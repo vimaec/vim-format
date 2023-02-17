@@ -3,7 +3,7 @@
 #include <algorithm>
 //#include <cmath>
 
-namespace Vim::Math3d
+namespace vim::math3d
 {
     template <typename T = double>
     class ValueDomain {
