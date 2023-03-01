@@ -348,13 +348,13 @@ namespace bfast
             return r;
         }
 
-#ifdef __ANDROID__
-		bool fopen_s(FILE** f, const char* name, const char* mode) 
+#if defined(__ANDROID__) || defined(__APPLE__)
+		byte fopen_s(FILE** f, const char* name, const char* mode)
         {
 			assert(f);
 			*f = fopen(name, mode);
-            if (!*f) return false;
-			return true;
+            if (!*f) return -1;
+			return 0;
 		}
 #endif
 
