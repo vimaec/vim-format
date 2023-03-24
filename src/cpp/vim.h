@@ -78,7 +78,6 @@ namespace Vim
         bfast::Bfast mGeometryBFast;
         bfast::Bfast mAssetsBFast;
         bfast::Bfast mEntitiesBFast;
-//        DocumentModel mDocumentModel;
         std::vector<std::string> mStrings;
         g3d::G3d mGeometry;
         std::unordered_map<std::string, EntityTable> mEntityTables;
