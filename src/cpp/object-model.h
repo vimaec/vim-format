@@ -909,13 +909,13 @@ namespace Vim
 
         int GetDisplayUnitIndex(int parameterDescriptorIndex)
         {
-            if (mEntityTable.mDataColumns.find("index:Vim.DisplayUnit:DisplayUnit") == mEntityTable.mDataColumns.end())
+            if (mEntityTable.mIndexColumns.find("index:Vim.DisplayUnit:DisplayUnit") == mEntityTable.mIndexColumns.end())
                 return -1;
 
             if (parameterDescriptorIndex < 0 || parameterDescriptorIndex >= GetCount())
                 return -1;
 
-            return *reinterpret_cast<int*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["index:Vim.DisplayUnit:DisplayUnit"].begin() + parameterDescriptorIndex * sizeof(int)));
+            return mEntityTable.mIndexColumns["index:Vim.DisplayUnit:DisplayUnit"][parameterDescriptorIndex];
         }
 
     };
@@ -1030,24 +1030,24 @@ namespace Vim
 
         int GetParameterDescriptorIndex(int parameterIndex)
         {
-            if (mEntityTable.mDataColumns.find("index:Vim.ParameterDescriptor:ParameterDescriptor") == mEntityTable.mDataColumns.end())
+            if (mEntityTable.mIndexColumns.find("index:Vim.ParameterDescriptor:ParameterDescriptor") == mEntityTable.mIndexColumns.end())
                 return -1;
 
             if (parameterIndex < 0 || parameterIndex >= GetCount())
                 return -1;
 
-            return *reinterpret_cast<int*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["index:Vim.ParameterDescriptor:ParameterDescriptor"].begin() + parameterIndex * sizeof(int)));
+            return mEntityTable.mIndexColumns["index:Vim.ParameterDescriptor:ParameterDescriptor"][parameterIndex];
         }
 
         int GetElementIndex(int parameterIndex)
         {
-            if (mEntityTable.mDataColumns.find("index:Vim.Element:Element") == mEntityTable.mDataColumns.end())
+            if (mEntityTable.mIndexColumns.find("index:Vim.Element:Element") == mEntityTable.mIndexColumns.end())
                 return -1;
 
             if (parameterIndex < 0 || parameterIndex >= GetCount())
                 return -1;
 
-            return *reinterpret_cast<int*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["index:Vim.Element:Element"].begin() + parameterIndex * sizeof(int)));
+            return mEntityTable.mIndexColumns["index:Vim.Element:Element"][parameterIndex];
         }
 
     };
@@ -1459,123 +1459,123 @@ namespace Vim
 
         int GetLevelIndex(int elementIndex)
         {
-            if (mEntityTable.mDataColumns.find("index:Vim.Level:Level") == mEntityTable.mDataColumns.end())
+            if (mEntityTable.mIndexColumns.find("index:Vim.Level:Level") == mEntityTable.mIndexColumns.end())
                 return -1;
 
             if (elementIndex < 0 || elementIndex >= GetCount())
                 return -1;
 
-            return *reinterpret_cast<int*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["index:Vim.Level:Level"].begin() + elementIndex * sizeof(int)));
+            return mEntityTable.mIndexColumns["index:Vim.Level:Level"][elementIndex];
         }
 
         int GetPhaseCreatedIndex(int elementIndex)
         {
-            if (mEntityTable.mDataColumns.find("index:Vim.Phase:PhaseCreated") == mEntityTable.mDataColumns.end())
+            if (mEntityTable.mIndexColumns.find("index:Vim.Phase:PhaseCreated") == mEntityTable.mIndexColumns.end())
                 return -1;
 
             if (elementIndex < 0 || elementIndex >= GetCount())
                 return -1;
 
-            return *reinterpret_cast<int*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["index:Vim.Phase:PhaseCreated"].begin() + elementIndex * sizeof(int)));
+            return mEntityTable.mIndexColumns["index:Vim.Phase:PhaseCreated"][elementIndex];
         }
 
         int GetPhaseDemolishedIndex(int elementIndex)
         {
-            if (mEntityTable.mDataColumns.find("index:Vim.Phase:PhaseDemolished") == mEntityTable.mDataColumns.end())
+            if (mEntityTable.mIndexColumns.find("index:Vim.Phase:PhaseDemolished") == mEntityTable.mIndexColumns.end())
                 return -1;
 
             if (elementIndex < 0 || elementIndex >= GetCount())
                 return -1;
 
-            return *reinterpret_cast<int*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["index:Vim.Phase:PhaseDemolished"].begin() + elementIndex * sizeof(int)));
+            return mEntityTable.mIndexColumns["index:Vim.Phase:PhaseDemolished"][elementIndex];
         }
 
         int GetCategoryIndex(int elementIndex)
         {
-            if (mEntityTable.mDataColumns.find("index:Vim.Category:Category") == mEntityTable.mDataColumns.end())
+            if (mEntityTable.mIndexColumns.find("index:Vim.Category:Category") == mEntityTable.mIndexColumns.end())
                 return -1;
 
             if (elementIndex < 0 || elementIndex >= GetCount())
                 return -1;
 
-            return *reinterpret_cast<int*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["index:Vim.Category:Category"].begin() + elementIndex * sizeof(int)));
+            return mEntityTable.mIndexColumns["index:Vim.Category:Category"][elementIndex];
         }
 
         int GetWorksetIndex(int elementIndex)
         {
-            if (mEntityTable.mDataColumns.find("index:Vim.Workset:Workset") == mEntityTable.mDataColumns.end())
+            if (mEntityTable.mIndexColumns.find("index:Vim.Workset:Workset") == mEntityTable.mIndexColumns.end())
                 return -1;
 
             if (elementIndex < 0 || elementIndex >= GetCount())
                 return -1;
 
-            return *reinterpret_cast<int*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["index:Vim.Workset:Workset"].begin() + elementIndex * sizeof(int)));
+            return mEntityTable.mIndexColumns["index:Vim.Workset:Workset"][elementIndex];
         }
 
         int GetDesignOptionIndex(int elementIndex)
         {
-            if (mEntityTable.mDataColumns.find("index:Vim.DesignOption:DesignOption") == mEntityTable.mDataColumns.end())
+            if (mEntityTable.mIndexColumns.find("index:Vim.DesignOption:DesignOption") == mEntityTable.mIndexColumns.end())
                 return -1;
 
             if (elementIndex < 0 || elementIndex >= GetCount())
                 return -1;
 
-            return *reinterpret_cast<int*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["index:Vim.DesignOption:DesignOption"].begin() + elementIndex * sizeof(int)));
+            return mEntityTable.mIndexColumns["index:Vim.DesignOption:DesignOption"][elementIndex];
         }
 
         int GetOwnerViewIndex(int elementIndex)
         {
-            if (mEntityTable.mDataColumns.find("index:Vim.View:OwnerView") == mEntityTable.mDataColumns.end())
+            if (mEntityTable.mIndexColumns.find("index:Vim.View:OwnerView") == mEntityTable.mIndexColumns.end())
                 return -1;
 
             if (elementIndex < 0 || elementIndex >= GetCount())
                 return -1;
 
-            return *reinterpret_cast<int*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["index:Vim.View:OwnerView"].begin() + elementIndex * sizeof(int)));
+            return mEntityTable.mIndexColumns["index:Vim.View:OwnerView"][elementIndex];
         }
 
         int GetGroupIndex(int elementIndex)
         {
-            if (mEntityTable.mDataColumns.find("index:Vim.Group:Group") == mEntityTable.mDataColumns.end())
+            if (mEntityTable.mIndexColumns.find("index:Vim.Group:Group") == mEntityTable.mIndexColumns.end())
                 return -1;
 
             if (elementIndex < 0 || elementIndex >= GetCount())
                 return -1;
 
-            return *reinterpret_cast<int*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["index:Vim.Group:Group"].begin() + elementIndex * sizeof(int)));
+            return mEntityTable.mIndexColumns["index:Vim.Group:Group"][elementIndex];
         }
 
         int GetAssemblyInstanceIndex(int elementIndex)
         {
-            if (mEntityTable.mDataColumns.find("index:Vim.AssemblyInstance:AssemblyInstance") == mEntityTable.mDataColumns.end())
+            if (mEntityTable.mIndexColumns.find("index:Vim.AssemblyInstance:AssemblyInstance") == mEntityTable.mIndexColumns.end())
                 return -1;
 
             if (elementIndex < 0 || elementIndex >= GetCount())
                 return -1;
 
-            return *reinterpret_cast<int*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["index:Vim.AssemblyInstance:AssemblyInstance"].begin() + elementIndex * sizeof(int)));
+            return mEntityTable.mIndexColumns["index:Vim.AssemblyInstance:AssemblyInstance"][elementIndex];
         }
 
         int GetBimDocumentIndex(int elementIndex)
         {
-            if (mEntityTable.mDataColumns.find("index:Vim.BimDocument:BimDocument") == mEntityTable.mDataColumns.end())
+            if (mEntityTable.mIndexColumns.find("index:Vim.BimDocument:BimDocument") == mEntityTable.mIndexColumns.end())
                 return -1;
 
             if (elementIndex < 0 || elementIndex >= GetCount())
                 return -1;
 
-            return *reinterpret_cast<int*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["index:Vim.BimDocument:BimDocument"].begin() + elementIndex * sizeof(int)));
+            return mEntityTable.mIndexColumns["index:Vim.BimDocument:BimDocument"][elementIndex];
         }
 
         int GetRoomIndex(int elementIndex)
         {
-            if (mEntityTable.mDataColumns.find("index:Vim.Room:Room") == mEntityTable.mDataColumns.end())
+            if (mEntityTable.mIndexColumns.find("index:Vim.Room:Room") == mEntityTable.mIndexColumns.end())
                 return -1;
 
             if (elementIndex < 0 || elementIndex >= GetCount())
                 return -1;
 
-            return *reinterpret_cast<int*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["index:Vim.Room:Room"].begin() + elementIndex * sizeof(int)));
+            return mEntityTable.mIndexColumns["index:Vim.Room:Room"][elementIndex];
         }
 
     };
@@ -1898,13 +1898,13 @@ namespace Vim
 
         int GetBimDocumentIndex(int worksetIndex)
         {
-            if (mEntityTable.mDataColumns.find("index:Vim.BimDocument:BimDocument") == mEntityTable.mDataColumns.end())
+            if (mEntityTable.mIndexColumns.find("index:Vim.BimDocument:BimDocument") == mEntityTable.mIndexColumns.end())
                 return -1;
 
             if (worksetIndex < 0 || worksetIndex >= GetCount())
                 return -1;
 
-            return *reinterpret_cast<int*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["index:Vim.BimDocument:BimDocument"].begin() + worksetIndex * sizeof(int)));
+            return mEntityTable.mIndexColumns["index:Vim.BimDocument:BimDocument"][worksetIndex];
         }
 
     };
@@ -2078,13 +2078,13 @@ namespace Vim
 
         int GetElementIndex(int assemblyInstanceIndex)
         {
-            if (mEntityTable.mDataColumns.find("index:Vim.Element:Element") == mEntityTable.mDataColumns.end())
+            if (mEntityTable.mIndexColumns.find("index:Vim.Element:Element") == mEntityTable.mIndexColumns.end())
                 return -1;
 
             if (assemblyInstanceIndex < 0 || assemblyInstanceIndex >= GetCount())
                 return -1;
 
-            return *reinterpret_cast<int*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["index:Vim.Element:Element"].begin() + assemblyInstanceIndex * sizeof(int)));
+            return mEntityTable.mIndexColumns["index:Vim.Element:Element"][assemblyInstanceIndex];
         }
 
     };
@@ -2258,13 +2258,13 @@ namespace Vim
 
         int GetElementIndex(int groupIndex)
         {
-            if (mEntityTable.mDataColumns.find("index:Vim.Element:Element") == mEntityTable.mDataColumns.end())
+            if (mEntityTable.mIndexColumns.find("index:Vim.Element:Element") == mEntityTable.mIndexColumns.end())
                 return -1;
 
             if (groupIndex < 0 || groupIndex >= GetCount())
                 return -1;
 
-            return *reinterpret_cast<int*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["index:Vim.Element:Element"].begin() + groupIndex * sizeof(int)));
+            return mEntityTable.mIndexColumns["index:Vim.Element:Element"][groupIndex];
         }
 
     };
@@ -2373,13 +2373,13 @@ namespace Vim
 
         int GetElementIndex(int designOptionIndex)
         {
-            if (mEntityTable.mDataColumns.find("index:Vim.Element:Element") == mEntityTable.mDataColumns.end())
+            if (mEntityTable.mIndexColumns.find("index:Vim.Element:Element") == mEntityTable.mIndexColumns.end())
                 return -1;
 
             if (designOptionIndex < 0 || designOptionIndex >= GetCount())
                 return -1;
 
-            return *reinterpret_cast<int*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["index:Vim.Element:Element"].begin() + designOptionIndex * sizeof(int)));
+            return mEntityTable.mIndexColumns["index:Vim.Element:Element"][designOptionIndex];
         }
 
     };
@@ -2488,13 +2488,13 @@ namespace Vim
 
         int GetElementIndex(int levelIndex)
         {
-            if (mEntityTable.mDataColumns.find("index:Vim.Element:Element") == mEntityTable.mDataColumns.end())
+            if (mEntityTable.mIndexColumns.find("index:Vim.Element:Element") == mEntityTable.mIndexColumns.end())
                 return -1;
 
             if (levelIndex < 0 || levelIndex >= GetCount())
                 return -1;
 
-            return *reinterpret_cast<int*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["index:Vim.Element:Element"].begin() + levelIndex * sizeof(int)));
+            return mEntityTable.mIndexColumns["index:Vim.Element:Element"][levelIndex];
         }
 
     };
@@ -2567,13 +2567,13 @@ namespace Vim
 
         int GetElementIndex(int phaseIndex)
         {
-            if (mEntityTable.mDataColumns.find("index:Vim.Element:Element") == mEntityTable.mDataColumns.end())
+            if (mEntityTable.mIndexColumns.find("index:Vim.Element:Element") == mEntityTable.mIndexColumns.end())
                 return -1;
 
             if (phaseIndex < 0 || phaseIndex >= GetCount())
                 return -1;
 
-            return *reinterpret_cast<int*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["index:Vim.Element:Element"].begin() + phaseIndex * sizeof(int)));
+            return mEntityTable.mIndexColumns["index:Vim.Element:Element"][phaseIndex];
         }
 
     };
@@ -2899,24 +2899,24 @@ namespace Vim
 
         int GetUpperLimitIndex(int roomIndex)
         {
-            if (mEntityTable.mDataColumns.find("index:Vim.Level:UpperLimit") == mEntityTable.mDataColumns.end())
+            if (mEntityTable.mIndexColumns.find("index:Vim.Level:UpperLimit") == mEntityTable.mIndexColumns.end())
                 return -1;
 
             if (roomIndex < 0 || roomIndex >= GetCount())
                 return -1;
 
-            return *reinterpret_cast<int*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["index:Vim.Level:UpperLimit"].begin() + roomIndex * sizeof(int)));
+            return mEntityTable.mIndexColumns["index:Vim.Level:UpperLimit"][roomIndex];
         }
 
         int GetElementIndex(int roomIndex)
         {
-            if (mEntityTable.mDataColumns.find("index:Vim.Element:Element") == mEntityTable.mDataColumns.end())
+            if (mEntityTable.mIndexColumns.find("index:Vim.Element:Element") == mEntityTable.mIndexColumns.end())
                 return -1;
 
             if (roomIndex < 0 || roomIndex >= GetCount())
                 return -1;
 
-            return *reinterpret_cast<int*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["index:Vim.Element:Element"].begin() + roomIndex * sizeof(int)));
+            return mEntityTable.mIndexColumns["index:Vim.Element:Element"][roomIndex];
         }
 
     };
@@ -4007,46 +4007,46 @@ namespace Vim
 
         int GetActiveViewIndex(int bimDocumentIndex)
         {
-            if (mEntityTable.mDataColumns.find("index:Vim.View:ActiveView") == mEntityTable.mDataColumns.end())
+            if (mEntityTable.mIndexColumns.find("index:Vim.View:ActiveView") == mEntityTable.mIndexColumns.end())
                 return -1;
 
             if (bimDocumentIndex < 0 || bimDocumentIndex >= GetCount())
                 return -1;
 
-            return *reinterpret_cast<int*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["index:Vim.View:ActiveView"].begin() + bimDocumentIndex * sizeof(int)));
+            return mEntityTable.mIndexColumns["index:Vim.View:ActiveView"][bimDocumentIndex];
         }
 
         int GetOwnerFamilyIndex(int bimDocumentIndex)
         {
-            if (mEntityTable.mDataColumns.find("index:Vim.Family:OwnerFamily") == mEntityTable.mDataColumns.end())
+            if (mEntityTable.mIndexColumns.find("index:Vim.Family:OwnerFamily") == mEntityTable.mIndexColumns.end())
                 return -1;
 
             if (bimDocumentIndex < 0 || bimDocumentIndex >= GetCount())
                 return -1;
 
-            return *reinterpret_cast<int*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["index:Vim.Family:OwnerFamily"].begin() + bimDocumentIndex * sizeof(int)));
+            return mEntityTable.mIndexColumns["index:Vim.Family:OwnerFamily"][bimDocumentIndex];
         }
 
         int GetParentIndex(int bimDocumentIndex)
         {
-            if (mEntityTable.mDataColumns.find("index:Vim.BimDocument:Parent") == mEntityTable.mDataColumns.end())
+            if (mEntityTable.mIndexColumns.find("index:Vim.BimDocument:Parent") == mEntityTable.mIndexColumns.end())
                 return -1;
 
             if (bimDocumentIndex < 0 || bimDocumentIndex >= GetCount())
                 return -1;
 
-            return *reinterpret_cast<int*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["index:Vim.BimDocument:Parent"].begin() + bimDocumentIndex * sizeof(int)));
+            return mEntityTable.mIndexColumns["index:Vim.BimDocument:Parent"][bimDocumentIndex];
         }
 
         int GetElementIndex(int bimDocumentIndex)
         {
-            if (mEntityTable.mDataColumns.find("index:Vim.Element:Element") == mEntityTable.mDataColumns.end())
+            if (mEntityTable.mIndexColumns.find("index:Vim.Element:Element") == mEntityTable.mIndexColumns.end())
                 return -1;
 
             if (bimDocumentIndex < 0 || bimDocumentIndex >= GetCount())
                 return -1;
 
-            return *reinterpret_cast<int*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["index:Vim.Element:Element"].begin() + bimDocumentIndex * sizeof(int)));
+            return mEntityTable.mIndexColumns["index:Vim.Element:Element"][bimDocumentIndex];
         }
 
     };
@@ -4125,24 +4125,24 @@ namespace Vim
 
         int GetDisplayUnitIndex(int displayUnitInBimDocumentIndex)
         {
-            if (mEntityTable.mDataColumns.find("index:Vim.DisplayUnit:DisplayUnit") == mEntityTable.mDataColumns.end())
+            if (mEntityTable.mIndexColumns.find("index:Vim.DisplayUnit:DisplayUnit") == mEntityTable.mIndexColumns.end())
                 return -1;
 
             if (displayUnitInBimDocumentIndex < 0 || displayUnitInBimDocumentIndex >= GetCount())
                 return -1;
 
-            return *reinterpret_cast<int*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["index:Vim.DisplayUnit:DisplayUnit"].begin() + displayUnitInBimDocumentIndex * sizeof(int)));
+            return mEntityTable.mIndexColumns["index:Vim.DisplayUnit:DisplayUnit"][displayUnitInBimDocumentIndex];
         }
 
         int GetBimDocumentIndex(int displayUnitInBimDocumentIndex)
         {
-            if (mEntityTable.mDataColumns.find("index:Vim.BimDocument:BimDocument") == mEntityTable.mDataColumns.end())
+            if (mEntityTable.mIndexColumns.find("index:Vim.BimDocument:BimDocument") == mEntityTable.mIndexColumns.end())
                 return -1;
 
             if (displayUnitInBimDocumentIndex < 0 || displayUnitInBimDocumentIndex >= GetCount())
                 return -1;
 
-            return *reinterpret_cast<int*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["index:Vim.BimDocument:BimDocument"].begin() + displayUnitInBimDocumentIndex * sizeof(int)));
+            return mEntityTable.mIndexColumns["index:Vim.BimDocument:BimDocument"][displayUnitInBimDocumentIndex];
         }
 
     };
@@ -4257,24 +4257,24 @@ namespace Vim
 
         int GetPhaseIndex(int phaseOrderInBimDocumentIndex)
         {
-            if (mEntityTable.mDataColumns.find("index:Vim.Phase:Phase") == mEntityTable.mDataColumns.end())
+            if (mEntityTable.mIndexColumns.find("index:Vim.Phase:Phase") == mEntityTable.mIndexColumns.end())
                 return -1;
 
             if (phaseOrderInBimDocumentIndex < 0 || phaseOrderInBimDocumentIndex >= GetCount())
                 return -1;
 
-            return *reinterpret_cast<int*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["index:Vim.Phase:Phase"].begin() + phaseOrderInBimDocumentIndex * sizeof(int)));
+            return mEntityTable.mIndexColumns["index:Vim.Phase:Phase"][phaseOrderInBimDocumentIndex];
         }
 
         int GetBimDocumentIndex(int phaseOrderInBimDocumentIndex)
         {
-            if (mEntityTable.mDataColumns.find("index:Vim.BimDocument:BimDocument") == mEntityTable.mDataColumns.end())
+            if (mEntityTable.mIndexColumns.find("index:Vim.BimDocument:BimDocument") == mEntityTable.mIndexColumns.end())
                 return -1;
 
             if (phaseOrderInBimDocumentIndex < 0 || phaseOrderInBimDocumentIndex >= GetCount())
                 return -1;
 
-            return *reinterpret_cast<int*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["index:Vim.BimDocument:BimDocument"].begin() + phaseOrderInBimDocumentIndex * sizeof(int)));
+            return mEntityTable.mIndexColumns["index:Vim.BimDocument:BimDocument"][phaseOrderInBimDocumentIndex];
         }
 
     };
@@ -4561,24 +4561,24 @@ namespace Vim
 
         int GetParentIndex(int categoryIndex)
         {
-            if (mEntityTable.mDataColumns.find("index:Vim.Category:Parent") == mEntityTable.mDataColumns.end())
+            if (mEntityTable.mIndexColumns.find("index:Vim.Category:Parent") == mEntityTable.mIndexColumns.end())
                 return -1;
 
             if (categoryIndex < 0 || categoryIndex >= GetCount())
                 return -1;
 
-            return *reinterpret_cast<int*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["index:Vim.Category:Parent"].begin() + categoryIndex * sizeof(int)));
+            return mEntityTable.mIndexColumns["index:Vim.Category:Parent"][categoryIndex];
         }
 
         int GetMaterialIndex(int categoryIndex)
         {
-            if (mEntityTable.mDataColumns.find("index:Vim.Material:Material") == mEntityTable.mDataColumns.end())
+            if (mEntityTable.mIndexColumns.find("index:Vim.Material:Material") == mEntityTable.mIndexColumns.end())
                 return -1;
 
             if (categoryIndex < 0 || categoryIndex >= GetCount())
                 return -1;
 
-            return *reinterpret_cast<int*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["index:Vim.Material:Material"].begin() + categoryIndex * sizeof(int)));
+            return mEntityTable.mIndexColumns["index:Vim.Material:Material"][categoryIndex];
         }
 
     };
@@ -4800,24 +4800,24 @@ namespace Vim
 
         int GetFamilyCategoryIndex(int familyIndex)
         {
-            if (mEntityTable.mDataColumns.find("index:Vim.Category:FamilyCategory") == mEntityTable.mDataColumns.end())
+            if (mEntityTable.mIndexColumns.find("index:Vim.Category:FamilyCategory") == mEntityTable.mIndexColumns.end())
                 return -1;
 
             if (familyIndex < 0 || familyIndex >= GetCount())
                 return -1;
 
-            return *reinterpret_cast<int*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["index:Vim.Category:FamilyCategory"].begin() + familyIndex * sizeof(int)));
+            return mEntityTable.mIndexColumns["index:Vim.Category:FamilyCategory"][familyIndex];
         }
 
         int GetElementIndex(int familyIndex)
         {
-            if (mEntityTable.mDataColumns.find("index:Vim.Element:Element") == mEntityTable.mDataColumns.end())
+            if (mEntityTable.mIndexColumns.find("index:Vim.Element:Element") == mEntityTable.mIndexColumns.end())
                 return -1;
 
             if (familyIndex < 0 || familyIndex >= GetCount())
                 return -1;
 
-            return *reinterpret_cast<int*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["index:Vim.Element:Element"].begin() + familyIndex * sizeof(int)));
+            return mEntityTable.mIndexColumns["index:Vim.Element:Element"][familyIndex];
         }
 
     };
@@ -4938,35 +4938,35 @@ namespace Vim
 
         int GetFamilyIndex(int familyTypeIndex)
         {
-            if (mEntityTable.mDataColumns.find("index:Vim.Family:Family") == mEntityTable.mDataColumns.end())
+            if (mEntityTable.mIndexColumns.find("index:Vim.Family:Family") == mEntityTable.mIndexColumns.end())
                 return -1;
 
             if (familyTypeIndex < 0 || familyTypeIndex >= GetCount())
                 return -1;
 
-            return *reinterpret_cast<int*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["index:Vim.Family:Family"].begin() + familyTypeIndex * sizeof(int)));
+            return mEntityTable.mIndexColumns["index:Vim.Family:Family"][familyTypeIndex];
         }
 
         int GetCompoundStructureIndex(int familyTypeIndex)
         {
-            if (mEntityTable.mDataColumns.find("index:Vim.CompoundStructure:CompoundStructure") == mEntityTable.mDataColumns.end())
+            if (mEntityTable.mIndexColumns.find("index:Vim.CompoundStructure:CompoundStructure") == mEntityTable.mIndexColumns.end())
                 return -1;
 
             if (familyTypeIndex < 0 || familyTypeIndex >= GetCount())
                 return -1;
 
-            return *reinterpret_cast<int*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["index:Vim.CompoundStructure:CompoundStructure"].begin() + familyTypeIndex * sizeof(int)));
+            return mEntityTable.mIndexColumns["index:Vim.CompoundStructure:CompoundStructure"][familyTypeIndex];
         }
 
         int GetElementIndex(int familyTypeIndex)
         {
-            if (mEntityTable.mDataColumns.find("index:Vim.Element:Element") == mEntityTable.mDataColumns.end())
+            if (mEntityTable.mIndexColumns.find("index:Vim.Element:Element") == mEntityTable.mIndexColumns.end())
                 return -1;
 
             if (familyTypeIndex < 0 || familyTypeIndex >= GetCount())
                 return -1;
 
-            return *reinterpret_cast<int*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["index:Vim.Element:Element"].begin() + familyTypeIndex * sizeof(int)));
+            return mEntityTable.mIndexColumns["index:Vim.Element:Element"][familyTypeIndex];
         }
 
     };
@@ -5623,57 +5623,57 @@ namespace Vim
 
         int GetFamilyTypeIndex(int familyInstanceIndex)
         {
-            if (mEntityTable.mDataColumns.find("index:Vim.FamilyType:FamilyType") == mEntityTable.mDataColumns.end())
+            if (mEntityTable.mIndexColumns.find("index:Vim.FamilyType:FamilyType") == mEntityTable.mIndexColumns.end())
                 return -1;
 
             if (familyInstanceIndex < 0 || familyInstanceIndex >= GetCount())
                 return -1;
 
-            return *reinterpret_cast<int*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["index:Vim.FamilyType:FamilyType"].begin() + familyInstanceIndex * sizeof(int)));
+            return mEntityTable.mIndexColumns["index:Vim.FamilyType:FamilyType"][familyInstanceIndex];
         }
 
         int GetHostIndex(int familyInstanceIndex)
         {
-            if (mEntityTable.mDataColumns.find("index:Vim.Element:Host") == mEntityTable.mDataColumns.end())
+            if (mEntityTable.mIndexColumns.find("index:Vim.Element:Host") == mEntityTable.mIndexColumns.end())
                 return -1;
 
             if (familyInstanceIndex < 0 || familyInstanceIndex >= GetCount())
                 return -1;
 
-            return *reinterpret_cast<int*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["index:Vim.Element:Host"].begin() + familyInstanceIndex * sizeof(int)));
+            return mEntityTable.mIndexColumns["index:Vim.Element:Host"][familyInstanceIndex];
         }
 
         int GetFromRoomIndex(int familyInstanceIndex)
         {
-            if (mEntityTable.mDataColumns.find("index:Vim.Room:FromRoom") == mEntityTable.mDataColumns.end())
+            if (mEntityTable.mIndexColumns.find("index:Vim.Room:FromRoom") == mEntityTable.mIndexColumns.end())
                 return -1;
 
             if (familyInstanceIndex < 0 || familyInstanceIndex >= GetCount())
                 return -1;
 
-            return *reinterpret_cast<int*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["index:Vim.Room:FromRoom"].begin() + familyInstanceIndex * sizeof(int)));
+            return mEntityTable.mIndexColumns["index:Vim.Room:FromRoom"][familyInstanceIndex];
         }
 
         int GetToRoomIndex(int familyInstanceIndex)
         {
-            if (mEntityTable.mDataColumns.find("index:Vim.Room:ToRoom") == mEntityTable.mDataColumns.end())
+            if (mEntityTable.mIndexColumns.find("index:Vim.Room:ToRoom") == mEntityTable.mIndexColumns.end())
                 return -1;
 
             if (familyInstanceIndex < 0 || familyInstanceIndex >= GetCount())
                 return -1;
 
-            return *reinterpret_cast<int*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["index:Vim.Room:ToRoom"].begin() + familyInstanceIndex * sizeof(int)));
+            return mEntityTable.mIndexColumns["index:Vim.Room:ToRoom"][familyInstanceIndex];
         }
 
         int GetElementIndex(int familyInstanceIndex)
         {
-            if (mEntityTable.mDataColumns.find("index:Vim.Element:Element") == mEntityTable.mDataColumns.end())
+            if (mEntityTable.mIndexColumns.find("index:Vim.Element:Element") == mEntityTable.mIndexColumns.end())
                 return -1;
 
             if (familyInstanceIndex < 0 || familyInstanceIndex >= GetCount())
                 return -1;
 
-            return *reinterpret_cast<int*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["index:Vim.Element:Element"].begin() + familyInstanceIndex * sizeof(int)));
+            return mEntityTable.mIndexColumns["index:Vim.Element:Element"][familyInstanceIndex];
         }
 
     };
@@ -6282,24 +6282,24 @@ namespace Vim
 
         int GetCameraIndex(int viewIndex)
         {
-            if (mEntityTable.mDataColumns.find("index:Vim.Camera:Camera") == mEntityTable.mDataColumns.end())
+            if (mEntityTable.mIndexColumns.find("index:Vim.Camera:Camera") == mEntityTable.mIndexColumns.end())
                 return -1;
 
             if (viewIndex < 0 || viewIndex >= GetCount())
                 return -1;
 
-            return *reinterpret_cast<int*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["index:Vim.Camera:Camera"].begin() + viewIndex * sizeof(int)));
+            return mEntityTable.mIndexColumns["index:Vim.Camera:Camera"][viewIndex];
         }
 
         int GetElementIndex(int viewIndex)
         {
-            if (mEntityTable.mDataColumns.find("index:Vim.Element:Element") == mEntityTable.mDataColumns.end())
+            if (mEntityTable.mIndexColumns.find("index:Vim.Element:Element") == mEntityTable.mIndexColumns.end())
                 return -1;
 
             if (viewIndex < 0 || viewIndex >= GetCount())
                 return -1;
 
-            return *reinterpret_cast<int*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["index:Vim.Element:Element"].begin() + viewIndex * sizeof(int)));
+            return mEntityTable.mIndexColumns["index:Vim.Element:Element"][viewIndex];
         }
 
     };
@@ -6378,24 +6378,24 @@ namespace Vim
 
         int GetViewIndex(int elementInViewIndex)
         {
-            if (mEntityTable.mDataColumns.find("index:Vim.View:View") == mEntityTable.mDataColumns.end())
+            if (mEntityTable.mIndexColumns.find("index:Vim.View:View") == mEntityTable.mIndexColumns.end())
                 return -1;
 
             if (elementInViewIndex < 0 || elementInViewIndex >= GetCount())
                 return -1;
 
-            return *reinterpret_cast<int*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["index:Vim.View:View"].begin() + elementInViewIndex * sizeof(int)));
+            return mEntityTable.mIndexColumns["index:Vim.View:View"][elementInViewIndex];
         }
 
         int GetElementIndex(int elementInViewIndex)
         {
-            if (mEntityTable.mDataColumns.find("index:Vim.Element:Element") == mEntityTable.mDataColumns.end())
+            if (mEntityTable.mIndexColumns.find("index:Vim.Element:Element") == mEntityTable.mIndexColumns.end())
                 return -1;
 
             if (elementInViewIndex < 0 || elementInViewIndex >= GetCount())
                 return -1;
 
-            return *reinterpret_cast<int*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["index:Vim.Element:Element"].begin() + elementInViewIndex * sizeof(int)));
+            return mEntityTable.mIndexColumns["index:Vim.Element:Element"][elementInViewIndex];
         }
 
     };
@@ -6474,24 +6474,24 @@ namespace Vim
 
         int GetShapeIndex(int shapeInViewIndex)
         {
-            if (mEntityTable.mDataColumns.find("index:Vim.Shape:Shape") == mEntityTable.mDataColumns.end())
+            if (mEntityTable.mIndexColumns.find("index:Vim.Shape:Shape") == mEntityTable.mIndexColumns.end())
                 return -1;
 
             if (shapeInViewIndex < 0 || shapeInViewIndex >= GetCount())
                 return -1;
 
-            return *reinterpret_cast<int*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["index:Vim.Shape:Shape"].begin() + shapeInViewIndex * sizeof(int)));
+            return mEntityTable.mIndexColumns["index:Vim.Shape:Shape"][shapeInViewIndex];
         }
 
         int GetViewIndex(int shapeInViewIndex)
         {
-            if (mEntityTable.mDataColumns.find("index:Vim.View:View") == mEntityTable.mDataColumns.end())
+            if (mEntityTable.mIndexColumns.find("index:Vim.View:View") == mEntityTable.mIndexColumns.end())
                 return -1;
 
             if (shapeInViewIndex < 0 || shapeInViewIndex >= GetCount())
                 return -1;
 
-            return *reinterpret_cast<int*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["index:Vim.View:View"].begin() + shapeInViewIndex * sizeof(int)));
+            return mEntityTable.mIndexColumns["index:Vim.View:View"][shapeInViewIndex];
         }
 
     };
@@ -6570,24 +6570,24 @@ namespace Vim
 
         int GetAssetIndex(int assetInViewIndex)
         {
-            if (mEntityTable.mDataColumns.find("index:Vim.Asset:Asset") == mEntityTable.mDataColumns.end())
+            if (mEntityTable.mIndexColumns.find("index:Vim.Asset:Asset") == mEntityTable.mIndexColumns.end())
                 return -1;
 
             if (assetInViewIndex < 0 || assetInViewIndex >= GetCount())
                 return -1;
 
-            return *reinterpret_cast<int*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["index:Vim.Asset:Asset"].begin() + assetInViewIndex * sizeof(int)));
+            return mEntityTable.mIndexColumns["index:Vim.Asset:Asset"][assetInViewIndex];
         }
 
         int GetViewIndex(int assetInViewIndex)
         {
-            if (mEntityTable.mDataColumns.find("index:Vim.View:View") == mEntityTable.mDataColumns.end())
+            if (mEntityTable.mIndexColumns.find("index:Vim.View:View") == mEntityTable.mIndexColumns.end())
                 return -1;
 
             if (assetInViewIndex < 0 || assetInViewIndex >= GetCount())
                 return -1;
 
-            return *reinterpret_cast<int*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["index:Vim.View:View"].begin() + assetInViewIndex * sizeof(int)));
+            return mEntityTable.mIndexColumns["index:Vim.View:View"][assetInViewIndex];
         }
 
     };
@@ -6741,24 +6741,24 @@ namespace Vim
 
         int GetLevelIndex(int levelInViewIndex)
         {
-            if (mEntityTable.mDataColumns.find("index:Vim.Level:Level") == mEntityTable.mDataColumns.end())
+            if (mEntityTable.mIndexColumns.find("index:Vim.Level:Level") == mEntityTable.mIndexColumns.end())
                 return -1;
 
             if (levelInViewIndex < 0 || levelInViewIndex >= GetCount())
                 return -1;
 
-            return *reinterpret_cast<int*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["index:Vim.Level:Level"].begin() + levelInViewIndex * sizeof(int)));
+            return mEntityTable.mIndexColumns["index:Vim.Level:Level"][levelInViewIndex];
         }
 
         int GetViewIndex(int levelInViewIndex)
         {
-            if (mEntityTable.mDataColumns.find("index:Vim.View:View") == mEntityTable.mDataColumns.end())
+            if (mEntityTable.mIndexColumns.find("index:Vim.View:View") == mEntityTable.mIndexColumns.end())
                 return -1;
 
             if (levelInViewIndex < 0 || levelInViewIndex >= GetCount())
                 return -1;
 
-            return *reinterpret_cast<int*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["index:Vim.View:View"].begin() + levelInViewIndex * sizeof(int)));
+            return mEntityTable.mIndexColumns["index:Vim.View:View"][levelInViewIndex];
         }
 
     };
@@ -7740,35 +7740,35 @@ namespace Vim
 
         int GetColorTextureFileIndex(int materialIndex)
         {
-            if (mEntityTable.mDataColumns.find("index:Vim.Asset:ColorTextureFile") == mEntityTable.mDataColumns.end())
+            if (mEntityTable.mIndexColumns.find("index:Vim.Asset:ColorTextureFile") == mEntityTable.mIndexColumns.end())
                 return -1;
 
             if (materialIndex < 0 || materialIndex >= GetCount())
                 return -1;
 
-            return *reinterpret_cast<int*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["index:Vim.Asset:ColorTextureFile"].begin() + materialIndex * sizeof(int)));
+            return mEntityTable.mIndexColumns["index:Vim.Asset:ColorTextureFile"][materialIndex];
         }
 
         int GetNormalTextureFileIndex(int materialIndex)
         {
-            if (mEntityTable.mDataColumns.find("index:Vim.Asset:NormalTextureFile") == mEntityTable.mDataColumns.end())
+            if (mEntityTable.mIndexColumns.find("index:Vim.Asset:NormalTextureFile") == mEntityTable.mIndexColumns.end())
                 return -1;
 
             if (materialIndex < 0 || materialIndex >= GetCount())
                 return -1;
 
-            return *reinterpret_cast<int*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["index:Vim.Asset:NormalTextureFile"].begin() + materialIndex * sizeof(int)));
+            return mEntityTable.mIndexColumns["index:Vim.Asset:NormalTextureFile"][materialIndex];
         }
 
         int GetElementIndex(int materialIndex)
         {
-            if (mEntityTable.mDataColumns.find("index:Vim.Element:Element") == mEntityTable.mDataColumns.end())
+            if (mEntityTable.mIndexColumns.find("index:Vim.Element:Element") == mEntityTable.mIndexColumns.end())
                 return -1;
 
             if (materialIndex < 0 || materialIndex >= GetCount())
                 return -1;
 
-            return *reinterpret_cast<int*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["index:Vim.Element:Element"].begin() + materialIndex * sizeof(int)));
+            return mEntityTable.mIndexColumns["index:Vim.Element:Element"][materialIndex];
         }
 
     };
@@ -7953,24 +7953,24 @@ namespace Vim
 
         int GetMaterialIndex(int materialInElementIndex)
         {
-            if (mEntityTable.mDataColumns.find("index:Vim.Material:Material") == mEntityTable.mDataColumns.end())
+            if (mEntityTable.mIndexColumns.find("index:Vim.Material:Material") == mEntityTable.mIndexColumns.end())
                 return -1;
 
             if (materialInElementIndex < 0 || materialInElementIndex >= GetCount())
                 return -1;
 
-            return *reinterpret_cast<int*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["index:Vim.Material:Material"].begin() + materialInElementIndex * sizeof(int)));
+            return mEntityTable.mIndexColumns["index:Vim.Material:Material"][materialInElementIndex];
         }
 
         int GetElementIndex(int materialInElementIndex)
         {
-            if (mEntityTable.mDataColumns.find("index:Vim.Element:Element") == mEntityTable.mDataColumns.end())
+            if (mEntityTable.mIndexColumns.find("index:Vim.Element:Element") == mEntityTable.mIndexColumns.end())
                 return -1;
 
             if (materialInElementIndex < 0 || materialInElementIndex >= GetCount())
                 return -1;
 
-            return *reinterpret_cast<int*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["index:Vim.Element:Element"].begin() + materialInElementIndex * sizeof(int)));
+            return mEntityTable.mIndexColumns["index:Vim.Element:Element"][materialInElementIndex];
         }
 
     };
@@ -8156,24 +8156,24 @@ namespace Vim
 
         int GetMaterialIndex(int compoundStructureLayerIndex)
         {
-            if (mEntityTable.mDataColumns.find("index:Vim.Material:Material") == mEntityTable.mDataColumns.end())
+            if (mEntityTable.mIndexColumns.find("index:Vim.Material:Material") == mEntityTable.mIndexColumns.end())
                 return -1;
 
             if (compoundStructureLayerIndex < 0 || compoundStructureLayerIndex >= GetCount())
                 return -1;
 
-            return *reinterpret_cast<int*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["index:Vim.Material:Material"].begin() + compoundStructureLayerIndex * sizeof(int)));
+            return mEntityTable.mIndexColumns["index:Vim.Material:Material"][compoundStructureLayerIndex];
         }
 
         int GetCompoundStructureIndex(int compoundStructureLayerIndex)
         {
-            if (mEntityTable.mDataColumns.find("index:Vim.CompoundStructure:CompoundStructure") == mEntityTable.mDataColumns.end())
+            if (mEntityTable.mIndexColumns.find("index:Vim.CompoundStructure:CompoundStructure") == mEntityTable.mIndexColumns.end())
                 return -1;
 
             if (compoundStructureLayerIndex < 0 || compoundStructureLayerIndex >= GetCount())
                 return -1;
 
-            return *reinterpret_cast<int*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["index:Vim.CompoundStructure:CompoundStructure"].begin() + compoundStructureLayerIndex * sizeof(int)));
+            return mEntityTable.mIndexColumns["index:Vim.CompoundStructure:CompoundStructure"][compoundStructureLayerIndex];
         }
 
     };
@@ -8282,13 +8282,13 @@ namespace Vim
 
         int GetStructuralLayerIndex(int compoundStructureIndex)
         {
-            if (mEntityTable.mDataColumns.find("index:Vim.CompoundStructureLayer:StructuralLayer") == mEntityTable.mDataColumns.end())
+            if (mEntityTable.mIndexColumns.find("index:Vim.CompoundStructureLayer:StructuralLayer") == mEntityTable.mIndexColumns.end())
                 return -1;
 
             if (compoundStructureIndex < 0 || compoundStructureIndex >= GetCount())
                 return -1;
 
-            return *reinterpret_cast<int*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["index:Vim.CompoundStructureLayer:StructuralLayer"].begin() + compoundStructureIndex * sizeof(int)));
+            return mEntityTable.mIndexColumns["index:Vim.CompoundStructureLayer:StructuralLayer"][compoundStructureIndex];
         }
 
     };
@@ -8361,13 +8361,13 @@ namespace Vim
 
         int GetElementIndex(int nodeIndex)
         {
-            if (mEntityTable.mDataColumns.find("index:Vim.Element:Element") == mEntityTable.mDataColumns.end())
+            if (mEntityTable.mIndexColumns.find("index:Vim.Element:Element") == mEntityTable.mIndexColumns.end())
                 return -1;
 
             if (nodeIndex < 0 || nodeIndex >= GetCount())
                 return -1;
 
-            return *reinterpret_cast<int*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["index:Vim.Element:Element"].begin() + nodeIndex * sizeof(int)));
+            return mEntityTable.mIndexColumns["index:Vim.Element:Element"][nodeIndex];
         }
 
     };
@@ -8645,13 +8645,13 @@ namespace Vim
 
         int GetElementIndex(int shapeIndex)
         {
-            if (mEntityTable.mDataColumns.find("index:Vim.Element:Element") == mEntityTable.mDataColumns.end())
+            if (mEntityTable.mIndexColumns.find("index:Vim.Element:Element") == mEntityTable.mIndexColumns.end())
                 return -1;
 
             if (shapeIndex < 0 || shapeIndex >= GetCount())
                 return -1;
 
-            return *reinterpret_cast<int*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["index:Vim.Element:Element"].begin() + shapeIndex * sizeof(int)));
+            return mEntityTable.mIndexColumns["index:Vim.Element:Element"][shapeIndex];
         }
 
     };
@@ -8724,13 +8724,13 @@ namespace Vim
 
         int GetElementIndex(int shapeCollectionIndex)
         {
-            if (mEntityTable.mDataColumns.find("index:Vim.Element:Element") == mEntityTable.mDataColumns.end())
+            if (mEntityTable.mIndexColumns.find("index:Vim.Element:Element") == mEntityTable.mIndexColumns.end())
                 return -1;
 
             if (shapeCollectionIndex < 0 || shapeCollectionIndex >= GetCount())
                 return -1;
 
-            return *reinterpret_cast<int*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["index:Vim.Element:Element"].begin() + shapeCollectionIndex * sizeof(int)));
+            return mEntityTable.mIndexColumns["index:Vim.Element:Element"][shapeCollectionIndex];
         }
 
     };
@@ -8809,24 +8809,24 @@ namespace Vim
 
         int GetShapeIndex(int shapeInShapeCollectionIndex)
         {
-            if (mEntityTable.mDataColumns.find("index:Vim.Shape:Shape") == mEntityTable.mDataColumns.end())
+            if (mEntityTable.mIndexColumns.find("index:Vim.Shape:Shape") == mEntityTable.mIndexColumns.end())
                 return -1;
 
             if (shapeInShapeCollectionIndex < 0 || shapeInShapeCollectionIndex >= GetCount())
                 return -1;
 
-            return *reinterpret_cast<int*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["index:Vim.Shape:Shape"].begin() + shapeInShapeCollectionIndex * sizeof(int)));
+            return mEntityTable.mIndexColumns["index:Vim.Shape:Shape"][shapeInShapeCollectionIndex];
         }
 
         int GetShapeCollectionIndex(int shapeInShapeCollectionIndex)
         {
-            if (mEntityTable.mDataColumns.find("index:Vim.ShapeCollection:ShapeCollection") == mEntityTable.mDataColumns.end())
+            if (mEntityTable.mIndexColumns.find("index:Vim.ShapeCollection:ShapeCollection") == mEntityTable.mIndexColumns.end())
                 return -1;
 
             if (shapeInShapeCollectionIndex < 0 || shapeInShapeCollectionIndex >= GetCount())
                 return -1;
 
-            return *reinterpret_cast<int*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["index:Vim.ShapeCollection:ShapeCollection"].begin() + shapeInShapeCollectionIndex * sizeof(int)));
+            return mEntityTable.mIndexColumns["index:Vim.ShapeCollection:ShapeCollection"][shapeInShapeCollectionIndex];
         }
 
     };
@@ -8935,13 +8935,13 @@ namespace Vim
 
         int GetElementIndex(int systemIndex)
         {
-            if (mEntityTable.mDataColumns.find("index:Vim.Element:Element") == mEntityTable.mDataColumns.end())
+            if (mEntityTable.mIndexColumns.find("index:Vim.Element:Element") == mEntityTable.mIndexColumns.end())
                 return -1;
 
             if (systemIndex < 0 || systemIndex >= GetCount())
                 return -1;
 
-            return *reinterpret_cast<int*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["index:Vim.Element:Element"].begin() + systemIndex * sizeof(int)));
+            return mEntityTable.mIndexColumns["index:Vim.Element:Element"][systemIndex];
         }
 
     };
@@ -9056,24 +9056,24 @@ namespace Vim
 
         int GetSystemIndex(int elementInSystemIndex)
         {
-            if (mEntityTable.mDataColumns.find("index:Vim.System:System") == mEntityTable.mDataColumns.end())
+            if (mEntityTable.mIndexColumns.find("index:Vim.System:System") == mEntityTable.mIndexColumns.end())
                 return -1;
 
             if (elementInSystemIndex < 0 || elementInSystemIndex >= GetCount())
                 return -1;
 
-            return *reinterpret_cast<int*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["index:Vim.System:System"].begin() + elementInSystemIndex * sizeof(int)));
+            return mEntityTable.mIndexColumns["index:Vim.System:System"][elementInSystemIndex];
         }
 
         int GetElementIndex(int elementInSystemIndex)
         {
-            if (mEntityTable.mDataColumns.find("index:Vim.Element:Element") == mEntityTable.mDataColumns.end())
+            if (mEntityTable.mIndexColumns.find("index:Vim.Element:Element") == mEntityTable.mIndexColumns.end())
                 return -1;
 
             if (elementInSystemIndex < 0 || elementInSystemIndex >= GetCount())
                 return -1;
 
-            return *reinterpret_cast<int*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["index:Vim.Element:Element"].begin() + elementInSystemIndex * sizeof(int)));
+            return mEntityTable.mIndexColumns["index:Vim.Element:Element"][elementInSystemIndex];
         }
 
     };
@@ -9254,13 +9254,13 @@ namespace Vim
 
         int GetBimDocumentIndex(int warningIndex)
         {
-            if (mEntityTable.mDataColumns.find("index:Vim.BimDocument:BimDocument") == mEntityTable.mDataColumns.end())
+            if (mEntityTable.mIndexColumns.find("index:Vim.BimDocument:BimDocument") == mEntityTable.mIndexColumns.end())
                 return -1;
 
             if (warningIndex < 0 || warningIndex >= GetCount())
                 return -1;
 
-            return *reinterpret_cast<int*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["index:Vim.BimDocument:BimDocument"].begin() + warningIndex * sizeof(int)));
+            return mEntityTable.mIndexColumns["index:Vim.BimDocument:BimDocument"][warningIndex];
         }
 
     };
@@ -9339,24 +9339,24 @@ namespace Vim
 
         int GetWarningIndex(int elementInWarningIndex)
         {
-            if (mEntityTable.mDataColumns.find("index:Vim.Warning:Warning") == mEntityTable.mDataColumns.end())
+            if (mEntityTable.mIndexColumns.find("index:Vim.Warning:Warning") == mEntityTable.mIndexColumns.end())
                 return -1;
 
             if (elementInWarningIndex < 0 || elementInWarningIndex >= GetCount())
                 return -1;
 
-            return *reinterpret_cast<int*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["index:Vim.Warning:Warning"].begin() + elementInWarningIndex * sizeof(int)));
+            return mEntityTable.mIndexColumns["index:Vim.Warning:Warning"][elementInWarningIndex];
         }
 
         int GetElementIndex(int elementInWarningIndex)
         {
-            if (mEntityTable.mDataColumns.find("index:Vim.Element:Element") == mEntityTable.mDataColumns.end())
+            if (mEntityTable.mIndexColumns.find("index:Vim.Element:Element") == mEntityTable.mIndexColumns.end())
                 return -1;
 
             if (elementInWarningIndex < 0 || elementInWarningIndex >= GetCount())
                 return -1;
 
-            return *reinterpret_cast<int*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["index:Vim.Element:Element"].begin() + elementInWarningIndex * sizeof(int)));
+            return mEntityTable.mIndexColumns["index:Vim.Element:Element"][elementInWarningIndex];
         }
 
     };
@@ -9593,13 +9593,13 @@ namespace Vim
 
         int GetElementIndex(int basePointIndex)
         {
-            if (mEntityTable.mDataColumns.find("index:Vim.Element:Element") == mEntityTable.mDataColumns.end())
+            if (mEntityTable.mIndexColumns.find("index:Vim.Element:Element") == mEntityTable.mIndexColumns.end())
                 return -1;
 
             if (basePointIndex < 0 || basePointIndex >= GetCount())
                 return -1;
 
-            return *reinterpret_cast<int*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["index:Vim.Element:Element"].begin() + basePointIndex * sizeof(int)));
+            return mEntityTable.mIndexColumns["index:Vim.Element:Element"][basePointIndex];
         }
 
     };
@@ -9813,13 +9813,13 @@ namespace Vim
 
         int GetElementIndex(int phaseFilterIndex)
         {
-            if (mEntityTable.mDataColumns.find("index:Vim.Element:Element") == mEntityTable.mDataColumns.end())
+            if (mEntityTable.mIndexColumns.find("index:Vim.Element:Element") == mEntityTable.mIndexColumns.end())
                 return -1;
 
             if (phaseFilterIndex < 0 || phaseFilterIndex >= GetCount())
                 return -1;
 
-            return *reinterpret_cast<int*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["index:Vim.Element:Element"].begin() + phaseFilterIndex * sizeof(int)));
+            return mEntityTable.mIndexColumns["index:Vim.Element:Element"][phaseFilterIndex];
         }
 
     };
@@ -10130,13 +10130,13 @@ namespace Vim
 
         int GetElementIndex(int gridIndex)
         {
-            if (mEntityTable.mDataColumns.find("index:Vim.Element:Element") == mEntityTable.mDataColumns.end())
+            if (mEntityTable.mIndexColumns.find("index:Vim.Element:Element") == mEntityTable.mIndexColumns.end())
                 return -1;
 
             if (gridIndex < 0 || gridIndex >= GetCount())
                 return -1;
 
-            return *reinterpret_cast<int*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["index:Vim.Element:Element"].begin() + gridIndex * sizeof(int)));
+            return mEntityTable.mIndexColumns["index:Vim.Element:Element"][gridIndex];
         }
 
     };
@@ -10357,24 +10357,24 @@ namespace Vim
 
         int GetAreaSchemeIndex(int areaIndex)
         {
-            if (mEntityTable.mDataColumns.find("index:Vim.AreaScheme:AreaScheme") == mEntityTable.mDataColumns.end())
+            if (mEntityTable.mIndexColumns.find("index:Vim.AreaScheme:AreaScheme") == mEntityTable.mIndexColumns.end())
                 return -1;
 
             if (areaIndex < 0 || areaIndex >= GetCount())
                 return -1;
 
-            return *reinterpret_cast<int*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["index:Vim.AreaScheme:AreaScheme"].begin() + areaIndex * sizeof(int)));
+            return mEntityTable.mIndexColumns["index:Vim.AreaScheme:AreaScheme"][areaIndex];
         }
 
         int GetElementIndex(int areaIndex)
         {
-            if (mEntityTable.mDataColumns.find("index:Vim.Element:Element") == mEntityTable.mDataColumns.end())
+            if (mEntityTable.mIndexColumns.find("index:Vim.Element:Element") == mEntityTable.mIndexColumns.end())
                 return -1;
 
             if (areaIndex < 0 || areaIndex >= GetCount())
                 return -1;
 
-            return *reinterpret_cast<int*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["index:Vim.Element:Element"].begin() + areaIndex * sizeof(int)));
+            return mEntityTable.mIndexColumns["index:Vim.Element:Element"][areaIndex];
         }
 
     };
@@ -10483,13 +10483,13 @@ namespace Vim
 
         int GetElementIndex(int areaSchemeIndex)
         {
-            if (mEntityTable.mDataColumns.find("index:Vim.Element:Element") == mEntityTable.mDataColumns.end())
+            if (mEntityTable.mIndexColumns.find("index:Vim.Element:Element") == mEntityTable.mIndexColumns.end())
                 return -1;
 
             if (areaSchemeIndex < 0 || areaSchemeIndex >= GetCount())
                 return -1;
 
-            return *reinterpret_cast<int*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["index:Vim.Element:Element"].begin() + areaSchemeIndex * sizeof(int)));
+            return mEntityTable.mIndexColumns["index:Vim.Element:Element"][areaSchemeIndex];
         }
 
     };
