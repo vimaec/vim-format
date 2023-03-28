@@ -336,7 +336,7 @@ namespace Vim
         std::vector<Asset>* GetAll()
         {
             if (mEntityTable.mStringColumns.find("string:BufferName") == mEntityTable.mStringColumns.end())
-                return NULL;
+                return {};
 
             const int count = GetCount();
 
@@ -362,7 +362,7 @@ namespace Vim
                 return {};
 
             if (mEntityTable.mStringColumns.find("string:BufferName") == mEntityTable.mStringColumns.end())
-                return NULL;
+                return {};
 
             return &mStrings[mEntityTable.mStringColumns["string:BufferName"][assetIndex]];
         }
@@ -370,7 +370,7 @@ namespace Vim
         const std::vector<const std::string*>* GetAllBufferName()
         {
             if (mEntityTable.mStringColumns.find("string:BufferName") == mEntityTable.mStringColumns.end())
-                return NULL;
+                return {};
 
             const int count = GetCount();
             const std::vector<int>& bufferNameData = mEntityTable.mStringColumns["string:BufferName"];
@@ -391,7 +391,7 @@ namespace Vim
     static AssetTable* GetAssetTable(VimScene& scene)
     {
         if (scene.mEntityTables.find("Vim.Asset") == scene.mEntityTables.end())
-            return NULL;
+            return {};
 
         return new AssetTable(scene.mEntityTables["Vim.Asset"], scene.mStrings);
     }
@@ -438,7 +438,7 @@ namespace Vim
             if (mEntityTable.mStringColumns.find("string:Spec") == mEntityTable.mStringColumns.end() ||
                 mEntityTable.mStringColumns.find("string:Type") == mEntityTable.mStringColumns.end() ||
                 mEntityTable.mStringColumns.find("string:Label") == mEntityTable.mStringColumns.end())
-                return NULL;
+                return {};
 
             const int count = GetCount();
 
@@ -470,7 +470,7 @@ namespace Vim
                 return {};
 
             if (mEntityTable.mStringColumns.find("string:Spec") == mEntityTable.mStringColumns.end())
-                return NULL;
+                return {};
 
             return &mStrings[mEntityTable.mStringColumns["string:Spec"][displayUnitIndex]];
         }
@@ -478,7 +478,7 @@ namespace Vim
         const std::vector<const std::string*>* GetAllSpec()
         {
             if (mEntityTable.mStringColumns.find("string:Spec") == mEntityTable.mStringColumns.end())
-                return NULL;
+                return {};
 
             const int count = GetCount();
             const std::vector<int>& specData = mEntityTable.mStringColumns["string:Spec"];
@@ -500,7 +500,7 @@ namespace Vim
                 return {};
 
             if (mEntityTable.mStringColumns.find("string:Type") == mEntityTable.mStringColumns.end())
-                return NULL;
+                return {};
 
             return &mStrings[mEntityTable.mStringColumns["string:Type"][displayUnitIndex]];
         }
@@ -508,7 +508,7 @@ namespace Vim
         const std::vector<const std::string*>* GetAllType()
         {
             if (mEntityTable.mStringColumns.find("string:Type") == mEntityTable.mStringColumns.end())
-                return NULL;
+                return {};
 
             const int count = GetCount();
             const std::vector<int>& typeData = mEntityTable.mStringColumns["string:Type"];
@@ -530,7 +530,7 @@ namespace Vim
                 return {};
 
             if (mEntityTable.mStringColumns.find("string:Label") == mEntityTable.mStringColumns.end())
-                return NULL;
+                return {};
 
             return &mStrings[mEntityTable.mStringColumns["string:Label"][displayUnitIndex]];
         }
@@ -538,7 +538,7 @@ namespace Vim
         const std::vector<const std::string*>* GetAllLabel()
         {
             if (mEntityTable.mStringColumns.find("string:Label") == mEntityTable.mStringColumns.end())
-                return NULL;
+                return {};
 
             const int count = GetCount();
             const std::vector<int>& labelData = mEntityTable.mStringColumns["string:Label"];
@@ -559,7 +559,7 @@ namespace Vim
     static DisplayUnitTable* GetDisplayUnitTable(VimScene& scene)
     {
         if (scene.mEntityTables.find("Vim.DisplayUnit") == scene.mEntityTables.end())
-            return NULL;
+            return {};
 
         return new DisplayUnitTable(scene.mEntityTables["Vim.DisplayUnit"], scene.mStrings);
     }
@@ -626,7 +626,7 @@ namespace Vim
                 mEntityTable.mDataColumns.find("int:Flags") == mEntityTable.mDataColumns.end() ||
                 mEntityTable.mStringColumns.find("string:Guid") == mEntityTable.mStringColumns.end() ||
                 mEntityTable.mIndexColumns.find("index:Vim.DisplayUnit:DisplayUnit") == mEntityTable.mIndexColumns.end())
-                return NULL;
+                return {};
 
             const int count = GetCount();
 
@@ -685,7 +685,7 @@ namespace Vim
                 return {};
 
             if (mEntityTable.mStringColumns.find("string:Name") == mEntityTable.mStringColumns.end())
-                return NULL;
+                return {};
 
             return &mStrings[mEntityTable.mStringColumns["string:Name"][parameterDescriptorIndex]];
         }
@@ -693,7 +693,7 @@ namespace Vim
         const std::vector<const std::string*>* GetAllName()
         {
             if (mEntityTable.mStringColumns.find("string:Name") == mEntityTable.mStringColumns.end())
-                return NULL;
+                return {};
 
             const int count = GetCount();
             const std::vector<int>& nameData = mEntityTable.mStringColumns["string:Name"];
@@ -715,7 +715,7 @@ namespace Vim
                 return {};
 
             if (mEntityTable.mStringColumns.find("string:Group") == mEntityTable.mStringColumns.end())
-                return NULL;
+                return {};
 
             return &mStrings[mEntityTable.mStringColumns["string:Group"][parameterDescriptorIndex]];
         }
@@ -723,7 +723,7 @@ namespace Vim
         const std::vector<const std::string*>* GetAllGroup()
         {
             if (mEntityTable.mStringColumns.find("string:Group") == mEntityTable.mStringColumns.end())
-                return NULL;
+                return {};
 
             const int count = GetCount();
             const std::vector<int>& groupData = mEntityTable.mStringColumns["string:Group"];
@@ -745,7 +745,7 @@ namespace Vim
                 return {};
 
             if (mEntityTable.mStringColumns.find("string:ParameterType") == mEntityTable.mStringColumns.end())
-                return NULL;
+                return {};
 
             return &mStrings[mEntityTable.mStringColumns["string:ParameterType"][parameterDescriptorIndex]];
         }
@@ -753,7 +753,7 @@ namespace Vim
         const std::vector<const std::string*>* GetAllParameterType()
         {
             if (mEntityTable.mStringColumns.find("string:ParameterType") == mEntityTable.mStringColumns.end())
-                return NULL;
+                return {};
 
             const int count = GetCount();
             const std::vector<int>& parameterTypeData = mEntityTable.mStringColumns["string:ParameterType"];
@@ -783,7 +783,7 @@ namespace Vim
         const std::vector<bool>* GetAllIsInstance()
         {
             if (mEntityTable.mDataColumns.find("byte:IsInstance") == mEntityTable.mDataColumns.end())
-                return NULL;
+                return {};
 
             const int count = GetCount();
             bfast::byte* isInstanceData = new bfast::byte[count];
@@ -810,7 +810,7 @@ namespace Vim
         const std::vector<bool>* GetAllIsShared()
         {
             if (mEntityTable.mDataColumns.find("byte:IsShared") == mEntityTable.mDataColumns.end())
-                return NULL;
+                return {};
 
             const int count = GetCount();
             bfast::byte* isSharedData = new bfast::byte[count];
@@ -837,7 +837,7 @@ namespace Vim
         const std::vector<bool>* GetAllIsReadOnly()
         {
             if (mEntityTable.mDataColumns.find("byte:IsReadOnly") == mEntityTable.mDataColumns.end())
-                return NULL;
+                return {};
 
             const int count = GetCount();
             bfast::byte* isReadOnlyData = new bfast::byte[count];
@@ -864,7 +864,7 @@ namespace Vim
         const std::vector<int>* GetAllFlags()
         {
             if (mEntityTable.mDataColumns.find("int:Flags") == mEntityTable.mDataColumns.end())
-                return NULL;
+                return {};
 
             const int count = GetCount();
             int* flagsData = new int[count];
@@ -883,7 +883,7 @@ namespace Vim
                 return {};
 
             if (mEntityTable.mStringColumns.find("string:Guid") == mEntityTable.mStringColumns.end())
-                return NULL;
+                return {};
 
             return &mStrings[mEntityTable.mStringColumns["string:Guid"][parameterDescriptorIndex]];
         }
@@ -891,7 +891,7 @@ namespace Vim
         const std::vector<const std::string*>* GetAllGuid()
         {
             if (mEntityTable.mStringColumns.find("string:Guid") == mEntityTable.mStringColumns.end())
-                return NULL;
+                return {};
 
             const int count = GetCount();
             const std::vector<int>& guidData = mEntityTable.mStringColumns["string:Guid"];
@@ -923,7 +923,7 @@ namespace Vim
     static ParameterDescriptorTable* GetParameterDescriptorTable(VimScene& scene)
     {
         if (scene.mEntityTables.find("Vim.ParameterDescriptor") == scene.mEntityTables.end())
-            return NULL;
+            return {};
 
         return new ParameterDescriptorTable(scene.mEntityTables["Vim.ParameterDescriptor"], scene.mStrings);
     }
@@ -973,7 +973,7 @@ namespace Vim
             if (mEntityTable.mStringColumns.find("string:Value") == mEntityTable.mStringColumns.end() ||
                 mEntityTable.mIndexColumns.find("index:Vim.ParameterDescriptor:ParameterDescriptor") == mEntityTable.mIndexColumns.end() ||
                 mEntityTable.mIndexColumns.find("index:Vim.Element:Element") == mEntityTable.mIndexColumns.end())
-                return NULL;
+                return {};
 
             const int count = GetCount();
 
@@ -1004,7 +1004,7 @@ namespace Vim
                 return {};
 
             if (mEntityTable.mStringColumns.find("string:Value") == mEntityTable.mStringColumns.end())
-                return NULL;
+                return {};
 
             return &mStrings[mEntityTable.mStringColumns["string:Value"][parameterIndex]];
         }
@@ -1012,7 +1012,7 @@ namespace Vim
         const std::vector<const std::string*>* GetAllValue()
         {
             if (mEntityTable.mStringColumns.find("string:Value") == mEntityTable.mStringColumns.end())
-                return NULL;
+                return {};
 
             const int count = GetCount();
             const std::vector<int>& valueData = mEntityTable.mStringColumns["string:Value"];
@@ -1055,7 +1055,7 @@ namespace Vim
     static ParameterTable* GetParameterTable(VimScene& scene)
     {
         if (scene.mEntityTables.find("Vim.Parameter") == scene.mEntityTables.end())
-            return NULL;
+            return {};
 
         return new ParameterTable(scene.mEntityTables["Vim.Parameter"], scene.mStrings);
     }
@@ -1161,7 +1161,7 @@ namespace Vim
                 mEntityTable.mIndexColumns.find("index:Vim.AssemblyInstance:AssemblyInstance") == mEntityTable.mIndexColumns.end() ||
                 mEntityTable.mIndexColumns.find("index:Vim.BimDocument:BimDocument") == mEntityTable.mIndexColumns.end() ||
                 mEntityTable.mIndexColumns.find("index:Vim.Room:Room") == mEntityTable.mIndexColumns.end())
-                return NULL;
+                return {};
 
             const int count = GetCount();
 
@@ -1245,7 +1245,7 @@ namespace Vim
         const std::vector<int>* GetAllId()
         {
             if (mEntityTable.mDataColumns.find("int:Id") == mEntityTable.mDataColumns.end())
-                return NULL;
+                return {};
 
             const int count = GetCount();
             int* idData = new int[count];
@@ -1264,7 +1264,7 @@ namespace Vim
                 return {};
 
             if (mEntityTable.mStringColumns.find("string:Type") == mEntityTable.mStringColumns.end())
-                return NULL;
+                return {};
 
             return &mStrings[mEntityTable.mStringColumns["string:Type"][elementIndex]];
         }
@@ -1272,7 +1272,7 @@ namespace Vim
         const std::vector<const std::string*>* GetAllType()
         {
             if (mEntityTable.mStringColumns.find("string:Type") == mEntityTable.mStringColumns.end())
-                return NULL;
+                return {};
 
             const int count = GetCount();
             const std::vector<int>& typeData = mEntityTable.mStringColumns["string:Type"];
@@ -1294,7 +1294,7 @@ namespace Vim
                 return {};
 
             if (mEntityTable.mStringColumns.find("string:Name") == mEntityTable.mStringColumns.end())
-                return NULL;
+                return {};
 
             return &mStrings[mEntityTable.mStringColumns["string:Name"][elementIndex]];
         }
@@ -1302,7 +1302,7 @@ namespace Vim
         const std::vector<const std::string*>* GetAllName()
         {
             if (mEntityTable.mStringColumns.find("string:Name") == mEntityTable.mStringColumns.end())
-                return NULL;
+                return {};
 
             const int count = GetCount();
             const std::vector<int>& nameData = mEntityTable.mStringColumns["string:Name"];
@@ -1324,7 +1324,7 @@ namespace Vim
                 return {};
 
             if (mEntityTable.mStringColumns.find("string:UniqueId") == mEntityTable.mStringColumns.end())
-                return NULL;
+                return {};
 
             return &mStrings[mEntityTable.mStringColumns["string:UniqueId"][elementIndex]];
         }
@@ -1332,7 +1332,7 @@ namespace Vim
         const std::vector<const std::string*>* GetAllUniqueId()
         {
             if (mEntityTable.mStringColumns.find("string:UniqueId") == mEntityTable.mStringColumns.end())
-                return NULL;
+                return {};
 
             const int count = GetCount();
             const std::vector<int>& uniqueIdData = mEntityTable.mStringColumns["string:UniqueId"];
@@ -1377,7 +1377,7 @@ namespace Vim
             if (mEntityTable.mDataColumns.find("float:Location.X") == mEntityTable.mDataColumns.end() ||
                 mEntityTable.mDataColumns.find("float:Location.Y") == mEntityTable.mDataColumns.end() ||
                 mEntityTable.mDataColumns.find("float:Location.Z") == mEntityTable.mDataColumns.end())
-                return NULL;
+                return {};
 
             const int count = GetCount();
             Vector3Converter locationConverter;
@@ -1406,7 +1406,7 @@ namespace Vim
                 return {};
 
             if (mEntityTable.mStringColumns.find("string:FamilyName") == mEntityTable.mStringColumns.end())
-                return NULL;
+                return {};
 
             return &mStrings[mEntityTable.mStringColumns["string:FamilyName"][elementIndex]];
         }
@@ -1414,7 +1414,7 @@ namespace Vim
         const std::vector<const std::string*>* GetAllFamilyName()
         {
             if (mEntityTable.mStringColumns.find("string:FamilyName") == mEntityTable.mStringColumns.end())
-                return NULL;
+                return {};
 
             const int count = GetCount();
             const std::vector<int>& familyNameData = mEntityTable.mStringColumns["string:FamilyName"];
@@ -1444,7 +1444,7 @@ namespace Vim
         const std::vector<bool>* GetAllIsPinned()
         {
             if (mEntityTable.mDataColumns.find("byte:IsPinned") == mEntityTable.mDataColumns.end())
-                return NULL;
+                return {};
 
             const int count = GetCount();
             bfast::byte* isPinnedData = new bfast::byte[count];
@@ -1583,7 +1583,7 @@ namespace Vim
     static ElementTable* GetElementTable(VimScene& scene)
     {
         if (scene.mEntityTables.find("Vim.Element") == scene.mEntityTables.end())
-            return NULL;
+            return {};
 
         return new ElementTable(scene.mEntityTables["Vim.Element"], scene.mStrings);
     }
@@ -1647,7 +1647,7 @@ namespace Vim
                 mEntityTable.mStringColumns.find("string:Owner") == mEntityTable.mStringColumns.end() ||
                 mEntityTable.mStringColumns.find("string:UniqueId") == mEntityTable.mStringColumns.end() ||
                 mEntityTable.mIndexColumns.find("index:Vim.BimDocument:BimDocument") == mEntityTable.mIndexColumns.end())
-                return NULL;
+                return {};
 
             const int count = GetCount();
 
@@ -1709,7 +1709,7 @@ namespace Vim
         const std::vector<int>* GetAllId()
         {
             if (mEntityTable.mDataColumns.find("int:Id") == mEntityTable.mDataColumns.end())
-                return NULL;
+                return {};
 
             const int count = GetCount();
             int* idData = new int[count];
@@ -1728,7 +1728,7 @@ namespace Vim
                 return {};
 
             if (mEntityTable.mStringColumns.find("string:Name") == mEntityTable.mStringColumns.end())
-                return NULL;
+                return {};
 
             return &mStrings[mEntityTable.mStringColumns["string:Name"][worksetIndex]];
         }
@@ -1736,7 +1736,7 @@ namespace Vim
         const std::vector<const std::string*>* GetAllName()
         {
             if (mEntityTable.mStringColumns.find("string:Name") == mEntityTable.mStringColumns.end())
-                return NULL;
+                return {};
 
             const int count = GetCount();
             const std::vector<int>& nameData = mEntityTable.mStringColumns["string:Name"];
@@ -1758,7 +1758,7 @@ namespace Vim
                 return {};
 
             if (mEntityTable.mStringColumns.find("string:Kind") == mEntityTable.mStringColumns.end())
-                return NULL;
+                return {};
 
             return &mStrings[mEntityTable.mStringColumns["string:Kind"][worksetIndex]];
         }
@@ -1766,7 +1766,7 @@ namespace Vim
         const std::vector<const std::string*>* GetAllKind()
         {
             if (mEntityTable.mStringColumns.find("string:Kind") == mEntityTable.mStringColumns.end())
-                return NULL;
+                return {};
 
             const int count = GetCount();
             const std::vector<int>& kindData = mEntityTable.mStringColumns["string:Kind"];
@@ -1796,7 +1796,7 @@ namespace Vim
         const std::vector<bool>* GetAllIsOpen()
         {
             if (mEntityTable.mDataColumns.find("byte:IsOpen") == mEntityTable.mDataColumns.end())
-                return NULL;
+                return {};
 
             const int count = GetCount();
             bfast::byte* isOpenData = new bfast::byte[count];
@@ -1823,7 +1823,7 @@ namespace Vim
         const std::vector<bool>* GetAllIsEditable()
         {
             if (mEntityTable.mDataColumns.find("byte:IsEditable") == mEntityTable.mDataColumns.end())
-                return NULL;
+                return {};
 
             const int count = GetCount();
             bfast::byte* isEditableData = new bfast::byte[count];
@@ -1842,7 +1842,7 @@ namespace Vim
                 return {};
 
             if (mEntityTable.mStringColumns.find("string:Owner") == mEntityTable.mStringColumns.end())
-                return NULL;
+                return {};
 
             return &mStrings[mEntityTable.mStringColumns["string:Owner"][worksetIndex]];
         }
@@ -1850,7 +1850,7 @@ namespace Vim
         const std::vector<const std::string*>* GetAllOwner()
         {
             if (mEntityTable.mStringColumns.find("string:Owner") == mEntityTable.mStringColumns.end())
-                return NULL;
+                return {};
 
             const int count = GetCount();
             const std::vector<int>& ownerData = mEntityTable.mStringColumns["string:Owner"];
@@ -1872,7 +1872,7 @@ namespace Vim
                 return {};
 
             if (mEntityTable.mStringColumns.find("string:UniqueId") == mEntityTable.mStringColumns.end())
-                return NULL;
+                return {};
 
             return &mStrings[mEntityTable.mStringColumns["string:UniqueId"][worksetIndex]];
         }
@@ -1880,7 +1880,7 @@ namespace Vim
         const std::vector<const std::string*>* GetAllUniqueId()
         {
             if (mEntityTable.mStringColumns.find("string:UniqueId") == mEntityTable.mStringColumns.end())
-                return NULL;
+                return {};
 
             const int count = GetCount();
             const std::vector<int>& uniqueIdData = mEntityTable.mStringColumns["string:UniqueId"];
@@ -1912,7 +1912,7 @@ namespace Vim
     static WorksetTable* GetWorksetTable(VimScene& scene)
     {
         if (scene.mEntityTables.find("Vim.Workset") == scene.mEntityTables.end())
-            return NULL;
+            return {};
 
         return new WorksetTable(scene.mEntityTables["Vim.Workset"], scene.mStrings);
     }
@@ -1963,7 +1963,7 @@ namespace Vim
                 mEntityTable.mDataColumns.find("float:Position.Y") == mEntityTable.mDataColumns.end() ||
                 mEntityTable.mDataColumns.find("float:Position.Z") == mEntityTable.mDataColumns.end() ||
                 mEntityTable.mIndexColumns.find("index:Vim.Element:Element") == mEntityTable.mIndexColumns.end())
-                return NULL;
+                return {};
 
             const int count = GetCount();
 
@@ -2000,7 +2000,7 @@ namespace Vim
                 return {};
 
             if (mEntityTable.mStringColumns.find("string:AssemblyTypeName") == mEntityTable.mStringColumns.end())
-                return NULL;
+                return {};
 
             return &mStrings[mEntityTable.mStringColumns["string:AssemblyTypeName"][assemblyInstanceIndex]];
         }
@@ -2008,7 +2008,7 @@ namespace Vim
         const std::vector<const std::string*>* GetAllAssemblyTypeName()
         {
             if (mEntityTable.mStringColumns.find("string:AssemblyTypeName") == mEntityTable.mStringColumns.end())
-                return NULL;
+                return {};
 
             const int count = GetCount();
             const std::vector<int>& assemblyTypeNameData = mEntityTable.mStringColumns["string:AssemblyTypeName"];
@@ -2053,7 +2053,7 @@ namespace Vim
             if (mEntityTable.mDataColumns.find("float:Position.X") == mEntityTable.mDataColumns.end() ||
                 mEntityTable.mDataColumns.find("float:Position.Y") == mEntityTable.mDataColumns.end() ||
                 mEntityTable.mDataColumns.find("float:Position.Z") == mEntityTable.mDataColumns.end())
-                return NULL;
+                return {};
 
             const int count = GetCount();
             Vector3Converter positionConverter;
@@ -2092,7 +2092,7 @@ namespace Vim
     static AssemblyInstanceTable* GetAssemblyInstanceTable(VimScene& scene)
     {
         if (scene.mEntityTables.find("Vim.AssemblyInstance") == scene.mEntityTables.end())
-            return NULL;
+            return {};
 
         return new AssemblyInstanceTable(scene.mEntityTables["Vim.AssemblyInstance"], scene.mStrings);
     }
@@ -2143,7 +2143,7 @@ namespace Vim
                 mEntityTable.mDataColumns.find("float:Position.Y") == mEntityTable.mDataColumns.end() ||
                 mEntityTable.mDataColumns.find("float:Position.Z") == mEntityTable.mDataColumns.end() ||
                 mEntityTable.mIndexColumns.find("index:Vim.Element:Element") == mEntityTable.mIndexColumns.end())
-                return NULL;
+                return {};
 
             const int count = GetCount();
 
@@ -2180,7 +2180,7 @@ namespace Vim
                 return {};
 
             if (mEntityTable.mStringColumns.find("string:GroupType") == mEntityTable.mStringColumns.end())
-                return NULL;
+                return {};
 
             return &mStrings[mEntityTable.mStringColumns["string:GroupType"][groupIndex]];
         }
@@ -2188,7 +2188,7 @@ namespace Vim
         const std::vector<const std::string*>* GetAllGroupType()
         {
             if (mEntityTable.mStringColumns.find("string:GroupType") == mEntityTable.mStringColumns.end())
-                return NULL;
+                return {};
 
             const int count = GetCount();
             const std::vector<int>& groupTypeData = mEntityTable.mStringColumns["string:GroupType"];
@@ -2233,7 +2233,7 @@ namespace Vim
             if (mEntityTable.mDataColumns.find("float:Position.X") == mEntityTable.mDataColumns.end() ||
                 mEntityTable.mDataColumns.find("float:Position.Y") == mEntityTable.mDataColumns.end() ||
                 mEntityTable.mDataColumns.find("float:Position.Z") == mEntityTable.mDataColumns.end())
-                return NULL;
+                return {};
 
             const int count = GetCount();
             Vector3Converter positionConverter;
@@ -2272,7 +2272,7 @@ namespace Vim
     static GroupTable* GetGroupTable(VimScene& scene)
     {
         if (scene.mEntityTables.find("Vim.Group") == scene.mEntityTables.end())
-            return NULL;
+            return {};
 
         return new GroupTable(scene.mEntityTables["Vim.Group"], scene.mStrings);
     }
@@ -2318,7 +2318,7 @@ namespace Vim
         {
             if (mEntityTable.mDataColumns.find("byte:IsPrimary") == mEntityTable.mDataColumns.end() ||
                 mEntityTable.mIndexColumns.find("index:Vim.Element:Element") == mEntityTable.mIndexColumns.end())
-                return NULL;
+                return {};
 
             const int count = GetCount();
 
@@ -2358,7 +2358,7 @@ namespace Vim
         const std::vector<bool>* GetAllIsPrimary()
         {
             if (mEntityTable.mDataColumns.find("byte:IsPrimary") == mEntityTable.mDataColumns.end())
-                return NULL;
+                return {};
 
             const int count = GetCount();
             bfast::byte* isPrimaryData = new bfast::byte[count];
@@ -2387,7 +2387,7 @@ namespace Vim
     static DesignOptionTable* GetDesignOptionTable(VimScene& scene)
     {
         if (scene.mEntityTables.find("Vim.DesignOption") == scene.mEntityTables.end())
-            return NULL;
+            return {};
 
         return new DesignOptionTable(scene.mEntityTables["Vim.DesignOption"], scene.mStrings);
     }
@@ -2433,7 +2433,7 @@ namespace Vim
         {
             if (mEntityTable.mDataColumns.find("double:Elevation") == mEntityTable.mDataColumns.end() ||
                 mEntityTable.mIndexColumns.find("index:Vim.Element:Element") == mEntityTable.mIndexColumns.end())
-                return NULL;
+                return {};
 
             const int count = GetCount();
 
@@ -2473,7 +2473,7 @@ namespace Vim
         const std::vector<double>* GetAllElevation()
         {
             if (mEntityTable.mDataColumns.find("double:Elevation") == mEntityTable.mDataColumns.end())
-                return NULL;
+                return {};
 
             const int count = GetCount();
             double* elevationData = new double[count];
@@ -2502,7 +2502,7 @@ namespace Vim
     static LevelTable* GetLevelTable(VimScene& scene)
     {
         if (scene.mEntityTables.find("Vim.Level") == scene.mEntityTables.end())
-            return NULL;
+            return {};
 
         return new LevelTable(scene.mEntityTables["Vim.Level"], scene.mStrings);
     }
@@ -2545,7 +2545,7 @@ namespace Vim
         std::vector<Phase>* GetAll()
         {
             if (mEntityTable.mIndexColumns.find("index:Vim.Element:Element") == mEntityTable.mIndexColumns.end())
-                return NULL;
+                return {};
 
             const int count = GetCount();
 
@@ -2581,7 +2581,7 @@ namespace Vim
     static PhaseTable* GetPhaseTable(VimScene& scene)
     {
         if (scene.mEntityTables.find("Vim.Phase") == scene.mEntityTables.end())
-            return NULL;
+            return {};
 
         return new PhaseTable(scene.mEntityTables["Vim.Phase"], scene.mStrings);
     }
@@ -2649,7 +2649,7 @@ namespace Vim
                 mEntityTable.mStringColumns.find("string:Number") == mEntityTable.mStringColumns.end() ||
                 mEntityTable.mIndexColumns.find("index:Vim.Level:UpperLimit") == mEntityTable.mIndexColumns.end() ||
                 mEntityTable.mIndexColumns.find("index:Vim.Element:Element") == mEntityTable.mIndexColumns.end())
-                return NULL;
+                return {};
 
             const int count = GetCount();
 
@@ -2719,7 +2719,7 @@ namespace Vim
         const std::vector<double>* GetAllBaseOffset()
         {
             if (mEntityTable.mDataColumns.find("double:BaseOffset") == mEntityTable.mDataColumns.end())
-                return NULL;
+                return {};
 
             const int count = GetCount();
             double* baseOffsetData = new double[count];
@@ -2746,7 +2746,7 @@ namespace Vim
         const std::vector<double>* GetAllLimitOffset()
         {
             if (mEntityTable.mDataColumns.find("double:LimitOffset") == mEntityTable.mDataColumns.end())
-                return NULL;
+                return {};
 
             const int count = GetCount();
             double* limitOffsetData = new double[count];
@@ -2773,7 +2773,7 @@ namespace Vim
         const std::vector<double>* GetAllUnboundedHeight()
         {
             if (mEntityTable.mDataColumns.find("double:UnboundedHeight") == mEntityTable.mDataColumns.end())
-                return NULL;
+                return {};
 
             const int count = GetCount();
             double* unboundedHeightData = new double[count];
@@ -2800,7 +2800,7 @@ namespace Vim
         const std::vector<double>* GetAllVolume()
         {
             if (mEntityTable.mDataColumns.find("double:Volume") == mEntityTable.mDataColumns.end())
-                return NULL;
+                return {};
 
             const int count = GetCount();
             double* volumeData = new double[count];
@@ -2827,7 +2827,7 @@ namespace Vim
         const std::vector<double>* GetAllPerimeter()
         {
             if (mEntityTable.mDataColumns.find("double:Perimeter") == mEntityTable.mDataColumns.end())
-                return NULL;
+                return {};
 
             const int count = GetCount();
             double* perimeterData = new double[count];
@@ -2854,7 +2854,7 @@ namespace Vim
         const std::vector<double>* GetAllArea()
         {
             if (mEntityTable.mDataColumns.find("double:Area") == mEntityTable.mDataColumns.end())
-                return NULL;
+                return {};
 
             const int count = GetCount();
             double* areaData = new double[count];
@@ -2873,7 +2873,7 @@ namespace Vim
                 return {};
 
             if (mEntityTable.mStringColumns.find("string:Number") == mEntityTable.mStringColumns.end())
-                return NULL;
+                return {};
 
             return &mStrings[mEntityTable.mStringColumns["string:Number"][roomIndex]];
         }
@@ -2881,7 +2881,7 @@ namespace Vim
         const std::vector<const std::string*>* GetAllNumber()
         {
             if (mEntityTable.mStringColumns.find("string:Number") == mEntityTable.mStringColumns.end())
-                return NULL;
+                return {};
 
             const int count = GetCount();
             const std::vector<int>& numberData = mEntityTable.mStringColumns["string:Number"];
@@ -2924,7 +2924,7 @@ namespace Vim
     static RoomTable* GetRoomTable(VimScene& scene)
     {
         if (scene.mEntityTables.find("Vim.Room") == scene.mEntityTables.end())
-            return NULL;
+            return {};
 
         return new RoomTable(scene.mEntityTables["Vim.Room"], scene.mStrings);
     }
@@ -3063,7 +3063,7 @@ namespace Vim
                 mEntityTable.mIndexColumns.find("index:Vim.Family:OwnerFamily") == mEntityTable.mIndexColumns.end() ||
                 mEntityTable.mIndexColumns.find("index:Vim.BimDocument:Parent") == mEntityTable.mIndexColumns.end() ||
                 mEntityTable.mIndexColumns.find("index:Vim.Element:Element") == mEntityTable.mIndexColumns.end())
-                return NULL;
+                return {};
 
             const int count = GetCount();
 
@@ -3198,7 +3198,7 @@ namespace Vim
                 return {};
 
             if (mEntityTable.mStringColumns.find("string:Title") == mEntityTable.mStringColumns.end())
-                return NULL;
+                return {};
 
             return &mStrings[mEntityTable.mStringColumns["string:Title"][bimDocumentIndex]];
         }
@@ -3206,7 +3206,7 @@ namespace Vim
         const std::vector<const std::string*>* GetAllTitle()
         {
             if (mEntityTable.mStringColumns.find("string:Title") == mEntityTable.mStringColumns.end())
-                return NULL;
+                return {};
 
             const int count = GetCount();
             const std::vector<int>& titleData = mEntityTable.mStringColumns["string:Title"];
@@ -3236,7 +3236,7 @@ namespace Vim
         const std::vector<bool>* GetAllIsMetric()
         {
             if (mEntityTable.mDataColumns.find("byte:IsMetric") == mEntityTable.mDataColumns.end())
-                return NULL;
+                return {};
 
             const int count = GetCount();
             bfast::byte* isMetricData = new bfast::byte[count];
@@ -3255,7 +3255,7 @@ namespace Vim
                 return {};
 
             if (mEntityTable.mStringColumns.find("string:Guid") == mEntityTable.mStringColumns.end())
-                return NULL;
+                return {};
 
             return &mStrings[mEntityTable.mStringColumns["string:Guid"][bimDocumentIndex]];
         }
@@ -3263,7 +3263,7 @@ namespace Vim
         const std::vector<const std::string*>* GetAllGuid()
         {
             if (mEntityTable.mStringColumns.find("string:Guid") == mEntityTable.mStringColumns.end())
-                return NULL;
+                return {};
 
             const int count = GetCount();
             const std::vector<int>& guidData = mEntityTable.mStringColumns["string:Guid"];
@@ -3293,7 +3293,7 @@ namespace Vim
         const std::vector<int>* GetAllNumSaves()
         {
             if (mEntityTable.mDataColumns.find("int:NumSaves") == mEntityTable.mDataColumns.end())
-                return NULL;
+                return {};
 
             const int count = GetCount();
             int* numSavesData = new int[count];
@@ -3320,7 +3320,7 @@ namespace Vim
         const std::vector<bool>* GetAllIsLinked()
         {
             if (mEntityTable.mDataColumns.find("byte:IsLinked") == mEntityTable.mDataColumns.end())
-                return NULL;
+                return {};
 
             const int count = GetCount();
             bfast::byte* isLinkedData = new bfast::byte[count];
@@ -3347,7 +3347,7 @@ namespace Vim
         const std::vector<bool>* GetAllIsDetached()
         {
             if (mEntityTable.mDataColumns.find("byte:IsDetached") == mEntityTable.mDataColumns.end())
-                return NULL;
+                return {};
 
             const int count = GetCount();
             bfast::byte* isDetachedData = new bfast::byte[count];
@@ -3374,7 +3374,7 @@ namespace Vim
         const std::vector<bool>* GetAllIsWorkshared()
         {
             if (mEntityTable.mDataColumns.find("byte:IsWorkshared") == mEntityTable.mDataColumns.end())
-                return NULL;
+                return {};
 
             const int count = GetCount();
             bfast::byte* isWorksharedData = new bfast::byte[count];
@@ -3393,7 +3393,7 @@ namespace Vim
                 return {};
 
             if (mEntityTable.mStringColumns.find("string:PathName") == mEntityTable.mStringColumns.end())
-                return NULL;
+                return {};
 
             return &mStrings[mEntityTable.mStringColumns["string:PathName"][bimDocumentIndex]];
         }
@@ -3401,7 +3401,7 @@ namespace Vim
         const std::vector<const std::string*>* GetAllPathName()
         {
             if (mEntityTable.mStringColumns.find("string:PathName") == mEntityTable.mStringColumns.end())
-                return NULL;
+                return {};
 
             const int count = GetCount();
             const std::vector<int>& pathNameData = mEntityTable.mStringColumns["string:PathName"];
@@ -3431,7 +3431,7 @@ namespace Vim
         const std::vector<double>* GetAllLatitude()
         {
             if (mEntityTable.mDataColumns.find("double:Latitude") == mEntityTable.mDataColumns.end())
-                return NULL;
+                return {};
 
             const int count = GetCount();
             double* latitudeData = new double[count];
@@ -3458,7 +3458,7 @@ namespace Vim
         const std::vector<double>* GetAllLongitude()
         {
             if (mEntityTable.mDataColumns.find("double:Longitude") == mEntityTable.mDataColumns.end())
-                return NULL;
+                return {};
 
             const int count = GetCount();
             double* longitudeData = new double[count];
@@ -3485,7 +3485,7 @@ namespace Vim
         const std::vector<double>* GetAllTimeZone()
         {
             if (mEntityTable.mDataColumns.find("double:TimeZone") == mEntityTable.mDataColumns.end())
-                return NULL;
+                return {};
 
             const int count = GetCount();
             double* timeZoneData = new double[count];
@@ -3504,7 +3504,7 @@ namespace Vim
                 return {};
 
             if (mEntityTable.mStringColumns.find("string:PlaceName") == mEntityTable.mStringColumns.end())
-                return NULL;
+                return {};
 
             return &mStrings[mEntityTable.mStringColumns["string:PlaceName"][bimDocumentIndex]];
         }
@@ -3512,7 +3512,7 @@ namespace Vim
         const std::vector<const std::string*>* GetAllPlaceName()
         {
             if (mEntityTable.mStringColumns.find("string:PlaceName") == mEntityTable.mStringColumns.end())
-                return NULL;
+                return {};
 
             const int count = GetCount();
             const std::vector<int>& placeNameData = mEntityTable.mStringColumns["string:PlaceName"];
@@ -3534,7 +3534,7 @@ namespace Vim
                 return {};
 
             if (mEntityTable.mStringColumns.find("string:WeatherStationName") == mEntityTable.mStringColumns.end())
-                return NULL;
+                return {};
 
             return &mStrings[mEntityTable.mStringColumns["string:WeatherStationName"][bimDocumentIndex]];
         }
@@ -3542,7 +3542,7 @@ namespace Vim
         const std::vector<const std::string*>* GetAllWeatherStationName()
         {
             if (mEntityTable.mStringColumns.find("string:WeatherStationName") == mEntityTable.mStringColumns.end())
-                return NULL;
+                return {};
 
             const int count = GetCount();
             const std::vector<int>& weatherStationNameData = mEntityTable.mStringColumns["string:WeatherStationName"];
@@ -3572,7 +3572,7 @@ namespace Vim
         const std::vector<double>* GetAllElevation()
         {
             if (mEntityTable.mDataColumns.find("double:Elevation") == mEntityTable.mDataColumns.end())
-                return NULL;
+                return {};
 
             const int count = GetCount();
             double* elevationData = new double[count];
@@ -3591,7 +3591,7 @@ namespace Vim
                 return {};
 
             if (mEntityTable.mStringColumns.find("string:ProjectLocation") == mEntityTable.mStringColumns.end())
-                return NULL;
+                return {};
 
             return &mStrings[mEntityTable.mStringColumns["string:ProjectLocation"][bimDocumentIndex]];
         }
@@ -3599,7 +3599,7 @@ namespace Vim
         const std::vector<const std::string*>* GetAllProjectLocation()
         {
             if (mEntityTable.mStringColumns.find("string:ProjectLocation") == mEntityTable.mStringColumns.end())
-                return NULL;
+                return {};
 
             const int count = GetCount();
             const std::vector<int>& projectLocationData = mEntityTable.mStringColumns["string:ProjectLocation"];
@@ -3621,7 +3621,7 @@ namespace Vim
                 return {};
 
             if (mEntityTable.mStringColumns.find("string:IssueDate") == mEntityTable.mStringColumns.end())
-                return NULL;
+                return {};
 
             return &mStrings[mEntityTable.mStringColumns["string:IssueDate"][bimDocumentIndex]];
         }
@@ -3629,7 +3629,7 @@ namespace Vim
         const std::vector<const std::string*>* GetAllIssueDate()
         {
             if (mEntityTable.mStringColumns.find("string:IssueDate") == mEntityTable.mStringColumns.end())
-                return NULL;
+                return {};
 
             const int count = GetCount();
             const std::vector<int>& issueDateData = mEntityTable.mStringColumns["string:IssueDate"];
@@ -3651,7 +3651,7 @@ namespace Vim
                 return {};
 
             if (mEntityTable.mStringColumns.find("string:Status") == mEntityTable.mStringColumns.end())
-                return NULL;
+                return {};
 
             return &mStrings[mEntityTable.mStringColumns["string:Status"][bimDocumentIndex]];
         }
@@ -3659,7 +3659,7 @@ namespace Vim
         const std::vector<const std::string*>* GetAllStatus()
         {
             if (mEntityTable.mStringColumns.find("string:Status") == mEntityTable.mStringColumns.end())
-                return NULL;
+                return {};
 
             const int count = GetCount();
             const std::vector<int>& statusData = mEntityTable.mStringColumns["string:Status"];
@@ -3681,7 +3681,7 @@ namespace Vim
                 return {};
 
             if (mEntityTable.mStringColumns.find("string:ClientName") == mEntityTable.mStringColumns.end())
-                return NULL;
+                return {};
 
             return &mStrings[mEntityTable.mStringColumns["string:ClientName"][bimDocumentIndex]];
         }
@@ -3689,7 +3689,7 @@ namespace Vim
         const std::vector<const std::string*>* GetAllClientName()
         {
             if (mEntityTable.mStringColumns.find("string:ClientName") == mEntityTable.mStringColumns.end())
-                return NULL;
+                return {};
 
             const int count = GetCount();
             const std::vector<int>& clientNameData = mEntityTable.mStringColumns["string:ClientName"];
@@ -3711,7 +3711,7 @@ namespace Vim
                 return {};
 
             if (mEntityTable.mStringColumns.find("string:Address") == mEntityTable.mStringColumns.end())
-                return NULL;
+                return {};
 
             return &mStrings[mEntityTable.mStringColumns["string:Address"][bimDocumentIndex]];
         }
@@ -3719,7 +3719,7 @@ namespace Vim
         const std::vector<const std::string*>* GetAllAddress()
         {
             if (mEntityTable.mStringColumns.find("string:Address") == mEntityTable.mStringColumns.end())
-                return NULL;
+                return {};
 
             const int count = GetCount();
             const std::vector<int>& addressData = mEntityTable.mStringColumns["string:Address"];
@@ -3741,7 +3741,7 @@ namespace Vim
                 return {};
 
             if (mEntityTable.mStringColumns.find("string:Name") == mEntityTable.mStringColumns.end())
-                return NULL;
+                return {};
 
             return &mStrings[mEntityTable.mStringColumns["string:Name"][bimDocumentIndex]];
         }
@@ -3749,7 +3749,7 @@ namespace Vim
         const std::vector<const std::string*>* GetAllName()
         {
             if (mEntityTable.mStringColumns.find("string:Name") == mEntityTable.mStringColumns.end())
-                return NULL;
+                return {};
 
             const int count = GetCount();
             const std::vector<int>& nameData = mEntityTable.mStringColumns["string:Name"];
@@ -3771,7 +3771,7 @@ namespace Vim
                 return {};
 
             if (mEntityTable.mStringColumns.find("string:Number") == mEntityTable.mStringColumns.end())
-                return NULL;
+                return {};
 
             return &mStrings[mEntityTable.mStringColumns["string:Number"][bimDocumentIndex]];
         }
@@ -3779,7 +3779,7 @@ namespace Vim
         const std::vector<const std::string*>* GetAllNumber()
         {
             if (mEntityTable.mStringColumns.find("string:Number") == mEntityTable.mStringColumns.end())
-                return NULL;
+                return {};
 
             const int count = GetCount();
             const std::vector<int>& numberData = mEntityTable.mStringColumns["string:Number"];
@@ -3801,7 +3801,7 @@ namespace Vim
                 return {};
 
             if (mEntityTable.mStringColumns.find("string:Author") == mEntityTable.mStringColumns.end())
-                return NULL;
+                return {};
 
             return &mStrings[mEntityTable.mStringColumns["string:Author"][bimDocumentIndex]];
         }
@@ -3809,7 +3809,7 @@ namespace Vim
         const std::vector<const std::string*>* GetAllAuthor()
         {
             if (mEntityTable.mStringColumns.find("string:Author") == mEntityTable.mStringColumns.end())
-                return NULL;
+                return {};
 
             const int count = GetCount();
             const std::vector<int>& authorData = mEntityTable.mStringColumns["string:Author"];
@@ -3831,7 +3831,7 @@ namespace Vim
                 return {};
 
             if (mEntityTable.mStringColumns.find("string:BuildingName") == mEntityTable.mStringColumns.end())
-                return NULL;
+                return {};
 
             return &mStrings[mEntityTable.mStringColumns["string:BuildingName"][bimDocumentIndex]];
         }
@@ -3839,7 +3839,7 @@ namespace Vim
         const std::vector<const std::string*>* GetAllBuildingName()
         {
             if (mEntityTable.mStringColumns.find("string:BuildingName") == mEntityTable.mStringColumns.end())
-                return NULL;
+                return {};
 
             const int count = GetCount();
             const std::vector<int>& buildingNameData = mEntityTable.mStringColumns["string:BuildingName"];
@@ -3861,7 +3861,7 @@ namespace Vim
                 return {};
 
             if (mEntityTable.mStringColumns.find("string:OrganizationName") == mEntityTable.mStringColumns.end())
-                return NULL;
+                return {};
 
             return &mStrings[mEntityTable.mStringColumns["string:OrganizationName"][bimDocumentIndex]];
         }
@@ -3869,7 +3869,7 @@ namespace Vim
         const std::vector<const std::string*>* GetAllOrganizationName()
         {
             if (mEntityTable.mStringColumns.find("string:OrganizationName") == mEntityTable.mStringColumns.end())
-                return NULL;
+                return {};
 
             const int count = GetCount();
             const std::vector<int>& organizationNameData = mEntityTable.mStringColumns["string:OrganizationName"];
@@ -3891,7 +3891,7 @@ namespace Vim
                 return {};
 
             if (mEntityTable.mStringColumns.find("string:OrganizationDescription") == mEntityTable.mStringColumns.end())
-                return NULL;
+                return {};
 
             return &mStrings[mEntityTable.mStringColumns["string:OrganizationDescription"][bimDocumentIndex]];
         }
@@ -3899,7 +3899,7 @@ namespace Vim
         const std::vector<const std::string*>* GetAllOrganizationDescription()
         {
             if (mEntityTable.mStringColumns.find("string:OrganizationDescription") == mEntityTable.mStringColumns.end())
-                return NULL;
+                return {};
 
             const int count = GetCount();
             const std::vector<int>& organizationDescriptionData = mEntityTable.mStringColumns["string:OrganizationDescription"];
@@ -3921,7 +3921,7 @@ namespace Vim
                 return {};
 
             if (mEntityTable.mStringColumns.find("string:Product") == mEntityTable.mStringColumns.end())
-                return NULL;
+                return {};
 
             return &mStrings[mEntityTable.mStringColumns["string:Product"][bimDocumentIndex]];
         }
@@ -3929,7 +3929,7 @@ namespace Vim
         const std::vector<const std::string*>* GetAllProduct()
         {
             if (mEntityTable.mStringColumns.find("string:Product") == mEntityTable.mStringColumns.end())
-                return NULL;
+                return {};
 
             const int count = GetCount();
             const std::vector<int>& productData = mEntityTable.mStringColumns["string:Product"];
@@ -3951,7 +3951,7 @@ namespace Vim
                 return {};
 
             if (mEntityTable.mStringColumns.find("string:Version") == mEntityTable.mStringColumns.end())
-                return NULL;
+                return {};
 
             return &mStrings[mEntityTable.mStringColumns["string:Version"][bimDocumentIndex]];
         }
@@ -3959,7 +3959,7 @@ namespace Vim
         const std::vector<const std::string*>* GetAllVersion()
         {
             if (mEntityTable.mStringColumns.find("string:Version") == mEntityTable.mStringColumns.end())
-                return NULL;
+                return {};
 
             const int count = GetCount();
             const std::vector<int>& versionData = mEntityTable.mStringColumns["string:Version"];
@@ -3981,7 +3981,7 @@ namespace Vim
                 return {};
 
             if (mEntityTable.mStringColumns.find("string:User") == mEntityTable.mStringColumns.end())
-                return NULL;
+                return {};
 
             return &mStrings[mEntityTable.mStringColumns["string:User"][bimDocumentIndex]];
         }
@@ -3989,7 +3989,7 @@ namespace Vim
         const std::vector<const std::string*>* GetAllUser()
         {
             if (mEntityTable.mStringColumns.find("string:User") == mEntityTable.mStringColumns.end())
-                return NULL;
+                return {};
 
             const int count = GetCount();
             const std::vector<int>& userData = mEntityTable.mStringColumns["string:User"];
@@ -4054,7 +4054,7 @@ namespace Vim
     static BimDocumentTable* GetBimDocumentTable(VimScene& scene)
     {
         if (scene.mEntityTables.find("Vim.BimDocument") == scene.mEntityTables.end())
-            return NULL;
+            return {};
 
         return new BimDocumentTable(scene.mEntityTables["Vim.BimDocument"], scene.mStrings);
     }
@@ -4101,7 +4101,7 @@ namespace Vim
         {
             if (mEntityTable.mIndexColumns.find("index:Vim.DisplayUnit:DisplayUnit") == mEntityTable.mIndexColumns.end() ||
                 mEntityTable.mIndexColumns.find("index:Vim.BimDocument:BimDocument") == mEntityTable.mIndexColumns.end())
-                return NULL;
+                return {};
 
             const int count = GetCount();
 
@@ -4150,7 +4150,7 @@ namespace Vim
     static DisplayUnitInBimDocumentTable* GetDisplayUnitInBimDocumentTable(VimScene& scene)
     {
         if (scene.mEntityTables.find("Vim.DisplayUnitInBimDocument") == scene.mEntityTables.end())
-            return NULL;
+            return {};
 
         return new DisplayUnitInBimDocumentTable(scene.mEntityTables["Vim.DisplayUnitInBimDocument"], scene.mStrings);
     }
@@ -4200,7 +4200,7 @@ namespace Vim
             if (mEntityTable.mDataColumns.find("int:OrderIndex") == mEntityTable.mDataColumns.end() ||
                 mEntityTable.mIndexColumns.find("index:Vim.Phase:Phase") == mEntityTable.mIndexColumns.end() ||
                 mEntityTable.mIndexColumns.find("index:Vim.BimDocument:BimDocument") == mEntityTable.mIndexColumns.end())
-                return NULL;
+                return {};
 
             const int count = GetCount();
 
@@ -4242,7 +4242,7 @@ namespace Vim
         const std::vector<int>* GetAllOrderIndex()
         {
             if (mEntityTable.mDataColumns.find("int:OrderIndex") == mEntityTable.mDataColumns.end())
-                return NULL;
+                return {};
 
             const int count = GetCount();
             int* orderIndexData = new int[count];
@@ -4282,7 +4282,7 @@ namespace Vim
     static PhaseOrderInBimDocumentTable* GetPhaseOrderInBimDocumentTable(VimScene& scene)
     {
         if (scene.mEntityTables.find("Vim.PhaseOrderInBimDocument") == scene.mEntityTables.end())
-            return NULL;
+            return {};
 
         return new PhaseOrderInBimDocumentTable(scene.mEntityTables["Vim.PhaseOrderInBimDocument"], scene.mStrings);
     }
@@ -4346,7 +4346,7 @@ namespace Vim
                 mEntityTable.mStringColumns.find("string:BuiltInCategory") == mEntityTable.mStringColumns.end() ||
                 mEntityTable.mIndexColumns.find("index:Vim.Category:Parent") == mEntityTable.mIndexColumns.end() ||
                 mEntityTable.mIndexColumns.find("index:Vim.Material:Material") == mEntityTable.mIndexColumns.end())
-                return NULL;
+                return {};
 
             const int count = GetCount();
 
@@ -4396,7 +4396,7 @@ namespace Vim
                 return {};
 
             if (mEntityTable.mStringColumns.find("string:Name") == mEntityTable.mStringColumns.end())
-                return NULL;
+                return {};
 
             return &mStrings[mEntityTable.mStringColumns["string:Name"][categoryIndex]];
         }
@@ -4404,7 +4404,7 @@ namespace Vim
         const std::vector<const std::string*>* GetAllName()
         {
             if (mEntityTable.mStringColumns.find("string:Name") == mEntityTable.mStringColumns.end())
-                return NULL;
+                return {};
 
             const int count = GetCount();
             const std::vector<int>& nameData = mEntityTable.mStringColumns["string:Name"];
@@ -4434,7 +4434,7 @@ namespace Vim
         const std::vector<int>* GetAllId()
         {
             if (mEntityTable.mDataColumns.find("int:Id") == mEntityTable.mDataColumns.end())
-                return NULL;
+                return {};
 
             const int count = GetCount();
             int* idData = new int[count];
@@ -4453,7 +4453,7 @@ namespace Vim
                 return {};
 
             if (mEntityTable.mStringColumns.find("string:CategoryType") == mEntityTable.mStringColumns.end())
-                return NULL;
+                return {};
 
             return &mStrings[mEntityTable.mStringColumns["string:CategoryType"][categoryIndex]];
         }
@@ -4461,7 +4461,7 @@ namespace Vim
         const std::vector<const std::string*>* GetAllCategoryType()
         {
             if (mEntityTable.mStringColumns.find("string:CategoryType") == mEntityTable.mStringColumns.end())
-                return NULL;
+                return {};
 
             const int count = GetCount();
             const std::vector<int>& categoryTypeData = mEntityTable.mStringColumns["string:CategoryType"];
@@ -4506,7 +4506,7 @@ namespace Vim
             if (mEntityTable.mDataColumns.find("double:LineColor.X") == mEntityTable.mDataColumns.end() ||
                 mEntityTable.mDataColumns.find("double:LineColor.Y") == mEntityTable.mDataColumns.end() ||
                 mEntityTable.mDataColumns.find("double:LineColor.Z") == mEntityTable.mDataColumns.end())
-                return NULL;
+                return {};
 
             const int count = GetCount();
             DVector3Converter lineColorConverter;
@@ -4535,7 +4535,7 @@ namespace Vim
                 return {};
 
             if (mEntityTable.mStringColumns.find("string:BuiltInCategory") == mEntityTable.mStringColumns.end())
-                return NULL;
+                return {};
 
             return &mStrings[mEntityTable.mStringColumns["string:BuiltInCategory"][categoryIndex]];
         }
@@ -4543,7 +4543,7 @@ namespace Vim
         const std::vector<const std::string*>* GetAllBuiltInCategory()
         {
             if (mEntityTable.mStringColumns.find("string:BuiltInCategory") == mEntityTable.mStringColumns.end())
-                return NULL;
+                return {};
 
             const int count = GetCount();
             const std::vector<int>& builtInCategoryData = mEntityTable.mStringColumns["string:BuiltInCategory"];
@@ -4586,7 +4586,7 @@ namespace Vim
     static CategoryTable* GetCategoryTable(VimScene& scene)
     {
         if (scene.mEntityTables.find("Vim.Category") == scene.mEntityTables.end())
-            return NULL;
+            return {};
 
         return new CategoryTable(scene.mEntityTables["Vim.Category"], scene.mStrings);
     }
@@ -4645,7 +4645,7 @@ namespace Vim
                 mEntityTable.mDataColumns.find("byte:IsInPlace") == mEntityTable.mDataColumns.end() ||
                 mEntityTable.mIndexColumns.find("index:Vim.Category:FamilyCategory") == mEntityTable.mIndexColumns.end() ||
                 mEntityTable.mIndexColumns.find("index:Vim.Element:Element") == mEntityTable.mIndexColumns.end())
-                return NULL;
+                return {};
 
             const int count = GetCount();
 
@@ -4690,7 +4690,7 @@ namespace Vim
                 return {};
 
             if (mEntityTable.mStringColumns.find("string:StructuralMaterialType") == mEntityTable.mStringColumns.end())
-                return NULL;
+                return {};
 
             return &mStrings[mEntityTable.mStringColumns["string:StructuralMaterialType"][familyIndex]];
         }
@@ -4698,7 +4698,7 @@ namespace Vim
         const std::vector<const std::string*>* GetAllStructuralMaterialType()
         {
             if (mEntityTable.mStringColumns.find("string:StructuralMaterialType") == mEntityTable.mStringColumns.end())
-                return NULL;
+                return {};
 
             const int count = GetCount();
             const std::vector<int>& structuralMaterialTypeData = mEntityTable.mStringColumns["string:StructuralMaterialType"];
@@ -4720,7 +4720,7 @@ namespace Vim
                 return {};
 
             if (mEntityTable.mStringColumns.find("string:StructuralSectionShape") == mEntityTable.mStringColumns.end())
-                return NULL;
+                return {};
 
             return &mStrings[mEntityTable.mStringColumns["string:StructuralSectionShape"][familyIndex]];
         }
@@ -4728,7 +4728,7 @@ namespace Vim
         const std::vector<const std::string*>* GetAllStructuralSectionShape()
         {
             if (mEntityTable.mStringColumns.find("string:StructuralSectionShape") == mEntityTable.mStringColumns.end())
-                return NULL;
+                return {};
 
             const int count = GetCount();
             const std::vector<int>& structuralSectionShapeData = mEntityTable.mStringColumns["string:StructuralSectionShape"];
@@ -4758,7 +4758,7 @@ namespace Vim
         const std::vector<bool>* GetAllIsSystemFamily()
         {
             if (mEntityTable.mDataColumns.find("byte:IsSystemFamily") == mEntityTable.mDataColumns.end())
-                return NULL;
+                return {};
 
             const int count = GetCount();
             bfast::byte* isSystemFamilyData = new bfast::byte[count];
@@ -4785,7 +4785,7 @@ namespace Vim
         const std::vector<bool>* GetAllIsInPlace()
         {
             if (mEntityTable.mDataColumns.find("byte:IsInPlace") == mEntityTable.mDataColumns.end())
-                return NULL;
+                return {};
 
             const int count = GetCount();
             bfast::byte* isInPlaceData = new bfast::byte[count];
@@ -4825,7 +4825,7 @@ namespace Vim
     static FamilyTable* GetFamilyTable(VimScene& scene)
     {
         if (scene.mEntityTables.find("Vim.Family") == scene.mEntityTables.end())
-            return NULL;
+            return {};
 
         return new FamilyTable(scene.mEntityTables["Vim.Family"], scene.mStrings);
     }
@@ -4879,7 +4879,7 @@ namespace Vim
                 mEntityTable.mIndexColumns.find("index:Vim.Family:Family") == mEntityTable.mIndexColumns.end() ||
                 mEntityTable.mIndexColumns.find("index:Vim.CompoundStructure:CompoundStructure") == mEntityTable.mIndexColumns.end() ||
                 mEntityTable.mIndexColumns.find("index:Vim.Element:Element") == mEntityTable.mIndexColumns.end())
-                return NULL;
+                return {};
 
             const int count = GetCount();
 
@@ -4923,7 +4923,7 @@ namespace Vim
         const std::vector<bool>* GetAllIsSystemFamilyType()
         {
             if (mEntityTable.mDataColumns.find("byte:IsSystemFamilyType") == mEntityTable.mDataColumns.end())
-                return NULL;
+                return {};
 
             const int count = GetCount();
             bfast::byte* isSystemFamilyTypeData = new bfast::byte[count];
@@ -4974,7 +4974,7 @@ namespace Vim
     static FamilyTypeTable* GetFamilyTypeTable(VimScene& scene)
     {
         if (scene.mEntityTables.find("Vim.FamilyType") == scene.mEntityTables.end())
-            return NULL;
+            return {};
 
         return new FamilyTypeTable(scene.mEntityTables["Vim.FamilyType"], scene.mStrings);
     }
@@ -5078,7 +5078,7 @@ namespace Vim
                 mEntityTable.mIndexColumns.find("index:Vim.Room:FromRoom") == mEntityTable.mIndexColumns.end() ||
                 mEntityTable.mIndexColumns.find("index:Vim.Room:ToRoom") == mEntityTable.mIndexColumns.end() ||
                 mEntityTable.mIndexColumns.find("index:Vim.Element:Element") == mEntityTable.mIndexColumns.end())
-                return NULL;
+                return {};
 
             const int count = GetCount();
 
@@ -5188,7 +5188,7 @@ namespace Vim
         const std::vector<bool>* GetAllFacingFlipped()
         {
             if (mEntityTable.mDataColumns.find("byte:FacingFlipped") == mEntityTable.mDataColumns.end())
-                return NULL;
+                return {};
 
             const int count = GetCount();
             bfast::byte* facingFlippedData = new bfast::byte[count];
@@ -5230,7 +5230,7 @@ namespace Vim
             if (mEntityTable.mDataColumns.find("float:FacingOrientation.X") == mEntityTable.mDataColumns.end() ||
                 mEntityTable.mDataColumns.find("float:FacingOrientation.Y") == mEntityTable.mDataColumns.end() ||
                 mEntityTable.mDataColumns.find("float:FacingOrientation.Z") == mEntityTable.mDataColumns.end())
-                return NULL;
+                return {};
 
             const int count = GetCount();
             Vector3Converter facingOrientationConverter;
@@ -5267,7 +5267,7 @@ namespace Vim
         const std::vector<bool>* GetAllHandFlipped()
         {
             if (mEntityTable.mDataColumns.find("byte:HandFlipped") == mEntityTable.mDataColumns.end())
-                return NULL;
+                return {};
 
             const int count = GetCount();
             bfast::byte* handFlippedData = new bfast::byte[count];
@@ -5294,7 +5294,7 @@ namespace Vim
         const std::vector<bool>* GetAllMirrored()
         {
             if (mEntityTable.mDataColumns.find("byte:Mirrored") == mEntityTable.mDataColumns.end())
-                return NULL;
+                return {};
 
             const int count = GetCount();
             bfast::byte* mirroredData = new bfast::byte[count];
@@ -5321,7 +5321,7 @@ namespace Vim
         const std::vector<bool>* GetAllHasModifiedGeometry()
         {
             if (mEntityTable.mDataColumns.find("byte:HasModifiedGeometry") == mEntityTable.mDataColumns.end())
-                return NULL;
+                return {};
 
             const int count = GetCount();
             bfast::byte* hasModifiedGeometryData = new bfast::byte[count];
@@ -5348,7 +5348,7 @@ namespace Vim
         const std::vector<float>* GetAllScale()
         {
             if (mEntityTable.mDataColumns.find("float:Scale") == mEntityTable.mDataColumns.end())
-                return NULL;
+                return {};
 
             const int count = GetCount();
             float* scaleData = new float[count];
@@ -5390,7 +5390,7 @@ namespace Vim
             if (mEntityTable.mDataColumns.find("float:BasisX.X") == mEntityTable.mDataColumns.end() ||
                 mEntityTable.mDataColumns.find("float:BasisX.Y") == mEntityTable.mDataColumns.end() ||
                 mEntityTable.mDataColumns.find("float:BasisX.Z") == mEntityTable.mDataColumns.end())
-                return NULL;
+                return {};
 
             const int count = GetCount();
             Vector3Converter basisXConverter;
@@ -5442,7 +5442,7 @@ namespace Vim
             if (mEntityTable.mDataColumns.find("float:BasisY.X") == mEntityTable.mDataColumns.end() ||
                 mEntityTable.mDataColumns.find("float:BasisY.Y") == mEntityTable.mDataColumns.end() ||
                 mEntityTable.mDataColumns.find("float:BasisY.Z") == mEntityTable.mDataColumns.end())
-                return NULL;
+                return {};
 
             const int count = GetCount();
             Vector3Converter basisYConverter;
@@ -5494,7 +5494,7 @@ namespace Vim
             if (mEntityTable.mDataColumns.find("float:BasisZ.X") == mEntityTable.mDataColumns.end() ||
                 mEntityTable.mDataColumns.find("float:BasisZ.Y") == mEntityTable.mDataColumns.end() ||
                 mEntityTable.mDataColumns.find("float:BasisZ.Z") == mEntityTable.mDataColumns.end())
-                return NULL;
+                return {};
 
             const int count = GetCount();
             Vector3Converter basisZConverter;
@@ -5546,7 +5546,7 @@ namespace Vim
             if (mEntityTable.mDataColumns.find("float:Translation.X") == mEntityTable.mDataColumns.end() ||
                 mEntityTable.mDataColumns.find("float:Translation.Y") == mEntityTable.mDataColumns.end() ||
                 mEntityTable.mDataColumns.find("float:Translation.Z") == mEntityTable.mDataColumns.end())
-                return NULL;
+                return {};
 
             const int count = GetCount();
             Vector3Converter translationConverter;
@@ -5598,7 +5598,7 @@ namespace Vim
             if (mEntityTable.mDataColumns.find("float:HandOrientation.X") == mEntityTable.mDataColumns.end() ||
                 mEntityTable.mDataColumns.find("float:HandOrientation.Y") == mEntityTable.mDataColumns.end() ||
                 mEntityTable.mDataColumns.find("float:HandOrientation.Z") == mEntityTable.mDataColumns.end())
-                return NULL;
+                return {};
 
             const int count = GetCount();
             Vector3Converter handOrientationConverter;
@@ -5681,7 +5681,7 @@ namespace Vim
     static FamilyInstanceTable* GetFamilyInstanceTable(VimScene& scene)
     {
         if (scene.mEntityTables.find("Vim.FamilyInstance") == scene.mEntityTables.end())
-            return NULL;
+            return {};
 
         return new FamilyInstanceTable(scene.mEntityTables["Vim.FamilyInstance"], scene.mStrings);
     }
@@ -5771,7 +5771,7 @@ namespace Vim
                 mEntityTable.mDataColumns.find("int:DetailLevel") == mEntityTable.mDataColumns.end() ||
                 mEntityTable.mIndexColumns.find("index:Vim.Camera:Camera") == mEntityTable.mIndexColumns.end() ||
                 mEntityTable.mIndexColumns.find("index:Vim.Element:Element") == mEntityTable.mIndexColumns.end())
-                return NULL;
+                return {};
 
             const int count = GetCount();
 
@@ -5858,7 +5858,7 @@ namespace Vim
                 return {};
 
             if (mEntityTable.mStringColumns.find("string:Title") == mEntityTable.mStringColumns.end())
-                return NULL;
+                return {};
 
             return &mStrings[mEntityTable.mStringColumns["string:Title"][viewIndex]];
         }
@@ -5866,7 +5866,7 @@ namespace Vim
         const std::vector<const std::string*>* GetAllTitle()
         {
             if (mEntityTable.mStringColumns.find("string:Title") == mEntityTable.mStringColumns.end())
-                return NULL;
+                return {};
 
             const int count = GetCount();
             const std::vector<int>& titleData = mEntityTable.mStringColumns["string:Title"];
@@ -5888,7 +5888,7 @@ namespace Vim
                 return {};
 
             if (mEntityTable.mStringColumns.find("string:ViewType") == mEntityTable.mStringColumns.end())
-                return NULL;
+                return {};
 
             return &mStrings[mEntityTable.mStringColumns["string:ViewType"][viewIndex]];
         }
@@ -5896,7 +5896,7 @@ namespace Vim
         const std::vector<const std::string*>* GetAllViewType()
         {
             if (mEntityTable.mStringColumns.find("string:ViewType") == mEntityTable.mStringColumns.end())
-                return NULL;
+                return {};
 
             const int count = GetCount();
             const std::vector<int>& viewTypeData = mEntityTable.mStringColumns["string:ViewType"];
@@ -5941,7 +5941,7 @@ namespace Vim
             if (mEntityTable.mDataColumns.find("double:Up.X") == mEntityTable.mDataColumns.end() ||
                 mEntityTable.mDataColumns.find("double:Up.Y") == mEntityTable.mDataColumns.end() ||
                 mEntityTable.mDataColumns.find("double:Up.Z") == mEntityTable.mDataColumns.end())
-                return NULL;
+                return {};
 
             const int count = GetCount();
             DVector3Converter upConverter;
@@ -5993,7 +5993,7 @@ namespace Vim
             if (mEntityTable.mDataColumns.find("double:Right.X") == mEntityTable.mDataColumns.end() ||
                 mEntityTable.mDataColumns.find("double:Right.Y") == mEntityTable.mDataColumns.end() ||
                 mEntityTable.mDataColumns.find("double:Right.Z") == mEntityTable.mDataColumns.end())
-                return NULL;
+                return {};
 
             const int count = GetCount();
             DVector3Converter rightConverter;
@@ -6045,7 +6045,7 @@ namespace Vim
             if (mEntityTable.mDataColumns.find("double:Origin.X") == mEntityTable.mDataColumns.end() ||
                 mEntityTable.mDataColumns.find("double:Origin.Y") == mEntityTable.mDataColumns.end() ||
                 mEntityTable.mDataColumns.find("double:Origin.Z") == mEntityTable.mDataColumns.end())
-                return NULL;
+                return {};
 
             const int count = GetCount();
             DVector3Converter originConverter;
@@ -6097,7 +6097,7 @@ namespace Vim
             if (mEntityTable.mDataColumns.find("double:ViewDirection.X") == mEntityTable.mDataColumns.end() ||
                 mEntityTable.mDataColumns.find("double:ViewDirection.Y") == mEntityTable.mDataColumns.end() ||
                 mEntityTable.mDataColumns.find("double:ViewDirection.Z") == mEntityTable.mDataColumns.end())
-                return NULL;
+                return {};
 
             const int count = GetCount();
             DVector3Converter viewDirectionConverter;
@@ -6149,7 +6149,7 @@ namespace Vim
             if (mEntityTable.mDataColumns.find("double:ViewPosition.X") == mEntityTable.mDataColumns.end() ||
                 mEntityTable.mDataColumns.find("double:ViewPosition.Y") == mEntityTable.mDataColumns.end() ||
                 mEntityTable.mDataColumns.find("double:ViewPosition.Z") == mEntityTable.mDataColumns.end())
-                return NULL;
+                return {};
 
             const int count = GetCount();
             DVector3Converter viewPositionConverter;
@@ -6186,7 +6186,7 @@ namespace Vim
         const std::vector<double>* GetAllScale()
         {
             if (mEntityTable.mDataColumns.find("double:Scale") == mEntityTable.mDataColumns.end())
-                return NULL;
+                return {};
 
             const int count = GetCount();
             double* scaleData = new double[count];
@@ -6230,7 +6230,7 @@ namespace Vim
                 mEntityTable.mDataColumns.find("double:Outline.Min.Y") == mEntityTable.mDataColumns.end() ||
                 mEntityTable.mDataColumns.find("double:Outline.Max.X") == mEntityTable.mDataColumns.end() ||
                 mEntityTable.mDataColumns.find("double:Outline.Max.Y") == mEntityTable.mDataColumns.end())
-                return NULL;
+                return {};
 
             const int count = GetCount();
             DAABox2DConverter outlineConverter;
@@ -6267,7 +6267,7 @@ namespace Vim
         const std::vector<int>* GetAllDetailLevel()
         {
             if (mEntityTable.mDataColumns.find("int:DetailLevel") == mEntityTable.mDataColumns.end())
-                return NULL;
+                return {};
 
             const int count = GetCount();
             int* detailLevelData = new int[count];
@@ -6307,7 +6307,7 @@ namespace Vim
     static ViewTable* GetViewTable(VimScene& scene)
     {
         if (scene.mEntityTables.find("Vim.View") == scene.mEntityTables.end())
-            return NULL;
+            return {};
 
         return new ViewTable(scene.mEntityTables["Vim.View"], scene.mStrings);
     }
@@ -6354,7 +6354,7 @@ namespace Vim
         {
             if (mEntityTable.mIndexColumns.find("index:Vim.View:View") == mEntityTable.mIndexColumns.end() ||
                 mEntityTable.mIndexColumns.find("index:Vim.Element:Element") == mEntityTable.mIndexColumns.end())
-                return NULL;
+                return {};
 
             const int count = GetCount();
 
@@ -6403,7 +6403,7 @@ namespace Vim
     static ElementInViewTable* GetElementInViewTable(VimScene& scene)
     {
         if (scene.mEntityTables.find("Vim.ElementInView") == scene.mEntityTables.end())
-            return NULL;
+            return {};
 
         return new ElementInViewTable(scene.mEntityTables["Vim.ElementInView"], scene.mStrings);
     }
@@ -6450,7 +6450,7 @@ namespace Vim
         {
             if (mEntityTable.mIndexColumns.find("index:Vim.Shape:Shape") == mEntityTable.mIndexColumns.end() ||
                 mEntityTable.mIndexColumns.find("index:Vim.View:View") == mEntityTable.mIndexColumns.end())
-                return NULL;
+                return {};
 
             const int count = GetCount();
 
@@ -6499,7 +6499,7 @@ namespace Vim
     static ShapeInViewTable* GetShapeInViewTable(VimScene& scene)
     {
         if (scene.mEntityTables.find("Vim.ShapeInView") == scene.mEntityTables.end())
-            return NULL;
+            return {};
 
         return new ShapeInViewTable(scene.mEntityTables["Vim.ShapeInView"], scene.mStrings);
     }
@@ -6546,7 +6546,7 @@ namespace Vim
         {
             if (mEntityTable.mIndexColumns.find("index:Vim.Asset:Asset") == mEntityTable.mIndexColumns.end() ||
                 mEntityTable.mIndexColumns.find("index:Vim.View:View") == mEntityTable.mIndexColumns.end())
-                return NULL;
+                return {};
 
             const int count = GetCount();
 
@@ -6595,7 +6595,7 @@ namespace Vim
     static AssetInViewTable* GetAssetInViewTable(VimScene& scene)
     {
         if (scene.mEntityTables.find("Vim.AssetInView") == scene.mEntityTables.end())
-            return NULL;
+            return {};
 
         return new AssetInViewTable(scene.mEntityTables["Vim.AssetInView"], scene.mStrings);
     }
@@ -6651,7 +6651,7 @@ namespace Vim
                 mEntityTable.mDataColumns.find("double:Extents.Max.Z") == mEntityTable.mDataColumns.end() ||
                 mEntityTable.mIndexColumns.find("index:Vim.Level:Level") == mEntityTable.mIndexColumns.end() ||
                 mEntityTable.mIndexColumns.find("index:Vim.View:View") == mEntityTable.mIndexColumns.end())
-                return NULL;
+                return {};
 
             const int count = GetCount();
 
@@ -6716,7 +6716,7 @@ namespace Vim
                 mEntityTable.mDataColumns.find("double:Extents.Max.X") == mEntityTable.mDataColumns.end() ||
                 mEntityTable.mDataColumns.find("double:Extents.Max.Y") == mEntityTable.mDataColumns.end() ||
                 mEntityTable.mDataColumns.find("double:Extents.Max.Z") == mEntityTable.mDataColumns.end())
-                return NULL;
+                return {};
 
             const int count = GetCount();
             DAABoxConverter extentsConverter;
@@ -6766,7 +6766,7 @@ namespace Vim
     static LevelInViewTable* GetLevelInViewTable(VimScene& scene)
     {
         if (scene.mEntityTables.find("Vim.LevelInView") == scene.mEntityTables.end())
-            return NULL;
+            return {};
 
         return new LevelInViewTable(scene.mEntityTables["Vim.LevelInView"], scene.mStrings);
     }
@@ -6831,7 +6831,7 @@ namespace Vim
                 mEntityTable.mDataColumns.find("double:TargetDistance") == mEntityTable.mDataColumns.end() ||
                 mEntityTable.mDataColumns.find("double:RightOffset") == mEntityTable.mDataColumns.end() ||
                 mEntityTable.mDataColumns.find("double:UpOffset") == mEntityTable.mDataColumns.end())
-                return NULL;
+                return {};
 
             const int count = GetCount();
 
@@ -6908,7 +6908,7 @@ namespace Vim
         const std::vector<int>* GetAllId()
         {
             if (mEntityTable.mDataColumns.find("int:Id") == mEntityTable.mDataColumns.end())
-                return NULL;
+                return {};
 
             const int count = GetCount();
             int* idData = new int[count];
@@ -6935,7 +6935,7 @@ namespace Vim
         const std::vector<int>* GetAllIsPerspective()
         {
             if (mEntityTable.mDataColumns.find("int:IsPerspective") == mEntityTable.mDataColumns.end())
-                return NULL;
+                return {};
 
             const int count = GetCount();
             int* isPerspectiveData = new int[count];
@@ -6962,7 +6962,7 @@ namespace Vim
         const std::vector<double>* GetAllVerticalExtent()
         {
             if (mEntityTable.mDataColumns.find("double:VerticalExtent") == mEntityTable.mDataColumns.end())
-                return NULL;
+                return {};
 
             const int count = GetCount();
             double* verticalExtentData = new double[count];
@@ -6989,7 +6989,7 @@ namespace Vim
         const std::vector<double>* GetAllHorizontalExtent()
         {
             if (mEntityTable.mDataColumns.find("double:HorizontalExtent") == mEntityTable.mDataColumns.end())
-                return NULL;
+                return {};
 
             const int count = GetCount();
             double* horizontalExtentData = new double[count];
@@ -7016,7 +7016,7 @@ namespace Vim
         const std::vector<double>* GetAllFarDistance()
         {
             if (mEntityTable.mDataColumns.find("double:FarDistance") == mEntityTable.mDataColumns.end())
-                return NULL;
+                return {};
 
             const int count = GetCount();
             double* farDistanceData = new double[count];
@@ -7043,7 +7043,7 @@ namespace Vim
         const std::vector<double>* GetAllNearDistance()
         {
             if (mEntityTable.mDataColumns.find("double:NearDistance") == mEntityTable.mDataColumns.end())
-                return NULL;
+                return {};
 
             const int count = GetCount();
             double* nearDistanceData = new double[count];
@@ -7070,7 +7070,7 @@ namespace Vim
         const std::vector<double>* GetAllTargetDistance()
         {
             if (mEntityTable.mDataColumns.find("double:TargetDistance") == mEntityTable.mDataColumns.end())
-                return NULL;
+                return {};
 
             const int count = GetCount();
             double* targetDistanceData = new double[count];
@@ -7097,7 +7097,7 @@ namespace Vim
         const std::vector<double>* GetAllRightOffset()
         {
             if (mEntityTable.mDataColumns.find("double:RightOffset") == mEntityTable.mDataColumns.end())
-                return NULL;
+                return {};
 
             const int count = GetCount();
             double* rightOffsetData = new double[count];
@@ -7124,7 +7124,7 @@ namespace Vim
         const std::vector<double>* GetAllUpOffset()
         {
             if (mEntityTable.mDataColumns.find("double:UpOffset") == mEntityTable.mDataColumns.end())
-                return NULL;
+                return {};
 
             const int count = GetCount();
             double* upOffsetData = new double[count];
@@ -7142,7 +7142,7 @@ namespace Vim
     static CameraTable* GetCameraTable(VimScene& scene)
     {
         if (scene.mEntityTables.find("Vim.Camera") == scene.mEntityTables.end())
-            return NULL;
+            return {};
 
         return new CameraTable(scene.mEntityTables["Vim.Camera"], scene.mStrings);
     }
@@ -7232,7 +7232,7 @@ namespace Vim
                 mEntityTable.mIndexColumns.find("index:Vim.Asset:ColorTextureFile") == mEntityTable.mIndexColumns.end() ||
                 mEntityTable.mIndexColumns.find("index:Vim.Asset:NormalTextureFile") == mEntityTable.mIndexColumns.end() ||
                 mEntityTable.mIndexColumns.find("index:Vim.Element:Element") == mEntityTable.mIndexColumns.end())
-                return NULL;
+                return {};
 
             const int count = GetCount();
 
@@ -7324,7 +7324,7 @@ namespace Vim
                 return {};
 
             if (mEntityTable.mStringColumns.find("string:Name") == mEntityTable.mStringColumns.end())
-                return NULL;
+                return {};
 
             return &mStrings[mEntityTable.mStringColumns["string:Name"][materialIndex]];
         }
@@ -7332,7 +7332,7 @@ namespace Vim
         const std::vector<const std::string*>* GetAllName()
         {
             if (mEntityTable.mStringColumns.find("string:Name") == mEntityTable.mStringColumns.end())
-                return NULL;
+                return {};
 
             const int count = GetCount();
             const std::vector<int>& nameData = mEntityTable.mStringColumns["string:Name"];
@@ -7354,7 +7354,7 @@ namespace Vim
                 return {};
 
             if (mEntityTable.mStringColumns.find("string:MaterialCategory") == mEntityTable.mStringColumns.end())
-                return NULL;
+                return {};
 
             return &mStrings[mEntityTable.mStringColumns["string:MaterialCategory"][materialIndex]];
         }
@@ -7362,7 +7362,7 @@ namespace Vim
         const std::vector<const std::string*>* GetAllMaterialCategory()
         {
             if (mEntityTable.mStringColumns.find("string:MaterialCategory") == mEntityTable.mStringColumns.end())
-                return NULL;
+                return {};
 
             const int count = GetCount();
             const std::vector<int>& materialCategoryData = mEntityTable.mStringColumns["string:MaterialCategory"];
@@ -7407,7 +7407,7 @@ namespace Vim
             if (mEntityTable.mDataColumns.find("double:Color.X") == mEntityTable.mDataColumns.end() ||
                 mEntityTable.mDataColumns.find("double:Color.Y") == mEntityTable.mDataColumns.end() ||
                 mEntityTable.mDataColumns.find("double:Color.Z") == mEntityTable.mDataColumns.end())
-                return NULL;
+                return {};
 
             const int count = GetCount();
             DVector3Converter colorConverter;
@@ -7457,7 +7457,7 @@ namespace Vim
         {
             if (mEntityTable.mDataColumns.find("double:ColorUvScaling.X") == mEntityTable.mDataColumns.end() ||
                 mEntityTable.mDataColumns.find("double:ColorUvScaling.Y") == mEntityTable.mDataColumns.end())
-                return NULL;
+                return {};
 
             const int count = GetCount();
             DVector2Converter colorUvScalingConverter;
@@ -7507,7 +7507,7 @@ namespace Vim
         {
             if (mEntityTable.mDataColumns.find("double:ColorUvOffset.X") == mEntityTable.mDataColumns.end() ||
                 mEntityTable.mDataColumns.find("double:ColorUvOffset.Y") == mEntityTable.mDataColumns.end())
-                return NULL;
+                return {};
 
             const int count = GetCount();
             DVector2Converter colorUvOffsetConverter;
@@ -7557,7 +7557,7 @@ namespace Vim
         {
             if (mEntityTable.mDataColumns.find("double:NormalUvScaling.X") == mEntityTable.mDataColumns.end() ||
                 mEntityTable.mDataColumns.find("double:NormalUvScaling.Y") == mEntityTable.mDataColumns.end())
-                return NULL;
+                return {};
 
             const int count = GetCount();
             DVector2Converter normalUvScalingConverter;
@@ -7607,7 +7607,7 @@ namespace Vim
         {
             if (mEntityTable.mDataColumns.find("double:NormalUvOffset.X") == mEntityTable.mDataColumns.end() ||
                 mEntityTable.mDataColumns.find("double:NormalUvOffset.Y") == mEntityTable.mDataColumns.end())
-                return NULL;
+                return {};
 
             const int count = GetCount();
             DVector2Converter normalUvOffsetConverter;
@@ -7644,7 +7644,7 @@ namespace Vim
         const std::vector<double>* GetAllNormalAmount()
         {
             if (mEntityTable.mDataColumns.find("double:NormalAmount") == mEntityTable.mDataColumns.end())
-                return NULL;
+                return {};
 
             const int count = GetCount();
             double* normalAmountData = new double[count];
@@ -7671,7 +7671,7 @@ namespace Vim
         const std::vector<double>* GetAllGlossiness()
         {
             if (mEntityTable.mDataColumns.find("double:Glossiness") == mEntityTable.mDataColumns.end())
-                return NULL;
+                return {};
 
             const int count = GetCount();
             double* glossinessData = new double[count];
@@ -7698,7 +7698,7 @@ namespace Vim
         const std::vector<double>* GetAllSmoothness()
         {
             if (mEntityTable.mDataColumns.find("double:Smoothness") == mEntityTable.mDataColumns.end())
-                return NULL;
+                return {};
 
             const int count = GetCount();
             double* smoothnessData = new double[count];
@@ -7725,7 +7725,7 @@ namespace Vim
         const std::vector<double>* GetAllTransparency()
         {
             if (mEntityTable.mDataColumns.find("double:Transparency") == mEntityTable.mDataColumns.end())
-                return NULL;
+                return {};
 
             const int count = GetCount();
             double* transparencyData = new double[count];
@@ -7776,7 +7776,7 @@ namespace Vim
     static MaterialTable* GetMaterialTable(VimScene& scene)
     {
         if (scene.mEntityTables.find("Vim.Material") == scene.mEntityTables.end())
-            return NULL;
+            return {};
 
         return new MaterialTable(scene.mEntityTables["Vim.Material"], scene.mStrings);
     }
@@ -7832,7 +7832,7 @@ namespace Vim
                 mEntityTable.mDataColumns.find("byte:IsPaint") == mEntityTable.mDataColumns.end() ||
                 mEntityTable.mIndexColumns.find("index:Vim.Material:Material") == mEntityTable.mIndexColumns.end() ||
                 mEntityTable.mIndexColumns.find("index:Vim.Element:Element") == mEntityTable.mIndexColumns.end())
-                return NULL;
+                return {};
 
             const int count = GetCount();
 
@@ -7884,7 +7884,7 @@ namespace Vim
         const std::vector<double>* GetAllArea()
         {
             if (mEntityTable.mDataColumns.find("double:Area") == mEntityTable.mDataColumns.end())
-                return NULL;
+                return {};
 
             const int count = GetCount();
             double* areaData = new double[count];
@@ -7911,7 +7911,7 @@ namespace Vim
         const std::vector<double>* GetAllVolume()
         {
             if (mEntityTable.mDataColumns.find("double:Volume") == mEntityTable.mDataColumns.end())
-                return NULL;
+                return {};
 
             const int count = GetCount();
             double* volumeData = new double[count];
@@ -7938,7 +7938,7 @@ namespace Vim
         const std::vector<bool>* GetAllIsPaint()
         {
             if (mEntityTable.mDataColumns.find("byte:IsPaint") == mEntityTable.mDataColumns.end())
-                return NULL;
+                return {};
 
             const int count = GetCount();
             bfast::byte* isPaintData = new bfast::byte[count];
@@ -7978,7 +7978,7 @@ namespace Vim
     static MaterialInElementTable* GetMaterialInElementTable(VimScene& scene)
     {
         if (scene.mEntityTables.find("Vim.MaterialInElement") == scene.mEntityTables.end())
-            return NULL;
+            return {};
 
         return new MaterialInElementTable(scene.mEntityTables["Vim.MaterialInElement"], scene.mStrings);
     }
@@ -8034,7 +8034,7 @@ namespace Vim
                 mEntityTable.mStringColumns.find("string:MaterialFunctionAssignment") == mEntityTable.mStringColumns.end() ||
                 mEntityTable.mIndexColumns.find("index:Vim.Material:Material") == mEntityTable.mIndexColumns.end() ||
                 mEntityTable.mIndexColumns.find("index:Vim.CompoundStructure:CompoundStructure") == mEntityTable.mIndexColumns.end())
-                return NULL;
+                return {};
 
             const int count = GetCount();
 
@@ -8084,7 +8084,7 @@ namespace Vim
         const std::vector<int>* GetAllOrderIndex()
         {
             if (mEntityTable.mDataColumns.find("int:OrderIndex") == mEntityTable.mDataColumns.end())
-                return NULL;
+                return {};
 
             const int count = GetCount();
             int* orderIndexData = new int[count];
@@ -8111,7 +8111,7 @@ namespace Vim
         const std::vector<double>* GetAllWidth()
         {
             if (mEntityTable.mDataColumns.find("double:Width") == mEntityTable.mDataColumns.end())
-                return NULL;
+                return {};
 
             const int count = GetCount();
             double* widthData = new double[count];
@@ -8130,7 +8130,7 @@ namespace Vim
                 return {};
 
             if (mEntityTable.mStringColumns.find("string:MaterialFunctionAssignment") == mEntityTable.mStringColumns.end())
-                return NULL;
+                return {};
 
             return &mStrings[mEntityTable.mStringColumns["string:MaterialFunctionAssignment"][compoundStructureLayerIndex]];
         }
@@ -8138,7 +8138,7 @@ namespace Vim
         const std::vector<const std::string*>* GetAllMaterialFunctionAssignment()
         {
             if (mEntityTable.mStringColumns.find("string:MaterialFunctionAssignment") == mEntityTable.mStringColumns.end())
-                return NULL;
+                return {};
 
             const int count = GetCount();
             const std::vector<int>& materialFunctionAssignmentData = mEntityTable.mStringColumns["string:MaterialFunctionAssignment"];
@@ -8181,7 +8181,7 @@ namespace Vim
     static CompoundStructureLayerTable* GetCompoundStructureLayerTable(VimScene& scene)
     {
         if (scene.mEntityTables.find("Vim.CompoundStructureLayer") == scene.mEntityTables.end())
-            return NULL;
+            return {};
 
         return new CompoundStructureLayerTable(scene.mEntityTables["Vim.CompoundStructureLayer"], scene.mStrings);
     }
@@ -8227,7 +8227,7 @@ namespace Vim
         {
             if (mEntityTable.mDataColumns.find("double:Width") == mEntityTable.mDataColumns.end() ||
                 mEntityTable.mIndexColumns.find("index:Vim.CompoundStructureLayer:StructuralLayer") == mEntityTable.mIndexColumns.end())
-                return NULL;
+                return {};
 
             const int count = GetCount();
 
@@ -8267,7 +8267,7 @@ namespace Vim
         const std::vector<double>* GetAllWidth()
         {
             if (mEntityTable.mDataColumns.find("double:Width") == mEntityTable.mDataColumns.end())
-                return NULL;
+                return {};
 
             const int count = GetCount();
             double* widthData = new double[count];
@@ -8296,7 +8296,7 @@ namespace Vim
     static CompoundStructureTable* GetCompoundStructureTable(VimScene& scene)
     {
         if (scene.mEntityTables.find("Vim.CompoundStructure") == scene.mEntityTables.end())
-            return NULL;
+            return {};
 
         return new CompoundStructureTable(scene.mEntityTables["Vim.CompoundStructure"], scene.mStrings);
     }
@@ -8339,7 +8339,7 @@ namespace Vim
         std::vector<Node>* GetAll()
         {
             if (mEntityTable.mIndexColumns.find("index:Vim.Element:Element") == mEntityTable.mIndexColumns.end())
-                return NULL;
+                return {};
 
             const int count = GetCount();
 
@@ -8375,7 +8375,7 @@ namespace Vim
     static NodeTable* GetNodeTable(VimScene& scene)
     {
         if (scene.mEntityTables.find("Vim.Node") == scene.mEntityTables.end())
-            return NULL;
+            return {};
 
         return new NodeTable(scene.mEntityTables["Vim.Node"], scene.mStrings);
     }
@@ -8428,7 +8428,7 @@ namespace Vim
                 mEntityTable.mDataColumns.find("float:Box.Max.Z") == mEntityTable.mDataColumns.end() ||
                 mEntityTable.mDataColumns.find("int:VertexCount") == mEntityTable.mDataColumns.end() ||
                 mEntityTable.mDataColumns.find("int:FaceCount") == mEntityTable.mDataColumns.end())
-                return NULL;
+                return {};
 
             const int count = GetCount();
 
@@ -8498,7 +8498,7 @@ namespace Vim
                 mEntityTable.mDataColumns.find("float:Box.Max.X") == mEntityTable.mDataColumns.end() ||
                 mEntityTable.mDataColumns.find("float:Box.Max.Y") == mEntityTable.mDataColumns.end() ||
                 mEntityTable.mDataColumns.find("float:Box.Max.Z") == mEntityTable.mDataColumns.end())
-                return NULL;
+                return {};
 
             const int count = GetCount();
             AABoxConverter boxConverter;
@@ -8535,7 +8535,7 @@ namespace Vim
         const std::vector<int>* GetAllVertexCount()
         {
             if (mEntityTable.mDataColumns.find("int:VertexCount") == mEntityTable.mDataColumns.end())
-                return NULL;
+                return {};
 
             const int count = GetCount();
             int* vertexCountData = new int[count];
@@ -8562,7 +8562,7 @@ namespace Vim
         const std::vector<int>* GetAllFaceCount()
         {
             if (mEntityTable.mDataColumns.find("int:FaceCount") == mEntityTable.mDataColumns.end())
-                return NULL;
+                return {};
 
             const int count = GetCount();
             int* faceCountData = new int[count];
@@ -8580,7 +8580,7 @@ namespace Vim
     static GeometryTable* GetGeometryTable(VimScene& scene)
     {
         if (scene.mEntityTables.find("Vim.Geometry") == scene.mEntityTables.end())
-            return NULL;
+            return {};
 
         return new GeometryTable(scene.mEntityTables["Vim.Geometry"], scene.mStrings);
     }
@@ -8623,7 +8623,7 @@ namespace Vim
         std::vector<Shape>* GetAll()
         {
             if (mEntityTable.mIndexColumns.find("index:Vim.Element:Element") == mEntityTable.mIndexColumns.end())
-                return NULL;
+                return {};
 
             const int count = GetCount();
 
@@ -8659,7 +8659,7 @@ namespace Vim
     static ShapeTable* GetShapeTable(VimScene& scene)
     {
         if (scene.mEntityTables.find("Vim.Shape") == scene.mEntityTables.end())
-            return NULL;
+            return {};
 
         return new ShapeTable(scene.mEntityTables["Vim.Shape"], scene.mStrings);
     }
@@ -8702,7 +8702,7 @@ namespace Vim
         std::vector<ShapeCollection>* GetAll()
         {
             if (mEntityTable.mIndexColumns.find("index:Vim.Element:Element") == mEntityTable.mIndexColumns.end())
-                return NULL;
+                return {};
 
             const int count = GetCount();
 
@@ -8738,7 +8738,7 @@ namespace Vim
     static ShapeCollectionTable* GetShapeCollectionTable(VimScene& scene)
     {
         if (scene.mEntityTables.find("Vim.ShapeCollection") == scene.mEntityTables.end())
-            return NULL;
+            return {};
 
         return new ShapeCollectionTable(scene.mEntityTables["Vim.ShapeCollection"], scene.mStrings);
     }
@@ -8785,7 +8785,7 @@ namespace Vim
         {
             if (mEntityTable.mIndexColumns.find("index:Vim.Shape:Shape") == mEntityTable.mIndexColumns.end() ||
                 mEntityTable.mIndexColumns.find("index:Vim.ShapeCollection:ShapeCollection") == mEntityTable.mIndexColumns.end())
-                return NULL;
+                return {};
 
             const int count = GetCount();
 
@@ -8834,7 +8834,7 @@ namespace Vim
     static ShapeInShapeCollectionTable* GetShapeInShapeCollectionTable(VimScene& scene)
     {
         if (scene.mEntityTables.find("Vim.ShapeInShapeCollection") == scene.mEntityTables.end())
-            return NULL;
+            return {};
 
         return new ShapeInShapeCollectionTable(scene.mEntityTables["Vim.ShapeInShapeCollection"], scene.mStrings);
     }
@@ -8880,7 +8880,7 @@ namespace Vim
         {
             if (mEntityTable.mDataColumns.find("int:SystemType") == mEntityTable.mDataColumns.end() ||
                 mEntityTable.mIndexColumns.find("index:Vim.Element:Element") == mEntityTable.mIndexColumns.end())
-                return NULL;
+                return {};
 
             const int count = GetCount();
 
@@ -8920,7 +8920,7 @@ namespace Vim
         const std::vector<int>* GetAllSystemType()
         {
             if (mEntityTable.mDataColumns.find("int:SystemType") == mEntityTable.mDataColumns.end())
-                return NULL;
+                return {};
 
             const int count = GetCount();
             int* systemTypeData = new int[count];
@@ -8949,7 +8949,7 @@ namespace Vim
     static SystemTable* GetSystemTable(VimScene& scene)
     {
         if (scene.mEntityTables.find("Vim.System") == scene.mEntityTables.end())
-            return NULL;
+            return {};
 
         return new SystemTable(scene.mEntityTables["Vim.System"], scene.mStrings);
     }
@@ -8999,7 +8999,7 @@ namespace Vim
             if (mEntityTable.mDataColumns.find("int:Roles") == mEntityTable.mDataColumns.end() ||
                 mEntityTable.mIndexColumns.find("index:Vim.System:System") == mEntityTable.mIndexColumns.end() ||
                 mEntityTable.mIndexColumns.find("index:Vim.Element:Element") == mEntityTable.mIndexColumns.end())
-                return NULL;
+                return {};
 
             const int count = GetCount();
 
@@ -9041,7 +9041,7 @@ namespace Vim
         const std::vector<int>* GetAllRoles()
         {
             if (mEntityTable.mDataColumns.find("int:Roles") == mEntityTable.mDataColumns.end())
-                return NULL;
+                return {};
 
             const int count = GetCount();
             int* rolesData = new int[count];
@@ -9081,7 +9081,7 @@ namespace Vim
     static ElementInSystemTable* GetElementInSystemTable(VimScene& scene)
     {
         if (scene.mEntityTables.find("Vim.ElementInSystem") == scene.mEntityTables.end())
-            return NULL;
+            return {};
 
         return new ElementInSystemTable(scene.mEntityTables["Vim.ElementInSystem"], scene.mStrings);
     }
@@ -9133,7 +9133,7 @@ namespace Vim
                 mEntityTable.mStringColumns.find("string:Severity") == mEntityTable.mStringColumns.end() ||
                 mEntityTable.mStringColumns.find("string:Description") == mEntityTable.mStringColumns.end() ||
                 mEntityTable.mIndexColumns.find("index:Vim.BimDocument:BimDocument") == mEntityTable.mIndexColumns.end())
-                return NULL;
+                return {};
 
             const int count = GetCount();
 
@@ -9168,7 +9168,7 @@ namespace Vim
                 return {};
 
             if (mEntityTable.mStringColumns.find("string:Guid") == mEntityTable.mStringColumns.end())
-                return NULL;
+                return {};
 
             return &mStrings[mEntityTable.mStringColumns["string:Guid"][warningIndex]];
         }
@@ -9176,7 +9176,7 @@ namespace Vim
         const std::vector<const std::string*>* GetAllGuid()
         {
             if (mEntityTable.mStringColumns.find("string:Guid") == mEntityTable.mStringColumns.end())
-                return NULL;
+                return {};
 
             const int count = GetCount();
             const std::vector<int>& guidData = mEntityTable.mStringColumns["string:Guid"];
@@ -9198,7 +9198,7 @@ namespace Vim
                 return {};
 
             if (mEntityTable.mStringColumns.find("string:Severity") == mEntityTable.mStringColumns.end())
-                return NULL;
+                return {};
 
             return &mStrings[mEntityTable.mStringColumns["string:Severity"][warningIndex]];
         }
@@ -9206,7 +9206,7 @@ namespace Vim
         const std::vector<const std::string*>* GetAllSeverity()
         {
             if (mEntityTable.mStringColumns.find("string:Severity") == mEntityTable.mStringColumns.end())
-                return NULL;
+                return {};
 
             const int count = GetCount();
             const std::vector<int>& severityData = mEntityTable.mStringColumns["string:Severity"];
@@ -9228,7 +9228,7 @@ namespace Vim
                 return {};
 
             if (mEntityTable.mStringColumns.find("string:Description") == mEntityTable.mStringColumns.end())
-                return NULL;
+                return {};
 
             return &mStrings[mEntityTable.mStringColumns["string:Description"][warningIndex]];
         }
@@ -9236,7 +9236,7 @@ namespace Vim
         const std::vector<const std::string*>* GetAllDescription()
         {
             if (mEntityTable.mStringColumns.find("string:Description") == mEntityTable.mStringColumns.end())
-                return NULL;
+                return {};
 
             const int count = GetCount();
             const std::vector<int>& descriptionData = mEntityTable.mStringColumns["string:Description"];
@@ -9268,7 +9268,7 @@ namespace Vim
     static WarningTable* GetWarningTable(VimScene& scene)
     {
         if (scene.mEntityTables.find("Vim.Warning") == scene.mEntityTables.end())
-            return NULL;
+            return {};
 
         return new WarningTable(scene.mEntityTables["Vim.Warning"], scene.mStrings);
     }
@@ -9315,7 +9315,7 @@ namespace Vim
         {
             if (mEntityTable.mIndexColumns.find("index:Vim.Warning:Warning") == mEntityTable.mIndexColumns.end() ||
                 mEntityTable.mIndexColumns.find("index:Vim.Element:Element") == mEntityTable.mIndexColumns.end())
-                return NULL;
+                return {};
 
             const int count = GetCount();
 
@@ -9364,7 +9364,7 @@ namespace Vim
     static ElementInWarningTable* GetElementInWarningTable(VimScene& scene)
     {
         if (scene.mEntityTables.find("Vim.ElementInWarning") == scene.mEntityTables.end())
-            return NULL;
+            return {};
 
         return new ElementInWarningTable(scene.mEntityTables["Vim.ElementInWarning"], scene.mStrings);
     }
@@ -9420,7 +9420,7 @@ namespace Vim
                 mEntityTable.mDataColumns.find("double:SharedPosition.Y") == mEntityTable.mDataColumns.end() ||
                 mEntityTable.mDataColumns.find("double:SharedPosition.Z") == mEntityTable.mDataColumns.end() ||
                 mEntityTable.mIndexColumns.find("index:Vim.Element:Element") == mEntityTable.mIndexColumns.end())
-                return NULL;
+                return {};
 
             const int count = GetCount();
 
@@ -9474,7 +9474,7 @@ namespace Vim
         const std::vector<bool>* GetAllIsSurveyPoint()
         {
             if (mEntityTable.mDataColumns.find("byte:IsSurveyPoint") == mEntityTable.mDataColumns.end())
-                return NULL;
+                return {};
 
             const int count = GetCount();
             bfast::byte* isSurveyPointData = new bfast::byte[count];
@@ -9516,7 +9516,7 @@ namespace Vim
             if (mEntityTable.mDataColumns.find("double:Position.X") == mEntityTable.mDataColumns.end() ||
                 mEntityTable.mDataColumns.find("double:Position.Y") == mEntityTable.mDataColumns.end() ||
                 mEntityTable.mDataColumns.find("double:Position.Z") == mEntityTable.mDataColumns.end())
-                return NULL;
+                return {};
 
             const int count = GetCount();
             DVector3Converter positionConverter;
@@ -9568,7 +9568,7 @@ namespace Vim
             if (mEntityTable.mDataColumns.find("double:SharedPosition.X") == mEntityTable.mDataColumns.end() ||
                 mEntityTable.mDataColumns.find("double:SharedPosition.Y") == mEntityTable.mDataColumns.end() ||
                 mEntityTable.mDataColumns.find("double:SharedPosition.Z") == mEntityTable.mDataColumns.end())
-                return NULL;
+                return {};
 
             const int count = GetCount();
             DVector3Converter sharedPositionConverter;
@@ -9607,7 +9607,7 @@ namespace Vim
     static BasePointTable* GetBasePointTable(VimScene& scene)
     {
         if (scene.mEntityTables.find("Vim.BasePoint") == scene.mEntityTables.end())
-            return NULL;
+            return {};
 
         return new BasePointTable(scene.mEntityTables["Vim.BasePoint"], scene.mStrings);
     }
@@ -9662,7 +9662,7 @@ namespace Vim
                 mEntityTable.mDataColumns.find("int:Demolished") == mEntityTable.mDataColumns.end() ||
                 mEntityTable.mDataColumns.find("int:Temporary") == mEntityTable.mDataColumns.end() ||
                 mEntityTable.mIndexColumns.find("index:Vim.Element:Element") == mEntityTable.mIndexColumns.end())
-                return NULL;
+                return {};
 
             const int count = GetCount();
 
@@ -9717,7 +9717,7 @@ namespace Vim
         const std::vector<int>* GetAllNew()
         {
             if (mEntityTable.mDataColumns.find("int:New") == mEntityTable.mDataColumns.end())
-                return NULL;
+                return {};
 
             const int count = GetCount();
             int* newData = new int[count];
@@ -9744,7 +9744,7 @@ namespace Vim
         const std::vector<int>* GetAllExisting()
         {
             if (mEntityTable.mDataColumns.find("int:Existing") == mEntityTable.mDataColumns.end())
-                return NULL;
+                return {};
 
             const int count = GetCount();
             int* existingData = new int[count];
@@ -9771,7 +9771,7 @@ namespace Vim
         const std::vector<int>* GetAllDemolished()
         {
             if (mEntityTable.mDataColumns.find("int:Demolished") == mEntityTable.mDataColumns.end())
-                return NULL;
+                return {};
 
             const int count = GetCount();
             int* demolishedData = new int[count];
@@ -9798,7 +9798,7 @@ namespace Vim
         const std::vector<int>* GetAllTemporary()
         {
             if (mEntityTable.mDataColumns.find("int:Temporary") == mEntityTable.mDataColumns.end())
-                return NULL;
+                return {};
 
             const int count = GetCount();
             int* temporaryData = new int[count];
@@ -9827,7 +9827,7 @@ namespace Vim
     static PhaseFilterTable* GetPhaseFilterTable(VimScene& scene)
     {
         if (scene.mEntityTables.find("Vim.PhaseFilter") == scene.mEntityTables.end())
-            return NULL;
+            return {};
 
         return new PhaseFilterTable(scene.mEntityTables["Vim.PhaseFilter"], scene.mStrings);
     }
@@ -9892,7 +9892,7 @@ namespace Vim
                 mEntityTable.mDataColumns.find("double:Extents.Max.Y") == mEntityTable.mDataColumns.end() ||
                 mEntityTable.mDataColumns.find("double:Extents.Max.Z") == mEntityTable.mDataColumns.end() ||
                 mEntityTable.mIndexColumns.find("index:Vim.Element:Element") == mEntityTable.mIndexColumns.end())
-                return NULL;
+                return {};
 
             const int count = GetCount();
 
@@ -9968,7 +9968,7 @@ namespace Vim
             if (mEntityTable.mDataColumns.find("double:StartPoint.X") == mEntityTable.mDataColumns.end() ||
                 mEntityTable.mDataColumns.find("double:StartPoint.Y") == mEntityTable.mDataColumns.end() ||
                 mEntityTable.mDataColumns.find("double:StartPoint.Z") == mEntityTable.mDataColumns.end())
-                return NULL;
+                return {};
 
             const int count = GetCount();
             DVector3Converter startPointConverter;
@@ -10020,7 +10020,7 @@ namespace Vim
             if (mEntityTable.mDataColumns.find("double:EndPoint.X") == mEntityTable.mDataColumns.end() ||
                 mEntityTable.mDataColumns.find("double:EndPoint.Y") == mEntityTable.mDataColumns.end() ||
                 mEntityTable.mDataColumns.find("double:EndPoint.Z") == mEntityTable.mDataColumns.end())
-                return NULL;
+                return {};
 
             const int count = GetCount();
             DVector3Converter endPointConverter;
@@ -10057,7 +10057,7 @@ namespace Vim
         const std::vector<bool>* GetAllIsCurved()
         {
             if (mEntityTable.mDataColumns.find("byte:IsCurved") == mEntityTable.mDataColumns.end())
-                return NULL;
+                return {};
 
             const int count = GetCount();
             bfast::byte* isCurvedData = new bfast::byte[count];
@@ -10105,7 +10105,7 @@ namespace Vim
                 mEntityTable.mDataColumns.find("double:Extents.Max.X") == mEntityTable.mDataColumns.end() ||
                 mEntityTable.mDataColumns.find("double:Extents.Max.Y") == mEntityTable.mDataColumns.end() ||
                 mEntityTable.mDataColumns.find("double:Extents.Max.Z") == mEntityTable.mDataColumns.end())
-                return NULL;
+                return {};
 
             const int count = GetCount();
             DAABoxConverter extentsConverter;
@@ -10144,7 +10144,7 @@ namespace Vim
     static GridTable* GetGridTable(VimScene& scene)
     {
         if (scene.mEntityTables.find("Vim.Grid") == scene.mEntityTables.end())
-            return NULL;
+            return {};
 
         return new GridTable(scene.mEntityTables["Vim.Grid"], scene.mStrings);
     }
@@ -10203,7 +10203,7 @@ namespace Vim
                 mEntityTable.mDataColumns.find("byte:IsGrossInterior") == mEntityTable.mDataColumns.end() ||
                 mEntityTable.mIndexColumns.find("index:Vim.AreaScheme:AreaScheme") == mEntityTable.mIndexColumns.end() ||
                 mEntityTable.mIndexColumns.find("index:Vim.Element:Element") == mEntityTable.mIndexColumns.end())
-                return NULL;
+                return {};
 
             const int count = GetCount();
 
@@ -10258,7 +10258,7 @@ namespace Vim
         const std::vector<double>* GetAllValue()
         {
             if (mEntityTable.mDataColumns.find("double:Value") == mEntityTable.mDataColumns.end())
-                return NULL;
+                return {};
 
             const int count = GetCount();
             double* valueData = new double[count];
@@ -10285,7 +10285,7 @@ namespace Vim
         const std::vector<double>* GetAllPerimeter()
         {
             if (mEntityTable.mDataColumns.find("double:Perimeter") == mEntityTable.mDataColumns.end())
-                return NULL;
+                return {};
 
             const int count = GetCount();
             double* perimeterData = new double[count];
@@ -10304,7 +10304,7 @@ namespace Vim
                 return {};
 
             if (mEntityTable.mStringColumns.find("string:Number") == mEntityTable.mStringColumns.end())
-                return NULL;
+                return {};
 
             return &mStrings[mEntityTable.mStringColumns["string:Number"][areaIndex]];
         }
@@ -10312,7 +10312,7 @@ namespace Vim
         const std::vector<const std::string*>* GetAllNumber()
         {
             if (mEntityTable.mStringColumns.find("string:Number") == mEntityTable.mStringColumns.end())
-                return NULL;
+                return {};
 
             const int count = GetCount();
             const std::vector<int>& numberData = mEntityTable.mStringColumns["string:Number"];
@@ -10342,7 +10342,7 @@ namespace Vim
         const std::vector<bool>* GetAllIsGrossInterior()
         {
             if (mEntityTable.mDataColumns.find("byte:IsGrossInterior") == mEntityTable.mDataColumns.end())
-                return NULL;
+                return {};
 
             const int count = GetCount();
             bfast::byte* isGrossInteriorData = new bfast::byte[count];
@@ -10382,7 +10382,7 @@ namespace Vim
     static AreaTable* GetAreaTable(VimScene& scene)
     {
         if (scene.mEntityTables.find("Vim.Area") == scene.mEntityTables.end())
-            return NULL;
+            return {};
 
         return new AreaTable(scene.mEntityTables["Vim.Area"], scene.mStrings);
     }
@@ -10428,7 +10428,7 @@ namespace Vim
         {
             if (mEntityTable.mDataColumns.find("byte:IsGrossBuildingArea") == mEntityTable.mDataColumns.end() ||
                 mEntityTable.mIndexColumns.find("index:Vim.Element:Element") == mEntityTable.mIndexColumns.end())
-                return NULL;
+                return {};
 
             const int count = GetCount();
 
@@ -10468,7 +10468,7 @@ namespace Vim
         const std::vector<bool>* GetAllIsGrossBuildingArea()
         {
             if (mEntityTable.mDataColumns.find("byte:IsGrossBuildingArea") == mEntityTable.mDataColumns.end())
-                return NULL;
+                return {};
 
             const int count = GetCount();
             bfast::byte* isGrossBuildingAreaData = new bfast::byte[count];
@@ -10497,7 +10497,7 @@ namespace Vim
     static AreaSchemeTable* GetAreaSchemeTable(VimScene& scene)
     {
         if (scene.mEntityTables.find("Vim.AreaScheme") == scene.mEntityTables.end())
-            return NULL;
+            return {};
 
         return new AreaSchemeTable(scene.mEntityTables["Vim.AreaScheme"], scene.mStrings);
     }
