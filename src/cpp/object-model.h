@@ -325,7 +325,7 @@ namespace Vim
             return mEntityTable.mStringColumns["string:BufferName"].size() / sizeof(int);
         }
 
-        Asset* Get(int assetIndex, bool recursive = false)
+        Asset* Get(int assetIndex)
         {
             Asset* asset = new Asset();
             asset->mIndex = assetIndex;
@@ -423,7 +423,7 @@ namespace Vim
             return mEntityTable.mStringColumns["string:Spec"].size() / sizeof(int);
         }
 
-        DisplayUnit* Get(int displayUnitIndex, bool recursive = false)
+        DisplayUnit* Get(int displayUnitIndex)
         {
             DisplayUnit* displayUnit = new DisplayUnit();
             displayUnit->mIndex = displayUnitIndex;
@@ -599,7 +599,7 @@ namespace Vim
             return mEntityTable.mStringColumns["string:Name"].size() / sizeof(int);
         }
 
-        ParameterDescriptor* Get(int parameterDescriptorIndex, bool recursive = false)
+        ParameterDescriptor* Get(int parameterDescriptorIndex)
         {
             ParameterDescriptor* parameterDescriptor = new ParameterDescriptor();
             parameterDescriptor->mIndex = parameterDescriptorIndex;
@@ -958,7 +958,7 @@ namespace Vim
             return mEntityTable.mStringColumns["string:Value"].size() / sizeof(int);
         }
 
-        Parameter* Get(int parameterIndex, bool recursive = false)
+        Parameter* Get(int parameterIndex)
         {
             Parameter* parameter = new Parameter();
             parameter->mIndex = parameterIndex;
@@ -1114,7 +1114,7 @@ namespace Vim
             return mEntityTable.mDataColumns["int:Id"].size() / sizeof(int);
         }
 
-        Element* Get(int elementIndex, bool recursive = false)
+        Element* Get(int elementIndex)
         {
             Element* element = new Element();
             element->mIndex = elementIndex;
@@ -1622,7 +1622,7 @@ namespace Vim
             return mEntityTable.mDataColumns["int:Id"].size() / sizeof(int);
         }
 
-        Workset* Get(int worksetIndex, bool recursive = false)
+        Workset* Get(int worksetIndex)
         {
             Workset* workset = new Workset();
             workset->mIndex = worksetIndex;
@@ -1946,7 +1946,7 @@ namespace Vim
             return mEntityTable.mStringColumns["string:AssemblyTypeName"].size() / sizeof(int);
         }
 
-        AssemblyInstance* Get(int assemblyInstanceIndex, bool recursive = false)
+        AssemblyInstance* Get(int assemblyInstanceIndex)
         {
             AssemblyInstance* assemblyInstance = new AssemblyInstance();
             assemblyInstance->mIndex = assemblyInstanceIndex;
@@ -2126,7 +2126,7 @@ namespace Vim
             return mEntityTable.mStringColumns["string:GroupType"].size() / sizeof(int);
         }
 
-        Group* Get(int groupIndex, bool recursive = false)
+        Group* Get(int groupIndex)
         {
             Group* group = new Group();
             group->mIndex = groupIndex;
@@ -2305,7 +2305,7 @@ namespace Vim
             return mEntityTable.mDataColumns["byte:IsPrimary"].size() / sizeof(bfast::byte);
         }
 
-        DesignOption* Get(int designOptionIndex, bool recursive = false)
+        DesignOption* Get(int designOptionIndex)
         {
             DesignOption* designOption = new DesignOption();
             designOption->mIndex = designOptionIndex;
@@ -2420,7 +2420,7 @@ namespace Vim
             return mEntityTable.mDataColumns["double:Elevation"].size() / sizeof(double);
         }
 
-        Level* Get(int levelIndex, bool recursive = false)
+        Level* Get(int levelIndex)
         {
             Level* level = new Level();
             level->mIndex = levelIndex;
@@ -2534,7 +2534,7 @@ namespace Vim
             return mEntityTable.mIndexColumns["index:Vim.Element:Element"].size() / sizeof(int);
         }
 
-        Phase* Get(int phaseIndex, bool recursive = false)
+        Phase* Get(int phaseIndex)
         {
             Phase* phase = new Phase();
             phase->mIndex = phaseIndex;
@@ -2622,7 +2622,7 @@ namespace Vim
             return mEntityTable.mDataColumns["double:BaseOffset"].size() / sizeof(double);
         }
 
-        Room* Get(int roomIndex, bool recursive = false)
+        Room* Get(int roomIndex)
         {
             Room* room = new Room();
             room->mIndex = roomIndex;
@@ -2990,7 +2990,7 @@ namespace Vim
             return mEntityTable.mStringColumns["string:Title"].size() / sizeof(int);
         }
 
-        BimDocument* Get(int bimDocumentIndex, bool recursive = false)
+        BimDocument* Get(int bimDocumentIndex)
         {
             BimDocument* bimDocument = new BimDocument();
             bimDocument->mIndex = bimDocumentIndex;
@@ -4088,7 +4088,7 @@ namespace Vim
             return mEntityTable.mIndexColumns["index:Vim.DisplayUnit:DisplayUnit"].size() / sizeof(int);
         }
 
-        DisplayUnitInBimDocument* Get(int displayUnitInBimDocumentIndex, bool recursive = false)
+        DisplayUnitInBimDocument* Get(int displayUnitInBimDocumentIndex)
         {
             DisplayUnitInBimDocument* displayUnitInBimDocument = new DisplayUnitInBimDocument();
             displayUnitInBimDocument->mIndex = displayUnitInBimDocumentIndex;
@@ -4185,7 +4185,7 @@ namespace Vim
             return mEntityTable.mDataColumns["int:OrderIndex"].size() / sizeof(int);
         }
 
-        PhaseOrderInBimDocument* Get(int phaseOrderInBimDocumentIndex, bool recursive = false)
+        PhaseOrderInBimDocument* Get(int phaseOrderInBimDocumentIndex)
         {
             PhaseOrderInBimDocument* phaseOrderInBimDocument = new PhaseOrderInBimDocument();
             phaseOrderInBimDocument->mIndex = phaseOrderInBimDocumentIndex;
@@ -4321,7 +4321,7 @@ namespace Vim
             return mEntityTable.mStringColumns["string:Name"].size() / sizeof(int);
         }
 
-        Category* Get(int categoryIndex, bool recursive = false)
+        Category* Get(int categoryIndex)
         {
             Category* category = new Category();
             category->mIndex = categoryIndex;
@@ -4624,7 +4624,7 @@ namespace Vim
             return mEntityTable.mStringColumns["string:StructuralMaterialType"].size() / sizeof(int);
         }
 
-        Family* Get(int familyIndex, bool recursive = false)
+        Family* Get(int familyIndex)
         {
             Family* family = new Family();
             family->mIndex = familyIndex;
@@ -4862,7 +4862,7 @@ namespace Vim
             return mEntityTable.mDataColumns["byte:IsSystemFamilyType"].size() / sizeof(bfast::byte);
         }
 
-        FamilyType* Get(int familyTypeIndex, bool recursive = false)
+        FamilyType* Get(int familyTypeIndex)
         {
             FamilyType* familyType = new FamilyType();
             familyType->mIndex = familyTypeIndex;
@@ -5025,7 +5025,7 @@ namespace Vim
             return mEntityTable.mDataColumns["byte:FacingFlipped"].size() / sizeof(bfast::byte);
         }
 
-        FamilyInstance* Get(int familyInstanceIndex, bool recursive = false)
+        FamilyInstance* Get(int familyInstanceIndex)
         {
             FamilyInstance* familyInstance = new FamilyInstance();
             familyInstance->mIndex = familyInstanceIndex;
@@ -5725,7 +5725,7 @@ namespace Vim
             return mEntityTable.mStringColumns["string:Title"].size() / sizeof(int);
         }
 
-        View* Get(int viewIndex, bool recursive = false)
+        View* Get(int viewIndex)
         {
             View* view = new View();
             view->mIndex = viewIndex;
@@ -6341,7 +6341,7 @@ namespace Vim
             return mEntityTable.mIndexColumns["index:Vim.View:View"].size() / sizeof(int);
         }
 
-        ElementInView* Get(int elementInViewIndex, bool recursive = false)
+        ElementInView* Get(int elementInViewIndex)
         {
             ElementInView* elementInView = new ElementInView();
             elementInView->mIndex = elementInViewIndex;
@@ -6437,7 +6437,7 @@ namespace Vim
             return mEntityTable.mIndexColumns["index:Vim.Shape:Shape"].size() / sizeof(int);
         }
 
-        ShapeInView* Get(int shapeInViewIndex, bool recursive = false)
+        ShapeInView* Get(int shapeInViewIndex)
         {
             ShapeInView* shapeInView = new ShapeInView();
             shapeInView->mIndex = shapeInViewIndex;
@@ -6533,7 +6533,7 @@ namespace Vim
             return mEntityTable.mIndexColumns["index:Vim.Asset:Asset"].size() / sizeof(int);
         }
 
-        AssetInView* Get(int assetInViewIndex, bool recursive = false)
+        AssetInView* Get(int assetInViewIndex)
         {
             AssetInView* assetInView = new AssetInView();
             assetInView->mIndex = assetInViewIndex;
@@ -6631,7 +6631,7 @@ namespace Vim
             return mEntityTable.mDataColumns["double:Extents" + converter.GetColumns()[0]].size() / sizeof(double);
         }
 
-        LevelInView* Get(int levelInViewIndex, bool recursive = false)
+        LevelInView* Get(int levelInViewIndex)
         {
             LevelInView* levelInView = new LevelInView();
             levelInView->mIndex = levelInViewIndex;
@@ -6804,7 +6804,7 @@ namespace Vim
             return mEntityTable.mDataColumns["int:Id"].size() / sizeof(int);
         }
 
-        Camera* Get(int cameraIndex, bool recursive = false)
+        Camera* Get(int cameraIndex)
         {
             Camera* camera = new Camera();
             camera->mIndex = cameraIndex;
@@ -7189,7 +7189,7 @@ namespace Vim
             return mEntityTable.mStringColumns["string:Name"].size() / sizeof(int);
         }
 
-        Material* Get(int materialIndex, bool recursive = false)
+        Material* Get(int materialIndex)
         {
             Material* material = new Material();
             material->mIndex = materialIndex;
@@ -7813,7 +7813,7 @@ namespace Vim
             return mEntityTable.mDataColumns["double:Area"].size() / sizeof(double);
         }
 
-        MaterialInElement* Get(int materialInElementIndex, bool recursive = false)
+        MaterialInElement* Get(int materialInElementIndex)
         {
             MaterialInElement* materialInElement = new MaterialInElement();
             materialInElement->mIndex = materialInElementIndex;
@@ -8015,7 +8015,7 @@ namespace Vim
             return mEntityTable.mDataColumns["int:OrderIndex"].size() / sizeof(int);
         }
 
-        CompoundStructureLayer* Get(int compoundStructureLayerIndex, bool recursive = false)
+        CompoundStructureLayer* Get(int compoundStructureLayerIndex)
         {
             CompoundStructureLayer* compoundStructureLayer = new CompoundStructureLayer();
             compoundStructureLayer->mIndex = compoundStructureLayerIndex;
@@ -8214,7 +8214,7 @@ namespace Vim
             return mEntityTable.mDataColumns["double:Width"].size() / sizeof(double);
         }
 
-        CompoundStructure* Get(int compoundStructureIndex, bool recursive = false)
+        CompoundStructure* Get(int compoundStructureIndex)
         {
             CompoundStructure* compoundStructure = new CompoundStructure();
             compoundStructure->mIndex = compoundStructureIndex;
@@ -8328,7 +8328,7 @@ namespace Vim
             return mEntityTable.mIndexColumns["index:Vim.Element:Element"].size() / sizeof(int);
         }
 
-        Node* Get(int nodeIndex, bool recursive = false)
+        Node* Get(int nodeIndex)
         {
             Node* node = new Node();
             node->mIndex = nodeIndex;
@@ -8408,7 +8408,7 @@ namespace Vim
             return mEntityTable.mDataColumns["float:Box" + converter.GetColumns()[0]].size() / sizeof(float);
         }
 
-        Geometry* Get(int geometryIndex, bool recursive = false)
+        Geometry* Get(int geometryIndex)
         {
             Geometry* geometry = new Geometry();
             geometry->mIndex = geometryIndex;
@@ -8612,7 +8612,7 @@ namespace Vim
             return mEntityTable.mIndexColumns["index:Vim.Element:Element"].size() / sizeof(int);
         }
 
-        Shape* Get(int shapeIndex, bool recursive = false)
+        Shape* Get(int shapeIndex)
         {
             Shape* shape = new Shape();
             shape->mIndex = shapeIndex;
@@ -8691,7 +8691,7 @@ namespace Vim
             return mEntityTable.mIndexColumns["index:Vim.Element:Element"].size() / sizeof(int);
         }
 
-        ShapeCollection* Get(int shapeCollectionIndex, bool recursive = false)
+        ShapeCollection* Get(int shapeCollectionIndex)
         {
             ShapeCollection* shapeCollection = new ShapeCollection();
             shapeCollection->mIndex = shapeCollectionIndex;
@@ -8772,7 +8772,7 @@ namespace Vim
             return mEntityTable.mIndexColumns["index:Vim.Shape:Shape"].size() / sizeof(int);
         }
 
-        ShapeInShapeCollection* Get(int shapeInShapeCollectionIndex, bool recursive = false)
+        ShapeInShapeCollection* Get(int shapeInShapeCollectionIndex)
         {
             ShapeInShapeCollection* shapeInShapeCollection = new ShapeInShapeCollection();
             shapeInShapeCollection->mIndex = shapeInShapeCollectionIndex;
@@ -8867,7 +8867,7 @@ namespace Vim
             return mEntityTable.mDataColumns["int:SystemType"].size() / sizeof(int);
         }
 
-        System* Get(int systemIndex, bool recursive = false)
+        System* Get(int systemIndex)
         {
             System* system = new System();
             system->mIndex = systemIndex;
@@ -8984,7 +8984,7 @@ namespace Vim
             return mEntityTable.mDataColumns["int:Roles"].size() / sizeof(int);
         }
 
-        ElementInSystem* Get(int elementInSystemIndex, bool recursive = false)
+        ElementInSystem* Get(int elementInSystemIndex)
         {
             ElementInSystem* elementInSystem = new ElementInSystem();
             elementInSystem->mIndex = elementInSystemIndex;
@@ -9116,7 +9116,7 @@ namespace Vim
             return mEntityTable.mStringColumns["string:Guid"].size() / sizeof(int);
         }
 
-        Warning* Get(int warningIndex, bool recursive = false)
+        Warning* Get(int warningIndex)
         {
             Warning* warning = new Warning();
             warning->mIndex = warningIndex;
@@ -9302,7 +9302,7 @@ namespace Vim
             return mEntityTable.mIndexColumns["index:Vim.Warning:Warning"].size() / sizeof(int);
         }
 
-        ElementInWarning* Get(int elementInWarningIndex, bool recursive = false)
+        ElementInWarning* Get(int elementInWarningIndex)
         {
             ElementInWarning* elementInWarning = new ElementInWarning();
             elementInWarning->mIndex = elementInWarningIndex;
@@ -9399,7 +9399,7 @@ namespace Vim
             return mEntityTable.mDataColumns["byte:IsSurveyPoint"].size() / sizeof(bfast::byte);
         }
 
-        BasePoint* Get(int basePointIndex, bool recursive = false)
+        BasePoint* Get(int basePointIndex)
         {
             BasePoint* basePoint = new BasePoint();
             basePoint->mIndex = basePointIndex;
@@ -9643,7 +9643,7 @@ namespace Vim
             return mEntityTable.mDataColumns["int:New"].size() / sizeof(int);
         }
 
-        PhaseFilter* Get(int phaseFilterIndex, bool recursive = false)
+        PhaseFilter* Get(int phaseFilterIndex)
         {
             PhaseFilter* phaseFilter = new PhaseFilter();
             phaseFilter->mIndex = phaseFilterIndex;
@@ -9864,7 +9864,7 @@ namespace Vim
             return mEntityTable.mDataColumns["double:StartPoint" + converter.GetColumns()[0]].size() / sizeof(double);
         }
 
-        Grid* Get(int gridIndex, bool recursive = false)
+        Grid* Get(int gridIndex)
         {
             Grid* grid = new Grid();
             grid->mIndex = gridIndex;
@@ -10182,7 +10182,7 @@ namespace Vim
             return mEntityTable.mDataColumns["double:Value"].size() / sizeof(double);
         }
 
-        Area* Get(int areaIndex, bool recursive = false)
+        Area* Get(int areaIndex)
         {
             Area* area = new Area();
             area->mIndex = areaIndex;
@@ -10415,7 +10415,7 @@ namespace Vim
             return mEntityTable.mDataColumns["byte:IsGrossBuildingArea"].size() / sizeof(bfast::byte);
         }
 
-        AreaScheme* Get(int areaSchemeIndex, bool recursive = false)
+        AreaScheme* Get(int areaSchemeIndex)
         {
             AreaScheme* areaScheme = new AreaScheme();
             areaScheme->mIndex = areaSchemeIndex;
