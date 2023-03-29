@@ -17,25 +17,6 @@
 
 namespace Vim
 {
-    class SerializableProperty
-    {
-    public:
-        /// <summary>
-        /// The index of the entity that the property is matched to 
-        /// </summary>
-        int mEntityId;
-
-        /// <summary>
-        /// The string index of the property name
-        /// </summary>
-        int mName;
-
-        /// <summary>
-        /// The string index of the property value
-        /// </summary>
-        int mValue;
-    };
-
     class EntityTable
     {
     public:
@@ -43,8 +24,7 @@ namespace Vim
 
         std::unordered_map<std::string, std::vector<int>> mIndexColumns;
         std::unordered_map<std::string, std::vector<int>> mStringColumns;
-        std::unordered_map<std::string, std::vector<double>> mNumericColumns;
-        std::vector<SerializableProperty> mProperties;
+        std::unordered_map<std::string, bfast::ByteRange> mDataColumns;
     };
 
     inline std::vector<std::string> split(const std::string& str, const std::string& delim)
@@ -91,14 +71,14 @@ namespace Vim
         All = Geometry | Assets | Strings | Entities
     };
 
-    class Scene
+    class VimScene
     {
     public:
         bfast::Bfast mBfast;
         bfast::Bfast mGeometryBFast;
         bfast::Bfast mAssetsBFast;
         bfast::Bfast mEntitiesBFast;
-        std::vector<const bfast::byte*> mStrings;
+        std::vector<std::string> mStrings;
         g3d::G3d mGeometry;
         std::unordered_map<std::string, EntityTable> mEntityTables;
         std::unordered_map<std::string, std::string> mHeader;
@@ -190,12 +170,12 @@ namespace Vim
                         data += strlen((const char*)data) + 1;
                     }
 
-                    mStrings.resize(count);
+                    mStrings.reserve(count);
                     count = 0;
                     data = b.data.begin();
                     while (data < b.data.end())
                     {
-                        mStrings[count++] = data;
+                        mStrings.emplace_back(reinterpret_cast<const char*>(data));
                         data += strlen((const char*)data) + 1;
                     }
                 }
@@ -214,28 +194,24 @@ namespace Vim
                             {
                                 auto& tableBuffer = tableBFast.buffers[k];
 
-                                if (tableBuffer.name == "properties")
-                                {
-                                    entityTable.mProperties = std::vector<SerializableProperty>((SerializableProperty*)tableBuffer.data.begin(), (SerializableProperty*)tableBuffer.data.end());
-                                }
-                                else
-                                {
-                                    size_t index = tableBuffer.name.find_first_of(':');
-                                    std::string type = tableBuffer.name.substr(0, index);
-                                    std::string name = tableBuffer.name.substr(index + 1);
+                                size_t index = tableBuffer.name.find_first_of(':');
+                                std::string type = tableBuffer.name.substr(0, index);
+                                std::string name = tableBuffer.name.substr(index + 1);
 
-                                    if (type == "numeric")
-                                    {
-                                        entityTable.mNumericColumns[name] = std::vector<double>((double*)tableBuffer.data.begin(), (double*)tableBuffer.data.end());
-                                    }
-                                    else if (type == "index")
-                                    {
-                                        entityTable.mIndexColumns[name] = std::vector<int>((int*)tableBuffer.data.begin(), (int*)tableBuffer.data.end());
-                                    }
-                                    else if (type == "string")
-                                    {
-                                        entityTable.mStringColumns[name] = std::vector<int>((int*)tableBuffer.data.begin(), (int*)tableBuffer.data.end());
-                                    }
+                                if (type == "int" ||
+                                    type == "byte" ||
+                                    type == "double" ||
+                                    type == "float")
+                                {
+                                    entityTable.mDataColumns[tableBuffer.name] = tableBuffer.data;
+                                }
+                                else if (type == "index")
+                                {
+                                    entityTable.mIndexColumns[tableBuffer.name] = std::vector<int>((int*)tableBuffer.data.begin(), (int*)tableBuffer.data.end());
+                                }
+                                else if (type == "string")
+                                {
+                                    entityTable.mStringColumns[tableBuffer.name] = std::vector<int>((int*)tableBuffer.data.begin(), (int*)tableBuffer.data.end());
                                 }
                             }
 
