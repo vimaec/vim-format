@@ -52,12 +52,12 @@ impl Default for Header {
 /// A helper struct for representing a range of bytes 
 #[derive(Debug, Clone, Copy)]
 pub struct ByteRange {
-    begin: *const u8,
-    end: *const u8,
+    pub begin: *const u8,
+    pub end: *const u8,
 }
 impl ByteRange {
-    pub fn begin(&self) -> *const u8 { return self.begin }
-    pub fn end(&self) -> *const u8 { return self.end }
+    // pub fn begin(&self) -> *const u8 { return self.begin }
+    // pub fn end(&self) -> *const u8 { return self.end }
     pub fn size(&self) -> usize { unsafe { self.end.offset_from(self.begin) as usize } }
 }
 impl ToString for ByteRange {
@@ -175,7 +175,7 @@ impl RawData {
             let offset = &offsets[i];
             debug_assert!(range.size() == (offset.end - offset.begin) as usize);
             debug_assert!(current == offset.begin as usize);          
-            let slice = unsafe { std::slice::from_raw_parts(range.begin(), range.end().offset_from(range.begin()) as usize) };
+            let slice = unsafe { std::slice::from_raw_parts(range.begin, range.end.offset_from(range.begin) as usize) };
             out.extend_from_slice(slice);
             current += range.size();
             debug_assert!(current == offset.end as usize);
@@ -193,12 +193,12 @@ impl RawData {
     
     // Unpacks a vector of bytes into a RawData
     pub fn unpack(data: &ByteRange) -> Result<RawData, Box<dyn std::error::Error>> {
-        let h = unsafe { &*(data.begin() as *const Header) };
+        let h = unsafe { &*(data.begin as *const Header) };
         if h.magic != MAGIC { return Err("invalid magic number, either not a BFast, or was created on a machine with different endianess".into()); }
         if h.data_end < h.data_start { return Err("data ends before it starts".into()); }
         
         let size = h.num_arrays as usize;
-        let array_offsets = unsafe { std::slice::from_raw_parts((data.begin().offset(ARRAY_OFFSETS_START)) as *const ArrayOffset, size) };
+        let array_offsets = unsafe { std::slice::from_raw_parts((data.begin.offset(ARRAY_OFFSETS_START)) as *const ArrayOffset, size) };
         let mut r = RawData {  ranges: Vec::with_capacity(size) };
     
         for i in 0..size {
@@ -207,8 +207,8 @@ impl RawData {
             if offset.end as usize > data.size() { return Err("Offset end is after the end of the data".into()); }
             if i > 0 && offset.begin < array_offsets[i - 1].end { return Err("Offset begin is before the end of the previous offset".into()); }
             
-            let begin = unsafe { data.begin().add(offset.begin as usize) };
-            let end = unsafe { data.end().add(offset.end as usize) };
+            let begin = unsafe { data.begin.add(offset.begin as usize) };
+            let end = unsafe { data.end.add(offset.end as usize) };
             r.ranges.push(ByteRange{ begin, end })
         }
         Ok(r)
@@ -235,11 +235,22 @@ impl Bfast {
         r.pack()
     }
 
+    pub fn add(&mut self, name: String, begin: *const u8, end: *const u8) {
+        self.buffers.push(Buffer { name, data: ByteRange { begin, end } });
+    }
+
+    pub fn add_str(&mut self, name: String, data: &str) {
+        let begin = data.as_ptr();
+        let end = unsafe { begin.add(data.len()) };
+        self.add(name, begin, end)
+    }
+
+
     /// Unpacks an array of buffers into a BFastData package
     pub fn unpack_range(data: &ByteRange) -> Result<Self, Box<dyn std::error::Error>> {
         let raw_data = RawData::unpack(&data)?;
         let b = raw_data.ranges.first().ok_or("Empty ranges list")?;
-        let raw_ranges = unsafe { std::slice::from_raw_parts(b.begin(), b.size()) };
+        let raw_ranges = unsafe { std::slice::from_raw_parts(b.begin, b.size()) };
         
         let mut buffers: Vec<Buffer> = Vec::with_capacity(raw_data.ranges.len());
         let max_index = raw_data.ranges.len() - 1;

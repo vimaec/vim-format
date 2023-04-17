@@ -196,8 +196,8 @@ impl AttributeDescriptor {
 
 pub struct Attribute {
     pub descriptor: AttributeDescriptor,
-    _begin: *const u8,
-    _end: *const u8,
+    begin: *const u8,
+    end: *const u8,
 }
 
 impl Attribute {
@@ -209,8 +209,8 @@ impl Attribute {
         let descriptor = AttributeDescriptor::from_string(desc)?;
         let attribute = Attribute {
             descriptor,
-            _begin: begin,
-            _end: end,
+            begin,
+            end,
         };
 
         if attribute.byte_size() % attribute.data_element_size() != 0 {
@@ -221,7 +221,7 @@ impl Attribute {
     }
 
     pub fn byte_size(&self) -> usize {
-        (self._end as usize) - (self._begin as usize)
+        (self.end as usize) - (self.begin as usize)
     }
 
     pub fn data_element_size(&self) -> usize {
@@ -235,12 +235,12 @@ impl Attribute {
     pub fn to_buffer(&self) -> bfast::Buffer {
         bfast::Buffer {
             name: self.descriptor.to_string(),
-            data: std::slice::from_raw_parts(self._begin, self.byte_size()),
+            data: bfast::ByteRange { begin: self.begin, end : self.end },
         }
     }
 
     pub fn from_buffer(buffer: bfast::Buffer) -> Result<Self, String> {
-        Self::new(&buffer.name, buffer.data.as_ptr(), unsafe { buffer.data.as_ptr().add(buffer.data.len()) })
+        Self::new(&buffer.name, buffer.data.begin,  buffer.data.end)
     }
 }
 
@@ -251,13 +251,13 @@ pub struct G3d {
 }
 
 impl G3d {
-    pub fn new() -> Self {
-        G3d {
-            meta: Self::default_meta(),
-            bfast: bfast::Bfast::default(),
-            attributes: Vec::new(),
-        }
-    }
+    // pub fn new() -> Self {
+    //     G3d {
+    //         meta: Self::default_meta(),
+    //         bfast: bfast::Bfast::default(),
+    //         attributes: Vec::new(),
+    //     }
+    // }
 
     pub fn from_bfast(input_bfast: bfast::Bfast) -> Self {
         let mut attributes = Vec::new();
@@ -265,9 +265,9 @@ impl G3d {
 
         for (i, buffer) in input_bfast.buffers.iter().enumerate() {
             if i == 0 {
-                meta = String::from_utf8_lossy(&buffer.data).to_string();
+                meta = buffer.data.to_string()// String::from_utf8_lossy(&buffer.data).to_string();
             } else {
-                if let Ok(attr) = Attribute::from_buffer(buffer.clone()) {
+                if let Ok(attr) = Attribute::from_buffer(*buffer) {
                     attributes.push(attr);
                 }
             }
