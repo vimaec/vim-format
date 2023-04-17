@@ -1,7 +1,7 @@
 use std::io::{Read, Write};
 use std::vec::Vec;
 
-pub const BFAST_VERSION: Version = Version(1, 0, 1, "2019.9.24");
+pub const BFAST_VERSION: (u8, u8, u8, &'static str) = (1, 0, 1, "2019.9.24");
 /// Magic numbers for identifying a BFAST format
 const MAGIC: u64 = 0xBFA5;
 const TMP: u64 = 0xA5BF;
@@ -16,7 +16,6 @@ const ARRAY_OFFSETS_START: isize = 32;
 const ALIGNMENT: usize = 64;
 const ZERO_BYTE: u8 = (0 as char) as u8;
 
-pub struct Version(u8, u8, u8, &'static str);
 /// The array offset indicates where in the raw byte array (offset from beginning of BFAST byte stream) that a particular array's data can be found. 
 #[repr(align(8))]
 #[derive(Debug, Clone, Copy)]
