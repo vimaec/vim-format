@@ -1,6 +1,6 @@
 use std::cmp::Ordering;
 use std::ops::{Add, Div, Mul, Neg, Sub, AddAssign};
-use num_traits::{Float, Zero, One, FloatConst };
+use num_traits::{Float, Zero, One, FloatConst};
 use std::hash::Hash;
 
 use math3d_macro_derive::{StructOps, VectorOps, IntervalOps, VectorComponentOps, VectorOperators};
