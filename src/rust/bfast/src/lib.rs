@@ -3,89 +3,99 @@ use std::vec::Vec;
 
 pub const BFAST_VERSION: (u8, u8, u8, &'static str) = (1, 0, 1, "2019.9.24");
 /// Magic numbers for identifying a BFAST format
-const MAGIC: u64 = 0xBFA5;
-const TMP: u64 = 0xA5BF;
-const SWAPPED_MAGIC: u64 = TMP << 48;
+pub const MAGIC: u64 = 0xBFA5;
+pub const TMP: u64 = 0xA5BF;
+pub const SWAPPED_MAGIC: u64 = TMP << 48;
 /// The size of the header
 pub const HEADER_SIZE: usize = 32;
 /// The size of array offsets 
 pub const ARRAY_OFFSET_SIZE: usize = 16;
 /// This is the size of the header + padding to bring to alignment 
-const ARRAY_OFFSETS_START: isize = 32;
+const ARRAY_OFFSETS_START: usize = 32;
 /// This is sufficient alignment to fit objects natively into 256-bit (32 byte) registers 
 const ALIGNMENT: usize = 64;
-const ZERO_BYTE: u8 = (0 as char) as u8;
+const ZERO_BYTE: u8 = '\0' as u8;
 
 /// The array offset indicates where in the raw byte array (offset from beginning of BFAST byte stream) that a particular array's data can be found. 
 #[repr(align(8))]
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, PartialEq, Eq, Hash, Clone, Copy)]
 pub struct ArrayOffset {
     pub begin: u64,
     pub end: u64,
 }
-impl Default for ArrayOffset {
-    fn default() -> Self {
-        Self { begin: Default::default(), end: Default::default() }
-    }
-}
+// impl Default for ArrayOffset {
+//     fn default() -> Self {
+//         Self { begin: Default::default(), end: Default::default() }
+//     }
+// }
 
 /// A data structure at the top of the file. This is followed by 32 bytes of padding, then an array of n array_offsets (where n is equal to num_arrays)
 #[repr(align(8))]
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, PartialEq, Eq, Hash, Clone, Copy)]
 pub struct Header {
-    magic: u64,         // Either MAGIC (same-endian) of SWAPPED_MAGIC (different-endian)
-    data_start: u64,    // >= desc_end and modulo 64 == 0 and <= file_size
-    data_end: u64,      // >= data_start and <= file_size
-    num_arrays: u64,    // number of array_headers
+    /// Either MAGIC (same-endian) of SWAPPED_MAGIC (different-endian)
+    magic: u64,
+    /// >= desc_end and modulo 64 == 0 and <= file_size
+    data_start: u64,
+    /// >= data_start and <= file_size
+    data_end: u64,
+    /// number of array_headers
+    num_arrays: u64,
 }
-impl Default for Header {
-    fn default() -> Self {
-        Self { 
-            magic: Default::default(), 
-            data_start: Default::default(), 
-            data_end: Default::default(), 
-            num_arrays: Default::default() 
-        }
-    }
-}
+// impl Default for Header {
+//     fn default() -> Self {
+//         Self { magic: Default::default(), data_start: Default::default(), data_end: Default::default(), num_arrays: Default::default() }
+//     }
+// }
 
 /// A helper struct for representing a range of bytes 
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, PartialEq, Eq, Hash, Clone, Copy)]
 pub struct ByteRange {
-    pub begin: *const u8,
-    pub end: *const u8,
+    pub begin: usize,
+    pub end: usize
 }
 impl ByteRange {
     // pub fn begin(&self) -> *const u8 { return self.begin }
     // pub fn end(&self) -> *const u8 { return self.end }
-    pub fn size(&self) -> usize { unsafe { self.end.offset_from(self.begin) as usize } }
+    //pub fn data(&self) -> &[u8] { unsafe { std::slice::from_raw_parts(self.begin, self.size()) } }
+    //pub fn size(&self) -> usize { unsafe { self.end.offset_from(self.begin) as usize } }
+    pub fn size(&self) -> usize { self.end - self.begin }
 }
-impl ToString for ByteRange {
-    fn to_string(&self) -> String {
-        let slice = unsafe { std::slice::from_raw_parts(self.begin, self.size()) };
-        String::from_utf8_lossy(slice).into_owned()
-    }
-}
+
+// impl ToString for ByteRange {
+//     fn to_string(&self) -> String {
+//         String::from_utf8_lossy(self.data()).into_owned()
+//     }
+// }
 
 /// A Bfast buffer conceptually is a name and a byte-range
-#[derive(Debug, Clone)]
+#[derive(Debug, PartialEq, Eq, Hash)] //, Clone, Copy
 pub struct Buffer {
     pub name: String,
-    pub data: ByteRange,
+    pub range: ByteRange,
 }
+// impl Buffer {
+//     pub fn new(name: &str, begin: *const u8, end: *const u8) -> Self {
+//         Self { name: String::from(name), data: ByteRange { begin, end } }
+//     }
+//     pub fn new_data(name: &str, data: &str) -> Self {
+//         let begin = data.as_ptr();
+//         let end = unsafe { begin.add(data.len()) };
+//         Self { name: String::from(name), data: ByteRange { begin, end } }
+//     }
+// }
 
 /// The Bfast container implementation is a container of date ranges: the first one contains the names 
-pub struct RawData {
+#[derive(Debug)]
+struct RawData {
     // Each data buffer 
-    pub ranges: Vec<ByteRange>,
+    ranges: Vec<ByteRange>,
 }
 
 impl RawData {
     /// Returns true if the given value is aligned. 
-    #[inline(always)]
     fn is_aligned(n: usize) -> bool { n % ALIGNMENT == 0 }
     /// Returns an aligned version of the given value to bring it to alignment 
-    #[inline(always)]
     fn aligned_value(n: usize) -> usize {
         if Self::is_aligned(n) { n } else {
             let r = n + ALIGNMENT - (n % ALIGNMENT);
@@ -175,8 +185,8 @@ impl RawData {
             let offset = &offsets[i];
             debug_assert!(range.size() == (offset.end - offset.begin) as usize);
             debug_assert!(current == offset.begin as usize);          
-            let slice = unsafe { std::slice::from_raw_parts(range.begin, range.end.offset_from(range.begin) as usize) };
-            out.extend_from_slice(slice);
+           // let slice = unsafe { std::slice::from_raw_parts(range.begin, range.end.offset_from(range.begin) as usize) };
+           // out.extend_from_slice(range.data);
             current += range.size();
             debug_assert!(current == offset.end as usize);
         }
@@ -191,101 +201,147 @@ impl RawData {
         r
     }
     
-    // Unpacks a vector of bytes into a RawData
-    pub fn unpack(data: &ByteRange) -> Result<RawData, Box<dyn std::error::Error>> {
-        let h = unsafe { &*(data.begin as *const Header) };
-        if h.magic != MAGIC { return Err("invalid magic number, either not a BFast, or was created on a machine with different endianess".into()); }
-        if h.data_end < h.data_start { return Err("data ends before it starts".into()); }
+    // // Unpacks a vector of bytes into a RawData
+    // pub fn unpack(range: &ByteRange) -> Result<RawData, Box<dyn std::error::Error>> {
+    //     let h = unsafe { &*(range.begin as *const Header) };
+    //     if h.magic != MAGIC { return Err("invalid magic number, either not a BFast, or was created on a machine with different endianess".into()); }
+    //     if h.data_end < h.data_start { return Err("data ends before it starts".into()); }
         
-        let size = h.num_arrays as usize;
-        let array_offsets = unsafe { std::slice::from_raw_parts((data.begin.offset(ARRAY_OFFSETS_START)) as *const ArrayOffset, size) };
-        let mut r = RawData {  ranges: Vec::with_capacity(size) };
+    //     let size = h.num_arrays as usize;
+    //     let array_offsets = unsafe { std::slice::from_raw_parts((range.begin.offset(ARRAY_OFFSETS_START)) as *const ArrayOffset, size) };
+    //     let mut r = RawData {  ranges: Vec::with_capacity(size) };
     
-        for i in 0..size {
-            let offset = &array_offsets[i];
-            if offset.begin > offset.end { return Err("Offset begin is after the offset end".into()); }
-            if offset.end as usize > data.size() { return Err("Offset end is after the end of the data".into()); }
-            if i > 0 && offset.begin < array_offsets[i - 1].end { return Err("Offset begin is before the end of the previous offset".into()); }
+    //     for i in 0..size {
+    //         let offset = &array_offsets[i];
+    //         if offset.begin > offset.end { return Err("Offset begin is after the offset end".into()); }
+    //         if offset.end as usize > range.size() { return Err("Offset end is after the end of the data".into()); }
+    //         if i > 0 && offset.begin < array_offsets[i - 1].end { return Err("Offset begin is before the end of the previous offset".into()); }
             
-            let begin = unsafe { data.begin.add(offset.begin as usize) };
-            let end = unsafe { data.end.add(offset.end as usize) };
-            r.ranges.push(ByteRange{ begin, end })
-        }
-        Ok(r)
-    }
+    //         let begin = unsafe { range.begin.offset(offset.begin as isize) };
+    //         let end = unsafe { range.end.offset(offset.end as isize) };
+    //         r.ranges.push(ByteRange{ begin, end })
+    //     }
+    //     Ok(r)
+    // }
 }
 
 /// A Bfast conceptually is a collection of buffers: named byte arrays. 
 /// It contains the raw data contained within. 
-pub struct Bfast {
-    //name_data: Vec<Byte>,
-    pub data: ByteRange,
-    //data_buffer: Vec<Byte>,
+#[derive(Debug)]
+pub struct Bfast<'a> { 
+    pub data: &'a [u8], 
     pub buffers: Vec<Buffer>,
 }
-impl Bfast {
-    pub fn pack(&self) -> Vec<u8> {
-        let count = self.buffers.len();
+impl<'a> Bfast<'a> {
+    // pub fn range(&self, range: &ByteRange) -> &[u8] { &self.data[range.begin..range.end] }
+    // pub fn buffer(&self, buffer: &Buffer) -> &[u8] { &self.data[buffer.range.begin..buffer.range.end] }
+    
+    pub fn pack(buffers: Vec<Buffer>) -> Vec<u8> {
+        // // Compute the name data
+        // name_data.clear();
+
+        // size_t count = 0;
+        // for (auto b : buffers)
+        // {
+        //     for (auto c : b.name)
+        //         count++;
+        //     count++;
+        // }
+
+        // name_data.resize(count);
+        // count = 0;
+        // for (auto b : buffers)
+        // {
+        //     for (auto c : b.name)
+        //         name_data[count++] = c;
+        //     name_data[count++] = 0;
+        // }
+
+        // RawData r;
+        // size_t index = 0;
+        // r.ranges.resize(1 + buffers.size());
+        // r.ranges[index++] = ByteRange{ name_data.data(), name_data.data() + name_data.size() };
+        // for (auto b : buffers)
+        //     r.ranges[index++] = b.data;
+        // return r;
+
+        let count = buffers.len();
         let name_data: Vec<u8> = Vec::with_capacity(count);
         
-        let mut ranges = Vec::with_capacity(1 + self.buffers.len());
-        ranges.push(ByteRange { begin: name_data.as_ptr(), end: unsafe { name_data.as_ptr().add(name_data.len() as usize) } }); 
-        for b in &self.buffers { ranges.push(b.data) }
+        let mut ranges = Vec::with_capacity(1 + buffers.len());
+       //ranges.push(ByteRange { begin: name_data.as_ptr(), end: unsafe { name_data.as_ptr().add(name_data.len() as usize) } }); 
+        for b in &buffers { ranges.push(b.range) }
         let r = RawData { ranges };
         r.pack()
     }
 
-    pub fn add(&mut self, name: String, begin: *const u8, end: *const u8) {
-        self.buffers.push(Buffer { name, data: ByteRange { begin, end } });
-    }
+    ///Unpacks an array of buffers into a BFastData package    
+    pub fn unpack(data: &[u8], range: Option<ByteRange>) -> Result<Vec<Buffer>, Box<dyn std::error::Error>> {
+        const HEADER_SIZE: usize = std::mem::size_of::<Header>();
+        const ARRAY_OFFSET_SIZE: usize = std::mem::size_of::<ArrayOffset>();
 
-    pub fn add_str(&mut self, name: String, data: &str) {
-        let begin = data.as_ptr();
-        let end = unsafe { begin.add(data.len()) };
-        self.add(name, begin, end)
-    }
+        let range = range.unwrap_or(ByteRange { begin: 0, end: data.len() });
+        let header = &data[0..HEADER_SIZE];
+        let h = unsafe { &*(header.as_ptr() as *const Header) };
+        if h.magic != MAGIC { return Err("invalid magic number, either not a BFast, or was created on a machine with different endianess".into()); }
+        if h.data_end < h.data_start { return Err("data ends before it starts".into()); }
 
-
-    /// Unpacks an array of buffers into a BFastData package
-    pub fn unpack_range(data: &ByteRange) -> Result<Self, Box<dyn std::error::Error>> {
-        let raw_data = RawData::unpack(&data)?;
-        let b = raw_data.ranges.first().ok_or("Empty ranges list")?;
-        let raw_ranges = unsafe { std::slice::from_raw_parts(b.begin, b.size()) };
+        let size = h.num_arrays as usize;
+        let mut ranges: Vec<ByteRange> = Vec::with_capacity(size);
         
-        let mut buffers: Vec<Buffer> = Vec::with_capacity(raw_data.ranges.len());
-        let max_index = raw_data.ranges.len() - 1;
-        for (i, v) in raw_ranges.split(|&c| c == ZERO_BYTE).enumerate() {
-            let str = std::str::from_utf8(v)?;
-            if i >= max_index { return Err("The number of names does not match the raw data size".into()) }
-            buffers.push(Buffer { name: str.to_owned(), data: raw_data.ranges[i + 1] })
+        let start = range.begin + ARRAY_OFFSETS_START;
+        let mut prev: Option<&ArrayOffset> = None;
+        for i in 0..size {
+            let index = start + i * ARRAY_OFFSET_SIZE;
+            let slice = &data[index..(index + ARRAY_OFFSET_SIZE)];
+            let offset = unsafe { &*(slice.as_ptr() as *const ArrayOffset) };
+            if (*offset).begin > offset.end { return Err("Offset begin is after the offset end".into()); }
+            if offset.end as usize > range.size() { return Err("Offset end is after the end of the data".into()); }
+            if let Some(p) = prev { if offset.begin < p.end { return Err("Offset begin is before the end of the previous offset".into()); } }
+            
+            let begin = range.begin + offset.begin as usize;
+            let end = range.begin + offset.end as usize;
+            ranges.push(ByteRange{ begin, end });
+            prev = Some(offset);
         }
-        Ok(Self { data: *data, buffers })
+
+        let names_range = ranges.first().ok_or("Empty ranges list")?;
+        let names: Vec<&str> = std::str::from_utf8(&data[names_range.begin..names_range.end])?
+            .split_terminator('\0')
+            .collect();
+        if names.len() != ranges.len() - 1 { return Err("The number of names does not match the raw data size".into()) }
+        let buffers = names.iter().enumerate()
+            .map(|(i, name)| Buffer { name: String::from(*name), range: ranges[i + 1] })
+            .collect();
+        Ok(buffers)
     }
 
-    fn unpack(data: &[u8]) -> Result<Self, Box<dyn std::error::Error>> {
-        let pointer = data.as_ptr();
-        let range = ByteRange {
-            begin: pointer,
-            end: unsafe { pointer.add(data.len()) },
-        };
-        Self::unpack_range(&range)
-    }
-
-    pub fn write_file(&self, file: &str) -> Result<(), Box<dyn std::error::Error>> {
-        let data = self.pack();
+    pub fn write_file(buffers: Vec<Buffer>, file: &str) -> Result<(), Box<dyn std::error::Error>> {
+        let data = Self::pack(buffers);
         let mut fstrm = std::fs::File::create(std::path::Path::new(file))?;
         fstrm.write_all(&data)?;
         Ok(())
     }
+    
+}
 
-    pub fn read_file(file: &str) -> Result<Bfast, Box<dyn std::error::Error>> {
-        let mut fstrm = std::fs::File::open(std::path::Path::new(file))?;  
-        Self::read_stream(&mut fstrm)
+
+
+// impl Default for Bfast {
+//     fn default() -> Self {
+//         Self { buffers: Default::default() }
+//     }
+// }
+impl<'a> From<&'a [u8]> for Bfast<'a> {
+    fn from(data: &'a [u8]) -> Self {
+        if let Ok(b) = Self::unpack(data, None) { Self { data, buffers : b } } 
+        else { Self { data, buffers: Vec::new() } }
     }
-    pub fn read_stream(fstrm: &mut std::fs::File) -> Result<Bfast, Box<dyn std::error::Error>> {
-        let filesize = fstrm.metadata()?.len() as usize;
-        let mut buffer = vec![0u8; filesize];
-        fstrm.read_exact(&mut buffer)?;
-        Bfast::unpack(&buffer)
-    }
+}
+impl<'a> Into<&'a [u8]> for Bfast<'a> {
+    fn into(self) -> &'a [u8] { self.data }
+}
+
+pub fn read_bytes(file: &str) -> Result<Vec<u8>, Box<dyn std::error::Error>> {
+    Ok(std::fs::read(file)?)
 }
