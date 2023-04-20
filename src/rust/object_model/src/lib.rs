@@ -2,28 +2,6 @@ use std::str;
 use num_traits::Float;
 use vim::EntityTable;
 
-#[derive(Debug, PartialEq, Copy, Clone)]
-pub struct Vector2<T: Float> {
-    pub x: T,
-    pub y: T,
-}
-#[derive(Debug, PartialEq, Copy, Clone)]
-pub struct Vector3<T: Float> {
-    pub x: T,
-    pub y: T,
-    pub z: T,
-}
-#[derive(Debug, PartialEq, Copy, Clone)]
-pub struct AABox<T: Float> {
-    pub min: Vector3::<T>,
-    pub max: Vector3::<T>,
-}
-#[derive(Debug, PartialEq, Copy, Clone)]
-pub struct AABox2D<T: Float> {
-    pub min: Vector2::<T>,
-    pub max: Vector2::<T>,
-}
-
 pub struct Asset<'a> {
     pub index: usize,
     pub buffer_name: &'a str,
@@ -793,9 +771,6 @@ pub struct AreaSchemeTable<'a> {
     pub strings: Vec<&'a str>,
 }
 
-
-
-
 pub trait Converter<T> {
     fn get_size(&self) -> usize;
     fn get_bytes(&self) -> usize;
@@ -844,6 +819,27 @@ pub trait Converter<T> {
     }
 }
 
+#[derive(Debug, PartialEq, Copy, Clone)]
+pub struct Vector2<T: Float> {
+    pub x: T,
+    pub y: T,
+}
+#[derive(Debug, PartialEq, Copy, Clone)]
+pub struct Vector3<T: Float> {
+    pub x: T,
+    pub y: T,
+    pub z: T,
+}
+#[derive(Debug, PartialEq, Copy, Clone)]
+pub struct AABox<T: Float> {
+    pub min: Vector3::<T>,
+    pub max: Vector3::<T>,
+}
+#[derive(Debug, PartialEq, Copy, Clone)]
+pub struct AABox2D<T: Float> {
+    pub min: Vector2::<T>,
+    pub max: Vector2::<T>,
+}
 
 // impl<'a> DisplayUnit<'a> {
 //     fn default() -> Self {
