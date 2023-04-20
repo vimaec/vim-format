@@ -62,8 +62,8 @@ pub enum VimLoadFlags {
 pub struct EntityTable<'a> {
     pub data: &'a [u8], 
     pub name: &'a str,
-    pub index_columns: HashMap<&'a str, Vec<i32>>,
-    pub string_columns: HashMap<&'a str, Vec<i32>>,
+    pub index_columns: HashMap<&'a str, Vec<usize>>,
+    pub string_columns: HashMap<&'a str, Vec<usize>>,
     pub data_columns: HashMap<&'a str, ByteRange>,
 }
 
@@ -151,26 +151,26 @@ impl<'a> VimScene<'a> {
                             let tb = &entities_bfast.data[eb.range.begin..eb.range.end];
                             let table = Bfast::unpack(tb)?;
     
-                            let mut index_columns: HashMap<&str, Vec<i32>> = HashMap::new();
-                            let mut string_columns: HashMap<&str, Vec<i32>> = HashMap::new();
+                            let mut index_columns: HashMap<&str, Vec<usize>> = HashMap::new();
+                            let mut string_columns: HashMap<&str, Vec<usize>> = HashMap::new();
                             let mut data_columns: HashMap<&str, ByteRange> = HashMap::new();
     
                             for tb in table.buffers.iter() {
                                 let tbname: &str = &tb.name;
                                 if let Some(index) = tbname.find(':') {
                                     let type_str = &tbname[0..index];
-                                    let column_str = &tbname[(index + 1)..tbname.len()];
+                                    //let column_str = &tbname[(index + 1)..tbname.len()];
     
                                     if ["int", "byte", "double", "float"].contains(&type_str) {
-                                        data_columns.insert(column_str, tb.range);
+                                        data_columns.insert(tbname, tb.range);
                                     } else if "index" == type_str {
                                         let b = &table.data[tb.range.begin..tb.range.end];
-                                        let ints: Vec<i32> = b.chunks_exact(4).map(|bytes| i32::from_ne_bytes([bytes[0], bytes[1], bytes[2], bytes[3]])).collect();
-                                        index_columns.insert(column_str, ints);
+                                        let ints: Vec<usize> = b.chunks_exact(4).map(|bytes| i32::from_ne_bytes([bytes[0], bytes[1], bytes[2], bytes[3]]) as usize).collect();
+                                        index_columns.insert(tbname, ints);
                                     } else if "string" == type_str {
                                         let b = &table.data[tb.range.begin..tb.range.end];
-                                        let ints: Vec<i32> = b.chunks_exact(4).map(|bytes| i32::from_ne_bytes([bytes[0], bytes[1], bytes[2], bytes[3]])).collect();
-                                        string_columns.insert(column_str, ints);
+                                        let ints: Vec<usize> = b.chunks_exact(4).map(|bytes| i32::from_ne_bytes([bytes[0], bytes[1], bytes[2], bytes[3]]) as usize).collect();
+                                        string_columns.insert(tbname, ints);
                                     }
                                 }
                             }

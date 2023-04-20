@@ -37,6 +37,7 @@ version = "0.1.0"
 dependencies = [
  "bfast",
  "g3d",
+ "num-traits",
  "vim",
 ]
 
