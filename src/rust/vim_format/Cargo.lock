@@ -55,7 +55,17 @@ dependencies = [
  "bfast",
  "g3d",
  "num-traits",
+ "object_model_macro_derive",
  "vim",
+]
+
+[[package]]
+name = "object_model_macro_derive"
+version = "0.1.0"
+dependencies = [
+ "num-traits",
+ "quote",
+ "syn",
 ]
 
 [[package]]

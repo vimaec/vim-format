@@ -841,16 +841,8 @@ pub struct AABox2D<T: Float> {
     pub max: Vector2::<T>,
 }
 
-// impl<'a> DisplayUnit<'a> {
-//     fn default() -> Self {
-//         DisplayUnit {
-//             index: 0,
-//             spec: "",
-//             unit_type: "",
-//             label: "",
-//         }
-//     }
-// }
+
+
 // impl<'a> AssetTable<'a> {
 //     fn new(entity_table: &'a EntityTable, strings: Vec<&'a str>) -> Self {
 //         Self { entity_table, strings }
