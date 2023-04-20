@@ -61,6 +61,9 @@ impl ByteRange {
     //pub fn size(&self) -> usize { unsafe { self.end.offset_from(self.begin) as usize } }
     pub fn size(&self) -> usize { self.end - self.begin }
 }
+impl Default for ByteRange {
+    fn default() -> Self { Self { begin: Default::default(), end: Default::default() } }
+}
 
 // impl ToString for ByteRange {
 //     fn to_string(&self) -> String {
@@ -70,8 +73,8 @@ impl ByteRange {
 
 /// A Bfast buffer conceptually is a name and a byte-range
 #[derive(Debug, PartialEq, Eq, Hash)] //, Clone, Copy
-pub struct Buffer {
-    pub name: String,
+pub struct Buffer<'a> {
+    pub name: &'a str,
     pub range: ByteRange,
 }
 // impl Buffer {
@@ -84,6 +87,9 @@ pub struct Buffer {
 //         Self { name: String::from(name), data: ByteRange { begin, end } }
 //     }
 // }
+impl<'a> Default for Buffer<'a> {
+    fn default() -> Self { Self { name: Default::default() , range: Default::default() } }
+}
 
 /// The Bfast container implementation is a container of date ranges: the first one contains the names 
 #[derive(Debug)]
@@ -230,7 +236,7 @@ impl RawData {
 #[derive(Debug)]
 pub struct Bfast<'a> { 
     pub data: &'a [u8], 
-    pub buffers: Vec<Buffer>,
+    pub buffers: Vec<Buffer<'a>>,
 }
 impl<'a> Bfast<'a> {
     // pub fn range(&self, range: &ByteRange) -> &[u8] { &self.data[range.begin..range.end] }
@@ -276,11 +282,11 @@ impl<'a> Bfast<'a> {
     }
 
     ///Unpacks an array of buffers into a BFastData package    
-    pub fn unpack(data: &[u8], range: Option<ByteRange>) -> Result<Vec<Buffer>, Box<dyn std::error::Error>> {
+    pub fn unpack(data: &[u8]) -> Result<Bfast, Box<dyn std::error::Error>> {
         const HEADER_SIZE: usize = std::mem::size_of::<Header>();
         const ARRAY_OFFSET_SIZE: usize = std::mem::size_of::<ArrayOffset>();
 
-        let range = range.unwrap_or(ByteRange { begin: 0, end: data.len() });
+        let range = ByteRange { begin: 0, end: data.len() };
         let header = &data[0..HEADER_SIZE];
         let h = unsafe { &*(header.as_ptr() as *const Header) };
         if h.magic != MAGIC { return Err("invalid magic number, either not a BFast, or was created on a machine with different endianess".into()); }
@@ -310,10 +316,10 @@ impl<'a> Bfast<'a> {
             .split_terminator('\0')
             .collect();
         if names.len() != ranges.len() - 1 { return Err("The number of names does not match the raw data size".into()) }
-        let buffers = names.iter().enumerate()
-            .map(|(i, name)| Buffer { name: String::from(*name), range: ranges[i + 1] })
+        let buffers: Vec<Buffer> = names.iter().enumerate()
+            .map(|(i, name)| Buffer { name, range: ranges[i + 1] })
             .collect();
-        Ok(buffers)
+        Ok(Bfast { data, buffers })
     }
 
     pub fn write_file(buffers: Vec<Buffer>, file: &str) -> Result<(), Box<dyn std::error::Error>> {
@@ -325,17 +331,14 @@ impl<'a> Bfast<'a> {
     
 }
 
+impl<'a> Default for Bfast<'a> {
+    fn default() -> Self { Self { data: Default::default(), buffers: Default::default() } }
+}
 
-
-// impl Default for Bfast {
-//     fn default() -> Self {
-//         Self { buffers: Default::default() }
-//     }
-// }
 impl<'a> From<&'a [u8]> for Bfast<'a> {
     fn from(data: &'a [u8]) -> Self {
-        if let Ok(b) = Self::unpack(data, None) { Self { data, buffers : b } } 
-        else { Self { data, buffers: Vec::new() } }
+        if let Ok(bfast) = Self::unpack(data) { bfast } 
+        else { Default::default() }
     }
 }
 impl<'a> Into<&'a [u8]> for Bfast<'a> {

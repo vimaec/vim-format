@@ -1,75 +1,10 @@
-use std::{collections::HashMap, ops::Index};
-use std::fs::File;
-use std::io::Read;
+use std::collections::HashMap;
 use std::str;
 use std::string::String;
-use bfast::{self, ByteRange, Header, Buffer, Bfast};
+use bfast::{self, ByteRange, Buffer, Bfast};
 use g3d::G3d;
 
 #[derive(Debug, PartialEq, Eq, Hash, Clone, Copy)]
-pub enum VimErrorCodes {
-    Success = 0,
-    Failed = -1,
-    NoVersionInfo = -2,
-    FileNotRecognized = -3,
-    GeometryLoadingException = -4,
-    AssetLoadingException = -5,
-    EntityLoadingException = -6,
-}
-impl std::fmt::Display for VimErrorCodes {
-    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result { write!(f, "{:?}", self) }
-}
-impl std::error::Error for VimErrorCodes {}
-
-#[derive(Debug, PartialEq, Eq, Hash, Clone, Copy)]
-pub enum VimLoadFlags {
-    Geometry = 1,
-    Assets = 2,
-    Strings = 4,
-    Entities = 8,
-    All = VimLoadFlags::Geometry as isize | VimLoadFlags::Assets as isize | VimLoadFlags::Strings as isize | VimLoadFlags::Entities as isize,
-}
-
-#[derive(Debug)]
-pub struct EntityTable {
-    pub name: String,
-    pub index_columns: HashMap<String, Vec<i32>>,
-    pub string_columns: HashMap<String, Vec<i32>>,
-    pub data_columns: HashMap<String, ByteRange>,
-}
-
-// fn split(str: &str, delim: &str) -> Vec<String> {
-//     let mut tokens = Vec::new();
-//     let mut prev = 0;
-//     let mut pos = 0;
-//     while pos < str.len() && prev < str.len() {
-//         pos = str[prev..].find(delim).unwrap_or(str.len());
-//         let token = str[prev..prev + pos].to_string();
-//         if !token.is_empty() {
-//             tokens.push(token);
-//         }
-//         prev += pos + delim.len();
-//     }
-//     tokens
-// }
-
-#[derive(Debug)]
-pub struct VimScene<'a> {
-   // bfast: bfast::Bfast,
-
-    //geometry_bfast: bfast::Bfast,
-    assets_bfast: bfast::Bfast<'a>,
-    entities_bfast: bfast::Bfast<'a>,
-    strings: Vec<String>,
-    pub geometry: G3d,
-    pub entity_tables: HashMap<String, EntityTable>,
-    header: HashMap<String, String>,
-    version_major: u32,
-    version_minor: u32,
-    version_patch: u32,
-}
-
-#[derive(Debug)]
 pub struct Version {
     pub major: u32,
     pub minor: u32,
@@ -99,125 +34,169 @@ impl std::str::FromStr for Version {
     }
 }
 
- 
+#[derive(Debug, PartialEq, Eq, Hash, Clone, Copy)]
+pub enum VimErrorCodes {
+    Success = 0,
+    Failed = -1,
+    NoVersionInfo = -2,
+    FileNotRecognized = -3,
+    GeometryLoadingException = -4,
+    AssetLoadingException = -5,
+    EntityLoadingException = -6,
+}
+impl std::fmt::Display for VimErrorCodes {
+    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result { write!(f, "{:?}", self) }
+}
+impl std::error::Error for VimErrorCodes {}
+
+#[derive(Debug, PartialEq, Eq, Hash, Clone, Copy)]
+pub enum VimLoadFlags {
+    Geometry = 1,
+    Assets = 2,
+    Strings = 4,
+    Entities = 8,
+    All = VimLoadFlags::Geometry as isize | VimLoadFlags::Assets as isize | VimLoadFlags::Strings as isize | VimLoadFlags::Entities as isize,
+}
+
+#[derive(Debug)]
+pub struct EntityTable<'a> {
+    pub data: &'a [u8], 
+    pub name: &'a str,
+    pub index_columns: HashMap<&'a str, Vec<i32>>,
+    pub string_columns: HashMap<&'a str, Vec<i32>>,
+    pub data_columns: HashMap<&'a str, ByteRange>,
+}
+
+#[derive(Debug)]
+pub struct VimHeader {
+    pub vim: Version,
+    pub id: String,
+    pub revision: String,
+    pub generator: String,
+    pub created: String,
+    pub schema: String,
+}
+impl Default for VimHeader {
+    fn default() -> Self { Self { vim: Default::default(), id: Default::default(), revision: Default::default(), generator: Default::default(), created: Default::default(), schema: Default::default() } }
+}
+
+#[derive(Debug)]
+pub struct VimScene<'a> {
+    pub header: VimHeader,
+    pub assets: bfast::Bfast<'a>,
+    pub geometry: G3d<'a>,
+    pub strings: Vec<&'a str>,
+    pub entities: HashMap<&'a str, EntityTable<'a>>,
+}
+
 impl<'a> VimScene<'a> {
-    fn version(data: &[u8], b: &Buffer) -> Result<Version, Box<dyn std::error::Error>> {
-        let h = &data[b.range.begin..b.range.end];
-        let header = std::str::from_utf8(h)?;
-        for token in header.split('\n') {
-            let kv: Vec<&str> = token.split("=").collect();
-            if kv.len() == 2 {
-                if kv[0] == "vim" { 
-                    return Ok(kv[1].parse::<Version>()?); 
-                }
-            }
-        }
-        Err(Box::new(VimErrorCodes::NoVersionInfo))
-    }
-
-    pub fn read_file(path: &str, load_flags: VimLoadFlags) -> Result<Self, Box<dyn std::error::Error>>  {
-        let mut mVersionMajor: u32 = 0xffffffff;
-        let mut mVersionMinor: u32 = 0xffffffff;
-        let mut mVersionPatch: u32 = 0xffffffff;
-
-        let mut mHeader: HashMap<String, String> = HashMap::new();
-        let mut mGeometryBFast: bfast::Bfast = bfast::Bfast { data: &Vec::new(), buffers: Vec::new() };
-        let mut mGeometry: G3d = G3d::default();
-        let mut mAssetsBFast: bfast::Bfast = bfast::Bfast { data: &Vec::new(), buffers: Vec::new() };
-        let mut version = Version::default();
-        let mut strings: Vec<String> = Vec::new();
-
-        let mut mEntityTables: HashMap<String, EntityTable> = HashMap::new();
-
-        let buffer = std::fs::read(path)?;
-        let slice: &[u8] = &buffer;
-        let bfast: Bfast = slice.into();
-
-        let ui_load_flags = load_flags as isize;
-        for b in &bfast.buffers {
-            match b.name.as_str() {
-                "header" => version = Self::version(bfast.data, b).unwrap_or(Version::default()),
-                "geometry" if (ui_load_flags & VimLoadFlags::Geometry as isize) != 0 => {
-                    let m_geometry_bfast: Bfast = (&slice[b.range.begin..b.range.end]).into();
-                    mGeometry = g3d::G3d::from(m_geometry_bfast);
-                },
-                "assets" if (ui_load_flags & VimLoadFlags::Assets as isize) != 0 => {
-                    mAssetsBFast = (&slice[b.range.begin..b.range.end]).into();
-                    // match bfast::Bfast::unpack_range(&b.data, |b| bfast::Bfast { buffers: b }) {
-                    //     Ok(b) => mAssetsBFast = b,
-                    //     Err(_e) => return Err(Box::new(VimErrorCodes::AssetLoadingException)),
-                    // }
-                },
-                "strings" if (ui_load_flags & VimLoadFlags::Strings as isize) != 0 => {
-                    let strs: Vec<&str> = std::str::from_utf8(&bfast.data[b.range.begin..b.range.end])?
-                        .split_terminator('\0')
-                        .collect();
-                    strings = strs.iter().map(|s| String::from(*s)).collect();
-                //    let str = b.data.to_string();
-                //     let size = b.data.data();
-                //     for (i, v) in size.split(|&c| c == ZERO_BYTE).enumerate() {
-                //         let name = String::from_utf8_lossy(v).to_string(); 
-                //         strings.push(name);
-                //     }
-                    print!("") 
-                },
-                "entities" if (ui_load_flags & VimLoadFlags::Entities as isize) != 0  => {
-                    let entities_bfast: Bfast = (&slice[b.range.begin..b.range.end]).into();
-                    for (j, eb) in entities_bfast.buffers.iter().enumerate() {
-                        let table_bfast: Bfast = (&entities_bfast.data[eb.range.begin..eb.range.end]).into();
-
-                        let mut index_columns: HashMap<String, Vec<i32>> = HashMap::new();
-                        let mut string_columns: HashMap<String, Vec<i32>> = HashMap::new();
-                        let mut data_columns: HashMap<String, ByteRange> = HashMap::new();
-
-                        for (k, tb) in table_bfast.buffers.iter().enumerate() {
-                            let tbname: &str = &tb.name;
-                            if let Some(index) = tbname.find(':') {
-                                let type_str = &tbname[0..index];
-                                let column_str = &tbname[(index + 1)..tbname.len()];
-
-                                if ["int", "byte", "double", "float"].contains(&type_str) {
-                                    data_columns.insert(column_str.to_owned(), tb.range);
-                                } else if "index" == type_str {
-                                    let b = &table_bfast.data[tb.range.begin..tb.range.end];
-                                    let ints: Vec<i32> = b.chunks_exact(4).map(|bytes| i32::from_ne_bytes([bytes[0], bytes[1], bytes[2], bytes[3]])).collect();
-                                    index_columns.insert(column_str.to_owned(), ints);
-                                } else if "string" == type_str {
-                                    let b = &table_bfast.data[tb.range.begin..tb.range.end];
-                                    let ints: Vec<i32> = b.chunks_exact(4).map(|bytes| i32::from_ne_bytes([bytes[0], bytes[1], bytes[2], bytes[3]])).collect();
-                                    string_columns.insert(column_str.to_owned(), ints);
-                                }
-                            }
-
-                        }
-                        mEntityTables.insert(eb.name.to_string(), EntityTable {
-                            name: eb.name.to_string(),
-                            index_columns,
-                            string_columns,
-                            data_columns,
-                        });
+    pub fn unpack(data: &'a [u8], flags: VimLoadFlags) -> Result<Self, Box<dyn std::error::Error>>  {
+        let bfast = &Bfast::unpack(data)?;
+        let ui_load_flags = flags as isize;
+        let data: HashMap<&str, &Buffer> = HashMap::from_iter(bfast.buffers.iter().map(|b| (b.name, b)));
+        
+        Ok(VimScene::<'a> {
+            header: {
+                if let Some(b) = data.get("header") {
+                    let h = &bfast.data[b.range.begin..b.range.end];
+                    let map: HashMap<&str, &str> = HashMap::from_iter(std::str::from_utf8(h)?.split_terminator('\n').map(|token| { 
+                        let kv: Vec<&str> = token.split("=").collect();
+                        (kv[0], kv[1])
+                    }));
+                    VimHeader { 
+                        vim : map.get("vim").unwrap_or(&"").parse::<Version>().map_err(|_| VimErrorCodes::NoVersionInfo)?, 
+                        id: (*map.get("id").unwrap_or(&"")).to_owned(),
+                        revision: (*map.get("revision").unwrap_or(&"")).to_owned(),
+                        generator: (*map.get("generator").unwrap_or(&"")).to_owned(),
+                        created: (*map.get("created").unwrap_or(&"")).to_owned(),
+                        schema: (*map.get("schema").unwrap_or(&"")).to_owned(),
                     }
                 }
-                &_ => return Err(Box::new(VimErrorCodes::Failed))
-            }
-        }
-        return Err(Box::new(VimErrorCodes::Failed))
-        // Ok(VimScene {
-        //     //bfast,
-        //    // geometry_bfast: mGeometryBFast,
-        //     assets_bfast: mAssetsBFast,
-        //     entities_bfast: bfast::Bfast { data: &Vec::new()  },
-        //     strings: strings,
-        //     geometry: mGeometry,
-        //     entity_tables: HashMap::new(),
-        //     header: mHeader,
-        //     version_major: mVersionMajor,
-        //     version_minor: mVersionMinor,
-        //     version_patch: mVersionPatch,
-        // }) 
-        
+                else { return Err("Invalid Header".into()); }
+            },
+            geometry: {
+                if (ui_load_flags & VimLoadFlags::Geometry as isize) != 0 {
+                    if let Some(b) = data.get("geometry") {
+                        let g = &bfast.data[b.range.begin..b.range.end];
+                        G3d::unpack(Bfast::unpack(g)?)?
+                    }
+                    else { return Err("Invalid Geometry".into()); }
+                } else { G3d::default() }
+            },
+            assets: {
+                if (ui_load_flags & VimLoadFlags::Assets as isize) != 0 {
+                    if let Some(b) = data.get("assets") {
+                        let a = &bfast.data[b.range.begin..b.range.end];
+                        Bfast::unpack(a)?
+                    }
+                    else { return Err("Invalid Assets".into()); }
+                } else { Bfast::default() }
+            },
+            strings: {
+                if (ui_load_flags & VimLoadFlags::Strings as isize) != 0 {
+                    if let Some(b) = data.get("strings") {
+                        let s = &bfast.data[b.range.begin..b.range.end];
+                        std::str::from_utf8(s)?.split_terminator('\0').collect()
+                    }
+                    else { return Err("Invalid Strings".into()); }
+                } else { Vec::default() }
+            },
+            entities: {
+                if (ui_load_flags & VimLoadFlags::Entities as isize) != 0 {
+                    if let Some(b) = data.get("entities") {
+                        let et = &bfast.data[b.range.begin..b.range.end];
+                        let entities_bfast = Bfast::unpack(et)?;
+                        let mut entity_tables: HashMap<&str, EntityTable> = HashMap::new();
+                        for eb in entities_bfast.buffers.iter() {
+                            let tb = &entities_bfast.data[eb.range.begin..eb.range.end];
+                            let table = Bfast::unpack(tb)?;
+    
+                            let mut index_columns: HashMap<&str, Vec<i32>> = HashMap::new();
+                            let mut string_columns: HashMap<&str, Vec<i32>> = HashMap::new();
+                            let mut data_columns: HashMap<&str, ByteRange> = HashMap::new();
+    
+                            for tb in table.buffers.iter() {
+                                let tbname: &str = &tb.name;
+                                if let Some(index) = tbname.find(':') {
+                                    let type_str = &tbname[0..index];
+                                    let column_str = &tbname[(index + 1)..tbname.len()];
+    
+                                    if ["int", "byte", "double", "float"].contains(&type_str) {
+                                        data_columns.insert(column_str, tb.range);
+                                    } else if "index" == type_str {
+                                        let b = &table.data[tb.range.begin..tb.range.end];
+                                        let ints: Vec<i32> = b.chunks_exact(4).map(|bytes| i32::from_ne_bytes([bytes[0], bytes[1], bytes[2], bytes[3]])).collect();
+                                        index_columns.insert(column_str, ints);
+                                    } else if "string" == type_str {
+                                        let b = &table.data[tb.range.begin..tb.range.end];
+                                        let ints: Vec<i32> = b.chunks_exact(4).map(|bytes| i32::from_ne_bytes([bytes[0], bytes[1], bytes[2], bytes[3]])).collect();
+                                        string_columns.insert(column_str, ints);
+                                    }
+                                }
+                            }
+                            entity_tables.insert(eb.name, EntityTable { name: eb.name, index_columns, string_columns, data_columns, data: tb });
+                        }
+                        entity_tables
+                    }
+                    else { return Err("Invalid Entities".into()); }
+                } else { HashMap::default() }
+            },
+        })
     }
 }
+impl<'a> Default for VimScene<'a> {
+    fn default() -> Self { Self { header: Default::default(), assets: Default::default(), geometry: Default::default(), strings: Default::default(), entities: Default::default()  } }
+}
+impl<'a> From<&'a [u8]> for VimScene<'a> {
+    fn from(slice: &'a [u8]) -> Self { Self::from((slice, VimLoadFlags::All)) }
+}
+impl<'a> From<(&'a [u8], VimLoadFlags)> for VimScene<'a> {
+    fn from((slice, flags): (&'a [u8], VimLoadFlags)) -> Self {
+        if let Ok(scene) = Self::unpack(slice, flags) { scene } 
+        else { Default::default() }
+    }
+}
+
 
 #[cfg(test)]
 mod tests {
@@ -225,10 +204,9 @@ mod tests {
 
     #[test]
     fn it_works() {
-        let res = VimScene::read_file("D:\\wolford.vim", VimLoadFlags::All);
+        let buffer:&[u8] = &std::fs::read("D:\\wolford.vim").unwrap();
+        let res = VimScene::unpack(buffer, VimLoadFlags::All).unwrap();
         print!("{:?}", res);
-        assert!(res.is_ok());
-        let scene = res.unwrap();
-        print!("{:?}", scene);
+         
     }
 }

@@ -51,6 +51,11 @@ dependencies = [
 [[package]]
 name = "object_model"
 version = "0.1.0"
+dependencies = [
+ "bfast",
+ "g3d",
+ "vim",
+]
 
 [[package]]
 name = "proc-macro2"

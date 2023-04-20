@@ -161,17 +161,17 @@ pub struct AttributeDescriptor {
     /// The semantic of the attribute (e.g. normals, uv)
     pub semantic: String,
 }
-impl Default for AttributeDescriptor {
-    fn default() -> Self {
-        Self { 
-            data_type: DataType::Undefined, 
-            data_arity: Default::default(), 
-            index: Default::default(), 
-            association: Association::None, 
-            semantic: Default::default() 
-        }
-    }
-}
+// impl Default for AttributeDescriptor {
+//     fn default() -> Self {
+//         Self { 
+//             data_type: DataType::Undefined, 
+//             data_arity: Default::default(), 
+//             index: Default::default(), 
+//             association: Association::None, 
+//             semantic: Default::default() 
+//         }
+//     }
+// }
 impl ToString for AttributeDescriptor {
     fn to_string(&self) -> String { 
         format!("g3d:{}:{}:{}:{}:{}",
@@ -191,12 +191,12 @@ impl std::str::FromStr for AttributeDescriptor {
         if tokens[0] != "g3d" { return Err(format!("Expected g3d, found: {}", tokens[0]).into()); }
 
         let association = tokens[1].parse::<Association>().unwrap_or(Association::None);
-        let semantic = String::from(tokens[2]);
+        let semantic = tokens[2];
         let index = tokens[3].parse::<i32>().map_err(|e| e.to_string())?;
         let data_type = tokens[4].parse::<DataType>().unwrap_or(DataType::Undefined);
         let data_arity = tokens[5].parse::<usize>().map_err(|e| e.to_string())?;
 
-        Ok(AttributeDescriptor { data_type, data_arity, index, association, semantic })
+        Ok(AttributeDescriptor { data_type, data_arity, index, association, semantic: semantic.to_owned() })
     }
 }
 // impl AttributeDescriptor {   
@@ -238,14 +238,27 @@ impl Attribute {
 // }
 
 #[derive(Debug)]
-pub struct G3d {
-    pub meta: String,
-   // bfast: bfast::Bfast,
+pub struct G3d<'a> {
+    pub meta: &'a str,
+    pub bfast: Bfast<'a>,
     pub attributes: Vec<Attribute>,
 }
 
-impl G3d {
+impl<'a> G3d<'a> {
     const DEFAULT_META: &str = "{\"G3D\": \"1.0.0\"}";
+    
+    pub fn unpack(bfast: Bfast<'a>) -> Result<Self, Box<dyn std::error::Error>>  {
+        let mut attributes = Vec::new();
+        let mut meta = Self::DEFAULT_META;
+        for (i, buffer) in bfast.buffers.iter().enumerate() {
+            if i == 0 {
+                meta = unsafe { std::str::from_utf8_unchecked(&bfast.data[buffer.range.begin..buffer.range.end]) };
+            } else if let Ok(attr) = Attribute::new(&buffer.name, buffer.range.begin, buffer.range.end) {
+                attributes.push(attr);
+            }
+        }
+        Ok(Self { meta, attributes, bfast })
+    }
 
     // pub fn recompute_bfast(&self, bfast: &mut bfast::Bfast ) {
     //     bfast.buffers = self.attributes.iter().map(|attr| -> bfast::Buffer {
@@ -274,28 +287,17 @@ impl G3d {
     // }
 }
 
-impl Default for G3d {
-    fn default() -> Self {
-        Self { meta: Default::default(), attributes: Default::default() }
+impl<'a> Default for G3d<'a> {
+    fn default() -> Self { Self { meta: Default::default(), bfast : Default::default(), attributes: Default::default() } }
+}
+
+impl<'a> From<Bfast<'a>> for G3d<'a> {
+    fn from(bfast: Bfast<'a>) -> Self {
+        if let Ok(g3d) = Self::unpack(bfast) { g3d }
+        else { Default::default() }
     }
 }
-impl From<Bfast<'_>> for G3d {
-    fn from(bfast: Bfast) -> Self {
-        let mut attributes = Vec::new();
-        let mut meta = Self::DEFAULT_META.to_string();
-        for (i, buffer) in bfast.buffers.iter().enumerate() {
-            if i == 0 {
-                meta = String::from_utf8_lossy(&bfast.data[buffer.range.begin..buffer.range.end]).into();
-            } 
-            else {
-                if let Ok(attr) = Attribute::new(&buffer.name, buffer.range.begin,  buffer.range.end) {
-                    attributes.push(attr);
-                }
-            }
-        }
-        G3d { meta, attributes }
-    }
-}
+
 // impl Into<bfast::Bfast> for G3d {
 //     fn into(self) -> bfast::Bfast {
 //         let mut buffers: Vec<bfast::Buffer> = Vec::with_capacity(self.attributes.len() + 1);
