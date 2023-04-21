@@ -206,7 +206,10 @@ mod tests {
     fn it_works() {
         let buffer:&[u8] = &std::fs::read("D:\\wolford.vim").unwrap();
         let res = VimScene::unpack(buffer, VimLoadFlags::All).unwrap();
-        print!("{:?}", res);
+        let asset = res.entities.get("Vim.Asset").unwrap();
+        
+        print!("{} {} {}", asset.string_columns.len(), asset.index_columns.len(), asset.data_columns.len());
+       // print!("{:?}", res);
          
     }
 }
