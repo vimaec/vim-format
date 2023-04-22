@@ -276,7 +276,7 @@ impl<'a> Bfast<'a> {
         
         let mut ranges = Vec::with_capacity(1 + buffers.len());
        //ranges.push(ByteRange { begin: name_data.as_ptr(), end: unsafe { name_data.as_ptr().add(name_data.len() as usize) } }); 
-        for b in &buffers { ranges.push(b.range) }
+        //for b in &buffers { ranges.push(b.range) }
         let r = RawData { ranges };
         r.pack()
     }
@@ -293,7 +293,7 @@ impl<'a> Bfast<'a> {
         if h.data_end < h.data_start { return Err("data ends before it starts".into()); }
 
         let size = h.num_arrays as usize;
-        let mut ranges: Vec<ByteRange> = Vec::with_capacity(size);
+        let mut ranges = Vec::with_capacity(size);
         
         let start = range.begin + ARRAY_OFFSETS_START;
         let mut prev: Option<&ArrayOffset> = None;
@@ -310,7 +310,7 @@ impl<'a> Bfast<'a> {
             ranges.push(ByteRange{ begin, end });
             prev = Some(offset);
         }
-
+        
         let names_range = ranges.first().ok_or("Empty ranges list")?;
         let names: Vec<&str> = std::str::from_utf8(&data[names_range.begin..names_range.end])?
             .split_terminator('\0')

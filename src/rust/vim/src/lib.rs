@@ -62,9 +62,7 @@ pub enum VimLoadFlags {
 pub struct EntityTable<'a> {
     pub data: &'a [u8], 
     pub name: &'a str,
-    pub index_columns: HashMap<&'a str, Vec<usize>>,
-    pub string_columns: HashMap<&'a str, Vec<usize>>,
-    pub data_columns: HashMap<&'a str, ByteRange>,
+    pub columns: HashMap<&'a str, ByteRange>,
 }
 
 #[derive(Debug)]
@@ -148,33 +146,10 @@ impl<'a> VimScene<'a> {
                         let entities_bfast = Bfast::unpack(et)?;
                         let mut entity_tables: HashMap<&str, EntityTable> = HashMap::new();
                         for eb in entities_bfast.buffers.iter() {
-                            let tb = &entities_bfast.data[eb.range.begin..eb.range.end];
-                            let table = Bfast::unpack(tb)?;
-    
-                            let mut index_columns: HashMap<&str, Vec<usize>> = HashMap::new();
-                            let mut string_columns: HashMap<&str, Vec<usize>> = HashMap::new();
-                            let mut data_columns: HashMap<&str, ByteRange> = HashMap::new();
-    
-                            for tb in table.buffers.iter() {
-                                let tbname: &str = &tb.name;
-                                if let Some(index) = tbname.find(':') {
-                                    let type_str = &tbname[0..index];
-                                    //let column_str = &tbname[(index + 1)..tbname.len()];
-    
-                                    if ["int", "byte", "double", "float"].contains(&type_str) {
-                                        data_columns.insert(tbname, tb.range);
-                                    } else if "index" == type_str {
-                                        let b = &table.data[tb.range.begin..tb.range.end];
-                                        let ints: Vec<usize> = b.chunks_exact(4).map(|bytes| i32::from_ne_bytes([bytes[0], bytes[1], bytes[2], bytes[3]]) as usize).collect();
-                                        index_columns.insert(tbname, ints);
-                                    } else if "string" == type_str {
-                                        let b = &table.data[tb.range.begin..tb.range.end];
-                                        let ints: Vec<usize> = b.chunks_exact(4).map(|bytes| i32::from_ne_bytes([bytes[0], bytes[1], bytes[2], bytes[3]]) as usize).collect();
-                                        string_columns.insert(tbname, ints);
-                                    }
-                                }
-                            }
-                            entity_tables.insert(eb.name, EntityTable { name: eb.name, index_columns, string_columns, data_columns, data: tb });
+                            let data = &entities_bfast.data[eb.range.begin..eb.range.end];
+                            let table = Bfast::unpack(data)?;
+                            let columns = HashMap::from_iter(table.buffers.iter().map(|tb| (tb.name, tb.range)));
+                            entity_tables.insert(eb.name, EntityTable { name: eb.name, columns, data });
                         }
                         entity_tables
                     }
@@ -208,7 +183,7 @@ mod tests {
         let res = VimScene::unpack(buffer, VimLoadFlags::All).unwrap();
         let asset = res.entities.get("Vim.Asset").unwrap();
         
-        print!("{} {} {}", asset.string_columns.len(), asset.index_columns.len(), asset.data_columns.len());
+        print!("{} {} {}", asset.columns.len(), asset.columns.len(), asset.columns.len());
        // print!("{:?}", res);
          
     }

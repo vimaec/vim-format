@@ -4,3 +4,5 @@ src/rust/bfast/target/
 src/rust/g3d/target/
 src/rust/object_model/target/
 src/rust/vim/target/
+src/rust/math3d/math3d_macro_derive/target/
+src/rust/object_model/object_model_macro_derive/target/

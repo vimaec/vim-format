@@ -45,7 +45,9 @@ pub fn vim_schema(args: TokenStream, input: TokenStream) -> TokenStream {
         let mut mapped_columns = Vec::new();
         let mut column_names = Vec::new();
         let mut functions = HashMap::new();
+        let mut field_seter_pair = Vec::new();
 
+        let mut has_lfmt = quote! {};
         for c in columns {
             if let Some(idx) = c.find(':') {
                 let type_name: &str = &c[0..idx];
@@ -54,57 +56,208 @@ pub fn vim_schema(args: TokenStream, input: TokenStream) -> TokenStream {
                 let quote = match type_name {
                     "double" => {
                         let flat_name = &filed_name.replace(".", "");
+                        let field_ident = to_ident(&camel_to_snake(flat_name, false));
+
                         let column_name = to_ident(&camel_to_snake(&format!("{}_column_name", flat_name), true));
                         column_names.push(quote! { pub const #column_name: &'static str = #c; });
-                        if !functions.contains_key("count") { functions.insert("count", quote! { pub fn count(&self) -> usize { self.entity_table.data_columns.get(#c).map_or(0, |column| column.size() / std::mem::size_of::<f64>()) } }); }
-                        let field_ident = to_ident(&camel_to_snake(flat_name, false));
-                        quote! { pub #field_ident: f64, }
+                        
+                        if !functions.contains_key("count()") { functions.insert("count", quote! { pub fn count(&self) -> usize { self.entity_table.columns.get(#c).map_or(0, |column| column.size() / std::mem::size_of::<f64>()) } }); }
+                        let get_all_function = format_ident!("get_{}_all", camel_to_snake(flat_name, false));
+                        let get_function = format_ident!("get_{}", camel_to_snake(flat_name, false));
+                        functions.insert(c, quote! { 
+                            pub fn #get_all_function(&self) -> Option<Vec<f64>> {
+                                if let Some(range) = self.entity_table.columns.get(#c) {
+                                    if let Some(b) = self.entity_table.data.get(range.begin..range.end) {
+                                        return Some(b.chunks_exact(8).map(|bytes| f64::from_ne_bytes([bytes[0], bytes[1], bytes[2], bytes[3], bytes[4], bytes[5], bytes[6], bytes[7]])).collect())
+                                    }
+                                }
+                                None
+                            }
+                            pub fn #get_function(&self, index: usize) -> Option<f64> {
+                                if let Some(range) = self.entity_table.columns.get(#c) {
+                                    let at = range.begin + 8 * index;
+                                    if let Some(bytes) = self.entity_table.data.get(at..at + 8) {
+                                        return Some(f64::from_ne_bytes([bytes[0], bytes[1], bytes[2], bytes[3], bytes[4], bytes[5], bytes[6], bytes[7]]))
+                                    }
+                                } 
+                                None
+                            }
+                        });
+                        field_seter_pair.push(quote! { #field_ident: self.#get_function(index), });
+                        
+                        quote! { pub #field_ident: Option<f64>, }
                     },
                     "float" => {
                         let flat_name = &filed_name.replace(".", "");
+                        let field_ident = to_ident(&camel_to_snake(flat_name, false));
+
                         let column_name = to_ident(&camel_to_snake(&format!("{}_column_name", flat_name), true));
                         column_names.push(quote! { pub const #column_name: &'static str = #c; });
-                        if !functions.contains_key("count") { functions.insert("count", quote! { pub fn count(&self) -> usize { self.entity_table.data_columns.get(#c).map_or(0, |column| column.size() / std::mem::size_of::<f32>()) } }); }
-                        let field_ident = to_ident(&camel_to_snake(flat_name, false));
-                        quote! { pub #field_ident: f32, }
+                        
+                        if !functions.contains_key("count()") { functions.insert("count", quote! { pub fn count(&self) -> usize { self.entity_table.columns.get(#c).map_or(0, |column| column.size() / std::mem::size_of::<f32>()) } }); }
+                        let get_all_function = format_ident!("get_{}_all", camel_to_snake(flat_name, false));
+                        let get_function = format_ident!("get_{}", camel_to_snake(flat_name, false));
+                        functions.insert(c, quote! { 
+                            pub fn #get_all_function(&self) -> Option<Vec<f32>> {
+                                if let Some(range) = self.entity_table.columns.get(#c) {
+                                    if let Some(b) = self.entity_table.data.get(range.begin..range.end) {
+                                        return Some(b.chunks_exact(4).map(|bytes| f32::from_ne_bytes([bytes[0], bytes[1], bytes[2], bytes[3]])).collect())
+                                    }
+                                }
+                                None
+                            }
+                            pub fn #get_function(&self, index: usize) -> Option<f32> {
+                                if let Some(range) = self.entity_table.columns.get(#c) {
+                                    let at =  range.begin + 4 * index;
+                                    if let Some(bytes) = self.entity_table.data.get(at..at + 4) {
+                                        return Some(f32::from_ne_bytes([bytes[0], bytes[1], bytes[2], bytes[3]]));
+                                    }
+                                } 
+                                None
+                            }
+                        });
+                        field_seter_pair.push(quote! { #field_ident: self.#get_function(index), });
+                        
+                        quote! { pub #field_ident: Option<f32>, }
                     },
                     "int" => {
                         let flat_name = &filed_name.replace(".", "");
+                        let field_ident = to_ident(&camel_to_snake(flat_name, false));
+
                         let column_name = to_ident(&camel_to_snake(&format!("{}_column_name", flat_name), true));
                         column_names.push(quote! { pub const #column_name: &'static str = #c; });
-                        if !functions.contains_key("count") { functions.insert("count",quote! { pub fn count(&self) -> usize { self.entity_table.data_columns.get(#c).map_or(0, |column| column.size() / std::mem::size_of::<i32>()) } }); }
-                        let field_ident = to_ident(&camel_to_snake(flat_name, false));
-                        quote! { pub #field_ident: i32, }
+                        
+                        if !functions.contains_key("count()") { functions.insert("count",quote! { pub fn count(&self) -> usize { self.entity_table.columns.get(#c).map_or(0, |column| column.size() / std::mem::size_of::<i32>()) } }); }
+                        let get_all_function = format_ident!("get_{}_all", camel_to_snake(flat_name, false));
+                        let get_function = format_ident!("get_{}", camel_to_snake(flat_name, false));
+                        functions.insert(c, quote! { 
+                            pub fn #get_all_function(&self) -> Option<Vec<i32>> {
+                                if let Some(range) = self.entity_table.columns.get(#c) {
+                                    if let Some(b) = self.entity_table.data.get(range.begin..range.end) {
+                                        return Some(b.chunks_exact(4).map(|bytes| i32::from_ne_bytes([bytes[0], bytes[1], bytes[2], bytes[3]])).collect())
+                                    }
+                                }
+                                None
+                            }
+                            pub fn #get_function(&self, index: usize) -> Option<i32> {
+                                if let Some(range) = self.entity_table.columns.get(#c) {
+                                    let at =  range.begin + 4 * index;
+                                    if let Some(bytes) = self.entity_table.data.get(at..at + 4) {
+                                        return Some(i32::from_ne_bytes([bytes[0], bytes[1], bytes[2], bytes[3]]));
+                                    }
+                                } 
+                                None
+                            }
+                        });
+                        field_seter_pair.push(quote! { #field_ident: self.#get_function(index), });
+                        
+                        quote! { pub #field_ident: Option<i32>, }
                     },
                     "byte" => {
                         let flat_name = &filed_name.replace(".", "");
+                        let field_ident = to_ident(&camel_to_snake(flat_name, false));
+                        
                         let column_name = to_ident(&camel_to_snake(&format!("{}_column_name", flat_name), true));
                         column_names.push(quote! { pub const #column_name: &'static str = #c; });
-                        if !functions.contains_key("count") { functions.insert("count", quote! { pub fn count(&self) -> usize { self.entity_table.data_columns.get(#c).map_or(0, |column| column.size()) } }); }
-                        let field_ident = to_ident(&camel_to_snake(flat_name, false));
-                        quote! { pub #field_ident: u8, }
+                        
+                        if !functions.contains_key("count()") { functions.insert("count", quote! { pub fn count(&self) -> usize { self.entity_table.columns.get(#c).map_or(0, |column| column.size()) } }); }
+                        let get_all_function = format_ident!("get_{}_all", camel_to_snake(flat_name, false));
+                        let get_function = format_ident!("get_{}", camel_to_snake(flat_name, false));
+                        functions.insert(c, quote! { 
+                            pub fn #get_all_function(&self) -> Option<&[u8]> {
+                                if let Some(range) = self.entity_table.columns.get(#c) {
+                                    return self.entity_table.data.get(range.begin..range.end);
+                                }
+                                None
+                            }
+                            pub fn #get_function(&self, index: usize) -> Option<u8> {
+                                if let Some(range) = self.entity_table.columns.get(#c) {
+                                    return self.entity_table.data.get(range.begin + index).copied();
+                                } 
+                                None
+                            }
+                        });
+                        field_seter_pair.push(quote! { #field_ident: self.#get_function(index), });
+                        
+                        quote! { pub #field_ident: Option<u8>, }
                     }, 
                     "string" => {
                         let flat_name = &filed_name.replace(".", "");
+                        let field_ident = to_ident(&camel_to_snake(flat_name, false));
+
                         let column_name = to_ident(&camel_to_snake(&format!("{}_column_name", flat_name), true));
                         column_names.push(quote! { pub const #column_name: &'static str = #c; });
-                        if !functions.contains_key("count") { functions.insert("count", quote! { pub fn count(&self) -> usize { self.entity_table.string_columns.get(#c).map_or(0, |column| column.len()) } }); }
-                        let field_ident = to_ident(&camel_to_snake(flat_name, false));
-                        quote! { pub #field_ident: &'a str, }
+                        //if !functions.contains_key("count()") { functions.insert("count", quote! { pub fn count(&self) -> usize { self.entity_table.string_columns.get(#c).map_or(0, |column| column.len()) } }); }
+                        
+                        if !functions.contains_key("count()") { functions.insert("count",quote! { pub fn count(&self) -> usize { self.entity_table.columns.get(#c).map_or(0, |column| column.size() / std::mem::size_of::<i32>()) } }); }
+                        let get_all_function = format_ident!("get_{}_all", camel_to_snake(flat_name, false));
+                        let get_function = format_ident!("get_{}", camel_to_snake(flat_name, false));
+                        functions.insert(c, quote! { 
+                            pub fn #get_all_function(&self) -> Option<Vec<&str>> {
+                                if let Some(range) = self.entity_table.columns.get(#c) {
+                                    if let Some(b) = self.entity_table.data.get(range.begin..range.end) {
+                                        return Some(b.chunks_exact(4).map(|bytes| i32::from_ne_bytes([bytes[0], bytes[1], bytes[2], bytes[3]])).map(|i| self.strings[i as usize]).collect());
+                                    }
+                                }
+                                None
+                            }
+                            pub fn #get_function(&self, index: usize) -> Option<&str> {
+                                if let Some(range) = self.entity_table.columns.get(#c) {
+                                    let at =  range.begin + 4 * index;
+                                    if let Some(bytes) = self.entity_table.data.get(at..at + 4) {
+                                        let idx = i32::from_ne_bytes([bytes[0], bytes[1], bytes[2], bytes[3]]) as usize;
+                                        return self.strings.get(idx).copied();
+                                    }
+                                }
+                                None
+                            }
+                        });
+                        field_seter_pair.push(quote! { #field_ident: self.#get_function(index), });
+                        has_lfmt = quote! { <'a> };
+
+                        quote! { pub #field_ident: Option<&'a str>, }
                     },
                     "index" => { 
                         let index_parts: Vec<&str> = filed_name.split_terminator(":").collect();
                         if index_parts.len() != 2 { return quote! { #type_name } }
                         let index_type = format_ident!("{}", index_parts[0].split_terminator('.').last().unwrap());
-                        let index_name = to_ident(&camel_to_snake(&index_parts[1].replace(".", ""), false));
+                        let flat_name = &index_parts[1].replace(".", "");
+                        let index_name = to_ident(&camel_to_snake(flat_name, false));
                         let index_id_name = format_ident!("{}_index", index_name);
                         
                         let column_name = to_ident(&camel_to_snake(&format!("{}_column_name", index_id_name), true));
                         column_names.push(quote! { pub const #column_name: &'static str = #c; });
-                        if !functions.contains_key("count") { functions.insert("count", quote! { pub fn count(&self) -> usize { self.entity_table.index_columns.get(#c).map_or(0, |column| column.len()) } }); }
+                        //if !functions.contains_key("count()") { functions.insert("count", quote! { pub fn count(&self) -> usize { self.entity_table.index_columns.get(#c).map_or(0, |column| column.len()) } }); }
+                        
+                        if !functions.contains_key("count()") { functions.insert("count",quote! { pub fn count(&self) -> usize { self.entity_table.columns.get(#c).map_or(0, |column| column.size() / std::mem::size_of::<i32>()) } }); }
+                        let get_all_function = format_ident!("get_{}_indices_all", camel_to_snake(flat_name, false));
+                        let get_function = format_ident!("get_{}_idex", camel_to_snake(flat_name, false));
+                        functions.insert(c, quote! { 
+                            pub fn #get_all_function(&self) -> Option<Vec<i32>> {
+                                if let Some(range) = self.entity_table.columns.get(#c) {
+                                    if let Some(b) = self.entity_table.data.get(range.begin..range.end) {
+                                        return Some(b.chunks_exact(4).map(|bytes| i32::from_ne_bytes([bytes[0], bytes[1], bytes[2], bytes[3]])).collect());
+                                    }
+                                }
+                                None
+                            }
+                            pub fn #get_function(&self, index: usize) -> Option<i32> {
+                                if let Some(range) = self.entity_table.columns.get(#c) {
+                                    let at =  range.begin + 4 * index;
+                                    if let Some(bytes) = self.entity_table.data.get(at..at + 4) {
+                                        return Some(i32::from_ne_bytes([bytes[0], bytes[1], bytes[2], bytes[3]]));
+                                    }
+                                } 
+                                None
+                            }
+                        });
+                        field_seter_pair.push(quote! { #index_id_name: self.#get_function(index), });
+                        //field_seter_pair.push(quote! { #index_name: None, });
+                       // has_lfmt = quote! { <'a> };
+
                         quote! {
-                            pub #index_id_name: usize,
-                            pub #index_name: Option<&'a #index_type<'a>>,
+                            pub #index_id_name: Option<i32>,
+                           // pub #index_name: Option<&'a #index_type<'a>>,
                         }
                     },
                     _ => quote! { #type_name },
@@ -113,9 +266,10 @@ pub fn vim_schema(args: TokenStream, input: TokenStream) -> TokenStream {
             } else { mapped_columns.push(quote! { #c }) }
         }
         let fns = functions.values();
+       
         quote! {
-            pub struct #struct_name <'a> {
-                pub index: &'a usize,
+            pub struct #struct_name #has_lfmt {
+                pub index: usize,
                 #(#mapped_columns)*
             }
 
@@ -133,6 +287,13 @@ pub fn vim_schema(args: TokenStream, input: TokenStream) -> TokenStream {
                 }
 
                 #(#fns)*
+
+                pub fn get(&self, index: usize) -> Option<#struct_name> {
+                    Some(#struct_name {
+                        index: index, 
+                        #(#field_seter_pair)*
+                    })
+                }
             }
         }
     });
