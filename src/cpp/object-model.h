@@ -248,6 +248,12 @@ namespace Vim
     class AreaTable;
     class AreaScheme;
     class AreaSchemeTable;
+    class Schedule;
+    class ScheduleTable;
+    class ScheduleColumn;
+    class ScheduleColumnTable;
+    class ScheduleCell;
+    class ScheduleCellTable;
     
     class DocumentModel
     {
@@ -295,6 +301,9 @@ namespace Vim
         GridTable* mGrid;
         AreaTable* mArea;
         AreaSchemeTable* mAreaScheme;
+        ScheduleTable* mSchedule;
+        ScheduleColumnTable* mScheduleColumn;
+        ScheduleCellTable* mScheduleCell;
         
         DocumentModel(VimScene& scene);
         ~DocumentModel();
@@ -2421,6 +2430,8 @@ namespace Vim
         int mIndex;
         double mElevation;
         
+        int mFamilyTypeIndex;
+        FamilyType* mFamilyType;
         int mElementIndex;
         Element* mElement;
         
@@ -2448,6 +2459,7 @@ namespace Vim
             Level* level = new Level();
             level->mIndex = levelIndex;
             level->mElevation = GetElevation(levelIndex);
+            level->mFamilyTypeIndex = GetFamilyTypeIndex(levelIndex);
             level->mElementIndex = GetElementIndex(levelIndex);
             return level;
         }
@@ -2455,6 +2467,7 @@ namespace Vim
         std::vector<Level>* GetAll()
         {
             bool existsElevation = mEntityTable.mDataColumns.find("double:Elevation") == mEntityTable.mDataColumns.end();
+            bool existsFamilyType = mEntityTable.mIndexColumns.find("index:Vim.FamilyType:FamilyType") == mEntityTable.mIndexColumns.end();
             bool existsElement = mEntityTable.mIndexColumns.find("index:Vim.Element:Element") == mEntityTable.mIndexColumns.end();
             
             const int count = GetCount();
@@ -2465,6 +2478,7 @@ namespace Vim
             double* elevationData = new double[count];
             if (existsElevation) memcpy(elevationData, mEntityTable.mDataColumns["double:Elevation"].begin(), count * sizeof(double));
             
+            const std::vector<int>& familyTypeData = existsFamilyType ? mEntityTable.mIndexColumns["index:Vim.FamilyType:FamilyType"] : std::vector<int>();
             const std::vector<int>& elementData = existsElement ? mEntityTable.mIndexColumns["index:Vim.Element:Element"] : std::vector<int>();
             
             for (int i = 0; i < count; ++i)
@@ -2473,6 +2487,7 @@ namespace Vim
                 entity.mIndex = i;
                 if (existsElevation)
                     entity.mElevation = elevationData[i];
+                entity.mFamilyTypeIndex = existsFamilyType ? familyTypeData[i] : -1;
                 entity.mElementIndex = existsElement ? elementData[i] : -1;
                 level->push_back(entity);
             }
@@ -2507,6 +2522,17 @@ namespace Vim
             delete[] elevationData;
             
             return result;
+        }
+        
+        int GetFamilyTypeIndex(int levelIndex)
+        {
+            if (mEntityTable.mIndexColumns.find("index:Vim.FamilyType:FamilyType") == mEntityTable.mIndexColumns.end())
+                return -1;
+            
+            if (levelIndex < 0 || levelIndex >= GetCount())
+                return -1;
+            
+            return mEntityTable.mIndexColumns["index:Vim.FamilyType:FamilyType"][levelIndex];
         }
         
         int GetElementIndex(int levelIndex)
@@ -5774,6 +5800,8 @@ namespace Vim
         
         int mCameraIndex;
         Camera* mCamera;
+        int mFamilyTypeIndex;
+        FamilyType* mFamilyType;
         int mElementIndex;
         Element* mElement;
         
@@ -5811,6 +5839,7 @@ namespace Vim
             view->mOutline = GetOutline(viewIndex);
             view->mDetailLevel = GetDetailLevel(viewIndex);
             view->mCameraIndex = GetCameraIndex(viewIndex);
+            view->mFamilyTypeIndex = GetFamilyTypeIndex(viewIndex);
             view->mElementIndex = GetElementIndex(viewIndex);
             return view;
         }
@@ -5841,6 +5870,7 @@ namespace Vim
             bool existsOutlineMaxY = mEntityTable.mDataColumns.find("double:Outline.Max.Y") == mEntityTable.mDataColumns.end();
             bool existsDetailLevel = mEntityTable.mDataColumns.find("int:DetailLevel") == mEntityTable.mDataColumns.end();
             bool existsCamera = mEntityTable.mIndexColumns.find("index:Vim.Camera:Camera") == mEntityTable.mIndexColumns.end();
+            bool existsFamilyType = mEntityTable.mIndexColumns.find("index:Vim.FamilyType:FamilyType") == mEntityTable.mIndexColumns.end();
             bool existsElement = mEntityTable.mIndexColumns.find("index:Vim.Element:Element") == mEntityTable.mIndexColumns.end();
             
             const int count = GetCount();
@@ -5889,6 +5919,7 @@ namespace Vim
             if (existsDetailLevel) memcpy(detailLevelData, mEntityTable.mDataColumns["int:DetailLevel"].begin(), count * sizeof(int));
             
             const std::vector<int>& cameraData = existsCamera ? mEntityTable.mIndexColumns["index:Vim.Camera:Camera"] : std::vector<int>();
+            const std::vector<int>& familyTypeData = existsFamilyType ? mEntityTable.mIndexColumns["index:Vim.FamilyType:FamilyType"] : std::vector<int>();
             const std::vector<int>& elementData = existsElement ? mEntityTable.mIndexColumns["index:Vim.Element:Element"] : std::vector<int>();
             
             for (int i = 0; i < count; ++i)
@@ -5916,6 +5947,7 @@ namespace Vim
                 if (existsDetailLevel)
                     entity.mDetailLevel = detailLevelData[i];
                 entity.mCameraIndex = existsCamera ? cameraData[i] : -1;
+                entity.mFamilyTypeIndex = existsFamilyType ? familyTypeData[i] : -1;
                 entity.mElementIndex = existsElement ? elementData[i] : -1;
                 view->push_back(entity);
             }
@@ -6369,6 +6401,17 @@ namespace Vim
                 return -1;
             
             return mEntityTable.mIndexColumns["index:Vim.Camera:Camera"][viewIndex];
+        }
+        
+        int GetFamilyTypeIndex(int viewIndex)
+        {
+            if (mEntityTable.mIndexColumns.find("index:Vim.FamilyType:FamilyType") == mEntityTable.mIndexColumns.end())
+                return -1;
+            
+            if (viewIndex < 0 || viewIndex >= GetCount())
+                return -1;
+            
+            return mEntityTable.mIndexColumns["index:Vim.FamilyType:FamilyType"][viewIndex];
         }
         
         int GetElementIndex(int viewIndex)
@@ -8942,6 +8985,8 @@ namespace Vim
         int mIndex;
         int mSystemType;
         
+        int mFamilyTypeIndex;
+        FamilyType* mFamilyType;
         int mElementIndex;
         Element* mElement;
         
@@ -8969,6 +9014,7 @@ namespace Vim
             System* system = new System();
             system->mIndex = systemIndex;
             system->mSystemType = GetSystemType(systemIndex);
+            system->mFamilyTypeIndex = GetFamilyTypeIndex(systemIndex);
             system->mElementIndex = GetElementIndex(systemIndex);
             return system;
         }
@@ -8976,6 +9022,7 @@ namespace Vim
         std::vector<System>* GetAll()
         {
             bool existsSystemType = mEntityTable.mDataColumns.find("int:SystemType") == mEntityTable.mDataColumns.end();
+            bool existsFamilyType = mEntityTable.mIndexColumns.find("index:Vim.FamilyType:FamilyType") == mEntityTable.mIndexColumns.end();
             bool existsElement = mEntityTable.mIndexColumns.find("index:Vim.Element:Element") == mEntityTable.mIndexColumns.end();
             
             const int count = GetCount();
@@ -8986,6 +9033,7 @@ namespace Vim
             int* systemTypeData = new int[count];
             if (existsSystemType) memcpy(systemTypeData, mEntityTable.mDataColumns["int:SystemType"].begin(), count * sizeof(int));
             
+            const std::vector<int>& familyTypeData = existsFamilyType ? mEntityTable.mIndexColumns["index:Vim.FamilyType:FamilyType"] : std::vector<int>();
             const std::vector<int>& elementData = existsElement ? mEntityTable.mIndexColumns["index:Vim.Element:Element"] : std::vector<int>();
             
             for (int i = 0; i < count; ++i)
@@ -8994,6 +9042,7 @@ namespace Vim
                 entity.mIndex = i;
                 if (existsSystemType)
                     entity.mSystemType = systemTypeData[i];
+                entity.mFamilyTypeIndex = existsFamilyType ? familyTypeData[i] : -1;
                 entity.mElementIndex = existsElement ? elementData[i] : -1;
                 system->push_back(entity);
             }
@@ -9028,6 +9077,17 @@ namespace Vim
             delete[] systemTypeData;
             
             return result;
+        }
+        
+        int GetFamilyTypeIndex(int systemIndex)
+        {
+            if (mEntityTable.mIndexColumns.find("index:Vim.FamilyType:FamilyType") == mEntityTable.mIndexColumns.end())
+                return -1;
+            
+            if (systemIndex < 0 || systemIndex >= GetCount())
+                return -1;
+            
+            return mEntityTable.mIndexColumns["index:Vim.FamilyType:FamilyType"][systemIndex];
         }
         
         int GetElementIndex(int systemIndex)
@@ -9944,6 +10004,8 @@ namespace Vim
         bool mIsCurved;
         DAABox mExtents;
         
+        int mFamilyTypeIndex;
+        FamilyType* mFamilyType;
         int mElementIndex;
         Element* mElement;
         
@@ -9975,6 +10037,7 @@ namespace Vim
             grid->mEndPoint = GetEndPoint(gridIndex);
             grid->mIsCurved = GetIsCurved(gridIndex);
             grid->mExtents = GetExtents(gridIndex);
+            grid->mFamilyTypeIndex = GetFamilyTypeIndex(gridIndex);
             grid->mElementIndex = GetElementIndex(gridIndex);
             return grid;
         }
@@ -9994,6 +10057,7 @@ namespace Vim
             bool existsExtentsMaxX = mEntityTable.mDataColumns.find("double:Extents.Max.X") == mEntityTable.mDataColumns.end();
             bool existsExtentsMaxY = mEntityTable.mDataColumns.find("double:Extents.Max.Y") == mEntityTable.mDataColumns.end();
             bool existsExtentsMaxZ = mEntityTable.mDataColumns.find("double:Extents.Max.Z") == mEntityTable.mDataColumns.end();
+            bool existsFamilyType = mEntityTable.mIndexColumns.find("index:Vim.FamilyType:FamilyType") == mEntityTable.mIndexColumns.end();
             bool existsElement = mEntityTable.mIndexColumns.find("index:Vim.Element:Element") == mEntityTable.mIndexColumns.end();
             
             const int count = GetCount();
@@ -10019,6 +10083,7 @@ namespace Vim
             if (existsExtentsMinX && existsExtentsMinY && existsExtentsMinZ && existsExtentsMaxX && existsExtentsMaxY && existsExtentsMaxZ) for (int i = 0; i < extentsConverter.GetSize(); i++)
                 extentsData[i] = &mEntityTable.mDataColumns["double:Extents" + extentsConverter.GetColumns()[i]];
             
+            const std::vector<int>& familyTypeData = existsFamilyType ? mEntityTable.mIndexColumns["index:Vim.FamilyType:FamilyType"] : std::vector<int>();
             const std::vector<int>& elementData = existsElement ? mEntityTable.mIndexColumns["index:Vim.Element:Element"] : std::vector<int>();
             
             for (int i = 0; i < count; ++i)
@@ -10033,6 +10098,7 @@ namespace Vim
                     entity.mIsCurved = isCurvedData[i];
                 if (existsExtentsMinX && existsExtentsMinY && existsExtentsMinZ && existsExtentsMaxX && existsExtentsMaxY && existsExtentsMaxZ)
                     extentsConverter.ConvertFromColumns(&entity.mExtents, extentsData, i);
+                entity.mFamilyTypeIndex = existsFamilyType ? familyTypeData[i] : -1;
                 entity.mElementIndex = existsElement ? elementData[i] : -1;
                 grid->push_back(entity);
             }
@@ -10232,6 +10298,17 @@ namespace Vim
             delete[] extentsData;
             
             return result;
+        }
+        
+        int GetFamilyTypeIndex(int gridIndex)
+        {
+            if (mEntityTable.mIndexColumns.find("index:Vim.FamilyType:FamilyType") == mEntityTable.mIndexColumns.end())
+                return -1;
+            
+            if (gridIndex < 0 || gridIndex >= GetCount())
+                return -1;
+            
+            return mEntityTable.mIndexColumns["index:Vim.FamilyType:FamilyType"][gridIndex];
         }
         
         int GetElementIndex(int gridIndex)
@@ -10611,6 +10688,388 @@ namespace Vim
         return new AreaSchemeTable(scene.mEntityTables["Vim.AreaScheme"], scene.mStrings);
     }
     
+    class Schedule
+    {
+    public:
+        int mIndex;
+        
+        int mElementIndex;
+        Element* mElement;
+        
+        Schedule() {}
+    };
+    
+    class ScheduleTable
+    {
+        EntityTable& mEntityTable;
+        std::vector<std::string>& mStrings;
+    public:
+        ScheduleTable(EntityTable& entityTable, std::vector<std::string>& strings):
+            mEntityTable(entityTable), mStrings(strings) {}
+        
+        int GetCount()
+        {
+            if (mEntityTable.mIndexColumns.find("index:Vim.Element:Element") == mEntityTable.mIndexColumns.end())
+                return 0;
+            
+            return mEntityTable.mIndexColumns["index:Vim.Element:Element"].size() / sizeof(int);
+        }
+        
+        Schedule* Get(int scheduleIndex)
+        {
+            Schedule* schedule = new Schedule();
+            schedule->mIndex = scheduleIndex;
+            schedule->mElementIndex = GetElementIndex(scheduleIndex);
+            return schedule;
+        }
+        
+        std::vector<Schedule>* GetAll()
+        {
+            bool existsElement = mEntityTable.mIndexColumns.find("index:Vim.Element:Element") == mEntityTable.mIndexColumns.end();
+            
+            const int count = GetCount();
+            
+            std::vector<Schedule>* schedule = new std::vector<Schedule>();
+            schedule->reserve(count);
+            
+            const std::vector<int>& elementData = existsElement ? mEntityTable.mIndexColumns["index:Vim.Element:Element"] : std::vector<int>();
+            
+            for (int i = 0; i < count; ++i)
+            {
+                Schedule entity;
+                entity.mIndex = i;
+                entity.mElementIndex = existsElement ? elementData[i] : -1;
+                schedule->push_back(entity);
+            }
+            
+            return schedule;
+        }
+        
+        int GetElementIndex(int scheduleIndex)
+        {
+            if (mEntityTable.mIndexColumns.find("index:Vim.Element:Element") == mEntityTable.mIndexColumns.end())
+                return -1;
+            
+            if (scheduleIndex < 0 || scheduleIndex >= GetCount())
+                return -1;
+            
+            return mEntityTable.mIndexColumns["index:Vim.Element:Element"][scheduleIndex];
+        }
+        
+    };
+    
+    static ScheduleTable* GetScheduleTable(VimScene& scene)
+    {
+        if (scene.mEntityTables.find("Vim.Schedule") == scene.mEntityTables.end())
+            return {};
+        
+        return new ScheduleTable(scene.mEntityTables["Vim.Schedule"], scene.mStrings);
+    }
+    
+    class ScheduleColumn
+    {
+    public:
+        int mIndex;
+        const std::string* mName;
+        int mColumnIndex;
+        
+        int mScheduleIndex;
+        Schedule* mSchedule;
+        
+        ScheduleColumn() {}
+    };
+    
+    class ScheduleColumnTable
+    {
+        EntityTable& mEntityTable;
+        std::vector<std::string>& mStrings;
+    public:
+        ScheduleColumnTable(EntityTable& entityTable, std::vector<std::string>& strings):
+            mEntityTable(entityTable), mStrings(strings) {}
+        
+        int GetCount()
+        {
+            if (mEntityTable.mStringColumns.find("string:Name") == mEntityTable.mStringColumns.end())
+                return 0;
+            
+            return mEntityTable.mStringColumns["string:Name"].size() / sizeof(int);
+        }
+        
+        ScheduleColumn* Get(int scheduleColumnIndex)
+        {
+            ScheduleColumn* scheduleColumn = new ScheduleColumn();
+            scheduleColumn->mIndex = scheduleColumnIndex;
+            scheduleColumn->mName = GetName(scheduleColumnIndex);
+            scheduleColumn->mColumnIndex = GetColumnIndex(scheduleColumnIndex);
+            scheduleColumn->mScheduleIndex = GetScheduleIndex(scheduleColumnIndex);
+            return scheduleColumn;
+        }
+        
+        std::vector<ScheduleColumn>* GetAll()
+        {
+            bool existsName = mEntityTable.mStringColumns.find("string:Name") == mEntityTable.mStringColumns.end();
+            bool existsColumnIndex = mEntityTable.mDataColumns.find("int:ColumnIndex") == mEntityTable.mDataColumns.end();
+            bool existsSchedule = mEntityTable.mIndexColumns.find("index:Vim.Schedule:Schedule") == mEntityTable.mIndexColumns.end();
+            
+            const int count = GetCount();
+            
+            std::vector<ScheduleColumn>* scheduleColumn = new std::vector<ScheduleColumn>();
+            scheduleColumn->reserve(count);
+            
+            const std::vector<int>& nameData = existsName ? mEntityTable.mStringColumns["string:Name"] : std::vector<int>();
+            
+            int* columnIndexData = new int[count];
+            if (existsColumnIndex) memcpy(columnIndexData, mEntityTable.mDataColumns["int:ColumnIndex"].begin(), count * sizeof(int));
+            
+            const std::vector<int>& scheduleData = existsSchedule ? mEntityTable.mIndexColumns["index:Vim.Schedule:Schedule"] : std::vector<int>();
+            
+            for (int i = 0; i < count; ++i)
+            {
+                ScheduleColumn entity;
+                entity.mIndex = i;
+                if (existsName)
+                    entity.mName = &mStrings[nameData[i]];
+                if (existsColumnIndex)
+                    entity.mColumnIndex = columnIndexData[i];
+                entity.mScheduleIndex = existsSchedule ? scheduleData[i] : -1;
+                scheduleColumn->push_back(entity);
+            }
+            
+            delete[] columnIndexData;
+            
+            return scheduleColumn;
+        }
+        
+        const std::string* GetName(int scheduleColumnIndex)
+        {
+            if (scheduleColumnIndex < 0 || scheduleColumnIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.mStringColumns.find("string:Name") == mEntityTable.mStringColumns.end())
+                return {};
+            
+            return &mStrings[mEntityTable.mStringColumns["string:Name"][scheduleColumnIndex]];
+        }
+        
+        const std::vector<const std::string*>* GetAllName()
+        {
+            if (mEntityTable.mStringColumns.find("string:Name") == mEntityTable.mStringColumns.end())
+                return {};
+            
+            const int count = GetCount();
+            const std::vector<int>& nameData = mEntityTable.mStringColumns["string:Name"];
+            
+            std::vector<const std::string*>* result = new std::vector<const std::string*>();
+            result->reserve(count);
+            
+            for (int i = 0; i < count; ++i)
+            {
+                result->push_back(&mStrings[nameData[i]]);
+            }
+            
+            return result;
+        }
+        
+        int GetColumnIndex(int scheduleColumnIndex)
+        {
+            if (scheduleColumnIndex < 0 || scheduleColumnIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.mDataColumns.find("int:ColumnIndex") == mEntityTable.mDataColumns.end())
+                return {};
+            
+            return *reinterpret_cast<int*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["int:ColumnIndex"].begin() + scheduleColumnIndex * sizeof(int)));
+        }
+        
+        const std::vector<int>* GetAllColumnIndex()
+        {
+            if (mEntityTable.mDataColumns.find("int:ColumnIndex") == mEntityTable.mDataColumns.end())
+                return {};
+            
+            const int count = GetCount();
+            int* columnIndexData = new int[count];
+            memcpy(columnIndexData, mEntityTable.mDataColumns["int:ColumnIndex"].begin(), count * sizeof(int));
+            
+            std::vector<int>* result = new std::vector<int>(columnIndexData, columnIndexData + count);
+            
+            delete[] columnIndexData;
+            
+            return result;
+        }
+        
+        int GetScheduleIndex(int scheduleColumnIndex)
+        {
+            if (mEntityTable.mIndexColumns.find("index:Vim.Schedule:Schedule") == mEntityTable.mIndexColumns.end())
+                return -1;
+            
+            if (scheduleColumnIndex < 0 || scheduleColumnIndex >= GetCount())
+                return -1;
+            
+            return mEntityTable.mIndexColumns["index:Vim.Schedule:Schedule"][scheduleColumnIndex];
+        }
+        
+    };
+    
+    static ScheduleColumnTable* GetScheduleColumnTable(VimScene& scene)
+    {
+        if (scene.mEntityTables.find("Vim.ScheduleColumn") == scene.mEntityTables.end())
+            return {};
+        
+        return new ScheduleColumnTable(scene.mEntityTables["Vim.ScheduleColumn"], scene.mStrings);
+    }
+    
+    class ScheduleCell
+    {
+    public:
+        int mIndex;
+        const std::string* mValue;
+        int mRowIndex;
+        
+        int mScheduleColumnIndex;
+        ScheduleColumn* mScheduleColumn;
+        
+        ScheduleCell() {}
+    };
+    
+    class ScheduleCellTable
+    {
+        EntityTable& mEntityTable;
+        std::vector<std::string>& mStrings;
+    public:
+        ScheduleCellTable(EntityTable& entityTable, std::vector<std::string>& strings):
+            mEntityTable(entityTable), mStrings(strings) {}
+        
+        int GetCount()
+        {
+            if (mEntityTable.mStringColumns.find("string:Value") == mEntityTable.mStringColumns.end())
+                return 0;
+            
+            return mEntityTable.mStringColumns["string:Value"].size() / sizeof(int);
+        }
+        
+        ScheduleCell* Get(int scheduleCellIndex)
+        {
+            ScheduleCell* scheduleCell = new ScheduleCell();
+            scheduleCell->mIndex = scheduleCellIndex;
+            scheduleCell->mValue = GetValue(scheduleCellIndex);
+            scheduleCell->mRowIndex = GetRowIndex(scheduleCellIndex);
+            scheduleCell->mScheduleColumnIndex = GetScheduleColumnIndex(scheduleCellIndex);
+            return scheduleCell;
+        }
+        
+        std::vector<ScheduleCell>* GetAll()
+        {
+            bool existsValue = mEntityTable.mStringColumns.find("string:Value") == mEntityTable.mStringColumns.end();
+            bool existsRowIndex = mEntityTable.mDataColumns.find("int:RowIndex") == mEntityTable.mDataColumns.end();
+            bool existsScheduleColumn = mEntityTable.mIndexColumns.find("index:Vim.ScheduleColumn:ScheduleColumn") == mEntityTable.mIndexColumns.end();
+            
+            const int count = GetCount();
+            
+            std::vector<ScheduleCell>* scheduleCell = new std::vector<ScheduleCell>();
+            scheduleCell->reserve(count);
+            
+            const std::vector<int>& valueData = existsValue ? mEntityTable.mStringColumns["string:Value"] : std::vector<int>();
+            
+            int* rowIndexData = new int[count];
+            if (existsRowIndex) memcpy(rowIndexData, mEntityTable.mDataColumns["int:RowIndex"].begin(), count * sizeof(int));
+            
+            const std::vector<int>& scheduleColumnData = existsScheduleColumn ? mEntityTable.mIndexColumns["index:Vim.ScheduleColumn:ScheduleColumn"] : std::vector<int>();
+            
+            for (int i = 0; i < count; ++i)
+            {
+                ScheduleCell entity;
+                entity.mIndex = i;
+                if (existsValue)
+                    entity.mValue = &mStrings[valueData[i]];
+                if (existsRowIndex)
+                    entity.mRowIndex = rowIndexData[i];
+                entity.mScheduleColumnIndex = existsScheduleColumn ? scheduleColumnData[i] : -1;
+                scheduleCell->push_back(entity);
+            }
+            
+            delete[] rowIndexData;
+            
+            return scheduleCell;
+        }
+        
+        const std::string* GetValue(int scheduleCellIndex)
+        {
+            if (scheduleCellIndex < 0 || scheduleCellIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.mStringColumns.find("string:Value") == mEntityTable.mStringColumns.end())
+                return {};
+            
+            return &mStrings[mEntityTable.mStringColumns["string:Value"][scheduleCellIndex]];
+        }
+        
+        const std::vector<const std::string*>* GetAllValue()
+        {
+            if (mEntityTable.mStringColumns.find("string:Value") == mEntityTable.mStringColumns.end())
+                return {};
+            
+            const int count = GetCount();
+            const std::vector<int>& valueData = mEntityTable.mStringColumns["string:Value"];
+            
+            std::vector<const std::string*>* result = new std::vector<const std::string*>();
+            result->reserve(count);
+            
+            for (int i = 0; i < count; ++i)
+            {
+                result->push_back(&mStrings[valueData[i]]);
+            }
+            
+            return result;
+        }
+        
+        int GetRowIndex(int scheduleCellIndex)
+        {
+            if (scheduleCellIndex < 0 || scheduleCellIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.mDataColumns.find("int:RowIndex") == mEntityTable.mDataColumns.end())
+                return {};
+            
+            return *reinterpret_cast<int*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["int:RowIndex"].begin() + scheduleCellIndex * sizeof(int)));
+        }
+        
+        const std::vector<int>* GetAllRowIndex()
+        {
+            if (mEntityTable.mDataColumns.find("int:RowIndex") == mEntityTable.mDataColumns.end())
+                return {};
+            
+            const int count = GetCount();
+            int* rowIndexData = new int[count];
+            memcpy(rowIndexData, mEntityTable.mDataColumns["int:RowIndex"].begin(), count * sizeof(int));
+            
+            std::vector<int>* result = new std::vector<int>(rowIndexData, rowIndexData + count);
+            
+            delete[] rowIndexData;
+            
+            return result;
+        }
+        
+        int GetScheduleColumnIndex(int scheduleCellIndex)
+        {
+            if (mEntityTable.mIndexColumns.find("index:Vim.ScheduleColumn:ScheduleColumn") == mEntityTable.mIndexColumns.end())
+                return -1;
+            
+            if (scheduleCellIndex < 0 || scheduleCellIndex >= GetCount())
+                return -1;
+            
+            return mEntityTable.mIndexColumns["index:Vim.ScheduleColumn:ScheduleColumn"][scheduleCellIndex];
+        }
+        
+    };
+    
+    static ScheduleCellTable* GetScheduleCellTable(VimScene& scene)
+    {
+        if (scene.mEntityTables.find("Vim.ScheduleCell") == scene.mEntityTables.end())
+            return {};
+        
+        return new ScheduleCellTable(scene.mEntityTables["Vim.ScheduleCell"], scene.mStrings);
+    }
+    
     DocumentModel::DocumentModel(VimScene& scene)
     {
         mAsset = GetAssetTable(scene);
@@ -10656,6 +11115,9 @@ namespace Vim
         mGrid = GetGridTable(scene);
         mArea = GetAreaTable(scene);
         mAreaScheme = GetAreaSchemeTable(scene);
+        mSchedule = GetScheduleTable(scene);
+        mScheduleColumn = GetScheduleColumnTable(scene);
+        mScheduleCell = GetScheduleCellTable(scene);
     }
     
     DocumentModel::~DocumentModel()
@@ -10703,6 +11165,9 @@ namespace Vim
         delete mGrid;
         delete mArea;
         delete mAreaScheme;
+        delete mSchedule;
+        delete mScheduleColumn;
+        delete mScheduleCell;
     }
 }
 
