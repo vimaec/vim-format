@@ -1082,7 +1082,7 @@ namespace Vim
     {
     public:
         int mIndex;
-        int mId;
+        long long mId;
         const std::string* mType;
         const std::string* mName;
         const std::string* mUniqueId;
@@ -1126,10 +1126,10 @@ namespace Vim
         
         int GetCount()
         {
-            if (mEntityTable.mDataColumns.find("int:Id") == mEntityTable.mDataColumns.end())
+            if (mEntityTable.mDataColumns.find("long:Id") == mEntityTable.mDataColumns.end())
                 return 0;
             
-            return mEntityTable.mDataColumns["int:Id"].size() / sizeof(int);
+            return mEntityTable.mDataColumns["long:Id"].size() / sizeof(long long);
         }
         
         Element* Get(int elementIndex)
@@ -1159,7 +1159,7 @@ namespace Vim
         
         std::vector<Element>* GetAll()
         {
-            bool existsId = mEntityTable.mDataColumns.find("int:Id") == mEntityTable.mDataColumns.end();
+            bool existsId = mEntityTable.mDataColumns.find("long:Id") == mEntityTable.mDataColumns.end();
             bool existsType = mEntityTable.mStringColumns.find("string:Type") == mEntityTable.mStringColumns.end();
             bool existsName = mEntityTable.mStringColumns.find("string:Name") == mEntityTable.mStringColumns.end();
             bool existsUniqueId = mEntityTable.mStringColumns.find("string:UniqueId") == mEntityTable.mStringColumns.end();
@@ -1185,8 +1185,8 @@ namespace Vim
             std::vector<Element>* element = new std::vector<Element>();
             element->reserve(count);
             
-            int* idData = new int[count];
-            if (existsId) memcpy(idData, mEntityTable.mDataColumns["int:Id"].begin(), count * sizeof(int));
+            long long* idData = new long long[count];
+            if (existsId) memcpy(idData, mEntityTable.mDataColumns["long:Id"].begin(), count * sizeof(long long));
             
             const std::vector<int>& typeData = existsType ? mEntityTable.mStringColumns["string:Type"] : std::vector<int>();
             
@@ -1255,27 +1255,27 @@ namespace Vim
             return element;
         }
         
-        int GetId(int elementIndex)
+        long long GetId(int elementIndex)
         {
             if (elementIndex < 0 || elementIndex >= GetCount())
                 return {};
             
-            if (mEntityTable.mDataColumns.find("int:Id") == mEntityTable.mDataColumns.end())
+            if (mEntityTable.mDataColumns.find("long:Id") == mEntityTable.mDataColumns.end())
                 return {};
             
-            return *reinterpret_cast<int*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["int:Id"].begin() + elementIndex * sizeof(int)));
+            return *reinterpret_cast<long long*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["long:Id"].begin() + elementIndex * sizeof(long long)));
         }
         
-        const std::vector<int>* GetAllId()
+        const std::vector<long long>* GetAllId()
         {
-            if (mEntityTable.mDataColumns.find("int:Id") == mEntityTable.mDataColumns.end())
+            if (mEntityTable.mDataColumns.find("long:Id") == mEntityTable.mDataColumns.end())
                 return {};
             
             const int count = GetCount();
-            int* idData = new int[count];
-            memcpy(idData, mEntityTable.mDataColumns["int:Id"].begin(), count * sizeof(int));
+            long long* idData = new long long[count];
+            memcpy(idData, mEntityTable.mDataColumns["long:Id"].begin(), count * sizeof(long long));
             
-            std::vector<int>* result = new std::vector<int>(idData, idData + count);
+            std::vector<long long>* result = new std::vector<long long>(idData, idData + count);
             
             delete[] idData;
             
@@ -4372,7 +4372,7 @@ namespace Vim
     public:
         int mIndex;
         const std::string* mName;
-        int mId;
+        long long mId;
         const std::string* mCategoryType;
         DVector3 mLineColor;
         const std::string* mBuiltInCategory;
@@ -4418,7 +4418,7 @@ namespace Vim
         std::vector<Category>* GetAll()
         {
             bool existsName = mEntityTable.mStringColumns.find("string:Name") == mEntityTable.mStringColumns.end();
-            bool existsId = mEntityTable.mDataColumns.find("int:Id") == mEntityTable.mDataColumns.end();
+            bool existsId = mEntityTable.mDataColumns.find("long:Id") == mEntityTable.mDataColumns.end();
             bool existsCategoryType = mEntityTable.mStringColumns.find("string:CategoryType") == mEntityTable.mStringColumns.end();
             bool existsLineColorX = mEntityTable.mDataColumns.find("double:LineColor.X") == mEntityTable.mDataColumns.end();
             bool existsLineColorY = mEntityTable.mDataColumns.find("double:LineColor.Y") == mEntityTable.mDataColumns.end();
@@ -4434,8 +4434,8 @@ namespace Vim
             
             const std::vector<int>& nameData = existsName ? mEntityTable.mStringColumns["string:Name"] : std::vector<int>();
             
-            int* idData = new int[count];
-            if (existsId) memcpy(idData, mEntityTable.mDataColumns["int:Id"].begin(), count * sizeof(int));
+            long long* idData = new long long[count];
+            if (existsId) memcpy(idData, mEntityTable.mDataColumns["long:Id"].begin(), count * sizeof(long long));
             
             const std::vector<int>& categoryTypeData = existsCategoryType ? mEntityTable.mStringColumns["string:CategoryType"] : std::vector<int>();
             
@@ -4504,27 +4504,27 @@ namespace Vim
             return result;
         }
         
-        int GetId(int categoryIndex)
+        long long GetId(int categoryIndex)
         {
             if (categoryIndex < 0 || categoryIndex >= GetCount())
                 return {};
             
-            if (mEntityTable.mDataColumns.find("int:Id") == mEntityTable.mDataColumns.end())
+            if (mEntityTable.mDataColumns.find("long:Id") == mEntityTable.mDataColumns.end())
                 return {};
             
-            return *reinterpret_cast<int*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["int:Id"].begin() + categoryIndex * sizeof(int)));
+            return *reinterpret_cast<long long*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["long:Id"].begin() + categoryIndex * sizeof(long long)));
         }
         
-        const std::vector<int>* GetAllId()
+        const std::vector<long long>* GetAllId()
         {
-            if (mEntityTable.mDataColumns.find("int:Id") == mEntityTable.mDataColumns.end())
+            if (mEntityTable.mDataColumns.find("long:Id") == mEntityTable.mDataColumns.end())
                 return {};
             
             const int count = GetCount();
-            int* idData = new int[count];
-            memcpy(idData, mEntityTable.mDataColumns["int:Id"].begin(), count * sizeof(int));
+            long long* idData = new long long[count];
+            memcpy(idData, mEntityTable.mDataColumns["long:Id"].begin(), count * sizeof(long long));
             
-            std::vector<int>* result = new std::vector<int>(idData, idData + count);
+            std::vector<long long>* result = new std::vector<long long>(idData, idData + count);
             
             delete[] idData;
             
