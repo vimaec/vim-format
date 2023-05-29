@@ -16,6 +16,7 @@
     <ProjectGuid>{b710271d-41aa-4edf-a0a6-764decd19a3c}</ProjectGuid>
     <RootNamespace>VimCppTests</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <ProjectName>Vim.Cpp</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
