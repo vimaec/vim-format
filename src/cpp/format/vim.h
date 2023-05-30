@@ -25,6 +25,76 @@ namespace Vim
         std::unordered_map<std::string, std::vector<int>> mIndexColumns;
         std::unordered_map<std::string, std::vector<int>> mStringColumns;
         std::unordered_map<std::string, bfast::ByteRange> mDataColumns;
+
+        static bool starts_with(const std::string& base, const std::string& value)
+        {
+            return base.rfind(value, 0) == 0;
+        }
+
+        static size_t get_type_size(const std::string& col_name)
+        {
+            if (starts_with(col_name, "index:") ||
+                starts_with(col_name, "string:") ||
+                starts_with(col_name, "int:") ||
+                starts_with(col_name, "uint:") ||
+                starts_with(col_name, "float:"))
+            {
+                return 4; // 4 bytes
+            }
+
+            if (starts_with(col_name, "double:") ||
+                starts_with(col_name, "long:") ||
+                starts_with(col_name, "ulong:"))
+            {
+                return 8; // 8 bytes
+            }
+
+            if (starts_with(col_name, "byte:") ||
+                starts_with(col_name, "ubyte:"))
+            {
+                return 1; // 1 byte
+            }
+
+            return 1; // default to 1 byte
+        }
+
+        bool column_exists(const std::string& col_name)
+        {
+            if (starts_with(col_name, "index:"))
+            {
+                return mIndexColumns.find(col_name) != mIndexColumns.end();
+            }
+
+            if (starts_with(col_name, "string:"))
+            {
+                return mStringColumns.find(col_name) != mStringColumns.end();
+            }
+
+            return mDataColumns.find(col_name) != mDataColumns.end();
+        }
+
+        size_t get_count() const
+        {
+            if (!mIndexColumns.empty())
+            {
+                return mIndexColumns.begin()->second.size();
+            }
+
+            if (!mStringColumns.empty())
+            {
+                return mStringColumns.begin()->second.size();
+            }
+
+            if (!mDataColumns.empty())
+            {
+                const auto first_data_column = mDataColumns.begin();
+                const auto& col_name = first_data_column->first;
+                const auto bytes = first_data_column->second;
+                return bytes.size() / get_type_size(col_name);
+            }
+
+            return 0;
+        }
     };
 
     inline std::vector<std::string> split(const std::string& str, const std::string& delim)
