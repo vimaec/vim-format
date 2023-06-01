@@ -1,26 +1,6 @@
 #include <iostream>
 #include "object-model.h"
 
-bool inline operator==(const Vim::Vector3& a, const Vim::Vector3& b)
-{
-    return abs(a.x - b.x) < 1e-10 &&
-           abs(a.y - b.y) < 1e-10 &&
-           abs(a.z - b.z) < 1e-10;
-}
-
-bool inline operator!=(const Vim::Vector3& a, const Vim::Vector3& b)
-{
-    return !(a == b);
-}
-
-std::ostream& operator<< (std::ostream& stream, const Vim::Vector3& vector)
-{
-    stream << "(X: " << vector.x
-           << ", Y: " << vector.y
-           << ", Z: " << vector.z << ")";
-    return stream;
-}
-
 template<typename T>
 void test(std::string message, T actual, T expected)
 {
@@ -74,7 +54,9 @@ void testElement(const Vim::DocumentModel& model)
     test("Element 30 AssemblyInstanceIndex", model.mElement->Get(30)->mAssemblyInstanceIndex, -1);
     test("Element 30 BimDocumentIndex", model.mElement->Get(30)->mBimDocumentIndex, 0);
     test("Element 30 RoomIndex", model.mElement->Get(30)->mRoomIndex, -1);
-    test("Element 30 RoomIndex", model.mElement->Get(30)->mLocation, Vim::Vector3{0, 0, 0});
+    test("Element 30 RoomIndex", model.mElement->Get(30)->mLocation_X, 0.0f);
+    test("Element 30 RoomIndex", model.mElement->Get(30)->mLocation_Y, 0.0f);
+    test("Element 30 RoomIndex", model.mElement->Get(30)->mLocation_Z, 0.0f);
 
     std::cout << "Get element test: OK" << std::endl;
 }
