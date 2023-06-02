@@ -8,7 +8,6 @@
 #define __VIM_H__
 
 #include <vector>
-#include <sstream>
 #include <unordered_map>
 #include <tuple>
 #include <stdexcept>
@@ -17,6 +16,32 @@
 
 namespace Vim
 {
+    enum class ColumnType
+    {
+        index_column,
+        string_column,
+        data_column,
+    };
+
+    // Buffer names
+    static const std::string buffer_name_header = "header";
+    static const std::string buffer_name_geometry = "geometry";
+    static const std::string buffer_name_assets = "assets";
+    static const std::string buffer_name_strings = "strings";
+    static const std::string buffer_name_entities = "entities";
+
+    // Entity column prefixes
+    static const std::string index_column_prefix = "index:";
+    static const std::string string_column_prefix = "string:";
+    static const std::string data_column_byte_prefix = "byte:";
+    static const std::string data_column_ubyte_prefix = "ubyte:";
+    static const std::string data_column_int_prefix = "int:";
+    static const std::string data_column_uint_prefix = "uint:";
+    static const std::string data_column_long_prefix = "long:";
+    static const std::string data_column_ulong_prefix = "ulong:";
+    static const std::string data_column_float_prefix = "float:";
+    static const std::string data_column_double_prefix = "double:";
+
     class EntityTable
     {
     public:
@@ -31,26 +56,37 @@ namespace Vim
             return base.rfind(value, 0) == 0;
         }
 
+        static ColumnType get_column_type(const std::string& col_name)
+        {
+            if (starts_with(col_name, "index:"))
+                return ColumnType::index_column;
+
+            if (starts_with(col_name, "string:"))
+                return ColumnType::string_column;
+
+            return ColumnType::data_column; // default to data column.
+        }
+
         static size_t get_type_size(const std::string& col_name)
         {
-            if (starts_with(col_name, "index:") ||
-                starts_with(col_name, "string:") ||
-                starts_with(col_name, "int:") ||
-                starts_with(col_name, "uint:") ||
-                starts_with(col_name, "float:"))
+            if (starts_with(col_name, index_column_prefix) ||
+                starts_with(col_name, string_column_prefix) ||
+                starts_with(col_name, data_column_int_prefix) ||
+                starts_with(col_name, data_column_uint_prefix) ||
+                starts_with(col_name, data_column_float_prefix))
             {
                 return 4; // 4 bytes
             }
 
-            if (starts_with(col_name, "double:") ||
-                starts_with(col_name, "long:") ||
-                starts_with(col_name, "ulong:"))
+            if (starts_with(col_name, data_column_double_prefix) ||
+                starts_with(col_name, data_column_long_prefix) ||
+                starts_with(col_name, data_column_ulong_prefix))
             {
                 return 8; // 8 bytes
             }
 
-            if (starts_with(col_name, "byte:") ||
-                starts_with(col_name, "ubyte:"))
+            if (starts_with(col_name, data_column_byte_prefix) ||
+                starts_with(col_name, data_column_ubyte_prefix))
             {
                 return 1; // 1 byte
             }
@@ -60,12 +96,12 @@ namespace Vim
 
         bool column_exists(const std::string& col_name)
         {
-            if (starts_with(col_name, "index:"))
+            if (starts_with(col_name, index_column_prefix))
             {
                 return mIndexColumns.find(col_name) != mIndexColumns.end();
             }
 
-            if (starts_with(col_name, "string:"))
+            if (starts_with(col_name, string_column_prefix))
             {
                 return mStringColumns.find(col_name) != mStringColumns.end();
             }
@@ -157,11 +193,11 @@ namespace Vim
         uint32_t mVersionMinor = 0xffffffff;
         uint32_t mVersionPatch = 0xffffffff;
 
-        VimErrorCodes ReadFile(std::string fileName, VimLoadFlags loadFlags = VimLoadFlags::All)
+        VimErrorCodes ReadFile(std::string file_name, VimLoadFlags load_flags = VimLoadFlags::All)
         {
             try
             {
-                mBfast = bfast::Bfast::read_file(fileName);
+                mBfast = bfast::Bfast::read_file(file_name);
             }
             catch (std::exception& e)
             {
@@ -169,31 +205,30 @@ namespace Vim
                 return VimErrorCodes::FileNotRecognized;
             }
 
-            uint32_t uiLoadFlags = (uint32_t)loadFlags;
+            auto ui_load_flags = static_cast<uint32_t>(load_flags);
 
-            for (auto i = 0; i < mBfast.buffers.size(); ++i)
+            for (auto& b : mBfast.buffers)
             {
-                auto& b = mBfast.buffers[i];
-                if (b.name == "header")
+                if (b.name == buffer_name_header)
                 {
-                    std::vector<std::string> versionParts;
+                    std::vector<std::string> version_parts;
 
-                    std::string header = (const char*)(b.data.begin());
+                    std::string header = reinterpret_cast<const char*>(b.data.begin());
                     std::vector<std::string> tokens = split(header, "\n");
 
-                    for (size_t i = 0; i < tokens.size(); i ++)
+                    for (auto& token : tokens)
                     {
-                        std::vector<std::string> keyValue = split(tokens[i], "=");
+                        std::vector<std::string> key_value = split(token, "=");
 
-                        if (keyValue.size() == 2)
+                        if (key_value.size() == 2)
                         {
-                            mHeader[keyValue[0]] = keyValue[1];
+                            mHeader[key_value[0]] = key_value[1];
                         }
                     }
 
                     if (mHeader.end() != mHeader.find("vim"))
                     {
-                        versionParts = split(mHeader["vim"], ".");
+                        version_parts = split(mHeader["vim"], ".");
                     }
                     else
                     {
@@ -201,11 +236,11 @@ namespace Vim
                         return VimErrorCodes::NoVersionInfo;
                     }
 
-                    if (versionParts.size() > 0) mVersionMajor = std::stoi(versionParts[0]);
-                    if (versionParts.size() > 1) mVersionMinor = std::stoi(versionParts[1]);
-                    if (versionParts.size() > 2) mVersionPatch = std::stoi(versionParts[2]);
+                    if (version_parts.size() > 0) mVersionMajor = std::stoi(version_parts[0]);
+                    if (version_parts.size() > 1) mVersionMinor = std::stoi(version_parts[1]);
+                    if (version_parts.size() > 2) mVersionPatch = std::stoi(version_parts[2]);
                 }
-                else if (b.name == "geometry" && (uiLoadFlags & (uint32_t)VimLoadFlags::Geometry) != 0)
+                else if (b.name == buffer_name_geometry && (ui_load_flags & static_cast<uint32_t>(VimLoadFlags::Geometry)) != 0)
                 {
                     try
                     {
@@ -215,10 +250,10 @@ namespace Vim
                     catch (std::exception& e)
                     {
                         e;
-                        return Vim::VimErrorCodes::GeometryLoadingException;
+                        return VimErrorCodes::GeometryLoadingException;
                     }
                 }
-                else if (b.name == "assets" && (uiLoadFlags & (uint32_t)VimLoadFlags::Assets) != 0)
+                else if (b.name == buffer_name_assets && (ui_load_flags & static_cast<uint32_t>(VimLoadFlags::Assets)) != 0)
                 {
                     try
                     {
@@ -227,17 +262,17 @@ namespace Vim
                     catch (std::exception& e)
                     {
                         e;
-                        return Vim::VimErrorCodes::AssetLoadingException;
+                        return VimErrorCodes::AssetLoadingException;
                     }
                 }
-                else if (b.name == "strings" && (uiLoadFlags & (uint32_t)VimLoadFlags::Strings) != 0)
+                else if (b.name == buffer_name_strings && (ui_load_flags & static_cast<uint32_t>(VimLoadFlags::Strings)) != 0)
                 {
                     const bfast::byte* data = b.data.begin();
                     size_t count = 0;
                     while (data < b.data.end())
                     {
                         count++;
-                        data += strlen((const char*)data) + 1;
+                        data += strlen(reinterpret_cast<const char*>(data)) + 1;
                     }
 
                     mStrings.reserve(count);
@@ -246,52 +281,43 @@ namespace Vim
                     while (data < b.data.end())
                     {
                         mStrings.emplace_back(reinterpret_cast<const char*>(data));
-                        data += strlen((const char*)data) + 1;
+                        data += strlen(reinterpret_cast<const char*>(data)) + 1;
                     }
                 }
-                else if (b.name == "entities" && (uiLoadFlags & (uint32_t)VimLoadFlags::Entities) != 0)
+                else if (b.name == buffer_name_entities && (ui_load_flags & static_cast<uint32_t>(VimLoadFlags::Entities)) != 0)
                 {
                     try
                     {
                         mEntitiesBFast = bfast::Bfast::unpack(b.data);
-                        for (auto j = 0; j < mEntitiesBFast.buffers.size(); ++j)
+                        for (auto& entity_buffer : mEntitiesBFast.buffers)
                         {
-                            auto& entityBuffer = mEntitiesBFast.buffers[j];
-                            EntityTable entityTable = { entityBuffer.name };
-                            bfast::Bfast tableBFast = bfast::Bfast::unpack(entityBuffer.data);
+                            EntityTable entity_table = { entity_buffer.name };
+                            bfast::Bfast table_bfast = bfast::Bfast::unpack(entity_buffer.data);
 
-                            for (auto k = 0; k < tableBFast.buffers.size(); ++k)
+                            for (auto& table_buffer : table_bfast.buffers)
                             {
-                                auto& tableBuffer = tableBFast.buffers[k];
-
-                                size_t index = tableBuffer.name.find_first_of(':');
-                                std::string type = tableBuffer.name.substr(0, index);
-                                std::string name = tableBuffer.name.substr(index + 1);
-
-                                if (type == "int" ||
-                                    type == "byte" ||
-                                    type == "double" ||
-                                    type == "float")
+                                auto column_type = EntityTable::get_column_type(table_buffer.name);
+                                switch (column_type)
                                 {
-                                    entityTable.mDataColumns[tableBuffer.name] = tableBuffer.data;
-                                }
-                                else if (type == "index")
-                                {
-                                    entityTable.mIndexColumns[tableBuffer.name] = std::vector<int>((int*)tableBuffer.data.begin(), (int*)tableBuffer.data.end());
-                                }
-                                else if (type == "string")
-                                {
-                                    entityTable.mStringColumns[tableBuffer.name] = std::vector<int>((int*)tableBuffer.data.begin(), (int*)tableBuffer.data.end());
+                                case ColumnType::index_column:
+                                    entity_table.mIndexColumns[table_buffer.name] = std::vector<int>((int*)table_buffer.data.begin(), (int*)table_buffer.data.end());
+                                    break;
+                                case ColumnType::string_column:
+                                    entity_table.mStringColumns[table_buffer.name] = std::vector<int>((int*)table_buffer.data.begin(), (int*)table_buffer.data.end());
+                                    break;
+                                case ColumnType::data_column:
+                                    entity_table.mDataColumns[table_buffer.name] = table_buffer.data;
+                                    break;
                                 }
                             }
 
-                            mEntityTables[entityTable.mName] = entityTable;
+                            mEntityTables[entity_table.mName] = entity_table;
                         }
                     }
                     catch (std::exception& e)
                     {
                         e;
-                        return Vim::VimErrorCodes::EntityLoadingException;
+                        return VimErrorCodes::EntityLoadingException;
                     }
                 }
             }

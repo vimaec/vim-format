@@ -27,16 +27,17 @@ void test(std::string message, const std::vector<T>& actual, const std::vector<T
     }
 }
 
-void testElement(const Vim::DocumentModel& model)
+void test_element(const Vim::DocumentModel& model, const size_t expected_element_count)
 {
     assert(model.mElement);
 
-    test("Element count", model.mElement->GetCount(), 4464);
+    test("Element count", model.mElement->GetCount(), expected_element_count);
     test("Element 0 ID", model.mElement->GetId(0), -1ll);
     test("Element 1 ID", model.mElement->GetId(1), 1222722ll);
     test("Element 2 ID", model.mElement->GetId(2), 32440ll);
     test("Element 3 ID", model.mElement->GetId(3), 118390ll);
 
+    // TODO: improve expected test definition on a per-element basis
     test("Element 30 Index", model.mElement->Get(30)->mIndex, 30);
     test("Element 30 ID", model.mElement->Get(30)->mId, 374011ll);
     test("Element 30 Name", *model.mElement->Get(30)->mName, std::string("GWB on Mtl. Stud"));
@@ -61,7 +62,7 @@ void testElement(const Vim::DocumentModel& model)
     std::cout << "Get element test: OK" << std::endl;
 }
 
-void testElementIds(const Vim::DocumentModel& model)
+void test_element_ids(const Vim::DocumentModel& model)
 {
     assert(model.mElement);
 
@@ -77,7 +78,7 @@ void testElementIds(const Vim::DocumentModel& model)
     std::cout << "Get element IDs test: OK" << std::endl;
 }
 
-void testGetAll(const Vim::DocumentModel& model)
+void test_get_all(const Vim::DocumentModel& model)
 {
     assert(model.mLevel);
 
@@ -108,23 +109,41 @@ std::string normalizePath(const std::string& fileName)
     return ret;
 }
 
-int main(int num, char** args)
+int test_wolford(const std::string& vim_file_path, const int expected_element_count)
 {
-    auto thisExePath = normalizePath(std::string(args[0]));
-    const auto thisDir = thisExePath.erase(thisExePath.rfind("src"));
-    const auto testRelativeFilePath = normalizePath("data\\Wolford_Residence.r2023.vim");
-    const auto vimFilePath = thisDir + testRelativeFilePath;
-
-    std::cout << "Testing VIM file: " << thisExePath << std::endl;
+    std::cout << "Testing VIM file: " << vim_file_path << std::endl;
 
     Vim::VimScene scene;
-    scene.ReadFile(vimFilePath);
+    scene.ReadFile(vim_file_path);
 
-    Vim::DocumentModel model(scene);
+    const Vim::DocumentModel model(scene);
 
-    testElement(model);
-    testElementIds(model);
-    testGetAll(model);
+    test_element(model, expected_element_count);
+    test_element_ids(model);
+    test_get_all(model);
+
+    return 0;
+}
+
+int main(int num, char** args)
+{
+    auto this_exe_path = normalizePath(std::string(args[0]));
+    
+    const auto this_dir = this_exe_path.erase(this_exe_path.rfind("src"));
+
+    const std::vector<std::tuple<std::string, int>> tests =
+    {
+        //std::tuple<std::string, int>(normalizePath("data\\Wolford_Residence.r2023.om_v4.4.0.vim"), 4464), // TODO: restore this
+        std::tuple<std::string, int>(normalizePath("data\\Wolford_Residence.r2023.om_v5.0.0.vim"), 4473),
+    };
+    for (const auto& test : tests)
+    {
+        const auto vim_file_path = this_dir + std::get<0>(test);
+        const auto expected_element_count = std::get<1>(test);
+        const auto result = test_wolford(vim_file_path, expected_element_count);
+        if (result != 0)
+            return result;
+    }
 
     return 0;
 }

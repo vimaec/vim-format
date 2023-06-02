@@ -176,7 +176,7 @@ namespace Vim
         AssetTable(EntityTable& entityTable, std::vector<std::string>& strings):
             mEntityTable(entityTable), mStrings(strings) {}
         
-        int GetCount()
+        size_t GetCount()
         {
             return mEntityTable.get_count();
         }
@@ -193,7 +193,7 @@ namespace Vim
         {
             bool existsBufferName = mEntityTable.column_exists("string:BufferName");
             
-            const int count = GetCount();
+            const auto count = GetCount();
             
             std::vector<Asset>* asset = new std::vector<Asset>();
             asset->reserve(count);
@@ -226,7 +226,7 @@ namespace Vim
         
         const std::vector<const std::string*>* GetAllBufferName()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             const std::vector<int>& bufferNameData = mEntityTable.column_exists("string:BufferName") ? mEntityTable.mStringColumns["string:BufferName"] : std::vector<int>();
             
@@ -270,7 +270,7 @@ namespace Vim
         DisplayUnitTable(EntityTable& entityTable, std::vector<std::string>& strings):
             mEntityTable(entityTable), mStrings(strings) {}
         
-        int GetCount()
+        size_t GetCount()
         {
             return mEntityTable.get_count();
         }
@@ -291,7 +291,7 @@ namespace Vim
             bool existsType = mEntityTable.column_exists("string:Type");
             bool existsLabel = mEntityTable.column_exists("string:Label");
             
-            const int count = GetCount();
+            const auto count = GetCount();
             
             std::vector<DisplayUnit>* displayUnit = new std::vector<DisplayUnit>();
             displayUnit->reserve(count);
@@ -332,7 +332,7 @@ namespace Vim
         
         const std::vector<const std::string*>* GetAllSpec()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             const std::vector<int>& specData = mEntityTable.column_exists("string:Spec") ? mEntityTable.mStringColumns["string:Spec"] : std::vector<int>();
             
@@ -361,7 +361,7 @@ namespace Vim
         
         const std::vector<const std::string*>* GetAllType()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             const std::vector<int>& typeData = mEntityTable.column_exists("string:Type") ? mEntityTable.mStringColumns["string:Type"] : std::vector<int>();
             
@@ -390,7 +390,7 @@ namespace Vim
         
         const std::vector<const std::string*>* GetAllLabel()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             const std::vector<int>& labelData = mEntityTable.column_exists("string:Label") ? mEntityTable.mStringColumns["string:Label"] : std::vector<int>();
             
@@ -442,7 +442,7 @@ namespace Vim
         ParameterDescriptorTable(EntityTable& entityTable, std::vector<std::string>& strings):
             mEntityTable(entityTable), mStrings(strings) {}
         
-        int GetCount()
+        size_t GetCount()
         {
             return mEntityTable.get_count();
         }
@@ -475,7 +475,7 @@ namespace Vim
             bool existsGuid = mEntityTable.column_exists("string:Guid");
             bool existsDisplayUnit = mEntityTable.column_exists("index:Vim.DisplayUnit:DisplayUnit");
             
-            const int count = GetCount();
+            const auto count = GetCount();
             
             std::vector<ParameterDescriptor>* parameterDescriptor = new std::vector<ParameterDescriptor>();
             parameterDescriptor->reserve(count);
@@ -556,7 +556,7 @@ namespace Vim
         
         const std::vector<const std::string*>* GetAllName()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             const std::vector<int>& nameData = mEntityTable.column_exists("string:Name") ? mEntityTable.mStringColumns["string:Name"] : std::vector<int>();
             
@@ -585,7 +585,7 @@ namespace Vim
         
         const std::vector<const std::string*>* GetAllGroup()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             const std::vector<int>& groupData = mEntityTable.column_exists("string:Group") ? mEntityTable.mStringColumns["string:Group"] : std::vector<int>();
             
@@ -614,7 +614,7 @@ namespace Vim
         
         const std::vector<const std::string*>* GetAllParameterType()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             const std::vector<int>& parameterTypeData = mEntityTable.column_exists("string:ParameterType") ? mEntityTable.mStringColumns["string:ParameterType"] : std::vector<int>();
             
@@ -643,7 +643,7 @@ namespace Vim
         
         const std::vector<bool>* GetAllIsInstance()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             bfast::byte* isInstanceData = new bfast::byte[count];
             if (mEntityTable.column_exists("byte:IsInstance")) {
@@ -671,7 +671,7 @@ namespace Vim
         
         const std::vector<bool>* GetAllIsShared()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             bfast::byte* isSharedData = new bfast::byte[count];
             if (mEntityTable.column_exists("byte:IsShared")) {
@@ -699,7 +699,7 @@ namespace Vim
         
         const std::vector<bool>* GetAllIsReadOnly()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             bfast::byte* isReadOnlyData = new bfast::byte[count];
             if (mEntityTable.column_exists("byte:IsReadOnly")) {
@@ -727,7 +727,7 @@ namespace Vim
         
         const std::vector<int>* GetAllFlags()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             int* flagsData = new int[count];
             if (mEntityTable.column_exists("int:Flags")) {
@@ -755,7 +755,7 @@ namespace Vim
         
         const std::vector<const std::string*>* GetAllGuid()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             const std::vector<int>& guidData = mEntityTable.column_exists("string:Guid") ? mEntityTable.mStringColumns["string:Guid"] : std::vector<int>();
             
@@ -814,7 +814,7 @@ namespace Vim
         ParameterTable(EntityTable& entityTable, std::vector<std::string>& strings):
             mEntityTable(entityTable), mStrings(strings) {}
         
-        int GetCount()
+        size_t GetCount()
         {
             return mEntityTable.get_count();
         }
@@ -835,7 +835,7 @@ namespace Vim
             bool existsParameterDescriptor = mEntityTable.column_exists("index:Vim.ParameterDescriptor:ParameterDescriptor");
             bool existsElement = mEntityTable.column_exists("index:Vim.Element:Element");
             
-            const int count = GetCount();
+            const auto count = GetCount();
             
             std::vector<Parameter>* parameter = new std::vector<Parameter>();
             parameter->reserve(count);
@@ -873,7 +873,7 @@ namespace Vim
         
         const std::vector<const std::string*>* GetAllValue()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             const std::vector<int>& valueData = mEntityTable.column_exists("string:Value") ? mEntityTable.mStringColumns["string:Value"] : std::vector<int>();
             
@@ -970,7 +970,7 @@ namespace Vim
         ElementTable(EntityTable& entityTable, std::vector<std::string>& strings):
             mEntityTable(entityTable), mStrings(strings) {}
         
-        int GetCount()
+        size_t GetCount()
         {
             return mEntityTable.get_count();
         }
@@ -1025,7 +1025,7 @@ namespace Vim
             bool existsBimDocument = mEntityTable.column_exists("index:Vim.BimDocument:BimDocument");
             bool existsRoom = mEntityTable.column_exists("index:Vim.Room:Room");
             
-            const int count = GetCount();
+            const auto count = GetCount();
             
             std::vector<Element>* element = new std::vector<Element>();
             element->reserve(count);
@@ -1143,7 +1143,7 @@ namespace Vim
         
         const std::vector<long long>* GetAllId()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             long long* idData = new long long[count];
             if (mEntityTable.column_exists("long:Id")) {
@@ -1176,7 +1176,7 @@ namespace Vim
         
         const std::vector<const std::string*>* GetAllType()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             const std::vector<int>& typeData = mEntityTable.column_exists("string:Type") ? mEntityTable.mStringColumns["string:Type"] : std::vector<int>();
             
@@ -1205,7 +1205,7 @@ namespace Vim
         
         const std::vector<const std::string*>* GetAllName()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             const std::vector<int>& nameData = mEntityTable.column_exists("string:Name") ? mEntityTable.mStringColumns["string:Name"] : std::vector<int>();
             
@@ -1234,7 +1234,7 @@ namespace Vim
         
         const std::vector<const std::string*>* GetAllUniqueId()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             const std::vector<int>& uniqueIdData = mEntityTable.column_exists("string:UniqueId") ? mEntityTable.mStringColumns["string:UniqueId"] : std::vector<int>();
             
@@ -1263,7 +1263,7 @@ namespace Vim
         
         const std::vector<float>* GetAllLocation_X()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             float* location_XData = new float[count];
             if (mEntityTable.column_exists("float:Location.X")) {
@@ -1291,7 +1291,7 @@ namespace Vim
         
         const std::vector<float>* GetAllLocation_Y()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             float* location_YData = new float[count];
             if (mEntityTable.column_exists("float:Location.Y")) {
@@ -1319,7 +1319,7 @@ namespace Vim
         
         const std::vector<float>* GetAllLocation_Z()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             float* location_ZData = new float[count];
             if (mEntityTable.column_exists("float:Location.Z")) {
@@ -1347,7 +1347,7 @@ namespace Vim
         
         const std::vector<const std::string*>* GetAllFamilyName()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             const std::vector<int>& familyNameData = mEntityTable.column_exists("string:FamilyName") ? mEntityTable.mStringColumns["string:FamilyName"] : std::vector<int>();
             
@@ -1376,7 +1376,7 @@ namespace Vim
         
         const std::vector<bool>* GetAllIsPinned()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             bfast::byte* isPinnedData = new bfast::byte[count];
             if (mEntityTable.column_exists("byte:IsPinned")) {
@@ -1558,7 +1558,7 @@ namespace Vim
         WorksetTable(EntityTable& entityTable, std::vector<std::string>& strings):
             mEntityTable(entityTable), mStrings(strings) {}
         
-        int GetCount()
+        size_t GetCount()
         {
             return mEntityTable.get_count();
         }
@@ -1589,7 +1589,7 @@ namespace Vim
             bool existsUniqueId = mEntityTable.column_exists("string:UniqueId");
             bool existsBimDocument = mEntityTable.column_exists("index:Vim.BimDocument:BimDocument");
             
-            const int count = GetCount();
+            const auto count = GetCount();
             
             std::vector<Workset>* workset = new std::vector<Workset>();
             workset->reserve(count);
@@ -1662,7 +1662,7 @@ namespace Vim
         
         const std::vector<int>* GetAllId()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             int* idData = new int[count];
             if (mEntityTable.column_exists("int:Id")) {
@@ -1690,7 +1690,7 @@ namespace Vim
         
         const std::vector<const std::string*>* GetAllName()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             const std::vector<int>& nameData = mEntityTable.column_exists("string:Name") ? mEntityTable.mStringColumns["string:Name"] : std::vector<int>();
             
@@ -1719,7 +1719,7 @@ namespace Vim
         
         const std::vector<const std::string*>* GetAllKind()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             const std::vector<int>& kindData = mEntityTable.column_exists("string:Kind") ? mEntityTable.mStringColumns["string:Kind"] : std::vector<int>();
             
@@ -1748,7 +1748,7 @@ namespace Vim
         
         const std::vector<bool>* GetAllIsOpen()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             bfast::byte* isOpenData = new bfast::byte[count];
             if (mEntityTable.column_exists("byte:IsOpen")) {
@@ -1776,7 +1776,7 @@ namespace Vim
         
         const std::vector<bool>* GetAllIsEditable()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             bfast::byte* isEditableData = new bfast::byte[count];
             if (mEntityTable.column_exists("byte:IsEditable")) {
@@ -1804,7 +1804,7 @@ namespace Vim
         
         const std::vector<const std::string*>* GetAllOwner()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             const std::vector<int>& ownerData = mEntityTable.column_exists("string:Owner") ? mEntityTable.mStringColumns["string:Owner"] : std::vector<int>();
             
@@ -1833,7 +1833,7 @@ namespace Vim
         
         const std::vector<const std::string*>* GetAllUniqueId()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             const std::vector<int>& uniqueIdData = mEntityTable.column_exists("string:UniqueId") ? mEntityTable.mStringColumns["string:UniqueId"] : std::vector<int>();
             
@@ -1893,7 +1893,7 @@ namespace Vim
         AssemblyInstanceTable(EntityTable& entityTable, std::vector<std::string>& strings):
             mEntityTable(entityTable), mStrings(strings) {}
         
-        int GetCount()
+        size_t GetCount()
         {
             return mEntityTable.get_count();
         }
@@ -1918,7 +1918,7 @@ namespace Vim
             bool existsPosition_Z = mEntityTable.column_exists("float:Position.Z");
             bool existsElement = mEntityTable.column_exists("index:Vim.Element:Element");
             
-            const int count = GetCount();
+            const auto count = GetCount();
             
             std::vector<AssemblyInstance>* assemblyInstance = new std::vector<AssemblyInstance>();
             assemblyInstance->reserve(count);
@@ -1979,7 +1979,7 @@ namespace Vim
         
         const std::vector<const std::string*>* GetAllAssemblyTypeName()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             const std::vector<int>& assemblyTypeNameData = mEntityTable.column_exists("string:AssemblyTypeName") ? mEntityTable.mStringColumns["string:AssemblyTypeName"] : std::vector<int>();
             
@@ -2008,7 +2008,7 @@ namespace Vim
         
         const std::vector<float>* GetAllPosition_X()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             float* position_XData = new float[count];
             if (mEntityTable.column_exists("float:Position.X")) {
@@ -2036,7 +2036,7 @@ namespace Vim
         
         const std::vector<float>* GetAllPosition_Y()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             float* position_YData = new float[count];
             if (mEntityTable.column_exists("float:Position.Y")) {
@@ -2064,7 +2064,7 @@ namespace Vim
         
         const std::vector<float>* GetAllPosition_Z()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             float* position_ZData = new float[count];
             if (mEntityTable.column_exists("float:Position.Z")) {
@@ -2123,7 +2123,7 @@ namespace Vim
         GroupTable(EntityTable& entityTable, std::vector<std::string>& strings):
             mEntityTable(entityTable), mStrings(strings) {}
         
-        int GetCount()
+        size_t GetCount()
         {
             return mEntityTable.get_count();
         }
@@ -2148,7 +2148,7 @@ namespace Vim
             bool existsPosition_Z = mEntityTable.column_exists("float:Position.Z");
             bool existsElement = mEntityTable.column_exists("index:Vim.Element:Element");
             
-            const int count = GetCount();
+            const auto count = GetCount();
             
             std::vector<Group>* group = new std::vector<Group>();
             group->reserve(count);
@@ -2209,7 +2209,7 @@ namespace Vim
         
         const std::vector<const std::string*>* GetAllGroupType()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             const std::vector<int>& groupTypeData = mEntityTable.column_exists("string:GroupType") ? mEntityTable.mStringColumns["string:GroupType"] : std::vector<int>();
             
@@ -2238,7 +2238,7 @@ namespace Vim
         
         const std::vector<float>* GetAllPosition_X()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             float* position_XData = new float[count];
             if (mEntityTable.column_exists("float:Position.X")) {
@@ -2266,7 +2266,7 @@ namespace Vim
         
         const std::vector<float>* GetAllPosition_Y()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             float* position_YData = new float[count];
             if (mEntityTable.column_exists("float:Position.Y")) {
@@ -2294,7 +2294,7 @@ namespace Vim
         
         const std::vector<float>* GetAllPosition_Z()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             float* position_ZData = new float[count];
             if (mEntityTable.column_exists("float:Position.Z")) {
@@ -2350,7 +2350,7 @@ namespace Vim
         DesignOptionTable(EntityTable& entityTable, std::vector<std::string>& strings):
             mEntityTable(entityTable), mStrings(strings) {}
         
-        int GetCount()
+        size_t GetCount()
         {
             return mEntityTable.get_count();
         }
@@ -2369,7 +2369,7 @@ namespace Vim
             bool existsIsPrimary = mEntityTable.column_exists("byte:IsPrimary");
             bool existsElement = mEntityTable.column_exists("index:Vim.Element:Element");
             
-            const int count = GetCount();
+            const auto count = GetCount();
             
             std::vector<DesignOption>* designOption = new std::vector<DesignOption>();
             designOption->reserve(count);
@@ -2410,7 +2410,7 @@ namespace Vim
         
         const std::vector<bool>* GetAllIsPrimary()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             bfast::byte* isPrimaryData = new bfast::byte[count];
             if (mEntityTable.column_exists("byte:IsPrimary")) {
@@ -2468,7 +2468,7 @@ namespace Vim
         LevelTable(EntityTable& entityTable, std::vector<std::string>& strings):
             mEntityTable(entityTable), mStrings(strings) {}
         
-        int GetCount()
+        size_t GetCount()
         {
             return mEntityTable.get_count();
         }
@@ -2489,7 +2489,7 @@ namespace Vim
             bool existsFamilyType = mEntityTable.column_exists("index:Vim.FamilyType:FamilyType");
             bool existsElement = mEntityTable.column_exists("index:Vim.Element:Element");
             
-            const int count = GetCount();
+            const auto count = GetCount();
             
             std::vector<Level>* level = new std::vector<Level>();
             level->reserve(count);
@@ -2532,7 +2532,7 @@ namespace Vim
         
         const std::vector<double>* GetAllElevation()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             double* elevationData = new double[count];
             if (mEntityTable.column_exists("double:Elevation")) {
@@ -2599,7 +2599,7 @@ namespace Vim
         PhaseTable(EntityTable& entityTable, std::vector<std::string>& strings):
             mEntityTable(entityTable), mStrings(strings) {}
         
-        int GetCount()
+        size_t GetCount()
         {
             return mEntityTable.get_count();
         }
@@ -2616,7 +2616,7 @@ namespace Vim
         {
             bool existsElement = mEntityTable.column_exists("index:Vim.Element:Element");
             
-            const int count = GetCount();
+            const auto count = GetCount();
             
             std::vector<Phase>* phase = new std::vector<Phase>();
             phase->reserve(count);
@@ -2684,7 +2684,7 @@ namespace Vim
         RoomTable(EntityTable& entityTable, std::vector<std::string>& strings):
             mEntityTable(entityTable), mStrings(strings) {}
         
-        int GetCount()
+        size_t GetCount()
         {
             return mEntityTable.get_count();
         }
@@ -2717,7 +2717,7 @@ namespace Vim
             bool existsUpperLimit = mEntityTable.column_exists("index:Vim.Level:UpperLimit");
             bool existsElement = mEntityTable.column_exists("index:Vim.Element:Element");
             
-            const int count = GetCount();
+            const auto count = GetCount();
             
             std::vector<Room>* room = new std::vector<Room>();
             room->reserve(count);
@@ -2804,7 +2804,7 @@ namespace Vim
         
         const std::vector<double>* GetAllBaseOffset()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             double* baseOffsetData = new double[count];
             if (mEntityTable.column_exists("double:BaseOffset")) {
@@ -2832,7 +2832,7 @@ namespace Vim
         
         const std::vector<double>* GetAllLimitOffset()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             double* limitOffsetData = new double[count];
             if (mEntityTable.column_exists("double:LimitOffset")) {
@@ -2860,7 +2860,7 @@ namespace Vim
         
         const std::vector<double>* GetAllUnboundedHeight()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             double* unboundedHeightData = new double[count];
             if (mEntityTable.column_exists("double:UnboundedHeight")) {
@@ -2888,7 +2888,7 @@ namespace Vim
         
         const std::vector<double>* GetAllVolume()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             double* volumeData = new double[count];
             if (mEntityTable.column_exists("double:Volume")) {
@@ -2916,7 +2916,7 @@ namespace Vim
         
         const std::vector<double>* GetAllPerimeter()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             double* perimeterData = new double[count];
             if (mEntityTable.column_exists("double:Perimeter")) {
@@ -2944,7 +2944,7 @@ namespace Vim
         
         const std::vector<double>* GetAllArea()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             double* areaData = new double[count];
             if (mEntityTable.column_exists("double:Area")) {
@@ -2972,7 +2972,7 @@ namespace Vim
         
         const std::vector<const std::string*>* GetAllNumber()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             const std::vector<int>& numberData = mEntityTable.column_exists("string:Number") ? mEntityTable.mStringColumns["string:Number"] : std::vector<int>();
             
@@ -3074,7 +3074,7 @@ namespace Vim
         BimDocumentTable(EntityTable& entityTable, std::vector<std::string>& strings):
             mEntityTable(entityTable), mStrings(strings) {}
         
-        int GetCount()
+        size_t GetCount()
         {
             return mEntityTable.get_count();
         }
@@ -3153,7 +3153,7 @@ namespace Vim
             bool existsParent = mEntityTable.column_exists("index:Vim.BimDocument:Parent");
             bool existsElement = mEntityTable.column_exists("index:Vim.Element:Element");
             
-            const int count = GetCount();
+            const auto count = GetCount();
             
             std::vector<BimDocument>* bimDocument = new std::vector<BimDocument>();
             bimDocument->reserve(count);
@@ -3340,7 +3340,7 @@ namespace Vim
         
         const std::vector<const std::string*>* GetAllTitle()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             const std::vector<int>& titleData = mEntityTable.column_exists("string:Title") ? mEntityTable.mStringColumns["string:Title"] : std::vector<int>();
             
@@ -3369,7 +3369,7 @@ namespace Vim
         
         const std::vector<bool>* GetAllIsMetric()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             bfast::byte* isMetricData = new bfast::byte[count];
             if (mEntityTable.column_exists("byte:IsMetric")) {
@@ -3397,7 +3397,7 @@ namespace Vim
         
         const std::vector<const std::string*>* GetAllGuid()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             const std::vector<int>& guidData = mEntityTable.column_exists("string:Guid") ? mEntityTable.mStringColumns["string:Guid"] : std::vector<int>();
             
@@ -3426,7 +3426,7 @@ namespace Vim
         
         const std::vector<int>* GetAllNumSaves()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             int* numSavesData = new int[count];
             if (mEntityTable.column_exists("int:NumSaves")) {
@@ -3454,7 +3454,7 @@ namespace Vim
         
         const std::vector<bool>* GetAllIsLinked()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             bfast::byte* isLinkedData = new bfast::byte[count];
             if (mEntityTable.column_exists("byte:IsLinked")) {
@@ -3482,7 +3482,7 @@ namespace Vim
         
         const std::vector<bool>* GetAllIsDetached()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             bfast::byte* isDetachedData = new bfast::byte[count];
             if (mEntityTable.column_exists("byte:IsDetached")) {
@@ -3510,7 +3510,7 @@ namespace Vim
         
         const std::vector<bool>* GetAllIsWorkshared()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             bfast::byte* isWorksharedData = new bfast::byte[count];
             if (mEntityTable.column_exists("byte:IsWorkshared")) {
@@ -3538,7 +3538,7 @@ namespace Vim
         
         const std::vector<const std::string*>* GetAllPathName()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             const std::vector<int>& pathNameData = mEntityTable.column_exists("string:PathName") ? mEntityTable.mStringColumns["string:PathName"] : std::vector<int>();
             
@@ -3567,7 +3567,7 @@ namespace Vim
         
         const std::vector<double>* GetAllLatitude()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             double* latitudeData = new double[count];
             if (mEntityTable.column_exists("double:Latitude")) {
@@ -3595,7 +3595,7 @@ namespace Vim
         
         const std::vector<double>* GetAllLongitude()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             double* longitudeData = new double[count];
             if (mEntityTable.column_exists("double:Longitude")) {
@@ -3623,7 +3623,7 @@ namespace Vim
         
         const std::vector<double>* GetAllTimeZone()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             double* timeZoneData = new double[count];
             if (mEntityTable.column_exists("double:TimeZone")) {
@@ -3651,7 +3651,7 @@ namespace Vim
         
         const std::vector<const std::string*>* GetAllPlaceName()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             const std::vector<int>& placeNameData = mEntityTable.column_exists("string:PlaceName") ? mEntityTable.mStringColumns["string:PlaceName"] : std::vector<int>();
             
@@ -3680,7 +3680,7 @@ namespace Vim
         
         const std::vector<const std::string*>* GetAllWeatherStationName()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             const std::vector<int>& weatherStationNameData = mEntityTable.column_exists("string:WeatherStationName") ? mEntityTable.mStringColumns["string:WeatherStationName"] : std::vector<int>();
             
@@ -3709,7 +3709,7 @@ namespace Vim
         
         const std::vector<double>* GetAllElevation()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             double* elevationData = new double[count];
             if (mEntityTable.column_exists("double:Elevation")) {
@@ -3737,7 +3737,7 @@ namespace Vim
         
         const std::vector<const std::string*>* GetAllProjectLocation()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             const std::vector<int>& projectLocationData = mEntityTable.column_exists("string:ProjectLocation") ? mEntityTable.mStringColumns["string:ProjectLocation"] : std::vector<int>();
             
@@ -3766,7 +3766,7 @@ namespace Vim
         
         const std::vector<const std::string*>* GetAllIssueDate()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             const std::vector<int>& issueDateData = mEntityTable.column_exists("string:IssueDate") ? mEntityTable.mStringColumns["string:IssueDate"] : std::vector<int>();
             
@@ -3795,7 +3795,7 @@ namespace Vim
         
         const std::vector<const std::string*>* GetAllStatus()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             const std::vector<int>& statusData = mEntityTable.column_exists("string:Status") ? mEntityTable.mStringColumns["string:Status"] : std::vector<int>();
             
@@ -3824,7 +3824,7 @@ namespace Vim
         
         const std::vector<const std::string*>* GetAllClientName()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             const std::vector<int>& clientNameData = mEntityTable.column_exists("string:ClientName") ? mEntityTable.mStringColumns["string:ClientName"] : std::vector<int>();
             
@@ -3853,7 +3853,7 @@ namespace Vim
         
         const std::vector<const std::string*>* GetAllAddress()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             const std::vector<int>& addressData = mEntityTable.column_exists("string:Address") ? mEntityTable.mStringColumns["string:Address"] : std::vector<int>();
             
@@ -3882,7 +3882,7 @@ namespace Vim
         
         const std::vector<const std::string*>* GetAllName()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             const std::vector<int>& nameData = mEntityTable.column_exists("string:Name") ? mEntityTable.mStringColumns["string:Name"] : std::vector<int>();
             
@@ -3911,7 +3911,7 @@ namespace Vim
         
         const std::vector<const std::string*>* GetAllNumber()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             const std::vector<int>& numberData = mEntityTable.column_exists("string:Number") ? mEntityTable.mStringColumns["string:Number"] : std::vector<int>();
             
@@ -3940,7 +3940,7 @@ namespace Vim
         
         const std::vector<const std::string*>* GetAllAuthor()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             const std::vector<int>& authorData = mEntityTable.column_exists("string:Author") ? mEntityTable.mStringColumns["string:Author"] : std::vector<int>();
             
@@ -3969,7 +3969,7 @@ namespace Vim
         
         const std::vector<const std::string*>* GetAllBuildingName()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             const std::vector<int>& buildingNameData = mEntityTable.column_exists("string:BuildingName") ? mEntityTable.mStringColumns["string:BuildingName"] : std::vector<int>();
             
@@ -3998,7 +3998,7 @@ namespace Vim
         
         const std::vector<const std::string*>* GetAllOrganizationName()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             const std::vector<int>& organizationNameData = mEntityTable.column_exists("string:OrganizationName") ? mEntityTable.mStringColumns["string:OrganizationName"] : std::vector<int>();
             
@@ -4027,7 +4027,7 @@ namespace Vim
         
         const std::vector<const std::string*>* GetAllOrganizationDescription()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             const std::vector<int>& organizationDescriptionData = mEntityTable.column_exists("string:OrganizationDescription") ? mEntityTable.mStringColumns["string:OrganizationDescription"] : std::vector<int>();
             
@@ -4056,7 +4056,7 @@ namespace Vim
         
         const std::vector<const std::string*>* GetAllProduct()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             const std::vector<int>& productData = mEntityTable.column_exists("string:Product") ? mEntityTable.mStringColumns["string:Product"] : std::vector<int>();
             
@@ -4085,7 +4085,7 @@ namespace Vim
         
         const std::vector<const std::string*>* GetAllVersion()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             const std::vector<int>& versionData = mEntityTable.column_exists("string:Version") ? mEntityTable.mStringColumns["string:Version"] : std::vector<int>();
             
@@ -4114,7 +4114,7 @@ namespace Vim
         
         const std::vector<const std::string*>* GetAllUser()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             const std::vector<int>& userData = mEntityTable.column_exists("string:User") ? mEntityTable.mStringColumns["string:User"] : std::vector<int>();
             
@@ -4208,7 +4208,7 @@ namespace Vim
         DisplayUnitInBimDocumentTable(EntityTable& entityTable, std::vector<std::string>& strings):
             mEntityTable(entityTable), mStrings(strings) {}
         
-        int GetCount()
+        size_t GetCount()
         {
             return mEntityTable.get_count();
         }
@@ -4227,7 +4227,7 @@ namespace Vim
             bool existsDisplayUnit = mEntityTable.column_exists("index:Vim.DisplayUnit:DisplayUnit");
             bool existsBimDocument = mEntityTable.column_exists("index:Vim.BimDocument:BimDocument");
             
-            const int count = GetCount();
+            const auto count = GetCount();
             
             std::vector<DisplayUnitInBimDocument>* displayUnitInBimDocument = new std::vector<DisplayUnitInBimDocument>();
             displayUnitInBimDocument->reserve(count);
@@ -4303,7 +4303,7 @@ namespace Vim
         PhaseOrderInBimDocumentTable(EntityTable& entityTable, std::vector<std::string>& strings):
             mEntityTable(entityTable), mStrings(strings) {}
         
-        int GetCount()
+        size_t GetCount()
         {
             return mEntityTable.get_count();
         }
@@ -4324,7 +4324,7 @@ namespace Vim
             bool existsPhase = mEntityTable.column_exists("index:Vim.Phase:Phase");
             bool existsBimDocument = mEntityTable.column_exists("index:Vim.BimDocument:BimDocument");
             
-            const int count = GetCount();
+            const auto count = GetCount();
             
             std::vector<PhaseOrderInBimDocument>* phaseOrderInBimDocument = new std::vector<PhaseOrderInBimDocument>();
             phaseOrderInBimDocument->reserve(count);
@@ -4367,7 +4367,7 @@ namespace Vim
         
         const std::vector<int>* GetAllOrderIndex()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             int* orderIndexData = new int[count];
             if (mEntityTable.column_exists("int:OrderIndex")) {
@@ -4443,7 +4443,7 @@ namespace Vim
         CategoryTable(EntityTable& entityTable, std::vector<std::string>& strings):
             mEntityTable(entityTable), mStrings(strings) {}
         
-        int GetCount()
+        size_t GetCount()
         {
             return mEntityTable.get_count();
         }
@@ -4476,7 +4476,7 @@ namespace Vim
             bool existsParent = mEntityTable.column_exists("index:Vim.Category:Parent");
             bool existsMaterial = mEntityTable.column_exists("index:Vim.Material:Material");
             
-            const int count = GetCount();
+            const auto count = GetCount();
             
             std::vector<Category>* category = new std::vector<Category>();
             category->reserve(count);
@@ -4560,7 +4560,7 @@ namespace Vim
         
         const std::vector<const std::string*>* GetAllName()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             const std::vector<int>& nameData = mEntityTable.column_exists("string:Name") ? mEntityTable.mStringColumns["string:Name"] : std::vector<int>();
             
@@ -4593,7 +4593,7 @@ namespace Vim
         
         const std::vector<long long>* GetAllId()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             long long* idData = new long long[count];
             if (mEntityTable.column_exists("long:Id")) {
@@ -4626,7 +4626,7 @@ namespace Vim
         
         const std::vector<const std::string*>* GetAllCategoryType()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             const std::vector<int>& categoryTypeData = mEntityTable.column_exists("string:CategoryType") ? mEntityTable.mStringColumns["string:CategoryType"] : std::vector<int>();
             
@@ -4655,7 +4655,7 @@ namespace Vim
         
         const std::vector<double>* GetAllLineColor_X()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             double* lineColor_XData = new double[count];
             if (mEntityTable.column_exists("double:LineColor.X")) {
@@ -4683,7 +4683,7 @@ namespace Vim
         
         const std::vector<double>* GetAllLineColor_Y()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             double* lineColor_YData = new double[count];
             if (mEntityTable.column_exists("double:LineColor.Y")) {
@@ -4711,7 +4711,7 @@ namespace Vim
         
         const std::vector<double>* GetAllLineColor_Z()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             double* lineColor_ZData = new double[count];
             if (mEntityTable.column_exists("double:LineColor.Z")) {
@@ -4739,7 +4739,7 @@ namespace Vim
         
         const std::vector<const std::string*>* GetAllBuiltInCategory()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             const std::vector<int>& builtInCategoryData = mEntityTable.column_exists("string:BuiltInCategory") ? mEntityTable.mStringColumns["string:BuiltInCategory"] : std::vector<int>();
             
@@ -4813,7 +4813,7 @@ namespace Vim
         FamilyTable(EntityTable& entityTable, std::vector<std::string>& strings):
             mEntityTable(entityTable), mStrings(strings) {}
         
-        int GetCount()
+        size_t GetCount()
         {
             return mEntityTable.get_count();
         }
@@ -4840,7 +4840,7 @@ namespace Vim
             bool existsFamilyCategory = mEntityTable.column_exists("index:Vim.Category:FamilyCategory");
             bool existsElement = mEntityTable.column_exists("index:Vim.Element:Element");
             
-            const int count = GetCount();
+            const auto count = GetCount();
             
             std::vector<Family>* family = new std::vector<Family>();
             family->reserve(count);
@@ -4899,7 +4899,7 @@ namespace Vim
         
         const std::vector<const std::string*>* GetAllStructuralMaterialType()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             const std::vector<int>& structuralMaterialTypeData = mEntityTable.column_exists("string:StructuralMaterialType") ? mEntityTable.mStringColumns["string:StructuralMaterialType"] : std::vector<int>();
             
@@ -4928,7 +4928,7 @@ namespace Vim
         
         const std::vector<const std::string*>* GetAllStructuralSectionShape()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             const std::vector<int>& structuralSectionShapeData = mEntityTable.column_exists("string:StructuralSectionShape") ? mEntityTable.mStringColumns["string:StructuralSectionShape"] : std::vector<int>();
             
@@ -4957,7 +4957,7 @@ namespace Vim
         
         const std::vector<bool>* GetAllIsSystemFamily()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             bfast::byte* isSystemFamilyData = new bfast::byte[count];
             if (mEntityTable.column_exists("byte:IsSystemFamily")) {
@@ -4985,7 +4985,7 @@ namespace Vim
         
         const std::vector<bool>* GetAllIsInPlace()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             bfast::byte* isInPlaceData = new bfast::byte[count];
             if (mEntityTable.column_exists("byte:IsInPlace")) {
@@ -5057,7 +5057,7 @@ namespace Vim
         FamilyTypeTable(EntityTable& entityTable, std::vector<std::string>& strings):
             mEntityTable(entityTable), mStrings(strings) {}
         
-        int GetCount()
+        size_t GetCount()
         {
             return mEntityTable.get_count();
         }
@@ -5080,7 +5080,7 @@ namespace Vim
             bool existsCompoundStructure = mEntityTable.column_exists("index:Vim.CompoundStructure:CompoundStructure");
             bool existsElement = mEntityTable.column_exists("index:Vim.Element:Element");
             
-            const int count = GetCount();
+            const auto count = GetCount();
             
             std::vector<FamilyType>* familyType = new std::vector<FamilyType>();
             familyType->reserve(count);
@@ -5125,7 +5125,7 @@ namespace Vim
         
         const std::vector<bool>* GetAllIsSystemFamilyType()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             bfast::byte* isSystemFamilyTypeData = new bfast::byte[count];
             if (mEntityTable.column_exists("byte:IsSystemFamilyType")) {
@@ -5235,7 +5235,7 @@ namespace Vim
         FamilyInstanceTable(EntityTable& entityTable, std::vector<std::string>& strings):
             mEntityTable(entityTable), mStrings(strings) {}
         
-        int GetCount()
+        size_t GetCount()
         {
             return mEntityTable.get_count();
         }
@@ -5306,7 +5306,7 @@ namespace Vim
             bool existsToRoom = mEntityTable.column_exists("index:Vim.Room:ToRoom");
             bool existsElement = mEntityTable.column_exists("index:Vim.Element:Element");
             
-            const int count = GetCount();
+            const auto count = GetCount();
             
             std::vector<FamilyInstance>* familyInstance = new std::vector<FamilyInstance>();
             familyInstance->reserve(count);
@@ -5531,7 +5531,7 @@ namespace Vim
         
         const std::vector<bool>* GetAllFacingFlipped()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             bfast::byte* facingFlippedData = new bfast::byte[count];
             if (mEntityTable.column_exists("byte:FacingFlipped")) {
@@ -5559,7 +5559,7 @@ namespace Vim
         
         const std::vector<float>* GetAllFacingOrientation_X()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             float* facingOrientation_XData = new float[count];
             if (mEntityTable.column_exists("float:FacingOrientation.X")) {
@@ -5587,7 +5587,7 @@ namespace Vim
         
         const std::vector<float>* GetAllFacingOrientation_Y()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             float* facingOrientation_YData = new float[count];
             if (mEntityTable.column_exists("float:FacingOrientation.Y")) {
@@ -5615,7 +5615,7 @@ namespace Vim
         
         const std::vector<float>* GetAllFacingOrientation_Z()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             float* facingOrientation_ZData = new float[count];
             if (mEntityTable.column_exists("float:FacingOrientation.Z")) {
@@ -5643,7 +5643,7 @@ namespace Vim
         
         const std::vector<bool>* GetAllHandFlipped()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             bfast::byte* handFlippedData = new bfast::byte[count];
             if (mEntityTable.column_exists("byte:HandFlipped")) {
@@ -5671,7 +5671,7 @@ namespace Vim
         
         const std::vector<bool>* GetAllMirrored()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             bfast::byte* mirroredData = new bfast::byte[count];
             if (mEntityTable.column_exists("byte:Mirrored")) {
@@ -5699,7 +5699,7 @@ namespace Vim
         
         const std::vector<bool>* GetAllHasModifiedGeometry()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             bfast::byte* hasModifiedGeometryData = new bfast::byte[count];
             if (mEntityTable.column_exists("byte:HasModifiedGeometry")) {
@@ -5727,7 +5727,7 @@ namespace Vim
         
         const std::vector<float>* GetAllScale()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             float* scaleData = new float[count];
             if (mEntityTable.column_exists("float:Scale")) {
@@ -5755,7 +5755,7 @@ namespace Vim
         
         const std::vector<float>* GetAllBasisX_X()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             float* basisX_XData = new float[count];
             if (mEntityTable.column_exists("float:BasisX.X")) {
@@ -5783,7 +5783,7 @@ namespace Vim
         
         const std::vector<float>* GetAllBasisX_Y()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             float* basisX_YData = new float[count];
             if (mEntityTable.column_exists("float:BasisX.Y")) {
@@ -5811,7 +5811,7 @@ namespace Vim
         
         const std::vector<float>* GetAllBasisX_Z()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             float* basisX_ZData = new float[count];
             if (mEntityTable.column_exists("float:BasisX.Z")) {
@@ -5839,7 +5839,7 @@ namespace Vim
         
         const std::vector<float>* GetAllBasisY_X()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             float* basisY_XData = new float[count];
             if (mEntityTable.column_exists("float:BasisY.X")) {
@@ -5867,7 +5867,7 @@ namespace Vim
         
         const std::vector<float>* GetAllBasisY_Y()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             float* basisY_YData = new float[count];
             if (mEntityTable.column_exists("float:BasisY.Y")) {
@@ -5895,7 +5895,7 @@ namespace Vim
         
         const std::vector<float>* GetAllBasisY_Z()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             float* basisY_ZData = new float[count];
             if (mEntityTable.column_exists("float:BasisY.Z")) {
@@ -5923,7 +5923,7 @@ namespace Vim
         
         const std::vector<float>* GetAllBasisZ_X()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             float* basisZ_XData = new float[count];
             if (mEntityTable.column_exists("float:BasisZ.X")) {
@@ -5951,7 +5951,7 @@ namespace Vim
         
         const std::vector<float>* GetAllBasisZ_Y()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             float* basisZ_YData = new float[count];
             if (mEntityTable.column_exists("float:BasisZ.Y")) {
@@ -5979,7 +5979,7 @@ namespace Vim
         
         const std::vector<float>* GetAllBasisZ_Z()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             float* basisZ_ZData = new float[count];
             if (mEntityTable.column_exists("float:BasisZ.Z")) {
@@ -6007,7 +6007,7 @@ namespace Vim
         
         const std::vector<float>* GetAllTranslation_X()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             float* translation_XData = new float[count];
             if (mEntityTable.column_exists("float:Translation.X")) {
@@ -6035,7 +6035,7 @@ namespace Vim
         
         const std::vector<float>* GetAllTranslation_Y()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             float* translation_YData = new float[count];
             if (mEntityTable.column_exists("float:Translation.Y")) {
@@ -6063,7 +6063,7 @@ namespace Vim
         
         const std::vector<float>* GetAllTranslation_Z()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             float* translation_ZData = new float[count];
             if (mEntityTable.column_exists("float:Translation.Z")) {
@@ -6091,7 +6091,7 @@ namespace Vim
         
         const std::vector<float>* GetAllHandOrientation_X()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             float* handOrientation_XData = new float[count];
             if (mEntityTable.column_exists("float:HandOrientation.X")) {
@@ -6119,7 +6119,7 @@ namespace Vim
         
         const std::vector<float>* GetAllHandOrientation_Y()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             float* handOrientation_YData = new float[count];
             if (mEntityTable.column_exists("float:HandOrientation.Y")) {
@@ -6147,7 +6147,7 @@ namespace Vim
         
         const std::vector<float>* GetAllHandOrientation_Z()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             float* handOrientation_ZData = new float[count];
             if (mEntityTable.column_exists("float:HandOrientation.Z")) {
@@ -6277,7 +6277,7 @@ namespace Vim
         ViewTable(EntityTable& entityTable, std::vector<std::string>& strings):
             mEntityTable(entityTable), mStrings(strings) {}
         
-        int GetCount()
+        size_t GetCount()
         {
             return mEntityTable.get_count();
         }
@@ -6344,7 +6344,7 @@ namespace Vim
             bool existsFamilyType = mEntityTable.column_exists("index:Vim.FamilyType:FamilyType");
             bool existsElement = mEntityTable.column_exists("index:Vim.Element:Element");
             
-            const int count = GetCount();
+            const auto count = GetCount();
             
             std::vector<View>* view = new std::vector<View>();
             view->reserve(count);
@@ -6557,7 +6557,7 @@ namespace Vim
         
         const std::vector<const std::string*>* GetAllTitle()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             const std::vector<int>& titleData = mEntityTable.column_exists("string:Title") ? mEntityTable.mStringColumns["string:Title"] : std::vector<int>();
             
@@ -6586,7 +6586,7 @@ namespace Vim
         
         const std::vector<const std::string*>* GetAllViewType()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             const std::vector<int>& viewTypeData = mEntityTable.column_exists("string:ViewType") ? mEntityTable.mStringColumns["string:ViewType"] : std::vector<int>();
             
@@ -6615,7 +6615,7 @@ namespace Vim
         
         const std::vector<double>* GetAllUp_X()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             double* up_XData = new double[count];
             if (mEntityTable.column_exists("double:Up.X")) {
@@ -6643,7 +6643,7 @@ namespace Vim
         
         const std::vector<double>* GetAllUp_Y()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             double* up_YData = new double[count];
             if (mEntityTable.column_exists("double:Up.Y")) {
@@ -6671,7 +6671,7 @@ namespace Vim
         
         const std::vector<double>* GetAllUp_Z()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             double* up_ZData = new double[count];
             if (mEntityTable.column_exists("double:Up.Z")) {
@@ -6699,7 +6699,7 @@ namespace Vim
         
         const std::vector<double>* GetAllRight_X()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             double* right_XData = new double[count];
             if (mEntityTable.column_exists("double:Right.X")) {
@@ -6727,7 +6727,7 @@ namespace Vim
         
         const std::vector<double>* GetAllRight_Y()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             double* right_YData = new double[count];
             if (mEntityTable.column_exists("double:Right.Y")) {
@@ -6755,7 +6755,7 @@ namespace Vim
         
         const std::vector<double>* GetAllRight_Z()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             double* right_ZData = new double[count];
             if (mEntityTable.column_exists("double:Right.Z")) {
@@ -6783,7 +6783,7 @@ namespace Vim
         
         const std::vector<double>* GetAllOrigin_X()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             double* origin_XData = new double[count];
             if (mEntityTable.column_exists("double:Origin.X")) {
@@ -6811,7 +6811,7 @@ namespace Vim
         
         const std::vector<double>* GetAllOrigin_Y()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             double* origin_YData = new double[count];
             if (mEntityTable.column_exists("double:Origin.Y")) {
@@ -6839,7 +6839,7 @@ namespace Vim
         
         const std::vector<double>* GetAllOrigin_Z()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             double* origin_ZData = new double[count];
             if (mEntityTable.column_exists("double:Origin.Z")) {
@@ -6867,7 +6867,7 @@ namespace Vim
         
         const std::vector<double>* GetAllViewDirection_X()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             double* viewDirection_XData = new double[count];
             if (mEntityTable.column_exists("double:ViewDirection.X")) {
@@ -6895,7 +6895,7 @@ namespace Vim
         
         const std::vector<double>* GetAllViewDirection_Y()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             double* viewDirection_YData = new double[count];
             if (mEntityTable.column_exists("double:ViewDirection.Y")) {
@@ -6923,7 +6923,7 @@ namespace Vim
         
         const std::vector<double>* GetAllViewDirection_Z()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             double* viewDirection_ZData = new double[count];
             if (mEntityTable.column_exists("double:ViewDirection.Z")) {
@@ -6951,7 +6951,7 @@ namespace Vim
         
         const std::vector<double>* GetAllViewPosition_X()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             double* viewPosition_XData = new double[count];
             if (mEntityTable.column_exists("double:ViewPosition.X")) {
@@ -6979,7 +6979,7 @@ namespace Vim
         
         const std::vector<double>* GetAllViewPosition_Y()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             double* viewPosition_YData = new double[count];
             if (mEntityTable.column_exists("double:ViewPosition.Y")) {
@@ -7007,7 +7007,7 @@ namespace Vim
         
         const std::vector<double>* GetAllViewPosition_Z()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             double* viewPosition_ZData = new double[count];
             if (mEntityTable.column_exists("double:ViewPosition.Z")) {
@@ -7035,7 +7035,7 @@ namespace Vim
         
         const std::vector<double>* GetAllScale()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             double* scaleData = new double[count];
             if (mEntityTable.column_exists("double:Scale")) {
@@ -7063,7 +7063,7 @@ namespace Vim
         
         const std::vector<double>* GetAllOutline_Min_X()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             double* outline_Min_XData = new double[count];
             if (mEntityTable.column_exists("double:Outline.Min.X")) {
@@ -7091,7 +7091,7 @@ namespace Vim
         
         const std::vector<double>* GetAllOutline_Min_Y()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             double* outline_Min_YData = new double[count];
             if (mEntityTable.column_exists("double:Outline.Min.Y")) {
@@ -7119,7 +7119,7 @@ namespace Vim
         
         const std::vector<double>* GetAllOutline_Max_X()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             double* outline_Max_XData = new double[count];
             if (mEntityTable.column_exists("double:Outline.Max.X")) {
@@ -7147,7 +7147,7 @@ namespace Vim
         
         const std::vector<double>* GetAllOutline_Max_Y()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             double* outline_Max_YData = new double[count];
             if (mEntityTable.column_exists("double:Outline.Max.Y")) {
@@ -7175,7 +7175,7 @@ namespace Vim
         
         const std::vector<int>* GetAllDetailLevel()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             int* detailLevelData = new int[count];
             if (mEntityTable.column_exists("int:DetailLevel")) {
@@ -7256,7 +7256,7 @@ namespace Vim
         ElementInViewTable(EntityTable& entityTable, std::vector<std::string>& strings):
             mEntityTable(entityTable), mStrings(strings) {}
         
-        int GetCount()
+        size_t GetCount()
         {
             return mEntityTable.get_count();
         }
@@ -7275,7 +7275,7 @@ namespace Vim
             bool existsView = mEntityTable.column_exists("index:Vim.View:View");
             bool existsElement = mEntityTable.column_exists("index:Vim.Element:Element");
             
-            const int count = GetCount();
+            const auto count = GetCount();
             
             std::vector<ElementInView>* elementInView = new std::vector<ElementInView>();
             elementInView->reserve(count);
@@ -7350,7 +7350,7 @@ namespace Vim
         ShapeInViewTable(EntityTable& entityTable, std::vector<std::string>& strings):
             mEntityTable(entityTable), mStrings(strings) {}
         
-        int GetCount()
+        size_t GetCount()
         {
             return mEntityTable.get_count();
         }
@@ -7369,7 +7369,7 @@ namespace Vim
             bool existsShape = mEntityTable.column_exists("index:Vim.Shape:Shape");
             bool existsView = mEntityTable.column_exists("index:Vim.View:View");
             
-            const int count = GetCount();
+            const auto count = GetCount();
             
             std::vector<ShapeInView>* shapeInView = new std::vector<ShapeInView>();
             shapeInView->reserve(count);
@@ -7444,7 +7444,7 @@ namespace Vim
         AssetInViewTable(EntityTable& entityTable, std::vector<std::string>& strings):
             mEntityTable(entityTable), mStrings(strings) {}
         
-        int GetCount()
+        size_t GetCount()
         {
             return mEntityTable.get_count();
         }
@@ -7463,7 +7463,7 @@ namespace Vim
             bool existsAsset = mEntityTable.column_exists("index:Vim.Asset:Asset");
             bool existsView = mEntityTable.column_exists("index:Vim.View:View");
             
-            const int count = GetCount();
+            const auto count = GetCount();
             
             std::vector<AssetInView>* assetInView = new std::vector<AssetInView>();
             assetInView->reserve(count);
@@ -7544,7 +7544,7 @@ namespace Vim
         LevelInViewTable(EntityTable& entityTable, std::vector<std::string>& strings):
             mEntityTable(entityTable), mStrings(strings) {}
         
-        int GetCount()
+        size_t GetCount()
         {
             return mEntityTable.get_count();
         }
@@ -7575,7 +7575,7 @@ namespace Vim
             bool existsLevel = mEntityTable.column_exists("index:Vim.Level:Level");
             bool existsView = mEntityTable.column_exists("index:Vim.View:View");
             
-            const int count = GetCount();
+            const auto count = GetCount();
             
             std::vector<LevelInView>* levelInView = new std::vector<LevelInView>();
             levelInView->reserve(count);
@@ -7658,7 +7658,7 @@ namespace Vim
         
         const std::vector<double>* GetAllExtents_Min_X()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             double* extents_Min_XData = new double[count];
             if (mEntityTable.column_exists("double:Extents.Min.X")) {
@@ -7686,7 +7686,7 @@ namespace Vim
         
         const std::vector<double>* GetAllExtents_Min_Y()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             double* extents_Min_YData = new double[count];
             if (mEntityTable.column_exists("double:Extents.Min.Y")) {
@@ -7714,7 +7714,7 @@ namespace Vim
         
         const std::vector<double>* GetAllExtents_Min_Z()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             double* extents_Min_ZData = new double[count];
             if (mEntityTable.column_exists("double:Extents.Min.Z")) {
@@ -7742,7 +7742,7 @@ namespace Vim
         
         const std::vector<double>* GetAllExtents_Max_X()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             double* extents_Max_XData = new double[count];
             if (mEntityTable.column_exists("double:Extents.Max.X")) {
@@ -7770,7 +7770,7 @@ namespace Vim
         
         const std::vector<double>* GetAllExtents_Max_Y()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             double* extents_Max_YData = new double[count];
             if (mEntityTable.column_exists("double:Extents.Max.Y")) {
@@ -7798,7 +7798,7 @@ namespace Vim
         
         const std::vector<double>* GetAllExtents_Max_Z()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             double* extents_Max_ZData = new double[count];
             if (mEntityTable.column_exists("double:Extents.Max.Z")) {
@@ -7871,7 +7871,7 @@ namespace Vim
         CameraTable(EntityTable& entityTable, std::vector<std::string>& strings):
             mEntityTable(entityTable), mStrings(strings) {}
         
-        int GetCount()
+        size_t GetCount()
         {
             return mEntityTable.get_count();
         }
@@ -7904,7 +7904,7 @@ namespace Vim
             bool existsRightOffset = mEntityTable.column_exists("double:RightOffset");
             bool existsUpOffset = mEntityTable.column_exists("double:UpOffset");
             
-            const int count = GetCount();
+            const auto count = GetCount();
             
             std::vector<Camera>* camera = new std::vector<Camera>();
             camera->reserve(count);
@@ -8006,7 +8006,7 @@ namespace Vim
         
         const std::vector<int>* GetAllId()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             int* idData = new int[count];
             if (mEntityTable.column_exists("int:Id")) {
@@ -8034,7 +8034,7 @@ namespace Vim
         
         const std::vector<int>* GetAllIsPerspective()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             int* isPerspectiveData = new int[count];
             if (mEntityTable.column_exists("int:IsPerspective")) {
@@ -8062,7 +8062,7 @@ namespace Vim
         
         const std::vector<double>* GetAllVerticalExtent()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             double* verticalExtentData = new double[count];
             if (mEntityTable.column_exists("double:VerticalExtent")) {
@@ -8090,7 +8090,7 @@ namespace Vim
         
         const std::vector<double>* GetAllHorizontalExtent()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             double* horizontalExtentData = new double[count];
             if (mEntityTable.column_exists("double:HorizontalExtent")) {
@@ -8118,7 +8118,7 @@ namespace Vim
         
         const std::vector<double>* GetAllFarDistance()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             double* farDistanceData = new double[count];
             if (mEntityTable.column_exists("double:FarDistance")) {
@@ -8146,7 +8146,7 @@ namespace Vim
         
         const std::vector<double>* GetAllNearDistance()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             double* nearDistanceData = new double[count];
             if (mEntityTable.column_exists("double:NearDistance")) {
@@ -8174,7 +8174,7 @@ namespace Vim
         
         const std::vector<double>* GetAllTargetDistance()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             double* targetDistanceData = new double[count];
             if (mEntityTable.column_exists("double:TargetDistance")) {
@@ -8202,7 +8202,7 @@ namespace Vim
         
         const std::vector<double>* GetAllRightOffset()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             double* rightOffsetData = new double[count];
             if (mEntityTable.column_exists("double:RightOffset")) {
@@ -8230,7 +8230,7 @@ namespace Vim
         
         const std::vector<double>* GetAllUpOffset()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             double* upOffsetData = new double[count];
             if (mEntityTable.column_exists("double:UpOffset")) {
@@ -8294,7 +8294,7 @@ namespace Vim
         MaterialTable(EntityTable& entityTable, std::vector<std::string>& strings):
             mEntityTable(entityTable), mStrings(strings) {}
         
-        int GetCount()
+        size_t GetCount()
         {
             return mEntityTable.get_count();
         }
@@ -8349,7 +8349,7 @@ namespace Vim
             bool existsNormalTextureFile = mEntityTable.column_exists("index:Vim.Asset:NormalTextureFile");
             bool existsElement = mEntityTable.column_exists("index:Vim.Element:Element");
             
-            const int count = GetCount();
+            const auto count = GetCount();
             
             std::vector<Material>* material = new std::vector<Material>();
             material->reserve(count);
@@ -8514,7 +8514,7 @@ namespace Vim
         
         const std::vector<const std::string*>* GetAllName()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             const std::vector<int>& nameData = mEntityTable.column_exists("string:Name") ? mEntityTable.mStringColumns["string:Name"] : std::vector<int>();
             
@@ -8543,7 +8543,7 @@ namespace Vim
         
         const std::vector<const std::string*>* GetAllMaterialCategory()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             const std::vector<int>& materialCategoryData = mEntityTable.column_exists("string:MaterialCategory") ? mEntityTable.mStringColumns["string:MaterialCategory"] : std::vector<int>();
             
@@ -8572,7 +8572,7 @@ namespace Vim
         
         const std::vector<double>* GetAllColor_X()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             double* color_XData = new double[count];
             if (mEntityTable.column_exists("double:Color.X")) {
@@ -8600,7 +8600,7 @@ namespace Vim
         
         const std::vector<double>* GetAllColor_Y()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             double* color_YData = new double[count];
             if (mEntityTable.column_exists("double:Color.Y")) {
@@ -8628,7 +8628,7 @@ namespace Vim
         
         const std::vector<double>* GetAllColor_Z()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             double* color_ZData = new double[count];
             if (mEntityTable.column_exists("double:Color.Z")) {
@@ -8656,7 +8656,7 @@ namespace Vim
         
         const std::vector<double>* GetAllColorUvScaling_X()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             double* colorUvScaling_XData = new double[count];
             if (mEntityTable.column_exists("double:ColorUvScaling.X")) {
@@ -8684,7 +8684,7 @@ namespace Vim
         
         const std::vector<double>* GetAllColorUvScaling_Y()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             double* colorUvScaling_YData = new double[count];
             if (mEntityTable.column_exists("double:ColorUvScaling.Y")) {
@@ -8712,7 +8712,7 @@ namespace Vim
         
         const std::vector<double>* GetAllColorUvOffset_X()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             double* colorUvOffset_XData = new double[count];
             if (mEntityTable.column_exists("double:ColorUvOffset.X")) {
@@ -8740,7 +8740,7 @@ namespace Vim
         
         const std::vector<double>* GetAllColorUvOffset_Y()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             double* colorUvOffset_YData = new double[count];
             if (mEntityTable.column_exists("double:ColorUvOffset.Y")) {
@@ -8768,7 +8768,7 @@ namespace Vim
         
         const std::vector<double>* GetAllNormalUvScaling_X()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             double* normalUvScaling_XData = new double[count];
             if (mEntityTable.column_exists("double:NormalUvScaling.X")) {
@@ -8796,7 +8796,7 @@ namespace Vim
         
         const std::vector<double>* GetAllNormalUvScaling_Y()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             double* normalUvScaling_YData = new double[count];
             if (mEntityTable.column_exists("double:NormalUvScaling.Y")) {
@@ -8824,7 +8824,7 @@ namespace Vim
         
         const std::vector<double>* GetAllNormalUvOffset_X()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             double* normalUvOffset_XData = new double[count];
             if (mEntityTable.column_exists("double:NormalUvOffset.X")) {
@@ -8852,7 +8852,7 @@ namespace Vim
         
         const std::vector<double>* GetAllNormalUvOffset_Y()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             double* normalUvOffset_YData = new double[count];
             if (mEntityTable.column_exists("double:NormalUvOffset.Y")) {
@@ -8880,7 +8880,7 @@ namespace Vim
         
         const std::vector<double>* GetAllNormalAmount()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             double* normalAmountData = new double[count];
             if (mEntityTable.column_exists("double:NormalAmount")) {
@@ -8908,7 +8908,7 @@ namespace Vim
         
         const std::vector<double>* GetAllGlossiness()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             double* glossinessData = new double[count];
             if (mEntityTable.column_exists("double:Glossiness")) {
@@ -8936,7 +8936,7 @@ namespace Vim
         
         const std::vector<double>* GetAllSmoothness()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             double* smoothnessData = new double[count];
             if (mEntityTable.column_exists("double:Smoothness")) {
@@ -8964,7 +8964,7 @@ namespace Vim
         
         const std::vector<double>* GetAllTransparency()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             double* transparencyData = new double[count];
             if (mEntityTable.column_exists("double:Transparency")) {
@@ -9048,7 +9048,7 @@ namespace Vim
         MaterialInElementTable(EntityTable& entityTable, std::vector<std::string>& strings):
             mEntityTable(entityTable), mStrings(strings) {}
         
-        int GetCount()
+        size_t GetCount()
         {
             return mEntityTable.get_count();
         }
@@ -9073,7 +9073,7 @@ namespace Vim
             bool existsMaterial = mEntityTable.column_exists("index:Vim.Material:Material");
             bool existsElement = mEntityTable.column_exists("index:Vim.Element:Element");
             
-            const int count = GetCount();
+            const auto count = GetCount();
             
             std::vector<MaterialInElement>* materialInElement = new std::vector<MaterialInElement>();
             materialInElement->reserve(count);
@@ -9132,7 +9132,7 @@ namespace Vim
         
         const std::vector<double>* GetAllArea()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             double* areaData = new double[count];
             if (mEntityTable.column_exists("double:Area")) {
@@ -9160,7 +9160,7 @@ namespace Vim
         
         const std::vector<double>* GetAllVolume()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             double* volumeData = new double[count];
             if (mEntityTable.column_exists("double:Volume")) {
@@ -9188,7 +9188,7 @@ namespace Vim
         
         const std::vector<bool>* GetAllIsPaint()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             bfast::byte* isPaintData = new bfast::byte[count];
             if (mEntityTable.column_exists("byte:IsPaint")) {
@@ -9260,7 +9260,7 @@ namespace Vim
         CompoundStructureLayerTable(EntityTable& entityTable, std::vector<std::string>& strings):
             mEntityTable(entityTable), mStrings(strings) {}
         
-        int GetCount()
+        size_t GetCount()
         {
             return mEntityTable.get_count();
         }
@@ -9285,7 +9285,7 @@ namespace Vim
             bool existsMaterial = mEntityTable.column_exists("index:Vim.Material:Material");
             bool existsCompoundStructure = mEntityTable.column_exists("index:Vim.CompoundStructure:CompoundStructure");
             
-            const int count = GetCount();
+            const auto count = GetCount();
             
             std::vector<CompoundStructureLayer>* compoundStructureLayer = new std::vector<CompoundStructureLayer>();
             compoundStructureLayer->reserve(count);
@@ -9340,7 +9340,7 @@ namespace Vim
         
         const std::vector<int>* GetAllOrderIndex()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             int* orderIndexData = new int[count];
             if (mEntityTable.column_exists("int:OrderIndex")) {
@@ -9368,7 +9368,7 @@ namespace Vim
         
         const std::vector<double>* GetAllWidth()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             double* widthData = new double[count];
             if (mEntityTable.column_exists("double:Width")) {
@@ -9396,7 +9396,7 @@ namespace Vim
         
         const std::vector<const std::string*>* GetAllMaterialFunctionAssignment()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             const std::vector<int>& materialFunctionAssignmentData = mEntityTable.column_exists("string:MaterialFunctionAssignment") ? mEntityTable.mStringColumns["string:MaterialFunctionAssignment"] : std::vector<int>();
             
@@ -9465,7 +9465,7 @@ namespace Vim
         CompoundStructureTable(EntityTable& entityTable, std::vector<std::string>& strings):
             mEntityTable(entityTable), mStrings(strings) {}
         
-        int GetCount()
+        size_t GetCount()
         {
             return mEntityTable.get_count();
         }
@@ -9484,7 +9484,7 @@ namespace Vim
             bool existsWidth = mEntityTable.column_exists("double:Width");
             bool existsStructuralLayer = mEntityTable.column_exists("index:Vim.CompoundStructureLayer:StructuralLayer");
             
-            const int count = GetCount();
+            const auto count = GetCount();
             
             std::vector<CompoundStructure>* compoundStructure = new std::vector<CompoundStructure>();
             compoundStructure->reserve(count);
@@ -9525,7 +9525,7 @@ namespace Vim
         
         const std::vector<double>* GetAllWidth()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             double* widthData = new double[count];
             if (mEntityTable.column_exists("double:Width")) {
@@ -9580,7 +9580,7 @@ namespace Vim
         NodeTable(EntityTable& entityTable, std::vector<std::string>& strings):
             mEntityTable(entityTable), mStrings(strings) {}
         
-        int GetCount()
+        size_t GetCount()
         {
             return mEntityTable.get_count();
         }
@@ -9597,7 +9597,7 @@ namespace Vim
         {
             bool existsElement = mEntityTable.column_exists("index:Vim.Element:Element");
             
-            const int count = GetCount();
+            const auto count = GetCount();
             
             std::vector<Node>* node = new std::vector<Node>();
             node->reserve(count);
@@ -9661,7 +9661,7 @@ namespace Vim
         GeometryTable(EntityTable& entityTable, std::vector<std::string>& strings):
             mEntityTable(entityTable), mStrings(strings) {}
         
-        int GetCount()
+        size_t GetCount()
         {
             return mEntityTable.get_count();
         }
@@ -9692,7 +9692,7 @@ namespace Vim
             bool existsVertexCount = mEntityTable.column_exists("int:VertexCount");
             bool existsFaceCount = mEntityTable.column_exists("int:FaceCount");
             
-            const int count = GetCount();
+            const auto count = GetCount();
             
             std::vector<Geometry>* geometry = new std::vector<Geometry>();
             geometry->reserve(count);
@@ -9786,7 +9786,7 @@ namespace Vim
         
         const std::vector<float>* GetAllBox_Min_X()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             float* box_Min_XData = new float[count];
             if (mEntityTable.column_exists("float:Box.Min.X")) {
@@ -9814,7 +9814,7 @@ namespace Vim
         
         const std::vector<float>* GetAllBox_Min_Y()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             float* box_Min_YData = new float[count];
             if (mEntityTable.column_exists("float:Box.Min.Y")) {
@@ -9842,7 +9842,7 @@ namespace Vim
         
         const std::vector<float>* GetAllBox_Min_Z()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             float* box_Min_ZData = new float[count];
             if (mEntityTable.column_exists("float:Box.Min.Z")) {
@@ -9870,7 +9870,7 @@ namespace Vim
         
         const std::vector<float>* GetAllBox_Max_X()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             float* box_Max_XData = new float[count];
             if (mEntityTable.column_exists("float:Box.Max.X")) {
@@ -9898,7 +9898,7 @@ namespace Vim
         
         const std::vector<float>* GetAllBox_Max_Y()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             float* box_Max_YData = new float[count];
             if (mEntityTable.column_exists("float:Box.Max.Y")) {
@@ -9926,7 +9926,7 @@ namespace Vim
         
         const std::vector<float>* GetAllBox_Max_Z()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             float* box_Max_ZData = new float[count];
             if (mEntityTable.column_exists("float:Box.Max.Z")) {
@@ -9954,7 +9954,7 @@ namespace Vim
         
         const std::vector<int>* GetAllVertexCount()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             int* vertexCountData = new int[count];
             if (mEntityTable.column_exists("int:VertexCount")) {
@@ -9982,7 +9982,7 @@ namespace Vim
         
         const std::vector<int>* GetAllFaceCount()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             int* faceCountData = new int[count];
             if (mEntityTable.column_exists("int:FaceCount")) {
@@ -10025,7 +10025,7 @@ namespace Vim
         ShapeTable(EntityTable& entityTable, std::vector<std::string>& strings):
             mEntityTable(entityTable), mStrings(strings) {}
         
-        int GetCount()
+        size_t GetCount()
         {
             return mEntityTable.get_count();
         }
@@ -10042,7 +10042,7 @@ namespace Vim
         {
             bool existsElement = mEntityTable.column_exists("index:Vim.Element:Element");
             
-            const int count = GetCount();
+            const auto count = GetCount();
             
             std::vector<Shape>* shape = new std::vector<Shape>();
             shape->reserve(count);
@@ -10101,7 +10101,7 @@ namespace Vim
         ShapeCollectionTable(EntityTable& entityTable, std::vector<std::string>& strings):
             mEntityTable(entityTable), mStrings(strings) {}
         
-        int GetCount()
+        size_t GetCount()
         {
             return mEntityTable.get_count();
         }
@@ -10118,7 +10118,7 @@ namespace Vim
         {
             bool existsElement = mEntityTable.column_exists("index:Vim.Element:Element");
             
-            const int count = GetCount();
+            const auto count = GetCount();
             
             std::vector<ShapeCollection>* shapeCollection = new std::vector<ShapeCollection>();
             shapeCollection->reserve(count);
@@ -10179,7 +10179,7 @@ namespace Vim
         ShapeInShapeCollectionTable(EntityTable& entityTable, std::vector<std::string>& strings):
             mEntityTable(entityTable), mStrings(strings) {}
         
-        int GetCount()
+        size_t GetCount()
         {
             return mEntityTable.get_count();
         }
@@ -10198,7 +10198,7 @@ namespace Vim
             bool existsShape = mEntityTable.column_exists("index:Vim.Shape:Shape");
             bool existsShapeCollection = mEntityTable.column_exists("index:Vim.ShapeCollection:ShapeCollection");
             
-            const int count = GetCount();
+            const auto count = GetCount();
             
             std::vector<ShapeInShapeCollection>* shapeInShapeCollection = new std::vector<ShapeInShapeCollection>();
             shapeInShapeCollection->reserve(count);
@@ -10274,7 +10274,7 @@ namespace Vim
         SystemTable(EntityTable& entityTable, std::vector<std::string>& strings):
             mEntityTable(entityTable), mStrings(strings) {}
         
-        int GetCount()
+        size_t GetCount()
         {
             return mEntityTable.get_count();
         }
@@ -10295,7 +10295,7 @@ namespace Vim
             bool existsFamilyType = mEntityTable.column_exists("index:Vim.FamilyType:FamilyType");
             bool existsElement = mEntityTable.column_exists("index:Vim.Element:Element");
             
-            const int count = GetCount();
+            const auto count = GetCount();
             
             std::vector<System>* system = new std::vector<System>();
             system->reserve(count);
@@ -10338,7 +10338,7 @@ namespace Vim
         
         const std::vector<int>* GetAllSystemType()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             int* systemTypeData = new int[count];
             if (mEntityTable.column_exists("int:SystemType")) {
@@ -10408,7 +10408,7 @@ namespace Vim
         ElementInSystemTable(EntityTable& entityTable, std::vector<std::string>& strings):
             mEntityTable(entityTable), mStrings(strings) {}
         
-        int GetCount()
+        size_t GetCount()
         {
             return mEntityTable.get_count();
         }
@@ -10429,7 +10429,7 @@ namespace Vim
             bool existsSystem = mEntityTable.column_exists("index:Vim.System:System");
             bool existsElement = mEntityTable.column_exists("index:Vim.Element:Element");
             
-            const int count = GetCount();
+            const auto count = GetCount();
             
             std::vector<ElementInSystem>* elementInSystem = new std::vector<ElementInSystem>();
             elementInSystem->reserve(count);
@@ -10472,7 +10472,7 @@ namespace Vim
         
         const std::vector<int>* GetAllRoles()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             int* rolesData = new int[count];
             if (mEntityTable.column_exists("int:Roles")) {
@@ -10542,7 +10542,7 @@ namespace Vim
         WarningTable(EntityTable& entityTable, std::vector<std::string>& strings):
             mEntityTable(entityTable), mStrings(strings) {}
         
-        int GetCount()
+        size_t GetCount()
         {
             return mEntityTable.get_count();
         }
@@ -10565,7 +10565,7 @@ namespace Vim
             bool existsDescription = mEntityTable.column_exists("string:Description");
             bool existsBimDocument = mEntityTable.column_exists("index:Vim.BimDocument:BimDocument");
             
-            const int count = GetCount();
+            const auto count = GetCount();
             
             std::vector<Warning>* warning = new std::vector<Warning>();
             warning->reserve(count);
@@ -10609,7 +10609,7 @@ namespace Vim
         
         const std::vector<const std::string*>* GetAllGuid()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             const std::vector<int>& guidData = mEntityTable.column_exists("string:Guid") ? mEntityTable.mStringColumns["string:Guid"] : std::vector<int>();
             
@@ -10638,7 +10638,7 @@ namespace Vim
         
         const std::vector<const std::string*>* GetAllSeverity()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             const std::vector<int>& severityData = mEntityTable.column_exists("string:Severity") ? mEntityTable.mStringColumns["string:Severity"] : std::vector<int>();
             
@@ -10667,7 +10667,7 @@ namespace Vim
         
         const std::vector<const std::string*>* GetAllDescription()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             const std::vector<int>& descriptionData = mEntityTable.column_exists("string:Description") ? mEntityTable.mStringColumns["string:Description"] : std::vector<int>();
             
@@ -10725,7 +10725,7 @@ namespace Vim
         ElementInWarningTable(EntityTable& entityTable, std::vector<std::string>& strings):
             mEntityTable(entityTable), mStrings(strings) {}
         
-        int GetCount()
+        size_t GetCount()
         {
             return mEntityTable.get_count();
         }
@@ -10744,7 +10744,7 @@ namespace Vim
             bool existsWarning = mEntityTable.column_exists("index:Vim.Warning:Warning");
             bool existsElement = mEntityTable.column_exists("index:Vim.Element:Element");
             
-            const int count = GetCount();
+            const auto count = GetCount();
             
             std::vector<ElementInWarning>* elementInWarning = new std::vector<ElementInWarning>();
             elementInWarning->reserve(count);
@@ -10824,7 +10824,7 @@ namespace Vim
         BasePointTable(EntityTable& entityTable, std::vector<std::string>& strings):
             mEntityTable(entityTable), mStrings(strings) {}
         
-        int GetCount()
+        size_t GetCount()
         {
             return mEntityTable.get_count();
         }
@@ -10855,7 +10855,7 @@ namespace Vim
             bool existsSharedPosition_Z = mEntityTable.column_exists("double:SharedPosition.Z");
             bool existsElement = mEntityTable.column_exists("index:Vim.Element:Element");
             
-            const int count = GetCount();
+            const auto count = GetCount();
             
             std::vector<BasePoint>* basePoint = new std::vector<BasePoint>();
             basePoint->reserve(count);
@@ -10944,7 +10944,7 @@ namespace Vim
         
         const std::vector<bool>* GetAllIsSurveyPoint()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             bfast::byte* isSurveyPointData = new bfast::byte[count];
             if (mEntityTable.column_exists("byte:IsSurveyPoint")) {
@@ -10972,7 +10972,7 @@ namespace Vim
         
         const std::vector<double>* GetAllPosition_X()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             double* position_XData = new double[count];
             if (mEntityTable.column_exists("double:Position.X")) {
@@ -11000,7 +11000,7 @@ namespace Vim
         
         const std::vector<double>* GetAllPosition_Y()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             double* position_YData = new double[count];
             if (mEntityTable.column_exists("double:Position.Y")) {
@@ -11028,7 +11028,7 @@ namespace Vim
         
         const std::vector<double>* GetAllPosition_Z()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             double* position_ZData = new double[count];
             if (mEntityTable.column_exists("double:Position.Z")) {
@@ -11056,7 +11056,7 @@ namespace Vim
         
         const std::vector<double>* GetAllSharedPosition_X()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             double* sharedPosition_XData = new double[count];
             if (mEntityTable.column_exists("double:SharedPosition.X")) {
@@ -11084,7 +11084,7 @@ namespace Vim
         
         const std::vector<double>* GetAllSharedPosition_Y()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             double* sharedPosition_YData = new double[count];
             if (mEntityTable.column_exists("double:SharedPosition.Y")) {
@@ -11112,7 +11112,7 @@ namespace Vim
         
         const std::vector<double>* GetAllSharedPosition_Z()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             double* sharedPosition_ZData = new double[count];
             if (mEntityTable.column_exists("double:SharedPosition.Z")) {
@@ -11171,7 +11171,7 @@ namespace Vim
         PhaseFilterTable(EntityTable& entityTable, std::vector<std::string>& strings):
             mEntityTable(entityTable), mStrings(strings) {}
         
-        int GetCount()
+        size_t GetCount()
         {
             return mEntityTable.get_count();
         }
@@ -11196,7 +11196,7 @@ namespace Vim
             bool existsTemporary = mEntityTable.column_exists("int:Temporary");
             bool existsElement = mEntityTable.column_exists("index:Vim.Element:Element");
             
-            const int count = GetCount();
+            const auto count = GetCount();
             
             std::vector<PhaseFilter>* phaseFilter = new std::vector<PhaseFilter>();
             phaseFilter->reserve(count);
@@ -11261,7 +11261,7 @@ namespace Vim
         
         const std::vector<int>* GetAllNew()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             int* newData = new int[count];
             if (mEntityTable.column_exists("int:New")) {
@@ -11289,7 +11289,7 @@ namespace Vim
         
         const std::vector<int>* GetAllExisting()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             int* existingData = new int[count];
             if (mEntityTable.column_exists("int:Existing")) {
@@ -11317,7 +11317,7 @@ namespace Vim
         
         const std::vector<int>* GetAllDemolished()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             int* demolishedData = new int[count];
             if (mEntityTable.column_exists("int:Demolished")) {
@@ -11345,7 +11345,7 @@ namespace Vim
         
         const std::vector<int>* GetAllTemporary()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             int* temporaryData = new int[count];
             if (mEntityTable.column_exists("int:Temporary")) {
@@ -11415,7 +11415,7 @@ namespace Vim
         GridTable(EntityTable& entityTable, std::vector<std::string>& strings):
             mEntityTable(entityTable), mStrings(strings) {}
         
-        int GetCount()
+        size_t GetCount()
         {
             return mEntityTable.get_count();
         }
@@ -11460,7 +11460,7 @@ namespace Vim
             bool existsFamilyType = mEntityTable.column_exists("index:Vim.FamilyType:FamilyType");
             bool existsElement = mEntityTable.column_exists("index:Vim.Element:Element");
             
-            const int count = GetCount();
+            const auto count = GetCount();
             
             std::vector<Grid>* grid = new std::vector<Grid>();
             grid->reserve(count);
@@ -11599,7 +11599,7 @@ namespace Vim
         
         const std::vector<double>* GetAllStartPoint_X()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             double* startPoint_XData = new double[count];
             if (mEntityTable.column_exists("double:StartPoint.X")) {
@@ -11627,7 +11627,7 @@ namespace Vim
         
         const std::vector<double>* GetAllStartPoint_Y()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             double* startPoint_YData = new double[count];
             if (mEntityTable.column_exists("double:StartPoint.Y")) {
@@ -11655,7 +11655,7 @@ namespace Vim
         
         const std::vector<double>* GetAllStartPoint_Z()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             double* startPoint_ZData = new double[count];
             if (mEntityTable.column_exists("double:StartPoint.Z")) {
@@ -11683,7 +11683,7 @@ namespace Vim
         
         const std::vector<double>* GetAllEndPoint_X()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             double* endPoint_XData = new double[count];
             if (mEntityTable.column_exists("double:EndPoint.X")) {
@@ -11711,7 +11711,7 @@ namespace Vim
         
         const std::vector<double>* GetAllEndPoint_Y()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             double* endPoint_YData = new double[count];
             if (mEntityTable.column_exists("double:EndPoint.Y")) {
@@ -11739,7 +11739,7 @@ namespace Vim
         
         const std::vector<double>* GetAllEndPoint_Z()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             double* endPoint_ZData = new double[count];
             if (mEntityTable.column_exists("double:EndPoint.Z")) {
@@ -11767,7 +11767,7 @@ namespace Vim
         
         const std::vector<bool>* GetAllIsCurved()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             bfast::byte* isCurvedData = new bfast::byte[count];
             if (mEntityTable.column_exists("byte:IsCurved")) {
@@ -11795,7 +11795,7 @@ namespace Vim
         
         const std::vector<double>* GetAllExtents_Min_X()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             double* extents_Min_XData = new double[count];
             if (mEntityTable.column_exists("double:Extents.Min.X")) {
@@ -11823,7 +11823,7 @@ namespace Vim
         
         const std::vector<double>* GetAllExtents_Min_Y()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             double* extents_Min_YData = new double[count];
             if (mEntityTable.column_exists("double:Extents.Min.Y")) {
@@ -11851,7 +11851,7 @@ namespace Vim
         
         const std::vector<double>* GetAllExtents_Min_Z()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             double* extents_Min_ZData = new double[count];
             if (mEntityTable.column_exists("double:Extents.Min.Z")) {
@@ -11879,7 +11879,7 @@ namespace Vim
         
         const std::vector<double>* GetAllExtents_Max_X()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             double* extents_Max_XData = new double[count];
             if (mEntityTable.column_exists("double:Extents.Max.X")) {
@@ -11907,7 +11907,7 @@ namespace Vim
         
         const std::vector<double>* GetAllExtents_Max_Y()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             double* extents_Max_YData = new double[count];
             if (mEntityTable.column_exists("double:Extents.Max.Y")) {
@@ -11935,7 +11935,7 @@ namespace Vim
         
         const std::vector<double>* GetAllExtents_Max_Z()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             double* extents_Max_ZData = new double[count];
             if (mEntityTable.column_exists("double:Extents.Max.Z")) {
@@ -12008,7 +12008,7 @@ namespace Vim
         AreaTable(EntityTable& entityTable, std::vector<std::string>& strings):
             mEntityTable(entityTable), mStrings(strings) {}
         
-        int GetCount()
+        size_t GetCount()
         {
             return mEntityTable.get_count();
         }
@@ -12035,7 +12035,7 @@ namespace Vim
             bool existsAreaScheme = mEntityTable.column_exists("index:Vim.AreaScheme:AreaScheme");
             bool existsElement = mEntityTable.column_exists("index:Vim.Element:Element");
             
-            const int count = GetCount();
+            const auto count = GetCount();
             
             std::vector<Area>* area = new std::vector<Area>();
             area->reserve(count);
@@ -12098,7 +12098,7 @@ namespace Vim
         
         const std::vector<double>* GetAllValue()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             double* valueData = new double[count];
             if (mEntityTable.column_exists("double:Value")) {
@@ -12126,7 +12126,7 @@ namespace Vim
         
         const std::vector<double>* GetAllPerimeter()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             double* perimeterData = new double[count];
             if (mEntityTable.column_exists("double:Perimeter")) {
@@ -12154,7 +12154,7 @@ namespace Vim
         
         const std::vector<const std::string*>* GetAllNumber()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             const std::vector<int>& numberData = mEntityTable.column_exists("string:Number") ? mEntityTable.mStringColumns["string:Number"] : std::vector<int>();
             
@@ -12183,7 +12183,7 @@ namespace Vim
         
         const std::vector<bool>* GetAllIsGrossInterior()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             bfast::byte* isGrossInteriorData = new bfast::byte[count];
             if (mEntityTable.column_exists("byte:IsGrossInterior")) {
@@ -12251,7 +12251,7 @@ namespace Vim
         AreaSchemeTable(EntityTable& entityTable, std::vector<std::string>& strings):
             mEntityTable(entityTable), mStrings(strings) {}
         
-        int GetCount()
+        size_t GetCount()
         {
             return mEntityTable.get_count();
         }
@@ -12270,7 +12270,7 @@ namespace Vim
             bool existsIsGrossBuildingArea = mEntityTable.column_exists("byte:IsGrossBuildingArea");
             bool existsElement = mEntityTable.column_exists("index:Vim.Element:Element");
             
-            const int count = GetCount();
+            const auto count = GetCount();
             
             std::vector<AreaScheme>* areaScheme = new std::vector<AreaScheme>();
             areaScheme->reserve(count);
@@ -12311,7 +12311,7 @@ namespace Vim
         
         const std::vector<bool>* GetAllIsGrossBuildingArea()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             bfast::byte* isGrossBuildingAreaData = new bfast::byte[count];
             if (mEntityTable.column_exists("byte:IsGrossBuildingArea")) {
@@ -12366,7 +12366,7 @@ namespace Vim
         ScheduleTable(EntityTable& entityTable, std::vector<std::string>& strings):
             mEntityTable(entityTable), mStrings(strings) {}
         
-        int GetCount()
+        size_t GetCount()
         {
             return mEntityTable.get_count();
         }
@@ -12383,7 +12383,7 @@ namespace Vim
         {
             bool existsElement = mEntityTable.column_exists("index:Vim.Element:Element");
             
-            const int count = GetCount();
+            const auto count = GetCount();
             
             std::vector<Schedule>* schedule = new std::vector<Schedule>();
             schedule->reserve(count);
@@ -12444,7 +12444,7 @@ namespace Vim
         ScheduleColumnTable(EntityTable& entityTable, std::vector<std::string>& strings):
             mEntityTable(entityTable), mStrings(strings) {}
         
-        int GetCount()
+        size_t GetCount()
         {
             return mEntityTable.get_count();
         }
@@ -12465,7 +12465,7 @@ namespace Vim
             bool existsColumnIndex = mEntityTable.column_exists("int:ColumnIndex");
             bool existsSchedule = mEntityTable.column_exists("index:Vim.Schedule:Schedule");
             
-            const int count = GetCount();
+            const auto count = GetCount();
             
             std::vector<ScheduleColumn>* scheduleColumn = new std::vector<ScheduleColumn>();
             scheduleColumn->reserve(count);
@@ -12510,7 +12510,7 @@ namespace Vim
         
         const std::vector<const std::string*>* GetAllName()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             const std::vector<int>& nameData = mEntityTable.column_exists("string:Name") ? mEntityTable.mStringColumns["string:Name"] : std::vector<int>();
             
@@ -12539,7 +12539,7 @@ namespace Vim
         
         const std::vector<int>* GetAllColumnIndex()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             int* columnIndexData = new int[count];
             if (mEntityTable.column_exists("int:ColumnIndex")) {
@@ -12596,7 +12596,7 @@ namespace Vim
         ScheduleCellTable(EntityTable& entityTable, std::vector<std::string>& strings):
             mEntityTable(entityTable), mStrings(strings) {}
         
-        int GetCount()
+        size_t GetCount()
         {
             return mEntityTable.get_count();
         }
@@ -12617,7 +12617,7 @@ namespace Vim
             bool existsRowIndex = mEntityTable.column_exists("int:RowIndex");
             bool existsScheduleColumn = mEntityTable.column_exists("index:Vim.ScheduleColumn:ScheduleColumn");
             
-            const int count = GetCount();
+            const auto count = GetCount();
             
             std::vector<ScheduleCell>* scheduleCell = new std::vector<ScheduleCell>();
             scheduleCell->reserve(count);
@@ -12662,7 +12662,7 @@ namespace Vim
         
         const std::vector<const std::string*>* GetAllValue()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             const std::vector<int>& valueData = mEntityTable.column_exists("string:Value") ? mEntityTable.mStringColumns["string:Value"] : std::vector<int>();
             
@@ -12691,7 +12691,7 @@ namespace Vim
         
         const std::vector<int>* GetAllRowIndex()
         {
-            const int count = GetCount();
+            const auto count = GetCount();
             
             int* rowIndexData = new int[count];
             if (mEntityTable.column_exists("int:RowIndex")) {
