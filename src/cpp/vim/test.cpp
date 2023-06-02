@@ -40,19 +40,16 @@ int get_index(const std::vector<T>& v, const T item)
 
 std::unique_ptr<Vim::Element> find_element_by_id(const Vim::DocumentModel& model, const long long element_id)
 {
-    /*const std::unique_ptr<std::vector<long long>> all_ids (model.mElement->GetAllId());*/
     const auto all_ids = std::unique_ptr<std::vector<long long>> (model.mElement->GetAllId());
     const auto element_index = get_index(*all_ids, element_id);
     return std::unique_ptr<Vim::Element>(model.mElement->Get(element_index));
 }
 
-void test_element(const Vim::DocumentModel& model, const size_t expected_element_count)
+void test_element(const Vim::DocumentModel& model)
 {
     assert(model.mElement);
 
-    test("Element count", model.mElement->GetCount(), expected_element_count);
-
-    const auto element = find_element_by_id(model, 374011ll);
+    const auto element = find_element_by_id(model, 374011ll); // A common element ID across all wolford files.
 
     test("Element 30 ID", element->mId, 374011ll);
     test("Element 30 Name", *element->mName, std::string("GWB on Mtl. Stud"));
@@ -77,18 +74,16 @@ void test_element(const Vim::DocumentModel& model, const size_t expected_element
     std::cout << "Get element test: OK" << std::endl;
 }
 
-void test_element_ids(const Vim::DocumentModel& model)
+void test_element_ids(const Vim::DocumentModel& model, const size_t expected_element_count, const std::vector<long long>& first_ten_ids)
 {
     assert(model.mElement);
 
-    auto ids = model.mElement->GetAllId();
+    test("Element count", model.mElement->GetCount(), expected_element_count);
 
-    std::vector<long long> expectedIds = { -1ll, 1222722ll, 32440ll, 118390ll, 174750ll, 18438ll, 355500ll, 185913ll, 9946ll, 182664ll };
-    std::vector<long long> actualIds = *ids;
-    actualIds.resize(10);
-
-    test("Element IDs count", (int) ids->size(), 4464);
-    test("Element IDs", actualIds, expectedIds);
+    const auto ids = std::unique_ptr<std::vector<long long>>(model.mElement->GetAllId());
+    ids->resize(10);
+    
+    test("Element IDs", *ids, first_ten_ids);
 
     std::cout << "Get element IDs test: OK" << std::endl;
 }
@@ -111,7 +106,7 @@ constexpr char pathSeparator =
     '\\';
 #endif
 
-std::string normalizePath(const std::string& fileName)
+std::string normalize_path(const std::string& fileName)
 {
     std::string ret = fileName;
 
@@ -124,17 +119,34 @@ std::string normalizePath(const std::string& fileName)
     return ret;
 }
 
-int test_wolford(const std::string& vim_file_path, const int expected_element_count)
+class TestCase
 {
-    std::cout << "Testing VIM file: " << vim_file_path << std::endl;
+public:
+    const std::string vim_file_path;
+    const int expected_element_count;
+    const std::vector<long long> first_ten_element_ids;
+
+    TestCase(
+        std::string vim_file_path,
+        int expected_element_count,
+        std::vector<long long> first_ten_element_ids)
+        : vim_file_path(std::move(vim_file_path)),
+        expected_element_count(expected_element_count),
+        first_ten_element_ids(std::move(first_ten_element_ids))
+    { }
+};
+
+int test_wolford(const TestCase& testCase)
+{
+    std::cout << "Testing VIM file: " << testCase.vim_file_path << std::endl;
 
     Vim::VimScene scene;
-    scene.ReadFile(vim_file_path);
+    scene.ReadFile(testCase.vim_file_path);
 
     const Vim::DocumentModel model(scene);
 
-    test_element(model, expected_element_count);
-    test_element_ids(model);
+    test_element(model);
+    test_element_ids(model, testCase.expected_element_count, testCase.first_ten_element_ids);
     test_get_all(model);
 
     return 0;
@@ -142,20 +154,19 @@ int test_wolford(const std::string& vim_file_path, const int expected_element_co
 
 int main(int num, char** args)
 {
-    auto this_exe_path = normalizePath(std::string(args[0]));
+    auto this_exe_path = normalize_path(std::string(args[0]));
     
     const auto this_dir = this_exe_path.erase(this_exe_path.rfind("src"));
 
-    const std::vector<std::tuple<std::string, int>> tests =
+    const std::vector<TestCase> test_cases =
     {
-        //std::tuple<std::string, int>(normalizePath("data\\Wolford_Residence.r2023.om_v4.4.0.vim"), 4464),
-        std::tuple<std::string, int>(normalizePath("data\\Wolford_Residence.r2023.om_v5.0.0.vim"), 4473),
+        TestCase(normalize_path(this_dir + "data\\Wolford_Residence.r2023.om_v4.4.0.vim"), 4464, { -1ll, 1222722ll, 32440ll, 118390ll, 174750ll, 18438ll, 355500ll, 185913ll, 9946ll, 182664ll }),
+        TestCase(normalize_path(this_dir + "data\\Wolford_Residence.r2023.om_v5.0.0.vim"), 4473, { -1ll, 1222722ll, 75912ll, -1ll, 32440ll, 118390ll, 22793ll, 22794ll, 22795ll, 22796ll })
     };
-    for (const auto& test : tests)
+
+    for (const auto& test_case : test_cases)
     {
-        const auto vim_file_path = this_dir + std::get<0>(test);
-        const auto expected_element_count = std::get<1>(test);
-        const auto result = test_wolford(vim_file_path, expected_element_count);
+        const auto result = test_wolford(test_case);
         if (result != 0)
             return result;
     }
