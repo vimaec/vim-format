@@ -27,37 +27,52 @@ void test(std::string message, const std::vector<T>& actual, const std::vector<T
     }
 }
 
+// Function to print the
+// index of an element
+template<typename T>
+int get_index(const std::vector<T>& v, const T item)
+{
+    auto it = std::find(v.begin(), v.end(), item);
+    return it != v.end()
+        ? it - v.begin()
+        : -1;
+}
+
+std::unique_ptr<Vim::Element> find_element_by_id(const Vim::DocumentModel& model, const long long element_id)
+{
+    /*const std::unique_ptr<std::vector<long long>> all_ids (model.mElement->GetAllId());*/
+    const auto all_ids = std::unique_ptr<std::vector<long long>> (model.mElement->GetAllId());
+    const auto element_index = get_index(*all_ids, element_id);
+    return std::unique_ptr<Vim::Element>(model.mElement->Get(element_index));
+}
+
 void test_element(const Vim::DocumentModel& model, const size_t expected_element_count)
 {
     assert(model.mElement);
 
     test("Element count", model.mElement->GetCount(), expected_element_count);
-    test("Element 0 ID", model.mElement->GetId(0), -1ll);
-    test("Element 1 ID", model.mElement->GetId(1), 1222722ll);
-    test("Element 2 ID", model.mElement->GetId(2), 32440ll);
-    test("Element 3 ID", model.mElement->GetId(3), 118390ll);
 
-    // TODO: improve expected test definition on a per-element basis
-    test("Element 30 Index", model.mElement->Get(30)->mIndex, 30);
-    test("Element 30 ID", model.mElement->Get(30)->mId, 374011ll);
-    test("Element 30 Name", *model.mElement->Get(30)->mName, std::string("GWB on Mtl. Stud"));
-    test("Element 30 UniqueID", *model.mElement->Get(30)->mUniqueId, std::string("3ae43fb5-6797-479b-ac14-3436f35a7178-0005b4fb"));
-    test("Element 30 FamilyNome", *model.mElement->Get(30)->mFamilyName, std::string("Compound Ceiling"));
-    test("Element 30 IsPinned", model.mElement->Get(30)->mIsPinned, false);
-    test("Element 30 LevelIndex", model.mElement->Get(30)->mLevelIndex, 6);
-    test("Element 30 PhaseCreatedIndex", model.mElement->Get(30)->mPhaseCreatedIndex, 1);
-    test("Element 30 PhaseDemolishedIndex", model.mElement->Get(30)->mPhaseDemolishedIndex, -1);
-    test("Element 30 CategoryIndex", model.mElement->Get(30)->mCategoryIndex, 5);
-    test("Element 30 WorksetIndex", model.mElement->Get(30)->mWorksetIndex, 0);
-    test("Element 30 DesignOptionIndex", model.mElement->Get(30)->mDesignOptionIndex, -1);
-    test("Element 30 OwnerViewIndex", model.mElement->Get(30)->mOwnerViewIndex, -1);
-    test("Element 30 GroupIndex", model.mElement->Get(30)->mGroupIndex, -1);
-    test("Element 30 AssemblyInstanceIndex", model.mElement->Get(30)->mAssemblyInstanceIndex, -1);
-    test("Element 30 BimDocumentIndex", model.mElement->Get(30)->mBimDocumentIndex, 0);
-    test("Element 30 RoomIndex", model.mElement->Get(30)->mRoomIndex, -1);
-    test("Element 30 RoomIndex", model.mElement->Get(30)->mLocation_X, 0.0f);
-    test("Element 30 RoomIndex", model.mElement->Get(30)->mLocation_Y, 0.0f);
-    test("Element 30 RoomIndex", model.mElement->Get(30)->mLocation_Z, 0.0f);
+    const auto element = find_element_by_id(model, 374011ll);
+
+    test("Element 30 ID", element->mId, 374011ll);
+    test("Element 30 Name", *element->mName, std::string("GWB on Mtl. Stud"));
+    test("Element 30 UniqueID", *element->mUniqueId, std::string("3ae43fb5-6797-479b-ac14-3436f35a7178-0005b4fb"));
+    test("Element 30 FamilyNome", *element->mFamilyName, std::string("Compound Ceiling"));
+    test("Element 30 IsPinned", element->mIsPinned, false);
+    test("Element 30 LevelIndex", element->mLevelIndex, 6);
+    test("Element 30 PhaseCreatedIndex", element->mPhaseCreatedIndex, 1);
+    test("Element 30 PhaseDemolishedIndex", element->mPhaseDemolishedIndex, -1);
+    test("Element 30 CategoryIndex", element->mCategoryIndex, 5);
+    test("Element 30 WorksetIndex", element->mWorksetIndex, 0);
+    test("Element 30 DesignOptionIndex", element->mDesignOptionIndex, -1);
+    test("Element 30 OwnerViewIndex", element->mOwnerViewIndex, -1);
+    test("Element 30 GroupIndex", element->mGroupIndex, -1);
+    test("Element 30 AssemblyInstanceIndex", element->mAssemblyInstanceIndex, -1);
+    test("Element 30 BimDocumentIndex", element->mBimDocumentIndex, 0);
+    test("Element 30 RoomIndex", element->mRoomIndex, -1);
+    test("Element 30 RoomIndex", element->mLocation_X, 0.0f);
+    test("Element 30 RoomIndex", element->mLocation_Y, 0.0f);
+    test("Element 30 RoomIndex", element->mLocation_Z, 0.0f);
 
     std::cout << "Get element test: OK" << std::endl;
 }
@@ -133,7 +148,7 @@ int main(int num, char** args)
 
     const std::vector<std::tuple<std::string, int>> tests =
     {
-        //std::tuple<std::string, int>(normalizePath("data\\Wolford_Residence.r2023.om_v4.4.0.vim"), 4464), // TODO: restore this
+        //std::tuple<std::string, int>(normalizePath("data\\Wolford_Residence.r2023.om_v4.4.0.vim"), 4464),
         std::tuple<std::string, int>(normalizePath("data\\Wolford_Residence.r2023.om_v5.0.0.vim"), 4473),
     };
     for (const auto& test : tests)

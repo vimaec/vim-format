@@ -224,7 +224,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<const std::string*>* GetAllBufferName()
+        std::vector<const std::string*>* GetAllBufferName()
         {
             const auto count = GetCount();
             
@@ -330,7 +330,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<const std::string*>* GetAllSpec()
+        std::vector<const std::string*>* GetAllSpec()
         {
             const auto count = GetCount();
             
@@ -359,7 +359,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<const std::string*>* GetAllType()
+        std::vector<const std::string*>* GetAllType()
         {
             const auto count = GetCount();
             
@@ -388,7 +388,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<const std::string*>* GetAllLabel()
+        std::vector<const std::string*>* GetAllLabel()
         {
             const auto count = GetCount();
             
@@ -554,7 +554,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<const std::string*>* GetAllName()
+        std::vector<const std::string*>* GetAllName()
         {
             const auto count = GetCount();
             
@@ -583,7 +583,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<const std::string*>* GetAllGroup()
+        std::vector<const std::string*>* GetAllGroup()
         {
             const auto count = GetCount();
             
@@ -612,7 +612,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<const std::string*>* GetAllParameterType()
+        std::vector<const std::string*>* GetAllParameterType()
         {
             const auto count = GetCount();
             
@@ -641,7 +641,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<bool>* GetAllIsInstance()
+        std::vector<bool>* GetAllIsInstance()
         {
             const auto count = GetCount();
             
@@ -669,7 +669,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<bool>* GetAllIsShared()
+        std::vector<bool>* GetAllIsShared()
         {
             const auto count = GetCount();
             
@@ -697,7 +697,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<bool>* GetAllIsReadOnly()
+        std::vector<bool>* GetAllIsReadOnly()
         {
             const auto count = GetCount();
             
@@ -725,7 +725,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<int>* GetAllFlags()
+        std::vector<int>* GetAllFlags()
         {
             const auto count = GetCount();
             
@@ -753,7 +753,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<const std::string*>* GetAllGuid()
+        std::vector<const std::string*>* GetAllGuid()
         {
             const auto count = GetCount();
             
@@ -871,7 +871,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<const std::string*>* GetAllValue()
+        std::vector<const std::string*>* GetAllValue()
         {
             const auto count = GetCount();
             
@@ -1141,7 +1141,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<long long>* GetAllId()
+        std::vector<long long>* GetAllId()
         {
             const auto count = GetCount();
             
@@ -1174,7 +1174,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<const std::string*>* GetAllType()
+        std::vector<const std::string*>* GetAllType()
         {
             const auto count = GetCount();
             
@@ -1203,7 +1203,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<const std::string*>* GetAllName()
+        std::vector<const std::string*>* GetAllName()
         {
             const auto count = GetCount();
             
@@ -1232,7 +1232,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<const std::string*>* GetAllUniqueId()
+        std::vector<const std::string*>* GetAllUniqueId()
         {
             const auto count = GetCount();
             
@@ -1261,7 +1261,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<float>* GetAllLocation_X()
+        std::vector<float>* GetAllLocation_X()
         {
             const auto count = GetCount();
             
@@ -1289,7 +1289,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<float>* GetAllLocation_Y()
+        std::vector<float>* GetAllLocation_Y()
         {
             const auto count = GetCount();
             
@@ -1317,7 +1317,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<float>* GetAllLocation_Z()
+        std::vector<float>* GetAllLocation_Z()
         {
             const auto count = GetCount();
             
@@ -1345,7 +1345,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<const std::string*>* GetAllFamilyName()
+        std::vector<const std::string*>* GetAllFamilyName()
         {
             const auto count = GetCount();
             
@@ -1374,7 +1374,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<bool>* GetAllIsPinned()
+        std::vector<bool>* GetAllIsPinned()
         {
             const auto count = GetCount();
             
@@ -1660,7 +1660,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<int>* GetAllId()
+        std::vector<int>* GetAllId()
         {
             const auto count = GetCount();
             
@@ -1688,7 +1688,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<const std::string*>* GetAllName()
+        std::vector<const std::string*>* GetAllName()
         {
             const auto count = GetCount();
             
@@ -1717,7 +1717,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<const std::string*>* GetAllKind()
+        std::vector<const std::string*>* GetAllKind()
         {
             const auto count = GetCount();
             
@@ -1746,7 +1746,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<bool>* GetAllIsOpen()
+        std::vector<bool>* GetAllIsOpen()
         {
             const auto count = GetCount();
             
@@ -1774,7 +1774,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<bool>* GetAllIsEditable()
+        std::vector<bool>* GetAllIsEditable()
         {
             const auto count = GetCount();
             
@@ -1802,7 +1802,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<const std::string*>* GetAllOwner()
+        std::vector<const std::string*>* GetAllOwner()
         {
             const auto count = GetCount();
             
@@ -1831,7 +1831,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<const std::string*>* GetAllUniqueId()
+        std::vector<const std::string*>* GetAllUniqueId()
         {
             const auto count = GetCount();
             
@@ -1977,7 +1977,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<const std::string*>* GetAllAssemblyTypeName()
+        std::vector<const std::string*>* GetAllAssemblyTypeName()
         {
             const auto count = GetCount();
             
@@ -2006,7 +2006,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<float>* GetAllPosition_X()
+        std::vector<float>* GetAllPosition_X()
         {
             const auto count = GetCount();
             
@@ -2034,7 +2034,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<float>* GetAllPosition_Y()
+        std::vector<float>* GetAllPosition_Y()
         {
             const auto count = GetCount();
             
@@ -2062,7 +2062,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<float>* GetAllPosition_Z()
+        std::vector<float>* GetAllPosition_Z()
         {
             const auto count = GetCount();
             
@@ -2207,7 +2207,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<const std::string*>* GetAllGroupType()
+        std::vector<const std::string*>* GetAllGroupType()
         {
             const auto count = GetCount();
             
@@ -2236,7 +2236,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<float>* GetAllPosition_X()
+        std::vector<float>* GetAllPosition_X()
         {
             const auto count = GetCount();
             
@@ -2264,7 +2264,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<float>* GetAllPosition_Y()
+        std::vector<float>* GetAllPosition_Y()
         {
             const auto count = GetCount();
             
@@ -2292,7 +2292,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<float>* GetAllPosition_Z()
+        std::vector<float>* GetAllPosition_Z()
         {
             const auto count = GetCount();
             
@@ -2408,7 +2408,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<bool>* GetAllIsPrimary()
+        std::vector<bool>* GetAllIsPrimary()
         {
             const auto count = GetCount();
             
@@ -2530,7 +2530,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<double>* GetAllElevation()
+        std::vector<double>* GetAllElevation()
         {
             const auto count = GetCount();
             
@@ -2802,7 +2802,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<double>* GetAllBaseOffset()
+        std::vector<double>* GetAllBaseOffset()
         {
             const auto count = GetCount();
             
@@ -2830,7 +2830,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<double>* GetAllLimitOffset()
+        std::vector<double>* GetAllLimitOffset()
         {
             const auto count = GetCount();
             
@@ -2858,7 +2858,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<double>* GetAllUnboundedHeight()
+        std::vector<double>* GetAllUnboundedHeight()
         {
             const auto count = GetCount();
             
@@ -2886,7 +2886,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<double>* GetAllVolume()
+        std::vector<double>* GetAllVolume()
         {
             const auto count = GetCount();
             
@@ -2914,7 +2914,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<double>* GetAllPerimeter()
+        std::vector<double>* GetAllPerimeter()
         {
             const auto count = GetCount();
             
@@ -2942,7 +2942,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<double>* GetAllArea()
+        std::vector<double>* GetAllArea()
         {
             const auto count = GetCount();
             
@@ -2970,7 +2970,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<const std::string*>* GetAllNumber()
+        std::vector<const std::string*>* GetAllNumber()
         {
             const auto count = GetCount();
             
@@ -3338,7 +3338,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<const std::string*>* GetAllTitle()
+        std::vector<const std::string*>* GetAllTitle()
         {
             const auto count = GetCount();
             
@@ -3367,7 +3367,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<bool>* GetAllIsMetric()
+        std::vector<bool>* GetAllIsMetric()
         {
             const auto count = GetCount();
             
@@ -3395,7 +3395,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<const std::string*>* GetAllGuid()
+        std::vector<const std::string*>* GetAllGuid()
         {
             const auto count = GetCount();
             
@@ -3424,7 +3424,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<int>* GetAllNumSaves()
+        std::vector<int>* GetAllNumSaves()
         {
             const auto count = GetCount();
             
@@ -3452,7 +3452,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<bool>* GetAllIsLinked()
+        std::vector<bool>* GetAllIsLinked()
         {
             const auto count = GetCount();
             
@@ -3480,7 +3480,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<bool>* GetAllIsDetached()
+        std::vector<bool>* GetAllIsDetached()
         {
             const auto count = GetCount();
             
@@ -3508,7 +3508,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<bool>* GetAllIsWorkshared()
+        std::vector<bool>* GetAllIsWorkshared()
         {
             const auto count = GetCount();
             
@@ -3536,7 +3536,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<const std::string*>* GetAllPathName()
+        std::vector<const std::string*>* GetAllPathName()
         {
             const auto count = GetCount();
             
@@ -3565,7 +3565,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<double>* GetAllLatitude()
+        std::vector<double>* GetAllLatitude()
         {
             const auto count = GetCount();
             
@@ -3593,7 +3593,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<double>* GetAllLongitude()
+        std::vector<double>* GetAllLongitude()
         {
             const auto count = GetCount();
             
@@ -3621,7 +3621,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<double>* GetAllTimeZone()
+        std::vector<double>* GetAllTimeZone()
         {
             const auto count = GetCount();
             
@@ -3649,7 +3649,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<const std::string*>* GetAllPlaceName()
+        std::vector<const std::string*>* GetAllPlaceName()
         {
             const auto count = GetCount();
             
@@ -3678,7 +3678,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<const std::string*>* GetAllWeatherStationName()
+        std::vector<const std::string*>* GetAllWeatherStationName()
         {
             const auto count = GetCount();
             
@@ -3707,7 +3707,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<double>* GetAllElevation()
+        std::vector<double>* GetAllElevation()
         {
             const auto count = GetCount();
             
@@ -3735,7 +3735,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<const std::string*>* GetAllProjectLocation()
+        std::vector<const std::string*>* GetAllProjectLocation()
         {
             const auto count = GetCount();
             
@@ -3764,7 +3764,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<const std::string*>* GetAllIssueDate()
+        std::vector<const std::string*>* GetAllIssueDate()
         {
             const auto count = GetCount();
             
@@ -3793,7 +3793,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<const std::string*>* GetAllStatus()
+        std::vector<const std::string*>* GetAllStatus()
         {
             const auto count = GetCount();
             
@@ -3822,7 +3822,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<const std::string*>* GetAllClientName()
+        std::vector<const std::string*>* GetAllClientName()
         {
             const auto count = GetCount();
             
@@ -3851,7 +3851,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<const std::string*>* GetAllAddress()
+        std::vector<const std::string*>* GetAllAddress()
         {
             const auto count = GetCount();
             
@@ -3880,7 +3880,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<const std::string*>* GetAllName()
+        std::vector<const std::string*>* GetAllName()
         {
             const auto count = GetCount();
             
@@ -3909,7 +3909,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<const std::string*>* GetAllNumber()
+        std::vector<const std::string*>* GetAllNumber()
         {
             const auto count = GetCount();
             
@@ -3938,7 +3938,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<const std::string*>* GetAllAuthor()
+        std::vector<const std::string*>* GetAllAuthor()
         {
             const auto count = GetCount();
             
@@ -3967,7 +3967,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<const std::string*>* GetAllBuildingName()
+        std::vector<const std::string*>* GetAllBuildingName()
         {
             const auto count = GetCount();
             
@@ -3996,7 +3996,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<const std::string*>* GetAllOrganizationName()
+        std::vector<const std::string*>* GetAllOrganizationName()
         {
             const auto count = GetCount();
             
@@ -4025,7 +4025,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<const std::string*>* GetAllOrganizationDescription()
+        std::vector<const std::string*>* GetAllOrganizationDescription()
         {
             const auto count = GetCount();
             
@@ -4054,7 +4054,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<const std::string*>* GetAllProduct()
+        std::vector<const std::string*>* GetAllProduct()
         {
             const auto count = GetCount();
             
@@ -4083,7 +4083,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<const std::string*>* GetAllVersion()
+        std::vector<const std::string*>* GetAllVersion()
         {
             const auto count = GetCount();
             
@@ -4112,7 +4112,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<const std::string*>* GetAllUser()
+        std::vector<const std::string*>* GetAllUser()
         {
             const auto count = GetCount();
             
@@ -4365,7 +4365,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<int>* GetAllOrderIndex()
+        std::vector<int>* GetAllOrderIndex()
         {
             const auto count = GetCount();
             
@@ -4558,7 +4558,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<const std::string*>* GetAllName()
+        std::vector<const std::string*>* GetAllName()
         {
             const auto count = GetCount();
             
@@ -4591,7 +4591,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<long long>* GetAllId()
+        std::vector<long long>* GetAllId()
         {
             const auto count = GetCount();
             
@@ -4624,7 +4624,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<const std::string*>* GetAllCategoryType()
+        std::vector<const std::string*>* GetAllCategoryType()
         {
             const auto count = GetCount();
             
@@ -4653,7 +4653,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<double>* GetAllLineColor_X()
+        std::vector<double>* GetAllLineColor_X()
         {
             const auto count = GetCount();
             
@@ -4681,7 +4681,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<double>* GetAllLineColor_Y()
+        std::vector<double>* GetAllLineColor_Y()
         {
             const auto count = GetCount();
             
@@ -4709,7 +4709,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<double>* GetAllLineColor_Z()
+        std::vector<double>* GetAllLineColor_Z()
         {
             const auto count = GetCount();
             
@@ -4737,7 +4737,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<const std::string*>* GetAllBuiltInCategory()
+        std::vector<const std::string*>* GetAllBuiltInCategory()
         {
             const auto count = GetCount();
             
@@ -4897,7 +4897,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<const std::string*>* GetAllStructuralMaterialType()
+        std::vector<const std::string*>* GetAllStructuralMaterialType()
         {
             const auto count = GetCount();
             
@@ -4926,7 +4926,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<const std::string*>* GetAllStructuralSectionShape()
+        std::vector<const std::string*>* GetAllStructuralSectionShape()
         {
             const auto count = GetCount();
             
@@ -4955,7 +4955,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<bool>* GetAllIsSystemFamily()
+        std::vector<bool>* GetAllIsSystemFamily()
         {
             const auto count = GetCount();
             
@@ -4983,7 +4983,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<bool>* GetAllIsInPlace()
+        std::vector<bool>* GetAllIsInPlace()
         {
             const auto count = GetCount();
             
@@ -5123,7 +5123,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<bool>* GetAllIsSystemFamilyType()
+        std::vector<bool>* GetAllIsSystemFamilyType()
         {
             const auto count = GetCount();
             
@@ -5529,7 +5529,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<bool>* GetAllFacingFlipped()
+        std::vector<bool>* GetAllFacingFlipped()
         {
             const auto count = GetCount();
             
@@ -5557,7 +5557,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<float>* GetAllFacingOrientation_X()
+        std::vector<float>* GetAllFacingOrientation_X()
         {
             const auto count = GetCount();
             
@@ -5585,7 +5585,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<float>* GetAllFacingOrientation_Y()
+        std::vector<float>* GetAllFacingOrientation_Y()
         {
             const auto count = GetCount();
             
@@ -5613,7 +5613,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<float>* GetAllFacingOrientation_Z()
+        std::vector<float>* GetAllFacingOrientation_Z()
         {
             const auto count = GetCount();
             
@@ -5641,7 +5641,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<bool>* GetAllHandFlipped()
+        std::vector<bool>* GetAllHandFlipped()
         {
             const auto count = GetCount();
             
@@ -5669,7 +5669,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<bool>* GetAllMirrored()
+        std::vector<bool>* GetAllMirrored()
         {
             const auto count = GetCount();
             
@@ -5697,7 +5697,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<bool>* GetAllHasModifiedGeometry()
+        std::vector<bool>* GetAllHasModifiedGeometry()
         {
             const auto count = GetCount();
             
@@ -5725,7 +5725,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<float>* GetAllScale()
+        std::vector<float>* GetAllScale()
         {
             const auto count = GetCount();
             
@@ -5753,7 +5753,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<float>* GetAllBasisX_X()
+        std::vector<float>* GetAllBasisX_X()
         {
             const auto count = GetCount();
             
@@ -5781,7 +5781,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<float>* GetAllBasisX_Y()
+        std::vector<float>* GetAllBasisX_Y()
         {
             const auto count = GetCount();
             
@@ -5809,7 +5809,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<float>* GetAllBasisX_Z()
+        std::vector<float>* GetAllBasisX_Z()
         {
             const auto count = GetCount();
             
@@ -5837,7 +5837,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<float>* GetAllBasisY_X()
+        std::vector<float>* GetAllBasisY_X()
         {
             const auto count = GetCount();
             
@@ -5865,7 +5865,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<float>* GetAllBasisY_Y()
+        std::vector<float>* GetAllBasisY_Y()
         {
             const auto count = GetCount();
             
@@ -5893,7 +5893,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<float>* GetAllBasisY_Z()
+        std::vector<float>* GetAllBasisY_Z()
         {
             const auto count = GetCount();
             
@@ -5921,7 +5921,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<float>* GetAllBasisZ_X()
+        std::vector<float>* GetAllBasisZ_X()
         {
             const auto count = GetCount();
             
@@ -5949,7 +5949,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<float>* GetAllBasisZ_Y()
+        std::vector<float>* GetAllBasisZ_Y()
         {
             const auto count = GetCount();
             
@@ -5977,7 +5977,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<float>* GetAllBasisZ_Z()
+        std::vector<float>* GetAllBasisZ_Z()
         {
             const auto count = GetCount();
             
@@ -6005,7 +6005,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<float>* GetAllTranslation_X()
+        std::vector<float>* GetAllTranslation_X()
         {
             const auto count = GetCount();
             
@@ -6033,7 +6033,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<float>* GetAllTranslation_Y()
+        std::vector<float>* GetAllTranslation_Y()
         {
             const auto count = GetCount();
             
@@ -6061,7 +6061,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<float>* GetAllTranslation_Z()
+        std::vector<float>* GetAllTranslation_Z()
         {
             const auto count = GetCount();
             
@@ -6089,7 +6089,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<float>* GetAllHandOrientation_X()
+        std::vector<float>* GetAllHandOrientation_X()
         {
             const auto count = GetCount();
             
@@ -6117,7 +6117,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<float>* GetAllHandOrientation_Y()
+        std::vector<float>* GetAllHandOrientation_Y()
         {
             const auto count = GetCount();
             
@@ -6145,7 +6145,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<float>* GetAllHandOrientation_Z()
+        std::vector<float>* GetAllHandOrientation_Z()
         {
             const auto count = GetCount();
             
@@ -6555,7 +6555,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<const std::string*>* GetAllTitle()
+        std::vector<const std::string*>* GetAllTitle()
         {
             const auto count = GetCount();
             
@@ -6584,7 +6584,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<const std::string*>* GetAllViewType()
+        std::vector<const std::string*>* GetAllViewType()
         {
             const auto count = GetCount();
             
@@ -6613,7 +6613,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<double>* GetAllUp_X()
+        std::vector<double>* GetAllUp_X()
         {
             const auto count = GetCount();
             
@@ -6641,7 +6641,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<double>* GetAllUp_Y()
+        std::vector<double>* GetAllUp_Y()
         {
             const auto count = GetCount();
             
@@ -6669,7 +6669,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<double>* GetAllUp_Z()
+        std::vector<double>* GetAllUp_Z()
         {
             const auto count = GetCount();
             
@@ -6697,7 +6697,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<double>* GetAllRight_X()
+        std::vector<double>* GetAllRight_X()
         {
             const auto count = GetCount();
             
@@ -6725,7 +6725,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<double>* GetAllRight_Y()
+        std::vector<double>* GetAllRight_Y()
         {
             const auto count = GetCount();
             
@@ -6753,7 +6753,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<double>* GetAllRight_Z()
+        std::vector<double>* GetAllRight_Z()
         {
             const auto count = GetCount();
             
@@ -6781,7 +6781,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<double>* GetAllOrigin_X()
+        std::vector<double>* GetAllOrigin_X()
         {
             const auto count = GetCount();
             
@@ -6809,7 +6809,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<double>* GetAllOrigin_Y()
+        std::vector<double>* GetAllOrigin_Y()
         {
             const auto count = GetCount();
             
@@ -6837,7 +6837,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<double>* GetAllOrigin_Z()
+        std::vector<double>* GetAllOrigin_Z()
         {
             const auto count = GetCount();
             
@@ -6865,7 +6865,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<double>* GetAllViewDirection_X()
+        std::vector<double>* GetAllViewDirection_X()
         {
             const auto count = GetCount();
             
@@ -6893,7 +6893,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<double>* GetAllViewDirection_Y()
+        std::vector<double>* GetAllViewDirection_Y()
         {
             const auto count = GetCount();
             
@@ -6921,7 +6921,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<double>* GetAllViewDirection_Z()
+        std::vector<double>* GetAllViewDirection_Z()
         {
             const auto count = GetCount();
             
@@ -6949,7 +6949,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<double>* GetAllViewPosition_X()
+        std::vector<double>* GetAllViewPosition_X()
         {
             const auto count = GetCount();
             
@@ -6977,7 +6977,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<double>* GetAllViewPosition_Y()
+        std::vector<double>* GetAllViewPosition_Y()
         {
             const auto count = GetCount();
             
@@ -7005,7 +7005,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<double>* GetAllViewPosition_Z()
+        std::vector<double>* GetAllViewPosition_Z()
         {
             const auto count = GetCount();
             
@@ -7033,7 +7033,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<double>* GetAllScale()
+        std::vector<double>* GetAllScale()
         {
             const auto count = GetCount();
             
@@ -7061,7 +7061,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<double>* GetAllOutline_Min_X()
+        std::vector<double>* GetAllOutline_Min_X()
         {
             const auto count = GetCount();
             
@@ -7089,7 +7089,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<double>* GetAllOutline_Min_Y()
+        std::vector<double>* GetAllOutline_Min_Y()
         {
             const auto count = GetCount();
             
@@ -7117,7 +7117,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<double>* GetAllOutline_Max_X()
+        std::vector<double>* GetAllOutline_Max_X()
         {
             const auto count = GetCount();
             
@@ -7145,7 +7145,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<double>* GetAllOutline_Max_Y()
+        std::vector<double>* GetAllOutline_Max_Y()
         {
             const auto count = GetCount();
             
@@ -7173,7 +7173,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<int>* GetAllDetailLevel()
+        std::vector<int>* GetAllDetailLevel()
         {
             const auto count = GetCount();
             
@@ -7656,7 +7656,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<double>* GetAllExtents_Min_X()
+        std::vector<double>* GetAllExtents_Min_X()
         {
             const auto count = GetCount();
             
@@ -7684,7 +7684,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<double>* GetAllExtents_Min_Y()
+        std::vector<double>* GetAllExtents_Min_Y()
         {
             const auto count = GetCount();
             
@@ -7712,7 +7712,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<double>* GetAllExtents_Min_Z()
+        std::vector<double>* GetAllExtents_Min_Z()
         {
             const auto count = GetCount();
             
@@ -7740,7 +7740,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<double>* GetAllExtents_Max_X()
+        std::vector<double>* GetAllExtents_Max_X()
         {
             const auto count = GetCount();
             
@@ -7768,7 +7768,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<double>* GetAllExtents_Max_Y()
+        std::vector<double>* GetAllExtents_Max_Y()
         {
             const auto count = GetCount();
             
@@ -7796,7 +7796,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<double>* GetAllExtents_Max_Z()
+        std::vector<double>* GetAllExtents_Max_Z()
         {
             const auto count = GetCount();
             
@@ -8004,7 +8004,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<int>* GetAllId()
+        std::vector<int>* GetAllId()
         {
             const auto count = GetCount();
             
@@ -8032,7 +8032,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<int>* GetAllIsPerspective()
+        std::vector<int>* GetAllIsPerspective()
         {
             const auto count = GetCount();
             
@@ -8060,7 +8060,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<double>* GetAllVerticalExtent()
+        std::vector<double>* GetAllVerticalExtent()
         {
             const auto count = GetCount();
             
@@ -8088,7 +8088,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<double>* GetAllHorizontalExtent()
+        std::vector<double>* GetAllHorizontalExtent()
         {
             const auto count = GetCount();
             
@@ -8116,7 +8116,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<double>* GetAllFarDistance()
+        std::vector<double>* GetAllFarDistance()
         {
             const auto count = GetCount();
             
@@ -8144,7 +8144,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<double>* GetAllNearDistance()
+        std::vector<double>* GetAllNearDistance()
         {
             const auto count = GetCount();
             
@@ -8172,7 +8172,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<double>* GetAllTargetDistance()
+        std::vector<double>* GetAllTargetDistance()
         {
             const auto count = GetCount();
             
@@ -8200,7 +8200,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<double>* GetAllRightOffset()
+        std::vector<double>* GetAllRightOffset()
         {
             const auto count = GetCount();
             
@@ -8228,7 +8228,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<double>* GetAllUpOffset()
+        std::vector<double>* GetAllUpOffset()
         {
             const auto count = GetCount();
             
@@ -8512,7 +8512,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<const std::string*>* GetAllName()
+        std::vector<const std::string*>* GetAllName()
         {
             const auto count = GetCount();
             
@@ -8541,7 +8541,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<const std::string*>* GetAllMaterialCategory()
+        std::vector<const std::string*>* GetAllMaterialCategory()
         {
             const auto count = GetCount();
             
@@ -8570,7 +8570,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<double>* GetAllColor_X()
+        std::vector<double>* GetAllColor_X()
         {
             const auto count = GetCount();
             
@@ -8598,7 +8598,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<double>* GetAllColor_Y()
+        std::vector<double>* GetAllColor_Y()
         {
             const auto count = GetCount();
             
@@ -8626,7 +8626,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<double>* GetAllColor_Z()
+        std::vector<double>* GetAllColor_Z()
         {
             const auto count = GetCount();
             
@@ -8654,7 +8654,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<double>* GetAllColorUvScaling_X()
+        std::vector<double>* GetAllColorUvScaling_X()
         {
             const auto count = GetCount();
             
@@ -8682,7 +8682,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<double>* GetAllColorUvScaling_Y()
+        std::vector<double>* GetAllColorUvScaling_Y()
         {
             const auto count = GetCount();
             
@@ -8710,7 +8710,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<double>* GetAllColorUvOffset_X()
+        std::vector<double>* GetAllColorUvOffset_X()
         {
             const auto count = GetCount();
             
@@ -8738,7 +8738,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<double>* GetAllColorUvOffset_Y()
+        std::vector<double>* GetAllColorUvOffset_Y()
         {
             const auto count = GetCount();
             
@@ -8766,7 +8766,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<double>* GetAllNormalUvScaling_X()
+        std::vector<double>* GetAllNormalUvScaling_X()
         {
             const auto count = GetCount();
             
@@ -8794,7 +8794,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<double>* GetAllNormalUvScaling_Y()
+        std::vector<double>* GetAllNormalUvScaling_Y()
         {
             const auto count = GetCount();
             
@@ -8822,7 +8822,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<double>* GetAllNormalUvOffset_X()
+        std::vector<double>* GetAllNormalUvOffset_X()
         {
             const auto count = GetCount();
             
@@ -8850,7 +8850,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<double>* GetAllNormalUvOffset_Y()
+        std::vector<double>* GetAllNormalUvOffset_Y()
         {
             const auto count = GetCount();
             
@@ -8878,7 +8878,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<double>* GetAllNormalAmount()
+        std::vector<double>* GetAllNormalAmount()
         {
             const auto count = GetCount();
             
@@ -8906,7 +8906,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<double>* GetAllGlossiness()
+        std::vector<double>* GetAllGlossiness()
         {
             const auto count = GetCount();
             
@@ -8934,7 +8934,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<double>* GetAllSmoothness()
+        std::vector<double>* GetAllSmoothness()
         {
             const auto count = GetCount();
             
@@ -8962,7 +8962,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<double>* GetAllTransparency()
+        std::vector<double>* GetAllTransparency()
         {
             const auto count = GetCount();
             
@@ -9130,7 +9130,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<double>* GetAllArea()
+        std::vector<double>* GetAllArea()
         {
             const auto count = GetCount();
             
@@ -9158,7 +9158,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<double>* GetAllVolume()
+        std::vector<double>* GetAllVolume()
         {
             const auto count = GetCount();
             
@@ -9186,7 +9186,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<bool>* GetAllIsPaint()
+        std::vector<bool>* GetAllIsPaint()
         {
             const auto count = GetCount();
             
@@ -9338,7 +9338,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<int>* GetAllOrderIndex()
+        std::vector<int>* GetAllOrderIndex()
         {
             const auto count = GetCount();
             
@@ -9366,7 +9366,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<double>* GetAllWidth()
+        std::vector<double>* GetAllWidth()
         {
             const auto count = GetCount();
             
@@ -9394,7 +9394,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<const std::string*>* GetAllMaterialFunctionAssignment()
+        std::vector<const std::string*>* GetAllMaterialFunctionAssignment()
         {
             const auto count = GetCount();
             
@@ -9523,7 +9523,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<double>* GetAllWidth()
+        std::vector<double>* GetAllWidth()
         {
             const auto count = GetCount();
             
@@ -9784,7 +9784,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<float>* GetAllBox_Min_X()
+        std::vector<float>* GetAllBox_Min_X()
         {
             const auto count = GetCount();
             
@@ -9812,7 +9812,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<float>* GetAllBox_Min_Y()
+        std::vector<float>* GetAllBox_Min_Y()
         {
             const auto count = GetCount();
             
@@ -9840,7 +9840,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<float>* GetAllBox_Min_Z()
+        std::vector<float>* GetAllBox_Min_Z()
         {
             const auto count = GetCount();
             
@@ -9868,7 +9868,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<float>* GetAllBox_Max_X()
+        std::vector<float>* GetAllBox_Max_X()
         {
             const auto count = GetCount();
             
@@ -9896,7 +9896,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<float>* GetAllBox_Max_Y()
+        std::vector<float>* GetAllBox_Max_Y()
         {
             const auto count = GetCount();
             
@@ -9924,7 +9924,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<float>* GetAllBox_Max_Z()
+        std::vector<float>* GetAllBox_Max_Z()
         {
             const auto count = GetCount();
             
@@ -9952,7 +9952,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<int>* GetAllVertexCount()
+        std::vector<int>* GetAllVertexCount()
         {
             const auto count = GetCount();
             
@@ -9980,7 +9980,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<int>* GetAllFaceCount()
+        std::vector<int>* GetAllFaceCount()
         {
             const auto count = GetCount();
             
@@ -10336,7 +10336,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<int>* GetAllSystemType()
+        std::vector<int>* GetAllSystemType()
         {
             const auto count = GetCount();
             
@@ -10470,7 +10470,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<int>* GetAllRoles()
+        std::vector<int>* GetAllRoles()
         {
             const auto count = GetCount();
             
@@ -10607,7 +10607,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<const std::string*>* GetAllGuid()
+        std::vector<const std::string*>* GetAllGuid()
         {
             const auto count = GetCount();
             
@@ -10636,7 +10636,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<const std::string*>* GetAllSeverity()
+        std::vector<const std::string*>* GetAllSeverity()
         {
             const auto count = GetCount();
             
@@ -10665,7 +10665,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<const std::string*>* GetAllDescription()
+        std::vector<const std::string*>* GetAllDescription()
         {
             const auto count = GetCount();
             
@@ -10942,7 +10942,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<bool>* GetAllIsSurveyPoint()
+        std::vector<bool>* GetAllIsSurveyPoint()
         {
             const auto count = GetCount();
             
@@ -10970,7 +10970,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<double>* GetAllPosition_X()
+        std::vector<double>* GetAllPosition_X()
         {
             const auto count = GetCount();
             
@@ -10998,7 +10998,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<double>* GetAllPosition_Y()
+        std::vector<double>* GetAllPosition_Y()
         {
             const auto count = GetCount();
             
@@ -11026,7 +11026,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<double>* GetAllPosition_Z()
+        std::vector<double>* GetAllPosition_Z()
         {
             const auto count = GetCount();
             
@@ -11054,7 +11054,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<double>* GetAllSharedPosition_X()
+        std::vector<double>* GetAllSharedPosition_X()
         {
             const auto count = GetCount();
             
@@ -11082,7 +11082,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<double>* GetAllSharedPosition_Y()
+        std::vector<double>* GetAllSharedPosition_Y()
         {
             const auto count = GetCount();
             
@@ -11110,7 +11110,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<double>* GetAllSharedPosition_Z()
+        std::vector<double>* GetAllSharedPosition_Z()
         {
             const auto count = GetCount();
             
@@ -11259,7 +11259,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<int>* GetAllNew()
+        std::vector<int>* GetAllNew()
         {
             const auto count = GetCount();
             
@@ -11287,7 +11287,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<int>* GetAllExisting()
+        std::vector<int>* GetAllExisting()
         {
             const auto count = GetCount();
             
@@ -11315,7 +11315,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<int>* GetAllDemolished()
+        std::vector<int>* GetAllDemolished()
         {
             const auto count = GetCount();
             
@@ -11343,7 +11343,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<int>* GetAllTemporary()
+        std::vector<int>* GetAllTemporary()
         {
             const auto count = GetCount();
             
@@ -11597,7 +11597,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<double>* GetAllStartPoint_X()
+        std::vector<double>* GetAllStartPoint_X()
         {
             const auto count = GetCount();
             
@@ -11625,7 +11625,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<double>* GetAllStartPoint_Y()
+        std::vector<double>* GetAllStartPoint_Y()
         {
             const auto count = GetCount();
             
@@ -11653,7 +11653,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<double>* GetAllStartPoint_Z()
+        std::vector<double>* GetAllStartPoint_Z()
         {
             const auto count = GetCount();
             
@@ -11681,7 +11681,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<double>* GetAllEndPoint_X()
+        std::vector<double>* GetAllEndPoint_X()
         {
             const auto count = GetCount();
             
@@ -11709,7 +11709,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<double>* GetAllEndPoint_Y()
+        std::vector<double>* GetAllEndPoint_Y()
         {
             const auto count = GetCount();
             
@@ -11737,7 +11737,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<double>* GetAllEndPoint_Z()
+        std::vector<double>* GetAllEndPoint_Z()
         {
             const auto count = GetCount();
             
@@ -11765,7 +11765,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<bool>* GetAllIsCurved()
+        std::vector<bool>* GetAllIsCurved()
         {
             const auto count = GetCount();
             
@@ -11793,7 +11793,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<double>* GetAllExtents_Min_X()
+        std::vector<double>* GetAllExtents_Min_X()
         {
             const auto count = GetCount();
             
@@ -11821,7 +11821,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<double>* GetAllExtents_Min_Y()
+        std::vector<double>* GetAllExtents_Min_Y()
         {
             const auto count = GetCount();
             
@@ -11849,7 +11849,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<double>* GetAllExtents_Min_Z()
+        std::vector<double>* GetAllExtents_Min_Z()
         {
             const auto count = GetCount();
             
@@ -11877,7 +11877,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<double>* GetAllExtents_Max_X()
+        std::vector<double>* GetAllExtents_Max_X()
         {
             const auto count = GetCount();
             
@@ -11905,7 +11905,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<double>* GetAllExtents_Max_Y()
+        std::vector<double>* GetAllExtents_Max_Y()
         {
             const auto count = GetCount();
             
@@ -11933,7 +11933,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<double>* GetAllExtents_Max_Z()
+        std::vector<double>* GetAllExtents_Max_Z()
         {
             const auto count = GetCount();
             
@@ -12096,7 +12096,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<double>* GetAllValue()
+        std::vector<double>* GetAllValue()
         {
             const auto count = GetCount();
             
@@ -12124,7 +12124,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<double>* GetAllPerimeter()
+        std::vector<double>* GetAllPerimeter()
         {
             const auto count = GetCount();
             
@@ -12152,7 +12152,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<const std::string*>* GetAllNumber()
+        std::vector<const std::string*>* GetAllNumber()
         {
             const auto count = GetCount();
             
@@ -12181,7 +12181,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<bool>* GetAllIsGrossInterior()
+        std::vector<bool>* GetAllIsGrossInterior()
         {
             const auto count = GetCount();
             
@@ -12309,7 +12309,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<bool>* GetAllIsGrossBuildingArea()
+        std::vector<bool>* GetAllIsGrossBuildingArea()
         {
             const auto count = GetCount();
             
@@ -12508,7 +12508,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<const std::string*>* GetAllName()
+        std::vector<const std::string*>* GetAllName()
         {
             const auto count = GetCount();
             
@@ -12537,7 +12537,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<int>* GetAllColumnIndex()
+        std::vector<int>* GetAllColumnIndex()
         {
             const auto count = GetCount();
             
@@ -12660,7 +12660,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<const std::string*>* GetAllValue()
+        std::vector<const std::string*>* GetAllValue()
         {
             const auto count = GetCount();
             
@@ -12689,7 +12689,7 @@ namespace Vim
             return {};
         }
         
-        const std::vector<int>* GetAllRowIndex()
+        std::vector<int>* GetAllRowIndex()
         {
             const auto count = GetCount();
             
