@@ -54,7 +54,7 @@ void test_element(const Vim::DocumentModel& model)
     test("Element 30 ID", element->mId, 374011ll);
     test("Element 30 Name", *element->mName, std::string("GWB on Mtl. Stud"));
     test("Element 30 UniqueID", *element->mUniqueId, std::string("3ae43fb5-6797-479b-ac14-3436f35a7178-0005b4fb"));
-    test("Element 30 FamilyNome", *element->mFamilyName, std::string("Compound Ceiling"));
+    test("Element 30 FamilyName", *element->mFamilyName, std::string("Compound Ceiling"));
     test("Element 30 IsPinned", element->mIsPinned, false);
     test("Element 30 LevelIndex", element->mLevelIndex, 6);
     test("Element 30 PhaseCreatedIndex", element->mPhaseCreatedIndex, 1);
