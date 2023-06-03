@@ -1,7 +1,9 @@
 name: Build merged C#
 
 on:
-  workflow_dispatch:
+  push:
+    branches:
+      - vadim/repo-setup
   # pull_request:
   #   branches:
   #     - develop
