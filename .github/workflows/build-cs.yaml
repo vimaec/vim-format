@@ -1,0 +1,48 @@
+name: Build merged C#
+
+on:
+  workflow_dispatch:
+  # pull_request:
+  #   branches:
+  #     - develop
+
+env:
+  DOTNET_VERSION: 6.0.x
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+
+  build_merged:
+    runs-on: ubuntu-latest
+
+    steps:
+
+      ###########################################
+      # CONFIG AND SETUP
+      ###########################################
+
+      - name: Setup dotnet ${{ env.DOTNET_VERSION }}
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+
+      - name: Git Checkout
+        uses: actions/checkout@v2
+
+      - name: Setup Git VIM Robot User Info
+        run: |
+          git config --global user.email "vim-robot@email.com"
+          git config --global user.name "Vim Robot"
+
+      - name: Merge with base
+        run: git merge origin/develop
+        # run: git merge origin/${GITHUB_BASE_REF} # GITHUB_BASE_REF is only defined for pull requests
+        shell: bash
+
+      ###########################################
+      # BUILD
+      ###########################################
+
+      - name: Build the Solution (Release)
+        shell: bash
+        run: dotnet build ./src/cs/vim-format.sln -c Release
