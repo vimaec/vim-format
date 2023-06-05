@@ -2,7 +2,7 @@ import { VimDocument } from '../src/objectModel'
 import { BFast } from '../src/bfast'
 import { loadFile } from './helpers'
 
-const vimFilePath = `${__dirname}/../data/Wolford_Residence.r2023.vim`
+const vimFilePath = `${__dirname}/../../../data/Wolford_Residence.r2023.vim`
 
 describe('testing VIM loading file', () => {
     test('loading VIM file', async () => {

@@ -3,7 +3,7 @@ import { BFast } from '../src/bfast'
 import { loadFile } from './helpers'
 import { VimHelpers } from '../src/vimHelpers'
 
-const vimFilePath = `${__dirname}/../data/Wolford_Residence.r2023.vim`
+const vimFilePath = `${__dirname}/../../../data/Wolford_Residence.r2023.vim`
 
 describe('testing vimHelpers.ts getElementParameters', () => {
     test('getting element parameters', async () => {
