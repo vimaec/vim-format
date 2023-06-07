@@ -5,13 +5,10 @@ SRC=`pwd`/../src/cpp/vim
 bash build-cpp-tests.sh
 
 echo Running C++ tests...
-
-$SRC/test_app |
-  while IFS= read -r line
-  do
-    echo "$line"
-  done
+$SRC/test_app
+CODE=$?
 
 echo Cleaning up...
-
 rm $SRC/test_app
+
+exit $CODE
