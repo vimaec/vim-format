@@ -4,6 +4,7 @@
 #define __OBJECT_MODEL_H__
 
 #include <string>
+#include <cstring>
 #include <vector>
 #include "bfast.h"
 #include "vim.h"

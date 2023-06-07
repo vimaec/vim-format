@@ -41,5 +41,5 @@ jobs:
 
       - name: g++ build
         shell: bash
-        run: build-cpp-tests.sh
+        run: ./build-cpp-tests.sh
         working-directory: ./devops

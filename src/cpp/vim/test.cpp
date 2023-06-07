@@ -1,4 +1,5 @@
 #include <iostream>
+#include <memory>
 #include "object-model.h"
 
 template<typename T>
@@ -100,7 +101,7 @@ void test_get_all(const Vim::DocumentModel& model)
 }
 
 constexpr char pathSeparator =
-#if defined(__ANDROID__) || defined(__APPLE__)
+#if defined(__ANDROID__) || defined(__APPLE__) || defined(__linux__)
     '/';
 #else
     '\\';
@@ -110,7 +111,7 @@ std::string normalize_path(const std::string& fileName)
 {
     std::string ret = fileName;
 
-#if defined(__ANDROID__) || defined(__APPLE__)
+#if defined(__ANDROID__) || defined(__APPLE__) || defined(__linux__)
     std::replace(ret.begin(), ret.end(), '\\', pathSeparator);
 #else
     std::replace(ret.begin(), ret.end(), '/', pathSeparator);

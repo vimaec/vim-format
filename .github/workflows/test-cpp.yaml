@@ -11,7 +11,7 @@ on:
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
 
-  build_merged:
+  test_merged:
     runs-on: ubuntu-latest
 
     steps:
@@ -39,7 +39,7 @@ jobs:
       # BUILD
       ###########################################
 
-      - name: g++ build
+      - name: Test
         shell: bash
-        run: run-cpp-tests.sh
+        run: ./run-cpp-tests.sh
         working-directory: ./devops
