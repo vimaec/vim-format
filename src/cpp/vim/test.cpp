@@ -111,7 +111,7 @@ std::string normalize_path(const std::string& fileName)
     std::string ret = fileName;
 
 #if defined(__ANDROID__) || defined(__APPLE__)
-    std::replace(ret.begin(), ret.end(), '\\', platformPathSeparator);
+    std::replace(ret.begin(), ret.end(), '\\', pathSeparator);
 #else
     std::replace(ret.begin(), ret.end(), '/', pathSeparator);
 #endif
