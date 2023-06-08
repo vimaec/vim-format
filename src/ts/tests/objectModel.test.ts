@@ -25,8 +25,8 @@ class TestCase {
 }
 
 const testCases: TestCase[] = [
-    new TestCase(`${__dirname}/../data/Wolford_Residence.r2023.om_v4.4.0.vim`, 4464, new BigInt64Array([-1n, 1222722n, 32440n, 118390n, 174750n, 18438n, 355500n, 185913n, 9946n, 182664n])),
-    new TestCase(`${__dirname}/../data/Wolford_Residence.r2023.om_v5.0.0.vim`, 4473, new BigInt64Array([-1n, 1222722n, 75912n, -1n, 32440n, 118390n, 22793n, 22794n, 22795n, 22796n]))
+    new TestCase(`${__dirname}/../../../data/Wolford_Residence.r2023.om_v4.4.0.vim`, 4464, new BigInt64Array([-1n, 1222722n, 32440n, 118390n, 174750n, 18438n, 355500n, 185913n, 9946n, 182664n])),
+    new TestCase(`${__dirname}/../../../data/Wolford_Residence.r2023.om_v5.0.0.vim`, 4473, new BigInt64Array([-1n, 1222722n, 75912n, -1n, 32440n, 118390n, 22793n, 22794n, 22795n, 22796n]))
 ]
 
 async function getElementById(doc: VimDocument, id: bigint): Promise<IElement>

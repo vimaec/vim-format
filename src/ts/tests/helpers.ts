@@ -3,7 +3,7 @@ import { BFast } from '../src/bfast'
 import { AbstractG3d, G3d } from '../src/g3d'
 import { RemoteG3d } from '../src/remoteG3d'
 
-export const testVimFilePath = `${__dirname}/../data/Wolford_Residence.r2023.om_v4.4.0.vim`
+export const testVimFilePath = `${__dirname}/../../../data/Wolford_Residence.r2023.om_v4.4.0.vim`
 
 export function getFilterTestFile(instance : number){
   return 'tests/filter_'+instance+'.txt'
