@@ -12,6 +12,8 @@ class G3dRemoteAttribute {
 
   async getAll<T extends TypedArray>() {
     const bytes = await this.bfast.getBytes(this.descriptor.description)
+    if(!bytes) return
+    
     const data = G3dAttribute.castData(bytes, this.descriptor.dataType)
     return data as T
   }
@@ -20,9 +22,8 @@ class G3dRemoteAttribute {
     return await this.bfast.getValue(this.descriptor.description, index)
   }
 
-  async getNumber(index: number){
-    const count = await this.bfast.getValue(this.descriptor.description, index)
-    return count
+  async getNumber(index: number): Promise<number> {
+    return Number(await this.bfast.getValue(this.descriptor.description, index))
   }
 
   async getValue<T extends TypedArray>(index: number){

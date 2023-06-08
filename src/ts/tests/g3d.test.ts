@@ -1,11 +1,10 @@
-import { g3dAreEqual, getFilterTestFile, instanceAreEqual, loadG3d } from "./helpers"
+import { g3dAreEqual, getFilterTestFile, instanceAreEqual, loadG3d, testVimFilePath } from "./helpers"
 import * as fs from 'fs';
-
 
 describe('G3d', () =>{
   
   test('g3d.append', async () =>{
-    const g3d = await loadG3d()
+    const g3d = await loadG3d(testVimFilePath)
 
     for(let i = 0; i < g3d.getInstanceCount(); i++ ){
       const slice = g3d.slice(i)
@@ -16,12 +15,12 @@ describe('G3d', () =>{
   })
   
   test('g3d.equals (all)', async () =>{
-    const g3d = await loadG3d()
+    const g3d = await loadG3d(testVimFilePath)
     expect(g3dAreEqual(g3d, g3d)).toBeTruthy()
   })
 
   test('g3d.filter (all)', async () => {
-    const g3d = await loadG3d()
+    const g3d = await loadG3d(testVimFilePath)
 
     const instances = g3d.instanceMeshes.map((_,i) => i)
     const filter = g3d.filter([...instances])
@@ -31,7 +30,7 @@ describe('G3d', () =>{
  
 
   test('G3d.filter (some)', async () =>{
-    const g3d = await loadG3d()
+    const g3d = await loadG3d(testVimFilePath)
     const instances = [0, 1, 4000, 8059]
     for(let i=0; i < instances.length; i++){
       const instance = instances[i]

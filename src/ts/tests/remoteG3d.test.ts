@@ -1,11 +1,10 @@
-import { g3dAreEqual, expectG3dAreSame, loadAbstract, loadBoth, loadG3d, loadRemote, getFilterTestFile } from './helpers'
+import { g3dAreEqual, expectG3dAreSame, loadAbstract, loadBoth, loadG3d, loadRemote, testVimFilePath } from './helpers'
 import { VimAttributes } from '../src/g3d'
-import * as fs from 'fs';
 
 describe('RemoteG3d', () => {
   
   test('RemoteG3d.getVertexCount', async () => {
-      const [g3d, remoteG3d] = await loadBoth()
+      const [g3d, remoteG3d] = await loadBoth(testVimFilePath)
 
       const value = await remoteG3d.getVertexCount()
       const expected = g3d.getVertexCount()
@@ -14,7 +13,7 @@ describe('RemoteG3d', () => {
   })
 
   test('RemoteG3d.getMeshCount', async () => {
-    const [g3d, remoteG3d] = await loadBoth()
+    const [g3d, remoteG3d] = await loadBoth(testVimFilePath)
 
     const value = await remoteG3d.getMeshCount()
     const expected = g3d.getMeshCount()
@@ -23,7 +22,7 @@ describe('RemoteG3d', () => {
   })
 
   test('RemoteG3d.getSubmeshCount', async () => {
-    const [g3d, remoteG3d] = await loadBoth()
+    const [g3d, remoteG3d] = await loadBoth(testVimFilePath)
 
     const value = await remoteG3d.getSubmeshCount()
     const expected = g3d.getSubmeshCount()
@@ -32,7 +31,7 @@ describe('RemoteG3d', () => {
 
   test('RemoteG3d.meshSubmeshes', async () => {
     
-    const [g3d, remoteG3d] = await loadBoth()
+    const [g3d, remoteG3d] = await loadBoth(testVimFilePath)
     const meshCount = g3d.getMeshCount()
     
     for (let m=0; m < meshCount; m++){
@@ -44,7 +43,7 @@ describe('RemoteG3d', () => {
 
   test('RemoteG3d.getMeshSubmeshStart', async () => {
     
-    const [g3d, remoteG3d] = await loadBoth()
+    const [g3d, remoteG3d] = await loadBoth(testVimFilePath)
     const meshCount = g3d.getMeshCount()
     
     for (let m=0; m < meshCount; m++){
@@ -56,7 +55,7 @@ describe('RemoteG3d', () => {
 
   test('RemoteG3d.getMeshSubmeshEnd', async () => {
     
-    const [g3d, remoteG3d] = await loadBoth()
+    const [g3d, remoteG3d] = await loadBoth(testVimFilePath)
     const meshCount = g3d.getMeshCount()
     
     for (let m=0; m < meshCount; m++){
@@ -68,7 +67,7 @@ describe('RemoteG3d', () => {
 
   test('RemoteG3d.getMeshIndexStart', async () => {
     
-    const [g3d, remoteG3d] = await loadBoth()
+    const [g3d, remoteG3d] = await loadBoth(testVimFilePath)
     const meshCount = g3d.getMeshCount()
     
     for (let m=0; m < meshCount; m++){
@@ -80,7 +79,7 @@ describe('RemoteG3d', () => {
 
   test('RemoteG3d.getMeshIndexEnd', async () => {
     
-    const [g3d, remoteG3d] = await loadBoth()
+    const [g3d, remoteG3d] = await loadBoth(testVimFilePath)
     const meshCount = g3d.getMeshCount()
     for (let m=0; m < meshCount; m++){
       const value = await remoteG3d.getMeshIndexEnd(m)
@@ -91,7 +90,7 @@ describe('RemoteG3d', () => {
 
   test('RemoteG3d.getMeshIndexCount', async () => {
     
-    const [g3d, remoteG3d] = await loadBoth()
+    const [g3d, remoteG3d] = await loadBoth(testVimFilePath)
     const meshCount = g3d.getMeshCount()
 
     for(let m=0; m < meshCount; m++ ){
@@ -103,9 +102,9 @@ describe('RemoteG3d', () => {
 
   test('RemoteG3d.getMeshIndices', async () => {
     
-    const remote = await loadRemote()
-    const abstract = await loadAbstract()
-    const g3d = await loadG3d()
+    const remote = await loadRemote(testVimFilePath)
+    const abstract = await loadAbstract(testVimFilePath)
+    const g3d = await loadG3d(testVimFilePath)
     const meshCount = g3d.getMeshCount()
 
     const compareIndices = async function(mesh: number){
@@ -128,7 +127,7 @@ describe('RemoteG3d', () => {
 
   test('RemoteG3d.getMeshSubmeshCount', async () => {
     
-    const [g3d, remoteG3d] = await loadBoth()
+    const [g3d, remoteG3d] = await loadBoth(testVimFilePath)
     const meshCount = g3d.getMeshCount()
     for(let m=0; m < meshCount; m++){
       const value = await remoteG3d.getMeshSubmeshCount(m)
@@ -139,9 +138,9 @@ describe('RemoteG3d', () => {
 
   test('RemoteG3d.getSubmeshIndexStart', async () => {
     
-    const remoteG3d = await loadRemote()
-    const abstract = await loadAbstract()
-    const g3d = await loadG3d()
+    const remoteG3d = await loadRemote(testVimFilePath)
+    const abstract = await loadAbstract(testVimFilePath)
+    const g3d = await loadG3d(testVimFilePath)
     const submeshCount = g3d.getSubmeshCount()
     
     for(let m=0; m < submeshCount; m++){
@@ -158,9 +157,9 @@ describe('RemoteG3d', () => {
   
   test('RemoteG3d.getSubmeshIndexEnd', async () => {
     
-    const remoteG3d = await loadRemote()
-    const abstract = await loadAbstract()
-    const g3d = await loadG3d()
+    const remoteG3d = await loadRemote(testVimFilePath)
+    const abstract = await loadAbstract(testVimFilePath)
+    const g3d = await loadG3d(testVimFilePath)
     const submeshCount = g3d.getSubmeshCount()
     
     for(let m=0; m < submeshCount; m++){
@@ -176,7 +175,7 @@ describe('RemoteG3d', () => {
 
   test('RemoteG3d.getSubmeshIndexCount', async () => {
     
-    const [g3d, remoteG3d] = await loadBoth()
+    const [g3d, remoteG3d] = await loadBoth(testVimFilePath)
     const submeshCount = g3d.getSubmeshCount()
     for(let m=0; m < submeshCount; m++){
       const value = await remoteG3d.getSubmeshIndexCount(-1)
@@ -186,13 +185,13 @@ describe('RemoteG3d', () => {
   })
 
   test('RemoteG3d.toG3d', async () =>{
-    const [g3d, remote] = await loadBoth()
+    const [g3d, remote] = await loadBoth(testVimFilePath)
     const value = await remote.toG3d()
     expectG3dAreSame(value, g3d)
   })  
 
   test('RemoteG3d.slice', async () =>{
-    const [g3d, remote] = await loadBoth()
+    const [g3d, remote] = await loadBoth(testVimFilePath)
     for(let i = 0; i < g3d.getInstanceCount(); i++ ){
       const value = await remote.slice(i)
       const expected = await g3d.slice(i)
@@ -201,7 +200,7 @@ describe('RemoteG3d', () => {
   }) 
 
   test('RemoteG3d.filter (all)', async () =>{
-    const [g3d, remote] = await loadBoth()
+    const [g3d, remote] = await loadBoth(testVimFilePath)
     const instances = Array.from(g3d.instanceMeshes.map((_,i) => i))
       const expected = g3d.filter(instances)
       const value = await remote.filter(instances)

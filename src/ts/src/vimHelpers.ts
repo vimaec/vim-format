@@ -1,125 +1,4 @@
-/**
- * @module vim-ts
- */
-
 import { VimDocument } from "./objectModel"
-
-export class VimHelpers {
-  /**
-   * Returns all parameters of an element and of its family type and family
-   * @param element element index
-   * @returns An array of paramters with name, value, group
-   */
-  static async getElementParameters (document: VimDocument, element: number) {
-    const result: ElementParameter[] = []
-    
-    await Promise.all([
-      this.getElementsParameters(document, [element], true).then(p => p?.forEach(i => result.push(i))),
-      this.getAllFamilyParameters(document, element).then(p => p?.forEach(i => result.push(i)))
-    ])
-
-    return result
-  }
-
-  private static async getAllFamilyParameters (document: VimDocument, element: number) {
-    const familyInstance = await this.getElementFamilyInstance(document, element)
-
-    const familyType = familyInstance
-      ? await document.familyInstance?.getFamilyTypeIndex(familyInstance)
-      : undefined
-
-    let family: number | undefined
-    let familyTypeElement: number | undefined
-
-    if (familyType)
-      await Promise.all([
-        document.familyType?.getFamilyIndex(familyType).then((f) => family = f),
-        document.familyType?.getElementIndex(familyType).then((fte) => familyTypeElement = fte)
-      ])
-
-    const familyElement = family
-      ? await document.family?.getElementIndex(family)
-      : undefined
-
-    const elements: number[] = []
-
-    if (familyTypeElement)
-      elements.push(familyTypeElement)
-
-    if (familyElement)
-      elements.push(familyElement)
-
-    return await this.getElementsParameters(document, elements, false)
-  }
-
-  private static async getElementsParameters (document: VimDocument, elements: number[], isInstance: boolean) {
-    const set = new Set(elements)
-
-    const getParameterDisplayValue = async (index: number) => {
-      const value = (await document.parameter?.getValue(index))
-        ?.split('|')
-        .filter((s) => s.length > 0)
-      const displayValue = value?.[value.length - 1] ?? value?.[0]
-      return displayValue
-    }
-
-    const getParameterName = async (descriptor: number | undefined) => {
-      if (descriptor === undefined) return
-      return await document.parameterDescriptor?.getName(descriptor)
-    }
-
-    const getParameterGroup = async (descriptor: number | undefined) => {
-      if (!descriptor) return
-      return await document.parameterDescriptor?.getGroup(descriptor)
-    }
-
-    const elementIndices = await document.parameter?.getAllElementIndex()
-
-    if (!elementIndices)
-      return undefined
-
-    const result: ElementParameter[] = []
-
-    await Promise.all(elementIndices.map(async (e, i) => {
-      if (!set.has(e))
-        return
-
-      let name: string | undefined
-      let value: string | undefined
-      let group: string | undefined
-
-      await Promise.all([
-        getParameterName(e).then((n) => name = n),
-        getParameterDisplayValue(i).then((v) => value = v),
-        getParameterGroup(e).then((g) => group = g)
-      ])
-
-      result.push({ name, value, group, isInstance })
-    }))
-
-    return result
-  }
-
-  private static async getElementFamilyInstance (document: VimDocument, element: number) {
-    if (!document.familyInstance)
-      return undefined
-
-    const elementIndices = await document.familyInstance.getAllElementIndex()
-
-    if (!elementIndices)
-      return undefined
-
-    let result: number | undefined
-
-    await Promise.all(elementIndices.map(async (e, i) => {
-      if (e === element) {
-        result = i
-      }
-    }))
-
-    return result
-  }
-}
 
 /**
  * Representation of ElementParamter entity from the entity model
@@ -131,3 +10,92 @@ export type ElementParameter = {
   group: string | undefined
   isInstance: boolean
 }
+  
+  /**
+   * Returns all parameters of an element and of its family type and family
+   * @param element element index
+   * @returns An array of paramters with name, value, group
+   */
+  export async function getElementParameters (document: VimDocument, element: number) {
+    const elements = new Map<number, boolean>()
+    elements.set(element, true)
+
+    const familyElements = await getFamilyElements(document, element)
+    familyElements.forEach(element => elements.set(element, false))
+
+    return getElementsParameters(document, elements)
+  }
+
+  export async function getFamilyElements(document: VimDocument, element: number){
+    const familyInstance = await getElementFamilyInstance(document, element)
+
+    const familyType = Number.isInteger(familyInstance)
+      ? await document.familyInstance.getFamilyTypeIndex(familyInstance)
+      : undefined
+
+    const getFamilyElement = async (familyType: number) =>
+    {
+      const family = await document.familyType.getFamilyIndex(familyType)
+
+      return Number.isInteger(family)
+       ? await document.family.getElementIndex(family)
+       : undefined
+    }
+
+    return Number.isInteger(familyType)
+      ? await Promise.all([
+        getFamilyElement(familyType), 
+        document.familyType.getElementIndex(familyType)
+      ])
+      : [undefined, undefined]
+  }
+
+  export async function getElementsParameters (document: VimDocument, elements: Map<number, boolean>) {
+    const [parameterElements, parameterValues, getParameterDescriptorIndices, parameterDescriptorNames, parameterDescriptorGroups] = await Promise.all([
+      document.parameter.getAllElementIndex(),
+      document.parameter.getAllValue(),
+      document.parameter.getAllParameterDescriptorIndex(),
+      document.parameterDescriptor.getAllName(),
+      document.parameterDescriptor.getAllGroup()
+    ])
+    if (!parameterElements) return undefined
+
+    const getParameterDisplayValue = (index: number) => {
+      const value = parameterValues[index]
+      const split = value.indexOf('|')
+      if(split >= 0){
+        return value.substring(split +1, value.length)
+      }
+      else return value
+    }
+
+    const parameters = new Array<[number, boolean]>()
+    parameterElements.forEach((e,i) => {
+      if(elements.has(e)){
+        parameters.push([i, elements.get(e)])
+      }
+    })
+
+    return parameters.map(([parameter, isInstance]) =>{
+      const descriptor = getParameterDescriptorIndices[parameter]
+      const value = getParameterDisplayValue(parameter)
+
+      const name = Number.isInteger(descriptor)
+       ? parameterDescriptorNames[descriptor]
+       : undefined
+
+      const group = Number.isInteger(descriptor)
+       ? parameterDescriptorGroups[descriptor]
+       : undefined
+
+      return {name, value, group, isInstance} as ElementParameter
+    })
+  }
+
+  async function getElementFamilyInstance (document: VimDocument, element: number) {
+    const familyInstanceElement = await document.familyInstance.getAllElementIndex()
+    const result = familyInstanceElement.findIndex(e => e === element)
+    return result < 0 ? undefined : result
+  }
+
+  

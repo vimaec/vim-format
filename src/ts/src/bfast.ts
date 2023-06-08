@@ -5,15 +5,29 @@
  import { RemoteValue } from './remoteValue'
  import { RemoteBuffer } from './remoteBuffer'
  
- type ArrayConstructor =
+ type NumericArrayConstructor =
    | Int8ArrayConstructor
+   | Uint8ArrayConstructor
    | Int16ArrayConstructor
    | Uint16ArrayConstructor
    | Int32ArrayConstructor
    | Uint32ArrayConstructor
+   | BigInt64ArrayConstructor
+   | BigUint64ArrayConstructor
    | Float32ArrayConstructor
    | Float64ArrayConstructor
 
+export type NumericArray =
+   | Int8Array
+   | Uint8Array
+   | Int16Array
+   | Uint16Array
+   | Int32Array
+   | Uint32Array
+   | Float32Array
+   | Float64Array
+   | BigInt64Array
+   | BigUint64Array
  
  export class Range {
    start: number
@@ -35,41 +49,53 @@
  /**
   * Returns -1 size for undefined attributes.
   */
-export function parseName(name: string): [number, ArrayConstructor]{
+export function parseName(name: string): [number, NumericArrayConstructor]{
   if(name.startsWith('g3d')){
-    const result = name.includes(':int8:') ? [1, Int8Array]
-     : name.includes(':uint8:') ? [1, Uint8Array]
-     : name.includes(':uint16:') ? [2, Uint16Array]
-     : name.includes(':int16:') ? [2, Int16Array]
-     : name.includes(':int32:') ? [4, Int32Array]
-     : name.includes(':float32:') ? [4, Float32Array]
-     : name.includes(':uint32:') ? [4, Uint32Array]
-     : [-1, undefined] 
-
-    return result as [number, ArrayConstructor]
+    const result =
+        name.includes(':int8:')    ? [1, Int8Array]
+      : name.includes(':uint8:')   ? [1, Uint8Array]
+      : name.includes(':int16:')   ? [2, Int16Array]
+      : name.includes(':uint16:')  ? [2, Uint16Array]
+      : name.includes(':int32:')   ? [4, Int32Array]
+      : name.includes(':uint32:')  ? [4, Uint32Array]
+      : name.includes(':int64:')   ? [8, BigInt64Array]
+      : name.includes(':uint64:')  ? [8, BigUint64Array]
+      : name.includes(':float32:') ? [4, Float32Array]
+      : name.includes(':float64:') ? [8, Float64Array]
+      : [-1, undefined] 
+    return result as [number, NumericArrayConstructor]
   }
   else{
-    const result = name.startsWith('byte:') ? [1, Int8Array]
-     :name.startsWith('short:') ? [2, Int16Array]
-     :name.startsWith('int:') ? [4, Int32Array]
-     :name.startsWith('float:') ? [4, Float32Array]
-     :name.startsWith('long:') ? [8, Float64Array]
-     :name.startsWith('double:') ? [8,Float64Array]
-     : [4, Int32Array] 
-     return result as [number, ArrayConstructor]
+    const result =
+        name.startsWith('byte:')   ? [1, Int8Array]
+      : name.startsWith('ubyte:')  ? [1, Uint8Array]
+      : name.startsWith('short:')  ? [2, Int16Array]
+      : name.startsWith('ushort:') ? [2, Uint16Array]
+      : name.startsWith('int:')    ? [4, Int32Array]
+      : name.startsWith('uint:')   ? [4, Uint32Array]
+      : name.startsWith('long:')   ? [8, BigInt64Array]
+      : name.startsWith('ulong:')  ? [8, BigUint64Array]
+      : name.startsWith('float:')  ? [4, Float32Array]
+      : name.startsWith('double:') ? [8, Float64Array]
+      : [-1, undefined] 
+     return result as [number, NumericArrayConstructor]
   }
 }
 
  export function typeSize (type: string) {
    switch (type) {
      case 'byte':
+     case 'ubyte':
        return 1
      case 'short':
+     case 'ushort':
        return 2
      case 'int':
+     case 'uint':
      case 'float':
        return 4
      case 'long':
+     case 'ulong':
      case 'double':
        return 8
      default:
@@ -77,17 +103,26 @@ export function parseName(name: string): [number, ArrayConstructor]{
    }
  }
  
- function typeConstructor (type: string): ArrayConstructor {
+ function typeConstructor (type: string): NumericArrayConstructor {
    switch (type) {
      case 'byte':
        return Int8Array
+     case 'ubyte':
+       return Uint8Array
      case 'short':
        return Int16Array
+     case 'ushort':
+       return Uint16Array
      case 'int':
        return Int32Array
+     case 'uint':
+       return Uint32Array
+     case 'long':
+       return BigInt64Array
+     case 'ulong':
+       return BigUint64Array
      case 'float':
        return Float32Array
-     case 'long':
      case 'double':
        return Float64Array
      default:
@@ -211,9 +246,9 @@ export function parseName(name: string): [number, ArrayConstructor]{
      return request.get()
    }
  
-   async getLocalBfast (name: string) {
+   async getLocalBfast (name: string): Promise<BFast | undefined> {
      const buffer = await this.getBuffer(name)
-     if (!buffer) return
+     if (!buffer) return undefined
      return new BFast(buffer, 0, name)
    }
  
@@ -222,11 +257,10 @@ export function parseName(name: string): [number, ArrayConstructor]{
     * This value is not cached.
     * @param name buffer name
     */
-   async getBuffer (name: string) {
+   async getBuffer (name: string): Promise<ArrayBuffer | undefined> {
      const ranges = await this.getRanges()
      const range = ranges.get(name)
-     if (!range) return
- 
+     if (!range) return undefined
      const buffer = await this.request(range, name)
      return buffer
    }
@@ -235,57 +269,58 @@ export function parseName(name: string): [number, ArrayConstructor]{
     * Returns a number array from the buffer associated with name
     * @param name buffer name
     */
-   async getArray (name: string) {
+   async getArray (name: string): Promise<NumericArray | undefined> {
      const buffer = await this.getBuffer(name)
-     if (!buffer) return
+     if (!buffer) return undefined
      const type = name.split(':')[0]
      const Ctor = typeConstructor(type)
      const array = new Ctor(buffer)
-     return Array.from(array)
+     return array
    }
- 
+
    /**
     * Returns a single value from given buffer name
     * @param name buffer name
     * @param index row index
     */
-   async getValue (name: string, index: number) {
+   async getValue (name: string, index: number): Promise<number | BigInt | undefined> {
     const array = await this.getValues(name, index, 1)
     return array?.[0]
    }
-
+ 
    async getRange(name:string){
     const ranges = await this.getRanges()
     return ranges.get(name)
    }
-
+ 
    /**
     * Returns count subsequent values from given buffer name.
     * @param name buffer name
     * @param index row index
     * @param count count of values to return
     */
-   async getValues (name: string, index: number, count: number) {
-    if(index < 0 || count < 1) return
+   async getValues (name: string, index: number, count: number): Promise<NumericArray | undefined> {
+    if (index < 0 || count < 1) return undefined
+ 
     const range = await this.getRange(name)
-    if (!range) return
-
+    if (!range) return undefined
+ 
     const [size, ctor] = parseName(name)
-    if(size < 0) return
-
+    if(size < 0) return undefined
+ 
     const start = Math.min(range.start + index * size, range.end)
     const end = Math.min(start + size * count, range.end)
     
     const dataRange = new Range(start, end)
-    if(dataRange.length <= 0) return
-
+    if(dataRange.length <= 0) return undefined
+ 
     const buffer = await this.request(
       dataRange,
       `${name}[${index.toString()}]`
     )
-    if (!buffer) return
+    if (!buffer) return undefined
+ 
     const array = new ctor(buffer)
-
     return array
   }
   /**
@@ -293,9 +328,9 @@ export function parseName(name: string): [number, ArrayConstructor]{
     * Returns the buffer with given name as a byte array
     * @param name buffer name
     */
-   async getBytes (name: string) {
+   async getBytes (name: string): Promise<Uint8Array | undefined> {
      const buffer = await this.getBuffer(name)
-     if (!buffer) return
+     if (!buffer) return undefined
      const array = new Uint8Array(buffer)
      return array
    }
@@ -304,10 +339,10 @@ export function parseName(name: string): [number, ArrayConstructor]{
     * Returns a map of name-values with the same index from all buffers.
     * @param name buffer name
     */
-   async getRow (index: number) {
+   async getRow (index: number): Promise<Map<string, number | BigInt | undefined> | undefined> {
      const ranges = await this.getRanges()
-     if (!ranges) return
-     const result = new Map<string, number | undefined>()
+     if (!ranges) return undefined
+     const result = new Map<string, number | BigInt | undefined>()
      const promises = []
      for (const name of ranges.keys()) {
        const p = this.getValue(name, index).then((v) => result.set(name, v))
@@ -334,11 +369,11 @@ export function parseName(name: string): [number, ArrayConstructor]{
    /**
     * Downloads the appropriate range and cast it as a new sub bfast.
     */
-   private async requestBfast (name: string) {
+   private async requestBfast (name: string): Promise<BFast | undefined> {
      const ranges = await this.getRanges()
  
      const range = ranges.get(name)
-     if (!range) return
+     if (!range) return undefined
  
      const result = new BFast(
        this.source,
@@ -387,7 +422,7 @@ export function parseName(name: string): [number, ArrayConstructor]{
    /**
     * Downloads and parse names from remote.
     */
-   private async requestNames (range: Range) {
+   private async requestNames (range: Range): Promise<string[]> {
      const buffer = await this.request(range, 'Names')
      const names = new TextDecoder('utf-8').decode(buffer)
      const result = names.slice(0, -1).split('\0')
@@ -397,7 +432,7 @@ export function parseName(name: string): [number, ArrayConstructor]{
    /**
     * Downloads and parse header from remote.
     */
-   private async requestHeader () {
+   private async requestHeader (): Promise<BFastHeader> {
      const buffer = await this.request(new Range(0, 32), 'Header')
      if (!buffer) throw new Error('Could not get BFAST Header')
      const result = BFastHeader.createFromBuffer(buffer)
@@ -409,7 +444,7 @@ export function parseName(name: string): [number, ArrayConstructor]{
     * @param range range to get, or get full resource if undefined
     * @param label label for logs
     */
-   private async request (range: Range, label: string) {
+   private async request (range: Range, label: string): Promise<ArrayBuffer> {
      const buffer =
        this.local(range, label) ??
        (await this.remote(range, label)) ??
@@ -429,8 +464,8 @@ export function parseName(name: string): [number, ArrayConstructor]{
    /**
     * returns requested range from cache.
     */
-   private local (range: Range, label: string) {
-     if (!(this.source instanceof ArrayBuffer)) return
+   private local (range: Range, label: string) : ArrayBuffer | undefined {
+     if (!(this.source instanceof ArrayBuffer)) return undefined
      //console.log(`Returning local ${this.name}.${label}`)
      const r = range.offset(this.offset)
      return this.source.slice(r.start, r.end)
@@ -439,17 +474,17 @@ export function parseName(name: string): [number, ArrayConstructor]{
    /**
     * returns requested range from remote.
     */
-   private async remote (range: Range | undefined, label: string) {
-     if (!(this.source instanceof RemoteBuffer)) return
+   private async remote (range: Range | undefined, label: string): Promise<ArrayBuffer | undefined> {
+     if (!(this.source instanceof RemoteBuffer)) return undefined
      const r = range?.offset(this.offset)
      const buffer = await this.source.http(r, `${this.name}.${label}`)
      if (range && (buffer?.byteLength ?? 0) < range.length) {
        console.log('Range request request failed.')
-       return
+       return undefined
      }
      return buffer
    }
-
+ 
   /**
    * Returns a new local bfast equivalent to this bfast.
    */
@@ -461,4 +496,3 @@ export function parseName(name: string): [number, ArrayConstructor]{
     return result
   }
  }
- 
