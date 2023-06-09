@@ -3,6 +3,24 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "bfast", "bfast", "{F3260C54-834F-4C74-A3B7-EAB622AFA492}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vim.BFast", "bfast\Vim.BFast\Vim.BFast.csproj", "{1059A7DE-95FA-4F54-85E3-84049E1872D5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vim.BFast.Tests", "bfast\Vim.BFast.Tests\Vim.BFast.Tests.csproj", "{000ED0CF-EC9C-488C-BE85-14B95FFDF104}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "linqarray", "linqarray", "{CF54EDFD-51AB-4B0D-B084-2DF42918BA51}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vim.LinqArray", "linqarray\Vim.LinqArray\Vim.LinqArray.csproj", "{07CA1F46-21DA-4C22-A8CB-52D526D51C94}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vim.LinqArray.Tests", "linqarray\Vim.LinqArray.Tests\Vim.LinqArray.Tests.csproj", "{461788B0-072C-485F-82C0-F83CCC86F95D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "math3d", "math3d", "{9BD3CC85-97FD-4093-AA11-58FE405B0F65}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vim.Math3D", "math3d\Vim.Math3D\Vim.Math3D.csproj", "{1086F24E-32C8-4261-9B06-A364EEE71DEF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vim.Math3D.Tests", "math3d\Vim.Math3D.Tests\Vim.Math3D.Tests.csproj", "{1CC20AA4-11F1-4548-9285-FD24D42190FB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -10,5 +28,39 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{1059A7DE-95FA-4F54-85E3-84049E1872D5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1059A7DE-95FA-4F54-85E3-84049E1872D5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1059A7DE-95FA-4F54-85E3-84049E1872D5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1059A7DE-95FA-4F54-85E3-84049E1872D5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{000ED0CF-EC9C-488C-BE85-14B95FFDF104}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{000ED0CF-EC9C-488C-BE85-14B95FFDF104}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{000ED0CF-EC9C-488C-BE85-14B95FFDF104}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{000ED0CF-EC9C-488C-BE85-14B95FFDF104}.Release|Any CPU.Build.0 = Release|Any CPU
+		{07CA1F46-21DA-4C22-A8CB-52D526D51C94}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{07CA1F46-21DA-4C22-A8CB-52D526D51C94}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{07CA1F46-21DA-4C22-A8CB-52D526D51C94}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{07CA1F46-21DA-4C22-A8CB-52D526D51C94}.Release|Any CPU.Build.0 = Release|Any CPU
+		{461788B0-072C-485F-82C0-F83CCC86F95D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{461788B0-072C-485F-82C0-F83CCC86F95D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{461788B0-072C-485F-82C0-F83CCC86F95D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{461788B0-072C-485F-82C0-F83CCC86F95D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1086F24E-32C8-4261-9B06-A364EEE71DEF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1086F24E-32C8-4261-9B06-A364EEE71DEF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1086F24E-32C8-4261-9B06-A364EEE71DEF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1086F24E-32C8-4261-9B06-A364EEE71DEF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1CC20AA4-11F1-4548-9285-FD24D42190FB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1CC20AA4-11F1-4548-9285-FD24D42190FB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1CC20AA4-11F1-4548-9285-FD24D42190FB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1CC20AA4-11F1-4548-9285-FD24D42190FB}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{1059A7DE-95FA-4F54-85E3-84049E1872D5} = {F3260C54-834F-4C74-A3B7-EAB622AFA492}
+		{000ED0CF-EC9C-488C-BE85-14B95FFDF104} = {F3260C54-834F-4C74-A3B7-EAB622AFA492}
+		{07CA1F46-21DA-4C22-A8CB-52D526D51C94} = {CF54EDFD-51AB-4B0D-B084-2DF42918BA51}
+		{461788B0-072C-485F-82C0-F83CCC86F95D} = {CF54EDFD-51AB-4B0D-B084-2DF42918BA51}
+		{1086F24E-32C8-4261-9B06-A364EEE71DEF} = {9BD3CC85-97FD-4093-AA11-58FE405B0F65}
+		{1CC20AA4-11F1-4548-9285-FD24D42190FB} = {9BD3CC85-97FD-4093-AA11-58FE405B0F65}
 	EndGlobalSection
 EndGlobal
