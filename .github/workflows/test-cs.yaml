@@ -1,4 +1,4 @@
-name: Test merged TS
+name: Test merged C#
 
 on:
   push:
@@ -8,10 +8,13 @@ on:
   #   branches:
   #     - develop
 
+env:
+  DOTNET_VERSION: 6.0.x
+
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
 
-  test_merged:
+  build_merged:
     runs-on: ubuntu-latest
 
     steps:
@@ -19,11 +22,15 @@ jobs:
       ###########################################
       # CONFIG AND SETUP
       ###########################################
- 
+
+      - name: Setup dotnet ${{ env.DOTNET_VERSION }}
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+
       - name: Git Checkout
         uses: actions/checkout@v2
         with:
-          lfs: true
           fetch-depth: 0  # fetches the whole history in order to be able to merge with the base branch
 
       - name: Setup Git VIM Robot User Info
@@ -36,15 +43,10 @@ jobs:
         # run: git merge origin/${GITHUB_BASE_REF} # GITHUB_BASE_REF is only defined for pull requests
         shell: bash
 
-      - name: Install modules
-        run: npm install
-        working-directory: ./src/ts
-
       ###########################################
       # TEST
       ###########################################
 
-      - name: NPM Test
+      - name: Test the Solution
         shell: bash
-        run: npm test
-        working-directory: ./src/ts
+        run: dotnet test ./src/cs/vim-format.sln
