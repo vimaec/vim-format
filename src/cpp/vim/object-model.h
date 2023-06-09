@@ -6,7 +6,7 @@
 #include <string>
 #include <cstring>
 #include <vector>
-#include "bfast.h"
+#include "../bfast.h"
 #include "vim.h"
 
 namespace Vim
