@@ -6,7 +6,6 @@ using Vim.Math3d;
 using Vim.BFast;
 using System.IO;
 using Vim.DotNetUtilities;
-using static Vim.DataFormat.Serializer;
 
 namespace Vim.Format
 {

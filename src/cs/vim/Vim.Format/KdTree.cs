@@ -5,7 +5,7 @@ using Vim.LinqArray;
 using Vim.Math3d;
 using System.Diagnostics;
 
-namespace Vim.Geometry
+namespace Vim.Format
 {
     public class KdTree<T> where T : IBounded
     {

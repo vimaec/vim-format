@@ -3,7 +3,7 @@ using System.Diagnostics;
 using Vim.G3d;
 using Vim.Math3d;
 
-namespace Vim.Geometry
+namespace Vim.Format
 {
     /// <summary>
     /// A triangular mesh data structure.

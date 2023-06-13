@@ -11,7 +11,25 @@
     <ProjectReference Include="..\..\math3d\Vim.Math3D\Vim.Math3D.csproj" />
     <ProjectReference Include="..\..\Vim.Constants\Vim.Constants.csproj" />
     <ProjectReference Include="..\DotNetUtilities\Vim.DotNetUtilities.csproj" />
-    <ProjectReference Include="..\Geometry\Vim.Geometry.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="ArrayOps.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>ArrayOps.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="ArrayOps.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>ArrayOps.tt</DependentUpon>
+    </Compile>
   </ItemGroup>
 
 </Project>

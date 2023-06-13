@@ -6,7 +6,7 @@ using Vim.G3d;
 using Vim.LinqArray;
 using Vim.Math3d;
 
-namespace Vim.Geometry
+namespace Vim.Format
 {
     /// <summary>
     /// The base class of topology face, topology edge, topology vertex, and topology element

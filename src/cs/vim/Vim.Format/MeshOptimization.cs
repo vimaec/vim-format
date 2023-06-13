@@ -7,7 +7,7 @@ using Vim.G3d;
 using Vim.LinqArray;
 using Vim.Math3d;
 
-namespace Vim.Geometry
+namespace Vim.Format
 {
     /// <summary>
     /// This class is used to compare quickly two meshes within a lookup table (e.g. Dictionary, HashTable).

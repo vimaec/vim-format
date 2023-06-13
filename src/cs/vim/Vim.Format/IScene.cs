@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Vim.LinqArray;
 using Vim.Math3d;
 
-namespace Vim.Geometry
+namespace Vim.Format
 {
     /// <summary>
     /// An IScene is a generic representation of a 3D scene graph.

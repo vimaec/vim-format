@@ -3,7 +3,7 @@ using System.Diagnostics;
 using System.Linq;
 using Vim.G3d;
 
-namespace Vim.Geometry
+namespace Vim.Format
 {
     /// <summary>
     /// This is a quadrilateral mesh. Note that it does not implement the IMesh interface,

@@ -2,36 +2,33 @@
 using System.Linq;
 using Vim.BFast;
 using Vim.G3d;
-using Vim.Geometry;
 using Vim.LinqArray;
-
-using static Vim.DataFormat.DocumentBuilder;
 
 namespace Vim.Format
 {
     public static class DocumentBuilderExtensions
     {
-        public static IMesh ToIMesh(this SubdividedMesh gb)
+        public static IMesh ToIMesh(this DocumentBuilder.SubdividedMesh gb)
             => Primitives.TriMesh(
                 gb.Vertices.ToIArray(),
                 gb.Indices.ToIArray(),
                 submeshMaterials: gb.SubmeshMaterials.ToIArray()
             );
 
-        public static Material ToDocumentBuilderMaterial(this G3dMaterial g3dMaterial)
-            => new Material
+        public static DocumentBuilder.Material ToDocumentBuilderMaterial(this G3dMaterial g3dMaterial)
+            => new DocumentBuilder.Material
             {
                 Color = g3dMaterial.Color,
                 Glossiness = g3dMaterial.Glossiness,
                 Smoothness = g3dMaterial.Smoothness,
             };
 
-        public static SubdividedMesh ToDocumentBuilderSubdividedMesh(this IMesh m)
-            => new SubdividedMesh(
-                m.Indices.ToList(),
-                m.Vertices.ToList(),
-                m.SubmeshIndexOffsets.ToList(),
-                m.SubmeshMaterials.ToList());
+        public static DocumentBuilder.SubdividedMesh ToDocumentBuilderSubdividedMesh(this IMesh m)
+            => new DocumentBuilder.SubdividedMesh(
+                                                  m.Indices.ToList(),
+                                                  m.Vertices.ToList(),
+                                                  m.SubmeshIndexOffsets.ToList(),
+                                                  m.SubmeshMaterials.ToList());
 
         public static void AddMesh(this DocumentBuilder db, IMesh m)
             => db.AddMesh(m.ToDocumentBuilderSubdividedMesh());

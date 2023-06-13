@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Vim.Math3d;
 
-namespace Vim.Geometry.Algorithms
+namespace Vim.Format.Algorithms
 {
     public static class GeometryCuttingUtils
     {

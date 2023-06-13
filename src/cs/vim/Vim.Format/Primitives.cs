@@ -5,7 +5,7 @@ using Vim.G3d;
 using Vim.LinqArray;
 using Vim.Math3d;
 
-namespace Vim.Geometry
+namespace Vim.Format
 {
     // TODO: plane, cylinder, cone, ruled face, 
     public static class Primitives

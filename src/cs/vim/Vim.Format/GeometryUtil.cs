@@ -4,7 +4,7 @@ using System.Linq;
 using Vim.LinqArray;
 using Vim.Math3d;
 
-namespace Vim.Geometry
+namespace Vim.Format
 {
     // TODO: many of these functions should live in other places
     public static class GeometryUtil

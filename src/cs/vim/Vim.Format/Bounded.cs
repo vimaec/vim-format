@@ -1,6 +1,6 @@
 ﻿using Vim.Math3d;
 
-namespace Vim.Geometry
+namespace Vim.Format
 {
     public interface IBounded
     {

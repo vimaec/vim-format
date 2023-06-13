@@ -2,7 +2,7 @@
 using Vim.LinqArray;
 using Vim.Math3d;
 
-namespace Vim.Geometry
+namespace Vim.Format
 {
     /// <summary>
     /// This is the interface for triangle meshes. 
