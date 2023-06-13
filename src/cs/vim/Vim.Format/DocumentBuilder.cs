@@ -5,7 +5,6 @@ using System.Linq;
 using Vim.Math3d;
 using Vim.BFast;
 using System.IO;
-using Vim.DotNetUtilities;
 
 namespace Vim.Format
 {
@@ -165,7 +164,7 @@ namespace Vim.Format
             var entityTables = ComputeEntityTables(stringLookupInfo.StringLookup);
             var stringTable = stringLookupInfo.StringTable;
 
-            Serialize(stream, Header, assets, stringTable, entityTables, new BigG3dWriter(Meshes, Instances, Shapes, Materials, null, UseColors));
+            Serializer.Serialize(stream, Header, assets, stringTable, entityTables, new BigG3dWriter(Meshes, Instances, Shapes, Materials, null, UseColors));
         }
     }
 }

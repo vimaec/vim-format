@@ -2,14 +2,9 @@
 using System.Linq;
 using System;
 using Vim.BFast;
-using Vim.G3d;
 using System.IO;
-using System.Diagnostics;
-using Vim.DotNetUtilities;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Xml.Linq;
-using System.Drawing;
 
 namespace Vim.Format
 {

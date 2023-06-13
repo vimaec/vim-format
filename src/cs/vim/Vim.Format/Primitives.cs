@@ -4,6 +4,7 @@ using System.Linq;
 using Vim.G3d;
 using Vim.LinqArray;
 using Vim.Math3d;
+using Constants = Vim.Math3d.Constants;
 
 namespace Vim.Format
 {

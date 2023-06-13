@@ -20,10 +20,10 @@ namespace Vim.Format
         public string[] Names { get; }
         public long[] Sizes { get; }
         public BFastHeader Header { get; }
-        public List<SubdividedMesh> Meshes { get; }
-        public List<Instance> Instances { get; }
-        public List<Shape> Shapes { get; }
-        public List<Material> Materials { get; }
+        public List<DocumentBuilder.SubdividedMesh> Meshes { get; }
+        public List<DocumentBuilder.Instance> Instances { get; }
+        public List<DocumentBuilder.Shape> Shapes { get; }
+        public List<DocumentBuilder.Material> Materials { get; }
 
         // Computed fields
         public int[] MeshVertexOffsets { get; }
@@ -32,7 +32,7 @@ namespace Vim.Format
         public int[] SubmeshIndexOffsets { get; }
         public int[] ShapeVertexOffsets { get; }
 
-        public BigG3dWriter(List<SubdividedMesh> meshes, List<Instance> instances, List<Shape> shapes, List<Material> materials, G3dHeader? header = null, bool useColors = false)
+        public BigG3dWriter(List<DocumentBuilder.SubdividedMesh> meshes, List<DocumentBuilder.Instance> instances, List<DocumentBuilder.Shape> shapes, List<DocumentBuilder.Material> materials, G3dHeader? header = null, bool useColors = false)
         {
             Meshes = meshes;
             Instances = instances;

@@ -2,10 +2,10 @@
 using System.Diagnostics;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using Vim.DotNetUtilities;
 using Vim.G3d;
 using Vim.LinqArray;
 using Vim.Math3d;
+using Constants = Vim.Math3d.Constants;
 
 namespace Vim.Format
 {

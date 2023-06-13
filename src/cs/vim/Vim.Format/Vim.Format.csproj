@@ -2,6 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
 
   <ItemGroup>
@@ -11,6 +12,12 @@
     <ProjectReference Include="..\..\math3d\Vim.Math3D\Vim.Math3D.csproj" />
     <ProjectReference Include="..\..\Vim.Constants\Vim.Constants.csproj" />
     <ProjectReference Include="..\DotNetUtilities\Vim.DotNetUtilities.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.Memory">
+      <Version>4.5.4</Version>
+    </PackageReference>
   </ItemGroup>
 
   <ItemGroup>

@@ -2,9 +2,6 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Security.Cryptography.X509Certificates;
-using Vim.DotNetUtilities;
-using Vim.Geometry;
 using Vim.LinqArray;
 using Vim.Math3d;
 
