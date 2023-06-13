@@ -4,7 +4,7 @@ using System.Linq;
 using Vim.LinqArray;
 using Vim.Math3d;
 
-namespace Vim.DataFormat
+namespace Vim.Format
 {
     public static partial class ColumnExtensions
     {

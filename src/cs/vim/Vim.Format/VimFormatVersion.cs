@@ -1,6 +1,6 @@
 ﻿using Vim.DotNetUtilities;
 
-namespace Vim.DataFormat
+namespace Vim.Format
 {
     public static class VimFormatVersion
     {

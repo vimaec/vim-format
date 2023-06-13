@@ -4,7 +4,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
 
-namespace Vim.DataFormat
+namespace Vim.Format
 {
     public enum ValueSerializationStrategy
     {

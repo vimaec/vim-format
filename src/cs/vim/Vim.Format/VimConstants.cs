@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Vim.DataFormat
+namespace Vim.Format
 {
     public static class TableNames
     {

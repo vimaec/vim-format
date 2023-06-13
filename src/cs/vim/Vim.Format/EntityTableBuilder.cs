@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Vim.BFast;
 
-namespace Vim.DataFormat
+namespace Vim.Format
 {
     public class EntityTableBuilder
     {

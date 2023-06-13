@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Vim.DataFormat
+namespace Vim.Format
 {
     public enum ColumnType
     {

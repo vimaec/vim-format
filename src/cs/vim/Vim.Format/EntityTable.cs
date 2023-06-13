@@ -3,7 +3,7 @@ using System.Diagnostics;
 using Vim.BFast;
 using Vim.LinqArray;
 
-namespace Vim.DataFormat
+namespace Vim.Format
 {
     public class EntityTable
     {

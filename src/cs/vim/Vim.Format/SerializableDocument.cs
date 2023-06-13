@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Vim.BFast;
 
-namespace Vim.DataFormat
+namespace Vim.Format
 {
     /// <summary>
     /// Tracks all of the data for a particular entity type in a conceptual table.

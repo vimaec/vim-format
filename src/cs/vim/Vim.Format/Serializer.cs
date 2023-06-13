@@ -11,7 +11,7 @@ using System.Text.RegularExpressions;
 using System.Xml.Linq;
 using System.Drawing;
 
-namespace Vim.DataFormat
+namespace Vim.Format
 {
     public static class Serializer
     {

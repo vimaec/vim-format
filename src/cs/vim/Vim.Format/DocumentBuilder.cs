@@ -8,7 +8,7 @@ using System.IO;
 using Vim.DotNetUtilities;
 using static Vim.DataFormat.Serializer;
 
-namespace Vim.DataFormat
+namespace Vim.Format
 {
     public partial class DocumentBuilder
     {

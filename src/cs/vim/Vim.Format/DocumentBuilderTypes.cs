@@ -4,7 +4,7 @@ using System.Linq;
 using Vim.G3d;
 using Vim.Math3d;
 
-namespace Vim.DataFormat
+namespace Vim.Format
 {
     public partial class DocumentBuilder
     {

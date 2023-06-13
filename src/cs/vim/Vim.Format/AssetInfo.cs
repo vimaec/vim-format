@@ -5,7 +5,7 @@ using Vim.BFast;
 using Vim.DotNetUtilities;
 using Vim.LinqArray;
 
-namespace Vim.DataFormat
+namespace Vim.Format
 {
     public enum AssetType
     {

@@ -4,7 +4,7 @@ using System.Globalization;
 using System.Linq;
 using Vim.DotNetUtilities;
 
-namespace Vim.DataFormat
+namespace Vim.Format
 {
     public class SerializableHeader
     {

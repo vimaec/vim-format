@@ -5,7 +5,7 @@ using System.Linq;
 using Vim.BFast;
 using Vim.LinqArray;
 
-namespace Vim.DataFormat
+namespace Vim.Format
 {
     public static partial class ColumnExtensions
     {

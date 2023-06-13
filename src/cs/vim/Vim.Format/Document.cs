@@ -1,7 +1,7 @@
 ﻿using Vim.LinqArray;
 using Vim.BFast;
 
-namespace Vim.DataFormat
+namespace Vim.Format
 {
     // TODO: this should be merged into Serializable document. 
     public class Document

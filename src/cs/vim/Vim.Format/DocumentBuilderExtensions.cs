@@ -7,7 +7,7 @@ using Vim.LinqArray;
 
 using static Vim.DataFormat.DocumentBuilder;
 
-namespace Vim.DataFormat
+namespace Vim.Format
 {
     public static class DocumentBuilderExtensions
     {

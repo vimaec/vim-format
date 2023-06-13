@@ -4,7 +4,7 @@ using System.Linq;
 using Vim.DotNetUtilities;
 using Vim.LinqArray;
 
-namespace Vim.DataFormat
+namespace Vim.Format
 {
     public class VimSchema
     {

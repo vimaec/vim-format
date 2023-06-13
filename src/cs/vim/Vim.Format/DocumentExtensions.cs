@@ -3,7 +3,7 @@ using System.Text.RegularExpressions;
 using Vim.LinqArray;
 using Vim.BFast;
 
-namespace Vim.DataFormat
+namespace Vim.Format
 {
     public static class DocumentExtensions
     {

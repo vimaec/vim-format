@@ -9,7 +9,7 @@ using System.IO;
 using Vim.DotNetUtilities;
 using static Vim.DataFormat.DocumentBuilder;
 
-namespace Vim.DataFormat
+namespace Vim.Format
 {
     /// <summary>
     /// This is a helper class for writing the really big G3Ds needed in a VIM
