@@ -1,0 +1,17 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\bfast\Vim.BFast\Vim.BFast.csproj" />
+    <ProjectReference Include="..\..\g3d\Vim.G3d\Vim.G3d.csproj" />
+    <ProjectReference Include="..\..\linqarray\Vim.LinqArray\Vim.LinqArray.csproj" />
+    <ProjectReference Include="..\..\math3d\Vim.Math3D\Vim.Math3D.csproj" />
+    <ProjectReference Include="..\..\Vim.Constants\Vim.Constants.csproj" />
+    <ProjectReference Include="..\DotNetUtilities\Vim.DotNetUtilities.csproj" />
+    <ProjectReference Include="..\Geometry\Vim.Geometry.csproj" />
+  </ItemGroup>
+
+</Project>
