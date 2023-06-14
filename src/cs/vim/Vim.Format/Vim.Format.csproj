@@ -19,18 +19,18 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="ArrayOps.tt">
+    <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Geometry\ArrayOps.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>ArrayOps.cs</LastGenOutput>
     </None>
   </ItemGroup>
 
   <ItemGroup>
-    <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Update="ArrayOps.cs">
+    <Compile Update="Geometry\ArrayOps.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
       <DependentUpon>ArrayOps.tt</DependentUpon>

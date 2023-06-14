@@ -1,13 +1,6 @@
-﻿using Vim;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Vim.Math3d;
+﻿using Vim.Math3d;
 
-namespace Vim.Format.Algorithms
+namespace Vim.Format.Geometry
 {
     public static class GeometryCuttingUtils
     {

@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using Vim.G3d;
 using Vim.LinqArray;
 using Vim.Math3d;
 
-namespace Vim.Format
+namespace Vim.Format.Geometry
 {
     /// <summary>
     /// The base class of topology face, topology edge, topology vertex, and topology element

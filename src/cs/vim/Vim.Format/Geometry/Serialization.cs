@@ -1,6 +1,6 @@
 ﻿using Vim.G3d;
 
-namespace Vim.Format
+namespace Vim.Format.Geometry
 {
     public static class Serialization
     {

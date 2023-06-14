@@ -1,9 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using Vim.G3d;
 
-namespace Vim.Format
+namespace Vim.Format.Geometry
 {
     /// <summary>
     /// This is a quadrilateral mesh. Note that it does not implement the IMesh interface,

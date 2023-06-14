@@ -4,7 +4,7 @@ using Vim.BFast;
 using Vim.G3d;
 using Vim.LinqArray;
 
-namespace Vim.Format
+namespace Vim.Format.Geometry
 {
     public static class Validation
     {

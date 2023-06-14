@@ -1,7 +1,7 @@
 ﻿using Vim.G3d;
 using Vim.Math3d;
 
-namespace Vim.Format
+namespace Vim.Format.Geometry
 {
     public interface IMaterial
     {

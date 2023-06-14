@@ -4,10 +4,9 @@ using System.Diagnostics;
 using System.Linq;
 using Vim.LinqArray;
 using Vim.Math3d;
-
 using LineApprox = System.Tuple<Vim.Math3d.Int2, Vim.Math3d.Int2>;
 
-namespace Vim.Format.Algorithms
+namespace Vim.Format.Geometry
 {
     public static class PerimeterProjection
     {

@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Vim.G3d;
 using Vim.LinqArray;
 using Vim.Math3d;
 
-namespace Vim.Format
+namespace Vim.Format.Geometry
 {
     public static class MeshExtensions
     {
@@ -16,7 +15,6 @@ namespace Vim.Format
 
         public static IMesh ToIMesh(this IEnumerable<GeometryAttribute> self)
         {
-            var attrs = self.Where(x => x != null).ToArray();
             var tmp = new GeometryAttributes(self);
             switch (tmp.NumCornersPerFace)
             {
