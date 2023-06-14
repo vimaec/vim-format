@@ -5,12 +5,6 @@
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Description>G3D is a simple, efficient, generic binary format for storing and transmitting geometry. The G3D format is designed to be used either as a serialization format or as an in-memory data structure. G3D can represent triangular meshes, quadrilateral meshes, polygonal meshes, point clouds, and line segments.
 It can be easily and efficiently deserialized and rendered in different languages and on different platforms.</Description>
-    <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
-    <PackageProjectUrl>https://github.com/vimaec/g3d</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/vimaec/g3d</RepositoryUrl>
-    <RepositoryType>GitHub</RepositoryType>
-    <Version>1.5.2</Version>
-    <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
     <IncludeSymbols>true</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>

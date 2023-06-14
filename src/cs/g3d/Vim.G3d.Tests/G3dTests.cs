@@ -35,9 +35,9 @@ namespace Vim.G3d.Tests
         }
 
         public static readonly string ProjectFolder = new DirectoryInfo(Properties.Resources.ProjDir.Trim()).FullName;
-        public static string RootFolder = Path.Combine(ProjectFolder, "..", "..");
-        public static string TestInputFolder = Path.Combine(RootFolder, "test-data", "models");
-        public static string TestOutputFolder = Path.Combine(RootFolder, "test-data", "output");
+        public static string RootFolder = Path.Combine(ProjectFolder, "..", "..", "..", "..");
+        public static string TestInputFolder = Path.Combine(RootFolder, "data", "g3d-test-data", "models");
+        public static string TestOutputFolder = Path.Combine(RootFolder, "data", "g3d-test-data", "output");
 
         public static IEnumerable<string> GetInputFiles()
             => Directory.GetFiles(TestInputFolder, "*.*", SearchOption.AllDirectories);
