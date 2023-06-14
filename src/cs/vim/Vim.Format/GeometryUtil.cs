@@ -12,16 +12,16 @@ namespace Vim.Format
         public static IArray<Vector3> Normalize(this IArray<Vector3> vectors)
             => vectors.Select(v => v.Normalize());
 
-        public static bool SequenceAlmostEquals(this IArray<Vector3> vs1, IArray<Vector3> vs2, float tolerance = Constants.Tolerance)
+        public static bool SequenceAlmostEquals(this IArray<Vector3> vs1, IArray<Vector3> vs2, float tolerance = Math3d.Constants.Tolerance)
             => vs1.Count == vs2.Count && vs1.Indices().All(i => vs1[i].AlmostEquals(vs2[i], tolerance));
 
-        public static bool AreColinear(this IEnumerable<Vector3> vectors, Vector3 reference, float tolerance = (float)Constants.OneTenthOfADegree)
+        public static bool AreColinear(this IEnumerable<Vector3> vectors, Vector3 reference, float tolerance = (float)Math3d.Constants.OneTenthOfADegree)
             => !reference.IsNaN() && vectors.All(v => v.Colinear(reference, tolerance));
 
-        public static bool AreColinear(this IEnumerable<Vector3> vectors, float tolerance = (float)Constants.OneTenthOfADegree)
+        public static bool AreColinear(this IEnumerable<Vector3> vectors, float tolerance = (float)Math3d.Constants.OneTenthOfADegree)
             => vectors.ToList().AreColinear(tolerance);
 
-        public static bool AreColinear(this IList<Vector3> vectors, float tolerance = (float)Constants.OneTenthOfADegree)
+        public static bool AreColinear(this IList<Vector3> vectors, float tolerance = (float)Math3d.Constants.OneTenthOfADegree)
             => vectors.Count <= 1 || vectors.Skip(1).AreColinear(vectors[0], tolerance);
 
         public static AABox BoundingBox(this IArray<Vector3> vertices)

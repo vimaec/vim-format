@@ -194,7 +194,7 @@ namespace Vim.Format
             return mesh.RemapVertices(remap.ToIArray());
         }
 
-        public static bool GeometryEquals(this IMesh mesh, IMesh other, float tolerance = Constants.Tolerance)
+        public static bool GeometryEquals(this IMesh mesh, IMesh other, float tolerance = Math3d.Constants.Tolerance)
         {
             if (mesh.NumFaces != other.NumFaces)
                 return false;
@@ -271,7 +271,7 @@ namespace Vim.Format
             => points.Maximize(float.MinValue, v => v.Distance(x));
 
         public static IGeometryAttributes SnapPoints(this IMesh mesh, float snapSize)
-            => snapSize.Abs() >= Constants.Tolerance
+            => snapSize.Abs() >= Math3d.Constants.Tolerance
                 ? mesh.Deform(v => (v * snapSize.Inverse()).Truncate() * snapSize)
                 : mesh.Deform(v => Vector3.Zero);
 
@@ -372,7 +372,7 @@ namespace Vim.Format
         public static IArray<Vector3> ComputedNormals(this IMesh mesh)
             => mesh.Triangles().Select(t => t.Normal);
 
-        public static bool Planar(this IMesh mesh, float tolerance = Constants.Tolerance)
+        public static bool Planar(this IMesh mesh, float tolerance = Math3d.Constants.Tolerance)
         {
             if (mesh.NumFaces <= 1) return true;
             var normal = mesh.Triangle(0).Normal;

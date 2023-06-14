@@ -92,7 +92,7 @@ namespace Vim.Format
         /// <summary>
         /// Merges vertices that are within a certain distance and have similar normals and colors.        
         /// </summary>
-        public static IMesh WeldVertices(this IMesh g, float threshold = (float)Constants.MmToFeet)
+        public static IMesh WeldVertices(this IMesh g, float threshold = (float)Math3d.Constants.MmToFeet)
         {
             var positions = g.Vertices;
             var normals = g.GetOrComputeVertexNormals().ToArray();

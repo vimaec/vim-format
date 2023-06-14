@@ -136,7 +136,7 @@ namespace Vim.Format
         // see: https://github.com/mrdoob/three.js/blob/9ef27d1af7809fa4d9943f8d4c4644e365ab6d2d/src/geometries/TorusBufferGeometry.js#L52
         public static Vector3 TorusFunction(Vector2 uv, float radius, float tube)
         {
-            uv = uv * Constants.TwoPi;
+            uv *= Math3d.Constants.TwoPi;
             return new Vector3(
                 (radius + tube * uv.Y.Cos()) * uv.X.Cos(),
                 (radius + tube * uv.Y.Cos()) * uv.X.Sin(),
@@ -149,9 +149,9 @@ namespace Vim.Format
         // see: https://github.com/mrdoob/three.js/blob/9ef27d1af7809fa4d9943f8d4c4644e365ab6d2d/src/geometries/SphereBufferGeometry.js#L76
         public static Vector3 SphereFunction(Vector2 uv, float radius)
             => new Vector3(
-                (float)(-radius * Math.Cos(uv.X * Constants.TwoPi) * Math.Sin(uv.Y * Constants.Pi)),
-                (float)(radius * Math.Cos(uv.Y * Constants.Pi)),
-                (float)(radius * Math.Sin(uv.X * Constants.TwoPi) * Math.Sin(uv.Y * Constants.Pi)));
+                (float)(-radius * Math.Cos(uv.X * Math3d.Constants.TwoPi) * Math.Sin(uv.Y * Math3d.Constants.Pi)),
+                (float)(radius * Math.Cos(uv.Y * Math3d.Constants.Pi)),
+                (float)(radius * Math.Sin(uv.X * Math3d.Constants.TwoPi) * Math.Sin(uv.Y * Math3d.Constants.Pi)));
 
         public static IMesh Sphere(float radius, int uSegs, int vSegs)
             => QuadMesh(uv => SphereFunction(uv, radius), uSegs, vSegs);
@@ -174,7 +174,7 @@ namespace Vim.Format
             => numPoints.Select(i => CirclePoint(i, numPoints));
 
         public static Vector2 CirclePoint(int i, int numPoints)
-            => new Vector2((i * (Constants.TwoPi / numPoints)).Cos(), (i * (Constants.TwoPi / numPoints)).Sin());
+            => new Vector2((i * (Math3d.Constants.TwoPi / numPoints)).Cos(), (i * (Math3d.Constants.TwoPi / numPoints)).Sin());
 
         /// <summary>
         /// Computes the indices of a quad mesh astrip.
@@ -348,7 +348,7 @@ namespace Vim.Format
             var verts = new List<Vector3>();
             for (var i = 0; i < segments; ++i)
             {
-                var angle = Constants.TwoPi / segments;
+                var angle = Math3d.Constants.TwoPi / segments;
                 points.Rotate(axis, angle).AddTo(verts);
             }
 

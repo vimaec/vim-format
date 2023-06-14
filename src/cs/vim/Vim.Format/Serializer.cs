@@ -5,6 +5,7 @@ using Vim.BFast;
 using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
+using Vim.G3d;
 
 namespace Vim.Format
 {

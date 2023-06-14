@@ -1,13 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Vim.Math3d;
 using Vim.G3d;
-using Vim.LinqArray;
 using Vim.BFast;
 using System.IO;
-using Vim.DotNetUtilities;
-using static Vim.DataFormat.DocumentBuilder;
 
 namespace Vim.Format
 {
