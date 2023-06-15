@@ -1,14 +1,11 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.IO;
 using System.Linq;
-using Vim.DataFormat;
-using Vim.DotNetUtilities;
 using Vim.LinqArray;
 
-namespace Vim.ObjectModel
+namespace Vim.Format.ObjectModel
 {
     public static class ObjectModelExtensions
     {

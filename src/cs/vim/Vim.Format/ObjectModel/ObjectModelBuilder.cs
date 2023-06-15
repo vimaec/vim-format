@@ -2,10 +2,8 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using Vim.DataFormat;
-using Vim.DotNetUtilities;
 
-namespace Vim.ObjectModel
+namespace Vim.Format.ObjectModel
 {
     public readonly struct GetOrAddResult<TEntity> where TEntity : Entity
     {

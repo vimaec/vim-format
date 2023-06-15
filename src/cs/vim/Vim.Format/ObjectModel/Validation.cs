@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Vim.LinqArray;
 using Vim.Math3d;
 
-namespace Vim.ObjectModel
+namespace Vim.Format.ObjectModel
 {
     public class ObjectModelValidationOptions
     {
@@ -64,7 +64,7 @@ namespace Vim.ObjectModel
                 if (bdElement == null)
                     throw new ObjectModelValidationException($"{nameof(BimDocument)} @{bd.Index} has null {nameof(Element)}.");
 
-                var expectedElementId = Vim.DataFormat.VimConstants.SyntheticElementId;
+                var expectedElementId = VimConstants.SyntheticElementId;
                 if (validationOptions.BimDocumentElementMustBeSynthetic && bdElement.Id != expectedElementId)
                     throw new ObjectModelValidationException($"{nameof(BimDocument)} @{bd.Index} - Related {nameof(Element)}.{nameof(Element.Id)} @{bdElement.Index} is not {expectedElementId}");
 
@@ -72,7 +72,7 @@ namespace Vim.ObjectModel
                 if (validationOptions.BimDocumentElementNameMustMatchBimDocumentName && bdElement.Name != expectedName)
                     throw new ObjectModelValidationException($"{nameof(BimDocument)} @{bd.Index} - Related {nameof(Element)}.{nameof(Element.Name)} @{bdElement.Index} does not match {nameof(BimDocument)}.{nameof(BimDocument.Name)} ({expectedName})");
 
-                var expectedElementType = Vim.DataFormat.VimConstants.BimDocumentParameterHolderElementType;
+                var expectedElementType = VimConstants.BimDocumentParameterHolderElementType;
                 if (validationOptions.BimDocumentElementTypeMustBeParameterHolder && bdElement.Type != expectedElementType)
                     throw new ObjectModelValidationException($"{nameof(BimDocument)} @{bd.Index} - Related {nameof(Element)}.{nameof(Element.Type)} @{bdElement.Index} is not '{expectedElementType}'.");
             }

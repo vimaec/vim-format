@@ -1,10 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using Vim.DataFormat;
 using Vim.Math3d;
 
-namespace Vim.ObjectModel
+namespace Vim.Format.ObjectModel
 {
     /// <summary>
     /// Stores converted object models encountered during the Export process.

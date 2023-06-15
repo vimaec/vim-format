@@ -2,13 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using Vim.DataFormat;
-using Vim.DotNetUtilities;
 using Vim.Math3d;
 
 // ReSharper disable InconsistentNaming
 
-namespace Vim.ObjectModel
+namespace Vim.Format.ObjectModel
 {
     public static class SchemaVersion
     {

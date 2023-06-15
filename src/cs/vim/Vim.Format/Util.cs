@@ -224,6 +224,13 @@ namespace Vim.Format
         public static void TimeIt(this Action action, string label = "")
             => TimeIt(action.ToFunction(), label);
 
+        // public static Disposer TimeIt(string label = "")
+        // {
+        //     Console.WriteLine($"Starting timing {label}");
+        //     var sw = Stopwatch.StartNew();
+        //     return Disposer(() => sw.OutputTimeElapsed(label));
+        // }
+
         public static string PrettyPrintTimeElapsed(this Stopwatch sw)
             => $"{sw.Elapsed.Minutes}:{sw.Elapsed.Seconds}.{sw.Elapsed.Milliseconds}";
 
@@ -995,6 +1002,43 @@ namespace Vim.Format
             => $"{beginQuote}{s}{endQuote ?? beginQuote}";
 
         /// <summary>
+        /// Given a sequence of elements, and a mapping function from element to parent, returns a dictionary of lists that maps elements to children.
+        /// </summary>
+        public static DictionaryOfLists<T, T> ComputeChildren<T>(this IEnumerable<T> elements,
+            Func<T, T> parentSelector)
+        {
+            var r = new DictionaryOfLists<T, T>();
+            foreach (var e in elements)
+            {
+                var p = parentSelector(e);
+                if (p != null)
+                    r.Add(p, e);
+            }
+
+            return r;
+        }
+
+
+        /// <summary>
+        /// Treats a Dictionary of lists as a graph and visits the node,
+        /// and all its descendants, exactly once using a depth first traversal.
+        /// </summary>
+        public static IEnumerable<T> EnumerateSubNodes<T>(this DictionaryOfLists<T, T> self, T target,
+            HashSet<T> visited = null)
+        {
+            if (visited?.Contains(target) ?? false)
+                yield break;
+            yield return target;
+            visited = visited ?? new HashSet<T>();
+            visited.Add(target);
+            foreach (var x in self.GetOrDefault(target))
+            {
+                foreach (var c in self.EnumerateSubNodes(x, visited))
+                    yield return c;
+            }
+        }
+
+        /// <summary>
         /// Returns the top of a stack, or the default T value if none is present.
         /// </summary>
         public static T PeekOrDefault<T>(this Stack<T> self)
@@ -1156,6 +1200,12 @@ namespace Vim.Format
         }
 
         /// <summary>
+        /// Given a full file path, collapses the full path into a checksum, and return a file name.
+        /// </summary>
+        // public static string FilePathToUniqueFileName(string filePath)
+        //     => filePath.Replace('/', '\\').MD5HashAsBitConverterLowerInvariant() + "_" + Path.GetFileName(filePath);
+
+        /// <summary>
         /// Returns the path in which the given directory path has been removed.
         /// </summary>
         public static string TrimDirectoryFromPath(string dir, string path)
@@ -1296,6 +1346,10 @@ namespace Vim.Format
         public static Dictionary<U, int> CountInstances<T, U>(this IEnumerable<T> self, Func<T, U> map)
             => self.Select(map).CountInstances();
 
+        public static DictionaryOfLists<TKey, TValue> ToDictionaryOfLists<TKey, TValue>(
+            this IEnumerable<IGrouping<TKey, TValue>> groups)
+            => new DictionaryOfLists<TKey, TValue>(groups);
+
         public static string[] SplitAtNull(this string s)
             => s.Split('\0');
 
@@ -1378,6 +1432,31 @@ namespace Vim.Format
 
         public static IEnumerable<Type> GetAllSubclassesOf(Assembly asm, Type t)
             => asm.GetTypes().Where(x => x.IsSubclassOf(t));
+
+        // public static Disposer Disposer(Action action)
+        //     => new Disposer(action);
+        //
+        // public static Disposer Disposer(Action beforeAction, Action afterAction)
+        // {
+        //     beforeAction();
+        //     return new Disposer(afterAction);
+        // }
+        //
+        // public static Disposer ReportMemoryConsumptionAndTimeElapsed()
+        // {
+        //     GC.Collect();
+        //     GC.WaitForPendingFinalizers();
+        //     var memBefore = GC.GetTotalMemory(true);
+        //     var sw = Stopwatch.StartNew();
+        //     return Disposer(() =>
+        //     {
+        //         OutputTimeElapsed(sw, "Time Elapsed");
+        //         GC.Collect();
+        //         GC.WaitForPendingFinalizers();
+        //         var memConsumption = GC.GetTotalMemory(true) - memBefore;
+        //         Console.WriteLine($"Approximate memory consumption = {BytesToString(memConsumption)}");
+        //     });
+        // }
 
         public static T LoadFileAndReportStats<T>(string fileName, Func<string, T> loadFunc)
         {
@@ -1648,6 +1727,15 @@ namespace Vim.Format
 
         public static T PopIfNotEmpty<T>(this Stack<T> self)
             => self.Count > 0 ? self.Pop() : default;
+
+        public static DictionaryOfLists<TKey, TValue> ToDictionaryOfLists<TSrc, TKey, TValue>(
+            this IEnumerable<TSrc> self, Func<TSrc, TKey> keySelector, Func<TSrc, TValue> valueSelector)
+        {
+            var r = new DictionaryOfLists<TKey, TValue>();
+            foreach (var x in self)
+                r.Add(keySelector(x), valueSelector(x));
+            return r;
+        }
 
         /// <summary>
         /// Given a grouping, creates a lookup from elements back o keys

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Vim.LinqArray;
 
-namespace Vim.ObjectModel
+namespace Vim.Format.ObjectModel
 {
     /// <summary>
     /// Represents common element information

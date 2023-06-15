@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-
 using IndexMap = System.Collections.Generic.Dictionary<int, int>;
 using ReadOnlyIndexMap = System.Collections.Generic.IReadOnlyDictionary<int, int>;
 
-namespace Vim.ObjectModel
+namespace Vim.Format.ObjectModel
 {
     /// <summary>
     /// A collection of maps from element index to other related entity indices.
