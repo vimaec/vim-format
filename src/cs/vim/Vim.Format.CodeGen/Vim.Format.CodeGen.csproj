@@ -1,0 +1,26 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ApplicationIcon />
+    <OutputType>Exe</OutputType>
+    <StartupObject>Vim.Format.CodeGen.Program</StartupObject>
+    <RunPostBuildEvent>OnOutputUpdated</RunPostBuildEvent>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\math3d\Vim.Math3D.Tests\Vim.Math3D.Tests.csproj" />
+    <ProjectReference Include="..\Vim.Format\Vim.Format.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="HandWrittenCpp.cpp">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="dotnet &quot;$(OutDir)Vim.ObjectModel.CodeGen.dll&quot; &quot;../ObjectModel/ObjectModelGenerated.cs&quot; &quot;../../Vim.Sql/ObjectModelContext.cs&quot; &quot;../vim-ts/src/objectModel.ts&quot; &quot;../vim-format/src/cpp/object-model.h&quot;" />
+  </Target>
+
+</Project>
