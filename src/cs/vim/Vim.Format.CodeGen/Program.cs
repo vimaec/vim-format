@@ -1,4 +1,4 @@
-﻿namespace Vim.ObjectModel.CodeGen
+﻿namespace Vim.Format.CodeGen
 {
     public static class Program
     {

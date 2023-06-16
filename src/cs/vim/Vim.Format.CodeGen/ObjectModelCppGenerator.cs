@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using Vim.DataFormat;
 using Vim.DotNetUtilities;
+using Vim.Format.ObjectModel;
 
-namespace Vim.ObjectModel.CodeGen;
+namespace Vim.Format.CodeGen;
 
 public static class ObjectModelCppGenerator
 {
