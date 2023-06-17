@@ -4,7 +4,7 @@ using System.Linq;
 using Vim.G3d;
 using Vim.BFast;
 using System.IO;
-using static Vim.DataFormat.DocumentBuilder;
+using static Vim.Format.DocumentBuilder;
 
 namespace Vim.Format
 {

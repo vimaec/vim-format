@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using Vim.DotNetUtilities;
+using Vim.Format.Utils;
 
-namespace Vim.DataFormat
+namespace Vim.Format
 {
     public static partial class ColumnExtensions
     {

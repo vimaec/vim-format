@@ -4,18 +4,16 @@ using Vim.BFast;
 using Vim.Format.Geometry;
 using Vim.G3d;
 using Vim.LinqArray;
+using static Vim.Format.DocumentBuilder;
 
 namespace Vim.Format
-using static Vim.DataFormat.DocumentBuilder;
 {
     public static class DocumentBuilderExtensions
     {
         public static IMesh ToIMesh(this SubdividedMesh gb)
-            => Primitives.TriMesh(
-                gb.Vertices.ToIArray(),
+            => gb.Vertices.ToIArray().TriMesh(
                 gb.Indices.ToIArray(),
-                submeshMaterials: gb.SubmeshMaterials.ToIArray()
-            );
+                submeshMaterials: gb.SubmeshMaterials.ToIArray());
 
         public static Material ToDocumentBuilderMaterial(this G3dMaterial g3dMaterial)
             => new Material

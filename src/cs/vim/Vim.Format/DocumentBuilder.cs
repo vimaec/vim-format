@@ -193,7 +193,7 @@ namespace Vim.Format
             var entityTables = ComputeEntityTables(stringLookupInfo.StringLookup);
             var stringTable = stringLookupInfo.StringTable;
 
-            Serialize(stream, Header, assets, stringTable, entityTables, new BigG3dWriter(Meshes, Instances, Shapes, Materials, null, UseColors));
+            Serializer.Serialize(stream, Header, assets, stringTable, entityTables, new BigG3dWriter(Meshes, Instances, Shapes, Materials, null, UseColors));
         }
     }
 }

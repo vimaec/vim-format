@@ -1,4 +1,4 @@
-﻿namespace Vim.DataFormat
+﻿namespace Vim.Format
 {
     public enum ValueSerializationStrategy
     {

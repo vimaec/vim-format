@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Reflection;
-using Vim.DotNetUtilities;
+using Vim.Format.Utils;
 
-namespace Vim.DataFormat
+namespace Vim.Format
 {
     [AttributeUsage(AttributeTargets.Field, AllowMultiple = true)]
     public partial class EntityColumnLoaderAttribute : Attribute

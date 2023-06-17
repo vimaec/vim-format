@@ -65,10 +65,10 @@ namespace Vim.Format.ObjectModel {
     // AUTO-GENERATED
     public partial class ParameterDescriptor
     {
-        public Vim.ObjectModel.DisplayUnit DisplayUnit => _DisplayUnit.Value;
+        public Vim.Format.ObjectModel.DisplayUnit DisplayUnit => _DisplayUnit.Value;
         public ParameterDescriptor()
         {
-            _DisplayUnit = new Relation<Vim.ObjectModel.DisplayUnit>();
+            _DisplayUnit = new Relation<Vim.Format.ObjectModel.DisplayUnit>();
         }
         
         public override bool FieldsAreEqual(object obj)
@@ -101,12 +101,12 @@ namespace Vim.Format.ObjectModel {
     // AUTO-GENERATED
     public partial class Parameter
     {
-        public Vim.ObjectModel.ParameterDescriptor ParameterDescriptor => _ParameterDescriptor.Value;
-        public Vim.ObjectModel.Element Element => _Element.Value;
+        public Vim.Format.ObjectModel.ParameterDescriptor ParameterDescriptor => _ParameterDescriptor.Value;
+        public Vim.Format.ObjectModel.Element Element => _Element.Value;
         public Parameter()
         {
-            _ParameterDescriptor = new Relation<Vim.ObjectModel.ParameterDescriptor>();
-            _Element = new Relation<Vim.ObjectModel.Element>();
+            _ParameterDescriptor = new Relation<Vim.Format.ObjectModel.ParameterDescriptor>();
+            _Element = new Relation<Vim.Format.ObjectModel.Element>();
         }
         
         public override bool FieldsAreEqual(object obj)
@@ -133,30 +133,30 @@ namespace Vim.Format.ObjectModel {
     // AUTO-GENERATED
     public partial class Element
     {
-        public Vim.ObjectModel.Level Level => _Level.Value;
-        public Vim.ObjectModel.Phase PhaseCreated => _PhaseCreated.Value;
-        public Vim.ObjectModel.Phase PhaseDemolished => _PhaseDemolished.Value;
-        public Vim.ObjectModel.Category Category => _Category.Value;
-        public Vim.ObjectModel.Workset Workset => _Workset.Value;
-        public Vim.ObjectModel.DesignOption DesignOption => _DesignOption.Value;
-        public Vim.ObjectModel.View OwnerView => _OwnerView.Value;
-        public Vim.ObjectModel.Group Group => _Group.Value;
-        public Vim.ObjectModel.AssemblyInstance AssemblyInstance => _AssemblyInstance.Value;
-        public Vim.ObjectModel.BimDocument BimDocument => _BimDocument.Value;
-        public Vim.ObjectModel.Room Room => _Room.Value;
+        public Vim.Format.ObjectModel.Level Level => _Level.Value;
+        public Vim.Format.ObjectModel.Phase PhaseCreated => _PhaseCreated.Value;
+        public Vim.Format.ObjectModel.Phase PhaseDemolished => _PhaseDemolished.Value;
+        public Vim.Format.ObjectModel.Category Category => _Category.Value;
+        public Vim.Format.ObjectModel.Workset Workset => _Workset.Value;
+        public Vim.Format.ObjectModel.DesignOption DesignOption => _DesignOption.Value;
+        public Vim.Format.ObjectModel.View OwnerView => _OwnerView.Value;
+        public Vim.Format.ObjectModel.Group Group => _Group.Value;
+        public Vim.Format.ObjectModel.AssemblyInstance AssemblyInstance => _AssemblyInstance.Value;
+        public Vim.Format.ObjectModel.BimDocument BimDocument => _BimDocument.Value;
+        public Vim.Format.ObjectModel.Room Room => _Room.Value;
         public Element()
         {
-            _Level = new Relation<Vim.ObjectModel.Level>();
-            _PhaseCreated = new Relation<Vim.ObjectModel.Phase>();
-            _PhaseDemolished = new Relation<Vim.ObjectModel.Phase>();
-            _Category = new Relation<Vim.ObjectModel.Category>();
-            _Workset = new Relation<Vim.ObjectModel.Workset>();
-            _DesignOption = new Relation<Vim.ObjectModel.DesignOption>();
-            _OwnerView = new Relation<Vim.ObjectModel.View>();
-            _Group = new Relation<Vim.ObjectModel.Group>();
-            _AssemblyInstance = new Relation<Vim.ObjectModel.AssemblyInstance>();
-            _BimDocument = new Relation<Vim.ObjectModel.BimDocument>();
-            _Room = new Relation<Vim.ObjectModel.Room>();
+            _Level = new Relation<Vim.Format.ObjectModel.Level>();
+            _PhaseCreated = new Relation<Vim.Format.ObjectModel.Phase>();
+            _PhaseDemolished = new Relation<Vim.Format.ObjectModel.Phase>();
+            _Category = new Relation<Vim.Format.ObjectModel.Category>();
+            _Workset = new Relation<Vim.Format.ObjectModel.Workset>();
+            _DesignOption = new Relation<Vim.Format.ObjectModel.DesignOption>();
+            _OwnerView = new Relation<Vim.Format.ObjectModel.View>();
+            _Group = new Relation<Vim.Format.ObjectModel.Group>();
+            _AssemblyInstance = new Relation<Vim.Format.ObjectModel.AssemblyInstance>();
+            _BimDocument = new Relation<Vim.Format.ObjectModel.BimDocument>();
+            _Room = new Relation<Vim.Format.ObjectModel.Room>();
         }
         
         public override bool FieldsAreEqual(object obj)
@@ -200,10 +200,10 @@ namespace Vim.Format.ObjectModel {
     // AUTO-GENERATED
     public partial class Workset
     {
-        public Vim.ObjectModel.BimDocument BimDocument => _BimDocument.Value;
+        public Vim.Format.ObjectModel.BimDocument BimDocument => _BimDocument.Value;
         public Workset()
         {
-            _BimDocument = new Relation<Vim.ObjectModel.BimDocument>();
+            _BimDocument = new Relation<Vim.Format.ObjectModel.BimDocument>();
         }
         
         public override bool FieldsAreEqual(object obj)
@@ -235,10 +235,10 @@ namespace Vim.Format.ObjectModel {
     // AUTO-GENERATED
     public partial class AssemblyInstance
     {
-        public Vim.ObjectModel.Element Element => _Element.Value;
+        public Vim.Format.ObjectModel.Element Element => _Element.Value;
         public AssemblyInstance()
         {
-            _Element = new Relation<Vim.ObjectModel.Element>();
+            _Element = new Relation<Vim.Format.ObjectModel.Element>();
         }
         
         public override bool FieldsAreEqual(object obj)
@@ -267,10 +267,10 @@ namespace Vim.Format.ObjectModel {
     // AUTO-GENERATED
     public partial class Group
     {
-        public Vim.ObjectModel.Element Element => _Element.Value;
+        public Vim.Format.ObjectModel.Element Element => _Element.Value;
         public Group()
         {
-            _Element = new Relation<Vim.ObjectModel.Element>();
+            _Element = new Relation<Vim.Format.ObjectModel.Element>();
         }
         
         public override bool FieldsAreEqual(object obj)
@@ -299,10 +299,10 @@ namespace Vim.Format.ObjectModel {
     // AUTO-GENERATED
     public partial class DesignOption
     {
-        public Vim.ObjectModel.Element Element => _Element.Value;
+        public Vim.Format.ObjectModel.Element Element => _Element.Value;
         public DesignOption()
         {
-            _Element = new Relation<Vim.ObjectModel.Element>();
+            _Element = new Relation<Vim.Format.ObjectModel.Element>();
         }
         
         public override bool FieldsAreEqual(object obj)
@@ -328,12 +328,12 @@ namespace Vim.Format.ObjectModel {
     // AUTO-GENERATED
     public partial class Level
     {
-        public Vim.ObjectModel.FamilyType FamilyType => _FamilyType.Value;
-        public Vim.ObjectModel.Element Element => _Element.Value;
+        public Vim.Format.ObjectModel.FamilyType FamilyType => _FamilyType.Value;
+        public Vim.Format.ObjectModel.Element Element => _Element.Value;
         public Level()
         {
-            _FamilyType = new Relation<Vim.ObjectModel.FamilyType>();
-            _Element = new Relation<Vim.ObjectModel.Element>();
+            _FamilyType = new Relation<Vim.Format.ObjectModel.FamilyType>();
+            _Element = new Relation<Vim.Format.ObjectModel.Element>();
         }
         
         public override bool FieldsAreEqual(object obj)
@@ -360,10 +360,10 @@ namespace Vim.Format.ObjectModel {
     // AUTO-GENERATED
     public partial class Phase
     {
-        public Vim.ObjectModel.Element Element => _Element.Value;
+        public Vim.Format.ObjectModel.Element Element => _Element.Value;
         public Phase()
         {
-            _Element = new Relation<Vim.ObjectModel.Element>();
+            _Element = new Relation<Vim.Format.ObjectModel.Element>();
         }
         
         public override bool FieldsAreEqual(object obj)
@@ -388,12 +388,12 @@ namespace Vim.Format.ObjectModel {
     // AUTO-GENERATED
     public partial class Room
     {
-        public Vim.ObjectModel.Level UpperLimit => _UpperLimit.Value;
-        public Vim.ObjectModel.Element Element => _Element.Value;
+        public Vim.Format.ObjectModel.Level UpperLimit => _UpperLimit.Value;
+        public Vim.Format.ObjectModel.Element Element => _Element.Value;
         public Room()
         {
-            _UpperLimit = new Relation<Vim.ObjectModel.Level>();
-            _Element = new Relation<Vim.ObjectModel.Element>();
+            _UpperLimit = new Relation<Vim.Format.ObjectModel.Level>();
+            _Element = new Relation<Vim.Format.ObjectModel.Element>();
         }
         
         public override bool FieldsAreEqual(object obj)
@@ -426,16 +426,16 @@ namespace Vim.Format.ObjectModel {
     // AUTO-GENERATED
     public partial class BimDocument
     {
-        public Vim.ObjectModel.View ActiveView => _ActiveView.Value;
-        public Vim.ObjectModel.Family OwnerFamily => _OwnerFamily.Value;
-        public Vim.ObjectModel.BimDocument Parent => _Parent.Value;
-        public Vim.ObjectModel.Element Element => _Element.Value;
+        public Vim.Format.ObjectModel.View ActiveView => _ActiveView.Value;
+        public Vim.Format.ObjectModel.Family OwnerFamily => _OwnerFamily.Value;
+        public Vim.Format.ObjectModel.BimDocument Parent => _Parent.Value;
+        public Vim.Format.ObjectModel.Element Element => _Element.Value;
         public BimDocument()
         {
-            _ActiveView = new Relation<Vim.ObjectModel.View>();
-            _OwnerFamily = new Relation<Vim.ObjectModel.Family>();
-            _Parent = new Relation<Vim.ObjectModel.BimDocument>();
-            _Element = new Relation<Vim.ObjectModel.Element>();
+            _ActiveView = new Relation<Vim.Format.ObjectModel.View>();
+            _OwnerFamily = new Relation<Vim.Format.ObjectModel.Family>();
+            _Parent = new Relation<Vim.Format.ObjectModel.BimDocument>();
+            _Element = new Relation<Vim.Format.ObjectModel.Element>();
         }
         
         public override bool FieldsAreEqual(object obj)
@@ -490,12 +490,12 @@ namespace Vim.Format.ObjectModel {
     // AUTO-GENERATED
     public partial class DisplayUnitInBimDocument
     {
-        public Vim.ObjectModel.DisplayUnit DisplayUnit => _DisplayUnit.Value;
-        public Vim.ObjectModel.BimDocument BimDocument => _BimDocument.Value;
+        public Vim.Format.ObjectModel.DisplayUnit DisplayUnit => _DisplayUnit.Value;
+        public Vim.Format.ObjectModel.BimDocument BimDocument => _BimDocument.Value;
         public DisplayUnitInBimDocument()
         {
-            _DisplayUnit = new Relation<Vim.ObjectModel.DisplayUnit>();
-            _BimDocument = new Relation<Vim.ObjectModel.BimDocument>();
+            _DisplayUnit = new Relation<Vim.Format.ObjectModel.DisplayUnit>();
+            _BimDocument = new Relation<Vim.Format.ObjectModel.BimDocument>();
         }
         
         public override bool FieldsAreEqual(object obj)
@@ -521,12 +521,12 @@ namespace Vim.Format.ObjectModel {
     // AUTO-GENERATED
     public partial class PhaseOrderInBimDocument
     {
-        public Vim.ObjectModel.Phase Phase => _Phase.Value;
-        public Vim.ObjectModel.BimDocument BimDocument => _BimDocument.Value;
+        public Vim.Format.ObjectModel.Phase Phase => _Phase.Value;
+        public Vim.Format.ObjectModel.BimDocument BimDocument => _BimDocument.Value;
         public PhaseOrderInBimDocument()
         {
-            _Phase = new Relation<Vim.ObjectModel.Phase>();
-            _BimDocument = new Relation<Vim.ObjectModel.BimDocument>();
+            _Phase = new Relation<Vim.Format.ObjectModel.Phase>();
+            _BimDocument = new Relation<Vim.Format.ObjectModel.BimDocument>();
         }
         
         public override bool FieldsAreEqual(object obj)
@@ -553,12 +553,12 @@ namespace Vim.Format.ObjectModel {
     // AUTO-GENERATED
     public partial class Category
     {
-        public Vim.ObjectModel.Category Parent => _Parent.Value;
-        public Vim.ObjectModel.Material Material => _Material.Value;
+        public Vim.Format.ObjectModel.Category Parent => _Parent.Value;
+        public Vim.Format.ObjectModel.Material Material => _Material.Value;
         public Category()
         {
-            _Parent = new Relation<Vim.ObjectModel.Category>();
-            _Material = new Relation<Vim.ObjectModel.Material>();
+            _Parent = new Relation<Vim.Format.ObjectModel.Category>();
+            _Material = new Relation<Vim.Format.ObjectModel.Material>();
         }
         
         public override bool FieldsAreEqual(object obj)
@@ -591,12 +591,12 @@ namespace Vim.Format.ObjectModel {
     // AUTO-GENERATED
     public partial class Family
     {
-        public Vim.ObjectModel.Category FamilyCategory => _FamilyCategory.Value;
-        public Vim.ObjectModel.Element Element => _Element.Value;
+        public Vim.Format.ObjectModel.Category FamilyCategory => _FamilyCategory.Value;
+        public Vim.Format.ObjectModel.Element Element => _Element.Value;
         public Family()
         {
-            _FamilyCategory = new Relation<Vim.ObjectModel.Category>();
-            _Element = new Relation<Vim.ObjectModel.Element>();
+            _FamilyCategory = new Relation<Vim.Format.ObjectModel.Category>();
+            _Element = new Relation<Vim.Format.ObjectModel.Element>();
         }
         
         public override bool FieldsAreEqual(object obj)
@@ -626,14 +626,14 @@ namespace Vim.Format.ObjectModel {
     // AUTO-GENERATED
     public partial class FamilyType
     {
-        public Vim.ObjectModel.Family Family => _Family.Value;
-        public Vim.ObjectModel.CompoundStructure CompoundStructure => _CompoundStructure.Value;
-        public Vim.ObjectModel.Element Element => _Element.Value;
+        public Vim.Format.ObjectModel.Family Family => _Family.Value;
+        public Vim.Format.ObjectModel.CompoundStructure CompoundStructure => _CompoundStructure.Value;
+        public Vim.Format.ObjectModel.Element Element => _Element.Value;
         public FamilyType()
         {
-            _Family = new Relation<Vim.ObjectModel.Family>();
-            _CompoundStructure = new Relation<Vim.ObjectModel.CompoundStructure>();
-            _Element = new Relation<Vim.ObjectModel.Element>();
+            _Family = new Relation<Vim.Format.ObjectModel.Family>();
+            _CompoundStructure = new Relation<Vim.Format.ObjectModel.CompoundStructure>();
+            _Element = new Relation<Vim.Format.ObjectModel.Element>();
         }
         
         public override bool FieldsAreEqual(object obj)
@@ -661,18 +661,18 @@ namespace Vim.Format.ObjectModel {
     // AUTO-GENERATED
     public partial class FamilyInstance
     {
-        public Vim.ObjectModel.FamilyType FamilyType => _FamilyType.Value;
-        public Vim.ObjectModel.Element Host => _Host.Value;
-        public Vim.ObjectModel.Room FromRoom => _FromRoom.Value;
-        public Vim.ObjectModel.Room ToRoom => _ToRoom.Value;
-        public Vim.ObjectModel.Element Element => _Element.Value;
+        public Vim.Format.ObjectModel.FamilyType FamilyType => _FamilyType.Value;
+        public Vim.Format.ObjectModel.Element Host => _Host.Value;
+        public Vim.Format.ObjectModel.Room FromRoom => _FromRoom.Value;
+        public Vim.Format.ObjectModel.Room ToRoom => _ToRoom.Value;
+        public Vim.Format.ObjectModel.Element Element => _Element.Value;
         public FamilyInstance()
         {
-            _FamilyType = new Relation<Vim.ObjectModel.FamilyType>();
-            _Host = new Relation<Vim.ObjectModel.Element>();
-            _FromRoom = new Relation<Vim.ObjectModel.Room>();
-            _ToRoom = new Relation<Vim.ObjectModel.Room>();
-            _Element = new Relation<Vim.ObjectModel.Element>();
+            _FamilyType = new Relation<Vim.Format.ObjectModel.FamilyType>();
+            _Host = new Relation<Vim.Format.ObjectModel.Element>();
+            _FromRoom = new Relation<Vim.Format.ObjectModel.Room>();
+            _ToRoom = new Relation<Vim.Format.ObjectModel.Room>();
+            _Element = new Relation<Vim.Format.ObjectModel.Element>();
         }
         
         public override bool FieldsAreEqual(object obj)
@@ -724,14 +724,14 @@ namespace Vim.Format.ObjectModel {
     // AUTO-GENERATED
     public partial class View
     {
-        public Vim.ObjectModel.Camera Camera => _Camera.Value;
-        public Vim.ObjectModel.FamilyType FamilyType => _FamilyType.Value;
-        public Vim.ObjectModel.Element Element => _Element.Value;
+        public Vim.Format.ObjectModel.Camera Camera => _Camera.Value;
+        public Vim.Format.ObjectModel.FamilyType FamilyType => _FamilyType.Value;
+        public Vim.Format.ObjectModel.Element Element => _Element.Value;
         public View()
         {
-            _Camera = new Relation<Vim.ObjectModel.Camera>();
-            _FamilyType = new Relation<Vim.ObjectModel.FamilyType>();
-            _Element = new Relation<Vim.ObjectModel.Element>();
+            _Camera = new Relation<Vim.Format.ObjectModel.Camera>();
+            _FamilyType = new Relation<Vim.Format.ObjectModel.FamilyType>();
+            _Element = new Relation<Vim.Format.ObjectModel.Element>();
         }
         
         public override bool FieldsAreEqual(object obj)
@@ -781,12 +781,12 @@ namespace Vim.Format.ObjectModel {
     // AUTO-GENERATED
     public partial class ElementInView
     {
-        public Vim.ObjectModel.View View => _View.Value;
-        public Vim.ObjectModel.Element Element => _Element.Value;
+        public Vim.Format.ObjectModel.View View => _View.Value;
+        public Vim.Format.ObjectModel.Element Element => _Element.Value;
         public ElementInView()
         {
-            _View = new Relation<Vim.ObjectModel.View>();
-            _Element = new Relation<Vim.ObjectModel.Element>();
+            _View = new Relation<Vim.Format.ObjectModel.View>();
+            _Element = new Relation<Vim.Format.ObjectModel.Element>();
         }
         
         public override bool FieldsAreEqual(object obj)
@@ -812,12 +812,12 @@ namespace Vim.Format.ObjectModel {
     // AUTO-GENERATED
     public partial class ShapeInView
     {
-        public Vim.ObjectModel.Shape Shape => _Shape.Value;
-        public Vim.ObjectModel.View View => _View.Value;
+        public Vim.Format.ObjectModel.Shape Shape => _Shape.Value;
+        public Vim.Format.ObjectModel.View View => _View.Value;
         public ShapeInView()
         {
-            _Shape = new Relation<Vim.ObjectModel.Shape>();
-            _View = new Relation<Vim.ObjectModel.View>();
+            _Shape = new Relation<Vim.Format.ObjectModel.Shape>();
+            _View = new Relation<Vim.Format.ObjectModel.View>();
         }
         
         public override bool FieldsAreEqual(object obj)
@@ -843,12 +843,12 @@ namespace Vim.Format.ObjectModel {
     // AUTO-GENERATED
     public partial class AssetInView
     {
-        public Vim.ObjectModel.Asset Asset => _Asset.Value;
-        public Vim.ObjectModel.View View => _View.Value;
+        public Vim.Format.ObjectModel.Asset Asset => _Asset.Value;
+        public Vim.Format.ObjectModel.View View => _View.Value;
         public AssetInView()
         {
-            _Asset = new Relation<Vim.ObjectModel.Asset>();
-            _View = new Relation<Vim.ObjectModel.View>();
+            _Asset = new Relation<Vim.Format.ObjectModel.Asset>();
+            _View = new Relation<Vim.Format.ObjectModel.View>();
         }
         
         public override bool FieldsAreEqual(object obj)
@@ -874,12 +874,12 @@ namespace Vim.Format.ObjectModel {
     // AUTO-GENERATED
     public partial class LevelInView
     {
-        public Vim.ObjectModel.Level Level => _Level.Value;
-        public Vim.ObjectModel.View View => _View.Value;
+        public Vim.Format.ObjectModel.Level Level => _Level.Value;
+        public Vim.Format.ObjectModel.View View => _View.Value;
         public LevelInView()
         {
-            _Level = new Relation<Vim.ObjectModel.Level>();
-            _View = new Relation<Vim.ObjectModel.View>();
+            _Level = new Relation<Vim.Format.ObjectModel.Level>();
+            _View = new Relation<Vim.Format.ObjectModel.View>();
         }
         
         public override bool FieldsAreEqual(object obj)
@@ -945,14 +945,14 @@ namespace Vim.Format.ObjectModel {
     // AUTO-GENERATED
     public partial class Material
     {
-        public Vim.ObjectModel.Asset ColorTextureFile => _ColorTextureFile.Value;
-        public Vim.ObjectModel.Asset NormalTextureFile => _NormalTextureFile.Value;
-        public Vim.ObjectModel.Element Element => _Element.Value;
+        public Vim.Format.ObjectModel.Asset ColorTextureFile => _ColorTextureFile.Value;
+        public Vim.Format.ObjectModel.Asset NormalTextureFile => _NormalTextureFile.Value;
+        public Vim.Format.ObjectModel.Element Element => _Element.Value;
         public Material()
         {
-            _ColorTextureFile = new Relation<Vim.ObjectModel.Asset>();
-            _NormalTextureFile = new Relation<Vim.ObjectModel.Asset>();
-            _Element = new Relation<Vim.ObjectModel.Element>();
+            _ColorTextureFile = new Relation<Vim.Format.ObjectModel.Asset>();
+            _NormalTextureFile = new Relation<Vim.Format.ObjectModel.Asset>();
+            _Element = new Relation<Vim.Format.ObjectModel.Element>();
         }
         
         public override bool FieldsAreEqual(object obj)
@@ -996,12 +996,12 @@ namespace Vim.Format.ObjectModel {
     // AUTO-GENERATED
     public partial class MaterialInElement
     {
-        public Vim.ObjectModel.Material Material => _Material.Value;
-        public Vim.ObjectModel.Element Element => _Element.Value;
+        public Vim.Format.ObjectModel.Material Material => _Material.Value;
+        public Vim.Format.ObjectModel.Element Element => _Element.Value;
         public MaterialInElement()
         {
-            _Material = new Relation<Vim.ObjectModel.Material>();
-            _Element = new Relation<Vim.ObjectModel.Element>();
+            _Material = new Relation<Vim.Format.ObjectModel.Material>();
+            _Element = new Relation<Vim.Format.ObjectModel.Element>();
         }
         
         public override bool FieldsAreEqual(object obj)
@@ -1030,12 +1030,12 @@ namespace Vim.Format.ObjectModel {
     // AUTO-GENERATED
     public partial class CompoundStructureLayer
     {
-        public Vim.ObjectModel.Material Material => _Material.Value;
-        public Vim.ObjectModel.CompoundStructure CompoundStructure => _CompoundStructure.Value;
+        public Vim.Format.ObjectModel.Material Material => _Material.Value;
+        public Vim.Format.ObjectModel.CompoundStructure CompoundStructure => _CompoundStructure.Value;
         public CompoundStructureLayer()
         {
-            _Material = new Relation<Vim.ObjectModel.Material>();
-            _CompoundStructure = new Relation<Vim.ObjectModel.CompoundStructure>();
+            _Material = new Relation<Vim.Format.ObjectModel.Material>();
+            _CompoundStructure = new Relation<Vim.Format.ObjectModel.CompoundStructure>();
         }
         
         public override bool FieldsAreEqual(object obj)
@@ -1064,10 +1064,10 @@ namespace Vim.Format.ObjectModel {
     // AUTO-GENERATED
     public partial class CompoundStructure
     {
-        public Vim.ObjectModel.CompoundStructureLayer StructuralLayer => _StructuralLayer.Value;
+        public Vim.Format.ObjectModel.CompoundStructureLayer StructuralLayer => _StructuralLayer.Value;
         public CompoundStructure()
         {
-            _StructuralLayer = new Relation<Vim.ObjectModel.CompoundStructureLayer>();
+            _StructuralLayer = new Relation<Vim.Format.ObjectModel.CompoundStructureLayer>();
         }
         
         public override bool FieldsAreEqual(object obj)
@@ -1093,10 +1093,10 @@ namespace Vim.Format.ObjectModel {
     // AUTO-GENERATED
     public partial class Node
     {
-        public Vim.ObjectModel.Element Element => _Element.Value;
+        public Vim.Format.ObjectModel.Element Element => _Element.Value;
         public Node()
         {
-            _Element = new Relation<Vim.ObjectModel.Element>();
+            _Element = new Relation<Vim.Format.ObjectModel.Element>();
         }
         
         public override bool FieldsAreEqual(object obj)
@@ -1154,10 +1154,10 @@ namespace Vim.Format.ObjectModel {
     // AUTO-GENERATED
     public partial class Shape
     {
-        public Vim.ObjectModel.Element Element => _Element.Value;
+        public Vim.Format.ObjectModel.Element Element => _Element.Value;
         public Shape()
         {
-            _Element = new Relation<Vim.ObjectModel.Element>();
+            _Element = new Relation<Vim.Format.ObjectModel.Element>();
         }
         
         public override bool FieldsAreEqual(object obj)
@@ -1182,10 +1182,10 @@ namespace Vim.Format.ObjectModel {
     // AUTO-GENERATED
     public partial class ShapeCollection
     {
-        public Vim.ObjectModel.Element Element => _Element.Value;
+        public Vim.Format.ObjectModel.Element Element => _Element.Value;
         public ShapeCollection()
         {
-            _Element = new Relation<Vim.ObjectModel.Element>();
+            _Element = new Relation<Vim.Format.ObjectModel.Element>();
         }
         
         public override bool FieldsAreEqual(object obj)
@@ -1210,12 +1210,12 @@ namespace Vim.Format.ObjectModel {
     // AUTO-GENERATED
     public partial class ShapeInShapeCollection
     {
-        public Vim.ObjectModel.Shape Shape => _Shape.Value;
-        public Vim.ObjectModel.ShapeCollection ShapeCollection => _ShapeCollection.Value;
+        public Vim.Format.ObjectModel.Shape Shape => _Shape.Value;
+        public Vim.Format.ObjectModel.ShapeCollection ShapeCollection => _ShapeCollection.Value;
         public ShapeInShapeCollection()
         {
-            _Shape = new Relation<Vim.ObjectModel.Shape>();
-            _ShapeCollection = new Relation<Vim.ObjectModel.ShapeCollection>();
+            _Shape = new Relation<Vim.Format.ObjectModel.Shape>();
+            _ShapeCollection = new Relation<Vim.Format.ObjectModel.ShapeCollection>();
         }
         
         public override bool FieldsAreEqual(object obj)
@@ -1241,12 +1241,12 @@ namespace Vim.Format.ObjectModel {
     // AUTO-GENERATED
     public partial class System
     {
-        public Vim.ObjectModel.FamilyType FamilyType => _FamilyType.Value;
-        public Vim.ObjectModel.Element Element => _Element.Value;
+        public Vim.Format.ObjectModel.FamilyType FamilyType => _FamilyType.Value;
+        public Vim.Format.ObjectModel.Element Element => _Element.Value;
         public System()
         {
-            _FamilyType = new Relation<Vim.ObjectModel.FamilyType>();
-            _Element = new Relation<Vim.ObjectModel.Element>();
+            _FamilyType = new Relation<Vim.Format.ObjectModel.FamilyType>();
+            _Element = new Relation<Vim.Format.ObjectModel.Element>();
         }
         
         public override bool FieldsAreEqual(object obj)
@@ -1273,12 +1273,12 @@ namespace Vim.Format.ObjectModel {
     // AUTO-GENERATED
     public partial class ElementInSystem
     {
-        public Vim.ObjectModel.System System => _System.Value;
-        public Vim.ObjectModel.Element Element => _Element.Value;
+        public Vim.Format.ObjectModel.System System => _System.Value;
+        public Vim.Format.ObjectModel.Element Element => _Element.Value;
         public ElementInSystem()
         {
-            _System = new Relation<Vim.ObjectModel.System>();
-            _Element = new Relation<Vim.ObjectModel.Element>();
+            _System = new Relation<Vim.Format.ObjectModel.System>();
+            _Element = new Relation<Vim.Format.ObjectModel.Element>();
         }
         
         public override bool FieldsAreEqual(object obj)
@@ -1305,10 +1305,10 @@ namespace Vim.Format.ObjectModel {
     // AUTO-GENERATED
     public partial class Warning
     {
-        public Vim.ObjectModel.BimDocument BimDocument => _BimDocument.Value;
+        public Vim.Format.ObjectModel.BimDocument BimDocument => _BimDocument.Value;
         public Warning()
         {
-            _BimDocument = new Relation<Vim.ObjectModel.BimDocument>();
+            _BimDocument = new Relation<Vim.Format.ObjectModel.BimDocument>();
         }
         
         public override bool FieldsAreEqual(object obj)
@@ -1336,12 +1336,12 @@ namespace Vim.Format.ObjectModel {
     // AUTO-GENERATED
     public partial class ElementInWarning
     {
-        public Vim.ObjectModel.Warning Warning => _Warning.Value;
-        public Vim.ObjectModel.Element Element => _Element.Value;
+        public Vim.Format.ObjectModel.Warning Warning => _Warning.Value;
+        public Vim.Format.ObjectModel.Element Element => _Element.Value;
         public ElementInWarning()
         {
-            _Warning = new Relation<Vim.ObjectModel.Warning>();
-            _Element = new Relation<Vim.ObjectModel.Element>();
+            _Warning = new Relation<Vim.Format.ObjectModel.Warning>();
+            _Element = new Relation<Vim.Format.ObjectModel.Element>();
         }
         
         public override bool FieldsAreEqual(object obj)
@@ -1367,10 +1367,10 @@ namespace Vim.Format.ObjectModel {
     // AUTO-GENERATED
     public partial class BasePoint
     {
-        public Vim.ObjectModel.Element Element => _Element.Value;
+        public Vim.Format.ObjectModel.Element Element => _Element.Value;
         public BasePoint()
         {
-            _Element = new Relation<Vim.ObjectModel.Element>();
+            _Element = new Relation<Vim.Format.ObjectModel.Element>();
         }
         
         public override bool FieldsAreEqual(object obj)
@@ -1402,10 +1402,10 @@ namespace Vim.Format.ObjectModel {
     // AUTO-GENERATED
     public partial class PhaseFilter
     {
-        public Vim.ObjectModel.Element Element => _Element.Value;
+        public Vim.Format.ObjectModel.Element Element => _Element.Value;
         public PhaseFilter()
         {
-            _Element = new Relation<Vim.ObjectModel.Element>();
+            _Element = new Relation<Vim.Format.ObjectModel.Element>();
         }
         
         public override bool FieldsAreEqual(object obj)
@@ -1434,12 +1434,12 @@ namespace Vim.Format.ObjectModel {
     // AUTO-GENERATED
     public partial class Grid
     {
-        public Vim.ObjectModel.FamilyType FamilyType => _FamilyType.Value;
-        public Vim.ObjectModel.Element Element => _Element.Value;
+        public Vim.Format.ObjectModel.FamilyType FamilyType => _FamilyType.Value;
+        public Vim.Format.ObjectModel.Element Element => _Element.Value;
         public Grid()
         {
-            _FamilyType = new Relation<Vim.ObjectModel.FamilyType>();
-            _Element = new Relation<Vim.ObjectModel.Element>();
+            _FamilyType = new Relation<Vim.Format.ObjectModel.FamilyType>();
+            _Element = new Relation<Vim.Format.ObjectModel.Element>();
         }
         
         public override bool FieldsAreEqual(object obj)
@@ -1478,12 +1478,12 @@ namespace Vim.Format.ObjectModel {
     // AUTO-GENERATED
     public partial class Area
     {
-        public Vim.ObjectModel.AreaScheme AreaScheme => _AreaScheme.Value;
-        public Vim.ObjectModel.Element Element => _Element.Value;
+        public Vim.Format.ObjectModel.AreaScheme AreaScheme => _AreaScheme.Value;
+        public Vim.Format.ObjectModel.Element Element => _Element.Value;
         public Area()
         {
-            _AreaScheme = new Relation<Vim.ObjectModel.AreaScheme>();
-            _Element = new Relation<Vim.ObjectModel.Element>();
+            _AreaScheme = new Relation<Vim.Format.ObjectModel.AreaScheme>();
+            _Element = new Relation<Vim.Format.ObjectModel.Element>();
         }
         
         public override bool FieldsAreEqual(object obj)
@@ -1513,10 +1513,10 @@ namespace Vim.Format.ObjectModel {
     // AUTO-GENERATED
     public partial class AreaScheme
     {
-        public Vim.ObjectModel.Element Element => _Element.Value;
+        public Vim.Format.ObjectModel.Element Element => _Element.Value;
         public AreaScheme()
         {
-            _Element = new Relation<Vim.ObjectModel.Element>();
+            _Element = new Relation<Vim.Format.ObjectModel.Element>();
         }
         
         public override bool FieldsAreEqual(object obj)
@@ -1542,10 +1542,10 @@ namespace Vim.Format.ObjectModel {
     // AUTO-GENERATED
     public partial class Schedule
     {
-        public Vim.ObjectModel.Element Element => _Element.Value;
+        public Vim.Format.ObjectModel.Element Element => _Element.Value;
         public Schedule()
         {
-            _Element = new Relation<Vim.ObjectModel.Element>();
+            _Element = new Relation<Vim.Format.ObjectModel.Element>();
         }
         
         public override bool FieldsAreEqual(object obj)
@@ -1570,10 +1570,10 @@ namespace Vim.Format.ObjectModel {
     // AUTO-GENERATED
     public partial class ScheduleColumn
     {
-        public Vim.ObjectModel.Schedule Schedule => _Schedule.Value;
+        public Vim.Format.ObjectModel.Schedule Schedule => _Schedule.Value;
         public ScheduleColumn()
         {
-            _Schedule = new Relation<Vim.ObjectModel.Schedule>();
+            _Schedule = new Relation<Vim.Format.ObjectModel.Schedule>();
         }
         
         public override bool FieldsAreEqual(object obj)
@@ -1600,10 +1600,10 @@ namespace Vim.Format.ObjectModel {
     // AUTO-GENERATED
     public partial class ScheduleCell
     {
-        public Vim.ObjectModel.ScheduleColumn ScheduleColumn => _ScheduleColumn.Value;
+        public Vim.Format.ObjectModel.ScheduleColumn ScheduleColumn => _ScheduleColumn.Value;
         public ScheduleCell()
         {
-            _ScheduleColumn = new Relation<Vim.ObjectModel.ScheduleColumn>();
+            _ScheduleColumn = new Relation<Vim.Format.ObjectModel.ScheduleColumn>();
         }
         
         public override bool FieldsAreEqual(object obj)
@@ -1713,7 +1713,7 @@ namespace Vim.Format.ObjectModel {
             r.IsReadOnly = ParameterDescriptorIsReadOnly.ElementAtOrDefault(n);
             r.Flags = ParameterDescriptorFlags.ElementAtOrDefault(n);
             r.Guid = ParameterDescriptorGuid.ElementAtOrDefault(n);
-            r._DisplayUnit = new Relation<Vim.ObjectModel.DisplayUnit>(GetParameterDescriptorDisplayUnitIndex(n), GetDisplayUnit);
+            r._DisplayUnit = new Relation<Vim.Format.ObjectModel.DisplayUnit>(GetParameterDescriptorDisplayUnitIndex(n), GetDisplayUnit);
             return r;
         }
         
@@ -1737,8 +1737,8 @@ namespace Vim.Format.ObjectModel {
             r.Document = Document;
             r.Index = n;
             r.Value = ParameterValue.ElementAtOrDefault(n);
-            r._ParameterDescriptor = new Relation<Vim.ObjectModel.ParameterDescriptor>(GetParameterParameterDescriptorIndex(n), GetParameterDescriptor);
-            r._Element = new Relation<Vim.ObjectModel.Element>(GetParameterElementIndex(n), GetElement);
+            r._ParameterDescriptor = new Relation<Vim.Format.ObjectModel.ParameterDescriptor>(GetParameterParameterDescriptorIndex(n), GetParameterDescriptor);
+            r._Element = new Relation<Vim.Format.ObjectModel.Element>(GetParameterElementIndex(n), GetElement);
             return r;
         }
         
@@ -1804,17 +1804,17 @@ namespace Vim.Format.ObjectModel {
             r.Location_Z = ElementLocation_Z.ElementAtOrDefault(n);
             r.FamilyName = ElementFamilyName.ElementAtOrDefault(n);
             r.IsPinned = ElementIsPinned.ElementAtOrDefault(n);
-            r._Level = new Relation<Vim.ObjectModel.Level>(GetElementLevelIndex(n), GetLevel);
-            r._PhaseCreated = new Relation<Vim.ObjectModel.Phase>(GetElementPhaseCreatedIndex(n), GetPhase);
-            r._PhaseDemolished = new Relation<Vim.ObjectModel.Phase>(GetElementPhaseDemolishedIndex(n), GetPhase);
-            r._Category = new Relation<Vim.ObjectModel.Category>(GetElementCategoryIndex(n), GetCategory);
-            r._Workset = new Relation<Vim.ObjectModel.Workset>(GetElementWorksetIndex(n), GetWorkset);
-            r._DesignOption = new Relation<Vim.ObjectModel.DesignOption>(GetElementDesignOptionIndex(n), GetDesignOption);
-            r._OwnerView = new Relation<Vim.ObjectModel.View>(GetElementOwnerViewIndex(n), GetView);
-            r._Group = new Relation<Vim.ObjectModel.Group>(GetElementGroupIndex(n), GetGroup);
-            r._AssemblyInstance = new Relation<Vim.ObjectModel.AssemblyInstance>(GetElementAssemblyInstanceIndex(n), GetAssemblyInstance);
-            r._BimDocument = new Relation<Vim.ObjectModel.BimDocument>(GetElementBimDocumentIndex(n), GetBimDocument);
-            r._Room = new Relation<Vim.ObjectModel.Room>(GetElementRoomIndex(n), GetRoom);
+            r._Level = new Relation<Vim.Format.ObjectModel.Level>(GetElementLevelIndex(n), GetLevel);
+            r._PhaseCreated = new Relation<Vim.Format.ObjectModel.Phase>(GetElementPhaseCreatedIndex(n), GetPhase);
+            r._PhaseDemolished = new Relation<Vim.Format.ObjectModel.Phase>(GetElementPhaseDemolishedIndex(n), GetPhase);
+            r._Category = new Relation<Vim.Format.ObjectModel.Category>(GetElementCategoryIndex(n), GetCategory);
+            r._Workset = new Relation<Vim.Format.ObjectModel.Workset>(GetElementWorksetIndex(n), GetWorkset);
+            r._DesignOption = new Relation<Vim.Format.ObjectModel.DesignOption>(GetElementDesignOptionIndex(n), GetDesignOption);
+            r._OwnerView = new Relation<Vim.Format.ObjectModel.View>(GetElementOwnerViewIndex(n), GetView);
+            r._Group = new Relation<Vim.Format.ObjectModel.Group>(GetElementGroupIndex(n), GetGroup);
+            r._AssemblyInstance = new Relation<Vim.Format.ObjectModel.AssemblyInstance>(GetElementAssemblyInstanceIndex(n), GetAssemblyInstance);
+            r._BimDocument = new Relation<Vim.Format.ObjectModel.BimDocument>(GetElementBimDocumentIndex(n), GetBimDocument);
+            r._Room = new Relation<Vim.Format.ObjectModel.Room>(GetElementRoomIndex(n), GetRoom);
             return r;
         }
         
@@ -1854,7 +1854,7 @@ namespace Vim.Format.ObjectModel {
             r.IsEditable = WorksetIsEditable.ElementAtOrDefault(n);
             r.Owner = WorksetOwner.ElementAtOrDefault(n);
             r.UniqueId = WorksetUniqueId.ElementAtOrDefault(n);
-            r._BimDocument = new Relation<Vim.ObjectModel.BimDocument>(GetWorksetBimDocumentIndex(n), GetBimDocument);
+            r._BimDocument = new Relation<Vim.Format.ObjectModel.BimDocument>(GetWorksetBimDocumentIndex(n), GetBimDocument);
             return r;
         }
         
@@ -1885,7 +1885,7 @@ namespace Vim.Format.ObjectModel {
             r.Position_X = AssemblyInstancePosition_X.ElementAtOrDefault(n);
             r.Position_Y = AssemblyInstancePosition_Y.ElementAtOrDefault(n);
             r.Position_Z = AssemblyInstancePosition_Z.ElementAtOrDefault(n);
-            r._Element = new Relation<Vim.ObjectModel.Element>(GetAssemblyInstanceElementIndex(n), GetElement);
+            r._Element = new Relation<Vim.Format.ObjectModel.Element>(GetAssemblyInstanceElementIndex(n), GetElement);
             return r;
         }
         
@@ -1916,7 +1916,7 @@ namespace Vim.Format.ObjectModel {
             r.Position_X = GroupPosition_X.ElementAtOrDefault(n);
             r.Position_Y = GroupPosition_Y.ElementAtOrDefault(n);
             r.Position_Z = GroupPosition_Z.ElementAtOrDefault(n);
-            r._Element = new Relation<Vim.ObjectModel.Element>(GetGroupElementIndex(n), GetElement);
+            r._Element = new Relation<Vim.Format.ObjectModel.Element>(GetGroupElementIndex(n), GetElement);
             return r;
         }
         
@@ -1938,7 +1938,7 @@ namespace Vim.Format.ObjectModel {
             r.Document = Document;
             r.Index = n;
             r.IsPrimary = DesignOptionIsPrimary.ElementAtOrDefault(n);
-            r._Element = new Relation<Vim.ObjectModel.Element>(GetDesignOptionElementIndex(n), GetElement);
+            r._Element = new Relation<Vim.Format.ObjectModel.Element>(GetDesignOptionElementIndex(n), GetElement);
             return r;
         }
         
@@ -1962,8 +1962,8 @@ namespace Vim.Format.ObjectModel {
             r.Document = Document;
             r.Index = n;
             r.Elevation = LevelElevation.ElementAtOrDefault(n);
-            r._FamilyType = new Relation<Vim.ObjectModel.FamilyType>(GetLevelFamilyTypeIndex(n), GetFamilyType);
-            r._Element = new Relation<Vim.ObjectModel.Element>(GetLevelElementIndex(n), GetElement);
+            r._FamilyType = new Relation<Vim.Format.ObjectModel.FamilyType>(GetLevelFamilyTypeIndex(n), GetFamilyType);
+            r._Element = new Relation<Vim.Format.ObjectModel.Element>(GetLevelElementIndex(n), GetElement);
             return r;
         }
         
@@ -1982,7 +1982,7 @@ namespace Vim.Format.ObjectModel {
             var r = new Phase();
             r.Document = Document;
             r.Index = n;
-            r._Element = new Relation<Vim.ObjectModel.Element>(GetPhaseElementIndex(n), GetElement);
+            r._Element = new Relation<Vim.Format.ObjectModel.Element>(GetPhaseElementIndex(n), GetElement);
             return r;
         }
         
@@ -2024,8 +2024,8 @@ namespace Vim.Format.ObjectModel {
             r.Perimeter = RoomPerimeter.ElementAtOrDefault(n);
             r.Area = RoomArea.ElementAtOrDefault(n);
             r.Number = RoomNumber.ElementAtOrDefault(n);
-            r._UpperLimit = new Relation<Vim.ObjectModel.Level>(GetRoomUpperLimitIndex(n), GetLevel);
-            r._Element = new Relation<Vim.ObjectModel.Element>(GetRoomElementIndex(n), GetElement);
+            r._UpperLimit = new Relation<Vim.Format.ObjectModel.Level>(GetRoomUpperLimitIndex(n), GetLevel);
+            r._Element = new Relation<Vim.Format.ObjectModel.Element>(GetRoomElementIndex(n), GetElement);
             return r;
         }
         
@@ -2134,10 +2134,10 @@ namespace Vim.Format.ObjectModel {
             r.Product = BimDocumentProduct.ElementAtOrDefault(n);
             r.Version = BimDocumentVersion.ElementAtOrDefault(n);
             r.User = BimDocumentUser.ElementAtOrDefault(n);
-            r._ActiveView = new Relation<Vim.ObjectModel.View>(GetBimDocumentActiveViewIndex(n), GetView);
-            r._OwnerFamily = new Relation<Vim.ObjectModel.Family>(GetBimDocumentOwnerFamilyIndex(n), GetFamily);
-            r._Parent = new Relation<Vim.ObjectModel.BimDocument>(GetBimDocumentParentIndex(n), GetBimDocument);
-            r._Element = new Relation<Vim.ObjectModel.Element>(GetBimDocumentElementIndex(n), GetElement);
+            r._ActiveView = new Relation<Vim.Format.ObjectModel.View>(GetBimDocumentActiveViewIndex(n), GetView);
+            r._OwnerFamily = new Relation<Vim.Format.ObjectModel.Family>(GetBimDocumentOwnerFamilyIndex(n), GetFamily);
+            r._Parent = new Relation<Vim.Format.ObjectModel.BimDocument>(GetBimDocumentParentIndex(n), GetBimDocument);
+            r._Element = new Relation<Vim.Format.ObjectModel.Element>(GetBimDocumentElementIndex(n), GetElement);
             return r;
         }
         
@@ -2158,8 +2158,8 @@ namespace Vim.Format.ObjectModel {
             var r = new DisplayUnitInBimDocument();
             r.Document = Document;
             r.Index = n;
-            r._DisplayUnit = new Relation<Vim.ObjectModel.DisplayUnit>(GetDisplayUnitInBimDocumentDisplayUnitIndex(n), GetDisplayUnit);
-            r._BimDocument = new Relation<Vim.ObjectModel.BimDocument>(GetDisplayUnitInBimDocumentBimDocumentIndex(n), GetBimDocument);
+            r._DisplayUnit = new Relation<Vim.Format.ObjectModel.DisplayUnit>(GetDisplayUnitInBimDocumentDisplayUnitIndex(n), GetDisplayUnit);
+            r._BimDocument = new Relation<Vim.Format.ObjectModel.BimDocument>(GetDisplayUnitInBimDocumentBimDocumentIndex(n), GetBimDocument);
             return r;
         }
         
@@ -2183,8 +2183,8 @@ namespace Vim.Format.ObjectModel {
             r.Document = Document;
             r.Index = n;
             r.OrderIndex = PhaseOrderInBimDocumentOrderIndex.ElementAtOrDefault(n);
-            r._Phase = new Relation<Vim.ObjectModel.Phase>(GetPhaseOrderInBimDocumentPhaseIndex(n), GetPhase);
-            r._BimDocument = new Relation<Vim.ObjectModel.BimDocument>(GetPhaseOrderInBimDocumentBimDocumentIndex(n), GetBimDocument);
+            r._Phase = new Relation<Vim.Format.ObjectModel.Phase>(GetPhaseOrderInBimDocumentPhaseIndex(n), GetPhase);
+            r._BimDocument = new Relation<Vim.Format.ObjectModel.BimDocument>(GetPhaseOrderInBimDocumentBimDocumentIndex(n), GetBimDocument);
             return r;
         }
         
@@ -2226,8 +2226,8 @@ namespace Vim.Format.ObjectModel {
             r.LineColor_Y = CategoryLineColor_Y.ElementAtOrDefault(n);
             r.LineColor_Z = CategoryLineColor_Z.ElementAtOrDefault(n);
             r.BuiltInCategory = CategoryBuiltInCategory.ElementAtOrDefault(n);
-            r._Parent = new Relation<Vim.ObjectModel.Category>(GetCategoryParentIndex(n), GetCategory);
-            r._Material = new Relation<Vim.ObjectModel.Material>(GetCategoryMaterialIndex(n), GetMaterial);
+            r._Parent = new Relation<Vim.Format.ObjectModel.Category>(GetCategoryParentIndex(n), GetCategory);
+            r._Material = new Relation<Vim.Format.ObjectModel.Material>(GetCategoryMaterialIndex(n), GetMaterial);
             return r;
         }
         
@@ -2260,8 +2260,8 @@ namespace Vim.Format.ObjectModel {
             r.StructuralSectionShape = FamilyStructuralSectionShape.ElementAtOrDefault(n);
             r.IsSystemFamily = FamilyIsSystemFamily.ElementAtOrDefault(n);
             r.IsInPlace = FamilyIsInPlace.ElementAtOrDefault(n);
-            r._FamilyCategory = new Relation<Vim.ObjectModel.Category>(GetFamilyFamilyCategoryIndex(n), GetCategory);
-            r._Element = new Relation<Vim.ObjectModel.Element>(GetFamilyElementIndex(n), GetElement);
+            r._FamilyCategory = new Relation<Vim.Format.ObjectModel.Category>(GetFamilyFamilyCategoryIndex(n), GetCategory);
+            r._Element = new Relation<Vim.Format.ObjectModel.Element>(GetFamilyElementIndex(n), GetElement);
             return r;
         }
         
@@ -2287,9 +2287,9 @@ namespace Vim.Format.ObjectModel {
             r.Document = Document;
             r.Index = n;
             r.IsSystemFamilyType = FamilyTypeIsSystemFamilyType.ElementAtOrDefault(n);
-            r._Family = new Relation<Vim.ObjectModel.Family>(GetFamilyTypeFamilyIndex(n), GetFamily);
-            r._CompoundStructure = new Relation<Vim.ObjectModel.CompoundStructure>(GetFamilyTypeCompoundStructureIndex(n), GetCompoundStructure);
-            r._Element = new Relation<Vim.ObjectModel.Element>(GetFamilyTypeElementIndex(n), GetElement);
+            r._Family = new Relation<Vim.Format.ObjectModel.Family>(GetFamilyTypeFamilyIndex(n), GetFamily);
+            r._CompoundStructure = new Relation<Vim.Format.ObjectModel.CompoundStructure>(GetFamilyTypeCompoundStructureIndex(n), GetCompoundStructure);
+            r._Element = new Relation<Vim.Format.ObjectModel.Element>(GetFamilyTypeElementIndex(n), GetElement);
             return r;
         }
         
@@ -2385,11 +2385,11 @@ namespace Vim.Format.ObjectModel {
             r.HandOrientation_X = FamilyInstanceHandOrientation_X.ElementAtOrDefault(n);
             r.HandOrientation_Y = FamilyInstanceHandOrientation_Y.ElementAtOrDefault(n);
             r.HandOrientation_Z = FamilyInstanceHandOrientation_Z.ElementAtOrDefault(n);
-            r._FamilyType = new Relation<Vim.ObjectModel.FamilyType>(GetFamilyInstanceFamilyTypeIndex(n), GetFamilyType);
-            r._Host = new Relation<Vim.ObjectModel.Element>(GetFamilyInstanceHostIndex(n), GetElement);
-            r._FromRoom = new Relation<Vim.ObjectModel.Room>(GetFamilyInstanceFromRoomIndex(n), GetRoom);
-            r._ToRoom = new Relation<Vim.ObjectModel.Room>(GetFamilyInstanceToRoomIndex(n), GetRoom);
-            r._Element = new Relation<Vim.ObjectModel.Element>(GetFamilyInstanceElementIndex(n), GetElement);
+            r._FamilyType = new Relation<Vim.Format.ObjectModel.FamilyType>(GetFamilyInstanceFamilyTypeIndex(n), GetFamilyType);
+            r._Host = new Relation<Vim.Format.ObjectModel.Element>(GetFamilyInstanceHostIndex(n), GetElement);
+            r._FromRoom = new Relation<Vim.Format.ObjectModel.Room>(GetFamilyInstanceFromRoomIndex(n), GetRoom);
+            r._ToRoom = new Relation<Vim.Format.ObjectModel.Room>(GetFamilyInstanceToRoomIndex(n), GetRoom);
+            r._Element = new Relation<Vim.Format.ObjectModel.Element>(GetFamilyInstanceElementIndex(n), GetElement);
             return r;
         }
         
@@ -2481,9 +2481,9 @@ namespace Vim.Format.ObjectModel {
             r.Outline_Max_X = ViewOutline_Max_X.ElementAtOrDefault(n);
             r.Outline_Max_Y = ViewOutline_Max_Y.ElementAtOrDefault(n);
             r.DetailLevel = ViewDetailLevel.ElementAtOrDefault(n);
-            r._Camera = new Relation<Vim.ObjectModel.Camera>(GetViewCameraIndex(n), GetCamera);
-            r._FamilyType = new Relation<Vim.ObjectModel.FamilyType>(GetViewFamilyTypeIndex(n), GetFamilyType);
-            r._Element = new Relation<Vim.ObjectModel.Element>(GetViewElementIndex(n), GetElement);
+            r._Camera = new Relation<Vim.Format.ObjectModel.Camera>(GetViewCameraIndex(n), GetCamera);
+            r._FamilyType = new Relation<Vim.Format.ObjectModel.FamilyType>(GetViewFamilyTypeIndex(n), GetFamilyType);
+            r._Element = new Relation<Vim.Format.ObjectModel.Element>(GetViewElementIndex(n), GetElement);
             return r;
         }
         
@@ -2504,8 +2504,8 @@ namespace Vim.Format.ObjectModel {
             var r = new ElementInView();
             r.Document = Document;
             r.Index = n;
-            r._View = new Relation<Vim.ObjectModel.View>(GetElementInViewViewIndex(n), GetView);
-            r._Element = new Relation<Vim.ObjectModel.Element>(GetElementInViewElementIndex(n), GetElement);
+            r._View = new Relation<Vim.Format.ObjectModel.View>(GetElementInViewViewIndex(n), GetView);
+            r._Element = new Relation<Vim.Format.ObjectModel.Element>(GetElementInViewElementIndex(n), GetElement);
             return r;
         }
         
@@ -2526,8 +2526,8 @@ namespace Vim.Format.ObjectModel {
             var r = new ShapeInView();
             r.Document = Document;
             r.Index = n;
-            r._Shape = new Relation<Vim.ObjectModel.Shape>(GetShapeInViewShapeIndex(n), GetShape);
-            r._View = new Relation<Vim.ObjectModel.View>(GetShapeInViewViewIndex(n), GetView);
+            r._Shape = new Relation<Vim.Format.ObjectModel.Shape>(GetShapeInViewShapeIndex(n), GetShape);
+            r._View = new Relation<Vim.Format.ObjectModel.View>(GetShapeInViewViewIndex(n), GetView);
             return r;
         }
         
@@ -2548,8 +2548,8 @@ namespace Vim.Format.ObjectModel {
             var r = new AssetInView();
             r.Document = Document;
             r.Index = n;
-            r._Asset = new Relation<Vim.ObjectModel.Asset>(GetAssetInViewAssetIndex(n), GetAsset);
-            r._View = new Relation<Vim.ObjectModel.View>(GetAssetInViewViewIndex(n), GetView);
+            r._Asset = new Relation<Vim.Format.ObjectModel.Asset>(GetAssetInViewAssetIndex(n), GetAsset);
+            r._View = new Relation<Vim.Format.ObjectModel.View>(GetAssetInViewViewIndex(n), GetView);
             return r;
         }
         
@@ -2588,8 +2588,8 @@ namespace Vim.Format.ObjectModel {
             r.Extents_Max_X = LevelInViewExtents_Max_X.ElementAtOrDefault(n);
             r.Extents_Max_Y = LevelInViewExtents_Max_Y.ElementAtOrDefault(n);
             r.Extents_Max_Z = LevelInViewExtents_Max_Z.ElementAtOrDefault(n);
-            r._Level = new Relation<Vim.ObjectModel.Level>(GetLevelInViewLevelIndex(n), GetLevel);
-            r._View = new Relation<Vim.ObjectModel.View>(GetLevelInViewViewIndex(n), GetView);
+            r._Level = new Relation<Vim.Format.ObjectModel.Level>(GetLevelInViewLevelIndex(n), GetLevel);
+            r._View = new Relation<Vim.Format.ObjectModel.View>(GetLevelInViewViewIndex(n), GetView);
             return r;
         }
         
@@ -2706,9 +2706,9 @@ namespace Vim.Format.ObjectModel {
             r.Glossiness = MaterialGlossiness.ElementAtOrDefault(n);
             r.Smoothness = MaterialSmoothness.ElementAtOrDefault(n);
             r.Transparency = MaterialTransparency.ElementAtOrDefault(n);
-            r._ColorTextureFile = new Relation<Vim.ObjectModel.Asset>(GetMaterialColorTextureFileIndex(n), GetAsset);
-            r._NormalTextureFile = new Relation<Vim.ObjectModel.Asset>(GetMaterialNormalTextureFileIndex(n), GetAsset);
-            r._Element = new Relation<Vim.ObjectModel.Element>(GetMaterialElementIndex(n), GetElement);
+            r._ColorTextureFile = new Relation<Vim.Format.ObjectModel.Asset>(GetMaterialColorTextureFileIndex(n), GetAsset);
+            r._NormalTextureFile = new Relation<Vim.Format.ObjectModel.Asset>(GetMaterialNormalTextureFileIndex(n), GetAsset);
+            r._Element = new Relation<Vim.Format.ObjectModel.Element>(GetMaterialElementIndex(n), GetElement);
             return r;
         }
         
@@ -2738,8 +2738,8 @@ namespace Vim.Format.ObjectModel {
             r.Area = MaterialInElementArea.ElementAtOrDefault(n);
             r.Volume = MaterialInElementVolume.ElementAtOrDefault(n);
             r.IsPaint = MaterialInElementIsPaint.ElementAtOrDefault(n);
-            r._Material = new Relation<Vim.ObjectModel.Material>(GetMaterialInElementMaterialIndex(n), GetMaterial);
-            r._Element = new Relation<Vim.ObjectModel.Element>(GetMaterialInElementElementIndex(n), GetElement);
+            r._Material = new Relation<Vim.Format.ObjectModel.Material>(GetMaterialInElementMaterialIndex(n), GetMaterial);
+            r._Element = new Relation<Vim.Format.ObjectModel.Element>(GetMaterialInElementElementIndex(n), GetElement);
             return r;
         }
         
@@ -2769,8 +2769,8 @@ namespace Vim.Format.ObjectModel {
             r.OrderIndex = CompoundStructureLayerOrderIndex.ElementAtOrDefault(n);
             r.Width = CompoundStructureLayerWidth.ElementAtOrDefault(n);
             r.MaterialFunctionAssignment = CompoundStructureLayerMaterialFunctionAssignment.ElementAtOrDefault(n);
-            r._Material = new Relation<Vim.ObjectModel.Material>(GetCompoundStructureLayerMaterialIndex(n), GetMaterial);
-            r._CompoundStructure = new Relation<Vim.ObjectModel.CompoundStructure>(GetCompoundStructureLayerCompoundStructureIndex(n), GetCompoundStructure);
+            r._Material = new Relation<Vim.Format.ObjectModel.Material>(GetCompoundStructureLayerMaterialIndex(n), GetMaterial);
+            r._CompoundStructure = new Relation<Vim.Format.ObjectModel.CompoundStructure>(GetCompoundStructureLayerCompoundStructureIndex(n), GetCompoundStructure);
             return r;
         }
         
@@ -2792,7 +2792,7 @@ namespace Vim.Format.ObjectModel {
             r.Document = Document;
             r.Index = n;
             r.Width = CompoundStructureWidth.ElementAtOrDefault(n);
-            r._StructuralLayer = new Relation<Vim.ObjectModel.CompoundStructureLayer>(GetCompoundStructureStructuralLayerIndex(n), GetCompoundStructureLayer);
+            r._StructuralLayer = new Relation<Vim.Format.ObjectModel.CompoundStructureLayer>(GetCompoundStructureStructuralLayerIndex(n), GetCompoundStructureLayer);
             return r;
         }
         
@@ -2811,7 +2811,7 @@ namespace Vim.Format.ObjectModel {
             var r = new Node();
             r.Document = Document;
             r.Index = n;
-            r._Element = new Relation<Vim.ObjectModel.Element>(GetNodeElementIndex(n), GetElement);
+            r._Element = new Relation<Vim.Format.ObjectModel.Element>(GetNodeElementIndex(n), GetElement);
             return r;
         }
         
@@ -2870,7 +2870,7 @@ namespace Vim.Format.ObjectModel {
             var r = new Shape();
             r.Document = Document;
             r.Index = n;
-            r._Element = new Relation<Vim.ObjectModel.Element>(GetShapeElementIndex(n), GetElement);
+            r._Element = new Relation<Vim.Format.ObjectModel.Element>(GetShapeElementIndex(n), GetElement);
             return r;
         }
         
@@ -2889,7 +2889,7 @@ namespace Vim.Format.ObjectModel {
             var r = new ShapeCollection();
             r.Document = Document;
             r.Index = n;
-            r._Element = new Relation<Vim.ObjectModel.Element>(GetShapeCollectionElementIndex(n), GetElement);
+            r._Element = new Relation<Vim.Format.ObjectModel.Element>(GetShapeCollectionElementIndex(n), GetElement);
             return r;
         }
         
@@ -2910,8 +2910,8 @@ namespace Vim.Format.ObjectModel {
             var r = new ShapeInShapeCollection();
             r.Document = Document;
             r.Index = n;
-            r._Shape = new Relation<Vim.ObjectModel.Shape>(GetShapeInShapeCollectionShapeIndex(n), GetShape);
-            r._ShapeCollection = new Relation<Vim.ObjectModel.ShapeCollection>(GetShapeInShapeCollectionShapeCollectionIndex(n), GetShapeCollection);
+            r._Shape = new Relation<Vim.Format.ObjectModel.Shape>(GetShapeInShapeCollectionShapeIndex(n), GetShape);
+            r._ShapeCollection = new Relation<Vim.Format.ObjectModel.ShapeCollection>(GetShapeInShapeCollectionShapeCollectionIndex(n), GetShapeCollection);
             return r;
         }
         
@@ -2935,8 +2935,8 @@ namespace Vim.Format.ObjectModel {
             r.Document = Document;
             r.Index = n;
             r.SystemType = SystemSystemType.ElementAtOrDefault(n);
-            r._FamilyType = new Relation<Vim.ObjectModel.FamilyType>(GetSystemFamilyTypeIndex(n), GetFamilyType);
-            r._Element = new Relation<Vim.ObjectModel.Element>(GetSystemElementIndex(n), GetElement);
+            r._FamilyType = new Relation<Vim.Format.ObjectModel.FamilyType>(GetSystemFamilyTypeIndex(n), GetFamilyType);
+            r._Element = new Relation<Vim.Format.ObjectModel.Element>(GetSystemElementIndex(n), GetElement);
             return r;
         }
         
@@ -2960,8 +2960,8 @@ namespace Vim.Format.ObjectModel {
             r.Document = Document;
             r.Index = n;
             r.Roles = ElementInSystemRoles.ElementAtOrDefault(n);
-            r._System = new Relation<Vim.ObjectModel.System>(GetElementInSystemSystemIndex(n), GetSystem);
-            r._Element = new Relation<Vim.ObjectModel.Element>(GetElementInSystemElementIndex(n), GetElement);
+            r._System = new Relation<Vim.Format.ObjectModel.System>(GetElementInSystemSystemIndex(n), GetSystem);
+            r._Element = new Relation<Vim.Format.ObjectModel.Element>(GetElementInSystemElementIndex(n), GetElement);
             return r;
         }
         
@@ -2989,7 +2989,7 @@ namespace Vim.Format.ObjectModel {
             r.Guid = WarningGuid.ElementAtOrDefault(n);
             r.Severity = WarningSeverity.ElementAtOrDefault(n);
             r.Description = WarningDescription.ElementAtOrDefault(n);
-            r._BimDocument = new Relation<Vim.ObjectModel.BimDocument>(GetWarningBimDocumentIndex(n), GetBimDocument);
+            r._BimDocument = new Relation<Vim.Format.ObjectModel.BimDocument>(GetWarningBimDocumentIndex(n), GetBimDocument);
             return r;
         }
         
@@ -3010,8 +3010,8 @@ namespace Vim.Format.ObjectModel {
             var r = new ElementInWarning();
             r.Document = Document;
             r.Index = n;
-            r._Warning = new Relation<Vim.ObjectModel.Warning>(GetElementInWarningWarningIndex(n), GetWarning);
-            r._Element = new Relation<Vim.ObjectModel.Element>(GetElementInWarningElementIndex(n), GetElement);
+            r._Warning = new Relation<Vim.Format.ObjectModel.Warning>(GetElementInWarningWarningIndex(n), GetWarning);
+            r._Element = new Relation<Vim.Format.ObjectModel.Element>(GetElementInWarningElementIndex(n), GetElement);
             return r;
         }
         
@@ -3051,7 +3051,7 @@ namespace Vim.Format.ObjectModel {
             r.SharedPosition_X = BasePointSharedPosition_X.ElementAtOrDefault(n);
             r.SharedPosition_Y = BasePointSharedPosition_Y.ElementAtOrDefault(n);
             r.SharedPosition_Z = BasePointSharedPosition_Z.ElementAtOrDefault(n);
-            r._Element = new Relation<Vim.ObjectModel.Element>(GetBasePointElementIndex(n), GetElement);
+            r._Element = new Relation<Vim.Format.ObjectModel.Element>(GetBasePointElementIndex(n), GetElement);
             return r;
         }
         
@@ -3082,7 +3082,7 @@ namespace Vim.Format.ObjectModel {
             r.Existing = PhaseFilterExisting.ElementAtOrDefault(n);
             r.Demolished = PhaseFilterDemolished.ElementAtOrDefault(n);
             r.Temporary = PhaseFilterTemporary.ElementAtOrDefault(n);
-            r._Element = new Relation<Vim.ObjectModel.Element>(GetPhaseFilterElementIndex(n), GetElement);
+            r._Element = new Relation<Vim.Format.ObjectModel.Element>(GetPhaseFilterElementIndex(n), GetElement);
             return r;
         }
         
@@ -3142,8 +3142,8 @@ namespace Vim.Format.ObjectModel {
             r.Extents_Max_X = GridExtents_Max_X.ElementAtOrDefault(n);
             r.Extents_Max_Y = GridExtents_Max_Y.ElementAtOrDefault(n);
             r.Extents_Max_Z = GridExtents_Max_Z.ElementAtOrDefault(n);
-            r._FamilyType = new Relation<Vim.ObjectModel.FamilyType>(GetGridFamilyTypeIndex(n), GetFamilyType);
-            r._Element = new Relation<Vim.ObjectModel.Element>(GetGridElementIndex(n), GetElement);
+            r._FamilyType = new Relation<Vim.Format.ObjectModel.FamilyType>(GetGridFamilyTypeIndex(n), GetFamilyType);
+            r._Element = new Relation<Vim.Format.ObjectModel.Element>(GetGridElementIndex(n), GetElement);
             return r;
         }
         
@@ -3176,8 +3176,8 @@ namespace Vim.Format.ObjectModel {
             r.Perimeter = AreaPerimeter.ElementAtOrDefault(n);
             r.Number = AreaNumber.ElementAtOrDefault(n);
             r.IsGrossInterior = AreaIsGrossInterior.ElementAtOrDefault(n);
-            r._AreaScheme = new Relation<Vim.ObjectModel.AreaScheme>(GetAreaAreaSchemeIndex(n), GetAreaScheme);
-            r._Element = new Relation<Vim.ObjectModel.Element>(GetAreaElementIndex(n), GetElement);
+            r._AreaScheme = new Relation<Vim.Format.ObjectModel.AreaScheme>(GetAreaAreaSchemeIndex(n), GetAreaScheme);
+            r._Element = new Relation<Vim.Format.ObjectModel.Element>(GetAreaElementIndex(n), GetElement);
             return r;
         }
         
@@ -3199,7 +3199,7 @@ namespace Vim.Format.ObjectModel {
             r.Document = Document;
             r.Index = n;
             r.IsGrossBuildingArea = AreaSchemeIsGrossBuildingArea.ElementAtOrDefault(n);
-            r._Element = new Relation<Vim.ObjectModel.Element>(GetAreaSchemeElementIndex(n), GetElement);
+            r._Element = new Relation<Vim.Format.ObjectModel.Element>(GetAreaSchemeElementIndex(n), GetElement);
             return r;
         }
         
@@ -3218,7 +3218,7 @@ namespace Vim.Format.ObjectModel {
             var r = new Schedule();
             r.Document = Document;
             r.Index = n;
-            r._Element = new Relation<Vim.ObjectModel.Element>(GetScheduleElementIndex(n), GetElement);
+            r._Element = new Relation<Vim.Format.ObjectModel.Element>(GetScheduleElementIndex(n), GetElement);
             return r;
         }
         
@@ -3243,7 +3243,7 @@ namespace Vim.Format.ObjectModel {
             r.Index = n;
             r.Name = ScheduleColumnName.ElementAtOrDefault(n);
             r.ColumnIndex = ScheduleColumnColumnIndex.ElementAtOrDefault(n);
-            r._Schedule = new Relation<Vim.ObjectModel.Schedule>(GetScheduleColumnScheduleIndex(n), GetSchedule);
+            r._Schedule = new Relation<Vim.Format.ObjectModel.Schedule>(GetScheduleColumnScheduleIndex(n), GetSchedule);
             return r;
         }
         
@@ -3268,7 +3268,7 @@ namespace Vim.Format.ObjectModel {
             r.Index = n;
             r.Value = ScheduleCellValue.ElementAtOrDefault(n);
             r.RowIndex = ScheduleCellRowIndex.ElementAtOrDefault(n);
-            r._ScheduleColumn = new Relation<Vim.ObjectModel.ScheduleColumn>(GetScheduleCellScheduleColumnIndex(n), GetScheduleColumn);
+            r._ScheduleColumn = new Relation<Vim.Format.ObjectModel.ScheduleColumn>(GetScheduleCellScheduleColumnIndex(n), GetScheduleColumn);
             return r;
         }
         

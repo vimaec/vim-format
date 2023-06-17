@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Vim.DataFormat
+namespace Vim.Format
 {
     public class TableNameAttribute : Attribute
     {
