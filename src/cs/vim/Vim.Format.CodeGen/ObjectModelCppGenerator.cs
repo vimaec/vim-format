@@ -437,7 +437,7 @@ public static class ObjectModelCppGenerator
     {
         var compositeTypesAssembly = new ColumnExtensions.Vector3CompositeDataColumn().GetType().Assembly;
         var composite = compositeTypesAssembly.GetType(
-            $"Vim.DataFormat.ColumnExtensions+{field.FieldType.Name}CompositeDataColumn", true, false);
+            $"Vim.Format.ColumnExtensions+{field.FieldType.Name}CompositeDataColumn", true, false);
 
         if (composite == null)
             throw new InvalidOperationException($"Type {field.FieldType.Name}CompositeDataColumn not found");
