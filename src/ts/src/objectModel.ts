@@ -591,7 +591,7 @@ export class ParameterTable implements IParameterTable {
 
 export interface IElement {
     index: number
-    id?: BigInt
+    id?: bigint
     type?: string
     name?: string
     uniqueId?: string
@@ -630,7 +630,7 @@ export interface IElementTable {
     get(elementIndex: number): Promise<IElement>
     getAll(): Promise<IElement[]>
     
-    getId(elementIndex: number): Promise<BigInt | undefined>
+    getId(elementIndex: number): Promise<bigint | undefined>
     getAllId(): Promise<BigInt64Array | undefined>
     getType(elementIndex: number): Promise<string | undefined>
     getAllType(): Promise<string[] | undefined>
@@ -686,7 +686,7 @@ export interface IElementTable {
 
 export class Element implements IElement {
     index: number
-    id?: BigInt
+    id?: bigint
     type?: string
     name?: string
     uniqueId?: string
@@ -854,7 +854,7 @@ export class ElementTable implements IElementTable {
         return element
     }
     
-    async getId(elementIndex: number): Promise<BigInt | undefined> {
+    async getId(elementIndex: number): Promise<bigint | undefined> {
         return (await this.entityTable.getBigInt(elementIndex, "long:Id")) ?? (await this.entityTable.getBigInt(elementIndex, "int:Id"))
     }
     
@@ -3208,7 +3208,7 @@ export class PhaseOrderInBimDocumentTable implements IPhaseOrderInBimDocumentTab
 export interface ICategory {
     index: number
     name?: string
-    id?: BigInt
+    id?: bigint
     categoryType?: string
     lineColor_X?: number
     lineColor_Y?: number
@@ -3228,7 +3228,7 @@ export interface ICategoryTable {
     
     getName(categoryIndex: number): Promise<string | undefined>
     getAllName(): Promise<string[] | undefined>
-    getId(categoryIndex: number): Promise<BigInt | undefined>
+    getId(categoryIndex: number): Promise<bigint | undefined>
     getAllId(): Promise<BigInt64Array | undefined>
     getCategoryType(categoryIndex: number): Promise<string | undefined>
     getAllCategoryType(): Promise<string[] | undefined>
@@ -3252,7 +3252,7 @@ export interface ICategoryTable {
 export class Category implements ICategory {
     index: number
     name?: string
-    id?: BigInt
+    id?: bigint
     categoryType?: string
     lineColor_X?: number
     lineColor_Y?: number
@@ -3363,7 +3363,7 @@ export class CategoryTable implements ICategoryTable {
         return (await this.entityTable.getStringArray("string:Name"))
     }
     
-    async getId(categoryIndex: number): Promise<BigInt | undefined> {
+    async getId(categoryIndex: number): Promise<bigint | undefined> {
         return (await this.entityTable.getBigInt(categoryIndex, "long:Id")) ?? (await this.entityTable.getBigInt(categoryIndex, "int:Id"))
     }
     
