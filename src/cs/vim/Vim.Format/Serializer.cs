@@ -97,6 +97,11 @@ namespace Vim.Format
                             et.DataColumns.Add(colBr.ReadEntityTableColumn<int>(schemaOnly));
                             break;
                         }
+                    case VimConstants.LongColumnNameTypePrefix:
+                        {
+                            et.DataColumns.Add(colBr.ReadEntityTableColumn<long>(schemaOnly));
+                            break;
+                        }
                     case VimConstants.DoubleColumnNameTypePrefix:
                         {
                             et.DataColumns.Add(colBr.ReadEntityTableColumn<double>(schemaOnly));

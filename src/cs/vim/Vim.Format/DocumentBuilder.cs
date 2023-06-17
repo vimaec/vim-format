@@ -132,8 +132,36 @@ namespace Vim.Format
                 var tb = GetTableBuilderOrCreate(TableNames.Geometry);
                 tb.Clear();
 
-                // We have to force evaluation because as an enumerable the bounding box could be evaluated 6 times more
-                tb.AddCompositeDataColumns("Box", Meshes.Select(g => AABox.Create(g.Vertices)));
+                // Populate the box
+                var boxMinX = new float[Meshes.Count];
+                var boxMinY = new float[Meshes.Count];
+                var boxMinZ = new float[Meshes.Count];
+                
+                var boxMaxX = new float[Meshes.Count];
+                var boxMaxY = new float[Meshes.Count];
+                var boxMaxZ = new float[Meshes.Count];
+
+                for (var i = 0; i < Meshes.Count; ++i)
+                {
+                    var b = AABox.Create(Meshes[i].Vertices);
+                    boxMinX[i] = b.Min.X;
+                    boxMinY[i] = b.Min.Y;
+                    boxMinZ[i] = b.Min.Z;
+
+                    boxMaxX[i] = b.Max.X;
+                    boxMaxY[i] = b.Max.Y;
+                    boxMaxZ[i] = b.Max.Z;
+                }
+
+                // TODO: TECH DEBT - this couples the object model to the data format.
+                tb.AddDataColumn("float:Box.Min.X", boxMinX);
+                tb.AddDataColumn("float:Box.Min.Y", boxMinY);
+                tb.AddDataColumn("float:Box.Min.Z", boxMinZ);
+
+                tb.AddDataColumn("float:Box.Max.X", boxMaxX);
+                tb.AddDataColumn("float:Box.Max.Y", boxMaxY);
+                tb.AddDataColumn("float:Box.Max.Z", boxMaxZ);
+
                 tb.AddDataColumn("int:VertexCount", Meshes.Select(g => g.Vertices.Count));
                 tb.AddDataColumn("int:FaceCount", Meshes.Select(g => g.Indices.Count / 3));
             }
@@ -165,7 +193,7 @@ namespace Vim.Format
             var entityTables = ComputeEntityTables(stringLookupInfo.StringLookup);
             var stringTable = stringLookupInfo.StringTable;
 
-            Serializer.Serialize(stream, Header, assets, stringTable, entityTables, new BigG3dWriter(Meshes, Instances, Shapes, Materials, null, UseColors));
+            Serialize(stream, Header, assets, stringTable, entityTables, new BigG3dWriter(Meshes, Instances, Shapes, Materials, null, UseColors));
         }
     }
 }

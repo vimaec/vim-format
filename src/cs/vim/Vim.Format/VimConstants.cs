@@ -61,12 +61,16 @@ namespace Vim.Format
         public const string StringColumnNameTypePrefix = "string:";
 
         public const string IntColumnNameTypePrefix = "int:";
+        public const string UintColumnNameTypePrefix = "uint:"; // unused for now
+        public const string LongColumnNameTypePrefix = "long:";
+        public const string UlongColumnNameTypePrefix = "ulong:"; // unused for now
         public const string ByteColumnNameTypePrefix = "byte:";
+        public const string UbyteColumNameTypePrefix = "ubyte:"; // unused for now
         public const string FloatColumnNameTypePrefix = "float:";
         public const string DoubleColumnNameTypePrefix = "double:";
 
         public const int NoEntityRelation = -1;
-        public const int SyntheticElementId = -1;
+        public const long SyntheticElementId = -1;
         public const string SystemFamilyTypeElementType = "System Family Type";
         public const string SystemFamilyElementType = "System Family";
         public const string UnassignedSystem = "Unassigned System";

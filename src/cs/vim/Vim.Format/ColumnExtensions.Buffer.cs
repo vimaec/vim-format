@@ -57,12 +57,36 @@ namespace Vim.Format
 
         public const string UnknownNamedBufferPrefix = "Unknown NamedBuffer prefix";
 
+        public static object GetDataColumnValue(this IBuffer dataColumn, string typePrefix, int rowIndex)
+        {
+            switch (typePrefix)
+            {
+                case VimConstants.IntColumnNameTypePrefix:
+                    return dataColumn.AsArray<int>().ElementAtOrDefault(rowIndex);
+                case VimConstants.LongColumnNameTypePrefix:
+                    return dataColumn.AsArray<long>().ElementAtOrDefault(rowIndex);
+                case VimConstants.ByteColumnNameTypePrefix:
+                    return dataColumn.AsArray<byte>().ElementAtOrDefault(rowIndex);
+                case VimConstants.FloatColumnNameTypePrefix:
+                    return dataColumn.AsArray<float>().ElementAtOrDefault(rowIndex);
+                case VimConstants.DoubleColumnNameTypePrefix:
+                    return dataColumn.AsArray<double>().ElementAtOrDefault(rowIndex);
+                default:
+                    return null;
+            }
+        }
+
+        public static object GetDataColumnValue(this INamedBuffer dataColumn, int rowIndex)
+            => dataColumn.GetDataColumnValue(dataColumn.GetTypePrefix(), rowIndex);
+
         public static IBuffer CreateDefaultDataColumnBuffer(int length, string typePrefix)
         {
             switch (typePrefix)
             {
                 case (VimConstants.IntColumnNameTypePrefix):
                     return new int[length].ToBuffer();
+                case (VimConstants.LongColumnNameTypePrefix):
+                    return new long[length].ToBuffer();
                 case (VimConstants.ByteColumnNameTypePrefix):
                     return new byte[length].ToBuffer();
                 case (VimConstants.FloatColumnNameTypePrefix):
@@ -80,6 +104,8 @@ namespace Vim.Format
             {
                 case (VimConstants.IntColumnNameTypePrefix):
                     return (dataColumn.Data as int[]).RemapData(remapping).ToBuffer();
+                case (VimConstants.LongColumnNameTypePrefix):
+                    return (dataColumn.Data as long[]).RemapData(remapping).ToBuffer();
                 case (VimConstants.DoubleColumnNameTypePrefix):
                     return (dataColumn.Data as double[]).RemapData(remapping).ToBuffer();
                 case (VimConstants.FloatColumnNameTypePrefix):
@@ -106,6 +132,8 @@ namespace Vim.Format
             {
                 case (VimConstants.IntColumnNameTypePrefix):
                     return thisBuffer.Concat<int>(otherBuffer);
+                case (VimConstants.LongColumnNameTypePrefix):
+                    return thisBuffer.Concat<long>(otherBuffer);
                 case (VimConstants.ByteColumnNameTypePrefix):
                     return thisBuffer.Concat<byte>(otherBuffer);
                 case (VimConstants.FloatColumnNameTypePrefix):
