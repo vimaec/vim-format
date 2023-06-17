@@ -84,8 +84,8 @@
     <ClCompile Include="test.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="bfast.h" />
-    <ClInclude Include="g3d.h" />
+    <ClInclude Include="../bfast.h" />
+    <ClInclude Include="../g3d.h" />
     <ClInclude Include="object-model.h" />
     <ClInclude Include="vim.h" />
   </ItemGroup>
