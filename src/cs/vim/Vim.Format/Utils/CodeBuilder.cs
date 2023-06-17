@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using System.Text;
 
-namespace Vim.DotNetUtilities
+namespace Vim.Format.Utils
 {
     public class CodeBuilder
     {

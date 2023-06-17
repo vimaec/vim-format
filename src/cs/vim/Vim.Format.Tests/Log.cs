@@ -1,6 +1,7 @@
 ﻿using System;
 using Serilog;
 using Vim.Format.Logging;
+using Vim.Format.Utils;
 using ILogger = Vim.Format.Logging.ILogger;
 using SerilogLog = Serilog.Log;
 

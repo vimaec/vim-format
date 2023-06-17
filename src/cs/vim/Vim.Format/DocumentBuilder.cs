@@ -5,6 +5,7 @@ using System.Linq;
 using Vim.Math3d;
 using Vim.BFast;
 using System.IO;
+using Vim.Format.Utils;
 
 namespace Vim.Format
 {

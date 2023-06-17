@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 
-namespace Vim.Format
+namespace Vim.Format.Utils
 {
     // We've defined a serializable version since the System.Version type is not readily serializable by Newtonsoft.Json
     [Serializable]

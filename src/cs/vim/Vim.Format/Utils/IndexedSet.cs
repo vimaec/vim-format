@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Vim.Format
+namespace Vim.Format.Utils
 {
     /// <summary>
     /// This class is similar to a hash set (and is enumerable like a dictionary), 

@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 using Vim.Format.Geometry;
 using Vim.Format.ObjectModel;
+using Vim.Format.Utils;
 using Vim.LinqArray;
 using Vim.Math3d;
 

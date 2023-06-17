@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Vim.Format
+namespace Vim.Format.Utils
 {
     /// <summary>
     /// A convenience class which allows the caller to specify the HResult contained in the exception. <br/>

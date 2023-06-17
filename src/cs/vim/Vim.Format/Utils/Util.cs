@@ -6,7 +6,7 @@ using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 
-namespace Vim.Format
+namespace Vim.Format.Utils
 {
     public static class Util
     {

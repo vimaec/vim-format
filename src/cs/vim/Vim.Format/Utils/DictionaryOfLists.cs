@@ -1,9 +1,8 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Vim.Format
+namespace Vim.Format.Utils
 {
     public class DictionaryOfLists<TKey, TValue> : Dictionary<TKey, List<TValue>>
     {

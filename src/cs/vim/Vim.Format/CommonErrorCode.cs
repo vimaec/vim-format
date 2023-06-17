@@ -1,4 +1,7 @@
 ﻿// ReSharper disable once CheckNamespace
+
+using Vim.Format.Utils;
+
 namespace Vim.Format
 {
     /// <summary>

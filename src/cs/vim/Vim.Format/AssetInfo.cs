@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using Vim.BFast;
+using Vim.Format.Utils;
 using Vim.LinqArray;
 
 namespace Vim.Format

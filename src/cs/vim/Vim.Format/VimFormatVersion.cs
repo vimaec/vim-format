@@ -1,4 +1,6 @@
-﻿namespace Vim.Format
+﻿using Vim.Format.Utils;
+
+namespace Vim.Format
 {
     public static class VimFormatVersion
     {

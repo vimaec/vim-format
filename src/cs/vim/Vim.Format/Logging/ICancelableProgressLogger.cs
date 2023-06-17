@@ -1,4 +1,5 @@
 ﻿using System;
+using Vim.Format.Utils;
 
 namespace Vim.Format.Logging
 {

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Vim.Format.Utils;
 using IndexMap = System.Collections.Generic.Dictionary<int, int>;
 using ReadOnlyIndexMap = System.Collections.Generic.IReadOnlyDictionary<int, int>;
 

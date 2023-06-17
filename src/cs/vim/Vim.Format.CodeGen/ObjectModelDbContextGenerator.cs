@@ -2,8 +2,8 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using Vim.DotNetUtilities;
 using Vim.Format.ObjectModel;
+using Vim.Format.Utils;
 
 namespace Vim.Format.CodeGen;
 

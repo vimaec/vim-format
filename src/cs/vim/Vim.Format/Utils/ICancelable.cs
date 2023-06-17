@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Vim.Format
+namespace Vim.Format.Utils
 {
     /// <summary>
     /// Combines a Cancelation event observer (CancellationToken) and a cancelation requester (CancelTokenSource). 

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using Vim.Format.Utils;
 using Vim.Math3d;
 
 // ReSharper disable InconsistentNaming
