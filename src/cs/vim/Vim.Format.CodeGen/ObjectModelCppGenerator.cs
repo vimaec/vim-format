@@ -15,7 +15,7 @@ public static class ObjectModelCppGenerator
     private static string ToFieldName(string name) => 'm' + ToUpperFirstLetter(name);
     private static string ToArgumentName(string name)
     {
-        string argument = ToLowerFirstLetter(name);
+        var argument = ToLowerFirstLetter(name);
 
         return argument switch
         {
@@ -33,47 +33,30 @@ public static class ObjectModelCppGenerator
             "Double" or "double" => "double",
             "String" or "string" => "const std::string*",
             "Int32" or "int" => "int",
-            "Vector2" or "DVector2" or
-            "Vector3" or "DVector3" or
-            "Vector4" or "DVector4" or
-            "AABox" or "DAABox" or
-            "AABox2D" or "DAABox2D" or
-            "AABox4D" or "DAABox4D" or
-            "Matrix4x4" => type,
+            "Int64" or "Long" or "long" => "long long",
             _ => throw new ArgumentOutOfRangeException(nameof(type), type, $"Type {type} not supported")
         };
 
-    private static string ColumnNameToVariableName(string column)
-        => column.Substring(column.LastIndexOf(':') + 1).Replace(".", "");
-
-    private static void WriteColumnCheck(CodeBuilder cb, (string collection, string column)[] columns, string returnValue)
+    private static void WriteColumnCheck(CodeBuilder cb, string columnName, string conditionalCode, bool negate)
     {
-        if (columns.Length == 0)
-            return;
-
-        cb.AppendLine($"if (mEntityTable.{columns[0].collection}.find(\"{columns[0].column}\")" +
-                      $" == mEntityTable.{columns[0].collection}.end(){(columns.Length == 1 ? ")" : " ||")}");
-
-        for (int i = 1; i < columns.Length; i++)
-        {
-            cb.IndentOneLine($"mEntityTable.{columns[i].collection}.find(\"{columns[i].column}\")" +
-                             $" == mEntityTable.{columns[i].collection}.end(){(i == columns.Length - 1 ? ")" : " ||")}");
-        }
-
-        cb.IndentOneLine($"return {returnValue};");
+        cb.AppendLine($"if ({(negate ? "!" : "")}mEntityTable.column_exists(\"{columnName}\")) {{");
+        cb.AppendLine(conditionalCode);
+        cb.AppendLine("}");
         cb.AppendLine();
     }
 
-    private static void WriteColumnCheckFlags(CodeBuilder cb, (string collection, string column)[] columns)
+    private static void WriteColumnCheckFlags(CodeBuilder cb, FieldInfo[] fields, FieldInfo[] relations)
     {
-        if (columns.Length == 0)
-            return;
-
-        for (int i = 0; i < columns.Length; i++)
+        foreach (var fieldInfo in fields)
         {
-            cb.AppendLine($"bool exists{ColumnNameToVariableName(columns[i].column)}" +
-                          $" = mEntityTable.{columns[i].collection}.find(\"{columns[i].column}\")" +
-                          $" == mEntityTable.{columns[i].collection}.end();");
+            var loadingInfos = fieldInfo.GetEntityColumnLoadingInfo();
+            var exists = string.Join(" || ", loadingInfos.Select(li => $"mEntityTable.column_exists(\"{li.SerializedValueColumnName}\")"));
+            cb.AppendLine($"bool exists{fieldInfo.Name} = {exists};");
+        }
+
+        foreach (var fieldInfo in relations)
+        {
+            cb.AppendLine($"bool exists{fieldInfo.Name.Trim('_')} = mEntityTable.column_exists(\"{fieldInfo.GetSerializedIndexColumnName()}\");");
         }
 
         cb.AppendLine();
@@ -112,8 +95,6 @@ public static class ObjectModelCppGenerator
         cb.AppendLine("};");
     }
 
-    private static string CompositeTypePrefix(Type type) => type.Name.StartsWith("D") ? "double:" : "float:"; 
-    
     private static void WriteEntityTableClass(CodeBuilder cb, Type entity)
     {
         var name = ToUpperFirstLetter(entity.Name);
@@ -135,7 +116,7 @@ public static class ObjectModelCppGenerator
         cb.IndentOneLine("mEntityTable(entityTable), mStrings(strings) {}");
         cb.AppendLine();
     
-        WriteGetCount(cb, fields, relations);
+        WriteGetCount(cb);
         cb.AppendLine();
 
         WriteGet(cb, entity, fields, relations);
@@ -162,8 +143,8 @@ public static class ObjectModelCppGenerator
 
     private static void WriteGet(CodeBuilder cb, Type entity, FieldInfo[] fields, FieldInfo[] relations)
     {
-        string name = ToUpperFirstLetter(entity.Name);
-        string lowerName = ToLowerFirstLetter(name);
+        var name = ToUpperFirstLetter(entity.Name);
+        var lowerName = ToLowerFirstLetter(name);
 
         cb.AppendLine($"{name}* Get(int {lowerName}Index)");
         cb.AppendLine("{");
@@ -200,93 +181,33 @@ public static class ObjectModelCppGenerator
         cb.AppendLine($"return new {entity.Name}Table(scene.mEntityTables[\"{entity.GetEntityTableName()}\"], scene.mStrings);");
         cb.AppendLine("}");
     }
-    
-    private static void WriteGetCount(CodeBuilder cb, FieldInfo[] fields, FieldInfo[] relations)
+
+    private static void WriteGetCount(CodeBuilder cb)
     {
-        cb.AppendLine("int GetCount()");
+        cb.AppendLine("size_t GetCount()");
         cb.AppendLine("{");
-
-        string mapName = null;
-        string columnName = null;
-        string sizeType = "int";
-    
-        if (fields.Length > 0)
-        {
-            var first = fields[0];
-            var (strategy, prefix) = first.FieldType.GetValueSerializationStrategyAndTypePrefix();
-    
-            if (strategy != ValueSerializationStrategy.SerializeAsCompositeDataColumns)
-            {
-                switch (prefix)
-                {
-                    case VimConstants.StringColumnNameTypePrefix:
-                        mapName = "mStringColumns";
-                        break;
-                    case VimConstants.IndexColumnNameTypePrefix:
-                        mapName = "mIndexColumns";
-                        break;
-                    case VimConstants.IntColumnNameTypePrefix or
-                         VimConstants.ByteColumnNameTypePrefix or
-                         VimConstants.FloatColumnNameTypePrefix or
-                         VimConstants.DoubleColumnNameTypePrefix:
-                        mapName = "mDataColumns";
-
-                        sizeType = prefix switch
-                        {
-                            VimConstants.ByteColumnNameTypePrefix => "byte",
-                            VimConstants.FloatColumnNameTypePrefix => "float",
-                            VimConstants.DoubleColumnNameTypePrefix => "double",
-                            _ => sizeType
-                        };
-
-                        break;
-                    default:
-                        throw new ArgumentOutOfRangeException(nameof(prefix), prefix, $"Prefix {prefix} not expected");
-                }
-
-                columnName = $"\"{prefix}{first.Name}\"";
-            }
-            else
-            {
-                cb.AppendLine($"{ToCppType(first.FieldType.Name)}Converter converter;");
-
-                mapName = "mDataColumns";
-                columnName = $"\"{CompositeTypePrefix(first.FieldType)}{first.Name}\" + converter.GetColumns()[0]";
-                sizeType = CompositeTypePrefix(first.FieldType).TrimEnd(':');
-            }
-        }
-        else if (relations.Length > 0)
-        {
-            var first = relations[0].GetIndexColumnInfo();
-
-            mapName = "mIndexColumns";
-            columnName = $"\"{first.IndexColumnName}\"";
-        }
-        
-        WriteNotFoundReturn(cb, "mEntityTable." + mapName, columnName, "0");
-        cb.AppendLine($"return mEntityTable.{mapName}[{columnName}].size() / sizeof({ToCppType(sizeType)});");
-    
+        cb.AppendLine("return mEntityTable.get_count();");
         cb.AppendLine("}");
     }
 
     private static void WriteGetAll(CodeBuilder cb, Type entity, FieldInfo[] fields, FieldInfo[] relations)
     {
-        string name = ToUpperFirstLetter(entity.Name);
-        string lowerName = ToLowerFirstLetter(name);
+        var name = ToUpperFirstLetter(entity.Name);
+        var lowerName = ToLowerFirstLetter(name);
 
         cb.AppendLine($"std::vector<{name}>* GetAll()");
         cb.AppendLine("{");
 
-        WriteColumnCheckFlags(cb, GetColumnMap(fields, relations).ToArray());
+        WriteColumnCheckFlags(cb, fields, relations);
 
-        cb.AppendLine("const int count = GetCount();");
+        cb.AppendLine("const auto count = GetCount();");
         cb.AppendLine();
 
         cb.AppendLine($"std::vector<{name}>* {lowerName} = new std::vector<{name}>();");
         cb.AppendLine($"{lowerName}->reserve(count);");
         cb.AppendLine();
         
-        var arrays = WriteGetAllDataVars(cb, fields, relations, true);
+        var arrays = WriteGetAllDataVars(cb, fields, relations);
         WriteGetAllEntities(cb, fields, relations, name);
 
         cb.AppendLine($"{lowerName}->push_back(entity);");
@@ -328,11 +249,6 @@ public static class ObjectModelCppGenerator
                     cb.AppendLine($"if (exists{field.Name})");
                     cb.IndentOneLine($"entity.{fieldName} = {dataName}[i];");
                     break;
-                case ValueSerializationStrategy.SerializeAsCompositeDataColumns:
-                    var converter = ToLowerFirstLetter(field.Name) + "Converter";
-                    cb.AppendLine($"if ({GetCompositeSuffixes(field).Select(s => $"exists{field.Name}{s.Replace(".", "")}").Aggregate((s1, s2) => $"{s1} && {s2}")})");
-                    cb.IndentOneLine($"{converter}.ConvertFromColumns(&entity.{fieldName}, {dataName}, i);");
-                    break;
                 default:
                     throw new ArgumentOutOfRangeException($"Strategy {strategy} not expected");
             }
@@ -346,37 +262,48 @@ public static class ObjectModelCppGenerator
         }
     }
 
-    private static List<string> WriteGetAllDataVars(CodeBuilder cb, FieldInfo[] fields, FieldInfo[] relations, bool checkExists)
+    private static List<string> WriteGetAllDataVars(CodeBuilder cb, FieldInfo[] fields, FieldInfo[] relations)
     {
         var arrays = new List<string>();
 
         foreach (var field in fields)
         {
             var fieldName = ToLowerFirstLetter(field.Name);
-            var (strategy, typePrefix) = field.FieldType.GetValueSerializationStrategyAndTypePrefix();
+            var loadingInfos = field.GetEntityColumnLoadingInfo();
 
+            //var (strategy, typePrefix) = field.FieldType.GetValueSerializationStrategyAndTypePrefix();
+            var baseLoadingInfo = loadingInfos[0];
+            var strategy = baseLoadingInfo.Strategy;
             switch (strategy)
             {
                 case ValueSerializationStrategy.SerializeAsStringColumn:
-                    cb.AppendLine($"const std::vector<int>& {fieldName}Data = " + (checkExists
-                                   ? $"exists{field.Name} ? mEntityTable.mStringColumns[\"{typePrefix}{field.Name}\"] : std::vector<int>();"
-                                   : $"mEntityTable.mStringColumns[\"{typePrefix}{field.Name}\"];"));
+                    cb.AppendLine($"const std::vector<int>& {fieldName}Data = mEntityTable.column_exists(\"{baseLoadingInfo.SerializedValueColumnName}\") ? mEntityTable.mStringColumns[\"{baseLoadingInfo.SerializedValueColumnName}\"] : std::vector<int>();");
                     break;
                 case ValueSerializationStrategy.SerializeAsDataColumn:
-                    var type = ToCppType(typePrefix.Replace(":", ""));
-                    cb.AppendLine($"{type}* {fieldName}Data = new {type}[count];");
+                    var cppType = ToCppType(baseLoadingInfo.TypePrefix.Replace(":", ""));
+                    cb.AppendLine($"{cppType}* {fieldName}Data = new {cppType}[count];");
 
-                    cb.AppendLine((checkExists ? $"if (exists{field.Name}) " : "") +
-                                  $"memcpy({fieldName}Data, mEntityTable.mDataColumns[\"{typePrefix}{field.Name}\"].begin(), count * sizeof({type}));");
+                    for (var i = 0; i < loadingInfos.Length; ++i)
+                    {
+                        var li = loadingInfos[i];
+                        cb.AppendLine($"{(i > 0 ? "else " : "")}if (mEntityTable.column_exists(\"{li.SerializedValueColumnName}\")) {{");
 
-                    arrays.Add($"{fieldName}Data");
-                    break;
-                case ValueSerializationStrategy.SerializeAsCompositeDataColumns:
-                    cb.AppendLine($"{ToCppType(field.FieldType.Name)}Converter {fieldName}Converter;");
-                    cb.AppendLine($"ByteRangePtr* {fieldName}Data = new ByteRangePtr[{fieldName}Converter.GetSize()];");
-                    cb.AppendLine((checkExists ? $"if ({GetCompositeSuffixes(field).Select(s => $"exists{field.Name}{s.Replace(".", "")}").Aggregate((s1, s2) => $"{s1} && {s2}")}) " : "") +
-                                  $"for (int i = 0; i < {fieldName}Converter.GetSize(); i++)");
-                    cb.IndentOneLine($"{fieldName}Data[i] = &mEntityTable.mDataColumns[\"{CompositeTypePrefix(field.FieldType)}{field.Name}\" + {fieldName}Converter.GetColumns()[i]];");
+                        if (i == 0)
+                        {
+                            // memcpy
+                            cb.AppendLine($"memcpy({fieldName}Data, mEntityTable.mDataColumns[\"{li.SerializedValueColumnName}\"].begin(), count * sizeof({cppType}));");
+                        }
+                        else
+                        {
+                            // Cast to the target C++ type.
+                            var thisCppType = ToCppType(li.TypePrefix.Replace(":", ""));
+                            cb.AppendLine("for (int i = 0; i < count; ++i) {");
+                            cb.AppendLine($"{fieldName}Data[i] = {GetDataAsStaticCast(cppType, li.SerializedValueColumnName, "i", thisCppType)};");
+                            cb.AppendLine("}");
+                        }
+
+                        cb.AppendLine("}");
+                    }
 
                     arrays.Add($"{fieldName}Data");
                     break;
@@ -389,10 +316,8 @@ public static class ObjectModelCppGenerator
 
         foreach (var relation in relations)
         {
-            cb.AppendLine($"const std::vector<int>& {ToLowerFirstLetter(relation.Name.Replace("_", ""))}Data = " +
-                          (checkExists ?
-                          $"exists{relation.Name.Replace("_", "")} ? mEntityTable.mIndexColumns[\"{relation.GetIndexColumnInfo().IndexColumnName}\"] : std::vector<int>();" :
-                          $"mEntityTable.mIndexColumns[\"{relation.GetIndexColumnInfo().IndexColumnName}\"];"));
+            var indexColumnName = relation.GetIndexColumnInfo().IndexColumnName;
+            cb.AppendLine($"const std::vector<int>& {ToLowerFirstLetter(relation.Name.Replace("_", ""))}Data = mEntityTable.column_exists(\"{indexColumnName}\") ? mEntityTable.mIndexColumns[\"{indexColumnName}\"] : std::vector<int>();");
         }
 
         if (relations.Length > 0)
@@ -400,117 +325,55 @@ public static class ObjectModelCppGenerator
 
         return arrays;
     }
-    
-    private static List<(string, string)> GetColumnMap(FieldInfo[] fields, FieldInfo[] relations)
+
+    private static string GetDataAsStaticCast(string cppType, string serializedColumnName, string offset,
+        string serializedCppType)
     {
-        var result = new List<(string, string)>();
-
-        foreach (var field in fields)
-        {
-            var (strategy, typePrefix) = field.FieldType.GetValueSerializationStrategyAndTypePrefix();
-
-            switch (strategy)
-            {
-                case ValueSerializationStrategy.SerializeAsStringColumn:
-                    result.Add(("mStringColumns", $"{typePrefix}{field.Name}"));
-                    break;
-                case ValueSerializationStrategy.SerializeAsDataColumn:
-                    result.Add(("mDataColumns", $"{typePrefix}{field.Name}"));
-                    break;
-                case ValueSerializationStrategy.SerializeAsCompositeDataColumns:
-                    GetCompositeTypeColumnsToCheck(field, ref result);
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException($"Strategy {strategy} not expected");
-            }
-        }
-
-        foreach (var relation in relations)
-        {
-            result.Add(("mIndexColumns", relation.GetIndexColumnInfo().IndexColumnName));
-        }
-
-        return result;
-    }
-
-    private static string[] GetCompositeSuffixes(FieldInfo field)
-    {
-        var compositeTypesAssembly = new ColumnExtensions.Vector3CompositeDataColumn().GetType().Assembly;
-        var composite = compositeTypesAssembly.GetType(
-            $"Vim.Format.ColumnExtensions+{field.FieldType.Name}CompositeDataColumn", true, false);
-
-        if (composite == null)
-            throw new InvalidOperationException($"Type {field.FieldType.Name}CompositeDataColumn not found");
-
-        var compositeInstance = Activator.CreateInstance(composite);
-
-        var suffixes = (string[]) composite
-                                 .GetProperty("Suffixes", BindingFlags.Public | BindingFlags.Instance)
-                                ?.GetValue(compositeInstance);
-
-        if (suffixes == null)
-            throw new InvalidOperationException("Suffixes are null");
-
-        return suffixes;
-    }
-
-    private static void GetCompositeTypeColumnsToCheck(FieldInfo field, ref List<(string, string)> columnsToCheck)
-    {
-        var suffixes = GetCompositeSuffixes(field);
-
-        foreach (var suffix in suffixes)
-        {
-            columnsToCheck.Add(("mDataColumns", $"{CompositeTypePrefix(field.FieldType)}{field.Name}{suffix}"));
-        }
+        var getBytes = $"const_cast<bfast::byte*>(mEntityTable.mDataColumns[\"{serializedColumnName}\"].begin() + {offset} * sizeof({serializedCppType}))";
+        return cppType == serializedCppType
+            ? $"*reinterpret_cast<{cppType}*>({getBytes})"
+            : $"static_cast<{cppType}>(*reinterpret_cast<{serializedCppType}*>({getBytes}))";
     }
 
     private static void WriteGetFieldGetter(CodeBuilder cb, FieldInfo field, string lowerName)
     {
         var argumentName = ToArgumentName(field.Name);
-        var type = ToCppType(field.FieldType.Name);
+        var cppType = ToCppType(field.FieldType.Name);
 
-        cb.AppendLine($"{type} Get{ToUpperFirstLetter(field.Name)}(int {lowerName}Index)");
+        cb.AppendLine($"{cppType} Get{ToUpperFirstLetter(field.Name)}(int {lowerName}Index)");
         cb.AppendLine("{");
         cb.AppendLine($"if ({lowerName}Index < 0 || {lowerName}Index >= GetCount())");
         cb.IndentOneLine("return {};");
         cb.AppendLine();
 
-        var (strategy, prefix) = field.FieldType.GetValueSerializationStrategyAndTypePrefix();
+        var loadingInfos = field.GetEntityColumnLoadingInfo();
+        var baseLoadingInfo = loadingInfos[0];
 
-        switch (strategy)
+        switch (baseLoadingInfo.Strategy)
         {
             case ValueSerializationStrategy.SerializeAsStringColumn:
-                WriteColumnCheck(cb, new[] { ("mStringColumns", $"{prefix}{field.Name}") }, "{}");
-                cb.AppendLine($"return &mStrings[mEntityTable.mStringColumns[\"{prefix}{field.Name}\"][{lowerName}Index]];");
+                WriteColumnCheck(
+                    cb,
+                    baseLoadingInfo.SerializedValueColumnName,
+                    $"return &mStrings[mEntityTable.mStringColumns[\"{baseLoadingInfo.SerializedValueColumnName}\"][{lowerName}Index]];",
+                    false);
+                cb.AppendLine("return {};");
                 break;
             case ValueSerializationStrategy.SerializeAsDataColumn:
-                WriteColumnCheck(cb, new[] { ("mDataColumns", $"{prefix}{field.Name}") }, "{}");
-                cb.AppendLine($"return *reinterpret_cast<{type}*>(const_cast<bfast::byte*>(" +
-                              $"mEntityTable.mDataColumns[\"{prefix}{field.Name}\"].begin() + {lowerName}Index * sizeof({type})));");
-                break;
-            case ValueSerializationStrategy.SerializeAsCompositeDataColumns:
-                var columnsToCheck = new List<(string, string)>();
-                GetCompositeTypeColumnsToCheck(field, ref columnsToCheck);
-                WriteColumnCheck(cb, columnsToCheck.ToArray(), "{}");
+                foreach (var li in loadingInfos)
+                {
+                    var thisCppType = ToCppType(li.TypePrefix.Replace(":", ""));
+                    WriteColumnCheck(
+                        cb,
+                        li.SerializedValueColumnName,
+                        $"return {GetDataAsStaticCast(cppType, li.SerializedValueColumnName, $"{lowerName}Index", thisCppType)};",
+                        false);
+                }
 
-                cb.AppendLine($"{type}Converter {argumentName}Converter;");
-                cb.AppendLine($"bfast::byte* bytes = new bfast::byte[{argumentName}Converter.GetSize() * {argumentName}Converter.GetBytes()];");
-                
-                cb.AppendLine($"for (int i = 0; i < {argumentName}Converter.GetSize(); ++i)");
-                cb.AppendLine("{");
-                cb.AppendLine($"memcpy(bytes + i * {argumentName}Converter.GetBytes(),");
-                cb.IndentOneLine($"mEntityTable.mDataColumns[\"{CompositeTypePrefix(field.FieldType)}{field.Name}\"" +
-                                 $" + {argumentName}Converter.GetColumns()[i]].begin()");
-                cb.IndentOneLine($" + {lowerName}Index * {argumentName}Converter.GetBytes(),");
-                cb.IndentOneLine($"{argumentName}Converter.GetBytes());");
-                cb.AppendLine("}");
-
-                cb.AppendLine($"{type} {argumentName} = {argumentName}Converter.ConvertFromArray(bytes);");
-                cb.AppendLine("delete[] bytes;");
-                cb.AppendLine($"return {argumentName};");
+                cb.AppendLine("return {};");
                 break;
             default:
-                throw new ArgumentOutOfRangeException($"Strategy {strategy} not expected");
+                throw new ArgumentOutOfRangeException($"Strategy {baseLoadingInfo.Strategy} not expected");
         }
 
         cb.AppendLine("}");
@@ -520,51 +383,36 @@ public static class ObjectModelCppGenerator
     {
         var cppType = ToCppType(field.FieldType.Name);
 
-        cb.AppendLine($"const std::vector<{ToCppType(field.FieldType.Name)}>* GetAll{field.Name}()");
+        cb.AppendLine($"std::vector<{cppType}>* GetAll{field.Name}()");
         cb.AppendLine("{");
 
-        WriteColumnCheck(cb, GetColumnMap(new[] { field }, Array.Empty<FieldInfo>()).ToArray(), "{}");
+        cb.AppendLine("const auto count = GetCount();");
+        cb.AppendLine();
 
-        cb.AppendLine("const int count = GetCount();");
-        
-        var arrays = WriteGetAllDataVars(cb, new[] { field }, Array.Empty<FieldInfo>(), false);
-        
         var (strategy, _) = field.FieldType.GetValueSerializationStrategyAndTypePrefix();
         var lowerName = ToLowerFirstLetter(field.Name);
-
+        var arrays = WriteGetAllDataVars(cb, new[] { field }, Array.Empty<FieldInfo>());
         switch (strategy)
         {
             case ValueSerializationStrategy.SerializeAsDataColumn:
-                cb.AppendLine($"std::vector<{cppType}>* result = new std::vector<{cppType}>({arrays[0]}, {arrays[0]} + count);");
-                cb.AppendLine();
+                {
+                    cb.AppendLine($"std::vector<{cppType}>* result = new std::vector<{cppType}>({arrays[0]}, {arrays[0]} + count);");
+                    cb.AppendLine();
+                    cb.AppendLine($"delete[] {arrays[0]};");
+                    break;
+                }
 
-                cb.AppendLine($"delete[] {arrays[0]};");
-                break;
             case ValueSerializationStrategy.SerializeAsStringColumn:
-                cb.AppendLine("std::vector<const std::string*>* result = new std::vector<const std::string*>();");
-                cb.AppendLine("result->reserve(count);");
-                cb.AppendLine();
-
-                cb.AppendLine("for (int i = 0; i < count; ++i)");
-                cb.AppendLine("{");
-                cb.AppendLine($"result->push_back(&mStrings[{lowerName}Data[i]]);");
-                cb.AppendLine("}");
-                break;
-            case ValueSerializationStrategy.SerializeAsCompositeDataColumns:
-                cb.AppendLine($"std::vector<{ToCppType(field.FieldType.Name)}>* result = new std::vector<{ToCppType(field.FieldType.Name)}>();");
-                cb.AppendLine("result->reserve(count);");
-                cb.AppendLine();
-
-                cb.AppendLine("for (int i = 0; i < count; ++i)");
-                cb.AppendLine("{");
-                cb.AppendLine($"{ToCppType(field.FieldType.Name)} value;");
-                cb.AppendLine($"{lowerName}Converter.ConvertFromColumns(&value, {arrays[0]}, i);");
-                cb.AppendLine("result->push_back(value);");
-                cb.AppendLine("}");
-                cb.AppendLine();
-
-                cb.AppendLine($"delete[] {arrays[0]};");
-                break;
+                {
+                    cb.AppendLine("std::vector<const std::string*>* result = new std::vector<const std::string*>();");
+                    cb.AppendLine("result->reserve(count);");
+                    cb.AppendLine();
+                    cb.AppendLine("for (int i = 0; i < count; ++i)");
+                    cb.AppendLine("{");
+                    cb.AppendLine($"result->push_back(&mStrings[{lowerName}Data[i]]);");
+                    cb.AppendLine("}");
+                    break;
+                }
         }
 
         cb.AppendLine();
@@ -580,7 +428,7 @@ public static class ObjectModelCppGenerator
 
             cb.AppendLine($"int Get{relationName}Index(int {lowerName}Index)");
             cb.AppendLine("{");
-            WriteColumnCheck(cb, new[] { ("mIndexColumns", relation.GetIndexColumnInfo().IndexColumnName) }, "-1");
+            WriteColumnCheck(cb, relation.GetIndexColumnInfo().IndexColumnName, "return -1;", true);
             cb.AppendLine($"if ({lowerName}Index < 0 || {lowerName}Index >= GetCount())");
             cb.IndentOneLine("return -1;");
             cb.AppendLine();

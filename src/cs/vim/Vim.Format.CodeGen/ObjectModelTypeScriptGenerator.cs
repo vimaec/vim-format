@@ -15,20 +15,21 @@ public static class ObjectModelTypeScriptGenerator
     private static string SanitizeFieldName(string fieldName)
         => fieldName == "new" ? "_new" : fieldName;
 
-    private static string ToTypeScriptType(string type) =>
-        type switch
+    private static string ToTypeScriptType(string type)
+        => type switch
         {
             "Boolean" or "bool" => "boolean",
             "Single" or "float" or "Double" or "double" or "Int32" or "int" => "number",
+            "Int64" or "Long" or "long" => "bigint",
             "String" or "string" => "string",
-            "Vector2" or "DVector2" => "Vector2",
-            "Vector3" or "DVector3" => "Vector3",
-            "Vector4" or "DVector4" => "Vector4",
-            "AABox" or "DAABox" => "AABox",
-            "AABox2D" or "DAABox2D" => "AABox2D",
-            "AABox4D" or "DAABox4D" => "AABox4D",
-            "Matrix4x4" => type,
             _ => throw new ArgumentOutOfRangeException(nameof(type), type, $"Type {type} not supported")
+        };
+
+    private static string ToTypeScriptArrayType(string type)
+        => type switch
+        {
+            "Int64" or "Long" or "long" => "BigInt64Array",
+            _ => $"{ToTypeScriptType(type)}[]"
         };
 
     private static void WriteEntityInterface(CodeBuilder cb, Type entity)
@@ -77,7 +78,7 @@ public static class ObjectModelTypeScriptGenerator
         foreach (var field in fields)
         {
             cb.AppendLine($"get{field.Name}({lowerName}Index: number): Promise<{ToTypeScriptType(field.FieldType.Name)} | undefined>");
-            cb.AppendLine($"getAll{field.Name}(): Promise<{ToTypeScriptType(field.FieldType.Name)}[] | undefined>");
+            cb.AppendLine($"getAll{field.Name}(): Promise<{ToTypeScriptArrayType(field.FieldType.Name)} | undefined>");
         }
 
         if (fields.Length > 0 && relations.Length > 0)
@@ -151,8 +152,6 @@ public static class ObjectModelTypeScriptGenerator
         cb.AppendLine("}");
     }
 
-    private static string CompositeTypePrefix(Type type) => type.Name.StartsWith("D") ? "double:" : "float:"; 
-
     private static void WriteEntityTableClass(CodeBuilder cb, Type entity)
     {
         var name = entity.Name;
@@ -172,7 +171,7 @@ public static class ObjectModelTypeScriptGenerator
         WriteCreateFromDocument(cb, entity, name, relations);
         cb.AppendLine();
 
-        WriteGetCountGetter(cb, fields, relations);
+        WriteGetCountGetter(cb);
         cb.AppendLine();
 
         cb.AppendLine($"async get({lowerName}Index: number): Promise<I{name}> {{");
@@ -187,10 +186,11 @@ public static class ObjectModelTypeScriptGenerator
         
         foreach (var field in fields)
         {
-            var strategy = WriteGetFieldGetter(cb, field, lowerName, out var prefix);
+            var loadingInfos = field.GetEntityColumnLoadingInfo();
+            WriteGetFieldGetter(cb, field, lowerName, loadingInfos);
             cb.AppendLine();
             
-            WriteGetAllFieldGetter(cb, field, strategy, prefix);
+            WriteGetAllFieldGetter(cb, field, loadingInfos);
             cb.AppendLine();
         }
 
@@ -222,97 +222,58 @@ public static class ObjectModelTypeScriptGenerator
         cb.AppendLine("}");
     }
 
-    private static void WriteGetCountGetter(CodeBuilder cb, FieldInfo[] fields, FieldInfo[] relations)
+    private static void WriteGetCountGetter(CodeBuilder cb)
     {
-        cb.AppendLine("async getCount(): Promise<number> {");
-
-        if (fields.Length > 0)
-        {
-            var first = fields[0];
-            var (strategy, prefix) = first.FieldType.GetValueSerializationStrategyAndTypePrefix();
-
-            if (strategy != ValueSerializationStrategy.SerializeAsCompositeDataColumns)
-            {
-                cb.AppendLine($"return (await this.entityTable.getArray(\"{prefix}{first.Name}\"))?.length ?? 0");
-            }
-            else
-            {
-                cb.AppendLine($"return (await this.entityTable.getArray(\"{CompositeTypePrefix(first.FieldType)}{first.Name}\"" +
-                              $" + new Converters.{ToTypeScriptType(first.FieldType.Name)}Converter().columns[0]))?.length ?? 0");
-            }
-        }
-        else if (relations.Length > 0)
-        {
-            var first = relations[0].GetIndexColumnInfo();
-            cb.AppendLine($"return (await this.entityTable.getArray(\"{first.IndexColumnName}\"))?.length ?? 0");
-        }
-
+        cb.AppendLine("getCount(): Promise<number> {");
+        cb.AppendLine("return this.entityTable.getCount()");
         cb.AppendLine("}");
     }
 
-    private static ValueSerializationStrategy WriteGetFieldGetter(CodeBuilder cb, FieldInfo field, string lowerName,
-                                                                  out string prefix)
-    {
-        cb.AppendLine($"async get{field.Name}({lowerName}Index: number): Promise<{ToTypeScriptType(field.FieldType.Name)} | undefined>{{");
-        (var strategy, prefix) = field.FieldType.GetValueSerializationStrategyAndTypePrefix();
-
-        if (strategy != ValueSerializationStrategy.SerializeAsCompositeDataColumns)
+    private static string GetFieldGetter(this FieldInfo fieldInfo)
+        => ToTypeScriptType(fieldInfo.FieldType.Name) switch
         {
-            var getterName = ToTypeScriptType(field.FieldType.Name) switch
-            {
-                "boolean" => "getBoolean",
-                "number" => "getNumber",
-                "string" => "getString",
-                _ => throw new ArgumentOutOfRangeException($"There's no getter function for {field.FieldType.Name}")
-            };
-
-            cb.AppendLine($"return await this.entityTable.{getterName}({lowerName}Index, \"{prefix}{field.Name}\")");
-        }
-        else
-        {
-            cb.AppendLine($"const converter = new Converters.{ToTypeScriptType(field.FieldType.Name)}Converter()");
-            cb.AppendLine();
-
-            cb.AppendLine("let numbers = await Promise.all(converter.columns.map(c" +
-                          $" => this.entityTable.getNumber({lowerName}Index, \"{CompositeTypePrefix(field.FieldType)}{field.Name}\" + c)))");
-            cb.AppendLine();
-
-            cb.AppendLine("return Converters.convert(converter, numbers)");
-        }
-
-        cb.AppendLine("}");
-        return strategy;
-    }
-
-    private static string GetArrayGetterName(FieldInfo field) =>
-        ToTypeScriptType(field.FieldType.Name) switch
-        {
-            "boolean" => "getBooleanArray",
-            "number" => "getArray",
-            "string" => "getStringArray",
-            _ => throw new ArgumentOutOfRangeException($"There's no getter function for {field.FieldType.Name}")
+            "boolean" => "getBoolean",
+            "number" => "getNumber",
+            "bigint" => "getBigInt",
+            "string" => "getString",
+            _ => throw new ArgumentOutOfRangeException($"There's no getter function for {fieldInfo.FieldType.Name}")
         };
 
-    private static void WriteGetAllFieldGetter(CodeBuilder cb, FieldInfo field, ValueSerializationStrategy strategy,
-                                               string prefix)
+    private static string GetArrayGetterName(this FieldInfo fieldInfo) =>
+        ToTypeScriptType(fieldInfo.FieldType.Name) switch
+        {
+            "boolean" => "getBooleanArray",
+            "number" => "getNumberArray",
+            "bigint" => "getBigIntArray",
+            "string" => "getStringArray",
+            _ => throw new ArgumentOutOfRangeException($"There's no getter function for {fieldInfo.FieldType.Name}")
+        };
+
+    private static void WriteGetFieldGetter(
+        CodeBuilder cb,
+        FieldInfo fieldInfo,
+        string lowerName,
+        EntityColumnLoadingInfo[] loadingInfos)
     {
-        cb.AppendLine($"async getAll{field.Name}(): Promise<{ToTypeScriptType(field.FieldType.Name)}[] | undefined>{{");
+        cb.AppendLine($"async get{fieldInfo.Name}({lowerName}Index: number): Promise<{ToTypeScriptType(fieldInfo.FieldType.Name)} | undefined> {{");
 
-        if (strategy != ValueSerializationStrategy.SerializeAsCompositeDataColumns)
-        {
-            cb.AppendLine($"return await this.entityTable.{GetArrayGetterName(field)}(\"{prefix}{field.Name}\")");
-        }
-        else
-        {
-            cb.AppendLine($"const converter = new Converters.{ToTypeScriptType(field.FieldType.Name)}Converter()");
-            cb.AppendLine();
+        var getters = string.Join(" ?? ", loadingInfos.Select(li =>
+            $"(await this.entityTable.{fieldInfo.GetFieldGetter()}({lowerName}Index, \"{li.SerializedValueColumnName}\"))"));
+        cb.AppendLine($"return {getters}");
+        
+        cb.AppendLine("}");
+    }
 
-            cb.AppendLine("let numbers = await Promise.all(converter.columns.map(c" +
-                          $" => this.entityTable.getArray(\"{CompositeTypePrefix(field.FieldType)}{field.Name}\" + c)))");
-            cb.AppendLine();
+    private static void WriteGetAllFieldGetter(
+        CodeBuilder cb,
+        FieldInfo fieldInfo,
+        EntityColumnLoadingInfo[] loadingInfos)
+    {
+        cb.AppendLine($"async getAll{fieldInfo.Name}(): Promise<{ToTypeScriptArrayType(fieldInfo.FieldType.Name)} | undefined> {{");
 
-            cb.AppendLine("return Converters.convertArray(converter, numbers)");
-        }
+        var getters = string.Join(" ?? ", loadingInfos.Select(li =>
+            $"(await this.entityTable.{fieldInfo.GetArrayGetterName()}(\"{li.SerializedValueColumnName}\"))"));
+        cb.AppendLine($"return {getters}");
 
         cb.AppendLine("}");
     }
@@ -330,7 +291,7 @@ public static class ObjectModelTypeScriptGenerator
             cb.AppendLine();
 
             cb.AppendLine($"async getAll{relationName}Index(): Promise<number[] | undefined> {{");
-            cb.AppendLine($"return await this.entityTable.getArray(\"{relation.GetIndexColumnInfo().IndexColumnName}\")");
+            cb.AppendLine($"return await this.entityTable.getNumberArray(\"{relation.GetIndexColumnInfo().IndexColumnName}\")");
             cb.AppendLine("}");
             cb.AppendLine();
 
@@ -362,17 +323,8 @@ public static class ObjectModelTypeScriptGenerator
         foreach (var field in fields)
         {
             var lowerFieldName = SanitizeFieldName(ToLowerFirstLetter(field.Name));
-            var (strategy, _) = field.FieldType.GetValueSerializationStrategyAndTypePrefix();
 
-            if (strategy != ValueSerializationStrategy.SerializeAsCompositeDataColumns)
-            {
-                cb.AppendLine($"let {lowerFieldName}: {ToTypeScriptType(field.FieldType.Name)}[] | undefined");
-            }
-            else
-            {
-                cb.AppendLine($"const {lowerFieldName}Converter = new Converters.{ToTypeScriptType(field.FieldType.Name)}Converter()");
-                cb.AppendLine($"let {lowerFieldName}: {ToTypeScriptType(field.FieldType.Name)}[] | undefined");
-            }
+            cb.AppendLine($"let {lowerFieldName}: {ToTypeScriptArrayType(field.FieldType.Name)} | undefined");
         }
 
         foreach (var relation in relations)
@@ -385,23 +337,15 @@ public static class ObjectModelTypeScriptGenerator
         cb.AppendLine("await Promise.all([");
         cb.Indent();
         
-        foreach (var field in fields)
+        foreach (var fieldInfo in fields)
         {
-            var lowerFieldName = SanitizeFieldName(ToLowerFirstLetter(field.Name));
-            var (strategy, prefix) = field.FieldType.GetValueSerializationStrategyAndTypePrefix();
+            var lowerFieldName = SanitizeFieldName(ToLowerFirstLetter(fieldInfo.Name));
 
-            if (strategy != ValueSerializationStrategy.SerializeAsCompositeDataColumns)
-            {
-                cb.AppendLine($"localTable.{GetArrayGetterName(field)}(\"{prefix}{field.Name}\").then(a => {lowerFieldName} = a),");
-            }
-            else
-            {
-                cb.AppendLine($"Promise.all({lowerFieldName}Converter.columns.map(" +
-                              $"c => this.entityTable.getArray(\"{CompositeTypePrefix(field.FieldType)}{field.Name}\" + c)))");
-                cb.Indent();
-                cb.AppendLine($".then(a => {lowerFieldName} = Converters.convertArray({lowerFieldName}Converter, a)),");
-                cb.Unindent();
-            }
+            var loadingInfos = fieldInfo.GetEntityColumnLoadingInfo();
+
+            var getters = string.Join(" ?? ", loadingInfos.Select(li =>
+                $"(await localTable.{fieldInfo.GetArrayGetterName()}(\"{li.SerializedValueColumnName}\"))"));
+            cb.AppendLine($"(async () => {{ {lowerFieldName} = {getters} }})(),");
 
             arrays.Add(lowerFieldName);
         }
@@ -410,7 +354,7 @@ public static class ObjectModelTypeScriptGenerator
         {
             var lowerRelationName = ToLowerFirstLetter(relation.Name.Replace("_", ""));
 
-            cb.AppendLine($"localTable.getArray(\"{relation.GetIndexColumnInfo().IndexColumnName}\").then(a => {lowerRelationName}Index = a),");
+            cb.AppendLine($"(async () => {{ {lowerRelationName}Index = (await localTable.getNumberArray(\"{relation.GetIndexColumnInfo().IndexColumnName}\")) }})(),");
 
             arrays.Add(lowerRelationName + "Index");
         }

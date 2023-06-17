@@ -18,8 +18,6 @@ public static class ObjectModelGenerator
                 => nameof(EntityTable.GetStringColumnValues),
             ValueSerializationStrategy.SerializeAsDataColumn
                 => $"{nameof(EntityTable.GetDataColumnValues)}<{type.Name}>",
-            ValueSerializationStrategy.SerializeAsCompositeDataColumns
-                => $"{nameof(ColumnExtensions.GetCompositeDataColumnValues)}<{type.Name}>",
             _ => throw new Exception($"{nameof(GetEntityTableGetterFunctionName)} error - unknown strategy {strategy:G}")
         };
     }
@@ -32,8 +30,6 @@ public static class ObjectModelGenerator
                 => nameof(EntityTableBuilder.AddStringColumn),
             ValueSerializationStrategy.SerializeAsDataColumn
                 => $"{nameof(EntityTableBuilder.AddDataColumn)}",
-            ValueSerializationStrategy.SerializeAsCompositeDataColumns
-                => $"{nameof(ColumnExtensions.AddCompositeDataColumns)}",
             _ => throw new Exception($"{nameof(GetEntityTableBuilderAddFunctionName)} error - unknown strategy {strategy:G}")
         };
     }
@@ -62,16 +58,36 @@ public static class ObjectModelGenerator
         // Get each non-relational columns for each element
         foreach (var fieldInfo in entityFields)
         {
-            var (strategy, typePrefix) = fieldInfo.FieldType.GetValueSerializationStrategyAndTypePrefix();
-            var functionName = strategy.GetEntityTableGetterFunctionName(fieldInfo.FieldType);
+            var fieldName = fieldInfo.Name;
+            var fieldType = fieldInfo.FieldType;
+            var fieldTypeName = fieldInfo.FieldType.Name;
 
-            cb.AppendLine($"public IArray<{fieldInfo.FieldType.Name}> {t.Name}{fieldInfo.Name} {{ get; }}");
+            var loadingInfos = fieldInfo.GetEntityColumnLoadingInfo();
+
+            var baseStrategy = loadingInfos[0].Strategy; // Invariant: there is always at least one entityColumnInfo (the default one)
+            
+            var dataColumnGetters = loadingInfos.Select(eci =>
+            {
+                var functionName = eci.Strategy.GetEntityTableGetterFunctionName(eci.EntityColumnAttribute.SerializedType);
+                var dataColumnGetter = $"{t.Name}EntityTable?.{functionName}(\"{eci.SerializedValueColumnName}\")";
+                if (eci.EntityColumnAttribute.SerializedType != fieldType)
+                {
+                    dataColumnGetter += $"?.Select(v => ({fieldTypeName}) v)";
+                }
+                return dataColumnGetter;
+            }).ToArray();
+
+            var dataColumnGetterString = dataColumnGetters.Length > 1
+                ? $"({string.Join(" ?? ", dataColumnGetters)})"
+                : dataColumnGetters[0];
+
+            cb.AppendLine($"public IArray<{fieldTypeName}> {t.Name}{fieldName} {{ get; }}");
             constructor.ArraysInitializers
-                       .Add($"{t.Name}{fieldInfo.Name} = {t.Name}EntityTable?.{functionName}(\"{typePrefix}{fieldInfo.Name}\") ?? Array.Empty<{fieldInfo.FieldType.Name}>().ToIArray();");
+                       .Add($"{t.Name}{fieldName} = {dataColumnGetterString} ?? Array.Empty<{fieldTypeName}>().ToIArray();");
 
             // Safe accessor.
-            var defaultValue = strategy == ValueSerializationStrategy.SerializeAsStringColumn ? "\"\"" : "default";
-            cb.AppendLine($"public {fieldInfo.FieldType.Name} Get{t.Name}{fieldInfo.Name}(int index, {fieldInfo.FieldType.Name} defaultValue = {defaultValue}) => {t.Name}{fieldInfo.Name}?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;");
+            var defaultValue = baseStrategy == ValueSerializationStrategy.SerializeAsStringColumn ? "\"\"" : "default";
+            cb.AppendLine($"public {fieldTypeName} Get{t.Name}{fieldName}(int index, {fieldTypeName} defaultValue = {defaultValue}) => {t.Name}{fieldName}?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;");
         }
 
         // Get each relational column
@@ -197,7 +213,7 @@ public static class ObjectModelGenerator
 
     private static CodeBuilder WriteDocument(CodeBuilder cb = null)
     {
-        cb ??= new CodeBuilder();
+        cb = cb ?? new CodeBuilder();
 
         var entityTypes = ObjectModelReflection.GetEntityTypes().ToArray();
 
@@ -293,10 +309,9 @@ public static class ObjectModelGenerator
 
             foreach (var fieldInfo in entityFields)
             {
-                var (strategy, typePrefix) = fieldInfo.FieldType.GetValueSerializationStrategyAndTypePrefix();
+                var (strategy, _) = fieldInfo.FieldType.GetValueSerializationStrategyAndTypePrefix();
                 var functionName = strategy.GetEntityTableBuilderAddFunctionName(fieldInfo.FieldType);
-                var name = fieldInfo.Name;
-                cb.AppendLine($"tb.{functionName}(\"{typePrefix}{name}\", typedEntities.Select(x => x.{name}));");
+                cb.AppendLine($"tb.{functionName}(\"{fieldInfo.GetSerializedValueColumnName()}\", typedEntities.Select(x => x.{fieldInfo.Name}));");
             }
 
             foreach (var fieldInfo in relationFields)
@@ -335,12 +350,14 @@ public static class ObjectModelGenerator
             cb.AppendLine("using System;");
             cb.AppendLine("using System.Collections.Generic;");
             cb.AppendLine("using System.Linq;");
+            cb.AppendLine("using Vim.DataFormat;");
             cb.AppendLine("using Vim.Math3d;");
             cb.AppendLine("using Vim.LinqArray;");
+            cb.AppendLine("using Vim.DotNetUtilities;");
 
             cb.AppendLine();
 
-            cb.AppendLine("namespace Vim.Format.ObjectModel {");
+            cb.AppendLine("namespace Vim.ObjectModel {");
 
             WriteDocument(cb);
 
