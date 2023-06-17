@@ -533,8 +533,9 @@ public static class ObjectModelCppGenerator
             cb.AppendLine("#define __OBJECT_MODEL_H__");
             cb.AppendLine();
             cb.AppendLine("#include <string>");
+            cb.AppendLine("#include <cstring>");
             cb.AppendLine("#include <vector>");
-            cb.AppendLine("#include \"bfast.h\"");
+            cb.AppendLine("#include \"../bfast.h\"");
             cb.AppendLine("#include \"vim.h\"");
 
             cb.AppendLine();

@@ -350,14 +350,13 @@ public static class ObjectModelGenerator
             cb.AppendLine("using System;");
             cb.AppendLine("using System.Collections.Generic;");
             cb.AppendLine("using System.Linq;");
-            cb.AppendLine("using Vim.DataFormat;");
             cb.AppendLine("using Vim.Math3d;");
             cb.AppendLine("using Vim.LinqArray;");
-            cb.AppendLine("using Vim.DotNetUtilities;");
+            cb.AppendLine("using Vim.Format.ObjectModel;");
 
             cb.AppendLine();
 
-            cb.AppendLine("namespace Vim.ObjectModel {");
+            cb.AppendLine("namespace Vim.Format.ObjectModel {");
 
             WriteDocument(cb);
 
