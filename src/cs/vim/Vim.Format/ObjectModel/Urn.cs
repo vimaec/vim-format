@@ -46,6 +46,9 @@ namespace Vim.Format.ObjectModel
         public static string GetElementUrn(string documentUrn, int elementId)
             => documentUrn + Separator + ElementPrefix + Separator + elementId;
 
+        public static string GetElementUrn(string documentUrn, long elementId)
+            => documentUrn + Separator + ElementPrefix + Separator + elementId;
+
         public static string GetElementUrn(string nid, string documentGuid, int documentNumSaves, int elementId)
             => GetElementUrn(GetBimDocumentUrn(nid, documentGuid, documentNumSaves), elementId);
 

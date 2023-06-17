@@ -65,10 +65,10 @@ namespace Vim.Format.ObjectModel {
     // AUTO-GENERATED
     public partial class ParameterDescriptor
     {
-        public DisplayUnit DisplayUnit => _DisplayUnit.Value;
+        public Vim.ObjectModel.DisplayUnit DisplayUnit => _DisplayUnit.Value;
         public ParameterDescriptor()
         {
-            _DisplayUnit = new Relation<DisplayUnit>();
+            _DisplayUnit = new Relation<Vim.ObjectModel.DisplayUnit>();
         }
         
         public override bool FieldsAreEqual(object obj)
@@ -101,12 +101,12 @@ namespace Vim.Format.ObjectModel {
     // AUTO-GENERATED
     public partial class Parameter
     {
-        public ParameterDescriptor ParameterDescriptor => _ParameterDescriptor.Value;
-        public Element Element => _Element.Value;
+        public Vim.ObjectModel.ParameterDescriptor ParameterDescriptor => _ParameterDescriptor.Value;
+        public Vim.ObjectModel.Element Element => _Element.Value;
         public Parameter()
         {
-            _ParameterDescriptor = new Relation<ParameterDescriptor>();
-            _Element = new Relation<Element>();
+            _ParameterDescriptor = new Relation<Vim.ObjectModel.ParameterDescriptor>();
+            _Element = new Relation<Vim.ObjectModel.Element>();
         }
         
         public override bool FieldsAreEqual(object obj)
@@ -133,30 +133,30 @@ namespace Vim.Format.ObjectModel {
     // AUTO-GENERATED
     public partial class Element
     {
-        public Level Level => _Level.Value;
-        public Phase PhaseCreated => _PhaseCreated.Value;
-        public Phase PhaseDemolished => _PhaseDemolished.Value;
-        public Category Category => _Category.Value;
-        public Workset Workset => _Workset.Value;
-        public DesignOption DesignOption => _DesignOption.Value;
-        public View OwnerView => _OwnerView.Value;
-        public Group Group => _Group.Value;
-        public AssemblyInstance AssemblyInstance => _AssemblyInstance.Value;
-        public BimDocument BimDocument => _BimDocument.Value;
-        public Room Room => _Room.Value;
+        public Vim.ObjectModel.Level Level => _Level.Value;
+        public Vim.ObjectModel.Phase PhaseCreated => _PhaseCreated.Value;
+        public Vim.ObjectModel.Phase PhaseDemolished => _PhaseDemolished.Value;
+        public Vim.ObjectModel.Category Category => _Category.Value;
+        public Vim.ObjectModel.Workset Workset => _Workset.Value;
+        public Vim.ObjectModel.DesignOption DesignOption => _DesignOption.Value;
+        public Vim.ObjectModel.View OwnerView => _OwnerView.Value;
+        public Vim.ObjectModel.Group Group => _Group.Value;
+        public Vim.ObjectModel.AssemblyInstance AssemblyInstance => _AssemblyInstance.Value;
+        public Vim.ObjectModel.BimDocument BimDocument => _BimDocument.Value;
+        public Vim.ObjectModel.Room Room => _Room.Value;
         public Element()
         {
-            _Level = new Relation<Level>();
-            _PhaseCreated = new Relation<Phase>();
-            _PhaseDemolished = new Relation<Phase>();
-            _Category = new Relation<Category>();
-            _Workset = new Relation<Workset>();
-            _DesignOption = new Relation<DesignOption>();
-            _OwnerView = new Relation<View>();
-            _Group = new Relation<Group>();
-            _AssemblyInstance = new Relation<AssemblyInstance>();
-            _BimDocument = new Relation<BimDocument>();
-            _Room = new Relation<Room>();
+            _Level = new Relation<Vim.ObjectModel.Level>();
+            _PhaseCreated = new Relation<Vim.ObjectModel.Phase>();
+            _PhaseDemolished = new Relation<Vim.ObjectModel.Phase>();
+            _Category = new Relation<Vim.ObjectModel.Category>();
+            _Workset = new Relation<Vim.ObjectModel.Workset>();
+            _DesignOption = new Relation<Vim.ObjectModel.DesignOption>();
+            _OwnerView = new Relation<Vim.ObjectModel.View>();
+            _Group = new Relation<Vim.ObjectModel.Group>();
+            _AssemblyInstance = new Relation<Vim.ObjectModel.AssemblyInstance>();
+            _BimDocument = new Relation<Vim.ObjectModel.BimDocument>();
+            _Room = new Relation<Vim.ObjectModel.Room>();
         }
         
         public override bool FieldsAreEqual(object obj)
@@ -169,7 +169,9 @@ namespace Vim.Format.ObjectModel {
                     (Type == other.Type) &&
                     (Name == other.Name) &&
                     (UniqueId == other.UniqueId) &&
-                    (Location == other.Location) &&
+                    (Location_X == other.Location_X) &&
+                    (Location_Y == other.Location_Y) &&
+                    (Location_Z == other.Location_Z) &&
                     (FamilyName == other.FamilyName) &&
                     (IsPinned == other.IsPinned) &&
                     (_Level?.Index == other._Level?.Index) &&
@@ -198,10 +200,10 @@ namespace Vim.Format.ObjectModel {
     // AUTO-GENERATED
     public partial class Workset
     {
-        public BimDocument BimDocument => _BimDocument.Value;
+        public Vim.ObjectModel.BimDocument BimDocument => _BimDocument.Value;
         public Workset()
         {
-            _BimDocument = new Relation<BimDocument>();
+            _BimDocument = new Relation<Vim.ObjectModel.BimDocument>();
         }
         
         public override bool FieldsAreEqual(object obj)
@@ -233,10 +235,10 @@ namespace Vim.Format.ObjectModel {
     // AUTO-GENERATED
     public partial class AssemblyInstance
     {
-        public Element Element => _Element.Value;
+        public Vim.ObjectModel.Element Element => _Element.Value;
         public AssemblyInstance()
         {
-            _Element = new Relation<Element>();
+            _Element = new Relation<Vim.ObjectModel.Element>();
         }
         
         public override bool FieldsAreEqual(object obj)
@@ -246,7 +248,9 @@ namespace Vim.Format.ObjectModel {
                 var fieldsAreEqual =
                     (Index == other.Index) &&
                     (AssemblyTypeName == other.AssemblyTypeName) &&
-                    (Position == other.Position) &&
+                    (Position_X == other.Position_X) &&
+                    (Position_Y == other.Position_Y) &&
+                    (Position_Z == other.Position_Z) &&
                     (_Element?.Index == other._Element?.Index);
                 if (!fieldsAreEqual)
                 {
@@ -263,10 +267,10 @@ namespace Vim.Format.ObjectModel {
     // AUTO-GENERATED
     public partial class Group
     {
-        public Element Element => _Element.Value;
+        public Vim.ObjectModel.Element Element => _Element.Value;
         public Group()
         {
-            _Element = new Relation<Element>();
+            _Element = new Relation<Vim.ObjectModel.Element>();
         }
         
         public override bool FieldsAreEqual(object obj)
@@ -276,7 +280,9 @@ namespace Vim.Format.ObjectModel {
                 var fieldsAreEqual =
                     (Index == other.Index) &&
                     (GroupType == other.GroupType) &&
-                    (Position == other.Position) &&
+                    (Position_X == other.Position_X) &&
+                    (Position_Y == other.Position_Y) &&
+                    (Position_Z == other.Position_Z) &&
                     (_Element?.Index == other._Element?.Index);
                 if (!fieldsAreEqual)
                 {
@@ -293,10 +299,10 @@ namespace Vim.Format.ObjectModel {
     // AUTO-GENERATED
     public partial class DesignOption
     {
-        public Element Element => _Element.Value;
+        public Vim.ObjectModel.Element Element => _Element.Value;
         public DesignOption()
         {
-            _Element = new Relation<Element>();
+            _Element = new Relation<Vim.ObjectModel.Element>();
         }
         
         public override bool FieldsAreEqual(object obj)
@@ -322,12 +328,12 @@ namespace Vim.Format.ObjectModel {
     // AUTO-GENERATED
     public partial class Level
     {
-        public FamilyType FamilyType => _FamilyType.Value;
-        public Element Element => _Element.Value;
+        public Vim.ObjectModel.FamilyType FamilyType => _FamilyType.Value;
+        public Vim.ObjectModel.Element Element => _Element.Value;
         public Level()
         {
-            _FamilyType = new Relation<FamilyType>();
-            _Element = new Relation<Element>();
+            _FamilyType = new Relation<Vim.ObjectModel.FamilyType>();
+            _Element = new Relation<Vim.ObjectModel.Element>();
         }
         
         public override bool FieldsAreEqual(object obj)
@@ -354,10 +360,10 @@ namespace Vim.Format.ObjectModel {
     // AUTO-GENERATED
     public partial class Phase
     {
-        public Element Element => _Element.Value;
+        public Vim.ObjectModel.Element Element => _Element.Value;
         public Phase()
         {
-            _Element = new Relation<Element>();
+            _Element = new Relation<Vim.ObjectModel.Element>();
         }
         
         public override bool FieldsAreEqual(object obj)
@@ -382,12 +388,12 @@ namespace Vim.Format.ObjectModel {
     // AUTO-GENERATED
     public partial class Room
     {
-        public Level UpperLimit => _UpperLimit.Value;
-        public Element Element => _Element.Value;
+        public Vim.ObjectModel.Level UpperLimit => _UpperLimit.Value;
+        public Vim.ObjectModel.Element Element => _Element.Value;
         public Room()
         {
-            _UpperLimit = new Relation<Level>();
-            _Element = new Relation<Element>();
+            _UpperLimit = new Relation<Vim.ObjectModel.Level>();
+            _Element = new Relation<Vim.ObjectModel.Element>();
         }
         
         public override bool FieldsAreEqual(object obj)
@@ -420,16 +426,16 @@ namespace Vim.Format.ObjectModel {
     // AUTO-GENERATED
     public partial class BimDocument
     {
-        public View ActiveView => _ActiveView.Value;
-        public Family OwnerFamily => _OwnerFamily.Value;
-        public BimDocument Parent => _Parent.Value;
-        public Element Element => _Element.Value;
+        public Vim.ObjectModel.View ActiveView => _ActiveView.Value;
+        public Vim.ObjectModel.Family OwnerFamily => _OwnerFamily.Value;
+        public Vim.ObjectModel.BimDocument Parent => _Parent.Value;
+        public Vim.ObjectModel.Element Element => _Element.Value;
         public BimDocument()
         {
-            _ActiveView = new Relation<View>();
-            _OwnerFamily = new Relation<Family>();
-            _Parent = new Relation<BimDocument>();
-            _Element = new Relation<Element>();
+            _ActiveView = new Relation<Vim.ObjectModel.View>();
+            _OwnerFamily = new Relation<Vim.ObjectModel.Family>();
+            _Parent = new Relation<Vim.ObjectModel.BimDocument>();
+            _Element = new Relation<Vim.ObjectModel.Element>();
         }
         
         public override bool FieldsAreEqual(object obj)
@@ -484,12 +490,12 @@ namespace Vim.Format.ObjectModel {
     // AUTO-GENERATED
     public partial class DisplayUnitInBimDocument
     {
-        public DisplayUnit DisplayUnit => _DisplayUnit.Value;
-        public BimDocument BimDocument => _BimDocument.Value;
+        public Vim.ObjectModel.DisplayUnit DisplayUnit => _DisplayUnit.Value;
+        public Vim.ObjectModel.BimDocument BimDocument => _BimDocument.Value;
         public DisplayUnitInBimDocument()
         {
-            _DisplayUnit = new Relation<DisplayUnit>();
-            _BimDocument = new Relation<BimDocument>();
+            _DisplayUnit = new Relation<Vim.ObjectModel.DisplayUnit>();
+            _BimDocument = new Relation<Vim.ObjectModel.BimDocument>();
         }
         
         public override bool FieldsAreEqual(object obj)
@@ -515,12 +521,12 @@ namespace Vim.Format.ObjectModel {
     // AUTO-GENERATED
     public partial class PhaseOrderInBimDocument
     {
-        public Phase Phase => _Phase.Value;
-        public BimDocument BimDocument => _BimDocument.Value;
+        public Vim.ObjectModel.Phase Phase => _Phase.Value;
+        public Vim.ObjectModel.BimDocument BimDocument => _BimDocument.Value;
         public PhaseOrderInBimDocument()
         {
-            _Phase = new Relation<Phase>();
-            _BimDocument = new Relation<BimDocument>();
+            _Phase = new Relation<Vim.ObjectModel.Phase>();
+            _BimDocument = new Relation<Vim.ObjectModel.BimDocument>();
         }
         
         public override bool FieldsAreEqual(object obj)
@@ -547,12 +553,12 @@ namespace Vim.Format.ObjectModel {
     // AUTO-GENERATED
     public partial class Category
     {
-        public Category Parent => _Parent.Value;
-        public Material Material => _Material.Value;
+        public Vim.ObjectModel.Category Parent => _Parent.Value;
+        public Vim.ObjectModel.Material Material => _Material.Value;
         public Category()
         {
-            _Parent = new Relation<Category>();
-            _Material = new Relation<Material>();
+            _Parent = new Relation<Vim.ObjectModel.Category>();
+            _Material = new Relation<Vim.ObjectModel.Material>();
         }
         
         public override bool FieldsAreEqual(object obj)
@@ -564,7 +570,9 @@ namespace Vim.Format.ObjectModel {
                     (Name == other.Name) &&
                     (Id == other.Id) &&
                     (CategoryType == other.CategoryType) &&
-                    (LineColor == other.LineColor) &&
+                    (LineColor_X == other.LineColor_X) &&
+                    (LineColor_Y == other.LineColor_Y) &&
+                    (LineColor_Z == other.LineColor_Z) &&
                     (BuiltInCategory == other.BuiltInCategory) &&
                     (_Parent?.Index == other._Parent?.Index) &&
                     (_Material?.Index == other._Material?.Index);
@@ -583,12 +591,12 @@ namespace Vim.Format.ObjectModel {
     // AUTO-GENERATED
     public partial class Family
     {
-        public Category FamilyCategory => _FamilyCategory.Value;
-        public Element Element => _Element.Value;
+        public Vim.ObjectModel.Category FamilyCategory => _FamilyCategory.Value;
+        public Vim.ObjectModel.Element Element => _Element.Value;
         public Family()
         {
-            _FamilyCategory = new Relation<Category>();
-            _Element = new Relation<Element>();
+            _FamilyCategory = new Relation<Vim.ObjectModel.Category>();
+            _Element = new Relation<Vim.ObjectModel.Element>();
         }
         
         public override bool FieldsAreEqual(object obj)
@@ -618,14 +626,14 @@ namespace Vim.Format.ObjectModel {
     // AUTO-GENERATED
     public partial class FamilyType
     {
-        public Family Family => _Family.Value;
-        public CompoundStructure CompoundStructure => _CompoundStructure.Value;
-        public Element Element => _Element.Value;
+        public Vim.ObjectModel.Family Family => _Family.Value;
+        public Vim.ObjectModel.CompoundStructure CompoundStructure => _CompoundStructure.Value;
+        public Vim.ObjectModel.Element Element => _Element.Value;
         public FamilyType()
         {
-            _Family = new Relation<Family>();
-            _CompoundStructure = new Relation<CompoundStructure>();
-            _Element = new Relation<Element>();
+            _Family = new Relation<Vim.ObjectModel.Family>();
+            _CompoundStructure = new Relation<Vim.ObjectModel.CompoundStructure>();
+            _Element = new Relation<Vim.ObjectModel.Element>();
         }
         
         public override bool FieldsAreEqual(object obj)
@@ -653,18 +661,18 @@ namespace Vim.Format.ObjectModel {
     // AUTO-GENERATED
     public partial class FamilyInstance
     {
-        public FamilyType FamilyType => _FamilyType.Value;
-        public Element Host => _Host.Value;
-        public Room FromRoom => _FromRoom.Value;
-        public Room ToRoom => _ToRoom.Value;
-        public Element Element => _Element.Value;
+        public Vim.ObjectModel.FamilyType FamilyType => _FamilyType.Value;
+        public Vim.ObjectModel.Element Host => _Host.Value;
+        public Vim.ObjectModel.Room FromRoom => _FromRoom.Value;
+        public Vim.ObjectModel.Room ToRoom => _ToRoom.Value;
+        public Vim.ObjectModel.Element Element => _Element.Value;
         public FamilyInstance()
         {
-            _FamilyType = new Relation<FamilyType>();
-            _Host = new Relation<Element>();
-            _FromRoom = new Relation<Room>();
-            _ToRoom = new Relation<Room>();
-            _Element = new Relation<Element>();
+            _FamilyType = new Relation<Vim.ObjectModel.FamilyType>();
+            _Host = new Relation<Vim.ObjectModel.Element>();
+            _FromRoom = new Relation<Vim.ObjectModel.Room>();
+            _ToRoom = new Relation<Vim.ObjectModel.Room>();
+            _Element = new Relation<Vim.ObjectModel.Element>();
         }
         
         public override bool FieldsAreEqual(object obj)
@@ -674,16 +682,28 @@ namespace Vim.Format.ObjectModel {
                 var fieldsAreEqual =
                     (Index == other.Index) &&
                     (FacingFlipped == other.FacingFlipped) &&
-                    (FacingOrientation == other.FacingOrientation) &&
+                    (FacingOrientation_X == other.FacingOrientation_X) &&
+                    (FacingOrientation_Y == other.FacingOrientation_Y) &&
+                    (FacingOrientation_Z == other.FacingOrientation_Z) &&
                     (HandFlipped == other.HandFlipped) &&
                     (Mirrored == other.Mirrored) &&
                     (HasModifiedGeometry == other.HasModifiedGeometry) &&
                     (Scale == other.Scale) &&
-                    (BasisX == other.BasisX) &&
-                    (BasisY == other.BasisY) &&
-                    (BasisZ == other.BasisZ) &&
-                    (Translation == other.Translation) &&
-                    (HandOrientation == other.HandOrientation) &&
+                    (BasisX_X == other.BasisX_X) &&
+                    (BasisX_Y == other.BasisX_Y) &&
+                    (BasisX_Z == other.BasisX_Z) &&
+                    (BasisY_X == other.BasisY_X) &&
+                    (BasisY_Y == other.BasisY_Y) &&
+                    (BasisY_Z == other.BasisY_Z) &&
+                    (BasisZ_X == other.BasisZ_X) &&
+                    (BasisZ_Y == other.BasisZ_Y) &&
+                    (BasisZ_Z == other.BasisZ_Z) &&
+                    (Translation_X == other.Translation_X) &&
+                    (Translation_Y == other.Translation_Y) &&
+                    (Translation_Z == other.Translation_Z) &&
+                    (HandOrientation_X == other.HandOrientation_X) &&
+                    (HandOrientation_Y == other.HandOrientation_Y) &&
+                    (HandOrientation_Z == other.HandOrientation_Z) &&
                     (_FamilyType?.Index == other._FamilyType?.Index) &&
                     (_Host?.Index == other._Host?.Index) &&
                     (_FromRoom?.Index == other._FromRoom?.Index) &&
@@ -704,14 +724,14 @@ namespace Vim.Format.ObjectModel {
     // AUTO-GENERATED
     public partial class View
     {
-        public Camera Camera => _Camera.Value;
-        public FamilyType FamilyType => _FamilyType.Value;
-        public Element Element => _Element.Value;
+        public Vim.ObjectModel.Camera Camera => _Camera.Value;
+        public Vim.ObjectModel.FamilyType FamilyType => _FamilyType.Value;
+        public Vim.ObjectModel.Element Element => _Element.Value;
         public View()
         {
-            _Camera = new Relation<Camera>();
-            _FamilyType = new Relation<FamilyType>();
-            _Element = new Relation<Element>();
+            _Camera = new Relation<Vim.ObjectModel.Camera>();
+            _FamilyType = new Relation<Vim.ObjectModel.FamilyType>();
+            _Element = new Relation<Vim.ObjectModel.Element>();
         }
         
         public override bool FieldsAreEqual(object obj)
@@ -722,13 +742,26 @@ namespace Vim.Format.ObjectModel {
                     (Index == other.Index) &&
                     (Title == other.Title) &&
                     (ViewType == other.ViewType) &&
-                    (Up == other.Up) &&
-                    (Right == other.Right) &&
-                    (Origin == other.Origin) &&
-                    (ViewDirection == other.ViewDirection) &&
-                    (ViewPosition == other.ViewPosition) &&
+                    (Up_X == other.Up_X) &&
+                    (Up_Y == other.Up_Y) &&
+                    (Up_Z == other.Up_Z) &&
+                    (Right_X == other.Right_X) &&
+                    (Right_Y == other.Right_Y) &&
+                    (Right_Z == other.Right_Z) &&
+                    (Origin_X == other.Origin_X) &&
+                    (Origin_Y == other.Origin_Y) &&
+                    (Origin_Z == other.Origin_Z) &&
+                    (ViewDirection_X == other.ViewDirection_X) &&
+                    (ViewDirection_Y == other.ViewDirection_Y) &&
+                    (ViewDirection_Z == other.ViewDirection_Z) &&
+                    (ViewPosition_X == other.ViewPosition_X) &&
+                    (ViewPosition_Y == other.ViewPosition_Y) &&
+                    (ViewPosition_Z == other.ViewPosition_Z) &&
                     (Scale == other.Scale) &&
-                    (Outline == other.Outline) &&
+                    (Outline_Min_X == other.Outline_Min_X) &&
+                    (Outline_Min_Y == other.Outline_Min_Y) &&
+                    (Outline_Max_X == other.Outline_Max_X) &&
+                    (Outline_Max_Y == other.Outline_Max_Y) &&
                     (DetailLevel == other.DetailLevel) &&
                     (_Camera?.Index == other._Camera?.Index) &&
                     (_FamilyType?.Index == other._FamilyType?.Index) &&
@@ -748,12 +781,12 @@ namespace Vim.Format.ObjectModel {
     // AUTO-GENERATED
     public partial class ElementInView
     {
-        public View View => _View.Value;
-        public Element Element => _Element.Value;
+        public Vim.ObjectModel.View View => _View.Value;
+        public Vim.ObjectModel.Element Element => _Element.Value;
         public ElementInView()
         {
-            _View = new Relation<View>();
-            _Element = new Relation<Element>();
+            _View = new Relation<Vim.ObjectModel.View>();
+            _Element = new Relation<Vim.ObjectModel.Element>();
         }
         
         public override bool FieldsAreEqual(object obj)
@@ -779,12 +812,12 @@ namespace Vim.Format.ObjectModel {
     // AUTO-GENERATED
     public partial class ShapeInView
     {
-        public Shape Shape => _Shape.Value;
-        public View View => _View.Value;
+        public Vim.ObjectModel.Shape Shape => _Shape.Value;
+        public Vim.ObjectModel.View View => _View.Value;
         public ShapeInView()
         {
-            _Shape = new Relation<Shape>();
-            _View = new Relation<View>();
+            _Shape = new Relation<Vim.ObjectModel.Shape>();
+            _View = new Relation<Vim.ObjectModel.View>();
         }
         
         public override bool FieldsAreEqual(object obj)
@@ -810,12 +843,12 @@ namespace Vim.Format.ObjectModel {
     // AUTO-GENERATED
     public partial class AssetInView
     {
-        public Asset Asset => _Asset.Value;
-        public View View => _View.Value;
+        public Vim.ObjectModel.Asset Asset => _Asset.Value;
+        public Vim.ObjectModel.View View => _View.Value;
         public AssetInView()
         {
-            _Asset = new Relation<Asset>();
-            _View = new Relation<View>();
+            _Asset = new Relation<Vim.ObjectModel.Asset>();
+            _View = new Relation<Vim.ObjectModel.View>();
         }
         
         public override bool FieldsAreEqual(object obj)
@@ -841,12 +874,12 @@ namespace Vim.Format.ObjectModel {
     // AUTO-GENERATED
     public partial class LevelInView
     {
-        public Level Level => _Level.Value;
-        public View View => _View.Value;
+        public Vim.ObjectModel.Level Level => _Level.Value;
+        public Vim.ObjectModel.View View => _View.Value;
         public LevelInView()
         {
-            _Level = new Relation<Level>();
-            _View = new Relation<View>();
+            _Level = new Relation<Vim.ObjectModel.Level>();
+            _View = new Relation<Vim.ObjectModel.View>();
         }
         
         public override bool FieldsAreEqual(object obj)
@@ -855,7 +888,12 @@ namespace Vim.Format.ObjectModel {
             {
                 var fieldsAreEqual =
                     (Index == other.Index) &&
-                    (Extents == other.Extents) &&
+                    (Extents_Min_X == other.Extents_Min_X) &&
+                    (Extents_Min_Y == other.Extents_Min_Y) &&
+                    (Extents_Min_Z == other.Extents_Min_Z) &&
+                    (Extents_Max_X == other.Extents_Max_X) &&
+                    (Extents_Max_Y == other.Extents_Max_Y) &&
+                    (Extents_Max_Z == other.Extents_Max_Z) &&
                     (_Level?.Index == other._Level?.Index) &&
                     (_View?.Index == other._View?.Index);
                 if (!fieldsAreEqual)
@@ -907,14 +945,14 @@ namespace Vim.Format.ObjectModel {
     // AUTO-GENERATED
     public partial class Material
     {
-        public Asset ColorTextureFile => _ColorTextureFile.Value;
-        public Asset NormalTextureFile => _NormalTextureFile.Value;
-        public Element Element => _Element.Value;
+        public Vim.ObjectModel.Asset ColorTextureFile => _ColorTextureFile.Value;
+        public Vim.ObjectModel.Asset NormalTextureFile => _NormalTextureFile.Value;
+        public Vim.ObjectModel.Element Element => _Element.Value;
         public Material()
         {
-            _ColorTextureFile = new Relation<Asset>();
-            _NormalTextureFile = new Relation<Asset>();
-            _Element = new Relation<Element>();
+            _ColorTextureFile = new Relation<Vim.ObjectModel.Asset>();
+            _NormalTextureFile = new Relation<Vim.ObjectModel.Asset>();
+            _Element = new Relation<Vim.ObjectModel.Element>();
         }
         
         public override bool FieldsAreEqual(object obj)
@@ -925,11 +963,17 @@ namespace Vim.Format.ObjectModel {
                     (Index == other.Index) &&
                     (Name == other.Name) &&
                     (MaterialCategory == other.MaterialCategory) &&
-                    (Color == other.Color) &&
-                    (ColorUvScaling == other.ColorUvScaling) &&
-                    (ColorUvOffset == other.ColorUvOffset) &&
-                    (NormalUvScaling == other.NormalUvScaling) &&
-                    (NormalUvOffset == other.NormalUvOffset) &&
+                    (Color_X == other.Color_X) &&
+                    (Color_Y == other.Color_Y) &&
+                    (Color_Z == other.Color_Z) &&
+                    (ColorUvScaling_X == other.ColorUvScaling_X) &&
+                    (ColorUvScaling_Y == other.ColorUvScaling_Y) &&
+                    (ColorUvOffset_X == other.ColorUvOffset_X) &&
+                    (ColorUvOffset_Y == other.ColorUvOffset_Y) &&
+                    (NormalUvScaling_X == other.NormalUvScaling_X) &&
+                    (NormalUvScaling_Y == other.NormalUvScaling_Y) &&
+                    (NormalUvOffset_X == other.NormalUvOffset_X) &&
+                    (NormalUvOffset_Y == other.NormalUvOffset_Y) &&
                     (NormalAmount == other.NormalAmount) &&
                     (Glossiness == other.Glossiness) &&
                     (Smoothness == other.Smoothness) &&
@@ -952,12 +996,12 @@ namespace Vim.Format.ObjectModel {
     // AUTO-GENERATED
     public partial class MaterialInElement
     {
-        public Material Material => _Material.Value;
-        public Element Element => _Element.Value;
+        public Vim.ObjectModel.Material Material => _Material.Value;
+        public Vim.ObjectModel.Element Element => _Element.Value;
         public MaterialInElement()
         {
-            _Material = new Relation<Material>();
-            _Element = new Relation<Element>();
+            _Material = new Relation<Vim.ObjectModel.Material>();
+            _Element = new Relation<Vim.ObjectModel.Element>();
         }
         
         public override bool FieldsAreEqual(object obj)
@@ -986,12 +1030,12 @@ namespace Vim.Format.ObjectModel {
     // AUTO-GENERATED
     public partial class CompoundStructureLayer
     {
-        public Material Material => _Material.Value;
-        public CompoundStructure CompoundStructure => _CompoundStructure.Value;
+        public Vim.ObjectModel.Material Material => _Material.Value;
+        public Vim.ObjectModel.CompoundStructure CompoundStructure => _CompoundStructure.Value;
         public CompoundStructureLayer()
         {
-            _Material = new Relation<Material>();
-            _CompoundStructure = new Relation<CompoundStructure>();
+            _Material = new Relation<Vim.ObjectModel.Material>();
+            _CompoundStructure = new Relation<Vim.ObjectModel.CompoundStructure>();
         }
         
         public override bool FieldsAreEqual(object obj)
@@ -1020,10 +1064,10 @@ namespace Vim.Format.ObjectModel {
     // AUTO-GENERATED
     public partial class CompoundStructure
     {
-        public CompoundStructureLayer StructuralLayer => _StructuralLayer.Value;
+        public Vim.ObjectModel.CompoundStructureLayer StructuralLayer => _StructuralLayer.Value;
         public CompoundStructure()
         {
-            _StructuralLayer = new Relation<CompoundStructureLayer>();
+            _StructuralLayer = new Relation<Vim.ObjectModel.CompoundStructureLayer>();
         }
         
         public override bool FieldsAreEqual(object obj)
@@ -1049,10 +1093,10 @@ namespace Vim.Format.ObjectModel {
     // AUTO-GENERATED
     public partial class Node
     {
-        public Element Element => _Element.Value;
+        public Vim.ObjectModel.Element Element => _Element.Value;
         public Node()
         {
-            _Element = new Relation<Element>();
+            _Element = new Relation<Vim.ObjectModel.Element>();
         }
         
         public override bool FieldsAreEqual(object obj)
@@ -1087,7 +1131,12 @@ namespace Vim.Format.ObjectModel {
             {
                 var fieldsAreEqual =
                     (Index == other.Index) &&
-                    (Box == other.Box) &&
+                    (Box_Min_X == other.Box_Min_X) &&
+                    (Box_Min_Y == other.Box_Min_Y) &&
+                    (Box_Min_Z == other.Box_Min_Z) &&
+                    (Box_Max_X == other.Box_Max_X) &&
+                    (Box_Max_Y == other.Box_Max_Y) &&
+                    (Box_Max_Z == other.Box_Max_Z) &&
                     (VertexCount == other.VertexCount) &&
                     (FaceCount == other.FaceCount);
                 if (!fieldsAreEqual)
@@ -1105,10 +1154,10 @@ namespace Vim.Format.ObjectModel {
     // AUTO-GENERATED
     public partial class Shape
     {
-        public Element Element => _Element.Value;
+        public Vim.ObjectModel.Element Element => _Element.Value;
         public Shape()
         {
-            _Element = new Relation<Element>();
+            _Element = new Relation<Vim.ObjectModel.Element>();
         }
         
         public override bool FieldsAreEqual(object obj)
@@ -1133,10 +1182,10 @@ namespace Vim.Format.ObjectModel {
     // AUTO-GENERATED
     public partial class ShapeCollection
     {
-        public Element Element => _Element.Value;
+        public Vim.ObjectModel.Element Element => _Element.Value;
         public ShapeCollection()
         {
-            _Element = new Relation<Element>();
+            _Element = new Relation<Vim.ObjectModel.Element>();
         }
         
         public override bool FieldsAreEqual(object obj)
@@ -1161,12 +1210,12 @@ namespace Vim.Format.ObjectModel {
     // AUTO-GENERATED
     public partial class ShapeInShapeCollection
     {
-        public Shape Shape => _Shape.Value;
-        public ShapeCollection ShapeCollection => _ShapeCollection.Value;
+        public Vim.ObjectModel.Shape Shape => _Shape.Value;
+        public Vim.ObjectModel.ShapeCollection ShapeCollection => _ShapeCollection.Value;
         public ShapeInShapeCollection()
         {
-            _Shape = new Relation<Shape>();
-            _ShapeCollection = new Relation<ShapeCollection>();
+            _Shape = new Relation<Vim.ObjectModel.Shape>();
+            _ShapeCollection = new Relation<Vim.ObjectModel.ShapeCollection>();
         }
         
         public override bool FieldsAreEqual(object obj)
@@ -1192,12 +1241,12 @@ namespace Vim.Format.ObjectModel {
     // AUTO-GENERATED
     public partial class System
     {
-        public FamilyType FamilyType => _FamilyType.Value;
-        public Element Element => _Element.Value;
+        public Vim.ObjectModel.FamilyType FamilyType => _FamilyType.Value;
+        public Vim.ObjectModel.Element Element => _Element.Value;
         public System()
         {
-            _FamilyType = new Relation<FamilyType>();
-            _Element = new Relation<Element>();
+            _FamilyType = new Relation<Vim.ObjectModel.FamilyType>();
+            _Element = new Relation<Vim.ObjectModel.Element>();
         }
         
         public override bool FieldsAreEqual(object obj)
@@ -1224,12 +1273,12 @@ namespace Vim.Format.ObjectModel {
     // AUTO-GENERATED
     public partial class ElementInSystem
     {
-        public System System => _System.Value;
-        public Element Element => _Element.Value;
+        public Vim.ObjectModel.System System => _System.Value;
+        public Vim.ObjectModel.Element Element => _Element.Value;
         public ElementInSystem()
         {
-            _System = new Relation<System>();
-            _Element = new Relation<Element>();
+            _System = new Relation<Vim.ObjectModel.System>();
+            _Element = new Relation<Vim.ObjectModel.Element>();
         }
         
         public override bool FieldsAreEqual(object obj)
@@ -1256,10 +1305,10 @@ namespace Vim.Format.ObjectModel {
     // AUTO-GENERATED
     public partial class Warning
     {
-        public BimDocument BimDocument => _BimDocument.Value;
+        public Vim.ObjectModel.BimDocument BimDocument => _BimDocument.Value;
         public Warning()
         {
-            _BimDocument = new Relation<BimDocument>();
+            _BimDocument = new Relation<Vim.ObjectModel.BimDocument>();
         }
         
         public override bool FieldsAreEqual(object obj)
@@ -1287,12 +1336,12 @@ namespace Vim.Format.ObjectModel {
     // AUTO-GENERATED
     public partial class ElementInWarning
     {
-        public Warning Warning => _Warning.Value;
-        public Element Element => _Element.Value;
+        public Vim.ObjectModel.Warning Warning => _Warning.Value;
+        public Vim.ObjectModel.Element Element => _Element.Value;
         public ElementInWarning()
         {
-            _Warning = new Relation<Warning>();
-            _Element = new Relation<Element>();
+            _Warning = new Relation<Vim.ObjectModel.Warning>();
+            _Element = new Relation<Vim.ObjectModel.Element>();
         }
         
         public override bool FieldsAreEqual(object obj)
@@ -1318,10 +1367,10 @@ namespace Vim.Format.ObjectModel {
     // AUTO-GENERATED
     public partial class BasePoint
     {
-        public Element Element => _Element.Value;
+        public Vim.ObjectModel.Element Element => _Element.Value;
         public BasePoint()
         {
-            _Element = new Relation<Element>();
+            _Element = new Relation<Vim.ObjectModel.Element>();
         }
         
         public override bool FieldsAreEqual(object obj)
@@ -1331,8 +1380,12 @@ namespace Vim.Format.ObjectModel {
                 var fieldsAreEqual =
                     (Index == other.Index) &&
                     (IsSurveyPoint == other.IsSurveyPoint) &&
-                    (Position == other.Position) &&
-                    (SharedPosition == other.SharedPosition) &&
+                    (Position_X == other.Position_X) &&
+                    (Position_Y == other.Position_Y) &&
+                    (Position_Z == other.Position_Z) &&
+                    (SharedPosition_X == other.SharedPosition_X) &&
+                    (SharedPosition_Y == other.SharedPosition_Y) &&
+                    (SharedPosition_Z == other.SharedPosition_Z) &&
                     (_Element?.Index == other._Element?.Index);
                 if (!fieldsAreEqual)
                 {
@@ -1349,10 +1402,10 @@ namespace Vim.Format.ObjectModel {
     // AUTO-GENERATED
     public partial class PhaseFilter
     {
-        public Element Element => _Element.Value;
+        public Vim.ObjectModel.Element Element => _Element.Value;
         public PhaseFilter()
         {
-            _Element = new Relation<Element>();
+            _Element = new Relation<Vim.ObjectModel.Element>();
         }
         
         public override bool FieldsAreEqual(object obj)
@@ -1381,12 +1434,12 @@ namespace Vim.Format.ObjectModel {
     // AUTO-GENERATED
     public partial class Grid
     {
-        public FamilyType FamilyType => _FamilyType.Value;
-        public Element Element => _Element.Value;
+        public Vim.ObjectModel.FamilyType FamilyType => _FamilyType.Value;
+        public Vim.ObjectModel.Element Element => _Element.Value;
         public Grid()
         {
-            _FamilyType = new Relation<FamilyType>();
-            _Element = new Relation<Element>();
+            _FamilyType = new Relation<Vim.ObjectModel.FamilyType>();
+            _Element = new Relation<Vim.ObjectModel.Element>();
         }
         
         public override bool FieldsAreEqual(object obj)
@@ -1395,10 +1448,19 @@ namespace Vim.Format.ObjectModel {
             {
                 var fieldsAreEqual =
                     (Index == other.Index) &&
-                    (StartPoint == other.StartPoint) &&
-                    (EndPoint == other.EndPoint) &&
+                    (StartPoint_X == other.StartPoint_X) &&
+                    (StartPoint_Y == other.StartPoint_Y) &&
+                    (StartPoint_Z == other.StartPoint_Z) &&
+                    (EndPoint_X == other.EndPoint_X) &&
+                    (EndPoint_Y == other.EndPoint_Y) &&
+                    (EndPoint_Z == other.EndPoint_Z) &&
                     (IsCurved == other.IsCurved) &&
-                    (Extents == other.Extents) &&
+                    (Extents_Min_X == other.Extents_Min_X) &&
+                    (Extents_Min_Y == other.Extents_Min_Y) &&
+                    (Extents_Min_Z == other.Extents_Min_Z) &&
+                    (Extents_Max_X == other.Extents_Max_X) &&
+                    (Extents_Max_Y == other.Extents_Max_Y) &&
+                    (Extents_Max_Z == other.Extents_Max_Z) &&
                     (_FamilyType?.Index == other._FamilyType?.Index) &&
                     (_Element?.Index == other._Element?.Index);
                 if (!fieldsAreEqual)
@@ -1416,12 +1478,12 @@ namespace Vim.Format.ObjectModel {
     // AUTO-GENERATED
     public partial class Area
     {
-        public AreaScheme AreaScheme => _AreaScheme.Value;
-        public Element Element => _Element.Value;
+        public Vim.ObjectModel.AreaScheme AreaScheme => _AreaScheme.Value;
+        public Vim.ObjectModel.Element Element => _Element.Value;
         public Area()
         {
-            _AreaScheme = new Relation<AreaScheme>();
-            _Element = new Relation<Element>();
+            _AreaScheme = new Relation<Vim.ObjectModel.AreaScheme>();
+            _Element = new Relation<Vim.ObjectModel.Element>();
         }
         
         public override bool FieldsAreEqual(object obj)
@@ -1451,10 +1513,10 @@ namespace Vim.Format.ObjectModel {
     // AUTO-GENERATED
     public partial class AreaScheme
     {
-        public Element Element => _Element.Value;
+        public Vim.ObjectModel.Element Element => _Element.Value;
         public AreaScheme()
         {
-            _Element = new Relation<Element>();
+            _Element = new Relation<Vim.ObjectModel.Element>();
         }
         
         public override bool FieldsAreEqual(object obj)
@@ -1480,10 +1542,10 @@ namespace Vim.Format.ObjectModel {
     // AUTO-GENERATED
     public partial class Schedule
     {
-        public Element Element => _Element.Value;
+        public Vim.ObjectModel.Element Element => _Element.Value;
         public Schedule()
         {
-            _Element = new Relation<Element>();
+            _Element = new Relation<Vim.ObjectModel.Element>();
         }
         
         public override bool FieldsAreEqual(object obj)
@@ -1508,10 +1570,10 @@ namespace Vim.Format.ObjectModel {
     // AUTO-GENERATED
     public partial class ScheduleColumn
     {
-        public Schedule Schedule => _Schedule.Value;
+        public Vim.ObjectModel.Schedule Schedule => _Schedule.Value;
         public ScheduleColumn()
         {
-            _Schedule = new Relation<Schedule>();
+            _Schedule = new Relation<Vim.ObjectModel.Schedule>();
         }
         
         public override bool FieldsAreEqual(object obj)
@@ -1538,10 +1600,10 @@ namespace Vim.Format.ObjectModel {
     // AUTO-GENERATED
     public partial class ScheduleCell
     {
-        public ScheduleColumn ScheduleColumn => _ScheduleColumn.Value;
+        public Vim.ObjectModel.ScheduleColumn ScheduleColumn => _ScheduleColumn.Value;
         public ScheduleCell()
         {
-            _ScheduleColumn = new Relation<ScheduleColumn>();
+            _ScheduleColumn = new Relation<Vim.ObjectModel.ScheduleColumn>();
         }
         
         public override bool FieldsAreEqual(object obj)
@@ -1651,7 +1713,7 @@ namespace Vim.Format.ObjectModel {
             r.IsReadOnly = ParameterDescriptorIsReadOnly.ElementAtOrDefault(n);
             r.Flags = ParameterDescriptorFlags.ElementAtOrDefault(n);
             r.Guid = ParameterDescriptorGuid.ElementAtOrDefault(n);
-            r._DisplayUnit = new Relation<DisplayUnit>(GetParameterDescriptorDisplayUnitIndex(n), GetDisplayUnit);
+            r._DisplayUnit = new Relation<Vim.ObjectModel.DisplayUnit>(GetParameterDescriptorDisplayUnitIndex(n), GetDisplayUnit);
             return r;
         }
         
@@ -1675,8 +1737,8 @@ namespace Vim.Format.ObjectModel {
             r.Document = Document;
             r.Index = n;
             r.Value = ParameterValue.ElementAtOrDefault(n);
-            r._ParameterDescriptor = new Relation<ParameterDescriptor>(GetParameterParameterDescriptorIndex(n), GetParameterDescriptor);
-            r._Element = new Relation<Element>(GetParameterElementIndex(n), GetElement);
+            r._ParameterDescriptor = new Relation<Vim.ObjectModel.ParameterDescriptor>(GetParameterParameterDescriptorIndex(n), GetParameterDescriptor);
+            r._Element = new Relation<Vim.ObjectModel.Element>(GetParameterElementIndex(n), GetElement);
             return r;
         }
         
@@ -1685,16 +1747,20 @@ namespace Vim.Format.ObjectModel {
         
         public EntityTable ElementEntityTable { get; }
         
-        public IArray<Int32> ElementId { get; }
-        public Int32 GetElementId(int index, Int32 defaultValue = default) => ElementId?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Int64> ElementId { get; }
+        public Int64 GetElementId(int index, Int64 defaultValue = default) => ElementId?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
         public IArray<String> ElementType { get; }
         public String GetElementType(int index, String defaultValue = "") => ElementType?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
         public IArray<String> ElementName { get; }
         public String GetElementName(int index, String defaultValue = "") => ElementName?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
         public IArray<String> ElementUniqueId { get; }
         public String GetElementUniqueId(int index, String defaultValue = "") => ElementUniqueId?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IArray<Vector3> ElementLocation { get; }
-        public Vector3 GetElementLocation(int index, Vector3 defaultValue = default) => ElementLocation?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Single> ElementLocation_X { get; }
+        public Single GetElementLocation_X(int index, Single defaultValue = default) => ElementLocation_X?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Single> ElementLocation_Y { get; }
+        public Single GetElementLocation_Y(int index, Single defaultValue = default) => ElementLocation_Y?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Single> ElementLocation_Z { get; }
+        public Single GetElementLocation_Z(int index, Single defaultValue = default) => ElementLocation_Z?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
         public IArray<String> ElementFamilyName { get; }
         public String GetElementFamilyName(int index, String defaultValue = "") => ElementFamilyName?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
         public IArray<Boolean> ElementIsPinned { get; }
@@ -1733,20 +1799,22 @@ namespace Vim.Format.ObjectModel {
             r.Type = ElementType.ElementAtOrDefault(n);
             r.Name = ElementName.ElementAtOrDefault(n);
             r.UniqueId = ElementUniqueId.ElementAtOrDefault(n);
-            r.Location = ElementLocation.ElementAtOrDefault(n);
+            r.Location_X = ElementLocation_X.ElementAtOrDefault(n);
+            r.Location_Y = ElementLocation_Y.ElementAtOrDefault(n);
+            r.Location_Z = ElementLocation_Z.ElementAtOrDefault(n);
             r.FamilyName = ElementFamilyName.ElementAtOrDefault(n);
             r.IsPinned = ElementIsPinned.ElementAtOrDefault(n);
-            r._Level = new Relation<Level>(GetElementLevelIndex(n), GetLevel);
-            r._PhaseCreated = new Relation<Phase>(GetElementPhaseCreatedIndex(n), GetPhase);
-            r._PhaseDemolished = new Relation<Phase>(GetElementPhaseDemolishedIndex(n), GetPhase);
-            r._Category = new Relation<Category>(GetElementCategoryIndex(n), GetCategory);
-            r._Workset = new Relation<Workset>(GetElementWorksetIndex(n), GetWorkset);
-            r._DesignOption = new Relation<DesignOption>(GetElementDesignOptionIndex(n), GetDesignOption);
-            r._OwnerView = new Relation<View>(GetElementOwnerViewIndex(n), GetView);
-            r._Group = new Relation<Group>(GetElementGroupIndex(n), GetGroup);
-            r._AssemblyInstance = new Relation<AssemblyInstance>(GetElementAssemblyInstanceIndex(n), GetAssemblyInstance);
-            r._BimDocument = new Relation<BimDocument>(GetElementBimDocumentIndex(n), GetBimDocument);
-            r._Room = new Relation<Room>(GetElementRoomIndex(n), GetRoom);
+            r._Level = new Relation<Vim.ObjectModel.Level>(GetElementLevelIndex(n), GetLevel);
+            r._PhaseCreated = new Relation<Vim.ObjectModel.Phase>(GetElementPhaseCreatedIndex(n), GetPhase);
+            r._PhaseDemolished = new Relation<Vim.ObjectModel.Phase>(GetElementPhaseDemolishedIndex(n), GetPhase);
+            r._Category = new Relation<Vim.ObjectModel.Category>(GetElementCategoryIndex(n), GetCategory);
+            r._Workset = new Relation<Vim.ObjectModel.Workset>(GetElementWorksetIndex(n), GetWorkset);
+            r._DesignOption = new Relation<Vim.ObjectModel.DesignOption>(GetElementDesignOptionIndex(n), GetDesignOption);
+            r._OwnerView = new Relation<Vim.ObjectModel.View>(GetElementOwnerViewIndex(n), GetView);
+            r._Group = new Relation<Vim.ObjectModel.Group>(GetElementGroupIndex(n), GetGroup);
+            r._AssemblyInstance = new Relation<Vim.ObjectModel.AssemblyInstance>(GetElementAssemblyInstanceIndex(n), GetAssemblyInstance);
+            r._BimDocument = new Relation<Vim.ObjectModel.BimDocument>(GetElementBimDocumentIndex(n), GetBimDocument);
+            r._Room = new Relation<Vim.ObjectModel.Room>(GetElementRoomIndex(n), GetRoom);
             return r;
         }
         
@@ -1786,7 +1854,7 @@ namespace Vim.Format.ObjectModel {
             r.IsEditable = WorksetIsEditable.ElementAtOrDefault(n);
             r.Owner = WorksetOwner.ElementAtOrDefault(n);
             r.UniqueId = WorksetUniqueId.ElementAtOrDefault(n);
-            r._BimDocument = new Relation<BimDocument>(GetWorksetBimDocumentIndex(n), GetBimDocument);
+            r._BimDocument = new Relation<Vim.ObjectModel.BimDocument>(GetWorksetBimDocumentIndex(n), GetBimDocument);
             return r;
         }
         
@@ -1797,8 +1865,12 @@ namespace Vim.Format.ObjectModel {
         
         public IArray<String> AssemblyInstanceAssemblyTypeName { get; }
         public String GetAssemblyInstanceAssemblyTypeName(int index, String defaultValue = "") => AssemblyInstanceAssemblyTypeName?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IArray<Vector3> AssemblyInstancePosition { get; }
-        public Vector3 GetAssemblyInstancePosition(int index, Vector3 defaultValue = default) => AssemblyInstancePosition?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Single> AssemblyInstancePosition_X { get; }
+        public Single GetAssemblyInstancePosition_X(int index, Single defaultValue = default) => AssemblyInstancePosition_X?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Single> AssemblyInstancePosition_Y { get; }
+        public Single GetAssemblyInstancePosition_Y(int index, Single defaultValue = default) => AssemblyInstancePosition_Y?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Single> AssemblyInstancePosition_Z { get; }
+        public Single GetAssemblyInstancePosition_Z(int index, Single defaultValue = default) => AssemblyInstancePosition_Z?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
         public IArray<int> AssemblyInstanceElementIndex { get; }
         public int GetAssemblyInstanceElementIndex(int index) => AssemblyInstanceElementIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
         public int NumAssemblyInstance => AssemblyInstanceEntityTable?.NumRows ?? 0;
@@ -1810,8 +1882,10 @@ namespace Vim.Format.ObjectModel {
             r.Document = Document;
             r.Index = n;
             r.AssemblyTypeName = AssemblyInstanceAssemblyTypeName.ElementAtOrDefault(n);
-            r.Position = AssemblyInstancePosition.ElementAtOrDefault(n);
-            r._Element = new Relation<Element>(GetAssemblyInstanceElementIndex(n), GetElement);
+            r.Position_X = AssemblyInstancePosition_X.ElementAtOrDefault(n);
+            r.Position_Y = AssemblyInstancePosition_Y.ElementAtOrDefault(n);
+            r.Position_Z = AssemblyInstancePosition_Z.ElementAtOrDefault(n);
+            r._Element = new Relation<Vim.ObjectModel.Element>(GetAssemblyInstanceElementIndex(n), GetElement);
             return r;
         }
         
@@ -1822,8 +1896,12 @@ namespace Vim.Format.ObjectModel {
         
         public IArray<String> GroupGroupType { get; }
         public String GetGroupGroupType(int index, String defaultValue = "") => GroupGroupType?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IArray<Vector3> GroupPosition { get; }
-        public Vector3 GetGroupPosition(int index, Vector3 defaultValue = default) => GroupPosition?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Single> GroupPosition_X { get; }
+        public Single GetGroupPosition_X(int index, Single defaultValue = default) => GroupPosition_X?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Single> GroupPosition_Y { get; }
+        public Single GetGroupPosition_Y(int index, Single defaultValue = default) => GroupPosition_Y?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Single> GroupPosition_Z { get; }
+        public Single GetGroupPosition_Z(int index, Single defaultValue = default) => GroupPosition_Z?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
         public IArray<int> GroupElementIndex { get; }
         public int GetGroupElementIndex(int index) => GroupElementIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
         public int NumGroup => GroupEntityTable?.NumRows ?? 0;
@@ -1835,8 +1913,10 @@ namespace Vim.Format.ObjectModel {
             r.Document = Document;
             r.Index = n;
             r.GroupType = GroupGroupType.ElementAtOrDefault(n);
-            r.Position = GroupPosition.ElementAtOrDefault(n);
-            r._Element = new Relation<Element>(GetGroupElementIndex(n), GetElement);
+            r.Position_X = GroupPosition_X.ElementAtOrDefault(n);
+            r.Position_Y = GroupPosition_Y.ElementAtOrDefault(n);
+            r.Position_Z = GroupPosition_Z.ElementAtOrDefault(n);
+            r._Element = new Relation<Vim.ObjectModel.Element>(GetGroupElementIndex(n), GetElement);
             return r;
         }
         
@@ -1858,7 +1938,7 @@ namespace Vim.Format.ObjectModel {
             r.Document = Document;
             r.Index = n;
             r.IsPrimary = DesignOptionIsPrimary.ElementAtOrDefault(n);
-            r._Element = new Relation<Element>(GetDesignOptionElementIndex(n), GetElement);
+            r._Element = new Relation<Vim.ObjectModel.Element>(GetDesignOptionElementIndex(n), GetElement);
             return r;
         }
         
@@ -1882,8 +1962,8 @@ namespace Vim.Format.ObjectModel {
             r.Document = Document;
             r.Index = n;
             r.Elevation = LevelElevation.ElementAtOrDefault(n);
-            r._FamilyType = new Relation<FamilyType>(GetLevelFamilyTypeIndex(n), GetFamilyType);
-            r._Element = new Relation<Element>(GetLevelElementIndex(n), GetElement);
+            r._FamilyType = new Relation<Vim.ObjectModel.FamilyType>(GetLevelFamilyTypeIndex(n), GetFamilyType);
+            r._Element = new Relation<Vim.ObjectModel.Element>(GetLevelElementIndex(n), GetElement);
             return r;
         }
         
@@ -1902,7 +1982,7 @@ namespace Vim.Format.ObjectModel {
             var r = new Phase();
             r.Document = Document;
             r.Index = n;
-            r._Element = new Relation<Element>(GetPhaseElementIndex(n), GetElement);
+            r._Element = new Relation<Vim.ObjectModel.Element>(GetPhaseElementIndex(n), GetElement);
             return r;
         }
         
@@ -1944,8 +2024,8 @@ namespace Vim.Format.ObjectModel {
             r.Perimeter = RoomPerimeter.ElementAtOrDefault(n);
             r.Area = RoomArea.ElementAtOrDefault(n);
             r.Number = RoomNumber.ElementAtOrDefault(n);
-            r._UpperLimit = new Relation<Level>(GetRoomUpperLimitIndex(n), GetLevel);
-            r._Element = new Relation<Element>(GetRoomElementIndex(n), GetElement);
+            r._UpperLimit = new Relation<Vim.ObjectModel.Level>(GetRoomUpperLimitIndex(n), GetLevel);
+            r._Element = new Relation<Vim.ObjectModel.Element>(GetRoomElementIndex(n), GetElement);
             return r;
         }
         
@@ -2054,10 +2134,10 @@ namespace Vim.Format.ObjectModel {
             r.Product = BimDocumentProduct.ElementAtOrDefault(n);
             r.Version = BimDocumentVersion.ElementAtOrDefault(n);
             r.User = BimDocumentUser.ElementAtOrDefault(n);
-            r._ActiveView = new Relation<View>(GetBimDocumentActiveViewIndex(n), GetView);
-            r._OwnerFamily = new Relation<Family>(GetBimDocumentOwnerFamilyIndex(n), GetFamily);
-            r._Parent = new Relation<BimDocument>(GetBimDocumentParentIndex(n), GetBimDocument);
-            r._Element = new Relation<Element>(GetBimDocumentElementIndex(n), GetElement);
+            r._ActiveView = new Relation<Vim.ObjectModel.View>(GetBimDocumentActiveViewIndex(n), GetView);
+            r._OwnerFamily = new Relation<Vim.ObjectModel.Family>(GetBimDocumentOwnerFamilyIndex(n), GetFamily);
+            r._Parent = new Relation<Vim.ObjectModel.BimDocument>(GetBimDocumentParentIndex(n), GetBimDocument);
+            r._Element = new Relation<Vim.ObjectModel.Element>(GetBimDocumentElementIndex(n), GetElement);
             return r;
         }
         
@@ -2078,8 +2158,8 @@ namespace Vim.Format.ObjectModel {
             var r = new DisplayUnitInBimDocument();
             r.Document = Document;
             r.Index = n;
-            r._DisplayUnit = new Relation<DisplayUnit>(GetDisplayUnitInBimDocumentDisplayUnitIndex(n), GetDisplayUnit);
-            r._BimDocument = new Relation<BimDocument>(GetDisplayUnitInBimDocumentBimDocumentIndex(n), GetBimDocument);
+            r._DisplayUnit = new Relation<Vim.ObjectModel.DisplayUnit>(GetDisplayUnitInBimDocumentDisplayUnitIndex(n), GetDisplayUnit);
+            r._BimDocument = new Relation<Vim.ObjectModel.BimDocument>(GetDisplayUnitInBimDocumentBimDocumentIndex(n), GetBimDocument);
             return r;
         }
         
@@ -2103,8 +2183,8 @@ namespace Vim.Format.ObjectModel {
             r.Document = Document;
             r.Index = n;
             r.OrderIndex = PhaseOrderInBimDocumentOrderIndex.ElementAtOrDefault(n);
-            r._Phase = new Relation<Phase>(GetPhaseOrderInBimDocumentPhaseIndex(n), GetPhase);
-            r._BimDocument = new Relation<BimDocument>(GetPhaseOrderInBimDocumentBimDocumentIndex(n), GetBimDocument);
+            r._Phase = new Relation<Vim.ObjectModel.Phase>(GetPhaseOrderInBimDocumentPhaseIndex(n), GetPhase);
+            r._BimDocument = new Relation<Vim.ObjectModel.BimDocument>(GetPhaseOrderInBimDocumentBimDocumentIndex(n), GetBimDocument);
             return r;
         }
         
@@ -2115,12 +2195,16 @@ namespace Vim.Format.ObjectModel {
         
         public IArray<String> CategoryName { get; }
         public String GetCategoryName(int index, String defaultValue = "") => CategoryName?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IArray<Int32> CategoryId { get; }
-        public Int32 GetCategoryId(int index, Int32 defaultValue = default) => CategoryId?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Int64> CategoryId { get; }
+        public Int64 GetCategoryId(int index, Int64 defaultValue = default) => CategoryId?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
         public IArray<String> CategoryCategoryType { get; }
         public String GetCategoryCategoryType(int index, String defaultValue = "") => CategoryCategoryType?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IArray<DVector3> CategoryLineColor { get; }
-        public DVector3 GetCategoryLineColor(int index, DVector3 defaultValue = default) => CategoryLineColor?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> CategoryLineColor_X { get; }
+        public Double GetCategoryLineColor_X(int index, Double defaultValue = default) => CategoryLineColor_X?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> CategoryLineColor_Y { get; }
+        public Double GetCategoryLineColor_Y(int index, Double defaultValue = default) => CategoryLineColor_Y?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> CategoryLineColor_Z { get; }
+        public Double GetCategoryLineColor_Z(int index, Double defaultValue = default) => CategoryLineColor_Z?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
         public IArray<String> CategoryBuiltInCategory { get; }
         public String GetCategoryBuiltInCategory(int index, String defaultValue = "") => CategoryBuiltInCategory?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
         public IArray<int> CategoryParentIndex { get; }
@@ -2138,10 +2222,12 @@ namespace Vim.Format.ObjectModel {
             r.Name = CategoryName.ElementAtOrDefault(n);
             r.Id = CategoryId.ElementAtOrDefault(n);
             r.CategoryType = CategoryCategoryType.ElementAtOrDefault(n);
-            r.LineColor = CategoryLineColor.ElementAtOrDefault(n);
+            r.LineColor_X = CategoryLineColor_X.ElementAtOrDefault(n);
+            r.LineColor_Y = CategoryLineColor_Y.ElementAtOrDefault(n);
+            r.LineColor_Z = CategoryLineColor_Z.ElementAtOrDefault(n);
             r.BuiltInCategory = CategoryBuiltInCategory.ElementAtOrDefault(n);
-            r._Parent = new Relation<Category>(GetCategoryParentIndex(n), GetCategory);
-            r._Material = new Relation<Material>(GetCategoryMaterialIndex(n), GetMaterial);
+            r._Parent = new Relation<Vim.ObjectModel.Category>(GetCategoryParentIndex(n), GetCategory);
+            r._Material = new Relation<Vim.ObjectModel.Material>(GetCategoryMaterialIndex(n), GetMaterial);
             return r;
         }
         
@@ -2174,8 +2260,8 @@ namespace Vim.Format.ObjectModel {
             r.StructuralSectionShape = FamilyStructuralSectionShape.ElementAtOrDefault(n);
             r.IsSystemFamily = FamilyIsSystemFamily.ElementAtOrDefault(n);
             r.IsInPlace = FamilyIsInPlace.ElementAtOrDefault(n);
-            r._FamilyCategory = new Relation<Category>(GetFamilyFamilyCategoryIndex(n), GetCategory);
-            r._Element = new Relation<Element>(GetFamilyElementIndex(n), GetElement);
+            r._FamilyCategory = new Relation<Vim.ObjectModel.Category>(GetFamilyFamilyCategoryIndex(n), GetCategory);
+            r._Element = new Relation<Vim.ObjectModel.Element>(GetFamilyElementIndex(n), GetElement);
             return r;
         }
         
@@ -2201,9 +2287,9 @@ namespace Vim.Format.ObjectModel {
             r.Document = Document;
             r.Index = n;
             r.IsSystemFamilyType = FamilyTypeIsSystemFamilyType.ElementAtOrDefault(n);
-            r._Family = new Relation<Family>(GetFamilyTypeFamilyIndex(n), GetFamily);
-            r._CompoundStructure = new Relation<CompoundStructure>(GetFamilyTypeCompoundStructureIndex(n), GetCompoundStructure);
-            r._Element = new Relation<Element>(GetFamilyTypeElementIndex(n), GetElement);
+            r._Family = new Relation<Vim.ObjectModel.Family>(GetFamilyTypeFamilyIndex(n), GetFamily);
+            r._CompoundStructure = new Relation<Vim.ObjectModel.CompoundStructure>(GetFamilyTypeCompoundStructureIndex(n), GetCompoundStructure);
+            r._Element = new Relation<Vim.ObjectModel.Element>(GetFamilyTypeElementIndex(n), GetElement);
             return r;
         }
         
@@ -2214,8 +2300,12 @@ namespace Vim.Format.ObjectModel {
         
         public IArray<Boolean> FamilyInstanceFacingFlipped { get; }
         public Boolean GetFamilyInstanceFacingFlipped(int index, Boolean defaultValue = default) => FamilyInstanceFacingFlipped?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IArray<Vector3> FamilyInstanceFacingOrientation { get; }
-        public Vector3 GetFamilyInstanceFacingOrientation(int index, Vector3 defaultValue = default) => FamilyInstanceFacingOrientation?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Single> FamilyInstanceFacingOrientation_X { get; }
+        public Single GetFamilyInstanceFacingOrientation_X(int index, Single defaultValue = default) => FamilyInstanceFacingOrientation_X?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Single> FamilyInstanceFacingOrientation_Y { get; }
+        public Single GetFamilyInstanceFacingOrientation_Y(int index, Single defaultValue = default) => FamilyInstanceFacingOrientation_Y?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Single> FamilyInstanceFacingOrientation_Z { get; }
+        public Single GetFamilyInstanceFacingOrientation_Z(int index, Single defaultValue = default) => FamilyInstanceFacingOrientation_Z?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
         public IArray<Boolean> FamilyInstanceHandFlipped { get; }
         public Boolean GetFamilyInstanceHandFlipped(int index, Boolean defaultValue = default) => FamilyInstanceHandFlipped?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
         public IArray<Boolean> FamilyInstanceMirrored { get; }
@@ -2224,16 +2314,36 @@ namespace Vim.Format.ObjectModel {
         public Boolean GetFamilyInstanceHasModifiedGeometry(int index, Boolean defaultValue = default) => FamilyInstanceHasModifiedGeometry?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
         public IArray<Single> FamilyInstanceScale { get; }
         public Single GetFamilyInstanceScale(int index, Single defaultValue = default) => FamilyInstanceScale?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IArray<Vector3> FamilyInstanceBasisX { get; }
-        public Vector3 GetFamilyInstanceBasisX(int index, Vector3 defaultValue = default) => FamilyInstanceBasisX?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IArray<Vector3> FamilyInstanceBasisY { get; }
-        public Vector3 GetFamilyInstanceBasisY(int index, Vector3 defaultValue = default) => FamilyInstanceBasisY?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IArray<Vector3> FamilyInstanceBasisZ { get; }
-        public Vector3 GetFamilyInstanceBasisZ(int index, Vector3 defaultValue = default) => FamilyInstanceBasisZ?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IArray<Vector3> FamilyInstanceTranslation { get; }
-        public Vector3 GetFamilyInstanceTranslation(int index, Vector3 defaultValue = default) => FamilyInstanceTranslation?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IArray<Vector3> FamilyInstanceHandOrientation { get; }
-        public Vector3 GetFamilyInstanceHandOrientation(int index, Vector3 defaultValue = default) => FamilyInstanceHandOrientation?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Single> FamilyInstanceBasisX_X { get; }
+        public Single GetFamilyInstanceBasisX_X(int index, Single defaultValue = default) => FamilyInstanceBasisX_X?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Single> FamilyInstanceBasisX_Y { get; }
+        public Single GetFamilyInstanceBasisX_Y(int index, Single defaultValue = default) => FamilyInstanceBasisX_Y?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Single> FamilyInstanceBasisX_Z { get; }
+        public Single GetFamilyInstanceBasisX_Z(int index, Single defaultValue = default) => FamilyInstanceBasisX_Z?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Single> FamilyInstanceBasisY_X { get; }
+        public Single GetFamilyInstanceBasisY_X(int index, Single defaultValue = default) => FamilyInstanceBasisY_X?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Single> FamilyInstanceBasisY_Y { get; }
+        public Single GetFamilyInstanceBasisY_Y(int index, Single defaultValue = default) => FamilyInstanceBasisY_Y?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Single> FamilyInstanceBasisY_Z { get; }
+        public Single GetFamilyInstanceBasisY_Z(int index, Single defaultValue = default) => FamilyInstanceBasisY_Z?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Single> FamilyInstanceBasisZ_X { get; }
+        public Single GetFamilyInstanceBasisZ_X(int index, Single defaultValue = default) => FamilyInstanceBasisZ_X?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Single> FamilyInstanceBasisZ_Y { get; }
+        public Single GetFamilyInstanceBasisZ_Y(int index, Single defaultValue = default) => FamilyInstanceBasisZ_Y?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Single> FamilyInstanceBasisZ_Z { get; }
+        public Single GetFamilyInstanceBasisZ_Z(int index, Single defaultValue = default) => FamilyInstanceBasisZ_Z?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Single> FamilyInstanceTranslation_X { get; }
+        public Single GetFamilyInstanceTranslation_X(int index, Single defaultValue = default) => FamilyInstanceTranslation_X?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Single> FamilyInstanceTranslation_Y { get; }
+        public Single GetFamilyInstanceTranslation_Y(int index, Single defaultValue = default) => FamilyInstanceTranslation_Y?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Single> FamilyInstanceTranslation_Z { get; }
+        public Single GetFamilyInstanceTranslation_Z(int index, Single defaultValue = default) => FamilyInstanceTranslation_Z?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Single> FamilyInstanceHandOrientation_X { get; }
+        public Single GetFamilyInstanceHandOrientation_X(int index, Single defaultValue = default) => FamilyInstanceHandOrientation_X?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Single> FamilyInstanceHandOrientation_Y { get; }
+        public Single GetFamilyInstanceHandOrientation_Y(int index, Single defaultValue = default) => FamilyInstanceHandOrientation_Y?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Single> FamilyInstanceHandOrientation_Z { get; }
+        public Single GetFamilyInstanceHandOrientation_Z(int index, Single defaultValue = default) => FamilyInstanceHandOrientation_Z?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
         public IArray<int> FamilyInstanceFamilyTypeIndex { get; }
         public int GetFamilyInstanceFamilyTypeIndex(int index) => FamilyInstanceFamilyTypeIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
         public IArray<int> FamilyInstanceHostIndex { get; }
@@ -2253,21 +2363,33 @@ namespace Vim.Format.ObjectModel {
             r.Document = Document;
             r.Index = n;
             r.FacingFlipped = FamilyInstanceFacingFlipped.ElementAtOrDefault(n);
-            r.FacingOrientation = FamilyInstanceFacingOrientation.ElementAtOrDefault(n);
+            r.FacingOrientation_X = FamilyInstanceFacingOrientation_X.ElementAtOrDefault(n);
+            r.FacingOrientation_Y = FamilyInstanceFacingOrientation_Y.ElementAtOrDefault(n);
+            r.FacingOrientation_Z = FamilyInstanceFacingOrientation_Z.ElementAtOrDefault(n);
             r.HandFlipped = FamilyInstanceHandFlipped.ElementAtOrDefault(n);
             r.Mirrored = FamilyInstanceMirrored.ElementAtOrDefault(n);
             r.HasModifiedGeometry = FamilyInstanceHasModifiedGeometry.ElementAtOrDefault(n);
             r.Scale = FamilyInstanceScale.ElementAtOrDefault(n);
-            r.BasisX = FamilyInstanceBasisX.ElementAtOrDefault(n);
-            r.BasisY = FamilyInstanceBasisY.ElementAtOrDefault(n);
-            r.BasisZ = FamilyInstanceBasisZ.ElementAtOrDefault(n);
-            r.Translation = FamilyInstanceTranslation.ElementAtOrDefault(n);
-            r.HandOrientation = FamilyInstanceHandOrientation.ElementAtOrDefault(n);
-            r._FamilyType = new Relation<FamilyType>(GetFamilyInstanceFamilyTypeIndex(n), GetFamilyType);
-            r._Host = new Relation<Element>(GetFamilyInstanceHostIndex(n), GetElement);
-            r._FromRoom = new Relation<Room>(GetFamilyInstanceFromRoomIndex(n), GetRoom);
-            r._ToRoom = new Relation<Room>(GetFamilyInstanceToRoomIndex(n), GetRoom);
-            r._Element = new Relation<Element>(GetFamilyInstanceElementIndex(n), GetElement);
+            r.BasisX_X = FamilyInstanceBasisX_X.ElementAtOrDefault(n);
+            r.BasisX_Y = FamilyInstanceBasisX_Y.ElementAtOrDefault(n);
+            r.BasisX_Z = FamilyInstanceBasisX_Z.ElementAtOrDefault(n);
+            r.BasisY_X = FamilyInstanceBasisY_X.ElementAtOrDefault(n);
+            r.BasisY_Y = FamilyInstanceBasisY_Y.ElementAtOrDefault(n);
+            r.BasisY_Z = FamilyInstanceBasisY_Z.ElementAtOrDefault(n);
+            r.BasisZ_X = FamilyInstanceBasisZ_X.ElementAtOrDefault(n);
+            r.BasisZ_Y = FamilyInstanceBasisZ_Y.ElementAtOrDefault(n);
+            r.BasisZ_Z = FamilyInstanceBasisZ_Z.ElementAtOrDefault(n);
+            r.Translation_X = FamilyInstanceTranslation_X.ElementAtOrDefault(n);
+            r.Translation_Y = FamilyInstanceTranslation_Y.ElementAtOrDefault(n);
+            r.Translation_Z = FamilyInstanceTranslation_Z.ElementAtOrDefault(n);
+            r.HandOrientation_X = FamilyInstanceHandOrientation_X.ElementAtOrDefault(n);
+            r.HandOrientation_Y = FamilyInstanceHandOrientation_Y.ElementAtOrDefault(n);
+            r.HandOrientation_Z = FamilyInstanceHandOrientation_Z.ElementAtOrDefault(n);
+            r._FamilyType = new Relation<Vim.ObjectModel.FamilyType>(GetFamilyInstanceFamilyTypeIndex(n), GetFamilyType);
+            r._Host = new Relation<Vim.ObjectModel.Element>(GetFamilyInstanceHostIndex(n), GetElement);
+            r._FromRoom = new Relation<Vim.ObjectModel.Room>(GetFamilyInstanceFromRoomIndex(n), GetRoom);
+            r._ToRoom = new Relation<Vim.ObjectModel.Room>(GetFamilyInstanceToRoomIndex(n), GetRoom);
+            r._Element = new Relation<Vim.ObjectModel.Element>(GetFamilyInstanceElementIndex(n), GetElement);
             return r;
         }
         
@@ -2280,20 +2402,46 @@ namespace Vim.Format.ObjectModel {
         public String GetViewTitle(int index, String defaultValue = "") => ViewTitle?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
         public IArray<String> ViewViewType { get; }
         public String GetViewViewType(int index, String defaultValue = "") => ViewViewType?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IArray<DVector3> ViewUp { get; }
-        public DVector3 GetViewUp(int index, DVector3 defaultValue = default) => ViewUp?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IArray<DVector3> ViewRight { get; }
-        public DVector3 GetViewRight(int index, DVector3 defaultValue = default) => ViewRight?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IArray<DVector3> ViewOrigin { get; }
-        public DVector3 GetViewOrigin(int index, DVector3 defaultValue = default) => ViewOrigin?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IArray<DVector3> ViewViewDirection { get; }
-        public DVector3 GetViewViewDirection(int index, DVector3 defaultValue = default) => ViewViewDirection?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IArray<DVector3> ViewViewPosition { get; }
-        public DVector3 GetViewViewPosition(int index, DVector3 defaultValue = default) => ViewViewPosition?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> ViewUp_X { get; }
+        public Double GetViewUp_X(int index, Double defaultValue = default) => ViewUp_X?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> ViewUp_Y { get; }
+        public Double GetViewUp_Y(int index, Double defaultValue = default) => ViewUp_Y?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> ViewUp_Z { get; }
+        public Double GetViewUp_Z(int index, Double defaultValue = default) => ViewUp_Z?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> ViewRight_X { get; }
+        public Double GetViewRight_X(int index, Double defaultValue = default) => ViewRight_X?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> ViewRight_Y { get; }
+        public Double GetViewRight_Y(int index, Double defaultValue = default) => ViewRight_Y?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> ViewRight_Z { get; }
+        public Double GetViewRight_Z(int index, Double defaultValue = default) => ViewRight_Z?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> ViewOrigin_X { get; }
+        public Double GetViewOrigin_X(int index, Double defaultValue = default) => ViewOrigin_X?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> ViewOrigin_Y { get; }
+        public Double GetViewOrigin_Y(int index, Double defaultValue = default) => ViewOrigin_Y?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> ViewOrigin_Z { get; }
+        public Double GetViewOrigin_Z(int index, Double defaultValue = default) => ViewOrigin_Z?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> ViewViewDirection_X { get; }
+        public Double GetViewViewDirection_X(int index, Double defaultValue = default) => ViewViewDirection_X?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> ViewViewDirection_Y { get; }
+        public Double GetViewViewDirection_Y(int index, Double defaultValue = default) => ViewViewDirection_Y?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> ViewViewDirection_Z { get; }
+        public Double GetViewViewDirection_Z(int index, Double defaultValue = default) => ViewViewDirection_Z?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> ViewViewPosition_X { get; }
+        public Double GetViewViewPosition_X(int index, Double defaultValue = default) => ViewViewPosition_X?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> ViewViewPosition_Y { get; }
+        public Double GetViewViewPosition_Y(int index, Double defaultValue = default) => ViewViewPosition_Y?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> ViewViewPosition_Z { get; }
+        public Double GetViewViewPosition_Z(int index, Double defaultValue = default) => ViewViewPosition_Z?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
         public IArray<Double> ViewScale { get; }
         public Double GetViewScale(int index, Double defaultValue = default) => ViewScale?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IArray<DAABox2D> ViewOutline { get; }
-        public DAABox2D GetViewOutline(int index, DAABox2D defaultValue = default) => ViewOutline?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> ViewOutline_Min_X { get; }
+        public Double GetViewOutline_Min_X(int index, Double defaultValue = default) => ViewOutline_Min_X?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> ViewOutline_Min_Y { get; }
+        public Double GetViewOutline_Min_Y(int index, Double defaultValue = default) => ViewOutline_Min_Y?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> ViewOutline_Max_X { get; }
+        public Double GetViewOutline_Max_X(int index, Double defaultValue = default) => ViewOutline_Max_X?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> ViewOutline_Max_Y { get; }
+        public Double GetViewOutline_Max_Y(int index, Double defaultValue = default) => ViewOutline_Max_Y?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
         public IArray<Int32> ViewDetailLevel { get; }
         public Int32 GetViewDetailLevel(int index, Int32 defaultValue = default) => ViewDetailLevel?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
         public IArray<int> ViewCameraIndex { get; }
@@ -2312,17 +2460,30 @@ namespace Vim.Format.ObjectModel {
             r.Index = n;
             r.Title = ViewTitle.ElementAtOrDefault(n);
             r.ViewType = ViewViewType.ElementAtOrDefault(n);
-            r.Up = ViewUp.ElementAtOrDefault(n);
-            r.Right = ViewRight.ElementAtOrDefault(n);
-            r.Origin = ViewOrigin.ElementAtOrDefault(n);
-            r.ViewDirection = ViewViewDirection.ElementAtOrDefault(n);
-            r.ViewPosition = ViewViewPosition.ElementAtOrDefault(n);
+            r.Up_X = ViewUp_X.ElementAtOrDefault(n);
+            r.Up_Y = ViewUp_Y.ElementAtOrDefault(n);
+            r.Up_Z = ViewUp_Z.ElementAtOrDefault(n);
+            r.Right_X = ViewRight_X.ElementAtOrDefault(n);
+            r.Right_Y = ViewRight_Y.ElementAtOrDefault(n);
+            r.Right_Z = ViewRight_Z.ElementAtOrDefault(n);
+            r.Origin_X = ViewOrigin_X.ElementAtOrDefault(n);
+            r.Origin_Y = ViewOrigin_Y.ElementAtOrDefault(n);
+            r.Origin_Z = ViewOrigin_Z.ElementAtOrDefault(n);
+            r.ViewDirection_X = ViewViewDirection_X.ElementAtOrDefault(n);
+            r.ViewDirection_Y = ViewViewDirection_Y.ElementAtOrDefault(n);
+            r.ViewDirection_Z = ViewViewDirection_Z.ElementAtOrDefault(n);
+            r.ViewPosition_X = ViewViewPosition_X.ElementAtOrDefault(n);
+            r.ViewPosition_Y = ViewViewPosition_Y.ElementAtOrDefault(n);
+            r.ViewPosition_Z = ViewViewPosition_Z.ElementAtOrDefault(n);
             r.Scale = ViewScale.ElementAtOrDefault(n);
-            r.Outline = ViewOutline.ElementAtOrDefault(n);
+            r.Outline_Min_X = ViewOutline_Min_X.ElementAtOrDefault(n);
+            r.Outline_Min_Y = ViewOutline_Min_Y.ElementAtOrDefault(n);
+            r.Outline_Max_X = ViewOutline_Max_X.ElementAtOrDefault(n);
+            r.Outline_Max_Y = ViewOutline_Max_Y.ElementAtOrDefault(n);
             r.DetailLevel = ViewDetailLevel.ElementAtOrDefault(n);
-            r._Camera = new Relation<Camera>(GetViewCameraIndex(n), GetCamera);
-            r._FamilyType = new Relation<FamilyType>(GetViewFamilyTypeIndex(n), GetFamilyType);
-            r._Element = new Relation<Element>(GetViewElementIndex(n), GetElement);
+            r._Camera = new Relation<Vim.ObjectModel.Camera>(GetViewCameraIndex(n), GetCamera);
+            r._FamilyType = new Relation<Vim.ObjectModel.FamilyType>(GetViewFamilyTypeIndex(n), GetFamilyType);
+            r._Element = new Relation<Vim.ObjectModel.Element>(GetViewElementIndex(n), GetElement);
             return r;
         }
         
@@ -2343,8 +2504,8 @@ namespace Vim.Format.ObjectModel {
             var r = new ElementInView();
             r.Document = Document;
             r.Index = n;
-            r._View = new Relation<View>(GetElementInViewViewIndex(n), GetView);
-            r._Element = new Relation<Element>(GetElementInViewElementIndex(n), GetElement);
+            r._View = new Relation<Vim.ObjectModel.View>(GetElementInViewViewIndex(n), GetView);
+            r._Element = new Relation<Vim.ObjectModel.Element>(GetElementInViewElementIndex(n), GetElement);
             return r;
         }
         
@@ -2365,8 +2526,8 @@ namespace Vim.Format.ObjectModel {
             var r = new ShapeInView();
             r.Document = Document;
             r.Index = n;
-            r._Shape = new Relation<Shape>(GetShapeInViewShapeIndex(n), GetShape);
-            r._View = new Relation<View>(GetShapeInViewViewIndex(n), GetView);
+            r._Shape = new Relation<Vim.ObjectModel.Shape>(GetShapeInViewShapeIndex(n), GetShape);
+            r._View = new Relation<Vim.ObjectModel.View>(GetShapeInViewViewIndex(n), GetView);
             return r;
         }
         
@@ -2387,8 +2548,8 @@ namespace Vim.Format.ObjectModel {
             var r = new AssetInView();
             r.Document = Document;
             r.Index = n;
-            r._Asset = new Relation<Asset>(GetAssetInViewAssetIndex(n), GetAsset);
-            r._View = new Relation<View>(GetAssetInViewViewIndex(n), GetView);
+            r._Asset = new Relation<Vim.ObjectModel.Asset>(GetAssetInViewAssetIndex(n), GetAsset);
+            r._View = new Relation<Vim.ObjectModel.View>(GetAssetInViewViewIndex(n), GetView);
             return r;
         }
         
@@ -2397,8 +2558,18 @@ namespace Vim.Format.ObjectModel {
         
         public EntityTable LevelInViewEntityTable { get; }
         
-        public IArray<DAABox> LevelInViewExtents { get; }
-        public DAABox GetLevelInViewExtents(int index, DAABox defaultValue = default) => LevelInViewExtents?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> LevelInViewExtents_Min_X { get; }
+        public Double GetLevelInViewExtents_Min_X(int index, Double defaultValue = default) => LevelInViewExtents_Min_X?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> LevelInViewExtents_Min_Y { get; }
+        public Double GetLevelInViewExtents_Min_Y(int index, Double defaultValue = default) => LevelInViewExtents_Min_Y?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> LevelInViewExtents_Min_Z { get; }
+        public Double GetLevelInViewExtents_Min_Z(int index, Double defaultValue = default) => LevelInViewExtents_Min_Z?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> LevelInViewExtents_Max_X { get; }
+        public Double GetLevelInViewExtents_Max_X(int index, Double defaultValue = default) => LevelInViewExtents_Max_X?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> LevelInViewExtents_Max_Y { get; }
+        public Double GetLevelInViewExtents_Max_Y(int index, Double defaultValue = default) => LevelInViewExtents_Max_Y?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> LevelInViewExtents_Max_Z { get; }
+        public Double GetLevelInViewExtents_Max_Z(int index, Double defaultValue = default) => LevelInViewExtents_Max_Z?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
         public IArray<int> LevelInViewLevelIndex { get; }
         public int GetLevelInViewLevelIndex(int index) => LevelInViewLevelIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
         public IArray<int> LevelInViewViewIndex { get; }
@@ -2411,9 +2582,14 @@ namespace Vim.Format.ObjectModel {
             var r = new LevelInView();
             r.Document = Document;
             r.Index = n;
-            r.Extents = LevelInViewExtents.ElementAtOrDefault(n);
-            r._Level = new Relation<Level>(GetLevelInViewLevelIndex(n), GetLevel);
-            r._View = new Relation<View>(GetLevelInViewViewIndex(n), GetView);
+            r.Extents_Min_X = LevelInViewExtents_Min_X.ElementAtOrDefault(n);
+            r.Extents_Min_Y = LevelInViewExtents_Min_Y.ElementAtOrDefault(n);
+            r.Extents_Min_Z = LevelInViewExtents_Min_Z.ElementAtOrDefault(n);
+            r.Extents_Max_X = LevelInViewExtents_Max_X.ElementAtOrDefault(n);
+            r.Extents_Max_Y = LevelInViewExtents_Max_Y.ElementAtOrDefault(n);
+            r.Extents_Max_Z = LevelInViewExtents_Max_Z.ElementAtOrDefault(n);
+            r._Level = new Relation<Vim.ObjectModel.Level>(GetLevelInViewLevelIndex(n), GetLevel);
+            r._View = new Relation<Vim.ObjectModel.View>(GetLevelInViewViewIndex(n), GetView);
             return r;
         }
         
@@ -2469,16 +2645,28 @@ namespace Vim.Format.ObjectModel {
         public String GetMaterialName(int index, String defaultValue = "") => MaterialName?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
         public IArray<String> MaterialMaterialCategory { get; }
         public String GetMaterialMaterialCategory(int index, String defaultValue = "") => MaterialMaterialCategory?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IArray<DVector3> MaterialColor { get; }
-        public DVector3 GetMaterialColor(int index, DVector3 defaultValue = default) => MaterialColor?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IArray<DVector2> MaterialColorUvScaling { get; }
-        public DVector2 GetMaterialColorUvScaling(int index, DVector2 defaultValue = default) => MaterialColorUvScaling?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IArray<DVector2> MaterialColorUvOffset { get; }
-        public DVector2 GetMaterialColorUvOffset(int index, DVector2 defaultValue = default) => MaterialColorUvOffset?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IArray<DVector2> MaterialNormalUvScaling { get; }
-        public DVector2 GetMaterialNormalUvScaling(int index, DVector2 defaultValue = default) => MaterialNormalUvScaling?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IArray<DVector2> MaterialNormalUvOffset { get; }
-        public DVector2 GetMaterialNormalUvOffset(int index, DVector2 defaultValue = default) => MaterialNormalUvOffset?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> MaterialColor_X { get; }
+        public Double GetMaterialColor_X(int index, Double defaultValue = default) => MaterialColor_X?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> MaterialColor_Y { get; }
+        public Double GetMaterialColor_Y(int index, Double defaultValue = default) => MaterialColor_Y?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> MaterialColor_Z { get; }
+        public Double GetMaterialColor_Z(int index, Double defaultValue = default) => MaterialColor_Z?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> MaterialColorUvScaling_X { get; }
+        public Double GetMaterialColorUvScaling_X(int index, Double defaultValue = default) => MaterialColorUvScaling_X?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> MaterialColorUvScaling_Y { get; }
+        public Double GetMaterialColorUvScaling_Y(int index, Double defaultValue = default) => MaterialColorUvScaling_Y?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> MaterialColorUvOffset_X { get; }
+        public Double GetMaterialColorUvOffset_X(int index, Double defaultValue = default) => MaterialColorUvOffset_X?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> MaterialColorUvOffset_Y { get; }
+        public Double GetMaterialColorUvOffset_Y(int index, Double defaultValue = default) => MaterialColorUvOffset_Y?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> MaterialNormalUvScaling_X { get; }
+        public Double GetMaterialNormalUvScaling_X(int index, Double defaultValue = default) => MaterialNormalUvScaling_X?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> MaterialNormalUvScaling_Y { get; }
+        public Double GetMaterialNormalUvScaling_Y(int index, Double defaultValue = default) => MaterialNormalUvScaling_Y?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> MaterialNormalUvOffset_X { get; }
+        public Double GetMaterialNormalUvOffset_X(int index, Double defaultValue = default) => MaterialNormalUvOffset_X?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> MaterialNormalUvOffset_Y { get; }
+        public Double GetMaterialNormalUvOffset_Y(int index, Double defaultValue = default) => MaterialNormalUvOffset_Y?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
         public IArray<Double> MaterialNormalAmount { get; }
         public Double GetMaterialNormalAmount(int index, Double defaultValue = default) => MaterialNormalAmount?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
         public IArray<Double> MaterialGlossiness { get; }
@@ -2503,18 +2691,24 @@ namespace Vim.Format.ObjectModel {
             r.Index = n;
             r.Name = MaterialName.ElementAtOrDefault(n);
             r.MaterialCategory = MaterialMaterialCategory.ElementAtOrDefault(n);
-            r.Color = MaterialColor.ElementAtOrDefault(n);
-            r.ColorUvScaling = MaterialColorUvScaling.ElementAtOrDefault(n);
-            r.ColorUvOffset = MaterialColorUvOffset.ElementAtOrDefault(n);
-            r.NormalUvScaling = MaterialNormalUvScaling.ElementAtOrDefault(n);
-            r.NormalUvOffset = MaterialNormalUvOffset.ElementAtOrDefault(n);
+            r.Color_X = MaterialColor_X.ElementAtOrDefault(n);
+            r.Color_Y = MaterialColor_Y.ElementAtOrDefault(n);
+            r.Color_Z = MaterialColor_Z.ElementAtOrDefault(n);
+            r.ColorUvScaling_X = MaterialColorUvScaling_X.ElementAtOrDefault(n);
+            r.ColorUvScaling_Y = MaterialColorUvScaling_Y.ElementAtOrDefault(n);
+            r.ColorUvOffset_X = MaterialColorUvOffset_X.ElementAtOrDefault(n);
+            r.ColorUvOffset_Y = MaterialColorUvOffset_Y.ElementAtOrDefault(n);
+            r.NormalUvScaling_X = MaterialNormalUvScaling_X.ElementAtOrDefault(n);
+            r.NormalUvScaling_Y = MaterialNormalUvScaling_Y.ElementAtOrDefault(n);
+            r.NormalUvOffset_X = MaterialNormalUvOffset_X.ElementAtOrDefault(n);
+            r.NormalUvOffset_Y = MaterialNormalUvOffset_Y.ElementAtOrDefault(n);
             r.NormalAmount = MaterialNormalAmount.ElementAtOrDefault(n);
             r.Glossiness = MaterialGlossiness.ElementAtOrDefault(n);
             r.Smoothness = MaterialSmoothness.ElementAtOrDefault(n);
             r.Transparency = MaterialTransparency.ElementAtOrDefault(n);
-            r._ColorTextureFile = new Relation<Asset>(GetMaterialColorTextureFileIndex(n), GetAsset);
-            r._NormalTextureFile = new Relation<Asset>(GetMaterialNormalTextureFileIndex(n), GetAsset);
-            r._Element = new Relation<Element>(GetMaterialElementIndex(n), GetElement);
+            r._ColorTextureFile = new Relation<Vim.ObjectModel.Asset>(GetMaterialColorTextureFileIndex(n), GetAsset);
+            r._NormalTextureFile = new Relation<Vim.ObjectModel.Asset>(GetMaterialNormalTextureFileIndex(n), GetAsset);
+            r._Element = new Relation<Vim.ObjectModel.Element>(GetMaterialElementIndex(n), GetElement);
             return r;
         }
         
@@ -2544,8 +2738,8 @@ namespace Vim.Format.ObjectModel {
             r.Area = MaterialInElementArea.ElementAtOrDefault(n);
             r.Volume = MaterialInElementVolume.ElementAtOrDefault(n);
             r.IsPaint = MaterialInElementIsPaint.ElementAtOrDefault(n);
-            r._Material = new Relation<Material>(GetMaterialInElementMaterialIndex(n), GetMaterial);
-            r._Element = new Relation<Element>(GetMaterialInElementElementIndex(n), GetElement);
+            r._Material = new Relation<Vim.ObjectModel.Material>(GetMaterialInElementMaterialIndex(n), GetMaterial);
+            r._Element = new Relation<Vim.ObjectModel.Element>(GetMaterialInElementElementIndex(n), GetElement);
             return r;
         }
         
@@ -2575,8 +2769,8 @@ namespace Vim.Format.ObjectModel {
             r.OrderIndex = CompoundStructureLayerOrderIndex.ElementAtOrDefault(n);
             r.Width = CompoundStructureLayerWidth.ElementAtOrDefault(n);
             r.MaterialFunctionAssignment = CompoundStructureLayerMaterialFunctionAssignment.ElementAtOrDefault(n);
-            r._Material = new Relation<Material>(GetCompoundStructureLayerMaterialIndex(n), GetMaterial);
-            r._CompoundStructure = new Relation<CompoundStructure>(GetCompoundStructureLayerCompoundStructureIndex(n), GetCompoundStructure);
+            r._Material = new Relation<Vim.ObjectModel.Material>(GetCompoundStructureLayerMaterialIndex(n), GetMaterial);
+            r._CompoundStructure = new Relation<Vim.ObjectModel.CompoundStructure>(GetCompoundStructureLayerCompoundStructureIndex(n), GetCompoundStructure);
             return r;
         }
         
@@ -2598,7 +2792,7 @@ namespace Vim.Format.ObjectModel {
             r.Document = Document;
             r.Index = n;
             r.Width = CompoundStructureWidth.ElementAtOrDefault(n);
-            r._StructuralLayer = new Relation<CompoundStructureLayer>(GetCompoundStructureStructuralLayerIndex(n), GetCompoundStructureLayer);
+            r._StructuralLayer = new Relation<Vim.ObjectModel.CompoundStructureLayer>(GetCompoundStructureStructuralLayerIndex(n), GetCompoundStructureLayer);
             return r;
         }
         
@@ -2617,7 +2811,7 @@ namespace Vim.Format.ObjectModel {
             var r = new Node();
             r.Document = Document;
             r.Index = n;
-            r._Element = new Relation<Element>(GetNodeElementIndex(n), GetElement);
+            r._Element = new Relation<Vim.ObjectModel.Element>(GetNodeElementIndex(n), GetElement);
             return r;
         }
         
@@ -2626,8 +2820,18 @@ namespace Vim.Format.ObjectModel {
         
         public EntityTable GeometryEntityTable { get; }
         
-        public IArray<AABox> GeometryBox { get; }
-        public AABox GetGeometryBox(int index, AABox defaultValue = default) => GeometryBox?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Single> GeometryBox_Min_X { get; }
+        public Single GetGeometryBox_Min_X(int index, Single defaultValue = default) => GeometryBox_Min_X?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Single> GeometryBox_Min_Y { get; }
+        public Single GetGeometryBox_Min_Y(int index, Single defaultValue = default) => GeometryBox_Min_Y?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Single> GeometryBox_Min_Z { get; }
+        public Single GetGeometryBox_Min_Z(int index, Single defaultValue = default) => GeometryBox_Min_Z?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Single> GeometryBox_Max_X { get; }
+        public Single GetGeometryBox_Max_X(int index, Single defaultValue = default) => GeometryBox_Max_X?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Single> GeometryBox_Max_Y { get; }
+        public Single GetGeometryBox_Max_Y(int index, Single defaultValue = default) => GeometryBox_Max_Y?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Single> GeometryBox_Max_Z { get; }
+        public Single GetGeometryBox_Max_Z(int index, Single defaultValue = default) => GeometryBox_Max_Z?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
         public IArray<Int32> GeometryVertexCount { get; }
         public Int32 GetGeometryVertexCount(int index, Int32 defaultValue = default) => GeometryVertexCount?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
         public IArray<Int32> GeometryFaceCount { get; }
@@ -2640,7 +2844,12 @@ namespace Vim.Format.ObjectModel {
             var r = new Geometry();
             r.Document = Document;
             r.Index = n;
-            r.Box = GeometryBox.ElementAtOrDefault(n);
+            r.Box_Min_X = GeometryBox_Min_X.ElementAtOrDefault(n);
+            r.Box_Min_Y = GeometryBox_Min_Y.ElementAtOrDefault(n);
+            r.Box_Min_Z = GeometryBox_Min_Z.ElementAtOrDefault(n);
+            r.Box_Max_X = GeometryBox_Max_X.ElementAtOrDefault(n);
+            r.Box_Max_Y = GeometryBox_Max_Y.ElementAtOrDefault(n);
+            r.Box_Max_Z = GeometryBox_Max_Z.ElementAtOrDefault(n);
             r.VertexCount = GeometryVertexCount.ElementAtOrDefault(n);
             r.FaceCount = GeometryFaceCount.ElementAtOrDefault(n);
             return r;
@@ -2661,7 +2870,7 @@ namespace Vim.Format.ObjectModel {
             var r = new Shape();
             r.Document = Document;
             r.Index = n;
-            r._Element = new Relation<Element>(GetShapeElementIndex(n), GetElement);
+            r._Element = new Relation<Vim.ObjectModel.Element>(GetShapeElementIndex(n), GetElement);
             return r;
         }
         
@@ -2680,7 +2889,7 @@ namespace Vim.Format.ObjectModel {
             var r = new ShapeCollection();
             r.Document = Document;
             r.Index = n;
-            r._Element = new Relation<Element>(GetShapeCollectionElementIndex(n), GetElement);
+            r._Element = new Relation<Vim.ObjectModel.Element>(GetShapeCollectionElementIndex(n), GetElement);
             return r;
         }
         
@@ -2701,8 +2910,8 @@ namespace Vim.Format.ObjectModel {
             var r = new ShapeInShapeCollection();
             r.Document = Document;
             r.Index = n;
-            r._Shape = new Relation<Shape>(GetShapeInShapeCollectionShapeIndex(n), GetShape);
-            r._ShapeCollection = new Relation<ShapeCollection>(GetShapeInShapeCollectionShapeCollectionIndex(n), GetShapeCollection);
+            r._Shape = new Relation<Vim.ObjectModel.Shape>(GetShapeInShapeCollectionShapeIndex(n), GetShape);
+            r._ShapeCollection = new Relation<Vim.ObjectModel.ShapeCollection>(GetShapeInShapeCollectionShapeCollectionIndex(n), GetShapeCollection);
             return r;
         }
         
@@ -2726,8 +2935,8 @@ namespace Vim.Format.ObjectModel {
             r.Document = Document;
             r.Index = n;
             r.SystemType = SystemSystemType.ElementAtOrDefault(n);
-            r._FamilyType = new Relation<FamilyType>(GetSystemFamilyTypeIndex(n), GetFamilyType);
-            r._Element = new Relation<Element>(GetSystemElementIndex(n), GetElement);
+            r._FamilyType = new Relation<Vim.ObjectModel.FamilyType>(GetSystemFamilyTypeIndex(n), GetFamilyType);
+            r._Element = new Relation<Vim.ObjectModel.Element>(GetSystemElementIndex(n), GetElement);
             return r;
         }
         
@@ -2751,8 +2960,8 @@ namespace Vim.Format.ObjectModel {
             r.Document = Document;
             r.Index = n;
             r.Roles = ElementInSystemRoles.ElementAtOrDefault(n);
-            r._System = new Relation<System>(GetElementInSystemSystemIndex(n), GetSystem);
-            r._Element = new Relation<Element>(GetElementInSystemElementIndex(n), GetElement);
+            r._System = new Relation<Vim.ObjectModel.System>(GetElementInSystemSystemIndex(n), GetSystem);
+            r._Element = new Relation<Vim.ObjectModel.Element>(GetElementInSystemElementIndex(n), GetElement);
             return r;
         }
         
@@ -2780,7 +2989,7 @@ namespace Vim.Format.ObjectModel {
             r.Guid = WarningGuid.ElementAtOrDefault(n);
             r.Severity = WarningSeverity.ElementAtOrDefault(n);
             r.Description = WarningDescription.ElementAtOrDefault(n);
-            r._BimDocument = new Relation<BimDocument>(GetWarningBimDocumentIndex(n), GetBimDocument);
+            r._BimDocument = new Relation<Vim.ObjectModel.BimDocument>(GetWarningBimDocumentIndex(n), GetBimDocument);
             return r;
         }
         
@@ -2801,8 +3010,8 @@ namespace Vim.Format.ObjectModel {
             var r = new ElementInWarning();
             r.Document = Document;
             r.Index = n;
-            r._Warning = new Relation<Warning>(GetElementInWarningWarningIndex(n), GetWarning);
-            r._Element = new Relation<Element>(GetElementInWarningElementIndex(n), GetElement);
+            r._Warning = new Relation<Vim.ObjectModel.Warning>(GetElementInWarningWarningIndex(n), GetWarning);
+            r._Element = new Relation<Vim.ObjectModel.Element>(GetElementInWarningElementIndex(n), GetElement);
             return r;
         }
         
@@ -2813,10 +3022,18 @@ namespace Vim.Format.ObjectModel {
         
         public IArray<Boolean> BasePointIsSurveyPoint { get; }
         public Boolean GetBasePointIsSurveyPoint(int index, Boolean defaultValue = default) => BasePointIsSurveyPoint?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IArray<DVector3> BasePointPosition { get; }
-        public DVector3 GetBasePointPosition(int index, DVector3 defaultValue = default) => BasePointPosition?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IArray<DVector3> BasePointSharedPosition { get; }
-        public DVector3 GetBasePointSharedPosition(int index, DVector3 defaultValue = default) => BasePointSharedPosition?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> BasePointPosition_X { get; }
+        public Double GetBasePointPosition_X(int index, Double defaultValue = default) => BasePointPosition_X?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> BasePointPosition_Y { get; }
+        public Double GetBasePointPosition_Y(int index, Double defaultValue = default) => BasePointPosition_Y?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> BasePointPosition_Z { get; }
+        public Double GetBasePointPosition_Z(int index, Double defaultValue = default) => BasePointPosition_Z?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> BasePointSharedPosition_X { get; }
+        public Double GetBasePointSharedPosition_X(int index, Double defaultValue = default) => BasePointSharedPosition_X?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> BasePointSharedPosition_Y { get; }
+        public Double GetBasePointSharedPosition_Y(int index, Double defaultValue = default) => BasePointSharedPosition_Y?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> BasePointSharedPosition_Z { get; }
+        public Double GetBasePointSharedPosition_Z(int index, Double defaultValue = default) => BasePointSharedPosition_Z?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
         public IArray<int> BasePointElementIndex { get; }
         public int GetBasePointElementIndex(int index) => BasePointElementIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
         public int NumBasePoint => BasePointEntityTable?.NumRows ?? 0;
@@ -2828,9 +3045,13 @@ namespace Vim.Format.ObjectModel {
             r.Document = Document;
             r.Index = n;
             r.IsSurveyPoint = BasePointIsSurveyPoint.ElementAtOrDefault(n);
-            r.Position = BasePointPosition.ElementAtOrDefault(n);
-            r.SharedPosition = BasePointSharedPosition.ElementAtOrDefault(n);
-            r._Element = new Relation<Element>(GetBasePointElementIndex(n), GetElement);
+            r.Position_X = BasePointPosition_X.ElementAtOrDefault(n);
+            r.Position_Y = BasePointPosition_Y.ElementAtOrDefault(n);
+            r.Position_Z = BasePointPosition_Z.ElementAtOrDefault(n);
+            r.SharedPosition_X = BasePointSharedPosition_X.ElementAtOrDefault(n);
+            r.SharedPosition_Y = BasePointSharedPosition_Y.ElementAtOrDefault(n);
+            r.SharedPosition_Z = BasePointSharedPosition_Z.ElementAtOrDefault(n);
+            r._Element = new Relation<Vim.ObjectModel.Element>(GetBasePointElementIndex(n), GetElement);
             return r;
         }
         
@@ -2861,7 +3082,7 @@ namespace Vim.Format.ObjectModel {
             r.Existing = PhaseFilterExisting.ElementAtOrDefault(n);
             r.Demolished = PhaseFilterDemolished.ElementAtOrDefault(n);
             r.Temporary = PhaseFilterTemporary.ElementAtOrDefault(n);
-            r._Element = new Relation<Element>(GetPhaseFilterElementIndex(n), GetElement);
+            r._Element = new Relation<Vim.ObjectModel.Element>(GetPhaseFilterElementIndex(n), GetElement);
             return r;
         }
         
@@ -2870,14 +3091,32 @@ namespace Vim.Format.ObjectModel {
         
         public EntityTable GridEntityTable { get; }
         
-        public IArray<DVector3> GridStartPoint { get; }
-        public DVector3 GetGridStartPoint(int index, DVector3 defaultValue = default) => GridStartPoint?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IArray<DVector3> GridEndPoint { get; }
-        public DVector3 GetGridEndPoint(int index, DVector3 defaultValue = default) => GridEndPoint?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> GridStartPoint_X { get; }
+        public Double GetGridStartPoint_X(int index, Double defaultValue = default) => GridStartPoint_X?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> GridStartPoint_Y { get; }
+        public Double GetGridStartPoint_Y(int index, Double defaultValue = default) => GridStartPoint_Y?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> GridStartPoint_Z { get; }
+        public Double GetGridStartPoint_Z(int index, Double defaultValue = default) => GridStartPoint_Z?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> GridEndPoint_X { get; }
+        public Double GetGridEndPoint_X(int index, Double defaultValue = default) => GridEndPoint_X?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> GridEndPoint_Y { get; }
+        public Double GetGridEndPoint_Y(int index, Double defaultValue = default) => GridEndPoint_Y?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> GridEndPoint_Z { get; }
+        public Double GetGridEndPoint_Z(int index, Double defaultValue = default) => GridEndPoint_Z?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
         public IArray<Boolean> GridIsCurved { get; }
         public Boolean GetGridIsCurved(int index, Boolean defaultValue = default) => GridIsCurved?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IArray<DAABox> GridExtents { get; }
-        public DAABox GetGridExtents(int index, DAABox defaultValue = default) => GridExtents?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> GridExtents_Min_X { get; }
+        public Double GetGridExtents_Min_X(int index, Double defaultValue = default) => GridExtents_Min_X?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> GridExtents_Min_Y { get; }
+        public Double GetGridExtents_Min_Y(int index, Double defaultValue = default) => GridExtents_Min_Y?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> GridExtents_Min_Z { get; }
+        public Double GetGridExtents_Min_Z(int index, Double defaultValue = default) => GridExtents_Min_Z?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> GridExtents_Max_X { get; }
+        public Double GetGridExtents_Max_X(int index, Double defaultValue = default) => GridExtents_Max_X?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> GridExtents_Max_Y { get; }
+        public Double GetGridExtents_Max_Y(int index, Double defaultValue = default) => GridExtents_Max_Y?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> GridExtents_Max_Z { get; }
+        public Double GetGridExtents_Max_Z(int index, Double defaultValue = default) => GridExtents_Max_Z?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
         public IArray<int> GridFamilyTypeIndex { get; }
         public int GetGridFamilyTypeIndex(int index) => GridFamilyTypeIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
         public IArray<int> GridElementIndex { get; }
@@ -2890,12 +3129,21 @@ namespace Vim.Format.ObjectModel {
             var r = new Grid();
             r.Document = Document;
             r.Index = n;
-            r.StartPoint = GridStartPoint.ElementAtOrDefault(n);
-            r.EndPoint = GridEndPoint.ElementAtOrDefault(n);
+            r.StartPoint_X = GridStartPoint_X.ElementAtOrDefault(n);
+            r.StartPoint_Y = GridStartPoint_Y.ElementAtOrDefault(n);
+            r.StartPoint_Z = GridStartPoint_Z.ElementAtOrDefault(n);
+            r.EndPoint_X = GridEndPoint_X.ElementAtOrDefault(n);
+            r.EndPoint_Y = GridEndPoint_Y.ElementAtOrDefault(n);
+            r.EndPoint_Z = GridEndPoint_Z.ElementAtOrDefault(n);
             r.IsCurved = GridIsCurved.ElementAtOrDefault(n);
-            r.Extents = GridExtents.ElementAtOrDefault(n);
-            r._FamilyType = new Relation<FamilyType>(GetGridFamilyTypeIndex(n), GetFamilyType);
-            r._Element = new Relation<Element>(GetGridElementIndex(n), GetElement);
+            r.Extents_Min_X = GridExtents_Min_X.ElementAtOrDefault(n);
+            r.Extents_Min_Y = GridExtents_Min_Y.ElementAtOrDefault(n);
+            r.Extents_Min_Z = GridExtents_Min_Z.ElementAtOrDefault(n);
+            r.Extents_Max_X = GridExtents_Max_X.ElementAtOrDefault(n);
+            r.Extents_Max_Y = GridExtents_Max_Y.ElementAtOrDefault(n);
+            r.Extents_Max_Z = GridExtents_Max_Z.ElementAtOrDefault(n);
+            r._FamilyType = new Relation<Vim.ObjectModel.FamilyType>(GetGridFamilyTypeIndex(n), GetFamilyType);
+            r._Element = new Relation<Vim.ObjectModel.Element>(GetGridElementIndex(n), GetElement);
             return r;
         }
         
@@ -2928,8 +3176,8 @@ namespace Vim.Format.ObjectModel {
             r.Perimeter = AreaPerimeter.ElementAtOrDefault(n);
             r.Number = AreaNumber.ElementAtOrDefault(n);
             r.IsGrossInterior = AreaIsGrossInterior.ElementAtOrDefault(n);
-            r._AreaScheme = new Relation<AreaScheme>(GetAreaAreaSchemeIndex(n), GetAreaScheme);
-            r._Element = new Relation<Element>(GetAreaElementIndex(n), GetElement);
+            r._AreaScheme = new Relation<Vim.ObjectModel.AreaScheme>(GetAreaAreaSchemeIndex(n), GetAreaScheme);
+            r._Element = new Relation<Vim.ObjectModel.Element>(GetAreaElementIndex(n), GetElement);
             return r;
         }
         
@@ -2951,7 +3199,7 @@ namespace Vim.Format.ObjectModel {
             r.Document = Document;
             r.Index = n;
             r.IsGrossBuildingArea = AreaSchemeIsGrossBuildingArea.ElementAtOrDefault(n);
-            r._Element = new Relation<Element>(GetAreaSchemeElementIndex(n), GetElement);
+            r._Element = new Relation<Vim.ObjectModel.Element>(GetAreaSchemeElementIndex(n), GetElement);
             return r;
         }
         
@@ -2970,7 +3218,7 @@ namespace Vim.Format.ObjectModel {
             var r = new Schedule();
             r.Document = Document;
             r.Index = n;
-            r._Element = new Relation<Element>(GetScheduleElementIndex(n), GetElement);
+            r._Element = new Relation<Vim.ObjectModel.Element>(GetScheduleElementIndex(n), GetElement);
             return r;
         }
         
@@ -2995,7 +3243,7 @@ namespace Vim.Format.ObjectModel {
             r.Index = n;
             r.Name = ScheduleColumnName.ElementAtOrDefault(n);
             r.ColumnIndex = ScheduleColumnColumnIndex.ElementAtOrDefault(n);
-            r._Schedule = new Relation<Schedule>(GetScheduleColumnScheduleIndex(n), GetSchedule);
+            r._Schedule = new Relation<Vim.ObjectModel.Schedule>(GetScheduleColumnScheduleIndex(n), GetSchedule);
             return r;
         }
         
@@ -3020,7 +3268,7 @@ namespace Vim.Format.ObjectModel {
             r.Index = n;
             r.Value = ScheduleCellValue.ElementAtOrDefault(n);
             r.RowIndex = ScheduleCellRowIndex.ElementAtOrDefault(n);
-            r._ScheduleColumn = new Relation<ScheduleColumn>(GetScheduleCellScheduleColumnIndex(n), GetScheduleColumn);
+            r._ScheduleColumn = new Relation<Vim.ObjectModel.ScheduleColumn>(GetScheduleCellScheduleColumnIndex(n), GetScheduleColumn);
             return r;
         }
         
@@ -3189,11 +3437,13 @@ namespace Vim.Format.ObjectModel {
             ParameterDescriptorFlags = ParameterDescriptorEntityTable?.GetDataColumnValues<Int32>("int:Flags") ?? Array.Empty<Int32>().ToIArray();
             ParameterDescriptorGuid = ParameterDescriptorEntityTable?.GetStringColumnValues("string:Guid") ?? Array.Empty<String>().ToIArray();
             ParameterValue = ParameterEntityTable?.GetStringColumnValues("string:Value") ?? Array.Empty<String>().ToIArray();
-            ElementId = ElementEntityTable?.GetDataColumnValues<Int32>("int:Id") ?? Array.Empty<Int32>().ToIArray();
+            ElementId = (ElementEntityTable?.GetDataColumnValues<Int64>("long:Id") ?? ElementEntityTable?.GetDataColumnValues<Int32>("int:Id")?.Select(v => (Int64) v)) ?? Array.Empty<Int64>().ToIArray();
             ElementType = ElementEntityTable?.GetStringColumnValues("string:Type") ?? Array.Empty<String>().ToIArray();
             ElementName = ElementEntityTable?.GetStringColumnValues("string:Name") ?? Array.Empty<String>().ToIArray();
             ElementUniqueId = ElementEntityTable?.GetStringColumnValues("string:UniqueId") ?? Array.Empty<String>().ToIArray();
-            ElementLocation = ElementEntityTable?.GetCompositeDataColumnValues<Vector3>("Location") ?? Array.Empty<Vector3>().ToIArray();
+            ElementLocation_X = ElementEntityTable?.GetDataColumnValues<Single>("float:Location.X") ?? Array.Empty<Single>().ToIArray();
+            ElementLocation_Y = ElementEntityTable?.GetDataColumnValues<Single>("float:Location.Y") ?? Array.Empty<Single>().ToIArray();
+            ElementLocation_Z = ElementEntityTable?.GetDataColumnValues<Single>("float:Location.Z") ?? Array.Empty<Single>().ToIArray();
             ElementFamilyName = ElementEntityTable?.GetStringColumnValues("string:FamilyName") ?? Array.Empty<String>().ToIArray();
             ElementIsPinned = ElementEntityTable?.GetDataColumnValues<Boolean>("byte:IsPinned") ?? Array.Empty<Boolean>().ToIArray();
             WorksetId = WorksetEntityTable?.GetDataColumnValues<Int32>("int:Id") ?? Array.Empty<Int32>().ToIArray();
@@ -3204,9 +3454,13 @@ namespace Vim.Format.ObjectModel {
             WorksetOwner = WorksetEntityTable?.GetStringColumnValues("string:Owner") ?? Array.Empty<String>().ToIArray();
             WorksetUniqueId = WorksetEntityTable?.GetStringColumnValues("string:UniqueId") ?? Array.Empty<String>().ToIArray();
             AssemblyInstanceAssemblyTypeName = AssemblyInstanceEntityTable?.GetStringColumnValues("string:AssemblyTypeName") ?? Array.Empty<String>().ToIArray();
-            AssemblyInstancePosition = AssemblyInstanceEntityTable?.GetCompositeDataColumnValues<Vector3>("Position") ?? Array.Empty<Vector3>().ToIArray();
+            AssemblyInstancePosition_X = AssemblyInstanceEntityTable?.GetDataColumnValues<Single>("float:Position.X") ?? Array.Empty<Single>().ToIArray();
+            AssemblyInstancePosition_Y = AssemblyInstanceEntityTable?.GetDataColumnValues<Single>("float:Position.Y") ?? Array.Empty<Single>().ToIArray();
+            AssemblyInstancePosition_Z = AssemblyInstanceEntityTable?.GetDataColumnValues<Single>("float:Position.Z") ?? Array.Empty<Single>().ToIArray();
             GroupGroupType = GroupEntityTable?.GetStringColumnValues("string:GroupType") ?? Array.Empty<String>().ToIArray();
-            GroupPosition = GroupEntityTable?.GetCompositeDataColumnValues<Vector3>("Position") ?? Array.Empty<Vector3>().ToIArray();
+            GroupPosition_X = GroupEntityTable?.GetDataColumnValues<Single>("float:Position.X") ?? Array.Empty<Single>().ToIArray();
+            GroupPosition_Y = GroupEntityTable?.GetDataColumnValues<Single>("float:Position.Y") ?? Array.Empty<Single>().ToIArray();
+            GroupPosition_Z = GroupEntityTable?.GetDataColumnValues<Single>("float:Position.Z") ?? Array.Empty<Single>().ToIArray();
             DesignOptionIsPrimary = DesignOptionEntityTable?.GetDataColumnValues<Boolean>("byte:IsPrimary") ?? Array.Empty<Boolean>().ToIArray();
             LevelElevation = LevelEntityTable?.GetDataColumnValues<Double>("double:Elevation") ?? Array.Empty<Double>().ToIArray();
             RoomBaseOffset = RoomEntityTable?.GetDataColumnValues<Double>("double:BaseOffset") ?? Array.Empty<Double>().ToIArray();
@@ -3246,9 +3500,11 @@ namespace Vim.Format.ObjectModel {
             BimDocumentUser = BimDocumentEntityTable?.GetStringColumnValues("string:User") ?? Array.Empty<String>().ToIArray();
             PhaseOrderInBimDocumentOrderIndex = PhaseOrderInBimDocumentEntityTable?.GetDataColumnValues<Int32>("int:OrderIndex") ?? Array.Empty<Int32>().ToIArray();
             CategoryName = CategoryEntityTable?.GetStringColumnValues("string:Name") ?? Array.Empty<String>().ToIArray();
-            CategoryId = CategoryEntityTable?.GetDataColumnValues<Int32>("int:Id") ?? Array.Empty<Int32>().ToIArray();
+            CategoryId = (CategoryEntityTable?.GetDataColumnValues<Int64>("long:Id") ?? CategoryEntityTable?.GetDataColumnValues<Int32>("int:Id")?.Select(v => (Int64) v)) ?? Array.Empty<Int64>().ToIArray();
             CategoryCategoryType = CategoryEntityTable?.GetStringColumnValues("string:CategoryType") ?? Array.Empty<String>().ToIArray();
-            CategoryLineColor = CategoryEntityTable?.GetCompositeDataColumnValues<DVector3>("LineColor") ?? Array.Empty<DVector3>().ToIArray();
+            CategoryLineColor_X = CategoryEntityTable?.GetDataColumnValues<Double>("double:LineColor.X") ?? Array.Empty<Double>().ToIArray();
+            CategoryLineColor_Y = CategoryEntityTable?.GetDataColumnValues<Double>("double:LineColor.Y") ?? Array.Empty<Double>().ToIArray();
+            CategoryLineColor_Z = CategoryEntityTable?.GetDataColumnValues<Double>("double:LineColor.Z") ?? Array.Empty<Double>().ToIArray();
             CategoryBuiltInCategory = CategoryEntityTable?.GetStringColumnValues("string:BuiltInCategory") ?? Array.Empty<String>().ToIArray();
             FamilyStructuralMaterialType = FamilyEntityTable?.GetStringColumnValues("string:StructuralMaterialType") ?? Array.Empty<String>().ToIArray();
             FamilyStructuralSectionShape = FamilyEntityTable?.GetStringColumnValues("string:StructuralSectionShape") ?? Array.Empty<String>().ToIArray();
@@ -3256,27 +3512,57 @@ namespace Vim.Format.ObjectModel {
             FamilyIsInPlace = FamilyEntityTable?.GetDataColumnValues<Boolean>("byte:IsInPlace") ?? Array.Empty<Boolean>().ToIArray();
             FamilyTypeIsSystemFamilyType = FamilyTypeEntityTable?.GetDataColumnValues<Boolean>("byte:IsSystemFamilyType") ?? Array.Empty<Boolean>().ToIArray();
             FamilyInstanceFacingFlipped = FamilyInstanceEntityTable?.GetDataColumnValues<Boolean>("byte:FacingFlipped") ?? Array.Empty<Boolean>().ToIArray();
-            FamilyInstanceFacingOrientation = FamilyInstanceEntityTable?.GetCompositeDataColumnValues<Vector3>("FacingOrientation") ?? Array.Empty<Vector3>().ToIArray();
+            FamilyInstanceFacingOrientation_X = FamilyInstanceEntityTable?.GetDataColumnValues<Single>("float:FacingOrientation.X") ?? Array.Empty<Single>().ToIArray();
+            FamilyInstanceFacingOrientation_Y = FamilyInstanceEntityTable?.GetDataColumnValues<Single>("float:FacingOrientation.Y") ?? Array.Empty<Single>().ToIArray();
+            FamilyInstanceFacingOrientation_Z = FamilyInstanceEntityTable?.GetDataColumnValues<Single>("float:FacingOrientation.Z") ?? Array.Empty<Single>().ToIArray();
             FamilyInstanceHandFlipped = FamilyInstanceEntityTable?.GetDataColumnValues<Boolean>("byte:HandFlipped") ?? Array.Empty<Boolean>().ToIArray();
             FamilyInstanceMirrored = FamilyInstanceEntityTable?.GetDataColumnValues<Boolean>("byte:Mirrored") ?? Array.Empty<Boolean>().ToIArray();
             FamilyInstanceHasModifiedGeometry = FamilyInstanceEntityTable?.GetDataColumnValues<Boolean>("byte:HasModifiedGeometry") ?? Array.Empty<Boolean>().ToIArray();
             FamilyInstanceScale = FamilyInstanceEntityTable?.GetDataColumnValues<Single>("float:Scale") ?? Array.Empty<Single>().ToIArray();
-            FamilyInstanceBasisX = FamilyInstanceEntityTable?.GetCompositeDataColumnValues<Vector3>("BasisX") ?? Array.Empty<Vector3>().ToIArray();
-            FamilyInstanceBasisY = FamilyInstanceEntityTable?.GetCompositeDataColumnValues<Vector3>("BasisY") ?? Array.Empty<Vector3>().ToIArray();
-            FamilyInstanceBasisZ = FamilyInstanceEntityTable?.GetCompositeDataColumnValues<Vector3>("BasisZ") ?? Array.Empty<Vector3>().ToIArray();
-            FamilyInstanceTranslation = FamilyInstanceEntityTable?.GetCompositeDataColumnValues<Vector3>("Translation") ?? Array.Empty<Vector3>().ToIArray();
-            FamilyInstanceHandOrientation = FamilyInstanceEntityTable?.GetCompositeDataColumnValues<Vector3>("HandOrientation") ?? Array.Empty<Vector3>().ToIArray();
+            FamilyInstanceBasisX_X = FamilyInstanceEntityTable?.GetDataColumnValues<Single>("float:BasisX.X") ?? Array.Empty<Single>().ToIArray();
+            FamilyInstanceBasisX_Y = FamilyInstanceEntityTable?.GetDataColumnValues<Single>("float:BasisX.Y") ?? Array.Empty<Single>().ToIArray();
+            FamilyInstanceBasisX_Z = FamilyInstanceEntityTable?.GetDataColumnValues<Single>("float:BasisX.Z") ?? Array.Empty<Single>().ToIArray();
+            FamilyInstanceBasisY_X = FamilyInstanceEntityTable?.GetDataColumnValues<Single>("float:BasisY.X") ?? Array.Empty<Single>().ToIArray();
+            FamilyInstanceBasisY_Y = FamilyInstanceEntityTable?.GetDataColumnValues<Single>("float:BasisY.Y") ?? Array.Empty<Single>().ToIArray();
+            FamilyInstanceBasisY_Z = FamilyInstanceEntityTable?.GetDataColumnValues<Single>("float:BasisY.Z") ?? Array.Empty<Single>().ToIArray();
+            FamilyInstanceBasisZ_X = FamilyInstanceEntityTable?.GetDataColumnValues<Single>("float:BasisZ.X") ?? Array.Empty<Single>().ToIArray();
+            FamilyInstanceBasisZ_Y = FamilyInstanceEntityTable?.GetDataColumnValues<Single>("float:BasisZ.Y") ?? Array.Empty<Single>().ToIArray();
+            FamilyInstanceBasisZ_Z = FamilyInstanceEntityTable?.GetDataColumnValues<Single>("float:BasisZ.Z") ?? Array.Empty<Single>().ToIArray();
+            FamilyInstanceTranslation_X = FamilyInstanceEntityTable?.GetDataColumnValues<Single>("float:Translation.X") ?? Array.Empty<Single>().ToIArray();
+            FamilyInstanceTranslation_Y = FamilyInstanceEntityTable?.GetDataColumnValues<Single>("float:Translation.Y") ?? Array.Empty<Single>().ToIArray();
+            FamilyInstanceTranslation_Z = FamilyInstanceEntityTable?.GetDataColumnValues<Single>("float:Translation.Z") ?? Array.Empty<Single>().ToIArray();
+            FamilyInstanceHandOrientation_X = FamilyInstanceEntityTable?.GetDataColumnValues<Single>("float:HandOrientation.X") ?? Array.Empty<Single>().ToIArray();
+            FamilyInstanceHandOrientation_Y = FamilyInstanceEntityTable?.GetDataColumnValues<Single>("float:HandOrientation.Y") ?? Array.Empty<Single>().ToIArray();
+            FamilyInstanceHandOrientation_Z = FamilyInstanceEntityTable?.GetDataColumnValues<Single>("float:HandOrientation.Z") ?? Array.Empty<Single>().ToIArray();
             ViewTitle = ViewEntityTable?.GetStringColumnValues("string:Title") ?? Array.Empty<String>().ToIArray();
             ViewViewType = ViewEntityTable?.GetStringColumnValues("string:ViewType") ?? Array.Empty<String>().ToIArray();
-            ViewUp = ViewEntityTable?.GetCompositeDataColumnValues<DVector3>("Up") ?? Array.Empty<DVector3>().ToIArray();
-            ViewRight = ViewEntityTable?.GetCompositeDataColumnValues<DVector3>("Right") ?? Array.Empty<DVector3>().ToIArray();
-            ViewOrigin = ViewEntityTable?.GetCompositeDataColumnValues<DVector3>("Origin") ?? Array.Empty<DVector3>().ToIArray();
-            ViewViewDirection = ViewEntityTable?.GetCompositeDataColumnValues<DVector3>("ViewDirection") ?? Array.Empty<DVector3>().ToIArray();
-            ViewViewPosition = ViewEntityTable?.GetCompositeDataColumnValues<DVector3>("ViewPosition") ?? Array.Empty<DVector3>().ToIArray();
+            ViewUp_X = ViewEntityTable?.GetDataColumnValues<Double>("double:Up.X") ?? Array.Empty<Double>().ToIArray();
+            ViewUp_Y = ViewEntityTable?.GetDataColumnValues<Double>("double:Up.Y") ?? Array.Empty<Double>().ToIArray();
+            ViewUp_Z = ViewEntityTable?.GetDataColumnValues<Double>("double:Up.Z") ?? Array.Empty<Double>().ToIArray();
+            ViewRight_X = ViewEntityTable?.GetDataColumnValues<Double>("double:Right.X") ?? Array.Empty<Double>().ToIArray();
+            ViewRight_Y = ViewEntityTable?.GetDataColumnValues<Double>("double:Right.Y") ?? Array.Empty<Double>().ToIArray();
+            ViewRight_Z = ViewEntityTable?.GetDataColumnValues<Double>("double:Right.Z") ?? Array.Empty<Double>().ToIArray();
+            ViewOrigin_X = ViewEntityTable?.GetDataColumnValues<Double>("double:Origin.X") ?? Array.Empty<Double>().ToIArray();
+            ViewOrigin_Y = ViewEntityTable?.GetDataColumnValues<Double>("double:Origin.Y") ?? Array.Empty<Double>().ToIArray();
+            ViewOrigin_Z = ViewEntityTable?.GetDataColumnValues<Double>("double:Origin.Z") ?? Array.Empty<Double>().ToIArray();
+            ViewViewDirection_X = ViewEntityTable?.GetDataColumnValues<Double>("double:ViewDirection.X") ?? Array.Empty<Double>().ToIArray();
+            ViewViewDirection_Y = ViewEntityTable?.GetDataColumnValues<Double>("double:ViewDirection.Y") ?? Array.Empty<Double>().ToIArray();
+            ViewViewDirection_Z = ViewEntityTable?.GetDataColumnValues<Double>("double:ViewDirection.Z") ?? Array.Empty<Double>().ToIArray();
+            ViewViewPosition_X = ViewEntityTable?.GetDataColumnValues<Double>("double:ViewPosition.X") ?? Array.Empty<Double>().ToIArray();
+            ViewViewPosition_Y = ViewEntityTable?.GetDataColumnValues<Double>("double:ViewPosition.Y") ?? Array.Empty<Double>().ToIArray();
+            ViewViewPosition_Z = ViewEntityTable?.GetDataColumnValues<Double>("double:ViewPosition.Z") ?? Array.Empty<Double>().ToIArray();
             ViewScale = ViewEntityTable?.GetDataColumnValues<Double>("double:Scale") ?? Array.Empty<Double>().ToIArray();
-            ViewOutline = ViewEntityTable?.GetCompositeDataColumnValues<DAABox2D>("Outline") ?? Array.Empty<DAABox2D>().ToIArray();
+            ViewOutline_Min_X = ViewEntityTable?.GetDataColumnValues<Double>("double:Outline.Min.X") ?? Array.Empty<Double>().ToIArray();
+            ViewOutline_Min_Y = ViewEntityTable?.GetDataColumnValues<Double>("double:Outline.Min.Y") ?? Array.Empty<Double>().ToIArray();
+            ViewOutline_Max_X = ViewEntityTable?.GetDataColumnValues<Double>("double:Outline.Max.X") ?? Array.Empty<Double>().ToIArray();
+            ViewOutline_Max_Y = ViewEntityTable?.GetDataColumnValues<Double>("double:Outline.Max.Y") ?? Array.Empty<Double>().ToIArray();
             ViewDetailLevel = ViewEntityTable?.GetDataColumnValues<Int32>("int:DetailLevel") ?? Array.Empty<Int32>().ToIArray();
-            LevelInViewExtents = LevelInViewEntityTable?.GetCompositeDataColumnValues<DAABox>("Extents") ?? Array.Empty<DAABox>().ToIArray();
+            LevelInViewExtents_Min_X = LevelInViewEntityTable?.GetDataColumnValues<Double>("double:Extents.Min.X") ?? Array.Empty<Double>().ToIArray();
+            LevelInViewExtents_Min_Y = LevelInViewEntityTable?.GetDataColumnValues<Double>("double:Extents.Min.Y") ?? Array.Empty<Double>().ToIArray();
+            LevelInViewExtents_Min_Z = LevelInViewEntityTable?.GetDataColumnValues<Double>("double:Extents.Min.Z") ?? Array.Empty<Double>().ToIArray();
+            LevelInViewExtents_Max_X = LevelInViewEntityTable?.GetDataColumnValues<Double>("double:Extents.Max.X") ?? Array.Empty<Double>().ToIArray();
+            LevelInViewExtents_Max_Y = LevelInViewEntityTable?.GetDataColumnValues<Double>("double:Extents.Max.Y") ?? Array.Empty<Double>().ToIArray();
+            LevelInViewExtents_Max_Z = LevelInViewEntityTable?.GetDataColumnValues<Double>("double:Extents.Max.Z") ?? Array.Empty<Double>().ToIArray();
             CameraId = CameraEntityTable?.GetDataColumnValues<Int32>("int:Id") ?? Array.Empty<Int32>().ToIArray();
             CameraIsPerspective = CameraEntityTable?.GetDataColumnValues<Int32>("int:IsPerspective") ?? Array.Empty<Int32>().ToIArray();
             CameraVerticalExtent = CameraEntityTable?.GetDataColumnValues<Double>("double:VerticalExtent") ?? Array.Empty<Double>().ToIArray();
@@ -3288,11 +3574,17 @@ namespace Vim.Format.ObjectModel {
             CameraUpOffset = CameraEntityTable?.GetDataColumnValues<Double>("double:UpOffset") ?? Array.Empty<Double>().ToIArray();
             MaterialName = MaterialEntityTable?.GetStringColumnValues("string:Name") ?? Array.Empty<String>().ToIArray();
             MaterialMaterialCategory = MaterialEntityTable?.GetStringColumnValues("string:MaterialCategory") ?? Array.Empty<String>().ToIArray();
-            MaterialColor = MaterialEntityTable?.GetCompositeDataColumnValues<DVector3>("Color") ?? Array.Empty<DVector3>().ToIArray();
-            MaterialColorUvScaling = MaterialEntityTable?.GetCompositeDataColumnValues<DVector2>("ColorUvScaling") ?? Array.Empty<DVector2>().ToIArray();
-            MaterialColorUvOffset = MaterialEntityTable?.GetCompositeDataColumnValues<DVector2>("ColorUvOffset") ?? Array.Empty<DVector2>().ToIArray();
-            MaterialNormalUvScaling = MaterialEntityTable?.GetCompositeDataColumnValues<DVector2>("NormalUvScaling") ?? Array.Empty<DVector2>().ToIArray();
-            MaterialNormalUvOffset = MaterialEntityTable?.GetCompositeDataColumnValues<DVector2>("NormalUvOffset") ?? Array.Empty<DVector2>().ToIArray();
+            MaterialColor_X = MaterialEntityTable?.GetDataColumnValues<Double>("double:Color.X") ?? Array.Empty<Double>().ToIArray();
+            MaterialColor_Y = MaterialEntityTable?.GetDataColumnValues<Double>("double:Color.Y") ?? Array.Empty<Double>().ToIArray();
+            MaterialColor_Z = MaterialEntityTable?.GetDataColumnValues<Double>("double:Color.Z") ?? Array.Empty<Double>().ToIArray();
+            MaterialColorUvScaling_X = MaterialEntityTable?.GetDataColumnValues<Double>("double:ColorUvScaling.X") ?? Array.Empty<Double>().ToIArray();
+            MaterialColorUvScaling_Y = MaterialEntityTable?.GetDataColumnValues<Double>("double:ColorUvScaling.Y") ?? Array.Empty<Double>().ToIArray();
+            MaterialColorUvOffset_X = MaterialEntityTable?.GetDataColumnValues<Double>("double:ColorUvOffset.X") ?? Array.Empty<Double>().ToIArray();
+            MaterialColorUvOffset_Y = MaterialEntityTable?.GetDataColumnValues<Double>("double:ColorUvOffset.Y") ?? Array.Empty<Double>().ToIArray();
+            MaterialNormalUvScaling_X = MaterialEntityTable?.GetDataColumnValues<Double>("double:NormalUvScaling.X") ?? Array.Empty<Double>().ToIArray();
+            MaterialNormalUvScaling_Y = MaterialEntityTable?.GetDataColumnValues<Double>("double:NormalUvScaling.Y") ?? Array.Empty<Double>().ToIArray();
+            MaterialNormalUvOffset_X = MaterialEntityTable?.GetDataColumnValues<Double>("double:NormalUvOffset.X") ?? Array.Empty<Double>().ToIArray();
+            MaterialNormalUvOffset_Y = MaterialEntityTable?.GetDataColumnValues<Double>("double:NormalUvOffset.Y") ?? Array.Empty<Double>().ToIArray();
             MaterialNormalAmount = MaterialEntityTable?.GetDataColumnValues<Double>("double:NormalAmount") ?? Array.Empty<Double>().ToIArray();
             MaterialGlossiness = MaterialEntityTable?.GetDataColumnValues<Double>("double:Glossiness") ?? Array.Empty<Double>().ToIArray();
             MaterialSmoothness = MaterialEntityTable?.GetDataColumnValues<Double>("double:Smoothness") ?? Array.Empty<Double>().ToIArray();
@@ -3304,7 +3596,12 @@ namespace Vim.Format.ObjectModel {
             CompoundStructureLayerWidth = CompoundStructureLayerEntityTable?.GetDataColumnValues<Double>("double:Width") ?? Array.Empty<Double>().ToIArray();
             CompoundStructureLayerMaterialFunctionAssignment = CompoundStructureLayerEntityTable?.GetStringColumnValues("string:MaterialFunctionAssignment") ?? Array.Empty<String>().ToIArray();
             CompoundStructureWidth = CompoundStructureEntityTable?.GetDataColumnValues<Double>("double:Width") ?? Array.Empty<Double>().ToIArray();
-            GeometryBox = GeometryEntityTable?.GetCompositeDataColumnValues<AABox>("Box") ?? Array.Empty<AABox>().ToIArray();
+            GeometryBox_Min_X = GeometryEntityTable?.GetDataColumnValues<Single>("float:Box.Min.X") ?? Array.Empty<Single>().ToIArray();
+            GeometryBox_Min_Y = GeometryEntityTable?.GetDataColumnValues<Single>("float:Box.Min.Y") ?? Array.Empty<Single>().ToIArray();
+            GeometryBox_Min_Z = GeometryEntityTable?.GetDataColumnValues<Single>("float:Box.Min.Z") ?? Array.Empty<Single>().ToIArray();
+            GeometryBox_Max_X = GeometryEntityTable?.GetDataColumnValues<Single>("float:Box.Max.X") ?? Array.Empty<Single>().ToIArray();
+            GeometryBox_Max_Y = GeometryEntityTable?.GetDataColumnValues<Single>("float:Box.Max.Y") ?? Array.Empty<Single>().ToIArray();
+            GeometryBox_Max_Z = GeometryEntityTable?.GetDataColumnValues<Single>("float:Box.Max.Z") ?? Array.Empty<Single>().ToIArray();
             GeometryVertexCount = GeometryEntityTable?.GetDataColumnValues<Int32>("int:VertexCount") ?? Array.Empty<Int32>().ToIArray();
             GeometryFaceCount = GeometryEntityTable?.GetDataColumnValues<Int32>("int:FaceCount") ?? Array.Empty<Int32>().ToIArray();
             SystemSystemType = SystemEntityTable?.GetDataColumnValues<Int32>("int:SystemType") ?? Array.Empty<Int32>().ToIArray();
@@ -3313,16 +3610,29 @@ namespace Vim.Format.ObjectModel {
             WarningSeverity = WarningEntityTable?.GetStringColumnValues("string:Severity") ?? Array.Empty<String>().ToIArray();
             WarningDescription = WarningEntityTable?.GetStringColumnValues("string:Description") ?? Array.Empty<String>().ToIArray();
             BasePointIsSurveyPoint = BasePointEntityTable?.GetDataColumnValues<Boolean>("byte:IsSurveyPoint") ?? Array.Empty<Boolean>().ToIArray();
-            BasePointPosition = BasePointEntityTable?.GetCompositeDataColumnValues<DVector3>("Position") ?? Array.Empty<DVector3>().ToIArray();
-            BasePointSharedPosition = BasePointEntityTable?.GetCompositeDataColumnValues<DVector3>("SharedPosition") ?? Array.Empty<DVector3>().ToIArray();
+            BasePointPosition_X = BasePointEntityTable?.GetDataColumnValues<Double>("double:Position.X") ?? Array.Empty<Double>().ToIArray();
+            BasePointPosition_Y = BasePointEntityTable?.GetDataColumnValues<Double>("double:Position.Y") ?? Array.Empty<Double>().ToIArray();
+            BasePointPosition_Z = BasePointEntityTable?.GetDataColumnValues<Double>("double:Position.Z") ?? Array.Empty<Double>().ToIArray();
+            BasePointSharedPosition_X = BasePointEntityTable?.GetDataColumnValues<Double>("double:SharedPosition.X") ?? Array.Empty<Double>().ToIArray();
+            BasePointSharedPosition_Y = BasePointEntityTable?.GetDataColumnValues<Double>("double:SharedPosition.Y") ?? Array.Empty<Double>().ToIArray();
+            BasePointSharedPosition_Z = BasePointEntityTable?.GetDataColumnValues<Double>("double:SharedPosition.Z") ?? Array.Empty<Double>().ToIArray();
             PhaseFilterNew = PhaseFilterEntityTable?.GetDataColumnValues<Int32>("int:New") ?? Array.Empty<Int32>().ToIArray();
             PhaseFilterExisting = PhaseFilterEntityTable?.GetDataColumnValues<Int32>("int:Existing") ?? Array.Empty<Int32>().ToIArray();
             PhaseFilterDemolished = PhaseFilterEntityTable?.GetDataColumnValues<Int32>("int:Demolished") ?? Array.Empty<Int32>().ToIArray();
             PhaseFilterTemporary = PhaseFilterEntityTable?.GetDataColumnValues<Int32>("int:Temporary") ?? Array.Empty<Int32>().ToIArray();
-            GridStartPoint = GridEntityTable?.GetCompositeDataColumnValues<DVector3>("StartPoint") ?? Array.Empty<DVector3>().ToIArray();
-            GridEndPoint = GridEntityTable?.GetCompositeDataColumnValues<DVector3>("EndPoint") ?? Array.Empty<DVector3>().ToIArray();
+            GridStartPoint_X = GridEntityTable?.GetDataColumnValues<Double>("double:StartPoint.X") ?? Array.Empty<Double>().ToIArray();
+            GridStartPoint_Y = GridEntityTable?.GetDataColumnValues<Double>("double:StartPoint.Y") ?? Array.Empty<Double>().ToIArray();
+            GridStartPoint_Z = GridEntityTable?.GetDataColumnValues<Double>("double:StartPoint.Z") ?? Array.Empty<Double>().ToIArray();
+            GridEndPoint_X = GridEntityTable?.GetDataColumnValues<Double>("double:EndPoint.X") ?? Array.Empty<Double>().ToIArray();
+            GridEndPoint_Y = GridEntityTable?.GetDataColumnValues<Double>("double:EndPoint.Y") ?? Array.Empty<Double>().ToIArray();
+            GridEndPoint_Z = GridEntityTable?.GetDataColumnValues<Double>("double:EndPoint.Z") ?? Array.Empty<Double>().ToIArray();
             GridIsCurved = GridEntityTable?.GetDataColumnValues<Boolean>("byte:IsCurved") ?? Array.Empty<Boolean>().ToIArray();
-            GridExtents = GridEntityTable?.GetCompositeDataColumnValues<DAABox>("Extents") ?? Array.Empty<DAABox>().ToIArray();
+            GridExtents_Min_X = GridEntityTable?.GetDataColumnValues<Double>("double:Extents.Min.X") ?? Array.Empty<Double>().ToIArray();
+            GridExtents_Min_Y = GridEntityTable?.GetDataColumnValues<Double>("double:Extents.Min.Y") ?? Array.Empty<Double>().ToIArray();
+            GridExtents_Min_Z = GridEntityTable?.GetDataColumnValues<Double>("double:Extents.Min.Z") ?? Array.Empty<Double>().ToIArray();
+            GridExtents_Max_X = GridEntityTable?.GetDataColumnValues<Double>("double:Extents.Max.X") ?? Array.Empty<Double>().ToIArray();
+            GridExtents_Max_Y = GridEntityTable?.GetDataColumnValues<Double>("double:Extents.Max.Y") ?? Array.Empty<Double>().ToIArray();
+            GridExtents_Max_Z = GridEntityTable?.GetDataColumnValues<Double>("double:Extents.Max.Z") ?? Array.Empty<Double>().ToIArray();
             AreaValue = AreaEntityTable?.GetDataColumnValues<Double>("double:Value") ?? Array.Empty<Double>().ToIArray();
             AreaPerimeter = AreaEntityTable?.GetDataColumnValues<Double>("double:Perimeter") ?? Array.Empty<Double>().ToIArray();
             AreaNumber = AreaEntityTable?.GetStringColumnValues("string:Number") ?? Array.Empty<String>().ToIArray();
@@ -3567,11 +3877,13 @@ namespace Vim.Format.ObjectModel {
         {
             var typedEntities = entities?.Cast<Element>() ?? Enumerable.Empty<Element>();
             var tb = new EntityTableBuilder("Vim.Element");
-            tb.AddDataColumn("int:Id", typedEntities.Select(x => x.Id));
+            tb.AddDataColumn("long:Id", typedEntities.Select(x => x.Id));
             tb.AddStringColumn("string:Type", typedEntities.Select(x => x.Type));
             tb.AddStringColumn("string:Name", typedEntities.Select(x => x.Name));
             tb.AddStringColumn("string:UniqueId", typedEntities.Select(x => x.UniqueId));
-            tb.AddCompositeDataColumns("Location", typedEntities.Select(x => x.Location));
+            tb.AddDataColumn("float:Location.X", typedEntities.Select(x => x.Location_X));
+            tb.AddDataColumn("float:Location.Y", typedEntities.Select(x => x.Location_Y));
+            tb.AddDataColumn("float:Location.Z", typedEntities.Select(x => x.Location_Z));
             tb.AddStringColumn("string:FamilyName", typedEntities.Select(x => x.FamilyName));
             tb.AddDataColumn("byte:IsPinned", typedEntities.Select(x => x.IsPinned));
             tb.AddIndexColumn("index:Vim.Level:Level", typedEntities.Select(x => x._Level.Index));
@@ -3606,7 +3918,9 @@ namespace Vim.Format.ObjectModel {
             var typedEntities = entities?.Cast<AssemblyInstance>() ?? Enumerable.Empty<AssemblyInstance>();
             var tb = new EntityTableBuilder("Vim.AssemblyInstance");
             tb.AddStringColumn("string:AssemblyTypeName", typedEntities.Select(x => x.AssemblyTypeName));
-            tb.AddCompositeDataColumns("Position", typedEntities.Select(x => x.Position));
+            tb.AddDataColumn("float:Position.X", typedEntities.Select(x => x.Position_X));
+            tb.AddDataColumn("float:Position.Y", typedEntities.Select(x => x.Position_Y));
+            tb.AddDataColumn("float:Position.Z", typedEntities.Select(x => x.Position_Z));
             tb.AddIndexColumn("index:Vim.Element:Element", typedEntities.Select(x => x._Element.Index));
             return tb;
         }
@@ -3615,7 +3929,9 @@ namespace Vim.Format.ObjectModel {
             var typedEntities = entities?.Cast<Group>() ?? Enumerable.Empty<Group>();
             var tb = new EntityTableBuilder("Vim.Group");
             tb.AddStringColumn("string:GroupType", typedEntities.Select(x => x.GroupType));
-            tb.AddCompositeDataColumns("Position", typedEntities.Select(x => x.Position));
+            tb.AddDataColumn("float:Position.X", typedEntities.Select(x => x.Position_X));
+            tb.AddDataColumn("float:Position.Y", typedEntities.Select(x => x.Position_Y));
+            tb.AddDataColumn("float:Position.Z", typedEntities.Select(x => x.Position_Z));
             tb.AddIndexColumn("index:Vim.Element:Element", typedEntities.Select(x => x._Element.Index));
             return tb;
         }
@@ -3718,9 +4034,11 @@ namespace Vim.Format.ObjectModel {
             var typedEntities = entities?.Cast<Category>() ?? Enumerable.Empty<Category>();
             var tb = new EntityTableBuilder("Vim.Category");
             tb.AddStringColumn("string:Name", typedEntities.Select(x => x.Name));
-            tb.AddDataColumn("int:Id", typedEntities.Select(x => x.Id));
+            tb.AddDataColumn("long:Id", typedEntities.Select(x => x.Id));
             tb.AddStringColumn("string:CategoryType", typedEntities.Select(x => x.CategoryType));
-            tb.AddCompositeDataColumns("LineColor", typedEntities.Select(x => x.LineColor));
+            tb.AddDataColumn("double:LineColor.X", typedEntities.Select(x => x.LineColor_X));
+            tb.AddDataColumn("double:LineColor.Y", typedEntities.Select(x => x.LineColor_Y));
+            tb.AddDataColumn("double:LineColor.Z", typedEntities.Select(x => x.LineColor_Z));
             tb.AddStringColumn("string:BuiltInCategory", typedEntities.Select(x => x.BuiltInCategory));
             tb.AddIndexColumn("index:Vim.Category:Parent", typedEntities.Select(x => x._Parent.Index));
             tb.AddIndexColumn("index:Vim.Material:Material", typedEntities.Select(x => x._Material.Index));
@@ -3753,16 +4071,28 @@ namespace Vim.Format.ObjectModel {
             var typedEntities = entities?.Cast<FamilyInstance>() ?? Enumerable.Empty<FamilyInstance>();
             var tb = new EntityTableBuilder("Vim.FamilyInstance");
             tb.AddDataColumn("byte:FacingFlipped", typedEntities.Select(x => x.FacingFlipped));
-            tb.AddCompositeDataColumns("FacingOrientation", typedEntities.Select(x => x.FacingOrientation));
+            tb.AddDataColumn("float:FacingOrientation.X", typedEntities.Select(x => x.FacingOrientation_X));
+            tb.AddDataColumn("float:FacingOrientation.Y", typedEntities.Select(x => x.FacingOrientation_Y));
+            tb.AddDataColumn("float:FacingOrientation.Z", typedEntities.Select(x => x.FacingOrientation_Z));
             tb.AddDataColumn("byte:HandFlipped", typedEntities.Select(x => x.HandFlipped));
             tb.AddDataColumn("byte:Mirrored", typedEntities.Select(x => x.Mirrored));
             tb.AddDataColumn("byte:HasModifiedGeometry", typedEntities.Select(x => x.HasModifiedGeometry));
             tb.AddDataColumn("float:Scale", typedEntities.Select(x => x.Scale));
-            tb.AddCompositeDataColumns("BasisX", typedEntities.Select(x => x.BasisX));
-            tb.AddCompositeDataColumns("BasisY", typedEntities.Select(x => x.BasisY));
-            tb.AddCompositeDataColumns("BasisZ", typedEntities.Select(x => x.BasisZ));
-            tb.AddCompositeDataColumns("Translation", typedEntities.Select(x => x.Translation));
-            tb.AddCompositeDataColumns("HandOrientation", typedEntities.Select(x => x.HandOrientation));
+            tb.AddDataColumn("float:BasisX.X", typedEntities.Select(x => x.BasisX_X));
+            tb.AddDataColumn("float:BasisX.Y", typedEntities.Select(x => x.BasisX_Y));
+            tb.AddDataColumn("float:BasisX.Z", typedEntities.Select(x => x.BasisX_Z));
+            tb.AddDataColumn("float:BasisY.X", typedEntities.Select(x => x.BasisY_X));
+            tb.AddDataColumn("float:BasisY.Y", typedEntities.Select(x => x.BasisY_Y));
+            tb.AddDataColumn("float:BasisY.Z", typedEntities.Select(x => x.BasisY_Z));
+            tb.AddDataColumn("float:BasisZ.X", typedEntities.Select(x => x.BasisZ_X));
+            tb.AddDataColumn("float:BasisZ.Y", typedEntities.Select(x => x.BasisZ_Y));
+            tb.AddDataColumn("float:BasisZ.Z", typedEntities.Select(x => x.BasisZ_Z));
+            tb.AddDataColumn("float:Translation.X", typedEntities.Select(x => x.Translation_X));
+            tb.AddDataColumn("float:Translation.Y", typedEntities.Select(x => x.Translation_Y));
+            tb.AddDataColumn("float:Translation.Z", typedEntities.Select(x => x.Translation_Z));
+            tb.AddDataColumn("float:HandOrientation.X", typedEntities.Select(x => x.HandOrientation_X));
+            tb.AddDataColumn("float:HandOrientation.Y", typedEntities.Select(x => x.HandOrientation_Y));
+            tb.AddDataColumn("float:HandOrientation.Z", typedEntities.Select(x => x.HandOrientation_Z));
             tb.AddIndexColumn("index:Vim.FamilyType:FamilyType", typedEntities.Select(x => x._FamilyType.Index));
             tb.AddIndexColumn("index:Vim.Element:Host", typedEntities.Select(x => x._Host.Index));
             tb.AddIndexColumn("index:Vim.Room:FromRoom", typedEntities.Select(x => x._FromRoom.Index));
@@ -3776,13 +4106,26 @@ namespace Vim.Format.ObjectModel {
             var tb = new EntityTableBuilder("Vim.View");
             tb.AddStringColumn("string:Title", typedEntities.Select(x => x.Title));
             tb.AddStringColumn("string:ViewType", typedEntities.Select(x => x.ViewType));
-            tb.AddCompositeDataColumns("Up", typedEntities.Select(x => x.Up));
-            tb.AddCompositeDataColumns("Right", typedEntities.Select(x => x.Right));
-            tb.AddCompositeDataColumns("Origin", typedEntities.Select(x => x.Origin));
-            tb.AddCompositeDataColumns("ViewDirection", typedEntities.Select(x => x.ViewDirection));
-            tb.AddCompositeDataColumns("ViewPosition", typedEntities.Select(x => x.ViewPosition));
+            tb.AddDataColumn("double:Up.X", typedEntities.Select(x => x.Up_X));
+            tb.AddDataColumn("double:Up.Y", typedEntities.Select(x => x.Up_Y));
+            tb.AddDataColumn("double:Up.Z", typedEntities.Select(x => x.Up_Z));
+            tb.AddDataColumn("double:Right.X", typedEntities.Select(x => x.Right_X));
+            tb.AddDataColumn("double:Right.Y", typedEntities.Select(x => x.Right_Y));
+            tb.AddDataColumn("double:Right.Z", typedEntities.Select(x => x.Right_Z));
+            tb.AddDataColumn("double:Origin.X", typedEntities.Select(x => x.Origin_X));
+            tb.AddDataColumn("double:Origin.Y", typedEntities.Select(x => x.Origin_Y));
+            tb.AddDataColumn("double:Origin.Z", typedEntities.Select(x => x.Origin_Z));
+            tb.AddDataColumn("double:ViewDirection.X", typedEntities.Select(x => x.ViewDirection_X));
+            tb.AddDataColumn("double:ViewDirection.Y", typedEntities.Select(x => x.ViewDirection_Y));
+            tb.AddDataColumn("double:ViewDirection.Z", typedEntities.Select(x => x.ViewDirection_Z));
+            tb.AddDataColumn("double:ViewPosition.X", typedEntities.Select(x => x.ViewPosition_X));
+            tb.AddDataColumn("double:ViewPosition.Y", typedEntities.Select(x => x.ViewPosition_Y));
+            tb.AddDataColumn("double:ViewPosition.Z", typedEntities.Select(x => x.ViewPosition_Z));
             tb.AddDataColumn("double:Scale", typedEntities.Select(x => x.Scale));
-            tb.AddCompositeDataColumns("Outline", typedEntities.Select(x => x.Outline));
+            tb.AddDataColumn("double:Outline.Min.X", typedEntities.Select(x => x.Outline_Min_X));
+            tb.AddDataColumn("double:Outline.Min.Y", typedEntities.Select(x => x.Outline_Min_Y));
+            tb.AddDataColumn("double:Outline.Max.X", typedEntities.Select(x => x.Outline_Max_X));
+            tb.AddDataColumn("double:Outline.Max.Y", typedEntities.Select(x => x.Outline_Max_Y));
             tb.AddDataColumn("int:DetailLevel", typedEntities.Select(x => x.DetailLevel));
             tb.AddIndexColumn("index:Vim.Camera:Camera", typedEntities.Select(x => x._Camera.Index));
             tb.AddIndexColumn("index:Vim.FamilyType:FamilyType", typedEntities.Select(x => x._FamilyType.Index));
@@ -3817,7 +4160,12 @@ namespace Vim.Format.ObjectModel {
         {
             var typedEntities = entities?.Cast<LevelInView>() ?? Enumerable.Empty<LevelInView>();
             var tb = new EntityTableBuilder("Vim.LevelInView");
-            tb.AddCompositeDataColumns("Extents", typedEntities.Select(x => x.Extents));
+            tb.AddDataColumn("double:Extents.Min.X", typedEntities.Select(x => x.Extents_Min_X));
+            tb.AddDataColumn("double:Extents.Min.Y", typedEntities.Select(x => x.Extents_Min_Y));
+            tb.AddDataColumn("double:Extents.Min.Z", typedEntities.Select(x => x.Extents_Min_Z));
+            tb.AddDataColumn("double:Extents.Max.X", typedEntities.Select(x => x.Extents_Max_X));
+            tb.AddDataColumn("double:Extents.Max.Y", typedEntities.Select(x => x.Extents_Max_Y));
+            tb.AddDataColumn("double:Extents.Max.Z", typedEntities.Select(x => x.Extents_Max_Z));
             tb.AddIndexColumn("index:Vim.Level:Level", typedEntities.Select(x => x._Level.Index));
             tb.AddIndexColumn("index:Vim.View:View", typedEntities.Select(x => x._View.Index));
             return tb;
@@ -3843,11 +4191,17 @@ namespace Vim.Format.ObjectModel {
             var tb = new EntityTableBuilder("Vim.Material");
             tb.AddStringColumn("string:Name", typedEntities.Select(x => x.Name));
             tb.AddStringColumn("string:MaterialCategory", typedEntities.Select(x => x.MaterialCategory));
-            tb.AddCompositeDataColumns("Color", typedEntities.Select(x => x.Color));
-            tb.AddCompositeDataColumns("ColorUvScaling", typedEntities.Select(x => x.ColorUvScaling));
-            tb.AddCompositeDataColumns("ColorUvOffset", typedEntities.Select(x => x.ColorUvOffset));
-            tb.AddCompositeDataColumns("NormalUvScaling", typedEntities.Select(x => x.NormalUvScaling));
-            tb.AddCompositeDataColumns("NormalUvOffset", typedEntities.Select(x => x.NormalUvOffset));
+            tb.AddDataColumn("double:Color.X", typedEntities.Select(x => x.Color_X));
+            tb.AddDataColumn("double:Color.Y", typedEntities.Select(x => x.Color_Y));
+            tb.AddDataColumn("double:Color.Z", typedEntities.Select(x => x.Color_Z));
+            tb.AddDataColumn("double:ColorUvScaling.X", typedEntities.Select(x => x.ColorUvScaling_X));
+            tb.AddDataColumn("double:ColorUvScaling.Y", typedEntities.Select(x => x.ColorUvScaling_Y));
+            tb.AddDataColumn("double:ColorUvOffset.X", typedEntities.Select(x => x.ColorUvOffset_X));
+            tb.AddDataColumn("double:ColorUvOffset.Y", typedEntities.Select(x => x.ColorUvOffset_Y));
+            tb.AddDataColumn("double:NormalUvScaling.X", typedEntities.Select(x => x.NormalUvScaling_X));
+            tb.AddDataColumn("double:NormalUvScaling.Y", typedEntities.Select(x => x.NormalUvScaling_Y));
+            tb.AddDataColumn("double:NormalUvOffset.X", typedEntities.Select(x => x.NormalUvOffset_X));
+            tb.AddDataColumn("double:NormalUvOffset.Y", typedEntities.Select(x => x.NormalUvOffset_Y));
             tb.AddDataColumn("double:NormalAmount", typedEntities.Select(x => x.NormalAmount));
             tb.AddDataColumn("double:Glossiness", typedEntities.Select(x => x.Glossiness));
             tb.AddDataColumn("double:Smoothness", typedEntities.Select(x => x.Smoothness));
@@ -3898,7 +4252,12 @@ namespace Vim.Format.ObjectModel {
         {
             var typedEntities = entities?.Cast<Geometry>() ?? Enumerable.Empty<Geometry>();
             var tb = new EntityTableBuilder("Vim.Geometry");
-            tb.AddCompositeDataColumns("Box", typedEntities.Select(x => x.Box));
+            tb.AddDataColumn("float:Box.Min.X", typedEntities.Select(x => x.Box_Min_X));
+            tb.AddDataColumn("float:Box.Min.Y", typedEntities.Select(x => x.Box_Min_Y));
+            tb.AddDataColumn("float:Box.Min.Z", typedEntities.Select(x => x.Box_Min_Z));
+            tb.AddDataColumn("float:Box.Max.X", typedEntities.Select(x => x.Box_Max_X));
+            tb.AddDataColumn("float:Box.Max.Y", typedEntities.Select(x => x.Box_Max_Y));
+            tb.AddDataColumn("float:Box.Max.Z", typedEntities.Select(x => x.Box_Max_Z));
             tb.AddDataColumn("int:VertexCount", typedEntities.Select(x => x.VertexCount));
             tb.AddDataColumn("int:FaceCount", typedEntities.Select(x => x.FaceCount));
             return tb;
@@ -3966,8 +4325,12 @@ namespace Vim.Format.ObjectModel {
             var typedEntities = entities?.Cast<BasePoint>() ?? Enumerable.Empty<BasePoint>();
             var tb = new EntityTableBuilder("Vim.BasePoint");
             tb.AddDataColumn("byte:IsSurveyPoint", typedEntities.Select(x => x.IsSurveyPoint));
-            tb.AddCompositeDataColumns("Position", typedEntities.Select(x => x.Position));
-            tb.AddCompositeDataColumns("SharedPosition", typedEntities.Select(x => x.SharedPosition));
+            tb.AddDataColumn("double:Position.X", typedEntities.Select(x => x.Position_X));
+            tb.AddDataColumn("double:Position.Y", typedEntities.Select(x => x.Position_Y));
+            tb.AddDataColumn("double:Position.Z", typedEntities.Select(x => x.Position_Z));
+            tb.AddDataColumn("double:SharedPosition.X", typedEntities.Select(x => x.SharedPosition_X));
+            tb.AddDataColumn("double:SharedPosition.Y", typedEntities.Select(x => x.SharedPosition_Y));
+            tb.AddDataColumn("double:SharedPosition.Z", typedEntities.Select(x => x.SharedPosition_Z));
             tb.AddIndexColumn("index:Vim.Element:Element", typedEntities.Select(x => x._Element.Index));
             return tb;
         }
@@ -3986,10 +4349,19 @@ namespace Vim.Format.ObjectModel {
         {
             var typedEntities = entities?.Cast<Grid>() ?? Enumerable.Empty<Grid>();
             var tb = new EntityTableBuilder("Vim.Grid");
-            tb.AddCompositeDataColumns("StartPoint", typedEntities.Select(x => x.StartPoint));
-            tb.AddCompositeDataColumns("EndPoint", typedEntities.Select(x => x.EndPoint));
+            tb.AddDataColumn("double:StartPoint.X", typedEntities.Select(x => x.StartPoint_X));
+            tb.AddDataColumn("double:StartPoint.Y", typedEntities.Select(x => x.StartPoint_Y));
+            tb.AddDataColumn("double:StartPoint.Z", typedEntities.Select(x => x.StartPoint_Z));
+            tb.AddDataColumn("double:EndPoint.X", typedEntities.Select(x => x.EndPoint_X));
+            tb.AddDataColumn("double:EndPoint.Y", typedEntities.Select(x => x.EndPoint_Y));
+            tb.AddDataColumn("double:EndPoint.Z", typedEntities.Select(x => x.EndPoint_Z));
             tb.AddDataColumn("byte:IsCurved", typedEntities.Select(x => x.IsCurved));
-            tb.AddCompositeDataColumns("Extents", typedEntities.Select(x => x.Extents));
+            tb.AddDataColumn("double:Extents.Min.X", typedEntities.Select(x => x.Extents_Min_X));
+            tb.AddDataColumn("double:Extents.Min.Y", typedEntities.Select(x => x.Extents_Min_Y));
+            tb.AddDataColumn("double:Extents.Min.Z", typedEntities.Select(x => x.Extents_Min_Z));
+            tb.AddDataColumn("double:Extents.Max.X", typedEntities.Select(x => x.Extents_Max_X));
+            tb.AddDataColumn("double:Extents.Max.Y", typedEntities.Select(x => x.Extents_Max_Y));
+            tb.AddDataColumn("double:Extents.Max.Z", typedEntities.Select(x => x.Extents_Max_Z));
             tb.AddIndexColumn("index:Vim.FamilyType:FamilyType", typedEntities.Select(x => x._FamilyType.Index));
             tb.AddIndexColumn("index:Vim.Element:Element", typedEntities.Select(x => x._Element.Index));
             return tb;

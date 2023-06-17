@@ -11,112 +11,134 @@ namespace Vim.Format.ObjectModel
 {
     public static class SchemaVersion
     {
-        public static SerializableVersion Current => v4_6_0;
+        // ReSharper disable MemberHidesStaticFromOuterClass
+        public static class History
+        {
+            // Schema removals (we still read these as fallbacks to preserve backwards compatibility):
+            //   Vim.Category__int:Id
+            //   Vim.Element__int:Id
+            // Schema additions:
+            //   Vim.Category__long:Id
+            //   Vim.Element__long:Id
+            public const string v5_0_0 = "5.0.0";
 
-        // Schema additions:
-        //   Vim.Grid__index:Vim.FamilyType:FamilyType
-        //   Vim.Level__index:Vim.FamilyType:FamilyType
-        //   Vim.Schedule__index:Vim.Element:Element
-        //   Vim.ScheduleCell__index:Vim.ScheduleColumn:ScheduleColumn
-        //   Vim.ScheduleCell__int:RowIndex
-        //   Vim.ScheduleCell__string:Value
-        //   Vim.ScheduleColumn__index:Vim.Schedule:Schedule
-        //   Vim.ScheduleColumn__int:ColumnIndex
-        //   Vim.ScheduleColumn__string:Name
-        //   Vim.System__index:Vim.FamilyType:FamilyType
-        //   Vim.View__index:Vim.FamilyType:FamilyType
-        public static SerializableVersion v4_6_0 => SerializableVersion.Parse("4.6.0");
+            // Schema additions:
+            //   Vim.Grid__index:Vim.FamilyType:FamilyType
+            //   Vim.Level__index:Vim.FamilyType:FamilyType
+            //   Vim.Schedule__index:Vim.Element:Element
+            //   Vim.ScheduleCell__index:Vim.ScheduleColumn:ScheduleColumn
+            //   Vim.ScheduleCell__int:RowIndex
+            //   Vim.ScheduleCell__string:Value
+            //   Vim.ScheduleColumn__index:Vim.Schedule:Schedule
+            //   Vim.ScheduleColumn__int:ColumnIndex
+            //   Vim.ScheduleColumn__string:Name
+            //   Vim.System__index:Vim.FamilyType:FamilyType
+            //   Vim.View__index:Vim.FamilyType:FamilyType
+            public const string v4_6_0 = "4.6.0";
 
-        // Schema additions:
-        //   Vim.Area__byte:IsGrossInterior
-        //   Vim.Area__double:Perimeter
-        //   Vim.Area__double:Value
-        //   Vim.Area__index:Vim.AreaScheme:AreaScheme
-        //   Vim.Area__index:Vim.Element:Element
-        //   Vim.Area__string:Number
-        //   Vim.AreaScheme__byte:IsGrossBuildingArea
-        //   Vim.AreaScheme__index:Vim.Element:Element
-        //   Vim.Grid__byte:IsCurved
-        //   Vim.Grid__double:EndPoint.X
-        //   Vim.Grid__double:EndPoint.Y
-        //   Vim.Grid__double:EndPoint.Z
-        //   Vim.Grid__double:Extents.Max.X
-        //   Vim.Grid__double:Extents.Max.Y
-        //   Vim.Grid__double:Extents.Max.Z
-        //   Vim.Grid__double:Extents.Min.X
-        //   Vim.Grid__double:Extents.Min.Y
-        //   Vim.Grid__double:Extents.Min.Z
-        //   Vim.Grid__double:StartPoint.X
-        //   Vim.Grid__double:StartPoint.Y
-        //   Vim.Grid__double:StartPoint.Z
-        //   Vim.Grid__index:Vim.Element:Element
-        //   Vim.LevelInView__double:Extents.Max.X
-        //   Vim.LevelInView__double:Extents.Max.Y
-        //   Vim.LevelInView__double:Extents.Max.Z
-        //   Vim.LevelInView__double:Extents.Min.X
-        //   Vim.LevelInView__double:Extents.Min.Y
-        //   Vim.LevelInView__double:Extents.Min.Z
-        //   Vim.LevelInView__index:Vim.Level:Level
-        //   Vim.LevelInView__index:Vim.View:View
-        //   Vim.PhaseFilter__index:Vim.Element:Element
-        //   Vim.PhaseFilter__int:Demolished
-        //   Vim.PhaseFilter__int:Existing
-        //   Vim.PhaseFilter__int:New
-        //   Vim.PhaseFilter__int:Temporary
-        public static SerializableVersion v4_5_0 => SerializableVersion.Parse("4.5.0");
+            // Schema additions:
+            //   Vim.Area__byte:IsGrossInterior
+            //   Vim.Area__double:Perimeter
+            //   Vim.Area__double:Value
+            //   Vim.Area__index:Vim.AreaScheme:AreaScheme
+            //   Vim.Area__index:Vim.Element:Element
+            //   Vim.Area__string:Number
+            //   Vim.AreaScheme__byte:IsGrossBuildingArea
+            //   Vim.AreaScheme__index:Vim.Element:Element
+            //   Vim.Grid__byte:IsCurved
+            //   Vim.Grid__double:EndPoint.X
+            //   Vim.Grid__double:EndPoint.Y
+            //   Vim.Grid__double:EndPoint.Z
+            //   Vim.Grid__double:Extents.Max.X
+            //   Vim.Grid__double:Extents.Max.Y
+            //   Vim.Grid__double:Extents.Max.Z
+            //   Vim.Grid__double:Extents.Min.X
+            //   Vim.Grid__double:Extents.Min.Y
+            //   Vim.Grid__double:Extents.Min.Z
+            //   Vim.Grid__double:StartPoint.X
+            //   Vim.Grid__double:StartPoint.Y
+            //   Vim.Grid__double:StartPoint.Z
+            //   Vim.Grid__index:Vim.Element:Element
+            //   Vim.LevelInView__double:Extents.Max.X
+            //   Vim.LevelInView__double:Extents.Max.Y
+            //   Vim.LevelInView__double:Extents.Max.Z
+            //   Vim.LevelInView__double:Extents.Min.X
+            //   Vim.LevelInView__double:Extents.Min.Y
+            //   Vim.LevelInView__double:Extents.Min.Z
+            //   Vim.LevelInView__index:Vim.Level:Level
+            //   Vim.LevelInView__index:Vim.View:View
+            //   Vim.PhaseFilter__index:Vim.Element:Element
+            //   Vim.PhaseFilter__int:Demolished
+            //   Vim.PhaseFilter__int:Existing
+            //   Vim.PhaseFilter__int:New
+            //   Vim.PhaseFilter__int:Temporary
+            public const string v4_5_0 = "4.5.0";
 
-        // Schema additions:
-        //   Vim.BasePoint__byte:IsSurveyPoint
-        //   Vim.BasePoint__double:Position.X
-        //   Vim.BasePoint__double:Position.Y
-        //   Vim.BasePoint__double:Position.Z
-        //   Vim.BasePoint__double:SharedPosition.X
-        //   Vim.BasePoint__double:SharedPosition.Y
-        //   Vim.BasePoint__double:SharedPosition.Z
-        //   Vim.BasePoint__index:Vim.Element:Element
-        //   Vim.Element__byte:IsPinned
-        //   Vim.Element__string:UniqueId
-        //   Vim.Family__byte:IsInPlace
-        public static SerializableVersion v4_4_0 => SerializableVersion.Parse("4.4.0");
+            // Schema additions:
+            //   Vim.BasePoint__byte:IsSurveyPoint
+            //   Vim.BasePoint__double:Position.X
+            //   Vim.BasePoint__double:Position.Y
+            //   Vim.BasePoint__double:Position.Z
+            //   Vim.BasePoint__double:SharedPosition.X
+            //   Vim.BasePoint__double:SharedPosition.Y
+            //   Vim.BasePoint__double:SharedPosition.Z
+            //   Vim.BasePoint__index:Vim.Element:Element
+            //   Vim.Element__byte:IsPinned
+            //   Vim.Element__string:UniqueId
+            //   Vim.Family__byte:IsInPlace
+            public const string v4_4_0 = "4.4.0";
 
-        // G3d Additions:
-        //   g3d:instance:flags:0:uint16:1 (to support newly captured room geometry being hidden by default)
-        // Schema additions:
-        //   Vim.MaterialInElement__byte:IsPaint
-        //   Vim.MaterialInElement__double:Area
-        //   Vim.MaterialInElement__double:Volume
-        //   Vim.MaterialInElement__index:Vim.Element:Element
-        //   Vim.MaterialInElement__index:Vim.Material:Material
-        public static SerializableVersion v4_3_0 => SerializableVersion.Parse("4.3.0");
+            // G3d Additions:
+            //   g3d:instance:flags:0:uint16:1 (to support newly captured room geometry being hidden by default)
+            // Schema additions:
+            //   Vim.MaterialInElement__byte:IsPaint
+            //   Vim.MaterialInElement__double:Area
+            //   Vim.MaterialInElement__double:Volume
+            //   Vim.MaterialInElement__index:Vim.Element:Element
+            //   Vim.MaterialInElement__index:Vim.Material:Material
+            public const string v4_3_0 = "4.3.0";
 
-        // Schema additions:
-        //   Vim.ElementInSystem__index:Vim.Element:Element
-        //   Vim.ElementInSystem__index:Vim.System:System
-        //   Vim.ElementInSystem__int:Roles
-        //   Vim.ElementInWarning__index:Vim.Element:Element
-        //   Vim.ElementInWarning__index:Vim.Warning:Warning
-        //   Vim.ParameterDescriptor__int:Flags
-        //   Vim.ParameterDescriptor__string:Guid
-        //   Vim.System__index:Vim.Element:Element
-        //   Vim.System__int:SystemType
-        //   Vim.Warning__index:Vim.BimDocument:BimDocument
-        //   Vim.Warning__string:Description
-        //   Vim.Warning__string:Guid
-        //   Vim.Warning__string:Severity
-        //   Vim.Workset__index:Vim.BimDocument:BimDocument
-        public static SerializableVersion v4_2_0 => SerializableVersion.Parse("4.2.0");
+            // Schema additions:
+            //   Vim.ElementInSystem__index:Vim.Element:Element
+            //   Vim.ElementInSystem__index:Vim.System:System
+            //   Vim.ElementInSystem__int:Roles
+            //   Vim.ElementInWarning__index:Vim.Element:Element
+            //   Vim.ElementInWarning__index:Vim.Warning:Warning
+            //   Vim.ParameterDescriptor__int:Flags
+            //   Vim.ParameterDescriptor__string:Guid
+            //   Vim.System__index:Vim.Element:Element
+            //   Vim.System__int:SystemType
+            //   Vim.Warning__index:Vim.BimDocument:BimDocument
+            //   Vim.Warning__string:Description
+            //   Vim.Warning__string:Guid
+            //   Vim.Warning__string:Severity
+            //   Vim.Workset__index:Vim.BimDocument:BimDocument
+            public const string v4_2_0 = "4.2.0";
 
-        // Schema additions:
-        //   Vim.BimDocument__index:Vim.BimDocument:Parent
-        //   Vim.CompoundStructure__double:Width
-        //   Vim.CompoundStructure__index:Vim.CompoundStructureLayer:StructuralLayer
-        //   Vim.ShapeCollection__index:Vim.Element:Element
-        //   Vim.ShapeInShapeCollection__index:Vim.Shape:Shape
-        //   Vim.ShapeInShapeCollection__index:Vim.ShapeCollection:ShapeCollection
-        public static SerializableVersion v4_1_0 => SerializableVersion.Parse("4.1.0");
+            // Schema additions:
+            //   Vim.BimDocument__index:Vim.BimDocument:Parent
+            //   Vim.CompoundStructure__double:Width
+            //   Vim.CompoundStructure__index:Vim.CompoundStructureLayer:StructuralLayer
+            //   Vim.ShapeCollection__index:Vim.Element:Element
+            //   Vim.ShapeInShapeCollection__index:Vim.Shape:Shape
+            //   Vim.ShapeInShapeCollection__index:Vim.ShapeCollection:ShapeCollection
+            public const string v4_1_0 = "4.1.0";
 
-        // Object model schema version released with VIM 1.0
-        public static SerializableVersion v4_0_0 => SerializableVersion.Parse("4.0.0");
+            // Object model schema version released with VIM 1.0
+            public const string v4_0_0 = "4.0.0";
+        }
+        // ReSharper enable MemberHidesStaticFromOuterClass
+
+        // [MAINTAIN] Add more object model SerializableVersions below and update the current one.
+        public static SerializableVersion Current => v5_0_0;
+        public static SerializableVersion v5_0_0 => SerializableVersion.Parse(History.v5_0_0);
+        public static SerializableVersion v4_6_0 => SerializableVersion.Parse(History.v4_6_0);
+        public static SerializableVersion v4_5_0 => SerializableVersion.Parse(History.v4_5_0);
+        public static SerializableVersion v4_4_0 => SerializableVersion.Parse(History.v4_4_0);
+        public static SerializableVersion v4_3_0 => SerializableVersion.Parse(History.v4_3_0);
+        public static SerializableVersion v4_2_0 => SerializableVersion.Parse(History.v4_2_0);
+        public static SerializableVersion v4_1_0 => SerializableVersion.Parse(History.v4_1_0);
+        public static SerializableVersion v4_0_0 => SerializableVersion.Parse(History.v4_0_0);
     }
 
     public partial class DocumentModel
@@ -127,13 +149,6 @@ namespace Vim.Format.ObjectModel
             => Document.Header.Values.TryGetValue(SerializableHeader.SchemaField, out var schemaString)
                 ? SerializableVersion.Parse(schemaString)
                 : SerializableVersion.Unknown;
-    }
-
-    public partial class TableNameAttribute : Attribute
-    {
-        public string Name { get; }
-        public TableNameAttribute(string name)
-            => Name = name;
     }
 
     public enum G3dAttributeReferenceMultiplicity {
@@ -418,7 +433,9 @@ namespace Vim.Format.ObjectModel
     [TableName(TableNames.Element)]
     public partial class Element : Entity
     {
-        public int Id;
+        [EntityColumnLoader("int:Id", typeof(int), SchemaVersion.History.v4_6_0)]
+        public long Id;
+
         public string Type;
         public string Name;
         /// <summary>
@@ -427,11 +444,20 @@ namespace Vim.Format.ObjectModel
         /// We export this value to enable a correlation with other tools which persist the Element.UniqueId from Revit.
         /// </summary>
         public string UniqueId;
-        public Vector3 Location;
+
+        public float Location_X;
+        public float Location_Y;
+        public float Location_Z;
+        public Vector3 Location
+        {
+            get => new Vector3(Location_X, Location_Y, Location_Z);
+            set => (Location_X, Location_Y, Location_Z) = value;
+        }
+
         public string FamilyName;
         public bool IsPinned;
-        public Relation<Level> _Level;
 
+        public Relation<Level> _Level;
         public Relation<Phase> _PhaseCreated;
         public Relation<Phase> _PhaseDemolished;
         public Relation<Category> _Category;
@@ -464,14 +490,28 @@ namespace Vim.Format.ObjectModel
     public partial class AssemblyInstance : EntityWithElement
     {
         public string AssemblyTypeName;
-        public Vector3 Position;
+        public float Position_X;
+        public float Position_Y;
+        public float Position_Z;
+        public Vector3 Position
+        {
+            get => new Vector3(Position_X, Position_Y, Position_Z);
+            set => (Position_X, Position_Y, Position_Z) = value;
+        }
     }
 
     [TableName(TableNames.Group)]
     public partial class Group : EntityWithElement
     {
         public string GroupType;
-        public Vector3 Position;
+        public float Position_X;
+        public float Position_Y;
+        public float Position_Z;
+        public Vector3 Position
+        {
+            get => new Vector3(Position_X, Position_Y, Position_Z);
+            set => (Position_X, Position_Y, Position_Z) = value;
+        }
     }
 
     [TableName(TableNames.DesignOption)]
@@ -599,9 +639,21 @@ namespace Vim.Format.ObjectModel
     public partial class Category : Entity
     {
         public string Name;
-        public int Id;
+
+        [EntityColumnLoader("int:Id", typeof(int), SchemaVersion.History.v4_6_0)]
+        public long Id;
+        
         public string CategoryType;
-        public DVector3 LineColor;
+
+        public double LineColor_X;
+        public double LineColor_Y;
+        public double LineColor_Z;
+        public DVector3 LineColor
+        {
+            get => new DVector3(LineColor_X, LineColor_Y, LineColor_Z);
+            set => (LineColor_X, LineColor_Y, LineColor_Z) = value;
+        }
+
         /// <summary>
         /// Represents the associated built-in category in Revit.
         /// </summary>
@@ -646,16 +698,67 @@ namespace Vim.Format.ObjectModel
     public partial class FamilyInstance : EntityWithElement
     {
         public bool FacingFlipped;
-        public Vector3 FacingOrientation;
+
+        public float FacingOrientation_X;
+        public float FacingOrientation_Y;
+        public float FacingOrientation_Z;
+        public Vector3 FacingOrientation
+        {
+            get => new Vector3(FacingOrientation_X, FacingOrientation_Y, FacingOrientation_Z);
+            set => (FacingOrientation_X, FacingOrientation_Y, FacingOrientation_Z) = value;
+        }
+
         public bool HandFlipped;
         public bool Mirrored;
         public bool HasModifiedGeometry;
         public float Scale;
-        public Vector3 BasisX;
-        public Vector3 BasisY;
-        public Vector3 BasisZ;
-        public Vector3 Translation;
-        public Vector3 HandOrientation;
+
+        public float BasisX_X;
+        public float BasisX_Y;
+        public float BasisX_Z;
+        public Vector3 BasisX
+        {
+            get => new Vector3(BasisX_X, BasisX_Y, BasisX_Z);
+            set => (BasisX_X, BasisX_Y, BasisX_Z) = value;
+        }
+
+        public float BasisY_X;
+        public float BasisY_Y;
+        public float BasisY_Z;
+        public Vector3 BasisY
+        {
+            get => new Vector3(BasisY_X, BasisY_Y, BasisY_Z);
+            set => (BasisY_X, BasisY_Y, BasisY_Z) = value;
+        }
+
+        public float BasisZ_X;
+        public float BasisZ_Y;
+        public float BasisZ_Z;
+        public Vector3 BasisZ
+        {
+            get => new Vector3(BasisZ_X, BasisZ_Y, BasisZ_Z);
+            set => (BasisZ_X, BasisZ_Y, BasisZ_Z) = value;
+        }
+
+
+        public float Translation_X;
+        public float Translation_Y;
+        public float Translation_Z;
+        public Vector3 Translation
+        {
+            get => new Vector3(Translation_X, Translation_Y, Translation_Z);
+            set => (Translation_X, Translation_Y, Translation_Z) = value;
+        }
+
+        public float HandOrientation_X;
+        public float HandOrientation_Y;
+        public float HandOrientation_Z;
+        public Vector3 HandOrientation
+        {
+            get => new Vector3(HandOrientation_X, HandOrientation_Y, HandOrientation_Z);
+            set => (HandOrientation_X, HandOrientation_Y, HandOrientation_Z) = value;
+        }
+
         public Relation<FamilyType> _FamilyType;
         public Relation<Element> _Host;
         public Relation<Room> _FromRoom;
@@ -670,13 +773,68 @@ namespace Vim.Format.ObjectModel
     {
         public string Title;
         public string ViewType;
-        public DVector3 Up;
-        public DVector3 Right;
-        public DVector3 Origin;
-        public DVector3 ViewDirection;
-        public DVector3 ViewPosition;
+
+        public double Up_X;
+        public double Up_Y;
+        public double Up_Z;
+        public DVector3 Up
+        {
+            get => new DVector3(Up_X, Up_Y, Up_Z);
+            set => (Up_X, Up_Y, Up_Z) = value;
+        }
+
+        public double Right_X;
+        public double Right_Y;
+        public double Right_Z;
+        public DVector3 Right
+        {
+            get => new DVector3(Right_X, Right_Y, Right_Z);
+            set => (Right_X, Right_Y, Right_Z) = value;
+        }
+
+        public double Origin_X;
+        public double Origin_Y;
+        public double Origin_Z;
+        public DVector3 Origin
+        {
+            get => new DVector3(Origin_X, Origin_Y, Origin_Z);
+            set => (Origin_X, Origin_Y, Origin_Z) = value;
+        }
+
+        public double ViewDirection_X;
+        public double ViewDirection_Y;
+        public double ViewDirection_Z;
+        public DVector3 ViewDirection
+        {
+            get => new DVector3(ViewDirection_X, ViewDirection_Y, ViewDirection_Z);
+            set => (ViewDirection_X, ViewDirection_Y, ViewDirection_Z) = value;
+        }
+
+        public double ViewPosition_X;
+        public double ViewPosition_Y;
+        public double ViewPosition_Z;
+        public DVector3 ViewPosition
+        {
+            get => new DVector3(ViewPosition_X, ViewPosition_Y, ViewPosition_Z);
+            set => (ViewPosition_X, ViewPosition_Y, ViewPosition_Z) = value;
+        }
+
         public double Scale;
-        public DAABox2D Outline;
+
+        public double Outline_Min_X;
+        public double Outline_Min_Y;
+        public double Outline_Max_X;
+        public double Outline_Max_Y;
+        public DAABox2D Outline
+        {
+            get => new DAABox2D(new DVector2(Outline_Min_X, Outline_Min_Y), new DVector2(Outline_Max_X, Outline_Max_Y));
+            set
+            {
+                (Outline_Min_X, Outline_Min_Y) = value.Min;
+                (Outline_Max_X, Outline_Max_Y) = value.Max;
+            }
+        }
+
         public int DetailLevel; // 0 = Undefined, 1 = Coarse, 2 = Medium, 3 = Fine
         public Relation<Camera> _Camera;
 
@@ -733,7 +891,22 @@ namespace Vim.Format.ObjectModel
         /// <summary>
         /// The graphical extents of the level line, including the circular bubble
         /// </summary>
-        public DAABox Extents;
+        public double Extents_Min_X;
+        public double Extents_Min_Y;
+        public double Extents_Min_Z;
+        public double Extents_Max_X;
+        public double Extents_Max_Y;
+        public double Extents_Max_Z;
+
+        public DAABox Extents
+        {
+            get => new DAABox(new DVector3(Extents_Min_X, Extents_Min_Y, Extents_Min_Z), new DVector3(Extents_Max_X, Extents_Max_Y, Extents_Max_Z));
+            set
+            {
+                (Extents_Min_X, Extents_Min_Y, Extents_Min_Z) = value.Min;
+                (Extents_Max_X, Extents_Max_Y, Extents_Max_Z) = value.Max;
+            }
+        }
 
         public Relation<Level> _Level;
         public Relation<View> _View;
@@ -811,10 +984,18 @@ namespace Vim.Format.ObjectModel
         /// </summary>
         public string MaterialCategory;
 
+
         /// <summary>
         /// The diffuse (albedo) color.
         /// </summary>
-        public DVector3 Color;
+        public double Color_X;
+        public double Color_Y;
+        public double Color_Z;
+        public DVector3 Color
+        {
+            get => new DVector3(Color_X, Color_Y, Color_Z);
+            set => (Color_X, Color_Y, Color_Z) = value;
+        }
 
         /// <summary>
         /// The asset representing the diffuse (albedo) color texture.
@@ -824,12 +1005,24 @@ namespace Vim.Format.ObjectModel
         /// <summary>
         /// The UV scaling factor of the diffuse (albedo) color texture.
         /// </summary>
-        public DVector2 ColorUvScaling = new DVector2(1, 1);
+        public double ColorUvScaling_X = 1;
+        public double ColorUvScaling_Y = 1;
+        public DVector2 ColorUvScaling
+        {
+            get => new DVector2(ColorUvScaling_X, ColorUvScaling_Y);
+            set => (ColorUvScaling_X, ColorUvScaling_Y) = value;
+        }
 
         /// <summary>
         /// The UV offset of the diffuse (albedo) color texture.
         /// </summary>
-        public DVector2 ColorUvOffset;
+        public double ColorUvOffset_X;
+        public double ColorUvOffset_Y;
+        public DVector2 ColorUvOffset
+        {
+            get => new DVector2(ColorUvOffset_X, ColorUvOffset_Y);
+            set => (ColorUvOffset_X, ColorUvOffset_Y) = value;
+        }
 
         /// <summary>
         /// The asset representing the normal (bump) texture.
@@ -839,12 +1032,24 @@ namespace Vim.Format.ObjectModel
         /// <summary>
         /// The UV scaling factor of the normal (bump) texture.
         /// </summary>
-        public DVector2 NormalUvScaling = new DVector2(1, 1);
+        public double NormalUvScaling_X = 1;
+        public double NormalUvScaling_Y = 1;
+        public DVector2 NormalUvScaling
+        {
+            get => new DVector2(NormalUvScaling_X, NormalUvScaling_Y);
+            set => (NormalUvScaling_X, NormalUvScaling_Y) = value;
+        }
 
         /// <summary>
         /// The UV offset of the normal (bump) texture.
         /// </summary>
-        public DVector2 NormalUvOffset;
+        public double NormalUvOffset_X;
+        public double NormalUvOffset_Y;
+        public DVector2 NormalUvOffset
+        {
+            get => new DVector2(NormalUvOffset_X, NormalUvOffset_Y);
+            set => (NormalUvOffset_X, NormalUvOffset_Y) = value;
+        }
 
         /// <summary>The magnitude of the normal texture effect.</summary>
         public double NormalAmount;
@@ -946,7 +1151,22 @@ namespace Vim.Format.ObjectModel
     [TableName(TableNames.Geometry)]
     public partial class Geometry : Entity
     {
-        public AABox Box;
+        public float Box_Min_X;
+        public float Box_Min_Y;
+        public float Box_Min_Z;
+        public float Box_Max_X;
+        public float Box_Max_Y;
+        public float Box_Max_Z;
+        public AABox Box
+        {
+            get => new AABox(new Vector3(Box_Min_X, Box_Min_Y, Box_Min_Z), new Vector3(Box_Max_X, Box_Max_Y, Box_Max_Z));
+            set
+            {
+                (Box_Min_X, Box_Min_Y, Box_Min_Z) = value.Min;
+                (Box_Max_X, Box_Max_Y, Box_Max_Z) = value.Max;
+            }
+        }
+
         public int VertexCount;
         public int FaceCount;
     }
@@ -1126,14 +1346,28 @@ namespace Vim.Format.ObjectModel
         /// <summary>
         /// The position of the BasePoint relative to the BimDocument's internal origin.
         /// </summary>
-        public DVector3 Position;
+        public double Position_X;
+        public double Position_Y;
+        public double Position_Z;
+        public DVector3 Position
+        {
+            get => new DVector3(Position_X, Position_Y, Position_Z);
+            set => (Position_X, Position_Y, Position_Z) = value;
+        }
 
         /// <summary>
         /// From the RevitAPI docs (2020 onwards):<br/>
         /// Shared position of the BasePoint based on the active ProjectLocation of its belonging Document.<br/>
         /// To get the shared position under other ProjectLocations, please use ProjectLocation.GetProjectPosition(BasePoint.Position).
         /// </summary>
-        public DVector3 SharedPosition;
+        public double SharedPosition_X;
+        public double SharedPosition_Y;
+        public double SharedPosition_Z;
+        public DVector3 SharedPosition
+        {
+            get => new DVector3(SharedPosition_X, SharedPosition_Y, SharedPosition_Z);
+            set => (SharedPosition_X, SharedPosition_Y, SharedPosition_Z) = value;
+        }
     }
 
     /// <summary>
@@ -1206,12 +1440,26 @@ namespace Vim.Format.ObjectModel
         /// <summary>
         /// The start point of the grid line
         /// </summary>
-        public DVector3 StartPoint;
+        public double StartPoint_X;
+        public double StartPoint_Y;
+        public double StartPoint_Z;
+        public DVector3 StartPoint
+        {
+            get => new DVector3(StartPoint_X, StartPoint_Y, StartPoint_Z);
+            set => (StartPoint_X, StartPoint_Y, StartPoint_Z) = value;
+        }
 
         /// <summary>
         /// The end point of the grid line
         /// </summary>
-        public DVector3 EndPoint;
+        public double EndPoint_X;
+        public double EndPoint_Y;
+        public double EndPoint_Z;
+        public DVector3 EndPoint
+        {
+            get => new DVector3(EndPoint_X, EndPoint_Y, EndPoint_Z);
+            set => (EndPoint_X, EndPoint_Y, EndPoint_Z) = value;
+        }
 
         /// <summary>
         /// Whether the grid is curved 
@@ -1221,7 +1469,22 @@ namespace Vim.Format.ObjectModel
         /// <summary>
         /// The extents of the grid as a bounding box
         /// </summary>
-        public DAABox Extents;
+        public double Extents_Min_X;
+        public double Extents_Min_Y;
+        public double Extents_Min_Z;
+        public double Extents_Max_X;
+        public double Extents_Max_Y;
+        public double Extents_Max_Z;
+
+        public DAABox Extents
+        {
+            get => new DAABox(new DVector3(Extents_Min_X, Extents_Min_Y, Extents_Min_Z), new DVector3(Extents_Max_X, Extents_Max_Y, Extents_Max_Z));
+            set
+            {
+                (Extents_Min_X, Extents_Min_Y, Extents_Min_Z) = value.Min;
+                (Extents_Max_X, Extents_Max_Y, Extents_Max_Z) = value.Max;
+            }
+        }
 
         /// <summary>
         /// The associated FamilyType of the Grid. In Revit, this maps to the Grid's GridType.
@@ -1327,27 +1590,18 @@ namespace Vim.Format.ObjectModel
     /// <summary>
     /// Helper functions for performing reflection over the object model
     /// </summary>
-    public static class ObjectModelReflection
+    public static partial class ObjectModelReflection
     {
-        public static bool IsRelationType(this Type t)
-            => t.Name == "Relation`1";
+        public static EntityColumnLoadingInfo[] GetEntityColumnLoadingInfo(this FieldInfo fi)
+            => fi.GetOrderedEntityColumnLoaderAttributes(SchemaVersion.Current)
+                .Select(a =>
+                {
+                    var (strategy, typePrefix) = a.SerializedType.GetValueSerializationStrategyAndTypePrefix();
+                    return new EntityColumnLoadingInfo(strategy, typePrefix, a);
+                })
+                .ToArray();
 
-        public static IEnumerable<FieldInfo> GetEntityFields(this Type t, bool skipIndex = true, bool skipProperties = true)
-            => t.GetFields().Where(fi =>
-                !fi.FieldType.Equals(typeof(Document))
-                && (skipIndex ? fi.Name != "Index" : true)
-                && (skipProperties ? fi.Name != "Properties" : true)
-                && !IsRelationType(fi.FieldType)
-                && !fi.IsLiteral // do not include const fields
-            );
-
-        public static Type RelationTypeParameter(this Type t)
-            => t.GenericTypeArguments[0];
-
-        public static IEnumerable<FieldInfo> GetRelationFields(this Type t)
-            => t.GetFields().Where(fi => IsRelationType(fi.FieldType));
-
-        public static bool IsEntityAndHasTableNameAttribute(Type t)
+        public static bool IsEntityAndHasTableNameAttribute(this Type t)
             => typeof(Entity).IsAssignableFrom(t) && t.GetCustomAttribute(typeof(TableNameAttribute)) != null;
 
         public static IEnumerable<Type> GetEntityTypes<T>() where T : Entity
@@ -1355,24 +1609,6 @@ namespace Vim.Format.ObjectModel
 
         public static IEnumerable<Type> GetEntityTypes()
             => GetEntityTypes<Entity>().Where(IsEntityAndHasTableNameAttribute);
-
-        public static string GetEntityTableName(this Type t)
-            => (t.GetCustomAttribute(typeof(TableNameAttribute)) as TableNameAttribute)?.Name;
-
-        public static (string IndexColumnName, string LocalFieldName) GetIndexColumnInfo(this FieldInfo fieldInfo)
-        {
-            if (!fieldInfo.Name.StartsWith("_"))
-                throw new Exception("Relation field info names must start with a leading underscore");
-
-            var localFieldName = fieldInfo.Name.Substring(1);
-
-            var relationTypeParameter = fieldInfo.FieldType.RelationTypeParameter();
-            var relatedTableName = relationTypeParameter.GetEntityTableName();
-            if (string.IsNullOrEmpty(relatedTableName))
-                throw new Exception($"Could not find related table for type {relationTypeParameter}");
-
-            return (ColumnExtensions.GetIndexColumnName(relatedTableName, localFieldName), localFieldName);
-        }
 
         public static object GetPropertyValue(this DocumentModel documentModel, string propertyName)
             => documentModel.GetType().GetProperty(propertyName)?.GetValue(documentModel, null);
@@ -1385,17 +1621,18 @@ namespace Vim.Format.ObjectModel
             {
                 var entityTableSchema = vimSchema.AddEntityTableSchema(entityType.GetEntityTableName());
 
-                foreach (var fieldInfo in GetRelationFields(entityType))
+                foreach (var fieldInfo in entityType.GetRelationFields())
                 {
                     var (indexColumnName, _) = fieldInfo.GetIndexColumnInfo();
                     entityTableSchema.AddColumn(indexColumnName);
                 }
 
-                foreach (var fieldInfo in GetEntityFields(entityType))
+                foreach (var fieldInfo in entityType.GetEntityFields())
                 {
-                    var columnNames = fieldInfo.GetValueColumnNames();
-                    foreach (var columnName in columnNames)
-                        entityTableSchema.AddColumn(columnName);
+                    var loadingInfos = fieldInfo.GetEntityColumnLoadingInfo();
+
+                    foreach (var li in loadingInfos)
+                        entityTableSchema.AddColumn(li.EntityColumnAttribute.SerializedValueColumnName);
                 }
             }
             return vimSchema;

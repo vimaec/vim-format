@@ -150,7 +150,7 @@ namespace Vim.Format.ObjectModel
 
         // Commonly Accessed Properties
 
-        public int ElementId => DocumentModel.GetElementId(ElementIndex, -1);
+        public long ElementId => DocumentModel.GetElementId(ElementIndex, -1);
         public string ElementUniqueId => DocumentModel.GetElementUniqueId(ElementIndex);
 
         public string ElementUniqueIdWithBimScopedElementIdFallback
