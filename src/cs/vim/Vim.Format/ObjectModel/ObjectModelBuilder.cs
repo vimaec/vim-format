@@ -121,8 +121,8 @@ namespace Vim.Format.ObjectModel
         public TEntity GetOrDefault<TEntity>(object key) where TEntity : Entity
             => TryGet<TEntity>(key, out var e) ? e : default;
 
-        public DocumentBuilder ToDocumentBuilder(string generator)
-            => AddEntityTablesToDocumentBuilder(new DocumentBuilder(generator, SchemaVersion.Current));
+        public DocumentBuilder ToDocumentBuilder(string generator, string versionString)
+            => AddEntityTablesToDocumentBuilder(new DocumentBuilder(generator, SchemaVersion.Current, versionString));
 
         public bool HasBuilder<TEntity>()
             => HasBuilder(typeof(TEntity));

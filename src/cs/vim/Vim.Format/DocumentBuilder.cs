@@ -24,9 +24,10 @@ namespace Vim.Format
         public DocumentBuilder(
             string generator,
             SerializableVersion schema,
+            string versionString,
             IReadOnlyDictionary<string, string> optionalHeaderValues = null)
         {
-            Header = new SerializableHeader(generator, schema, optionalHeaderValues);
+            Header = new SerializableHeader(generator, schema, versionString, optionalHeaderValues);
         }
 
         public EntityTableBuilder GetTableBuilderOrCreate(string name)

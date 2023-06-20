@@ -67,13 +67,14 @@ namespace Vim.Format
         /// Returns a new dictionary containing optional values. Applied upon serialization.
         /// </summary>
         private static IReadOnlyDictionary<string, string> AddOptionalValues(
-            IReadOnlyDictionary<string, string> dictionary)
+            IReadOnlyDictionary<string, string> dictionary,
+            string versionString)
         {
             var d = dictionary.ToDictionary(
                 kv => kv.Key,
                 kv => kv.Value);
 
-            d.AddIfNotPresent(BuildField, Constants.QualifiedVersionString);
+            d.AddIfNotPresent(BuildField, versionString);
 
             return d;
         }
@@ -81,7 +82,7 @@ namespace Vim.Format
         /// <summary>
         /// Constructor used during serialization of a new VIM.
         /// </summary>
-        public SerializableHeader(string generator, SerializableVersion schema, IReadOnlyDictionary<string, string> values = null)
+        public SerializableHeader(string generator, SerializableVersion schema, string versionString, IReadOnlyDictionary<string, string> values = null)
             : this(
             CurrentVimFormatVersion,
             Guid.NewGuid(),
@@ -89,7 +90,7 @@ namespace Vim.Format
             generator,
             DateTime.UtcNow,
             schema,
-            AddOptionalValues(values ?? new Dictionary<string, string>()))
+            AddOptionalValues(values ?? new Dictionary<string, string>(), versionString))
         { }
 
         /// <summary>
