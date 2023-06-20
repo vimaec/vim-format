@@ -31,6 +31,7 @@ jobs:
       - name: Git Checkout
         uses: actions/checkout@v2
         with:
+          lfs: true
           fetch-depth: 0  # fetches the whole history in order to be able to merge with the base branch
 
       - name: Setup Git VIM Robot User Info
