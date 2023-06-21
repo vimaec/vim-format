@@ -21,8 +21,10 @@ Unlike other 3D data formats, VIM is designed to carry substantial amounts of co
 * Unlike glTF and FBX, VIM is not designed to specify animated assets  
 -->
 
+<!-- TODO: Do we want to keep this?
 # Sample Implementation
 A sample validating VIM reader can be found at: https://github.com/vimaec/vim/blob/master/VIMReference/Program.cs
+-->
 
 # About this Specification
 
@@ -34,7 +36,7 @@ This is the specification for version 1.0.0 of the VIM data format. It is divide
 5. FAQ
 
 # 1. VIM Format Binary Specification
-At the top level, a VIM document conforms to the [BFAST (Binary Format for Array Serialization and Transmission) binary data format](https://github.com/vimaec/bfast).
+At the top level, a VIM document conforms to the [BFAST (Binary Format for Array Serialization and Transmission) binary data format](./bfast.md).
 A BFAST is conceptually similar to a ZIP or TAR archive without compression, just an array of named data buffers. Physically it is laid out as a header, an array of range structures (each containing offsets to the beginning and end of a buffer), and then the data section. The following structures assume 64-bit or smaller alignment.
 
 ## Header
@@ -115,10 +117,10 @@ The `schema` field contains the version of the VIM Object Model.
 The assets section of a BIM is also a BFAST container. It may contain any number of buffers with any names. Buffers prefixed with the name `texture/` are assumed to be texture files. By convention buffers prefixed with the name `render/` contain image files. The asset buffer `render/main.png` is used as the PNG thumbnail of the VIM file.
 
 ## Geometry Buffer
-The geometry section of a VIM contains the merged geometry and basic scene graph information for an entire VIM document using the [G3D format](https://github.com/vimaec/g3d).
+The geometry section of a VIM contains the merged geometry and basic scene graph information for an entire VIM document using the [G3D format](./g3d.md).
 
 ### About G3D
-The [G3D format](https://github.com/vimaec/g3d) is a binary format for 3D geometry that encodes data in an array of attribute buffers. 
+The [G3D format](./g3d.md) is a binary format for 3D geometry that encodes data in an array of attribute buffers. 
 
 G3D is based on the BFAST binary layout and uses a naming convention to identify the layout of each attribute buffer and how it is used.
 
@@ -134,7 +136,7 @@ G3D attributes have names to identify them (e.g., position or UV) and uses indic
 
 They can be of one of the following core data datatypes: float32, float64, int8, int16, int32, int64.
 
-More information on G3D is available on its Github repo at [https://github.com/vimaec/g3d](https://github.com/vimaec/g3d).
+More information on G3D is available on its [page](./g3d.md).
 
 ### VIM Geometry Attributes
 The geometry in a VIM contains the following attributes:
@@ -221,9 +223,9 @@ This buffer is encoded as a BFAST, with each buffer containing an entity table. 
 
 The "VIM Object Model" refers to the schema of the entity tables. This constitutes the name of each table, the name and type of each column in each table, and the relationship between tables, as specified by index columns.
 
-- [Conceptual Overview](./ObjectModel/VIM_Object_Model.md)
+- [Conceptual Overview](./object-model.md)
 
-- [Schema](./ObjectModel/object-model-schema.json)
+- [Schema](./object-model-schema.json)
 
   - The "Tables" object describes the entity table names and their contained columns.
 
@@ -244,7 +246,7 @@ The "VIM Object Model" refers to the schema of the entity tables. This constitut
 
     - **Index** columns are prefixed with `index:(TABLE_NAME):` and describe a relation to a row in another table. For example, the column `index:Vim.BimDocument:BimDocument` in the `Vim.Element` table contains 32-bit signed integer values representing indexes into the `Vim.BimDocument` table. This index encodes the relation between an Element and its originating BimDocument. If there is no relation, an index value of `-1` is used.
 
-- [Schema Evolution](./ObjectModel/schema-diff.json)
+- [Schema Evolution](./schema-diff.json)
 
   - This file summarizes the difference between schema versions using a flat representation of the entity table columns, prefixed by their entity table name, in the form: `(TABLE_NAME)__(COLUMN_NAME)`.
 

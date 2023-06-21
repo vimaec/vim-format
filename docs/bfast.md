@@ -115,7 +115,7 @@ A name may contain any Utf-8 encoded character except the null character.
 There must be N-1 names where N is the number of ranges (i.e. the `NumArrays` value in header). 
 
 # Implementations
-
+<!-- TODO: Update this? -->
 The official reference implementation of BFAST is written in C# and targets .NET Standard 2.0. The C#
 test suite uses NUnit and targets .NET Core 2.1. At VIM AEC we are using BFAST in production code that 
 targets Unity 2019.1 and .NET Framework 4.7.1.

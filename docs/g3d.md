@@ -18,17 +18,15 @@ G3D is maintained by [VIMaec LLC](https://vimaec.com) and is licensed under the 
 
 On this Github repository we have the following projects:
 
-* `csharp\Vim.G3d` - C# .NET Standard 2.0 Library for reading/writing G3D buffers 
-* `csharp\Vim.G3d.AssimpAdapter` - C# .NET Framework 4.7.1 library for converting from Assimp meshes to G3D data structures
-* `csharp\Vim.G3d.Test` - C# .NET Core 2.1 project with NUnit tests 
-* `csharp\Vim.G3d.UnityAdapter` - C# .NET Framework 4.7.1 library for converting to/from Unity types (tested with Unit 2019.1) 
-* `unity\Vim.G3d.Unity` - A Unity 2019.1.14 project for testing the Unity adapters  
+* `src/cs/g3d/Vim.G3d` - C# .NET Standard 2.0 Library for reading/writing G3D buffers
+* `src/cs/g3d/Vim.G3d.AssimpAdapter` - C# .NET Framework 4.7.1 library for converting from Assimp meshes to G3D data structures
+* `src/cs/g3d/Vim.G3d.Tests` - C# .NET Core 2.1 project with NUnit tests
 
 # Format 
 
 ## BFAST Container
 
-The underlying binary layout of a G3D file conforms to the [BFAST serialization format](https://github.com/vimaec/bfast), which is a simple and efficient binary format for serializing collections of byte arrays. BFAST provides an interface that allows named arrays of binary data to be serialized and deserialized quickly and easily.
+The underlying binary layout of a G3D file conforms to the [BFAST serialization format](./bfast.md), which is a simple and efficient binary format for serializing collections of byte arrays. BFAST provides an interface that allows named arrays of binary data to be serialized and deserialized quickly and easily.
 
 The first named buffer in the BFAST container is reserved for meta-information about the file encoded in JSON format. It has the name "meta". Each subsequent buffer uses the attribute descriptor string as a name. 
 
@@ -51,13 +49,13 @@ This attribute descriptor string is the name of the buffer.
 G3D is organized as a collection of attribute buffers. Each attributes describe what part of the incoming geometry they are associated with:
 
 * vertex     // vertex data
-* corner    // face-vertex data
-* face      // per polygon data
-* edge      // per half-edge data 
-* mesh     // A continuous group of submeshes
-* submesh  // polygonal group - assumes a contiguous sequence of indices in the index buffer
-* instance // objects which may have a related mesh, matrix and more.
-* all		// whole object data - for example face-size of 4 with whole object indicates a quad mesh
+* corner     // face-vertex data
+* face       // per polygon data
+* edge       // per half-edge data 
+* mesh       // A continuous group of submeshes
+* submesh    // polygonal group - assumes a contiguous sequence of indices in the index buffer
+* instance   // objects which may have a related mesh, matrix and more.
+* all        // whole object data - for example face-size of 4 with whole object indicates a quad mesh
 
 ### Semantic
 
