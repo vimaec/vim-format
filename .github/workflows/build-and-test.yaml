@@ -1,0 +1,65 @@
+name: Build merged C++
+
+on:
+  push:
+    branches:
+      - vadim/repo-setup
+  # pull_request:
+  #   branches:
+  #     - develop
+
+jobs:
+  ###############
+  ##### C++ #####
+  ###############
+
+  build_cpp_merged:
+    uses: ./.github/workflows/merge-and-run.yaml
+    with:
+      run: ./build-cpp-tests.sh
+      working-directory: ./devops
+
+  test_cpp_merged:
+    if: ${{ success() }}
+    needs: build_cpp_merged
+    uses: ./.github/workflows/merge-and-run.yaml
+    with:
+      lfs: true
+      run: ./run-cpp-tests.sh
+      working-directory: ./devops
+
+  ##############
+  ##### C# #####
+  ##############
+  
+  build_cs_merged:
+    uses: ./.github/workflows/merge-and-run.yaml
+    with:
+      run: dotnet build ./src/cs/vim-format.sln -c Release
+
+  test_cs_merged:
+    if: ${{ success() }}
+    needs: build_cs_merged
+    uses: ./.github/workflows/merge-and-run.yaml
+    with:
+      lfs: true
+      run: dotnet test ./src/cs/vim-format.sln
+
+  ##############
+  ##### TS #####
+  ##############
+  
+  build_ts_merged:
+    uses: ./.github/workflows/merge-and-run.yaml
+    with:
+      run: npm install && npm run build
+      working-directory: ./src/ts
+
+  test_ts_merged:
+    if: ${{ success() }}
+    needs: build_ts_merged
+    uses: ./.github/workflows/merge-and-run.yaml
+    with:
+      lfs: true
+      run: npm install && npm test
+      working-directory: ./src/ts

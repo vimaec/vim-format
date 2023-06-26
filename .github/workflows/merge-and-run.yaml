@@ -1,0 +1,41 @@
+name: Build merged
+
+# TODO: change to git merge origin/${GITHUB_BASE_REF}
+
+on:
+  workflow_call:
+    inputs:
+      lfs:
+        type: boolean
+        default: false
+      run:
+        type: string
+      working-directory:
+        type: string
+        default: "."
+
+jobs:
+  merge_and_run:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          lfs: ${{ inputs.lfs }}
+          fetch-depth: 0  # fetches the whole history in order to be able to merge with the base branch
+
+      - name: Setup Git VIM Robot User Info
+        run: |
+          git config --global user.email "vim-robot@email.com"
+          git config --global user.name "Vim Robot"
+
+      - name: Merge with base
+        run: git merge origin/develop
+        # run: git merge origin/${GITHUB_BASE_REF} # GITHUB_BASE_REF is only defined for pull requests
+        shell: bash
+
+      - name: Run
+        shell: bash
+        run: ${{ inputs.run }}
+        working-directory: ${{ inputs.working-directory }}
