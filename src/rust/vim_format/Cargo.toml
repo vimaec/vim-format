@@ -1,0 +1,13 @@
+[package]
+name = "vim_format"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+bfast = { path = "../bfast" }
+g3d = { path = "../g3d" }
+vim = { path = "../vim" }
+math3d = { path = "../math3d" }
+object_model = { path = "../object_model" }
