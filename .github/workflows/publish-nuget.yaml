@@ -1,0 +1,31 @@
+name: Publish NuGet
+
+on:
+  workflow_call:
+    inputs:
+      project_path:
+        type: string
+      test_project_path:
+        type: string
+      package_name:
+        type: string
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+    - name: Checkout shared scripts
+      uses: actions/checkout@v2
+      with:
+        repository: vimaec/ci-cd-scripts
+        ref: refs/heads/main
+        path: .github/
+    - uses: ./.github/actions/publish-nuget
+      with:
+        project_path: ${{ inputs.project_path }}
+        test_project_path: ${{ inputs.test_project_path }}
+        package_name: ${{ inputs.package_name }}
+        api_key: ${{secrets.VIM_NUGET_PUSH}}
+        root_path: ".github"

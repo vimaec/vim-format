@@ -5,22 +5,8 @@ on:
 
 jobs:
   publish:
-
-    runs-on: ubuntu-latest
-
-    steps:
-    - name: Checkout repository
-      uses: actions/checkout@v2
-    - name: Checkout shared scripts
-      uses: actions/checkout@v2
-      with:
-        repository: vimaec/ci-cd-scripts
-        ref: refs/heads/main
-        path: .github/
-    - uses: ./.github/actions/publish-nuget
-      with:
-        project_path: src/cs/bfast/Vim.BFast/Vim.BFast.csproj
-        test_project_path: src/cs/bfast/Vim.BFast.Tests/Vim.BFast.Tests.csproj
-        package_name: Vim.BFast
-        api_key: ${{secrets.VIM_NUGET_PUSH}}
-        root_path: ".github"
+    uses: ./.github/workflows/publish-nuget.yaml
+    with:
+      project_path: src/cs/bfast/Vim.BFast/Vim.BFast.csproj
+      test_project_path: src/cs/bfast/Vim.BFast.Tests/Vim.BFast.Tests.csproj
+      package_name: Vim.BFast
