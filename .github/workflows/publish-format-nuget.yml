@@ -1,0 +1,12 @@
+name: Publish Format NuGet
+
+on:
+  workflow_dispatch:
+
+jobs:
+  publish:
+    uses: ./.github/workflows/publish-nuget.yaml
+    with:
+      project_path: src/cs/vim/Vim.Format/Vim.Format.csproj
+      test_project_path: src/cs/vim/Vim.Format.Tests/Vim.Format.Tests.csproj
+      package_name: Vim.Format
