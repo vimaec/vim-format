@@ -14,18 +14,48 @@ jobs:
   publish:
     runs-on: ubuntu-latest
     steps:
+
+    ############################
+    ########## SETUP ###########
+    ############################
+
     - name: Checkout repository
-      uses: actions/checkout@v2
-    - name: Checkout shared scripts
-      uses: actions/checkout@v2
-      with:
-        repository: vimaec/ci-cd-scripts
-        ref: refs/heads/main
-        path: .github/
-    - uses: ./.github/actions/publish-nuget
-      with:
-        project_path: ${{ inputs.project_path }}
-        test_project_path: ${{ inputs.test_project_path }}
-        package_name: ${{ inputs.package_name }}
-        api_key: ${{secrets.VIM_NUGET_PUSH}}
-        root_path: ".github"
+      uses: actions/checkout@v3
+    - name: Install additional tools
+      run: sudo apt install nuget
+      shell: bash
+    - name: Check version
+      # composite actions don't support if-statements yet
+      run: |
+        ! [[ "${{ inputs.package_name }}" == "" ]] && \
+        ./devops/check-nuget-version.sh ${{ inputs.project_path }} ${{ inputs.package_name }} \
+        || true
+      shell: bash
+
+    ############################
+    ########## BUILD ###########
+    ############################
+
+    - name: Restore dependencies
+      run: dotnet restore ${{ inputs.project_path }}
+      shell: bash
+    - name: Build
+      run: dotnet build -c Release --no-restore ${{ inputs.project_path }}
+      shell: bash
+    - name: Test
+      run: dotnet test -c Release ${{ inputs.test_project_path }}
+      shell: bash
+    - name: Pack NuGet package
+      run: nuget pack ${{ inputs.project_path }} -Symbols -SymbolPackageFormat snupkg -OutputDirectory . -NonInteractive -Properties Configuration=Release -Exclude *.tt
+      shell: bash
+
+    ##############################
+    ########## PUBLISH ###########
+    ##############################
+
+    - name: Push NuGet package
+      run: nuget push ${{ inputs.package_name }}*.nupkg -ApiKey ${{ inputs.api_key }} -Source https://api.nuget.org/v3/index.json
+      shell: bash
+    - name: Tag commit
+      run: ./devops/tag-commit.sh ${{ inputs.project_path }} ${{ inputs.package_name }}
+      shell: bash
