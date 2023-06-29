@@ -9,7 +9,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\math3d\Vim.Math3D.Tests\Vim.Math3D.Tests.csproj" />
     <ProjectReference Include="..\Vim.Format\Vim.Format.csproj" />
   </ItemGroup>
 
