@@ -38,12 +38,9 @@ jobs:
         # run: git merge origin/${GITHUB_BASE_REF} # GITHUB_BASE_REF is only defined for pull requests
         shell: bash
 
-      - name: Run CodeGen
-        # composite actions don't support if-statements yet
-        run: |
-          ! [[ ${{ inputs.run-codegen }} ]] && \
-          dotnet build ./src/cs/vim/Vim.Format.CodeGen/Vim.Format.CodeGen.csproj \
-          || true
+      - name: Optionally run CodeGen first
+        if: ${{ inputs.run-codegen }}
+        run: dotnet build ./src/cs/vim/Vim.Format.CodeGen/Vim.Format.CodeGen.csproj
         shell: bash
 
       - name: Run
