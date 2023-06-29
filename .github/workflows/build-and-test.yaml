@@ -9,13 +9,25 @@ on:
   #     - develop
 
 jobs:
+
+  ###############
+  ### CodeGen ###
+  ###############
+
+  run_codegen:
+    uses: ./.github/workflows/merge-and-run.yaml
+    with:
+      run: dotnet build ./src/cs/vim/Vim.Format.CodeGen/Vim.Format.CodeGen.csproj
+
   ###############
   ##### C++ #####
   ###############
 
   build_cpp_merged:
+    needs: run_codegen
     uses: ./.github/workflows/merge-and-run.yaml
     with:
+      run-codegen: true
       run: ./build-cpp-tests.sh
       working-directory: ./devops
 
@@ -25,6 +37,7 @@ jobs:
     uses: ./.github/workflows/merge-and-run.yaml
     with:
       lfs: true
+      run-codegen: true
       run: ./run-cpp-tests.sh
       working-directory: ./devops
 
@@ -33,8 +46,10 @@ jobs:
   ##############
   
   build_cs_merged:
+    needs: run_codegen
     uses: ./.github/workflows/merge-and-run.yaml
     with:
+      run-codegen: true
       run: dotnet build ./src/cs/vim-format.sln -c Release
 
   test_cs_merged:
@@ -43,6 +58,7 @@ jobs:
     uses: ./.github/workflows/merge-and-run.yaml
     with:
       lfs: true
+      run-codegen: true
       run: dotnet test ./src/cs/vim-format.sln
 
   ##############
@@ -50,8 +66,10 @@ jobs:
   ##############
   
   build_ts_merged:
+    needs: run_codegen
     uses: ./.github/workflows/merge-and-run.yaml
     with:
+      run-codegen: true
       run: npm install && npm run build
       working-directory: ./src/ts
 
@@ -61,5 +79,6 @@ jobs:
     uses: ./.github/workflows/merge-and-run.yaml
     with:
       lfs: true
+      run-codegen: true
       run: npm install && npm test
       working-directory: ./src/ts

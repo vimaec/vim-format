@@ -8,6 +8,9 @@ on:
       lfs:
         type: boolean
         default: false
+      run-codegen:
+        type: boolean
+        default: false
       run:
         type: string
       working-directory:
@@ -33,6 +36,14 @@ jobs:
       - name: Merge with base
         run: git merge origin/develop
         # run: git merge origin/${GITHUB_BASE_REF} # GITHUB_BASE_REF is only defined for pull requests
+        shell: bash
+
+      - name: Run CodeGen
+        # composite actions don't support if-statements yet
+        run: |
+          ! [[ ${{ inputs.run-codegen }} ]] && \
+          dotnet build ./src/cs/vim/Vim.Format.CodeGen/Vim.Format.CodeGen.csproj \
+          || true
         shell: bash
 
       - name: Run
