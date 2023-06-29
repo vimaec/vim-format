@@ -57,5 +57,5 @@ jobs:
       run: nuget push ${{ inputs.package_name }}*.nupkg -ApiKey ${{ inputs.api_key }} -Source https://api.nuget.org/v3/index.json
       shell: bash
     - name: Tag commit
-      run: ./devops/tag-commit.sh ${{ inputs.project_path }} ${{ inputs.package_name }}
+      run: ./devops/cs-tag-commit.sh ${{ inputs.project_path }} ${{ inputs.package_name }}
       shell: bash

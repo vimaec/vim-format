@@ -8,19 +8,19 @@ fi
 __dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ver=`bash ${__dir}/csproj-version.sh $1`
 
-package=`(echo "$2" | tr '[:upper:]' '[:lower:]')`  # to lower
-package=${package#*.}                               # remove everything before .
-
 if ! [ $? == 0 ]; then
     echo "Version couldn't be parsed."
     echo $ver
     exit 3
 fi
 
-echo "Project version is ${ver}. Tagging..."
+package=`(echo "$2" | tr '[:upper:]' '[:lower:]')`  # to lower
+package=${package#*.}                               # remove everything before .
+
+echo "Project version is ${ver}. Tagging cs_${package}_${ver}..."
 
 git tag cs_${package}_${ver}
 
-echo "Pushing tags..."
+echo "Pushing tag..."
 
-git push origin ${ver}
+git push origin cs_${package}_${ver}

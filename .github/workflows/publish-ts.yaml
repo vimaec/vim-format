@@ -25,3 +25,6 @@ jobs:
         working-directory: ./src/ts
         env:
           NODE_AUTH_TOKEN: ${{ secrets.VIM_NPM_PUSH }}
+      - name: Tag commit
+        run: ./devops/ts-tag-commit.sh ./src/ts/package.json
+        shell: bash
