@@ -2,7 +2,7 @@
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using Vim.Format.Logging;
+using Vim.Format.Tests.Logging;
 
 namespace Vim.Format.Tests
 {

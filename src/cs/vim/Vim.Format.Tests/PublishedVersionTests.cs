@@ -1,7 +1,7 @@
 using System.IO;
 using System.Text.RegularExpressions;
 using NUnit.Framework;
-using Vim.Format.Logging;
+using Vim.Format.Tests.Logging;
 
 namespace Vim.Format.Tests
 {
