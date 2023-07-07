@@ -3,7 +3,7 @@ using Vim.G3d;
 using Vim.LinqArray;
 using Vim.Math3d;
 
-namespace Vim.Format.SceneBuilder
+namespace Vim
 {
     public class VimShape : ElementInfo
     {

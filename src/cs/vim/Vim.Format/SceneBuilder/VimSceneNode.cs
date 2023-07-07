@@ -4,7 +4,7 @@ using Vim.G3d;
 using Vim.LinqArray;
 using Vim.Math3d;
 
-namespace Vim.Format.SceneBuilder
+namespace Vim
 {
     public sealed class VimSceneNode : ElementInfo, ISceneNode, ITransformable3D<VimSceneNode>
     {
@@ -44,7 +44,7 @@ namespace Vim.Format.SceneBuilder
         public bool HasMesh => MeshIndex != -1;
 
         public Node NodeModel => _Scene.DocumentModel.GetNode(Id);
-        public ObjectModel.Geometry GeometryModel => _Scene.DocumentModel.GetGeometry(MeshIndex);
+        public Geometry GeometryModel => _Scene.DocumentModel.GetGeometry(MeshIndex);
         public Vector3 ModelCenter => GeometryModel.Box.Center.Transform(Transform);
 
         // TODO: I think this should be "IEnumerable<ISceneNode>" in the interface

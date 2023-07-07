@@ -3,15 +3,17 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Vim.Format;
 using Vim.Format.Geometry;
-using Vim.Format.Logging;
 using Vim.Format.ObjectModel;
 using Vim.Format.Utils;
 using Vim.G3d;
 using Vim.LinqArray;
 using Vim.Math3d;
 
-namespace Vim.Format.SceneBuilder
+using IVimSceneProgress = System.IProgress<(string, double)>;
+
+namespace Vim
 {
     // TODO: add property cache lookup
 
@@ -20,22 +22,22 @@ namespace Vim.Format.SceneBuilder
     /// </summary>
     public class VimScene : IScene
     {
-        public static VimScene LoadVim(string f, LoadOptions loadOptions, ICancelableProgressLogger progress = null, bool inParallel = false, int vimIndex = 0)
+        public static VimScene LoadVim(string f, LoadOptions loadOptions, IVimSceneProgress progress = null, bool inParallel = false, int vimIndex = 0)
             => new VimScene(Serializer.Deserialize(f, loadOptions), progress, inParallel, vimIndex);
 
-        public static VimScene LoadVim(string f, ICancelableProgressLogger progress = null, bool skipGeometry = false, bool skipAssets = false, bool skipNodes = false, bool inParallel = false)
+        public static VimScene LoadVim(string f, IVimSceneProgress progress = null, bool skipGeometry = false, bool skipAssets = false, bool skipNodes = false, bool inParallel = false)
             => LoadVim(f, new LoadOptions { SkipGeometry = skipGeometry, SkipAssets = skipAssets}, progress, inParallel);
 
-        public static VimScene LoadVim(Stream stream, LoadOptions loadOptions, ICancelableProgressLogger progress = null, bool inParallel = false)
+        public static VimScene LoadVim(Stream stream, LoadOptions loadOptions, IVimSceneProgress progress = null, bool inParallel = false)
             => new VimScene(Serializer.Deserialize(stream, loadOptions), progress, inParallel);
 
-        public static VimScene LoadVim(Stream stream, ICancelableProgressLogger progress = null, bool skipGeometry = false, bool skipAssets = false, bool skipNodes = false, bool inParallel = false)
+        public static VimScene LoadVim(Stream stream, IVimSceneProgress progress = null, bool skipGeometry = false, bool skipAssets = false, bool skipNodes = false, bool inParallel = false)
             => LoadVim(stream, new LoadOptions { SkipGeometry = skipGeometry, SkipAssets = skipAssets}, progress, inParallel);
 
         /// <summary>
         /// The vimscene is uninitialized until all action of the enumerable have been run.
         /// </summary>
-        public static (VimScene, IEnumerable<Action>) LoadVimBySteps(Stream stream, ICancelableProgressLogger progress = null)
+        public static (VimScene, IEnumerable<Action>) LoadVimBySteps(Stream stream, IVimSceneProgress progress = null)
         {
             var scene = new VimScene(Serializer.Deserialize(stream));
             return (scene, scene.GetInitStepsWithProgress(false, progress));
@@ -74,10 +76,10 @@ namespace Vim.Format.SceneBuilder
         private VimScene(SerializableDocument doc)
             => _SerializableDocument = doc;
 
-        public VimScene(SerializableDocument doc, ICancelableProgressLogger progress = null, bool inParallel = false, int vimIndex = 0) : this(doc)
+        public VimScene(SerializableDocument doc, IVimSceneProgress progress = null, bool inParallel = false, int vimIndex = 0) : this(doc)
         {
             VimIndex = vimIndex;
-            progress?.LogProgress($"Creating scene from {doc.FileName}", 0.0);
+            progress?.Report(($"Creating scene from {doc.FileName}", 0.0));
 
 
             var actions = GetInitStepsWithProgress(inParallel, progress);
@@ -92,10 +94,10 @@ namespace Vim.Format.SceneBuilder
                     action();
             }
 
-            progress?.LogProgress("Completed creating scene", 1.0);
+            progress?.Report(("Completed creating scene", 1.0));
         }
 
-        private Action[] GetInitStepsWithProgress(bool inParallel, ICancelableProgressLogger progress = null)
+        private Action[] GetInitStepsWithProgress(bool inParallel, IVimSceneProgress progress = null)
         {
             var steps = GetInitSteps(inParallel);
             var total = steps.Sum(s => s.Effort);
@@ -273,9 +275,9 @@ namespace Vim.Format.SceneBuilder
                 Effort = effort;
             }
 
-            public void Run(ICancelableProgressLogger progress)
+            public void Run(IVimSceneProgress progress)
             {
-                progress?.LogProgress(_name, Effort);
+                progress?.Report((_name, Effort));
                 _action();
             }
         }
@@ -291,7 +293,7 @@ namespace Vim.Format.SceneBuilder
                 Effort = _steps.Sum(s => s.Effort);
             }
 
-            public void Run(ICancelableProgressLogger progress)
+            public void Run(IVimSceneProgress progress)
             {
                 foreach (var step in _steps)
                     step.Run(progress);
@@ -300,30 +302,27 @@ namespace Vim.Format.SceneBuilder
 
         public interface IStep
         {
-            void Run(ICancelableProgressLogger progress);
+            void Run(IVimSceneProgress progress);
             float Effort { get; }
         }
 
-        private class CumulativeProgressDecorator : ICancelableProgressLogger
+        private class CumulativeProgressDecorator : IVimSceneProgress
         {
-            private double _total;
+            private readonly double _total;
             private double _current;
 
-            private ICancelableProgressLogger _logger;
-            private CumulativeProgressDecorator(ICancelableProgressLogger logger, float total)
-                => (_logger, _total) = (logger, total);
+            private readonly IVimSceneProgress _progress;
 
-            public static CumulativeProgressDecorator Decorate(ICancelableProgressLogger logger, float total)
+            private CumulativeProgressDecorator(IVimSceneProgress progress, float total)
+                => (_progress, _total) = (progress, total);
+
+            public static CumulativeProgressDecorator Decorate(IVimSceneProgress logger, float total)
                 => logger != null ? new CumulativeProgressDecorator(logger, total) : null;
 
-            public bool IsCancelRequested() => _logger.IsCancelRequested();
-            public void Cancel() => _logger.Cancel();
-            public ILogger Log(string message = "", LogLevel level = LogLevel.Trace) => _logger.Log(message, level);
-
-            public void Report(double value)
+            public void Report((string, double) value)
             {
-                _current += value;
-                _logger.Report(_current / _total);
+                _current += value.Item2;
+                _progress.Report((value.Item1, _current / _total));
             }
         }
     }
