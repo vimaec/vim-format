@@ -7,15 +7,17 @@
     <StartupObject>Vim.Format.CodeGen.Program</StartupObject>
     <RunPostBuildEvent>OnOutputUpdated</RunPostBuildEvent>
   </PropertyGroup>
-
   <ItemGroup>
-    <ProjectReference Include="..\Vim.Format\Vim.Format.csproj" />
+    <Compile Include="..\Vim.Format\ObjectModel\ObjectModel.cs" Link="ObjectModel.cs" />
   </ItemGroup>
-
   <ItemGroup>
     <None Include="HandWrittenCpp.cpp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\math3d\Vim.Math3D\Vim.Math3D.csproj" />
+    <ProjectReference Include="..\Vim.Format.Core\Vim.Format.Core.csproj" />
   </ItemGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
