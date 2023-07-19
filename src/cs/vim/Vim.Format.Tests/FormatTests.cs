@@ -6,7 +6,7 @@ using Vim.LinqArray;
 
 namespace Vim.Format.Tests
 {
-    public static class DataFormatTests
+    public static class FormatTests
     {
         public static void AssertNameAndSizesAreEqual(INamedBuffer b1, INamedBuffer b2)
         {
