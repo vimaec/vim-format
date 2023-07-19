@@ -144,11 +144,6 @@ namespace Vim.Format.ObjectModel
     public partial class DocumentModel
     {
         public readonly Document Document;
-
-        public SerializableVersion SchemaVersion
-            => Document.Header.Values.TryGetValue(SerializableHeader.SchemaField, out var schemaString)
-                ? SerializableVersion.Parse(schemaString)
-                : SerializableVersion.Unknown;
     }
 
     public enum G3dAttributeReferenceMultiplicity {
@@ -353,9 +348,6 @@ namespace Vim.Format.ObjectModel
 
         public bool IsProject
             => ((ParameterDescriptorFlag) Flags & ParameterDescriptorFlag.IsProject) == ParameterDescriptorFlag.IsProject;
-
-        public bool IsGlobal
-            => ((ParameterDescriptorFlag) Flags & ParameterDescriptorFlag.IsGlobal) == ParameterDescriptorFlag.IsGlobal;
 
         /// <summary>
         /// Invoked to set Flags and to assign the IsInstance/IsShared/IsReadOnly values.

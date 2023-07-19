@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Vim.Format;
-using Vim.Format.Geometry;
 using Vim.Format.ObjectModel;
 using Vim.Format.Utils;
 using Vim.LinqArray;
@@ -142,24 +141,15 @@ namespace Vim
 "Structural:OST_FabricAreas"
         };
 
-        public static bool Is3DView(View view)
-            => view?.Element?.Type == "View3D" || view?.Element?.Type == "ViewSection";
-
         public static Dictionary<string, string> CategoryToDiscipline
             = DisciplineAndCategories.ToDictionary(c => c.Substring(c.IndexOf(':') + 1), c => c.Substring(0, c.IndexOf(':')));
-
-        public static string[] Disciplines
-            = CategoryToDiscipline.Values.Distinct().OrderBy(x => x).ToArray();
 
         public static string[] Categories
             = CategoryToDiscipline.Keys.OrderBy(x => x).ToArray();
 
         public static string GetDisiplineFromCategory(string category, string defaultDiscipline = "Generic")
             => CategoryToDiscipline.GetOrDefault(category ?? "", defaultDiscipline);
-
-        public static IEnumerable<string> GetCategoriesFromDiscipline(string discipline)
-            => CategoryToDiscipline.Where(kv => kv.Value == discipline).Select(kv => kv.Key);
-
+        
         public static Vector4 GetDiffuseColor(this Material m)
             => m?.Color.ToDiffuseColor(m.Transparency) ?? DefaultColor;
 
@@ -169,21 +159,6 @@ namespace Vim
         public static IArray<Vector4> MaterialColors(this VimScene scene) => scene.DocumentModel.MaterialList.Select(GetDiffuseColor);
 
         public static Vector4 DefaultColor = new Vector4(0.5f, 0.5f, 0.5f, 1);
-
-        public static IArray<Vector4> FaceColors(this VimScene scene, IMesh mesh)
-        {
-            var colorLookup = scene.MaterialColors();
-            return mesh.GetFaceMaterials().Select(m => colorLookup.ElementAtOrDefault(m ,DefaultColor));
-        }
-
-        public static IArray<Vector4> CalculateVertexColors(this VimScene scene, IMesh m)
-            => m.FaceDataToVertexData(scene.FaceColors(m));
-
-        public static VimScene ToVimScene(this SerializableDocument self)
-            => new VimScene(self);
-
-        public static bool IsMirrored(this VimSceneNode node)
-            => node.Transform.IsReflection;
 
         public static IEnumerable<(string assetBufferName, FileInfo assetFileInfo)> ExtractAssets(this VimScene vim, DirectoryInfo directory)
             => vim.Document.ExtractAssets(directory);

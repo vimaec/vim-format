@@ -34,15 +34,6 @@ namespace Vim
         public static VimScene LoadVim(Stream stream, IVimSceneProgress progress = null, bool skipGeometry = false, bool skipAssets = false, bool skipNodes = false, bool inParallel = false)
             => LoadVim(stream, new LoadOptions { SkipGeometry = skipGeometry, SkipAssets = skipAssets}, progress, inParallel);
 
-        /// <summary>
-        /// The vimscene is uninitialized until all action of the enumerable have been run.
-        /// </summary>
-        public static (VimScene, IEnumerable<Action>) LoadVimBySteps(Stream stream, IVimSceneProgress progress = null)
-        {
-            var scene = new VimScene(Serializer.Deserialize(stream));
-            return (scene, scene.GetInitStepsWithProgress(false, progress));
-        }
-
         public int VimIndex { get; set; }
         public IArray<IMesh> Meshes { get; private set; }
         public IArray<ISceneNode> Nodes { get; private set; }
@@ -211,17 +202,8 @@ namespace Vim
             return inParallel ? r.EvaluateInParallel() : r.Evaluate();
         }
 
-        public FamilyInstance GetFamilyInstance(Element e)
-            => new ElementInfo(DocumentModel, e.Index).FamilyInstance;
-
         public void Save(string filePath)
             => _SerializableDocument.Serialize(filePath);
-
-        public DictionaryOfLists<IMesh, VimSceneNode> GroupNodesByGeometry()
-            => VimNodesWithGeometry().ToDictionaryOfLists(n => n.GetMesh());
-
-        public IEnumerable<VimSceneNode> VimNodesWithGeometry()
-            => VimNodes.ToEnumerable().Where(n => n.MeshIndex >= 0);
 
         public string FileName => _SerializableDocument.FileName;
 
@@ -233,20 +215,8 @@ namespace Vim
                 VimNodes = VimNodes.Select(nodeTransform).EvaluateInParallel();
         }
 
-        public string GetCategoryName(int categoryIndex, string missing = "")
-            => DocumentModel.GetCategoryName(categoryIndex, missing);
-
         public string GetElementName(int elementIndex, string missing = "")
             => DocumentModel.GetElementName(elementIndex, missing);
-
-        public string GetFamilyName(int familyIndex, string missing = "")
-            => GetElementName(DocumentModel.GetFamilyElementIndex(familyIndex), missing);
-
-        public string GetFamilyTypeName(int familyTypeIndex, string missing = "")
-            => GetElementName(DocumentModel.GetFamilyTypeElementIndex(familyTypeIndex), missing);
-
-        public string GetLevelName(int levelIndex, string missing = "")
-            => GetElementName(DocumentModel.GetLevelElementIndex(levelIndex), missing);
 
         public string GetBimDocumentFileName(int index = 0, string missing = "")
         {
@@ -258,9 +228,6 @@ namespace Vim
 
         public BimDocument GetBimDocument(int index = 0)
             => DocumentModel.GetBimDocument(index);
-
-        public string GetWorksetName(int worksetIndex, string missing = "")
-            => DocumentModel.GetWorksetName(worksetIndex, missing);
 
         private class Step : IStep
         {

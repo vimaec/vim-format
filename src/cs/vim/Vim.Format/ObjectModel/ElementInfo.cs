@@ -103,11 +103,9 @@ namespace Vim.Format.ObjectModel
         public BimDocument BimDocument => DocumentModel.BimDocumentList.ElementAtOrDefault(BimDocumentIndex);
         public Workset Workset => DocumentModel.WorksetList.ElementAtOrDefault(WorksetIndex);
         public FamilyInstance FamilyInstance => DocumentModel.FamilyInstanceList.ElementAtOrDefault(FamilyInstanceIndex);
-        public Element FamilyInstanceElement => DocumentModel.ElementList.ElementAtOrDefault(FamilyInstanceElementIndex);
         public FamilyType FamilyType => DocumentModel.FamilyTypeList.ElementAtOrDefault(FamilyTypeIndex);
         public Element FamilyTypeElement => DocumentModel.ElementList.ElementAtOrDefault(FamilyTypeElementIndex);
         public Family Family => DocumentModel.FamilyList.ElementAtOrDefault(FamilyIndex);
-        public Element FamilyElement => DocumentModel.ElementList.ElementAtOrDefault(FamilyElementIndex);
         public System System => DocumentModel.SystemList.ElementAtOrDefault(SystemIndex);
         public Element SystemElement => DocumentModel.ElementList.ElementAtOrDefault(SystemElementIndex);
         public IEnumerable<Parameter> Parameters => DocumentModel.ParameterList.SelectByIndex(ParameterIndices).ToEnumerable();

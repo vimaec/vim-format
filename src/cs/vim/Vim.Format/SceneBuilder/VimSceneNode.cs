@@ -45,7 +45,6 @@ namespace Vim
 
         public Node NodeModel => _Scene.DocumentModel.GetNode(Id);
         public Geometry GeometryModel => _Scene.DocumentModel.GetGeometry(MeshIndex);
-        public Vector3 ModelCenter => GeometryModel.Box.Center.Transform(Transform);
 
         // TODO: I think this should be "IEnumerable<ISceneNode>" in the interface
         public ISceneNode Parent => null;

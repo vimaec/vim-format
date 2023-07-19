@@ -124,9 +124,6 @@ namespace Vim.Format.ObjectModel
         public DocumentBuilder ToDocumentBuilder(string generator, string versionString)
             => AddEntityTablesToDocumentBuilder(new DocumentBuilder(generator, SchemaVersion.Current, versionString));
 
-        public bool HasBuilder<TEntity>()
-            => HasBuilder(typeof(TEntity));
-
         public bool HasBuilder(Type t)
             => EntityTableBuilders.ContainsKey(t);
 
