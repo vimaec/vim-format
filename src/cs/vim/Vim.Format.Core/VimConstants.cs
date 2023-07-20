@@ -88,19 +88,6 @@ namespace Vim.Format
             TableNames.Material,
         };
 
-        public static class GeneratorStrings
-        {
-            // TODO: move these into their distinct projects.
-            public const string MeshParametrization = "Vim.Internal.MeshParametrization";
-            public const string Test = "Vim.Test";
-            public const string UnityToVim = "Vim.Unity.Converter";
-            public const string VimToolMerge = "Vim.VimTool.Merge";
-            public const string VimToolTransform = "Vim.VimTool.Transform";
-            public const string FbxConverter = "Vim.Fbx.Converter";
-            public const string IfcConverter = "Vim.Ifc.Converter";
-            public const string VimMigration = "Vim.Migration";
-        }
-
         public static class DisciplineNames
         {
             public const string Mechanical = nameof(Mechanical);
