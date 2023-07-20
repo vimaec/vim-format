@@ -18,6 +18,12 @@
 #include <iterator>
 #include <stdexcept>
 
+#ifndef DISABLE_EXCEPTIONS
+    #define VIM_THROW(msg, ret) throw std::runtime_error(msg);
+#else
+    #define VIM_THROW(msg, ret) { assert(msg); return ret; }
+#endif
+
 namespace bfast
 {
 #define BFAST_VERSION = { 1, 0, 1, "2019.9.24" };
@@ -202,9 +208,9 @@ namespace bfast
         {
             const auto& h = *(Header*)data.begin();
             if (h.magic != MAGIC)
-                throw std::runtime_error("invalid magic number, either not a BFast, or was created on a machine with different endianess");
+                VIM_THROW("invalid magic number, either not a BFast, or was created on a machine with different endianess", {});
             if (h.data_end < h.data_start)
-                throw std::runtime_error("data ends before it starts");
+                VIM_THROW("data ends before it starts", {});
 
             const auto* array_offsets = (ArrayOffset*)(data.begin() + array_offsets_start);
 
@@ -214,11 +220,11 @@ namespace bfast
             {
                 const auto& offset = array_offsets[i];
                 if (offset._begin > offset._end)
-                    throw std::runtime_error("Offset begin is after the offset end");
+                    VIM_THROW("Offset begin is after the offset end", {});
                 if (offset._end > data.size())
-                    throw std::runtime_error("Offset end is after the end of the data");
+                    VIM_THROW("Offset end is after the end of the data", {});
                 if (i > 0 && offset._begin < array_offsets[i - 1]._end)
-                    throw std::runtime_error("Offset begin is before the end of the previous offset");
+                    VIM_THROW("Offset begin is before the end of the previous offset", {});
                 auto begin = data.begin() + offset._begin;
                 auto end = data.begin() + offset._end;
                 r.ranges[i] = ByteRange{ begin, end };
@@ -320,7 +326,7 @@ namespace bfast
             auto raw_data = RawData::unpack(data);
             auto names = split_names(raw_data.ranges[0]);
             if (names.size() != raw_data.ranges.size() - 1)
-                throw std::runtime_error("The number of names does not match the raw data size");
+                VIM_THROW("The number of names does not match the raw data size", {});
             Bfast r;
             r.data = data;
             r.buffers.resize(names.size());
@@ -339,7 +345,7 @@ namespace bfast
             auto raw_data = RawData::unpack(r.data);
             auto names = split_names(raw_data.ranges[0]);
             if (names.size() != raw_data.ranges.size() - 1)
-                throw std::runtime_error("The number of names does not match the raw data size");
+                VIM_THROW("The number of names does not match the raw data size", {});
             r.buffers.resize(names.size());
             for (size_t i = 0; i < names.size(); ++i)
             {
@@ -362,7 +368,7 @@ namespace bfast
             auto data = pack();
             FILE* f = nullptr;
             if (fopen_s(&f, file.c_str(), "wb") != 0)
-                throw std::runtime_error("Failed to open file");
+                VIM_THROW("Failed to open file", );
             if (f == nullptr)
                 return;
             fwrite(&data[0], 1, data.size(), f);
@@ -376,7 +382,7 @@ namespace bfast
             fstrm.seekg(0, ios_base::beg);
 
             if (!fstrm.is_open())
-                throw std::runtime_error("Couldn't read file");
+                VIM_THROW("Couldn't read file", {});
 
             vector<byte> buffer;
             buffer.resize(filesize);

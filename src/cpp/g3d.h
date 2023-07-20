@@ -114,7 +114,7 @@ namespace g3d
                 case DataType::dt_float128:
                     return 16;
                 default:
-                    throw runtime_error("invalid data type");
+                    VIM_THROW("invalid data type", 0);
             }
         }
 
@@ -204,13 +204,13 @@ namespace g3d
 
         static Association association_from_string(const string& s) {
             auto d = associations_from_strings();
-            if (d.find(s) == d.end()) throw runtime_error("unknown association");
+            if (d.find(s) == d.end()) VIM_THROW("unknown association", {});
             return d.at(s);
         }
 
         static DataType data_type_from_string(const string& s) {
             auto d = data_types_from_strings();
-            if (d.find(s) == d.end()) throw runtime_error("unknown data-type");
+            if (d.find(s) == d.end()) VIM_THROW("unknown data-type", {});
             return d.at(s);
         }
 
@@ -219,14 +219,14 @@ namespace g3d
             auto tokens = split(s, ':');
             auto token = tokens.begin();
             auto end = tokens.end();
-            if (token == end) throw runtime_error("Insufficient tokens");
-            if (*token++ != "g3d") throw runtime_error("Expected g3d"); if (token == end) throw runtime_error("Insufficient tokens");
-            desc.association = association_from_string(*token++); if (token == end) throw runtime_error("Insufficient tokens");
-            desc.semantic = *token++; if (token == end) throw runtime_error("Insufficient tokens");
+            if (token == end) VIM_THROW("Insufficient tokens", {});
+            if (*token++ != "g3d") VIM_THROW("Expected g3d", {}); if (token == end) VIM_THROW("Insufficient tokens", {});
+            desc.association = association_from_string(*token++); if (token == end) VIM_THROW("Insufficient tokens", {});
+            desc.semantic = *token++; if (token == end) VIM_THROW("Insufficient tokens", {});
             desc.index = stoi(*token++);
-            desc.data_type = data_type_from_string(*token++); if (token == end) throw runtime_error("Insufficient tokens");
+            desc.data_type = data_type_from_string(*token++); if (token == end) VIM_THROW("Insufficient tokens", {});
             desc.data_arity = stoi(*token++);
-            if (token != end) throw runtime_error("Too many tokens");
+            if (token != end) VIM_THROW("Too many tokens", {});
             return desc;
         }
     };
@@ -238,8 +238,8 @@ namespace g3d
             , _begin((uint8_t*)begin)
             , _end((uint8_t*)end)
         { 
-            if (!begin || !end) throw runtime_error("Null parameters");
-            if (byte_size() % data_element_size() != 0) throw runtime_error("Data buffer byte size does not divide evenly by size of elements");        
+            if (!begin || !end) VIM_THROW("Null parameters", );
+            if (byte_size() % data_element_size() != 0) VIM_THROW("Data buffer byte size does not divide evenly by size of elements", );
         }
         size_t byte_size() const {
             return _end - _begin;
@@ -320,6 +320,9 @@ namespace g3d
         }
 
         void add_attribute(const string& name, const void* begin, const void* end) {
+#ifdef DISABLE_EXCEPTIONS
+            attributes.push_back(Attribute(name, begin, end));
+#else
             try
             {
                 attributes.push_back(Attribute(name, begin, end));
@@ -327,6 +330,7 @@ namespace g3d
                 e;
                 // do nothing; the attribute was not recognized.
             }
+#endif
         }
 
         void add_attribute(const string& name, void* begin, size_t size) {
