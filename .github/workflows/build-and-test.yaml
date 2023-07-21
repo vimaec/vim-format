@@ -1,12 +1,9 @@
 name: Build merged C++
 
 on:
-  push:
+  pull_request:
     branches:
-      - vadim/repo-setup
-  # pull_request:
-  #   branches:
-  #     - develop
+      - develop
 
 jobs:
 
