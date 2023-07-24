@@ -12,7 +12,7 @@
 #include <tuple>
 #include <stdexcept>
 
-#include "g3d.h"
+#include "../g3d.h"
 
 namespace Vim
 {

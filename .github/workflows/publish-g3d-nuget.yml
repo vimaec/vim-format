@@ -1,0 +1,12 @@
+name: Publish G3D NuGet
+
+on:
+  workflow_dispatch:
+
+jobs:
+  publish:
+    uses: ./.github/workflows/publish-nuget.yaml
+    with:
+      project_path: src/cs/g3d/Vim.G3d/Vim.G3d.csproj
+      test_project_path: src/cs/g3d/Vim.G3d.Tests/Vim.G3d.Tests.csproj
+      package_name: Vim.G3d

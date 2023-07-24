@@ -1,0 +1,12 @@
+name: Publish LinqArray NuGet
+
+on:
+  workflow_dispatch:
+
+jobs:
+  publish:
+    uses: ./.github/workflows/publish-nuget.yaml
+    with:
+      project_path: src/cs/linqarray/Vim.LinqArray/Vim.LinqArray.csproj
+      test_project_path: src/cs/linqarray/Vim.LinqArray.Tests/Vim.LinqArray.Tests.csproj
+      package_name: Vim.LinqArray

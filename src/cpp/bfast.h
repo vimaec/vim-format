@@ -348,7 +348,7 @@ namespace bfast
             return r;
         }
 
-#if defined(__ANDROID__) || defined(__APPLE__)
+#if defined(__ANDROID__) || defined(__APPLE__) || defined(__linux__)
 		byte fopen_s(FILE** f, const char* name, const char* mode)
         {
 			assert(f);

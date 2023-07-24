@@ -1,0 +1,400 @@
+{
+  "VimFormatVersion": "1.0.0",
+  "SchemaVersion": "5.0.0",
+  "Tables": {
+    "Vim.Area": [
+      "byte:IsGrossInterior",
+      "double:Perimeter",
+      "double:Value",
+      "index:Vim.AreaScheme:AreaScheme",
+      "index:Vim.Element:Element",
+      "string:Number"
+    ],
+    "Vim.AreaScheme": [
+      "byte:IsGrossBuildingArea",
+      "index:Vim.Element:Element"
+    ],
+    "Vim.AssemblyInstance": [
+      "float:Position.X",
+      "float:Position.Y",
+      "float:Position.Z",
+      "index:Vim.Element:Element",
+      "string:AssemblyTypeName"
+    ],
+    "Vim.Asset": [
+      "string:BufferName"
+    ],
+    "Vim.AssetInView": [
+      "index:Vim.Asset:Asset",
+      "index:Vim.View:View"
+    ],
+    "Vim.BasePoint": [
+      "byte:IsSurveyPoint",
+      "double:Position.X",
+      "double:Position.Y",
+      "double:Position.Z",
+      "double:SharedPosition.X",
+      "double:SharedPosition.Y",
+      "double:SharedPosition.Z",
+      "index:Vim.Element:Element"
+    ],
+    "Vim.BimDocument": [
+      "byte:IsDetached",
+      "byte:IsLinked",
+      "byte:IsMetric",
+      "byte:IsWorkshared",
+      "double:Elevation",
+      "double:Latitude",
+      "double:Longitude",
+      "double:TimeZone",
+      "index:Vim.BimDocument:Parent",
+      "index:Vim.Element:Element",
+      "index:Vim.Family:OwnerFamily",
+      "index:Vim.View:ActiveView",
+      "int:NumSaves",
+      "string:Address",
+      "string:Author",
+      "string:BuildingName",
+      "string:ClientName",
+      "string:Guid",
+      "string:IssueDate",
+      "string:Name",
+      "string:Number",
+      "string:OrganizationDescription",
+      "string:OrganizationName",
+      "string:PathName",
+      "string:PlaceName",
+      "string:Product",
+      "string:ProjectLocation",
+      "string:Status",
+      "string:Title",
+      "string:User",
+      "string:Version",
+      "string:WeatherStationName"
+    ],
+    "Vim.Camera": [
+      "double:FarDistance",
+      "double:HorizontalExtent",
+      "double:NearDistance",
+      "double:RightOffset",
+      "double:TargetDistance",
+      "double:UpOffset",
+      "double:VerticalExtent",
+      "int:Id",
+      "int:IsPerspective"
+    ],
+    "Vim.Category": [
+      "double:LineColor.X",
+      "double:LineColor.Y",
+      "double:LineColor.Z",
+      "index:Vim.Category:Parent",
+      "index:Vim.Material:Material",
+      "long:Id",
+      "string:BuiltInCategory",
+      "string:CategoryType",
+      "string:Name"
+    ],
+    "Vim.CompoundStructure": [
+      "double:Width",
+      "index:Vim.CompoundStructureLayer:StructuralLayer"
+    ],
+    "Vim.CompoundStructureLayer": [
+      "double:Width",
+      "index:Vim.CompoundStructure:CompoundStructure",
+      "index:Vim.Material:Material",
+      "int:OrderIndex",
+      "string:MaterialFunctionAssignment"
+    ],
+    "Vim.DesignOption": [
+      "byte:IsPrimary",
+      "index:Vim.Element:Element"
+    ],
+    "Vim.DisplayUnit": [
+      "string:Label",
+      "string:Spec",
+      "string:Type"
+    ],
+    "Vim.DisplayUnitInBimDocument": [
+      "index:Vim.BimDocument:BimDocument",
+      "index:Vim.DisplayUnit:DisplayUnit"
+    ],
+    "Vim.Element": [
+      "byte:IsPinned",
+      "float:Location.X",
+      "float:Location.Y",
+      "float:Location.Z",
+      "index:Vim.AssemblyInstance:AssemblyInstance",
+      "index:Vim.BimDocument:BimDocument",
+      "index:Vim.Category:Category",
+      "index:Vim.DesignOption:DesignOption",
+      "index:Vim.Group:Group",
+      "index:Vim.Level:Level",
+      "index:Vim.Phase:PhaseCreated",
+      "index:Vim.Phase:PhaseDemolished",
+      "index:Vim.Room:Room",
+      "index:Vim.View:OwnerView",
+      "index:Vim.Workset:Workset",
+      "long:Id",
+      "string:FamilyName",
+      "string:Name",
+      "string:Type",
+      "string:UniqueId"
+    ],
+    "Vim.ElementInSystem": [
+      "index:Vim.Element:Element",
+      "index:Vim.System:System",
+      "int:Roles"
+    ],
+    "Vim.ElementInView": [
+      "index:Vim.Element:Element",
+      "index:Vim.View:View"
+    ],
+    "Vim.ElementInWarning": [
+      "index:Vim.Element:Element",
+      "index:Vim.Warning:Warning"
+    ],
+    "Vim.Family": [
+      "byte:IsInPlace",
+      "byte:IsSystemFamily",
+      "index:Vim.Category:FamilyCategory",
+      "index:Vim.Element:Element",
+      "string:StructuralMaterialType",
+      "string:StructuralSectionShape"
+    ],
+    "Vim.FamilyInstance": [
+      "byte:FacingFlipped",
+      "byte:HandFlipped",
+      "byte:HasModifiedGeometry",
+      "byte:Mirrored",
+      "float:BasisX.X",
+      "float:BasisX.Y",
+      "float:BasisX.Z",
+      "float:BasisY.X",
+      "float:BasisY.Y",
+      "float:BasisY.Z",
+      "float:BasisZ.X",
+      "float:BasisZ.Y",
+      "float:BasisZ.Z",
+      "float:FacingOrientation.X",
+      "float:FacingOrientation.Y",
+      "float:FacingOrientation.Z",
+      "float:HandOrientation.X",
+      "float:HandOrientation.Y",
+      "float:HandOrientation.Z",
+      "float:Scale",
+      "float:Translation.X",
+      "float:Translation.Y",
+      "float:Translation.Z",
+      "index:Vim.Element:Element",
+      "index:Vim.Element:Host",
+      "index:Vim.FamilyType:FamilyType",
+      "index:Vim.Room:FromRoom",
+      "index:Vim.Room:ToRoom"
+    ],
+    "Vim.FamilyType": [
+      "byte:IsSystemFamilyType",
+      "index:Vim.CompoundStructure:CompoundStructure",
+      "index:Vim.Element:Element",
+      "index:Vim.Family:Family"
+    ],
+    "Vim.Geometry": [
+      "float:Box.Max.X",
+      "float:Box.Max.Y",
+      "float:Box.Max.Z",
+      "float:Box.Min.X",
+      "float:Box.Min.Y",
+      "float:Box.Min.Z",
+      "int:FaceCount",
+      "int:VertexCount"
+    ],
+    "Vim.Grid": [
+      "byte:IsCurved",
+      "double:EndPoint.X",
+      "double:EndPoint.Y",
+      "double:EndPoint.Z",
+      "double:Extents.Max.X",
+      "double:Extents.Max.Y",
+      "double:Extents.Max.Z",
+      "double:Extents.Min.X",
+      "double:Extents.Min.Y",
+      "double:Extents.Min.Z",
+      "double:StartPoint.X",
+      "double:StartPoint.Y",
+      "double:StartPoint.Z",
+      "index:Vim.Element:Element",
+      "index:Vim.FamilyType:FamilyType"
+    ],
+    "Vim.Group": [
+      "float:Position.X",
+      "float:Position.Y",
+      "float:Position.Z",
+      "index:Vim.Element:Element",
+      "string:GroupType"
+    ],
+    "Vim.Level": [
+      "double:Elevation",
+      "index:Vim.Element:Element",
+      "index:Vim.FamilyType:FamilyType"
+    ],
+    "Vim.LevelInView": [
+      "double:Extents.Max.X",
+      "double:Extents.Max.Y",
+      "double:Extents.Max.Z",
+      "double:Extents.Min.X",
+      "double:Extents.Min.Y",
+      "double:Extents.Min.Z",
+      "index:Vim.Level:Level",
+      "index:Vim.View:View"
+    ],
+    "Vim.Material": [
+      "double:Color.X",
+      "double:Color.Y",
+      "double:Color.Z",
+      "double:ColorUvOffset.X",
+      "double:ColorUvOffset.Y",
+      "double:ColorUvScaling.X",
+      "double:ColorUvScaling.Y",
+      "double:Glossiness",
+      "double:NormalAmount",
+      "double:NormalUvOffset.X",
+      "double:NormalUvOffset.Y",
+      "double:NormalUvScaling.X",
+      "double:NormalUvScaling.Y",
+      "double:Smoothness",
+      "double:Transparency",
+      "index:Vim.Asset:ColorTextureFile",
+      "index:Vim.Asset:NormalTextureFile",
+      "index:Vim.Element:Element",
+      "string:MaterialCategory",
+      "string:Name"
+    ],
+    "Vim.MaterialInElement": [
+      "byte:IsPaint",
+      "double:Area",
+      "double:Volume",
+      "index:Vim.Element:Element",
+      "index:Vim.Material:Material"
+    ],
+    "Vim.Node": [
+      "index:Vim.Element:Element"
+    ],
+    "Vim.Parameter": [
+      "index:Vim.Element:Element",
+      "index:Vim.ParameterDescriptor:ParameterDescriptor",
+      "string:Value"
+    ],
+    "Vim.ParameterDescriptor": [
+      "byte:IsInstance",
+      "byte:IsReadOnly",
+      "byte:IsShared",
+      "index:Vim.DisplayUnit:DisplayUnit",
+      "int:Flags",
+      "string:Group",
+      "string:Guid",
+      "string:Name",
+      "string:ParameterType"
+    ],
+    "Vim.Phase": [
+      "index:Vim.Element:Element"
+    ],
+    "Vim.PhaseFilter": [
+      "index:Vim.Element:Element",
+      "int:Demolished",
+      "int:Existing",
+      "int:New",
+      "int:Temporary"
+    ],
+    "Vim.PhaseOrderInBimDocument": [
+      "index:Vim.BimDocument:BimDocument",
+      "index:Vim.Phase:Phase",
+      "int:OrderIndex"
+    ],
+    "Vim.Room": [
+      "double:Area",
+      "double:BaseOffset",
+      "double:LimitOffset",
+      "double:Perimeter",
+      "double:UnboundedHeight",
+      "double:Volume",
+      "index:Vim.Element:Element",
+      "index:Vim.Level:UpperLimit",
+      "string:Number"
+    ],
+    "Vim.Schedule": [
+      "index:Vim.Element:Element"
+    ],
+    "Vim.ScheduleCell": [
+      "index:Vim.ScheduleColumn:ScheduleColumn",
+      "int:RowIndex",
+      "string:Value"
+    ],
+    "Vim.ScheduleColumn": [
+      "index:Vim.Schedule:Schedule",
+      "int:ColumnIndex",
+      "string:Name"
+    ],
+    "Vim.Shape": [
+      "index:Vim.Element:Element"
+    ],
+    "Vim.ShapeCollection": [
+      "index:Vim.Element:Element"
+    ],
+    "Vim.ShapeInShapeCollection": [
+      "index:Vim.Shape:Shape",
+      "index:Vim.ShapeCollection:ShapeCollection"
+    ],
+    "Vim.ShapeInView": [
+      "index:Vim.Shape:Shape",
+      "index:Vim.View:View"
+    ],
+    "Vim.System": [
+      "index:Vim.Element:Element",
+      "index:Vim.FamilyType:FamilyType",
+      "int:SystemType"
+    ],
+    "Vim.View": [
+      "double:Origin.X",
+      "double:Origin.Y",
+      "double:Origin.Z",
+      "double:Outline.Max.X",
+      "double:Outline.Max.Y",
+      "double:Outline.Min.X",
+      "double:Outline.Min.Y",
+      "double:Right.X",
+      "double:Right.Y",
+      "double:Right.Z",
+      "double:Scale",
+      "double:Up.X",
+      "double:Up.Y",
+      "double:Up.Z",
+      "double:ViewDirection.X",
+      "double:ViewDirection.Y",
+      "double:ViewDirection.Z",
+      "double:ViewPosition.X",
+      "double:ViewPosition.Y",
+      "double:ViewPosition.Z",
+      "index:Vim.Camera:Camera",
+      "index:Vim.Element:Element",
+      "index:Vim.FamilyType:FamilyType",
+      "int:DetailLevel",
+      "string:Title",
+      "string:ViewType"
+    ],
+    "Vim.Warning": [
+      "index:Vim.BimDocument:BimDocument",
+      "string:Description",
+      "string:Guid",
+      "string:Severity"
+    ],
+    "Vim.Workset": [
+      "byte:IsEditable",
+      "byte:IsOpen",
+      "index:Vim.BimDocument:BimDocument",
+      "int:Id",
+      "string:Kind",
+      "string:Name",
+      "string:Owner",
+      "string:UniqueId"
+    ]
+  }
+}

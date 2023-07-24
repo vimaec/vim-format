@@ -1,0 +1,12 @@
+name: Publish Math3D NuGet
+
+on:
+  workflow_dispatch:
+
+jobs:
+  publish:
+    uses: ./.github/workflows/publish-nuget.yaml
+    with:
+      project_path: src/cs/math3d/Vim.Math3D/Vim.Math3D.csproj
+      test_project_path: src/cs/math3d/Vim.Math3D.Tests/Vim.Math3D.Tests.csproj
+      package_name: Vim.Math3D

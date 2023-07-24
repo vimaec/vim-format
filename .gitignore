@@ -1,3 +1,4 @@
+out/
 src/rust/vim_format/target/
 src/rust/math3d/target/
 src/rust/bfast/target/

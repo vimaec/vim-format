@@ -1,0 +1,1 @@
+typedef bfast::ByteRange* ByteRangePtr;
