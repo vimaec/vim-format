@@ -10,6 +10,17 @@ namespace Vim.Util
     public static class IO
     {
         /// <summary>
+        /// Deletes the file or directory (recursively) at the given path.
+        /// </summary>
+        public static void Delete(string path)
+        {
+            if (File.Exists(path))
+                File.Delete(path);
+            if (Directory.Exists(path))
+                Directory.Delete(path, true);
+        }
+
+        /// <summary>
         /// Create the directory for the given filepath if it doesn't exist.
         /// </summary>
         public static string CreateFileDirectory(string filepath)
@@ -18,6 +29,19 @@ namespace Vim.Util
             if (!string.IsNullOrEmpty(dirPath) && !Directory.Exists(dirPath))
                 Directory.CreateDirectory(dirPath);
             return filepath;
+        }
+
+        /// <summary>
+        /// Returns true if the given directory contains no files or if the directory does not exist.
+        /// </summary>
+        public static bool DirectoryIsEmpty(string dirPath)
+        {
+            if (!Directory.Exists(dirPath))
+            {
+                return true;
+            }
+
+            return Directory.GetFiles(dirPath, "*", SearchOption.AllDirectories).Length == 0;
         }
 
         /// <summary>
