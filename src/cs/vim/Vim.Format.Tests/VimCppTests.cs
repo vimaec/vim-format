@@ -13,7 +13,7 @@ public static class VimCppTests
     {
         public override string GetExePath(string projectConfig)
         {
-            return Path.Combine(RepoPaths.SrcDir, "cpp", "vim", "bin", "x64", projectConfig, "Vim.Cpp.exe");
+            return Path.Combine(VimFormatRepoPaths.SrcDir, "cpp", "vim", "bin", "x64", projectConfig, "Vim.Cpp.exe");
         }
     }
 
