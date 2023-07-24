@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 
 namespace Vim.Util
@@ -10,8 +11,29 @@ namespace Vim.Util
     /// </summary>
     public static class Util
     {
+        public static string ToHex(this byte[] bytes, bool upperCase = false)
+            => string.Join("", bytes.Select(b => b.ToString(upperCase ? "X2" : "x2")));
+
+        public static string ToBase64(this byte[] bytes)
+            => Convert.ToBase64String(bytes);
+
+        public static string Base64ToHex(this string base64)
+            => Convert.FromBase64String(base64).ToHex();
+
         public static byte[] ToBytesUtf8(this string s)
             => Encoding.UTF8.GetBytes(s);
+
+        public static readonly string[] ByteSuffixes = { "B", "KB", "MB", "GB", "TB", "PB", "EB" }; //Longs run out around EB
+
+        /// Improved version of https://stackoverflow.com/questions/281640/how-do-i-get-a-human-readable-file-size-in-bytes-abbreviation-using-net
+        public static string BytesToString(long byteCount, int numPlacesToRound = 1)
+        {
+            if (byteCount == 0) return "0B";
+            var bytes = Math.Abs(byteCount);
+            var place = Convert.ToInt32(Math.Floor(Math.Log(bytes, 1024)));
+            var num = Math.Round(bytes / Math.Pow(1024, place), numPlacesToRound);
+            return $"{(Math.Sign(byteCount) * num).ToString($"F{numPlacesToRound}")}{ByteSuffixes[place]}";
+        }
 
         /// <summary>
         /// A helper function for append one or more items to an IEnumerable.
@@ -59,6 +81,28 @@ namespace Vim.Util
         {
             key = tuple.Key;
             value = tuple.Value;
+        }
+
+        /// <summary>
+        /// Returns a shallow clone of the given object's properties.
+        /// </summary>
+        public static T ShallowClone<T>(T obj) where T : class, new()
+        {
+            var type = obj.GetType();
+            var properties = type.GetProperties(BindingFlags.Public | BindingFlags.Instance);
+
+            var clonedObj = new T();
+
+            foreach (var property in properties)
+            {
+                if (property.CanRead && property.CanWrite)
+                {
+                    var value = property.GetValue(obj);
+                    property.SetValue(clonedObj, value);
+                }
+            }
+
+            return clonedObj;
         }
     }
 }
