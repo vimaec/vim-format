@@ -11,70 +11,31 @@
 
 namespace Vim
 {
-    typedef bfast::ByteRange* ByteRangePtr;
-    
-    enum class ColumnType
-    {
-        indexColumn,
-        stringColumn,
-        dataColumn,
-    };
-    
-    // Buffer names
-    static const std::string bufferNameHeader = "header";
-    static const std::string bufferNameGeometry = "geometry";
-    static const std::string bufferNameAssets = "assets";
-    static const std::string bufferNameStrings = "strings";
-    static const std::string bufferNameEntities = "entities";
-    
-    // Entity column prefixes
-    static const std::string indexColumnPrefix = "index:";
-    static const std::string stringColumnPrefix = "string:";
-    static const std::string dataColumnBytePrefix = "byte:";
-    static const std::string dataColumnUbytePrefix = "ubyte:";
-    static const std::string dataColumnIntPrefix = "int:";
-    static const std::string dataColumnUintPrefix = "uint:";
-    static const std::string dataColumnLongPrefix = "long:";
-    static const std::string dataColumnUlongPrefix = "ulong:";
-    static const std::string dataColumnFloatPrefix = "float:";
-    static const std::string dataColumnDoublePrefix = "double:";
-    
     static inline bool startsWith(const std::string& base, const std::string& value)
     {
         return base.rfind(value, 0) == 0;
     }
     
-    static ColumnType getColumnType(const std::string& colName)
-    {
-        if (startsWith(colName, "index:"))
-            return ColumnType::indexColumn;
-    
-        if (startsWith(colName, "string:"))
-            return ColumnType::stringColumn;
-    
-        return ColumnType::dataColumn; // default to data column.
-    }
-    
     static size_t getTypeSize(const std::string& colName)
     {
-        if (startsWith(colName, indexColumnPrefix) ||
-            startsWith(colName, stringColumnPrefix) ||
-            startsWith(colName, dataColumnIntPrefix) ||
-            startsWith(colName, dataColumnUintPrefix) ||
-            startsWith(colName, dataColumnFloatPrefix))
+        if (startsWith(colName, "index:") ||
+            startsWith(colName, "string:") ||
+            startsWith(colName, "int:") ||
+            startsWith(colName, "uint:") ||
+            startsWith(colName, "float:"))
         {
             return 4; // 4 bytes
         }
     
-        if (startsWith(colName, dataColumnDoublePrefix) ||
-            startsWith(colName, dataColumnLongPrefix) ||
-            startsWith(colName, dataColumnUlongPrefix))
+        if (startsWith(colName, "double:") ||
+            startsWith(colName, "long:") ||
+            startsWith(colName, "ulong:"))
         {
             return 8; // 8 bytes
         }
     
-        if (startsWith(colName, dataColumnBytePrefix) ||
-            startsWith(colName, dataColumnUbytePrefix))
+        if (startsWith(colName, "byte:") ||
+            startsWith(colName, "ubyte:"))
         {
             return 1; // 1 byte
         }
@@ -84,12 +45,12 @@ namespace Vim
     
     static bool columnExists(const EntityTable& table, const std::string& colName)
     {
-        if (startsWith(colName, indexColumnPrefix))
+        if (startsWith(colName, "index:"))
         {
             return table.mIndexColumns.find(colName) != table.mIndexColumns.end();
         }
     
-        if (startsWith(colName, stringColumnPrefix))
+        if (startsWith(colName, "string:"))
         {
             return table.mStringColumns.find(colName) != table.mStringColumns.end();
         }
