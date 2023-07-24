@@ -1,6 +1,6 @@
 ﻿using NUnit.Framework;
 
-namespace Vim.Format.Utils.Tests
+namespace Vim.Util.Tests
 {
     [TestFixture]
     public static class SerializableVersionTests

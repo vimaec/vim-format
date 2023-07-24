@@ -1,7 +1,7 @@
 ﻿using SerilogLogger = Serilog.Core.Logger;
 using SerilogLogEventLevel = Serilog.Events.LogEventLevel;
 
-namespace Vim.Format.Tests.Logging;
+namespace Vim.Util.Tests.Logging;
 
 public class SerilogLoggerAdapter : ILogger
 {

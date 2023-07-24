@@ -1,7 +1,8 @@
 using System.IO;
 using System.Text.RegularExpressions;
 using NUnit.Framework;
-using Vim.Format.Tests.Logging;
+using Vim.Util.Tests;
+using Vim.Util.Tests.Logging;
 
 namespace Vim.Format.Tests
 {

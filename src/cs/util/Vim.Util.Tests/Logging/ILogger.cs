@@ -1,4 +1,4 @@
-﻿namespace Vim.Format.Tests.Logging;
+﻿namespace Vim.Util.Tests.Logging;
 
 public interface ILogger
 {

@@ -5,8 +5,8 @@ using Vim.BFast;
 using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
-using Vim.Format.Utils;
 using Vim.G3d;
+using Vim.Util;
 
 namespace Vim.Format
 {

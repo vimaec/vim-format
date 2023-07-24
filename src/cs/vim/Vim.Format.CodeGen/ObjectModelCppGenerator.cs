@@ -38,7 +38,7 @@ public static class ObjectModelCppGenerator
 
     private static void WriteColumnCheck(CodeBuilder cb, string columnName, string conditionalCode, bool negate)
     {
-        cb.AppendLine($"if ({(negate ? "!" : "")}columnExists(mEntityTable, \"{columnName}\")) {{");
+        cb.AppendLine($"if ({(negate ? "!" : "")}mEntityTable.column_exists(\"{columnName}\")) {{");
         cb.AppendLine(conditionalCode);
         cb.AppendLine("}");
         cb.AppendLine();
@@ -49,13 +49,13 @@ public static class ObjectModelCppGenerator
         foreach (var fieldInfo in fields)
         {
             var loadingInfos = fieldInfo.GetEntityColumnLoadingInfo();
-            var exists = string.Join(" || ", loadingInfos.Select(li => $"columnExists(mEntityTable, \"{li.SerializedValueColumnName}\")"));
+            var exists = string.Join(" || ", loadingInfos.Select(li => $"mEntityTable.column_exists(\"{li.SerializedValueColumnName}\")"));
             cb.AppendLine($"bool exists{fieldInfo.Name} = {exists};");
         }
 
         foreach (var fieldInfo in relations)
         {
-            cb.AppendLine($"bool exists{fieldInfo.Name.Trim('_')} = columnExists(mEntityTable, \"{fieldInfo.GetSerializedIndexColumnName()}\");");
+            cb.AppendLine($"bool exists{fieldInfo.Name.Trim('_')} = mEntityTable.column_exists(\"{fieldInfo.GetSerializedIndexColumnName()}\");");
         }
 
         cb.AppendLine();
@@ -185,7 +185,7 @@ public static class ObjectModelCppGenerator
     {
         cb.AppendLine("size_t GetCount()");
         cb.AppendLine("{");
-        cb.AppendLine("return getCount(mEntityTable);");
+        cb.AppendLine("return mEntityTable.get_count();");
         cb.AppendLine("}");
     }
 
@@ -276,7 +276,7 @@ public static class ObjectModelCppGenerator
             switch (strategy)
             {
                 case ValueSerializationStrategy.SerializeAsStringColumn:
-                    cb.AppendLine($"const std::vector<int>& {fieldName}Data = columnExists(mEntityTable, \"{baseLoadingInfo.SerializedValueColumnName}\") ? mEntityTable.mStringColumns[\"{baseLoadingInfo.SerializedValueColumnName}\"] : std::vector<int>();");
+                    cb.AppendLine($"const std::vector<int>& {fieldName}Data = mEntityTable.column_exists(\"{baseLoadingInfo.SerializedValueColumnName}\") ? mEntityTable.mStringColumns[\"{baseLoadingInfo.SerializedValueColumnName}\"] : std::vector<int>();");
                     break;
                 case ValueSerializationStrategy.SerializeAsDataColumn:
                     var cppType = ToCppType(baseLoadingInfo.TypePrefix.Replace(":", ""));
@@ -285,7 +285,7 @@ public static class ObjectModelCppGenerator
                     for (var i = 0; i < loadingInfos.Length; ++i)
                     {
                         var li = loadingInfos[i];
-                        cb.AppendLine($"{(i > 0 ? "else " : "")}if (columnExists(mEntityTable, \"{li.SerializedValueColumnName}\")) {{");
+                        cb.AppendLine($"{(i > 0 ? "else " : "")}if (mEntityTable.column_exists(\"{li.SerializedValueColumnName}\")) {{");
 
                         if (i == 0)
                         {
@@ -316,7 +316,7 @@ public static class ObjectModelCppGenerator
         foreach (var relation in relations)
         {
             var indexColumnName = relation.GetIndexColumnInfo().IndexColumnName;
-            cb.AppendLine($"const std::vector<int>& {ToLowerFirstLetter(relation.Name.Replace("_", ""))}Data = columnExists(mEntityTable ,\"{indexColumnName}\") ? mEntityTable.mIndexColumns[\"{indexColumnName}\"] : std::vector<int>();");
+            cb.AppendLine($"const std::vector<int>& {ToLowerFirstLetter(relation.Name.Replace("_", ""))}Data = mEntityTable.column_exists(\"{indexColumnName}\") ? mEntityTable.mIndexColumns[\"{indexColumnName}\"] : std::vector<int>();");
         }
 
         if (relations.Length > 0)

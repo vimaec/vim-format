@@ -1,7 +1,7 @@
 ﻿using Serilog;
-using Vim.Format.Utils;
+using Vim.Util;
 
-namespace Vim.Format.Tests.Logging;
+namespace Vim.Util.Tests.Logging;
 
 public static class Log
 {
@@ -13,7 +13,7 @@ public static class Log
 
         if (!string.IsNullOrEmpty(filePath))
         {
-            Util.CreateFileDirectory(filePath);
+            IO.CreateFileDirectory(filePath);
             config = config.WriteTo.File(filePath);
         }
 

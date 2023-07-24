@@ -1,4 +1,4 @@
-﻿namespace Vim.Format.Tests.Logging;
+﻿namespace Vim.Util.Tests.Logging;
 // Based on: Microsoft.Extensions.Logging.LogLevel
 
 public enum LogLevel

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Vim.Format.Utils;
+using Vim.Util;
 using Vim.LinqArray;
 using Vim.Math3d;
 

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using Vim.Format.Utils;
+using Vim.Util;
 using Vim.Math3d;
 
 // ReSharper disable InconsistentNaming
@@ -1597,7 +1597,7 @@ namespace Vim.Format.ObjectModel
             => typeof(Entity).IsAssignableFrom(t) && t.GetCustomAttribute(typeof(TableNameAttribute)) != null;
 
         public static IEnumerable<Type> GetEntityTypes<T>() where T : Entity
-            => Util.GetAllSubclassesOf(typeof(T).Assembly, typeof(T));
+            => typeof(T).Assembly.GetAllSubclassesOf(typeof(T));
 
         public static IEnumerable<Type> GetEntityTypes()
             => GetEntityTypes<Entity>().Where(IsEntityAndHasTableNameAttribute);

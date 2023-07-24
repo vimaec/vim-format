@@ -11,75 +11,6 @@
 
 namespace Vim
 {
-    static inline bool startsWith(const std::string& base, const std::string& value)
-    {
-        return base.rfind(value, 0) == 0;
-    }
-    
-    static size_t getTypeSize(const std::string& colName)
-    {
-        if (startsWith(colName, "index:") ||
-            startsWith(colName, "string:") ||
-            startsWith(colName, "int:") ||
-            startsWith(colName, "uint:") ||
-            startsWith(colName, "float:"))
-        {
-            return 4; // 4 bytes
-        }
-    
-        if (startsWith(colName, "double:") ||
-            startsWith(colName, "long:") ||
-            startsWith(colName, "ulong:"))
-        {
-            return 8; // 8 bytes
-        }
-    
-        if (startsWith(colName, "byte:") ||
-            startsWith(colName, "ubyte:"))
-        {
-            return 1; // 1 byte
-        }
-    
-        return 1; // default to 1 byte
-    }
-    
-    static bool columnExists(const EntityTable& table, const std::string& colName)
-    {
-        if (startsWith(colName, "index:"))
-        {
-            return table.mIndexColumns.find(colName) != table.mIndexColumns.end();
-        }
-    
-        if (startsWith(colName, "string:"))
-        {
-            return table.mStringColumns.find(colName) != table.mStringColumns.end();
-        }
-    
-        return table.mDataColumns.find(colName) != table.mDataColumns.end();
-    }
-    
-    static size_t getCount(const EntityTable& table)
-    {
-        if (!table.mIndexColumns.empty())
-        {
-            return table.mIndexColumns.begin()->second.size();
-        }
-    
-        if (!table.mStringColumns.empty())
-        {
-            return table.mStringColumns.begin()->second.size();
-        }
-    
-        if (!table.mDataColumns.empty())
-        {
-            const auto first_data_column = table.mDataColumns.begin();
-            const auto& col_name = first_data_column->first;
-            const auto bytes = first_data_column->second;
-            return bytes.size() / getTypeSize(col_name);
-        }
-    
-        return 0;
-    }
     
     class Asset;
     class AssetTable;
@@ -247,7 +178,7 @@ namespace Vim
         
         size_t GetCount()
         {
-            return getCount(mEntityTable);
+            return mEntityTable.get_count();
         }
         
         Asset* Get(int assetIndex)
@@ -260,14 +191,14 @@ namespace Vim
         
         std::vector<Asset>* GetAll()
         {
-            bool existsBufferName = columnExists(mEntityTable, "string:BufferName");
+            bool existsBufferName = mEntityTable.column_exists("string:BufferName");
             
             const auto count = GetCount();
             
             std::vector<Asset>* asset = new std::vector<Asset>();
             asset->reserve(count);
             
-            const std::vector<int>& bufferNameData = columnExists(mEntityTable, "string:BufferName") ? mEntityTable.mStringColumns["string:BufferName"] : std::vector<int>();
+            const std::vector<int>& bufferNameData = mEntityTable.column_exists("string:BufferName") ? mEntityTable.mStringColumns["string:BufferName"] : std::vector<int>();
             
             for (int i = 0; i < count; ++i)
             {
@@ -286,7 +217,7 @@ namespace Vim
             if (assetIndex < 0 || assetIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "string:BufferName")) {
+            if (mEntityTable.column_exists("string:BufferName")) {
                 return std::string(reinterpret_cast<const char*>(mStrings[mEntityTable.mStringColumns["string:BufferName"][assetIndex]]));
             }
             
@@ -297,7 +228,7 @@ namespace Vim
         {
             const auto count = GetCount();
             
-            const std::vector<int>& bufferNameData = columnExists(mEntityTable, "string:BufferName") ? mEntityTable.mStringColumns["string:BufferName"] : std::vector<int>();
+            const std::vector<int>& bufferNameData = mEntityTable.column_exists("string:BufferName") ? mEntityTable.mStringColumns["string:BufferName"] : std::vector<int>();
             
             std::vector<std::string>* result = new std::vector<std::string>();
             result->reserve(count);
@@ -341,7 +272,7 @@ namespace Vim
         
         size_t GetCount()
         {
-            return getCount(mEntityTable);
+            return mEntityTable.get_count();
         }
         
         DisplayUnit* Get(int displayUnitIndex)
@@ -356,20 +287,20 @@ namespace Vim
         
         std::vector<DisplayUnit>* GetAll()
         {
-            bool existsSpec = columnExists(mEntityTable, "string:Spec");
-            bool existsType = columnExists(mEntityTable, "string:Type");
-            bool existsLabel = columnExists(mEntityTable, "string:Label");
+            bool existsSpec = mEntityTable.column_exists("string:Spec");
+            bool existsType = mEntityTable.column_exists("string:Type");
+            bool existsLabel = mEntityTable.column_exists("string:Label");
             
             const auto count = GetCount();
             
             std::vector<DisplayUnit>* displayUnit = new std::vector<DisplayUnit>();
             displayUnit->reserve(count);
             
-            const std::vector<int>& specData = columnExists(mEntityTable, "string:Spec") ? mEntityTable.mStringColumns["string:Spec"] : std::vector<int>();
+            const std::vector<int>& specData = mEntityTable.column_exists("string:Spec") ? mEntityTable.mStringColumns["string:Spec"] : std::vector<int>();
             
-            const std::vector<int>& typeData = columnExists(mEntityTable, "string:Type") ? mEntityTable.mStringColumns["string:Type"] : std::vector<int>();
+            const std::vector<int>& typeData = mEntityTable.column_exists("string:Type") ? mEntityTable.mStringColumns["string:Type"] : std::vector<int>();
             
-            const std::vector<int>& labelData = columnExists(mEntityTable, "string:Label") ? mEntityTable.mStringColumns["string:Label"] : std::vector<int>();
+            const std::vector<int>& labelData = mEntityTable.column_exists("string:Label") ? mEntityTable.mStringColumns["string:Label"] : std::vector<int>();
             
             for (int i = 0; i < count; ++i)
             {
@@ -392,7 +323,7 @@ namespace Vim
             if (displayUnitIndex < 0 || displayUnitIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "string:Spec")) {
+            if (mEntityTable.column_exists("string:Spec")) {
                 return std::string(reinterpret_cast<const char*>(mStrings[mEntityTable.mStringColumns["string:Spec"][displayUnitIndex]]));
             }
             
@@ -403,7 +334,7 @@ namespace Vim
         {
             const auto count = GetCount();
             
-            const std::vector<int>& specData = columnExists(mEntityTable, "string:Spec") ? mEntityTable.mStringColumns["string:Spec"] : std::vector<int>();
+            const std::vector<int>& specData = mEntityTable.column_exists("string:Spec") ? mEntityTable.mStringColumns["string:Spec"] : std::vector<int>();
             
             std::vector<std::string>* result = new std::vector<std::string>();
             result->reserve(count);
@@ -421,7 +352,7 @@ namespace Vim
             if (displayUnitIndex < 0 || displayUnitIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "string:Type")) {
+            if (mEntityTable.column_exists("string:Type")) {
                 return std::string(reinterpret_cast<const char*>(mStrings[mEntityTable.mStringColumns["string:Type"][displayUnitIndex]]));
             }
             
@@ -432,7 +363,7 @@ namespace Vim
         {
             const auto count = GetCount();
             
-            const std::vector<int>& typeData = columnExists(mEntityTable, "string:Type") ? mEntityTable.mStringColumns["string:Type"] : std::vector<int>();
+            const std::vector<int>& typeData = mEntityTable.column_exists("string:Type") ? mEntityTable.mStringColumns["string:Type"] : std::vector<int>();
             
             std::vector<std::string>* result = new std::vector<std::string>();
             result->reserve(count);
@@ -450,7 +381,7 @@ namespace Vim
             if (displayUnitIndex < 0 || displayUnitIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "string:Label")) {
+            if (mEntityTable.column_exists("string:Label")) {
                 return std::string(reinterpret_cast<const char*>(mStrings[mEntityTable.mStringColumns["string:Label"][displayUnitIndex]]));
             }
             
@@ -461,7 +392,7 @@ namespace Vim
         {
             const auto count = GetCount();
             
-            const std::vector<int>& labelData = columnExists(mEntityTable, "string:Label") ? mEntityTable.mStringColumns["string:Label"] : std::vector<int>();
+            const std::vector<int>& labelData = mEntityTable.column_exists("string:Label") ? mEntityTable.mStringColumns["string:Label"] : std::vector<int>();
             
             std::vector<std::string>* result = new std::vector<std::string>();
             result->reserve(count);
@@ -513,7 +444,7 @@ namespace Vim
         
         size_t GetCount()
         {
-            return getCount(mEntityTable);
+            return mEntityTable.get_count();
         }
         
         ParameterDescriptor* Get(int parameterDescriptorIndex)
@@ -534,50 +465,50 @@ namespace Vim
         
         std::vector<ParameterDescriptor>* GetAll()
         {
-            bool existsName = columnExists(mEntityTable, "string:Name");
-            bool existsGroup = columnExists(mEntityTable, "string:Group");
-            bool existsParameterType = columnExists(mEntityTable, "string:ParameterType");
-            bool existsIsInstance = columnExists(mEntityTable, "byte:IsInstance");
-            bool existsIsShared = columnExists(mEntityTable, "byte:IsShared");
-            bool existsIsReadOnly = columnExists(mEntityTable, "byte:IsReadOnly");
-            bool existsFlags = columnExists(mEntityTable, "int:Flags");
-            bool existsGuid = columnExists(mEntityTable, "string:Guid");
-            bool existsDisplayUnit = columnExists(mEntityTable, "index:Vim.DisplayUnit:DisplayUnit");
+            bool existsName = mEntityTable.column_exists("string:Name");
+            bool existsGroup = mEntityTable.column_exists("string:Group");
+            bool existsParameterType = mEntityTable.column_exists("string:ParameterType");
+            bool existsIsInstance = mEntityTable.column_exists("byte:IsInstance");
+            bool existsIsShared = mEntityTable.column_exists("byte:IsShared");
+            bool existsIsReadOnly = mEntityTable.column_exists("byte:IsReadOnly");
+            bool existsFlags = mEntityTable.column_exists("int:Flags");
+            bool existsGuid = mEntityTable.column_exists("string:Guid");
+            bool existsDisplayUnit = mEntityTable.column_exists("index:Vim.DisplayUnit:DisplayUnit");
             
             const auto count = GetCount();
             
             std::vector<ParameterDescriptor>* parameterDescriptor = new std::vector<ParameterDescriptor>();
             parameterDescriptor->reserve(count);
             
-            const std::vector<int>& nameData = columnExists(mEntityTable, "string:Name") ? mEntityTable.mStringColumns["string:Name"] : std::vector<int>();
+            const std::vector<int>& nameData = mEntityTable.column_exists("string:Name") ? mEntityTable.mStringColumns["string:Name"] : std::vector<int>();
             
-            const std::vector<int>& groupData = columnExists(mEntityTable, "string:Group") ? mEntityTable.mStringColumns["string:Group"] : std::vector<int>();
+            const std::vector<int>& groupData = mEntityTable.column_exists("string:Group") ? mEntityTable.mStringColumns["string:Group"] : std::vector<int>();
             
-            const std::vector<int>& parameterTypeData = columnExists(mEntityTable, "string:ParameterType") ? mEntityTable.mStringColumns["string:ParameterType"] : std::vector<int>();
+            const std::vector<int>& parameterTypeData = mEntityTable.column_exists("string:ParameterType") ? mEntityTable.mStringColumns["string:ParameterType"] : std::vector<int>();
             
             bfast::byte* isInstanceData = new bfast::byte[count];
-            if (columnExists(mEntityTable, "byte:IsInstance")) {
+            if (mEntityTable.column_exists("byte:IsInstance")) {
                 memcpy(isInstanceData, mEntityTable.mDataColumns["byte:IsInstance"].begin(), count * sizeof(bfast::byte));
             }
             
             bfast::byte* isSharedData = new bfast::byte[count];
-            if (columnExists(mEntityTable, "byte:IsShared")) {
+            if (mEntityTable.column_exists("byte:IsShared")) {
                 memcpy(isSharedData, mEntityTable.mDataColumns["byte:IsShared"].begin(), count * sizeof(bfast::byte));
             }
             
             bfast::byte* isReadOnlyData = new bfast::byte[count];
-            if (columnExists(mEntityTable, "byte:IsReadOnly")) {
+            if (mEntityTable.column_exists("byte:IsReadOnly")) {
                 memcpy(isReadOnlyData, mEntityTable.mDataColumns["byte:IsReadOnly"].begin(), count * sizeof(bfast::byte));
             }
             
             int* flagsData = new int[count];
-            if (columnExists(mEntityTable, "int:Flags")) {
+            if (mEntityTable.column_exists("int:Flags")) {
                 memcpy(flagsData, mEntityTable.mDataColumns["int:Flags"].begin(), count * sizeof(int));
             }
             
-            const std::vector<int>& guidData = columnExists(mEntityTable, "string:Guid") ? mEntityTable.mStringColumns["string:Guid"] : std::vector<int>();
+            const std::vector<int>& guidData = mEntityTable.column_exists("string:Guid") ? mEntityTable.mStringColumns["string:Guid"] : std::vector<int>();
             
-            const std::vector<int>& displayUnitData = columnExists(mEntityTable ,"index:Vim.DisplayUnit:DisplayUnit") ? mEntityTable.mIndexColumns["index:Vim.DisplayUnit:DisplayUnit"] : std::vector<int>();
+            const std::vector<int>& displayUnitData = mEntityTable.column_exists("index:Vim.DisplayUnit:DisplayUnit") ? mEntityTable.mIndexColumns["index:Vim.DisplayUnit:DisplayUnit"] : std::vector<int>();
             
             for (int i = 0; i < count; ++i)
             {
@@ -616,7 +547,7 @@ namespace Vim
             if (parameterDescriptorIndex < 0 || parameterDescriptorIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "string:Name")) {
+            if (mEntityTable.column_exists("string:Name")) {
                 return std::string(reinterpret_cast<const char*>(mStrings[mEntityTable.mStringColumns["string:Name"][parameterDescriptorIndex]]));
             }
             
@@ -627,7 +558,7 @@ namespace Vim
         {
             const auto count = GetCount();
             
-            const std::vector<int>& nameData = columnExists(mEntityTable, "string:Name") ? mEntityTable.mStringColumns["string:Name"] : std::vector<int>();
+            const std::vector<int>& nameData = mEntityTable.column_exists("string:Name") ? mEntityTable.mStringColumns["string:Name"] : std::vector<int>();
             
             std::vector<std::string>* result = new std::vector<std::string>();
             result->reserve(count);
@@ -645,7 +576,7 @@ namespace Vim
             if (parameterDescriptorIndex < 0 || parameterDescriptorIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "string:Group")) {
+            if (mEntityTable.column_exists("string:Group")) {
                 return std::string(reinterpret_cast<const char*>(mStrings[mEntityTable.mStringColumns["string:Group"][parameterDescriptorIndex]]));
             }
             
@@ -656,7 +587,7 @@ namespace Vim
         {
             const auto count = GetCount();
             
-            const std::vector<int>& groupData = columnExists(mEntityTable, "string:Group") ? mEntityTable.mStringColumns["string:Group"] : std::vector<int>();
+            const std::vector<int>& groupData = mEntityTable.column_exists("string:Group") ? mEntityTable.mStringColumns["string:Group"] : std::vector<int>();
             
             std::vector<std::string>* result = new std::vector<std::string>();
             result->reserve(count);
@@ -674,7 +605,7 @@ namespace Vim
             if (parameterDescriptorIndex < 0 || parameterDescriptorIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "string:ParameterType")) {
+            if (mEntityTable.column_exists("string:ParameterType")) {
                 return std::string(reinterpret_cast<const char*>(mStrings[mEntityTable.mStringColumns["string:ParameterType"][parameterDescriptorIndex]]));
             }
             
@@ -685,7 +616,7 @@ namespace Vim
         {
             const auto count = GetCount();
             
-            const std::vector<int>& parameterTypeData = columnExists(mEntityTable, "string:ParameterType") ? mEntityTable.mStringColumns["string:ParameterType"] : std::vector<int>();
+            const std::vector<int>& parameterTypeData = mEntityTable.column_exists("string:ParameterType") ? mEntityTable.mStringColumns["string:ParameterType"] : std::vector<int>();
             
             std::vector<std::string>* result = new std::vector<std::string>();
             result->reserve(count);
@@ -703,7 +634,7 @@ namespace Vim
             if (parameterDescriptorIndex < 0 || parameterDescriptorIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "byte:IsInstance")) {
+            if (mEntityTable.column_exists("byte:IsInstance")) {
                 return static_cast<bool>(*reinterpret_cast<bfast::byte*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["byte:IsInstance"].begin() + parameterDescriptorIndex * sizeof(bfast::byte))));
             }
             
@@ -715,7 +646,7 @@ namespace Vim
             const auto count = GetCount();
             
             bfast::byte* isInstanceData = new bfast::byte[count];
-            if (columnExists(mEntityTable, "byte:IsInstance")) {
+            if (mEntityTable.column_exists("byte:IsInstance")) {
                 memcpy(isInstanceData, mEntityTable.mDataColumns["byte:IsInstance"].begin(), count * sizeof(bfast::byte));
             }
             
@@ -731,7 +662,7 @@ namespace Vim
             if (parameterDescriptorIndex < 0 || parameterDescriptorIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "byte:IsShared")) {
+            if (mEntityTable.column_exists("byte:IsShared")) {
                 return static_cast<bool>(*reinterpret_cast<bfast::byte*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["byte:IsShared"].begin() + parameterDescriptorIndex * sizeof(bfast::byte))));
             }
             
@@ -743,7 +674,7 @@ namespace Vim
             const auto count = GetCount();
             
             bfast::byte* isSharedData = new bfast::byte[count];
-            if (columnExists(mEntityTable, "byte:IsShared")) {
+            if (mEntityTable.column_exists("byte:IsShared")) {
                 memcpy(isSharedData, mEntityTable.mDataColumns["byte:IsShared"].begin(), count * sizeof(bfast::byte));
             }
             
@@ -759,7 +690,7 @@ namespace Vim
             if (parameterDescriptorIndex < 0 || parameterDescriptorIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "byte:IsReadOnly")) {
+            if (mEntityTable.column_exists("byte:IsReadOnly")) {
                 return static_cast<bool>(*reinterpret_cast<bfast::byte*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["byte:IsReadOnly"].begin() + parameterDescriptorIndex * sizeof(bfast::byte))));
             }
             
@@ -771,7 +702,7 @@ namespace Vim
             const auto count = GetCount();
             
             bfast::byte* isReadOnlyData = new bfast::byte[count];
-            if (columnExists(mEntityTable, "byte:IsReadOnly")) {
+            if (mEntityTable.column_exists("byte:IsReadOnly")) {
                 memcpy(isReadOnlyData, mEntityTable.mDataColumns["byte:IsReadOnly"].begin(), count * sizeof(bfast::byte));
             }
             
@@ -787,7 +718,7 @@ namespace Vim
             if (parameterDescriptorIndex < 0 || parameterDescriptorIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "int:Flags")) {
+            if (mEntityTable.column_exists("int:Flags")) {
                 return *reinterpret_cast<int*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["int:Flags"].begin() + parameterDescriptorIndex * sizeof(int)));
             }
             
@@ -799,7 +730,7 @@ namespace Vim
             const auto count = GetCount();
             
             int* flagsData = new int[count];
-            if (columnExists(mEntityTable, "int:Flags")) {
+            if (mEntityTable.column_exists("int:Flags")) {
                 memcpy(flagsData, mEntityTable.mDataColumns["int:Flags"].begin(), count * sizeof(int));
             }
             
@@ -815,7 +746,7 @@ namespace Vim
             if (parameterDescriptorIndex < 0 || parameterDescriptorIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "string:Guid")) {
+            if (mEntityTable.column_exists("string:Guid")) {
                 return std::string(reinterpret_cast<const char*>(mStrings[mEntityTable.mStringColumns["string:Guid"][parameterDescriptorIndex]]));
             }
             
@@ -826,7 +757,7 @@ namespace Vim
         {
             const auto count = GetCount();
             
-            const std::vector<int>& guidData = columnExists(mEntityTable, "string:Guid") ? mEntityTable.mStringColumns["string:Guid"] : std::vector<int>();
+            const std::vector<int>& guidData = mEntityTable.column_exists("string:Guid") ? mEntityTable.mStringColumns["string:Guid"] : std::vector<int>();
             
             std::vector<std::string>* result = new std::vector<std::string>();
             result->reserve(count);
@@ -841,7 +772,7 @@ namespace Vim
         
         int GetDisplayUnitIndex(int parameterDescriptorIndex)
         {
-            if (!columnExists(mEntityTable, "index:Vim.DisplayUnit:DisplayUnit")) {
+            if (!mEntityTable.column_exists("index:Vim.DisplayUnit:DisplayUnit")) {
                 return -1;
             }
             
@@ -885,7 +816,7 @@ namespace Vim
         
         size_t GetCount()
         {
-            return getCount(mEntityTable);
+            return mEntityTable.get_count();
         }
         
         Parameter* Get(int parameterIndex)
@@ -900,19 +831,19 @@ namespace Vim
         
         std::vector<Parameter>* GetAll()
         {
-            bool existsValue = columnExists(mEntityTable, "string:Value");
-            bool existsParameterDescriptor = columnExists(mEntityTable, "index:Vim.ParameterDescriptor:ParameterDescriptor");
-            bool existsElement = columnExists(mEntityTable, "index:Vim.Element:Element");
+            bool existsValue = mEntityTable.column_exists("string:Value");
+            bool existsParameterDescriptor = mEntityTable.column_exists("index:Vim.ParameterDescriptor:ParameterDescriptor");
+            bool existsElement = mEntityTable.column_exists("index:Vim.Element:Element");
             
             const auto count = GetCount();
             
             std::vector<Parameter>* parameter = new std::vector<Parameter>();
             parameter->reserve(count);
             
-            const std::vector<int>& valueData = columnExists(mEntityTable, "string:Value") ? mEntityTable.mStringColumns["string:Value"] : std::vector<int>();
+            const std::vector<int>& valueData = mEntityTable.column_exists("string:Value") ? mEntityTable.mStringColumns["string:Value"] : std::vector<int>();
             
-            const std::vector<int>& parameterDescriptorData = columnExists(mEntityTable ,"index:Vim.ParameterDescriptor:ParameterDescriptor") ? mEntityTable.mIndexColumns["index:Vim.ParameterDescriptor:ParameterDescriptor"] : std::vector<int>();
-            const std::vector<int>& elementData = columnExists(mEntityTable ,"index:Vim.Element:Element") ? mEntityTable.mIndexColumns["index:Vim.Element:Element"] : std::vector<int>();
+            const std::vector<int>& parameterDescriptorData = mEntityTable.column_exists("index:Vim.ParameterDescriptor:ParameterDescriptor") ? mEntityTable.mIndexColumns["index:Vim.ParameterDescriptor:ParameterDescriptor"] : std::vector<int>();
+            const std::vector<int>& elementData = mEntityTable.column_exists("index:Vim.Element:Element") ? mEntityTable.mIndexColumns["index:Vim.Element:Element"] : std::vector<int>();
             
             for (int i = 0; i < count; ++i)
             {
@@ -933,7 +864,7 @@ namespace Vim
             if (parameterIndex < 0 || parameterIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "string:Value")) {
+            if (mEntityTable.column_exists("string:Value")) {
                 return std::string(reinterpret_cast<const char*>(mStrings[mEntityTable.mStringColumns["string:Value"][parameterIndex]]));
             }
             
@@ -944,7 +875,7 @@ namespace Vim
         {
             const auto count = GetCount();
             
-            const std::vector<int>& valueData = columnExists(mEntityTable, "string:Value") ? mEntityTable.mStringColumns["string:Value"] : std::vector<int>();
+            const std::vector<int>& valueData = mEntityTable.column_exists("string:Value") ? mEntityTable.mStringColumns["string:Value"] : std::vector<int>();
             
             std::vector<std::string>* result = new std::vector<std::string>();
             result->reserve(count);
@@ -959,7 +890,7 @@ namespace Vim
         
         int GetParameterDescriptorIndex(int parameterIndex)
         {
-            if (!columnExists(mEntityTable, "index:Vim.ParameterDescriptor:ParameterDescriptor")) {
+            if (!mEntityTable.column_exists("index:Vim.ParameterDescriptor:ParameterDescriptor")) {
                 return -1;
             }
             
@@ -971,7 +902,7 @@ namespace Vim
         
         int GetElementIndex(int parameterIndex)
         {
-            if (!columnExists(mEntityTable, "index:Vim.Element:Element")) {
+            if (!mEntityTable.column_exists("index:Vim.Element:Element")) {
                 return -1;
             }
             
@@ -1041,7 +972,7 @@ namespace Vim
         
         size_t GetCount()
         {
-            return getCount(mEntityTable);
+            return mEntityTable.get_count();
         }
         
         Element* Get(int elementIndex)
@@ -1073,26 +1004,26 @@ namespace Vim
         
         std::vector<Element>* GetAll()
         {
-            bool existsId = columnExists(mEntityTable, "long:Id") || columnExists(mEntityTable, "int:Id");
-            bool existsType = columnExists(mEntityTable, "string:Type");
-            bool existsName = columnExists(mEntityTable, "string:Name");
-            bool existsUniqueId = columnExists(mEntityTable, "string:UniqueId");
-            bool existsLocation_X = columnExists(mEntityTable, "float:Location.X");
-            bool existsLocation_Y = columnExists(mEntityTable, "float:Location.Y");
-            bool existsLocation_Z = columnExists(mEntityTable, "float:Location.Z");
-            bool existsFamilyName = columnExists(mEntityTable, "string:FamilyName");
-            bool existsIsPinned = columnExists(mEntityTable, "byte:IsPinned");
-            bool existsLevel = columnExists(mEntityTable, "index:Vim.Level:Level");
-            bool existsPhaseCreated = columnExists(mEntityTable, "index:Vim.Phase:PhaseCreated");
-            bool existsPhaseDemolished = columnExists(mEntityTable, "index:Vim.Phase:PhaseDemolished");
-            bool existsCategory = columnExists(mEntityTable, "index:Vim.Category:Category");
-            bool existsWorkset = columnExists(mEntityTable, "index:Vim.Workset:Workset");
-            bool existsDesignOption = columnExists(mEntityTable, "index:Vim.DesignOption:DesignOption");
-            bool existsOwnerView = columnExists(mEntityTable, "index:Vim.View:OwnerView");
-            bool existsGroup = columnExists(mEntityTable, "index:Vim.Group:Group");
-            bool existsAssemblyInstance = columnExists(mEntityTable, "index:Vim.AssemblyInstance:AssemblyInstance");
-            bool existsBimDocument = columnExists(mEntityTable, "index:Vim.BimDocument:BimDocument");
-            bool existsRoom = columnExists(mEntityTable, "index:Vim.Room:Room");
+            bool existsId = mEntityTable.column_exists("long:Id") || mEntityTable.column_exists("int:Id");
+            bool existsType = mEntityTable.column_exists("string:Type");
+            bool existsName = mEntityTable.column_exists("string:Name");
+            bool existsUniqueId = mEntityTable.column_exists("string:UniqueId");
+            bool existsLocation_X = mEntityTable.column_exists("float:Location.X");
+            bool existsLocation_Y = mEntityTable.column_exists("float:Location.Y");
+            bool existsLocation_Z = mEntityTable.column_exists("float:Location.Z");
+            bool existsFamilyName = mEntityTable.column_exists("string:FamilyName");
+            bool existsIsPinned = mEntityTable.column_exists("byte:IsPinned");
+            bool existsLevel = mEntityTable.column_exists("index:Vim.Level:Level");
+            bool existsPhaseCreated = mEntityTable.column_exists("index:Vim.Phase:PhaseCreated");
+            bool existsPhaseDemolished = mEntityTable.column_exists("index:Vim.Phase:PhaseDemolished");
+            bool existsCategory = mEntityTable.column_exists("index:Vim.Category:Category");
+            bool existsWorkset = mEntityTable.column_exists("index:Vim.Workset:Workset");
+            bool existsDesignOption = mEntityTable.column_exists("index:Vim.DesignOption:DesignOption");
+            bool existsOwnerView = mEntityTable.column_exists("index:Vim.View:OwnerView");
+            bool existsGroup = mEntityTable.column_exists("index:Vim.Group:Group");
+            bool existsAssemblyInstance = mEntityTable.column_exists("index:Vim.AssemblyInstance:AssemblyInstance");
+            bool existsBimDocument = mEntityTable.column_exists("index:Vim.BimDocument:BimDocument");
+            bool existsRoom = mEntityTable.column_exists("index:Vim.Room:Room");
             
             const auto count = GetCount();
             
@@ -1100,54 +1031,54 @@ namespace Vim
             element->reserve(count);
             
             long long* idData = new long long[count];
-            if (columnExists(mEntityTable, "long:Id")) {
+            if (mEntityTable.column_exists("long:Id")) {
                 memcpy(idData, mEntityTable.mDataColumns["long:Id"].begin(), count * sizeof(long long));
             }
-            else if (columnExists(mEntityTable, "int:Id")) {
+            else if (mEntityTable.column_exists("int:Id")) {
                 for (int i = 0; i < count; ++i) {
                     idData[i] = static_cast<long long>(*reinterpret_cast<int*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["int:Id"].begin() + i * sizeof(int))));
                 }
             }
             
-            const std::vector<int>& typeData = columnExists(mEntityTable, "string:Type") ? mEntityTable.mStringColumns["string:Type"] : std::vector<int>();
+            const std::vector<int>& typeData = mEntityTable.column_exists("string:Type") ? mEntityTable.mStringColumns["string:Type"] : std::vector<int>();
             
-            const std::vector<int>& nameData = columnExists(mEntityTable, "string:Name") ? mEntityTable.mStringColumns["string:Name"] : std::vector<int>();
+            const std::vector<int>& nameData = mEntityTable.column_exists("string:Name") ? mEntityTable.mStringColumns["string:Name"] : std::vector<int>();
             
-            const std::vector<int>& uniqueIdData = columnExists(mEntityTable, "string:UniqueId") ? mEntityTable.mStringColumns["string:UniqueId"] : std::vector<int>();
+            const std::vector<int>& uniqueIdData = mEntityTable.column_exists("string:UniqueId") ? mEntityTable.mStringColumns["string:UniqueId"] : std::vector<int>();
             
             float* location_XData = new float[count];
-            if (columnExists(mEntityTable, "float:Location.X")) {
+            if (mEntityTable.column_exists("float:Location.X")) {
                 memcpy(location_XData, mEntityTable.mDataColumns["float:Location.X"].begin(), count * sizeof(float));
             }
             
             float* location_YData = new float[count];
-            if (columnExists(mEntityTable, "float:Location.Y")) {
+            if (mEntityTable.column_exists("float:Location.Y")) {
                 memcpy(location_YData, mEntityTable.mDataColumns["float:Location.Y"].begin(), count * sizeof(float));
             }
             
             float* location_ZData = new float[count];
-            if (columnExists(mEntityTable, "float:Location.Z")) {
+            if (mEntityTable.column_exists("float:Location.Z")) {
                 memcpy(location_ZData, mEntityTable.mDataColumns["float:Location.Z"].begin(), count * sizeof(float));
             }
             
-            const std::vector<int>& familyNameData = columnExists(mEntityTable, "string:FamilyName") ? mEntityTable.mStringColumns["string:FamilyName"] : std::vector<int>();
+            const std::vector<int>& familyNameData = mEntityTable.column_exists("string:FamilyName") ? mEntityTable.mStringColumns["string:FamilyName"] : std::vector<int>();
             
             bfast::byte* isPinnedData = new bfast::byte[count];
-            if (columnExists(mEntityTable, "byte:IsPinned")) {
+            if (mEntityTable.column_exists("byte:IsPinned")) {
                 memcpy(isPinnedData, mEntityTable.mDataColumns["byte:IsPinned"].begin(), count * sizeof(bfast::byte));
             }
             
-            const std::vector<int>& levelData = columnExists(mEntityTable ,"index:Vim.Level:Level") ? mEntityTable.mIndexColumns["index:Vim.Level:Level"] : std::vector<int>();
-            const std::vector<int>& phaseCreatedData = columnExists(mEntityTable ,"index:Vim.Phase:PhaseCreated") ? mEntityTable.mIndexColumns["index:Vim.Phase:PhaseCreated"] : std::vector<int>();
-            const std::vector<int>& phaseDemolishedData = columnExists(mEntityTable ,"index:Vim.Phase:PhaseDemolished") ? mEntityTable.mIndexColumns["index:Vim.Phase:PhaseDemolished"] : std::vector<int>();
-            const std::vector<int>& categoryData = columnExists(mEntityTable ,"index:Vim.Category:Category") ? mEntityTable.mIndexColumns["index:Vim.Category:Category"] : std::vector<int>();
-            const std::vector<int>& worksetData = columnExists(mEntityTable ,"index:Vim.Workset:Workset") ? mEntityTable.mIndexColumns["index:Vim.Workset:Workset"] : std::vector<int>();
-            const std::vector<int>& designOptionData = columnExists(mEntityTable ,"index:Vim.DesignOption:DesignOption") ? mEntityTable.mIndexColumns["index:Vim.DesignOption:DesignOption"] : std::vector<int>();
-            const std::vector<int>& ownerViewData = columnExists(mEntityTable ,"index:Vim.View:OwnerView") ? mEntityTable.mIndexColumns["index:Vim.View:OwnerView"] : std::vector<int>();
-            const std::vector<int>& groupData = columnExists(mEntityTable ,"index:Vim.Group:Group") ? mEntityTable.mIndexColumns["index:Vim.Group:Group"] : std::vector<int>();
-            const std::vector<int>& assemblyInstanceData = columnExists(mEntityTable ,"index:Vim.AssemblyInstance:AssemblyInstance") ? mEntityTable.mIndexColumns["index:Vim.AssemblyInstance:AssemblyInstance"] : std::vector<int>();
-            const std::vector<int>& bimDocumentData = columnExists(mEntityTable ,"index:Vim.BimDocument:BimDocument") ? mEntityTable.mIndexColumns["index:Vim.BimDocument:BimDocument"] : std::vector<int>();
-            const std::vector<int>& roomData = columnExists(mEntityTable ,"index:Vim.Room:Room") ? mEntityTable.mIndexColumns["index:Vim.Room:Room"] : std::vector<int>();
+            const std::vector<int>& levelData = mEntityTable.column_exists("index:Vim.Level:Level") ? mEntityTable.mIndexColumns["index:Vim.Level:Level"] : std::vector<int>();
+            const std::vector<int>& phaseCreatedData = mEntityTable.column_exists("index:Vim.Phase:PhaseCreated") ? mEntityTable.mIndexColumns["index:Vim.Phase:PhaseCreated"] : std::vector<int>();
+            const std::vector<int>& phaseDemolishedData = mEntityTable.column_exists("index:Vim.Phase:PhaseDemolished") ? mEntityTable.mIndexColumns["index:Vim.Phase:PhaseDemolished"] : std::vector<int>();
+            const std::vector<int>& categoryData = mEntityTable.column_exists("index:Vim.Category:Category") ? mEntityTable.mIndexColumns["index:Vim.Category:Category"] : std::vector<int>();
+            const std::vector<int>& worksetData = mEntityTable.column_exists("index:Vim.Workset:Workset") ? mEntityTable.mIndexColumns["index:Vim.Workset:Workset"] : std::vector<int>();
+            const std::vector<int>& designOptionData = mEntityTable.column_exists("index:Vim.DesignOption:DesignOption") ? mEntityTable.mIndexColumns["index:Vim.DesignOption:DesignOption"] : std::vector<int>();
+            const std::vector<int>& ownerViewData = mEntityTable.column_exists("index:Vim.View:OwnerView") ? mEntityTable.mIndexColumns["index:Vim.View:OwnerView"] : std::vector<int>();
+            const std::vector<int>& groupData = mEntityTable.column_exists("index:Vim.Group:Group") ? mEntityTable.mIndexColumns["index:Vim.Group:Group"] : std::vector<int>();
+            const std::vector<int>& assemblyInstanceData = mEntityTable.column_exists("index:Vim.AssemblyInstance:AssemblyInstance") ? mEntityTable.mIndexColumns["index:Vim.AssemblyInstance:AssemblyInstance"] : std::vector<int>();
+            const std::vector<int>& bimDocumentData = mEntityTable.column_exists("index:Vim.BimDocument:BimDocument") ? mEntityTable.mIndexColumns["index:Vim.BimDocument:BimDocument"] : std::vector<int>();
+            const std::vector<int>& roomData = mEntityTable.column_exists("index:Vim.Room:Room") ? mEntityTable.mIndexColumns["index:Vim.Room:Room"] : std::vector<int>();
             
             for (int i = 0; i < count; ++i)
             {
@@ -1199,11 +1130,11 @@ namespace Vim
             if (elementIndex < 0 || elementIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "long:Id")) {
+            if (mEntityTable.column_exists("long:Id")) {
                 return *reinterpret_cast<long long*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["long:Id"].begin() + elementIndex * sizeof(long long)));
             }
             
-            if (columnExists(mEntityTable, "int:Id")) {
+            if (mEntityTable.column_exists("int:Id")) {
                 return static_cast<long long>(*reinterpret_cast<int*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["int:Id"].begin() + elementIndex * sizeof(int))));
             }
             
@@ -1215,10 +1146,10 @@ namespace Vim
             const auto count = GetCount();
             
             long long* idData = new long long[count];
-            if (columnExists(mEntityTable, "long:Id")) {
+            if (mEntityTable.column_exists("long:Id")) {
                 memcpy(idData, mEntityTable.mDataColumns["long:Id"].begin(), count * sizeof(long long));
             }
-            else if (columnExists(mEntityTable, "int:Id")) {
+            else if (mEntityTable.column_exists("int:Id")) {
                 for (int i = 0; i < count; ++i) {
                     idData[i] = static_cast<long long>(*reinterpret_cast<int*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["int:Id"].begin() + i * sizeof(int))));
                 }
@@ -1236,7 +1167,7 @@ namespace Vim
             if (elementIndex < 0 || elementIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "string:Type")) {
+            if (mEntityTable.column_exists("string:Type")) {
                 return std::string(reinterpret_cast<const char*>(mStrings[mEntityTable.mStringColumns["string:Type"][elementIndex]]));
             }
             
@@ -1247,7 +1178,7 @@ namespace Vim
         {
             const auto count = GetCount();
             
-            const std::vector<int>& typeData = columnExists(mEntityTable, "string:Type") ? mEntityTable.mStringColumns["string:Type"] : std::vector<int>();
+            const std::vector<int>& typeData = mEntityTable.column_exists("string:Type") ? mEntityTable.mStringColumns["string:Type"] : std::vector<int>();
             
             std::vector<std::string>* result = new std::vector<std::string>();
             result->reserve(count);
@@ -1265,7 +1196,7 @@ namespace Vim
             if (elementIndex < 0 || elementIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "string:Name")) {
+            if (mEntityTable.column_exists("string:Name")) {
                 return std::string(reinterpret_cast<const char*>(mStrings[mEntityTable.mStringColumns["string:Name"][elementIndex]]));
             }
             
@@ -1276,7 +1207,7 @@ namespace Vim
         {
             const auto count = GetCount();
             
-            const std::vector<int>& nameData = columnExists(mEntityTable, "string:Name") ? mEntityTable.mStringColumns["string:Name"] : std::vector<int>();
+            const std::vector<int>& nameData = mEntityTable.column_exists("string:Name") ? mEntityTable.mStringColumns["string:Name"] : std::vector<int>();
             
             std::vector<std::string>* result = new std::vector<std::string>();
             result->reserve(count);
@@ -1294,7 +1225,7 @@ namespace Vim
             if (elementIndex < 0 || elementIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "string:UniqueId")) {
+            if (mEntityTable.column_exists("string:UniqueId")) {
                 return std::string(reinterpret_cast<const char*>(mStrings[mEntityTable.mStringColumns["string:UniqueId"][elementIndex]]));
             }
             
@@ -1305,7 +1236,7 @@ namespace Vim
         {
             const auto count = GetCount();
             
-            const std::vector<int>& uniqueIdData = columnExists(mEntityTable, "string:UniqueId") ? mEntityTable.mStringColumns["string:UniqueId"] : std::vector<int>();
+            const std::vector<int>& uniqueIdData = mEntityTable.column_exists("string:UniqueId") ? mEntityTable.mStringColumns["string:UniqueId"] : std::vector<int>();
             
             std::vector<std::string>* result = new std::vector<std::string>();
             result->reserve(count);
@@ -1323,7 +1254,7 @@ namespace Vim
             if (elementIndex < 0 || elementIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "float:Location.X")) {
+            if (mEntityTable.column_exists("float:Location.X")) {
                 return *reinterpret_cast<float*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["float:Location.X"].begin() + elementIndex * sizeof(float)));
             }
             
@@ -1335,7 +1266,7 @@ namespace Vim
             const auto count = GetCount();
             
             float* location_XData = new float[count];
-            if (columnExists(mEntityTable, "float:Location.X")) {
+            if (mEntityTable.column_exists("float:Location.X")) {
                 memcpy(location_XData, mEntityTable.mDataColumns["float:Location.X"].begin(), count * sizeof(float));
             }
             
@@ -1351,7 +1282,7 @@ namespace Vim
             if (elementIndex < 0 || elementIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "float:Location.Y")) {
+            if (mEntityTable.column_exists("float:Location.Y")) {
                 return *reinterpret_cast<float*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["float:Location.Y"].begin() + elementIndex * sizeof(float)));
             }
             
@@ -1363,7 +1294,7 @@ namespace Vim
             const auto count = GetCount();
             
             float* location_YData = new float[count];
-            if (columnExists(mEntityTable, "float:Location.Y")) {
+            if (mEntityTable.column_exists("float:Location.Y")) {
                 memcpy(location_YData, mEntityTable.mDataColumns["float:Location.Y"].begin(), count * sizeof(float));
             }
             
@@ -1379,7 +1310,7 @@ namespace Vim
             if (elementIndex < 0 || elementIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "float:Location.Z")) {
+            if (mEntityTable.column_exists("float:Location.Z")) {
                 return *reinterpret_cast<float*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["float:Location.Z"].begin() + elementIndex * sizeof(float)));
             }
             
@@ -1391,7 +1322,7 @@ namespace Vim
             const auto count = GetCount();
             
             float* location_ZData = new float[count];
-            if (columnExists(mEntityTable, "float:Location.Z")) {
+            if (mEntityTable.column_exists("float:Location.Z")) {
                 memcpy(location_ZData, mEntityTable.mDataColumns["float:Location.Z"].begin(), count * sizeof(float));
             }
             
@@ -1407,7 +1338,7 @@ namespace Vim
             if (elementIndex < 0 || elementIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "string:FamilyName")) {
+            if (mEntityTable.column_exists("string:FamilyName")) {
                 return std::string(reinterpret_cast<const char*>(mStrings[mEntityTable.mStringColumns["string:FamilyName"][elementIndex]]));
             }
             
@@ -1418,7 +1349,7 @@ namespace Vim
         {
             const auto count = GetCount();
             
-            const std::vector<int>& familyNameData = columnExists(mEntityTable, "string:FamilyName") ? mEntityTable.mStringColumns["string:FamilyName"] : std::vector<int>();
+            const std::vector<int>& familyNameData = mEntityTable.column_exists("string:FamilyName") ? mEntityTable.mStringColumns["string:FamilyName"] : std::vector<int>();
             
             std::vector<std::string>* result = new std::vector<std::string>();
             result->reserve(count);
@@ -1436,7 +1367,7 @@ namespace Vim
             if (elementIndex < 0 || elementIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "byte:IsPinned")) {
+            if (mEntityTable.column_exists("byte:IsPinned")) {
                 return static_cast<bool>(*reinterpret_cast<bfast::byte*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["byte:IsPinned"].begin() + elementIndex * sizeof(bfast::byte))));
             }
             
@@ -1448,7 +1379,7 @@ namespace Vim
             const auto count = GetCount();
             
             bfast::byte* isPinnedData = new bfast::byte[count];
-            if (columnExists(mEntityTable, "byte:IsPinned")) {
+            if (mEntityTable.column_exists("byte:IsPinned")) {
                 memcpy(isPinnedData, mEntityTable.mDataColumns["byte:IsPinned"].begin(), count * sizeof(bfast::byte));
             }
             
@@ -1461,7 +1392,7 @@ namespace Vim
         
         int GetLevelIndex(int elementIndex)
         {
-            if (!columnExists(mEntityTable, "index:Vim.Level:Level")) {
+            if (!mEntityTable.column_exists("index:Vim.Level:Level")) {
                 return -1;
             }
             
@@ -1473,7 +1404,7 @@ namespace Vim
         
         int GetPhaseCreatedIndex(int elementIndex)
         {
-            if (!columnExists(mEntityTable, "index:Vim.Phase:PhaseCreated")) {
+            if (!mEntityTable.column_exists("index:Vim.Phase:PhaseCreated")) {
                 return -1;
             }
             
@@ -1485,7 +1416,7 @@ namespace Vim
         
         int GetPhaseDemolishedIndex(int elementIndex)
         {
-            if (!columnExists(mEntityTable, "index:Vim.Phase:PhaseDemolished")) {
+            if (!mEntityTable.column_exists("index:Vim.Phase:PhaseDemolished")) {
                 return -1;
             }
             
@@ -1497,7 +1428,7 @@ namespace Vim
         
         int GetCategoryIndex(int elementIndex)
         {
-            if (!columnExists(mEntityTable, "index:Vim.Category:Category")) {
+            if (!mEntityTable.column_exists("index:Vim.Category:Category")) {
                 return -1;
             }
             
@@ -1509,7 +1440,7 @@ namespace Vim
         
         int GetWorksetIndex(int elementIndex)
         {
-            if (!columnExists(mEntityTable, "index:Vim.Workset:Workset")) {
+            if (!mEntityTable.column_exists("index:Vim.Workset:Workset")) {
                 return -1;
             }
             
@@ -1521,7 +1452,7 @@ namespace Vim
         
         int GetDesignOptionIndex(int elementIndex)
         {
-            if (!columnExists(mEntityTable, "index:Vim.DesignOption:DesignOption")) {
+            if (!mEntityTable.column_exists("index:Vim.DesignOption:DesignOption")) {
                 return -1;
             }
             
@@ -1533,7 +1464,7 @@ namespace Vim
         
         int GetOwnerViewIndex(int elementIndex)
         {
-            if (!columnExists(mEntityTable, "index:Vim.View:OwnerView")) {
+            if (!mEntityTable.column_exists("index:Vim.View:OwnerView")) {
                 return -1;
             }
             
@@ -1545,7 +1476,7 @@ namespace Vim
         
         int GetGroupIndex(int elementIndex)
         {
-            if (!columnExists(mEntityTable, "index:Vim.Group:Group")) {
+            if (!mEntityTable.column_exists("index:Vim.Group:Group")) {
                 return -1;
             }
             
@@ -1557,7 +1488,7 @@ namespace Vim
         
         int GetAssemblyInstanceIndex(int elementIndex)
         {
-            if (!columnExists(mEntityTable, "index:Vim.AssemblyInstance:AssemblyInstance")) {
+            if (!mEntityTable.column_exists("index:Vim.AssemblyInstance:AssemblyInstance")) {
                 return -1;
             }
             
@@ -1569,7 +1500,7 @@ namespace Vim
         
         int GetBimDocumentIndex(int elementIndex)
         {
-            if (!columnExists(mEntityTable, "index:Vim.BimDocument:BimDocument")) {
+            if (!mEntityTable.column_exists("index:Vim.BimDocument:BimDocument")) {
                 return -1;
             }
             
@@ -1581,7 +1512,7 @@ namespace Vim
         
         int GetRoomIndex(int elementIndex)
         {
-            if (!columnExists(mEntityTable, "index:Vim.Room:Room")) {
+            if (!mEntityTable.column_exists("index:Vim.Room:Room")) {
                 return -1;
             }
             
@@ -1629,7 +1560,7 @@ namespace Vim
         
         size_t GetCount()
         {
-            return getCount(mEntityTable);
+            return mEntityTable.get_count();
         }
         
         Workset* Get(int worksetIndex)
@@ -1649,14 +1580,14 @@ namespace Vim
         
         std::vector<Workset>* GetAll()
         {
-            bool existsId = columnExists(mEntityTable, "int:Id");
-            bool existsName = columnExists(mEntityTable, "string:Name");
-            bool existsKind = columnExists(mEntityTable, "string:Kind");
-            bool existsIsOpen = columnExists(mEntityTable, "byte:IsOpen");
-            bool existsIsEditable = columnExists(mEntityTable, "byte:IsEditable");
-            bool existsOwner = columnExists(mEntityTable, "string:Owner");
-            bool existsUniqueId = columnExists(mEntityTable, "string:UniqueId");
-            bool existsBimDocument = columnExists(mEntityTable, "index:Vim.BimDocument:BimDocument");
+            bool existsId = mEntityTable.column_exists("int:Id");
+            bool existsName = mEntityTable.column_exists("string:Name");
+            bool existsKind = mEntityTable.column_exists("string:Kind");
+            bool existsIsOpen = mEntityTable.column_exists("byte:IsOpen");
+            bool existsIsEditable = mEntityTable.column_exists("byte:IsEditable");
+            bool existsOwner = mEntityTable.column_exists("string:Owner");
+            bool existsUniqueId = mEntityTable.column_exists("string:UniqueId");
+            bool existsBimDocument = mEntityTable.column_exists("index:Vim.BimDocument:BimDocument");
             
             const auto count = GetCount();
             
@@ -1664,29 +1595,29 @@ namespace Vim
             workset->reserve(count);
             
             int* idData = new int[count];
-            if (columnExists(mEntityTable, "int:Id")) {
+            if (mEntityTable.column_exists("int:Id")) {
                 memcpy(idData, mEntityTable.mDataColumns["int:Id"].begin(), count * sizeof(int));
             }
             
-            const std::vector<int>& nameData = columnExists(mEntityTable, "string:Name") ? mEntityTable.mStringColumns["string:Name"] : std::vector<int>();
+            const std::vector<int>& nameData = mEntityTable.column_exists("string:Name") ? mEntityTable.mStringColumns["string:Name"] : std::vector<int>();
             
-            const std::vector<int>& kindData = columnExists(mEntityTable, "string:Kind") ? mEntityTable.mStringColumns["string:Kind"] : std::vector<int>();
+            const std::vector<int>& kindData = mEntityTable.column_exists("string:Kind") ? mEntityTable.mStringColumns["string:Kind"] : std::vector<int>();
             
             bfast::byte* isOpenData = new bfast::byte[count];
-            if (columnExists(mEntityTable, "byte:IsOpen")) {
+            if (mEntityTable.column_exists("byte:IsOpen")) {
                 memcpy(isOpenData, mEntityTable.mDataColumns["byte:IsOpen"].begin(), count * sizeof(bfast::byte));
             }
             
             bfast::byte* isEditableData = new bfast::byte[count];
-            if (columnExists(mEntityTable, "byte:IsEditable")) {
+            if (mEntityTable.column_exists("byte:IsEditable")) {
                 memcpy(isEditableData, mEntityTable.mDataColumns["byte:IsEditable"].begin(), count * sizeof(bfast::byte));
             }
             
-            const std::vector<int>& ownerData = columnExists(mEntityTable, "string:Owner") ? mEntityTable.mStringColumns["string:Owner"] : std::vector<int>();
+            const std::vector<int>& ownerData = mEntityTable.column_exists("string:Owner") ? mEntityTable.mStringColumns["string:Owner"] : std::vector<int>();
             
-            const std::vector<int>& uniqueIdData = columnExists(mEntityTable, "string:UniqueId") ? mEntityTable.mStringColumns["string:UniqueId"] : std::vector<int>();
+            const std::vector<int>& uniqueIdData = mEntityTable.column_exists("string:UniqueId") ? mEntityTable.mStringColumns["string:UniqueId"] : std::vector<int>();
             
-            const std::vector<int>& bimDocumentData = columnExists(mEntityTable ,"index:Vim.BimDocument:BimDocument") ? mEntityTable.mIndexColumns["index:Vim.BimDocument:BimDocument"] : std::vector<int>();
+            const std::vector<int>& bimDocumentData = mEntityTable.column_exists("index:Vim.BimDocument:BimDocument") ? mEntityTable.mIndexColumns["index:Vim.BimDocument:BimDocument"] : std::vector<int>();
             
             for (int i = 0; i < count; ++i)
             {
@@ -1722,7 +1653,7 @@ namespace Vim
             if (worksetIndex < 0 || worksetIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "int:Id")) {
+            if (mEntityTable.column_exists("int:Id")) {
                 return *reinterpret_cast<int*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["int:Id"].begin() + worksetIndex * sizeof(int)));
             }
             
@@ -1734,7 +1665,7 @@ namespace Vim
             const auto count = GetCount();
             
             int* idData = new int[count];
-            if (columnExists(mEntityTable, "int:Id")) {
+            if (mEntityTable.column_exists("int:Id")) {
                 memcpy(idData, mEntityTable.mDataColumns["int:Id"].begin(), count * sizeof(int));
             }
             
@@ -1750,7 +1681,7 @@ namespace Vim
             if (worksetIndex < 0 || worksetIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "string:Name")) {
+            if (mEntityTable.column_exists("string:Name")) {
                 return std::string(reinterpret_cast<const char*>(mStrings[mEntityTable.mStringColumns["string:Name"][worksetIndex]]));
             }
             
@@ -1761,7 +1692,7 @@ namespace Vim
         {
             const auto count = GetCount();
             
-            const std::vector<int>& nameData = columnExists(mEntityTable, "string:Name") ? mEntityTable.mStringColumns["string:Name"] : std::vector<int>();
+            const std::vector<int>& nameData = mEntityTable.column_exists("string:Name") ? mEntityTable.mStringColumns["string:Name"] : std::vector<int>();
             
             std::vector<std::string>* result = new std::vector<std::string>();
             result->reserve(count);
@@ -1779,7 +1710,7 @@ namespace Vim
             if (worksetIndex < 0 || worksetIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "string:Kind")) {
+            if (mEntityTable.column_exists("string:Kind")) {
                 return std::string(reinterpret_cast<const char*>(mStrings[mEntityTable.mStringColumns["string:Kind"][worksetIndex]]));
             }
             
@@ -1790,7 +1721,7 @@ namespace Vim
         {
             const auto count = GetCount();
             
-            const std::vector<int>& kindData = columnExists(mEntityTable, "string:Kind") ? mEntityTable.mStringColumns["string:Kind"] : std::vector<int>();
+            const std::vector<int>& kindData = mEntityTable.column_exists("string:Kind") ? mEntityTable.mStringColumns["string:Kind"] : std::vector<int>();
             
             std::vector<std::string>* result = new std::vector<std::string>();
             result->reserve(count);
@@ -1808,7 +1739,7 @@ namespace Vim
             if (worksetIndex < 0 || worksetIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "byte:IsOpen")) {
+            if (mEntityTable.column_exists("byte:IsOpen")) {
                 return static_cast<bool>(*reinterpret_cast<bfast::byte*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["byte:IsOpen"].begin() + worksetIndex * sizeof(bfast::byte))));
             }
             
@@ -1820,7 +1751,7 @@ namespace Vim
             const auto count = GetCount();
             
             bfast::byte* isOpenData = new bfast::byte[count];
-            if (columnExists(mEntityTable, "byte:IsOpen")) {
+            if (mEntityTable.column_exists("byte:IsOpen")) {
                 memcpy(isOpenData, mEntityTable.mDataColumns["byte:IsOpen"].begin(), count * sizeof(bfast::byte));
             }
             
@@ -1836,7 +1767,7 @@ namespace Vim
             if (worksetIndex < 0 || worksetIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "byte:IsEditable")) {
+            if (mEntityTable.column_exists("byte:IsEditable")) {
                 return static_cast<bool>(*reinterpret_cast<bfast::byte*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["byte:IsEditable"].begin() + worksetIndex * sizeof(bfast::byte))));
             }
             
@@ -1848,7 +1779,7 @@ namespace Vim
             const auto count = GetCount();
             
             bfast::byte* isEditableData = new bfast::byte[count];
-            if (columnExists(mEntityTable, "byte:IsEditable")) {
+            if (mEntityTable.column_exists("byte:IsEditable")) {
                 memcpy(isEditableData, mEntityTable.mDataColumns["byte:IsEditable"].begin(), count * sizeof(bfast::byte));
             }
             
@@ -1864,7 +1795,7 @@ namespace Vim
             if (worksetIndex < 0 || worksetIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "string:Owner")) {
+            if (mEntityTable.column_exists("string:Owner")) {
                 return std::string(reinterpret_cast<const char*>(mStrings[mEntityTable.mStringColumns["string:Owner"][worksetIndex]]));
             }
             
@@ -1875,7 +1806,7 @@ namespace Vim
         {
             const auto count = GetCount();
             
-            const std::vector<int>& ownerData = columnExists(mEntityTable, "string:Owner") ? mEntityTable.mStringColumns["string:Owner"] : std::vector<int>();
+            const std::vector<int>& ownerData = mEntityTable.column_exists("string:Owner") ? mEntityTable.mStringColumns["string:Owner"] : std::vector<int>();
             
             std::vector<std::string>* result = new std::vector<std::string>();
             result->reserve(count);
@@ -1893,7 +1824,7 @@ namespace Vim
             if (worksetIndex < 0 || worksetIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "string:UniqueId")) {
+            if (mEntityTable.column_exists("string:UniqueId")) {
                 return std::string(reinterpret_cast<const char*>(mStrings[mEntityTable.mStringColumns["string:UniqueId"][worksetIndex]]));
             }
             
@@ -1904,7 +1835,7 @@ namespace Vim
         {
             const auto count = GetCount();
             
-            const std::vector<int>& uniqueIdData = columnExists(mEntityTable, "string:UniqueId") ? mEntityTable.mStringColumns["string:UniqueId"] : std::vector<int>();
+            const std::vector<int>& uniqueIdData = mEntityTable.column_exists("string:UniqueId") ? mEntityTable.mStringColumns["string:UniqueId"] : std::vector<int>();
             
             std::vector<std::string>* result = new std::vector<std::string>();
             result->reserve(count);
@@ -1919,7 +1850,7 @@ namespace Vim
         
         int GetBimDocumentIndex(int worksetIndex)
         {
-            if (!columnExists(mEntityTable, "index:Vim.BimDocument:BimDocument")) {
+            if (!mEntityTable.column_exists("index:Vim.BimDocument:BimDocument")) {
                 return -1;
             }
             
@@ -1964,7 +1895,7 @@ namespace Vim
         
         size_t GetCount()
         {
-            return getCount(mEntityTable);
+            return mEntityTable.get_count();
         }
         
         AssemblyInstance* Get(int assemblyInstanceIndex)
@@ -1981,35 +1912,35 @@ namespace Vim
         
         std::vector<AssemblyInstance>* GetAll()
         {
-            bool existsAssemblyTypeName = columnExists(mEntityTable, "string:AssemblyTypeName");
-            bool existsPosition_X = columnExists(mEntityTable, "float:Position.X");
-            bool existsPosition_Y = columnExists(mEntityTable, "float:Position.Y");
-            bool existsPosition_Z = columnExists(mEntityTable, "float:Position.Z");
-            bool existsElement = columnExists(mEntityTable, "index:Vim.Element:Element");
+            bool existsAssemblyTypeName = mEntityTable.column_exists("string:AssemblyTypeName");
+            bool existsPosition_X = mEntityTable.column_exists("float:Position.X");
+            bool existsPosition_Y = mEntityTable.column_exists("float:Position.Y");
+            bool existsPosition_Z = mEntityTable.column_exists("float:Position.Z");
+            bool existsElement = mEntityTable.column_exists("index:Vim.Element:Element");
             
             const auto count = GetCount();
             
             std::vector<AssemblyInstance>* assemblyInstance = new std::vector<AssemblyInstance>();
             assemblyInstance->reserve(count);
             
-            const std::vector<int>& assemblyTypeNameData = columnExists(mEntityTable, "string:AssemblyTypeName") ? mEntityTable.mStringColumns["string:AssemblyTypeName"] : std::vector<int>();
+            const std::vector<int>& assemblyTypeNameData = mEntityTable.column_exists("string:AssemblyTypeName") ? mEntityTable.mStringColumns["string:AssemblyTypeName"] : std::vector<int>();
             
             float* position_XData = new float[count];
-            if (columnExists(mEntityTable, "float:Position.X")) {
+            if (mEntityTable.column_exists("float:Position.X")) {
                 memcpy(position_XData, mEntityTable.mDataColumns["float:Position.X"].begin(), count * sizeof(float));
             }
             
             float* position_YData = new float[count];
-            if (columnExists(mEntityTable, "float:Position.Y")) {
+            if (mEntityTable.column_exists("float:Position.Y")) {
                 memcpy(position_YData, mEntityTable.mDataColumns["float:Position.Y"].begin(), count * sizeof(float));
             }
             
             float* position_ZData = new float[count];
-            if (columnExists(mEntityTable, "float:Position.Z")) {
+            if (mEntityTable.column_exists("float:Position.Z")) {
                 memcpy(position_ZData, mEntityTable.mDataColumns["float:Position.Z"].begin(), count * sizeof(float));
             }
             
-            const std::vector<int>& elementData = columnExists(mEntityTable ,"index:Vim.Element:Element") ? mEntityTable.mIndexColumns["index:Vim.Element:Element"] : std::vector<int>();
+            const std::vector<int>& elementData = mEntityTable.column_exists("index:Vim.Element:Element") ? mEntityTable.mIndexColumns["index:Vim.Element:Element"] : std::vector<int>();
             
             for (int i = 0; i < count; ++i)
             {
@@ -2039,7 +1970,7 @@ namespace Vim
             if (assemblyInstanceIndex < 0 || assemblyInstanceIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "string:AssemblyTypeName")) {
+            if (mEntityTable.column_exists("string:AssemblyTypeName")) {
                 return std::string(reinterpret_cast<const char*>(mStrings[mEntityTable.mStringColumns["string:AssemblyTypeName"][assemblyInstanceIndex]]));
             }
             
@@ -2050,7 +1981,7 @@ namespace Vim
         {
             const auto count = GetCount();
             
-            const std::vector<int>& assemblyTypeNameData = columnExists(mEntityTable, "string:AssemblyTypeName") ? mEntityTable.mStringColumns["string:AssemblyTypeName"] : std::vector<int>();
+            const std::vector<int>& assemblyTypeNameData = mEntityTable.column_exists("string:AssemblyTypeName") ? mEntityTable.mStringColumns["string:AssemblyTypeName"] : std::vector<int>();
             
             std::vector<std::string>* result = new std::vector<std::string>();
             result->reserve(count);
@@ -2068,7 +1999,7 @@ namespace Vim
             if (assemblyInstanceIndex < 0 || assemblyInstanceIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "float:Position.X")) {
+            if (mEntityTable.column_exists("float:Position.X")) {
                 return *reinterpret_cast<float*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["float:Position.X"].begin() + assemblyInstanceIndex * sizeof(float)));
             }
             
@@ -2080,7 +2011,7 @@ namespace Vim
             const auto count = GetCount();
             
             float* position_XData = new float[count];
-            if (columnExists(mEntityTable, "float:Position.X")) {
+            if (mEntityTable.column_exists("float:Position.X")) {
                 memcpy(position_XData, mEntityTable.mDataColumns["float:Position.X"].begin(), count * sizeof(float));
             }
             
@@ -2096,7 +2027,7 @@ namespace Vim
             if (assemblyInstanceIndex < 0 || assemblyInstanceIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "float:Position.Y")) {
+            if (mEntityTable.column_exists("float:Position.Y")) {
                 return *reinterpret_cast<float*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["float:Position.Y"].begin() + assemblyInstanceIndex * sizeof(float)));
             }
             
@@ -2108,7 +2039,7 @@ namespace Vim
             const auto count = GetCount();
             
             float* position_YData = new float[count];
-            if (columnExists(mEntityTable, "float:Position.Y")) {
+            if (mEntityTable.column_exists("float:Position.Y")) {
                 memcpy(position_YData, mEntityTable.mDataColumns["float:Position.Y"].begin(), count * sizeof(float));
             }
             
@@ -2124,7 +2055,7 @@ namespace Vim
             if (assemblyInstanceIndex < 0 || assemblyInstanceIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "float:Position.Z")) {
+            if (mEntityTable.column_exists("float:Position.Z")) {
                 return *reinterpret_cast<float*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["float:Position.Z"].begin() + assemblyInstanceIndex * sizeof(float)));
             }
             
@@ -2136,7 +2067,7 @@ namespace Vim
             const auto count = GetCount();
             
             float* position_ZData = new float[count];
-            if (columnExists(mEntityTable, "float:Position.Z")) {
+            if (mEntityTable.column_exists("float:Position.Z")) {
                 memcpy(position_ZData, mEntityTable.mDataColumns["float:Position.Z"].begin(), count * sizeof(float));
             }
             
@@ -2149,7 +2080,7 @@ namespace Vim
         
         int GetElementIndex(int assemblyInstanceIndex)
         {
-            if (!columnExists(mEntityTable, "index:Vim.Element:Element")) {
+            if (!mEntityTable.column_exists("index:Vim.Element:Element")) {
                 return -1;
             }
             
@@ -2194,7 +2125,7 @@ namespace Vim
         
         size_t GetCount()
         {
-            return getCount(mEntityTable);
+            return mEntityTable.get_count();
         }
         
         Group* Get(int groupIndex)
@@ -2211,35 +2142,35 @@ namespace Vim
         
         std::vector<Group>* GetAll()
         {
-            bool existsGroupType = columnExists(mEntityTable, "string:GroupType");
-            bool existsPosition_X = columnExists(mEntityTable, "float:Position.X");
-            bool existsPosition_Y = columnExists(mEntityTable, "float:Position.Y");
-            bool existsPosition_Z = columnExists(mEntityTable, "float:Position.Z");
-            bool existsElement = columnExists(mEntityTable, "index:Vim.Element:Element");
+            bool existsGroupType = mEntityTable.column_exists("string:GroupType");
+            bool existsPosition_X = mEntityTable.column_exists("float:Position.X");
+            bool existsPosition_Y = mEntityTable.column_exists("float:Position.Y");
+            bool existsPosition_Z = mEntityTable.column_exists("float:Position.Z");
+            bool existsElement = mEntityTable.column_exists("index:Vim.Element:Element");
             
             const auto count = GetCount();
             
             std::vector<Group>* group = new std::vector<Group>();
             group->reserve(count);
             
-            const std::vector<int>& groupTypeData = columnExists(mEntityTable, "string:GroupType") ? mEntityTable.mStringColumns["string:GroupType"] : std::vector<int>();
+            const std::vector<int>& groupTypeData = mEntityTable.column_exists("string:GroupType") ? mEntityTable.mStringColumns["string:GroupType"] : std::vector<int>();
             
             float* position_XData = new float[count];
-            if (columnExists(mEntityTable, "float:Position.X")) {
+            if (mEntityTable.column_exists("float:Position.X")) {
                 memcpy(position_XData, mEntityTable.mDataColumns["float:Position.X"].begin(), count * sizeof(float));
             }
             
             float* position_YData = new float[count];
-            if (columnExists(mEntityTable, "float:Position.Y")) {
+            if (mEntityTable.column_exists("float:Position.Y")) {
                 memcpy(position_YData, mEntityTable.mDataColumns["float:Position.Y"].begin(), count * sizeof(float));
             }
             
             float* position_ZData = new float[count];
-            if (columnExists(mEntityTable, "float:Position.Z")) {
+            if (mEntityTable.column_exists("float:Position.Z")) {
                 memcpy(position_ZData, mEntityTable.mDataColumns["float:Position.Z"].begin(), count * sizeof(float));
             }
             
-            const std::vector<int>& elementData = columnExists(mEntityTable ,"index:Vim.Element:Element") ? mEntityTable.mIndexColumns["index:Vim.Element:Element"] : std::vector<int>();
+            const std::vector<int>& elementData = mEntityTable.column_exists("index:Vim.Element:Element") ? mEntityTable.mIndexColumns["index:Vim.Element:Element"] : std::vector<int>();
             
             for (int i = 0; i < count; ++i)
             {
@@ -2269,7 +2200,7 @@ namespace Vim
             if (groupIndex < 0 || groupIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "string:GroupType")) {
+            if (mEntityTable.column_exists("string:GroupType")) {
                 return std::string(reinterpret_cast<const char*>(mStrings[mEntityTable.mStringColumns["string:GroupType"][groupIndex]]));
             }
             
@@ -2280,7 +2211,7 @@ namespace Vim
         {
             const auto count = GetCount();
             
-            const std::vector<int>& groupTypeData = columnExists(mEntityTable, "string:GroupType") ? mEntityTable.mStringColumns["string:GroupType"] : std::vector<int>();
+            const std::vector<int>& groupTypeData = mEntityTable.column_exists("string:GroupType") ? mEntityTable.mStringColumns["string:GroupType"] : std::vector<int>();
             
             std::vector<std::string>* result = new std::vector<std::string>();
             result->reserve(count);
@@ -2298,7 +2229,7 @@ namespace Vim
             if (groupIndex < 0 || groupIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "float:Position.X")) {
+            if (mEntityTable.column_exists("float:Position.X")) {
                 return *reinterpret_cast<float*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["float:Position.X"].begin() + groupIndex * sizeof(float)));
             }
             
@@ -2310,7 +2241,7 @@ namespace Vim
             const auto count = GetCount();
             
             float* position_XData = new float[count];
-            if (columnExists(mEntityTable, "float:Position.X")) {
+            if (mEntityTable.column_exists("float:Position.X")) {
                 memcpy(position_XData, mEntityTable.mDataColumns["float:Position.X"].begin(), count * sizeof(float));
             }
             
@@ -2326,7 +2257,7 @@ namespace Vim
             if (groupIndex < 0 || groupIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "float:Position.Y")) {
+            if (mEntityTable.column_exists("float:Position.Y")) {
                 return *reinterpret_cast<float*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["float:Position.Y"].begin() + groupIndex * sizeof(float)));
             }
             
@@ -2338,7 +2269,7 @@ namespace Vim
             const auto count = GetCount();
             
             float* position_YData = new float[count];
-            if (columnExists(mEntityTable, "float:Position.Y")) {
+            if (mEntityTable.column_exists("float:Position.Y")) {
                 memcpy(position_YData, mEntityTable.mDataColumns["float:Position.Y"].begin(), count * sizeof(float));
             }
             
@@ -2354,7 +2285,7 @@ namespace Vim
             if (groupIndex < 0 || groupIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "float:Position.Z")) {
+            if (mEntityTable.column_exists("float:Position.Z")) {
                 return *reinterpret_cast<float*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["float:Position.Z"].begin() + groupIndex * sizeof(float)));
             }
             
@@ -2366,7 +2297,7 @@ namespace Vim
             const auto count = GetCount();
             
             float* position_ZData = new float[count];
-            if (columnExists(mEntityTable, "float:Position.Z")) {
+            if (mEntityTable.column_exists("float:Position.Z")) {
                 memcpy(position_ZData, mEntityTable.mDataColumns["float:Position.Z"].begin(), count * sizeof(float));
             }
             
@@ -2379,7 +2310,7 @@ namespace Vim
         
         int GetElementIndex(int groupIndex)
         {
-            if (!columnExists(mEntityTable, "index:Vim.Element:Element")) {
+            if (!mEntityTable.column_exists("index:Vim.Element:Element")) {
                 return -1;
             }
             
@@ -2421,7 +2352,7 @@ namespace Vim
         
         size_t GetCount()
         {
-            return getCount(mEntityTable);
+            return mEntityTable.get_count();
         }
         
         DesignOption* Get(int designOptionIndex)
@@ -2435,8 +2366,8 @@ namespace Vim
         
         std::vector<DesignOption>* GetAll()
         {
-            bool existsIsPrimary = columnExists(mEntityTable, "byte:IsPrimary");
-            bool existsElement = columnExists(mEntityTable, "index:Vim.Element:Element");
+            bool existsIsPrimary = mEntityTable.column_exists("byte:IsPrimary");
+            bool existsElement = mEntityTable.column_exists("index:Vim.Element:Element");
             
             const auto count = GetCount();
             
@@ -2444,11 +2375,11 @@ namespace Vim
             designOption->reserve(count);
             
             bfast::byte* isPrimaryData = new bfast::byte[count];
-            if (columnExists(mEntityTable, "byte:IsPrimary")) {
+            if (mEntityTable.column_exists("byte:IsPrimary")) {
                 memcpy(isPrimaryData, mEntityTable.mDataColumns["byte:IsPrimary"].begin(), count * sizeof(bfast::byte));
             }
             
-            const std::vector<int>& elementData = columnExists(mEntityTable ,"index:Vim.Element:Element") ? mEntityTable.mIndexColumns["index:Vim.Element:Element"] : std::vector<int>();
+            const std::vector<int>& elementData = mEntityTable.column_exists("index:Vim.Element:Element") ? mEntityTable.mIndexColumns["index:Vim.Element:Element"] : std::vector<int>();
             
             for (int i = 0; i < count; ++i)
             {
@@ -2470,7 +2401,7 @@ namespace Vim
             if (designOptionIndex < 0 || designOptionIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "byte:IsPrimary")) {
+            if (mEntityTable.column_exists("byte:IsPrimary")) {
                 return static_cast<bool>(*reinterpret_cast<bfast::byte*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["byte:IsPrimary"].begin() + designOptionIndex * sizeof(bfast::byte))));
             }
             
@@ -2482,7 +2413,7 @@ namespace Vim
             const auto count = GetCount();
             
             bfast::byte* isPrimaryData = new bfast::byte[count];
-            if (columnExists(mEntityTable, "byte:IsPrimary")) {
+            if (mEntityTable.column_exists("byte:IsPrimary")) {
                 memcpy(isPrimaryData, mEntityTable.mDataColumns["byte:IsPrimary"].begin(), count * sizeof(bfast::byte));
             }
             
@@ -2495,7 +2426,7 @@ namespace Vim
         
         int GetElementIndex(int designOptionIndex)
         {
-            if (!columnExists(mEntityTable, "index:Vim.Element:Element")) {
+            if (!mEntityTable.column_exists("index:Vim.Element:Element")) {
                 return -1;
             }
             
@@ -2539,7 +2470,7 @@ namespace Vim
         
         size_t GetCount()
         {
-            return getCount(mEntityTable);
+            return mEntityTable.get_count();
         }
         
         Level* Get(int levelIndex)
@@ -2554,9 +2485,9 @@ namespace Vim
         
         std::vector<Level>* GetAll()
         {
-            bool existsElevation = columnExists(mEntityTable, "double:Elevation");
-            bool existsFamilyType = columnExists(mEntityTable, "index:Vim.FamilyType:FamilyType");
-            bool existsElement = columnExists(mEntityTable, "index:Vim.Element:Element");
+            bool existsElevation = mEntityTable.column_exists("double:Elevation");
+            bool existsFamilyType = mEntityTable.column_exists("index:Vim.FamilyType:FamilyType");
+            bool existsElement = mEntityTable.column_exists("index:Vim.Element:Element");
             
             const auto count = GetCount();
             
@@ -2564,12 +2495,12 @@ namespace Vim
             level->reserve(count);
             
             double* elevationData = new double[count];
-            if (columnExists(mEntityTable, "double:Elevation")) {
+            if (mEntityTable.column_exists("double:Elevation")) {
                 memcpy(elevationData, mEntityTable.mDataColumns["double:Elevation"].begin(), count * sizeof(double));
             }
             
-            const std::vector<int>& familyTypeData = columnExists(mEntityTable ,"index:Vim.FamilyType:FamilyType") ? mEntityTable.mIndexColumns["index:Vim.FamilyType:FamilyType"] : std::vector<int>();
-            const std::vector<int>& elementData = columnExists(mEntityTable ,"index:Vim.Element:Element") ? mEntityTable.mIndexColumns["index:Vim.Element:Element"] : std::vector<int>();
+            const std::vector<int>& familyTypeData = mEntityTable.column_exists("index:Vim.FamilyType:FamilyType") ? mEntityTable.mIndexColumns["index:Vim.FamilyType:FamilyType"] : std::vector<int>();
+            const std::vector<int>& elementData = mEntityTable.column_exists("index:Vim.Element:Element") ? mEntityTable.mIndexColumns["index:Vim.Element:Element"] : std::vector<int>();
             
             for (int i = 0; i < count; ++i)
             {
@@ -2592,7 +2523,7 @@ namespace Vim
             if (levelIndex < 0 || levelIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "double:Elevation")) {
+            if (mEntityTable.column_exists("double:Elevation")) {
                 return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:Elevation"].begin() + levelIndex * sizeof(double)));
             }
             
@@ -2604,7 +2535,7 @@ namespace Vim
             const auto count = GetCount();
             
             double* elevationData = new double[count];
-            if (columnExists(mEntityTable, "double:Elevation")) {
+            if (mEntityTable.column_exists("double:Elevation")) {
                 memcpy(elevationData, mEntityTable.mDataColumns["double:Elevation"].begin(), count * sizeof(double));
             }
             
@@ -2617,7 +2548,7 @@ namespace Vim
         
         int GetFamilyTypeIndex(int levelIndex)
         {
-            if (!columnExists(mEntityTable, "index:Vim.FamilyType:FamilyType")) {
+            if (!mEntityTable.column_exists("index:Vim.FamilyType:FamilyType")) {
                 return -1;
             }
             
@@ -2629,7 +2560,7 @@ namespace Vim
         
         int GetElementIndex(int levelIndex)
         {
-            if (!columnExists(mEntityTable, "index:Vim.Element:Element")) {
+            if (!mEntityTable.column_exists("index:Vim.Element:Element")) {
                 return -1;
             }
             
@@ -2670,7 +2601,7 @@ namespace Vim
         
         size_t GetCount()
         {
-            return getCount(mEntityTable);
+            return mEntityTable.get_count();
         }
         
         Phase* Get(int phaseIndex)
@@ -2683,14 +2614,14 @@ namespace Vim
         
         std::vector<Phase>* GetAll()
         {
-            bool existsElement = columnExists(mEntityTable, "index:Vim.Element:Element");
+            bool existsElement = mEntityTable.column_exists("index:Vim.Element:Element");
             
             const auto count = GetCount();
             
             std::vector<Phase>* phase = new std::vector<Phase>();
             phase->reserve(count);
             
-            const std::vector<int>& elementData = columnExists(mEntityTable ,"index:Vim.Element:Element") ? mEntityTable.mIndexColumns["index:Vim.Element:Element"] : std::vector<int>();
+            const std::vector<int>& elementData = mEntityTable.column_exists("index:Vim.Element:Element") ? mEntityTable.mIndexColumns["index:Vim.Element:Element"] : std::vector<int>();
             
             for (int i = 0; i < count; ++i)
             {
@@ -2705,7 +2636,7 @@ namespace Vim
         
         int GetElementIndex(int phaseIndex)
         {
-            if (!columnExists(mEntityTable, "index:Vim.Element:Element")) {
+            if (!mEntityTable.column_exists("index:Vim.Element:Element")) {
                 return -1;
             }
             
@@ -2755,7 +2686,7 @@ namespace Vim
         
         size_t GetCount()
         {
-            return getCount(mEntityTable);
+            return mEntityTable.get_count();
         }
         
         Room* Get(int roomIndex)
@@ -2776,15 +2707,15 @@ namespace Vim
         
         std::vector<Room>* GetAll()
         {
-            bool existsBaseOffset = columnExists(mEntityTable, "double:BaseOffset");
-            bool existsLimitOffset = columnExists(mEntityTable, "double:LimitOffset");
-            bool existsUnboundedHeight = columnExists(mEntityTable, "double:UnboundedHeight");
-            bool existsVolume = columnExists(mEntityTable, "double:Volume");
-            bool existsPerimeter = columnExists(mEntityTable, "double:Perimeter");
-            bool existsArea = columnExists(mEntityTable, "double:Area");
-            bool existsNumber = columnExists(mEntityTable, "string:Number");
-            bool existsUpperLimit = columnExists(mEntityTable, "index:Vim.Level:UpperLimit");
-            bool existsElement = columnExists(mEntityTable, "index:Vim.Element:Element");
+            bool existsBaseOffset = mEntityTable.column_exists("double:BaseOffset");
+            bool existsLimitOffset = mEntityTable.column_exists("double:LimitOffset");
+            bool existsUnboundedHeight = mEntityTable.column_exists("double:UnboundedHeight");
+            bool existsVolume = mEntityTable.column_exists("double:Volume");
+            bool existsPerimeter = mEntityTable.column_exists("double:Perimeter");
+            bool existsArea = mEntityTable.column_exists("double:Area");
+            bool existsNumber = mEntityTable.column_exists("string:Number");
+            bool existsUpperLimit = mEntityTable.column_exists("index:Vim.Level:UpperLimit");
+            bool existsElement = mEntityTable.column_exists("index:Vim.Element:Element");
             
             const auto count = GetCount();
             
@@ -2792,39 +2723,39 @@ namespace Vim
             room->reserve(count);
             
             double* baseOffsetData = new double[count];
-            if (columnExists(mEntityTable, "double:BaseOffset")) {
+            if (mEntityTable.column_exists("double:BaseOffset")) {
                 memcpy(baseOffsetData, mEntityTable.mDataColumns["double:BaseOffset"].begin(), count * sizeof(double));
             }
             
             double* limitOffsetData = new double[count];
-            if (columnExists(mEntityTable, "double:LimitOffset")) {
+            if (mEntityTable.column_exists("double:LimitOffset")) {
                 memcpy(limitOffsetData, mEntityTable.mDataColumns["double:LimitOffset"].begin(), count * sizeof(double));
             }
             
             double* unboundedHeightData = new double[count];
-            if (columnExists(mEntityTable, "double:UnboundedHeight")) {
+            if (mEntityTable.column_exists("double:UnboundedHeight")) {
                 memcpy(unboundedHeightData, mEntityTable.mDataColumns["double:UnboundedHeight"].begin(), count * sizeof(double));
             }
             
             double* volumeData = new double[count];
-            if (columnExists(mEntityTable, "double:Volume")) {
+            if (mEntityTable.column_exists("double:Volume")) {
                 memcpy(volumeData, mEntityTable.mDataColumns["double:Volume"].begin(), count * sizeof(double));
             }
             
             double* perimeterData = new double[count];
-            if (columnExists(mEntityTable, "double:Perimeter")) {
+            if (mEntityTable.column_exists("double:Perimeter")) {
                 memcpy(perimeterData, mEntityTable.mDataColumns["double:Perimeter"].begin(), count * sizeof(double));
             }
             
             double* areaData = new double[count];
-            if (columnExists(mEntityTable, "double:Area")) {
+            if (mEntityTable.column_exists("double:Area")) {
                 memcpy(areaData, mEntityTable.mDataColumns["double:Area"].begin(), count * sizeof(double));
             }
             
-            const std::vector<int>& numberData = columnExists(mEntityTable, "string:Number") ? mEntityTable.mStringColumns["string:Number"] : std::vector<int>();
+            const std::vector<int>& numberData = mEntityTable.column_exists("string:Number") ? mEntityTable.mStringColumns["string:Number"] : std::vector<int>();
             
-            const std::vector<int>& upperLimitData = columnExists(mEntityTable ,"index:Vim.Level:UpperLimit") ? mEntityTable.mIndexColumns["index:Vim.Level:UpperLimit"] : std::vector<int>();
-            const std::vector<int>& elementData = columnExists(mEntityTable ,"index:Vim.Element:Element") ? mEntityTable.mIndexColumns["index:Vim.Element:Element"] : std::vector<int>();
+            const std::vector<int>& upperLimitData = mEntityTable.column_exists("index:Vim.Level:UpperLimit") ? mEntityTable.mIndexColumns["index:Vim.Level:UpperLimit"] : std::vector<int>();
+            const std::vector<int>& elementData = mEntityTable.column_exists("index:Vim.Element:Element") ? mEntityTable.mIndexColumns["index:Vim.Element:Element"] : std::vector<int>();
             
             for (int i = 0; i < count; ++i)
             {
@@ -2864,7 +2795,7 @@ namespace Vim
             if (roomIndex < 0 || roomIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "double:BaseOffset")) {
+            if (mEntityTable.column_exists("double:BaseOffset")) {
                 return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:BaseOffset"].begin() + roomIndex * sizeof(double)));
             }
             
@@ -2876,7 +2807,7 @@ namespace Vim
             const auto count = GetCount();
             
             double* baseOffsetData = new double[count];
-            if (columnExists(mEntityTable, "double:BaseOffset")) {
+            if (mEntityTable.column_exists("double:BaseOffset")) {
                 memcpy(baseOffsetData, mEntityTable.mDataColumns["double:BaseOffset"].begin(), count * sizeof(double));
             }
             
@@ -2892,7 +2823,7 @@ namespace Vim
             if (roomIndex < 0 || roomIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "double:LimitOffset")) {
+            if (mEntityTable.column_exists("double:LimitOffset")) {
                 return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:LimitOffset"].begin() + roomIndex * sizeof(double)));
             }
             
@@ -2904,7 +2835,7 @@ namespace Vim
             const auto count = GetCount();
             
             double* limitOffsetData = new double[count];
-            if (columnExists(mEntityTable, "double:LimitOffset")) {
+            if (mEntityTable.column_exists("double:LimitOffset")) {
                 memcpy(limitOffsetData, mEntityTable.mDataColumns["double:LimitOffset"].begin(), count * sizeof(double));
             }
             
@@ -2920,7 +2851,7 @@ namespace Vim
             if (roomIndex < 0 || roomIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "double:UnboundedHeight")) {
+            if (mEntityTable.column_exists("double:UnboundedHeight")) {
                 return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:UnboundedHeight"].begin() + roomIndex * sizeof(double)));
             }
             
@@ -2932,7 +2863,7 @@ namespace Vim
             const auto count = GetCount();
             
             double* unboundedHeightData = new double[count];
-            if (columnExists(mEntityTable, "double:UnboundedHeight")) {
+            if (mEntityTable.column_exists("double:UnboundedHeight")) {
                 memcpy(unboundedHeightData, mEntityTable.mDataColumns["double:UnboundedHeight"].begin(), count * sizeof(double));
             }
             
@@ -2948,7 +2879,7 @@ namespace Vim
             if (roomIndex < 0 || roomIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "double:Volume")) {
+            if (mEntityTable.column_exists("double:Volume")) {
                 return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:Volume"].begin() + roomIndex * sizeof(double)));
             }
             
@@ -2960,7 +2891,7 @@ namespace Vim
             const auto count = GetCount();
             
             double* volumeData = new double[count];
-            if (columnExists(mEntityTable, "double:Volume")) {
+            if (mEntityTable.column_exists("double:Volume")) {
                 memcpy(volumeData, mEntityTable.mDataColumns["double:Volume"].begin(), count * sizeof(double));
             }
             
@@ -2976,7 +2907,7 @@ namespace Vim
             if (roomIndex < 0 || roomIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "double:Perimeter")) {
+            if (mEntityTable.column_exists("double:Perimeter")) {
                 return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:Perimeter"].begin() + roomIndex * sizeof(double)));
             }
             
@@ -2988,7 +2919,7 @@ namespace Vim
             const auto count = GetCount();
             
             double* perimeterData = new double[count];
-            if (columnExists(mEntityTable, "double:Perimeter")) {
+            if (mEntityTable.column_exists("double:Perimeter")) {
                 memcpy(perimeterData, mEntityTable.mDataColumns["double:Perimeter"].begin(), count * sizeof(double));
             }
             
@@ -3004,7 +2935,7 @@ namespace Vim
             if (roomIndex < 0 || roomIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "double:Area")) {
+            if (mEntityTable.column_exists("double:Area")) {
                 return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:Area"].begin() + roomIndex * sizeof(double)));
             }
             
@@ -3016,7 +2947,7 @@ namespace Vim
             const auto count = GetCount();
             
             double* areaData = new double[count];
-            if (columnExists(mEntityTable, "double:Area")) {
+            if (mEntityTable.column_exists("double:Area")) {
                 memcpy(areaData, mEntityTable.mDataColumns["double:Area"].begin(), count * sizeof(double));
             }
             
@@ -3032,7 +2963,7 @@ namespace Vim
             if (roomIndex < 0 || roomIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "string:Number")) {
+            if (mEntityTable.column_exists("string:Number")) {
                 return std::string(reinterpret_cast<const char*>(mStrings[mEntityTable.mStringColumns["string:Number"][roomIndex]]));
             }
             
@@ -3043,7 +2974,7 @@ namespace Vim
         {
             const auto count = GetCount();
             
-            const std::vector<int>& numberData = columnExists(mEntityTable, "string:Number") ? mEntityTable.mStringColumns["string:Number"] : std::vector<int>();
+            const std::vector<int>& numberData = mEntityTable.column_exists("string:Number") ? mEntityTable.mStringColumns["string:Number"] : std::vector<int>();
             
             std::vector<std::string>* result = new std::vector<std::string>();
             result->reserve(count);
@@ -3058,7 +2989,7 @@ namespace Vim
         
         int GetUpperLimitIndex(int roomIndex)
         {
-            if (!columnExists(mEntityTable, "index:Vim.Level:UpperLimit")) {
+            if (!mEntityTable.column_exists("index:Vim.Level:UpperLimit")) {
                 return -1;
             }
             
@@ -3070,7 +3001,7 @@ namespace Vim
         
         int GetElementIndex(int roomIndex)
         {
-            if (!columnExists(mEntityTable, "index:Vim.Element:Element")) {
+            if (!mEntityTable.column_exists("index:Vim.Element:Element")) {
                 return -1;
             }
             
@@ -3145,7 +3076,7 @@ namespace Vim
         
         size_t GetCount()
         {
-            return getCount(mEntityTable);
+            return mEntityTable.get_count();
         }
         
         BimDocument* Get(int bimDocumentIndex)
@@ -3189,131 +3120,131 @@ namespace Vim
         
         std::vector<BimDocument>* GetAll()
         {
-            bool existsTitle = columnExists(mEntityTable, "string:Title");
-            bool existsIsMetric = columnExists(mEntityTable, "byte:IsMetric");
-            bool existsGuid = columnExists(mEntityTable, "string:Guid");
-            bool existsNumSaves = columnExists(mEntityTable, "int:NumSaves");
-            bool existsIsLinked = columnExists(mEntityTable, "byte:IsLinked");
-            bool existsIsDetached = columnExists(mEntityTable, "byte:IsDetached");
-            bool existsIsWorkshared = columnExists(mEntityTable, "byte:IsWorkshared");
-            bool existsPathName = columnExists(mEntityTable, "string:PathName");
-            bool existsLatitude = columnExists(mEntityTable, "double:Latitude");
-            bool existsLongitude = columnExists(mEntityTable, "double:Longitude");
-            bool existsTimeZone = columnExists(mEntityTable, "double:TimeZone");
-            bool existsPlaceName = columnExists(mEntityTable, "string:PlaceName");
-            bool existsWeatherStationName = columnExists(mEntityTable, "string:WeatherStationName");
-            bool existsElevation = columnExists(mEntityTable, "double:Elevation");
-            bool existsProjectLocation = columnExists(mEntityTable, "string:ProjectLocation");
-            bool existsIssueDate = columnExists(mEntityTable, "string:IssueDate");
-            bool existsStatus = columnExists(mEntityTable, "string:Status");
-            bool existsClientName = columnExists(mEntityTable, "string:ClientName");
-            bool existsAddress = columnExists(mEntityTable, "string:Address");
-            bool existsName = columnExists(mEntityTable, "string:Name");
-            bool existsNumber = columnExists(mEntityTable, "string:Number");
-            bool existsAuthor = columnExists(mEntityTable, "string:Author");
-            bool existsBuildingName = columnExists(mEntityTable, "string:BuildingName");
-            bool existsOrganizationName = columnExists(mEntityTable, "string:OrganizationName");
-            bool existsOrganizationDescription = columnExists(mEntityTable, "string:OrganizationDescription");
-            bool existsProduct = columnExists(mEntityTable, "string:Product");
-            bool existsVersion = columnExists(mEntityTable, "string:Version");
-            bool existsUser = columnExists(mEntityTable, "string:User");
-            bool existsActiveView = columnExists(mEntityTable, "index:Vim.View:ActiveView");
-            bool existsOwnerFamily = columnExists(mEntityTable, "index:Vim.Family:OwnerFamily");
-            bool existsParent = columnExists(mEntityTable, "index:Vim.BimDocument:Parent");
-            bool existsElement = columnExists(mEntityTable, "index:Vim.Element:Element");
+            bool existsTitle = mEntityTable.column_exists("string:Title");
+            bool existsIsMetric = mEntityTable.column_exists("byte:IsMetric");
+            bool existsGuid = mEntityTable.column_exists("string:Guid");
+            bool existsNumSaves = mEntityTable.column_exists("int:NumSaves");
+            bool existsIsLinked = mEntityTable.column_exists("byte:IsLinked");
+            bool existsIsDetached = mEntityTable.column_exists("byte:IsDetached");
+            bool existsIsWorkshared = mEntityTable.column_exists("byte:IsWorkshared");
+            bool existsPathName = mEntityTable.column_exists("string:PathName");
+            bool existsLatitude = mEntityTable.column_exists("double:Latitude");
+            bool existsLongitude = mEntityTable.column_exists("double:Longitude");
+            bool existsTimeZone = mEntityTable.column_exists("double:TimeZone");
+            bool existsPlaceName = mEntityTable.column_exists("string:PlaceName");
+            bool existsWeatherStationName = mEntityTable.column_exists("string:WeatherStationName");
+            bool existsElevation = mEntityTable.column_exists("double:Elevation");
+            bool existsProjectLocation = mEntityTable.column_exists("string:ProjectLocation");
+            bool existsIssueDate = mEntityTable.column_exists("string:IssueDate");
+            bool existsStatus = mEntityTable.column_exists("string:Status");
+            bool existsClientName = mEntityTable.column_exists("string:ClientName");
+            bool existsAddress = mEntityTable.column_exists("string:Address");
+            bool existsName = mEntityTable.column_exists("string:Name");
+            bool existsNumber = mEntityTable.column_exists("string:Number");
+            bool existsAuthor = mEntityTable.column_exists("string:Author");
+            bool existsBuildingName = mEntityTable.column_exists("string:BuildingName");
+            bool existsOrganizationName = mEntityTable.column_exists("string:OrganizationName");
+            bool existsOrganizationDescription = mEntityTable.column_exists("string:OrganizationDescription");
+            bool existsProduct = mEntityTable.column_exists("string:Product");
+            bool existsVersion = mEntityTable.column_exists("string:Version");
+            bool existsUser = mEntityTable.column_exists("string:User");
+            bool existsActiveView = mEntityTable.column_exists("index:Vim.View:ActiveView");
+            bool existsOwnerFamily = mEntityTable.column_exists("index:Vim.Family:OwnerFamily");
+            bool existsParent = mEntityTable.column_exists("index:Vim.BimDocument:Parent");
+            bool existsElement = mEntityTable.column_exists("index:Vim.Element:Element");
             
             const auto count = GetCount();
             
             std::vector<BimDocument>* bimDocument = new std::vector<BimDocument>();
             bimDocument->reserve(count);
             
-            const std::vector<int>& titleData = columnExists(mEntityTable, "string:Title") ? mEntityTable.mStringColumns["string:Title"] : std::vector<int>();
+            const std::vector<int>& titleData = mEntityTable.column_exists("string:Title") ? mEntityTable.mStringColumns["string:Title"] : std::vector<int>();
             
             bfast::byte* isMetricData = new bfast::byte[count];
-            if (columnExists(mEntityTable, "byte:IsMetric")) {
+            if (mEntityTable.column_exists("byte:IsMetric")) {
                 memcpy(isMetricData, mEntityTable.mDataColumns["byte:IsMetric"].begin(), count * sizeof(bfast::byte));
             }
             
-            const std::vector<int>& guidData = columnExists(mEntityTable, "string:Guid") ? mEntityTable.mStringColumns["string:Guid"] : std::vector<int>();
+            const std::vector<int>& guidData = mEntityTable.column_exists("string:Guid") ? mEntityTable.mStringColumns["string:Guid"] : std::vector<int>();
             
             int* numSavesData = new int[count];
-            if (columnExists(mEntityTable, "int:NumSaves")) {
+            if (mEntityTable.column_exists("int:NumSaves")) {
                 memcpy(numSavesData, mEntityTable.mDataColumns["int:NumSaves"].begin(), count * sizeof(int));
             }
             
             bfast::byte* isLinkedData = new bfast::byte[count];
-            if (columnExists(mEntityTable, "byte:IsLinked")) {
+            if (mEntityTable.column_exists("byte:IsLinked")) {
                 memcpy(isLinkedData, mEntityTable.mDataColumns["byte:IsLinked"].begin(), count * sizeof(bfast::byte));
             }
             
             bfast::byte* isDetachedData = new bfast::byte[count];
-            if (columnExists(mEntityTable, "byte:IsDetached")) {
+            if (mEntityTable.column_exists("byte:IsDetached")) {
                 memcpy(isDetachedData, mEntityTable.mDataColumns["byte:IsDetached"].begin(), count * sizeof(bfast::byte));
             }
             
             bfast::byte* isWorksharedData = new bfast::byte[count];
-            if (columnExists(mEntityTable, "byte:IsWorkshared")) {
+            if (mEntityTable.column_exists("byte:IsWorkshared")) {
                 memcpy(isWorksharedData, mEntityTable.mDataColumns["byte:IsWorkshared"].begin(), count * sizeof(bfast::byte));
             }
             
-            const std::vector<int>& pathNameData = columnExists(mEntityTable, "string:PathName") ? mEntityTable.mStringColumns["string:PathName"] : std::vector<int>();
+            const std::vector<int>& pathNameData = mEntityTable.column_exists("string:PathName") ? mEntityTable.mStringColumns["string:PathName"] : std::vector<int>();
             
             double* latitudeData = new double[count];
-            if (columnExists(mEntityTable, "double:Latitude")) {
+            if (mEntityTable.column_exists("double:Latitude")) {
                 memcpy(latitudeData, mEntityTable.mDataColumns["double:Latitude"].begin(), count * sizeof(double));
             }
             
             double* longitudeData = new double[count];
-            if (columnExists(mEntityTable, "double:Longitude")) {
+            if (mEntityTable.column_exists("double:Longitude")) {
                 memcpy(longitudeData, mEntityTable.mDataColumns["double:Longitude"].begin(), count * sizeof(double));
             }
             
             double* timeZoneData = new double[count];
-            if (columnExists(mEntityTable, "double:TimeZone")) {
+            if (mEntityTable.column_exists("double:TimeZone")) {
                 memcpy(timeZoneData, mEntityTable.mDataColumns["double:TimeZone"].begin(), count * sizeof(double));
             }
             
-            const std::vector<int>& placeNameData = columnExists(mEntityTable, "string:PlaceName") ? mEntityTable.mStringColumns["string:PlaceName"] : std::vector<int>();
+            const std::vector<int>& placeNameData = mEntityTable.column_exists("string:PlaceName") ? mEntityTable.mStringColumns["string:PlaceName"] : std::vector<int>();
             
-            const std::vector<int>& weatherStationNameData = columnExists(mEntityTable, "string:WeatherStationName") ? mEntityTable.mStringColumns["string:WeatherStationName"] : std::vector<int>();
+            const std::vector<int>& weatherStationNameData = mEntityTable.column_exists("string:WeatherStationName") ? mEntityTable.mStringColumns["string:WeatherStationName"] : std::vector<int>();
             
             double* elevationData = new double[count];
-            if (columnExists(mEntityTable, "double:Elevation")) {
+            if (mEntityTable.column_exists("double:Elevation")) {
                 memcpy(elevationData, mEntityTable.mDataColumns["double:Elevation"].begin(), count * sizeof(double));
             }
             
-            const std::vector<int>& projectLocationData = columnExists(mEntityTable, "string:ProjectLocation") ? mEntityTable.mStringColumns["string:ProjectLocation"] : std::vector<int>();
+            const std::vector<int>& projectLocationData = mEntityTable.column_exists("string:ProjectLocation") ? mEntityTable.mStringColumns["string:ProjectLocation"] : std::vector<int>();
             
-            const std::vector<int>& issueDateData = columnExists(mEntityTable, "string:IssueDate") ? mEntityTable.mStringColumns["string:IssueDate"] : std::vector<int>();
+            const std::vector<int>& issueDateData = mEntityTable.column_exists("string:IssueDate") ? mEntityTable.mStringColumns["string:IssueDate"] : std::vector<int>();
             
-            const std::vector<int>& statusData = columnExists(mEntityTable, "string:Status") ? mEntityTable.mStringColumns["string:Status"] : std::vector<int>();
+            const std::vector<int>& statusData = mEntityTable.column_exists("string:Status") ? mEntityTable.mStringColumns["string:Status"] : std::vector<int>();
             
-            const std::vector<int>& clientNameData = columnExists(mEntityTable, "string:ClientName") ? mEntityTable.mStringColumns["string:ClientName"] : std::vector<int>();
+            const std::vector<int>& clientNameData = mEntityTable.column_exists("string:ClientName") ? mEntityTable.mStringColumns["string:ClientName"] : std::vector<int>();
             
-            const std::vector<int>& addressData = columnExists(mEntityTable, "string:Address") ? mEntityTable.mStringColumns["string:Address"] : std::vector<int>();
+            const std::vector<int>& addressData = mEntityTable.column_exists("string:Address") ? mEntityTable.mStringColumns["string:Address"] : std::vector<int>();
             
-            const std::vector<int>& nameData = columnExists(mEntityTable, "string:Name") ? mEntityTable.mStringColumns["string:Name"] : std::vector<int>();
+            const std::vector<int>& nameData = mEntityTable.column_exists("string:Name") ? mEntityTable.mStringColumns["string:Name"] : std::vector<int>();
             
-            const std::vector<int>& numberData = columnExists(mEntityTable, "string:Number") ? mEntityTable.mStringColumns["string:Number"] : std::vector<int>();
+            const std::vector<int>& numberData = mEntityTable.column_exists("string:Number") ? mEntityTable.mStringColumns["string:Number"] : std::vector<int>();
             
-            const std::vector<int>& authorData = columnExists(mEntityTable, "string:Author") ? mEntityTable.mStringColumns["string:Author"] : std::vector<int>();
+            const std::vector<int>& authorData = mEntityTable.column_exists("string:Author") ? mEntityTable.mStringColumns["string:Author"] : std::vector<int>();
             
-            const std::vector<int>& buildingNameData = columnExists(mEntityTable, "string:BuildingName") ? mEntityTable.mStringColumns["string:BuildingName"] : std::vector<int>();
+            const std::vector<int>& buildingNameData = mEntityTable.column_exists("string:BuildingName") ? mEntityTable.mStringColumns["string:BuildingName"] : std::vector<int>();
             
-            const std::vector<int>& organizationNameData = columnExists(mEntityTable, "string:OrganizationName") ? mEntityTable.mStringColumns["string:OrganizationName"] : std::vector<int>();
+            const std::vector<int>& organizationNameData = mEntityTable.column_exists("string:OrganizationName") ? mEntityTable.mStringColumns["string:OrganizationName"] : std::vector<int>();
             
-            const std::vector<int>& organizationDescriptionData = columnExists(mEntityTable, "string:OrganizationDescription") ? mEntityTable.mStringColumns["string:OrganizationDescription"] : std::vector<int>();
+            const std::vector<int>& organizationDescriptionData = mEntityTable.column_exists("string:OrganizationDescription") ? mEntityTable.mStringColumns["string:OrganizationDescription"] : std::vector<int>();
             
-            const std::vector<int>& productData = columnExists(mEntityTable, "string:Product") ? mEntityTable.mStringColumns["string:Product"] : std::vector<int>();
+            const std::vector<int>& productData = mEntityTable.column_exists("string:Product") ? mEntityTable.mStringColumns["string:Product"] : std::vector<int>();
             
-            const std::vector<int>& versionData = columnExists(mEntityTable, "string:Version") ? mEntityTable.mStringColumns["string:Version"] : std::vector<int>();
+            const std::vector<int>& versionData = mEntityTable.column_exists("string:Version") ? mEntityTable.mStringColumns["string:Version"] : std::vector<int>();
             
-            const std::vector<int>& userData = columnExists(mEntityTable, "string:User") ? mEntityTable.mStringColumns["string:User"] : std::vector<int>();
+            const std::vector<int>& userData = mEntityTable.column_exists("string:User") ? mEntityTable.mStringColumns["string:User"] : std::vector<int>();
             
-            const std::vector<int>& activeViewData = columnExists(mEntityTable ,"index:Vim.View:ActiveView") ? mEntityTable.mIndexColumns["index:Vim.View:ActiveView"] : std::vector<int>();
-            const std::vector<int>& ownerFamilyData = columnExists(mEntityTable ,"index:Vim.Family:OwnerFamily") ? mEntityTable.mIndexColumns["index:Vim.Family:OwnerFamily"] : std::vector<int>();
-            const std::vector<int>& parentData = columnExists(mEntityTable ,"index:Vim.BimDocument:Parent") ? mEntityTable.mIndexColumns["index:Vim.BimDocument:Parent"] : std::vector<int>();
-            const std::vector<int>& elementData = columnExists(mEntityTable ,"index:Vim.Element:Element") ? mEntityTable.mIndexColumns["index:Vim.Element:Element"] : std::vector<int>();
+            const std::vector<int>& activeViewData = mEntityTable.column_exists("index:Vim.View:ActiveView") ? mEntityTable.mIndexColumns["index:Vim.View:ActiveView"] : std::vector<int>();
+            const std::vector<int>& ownerFamilyData = mEntityTable.column_exists("index:Vim.Family:OwnerFamily") ? mEntityTable.mIndexColumns["index:Vim.Family:OwnerFamily"] : std::vector<int>();
+            const std::vector<int>& parentData = mEntityTable.column_exists("index:Vim.BimDocument:Parent") ? mEntityTable.mIndexColumns["index:Vim.BimDocument:Parent"] : std::vector<int>();
+            const std::vector<int>& elementData = mEntityTable.column_exists("index:Vim.Element:Element") ? mEntityTable.mIndexColumns["index:Vim.Element:Element"] : std::vector<int>();
             
             for (int i = 0; i < count; ++i)
             {
@@ -3400,7 +3331,7 @@ namespace Vim
             if (bimDocumentIndex < 0 || bimDocumentIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "string:Title")) {
+            if (mEntityTable.column_exists("string:Title")) {
                 return std::string(reinterpret_cast<const char*>(mStrings[mEntityTable.mStringColumns["string:Title"][bimDocumentIndex]]));
             }
             
@@ -3411,7 +3342,7 @@ namespace Vim
         {
             const auto count = GetCount();
             
-            const std::vector<int>& titleData = columnExists(mEntityTable, "string:Title") ? mEntityTable.mStringColumns["string:Title"] : std::vector<int>();
+            const std::vector<int>& titleData = mEntityTable.column_exists("string:Title") ? mEntityTable.mStringColumns["string:Title"] : std::vector<int>();
             
             std::vector<std::string>* result = new std::vector<std::string>();
             result->reserve(count);
@@ -3429,7 +3360,7 @@ namespace Vim
             if (bimDocumentIndex < 0 || bimDocumentIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "byte:IsMetric")) {
+            if (mEntityTable.column_exists("byte:IsMetric")) {
                 return static_cast<bool>(*reinterpret_cast<bfast::byte*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["byte:IsMetric"].begin() + bimDocumentIndex * sizeof(bfast::byte))));
             }
             
@@ -3441,7 +3372,7 @@ namespace Vim
             const auto count = GetCount();
             
             bfast::byte* isMetricData = new bfast::byte[count];
-            if (columnExists(mEntityTable, "byte:IsMetric")) {
+            if (mEntityTable.column_exists("byte:IsMetric")) {
                 memcpy(isMetricData, mEntityTable.mDataColumns["byte:IsMetric"].begin(), count * sizeof(bfast::byte));
             }
             
@@ -3457,7 +3388,7 @@ namespace Vim
             if (bimDocumentIndex < 0 || bimDocumentIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "string:Guid")) {
+            if (mEntityTable.column_exists("string:Guid")) {
                 return std::string(reinterpret_cast<const char*>(mStrings[mEntityTable.mStringColumns["string:Guid"][bimDocumentIndex]]));
             }
             
@@ -3468,7 +3399,7 @@ namespace Vim
         {
             const auto count = GetCount();
             
-            const std::vector<int>& guidData = columnExists(mEntityTable, "string:Guid") ? mEntityTable.mStringColumns["string:Guid"] : std::vector<int>();
+            const std::vector<int>& guidData = mEntityTable.column_exists("string:Guid") ? mEntityTable.mStringColumns["string:Guid"] : std::vector<int>();
             
             std::vector<std::string>* result = new std::vector<std::string>();
             result->reserve(count);
@@ -3486,7 +3417,7 @@ namespace Vim
             if (bimDocumentIndex < 0 || bimDocumentIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "int:NumSaves")) {
+            if (mEntityTable.column_exists("int:NumSaves")) {
                 return *reinterpret_cast<int*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["int:NumSaves"].begin() + bimDocumentIndex * sizeof(int)));
             }
             
@@ -3498,7 +3429,7 @@ namespace Vim
             const auto count = GetCount();
             
             int* numSavesData = new int[count];
-            if (columnExists(mEntityTable, "int:NumSaves")) {
+            if (mEntityTable.column_exists("int:NumSaves")) {
                 memcpy(numSavesData, mEntityTable.mDataColumns["int:NumSaves"].begin(), count * sizeof(int));
             }
             
@@ -3514,7 +3445,7 @@ namespace Vim
             if (bimDocumentIndex < 0 || bimDocumentIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "byte:IsLinked")) {
+            if (mEntityTable.column_exists("byte:IsLinked")) {
                 return static_cast<bool>(*reinterpret_cast<bfast::byte*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["byte:IsLinked"].begin() + bimDocumentIndex * sizeof(bfast::byte))));
             }
             
@@ -3526,7 +3457,7 @@ namespace Vim
             const auto count = GetCount();
             
             bfast::byte* isLinkedData = new bfast::byte[count];
-            if (columnExists(mEntityTable, "byte:IsLinked")) {
+            if (mEntityTable.column_exists("byte:IsLinked")) {
                 memcpy(isLinkedData, mEntityTable.mDataColumns["byte:IsLinked"].begin(), count * sizeof(bfast::byte));
             }
             
@@ -3542,7 +3473,7 @@ namespace Vim
             if (bimDocumentIndex < 0 || bimDocumentIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "byte:IsDetached")) {
+            if (mEntityTable.column_exists("byte:IsDetached")) {
                 return static_cast<bool>(*reinterpret_cast<bfast::byte*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["byte:IsDetached"].begin() + bimDocumentIndex * sizeof(bfast::byte))));
             }
             
@@ -3554,7 +3485,7 @@ namespace Vim
             const auto count = GetCount();
             
             bfast::byte* isDetachedData = new bfast::byte[count];
-            if (columnExists(mEntityTable, "byte:IsDetached")) {
+            if (mEntityTable.column_exists("byte:IsDetached")) {
                 memcpy(isDetachedData, mEntityTable.mDataColumns["byte:IsDetached"].begin(), count * sizeof(bfast::byte));
             }
             
@@ -3570,7 +3501,7 @@ namespace Vim
             if (bimDocumentIndex < 0 || bimDocumentIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "byte:IsWorkshared")) {
+            if (mEntityTable.column_exists("byte:IsWorkshared")) {
                 return static_cast<bool>(*reinterpret_cast<bfast::byte*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["byte:IsWorkshared"].begin() + bimDocumentIndex * sizeof(bfast::byte))));
             }
             
@@ -3582,7 +3513,7 @@ namespace Vim
             const auto count = GetCount();
             
             bfast::byte* isWorksharedData = new bfast::byte[count];
-            if (columnExists(mEntityTable, "byte:IsWorkshared")) {
+            if (mEntityTable.column_exists("byte:IsWorkshared")) {
                 memcpy(isWorksharedData, mEntityTable.mDataColumns["byte:IsWorkshared"].begin(), count * sizeof(bfast::byte));
             }
             
@@ -3598,7 +3529,7 @@ namespace Vim
             if (bimDocumentIndex < 0 || bimDocumentIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "string:PathName")) {
+            if (mEntityTable.column_exists("string:PathName")) {
                 return std::string(reinterpret_cast<const char*>(mStrings[mEntityTable.mStringColumns["string:PathName"][bimDocumentIndex]]));
             }
             
@@ -3609,7 +3540,7 @@ namespace Vim
         {
             const auto count = GetCount();
             
-            const std::vector<int>& pathNameData = columnExists(mEntityTable, "string:PathName") ? mEntityTable.mStringColumns["string:PathName"] : std::vector<int>();
+            const std::vector<int>& pathNameData = mEntityTable.column_exists("string:PathName") ? mEntityTable.mStringColumns["string:PathName"] : std::vector<int>();
             
             std::vector<std::string>* result = new std::vector<std::string>();
             result->reserve(count);
@@ -3627,7 +3558,7 @@ namespace Vim
             if (bimDocumentIndex < 0 || bimDocumentIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "double:Latitude")) {
+            if (mEntityTable.column_exists("double:Latitude")) {
                 return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:Latitude"].begin() + bimDocumentIndex * sizeof(double)));
             }
             
@@ -3639,7 +3570,7 @@ namespace Vim
             const auto count = GetCount();
             
             double* latitudeData = new double[count];
-            if (columnExists(mEntityTable, "double:Latitude")) {
+            if (mEntityTable.column_exists("double:Latitude")) {
                 memcpy(latitudeData, mEntityTable.mDataColumns["double:Latitude"].begin(), count * sizeof(double));
             }
             
@@ -3655,7 +3586,7 @@ namespace Vim
             if (bimDocumentIndex < 0 || bimDocumentIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "double:Longitude")) {
+            if (mEntityTable.column_exists("double:Longitude")) {
                 return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:Longitude"].begin() + bimDocumentIndex * sizeof(double)));
             }
             
@@ -3667,7 +3598,7 @@ namespace Vim
             const auto count = GetCount();
             
             double* longitudeData = new double[count];
-            if (columnExists(mEntityTable, "double:Longitude")) {
+            if (mEntityTable.column_exists("double:Longitude")) {
                 memcpy(longitudeData, mEntityTable.mDataColumns["double:Longitude"].begin(), count * sizeof(double));
             }
             
@@ -3683,7 +3614,7 @@ namespace Vim
             if (bimDocumentIndex < 0 || bimDocumentIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "double:TimeZone")) {
+            if (mEntityTable.column_exists("double:TimeZone")) {
                 return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:TimeZone"].begin() + bimDocumentIndex * sizeof(double)));
             }
             
@@ -3695,7 +3626,7 @@ namespace Vim
             const auto count = GetCount();
             
             double* timeZoneData = new double[count];
-            if (columnExists(mEntityTable, "double:TimeZone")) {
+            if (mEntityTable.column_exists("double:TimeZone")) {
                 memcpy(timeZoneData, mEntityTable.mDataColumns["double:TimeZone"].begin(), count * sizeof(double));
             }
             
@@ -3711,7 +3642,7 @@ namespace Vim
             if (bimDocumentIndex < 0 || bimDocumentIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "string:PlaceName")) {
+            if (mEntityTable.column_exists("string:PlaceName")) {
                 return std::string(reinterpret_cast<const char*>(mStrings[mEntityTable.mStringColumns["string:PlaceName"][bimDocumentIndex]]));
             }
             
@@ -3722,7 +3653,7 @@ namespace Vim
         {
             const auto count = GetCount();
             
-            const std::vector<int>& placeNameData = columnExists(mEntityTable, "string:PlaceName") ? mEntityTable.mStringColumns["string:PlaceName"] : std::vector<int>();
+            const std::vector<int>& placeNameData = mEntityTable.column_exists("string:PlaceName") ? mEntityTable.mStringColumns["string:PlaceName"] : std::vector<int>();
             
             std::vector<std::string>* result = new std::vector<std::string>();
             result->reserve(count);
@@ -3740,7 +3671,7 @@ namespace Vim
             if (bimDocumentIndex < 0 || bimDocumentIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "string:WeatherStationName")) {
+            if (mEntityTable.column_exists("string:WeatherStationName")) {
                 return std::string(reinterpret_cast<const char*>(mStrings[mEntityTable.mStringColumns["string:WeatherStationName"][bimDocumentIndex]]));
             }
             
@@ -3751,7 +3682,7 @@ namespace Vim
         {
             const auto count = GetCount();
             
-            const std::vector<int>& weatherStationNameData = columnExists(mEntityTable, "string:WeatherStationName") ? mEntityTable.mStringColumns["string:WeatherStationName"] : std::vector<int>();
+            const std::vector<int>& weatherStationNameData = mEntityTable.column_exists("string:WeatherStationName") ? mEntityTable.mStringColumns["string:WeatherStationName"] : std::vector<int>();
             
             std::vector<std::string>* result = new std::vector<std::string>();
             result->reserve(count);
@@ -3769,7 +3700,7 @@ namespace Vim
             if (bimDocumentIndex < 0 || bimDocumentIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "double:Elevation")) {
+            if (mEntityTable.column_exists("double:Elevation")) {
                 return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:Elevation"].begin() + bimDocumentIndex * sizeof(double)));
             }
             
@@ -3781,7 +3712,7 @@ namespace Vim
             const auto count = GetCount();
             
             double* elevationData = new double[count];
-            if (columnExists(mEntityTable, "double:Elevation")) {
+            if (mEntityTable.column_exists("double:Elevation")) {
                 memcpy(elevationData, mEntityTable.mDataColumns["double:Elevation"].begin(), count * sizeof(double));
             }
             
@@ -3797,7 +3728,7 @@ namespace Vim
             if (bimDocumentIndex < 0 || bimDocumentIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "string:ProjectLocation")) {
+            if (mEntityTable.column_exists("string:ProjectLocation")) {
                 return std::string(reinterpret_cast<const char*>(mStrings[mEntityTable.mStringColumns["string:ProjectLocation"][bimDocumentIndex]]));
             }
             
@@ -3808,7 +3739,7 @@ namespace Vim
         {
             const auto count = GetCount();
             
-            const std::vector<int>& projectLocationData = columnExists(mEntityTable, "string:ProjectLocation") ? mEntityTable.mStringColumns["string:ProjectLocation"] : std::vector<int>();
+            const std::vector<int>& projectLocationData = mEntityTable.column_exists("string:ProjectLocation") ? mEntityTable.mStringColumns["string:ProjectLocation"] : std::vector<int>();
             
             std::vector<std::string>* result = new std::vector<std::string>();
             result->reserve(count);
@@ -3826,7 +3757,7 @@ namespace Vim
             if (bimDocumentIndex < 0 || bimDocumentIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "string:IssueDate")) {
+            if (mEntityTable.column_exists("string:IssueDate")) {
                 return std::string(reinterpret_cast<const char*>(mStrings[mEntityTable.mStringColumns["string:IssueDate"][bimDocumentIndex]]));
             }
             
@@ -3837,7 +3768,7 @@ namespace Vim
         {
             const auto count = GetCount();
             
-            const std::vector<int>& issueDateData = columnExists(mEntityTable, "string:IssueDate") ? mEntityTable.mStringColumns["string:IssueDate"] : std::vector<int>();
+            const std::vector<int>& issueDateData = mEntityTable.column_exists("string:IssueDate") ? mEntityTable.mStringColumns["string:IssueDate"] : std::vector<int>();
             
             std::vector<std::string>* result = new std::vector<std::string>();
             result->reserve(count);
@@ -3855,7 +3786,7 @@ namespace Vim
             if (bimDocumentIndex < 0 || bimDocumentIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "string:Status")) {
+            if (mEntityTable.column_exists("string:Status")) {
                 return std::string(reinterpret_cast<const char*>(mStrings[mEntityTable.mStringColumns["string:Status"][bimDocumentIndex]]));
             }
             
@@ -3866,7 +3797,7 @@ namespace Vim
         {
             const auto count = GetCount();
             
-            const std::vector<int>& statusData = columnExists(mEntityTable, "string:Status") ? mEntityTable.mStringColumns["string:Status"] : std::vector<int>();
+            const std::vector<int>& statusData = mEntityTable.column_exists("string:Status") ? mEntityTable.mStringColumns["string:Status"] : std::vector<int>();
             
             std::vector<std::string>* result = new std::vector<std::string>();
             result->reserve(count);
@@ -3884,7 +3815,7 @@ namespace Vim
             if (bimDocumentIndex < 0 || bimDocumentIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "string:ClientName")) {
+            if (mEntityTable.column_exists("string:ClientName")) {
                 return std::string(reinterpret_cast<const char*>(mStrings[mEntityTable.mStringColumns["string:ClientName"][bimDocumentIndex]]));
             }
             
@@ -3895,7 +3826,7 @@ namespace Vim
         {
             const auto count = GetCount();
             
-            const std::vector<int>& clientNameData = columnExists(mEntityTable, "string:ClientName") ? mEntityTable.mStringColumns["string:ClientName"] : std::vector<int>();
+            const std::vector<int>& clientNameData = mEntityTable.column_exists("string:ClientName") ? mEntityTable.mStringColumns["string:ClientName"] : std::vector<int>();
             
             std::vector<std::string>* result = new std::vector<std::string>();
             result->reserve(count);
@@ -3913,7 +3844,7 @@ namespace Vim
             if (bimDocumentIndex < 0 || bimDocumentIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "string:Address")) {
+            if (mEntityTable.column_exists("string:Address")) {
                 return std::string(reinterpret_cast<const char*>(mStrings[mEntityTable.mStringColumns["string:Address"][bimDocumentIndex]]));
             }
             
@@ -3924,7 +3855,7 @@ namespace Vim
         {
             const auto count = GetCount();
             
-            const std::vector<int>& addressData = columnExists(mEntityTable, "string:Address") ? mEntityTable.mStringColumns["string:Address"] : std::vector<int>();
+            const std::vector<int>& addressData = mEntityTable.column_exists("string:Address") ? mEntityTable.mStringColumns["string:Address"] : std::vector<int>();
             
             std::vector<std::string>* result = new std::vector<std::string>();
             result->reserve(count);
@@ -3942,7 +3873,7 @@ namespace Vim
             if (bimDocumentIndex < 0 || bimDocumentIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "string:Name")) {
+            if (mEntityTable.column_exists("string:Name")) {
                 return std::string(reinterpret_cast<const char*>(mStrings[mEntityTable.mStringColumns["string:Name"][bimDocumentIndex]]));
             }
             
@@ -3953,7 +3884,7 @@ namespace Vim
         {
             const auto count = GetCount();
             
-            const std::vector<int>& nameData = columnExists(mEntityTable, "string:Name") ? mEntityTable.mStringColumns["string:Name"] : std::vector<int>();
+            const std::vector<int>& nameData = mEntityTable.column_exists("string:Name") ? mEntityTable.mStringColumns["string:Name"] : std::vector<int>();
             
             std::vector<std::string>* result = new std::vector<std::string>();
             result->reserve(count);
@@ -3971,7 +3902,7 @@ namespace Vim
             if (bimDocumentIndex < 0 || bimDocumentIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "string:Number")) {
+            if (mEntityTable.column_exists("string:Number")) {
                 return std::string(reinterpret_cast<const char*>(mStrings[mEntityTable.mStringColumns["string:Number"][bimDocumentIndex]]));
             }
             
@@ -3982,7 +3913,7 @@ namespace Vim
         {
             const auto count = GetCount();
             
-            const std::vector<int>& numberData = columnExists(mEntityTable, "string:Number") ? mEntityTable.mStringColumns["string:Number"] : std::vector<int>();
+            const std::vector<int>& numberData = mEntityTable.column_exists("string:Number") ? mEntityTable.mStringColumns["string:Number"] : std::vector<int>();
             
             std::vector<std::string>* result = new std::vector<std::string>();
             result->reserve(count);
@@ -4000,7 +3931,7 @@ namespace Vim
             if (bimDocumentIndex < 0 || bimDocumentIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "string:Author")) {
+            if (mEntityTable.column_exists("string:Author")) {
                 return std::string(reinterpret_cast<const char*>(mStrings[mEntityTable.mStringColumns["string:Author"][bimDocumentIndex]]));
             }
             
@@ -4011,7 +3942,7 @@ namespace Vim
         {
             const auto count = GetCount();
             
-            const std::vector<int>& authorData = columnExists(mEntityTable, "string:Author") ? mEntityTable.mStringColumns["string:Author"] : std::vector<int>();
+            const std::vector<int>& authorData = mEntityTable.column_exists("string:Author") ? mEntityTable.mStringColumns["string:Author"] : std::vector<int>();
             
             std::vector<std::string>* result = new std::vector<std::string>();
             result->reserve(count);
@@ -4029,7 +3960,7 @@ namespace Vim
             if (bimDocumentIndex < 0 || bimDocumentIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "string:BuildingName")) {
+            if (mEntityTable.column_exists("string:BuildingName")) {
                 return std::string(reinterpret_cast<const char*>(mStrings[mEntityTable.mStringColumns["string:BuildingName"][bimDocumentIndex]]));
             }
             
@@ -4040,7 +3971,7 @@ namespace Vim
         {
             const auto count = GetCount();
             
-            const std::vector<int>& buildingNameData = columnExists(mEntityTable, "string:BuildingName") ? mEntityTable.mStringColumns["string:BuildingName"] : std::vector<int>();
+            const std::vector<int>& buildingNameData = mEntityTable.column_exists("string:BuildingName") ? mEntityTable.mStringColumns["string:BuildingName"] : std::vector<int>();
             
             std::vector<std::string>* result = new std::vector<std::string>();
             result->reserve(count);
@@ -4058,7 +3989,7 @@ namespace Vim
             if (bimDocumentIndex < 0 || bimDocumentIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "string:OrganizationName")) {
+            if (mEntityTable.column_exists("string:OrganizationName")) {
                 return std::string(reinterpret_cast<const char*>(mStrings[mEntityTable.mStringColumns["string:OrganizationName"][bimDocumentIndex]]));
             }
             
@@ -4069,7 +4000,7 @@ namespace Vim
         {
             const auto count = GetCount();
             
-            const std::vector<int>& organizationNameData = columnExists(mEntityTable, "string:OrganizationName") ? mEntityTable.mStringColumns["string:OrganizationName"] : std::vector<int>();
+            const std::vector<int>& organizationNameData = mEntityTable.column_exists("string:OrganizationName") ? mEntityTable.mStringColumns["string:OrganizationName"] : std::vector<int>();
             
             std::vector<std::string>* result = new std::vector<std::string>();
             result->reserve(count);
@@ -4087,7 +4018,7 @@ namespace Vim
             if (bimDocumentIndex < 0 || bimDocumentIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "string:OrganizationDescription")) {
+            if (mEntityTable.column_exists("string:OrganizationDescription")) {
                 return std::string(reinterpret_cast<const char*>(mStrings[mEntityTable.mStringColumns["string:OrganizationDescription"][bimDocumentIndex]]));
             }
             
@@ -4098,7 +4029,7 @@ namespace Vim
         {
             const auto count = GetCount();
             
-            const std::vector<int>& organizationDescriptionData = columnExists(mEntityTable, "string:OrganizationDescription") ? mEntityTable.mStringColumns["string:OrganizationDescription"] : std::vector<int>();
+            const std::vector<int>& organizationDescriptionData = mEntityTable.column_exists("string:OrganizationDescription") ? mEntityTable.mStringColumns["string:OrganizationDescription"] : std::vector<int>();
             
             std::vector<std::string>* result = new std::vector<std::string>();
             result->reserve(count);
@@ -4116,7 +4047,7 @@ namespace Vim
             if (bimDocumentIndex < 0 || bimDocumentIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "string:Product")) {
+            if (mEntityTable.column_exists("string:Product")) {
                 return std::string(reinterpret_cast<const char*>(mStrings[mEntityTable.mStringColumns["string:Product"][bimDocumentIndex]]));
             }
             
@@ -4127,7 +4058,7 @@ namespace Vim
         {
             const auto count = GetCount();
             
-            const std::vector<int>& productData = columnExists(mEntityTable, "string:Product") ? mEntityTable.mStringColumns["string:Product"] : std::vector<int>();
+            const std::vector<int>& productData = mEntityTable.column_exists("string:Product") ? mEntityTable.mStringColumns["string:Product"] : std::vector<int>();
             
             std::vector<std::string>* result = new std::vector<std::string>();
             result->reserve(count);
@@ -4145,7 +4076,7 @@ namespace Vim
             if (bimDocumentIndex < 0 || bimDocumentIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "string:Version")) {
+            if (mEntityTable.column_exists("string:Version")) {
                 return std::string(reinterpret_cast<const char*>(mStrings[mEntityTable.mStringColumns["string:Version"][bimDocumentIndex]]));
             }
             
@@ -4156,7 +4087,7 @@ namespace Vim
         {
             const auto count = GetCount();
             
-            const std::vector<int>& versionData = columnExists(mEntityTable, "string:Version") ? mEntityTable.mStringColumns["string:Version"] : std::vector<int>();
+            const std::vector<int>& versionData = mEntityTable.column_exists("string:Version") ? mEntityTable.mStringColumns["string:Version"] : std::vector<int>();
             
             std::vector<std::string>* result = new std::vector<std::string>();
             result->reserve(count);
@@ -4174,7 +4105,7 @@ namespace Vim
             if (bimDocumentIndex < 0 || bimDocumentIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "string:User")) {
+            if (mEntityTable.column_exists("string:User")) {
                 return std::string(reinterpret_cast<const char*>(mStrings[mEntityTable.mStringColumns["string:User"][bimDocumentIndex]]));
             }
             
@@ -4185,7 +4116,7 @@ namespace Vim
         {
             const auto count = GetCount();
             
-            const std::vector<int>& userData = columnExists(mEntityTable, "string:User") ? mEntityTable.mStringColumns["string:User"] : std::vector<int>();
+            const std::vector<int>& userData = mEntityTable.column_exists("string:User") ? mEntityTable.mStringColumns["string:User"] : std::vector<int>();
             
             std::vector<std::string>* result = new std::vector<std::string>();
             result->reserve(count);
@@ -4200,7 +4131,7 @@ namespace Vim
         
         int GetActiveViewIndex(int bimDocumentIndex)
         {
-            if (!columnExists(mEntityTable, "index:Vim.View:ActiveView")) {
+            if (!mEntityTable.column_exists("index:Vim.View:ActiveView")) {
                 return -1;
             }
             
@@ -4212,7 +4143,7 @@ namespace Vim
         
         int GetOwnerFamilyIndex(int bimDocumentIndex)
         {
-            if (!columnExists(mEntityTable, "index:Vim.Family:OwnerFamily")) {
+            if (!mEntityTable.column_exists("index:Vim.Family:OwnerFamily")) {
                 return -1;
             }
             
@@ -4224,7 +4155,7 @@ namespace Vim
         
         int GetParentIndex(int bimDocumentIndex)
         {
-            if (!columnExists(mEntityTable, "index:Vim.BimDocument:Parent")) {
+            if (!mEntityTable.column_exists("index:Vim.BimDocument:Parent")) {
                 return -1;
             }
             
@@ -4236,7 +4167,7 @@ namespace Vim
         
         int GetElementIndex(int bimDocumentIndex)
         {
-            if (!columnExists(mEntityTable, "index:Vim.Element:Element")) {
+            if (!mEntityTable.column_exists("index:Vim.Element:Element")) {
                 return -1;
             }
             
@@ -4279,7 +4210,7 @@ namespace Vim
         
         size_t GetCount()
         {
-            return getCount(mEntityTable);
+            return mEntityTable.get_count();
         }
         
         DisplayUnitInBimDocument* Get(int displayUnitInBimDocumentIndex)
@@ -4293,16 +4224,16 @@ namespace Vim
         
         std::vector<DisplayUnitInBimDocument>* GetAll()
         {
-            bool existsDisplayUnit = columnExists(mEntityTable, "index:Vim.DisplayUnit:DisplayUnit");
-            bool existsBimDocument = columnExists(mEntityTable, "index:Vim.BimDocument:BimDocument");
+            bool existsDisplayUnit = mEntityTable.column_exists("index:Vim.DisplayUnit:DisplayUnit");
+            bool existsBimDocument = mEntityTable.column_exists("index:Vim.BimDocument:BimDocument");
             
             const auto count = GetCount();
             
             std::vector<DisplayUnitInBimDocument>* displayUnitInBimDocument = new std::vector<DisplayUnitInBimDocument>();
             displayUnitInBimDocument->reserve(count);
             
-            const std::vector<int>& displayUnitData = columnExists(mEntityTable ,"index:Vim.DisplayUnit:DisplayUnit") ? mEntityTable.mIndexColumns["index:Vim.DisplayUnit:DisplayUnit"] : std::vector<int>();
-            const std::vector<int>& bimDocumentData = columnExists(mEntityTable ,"index:Vim.BimDocument:BimDocument") ? mEntityTable.mIndexColumns["index:Vim.BimDocument:BimDocument"] : std::vector<int>();
+            const std::vector<int>& displayUnitData = mEntityTable.column_exists("index:Vim.DisplayUnit:DisplayUnit") ? mEntityTable.mIndexColumns["index:Vim.DisplayUnit:DisplayUnit"] : std::vector<int>();
+            const std::vector<int>& bimDocumentData = mEntityTable.column_exists("index:Vim.BimDocument:BimDocument") ? mEntityTable.mIndexColumns["index:Vim.BimDocument:BimDocument"] : std::vector<int>();
             
             for (int i = 0; i < count; ++i)
             {
@@ -4318,7 +4249,7 @@ namespace Vim
         
         int GetDisplayUnitIndex(int displayUnitInBimDocumentIndex)
         {
-            if (!columnExists(mEntityTable, "index:Vim.DisplayUnit:DisplayUnit")) {
+            if (!mEntityTable.column_exists("index:Vim.DisplayUnit:DisplayUnit")) {
                 return -1;
             }
             
@@ -4330,7 +4261,7 @@ namespace Vim
         
         int GetBimDocumentIndex(int displayUnitInBimDocumentIndex)
         {
-            if (!columnExists(mEntityTable, "index:Vim.BimDocument:BimDocument")) {
+            if (!mEntityTable.column_exists("index:Vim.BimDocument:BimDocument")) {
                 return -1;
             }
             
@@ -4374,7 +4305,7 @@ namespace Vim
         
         size_t GetCount()
         {
-            return getCount(mEntityTable);
+            return mEntityTable.get_count();
         }
         
         PhaseOrderInBimDocument* Get(int phaseOrderInBimDocumentIndex)
@@ -4389,9 +4320,9 @@ namespace Vim
         
         std::vector<PhaseOrderInBimDocument>* GetAll()
         {
-            bool existsOrderIndex = columnExists(mEntityTable, "int:OrderIndex");
-            bool existsPhase = columnExists(mEntityTable, "index:Vim.Phase:Phase");
-            bool existsBimDocument = columnExists(mEntityTable, "index:Vim.BimDocument:BimDocument");
+            bool existsOrderIndex = mEntityTable.column_exists("int:OrderIndex");
+            bool existsPhase = mEntityTable.column_exists("index:Vim.Phase:Phase");
+            bool existsBimDocument = mEntityTable.column_exists("index:Vim.BimDocument:BimDocument");
             
             const auto count = GetCount();
             
@@ -4399,12 +4330,12 @@ namespace Vim
             phaseOrderInBimDocument->reserve(count);
             
             int* orderIndexData = new int[count];
-            if (columnExists(mEntityTable, "int:OrderIndex")) {
+            if (mEntityTable.column_exists("int:OrderIndex")) {
                 memcpy(orderIndexData, mEntityTable.mDataColumns["int:OrderIndex"].begin(), count * sizeof(int));
             }
             
-            const std::vector<int>& phaseData = columnExists(mEntityTable ,"index:Vim.Phase:Phase") ? mEntityTable.mIndexColumns["index:Vim.Phase:Phase"] : std::vector<int>();
-            const std::vector<int>& bimDocumentData = columnExists(mEntityTable ,"index:Vim.BimDocument:BimDocument") ? mEntityTable.mIndexColumns["index:Vim.BimDocument:BimDocument"] : std::vector<int>();
+            const std::vector<int>& phaseData = mEntityTable.column_exists("index:Vim.Phase:Phase") ? mEntityTable.mIndexColumns["index:Vim.Phase:Phase"] : std::vector<int>();
+            const std::vector<int>& bimDocumentData = mEntityTable.column_exists("index:Vim.BimDocument:BimDocument") ? mEntityTable.mIndexColumns["index:Vim.BimDocument:BimDocument"] : std::vector<int>();
             
             for (int i = 0; i < count; ++i)
             {
@@ -4427,7 +4358,7 @@ namespace Vim
             if (phaseOrderInBimDocumentIndex < 0 || phaseOrderInBimDocumentIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "int:OrderIndex")) {
+            if (mEntityTable.column_exists("int:OrderIndex")) {
                 return *reinterpret_cast<int*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["int:OrderIndex"].begin() + phaseOrderInBimDocumentIndex * sizeof(int)));
             }
             
@@ -4439,7 +4370,7 @@ namespace Vim
             const auto count = GetCount();
             
             int* orderIndexData = new int[count];
-            if (columnExists(mEntityTable, "int:OrderIndex")) {
+            if (mEntityTable.column_exists("int:OrderIndex")) {
                 memcpy(orderIndexData, mEntityTable.mDataColumns["int:OrderIndex"].begin(), count * sizeof(int));
             }
             
@@ -4452,7 +4383,7 @@ namespace Vim
         
         int GetPhaseIndex(int phaseOrderInBimDocumentIndex)
         {
-            if (!columnExists(mEntityTable, "index:Vim.Phase:Phase")) {
+            if (!mEntityTable.column_exists("index:Vim.Phase:Phase")) {
                 return -1;
             }
             
@@ -4464,7 +4395,7 @@ namespace Vim
         
         int GetBimDocumentIndex(int phaseOrderInBimDocumentIndex)
         {
-            if (!columnExists(mEntityTable, "index:Vim.BimDocument:BimDocument")) {
+            if (!mEntityTable.column_exists("index:Vim.BimDocument:BimDocument")) {
                 return -1;
             }
             
@@ -4514,7 +4445,7 @@ namespace Vim
         
         size_t GetCount()
         {
-            return getCount(mEntityTable);
+            return mEntityTable.get_count();
         }
         
         Category* Get(int categoryIndex)
@@ -4535,54 +4466,54 @@ namespace Vim
         
         std::vector<Category>* GetAll()
         {
-            bool existsName = columnExists(mEntityTable, "string:Name");
-            bool existsId = columnExists(mEntityTable, "long:Id") || columnExists(mEntityTable, "int:Id");
-            bool existsCategoryType = columnExists(mEntityTable, "string:CategoryType");
-            bool existsLineColor_X = columnExists(mEntityTable, "double:LineColor.X");
-            bool existsLineColor_Y = columnExists(mEntityTable, "double:LineColor.Y");
-            bool existsLineColor_Z = columnExists(mEntityTable, "double:LineColor.Z");
-            bool existsBuiltInCategory = columnExists(mEntityTable, "string:BuiltInCategory");
-            bool existsParent = columnExists(mEntityTable, "index:Vim.Category:Parent");
-            bool existsMaterial = columnExists(mEntityTable, "index:Vim.Material:Material");
+            bool existsName = mEntityTable.column_exists("string:Name");
+            bool existsId = mEntityTable.column_exists("long:Id") || mEntityTable.column_exists("int:Id");
+            bool existsCategoryType = mEntityTable.column_exists("string:CategoryType");
+            bool existsLineColor_X = mEntityTable.column_exists("double:LineColor.X");
+            bool existsLineColor_Y = mEntityTable.column_exists("double:LineColor.Y");
+            bool existsLineColor_Z = mEntityTable.column_exists("double:LineColor.Z");
+            bool existsBuiltInCategory = mEntityTable.column_exists("string:BuiltInCategory");
+            bool existsParent = mEntityTable.column_exists("index:Vim.Category:Parent");
+            bool existsMaterial = mEntityTable.column_exists("index:Vim.Material:Material");
             
             const auto count = GetCount();
             
             std::vector<Category>* category = new std::vector<Category>();
             category->reserve(count);
             
-            const std::vector<int>& nameData = columnExists(mEntityTable, "string:Name") ? mEntityTable.mStringColumns["string:Name"] : std::vector<int>();
+            const std::vector<int>& nameData = mEntityTable.column_exists("string:Name") ? mEntityTable.mStringColumns["string:Name"] : std::vector<int>();
             
             long long* idData = new long long[count];
-            if (columnExists(mEntityTable, "long:Id")) {
+            if (mEntityTable.column_exists("long:Id")) {
                 memcpy(idData, mEntityTable.mDataColumns["long:Id"].begin(), count * sizeof(long long));
             }
-            else if (columnExists(mEntityTable, "int:Id")) {
+            else if (mEntityTable.column_exists("int:Id")) {
                 for (int i = 0; i < count; ++i) {
                     idData[i] = static_cast<long long>(*reinterpret_cast<int*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["int:Id"].begin() + i * sizeof(int))));
                 }
             }
             
-            const std::vector<int>& categoryTypeData = columnExists(mEntityTable, "string:CategoryType") ? mEntityTable.mStringColumns["string:CategoryType"] : std::vector<int>();
+            const std::vector<int>& categoryTypeData = mEntityTable.column_exists("string:CategoryType") ? mEntityTable.mStringColumns["string:CategoryType"] : std::vector<int>();
             
             double* lineColor_XData = new double[count];
-            if (columnExists(mEntityTable, "double:LineColor.X")) {
+            if (mEntityTable.column_exists("double:LineColor.X")) {
                 memcpy(lineColor_XData, mEntityTable.mDataColumns["double:LineColor.X"].begin(), count * sizeof(double));
             }
             
             double* lineColor_YData = new double[count];
-            if (columnExists(mEntityTable, "double:LineColor.Y")) {
+            if (mEntityTable.column_exists("double:LineColor.Y")) {
                 memcpy(lineColor_YData, mEntityTable.mDataColumns["double:LineColor.Y"].begin(), count * sizeof(double));
             }
             
             double* lineColor_ZData = new double[count];
-            if (columnExists(mEntityTable, "double:LineColor.Z")) {
+            if (mEntityTable.column_exists("double:LineColor.Z")) {
                 memcpy(lineColor_ZData, mEntityTable.mDataColumns["double:LineColor.Z"].begin(), count * sizeof(double));
             }
             
-            const std::vector<int>& builtInCategoryData = columnExists(mEntityTable, "string:BuiltInCategory") ? mEntityTable.mStringColumns["string:BuiltInCategory"] : std::vector<int>();
+            const std::vector<int>& builtInCategoryData = mEntityTable.column_exists("string:BuiltInCategory") ? mEntityTable.mStringColumns["string:BuiltInCategory"] : std::vector<int>();
             
-            const std::vector<int>& parentData = columnExists(mEntityTable ,"index:Vim.Category:Parent") ? mEntityTable.mIndexColumns["index:Vim.Category:Parent"] : std::vector<int>();
-            const std::vector<int>& materialData = columnExists(mEntityTable ,"index:Vim.Material:Material") ? mEntityTable.mIndexColumns["index:Vim.Material:Material"] : std::vector<int>();
+            const std::vector<int>& parentData = mEntityTable.column_exists("index:Vim.Category:Parent") ? mEntityTable.mIndexColumns["index:Vim.Category:Parent"] : std::vector<int>();
+            const std::vector<int>& materialData = mEntityTable.column_exists("index:Vim.Material:Material") ? mEntityTable.mIndexColumns["index:Vim.Material:Material"] : std::vector<int>();
             
             for (int i = 0; i < count; ++i)
             {
@@ -4620,7 +4551,7 @@ namespace Vim
             if (categoryIndex < 0 || categoryIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "string:Name")) {
+            if (mEntityTable.column_exists("string:Name")) {
                 return std::string(reinterpret_cast<const char*>(mStrings[mEntityTable.mStringColumns["string:Name"][categoryIndex]]));
             }
             
@@ -4631,7 +4562,7 @@ namespace Vim
         {
             const auto count = GetCount();
             
-            const std::vector<int>& nameData = columnExists(mEntityTable, "string:Name") ? mEntityTable.mStringColumns["string:Name"] : std::vector<int>();
+            const std::vector<int>& nameData = mEntityTable.column_exists("string:Name") ? mEntityTable.mStringColumns["string:Name"] : std::vector<int>();
             
             std::vector<std::string>* result = new std::vector<std::string>();
             result->reserve(count);
@@ -4649,11 +4580,11 @@ namespace Vim
             if (categoryIndex < 0 || categoryIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "long:Id")) {
+            if (mEntityTable.column_exists("long:Id")) {
                 return *reinterpret_cast<long long*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["long:Id"].begin() + categoryIndex * sizeof(long long)));
             }
             
-            if (columnExists(mEntityTable, "int:Id")) {
+            if (mEntityTable.column_exists("int:Id")) {
                 return static_cast<long long>(*reinterpret_cast<int*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["int:Id"].begin() + categoryIndex * sizeof(int))));
             }
             
@@ -4665,10 +4596,10 @@ namespace Vim
             const auto count = GetCount();
             
             long long* idData = new long long[count];
-            if (columnExists(mEntityTable, "long:Id")) {
+            if (mEntityTable.column_exists("long:Id")) {
                 memcpy(idData, mEntityTable.mDataColumns["long:Id"].begin(), count * sizeof(long long));
             }
-            else if (columnExists(mEntityTable, "int:Id")) {
+            else if (mEntityTable.column_exists("int:Id")) {
                 for (int i = 0; i < count; ++i) {
                     idData[i] = static_cast<long long>(*reinterpret_cast<int*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["int:Id"].begin() + i * sizeof(int))));
                 }
@@ -4686,7 +4617,7 @@ namespace Vim
             if (categoryIndex < 0 || categoryIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "string:CategoryType")) {
+            if (mEntityTable.column_exists("string:CategoryType")) {
                 return std::string(reinterpret_cast<const char*>(mStrings[mEntityTable.mStringColumns["string:CategoryType"][categoryIndex]]));
             }
             
@@ -4697,7 +4628,7 @@ namespace Vim
         {
             const auto count = GetCount();
             
-            const std::vector<int>& categoryTypeData = columnExists(mEntityTable, "string:CategoryType") ? mEntityTable.mStringColumns["string:CategoryType"] : std::vector<int>();
+            const std::vector<int>& categoryTypeData = mEntityTable.column_exists("string:CategoryType") ? mEntityTable.mStringColumns["string:CategoryType"] : std::vector<int>();
             
             std::vector<std::string>* result = new std::vector<std::string>();
             result->reserve(count);
@@ -4715,7 +4646,7 @@ namespace Vim
             if (categoryIndex < 0 || categoryIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "double:LineColor.X")) {
+            if (mEntityTable.column_exists("double:LineColor.X")) {
                 return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:LineColor.X"].begin() + categoryIndex * sizeof(double)));
             }
             
@@ -4727,7 +4658,7 @@ namespace Vim
             const auto count = GetCount();
             
             double* lineColor_XData = new double[count];
-            if (columnExists(mEntityTable, "double:LineColor.X")) {
+            if (mEntityTable.column_exists("double:LineColor.X")) {
                 memcpy(lineColor_XData, mEntityTable.mDataColumns["double:LineColor.X"].begin(), count * sizeof(double));
             }
             
@@ -4743,7 +4674,7 @@ namespace Vim
             if (categoryIndex < 0 || categoryIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "double:LineColor.Y")) {
+            if (mEntityTable.column_exists("double:LineColor.Y")) {
                 return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:LineColor.Y"].begin() + categoryIndex * sizeof(double)));
             }
             
@@ -4755,7 +4686,7 @@ namespace Vim
             const auto count = GetCount();
             
             double* lineColor_YData = new double[count];
-            if (columnExists(mEntityTable, "double:LineColor.Y")) {
+            if (mEntityTable.column_exists("double:LineColor.Y")) {
                 memcpy(lineColor_YData, mEntityTable.mDataColumns["double:LineColor.Y"].begin(), count * sizeof(double));
             }
             
@@ -4771,7 +4702,7 @@ namespace Vim
             if (categoryIndex < 0 || categoryIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "double:LineColor.Z")) {
+            if (mEntityTable.column_exists("double:LineColor.Z")) {
                 return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:LineColor.Z"].begin() + categoryIndex * sizeof(double)));
             }
             
@@ -4783,7 +4714,7 @@ namespace Vim
             const auto count = GetCount();
             
             double* lineColor_ZData = new double[count];
-            if (columnExists(mEntityTable, "double:LineColor.Z")) {
+            if (mEntityTable.column_exists("double:LineColor.Z")) {
                 memcpy(lineColor_ZData, mEntityTable.mDataColumns["double:LineColor.Z"].begin(), count * sizeof(double));
             }
             
@@ -4799,7 +4730,7 @@ namespace Vim
             if (categoryIndex < 0 || categoryIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "string:BuiltInCategory")) {
+            if (mEntityTable.column_exists("string:BuiltInCategory")) {
                 return std::string(reinterpret_cast<const char*>(mStrings[mEntityTable.mStringColumns["string:BuiltInCategory"][categoryIndex]]));
             }
             
@@ -4810,7 +4741,7 @@ namespace Vim
         {
             const auto count = GetCount();
             
-            const std::vector<int>& builtInCategoryData = columnExists(mEntityTable, "string:BuiltInCategory") ? mEntityTable.mStringColumns["string:BuiltInCategory"] : std::vector<int>();
+            const std::vector<int>& builtInCategoryData = mEntityTable.column_exists("string:BuiltInCategory") ? mEntityTable.mStringColumns["string:BuiltInCategory"] : std::vector<int>();
             
             std::vector<std::string>* result = new std::vector<std::string>();
             result->reserve(count);
@@ -4825,7 +4756,7 @@ namespace Vim
         
         int GetParentIndex(int categoryIndex)
         {
-            if (!columnExists(mEntityTable, "index:Vim.Category:Parent")) {
+            if (!mEntityTable.column_exists("index:Vim.Category:Parent")) {
                 return -1;
             }
             
@@ -4837,7 +4768,7 @@ namespace Vim
         
         int GetMaterialIndex(int categoryIndex)
         {
-            if (!columnExists(mEntityTable, "index:Vim.Material:Material")) {
+            if (!mEntityTable.column_exists("index:Vim.Material:Material")) {
                 return -1;
             }
             
@@ -4884,7 +4815,7 @@ namespace Vim
         
         size_t GetCount()
         {
-            return getCount(mEntityTable);
+            return mEntityTable.get_count();
         }
         
         Family* Get(int familyIndex)
@@ -4902,34 +4833,34 @@ namespace Vim
         
         std::vector<Family>* GetAll()
         {
-            bool existsStructuralMaterialType = columnExists(mEntityTable, "string:StructuralMaterialType");
-            bool existsStructuralSectionShape = columnExists(mEntityTable, "string:StructuralSectionShape");
-            bool existsIsSystemFamily = columnExists(mEntityTable, "byte:IsSystemFamily");
-            bool existsIsInPlace = columnExists(mEntityTable, "byte:IsInPlace");
-            bool existsFamilyCategory = columnExists(mEntityTable, "index:Vim.Category:FamilyCategory");
-            bool existsElement = columnExists(mEntityTable, "index:Vim.Element:Element");
+            bool existsStructuralMaterialType = mEntityTable.column_exists("string:StructuralMaterialType");
+            bool existsStructuralSectionShape = mEntityTable.column_exists("string:StructuralSectionShape");
+            bool existsIsSystemFamily = mEntityTable.column_exists("byte:IsSystemFamily");
+            bool existsIsInPlace = mEntityTable.column_exists("byte:IsInPlace");
+            bool existsFamilyCategory = mEntityTable.column_exists("index:Vim.Category:FamilyCategory");
+            bool existsElement = mEntityTable.column_exists("index:Vim.Element:Element");
             
             const auto count = GetCount();
             
             std::vector<Family>* family = new std::vector<Family>();
             family->reserve(count);
             
-            const std::vector<int>& structuralMaterialTypeData = columnExists(mEntityTable, "string:StructuralMaterialType") ? mEntityTable.mStringColumns["string:StructuralMaterialType"] : std::vector<int>();
+            const std::vector<int>& structuralMaterialTypeData = mEntityTable.column_exists("string:StructuralMaterialType") ? mEntityTable.mStringColumns["string:StructuralMaterialType"] : std::vector<int>();
             
-            const std::vector<int>& structuralSectionShapeData = columnExists(mEntityTable, "string:StructuralSectionShape") ? mEntityTable.mStringColumns["string:StructuralSectionShape"] : std::vector<int>();
+            const std::vector<int>& structuralSectionShapeData = mEntityTable.column_exists("string:StructuralSectionShape") ? mEntityTable.mStringColumns["string:StructuralSectionShape"] : std::vector<int>();
             
             bfast::byte* isSystemFamilyData = new bfast::byte[count];
-            if (columnExists(mEntityTable, "byte:IsSystemFamily")) {
+            if (mEntityTable.column_exists("byte:IsSystemFamily")) {
                 memcpy(isSystemFamilyData, mEntityTable.mDataColumns["byte:IsSystemFamily"].begin(), count * sizeof(bfast::byte));
             }
             
             bfast::byte* isInPlaceData = new bfast::byte[count];
-            if (columnExists(mEntityTable, "byte:IsInPlace")) {
+            if (mEntityTable.column_exists("byte:IsInPlace")) {
                 memcpy(isInPlaceData, mEntityTable.mDataColumns["byte:IsInPlace"].begin(), count * sizeof(bfast::byte));
             }
             
-            const std::vector<int>& familyCategoryData = columnExists(mEntityTable ,"index:Vim.Category:FamilyCategory") ? mEntityTable.mIndexColumns["index:Vim.Category:FamilyCategory"] : std::vector<int>();
-            const std::vector<int>& elementData = columnExists(mEntityTable ,"index:Vim.Element:Element") ? mEntityTable.mIndexColumns["index:Vim.Element:Element"] : std::vector<int>();
+            const std::vector<int>& familyCategoryData = mEntityTable.column_exists("index:Vim.Category:FamilyCategory") ? mEntityTable.mIndexColumns["index:Vim.Category:FamilyCategory"] : std::vector<int>();
+            const std::vector<int>& elementData = mEntityTable.column_exists("index:Vim.Element:Element") ? mEntityTable.mIndexColumns["index:Vim.Element:Element"] : std::vector<int>();
             
             for (int i = 0; i < count; ++i)
             {
@@ -4959,7 +4890,7 @@ namespace Vim
             if (familyIndex < 0 || familyIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "string:StructuralMaterialType")) {
+            if (mEntityTable.column_exists("string:StructuralMaterialType")) {
                 return std::string(reinterpret_cast<const char*>(mStrings[mEntityTable.mStringColumns["string:StructuralMaterialType"][familyIndex]]));
             }
             
@@ -4970,7 +4901,7 @@ namespace Vim
         {
             const auto count = GetCount();
             
-            const std::vector<int>& structuralMaterialTypeData = columnExists(mEntityTable, "string:StructuralMaterialType") ? mEntityTable.mStringColumns["string:StructuralMaterialType"] : std::vector<int>();
+            const std::vector<int>& structuralMaterialTypeData = mEntityTable.column_exists("string:StructuralMaterialType") ? mEntityTable.mStringColumns["string:StructuralMaterialType"] : std::vector<int>();
             
             std::vector<std::string>* result = new std::vector<std::string>();
             result->reserve(count);
@@ -4988,7 +4919,7 @@ namespace Vim
             if (familyIndex < 0 || familyIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "string:StructuralSectionShape")) {
+            if (mEntityTable.column_exists("string:StructuralSectionShape")) {
                 return std::string(reinterpret_cast<const char*>(mStrings[mEntityTable.mStringColumns["string:StructuralSectionShape"][familyIndex]]));
             }
             
@@ -4999,7 +4930,7 @@ namespace Vim
         {
             const auto count = GetCount();
             
-            const std::vector<int>& structuralSectionShapeData = columnExists(mEntityTable, "string:StructuralSectionShape") ? mEntityTable.mStringColumns["string:StructuralSectionShape"] : std::vector<int>();
+            const std::vector<int>& structuralSectionShapeData = mEntityTable.column_exists("string:StructuralSectionShape") ? mEntityTable.mStringColumns["string:StructuralSectionShape"] : std::vector<int>();
             
             std::vector<std::string>* result = new std::vector<std::string>();
             result->reserve(count);
@@ -5017,7 +4948,7 @@ namespace Vim
             if (familyIndex < 0 || familyIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "byte:IsSystemFamily")) {
+            if (mEntityTable.column_exists("byte:IsSystemFamily")) {
                 return static_cast<bool>(*reinterpret_cast<bfast::byte*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["byte:IsSystemFamily"].begin() + familyIndex * sizeof(bfast::byte))));
             }
             
@@ -5029,7 +4960,7 @@ namespace Vim
             const auto count = GetCount();
             
             bfast::byte* isSystemFamilyData = new bfast::byte[count];
-            if (columnExists(mEntityTable, "byte:IsSystemFamily")) {
+            if (mEntityTable.column_exists("byte:IsSystemFamily")) {
                 memcpy(isSystemFamilyData, mEntityTable.mDataColumns["byte:IsSystemFamily"].begin(), count * sizeof(bfast::byte));
             }
             
@@ -5045,7 +4976,7 @@ namespace Vim
             if (familyIndex < 0 || familyIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "byte:IsInPlace")) {
+            if (mEntityTable.column_exists("byte:IsInPlace")) {
                 return static_cast<bool>(*reinterpret_cast<bfast::byte*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["byte:IsInPlace"].begin() + familyIndex * sizeof(bfast::byte))));
             }
             
@@ -5057,7 +4988,7 @@ namespace Vim
             const auto count = GetCount();
             
             bfast::byte* isInPlaceData = new bfast::byte[count];
-            if (columnExists(mEntityTable, "byte:IsInPlace")) {
+            if (mEntityTable.column_exists("byte:IsInPlace")) {
                 memcpy(isInPlaceData, mEntityTable.mDataColumns["byte:IsInPlace"].begin(), count * sizeof(bfast::byte));
             }
             
@@ -5070,7 +5001,7 @@ namespace Vim
         
         int GetFamilyCategoryIndex(int familyIndex)
         {
-            if (!columnExists(mEntityTable, "index:Vim.Category:FamilyCategory")) {
+            if (!mEntityTable.column_exists("index:Vim.Category:FamilyCategory")) {
                 return -1;
             }
             
@@ -5082,7 +5013,7 @@ namespace Vim
         
         int GetElementIndex(int familyIndex)
         {
-            if (!columnExists(mEntityTable, "index:Vim.Element:Element")) {
+            if (!mEntityTable.column_exists("index:Vim.Element:Element")) {
                 return -1;
             }
             
@@ -5128,7 +5059,7 @@ namespace Vim
         
         size_t GetCount()
         {
-            return getCount(mEntityTable);
+            return mEntityTable.get_count();
         }
         
         FamilyType* Get(int familyTypeIndex)
@@ -5144,10 +5075,10 @@ namespace Vim
         
         std::vector<FamilyType>* GetAll()
         {
-            bool existsIsSystemFamilyType = columnExists(mEntityTable, "byte:IsSystemFamilyType");
-            bool existsFamily = columnExists(mEntityTable, "index:Vim.Family:Family");
-            bool existsCompoundStructure = columnExists(mEntityTable, "index:Vim.CompoundStructure:CompoundStructure");
-            bool existsElement = columnExists(mEntityTable, "index:Vim.Element:Element");
+            bool existsIsSystemFamilyType = mEntityTable.column_exists("byte:IsSystemFamilyType");
+            bool existsFamily = mEntityTable.column_exists("index:Vim.Family:Family");
+            bool existsCompoundStructure = mEntityTable.column_exists("index:Vim.CompoundStructure:CompoundStructure");
+            bool existsElement = mEntityTable.column_exists("index:Vim.Element:Element");
             
             const auto count = GetCount();
             
@@ -5155,13 +5086,13 @@ namespace Vim
             familyType->reserve(count);
             
             bfast::byte* isSystemFamilyTypeData = new bfast::byte[count];
-            if (columnExists(mEntityTable, "byte:IsSystemFamilyType")) {
+            if (mEntityTable.column_exists("byte:IsSystemFamilyType")) {
                 memcpy(isSystemFamilyTypeData, mEntityTable.mDataColumns["byte:IsSystemFamilyType"].begin(), count * sizeof(bfast::byte));
             }
             
-            const std::vector<int>& familyData = columnExists(mEntityTable ,"index:Vim.Family:Family") ? mEntityTable.mIndexColumns["index:Vim.Family:Family"] : std::vector<int>();
-            const std::vector<int>& compoundStructureData = columnExists(mEntityTable ,"index:Vim.CompoundStructure:CompoundStructure") ? mEntityTable.mIndexColumns["index:Vim.CompoundStructure:CompoundStructure"] : std::vector<int>();
-            const std::vector<int>& elementData = columnExists(mEntityTable ,"index:Vim.Element:Element") ? mEntityTable.mIndexColumns["index:Vim.Element:Element"] : std::vector<int>();
+            const std::vector<int>& familyData = mEntityTable.column_exists("index:Vim.Family:Family") ? mEntityTable.mIndexColumns["index:Vim.Family:Family"] : std::vector<int>();
+            const std::vector<int>& compoundStructureData = mEntityTable.column_exists("index:Vim.CompoundStructure:CompoundStructure") ? mEntityTable.mIndexColumns["index:Vim.CompoundStructure:CompoundStructure"] : std::vector<int>();
+            const std::vector<int>& elementData = mEntityTable.column_exists("index:Vim.Element:Element") ? mEntityTable.mIndexColumns["index:Vim.Element:Element"] : std::vector<int>();
             
             for (int i = 0; i < count; ++i)
             {
@@ -5185,7 +5116,7 @@ namespace Vim
             if (familyTypeIndex < 0 || familyTypeIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "byte:IsSystemFamilyType")) {
+            if (mEntityTable.column_exists("byte:IsSystemFamilyType")) {
                 return static_cast<bool>(*reinterpret_cast<bfast::byte*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["byte:IsSystemFamilyType"].begin() + familyTypeIndex * sizeof(bfast::byte))));
             }
             
@@ -5197,7 +5128,7 @@ namespace Vim
             const auto count = GetCount();
             
             bfast::byte* isSystemFamilyTypeData = new bfast::byte[count];
-            if (columnExists(mEntityTable, "byte:IsSystemFamilyType")) {
+            if (mEntityTable.column_exists("byte:IsSystemFamilyType")) {
                 memcpy(isSystemFamilyTypeData, mEntityTable.mDataColumns["byte:IsSystemFamilyType"].begin(), count * sizeof(bfast::byte));
             }
             
@@ -5210,7 +5141,7 @@ namespace Vim
         
         int GetFamilyIndex(int familyTypeIndex)
         {
-            if (!columnExists(mEntityTable, "index:Vim.Family:Family")) {
+            if (!mEntityTable.column_exists("index:Vim.Family:Family")) {
                 return -1;
             }
             
@@ -5222,7 +5153,7 @@ namespace Vim
         
         int GetCompoundStructureIndex(int familyTypeIndex)
         {
-            if (!columnExists(mEntityTable, "index:Vim.CompoundStructure:CompoundStructure")) {
+            if (!mEntityTable.column_exists("index:Vim.CompoundStructure:CompoundStructure")) {
                 return -1;
             }
             
@@ -5234,7 +5165,7 @@ namespace Vim
         
         int GetElementIndex(int familyTypeIndex)
         {
-            if (!columnExists(mEntityTable, "index:Vim.Element:Element")) {
+            if (!mEntityTable.column_exists("index:Vim.Element:Element")) {
                 return -1;
             }
             
@@ -5306,7 +5237,7 @@ namespace Vim
         
         size_t GetCount()
         {
-            return getCount(mEntityTable);
+            return mEntityTable.get_count();
         }
         
         FamilyInstance* Get(int familyInstanceIndex)
@@ -5346,34 +5277,34 @@ namespace Vim
         
         std::vector<FamilyInstance>* GetAll()
         {
-            bool existsFacingFlipped = columnExists(mEntityTable, "byte:FacingFlipped");
-            bool existsFacingOrientation_X = columnExists(mEntityTable, "float:FacingOrientation.X");
-            bool existsFacingOrientation_Y = columnExists(mEntityTable, "float:FacingOrientation.Y");
-            bool existsFacingOrientation_Z = columnExists(mEntityTable, "float:FacingOrientation.Z");
-            bool existsHandFlipped = columnExists(mEntityTable, "byte:HandFlipped");
-            bool existsMirrored = columnExists(mEntityTable, "byte:Mirrored");
-            bool existsHasModifiedGeometry = columnExists(mEntityTable, "byte:HasModifiedGeometry");
-            bool existsScale = columnExists(mEntityTable, "float:Scale");
-            bool existsBasisX_X = columnExists(mEntityTable, "float:BasisX.X");
-            bool existsBasisX_Y = columnExists(mEntityTable, "float:BasisX.Y");
-            bool existsBasisX_Z = columnExists(mEntityTable, "float:BasisX.Z");
-            bool existsBasisY_X = columnExists(mEntityTable, "float:BasisY.X");
-            bool existsBasisY_Y = columnExists(mEntityTable, "float:BasisY.Y");
-            bool existsBasisY_Z = columnExists(mEntityTable, "float:BasisY.Z");
-            bool existsBasisZ_X = columnExists(mEntityTable, "float:BasisZ.X");
-            bool existsBasisZ_Y = columnExists(mEntityTable, "float:BasisZ.Y");
-            bool existsBasisZ_Z = columnExists(mEntityTable, "float:BasisZ.Z");
-            bool existsTranslation_X = columnExists(mEntityTable, "float:Translation.X");
-            bool existsTranslation_Y = columnExists(mEntityTable, "float:Translation.Y");
-            bool existsTranslation_Z = columnExists(mEntityTable, "float:Translation.Z");
-            bool existsHandOrientation_X = columnExists(mEntityTable, "float:HandOrientation.X");
-            bool existsHandOrientation_Y = columnExists(mEntityTable, "float:HandOrientation.Y");
-            bool existsHandOrientation_Z = columnExists(mEntityTable, "float:HandOrientation.Z");
-            bool existsFamilyType = columnExists(mEntityTable, "index:Vim.FamilyType:FamilyType");
-            bool existsHost = columnExists(mEntityTable, "index:Vim.Element:Host");
-            bool existsFromRoom = columnExists(mEntityTable, "index:Vim.Room:FromRoom");
-            bool existsToRoom = columnExists(mEntityTable, "index:Vim.Room:ToRoom");
-            bool existsElement = columnExists(mEntityTable, "index:Vim.Element:Element");
+            bool existsFacingFlipped = mEntityTable.column_exists("byte:FacingFlipped");
+            bool existsFacingOrientation_X = mEntityTable.column_exists("float:FacingOrientation.X");
+            bool existsFacingOrientation_Y = mEntityTable.column_exists("float:FacingOrientation.Y");
+            bool existsFacingOrientation_Z = mEntityTable.column_exists("float:FacingOrientation.Z");
+            bool existsHandFlipped = mEntityTable.column_exists("byte:HandFlipped");
+            bool existsMirrored = mEntityTable.column_exists("byte:Mirrored");
+            bool existsHasModifiedGeometry = mEntityTable.column_exists("byte:HasModifiedGeometry");
+            bool existsScale = mEntityTable.column_exists("float:Scale");
+            bool existsBasisX_X = mEntityTable.column_exists("float:BasisX.X");
+            bool existsBasisX_Y = mEntityTable.column_exists("float:BasisX.Y");
+            bool existsBasisX_Z = mEntityTable.column_exists("float:BasisX.Z");
+            bool existsBasisY_X = mEntityTable.column_exists("float:BasisY.X");
+            bool existsBasisY_Y = mEntityTable.column_exists("float:BasisY.Y");
+            bool existsBasisY_Z = mEntityTable.column_exists("float:BasisY.Z");
+            bool existsBasisZ_X = mEntityTable.column_exists("float:BasisZ.X");
+            bool existsBasisZ_Y = mEntityTable.column_exists("float:BasisZ.Y");
+            bool existsBasisZ_Z = mEntityTable.column_exists("float:BasisZ.Z");
+            bool existsTranslation_X = mEntityTable.column_exists("float:Translation.X");
+            bool existsTranslation_Y = mEntityTable.column_exists("float:Translation.Y");
+            bool existsTranslation_Z = mEntityTable.column_exists("float:Translation.Z");
+            bool existsHandOrientation_X = mEntityTable.column_exists("float:HandOrientation.X");
+            bool existsHandOrientation_Y = mEntityTable.column_exists("float:HandOrientation.Y");
+            bool existsHandOrientation_Z = mEntityTable.column_exists("float:HandOrientation.Z");
+            bool existsFamilyType = mEntityTable.column_exists("index:Vim.FamilyType:FamilyType");
+            bool existsHost = mEntityTable.column_exists("index:Vim.Element:Host");
+            bool existsFromRoom = mEntityTable.column_exists("index:Vim.Room:FromRoom");
+            bool existsToRoom = mEntityTable.column_exists("index:Vim.Room:ToRoom");
+            bool existsElement = mEntityTable.column_exists("index:Vim.Element:Element");
             
             const auto count = GetCount();
             
@@ -5381,125 +5312,125 @@ namespace Vim
             familyInstance->reserve(count);
             
             bfast::byte* facingFlippedData = new bfast::byte[count];
-            if (columnExists(mEntityTable, "byte:FacingFlipped")) {
+            if (mEntityTable.column_exists("byte:FacingFlipped")) {
                 memcpy(facingFlippedData, mEntityTable.mDataColumns["byte:FacingFlipped"].begin(), count * sizeof(bfast::byte));
             }
             
             float* facingOrientation_XData = new float[count];
-            if (columnExists(mEntityTable, "float:FacingOrientation.X")) {
+            if (mEntityTable.column_exists("float:FacingOrientation.X")) {
                 memcpy(facingOrientation_XData, mEntityTable.mDataColumns["float:FacingOrientation.X"].begin(), count * sizeof(float));
             }
             
             float* facingOrientation_YData = new float[count];
-            if (columnExists(mEntityTable, "float:FacingOrientation.Y")) {
+            if (mEntityTable.column_exists("float:FacingOrientation.Y")) {
                 memcpy(facingOrientation_YData, mEntityTable.mDataColumns["float:FacingOrientation.Y"].begin(), count * sizeof(float));
             }
             
             float* facingOrientation_ZData = new float[count];
-            if (columnExists(mEntityTable, "float:FacingOrientation.Z")) {
+            if (mEntityTable.column_exists("float:FacingOrientation.Z")) {
                 memcpy(facingOrientation_ZData, mEntityTable.mDataColumns["float:FacingOrientation.Z"].begin(), count * sizeof(float));
             }
             
             bfast::byte* handFlippedData = new bfast::byte[count];
-            if (columnExists(mEntityTable, "byte:HandFlipped")) {
+            if (mEntityTable.column_exists("byte:HandFlipped")) {
                 memcpy(handFlippedData, mEntityTable.mDataColumns["byte:HandFlipped"].begin(), count * sizeof(bfast::byte));
             }
             
             bfast::byte* mirroredData = new bfast::byte[count];
-            if (columnExists(mEntityTable, "byte:Mirrored")) {
+            if (mEntityTable.column_exists("byte:Mirrored")) {
                 memcpy(mirroredData, mEntityTable.mDataColumns["byte:Mirrored"].begin(), count * sizeof(bfast::byte));
             }
             
             bfast::byte* hasModifiedGeometryData = new bfast::byte[count];
-            if (columnExists(mEntityTable, "byte:HasModifiedGeometry")) {
+            if (mEntityTable.column_exists("byte:HasModifiedGeometry")) {
                 memcpy(hasModifiedGeometryData, mEntityTable.mDataColumns["byte:HasModifiedGeometry"].begin(), count * sizeof(bfast::byte));
             }
             
             float* scaleData = new float[count];
-            if (columnExists(mEntityTable, "float:Scale")) {
+            if (mEntityTable.column_exists("float:Scale")) {
                 memcpy(scaleData, mEntityTable.mDataColumns["float:Scale"].begin(), count * sizeof(float));
             }
             
             float* basisX_XData = new float[count];
-            if (columnExists(mEntityTable, "float:BasisX.X")) {
+            if (mEntityTable.column_exists("float:BasisX.X")) {
                 memcpy(basisX_XData, mEntityTable.mDataColumns["float:BasisX.X"].begin(), count * sizeof(float));
             }
             
             float* basisX_YData = new float[count];
-            if (columnExists(mEntityTable, "float:BasisX.Y")) {
+            if (mEntityTable.column_exists("float:BasisX.Y")) {
                 memcpy(basisX_YData, mEntityTable.mDataColumns["float:BasisX.Y"].begin(), count * sizeof(float));
             }
             
             float* basisX_ZData = new float[count];
-            if (columnExists(mEntityTable, "float:BasisX.Z")) {
+            if (mEntityTable.column_exists("float:BasisX.Z")) {
                 memcpy(basisX_ZData, mEntityTable.mDataColumns["float:BasisX.Z"].begin(), count * sizeof(float));
             }
             
             float* basisY_XData = new float[count];
-            if (columnExists(mEntityTable, "float:BasisY.X")) {
+            if (mEntityTable.column_exists("float:BasisY.X")) {
                 memcpy(basisY_XData, mEntityTable.mDataColumns["float:BasisY.X"].begin(), count * sizeof(float));
             }
             
             float* basisY_YData = new float[count];
-            if (columnExists(mEntityTable, "float:BasisY.Y")) {
+            if (mEntityTable.column_exists("float:BasisY.Y")) {
                 memcpy(basisY_YData, mEntityTable.mDataColumns["float:BasisY.Y"].begin(), count * sizeof(float));
             }
             
             float* basisY_ZData = new float[count];
-            if (columnExists(mEntityTable, "float:BasisY.Z")) {
+            if (mEntityTable.column_exists("float:BasisY.Z")) {
                 memcpy(basisY_ZData, mEntityTable.mDataColumns["float:BasisY.Z"].begin(), count * sizeof(float));
             }
             
             float* basisZ_XData = new float[count];
-            if (columnExists(mEntityTable, "float:BasisZ.X")) {
+            if (mEntityTable.column_exists("float:BasisZ.X")) {
                 memcpy(basisZ_XData, mEntityTable.mDataColumns["float:BasisZ.X"].begin(), count * sizeof(float));
             }
             
             float* basisZ_YData = new float[count];
-            if (columnExists(mEntityTable, "float:BasisZ.Y")) {
+            if (mEntityTable.column_exists("float:BasisZ.Y")) {
                 memcpy(basisZ_YData, mEntityTable.mDataColumns["float:BasisZ.Y"].begin(), count * sizeof(float));
             }
             
             float* basisZ_ZData = new float[count];
-            if (columnExists(mEntityTable, "float:BasisZ.Z")) {
+            if (mEntityTable.column_exists("float:BasisZ.Z")) {
                 memcpy(basisZ_ZData, mEntityTable.mDataColumns["float:BasisZ.Z"].begin(), count * sizeof(float));
             }
             
             float* translation_XData = new float[count];
-            if (columnExists(mEntityTable, "float:Translation.X")) {
+            if (mEntityTable.column_exists("float:Translation.X")) {
                 memcpy(translation_XData, mEntityTable.mDataColumns["float:Translation.X"].begin(), count * sizeof(float));
             }
             
             float* translation_YData = new float[count];
-            if (columnExists(mEntityTable, "float:Translation.Y")) {
+            if (mEntityTable.column_exists("float:Translation.Y")) {
                 memcpy(translation_YData, mEntityTable.mDataColumns["float:Translation.Y"].begin(), count * sizeof(float));
             }
             
             float* translation_ZData = new float[count];
-            if (columnExists(mEntityTable, "float:Translation.Z")) {
+            if (mEntityTable.column_exists("float:Translation.Z")) {
                 memcpy(translation_ZData, mEntityTable.mDataColumns["float:Translation.Z"].begin(), count * sizeof(float));
             }
             
             float* handOrientation_XData = new float[count];
-            if (columnExists(mEntityTable, "float:HandOrientation.X")) {
+            if (mEntityTable.column_exists("float:HandOrientation.X")) {
                 memcpy(handOrientation_XData, mEntityTable.mDataColumns["float:HandOrientation.X"].begin(), count * sizeof(float));
             }
             
             float* handOrientation_YData = new float[count];
-            if (columnExists(mEntityTable, "float:HandOrientation.Y")) {
+            if (mEntityTable.column_exists("float:HandOrientation.Y")) {
                 memcpy(handOrientation_YData, mEntityTable.mDataColumns["float:HandOrientation.Y"].begin(), count * sizeof(float));
             }
             
             float* handOrientation_ZData = new float[count];
-            if (columnExists(mEntityTable, "float:HandOrientation.Z")) {
+            if (mEntityTable.column_exists("float:HandOrientation.Z")) {
                 memcpy(handOrientation_ZData, mEntityTable.mDataColumns["float:HandOrientation.Z"].begin(), count * sizeof(float));
             }
             
-            const std::vector<int>& familyTypeData = columnExists(mEntityTable ,"index:Vim.FamilyType:FamilyType") ? mEntityTable.mIndexColumns["index:Vim.FamilyType:FamilyType"] : std::vector<int>();
-            const std::vector<int>& hostData = columnExists(mEntityTable ,"index:Vim.Element:Host") ? mEntityTable.mIndexColumns["index:Vim.Element:Host"] : std::vector<int>();
-            const std::vector<int>& fromRoomData = columnExists(mEntityTable ,"index:Vim.Room:FromRoom") ? mEntityTable.mIndexColumns["index:Vim.Room:FromRoom"] : std::vector<int>();
-            const std::vector<int>& toRoomData = columnExists(mEntityTable ,"index:Vim.Room:ToRoom") ? mEntityTable.mIndexColumns["index:Vim.Room:ToRoom"] : std::vector<int>();
-            const std::vector<int>& elementData = columnExists(mEntityTable ,"index:Vim.Element:Element") ? mEntityTable.mIndexColumns["index:Vim.Element:Element"] : std::vector<int>();
+            const std::vector<int>& familyTypeData = mEntityTable.column_exists("index:Vim.FamilyType:FamilyType") ? mEntityTable.mIndexColumns["index:Vim.FamilyType:FamilyType"] : std::vector<int>();
+            const std::vector<int>& hostData = mEntityTable.column_exists("index:Vim.Element:Host") ? mEntityTable.mIndexColumns["index:Vim.Element:Host"] : std::vector<int>();
+            const std::vector<int>& fromRoomData = mEntityTable.column_exists("index:Vim.Room:FromRoom") ? mEntityTable.mIndexColumns["index:Vim.Room:FromRoom"] : std::vector<int>();
+            const std::vector<int>& toRoomData = mEntityTable.column_exists("index:Vim.Room:ToRoom") ? mEntityTable.mIndexColumns["index:Vim.Room:ToRoom"] : std::vector<int>();
+            const std::vector<int>& elementData = mEntityTable.column_exists("index:Vim.Element:Element") ? mEntityTable.mIndexColumns["index:Vim.Element:Element"] : std::vector<int>();
             
             for (int i = 0; i < count; ++i)
             {
@@ -5591,7 +5522,7 @@ namespace Vim
             if (familyInstanceIndex < 0 || familyInstanceIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "byte:FacingFlipped")) {
+            if (mEntityTable.column_exists("byte:FacingFlipped")) {
                 return static_cast<bool>(*reinterpret_cast<bfast::byte*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["byte:FacingFlipped"].begin() + familyInstanceIndex * sizeof(bfast::byte))));
             }
             
@@ -5603,7 +5534,7 @@ namespace Vim
             const auto count = GetCount();
             
             bfast::byte* facingFlippedData = new bfast::byte[count];
-            if (columnExists(mEntityTable, "byte:FacingFlipped")) {
+            if (mEntityTable.column_exists("byte:FacingFlipped")) {
                 memcpy(facingFlippedData, mEntityTable.mDataColumns["byte:FacingFlipped"].begin(), count * sizeof(bfast::byte));
             }
             
@@ -5619,7 +5550,7 @@ namespace Vim
             if (familyInstanceIndex < 0 || familyInstanceIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "float:FacingOrientation.X")) {
+            if (mEntityTable.column_exists("float:FacingOrientation.X")) {
                 return *reinterpret_cast<float*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["float:FacingOrientation.X"].begin() + familyInstanceIndex * sizeof(float)));
             }
             
@@ -5631,7 +5562,7 @@ namespace Vim
             const auto count = GetCount();
             
             float* facingOrientation_XData = new float[count];
-            if (columnExists(mEntityTable, "float:FacingOrientation.X")) {
+            if (mEntityTable.column_exists("float:FacingOrientation.X")) {
                 memcpy(facingOrientation_XData, mEntityTable.mDataColumns["float:FacingOrientation.X"].begin(), count * sizeof(float));
             }
             
@@ -5647,7 +5578,7 @@ namespace Vim
             if (familyInstanceIndex < 0 || familyInstanceIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "float:FacingOrientation.Y")) {
+            if (mEntityTable.column_exists("float:FacingOrientation.Y")) {
                 return *reinterpret_cast<float*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["float:FacingOrientation.Y"].begin() + familyInstanceIndex * sizeof(float)));
             }
             
@@ -5659,7 +5590,7 @@ namespace Vim
             const auto count = GetCount();
             
             float* facingOrientation_YData = new float[count];
-            if (columnExists(mEntityTable, "float:FacingOrientation.Y")) {
+            if (mEntityTable.column_exists("float:FacingOrientation.Y")) {
                 memcpy(facingOrientation_YData, mEntityTable.mDataColumns["float:FacingOrientation.Y"].begin(), count * sizeof(float));
             }
             
@@ -5675,7 +5606,7 @@ namespace Vim
             if (familyInstanceIndex < 0 || familyInstanceIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "float:FacingOrientation.Z")) {
+            if (mEntityTable.column_exists("float:FacingOrientation.Z")) {
                 return *reinterpret_cast<float*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["float:FacingOrientation.Z"].begin() + familyInstanceIndex * sizeof(float)));
             }
             
@@ -5687,7 +5618,7 @@ namespace Vim
             const auto count = GetCount();
             
             float* facingOrientation_ZData = new float[count];
-            if (columnExists(mEntityTable, "float:FacingOrientation.Z")) {
+            if (mEntityTable.column_exists("float:FacingOrientation.Z")) {
                 memcpy(facingOrientation_ZData, mEntityTable.mDataColumns["float:FacingOrientation.Z"].begin(), count * sizeof(float));
             }
             
@@ -5703,7 +5634,7 @@ namespace Vim
             if (familyInstanceIndex < 0 || familyInstanceIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "byte:HandFlipped")) {
+            if (mEntityTable.column_exists("byte:HandFlipped")) {
                 return static_cast<bool>(*reinterpret_cast<bfast::byte*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["byte:HandFlipped"].begin() + familyInstanceIndex * sizeof(bfast::byte))));
             }
             
@@ -5715,7 +5646,7 @@ namespace Vim
             const auto count = GetCount();
             
             bfast::byte* handFlippedData = new bfast::byte[count];
-            if (columnExists(mEntityTable, "byte:HandFlipped")) {
+            if (mEntityTable.column_exists("byte:HandFlipped")) {
                 memcpy(handFlippedData, mEntityTable.mDataColumns["byte:HandFlipped"].begin(), count * sizeof(bfast::byte));
             }
             
@@ -5731,7 +5662,7 @@ namespace Vim
             if (familyInstanceIndex < 0 || familyInstanceIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "byte:Mirrored")) {
+            if (mEntityTable.column_exists("byte:Mirrored")) {
                 return static_cast<bool>(*reinterpret_cast<bfast::byte*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["byte:Mirrored"].begin() + familyInstanceIndex * sizeof(bfast::byte))));
             }
             
@@ -5743,7 +5674,7 @@ namespace Vim
             const auto count = GetCount();
             
             bfast::byte* mirroredData = new bfast::byte[count];
-            if (columnExists(mEntityTable, "byte:Mirrored")) {
+            if (mEntityTable.column_exists("byte:Mirrored")) {
                 memcpy(mirroredData, mEntityTable.mDataColumns["byte:Mirrored"].begin(), count * sizeof(bfast::byte));
             }
             
@@ -5759,7 +5690,7 @@ namespace Vim
             if (familyInstanceIndex < 0 || familyInstanceIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "byte:HasModifiedGeometry")) {
+            if (mEntityTable.column_exists("byte:HasModifiedGeometry")) {
                 return static_cast<bool>(*reinterpret_cast<bfast::byte*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["byte:HasModifiedGeometry"].begin() + familyInstanceIndex * sizeof(bfast::byte))));
             }
             
@@ -5771,7 +5702,7 @@ namespace Vim
             const auto count = GetCount();
             
             bfast::byte* hasModifiedGeometryData = new bfast::byte[count];
-            if (columnExists(mEntityTable, "byte:HasModifiedGeometry")) {
+            if (mEntityTable.column_exists("byte:HasModifiedGeometry")) {
                 memcpy(hasModifiedGeometryData, mEntityTable.mDataColumns["byte:HasModifiedGeometry"].begin(), count * sizeof(bfast::byte));
             }
             
@@ -5787,7 +5718,7 @@ namespace Vim
             if (familyInstanceIndex < 0 || familyInstanceIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "float:Scale")) {
+            if (mEntityTable.column_exists("float:Scale")) {
                 return *reinterpret_cast<float*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["float:Scale"].begin() + familyInstanceIndex * sizeof(float)));
             }
             
@@ -5799,7 +5730,7 @@ namespace Vim
             const auto count = GetCount();
             
             float* scaleData = new float[count];
-            if (columnExists(mEntityTable, "float:Scale")) {
+            if (mEntityTable.column_exists("float:Scale")) {
                 memcpy(scaleData, mEntityTable.mDataColumns["float:Scale"].begin(), count * sizeof(float));
             }
             
@@ -5815,7 +5746,7 @@ namespace Vim
             if (familyInstanceIndex < 0 || familyInstanceIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "float:BasisX.X")) {
+            if (mEntityTable.column_exists("float:BasisX.X")) {
                 return *reinterpret_cast<float*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["float:BasisX.X"].begin() + familyInstanceIndex * sizeof(float)));
             }
             
@@ -5827,7 +5758,7 @@ namespace Vim
             const auto count = GetCount();
             
             float* basisX_XData = new float[count];
-            if (columnExists(mEntityTable, "float:BasisX.X")) {
+            if (mEntityTable.column_exists("float:BasisX.X")) {
                 memcpy(basisX_XData, mEntityTable.mDataColumns["float:BasisX.X"].begin(), count * sizeof(float));
             }
             
@@ -5843,7 +5774,7 @@ namespace Vim
             if (familyInstanceIndex < 0 || familyInstanceIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "float:BasisX.Y")) {
+            if (mEntityTable.column_exists("float:BasisX.Y")) {
                 return *reinterpret_cast<float*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["float:BasisX.Y"].begin() + familyInstanceIndex * sizeof(float)));
             }
             
@@ -5855,7 +5786,7 @@ namespace Vim
             const auto count = GetCount();
             
             float* basisX_YData = new float[count];
-            if (columnExists(mEntityTable, "float:BasisX.Y")) {
+            if (mEntityTable.column_exists("float:BasisX.Y")) {
                 memcpy(basisX_YData, mEntityTable.mDataColumns["float:BasisX.Y"].begin(), count * sizeof(float));
             }
             
@@ -5871,7 +5802,7 @@ namespace Vim
             if (familyInstanceIndex < 0 || familyInstanceIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "float:BasisX.Z")) {
+            if (mEntityTable.column_exists("float:BasisX.Z")) {
                 return *reinterpret_cast<float*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["float:BasisX.Z"].begin() + familyInstanceIndex * sizeof(float)));
             }
             
@@ -5883,7 +5814,7 @@ namespace Vim
             const auto count = GetCount();
             
             float* basisX_ZData = new float[count];
-            if (columnExists(mEntityTable, "float:BasisX.Z")) {
+            if (mEntityTable.column_exists("float:BasisX.Z")) {
                 memcpy(basisX_ZData, mEntityTable.mDataColumns["float:BasisX.Z"].begin(), count * sizeof(float));
             }
             
@@ -5899,7 +5830,7 @@ namespace Vim
             if (familyInstanceIndex < 0 || familyInstanceIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "float:BasisY.X")) {
+            if (mEntityTable.column_exists("float:BasisY.X")) {
                 return *reinterpret_cast<float*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["float:BasisY.X"].begin() + familyInstanceIndex * sizeof(float)));
             }
             
@@ -5911,7 +5842,7 @@ namespace Vim
             const auto count = GetCount();
             
             float* basisY_XData = new float[count];
-            if (columnExists(mEntityTable, "float:BasisY.X")) {
+            if (mEntityTable.column_exists("float:BasisY.X")) {
                 memcpy(basisY_XData, mEntityTable.mDataColumns["float:BasisY.X"].begin(), count * sizeof(float));
             }
             
@@ -5927,7 +5858,7 @@ namespace Vim
             if (familyInstanceIndex < 0 || familyInstanceIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "float:BasisY.Y")) {
+            if (mEntityTable.column_exists("float:BasisY.Y")) {
                 return *reinterpret_cast<float*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["float:BasisY.Y"].begin() + familyInstanceIndex * sizeof(float)));
             }
             
@@ -5939,7 +5870,7 @@ namespace Vim
             const auto count = GetCount();
             
             float* basisY_YData = new float[count];
-            if (columnExists(mEntityTable, "float:BasisY.Y")) {
+            if (mEntityTable.column_exists("float:BasisY.Y")) {
                 memcpy(basisY_YData, mEntityTable.mDataColumns["float:BasisY.Y"].begin(), count * sizeof(float));
             }
             
@@ -5955,7 +5886,7 @@ namespace Vim
             if (familyInstanceIndex < 0 || familyInstanceIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "float:BasisY.Z")) {
+            if (mEntityTable.column_exists("float:BasisY.Z")) {
                 return *reinterpret_cast<float*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["float:BasisY.Z"].begin() + familyInstanceIndex * sizeof(float)));
             }
             
@@ -5967,7 +5898,7 @@ namespace Vim
             const auto count = GetCount();
             
             float* basisY_ZData = new float[count];
-            if (columnExists(mEntityTable, "float:BasisY.Z")) {
+            if (mEntityTable.column_exists("float:BasisY.Z")) {
                 memcpy(basisY_ZData, mEntityTable.mDataColumns["float:BasisY.Z"].begin(), count * sizeof(float));
             }
             
@@ -5983,7 +5914,7 @@ namespace Vim
             if (familyInstanceIndex < 0 || familyInstanceIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "float:BasisZ.X")) {
+            if (mEntityTable.column_exists("float:BasisZ.X")) {
                 return *reinterpret_cast<float*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["float:BasisZ.X"].begin() + familyInstanceIndex * sizeof(float)));
             }
             
@@ -5995,7 +5926,7 @@ namespace Vim
             const auto count = GetCount();
             
             float* basisZ_XData = new float[count];
-            if (columnExists(mEntityTable, "float:BasisZ.X")) {
+            if (mEntityTable.column_exists("float:BasisZ.X")) {
                 memcpy(basisZ_XData, mEntityTable.mDataColumns["float:BasisZ.X"].begin(), count * sizeof(float));
             }
             
@@ -6011,7 +5942,7 @@ namespace Vim
             if (familyInstanceIndex < 0 || familyInstanceIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "float:BasisZ.Y")) {
+            if (mEntityTable.column_exists("float:BasisZ.Y")) {
                 return *reinterpret_cast<float*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["float:BasisZ.Y"].begin() + familyInstanceIndex * sizeof(float)));
             }
             
@@ -6023,7 +5954,7 @@ namespace Vim
             const auto count = GetCount();
             
             float* basisZ_YData = new float[count];
-            if (columnExists(mEntityTable, "float:BasisZ.Y")) {
+            if (mEntityTable.column_exists("float:BasisZ.Y")) {
                 memcpy(basisZ_YData, mEntityTable.mDataColumns["float:BasisZ.Y"].begin(), count * sizeof(float));
             }
             
@@ -6039,7 +5970,7 @@ namespace Vim
             if (familyInstanceIndex < 0 || familyInstanceIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "float:BasisZ.Z")) {
+            if (mEntityTable.column_exists("float:BasisZ.Z")) {
                 return *reinterpret_cast<float*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["float:BasisZ.Z"].begin() + familyInstanceIndex * sizeof(float)));
             }
             
@@ -6051,7 +5982,7 @@ namespace Vim
             const auto count = GetCount();
             
             float* basisZ_ZData = new float[count];
-            if (columnExists(mEntityTable, "float:BasisZ.Z")) {
+            if (mEntityTable.column_exists("float:BasisZ.Z")) {
                 memcpy(basisZ_ZData, mEntityTable.mDataColumns["float:BasisZ.Z"].begin(), count * sizeof(float));
             }
             
@@ -6067,7 +5998,7 @@ namespace Vim
             if (familyInstanceIndex < 0 || familyInstanceIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "float:Translation.X")) {
+            if (mEntityTable.column_exists("float:Translation.X")) {
                 return *reinterpret_cast<float*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["float:Translation.X"].begin() + familyInstanceIndex * sizeof(float)));
             }
             
@@ -6079,7 +6010,7 @@ namespace Vim
             const auto count = GetCount();
             
             float* translation_XData = new float[count];
-            if (columnExists(mEntityTable, "float:Translation.X")) {
+            if (mEntityTable.column_exists("float:Translation.X")) {
                 memcpy(translation_XData, mEntityTable.mDataColumns["float:Translation.X"].begin(), count * sizeof(float));
             }
             
@@ -6095,7 +6026,7 @@ namespace Vim
             if (familyInstanceIndex < 0 || familyInstanceIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "float:Translation.Y")) {
+            if (mEntityTable.column_exists("float:Translation.Y")) {
                 return *reinterpret_cast<float*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["float:Translation.Y"].begin() + familyInstanceIndex * sizeof(float)));
             }
             
@@ -6107,7 +6038,7 @@ namespace Vim
             const auto count = GetCount();
             
             float* translation_YData = new float[count];
-            if (columnExists(mEntityTable, "float:Translation.Y")) {
+            if (mEntityTable.column_exists("float:Translation.Y")) {
                 memcpy(translation_YData, mEntityTable.mDataColumns["float:Translation.Y"].begin(), count * sizeof(float));
             }
             
@@ -6123,7 +6054,7 @@ namespace Vim
             if (familyInstanceIndex < 0 || familyInstanceIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "float:Translation.Z")) {
+            if (mEntityTable.column_exists("float:Translation.Z")) {
                 return *reinterpret_cast<float*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["float:Translation.Z"].begin() + familyInstanceIndex * sizeof(float)));
             }
             
@@ -6135,7 +6066,7 @@ namespace Vim
             const auto count = GetCount();
             
             float* translation_ZData = new float[count];
-            if (columnExists(mEntityTable, "float:Translation.Z")) {
+            if (mEntityTable.column_exists("float:Translation.Z")) {
                 memcpy(translation_ZData, mEntityTable.mDataColumns["float:Translation.Z"].begin(), count * sizeof(float));
             }
             
@@ -6151,7 +6082,7 @@ namespace Vim
             if (familyInstanceIndex < 0 || familyInstanceIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "float:HandOrientation.X")) {
+            if (mEntityTable.column_exists("float:HandOrientation.X")) {
                 return *reinterpret_cast<float*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["float:HandOrientation.X"].begin() + familyInstanceIndex * sizeof(float)));
             }
             
@@ -6163,7 +6094,7 @@ namespace Vim
             const auto count = GetCount();
             
             float* handOrientation_XData = new float[count];
-            if (columnExists(mEntityTable, "float:HandOrientation.X")) {
+            if (mEntityTable.column_exists("float:HandOrientation.X")) {
                 memcpy(handOrientation_XData, mEntityTable.mDataColumns["float:HandOrientation.X"].begin(), count * sizeof(float));
             }
             
@@ -6179,7 +6110,7 @@ namespace Vim
             if (familyInstanceIndex < 0 || familyInstanceIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "float:HandOrientation.Y")) {
+            if (mEntityTable.column_exists("float:HandOrientation.Y")) {
                 return *reinterpret_cast<float*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["float:HandOrientation.Y"].begin() + familyInstanceIndex * sizeof(float)));
             }
             
@@ -6191,7 +6122,7 @@ namespace Vim
             const auto count = GetCount();
             
             float* handOrientation_YData = new float[count];
-            if (columnExists(mEntityTable, "float:HandOrientation.Y")) {
+            if (mEntityTable.column_exists("float:HandOrientation.Y")) {
                 memcpy(handOrientation_YData, mEntityTable.mDataColumns["float:HandOrientation.Y"].begin(), count * sizeof(float));
             }
             
@@ -6207,7 +6138,7 @@ namespace Vim
             if (familyInstanceIndex < 0 || familyInstanceIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "float:HandOrientation.Z")) {
+            if (mEntityTable.column_exists("float:HandOrientation.Z")) {
                 return *reinterpret_cast<float*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["float:HandOrientation.Z"].begin() + familyInstanceIndex * sizeof(float)));
             }
             
@@ -6219,7 +6150,7 @@ namespace Vim
             const auto count = GetCount();
             
             float* handOrientation_ZData = new float[count];
-            if (columnExists(mEntityTable, "float:HandOrientation.Z")) {
+            if (mEntityTable.column_exists("float:HandOrientation.Z")) {
                 memcpy(handOrientation_ZData, mEntityTable.mDataColumns["float:HandOrientation.Z"].begin(), count * sizeof(float));
             }
             
@@ -6232,7 +6163,7 @@ namespace Vim
         
         int GetFamilyTypeIndex(int familyInstanceIndex)
         {
-            if (!columnExists(mEntityTable, "index:Vim.FamilyType:FamilyType")) {
+            if (!mEntityTable.column_exists("index:Vim.FamilyType:FamilyType")) {
                 return -1;
             }
             
@@ -6244,7 +6175,7 @@ namespace Vim
         
         int GetHostIndex(int familyInstanceIndex)
         {
-            if (!columnExists(mEntityTable, "index:Vim.Element:Host")) {
+            if (!mEntityTable.column_exists("index:Vim.Element:Host")) {
                 return -1;
             }
             
@@ -6256,7 +6187,7 @@ namespace Vim
         
         int GetFromRoomIndex(int familyInstanceIndex)
         {
-            if (!columnExists(mEntityTable, "index:Vim.Room:FromRoom")) {
+            if (!mEntityTable.column_exists("index:Vim.Room:FromRoom")) {
                 return -1;
             }
             
@@ -6268,7 +6199,7 @@ namespace Vim
         
         int GetToRoomIndex(int familyInstanceIndex)
         {
-            if (!columnExists(mEntityTable, "index:Vim.Room:ToRoom")) {
+            if (!mEntityTable.column_exists("index:Vim.Room:ToRoom")) {
                 return -1;
             }
             
@@ -6280,7 +6211,7 @@ namespace Vim
         
         int GetElementIndex(int familyInstanceIndex)
         {
-            if (!columnExists(mEntityTable, "index:Vim.Element:Element")) {
+            if (!mEntityTable.column_exists("index:Vim.Element:Element")) {
                 return -1;
             }
             
@@ -6348,7 +6279,7 @@ namespace Vim
         
         size_t GetCount()
         {
-            return getCount(mEntityTable);
+            return mEntityTable.get_count();
         }
         
         View* Get(int viewIndex)
@@ -6386,150 +6317,150 @@ namespace Vim
         
         std::vector<View>* GetAll()
         {
-            bool existsTitle = columnExists(mEntityTable, "string:Title");
-            bool existsViewType = columnExists(mEntityTable, "string:ViewType");
-            bool existsUp_X = columnExists(mEntityTable, "double:Up.X");
-            bool existsUp_Y = columnExists(mEntityTable, "double:Up.Y");
-            bool existsUp_Z = columnExists(mEntityTable, "double:Up.Z");
-            bool existsRight_X = columnExists(mEntityTable, "double:Right.X");
-            bool existsRight_Y = columnExists(mEntityTable, "double:Right.Y");
-            bool existsRight_Z = columnExists(mEntityTable, "double:Right.Z");
-            bool existsOrigin_X = columnExists(mEntityTable, "double:Origin.X");
-            bool existsOrigin_Y = columnExists(mEntityTable, "double:Origin.Y");
-            bool existsOrigin_Z = columnExists(mEntityTable, "double:Origin.Z");
-            bool existsViewDirection_X = columnExists(mEntityTable, "double:ViewDirection.X");
-            bool existsViewDirection_Y = columnExists(mEntityTable, "double:ViewDirection.Y");
-            bool existsViewDirection_Z = columnExists(mEntityTable, "double:ViewDirection.Z");
-            bool existsViewPosition_X = columnExists(mEntityTable, "double:ViewPosition.X");
-            bool existsViewPosition_Y = columnExists(mEntityTable, "double:ViewPosition.Y");
-            bool existsViewPosition_Z = columnExists(mEntityTable, "double:ViewPosition.Z");
-            bool existsScale = columnExists(mEntityTable, "double:Scale");
-            bool existsOutline_Min_X = columnExists(mEntityTable, "double:Outline.Min.X");
-            bool existsOutline_Min_Y = columnExists(mEntityTable, "double:Outline.Min.Y");
-            bool existsOutline_Max_X = columnExists(mEntityTable, "double:Outline.Max.X");
-            bool existsOutline_Max_Y = columnExists(mEntityTable, "double:Outline.Max.Y");
-            bool existsDetailLevel = columnExists(mEntityTable, "int:DetailLevel");
-            bool existsCamera = columnExists(mEntityTable, "index:Vim.Camera:Camera");
-            bool existsFamilyType = columnExists(mEntityTable, "index:Vim.FamilyType:FamilyType");
-            bool existsElement = columnExists(mEntityTable, "index:Vim.Element:Element");
+            bool existsTitle = mEntityTable.column_exists("string:Title");
+            bool existsViewType = mEntityTable.column_exists("string:ViewType");
+            bool existsUp_X = mEntityTable.column_exists("double:Up.X");
+            bool existsUp_Y = mEntityTable.column_exists("double:Up.Y");
+            bool existsUp_Z = mEntityTable.column_exists("double:Up.Z");
+            bool existsRight_X = mEntityTable.column_exists("double:Right.X");
+            bool existsRight_Y = mEntityTable.column_exists("double:Right.Y");
+            bool existsRight_Z = mEntityTable.column_exists("double:Right.Z");
+            bool existsOrigin_X = mEntityTable.column_exists("double:Origin.X");
+            bool existsOrigin_Y = mEntityTable.column_exists("double:Origin.Y");
+            bool existsOrigin_Z = mEntityTable.column_exists("double:Origin.Z");
+            bool existsViewDirection_X = mEntityTable.column_exists("double:ViewDirection.X");
+            bool existsViewDirection_Y = mEntityTable.column_exists("double:ViewDirection.Y");
+            bool existsViewDirection_Z = mEntityTable.column_exists("double:ViewDirection.Z");
+            bool existsViewPosition_X = mEntityTable.column_exists("double:ViewPosition.X");
+            bool existsViewPosition_Y = mEntityTable.column_exists("double:ViewPosition.Y");
+            bool existsViewPosition_Z = mEntityTable.column_exists("double:ViewPosition.Z");
+            bool existsScale = mEntityTable.column_exists("double:Scale");
+            bool existsOutline_Min_X = mEntityTable.column_exists("double:Outline.Min.X");
+            bool existsOutline_Min_Y = mEntityTable.column_exists("double:Outline.Min.Y");
+            bool existsOutline_Max_X = mEntityTable.column_exists("double:Outline.Max.X");
+            bool existsOutline_Max_Y = mEntityTable.column_exists("double:Outline.Max.Y");
+            bool existsDetailLevel = mEntityTable.column_exists("int:DetailLevel");
+            bool existsCamera = mEntityTable.column_exists("index:Vim.Camera:Camera");
+            bool existsFamilyType = mEntityTable.column_exists("index:Vim.FamilyType:FamilyType");
+            bool existsElement = mEntityTable.column_exists("index:Vim.Element:Element");
             
             const auto count = GetCount();
             
             std::vector<View>* view = new std::vector<View>();
             view->reserve(count);
             
-            const std::vector<int>& titleData = columnExists(mEntityTable, "string:Title") ? mEntityTable.mStringColumns["string:Title"] : std::vector<int>();
+            const std::vector<int>& titleData = mEntityTable.column_exists("string:Title") ? mEntityTable.mStringColumns["string:Title"] : std::vector<int>();
             
-            const std::vector<int>& viewTypeData = columnExists(mEntityTable, "string:ViewType") ? mEntityTable.mStringColumns["string:ViewType"] : std::vector<int>();
+            const std::vector<int>& viewTypeData = mEntityTable.column_exists("string:ViewType") ? mEntityTable.mStringColumns["string:ViewType"] : std::vector<int>();
             
             double* up_XData = new double[count];
-            if (columnExists(mEntityTable, "double:Up.X")) {
+            if (mEntityTable.column_exists("double:Up.X")) {
                 memcpy(up_XData, mEntityTable.mDataColumns["double:Up.X"].begin(), count * sizeof(double));
             }
             
             double* up_YData = new double[count];
-            if (columnExists(mEntityTable, "double:Up.Y")) {
+            if (mEntityTable.column_exists("double:Up.Y")) {
                 memcpy(up_YData, mEntityTable.mDataColumns["double:Up.Y"].begin(), count * sizeof(double));
             }
             
             double* up_ZData = new double[count];
-            if (columnExists(mEntityTable, "double:Up.Z")) {
+            if (mEntityTable.column_exists("double:Up.Z")) {
                 memcpy(up_ZData, mEntityTable.mDataColumns["double:Up.Z"].begin(), count * sizeof(double));
             }
             
             double* right_XData = new double[count];
-            if (columnExists(mEntityTable, "double:Right.X")) {
+            if (mEntityTable.column_exists("double:Right.X")) {
                 memcpy(right_XData, mEntityTable.mDataColumns["double:Right.X"].begin(), count * sizeof(double));
             }
             
             double* right_YData = new double[count];
-            if (columnExists(mEntityTable, "double:Right.Y")) {
+            if (mEntityTable.column_exists("double:Right.Y")) {
                 memcpy(right_YData, mEntityTable.mDataColumns["double:Right.Y"].begin(), count * sizeof(double));
             }
             
             double* right_ZData = new double[count];
-            if (columnExists(mEntityTable, "double:Right.Z")) {
+            if (mEntityTable.column_exists("double:Right.Z")) {
                 memcpy(right_ZData, mEntityTable.mDataColumns["double:Right.Z"].begin(), count * sizeof(double));
             }
             
             double* origin_XData = new double[count];
-            if (columnExists(mEntityTable, "double:Origin.X")) {
+            if (mEntityTable.column_exists("double:Origin.X")) {
                 memcpy(origin_XData, mEntityTable.mDataColumns["double:Origin.X"].begin(), count * sizeof(double));
             }
             
             double* origin_YData = new double[count];
-            if (columnExists(mEntityTable, "double:Origin.Y")) {
+            if (mEntityTable.column_exists("double:Origin.Y")) {
                 memcpy(origin_YData, mEntityTable.mDataColumns["double:Origin.Y"].begin(), count * sizeof(double));
             }
             
             double* origin_ZData = new double[count];
-            if (columnExists(mEntityTable, "double:Origin.Z")) {
+            if (mEntityTable.column_exists("double:Origin.Z")) {
                 memcpy(origin_ZData, mEntityTable.mDataColumns["double:Origin.Z"].begin(), count * sizeof(double));
             }
             
             double* viewDirection_XData = new double[count];
-            if (columnExists(mEntityTable, "double:ViewDirection.X")) {
+            if (mEntityTable.column_exists("double:ViewDirection.X")) {
                 memcpy(viewDirection_XData, mEntityTable.mDataColumns["double:ViewDirection.X"].begin(), count * sizeof(double));
             }
             
             double* viewDirection_YData = new double[count];
-            if (columnExists(mEntityTable, "double:ViewDirection.Y")) {
+            if (mEntityTable.column_exists("double:ViewDirection.Y")) {
                 memcpy(viewDirection_YData, mEntityTable.mDataColumns["double:ViewDirection.Y"].begin(), count * sizeof(double));
             }
             
             double* viewDirection_ZData = new double[count];
-            if (columnExists(mEntityTable, "double:ViewDirection.Z")) {
+            if (mEntityTable.column_exists("double:ViewDirection.Z")) {
                 memcpy(viewDirection_ZData, mEntityTable.mDataColumns["double:ViewDirection.Z"].begin(), count * sizeof(double));
             }
             
             double* viewPosition_XData = new double[count];
-            if (columnExists(mEntityTable, "double:ViewPosition.X")) {
+            if (mEntityTable.column_exists("double:ViewPosition.X")) {
                 memcpy(viewPosition_XData, mEntityTable.mDataColumns["double:ViewPosition.X"].begin(), count * sizeof(double));
             }
             
             double* viewPosition_YData = new double[count];
-            if (columnExists(mEntityTable, "double:ViewPosition.Y")) {
+            if (mEntityTable.column_exists("double:ViewPosition.Y")) {
                 memcpy(viewPosition_YData, mEntityTable.mDataColumns["double:ViewPosition.Y"].begin(), count * sizeof(double));
             }
             
             double* viewPosition_ZData = new double[count];
-            if (columnExists(mEntityTable, "double:ViewPosition.Z")) {
+            if (mEntityTable.column_exists("double:ViewPosition.Z")) {
                 memcpy(viewPosition_ZData, mEntityTable.mDataColumns["double:ViewPosition.Z"].begin(), count * sizeof(double));
             }
             
             double* scaleData = new double[count];
-            if (columnExists(mEntityTable, "double:Scale")) {
+            if (mEntityTable.column_exists("double:Scale")) {
                 memcpy(scaleData, mEntityTable.mDataColumns["double:Scale"].begin(), count * sizeof(double));
             }
             
             double* outline_Min_XData = new double[count];
-            if (columnExists(mEntityTable, "double:Outline.Min.X")) {
+            if (mEntityTable.column_exists("double:Outline.Min.X")) {
                 memcpy(outline_Min_XData, mEntityTable.mDataColumns["double:Outline.Min.X"].begin(), count * sizeof(double));
             }
             
             double* outline_Min_YData = new double[count];
-            if (columnExists(mEntityTable, "double:Outline.Min.Y")) {
+            if (mEntityTable.column_exists("double:Outline.Min.Y")) {
                 memcpy(outline_Min_YData, mEntityTable.mDataColumns["double:Outline.Min.Y"].begin(), count * sizeof(double));
             }
             
             double* outline_Max_XData = new double[count];
-            if (columnExists(mEntityTable, "double:Outline.Max.X")) {
+            if (mEntityTable.column_exists("double:Outline.Max.X")) {
                 memcpy(outline_Max_XData, mEntityTable.mDataColumns["double:Outline.Max.X"].begin(), count * sizeof(double));
             }
             
             double* outline_Max_YData = new double[count];
-            if (columnExists(mEntityTable, "double:Outline.Max.Y")) {
+            if (mEntityTable.column_exists("double:Outline.Max.Y")) {
                 memcpy(outline_Max_YData, mEntityTable.mDataColumns["double:Outline.Max.Y"].begin(), count * sizeof(double));
             }
             
             int* detailLevelData = new int[count];
-            if (columnExists(mEntityTable, "int:DetailLevel")) {
+            if (mEntityTable.column_exists("int:DetailLevel")) {
                 memcpy(detailLevelData, mEntityTable.mDataColumns["int:DetailLevel"].begin(), count * sizeof(int));
             }
             
-            const std::vector<int>& cameraData = columnExists(mEntityTable ,"index:Vim.Camera:Camera") ? mEntityTable.mIndexColumns["index:Vim.Camera:Camera"] : std::vector<int>();
-            const std::vector<int>& familyTypeData = columnExists(mEntityTable ,"index:Vim.FamilyType:FamilyType") ? mEntityTable.mIndexColumns["index:Vim.FamilyType:FamilyType"] : std::vector<int>();
-            const std::vector<int>& elementData = columnExists(mEntityTable ,"index:Vim.Element:Element") ? mEntityTable.mIndexColumns["index:Vim.Element:Element"] : std::vector<int>();
+            const std::vector<int>& cameraData = mEntityTable.column_exists("index:Vim.Camera:Camera") ? mEntityTable.mIndexColumns["index:Vim.Camera:Camera"] : std::vector<int>();
+            const std::vector<int>& familyTypeData = mEntityTable.column_exists("index:Vim.FamilyType:FamilyType") ? mEntityTable.mIndexColumns["index:Vim.FamilyType:FamilyType"] : std::vector<int>();
+            const std::vector<int>& elementData = mEntityTable.column_exists("index:Vim.Element:Element") ? mEntityTable.mIndexColumns["index:Vim.Element:Element"] : std::vector<int>();
             
             for (int i = 0; i < count; ++i)
             {
@@ -6617,7 +6548,7 @@ namespace Vim
             if (viewIndex < 0 || viewIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "string:Title")) {
+            if (mEntityTable.column_exists("string:Title")) {
                 return std::string(reinterpret_cast<const char*>(mStrings[mEntityTable.mStringColumns["string:Title"][viewIndex]]));
             }
             
@@ -6628,7 +6559,7 @@ namespace Vim
         {
             const auto count = GetCount();
             
-            const std::vector<int>& titleData = columnExists(mEntityTable, "string:Title") ? mEntityTable.mStringColumns["string:Title"] : std::vector<int>();
+            const std::vector<int>& titleData = mEntityTable.column_exists("string:Title") ? mEntityTable.mStringColumns["string:Title"] : std::vector<int>();
             
             std::vector<std::string>* result = new std::vector<std::string>();
             result->reserve(count);
@@ -6646,7 +6577,7 @@ namespace Vim
             if (viewIndex < 0 || viewIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "string:ViewType")) {
+            if (mEntityTable.column_exists("string:ViewType")) {
                 return std::string(reinterpret_cast<const char*>(mStrings[mEntityTable.mStringColumns["string:ViewType"][viewIndex]]));
             }
             
@@ -6657,7 +6588,7 @@ namespace Vim
         {
             const auto count = GetCount();
             
-            const std::vector<int>& viewTypeData = columnExists(mEntityTable, "string:ViewType") ? mEntityTable.mStringColumns["string:ViewType"] : std::vector<int>();
+            const std::vector<int>& viewTypeData = mEntityTable.column_exists("string:ViewType") ? mEntityTable.mStringColumns["string:ViewType"] : std::vector<int>();
             
             std::vector<std::string>* result = new std::vector<std::string>();
             result->reserve(count);
@@ -6675,7 +6606,7 @@ namespace Vim
             if (viewIndex < 0 || viewIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "double:Up.X")) {
+            if (mEntityTable.column_exists("double:Up.X")) {
                 return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:Up.X"].begin() + viewIndex * sizeof(double)));
             }
             
@@ -6687,7 +6618,7 @@ namespace Vim
             const auto count = GetCount();
             
             double* up_XData = new double[count];
-            if (columnExists(mEntityTable, "double:Up.X")) {
+            if (mEntityTable.column_exists("double:Up.X")) {
                 memcpy(up_XData, mEntityTable.mDataColumns["double:Up.X"].begin(), count * sizeof(double));
             }
             
@@ -6703,7 +6634,7 @@ namespace Vim
             if (viewIndex < 0 || viewIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "double:Up.Y")) {
+            if (mEntityTable.column_exists("double:Up.Y")) {
                 return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:Up.Y"].begin() + viewIndex * sizeof(double)));
             }
             
@@ -6715,7 +6646,7 @@ namespace Vim
             const auto count = GetCount();
             
             double* up_YData = new double[count];
-            if (columnExists(mEntityTable, "double:Up.Y")) {
+            if (mEntityTable.column_exists("double:Up.Y")) {
                 memcpy(up_YData, mEntityTable.mDataColumns["double:Up.Y"].begin(), count * sizeof(double));
             }
             
@@ -6731,7 +6662,7 @@ namespace Vim
             if (viewIndex < 0 || viewIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "double:Up.Z")) {
+            if (mEntityTable.column_exists("double:Up.Z")) {
                 return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:Up.Z"].begin() + viewIndex * sizeof(double)));
             }
             
@@ -6743,7 +6674,7 @@ namespace Vim
             const auto count = GetCount();
             
             double* up_ZData = new double[count];
-            if (columnExists(mEntityTable, "double:Up.Z")) {
+            if (mEntityTable.column_exists("double:Up.Z")) {
                 memcpy(up_ZData, mEntityTable.mDataColumns["double:Up.Z"].begin(), count * sizeof(double));
             }
             
@@ -6759,7 +6690,7 @@ namespace Vim
             if (viewIndex < 0 || viewIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "double:Right.X")) {
+            if (mEntityTable.column_exists("double:Right.X")) {
                 return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:Right.X"].begin() + viewIndex * sizeof(double)));
             }
             
@@ -6771,7 +6702,7 @@ namespace Vim
             const auto count = GetCount();
             
             double* right_XData = new double[count];
-            if (columnExists(mEntityTable, "double:Right.X")) {
+            if (mEntityTable.column_exists("double:Right.X")) {
                 memcpy(right_XData, mEntityTable.mDataColumns["double:Right.X"].begin(), count * sizeof(double));
             }
             
@@ -6787,7 +6718,7 @@ namespace Vim
             if (viewIndex < 0 || viewIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "double:Right.Y")) {
+            if (mEntityTable.column_exists("double:Right.Y")) {
                 return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:Right.Y"].begin() + viewIndex * sizeof(double)));
             }
             
@@ -6799,7 +6730,7 @@ namespace Vim
             const auto count = GetCount();
             
             double* right_YData = new double[count];
-            if (columnExists(mEntityTable, "double:Right.Y")) {
+            if (mEntityTable.column_exists("double:Right.Y")) {
                 memcpy(right_YData, mEntityTable.mDataColumns["double:Right.Y"].begin(), count * sizeof(double));
             }
             
@@ -6815,7 +6746,7 @@ namespace Vim
             if (viewIndex < 0 || viewIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "double:Right.Z")) {
+            if (mEntityTable.column_exists("double:Right.Z")) {
                 return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:Right.Z"].begin() + viewIndex * sizeof(double)));
             }
             
@@ -6827,7 +6758,7 @@ namespace Vim
             const auto count = GetCount();
             
             double* right_ZData = new double[count];
-            if (columnExists(mEntityTable, "double:Right.Z")) {
+            if (mEntityTable.column_exists("double:Right.Z")) {
                 memcpy(right_ZData, mEntityTable.mDataColumns["double:Right.Z"].begin(), count * sizeof(double));
             }
             
@@ -6843,7 +6774,7 @@ namespace Vim
             if (viewIndex < 0 || viewIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "double:Origin.X")) {
+            if (mEntityTable.column_exists("double:Origin.X")) {
                 return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:Origin.X"].begin() + viewIndex * sizeof(double)));
             }
             
@@ -6855,7 +6786,7 @@ namespace Vim
             const auto count = GetCount();
             
             double* origin_XData = new double[count];
-            if (columnExists(mEntityTable, "double:Origin.X")) {
+            if (mEntityTable.column_exists("double:Origin.X")) {
                 memcpy(origin_XData, mEntityTable.mDataColumns["double:Origin.X"].begin(), count * sizeof(double));
             }
             
@@ -6871,7 +6802,7 @@ namespace Vim
             if (viewIndex < 0 || viewIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "double:Origin.Y")) {
+            if (mEntityTable.column_exists("double:Origin.Y")) {
                 return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:Origin.Y"].begin() + viewIndex * sizeof(double)));
             }
             
@@ -6883,7 +6814,7 @@ namespace Vim
             const auto count = GetCount();
             
             double* origin_YData = new double[count];
-            if (columnExists(mEntityTable, "double:Origin.Y")) {
+            if (mEntityTable.column_exists("double:Origin.Y")) {
                 memcpy(origin_YData, mEntityTable.mDataColumns["double:Origin.Y"].begin(), count * sizeof(double));
             }
             
@@ -6899,7 +6830,7 @@ namespace Vim
             if (viewIndex < 0 || viewIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "double:Origin.Z")) {
+            if (mEntityTable.column_exists("double:Origin.Z")) {
                 return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:Origin.Z"].begin() + viewIndex * sizeof(double)));
             }
             
@@ -6911,7 +6842,7 @@ namespace Vim
             const auto count = GetCount();
             
             double* origin_ZData = new double[count];
-            if (columnExists(mEntityTable, "double:Origin.Z")) {
+            if (mEntityTable.column_exists("double:Origin.Z")) {
                 memcpy(origin_ZData, mEntityTable.mDataColumns["double:Origin.Z"].begin(), count * sizeof(double));
             }
             
@@ -6927,7 +6858,7 @@ namespace Vim
             if (viewIndex < 0 || viewIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "double:ViewDirection.X")) {
+            if (mEntityTable.column_exists("double:ViewDirection.X")) {
                 return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:ViewDirection.X"].begin() + viewIndex * sizeof(double)));
             }
             
@@ -6939,7 +6870,7 @@ namespace Vim
             const auto count = GetCount();
             
             double* viewDirection_XData = new double[count];
-            if (columnExists(mEntityTable, "double:ViewDirection.X")) {
+            if (mEntityTable.column_exists("double:ViewDirection.X")) {
                 memcpy(viewDirection_XData, mEntityTable.mDataColumns["double:ViewDirection.X"].begin(), count * sizeof(double));
             }
             
@@ -6955,7 +6886,7 @@ namespace Vim
             if (viewIndex < 0 || viewIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "double:ViewDirection.Y")) {
+            if (mEntityTable.column_exists("double:ViewDirection.Y")) {
                 return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:ViewDirection.Y"].begin() + viewIndex * sizeof(double)));
             }
             
@@ -6967,7 +6898,7 @@ namespace Vim
             const auto count = GetCount();
             
             double* viewDirection_YData = new double[count];
-            if (columnExists(mEntityTable, "double:ViewDirection.Y")) {
+            if (mEntityTable.column_exists("double:ViewDirection.Y")) {
                 memcpy(viewDirection_YData, mEntityTable.mDataColumns["double:ViewDirection.Y"].begin(), count * sizeof(double));
             }
             
@@ -6983,7 +6914,7 @@ namespace Vim
             if (viewIndex < 0 || viewIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "double:ViewDirection.Z")) {
+            if (mEntityTable.column_exists("double:ViewDirection.Z")) {
                 return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:ViewDirection.Z"].begin() + viewIndex * sizeof(double)));
             }
             
@@ -6995,7 +6926,7 @@ namespace Vim
             const auto count = GetCount();
             
             double* viewDirection_ZData = new double[count];
-            if (columnExists(mEntityTable, "double:ViewDirection.Z")) {
+            if (mEntityTable.column_exists("double:ViewDirection.Z")) {
                 memcpy(viewDirection_ZData, mEntityTable.mDataColumns["double:ViewDirection.Z"].begin(), count * sizeof(double));
             }
             
@@ -7011,7 +6942,7 @@ namespace Vim
             if (viewIndex < 0 || viewIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "double:ViewPosition.X")) {
+            if (mEntityTable.column_exists("double:ViewPosition.X")) {
                 return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:ViewPosition.X"].begin() + viewIndex * sizeof(double)));
             }
             
@@ -7023,7 +6954,7 @@ namespace Vim
             const auto count = GetCount();
             
             double* viewPosition_XData = new double[count];
-            if (columnExists(mEntityTable, "double:ViewPosition.X")) {
+            if (mEntityTable.column_exists("double:ViewPosition.X")) {
                 memcpy(viewPosition_XData, mEntityTable.mDataColumns["double:ViewPosition.X"].begin(), count * sizeof(double));
             }
             
@@ -7039,7 +6970,7 @@ namespace Vim
             if (viewIndex < 0 || viewIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "double:ViewPosition.Y")) {
+            if (mEntityTable.column_exists("double:ViewPosition.Y")) {
                 return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:ViewPosition.Y"].begin() + viewIndex * sizeof(double)));
             }
             
@@ -7051,7 +6982,7 @@ namespace Vim
             const auto count = GetCount();
             
             double* viewPosition_YData = new double[count];
-            if (columnExists(mEntityTable, "double:ViewPosition.Y")) {
+            if (mEntityTable.column_exists("double:ViewPosition.Y")) {
                 memcpy(viewPosition_YData, mEntityTable.mDataColumns["double:ViewPosition.Y"].begin(), count * sizeof(double));
             }
             
@@ -7067,7 +6998,7 @@ namespace Vim
             if (viewIndex < 0 || viewIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "double:ViewPosition.Z")) {
+            if (mEntityTable.column_exists("double:ViewPosition.Z")) {
                 return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:ViewPosition.Z"].begin() + viewIndex * sizeof(double)));
             }
             
@@ -7079,7 +7010,7 @@ namespace Vim
             const auto count = GetCount();
             
             double* viewPosition_ZData = new double[count];
-            if (columnExists(mEntityTable, "double:ViewPosition.Z")) {
+            if (mEntityTable.column_exists("double:ViewPosition.Z")) {
                 memcpy(viewPosition_ZData, mEntityTable.mDataColumns["double:ViewPosition.Z"].begin(), count * sizeof(double));
             }
             
@@ -7095,7 +7026,7 @@ namespace Vim
             if (viewIndex < 0 || viewIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "double:Scale")) {
+            if (mEntityTable.column_exists("double:Scale")) {
                 return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:Scale"].begin() + viewIndex * sizeof(double)));
             }
             
@@ -7107,7 +7038,7 @@ namespace Vim
             const auto count = GetCount();
             
             double* scaleData = new double[count];
-            if (columnExists(mEntityTable, "double:Scale")) {
+            if (mEntityTable.column_exists("double:Scale")) {
                 memcpy(scaleData, mEntityTable.mDataColumns["double:Scale"].begin(), count * sizeof(double));
             }
             
@@ -7123,7 +7054,7 @@ namespace Vim
             if (viewIndex < 0 || viewIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "double:Outline.Min.X")) {
+            if (mEntityTable.column_exists("double:Outline.Min.X")) {
                 return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:Outline.Min.X"].begin() + viewIndex * sizeof(double)));
             }
             
@@ -7135,7 +7066,7 @@ namespace Vim
             const auto count = GetCount();
             
             double* outline_Min_XData = new double[count];
-            if (columnExists(mEntityTable, "double:Outline.Min.X")) {
+            if (mEntityTable.column_exists("double:Outline.Min.X")) {
                 memcpy(outline_Min_XData, mEntityTable.mDataColumns["double:Outline.Min.X"].begin(), count * sizeof(double));
             }
             
@@ -7151,7 +7082,7 @@ namespace Vim
             if (viewIndex < 0 || viewIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "double:Outline.Min.Y")) {
+            if (mEntityTable.column_exists("double:Outline.Min.Y")) {
                 return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:Outline.Min.Y"].begin() + viewIndex * sizeof(double)));
             }
             
@@ -7163,7 +7094,7 @@ namespace Vim
             const auto count = GetCount();
             
             double* outline_Min_YData = new double[count];
-            if (columnExists(mEntityTable, "double:Outline.Min.Y")) {
+            if (mEntityTable.column_exists("double:Outline.Min.Y")) {
                 memcpy(outline_Min_YData, mEntityTable.mDataColumns["double:Outline.Min.Y"].begin(), count * sizeof(double));
             }
             
@@ -7179,7 +7110,7 @@ namespace Vim
             if (viewIndex < 0 || viewIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "double:Outline.Max.X")) {
+            if (mEntityTable.column_exists("double:Outline.Max.X")) {
                 return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:Outline.Max.X"].begin() + viewIndex * sizeof(double)));
             }
             
@@ -7191,7 +7122,7 @@ namespace Vim
             const auto count = GetCount();
             
             double* outline_Max_XData = new double[count];
-            if (columnExists(mEntityTable, "double:Outline.Max.X")) {
+            if (mEntityTable.column_exists("double:Outline.Max.X")) {
                 memcpy(outline_Max_XData, mEntityTable.mDataColumns["double:Outline.Max.X"].begin(), count * sizeof(double));
             }
             
@@ -7207,7 +7138,7 @@ namespace Vim
             if (viewIndex < 0 || viewIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "double:Outline.Max.Y")) {
+            if (mEntityTable.column_exists("double:Outline.Max.Y")) {
                 return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:Outline.Max.Y"].begin() + viewIndex * sizeof(double)));
             }
             
@@ -7219,7 +7150,7 @@ namespace Vim
             const auto count = GetCount();
             
             double* outline_Max_YData = new double[count];
-            if (columnExists(mEntityTable, "double:Outline.Max.Y")) {
+            if (mEntityTable.column_exists("double:Outline.Max.Y")) {
                 memcpy(outline_Max_YData, mEntityTable.mDataColumns["double:Outline.Max.Y"].begin(), count * sizeof(double));
             }
             
@@ -7235,7 +7166,7 @@ namespace Vim
             if (viewIndex < 0 || viewIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "int:DetailLevel")) {
+            if (mEntityTable.column_exists("int:DetailLevel")) {
                 return *reinterpret_cast<int*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["int:DetailLevel"].begin() + viewIndex * sizeof(int)));
             }
             
@@ -7247,7 +7178,7 @@ namespace Vim
             const auto count = GetCount();
             
             int* detailLevelData = new int[count];
-            if (columnExists(mEntityTable, "int:DetailLevel")) {
+            if (mEntityTable.column_exists("int:DetailLevel")) {
                 memcpy(detailLevelData, mEntityTable.mDataColumns["int:DetailLevel"].begin(), count * sizeof(int));
             }
             
@@ -7260,7 +7191,7 @@ namespace Vim
         
         int GetCameraIndex(int viewIndex)
         {
-            if (!columnExists(mEntityTable, "index:Vim.Camera:Camera")) {
+            if (!mEntityTable.column_exists("index:Vim.Camera:Camera")) {
                 return -1;
             }
             
@@ -7272,7 +7203,7 @@ namespace Vim
         
         int GetFamilyTypeIndex(int viewIndex)
         {
-            if (!columnExists(mEntityTable, "index:Vim.FamilyType:FamilyType")) {
+            if (!mEntityTable.column_exists("index:Vim.FamilyType:FamilyType")) {
                 return -1;
             }
             
@@ -7284,7 +7215,7 @@ namespace Vim
         
         int GetElementIndex(int viewIndex)
         {
-            if (!columnExists(mEntityTable, "index:Vim.Element:Element")) {
+            if (!mEntityTable.column_exists("index:Vim.Element:Element")) {
                 return -1;
             }
             
@@ -7327,7 +7258,7 @@ namespace Vim
         
         size_t GetCount()
         {
-            return getCount(mEntityTable);
+            return mEntityTable.get_count();
         }
         
         ElementInView* Get(int elementInViewIndex)
@@ -7341,16 +7272,16 @@ namespace Vim
         
         std::vector<ElementInView>* GetAll()
         {
-            bool existsView = columnExists(mEntityTable, "index:Vim.View:View");
-            bool existsElement = columnExists(mEntityTable, "index:Vim.Element:Element");
+            bool existsView = mEntityTable.column_exists("index:Vim.View:View");
+            bool existsElement = mEntityTable.column_exists("index:Vim.Element:Element");
             
             const auto count = GetCount();
             
             std::vector<ElementInView>* elementInView = new std::vector<ElementInView>();
             elementInView->reserve(count);
             
-            const std::vector<int>& viewData = columnExists(mEntityTable ,"index:Vim.View:View") ? mEntityTable.mIndexColumns["index:Vim.View:View"] : std::vector<int>();
-            const std::vector<int>& elementData = columnExists(mEntityTable ,"index:Vim.Element:Element") ? mEntityTable.mIndexColumns["index:Vim.Element:Element"] : std::vector<int>();
+            const std::vector<int>& viewData = mEntityTable.column_exists("index:Vim.View:View") ? mEntityTable.mIndexColumns["index:Vim.View:View"] : std::vector<int>();
+            const std::vector<int>& elementData = mEntityTable.column_exists("index:Vim.Element:Element") ? mEntityTable.mIndexColumns["index:Vim.Element:Element"] : std::vector<int>();
             
             for (int i = 0; i < count; ++i)
             {
@@ -7366,7 +7297,7 @@ namespace Vim
         
         int GetViewIndex(int elementInViewIndex)
         {
-            if (!columnExists(mEntityTable, "index:Vim.View:View")) {
+            if (!mEntityTable.column_exists("index:Vim.View:View")) {
                 return -1;
             }
             
@@ -7378,7 +7309,7 @@ namespace Vim
         
         int GetElementIndex(int elementInViewIndex)
         {
-            if (!columnExists(mEntityTable, "index:Vim.Element:Element")) {
+            if (!mEntityTable.column_exists("index:Vim.Element:Element")) {
                 return -1;
             }
             
@@ -7421,7 +7352,7 @@ namespace Vim
         
         size_t GetCount()
         {
-            return getCount(mEntityTable);
+            return mEntityTable.get_count();
         }
         
         ShapeInView* Get(int shapeInViewIndex)
@@ -7435,16 +7366,16 @@ namespace Vim
         
         std::vector<ShapeInView>* GetAll()
         {
-            bool existsShape = columnExists(mEntityTable, "index:Vim.Shape:Shape");
-            bool existsView = columnExists(mEntityTable, "index:Vim.View:View");
+            bool existsShape = mEntityTable.column_exists("index:Vim.Shape:Shape");
+            bool existsView = mEntityTable.column_exists("index:Vim.View:View");
             
             const auto count = GetCount();
             
             std::vector<ShapeInView>* shapeInView = new std::vector<ShapeInView>();
             shapeInView->reserve(count);
             
-            const std::vector<int>& shapeData = columnExists(mEntityTable ,"index:Vim.Shape:Shape") ? mEntityTable.mIndexColumns["index:Vim.Shape:Shape"] : std::vector<int>();
-            const std::vector<int>& viewData = columnExists(mEntityTable ,"index:Vim.View:View") ? mEntityTable.mIndexColumns["index:Vim.View:View"] : std::vector<int>();
+            const std::vector<int>& shapeData = mEntityTable.column_exists("index:Vim.Shape:Shape") ? mEntityTable.mIndexColumns["index:Vim.Shape:Shape"] : std::vector<int>();
+            const std::vector<int>& viewData = mEntityTable.column_exists("index:Vim.View:View") ? mEntityTable.mIndexColumns["index:Vim.View:View"] : std::vector<int>();
             
             for (int i = 0; i < count; ++i)
             {
@@ -7460,7 +7391,7 @@ namespace Vim
         
         int GetShapeIndex(int shapeInViewIndex)
         {
-            if (!columnExists(mEntityTable, "index:Vim.Shape:Shape")) {
+            if (!mEntityTable.column_exists("index:Vim.Shape:Shape")) {
                 return -1;
             }
             
@@ -7472,7 +7403,7 @@ namespace Vim
         
         int GetViewIndex(int shapeInViewIndex)
         {
-            if (!columnExists(mEntityTable, "index:Vim.View:View")) {
+            if (!mEntityTable.column_exists("index:Vim.View:View")) {
                 return -1;
             }
             
@@ -7515,7 +7446,7 @@ namespace Vim
         
         size_t GetCount()
         {
-            return getCount(mEntityTable);
+            return mEntityTable.get_count();
         }
         
         AssetInView* Get(int assetInViewIndex)
@@ -7529,16 +7460,16 @@ namespace Vim
         
         std::vector<AssetInView>* GetAll()
         {
-            bool existsAsset = columnExists(mEntityTable, "index:Vim.Asset:Asset");
-            bool existsView = columnExists(mEntityTable, "index:Vim.View:View");
+            bool existsAsset = mEntityTable.column_exists("index:Vim.Asset:Asset");
+            bool existsView = mEntityTable.column_exists("index:Vim.View:View");
             
             const auto count = GetCount();
             
             std::vector<AssetInView>* assetInView = new std::vector<AssetInView>();
             assetInView->reserve(count);
             
-            const std::vector<int>& assetData = columnExists(mEntityTable ,"index:Vim.Asset:Asset") ? mEntityTable.mIndexColumns["index:Vim.Asset:Asset"] : std::vector<int>();
-            const std::vector<int>& viewData = columnExists(mEntityTable ,"index:Vim.View:View") ? mEntityTable.mIndexColumns["index:Vim.View:View"] : std::vector<int>();
+            const std::vector<int>& assetData = mEntityTable.column_exists("index:Vim.Asset:Asset") ? mEntityTable.mIndexColumns["index:Vim.Asset:Asset"] : std::vector<int>();
+            const std::vector<int>& viewData = mEntityTable.column_exists("index:Vim.View:View") ? mEntityTable.mIndexColumns["index:Vim.View:View"] : std::vector<int>();
             
             for (int i = 0; i < count; ++i)
             {
@@ -7554,7 +7485,7 @@ namespace Vim
         
         int GetAssetIndex(int assetInViewIndex)
         {
-            if (!columnExists(mEntityTable, "index:Vim.Asset:Asset")) {
+            if (!mEntityTable.column_exists("index:Vim.Asset:Asset")) {
                 return -1;
             }
             
@@ -7566,7 +7497,7 @@ namespace Vim
         
         int GetViewIndex(int assetInViewIndex)
         {
-            if (!columnExists(mEntityTable, "index:Vim.View:View")) {
+            if (!mEntityTable.column_exists("index:Vim.View:View")) {
                 return -1;
             }
             
@@ -7615,7 +7546,7 @@ namespace Vim
         
         size_t GetCount()
         {
-            return getCount(mEntityTable);
+            return mEntityTable.get_count();
         }
         
         LevelInView* Get(int levelInViewIndex)
@@ -7635,14 +7566,14 @@ namespace Vim
         
         std::vector<LevelInView>* GetAll()
         {
-            bool existsExtents_Min_X = columnExists(mEntityTable, "double:Extents.Min.X");
-            bool existsExtents_Min_Y = columnExists(mEntityTable, "double:Extents.Min.Y");
-            bool existsExtents_Min_Z = columnExists(mEntityTable, "double:Extents.Min.Z");
-            bool existsExtents_Max_X = columnExists(mEntityTable, "double:Extents.Max.X");
-            bool existsExtents_Max_Y = columnExists(mEntityTable, "double:Extents.Max.Y");
-            bool existsExtents_Max_Z = columnExists(mEntityTable, "double:Extents.Max.Z");
-            bool existsLevel = columnExists(mEntityTable, "index:Vim.Level:Level");
-            bool existsView = columnExists(mEntityTable, "index:Vim.View:View");
+            bool existsExtents_Min_X = mEntityTable.column_exists("double:Extents.Min.X");
+            bool existsExtents_Min_Y = mEntityTable.column_exists("double:Extents.Min.Y");
+            bool existsExtents_Min_Z = mEntityTable.column_exists("double:Extents.Min.Z");
+            bool existsExtents_Max_X = mEntityTable.column_exists("double:Extents.Max.X");
+            bool existsExtents_Max_Y = mEntityTable.column_exists("double:Extents.Max.Y");
+            bool existsExtents_Max_Z = mEntityTable.column_exists("double:Extents.Max.Z");
+            bool existsLevel = mEntityTable.column_exists("index:Vim.Level:Level");
+            bool existsView = mEntityTable.column_exists("index:Vim.View:View");
             
             const auto count = GetCount();
             
@@ -7650,37 +7581,37 @@ namespace Vim
             levelInView->reserve(count);
             
             double* extents_Min_XData = new double[count];
-            if (columnExists(mEntityTable, "double:Extents.Min.X")) {
+            if (mEntityTable.column_exists("double:Extents.Min.X")) {
                 memcpy(extents_Min_XData, mEntityTable.mDataColumns["double:Extents.Min.X"].begin(), count * sizeof(double));
             }
             
             double* extents_Min_YData = new double[count];
-            if (columnExists(mEntityTable, "double:Extents.Min.Y")) {
+            if (mEntityTable.column_exists("double:Extents.Min.Y")) {
                 memcpy(extents_Min_YData, mEntityTable.mDataColumns["double:Extents.Min.Y"].begin(), count * sizeof(double));
             }
             
             double* extents_Min_ZData = new double[count];
-            if (columnExists(mEntityTable, "double:Extents.Min.Z")) {
+            if (mEntityTable.column_exists("double:Extents.Min.Z")) {
                 memcpy(extents_Min_ZData, mEntityTable.mDataColumns["double:Extents.Min.Z"].begin(), count * sizeof(double));
             }
             
             double* extents_Max_XData = new double[count];
-            if (columnExists(mEntityTable, "double:Extents.Max.X")) {
+            if (mEntityTable.column_exists("double:Extents.Max.X")) {
                 memcpy(extents_Max_XData, mEntityTable.mDataColumns["double:Extents.Max.X"].begin(), count * sizeof(double));
             }
             
             double* extents_Max_YData = new double[count];
-            if (columnExists(mEntityTable, "double:Extents.Max.Y")) {
+            if (mEntityTable.column_exists("double:Extents.Max.Y")) {
                 memcpy(extents_Max_YData, mEntityTable.mDataColumns["double:Extents.Max.Y"].begin(), count * sizeof(double));
             }
             
             double* extents_Max_ZData = new double[count];
-            if (columnExists(mEntityTable, "double:Extents.Max.Z")) {
+            if (mEntityTable.column_exists("double:Extents.Max.Z")) {
                 memcpy(extents_Max_ZData, mEntityTable.mDataColumns["double:Extents.Max.Z"].begin(), count * sizeof(double));
             }
             
-            const std::vector<int>& levelData = columnExists(mEntityTable ,"index:Vim.Level:Level") ? mEntityTable.mIndexColumns["index:Vim.Level:Level"] : std::vector<int>();
-            const std::vector<int>& viewData = columnExists(mEntityTable ,"index:Vim.View:View") ? mEntityTable.mIndexColumns["index:Vim.View:View"] : std::vector<int>();
+            const std::vector<int>& levelData = mEntityTable.column_exists("index:Vim.Level:Level") ? mEntityTable.mIndexColumns["index:Vim.Level:Level"] : std::vector<int>();
+            const std::vector<int>& viewData = mEntityTable.column_exists("index:Vim.View:View") ? mEntityTable.mIndexColumns["index:Vim.View:View"] : std::vector<int>();
             
             for (int i = 0; i < count; ++i)
             {
@@ -7718,7 +7649,7 @@ namespace Vim
             if (levelInViewIndex < 0 || levelInViewIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "double:Extents.Min.X")) {
+            if (mEntityTable.column_exists("double:Extents.Min.X")) {
                 return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:Extents.Min.X"].begin() + levelInViewIndex * sizeof(double)));
             }
             
@@ -7730,7 +7661,7 @@ namespace Vim
             const auto count = GetCount();
             
             double* extents_Min_XData = new double[count];
-            if (columnExists(mEntityTable, "double:Extents.Min.X")) {
+            if (mEntityTable.column_exists("double:Extents.Min.X")) {
                 memcpy(extents_Min_XData, mEntityTable.mDataColumns["double:Extents.Min.X"].begin(), count * sizeof(double));
             }
             
@@ -7746,7 +7677,7 @@ namespace Vim
             if (levelInViewIndex < 0 || levelInViewIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "double:Extents.Min.Y")) {
+            if (mEntityTable.column_exists("double:Extents.Min.Y")) {
                 return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:Extents.Min.Y"].begin() + levelInViewIndex * sizeof(double)));
             }
             
@@ -7758,7 +7689,7 @@ namespace Vim
             const auto count = GetCount();
             
             double* extents_Min_YData = new double[count];
-            if (columnExists(mEntityTable, "double:Extents.Min.Y")) {
+            if (mEntityTable.column_exists("double:Extents.Min.Y")) {
                 memcpy(extents_Min_YData, mEntityTable.mDataColumns["double:Extents.Min.Y"].begin(), count * sizeof(double));
             }
             
@@ -7774,7 +7705,7 @@ namespace Vim
             if (levelInViewIndex < 0 || levelInViewIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "double:Extents.Min.Z")) {
+            if (mEntityTable.column_exists("double:Extents.Min.Z")) {
                 return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:Extents.Min.Z"].begin() + levelInViewIndex * sizeof(double)));
             }
             
@@ -7786,7 +7717,7 @@ namespace Vim
             const auto count = GetCount();
             
             double* extents_Min_ZData = new double[count];
-            if (columnExists(mEntityTable, "double:Extents.Min.Z")) {
+            if (mEntityTable.column_exists("double:Extents.Min.Z")) {
                 memcpy(extents_Min_ZData, mEntityTable.mDataColumns["double:Extents.Min.Z"].begin(), count * sizeof(double));
             }
             
@@ -7802,7 +7733,7 @@ namespace Vim
             if (levelInViewIndex < 0 || levelInViewIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "double:Extents.Max.X")) {
+            if (mEntityTable.column_exists("double:Extents.Max.X")) {
                 return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:Extents.Max.X"].begin() + levelInViewIndex * sizeof(double)));
             }
             
@@ -7814,7 +7745,7 @@ namespace Vim
             const auto count = GetCount();
             
             double* extents_Max_XData = new double[count];
-            if (columnExists(mEntityTable, "double:Extents.Max.X")) {
+            if (mEntityTable.column_exists("double:Extents.Max.X")) {
                 memcpy(extents_Max_XData, mEntityTable.mDataColumns["double:Extents.Max.X"].begin(), count * sizeof(double));
             }
             
@@ -7830,7 +7761,7 @@ namespace Vim
             if (levelInViewIndex < 0 || levelInViewIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "double:Extents.Max.Y")) {
+            if (mEntityTable.column_exists("double:Extents.Max.Y")) {
                 return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:Extents.Max.Y"].begin() + levelInViewIndex * sizeof(double)));
             }
             
@@ -7842,7 +7773,7 @@ namespace Vim
             const auto count = GetCount();
             
             double* extents_Max_YData = new double[count];
-            if (columnExists(mEntityTable, "double:Extents.Max.Y")) {
+            if (mEntityTable.column_exists("double:Extents.Max.Y")) {
                 memcpy(extents_Max_YData, mEntityTable.mDataColumns["double:Extents.Max.Y"].begin(), count * sizeof(double));
             }
             
@@ -7858,7 +7789,7 @@ namespace Vim
             if (levelInViewIndex < 0 || levelInViewIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "double:Extents.Max.Z")) {
+            if (mEntityTable.column_exists("double:Extents.Max.Z")) {
                 return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:Extents.Max.Z"].begin() + levelInViewIndex * sizeof(double)));
             }
             
@@ -7870,7 +7801,7 @@ namespace Vim
             const auto count = GetCount();
             
             double* extents_Max_ZData = new double[count];
-            if (columnExists(mEntityTable, "double:Extents.Max.Z")) {
+            if (mEntityTable.column_exists("double:Extents.Max.Z")) {
                 memcpy(extents_Max_ZData, mEntityTable.mDataColumns["double:Extents.Max.Z"].begin(), count * sizeof(double));
             }
             
@@ -7883,7 +7814,7 @@ namespace Vim
         
         int GetLevelIndex(int levelInViewIndex)
         {
-            if (!columnExists(mEntityTable, "index:Vim.Level:Level")) {
+            if (!mEntityTable.column_exists("index:Vim.Level:Level")) {
                 return -1;
             }
             
@@ -7895,7 +7826,7 @@ namespace Vim
         
         int GetViewIndex(int levelInViewIndex)
         {
-            if (!columnExists(mEntityTable, "index:Vim.View:View")) {
+            if (!mEntityTable.column_exists("index:Vim.View:View")) {
                 return -1;
             }
             
@@ -7942,7 +7873,7 @@ namespace Vim
         
         size_t GetCount()
         {
-            return getCount(mEntityTable);
+            return mEntityTable.get_count();
         }
         
         Camera* Get(int cameraIndex)
@@ -7963,15 +7894,15 @@ namespace Vim
         
         std::vector<Camera>* GetAll()
         {
-            bool existsId = columnExists(mEntityTable, "int:Id");
-            bool existsIsPerspective = columnExists(mEntityTable, "int:IsPerspective");
-            bool existsVerticalExtent = columnExists(mEntityTable, "double:VerticalExtent");
-            bool existsHorizontalExtent = columnExists(mEntityTable, "double:HorizontalExtent");
-            bool existsFarDistance = columnExists(mEntityTable, "double:FarDistance");
-            bool existsNearDistance = columnExists(mEntityTable, "double:NearDistance");
-            bool existsTargetDistance = columnExists(mEntityTable, "double:TargetDistance");
-            bool existsRightOffset = columnExists(mEntityTable, "double:RightOffset");
-            bool existsUpOffset = columnExists(mEntityTable, "double:UpOffset");
+            bool existsId = mEntityTable.column_exists("int:Id");
+            bool existsIsPerspective = mEntityTable.column_exists("int:IsPerspective");
+            bool existsVerticalExtent = mEntityTable.column_exists("double:VerticalExtent");
+            bool existsHorizontalExtent = mEntityTable.column_exists("double:HorizontalExtent");
+            bool existsFarDistance = mEntityTable.column_exists("double:FarDistance");
+            bool existsNearDistance = mEntityTable.column_exists("double:NearDistance");
+            bool existsTargetDistance = mEntityTable.column_exists("double:TargetDistance");
+            bool existsRightOffset = mEntityTable.column_exists("double:RightOffset");
+            bool existsUpOffset = mEntityTable.column_exists("double:UpOffset");
             
             const auto count = GetCount();
             
@@ -7979,47 +7910,47 @@ namespace Vim
             camera->reserve(count);
             
             int* idData = new int[count];
-            if (columnExists(mEntityTable, "int:Id")) {
+            if (mEntityTable.column_exists("int:Id")) {
                 memcpy(idData, mEntityTable.mDataColumns["int:Id"].begin(), count * sizeof(int));
             }
             
             int* isPerspectiveData = new int[count];
-            if (columnExists(mEntityTable, "int:IsPerspective")) {
+            if (mEntityTable.column_exists("int:IsPerspective")) {
                 memcpy(isPerspectiveData, mEntityTable.mDataColumns["int:IsPerspective"].begin(), count * sizeof(int));
             }
             
             double* verticalExtentData = new double[count];
-            if (columnExists(mEntityTable, "double:VerticalExtent")) {
+            if (mEntityTable.column_exists("double:VerticalExtent")) {
                 memcpy(verticalExtentData, mEntityTable.mDataColumns["double:VerticalExtent"].begin(), count * sizeof(double));
             }
             
             double* horizontalExtentData = new double[count];
-            if (columnExists(mEntityTable, "double:HorizontalExtent")) {
+            if (mEntityTable.column_exists("double:HorizontalExtent")) {
                 memcpy(horizontalExtentData, mEntityTable.mDataColumns["double:HorizontalExtent"].begin(), count * sizeof(double));
             }
             
             double* farDistanceData = new double[count];
-            if (columnExists(mEntityTable, "double:FarDistance")) {
+            if (mEntityTable.column_exists("double:FarDistance")) {
                 memcpy(farDistanceData, mEntityTable.mDataColumns["double:FarDistance"].begin(), count * sizeof(double));
             }
             
             double* nearDistanceData = new double[count];
-            if (columnExists(mEntityTable, "double:NearDistance")) {
+            if (mEntityTable.column_exists("double:NearDistance")) {
                 memcpy(nearDistanceData, mEntityTable.mDataColumns["double:NearDistance"].begin(), count * sizeof(double));
             }
             
             double* targetDistanceData = new double[count];
-            if (columnExists(mEntityTable, "double:TargetDistance")) {
+            if (mEntityTable.column_exists("double:TargetDistance")) {
                 memcpy(targetDistanceData, mEntityTable.mDataColumns["double:TargetDistance"].begin(), count * sizeof(double));
             }
             
             double* rightOffsetData = new double[count];
-            if (columnExists(mEntityTable, "double:RightOffset")) {
+            if (mEntityTable.column_exists("double:RightOffset")) {
                 memcpy(rightOffsetData, mEntityTable.mDataColumns["double:RightOffset"].begin(), count * sizeof(double));
             }
             
             double* upOffsetData = new double[count];
-            if (columnExists(mEntityTable, "double:UpOffset")) {
+            if (mEntityTable.column_exists("double:UpOffset")) {
                 memcpy(upOffsetData, mEntityTable.mDataColumns["double:UpOffset"].begin(), count * sizeof(double));
             }
             
@@ -8066,7 +7997,7 @@ namespace Vim
             if (cameraIndex < 0 || cameraIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "int:Id")) {
+            if (mEntityTable.column_exists("int:Id")) {
                 return *reinterpret_cast<int*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["int:Id"].begin() + cameraIndex * sizeof(int)));
             }
             
@@ -8078,7 +8009,7 @@ namespace Vim
             const auto count = GetCount();
             
             int* idData = new int[count];
-            if (columnExists(mEntityTable, "int:Id")) {
+            if (mEntityTable.column_exists("int:Id")) {
                 memcpy(idData, mEntityTable.mDataColumns["int:Id"].begin(), count * sizeof(int));
             }
             
@@ -8094,7 +8025,7 @@ namespace Vim
             if (cameraIndex < 0 || cameraIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "int:IsPerspective")) {
+            if (mEntityTable.column_exists("int:IsPerspective")) {
                 return *reinterpret_cast<int*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["int:IsPerspective"].begin() + cameraIndex * sizeof(int)));
             }
             
@@ -8106,7 +8037,7 @@ namespace Vim
             const auto count = GetCount();
             
             int* isPerspectiveData = new int[count];
-            if (columnExists(mEntityTable, "int:IsPerspective")) {
+            if (mEntityTable.column_exists("int:IsPerspective")) {
                 memcpy(isPerspectiveData, mEntityTable.mDataColumns["int:IsPerspective"].begin(), count * sizeof(int));
             }
             
@@ -8122,7 +8053,7 @@ namespace Vim
             if (cameraIndex < 0 || cameraIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "double:VerticalExtent")) {
+            if (mEntityTable.column_exists("double:VerticalExtent")) {
                 return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:VerticalExtent"].begin() + cameraIndex * sizeof(double)));
             }
             
@@ -8134,7 +8065,7 @@ namespace Vim
             const auto count = GetCount();
             
             double* verticalExtentData = new double[count];
-            if (columnExists(mEntityTable, "double:VerticalExtent")) {
+            if (mEntityTable.column_exists("double:VerticalExtent")) {
                 memcpy(verticalExtentData, mEntityTable.mDataColumns["double:VerticalExtent"].begin(), count * sizeof(double));
             }
             
@@ -8150,7 +8081,7 @@ namespace Vim
             if (cameraIndex < 0 || cameraIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "double:HorizontalExtent")) {
+            if (mEntityTable.column_exists("double:HorizontalExtent")) {
                 return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:HorizontalExtent"].begin() + cameraIndex * sizeof(double)));
             }
             
@@ -8162,7 +8093,7 @@ namespace Vim
             const auto count = GetCount();
             
             double* horizontalExtentData = new double[count];
-            if (columnExists(mEntityTable, "double:HorizontalExtent")) {
+            if (mEntityTable.column_exists("double:HorizontalExtent")) {
                 memcpy(horizontalExtentData, mEntityTable.mDataColumns["double:HorizontalExtent"].begin(), count * sizeof(double));
             }
             
@@ -8178,7 +8109,7 @@ namespace Vim
             if (cameraIndex < 0 || cameraIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "double:FarDistance")) {
+            if (mEntityTable.column_exists("double:FarDistance")) {
                 return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:FarDistance"].begin() + cameraIndex * sizeof(double)));
             }
             
@@ -8190,7 +8121,7 @@ namespace Vim
             const auto count = GetCount();
             
             double* farDistanceData = new double[count];
-            if (columnExists(mEntityTable, "double:FarDistance")) {
+            if (mEntityTable.column_exists("double:FarDistance")) {
                 memcpy(farDistanceData, mEntityTable.mDataColumns["double:FarDistance"].begin(), count * sizeof(double));
             }
             
@@ -8206,7 +8137,7 @@ namespace Vim
             if (cameraIndex < 0 || cameraIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "double:NearDistance")) {
+            if (mEntityTable.column_exists("double:NearDistance")) {
                 return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:NearDistance"].begin() + cameraIndex * sizeof(double)));
             }
             
@@ -8218,7 +8149,7 @@ namespace Vim
             const auto count = GetCount();
             
             double* nearDistanceData = new double[count];
-            if (columnExists(mEntityTable, "double:NearDistance")) {
+            if (mEntityTable.column_exists("double:NearDistance")) {
                 memcpy(nearDistanceData, mEntityTable.mDataColumns["double:NearDistance"].begin(), count * sizeof(double));
             }
             
@@ -8234,7 +8165,7 @@ namespace Vim
             if (cameraIndex < 0 || cameraIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "double:TargetDistance")) {
+            if (mEntityTable.column_exists("double:TargetDistance")) {
                 return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:TargetDistance"].begin() + cameraIndex * sizeof(double)));
             }
             
@@ -8246,7 +8177,7 @@ namespace Vim
             const auto count = GetCount();
             
             double* targetDistanceData = new double[count];
-            if (columnExists(mEntityTable, "double:TargetDistance")) {
+            if (mEntityTable.column_exists("double:TargetDistance")) {
                 memcpy(targetDistanceData, mEntityTable.mDataColumns["double:TargetDistance"].begin(), count * sizeof(double));
             }
             
@@ -8262,7 +8193,7 @@ namespace Vim
             if (cameraIndex < 0 || cameraIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "double:RightOffset")) {
+            if (mEntityTable.column_exists("double:RightOffset")) {
                 return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:RightOffset"].begin() + cameraIndex * sizeof(double)));
             }
             
@@ -8274,7 +8205,7 @@ namespace Vim
             const auto count = GetCount();
             
             double* rightOffsetData = new double[count];
-            if (columnExists(mEntityTable, "double:RightOffset")) {
+            if (mEntityTable.column_exists("double:RightOffset")) {
                 memcpy(rightOffsetData, mEntityTable.mDataColumns["double:RightOffset"].begin(), count * sizeof(double));
             }
             
@@ -8290,7 +8221,7 @@ namespace Vim
             if (cameraIndex < 0 || cameraIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "double:UpOffset")) {
+            if (mEntityTable.column_exists("double:UpOffset")) {
                 return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:UpOffset"].begin() + cameraIndex * sizeof(double)));
             }
             
@@ -8302,7 +8233,7 @@ namespace Vim
             const auto count = GetCount();
             
             double* upOffsetData = new double[count];
-            if (columnExists(mEntityTable, "double:UpOffset")) {
+            if (mEntityTable.column_exists("double:UpOffset")) {
                 memcpy(upOffsetData, mEntityTable.mDataColumns["double:UpOffset"].begin(), count * sizeof(double));
             }
             
@@ -8365,7 +8296,7 @@ namespace Vim
         
         size_t GetCount()
         {
-            return getCount(mEntityTable);
+            return mEntityTable.get_count();
         }
         
         Material* Get(int materialIndex)
@@ -8397,114 +8328,114 @@ namespace Vim
         
         std::vector<Material>* GetAll()
         {
-            bool existsName = columnExists(mEntityTable, "string:Name");
-            bool existsMaterialCategory = columnExists(mEntityTable, "string:MaterialCategory");
-            bool existsColor_X = columnExists(mEntityTable, "double:Color.X");
-            bool existsColor_Y = columnExists(mEntityTable, "double:Color.Y");
-            bool existsColor_Z = columnExists(mEntityTable, "double:Color.Z");
-            bool existsColorUvScaling_X = columnExists(mEntityTable, "double:ColorUvScaling.X");
-            bool existsColorUvScaling_Y = columnExists(mEntityTable, "double:ColorUvScaling.Y");
-            bool existsColorUvOffset_X = columnExists(mEntityTable, "double:ColorUvOffset.X");
-            bool existsColorUvOffset_Y = columnExists(mEntityTable, "double:ColorUvOffset.Y");
-            bool existsNormalUvScaling_X = columnExists(mEntityTable, "double:NormalUvScaling.X");
-            bool existsNormalUvScaling_Y = columnExists(mEntityTable, "double:NormalUvScaling.Y");
-            bool existsNormalUvOffset_X = columnExists(mEntityTable, "double:NormalUvOffset.X");
-            bool existsNormalUvOffset_Y = columnExists(mEntityTable, "double:NormalUvOffset.Y");
-            bool existsNormalAmount = columnExists(mEntityTable, "double:NormalAmount");
-            bool existsGlossiness = columnExists(mEntityTable, "double:Glossiness");
-            bool existsSmoothness = columnExists(mEntityTable, "double:Smoothness");
-            bool existsTransparency = columnExists(mEntityTable, "double:Transparency");
-            bool existsColorTextureFile = columnExists(mEntityTable, "index:Vim.Asset:ColorTextureFile");
-            bool existsNormalTextureFile = columnExists(mEntityTable, "index:Vim.Asset:NormalTextureFile");
-            bool existsElement = columnExists(mEntityTable, "index:Vim.Element:Element");
+            bool existsName = mEntityTable.column_exists("string:Name");
+            bool existsMaterialCategory = mEntityTable.column_exists("string:MaterialCategory");
+            bool existsColor_X = mEntityTable.column_exists("double:Color.X");
+            bool existsColor_Y = mEntityTable.column_exists("double:Color.Y");
+            bool existsColor_Z = mEntityTable.column_exists("double:Color.Z");
+            bool existsColorUvScaling_X = mEntityTable.column_exists("double:ColorUvScaling.X");
+            bool existsColorUvScaling_Y = mEntityTable.column_exists("double:ColorUvScaling.Y");
+            bool existsColorUvOffset_X = mEntityTable.column_exists("double:ColorUvOffset.X");
+            bool existsColorUvOffset_Y = mEntityTable.column_exists("double:ColorUvOffset.Y");
+            bool existsNormalUvScaling_X = mEntityTable.column_exists("double:NormalUvScaling.X");
+            bool existsNormalUvScaling_Y = mEntityTable.column_exists("double:NormalUvScaling.Y");
+            bool existsNormalUvOffset_X = mEntityTable.column_exists("double:NormalUvOffset.X");
+            bool existsNormalUvOffset_Y = mEntityTable.column_exists("double:NormalUvOffset.Y");
+            bool existsNormalAmount = mEntityTable.column_exists("double:NormalAmount");
+            bool existsGlossiness = mEntityTable.column_exists("double:Glossiness");
+            bool existsSmoothness = mEntityTable.column_exists("double:Smoothness");
+            bool existsTransparency = mEntityTable.column_exists("double:Transparency");
+            bool existsColorTextureFile = mEntityTable.column_exists("index:Vim.Asset:ColorTextureFile");
+            bool existsNormalTextureFile = mEntityTable.column_exists("index:Vim.Asset:NormalTextureFile");
+            bool existsElement = mEntityTable.column_exists("index:Vim.Element:Element");
             
             const auto count = GetCount();
             
             std::vector<Material>* material = new std::vector<Material>();
             material->reserve(count);
             
-            const std::vector<int>& nameData = columnExists(mEntityTable, "string:Name") ? mEntityTable.mStringColumns["string:Name"] : std::vector<int>();
+            const std::vector<int>& nameData = mEntityTable.column_exists("string:Name") ? mEntityTable.mStringColumns["string:Name"] : std::vector<int>();
             
-            const std::vector<int>& materialCategoryData = columnExists(mEntityTable, "string:MaterialCategory") ? mEntityTable.mStringColumns["string:MaterialCategory"] : std::vector<int>();
+            const std::vector<int>& materialCategoryData = mEntityTable.column_exists("string:MaterialCategory") ? mEntityTable.mStringColumns["string:MaterialCategory"] : std::vector<int>();
             
             double* color_XData = new double[count];
-            if (columnExists(mEntityTable, "double:Color.X")) {
+            if (mEntityTable.column_exists("double:Color.X")) {
                 memcpy(color_XData, mEntityTable.mDataColumns["double:Color.X"].begin(), count * sizeof(double));
             }
             
             double* color_YData = new double[count];
-            if (columnExists(mEntityTable, "double:Color.Y")) {
+            if (mEntityTable.column_exists("double:Color.Y")) {
                 memcpy(color_YData, mEntityTable.mDataColumns["double:Color.Y"].begin(), count * sizeof(double));
             }
             
             double* color_ZData = new double[count];
-            if (columnExists(mEntityTable, "double:Color.Z")) {
+            if (mEntityTable.column_exists("double:Color.Z")) {
                 memcpy(color_ZData, mEntityTable.mDataColumns["double:Color.Z"].begin(), count * sizeof(double));
             }
             
             double* colorUvScaling_XData = new double[count];
-            if (columnExists(mEntityTable, "double:ColorUvScaling.X")) {
+            if (mEntityTable.column_exists("double:ColorUvScaling.X")) {
                 memcpy(colorUvScaling_XData, mEntityTable.mDataColumns["double:ColorUvScaling.X"].begin(), count * sizeof(double));
             }
             
             double* colorUvScaling_YData = new double[count];
-            if (columnExists(mEntityTable, "double:ColorUvScaling.Y")) {
+            if (mEntityTable.column_exists("double:ColorUvScaling.Y")) {
                 memcpy(colorUvScaling_YData, mEntityTable.mDataColumns["double:ColorUvScaling.Y"].begin(), count * sizeof(double));
             }
             
             double* colorUvOffset_XData = new double[count];
-            if (columnExists(mEntityTable, "double:ColorUvOffset.X")) {
+            if (mEntityTable.column_exists("double:ColorUvOffset.X")) {
                 memcpy(colorUvOffset_XData, mEntityTable.mDataColumns["double:ColorUvOffset.X"].begin(), count * sizeof(double));
             }
             
             double* colorUvOffset_YData = new double[count];
-            if (columnExists(mEntityTable, "double:ColorUvOffset.Y")) {
+            if (mEntityTable.column_exists("double:ColorUvOffset.Y")) {
                 memcpy(colorUvOffset_YData, mEntityTable.mDataColumns["double:ColorUvOffset.Y"].begin(), count * sizeof(double));
             }
             
             double* normalUvScaling_XData = new double[count];
-            if (columnExists(mEntityTable, "double:NormalUvScaling.X")) {
+            if (mEntityTable.column_exists("double:NormalUvScaling.X")) {
                 memcpy(normalUvScaling_XData, mEntityTable.mDataColumns["double:NormalUvScaling.X"].begin(), count * sizeof(double));
             }
             
             double* normalUvScaling_YData = new double[count];
-            if (columnExists(mEntityTable, "double:NormalUvScaling.Y")) {
+            if (mEntityTable.column_exists("double:NormalUvScaling.Y")) {
                 memcpy(normalUvScaling_YData, mEntityTable.mDataColumns["double:NormalUvScaling.Y"].begin(), count * sizeof(double));
             }
             
             double* normalUvOffset_XData = new double[count];
-            if (columnExists(mEntityTable, "double:NormalUvOffset.X")) {
+            if (mEntityTable.column_exists("double:NormalUvOffset.X")) {
                 memcpy(normalUvOffset_XData, mEntityTable.mDataColumns["double:NormalUvOffset.X"].begin(), count * sizeof(double));
             }
             
             double* normalUvOffset_YData = new double[count];
-            if (columnExists(mEntityTable, "double:NormalUvOffset.Y")) {
+            if (mEntityTable.column_exists("double:NormalUvOffset.Y")) {
                 memcpy(normalUvOffset_YData, mEntityTable.mDataColumns["double:NormalUvOffset.Y"].begin(), count * sizeof(double));
             }
             
             double* normalAmountData = new double[count];
-            if (columnExists(mEntityTable, "double:NormalAmount")) {
+            if (mEntityTable.column_exists("double:NormalAmount")) {
                 memcpy(normalAmountData, mEntityTable.mDataColumns["double:NormalAmount"].begin(), count * sizeof(double));
             }
             
             double* glossinessData = new double[count];
-            if (columnExists(mEntityTable, "double:Glossiness")) {
+            if (mEntityTable.column_exists("double:Glossiness")) {
                 memcpy(glossinessData, mEntityTable.mDataColumns["double:Glossiness"].begin(), count * sizeof(double));
             }
             
             double* smoothnessData = new double[count];
-            if (columnExists(mEntityTable, "double:Smoothness")) {
+            if (mEntityTable.column_exists("double:Smoothness")) {
                 memcpy(smoothnessData, mEntityTable.mDataColumns["double:Smoothness"].begin(), count * sizeof(double));
             }
             
             double* transparencyData = new double[count];
-            if (columnExists(mEntityTable, "double:Transparency")) {
+            if (mEntityTable.column_exists("double:Transparency")) {
                 memcpy(transparencyData, mEntityTable.mDataColumns["double:Transparency"].begin(), count * sizeof(double));
             }
             
-            const std::vector<int>& colorTextureFileData = columnExists(mEntityTable ,"index:Vim.Asset:ColorTextureFile") ? mEntityTable.mIndexColumns["index:Vim.Asset:ColorTextureFile"] : std::vector<int>();
-            const std::vector<int>& normalTextureFileData = columnExists(mEntityTable ,"index:Vim.Asset:NormalTextureFile") ? mEntityTable.mIndexColumns["index:Vim.Asset:NormalTextureFile"] : std::vector<int>();
-            const std::vector<int>& elementData = columnExists(mEntityTable ,"index:Vim.Element:Element") ? mEntityTable.mIndexColumns["index:Vim.Element:Element"] : std::vector<int>();
+            const std::vector<int>& colorTextureFileData = mEntityTable.column_exists("index:Vim.Asset:ColorTextureFile") ? mEntityTable.mIndexColumns["index:Vim.Asset:ColorTextureFile"] : std::vector<int>();
+            const std::vector<int>& normalTextureFileData = mEntityTable.column_exists("index:Vim.Asset:NormalTextureFile") ? mEntityTable.mIndexColumns["index:Vim.Asset:NormalTextureFile"] : std::vector<int>();
+            const std::vector<int>& elementData = mEntityTable.column_exists("index:Vim.Element:Element") ? mEntityTable.mIndexColumns["index:Vim.Element:Element"] : std::vector<int>();
             
             for (int i = 0; i < count; ++i)
             {
@@ -8574,7 +8505,7 @@ namespace Vim
             if (materialIndex < 0 || materialIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "string:Name")) {
+            if (mEntityTable.column_exists("string:Name")) {
                 return std::string(reinterpret_cast<const char*>(mStrings[mEntityTable.mStringColumns["string:Name"][materialIndex]]));
             }
             
@@ -8585,7 +8516,7 @@ namespace Vim
         {
             const auto count = GetCount();
             
-            const std::vector<int>& nameData = columnExists(mEntityTable, "string:Name") ? mEntityTable.mStringColumns["string:Name"] : std::vector<int>();
+            const std::vector<int>& nameData = mEntityTable.column_exists("string:Name") ? mEntityTable.mStringColumns["string:Name"] : std::vector<int>();
             
             std::vector<std::string>* result = new std::vector<std::string>();
             result->reserve(count);
@@ -8603,7 +8534,7 @@ namespace Vim
             if (materialIndex < 0 || materialIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "string:MaterialCategory")) {
+            if (mEntityTable.column_exists("string:MaterialCategory")) {
                 return std::string(reinterpret_cast<const char*>(mStrings[mEntityTable.mStringColumns["string:MaterialCategory"][materialIndex]]));
             }
             
@@ -8614,7 +8545,7 @@ namespace Vim
         {
             const auto count = GetCount();
             
-            const std::vector<int>& materialCategoryData = columnExists(mEntityTable, "string:MaterialCategory") ? mEntityTable.mStringColumns["string:MaterialCategory"] : std::vector<int>();
+            const std::vector<int>& materialCategoryData = mEntityTable.column_exists("string:MaterialCategory") ? mEntityTable.mStringColumns["string:MaterialCategory"] : std::vector<int>();
             
             std::vector<std::string>* result = new std::vector<std::string>();
             result->reserve(count);
@@ -8632,7 +8563,7 @@ namespace Vim
             if (materialIndex < 0 || materialIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "double:Color.X")) {
+            if (mEntityTable.column_exists("double:Color.X")) {
                 return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:Color.X"].begin() + materialIndex * sizeof(double)));
             }
             
@@ -8644,7 +8575,7 @@ namespace Vim
             const auto count = GetCount();
             
             double* color_XData = new double[count];
-            if (columnExists(mEntityTable, "double:Color.X")) {
+            if (mEntityTable.column_exists("double:Color.X")) {
                 memcpy(color_XData, mEntityTable.mDataColumns["double:Color.X"].begin(), count * sizeof(double));
             }
             
@@ -8660,7 +8591,7 @@ namespace Vim
             if (materialIndex < 0 || materialIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "double:Color.Y")) {
+            if (mEntityTable.column_exists("double:Color.Y")) {
                 return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:Color.Y"].begin() + materialIndex * sizeof(double)));
             }
             
@@ -8672,7 +8603,7 @@ namespace Vim
             const auto count = GetCount();
             
             double* color_YData = new double[count];
-            if (columnExists(mEntityTable, "double:Color.Y")) {
+            if (mEntityTable.column_exists("double:Color.Y")) {
                 memcpy(color_YData, mEntityTable.mDataColumns["double:Color.Y"].begin(), count * sizeof(double));
             }
             
@@ -8688,7 +8619,7 @@ namespace Vim
             if (materialIndex < 0 || materialIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "double:Color.Z")) {
+            if (mEntityTable.column_exists("double:Color.Z")) {
                 return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:Color.Z"].begin() + materialIndex * sizeof(double)));
             }
             
@@ -8700,7 +8631,7 @@ namespace Vim
             const auto count = GetCount();
             
             double* color_ZData = new double[count];
-            if (columnExists(mEntityTable, "double:Color.Z")) {
+            if (mEntityTable.column_exists("double:Color.Z")) {
                 memcpy(color_ZData, mEntityTable.mDataColumns["double:Color.Z"].begin(), count * sizeof(double));
             }
             
@@ -8716,7 +8647,7 @@ namespace Vim
             if (materialIndex < 0 || materialIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "double:ColorUvScaling.X")) {
+            if (mEntityTable.column_exists("double:ColorUvScaling.X")) {
                 return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:ColorUvScaling.X"].begin() + materialIndex * sizeof(double)));
             }
             
@@ -8728,7 +8659,7 @@ namespace Vim
             const auto count = GetCount();
             
             double* colorUvScaling_XData = new double[count];
-            if (columnExists(mEntityTable, "double:ColorUvScaling.X")) {
+            if (mEntityTable.column_exists("double:ColorUvScaling.X")) {
                 memcpy(colorUvScaling_XData, mEntityTable.mDataColumns["double:ColorUvScaling.X"].begin(), count * sizeof(double));
             }
             
@@ -8744,7 +8675,7 @@ namespace Vim
             if (materialIndex < 0 || materialIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "double:ColorUvScaling.Y")) {
+            if (mEntityTable.column_exists("double:ColorUvScaling.Y")) {
                 return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:ColorUvScaling.Y"].begin() + materialIndex * sizeof(double)));
             }
             
@@ -8756,7 +8687,7 @@ namespace Vim
             const auto count = GetCount();
             
             double* colorUvScaling_YData = new double[count];
-            if (columnExists(mEntityTable, "double:ColorUvScaling.Y")) {
+            if (mEntityTable.column_exists("double:ColorUvScaling.Y")) {
                 memcpy(colorUvScaling_YData, mEntityTable.mDataColumns["double:ColorUvScaling.Y"].begin(), count * sizeof(double));
             }
             
@@ -8772,7 +8703,7 @@ namespace Vim
             if (materialIndex < 0 || materialIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "double:ColorUvOffset.X")) {
+            if (mEntityTable.column_exists("double:ColorUvOffset.X")) {
                 return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:ColorUvOffset.X"].begin() + materialIndex * sizeof(double)));
             }
             
@@ -8784,7 +8715,7 @@ namespace Vim
             const auto count = GetCount();
             
             double* colorUvOffset_XData = new double[count];
-            if (columnExists(mEntityTable, "double:ColorUvOffset.X")) {
+            if (mEntityTable.column_exists("double:ColorUvOffset.X")) {
                 memcpy(colorUvOffset_XData, mEntityTable.mDataColumns["double:ColorUvOffset.X"].begin(), count * sizeof(double));
             }
             
@@ -8800,7 +8731,7 @@ namespace Vim
             if (materialIndex < 0 || materialIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "double:ColorUvOffset.Y")) {
+            if (mEntityTable.column_exists("double:ColorUvOffset.Y")) {
                 return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:ColorUvOffset.Y"].begin() + materialIndex * sizeof(double)));
             }
             
@@ -8812,7 +8743,7 @@ namespace Vim
             const auto count = GetCount();
             
             double* colorUvOffset_YData = new double[count];
-            if (columnExists(mEntityTable, "double:ColorUvOffset.Y")) {
+            if (mEntityTable.column_exists("double:ColorUvOffset.Y")) {
                 memcpy(colorUvOffset_YData, mEntityTable.mDataColumns["double:ColorUvOffset.Y"].begin(), count * sizeof(double));
             }
             
@@ -8828,7 +8759,7 @@ namespace Vim
             if (materialIndex < 0 || materialIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "double:NormalUvScaling.X")) {
+            if (mEntityTable.column_exists("double:NormalUvScaling.X")) {
                 return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:NormalUvScaling.X"].begin() + materialIndex * sizeof(double)));
             }
             
@@ -8840,7 +8771,7 @@ namespace Vim
             const auto count = GetCount();
             
             double* normalUvScaling_XData = new double[count];
-            if (columnExists(mEntityTable, "double:NormalUvScaling.X")) {
+            if (mEntityTable.column_exists("double:NormalUvScaling.X")) {
                 memcpy(normalUvScaling_XData, mEntityTable.mDataColumns["double:NormalUvScaling.X"].begin(), count * sizeof(double));
             }
             
@@ -8856,7 +8787,7 @@ namespace Vim
             if (materialIndex < 0 || materialIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "double:NormalUvScaling.Y")) {
+            if (mEntityTable.column_exists("double:NormalUvScaling.Y")) {
                 return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:NormalUvScaling.Y"].begin() + materialIndex * sizeof(double)));
             }
             
@@ -8868,7 +8799,7 @@ namespace Vim
             const auto count = GetCount();
             
             double* normalUvScaling_YData = new double[count];
-            if (columnExists(mEntityTable, "double:NormalUvScaling.Y")) {
+            if (mEntityTable.column_exists("double:NormalUvScaling.Y")) {
                 memcpy(normalUvScaling_YData, mEntityTable.mDataColumns["double:NormalUvScaling.Y"].begin(), count * sizeof(double));
             }
             
@@ -8884,7 +8815,7 @@ namespace Vim
             if (materialIndex < 0 || materialIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "double:NormalUvOffset.X")) {
+            if (mEntityTable.column_exists("double:NormalUvOffset.X")) {
                 return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:NormalUvOffset.X"].begin() + materialIndex * sizeof(double)));
             }
             
@@ -8896,7 +8827,7 @@ namespace Vim
             const auto count = GetCount();
             
             double* normalUvOffset_XData = new double[count];
-            if (columnExists(mEntityTable, "double:NormalUvOffset.X")) {
+            if (mEntityTable.column_exists("double:NormalUvOffset.X")) {
                 memcpy(normalUvOffset_XData, mEntityTable.mDataColumns["double:NormalUvOffset.X"].begin(), count * sizeof(double));
             }
             
@@ -8912,7 +8843,7 @@ namespace Vim
             if (materialIndex < 0 || materialIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "double:NormalUvOffset.Y")) {
+            if (mEntityTable.column_exists("double:NormalUvOffset.Y")) {
                 return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:NormalUvOffset.Y"].begin() + materialIndex * sizeof(double)));
             }
             
@@ -8924,7 +8855,7 @@ namespace Vim
             const auto count = GetCount();
             
             double* normalUvOffset_YData = new double[count];
-            if (columnExists(mEntityTable, "double:NormalUvOffset.Y")) {
+            if (mEntityTable.column_exists("double:NormalUvOffset.Y")) {
                 memcpy(normalUvOffset_YData, mEntityTable.mDataColumns["double:NormalUvOffset.Y"].begin(), count * sizeof(double));
             }
             
@@ -8940,7 +8871,7 @@ namespace Vim
             if (materialIndex < 0 || materialIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "double:NormalAmount")) {
+            if (mEntityTable.column_exists("double:NormalAmount")) {
                 return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:NormalAmount"].begin() + materialIndex * sizeof(double)));
             }
             
@@ -8952,7 +8883,7 @@ namespace Vim
             const auto count = GetCount();
             
             double* normalAmountData = new double[count];
-            if (columnExists(mEntityTable, "double:NormalAmount")) {
+            if (mEntityTable.column_exists("double:NormalAmount")) {
                 memcpy(normalAmountData, mEntityTable.mDataColumns["double:NormalAmount"].begin(), count * sizeof(double));
             }
             
@@ -8968,7 +8899,7 @@ namespace Vim
             if (materialIndex < 0 || materialIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "double:Glossiness")) {
+            if (mEntityTable.column_exists("double:Glossiness")) {
                 return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:Glossiness"].begin() + materialIndex * sizeof(double)));
             }
             
@@ -8980,7 +8911,7 @@ namespace Vim
             const auto count = GetCount();
             
             double* glossinessData = new double[count];
-            if (columnExists(mEntityTable, "double:Glossiness")) {
+            if (mEntityTable.column_exists("double:Glossiness")) {
                 memcpy(glossinessData, mEntityTable.mDataColumns["double:Glossiness"].begin(), count * sizeof(double));
             }
             
@@ -8996,7 +8927,7 @@ namespace Vim
             if (materialIndex < 0 || materialIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "double:Smoothness")) {
+            if (mEntityTable.column_exists("double:Smoothness")) {
                 return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:Smoothness"].begin() + materialIndex * sizeof(double)));
             }
             
@@ -9008,7 +8939,7 @@ namespace Vim
             const auto count = GetCount();
             
             double* smoothnessData = new double[count];
-            if (columnExists(mEntityTable, "double:Smoothness")) {
+            if (mEntityTable.column_exists("double:Smoothness")) {
                 memcpy(smoothnessData, mEntityTable.mDataColumns["double:Smoothness"].begin(), count * sizeof(double));
             }
             
@@ -9024,7 +8955,7 @@ namespace Vim
             if (materialIndex < 0 || materialIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "double:Transparency")) {
+            if (mEntityTable.column_exists("double:Transparency")) {
                 return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:Transparency"].begin() + materialIndex * sizeof(double)));
             }
             
@@ -9036,7 +8967,7 @@ namespace Vim
             const auto count = GetCount();
             
             double* transparencyData = new double[count];
-            if (columnExists(mEntityTable, "double:Transparency")) {
+            if (mEntityTable.column_exists("double:Transparency")) {
                 memcpy(transparencyData, mEntityTable.mDataColumns["double:Transparency"].begin(), count * sizeof(double));
             }
             
@@ -9049,7 +8980,7 @@ namespace Vim
         
         int GetColorTextureFileIndex(int materialIndex)
         {
-            if (!columnExists(mEntityTable, "index:Vim.Asset:ColorTextureFile")) {
+            if (!mEntityTable.column_exists("index:Vim.Asset:ColorTextureFile")) {
                 return -1;
             }
             
@@ -9061,7 +8992,7 @@ namespace Vim
         
         int GetNormalTextureFileIndex(int materialIndex)
         {
-            if (!columnExists(mEntityTable, "index:Vim.Asset:NormalTextureFile")) {
+            if (!mEntityTable.column_exists("index:Vim.Asset:NormalTextureFile")) {
                 return -1;
             }
             
@@ -9073,7 +9004,7 @@ namespace Vim
         
         int GetElementIndex(int materialIndex)
         {
-            if (!columnExists(mEntityTable, "index:Vim.Element:Element")) {
+            if (!mEntityTable.column_exists("index:Vim.Element:Element")) {
                 return -1;
             }
             
@@ -9119,7 +9050,7 @@ namespace Vim
         
         size_t GetCount()
         {
-            return getCount(mEntityTable);
+            return mEntityTable.get_count();
         }
         
         MaterialInElement* Get(int materialInElementIndex)
@@ -9136,11 +9067,11 @@ namespace Vim
         
         std::vector<MaterialInElement>* GetAll()
         {
-            bool existsArea = columnExists(mEntityTable, "double:Area");
-            bool existsVolume = columnExists(mEntityTable, "double:Volume");
-            bool existsIsPaint = columnExists(mEntityTable, "byte:IsPaint");
-            bool existsMaterial = columnExists(mEntityTable, "index:Vim.Material:Material");
-            bool existsElement = columnExists(mEntityTable, "index:Vim.Element:Element");
+            bool existsArea = mEntityTable.column_exists("double:Area");
+            bool existsVolume = mEntityTable.column_exists("double:Volume");
+            bool existsIsPaint = mEntityTable.column_exists("byte:IsPaint");
+            bool existsMaterial = mEntityTable.column_exists("index:Vim.Material:Material");
+            bool existsElement = mEntityTable.column_exists("index:Vim.Element:Element");
             
             const auto count = GetCount();
             
@@ -9148,22 +9079,22 @@ namespace Vim
             materialInElement->reserve(count);
             
             double* areaData = new double[count];
-            if (columnExists(mEntityTable, "double:Area")) {
+            if (mEntityTable.column_exists("double:Area")) {
                 memcpy(areaData, mEntityTable.mDataColumns["double:Area"].begin(), count * sizeof(double));
             }
             
             double* volumeData = new double[count];
-            if (columnExists(mEntityTable, "double:Volume")) {
+            if (mEntityTable.column_exists("double:Volume")) {
                 memcpy(volumeData, mEntityTable.mDataColumns["double:Volume"].begin(), count * sizeof(double));
             }
             
             bfast::byte* isPaintData = new bfast::byte[count];
-            if (columnExists(mEntityTable, "byte:IsPaint")) {
+            if (mEntityTable.column_exists("byte:IsPaint")) {
                 memcpy(isPaintData, mEntityTable.mDataColumns["byte:IsPaint"].begin(), count * sizeof(bfast::byte));
             }
             
-            const std::vector<int>& materialData = columnExists(mEntityTable ,"index:Vim.Material:Material") ? mEntityTable.mIndexColumns["index:Vim.Material:Material"] : std::vector<int>();
-            const std::vector<int>& elementData = columnExists(mEntityTable ,"index:Vim.Element:Element") ? mEntityTable.mIndexColumns["index:Vim.Element:Element"] : std::vector<int>();
+            const std::vector<int>& materialData = mEntityTable.column_exists("index:Vim.Material:Material") ? mEntityTable.mIndexColumns["index:Vim.Material:Material"] : std::vector<int>();
+            const std::vector<int>& elementData = mEntityTable.column_exists("index:Vim.Element:Element") ? mEntityTable.mIndexColumns["index:Vim.Element:Element"] : std::vector<int>();
             
             for (int i = 0; i < count; ++i)
             {
@@ -9192,7 +9123,7 @@ namespace Vim
             if (materialInElementIndex < 0 || materialInElementIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "double:Area")) {
+            if (mEntityTable.column_exists("double:Area")) {
                 return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:Area"].begin() + materialInElementIndex * sizeof(double)));
             }
             
@@ -9204,7 +9135,7 @@ namespace Vim
             const auto count = GetCount();
             
             double* areaData = new double[count];
-            if (columnExists(mEntityTable, "double:Area")) {
+            if (mEntityTable.column_exists("double:Area")) {
                 memcpy(areaData, mEntityTable.mDataColumns["double:Area"].begin(), count * sizeof(double));
             }
             
@@ -9220,7 +9151,7 @@ namespace Vim
             if (materialInElementIndex < 0 || materialInElementIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "double:Volume")) {
+            if (mEntityTable.column_exists("double:Volume")) {
                 return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:Volume"].begin() + materialInElementIndex * sizeof(double)));
             }
             
@@ -9232,7 +9163,7 @@ namespace Vim
             const auto count = GetCount();
             
             double* volumeData = new double[count];
-            if (columnExists(mEntityTable, "double:Volume")) {
+            if (mEntityTable.column_exists("double:Volume")) {
                 memcpy(volumeData, mEntityTable.mDataColumns["double:Volume"].begin(), count * sizeof(double));
             }
             
@@ -9248,7 +9179,7 @@ namespace Vim
             if (materialInElementIndex < 0 || materialInElementIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "byte:IsPaint")) {
+            if (mEntityTable.column_exists("byte:IsPaint")) {
                 return static_cast<bool>(*reinterpret_cast<bfast::byte*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["byte:IsPaint"].begin() + materialInElementIndex * sizeof(bfast::byte))));
             }
             
@@ -9260,7 +9191,7 @@ namespace Vim
             const auto count = GetCount();
             
             bfast::byte* isPaintData = new bfast::byte[count];
-            if (columnExists(mEntityTable, "byte:IsPaint")) {
+            if (mEntityTable.column_exists("byte:IsPaint")) {
                 memcpy(isPaintData, mEntityTable.mDataColumns["byte:IsPaint"].begin(), count * sizeof(bfast::byte));
             }
             
@@ -9273,7 +9204,7 @@ namespace Vim
         
         int GetMaterialIndex(int materialInElementIndex)
         {
-            if (!columnExists(mEntityTable, "index:Vim.Material:Material")) {
+            if (!mEntityTable.column_exists("index:Vim.Material:Material")) {
                 return -1;
             }
             
@@ -9285,7 +9216,7 @@ namespace Vim
         
         int GetElementIndex(int materialInElementIndex)
         {
-            if (!columnExists(mEntityTable, "index:Vim.Element:Element")) {
+            if (!mEntityTable.column_exists("index:Vim.Element:Element")) {
                 return -1;
             }
             
@@ -9331,7 +9262,7 @@ namespace Vim
         
         size_t GetCount()
         {
-            return getCount(mEntityTable);
+            return mEntityTable.get_count();
         }
         
         CompoundStructureLayer* Get(int compoundStructureLayerIndex)
@@ -9348,11 +9279,11 @@ namespace Vim
         
         std::vector<CompoundStructureLayer>* GetAll()
         {
-            bool existsOrderIndex = columnExists(mEntityTable, "int:OrderIndex");
-            bool existsWidth = columnExists(mEntityTable, "double:Width");
-            bool existsMaterialFunctionAssignment = columnExists(mEntityTable, "string:MaterialFunctionAssignment");
-            bool existsMaterial = columnExists(mEntityTable, "index:Vim.Material:Material");
-            bool existsCompoundStructure = columnExists(mEntityTable, "index:Vim.CompoundStructure:CompoundStructure");
+            bool existsOrderIndex = mEntityTable.column_exists("int:OrderIndex");
+            bool existsWidth = mEntityTable.column_exists("double:Width");
+            bool existsMaterialFunctionAssignment = mEntityTable.column_exists("string:MaterialFunctionAssignment");
+            bool existsMaterial = mEntityTable.column_exists("index:Vim.Material:Material");
+            bool existsCompoundStructure = mEntityTable.column_exists("index:Vim.CompoundStructure:CompoundStructure");
             
             const auto count = GetCount();
             
@@ -9360,19 +9291,19 @@ namespace Vim
             compoundStructureLayer->reserve(count);
             
             int* orderIndexData = new int[count];
-            if (columnExists(mEntityTable, "int:OrderIndex")) {
+            if (mEntityTable.column_exists("int:OrderIndex")) {
                 memcpy(orderIndexData, mEntityTable.mDataColumns["int:OrderIndex"].begin(), count * sizeof(int));
             }
             
             double* widthData = new double[count];
-            if (columnExists(mEntityTable, "double:Width")) {
+            if (mEntityTable.column_exists("double:Width")) {
                 memcpy(widthData, mEntityTable.mDataColumns["double:Width"].begin(), count * sizeof(double));
             }
             
-            const std::vector<int>& materialFunctionAssignmentData = columnExists(mEntityTable, "string:MaterialFunctionAssignment") ? mEntityTable.mStringColumns["string:MaterialFunctionAssignment"] : std::vector<int>();
+            const std::vector<int>& materialFunctionAssignmentData = mEntityTable.column_exists("string:MaterialFunctionAssignment") ? mEntityTable.mStringColumns["string:MaterialFunctionAssignment"] : std::vector<int>();
             
-            const std::vector<int>& materialData = columnExists(mEntityTable ,"index:Vim.Material:Material") ? mEntityTable.mIndexColumns["index:Vim.Material:Material"] : std::vector<int>();
-            const std::vector<int>& compoundStructureData = columnExists(mEntityTable ,"index:Vim.CompoundStructure:CompoundStructure") ? mEntityTable.mIndexColumns["index:Vim.CompoundStructure:CompoundStructure"] : std::vector<int>();
+            const std::vector<int>& materialData = mEntityTable.column_exists("index:Vim.Material:Material") ? mEntityTable.mIndexColumns["index:Vim.Material:Material"] : std::vector<int>();
+            const std::vector<int>& compoundStructureData = mEntityTable.column_exists("index:Vim.CompoundStructure:CompoundStructure") ? mEntityTable.mIndexColumns["index:Vim.CompoundStructure:CompoundStructure"] : std::vector<int>();
             
             for (int i = 0; i < count; ++i)
             {
@@ -9400,7 +9331,7 @@ namespace Vim
             if (compoundStructureLayerIndex < 0 || compoundStructureLayerIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "int:OrderIndex")) {
+            if (mEntityTable.column_exists("int:OrderIndex")) {
                 return *reinterpret_cast<int*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["int:OrderIndex"].begin() + compoundStructureLayerIndex * sizeof(int)));
             }
             
@@ -9412,7 +9343,7 @@ namespace Vim
             const auto count = GetCount();
             
             int* orderIndexData = new int[count];
-            if (columnExists(mEntityTable, "int:OrderIndex")) {
+            if (mEntityTable.column_exists("int:OrderIndex")) {
                 memcpy(orderIndexData, mEntityTable.mDataColumns["int:OrderIndex"].begin(), count * sizeof(int));
             }
             
@@ -9428,7 +9359,7 @@ namespace Vim
             if (compoundStructureLayerIndex < 0 || compoundStructureLayerIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "double:Width")) {
+            if (mEntityTable.column_exists("double:Width")) {
                 return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:Width"].begin() + compoundStructureLayerIndex * sizeof(double)));
             }
             
@@ -9440,7 +9371,7 @@ namespace Vim
             const auto count = GetCount();
             
             double* widthData = new double[count];
-            if (columnExists(mEntityTable, "double:Width")) {
+            if (mEntityTable.column_exists("double:Width")) {
                 memcpy(widthData, mEntityTable.mDataColumns["double:Width"].begin(), count * sizeof(double));
             }
             
@@ -9456,7 +9387,7 @@ namespace Vim
             if (compoundStructureLayerIndex < 0 || compoundStructureLayerIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "string:MaterialFunctionAssignment")) {
+            if (mEntityTable.column_exists("string:MaterialFunctionAssignment")) {
                 return std::string(reinterpret_cast<const char*>(mStrings[mEntityTable.mStringColumns["string:MaterialFunctionAssignment"][compoundStructureLayerIndex]]));
             }
             
@@ -9467,7 +9398,7 @@ namespace Vim
         {
             const auto count = GetCount();
             
-            const std::vector<int>& materialFunctionAssignmentData = columnExists(mEntityTable, "string:MaterialFunctionAssignment") ? mEntityTable.mStringColumns["string:MaterialFunctionAssignment"] : std::vector<int>();
+            const std::vector<int>& materialFunctionAssignmentData = mEntityTable.column_exists("string:MaterialFunctionAssignment") ? mEntityTable.mStringColumns["string:MaterialFunctionAssignment"] : std::vector<int>();
             
             std::vector<std::string>* result = new std::vector<std::string>();
             result->reserve(count);
@@ -9482,7 +9413,7 @@ namespace Vim
         
         int GetMaterialIndex(int compoundStructureLayerIndex)
         {
-            if (!columnExists(mEntityTable, "index:Vim.Material:Material")) {
+            if (!mEntityTable.column_exists("index:Vim.Material:Material")) {
                 return -1;
             }
             
@@ -9494,7 +9425,7 @@ namespace Vim
         
         int GetCompoundStructureIndex(int compoundStructureLayerIndex)
         {
-            if (!columnExists(mEntityTable, "index:Vim.CompoundStructure:CompoundStructure")) {
+            if (!mEntityTable.column_exists("index:Vim.CompoundStructure:CompoundStructure")) {
                 return -1;
             }
             
@@ -9536,7 +9467,7 @@ namespace Vim
         
         size_t GetCount()
         {
-            return getCount(mEntityTable);
+            return mEntityTable.get_count();
         }
         
         CompoundStructure* Get(int compoundStructureIndex)
@@ -9550,8 +9481,8 @@ namespace Vim
         
         std::vector<CompoundStructure>* GetAll()
         {
-            bool existsWidth = columnExists(mEntityTable, "double:Width");
-            bool existsStructuralLayer = columnExists(mEntityTable, "index:Vim.CompoundStructureLayer:StructuralLayer");
+            bool existsWidth = mEntityTable.column_exists("double:Width");
+            bool existsStructuralLayer = mEntityTable.column_exists("index:Vim.CompoundStructureLayer:StructuralLayer");
             
             const auto count = GetCount();
             
@@ -9559,11 +9490,11 @@ namespace Vim
             compoundStructure->reserve(count);
             
             double* widthData = new double[count];
-            if (columnExists(mEntityTable, "double:Width")) {
+            if (mEntityTable.column_exists("double:Width")) {
                 memcpy(widthData, mEntityTable.mDataColumns["double:Width"].begin(), count * sizeof(double));
             }
             
-            const std::vector<int>& structuralLayerData = columnExists(mEntityTable ,"index:Vim.CompoundStructureLayer:StructuralLayer") ? mEntityTable.mIndexColumns["index:Vim.CompoundStructureLayer:StructuralLayer"] : std::vector<int>();
+            const std::vector<int>& structuralLayerData = mEntityTable.column_exists("index:Vim.CompoundStructureLayer:StructuralLayer") ? mEntityTable.mIndexColumns["index:Vim.CompoundStructureLayer:StructuralLayer"] : std::vector<int>();
             
             for (int i = 0; i < count; ++i)
             {
@@ -9585,7 +9516,7 @@ namespace Vim
             if (compoundStructureIndex < 0 || compoundStructureIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "double:Width")) {
+            if (mEntityTable.column_exists("double:Width")) {
                 return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:Width"].begin() + compoundStructureIndex * sizeof(double)));
             }
             
@@ -9597,7 +9528,7 @@ namespace Vim
             const auto count = GetCount();
             
             double* widthData = new double[count];
-            if (columnExists(mEntityTable, "double:Width")) {
+            if (mEntityTable.column_exists("double:Width")) {
                 memcpy(widthData, mEntityTable.mDataColumns["double:Width"].begin(), count * sizeof(double));
             }
             
@@ -9610,7 +9541,7 @@ namespace Vim
         
         int GetStructuralLayerIndex(int compoundStructureIndex)
         {
-            if (!columnExists(mEntityTable, "index:Vim.CompoundStructureLayer:StructuralLayer")) {
+            if (!mEntityTable.column_exists("index:Vim.CompoundStructureLayer:StructuralLayer")) {
                 return -1;
             }
             
@@ -9651,7 +9582,7 @@ namespace Vim
         
         size_t GetCount()
         {
-            return getCount(mEntityTable);
+            return mEntityTable.get_count();
         }
         
         Node* Get(int nodeIndex)
@@ -9664,14 +9595,14 @@ namespace Vim
         
         std::vector<Node>* GetAll()
         {
-            bool existsElement = columnExists(mEntityTable, "index:Vim.Element:Element");
+            bool existsElement = mEntityTable.column_exists("index:Vim.Element:Element");
             
             const auto count = GetCount();
             
             std::vector<Node>* node = new std::vector<Node>();
             node->reserve(count);
             
-            const std::vector<int>& elementData = columnExists(mEntityTable ,"index:Vim.Element:Element") ? mEntityTable.mIndexColumns["index:Vim.Element:Element"] : std::vector<int>();
+            const std::vector<int>& elementData = mEntityTable.column_exists("index:Vim.Element:Element") ? mEntityTable.mIndexColumns["index:Vim.Element:Element"] : std::vector<int>();
             
             for (int i = 0; i < count; ++i)
             {
@@ -9686,7 +9617,7 @@ namespace Vim
         
         int GetElementIndex(int nodeIndex)
         {
-            if (!columnExists(mEntityTable, "index:Vim.Element:Element")) {
+            if (!mEntityTable.column_exists("index:Vim.Element:Element")) {
                 return -1;
             }
             
@@ -9732,7 +9663,7 @@ namespace Vim
         
         size_t GetCount()
         {
-            return getCount(mEntityTable);
+            return mEntityTable.get_count();
         }
         
         Geometry* Get(int geometryIndex)
@@ -9752,14 +9683,14 @@ namespace Vim
         
         std::vector<Geometry>* GetAll()
         {
-            bool existsBox_Min_X = columnExists(mEntityTable, "float:Box.Min.X");
-            bool existsBox_Min_Y = columnExists(mEntityTable, "float:Box.Min.Y");
-            bool existsBox_Min_Z = columnExists(mEntityTable, "float:Box.Min.Z");
-            bool existsBox_Max_X = columnExists(mEntityTable, "float:Box.Max.X");
-            bool existsBox_Max_Y = columnExists(mEntityTable, "float:Box.Max.Y");
-            bool existsBox_Max_Z = columnExists(mEntityTable, "float:Box.Max.Z");
-            bool existsVertexCount = columnExists(mEntityTable, "int:VertexCount");
-            bool existsFaceCount = columnExists(mEntityTable, "int:FaceCount");
+            bool existsBox_Min_X = mEntityTable.column_exists("float:Box.Min.X");
+            bool existsBox_Min_Y = mEntityTable.column_exists("float:Box.Min.Y");
+            bool existsBox_Min_Z = mEntityTable.column_exists("float:Box.Min.Z");
+            bool existsBox_Max_X = mEntityTable.column_exists("float:Box.Max.X");
+            bool existsBox_Max_Y = mEntityTable.column_exists("float:Box.Max.Y");
+            bool existsBox_Max_Z = mEntityTable.column_exists("float:Box.Max.Z");
+            bool existsVertexCount = mEntityTable.column_exists("int:VertexCount");
+            bool existsFaceCount = mEntityTable.column_exists("int:FaceCount");
             
             const auto count = GetCount();
             
@@ -9767,42 +9698,42 @@ namespace Vim
             geometry->reserve(count);
             
             float* box_Min_XData = new float[count];
-            if (columnExists(mEntityTable, "float:Box.Min.X")) {
+            if (mEntityTable.column_exists("float:Box.Min.X")) {
                 memcpy(box_Min_XData, mEntityTable.mDataColumns["float:Box.Min.X"].begin(), count * sizeof(float));
             }
             
             float* box_Min_YData = new float[count];
-            if (columnExists(mEntityTable, "float:Box.Min.Y")) {
+            if (mEntityTable.column_exists("float:Box.Min.Y")) {
                 memcpy(box_Min_YData, mEntityTable.mDataColumns["float:Box.Min.Y"].begin(), count * sizeof(float));
             }
             
             float* box_Min_ZData = new float[count];
-            if (columnExists(mEntityTable, "float:Box.Min.Z")) {
+            if (mEntityTable.column_exists("float:Box.Min.Z")) {
                 memcpy(box_Min_ZData, mEntityTable.mDataColumns["float:Box.Min.Z"].begin(), count * sizeof(float));
             }
             
             float* box_Max_XData = new float[count];
-            if (columnExists(mEntityTable, "float:Box.Max.X")) {
+            if (mEntityTable.column_exists("float:Box.Max.X")) {
                 memcpy(box_Max_XData, mEntityTable.mDataColumns["float:Box.Max.X"].begin(), count * sizeof(float));
             }
             
             float* box_Max_YData = new float[count];
-            if (columnExists(mEntityTable, "float:Box.Max.Y")) {
+            if (mEntityTable.column_exists("float:Box.Max.Y")) {
                 memcpy(box_Max_YData, mEntityTable.mDataColumns["float:Box.Max.Y"].begin(), count * sizeof(float));
             }
             
             float* box_Max_ZData = new float[count];
-            if (columnExists(mEntityTable, "float:Box.Max.Z")) {
+            if (mEntityTable.column_exists("float:Box.Max.Z")) {
                 memcpy(box_Max_ZData, mEntityTable.mDataColumns["float:Box.Max.Z"].begin(), count * sizeof(float));
             }
             
             int* vertexCountData = new int[count];
-            if (columnExists(mEntityTable, "int:VertexCount")) {
+            if (mEntityTable.column_exists("int:VertexCount")) {
                 memcpy(vertexCountData, mEntityTable.mDataColumns["int:VertexCount"].begin(), count * sizeof(int));
             }
             
             int* faceCountData = new int[count];
-            if (columnExists(mEntityTable, "int:FaceCount")) {
+            if (mEntityTable.column_exists("int:FaceCount")) {
                 memcpy(faceCountData, mEntityTable.mDataColumns["int:FaceCount"].begin(), count * sizeof(int));
             }
             
@@ -9846,7 +9777,7 @@ namespace Vim
             if (geometryIndex < 0 || geometryIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "float:Box.Min.X")) {
+            if (mEntityTable.column_exists("float:Box.Min.X")) {
                 return *reinterpret_cast<float*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["float:Box.Min.X"].begin() + geometryIndex * sizeof(float)));
             }
             
@@ -9858,7 +9789,7 @@ namespace Vim
             const auto count = GetCount();
             
             float* box_Min_XData = new float[count];
-            if (columnExists(mEntityTable, "float:Box.Min.X")) {
+            if (mEntityTable.column_exists("float:Box.Min.X")) {
                 memcpy(box_Min_XData, mEntityTable.mDataColumns["float:Box.Min.X"].begin(), count * sizeof(float));
             }
             
@@ -9874,7 +9805,7 @@ namespace Vim
             if (geometryIndex < 0 || geometryIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "float:Box.Min.Y")) {
+            if (mEntityTable.column_exists("float:Box.Min.Y")) {
                 return *reinterpret_cast<float*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["float:Box.Min.Y"].begin() + geometryIndex * sizeof(float)));
             }
             
@@ -9886,7 +9817,7 @@ namespace Vim
             const auto count = GetCount();
             
             float* box_Min_YData = new float[count];
-            if (columnExists(mEntityTable, "float:Box.Min.Y")) {
+            if (mEntityTable.column_exists("float:Box.Min.Y")) {
                 memcpy(box_Min_YData, mEntityTable.mDataColumns["float:Box.Min.Y"].begin(), count * sizeof(float));
             }
             
@@ -9902,7 +9833,7 @@ namespace Vim
             if (geometryIndex < 0 || geometryIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "float:Box.Min.Z")) {
+            if (mEntityTable.column_exists("float:Box.Min.Z")) {
                 return *reinterpret_cast<float*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["float:Box.Min.Z"].begin() + geometryIndex * sizeof(float)));
             }
             
@@ -9914,7 +9845,7 @@ namespace Vim
             const auto count = GetCount();
             
             float* box_Min_ZData = new float[count];
-            if (columnExists(mEntityTable, "float:Box.Min.Z")) {
+            if (mEntityTable.column_exists("float:Box.Min.Z")) {
                 memcpy(box_Min_ZData, mEntityTable.mDataColumns["float:Box.Min.Z"].begin(), count * sizeof(float));
             }
             
@@ -9930,7 +9861,7 @@ namespace Vim
             if (geometryIndex < 0 || geometryIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "float:Box.Max.X")) {
+            if (mEntityTable.column_exists("float:Box.Max.X")) {
                 return *reinterpret_cast<float*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["float:Box.Max.X"].begin() + geometryIndex * sizeof(float)));
             }
             
@@ -9942,7 +9873,7 @@ namespace Vim
             const auto count = GetCount();
             
             float* box_Max_XData = new float[count];
-            if (columnExists(mEntityTable, "float:Box.Max.X")) {
+            if (mEntityTable.column_exists("float:Box.Max.X")) {
                 memcpy(box_Max_XData, mEntityTable.mDataColumns["float:Box.Max.X"].begin(), count * sizeof(float));
             }
             
@@ -9958,7 +9889,7 @@ namespace Vim
             if (geometryIndex < 0 || geometryIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "float:Box.Max.Y")) {
+            if (mEntityTable.column_exists("float:Box.Max.Y")) {
                 return *reinterpret_cast<float*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["float:Box.Max.Y"].begin() + geometryIndex * sizeof(float)));
             }
             
@@ -9970,7 +9901,7 @@ namespace Vim
             const auto count = GetCount();
             
             float* box_Max_YData = new float[count];
-            if (columnExists(mEntityTable, "float:Box.Max.Y")) {
+            if (mEntityTable.column_exists("float:Box.Max.Y")) {
                 memcpy(box_Max_YData, mEntityTable.mDataColumns["float:Box.Max.Y"].begin(), count * sizeof(float));
             }
             
@@ -9986,7 +9917,7 @@ namespace Vim
             if (geometryIndex < 0 || geometryIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "float:Box.Max.Z")) {
+            if (mEntityTable.column_exists("float:Box.Max.Z")) {
                 return *reinterpret_cast<float*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["float:Box.Max.Z"].begin() + geometryIndex * sizeof(float)));
             }
             
@@ -9998,7 +9929,7 @@ namespace Vim
             const auto count = GetCount();
             
             float* box_Max_ZData = new float[count];
-            if (columnExists(mEntityTable, "float:Box.Max.Z")) {
+            if (mEntityTable.column_exists("float:Box.Max.Z")) {
                 memcpy(box_Max_ZData, mEntityTable.mDataColumns["float:Box.Max.Z"].begin(), count * sizeof(float));
             }
             
@@ -10014,7 +9945,7 @@ namespace Vim
             if (geometryIndex < 0 || geometryIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "int:VertexCount")) {
+            if (mEntityTable.column_exists("int:VertexCount")) {
                 return *reinterpret_cast<int*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["int:VertexCount"].begin() + geometryIndex * sizeof(int)));
             }
             
@@ -10026,7 +9957,7 @@ namespace Vim
             const auto count = GetCount();
             
             int* vertexCountData = new int[count];
-            if (columnExists(mEntityTable, "int:VertexCount")) {
+            if (mEntityTable.column_exists("int:VertexCount")) {
                 memcpy(vertexCountData, mEntityTable.mDataColumns["int:VertexCount"].begin(), count * sizeof(int));
             }
             
@@ -10042,7 +9973,7 @@ namespace Vim
             if (geometryIndex < 0 || geometryIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "int:FaceCount")) {
+            if (mEntityTable.column_exists("int:FaceCount")) {
                 return *reinterpret_cast<int*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["int:FaceCount"].begin() + geometryIndex * sizeof(int)));
             }
             
@@ -10054,7 +9985,7 @@ namespace Vim
             const auto count = GetCount();
             
             int* faceCountData = new int[count];
-            if (columnExists(mEntityTable, "int:FaceCount")) {
+            if (mEntityTable.column_exists("int:FaceCount")) {
                 memcpy(faceCountData, mEntityTable.mDataColumns["int:FaceCount"].begin(), count * sizeof(int));
             }
             
@@ -10096,7 +10027,7 @@ namespace Vim
         
         size_t GetCount()
         {
-            return getCount(mEntityTable);
+            return mEntityTable.get_count();
         }
         
         Shape* Get(int shapeIndex)
@@ -10109,14 +10040,14 @@ namespace Vim
         
         std::vector<Shape>* GetAll()
         {
-            bool existsElement = columnExists(mEntityTable, "index:Vim.Element:Element");
+            bool existsElement = mEntityTable.column_exists("index:Vim.Element:Element");
             
             const auto count = GetCount();
             
             std::vector<Shape>* shape = new std::vector<Shape>();
             shape->reserve(count);
             
-            const std::vector<int>& elementData = columnExists(mEntityTable ,"index:Vim.Element:Element") ? mEntityTable.mIndexColumns["index:Vim.Element:Element"] : std::vector<int>();
+            const std::vector<int>& elementData = mEntityTable.column_exists("index:Vim.Element:Element") ? mEntityTable.mIndexColumns["index:Vim.Element:Element"] : std::vector<int>();
             
             for (int i = 0; i < count; ++i)
             {
@@ -10131,7 +10062,7 @@ namespace Vim
         
         int GetElementIndex(int shapeIndex)
         {
-            if (!columnExists(mEntityTable, "index:Vim.Element:Element")) {
+            if (!mEntityTable.column_exists("index:Vim.Element:Element")) {
                 return -1;
             }
             
@@ -10172,7 +10103,7 @@ namespace Vim
         
         size_t GetCount()
         {
-            return getCount(mEntityTable);
+            return mEntityTable.get_count();
         }
         
         ShapeCollection* Get(int shapeCollectionIndex)
@@ -10185,14 +10116,14 @@ namespace Vim
         
         std::vector<ShapeCollection>* GetAll()
         {
-            bool existsElement = columnExists(mEntityTable, "index:Vim.Element:Element");
+            bool existsElement = mEntityTable.column_exists("index:Vim.Element:Element");
             
             const auto count = GetCount();
             
             std::vector<ShapeCollection>* shapeCollection = new std::vector<ShapeCollection>();
             shapeCollection->reserve(count);
             
-            const std::vector<int>& elementData = columnExists(mEntityTable ,"index:Vim.Element:Element") ? mEntityTable.mIndexColumns["index:Vim.Element:Element"] : std::vector<int>();
+            const std::vector<int>& elementData = mEntityTable.column_exists("index:Vim.Element:Element") ? mEntityTable.mIndexColumns["index:Vim.Element:Element"] : std::vector<int>();
             
             for (int i = 0; i < count; ++i)
             {
@@ -10207,7 +10138,7 @@ namespace Vim
         
         int GetElementIndex(int shapeCollectionIndex)
         {
-            if (!columnExists(mEntityTable, "index:Vim.Element:Element")) {
+            if (!mEntityTable.column_exists("index:Vim.Element:Element")) {
                 return -1;
             }
             
@@ -10250,7 +10181,7 @@ namespace Vim
         
         size_t GetCount()
         {
-            return getCount(mEntityTable);
+            return mEntityTable.get_count();
         }
         
         ShapeInShapeCollection* Get(int shapeInShapeCollectionIndex)
@@ -10264,16 +10195,16 @@ namespace Vim
         
         std::vector<ShapeInShapeCollection>* GetAll()
         {
-            bool existsShape = columnExists(mEntityTable, "index:Vim.Shape:Shape");
-            bool existsShapeCollection = columnExists(mEntityTable, "index:Vim.ShapeCollection:ShapeCollection");
+            bool existsShape = mEntityTable.column_exists("index:Vim.Shape:Shape");
+            bool existsShapeCollection = mEntityTable.column_exists("index:Vim.ShapeCollection:ShapeCollection");
             
             const auto count = GetCount();
             
             std::vector<ShapeInShapeCollection>* shapeInShapeCollection = new std::vector<ShapeInShapeCollection>();
             shapeInShapeCollection->reserve(count);
             
-            const std::vector<int>& shapeData = columnExists(mEntityTable ,"index:Vim.Shape:Shape") ? mEntityTable.mIndexColumns["index:Vim.Shape:Shape"] : std::vector<int>();
-            const std::vector<int>& shapeCollectionData = columnExists(mEntityTable ,"index:Vim.ShapeCollection:ShapeCollection") ? mEntityTable.mIndexColumns["index:Vim.ShapeCollection:ShapeCollection"] : std::vector<int>();
+            const std::vector<int>& shapeData = mEntityTable.column_exists("index:Vim.Shape:Shape") ? mEntityTable.mIndexColumns["index:Vim.Shape:Shape"] : std::vector<int>();
+            const std::vector<int>& shapeCollectionData = mEntityTable.column_exists("index:Vim.ShapeCollection:ShapeCollection") ? mEntityTable.mIndexColumns["index:Vim.ShapeCollection:ShapeCollection"] : std::vector<int>();
             
             for (int i = 0; i < count; ++i)
             {
@@ -10289,7 +10220,7 @@ namespace Vim
         
         int GetShapeIndex(int shapeInShapeCollectionIndex)
         {
-            if (!columnExists(mEntityTable, "index:Vim.Shape:Shape")) {
+            if (!mEntityTable.column_exists("index:Vim.Shape:Shape")) {
                 return -1;
             }
             
@@ -10301,7 +10232,7 @@ namespace Vim
         
         int GetShapeCollectionIndex(int shapeInShapeCollectionIndex)
         {
-            if (!columnExists(mEntityTable, "index:Vim.ShapeCollection:ShapeCollection")) {
+            if (!mEntityTable.column_exists("index:Vim.ShapeCollection:ShapeCollection")) {
                 return -1;
             }
             
@@ -10345,7 +10276,7 @@ namespace Vim
         
         size_t GetCount()
         {
-            return getCount(mEntityTable);
+            return mEntityTable.get_count();
         }
         
         System* Get(int systemIndex)
@@ -10360,9 +10291,9 @@ namespace Vim
         
         std::vector<System>* GetAll()
         {
-            bool existsSystemType = columnExists(mEntityTable, "int:SystemType");
-            bool existsFamilyType = columnExists(mEntityTable, "index:Vim.FamilyType:FamilyType");
-            bool existsElement = columnExists(mEntityTable, "index:Vim.Element:Element");
+            bool existsSystemType = mEntityTable.column_exists("int:SystemType");
+            bool existsFamilyType = mEntityTable.column_exists("index:Vim.FamilyType:FamilyType");
+            bool existsElement = mEntityTable.column_exists("index:Vim.Element:Element");
             
             const auto count = GetCount();
             
@@ -10370,12 +10301,12 @@ namespace Vim
             system->reserve(count);
             
             int* systemTypeData = new int[count];
-            if (columnExists(mEntityTable, "int:SystemType")) {
+            if (mEntityTable.column_exists("int:SystemType")) {
                 memcpy(systemTypeData, mEntityTable.mDataColumns["int:SystemType"].begin(), count * sizeof(int));
             }
             
-            const std::vector<int>& familyTypeData = columnExists(mEntityTable ,"index:Vim.FamilyType:FamilyType") ? mEntityTable.mIndexColumns["index:Vim.FamilyType:FamilyType"] : std::vector<int>();
-            const std::vector<int>& elementData = columnExists(mEntityTable ,"index:Vim.Element:Element") ? mEntityTable.mIndexColumns["index:Vim.Element:Element"] : std::vector<int>();
+            const std::vector<int>& familyTypeData = mEntityTable.column_exists("index:Vim.FamilyType:FamilyType") ? mEntityTable.mIndexColumns["index:Vim.FamilyType:FamilyType"] : std::vector<int>();
+            const std::vector<int>& elementData = mEntityTable.column_exists("index:Vim.Element:Element") ? mEntityTable.mIndexColumns["index:Vim.Element:Element"] : std::vector<int>();
             
             for (int i = 0; i < count; ++i)
             {
@@ -10398,7 +10329,7 @@ namespace Vim
             if (systemIndex < 0 || systemIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "int:SystemType")) {
+            if (mEntityTable.column_exists("int:SystemType")) {
                 return *reinterpret_cast<int*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["int:SystemType"].begin() + systemIndex * sizeof(int)));
             }
             
@@ -10410,7 +10341,7 @@ namespace Vim
             const auto count = GetCount();
             
             int* systemTypeData = new int[count];
-            if (columnExists(mEntityTable, "int:SystemType")) {
+            if (mEntityTable.column_exists("int:SystemType")) {
                 memcpy(systemTypeData, mEntityTable.mDataColumns["int:SystemType"].begin(), count * sizeof(int));
             }
             
@@ -10423,7 +10354,7 @@ namespace Vim
         
         int GetFamilyTypeIndex(int systemIndex)
         {
-            if (!columnExists(mEntityTable, "index:Vim.FamilyType:FamilyType")) {
+            if (!mEntityTable.column_exists("index:Vim.FamilyType:FamilyType")) {
                 return -1;
             }
             
@@ -10435,7 +10366,7 @@ namespace Vim
         
         int GetElementIndex(int systemIndex)
         {
-            if (!columnExists(mEntityTable, "index:Vim.Element:Element")) {
+            if (!mEntityTable.column_exists("index:Vim.Element:Element")) {
                 return -1;
             }
             
@@ -10479,7 +10410,7 @@ namespace Vim
         
         size_t GetCount()
         {
-            return getCount(mEntityTable);
+            return mEntityTable.get_count();
         }
         
         ElementInSystem* Get(int elementInSystemIndex)
@@ -10494,9 +10425,9 @@ namespace Vim
         
         std::vector<ElementInSystem>* GetAll()
         {
-            bool existsRoles = columnExists(mEntityTable, "int:Roles");
-            bool existsSystem = columnExists(mEntityTable, "index:Vim.System:System");
-            bool existsElement = columnExists(mEntityTable, "index:Vim.Element:Element");
+            bool existsRoles = mEntityTable.column_exists("int:Roles");
+            bool existsSystem = mEntityTable.column_exists("index:Vim.System:System");
+            bool existsElement = mEntityTable.column_exists("index:Vim.Element:Element");
             
             const auto count = GetCount();
             
@@ -10504,12 +10435,12 @@ namespace Vim
             elementInSystem->reserve(count);
             
             int* rolesData = new int[count];
-            if (columnExists(mEntityTable, "int:Roles")) {
+            if (mEntityTable.column_exists("int:Roles")) {
                 memcpy(rolesData, mEntityTable.mDataColumns["int:Roles"].begin(), count * sizeof(int));
             }
             
-            const std::vector<int>& systemData = columnExists(mEntityTable ,"index:Vim.System:System") ? mEntityTable.mIndexColumns["index:Vim.System:System"] : std::vector<int>();
-            const std::vector<int>& elementData = columnExists(mEntityTable ,"index:Vim.Element:Element") ? mEntityTable.mIndexColumns["index:Vim.Element:Element"] : std::vector<int>();
+            const std::vector<int>& systemData = mEntityTable.column_exists("index:Vim.System:System") ? mEntityTable.mIndexColumns["index:Vim.System:System"] : std::vector<int>();
+            const std::vector<int>& elementData = mEntityTable.column_exists("index:Vim.Element:Element") ? mEntityTable.mIndexColumns["index:Vim.Element:Element"] : std::vector<int>();
             
             for (int i = 0; i < count; ++i)
             {
@@ -10532,7 +10463,7 @@ namespace Vim
             if (elementInSystemIndex < 0 || elementInSystemIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "int:Roles")) {
+            if (mEntityTable.column_exists("int:Roles")) {
                 return *reinterpret_cast<int*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["int:Roles"].begin() + elementInSystemIndex * sizeof(int)));
             }
             
@@ -10544,7 +10475,7 @@ namespace Vim
             const auto count = GetCount();
             
             int* rolesData = new int[count];
-            if (columnExists(mEntityTable, "int:Roles")) {
+            if (mEntityTable.column_exists("int:Roles")) {
                 memcpy(rolesData, mEntityTable.mDataColumns["int:Roles"].begin(), count * sizeof(int));
             }
             
@@ -10557,7 +10488,7 @@ namespace Vim
         
         int GetSystemIndex(int elementInSystemIndex)
         {
-            if (!columnExists(mEntityTable, "index:Vim.System:System")) {
+            if (!mEntityTable.column_exists("index:Vim.System:System")) {
                 return -1;
             }
             
@@ -10569,7 +10500,7 @@ namespace Vim
         
         int GetElementIndex(int elementInSystemIndex)
         {
-            if (!columnExists(mEntityTable, "index:Vim.Element:Element")) {
+            if (!mEntityTable.column_exists("index:Vim.Element:Element")) {
                 return -1;
             }
             
@@ -10613,7 +10544,7 @@ namespace Vim
         
         size_t GetCount()
         {
-            return getCount(mEntityTable);
+            return mEntityTable.get_count();
         }
         
         Warning* Get(int warningIndex)
@@ -10629,23 +10560,23 @@ namespace Vim
         
         std::vector<Warning>* GetAll()
         {
-            bool existsGuid = columnExists(mEntityTable, "string:Guid");
-            bool existsSeverity = columnExists(mEntityTable, "string:Severity");
-            bool existsDescription = columnExists(mEntityTable, "string:Description");
-            bool existsBimDocument = columnExists(mEntityTable, "index:Vim.BimDocument:BimDocument");
+            bool existsGuid = mEntityTable.column_exists("string:Guid");
+            bool existsSeverity = mEntityTable.column_exists("string:Severity");
+            bool existsDescription = mEntityTable.column_exists("string:Description");
+            bool existsBimDocument = mEntityTable.column_exists("index:Vim.BimDocument:BimDocument");
             
             const auto count = GetCount();
             
             std::vector<Warning>* warning = new std::vector<Warning>();
             warning->reserve(count);
             
-            const std::vector<int>& guidData = columnExists(mEntityTable, "string:Guid") ? mEntityTable.mStringColumns["string:Guid"] : std::vector<int>();
+            const std::vector<int>& guidData = mEntityTable.column_exists("string:Guid") ? mEntityTable.mStringColumns["string:Guid"] : std::vector<int>();
             
-            const std::vector<int>& severityData = columnExists(mEntityTable, "string:Severity") ? mEntityTable.mStringColumns["string:Severity"] : std::vector<int>();
+            const std::vector<int>& severityData = mEntityTable.column_exists("string:Severity") ? mEntityTable.mStringColumns["string:Severity"] : std::vector<int>();
             
-            const std::vector<int>& descriptionData = columnExists(mEntityTable, "string:Description") ? mEntityTable.mStringColumns["string:Description"] : std::vector<int>();
+            const std::vector<int>& descriptionData = mEntityTable.column_exists("string:Description") ? mEntityTable.mStringColumns["string:Description"] : std::vector<int>();
             
-            const std::vector<int>& bimDocumentData = columnExists(mEntityTable ,"index:Vim.BimDocument:BimDocument") ? mEntityTable.mIndexColumns["index:Vim.BimDocument:BimDocument"] : std::vector<int>();
+            const std::vector<int>& bimDocumentData = mEntityTable.column_exists("index:Vim.BimDocument:BimDocument") ? mEntityTable.mIndexColumns["index:Vim.BimDocument:BimDocument"] : std::vector<int>();
             
             for (int i = 0; i < count; ++i)
             {
@@ -10669,7 +10600,7 @@ namespace Vim
             if (warningIndex < 0 || warningIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "string:Guid")) {
+            if (mEntityTable.column_exists("string:Guid")) {
                 return std::string(reinterpret_cast<const char*>(mStrings[mEntityTable.mStringColumns["string:Guid"][warningIndex]]));
             }
             
@@ -10680,7 +10611,7 @@ namespace Vim
         {
             const auto count = GetCount();
             
-            const std::vector<int>& guidData = columnExists(mEntityTable, "string:Guid") ? mEntityTable.mStringColumns["string:Guid"] : std::vector<int>();
+            const std::vector<int>& guidData = mEntityTable.column_exists("string:Guid") ? mEntityTable.mStringColumns["string:Guid"] : std::vector<int>();
             
             std::vector<std::string>* result = new std::vector<std::string>();
             result->reserve(count);
@@ -10698,7 +10629,7 @@ namespace Vim
             if (warningIndex < 0 || warningIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "string:Severity")) {
+            if (mEntityTable.column_exists("string:Severity")) {
                 return std::string(reinterpret_cast<const char*>(mStrings[mEntityTable.mStringColumns["string:Severity"][warningIndex]]));
             }
             
@@ -10709,7 +10640,7 @@ namespace Vim
         {
             const auto count = GetCount();
             
-            const std::vector<int>& severityData = columnExists(mEntityTable, "string:Severity") ? mEntityTable.mStringColumns["string:Severity"] : std::vector<int>();
+            const std::vector<int>& severityData = mEntityTable.column_exists("string:Severity") ? mEntityTable.mStringColumns["string:Severity"] : std::vector<int>();
             
             std::vector<std::string>* result = new std::vector<std::string>();
             result->reserve(count);
@@ -10727,7 +10658,7 @@ namespace Vim
             if (warningIndex < 0 || warningIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "string:Description")) {
+            if (mEntityTable.column_exists("string:Description")) {
                 return std::string(reinterpret_cast<const char*>(mStrings[mEntityTable.mStringColumns["string:Description"][warningIndex]]));
             }
             
@@ -10738,7 +10669,7 @@ namespace Vim
         {
             const auto count = GetCount();
             
-            const std::vector<int>& descriptionData = columnExists(mEntityTable, "string:Description") ? mEntityTable.mStringColumns["string:Description"] : std::vector<int>();
+            const std::vector<int>& descriptionData = mEntityTable.column_exists("string:Description") ? mEntityTable.mStringColumns["string:Description"] : std::vector<int>();
             
             std::vector<std::string>* result = new std::vector<std::string>();
             result->reserve(count);
@@ -10753,7 +10684,7 @@ namespace Vim
         
         int GetBimDocumentIndex(int warningIndex)
         {
-            if (!columnExists(mEntityTable, "index:Vim.BimDocument:BimDocument")) {
+            if (!mEntityTable.column_exists("index:Vim.BimDocument:BimDocument")) {
                 return -1;
             }
             
@@ -10796,7 +10727,7 @@ namespace Vim
         
         size_t GetCount()
         {
-            return getCount(mEntityTable);
+            return mEntityTable.get_count();
         }
         
         ElementInWarning* Get(int elementInWarningIndex)
@@ -10810,16 +10741,16 @@ namespace Vim
         
         std::vector<ElementInWarning>* GetAll()
         {
-            bool existsWarning = columnExists(mEntityTable, "index:Vim.Warning:Warning");
-            bool existsElement = columnExists(mEntityTable, "index:Vim.Element:Element");
+            bool existsWarning = mEntityTable.column_exists("index:Vim.Warning:Warning");
+            bool existsElement = mEntityTable.column_exists("index:Vim.Element:Element");
             
             const auto count = GetCount();
             
             std::vector<ElementInWarning>* elementInWarning = new std::vector<ElementInWarning>();
             elementInWarning->reserve(count);
             
-            const std::vector<int>& warningData = columnExists(mEntityTable ,"index:Vim.Warning:Warning") ? mEntityTable.mIndexColumns["index:Vim.Warning:Warning"] : std::vector<int>();
-            const std::vector<int>& elementData = columnExists(mEntityTable ,"index:Vim.Element:Element") ? mEntityTable.mIndexColumns["index:Vim.Element:Element"] : std::vector<int>();
+            const std::vector<int>& warningData = mEntityTable.column_exists("index:Vim.Warning:Warning") ? mEntityTable.mIndexColumns["index:Vim.Warning:Warning"] : std::vector<int>();
+            const std::vector<int>& elementData = mEntityTable.column_exists("index:Vim.Element:Element") ? mEntityTable.mIndexColumns["index:Vim.Element:Element"] : std::vector<int>();
             
             for (int i = 0; i < count; ++i)
             {
@@ -10835,7 +10766,7 @@ namespace Vim
         
         int GetWarningIndex(int elementInWarningIndex)
         {
-            if (!columnExists(mEntityTable, "index:Vim.Warning:Warning")) {
+            if (!mEntityTable.column_exists("index:Vim.Warning:Warning")) {
                 return -1;
             }
             
@@ -10847,7 +10778,7 @@ namespace Vim
         
         int GetElementIndex(int elementInWarningIndex)
         {
-            if (!columnExists(mEntityTable, "index:Vim.Element:Element")) {
+            if (!mEntityTable.column_exists("index:Vim.Element:Element")) {
                 return -1;
             }
             
@@ -10895,7 +10826,7 @@ namespace Vim
         
         size_t GetCount()
         {
-            return getCount(mEntityTable);
+            return mEntityTable.get_count();
         }
         
         BasePoint* Get(int basePointIndex)
@@ -10915,14 +10846,14 @@ namespace Vim
         
         std::vector<BasePoint>* GetAll()
         {
-            bool existsIsSurveyPoint = columnExists(mEntityTable, "byte:IsSurveyPoint");
-            bool existsPosition_X = columnExists(mEntityTable, "double:Position.X");
-            bool existsPosition_Y = columnExists(mEntityTable, "double:Position.Y");
-            bool existsPosition_Z = columnExists(mEntityTable, "double:Position.Z");
-            bool existsSharedPosition_X = columnExists(mEntityTable, "double:SharedPosition.X");
-            bool existsSharedPosition_Y = columnExists(mEntityTable, "double:SharedPosition.Y");
-            bool existsSharedPosition_Z = columnExists(mEntityTable, "double:SharedPosition.Z");
-            bool existsElement = columnExists(mEntityTable, "index:Vim.Element:Element");
+            bool existsIsSurveyPoint = mEntityTable.column_exists("byte:IsSurveyPoint");
+            bool existsPosition_X = mEntityTable.column_exists("double:Position.X");
+            bool existsPosition_Y = mEntityTable.column_exists("double:Position.Y");
+            bool existsPosition_Z = mEntityTable.column_exists("double:Position.Z");
+            bool existsSharedPosition_X = mEntityTable.column_exists("double:SharedPosition.X");
+            bool existsSharedPosition_Y = mEntityTable.column_exists("double:SharedPosition.Y");
+            bool existsSharedPosition_Z = mEntityTable.column_exists("double:SharedPosition.Z");
+            bool existsElement = mEntityTable.column_exists("index:Vim.Element:Element");
             
             const auto count = GetCount();
             
@@ -10930,41 +10861,41 @@ namespace Vim
             basePoint->reserve(count);
             
             bfast::byte* isSurveyPointData = new bfast::byte[count];
-            if (columnExists(mEntityTable, "byte:IsSurveyPoint")) {
+            if (mEntityTable.column_exists("byte:IsSurveyPoint")) {
                 memcpy(isSurveyPointData, mEntityTable.mDataColumns["byte:IsSurveyPoint"].begin(), count * sizeof(bfast::byte));
             }
             
             double* position_XData = new double[count];
-            if (columnExists(mEntityTable, "double:Position.X")) {
+            if (mEntityTable.column_exists("double:Position.X")) {
                 memcpy(position_XData, mEntityTable.mDataColumns["double:Position.X"].begin(), count * sizeof(double));
             }
             
             double* position_YData = new double[count];
-            if (columnExists(mEntityTable, "double:Position.Y")) {
+            if (mEntityTable.column_exists("double:Position.Y")) {
                 memcpy(position_YData, mEntityTable.mDataColumns["double:Position.Y"].begin(), count * sizeof(double));
             }
             
             double* position_ZData = new double[count];
-            if (columnExists(mEntityTable, "double:Position.Z")) {
+            if (mEntityTable.column_exists("double:Position.Z")) {
                 memcpy(position_ZData, mEntityTable.mDataColumns["double:Position.Z"].begin(), count * sizeof(double));
             }
             
             double* sharedPosition_XData = new double[count];
-            if (columnExists(mEntityTable, "double:SharedPosition.X")) {
+            if (mEntityTable.column_exists("double:SharedPosition.X")) {
                 memcpy(sharedPosition_XData, mEntityTable.mDataColumns["double:SharedPosition.X"].begin(), count * sizeof(double));
             }
             
             double* sharedPosition_YData = new double[count];
-            if (columnExists(mEntityTable, "double:SharedPosition.Y")) {
+            if (mEntityTable.column_exists("double:SharedPosition.Y")) {
                 memcpy(sharedPosition_YData, mEntityTable.mDataColumns["double:SharedPosition.Y"].begin(), count * sizeof(double));
             }
             
             double* sharedPosition_ZData = new double[count];
-            if (columnExists(mEntityTable, "double:SharedPosition.Z")) {
+            if (mEntityTable.column_exists("double:SharedPosition.Z")) {
                 memcpy(sharedPosition_ZData, mEntityTable.mDataColumns["double:SharedPosition.Z"].begin(), count * sizeof(double));
             }
             
-            const std::vector<int>& elementData = columnExists(mEntityTable ,"index:Vim.Element:Element") ? mEntityTable.mIndexColumns["index:Vim.Element:Element"] : std::vector<int>();
+            const std::vector<int>& elementData = mEntityTable.column_exists("index:Vim.Element:Element") ? mEntityTable.mIndexColumns["index:Vim.Element:Element"] : std::vector<int>();
             
             for (int i = 0; i < count; ++i)
             {
@@ -11004,7 +10935,7 @@ namespace Vim
             if (basePointIndex < 0 || basePointIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "byte:IsSurveyPoint")) {
+            if (mEntityTable.column_exists("byte:IsSurveyPoint")) {
                 return static_cast<bool>(*reinterpret_cast<bfast::byte*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["byte:IsSurveyPoint"].begin() + basePointIndex * sizeof(bfast::byte))));
             }
             
@@ -11016,7 +10947,7 @@ namespace Vim
             const auto count = GetCount();
             
             bfast::byte* isSurveyPointData = new bfast::byte[count];
-            if (columnExists(mEntityTable, "byte:IsSurveyPoint")) {
+            if (mEntityTable.column_exists("byte:IsSurveyPoint")) {
                 memcpy(isSurveyPointData, mEntityTable.mDataColumns["byte:IsSurveyPoint"].begin(), count * sizeof(bfast::byte));
             }
             
@@ -11032,7 +10963,7 @@ namespace Vim
             if (basePointIndex < 0 || basePointIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "double:Position.X")) {
+            if (mEntityTable.column_exists("double:Position.X")) {
                 return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:Position.X"].begin() + basePointIndex * sizeof(double)));
             }
             
@@ -11044,7 +10975,7 @@ namespace Vim
             const auto count = GetCount();
             
             double* position_XData = new double[count];
-            if (columnExists(mEntityTable, "double:Position.X")) {
+            if (mEntityTable.column_exists("double:Position.X")) {
                 memcpy(position_XData, mEntityTable.mDataColumns["double:Position.X"].begin(), count * sizeof(double));
             }
             
@@ -11060,7 +10991,7 @@ namespace Vim
             if (basePointIndex < 0 || basePointIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "double:Position.Y")) {
+            if (mEntityTable.column_exists("double:Position.Y")) {
                 return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:Position.Y"].begin() + basePointIndex * sizeof(double)));
             }
             
@@ -11072,7 +11003,7 @@ namespace Vim
             const auto count = GetCount();
             
             double* position_YData = new double[count];
-            if (columnExists(mEntityTable, "double:Position.Y")) {
+            if (mEntityTable.column_exists("double:Position.Y")) {
                 memcpy(position_YData, mEntityTable.mDataColumns["double:Position.Y"].begin(), count * sizeof(double));
             }
             
@@ -11088,7 +11019,7 @@ namespace Vim
             if (basePointIndex < 0 || basePointIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "double:Position.Z")) {
+            if (mEntityTable.column_exists("double:Position.Z")) {
                 return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:Position.Z"].begin() + basePointIndex * sizeof(double)));
             }
             
@@ -11100,7 +11031,7 @@ namespace Vim
             const auto count = GetCount();
             
             double* position_ZData = new double[count];
-            if (columnExists(mEntityTable, "double:Position.Z")) {
+            if (mEntityTable.column_exists("double:Position.Z")) {
                 memcpy(position_ZData, mEntityTable.mDataColumns["double:Position.Z"].begin(), count * sizeof(double));
             }
             
@@ -11116,7 +11047,7 @@ namespace Vim
             if (basePointIndex < 0 || basePointIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "double:SharedPosition.X")) {
+            if (mEntityTable.column_exists("double:SharedPosition.X")) {
                 return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:SharedPosition.X"].begin() + basePointIndex * sizeof(double)));
             }
             
@@ -11128,7 +11059,7 @@ namespace Vim
             const auto count = GetCount();
             
             double* sharedPosition_XData = new double[count];
-            if (columnExists(mEntityTable, "double:SharedPosition.X")) {
+            if (mEntityTable.column_exists("double:SharedPosition.X")) {
                 memcpy(sharedPosition_XData, mEntityTable.mDataColumns["double:SharedPosition.X"].begin(), count * sizeof(double));
             }
             
@@ -11144,7 +11075,7 @@ namespace Vim
             if (basePointIndex < 0 || basePointIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "double:SharedPosition.Y")) {
+            if (mEntityTable.column_exists("double:SharedPosition.Y")) {
                 return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:SharedPosition.Y"].begin() + basePointIndex * sizeof(double)));
             }
             
@@ -11156,7 +11087,7 @@ namespace Vim
             const auto count = GetCount();
             
             double* sharedPosition_YData = new double[count];
-            if (columnExists(mEntityTable, "double:SharedPosition.Y")) {
+            if (mEntityTable.column_exists("double:SharedPosition.Y")) {
                 memcpy(sharedPosition_YData, mEntityTable.mDataColumns["double:SharedPosition.Y"].begin(), count * sizeof(double));
             }
             
@@ -11172,7 +11103,7 @@ namespace Vim
             if (basePointIndex < 0 || basePointIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "double:SharedPosition.Z")) {
+            if (mEntityTable.column_exists("double:SharedPosition.Z")) {
                 return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:SharedPosition.Z"].begin() + basePointIndex * sizeof(double)));
             }
             
@@ -11184,7 +11115,7 @@ namespace Vim
             const auto count = GetCount();
             
             double* sharedPosition_ZData = new double[count];
-            if (columnExists(mEntityTable, "double:SharedPosition.Z")) {
+            if (mEntityTable.column_exists("double:SharedPosition.Z")) {
                 memcpy(sharedPosition_ZData, mEntityTable.mDataColumns["double:SharedPosition.Z"].begin(), count * sizeof(double));
             }
             
@@ -11197,7 +11128,7 @@ namespace Vim
         
         int GetElementIndex(int basePointIndex)
         {
-            if (!columnExists(mEntityTable, "index:Vim.Element:Element")) {
+            if (!mEntityTable.column_exists("index:Vim.Element:Element")) {
                 return -1;
             }
             
@@ -11242,7 +11173,7 @@ namespace Vim
         
         size_t GetCount()
         {
-            return getCount(mEntityTable);
+            return mEntityTable.get_count();
         }
         
         PhaseFilter* Get(int phaseFilterIndex)
@@ -11259,11 +11190,11 @@ namespace Vim
         
         std::vector<PhaseFilter>* GetAll()
         {
-            bool existsNew = columnExists(mEntityTable, "int:New");
-            bool existsExisting = columnExists(mEntityTable, "int:Existing");
-            bool existsDemolished = columnExists(mEntityTable, "int:Demolished");
-            bool existsTemporary = columnExists(mEntityTable, "int:Temporary");
-            bool existsElement = columnExists(mEntityTable, "index:Vim.Element:Element");
+            bool existsNew = mEntityTable.column_exists("int:New");
+            bool existsExisting = mEntityTable.column_exists("int:Existing");
+            bool existsDemolished = mEntityTable.column_exists("int:Demolished");
+            bool existsTemporary = mEntityTable.column_exists("int:Temporary");
+            bool existsElement = mEntityTable.column_exists("index:Vim.Element:Element");
             
             const auto count = GetCount();
             
@@ -11271,26 +11202,26 @@ namespace Vim
             phaseFilter->reserve(count);
             
             int* newData = new int[count];
-            if (columnExists(mEntityTable, "int:New")) {
+            if (mEntityTable.column_exists("int:New")) {
                 memcpy(newData, mEntityTable.mDataColumns["int:New"].begin(), count * sizeof(int));
             }
             
             int* existingData = new int[count];
-            if (columnExists(mEntityTable, "int:Existing")) {
+            if (mEntityTable.column_exists("int:Existing")) {
                 memcpy(existingData, mEntityTable.mDataColumns["int:Existing"].begin(), count * sizeof(int));
             }
             
             int* demolishedData = new int[count];
-            if (columnExists(mEntityTable, "int:Demolished")) {
+            if (mEntityTable.column_exists("int:Demolished")) {
                 memcpy(demolishedData, mEntityTable.mDataColumns["int:Demolished"].begin(), count * sizeof(int));
             }
             
             int* temporaryData = new int[count];
-            if (columnExists(mEntityTable, "int:Temporary")) {
+            if (mEntityTable.column_exists("int:Temporary")) {
                 memcpy(temporaryData, mEntityTable.mDataColumns["int:Temporary"].begin(), count * sizeof(int));
             }
             
-            const std::vector<int>& elementData = columnExists(mEntityTable ,"index:Vim.Element:Element") ? mEntityTable.mIndexColumns["index:Vim.Element:Element"] : std::vector<int>();
+            const std::vector<int>& elementData = mEntityTable.column_exists("index:Vim.Element:Element") ? mEntityTable.mIndexColumns["index:Vim.Element:Element"] : std::vector<int>();
             
             for (int i = 0; i < count; ++i)
             {
@@ -11321,7 +11252,7 @@ namespace Vim
             if (phaseFilterIndex < 0 || phaseFilterIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "int:New")) {
+            if (mEntityTable.column_exists("int:New")) {
                 return *reinterpret_cast<int*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["int:New"].begin() + phaseFilterIndex * sizeof(int)));
             }
             
@@ -11333,7 +11264,7 @@ namespace Vim
             const auto count = GetCount();
             
             int* newData = new int[count];
-            if (columnExists(mEntityTable, "int:New")) {
+            if (mEntityTable.column_exists("int:New")) {
                 memcpy(newData, mEntityTable.mDataColumns["int:New"].begin(), count * sizeof(int));
             }
             
@@ -11349,7 +11280,7 @@ namespace Vim
             if (phaseFilterIndex < 0 || phaseFilterIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "int:Existing")) {
+            if (mEntityTable.column_exists("int:Existing")) {
                 return *reinterpret_cast<int*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["int:Existing"].begin() + phaseFilterIndex * sizeof(int)));
             }
             
@@ -11361,7 +11292,7 @@ namespace Vim
             const auto count = GetCount();
             
             int* existingData = new int[count];
-            if (columnExists(mEntityTable, "int:Existing")) {
+            if (mEntityTable.column_exists("int:Existing")) {
                 memcpy(existingData, mEntityTable.mDataColumns["int:Existing"].begin(), count * sizeof(int));
             }
             
@@ -11377,7 +11308,7 @@ namespace Vim
             if (phaseFilterIndex < 0 || phaseFilterIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "int:Demolished")) {
+            if (mEntityTable.column_exists("int:Demolished")) {
                 return *reinterpret_cast<int*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["int:Demolished"].begin() + phaseFilterIndex * sizeof(int)));
             }
             
@@ -11389,7 +11320,7 @@ namespace Vim
             const auto count = GetCount();
             
             int* demolishedData = new int[count];
-            if (columnExists(mEntityTable, "int:Demolished")) {
+            if (mEntityTable.column_exists("int:Demolished")) {
                 memcpy(demolishedData, mEntityTable.mDataColumns["int:Demolished"].begin(), count * sizeof(int));
             }
             
@@ -11405,7 +11336,7 @@ namespace Vim
             if (phaseFilterIndex < 0 || phaseFilterIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "int:Temporary")) {
+            if (mEntityTable.column_exists("int:Temporary")) {
                 return *reinterpret_cast<int*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["int:Temporary"].begin() + phaseFilterIndex * sizeof(int)));
             }
             
@@ -11417,7 +11348,7 @@ namespace Vim
             const auto count = GetCount();
             
             int* temporaryData = new int[count];
-            if (columnExists(mEntityTable, "int:Temporary")) {
+            if (mEntityTable.column_exists("int:Temporary")) {
                 memcpy(temporaryData, mEntityTable.mDataColumns["int:Temporary"].begin(), count * sizeof(int));
             }
             
@@ -11430,7 +11361,7 @@ namespace Vim
         
         int GetElementIndex(int phaseFilterIndex)
         {
-            if (!columnExists(mEntityTable, "index:Vim.Element:Element")) {
+            if (!mEntityTable.column_exists("index:Vim.Element:Element")) {
                 return -1;
             }
             
@@ -11486,7 +11417,7 @@ namespace Vim
         
         size_t GetCount()
         {
-            return getCount(mEntityTable);
+            return mEntityTable.get_count();
         }
         
         Grid* Get(int gridIndex)
@@ -11513,21 +11444,21 @@ namespace Vim
         
         std::vector<Grid>* GetAll()
         {
-            bool existsStartPoint_X = columnExists(mEntityTable, "double:StartPoint.X");
-            bool existsStartPoint_Y = columnExists(mEntityTable, "double:StartPoint.Y");
-            bool existsStartPoint_Z = columnExists(mEntityTable, "double:StartPoint.Z");
-            bool existsEndPoint_X = columnExists(mEntityTable, "double:EndPoint.X");
-            bool existsEndPoint_Y = columnExists(mEntityTable, "double:EndPoint.Y");
-            bool existsEndPoint_Z = columnExists(mEntityTable, "double:EndPoint.Z");
-            bool existsIsCurved = columnExists(mEntityTable, "byte:IsCurved");
-            bool existsExtents_Min_X = columnExists(mEntityTable, "double:Extents.Min.X");
-            bool existsExtents_Min_Y = columnExists(mEntityTable, "double:Extents.Min.Y");
-            bool existsExtents_Min_Z = columnExists(mEntityTable, "double:Extents.Min.Z");
-            bool existsExtents_Max_X = columnExists(mEntityTable, "double:Extents.Max.X");
-            bool existsExtents_Max_Y = columnExists(mEntityTable, "double:Extents.Max.Y");
-            bool existsExtents_Max_Z = columnExists(mEntityTable, "double:Extents.Max.Z");
-            bool existsFamilyType = columnExists(mEntityTable, "index:Vim.FamilyType:FamilyType");
-            bool existsElement = columnExists(mEntityTable, "index:Vim.Element:Element");
+            bool existsStartPoint_X = mEntityTable.column_exists("double:StartPoint.X");
+            bool existsStartPoint_Y = mEntityTable.column_exists("double:StartPoint.Y");
+            bool existsStartPoint_Z = mEntityTable.column_exists("double:StartPoint.Z");
+            bool existsEndPoint_X = mEntityTable.column_exists("double:EndPoint.X");
+            bool existsEndPoint_Y = mEntityTable.column_exists("double:EndPoint.Y");
+            bool existsEndPoint_Z = mEntityTable.column_exists("double:EndPoint.Z");
+            bool existsIsCurved = mEntityTable.column_exists("byte:IsCurved");
+            bool existsExtents_Min_X = mEntityTable.column_exists("double:Extents.Min.X");
+            bool existsExtents_Min_Y = mEntityTable.column_exists("double:Extents.Min.Y");
+            bool existsExtents_Min_Z = mEntityTable.column_exists("double:Extents.Min.Z");
+            bool existsExtents_Max_X = mEntityTable.column_exists("double:Extents.Max.X");
+            bool existsExtents_Max_Y = mEntityTable.column_exists("double:Extents.Max.Y");
+            bool existsExtents_Max_Z = mEntityTable.column_exists("double:Extents.Max.Z");
+            bool existsFamilyType = mEntityTable.column_exists("index:Vim.FamilyType:FamilyType");
+            bool existsElement = mEntityTable.column_exists("index:Vim.Element:Element");
             
             const auto count = GetCount();
             
@@ -11535,72 +11466,72 @@ namespace Vim
             grid->reserve(count);
             
             double* startPoint_XData = new double[count];
-            if (columnExists(mEntityTable, "double:StartPoint.X")) {
+            if (mEntityTable.column_exists("double:StartPoint.X")) {
                 memcpy(startPoint_XData, mEntityTable.mDataColumns["double:StartPoint.X"].begin(), count * sizeof(double));
             }
             
             double* startPoint_YData = new double[count];
-            if (columnExists(mEntityTable, "double:StartPoint.Y")) {
+            if (mEntityTable.column_exists("double:StartPoint.Y")) {
                 memcpy(startPoint_YData, mEntityTable.mDataColumns["double:StartPoint.Y"].begin(), count * sizeof(double));
             }
             
             double* startPoint_ZData = new double[count];
-            if (columnExists(mEntityTable, "double:StartPoint.Z")) {
+            if (mEntityTable.column_exists("double:StartPoint.Z")) {
                 memcpy(startPoint_ZData, mEntityTable.mDataColumns["double:StartPoint.Z"].begin(), count * sizeof(double));
             }
             
             double* endPoint_XData = new double[count];
-            if (columnExists(mEntityTable, "double:EndPoint.X")) {
+            if (mEntityTable.column_exists("double:EndPoint.X")) {
                 memcpy(endPoint_XData, mEntityTable.mDataColumns["double:EndPoint.X"].begin(), count * sizeof(double));
             }
             
             double* endPoint_YData = new double[count];
-            if (columnExists(mEntityTable, "double:EndPoint.Y")) {
+            if (mEntityTable.column_exists("double:EndPoint.Y")) {
                 memcpy(endPoint_YData, mEntityTable.mDataColumns["double:EndPoint.Y"].begin(), count * sizeof(double));
             }
             
             double* endPoint_ZData = new double[count];
-            if (columnExists(mEntityTable, "double:EndPoint.Z")) {
+            if (mEntityTable.column_exists("double:EndPoint.Z")) {
                 memcpy(endPoint_ZData, mEntityTable.mDataColumns["double:EndPoint.Z"].begin(), count * sizeof(double));
             }
             
             bfast::byte* isCurvedData = new bfast::byte[count];
-            if (columnExists(mEntityTable, "byte:IsCurved")) {
+            if (mEntityTable.column_exists("byte:IsCurved")) {
                 memcpy(isCurvedData, mEntityTable.mDataColumns["byte:IsCurved"].begin(), count * sizeof(bfast::byte));
             }
             
             double* extents_Min_XData = new double[count];
-            if (columnExists(mEntityTable, "double:Extents.Min.X")) {
+            if (mEntityTable.column_exists("double:Extents.Min.X")) {
                 memcpy(extents_Min_XData, mEntityTable.mDataColumns["double:Extents.Min.X"].begin(), count * sizeof(double));
             }
             
             double* extents_Min_YData = new double[count];
-            if (columnExists(mEntityTable, "double:Extents.Min.Y")) {
+            if (mEntityTable.column_exists("double:Extents.Min.Y")) {
                 memcpy(extents_Min_YData, mEntityTable.mDataColumns["double:Extents.Min.Y"].begin(), count * sizeof(double));
             }
             
             double* extents_Min_ZData = new double[count];
-            if (columnExists(mEntityTable, "double:Extents.Min.Z")) {
+            if (mEntityTable.column_exists("double:Extents.Min.Z")) {
                 memcpy(extents_Min_ZData, mEntityTable.mDataColumns["double:Extents.Min.Z"].begin(), count * sizeof(double));
             }
             
             double* extents_Max_XData = new double[count];
-            if (columnExists(mEntityTable, "double:Extents.Max.X")) {
+            if (mEntityTable.column_exists("double:Extents.Max.X")) {
                 memcpy(extents_Max_XData, mEntityTable.mDataColumns["double:Extents.Max.X"].begin(), count * sizeof(double));
             }
             
             double* extents_Max_YData = new double[count];
-            if (columnExists(mEntityTable, "double:Extents.Max.Y")) {
+            if (mEntityTable.column_exists("double:Extents.Max.Y")) {
                 memcpy(extents_Max_YData, mEntityTable.mDataColumns["double:Extents.Max.Y"].begin(), count * sizeof(double));
             }
             
             double* extents_Max_ZData = new double[count];
-            if (columnExists(mEntityTable, "double:Extents.Max.Z")) {
+            if (mEntityTable.column_exists("double:Extents.Max.Z")) {
                 memcpy(extents_Max_ZData, mEntityTable.mDataColumns["double:Extents.Max.Z"].begin(), count * sizeof(double));
             }
             
-            const std::vector<int>& familyTypeData = columnExists(mEntityTable ,"index:Vim.FamilyType:FamilyType") ? mEntityTable.mIndexColumns["index:Vim.FamilyType:FamilyType"] : std::vector<int>();
-            const std::vector<int>& elementData = columnExists(mEntityTable ,"index:Vim.Element:Element") ? mEntityTable.mIndexColumns["index:Vim.Element:Element"] : std::vector<int>();
+            const std::vector<int>& familyTypeData = mEntityTable.column_exists("index:Vim.FamilyType:FamilyType") ? mEntityTable.mIndexColumns["index:Vim.FamilyType:FamilyType"] : std::vector<int>();
+            const std::vector<int>& elementData = mEntityTable.column_exists("index:Vim.Element:Element") ? mEntityTable.mIndexColumns["index:Vim.Element:Element"] : std::vector<int>();
             
             for (int i = 0; i < count; ++i)
             {
@@ -11659,7 +11590,7 @@ namespace Vim
             if (gridIndex < 0 || gridIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "double:StartPoint.X")) {
+            if (mEntityTable.column_exists("double:StartPoint.X")) {
                 return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:StartPoint.X"].begin() + gridIndex * sizeof(double)));
             }
             
@@ -11671,7 +11602,7 @@ namespace Vim
             const auto count = GetCount();
             
             double* startPoint_XData = new double[count];
-            if (columnExists(mEntityTable, "double:StartPoint.X")) {
+            if (mEntityTable.column_exists("double:StartPoint.X")) {
                 memcpy(startPoint_XData, mEntityTable.mDataColumns["double:StartPoint.X"].begin(), count * sizeof(double));
             }
             
@@ -11687,7 +11618,7 @@ namespace Vim
             if (gridIndex < 0 || gridIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "double:StartPoint.Y")) {
+            if (mEntityTable.column_exists("double:StartPoint.Y")) {
                 return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:StartPoint.Y"].begin() + gridIndex * sizeof(double)));
             }
             
@@ -11699,7 +11630,7 @@ namespace Vim
             const auto count = GetCount();
             
             double* startPoint_YData = new double[count];
-            if (columnExists(mEntityTable, "double:StartPoint.Y")) {
+            if (mEntityTable.column_exists("double:StartPoint.Y")) {
                 memcpy(startPoint_YData, mEntityTable.mDataColumns["double:StartPoint.Y"].begin(), count * sizeof(double));
             }
             
@@ -11715,7 +11646,7 @@ namespace Vim
             if (gridIndex < 0 || gridIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "double:StartPoint.Z")) {
+            if (mEntityTable.column_exists("double:StartPoint.Z")) {
                 return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:StartPoint.Z"].begin() + gridIndex * sizeof(double)));
             }
             
@@ -11727,7 +11658,7 @@ namespace Vim
             const auto count = GetCount();
             
             double* startPoint_ZData = new double[count];
-            if (columnExists(mEntityTable, "double:StartPoint.Z")) {
+            if (mEntityTable.column_exists("double:StartPoint.Z")) {
                 memcpy(startPoint_ZData, mEntityTable.mDataColumns["double:StartPoint.Z"].begin(), count * sizeof(double));
             }
             
@@ -11743,7 +11674,7 @@ namespace Vim
             if (gridIndex < 0 || gridIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "double:EndPoint.X")) {
+            if (mEntityTable.column_exists("double:EndPoint.X")) {
                 return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:EndPoint.X"].begin() + gridIndex * sizeof(double)));
             }
             
@@ -11755,7 +11686,7 @@ namespace Vim
             const auto count = GetCount();
             
             double* endPoint_XData = new double[count];
-            if (columnExists(mEntityTable, "double:EndPoint.X")) {
+            if (mEntityTable.column_exists("double:EndPoint.X")) {
                 memcpy(endPoint_XData, mEntityTable.mDataColumns["double:EndPoint.X"].begin(), count * sizeof(double));
             }
             
@@ -11771,7 +11702,7 @@ namespace Vim
             if (gridIndex < 0 || gridIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "double:EndPoint.Y")) {
+            if (mEntityTable.column_exists("double:EndPoint.Y")) {
                 return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:EndPoint.Y"].begin() + gridIndex * sizeof(double)));
             }
             
@@ -11783,7 +11714,7 @@ namespace Vim
             const auto count = GetCount();
             
             double* endPoint_YData = new double[count];
-            if (columnExists(mEntityTable, "double:EndPoint.Y")) {
+            if (mEntityTable.column_exists("double:EndPoint.Y")) {
                 memcpy(endPoint_YData, mEntityTable.mDataColumns["double:EndPoint.Y"].begin(), count * sizeof(double));
             }
             
@@ -11799,7 +11730,7 @@ namespace Vim
             if (gridIndex < 0 || gridIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "double:EndPoint.Z")) {
+            if (mEntityTable.column_exists("double:EndPoint.Z")) {
                 return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:EndPoint.Z"].begin() + gridIndex * sizeof(double)));
             }
             
@@ -11811,7 +11742,7 @@ namespace Vim
             const auto count = GetCount();
             
             double* endPoint_ZData = new double[count];
-            if (columnExists(mEntityTable, "double:EndPoint.Z")) {
+            if (mEntityTable.column_exists("double:EndPoint.Z")) {
                 memcpy(endPoint_ZData, mEntityTable.mDataColumns["double:EndPoint.Z"].begin(), count * sizeof(double));
             }
             
@@ -11827,7 +11758,7 @@ namespace Vim
             if (gridIndex < 0 || gridIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "byte:IsCurved")) {
+            if (mEntityTable.column_exists("byte:IsCurved")) {
                 return static_cast<bool>(*reinterpret_cast<bfast::byte*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["byte:IsCurved"].begin() + gridIndex * sizeof(bfast::byte))));
             }
             
@@ -11839,7 +11770,7 @@ namespace Vim
             const auto count = GetCount();
             
             bfast::byte* isCurvedData = new bfast::byte[count];
-            if (columnExists(mEntityTable, "byte:IsCurved")) {
+            if (mEntityTable.column_exists("byte:IsCurved")) {
                 memcpy(isCurvedData, mEntityTable.mDataColumns["byte:IsCurved"].begin(), count * sizeof(bfast::byte));
             }
             
@@ -11855,7 +11786,7 @@ namespace Vim
             if (gridIndex < 0 || gridIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "double:Extents.Min.X")) {
+            if (mEntityTable.column_exists("double:Extents.Min.X")) {
                 return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:Extents.Min.X"].begin() + gridIndex * sizeof(double)));
             }
             
@@ -11867,7 +11798,7 @@ namespace Vim
             const auto count = GetCount();
             
             double* extents_Min_XData = new double[count];
-            if (columnExists(mEntityTable, "double:Extents.Min.X")) {
+            if (mEntityTable.column_exists("double:Extents.Min.X")) {
                 memcpy(extents_Min_XData, mEntityTable.mDataColumns["double:Extents.Min.X"].begin(), count * sizeof(double));
             }
             
@@ -11883,7 +11814,7 @@ namespace Vim
             if (gridIndex < 0 || gridIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "double:Extents.Min.Y")) {
+            if (mEntityTable.column_exists("double:Extents.Min.Y")) {
                 return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:Extents.Min.Y"].begin() + gridIndex * sizeof(double)));
             }
             
@@ -11895,7 +11826,7 @@ namespace Vim
             const auto count = GetCount();
             
             double* extents_Min_YData = new double[count];
-            if (columnExists(mEntityTable, "double:Extents.Min.Y")) {
+            if (mEntityTable.column_exists("double:Extents.Min.Y")) {
                 memcpy(extents_Min_YData, mEntityTable.mDataColumns["double:Extents.Min.Y"].begin(), count * sizeof(double));
             }
             
@@ -11911,7 +11842,7 @@ namespace Vim
             if (gridIndex < 0 || gridIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "double:Extents.Min.Z")) {
+            if (mEntityTable.column_exists("double:Extents.Min.Z")) {
                 return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:Extents.Min.Z"].begin() + gridIndex * sizeof(double)));
             }
             
@@ -11923,7 +11854,7 @@ namespace Vim
             const auto count = GetCount();
             
             double* extents_Min_ZData = new double[count];
-            if (columnExists(mEntityTable, "double:Extents.Min.Z")) {
+            if (mEntityTable.column_exists("double:Extents.Min.Z")) {
                 memcpy(extents_Min_ZData, mEntityTable.mDataColumns["double:Extents.Min.Z"].begin(), count * sizeof(double));
             }
             
@@ -11939,7 +11870,7 @@ namespace Vim
             if (gridIndex < 0 || gridIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "double:Extents.Max.X")) {
+            if (mEntityTable.column_exists("double:Extents.Max.X")) {
                 return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:Extents.Max.X"].begin() + gridIndex * sizeof(double)));
             }
             
@@ -11951,7 +11882,7 @@ namespace Vim
             const auto count = GetCount();
             
             double* extents_Max_XData = new double[count];
-            if (columnExists(mEntityTable, "double:Extents.Max.X")) {
+            if (mEntityTable.column_exists("double:Extents.Max.X")) {
                 memcpy(extents_Max_XData, mEntityTable.mDataColumns["double:Extents.Max.X"].begin(), count * sizeof(double));
             }
             
@@ -11967,7 +11898,7 @@ namespace Vim
             if (gridIndex < 0 || gridIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "double:Extents.Max.Y")) {
+            if (mEntityTable.column_exists("double:Extents.Max.Y")) {
                 return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:Extents.Max.Y"].begin() + gridIndex * sizeof(double)));
             }
             
@@ -11979,7 +11910,7 @@ namespace Vim
             const auto count = GetCount();
             
             double* extents_Max_YData = new double[count];
-            if (columnExists(mEntityTable, "double:Extents.Max.Y")) {
+            if (mEntityTable.column_exists("double:Extents.Max.Y")) {
                 memcpy(extents_Max_YData, mEntityTable.mDataColumns["double:Extents.Max.Y"].begin(), count * sizeof(double));
             }
             
@@ -11995,7 +11926,7 @@ namespace Vim
             if (gridIndex < 0 || gridIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "double:Extents.Max.Z")) {
+            if (mEntityTable.column_exists("double:Extents.Max.Z")) {
                 return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:Extents.Max.Z"].begin() + gridIndex * sizeof(double)));
             }
             
@@ -12007,7 +11938,7 @@ namespace Vim
             const auto count = GetCount();
             
             double* extents_Max_ZData = new double[count];
-            if (columnExists(mEntityTable, "double:Extents.Max.Z")) {
+            if (mEntityTable.column_exists("double:Extents.Max.Z")) {
                 memcpy(extents_Max_ZData, mEntityTable.mDataColumns["double:Extents.Max.Z"].begin(), count * sizeof(double));
             }
             
@@ -12020,7 +11951,7 @@ namespace Vim
         
         int GetFamilyTypeIndex(int gridIndex)
         {
-            if (!columnExists(mEntityTable, "index:Vim.FamilyType:FamilyType")) {
+            if (!mEntityTable.column_exists("index:Vim.FamilyType:FamilyType")) {
                 return -1;
             }
             
@@ -12032,7 +11963,7 @@ namespace Vim
         
         int GetElementIndex(int gridIndex)
         {
-            if (!columnExists(mEntityTable, "index:Vim.Element:Element")) {
+            if (!mEntityTable.column_exists("index:Vim.Element:Element")) {
                 return -1;
             }
             
@@ -12079,7 +12010,7 @@ namespace Vim
         
         size_t GetCount()
         {
-            return getCount(mEntityTable);
+            return mEntityTable.get_count();
         }
         
         Area* Get(int areaIndex)
@@ -12097,12 +12028,12 @@ namespace Vim
         
         std::vector<Area>* GetAll()
         {
-            bool existsValue = columnExists(mEntityTable, "double:Value");
-            bool existsPerimeter = columnExists(mEntityTable, "double:Perimeter");
-            bool existsNumber = columnExists(mEntityTable, "string:Number");
-            bool existsIsGrossInterior = columnExists(mEntityTable, "byte:IsGrossInterior");
-            bool existsAreaScheme = columnExists(mEntityTable, "index:Vim.AreaScheme:AreaScheme");
-            bool existsElement = columnExists(mEntityTable, "index:Vim.Element:Element");
+            bool existsValue = mEntityTable.column_exists("double:Value");
+            bool existsPerimeter = mEntityTable.column_exists("double:Perimeter");
+            bool existsNumber = mEntityTable.column_exists("string:Number");
+            bool existsIsGrossInterior = mEntityTable.column_exists("byte:IsGrossInterior");
+            bool existsAreaScheme = mEntityTable.column_exists("index:Vim.AreaScheme:AreaScheme");
+            bool existsElement = mEntityTable.column_exists("index:Vim.Element:Element");
             
             const auto count = GetCount();
             
@@ -12110,24 +12041,24 @@ namespace Vim
             area->reserve(count);
             
             double* valueData = new double[count];
-            if (columnExists(mEntityTable, "double:Value")) {
+            if (mEntityTable.column_exists("double:Value")) {
                 memcpy(valueData, mEntityTable.mDataColumns["double:Value"].begin(), count * sizeof(double));
             }
             
             double* perimeterData = new double[count];
-            if (columnExists(mEntityTable, "double:Perimeter")) {
+            if (mEntityTable.column_exists("double:Perimeter")) {
                 memcpy(perimeterData, mEntityTable.mDataColumns["double:Perimeter"].begin(), count * sizeof(double));
             }
             
-            const std::vector<int>& numberData = columnExists(mEntityTable, "string:Number") ? mEntityTable.mStringColumns["string:Number"] : std::vector<int>();
+            const std::vector<int>& numberData = mEntityTable.column_exists("string:Number") ? mEntityTable.mStringColumns["string:Number"] : std::vector<int>();
             
             bfast::byte* isGrossInteriorData = new bfast::byte[count];
-            if (columnExists(mEntityTable, "byte:IsGrossInterior")) {
+            if (mEntityTable.column_exists("byte:IsGrossInterior")) {
                 memcpy(isGrossInteriorData, mEntityTable.mDataColumns["byte:IsGrossInterior"].begin(), count * sizeof(bfast::byte));
             }
             
-            const std::vector<int>& areaSchemeData = columnExists(mEntityTable ,"index:Vim.AreaScheme:AreaScheme") ? mEntityTable.mIndexColumns["index:Vim.AreaScheme:AreaScheme"] : std::vector<int>();
-            const std::vector<int>& elementData = columnExists(mEntityTable ,"index:Vim.Element:Element") ? mEntityTable.mIndexColumns["index:Vim.Element:Element"] : std::vector<int>();
+            const std::vector<int>& areaSchemeData = mEntityTable.column_exists("index:Vim.AreaScheme:AreaScheme") ? mEntityTable.mIndexColumns["index:Vim.AreaScheme:AreaScheme"] : std::vector<int>();
+            const std::vector<int>& elementData = mEntityTable.column_exists("index:Vim.Element:Element") ? mEntityTable.mIndexColumns["index:Vim.Element:Element"] : std::vector<int>();
             
             for (int i = 0; i < count; ++i)
             {
@@ -12158,7 +12089,7 @@ namespace Vim
             if (areaIndex < 0 || areaIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "double:Value")) {
+            if (mEntityTable.column_exists("double:Value")) {
                 return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:Value"].begin() + areaIndex * sizeof(double)));
             }
             
@@ -12170,7 +12101,7 @@ namespace Vim
             const auto count = GetCount();
             
             double* valueData = new double[count];
-            if (columnExists(mEntityTable, "double:Value")) {
+            if (mEntityTable.column_exists("double:Value")) {
                 memcpy(valueData, mEntityTable.mDataColumns["double:Value"].begin(), count * sizeof(double));
             }
             
@@ -12186,7 +12117,7 @@ namespace Vim
             if (areaIndex < 0 || areaIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "double:Perimeter")) {
+            if (mEntityTable.column_exists("double:Perimeter")) {
                 return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:Perimeter"].begin() + areaIndex * sizeof(double)));
             }
             
@@ -12198,7 +12129,7 @@ namespace Vim
             const auto count = GetCount();
             
             double* perimeterData = new double[count];
-            if (columnExists(mEntityTable, "double:Perimeter")) {
+            if (mEntityTable.column_exists("double:Perimeter")) {
                 memcpy(perimeterData, mEntityTable.mDataColumns["double:Perimeter"].begin(), count * sizeof(double));
             }
             
@@ -12214,7 +12145,7 @@ namespace Vim
             if (areaIndex < 0 || areaIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "string:Number")) {
+            if (mEntityTable.column_exists("string:Number")) {
                 return std::string(reinterpret_cast<const char*>(mStrings[mEntityTable.mStringColumns["string:Number"][areaIndex]]));
             }
             
@@ -12225,7 +12156,7 @@ namespace Vim
         {
             const auto count = GetCount();
             
-            const std::vector<int>& numberData = columnExists(mEntityTable, "string:Number") ? mEntityTable.mStringColumns["string:Number"] : std::vector<int>();
+            const std::vector<int>& numberData = mEntityTable.column_exists("string:Number") ? mEntityTable.mStringColumns["string:Number"] : std::vector<int>();
             
             std::vector<std::string>* result = new std::vector<std::string>();
             result->reserve(count);
@@ -12243,7 +12174,7 @@ namespace Vim
             if (areaIndex < 0 || areaIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "byte:IsGrossInterior")) {
+            if (mEntityTable.column_exists("byte:IsGrossInterior")) {
                 return static_cast<bool>(*reinterpret_cast<bfast::byte*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["byte:IsGrossInterior"].begin() + areaIndex * sizeof(bfast::byte))));
             }
             
@@ -12255,7 +12186,7 @@ namespace Vim
             const auto count = GetCount();
             
             bfast::byte* isGrossInteriorData = new bfast::byte[count];
-            if (columnExists(mEntityTable, "byte:IsGrossInterior")) {
+            if (mEntityTable.column_exists("byte:IsGrossInterior")) {
                 memcpy(isGrossInteriorData, mEntityTable.mDataColumns["byte:IsGrossInterior"].begin(), count * sizeof(bfast::byte));
             }
             
@@ -12268,7 +12199,7 @@ namespace Vim
         
         int GetAreaSchemeIndex(int areaIndex)
         {
-            if (!columnExists(mEntityTable, "index:Vim.AreaScheme:AreaScheme")) {
+            if (!mEntityTable.column_exists("index:Vim.AreaScheme:AreaScheme")) {
                 return -1;
             }
             
@@ -12280,7 +12211,7 @@ namespace Vim
         
         int GetElementIndex(int areaIndex)
         {
-            if (!columnExists(mEntityTable, "index:Vim.Element:Element")) {
+            if (!mEntityTable.column_exists("index:Vim.Element:Element")) {
                 return -1;
             }
             
@@ -12322,7 +12253,7 @@ namespace Vim
         
         size_t GetCount()
         {
-            return getCount(mEntityTable);
+            return mEntityTable.get_count();
         }
         
         AreaScheme* Get(int areaSchemeIndex)
@@ -12336,8 +12267,8 @@ namespace Vim
         
         std::vector<AreaScheme>* GetAll()
         {
-            bool existsIsGrossBuildingArea = columnExists(mEntityTable, "byte:IsGrossBuildingArea");
-            bool existsElement = columnExists(mEntityTable, "index:Vim.Element:Element");
+            bool existsIsGrossBuildingArea = mEntityTable.column_exists("byte:IsGrossBuildingArea");
+            bool existsElement = mEntityTable.column_exists("index:Vim.Element:Element");
             
             const auto count = GetCount();
             
@@ -12345,11 +12276,11 @@ namespace Vim
             areaScheme->reserve(count);
             
             bfast::byte* isGrossBuildingAreaData = new bfast::byte[count];
-            if (columnExists(mEntityTable, "byte:IsGrossBuildingArea")) {
+            if (mEntityTable.column_exists("byte:IsGrossBuildingArea")) {
                 memcpy(isGrossBuildingAreaData, mEntityTable.mDataColumns["byte:IsGrossBuildingArea"].begin(), count * sizeof(bfast::byte));
             }
             
-            const std::vector<int>& elementData = columnExists(mEntityTable ,"index:Vim.Element:Element") ? mEntityTable.mIndexColumns["index:Vim.Element:Element"] : std::vector<int>();
+            const std::vector<int>& elementData = mEntityTable.column_exists("index:Vim.Element:Element") ? mEntityTable.mIndexColumns["index:Vim.Element:Element"] : std::vector<int>();
             
             for (int i = 0; i < count; ++i)
             {
@@ -12371,7 +12302,7 @@ namespace Vim
             if (areaSchemeIndex < 0 || areaSchemeIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "byte:IsGrossBuildingArea")) {
+            if (mEntityTable.column_exists("byte:IsGrossBuildingArea")) {
                 return static_cast<bool>(*reinterpret_cast<bfast::byte*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["byte:IsGrossBuildingArea"].begin() + areaSchemeIndex * sizeof(bfast::byte))));
             }
             
@@ -12383,7 +12314,7 @@ namespace Vim
             const auto count = GetCount();
             
             bfast::byte* isGrossBuildingAreaData = new bfast::byte[count];
-            if (columnExists(mEntityTable, "byte:IsGrossBuildingArea")) {
+            if (mEntityTable.column_exists("byte:IsGrossBuildingArea")) {
                 memcpy(isGrossBuildingAreaData, mEntityTable.mDataColumns["byte:IsGrossBuildingArea"].begin(), count * sizeof(bfast::byte));
             }
             
@@ -12396,7 +12327,7 @@ namespace Vim
         
         int GetElementIndex(int areaSchemeIndex)
         {
-            if (!columnExists(mEntityTable, "index:Vim.Element:Element")) {
+            if (!mEntityTable.column_exists("index:Vim.Element:Element")) {
                 return -1;
             }
             
@@ -12437,7 +12368,7 @@ namespace Vim
         
         size_t GetCount()
         {
-            return getCount(mEntityTable);
+            return mEntityTable.get_count();
         }
         
         Schedule* Get(int scheduleIndex)
@@ -12450,14 +12381,14 @@ namespace Vim
         
         std::vector<Schedule>* GetAll()
         {
-            bool existsElement = columnExists(mEntityTable, "index:Vim.Element:Element");
+            bool existsElement = mEntityTable.column_exists("index:Vim.Element:Element");
             
             const auto count = GetCount();
             
             std::vector<Schedule>* schedule = new std::vector<Schedule>();
             schedule->reserve(count);
             
-            const std::vector<int>& elementData = columnExists(mEntityTable ,"index:Vim.Element:Element") ? mEntityTable.mIndexColumns["index:Vim.Element:Element"] : std::vector<int>();
+            const std::vector<int>& elementData = mEntityTable.column_exists("index:Vim.Element:Element") ? mEntityTable.mIndexColumns["index:Vim.Element:Element"] : std::vector<int>();
             
             for (int i = 0; i < count; ++i)
             {
@@ -12472,7 +12403,7 @@ namespace Vim
         
         int GetElementIndex(int scheduleIndex)
         {
-            if (!columnExists(mEntityTable, "index:Vim.Element:Element")) {
+            if (!mEntityTable.column_exists("index:Vim.Element:Element")) {
                 return -1;
             }
             
@@ -12515,7 +12446,7 @@ namespace Vim
         
         size_t GetCount()
         {
-            return getCount(mEntityTable);
+            return mEntityTable.get_count();
         }
         
         ScheduleColumn* Get(int scheduleColumnIndex)
@@ -12530,23 +12461,23 @@ namespace Vim
         
         std::vector<ScheduleColumn>* GetAll()
         {
-            bool existsName = columnExists(mEntityTable, "string:Name");
-            bool existsColumnIndex = columnExists(mEntityTable, "int:ColumnIndex");
-            bool existsSchedule = columnExists(mEntityTable, "index:Vim.Schedule:Schedule");
+            bool existsName = mEntityTable.column_exists("string:Name");
+            bool existsColumnIndex = mEntityTable.column_exists("int:ColumnIndex");
+            bool existsSchedule = mEntityTable.column_exists("index:Vim.Schedule:Schedule");
             
             const auto count = GetCount();
             
             std::vector<ScheduleColumn>* scheduleColumn = new std::vector<ScheduleColumn>();
             scheduleColumn->reserve(count);
             
-            const std::vector<int>& nameData = columnExists(mEntityTable, "string:Name") ? mEntityTable.mStringColumns["string:Name"] : std::vector<int>();
+            const std::vector<int>& nameData = mEntityTable.column_exists("string:Name") ? mEntityTable.mStringColumns["string:Name"] : std::vector<int>();
             
             int* columnIndexData = new int[count];
-            if (columnExists(mEntityTable, "int:ColumnIndex")) {
+            if (mEntityTable.column_exists("int:ColumnIndex")) {
                 memcpy(columnIndexData, mEntityTable.mDataColumns["int:ColumnIndex"].begin(), count * sizeof(int));
             }
             
-            const std::vector<int>& scheduleData = columnExists(mEntityTable ,"index:Vim.Schedule:Schedule") ? mEntityTable.mIndexColumns["index:Vim.Schedule:Schedule"] : std::vector<int>();
+            const std::vector<int>& scheduleData = mEntityTable.column_exists("index:Vim.Schedule:Schedule") ? mEntityTable.mIndexColumns["index:Vim.Schedule:Schedule"] : std::vector<int>();
             
             for (int i = 0; i < count; ++i)
             {
@@ -12570,7 +12501,7 @@ namespace Vim
             if (scheduleColumnIndex < 0 || scheduleColumnIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "string:Name")) {
+            if (mEntityTable.column_exists("string:Name")) {
                 return std::string(reinterpret_cast<const char*>(mStrings[mEntityTable.mStringColumns["string:Name"][scheduleColumnIndex]]));
             }
             
@@ -12581,7 +12512,7 @@ namespace Vim
         {
             const auto count = GetCount();
             
-            const std::vector<int>& nameData = columnExists(mEntityTable, "string:Name") ? mEntityTable.mStringColumns["string:Name"] : std::vector<int>();
+            const std::vector<int>& nameData = mEntityTable.column_exists("string:Name") ? mEntityTable.mStringColumns["string:Name"] : std::vector<int>();
             
             std::vector<std::string>* result = new std::vector<std::string>();
             result->reserve(count);
@@ -12599,7 +12530,7 @@ namespace Vim
             if (scheduleColumnIndex < 0 || scheduleColumnIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "int:ColumnIndex")) {
+            if (mEntityTable.column_exists("int:ColumnIndex")) {
                 return *reinterpret_cast<int*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["int:ColumnIndex"].begin() + scheduleColumnIndex * sizeof(int)));
             }
             
@@ -12611,7 +12542,7 @@ namespace Vim
             const auto count = GetCount();
             
             int* columnIndexData = new int[count];
-            if (columnExists(mEntityTable, "int:ColumnIndex")) {
+            if (mEntityTable.column_exists("int:ColumnIndex")) {
                 memcpy(columnIndexData, mEntityTable.mDataColumns["int:ColumnIndex"].begin(), count * sizeof(int));
             }
             
@@ -12624,7 +12555,7 @@ namespace Vim
         
         int GetScheduleIndex(int scheduleColumnIndex)
         {
-            if (!columnExists(mEntityTable, "index:Vim.Schedule:Schedule")) {
+            if (!mEntityTable.column_exists("index:Vim.Schedule:Schedule")) {
                 return -1;
             }
             
@@ -12667,7 +12598,7 @@ namespace Vim
         
         size_t GetCount()
         {
-            return getCount(mEntityTable);
+            return mEntityTable.get_count();
         }
         
         ScheduleCell* Get(int scheduleCellIndex)
@@ -12682,23 +12613,23 @@ namespace Vim
         
         std::vector<ScheduleCell>* GetAll()
         {
-            bool existsValue = columnExists(mEntityTable, "string:Value");
-            bool existsRowIndex = columnExists(mEntityTable, "int:RowIndex");
-            bool existsScheduleColumn = columnExists(mEntityTable, "index:Vim.ScheduleColumn:ScheduleColumn");
+            bool existsValue = mEntityTable.column_exists("string:Value");
+            bool existsRowIndex = mEntityTable.column_exists("int:RowIndex");
+            bool existsScheduleColumn = mEntityTable.column_exists("index:Vim.ScheduleColumn:ScheduleColumn");
             
             const auto count = GetCount();
             
             std::vector<ScheduleCell>* scheduleCell = new std::vector<ScheduleCell>();
             scheduleCell->reserve(count);
             
-            const std::vector<int>& valueData = columnExists(mEntityTable, "string:Value") ? mEntityTable.mStringColumns["string:Value"] : std::vector<int>();
+            const std::vector<int>& valueData = mEntityTable.column_exists("string:Value") ? mEntityTable.mStringColumns["string:Value"] : std::vector<int>();
             
             int* rowIndexData = new int[count];
-            if (columnExists(mEntityTable, "int:RowIndex")) {
+            if (mEntityTable.column_exists("int:RowIndex")) {
                 memcpy(rowIndexData, mEntityTable.mDataColumns["int:RowIndex"].begin(), count * sizeof(int));
             }
             
-            const std::vector<int>& scheduleColumnData = columnExists(mEntityTable ,"index:Vim.ScheduleColumn:ScheduleColumn") ? mEntityTable.mIndexColumns["index:Vim.ScheduleColumn:ScheduleColumn"] : std::vector<int>();
+            const std::vector<int>& scheduleColumnData = mEntityTable.column_exists("index:Vim.ScheduleColumn:ScheduleColumn") ? mEntityTable.mIndexColumns["index:Vim.ScheduleColumn:ScheduleColumn"] : std::vector<int>();
             
             for (int i = 0; i < count; ++i)
             {
@@ -12722,7 +12653,7 @@ namespace Vim
             if (scheduleCellIndex < 0 || scheduleCellIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "string:Value")) {
+            if (mEntityTable.column_exists("string:Value")) {
                 return std::string(reinterpret_cast<const char*>(mStrings[mEntityTable.mStringColumns["string:Value"][scheduleCellIndex]]));
             }
             
@@ -12733,7 +12664,7 @@ namespace Vim
         {
             const auto count = GetCount();
             
-            const std::vector<int>& valueData = columnExists(mEntityTable, "string:Value") ? mEntityTable.mStringColumns["string:Value"] : std::vector<int>();
+            const std::vector<int>& valueData = mEntityTable.column_exists("string:Value") ? mEntityTable.mStringColumns["string:Value"] : std::vector<int>();
             
             std::vector<std::string>* result = new std::vector<std::string>();
             result->reserve(count);
@@ -12751,7 +12682,7 @@ namespace Vim
             if (scheduleCellIndex < 0 || scheduleCellIndex >= GetCount())
                 return {};
             
-            if (columnExists(mEntityTable, "int:RowIndex")) {
+            if (mEntityTable.column_exists("int:RowIndex")) {
                 return *reinterpret_cast<int*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["int:RowIndex"].begin() + scheduleCellIndex * sizeof(int)));
             }
             
@@ -12763,7 +12694,7 @@ namespace Vim
             const auto count = GetCount();
             
             int* rowIndexData = new int[count];
-            if (columnExists(mEntityTable, "int:RowIndex")) {
+            if (mEntityTable.column_exists("int:RowIndex")) {
                 memcpy(rowIndexData, mEntityTable.mDataColumns["int:RowIndex"].begin(), count * sizeof(int));
             }
             
@@ -12776,7 +12707,7 @@ namespace Vim
         
         int GetScheduleColumnIndex(int scheduleCellIndex)
         {
-            if (!columnExists(mEntityTable, "index:Vim.ScheduleColumn:ScheduleColumn")) {
+            if (!mEntityTable.column_exists("index:Vim.ScheduleColumn:ScheduleColumn")) {
                 return -1;
             }
             

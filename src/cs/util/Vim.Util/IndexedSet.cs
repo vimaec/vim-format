@@ -1,8 +1,9 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Vim.Format.Utils
+namespace Vim.Util
 {
     /// <summary>
     /// This class is similar to a hash set (and is enumerable like a dictionary), 
@@ -96,5 +97,78 @@ namespace Vim.Format.Utils
 
         public bool Remove(KeyValuePair<K, int> item)
             => throw new System.NotSupportedException();
+    }
+
+    public static class IndexedSetExtensions
+    {
+        /// <summary>
+        /// Returns distinct values each one assigned a new incremented index.
+        /// </summary>
+        public static IndexedSet<T> ToIndexedSet<T>(this IEnumerable<T> self)
+            => new IndexedSet<T>(self);
+
+        public static bool DictionaryEqual<TKey, TValue>(
+            this IDictionary<TKey, TValue> first,
+            IDictionary<TKey, TValue> second,
+            IEqualityComparer<TValue> valueComparer = null)
+        {
+            // From: https://stackoverflow.com/a/3928856
+
+            if (first == second) return true;
+            if ((first == null) || (second == null)) return false;
+            if (first.Count != second.Count) return false;
+
+            valueComparer = valueComparer ?? EqualityComparer<TValue>.Default;
+
+            foreach (var kvp in first)
+            {
+                if (!second.TryGetValue(kvp.Key, out var secondValue)) return false;
+                if (!valueComparer.Equals(kvp.Value, secondValue)) return false;
+            }
+            return true;
+        }
+
+        /// <summary>
+        /// Returns a value if found in the dictionary, or default if not present.
+        /// </summary>
+        public static void AddIfNotPresent<K, V>(this IDictionary<K, V> self, K key, V value)
+        {
+            if (!self.ContainsKey(key))
+                self.Add(key, value);
+        }
+
+        /// <summary>
+        /// Adds a key and value to a dictionary if the key is not already present, otherwise does nothing and returns false.
+        /// </summary>
+        public static bool TryAdd<K, V>(this IDictionary<K, V> self, K key, V value)
+        {
+            if (self.ContainsKey(key)) return false;
+            self.Add(key, value);
+            return true;
+        }
+
+        /// <summary>
+        /// Returns a value if found in the dictionary, or default if not present.
+        /// </summary>
+        public static V GetOrDefault<K, V>(this IDictionary<K, V> self, K key)
+            => self.GetOrDefault(key, default);
+
+        /// <summary>
+        /// Returns a value if found in the dictionary, or default if not present.
+        /// </summary>
+        public static V GetOrDefault<K, V>(this IDictionary<K, V> self, K key, V defaultValue)
+            => self.ContainsKey(key) ? self[key] : defaultValue;
+
+        /// <summary>
+        /// Given a dictionary looks up the key, or uses the function to add to the dictionary, and returns that result.
+        /// </summary>
+        public static V GetOrCompute<K, V>(this IDictionary<K, V> self, K key, Func<K, V> func)
+        {
+            if (self.ContainsKey(key))
+                return self[key];
+            var value = func(key);
+            self.Add(key, value);
+            return value;
+        }
     }
 }

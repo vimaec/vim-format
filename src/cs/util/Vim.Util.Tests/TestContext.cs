@@ -2,9 +2,9 @@
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using Vim.Format.Tests.Logging;
+using Vim.Util.Tests.Logging;
 
-namespace Vim.Format.Tests
+namespace Vim.Util.Tests
 {
 #if NET5_0_OR_GREATER
     public record TestContext(string TestName, string BaseDirPath, string SubDirPath = null)

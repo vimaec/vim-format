@@ -1,4 +1,4 @@
-﻿using Vim.Format.Utils;
+﻿using Vim.Util;
 
 namespace Vim.Format
 {
