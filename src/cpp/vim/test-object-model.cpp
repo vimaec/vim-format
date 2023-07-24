@@ -17,9 +17,9 @@ void test_element(const Vim::DocumentModel& model)
     const auto element = find_element_by_id(model, 374011ll); // A common element ID across all wolford files.
 
     test("Element 30 ID", element->mId, 374011ll);
-    test("Element 30 Name", *element->mName, std::string("GWB on Mtl. Stud"));
-    test("Element 30 UniqueID", *element->mUniqueId, std::string("3ae43fb5-6797-479b-ac14-3436f35a7178-0005b4fb"));
-    test("Element 30 FamilyName", *element->mFamilyName, std::string("Compound Ceiling"));
+    test("Element 30 Name", element->mName, std::string("GWB on Mtl. Stud"));
+    test("Element 30 UniqueID", element->mUniqueId, std::string("3ae43fb5-6797-479b-ac14-3436f35a7178-0005b4fb"));
+    test("Element 30 FamilyName", element->mFamilyName, std::string("Compound Ceiling"));
     test("Element 30 IsPinned", element->mIsPinned, false);
     test("Element 30 LevelIndex", element->mLevelIndex, 6);
     test("Element 30 PhaseCreatedIndex", element->mPhaseCreatedIndex, 1);
@@ -85,7 +85,7 @@ int test_wolford(const TestCase& testCase)
 {
     std::cout << "Testing VIM file: " << testCase.vim_file_path << std::endl;
 
-    Vim::VimScene scene;
+    Vim::Scene scene;
     scene.ReadFile(testCase.vim_file_path);
 
     const Vim::DocumentModel model(scene);

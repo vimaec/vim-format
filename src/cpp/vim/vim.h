@@ -43,7 +43,8 @@ namespace Vim
 
         std::unordered_map<std::string, std::vector<int>> mIndexColumns;
         std::unordered_map<std::string, std::vector<int>> mStringColumns;
-        std::unordered_map<std::string, std::vector<double>> mNumericColumns;
+        std::unordered_map<std::string, bfast::ByteRange> mDataColumns;
+
         std::vector<SerializableProperty> mProperties;
     };
 
@@ -239,17 +240,17 @@ namespace Vim
                                     std::string type = tableBuffer.name.substr(0, index);
                                     std::string name = tableBuffer.name.substr(index + 1);
 
-                                    if (type == "numeric")
+                                    if (type == "index")
                                     {
-                                        entityTable.mNumericColumns[name] = std::vector<double>((double*)tableBuffer.data.begin(), (double*)tableBuffer.data.end());
-                                    }
-                                    else if (type == "index")
-                                    {
-                                        entityTable.mIndexColumns[name] = std::vector<int>((int*)tableBuffer.data.begin(), (int*)tableBuffer.data.end());
+                                        entityTable.mIndexColumns[tableBuffer.name] = std::vector<int>((int*)tableBuffer.data.begin(), (int*)tableBuffer.data.end());
                                     }
                                     else if (type == "string")
                                     {
-                                        entityTable.mStringColumns[name] = std::vector<int>((int*)tableBuffer.data.begin(), (int*)tableBuffer.data.end());
+                                        entityTable.mStringColumns[tableBuffer.name] = std::vector<int>((int*)tableBuffer.data.begin(), (int*)tableBuffer.data.end());
+                                    }
+                                    else
+                                    {
+                                        entityTable.mDataColumns[tableBuffer.name] = tableBuffer.data;
                                     }
                                 }
                             }

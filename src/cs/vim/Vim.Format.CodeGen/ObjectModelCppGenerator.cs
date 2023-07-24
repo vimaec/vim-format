@@ -30,7 +30,7 @@ public static class ObjectModelCppGenerator
             "Byte" or "byte" => "bfast::byte",
             "Single" or "float" => "float",
             "Double" or "double" => "double",
-            "String" or "string" => "const std::string*",
+            "String" or "string" => "std::string",
             "Int32" or "int" => "int",
             "Int64" or "Long" or "long" => "long long",
             _ => throw new ArgumentOutOfRangeException(nameof(type), type, $"Type {type} not supported")
@@ -38,7 +38,7 @@ public static class ObjectModelCppGenerator
 
     private static void WriteColumnCheck(CodeBuilder cb, string columnName, string conditionalCode, bool negate)
     {
-        cb.AppendLine($"if ({(negate ? "!" : "")}mEntityTable.column_exists(\"{columnName}\")) {{");
+        cb.AppendLine($"if ({(negate ? "!" : "")}columnExists(mEntityTable, \"{columnName}\")) {{");
         cb.AppendLine(conditionalCode);
         cb.AppendLine("}");
         cb.AppendLine();
@@ -49,13 +49,13 @@ public static class ObjectModelCppGenerator
         foreach (var fieldInfo in fields)
         {
             var loadingInfos = fieldInfo.GetEntityColumnLoadingInfo();
-            var exists = string.Join(" || ", loadingInfos.Select(li => $"mEntityTable.column_exists(\"{li.SerializedValueColumnName}\")"));
+            var exists = string.Join(" || ", loadingInfos.Select(li => $"columnExists(mEntityTable, \"{li.SerializedValueColumnName}\")"));
             cb.AppendLine($"bool exists{fieldInfo.Name} = {exists};");
         }
 
         foreach (var fieldInfo in relations)
         {
-            cb.AppendLine($"bool exists{fieldInfo.Name.Trim('_')} = mEntityTable.column_exists(\"{fieldInfo.GetSerializedIndexColumnName()}\");");
+            cb.AppendLine($"bool exists{fieldInfo.Name.Trim('_')} = columnExists(mEntityTable, \"{fieldInfo.GetSerializedIndexColumnName()}\");");
         }
 
         cb.AppendLine();
@@ -107,11 +107,11 @@ public static class ObjectModelCppGenerator
         cb.AppendLine("{");
     
         cb.AppendLine("EntityTable& mEntityTable;");
-        cb.AppendLine("std::vector<std::string>& mStrings;");
+        cb.AppendLine("std::vector<const bfast::byte*>& mStrings;");
 
         cb.UnindentOneLine("public:");
 
-        cb.AppendLine($"{className}(EntityTable& entityTable, std::vector<std::string>& strings):");
+        cb.AppendLine($"{className}(EntityTable& entityTable, std::vector<const bfast::byte*>& strings):");
         cb.IndentOneLine("mEntityTable(entityTable), mStrings(strings) {}");
         cb.AppendLine();
     
@@ -174,7 +174,7 @@ public static class ObjectModelCppGenerator
     
     private static void WriteGetEntityTable(CodeBuilder cb, Type entity)
     {
-        cb.AppendLine($"static {entity.Name}Table* Get{entity.Name}Table(VimScene& scene)");
+        cb.AppendLine($"static {entity.Name}Table* Get{entity.Name}Table(Scene& scene)");
         cb.AppendLine("{");
         WriteNotFoundReturn(cb, "scene.mEntityTables", '"' + entity.GetEntityTableName() + '"', "{}");
         cb.AppendLine($"return new {entity.Name}Table(scene.mEntityTables[\"{entity.GetEntityTableName()}\"], scene.mStrings);");
@@ -185,7 +185,7 @@ public static class ObjectModelCppGenerator
     {
         cb.AppendLine("size_t GetCount()");
         cb.AppendLine("{");
-        cb.AppendLine("return mEntityTable.get_count();");
+        cb.AppendLine("return getCount(mEntityTable);");
         cb.AppendLine("}");
     }
 
@@ -242,7 +242,7 @@ public static class ObjectModelCppGenerator
             {
                 case ValueSerializationStrategy.SerializeAsStringColumn:
                     cb.AppendLine($"if (exists{field.Name})");
-                    cb.IndentOneLine($"entity.{fieldName} = &mStrings[{dataName}[i]];");
+                    cb.IndentOneLine($"entity.{fieldName} = std::string(reinterpret_cast<const char*>(mStrings[{dataName}[i]]));");
                     break;
                 case ValueSerializationStrategy.SerializeAsDataColumn:
                     cb.AppendLine($"if (exists{field.Name})");
@@ -276,7 +276,7 @@ public static class ObjectModelCppGenerator
             switch (strategy)
             {
                 case ValueSerializationStrategy.SerializeAsStringColumn:
-                    cb.AppendLine($"const std::vector<int>& {fieldName}Data = mEntityTable.column_exists(\"{baseLoadingInfo.SerializedValueColumnName}\") ? mEntityTable.mStringColumns[\"{baseLoadingInfo.SerializedValueColumnName}\"] : std::vector<int>();");
+                    cb.AppendLine($"const std::vector<int>& {fieldName}Data = columnExists(mEntityTable, \"{baseLoadingInfo.SerializedValueColumnName}\") ? mEntityTable.mStringColumns[\"{baseLoadingInfo.SerializedValueColumnName}\"] : std::vector<int>();");
                     break;
                 case ValueSerializationStrategy.SerializeAsDataColumn:
                     var cppType = ToCppType(baseLoadingInfo.TypePrefix.Replace(":", ""));
@@ -285,7 +285,7 @@ public static class ObjectModelCppGenerator
                     for (var i = 0; i < loadingInfos.Length; ++i)
                     {
                         var li = loadingInfos[i];
-                        cb.AppendLine($"{(i > 0 ? "else " : "")}if (mEntityTable.column_exists(\"{li.SerializedValueColumnName}\")) {{");
+                        cb.AppendLine($"{(i > 0 ? "else " : "")}if (columnExists(mEntityTable, \"{li.SerializedValueColumnName}\")) {{");
 
                         if (i == 0)
                         {
@@ -316,7 +316,7 @@ public static class ObjectModelCppGenerator
         foreach (var relation in relations)
         {
             var indexColumnName = relation.GetIndexColumnInfo().IndexColumnName;
-            cb.AppendLine($"const std::vector<int>& {ToLowerFirstLetter(relation.Name.Replace("_", ""))}Data = mEntityTable.column_exists(\"{indexColumnName}\") ? mEntityTable.mIndexColumns[\"{indexColumnName}\"] : std::vector<int>();");
+            cb.AppendLine($"const std::vector<int>& {ToLowerFirstLetter(relation.Name.Replace("_", ""))}Data = columnExists(mEntityTable ,\"{indexColumnName}\") ? mEntityTable.mIndexColumns[\"{indexColumnName}\"] : std::vector<int>();");
         }
 
         if (relations.Length > 0)
@@ -354,7 +354,7 @@ public static class ObjectModelCppGenerator
                 WriteColumnCheck(
                     cb,
                     baseLoadingInfo.SerializedValueColumnName,
-                    $"return &mStrings[mEntityTable.mStringColumns[\"{baseLoadingInfo.SerializedValueColumnName}\"][{lowerName}Index]];",
+                    $"return std::string(reinterpret_cast<const char*>(mStrings[mEntityTable.mStringColumns[\"{baseLoadingInfo.SerializedValueColumnName}\"][{lowerName}Index]]));",
                     false);
                 cb.AppendLine("return {};");
                 break;
@@ -403,12 +403,12 @@ public static class ObjectModelCppGenerator
 
             case ValueSerializationStrategy.SerializeAsStringColumn:
                 {
-                    cb.AppendLine("std::vector<const std::string*>* result = new std::vector<const std::string*>();");
+                    cb.AppendLine("std::vector<std::string>* result = new std::vector<std::string>();");
                     cb.AppendLine("result->reserve(count);");
                     cb.AppendLine();
                     cb.AppendLine("for (int i = 0; i < count; ++i)");
                     cb.AppendLine("{");
-                    cb.AppendLine($"result->push_back(&mStrings[{lowerName}Data[i]]);");
+                    cb.AppendLine($"result->push_back(std::string(reinterpret_cast<const char*>(mStrings[{lowerName}Data[i]])));");
                     cb.AppendLine("}");
                     break;
                 }
@@ -451,7 +451,7 @@ public static class ObjectModelCppGenerator
     
         cb.AppendLine();
         
-        cb.AppendLine("DocumentModel(VimScene& scene);");
+        cb.AppendLine("DocumentModel(Scene& scene);");
         cb.AppendLine("~DocumentModel();");
 
         cb.AppendLine("};");
@@ -459,7 +459,7 @@ public static class ObjectModelCppGenerator
 
     private static void WriteDocumentModelImplementation(CodeBuilder cb, Type[] entityTypes)
     {
-        cb.AppendLine("DocumentModel::DocumentModel(VimScene& scene)");
+        cb.AppendLine("DocumentModel::DocumentModel(Scene& scene)");
         cb.AppendLine("{");
 
         foreach (var type in entityTypes)
