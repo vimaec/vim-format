@@ -37,7 +37,7 @@ namespace Vim.Util.Tests
         [TestCaseSource(nameof(TestCases))]
         public static void Test(TestCase args)
         {
-            var success = Util.TryParseFeetAndInchesToDecimalInches(args.Input, out var decimalInches);
+            var success = StringFormatting.TryParseFeetAndInchesToDecimalInches(args.Input, out var decimalInches);
             Assert.AreEqual(args.ExpectSuccess, success);
 
             if (args.ExpectSuccess == false)

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -15,9 +16,32 @@ namespace Vim.Util
         public static void Delete(string path)
         {
             if (File.Exists(path))
+            {
                 File.Delete(path);
-            if (Directory.Exists(path))
+            }
+            else if (Directory.Exists(path))
+            {
                 Directory.Delete(path, true);
+            }
+        }
+
+        /// <summary>
+        /// Deletes all contents in a folder
+        /// https://stackoverflow.com/questions/1288718/how-to-delete-all-files-and-folders-in-a-directory
+        /// </summary>
+        public static void DeleteDirectoryContent(string folderPath)
+        {
+            var di = new DirectoryInfo(folderPath);
+
+            foreach (var dir in di.EnumerateDirectories().AsParallel())
+            {
+                Directory.Delete(dir.FullName, true);
+            }
+            
+            foreach (var file in di.EnumerateFiles().AsParallel())
+            {
+                file.Delete();
+            }
         }
 
         /// <summary>
@@ -26,9 +50,30 @@ namespace Vim.Util
         public static string CreateFileDirectory(string filepath)
         {
             var dirPath = Path.GetDirectoryName(filepath);
+
             if (!string.IsNullOrEmpty(dirPath) && !Directory.Exists(dirPath))
+            {
                 Directory.CreateDirectory(dirPath);
+            }
+
             return filepath;
+        }
+
+        /// <summary>
+        /// Creates a directory if needed, or clears all of its contents otherwise
+        /// </summary>
+        public static string CreateAndClearDirectory(string dirPath)
+        {
+            if (!Directory.Exists(dirPath))
+            {
+                Directory.CreateDirectory(dirPath);
+            }
+            else
+            {
+                DeleteDirectoryContent(dirPath);
+            }
+
+            return dirPath;
         }
 
         /// <summary>
@@ -60,6 +105,49 @@ namespace Vim.Util
 
             return filepath;
         }
+
+        /// <summary>
+        /// Recursively copies the files from the source directory to the target directory.
+        /// </summary>
+        public static void CopyDirectory(string sourceDirectory, string targetDirectory)
+        {
+            var diSource = new DirectoryInfo(sourceDirectory);
+            var diTarget = new DirectoryInfo(targetDirectory);
+            CopyAll(diSource, diTarget);
+        }
+
+        /// <summary>
+        /// Recursively copies the files from the source DirectoryInfo to the target DirectoryInfo.
+        /// </summary>
+        public static void CopyAll(DirectoryInfo source, DirectoryInfo target)
+        {
+            Directory.CreateDirectory(target.FullName);
+
+            foreach (var fi in source.GetFiles())
+            {
+                fi.CopyTo(Path.Combine(target.FullName, fi.Name), true);
+            }
+
+            foreach (var diSourceSubDir in source.GetDirectories())
+            {
+                var nextTargetSubDir = target.CreateSubdirectory(diSourceSubDir.Name);
+                CopyAll(diSourceSubDir, nextTargetSubDir);
+            }
+        }
+
+        /// <summary>
+        /// Changes the directory and the extension of a file. The new extension may or may not be specified with a leading period.
+        /// </summary>
+        public static string ChangeDirectoryAndExt(string filePath, string newFolder, string newExt)
+            => Path.ChangeExtension(IO.ChangeDirectory(filePath, newFolder), newExt); // TODO: move this to Vim.Util.IO
+
+
+        /// <summary>
+        /// Changes the directory of a file
+        /// </summary>
+        public static string ChangeDirectory(string filePath, string newFolder)
+            => Path.Combine(newFolder, Path.GetFileName(filePath));
+
 
         /// <summary>
         /// Returns all the files in the given directory and optionally its subdirectories,
@@ -132,7 +220,7 @@ namespace Vim.Util
         /// Returns the file size in bytes, or 0 if there is no file.
         /// </summary>
         public static string FileSizeAsString(string fileName, int numPlacesToShow = 1)
-            => Util.BytesToString(FileSize(fileName), numPlacesToShow);
+            => StringFormatting.BytesToString(FileSize(fileName), numPlacesToShow);
 
         /// <summary>
         /// Returns the total file size of all files given
@@ -144,7 +232,7 @@ namespace Vim.Util
         /// Returns the total file size of all files given as a human readable string
         /// </summary>
         public static string TotalFileSizeAsString(IEnumerable<string> files, int numPlacesToShow = 1)
-            => Util.BytesToString(TotalFileSize(files), numPlacesToShow);
+            => StringFormatting.BytesToString(TotalFileSize(files), numPlacesToShow);
 
         /// <summary>
         /// Given a full file path, collapses the full path into a checksum, and return a file name.
@@ -152,5 +240,77 @@ namespace Vim.Util
         public static string FilePathToUniqueFileName(string filePath)
             => filePath.Replace('/', '\\').MD5HashAsBitConverterLowerInvariant() + "_" + Path.GetFileName(filePath);
 
+        public static Process OpenFolderInExplorer(string folderPath)
+            => Process.Start("explorer.exe", folderPath);
+
+        public static Process SelectFileInExplorer(string filePath)
+            => Process.Start(new ProcessStartInfo
+            {
+                FileName = "explorer.exe",
+                Arguments = $"/select,\"{filePath}\"",
+                UseShellExecute = false
+            });
+
+
+        public static Process ShellExecute(string filePath)
+            => Process.Start(new ProcessStartInfo { FileName = filePath, UseShellExecute = true });
+
+        public static Process OpenFile(string filePath)
+        {
+            if (!File.Exists(filePath))
+                throw new FileNotFoundException("", filePath);
+
+            // Expand the file name
+            filePath = new FileInfo(filePath).FullName;
+
+            // Open the file with the default file extension handler.
+            try
+            {
+                return Process.Start(filePath);
+            }
+            catch (Exception e)
+            {
+                Trace.WriteLine(e.Message);
+            }
+
+            // If there is no default file extension handler, use shell execute
+            try
+            {
+                return ShellExecute(filePath);
+            }
+            catch (Exception e)
+            {
+                Trace.WriteLine(e.Message);
+            }
+
+            // If that didn't work, show the file in explorer.
+            return IO.SelectFileInExplorer(filePath);
+        }
+
+        /// <summary>
+        /// Returns true if the URI is valid.
+        /// </summary>
+        public static bool IsValidUri(string uri)
+        {
+            // see: https://stackoverflow.com/a/33573227
+            if (!Uri.IsWellFormedUriString(uri, UriKind.Absolute))
+                return false;
+            Uri tmp;
+            if (!Uri.TryCreate(uri, UriKind.Absolute, out tmp))
+                return false;
+            return tmp.Scheme == Uri.UriSchemeHttp || tmp.Scheme == Uri.UriSchemeHttps;
+        }
+
+        /// <summary>
+        /// Opens the URI in the browser and returns true if the uri is valid.
+        /// </summary>
+        public static bool OpenUri(string uri)
+        {
+            // see: https://stackoverflow.com/a/33573227
+            if (!IsValidUri(uri))
+                return false;
+            Process.Start(new ProcessStartInfo(uri) { UseShellExecute = true });
+            return true;
+        }
     }
 }
