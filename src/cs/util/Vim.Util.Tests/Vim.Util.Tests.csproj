@@ -20,6 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Vim.Util.Logging.Serilog\Vim.Util.Logging.Serilog.csproj" />
     <ProjectReference Include="..\Vim.Util\Vim.Util.csproj" />
   </ItemGroup>
 

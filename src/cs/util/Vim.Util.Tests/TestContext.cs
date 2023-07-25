@@ -2,7 +2,8 @@
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using Vim.Util.Tests.Logging;
+using Vim.Util.Logging;
+using Vim.Util.Logging.Serilog;
 
 namespace Vim.Util.Tests
 {

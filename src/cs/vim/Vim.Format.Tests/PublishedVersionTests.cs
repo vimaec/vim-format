@@ -2,7 +2,7 @@ using System.IO;
 using System.Text.RegularExpressions;
 using NUnit.Framework;
 using Vim.Util.Tests;
-using Vim.Util.Tests.Logging;
+using Vim.Util.Logging;
 
 namespace Vim.Format.Tests
 {
