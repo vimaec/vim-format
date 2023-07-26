@@ -6,6 +6,7 @@ using Vim.Util.Tests;
 namespace Vim.Format.Tests;
 
 [TestFixture]
+[Ignore("C++ Windows-specific tests")]
 public static class VimCppTests
 {
 

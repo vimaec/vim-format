@@ -21,14 +21,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\cpp\vim\Vim.Cpp.vcxproj" />
     <ProjectReference Include="..\..\bfast\Vim.BFast\Vim.BFast.csproj" />
     <ProjectReference Include="..\..\util\Vim.Util.Tests\Vim.Util.Tests.csproj" />
     <ProjectReference Include="..\Vim.Format\Vim.Format.csproj" />
   </ItemGroup>
-
-  <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
-    <Exec Command="echo $(ProjectDir) &gt; &quot;$(ProjectDir)/Resources/ProjDir.txt&quot;" />
-  </Target>
 
 </Project>
