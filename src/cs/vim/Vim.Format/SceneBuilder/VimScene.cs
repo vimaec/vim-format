@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Vim.Format;
 using Vim.Format.Geometry;
 using Vim.Format.ObjectModel;
-using Vim.Format.Utils;
+using Vim.Util;
 using Vim.G3d;
 using Vim.LinqArray;
 using Vim.Math3d;

@@ -2,14 +2,15 @@
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using Vim.Format.Tests.Logging;
+using Vim.Util.Logging;
+using Vim.Util.Logging.Serilog;
 
-namespace Vim.Format.Tests
+namespace Vim.Util.Tests
 {
 #if NET5_0_OR_GREATER
     public record TestContext(string TestName, string BaseDirPath, string SubDirPath = null)
     {
-        public static readonly string DefaultTestDir = Path.Combine(RepoPaths.OutDir, "_tests"); // leading underscore to find it easily in the explorer.
+        public static readonly string DefaultTestDir = Path.Combine(VimFormatRepoPaths.OutDir, "_tests"); // leading underscore to find it easily in the explorer.
 
         public string DirPath
             => Path.Combine(new[] { BaseDirPath, SubDirPath }.Where(s => !string.IsNullOrEmpty(s)).ToArray());

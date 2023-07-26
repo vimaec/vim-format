@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Vim.BFast;
 using Vim.Format.Geometry;
 using Vim.Format.ObjectModel;
-using Vim.Format.Utils;
+using Vim.Util;
 using Vim.LinqArray;
 using Vim.Math3d;
 
@@ -165,7 +165,7 @@ namespace Vim.Format.SceneBuilder
             // Test the assets.
             var dbAssetDictionary = db.Assets;
             var vimAssetDictionary = vim._SerializableDocument.Assets.ToDictionary(a => a.Name, a => a.ToBytes());
-            if (!dbAssetDictionary.DictionaryEqual(vimAssetDictionary, new Util.ArrayEqualityComparer<byte>()))
+            if (!dbAssetDictionary.DictionaryEqual(vimAssetDictionary, new ArrayEqualityComparer<byte>()))
                 throw new VimValidationException($"{nameof(DocumentBuilder)} assets are not equal to {nameof(VimScene)} assets");
 
             // Test the entity tables.

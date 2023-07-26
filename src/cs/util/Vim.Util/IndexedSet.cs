@@ -1,8 +1,9 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Vim.Format.Utils
+namespace Vim.Util
 {
     /// <summary>
     /// This class is similar to a hash set (and is enumerable like a dictionary), 

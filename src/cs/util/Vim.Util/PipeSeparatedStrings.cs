@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Vim.Format.Utils
+namespace Vim.Util
 {
     public static class PipeSeparatedStrings
     {

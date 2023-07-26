@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Vim.Format.Utils.Tests
+namespace Vim.Util.Tests
 {
     [TestFixture]
     public static class PipeSeparatedStringsTests

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using Vim.Format.Utils;
+using Vim.Util;
 
 namespace Vim.Format.ObjectModel
 {

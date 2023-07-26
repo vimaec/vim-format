@@ -1,12 +1,12 @@
 ﻿using System.IO;
 using System.Linq;
 
-namespace Vim.Format.Tests
+namespace Vim.Util.Tests
 {
     /// <summary>
     /// A global interface to the repository's path configurations.
     /// </summary>
-    public static class RepoPaths
+    public static class VimFormatRepoPaths
     {
 
         /// <summary>

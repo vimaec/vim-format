@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Vim.Format.Utils
+namespace Vim.Util
 {
     public class DictionaryOfLists<TKey, TValue> : Dictionary<TKey, List<TValue>>
     {
@@ -53,5 +53,9 @@ namespace Vim.Format.Utils
             }
             return r;
         }
+
+        public static DictionaryOfLists<TKey, TValue> ToDictionaryOfLists<TKey, TValue>(
+            this IEnumerable<IGrouping<TKey, TValue>> groups)
+            => new DictionaryOfLists<TKey, TValue>(groups);
     }
 }
