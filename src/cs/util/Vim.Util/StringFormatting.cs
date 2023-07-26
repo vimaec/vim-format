@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -65,11 +66,11 @@ namespace Vim.Util
                 return false;
 
             var sign = m.Groups["minus"].Success ? -1 : 1;
-            var feet = m.Groups["feet"].Success ? Convert.ToDouble((string)m.Groups["feet"].Value) : 0;
-            var inch = m.Groups["inch"].Success ? Convert.ToInt32((string)m.Groups["inch"].Value) : 0;
-            var sixt = m.Groups["sixt"].Success ? Convert.ToInt32((string)m.Groups["sixt"].Value) : 0;
-            var numer = m.Groups["numer"].Success ? Convert.ToInt32((string)m.Groups["numer"].Value) : 0;
-            var denom = m.Groups["denom"].Success ? Convert.ToInt32((string)m.Groups["denom"].Value) : 1;
+            var feet = m.Groups["feet"].Success ? double.Parse(m.Groups["feet"].Value, CultureInfo.InvariantCulture) : 0;
+            var inch = m.Groups["inch"].Success ? Convert.ToInt32(m.Groups["inch"].Value) : 0;
+            var sixt = m.Groups["sixt"].Success ? Convert.ToInt32(m.Groups["sixt"].Value) : 0;
+            var numer = m.Groups["numer"].Success ? Convert.ToInt32(m.Groups["numer"].Value) : 0;
+            var denom = m.Groups["denom"].Success ? Convert.ToInt32(m.Groups["denom"].Value) : 1;
             value = sign * (feet * 12 + inch + sixt / 16.0 + numer / Convert.ToDouble(denom));
             return true;
         }
