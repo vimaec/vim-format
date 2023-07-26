@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Reflection;
-using Vim.Format.Utils;
+using Vim.Util;
 
 namespace Vim.Format
 {

@@ -5,7 +5,7 @@ using System.Linq;
 using Vim.Math3d;
 using Vim.BFast;
 using System.IO;
-using Vim.Format.Utils;
+using Vim.Util;
 
 namespace Vim.Format
 {
@@ -180,7 +180,7 @@ namespace Vim.Format
 
         public void Write(string filePath)
         {
-            Util.CreateFileDirectory(filePath);
+            IO.CreateFileDirectory(filePath);
             using (var stream = File.OpenWrite(filePath))
                 Write(stream);
         }

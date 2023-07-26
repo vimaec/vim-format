@@ -1,7 +1,8 @@
 using System.IO;
 using System.Text.RegularExpressions;
 using NUnit.Framework;
-using Vim.Format.Tests.Logging;
+using Vim.Util.Tests;
+using Vim.Util.Logging;
 
 namespace Vim.Format.Tests
 {
@@ -28,7 +29,7 @@ namespace Vim.Format.Tests
 
             // Parse BFast version
 
-            var bfastProj = Path.Combine(RepoPaths.SrcDir, "cs", "bfast", "Vim.BFast", "Vim.BFast.csproj");
+            var bfastProj = Path.Combine(VimFormatRepoPaths.SrcDir, "cs", "bfast", "Vim.BFast", "Vim.BFast.csproj");
             var bfastProjContent = File.ReadAllText(bfastProj);
             var bfastVersionMatch = VersionRegex.Match(bfastProjContent);
             Assert.IsTrue(bfastVersionMatch.Success);
@@ -37,7 +38,7 @@ namespace Vim.Format.Tests
 
             // Parse LinqArray version
 
-            var linqArrayProj = Path.Combine(RepoPaths.SrcDir, "cs", "linqarray", "Vim.LinqArray", "Vim.LinqArray.csproj");
+            var linqArrayProj = Path.Combine(VimFormatRepoPaths.SrcDir, "cs", "linqarray", "Vim.LinqArray", "Vim.LinqArray.csproj");
             var linqArrayProjContent = File.ReadAllText(linqArrayProj);
             var linqArrayVersionMatch = VersionRegex.Match(linqArrayProjContent);
             Assert.IsTrue(linqArrayVersionMatch.Success);
@@ -46,7 +47,7 @@ namespace Vim.Format.Tests
 
             // Parse Math3D version
 
-            var math3dProj = Path.Combine(RepoPaths.SrcDir, "cs", "math3d", "Vim.Math3D", "Vim.Math3D.csproj");
+            var math3dProj = Path.Combine(VimFormatRepoPaths.SrcDir, "cs", "math3d", "Vim.Math3D", "Vim.Math3D.csproj");
             var math3dProjContent = File.ReadAllText(math3dProj);
             var math3dVersionMatch = VersionRegex.Match(math3dProjContent);
             Assert.IsTrue(math3dVersionMatch.Success);
@@ -57,7 +58,7 @@ namespace Vim.Format.Tests
 
             // -- Check for matches in the g3d project
 
-            var g3dProj = Path.Combine(RepoPaths.SrcDir, "cs", "g3d", "Vim.G3d", "Vim.G3d.csproj");
+            var g3dProj = Path.Combine(VimFormatRepoPaths.SrcDir, "cs", "g3d", "Vim.G3d", "Vim.G3d.csproj");
             var g3dProjContent = File.ReadAllText(g3dProj);
             logger.LogInformation($"{Path.GetFileName(g3dProj)}:");
 

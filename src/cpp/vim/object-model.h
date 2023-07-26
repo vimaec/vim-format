@@ -11,7 +11,6 @@
 
 namespace Vim
 {
-    typedef bfast::ByteRange* ByteRangePtr;
     
     class Asset;
     class AssetTable;
@@ -156,7 +155,7 @@ namespace Vim
         ScheduleColumnTable* mScheduleColumn;
         ScheduleCellTable* mScheduleCell;
         
-        DocumentModel(VimScene& scene);
+        DocumentModel(Scene& scene);
         ~DocumentModel();
     };
     
@@ -164,7 +163,7 @@ namespace Vim
     {
     public:
         int mIndex;
-        const std::string* mBufferName;
+        std::string mBufferName;
         
         Asset() {}
     };
@@ -172,9 +171,9 @@ namespace Vim
     class AssetTable
     {
         EntityTable& mEntityTable;
-        std::vector<std::string>& mStrings;
+        std::vector<const bfast::byte*>& mStrings;
     public:
-        AssetTable(EntityTable& entityTable, std::vector<std::string>& strings):
+        AssetTable(EntityTable& entityTable, std::vector<const bfast::byte*>& strings):
             mEntityTable(entityTable), mStrings(strings) {}
         
         size_t GetCount()
@@ -206,37 +205,37 @@ namespace Vim
                 Asset entity;
                 entity.mIndex = i;
                 if (existsBufferName)
-                    entity.mBufferName = &mStrings[bufferNameData[i]];
+                    entity.mBufferName = std::string(reinterpret_cast<const char*>(mStrings[bufferNameData[i]]));
                 asset->push_back(entity);
             }
             
             return asset;
         }
         
-        const std::string* GetBufferName(int assetIndex)
+        std::string GetBufferName(int assetIndex)
         {
             if (assetIndex < 0 || assetIndex >= GetCount())
                 return {};
             
             if (mEntityTable.column_exists("string:BufferName")) {
-                return &mStrings[mEntityTable.mStringColumns["string:BufferName"][assetIndex]];
+                return std::string(reinterpret_cast<const char*>(mStrings[mEntityTable.mStringColumns["string:BufferName"][assetIndex]]));
             }
             
             return {};
         }
         
-        std::vector<const std::string*>* GetAllBufferName()
+        std::vector<std::string>* GetAllBufferName()
         {
             const auto count = GetCount();
             
             const std::vector<int>& bufferNameData = mEntityTable.column_exists("string:BufferName") ? mEntityTable.mStringColumns["string:BufferName"] : std::vector<int>();
             
-            std::vector<const std::string*>* result = new std::vector<const std::string*>();
+            std::vector<std::string>* result = new std::vector<std::string>();
             result->reserve(count);
             
             for (int i = 0; i < count; ++i)
             {
-                result->push_back(&mStrings[bufferNameData[i]]);
+                result->push_back(std::string(reinterpret_cast<const char*>(mStrings[bufferNameData[i]])));
             }
             
             return result;
@@ -244,7 +243,7 @@ namespace Vim
         
     };
     
-    static AssetTable* GetAssetTable(VimScene& scene)
+    static AssetTable* GetAssetTable(Scene& scene)
     {
         if (scene.mEntityTables.find("Vim.Asset") == scene.mEntityTables.end())
             return {};
@@ -256,9 +255,9 @@ namespace Vim
     {
     public:
         int mIndex;
-        const std::string* mSpec;
-        const std::string* mType;
-        const std::string* mLabel;
+        std::string mSpec;
+        std::string mType;
+        std::string mLabel;
         
         DisplayUnit() {}
     };
@@ -266,9 +265,9 @@ namespace Vim
     class DisplayUnitTable
     {
         EntityTable& mEntityTable;
-        std::vector<std::string>& mStrings;
+        std::vector<const bfast::byte*>& mStrings;
     public:
-        DisplayUnitTable(EntityTable& entityTable, std::vector<std::string>& strings):
+        DisplayUnitTable(EntityTable& entityTable, std::vector<const bfast::byte*>& strings):
             mEntityTable(entityTable), mStrings(strings) {}
         
         size_t GetCount()
@@ -308,99 +307,99 @@ namespace Vim
                 DisplayUnit entity;
                 entity.mIndex = i;
                 if (existsSpec)
-                    entity.mSpec = &mStrings[specData[i]];
+                    entity.mSpec = std::string(reinterpret_cast<const char*>(mStrings[specData[i]]));
                 if (existsType)
-                    entity.mType = &mStrings[typeData[i]];
+                    entity.mType = std::string(reinterpret_cast<const char*>(mStrings[typeData[i]]));
                 if (existsLabel)
-                    entity.mLabel = &mStrings[labelData[i]];
+                    entity.mLabel = std::string(reinterpret_cast<const char*>(mStrings[labelData[i]]));
                 displayUnit->push_back(entity);
             }
             
             return displayUnit;
         }
         
-        const std::string* GetSpec(int displayUnitIndex)
+        std::string GetSpec(int displayUnitIndex)
         {
             if (displayUnitIndex < 0 || displayUnitIndex >= GetCount())
                 return {};
             
             if (mEntityTable.column_exists("string:Spec")) {
-                return &mStrings[mEntityTable.mStringColumns["string:Spec"][displayUnitIndex]];
+                return std::string(reinterpret_cast<const char*>(mStrings[mEntityTable.mStringColumns["string:Spec"][displayUnitIndex]]));
             }
             
             return {};
         }
         
-        std::vector<const std::string*>* GetAllSpec()
+        std::vector<std::string>* GetAllSpec()
         {
             const auto count = GetCount();
             
             const std::vector<int>& specData = mEntityTable.column_exists("string:Spec") ? mEntityTable.mStringColumns["string:Spec"] : std::vector<int>();
             
-            std::vector<const std::string*>* result = new std::vector<const std::string*>();
+            std::vector<std::string>* result = new std::vector<std::string>();
             result->reserve(count);
             
             for (int i = 0; i < count; ++i)
             {
-                result->push_back(&mStrings[specData[i]]);
+                result->push_back(std::string(reinterpret_cast<const char*>(mStrings[specData[i]])));
             }
             
             return result;
         }
         
-        const std::string* GetType(int displayUnitIndex)
+        std::string GetType(int displayUnitIndex)
         {
             if (displayUnitIndex < 0 || displayUnitIndex >= GetCount())
                 return {};
             
             if (mEntityTable.column_exists("string:Type")) {
-                return &mStrings[mEntityTable.mStringColumns["string:Type"][displayUnitIndex]];
+                return std::string(reinterpret_cast<const char*>(mStrings[mEntityTable.mStringColumns["string:Type"][displayUnitIndex]]));
             }
             
             return {};
         }
         
-        std::vector<const std::string*>* GetAllType()
+        std::vector<std::string>* GetAllType()
         {
             const auto count = GetCount();
             
             const std::vector<int>& typeData = mEntityTable.column_exists("string:Type") ? mEntityTable.mStringColumns["string:Type"] : std::vector<int>();
             
-            std::vector<const std::string*>* result = new std::vector<const std::string*>();
+            std::vector<std::string>* result = new std::vector<std::string>();
             result->reserve(count);
             
             for (int i = 0; i < count; ++i)
             {
-                result->push_back(&mStrings[typeData[i]]);
+                result->push_back(std::string(reinterpret_cast<const char*>(mStrings[typeData[i]])));
             }
             
             return result;
         }
         
-        const std::string* GetLabel(int displayUnitIndex)
+        std::string GetLabel(int displayUnitIndex)
         {
             if (displayUnitIndex < 0 || displayUnitIndex >= GetCount())
                 return {};
             
             if (mEntityTable.column_exists("string:Label")) {
-                return &mStrings[mEntityTable.mStringColumns["string:Label"][displayUnitIndex]];
+                return std::string(reinterpret_cast<const char*>(mStrings[mEntityTable.mStringColumns["string:Label"][displayUnitIndex]]));
             }
             
             return {};
         }
         
-        std::vector<const std::string*>* GetAllLabel()
+        std::vector<std::string>* GetAllLabel()
         {
             const auto count = GetCount();
             
             const std::vector<int>& labelData = mEntityTable.column_exists("string:Label") ? mEntityTable.mStringColumns["string:Label"] : std::vector<int>();
             
-            std::vector<const std::string*>* result = new std::vector<const std::string*>();
+            std::vector<std::string>* result = new std::vector<std::string>();
             result->reserve(count);
             
             for (int i = 0; i < count; ++i)
             {
-                result->push_back(&mStrings[labelData[i]]);
+                result->push_back(std::string(reinterpret_cast<const char*>(mStrings[labelData[i]])));
             }
             
             return result;
@@ -408,7 +407,7 @@ namespace Vim
         
     };
     
-    static DisplayUnitTable* GetDisplayUnitTable(VimScene& scene)
+    static DisplayUnitTable* GetDisplayUnitTable(Scene& scene)
     {
         if (scene.mEntityTables.find("Vim.DisplayUnit") == scene.mEntityTables.end())
             return {};
@@ -420,14 +419,14 @@ namespace Vim
     {
     public:
         int mIndex;
-        const std::string* mName;
-        const std::string* mGroup;
-        const std::string* mParameterType;
+        std::string mName;
+        std::string mGroup;
+        std::string mParameterType;
         bool mIsInstance;
         bool mIsShared;
         bool mIsReadOnly;
         int mFlags;
-        const std::string* mGuid;
+        std::string mGuid;
         
         int mDisplayUnitIndex;
         DisplayUnit* mDisplayUnit;
@@ -438,9 +437,9 @@ namespace Vim
     class ParameterDescriptorTable
     {
         EntityTable& mEntityTable;
-        std::vector<std::string>& mStrings;
+        std::vector<const bfast::byte*>& mStrings;
     public:
-        ParameterDescriptorTable(EntityTable& entityTable, std::vector<std::string>& strings):
+        ParameterDescriptorTable(EntityTable& entityTable, std::vector<const bfast::byte*>& strings):
             mEntityTable(entityTable), mStrings(strings) {}
         
         size_t GetCount()
@@ -516,11 +515,11 @@ namespace Vim
                 ParameterDescriptor entity;
                 entity.mIndex = i;
                 if (existsName)
-                    entity.mName = &mStrings[nameData[i]];
+                    entity.mName = std::string(reinterpret_cast<const char*>(mStrings[nameData[i]]));
                 if (existsGroup)
-                    entity.mGroup = &mStrings[groupData[i]];
+                    entity.mGroup = std::string(reinterpret_cast<const char*>(mStrings[groupData[i]]));
                 if (existsParameterType)
-                    entity.mParameterType = &mStrings[parameterTypeData[i]];
+                    entity.mParameterType = std::string(reinterpret_cast<const char*>(mStrings[parameterTypeData[i]]));
                 if (existsIsInstance)
                     entity.mIsInstance = isInstanceData[i];
                 if (existsIsShared)
@@ -530,7 +529,7 @@ namespace Vim
                 if (existsFlags)
                     entity.mFlags = flagsData[i];
                 if (existsGuid)
-                    entity.mGuid = &mStrings[guidData[i]];
+                    entity.mGuid = std::string(reinterpret_cast<const char*>(mStrings[guidData[i]]));
                 entity.mDisplayUnitIndex = existsDisplayUnit ? displayUnitData[i] : -1;
                 parameterDescriptor->push_back(entity);
             }
@@ -543,88 +542,88 @@ namespace Vim
             return parameterDescriptor;
         }
         
-        const std::string* GetName(int parameterDescriptorIndex)
+        std::string GetName(int parameterDescriptorIndex)
         {
             if (parameterDescriptorIndex < 0 || parameterDescriptorIndex >= GetCount())
                 return {};
             
             if (mEntityTable.column_exists("string:Name")) {
-                return &mStrings[mEntityTable.mStringColumns["string:Name"][parameterDescriptorIndex]];
+                return std::string(reinterpret_cast<const char*>(mStrings[mEntityTable.mStringColumns["string:Name"][parameterDescriptorIndex]]));
             }
             
             return {};
         }
         
-        std::vector<const std::string*>* GetAllName()
+        std::vector<std::string>* GetAllName()
         {
             const auto count = GetCount();
             
             const std::vector<int>& nameData = mEntityTable.column_exists("string:Name") ? mEntityTable.mStringColumns["string:Name"] : std::vector<int>();
             
-            std::vector<const std::string*>* result = new std::vector<const std::string*>();
+            std::vector<std::string>* result = new std::vector<std::string>();
             result->reserve(count);
             
             for (int i = 0; i < count; ++i)
             {
-                result->push_back(&mStrings[nameData[i]]);
+                result->push_back(std::string(reinterpret_cast<const char*>(mStrings[nameData[i]])));
             }
             
             return result;
         }
         
-        const std::string* GetGroup(int parameterDescriptorIndex)
+        std::string GetGroup(int parameterDescriptorIndex)
         {
             if (parameterDescriptorIndex < 0 || parameterDescriptorIndex >= GetCount())
                 return {};
             
             if (mEntityTable.column_exists("string:Group")) {
-                return &mStrings[mEntityTable.mStringColumns["string:Group"][parameterDescriptorIndex]];
+                return std::string(reinterpret_cast<const char*>(mStrings[mEntityTable.mStringColumns["string:Group"][parameterDescriptorIndex]]));
             }
             
             return {};
         }
         
-        std::vector<const std::string*>* GetAllGroup()
+        std::vector<std::string>* GetAllGroup()
         {
             const auto count = GetCount();
             
             const std::vector<int>& groupData = mEntityTable.column_exists("string:Group") ? mEntityTable.mStringColumns["string:Group"] : std::vector<int>();
             
-            std::vector<const std::string*>* result = new std::vector<const std::string*>();
+            std::vector<std::string>* result = new std::vector<std::string>();
             result->reserve(count);
             
             for (int i = 0; i < count; ++i)
             {
-                result->push_back(&mStrings[groupData[i]]);
+                result->push_back(std::string(reinterpret_cast<const char*>(mStrings[groupData[i]])));
             }
             
             return result;
         }
         
-        const std::string* GetParameterType(int parameterDescriptorIndex)
+        std::string GetParameterType(int parameterDescriptorIndex)
         {
             if (parameterDescriptorIndex < 0 || parameterDescriptorIndex >= GetCount())
                 return {};
             
             if (mEntityTable.column_exists("string:ParameterType")) {
-                return &mStrings[mEntityTable.mStringColumns["string:ParameterType"][parameterDescriptorIndex]];
+                return std::string(reinterpret_cast<const char*>(mStrings[mEntityTable.mStringColumns["string:ParameterType"][parameterDescriptorIndex]]));
             }
             
             return {};
         }
         
-        std::vector<const std::string*>* GetAllParameterType()
+        std::vector<std::string>* GetAllParameterType()
         {
             const auto count = GetCount();
             
             const std::vector<int>& parameterTypeData = mEntityTable.column_exists("string:ParameterType") ? mEntityTable.mStringColumns["string:ParameterType"] : std::vector<int>();
             
-            std::vector<const std::string*>* result = new std::vector<const std::string*>();
+            std::vector<std::string>* result = new std::vector<std::string>();
             result->reserve(count);
             
             for (int i = 0; i < count; ++i)
             {
-                result->push_back(&mStrings[parameterTypeData[i]]);
+                result->push_back(std::string(reinterpret_cast<const char*>(mStrings[parameterTypeData[i]])));
             }
             
             return result;
@@ -742,30 +741,30 @@ namespace Vim
             return result;
         }
         
-        const std::string* GetGuid(int parameterDescriptorIndex)
+        std::string GetGuid(int parameterDescriptorIndex)
         {
             if (parameterDescriptorIndex < 0 || parameterDescriptorIndex >= GetCount())
                 return {};
             
             if (mEntityTable.column_exists("string:Guid")) {
-                return &mStrings[mEntityTable.mStringColumns["string:Guid"][parameterDescriptorIndex]];
+                return std::string(reinterpret_cast<const char*>(mStrings[mEntityTable.mStringColumns["string:Guid"][parameterDescriptorIndex]]));
             }
             
             return {};
         }
         
-        std::vector<const std::string*>* GetAllGuid()
+        std::vector<std::string>* GetAllGuid()
         {
             const auto count = GetCount();
             
             const std::vector<int>& guidData = mEntityTable.column_exists("string:Guid") ? mEntityTable.mStringColumns["string:Guid"] : std::vector<int>();
             
-            std::vector<const std::string*>* result = new std::vector<const std::string*>();
+            std::vector<std::string>* result = new std::vector<std::string>();
             result->reserve(count);
             
             for (int i = 0; i < count; ++i)
             {
-                result->push_back(&mStrings[guidData[i]]);
+                result->push_back(std::string(reinterpret_cast<const char*>(mStrings[guidData[i]])));
             }
             
             return result;
@@ -785,7 +784,7 @@ namespace Vim
         
     };
     
-    static ParameterDescriptorTable* GetParameterDescriptorTable(VimScene& scene)
+    static ParameterDescriptorTable* GetParameterDescriptorTable(Scene& scene)
     {
         if (scene.mEntityTables.find("Vim.ParameterDescriptor") == scene.mEntityTables.end())
             return {};
@@ -797,7 +796,7 @@ namespace Vim
     {
     public:
         int mIndex;
-        const std::string* mValue;
+        std::string mValue;
         
         int mParameterDescriptorIndex;
         ParameterDescriptor* mParameterDescriptor;
@@ -810,9 +809,9 @@ namespace Vim
     class ParameterTable
     {
         EntityTable& mEntityTable;
-        std::vector<std::string>& mStrings;
+        std::vector<const bfast::byte*>& mStrings;
     public:
-        ParameterTable(EntityTable& entityTable, std::vector<std::string>& strings):
+        ParameterTable(EntityTable& entityTable, std::vector<const bfast::byte*>& strings):
             mEntityTable(entityTable), mStrings(strings) {}
         
         size_t GetCount()
@@ -851,7 +850,7 @@ namespace Vim
                 Parameter entity;
                 entity.mIndex = i;
                 if (existsValue)
-                    entity.mValue = &mStrings[valueData[i]];
+                    entity.mValue = std::string(reinterpret_cast<const char*>(mStrings[valueData[i]]));
                 entity.mParameterDescriptorIndex = existsParameterDescriptor ? parameterDescriptorData[i] : -1;
                 entity.mElementIndex = existsElement ? elementData[i] : -1;
                 parameter->push_back(entity);
@@ -860,30 +859,30 @@ namespace Vim
             return parameter;
         }
         
-        const std::string* GetValue(int parameterIndex)
+        std::string GetValue(int parameterIndex)
         {
             if (parameterIndex < 0 || parameterIndex >= GetCount())
                 return {};
             
             if (mEntityTable.column_exists("string:Value")) {
-                return &mStrings[mEntityTable.mStringColumns["string:Value"][parameterIndex]];
+                return std::string(reinterpret_cast<const char*>(mStrings[mEntityTable.mStringColumns["string:Value"][parameterIndex]]));
             }
             
             return {};
         }
         
-        std::vector<const std::string*>* GetAllValue()
+        std::vector<std::string>* GetAllValue()
         {
             const auto count = GetCount();
             
             const std::vector<int>& valueData = mEntityTable.column_exists("string:Value") ? mEntityTable.mStringColumns["string:Value"] : std::vector<int>();
             
-            std::vector<const std::string*>* result = new std::vector<const std::string*>();
+            std::vector<std::string>* result = new std::vector<std::string>();
             result->reserve(count);
             
             for (int i = 0; i < count; ++i)
             {
-                result->push_back(&mStrings[valueData[i]]);
+                result->push_back(std::string(reinterpret_cast<const char*>(mStrings[valueData[i]])));
             }
             
             return result;
@@ -915,7 +914,7 @@ namespace Vim
         
     };
     
-    static ParameterTable* GetParameterTable(VimScene& scene)
+    static ParameterTable* GetParameterTable(Scene& scene)
     {
         if (scene.mEntityTables.find("Vim.Parameter") == scene.mEntityTables.end())
             return {};
@@ -928,13 +927,13 @@ namespace Vim
     public:
         int mIndex;
         long long mId;
-        const std::string* mType;
-        const std::string* mName;
-        const std::string* mUniqueId;
+        std::string mType;
+        std::string mName;
+        std::string mUniqueId;
         float mLocation_X;
         float mLocation_Y;
         float mLocation_Z;
-        const std::string* mFamilyName;
+        std::string mFamilyName;
         bool mIsPinned;
         
         int mLevelIndex;
@@ -966,9 +965,9 @@ namespace Vim
     class ElementTable
     {
         EntityTable& mEntityTable;
-        std::vector<std::string>& mStrings;
+        std::vector<const bfast::byte*>& mStrings;
     public:
-        ElementTable(EntityTable& entityTable, std::vector<std::string>& strings):
+        ElementTable(EntityTable& entityTable, std::vector<const bfast::byte*>& strings):
             mEntityTable(entityTable), mStrings(strings) {}
         
         size_t GetCount()
@@ -1088,11 +1087,11 @@ namespace Vim
                 if (existsId)
                     entity.mId = idData[i];
                 if (existsType)
-                    entity.mType = &mStrings[typeData[i]];
+                    entity.mType = std::string(reinterpret_cast<const char*>(mStrings[typeData[i]]));
                 if (existsName)
-                    entity.mName = &mStrings[nameData[i]];
+                    entity.mName = std::string(reinterpret_cast<const char*>(mStrings[nameData[i]]));
                 if (existsUniqueId)
-                    entity.mUniqueId = &mStrings[uniqueIdData[i]];
+                    entity.mUniqueId = std::string(reinterpret_cast<const char*>(mStrings[uniqueIdData[i]]));
                 if (existsLocation_X)
                     entity.mLocation_X = location_XData[i];
                 if (existsLocation_Y)
@@ -1100,7 +1099,7 @@ namespace Vim
                 if (existsLocation_Z)
                     entity.mLocation_Z = location_ZData[i];
                 if (existsFamilyName)
-                    entity.mFamilyName = &mStrings[familyNameData[i]];
+                    entity.mFamilyName = std::string(reinterpret_cast<const char*>(mStrings[familyNameData[i]]));
                 if (existsIsPinned)
                     entity.mIsPinned = isPinnedData[i];
                 entity.mLevelIndex = existsLevel ? levelData[i] : -1;
@@ -1163,88 +1162,88 @@ namespace Vim
             return result;
         }
         
-        const std::string* GetType(int elementIndex)
+        std::string GetType(int elementIndex)
         {
             if (elementIndex < 0 || elementIndex >= GetCount())
                 return {};
             
             if (mEntityTable.column_exists("string:Type")) {
-                return &mStrings[mEntityTable.mStringColumns["string:Type"][elementIndex]];
+                return std::string(reinterpret_cast<const char*>(mStrings[mEntityTable.mStringColumns["string:Type"][elementIndex]]));
             }
             
             return {};
         }
         
-        std::vector<const std::string*>* GetAllType()
+        std::vector<std::string>* GetAllType()
         {
             const auto count = GetCount();
             
             const std::vector<int>& typeData = mEntityTable.column_exists("string:Type") ? mEntityTable.mStringColumns["string:Type"] : std::vector<int>();
             
-            std::vector<const std::string*>* result = new std::vector<const std::string*>();
+            std::vector<std::string>* result = new std::vector<std::string>();
             result->reserve(count);
             
             for (int i = 0; i < count; ++i)
             {
-                result->push_back(&mStrings[typeData[i]]);
+                result->push_back(std::string(reinterpret_cast<const char*>(mStrings[typeData[i]])));
             }
             
             return result;
         }
         
-        const std::string* GetName(int elementIndex)
+        std::string GetName(int elementIndex)
         {
             if (elementIndex < 0 || elementIndex >= GetCount())
                 return {};
             
             if (mEntityTable.column_exists("string:Name")) {
-                return &mStrings[mEntityTable.mStringColumns["string:Name"][elementIndex]];
+                return std::string(reinterpret_cast<const char*>(mStrings[mEntityTable.mStringColumns["string:Name"][elementIndex]]));
             }
             
             return {};
         }
         
-        std::vector<const std::string*>* GetAllName()
+        std::vector<std::string>* GetAllName()
         {
             const auto count = GetCount();
             
             const std::vector<int>& nameData = mEntityTable.column_exists("string:Name") ? mEntityTable.mStringColumns["string:Name"] : std::vector<int>();
             
-            std::vector<const std::string*>* result = new std::vector<const std::string*>();
+            std::vector<std::string>* result = new std::vector<std::string>();
             result->reserve(count);
             
             for (int i = 0; i < count; ++i)
             {
-                result->push_back(&mStrings[nameData[i]]);
+                result->push_back(std::string(reinterpret_cast<const char*>(mStrings[nameData[i]])));
             }
             
             return result;
         }
         
-        const std::string* GetUniqueId(int elementIndex)
+        std::string GetUniqueId(int elementIndex)
         {
             if (elementIndex < 0 || elementIndex >= GetCount())
                 return {};
             
             if (mEntityTable.column_exists("string:UniqueId")) {
-                return &mStrings[mEntityTable.mStringColumns["string:UniqueId"][elementIndex]];
+                return std::string(reinterpret_cast<const char*>(mStrings[mEntityTable.mStringColumns["string:UniqueId"][elementIndex]]));
             }
             
             return {};
         }
         
-        std::vector<const std::string*>* GetAllUniqueId()
+        std::vector<std::string>* GetAllUniqueId()
         {
             const auto count = GetCount();
             
             const std::vector<int>& uniqueIdData = mEntityTable.column_exists("string:UniqueId") ? mEntityTable.mStringColumns["string:UniqueId"] : std::vector<int>();
             
-            std::vector<const std::string*>* result = new std::vector<const std::string*>();
+            std::vector<std::string>* result = new std::vector<std::string>();
             result->reserve(count);
             
             for (int i = 0; i < count; ++i)
             {
-                result->push_back(&mStrings[uniqueIdData[i]]);
+                result->push_back(std::string(reinterpret_cast<const char*>(mStrings[uniqueIdData[i]])));
             }
             
             return result;
@@ -1334,30 +1333,30 @@ namespace Vim
             return result;
         }
         
-        const std::string* GetFamilyName(int elementIndex)
+        std::string GetFamilyName(int elementIndex)
         {
             if (elementIndex < 0 || elementIndex >= GetCount())
                 return {};
             
             if (mEntityTable.column_exists("string:FamilyName")) {
-                return &mStrings[mEntityTable.mStringColumns["string:FamilyName"][elementIndex]];
+                return std::string(reinterpret_cast<const char*>(mStrings[mEntityTable.mStringColumns["string:FamilyName"][elementIndex]]));
             }
             
             return {};
         }
         
-        std::vector<const std::string*>* GetAllFamilyName()
+        std::vector<std::string>* GetAllFamilyName()
         {
             const auto count = GetCount();
             
             const std::vector<int>& familyNameData = mEntityTable.column_exists("string:FamilyName") ? mEntityTable.mStringColumns["string:FamilyName"] : std::vector<int>();
             
-            std::vector<const std::string*>* result = new std::vector<const std::string*>();
+            std::vector<std::string>* result = new std::vector<std::string>();
             result->reserve(count);
             
             for (int i = 0; i < count; ++i)
             {
-                result->push_back(&mStrings[familyNameData[i]]);
+                result->push_back(std::string(reinterpret_cast<const char*>(mStrings[familyNameData[i]])));
             }
             
             return result;
@@ -1525,7 +1524,7 @@ namespace Vim
         
     };
     
-    static ElementTable* GetElementTable(VimScene& scene)
+    static ElementTable* GetElementTable(Scene& scene)
     {
         if (scene.mEntityTables.find("Vim.Element") == scene.mEntityTables.end())
             return {};
@@ -1538,12 +1537,12 @@ namespace Vim
     public:
         int mIndex;
         int mId;
-        const std::string* mName;
-        const std::string* mKind;
+        std::string mName;
+        std::string mKind;
         bool mIsOpen;
         bool mIsEditable;
-        const std::string* mOwner;
-        const std::string* mUniqueId;
+        std::string mOwner;
+        std::string mUniqueId;
         
         int mBimDocumentIndex;
         BimDocument* mBimDocument;
@@ -1554,9 +1553,9 @@ namespace Vim
     class WorksetTable
     {
         EntityTable& mEntityTable;
-        std::vector<std::string>& mStrings;
+        std::vector<const bfast::byte*>& mStrings;
     public:
-        WorksetTable(EntityTable& entityTable, std::vector<std::string>& strings):
+        WorksetTable(EntityTable& entityTable, std::vector<const bfast::byte*>& strings):
             mEntityTable(entityTable), mStrings(strings) {}
         
         size_t GetCount()
@@ -1627,17 +1626,17 @@ namespace Vim
                 if (existsId)
                     entity.mId = idData[i];
                 if (existsName)
-                    entity.mName = &mStrings[nameData[i]];
+                    entity.mName = std::string(reinterpret_cast<const char*>(mStrings[nameData[i]]));
                 if (existsKind)
-                    entity.mKind = &mStrings[kindData[i]];
+                    entity.mKind = std::string(reinterpret_cast<const char*>(mStrings[kindData[i]]));
                 if (existsIsOpen)
                     entity.mIsOpen = isOpenData[i];
                 if (existsIsEditable)
                     entity.mIsEditable = isEditableData[i];
                 if (existsOwner)
-                    entity.mOwner = &mStrings[ownerData[i]];
+                    entity.mOwner = std::string(reinterpret_cast<const char*>(mStrings[ownerData[i]]));
                 if (existsUniqueId)
-                    entity.mUniqueId = &mStrings[uniqueIdData[i]];
+                    entity.mUniqueId = std::string(reinterpret_cast<const char*>(mStrings[uniqueIdData[i]]));
                 entity.mBimDocumentIndex = existsBimDocument ? bimDocumentData[i] : -1;
                 workset->push_back(entity);
             }
@@ -1677,59 +1676,59 @@ namespace Vim
             return result;
         }
         
-        const std::string* GetName(int worksetIndex)
+        std::string GetName(int worksetIndex)
         {
             if (worksetIndex < 0 || worksetIndex >= GetCount())
                 return {};
             
             if (mEntityTable.column_exists("string:Name")) {
-                return &mStrings[mEntityTable.mStringColumns["string:Name"][worksetIndex]];
+                return std::string(reinterpret_cast<const char*>(mStrings[mEntityTable.mStringColumns["string:Name"][worksetIndex]]));
             }
             
             return {};
         }
         
-        std::vector<const std::string*>* GetAllName()
+        std::vector<std::string>* GetAllName()
         {
             const auto count = GetCount();
             
             const std::vector<int>& nameData = mEntityTable.column_exists("string:Name") ? mEntityTable.mStringColumns["string:Name"] : std::vector<int>();
             
-            std::vector<const std::string*>* result = new std::vector<const std::string*>();
+            std::vector<std::string>* result = new std::vector<std::string>();
             result->reserve(count);
             
             for (int i = 0; i < count; ++i)
             {
-                result->push_back(&mStrings[nameData[i]]);
+                result->push_back(std::string(reinterpret_cast<const char*>(mStrings[nameData[i]])));
             }
             
             return result;
         }
         
-        const std::string* GetKind(int worksetIndex)
+        std::string GetKind(int worksetIndex)
         {
             if (worksetIndex < 0 || worksetIndex >= GetCount())
                 return {};
             
             if (mEntityTable.column_exists("string:Kind")) {
-                return &mStrings[mEntityTable.mStringColumns["string:Kind"][worksetIndex]];
+                return std::string(reinterpret_cast<const char*>(mStrings[mEntityTable.mStringColumns["string:Kind"][worksetIndex]]));
             }
             
             return {};
         }
         
-        std::vector<const std::string*>* GetAllKind()
+        std::vector<std::string>* GetAllKind()
         {
             const auto count = GetCount();
             
             const std::vector<int>& kindData = mEntityTable.column_exists("string:Kind") ? mEntityTable.mStringColumns["string:Kind"] : std::vector<int>();
             
-            std::vector<const std::string*>* result = new std::vector<const std::string*>();
+            std::vector<std::string>* result = new std::vector<std::string>();
             result->reserve(count);
             
             for (int i = 0; i < count; ++i)
             {
-                result->push_back(&mStrings[kindData[i]]);
+                result->push_back(std::string(reinterpret_cast<const char*>(mStrings[kindData[i]])));
             }
             
             return result;
@@ -1791,59 +1790,59 @@ namespace Vim
             return result;
         }
         
-        const std::string* GetOwner(int worksetIndex)
+        std::string GetOwner(int worksetIndex)
         {
             if (worksetIndex < 0 || worksetIndex >= GetCount())
                 return {};
             
             if (mEntityTable.column_exists("string:Owner")) {
-                return &mStrings[mEntityTable.mStringColumns["string:Owner"][worksetIndex]];
+                return std::string(reinterpret_cast<const char*>(mStrings[mEntityTable.mStringColumns["string:Owner"][worksetIndex]]));
             }
             
             return {};
         }
         
-        std::vector<const std::string*>* GetAllOwner()
+        std::vector<std::string>* GetAllOwner()
         {
             const auto count = GetCount();
             
             const std::vector<int>& ownerData = mEntityTable.column_exists("string:Owner") ? mEntityTable.mStringColumns["string:Owner"] : std::vector<int>();
             
-            std::vector<const std::string*>* result = new std::vector<const std::string*>();
+            std::vector<std::string>* result = new std::vector<std::string>();
             result->reserve(count);
             
             for (int i = 0; i < count; ++i)
             {
-                result->push_back(&mStrings[ownerData[i]]);
+                result->push_back(std::string(reinterpret_cast<const char*>(mStrings[ownerData[i]])));
             }
             
             return result;
         }
         
-        const std::string* GetUniqueId(int worksetIndex)
+        std::string GetUniqueId(int worksetIndex)
         {
             if (worksetIndex < 0 || worksetIndex >= GetCount())
                 return {};
             
             if (mEntityTable.column_exists("string:UniqueId")) {
-                return &mStrings[mEntityTable.mStringColumns["string:UniqueId"][worksetIndex]];
+                return std::string(reinterpret_cast<const char*>(mStrings[mEntityTable.mStringColumns["string:UniqueId"][worksetIndex]]));
             }
             
             return {};
         }
         
-        std::vector<const std::string*>* GetAllUniqueId()
+        std::vector<std::string>* GetAllUniqueId()
         {
             const auto count = GetCount();
             
             const std::vector<int>& uniqueIdData = mEntityTable.column_exists("string:UniqueId") ? mEntityTable.mStringColumns["string:UniqueId"] : std::vector<int>();
             
-            std::vector<const std::string*>* result = new std::vector<const std::string*>();
+            std::vector<std::string>* result = new std::vector<std::string>();
             result->reserve(count);
             
             for (int i = 0; i < count; ++i)
             {
-                result->push_back(&mStrings[uniqueIdData[i]]);
+                result->push_back(std::string(reinterpret_cast<const char*>(mStrings[uniqueIdData[i]])));
             }
             
             return result;
@@ -1863,7 +1862,7 @@ namespace Vim
         
     };
     
-    static WorksetTable* GetWorksetTable(VimScene& scene)
+    static WorksetTable* GetWorksetTable(Scene& scene)
     {
         if (scene.mEntityTables.find("Vim.Workset") == scene.mEntityTables.end())
             return {};
@@ -1875,7 +1874,7 @@ namespace Vim
     {
     public:
         int mIndex;
-        const std::string* mAssemblyTypeName;
+        std::string mAssemblyTypeName;
         float mPosition_X;
         float mPosition_Y;
         float mPosition_Z;
@@ -1889,9 +1888,9 @@ namespace Vim
     class AssemblyInstanceTable
     {
         EntityTable& mEntityTable;
-        std::vector<std::string>& mStrings;
+        std::vector<const bfast::byte*>& mStrings;
     public:
-        AssemblyInstanceTable(EntityTable& entityTable, std::vector<std::string>& strings):
+        AssemblyInstanceTable(EntityTable& entityTable, std::vector<const bfast::byte*>& strings):
             mEntityTable(entityTable), mStrings(strings) {}
         
         size_t GetCount()
@@ -1948,7 +1947,7 @@ namespace Vim
                 AssemblyInstance entity;
                 entity.mIndex = i;
                 if (existsAssemblyTypeName)
-                    entity.mAssemblyTypeName = &mStrings[assemblyTypeNameData[i]];
+                    entity.mAssemblyTypeName = std::string(reinterpret_cast<const char*>(mStrings[assemblyTypeNameData[i]]));
                 if (existsPosition_X)
                     entity.mPosition_X = position_XData[i];
                 if (existsPosition_Y)
@@ -1966,30 +1965,30 @@ namespace Vim
             return assemblyInstance;
         }
         
-        const std::string* GetAssemblyTypeName(int assemblyInstanceIndex)
+        std::string GetAssemblyTypeName(int assemblyInstanceIndex)
         {
             if (assemblyInstanceIndex < 0 || assemblyInstanceIndex >= GetCount())
                 return {};
             
             if (mEntityTable.column_exists("string:AssemblyTypeName")) {
-                return &mStrings[mEntityTable.mStringColumns["string:AssemblyTypeName"][assemblyInstanceIndex]];
+                return std::string(reinterpret_cast<const char*>(mStrings[mEntityTable.mStringColumns["string:AssemblyTypeName"][assemblyInstanceIndex]]));
             }
             
             return {};
         }
         
-        std::vector<const std::string*>* GetAllAssemblyTypeName()
+        std::vector<std::string>* GetAllAssemblyTypeName()
         {
             const auto count = GetCount();
             
             const std::vector<int>& assemblyTypeNameData = mEntityTable.column_exists("string:AssemblyTypeName") ? mEntityTable.mStringColumns["string:AssemblyTypeName"] : std::vector<int>();
             
-            std::vector<const std::string*>* result = new std::vector<const std::string*>();
+            std::vector<std::string>* result = new std::vector<std::string>();
             result->reserve(count);
             
             for (int i = 0; i < count; ++i)
             {
-                result->push_back(&mStrings[assemblyTypeNameData[i]]);
+                result->push_back(std::string(reinterpret_cast<const char*>(mStrings[assemblyTypeNameData[i]])));
             }
             
             return result;
@@ -2093,7 +2092,7 @@ namespace Vim
         
     };
     
-    static AssemblyInstanceTable* GetAssemblyInstanceTable(VimScene& scene)
+    static AssemblyInstanceTable* GetAssemblyInstanceTable(Scene& scene)
     {
         if (scene.mEntityTables.find("Vim.AssemblyInstance") == scene.mEntityTables.end())
             return {};
@@ -2105,7 +2104,7 @@ namespace Vim
     {
     public:
         int mIndex;
-        const std::string* mGroupType;
+        std::string mGroupType;
         float mPosition_X;
         float mPosition_Y;
         float mPosition_Z;
@@ -2119,9 +2118,9 @@ namespace Vim
     class GroupTable
     {
         EntityTable& mEntityTable;
-        std::vector<std::string>& mStrings;
+        std::vector<const bfast::byte*>& mStrings;
     public:
-        GroupTable(EntityTable& entityTable, std::vector<std::string>& strings):
+        GroupTable(EntityTable& entityTable, std::vector<const bfast::byte*>& strings):
             mEntityTable(entityTable), mStrings(strings) {}
         
         size_t GetCount()
@@ -2178,7 +2177,7 @@ namespace Vim
                 Group entity;
                 entity.mIndex = i;
                 if (existsGroupType)
-                    entity.mGroupType = &mStrings[groupTypeData[i]];
+                    entity.mGroupType = std::string(reinterpret_cast<const char*>(mStrings[groupTypeData[i]]));
                 if (existsPosition_X)
                     entity.mPosition_X = position_XData[i];
                 if (existsPosition_Y)
@@ -2196,30 +2195,30 @@ namespace Vim
             return group;
         }
         
-        const std::string* GetGroupType(int groupIndex)
+        std::string GetGroupType(int groupIndex)
         {
             if (groupIndex < 0 || groupIndex >= GetCount())
                 return {};
             
             if (mEntityTable.column_exists("string:GroupType")) {
-                return &mStrings[mEntityTable.mStringColumns["string:GroupType"][groupIndex]];
+                return std::string(reinterpret_cast<const char*>(mStrings[mEntityTable.mStringColumns["string:GroupType"][groupIndex]]));
             }
             
             return {};
         }
         
-        std::vector<const std::string*>* GetAllGroupType()
+        std::vector<std::string>* GetAllGroupType()
         {
             const auto count = GetCount();
             
             const std::vector<int>& groupTypeData = mEntityTable.column_exists("string:GroupType") ? mEntityTable.mStringColumns["string:GroupType"] : std::vector<int>();
             
-            std::vector<const std::string*>* result = new std::vector<const std::string*>();
+            std::vector<std::string>* result = new std::vector<std::string>();
             result->reserve(count);
             
             for (int i = 0; i < count; ++i)
             {
-                result->push_back(&mStrings[groupTypeData[i]]);
+                result->push_back(std::string(reinterpret_cast<const char*>(mStrings[groupTypeData[i]])));
             }
             
             return result;
@@ -2323,7 +2322,7 @@ namespace Vim
         
     };
     
-    static GroupTable* GetGroupTable(VimScene& scene)
+    static GroupTable* GetGroupTable(Scene& scene)
     {
         if (scene.mEntityTables.find("Vim.Group") == scene.mEntityTables.end())
             return {};
@@ -2346,9 +2345,9 @@ namespace Vim
     class DesignOptionTable
     {
         EntityTable& mEntityTable;
-        std::vector<std::string>& mStrings;
+        std::vector<const bfast::byte*>& mStrings;
     public:
-        DesignOptionTable(EntityTable& entityTable, std::vector<std::string>& strings):
+        DesignOptionTable(EntityTable& entityTable, std::vector<const bfast::byte*>& strings):
             mEntityTable(entityTable), mStrings(strings) {}
         
         size_t GetCount()
@@ -2439,7 +2438,7 @@ namespace Vim
         
     };
     
-    static DesignOptionTable* GetDesignOptionTable(VimScene& scene)
+    static DesignOptionTable* GetDesignOptionTable(Scene& scene)
     {
         if (scene.mEntityTables.find("Vim.DesignOption") == scene.mEntityTables.end())
             return {};
@@ -2464,9 +2463,9 @@ namespace Vim
     class LevelTable
     {
         EntityTable& mEntityTable;
-        std::vector<std::string>& mStrings;
+        std::vector<const bfast::byte*>& mStrings;
     public:
-        LevelTable(EntityTable& entityTable, std::vector<std::string>& strings):
+        LevelTable(EntityTable& entityTable, std::vector<const bfast::byte*>& strings):
             mEntityTable(entityTable), mStrings(strings) {}
         
         size_t GetCount()
@@ -2573,7 +2572,7 @@ namespace Vim
         
     };
     
-    static LevelTable* GetLevelTable(VimScene& scene)
+    static LevelTable* GetLevelTable(Scene& scene)
     {
         if (scene.mEntityTables.find("Vim.Level") == scene.mEntityTables.end())
             return {};
@@ -2595,9 +2594,9 @@ namespace Vim
     class PhaseTable
     {
         EntityTable& mEntityTable;
-        std::vector<std::string>& mStrings;
+        std::vector<const bfast::byte*>& mStrings;
     public:
-        PhaseTable(EntityTable& entityTable, std::vector<std::string>& strings):
+        PhaseTable(EntityTable& entityTable, std::vector<const bfast::byte*>& strings):
             mEntityTable(entityTable), mStrings(strings) {}
         
         size_t GetCount()
@@ -2649,7 +2648,7 @@ namespace Vim
         
     };
     
-    static PhaseTable* GetPhaseTable(VimScene& scene)
+    static PhaseTable* GetPhaseTable(Scene& scene)
     {
         if (scene.mEntityTables.find("Vim.Phase") == scene.mEntityTables.end())
             return {};
@@ -2667,7 +2666,7 @@ namespace Vim
         double mVolume;
         double mPerimeter;
         double mArea;
-        const std::string* mNumber;
+        std::string mNumber;
         
         int mUpperLimitIndex;
         Level* mUpperLimit;
@@ -2680,9 +2679,9 @@ namespace Vim
     class RoomTable
     {
         EntityTable& mEntityTable;
-        std::vector<std::string>& mStrings;
+        std::vector<const bfast::byte*>& mStrings;
     public:
-        RoomTable(EntityTable& entityTable, std::vector<std::string>& strings):
+        RoomTable(EntityTable& entityTable, std::vector<const bfast::byte*>& strings):
             mEntityTable(entityTable), mStrings(strings) {}
         
         size_t GetCount()
@@ -2775,7 +2774,7 @@ namespace Vim
                 if (existsArea)
                     entity.mArea = areaData[i];
                 if (existsNumber)
-                    entity.mNumber = &mStrings[numberData[i]];
+                    entity.mNumber = std::string(reinterpret_cast<const char*>(mStrings[numberData[i]]));
                 entity.mUpperLimitIndex = existsUpperLimit ? upperLimitData[i] : -1;
                 entity.mElementIndex = existsElement ? elementData[i] : -1;
                 room->push_back(entity);
@@ -2959,30 +2958,30 @@ namespace Vim
             return result;
         }
         
-        const std::string* GetNumber(int roomIndex)
+        std::string GetNumber(int roomIndex)
         {
             if (roomIndex < 0 || roomIndex >= GetCount())
                 return {};
             
             if (mEntityTable.column_exists("string:Number")) {
-                return &mStrings[mEntityTable.mStringColumns["string:Number"][roomIndex]];
+                return std::string(reinterpret_cast<const char*>(mStrings[mEntityTable.mStringColumns["string:Number"][roomIndex]]));
             }
             
             return {};
         }
         
-        std::vector<const std::string*>* GetAllNumber()
+        std::vector<std::string>* GetAllNumber()
         {
             const auto count = GetCount();
             
             const std::vector<int>& numberData = mEntityTable.column_exists("string:Number") ? mEntityTable.mStringColumns["string:Number"] : std::vector<int>();
             
-            std::vector<const std::string*>* result = new std::vector<const std::string*>();
+            std::vector<std::string>* result = new std::vector<std::string>();
             result->reserve(count);
             
             for (int i = 0; i < count; ++i)
             {
-                result->push_back(&mStrings[numberData[i]]);
+                result->push_back(std::string(reinterpret_cast<const char*>(mStrings[numberData[i]])));
             }
             
             return result;
@@ -3014,7 +3013,7 @@ namespace Vim
         
     };
     
-    static RoomTable* GetRoomTable(VimScene& scene)
+    static RoomTable* GetRoomTable(Scene& scene)
     {
         if (scene.mEntityTables.find("Vim.Room") == scene.mEntityTables.end())
             return {};
@@ -3026,34 +3025,34 @@ namespace Vim
     {
     public:
         int mIndex;
-        const std::string* mTitle;
+        std::string mTitle;
         bool mIsMetric;
-        const std::string* mGuid;
+        std::string mGuid;
         int mNumSaves;
         bool mIsLinked;
         bool mIsDetached;
         bool mIsWorkshared;
-        const std::string* mPathName;
+        std::string mPathName;
         double mLatitude;
         double mLongitude;
         double mTimeZone;
-        const std::string* mPlaceName;
-        const std::string* mWeatherStationName;
+        std::string mPlaceName;
+        std::string mWeatherStationName;
         double mElevation;
-        const std::string* mProjectLocation;
-        const std::string* mIssueDate;
-        const std::string* mStatus;
-        const std::string* mClientName;
-        const std::string* mAddress;
-        const std::string* mName;
-        const std::string* mNumber;
-        const std::string* mAuthor;
-        const std::string* mBuildingName;
-        const std::string* mOrganizationName;
-        const std::string* mOrganizationDescription;
-        const std::string* mProduct;
-        const std::string* mVersion;
-        const std::string* mUser;
+        std::string mProjectLocation;
+        std::string mIssueDate;
+        std::string mStatus;
+        std::string mClientName;
+        std::string mAddress;
+        std::string mName;
+        std::string mNumber;
+        std::string mAuthor;
+        std::string mBuildingName;
+        std::string mOrganizationName;
+        std::string mOrganizationDescription;
+        std::string mProduct;
+        std::string mVersion;
+        std::string mUser;
         
         int mActiveViewIndex;
         View* mActiveView;
@@ -3070,9 +3069,9 @@ namespace Vim
     class BimDocumentTable
     {
         EntityTable& mEntityTable;
-        std::vector<std::string>& mStrings;
+        std::vector<const bfast::byte*>& mStrings;
     public:
-        BimDocumentTable(EntityTable& entityTable, std::vector<std::string>& strings):
+        BimDocumentTable(EntityTable& entityTable, std::vector<const bfast::byte*>& strings):
             mEntityTable(entityTable), mStrings(strings) {}
         
         size_t GetCount()
@@ -3252,11 +3251,11 @@ namespace Vim
                 BimDocument entity;
                 entity.mIndex = i;
                 if (existsTitle)
-                    entity.mTitle = &mStrings[titleData[i]];
+                    entity.mTitle = std::string(reinterpret_cast<const char*>(mStrings[titleData[i]]));
                 if (existsIsMetric)
                     entity.mIsMetric = isMetricData[i];
                 if (existsGuid)
-                    entity.mGuid = &mStrings[guidData[i]];
+                    entity.mGuid = std::string(reinterpret_cast<const char*>(mStrings[guidData[i]]));
                 if (existsNumSaves)
                     entity.mNumSaves = numSavesData[i];
                 if (existsIsLinked)
@@ -3266,7 +3265,7 @@ namespace Vim
                 if (existsIsWorkshared)
                     entity.mIsWorkshared = isWorksharedData[i];
                 if (existsPathName)
-                    entity.mPathName = &mStrings[pathNameData[i]];
+                    entity.mPathName = std::string(reinterpret_cast<const char*>(mStrings[pathNameData[i]]));
                 if (existsLatitude)
                     entity.mLatitude = latitudeData[i];
                 if (existsLongitude)
@@ -3274,39 +3273,39 @@ namespace Vim
                 if (existsTimeZone)
                     entity.mTimeZone = timeZoneData[i];
                 if (existsPlaceName)
-                    entity.mPlaceName = &mStrings[placeNameData[i]];
+                    entity.mPlaceName = std::string(reinterpret_cast<const char*>(mStrings[placeNameData[i]]));
                 if (existsWeatherStationName)
-                    entity.mWeatherStationName = &mStrings[weatherStationNameData[i]];
+                    entity.mWeatherStationName = std::string(reinterpret_cast<const char*>(mStrings[weatherStationNameData[i]]));
                 if (existsElevation)
                     entity.mElevation = elevationData[i];
                 if (existsProjectLocation)
-                    entity.mProjectLocation = &mStrings[projectLocationData[i]];
+                    entity.mProjectLocation = std::string(reinterpret_cast<const char*>(mStrings[projectLocationData[i]]));
                 if (existsIssueDate)
-                    entity.mIssueDate = &mStrings[issueDateData[i]];
+                    entity.mIssueDate = std::string(reinterpret_cast<const char*>(mStrings[issueDateData[i]]));
                 if (existsStatus)
-                    entity.mStatus = &mStrings[statusData[i]];
+                    entity.mStatus = std::string(reinterpret_cast<const char*>(mStrings[statusData[i]]));
                 if (existsClientName)
-                    entity.mClientName = &mStrings[clientNameData[i]];
+                    entity.mClientName = std::string(reinterpret_cast<const char*>(mStrings[clientNameData[i]]));
                 if (existsAddress)
-                    entity.mAddress = &mStrings[addressData[i]];
+                    entity.mAddress = std::string(reinterpret_cast<const char*>(mStrings[addressData[i]]));
                 if (existsName)
-                    entity.mName = &mStrings[nameData[i]];
+                    entity.mName = std::string(reinterpret_cast<const char*>(mStrings[nameData[i]]));
                 if (existsNumber)
-                    entity.mNumber = &mStrings[numberData[i]];
+                    entity.mNumber = std::string(reinterpret_cast<const char*>(mStrings[numberData[i]]));
                 if (existsAuthor)
-                    entity.mAuthor = &mStrings[authorData[i]];
+                    entity.mAuthor = std::string(reinterpret_cast<const char*>(mStrings[authorData[i]]));
                 if (existsBuildingName)
-                    entity.mBuildingName = &mStrings[buildingNameData[i]];
+                    entity.mBuildingName = std::string(reinterpret_cast<const char*>(mStrings[buildingNameData[i]]));
                 if (existsOrganizationName)
-                    entity.mOrganizationName = &mStrings[organizationNameData[i]];
+                    entity.mOrganizationName = std::string(reinterpret_cast<const char*>(mStrings[organizationNameData[i]]));
                 if (existsOrganizationDescription)
-                    entity.mOrganizationDescription = &mStrings[organizationDescriptionData[i]];
+                    entity.mOrganizationDescription = std::string(reinterpret_cast<const char*>(mStrings[organizationDescriptionData[i]]));
                 if (existsProduct)
-                    entity.mProduct = &mStrings[productData[i]];
+                    entity.mProduct = std::string(reinterpret_cast<const char*>(mStrings[productData[i]]));
                 if (existsVersion)
-                    entity.mVersion = &mStrings[versionData[i]];
+                    entity.mVersion = std::string(reinterpret_cast<const char*>(mStrings[versionData[i]]));
                 if (existsUser)
-                    entity.mUser = &mStrings[userData[i]];
+                    entity.mUser = std::string(reinterpret_cast<const char*>(mStrings[userData[i]]));
                 entity.mActiveViewIndex = existsActiveView ? activeViewData[i] : -1;
                 entity.mOwnerFamilyIndex = existsOwnerFamily ? ownerFamilyData[i] : -1;
                 entity.mParentIndex = existsParent ? parentData[i] : -1;
@@ -3327,30 +3326,30 @@ namespace Vim
             return bimDocument;
         }
         
-        const std::string* GetTitle(int bimDocumentIndex)
+        std::string GetTitle(int bimDocumentIndex)
         {
             if (bimDocumentIndex < 0 || bimDocumentIndex >= GetCount())
                 return {};
             
             if (mEntityTable.column_exists("string:Title")) {
-                return &mStrings[mEntityTable.mStringColumns["string:Title"][bimDocumentIndex]];
+                return std::string(reinterpret_cast<const char*>(mStrings[mEntityTable.mStringColumns["string:Title"][bimDocumentIndex]]));
             }
             
             return {};
         }
         
-        std::vector<const std::string*>* GetAllTitle()
+        std::vector<std::string>* GetAllTitle()
         {
             const auto count = GetCount();
             
             const std::vector<int>& titleData = mEntityTable.column_exists("string:Title") ? mEntityTable.mStringColumns["string:Title"] : std::vector<int>();
             
-            std::vector<const std::string*>* result = new std::vector<const std::string*>();
+            std::vector<std::string>* result = new std::vector<std::string>();
             result->reserve(count);
             
             for (int i = 0; i < count; ++i)
             {
-                result->push_back(&mStrings[titleData[i]]);
+                result->push_back(std::string(reinterpret_cast<const char*>(mStrings[titleData[i]])));
             }
             
             return result;
@@ -3384,30 +3383,30 @@ namespace Vim
             return result;
         }
         
-        const std::string* GetGuid(int bimDocumentIndex)
+        std::string GetGuid(int bimDocumentIndex)
         {
             if (bimDocumentIndex < 0 || bimDocumentIndex >= GetCount())
                 return {};
             
             if (mEntityTable.column_exists("string:Guid")) {
-                return &mStrings[mEntityTable.mStringColumns["string:Guid"][bimDocumentIndex]];
+                return std::string(reinterpret_cast<const char*>(mStrings[mEntityTable.mStringColumns["string:Guid"][bimDocumentIndex]]));
             }
             
             return {};
         }
         
-        std::vector<const std::string*>* GetAllGuid()
+        std::vector<std::string>* GetAllGuid()
         {
             const auto count = GetCount();
             
             const std::vector<int>& guidData = mEntityTable.column_exists("string:Guid") ? mEntityTable.mStringColumns["string:Guid"] : std::vector<int>();
             
-            std::vector<const std::string*>* result = new std::vector<const std::string*>();
+            std::vector<std::string>* result = new std::vector<std::string>();
             result->reserve(count);
             
             for (int i = 0; i < count; ++i)
             {
-                result->push_back(&mStrings[guidData[i]]);
+                result->push_back(std::string(reinterpret_cast<const char*>(mStrings[guidData[i]])));
             }
             
             return result;
@@ -3525,30 +3524,30 @@ namespace Vim
             return result;
         }
         
-        const std::string* GetPathName(int bimDocumentIndex)
+        std::string GetPathName(int bimDocumentIndex)
         {
             if (bimDocumentIndex < 0 || bimDocumentIndex >= GetCount())
                 return {};
             
             if (mEntityTable.column_exists("string:PathName")) {
-                return &mStrings[mEntityTable.mStringColumns["string:PathName"][bimDocumentIndex]];
+                return std::string(reinterpret_cast<const char*>(mStrings[mEntityTable.mStringColumns["string:PathName"][bimDocumentIndex]]));
             }
             
             return {};
         }
         
-        std::vector<const std::string*>* GetAllPathName()
+        std::vector<std::string>* GetAllPathName()
         {
             const auto count = GetCount();
             
             const std::vector<int>& pathNameData = mEntityTable.column_exists("string:PathName") ? mEntityTable.mStringColumns["string:PathName"] : std::vector<int>();
             
-            std::vector<const std::string*>* result = new std::vector<const std::string*>();
+            std::vector<std::string>* result = new std::vector<std::string>();
             result->reserve(count);
             
             for (int i = 0; i < count; ++i)
             {
-                result->push_back(&mStrings[pathNameData[i]]);
+                result->push_back(std::string(reinterpret_cast<const char*>(mStrings[pathNameData[i]])));
             }
             
             return result;
@@ -3638,59 +3637,59 @@ namespace Vim
             return result;
         }
         
-        const std::string* GetPlaceName(int bimDocumentIndex)
+        std::string GetPlaceName(int bimDocumentIndex)
         {
             if (bimDocumentIndex < 0 || bimDocumentIndex >= GetCount())
                 return {};
             
             if (mEntityTable.column_exists("string:PlaceName")) {
-                return &mStrings[mEntityTable.mStringColumns["string:PlaceName"][bimDocumentIndex]];
+                return std::string(reinterpret_cast<const char*>(mStrings[mEntityTable.mStringColumns["string:PlaceName"][bimDocumentIndex]]));
             }
             
             return {};
         }
         
-        std::vector<const std::string*>* GetAllPlaceName()
+        std::vector<std::string>* GetAllPlaceName()
         {
             const auto count = GetCount();
             
             const std::vector<int>& placeNameData = mEntityTable.column_exists("string:PlaceName") ? mEntityTable.mStringColumns["string:PlaceName"] : std::vector<int>();
             
-            std::vector<const std::string*>* result = new std::vector<const std::string*>();
+            std::vector<std::string>* result = new std::vector<std::string>();
             result->reserve(count);
             
             for (int i = 0; i < count; ++i)
             {
-                result->push_back(&mStrings[placeNameData[i]]);
+                result->push_back(std::string(reinterpret_cast<const char*>(mStrings[placeNameData[i]])));
             }
             
             return result;
         }
         
-        const std::string* GetWeatherStationName(int bimDocumentIndex)
+        std::string GetWeatherStationName(int bimDocumentIndex)
         {
             if (bimDocumentIndex < 0 || bimDocumentIndex >= GetCount())
                 return {};
             
             if (mEntityTable.column_exists("string:WeatherStationName")) {
-                return &mStrings[mEntityTable.mStringColumns["string:WeatherStationName"][bimDocumentIndex]];
+                return std::string(reinterpret_cast<const char*>(mStrings[mEntityTable.mStringColumns["string:WeatherStationName"][bimDocumentIndex]]));
             }
             
             return {};
         }
         
-        std::vector<const std::string*>* GetAllWeatherStationName()
+        std::vector<std::string>* GetAllWeatherStationName()
         {
             const auto count = GetCount();
             
             const std::vector<int>& weatherStationNameData = mEntityTable.column_exists("string:WeatherStationName") ? mEntityTable.mStringColumns["string:WeatherStationName"] : std::vector<int>();
             
-            std::vector<const std::string*>* result = new std::vector<const std::string*>();
+            std::vector<std::string>* result = new std::vector<std::string>();
             result->reserve(count);
             
             for (int i = 0; i < count; ++i)
             {
-                result->push_back(&mStrings[weatherStationNameData[i]]);
+                result->push_back(std::string(reinterpret_cast<const char*>(mStrings[weatherStationNameData[i]])));
             }
             
             return result;
@@ -3724,407 +3723,407 @@ namespace Vim
             return result;
         }
         
-        const std::string* GetProjectLocation(int bimDocumentIndex)
+        std::string GetProjectLocation(int bimDocumentIndex)
         {
             if (bimDocumentIndex < 0 || bimDocumentIndex >= GetCount())
                 return {};
             
             if (mEntityTable.column_exists("string:ProjectLocation")) {
-                return &mStrings[mEntityTable.mStringColumns["string:ProjectLocation"][bimDocumentIndex]];
+                return std::string(reinterpret_cast<const char*>(mStrings[mEntityTable.mStringColumns["string:ProjectLocation"][bimDocumentIndex]]));
             }
             
             return {};
         }
         
-        std::vector<const std::string*>* GetAllProjectLocation()
+        std::vector<std::string>* GetAllProjectLocation()
         {
             const auto count = GetCount();
             
             const std::vector<int>& projectLocationData = mEntityTable.column_exists("string:ProjectLocation") ? mEntityTable.mStringColumns["string:ProjectLocation"] : std::vector<int>();
             
-            std::vector<const std::string*>* result = new std::vector<const std::string*>();
+            std::vector<std::string>* result = new std::vector<std::string>();
             result->reserve(count);
             
             for (int i = 0; i < count; ++i)
             {
-                result->push_back(&mStrings[projectLocationData[i]]);
+                result->push_back(std::string(reinterpret_cast<const char*>(mStrings[projectLocationData[i]])));
             }
             
             return result;
         }
         
-        const std::string* GetIssueDate(int bimDocumentIndex)
+        std::string GetIssueDate(int bimDocumentIndex)
         {
             if (bimDocumentIndex < 0 || bimDocumentIndex >= GetCount())
                 return {};
             
             if (mEntityTable.column_exists("string:IssueDate")) {
-                return &mStrings[mEntityTable.mStringColumns["string:IssueDate"][bimDocumentIndex]];
+                return std::string(reinterpret_cast<const char*>(mStrings[mEntityTable.mStringColumns["string:IssueDate"][bimDocumentIndex]]));
             }
             
             return {};
         }
         
-        std::vector<const std::string*>* GetAllIssueDate()
+        std::vector<std::string>* GetAllIssueDate()
         {
             const auto count = GetCount();
             
             const std::vector<int>& issueDateData = mEntityTable.column_exists("string:IssueDate") ? mEntityTable.mStringColumns["string:IssueDate"] : std::vector<int>();
             
-            std::vector<const std::string*>* result = new std::vector<const std::string*>();
+            std::vector<std::string>* result = new std::vector<std::string>();
             result->reserve(count);
             
             for (int i = 0; i < count; ++i)
             {
-                result->push_back(&mStrings[issueDateData[i]]);
+                result->push_back(std::string(reinterpret_cast<const char*>(mStrings[issueDateData[i]])));
             }
             
             return result;
         }
         
-        const std::string* GetStatus(int bimDocumentIndex)
+        std::string GetStatus(int bimDocumentIndex)
         {
             if (bimDocumentIndex < 0 || bimDocumentIndex >= GetCount())
                 return {};
             
             if (mEntityTable.column_exists("string:Status")) {
-                return &mStrings[mEntityTable.mStringColumns["string:Status"][bimDocumentIndex]];
+                return std::string(reinterpret_cast<const char*>(mStrings[mEntityTable.mStringColumns["string:Status"][bimDocumentIndex]]));
             }
             
             return {};
         }
         
-        std::vector<const std::string*>* GetAllStatus()
+        std::vector<std::string>* GetAllStatus()
         {
             const auto count = GetCount();
             
             const std::vector<int>& statusData = mEntityTable.column_exists("string:Status") ? mEntityTable.mStringColumns["string:Status"] : std::vector<int>();
             
-            std::vector<const std::string*>* result = new std::vector<const std::string*>();
+            std::vector<std::string>* result = new std::vector<std::string>();
             result->reserve(count);
             
             for (int i = 0; i < count; ++i)
             {
-                result->push_back(&mStrings[statusData[i]]);
+                result->push_back(std::string(reinterpret_cast<const char*>(mStrings[statusData[i]])));
             }
             
             return result;
         }
         
-        const std::string* GetClientName(int bimDocumentIndex)
+        std::string GetClientName(int bimDocumentIndex)
         {
             if (bimDocumentIndex < 0 || bimDocumentIndex >= GetCount())
                 return {};
             
             if (mEntityTable.column_exists("string:ClientName")) {
-                return &mStrings[mEntityTable.mStringColumns["string:ClientName"][bimDocumentIndex]];
+                return std::string(reinterpret_cast<const char*>(mStrings[mEntityTable.mStringColumns["string:ClientName"][bimDocumentIndex]]));
             }
             
             return {};
         }
         
-        std::vector<const std::string*>* GetAllClientName()
+        std::vector<std::string>* GetAllClientName()
         {
             const auto count = GetCount();
             
             const std::vector<int>& clientNameData = mEntityTable.column_exists("string:ClientName") ? mEntityTable.mStringColumns["string:ClientName"] : std::vector<int>();
             
-            std::vector<const std::string*>* result = new std::vector<const std::string*>();
+            std::vector<std::string>* result = new std::vector<std::string>();
             result->reserve(count);
             
             for (int i = 0; i < count; ++i)
             {
-                result->push_back(&mStrings[clientNameData[i]]);
+                result->push_back(std::string(reinterpret_cast<const char*>(mStrings[clientNameData[i]])));
             }
             
             return result;
         }
         
-        const std::string* GetAddress(int bimDocumentIndex)
+        std::string GetAddress(int bimDocumentIndex)
         {
             if (bimDocumentIndex < 0 || bimDocumentIndex >= GetCount())
                 return {};
             
             if (mEntityTable.column_exists("string:Address")) {
-                return &mStrings[mEntityTable.mStringColumns["string:Address"][bimDocumentIndex]];
+                return std::string(reinterpret_cast<const char*>(mStrings[mEntityTable.mStringColumns["string:Address"][bimDocumentIndex]]));
             }
             
             return {};
         }
         
-        std::vector<const std::string*>* GetAllAddress()
+        std::vector<std::string>* GetAllAddress()
         {
             const auto count = GetCount();
             
             const std::vector<int>& addressData = mEntityTable.column_exists("string:Address") ? mEntityTable.mStringColumns["string:Address"] : std::vector<int>();
             
-            std::vector<const std::string*>* result = new std::vector<const std::string*>();
+            std::vector<std::string>* result = new std::vector<std::string>();
             result->reserve(count);
             
             for (int i = 0; i < count; ++i)
             {
-                result->push_back(&mStrings[addressData[i]]);
+                result->push_back(std::string(reinterpret_cast<const char*>(mStrings[addressData[i]])));
             }
             
             return result;
         }
         
-        const std::string* GetName(int bimDocumentIndex)
+        std::string GetName(int bimDocumentIndex)
         {
             if (bimDocumentIndex < 0 || bimDocumentIndex >= GetCount())
                 return {};
             
             if (mEntityTable.column_exists("string:Name")) {
-                return &mStrings[mEntityTable.mStringColumns["string:Name"][bimDocumentIndex]];
+                return std::string(reinterpret_cast<const char*>(mStrings[mEntityTable.mStringColumns["string:Name"][bimDocumentIndex]]));
             }
             
             return {};
         }
         
-        std::vector<const std::string*>* GetAllName()
+        std::vector<std::string>* GetAllName()
         {
             const auto count = GetCount();
             
             const std::vector<int>& nameData = mEntityTable.column_exists("string:Name") ? mEntityTable.mStringColumns["string:Name"] : std::vector<int>();
             
-            std::vector<const std::string*>* result = new std::vector<const std::string*>();
+            std::vector<std::string>* result = new std::vector<std::string>();
             result->reserve(count);
             
             for (int i = 0; i < count; ++i)
             {
-                result->push_back(&mStrings[nameData[i]]);
+                result->push_back(std::string(reinterpret_cast<const char*>(mStrings[nameData[i]])));
             }
             
             return result;
         }
         
-        const std::string* GetNumber(int bimDocumentIndex)
+        std::string GetNumber(int bimDocumentIndex)
         {
             if (bimDocumentIndex < 0 || bimDocumentIndex >= GetCount())
                 return {};
             
             if (mEntityTable.column_exists("string:Number")) {
-                return &mStrings[mEntityTable.mStringColumns["string:Number"][bimDocumentIndex]];
+                return std::string(reinterpret_cast<const char*>(mStrings[mEntityTable.mStringColumns["string:Number"][bimDocumentIndex]]));
             }
             
             return {};
         }
         
-        std::vector<const std::string*>* GetAllNumber()
+        std::vector<std::string>* GetAllNumber()
         {
             const auto count = GetCount();
             
             const std::vector<int>& numberData = mEntityTable.column_exists("string:Number") ? mEntityTable.mStringColumns["string:Number"] : std::vector<int>();
             
-            std::vector<const std::string*>* result = new std::vector<const std::string*>();
+            std::vector<std::string>* result = new std::vector<std::string>();
             result->reserve(count);
             
             for (int i = 0; i < count; ++i)
             {
-                result->push_back(&mStrings[numberData[i]]);
+                result->push_back(std::string(reinterpret_cast<const char*>(mStrings[numberData[i]])));
             }
             
             return result;
         }
         
-        const std::string* GetAuthor(int bimDocumentIndex)
+        std::string GetAuthor(int bimDocumentIndex)
         {
             if (bimDocumentIndex < 0 || bimDocumentIndex >= GetCount())
                 return {};
             
             if (mEntityTable.column_exists("string:Author")) {
-                return &mStrings[mEntityTable.mStringColumns["string:Author"][bimDocumentIndex]];
+                return std::string(reinterpret_cast<const char*>(mStrings[mEntityTable.mStringColumns["string:Author"][bimDocumentIndex]]));
             }
             
             return {};
         }
         
-        std::vector<const std::string*>* GetAllAuthor()
+        std::vector<std::string>* GetAllAuthor()
         {
             const auto count = GetCount();
             
             const std::vector<int>& authorData = mEntityTable.column_exists("string:Author") ? mEntityTable.mStringColumns["string:Author"] : std::vector<int>();
             
-            std::vector<const std::string*>* result = new std::vector<const std::string*>();
+            std::vector<std::string>* result = new std::vector<std::string>();
             result->reserve(count);
             
             for (int i = 0; i < count; ++i)
             {
-                result->push_back(&mStrings[authorData[i]]);
+                result->push_back(std::string(reinterpret_cast<const char*>(mStrings[authorData[i]])));
             }
             
             return result;
         }
         
-        const std::string* GetBuildingName(int bimDocumentIndex)
+        std::string GetBuildingName(int bimDocumentIndex)
         {
             if (bimDocumentIndex < 0 || bimDocumentIndex >= GetCount())
                 return {};
             
             if (mEntityTable.column_exists("string:BuildingName")) {
-                return &mStrings[mEntityTable.mStringColumns["string:BuildingName"][bimDocumentIndex]];
+                return std::string(reinterpret_cast<const char*>(mStrings[mEntityTable.mStringColumns["string:BuildingName"][bimDocumentIndex]]));
             }
             
             return {};
         }
         
-        std::vector<const std::string*>* GetAllBuildingName()
+        std::vector<std::string>* GetAllBuildingName()
         {
             const auto count = GetCount();
             
             const std::vector<int>& buildingNameData = mEntityTable.column_exists("string:BuildingName") ? mEntityTable.mStringColumns["string:BuildingName"] : std::vector<int>();
             
-            std::vector<const std::string*>* result = new std::vector<const std::string*>();
+            std::vector<std::string>* result = new std::vector<std::string>();
             result->reserve(count);
             
             for (int i = 0; i < count; ++i)
             {
-                result->push_back(&mStrings[buildingNameData[i]]);
+                result->push_back(std::string(reinterpret_cast<const char*>(mStrings[buildingNameData[i]])));
             }
             
             return result;
         }
         
-        const std::string* GetOrganizationName(int bimDocumentIndex)
+        std::string GetOrganizationName(int bimDocumentIndex)
         {
             if (bimDocumentIndex < 0 || bimDocumentIndex >= GetCount())
                 return {};
             
             if (mEntityTable.column_exists("string:OrganizationName")) {
-                return &mStrings[mEntityTable.mStringColumns["string:OrganizationName"][bimDocumentIndex]];
+                return std::string(reinterpret_cast<const char*>(mStrings[mEntityTable.mStringColumns["string:OrganizationName"][bimDocumentIndex]]));
             }
             
             return {};
         }
         
-        std::vector<const std::string*>* GetAllOrganizationName()
+        std::vector<std::string>* GetAllOrganizationName()
         {
             const auto count = GetCount();
             
             const std::vector<int>& organizationNameData = mEntityTable.column_exists("string:OrganizationName") ? mEntityTable.mStringColumns["string:OrganizationName"] : std::vector<int>();
             
-            std::vector<const std::string*>* result = new std::vector<const std::string*>();
+            std::vector<std::string>* result = new std::vector<std::string>();
             result->reserve(count);
             
             for (int i = 0; i < count; ++i)
             {
-                result->push_back(&mStrings[organizationNameData[i]]);
+                result->push_back(std::string(reinterpret_cast<const char*>(mStrings[organizationNameData[i]])));
             }
             
             return result;
         }
         
-        const std::string* GetOrganizationDescription(int bimDocumentIndex)
+        std::string GetOrganizationDescription(int bimDocumentIndex)
         {
             if (bimDocumentIndex < 0 || bimDocumentIndex >= GetCount())
                 return {};
             
             if (mEntityTable.column_exists("string:OrganizationDescription")) {
-                return &mStrings[mEntityTable.mStringColumns["string:OrganizationDescription"][bimDocumentIndex]];
+                return std::string(reinterpret_cast<const char*>(mStrings[mEntityTable.mStringColumns["string:OrganizationDescription"][bimDocumentIndex]]));
             }
             
             return {};
         }
         
-        std::vector<const std::string*>* GetAllOrganizationDescription()
+        std::vector<std::string>* GetAllOrganizationDescription()
         {
             const auto count = GetCount();
             
             const std::vector<int>& organizationDescriptionData = mEntityTable.column_exists("string:OrganizationDescription") ? mEntityTable.mStringColumns["string:OrganizationDescription"] : std::vector<int>();
             
-            std::vector<const std::string*>* result = new std::vector<const std::string*>();
+            std::vector<std::string>* result = new std::vector<std::string>();
             result->reserve(count);
             
             for (int i = 0; i < count; ++i)
             {
-                result->push_back(&mStrings[organizationDescriptionData[i]]);
+                result->push_back(std::string(reinterpret_cast<const char*>(mStrings[organizationDescriptionData[i]])));
             }
             
             return result;
         }
         
-        const std::string* GetProduct(int bimDocumentIndex)
+        std::string GetProduct(int bimDocumentIndex)
         {
             if (bimDocumentIndex < 0 || bimDocumentIndex >= GetCount())
                 return {};
             
             if (mEntityTable.column_exists("string:Product")) {
-                return &mStrings[mEntityTable.mStringColumns["string:Product"][bimDocumentIndex]];
+                return std::string(reinterpret_cast<const char*>(mStrings[mEntityTable.mStringColumns["string:Product"][bimDocumentIndex]]));
             }
             
             return {};
         }
         
-        std::vector<const std::string*>* GetAllProduct()
+        std::vector<std::string>* GetAllProduct()
         {
             const auto count = GetCount();
             
             const std::vector<int>& productData = mEntityTable.column_exists("string:Product") ? mEntityTable.mStringColumns["string:Product"] : std::vector<int>();
             
-            std::vector<const std::string*>* result = new std::vector<const std::string*>();
+            std::vector<std::string>* result = new std::vector<std::string>();
             result->reserve(count);
             
             for (int i = 0; i < count; ++i)
             {
-                result->push_back(&mStrings[productData[i]]);
+                result->push_back(std::string(reinterpret_cast<const char*>(mStrings[productData[i]])));
             }
             
             return result;
         }
         
-        const std::string* GetVersion(int bimDocumentIndex)
+        std::string GetVersion(int bimDocumentIndex)
         {
             if (bimDocumentIndex < 0 || bimDocumentIndex >= GetCount())
                 return {};
             
             if (mEntityTable.column_exists("string:Version")) {
-                return &mStrings[mEntityTable.mStringColumns["string:Version"][bimDocumentIndex]];
+                return std::string(reinterpret_cast<const char*>(mStrings[mEntityTable.mStringColumns["string:Version"][bimDocumentIndex]]));
             }
             
             return {};
         }
         
-        std::vector<const std::string*>* GetAllVersion()
+        std::vector<std::string>* GetAllVersion()
         {
             const auto count = GetCount();
             
             const std::vector<int>& versionData = mEntityTable.column_exists("string:Version") ? mEntityTable.mStringColumns["string:Version"] : std::vector<int>();
             
-            std::vector<const std::string*>* result = new std::vector<const std::string*>();
+            std::vector<std::string>* result = new std::vector<std::string>();
             result->reserve(count);
             
             for (int i = 0; i < count; ++i)
             {
-                result->push_back(&mStrings[versionData[i]]);
+                result->push_back(std::string(reinterpret_cast<const char*>(mStrings[versionData[i]])));
             }
             
             return result;
         }
         
-        const std::string* GetUser(int bimDocumentIndex)
+        std::string GetUser(int bimDocumentIndex)
         {
             if (bimDocumentIndex < 0 || bimDocumentIndex >= GetCount())
                 return {};
             
             if (mEntityTable.column_exists("string:User")) {
-                return &mStrings[mEntityTable.mStringColumns["string:User"][bimDocumentIndex]];
+                return std::string(reinterpret_cast<const char*>(mStrings[mEntityTable.mStringColumns["string:User"][bimDocumentIndex]]));
             }
             
             return {};
         }
         
-        std::vector<const std::string*>* GetAllUser()
+        std::vector<std::string>* GetAllUser()
         {
             const auto count = GetCount();
             
             const std::vector<int>& userData = mEntityTable.column_exists("string:User") ? mEntityTable.mStringColumns["string:User"] : std::vector<int>();
             
-            std::vector<const std::string*>* result = new std::vector<const std::string*>();
+            std::vector<std::string>* result = new std::vector<std::string>();
             result->reserve(count);
             
             for (int i = 0; i < count; ++i)
             {
-                result->push_back(&mStrings[userData[i]]);
+                result->push_back(std::string(reinterpret_cast<const char*>(mStrings[userData[i]])));
             }
             
             return result;
@@ -4180,7 +4179,7 @@ namespace Vim
         
     };
     
-    static BimDocumentTable* GetBimDocumentTable(VimScene& scene)
+    static BimDocumentTable* GetBimDocumentTable(Scene& scene)
     {
         if (scene.mEntityTables.find("Vim.BimDocument") == scene.mEntityTables.end())
             return {};
@@ -4204,9 +4203,9 @@ namespace Vim
     class DisplayUnitInBimDocumentTable
     {
         EntityTable& mEntityTable;
-        std::vector<std::string>& mStrings;
+        std::vector<const bfast::byte*>& mStrings;
     public:
-        DisplayUnitInBimDocumentTable(EntityTable& entityTable, std::vector<std::string>& strings):
+        DisplayUnitInBimDocumentTable(EntityTable& entityTable, std::vector<const bfast::byte*>& strings):
             mEntityTable(entityTable), mStrings(strings) {}
         
         size_t GetCount()
@@ -4274,7 +4273,7 @@ namespace Vim
         
     };
     
-    static DisplayUnitInBimDocumentTable* GetDisplayUnitInBimDocumentTable(VimScene& scene)
+    static DisplayUnitInBimDocumentTable* GetDisplayUnitInBimDocumentTable(Scene& scene)
     {
         if (scene.mEntityTables.find("Vim.DisplayUnitInBimDocument") == scene.mEntityTables.end())
             return {};
@@ -4299,9 +4298,9 @@ namespace Vim
     class PhaseOrderInBimDocumentTable
     {
         EntityTable& mEntityTable;
-        std::vector<std::string>& mStrings;
+        std::vector<const bfast::byte*>& mStrings;
     public:
-        PhaseOrderInBimDocumentTable(EntityTable& entityTable, std::vector<std::string>& strings):
+        PhaseOrderInBimDocumentTable(EntityTable& entityTable, std::vector<const bfast::byte*>& strings):
             mEntityTable(entityTable), mStrings(strings) {}
         
         size_t GetCount()
@@ -4408,7 +4407,7 @@ namespace Vim
         
     };
     
-    static PhaseOrderInBimDocumentTable* GetPhaseOrderInBimDocumentTable(VimScene& scene)
+    static PhaseOrderInBimDocumentTable* GetPhaseOrderInBimDocumentTable(Scene& scene)
     {
         if (scene.mEntityTables.find("Vim.PhaseOrderInBimDocument") == scene.mEntityTables.end())
             return {};
@@ -4420,13 +4419,13 @@ namespace Vim
     {
     public:
         int mIndex;
-        const std::string* mName;
+        std::string mName;
         long long mId;
-        const std::string* mCategoryType;
+        std::string mCategoryType;
         double mLineColor_X;
         double mLineColor_Y;
         double mLineColor_Z;
-        const std::string* mBuiltInCategory;
+        std::string mBuiltInCategory;
         
         int mParentIndex;
         Category* mParent;
@@ -4439,9 +4438,9 @@ namespace Vim
     class CategoryTable
     {
         EntityTable& mEntityTable;
-        std::vector<std::string>& mStrings;
+        std::vector<const bfast::byte*>& mStrings;
     public:
-        CategoryTable(EntityTable& entityTable, std::vector<std::string>& strings):
+        CategoryTable(EntityTable& entityTable, std::vector<const bfast::byte*>& strings):
             mEntityTable(entityTable), mStrings(strings) {}
         
         size_t GetCount()
@@ -4521,11 +4520,11 @@ namespace Vim
                 Category entity;
                 entity.mIndex = i;
                 if (existsName)
-                    entity.mName = &mStrings[nameData[i]];
+                    entity.mName = std::string(reinterpret_cast<const char*>(mStrings[nameData[i]]));
                 if (existsId)
                     entity.mId = idData[i];
                 if (existsCategoryType)
-                    entity.mCategoryType = &mStrings[categoryTypeData[i]];
+                    entity.mCategoryType = std::string(reinterpret_cast<const char*>(mStrings[categoryTypeData[i]]));
                 if (existsLineColor_X)
                     entity.mLineColor_X = lineColor_XData[i];
                 if (existsLineColor_Y)
@@ -4533,7 +4532,7 @@ namespace Vim
                 if (existsLineColor_Z)
                     entity.mLineColor_Z = lineColor_ZData[i];
                 if (existsBuiltInCategory)
-                    entity.mBuiltInCategory = &mStrings[builtInCategoryData[i]];
+                    entity.mBuiltInCategory = std::string(reinterpret_cast<const char*>(mStrings[builtInCategoryData[i]]));
                 entity.mParentIndex = existsParent ? parentData[i] : -1;
                 entity.mMaterialIndex = existsMaterial ? materialData[i] : -1;
                 category->push_back(entity);
@@ -4547,30 +4546,30 @@ namespace Vim
             return category;
         }
         
-        const std::string* GetName(int categoryIndex)
+        std::string GetName(int categoryIndex)
         {
             if (categoryIndex < 0 || categoryIndex >= GetCount())
                 return {};
             
             if (mEntityTable.column_exists("string:Name")) {
-                return &mStrings[mEntityTable.mStringColumns["string:Name"][categoryIndex]];
+                return std::string(reinterpret_cast<const char*>(mStrings[mEntityTable.mStringColumns["string:Name"][categoryIndex]]));
             }
             
             return {};
         }
         
-        std::vector<const std::string*>* GetAllName()
+        std::vector<std::string>* GetAllName()
         {
             const auto count = GetCount();
             
             const std::vector<int>& nameData = mEntityTable.column_exists("string:Name") ? mEntityTable.mStringColumns["string:Name"] : std::vector<int>();
             
-            std::vector<const std::string*>* result = new std::vector<const std::string*>();
+            std::vector<std::string>* result = new std::vector<std::string>();
             result->reserve(count);
             
             for (int i = 0; i < count; ++i)
             {
-                result->push_back(&mStrings[nameData[i]]);
+                result->push_back(std::string(reinterpret_cast<const char*>(mStrings[nameData[i]])));
             }
             
             return result;
@@ -4613,30 +4612,30 @@ namespace Vim
             return result;
         }
         
-        const std::string* GetCategoryType(int categoryIndex)
+        std::string GetCategoryType(int categoryIndex)
         {
             if (categoryIndex < 0 || categoryIndex >= GetCount())
                 return {};
             
             if (mEntityTable.column_exists("string:CategoryType")) {
-                return &mStrings[mEntityTable.mStringColumns["string:CategoryType"][categoryIndex]];
+                return std::string(reinterpret_cast<const char*>(mStrings[mEntityTable.mStringColumns["string:CategoryType"][categoryIndex]]));
             }
             
             return {};
         }
         
-        std::vector<const std::string*>* GetAllCategoryType()
+        std::vector<std::string>* GetAllCategoryType()
         {
             const auto count = GetCount();
             
             const std::vector<int>& categoryTypeData = mEntityTable.column_exists("string:CategoryType") ? mEntityTable.mStringColumns["string:CategoryType"] : std::vector<int>();
             
-            std::vector<const std::string*>* result = new std::vector<const std::string*>();
+            std::vector<std::string>* result = new std::vector<std::string>();
             result->reserve(count);
             
             for (int i = 0; i < count; ++i)
             {
-                result->push_back(&mStrings[categoryTypeData[i]]);
+                result->push_back(std::string(reinterpret_cast<const char*>(mStrings[categoryTypeData[i]])));
             }
             
             return result;
@@ -4726,30 +4725,30 @@ namespace Vim
             return result;
         }
         
-        const std::string* GetBuiltInCategory(int categoryIndex)
+        std::string GetBuiltInCategory(int categoryIndex)
         {
             if (categoryIndex < 0 || categoryIndex >= GetCount())
                 return {};
             
             if (mEntityTable.column_exists("string:BuiltInCategory")) {
-                return &mStrings[mEntityTable.mStringColumns["string:BuiltInCategory"][categoryIndex]];
+                return std::string(reinterpret_cast<const char*>(mStrings[mEntityTable.mStringColumns["string:BuiltInCategory"][categoryIndex]]));
             }
             
             return {};
         }
         
-        std::vector<const std::string*>* GetAllBuiltInCategory()
+        std::vector<std::string>* GetAllBuiltInCategory()
         {
             const auto count = GetCount();
             
             const std::vector<int>& builtInCategoryData = mEntityTable.column_exists("string:BuiltInCategory") ? mEntityTable.mStringColumns["string:BuiltInCategory"] : std::vector<int>();
             
-            std::vector<const std::string*>* result = new std::vector<const std::string*>();
+            std::vector<std::string>* result = new std::vector<std::string>();
             result->reserve(count);
             
             for (int i = 0; i < count; ++i)
             {
-                result->push_back(&mStrings[builtInCategoryData[i]]);
+                result->push_back(std::string(reinterpret_cast<const char*>(mStrings[builtInCategoryData[i]])));
             }
             
             return result;
@@ -4781,7 +4780,7 @@ namespace Vim
         
     };
     
-    static CategoryTable* GetCategoryTable(VimScene& scene)
+    static CategoryTable* GetCategoryTable(Scene& scene)
     {
         if (scene.mEntityTables.find("Vim.Category") == scene.mEntityTables.end())
             return {};
@@ -4793,8 +4792,8 @@ namespace Vim
     {
     public:
         int mIndex;
-        const std::string* mStructuralMaterialType;
-        const std::string* mStructuralSectionShape;
+        std::string mStructuralMaterialType;
+        std::string mStructuralSectionShape;
         bool mIsSystemFamily;
         bool mIsInPlace;
         
@@ -4809,9 +4808,9 @@ namespace Vim
     class FamilyTable
     {
         EntityTable& mEntityTable;
-        std::vector<std::string>& mStrings;
+        std::vector<const bfast::byte*>& mStrings;
     public:
-        FamilyTable(EntityTable& entityTable, std::vector<std::string>& strings):
+        FamilyTable(EntityTable& entityTable, std::vector<const bfast::byte*>& strings):
             mEntityTable(entityTable), mStrings(strings) {}
         
         size_t GetCount()
@@ -4868,9 +4867,9 @@ namespace Vim
                 Family entity;
                 entity.mIndex = i;
                 if (existsStructuralMaterialType)
-                    entity.mStructuralMaterialType = &mStrings[structuralMaterialTypeData[i]];
+                    entity.mStructuralMaterialType = std::string(reinterpret_cast<const char*>(mStrings[structuralMaterialTypeData[i]]));
                 if (existsStructuralSectionShape)
-                    entity.mStructuralSectionShape = &mStrings[structuralSectionShapeData[i]];
+                    entity.mStructuralSectionShape = std::string(reinterpret_cast<const char*>(mStrings[structuralSectionShapeData[i]]));
                 if (existsIsSystemFamily)
                     entity.mIsSystemFamily = isSystemFamilyData[i];
                 if (existsIsInPlace)
@@ -4886,59 +4885,59 @@ namespace Vim
             return family;
         }
         
-        const std::string* GetStructuralMaterialType(int familyIndex)
+        std::string GetStructuralMaterialType(int familyIndex)
         {
             if (familyIndex < 0 || familyIndex >= GetCount())
                 return {};
             
             if (mEntityTable.column_exists("string:StructuralMaterialType")) {
-                return &mStrings[mEntityTable.mStringColumns["string:StructuralMaterialType"][familyIndex]];
+                return std::string(reinterpret_cast<const char*>(mStrings[mEntityTable.mStringColumns["string:StructuralMaterialType"][familyIndex]]));
             }
             
             return {};
         }
         
-        std::vector<const std::string*>* GetAllStructuralMaterialType()
+        std::vector<std::string>* GetAllStructuralMaterialType()
         {
             const auto count = GetCount();
             
             const std::vector<int>& structuralMaterialTypeData = mEntityTable.column_exists("string:StructuralMaterialType") ? mEntityTable.mStringColumns["string:StructuralMaterialType"] : std::vector<int>();
             
-            std::vector<const std::string*>* result = new std::vector<const std::string*>();
+            std::vector<std::string>* result = new std::vector<std::string>();
             result->reserve(count);
             
             for (int i = 0; i < count; ++i)
             {
-                result->push_back(&mStrings[structuralMaterialTypeData[i]]);
+                result->push_back(std::string(reinterpret_cast<const char*>(mStrings[structuralMaterialTypeData[i]])));
             }
             
             return result;
         }
         
-        const std::string* GetStructuralSectionShape(int familyIndex)
+        std::string GetStructuralSectionShape(int familyIndex)
         {
             if (familyIndex < 0 || familyIndex >= GetCount())
                 return {};
             
             if (mEntityTable.column_exists("string:StructuralSectionShape")) {
-                return &mStrings[mEntityTable.mStringColumns["string:StructuralSectionShape"][familyIndex]];
+                return std::string(reinterpret_cast<const char*>(mStrings[mEntityTable.mStringColumns["string:StructuralSectionShape"][familyIndex]]));
             }
             
             return {};
         }
         
-        std::vector<const std::string*>* GetAllStructuralSectionShape()
+        std::vector<std::string>* GetAllStructuralSectionShape()
         {
             const auto count = GetCount();
             
             const std::vector<int>& structuralSectionShapeData = mEntityTable.column_exists("string:StructuralSectionShape") ? mEntityTable.mStringColumns["string:StructuralSectionShape"] : std::vector<int>();
             
-            std::vector<const std::string*>* result = new std::vector<const std::string*>();
+            std::vector<std::string>* result = new std::vector<std::string>();
             result->reserve(count);
             
             for (int i = 0; i < count; ++i)
             {
-                result->push_back(&mStrings[structuralSectionShapeData[i]]);
+                result->push_back(std::string(reinterpret_cast<const char*>(mStrings[structuralSectionShapeData[i]])));
             }
             
             return result;
@@ -5026,7 +5025,7 @@ namespace Vim
         
     };
     
-    static FamilyTable* GetFamilyTable(VimScene& scene)
+    static FamilyTable* GetFamilyTable(Scene& scene)
     {
         if (scene.mEntityTables.find("Vim.Family") == scene.mEntityTables.end())
             return {};
@@ -5053,9 +5052,9 @@ namespace Vim
     class FamilyTypeTable
     {
         EntityTable& mEntityTable;
-        std::vector<std::string>& mStrings;
+        std::vector<const bfast::byte*>& mStrings;
     public:
-        FamilyTypeTable(EntityTable& entityTable, std::vector<std::string>& strings):
+        FamilyTypeTable(EntityTable& entityTable, std::vector<const bfast::byte*>& strings):
             mEntityTable(entityTable), mStrings(strings) {}
         
         size_t GetCount()
@@ -5178,7 +5177,7 @@ namespace Vim
         
     };
     
-    static FamilyTypeTable* GetFamilyTypeTable(VimScene& scene)
+    static FamilyTypeTable* GetFamilyTypeTable(Scene& scene)
     {
         if (scene.mEntityTables.find("Vim.FamilyType") == scene.mEntityTables.end())
             return {};
@@ -5231,9 +5230,9 @@ namespace Vim
     class FamilyInstanceTable
     {
         EntityTable& mEntityTable;
-        std::vector<std::string>& mStrings;
+        std::vector<const bfast::byte*>& mStrings;
     public:
-        FamilyInstanceTable(EntityTable& entityTable, std::vector<std::string>& strings):
+        FamilyInstanceTable(EntityTable& entityTable, std::vector<const bfast::byte*>& strings):
             mEntityTable(entityTable), mStrings(strings) {}
         
         size_t GetCount()
@@ -6224,7 +6223,7 @@ namespace Vim
         
     };
     
-    static FamilyInstanceTable* GetFamilyInstanceTable(VimScene& scene)
+    static FamilyInstanceTable* GetFamilyInstanceTable(Scene& scene)
     {
         if (scene.mEntityTables.find("Vim.FamilyInstance") == scene.mEntityTables.end())
             return {};
@@ -6236,8 +6235,8 @@ namespace Vim
     {
     public:
         int mIndex;
-        const std::string* mTitle;
-        const std::string* mViewType;
+        std::string mTitle;
+        std::string mViewType;
         double mUp_X;
         double mUp_Y;
         double mUp_Z;
@@ -6273,9 +6272,9 @@ namespace Vim
     class ViewTable
     {
         EntityTable& mEntityTable;
-        std::vector<std::string>& mStrings;
+        std::vector<const bfast::byte*>& mStrings;
     public:
-        ViewTable(EntityTable& entityTable, std::vector<std::string>& strings):
+        ViewTable(EntityTable& entityTable, std::vector<const bfast::byte*>& strings):
             mEntityTable(entityTable), mStrings(strings) {}
         
         size_t GetCount()
@@ -6468,9 +6467,9 @@ namespace Vim
                 View entity;
                 entity.mIndex = i;
                 if (existsTitle)
-                    entity.mTitle = &mStrings[titleData[i]];
+                    entity.mTitle = std::string(reinterpret_cast<const char*>(mStrings[titleData[i]]));
                 if (existsViewType)
-                    entity.mViewType = &mStrings[viewTypeData[i]];
+                    entity.mViewType = std::string(reinterpret_cast<const char*>(mStrings[viewTypeData[i]]));
                 if (existsUp_X)
                     entity.mUp_X = up_XData[i];
                 if (existsUp_Y)
@@ -6544,59 +6543,59 @@ namespace Vim
             return view;
         }
         
-        const std::string* GetTitle(int viewIndex)
+        std::string GetTitle(int viewIndex)
         {
             if (viewIndex < 0 || viewIndex >= GetCount())
                 return {};
             
             if (mEntityTable.column_exists("string:Title")) {
-                return &mStrings[mEntityTable.mStringColumns["string:Title"][viewIndex]];
+                return std::string(reinterpret_cast<const char*>(mStrings[mEntityTable.mStringColumns["string:Title"][viewIndex]]));
             }
             
             return {};
         }
         
-        std::vector<const std::string*>* GetAllTitle()
+        std::vector<std::string>* GetAllTitle()
         {
             const auto count = GetCount();
             
             const std::vector<int>& titleData = mEntityTable.column_exists("string:Title") ? mEntityTable.mStringColumns["string:Title"] : std::vector<int>();
             
-            std::vector<const std::string*>* result = new std::vector<const std::string*>();
+            std::vector<std::string>* result = new std::vector<std::string>();
             result->reserve(count);
             
             for (int i = 0; i < count; ++i)
             {
-                result->push_back(&mStrings[titleData[i]]);
+                result->push_back(std::string(reinterpret_cast<const char*>(mStrings[titleData[i]])));
             }
             
             return result;
         }
         
-        const std::string* GetViewType(int viewIndex)
+        std::string GetViewType(int viewIndex)
         {
             if (viewIndex < 0 || viewIndex >= GetCount())
                 return {};
             
             if (mEntityTable.column_exists("string:ViewType")) {
-                return &mStrings[mEntityTable.mStringColumns["string:ViewType"][viewIndex]];
+                return std::string(reinterpret_cast<const char*>(mStrings[mEntityTable.mStringColumns["string:ViewType"][viewIndex]]));
             }
             
             return {};
         }
         
-        std::vector<const std::string*>* GetAllViewType()
+        std::vector<std::string>* GetAllViewType()
         {
             const auto count = GetCount();
             
             const std::vector<int>& viewTypeData = mEntityTable.column_exists("string:ViewType") ? mEntityTable.mStringColumns["string:ViewType"] : std::vector<int>();
             
-            std::vector<const std::string*>* result = new std::vector<const std::string*>();
+            std::vector<std::string>* result = new std::vector<std::string>();
             result->reserve(count);
             
             for (int i = 0; i < count; ++i)
             {
-                result->push_back(&mStrings[viewTypeData[i]]);
+                result->push_back(std::string(reinterpret_cast<const char*>(mStrings[viewTypeData[i]])));
             }
             
             return result;
@@ -7228,7 +7227,7 @@ namespace Vim
         
     };
     
-    static ViewTable* GetViewTable(VimScene& scene)
+    static ViewTable* GetViewTable(Scene& scene)
     {
         if (scene.mEntityTables.find("Vim.View") == scene.mEntityTables.end())
             return {};
@@ -7252,9 +7251,9 @@ namespace Vim
     class ElementInViewTable
     {
         EntityTable& mEntityTable;
-        std::vector<std::string>& mStrings;
+        std::vector<const bfast::byte*>& mStrings;
     public:
-        ElementInViewTable(EntityTable& entityTable, std::vector<std::string>& strings):
+        ElementInViewTable(EntityTable& entityTable, std::vector<const bfast::byte*>& strings):
             mEntityTable(entityTable), mStrings(strings) {}
         
         size_t GetCount()
@@ -7322,7 +7321,7 @@ namespace Vim
         
     };
     
-    static ElementInViewTable* GetElementInViewTable(VimScene& scene)
+    static ElementInViewTable* GetElementInViewTable(Scene& scene)
     {
         if (scene.mEntityTables.find("Vim.ElementInView") == scene.mEntityTables.end())
             return {};
@@ -7346,9 +7345,9 @@ namespace Vim
     class ShapeInViewTable
     {
         EntityTable& mEntityTable;
-        std::vector<std::string>& mStrings;
+        std::vector<const bfast::byte*>& mStrings;
     public:
-        ShapeInViewTable(EntityTable& entityTable, std::vector<std::string>& strings):
+        ShapeInViewTable(EntityTable& entityTable, std::vector<const bfast::byte*>& strings):
             mEntityTable(entityTable), mStrings(strings) {}
         
         size_t GetCount()
@@ -7416,7 +7415,7 @@ namespace Vim
         
     };
     
-    static ShapeInViewTable* GetShapeInViewTable(VimScene& scene)
+    static ShapeInViewTable* GetShapeInViewTable(Scene& scene)
     {
         if (scene.mEntityTables.find("Vim.ShapeInView") == scene.mEntityTables.end())
             return {};
@@ -7440,9 +7439,9 @@ namespace Vim
     class AssetInViewTable
     {
         EntityTable& mEntityTable;
-        std::vector<std::string>& mStrings;
+        std::vector<const bfast::byte*>& mStrings;
     public:
-        AssetInViewTable(EntityTable& entityTable, std::vector<std::string>& strings):
+        AssetInViewTable(EntityTable& entityTable, std::vector<const bfast::byte*>& strings):
             mEntityTable(entityTable), mStrings(strings) {}
         
         size_t GetCount()
@@ -7510,7 +7509,7 @@ namespace Vim
         
     };
     
-    static AssetInViewTable* GetAssetInViewTable(VimScene& scene)
+    static AssetInViewTable* GetAssetInViewTable(Scene& scene)
     {
         if (scene.mEntityTables.find("Vim.AssetInView") == scene.mEntityTables.end())
             return {};
@@ -7540,9 +7539,9 @@ namespace Vim
     class LevelInViewTable
     {
         EntityTable& mEntityTable;
-        std::vector<std::string>& mStrings;
+        std::vector<const bfast::byte*>& mStrings;
     public:
-        LevelInViewTable(EntityTable& entityTable, std::vector<std::string>& strings):
+        LevelInViewTable(EntityTable& entityTable, std::vector<const bfast::byte*>& strings):
             mEntityTable(entityTable), mStrings(strings) {}
         
         size_t GetCount()
@@ -7839,7 +7838,7 @@ namespace Vim
         
     };
     
-    static LevelInViewTable* GetLevelInViewTable(VimScene& scene)
+    static LevelInViewTable* GetLevelInViewTable(Scene& scene)
     {
         if (scene.mEntityTables.find("Vim.LevelInView") == scene.mEntityTables.end())
             return {};
@@ -7867,9 +7866,9 @@ namespace Vim
     class CameraTable
     {
         EntityTable& mEntityTable;
-        std::vector<std::string>& mStrings;
+        std::vector<const bfast::byte*>& mStrings;
     public:
-        CameraTable(EntityTable& entityTable, std::vector<std::string>& strings):
+        CameraTable(EntityTable& entityTable, std::vector<const bfast::byte*>& strings):
             mEntityTable(entityTable), mStrings(strings) {}
         
         size_t GetCount()
@@ -8247,7 +8246,7 @@ namespace Vim
         
     };
     
-    static CameraTable* GetCameraTable(VimScene& scene)
+    static CameraTable* GetCameraTable(Scene& scene)
     {
         if (scene.mEntityTables.find("Vim.Camera") == scene.mEntityTables.end())
             return {};
@@ -8259,8 +8258,8 @@ namespace Vim
     {
     public:
         int mIndex;
-        const std::string* mName;
-        const std::string* mMaterialCategory;
+        std::string mName;
+        std::string mMaterialCategory;
         double mColor_X;
         double mColor_Y;
         double mColor_Z;
@@ -8290,9 +8289,9 @@ namespace Vim
     class MaterialTable
     {
         EntityTable& mEntityTable;
-        std::vector<std::string>& mStrings;
+        std::vector<const bfast::byte*>& mStrings;
     public:
-        MaterialTable(EntityTable& entityTable, std::vector<std::string>& strings):
+        MaterialTable(EntityTable& entityTable, std::vector<const bfast::byte*>& strings):
             mEntityTable(entityTable), mStrings(strings) {}
         
         size_t GetCount()
@@ -8443,9 +8442,9 @@ namespace Vim
                 Material entity;
                 entity.mIndex = i;
                 if (existsName)
-                    entity.mName = &mStrings[nameData[i]];
+                    entity.mName = std::string(reinterpret_cast<const char*>(mStrings[nameData[i]]));
                 if (existsMaterialCategory)
-                    entity.mMaterialCategory = &mStrings[materialCategoryData[i]];
+                    entity.mMaterialCategory = std::string(reinterpret_cast<const char*>(mStrings[materialCategoryData[i]]));
                 if (existsColor_X)
                     entity.mColor_X = color_XData[i];
                 if (existsColor_Y)
@@ -8501,59 +8500,59 @@ namespace Vim
             return material;
         }
         
-        const std::string* GetName(int materialIndex)
+        std::string GetName(int materialIndex)
         {
             if (materialIndex < 0 || materialIndex >= GetCount())
                 return {};
             
             if (mEntityTable.column_exists("string:Name")) {
-                return &mStrings[mEntityTable.mStringColumns["string:Name"][materialIndex]];
+                return std::string(reinterpret_cast<const char*>(mStrings[mEntityTable.mStringColumns["string:Name"][materialIndex]]));
             }
             
             return {};
         }
         
-        std::vector<const std::string*>* GetAllName()
+        std::vector<std::string>* GetAllName()
         {
             const auto count = GetCount();
             
             const std::vector<int>& nameData = mEntityTable.column_exists("string:Name") ? mEntityTable.mStringColumns["string:Name"] : std::vector<int>();
             
-            std::vector<const std::string*>* result = new std::vector<const std::string*>();
+            std::vector<std::string>* result = new std::vector<std::string>();
             result->reserve(count);
             
             for (int i = 0; i < count; ++i)
             {
-                result->push_back(&mStrings[nameData[i]]);
+                result->push_back(std::string(reinterpret_cast<const char*>(mStrings[nameData[i]])));
             }
             
             return result;
         }
         
-        const std::string* GetMaterialCategory(int materialIndex)
+        std::string GetMaterialCategory(int materialIndex)
         {
             if (materialIndex < 0 || materialIndex >= GetCount())
                 return {};
             
             if (mEntityTable.column_exists("string:MaterialCategory")) {
-                return &mStrings[mEntityTable.mStringColumns["string:MaterialCategory"][materialIndex]];
+                return std::string(reinterpret_cast<const char*>(mStrings[mEntityTable.mStringColumns["string:MaterialCategory"][materialIndex]]));
             }
             
             return {};
         }
         
-        std::vector<const std::string*>* GetAllMaterialCategory()
+        std::vector<std::string>* GetAllMaterialCategory()
         {
             const auto count = GetCount();
             
             const std::vector<int>& materialCategoryData = mEntityTable.column_exists("string:MaterialCategory") ? mEntityTable.mStringColumns["string:MaterialCategory"] : std::vector<int>();
             
-            std::vector<const std::string*>* result = new std::vector<const std::string*>();
+            std::vector<std::string>* result = new std::vector<std::string>();
             result->reserve(count);
             
             for (int i = 0; i < count; ++i)
             {
-                result->push_back(&mStrings[materialCategoryData[i]]);
+                result->push_back(std::string(reinterpret_cast<const char*>(mStrings[materialCategoryData[i]])));
             }
             
             return result;
@@ -9017,7 +9016,7 @@ namespace Vim
         
     };
     
-    static MaterialTable* GetMaterialTable(VimScene& scene)
+    static MaterialTable* GetMaterialTable(Scene& scene)
     {
         if (scene.mEntityTables.find("Vim.Material") == scene.mEntityTables.end())
             return {};
@@ -9044,9 +9043,9 @@ namespace Vim
     class MaterialInElementTable
     {
         EntityTable& mEntityTable;
-        std::vector<std::string>& mStrings;
+        std::vector<const bfast::byte*>& mStrings;
     public:
-        MaterialInElementTable(EntityTable& entityTable, std::vector<std::string>& strings):
+        MaterialInElementTable(EntityTable& entityTable, std::vector<const bfast::byte*>& strings):
             mEntityTable(entityTable), mStrings(strings) {}
         
         size_t GetCount()
@@ -9229,7 +9228,7 @@ namespace Vim
         
     };
     
-    static MaterialInElementTable* GetMaterialInElementTable(VimScene& scene)
+    static MaterialInElementTable* GetMaterialInElementTable(Scene& scene)
     {
         if (scene.mEntityTables.find("Vim.MaterialInElement") == scene.mEntityTables.end())
             return {};
@@ -9243,7 +9242,7 @@ namespace Vim
         int mIndex;
         int mOrderIndex;
         double mWidth;
-        const std::string* mMaterialFunctionAssignment;
+        std::string mMaterialFunctionAssignment;
         
         int mMaterialIndex;
         Material* mMaterial;
@@ -9256,9 +9255,9 @@ namespace Vim
     class CompoundStructureLayerTable
     {
         EntityTable& mEntityTable;
-        std::vector<std::string>& mStrings;
+        std::vector<const bfast::byte*>& mStrings;
     public:
-        CompoundStructureLayerTable(EntityTable& entityTable, std::vector<std::string>& strings):
+        CompoundStructureLayerTable(EntityTable& entityTable, std::vector<const bfast::byte*>& strings):
             mEntityTable(entityTable), mStrings(strings) {}
         
         size_t GetCount()
@@ -9315,7 +9314,7 @@ namespace Vim
                 if (existsWidth)
                     entity.mWidth = widthData[i];
                 if (existsMaterialFunctionAssignment)
-                    entity.mMaterialFunctionAssignment = &mStrings[materialFunctionAssignmentData[i]];
+                    entity.mMaterialFunctionAssignment = std::string(reinterpret_cast<const char*>(mStrings[materialFunctionAssignmentData[i]]));
                 entity.mMaterialIndex = existsMaterial ? materialData[i] : -1;
                 entity.mCompoundStructureIndex = existsCompoundStructure ? compoundStructureData[i] : -1;
                 compoundStructureLayer->push_back(entity);
@@ -9383,30 +9382,30 @@ namespace Vim
             return result;
         }
         
-        const std::string* GetMaterialFunctionAssignment(int compoundStructureLayerIndex)
+        std::string GetMaterialFunctionAssignment(int compoundStructureLayerIndex)
         {
             if (compoundStructureLayerIndex < 0 || compoundStructureLayerIndex >= GetCount())
                 return {};
             
             if (mEntityTable.column_exists("string:MaterialFunctionAssignment")) {
-                return &mStrings[mEntityTable.mStringColumns["string:MaterialFunctionAssignment"][compoundStructureLayerIndex]];
+                return std::string(reinterpret_cast<const char*>(mStrings[mEntityTable.mStringColumns["string:MaterialFunctionAssignment"][compoundStructureLayerIndex]]));
             }
             
             return {};
         }
         
-        std::vector<const std::string*>* GetAllMaterialFunctionAssignment()
+        std::vector<std::string>* GetAllMaterialFunctionAssignment()
         {
             const auto count = GetCount();
             
             const std::vector<int>& materialFunctionAssignmentData = mEntityTable.column_exists("string:MaterialFunctionAssignment") ? mEntityTable.mStringColumns["string:MaterialFunctionAssignment"] : std::vector<int>();
             
-            std::vector<const std::string*>* result = new std::vector<const std::string*>();
+            std::vector<std::string>* result = new std::vector<std::string>();
             result->reserve(count);
             
             for (int i = 0; i < count; ++i)
             {
-                result->push_back(&mStrings[materialFunctionAssignmentData[i]]);
+                result->push_back(std::string(reinterpret_cast<const char*>(mStrings[materialFunctionAssignmentData[i]])));
             }
             
             return result;
@@ -9438,7 +9437,7 @@ namespace Vim
         
     };
     
-    static CompoundStructureLayerTable* GetCompoundStructureLayerTable(VimScene& scene)
+    static CompoundStructureLayerTable* GetCompoundStructureLayerTable(Scene& scene)
     {
         if (scene.mEntityTables.find("Vim.CompoundStructureLayer") == scene.mEntityTables.end())
             return {};
@@ -9461,9 +9460,9 @@ namespace Vim
     class CompoundStructureTable
     {
         EntityTable& mEntityTable;
-        std::vector<std::string>& mStrings;
+        std::vector<const bfast::byte*>& mStrings;
     public:
-        CompoundStructureTable(EntityTable& entityTable, std::vector<std::string>& strings):
+        CompoundStructureTable(EntityTable& entityTable, std::vector<const bfast::byte*>& strings):
             mEntityTable(entityTable), mStrings(strings) {}
         
         size_t GetCount()
@@ -9554,7 +9553,7 @@ namespace Vim
         
     };
     
-    static CompoundStructureTable* GetCompoundStructureTable(VimScene& scene)
+    static CompoundStructureTable* GetCompoundStructureTable(Scene& scene)
     {
         if (scene.mEntityTables.find("Vim.CompoundStructure") == scene.mEntityTables.end())
             return {};
@@ -9576,9 +9575,9 @@ namespace Vim
     class NodeTable
     {
         EntityTable& mEntityTable;
-        std::vector<std::string>& mStrings;
+        std::vector<const bfast::byte*>& mStrings;
     public:
-        NodeTable(EntityTable& entityTable, std::vector<std::string>& strings):
+        NodeTable(EntityTable& entityTable, std::vector<const bfast::byte*>& strings):
             mEntityTable(entityTable), mStrings(strings) {}
         
         size_t GetCount()
@@ -9630,7 +9629,7 @@ namespace Vim
         
     };
     
-    static NodeTable* GetNodeTable(VimScene& scene)
+    static NodeTable* GetNodeTable(Scene& scene)
     {
         if (scene.mEntityTables.find("Vim.Node") == scene.mEntityTables.end())
             return {};
@@ -9657,9 +9656,9 @@ namespace Vim
     class GeometryTable
     {
         EntityTable& mEntityTable;
-        std::vector<std::string>& mStrings;
+        std::vector<const bfast::byte*>& mStrings;
     public:
-        GeometryTable(EntityTable& entityTable, std::vector<std::string>& strings):
+        GeometryTable(EntityTable& entityTable, std::vector<const bfast::byte*>& strings):
             mEntityTable(entityTable), mStrings(strings) {}
         
         size_t GetCount()
@@ -9999,7 +9998,7 @@ namespace Vim
         
     };
     
-    static GeometryTable* GetGeometryTable(VimScene& scene)
+    static GeometryTable* GetGeometryTable(Scene& scene)
     {
         if (scene.mEntityTables.find("Vim.Geometry") == scene.mEntityTables.end())
             return {};
@@ -10021,9 +10020,9 @@ namespace Vim
     class ShapeTable
     {
         EntityTable& mEntityTable;
-        std::vector<std::string>& mStrings;
+        std::vector<const bfast::byte*>& mStrings;
     public:
-        ShapeTable(EntityTable& entityTable, std::vector<std::string>& strings):
+        ShapeTable(EntityTable& entityTable, std::vector<const bfast::byte*>& strings):
             mEntityTable(entityTable), mStrings(strings) {}
         
         size_t GetCount()
@@ -10075,7 +10074,7 @@ namespace Vim
         
     };
     
-    static ShapeTable* GetShapeTable(VimScene& scene)
+    static ShapeTable* GetShapeTable(Scene& scene)
     {
         if (scene.mEntityTables.find("Vim.Shape") == scene.mEntityTables.end())
             return {};
@@ -10097,9 +10096,9 @@ namespace Vim
     class ShapeCollectionTable
     {
         EntityTable& mEntityTable;
-        std::vector<std::string>& mStrings;
+        std::vector<const bfast::byte*>& mStrings;
     public:
-        ShapeCollectionTable(EntityTable& entityTable, std::vector<std::string>& strings):
+        ShapeCollectionTable(EntityTable& entityTable, std::vector<const bfast::byte*>& strings):
             mEntityTable(entityTable), mStrings(strings) {}
         
         size_t GetCount()
@@ -10151,7 +10150,7 @@ namespace Vim
         
     };
     
-    static ShapeCollectionTable* GetShapeCollectionTable(VimScene& scene)
+    static ShapeCollectionTable* GetShapeCollectionTable(Scene& scene)
     {
         if (scene.mEntityTables.find("Vim.ShapeCollection") == scene.mEntityTables.end())
             return {};
@@ -10175,9 +10174,9 @@ namespace Vim
     class ShapeInShapeCollectionTable
     {
         EntityTable& mEntityTable;
-        std::vector<std::string>& mStrings;
+        std::vector<const bfast::byte*>& mStrings;
     public:
-        ShapeInShapeCollectionTable(EntityTable& entityTable, std::vector<std::string>& strings):
+        ShapeInShapeCollectionTable(EntityTable& entityTable, std::vector<const bfast::byte*>& strings):
             mEntityTable(entityTable), mStrings(strings) {}
         
         size_t GetCount()
@@ -10245,7 +10244,7 @@ namespace Vim
         
     };
     
-    static ShapeInShapeCollectionTable* GetShapeInShapeCollectionTable(VimScene& scene)
+    static ShapeInShapeCollectionTable* GetShapeInShapeCollectionTable(Scene& scene)
     {
         if (scene.mEntityTables.find("Vim.ShapeInShapeCollection") == scene.mEntityTables.end())
             return {};
@@ -10270,9 +10269,9 @@ namespace Vim
     class SystemTable
     {
         EntityTable& mEntityTable;
-        std::vector<std::string>& mStrings;
+        std::vector<const bfast::byte*>& mStrings;
     public:
-        SystemTable(EntityTable& entityTable, std::vector<std::string>& strings):
+        SystemTable(EntityTable& entityTable, std::vector<const bfast::byte*>& strings):
             mEntityTable(entityTable), mStrings(strings) {}
         
         size_t GetCount()
@@ -10379,7 +10378,7 @@ namespace Vim
         
     };
     
-    static SystemTable* GetSystemTable(VimScene& scene)
+    static SystemTable* GetSystemTable(Scene& scene)
     {
         if (scene.mEntityTables.find("Vim.System") == scene.mEntityTables.end())
             return {};
@@ -10404,9 +10403,9 @@ namespace Vim
     class ElementInSystemTable
     {
         EntityTable& mEntityTable;
-        std::vector<std::string>& mStrings;
+        std::vector<const bfast::byte*>& mStrings;
     public:
-        ElementInSystemTable(EntityTable& entityTable, std::vector<std::string>& strings):
+        ElementInSystemTable(EntityTable& entityTable, std::vector<const bfast::byte*>& strings):
             mEntityTable(entityTable), mStrings(strings) {}
         
         size_t GetCount()
@@ -10513,7 +10512,7 @@ namespace Vim
         
     };
     
-    static ElementInSystemTable* GetElementInSystemTable(VimScene& scene)
+    static ElementInSystemTable* GetElementInSystemTable(Scene& scene)
     {
         if (scene.mEntityTables.find("Vim.ElementInSystem") == scene.mEntityTables.end())
             return {};
@@ -10525,9 +10524,9 @@ namespace Vim
     {
     public:
         int mIndex;
-        const std::string* mGuid;
-        const std::string* mSeverity;
-        const std::string* mDescription;
+        std::string mGuid;
+        std::string mSeverity;
+        std::string mDescription;
         
         int mBimDocumentIndex;
         BimDocument* mBimDocument;
@@ -10538,9 +10537,9 @@ namespace Vim
     class WarningTable
     {
         EntityTable& mEntityTable;
-        std::vector<std::string>& mStrings;
+        std::vector<const bfast::byte*>& mStrings;
     public:
-        WarningTable(EntityTable& entityTable, std::vector<std::string>& strings):
+        WarningTable(EntityTable& entityTable, std::vector<const bfast::byte*>& strings):
             mEntityTable(entityTable), mStrings(strings) {}
         
         size_t GetCount()
@@ -10584,11 +10583,11 @@ namespace Vim
                 Warning entity;
                 entity.mIndex = i;
                 if (existsGuid)
-                    entity.mGuid = &mStrings[guidData[i]];
+                    entity.mGuid = std::string(reinterpret_cast<const char*>(mStrings[guidData[i]]));
                 if (existsSeverity)
-                    entity.mSeverity = &mStrings[severityData[i]];
+                    entity.mSeverity = std::string(reinterpret_cast<const char*>(mStrings[severityData[i]]));
                 if (existsDescription)
-                    entity.mDescription = &mStrings[descriptionData[i]];
+                    entity.mDescription = std::string(reinterpret_cast<const char*>(mStrings[descriptionData[i]]));
                 entity.mBimDocumentIndex = existsBimDocument ? bimDocumentData[i] : -1;
                 warning->push_back(entity);
             }
@@ -10596,88 +10595,88 @@ namespace Vim
             return warning;
         }
         
-        const std::string* GetGuid(int warningIndex)
+        std::string GetGuid(int warningIndex)
         {
             if (warningIndex < 0 || warningIndex >= GetCount())
                 return {};
             
             if (mEntityTable.column_exists("string:Guid")) {
-                return &mStrings[mEntityTable.mStringColumns["string:Guid"][warningIndex]];
+                return std::string(reinterpret_cast<const char*>(mStrings[mEntityTable.mStringColumns["string:Guid"][warningIndex]]));
             }
             
             return {};
         }
         
-        std::vector<const std::string*>* GetAllGuid()
+        std::vector<std::string>* GetAllGuid()
         {
             const auto count = GetCount();
             
             const std::vector<int>& guidData = mEntityTable.column_exists("string:Guid") ? mEntityTable.mStringColumns["string:Guid"] : std::vector<int>();
             
-            std::vector<const std::string*>* result = new std::vector<const std::string*>();
+            std::vector<std::string>* result = new std::vector<std::string>();
             result->reserve(count);
             
             for (int i = 0; i < count; ++i)
             {
-                result->push_back(&mStrings[guidData[i]]);
+                result->push_back(std::string(reinterpret_cast<const char*>(mStrings[guidData[i]])));
             }
             
             return result;
         }
         
-        const std::string* GetSeverity(int warningIndex)
+        std::string GetSeverity(int warningIndex)
         {
             if (warningIndex < 0 || warningIndex >= GetCount())
                 return {};
             
             if (mEntityTable.column_exists("string:Severity")) {
-                return &mStrings[mEntityTable.mStringColumns["string:Severity"][warningIndex]];
+                return std::string(reinterpret_cast<const char*>(mStrings[mEntityTable.mStringColumns["string:Severity"][warningIndex]]));
             }
             
             return {};
         }
         
-        std::vector<const std::string*>* GetAllSeverity()
+        std::vector<std::string>* GetAllSeverity()
         {
             const auto count = GetCount();
             
             const std::vector<int>& severityData = mEntityTable.column_exists("string:Severity") ? mEntityTable.mStringColumns["string:Severity"] : std::vector<int>();
             
-            std::vector<const std::string*>* result = new std::vector<const std::string*>();
+            std::vector<std::string>* result = new std::vector<std::string>();
             result->reserve(count);
             
             for (int i = 0; i < count; ++i)
             {
-                result->push_back(&mStrings[severityData[i]]);
+                result->push_back(std::string(reinterpret_cast<const char*>(mStrings[severityData[i]])));
             }
             
             return result;
         }
         
-        const std::string* GetDescription(int warningIndex)
+        std::string GetDescription(int warningIndex)
         {
             if (warningIndex < 0 || warningIndex >= GetCount())
                 return {};
             
             if (mEntityTable.column_exists("string:Description")) {
-                return &mStrings[mEntityTable.mStringColumns["string:Description"][warningIndex]];
+                return std::string(reinterpret_cast<const char*>(mStrings[mEntityTable.mStringColumns["string:Description"][warningIndex]]));
             }
             
             return {};
         }
         
-        std::vector<const std::string*>* GetAllDescription()
+        std::vector<std::string>* GetAllDescription()
         {
             const auto count = GetCount();
             
             const std::vector<int>& descriptionData = mEntityTable.column_exists("string:Description") ? mEntityTable.mStringColumns["string:Description"] : std::vector<int>();
             
-            std::vector<const std::string*>* result = new std::vector<const std::string*>();
+            std::vector<std::string>* result = new std::vector<std::string>();
             result->reserve(count);
             
             for (int i = 0; i < count; ++i)
             {
-                result->push_back(&mStrings[descriptionData[i]]);
+                result->push_back(std::string(reinterpret_cast<const char*>(mStrings[descriptionData[i]])));
             }
             
             return result;
@@ -10697,7 +10696,7 @@ namespace Vim
         
     };
     
-    static WarningTable* GetWarningTable(VimScene& scene)
+    static WarningTable* GetWarningTable(Scene& scene)
     {
         if (scene.mEntityTables.find("Vim.Warning") == scene.mEntityTables.end())
             return {};
@@ -10721,9 +10720,9 @@ namespace Vim
     class ElementInWarningTable
     {
         EntityTable& mEntityTable;
-        std::vector<std::string>& mStrings;
+        std::vector<const bfast::byte*>& mStrings;
     public:
-        ElementInWarningTable(EntityTable& entityTable, std::vector<std::string>& strings):
+        ElementInWarningTable(EntityTable& entityTable, std::vector<const bfast::byte*>& strings):
             mEntityTable(entityTable), mStrings(strings) {}
         
         size_t GetCount()
@@ -10791,7 +10790,7 @@ namespace Vim
         
     };
     
-    static ElementInWarningTable* GetElementInWarningTable(VimScene& scene)
+    static ElementInWarningTable* GetElementInWarningTable(Scene& scene)
     {
         if (scene.mEntityTables.find("Vim.ElementInWarning") == scene.mEntityTables.end())
             return {};
@@ -10820,9 +10819,9 @@ namespace Vim
     class BasePointTable
     {
         EntityTable& mEntityTable;
-        std::vector<std::string>& mStrings;
+        std::vector<const bfast::byte*>& mStrings;
     public:
-        BasePointTable(EntityTable& entityTable, std::vector<std::string>& strings):
+        BasePointTable(EntityTable& entityTable, std::vector<const bfast::byte*>& strings):
             mEntityTable(entityTable), mStrings(strings) {}
         
         size_t GetCount()
@@ -11141,7 +11140,7 @@ namespace Vim
         
     };
     
-    static BasePointTable* GetBasePointTable(VimScene& scene)
+    static BasePointTable* GetBasePointTable(Scene& scene)
     {
         if (scene.mEntityTables.find("Vim.BasePoint") == scene.mEntityTables.end())
             return {};
@@ -11167,9 +11166,9 @@ namespace Vim
     class PhaseFilterTable
     {
         EntityTable& mEntityTable;
-        std::vector<std::string>& mStrings;
+        std::vector<const bfast::byte*>& mStrings;
     public:
-        PhaseFilterTable(EntityTable& entityTable, std::vector<std::string>& strings):
+        PhaseFilterTable(EntityTable& entityTable, std::vector<const bfast::byte*>& strings):
             mEntityTable(entityTable), mStrings(strings) {}
         
         size_t GetCount()
@@ -11374,7 +11373,7 @@ namespace Vim
         
     };
     
-    static PhaseFilterTable* GetPhaseFilterTable(VimScene& scene)
+    static PhaseFilterTable* GetPhaseFilterTable(Scene& scene)
     {
         if (scene.mEntityTables.find("Vim.PhaseFilter") == scene.mEntityTables.end())
             return {};
@@ -11411,9 +11410,9 @@ namespace Vim
     class GridTable
     {
         EntityTable& mEntityTable;
-        std::vector<std::string>& mStrings;
+        std::vector<const bfast::byte*>& mStrings;
     public:
-        GridTable(EntityTable& entityTable, std::vector<std::string>& strings):
+        GridTable(EntityTable& entityTable, std::vector<const bfast::byte*>& strings):
             mEntityTable(entityTable), mStrings(strings) {}
         
         size_t GetCount()
@@ -11976,7 +11975,7 @@ namespace Vim
         
     };
     
-    static GridTable* GetGridTable(VimScene& scene)
+    static GridTable* GetGridTable(Scene& scene)
     {
         if (scene.mEntityTables.find("Vim.Grid") == scene.mEntityTables.end())
             return {};
@@ -11990,7 +11989,7 @@ namespace Vim
         int mIndex;
         double mValue;
         double mPerimeter;
-        const std::string* mNumber;
+        std::string mNumber;
         bool mIsGrossInterior;
         
         int mAreaSchemeIndex;
@@ -12004,9 +12003,9 @@ namespace Vim
     class AreaTable
     {
         EntityTable& mEntityTable;
-        std::vector<std::string>& mStrings;
+        std::vector<const bfast::byte*>& mStrings;
     public:
-        AreaTable(EntityTable& entityTable, std::vector<std::string>& strings):
+        AreaTable(EntityTable& entityTable, std::vector<const bfast::byte*>& strings):
             mEntityTable(entityTable), mStrings(strings) {}
         
         size_t GetCount()
@@ -12070,7 +12069,7 @@ namespace Vim
                 if (existsPerimeter)
                     entity.mPerimeter = perimeterData[i];
                 if (existsNumber)
-                    entity.mNumber = &mStrings[numberData[i]];
+                    entity.mNumber = std::string(reinterpret_cast<const char*>(mStrings[numberData[i]]));
                 if (existsIsGrossInterior)
                     entity.mIsGrossInterior = isGrossInteriorData[i];
                 entity.mAreaSchemeIndex = existsAreaScheme ? areaSchemeData[i] : -1;
@@ -12141,30 +12140,30 @@ namespace Vim
             return result;
         }
         
-        const std::string* GetNumber(int areaIndex)
+        std::string GetNumber(int areaIndex)
         {
             if (areaIndex < 0 || areaIndex >= GetCount())
                 return {};
             
             if (mEntityTable.column_exists("string:Number")) {
-                return &mStrings[mEntityTable.mStringColumns["string:Number"][areaIndex]];
+                return std::string(reinterpret_cast<const char*>(mStrings[mEntityTable.mStringColumns["string:Number"][areaIndex]]));
             }
             
             return {};
         }
         
-        std::vector<const std::string*>* GetAllNumber()
+        std::vector<std::string>* GetAllNumber()
         {
             const auto count = GetCount();
             
             const std::vector<int>& numberData = mEntityTable.column_exists("string:Number") ? mEntityTable.mStringColumns["string:Number"] : std::vector<int>();
             
-            std::vector<const std::string*>* result = new std::vector<const std::string*>();
+            std::vector<std::string>* result = new std::vector<std::string>();
             result->reserve(count);
             
             for (int i = 0; i < count; ++i)
             {
-                result->push_back(&mStrings[numberData[i]]);
+                result->push_back(std::string(reinterpret_cast<const char*>(mStrings[numberData[i]])));
             }
             
             return result;
@@ -12224,7 +12223,7 @@ namespace Vim
         
     };
     
-    static AreaTable* GetAreaTable(VimScene& scene)
+    static AreaTable* GetAreaTable(Scene& scene)
     {
         if (scene.mEntityTables.find("Vim.Area") == scene.mEntityTables.end())
             return {};
@@ -12247,9 +12246,9 @@ namespace Vim
     class AreaSchemeTable
     {
         EntityTable& mEntityTable;
-        std::vector<std::string>& mStrings;
+        std::vector<const bfast::byte*>& mStrings;
     public:
-        AreaSchemeTable(EntityTable& entityTable, std::vector<std::string>& strings):
+        AreaSchemeTable(EntityTable& entityTable, std::vector<const bfast::byte*>& strings):
             mEntityTable(entityTable), mStrings(strings) {}
         
         size_t GetCount()
@@ -12340,7 +12339,7 @@ namespace Vim
         
     };
     
-    static AreaSchemeTable* GetAreaSchemeTable(VimScene& scene)
+    static AreaSchemeTable* GetAreaSchemeTable(Scene& scene)
     {
         if (scene.mEntityTables.find("Vim.AreaScheme") == scene.mEntityTables.end())
             return {};
@@ -12362,9 +12361,9 @@ namespace Vim
     class ScheduleTable
     {
         EntityTable& mEntityTable;
-        std::vector<std::string>& mStrings;
+        std::vector<const bfast::byte*>& mStrings;
     public:
-        ScheduleTable(EntityTable& entityTable, std::vector<std::string>& strings):
+        ScheduleTable(EntityTable& entityTable, std::vector<const bfast::byte*>& strings):
             mEntityTable(entityTable), mStrings(strings) {}
         
         size_t GetCount()
@@ -12416,7 +12415,7 @@ namespace Vim
         
     };
     
-    static ScheduleTable* GetScheduleTable(VimScene& scene)
+    static ScheduleTable* GetScheduleTable(Scene& scene)
     {
         if (scene.mEntityTables.find("Vim.Schedule") == scene.mEntityTables.end())
             return {};
@@ -12428,7 +12427,7 @@ namespace Vim
     {
     public:
         int mIndex;
-        const std::string* mName;
+        std::string mName;
         int mColumnIndex;
         
         int mScheduleIndex;
@@ -12440,9 +12439,9 @@ namespace Vim
     class ScheduleColumnTable
     {
         EntityTable& mEntityTable;
-        std::vector<std::string>& mStrings;
+        std::vector<const bfast::byte*>& mStrings;
     public:
-        ScheduleColumnTable(EntityTable& entityTable, std::vector<std::string>& strings):
+        ScheduleColumnTable(EntityTable& entityTable, std::vector<const bfast::byte*>& strings):
             mEntityTable(entityTable), mStrings(strings) {}
         
         size_t GetCount()
@@ -12485,7 +12484,7 @@ namespace Vim
                 ScheduleColumn entity;
                 entity.mIndex = i;
                 if (existsName)
-                    entity.mName = &mStrings[nameData[i]];
+                    entity.mName = std::string(reinterpret_cast<const char*>(mStrings[nameData[i]]));
                 if (existsColumnIndex)
                     entity.mColumnIndex = columnIndexData[i];
                 entity.mScheduleIndex = existsSchedule ? scheduleData[i] : -1;
@@ -12497,30 +12496,30 @@ namespace Vim
             return scheduleColumn;
         }
         
-        const std::string* GetName(int scheduleColumnIndex)
+        std::string GetName(int scheduleColumnIndex)
         {
             if (scheduleColumnIndex < 0 || scheduleColumnIndex >= GetCount())
                 return {};
             
             if (mEntityTable.column_exists("string:Name")) {
-                return &mStrings[mEntityTable.mStringColumns["string:Name"][scheduleColumnIndex]];
+                return std::string(reinterpret_cast<const char*>(mStrings[mEntityTable.mStringColumns["string:Name"][scheduleColumnIndex]]));
             }
             
             return {};
         }
         
-        std::vector<const std::string*>* GetAllName()
+        std::vector<std::string>* GetAllName()
         {
             const auto count = GetCount();
             
             const std::vector<int>& nameData = mEntityTable.column_exists("string:Name") ? mEntityTable.mStringColumns["string:Name"] : std::vector<int>();
             
-            std::vector<const std::string*>* result = new std::vector<const std::string*>();
+            std::vector<std::string>* result = new std::vector<std::string>();
             result->reserve(count);
             
             for (int i = 0; i < count; ++i)
             {
-                result->push_back(&mStrings[nameData[i]]);
+                result->push_back(std::string(reinterpret_cast<const char*>(mStrings[nameData[i]])));
             }
             
             return result;
@@ -12568,7 +12567,7 @@ namespace Vim
         
     };
     
-    static ScheduleColumnTable* GetScheduleColumnTable(VimScene& scene)
+    static ScheduleColumnTable* GetScheduleColumnTable(Scene& scene)
     {
         if (scene.mEntityTables.find("Vim.ScheduleColumn") == scene.mEntityTables.end())
             return {};
@@ -12580,7 +12579,7 @@ namespace Vim
     {
     public:
         int mIndex;
-        const std::string* mValue;
+        std::string mValue;
         int mRowIndex;
         
         int mScheduleColumnIndex;
@@ -12592,9 +12591,9 @@ namespace Vim
     class ScheduleCellTable
     {
         EntityTable& mEntityTable;
-        std::vector<std::string>& mStrings;
+        std::vector<const bfast::byte*>& mStrings;
     public:
-        ScheduleCellTable(EntityTable& entityTable, std::vector<std::string>& strings):
+        ScheduleCellTable(EntityTable& entityTable, std::vector<const bfast::byte*>& strings):
             mEntityTable(entityTable), mStrings(strings) {}
         
         size_t GetCount()
@@ -12637,7 +12636,7 @@ namespace Vim
                 ScheduleCell entity;
                 entity.mIndex = i;
                 if (existsValue)
-                    entity.mValue = &mStrings[valueData[i]];
+                    entity.mValue = std::string(reinterpret_cast<const char*>(mStrings[valueData[i]]));
                 if (existsRowIndex)
                     entity.mRowIndex = rowIndexData[i];
                 entity.mScheduleColumnIndex = existsScheduleColumn ? scheduleColumnData[i] : -1;
@@ -12649,30 +12648,30 @@ namespace Vim
             return scheduleCell;
         }
         
-        const std::string* GetValue(int scheduleCellIndex)
+        std::string GetValue(int scheduleCellIndex)
         {
             if (scheduleCellIndex < 0 || scheduleCellIndex >= GetCount())
                 return {};
             
             if (mEntityTable.column_exists("string:Value")) {
-                return &mStrings[mEntityTable.mStringColumns["string:Value"][scheduleCellIndex]];
+                return std::string(reinterpret_cast<const char*>(mStrings[mEntityTable.mStringColumns["string:Value"][scheduleCellIndex]]));
             }
             
             return {};
         }
         
-        std::vector<const std::string*>* GetAllValue()
+        std::vector<std::string>* GetAllValue()
         {
             const auto count = GetCount();
             
             const std::vector<int>& valueData = mEntityTable.column_exists("string:Value") ? mEntityTable.mStringColumns["string:Value"] : std::vector<int>();
             
-            std::vector<const std::string*>* result = new std::vector<const std::string*>();
+            std::vector<std::string>* result = new std::vector<std::string>();
             result->reserve(count);
             
             for (int i = 0; i < count; ++i)
             {
-                result->push_back(&mStrings[valueData[i]]);
+                result->push_back(std::string(reinterpret_cast<const char*>(mStrings[valueData[i]])));
             }
             
             return result;
@@ -12720,7 +12719,7 @@ namespace Vim
         
     };
     
-    static ScheduleCellTable* GetScheduleCellTable(VimScene& scene)
+    static ScheduleCellTable* GetScheduleCellTable(Scene& scene)
     {
         if (scene.mEntityTables.find("Vim.ScheduleCell") == scene.mEntityTables.end())
             return {};
@@ -12728,7 +12727,7 @@ namespace Vim
         return new ScheduleCellTable(scene.mEntityTables["Vim.ScheduleCell"], scene.mStrings);
     }
     
-    DocumentModel::DocumentModel(VimScene& scene)
+    DocumentModel::DocumentModel(Scene& scene)
     {
         mAsset = GetAssetTable(scene);
         mDisplayUnit = GetDisplayUnitTable(scene);

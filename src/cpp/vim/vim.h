@@ -1,13 +1,14 @@
 /*
     VIM Data Format
-    Copyright 2019, VIMaec LLC
+    Copyright 2023, VIMaec LLC
     Copyright 2018, Ara 3D, Inc.
-    Usage licensed under terms of MIT Licenese.
+    Usage licensed under terms of MIT License.
 */
 #ifndef __VIM_H__
 #define __VIM_H__
 
 #include <vector>
+#include <sstream>
 #include <unordered_map>
 #include <tuple>
 #include <stdexcept>
@@ -58,10 +59,10 @@ namespace Vim
 
         static ColumnType get_column_type(const std::string& col_name)
         {
-            if (starts_with(col_name, "index:"))
+            if (starts_with(col_name, index_column_prefix))
                 return ColumnType::index_column;
 
-            if (starts_with(col_name, "string:"))
+            if (starts_with(col_name, string_column_prefix))
                 return ColumnType::string_column;
 
             return ColumnType::data_column; // default to data column.
@@ -177,14 +178,14 @@ namespace Vim
         All = Geometry | Assets | Strings | Entities
     };
 
-    class VimScene
+    class Scene
     {
     public:
         bfast::Bfast mBfast;
         bfast::Bfast mGeometryBFast;
         bfast::Bfast mAssetsBFast;
         bfast::Bfast mEntitiesBFast;
-        std::vector<std::string> mStrings;
+        std::vector<const bfast::byte*> mStrings;
         g3d::G3d mGeometry;
         std::unordered_map<std::string, EntityTable> mEntityTables;
         std::unordered_map<std::string, std::string> mHeader;
@@ -195,6 +196,9 @@ namespace Vim
 
         VimErrorCodes ReadFile(std::string file_name, VimLoadFlags load_flags = VimLoadFlags::All)
         {
+#ifdef DISABLE_EXCEPTIONS
+            mBfast = bfast::Bfast::read_file(fileName);
+#else
             try
             {
                 mBfast = bfast::Bfast::read_file(file_name);
@@ -204,6 +208,7 @@ namespace Vim
                 e;
                 return VimErrorCodes::FileNotRecognized;
             }
+#endif
 
             auto ui_load_flags = static_cast<uint32_t>(load_flags);
 
@@ -242,6 +247,10 @@ namespace Vim
                 }
                 else if (b.name == buffer_name_geometry && (ui_load_flags & static_cast<uint32_t>(VimLoadFlags::Geometry)) != 0)
                 {
+#ifdef DISABLE_EXCEPTIONS
+                    mGeometryBFast = bfast::Bfast::unpack(b.data);
+                    mGeometry = std::move(g3d::G3d(mGeometryBFast));
+#else
                     try
                     {
                         mGeometryBFast = bfast::Bfast::unpack(b.data);
@@ -250,11 +259,15 @@ namespace Vim
                     catch (std::exception& e)
                     {
                         e;
-                        return VimErrorCodes::GeometryLoadingException;
+                        return Vim::VimErrorCodes::GeometryLoadingException;
                     }
+#endif
                 }
                 else if (b.name == buffer_name_assets && (ui_load_flags & static_cast<uint32_t>(VimLoadFlags::Assets)) != 0)
                 {
+#ifdef DISABLE_EXCEPTIONS
+                    mAssetsBFast = bfast::Bfast::unpack(b.data);
+#else
                     try
                     {
                         mAssetsBFast = bfast::Bfast::unpack(b.data);
@@ -262,8 +275,9 @@ namespace Vim
                     catch (std::exception& e)
                     {
                         e;
-                        return VimErrorCodes::AssetLoadingException;
+                        return Vim::VimErrorCodes::AssetLoadingException;
                     }
+#endif
                 }
                 else if (b.name == buffer_name_strings && (ui_load_flags & static_cast<uint32_t>(VimLoadFlags::Strings)) != 0)
                 {
@@ -275,18 +289,20 @@ namespace Vim
                         data += strlen(reinterpret_cast<const char*>(data)) + 1;
                     }
 
-                    mStrings.reserve(count);
+                    mStrings.resize(count);
                     count = 0;
                     data = b.data.begin();
                     while (data < b.data.end())
                     {
-                        mStrings.emplace_back(reinterpret_cast<const char*>(data));
+                        mStrings[count++] = data;
                         data += strlen(reinterpret_cast<const char*>(data)) + 1;
                     }
                 }
                 else if (b.name == buffer_name_entities && (ui_load_flags & static_cast<uint32_t>(VimLoadFlags::Entities)) != 0)
                 {
+#ifndef DISABLE_EXCEPTIONS
                     try
+#endif
                     {
                         mEntitiesBFast = bfast::Bfast::unpack(b.data);
                         for (auto& entity_buffer : mEntitiesBFast.buffers)
@@ -314,11 +330,13 @@ namespace Vim
                             mEntityTables[entity_table.mName] = entity_table;
                         }
                     }
+#ifndef DISABLE_EXCEPTIONS
                     catch (std::exception& e)
                     {
                         e;
-                        return VimErrorCodes::EntityLoadingException;
+                        return Vim::VimErrorCodes::EntityLoadingException;
                     }
+#endif
                 }
             }
             return VimErrorCodes::Success;

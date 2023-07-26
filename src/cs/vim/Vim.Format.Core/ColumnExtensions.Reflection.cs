@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using Vim.Format.Utils;
+using Vim.Util;
 
 namespace Vim.Format
 {

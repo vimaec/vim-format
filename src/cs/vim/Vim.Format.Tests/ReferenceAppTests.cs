@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using NUnit.Framework;
+using Vim.Util.Tests;
 
 namespace Vim.Format.Tests;
 
@@ -12,7 +13,7 @@ public static class ReferenceAppTests
     [Test]
     public static void Validate()
     {
-        var vim = RepoPaths.GetLatestWolfordResidenceVim();
+        var vim = VimFormatRepoPaths.GetLatestWolfordResidenceVim();
 
         Console.WriteLine("Welcome to the VIM Reference application");
         Console.WriteLine("This application demonstrates how to parse a VIM file");
