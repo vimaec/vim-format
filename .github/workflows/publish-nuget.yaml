@@ -5,10 +5,16 @@ on:
     inputs:
       project_path:
         type: string
+        required: true
       test_project_path:
         type: string
+        required: true
       package_name:
         type: string
+        required: true
+      api_key:
+        type: string
+        required: true
 
 env:
   NUGET_ENABLE_LEGACY_CSPROJ_PACK: true
@@ -59,7 +65,7 @@ jobs:
     ##############################
 
     - name: Push NuGet package
-      run: nuget push ${{ inputs.package_name }}*.nupkg -ApiKey ${{ secrets.VIM_NUGET_PUSH }} -Source https://api.nuget.org/v3/index.json
+      run: nuget push ${{ inputs.package_name }}*.nupkg -ApiKey ${{ inputs.api_key }} -Source https://api.nuget.org/v3/index.json
       shell: bash
     - name: Tag commit
       run: ./devops/cs-tag-commit.sh ${{ inputs.project_path }} ${{ inputs.package_name }}
