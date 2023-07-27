@@ -10,6 +10,9 @@ on:
       package_name:
         type: string
 
+env:
+  NUGET_ENABLE_LEGACY_CSPROJ_PACK: true
+
 jobs:
   publish:
     runs-on: ubuntu-latest
