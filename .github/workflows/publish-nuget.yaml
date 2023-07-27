@@ -21,6 +21,8 @@ jobs:
 
     - name: Checkout repository
       uses: actions/checkout@v3
+      with:
+          lfs: true
     - name: Install additional tools
       run: sudo apt install nuget
       shell: bash
