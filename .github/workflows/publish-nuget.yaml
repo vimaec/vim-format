@@ -59,7 +59,7 @@ jobs:
     ##############################
 
     - name: Push NuGet package
-      run: nuget push ${{ inputs.package_name }}*.nupkg -ApiKey ${{ inputs.api_key }} -Source https://api.nuget.org/v3/index.json
+      run: nuget push ${{ inputs.package_name }}*.nupkg -ApiKey ${{ secrets.VIM_NUGET_PUSH }} -Source https://api.nuget.org/v3/index.json
       shell: bash
     - name: Tag commit
       run: ./devops/cs-tag-commit.sh ${{ inputs.project_path }} ${{ inputs.package_name }}
