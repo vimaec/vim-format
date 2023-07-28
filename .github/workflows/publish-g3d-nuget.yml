@@ -10,3 +10,5 @@ jobs:
       project_path: src/cs/g3d/Vim.G3d/Vim.G3d.csproj
       test_project_path: src/cs/g3d/Vim.G3d.Tests/Vim.G3d.Tests.csproj
       package_name: Vim.G3d
+    secrets:
+      VIM_NUGET_PUSH: ${{ secrets.VIM_NUGET_PUSH }}

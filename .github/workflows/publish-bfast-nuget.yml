@@ -10,3 +10,5 @@ jobs:
       project_path: src/cs/bfast/Vim.BFast/Vim.BFast.csproj
       test_project_path: src/cs/bfast/Vim.BFast.Tests/Vim.BFast.Tests.csproj
       package_name: Vim.BFast
+    secrets:
+      VIM_NUGET_PUSH: ${{ secrets.VIM_NUGET_PUSH }}
