@@ -16,9 +16,6 @@ on:
       VIM_NUGET_PUSH:
         description: 'The API key needed to push the package'
 
-env:
-  NUGET_ENABLE_LEGACY_CSPROJ_PACK: true
-
 jobs:
   publish:
     runs-on: ubuntu-latest
@@ -57,6 +54,8 @@ jobs:
       run: dotnet test -c Release ${{ inputs.test_project_path }}
       shell: bash
     - name: Pack NuGet package
+      env:
+        NUGET_ENABLE_LEGACY_CSPROJ_PACK: true
       run: nuget pack ${{ inputs.project_path }} -Symbols -SymbolPackageFormat snupkg -OutputDirectory . -NonInteractive -Properties Configuration=Release -Exclude *.tt
       shell: bash
 
@@ -65,6 +64,8 @@ jobs:
     ##############################
 
     - name: Push NuGet package
+      env:
+        NUGET_ENABLE_LEGACY_CSPROJ_PACK: true
       run: nuget push ${{ inputs.package_name }}*.nupkg -ApiKey ${{ secrets.VIM_NUGET_PUSH }} -Source https://api.nuget.org/v3/index.json
       shell: bash
     - name: Tag commit
