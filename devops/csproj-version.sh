@@ -11,5 +11,5 @@ if ! [ -f $1 ]; then
 fi
 
 cat $1 |\
-    grep -Eo '<Version>[0-9]+\.[0-9]+\.[0-9]+(?:-(?:[a-z]|[A-Z])+)?<\/Version>' |\
+    grep -Eo '<Version>[0-9]+\.[0-9]+\.[0-9]+.*<\/Version>' |\
     perl -pe 's/<Version>//g and s/<\/Version>//g'

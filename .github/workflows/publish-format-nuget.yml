@@ -10,3 +10,5 @@ jobs:
       project_path: src/cs/vim/Vim.Format/Vim.Format.csproj
       test_project_path: src/cs/vim/Vim.Format.Tests/Vim.Format.Tests.csproj
       package_name: Vim.Format
+    secrets:
+      VIM_NUGET_PUSH: ${{ secrets.VIM_NUGET_PUSH }}

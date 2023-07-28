@@ -5,10 +5,16 @@ on:
     inputs:
       project_path:
         type: string
+        required: true
       test_project_path:
         type: string
+        required: true
       package_name:
         type: string
+        required: true
+    secrets:
+      VIM_NUGET_PUSH:
+        description: 'The API key needed to push the package'
 
 jobs:
   publish:
@@ -21,6 +27,8 @@ jobs:
 
     - name: Checkout repository
       uses: actions/checkout@v3
+      with:
+          lfs: true
     - name: Install additional tools
       run: sudo apt install nuget
       shell: bash
@@ -46,6 +54,8 @@ jobs:
       run: dotnet test -c Release ${{ inputs.test_project_path }}
       shell: bash
     - name: Pack NuGet package
+      env:
+        NUGET_ENABLE_LEGACY_CSPROJ_PACK: true
       run: nuget pack ${{ inputs.project_path }} -Symbols -SymbolPackageFormat snupkg -OutputDirectory . -NonInteractive -Properties Configuration=Release -Exclude *.tt
       shell: bash
 
@@ -54,7 +64,9 @@ jobs:
     ##############################
 
     - name: Push NuGet package
-      run: nuget push ${{ inputs.package_name }}*.nupkg -ApiKey ${{ inputs.api_key }} -Source https://api.nuget.org/v3/index.json
+      env:
+        NUGET_ENABLE_LEGACY_CSPROJ_PACK: true
+      run: nuget push ${{ inputs.package_name }}*.nupkg -ApiKey ${{ secrets.VIM_NUGET_PUSH }} -Source https://api.nuget.org/v3/index.json
       shell: bash
     - name: Tag commit
       run: ./devops/cs-tag-commit.sh ${{ inputs.project_path }} ${{ inputs.package_name }}
