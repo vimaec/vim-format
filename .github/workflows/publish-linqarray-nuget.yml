@@ -10,3 +10,5 @@ jobs:
       project_path: src/cs/linqarray/Vim.LinqArray/Vim.LinqArray.csproj
       test_project_path: src/cs/linqarray/Vim.LinqArray.Tests/Vim.LinqArray.Tests.csproj
       package_name: Vim.LinqArray
+    secrets:
+      VIM_NUGET_PUSH: ${{ secrets.VIM_NUGET_PUSH }}
