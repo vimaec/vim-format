@@ -14,6 +14,9 @@ namespace Vim.Format.ObjectModel
         // ReSharper disable MemberHidesStaticFromOuterClass
         public static class History
         {
+            // TODO: Update this
+            public const string v5_1_0 = "5.1.0";
+
             // Schema removals (we still read these as fallbacks to preserve backwards compatibility):
             //   Vim.Category__int:Id
             //   Vim.Element__int:Id
@@ -130,7 +133,8 @@ namespace Vim.Format.ObjectModel
         // ReSharper enable MemberHidesStaticFromOuterClass
 
         // [MAINTAIN] Add more object model SerializableVersions below and update the current one.
-        public static SerializableVersion Current => v5_0_0;
+        public static SerializableVersion Current => v5_1_0;
+        public static SerializableVersion v5_1_0 => SerializableVersion.Parse(History.v5_1_0);
         public static SerializableVersion v5_0_0 => SerializableVersion.Parse(History.v5_0_0);
         public static SerializableVersion v4_6_0 => SerializableVersion.Parse(History.v4_6_0);
         public static SerializableVersion v4_5_0 => SerializableVersion.Parse(History.v4_5_0);
@@ -1577,6 +1581,59 @@ namespace Vim.Format.ObjectModel
         /// The ScheduleColumn to which the cell belongs.
         /// </summary>
         public Relation<ScheduleColumn> _ScheduleColumn;
+    }
+
+    /// <summary>
+    /// Represents a view sheet set, which is a collection of views and view sheets.
+    /// </summary>
+    [TableName(TableNames.ViewSheetSet)]
+    public partial class ViewSheetSet : EntityWithElement
+    { }
+
+    /// <summary>
+    /// Represents a view sheet, which can contain multiple views.
+    /// </summary>
+    [TableName(TableNames.ViewSheet)]
+    public partial class ViewSheet : EntityWithElement
+    { }
+
+    /// <summary>
+    /// An associative table binding a ViewSheet to a ViewSheetSet.
+    /// </summary>
+    [TableName(TableNames.ViewSheetInViewSheetSet)]
+    public partial class ViewSheetInViewSheetSet : Entity, IStorageKey
+    {
+        public Relation<ViewSheet> _ViewSheet;
+        public Relation<ViewSheetSet> _ViewSheetSet;
+
+        public object GetStorageKey()
+            => _ViewSheet.CombineAsStorageKey(_ViewSheetSet);
+    }
+
+    /// <summary>
+    /// An associative table binding a View to a ViewSheetSet.
+    /// </summary>
+    [TableName(TableNames.ViewInViewSheetSet)]
+    public partial class ViewInViewSheetSet : Entity, IStorageKey
+    {
+        public Relation<View> _View;
+        public Relation<ViewSheetSet> _ViewSheetSet;
+
+        public object GetStorageKey()
+            => _View.CombineAsStorageKey(_ViewSheetSet);
+    }
+
+    /// <summary>
+    /// An associative table binding a View to a ViewSheet
+    /// </summary>
+    [TableName(TableNames.ViewInViewSheet)]
+    public partial class ViewInViewSheet : Entity, IStorageKey
+    {
+        public Relation<View> _View;
+        public Relation<ViewSheet> _ViewSheet;
+
+        public object GetStorageKey()
+            => _View.CombineAsStorageKey(_ViewSheet);
     }
 
     /// <summary>

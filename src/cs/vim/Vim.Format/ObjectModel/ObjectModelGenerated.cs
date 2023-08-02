@@ -1627,6 +1627,155 @@ namespace Vim.Format.ObjectModel {
         
     } // end of class
     
+    // AUTO-GENERATED
+    public partial class ViewSheetSet
+    {
+        public Vim.Format.ObjectModel.Element Element => _Element.Value;
+        public ViewSheetSet()
+        {
+            _Element = new Relation<Vim.Format.ObjectModel.Element>();
+        }
+        
+        public override bool FieldsAreEqual(object obj)
+        {
+            if ((obj is ViewSheetSet other))
+            {
+                var fieldsAreEqual =
+                    (Index == other.Index) &&
+                    (_Element?.Index == other._Element?.Index);
+                if (!fieldsAreEqual)
+                {
+                    return false;
+                }
+                
+                return true;
+            }
+            return false;
+        }
+        
+    } // end of class
+    
+    // AUTO-GENERATED
+    public partial class ViewSheet
+    {
+        public Vim.Format.ObjectModel.Element Element => _Element.Value;
+        public ViewSheet()
+        {
+            _Element = new Relation<Vim.Format.ObjectModel.Element>();
+        }
+        
+        public override bool FieldsAreEqual(object obj)
+        {
+            if ((obj is ViewSheet other))
+            {
+                var fieldsAreEqual =
+                    (Index == other.Index) &&
+                    (_Element?.Index == other._Element?.Index);
+                if (!fieldsAreEqual)
+                {
+                    return false;
+                }
+                
+                return true;
+            }
+            return false;
+        }
+        
+    } // end of class
+    
+    // AUTO-GENERATED
+    public partial class ViewSheetInViewSheetSet
+    {
+        public Vim.Format.ObjectModel.ViewSheet ViewSheet => _ViewSheet.Value;
+        public Vim.Format.ObjectModel.ViewSheetSet ViewSheetSet => _ViewSheetSet.Value;
+        public ViewSheetInViewSheetSet()
+        {
+            _ViewSheet = new Relation<Vim.Format.ObjectModel.ViewSheet>();
+            _ViewSheetSet = new Relation<Vim.Format.ObjectModel.ViewSheetSet>();
+        }
+        
+        public override bool FieldsAreEqual(object obj)
+        {
+            if ((obj is ViewSheetInViewSheetSet other))
+            {
+                var fieldsAreEqual =
+                    (Index == other.Index) &&
+                    (_ViewSheet?.Index == other._ViewSheet?.Index) &&
+                    (_ViewSheetSet?.Index == other._ViewSheetSet?.Index);
+                if (!fieldsAreEqual)
+                {
+                    return false;
+                }
+                
+                return true;
+            }
+            return false;
+        }
+        
+    } // end of class
+    
+    // AUTO-GENERATED
+    public partial class ViewInViewSheetSet
+    {
+        public Vim.Format.ObjectModel.View View => _View.Value;
+        public Vim.Format.ObjectModel.ViewSheetSet ViewSheetSet => _ViewSheetSet.Value;
+        public ViewInViewSheetSet()
+        {
+            _View = new Relation<Vim.Format.ObjectModel.View>();
+            _ViewSheetSet = new Relation<Vim.Format.ObjectModel.ViewSheetSet>();
+        }
+        
+        public override bool FieldsAreEqual(object obj)
+        {
+            if ((obj is ViewInViewSheetSet other))
+            {
+                var fieldsAreEqual =
+                    (Index == other.Index) &&
+                    (_View?.Index == other._View?.Index) &&
+                    (_ViewSheetSet?.Index == other._ViewSheetSet?.Index);
+                if (!fieldsAreEqual)
+                {
+                    return false;
+                }
+                
+                return true;
+            }
+            return false;
+        }
+        
+    } // end of class
+    
+    // AUTO-GENERATED
+    public partial class ViewInViewSheet
+    {
+        public Vim.Format.ObjectModel.View View => _View.Value;
+        public Vim.Format.ObjectModel.ViewSheet ViewSheet => _ViewSheet.Value;
+        public ViewInViewSheet()
+        {
+            _View = new Relation<Vim.Format.ObjectModel.View>();
+            _ViewSheet = new Relation<Vim.Format.ObjectModel.ViewSheet>();
+        }
+        
+        public override bool FieldsAreEqual(object obj)
+        {
+            if ((obj is ViewInViewSheet other))
+            {
+                var fieldsAreEqual =
+                    (Index == other.Index) &&
+                    (_View?.Index == other._View?.Index) &&
+                    (_ViewSheet?.Index == other._ViewSheet?.Index);
+                if (!fieldsAreEqual)
+                {
+                    return false;
+                }
+                
+                return true;
+            }
+            return false;
+        }
+        
+    } // end of class
+    
     public partial class DocumentModel
     {
         public ElementIndexMaps ElementIndexMaps { get; }
@@ -3272,6 +3421,110 @@ namespace Vim.Format.ObjectModel {
             return r;
         }
         
+        
+        // ViewSheetSet
+        
+        public EntityTable ViewSheetSetEntityTable { get; }
+        
+        public IArray<int> ViewSheetSetElementIndex { get; }
+        public int GetViewSheetSetElementIndex(int index) => ViewSheetSetElementIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
+        public int NumViewSheetSet => ViewSheetSetEntityTable?.NumRows ?? 0;
+        public IArray<ViewSheetSet> ViewSheetSetList { get; }
+        public ViewSheetSet GetViewSheetSet(int n)
+        {
+            if (n < 0) return null;
+            var r = new ViewSheetSet();
+            r.Document = Document;
+            r.Index = n;
+            r._Element = new Relation<Vim.Format.ObjectModel.Element>(GetViewSheetSetElementIndex(n), GetElement);
+            return r;
+        }
+        
+        
+        // ViewSheet
+        
+        public EntityTable ViewSheetEntityTable { get; }
+        
+        public IArray<int> ViewSheetElementIndex { get; }
+        public int GetViewSheetElementIndex(int index) => ViewSheetElementIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
+        public int NumViewSheet => ViewSheetEntityTable?.NumRows ?? 0;
+        public IArray<ViewSheet> ViewSheetList { get; }
+        public ViewSheet GetViewSheet(int n)
+        {
+            if (n < 0) return null;
+            var r = new ViewSheet();
+            r.Document = Document;
+            r.Index = n;
+            r._Element = new Relation<Vim.Format.ObjectModel.Element>(GetViewSheetElementIndex(n), GetElement);
+            return r;
+        }
+        
+        
+        // ViewSheetInViewSheetSet
+        
+        public EntityTable ViewSheetInViewSheetSetEntityTable { get; }
+        
+        public IArray<int> ViewSheetInViewSheetSetViewSheetIndex { get; }
+        public int GetViewSheetInViewSheetSetViewSheetIndex(int index) => ViewSheetInViewSheetSetViewSheetIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
+        public IArray<int> ViewSheetInViewSheetSetViewSheetSetIndex { get; }
+        public int GetViewSheetInViewSheetSetViewSheetSetIndex(int index) => ViewSheetInViewSheetSetViewSheetSetIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
+        public int NumViewSheetInViewSheetSet => ViewSheetInViewSheetSetEntityTable?.NumRows ?? 0;
+        public IArray<ViewSheetInViewSheetSet> ViewSheetInViewSheetSetList { get; }
+        public ViewSheetInViewSheetSet GetViewSheetInViewSheetSet(int n)
+        {
+            if (n < 0) return null;
+            var r = new ViewSheetInViewSheetSet();
+            r.Document = Document;
+            r.Index = n;
+            r._ViewSheet = new Relation<Vim.Format.ObjectModel.ViewSheet>(GetViewSheetInViewSheetSetViewSheetIndex(n), GetViewSheet);
+            r._ViewSheetSet = new Relation<Vim.Format.ObjectModel.ViewSheetSet>(GetViewSheetInViewSheetSetViewSheetSetIndex(n), GetViewSheetSet);
+            return r;
+        }
+        
+        
+        // ViewInViewSheetSet
+        
+        public EntityTable ViewInViewSheetSetEntityTable { get; }
+        
+        public IArray<int> ViewInViewSheetSetViewIndex { get; }
+        public int GetViewInViewSheetSetViewIndex(int index) => ViewInViewSheetSetViewIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
+        public IArray<int> ViewInViewSheetSetViewSheetSetIndex { get; }
+        public int GetViewInViewSheetSetViewSheetSetIndex(int index) => ViewInViewSheetSetViewSheetSetIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
+        public int NumViewInViewSheetSet => ViewInViewSheetSetEntityTable?.NumRows ?? 0;
+        public IArray<ViewInViewSheetSet> ViewInViewSheetSetList { get; }
+        public ViewInViewSheetSet GetViewInViewSheetSet(int n)
+        {
+            if (n < 0) return null;
+            var r = new ViewInViewSheetSet();
+            r.Document = Document;
+            r.Index = n;
+            r._View = new Relation<Vim.Format.ObjectModel.View>(GetViewInViewSheetSetViewIndex(n), GetView);
+            r._ViewSheetSet = new Relation<Vim.Format.ObjectModel.ViewSheetSet>(GetViewInViewSheetSetViewSheetSetIndex(n), GetViewSheetSet);
+            return r;
+        }
+        
+        
+        // ViewInViewSheet
+        
+        public EntityTable ViewInViewSheetEntityTable { get; }
+        
+        public IArray<int> ViewInViewSheetViewIndex { get; }
+        public int GetViewInViewSheetViewIndex(int index) => ViewInViewSheetViewIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
+        public IArray<int> ViewInViewSheetViewSheetIndex { get; }
+        public int GetViewInViewSheetViewSheetIndex(int index) => ViewInViewSheetViewSheetIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
+        public int NumViewInViewSheet => ViewInViewSheetEntityTable?.NumRows ?? 0;
+        public IArray<ViewInViewSheet> ViewInViewSheetList { get; }
+        public ViewInViewSheet GetViewInViewSheet(int n)
+        {
+            if (n < 0) return null;
+            var r = new ViewInViewSheet();
+            r.Document = Document;
+            r.Index = n;
+            r._View = new Relation<Vim.Format.ObjectModel.View>(GetViewInViewSheetViewIndex(n), GetView);
+            r._ViewSheet = new Relation<Vim.Format.ObjectModel.ViewSheet>(GetViewInViewSheetViewSheetIndex(n), GetViewSheet);
+            return r;
+        }
+        
         // All entity collections
         public Dictionary<string, IEnumerable<Entity>> AllEntities => new Dictionary<string, IEnumerable<Entity>>() {
             {"Vim.Asset", AssetList.ToEnumerable()},
@@ -3320,6 +3573,11 @@ namespace Vim.Format.ObjectModel {
             {"Vim.Schedule", ScheduleList.ToEnumerable()},
             {"Vim.ScheduleColumn", ScheduleColumnList.ToEnumerable()},
             {"Vim.ScheduleCell", ScheduleCellList.ToEnumerable()},
+            {"Vim.ViewSheetSet", ViewSheetSetList.ToEnumerable()},
+            {"Vim.ViewSheet", ViewSheetList.ToEnumerable()},
+            {"Vim.ViewSheetInViewSheetSet", ViewSheetInViewSheetSetList.ToEnumerable()},
+            {"Vim.ViewInViewSheetSet", ViewInViewSheetSetList.ToEnumerable()},
+            {"Vim.ViewInViewSheet", ViewInViewSheetList.ToEnumerable()},
         };
         
         // Entity types from table names
@@ -3370,6 +3628,11 @@ namespace Vim.Format.ObjectModel {
             {"Vim.Schedule", typeof(Schedule)},
             {"Vim.ScheduleColumn", typeof(ScheduleColumn)},
             {"Vim.ScheduleCell", typeof(ScheduleCell)},
+            {"Vim.ViewSheetSet", typeof(ViewSheetSet)},
+            {"Vim.ViewSheet", typeof(ViewSheet)},
+            {"Vim.ViewSheetInViewSheetSet", typeof(ViewSheetInViewSheetSet)},
+            {"Vim.ViewInViewSheetSet", typeof(ViewInViewSheetSet)},
+            {"Vim.ViewInViewSheet", typeof(ViewInViewSheet)},
         };
         public DocumentModel(Document d, bool inParallel = true)
         {
@@ -3422,6 +3685,11 @@ namespace Vim.Format.ObjectModel {
             ScheduleEntityTable = Document.GetTable("Vim.Schedule");
             ScheduleColumnEntityTable = Document.GetTable("Vim.ScheduleColumn");
             ScheduleCellEntityTable = Document.GetTable("Vim.ScheduleCell");
+            ViewSheetSetEntityTable = Document.GetTable("Vim.ViewSheetSet");
+            ViewSheetEntityTable = Document.GetTable("Vim.ViewSheet");
+            ViewSheetInViewSheetSetEntityTable = Document.GetTable("Vim.ViewSheetInViewSheetSet");
+            ViewInViewSheetSetEntityTable = Document.GetTable("Vim.ViewInViewSheetSet");
+            ViewInViewSheetEntityTable = Document.GetTable("Vim.ViewInViewSheet");
             
             // Initialize entity arrays
             AssetBufferName = AssetEntityTable?.GetStringColumnValues("string:BufferName") ?? Array.Empty<String>().ToIArray();
@@ -3728,6 +3996,14 @@ namespace Vim.Format.ObjectModel {
             ScheduleElementIndex = ScheduleEntityTable?.GetIndexColumnValues("index:Vim.Element:Element") ?? Array.Empty<int>().ToIArray();
             ScheduleColumnScheduleIndex = ScheduleColumnEntityTable?.GetIndexColumnValues("index:Vim.Schedule:Schedule") ?? Array.Empty<int>().ToIArray();
             ScheduleCellScheduleColumnIndex = ScheduleCellEntityTable?.GetIndexColumnValues("index:Vim.ScheduleColumn:ScheduleColumn") ?? Array.Empty<int>().ToIArray();
+            ViewSheetSetElementIndex = ViewSheetSetEntityTable?.GetIndexColumnValues("index:Vim.Element:Element") ?? Array.Empty<int>().ToIArray();
+            ViewSheetElementIndex = ViewSheetEntityTable?.GetIndexColumnValues("index:Vim.Element:Element") ?? Array.Empty<int>().ToIArray();
+            ViewSheetInViewSheetSetViewSheetIndex = ViewSheetInViewSheetSetEntityTable?.GetIndexColumnValues("index:Vim.ViewSheet:ViewSheet") ?? Array.Empty<int>().ToIArray();
+            ViewSheetInViewSheetSetViewSheetSetIndex = ViewSheetInViewSheetSetEntityTable?.GetIndexColumnValues("index:Vim.ViewSheetSet:ViewSheetSet") ?? Array.Empty<int>().ToIArray();
+            ViewInViewSheetSetViewIndex = ViewInViewSheetSetEntityTable?.GetIndexColumnValues("index:Vim.View:View") ?? Array.Empty<int>().ToIArray();
+            ViewInViewSheetSetViewSheetSetIndex = ViewInViewSheetSetEntityTable?.GetIndexColumnValues("index:Vim.ViewSheetSet:ViewSheetSet") ?? Array.Empty<int>().ToIArray();
+            ViewInViewSheetViewIndex = ViewInViewSheetEntityTable?.GetIndexColumnValues("index:Vim.View:View") ?? Array.Empty<int>().ToIArray();
+            ViewInViewSheetViewSheetIndex = ViewInViewSheetEntityTable?.GetIndexColumnValues("index:Vim.ViewSheet:ViewSheet") ?? Array.Empty<int>().ToIArray();
             
             // Initialize entity collections
             AssetList = NumAsset.Select(i => GetAsset(i));
@@ -3776,6 +4052,11 @@ namespace Vim.Format.ObjectModel {
             ScheduleList = NumSchedule.Select(i => GetSchedule(i));
             ScheduleColumnList = NumScheduleColumn.Select(i => GetScheduleColumn(i));
             ScheduleCellList = NumScheduleCell.Select(i => GetScheduleCell(i));
+            ViewSheetSetList = NumViewSheetSet.Select(i => GetViewSheetSet(i));
+            ViewSheetList = NumViewSheet.Select(i => GetViewSheet(i));
+            ViewSheetInViewSheetSetList = NumViewSheetInViewSheetSet.Select(i => GetViewSheetInViewSheetSet(i));
+            ViewInViewSheetSetList = NumViewInViewSheetSet.Select(i => GetViewInViewSheetSet(i));
+            ViewInViewSheetList = NumViewInViewSheet.Select(i => GetViewInViewSheet(i));
             
             // Initialize element index maps
             ElementIndexMaps = new ElementIndexMaps(this, inParallel);
@@ -3831,6 +4112,11 @@ namespace Vim.Format.ObjectModel {
             if (type == typeof(Schedule)) return ToScheduleTableBuilder;
             if (type == typeof(ScheduleColumn)) return ToScheduleColumnTableBuilder;
             if (type == typeof(ScheduleCell)) return ToScheduleCellTableBuilder;
+            if (type == typeof(ViewSheetSet)) return ToViewSheetSetTableBuilder;
+            if (type == typeof(ViewSheet)) return ToViewSheetTableBuilder;
+            if (type == typeof(ViewSheetInViewSheetSet)) return ToViewSheetInViewSheetSetTableBuilder;
+            if (type == typeof(ViewInViewSheetSet)) return ToViewInViewSheetSetTableBuilder;
+            if (type == typeof(ViewInViewSheet)) return ToViewInViewSheetTableBuilder;
             throw new ArgumentException(nameof(type));
         }
         public static EntityTableBuilder ToAssetTableBuilder(this IEnumerable<Entity> entities)
@@ -4411,6 +4697,44 @@ namespace Vim.Format.ObjectModel {
             tb.AddIndexColumn("index:Vim.ScheduleColumn:ScheduleColumn", typedEntities.Select(x => x._ScheduleColumn.Index));
             return tb;
         }
+        public static EntityTableBuilder ToViewSheetSetTableBuilder(this IEnumerable<Entity> entities)
+        {
+            var typedEntities = entities?.Cast<ViewSheetSet>() ?? Enumerable.Empty<ViewSheetSet>();
+            var tb = new EntityTableBuilder("Vim.ViewSheetSet");
+            tb.AddIndexColumn("index:Vim.Element:Element", typedEntities.Select(x => x._Element.Index));
+            return tb;
+        }
+        public static EntityTableBuilder ToViewSheetTableBuilder(this IEnumerable<Entity> entities)
+        {
+            var typedEntities = entities?.Cast<ViewSheet>() ?? Enumerable.Empty<ViewSheet>();
+            var tb = new EntityTableBuilder("Vim.ViewSheet");
+            tb.AddIndexColumn("index:Vim.Element:Element", typedEntities.Select(x => x._Element.Index));
+            return tb;
+        }
+        public static EntityTableBuilder ToViewSheetInViewSheetSetTableBuilder(this IEnumerable<Entity> entities)
+        {
+            var typedEntities = entities?.Cast<ViewSheetInViewSheetSet>() ?? Enumerable.Empty<ViewSheetInViewSheetSet>();
+            var tb = new EntityTableBuilder("Vim.ViewSheetInViewSheetSet");
+            tb.AddIndexColumn("index:Vim.ViewSheet:ViewSheet", typedEntities.Select(x => x._ViewSheet.Index));
+            tb.AddIndexColumn("index:Vim.ViewSheetSet:ViewSheetSet", typedEntities.Select(x => x._ViewSheetSet.Index));
+            return tb;
+        }
+        public static EntityTableBuilder ToViewInViewSheetSetTableBuilder(this IEnumerable<Entity> entities)
+        {
+            var typedEntities = entities?.Cast<ViewInViewSheetSet>() ?? Enumerable.Empty<ViewInViewSheetSet>();
+            var tb = new EntityTableBuilder("Vim.ViewInViewSheetSet");
+            tb.AddIndexColumn("index:Vim.View:View", typedEntities.Select(x => x._View.Index));
+            tb.AddIndexColumn("index:Vim.ViewSheetSet:ViewSheetSet", typedEntities.Select(x => x._ViewSheetSet.Index));
+            return tb;
+        }
+        public static EntityTableBuilder ToViewInViewSheetTableBuilder(this IEnumerable<Entity> entities)
+        {
+            var typedEntities = entities?.Cast<ViewInViewSheet>() ?? Enumerable.Empty<ViewInViewSheet>();
+            var tb = new EntityTableBuilder("Vim.ViewInViewSheet");
+            tb.AddIndexColumn("index:Vim.View:View", typedEntities.Select(x => x._View.Index));
+            tb.AddIndexColumn("index:Vim.ViewSheet:ViewSheet", typedEntities.Select(x => x._ViewSheet.Index));
+            return tb;
+        }
     } // DocumentBuilderExtensions
     
     public partial class ObjectModelBuilder
@@ -4463,6 +4787,11 @@ namespace Vim.Format.ObjectModel {
             {typeof(Schedule), new EntityTableBuilder()},
             {typeof(ScheduleColumn), new EntityTableBuilder()},
             {typeof(ScheduleCell), new EntityTableBuilder()},
+            {typeof(ViewSheetSet), new EntityTableBuilder()},
+            {typeof(ViewSheet), new EntityTableBuilder()},
+            {typeof(ViewSheetInViewSheetSet), new EntityTableBuilder()},
+            {typeof(ViewInViewSheetSet), new EntityTableBuilder()},
+            {typeof(ViewInViewSheet), new EntityTableBuilder()},
         };
     } // ObjectModelBuilder
 } // namespace

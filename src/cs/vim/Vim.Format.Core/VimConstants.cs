@@ -51,6 +51,11 @@ namespace Vim.Format
         public const string Schedule = "Vim.Schedule";
         public const string ScheduleColumn = "Vim.ScheduleColumn";
         public const string ScheduleCell = "Vim.ScheduleCell";
+        public const string ViewSheetSet = "Vim.ViewSheetSet";
+        public const string ViewSheet = "Vim.ViewSheet";
+        public const string ViewSheetInViewSheetSet = "Vim.ViewSheetInViewSheetSet";
+        public const string ViewInViewSheetSet = "Vim.ViewInViewSheetSet";
+        public const string ViewInViewSheet = "Vim.ViewInViewSheet";
     }
 
     public static class VimConstants
