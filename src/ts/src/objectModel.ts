@@ -5331,6 +5331,137 @@ export class AssetInViewTable implements IAssetInViewTable {
     
 }
 
+export interface IAssetInViewSheet {
+    index: number
+    
+    assetIndex?: number
+    asset?: IAsset
+    viewSheetIndex?: number
+    viewSheet?: IViewSheet
+}
+
+export interface IAssetInViewSheetTable {
+    getCount(): Promise<number>
+    get(assetInViewSheetIndex: number): Promise<IAssetInViewSheet>
+    getAll(): Promise<IAssetInViewSheet[]>
+    
+    getAssetIndex(assetInViewSheetIndex: number): Promise<number | undefined>
+    getAllAssetIndex(): Promise<number[] | undefined>
+    getAsset(assetInViewSheetIndex: number): Promise<IAsset | undefined>
+    getViewSheetIndex(assetInViewSheetIndex: number): Promise<number | undefined>
+    getAllViewSheetIndex(): Promise<number[] | undefined>
+    getViewSheet(assetInViewSheetIndex: number): Promise<IViewSheet | undefined>
+}
+
+export class AssetInViewSheet implements IAssetInViewSheet {
+    index: number
+    
+    assetIndex?: number
+    asset?: IAsset
+    viewSheetIndex?: number
+    viewSheet?: IViewSheet
+    
+    static async createFromTable(table: IAssetInViewSheetTable, index: number): Promise<IAssetInViewSheet> {
+        let result = new AssetInViewSheet()
+        result.index = index
+        
+        await Promise.all([
+            table.getAssetIndex(index).then(v => result.assetIndex = v),
+            table.getViewSheetIndex(index).then(v => result.viewSheetIndex = v),
+        ])
+        
+        return result
+    }
+}
+
+export class AssetInViewSheetTable implements IAssetInViewSheetTable {
+    private document: VimDocument
+    private entityTable: EntityTable
+    
+    static async createFromDocument(document: VimDocument): Promise<IAssetInViewSheetTable | undefined> {
+        const entity = await document.entities.getBfast("Vim.AssetInViewSheet")
+        
+        if (!entity) {
+            return undefined
+        }
+        
+        let table = new AssetInViewSheetTable()
+        table.document = document
+        table.entityTable = new EntityTable(entity, document.strings)
+        
+        return table
+    }
+    
+    getCount(): Promise<number> {
+        return this.entityTable.getCount()
+    }
+    
+    async get(assetInViewSheetIndex: number): Promise<IAssetInViewSheet> {
+        return await AssetInViewSheet.createFromTable(this, assetInViewSheetIndex)
+    }
+    
+    async getAll(): Promise<IAssetInViewSheet[]> {
+        const localTable = await this.entityTable.getLocal()
+        
+        let assetIndex: number[] | undefined
+        let viewSheetIndex: number[] | undefined
+        
+        await Promise.all([
+            (async () => { assetIndex = (await localTable.getNumberArray("index:Vim.Asset:Asset")) })(),
+            (async () => { viewSheetIndex = (await localTable.getNumberArray("index:Vim.ViewSheet:ViewSheet")) })(),
+        ])
+        
+        let assetInViewSheet: IAssetInViewSheet[] = []
+        
+        for (let i = 0; i < assetIndex!.length; i++) {
+            assetInViewSheet.push({
+                index: i,
+                assetIndex: assetIndex ? assetIndex[i] : undefined,
+                viewSheetIndex: viewSheetIndex ? viewSheetIndex[i] : undefined
+            })
+        }
+        
+        return assetInViewSheet
+    }
+    
+    async getAssetIndex(assetInViewSheetIndex: number): Promise<number | undefined> {
+        return await this.entityTable.getNumber(assetInViewSheetIndex, "index:Vim.Asset:Asset")
+    }
+    
+    async getAllAssetIndex(): Promise<number[] | undefined> {
+        return await this.entityTable.getNumberArray("index:Vim.Asset:Asset")
+    }
+    
+    async getAsset(assetInViewSheetIndex: number): Promise<IAsset | undefined> {
+        const index = await this.getAssetIndex(assetInViewSheetIndex)
+        
+        if (index === undefined) {
+            return undefined
+        }
+        
+        return await this.document.asset?.get(index)
+    }
+    
+    async getViewSheetIndex(assetInViewSheetIndex: number): Promise<number | undefined> {
+        return await this.entityTable.getNumber(assetInViewSheetIndex, "index:Vim.ViewSheet:ViewSheet")
+    }
+    
+    async getAllViewSheetIndex(): Promise<number[] | undefined> {
+        return await this.entityTable.getNumberArray("index:Vim.ViewSheet:ViewSheet")
+    }
+    
+    async getViewSheet(assetInViewSheetIndex: number): Promise<IViewSheet | undefined> {
+        const index = await this.getViewSheetIndex(assetInViewSheetIndex)
+        
+        if (index === undefined) {
+            return undefined
+        }
+        
+        return await this.document.viewSheet?.get(index)
+    }
+    
+}
+
 export interface ILevelInView {
     index: number
     extents_Min_X?: number
@@ -9926,6 +10057,7 @@ export class VimDocument {
     elementInView: IElementInViewTable | undefined
     shapeInView: IShapeInViewTable | undefined
     assetInView: IAssetInViewTable | undefined
+    assetInViewSheet: IAssetInViewSheetTable | undefined
     levelInView: ILevelInViewTable | undefined
     camera: ICameraTable | undefined
     material: IMaterialTable | undefined
@@ -9994,6 +10126,7 @@ export class VimDocument {
         doc.elementInView = await ElementInViewTable.createFromDocument(doc)
         doc.shapeInView = await ShapeInViewTable.createFromDocument(doc)
         doc.assetInView = await AssetInViewTable.createFromDocument(doc)
+        doc.assetInViewSheet = await AssetInViewSheetTable.createFromDocument(doc)
         doc.levelInView = await LevelInViewTable.createFromDocument(doc)
         doc.camera = await CameraTable.createFromDocument(doc)
         doc.material = await MaterialTable.createFromDocument(doc)

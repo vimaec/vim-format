@@ -872,6 +872,37 @@ namespace Vim.Format.ObjectModel {
     } // end of class
     
     // AUTO-GENERATED
+    public partial class AssetInViewSheet
+    {
+        public Vim.Format.ObjectModel.Asset Asset => _Asset.Value;
+        public Vim.Format.ObjectModel.ViewSheet ViewSheet => _ViewSheet.Value;
+        public AssetInViewSheet()
+        {
+            _Asset = new Relation<Vim.Format.ObjectModel.Asset>();
+            _ViewSheet = new Relation<Vim.Format.ObjectModel.ViewSheet>();
+        }
+        
+        public override bool FieldsAreEqual(object obj)
+        {
+            if ((obj is AssetInViewSheet other))
+            {
+                var fieldsAreEqual =
+                    (Index == other.Index) &&
+                    (_Asset?.Index == other._Asset?.Index) &&
+                    (_ViewSheet?.Index == other._ViewSheet?.Index);
+                if (!fieldsAreEqual)
+                {
+                    return false;
+                }
+                
+                return true;
+            }
+            return false;
+        }
+        
+    } // end of class
+    
+    // AUTO-GENERATED
     public partial class LevelInView
     {
         public Vim.Format.ObjectModel.Level Level => _Level.Value;
@@ -2703,6 +2734,28 @@ namespace Vim.Format.ObjectModel {
         }
         
         
+        // AssetInViewSheet
+        
+        public EntityTable AssetInViewSheetEntityTable { get; }
+        
+        public IArray<int> AssetInViewSheetAssetIndex { get; }
+        public int GetAssetInViewSheetAssetIndex(int index) => AssetInViewSheetAssetIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
+        public IArray<int> AssetInViewSheetViewSheetIndex { get; }
+        public int GetAssetInViewSheetViewSheetIndex(int index) => AssetInViewSheetViewSheetIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
+        public int NumAssetInViewSheet => AssetInViewSheetEntityTable?.NumRows ?? 0;
+        public IArray<AssetInViewSheet> AssetInViewSheetList { get; }
+        public AssetInViewSheet GetAssetInViewSheet(int n)
+        {
+            if (n < 0) return null;
+            var r = new AssetInViewSheet();
+            r.Document = Document;
+            r.Index = n;
+            r._Asset = new Relation<Vim.Format.ObjectModel.Asset>(GetAssetInViewSheetAssetIndex(n), GetAsset);
+            r._ViewSheet = new Relation<Vim.Format.ObjectModel.ViewSheet>(GetAssetInViewSheetViewSheetIndex(n), GetViewSheet);
+            return r;
+        }
+        
+        
         // LevelInView
         
         public EntityTable LevelInViewEntityTable { get; }
@@ -3550,6 +3603,7 @@ namespace Vim.Format.ObjectModel {
             {"Vim.ElementInView", ElementInViewList.ToEnumerable()},
             {"Vim.ShapeInView", ShapeInViewList.ToEnumerable()},
             {"Vim.AssetInView", AssetInViewList.ToEnumerable()},
+            {"Vim.AssetInViewSheet", AssetInViewSheetList.ToEnumerable()},
             {"Vim.LevelInView", LevelInViewList.ToEnumerable()},
             {"Vim.Camera", CameraList.ToEnumerable()},
             {"Vim.Material", MaterialList.ToEnumerable()},
@@ -3605,6 +3659,7 @@ namespace Vim.Format.ObjectModel {
             {"Vim.ElementInView", typeof(ElementInView)},
             {"Vim.ShapeInView", typeof(ShapeInView)},
             {"Vim.AssetInView", typeof(AssetInView)},
+            {"Vim.AssetInViewSheet", typeof(AssetInViewSheet)},
             {"Vim.LevelInView", typeof(LevelInView)},
             {"Vim.Camera", typeof(Camera)},
             {"Vim.Material", typeof(Material)},
@@ -3662,6 +3717,7 @@ namespace Vim.Format.ObjectModel {
             ElementInViewEntityTable = Document.GetTable("Vim.ElementInView");
             ShapeInViewEntityTable = Document.GetTable("Vim.ShapeInView");
             AssetInViewEntityTable = Document.GetTable("Vim.AssetInView");
+            AssetInViewSheetEntityTable = Document.GetTable("Vim.AssetInViewSheet");
             LevelInViewEntityTable = Document.GetTable("Vim.LevelInView");
             CameraEntityTable = Document.GetTable("Vim.Camera");
             MaterialEntityTable = Document.GetTable("Vim.Material");
@@ -3964,6 +4020,8 @@ namespace Vim.Format.ObjectModel {
             ShapeInViewViewIndex = ShapeInViewEntityTable?.GetIndexColumnValues("index:Vim.View:View") ?? Array.Empty<int>().ToIArray();
             AssetInViewAssetIndex = AssetInViewEntityTable?.GetIndexColumnValues("index:Vim.Asset:Asset") ?? Array.Empty<int>().ToIArray();
             AssetInViewViewIndex = AssetInViewEntityTable?.GetIndexColumnValues("index:Vim.View:View") ?? Array.Empty<int>().ToIArray();
+            AssetInViewSheetAssetIndex = AssetInViewSheetEntityTable?.GetIndexColumnValues("index:Vim.Asset:Asset") ?? Array.Empty<int>().ToIArray();
+            AssetInViewSheetViewSheetIndex = AssetInViewSheetEntityTable?.GetIndexColumnValues("index:Vim.ViewSheet:ViewSheet") ?? Array.Empty<int>().ToIArray();
             LevelInViewLevelIndex = LevelInViewEntityTable?.GetIndexColumnValues("index:Vim.Level:Level") ?? Array.Empty<int>().ToIArray();
             LevelInViewViewIndex = LevelInViewEntityTable?.GetIndexColumnValues("index:Vim.View:View") ?? Array.Empty<int>().ToIArray();
             MaterialColorTextureFileIndex = MaterialEntityTable?.GetIndexColumnValues("index:Vim.Asset:ColorTextureFile") ?? Array.Empty<int>().ToIArray();
@@ -4029,6 +4087,7 @@ namespace Vim.Format.ObjectModel {
             ElementInViewList = NumElementInView.Select(i => GetElementInView(i));
             ShapeInViewList = NumShapeInView.Select(i => GetShapeInView(i));
             AssetInViewList = NumAssetInView.Select(i => GetAssetInView(i));
+            AssetInViewSheetList = NumAssetInViewSheet.Select(i => GetAssetInViewSheet(i));
             LevelInViewList = NumLevelInView.Select(i => GetLevelInView(i));
             CameraList = NumCamera.Select(i => GetCamera(i));
             MaterialList = NumMaterial.Select(i => GetMaterial(i));
@@ -4089,6 +4148,7 @@ namespace Vim.Format.ObjectModel {
             if (type == typeof(ElementInView)) return ToElementInViewTableBuilder;
             if (type == typeof(ShapeInView)) return ToShapeInViewTableBuilder;
             if (type == typeof(AssetInView)) return ToAssetInViewTableBuilder;
+            if (type == typeof(AssetInViewSheet)) return ToAssetInViewSheetTableBuilder;
             if (type == typeof(LevelInView)) return ToLevelInViewTableBuilder;
             if (type == typeof(Camera)) return ToCameraTableBuilder;
             if (type == typeof(Material)) return ToMaterialTableBuilder;
@@ -4442,6 +4502,14 @@ namespace Vim.Format.ObjectModel {
             tb.AddIndexColumn("index:Vim.View:View", typedEntities.Select(x => x._View.Index));
             return tb;
         }
+        public static EntityTableBuilder ToAssetInViewSheetTableBuilder(this IEnumerable<Entity> entities)
+        {
+            var typedEntities = entities?.Cast<AssetInViewSheet>() ?? Enumerable.Empty<AssetInViewSheet>();
+            var tb = new EntityTableBuilder("Vim.AssetInViewSheet");
+            tb.AddIndexColumn("index:Vim.Asset:Asset", typedEntities.Select(x => x._Asset.Index));
+            tb.AddIndexColumn("index:Vim.ViewSheet:ViewSheet", typedEntities.Select(x => x._ViewSheet.Index));
+            return tb;
+        }
         public static EntityTableBuilder ToLevelInViewTableBuilder(this IEnumerable<Entity> entities)
         {
             var typedEntities = entities?.Cast<LevelInView>() ?? Enumerable.Empty<LevelInView>();
@@ -4764,6 +4832,7 @@ namespace Vim.Format.ObjectModel {
             {typeof(ElementInView), new EntityTableBuilder()},
             {typeof(ShapeInView), new EntityTableBuilder()},
             {typeof(AssetInView), new EntityTableBuilder()},
+            {typeof(AssetInViewSheet), new EntityTableBuilder()},
             {typeof(LevelInView), new EntityTableBuilder()},
             {typeof(Camera), new EntityTableBuilder()},
             {typeof(Material), new EntityTableBuilder()},

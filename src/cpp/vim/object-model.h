@@ -58,6 +58,8 @@ namespace Vim
     class ShapeInViewTable;
     class AssetInView;
     class AssetInViewTable;
+    class AssetInViewSheet;
+    class AssetInViewSheetTable;
     class LevelInView;
     class LevelInViewTable;
     class Camera;
@@ -141,6 +143,7 @@ namespace Vim
         ElementInViewTable* mElementInView;
         ShapeInViewTable* mShapeInView;
         AssetInViewTable* mAssetInView;
+        AssetInViewSheetTable* mAssetInViewSheet;
         LevelInViewTable* mLevelInView;
         CameraTable* mCamera;
         MaterialTable* mMaterial;
@@ -7532,6 +7535,100 @@ namespace Vim
         return new AssetInViewTable(scene.mEntityTables["Vim.AssetInView"], scene.mStrings);
     }
     
+    class AssetInViewSheet
+    {
+    public:
+        int mIndex;
+        
+        int mAssetIndex;
+        Asset* mAsset;
+        int mViewSheetIndex;
+        ViewSheet* mViewSheet;
+        
+        AssetInViewSheet() {}
+    };
+    
+    class AssetInViewSheetTable
+    {
+        EntityTable& mEntityTable;
+        std::vector<const bfast::byte*>& mStrings;
+    public:
+        AssetInViewSheetTable(EntityTable& entityTable, std::vector<const bfast::byte*>& strings):
+            mEntityTable(entityTable), mStrings(strings) {}
+        
+        size_t GetCount()
+        {
+            return mEntityTable.get_count();
+        }
+        
+        AssetInViewSheet* Get(int assetInViewSheetIndex)
+        {
+            AssetInViewSheet* assetInViewSheet = new AssetInViewSheet();
+            assetInViewSheet->mIndex = assetInViewSheetIndex;
+            assetInViewSheet->mAssetIndex = GetAssetIndex(assetInViewSheetIndex);
+            assetInViewSheet->mViewSheetIndex = GetViewSheetIndex(assetInViewSheetIndex);
+            return assetInViewSheet;
+        }
+        
+        std::vector<AssetInViewSheet>* GetAll()
+        {
+            bool existsAsset = mEntityTable.column_exists("index:Vim.Asset:Asset");
+            bool existsViewSheet = mEntityTable.column_exists("index:Vim.ViewSheet:ViewSheet");
+            
+            const auto count = GetCount();
+            
+            std::vector<AssetInViewSheet>* assetInViewSheet = new std::vector<AssetInViewSheet>();
+            assetInViewSheet->reserve(count);
+            
+            const std::vector<int>& assetData = mEntityTable.column_exists("index:Vim.Asset:Asset") ? mEntityTable.mIndexColumns["index:Vim.Asset:Asset"] : std::vector<int>();
+            const std::vector<int>& viewSheetData = mEntityTable.column_exists("index:Vim.ViewSheet:ViewSheet") ? mEntityTable.mIndexColumns["index:Vim.ViewSheet:ViewSheet"] : std::vector<int>();
+            
+            for (int i = 0; i < count; ++i)
+            {
+                AssetInViewSheet entity;
+                entity.mIndex = i;
+                entity.mAssetIndex = existsAsset ? assetData[i] : -1;
+                entity.mViewSheetIndex = existsViewSheet ? viewSheetData[i] : -1;
+                assetInViewSheet->push_back(entity);
+            }
+            
+            return assetInViewSheet;
+        }
+        
+        int GetAssetIndex(int assetInViewSheetIndex)
+        {
+            if (!mEntityTable.column_exists("index:Vim.Asset:Asset")) {
+                return -1;
+            }
+            
+            if (assetInViewSheetIndex < 0 || assetInViewSheetIndex >= GetCount())
+                return -1;
+            
+            return mEntityTable.mIndexColumns["index:Vim.Asset:Asset"][assetInViewSheetIndex];
+        }
+        
+        int GetViewSheetIndex(int assetInViewSheetIndex)
+        {
+            if (!mEntityTable.column_exists("index:Vim.ViewSheet:ViewSheet")) {
+                return -1;
+            }
+            
+            if (assetInViewSheetIndex < 0 || assetInViewSheetIndex >= GetCount())
+                return -1;
+            
+            return mEntityTable.mIndexColumns["index:Vim.ViewSheet:ViewSheet"][assetInViewSheetIndex];
+        }
+        
+    };
+    
+    static AssetInViewSheetTable* GetAssetInViewSheetTable(Scene& scene)
+    {
+        if (scene.mEntityTables.find("Vim.AssetInViewSheet") == scene.mEntityTables.end())
+            return {};
+        
+        return new AssetInViewSheetTable(scene.mEntityTables["Vim.AssetInViewSheet"], scene.mStrings);
+    }
+    
     class LevelInView
     {
     public:
@@ -13201,6 +13298,7 @@ namespace Vim
         mElementInView = GetElementInViewTable(scene);
         mShapeInView = GetShapeInViewTable(scene);
         mAssetInView = GetAssetInViewTable(scene);
+        mAssetInViewSheet = GetAssetInViewSheetTable(scene);
         mLevelInView = GetLevelInViewTable(scene);
         mCamera = GetCameraTable(scene);
         mMaterial = GetMaterialTable(scene);
@@ -13256,6 +13354,7 @@ namespace Vim
         delete mElementInView;
         delete mShapeInView;
         delete mAssetInView;
+        delete mAssetInViewSheet;
         delete mLevelInView;
         delete mCamera;
         delete mMaterial;

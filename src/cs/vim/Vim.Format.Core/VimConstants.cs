@@ -25,6 +25,7 @@ namespace Vim.Format
         public const string ElementInView = "Vim.ElementInView";
         public const string ShapeInView = "Vim.ShapeInView";
         public const string AssetInView = "Vim.AssetInView";
+        public const string AssetInViewSheet = "Vim.AssetInViewSheet";
         public const string LevelInView = "Vim.LevelInView";
         public const string Camera = "Vim.Camera";
         public const string Workset = "Vim.Workset";

@@ -879,6 +879,19 @@ namespace Vim.Format.ObjectModel
     }
 
     /// <summary>
+    /// An associative table binding an Asset to a ViewSheet.
+    /// </summary>
+    [TableName(TableNames.AssetInViewSheet)]
+    public partial class AssetInViewSheet : Entity, IStorageKey
+    {
+        public Relation<Asset> _Asset;
+        public Relation<ViewSheet> _ViewSheet;
+
+        public object GetStorageKey()
+            => _Asset.CombineAsStorageKey(_ViewSheet);
+    }
+
+    /// <summary>
     /// An associative table binding a Level to a View.
     /// </summary>
     [TableName(TableNames.LevelInView)]
