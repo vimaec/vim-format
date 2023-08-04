@@ -1689,9 +1689,11 @@ namespace Vim.Format.ObjectModel {
     // AUTO-GENERATED
     public partial class ViewSheet
     {
+        public Vim.Format.ObjectModel.FamilyType FamilyType => _FamilyType.Value;
         public Vim.Format.ObjectModel.Element Element => _Element.Value;
         public ViewSheet()
         {
+            _FamilyType = new Relation<Vim.Format.ObjectModel.FamilyType>();
             _Element = new Relation<Vim.Format.ObjectModel.Element>();
         }
         
@@ -1701,6 +1703,7 @@ namespace Vim.Format.ObjectModel {
             {
                 var fieldsAreEqual =
                     (Index == other.Index) &&
+                    (_FamilyType?.Index == other._FamilyType?.Index) &&
                     (_Element?.Index == other._Element?.Index);
                 if (!fieldsAreEqual)
                 {
@@ -3498,6 +3501,8 @@ namespace Vim.Format.ObjectModel {
         
         public EntityTable ViewSheetEntityTable { get; }
         
+        public IArray<int> ViewSheetFamilyTypeIndex { get; }
+        public int GetViewSheetFamilyTypeIndex(int index) => ViewSheetFamilyTypeIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
         public IArray<int> ViewSheetElementIndex { get; }
         public int GetViewSheetElementIndex(int index) => ViewSheetElementIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
         public int NumViewSheet => ViewSheetEntityTable?.NumRows ?? 0;
@@ -3508,6 +3513,7 @@ namespace Vim.Format.ObjectModel {
             var r = new ViewSheet();
             r.Document = Document;
             r.Index = n;
+            r._FamilyType = new Relation<Vim.Format.ObjectModel.FamilyType>(GetViewSheetFamilyTypeIndex(n), GetFamilyType);
             r._Element = new Relation<Vim.Format.ObjectModel.Element>(GetViewSheetElementIndex(n), GetElement);
             return r;
         }
@@ -4055,6 +4061,7 @@ namespace Vim.Format.ObjectModel {
             ScheduleColumnScheduleIndex = ScheduleColumnEntityTable?.GetIndexColumnValues("index:Vim.Schedule:Schedule") ?? Array.Empty<int>().ToIArray();
             ScheduleCellScheduleColumnIndex = ScheduleCellEntityTable?.GetIndexColumnValues("index:Vim.ScheduleColumn:ScheduleColumn") ?? Array.Empty<int>().ToIArray();
             ViewSheetSetElementIndex = ViewSheetSetEntityTable?.GetIndexColumnValues("index:Vim.Element:Element") ?? Array.Empty<int>().ToIArray();
+            ViewSheetFamilyTypeIndex = ViewSheetEntityTable?.GetIndexColumnValues("index:Vim.FamilyType:FamilyType") ?? Array.Empty<int>().ToIArray();
             ViewSheetElementIndex = ViewSheetEntityTable?.GetIndexColumnValues("index:Vim.Element:Element") ?? Array.Empty<int>().ToIArray();
             ViewSheetInViewSheetSetViewSheetIndex = ViewSheetInViewSheetSetEntityTable?.GetIndexColumnValues("index:Vim.ViewSheet:ViewSheet") ?? Array.Empty<int>().ToIArray();
             ViewSheetInViewSheetSetViewSheetSetIndex = ViewSheetInViewSheetSetEntityTable?.GetIndexColumnValues("index:Vim.ViewSheetSet:ViewSheetSet") ?? Array.Empty<int>().ToIArray();
@@ -4776,6 +4783,7 @@ namespace Vim.Format.ObjectModel {
         {
             var typedEntities = entities?.Cast<ViewSheet>() ?? Enumerable.Empty<ViewSheet>();
             var tb = new EntityTableBuilder("Vim.ViewSheet");
+            tb.AddIndexColumn("index:Vim.FamilyType:FamilyType", typedEntities.Select(x => x._FamilyType.Index));
             tb.AddIndexColumn("index:Vim.Element:Element", typedEntities.Select(x => x._Element.Index));
             return tb;
         }

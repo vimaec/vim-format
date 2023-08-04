@@ -12920,6 +12920,8 @@ namespace Vim
     public:
         int mIndex;
         
+        int mFamilyTypeIndex;
+        FamilyType* mFamilyType;
         int mElementIndex;
         Element* mElement;
         
@@ -12943,12 +12945,14 @@ namespace Vim
         {
             ViewSheet* viewSheet = new ViewSheet();
             viewSheet->mIndex = viewSheetIndex;
+            viewSheet->mFamilyTypeIndex = GetFamilyTypeIndex(viewSheetIndex);
             viewSheet->mElementIndex = GetElementIndex(viewSheetIndex);
             return viewSheet;
         }
         
         std::vector<ViewSheet>* GetAll()
         {
+            bool existsFamilyType = mEntityTable.column_exists("index:Vim.FamilyType:FamilyType");
             bool existsElement = mEntityTable.column_exists("index:Vim.Element:Element");
             
             const auto count = GetCount();
@@ -12956,17 +12960,31 @@ namespace Vim
             std::vector<ViewSheet>* viewSheet = new std::vector<ViewSheet>();
             viewSheet->reserve(count);
             
+            const std::vector<int>& familyTypeData = mEntityTable.column_exists("index:Vim.FamilyType:FamilyType") ? mEntityTable.mIndexColumns["index:Vim.FamilyType:FamilyType"] : std::vector<int>();
             const std::vector<int>& elementData = mEntityTable.column_exists("index:Vim.Element:Element") ? mEntityTable.mIndexColumns["index:Vim.Element:Element"] : std::vector<int>();
             
             for (int i = 0; i < count; ++i)
             {
                 ViewSheet entity;
                 entity.mIndex = i;
+                entity.mFamilyTypeIndex = existsFamilyType ? familyTypeData[i] : -1;
                 entity.mElementIndex = existsElement ? elementData[i] : -1;
                 viewSheet->push_back(entity);
             }
             
             return viewSheet;
+        }
+        
+        int GetFamilyTypeIndex(int viewSheetIndex)
+        {
+            if (!mEntityTable.column_exists("index:Vim.FamilyType:FamilyType")) {
+                return -1;
+            }
+            
+            if (viewSheetIndex < 0 || viewSheetIndex >= GetCount())
+                return -1;
+            
+            return mEntityTable.mIndexColumns["index:Vim.FamilyType:FamilyType"][viewSheetIndex];
         }
         
         int GetElementIndex(int viewSheetIndex)

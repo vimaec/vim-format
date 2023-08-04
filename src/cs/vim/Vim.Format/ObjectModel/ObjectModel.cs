@@ -1608,7 +1608,12 @@ namespace Vim.Format.ObjectModel
     /// </summary>
     [TableName(TableNames.ViewSheet)]
     public partial class ViewSheet : EntityWithElement
-    { }
+    {
+        /// <summary>
+        /// The ViewSheet's associated FamilyType. In Revit, this maps to its ViewFamilyType
+        /// </summary>
+        public Relation<FamilyType> _FamilyType;
+    }
 
     /// <summary>
     /// An associative table binding a ViewSheet to a ViewSheetSet.

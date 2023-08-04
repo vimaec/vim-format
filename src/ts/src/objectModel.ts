@@ -9541,6 +9541,8 @@ export class ViewSheetSetTable implements IViewSheetSetTable {
 export interface IViewSheet {
     index: number
     
+    familyTypeIndex?: number
+    familyType?: IFamilyType
     elementIndex?: number
     element?: IElement
 }
@@ -9550,6 +9552,9 @@ export interface IViewSheetTable {
     get(viewSheetIndex: number): Promise<IViewSheet>
     getAll(): Promise<IViewSheet[]>
     
+    getFamilyTypeIndex(viewSheetIndex: number): Promise<number | undefined>
+    getAllFamilyTypeIndex(): Promise<number[] | undefined>
+    getFamilyType(viewSheetIndex: number): Promise<IFamilyType | undefined>
     getElementIndex(viewSheetIndex: number): Promise<number | undefined>
     getAllElementIndex(): Promise<number[] | undefined>
     getElement(viewSheetIndex: number): Promise<IElement | undefined>
@@ -9558,6 +9563,8 @@ export interface IViewSheetTable {
 export class ViewSheet implements IViewSheet {
     index: number
     
+    familyTypeIndex?: number
+    familyType?: IFamilyType
     elementIndex?: number
     element?: IElement
     
@@ -9566,6 +9573,7 @@ export class ViewSheet implements IViewSheet {
         result.index = index
         
         await Promise.all([
+            table.getFamilyTypeIndex(index).then(v => result.familyTypeIndex = v),
             table.getElementIndex(index).then(v => result.elementIndex = v),
         ])
         
@@ -9602,22 +9610,43 @@ export class ViewSheetTable implements IViewSheetTable {
     async getAll(): Promise<IViewSheet[]> {
         const localTable = await this.entityTable.getLocal()
         
+        let familyTypeIndex: number[] | undefined
         let elementIndex: number[] | undefined
         
         await Promise.all([
+            (async () => { familyTypeIndex = (await localTable.getNumberArray("index:Vim.FamilyType:FamilyType")) })(),
             (async () => { elementIndex = (await localTable.getNumberArray("index:Vim.Element:Element")) })(),
         ])
         
         let viewSheet: IViewSheet[] = []
         
-        for (let i = 0; i < elementIndex!.length; i++) {
+        for (let i = 0; i < familyTypeIndex!.length; i++) {
             viewSheet.push({
                 index: i,
+                familyTypeIndex: familyTypeIndex ? familyTypeIndex[i] : undefined,
                 elementIndex: elementIndex ? elementIndex[i] : undefined
             })
         }
         
         return viewSheet
+    }
+    
+    async getFamilyTypeIndex(viewSheetIndex: number): Promise<number | undefined> {
+        return await this.entityTable.getNumber(viewSheetIndex, "index:Vim.FamilyType:FamilyType")
+    }
+    
+    async getAllFamilyTypeIndex(): Promise<number[] | undefined> {
+        return await this.entityTable.getNumberArray("index:Vim.FamilyType:FamilyType")
+    }
+    
+    async getFamilyType(viewSheetIndex: number): Promise<IFamilyType | undefined> {
+        const index = await this.getFamilyTypeIndex(viewSheetIndex)
+        
+        if (index === undefined) {
+            return undefined
+        }
+        
+        return await this.document.familyType?.get(index)
     }
     
     async getElementIndex(viewSheetIndex: number): Promise<number | undefined> {
