@@ -133,15 +133,13 @@ namespace Vim.Format
         }
 
         /// <summary>
-        /// Gets the byte array which defines the given asset. Returns false if the asset was not found or if the bytes are empty or null.
+        /// Gets the byte array which defines the given asset. Returns false if the asset was not found or if the byte array is empty or null.
         /// </summary>
-        public static bool TryGetAssetBytes(this Document doc, AssetType assetType, string assetName, out byte[] bytes)
+        public static bool TryGetAssetBytes(this Document doc, string assetBufferName, out byte[] bytes)
         {
             bytes = null;
 
-            var assetInfo = new AssetInfo(assetName, assetType);
-
-            var buffer = doc.GetAssetBuffer(assetInfo.ToString());
+            var buffer = doc.GetAssetBuffer(assetBufferName);
             if (!(buffer is NamedBuffer<byte> byteBuffer))
                 return false;
 
@@ -151,7 +149,13 @@ namespace Vim.Format
         }
 
         /// <summary>
-        /// Gets the byte array which defines the main image asset. Returns false if the asset was not found or if the bytes are empty or null.
+        /// Gets the byte array which defines the given asset. Returns false if the asset was not found or if the byte array is empty or null.
+        /// </summary>
+        public static bool TryGetAssetBytes(this Document doc, AssetType assetType, string assetName, out byte[] bytes)
+            => doc.TryGetAssetBytes(new AssetInfo(assetName, assetType).ToString(), out bytes);
+
+        /// <summary>
+        /// Gets the byte array which defines the main image asset. Returns false if the asset was not found or if the byte array is empty or null.
         /// </summary>
         public static bool TryGetMainImageBytes(this Document doc, out byte[] bytes)
             => doc.TryGetAssetBytes(AssetType.Render, VimConstants.MainPng, out bytes);
