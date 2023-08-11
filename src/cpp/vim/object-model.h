@@ -58,6 +58,8 @@ namespace Vim
     class ShapeInViewTable;
     class AssetInView;
     class AssetInViewTable;
+    class AssetInViewSheet;
+    class AssetInViewSheetTable;
     class LevelInView;
     class LevelInViewTable;
     class Camera;
@@ -104,6 +106,16 @@ namespace Vim
     class ScheduleColumnTable;
     class ScheduleCell;
     class ScheduleCellTable;
+    class ViewSheetSet;
+    class ViewSheetSetTable;
+    class ViewSheet;
+    class ViewSheetTable;
+    class ViewSheetInViewSheetSet;
+    class ViewSheetInViewSheetSetTable;
+    class ViewInViewSheetSet;
+    class ViewInViewSheetSetTable;
+    class ViewInViewSheet;
+    class ViewInViewSheetTable;
     
     class DocumentModel
     {
@@ -131,6 +143,7 @@ namespace Vim
         ElementInViewTable* mElementInView;
         ShapeInViewTable* mShapeInView;
         AssetInViewTable* mAssetInView;
+        AssetInViewSheetTable* mAssetInViewSheet;
         LevelInViewTable* mLevelInView;
         CameraTable* mCamera;
         MaterialTable* mMaterial;
@@ -154,6 +167,11 @@ namespace Vim
         ScheduleTable* mSchedule;
         ScheduleColumnTable* mScheduleColumn;
         ScheduleCellTable* mScheduleCell;
+        ViewSheetSetTable* mViewSheetSet;
+        ViewSheetTable* mViewSheet;
+        ViewSheetInViewSheetSetTable* mViewSheetInViewSheetSet;
+        ViewInViewSheetSetTable* mViewInViewSheetSet;
+        ViewInViewSheetTable* mViewInViewSheet;
         
         DocumentModel(Scene& scene);
         ~DocumentModel();
@@ -7517,6 +7535,100 @@ namespace Vim
         return new AssetInViewTable(scene.mEntityTables["Vim.AssetInView"], scene.mStrings);
     }
     
+    class AssetInViewSheet
+    {
+    public:
+        int mIndex;
+        
+        int mAssetIndex;
+        Asset* mAsset;
+        int mViewSheetIndex;
+        ViewSheet* mViewSheet;
+        
+        AssetInViewSheet() {}
+    };
+    
+    class AssetInViewSheetTable
+    {
+        EntityTable& mEntityTable;
+        std::vector<const bfast::byte*>& mStrings;
+    public:
+        AssetInViewSheetTable(EntityTable& entityTable, std::vector<const bfast::byte*>& strings):
+            mEntityTable(entityTable), mStrings(strings) {}
+        
+        size_t GetCount()
+        {
+            return mEntityTable.get_count();
+        }
+        
+        AssetInViewSheet* Get(int assetInViewSheetIndex)
+        {
+            AssetInViewSheet* assetInViewSheet = new AssetInViewSheet();
+            assetInViewSheet->mIndex = assetInViewSheetIndex;
+            assetInViewSheet->mAssetIndex = GetAssetIndex(assetInViewSheetIndex);
+            assetInViewSheet->mViewSheetIndex = GetViewSheetIndex(assetInViewSheetIndex);
+            return assetInViewSheet;
+        }
+        
+        std::vector<AssetInViewSheet>* GetAll()
+        {
+            bool existsAsset = mEntityTable.column_exists("index:Vim.Asset:Asset");
+            bool existsViewSheet = mEntityTable.column_exists("index:Vim.ViewSheet:ViewSheet");
+            
+            const auto count = GetCount();
+            
+            std::vector<AssetInViewSheet>* assetInViewSheet = new std::vector<AssetInViewSheet>();
+            assetInViewSheet->reserve(count);
+            
+            const std::vector<int>& assetData = mEntityTable.column_exists("index:Vim.Asset:Asset") ? mEntityTable.mIndexColumns["index:Vim.Asset:Asset"] : std::vector<int>();
+            const std::vector<int>& viewSheetData = mEntityTable.column_exists("index:Vim.ViewSheet:ViewSheet") ? mEntityTable.mIndexColumns["index:Vim.ViewSheet:ViewSheet"] : std::vector<int>();
+            
+            for (int i = 0; i < count; ++i)
+            {
+                AssetInViewSheet entity;
+                entity.mIndex = i;
+                entity.mAssetIndex = existsAsset ? assetData[i] : -1;
+                entity.mViewSheetIndex = existsViewSheet ? viewSheetData[i] : -1;
+                assetInViewSheet->push_back(entity);
+            }
+            
+            return assetInViewSheet;
+        }
+        
+        int GetAssetIndex(int assetInViewSheetIndex)
+        {
+            if (!mEntityTable.column_exists("index:Vim.Asset:Asset")) {
+                return -1;
+            }
+            
+            if (assetInViewSheetIndex < 0 || assetInViewSheetIndex >= GetCount())
+                return -1;
+            
+            return mEntityTable.mIndexColumns["index:Vim.Asset:Asset"][assetInViewSheetIndex];
+        }
+        
+        int GetViewSheetIndex(int assetInViewSheetIndex)
+        {
+            if (!mEntityTable.column_exists("index:Vim.ViewSheet:ViewSheet")) {
+                return -1;
+            }
+            
+            if (assetInViewSheetIndex < 0 || assetInViewSheetIndex >= GetCount())
+                return -1;
+            
+            return mEntityTable.mIndexColumns["index:Vim.ViewSheet:ViewSheet"][assetInViewSheetIndex];
+        }
+        
+    };
+    
+    static AssetInViewSheetTable* GetAssetInViewSheetTable(Scene& scene)
+    {
+        if (scene.mEntityTables.find("Vim.AssetInViewSheet") == scene.mEntityTables.end())
+            return {};
+        
+        return new AssetInViewSheetTable(scene.mEntityTables["Vim.AssetInViewSheet"], scene.mStrings);
+    }
+    
     class LevelInView
     {
     public:
@@ -12727,6 +12839,458 @@ namespace Vim
         return new ScheduleCellTable(scene.mEntityTables["Vim.ScheduleCell"], scene.mStrings);
     }
     
+    class ViewSheetSet
+    {
+    public:
+        int mIndex;
+        
+        int mElementIndex;
+        Element* mElement;
+        
+        ViewSheetSet() {}
+    };
+    
+    class ViewSheetSetTable
+    {
+        EntityTable& mEntityTable;
+        std::vector<const bfast::byte*>& mStrings;
+    public:
+        ViewSheetSetTable(EntityTable& entityTable, std::vector<const bfast::byte*>& strings):
+            mEntityTable(entityTable), mStrings(strings) {}
+        
+        size_t GetCount()
+        {
+            return mEntityTable.get_count();
+        }
+        
+        ViewSheetSet* Get(int viewSheetSetIndex)
+        {
+            ViewSheetSet* viewSheetSet = new ViewSheetSet();
+            viewSheetSet->mIndex = viewSheetSetIndex;
+            viewSheetSet->mElementIndex = GetElementIndex(viewSheetSetIndex);
+            return viewSheetSet;
+        }
+        
+        std::vector<ViewSheetSet>* GetAll()
+        {
+            bool existsElement = mEntityTable.column_exists("index:Vim.Element:Element");
+            
+            const auto count = GetCount();
+            
+            std::vector<ViewSheetSet>* viewSheetSet = new std::vector<ViewSheetSet>();
+            viewSheetSet->reserve(count);
+            
+            const std::vector<int>& elementData = mEntityTable.column_exists("index:Vim.Element:Element") ? mEntityTable.mIndexColumns["index:Vim.Element:Element"] : std::vector<int>();
+            
+            for (int i = 0; i < count; ++i)
+            {
+                ViewSheetSet entity;
+                entity.mIndex = i;
+                entity.mElementIndex = existsElement ? elementData[i] : -1;
+                viewSheetSet->push_back(entity);
+            }
+            
+            return viewSheetSet;
+        }
+        
+        int GetElementIndex(int viewSheetSetIndex)
+        {
+            if (!mEntityTable.column_exists("index:Vim.Element:Element")) {
+                return -1;
+            }
+            
+            if (viewSheetSetIndex < 0 || viewSheetSetIndex >= GetCount())
+                return -1;
+            
+            return mEntityTable.mIndexColumns["index:Vim.Element:Element"][viewSheetSetIndex];
+        }
+        
+    };
+    
+    static ViewSheetSetTable* GetViewSheetSetTable(Scene& scene)
+    {
+        if (scene.mEntityTables.find("Vim.ViewSheetSet") == scene.mEntityTables.end())
+            return {};
+        
+        return new ViewSheetSetTable(scene.mEntityTables["Vim.ViewSheetSet"], scene.mStrings);
+    }
+    
+    class ViewSheet
+    {
+    public:
+        int mIndex;
+        
+        int mFamilyTypeIndex;
+        FamilyType* mFamilyType;
+        int mElementIndex;
+        Element* mElement;
+        
+        ViewSheet() {}
+    };
+    
+    class ViewSheetTable
+    {
+        EntityTable& mEntityTable;
+        std::vector<const bfast::byte*>& mStrings;
+    public:
+        ViewSheetTable(EntityTable& entityTable, std::vector<const bfast::byte*>& strings):
+            mEntityTable(entityTable), mStrings(strings) {}
+        
+        size_t GetCount()
+        {
+            return mEntityTable.get_count();
+        }
+        
+        ViewSheet* Get(int viewSheetIndex)
+        {
+            ViewSheet* viewSheet = new ViewSheet();
+            viewSheet->mIndex = viewSheetIndex;
+            viewSheet->mFamilyTypeIndex = GetFamilyTypeIndex(viewSheetIndex);
+            viewSheet->mElementIndex = GetElementIndex(viewSheetIndex);
+            return viewSheet;
+        }
+        
+        std::vector<ViewSheet>* GetAll()
+        {
+            bool existsFamilyType = mEntityTable.column_exists("index:Vim.FamilyType:FamilyType");
+            bool existsElement = mEntityTable.column_exists("index:Vim.Element:Element");
+            
+            const auto count = GetCount();
+            
+            std::vector<ViewSheet>* viewSheet = new std::vector<ViewSheet>();
+            viewSheet->reserve(count);
+            
+            const std::vector<int>& familyTypeData = mEntityTable.column_exists("index:Vim.FamilyType:FamilyType") ? mEntityTable.mIndexColumns["index:Vim.FamilyType:FamilyType"] : std::vector<int>();
+            const std::vector<int>& elementData = mEntityTable.column_exists("index:Vim.Element:Element") ? mEntityTable.mIndexColumns["index:Vim.Element:Element"] : std::vector<int>();
+            
+            for (int i = 0; i < count; ++i)
+            {
+                ViewSheet entity;
+                entity.mIndex = i;
+                entity.mFamilyTypeIndex = existsFamilyType ? familyTypeData[i] : -1;
+                entity.mElementIndex = existsElement ? elementData[i] : -1;
+                viewSheet->push_back(entity);
+            }
+            
+            return viewSheet;
+        }
+        
+        int GetFamilyTypeIndex(int viewSheetIndex)
+        {
+            if (!mEntityTable.column_exists("index:Vim.FamilyType:FamilyType")) {
+                return -1;
+            }
+            
+            if (viewSheetIndex < 0 || viewSheetIndex >= GetCount())
+                return -1;
+            
+            return mEntityTable.mIndexColumns["index:Vim.FamilyType:FamilyType"][viewSheetIndex];
+        }
+        
+        int GetElementIndex(int viewSheetIndex)
+        {
+            if (!mEntityTable.column_exists("index:Vim.Element:Element")) {
+                return -1;
+            }
+            
+            if (viewSheetIndex < 0 || viewSheetIndex >= GetCount())
+                return -1;
+            
+            return mEntityTable.mIndexColumns["index:Vim.Element:Element"][viewSheetIndex];
+        }
+        
+    };
+    
+    static ViewSheetTable* GetViewSheetTable(Scene& scene)
+    {
+        if (scene.mEntityTables.find("Vim.ViewSheet") == scene.mEntityTables.end())
+            return {};
+        
+        return new ViewSheetTable(scene.mEntityTables["Vim.ViewSheet"], scene.mStrings);
+    }
+    
+    class ViewSheetInViewSheetSet
+    {
+    public:
+        int mIndex;
+        
+        int mViewSheetIndex;
+        ViewSheet* mViewSheet;
+        int mViewSheetSetIndex;
+        ViewSheetSet* mViewSheetSet;
+        
+        ViewSheetInViewSheetSet() {}
+    };
+    
+    class ViewSheetInViewSheetSetTable
+    {
+        EntityTable& mEntityTable;
+        std::vector<const bfast::byte*>& mStrings;
+    public:
+        ViewSheetInViewSheetSetTable(EntityTable& entityTable, std::vector<const bfast::byte*>& strings):
+            mEntityTable(entityTable), mStrings(strings) {}
+        
+        size_t GetCount()
+        {
+            return mEntityTable.get_count();
+        }
+        
+        ViewSheetInViewSheetSet* Get(int viewSheetInViewSheetSetIndex)
+        {
+            ViewSheetInViewSheetSet* viewSheetInViewSheetSet = new ViewSheetInViewSheetSet();
+            viewSheetInViewSheetSet->mIndex = viewSheetInViewSheetSetIndex;
+            viewSheetInViewSheetSet->mViewSheetIndex = GetViewSheetIndex(viewSheetInViewSheetSetIndex);
+            viewSheetInViewSheetSet->mViewSheetSetIndex = GetViewSheetSetIndex(viewSheetInViewSheetSetIndex);
+            return viewSheetInViewSheetSet;
+        }
+        
+        std::vector<ViewSheetInViewSheetSet>* GetAll()
+        {
+            bool existsViewSheet = mEntityTable.column_exists("index:Vim.ViewSheet:ViewSheet");
+            bool existsViewSheetSet = mEntityTable.column_exists("index:Vim.ViewSheetSet:ViewSheetSet");
+            
+            const auto count = GetCount();
+            
+            std::vector<ViewSheetInViewSheetSet>* viewSheetInViewSheetSet = new std::vector<ViewSheetInViewSheetSet>();
+            viewSheetInViewSheetSet->reserve(count);
+            
+            const std::vector<int>& viewSheetData = mEntityTable.column_exists("index:Vim.ViewSheet:ViewSheet") ? mEntityTable.mIndexColumns["index:Vim.ViewSheet:ViewSheet"] : std::vector<int>();
+            const std::vector<int>& viewSheetSetData = mEntityTable.column_exists("index:Vim.ViewSheetSet:ViewSheetSet") ? mEntityTable.mIndexColumns["index:Vim.ViewSheetSet:ViewSheetSet"] : std::vector<int>();
+            
+            for (int i = 0; i < count; ++i)
+            {
+                ViewSheetInViewSheetSet entity;
+                entity.mIndex = i;
+                entity.mViewSheetIndex = existsViewSheet ? viewSheetData[i] : -1;
+                entity.mViewSheetSetIndex = existsViewSheetSet ? viewSheetSetData[i] : -1;
+                viewSheetInViewSheetSet->push_back(entity);
+            }
+            
+            return viewSheetInViewSheetSet;
+        }
+        
+        int GetViewSheetIndex(int viewSheetInViewSheetSetIndex)
+        {
+            if (!mEntityTable.column_exists("index:Vim.ViewSheet:ViewSheet")) {
+                return -1;
+            }
+            
+            if (viewSheetInViewSheetSetIndex < 0 || viewSheetInViewSheetSetIndex >= GetCount())
+                return -1;
+            
+            return mEntityTable.mIndexColumns["index:Vim.ViewSheet:ViewSheet"][viewSheetInViewSheetSetIndex];
+        }
+        
+        int GetViewSheetSetIndex(int viewSheetInViewSheetSetIndex)
+        {
+            if (!mEntityTable.column_exists("index:Vim.ViewSheetSet:ViewSheetSet")) {
+                return -1;
+            }
+            
+            if (viewSheetInViewSheetSetIndex < 0 || viewSheetInViewSheetSetIndex >= GetCount())
+                return -1;
+            
+            return mEntityTable.mIndexColumns["index:Vim.ViewSheetSet:ViewSheetSet"][viewSheetInViewSheetSetIndex];
+        }
+        
+    };
+    
+    static ViewSheetInViewSheetSetTable* GetViewSheetInViewSheetSetTable(Scene& scene)
+    {
+        if (scene.mEntityTables.find("Vim.ViewSheetInViewSheetSet") == scene.mEntityTables.end())
+            return {};
+        
+        return new ViewSheetInViewSheetSetTable(scene.mEntityTables["Vim.ViewSheetInViewSheetSet"], scene.mStrings);
+    }
+    
+    class ViewInViewSheetSet
+    {
+    public:
+        int mIndex;
+        
+        int mViewIndex;
+        View* mView;
+        int mViewSheetSetIndex;
+        ViewSheetSet* mViewSheetSet;
+        
+        ViewInViewSheetSet() {}
+    };
+    
+    class ViewInViewSheetSetTable
+    {
+        EntityTable& mEntityTable;
+        std::vector<const bfast::byte*>& mStrings;
+    public:
+        ViewInViewSheetSetTable(EntityTable& entityTable, std::vector<const bfast::byte*>& strings):
+            mEntityTable(entityTable), mStrings(strings) {}
+        
+        size_t GetCount()
+        {
+            return mEntityTable.get_count();
+        }
+        
+        ViewInViewSheetSet* Get(int viewInViewSheetSetIndex)
+        {
+            ViewInViewSheetSet* viewInViewSheetSet = new ViewInViewSheetSet();
+            viewInViewSheetSet->mIndex = viewInViewSheetSetIndex;
+            viewInViewSheetSet->mViewIndex = GetViewIndex(viewInViewSheetSetIndex);
+            viewInViewSheetSet->mViewSheetSetIndex = GetViewSheetSetIndex(viewInViewSheetSetIndex);
+            return viewInViewSheetSet;
+        }
+        
+        std::vector<ViewInViewSheetSet>* GetAll()
+        {
+            bool existsView = mEntityTable.column_exists("index:Vim.View:View");
+            bool existsViewSheetSet = mEntityTable.column_exists("index:Vim.ViewSheetSet:ViewSheetSet");
+            
+            const auto count = GetCount();
+            
+            std::vector<ViewInViewSheetSet>* viewInViewSheetSet = new std::vector<ViewInViewSheetSet>();
+            viewInViewSheetSet->reserve(count);
+            
+            const std::vector<int>& viewData = mEntityTable.column_exists("index:Vim.View:View") ? mEntityTable.mIndexColumns["index:Vim.View:View"] : std::vector<int>();
+            const std::vector<int>& viewSheetSetData = mEntityTable.column_exists("index:Vim.ViewSheetSet:ViewSheetSet") ? mEntityTable.mIndexColumns["index:Vim.ViewSheetSet:ViewSheetSet"] : std::vector<int>();
+            
+            for (int i = 0; i < count; ++i)
+            {
+                ViewInViewSheetSet entity;
+                entity.mIndex = i;
+                entity.mViewIndex = existsView ? viewData[i] : -1;
+                entity.mViewSheetSetIndex = existsViewSheetSet ? viewSheetSetData[i] : -1;
+                viewInViewSheetSet->push_back(entity);
+            }
+            
+            return viewInViewSheetSet;
+        }
+        
+        int GetViewIndex(int viewInViewSheetSetIndex)
+        {
+            if (!mEntityTable.column_exists("index:Vim.View:View")) {
+                return -1;
+            }
+            
+            if (viewInViewSheetSetIndex < 0 || viewInViewSheetSetIndex >= GetCount())
+                return -1;
+            
+            return mEntityTable.mIndexColumns["index:Vim.View:View"][viewInViewSheetSetIndex];
+        }
+        
+        int GetViewSheetSetIndex(int viewInViewSheetSetIndex)
+        {
+            if (!mEntityTable.column_exists("index:Vim.ViewSheetSet:ViewSheetSet")) {
+                return -1;
+            }
+            
+            if (viewInViewSheetSetIndex < 0 || viewInViewSheetSetIndex >= GetCount())
+                return -1;
+            
+            return mEntityTable.mIndexColumns["index:Vim.ViewSheetSet:ViewSheetSet"][viewInViewSheetSetIndex];
+        }
+        
+    };
+    
+    static ViewInViewSheetSetTable* GetViewInViewSheetSetTable(Scene& scene)
+    {
+        if (scene.mEntityTables.find("Vim.ViewInViewSheetSet") == scene.mEntityTables.end())
+            return {};
+        
+        return new ViewInViewSheetSetTable(scene.mEntityTables["Vim.ViewInViewSheetSet"], scene.mStrings);
+    }
+    
+    class ViewInViewSheet
+    {
+    public:
+        int mIndex;
+        
+        int mViewIndex;
+        View* mView;
+        int mViewSheetIndex;
+        ViewSheet* mViewSheet;
+        
+        ViewInViewSheet() {}
+    };
+    
+    class ViewInViewSheetTable
+    {
+        EntityTable& mEntityTable;
+        std::vector<const bfast::byte*>& mStrings;
+    public:
+        ViewInViewSheetTable(EntityTable& entityTable, std::vector<const bfast::byte*>& strings):
+            mEntityTable(entityTable), mStrings(strings) {}
+        
+        size_t GetCount()
+        {
+            return mEntityTable.get_count();
+        }
+        
+        ViewInViewSheet* Get(int viewInViewSheetIndex)
+        {
+            ViewInViewSheet* viewInViewSheet = new ViewInViewSheet();
+            viewInViewSheet->mIndex = viewInViewSheetIndex;
+            viewInViewSheet->mViewIndex = GetViewIndex(viewInViewSheetIndex);
+            viewInViewSheet->mViewSheetIndex = GetViewSheetIndex(viewInViewSheetIndex);
+            return viewInViewSheet;
+        }
+        
+        std::vector<ViewInViewSheet>* GetAll()
+        {
+            bool existsView = mEntityTable.column_exists("index:Vim.View:View");
+            bool existsViewSheet = mEntityTable.column_exists("index:Vim.ViewSheet:ViewSheet");
+            
+            const auto count = GetCount();
+            
+            std::vector<ViewInViewSheet>* viewInViewSheet = new std::vector<ViewInViewSheet>();
+            viewInViewSheet->reserve(count);
+            
+            const std::vector<int>& viewData = mEntityTable.column_exists("index:Vim.View:View") ? mEntityTable.mIndexColumns["index:Vim.View:View"] : std::vector<int>();
+            const std::vector<int>& viewSheetData = mEntityTable.column_exists("index:Vim.ViewSheet:ViewSheet") ? mEntityTable.mIndexColumns["index:Vim.ViewSheet:ViewSheet"] : std::vector<int>();
+            
+            for (int i = 0; i < count; ++i)
+            {
+                ViewInViewSheet entity;
+                entity.mIndex = i;
+                entity.mViewIndex = existsView ? viewData[i] : -1;
+                entity.mViewSheetIndex = existsViewSheet ? viewSheetData[i] : -1;
+                viewInViewSheet->push_back(entity);
+            }
+            
+            return viewInViewSheet;
+        }
+        
+        int GetViewIndex(int viewInViewSheetIndex)
+        {
+            if (!mEntityTable.column_exists("index:Vim.View:View")) {
+                return -1;
+            }
+            
+            if (viewInViewSheetIndex < 0 || viewInViewSheetIndex >= GetCount())
+                return -1;
+            
+            return mEntityTable.mIndexColumns["index:Vim.View:View"][viewInViewSheetIndex];
+        }
+        
+        int GetViewSheetIndex(int viewInViewSheetIndex)
+        {
+            if (!mEntityTable.column_exists("index:Vim.ViewSheet:ViewSheet")) {
+                return -1;
+            }
+            
+            if (viewInViewSheetIndex < 0 || viewInViewSheetIndex >= GetCount())
+                return -1;
+            
+            return mEntityTable.mIndexColumns["index:Vim.ViewSheet:ViewSheet"][viewInViewSheetIndex];
+        }
+        
+    };
+    
+    static ViewInViewSheetTable* GetViewInViewSheetTable(Scene& scene)
+    {
+        if (scene.mEntityTables.find("Vim.ViewInViewSheet") == scene.mEntityTables.end())
+            return {};
+        
+        return new ViewInViewSheetTable(scene.mEntityTables["Vim.ViewInViewSheet"], scene.mStrings);
+    }
+    
     DocumentModel::DocumentModel(Scene& scene)
     {
         mAsset = GetAssetTable(scene);
@@ -12752,6 +13316,7 @@ namespace Vim
         mElementInView = GetElementInViewTable(scene);
         mShapeInView = GetShapeInViewTable(scene);
         mAssetInView = GetAssetInViewTable(scene);
+        mAssetInViewSheet = GetAssetInViewSheetTable(scene);
         mLevelInView = GetLevelInViewTable(scene);
         mCamera = GetCameraTable(scene);
         mMaterial = GetMaterialTable(scene);
@@ -12775,6 +13340,11 @@ namespace Vim
         mSchedule = GetScheduleTable(scene);
         mScheduleColumn = GetScheduleColumnTable(scene);
         mScheduleCell = GetScheduleCellTable(scene);
+        mViewSheetSet = GetViewSheetSetTable(scene);
+        mViewSheet = GetViewSheetTable(scene);
+        mViewSheetInViewSheetSet = GetViewSheetInViewSheetSetTable(scene);
+        mViewInViewSheetSet = GetViewInViewSheetSetTable(scene);
+        mViewInViewSheet = GetViewInViewSheetTable(scene);
     }
     
     DocumentModel::~DocumentModel()
@@ -12802,6 +13372,7 @@ namespace Vim
         delete mElementInView;
         delete mShapeInView;
         delete mAssetInView;
+        delete mAssetInViewSheet;
         delete mLevelInView;
         delete mCamera;
         delete mMaterial;
@@ -12825,6 +13396,11 @@ namespace Vim
         delete mSchedule;
         delete mScheduleColumn;
         delete mScheduleCell;
+        delete mViewSheetSet;
+        delete mViewSheet;
+        delete mViewSheetInViewSheetSet;
+        delete mViewInViewSheetSet;
+        delete mViewInViewSheet;
     }
 }
 

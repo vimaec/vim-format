@@ -12,15 +12,6 @@ namespace Vim.Format
 {
     public static class Serializer
     {
-        public static class BufferNames
-        {
-            public const string Header = "header";
-            public const string Assets = "assets";
-            public const string Entities = "entities";
-            public const string Strings = "strings";
-            public const string Geometry = "geometry";
-        }
-
         public static List<INamedBuffer> ToBuffers(this SerializableEntityTable table)
         {
             var r = new List<INamedBuffer>();

@@ -1,6 +1,6 @@
 {
   "VimFormatVersion": "1.0.0",
-  "SchemaVersion": "5.0.0",
+  "SchemaVersion": "5.1.0",
   "Tables": {
     "Vim.Area": [
       "byte:IsGrossInterior",
@@ -27,6 +27,10 @@
     "Vim.AssetInView": [
       "index:Vim.Asset:Asset",
       "index:Vim.View:View"
+    ],
+    "Vim.AssetInViewSheet": [
+      "index:Vim.Asset:Asset",
+      "index:Vim.ViewSheet:ViewSheet"
     ],
     "Vim.BasePoint": [
       "byte:IsSurveyPoint",
@@ -379,6 +383,25 @@
       "int:DetailLevel",
       "string:Title",
       "string:ViewType"
+    ],
+    "Vim.ViewInViewSheet": [
+      "index:Vim.View:View",
+      "index:Vim.ViewSheet:ViewSheet"
+    ],
+    "Vim.ViewInViewSheetSet": [
+      "index:Vim.View:View",
+      "index:Vim.ViewSheetSet:ViewSheetSet"
+    ],
+    "Vim.ViewSheet": [
+      "index:Vim.Element:Element",
+      "index:Vim.FamilyType:FamilyType"
+    ],
+    "Vim.ViewSheetInViewSheetSet": [
+      "index:Vim.ViewSheet:ViewSheet",
+      "index:Vim.ViewSheetSet:ViewSheetSet"
+    ],
+    "Vim.ViewSheetSet": [
+      "index:Vim.Element:Element"
     ],
     "Vim.Warning": [
       "index:Vim.BimDocument:BimDocument",

@@ -2,6 +2,15 @@
 
 namespace Vim.Format
 {
+    public static class BufferNames
+    {
+        public const string Header = "header";
+        public const string Assets = "assets";
+        public const string Entities = "entities";
+        public const string Strings = "strings";
+        public const string Geometry = "geometry";
+    }
+
     public static class TableNames
     {
         public const string Geometry = "Vim.Geometry";
@@ -25,6 +34,7 @@ namespace Vim.Format
         public const string ElementInView = "Vim.ElementInView";
         public const string ShapeInView = "Vim.ShapeInView";
         public const string AssetInView = "Vim.AssetInView";
+        public const string AssetInViewSheet = "Vim.AssetInViewSheet";
         public const string LevelInView = "Vim.LevelInView";
         public const string Camera = "Vim.Camera";
         public const string Workset = "Vim.Workset";
@@ -51,6 +61,11 @@ namespace Vim.Format
         public const string Schedule = "Vim.Schedule";
         public const string ScheduleColumn = "Vim.ScheduleColumn";
         public const string ScheduleCell = "Vim.ScheduleCell";
+        public const string ViewSheetSet = "Vim.ViewSheetSet";
+        public const string ViewSheet = "Vim.ViewSheet";
+        public const string ViewSheetInViewSheetSet = "Vim.ViewSheetInViewSheetSet";
+        public const string ViewInViewSheetSet = "Vim.ViewInViewSheetSet";
+        public const string ViewInViewSheet = "Vim.ViewInViewSheet";
     }
 
     public static class VimConstants
