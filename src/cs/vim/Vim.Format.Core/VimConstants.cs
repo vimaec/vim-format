@@ -2,6 +2,15 @@
 
 namespace Vim.Format
 {
+    public static class BufferNames
+    {
+        public const string Header = "header";
+        public const string Assets = "assets";
+        public const string Entities = "entities";
+        public const string Strings = "strings";
+        public const string Geometry = "geometry";
+    }
+
     public static class TableNames
     {
         public const string Geometry = "Vim.Geometry";
