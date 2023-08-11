@@ -15,9 +15,11 @@ namespace Vim.Util.Tests
         /// </summary>
         public static readonly string ProjDir = new DirectoryInfo(Properties.Resources.ProjDir.Trim()).FullName;
 
-        public static string SrcDir => Path.Combine(ProjDir, "..", "..", "..", "..", "src");
-        public static string OutDir => Path.Combine(ProjDir, "..", "..", "..", "..", "out");
-        public static string DataDir => Path.Combine(ProjDir, "..", "..", "..", "..", "data");
+        public static string RootDir => Path.Combine(ProjDir, "..", "..", "..", "..");
+        public static string DocsDir => Path.Combine(RootDir, "docs");
+        public static string SrcDir => Path.Combine(RootDir, "src");
+        public static string OutDir => Path.Combine(RootDir, "out");
+        public static string DataDir => Path.Combine(RootDir, "data");
 
         /// <summary>
         /// Returns the file path to the highest versioned mechanical room file among the version snapshots.
