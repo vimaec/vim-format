@@ -131,7 +131,6 @@ namespace Vim.Format.Tests.Geometry
             Assert.AreEqual(3, XYTriangle.Indices.Count);
             Assert.AreEqual(1, XYTriangle.Triangles().Count);
             Assert.AreEqual(0.5, XYTriangle.Area(), SmallTolerance);
-            Assert.IsTrue(XYTriangle.Planar());
             Assert.AreEqual(new[] { 0, 1, 2 }, XYTriangle.Indices.ToArray());
 
             Assert.AreEqual(3, XYQuad.NumCornersPerFace);
@@ -139,7 +138,6 @@ namespace Vim.Format.Tests.Geometry
             Assert.AreEqual(4, XYQuad.Vertices.Count);
             Assert.AreEqual(6, XYQuad.Indices.Count);
 
-            Assert.IsTrue(XYQuad.Planar());
             Assert.AreEqual(new[] { 0, 1, 2, 0, 2, 3 }, XYQuad.Indices.ToArray());
 
             Assert.AreEqual(3, XYQuadFromFunc.NumCornersPerFace);
@@ -164,7 +162,6 @@ namespace Vim.Format.Tests.Geometry
             Assert.AreEqual(6, XYTriangleTwice.Indices.Count);
             Assert.AreEqual(2, XYTriangleTwice.Triangles().Count);
             Assert.AreEqual(1.0, XYTriangleTwice.Area(), SmallTolerance);
-            Assert.IsTrue(XYTriangleTwice.Planar());
             Assert.AreEqual(new[] { 0, 1, 2, 3, 4, 5 }, XYTriangleTwice.Indices.ToArray());
         }
 

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Vim.BFast;
+using Vim.Format.Geometry;
 using Vim.G3d;
 using Vim.LinqArray;
 
@@ -88,5 +89,19 @@ namespace Vim.Format
         }
 
         // TODO: ValidateShapes() to validate VIM files which contain optional 2d data (shapes/overlays).
+
+        public static void ValidateIndices(this IMesh mesh)
+        {
+            foreach (var index in mesh.Indices.ToEnumerable())
+            {
+                if (index < 0 || index >= mesh.NumVertices)
+                    throw new Exception($"Invalid mesh index: {index}. Expected a value greater or equal to 0 and less than {mesh.NumVertices}");
+            }
+        }
+
+        public static void Validate(this IMesh mesh)
+        {
+            mesh.ValidateIndices();
+        }
     }
 }

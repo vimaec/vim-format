@@ -32,12 +32,6 @@ namespace Vim.Format.Geometry
                 submeshMaterials?.ToSubmeshMaterialAttribute()
             );
 
-        public static IMesh TriMesh(this IArray<Vector3> vertices, IArray<int> indices = null, params GeometryAttribute[] attributes)
-            => new GeometryAttribute[] {
-                vertices?.ToPositionAttribute(),
-                indices?.ToIndexAttribute(),
-            }.Concat(attributes).ToIMesh();
-
         public static IMesh QuadMesh(params GeometryAttribute[] attributes)
             => QuadMesh(attributes.AsEnumerable());
 
@@ -51,10 +45,7 @@ namespace Vim.Format.Geometry
                 uvs?.ToVertexUvAttribute(),
                 materials?.ToFaceMaterialAttribute()
             );
-
-        public static IMesh QuadMesh(Vector3 a, Vector3 b, Vector3 c, Vector3 d)
-            => QuadMesh(new[] { a, b, c, d }.ToIArray());
-
+        
         public static IMesh Cube
         {
             get
@@ -105,10 +96,7 @@ namespace Vim.Format.Geometry
                 return cube.Indices.Select(i => cube.Vertices[i]).TriMesh(cube.Indices.Count.Range());
             }
         }
-
-        public static IMesh ToIMesh(this AABox box)
-            => Cube.Scale(box.Extent).Translate(box.Center);
-
+        
         public static float Sqrt2 = 2.0f.Sqrt();
 
         public static readonly IMesh Tetrahedron
@@ -160,8 +148,6 @@ namespace Vim.Format.Geometry
         /// </summary>
         public static IMesh TriMeshFromQuad(Vector3 a, Vector3 b, Vector3 c, Vector3 d)
             => TriMesh(new[] { a, b, c, c, d, a }.ToIArray());
-
-        // Icosahedron, Dodecahedron,
 
         /// <summary>
         /// Returns a collection of circular points.
