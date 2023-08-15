@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Vim.LinqArray;
 using Vim.Math3d;
 
@@ -13,6 +14,33 @@ namespace Vim.Format.Geometry
         IArray<IMesh> Meshes { get; }
     }
 
+    public static class SceneExtensions
+    {
+        public static IMesh TransformedMesh(this ISceneNode node)
+            => node.GetMesh()?.Transform(node.Transform);
+
+        public static IEnumerable<IMesh> TransformedMeshes(this IScene scene)
+            => scene.Nodes.Where(n => n.GetMesh() != null).Select(TransformedMesh);
+
+        public static IMesh MergedGeometry(this IScene scene)
+            => scene.Nodes.ToEnumerable().MergedGeometry();
+
+        public static IMesh MergedGeometry(this IEnumerable<ISceneNode> nodes)
+            => nodes.Where(n => n.GetMesh() != null).Select(TransformedMesh).Merge();
+
+        public static IEnumerable<Vector3> AllVertices(this IScene scene)
+            => scene.TransformedMeshes().SelectMany(g => g.Vertices.ToEnumerable());
+
+        public static AABox BoundingBox(this IScene scene)
+            => AABox.Create(scene.AllVertices());
+
+        public static IArray<Vector3> TransformedVertices(this ISceneNode node)
+            => node.TransformedMesh()?.Vertices;
+
+        public static AABox TransformedBoundingBox(this ISceneNode node)
+            => AABox.Create(node.TransformedVertices()?.ToEnumerable());
+    }
+
     /// <summary>
     /// A node in a scene graph. 
     /// </summary>
@@ -24,21 +52,5 @@ namespace Vim.Format.Geometry
         int MeshIndex { get; }
         IMesh GetMesh();
         ISceneNode Parent { get; }
-
-        // TODO: DEPRECATE: this needs to be removed, currently only used in Vim.Max.Bridge.
-        IArray<ISceneNode> Children { get; }
-    }
-
-    public class NullNode : ISceneNode
-    {
-        public static NullNode Instance = new NullNode();
-        public static List<ISceneNode> ListInstance = new List<ISceneNode>() { Instance };
-        public int Id => -1;
-        public IScene Scene => null;
-        public Matrix4x4 Transform => Matrix4x4.Identity;
-        public int MeshIndex => 0;
-        public ISceneNode Parent => null;
-        public IArray<ISceneNode> Children => null;
-        public IMesh GetMesh() => null;
     }
 }

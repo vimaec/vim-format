@@ -13,8 +13,6 @@ using IVimSceneProgress = System.IProgress<(string, double)>;
 
 namespace Vim
 {
-    // TODO: add property cache lookup
-
     /// <summary>
     /// This is the top-level class of a loaded VIM file.
     /// </summary>
@@ -53,7 +51,7 @@ namespace Vim
             => _SerializableDocument.Geometry.MaterialColors[materialIndex];
 
         public static IMesh ToIMesh(G3dMesh g3d)
-            => Primitives.TriMesh(
+            => MeshUtil.CreateTriMesh(
                 g3d.Vertices.ToPositionAttribute(),
                 g3d.Indices.ToIndexAttribute(),
                 g3d.VertexUvs?.ToVertexUvAttribute(),

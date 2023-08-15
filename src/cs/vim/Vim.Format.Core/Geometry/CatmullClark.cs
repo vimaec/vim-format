@@ -224,7 +224,7 @@ namespace Vim.Format.Geometry
                 currentOldVertexIndex += faceSize;
             }
 
-            return Primitives.QuadMesh(newVertices.ToIArray(), newIndices.ToIArray());
+            return MeshUtil.CreateQuadMesh(newVertices.ToIArray(), newIndices.ToIArray());
         }
     }
 }

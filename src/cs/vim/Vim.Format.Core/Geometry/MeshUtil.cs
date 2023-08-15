@@ -7,23 +7,22 @@ using Vim.Math3d;
 
 namespace Vim.Format.Geometry
 {
-    // TODO: plane, cylinder, cone, ruled face, 
-    public static class Primitives
+    public static class MeshUtil
     {
-        public static IMesh TriMesh(IEnumerable<GeometryAttribute> attributes)
+        public static IMesh CreateTriMesh(IEnumerable<GeometryAttribute> attributes)
             => attributes.Where(x => x != null).ToIMesh();
 
-        public static IMesh TriMesh(params GeometryAttribute[] attributes)
-            => TriMesh(attributes.AsEnumerable());
+        public static IMesh CreateTriMesh(params GeometryAttribute[] attributes)
+            => CreateTriMesh(attributes.AsEnumerable());
 
-        public static IMesh TriMesh(
+        public static IMesh CreateTriMesh(
             this IArray<Vector3> vertices,
             IArray<int> indices = null,
             IArray<Vector2> uvs = null,
             IArray<Vector4> colors = null,
             IArray<int> materials = null,
             IArray<int> submeshMaterials = null)
-            => TriMesh(
+            => CreateTriMesh(
                 vertices?.ToPositionAttribute(),
                 indices?.ToIndexAttribute(),
                 uvs?.ToVertexUvAttribute(),
@@ -32,20 +31,20 @@ namespace Vim.Format.Geometry
                 submeshMaterials?.ToSubmeshMaterialAttribute()
             );
 
-        public static IMesh QuadMesh(params GeometryAttribute[] attributes)
-            => QuadMesh(attributes.AsEnumerable());
+        public static IMesh CreateQuadMesh(params GeometryAttribute[] attributes)
+            => CreateQuadMesh(attributes.AsEnumerable());
 
-        public static IMesh QuadMesh(this IEnumerable<GeometryAttribute> attributes)
+        public static IMesh CreateQuadMesh(this IEnumerable<GeometryAttribute> attributes)
             => new QuadMesh(attributes.Where(x => x != null)).ToTriMesh();
 
-        public static IMesh QuadMesh(this IArray<Vector3> vertices, IArray<int> indices = null, IArray<Vector2> uvs = null, IArray<int> materials = null, IArray<int> objectIds = null)
-            => QuadMesh(
+        public static IMesh CreateQuadMesh(this IArray<Vector3> vertices, IArray<int> indices = null, IArray<Vector2> uvs = null, IArray<int> materials = null, IArray<int> objectIds = null)
+            => CreateQuadMesh(
                 vertices.ToPositionAttribute(),
                 indices?.ToIndexAttribute(),
                 uvs?.ToVertexUvAttribute(),
                 materials?.ToFaceMaterialAttribute()
             );
-        
+
         public static IMesh Cube
         {
             get
@@ -84,7 +83,7 @@ namespace Vim.Format.Geometry
                     6, 7, 3
                 }.ToIArray();
 
-                return vertices.TriMesh(indices);
+                return vertices.CreateTriMesh(indices);
             }
         }
 
@@ -93,76 +92,12 @@ namespace Vim.Format.Geometry
             get
             {
                 var cube = Cube;
-                return cube.Indices.Select(i => cube.Vertices[i]).TriMesh(cube.Indices.Count.Range());
+                return cube.Indices.Select(i => cube.Vertices[i]).CreateTriMesh(cube.Indices.Count.Range());
             }
         }
-        
-        public static float Sqrt2 = 2.0f.Sqrt();
-
-        public static readonly IMesh Tetrahedron
-            = TriMesh(LinqArray.LinqArray.Create(
-                new Vector3(1f, 0.0f, -1f / Sqrt2),
-                new Vector3(-1f, 0.0f, -1f / Sqrt2),
-                new Vector3(0.0f, 1f, 1f / Sqrt2),
-                new Vector3(0.0f, -1f, 1f / Sqrt2)),
-            LinqArray.LinqArray.Create(0, 1, 2, 1, 0, 3, 0, 2, 3, 1, 3, 2));
-
-        public static readonly IMesh Square
-            = LinqArray.LinqArray.Create(
-                new Vector2(-0.5f, -0.5f),
-                new Vector2(-0.5f, 0.5f),
-                new Vector2(0.5f, 0.5f),
-                new Vector2(0.5f, -0.5f)).Select(x => x.ToVector3()).QuadMesh();
-
-        public static readonly IMesh Octahedron
-            = Square.Vertices.Append(Vector3.UnitZ, -Vector3.UnitZ).Normalize().TriMesh(
-                LinqArray.LinqArray.Create(
-                    0, 1, 4, 1, 2, 4, 2, 3, 4,
-                    3, 2, 5, 2, 1, 5, 1, 0, 5));
-
-        // see: https://github.com/mrdoob/three.js/blob/9ef27d1af7809fa4d9943f8d4c4644e365ab6d2d/src/geometries/TorusBufferGeometry.js#L52
-        public static Vector3 TorusFunction(Vector2 uv, float radius, float tube)
-        {
-            uv *= Math3d.Constants.TwoPi;
-            return new Vector3(
-                (radius + tube * uv.Y.Cos()) * uv.X.Cos(),
-                (radius + tube * uv.Y.Cos()) * uv.X.Sin(),
-                tube * uv.Y.Sin());
-        }
-
-        public static IMesh Torus(float radius, float tubeRadius, int uSegs, int vSegs)
-            => QuadMesh(uv => TorusFunction(uv, radius, tubeRadius), uSegs, vSegs);
-
-        // see: https://github.com/mrdoob/three.js/blob/9ef27d1af7809fa4d9943f8d4c4644e365ab6d2d/src/geometries/SphereBufferGeometry.js#L76
-        public static Vector3 SphereFunction(Vector2 uv, float radius)
-            => new Vector3(
-                (float)(-radius * Math.Cos(uv.X * Math3d.Constants.TwoPi) * Math.Sin(uv.Y * Math3d.Constants.Pi)),
-                (float)(radius * Math.Cos(uv.Y * Math3d.Constants.Pi)),
-                (float)(radius * Math.Sin(uv.X * Math3d.Constants.TwoPi) * Math.Sin(uv.Y * Math3d.Constants.Pi)));
-
-        public static IMesh Sphere(float radius, int uSegs, int vSegs)
-            => QuadMesh(uv => SphereFunction(uv, radius), uSegs, vSegs);
 
         /// <summary>
-        /// Creates a TriMesh from four points. 
-        /// </summary>
-        public static IMesh TriMeshFromQuad(Vector3 a, Vector3 b, Vector3 c, Vector3 d)
-            => TriMesh(new[] { a, b, c, c, d, a }.ToIArray());
-
-        /// <summary>
-        /// Returns a collection of circular points.
-        /// </summary>
-        public static IArray<Vector2> CirclePoints(float radius, int numPoints)
-            => CirclePoints(numPoints).Select(x => x * radius);
-
-        public static IArray<Vector2> CirclePoints(int numPoints)
-            => numPoints.Select(i => CirclePoint(i, numPoints));
-
-        public static Vector2 CirclePoint(int i, int numPoints)
-            => new Vector2((i * (Math3d.Constants.TwoPi / numPoints)).Cos(), (i * (Math3d.Constants.TwoPi / numPoints)).Sin());
-
-        /// <summary>
-        /// Computes the indices of a quad mesh astrip.
+        /// Computes the indices of a quad mesh strip.
         /// </summary>
         public static IArray<int> ComputeQuadMeshStripIndices(int usegs, int vsegs, bool wrapUSegs = false, bool wrapVSegs = false)
         {
@@ -300,13 +235,7 @@ namespace Vim.Format.Geometry
         /// <summary>
         /// Creates a quad mesh given a mapping from 2 space to 3 space 
         /// </summary>
-        public static IMesh QuadMesh(this Func<Vector2, Vector3> f, int segs)
-            => QuadMesh(f, segs, segs);
-
-        /// <summary>
-        /// Creates a quad mesh given a mapping from 2 space to 3 space 
-        /// </summary>
-        public static IMesh QuadMesh(this Func<Vector2, Vector3> f, int usegs, int vsegs, bool wrapUSegs = false, bool wrapVSegs = false)
+        public static IMesh CreateQuadMesh(this Func<Vector2, Vector3> f, int usegs, int vsegs, bool wrapUSegs = false, bool wrapVSegs = false)
         {
             var verts = new List<Vector3>();
             var maxUSegs = wrapUSegs ? usegs : usegs + 1;
@@ -322,22 +251,7 @@ namespace Vim.Format.Geometry
                 }
             }
 
-            return QuadMesh(verts.ToIArray(), ComputeQuadMeshStripIndices(usegs, vsegs, wrapUSegs, wrapVSegs));
-        }
-
-        /// <summary>
-        /// Creates a revolved face ... note that the last points are on top of the original 
-        /// </summary>
-        public static IMesh RevolveAroundAxis(this IArray<Vector3> points, Vector3 axis, int segments = 4)
-        {
-            var verts = new List<Vector3>();
-            for (var i = 0; i < segments; ++i)
-            {
-                var angle = Math3d.Constants.TwoPi / segments;
-                points.Rotate(axis, angle).AddTo(verts);
-            }
-
-            return QuadMesh(verts.ToIArray(), ComputeQuadMeshStripIndices(segments - 1, points.Count - 1));
+            return CreateQuadMesh(verts.ToIArray(), ComputeQuadMeshStripIndices(usegs, vsegs, wrapUSegs, wrapVSegs));
         }
     }
 }

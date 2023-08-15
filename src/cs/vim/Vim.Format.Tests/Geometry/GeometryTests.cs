@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using Vim.Format.Geometry;
@@ -10,24 +11,67 @@ namespace Vim.Format.Tests.Geometry
 {
     public static class GeometryTests
     {
-        public static IMesh XYTriangle = new[] { new Vector3(0f, 0f, 0f), new Vector3(0f, 1f, 0f), new Vector3(1f, 0f, 0f) }.ToIArray().TriMesh(3.Range());
-        public static IMesh XYQuad = new[] { new Vector3(0f, 0f, 0f), new Vector3(0f, 1f, 0f), new Vector3(1f, 1f, 0f), new Vector3(1f, 0f, 0f) }.ToIArray().QuadMesh(4.Range());
-        public static IMesh XYQuadFromFunc = Primitives.QuadMesh(uv => uv.ToVector3(), 1, 1);
-        public static IMesh XYQuad2x2 = Primitives.QuadMesh(uv => uv.ToVector3(), 2, 2);
+        public static IMesh XYTriangle = new[] { new Vector3(0f, 0f, 0f), new Vector3(0f, 1f, 0f), new Vector3(1f, 0f, 0f) }.ToIArray().CreateTriMesh(3.Range());
+        public static IMesh XYQuad = new[] { new Vector3(0f, 0f, 0f), new Vector3(0f, 1f, 0f), new Vector3(1f, 1f, 0f), new Vector3(1f, 0f, 0f) }.ToIArray().CreateQuadMesh(4.Range());
+        public static IMesh XYQuadFromFunc = MeshUtil.CreateQuadMesh(uv => uv.ToVector3(), 1, 1);
+        public static IMesh XYQuad2x2 = MeshUtil.CreateQuadMesh(uv => uv.ToVector3(), 2, 2);
         public static IMesh XYTriangleTwice = XYTriangle.Merge(XYTriangle.Translate(new Vector3(1, 0, 0)));
 
         public static readonly Vector3[] TestTetrahedronVertices = { Vector3.Zero, Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ };
         public static readonly int[] TestTetrahedronIndices = { 0, 1, 2, 0, 3, 1, 1, 3, 2, 2, 3, 0 };
 
         public static IMesh Tetrahedron =
-            TestTetrahedronVertices.ToIArray().TriMesh(TestTetrahedronIndices.ToIArray());
+            TestTetrahedronVertices.ToIArray().CreateTriMesh(TestTetrahedronIndices.ToIArray());
 
-        public static IMesh Torus = Primitives.Torus(10, 0.2f, 10, 24);
+        // see: https://github.com/mrdoob/three.js/blob/9ef27d1af7809fa4d9943f8d4c4644e365ab6d2d/src/geometries/TorusBufferGeometry.js#L52
+        public static Vector3 TorusFunction(Vector2 uv, float radius, float tube)
+        {
+            uv *= Math3d.Constants.TwoPi;
+            return new Vector3(
+                (radius + tube * uv.Y.Cos()) * uv.X.Cos(),
+                (radius + tube * uv.Y.Cos()) * uv.X.Sin(),
+                tube * uv.Y.Sin());
+        }
 
-        static IMesh RevolvedVerticalCylinder(float height, float radius, int verticalSegments, int radialSegments)
+        public static IMesh CreateTorus(float radius, float tubeRadius, int uSegs, int vSegs)
+            => MeshUtil.CreateQuadMesh(uv => TorusFunction(uv, radius, tubeRadius), uSegs, vSegs);
+
+        public static IMesh Torus = CreateTorus(10, 0.2f, 10, 24);
+
+        public static IArray<float> SampleZeroToOneInclusive(this int count)
+            => (count + 1).Select(i => i / (float)count);
+
+        public static IArray<Vector3> InterpolateInclusive(this int count, Func<float, Vector3> function)
+            => count.SampleZeroToOneInclusive().Select(function);
+
+        public static IArray<Vector3> Interpolate(this Line self, int count)
+            => count.InterpolateInclusive(self.Lerp);
+
+        public static IArray<Vector3> Transform(this IArray<Vector3> self, Matrix4x4 matrix)
+            => self.Select(x => x.Transform(matrix));
+
+        public static IArray<Vector3> Rotate(this IArray<Vector3> self, Vector3 axis, float angle)
+            => self.Transform(Matrix4x4.CreateFromAxisAngle(axis, angle));
+
+        /// <summary>
+        /// Creates a revolved face ... note that the last points are on top of the original 
+        /// </summary>
+        public static IMesh RevolveAroundAxis(this IArray<Vector3> points, Vector3 axis, int segments = 4)
+        {
+            var verts = new List<Vector3>();
+            for (var i = 0; i < segments; ++i)
+            {
+                var angle = Math3d.Constants.TwoPi / segments;
+                points.Rotate(axis, angle).AddTo(verts);
+            }
+
+            return MeshUtil.CreateQuadMesh(verts.ToIArray(), MeshUtil.ComputeQuadMeshStripIndices(segments - 1, points.Count - 1));
+        }
+
+        static IMesh CreateCylinder(float height, float radius, int verticalSegments, int radialSegments)
             => (Vector3.UnitZ * height).ToLine().Interpolate(verticalSegments).Add(-radius.AlongX()).RevolveAroundAxis(Vector3.UnitZ, radialSegments);
 
-        public static IMesh Cylinder = RevolvedVerticalCylinder(5, 1, 4, 12);
+        public static IMesh Cylinder = CreateCylinder(5, 1, 4, 12);
 
         public static IMesh[] AllMeshes = {
             XYTriangle, // 0
@@ -68,40 +112,6 @@ namespace Vim.Format.Tests.Geometry
                 g2.Attributes.Select(attr => attr.ElementCount).ToArray());
         }
 
-        public static void OutputTriangleStats(Triangle t)
-        {
-            Console.WriteLine($"Vertices: {t.A} {t.B} {t.C}");
-            Console.WriteLine($"Area: {t.Area} Perimeter: {t.Perimeter} Midpoint: {t.MidPoint}");
-            Console.WriteLine($"Bounding box: {t.BoundingBox}");
-            Console.WriteLine($"Bounding sphere: {t.BoundingSphere}");
-            Console.WriteLine($"Normal: {t.Normal}, normal direction {t.NormalDirection}");
-            Console.WriteLine($"Lengths: {t.LengthA} {t.LengthB} {t.LengthC}");
-        }
-
-        public static void OutputTriangleStatsSummary(IMesh g)
-        {
-            var triangles = g.Triangles();
-            for (var i = 0; i < Math.Min(3, triangles.Count); ++i)
-            {
-                Console.WriteLine($"Triangle {i}");
-                OutputTriangleStats(triangles[i]);
-            }
-
-            if (triangles.Count > 3)
-            {
-                Console.WriteLine("...");
-                Console.WriteLine($"Triangle {triangles.Count - 1}");
-                OutputTriangleStats(triangles.Last());
-            }
-        }
-
-        public static void OutputIMeshStats(IMesh g)
-        {
-            g.Validate();
-            foreach (var attr in g.Attributes.ToEnumerable())
-                Console.WriteLine($"{attr.Descriptor} elementCount={attr.ElementCount}");
-        }
-
         public static void GeometryNullOps(IMesh g)
         {
             AssertEqualsWithAttributes(g, g);
@@ -113,7 +123,6 @@ namespace Vim.Format.Tests.Geometry
             AssertEquals(g, g.CopyFaces(0, g.NumFaces).ToIMesh());
         }
 
-
         [Test]
         public static void BasicTests()
         {
@@ -122,7 +131,7 @@ namespace Vim.Format.Tests.Geometry
             {
                 Console.WriteLine($"Testing mesh {nMesh++}");
                 g.Validate();
-                //ValidateGeometry(g.ToTriMesh());
+                GeometryNullOps(g);
             }
 
             Assert.AreEqual(3, XYTriangle.NumCornersPerFace);
@@ -166,64 +175,24 @@ namespace Vim.Format.Tests.Geometry
         }
 
         [Test]
-        public static void BasicManipulationTests()
-        {
-            foreach (var g in AllMeshes)
-                GeometryNullOps(g);
-        }
-
-        [Test]
-        public static void OutputGeometryData()
-        {
-            var n = 0;
-            foreach (var g in AllMeshes)
-            {
-                Console.WriteLine($"Geometry {n++}");
-                for (var i = 0; i < g.Vertices.Count && i < 10; ++i)
-                {
-                    Console.WriteLine($"Vertex {i} {g.Vertices[i]}");
-                }
-
-                if (g.Vertices.Count > 10)
-                {
-                    var last = g.Vertices.Count - 1;
-                    Console.WriteLine("...");
-                    Console.WriteLine($"Vertex {last} {g.Vertices[last]}");
-                }
-
-                for (var i = 0; i < g.NumFaces && i < 10; ++i)
-                {
-                    Console.WriteLine($"Face {i}: {g.Triangle(i)}");
-                }
-
-                if (g.Vertices.Count > 10)
-                {
-                    var last = g.NumFaces - 1;
-                    Console.WriteLine("...");
-                    Console.WriteLine($"Face {last}: {g.Triangle(last)}");
-                }
-            }
-        }
-
-        [Test]
         public static void StripIndicesTests()
         {
-            var emptyStrip00 = Primitives.QuadMeshStripIndicesFromPointRows(0, 0);
+            var emptyStrip00 = MeshUtil.QuadMeshStripIndicesFromPointRows(0, 0);
             Assert.AreEqual(0, emptyStrip00.Count);
 
-            var emptyStrip01 = Primitives.QuadMeshStripIndicesFromPointRows(0, 1);
+            var emptyStrip01 = MeshUtil.QuadMeshStripIndicesFromPointRows(0, 1);
             Assert.AreEqual(0, emptyStrip01.Count);
 
-            var emptyStrip10 = Primitives.QuadMeshStripIndicesFromPointRows(1, 0);
+            var emptyStrip10 = MeshUtil.QuadMeshStripIndicesFromPointRows(1, 0);
             Assert.AreEqual(0, emptyStrip10.Count);
 
-            var emptyStrip11 = Primitives.QuadMeshStripIndicesFromPointRows(1, 1);
+            var emptyStrip11 = MeshUtil.QuadMeshStripIndicesFromPointRows(1, 1);
             Assert.AreEqual(0, emptyStrip11.Count);
 
-            var emptyStrip12 = Primitives.QuadMeshStripIndicesFromPointRows(1, 2);
+            var emptyStrip12 = MeshUtil.QuadMeshStripIndicesFromPointRows(1, 2);
             Assert.AreEqual(0, emptyStrip12.Count);
 
-            var emptyStrip21 = Primitives.QuadMeshStripIndicesFromPointRows(2, 1);
+            var emptyStrip21 = MeshUtil.QuadMeshStripIndicesFromPointRows(2, 1);
             Assert.AreEqual(0, emptyStrip21.Count);
 
             // COUNTER-CLOCKWISE TEST (DEFAULT)
@@ -231,7 +200,7 @@ namespace Vim.Format.Tests.Geometry
             //   |      |                      => counter-clockwise quad: (0,1,3,2)
             //   |      |
             //   0------1   <--- row 0: [0,1]
-            var strip22 = Primitives.QuadMeshStripIndicesFromPointRows(2, 2);
+            var strip22 = MeshUtil.QuadMeshStripIndicesFromPointRows(2, 2);
             Assert.AreEqual(4, strip22.Count);
             Assert.AreEqual(0, strip22[0]);
             Assert.AreEqual(1, strip22[1]);
@@ -243,7 +212,7 @@ namespace Vim.Format.Tests.Geometry
             //   |      |                      => clockwise quad: (2,3,1,0)
             //   |      |
             //   0------1   <--- row 0: [0,1]
-            var clockwiseStrip22 = Primitives.QuadMeshStripIndicesFromPointRows(2, 2, true);
+            var clockwiseStrip22 = MeshUtil.QuadMeshStripIndicesFromPointRows(2, 2, true);
             Assert.AreEqual(4, clockwiseStrip22.Count);
             Assert.AreEqual(2, clockwiseStrip22[0]);
             Assert.AreEqual(3, clockwiseStrip22[1]);
@@ -259,7 +228,7 @@ namespace Vim.Format.Tests.Geometry
             //   |      |      |
             //   |      |      |
             //   *------*------*
-            var strip23 = Primitives.QuadMeshStripIndicesFromPointRows(2, 3);
+            var strip23 = MeshUtil.QuadMeshStripIndicesFromPointRows(2, 3);
             Assert.AreEqual(4 * 2, strip23.Count);
 
             //   *------*------*------*
@@ -269,7 +238,7 @@ namespace Vim.Format.Tests.Geometry
             //   |      |      |      |
             //   |      |      |      |
             //   *------*------*------*
-            var strip34 = Primitives.QuadMeshStripIndicesFromPointRows(3, 4);
+            var strip34 = MeshUtil.QuadMeshStripIndicesFromPointRows(3, 4);
             Assert.AreEqual(4 * 6, strip34.Count);
         }
 

@@ -11,7 +11,7 @@ namespace Vim.Format
     public static class DocumentBuilderExtensions
     {
         public static IMesh ToIMesh(this SubdividedMesh gb)
-            => gb.Vertices.ToIArray().TriMesh(
+            => gb.Vertices.ToIArray().CreateTriMesh(
                 gb.Indices.ToIArray(),
                 submeshMaterials: gb.SubmeshMaterials.ToIArray());
 
