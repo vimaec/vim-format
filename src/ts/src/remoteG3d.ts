@@ -1,5 +1,6 @@
 import { BFast, typeSize } from "./bfast"
-import { G3d, G3dAttribute, G3dAttributeDescriptor, MeshSection, TypedArray, VimAttributes } from "./g3d"
+import { G3d, VimAttributes } from "./g3d"
+import { G3dAttribute, G3dAttributeDescriptor, TypedArray } from "./g3dAttributes"
 
 class G3dRemoteAttribute {
   descriptor: G3dAttributeDescriptor

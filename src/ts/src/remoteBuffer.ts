@@ -13,7 +13,7 @@ export function setRemoteBufferMaxConcurency(value: number){
 }
 
 
-class RetryRequest {
+export class RetryRequest {
   url: string
   range: string | undefined
   // eslint-disable-next-line no-undef

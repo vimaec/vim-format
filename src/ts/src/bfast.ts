@@ -4,6 +4,7 @@
 
  import { RemoteValue } from './remoteValue'
  import { RemoteBuffer } from './remoteBuffer'
+ import * as pako from 'pako'
  
  type NumericArrayConstructor =
    | Int8ArrayConstructor
@@ -246,9 +247,12 @@ export function parseName(name: string): [number, NumericArrayConstructor]{
      return request.get()
    }
  
-   async getLocalBfast (name: string): Promise<BFast | undefined> {
-     const buffer = await this.getBuffer(name)
+   async getLocalBfast (name: string, unzip: boolean = false): Promise<BFast | undefined> {
+     let buffer = await this.getBuffer(name)
      if (!buffer) return undefined
+     if(unzip){
+      buffer = pako.inflate(buffer).buffer
+     }
      return new BFast(buffer, 0, name)
    }
  
