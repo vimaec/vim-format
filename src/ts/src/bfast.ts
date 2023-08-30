@@ -218,6 +218,15 @@ export function parseName(name: string): [number, NumericArrayConstructor]{
      this._children = new Map<string, RemoteValue<BFast>>()
      this._ranges = new RemoteValue(() => this.requestRanges(), name + '.ranges')
    }
+
+   /**
+    * Aborts all downloads from the underlying RemoteBuffer
+    */
+   abort(){
+      if(this.source instanceof RemoteBuffer){
+        this.source.abort()
+      }
+   }
  
    /**
     * @returns Bfast Header
