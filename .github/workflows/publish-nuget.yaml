@@ -56,7 +56,7 @@ jobs:
     - name: Pack NuGet package
       env:
         NUGET_ENABLE_LEGACY_CSPROJ_PACK: true
-      run: nuget pack ${{ inputs.project_path }} -Symbols -SymbolPackageFormat snupkg -OutputDirectory . -NonInteractive -Properties Configuration=Release -Exclude *.tt
+      run: nuget pack ${{ inputs.project_path }} -IncludeReferencedProjects -Symbols -SymbolPackageFormat snupkg -OutputDirectory . -NonInteractive -Properties Configuration=Release -Exclude *.tt
       shell: bash
 
     ##############################
