@@ -66,6 +66,8 @@ namespace Vim.Format
         public const string ViewSheetInViewSheetSet = "Vim.ViewSheetInViewSheetSet";
         public const string ViewInViewSheetSet = "Vim.ViewInViewSheetSet";
         public const string ViewInViewSheet = "Vim.ViewInViewSheet";
+        public const string Site = "Vim.Site";
+        public const string Building = "Vim.Building";
     }
 
     public static class VimConstants

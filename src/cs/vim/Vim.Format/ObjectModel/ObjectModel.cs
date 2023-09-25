@@ -14,6 +14,9 @@ namespace Vim.Format.ObjectModel
         // ReSharper disable MemberHidesStaticFromOuterClass
         public static class History
         {
+            // TODO: document schema update
+            public const string v5_2_0 = "5.2.0";
+
             // Schema additions:
             //   Vim.AssetInViewSheet__index:Vim.Asset:Asset
             //   Vim.AssetInViewSheet__index:Vim.ViewSheet:ViewSheet
@@ -542,6 +545,11 @@ namespace Vim.Format.ObjectModel
         /// The associated Level's FamilyType (in Revit, this maps to its LevelType)
         /// </summary>
         public Relation<FamilyType> _FamilyType;
+
+        /// <summary>
+        /// The associated Level's building.
+        /// </summary>
+        public Relation<Building> _Building;
     }
 
     /// <summary>
@@ -1663,6 +1671,24 @@ namespace Vim.Format.ObjectModel
 
         public object GetStorageKey()
             => _View.CombineAsStorageKey(_ViewSheet);
+    }
+
+    [TableName(TableNames.Site)]
+    public partial class Site : EntityWithElement
+    {
+        public double Latitude;
+        public double Longitude;
+        public string Address;
+        public double Elevation;
+        public string Number;
+    }
+
+    [TableName(TableNames.Building)]
+    public partial class Building : EntityWithElement
+    {
+        public double Elevation;
+        public double TerrainElevation;
+        public Relation<Site> _Site;
     }
 
     /// <summary>
