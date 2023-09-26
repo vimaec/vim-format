@@ -261,10 +261,13 @@ namespace Vim.BFast
         /// </summary>
         public static IEnumerable<INamedBuffer> ReadBFast(this Stream stream)
         {
+            if (!stream.CanSeek)
+            {
+                throw new InvalidOperationException("Cannot read read non seekable stream. Consider using ReadBFastNoSeek.");
+            }
             foreach (var br in stream.GetBFastBufferReaders())
             {
-                var s = br.Seek();
-                yield return s.ReadArray<byte>((int)br.Size).ToNamedBuffer(br.Name);
+                yield return br.GetBuffer<byte>();
             }
         }
 
@@ -288,10 +291,32 @@ namespace Vim.BFast
         }
 
         /// <summary>
-        /// The total size required to put a BFAST in the header.
+        /// Reads a BFAST buffer from a stream as a collection of named buffers.
+        /// This implementation does seek into the stream.
+        /// Supports non-seekable stream such as web stream.
         /// </summary>
-        public static long ComputeSize(long[] bufferSizes, string[] bufferNames)
-            => CreateBFastHeader(bufferSizes, bufferNames).Preamble.DataEnd;
+        public static void ReadBFastNoSeek(this Stream stream, Func<Stream, string, long, bool> onBuffer)
+        {
+            var header = stream.ReadBFastHeader();
+            BFast.CheckAlignment(stream);
+
+            // position after ReadBFastHeader
+            var position = header.Ranges[1].Begin;
+
+            // Range 0 is Buffer Names is already read so skip to i=1.
+            for (var i = 1; i < header.Ranges.Length; i++)
+            {
+                // Skip padding.
+                var skip = header.Ranges[i].Begin - position;
+                stream.SkipBytes(skip);
+
+                if (!onBuffer(stream, header.Names[i - 1], header.Ranges[i].Count))
+                {
+                    break;
+                }
+                position = header.Ranges[i].End;
+            }
+        }
 
         /// <summary>
         /// Writes the BFAST header and name buffer to stream using the provided BinaryWriter. The BinaryWriter will be properly aligned by padding zeros 
@@ -435,5 +460,18 @@ namespace Vim.BFast
 
         public static BFastBuilder ToBFastBuilder(this IEnumerable<INamedBuffer> buffers)
             => new BFastBuilder().Add(buffers);
+
+        public static BFastRange OffsetBy(this BFastRange range, long offset)
+            => new BFastRange() {
+                Begin = range.Begin + offset,
+                End = range.End + offset
+            };
+
+        public static BFastRange FullRange(this Stream stream)
+            => new BFastRange()
+            {
+                Begin = 0,
+                End = stream.Length
+            };
     }
 }

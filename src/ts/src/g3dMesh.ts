@@ -6,15 +6,14 @@ import { AbstractG3d } from './abstractG3d'
 import { BFast } from './bfast'
 import { G3d, MeshSection } from './g3d'
 import { G3dMaterial } from './g3dMaterials'
+import { G3dScene } from './g3dScene'
 
 /**
  * See https://github.com/vimaec/vim#vim-geometry-attributes
  */
 export class MeshAttributes {
 
-  static instanceNodes = 'g3d:instance:node:0:int32:1'
   static instanceTransforms = 'g3d:instance:transform:0:float32:16'
-  static instanceFlags = 'g3d:instance:flags:0:uint16:1'
   static meshOpaqueSubmeshCount = 'g3d:mesh:opaquesubmeshcount:0:int32:1'
   static submeshIndexOffsets = 'g3d:submesh:indexoffset:0:int32:1'
   static submeshVertexOffsets = 'g3d:submesh:vertexoffset:0:int32:1'
@@ -23,9 +22,7 @@ export class MeshAttributes {
   static indices = 'g3d:corner:index:0:int32:1'
 
   static all = [
-    MeshAttributes.instanceNodes,
     MeshAttributes.instanceTransforms,
-    MeshAttributes.instanceFlags,
     MeshAttributes.meshOpaqueSubmeshCount,
     MeshAttributes.submeshIndexOffsets,
     MeshAttributes.submeshVertexOffsets,
@@ -43,11 +40,13 @@ export class MeshAttributes {
  * See https://github.com/vimaec/g3d for the g3d specification.
  */
 export class G3dMesh {
+
+  scene: G3dScene
+  meshIndex: number 
+
   rawG3d: AbstractG3d
 
-  instanceNodes: Int32Array
   instanceTransforms: Float32Array
-  instanceFlags: Uint16Array
 
   meshOpaqueSubmeshCount : number
 
@@ -67,9 +66,7 @@ export class G3dMesh {
   DEFAULT_COLOR = new Float32Array([1, 1, 1, 1])
 
   constructor(
-    instanceNodes: Int32Array | undefined,
     instanceTransforms: Float32Array,
-    instanceFlags: Uint16Array | undefined, 
     meshOpaqueSubmeshCount : number,
     submeshIndexOffsets : Int32Array,
     submeshVertexOffsets : Int32Array,
@@ -78,34 +75,20 @@ export class G3dMesh {
     positions: Float32Array,
     ){
 
-    this.instanceNodes = instanceNodes
     this.instanceTransforms = instanceTransforms
-    this.instanceFlags = instanceFlags
     this.meshOpaqueSubmeshCount = meshOpaqueSubmeshCount
     this.submeshIndexOffset = submeshIndexOffsets
     this.submeshVertexOffset = submeshVertexOffsets
     this.submeshMaterial = submeshMaterials
     this.indices = indices instanceof Uint32Array ? indices : new Uint32Array(indices.buffer)
     this.positions = positions
-
-    if(this.instanceFlags === undefined){
-      this.instanceFlags = new Uint16Array(this.instanceNodes.length)
-    }
   }
 
   static createFromAbstract(g3d: AbstractG3d) {
 
-    const instanceNodes = g3d.findAttribute(
-      MeshAttributes.instanceNodes
-      )?.data as Int32Array
-
     const instanceTransforms = g3d.findAttribute(
       MeshAttributes.instanceTransforms
     )?.data as Float32Array
-
-    const instanceFlags =
-      (g3d.findAttribute(MeshAttributes.instanceFlags)?.data as Uint16Array) ??
-      new Uint16Array(instanceNodes.length)
 
     const meshOpaqueSubmeshCountArray = g3d.findAttribute(
         MeshAttributes.meshOpaqueSubmeshCount
@@ -129,9 +112,7 @@ export class G3dMesh {
       ?.data as Float32Array
 
     const result = new G3dMesh(
-      instanceNodes,
       instanceTransforms,
-      instanceFlags,
       meshOpaqueSubmeshCount,
       submeshIndexOffsets,
       submeshVertexOffsets,
@@ -162,37 +143,49 @@ export class G3dMesh {
     return G3dMesh.createFromAbstract(g3d)
   }
 
-  toG3d(materials : G3dMaterial){
-    return new G3d(
-      new Int32Array(this.getInstanceCount()),
-      this.instanceFlags,
-      this.instanceTransforms,
-      this.instanceNodes,
-      new Int32Array(1).fill(0),
-      this.submeshIndexOffset,
-      this.submeshMaterial,
-      this.indices,
-      this.positions,
-      materials.materialColors
-    )
+  // -----------Instances---------------
+
+  getBimInstance(meshInstance: number){
+    const sceneInstance = this.scene.getMeshSceneInstance(this.meshIndex, meshInstance)
+    return this.scene.instanceNodes[sceneInstance]
   }
 
-  insert(g3d: G3dMesh,
-    instanceStart: number,
-    submesStart: number, 
-    indexStart: number, 
-    vertexStart: number,
-    materialStart: number
-  ){
-    this.instanceNodes.set(g3d.instanceNodes, instanceStart)
-    this.instanceTransforms.set(g3d.instanceTransforms, instanceStart * G3dMesh.MATRIX_SIZE)
-    this.instanceFlags.set(g3d.instanceFlags, instanceStart)
+  getInstanceMax(meshInstance: number){
+    const sceneInstance = this.scene.getMeshSceneInstance(this.meshIndex, meshInstance)
+    return this.scene.instanceMaxs.subarray(sceneInstance * 3, (sceneInstance +1) * 3)
+  }
 
-    this.submeshIndexOffset.set(g3d.submeshIndexOffset, submesStart)
-    this.submeshMaterial.set(g3d.submeshMaterial, submesStart)
+  getInstanceMin(meshInstance: number){
+    const sceneInstance = this.scene.getMeshSceneInstance(this.meshIndex, meshInstance)
+    return this.scene.instanceMins.subarray(sceneInstance * 3, (sceneInstance +1) * 3)
+  }
 
-    this.indices.set(g3d.indices, indexStart)
-    this.positions.set(g3d.positions, vertexStart)
+  getInstanceGroup(meshInstance: number){
+    const sceneInstance = this.scene.getMeshSceneInstance(this.meshIndex, meshInstance)
+    return this.scene.instanceGroups[sceneInstance]
+  }
+
+  getInstanceTag(meshInstance: number){
+    const sceneInstance = this.scene.getMeshSceneInstance(this.meshIndex, meshInstance)
+    return this.scene.instanceTags[sceneInstance]
+  }
+
+  getInstanceHasFlag(meshInstance: number, flag: number){
+    const sceneInstance = this.scene.getMeshSceneInstance(this.meshIndex, meshInstance)
+    return (this.scene.instanceFlags[sceneInstance] & flag) > 0
+  }
+
+  getInstanceCount = () => this.instanceTransforms.length
+
+  /**
+   * Returns an 16 number array representation of the matrix for given instance
+   * @param instance g3d instance index
+   */
+  getInstanceMatrix (instance: number): Float32Array {
+    return this.instanceTransforms.subarray(
+      instance * G3dMesh.MATRIX_SIZE,
+      (instance + 1) * G3dMesh.MATRIX_SIZE
+    )
   }
 
   // ------------- Mesh -----------------
@@ -279,21 +272,6 @@ export class G3dMesh {
   }
 
   // ------------- Instances -----------------
-  getInstanceCount = () => this.instanceNodes.length
 
-  getInstanceHasFlag(instance: number, flag: number){
-    return (this.instanceFlags[instance] & flag) > 0
-  }
-
-  /**
-   * Returns an 16 number array representation of the matrix for given instance
-   * @param instance g3d instance index
-   */
-  getInstanceMatrix (instance: number): Float32Array {
-    return this.instanceTransforms.subarray(
-      instance * G3dMesh.MATRIX_SIZE,
-      (instance + 1) * G3dMesh.MATRIX_SIZE
-    )
-  }
 }
 

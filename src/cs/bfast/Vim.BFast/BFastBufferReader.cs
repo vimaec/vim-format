@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.IO.Compression;
 using System.Linq;
 
 namespace Vim.BFast
@@ -56,10 +57,29 @@ namespace Vim.BFast
             BFast.CheckAlignment(_stream);
             return _stream;
         }
+
+        public NamedBuffer<T> GetBuffer<T>(bool inflate = false) where T : unmanaged
+        {
+            this.Seek();
+            if (!inflate)
+            {
+                return _stream.ReadArray<T>((int)Size).ToNamedBuffer(Name);
+            }
+            using(var deflated = new DeflateStream(_stream, CompressionMode.Decompress)){
+                return _stream.ReadArray<T>((int)Size).ToNamedBuffer(Name);
+            }
+        }
+
+        public NamedBuffer<byte> GetBuffer(bool inflate = false)
+        {
+            return GetBuffer<byte>(inflate);
+        }
+
     }
 
     public static class BFastBufferReaderExtensions
     {
+
         /// <summary>
         /// Reads the preamble, the ranges, and the names of the rest of the buffers. 
         /// </summary>
@@ -84,7 +104,7 @@ namespace Vim.BFast
             var padding = BFast.ComputePadding(r.Ranges);
             br.ReadBytes((int)padding);
             BFast.CheckAlignment(br.BaseStream);
-            
+
             var nameBytes = br.ReadBytes((int)r.Ranges[0].Count);
             r.Names = nameBytes.UnpackStrings();
 
@@ -141,6 +161,22 @@ namespace Vim.BFast
                 ? null
                 : stream.GetBFastBufferReaders(br => br.Name == bufferName).FirstOrDefault();
 
+
+        public static NamedBuffer<byte> GetBFastBuffer(this Stream stream, string bufferName, bool inflate = false)
+        {
+
+            var buffer = stream.GetBFastBufferReader(bufferName).GetBuffer();
+            return buffer;
+            
+            // if (!inflate) return buffer;
+            // var bytes = buffer.GetTypedData();
+            // using(var inflate = new DeflateStream(stream, CompressionMode.Decompress));
+        }
+
+        public static void SeekToBFastBuffer(this Stream stream, string bufferName)
+            => stream.GetBFastBufferReader(bufferName).Seek();
+
+
         /// <summary>
         /// Reads a BFAST stream and returns a list of labeled results.
         /// </summary>
@@ -167,11 +203,7 @@ namespace Vim.BFast
         public static NamedBuffer<T> ReadBFastBuffer<T>(this Stream stream, string bufferName) where T : unmanaged
         {
             var br = stream.GetBFastBufferReader(bufferName);
-            if (br == null)
-                return null;
-
-            var s = br.Seek();
-            return s.ReadArray<T>((int)br.Size).ToNamedBuffer(br.Name);
+            return br?.GetBuffer<T>();
         }
     }
 }

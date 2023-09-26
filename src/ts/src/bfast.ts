@@ -264,6 +264,15 @@ export function parseName(name: string): [number, NumericArrayConstructor]{
      }
      return new BFast(buffer, 0, name)
    }
+
+   async getLocalBfastRaw (name: string, unzip: boolean = false): Promise<BFast | undefined> {
+    let buffer = await this.getBuffer(name)
+    if (!buffer) return undefined
+    if(unzip){
+     buffer = pako.inflateRaw(buffer).buffer
+    }
+    return new BFast(buffer, 0, name)
+  }
  
    /**
     * Returns the raw buffer associated with a name

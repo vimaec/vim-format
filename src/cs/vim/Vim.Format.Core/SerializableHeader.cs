@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using Vim.BFast;
 using Vim.Util;
 
 namespace Vim.Format
@@ -9,8 +10,8 @@ namespace Vim.Format
     public class SerializableHeader
     {
         public static readonly SerializableVersion CurrentVimFormatVersion = VimFormatVersion.Current;
-        
-        public const string FormatVersionField = "vim";
+
+        protected const string FormatVersionField = "vim";
         public const string IdField = "id";
         public const string RevisionField = "revision";
         public const string GeneratorField = "generator";
@@ -119,7 +120,7 @@ namespace Vim.Format
             {
                 var tokens = line.Split(Separator);
                 var numTokens = tokens.Length;
-                
+
                 // skip empty lines.
                 if (numTokens == 0)
                     continue;
@@ -273,5 +274,10 @@ namespace Vim.Format
         /// </summary>
         public string PersistingId
             => CreatePersistingId(Id, Revision);
+
+        public byte[] ToBytes()
+        {
+            return ToString().ToBytesUtf8();
+        }
     }
 }

@@ -165,6 +165,11 @@ namespace Vim
 
         private void CreateMeshes(bool inParallel)
         {
+            if (_SerializableDocument.Geometry == null)
+            {
+                return;
+            }
+
             var srcGeo = _SerializableDocument.Geometry;
             var tmp = srcGeo?.Meshes.Select(ToIMesh);
             Meshes = (tmp == null)
@@ -176,18 +181,33 @@ namespace Vim
 
         private void CreateShapes(bool inParallel)
         {
+            if (_SerializableDocument.Geometry == null)
+            {
+                return;
+            }
+
             var r = _SerializableDocument.Geometry.Shapes.Select((s, i) => new VimShape(this, i));
             VimShapes = inParallel ? r.EvaluateInParallel() : r.Evaluate();
         }
 
         private void CreateScene(bool inParallel)
         {
+            if (_SerializableDocument.Geometry == null)
+            {
+                return;
+            }
+
             VimNodes = CreateVimSceneNodes(this, _SerializableDocument.Geometry, inParallel);
             Nodes = VimNodes.Select(n => n as ISceneNode);
         }
 
         private void CreateMaterials(bool inParallel)
         {
+            if (_SerializableDocument.Geometry == null)
+            {
+                return;
+            }
+
             var query = _SerializableDocument.Geometry.Materials.Select(m => new VimMaterial(m) as IMaterial);
             Materials = inParallel ? query.EvaluateInParallel() : query.Evaluate();
         }

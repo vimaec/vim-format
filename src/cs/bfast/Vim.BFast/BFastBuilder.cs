@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -74,6 +75,9 @@ namespace Vim.BFast
 
         public BFastBuilder Add(string name, IBuffer buffer)
             => _add(name, new BufferAsBFastComponent(buffer));
+
+        public BFastBuilder Add(Func<int, string> getName, IEnumerable<IBuffer> buffers)
+            => Add(buffers.Select((b, i) => b.ToNamedBuffer(getName(i))));
 
         public BFastBuilder Add(INamedBuffer buffer)
             => Add(buffer.Name, buffer);

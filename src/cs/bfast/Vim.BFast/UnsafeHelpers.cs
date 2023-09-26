@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Drawing;
 using System.IO;
 
 namespace Vim.BFast
@@ -70,6 +71,43 @@ namespace Vim.BFast
                 stream.ReadBytesBuffered(pBytes, (long)count * sizeof(T));
             }
             return r;
+        }
+
+
+        /// <summary>
+        /// Equivalent to ReadArray to use when you know the byte count instead of element count.
+        /// </summary>
+        public static unsafe T[] ReadArrayBytes<T>(this Stream stream, int byteLength) where T : unmanaged
+        {
+            return ReadArray<T>(stream, byteLength / sizeof(T));
+        }
+
+        public static unsafe T[] ConvertByteArrayToTypeArray<T>(byte[] byteArray) where T : unmanaged
+        {
+            if (byteArray.Length % sizeof(T) != 0)
+            {
+                throw new ArgumentException("Byte array length is not a multiple of the size of the target type.");
+            }
+
+            int elementCount = byteArray.Length / sizeof(T);
+            T[] resultArray = new T[elementCount];
+
+            fixed (byte* bytePtr = byteArray)
+            {
+                byte* currentBytePtr = bytePtr;
+                fixed (T* resultPtr = resultArray)
+                {
+                    T* currentResultPtr = resultPtr;
+                    for (int i = 0; i < elementCount; i++)
+                    {
+                        *currentResultPtr = *((T*)currentBytePtr);
+                        currentBytePtr += sizeof(T);
+                        currentResultPtr++;
+                    }
+                }
+            }
+
+            return resultArray;
         }
 
         /// <summary>

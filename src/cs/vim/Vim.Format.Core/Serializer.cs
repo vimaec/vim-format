@@ -172,7 +172,7 @@ namespace Vim.Format
             IBFastComponent geometry)
         {
             var bfastBuilder = new BFastBuilder();
-            bfastBuilder.Add(BufferNames.Header, header.ToString().ToBytesUtf8().ToBuffer());
+            //bfastBuilder.Add(BufferNames.Header, header.ToBytes());
             bfastBuilder.Add(BufferNames.Assets, assets ?? Array.Empty<INamedBuffer>());
             bfastBuilder.Add(BufferNames.Entities, entityTables.ToBFastBuilder());
             bfastBuilder.Add(BufferNames.Strings, stringTable.PackStrings().ToBuffer());

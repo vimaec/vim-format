@@ -4,9 +4,6 @@
 
 import { AbstractG3d } from './abstractG3d'
 import { BFast } from './bfast'
-import { FilterMode } from './g3dMeshIndex'
-import { G3dSubset } from './g3dSubset'
-
 
 export type MeshSection = 'opaque' | 'transparent' | 'all'
 
@@ -226,8 +223,9 @@ export class G3d {
   /**
    * Computes all instances pointing to each mesh.
    */
-  private computeMeshInstances = (): number[][] => {
-    const result: number[][] = []
+  private computeMeshInstances () {
+    
+    const result = new Array<Array<number>>(this.getMeshCount())
 
     for (let i = 0; i < this.instanceMeshes.length; i++) {
       const mesh = this.instanceMeshes[i]
@@ -801,7 +799,6 @@ export class G3d {
         'Invalid material color buffer, must be divisible by ' + G3d.COLOR_SIZE
       )
     }
-
     
     console.assert(this.meshInstances.length === this.getMeshCount())
     console.assert(this.meshOpaqueCount.length === this.getMeshCount())
@@ -821,50 +818,5 @@ export class G3d {
           this.getMeshIndexCount(m, 'all')
       )
     }
-  }
-
-  filter(mode: FilterMode, filter: number[]){
-    if(filter === undefined || mode === undefined){
-      return new G3dSubset(this, undefined)
-    }
-    if(mode === 'instance'){
-      return this.getMeshesFromInstances(filter)
-    }
-
-    if(mode === 'mesh'){
-      return new G3dSubset(this, filter)
-    }
-    if(mode === 'tag' || mode === 'group'){
-      throw new Error("Filter Mode Not implemented")
-    }
-  }
-
-  private getMeshesFromInstances(instances: number[]){
-    // Compute the list of unique meshes to include
-    const meshSet = new Set<number>()
-    const meshes = new Array<number>()
-    instances.forEach((instance, i) => {
-      const mesh = this.instanceMeshes[instance]
-      if(!meshSet.has(mesh) && mesh >=0){
-        meshes.push(mesh)
-        meshSet.add(mesh)
-      }
-    })
-    
-
-    // Compute the mesh-based instances indices for each mesh 
-    const instanceSet = new Set(instances)
-    const meshInstances = new Array<Array<number>>(meshes.length)
-    meshes.forEach((mesh, i) => {
-      const indices = new Array<number>()
-      this.meshInstances[mesh].forEach((instance, j) => {
-        if(instanceSet.has(instance)){
-          indices.push(j)
-        }
-        meshInstances[i] = indices
-      })
-    })
-    
-    return new G3dSubset(this, meshes, meshInstances)
   }
 }
