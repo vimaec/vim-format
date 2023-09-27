@@ -116,6 +116,10 @@ namespace Vim
     class ViewInViewSheetSetTable;
     class ViewInViewSheet;
     class ViewInViewSheetTable;
+    class Site;
+    class SiteTable;
+    class Building;
+    class BuildingTable;
     
     class DocumentModel
     {
@@ -172,6 +176,8 @@ namespace Vim
         ViewSheetInViewSheetSetTable* mViewSheetInViewSheetSet;
         ViewInViewSheetSetTable* mViewInViewSheetSet;
         ViewInViewSheetTable* mViewInViewSheet;
+        SiteTable* mSite;
+        BuildingTable* mBuilding;
         
         DocumentModel(Scene& scene);
         ~DocumentModel();
@@ -2472,6 +2478,8 @@ namespace Vim
         
         int mFamilyTypeIndex;
         FamilyType* mFamilyType;
+        int mBuildingIndex;
+        Building* mBuilding;
         int mElementIndex;
         Element* mElement;
         
@@ -2497,6 +2505,7 @@ namespace Vim
             level->mIndex = levelIndex;
             level->mElevation = GetElevation(levelIndex);
             level->mFamilyTypeIndex = GetFamilyTypeIndex(levelIndex);
+            level->mBuildingIndex = GetBuildingIndex(levelIndex);
             level->mElementIndex = GetElementIndex(levelIndex);
             return level;
         }
@@ -2505,6 +2514,7 @@ namespace Vim
         {
             bool existsElevation = mEntityTable.column_exists("double:Elevation");
             bool existsFamilyType = mEntityTable.column_exists("index:Vim.FamilyType:FamilyType");
+            bool existsBuilding = mEntityTable.column_exists("index:Vim.Building:Building");
             bool existsElement = mEntityTable.column_exists("index:Vim.Element:Element");
             
             const auto count = GetCount();
@@ -2518,6 +2528,7 @@ namespace Vim
             }
             
             const std::vector<int>& familyTypeData = mEntityTable.column_exists("index:Vim.FamilyType:FamilyType") ? mEntityTable.mIndexColumns["index:Vim.FamilyType:FamilyType"] : std::vector<int>();
+            const std::vector<int>& buildingData = mEntityTable.column_exists("index:Vim.Building:Building") ? mEntityTable.mIndexColumns["index:Vim.Building:Building"] : std::vector<int>();
             const std::vector<int>& elementData = mEntityTable.column_exists("index:Vim.Element:Element") ? mEntityTable.mIndexColumns["index:Vim.Element:Element"] : std::vector<int>();
             
             for (int i = 0; i < count; ++i)
@@ -2527,6 +2538,7 @@ namespace Vim
                 if (existsElevation)
                     entity.mElevation = elevationData[i];
                 entity.mFamilyTypeIndex = existsFamilyType ? familyTypeData[i] : -1;
+                entity.mBuildingIndex = existsBuilding ? buildingData[i] : -1;
                 entity.mElementIndex = existsElement ? elementData[i] : -1;
                 level->push_back(entity);
             }
@@ -2574,6 +2586,18 @@ namespace Vim
                 return -1;
             
             return mEntityTable.mIndexColumns["index:Vim.FamilyType:FamilyType"][levelIndex];
+        }
+        
+        int GetBuildingIndex(int levelIndex)
+        {
+            if (!mEntityTable.column_exists("index:Vim.Building:Building")) {
+                return -1;
+            }
+            
+            if (levelIndex < 0 || levelIndex >= GetCount())
+                return -1;
+            
+            return mEntityTable.mIndexColumns["index:Vim.Building:Building"][levelIndex];
         }
         
         int GetElementIndex(int levelIndex)
@@ -13291,6 +13315,481 @@ namespace Vim
         return new ViewInViewSheetTable(scene.mEntityTables["Vim.ViewInViewSheet"], scene.mStrings);
     }
     
+    class Site
+    {
+    public:
+        int mIndex;
+        double mLatitude;
+        double mLongitude;
+        std::string mAddress;
+        double mElevation;
+        std::string mNumber;
+        
+        int mElementIndex;
+        Element* mElement;
+        
+        Site() {}
+    };
+    
+    class SiteTable
+    {
+        EntityTable& mEntityTable;
+        std::vector<const bfast::byte*>& mStrings;
+    public:
+        SiteTable(EntityTable& entityTable, std::vector<const bfast::byte*>& strings):
+            mEntityTable(entityTable), mStrings(strings) {}
+        
+        size_t GetCount()
+        {
+            return mEntityTable.get_count();
+        }
+        
+        Site* Get(int siteIndex)
+        {
+            Site* site = new Site();
+            site->mIndex = siteIndex;
+            site->mLatitude = GetLatitude(siteIndex);
+            site->mLongitude = GetLongitude(siteIndex);
+            site->mAddress = GetAddress(siteIndex);
+            site->mElevation = GetElevation(siteIndex);
+            site->mNumber = GetNumber(siteIndex);
+            site->mElementIndex = GetElementIndex(siteIndex);
+            return site;
+        }
+        
+        std::vector<Site>* GetAll()
+        {
+            bool existsLatitude = mEntityTable.column_exists("double:Latitude");
+            bool existsLongitude = mEntityTable.column_exists("double:Longitude");
+            bool existsAddress = mEntityTable.column_exists("string:Address");
+            bool existsElevation = mEntityTable.column_exists("double:Elevation");
+            bool existsNumber = mEntityTable.column_exists("string:Number");
+            bool existsElement = mEntityTable.column_exists("index:Vim.Element:Element");
+            
+            const auto count = GetCount();
+            
+            std::vector<Site>* site = new std::vector<Site>();
+            site->reserve(count);
+            
+            double* latitudeData = new double[count];
+            if (mEntityTable.column_exists("double:Latitude")) {
+                memcpy(latitudeData, mEntityTable.mDataColumns["double:Latitude"].begin(), count * sizeof(double));
+            }
+            
+            double* longitudeData = new double[count];
+            if (mEntityTable.column_exists("double:Longitude")) {
+                memcpy(longitudeData, mEntityTable.mDataColumns["double:Longitude"].begin(), count * sizeof(double));
+            }
+            
+            const std::vector<int>& addressData = mEntityTable.column_exists("string:Address") ? mEntityTable.mStringColumns["string:Address"] : std::vector<int>();
+            
+            double* elevationData = new double[count];
+            if (mEntityTable.column_exists("double:Elevation")) {
+                memcpy(elevationData, mEntityTable.mDataColumns["double:Elevation"].begin(), count * sizeof(double));
+            }
+            
+            const std::vector<int>& numberData = mEntityTable.column_exists("string:Number") ? mEntityTable.mStringColumns["string:Number"] : std::vector<int>();
+            
+            const std::vector<int>& elementData = mEntityTable.column_exists("index:Vim.Element:Element") ? mEntityTable.mIndexColumns["index:Vim.Element:Element"] : std::vector<int>();
+            
+            for (int i = 0; i < count; ++i)
+            {
+                Site entity;
+                entity.mIndex = i;
+                if (existsLatitude)
+                    entity.mLatitude = latitudeData[i];
+                if (existsLongitude)
+                    entity.mLongitude = longitudeData[i];
+                if (existsAddress)
+                    entity.mAddress = std::string(reinterpret_cast<const char*>(mStrings[addressData[i]]));
+                if (existsElevation)
+                    entity.mElevation = elevationData[i];
+                if (existsNumber)
+                    entity.mNumber = std::string(reinterpret_cast<const char*>(mStrings[numberData[i]]));
+                entity.mElementIndex = existsElement ? elementData[i] : -1;
+                site->push_back(entity);
+            }
+            
+            delete[] latitudeData;
+            delete[] longitudeData;
+            delete[] elevationData;
+            
+            return site;
+        }
+        
+        double GetLatitude(int siteIndex)
+        {
+            if (siteIndex < 0 || siteIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("double:Latitude")) {
+                return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:Latitude"].begin() + siteIndex * sizeof(double)));
+            }
+            
+            return {};
+        }
+        
+        std::vector<double>* GetAllLatitude()
+        {
+            const auto count = GetCount();
+            
+            double* latitudeData = new double[count];
+            if (mEntityTable.column_exists("double:Latitude")) {
+                memcpy(latitudeData, mEntityTable.mDataColumns["double:Latitude"].begin(), count * sizeof(double));
+            }
+            
+            std::vector<double>* result = new std::vector<double>(latitudeData, latitudeData + count);
+            
+            delete[] latitudeData;
+            
+            return result;
+        }
+        
+        double GetLongitude(int siteIndex)
+        {
+            if (siteIndex < 0 || siteIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("double:Longitude")) {
+                return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:Longitude"].begin() + siteIndex * sizeof(double)));
+            }
+            
+            return {};
+        }
+        
+        std::vector<double>* GetAllLongitude()
+        {
+            const auto count = GetCount();
+            
+            double* longitudeData = new double[count];
+            if (mEntityTable.column_exists("double:Longitude")) {
+                memcpy(longitudeData, mEntityTable.mDataColumns["double:Longitude"].begin(), count * sizeof(double));
+            }
+            
+            std::vector<double>* result = new std::vector<double>(longitudeData, longitudeData + count);
+            
+            delete[] longitudeData;
+            
+            return result;
+        }
+        
+        std::string GetAddress(int siteIndex)
+        {
+            if (siteIndex < 0 || siteIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("string:Address")) {
+                return std::string(reinterpret_cast<const char*>(mStrings[mEntityTable.mStringColumns["string:Address"][siteIndex]]));
+            }
+            
+            return {};
+        }
+        
+        std::vector<std::string>* GetAllAddress()
+        {
+            const auto count = GetCount();
+            
+            const std::vector<int>& addressData = mEntityTable.column_exists("string:Address") ? mEntityTable.mStringColumns["string:Address"] : std::vector<int>();
+            
+            std::vector<std::string>* result = new std::vector<std::string>();
+            result->reserve(count);
+            
+            for (int i = 0; i < count; ++i)
+            {
+                result->push_back(std::string(reinterpret_cast<const char*>(mStrings[addressData[i]])));
+            }
+            
+            return result;
+        }
+        
+        double GetElevation(int siteIndex)
+        {
+            if (siteIndex < 0 || siteIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("double:Elevation")) {
+                return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:Elevation"].begin() + siteIndex * sizeof(double)));
+            }
+            
+            return {};
+        }
+        
+        std::vector<double>* GetAllElevation()
+        {
+            const auto count = GetCount();
+            
+            double* elevationData = new double[count];
+            if (mEntityTable.column_exists("double:Elevation")) {
+                memcpy(elevationData, mEntityTable.mDataColumns["double:Elevation"].begin(), count * sizeof(double));
+            }
+            
+            std::vector<double>* result = new std::vector<double>(elevationData, elevationData + count);
+            
+            delete[] elevationData;
+            
+            return result;
+        }
+        
+        std::string GetNumber(int siteIndex)
+        {
+            if (siteIndex < 0 || siteIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("string:Number")) {
+                return std::string(reinterpret_cast<const char*>(mStrings[mEntityTable.mStringColumns["string:Number"][siteIndex]]));
+            }
+            
+            return {};
+        }
+        
+        std::vector<std::string>* GetAllNumber()
+        {
+            const auto count = GetCount();
+            
+            const std::vector<int>& numberData = mEntityTable.column_exists("string:Number") ? mEntityTable.mStringColumns["string:Number"] : std::vector<int>();
+            
+            std::vector<std::string>* result = new std::vector<std::string>();
+            result->reserve(count);
+            
+            for (int i = 0; i < count; ++i)
+            {
+                result->push_back(std::string(reinterpret_cast<const char*>(mStrings[numberData[i]])));
+            }
+            
+            return result;
+        }
+        
+        int GetElementIndex(int siteIndex)
+        {
+            if (!mEntityTable.column_exists("index:Vim.Element:Element")) {
+                return -1;
+            }
+            
+            if (siteIndex < 0 || siteIndex >= GetCount())
+                return -1;
+            
+            return mEntityTable.mIndexColumns["index:Vim.Element:Element"][siteIndex];
+        }
+        
+    };
+    
+    static SiteTable* GetSiteTable(Scene& scene)
+    {
+        if (scene.mEntityTables.find("Vim.Site") == scene.mEntityTables.end())
+            return {};
+        
+        return new SiteTable(scene.mEntityTables["Vim.Site"], scene.mStrings);
+    }
+    
+    class Building
+    {
+    public:
+        int mIndex;
+        double mElevation;
+        double mTerrainElevation;
+        std::string mAddress;
+        
+        int mSiteIndex;
+        Site* mSite;
+        int mElementIndex;
+        Element* mElement;
+        
+        Building() {}
+    };
+    
+    class BuildingTable
+    {
+        EntityTable& mEntityTable;
+        std::vector<const bfast::byte*>& mStrings;
+    public:
+        BuildingTable(EntityTable& entityTable, std::vector<const bfast::byte*>& strings):
+            mEntityTable(entityTable), mStrings(strings) {}
+        
+        size_t GetCount()
+        {
+            return mEntityTable.get_count();
+        }
+        
+        Building* Get(int buildingIndex)
+        {
+            Building* building = new Building();
+            building->mIndex = buildingIndex;
+            building->mElevation = GetElevation(buildingIndex);
+            building->mTerrainElevation = GetTerrainElevation(buildingIndex);
+            building->mAddress = GetAddress(buildingIndex);
+            building->mSiteIndex = GetSiteIndex(buildingIndex);
+            building->mElementIndex = GetElementIndex(buildingIndex);
+            return building;
+        }
+        
+        std::vector<Building>* GetAll()
+        {
+            bool existsElevation = mEntityTable.column_exists("double:Elevation");
+            bool existsTerrainElevation = mEntityTable.column_exists("double:TerrainElevation");
+            bool existsAddress = mEntityTable.column_exists("string:Address");
+            bool existsSite = mEntityTable.column_exists("index:Vim.Site:Site");
+            bool existsElement = mEntityTable.column_exists("index:Vim.Element:Element");
+            
+            const auto count = GetCount();
+            
+            std::vector<Building>* building = new std::vector<Building>();
+            building->reserve(count);
+            
+            double* elevationData = new double[count];
+            if (mEntityTable.column_exists("double:Elevation")) {
+                memcpy(elevationData, mEntityTable.mDataColumns["double:Elevation"].begin(), count * sizeof(double));
+            }
+            
+            double* terrainElevationData = new double[count];
+            if (mEntityTable.column_exists("double:TerrainElevation")) {
+                memcpy(terrainElevationData, mEntityTable.mDataColumns["double:TerrainElevation"].begin(), count * sizeof(double));
+            }
+            
+            const std::vector<int>& addressData = mEntityTable.column_exists("string:Address") ? mEntityTable.mStringColumns["string:Address"] : std::vector<int>();
+            
+            const std::vector<int>& siteData = mEntityTable.column_exists("index:Vim.Site:Site") ? mEntityTable.mIndexColumns["index:Vim.Site:Site"] : std::vector<int>();
+            const std::vector<int>& elementData = mEntityTable.column_exists("index:Vim.Element:Element") ? mEntityTable.mIndexColumns["index:Vim.Element:Element"] : std::vector<int>();
+            
+            for (int i = 0; i < count; ++i)
+            {
+                Building entity;
+                entity.mIndex = i;
+                if (existsElevation)
+                    entity.mElevation = elevationData[i];
+                if (existsTerrainElevation)
+                    entity.mTerrainElevation = terrainElevationData[i];
+                if (existsAddress)
+                    entity.mAddress = std::string(reinterpret_cast<const char*>(mStrings[addressData[i]]));
+                entity.mSiteIndex = existsSite ? siteData[i] : -1;
+                entity.mElementIndex = existsElement ? elementData[i] : -1;
+                building->push_back(entity);
+            }
+            
+            delete[] elevationData;
+            delete[] terrainElevationData;
+            
+            return building;
+        }
+        
+        double GetElevation(int buildingIndex)
+        {
+            if (buildingIndex < 0 || buildingIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("double:Elevation")) {
+                return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:Elevation"].begin() + buildingIndex * sizeof(double)));
+            }
+            
+            return {};
+        }
+        
+        std::vector<double>* GetAllElevation()
+        {
+            const auto count = GetCount();
+            
+            double* elevationData = new double[count];
+            if (mEntityTable.column_exists("double:Elevation")) {
+                memcpy(elevationData, mEntityTable.mDataColumns["double:Elevation"].begin(), count * sizeof(double));
+            }
+            
+            std::vector<double>* result = new std::vector<double>(elevationData, elevationData + count);
+            
+            delete[] elevationData;
+            
+            return result;
+        }
+        
+        double GetTerrainElevation(int buildingIndex)
+        {
+            if (buildingIndex < 0 || buildingIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("double:TerrainElevation")) {
+                return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:TerrainElevation"].begin() + buildingIndex * sizeof(double)));
+            }
+            
+            return {};
+        }
+        
+        std::vector<double>* GetAllTerrainElevation()
+        {
+            const auto count = GetCount();
+            
+            double* terrainElevationData = new double[count];
+            if (mEntityTable.column_exists("double:TerrainElevation")) {
+                memcpy(terrainElevationData, mEntityTable.mDataColumns["double:TerrainElevation"].begin(), count * sizeof(double));
+            }
+            
+            std::vector<double>* result = new std::vector<double>(terrainElevationData, terrainElevationData + count);
+            
+            delete[] terrainElevationData;
+            
+            return result;
+        }
+        
+        std::string GetAddress(int buildingIndex)
+        {
+            if (buildingIndex < 0 || buildingIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("string:Address")) {
+                return std::string(reinterpret_cast<const char*>(mStrings[mEntityTable.mStringColumns["string:Address"][buildingIndex]]));
+            }
+            
+            return {};
+        }
+        
+        std::vector<std::string>* GetAllAddress()
+        {
+            const auto count = GetCount();
+            
+            const std::vector<int>& addressData = mEntityTable.column_exists("string:Address") ? mEntityTable.mStringColumns["string:Address"] : std::vector<int>();
+            
+            std::vector<std::string>* result = new std::vector<std::string>();
+            result->reserve(count);
+            
+            for (int i = 0; i < count; ++i)
+            {
+                result->push_back(std::string(reinterpret_cast<const char*>(mStrings[addressData[i]])));
+            }
+            
+            return result;
+        }
+        
+        int GetSiteIndex(int buildingIndex)
+        {
+            if (!mEntityTable.column_exists("index:Vim.Site:Site")) {
+                return -1;
+            }
+            
+            if (buildingIndex < 0 || buildingIndex >= GetCount())
+                return -1;
+            
+            return mEntityTable.mIndexColumns["index:Vim.Site:Site"][buildingIndex];
+        }
+        
+        int GetElementIndex(int buildingIndex)
+        {
+            if (!mEntityTable.column_exists("index:Vim.Element:Element")) {
+                return -1;
+            }
+            
+            if (buildingIndex < 0 || buildingIndex >= GetCount())
+                return -1;
+            
+            return mEntityTable.mIndexColumns["index:Vim.Element:Element"][buildingIndex];
+        }
+        
+    };
+    
+    static BuildingTable* GetBuildingTable(Scene& scene)
+    {
+        if (scene.mEntityTables.find("Vim.Building") == scene.mEntityTables.end())
+            return {};
+        
+        return new BuildingTable(scene.mEntityTables["Vim.Building"], scene.mStrings);
+    }
+    
     DocumentModel::DocumentModel(Scene& scene)
     {
         mAsset = GetAssetTable(scene);
@@ -13345,6 +13844,8 @@ namespace Vim
         mViewSheetInViewSheetSet = GetViewSheetInViewSheetSetTable(scene);
         mViewInViewSheetSet = GetViewInViewSheetSetTable(scene);
         mViewInViewSheet = GetViewInViewSheetTable(scene);
+        mSite = GetSiteTable(scene);
+        mBuilding = GetBuildingTable(scene);
     }
     
     DocumentModel::~DocumentModel()
@@ -13401,6 +13902,8 @@ namespace Vim
         delete mViewSheetInViewSheetSet;
         delete mViewInViewSheetSet;
         delete mViewInViewSheet;
+        delete mSite;
+        delete mBuilding;
     }
 }
 

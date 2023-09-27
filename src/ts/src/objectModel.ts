@@ -1800,6 +1800,8 @@ export interface ILevel {
     
     familyTypeIndex?: number
     familyType?: IFamilyType
+    buildingIndex?: number
+    building?: IBuilding
     elementIndex?: number
     element?: IElement
 }
@@ -1815,6 +1817,9 @@ export interface ILevelTable {
     getFamilyTypeIndex(levelIndex: number): Promise<number | undefined>
     getAllFamilyTypeIndex(): Promise<number[] | undefined>
     getFamilyType(levelIndex: number): Promise<IFamilyType | undefined>
+    getBuildingIndex(levelIndex: number): Promise<number | undefined>
+    getAllBuildingIndex(): Promise<number[] | undefined>
+    getBuilding(levelIndex: number): Promise<IBuilding | undefined>
     getElementIndex(levelIndex: number): Promise<number | undefined>
     getAllElementIndex(): Promise<number[] | undefined>
     getElement(levelIndex: number): Promise<IElement | undefined>
@@ -1826,6 +1831,8 @@ export class Level implements ILevel {
     
     familyTypeIndex?: number
     familyType?: IFamilyType
+    buildingIndex?: number
+    building?: IBuilding
     elementIndex?: number
     element?: IElement
     
@@ -1836,6 +1843,7 @@ export class Level implements ILevel {
         await Promise.all([
             table.getElevation(index).then(v => result.elevation = v),
             table.getFamilyTypeIndex(index).then(v => result.familyTypeIndex = v),
+            table.getBuildingIndex(index).then(v => result.buildingIndex = v),
             table.getElementIndex(index).then(v => result.elementIndex = v),
         ])
         
@@ -1874,11 +1882,13 @@ export class LevelTable implements ILevelTable {
         
         let elevation: number[] | undefined
         let familyTypeIndex: number[] | undefined
+        let buildingIndex: number[] | undefined
         let elementIndex: number[] | undefined
         
         await Promise.all([
             (async () => { elevation = (await localTable.getNumberArray("double:Elevation")) })(),
             (async () => { familyTypeIndex = (await localTable.getNumberArray("index:Vim.FamilyType:FamilyType")) })(),
+            (async () => { buildingIndex = (await localTable.getNumberArray("index:Vim.Building:Building")) })(),
             (async () => { elementIndex = (await localTable.getNumberArray("index:Vim.Element:Element")) })(),
         ])
         
@@ -1889,6 +1899,7 @@ export class LevelTable implements ILevelTable {
                 index: i,
                 elevation: elevation ? elevation[i] : undefined,
                 familyTypeIndex: familyTypeIndex ? familyTypeIndex[i] : undefined,
+                buildingIndex: buildingIndex ? buildingIndex[i] : undefined,
                 elementIndex: elementIndex ? elementIndex[i] : undefined
             })
         }
@@ -1920,6 +1931,24 @@ export class LevelTable implements ILevelTable {
         }
         
         return await this.document.familyType?.get(index)
+    }
+    
+    async getBuildingIndex(levelIndex: number): Promise<number | undefined> {
+        return await this.entityTable.getNumber(levelIndex, "index:Vim.Building:Building")
+    }
+    
+    async getAllBuildingIndex(): Promise<number[] | undefined> {
+        return await this.entityTable.getNumberArray("index:Vim.Building:Building")
+    }
+    
+    async getBuilding(levelIndex: number): Promise<IBuilding | undefined> {
+        const index = await this.getBuildingIndex(levelIndex)
+        
+        if (index === undefined) {
+            return undefined
+        }
+        
+        return await this.document.building?.get(index)
     }
     
     async getElementIndex(levelIndex: number): Promise<number | undefined> {
@@ -10062,6 +10091,369 @@ export class ViewInViewSheetTable implements IViewInViewSheetTable {
     
 }
 
+export interface ISite {
+    index: number
+    latitude?: number
+    longitude?: number
+    address?: string
+    elevation?: number
+    number?: string
+    
+    elementIndex?: number
+    element?: IElement
+}
+
+export interface ISiteTable {
+    getCount(): Promise<number>
+    get(siteIndex: number): Promise<ISite>
+    getAll(): Promise<ISite[]>
+    
+    getLatitude(siteIndex: number): Promise<number | undefined>
+    getAllLatitude(): Promise<number[] | undefined>
+    getLongitude(siteIndex: number): Promise<number | undefined>
+    getAllLongitude(): Promise<number[] | undefined>
+    getAddress(siteIndex: number): Promise<string | undefined>
+    getAllAddress(): Promise<string[] | undefined>
+    getElevation(siteIndex: number): Promise<number | undefined>
+    getAllElevation(): Promise<number[] | undefined>
+    getNumber(siteIndex: number): Promise<string | undefined>
+    getAllNumber(): Promise<string[] | undefined>
+    
+    getElementIndex(siteIndex: number): Promise<number | undefined>
+    getAllElementIndex(): Promise<number[] | undefined>
+    getElement(siteIndex: number): Promise<IElement | undefined>
+}
+
+export class Site implements ISite {
+    index: number
+    latitude?: number
+    longitude?: number
+    address?: string
+    elevation?: number
+    number?: string
+    
+    elementIndex?: number
+    element?: IElement
+    
+    static async createFromTable(table: ISiteTable, index: number): Promise<ISite> {
+        let result = new Site()
+        result.index = index
+        
+        await Promise.all([
+            table.getLatitude(index).then(v => result.latitude = v),
+            table.getLongitude(index).then(v => result.longitude = v),
+            table.getAddress(index).then(v => result.address = v),
+            table.getElevation(index).then(v => result.elevation = v),
+            table.getNumber(index).then(v => result.number = v),
+            table.getElementIndex(index).then(v => result.elementIndex = v),
+        ])
+        
+        return result
+    }
+}
+
+export class SiteTable implements ISiteTable {
+    private document: VimDocument
+    private entityTable: EntityTable
+    
+    static async createFromDocument(document: VimDocument): Promise<ISiteTable | undefined> {
+        const entity = await document.entities.getBfast("Vim.Site")
+        
+        if (!entity) {
+            return undefined
+        }
+        
+        let table = new SiteTable()
+        table.document = document
+        table.entityTable = new EntityTable(entity, document.strings)
+        
+        return table
+    }
+    
+    getCount(): Promise<number> {
+        return this.entityTable.getCount()
+    }
+    
+    async get(siteIndex: number): Promise<ISite> {
+        return await Site.createFromTable(this, siteIndex)
+    }
+    
+    async getAll(): Promise<ISite[]> {
+        const localTable = await this.entityTable.getLocal()
+        
+        let latitude: number[] | undefined
+        let longitude: number[] | undefined
+        let address: string[] | undefined
+        let elevation: number[] | undefined
+        let number: string[] | undefined
+        let elementIndex: number[] | undefined
+        
+        await Promise.all([
+            (async () => { latitude = (await localTable.getNumberArray("double:Latitude")) })(),
+            (async () => { longitude = (await localTable.getNumberArray("double:Longitude")) })(),
+            (async () => { address = (await localTable.getStringArray("string:Address")) })(),
+            (async () => { elevation = (await localTable.getNumberArray("double:Elevation")) })(),
+            (async () => { number = (await localTable.getStringArray("string:Number")) })(),
+            (async () => { elementIndex = (await localTable.getNumberArray("index:Vim.Element:Element")) })(),
+        ])
+        
+        let site: ISite[] = []
+        
+        for (let i = 0; i < latitude!.length; i++) {
+            site.push({
+                index: i,
+                latitude: latitude ? latitude[i] : undefined,
+                longitude: longitude ? longitude[i] : undefined,
+                address: address ? address[i] : undefined,
+                elevation: elevation ? elevation[i] : undefined,
+                number: number ? number[i] : undefined,
+                elementIndex: elementIndex ? elementIndex[i] : undefined
+            })
+        }
+        
+        return site
+    }
+    
+    async getLatitude(siteIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(siteIndex, "double:Latitude"))
+    }
+    
+    async getAllLatitude(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:Latitude"))
+    }
+    
+    async getLongitude(siteIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(siteIndex, "double:Longitude"))
+    }
+    
+    async getAllLongitude(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:Longitude"))
+    }
+    
+    async getAddress(siteIndex: number): Promise<string | undefined> {
+        return (await this.entityTable.getString(siteIndex, "string:Address"))
+    }
+    
+    async getAllAddress(): Promise<string[] | undefined> {
+        return (await this.entityTable.getStringArray("string:Address"))
+    }
+    
+    async getElevation(siteIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(siteIndex, "double:Elevation"))
+    }
+    
+    async getAllElevation(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:Elevation"))
+    }
+    
+    async getNumber(siteIndex: number): Promise<string | undefined> {
+        return (await this.entityTable.getString(siteIndex, "string:Number"))
+    }
+    
+    async getAllNumber(): Promise<string[] | undefined> {
+        return (await this.entityTable.getStringArray("string:Number"))
+    }
+    
+    async getElementIndex(siteIndex: number): Promise<number | undefined> {
+        return await this.entityTable.getNumber(siteIndex, "index:Vim.Element:Element")
+    }
+    
+    async getAllElementIndex(): Promise<number[] | undefined> {
+        return await this.entityTable.getNumberArray("index:Vim.Element:Element")
+    }
+    
+    async getElement(siteIndex: number): Promise<IElement | undefined> {
+        const index = await this.getElementIndex(siteIndex)
+        
+        if (index === undefined) {
+            return undefined
+        }
+        
+        return await this.document.element?.get(index)
+    }
+    
+}
+
+export interface IBuilding {
+    index: number
+    elevation?: number
+    terrainElevation?: number
+    address?: string
+    
+    siteIndex?: number
+    site?: ISite
+    elementIndex?: number
+    element?: IElement
+}
+
+export interface IBuildingTable {
+    getCount(): Promise<number>
+    get(buildingIndex: number): Promise<IBuilding>
+    getAll(): Promise<IBuilding[]>
+    
+    getElevation(buildingIndex: number): Promise<number | undefined>
+    getAllElevation(): Promise<number[] | undefined>
+    getTerrainElevation(buildingIndex: number): Promise<number | undefined>
+    getAllTerrainElevation(): Promise<number[] | undefined>
+    getAddress(buildingIndex: number): Promise<string | undefined>
+    getAllAddress(): Promise<string[] | undefined>
+    
+    getSiteIndex(buildingIndex: number): Promise<number | undefined>
+    getAllSiteIndex(): Promise<number[] | undefined>
+    getSite(buildingIndex: number): Promise<ISite | undefined>
+    getElementIndex(buildingIndex: number): Promise<number | undefined>
+    getAllElementIndex(): Promise<number[] | undefined>
+    getElement(buildingIndex: number): Promise<IElement | undefined>
+}
+
+export class Building implements IBuilding {
+    index: number
+    elevation?: number
+    terrainElevation?: number
+    address?: string
+    
+    siteIndex?: number
+    site?: ISite
+    elementIndex?: number
+    element?: IElement
+    
+    static async createFromTable(table: IBuildingTable, index: number): Promise<IBuilding> {
+        let result = new Building()
+        result.index = index
+        
+        await Promise.all([
+            table.getElevation(index).then(v => result.elevation = v),
+            table.getTerrainElevation(index).then(v => result.terrainElevation = v),
+            table.getAddress(index).then(v => result.address = v),
+            table.getSiteIndex(index).then(v => result.siteIndex = v),
+            table.getElementIndex(index).then(v => result.elementIndex = v),
+        ])
+        
+        return result
+    }
+}
+
+export class BuildingTable implements IBuildingTable {
+    private document: VimDocument
+    private entityTable: EntityTable
+    
+    static async createFromDocument(document: VimDocument): Promise<IBuildingTable | undefined> {
+        const entity = await document.entities.getBfast("Vim.Building")
+        
+        if (!entity) {
+            return undefined
+        }
+        
+        let table = new BuildingTable()
+        table.document = document
+        table.entityTable = new EntityTable(entity, document.strings)
+        
+        return table
+    }
+    
+    getCount(): Promise<number> {
+        return this.entityTable.getCount()
+    }
+    
+    async get(buildingIndex: number): Promise<IBuilding> {
+        return await Building.createFromTable(this, buildingIndex)
+    }
+    
+    async getAll(): Promise<IBuilding[]> {
+        const localTable = await this.entityTable.getLocal()
+        
+        let elevation: number[] | undefined
+        let terrainElevation: number[] | undefined
+        let address: string[] | undefined
+        let siteIndex: number[] | undefined
+        let elementIndex: number[] | undefined
+        
+        await Promise.all([
+            (async () => { elevation = (await localTable.getNumberArray("double:Elevation")) })(),
+            (async () => { terrainElevation = (await localTable.getNumberArray("double:TerrainElevation")) })(),
+            (async () => { address = (await localTable.getStringArray("string:Address")) })(),
+            (async () => { siteIndex = (await localTable.getNumberArray("index:Vim.Site:Site")) })(),
+            (async () => { elementIndex = (await localTable.getNumberArray("index:Vim.Element:Element")) })(),
+        ])
+        
+        let building: IBuilding[] = []
+        
+        for (let i = 0; i < elevation!.length; i++) {
+            building.push({
+                index: i,
+                elevation: elevation ? elevation[i] : undefined,
+                terrainElevation: terrainElevation ? terrainElevation[i] : undefined,
+                address: address ? address[i] : undefined,
+                siteIndex: siteIndex ? siteIndex[i] : undefined,
+                elementIndex: elementIndex ? elementIndex[i] : undefined
+            })
+        }
+        
+        return building
+    }
+    
+    async getElevation(buildingIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(buildingIndex, "double:Elevation"))
+    }
+    
+    async getAllElevation(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:Elevation"))
+    }
+    
+    async getTerrainElevation(buildingIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(buildingIndex, "double:TerrainElevation"))
+    }
+    
+    async getAllTerrainElevation(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:TerrainElevation"))
+    }
+    
+    async getAddress(buildingIndex: number): Promise<string | undefined> {
+        return (await this.entityTable.getString(buildingIndex, "string:Address"))
+    }
+    
+    async getAllAddress(): Promise<string[] | undefined> {
+        return (await this.entityTable.getStringArray("string:Address"))
+    }
+    
+    async getSiteIndex(buildingIndex: number): Promise<number | undefined> {
+        return await this.entityTable.getNumber(buildingIndex, "index:Vim.Site:Site")
+    }
+    
+    async getAllSiteIndex(): Promise<number[] | undefined> {
+        return await this.entityTable.getNumberArray("index:Vim.Site:Site")
+    }
+    
+    async getSite(buildingIndex: number): Promise<ISite | undefined> {
+        const index = await this.getSiteIndex(buildingIndex)
+        
+        if (index === undefined) {
+            return undefined
+        }
+        
+        return await this.document.site?.get(index)
+    }
+    
+    async getElementIndex(buildingIndex: number): Promise<number | undefined> {
+        return await this.entityTable.getNumber(buildingIndex, "index:Vim.Element:Element")
+    }
+    
+    async getAllElementIndex(): Promise<number[] | undefined> {
+        return await this.entityTable.getNumberArray("index:Vim.Element:Element")
+    }
+    
+    async getElement(buildingIndex: number): Promise<IElement | undefined> {
+        const index = await this.getElementIndex(buildingIndex)
+        
+        if (index === undefined) {
+            return undefined
+        }
+        
+        return await this.document.element?.get(index)
+    }
+    
+}
+
 export class VimDocument {
     asset: IAssetTable | undefined
     displayUnit: IDisplayUnitTable | undefined
@@ -10115,6 +10507,8 @@ export class VimDocument {
     viewSheetInViewSheetSet: IViewSheetInViewSheetSetTable | undefined
     viewInViewSheetSet: IViewInViewSheetSetTable | undefined
     viewInViewSheet: IViewInViewSheetTable | undefined
+    site: ISiteTable | undefined
+    building: IBuildingTable | undefined
     
     entities: BFast
     strings: string[] | undefined
@@ -10184,6 +10578,8 @@ export class VimDocument {
         doc.viewSheetInViewSheetSet = await ViewSheetInViewSheetSetTable.createFromDocument(doc)
         doc.viewInViewSheetSet = await ViewInViewSheetSetTable.createFromDocument(doc)
         doc.viewInViewSheet = await ViewInViewSheetTable.createFromDocument(doc)
+        doc.site = await SiteTable.createFromDocument(doc)
+        doc.building = await BuildingTable.createFromDocument(doc)
         
         return doc
     }

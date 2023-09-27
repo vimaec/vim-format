@@ -329,10 +329,12 @@ namespace Vim.Format.ObjectModel {
     public partial class Level
     {
         public Vim.Format.ObjectModel.FamilyType FamilyType => _FamilyType.Value;
+        public Vim.Format.ObjectModel.Building Building => _Building.Value;
         public Vim.Format.ObjectModel.Element Element => _Element.Value;
         public Level()
         {
             _FamilyType = new Relation<Vim.Format.ObjectModel.FamilyType>();
+            _Building = new Relation<Vim.Format.ObjectModel.Building>();
             _Element = new Relation<Vim.Format.ObjectModel.Element>();
         }
         
@@ -344,6 +346,7 @@ namespace Vim.Format.ObjectModel {
                     (Index == other.Index) &&
                     (Elevation == other.Elevation) &&
                     (_FamilyType?.Index == other._FamilyType?.Index) &&
+                    (_Building?.Index == other._Building?.Index) &&
                     (_Element?.Index == other._Element?.Index);
                 if (!fieldsAreEqual)
                 {
@@ -1810,6 +1813,73 @@ namespace Vim.Format.ObjectModel {
         
     } // end of class
     
+    // AUTO-GENERATED
+    public partial class Site
+    {
+        public Vim.Format.ObjectModel.Element Element => _Element.Value;
+        public Site()
+        {
+            _Element = new Relation<Vim.Format.ObjectModel.Element>();
+        }
+        
+        public override bool FieldsAreEqual(object obj)
+        {
+            if ((obj is Site other))
+            {
+                var fieldsAreEqual =
+                    (Index == other.Index) &&
+                    (Latitude == other.Latitude) &&
+                    (Longitude == other.Longitude) &&
+                    (Address == other.Address) &&
+                    (Elevation == other.Elevation) &&
+                    (Number == other.Number) &&
+                    (_Element?.Index == other._Element?.Index);
+                if (!fieldsAreEqual)
+                {
+                    return false;
+                }
+                
+                return true;
+            }
+            return false;
+        }
+        
+    } // end of class
+    
+    // AUTO-GENERATED
+    public partial class Building
+    {
+        public Vim.Format.ObjectModel.Site Site => _Site.Value;
+        public Vim.Format.ObjectModel.Element Element => _Element.Value;
+        public Building()
+        {
+            _Site = new Relation<Vim.Format.ObjectModel.Site>();
+            _Element = new Relation<Vim.Format.ObjectModel.Element>();
+        }
+        
+        public override bool FieldsAreEqual(object obj)
+        {
+            if ((obj is Building other))
+            {
+                var fieldsAreEqual =
+                    (Index == other.Index) &&
+                    (Elevation == other.Elevation) &&
+                    (TerrainElevation == other.TerrainElevation) &&
+                    (Address == other.Address) &&
+                    (_Site?.Index == other._Site?.Index) &&
+                    (_Element?.Index == other._Element?.Index);
+                if (!fieldsAreEqual)
+                {
+                    return false;
+                }
+                
+                return true;
+            }
+            return false;
+        }
+        
+    } // end of class
+    
     public partial class DocumentModel
     {
         public ElementIndexMaps ElementIndexMaps { get; }
@@ -2134,6 +2204,8 @@ namespace Vim.Format.ObjectModel {
         public Double GetLevelElevation(int index, Double defaultValue = default) => LevelElevation?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
         public IArray<int> LevelFamilyTypeIndex { get; }
         public int GetLevelFamilyTypeIndex(int index) => LevelFamilyTypeIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
+        public IArray<int> LevelBuildingIndex { get; }
+        public int GetLevelBuildingIndex(int index) => LevelBuildingIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
         public IArray<int> LevelElementIndex { get; }
         public int GetLevelElementIndex(int index) => LevelElementIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
         public int NumLevel => LevelEntityTable?.NumRows ?? 0;
@@ -2146,6 +2218,7 @@ namespace Vim.Format.ObjectModel {
             r.Index = n;
             r.Elevation = LevelElevation.ElementAtOrDefault(n);
             r._FamilyType = new Relation<Vim.Format.ObjectModel.FamilyType>(GetLevelFamilyTypeIndex(n), GetFamilyType);
+            r._Building = new Relation<Vim.Format.ObjectModel.Building>(GetLevelBuildingIndex(n), GetBuilding);
             r._Element = new Relation<Vim.Format.ObjectModel.Element>(GetLevelElementIndex(n), GetElement);
             return r;
         }
@@ -3584,6 +3657,71 @@ namespace Vim.Format.ObjectModel {
             return r;
         }
         
+        
+        // Site
+        
+        public EntityTable SiteEntityTable { get; }
+        
+        public IArray<Double> SiteLatitude { get; }
+        public Double GetSiteLatitude(int index, Double defaultValue = default) => SiteLatitude?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> SiteLongitude { get; }
+        public Double GetSiteLongitude(int index, Double defaultValue = default) => SiteLongitude?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<String> SiteAddress { get; }
+        public String GetSiteAddress(int index, String defaultValue = "") => SiteAddress?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> SiteElevation { get; }
+        public Double GetSiteElevation(int index, Double defaultValue = default) => SiteElevation?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<String> SiteNumber { get; }
+        public String GetSiteNumber(int index, String defaultValue = "") => SiteNumber?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<int> SiteElementIndex { get; }
+        public int GetSiteElementIndex(int index) => SiteElementIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
+        public int NumSite => SiteEntityTable?.NumRows ?? 0;
+        public IArray<Site> SiteList { get; }
+        public Site GetSite(int n)
+        {
+            if (n < 0) return null;
+            var r = new Site();
+            r.Document = Document;
+            r.Index = n;
+            r.Latitude = SiteLatitude.ElementAtOrDefault(n);
+            r.Longitude = SiteLongitude.ElementAtOrDefault(n);
+            r.Address = SiteAddress.ElementAtOrDefault(n);
+            r.Elevation = SiteElevation.ElementAtOrDefault(n);
+            r.Number = SiteNumber.ElementAtOrDefault(n);
+            r._Element = new Relation<Vim.Format.ObjectModel.Element>(GetSiteElementIndex(n), GetElement);
+            return r;
+        }
+        
+        
+        // Building
+        
+        public EntityTable BuildingEntityTable { get; }
+        
+        public IArray<Double> BuildingElevation { get; }
+        public Double GetBuildingElevation(int index, Double defaultValue = default) => BuildingElevation?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> BuildingTerrainElevation { get; }
+        public Double GetBuildingTerrainElevation(int index, Double defaultValue = default) => BuildingTerrainElevation?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<String> BuildingAddress { get; }
+        public String GetBuildingAddress(int index, String defaultValue = "") => BuildingAddress?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<int> BuildingSiteIndex { get; }
+        public int GetBuildingSiteIndex(int index) => BuildingSiteIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
+        public IArray<int> BuildingElementIndex { get; }
+        public int GetBuildingElementIndex(int index) => BuildingElementIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
+        public int NumBuilding => BuildingEntityTable?.NumRows ?? 0;
+        public IArray<Building> BuildingList { get; }
+        public Building GetBuilding(int n)
+        {
+            if (n < 0) return null;
+            var r = new Building();
+            r.Document = Document;
+            r.Index = n;
+            r.Elevation = BuildingElevation.ElementAtOrDefault(n);
+            r.TerrainElevation = BuildingTerrainElevation.ElementAtOrDefault(n);
+            r.Address = BuildingAddress.ElementAtOrDefault(n);
+            r._Site = new Relation<Vim.Format.ObjectModel.Site>(GetBuildingSiteIndex(n), GetSite);
+            r._Element = new Relation<Vim.Format.ObjectModel.Element>(GetBuildingElementIndex(n), GetElement);
+            return r;
+        }
+        
         // All entity collections
         public Dictionary<string, IEnumerable<Entity>> AllEntities => new Dictionary<string, IEnumerable<Entity>>() {
             {"Vim.Asset", AssetList.ToEnumerable()},
@@ -3638,6 +3776,8 @@ namespace Vim.Format.ObjectModel {
             {"Vim.ViewSheetInViewSheetSet", ViewSheetInViewSheetSetList.ToEnumerable()},
             {"Vim.ViewInViewSheetSet", ViewInViewSheetSetList.ToEnumerable()},
             {"Vim.ViewInViewSheet", ViewInViewSheetList.ToEnumerable()},
+            {"Vim.Site", SiteList.ToEnumerable()},
+            {"Vim.Building", BuildingList.ToEnumerable()},
         };
         
         // Entity types from table names
@@ -3694,6 +3834,8 @@ namespace Vim.Format.ObjectModel {
             {"Vim.ViewSheetInViewSheetSet", typeof(ViewSheetInViewSheetSet)},
             {"Vim.ViewInViewSheetSet", typeof(ViewInViewSheetSet)},
             {"Vim.ViewInViewSheet", typeof(ViewInViewSheet)},
+            {"Vim.Site", typeof(Site)},
+            {"Vim.Building", typeof(Building)},
         };
         public DocumentModel(Document d, bool inParallel = true)
         {
@@ -3752,6 +3894,8 @@ namespace Vim.Format.ObjectModel {
             ViewSheetInViewSheetSetEntityTable = Document.GetTable("Vim.ViewSheetInViewSheetSet");
             ViewInViewSheetSetEntityTable = Document.GetTable("Vim.ViewInViewSheetSet");
             ViewInViewSheetEntityTable = Document.GetTable("Vim.ViewInViewSheet");
+            SiteEntityTable = Document.GetTable("Vim.Site");
+            BuildingEntityTable = Document.GetTable("Vim.Building");
             
             // Initialize entity arrays
             AssetBufferName = AssetEntityTable?.GetStringColumnValues("string:BufferName") ?? Array.Empty<String>().ToIArray();
@@ -3972,6 +4116,14 @@ namespace Vim.Format.ObjectModel {
             ScheduleColumnColumnIndex = ScheduleColumnEntityTable?.GetDataColumnValues<Int32>("int:ColumnIndex") ?? Array.Empty<Int32>().ToIArray();
             ScheduleCellValue = ScheduleCellEntityTable?.GetStringColumnValues("string:Value") ?? Array.Empty<String>().ToIArray();
             ScheduleCellRowIndex = ScheduleCellEntityTable?.GetDataColumnValues<Int32>("int:RowIndex") ?? Array.Empty<Int32>().ToIArray();
+            SiteLatitude = SiteEntityTable?.GetDataColumnValues<Double>("double:Latitude") ?? Array.Empty<Double>().ToIArray();
+            SiteLongitude = SiteEntityTable?.GetDataColumnValues<Double>("double:Longitude") ?? Array.Empty<Double>().ToIArray();
+            SiteAddress = SiteEntityTable?.GetStringColumnValues("string:Address") ?? Array.Empty<String>().ToIArray();
+            SiteElevation = SiteEntityTable?.GetDataColumnValues<Double>("double:Elevation") ?? Array.Empty<Double>().ToIArray();
+            SiteNumber = SiteEntityTable?.GetStringColumnValues("string:Number") ?? Array.Empty<String>().ToIArray();
+            BuildingElevation = BuildingEntityTable?.GetDataColumnValues<Double>("double:Elevation") ?? Array.Empty<Double>().ToIArray();
+            BuildingTerrainElevation = BuildingEntityTable?.GetDataColumnValues<Double>("double:TerrainElevation") ?? Array.Empty<Double>().ToIArray();
+            BuildingAddress = BuildingEntityTable?.GetStringColumnValues("string:Address") ?? Array.Empty<String>().ToIArray();
             
             // Initialize entity relational columns
             ParameterDescriptorDisplayUnitIndex = ParameterDescriptorEntityTable?.GetIndexColumnValues("index:Vim.DisplayUnit:DisplayUnit") ?? Array.Empty<int>().ToIArray();
@@ -3993,6 +4145,7 @@ namespace Vim.Format.ObjectModel {
             GroupElementIndex = GroupEntityTable?.GetIndexColumnValues("index:Vim.Element:Element") ?? Array.Empty<int>().ToIArray();
             DesignOptionElementIndex = DesignOptionEntityTable?.GetIndexColumnValues("index:Vim.Element:Element") ?? Array.Empty<int>().ToIArray();
             LevelFamilyTypeIndex = LevelEntityTable?.GetIndexColumnValues("index:Vim.FamilyType:FamilyType") ?? Array.Empty<int>().ToIArray();
+            LevelBuildingIndex = LevelEntityTable?.GetIndexColumnValues("index:Vim.Building:Building") ?? Array.Empty<int>().ToIArray();
             LevelElementIndex = LevelEntityTable?.GetIndexColumnValues("index:Vim.Element:Element") ?? Array.Empty<int>().ToIArray();
             PhaseElementIndex = PhaseEntityTable?.GetIndexColumnValues("index:Vim.Element:Element") ?? Array.Empty<int>().ToIArray();
             RoomUpperLimitIndex = RoomEntityTable?.GetIndexColumnValues("index:Vim.Level:UpperLimit") ?? Array.Empty<int>().ToIArray();
@@ -4069,6 +4222,9 @@ namespace Vim.Format.ObjectModel {
             ViewInViewSheetSetViewSheetSetIndex = ViewInViewSheetSetEntityTable?.GetIndexColumnValues("index:Vim.ViewSheetSet:ViewSheetSet") ?? Array.Empty<int>().ToIArray();
             ViewInViewSheetViewIndex = ViewInViewSheetEntityTable?.GetIndexColumnValues("index:Vim.View:View") ?? Array.Empty<int>().ToIArray();
             ViewInViewSheetViewSheetIndex = ViewInViewSheetEntityTable?.GetIndexColumnValues("index:Vim.ViewSheet:ViewSheet") ?? Array.Empty<int>().ToIArray();
+            SiteElementIndex = SiteEntityTable?.GetIndexColumnValues("index:Vim.Element:Element") ?? Array.Empty<int>().ToIArray();
+            BuildingSiteIndex = BuildingEntityTable?.GetIndexColumnValues("index:Vim.Site:Site") ?? Array.Empty<int>().ToIArray();
+            BuildingElementIndex = BuildingEntityTable?.GetIndexColumnValues("index:Vim.Element:Element") ?? Array.Empty<int>().ToIArray();
             
             // Initialize entity collections
             AssetList = NumAsset.Select(i => GetAsset(i));
@@ -4123,6 +4279,8 @@ namespace Vim.Format.ObjectModel {
             ViewSheetInViewSheetSetList = NumViewSheetInViewSheetSet.Select(i => GetViewSheetInViewSheetSet(i));
             ViewInViewSheetSetList = NumViewInViewSheetSet.Select(i => GetViewInViewSheetSet(i));
             ViewInViewSheetList = NumViewInViewSheet.Select(i => GetViewInViewSheet(i));
+            SiteList = NumSite.Select(i => GetSite(i));
+            BuildingList = NumBuilding.Select(i => GetBuilding(i));
             
             // Initialize element index maps
             ElementIndexMaps = new ElementIndexMaps(this, inParallel);
@@ -4184,6 +4342,8 @@ namespace Vim.Format.ObjectModel {
             if (type == typeof(ViewSheetInViewSheetSet)) return ToViewSheetInViewSheetSetTableBuilder;
             if (type == typeof(ViewInViewSheetSet)) return ToViewInViewSheetSetTableBuilder;
             if (type == typeof(ViewInViewSheet)) return ToViewInViewSheetTableBuilder;
+            if (type == typeof(Site)) return ToSiteTableBuilder;
+            if (type == typeof(Building)) return ToBuildingTableBuilder;
             throw new ArgumentException(nameof(type));
         }
         public static EntityTableBuilder ToAssetTableBuilder(this IEnumerable<Entity> entities)
@@ -4302,6 +4462,7 @@ namespace Vim.Format.ObjectModel {
             var tb = new EntityTableBuilder("Vim.Level");
             tb.AddDataColumn("double:Elevation", typedEntities.Select(x => x.Elevation));
             tb.AddIndexColumn("index:Vim.FamilyType:FamilyType", typedEntities.Select(x => x._FamilyType.Index));
+            tb.AddIndexColumn("index:Vim.Building:Building", typedEntities.Select(x => x._Building.Index));
             tb.AddIndexColumn("index:Vim.Element:Element", typedEntities.Select(x => x._Element.Index));
             return tb;
         }
@@ -4811,6 +4972,29 @@ namespace Vim.Format.ObjectModel {
             tb.AddIndexColumn("index:Vim.ViewSheet:ViewSheet", typedEntities.Select(x => x._ViewSheet.Index));
             return tb;
         }
+        public static EntityTableBuilder ToSiteTableBuilder(this IEnumerable<Entity> entities)
+        {
+            var typedEntities = entities?.Cast<Site>() ?? Enumerable.Empty<Site>();
+            var tb = new EntityTableBuilder("Vim.Site");
+            tb.AddDataColumn("double:Latitude", typedEntities.Select(x => x.Latitude));
+            tb.AddDataColumn("double:Longitude", typedEntities.Select(x => x.Longitude));
+            tb.AddStringColumn("string:Address", typedEntities.Select(x => x.Address));
+            tb.AddDataColumn("double:Elevation", typedEntities.Select(x => x.Elevation));
+            tb.AddStringColumn("string:Number", typedEntities.Select(x => x.Number));
+            tb.AddIndexColumn("index:Vim.Element:Element", typedEntities.Select(x => x._Element.Index));
+            return tb;
+        }
+        public static EntityTableBuilder ToBuildingTableBuilder(this IEnumerable<Entity> entities)
+        {
+            var typedEntities = entities?.Cast<Building>() ?? Enumerable.Empty<Building>();
+            var tb = new EntityTableBuilder("Vim.Building");
+            tb.AddDataColumn("double:Elevation", typedEntities.Select(x => x.Elevation));
+            tb.AddDataColumn("double:TerrainElevation", typedEntities.Select(x => x.TerrainElevation));
+            tb.AddStringColumn("string:Address", typedEntities.Select(x => x.Address));
+            tb.AddIndexColumn("index:Vim.Site:Site", typedEntities.Select(x => x._Site.Index));
+            tb.AddIndexColumn("index:Vim.Element:Element", typedEntities.Select(x => x._Element.Index));
+            return tb;
+        }
     } // DocumentBuilderExtensions
     
     public partial class ObjectModelBuilder
@@ -4869,6 +5053,8 @@ namespace Vim.Format.ObjectModel {
             {typeof(ViewSheetInViewSheetSet), new EntityTableBuilder()},
             {typeof(ViewInViewSheetSet), new EntityTableBuilder()},
             {typeof(ViewInViewSheet), new EntityTableBuilder()},
+            {typeof(Site), new EntityTableBuilder()},
+            {typeof(Building), new EntityTableBuilder()},
         };
     } // ObjectModelBuilder
 } // namespace

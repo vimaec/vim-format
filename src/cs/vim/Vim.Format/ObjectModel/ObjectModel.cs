@@ -1688,6 +1688,7 @@ namespace Vim.Format.ObjectModel
     {
         public double Elevation;
         public double TerrainElevation;
+        public string Address;
         public Relation<Site> _Site;
     }
 
