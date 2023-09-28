@@ -19,8 +19,8 @@ G3D is maintained by [VIMaec LLC](https://vimaec.com) and is licensed under the 
 On this Github repository we have the following projects:
 
 * `src/cs/g3d/Vim.G3d` - C# .NET Standard 2.0 Library for reading/writing G3D buffers
-* `src/cs/g3d/Vim.G3d.AssimpAdapter` - C# .NET Framework 4.7.1 library for converting from Assimp meshes to G3D data structures
-* `src/cs/g3d/Vim.G3d.Tests` - C# .NET Core 2.1 project with NUnit tests
+* `src/cs/g3d/Vim.G3d.AssimpAdapter` - C# library for converting from Assimp meshes to G3D data structures
+* `src/cs/g3d/Vim.G3d.Tests` - C# project with NUnit tests
 
 # Format 
 
@@ -28,11 +28,20 @@ On this Github repository we have the following projects:
 
 The underlying binary layout of a G3D file conforms to the [BFAST serialization format](./bfast.md), which is a simple and efficient binary format for serializing collections of byte arrays. BFAST provides an interface that allows named arrays of binary data to be serialized and deserialized quickly and easily.
 
-The first named buffer in the BFAST container is reserved for meta-information about the file encoded in JSON format. It has the name "meta". Each subsequent buffer uses the attribute descriptor string as a name. 
-
 ## Meta-Information
 
-The first buffer of a G3D file is a JSON object where each field value must be a string. There is no requirement for the names and the values of the fields. 
+The first buffer in a g3d, named "meta", is an 8 byte header composed of the following data:
+
+```
+byte1=0x63 // magic number part "A"
+byte2=0xD0 // magic number part "B"
+byte3=0x66 // first character in the unit (0x66 is the character code for 'f' in 'ft' for feet)
+byte4=0x74 // second character in the unit (0x77 is the character code for 't' in 'ft' for feet)
+byte5=0x02 // up axis (0x00: x axis, 0x01: y axis, 0x02: z axis)
+byte6=0x00 // forward vector (0x00: x axis, 0x01: y axis, 0x02: z axis, 0x03: -x axis, 0x04: -y axis, 0x05: -z axis)
+byte7=0x00 // axis handedness (0x00: left-handed, 0x01: right-handed)
+byte8=0x00 // zero-padding
+```
 
 ## Attributes
  
