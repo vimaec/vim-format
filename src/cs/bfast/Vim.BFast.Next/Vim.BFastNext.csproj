@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\bfast\Vim.BFast\Vim.BFast.csproj" />
+    <ProjectReference Include="..\Vim.BFast\Vim.BFast.csproj" />
   </ItemGroup>
 
 </Project>

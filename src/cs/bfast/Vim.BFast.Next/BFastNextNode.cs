@@ -27,8 +27,8 @@ namespace Vim.BFastNextNS
 
         public BFastNextNode(Stream stream, BFastRange range)
         {
-            this._stream = stream;
-            this._range = range;
+            _stream = stream;
+            _range = range;
         }
 
         public BFastNext AsBFast()
@@ -64,7 +64,7 @@ namespace Vim.BFastNextNS
 
         private static void CopyStream(Stream input, Stream output, int bytes)
         {
-            byte[] buffer = new byte[32768];
+            var buffer = new byte[32768];
             int read;
             while (bytes > 0 &&
                    (read = input.Read(buffer, 0, Math.Min(buffer.Length, bytes))) > 0)
