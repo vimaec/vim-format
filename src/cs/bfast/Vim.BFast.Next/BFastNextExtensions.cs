@@ -45,7 +45,6 @@ namespace Vim.BFastNextNS
             var i = 0;
             foreach(var b in others)
             {
-                Console.WriteLine(i);
                 bfast.SetBFast(getName(i++), b, deflate);
             }
         }
