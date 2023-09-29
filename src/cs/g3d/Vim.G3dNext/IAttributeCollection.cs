@@ -1,16 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using Vim.BFast;
+using Vim.BFastNextNS;
 
 namespace Vim.G3dNext
 {
     /// <summary>
-    /// A function which reads an attribute from the given stream and size.
+    /// Defines method for additionnal setup after constructors in generated G3d classes.
     /// </summary>
-    public delegate IAttribute AttributeReader(Stream stream, long sizeInBytes);
-    public delegate IAttribute AttributeReader2(BFastNext.BFastNext bfast);
+    public interface ISetup
+    {
+        void Setup();
+    }
 
     /// <summary>
     /// A collection of attributes and readers which can be used to deserialize attributes from a stream.<br/>
@@ -22,23 +24,11 @@ namespace Vim.G3dNext
     /// </summary>
     public interface IAttributeCollection
     {
-        long GetSize();
-
-        /// <summary>
-        /// Returns the set of attribute names supported by the AttributeCollection.
-        /// </summary>
-        IEnumerable<string> AttributeNames { get; }
-
         /// <summary>
         /// A mapping from attribute name to its corresponding attribute.<br/>
         /// This is populated when reading attributes from a stream.
         /// </summary>
-        IDictionary<string, IAttribute> Attributes { get; }
-
-        /// <summary>
-        /// Validates the attribute collection. May throw an exception if the collection is invalid.
-        /// </summary>
-        void Validate();
+        IDictionary<string, IAttribute> Map { get; }
 
         /// <summary>
         /// Returns the attribute corresponding to the given type.
@@ -49,6 +39,12 @@ namespace Vim.G3dNext
         /// Merges the attribute with the given name with any other matching attributes in the other collections.
         /// </summary>
         IAttribute MergeAttribute(string attributeName, IReadOnlyList<IAttributeCollection> otherCollections);
+
+        /// <summary>
+        /// Validates the attribute collection. May throw an exception if the collection is invalid.
+        /// </summary>
+        void Validate();
+
     }
 
     /// <summary>
@@ -56,19 +52,32 @@ namespace Vim.G3dNext
     /// </summary>
     public static class AttributeCollectionExtensions
     {
-        public static void ReadAttributes(this IAttributeCollection attributeCollection, BFastNext.BFastNext bfast)
+        public static IEnumerable<string> GetAttributeNames(this IAttributeCollection attributeCollection)
+            => attributeCollection.Map.Keys;
+
+        public static long GetSize(this IAttributeCollection attributeCollection)
+            => attributeCollection.Map.Values
+                .Sum(a => a.GetSizeInBytes());
+
+        public static BFastNext ToBFast(this IAttributeCollection attributeCollection)
         {
-            foreach (var attribute in attributeCollection.Attributes.Values)
+            var attributes = attributeCollection.Map.Values
+                .OrderBy(n => n.Name)
+                .ToArray(); // Order the attributes by name for consistency
+
+            var bfast = new BFastNext();
+            foreach (var a in attributes)
             {
-                attribute.ReadBFast(bfast);
+                a.AddTo(bfast);
             }
+            return bfast;
         }
 
         public static IEnumerable<TAttr> GetAttributesOfType<TAttr>(
             this IReadOnlyList<IAttributeCollection> collections)
             where TAttr : IAttribute
             => collections
-                .Select(c => c.Attributes.Values.OfType<TAttr>().FirstOrDefault())
+                .Select(c => c.Map.Values.OfType<TAttr>().FirstOrDefault())
                 .Where(a => a != null);
 
         public static IEnumerable<(TAttr Attribute, int IndexedCount)> GetIndexedAttributesOfType<TAttr>(
@@ -77,7 +86,7 @@ namespace Vim.G3dNext
             => collections
                 .Select(c =>
                 {
-                    var attr = c.Attributes.Values.OfType<TAttr>().FirstOrDefault();
+                    var attr = c.Map.Values.OfType<TAttr>().FirstOrDefault();
                     if (attr == null || attr.IndexInto == null)
                         return (attr, 0);
 
@@ -106,35 +115,16 @@ namespace Vim.G3dNext
 
             var result = new T();
             
-            foreach (var item in @base.Attributes)
+            foreach (var item in @base.Map)
             {
                 var name = item.Key;
 
                 var merged = @base.MergeAttribute(name, others);
 
-                result.Attributes[name] = merged;
+                result.Map[name] = merged;
             }
 
             return result;
-        }
-
-        /// <summary>
-        /// Merges the given list of G3ds.<br/>
-        /// - If there is no g3d, returns a new empty g3d.<br/>
-        /// - If there is only one g3d, returns that g3d.
-        /// </summary>
-        public static G3DNext<T> Merge<T>(this IReadOnlyList<G3DNext<T>> g3ds)
-            where T : IAttributeCollection, new()
-        {
-            switch (g3ds.Count)
-            {
-                case 0:
-                    return new G3DNext<T>();
-                case 1:
-                    return g3ds.First();
-                default:
-                    return new G3DNext<T>(g3ds.Select(g => g.AttributeCollection).ToArray().Merge());
-            }
         }
     }
 }

@@ -6,16 +6,13 @@ using Vim.G3dNext.Attributes;
 using Vim.LinqArray;
 using Vim.Math3d;
 
-namespace Vim.Format.Vimx
+namespace Vim.Format.VimxNS.Conversion
 {
-    public static class G3dVimScene
+    public static class MeshesToScene
     {
-        /// <summary>
-        /// 
-        /// </summary>
-        public static G3dScene2 ToG3dScene(this G3dVim g3d, DocumentModel bim, G3dMesh[] meshes)
+        public static G3dScene CreateScene(G3dVim g3d, DocumentModel bim, G3dMesh[] meshes)
         {
-            var scene = new G3dScene2();
+            var scene = new G3dScene();
             var nodeElements = bim.NodeElementIndex.ToArray();
             var nodeElementIds = nodeElements
                 .Select(n => n < 0 || n > bim.ElementId.Count
@@ -27,7 +24,7 @@ namespace Vim.Format.Vimx
             scene.InstanceGroups = scene.InstanceNodes.Select(n => nodeElements[n]).ToArray();
             scene.InstanceTags = scene.InstanceNodes.Select(n => nodeElementIds[n]).ToArray();
             (scene.InstanceMins, scene.InstanceMaxs) = ComputeBoundingBoxes(meshes, scene.InstanceFiles, scene.InstanceIndices);
-            scene.InstanceFlags = scene.InstanceNodes.Select(i => g3d.instanceFlags[i]).ToArray();
+            scene.InstanceFlags = scene.InstanceNodes.Select(i => g3d.InstanceFlags[i]).ToArray();
 
             // meshes
             scene.MeshInstanceCounts = new int[meshes.Length];
@@ -35,7 +32,6 @@ namespace Vim.Format.Vimx
             scene.MeshVertexCounts = new int[meshes.Length];
             scene.MeshOpaqueIndexCounts = new int[meshes.Length];
             scene.MeshOpaqueVertexCounts = new int[meshes.Length];
-            var opaqueVertices = new int[meshes.Length];
 
             for (var i = 0; i < meshes.Length; i++)
             {
@@ -44,7 +40,7 @@ namespace Vim.Format.Vimx
                 scene.MeshIndexCounts[i] = mesh.GetIndexCount();
                 scene.MeshVertexCounts[i] = mesh.GetVertexCount();
                 scene.MeshOpaqueIndexCounts[i] = mesh.GetIndexCount(MeshSection.Opaque);
-                opaqueVertices[i] = mesh.GetVertexCount(MeshSection.Opaque);
+                scene.MeshOpaqueVertexCounts[i] = mesh.GetVertexCount(MeshSection.Opaque);
             }
             return scene;
         }
@@ -64,8 +60,8 @@ namespace Vim.Format.Vimx
                 var vertexCount = mesh.GetVertexCount();
                 for (var j = 0; j < vertexCount; j++)
                 {
-                    var pos = mesh.positions[j];
-                    var matrix = mesh.instanceTransforms[index];
+                    var pos = mesh.Positions[j];
+                    var matrix = mesh.InstanceTransforms[index];
                     var pos2 = pos.Transform(matrix);
                     min = min.Min(pos2);
                     max = max.Max(pos2);
@@ -86,11 +82,11 @@ namespace Vim.Format.Vimx
             for (var i = 0; i < meshes.Length; i++)
             {
                 var mesh = meshes[i];
-                for (var j = 0; j < mesh.instanceNodes.Length; j++)
+                for (var j = 0; j < mesh.InstanceNodes.Length; j++)
                 {
                     instanceFiles.Add(i);
                     instanceIndices.Add(j);
-                    instanceNodes.Add(mesh.instanceNodes[j]);
+                    instanceNodes.Add(mesh.InstanceNodes[j]);
                 }
             }
             return (instanceFiles.ToArray(), instanceIndices.ToArray(), instanceNodes.ToArray());

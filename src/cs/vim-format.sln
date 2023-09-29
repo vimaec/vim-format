@@ -57,9 +57,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Vim.Format.Vimx", "vim\Vim.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Vim.Format.Vimx.Test", "vim\Vim.Vimx.Test\Vim.Format.Vimx.Test.csproj", "{BBF94CBD-CD39-49F5-979A-5C9E52C29330}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vim.BFastNext", "Vim.BFast.Next\Vim.BFastNext.csproj", "{4854AD71-8023-43DE-AB2F-D5F6DCFE4974}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Vim.BFastNext", "Vim.BFast.Next\Vim.BFastNext.csproj", "{4854AD71-8023-43DE-AB2F-D5F6DCFE4974}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vim.BFastNext.Tests", "Vim.BFastNext.Tests\Vim.BFastNext.Tests.csproj", "{3DBA3070-FCB7-405B-9272-F7C112BD92A8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Vim.BFastNext.Tests", "Vim.BFastNext.Tests\Vim.BFastNext.Tests.csproj", "{3DBA3070-FCB7-405B-9272-F7C112BD92A8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vim.Format.Vimx.Conversion", "Vim.Format.Vimx.Conversion\Vim.Format.Vimx.Conversion.csproj", "{5527BC13-9D25-45A1-A52D-8656336542C0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -159,6 +161,10 @@ Global
 		{3DBA3070-FCB7-405B-9272-F7C112BD92A8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3DBA3070-FCB7-405B-9272-F7C112BD92A8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3DBA3070-FCB7-405B-9272-F7C112BD92A8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5527BC13-9D25-45A1-A52D-8656336542C0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5527BC13-9D25-45A1-A52D-8656336542C0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5527BC13-9D25-45A1-A52D-8656336542C0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5527BC13-9D25-45A1-A52D-8656336542C0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -187,6 +193,7 @@ Global
 		{BBF94CBD-CD39-49F5-979A-5C9E52C29330} = {D639C635-01D1-48C4-89B5-1FD70F1AFEE9}
 		{4854AD71-8023-43DE-AB2F-D5F6DCFE4974} = {F3260C54-834F-4C74-A3B7-EAB622AFA492}
 		{3DBA3070-FCB7-405B-9272-F7C112BD92A8} = {F3260C54-834F-4C74-A3B7-EAB622AFA492}
+		{5527BC13-9D25-45A1-A52D-8656336542C0} = {D639C635-01D1-48C4-89B5-1FD70F1AFEE9}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7D1BF641-26E8-4809-B638-029241C51BE2}

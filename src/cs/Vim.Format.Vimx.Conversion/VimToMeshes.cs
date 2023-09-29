@@ -4,15 +4,16 @@ using Vim.LinqArray;
 using Vim.Util;
 using Vim.BFast;
 using Vim.Math3d;
+using Vim.G3dNext.Attributes;
 
-namespace Vim.Format.Vimx
+namespace Vim.Format.VimxNS.Conversion
 {
-    internal static class G3dVimMeshes
+    public static class VimToMeshes
     {
         /// <summary>
         /// Splits a g3dVim into a sequence of vimx getMesh.  
         /// </summary>
-        public static IEnumerable<G3dMesh> ToG3dMeshes(this G3dVim g3d)
+        public static IEnumerable<G3dMesh> ExtractMeshes(G3dVim g3d)
         {
             var meshInstances = g3d.GetMeshInstances();
 
@@ -29,9 +30,9 @@ namespace Vim.Format.Vimx
                 result[i] = new List<int>();
             }
 
-            for (var i = 0; i < g3d.instanceMeshes.Length; i++)
+            for (var i = 0; i < g3d.InstanceMeshes.Length; i++)
             {
-                var mesh = g3d.instanceMeshes[i];
+                var mesh = g3d.InstanceMeshes[i];
                 if (mesh >= 0)
                 {
                     result[mesh].Add(i);
@@ -62,8 +63,8 @@ namespace Vim.Format.Vimx
             {
                 var instance = instances[i];
                 instanceNodes[i] = instances[i];
-                instanceTransforms[i] = g3d.instanceTransforms[instance];
-                instanceFlags[i] = g3d.instanceFlags[instance];
+                instanceTransforms[i] = g3d.InstanceTransforms[instance];
+                instanceFlags[i] = g3d.InstanceFlags[instance];
             }
 
             var opaqueCount = AppendSubmeshes(
@@ -88,17 +89,17 @@ namespace Vim.Format.Vimx
                 vertices
             );
 
-            var result = G3dMesh.FromArrays(
-                instanceNodes.ToArray(),
-                instanceTransforms.ToArray(),
-                opaqueCount,
-                submeshIndexOffsets.ToArray(),
-                submeshVertexOffsets.ToArray(),
-                submeshMaterials.ToArray(),
-                indices.ToArray(),
-                vertices.ToArray()
-            );
-            return result;
+            return new G3dMesh()
+            {
+                InstanceNodes = instanceNodes.ToArray(),
+                InstanceTransforms = instanceTransforms.ToArray(),
+                OpaqueSubmeshCounts = new int[] { opaqueCount },
+                SubmeshIndexOffsets = submeshIndexOffsets.ToArray(),
+                SubmeshVertexOffsets = submeshVertexOffsets.ToArray(),
+                SubmeshMaterials = submeshMaterials.ToArray(),
+                Indices = indices.ToArray(),
+                Positions = vertices.ToArray()
+            };
         }
 
         private static int AppendSubmeshes(
@@ -117,8 +118,8 @@ namespace Vim.Format.Vimx
             var count = 0;
             for (var sub = subStart; sub < subEnd; sub++)
             {
-                var currentMat = g3d.submeshMaterials[sub];
-                var color = currentMat > 0 ? g3d.materialColors[currentMat] : Vector4.One;
+                var currentMat = g3d.SubmeshMaterials[sub];
+                var color = currentMat > 0 ? g3d.MaterialColors[currentMat] : Vector4.One;
                 var accept = color.W < 1 == transparent;
 
                 if (!accept) continue;
@@ -144,7 +145,7 @@ namespace Vim.Format.Vimx
 
             for (var i = start; i < end; i++)
             {
-                var v = g3d.indices[i];
+                var v = g3d.Indices[i];
                 if (dict.ContainsKey(v))
                 {
                     indices.Add(dict[v]);
@@ -153,7 +154,7 @@ namespace Vim.Format.Vimx
                 {
                     indices.Add(vertices.Count);
                     dict.Add(v, vertices.Count);
-                    vertices.Add(g3d.vertices[v]);
+                    vertices.Add(g3d.Positions[v]);
                 }
             }
             return (indices, vertices);

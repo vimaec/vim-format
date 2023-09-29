@@ -1,15 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using Vim.BFast;
 
-namespace Vim.BFastNext
+namespace Vim.BFastNextNS
 {
     public class BFastNext : IBFastNextNode
     {
-        private Dictionary<string, IBFastNextNode> _children = new Dictionary<string, IBFastNextNode>();
+        private readonly Dictionary<string, IBFastNextNode> _children = new Dictionary<string, IBFastNextNode>();
         public IEnumerable<string> Entries => _children.Keys;
         private IEnumerable<(string, IWritable)> Writables => _children.Select(kvp => (kvp.Key, kvp.Value as IWritable));
 
@@ -20,26 +19,30 @@ namespace Vim.BFastNext
             _children = node.ToDictionary(c => c.name, c => c.value as IBFastNextNode);
         }
 
-        public void AddBFast(string name, BFastNext bfast)
+        public void SetBFast(string name, BFastNext bfast)
             => _children[name] = bfast;
 
-        public void AddArray<T>(string name, T[] array) where T : unmanaged
+        public void SetArray<T>(string name, T[] array) where T : unmanaged
             => _children[name] = BFastNextNode.FromArray(array);
 
-        public void AddArray<T>(Func<int, string> getName, IEnumerable<T[]> arrays) where T : unmanaged
+        public void SetArrays<T>(Func<int, string> getName, IEnumerable<T[]> arrays) where T : unmanaged
         {
             var index = 0;
             foreach (var array in arrays)
             {
-                AddArray(getName(index++), array);
+                SetArray(getName(index++), array);
             }
+        }
+
+        public void SetNode(string name, BFastNextNode node)
+        {
+            _children[name] = node;
         }
 
         public BFastNext GetBFast(string name)
         {
             if (!_children.ContainsKey(name)) return null;
             var bfast = _children[name].AsBFast();
-            _children[name] = bfast;
             return bfast;
         }
 

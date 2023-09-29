@@ -1,6 +1,6 @@
 ﻿using System.IO;
 
-namespace Vim.BFastNext
+namespace Vim.BFastNextNS
 {
     /// <summary>
     /// Anything that can be added to a BFAST must have a size and write to a stream.

@@ -2,7 +2,7 @@
 using System.IO;
 using Vim.BFast;
 
-namespace Vim.BFastNext
+namespace Vim.BFastNextNS
 {
     public class BFastNextNode : IBFastNextNode
     {

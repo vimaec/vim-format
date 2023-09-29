@@ -3,7 +3,7 @@ using System.IO.Compression;
 using System.IO;
 using System.Collections.Generic;
 
-namespace Vim.BFastNext
+namespace Vim.BFastNextNS
 {
     public static class BFastNextExtensions
     {
@@ -26,7 +26,7 @@ namespace Vim.BFastNext
 
         public static void SetBFast(this BFastNext bfast, string name, BFastNext other, bool deflate)
         {
-            if (deflate == false) bfast.AddBFast(name, other);
+            if (deflate == false) bfast.SetBFast(name, other);
 
             using (var output = new MemoryStream())
             {
@@ -36,7 +36,7 @@ namespace Vim.BFastNext
                 }
 
                 var a = output.ToArray();
-                bfast.AddArray(name, a);
+                bfast.SetArray(name, a);
             }
         }
 

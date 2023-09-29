@@ -1,12 +1,12 @@
 using NUnit.Framework;
 using NUnit.Framework.Internal;
 using Vim.BFast;
-using Vim.Format.Vimx;
-using Vim.G3dNext.Attributes;
 using Vim.G3dNext.Tests;
 using Vim.Math3d;
+using Vim.Format.VimxNS.Conversion;
+using Vim.Util.Tests;
 
-namespace Vim.Format.Vimx.Tests
+namespace Vim.Format.VimxNS.Tests
 {
     [TestFixture]
     public static class VimxTests
@@ -16,15 +16,15 @@ namespace Vim.Format.Vimx.Tests
         {
             var input = TestUtils.ResidencePath;
             var name = Path.GetFileNameWithoutExtension(TestUtils.ResidencePath);
-            var output = Path.Combine(TestUtils.TestOutputFolder, name + ".vimx");
+            var output = Path.Combine(VimFormatRepoPaths.OutDir, name + ".vimx");
 
-            var vimx = Vimx.FromVim(input);
-            vimx.Write(output);
+            var vimx = VimxConverter.FromVimPath(input);
+            vimx.ToBFast().Write(output);
 
             var result = Vimx.FromPath(output);
-            Assert.AreEqual(vimx.scene.InstanceFiles, result.scene.InstanceFiles);
-            Assert.AreEqual(vimx.materials.materialColors, result.materials.materialColors);
-            Assert.AreEqual(vimx.meshes.Length, result.meshes.Length);
+            Assert.AreEqual(vimx.Scene.InstanceFiles, result.Scene.InstanceFiles);
+            Assert.AreEqual(vimx.Materials.MaterialColors, result.Materials.MaterialColors);
+            Assert.AreEqual(vimx.Meshes.Length, result.Meshes.Length);
 
         }
 

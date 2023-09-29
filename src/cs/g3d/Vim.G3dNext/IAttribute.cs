@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Vim.BFastNextNS;
 
 namespace Vim.G3dNext
 {
@@ -13,8 +14,8 @@ namespace Vim.G3dNext
         Type IndexInto { get; }
         Array Data { get; }
         void Write(Stream stream);
-        void AddTo(BFastNext.BFastNext bfast);
-        void ReadBFast(BFastNext.BFastNext bfast);
+        void AddTo(BFastNext bfast);
+        void ReadBFast(BFastNext bfast);
     }
 
     public interface IAttribute<T> : IAttribute

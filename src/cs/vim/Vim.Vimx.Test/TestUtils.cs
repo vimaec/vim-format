@@ -8,10 +8,7 @@ namespace Vim.G3dNext.Tests
 {
     public static class TestUtils
     {
-        public static readonly string ProjectFolder = VimFormatRepoPaths.ProjDir;
-        public static string RootFolder = Path.Combine(ProjectFolder, "..", "..");
-        public static string TestInputFolder = Path.Combine(RootFolder, "data");
-        public static string TestOutputFolder = Path.Combine(RootFolder, "out");
+
         public static string ResidencePath = VimFormatRepoPaths.GetLatestWolfordResidenceVim();
 
         /// <summary>
@@ -22,7 +19,7 @@ namespace Vim.G3dNext.Tests
             if (testName == null)
                 throw new ArgumentException(nameof(testName));
 
-            var testDir = Path.Combine(TestOutputFolder, testName);
+            var testDir = Path.Combine(VimFormatRepoPaths.OutDir, testName);
 
             // Prepare the test directory
             if (Directory.Exists(testDir))
@@ -98,23 +95,21 @@ namespace Vim.G3dNext.Tests
             return GC.GetTotalMemory(true) - memBefore;
         }
 
-        public static G3DNext<VimAttributeCollection> CreateTestG3d()
+        public static VimAttributeCollection CreateTestG3d()
         {
-            var g3d = new G3DNext<VimAttributeCollection>();
-            var attrs = g3d.AttributeCollection;
+            var g3d = new VimAttributeCollection();
 
-            attrs.CornersPerFaceAttribute.TypedData = new int[] { 3 };
-            attrs.VertexAttribute.TypedData = new Vector3[] { Vector3.Zero, Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ };
-            attrs.IndexAttribute.TypedData = new int[] { 0, 1, 2, 0, 3, 2, 1, 3, 2 };
-            attrs.SubmeshIndexOffsetAttribute.TypedData = new int[] { 0, 3, 6 };
-            attrs.SubmeshMaterialAttribute.TypedData = new int[] { 0 };
-            attrs.MeshSubmeshOffsetAttribute.TypedData = new int[] { 0 };
-            attrs.InstanceTransformAttribute.TypedData = new Matrix4x4[] { Matrix4x4.Identity };
-            attrs.InstanceMeshAttribute.TypedData = new int[] { 0 };
-            attrs.InstanceParentAttribute.TypedData = new int[] { -1 };
-            attrs.MaterialColorAttribute.TypedData = new Vector4[] { new Vector4(0.25f, 0.5f, 0.75f, 1) };
-            attrs.MaterialGlossinessAttribute.TypedData = new float[] { .95f };
-            attrs.MaterialSmoothnessAttribute.TypedData = new float[] { .5f };
+            g3d.PositionsAttribute.TypedData = new Vector3[] { Vector3.Zero, Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ };
+            g3d.IndicesAttribute.TypedData = new int[] { 0, 1, 2, 0, 3, 2, 1, 3, 2 };
+            g3d.SubmeshIndexOffsetsAttribute.TypedData = new int[] { 0, 3, 6 };
+            g3d.SubmeshMaterialsAttribute.TypedData = new int[] { 0 };
+            g3d.MeshSubmeshOffsetsAttribute.TypedData = new int[] { 0 };
+            g3d.InstanceTransformsAttribute.TypedData = new Matrix4x4[] { Matrix4x4.Identity };
+            g3d.InstanceMeshesAttribute.TypedData = new int[] { 0 };
+            g3d.InstanceParentsAttribute.TypedData = new int[] { -1 };
+            g3d.MaterialColorsAttribute.TypedData = new Vector4[] { new Vector4(0.25f, 0.5f, 0.75f, 1) };
+            g3d.MaterialGlossinessAttribute.TypedData = new float[] { .95f };
+            g3d.MaterialSmoothnessAttribute.TypedData = new float[] { .5f };
 
             g3d.Validate();
 

@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
+﻿using System.Collections.Generic;
 using System.Text;
-using Vim.BFast;
 using Vim.Util;
 
-namespace Vim.Format.Vimx
+namespace Vim.Format.VimxNS
 {
     public class VimxHeader : SerializableHeader
     {
@@ -16,7 +13,14 @@ namespace Vim.Format.Vimx
 
         public VimxHeader(SerializableHeader header) : this(header.Generator, header.Schema, header.FileFormatVersion.ToString())
         {
+        }
 
+        public VimxHeader(string header) : this(Parse(header))
+        {
+        }
+
+        public VimxHeader(byte[] bytes) : this(Encoding.UTF8.GetString(bytes))
+        {
         }
 
         public static VimxHeader CreateDefault()
@@ -26,12 +30,6 @@ namespace Vim.Format.Vimx
                 CurrentVimFormatVersion,
                 CurrentVimFormatVersion.ToString()
             );
-        }
-
-        public static VimxHeader FromBytes(byte[] bytes)
-        {
-            var str = Encoding.UTF8.GetString(bytes);
-            return new VimxHeader(Parse(str));
         }
     }
 }

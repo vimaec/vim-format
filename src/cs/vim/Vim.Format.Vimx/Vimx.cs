@@ -1,85 +1,74 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using Vim.BFastNext;
-using Vim.Format.ObjectModel;
+﻿using System.Linq;
+using Vim.BFastNextNS;
+using Vim.G3dNext;
 using Vim.G3dNext.Attributes;
 
-namespace Vim.Format.Vimx
+namespace Vim.Format.VimxNS
 {
     public static class BufferNames
     {
-        public const string Header = Format.BufferNames.Header;
+        public const string Header = "header";
+        public const string Meta = "meta";
         public const string Scene = "scene";
         public const string Materials = "materials";
         public static string Mesh(int mesh) => $"mesh_{mesh}";
     }
 
+    public static class BufferCompression
+    {
+        public const bool Header = false;
+        public const bool Meta = false;
+        public const bool Scene = true;
+        public const bool Materials = true;
+        public const bool Meshes = true;
+    }
+
     public class Vimx
     {
-        public VimxHeader header;
-        public G3dScene2 scene;
-        public G3dMaterials materials;
-        public G3dMesh[] meshes;
+        public readonly VimxHeader Header;
+        public readonly MetaHeader Meta;
+        public readonly G3dScene Scene;
+        public readonly G3dMaterials Materials;
+        public readonly G3dMesh[] Meshes;
 
-        Vimx(VimxHeader header, G3dScene2 scene, G3dMaterials materials, G3dMesh[] meshes)
+        public Vimx(VimxHeader header, MetaHeader meta, G3dScene scene, G3dMaterials materials, G3dMesh[] meshes)
         {
-            this.header = header;
-            this.scene = scene;
-            this.materials = materials;
-            this.meshes = meshes;
+            Meta = meta;
+            Header = header;
+            Scene = scene;
+            Materials = materials;
+            Meshes = meshes;
         }
 
-        public static Vimx FromVim(string vimPath)
+        public Vimx(BFastNext bfast)
         {
-            var vim = VimScene.LoadVim(vimPath, new Format.LoadOptions()
-            {
-                SkipAssets = true,
-                SkipGeometry = true,
-            });
-            var g3d = G3dVim.ReadFromVim(vimPath);
-            return FromVim(g3d, vim.DocumentModel);
-        }
+            Header = new VimxHeader(bfast.GetArray<byte>(BufferNames.Header));
 
-        public static Vimx FromVim(G3dVim g3d, DocumentModel bim)
-        {
-            var meshes = g3d.ToG3dMeshes().OrderByBim(bim).ToArray();
-            var scene = g3d.ToG3dScene(bim, meshes);
-            var materials = g3d.ToG3dMaterials();
-            var header = VimxHeader.CreateDefault();
-            return new Vimx(header, scene, materials, meshes);
-        }
+            Scene = new G3dScene(
+                bfast.GetBFast(BufferNames.Scene, BufferCompression.Scene)
+            );
 
-        public static Vimx FromBFast(BFastNext.BFastNext bfast)
-        {
-            var headerBytes = bfast.GetArray<byte>("header");
-            var header = VimxHeader.FromBytes(headerBytes);
+            Materials = new G3dMaterials(
+                bfast.GetBFast(BufferNames.Materials, BufferCompression.Materials)
+            );
 
-            var bfastScene = bfast.GetBFast("scene", inflate: true);
-            var scene = new G3dScene2(bfastScene);
-
-            var bfastMaterials = bfast.GetBFast("materials", inflate: true);
-            var materials = G3dMaterials.FromBFast(bfastMaterials);
-
-            var meshes = Enumerable.Range(0, scene.MeshIndexCounts.Length).Select(i =>
-            {
-                var bfastMesh = bfast.GetBFast(BufferNames.Mesh(i), inflate: true);
-                return G3dMesh.FromBFast(bfastMesh);
-            }).ToArray();
-
-            return new Vimx(header, scene, materials, meshes);
+            Meshes = Enumerable.Range(0, Scene.MeshIndexCounts.Length).Select(i =>
+                new G3dMesh(bfast.GetBFast(BufferNames.Mesh(i), BufferCompression.Meshes))
+            ).ToArray();
         }
 
         public static Vimx FromPath(string path)
-            => path.ReadBFast(FromBFast);
+            => path.ReadBFast((b) => new Vimx(b));
 
-        public void Write(string path)
+        public BFastNext ToBFast()
         {
-            var bfast = new BFastNext.BFastNext();
-            bfast.AddArray(BufferNames.Header, header.ToBytes());
-            bfast.SetBFast(BufferNames.Scene, scene.source.ToBFast(), deflate: true);
-            bfast.SetBFast(BufferNames.Materials, materials.source.ToBFast(), deflate: true);
-            bfast.SetBFast(BufferNames.Mesh, meshes.Select(m => m.source.ToBFast()), deflate: true);
-            bfast.Write(path);
+            var bfast = new BFastNext();
+            bfast.SetArray(BufferNames.Meta, MetaHeader.Default.ToBytes());
+            bfast.SetArray(BufferNames.Header, Header.ToBytes());
+            bfast.SetBFast(BufferNames.Scene, Scene.ToBFast(), BufferCompression.Scene);
+            bfast.SetBFast(BufferNames.Materials, Materials.ToBFast(), BufferCompression.Materials);
+            bfast.SetBFast(BufferNames.Mesh, Meshes.Select(m => m.ToBFast()), BufferCompression.Meshes);
+            return bfast;
         }
     }
 }

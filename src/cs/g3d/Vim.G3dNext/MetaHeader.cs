@@ -1,7 +1,5 @@
 using System;
-using System.IO;
 using System.Text;
-using Vim.BFast;
 
 namespace Vim.G3dNext
 {
@@ -20,15 +18,10 @@ namespace Vim.G3dNext
         public byte Handedness; // 0=left-handed, 1=right-handed
         public byte Padding; // 0
 
-
-
         public string Unit => Encoding.ASCII.GetString(new byte[] { UnitA, UnitB });
 
         public byte[] ToBytes()
             => new[] { MagicA, MagicB, UnitA, UnitB, UpAxis, ForwardVector, Handedness, Padding };
-
-        public NamedBuffer<byte> ToNamedBuffer()
-            => ToBytes().ToNamedBuffer(Constants.MetaHeaderSegmentName);
 
         public static MetaHeader FromBytes(byte[] bytes)
             => new MetaHeader
@@ -65,25 +58,6 @@ namespace Vim.G3dNext
             if (ForwardVector < 0 || ForwardVector > 5) throw new Exception("Front vector must be 0 (x), 1(y), 2(z), 3(-x), 4(-y), or 5(-z)");
             if (Handedness < 0 || Handedness > 1) throw new Exception("Handedness must be 0 (left) or 1 (right");
             return this;
-        }
-
-        public static bool IsSegmentMetaHeader(string name, long size)
-            => name == Constants.MetaHeaderSegmentName && size == Constants.MetaHeaderSegmentNumBytes;
-
-        public static bool TryRead(Stream stream, long size, out MetaHeader outMetaHeader)
-        {
-            var buffer = stream.ReadArray<byte>((int)size);
-
-            if (buffer[0] == Constants.MetaHeaderMagicA && buffer[1] == Constants.MetaHeaderMagicB)
-            {
-                outMetaHeader = FromBytes(buffer);
-                return true;
-            }
-            else
-            {
-                outMetaHeader = default;
-                return false;
-            }
         }
     }
 }

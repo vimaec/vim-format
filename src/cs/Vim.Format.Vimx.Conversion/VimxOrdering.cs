@@ -1,40 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Vim.Format.ObjectModel;
-using Vim.Math3d;
+using Vim.G3dNext.Attributes;
 
-namespace Vim.Format.Vimx
+namespace Vim.Format.VimxNS.Conversion
 {
-    public static class G3dMeshExtensions
+    public static class VimxOrdering
     {
-        public static AABox GetAABB(this G3dMesh mesh)
-        {
-            var box = new AABox(mesh.positions[0], mesh.positions[0]);
-            for (var p = 1; p < mesh.positions.Length; p++)
-            {
-                var pos = mesh.positions[p];
-                box = box.Expand(pos);
-            }
-            return box;
-        }
-
-        private static AABox Expand(this AABox box, Vector3 pos)
-        {
-            return new AABox(
-                new Vector3(
-                    Math.Min(box.Min.X, pos.X),
-                    Math.Min(box.Min.Y, pos.Y),
-                    Math.Min(box.Min.Z, pos.Z)
-                ),
-                new Vector3(
-                    Math.Max(box.Max.X, pos.X),
-                    Math.Max(box.Max.Y, pos.Y),
-                    Math.Max(box.Max.Z, pos.Z)
-                )
-            );
-        }
-
         public static IEnumerable<G3dMesh> OrderByBim(this IEnumerable<G3dMesh> meshes, DocumentModel bim)
         {
             return meshes.OrderByDescending((m) => (
@@ -43,9 +15,9 @@ namespace Vim.Format.Vimx
             );
         }
 
-        public static string GetMeshName(this G3dMesh mesh, DocumentModel bim)
+        static string GetMeshName(this G3dMesh mesh, DocumentModel bim)
         {
-            var node = mesh.instanceNodes[0];
+            var node = mesh.InstanceNodes[0];
 
             if (node < 0 || node >= bim.NodeElementIndex.Count) return "";
             var element = bim.NodeElementIndex[node];

@@ -1,20 +1,27 @@
 ﻿using NUnit.Framework;
-using Vim.G3dNext.Tests;
+using Vim.Format.VimxNS.Conversion;
+using Vim.Util.Tests;
 
-namespace Vim.Format.Vimx.Test
+namespace Vim.Format.VimxNS.Actions
 {
     [TestFixture]
     public static class VimxActions
     {
+
+        const string whiteleys = "_WHITELEYS-VIM-MAIN_detached.v1.2.42.vim";
+
         [Test]
         public static void ConvertVimToVimx()
         {
-            var input = TestUtils.ResidencePath;
-            var name = Path.GetFileNameWithoutExtension(TestUtils.ResidencePath);
-            var output = Path.Combine(TestUtils.TestOutputFolder, name + ".vimx");
+            //var input = TestUtils.ResidencePath;
+            
+            var input = Path.Join(VimFormatRepoPaths.DataDir, whiteleys);
 
-            var vimx = Vimx.FromVim(input);
-            vimx.Write(output);
+            var name = Path.GetFileNameWithoutExtension(input);
+            var output = Path.Combine(VimFormatRepoPaths.OutDir, name + ".vimx");
+
+            var vimx = VimxConverter.FromVimPath(input);
+            vimx.ToBFast().Write(output);
         }
     }
 }

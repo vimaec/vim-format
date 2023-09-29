@@ -22,6 +22,7 @@ namespace Vim.G3dNext.CodeGen
                 cb.AppendLine("using System.Collections.Generic;");
                 cb.AppendLine("using System.Linq;");
                 cb.AppendLine("using Vim.BFast;");
+                cb.AppendLine("using Vim.BFastNextNS;");
                 cb.AppendLine();
                 cb.AppendLine("namespace Vim.G3dNext.Attributes");
                 cb.AppendLine("{");
@@ -92,15 +93,15 @@ namespace Vim.G3dNext.CodeGen
 
         public int Count => TypedData?.Length ?? 0;
 
-        public void AddTo(BFastNext.BFastNext bfast)
+        public void AddTo(BFastNext bfast)
         {{
             if(TypedData != null)
             {{
-                bfast.AddArray(Name, TypedData);
+                bfast.SetArray(Name, TypedData);
             }}
         }}
 
-        public void ReadBFast(BFastNext.BFastNext bfast)
+        public void ReadBFast(BFastNext bfast)
         {{
             TypedData = bfast.GetArray<{typedDataType}>(""{attributeName}"");
         }}
@@ -146,38 +147,46 @@ namespace Vim.G3dNext.CodeGen
                 throw new Exception($"No attribute of type {(nameof(AttributeCollectionAttribute))} found on {className}");
 
             var attributeClasses = ac.AttributeClasses;
-            var g3dName = "G3d" + className.Replace("AttributeCollection", "2");
+            var g3dName = "G3d" + className.Replace("AttributeCollection", "");
 
             cb.AppendLine($@"
-    public class {g3dName}
+    // Please provide an explicit implementation in another partial class file.
+    public partial class {g3dName} : ISetup
     {{
-        public G3DNext<{className}> source;
+        public {className} Attributes;
 
-        public {g3dName}()
+        public {g3dName}() : this(new {className}())
         {{
-            this.source = new G3DNext<{className}> ();
+            // empty
         }}
 
-        public {g3dName}(G3DNext<{className}> source)
+        public {g3dName}(BFastNext bfast) : this(new {className}(bfast))
         {{
-            this.source = source;
+            // empty
         }}
 
-        public {g3dName}(BFastNext.BFastNext bfast)
+        public {g3dName}({className} attributes)
         {{
-            this.source = new G3DNext<{className}>(bfast);
+            Attributes = attributes;
+
+            // Method to implement in another partial class
+            (this as ISetup).Setup();
         }}
+
+        public BFastNext ToBFast()
+            => Attributes.ToBFast();
 
         {
             string.Join(Environment.NewLine, attributeClasses.Select(c =>
             {
-                var ada = c.GetCustomAttribute<AttributeDescriptorAttribute>();
-                var typedDataType = ada.GetTypedDataType();
+                var attribute = c.GetCustomAttribute<AttributeDescriptorAttribute>();
+                var typedDataType = attribute.GetTypedDataType();
+
                 return $@"
-        public {typedDataType}[] {c.Name.Replace("Attribute","")}
+        public {typedDataType}[] {attribute.FormatClassName(c.Name)}
         {{
-            get => source.AttributeCollection.{c.Name}.TypedData;
-            set => source.AttributeCollection.{c.Name}.TypedData = value;
+            get => Attributes.{c.Name}.TypedData;
+            set => Attributes.{c.Name}.TypedData = value;
         }}";}))
         }
     }}
@@ -187,13 +196,25 @@ namespace Vim.G3dNext.CodeGen
             cb.AppendLine($@"
     public partial class {className} : IAttributeCollection
     {{
-        public IEnumerable<string> AttributeNames
-            => Attributes.Keys;
+        public {className}()
+        {{
+            // empty
+        }}
 
-        public long GetSize()
-            => Attributes.Values.Sum(a => a.Data.LongLength * a.AttributeDescriptor.DataElementSize);
+        public {className}(BFastNext bfast)
+        {{
+            this.ReadAttributes(bfast);
+        }}
 
-        public IDictionary<string, IAttribute> Attributes {{ get; }}
+        public void ReadAttributes(BFastNext bfast)
+        {{
+            foreach (var attribute in Map.Values)
+            {{
+                attribute.ReadBFast(bfast);
+            }}
+        }}
+
+        public IDictionary<string, IAttribute> Map {{ get; }}
             = new Dictionary<string, IAttribute>
             {{
 {string.Join(Environment.NewLine, attributeClasses.Select(c =>
@@ -204,8 +225,8 @@ namespace Vim.G3dNext.CodeGen
 {string.Join(Environment.NewLine, attributeClasses.Select(c => $@"
         public {c} {c.Name}
         {{
-            get => Attributes.TryGetValue({c}.AttributeName, out var attr) ? attr as {c} : default;
-            set => Attributes[{c}.AttributeName] = value as IAttribute;
+            get => Map.TryGetValue({c}.AttributeName, out var attr) ? attr as {c} : default;
+            set => Map[{c}.AttributeName] = value as IAttribute;
         }}"))}
 
         /// <inheritdoc/>
