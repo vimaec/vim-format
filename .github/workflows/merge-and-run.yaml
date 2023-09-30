@@ -1,7 +1,5 @@
 name: Build merged
 
-# TODO: change to git merge origin/${GITHUB_BASE_REF}
-
 on:
   workflow_call:
     inputs:
@@ -34,8 +32,7 @@ jobs:
           git config --global user.name "Vim Robot"
 
       - name: Merge with base
-        run: git merge origin/develop
-        # run: git merge origin/${GITHUB_BASE_REF} # GITHUB_BASE_REF is only defined for pull requests
+        run: git merge origin/${GITHUB_BASE_REF} # GITHUB_BASE_REF is only defined for pull requests
         shell: bash
 
       - name: Optionally run CodeGen first
