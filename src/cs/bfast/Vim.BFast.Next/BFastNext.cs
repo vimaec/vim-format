@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.IO.Compression;
 using System.Linq;
 using Vim.BFast;
 
@@ -19,8 +20,39 @@ namespace Vim.BFastNextNS
             _children = node.ToDictionary(c => c.name, c => c.value as IBFastNextNode);
         }
 
-        public void SetBFast(string name, BFastNext bfast)
-            => _children[name] = bfast;
+        public void SetBFast(Func<int, string> getName, IEnumerable<BFastNext> others, bool deflate = false)
+        {
+            var i = 0;
+            foreach (var b in others)
+            {
+                SetBFast(getName(i++), b, deflate);
+            }
+        }
+
+        public void SetBFast(string name, BFastNext bfast, bool deflate = false)
+        {
+            if (deflate == false)
+            {
+                bfast.SetBFast(name, bfast);
+            }
+            else
+            {
+                var a = Deflate(bfast);
+                bfast.SetArray(name, a);
+            }
+        }
+
+        private byte[] Deflate(BFastNext bfast)
+        {
+            using (var output = new MemoryStream())
+            {
+                using (var decompress = new DeflateStream(output, CompressionMode.Compress, true))
+                {
+                    bfast.Write(decompress);
+                }
+                return output.ToArray();
+            }
+        }
 
         public void SetArray<T>(string name, T[] array) where T : unmanaged
             => _children[name] = BFastNextNode.FromArray(array);
@@ -39,11 +71,28 @@ namespace Vim.BFastNextNS
             _children[name] = node;
         }
 
-        public BFastNext GetBFast(string name)
+        public BFastNext GetBFast(string name, bool inflate = false)
         {
-            if (!_children.ContainsKey(name)) return null;
-            var bfast = _children[name].AsBFast();
-            return bfast;
+            var node = GetNode(name);
+            if (node == null) return null;
+            if (inflate == false) return node.AsBFast();
+            return InflateNode(node);
+        }
+
+        private BFastNext InflateNode(IBFastNextNode node)
+        {
+            var output = new MemoryStream();
+            using (var input = new MemoryStream())
+            {
+                node.Write(input);
+                input.Seek(0, SeekOrigin.Begin);
+                using (var compress = new DeflateStream(input, CompressionMode.Decompress, true))
+                {
+                    compress.CopyTo(output);
+                    output.Seek(0, SeekOrigin.Begin);
+                    return new BFastNext(output);
+                }
+            }
         }
 
         public T[] GetArray<T>(string name) where T : unmanaged
@@ -129,4 +178,17 @@ namespace Vim.BFastNextNS
             return header.Preamble.DataEnd;
         }
     }
+
+    public static class BFastNextExtensions
+    {
+        public static T ReadBFast<T>(this string path, Func<BFastNext, T> process)
+        {
+            using (var file = new FileStream(path, FileMode.Open))
+            {
+                var bfast = new BFastNext(file);
+                return process(bfast);
+            }
+        }
+    }
 }
+

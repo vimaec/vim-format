@@ -13,9 +13,8 @@ namespace Vim.Format.VimxNS.Actions
         [Test]
         public static void ConvertVimToVimx()
         {
-            //var input = TestUtils.ResidencePath;
-            
-            var input = Path.Join(VimFormatRepoPaths.DataDir, whiteleys);
+            var input = VimFormatRepoPaths.GetLatestWolfordResidenceVim();
+            //var input = Path.Join(VimFormatRepoPaths.DataDir, input);
 
             var name = Path.GetFileNameWithoutExtension(input);
             var output = Path.Combine(VimFormatRepoPaths.OutDir, name + ".vimx");
