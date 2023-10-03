@@ -37,8 +37,8 @@ namespace Vim.G3dNext.Tests
             var indices = new[] { 0, 1, 2 };
 
             var g3d1 = new VimAttributeCollection();
-            g3d1.PositionsAttribute.TypedData = vertices;
-            g3d1.IndicesAttribute.TypedData = indices;
+            g3d1.Positions.TypedData = vertices;
+            g3d1.Indices.TypedData = indices;
 
             var memoryStream = new MemoryStream();
             g3d1.ToBFast().Write(memoryStream);
@@ -48,13 +48,13 @@ namespace Vim.G3dNext.Tests
             var g3d2 = new VimAttributeCollection(bfast);
             Assert.IsNotNull(g3d2);
 
-            Assert.AreEqual(3, g3d2.PositionsAttribute.Count);
-            Assert.AreEqual(3, g3d2.IndicesAttribute.Count);
-            Assert.AreEqual(0, g3d2.MeshSubmeshOffsetsAttribute.Count);
-            Assert.AreEqual(0, g3d2.InstanceTransformsAttribute.Count);
+            Assert.AreEqual(3, g3d2.Positions.Count);
+            Assert.AreEqual(3, g3d2.Indices.Count);
+            Assert.AreEqual(0, g3d2.MeshSubmeshOffsets.Count);
+            Assert.AreEqual(0, (object)g3d2.InstanceTransforms.Count);
 
-            Assert.AreEqual(vertices, g3d2.PositionsAttribute.TypedData);
-            Assert.AreEqual(indices, g3d2.IndicesAttribute.TypedData);
+            Assert.AreEqual(vertices, g3d2.Positions.TypedData);
+            Assert.AreEqual(indices, g3d2.Indices.TypedData);
         }
 
         [Test]
@@ -122,63 +122,63 @@ namespace Vim.G3dNext.Tests
             Assert.NotNull(g3d);
 
             {
-                var merged = Enumerable.Repeat(g3d.PositionsAttribute.TypedData, 2).SelectMany(v => v).ToArray();
-                Assert.AreEqual(merged, g3dResult.PositionsAttribute.TypedData);
+                var merged = Enumerable.Repeat(g3d.Positions.TypedData, 2).SelectMany(v => v).ToArray();
+                Assert.AreEqual(merged, g3dResult.Positions.TypedData);
             }
 
             {
-                var tmp = g3d.IndicesAttribute.TypedData;
-                var merged = new[] { tmp, tmp.Select(i => i + g3d.PositionsAttribute.Count).ToArray() }.SelectMany(v => v).ToArray();
-                Assert.AreEqual(merged, g3dResult.IndicesAttribute.TypedData);
+                var tmp = g3d.Indices.TypedData;
+                var merged = new[] { tmp, tmp.Select(i => i + g3d.Positions.Count).ToArray() }.SelectMany(v => v).ToArray();
+                Assert.AreEqual(merged, g3dResult.Indices.TypedData);
             }
 
             {
-                var tmp = g3d.SubmeshIndexOffsetsAttribute.TypedData;
-                var merged = new[] { tmp, tmp.Select(i => i + g3d.IndicesAttribute.Count).ToArray() }.SelectMany(v => v).ToArray();
-                Assert.AreEqual(merged, g3dResult.SubmeshIndexOffsetsAttribute.TypedData);
+                var tmp = g3d.SubmeshIndexOffsets.TypedData;
+                var merged = new[] { tmp, tmp.Select(i => i + g3d.Indices.Count).ToArray() }.SelectMany(v => v).ToArray();
+                Assert.AreEqual(merged, g3dResult.SubmeshIndexOffsets.TypedData);
             }
 
             {
-                var tmp = g3d.SubmeshMaterialsAttribute.TypedData;
-                var merged = new[] { tmp, tmp.Select(i => i + g3d.MaterialColorsAttribute.Count).ToArray() }.SelectMany(v => v).ToArray();
-                Assert.AreEqual(merged, g3dResult.SubmeshMaterialsAttribute.TypedData);
+                var tmp = g3d.SubmeshMaterials.TypedData;
+                var merged = new[] { tmp, tmp.Select(i => i + g3d.MaterialColors.Count).ToArray() }.SelectMany(v => v).ToArray();
+                Assert.AreEqual(merged, g3dResult.SubmeshMaterials.TypedData);
             }
 
             {
-                var tmp = g3d.MeshSubmeshOffsetsAttribute.TypedData;
-                var merged = new[] { tmp, tmp.Select(i => i + g3d.SubmeshIndexOffsetsAttribute.Count).ToArray() }.SelectMany(v => v).ToArray();
-                Assert.AreEqual(merged, g3dResult.MeshSubmeshOffsetsAttribute.TypedData);
+                var tmp = g3d.MeshSubmeshOffsets.TypedData;
+                var merged = new[] { tmp, tmp.Select(i => i + g3d.SubmeshIndexOffsets.Count).ToArray() }.SelectMany(v => v).ToArray();
+                Assert.AreEqual(merged, g3dResult.MeshSubmeshOffsets.TypedData);
             }
 
             {
-                var merged = Enumerable.Repeat(g3d.InstanceTransformsAttribute.TypedData, 2).SelectMany(v => v).ToArray();
-                Assert.AreEqual(merged, g3dResult.InstanceTransformsAttribute.TypedData);
+                var merged = Enumerable.Repeat(g3d.InstanceTransforms.TypedData, 2).SelectMany(v => v).ToArray();
+                Assert.AreEqual((object)merged, (object)g3dResult.InstanceTransforms.TypedData);
             }
 
             {
-                var tmp = g3d.InstanceMeshesAttribute.TypedData;
-                var merged = new[] { tmp, tmp.Select(i => i + g3d.MeshSubmeshOffsetsAttribute.Count).ToArray() }.SelectMany(v => v).ToArray();
-                Assert.AreEqual(merged, g3dResult.InstanceMeshesAttribute.TypedData);
+                var tmp = g3d.InstanceMeshes.TypedData;
+                var merged = new[] { tmp, tmp.Select(i => i + g3d.MeshSubmeshOffsets.Count).ToArray() }.SelectMany(v => v).ToArray();
+                Assert.AreEqual(merged, g3dResult.InstanceMeshes.TypedData);
             }
 
             {
-                var merged = Enumerable.Repeat(g3d.InstanceParentsAttribute.TypedData, 2).SelectMany(v => v).ToArray();
-                Assert.AreEqual(merged, g3dResult.InstanceParentsAttribute.TypedData);
+                var merged = Enumerable.Repeat(g3d.InstanceParents.TypedData, 2).SelectMany(v => v).ToArray();
+                Assert.AreEqual(merged, g3dResult.InstanceParents.TypedData);
             }
 
             {
-                var merged = Enumerable.Repeat(g3d.MaterialColorsAttribute.TypedData, 2).SelectMany(v => v).ToArray();
-                Assert.AreEqual(merged, g3dResult.MaterialColorsAttribute.TypedData);
+                var merged = Enumerable.Repeat(g3d.MaterialColors.TypedData, 2).SelectMany(v => v).ToArray();
+                Assert.AreEqual(merged, g3dResult.MaterialColors.TypedData);
             }
 
             {
-                var merged = Enumerable.Repeat(g3d.MaterialGlossinessAttribute.TypedData, 2).SelectMany(v => v).ToArray();
-                Assert.AreEqual(merged, g3dResult.MaterialGlossinessAttribute.TypedData);
+                var merged = Enumerable.Repeat(g3d.MaterialGlossiness.TypedData, 2).SelectMany(v => v).ToArray();
+                Assert.AreEqual(merged, g3dResult.MaterialGlossiness.TypedData);
             }
 
             {
-                var merged = Enumerable.Repeat(g3d.MaterialSmoothnessAttribute.TypedData, 2).SelectMany(v => v).ToArray();
-                Assert.AreEqual(merged, g3dResult.MaterialSmoothnessAttribute.TypedData);
+                var merged = Enumerable.Repeat(g3d.MaterialSmoothness.TypedData, 2).SelectMany(v => v).ToArray();
+                Assert.AreEqual(merged, g3dResult.MaterialSmoothness.TypedData);
             }
         }
     }

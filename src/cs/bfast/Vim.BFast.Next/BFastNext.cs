@@ -33,12 +33,12 @@ namespace Vim.BFastNextNS
         {
             if (deflate == false)
             {
-                bfast.SetBFast(name, bfast);
+                _children[name] = bfast;
             }
             else
             {
                 var a = Deflate(bfast);
-                bfast.SetArray(name, a);
+                SetArray(name, a);
             }
         }
 

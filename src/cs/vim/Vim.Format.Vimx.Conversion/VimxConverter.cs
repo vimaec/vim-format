@@ -4,6 +4,7 @@ using Vim.BFast;
 using Vim.G3dNext.Attributes;
 using Vim.Format.ObjectModel;
 using Vim.G3dNext;
+using System.Collections.Generic;
 
 namespace Vim.Format.VimxNS.Conversion
 {
@@ -27,11 +28,27 @@ namespace Vim.Format.VimxNS.Conversion
                 .OrderByBim(bim)
                 .ToArray();
 
-            var scene = MeshesToScene.CreateScene(g3d, bim, meshes);
+            var chunks = meshes.SplitChunks();
+            var scene = MeshesToScene.CreateScene(g3d, bim, chunks, meshes);
+
             var materials = new G3dMaterials(g3d.ToBFast());
             var header = VimxHeader.CreateDefault();
             
-            return new Vimx(header, MetaHeader.Default, scene, materials, meshes);
+            return new Vimx(header, MetaHeader.Default, scene, materials, chunks);
+        }
+
+        public static VimxChunk[] SplitChunks(this IEnumerable<G3dMesh> meshes)
+        {
+            var chunks = new List<VimxChunk>();
+            var chunk = new VimxChunk();
+            foreach (var mesh in meshes)
+            {
+                chunk.Meshes.Add(mesh);
+                mesh.Chunk = 0;
+            }
+            chunks.Add(chunk);
+
+            return chunks.ToArray();
         }
     }
 }

@@ -97,23 +97,23 @@ namespace Vim.G3dNext.Tests
 
         public static VimAttributeCollection CreateTestG3d()
         {
-            var g3d = new VimAttributeCollection();
+            var attributes = new VimAttributeCollection();
 
-            g3d.PositionsAttribute.TypedData = new Vector3[] { Vector3.Zero, Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ };
-            g3d.IndicesAttribute.TypedData = new int[] { 0, 1, 2, 0, 3, 2, 1, 3, 2 };
-            g3d.SubmeshIndexOffsetsAttribute.TypedData = new int[] { 0, 3, 6 };
-            g3d.SubmeshMaterialsAttribute.TypedData = new int[] { 0 };
-            g3d.MeshSubmeshOffsetsAttribute.TypedData = new int[] { 0 };
-            g3d.InstanceTransformsAttribute.TypedData = new Matrix4x4[] { Matrix4x4.Identity };
-            g3d.InstanceMeshesAttribute.TypedData = new int[] { 0 };
-            g3d.InstanceParentsAttribute.TypedData = new int[] { -1 };
-            g3d.MaterialColorsAttribute.TypedData = new Vector4[] { new Vector4(0.25f, 0.5f, 0.75f, 1) };
-            g3d.MaterialGlossinessAttribute.TypedData = new float[] { .95f };
-            g3d.MaterialSmoothnessAttribute.TypedData = new float[] { .5f };
+            attributes.Positions.TypedData = new Vector3[] { Vector3.Zero, Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ };
+            attributes.Indices.TypedData = new int[] { 0, 1, 2, 0, 3, 2, 1, 3, 2 };
+            attributes.SubmeshIndexOffsets.TypedData = new int[] { 0, 3, 6 };
+            attributes.SubmeshMaterials.TypedData = new int[] { 0 };
+            attributes.MeshSubmeshOffsets.TypedData = new int[] { 0 };
+            attributes.InstanceTransforms.TypedData = new Matrix4x4[] { Matrix4x4.Identity };
+            attributes.InstanceMeshes.TypedData = new int[] { 0 };
+            attributes.InstanceParents.TypedData = new int[] { -1 };
+            attributes.MaterialColors.TypedData = new Vector4[] { new Vector4(0.25f, 0.5f, 0.75f, 1) };
+            attributes.MaterialGlossiness.TypedData = new float[] { .95f };
+            attributes.MaterialSmoothness.TypedData = new float[] { .5f };
 
-            g3d.Validate();
+            attributes.Validate();
 
-            return g3d;
+            return attributes;
         }
     }
 }

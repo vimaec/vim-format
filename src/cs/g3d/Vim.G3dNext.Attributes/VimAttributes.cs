@@ -3,64 +3,73 @@
 namespace Vim.G3dNext.Attributes
 {
     [AttributeCollection(
-        typeof(PositionsAttribute),
-        typeof(IndicesAttribute),
-        typeof(InstanceTransformsAttribute),
-        typeof(InstanceParentsAttribute),
-        typeof(InstanceFlagsAttribute),
-        typeof(InstanceMeshesAttribute),
-        typeof(MeshSubmeshOffsetsAttribute),
-        typeof(SubmeshIndexOffsetsAttribute),
-        typeof(SubmeshMaterialsAttribute),
-        typeof(MaterialColorsAttribute),
-        typeof(MaterialGlossinessAttribute),
-        typeof(MaterialSmoothnessAttribute),
-        typeof(ShapeVerticesAttribute),
-        typeof(ShapeVertexOffsetsAttribute),
-        typeof(ShapeColorsAttribute),
-        typeof(ShapeWidthsAttribute)
+        typeof(VimPositionsAttribute),
+        typeof(VimIndicesAttribute),
+        typeof(VimInstanceTransformsAttribute),
+        typeof(VimInstanceParentsAttribute),
+        typeof(VimInstanceFlagsAttribute),
+        typeof(VimInstanceMeshesAttribute),
+        typeof(VimMeshSubmeshOffsetsAttribute),
+        typeof(VimSubmeshIndexOffsetsAttribute),
+        typeof(VimSubmeshMaterialsAttribute),
+        typeof(VimMaterialColorsAttribute),
+        typeof(VimMaterialGlossinessAttribute),
+        typeof(VimMaterialSmoothnessAttribute),
+        typeof(VimShapeVerticesAttribute),
+        typeof(VimShapeVertexOffsetsAttribute),
+        typeof(VimShapeColorsAttribute),
+        typeof(VimShapeWidthsAttribute)
     )]
     public partial class VimAttributeCollection // : IAttributeCollection
     {
 
     }
 
-    [AttributeDescriptor("g3d:vertex:position:0:float32:3", AttributeType.Data, ArrayType = typeof(Vector3))]
-    public partial class PositionsAttribute { }
+    [AttributeDescriptor("Vim", "g3d:vertex:position:0:float32:3", AttributeType.Data, ArrayType = typeof(Vector3))]
+    public partial class VimPositionsAttribute { }
 
-    [AttributeDescriptor("g3d:corner:index:0:int32:1", AttributeType.Index, IndexInto = typeof(PositionsAttribute))]
-    public partial class IndicesAttribute { }
+    [AttributeDescriptor("Vim", "g3d:corner:index:0:int32:1", AttributeType.Index, IndexInto = typeof(VimPositionsAttribute))]
+    public partial class VimIndicesAttribute { }
 
-    [AttributeDescriptor("g3d:instance:transform:0:float32:16", AttributeType.Data, ArrayType = typeof(Matrix4x4))]
-    public partial class InstanceTransformsAttribute { }
+    [AttributeDescriptor("Vim", "g3d:instance:transform:0:float32:16", AttributeType.Data, ArrayType = typeof(Matrix4x4))]
+    public partial class VimInstanceTransformsAttribute { }
 
-    [AttributeDescriptor("g3d:instance:parent:0:int32:1", AttributeType.Index, IndexInto = typeof(InstanceTransformsAttribute))]
-    public partial class InstanceParentsAttribute { }
+    [AttributeDescriptor("Vim", "g3d:instance:parent:0:int32:1", AttributeType.Index, IndexInto = typeof(VimInstanceTransformsAttribute))]
+    public partial class VimInstanceParentsAttribute { }
 
-    [AttributeDescriptor("g3d:instance:flags:0:uint16:1", AttributeType.Data)]
-    public partial class InstanceFlagsAttribute { }
+    [AttributeDescriptor("Vim", "g3d:instance:flags:0:uint16:1", AttributeType.Data)]
+    public partial class VimInstanceFlagsAttribute { }
 
-    [AttributeDescriptor("g3d:instance:mesh:0:int32:1", AttributeType.Index, IndexInto = typeof(MeshSubmeshOffsetsAttribute))]
-    public partial class InstanceMeshesAttribute { }
+    [AttributeDescriptor("Vim", "g3d:instance:mesh:0:int32:1", AttributeType.Index, IndexInto = typeof(VimMeshSubmeshOffsetsAttribute))]
+    public partial class VimInstanceMeshesAttribute { }
 
-    [AttributeDescriptor("g3d:mesh:submeshoffset:0:int32:1", AttributeType.Index, IndexInto = typeof(SubmeshIndexOffsetsAttribute))]
-    public partial class MeshSubmeshOffsetsAttribute { }
+    [AttributeDescriptor("Vim", "g3d:mesh:submeshoffset:0:int32:1", AttributeType.Index, IndexInto = typeof(VimSubmeshIndexOffsetsAttribute))]
+    public partial class VimMeshSubmeshOffsetsAttribute { }
 
-    [AttributeDescriptor("g3d:submesh:indexoffset:0:int32:1", AttributeType.Index, IndexInto = typeof(IndicesAttribute))]
-    public partial class SubmeshIndexOffsetsAttribute { }
+    [AttributeDescriptor("Vim", "g3d:submesh:indexoffset:0:int32:1", AttributeType.Index, IndexInto = typeof(VimIndicesAttribute))]
+    public partial class VimSubmeshIndexOffsetsAttribute { }
 
-    [AttributeDescriptor("g3d:submesh:material:0:int32:1", AttributeType.Index, IndexInto = typeof(MaterialColorsAttribute))]
-    public partial class SubmeshMaterialsAttribute { }
+    [AttributeDescriptor("Vim", "g3d:submesh:material:0:int32:1", AttributeType.Index, IndexInto = typeof(VimMaterialColorsAttribute))]
+    public partial class VimSubmeshMaterialsAttribute { }
 
-    [AttributeDescriptor("g3d:shapevertex:position:0:float32:3", AttributeType.Data, ArrayType = typeof(Vector3))]
-    public partial class ShapeVerticesAttribute { }
+    [AttributeDescriptor("Vim", "g3d:material:color:0:float32:4", AttributeType.Data, ArrayType = typeof(Vector4))]
+    public partial class VimMaterialColorsAttribute { }
 
-    [AttributeDescriptor("g3d:shape:vertexoffset:0:int32:1", AttributeType.Index, IndexInto = typeof(ShapeVerticesAttribute))]
-    public partial class ShapeVertexOffsetsAttribute { }
+    [AttributeDescriptor("Vim", "g3d:material:glossiness:0:float32:1", AttributeType.Data)]
+    public partial class VimMaterialGlossinessAttribute { }
 
-    [AttributeDescriptor("g3d:shape:color:0:float32:4", AttributeType.Data, ArrayType = typeof(Vector4))]
-    public partial class ShapeColorsAttribute { }
+    [AttributeDescriptor("Vim", "g3d:material:smoothness:0:float32:1", AttributeType.Data)]
+    public partial class VimMaterialSmoothnessAttribute { }
 
-    [AttributeDescriptor("g3d:shape:width:0:float32:1", AttributeType.Data)]
-    public partial class ShapeWidthsAttribute { }
+    [AttributeDescriptor("Vim", "g3d:shapevertex:position:0:float32:3", AttributeType.Data, ArrayType = typeof(Vector3))]
+    public partial class VimShapeVerticesAttribute { }
+
+    [AttributeDescriptor("Vim", "g3d:shape:vertexoffset:0:int32:1", AttributeType.Index, IndexInto = typeof(VimShapeVerticesAttribute))]
+    public partial class VimShapeVertexOffsetsAttribute { }
+
+    [AttributeDescriptor("Vim", "g3d:shape:color:0:float32:4", AttributeType.Data, ArrayType = typeof(Vector4))]
+    public partial class VimShapeColorsAttribute { }
+
+    [AttributeDescriptor("Vim", "g3d:shape:width:0:float32:1", AttributeType.Data)]
+    public partial class VimShapeWidthsAttribute { }
 }

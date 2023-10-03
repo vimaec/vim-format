@@ -10,9 +10,11 @@ namespace Vim.Format.VimxNS.Conversion
 {
     public static class MeshesToScene
     {
-        public static G3dScene CreateScene(G3dVim g3d, DocumentModel bim, G3dMesh[] meshes)
+        public static G3dScene CreateScene(G3dVim g3d, DocumentModel bim, VimxChunk[] chunks, G3dMesh[] meshes)
         {
             var scene = new G3dScene();
+            //scene.ChunksCount = new int[1] { chunks.Length };
+
             var nodeElements = bim.NodeElementIndex.ToArray();
             var nodeElementIds = nodeElements
                 .Select(n => n < 0 || n > bim.ElementId.Count
@@ -20,13 +22,14 @@ namespace Vim.Format.VimxNS.Conversion
                     : bim.ElementId[n]
                 ).ToArray();
 
-            (scene.InstanceFiles, scene.InstanceIndices, scene.InstanceNodes) = meshes.GetInstanceFiles();
+            (scene.InstanceMeshes, scene.InstanceTransforms, scene.InstanceNodes) = meshes.GetInstanceIds();
             scene.InstanceGroups = scene.InstanceNodes.Select(n => nodeElements[n]).ToArray();
             scene.InstanceTags = scene.InstanceNodes.Select(n => nodeElementIds[n]).ToArray();
-            (scene.InstanceMins, scene.InstanceMaxs) = ComputeBoundingBoxes(meshes, scene.InstanceFiles, scene.InstanceIndices);
+            (scene.InstanceMins, scene.InstanceMaxs) = ComputeBoundingBoxes(meshes, scene.InstanceMeshes, scene.InstanceTransforms);
             scene.InstanceFlags = scene.InstanceNodes.Select(i => g3d.InstanceFlags[i]).ToArray();
 
             // meshes
+            //scene.MeshChunk = new int[meshes.Length];
             scene.MeshInstanceCounts = new int[meshes.Length];
             scene.MeshIndexCounts = new int[meshes.Length];
             scene.MeshVertexCounts = new int[meshes.Length];
@@ -36,6 +39,7 @@ namespace Vim.Format.VimxNS.Conversion
             for (var i = 0; i < meshes.Length; i++)
             {
                 var mesh = meshes[i];
+                //scene.MeshChunk[i] = mesh.Chunk;
                 scene.MeshInstanceCounts[i] = mesh.GetInstanceCount();
                 scene.MeshIndexCounts[i] = mesh.GetIndexCount();
                 scene.MeshVertexCounts[i] = mesh.GetVertexCount();
@@ -72,9 +76,9 @@ namespace Vim.Format.VimxNS.Conversion
             return (instanceMins, instanceMaxs);
         }
 
-        private static (int[], int[], int[]) GetInstanceFiles(this G3dMesh[] meshes)
+        private static (int[], int[], int[]) GetInstanceIds(this G3dMesh[] meshes)
         {
-            var instanceFiles = new List<int>();
+            var instanceMeshes = new List<int>();
             var instanceIndices = new List<int>();
             var instanceNodes = new List<int>();
 
@@ -84,12 +88,12 @@ namespace Vim.Format.VimxNS.Conversion
                 var mesh = meshes[i];
                 for (var j = 0; j < mesh.InstanceNodes.Length; j++)
                 {
-                    instanceFiles.Add(i);
+                    instanceMeshes.Add(i);
                     instanceIndices.Add(j);
                     instanceNodes.Add(mesh.InstanceNodes[j]);
                 }
             }
-            return (instanceFiles.ToArray(), instanceIndices.ToArray(), instanceNodes.ToArray());
+            return (instanceMeshes.ToArray(), instanceIndices.ToArray(), instanceNodes.ToArray());
         }
     }
 }

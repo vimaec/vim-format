@@ -10,7 +10,7 @@ namespace Vim.Format.VimxNS.Actions
 
         const string whiteleys = "_WHITELEYS-VIM-MAIN_detached.v1.2.42.vim";
 
-        [Test]
+        [Test, Explicit]
         public static void ConvertVimToVimx()
         {
             var input = VimFormatRepoPaths.GetLatestWolfordResidenceVim();

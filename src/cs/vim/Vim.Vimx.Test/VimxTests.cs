@@ -22,9 +22,9 @@ namespace Vim.Format.VimxNS.Tests
             vimx.ToBFast().Write(output);
 
             var result = Vimx.FromPath(output);
-            Assert.AreEqual(vimx.Scene.InstanceFiles, result.Scene.InstanceFiles);
+            Assert.AreEqual(vimx.Scene.InstanceMeshes, result.Scene.InstanceMeshes);
             Assert.AreEqual(vimx.Materials.MaterialColors, result.Materials.MaterialColors);
-            Assert.AreEqual(vimx.Meshes.Length, result.Meshes.Length);
+            Assert.AreEqual(vimx.Chunks.Length, result.Chunks.Length);
 
         }
 

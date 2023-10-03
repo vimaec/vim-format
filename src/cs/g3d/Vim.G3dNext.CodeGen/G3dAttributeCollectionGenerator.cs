@@ -15,7 +15,7 @@ namespace Vim.G3dNext.CodeGen
             {
                 var cb = new CodeBuilder();
 
-                cb.AppendLine("// AUTO-GENERATED FILE, DO NOT MODIFY.");
+                cb.AppendLine("// AUTO-GENERATED FILE, DO NOT MODIFY WACKO3.");
                 cb.AppendLine("// ReSharper disable All");
                 cb.AppendLine("using System;");
                 cb.AppendLine("using System.IO;");
@@ -181,12 +181,12 @@ namespace Vim.G3dNext.CodeGen
             {
                 var attribute = c.GetCustomAttribute<AttributeDescriptorAttribute>();
                 var typedDataType = attribute.GetTypedDataType();
-
+                var name = attribute.FormatClassName(c.Name);
                 return $@"
-        public {typedDataType}[] {attribute.FormatClassName(c.Name)}
+        public {typedDataType}[] {attribute.FormatClassName(name)}
         {{
-            get => Attributes.{c.Name}.TypedData;
-            set => Attributes.{c.Name}.TypedData = value;
+            get => Attributes.{name}.TypedData;
+            set => Attributes.{name}.TypedData = value;
         }}";}))
         }
     }}
@@ -222,19 +222,31 @@ namespace Vim.G3dNext.CodeGen
             }};
 
         // Named Attributes.
-{string.Join(Environment.NewLine, attributeClasses.Select(c => $@"
-        public {c} {c.Name}
+{string.Join(Environment.NewLine, attributeClasses.Select(c =>
+    {
+        var attribute = c.GetCustomAttribute<AttributeDescriptorAttribute>();
+        var name = attribute.FormatClassName(c.Name);
+        return $@"
+        public {c} {name}
         {{
             get => Map.TryGetValue({c}.AttributeName, out var attr) ? attr as {c} : default;
             set => Map[{c}.AttributeName] = value as IAttribute;
-        }}"))}
+        }}";
+    })
+)}
 
         /// <inheritdoc/>
         public IAttribute GetAttribute(Type attributeType)
         {{
-{string.Join(Environment.NewLine, attributeClasses.Select(c => $@"
-            if (attributeType == typeof({c}))
-                return {c.Name};"))}
+{string.Join(Environment.NewLine, attributeClasses.Select(c => {
+    var attribute = c.GetCustomAttribute<AttributeDescriptorAttribute>();
+    var name = attribute.FormatClassName(c.Name);
+    return $@"
+
+                if (attributeType == typeof({c}))
+                    return {name};";
+
+    }))}
 
             throw new ArgumentException(""Type {{attributeType.ToString()}} is not supported."");
         }}
@@ -285,6 +297,7 @@ namespace Vim.G3dNext.CodeGen
 {
     var ada = c.GetCustomAttribute<AttributeDescriptorAttribute>();
     var typedDataType = ada.GetTypedDataType();
+    var name = ada.FormatClassName(c.Name);
 
     switch (ada.AttributeType)
     {
@@ -294,10 +307,10 @@ namespace Vim.G3dNext.CodeGen
         case AttributeType.Index:
             return $@"
             {{
-                var maxIndex = GetAttribute({c.Name}.IndexInto).Data.Length - 1;
-                for (var i = 0; i < {c.Name}.TypedData.Length; ++i)
+                var maxIndex = GetAttribute({name}.IndexInto).Data.Length - 1;
+                for (var i = 0; i < {name}.TypedData.Length; ++i)
                 {{
-                    var index = {c.Name}.TypedData[i];
+                    var index = {name}.TypedData[i];
 
                     if (index == -1)
                         continue; // no relation.

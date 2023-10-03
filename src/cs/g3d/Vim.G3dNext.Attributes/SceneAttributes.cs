@@ -3,59 +3,69 @@
 namespace Vim.G3dNext.Attributes
 {
     [AttributeCollection(
-        typeof(InstanceFilesAttribute),
-        typeof(InstanceIndicesAttribute),
-        typeof(InstanceNodesAttribute),
-        typeof(InstanceGroupsAttribute),
-        typeof(InstanceTagsAttribute),
-        typeof(InstanceFlagsAttribute),
-        typeof(InstanceMinsAttribute),
-        typeof(InstanceMaxsAttribute),
-        typeof(MeshInstanceCountsAttribute),
-        typeof(MeshIndexCountsAttribute),
-        typeof(MeshVertexCountsAttribute),
-        typeof(MeshOpaqueIndexCountsAttribute),
-        typeof(MeshOpaqueVertexCountsAttribute)
+        typeof(SceneChunkCountAttribute),
+        typeof(SceneInstanceMeshesAttribute),
+        typeof(SceneInstanceTransformsAttribute),
+        typeof(SceneInstanceNodesAttribute),
+        typeof(SceneInstanceGroupsAttribute),
+        typeof(SceneInstanceTagsAttribute),
+        typeof(SceneInstanceFlagsAttribute),
+        typeof(SceneInstanceMinsAttribute),
+        typeof(SceneInstanceMaxsAttribute),
+        typeof(SceneMeshChunksAttribute),
+        typeof(SceneMeshInstanceCountsAttribute),
+        typeof(SceneMeshIndexCountsAttribute),
+        typeof(SceneMeshVertexCountsAttribute),
+        typeof(SceneMeshOpaqueIndexCountsAttribute),
+        typeof(SceneMeshOpaqueVertexCountsAttribute)
     )]
     public partial class SceneAttributeCollection // : IAttributeCollection
     {
 
     }
 
-    [AttributeDescriptor("g3d:instance:file:0:int32:1", AttributeType.Data)]
-    public partial class InstanceFilesAttribute { }
+    [AttributeDescriptor("Scene", "g3d:chunk:count:0:int32:1", AttributeType.Data)]
+    public partial class SceneChunkCountAttribute { }
 
-    [AttributeDescriptor("g3d:instance:node:0:int32:1", AttributeType.Data)]
-    public partial class InstanceNodesAttribute { }
+    [AttributeDescriptor("Scene", "g3d:instance:mesh:0:int32:1", AttributeType.Data)]
+    public partial class SceneInstanceMeshesAttribute { }
 
-    [AttributeDescriptor("g3d:instance:index:0:int32:1", AttributeType.Data)]
-    public partial class InstanceIndicesAttribute { }
+    [AttributeDescriptor("Scene", "g3d:instance:transform:0:int32:1", AttributeType.Data)]
+    public partial class SceneInstanceTransformsAttribute { }
 
-    [AttributeDescriptor("g3d:instance:group:0:int32:1", AttributeType.Data)]
-    public partial class InstanceGroupsAttribute { }
+    [AttributeDescriptor("Scene", "g3d:instance:node:0:int32:1", AttributeType.Data)]
+    public partial class SceneInstanceNodesAttribute { }
 
-    [AttributeDescriptor("g3d:instance:tag:0:int64:1", AttributeType.Data)]
-    public partial class InstanceTagsAttribute { }
+    [AttributeDescriptor("Scene", "g3d:instance:group:0:int32:1", AttributeType.Data)]
+    public partial class SceneInstanceGroupsAttribute { }
 
-    [AttributeDescriptor("g3d:instance:min:0:float32:3", AttributeType.Data, ArrayType = typeof(Vector3))]
-    public partial class InstanceMinsAttribute { }
+    [AttributeDescriptor("Scene", "g3d:instance:tag:0:int64:1", AttributeType.Data)]
+    public partial class SceneInstanceTagsAttribute { }
 
-    [AttributeDescriptor("g3d:instance:max:0:float32:3", AttributeType.Data, ArrayType = typeof(Vector3))]
-    public partial class InstanceMaxsAttribute { }
+    [AttributeDescriptor("Scene", "g3d:instance:flags:0:uint16:1", AttributeType.Data)]
+    public partial class SceneInstanceFlagsAttribute { }
 
-    [AttributeDescriptor("g3d:mesh:instancecount:0:int32:1", AttributeType.Data)]
-    public partial class MeshInstanceCountsAttribute { }
+    [AttributeDescriptor("Scene", "g3d:instance:min:0:float32:3", AttributeType.Data, ArrayType = typeof(Vector3))]
+    public partial class SceneInstanceMinsAttribute { }
 
-    [AttributeDescriptor("g3d:mesh:vertexcount:0:int32:1", AttributeType.Data)]
-    public partial class MeshVertexCountsAttribute { }
+    [AttributeDescriptor("Scene", "g3d:instance:max:0:float32:3", AttributeType.Data, ArrayType = typeof(Vector3))]
+    public partial class SceneInstanceMaxsAttribute { }
 
-    [AttributeDescriptor("g3d:mesh:indexcount:0:int32:1", AttributeType.Data)]
-    public partial class MeshIndexCountsAttribute { }
+    [AttributeDescriptor("Scene", "g3d:mesh:chunk:0:int32:1", AttributeType.Data)]
+    public partial class SceneMeshChunksAttribute { }
 
-    [AttributeDescriptor("g3d:mesh:opaquevertexcount:0:int32:1", AttributeType.Data)]
-    public partial class MeshOpaqueVertexCountsAttribute { }
+    [AttributeDescriptor("Scene", "g3d:mesh:instancecount:0:int32:1", AttributeType.Data)]
+    public partial class SceneMeshInstanceCountsAttribute { }
 
-    [AttributeDescriptor("g3d:mesh:opaqueindexcount:0:int32:1", AttributeType.Data)]
-    public partial class MeshOpaqueIndexCountsAttribute { }
+    [AttributeDescriptor("Scene", "g3d:mesh:vertexcount:0:int32:1", AttributeType.Data)]
+    public partial class SceneMeshVertexCountsAttribute { }
 
+    [AttributeDescriptor("Scene", "g3d:mesh:indexcount:0:int32:1", AttributeType.Data)]
+    public partial class SceneMeshIndexCountsAttribute { }
+
+    [AttributeDescriptor("Scene", "g3d:mesh:opaquevertexcount:0:int32:1", AttributeType.Data)]
+    public partial class SceneMeshOpaqueVertexCountsAttribute { }
+
+    [AttributeDescriptor("Scene", "g3d:mesh:opaqueindexcount:0:int32:1", AttributeType.Data)]
+    public partial class SceneMeshOpaqueIndexCountsAttribute { }
 }

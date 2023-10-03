@@ -1,4 +1,4 @@
-// AUTO-GENERATED FILE, DO NOT MODIFY.
+// AUTO-GENERATED FILE, DO NOT MODIFY WACKO3.
 // ReSharper disable All
 using System;
 using System.IO;
@@ -10,7 +10,7 @@ using Vim.BFastNextNS;
 namespace Vim.G3dNext.Attributes
 {
     
-    public partial class PositionsAttribute : IAttribute<Vim.Math3d.Vector3>
+    public partial class VimPositionsAttribute : IAttribute<Vim.Math3d.Vector3>
     {
         public const string AttributeName = "g3d:vertex:position:0:float32:3";
 
@@ -55,7 +55,7 @@ namespace Vim.G3dNext.Attributes
         }
     }
     
-    public partial class IndicesAttribute : IAttribute<System.Int32>
+    public partial class VimIndicesAttribute : IAttribute<System.Int32>
     {
         public const string AttributeName = "g3d:corner:index:0:int32:1";
 
@@ -84,7 +84,7 @@ namespace Vim.G3dNext.Attributes
             = AttributeType.Index;
 
         public Type IndexInto { get; }
-            = typeof(Vim.G3dNext.Attributes.PositionsAttribute);
+            = typeof(Vim.G3dNext.Attributes.VimPositionsAttribute);
 
         public System.Int32[] TypedData { get; set; }
             = Array.Empty<System.Int32>();
@@ -100,7 +100,7 @@ namespace Vim.G3dNext.Attributes
         }
     }
     
-    public partial class InstanceTransformsAttribute : IAttribute<Vim.Math3d.Matrix4x4>
+    public partial class VimInstanceTransformsAttribute : IAttribute<Vim.Math3d.Matrix4x4>
     {
         public const string AttributeName = "g3d:instance:transform:0:float32:16";
 
@@ -145,7 +145,7 @@ namespace Vim.G3dNext.Attributes
         }
     }
     
-    public partial class InstanceParentsAttribute : IAttribute<System.Int32>
+    public partial class VimInstanceParentsAttribute : IAttribute<System.Int32>
     {
         public const string AttributeName = "g3d:instance:parent:0:int32:1";
 
@@ -174,7 +174,7 @@ namespace Vim.G3dNext.Attributes
             = AttributeType.Index;
 
         public Type IndexInto { get; }
-            = typeof(Vim.G3dNext.Attributes.InstanceTransformsAttribute);
+            = typeof(Vim.G3dNext.Attributes.VimInstanceTransformsAttribute);
 
         public System.Int32[] TypedData { get; set; }
             = Array.Empty<System.Int32>();
@@ -190,7 +190,7 @@ namespace Vim.G3dNext.Attributes
         }
     }
     
-    public partial class InstanceFlagsAttribute : IAttribute<System.UInt16>
+    public partial class VimInstanceFlagsAttribute : IAttribute<System.UInt16>
     {
         public const string AttributeName = "g3d:instance:flags:0:uint16:1";
 
@@ -235,7 +235,7 @@ namespace Vim.G3dNext.Attributes
         }
     }
     
-    public partial class InstanceMeshesAttribute : IAttribute<System.Int32>
+    public partial class VimInstanceMeshesAttribute : IAttribute<System.Int32>
     {
         public const string AttributeName = "g3d:instance:mesh:0:int32:1";
 
@@ -264,7 +264,7 @@ namespace Vim.G3dNext.Attributes
             = AttributeType.Index;
 
         public Type IndexInto { get; }
-            = typeof(Vim.G3dNext.Attributes.MeshSubmeshOffsetsAttribute);
+            = typeof(Vim.G3dNext.Attributes.VimMeshSubmeshOffsetsAttribute);
 
         public System.Int32[] TypedData { get; set; }
             = Array.Empty<System.Int32>();
@@ -280,7 +280,7 @@ namespace Vim.G3dNext.Attributes
         }
     }
     
-    public partial class MeshSubmeshOffsetsAttribute : IAttribute<System.Int32>
+    public partial class VimMeshSubmeshOffsetsAttribute : IAttribute<System.Int32>
     {
         public const string AttributeName = "g3d:mesh:submeshoffset:0:int32:1";
 
@@ -309,7 +309,7 @@ namespace Vim.G3dNext.Attributes
             = AttributeType.Index;
 
         public Type IndexInto { get; }
-            = typeof(Vim.G3dNext.Attributes.SubmeshIndexOffsetsAttribute);
+            = typeof(Vim.G3dNext.Attributes.VimSubmeshIndexOffsetsAttribute);
 
         public System.Int32[] TypedData { get; set; }
             = Array.Empty<System.Int32>();
@@ -325,7 +325,7 @@ namespace Vim.G3dNext.Attributes
         }
     }
     
-    public partial class SubmeshIndexOffsetsAttribute : IAttribute<System.Int32>
+    public partial class VimSubmeshIndexOffsetsAttribute : IAttribute<System.Int32>
     {
         public const string AttributeName = "g3d:submesh:indexoffset:0:int32:1";
 
@@ -354,7 +354,7 @@ namespace Vim.G3dNext.Attributes
             = AttributeType.Index;
 
         public Type IndexInto { get; }
-            = typeof(Vim.G3dNext.Attributes.IndicesAttribute);
+            = typeof(Vim.G3dNext.Attributes.VimIndicesAttribute);
 
         public System.Int32[] TypedData { get; set; }
             = Array.Empty<System.Int32>();
@@ -370,7 +370,7 @@ namespace Vim.G3dNext.Attributes
         }
     }
     
-    public partial class SubmeshMaterialsAttribute : IAttribute<System.Int32>
+    public partial class VimSubmeshMaterialsAttribute : IAttribute<System.Int32>
     {
         public const string AttributeName = "g3d:submesh:material:0:int32:1";
 
@@ -399,7 +399,7 @@ namespace Vim.G3dNext.Attributes
             = AttributeType.Index;
 
         public Type IndexInto { get; }
-            = typeof(Vim.G3dNext.Attributes.MaterialColorsAttribute);
+            = typeof(Vim.G3dNext.Attributes.VimMaterialColorsAttribute);
 
         public System.Int32[] TypedData { get; set; }
             = Array.Empty<System.Int32>();
@@ -415,7 +415,142 @@ namespace Vim.G3dNext.Attributes
         }
     }
     
-    public partial class ShapeVerticesAttribute : IAttribute<Vim.Math3d.Vector3>
+    public partial class VimMaterialColorsAttribute : IAttribute<Vim.Math3d.Vector4>
+    {
+        public const string AttributeName = "g3d:material:color:0:float32:4";
+
+        public string Name
+            => AttributeName;
+
+        public int Count => TypedData?.Length ?? 0;
+
+        public void AddTo(BFastNext bfast)
+        {
+            if(TypedData != null)
+            {
+                bfast.SetArray(Name, TypedData);
+            }
+        }
+
+        public void ReadBFast(BFastNext bfast)
+        {
+            TypedData = bfast.GetArray<Vim.Math3d.Vector4>("g3d:material:color:0:float32:4");
+        }
+
+        public IAttributeDescriptor AttributeDescriptor { get; }
+            = new AttributeDescriptor(AttributeName);
+
+        public AttributeType AttributeType { get; }
+            = AttributeType.Data;
+
+        public Type IndexInto { get; }
+            = null;
+
+        public Vim.Math3d.Vector4[] TypedData { get; set; }
+            = Array.Empty<Vim.Math3d.Vector4>();
+
+        public Array Data
+            => TypedData;
+
+        public void Write(Stream stream)
+        {
+            if (TypedData == null || TypedData.Length == 0)
+                return;
+            stream.Write(TypedData);
+        }
+    }
+    
+    public partial class VimMaterialGlossinessAttribute : IAttribute<System.Single>
+    {
+        public const string AttributeName = "g3d:material:glossiness:0:float32:1";
+
+        public string Name
+            => AttributeName;
+
+        public int Count => TypedData?.Length ?? 0;
+
+        public void AddTo(BFastNext bfast)
+        {
+            if(TypedData != null)
+            {
+                bfast.SetArray(Name, TypedData);
+            }
+        }
+
+        public void ReadBFast(BFastNext bfast)
+        {
+            TypedData = bfast.GetArray<System.Single>("g3d:material:glossiness:0:float32:1");
+        }
+
+        public IAttributeDescriptor AttributeDescriptor { get; }
+            = new AttributeDescriptor(AttributeName);
+
+        public AttributeType AttributeType { get; }
+            = AttributeType.Data;
+
+        public Type IndexInto { get; }
+            = null;
+
+        public System.Single[] TypedData { get; set; }
+            = Array.Empty<System.Single>();
+
+        public Array Data
+            => TypedData;
+
+        public void Write(Stream stream)
+        {
+            if (TypedData == null || TypedData.Length == 0)
+                return;
+            stream.Write(TypedData);
+        }
+    }
+    
+    public partial class VimMaterialSmoothnessAttribute : IAttribute<System.Single>
+    {
+        public const string AttributeName = "g3d:material:smoothness:0:float32:1";
+
+        public string Name
+            => AttributeName;
+
+        public int Count => TypedData?.Length ?? 0;
+
+        public void AddTo(BFastNext bfast)
+        {
+            if(TypedData != null)
+            {
+                bfast.SetArray(Name, TypedData);
+            }
+        }
+
+        public void ReadBFast(BFastNext bfast)
+        {
+            TypedData = bfast.GetArray<System.Single>("g3d:material:smoothness:0:float32:1");
+        }
+
+        public IAttributeDescriptor AttributeDescriptor { get; }
+            = new AttributeDescriptor(AttributeName);
+
+        public AttributeType AttributeType { get; }
+            = AttributeType.Data;
+
+        public Type IndexInto { get; }
+            = null;
+
+        public System.Single[] TypedData { get; set; }
+            = Array.Empty<System.Single>();
+
+        public Array Data
+            => TypedData;
+
+        public void Write(Stream stream)
+        {
+            if (TypedData == null || TypedData.Length == 0)
+                return;
+            stream.Write(TypedData);
+        }
+    }
+    
+    public partial class VimShapeVerticesAttribute : IAttribute<Vim.Math3d.Vector3>
     {
         public const string AttributeName = "g3d:shapevertex:position:0:float32:3";
 
@@ -460,7 +595,7 @@ namespace Vim.G3dNext.Attributes
         }
     }
     
-    public partial class ShapeVertexOffsetsAttribute : IAttribute<System.Int32>
+    public partial class VimShapeVertexOffsetsAttribute : IAttribute<System.Int32>
     {
         public const string AttributeName = "g3d:shape:vertexoffset:0:int32:1";
 
@@ -489,7 +624,7 @@ namespace Vim.G3dNext.Attributes
             = AttributeType.Index;
 
         public Type IndexInto { get; }
-            = typeof(Vim.G3dNext.Attributes.ShapeVerticesAttribute);
+            = typeof(Vim.G3dNext.Attributes.VimShapeVerticesAttribute);
 
         public System.Int32[] TypedData { get; set; }
             = Array.Empty<System.Int32>();
@@ -505,7 +640,7 @@ namespace Vim.G3dNext.Attributes
         }
     }
     
-    public partial class ShapeColorsAttribute : IAttribute<Vim.Math3d.Vector4>
+    public partial class VimShapeColorsAttribute : IAttribute<Vim.Math3d.Vector4>
     {
         public const string AttributeName = "g3d:shape:color:0:float32:4";
 
@@ -550,7 +685,7 @@ namespace Vim.G3dNext.Attributes
         }
     }
     
-    public partial class ShapeWidthsAttribute : IAttribute<System.Single>
+    public partial class VimShapeWidthsAttribute : IAttribute<System.Single>
     {
         public const string AttributeName = "g3d:shape:width:0:float32:1";
 
@@ -730,9 +865,9 @@ namespace Vim.G3dNext.Attributes
         }
     }
     
-    public partial class InstanceFilesAttribute : IAttribute<System.Int32>
+    public partial class SceneChunkCountAttribute : IAttribute<System.Int32>
     {
-        public const string AttributeName = "g3d:instance:file:0:int32:1";
+        public const string AttributeName = "g3d:chunk:count:0:int32:1";
 
         public string Name
             => AttributeName;
@@ -749,7 +884,7 @@ namespace Vim.G3dNext.Attributes
 
         public void ReadBFast(BFastNext bfast)
         {
-            TypedData = bfast.GetArray<System.Int32>("g3d:instance:file:0:int32:1");
+            TypedData = bfast.GetArray<System.Int32>("g3d:chunk:count:0:int32:1");
         }
 
         public IAttributeDescriptor AttributeDescriptor { get; }
@@ -775,7 +910,97 @@ namespace Vim.G3dNext.Attributes
         }
     }
     
-    public partial class InstanceNodesAttribute : IAttribute<System.Int32>
+    public partial class SceneInstanceMeshesAttribute : IAttribute<System.Int32>
+    {
+        public const string AttributeName = "g3d:instance:mesh:0:int32:1";
+
+        public string Name
+            => AttributeName;
+
+        public int Count => TypedData?.Length ?? 0;
+
+        public void AddTo(BFastNext bfast)
+        {
+            if(TypedData != null)
+            {
+                bfast.SetArray(Name, TypedData);
+            }
+        }
+
+        public void ReadBFast(BFastNext bfast)
+        {
+            TypedData = bfast.GetArray<System.Int32>("g3d:instance:mesh:0:int32:1");
+        }
+
+        public IAttributeDescriptor AttributeDescriptor { get; }
+            = new AttributeDescriptor(AttributeName);
+
+        public AttributeType AttributeType { get; }
+            = AttributeType.Data;
+
+        public Type IndexInto { get; }
+            = null;
+
+        public System.Int32[] TypedData { get; set; }
+            = Array.Empty<System.Int32>();
+
+        public Array Data
+            => TypedData;
+
+        public void Write(Stream stream)
+        {
+            if (TypedData == null || TypedData.Length == 0)
+                return;
+            stream.Write(TypedData);
+        }
+    }
+    
+    public partial class SceneInstanceTransformsAttribute : IAttribute<System.Int32>
+    {
+        public const string AttributeName = "g3d:instance:transform:0:int32:1";
+
+        public string Name
+            => AttributeName;
+
+        public int Count => TypedData?.Length ?? 0;
+
+        public void AddTo(BFastNext bfast)
+        {
+            if(TypedData != null)
+            {
+                bfast.SetArray(Name, TypedData);
+            }
+        }
+
+        public void ReadBFast(BFastNext bfast)
+        {
+            TypedData = bfast.GetArray<System.Int32>("g3d:instance:transform:0:int32:1");
+        }
+
+        public IAttributeDescriptor AttributeDescriptor { get; }
+            = new AttributeDescriptor(AttributeName);
+
+        public AttributeType AttributeType { get; }
+            = AttributeType.Data;
+
+        public Type IndexInto { get; }
+            = null;
+
+        public System.Int32[] TypedData { get; set; }
+            = Array.Empty<System.Int32>();
+
+        public Array Data
+            => TypedData;
+
+        public void Write(Stream stream)
+        {
+            if (TypedData == null || TypedData.Length == 0)
+                return;
+            stream.Write(TypedData);
+        }
+    }
+    
+    public partial class SceneInstanceNodesAttribute : IAttribute<System.Int32>
     {
         public const string AttributeName = "g3d:instance:node:0:int32:1";
 
@@ -820,52 +1045,7 @@ namespace Vim.G3dNext.Attributes
         }
     }
     
-    public partial class InstanceIndicesAttribute : IAttribute<System.Int32>
-    {
-        public const string AttributeName = "g3d:instance:index:0:int32:1";
-
-        public string Name
-            => AttributeName;
-
-        public int Count => TypedData?.Length ?? 0;
-
-        public void AddTo(BFastNext bfast)
-        {
-            if(TypedData != null)
-            {
-                bfast.SetArray(Name, TypedData);
-            }
-        }
-
-        public void ReadBFast(BFastNext bfast)
-        {
-            TypedData = bfast.GetArray<System.Int32>("g3d:instance:index:0:int32:1");
-        }
-
-        public IAttributeDescriptor AttributeDescriptor { get; }
-            = new AttributeDescriptor(AttributeName);
-
-        public AttributeType AttributeType { get; }
-            = AttributeType.Data;
-
-        public Type IndexInto { get; }
-            = null;
-
-        public System.Int32[] TypedData { get; set; }
-            = Array.Empty<System.Int32>();
-
-        public Array Data
-            => TypedData;
-
-        public void Write(Stream stream)
-        {
-            if (TypedData == null || TypedData.Length == 0)
-                return;
-            stream.Write(TypedData);
-        }
-    }
-    
-    public partial class InstanceGroupsAttribute : IAttribute<System.Int32>
+    public partial class SceneInstanceGroupsAttribute : IAttribute<System.Int32>
     {
         public const string AttributeName = "g3d:instance:group:0:int32:1";
 
@@ -910,7 +1090,7 @@ namespace Vim.G3dNext.Attributes
         }
     }
     
-    public partial class InstanceTagsAttribute : IAttribute<System.Int64>
+    public partial class SceneInstanceTagsAttribute : IAttribute<System.Int64>
     {
         public const string AttributeName = "g3d:instance:tag:0:int64:1";
 
@@ -955,7 +1135,52 @@ namespace Vim.G3dNext.Attributes
         }
     }
     
-    public partial class InstanceMinsAttribute : IAttribute<Vim.Math3d.Vector3>
+    public partial class SceneInstanceFlagsAttribute : IAttribute<System.UInt16>
+    {
+        public const string AttributeName = "g3d:instance:flags:0:uint16:1";
+
+        public string Name
+            => AttributeName;
+
+        public int Count => TypedData?.Length ?? 0;
+
+        public void AddTo(BFastNext bfast)
+        {
+            if(TypedData != null)
+            {
+                bfast.SetArray(Name, TypedData);
+            }
+        }
+
+        public void ReadBFast(BFastNext bfast)
+        {
+            TypedData = bfast.GetArray<System.UInt16>("g3d:instance:flags:0:uint16:1");
+        }
+
+        public IAttributeDescriptor AttributeDescriptor { get; }
+            = new AttributeDescriptor(AttributeName);
+
+        public AttributeType AttributeType { get; }
+            = AttributeType.Data;
+
+        public Type IndexInto { get; }
+            = null;
+
+        public System.UInt16[] TypedData { get; set; }
+            = Array.Empty<System.UInt16>();
+
+        public Array Data
+            => TypedData;
+
+        public void Write(Stream stream)
+        {
+            if (TypedData == null || TypedData.Length == 0)
+                return;
+            stream.Write(TypedData);
+        }
+    }
+    
+    public partial class SceneInstanceMinsAttribute : IAttribute<Vim.Math3d.Vector3>
     {
         public const string AttributeName = "g3d:instance:min:0:float32:3";
 
@@ -1000,7 +1225,7 @@ namespace Vim.G3dNext.Attributes
         }
     }
     
-    public partial class InstanceMaxsAttribute : IAttribute<Vim.Math3d.Vector3>
+    public partial class SceneInstanceMaxsAttribute : IAttribute<Vim.Math3d.Vector3>
     {
         public const string AttributeName = "g3d:instance:max:0:float32:3";
 
@@ -1045,7 +1270,52 @@ namespace Vim.G3dNext.Attributes
         }
     }
     
-    public partial class MeshInstanceCountsAttribute : IAttribute<System.Int32>
+    public partial class SceneMeshChunksAttribute : IAttribute<System.Int32>
+    {
+        public const string AttributeName = "g3d:mesh:chunk:0:int32:1";
+
+        public string Name
+            => AttributeName;
+
+        public int Count => TypedData?.Length ?? 0;
+
+        public void AddTo(BFastNext bfast)
+        {
+            if(TypedData != null)
+            {
+                bfast.SetArray(Name, TypedData);
+            }
+        }
+
+        public void ReadBFast(BFastNext bfast)
+        {
+            TypedData = bfast.GetArray<System.Int32>("g3d:mesh:chunk:0:int32:1");
+        }
+
+        public IAttributeDescriptor AttributeDescriptor { get; }
+            = new AttributeDescriptor(AttributeName);
+
+        public AttributeType AttributeType { get; }
+            = AttributeType.Data;
+
+        public Type IndexInto { get; }
+            = null;
+
+        public System.Int32[] TypedData { get; set; }
+            = Array.Empty<System.Int32>();
+
+        public Array Data
+            => TypedData;
+
+        public void Write(Stream stream)
+        {
+            if (TypedData == null || TypedData.Length == 0)
+                return;
+            stream.Write(TypedData);
+        }
+    }
+    
+    public partial class SceneMeshInstanceCountsAttribute : IAttribute<System.Int32>
     {
         public const string AttributeName = "g3d:mesh:instancecount:0:int32:1";
 
@@ -1090,7 +1360,7 @@ namespace Vim.G3dNext.Attributes
         }
     }
     
-    public partial class MeshVertexCountsAttribute : IAttribute<System.Int32>
+    public partial class SceneMeshVertexCountsAttribute : IAttribute<System.Int32>
     {
         public const string AttributeName = "g3d:mesh:vertexcount:0:int32:1";
 
@@ -1135,7 +1405,7 @@ namespace Vim.G3dNext.Attributes
         }
     }
     
-    public partial class MeshIndexCountsAttribute : IAttribute<System.Int32>
+    public partial class SceneMeshIndexCountsAttribute : IAttribute<System.Int32>
     {
         public const string AttributeName = "g3d:mesh:indexcount:0:int32:1";
 
@@ -1180,7 +1450,7 @@ namespace Vim.G3dNext.Attributes
         }
     }
     
-    public partial class MeshOpaqueVertexCountsAttribute : IAttribute<System.Int32>
+    public partial class SceneMeshOpaqueVertexCountsAttribute : IAttribute<System.Int32>
     {
         public const string AttributeName = "g3d:mesh:opaquevertexcount:0:int32:1";
 
@@ -1225,7 +1495,7 @@ namespace Vim.G3dNext.Attributes
         }
     }
     
-    public partial class MeshOpaqueIndexCountsAttribute : IAttribute<System.Int32>
+    public partial class SceneMeshOpaqueIndexCountsAttribute : IAttribute<System.Int32>
     {
         public const string AttributeName = "g3d:mesh:opaqueindexcount:0:int32:1";
 
@@ -1389,7 +1659,7 @@ namespace Vim.G3dNext.Attributes
             = AttributeType.Index;
 
         public Type IndexInto { get; }
-            = typeof(Vim.G3dNext.Attributes.IndicesAttribute);
+            = typeof(Vim.G3dNext.Attributes.MeshIndicesAttribute);
 
         public System.Int32[] TypedData { get; set; }
             = Array.Empty<System.Int32>();
@@ -1434,7 +1704,7 @@ namespace Vim.G3dNext.Attributes
             = AttributeType.Index;
 
         public Type IndexInto { get; }
-            = typeof(Vim.G3dNext.Attributes.IndicesAttribute);
+            = typeof(Vim.G3dNext.Attributes.MeshIndicesAttribute);
 
         public System.Int32[] TypedData { get; set; }
             = Array.Empty<System.Int32>();
@@ -1479,7 +1749,7 @@ namespace Vim.G3dNext.Attributes
             = AttributeType.Index;
 
         public Type IndexInto { get; }
-            = typeof(Vim.G3dNext.Attributes.MaterialColorsAttribute);
+            = null;
 
         public System.Int32[] TypedData { get; set; }
             = Array.Empty<System.Int32>();
@@ -1569,7 +1839,7 @@ namespace Vim.G3dNext.Attributes
             = AttributeType.Index;
 
         public Type IndexInto { get; }
-            = typeof(Vim.G3dNext.Attributes.PositionsAttribute);
+            = typeof(Vim.G3dNext.Attributes.MeshPositionsAttribute);
 
         public System.Int32[] TypedData { get; set; }
             = Array.Empty<System.Int32>();
@@ -1614,98 +1884,98 @@ namespace Vim.G3dNext.Attributes
         
         public Vim.Math3d.Vector3[] Positions
         {
-            get => Attributes.PositionsAttribute.TypedData;
-            set => Attributes.PositionsAttribute.TypedData = value;
+            get => Attributes.Positions.TypedData;
+            set => Attributes.Positions.TypedData = value;
         }
 
         public System.Int32[] Indices
         {
-            get => Attributes.IndicesAttribute.TypedData;
-            set => Attributes.IndicesAttribute.TypedData = value;
+            get => Attributes.Indices.TypedData;
+            set => Attributes.Indices.TypedData = value;
         }
 
         public Vim.Math3d.Matrix4x4[] InstanceTransforms
         {
-            get => Attributes.InstanceTransformsAttribute.TypedData;
-            set => Attributes.InstanceTransformsAttribute.TypedData = value;
+            get => Attributes.InstanceTransforms.TypedData;
+            set => Attributes.InstanceTransforms.TypedData = value;
         }
 
         public System.Int32[] InstanceParents
         {
-            get => Attributes.InstanceParentsAttribute.TypedData;
-            set => Attributes.InstanceParentsAttribute.TypedData = value;
+            get => Attributes.InstanceParents.TypedData;
+            set => Attributes.InstanceParents.TypedData = value;
         }
 
         public System.UInt16[] InstanceFlags
         {
-            get => Attributes.InstanceFlagsAttribute.TypedData;
-            set => Attributes.InstanceFlagsAttribute.TypedData = value;
+            get => Attributes.InstanceFlags.TypedData;
+            set => Attributes.InstanceFlags.TypedData = value;
         }
 
         public System.Int32[] InstanceMeshes
         {
-            get => Attributes.InstanceMeshesAttribute.TypedData;
-            set => Attributes.InstanceMeshesAttribute.TypedData = value;
+            get => Attributes.InstanceMeshes.TypedData;
+            set => Attributes.InstanceMeshes.TypedData = value;
         }
 
         public System.Int32[] MeshSubmeshOffsets
         {
-            get => Attributes.MeshSubmeshOffsetsAttribute.TypedData;
-            set => Attributes.MeshSubmeshOffsetsAttribute.TypedData = value;
+            get => Attributes.MeshSubmeshOffsets.TypedData;
+            set => Attributes.MeshSubmeshOffsets.TypedData = value;
         }
 
         public System.Int32[] SubmeshIndexOffsets
         {
-            get => Attributes.SubmeshIndexOffsetsAttribute.TypedData;
-            set => Attributes.SubmeshIndexOffsetsAttribute.TypedData = value;
+            get => Attributes.SubmeshIndexOffsets.TypedData;
+            set => Attributes.SubmeshIndexOffsets.TypedData = value;
         }
 
         public System.Int32[] SubmeshMaterials
         {
-            get => Attributes.SubmeshMaterialsAttribute.TypedData;
-            set => Attributes.SubmeshMaterialsAttribute.TypedData = value;
+            get => Attributes.SubmeshMaterials.TypedData;
+            set => Attributes.SubmeshMaterials.TypedData = value;
         }
 
         public Vim.Math3d.Vector4[] MaterialColors
         {
-            get => Attributes.MaterialColorsAttribute.TypedData;
-            set => Attributes.MaterialColorsAttribute.TypedData = value;
+            get => Attributes.MaterialColors.TypedData;
+            set => Attributes.MaterialColors.TypedData = value;
         }
 
         public System.Single[] MaterialGlossiness
         {
-            get => Attributes.MaterialGlossinessAttribute.TypedData;
-            set => Attributes.MaterialGlossinessAttribute.TypedData = value;
+            get => Attributes.MaterialGlossiness.TypedData;
+            set => Attributes.MaterialGlossiness.TypedData = value;
         }
 
         public System.Single[] MaterialSmoothness
         {
-            get => Attributes.MaterialSmoothnessAttribute.TypedData;
-            set => Attributes.MaterialSmoothnessAttribute.TypedData = value;
+            get => Attributes.MaterialSmoothness.TypedData;
+            set => Attributes.MaterialSmoothness.TypedData = value;
         }
 
         public Vim.Math3d.Vector3[] ShapeVertices
         {
-            get => Attributes.ShapeVerticesAttribute.TypedData;
-            set => Attributes.ShapeVerticesAttribute.TypedData = value;
+            get => Attributes.ShapeVertices.TypedData;
+            set => Attributes.ShapeVertices.TypedData = value;
         }
 
         public System.Int32[] ShapeVertexOffsets
         {
-            get => Attributes.ShapeVertexOffsetsAttribute.TypedData;
-            set => Attributes.ShapeVertexOffsetsAttribute.TypedData = value;
+            get => Attributes.ShapeVertexOffsets.TypedData;
+            set => Attributes.ShapeVertexOffsets.TypedData = value;
         }
 
         public Vim.Math3d.Vector4[] ShapeColors
         {
-            get => Attributes.ShapeColorsAttribute.TypedData;
-            set => Attributes.ShapeColorsAttribute.TypedData = value;
+            get => Attributes.ShapeColors.TypedData;
+            set => Attributes.ShapeColors.TypedData = value;
         }
 
         public System.Single[] ShapeWidths
         {
-            get => Attributes.ShapeWidthsAttribute.TypedData;
-            set => Attributes.ShapeWidthsAttribute.TypedData = value;
+            get => Attributes.ShapeWidths.TypedData;
+            set => Attributes.ShapeWidths.TypedData = value;
         }
     }
 
@@ -1733,173 +2003,189 @@ namespace Vim.G3dNext.Attributes
         public IDictionary<string, IAttribute> Map { get; }
             = new Dictionary<string, IAttribute>
             {
-                [Vim.G3dNext.Attributes.PositionsAttribute.AttributeName] = new Vim.G3dNext.Attributes.PositionsAttribute(),
-                [Vim.G3dNext.Attributes.IndicesAttribute.AttributeName] = new Vim.G3dNext.Attributes.IndicesAttribute(),
-                [Vim.G3dNext.Attributes.InstanceTransformsAttribute.AttributeName] = new Vim.G3dNext.Attributes.InstanceTransformsAttribute(),
-                [Vim.G3dNext.Attributes.InstanceParentsAttribute.AttributeName] = new Vim.G3dNext.Attributes.InstanceParentsAttribute(),
-                [Vim.G3dNext.Attributes.InstanceFlagsAttribute.AttributeName] = new Vim.G3dNext.Attributes.InstanceFlagsAttribute(),
-                [Vim.G3dNext.Attributes.InstanceMeshesAttribute.AttributeName] = new Vim.G3dNext.Attributes.InstanceMeshesAttribute(),
-                [Vim.G3dNext.Attributes.MeshSubmeshOffsetsAttribute.AttributeName] = new Vim.G3dNext.Attributes.MeshSubmeshOffsetsAttribute(),
-                [Vim.G3dNext.Attributes.SubmeshIndexOffsetsAttribute.AttributeName] = new Vim.G3dNext.Attributes.SubmeshIndexOffsetsAttribute(),
-                [Vim.G3dNext.Attributes.SubmeshMaterialsAttribute.AttributeName] = new Vim.G3dNext.Attributes.SubmeshMaterialsAttribute(),
-                [Vim.G3dNext.Attributes.MaterialColorsAttribute.AttributeName] = new Vim.G3dNext.Attributes.MaterialColorsAttribute(),
-                [Vim.G3dNext.Attributes.MaterialGlossinessAttribute.AttributeName] = new Vim.G3dNext.Attributes.MaterialGlossinessAttribute(),
-                [Vim.G3dNext.Attributes.MaterialSmoothnessAttribute.AttributeName] = new Vim.G3dNext.Attributes.MaterialSmoothnessAttribute(),
-                [Vim.G3dNext.Attributes.ShapeVerticesAttribute.AttributeName] = new Vim.G3dNext.Attributes.ShapeVerticesAttribute(),
-                [Vim.G3dNext.Attributes.ShapeVertexOffsetsAttribute.AttributeName] = new Vim.G3dNext.Attributes.ShapeVertexOffsetsAttribute(),
-                [Vim.G3dNext.Attributes.ShapeColorsAttribute.AttributeName] = new Vim.G3dNext.Attributes.ShapeColorsAttribute(),
-                [Vim.G3dNext.Attributes.ShapeWidthsAttribute.AttributeName] = new Vim.G3dNext.Attributes.ShapeWidthsAttribute(),
+                [Vim.G3dNext.Attributes.VimPositionsAttribute.AttributeName] = new Vim.G3dNext.Attributes.VimPositionsAttribute(),
+                [Vim.G3dNext.Attributes.VimIndicesAttribute.AttributeName] = new Vim.G3dNext.Attributes.VimIndicesAttribute(),
+                [Vim.G3dNext.Attributes.VimInstanceTransformsAttribute.AttributeName] = new Vim.G3dNext.Attributes.VimInstanceTransformsAttribute(),
+                [Vim.G3dNext.Attributes.VimInstanceParentsAttribute.AttributeName] = new Vim.G3dNext.Attributes.VimInstanceParentsAttribute(),
+                [Vim.G3dNext.Attributes.VimInstanceFlagsAttribute.AttributeName] = new Vim.G3dNext.Attributes.VimInstanceFlagsAttribute(),
+                [Vim.G3dNext.Attributes.VimInstanceMeshesAttribute.AttributeName] = new Vim.G3dNext.Attributes.VimInstanceMeshesAttribute(),
+                [Vim.G3dNext.Attributes.VimMeshSubmeshOffsetsAttribute.AttributeName] = new Vim.G3dNext.Attributes.VimMeshSubmeshOffsetsAttribute(),
+                [Vim.G3dNext.Attributes.VimSubmeshIndexOffsetsAttribute.AttributeName] = new Vim.G3dNext.Attributes.VimSubmeshIndexOffsetsAttribute(),
+                [Vim.G3dNext.Attributes.VimSubmeshMaterialsAttribute.AttributeName] = new Vim.G3dNext.Attributes.VimSubmeshMaterialsAttribute(),
+                [Vim.G3dNext.Attributes.VimMaterialColorsAttribute.AttributeName] = new Vim.G3dNext.Attributes.VimMaterialColorsAttribute(),
+                [Vim.G3dNext.Attributes.VimMaterialGlossinessAttribute.AttributeName] = new Vim.G3dNext.Attributes.VimMaterialGlossinessAttribute(),
+                [Vim.G3dNext.Attributes.VimMaterialSmoothnessAttribute.AttributeName] = new Vim.G3dNext.Attributes.VimMaterialSmoothnessAttribute(),
+                [Vim.G3dNext.Attributes.VimShapeVerticesAttribute.AttributeName] = new Vim.G3dNext.Attributes.VimShapeVerticesAttribute(),
+                [Vim.G3dNext.Attributes.VimShapeVertexOffsetsAttribute.AttributeName] = new Vim.G3dNext.Attributes.VimShapeVertexOffsetsAttribute(),
+                [Vim.G3dNext.Attributes.VimShapeColorsAttribute.AttributeName] = new Vim.G3dNext.Attributes.VimShapeColorsAttribute(),
+                [Vim.G3dNext.Attributes.VimShapeWidthsAttribute.AttributeName] = new Vim.G3dNext.Attributes.VimShapeWidthsAttribute(),
             };
 
         // Named Attributes.
 
-        public Vim.G3dNext.Attributes.PositionsAttribute PositionsAttribute
+        public Vim.G3dNext.Attributes.VimPositionsAttribute Positions
         {
-            get => Map.TryGetValue(Vim.G3dNext.Attributes.PositionsAttribute.AttributeName, out var attr) ? attr as Vim.G3dNext.Attributes.PositionsAttribute : default;
-            set => Map[Vim.G3dNext.Attributes.PositionsAttribute.AttributeName] = value as IAttribute;
+            get => Map.TryGetValue(Vim.G3dNext.Attributes.VimPositionsAttribute.AttributeName, out var attr) ? attr as Vim.G3dNext.Attributes.VimPositionsAttribute : default;
+            set => Map[Vim.G3dNext.Attributes.VimPositionsAttribute.AttributeName] = value as IAttribute;
         }
 
-        public Vim.G3dNext.Attributes.IndicesAttribute IndicesAttribute
+        public Vim.G3dNext.Attributes.VimIndicesAttribute Indices
         {
-            get => Map.TryGetValue(Vim.G3dNext.Attributes.IndicesAttribute.AttributeName, out var attr) ? attr as Vim.G3dNext.Attributes.IndicesAttribute : default;
-            set => Map[Vim.G3dNext.Attributes.IndicesAttribute.AttributeName] = value as IAttribute;
+            get => Map.TryGetValue(Vim.G3dNext.Attributes.VimIndicesAttribute.AttributeName, out var attr) ? attr as Vim.G3dNext.Attributes.VimIndicesAttribute : default;
+            set => Map[Vim.G3dNext.Attributes.VimIndicesAttribute.AttributeName] = value as IAttribute;
         }
 
-        public Vim.G3dNext.Attributes.InstanceTransformsAttribute InstanceTransformsAttribute
+        public Vim.G3dNext.Attributes.VimInstanceTransformsAttribute InstanceTransforms
         {
-            get => Map.TryGetValue(Vim.G3dNext.Attributes.InstanceTransformsAttribute.AttributeName, out var attr) ? attr as Vim.G3dNext.Attributes.InstanceTransformsAttribute : default;
-            set => Map[Vim.G3dNext.Attributes.InstanceTransformsAttribute.AttributeName] = value as IAttribute;
+            get => Map.TryGetValue(Vim.G3dNext.Attributes.VimInstanceTransformsAttribute.AttributeName, out var attr) ? attr as Vim.G3dNext.Attributes.VimInstanceTransformsAttribute : default;
+            set => Map[Vim.G3dNext.Attributes.VimInstanceTransformsAttribute.AttributeName] = value as IAttribute;
         }
 
-        public Vim.G3dNext.Attributes.InstanceParentsAttribute InstanceParentsAttribute
+        public Vim.G3dNext.Attributes.VimInstanceParentsAttribute InstanceParents
         {
-            get => Map.TryGetValue(Vim.G3dNext.Attributes.InstanceParentsAttribute.AttributeName, out var attr) ? attr as Vim.G3dNext.Attributes.InstanceParentsAttribute : default;
-            set => Map[Vim.G3dNext.Attributes.InstanceParentsAttribute.AttributeName] = value as IAttribute;
+            get => Map.TryGetValue(Vim.G3dNext.Attributes.VimInstanceParentsAttribute.AttributeName, out var attr) ? attr as Vim.G3dNext.Attributes.VimInstanceParentsAttribute : default;
+            set => Map[Vim.G3dNext.Attributes.VimInstanceParentsAttribute.AttributeName] = value as IAttribute;
         }
 
-        public Vim.G3dNext.Attributes.InstanceFlagsAttribute InstanceFlagsAttribute
+        public Vim.G3dNext.Attributes.VimInstanceFlagsAttribute InstanceFlags
         {
-            get => Map.TryGetValue(Vim.G3dNext.Attributes.InstanceFlagsAttribute.AttributeName, out var attr) ? attr as Vim.G3dNext.Attributes.InstanceFlagsAttribute : default;
-            set => Map[Vim.G3dNext.Attributes.InstanceFlagsAttribute.AttributeName] = value as IAttribute;
+            get => Map.TryGetValue(Vim.G3dNext.Attributes.VimInstanceFlagsAttribute.AttributeName, out var attr) ? attr as Vim.G3dNext.Attributes.VimInstanceFlagsAttribute : default;
+            set => Map[Vim.G3dNext.Attributes.VimInstanceFlagsAttribute.AttributeName] = value as IAttribute;
         }
 
-        public Vim.G3dNext.Attributes.InstanceMeshesAttribute InstanceMeshesAttribute
+        public Vim.G3dNext.Attributes.VimInstanceMeshesAttribute InstanceMeshes
         {
-            get => Map.TryGetValue(Vim.G3dNext.Attributes.InstanceMeshesAttribute.AttributeName, out var attr) ? attr as Vim.G3dNext.Attributes.InstanceMeshesAttribute : default;
-            set => Map[Vim.G3dNext.Attributes.InstanceMeshesAttribute.AttributeName] = value as IAttribute;
+            get => Map.TryGetValue(Vim.G3dNext.Attributes.VimInstanceMeshesAttribute.AttributeName, out var attr) ? attr as Vim.G3dNext.Attributes.VimInstanceMeshesAttribute : default;
+            set => Map[Vim.G3dNext.Attributes.VimInstanceMeshesAttribute.AttributeName] = value as IAttribute;
         }
 
-        public Vim.G3dNext.Attributes.MeshSubmeshOffsetsAttribute MeshSubmeshOffsetsAttribute
+        public Vim.G3dNext.Attributes.VimMeshSubmeshOffsetsAttribute MeshSubmeshOffsets
         {
-            get => Map.TryGetValue(Vim.G3dNext.Attributes.MeshSubmeshOffsetsAttribute.AttributeName, out var attr) ? attr as Vim.G3dNext.Attributes.MeshSubmeshOffsetsAttribute : default;
-            set => Map[Vim.G3dNext.Attributes.MeshSubmeshOffsetsAttribute.AttributeName] = value as IAttribute;
+            get => Map.TryGetValue(Vim.G3dNext.Attributes.VimMeshSubmeshOffsetsAttribute.AttributeName, out var attr) ? attr as Vim.G3dNext.Attributes.VimMeshSubmeshOffsetsAttribute : default;
+            set => Map[Vim.G3dNext.Attributes.VimMeshSubmeshOffsetsAttribute.AttributeName] = value as IAttribute;
         }
 
-        public Vim.G3dNext.Attributes.SubmeshIndexOffsetsAttribute SubmeshIndexOffsetsAttribute
+        public Vim.G3dNext.Attributes.VimSubmeshIndexOffsetsAttribute SubmeshIndexOffsets
         {
-            get => Map.TryGetValue(Vim.G3dNext.Attributes.SubmeshIndexOffsetsAttribute.AttributeName, out var attr) ? attr as Vim.G3dNext.Attributes.SubmeshIndexOffsetsAttribute : default;
-            set => Map[Vim.G3dNext.Attributes.SubmeshIndexOffsetsAttribute.AttributeName] = value as IAttribute;
+            get => Map.TryGetValue(Vim.G3dNext.Attributes.VimSubmeshIndexOffsetsAttribute.AttributeName, out var attr) ? attr as Vim.G3dNext.Attributes.VimSubmeshIndexOffsetsAttribute : default;
+            set => Map[Vim.G3dNext.Attributes.VimSubmeshIndexOffsetsAttribute.AttributeName] = value as IAttribute;
         }
 
-        public Vim.G3dNext.Attributes.SubmeshMaterialsAttribute SubmeshMaterialsAttribute
+        public Vim.G3dNext.Attributes.VimSubmeshMaterialsAttribute SubmeshMaterials
         {
-            get => Map.TryGetValue(Vim.G3dNext.Attributes.SubmeshMaterialsAttribute.AttributeName, out var attr) ? attr as Vim.G3dNext.Attributes.SubmeshMaterialsAttribute : default;
-            set => Map[Vim.G3dNext.Attributes.SubmeshMaterialsAttribute.AttributeName] = value as IAttribute;
+            get => Map.TryGetValue(Vim.G3dNext.Attributes.VimSubmeshMaterialsAttribute.AttributeName, out var attr) ? attr as Vim.G3dNext.Attributes.VimSubmeshMaterialsAttribute : default;
+            set => Map[Vim.G3dNext.Attributes.VimSubmeshMaterialsAttribute.AttributeName] = value as IAttribute;
         }
 
-        public Vim.G3dNext.Attributes.MaterialColorsAttribute MaterialColorsAttribute
+        public Vim.G3dNext.Attributes.VimMaterialColorsAttribute MaterialColors
         {
-            get => Map.TryGetValue(Vim.G3dNext.Attributes.MaterialColorsAttribute.AttributeName, out var attr) ? attr as Vim.G3dNext.Attributes.MaterialColorsAttribute : default;
-            set => Map[Vim.G3dNext.Attributes.MaterialColorsAttribute.AttributeName] = value as IAttribute;
+            get => Map.TryGetValue(Vim.G3dNext.Attributes.VimMaterialColorsAttribute.AttributeName, out var attr) ? attr as Vim.G3dNext.Attributes.VimMaterialColorsAttribute : default;
+            set => Map[Vim.G3dNext.Attributes.VimMaterialColorsAttribute.AttributeName] = value as IAttribute;
         }
 
-        public Vim.G3dNext.Attributes.MaterialGlossinessAttribute MaterialGlossinessAttribute
+        public Vim.G3dNext.Attributes.VimMaterialGlossinessAttribute MaterialGlossiness
         {
-            get => Map.TryGetValue(Vim.G3dNext.Attributes.MaterialGlossinessAttribute.AttributeName, out var attr) ? attr as Vim.G3dNext.Attributes.MaterialGlossinessAttribute : default;
-            set => Map[Vim.G3dNext.Attributes.MaterialGlossinessAttribute.AttributeName] = value as IAttribute;
+            get => Map.TryGetValue(Vim.G3dNext.Attributes.VimMaterialGlossinessAttribute.AttributeName, out var attr) ? attr as Vim.G3dNext.Attributes.VimMaterialGlossinessAttribute : default;
+            set => Map[Vim.G3dNext.Attributes.VimMaterialGlossinessAttribute.AttributeName] = value as IAttribute;
         }
 
-        public Vim.G3dNext.Attributes.MaterialSmoothnessAttribute MaterialSmoothnessAttribute
+        public Vim.G3dNext.Attributes.VimMaterialSmoothnessAttribute MaterialSmoothness
         {
-            get => Map.TryGetValue(Vim.G3dNext.Attributes.MaterialSmoothnessAttribute.AttributeName, out var attr) ? attr as Vim.G3dNext.Attributes.MaterialSmoothnessAttribute : default;
-            set => Map[Vim.G3dNext.Attributes.MaterialSmoothnessAttribute.AttributeName] = value as IAttribute;
+            get => Map.TryGetValue(Vim.G3dNext.Attributes.VimMaterialSmoothnessAttribute.AttributeName, out var attr) ? attr as Vim.G3dNext.Attributes.VimMaterialSmoothnessAttribute : default;
+            set => Map[Vim.G3dNext.Attributes.VimMaterialSmoothnessAttribute.AttributeName] = value as IAttribute;
         }
 
-        public Vim.G3dNext.Attributes.ShapeVerticesAttribute ShapeVerticesAttribute
+        public Vim.G3dNext.Attributes.VimShapeVerticesAttribute ShapeVertices
         {
-            get => Map.TryGetValue(Vim.G3dNext.Attributes.ShapeVerticesAttribute.AttributeName, out var attr) ? attr as Vim.G3dNext.Attributes.ShapeVerticesAttribute : default;
-            set => Map[Vim.G3dNext.Attributes.ShapeVerticesAttribute.AttributeName] = value as IAttribute;
+            get => Map.TryGetValue(Vim.G3dNext.Attributes.VimShapeVerticesAttribute.AttributeName, out var attr) ? attr as Vim.G3dNext.Attributes.VimShapeVerticesAttribute : default;
+            set => Map[Vim.G3dNext.Attributes.VimShapeVerticesAttribute.AttributeName] = value as IAttribute;
         }
 
-        public Vim.G3dNext.Attributes.ShapeVertexOffsetsAttribute ShapeVertexOffsetsAttribute
+        public Vim.G3dNext.Attributes.VimShapeVertexOffsetsAttribute ShapeVertexOffsets
         {
-            get => Map.TryGetValue(Vim.G3dNext.Attributes.ShapeVertexOffsetsAttribute.AttributeName, out var attr) ? attr as Vim.G3dNext.Attributes.ShapeVertexOffsetsAttribute : default;
-            set => Map[Vim.G3dNext.Attributes.ShapeVertexOffsetsAttribute.AttributeName] = value as IAttribute;
+            get => Map.TryGetValue(Vim.G3dNext.Attributes.VimShapeVertexOffsetsAttribute.AttributeName, out var attr) ? attr as Vim.G3dNext.Attributes.VimShapeVertexOffsetsAttribute : default;
+            set => Map[Vim.G3dNext.Attributes.VimShapeVertexOffsetsAttribute.AttributeName] = value as IAttribute;
         }
 
-        public Vim.G3dNext.Attributes.ShapeColorsAttribute ShapeColorsAttribute
+        public Vim.G3dNext.Attributes.VimShapeColorsAttribute ShapeColors
         {
-            get => Map.TryGetValue(Vim.G3dNext.Attributes.ShapeColorsAttribute.AttributeName, out var attr) ? attr as Vim.G3dNext.Attributes.ShapeColorsAttribute : default;
-            set => Map[Vim.G3dNext.Attributes.ShapeColorsAttribute.AttributeName] = value as IAttribute;
+            get => Map.TryGetValue(Vim.G3dNext.Attributes.VimShapeColorsAttribute.AttributeName, out var attr) ? attr as Vim.G3dNext.Attributes.VimShapeColorsAttribute : default;
+            set => Map[Vim.G3dNext.Attributes.VimShapeColorsAttribute.AttributeName] = value as IAttribute;
         }
 
-        public Vim.G3dNext.Attributes.ShapeWidthsAttribute ShapeWidthsAttribute
+        public Vim.G3dNext.Attributes.VimShapeWidthsAttribute ShapeWidths
         {
-            get => Map.TryGetValue(Vim.G3dNext.Attributes.ShapeWidthsAttribute.AttributeName, out var attr) ? attr as Vim.G3dNext.Attributes.ShapeWidthsAttribute : default;
-            set => Map[Vim.G3dNext.Attributes.ShapeWidthsAttribute.AttributeName] = value as IAttribute;
+            get => Map.TryGetValue(Vim.G3dNext.Attributes.VimShapeWidthsAttribute.AttributeName, out var attr) ? attr as Vim.G3dNext.Attributes.VimShapeWidthsAttribute : default;
+            set => Map[Vim.G3dNext.Attributes.VimShapeWidthsAttribute.AttributeName] = value as IAttribute;
         }
 
         /// <inheritdoc/>
         public IAttribute GetAttribute(Type attributeType)
         {
 
-            if (attributeType == typeof(Vim.G3dNext.Attributes.PositionsAttribute))
-                return PositionsAttribute;
 
-            if (attributeType == typeof(Vim.G3dNext.Attributes.IndicesAttribute))
-                return IndicesAttribute;
+                if (attributeType == typeof(Vim.G3dNext.Attributes.VimPositionsAttribute))
+                    return Positions;
 
-            if (attributeType == typeof(Vim.G3dNext.Attributes.InstanceTransformsAttribute))
-                return InstanceTransformsAttribute;
 
-            if (attributeType == typeof(Vim.G3dNext.Attributes.InstanceParentsAttribute))
-                return InstanceParentsAttribute;
+                if (attributeType == typeof(Vim.G3dNext.Attributes.VimIndicesAttribute))
+                    return Indices;
 
-            if (attributeType == typeof(Vim.G3dNext.Attributes.InstanceFlagsAttribute))
-                return InstanceFlagsAttribute;
 
-            if (attributeType == typeof(Vim.G3dNext.Attributes.InstanceMeshesAttribute))
-                return InstanceMeshesAttribute;
+                if (attributeType == typeof(Vim.G3dNext.Attributes.VimInstanceTransformsAttribute))
+                    return InstanceTransforms;
 
-            if (attributeType == typeof(Vim.G3dNext.Attributes.MeshSubmeshOffsetsAttribute))
-                return MeshSubmeshOffsetsAttribute;
 
-            if (attributeType == typeof(Vim.G3dNext.Attributes.SubmeshIndexOffsetsAttribute))
-                return SubmeshIndexOffsetsAttribute;
+                if (attributeType == typeof(Vim.G3dNext.Attributes.VimInstanceParentsAttribute))
+                    return InstanceParents;
 
-            if (attributeType == typeof(Vim.G3dNext.Attributes.SubmeshMaterialsAttribute))
-                return SubmeshMaterialsAttribute;
 
-            if (attributeType == typeof(Vim.G3dNext.Attributes.MaterialColorsAttribute))
-                return MaterialColorsAttribute;
+                if (attributeType == typeof(Vim.G3dNext.Attributes.VimInstanceFlagsAttribute))
+                    return InstanceFlags;
 
-            if (attributeType == typeof(Vim.G3dNext.Attributes.MaterialGlossinessAttribute))
-                return MaterialGlossinessAttribute;
 
-            if (attributeType == typeof(Vim.G3dNext.Attributes.MaterialSmoothnessAttribute))
-                return MaterialSmoothnessAttribute;
+                if (attributeType == typeof(Vim.G3dNext.Attributes.VimInstanceMeshesAttribute))
+                    return InstanceMeshes;
 
-            if (attributeType == typeof(Vim.G3dNext.Attributes.ShapeVerticesAttribute))
-                return ShapeVerticesAttribute;
 
-            if (attributeType == typeof(Vim.G3dNext.Attributes.ShapeVertexOffsetsAttribute))
-                return ShapeVertexOffsetsAttribute;
+                if (attributeType == typeof(Vim.G3dNext.Attributes.VimMeshSubmeshOffsetsAttribute))
+                    return MeshSubmeshOffsets;
 
-            if (attributeType == typeof(Vim.G3dNext.Attributes.ShapeColorsAttribute))
-                return ShapeColorsAttribute;
 
-            if (attributeType == typeof(Vim.G3dNext.Attributes.ShapeWidthsAttribute))
-                return ShapeWidthsAttribute;
+                if (attributeType == typeof(Vim.G3dNext.Attributes.VimSubmeshIndexOffsetsAttribute))
+                    return SubmeshIndexOffsets;
+
+
+                if (attributeType == typeof(Vim.G3dNext.Attributes.VimSubmeshMaterialsAttribute))
+                    return SubmeshMaterials;
+
+
+                if (attributeType == typeof(Vim.G3dNext.Attributes.VimMaterialColorsAttribute))
+                    return MaterialColors;
+
+
+                if (attributeType == typeof(Vim.G3dNext.Attributes.VimMaterialGlossinessAttribute))
+                    return MaterialGlossiness;
+
+
+                if (attributeType == typeof(Vim.G3dNext.Attributes.VimMaterialSmoothnessAttribute))
+                    return MaterialSmoothness;
+
+
+                if (attributeType == typeof(Vim.G3dNext.Attributes.VimShapeVerticesAttribute))
+                    return ShapeVertices;
+
+
+                if (attributeType == typeof(Vim.G3dNext.Attributes.VimShapeVertexOffsetsAttribute))
+                    return ShapeVertexOffsets;
+
+
+                if (attributeType == typeof(Vim.G3dNext.Attributes.VimShapeColorsAttribute))
+                    return ShapeColors;
+
+
+                if (attributeType == typeof(Vim.G3dNext.Attributes.VimShapeWidthsAttribute))
+                    return ShapeWidths;
 
             throw new ArgumentException("Type {attributeType.ToString()} is not supported.");
         }
@@ -1910,100 +2196,100 @@ namespace Vim.G3dNext.Attributes
             switch (attributeName)
             {
 
-                case Vim.G3dNext.Attributes.PositionsAttribute.AttributeName:
+                case Vim.G3dNext.Attributes.VimPositionsAttribute.AttributeName:
                 {
                     // Data Attribute
-                    return collections.GetAttributesOfType<Vim.G3dNext.Attributes.PositionsAttribute>().ToArray().MergeDataAttributes<Vim.G3dNext.Attributes.PositionsAttribute, Vim.Math3d.Vector3>();
+                    return collections.GetAttributesOfType<Vim.G3dNext.Attributes.VimPositionsAttribute>().ToArray().MergeDataAttributes<Vim.G3dNext.Attributes.VimPositionsAttribute, Vim.Math3d.Vector3>();
                 }
 
-                case Vim.G3dNext.Attributes.IndicesAttribute.AttributeName:
+                case Vim.G3dNext.Attributes.VimIndicesAttribute.AttributeName:
                 {
                     // Index Attribute
-                    return collections.GetIndexedAttributesOfType<Vim.G3dNext.Attributes.IndicesAttribute>().MergeIndexAttributes();
+                    return collections.GetIndexedAttributesOfType<Vim.G3dNext.Attributes.VimIndicesAttribute>().MergeIndexAttributes();
                 }
 
-                case Vim.G3dNext.Attributes.InstanceTransformsAttribute.AttributeName:
+                case Vim.G3dNext.Attributes.VimInstanceTransformsAttribute.AttributeName:
                 {
                     // Data Attribute
-                    return collections.GetAttributesOfType<Vim.G3dNext.Attributes.InstanceTransformsAttribute>().ToArray().MergeDataAttributes<Vim.G3dNext.Attributes.InstanceTransformsAttribute, Vim.Math3d.Matrix4x4>();
+                    return collections.GetAttributesOfType<Vim.G3dNext.Attributes.VimInstanceTransformsAttribute>().ToArray().MergeDataAttributes<Vim.G3dNext.Attributes.VimInstanceTransformsAttribute, Vim.Math3d.Matrix4x4>();
                 }
 
-                case Vim.G3dNext.Attributes.InstanceParentsAttribute.AttributeName:
+                case Vim.G3dNext.Attributes.VimInstanceParentsAttribute.AttributeName:
                 {
                     // Index Attribute
-                    return collections.GetIndexedAttributesOfType<Vim.G3dNext.Attributes.InstanceParentsAttribute>().MergeIndexAttributes();
+                    return collections.GetIndexedAttributesOfType<Vim.G3dNext.Attributes.VimInstanceParentsAttribute>().MergeIndexAttributes();
                 }
 
-                case Vim.G3dNext.Attributes.InstanceFlagsAttribute.AttributeName:
+                case Vim.G3dNext.Attributes.VimInstanceFlagsAttribute.AttributeName:
                 {
                     // Data Attribute
-                    return collections.GetAttributesOfType<Vim.G3dNext.Attributes.InstanceFlagsAttribute>().ToArray().MergeDataAttributes<Vim.G3dNext.Attributes.InstanceFlagsAttribute, System.UInt16>();
+                    return collections.GetAttributesOfType<Vim.G3dNext.Attributes.VimInstanceFlagsAttribute>().ToArray().MergeDataAttributes<Vim.G3dNext.Attributes.VimInstanceFlagsAttribute, System.UInt16>();
                 }
 
-                case Vim.G3dNext.Attributes.InstanceMeshesAttribute.AttributeName:
+                case Vim.G3dNext.Attributes.VimInstanceMeshesAttribute.AttributeName:
                 {
                     // Index Attribute
-                    return collections.GetIndexedAttributesOfType<Vim.G3dNext.Attributes.InstanceMeshesAttribute>().MergeIndexAttributes();
+                    return collections.GetIndexedAttributesOfType<Vim.G3dNext.Attributes.VimInstanceMeshesAttribute>().MergeIndexAttributes();
                 }
 
-                case Vim.G3dNext.Attributes.MeshSubmeshOffsetsAttribute.AttributeName:
+                case Vim.G3dNext.Attributes.VimMeshSubmeshOffsetsAttribute.AttributeName:
                 {
                     // Index Attribute
-                    return collections.GetIndexedAttributesOfType<Vim.G3dNext.Attributes.MeshSubmeshOffsetsAttribute>().MergeIndexAttributes();
+                    return collections.GetIndexedAttributesOfType<Vim.G3dNext.Attributes.VimMeshSubmeshOffsetsAttribute>().MergeIndexAttributes();
                 }
 
-                case Vim.G3dNext.Attributes.SubmeshIndexOffsetsAttribute.AttributeName:
+                case Vim.G3dNext.Attributes.VimSubmeshIndexOffsetsAttribute.AttributeName:
                 {
                     // Index Attribute
-                    return collections.GetIndexedAttributesOfType<Vim.G3dNext.Attributes.SubmeshIndexOffsetsAttribute>().MergeIndexAttributes();
+                    return collections.GetIndexedAttributesOfType<Vim.G3dNext.Attributes.VimSubmeshIndexOffsetsAttribute>().MergeIndexAttributes();
                 }
 
-                case Vim.G3dNext.Attributes.SubmeshMaterialsAttribute.AttributeName:
+                case Vim.G3dNext.Attributes.VimSubmeshMaterialsAttribute.AttributeName:
                 {
                     // Index Attribute
-                    return collections.GetIndexedAttributesOfType<Vim.G3dNext.Attributes.SubmeshMaterialsAttribute>().MergeIndexAttributes();
+                    return collections.GetIndexedAttributesOfType<Vim.G3dNext.Attributes.VimSubmeshMaterialsAttribute>().MergeIndexAttributes();
                 }
 
-                case Vim.G3dNext.Attributes.MaterialColorsAttribute.AttributeName:
+                case Vim.G3dNext.Attributes.VimMaterialColorsAttribute.AttributeName:
                 {
                     // Data Attribute
-                    return collections.GetAttributesOfType<Vim.G3dNext.Attributes.MaterialColorsAttribute>().ToArray().MergeDataAttributes<Vim.G3dNext.Attributes.MaterialColorsAttribute, Vim.Math3d.Vector4>();
+                    return collections.GetAttributesOfType<Vim.G3dNext.Attributes.VimMaterialColorsAttribute>().ToArray().MergeDataAttributes<Vim.G3dNext.Attributes.VimMaterialColorsAttribute, Vim.Math3d.Vector4>();
                 }
 
-                case Vim.G3dNext.Attributes.MaterialGlossinessAttribute.AttributeName:
+                case Vim.G3dNext.Attributes.VimMaterialGlossinessAttribute.AttributeName:
                 {
                     // Data Attribute
-                    return collections.GetAttributesOfType<Vim.G3dNext.Attributes.MaterialGlossinessAttribute>().ToArray().MergeDataAttributes<Vim.G3dNext.Attributes.MaterialGlossinessAttribute, System.Single>();
+                    return collections.GetAttributesOfType<Vim.G3dNext.Attributes.VimMaterialGlossinessAttribute>().ToArray().MergeDataAttributes<Vim.G3dNext.Attributes.VimMaterialGlossinessAttribute, System.Single>();
                 }
 
-                case Vim.G3dNext.Attributes.MaterialSmoothnessAttribute.AttributeName:
+                case Vim.G3dNext.Attributes.VimMaterialSmoothnessAttribute.AttributeName:
                 {
                     // Data Attribute
-                    return collections.GetAttributesOfType<Vim.G3dNext.Attributes.MaterialSmoothnessAttribute>().ToArray().MergeDataAttributes<Vim.G3dNext.Attributes.MaterialSmoothnessAttribute, System.Single>();
+                    return collections.GetAttributesOfType<Vim.G3dNext.Attributes.VimMaterialSmoothnessAttribute>().ToArray().MergeDataAttributes<Vim.G3dNext.Attributes.VimMaterialSmoothnessAttribute, System.Single>();
                 }
 
-                case Vim.G3dNext.Attributes.ShapeVerticesAttribute.AttributeName:
+                case Vim.G3dNext.Attributes.VimShapeVerticesAttribute.AttributeName:
                 {
                     // Data Attribute
-                    return collections.GetAttributesOfType<Vim.G3dNext.Attributes.ShapeVerticesAttribute>().ToArray().MergeDataAttributes<Vim.G3dNext.Attributes.ShapeVerticesAttribute, Vim.Math3d.Vector3>();
+                    return collections.GetAttributesOfType<Vim.G3dNext.Attributes.VimShapeVerticesAttribute>().ToArray().MergeDataAttributes<Vim.G3dNext.Attributes.VimShapeVerticesAttribute, Vim.Math3d.Vector3>();
                 }
 
-                case Vim.G3dNext.Attributes.ShapeVertexOffsetsAttribute.AttributeName:
+                case Vim.G3dNext.Attributes.VimShapeVertexOffsetsAttribute.AttributeName:
                 {
                     // Index Attribute
-                    return collections.GetIndexedAttributesOfType<Vim.G3dNext.Attributes.ShapeVertexOffsetsAttribute>().MergeIndexAttributes();
+                    return collections.GetIndexedAttributesOfType<Vim.G3dNext.Attributes.VimShapeVertexOffsetsAttribute>().MergeIndexAttributes();
                 }
 
-                case Vim.G3dNext.Attributes.ShapeColorsAttribute.AttributeName:
+                case Vim.G3dNext.Attributes.VimShapeColorsAttribute.AttributeName:
                 {
                     // Data Attribute
-                    return collections.GetAttributesOfType<Vim.G3dNext.Attributes.ShapeColorsAttribute>().ToArray().MergeDataAttributes<Vim.G3dNext.Attributes.ShapeColorsAttribute, Vim.Math3d.Vector4>();
+                    return collections.GetAttributesOfType<Vim.G3dNext.Attributes.VimShapeColorsAttribute>().ToArray().MergeDataAttributes<Vim.G3dNext.Attributes.VimShapeColorsAttribute, Vim.Math3d.Vector4>();
                 }
 
-                case Vim.G3dNext.Attributes.ShapeWidthsAttribute.AttributeName:
+                case Vim.G3dNext.Attributes.VimShapeWidthsAttribute.AttributeName:
                 {
                     // Data Attribute
-                    return collections.GetAttributesOfType<Vim.G3dNext.Attributes.ShapeWidthsAttribute>().ToArray().MergeDataAttributes<Vim.G3dNext.Attributes.ShapeWidthsAttribute, System.Single>();
+                    return collections.GetAttributesOfType<Vim.G3dNext.Attributes.VimShapeWidthsAttribute>().ToArray().MergeDataAttributes<Vim.G3dNext.Attributes.VimShapeWidthsAttribute, System.Single>();
                 }
 
                 default:
@@ -2016,100 +2302,100 @@ namespace Vim.G3dNext.Attributes
             // Ensure all the indices are either -1 or within the bounds of the attributes they are indexing into.
 
             {
-                var maxIndex = GetAttribute(IndicesAttribute.IndexInto).Data.Length - 1;
-                for (var i = 0; i < IndicesAttribute.TypedData.Length; ++i)
+                var maxIndex = GetAttribute(Indices.IndexInto).Data.Length - 1;
+                for (var i = 0; i < Indices.TypedData.Length; ++i)
                 {
-                    var index = IndicesAttribute.TypedData[i];
+                    var index = Indices.TypedData[i];
 
                     if (index == -1)
                         continue; // no relation.
 
                     if (index < -1 || index > maxIndex)
-                        throw new Exception($"Index out of range in Vim.G3dNext.Attributes.IndicesAttribute at position {i}. Expected either -1 for no relation, or a maximum of {maxIndex} but got {index}");
+                        throw new Exception($"Index out of range in Vim.G3dNext.Attributes.VimIndicesAttribute at position {i}. Expected either -1 for no relation, or a maximum of {maxIndex} but got {index}");
                 }
             }
 
             {
-                var maxIndex = GetAttribute(InstanceParentsAttribute.IndexInto).Data.Length - 1;
-                for (var i = 0; i < InstanceParentsAttribute.TypedData.Length; ++i)
+                var maxIndex = GetAttribute(InstanceParents.IndexInto).Data.Length - 1;
+                for (var i = 0; i < InstanceParents.TypedData.Length; ++i)
                 {
-                    var index = InstanceParentsAttribute.TypedData[i];
+                    var index = InstanceParents.TypedData[i];
 
                     if (index == -1)
                         continue; // no relation.
 
                     if (index < -1 || index > maxIndex)
-                        throw new Exception($"Index out of range in Vim.G3dNext.Attributes.InstanceParentsAttribute at position {i}. Expected either -1 for no relation, or a maximum of {maxIndex} but got {index}");
+                        throw new Exception($"Index out of range in Vim.G3dNext.Attributes.VimInstanceParentsAttribute at position {i}. Expected either -1 for no relation, or a maximum of {maxIndex} but got {index}");
                 }
             }
 
             {
-                var maxIndex = GetAttribute(InstanceMeshesAttribute.IndexInto).Data.Length - 1;
-                for (var i = 0; i < InstanceMeshesAttribute.TypedData.Length; ++i)
+                var maxIndex = GetAttribute(InstanceMeshes.IndexInto).Data.Length - 1;
+                for (var i = 0; i < InstanceMeshes.TypedData.Length; ++i)
                 {
-                    var index = InstanceMeshesAttribute.TypedData[i];
+                    var index = InstanceMeshes.TypedData[i];
 
                     if (index == -1)
                         continue; // no relation.
 
                     if (index < -1 || index > maxIndex)
-                        throw new Exception($"Index out of range in Vim.G3dNext.Attributes.InstanceMeshesAttribute at position {i}. Expected either -1 for no relation, or a maximum of {maxIndex} but got {index}");
+                        throw new Exception($"Index out of range in Vim.G3dNext.Attributes.VimInstanceMeshesAttribute at position {i}. Expected either -1 for no relation, or a maximum of {maxIndex} but got {index}");
                 }
             }
 
             {
-                var maxIndex = GetAttribute(MeshSubmeshOffsetsAttribute.IndexInto).Data.Length - 1;
-                for (var i = 0; i < MeshSubmeshOffsetsAttribute.TypedData.Length; ++i)
+                var maxIndex = GetAttribute(MeshSubmeshOffsets.IndexInto).Data.Length - 1;
+                for (var i = 0; i < MeshSubmeshOffsets.TypedData.Length; ++i)
                 {
-                    var index = MeshSubmeshOffsetsAttribute.TypedData[i];
+                    var index = MeshSubmeshOffsets.TypedData[i];
 
                     if (index == -1)
                         continue; // no relation.
 
                     if (index < -1 || index > maxIndex)
-                        throw new Exception($"Index out of range in Vim.G3dNext.Attributes.MeshSubmeshOffsetsAttribute at position {i}. Expected either -1 for no relation, or a maximum of {maxIndex} but got {index}");
+                        throw new Exception($"Index out of range in Vim.G3dNext.Attributes.VimMeshSubmeshOffsetsAttribute at position {i}. Expected either -1 for no relation, or a maximum of {maxIndex} but got {index}");
                 }
             }
 
             {
-                var maxIndex = GetAttribute(SubmeshIndexOffsetsAttribute.IndexInto).Data.Length - 1;
-                for (var i = 0; i < SubmeshIndexOffsetsAttribute.TypedData.Length; ++i)
+                var maxIndex = GetAttribute(SubmeshIndexOffsets.IndexInto).Data.Length - 1;
+                for (var i = 0; i < SubmeshIndexOffsets.TypedData.Length; ++i)
                 {
-                    var index = SubmeshIndexOffsetsAttribute.TypedData[i];
+                    var index = SubmeshIndexOffsets.TypedData[i];
 
                     if (index == -1)
                         continue; // no relation.
 
                     if (index < -1 || index > maxIndex)
-                        throw new Exception($"Index out of range in Vim.G3dNext.Attributes.SubmeshIndexOffsetsAttribute at position {i}. Expected either -1 for no relation, or a maximum of {maxIndex} but got {index}");
+                        throw new Exception($"Index out of range in Vim.G3dNext.Attributes.VimSubmeshIndexOffsetsAttribute at position {i}. Expected either -1 for no relation, or a maximum of {maxIndex} but got {index}");
                 }
             }
 
             {
-                var maxIndex = GetAttribute(SubmeshMaterialsAttribute.IndexInto).Data.Length - 1;
-                for (var i = 0; i < SubmeshMaterialsAttribute.TypedData.Length; ++i)
+                var maxIndex = GetAttribute(SubmeshMaterials.IndexInto).Data.Length - 1;
+                for (var i = 0; i < SubmeshMaterials.TypedData.Length; ++i)
                 {
-                    var index = SubmeshMaterialsAttribute.TypedData[i];
+                    var index = SubmeshMaterials.TypedData[i];
 
                     if (index == -1)
                         continue; // no relation.
 
                     if (index < -1 || index > maxIndex)
-                        throw new Exception($"Index out of range in Vim.G3dNext.Attributes.SubmeshMaterialsAttribute at position {i}. Expected either -1 for no relation, or a maximum of {maxIndex} but got {index}");
+                        throw new Exception($"Index out of range in Vim.G3dNext.Attributes.VimSubmeshMaterialsAttribute at position {i}. Expected either -1 for no relation, or a maximum of {maxIndex} but got {index}");
                 }
             }
 
             {
-                var maxIndex = GetAttribute(ShapeVertexOffsetsAttribute.IndexInto).Data.Length - 1;
-                for (var i = 0; i < ShapeVertexOffsetsAttribute.TypedData.Length; ++i)
+                var maxIndex = GetAttribute(ShapeVertexOffsets.IndexInto).Data.Length - 1;
+                for (var i = 0; i < ShapeVertexOffsets.TypedData.Length; ++i)
                 {
-                    var index = ShapeVertexOffsetsAttribute.TypedData[i];
+                    var index = ShapeVertexOffsets.TypedData[i];
 
                     if (index == -1)
                         continue; // no relation.
 
                     if (index < -1 || index > maxIndex)
-                        throw new Exception($"Index out of range in Vim.G3dNext.Attributes.ShapeVertexOffsetsAttribute at position {i}. Expected either -1 for no relation, or a maximum of {maxIndex} but got {index}");
+                        throw new Exception($"Index out of range in Vim.G3dNext.Attributes.VimShapeVertexOffsetsAttribute at position {i}. Expected either -1 for no relation, or a maximum of {maxIndex} but got {index}");
                 }
             }
         }
@@ -2144,20 +2430,20 @@ namespace Vim.G3dNext.Attributes
         
         public Vim.Math3d.Vector4[] MaterialColors
         {
-            get => Attributes.MaterialColorsAttribute.TypedData;
-            set => Attributes.MaterialColorsAttribute.TypedData = value;
+            get => Attributes.MaterialColors.TypedData;
+            set => Attributes.MaterialColors.TypedData = value;
         }
 
         public System.Single[] MaterialGlossiness
         {
-            get => Attributes.MaterialGlossinessAttribute.TypedData;
-            set => Attributes.MaterialGlossinessAttribute.TypedData = value;
+            get => Attributes.MaterialGlossiness.TypedData;
+            set => Attributes.MaterialGlossiness.TypedData = value;
         }
 
         public System.Single[] MaterialSmoothness
         {
-            get => Attributes.MaterialSmoothnessAttribute.TypedData;
-            set => Attributes.MaterialSmoothnessAttribute.TypedData = value;
+            get => Attributes.MaterialSmoothness.TypedData;
+            set => Attributes.MaterialSmoothness.TypedData = value;
         }
     }
 
@@ -2192,19 +2478,19 @@ namespace Vim.G3dNext.Attributes
 
         // Named Attributes.
 
-        public Vim.G3dNext.Attributes.MaterialColorsAttribute MaterialColorsAttribute
+        public Vim.G3dNext.Attributes.MaterialColorsAttribute MaterialColors
         {
             get => Map.TryGetValue(Vim.G3dNext.Attributes.MaterialColorsAttribute.AttributeName, out var attr) ? attr as Vim.G3dNext.Attributes.MaterialColorsAttribute : default;
             set => Map[Vim.G3dNext.Attributes.MaterialColorsAttribute.AttributeName] = value as IAttribute;
         }
 
-        public Vim.G3dNext.Attributes.MaterialGlossinessAttribute MaterialGlossinessAttribute
+        public Vim.G3dNext.Attributes.MaterialGlossinessAttribute MaterialGlossiness
         {
             get => Map.TryGetValue(Vim.G3dNext.Attributes.MaterialGlossinessAttribute.AttributeName, out var attr) ? attr as Vim.G3dNext.Attributes.MaterialGlossinessAttribute : default;
             set => Map[Vim.G3dNext.Attributes.MaterialGlossinessAttribute.AttributeName] = value as IAttribute;
         }
 
-        public Vim.G3dNext.Attributes.MaterialSmoothnessAttribute MaterialSmoothnessAttribute
+        public Vim.G3dNext.Attributes.MaterialSmoothnessAttribute MaterialSmoothness
         {
             get => Map.TryGetValue(Vim.G3dNext.Attributes.MaterialSmoothnessAttribute.AttributeName, out var attr) ? attr as Vim.G3dNext.Attributes.MaterialSmoothnessAttribute : default;
             set => Map[Vim.G3dNext.Attributes.MaterialSmoothnessAttribute.AttributeName] = value as IAttribute;
@@ -2214,14 +2500,17 @@ namespace Vim.G3dNext.Attributes
         public IAttribute GetAttribute(Type attributeType)
         {
 
-            if (attributeType == typeof(Vim.G3dNext.Attributes.MaterialColorsAttribute))
-                return MaterialColorsAttribute;
 
-            if (attributeType == typeof(Vim.G3dNext.Attributes.MaterialGlossinessAttribute))
-                return MaterialGlossinessAttribute;
+                if (attributeType == typeof(Vim.G3dNext.Attributes.MaterialColorsAttribute))
+                    return MaterialColors;
 
-            if (attributeType == typeof(Vim.G3dNext.Attributes.MaterialSmoothnessAttribute))
-                return MaterialSmoothnessAttribute;
+
+                if (attributeType == typeof(Vim.G3dNext.Attributes.MaterialGlossinessAttribute))
+                    return MaterialGlossiness;
+
+
+                if (attributeType == typeof(Vim.G3dNext.Attributes.MaterialSmoothnessAttribute))
+                    return MaterialSmoothness;
 
             throw new ArgumentException("Type {attributeType.ToString()} is not supported.");
         }
@@ -2289,82 +2578,94 @@ namespace Vim.G3dNext.Attributes
             => Attributes.ToBFast();
 
         
-        public System.Int32[] InstanceFiles
+        public System.Int32[] ChunkCount
         {
-            get => Attributes.InstanceFilesAttribute.TypedData;
-            set => Attributes.InstanceFilesAttribute.TypedData = value;
+            get => Attributes.ChunkCount.TypedData;
+            set => Attributes.ChunkCount.TypedData = value;
         }
 
-        public System.Int32[] InstanceIndices
+        public System.Int32[] InstanceMeshes
         {
-            get => Attributes.InstanceIndicesAttribute.TypedData;
-            set => Attributes.InstanceIndicesAttribute.TypedData = value;
+            get => Attributes.InstanceMeshes.TypedData;
+            set => Attributes.InstanceMeshes.TypedData = value;
+        }
+
+        public System.Int32[] InstanceTransforms
+        {
+            get => Attributes.InstanceTransforms.TypedData;
+            set => Attributes.InstanceTransforms.TypedData = value;
         }
 
         public System.Int32[] InstanceNodes
         {
-            get => Attributes.InstanceNodesAttribute.TypedData;
-            set => Attributes.InstanceNodesAttribute.TypedData = value;
+            get => Attributes.InstanceNodes.TypedData;
+            set => Attributes.InstanceNodes.TypedData = value;
         }
 
         public System.Int32[] InstanceGroups
         {
-            get => Attributes.InstanceGroupsAttribute.TypedData;
-            set => Attributes.InstanceGroupsAttribute.TypedData = value;
+            get => Attributes.InstanceGroups.TypedData;
+            set => Attributes.InstanceGroups.TypedData = value;
         }
 
         public System.Int64[] InstanceTags
         {
-            get => Attributes.InstanceTagsAttribute.TypedData;
-            set => Attributes.InstanceTagsAttribute.TypedData = value;
+            get => Attributes.InstanceTags.TypedData;
+            set => Attributes.InstanceTags.TypedData = value;
         }
 
         public System.UInt16[] InstanceFlags
         {
-            get => Attributes.InstanceFlagsAttribute.TypedData;
-            set => Attributes.InstanceFlagsAttribute.TypedData = value;
+            get => Attributes.InstanceFlags.TypedData;
+            set => Attributes.InstanceFlags.TypedData = value;
         }
 
         public Vim.Math3d.Vector3[] InstanceMins
         {
-            get => Attributes.InstanceMinsAttribute.TypedData;
-            set => Attributes.InstanceMinsAttribute.TypedData = value;
+            get => Attributes.InstanceMins.TypedData;
+            set => Attributes.InstanceMins.TypedData = value;
         }
 
         public Vim.Math3d.Vector3[] InstanceMaxs
         {
-            get => Attributes.InstanceMaxsAttribute.TypedData;
-            set => Attributes.InstanceMaxsAttribute.TypedData = value;
+            get => Attributes.InstanceMaxs.TypedData;
+            set => Attributes.InstanceMaxs.TypedData = value;
+        }
+
+        public System.Int32[] MeshChunks
+        {
+            get => Attributes.MeshChunks.TypedData;
+            set => Attributes.MeshChunks.TypedData = value;
         }
 
         public System.Int32[] MeshInstanceCounts
         {
-            get => Attributes.MeshInstanceCountsAttribute.TypedData;
-            set => Attributes.MeshInstanceCountsAttribute.TypedData = value;
+            get => Attributes.MeshInstanceCounts.TypedData;
+            set => Attributes.MeshInstanceCounts.TypedData = value;
         }
 
         public System.Int32[] MeshIndexCounts
         {
-            get => Attributes.MeshIndexCountsAttribute.TypedData;
-            set => Attributes.MeshIndexCountsAttribute.TypedData = value;
+            get => Attributes.MeshIndexCounts.TypedData;
+            set => Attributes.MeshIndexCounts.TypedData = value;
         }
 
         public System.Int32[] MeshVertexCounts
         {
-            get => Attributes.MeshVertexCountsAttribute.TypedData;
-            set => Attributes.MeshVertexCountsAttribute.TypedData = value;
+            get => Attributes.MeshVertexCounts.TypedData;
+            set => Attributes.MeshVertexCounts.TypedData = value;
         }
 
         public System.Int32[] MeshOpaqueIndexCounts
         {
-            get => Attributes.MeshOpaqueIndexCountsAttribute.TypedData;
-            set => Attributes.MeshOpaqueIndexCountsAttribute.TypedData = value;
+            get => Attributes.MeshOpaqueIndexCounts.TypedData;
+            set => Attributes.MeshOpaqueIndexCounts.TypedData = value;
         }
 
         public System.Int32[] MeshOpaqueVertexCounts
         {
-            get => Attributes.MeshOpaqueVertexCountsAttribute.TypedData;
-            set => Attributes.MeshOpaqueVertexCountsAttribute.TypedData = value;
+            get => Attributes.MeshOpaqueVertexCounts.TypedData;
+            set => Attributes.MeshOpaqueVertexCounts.TypedData = value;
         }
     }
 
@@ -2392,143 +2693,178 @@ namespace Vim.G3dNext.Attributes
         public IDictionary<string, IAttribute> Map { get; }
             = new Dictionary<string, IAttribute>
             {
-                [Vim.G3dNext.Attributes.InstanceFilesAttribute.AttributeName] = new Vim.G3dNext.Attributes.InstanceFilesAttribute(),
-                [Vim.G3dNext.Attributes.InstanceIndicesAttribute.AttributeName] = new Vim.G3dNext.Attributes.InstanceIndicesAttribute(),
-                [Vim.G3dNext.Attributes.InstanceNodesAttribute.AttributeName] = new Vim.G3dNext.Attributes.InstanceNodesAttribute(),
-                [Vim.G3dNext.Attributes.InstanceGroupsAttribute.AttributeName] = new Vim.G3dNext.Attributes.InstanceGroupsAttribute(),
-                [Vim.G3dNext.Attributes.InstanceTagsAttribute.AttributeName] = new Vim.G3dNext.Attributes.InstanceTagsAttribute(),
-                [Vim.G3dNext.Attributes.InstanceFlagsAttribute.AttributeName] = new Vim.G3dNext.Attributes.InstanceFlagsAttribute(),
-                [Vim.G3dNext.Attributes.InstanceMinsAttribute.AttributeName] = new Vim.G3dNext.Attributes.InstanceMinsAttribute(),
-                [Vim.G3dNext.Attributes.InstanceMaxsAttribute.AttributeName] = new Vim.G3dNext.Attributes.InstanceMaxsAttribute(),
-                [Vim.G3dNext.Attributes.MeshInstanceCountsAttribute.AttributeName] = new Vim.G3dNext.Attributes.MeshInstanceCountsAttribute(),
-                [Vim.G3dNext.Attributes.MeshIndexCountsAttribute.AttributeName] = new Vim.G3dNext.Attributes.MeshIndexCountsAttribute(),
-                [Vim.G3dNext.Attributes.MeshVertexCountsAttribute.AttributeName] = new Vim.G3dNext.Attributes.MeshVertexCountsAttribute(),
-                [Vim.G3dNext.Attributes.MeshOpaqueIndexCountsAttribute.AttributeName] = new Vim.G3dNext.Attributes.MeshOpaqueIndexCountsAttribute(),
-                [Vim.G3dNext.Attributes.MeshOpaqueVertexCountsAttribute.AttributeName] = new Vim.G3dNext.Attributes.MeshOpaqueVertexCountsAttribute(),
+                [Vim.G3dNext.Attributes.SceneChunkCountAttribute.AttributeName] = new Vim.G3dNext.Attributes.SceneChunkCountAttribute(),
+                [Vim.G3dNext.Attributes.SceneInstanceMeshesAttribute.AttributeName] = new Vim.G3dNext.Attributes.SceneInstanceMeshesAttribute(),
+                [Vim.G3dNext.Attributes.SceneInstanceTransformsAttribute.AttributeName] = new Vim.G3dNext.Attributes.SceneInstanceTransformsAttribute(),
+                [Vim.G3dNext.Attributes.SceneInstanceNodesAttribute.AttributeName] = new Vim.G3dNext.Attributes.SceneInstanceNodesAttribute(),
+                [Vim.G3dNext.Attributes.SceneInstanceGroupsAttribute.AttributeName] = new Vim.G3dNext.Attributes.SceneInstanceGroupsAttribute(),
+                [Vim.G3dNext.Attributes.SceneInstanceTagsAttribute.AttributeName] = new Vim.G3dNext.Attributes.SceneInstanceTagsAttribute(),
+                [Vim.G3dNext.Attributes.SceneInstanceFlagsAttribute.AttributeName] = new Vim.G3dNext.Attributes.SceneInstanceFlagsAttribute(),
+                [Vim.G3dNext.Attributes.SceneInstanceMinsAttribute.AttributeName] = new Vim.G3dNext.Attributes.SceneInstanceMinsAttribute(),
+                [Vim.G3dNext.Attributes.SceneInstanceMaxsAttribute.AttributeName] = new Vim.G3dNext.Attributes.SceneInstanceMaxsAttribute(),
+                [Vim.G3dNext.Attributes.SceneMeshChunksAttribute.AttributeName] = new Vim.G3dNext.Attributes.SceneMeshChunksAttribute(),
+                [Vim.G3dNext.Attributes.SceneMeshInstanceCountsAttribute.AttributeName] = new Vim.G3dNext.Attributes.SceneMeshInstanceCountsAttribute(),
+                [Vim.G3dNext.Attributes.SceneMeshIndexCountsAttribute.AttributeName] = new Vim.G3dNext.Attributes.SceneMeshIndexCountsAttribute(),
+                [Vim.G3dNext.Attributes.SceneMeshVertexCountsAttribute.AttributeName] = new Vim.G3dNext.Attributes.SceneMeshVertexCountsAttribute(),
+                [Vim.G3dNext.Attributes.SceneMeshOpaqueIndexCountsAttribute.AttributeName] = new Vim.G3dNext.Attributes.SceneMeshOpaqueIndexCountsAttribute(),
+                [Vim.G3dNext.Attributes.SceneMeshOpaqueVertexCountsAttribute.AttributeName] = new Vim.G3dNext.Attributes.SceneMeshOpaqueVertexCountsAttribute(),
             };
 
         // Named Attributes.
 
-        public Vim.G3dNext.Attributes.InstanceFilesAttribute InstanceFilesAttribute
+        public Vim.G3dNext.Attributes.SceneChunkCountAttribute ChunkCount
         {
-            get => Map.TryGetValue(Vim.G3dNext.Attributes.InstanceFilesAttribute.AttributeName, out var attr) ? attr as Vim.G3dNext.Attributes.InstanceFilesAttribute : default;
-            set => Map[Vim.G3dNext.Attributes.InstanceFilesAttribute.AttributeName] = value as IAttribute;
+            get => Map.TryGetValue(Vim.G3dNext.Attributes.SceneChunkCountAttribute.AttributeName, out var attr) ? attr as Vim.G3dNext.Attributes.SceneChunkCountAttribute : default;
+            set => Map[Vim.G3dNext.Attributes.SceneChunkCountAttribute.AttributeName] = value as IAttribute;
         }
 
-        public Vim.G3dNext.Attributes.InstanceIndicesAttribute InstanceIndicesAttribute
+        public Vim.G3dNext.Attributes.SceneInstanceMeshesAttribute InstanceMeshes
         {
-            get => Map.TryGetValue(Vim.G3dNext.Attributes.InstanceIndicesAttribute.AttributeName, out var attr) ? attr as Vim.G3dNext.Attributes.InstanceIndicesAttribute : default;
-            set => Map[Vim.G3dNext.Attributes.InstanceIndicesAttribute.AttributeName] = value as IAttribute;
+            get => Map.TryGetValue(Vim.G3dNext.Attributes.SceneInstanceMeshesAttribute.AttributeName, out var attr) ? attr as Vim.G3dNext.Attributes.SceneInstanceMeshesAttribute : default;
+            set => Map[Vim.G3dNext.Attributes.SceneInstanceMeshesAttribute.AttributeName] = value as IAttribute;
         }
 
-        public Vim.G3dNext.Attributes.InstanceNodesAttribute InstanceNodesAttribute
+        public Vim.G3dNext.Attributes.SceneInstanceTransformsAttribute InstanceTransforms
         {
-            get => Map.TryGetValue(Vim.G3dNext.Attributes.InstanceNodesAttribute.AttributeName, out var attr) ? attr as Vim.G3dNext.Attributes.InstanceNodesAttribute : default;
-            set => Map[Vim.G3dNext.Attributes.InstanceNodesAttribute.AttributeName] = value as IAttribute;
+            get => Map.TryGetValue(Vim.G3dNext.Attributes.SceneInstanceTransformsAttribute.AttributeName, out var attr) ? attr as Vim.G3dNext.Attributes.SceneInstanceTransformsAttribute : default;
+            set => Map[Vim.G3dNext.Attributes.SceneInstanceTransformsAttribute.AttributeName] = value as IAttribute;
         }
 
-        public Vim.G3dNext.Attributes.InstanceGroupsAttribute InstanceGroupsAttribute
+        public Vim.G3dNext.Attributes.SceneInstanceNodesAttribute InstanceNodes
         {
-            get => Map.TryGetValue(Vim.G3dNext.Attributes.InstanceGroupsAttribute.AttributeName, out var attr) ? attr as Vim.G3dNext.Attributes.InstanceGroupsAttribute : default;
-            set => Map[Vim.G3dNext.Attributes.InstanceGroupsAttribute.AttributeName] = value as IAttribute;
+            get => Map.TryGetValue(Vim.G3dNext.Attributes.SceneInstanceNodesAttribute.AttributeName, out var attr) ? attr as Vim.G3dNext.Attributes.SceneInstanceNodesAttribute : default;
+            set => Map[Vim.G3dNext.Attributes.SceneInstanceNodesAttribute.AttributeName] = value as IAttribute;
         }
 
-        public Vim.G3dNext.Attributes.InstanceTagsAttribute InstanceTagsAttribute
+        public Vim.G3dNext.Attributes.SceneInstanceGroupsAttribute InstanceGroups
         {
-            get => Map.TryGetValue(Vim.G3dNext.Attributes.InstanceTagsAttribute.AttributeName, out var attr) ? attr as Vim.G3dNext.Attributes.InstanceTagsAttribute : default;
-            set => Map[Vim.G3dNext.Attributes.InstanceTagsAttribute.AttributeName] = value as IAttribute;
+            get => Map.TryGetValue(Vim.G3dNext.Attributes.SceneInstanceGroupsAttribute.AttributeName, out var attr) ? attr as Vim.G3dNext.Attributes.SceneInstanceGroupsAttribute : default;
+            set => Map[Vim.G3dNext.Attributes.SceneInstanceGroupsAttribute.AttributeName] = value as IAttribute;
         }
 
-        public Vim.G3dNext.Attributes.InstanceFlagsAttribute InstanceFlagsAttribute
+        public Vim.G3dNext.Attributes.SceneInstanceTagsAttribute InstanceTags
         {
-            get => Map.TryGetValue(Vim.G3dNext.Attributes.InstanceFlagsAttribute.AttributeName, out var attr) ? attr as Vim.G3dNext.Attributes.InstanceFlagsAttribute : default;
-            set => Map[Vim.G3dNext.Attributes.InstanceFlagsAttribute.AttributeName] = value as IAttribute;
+            get => Map.TryGetValue(Vim.G3dNext.Attributes.SceneInstanceTagsAttribute.AttributeName, out var attr) ? attr as Vim.G3dNext.Attributes.SceneInstanceTagsAttribute : default;
+            set => Map[Vim.G3dNext.Attributes.SceneInstanceTagsAttribute.AttributeName] = value as IAttribute;
         }
 
-        public Vim.G3dNext.Attributes.InstanceMinsAttribute InstanceMinsAttribute
+        public Vim.G3dNext.Attributes.SceneInstanceFlagsAttribute InstanceFlags
         {
-            get => Map.TryGetValue(Vim.G3dNext.Attributes.InstanceMinsAttribute.AttributeName, out var attr) ? attr as Vim.G3dNext.Attributes.InstanceMinsAttribute : default;
-            set => Map[Vim.G3dNext.Attributes.InstanceMinsAttribute.AttributeName] = value as IAttribute;
+            get => Map.TryGetValue(Vim.G3dNext.Attributes.SceneInstanceFlagsAttribute.AttributeName, out var attr) ? attr as Vim.G3dNext.Attributes.SceneInstanceFlagsAttribute : default;
+            set => Map[Vim.G3dNext.Attributes.SceneInstanceFlagsAttribute.AttributeName] = value as IAttribute;
         }
 
-        public Vim.G3dNext.Attributes.InstanceMaxsAttribute InstanceMaxsAttribute
+        public Vim.G3dNext.Attributes.SceneInstanceMinsAttribute InstanceMins
         {
-            get => Map.TryGetValue(Vim.G3dNext.Attributes.InstanceMaxsAttribute.AttributeName, out var attr) ? attr as Vim.G3dNext.Attributes.InstanceMaxsAttribute : default;
-            set => Map[Vim.G3dNext.Attributes.InstanceMaxsAttribute.AttributeName] = value as IAttribute;
+            get => Map.TryGetValue(Vim.G3dNext.Attributes.SceneInstanceMinsAttribute.AttributeName, out var attr) ? attr as Vim.G3dNext.Attributes.SceneInstanceMinsAttribute : default;
+            set => Map[Vim.G3dNext.Attributes.SceneInstanceMinsAttribute.AttributeName] = value as IAttribute;
         }
 
-        public Vim.G3dNext.Attributes.MeshInstanceCountsAttribute MeshInstanceCountsAttribute
+        public Vim.G3dNext.Attributes.SceneInstanceMaxsAttribute InstanceMaxs
         {
-            get => Map.TryGetValue(Vim.G3dNext.Attributes.MeshInstanceCountsAttribute.AttributeName, out var attr) ? attr as Vim.G3dNext.Attributes.MeshInstanceCountsAttribute : default;
-            set => Map[Vim.G3dNext.Attributes.MeshInstanceCountsAttribute.AttributeName] = value as IAttribute;
+            get => Map.TryGetValue(Vim.G3dNext.Attributes.SceneInstanceMaxsAttribute.AttributeName, out var attr) ? attr as Vim.G3dNext.Attributes.SceneInstanceMaxsAttribute : default;
+            set => Map[Vim.G3dNext.Attributes.SceneInstanceMaxsAttribute.AttributeName] = value as IAttribute;
         }
 
-        public Vim.G3dNext.Attributes.MeshIndexCountsAttribute MeshIndexCountsAttribute
+        public Vim.G3dNext.Attributes.SceneMeshChunksAttribute MeshChunks
         {
-            get => Map.TryGetValue(Vim.G3dNext.Attributes.MeshIndexCountsAttribute.AttributeName, out var attr) ? attr as Vim.G3dNext.Attributes.MeshIndexCountsAttribute : default;
-            set => Map[Vim.G3dNext.Attributes.MeshIndexCountsAttribute.AttributeName] = value as IAttribute;
+            get => Map.TryGetValue(Vim.G3dNext.Attributes.SceneMeshChunksAttribute.AttributeName, out var attr) ? attr as Vim.G3dNext.Attributes.SceneMeshChunksAttribute : default;
+            set => Map[Vim.G3dNext.Attributes.SceneMeshChunksAttribute.AttributeName] = value as IAttribute;
         }
 
-        public Vim.G3dNext.Attributes.MeshVertexCountsAttribute MeshVertexCountsAttribute
+        public Vim.G3dNext.Attributes.SceneMeshInstanceCountsAttribute MeshInstanceCounts
         {
-            get => Map.TryGetValue(Vim.G3dNext.Attributes.MeshVertexCountsAttribute.AttributeName, out var attr) ? attr as Vim.G3dNext.Attributes.MeshVertexCountsAttribute : default;
-            set => Map[Vim.G3dNext.Attributes.MeshVertexCountsAttribute.AttributeName] = value as IAttribute;
+            get => Map.TryGetValue(Vim.G3dNext.Attributes.SceneMeshInstanceCountsAttribute.AttributeName, out var attr) ? attr as Vim.G3dNext.Attributes.SceneMeshInstanceCountsAttribute : default;
+            set => Map[Vim.G3dNext.Attributes.SceneMeshInstanceCountsAttribute.AttributeName] = value as IAttribute;
         }
 
-        public Vim.G3dNext.Attributes.MeshOpaqueIndexCountsAttribute MeshOpaqueIndexCountsAttribute
+        public Vim.G3dNext.Attributes.SceneMeshIndexCountsAttribute MeshIndexCounts
         {
-            get => Map.TryGetValue(Vim.G3dNext.Attributes.MeshOpaqueIndexCountsAttribute.AttributeName, out var attr) ? attr as Vim.G3dNext.Attributes.MeshOpaqueIndexCountsAttribute : default;
-            set => Map[Vim.G3dNext.Attributes.MeshOpaqueIndexCountsAttribute.AttributeName] = value as IAttribute;
+            get => Map.TryGetValue(Vim.G3dNext.Attributes.SceneMeshIndexCountsAttribute.AttributeName, out var attr) ? attr as Vim.G3dNext.Attributes.SceneMeshIndexCountsAttribute : default;
+            set => Map[Vim.G3dNext.Attributes.SceneMeshIndexCountsAttribute.AttributeName] = value as IAttribute;
         }
 
-        public Vim.G3dNext.Attributes.MeshOpaqueVertexCountsAttribute MeshOpaqueVertexCountsAttribute
+        public Vim.G3dNext.Attributes.SceneMeshVertexCountsAttribute MeshVertexCounts
         {
-            get => Map.TryGetValue(Vim.G3dNext.Attributes.MeshOpaqueVertexCountsAttribute.AttributeName, out var attr) ? attr as Vim.G3dNext.Attributes.MeshOpaqueVertexCountsAttribute : default;
-            set => Map[Vim.G3dNext.Attributes.MeshOpaqueVertexCountsAttribute.AttributeName] = value as IAttribute;
+            get => Map.TryGetValue(Vim.G3dNext.Attributes.SceneMeshVertexCountsAttribute.AttributeName, out var attr) ? attr as Vim.G3dNext.Attributes.SceneMeshVertexCountsAttribute : default;
+            set => Map[Vim.G3dNext.Attributes.SceneMeshVertexCountsAttribute.AttributeName] = value as IAttribute;
+        }
+
+        public Vim.G3dNext.Attributes.SceneMeshOpaqueIndexCountsAttribute MeshOpaqueIndexCounts
+        {
+            get => Map.TryGetValue(Vim.G3dNext.Attributes.SceneMeshOpaqueIndexCountsAttribute.AttributeName, out var attr) ? attr as Vim.G3dNext.Attributes.SceneMeshOpaqueIndexCountsAttribute : default;
+            set => Map[Vim.G3dNext.Attributes.SceneMeshOpaqueIndexCountsAttribute.AttributeName] = value as IAttribute;
+        }
+
+        public Vim.G3dNext.Attributes.SceneMeshOpaqueVertexCountsAttribute MeshOpaqueVertexCounts
+        {
+            get => Map.TryGetValue(Vim.G3dNext.Attributes.SceneMeshOpaqueVertexCountsAttribute.AttributeName, out var attr) ? attr as Vim.G3dNext.Attributes.SceneMeshOpaqueVertexCountsAttribute : default;
+            set => Map[Vim.G3dNext.Attributes.SceneMeshOpaqueVertexCountsAttribute.AttributeName] = value as IAttribute;
         }
 
         /// <inheritdoc/>
         public IAttribute GetAttribute(Type attributeType)
         {
 
-            if (attributeType == typeof(Vim.G3dNext.Attributes.InstanceFilesAttribute))
-                return InstanceFilesAttribute;
 
-            if (attributeType == typeof(Vim.G3dNext.Attributes.InstanceIndicesAttribute))
-                return InstanceIndicesAttribute;
+                if (attributeType == typeof(Vim.G3dNext.Attributes.SceneChunkCountAttribute))
+                    return ChunkCount;
 
-            if (attributeType == typeof(Vim.G3dNext.Attributes.InstanceNodesAttribute))
-                return InstanceNodesAttribute;
 
-            if (attributeType == typeof(Vim.G3dNext.Attributes.InstanceGroupsAttribute))
-                return InstanceGroupsAttribute;
+                if (attributeType == typeof(Vim.G3dNext.Attributes.SceneInstanceMeshesAttribute))
+                    return InstanceMeshes;
 
-            if (attributeType == typeof(Vim.G3dNext.Attributes.InstanceTagsAttribute))
-                return InstanceTagsAttribute;
 
-            if (attributeType == typeof(Vim.G3dNext.Attributes.InstanceFlagsAttribute))
-                return InstanceFlagsAttribute;
+                if (attributeType == typeof(Vim.G3dNext.Attributes.SceneInstanceTransformsAttribute))
+                    return InstanceTransforms;
 
-            if (attributeType == typeof(Vim.G3dNext.Attributes.InstanceMinsAttribute))
-                return InstanceMinsAttribute;
 
-            if (attributeType == typeof(Vim.G3dNext.Attributes.InstanceMaxsAttribute))
-                return InstanceMaxsAttribute;
+                if (attributeType == typeof(Vim.G3dNext.Attributes.SceneInstanceNodesAttribute))
+                    return InstanceNodes;
 
-            if (attributeType == typeof(Vim.G3dNext.Attributes.MeshInstanceCountsAttribute))
-                return MeshInstanceCountsAttribute;
 
-            if (attributeType == typeof(Vim.G3dNext.Attributes.MeshIndexCountsAttribute))
-                return MeshIndexCountsAttribute;
+                if (attributeType == typeof(Vim.G3dNext.Attributes.SceneInstanceGroupsAttribute))
+                    return InstanceGroups;
 
-            if (attributeType == typeof(Vim.G3dNext.Attributes.MeshVertexCountsAttribute))
-                return MeshVertexCountsAttribute;
 
-            if (attributeType == typeof(Vim.G3dNext.Attributes.MeshOpaqueIndexCountsAttribute))
-                return MeshOpaqueIndexCountsAttribute;
+                if (attributeType == typeof(Vim.G3dNext.Attributes.SceneInstanceTagsAttribute))
+                    return InstanceTags;
 
-            if (attributeType == typeof(Vim.G3dNext.Attributes.MeshOpaqueVertexCountsAttribute))
-                return MeshOpaqueVertexCountsAttribute;
+
+                if (attributeType == typeof(Vim.G3dNext.Attributes.SceneInstanceFlagsAttribute))
+                    return InstanceFlags;
+
+
+                if (attributeType == typeof(Vim.G3dNext.Attributes.SceneInstanceMinsAttribute))
+                    return InstanceMins;
+
+
+                if (attributeType == typeof(Vim.G3dNext.Attributes.SceneInstanceMaxsAttribute))
+                    return InstanceMaxs;
+
+
+                if (attributeType == typeof(Vim.G3dNext.Attributes.SceneMeshChunksAttribute))
+                    return MeshChunks;
+
+
+                if (attributeType == typeof(Vim.G3dNext.Attributes.SceneMeshInstanceCountsAttribute))
+                    return MeshInstanceCounts;
+
+
+                if (attributeType == typeof(Vim.G3dNext.Attributes.SceneMeshIndexCountsAttribute))
+                    return MeshIndexCounts;
+
+
+                if (attributeType == typeof(Vim.G3dNext.Attributes.SceneMeshVertexCountsAttribute))
+                    return MeshVertexCounts;
+
+
+                if (attributeType == typeof(Vim.G3dNext.Attributes.SceneMeshOpaqueIndexCountsAttribute))
+                    return MeshOpaqueIndexCounts;
+
+
+                if (attributeType == typeof(Vim.G3dNext.Attributes.SceneMeshOpaqueVertexCountsAttribute))
+                    return MeshOpaqueVertexCounts;
 
             throw new ArgumentException("Type {attributeType.ToString()} is not supported.");
         }
@@ -2539,82 +2875,94 @@ namespace Vim.G3dNext.Attributes
             switch (attributeName)
             {
 
-                case Vim.G3dNext.Attributes.InstanceFilesAttribute.AttributeName:
+                case Vim.G3dNext.Attributes.SceneChunkCountAttribute.AttributeName:
                 {
                     // Data Attribute
-                    return collections.GetAttributesOfType<Vim.G3dNext.Attributes.InstanceFilesAttribute>().ToArray().MergeDataAttributes<Vim.G3dNext.Attributes.InstanceFilesAttribute, System.Int32>();
+                    return collections.GetAttributesOfType<Vim.G3dNext.Attributes.SceneChunkCountAttribute>().ToArray().MergeDataAttributes<Vim.G3dNext.Attributes.SceneChunkCountAttribute, System.Int32>();
                 }
 
-                case Vim.G3dNext.Attributes.InstanceIndicesAttribute.AttributeName:
+                case Vim.G3dNext.Attributes.SceneInstanceMeshesAttribute.AttributeName:
                 {
                     // Data Attribute
-                    return collections.GetAttributesOfType<Vim.G3dNext.Attributes.InstanceIndicesAttribute>().ToArray().MergeDataAttributes<Vim.G3dNext.Attributes.InstanceIndicesAttribute, System.Int32>();
+                    return collections.GetAttributesOfType<Vim.G3dNext.Attributes.SceneInstanceMeshesAttribute>().ToArray().MergeDataAttributes<Vim.G3dNext.Attributes.SceneInstanceMeshesAttribute, System.Int32>();
                 }
 
-                case Vim.G3dNext.Attributes.InstanceNodesAttribute.AttributeName:
+                case Vim.G3dNext.Attributes.SceneInstanceTransformsAttribute.AttributeName:
                 {
                     // Data Attribute
-                    return collections.GetAttributesOfType<Vim.G3dNext.Attributes.InstanceNodesAttribute>().ToArray().MergeDataAttributes<Vim.G3dNext.Attributes.InstanceNodesAttribute, System.Int32>();
+                    return collections.GetAttributesOfType<Vim.G3dNext.Attributes.SceneInstanceTransformsAttribute>().ToArray().MergeDataAttributes<Vim.G3dNext.Attributes.SceneInstanceTransformsAttribute, System.Int32>();
                 }
 
-                case Vim.G3dNext.Attributes.InstanceGroupsAttribute.AttributeName:
+                case Vim.G3dNext.Attributes.SceneInstanceNodesAttribute.AttributeName:
                 {
                     // Data Attribute
-                    return collections.GetAttributesOfType<Vim.G3dNext.Attributes.InstanceGroupsAttribute>().ToArray().MergeDataAttributes<Vim.G3dNext.Attributes.InstanceGroupsAttribute, System.Int32>();
+                    return collections.GetAttributesOfType<Vim.G3dNext.Attributes.SceneInstanceNodesAttribute>().ToArray().MergeDataAttributes<Vim.G3dNext.Attributes.SceneInstanceNodesAttribute, System.Int32>();
                 }
 
-                case Vim.G3dNext.Attributes.InstanceTagsAttribute.AttributeName:
+                case Vim.G3dNext.Attributes.SceneInstanceGroupsAttribute.AttributeName:
                 {
                     // Data Attribute
-                    return collections.GetAttributesOfType<Vim.G3dNext.Attributes.InstanceTagsAttribute>().ToArray().MergeDataAttributes<Vim.G3dNext.Attributes.InstanceTagsAttribute, System.Int64>();
+                    return collections.GetAttributesOfType<Vim.G3dNext.Attributes.SceneInstanceGroupsAttribute>().ToArray().MergeDataAttributes<Vim.G3dNext.Attributes.SceneInstanceGroupsAttribute, System.Int32>();
                 }
 
-                case Vim.G3dNext.Attributes.InstanceFlagsAttribute.AttributeName:
+                case Vim.G3dNext.Attributes.SceneInstanceTagsAttribute.AttributeName:
                 {
                     // Data Attribute
-                    return collections.GetAttributesOfType<Vim.G3dNext.Attributes.InstanceFlagsAttribute>().ToArray().MergeDataAttributes<Vim.G3dNext.Attributes.InstanceFlagsAttribute, System.UInt16>();
+                    return collections.GetAttributesOfType<Vim.G3dNext.Attributes.SceneInstanceTagsAttribute>().ToArray().MergeDataAttributes<Vim.G3dNext.Attributes.SceneInstanceTagsAttribute, System.Int64>();
                 }
 
-                case Vim.G3dNext.Attributes.InstanceMinsAttribute.AttributeName:
+                case Vim.G3dNext.Attributes.SceneInstanceFlagsAttribute.AttributeName:
                 {
                     // Data Attribute
-                    return collections.GetAttributesOfType<Vim.G3dNext.Attributes.InstanceMinsAttribute>().ToArray().MergeDataAttributes<Vim.G3dNext.Attributes.InstanceMinsAttribute, Vim.Math3d.Vector3>();
+                    return collections.GetAttributesOfType<Vim.G3dNext.Attributes.SceneInstanceFlagsAttribute>().ToArray().MergeDataAttributes<Vim.G3dNext.Attributes.SceneInstanceFlagsAttribute, System.UInt16>();
                 }
 
-                case Vim.G3dNext.Attributes.InstanceMaxsAttribute.AttributeName:
+                case Vim.G3dNext.Attributes.SceneInstanceMinsAttribute.AttributeName:
                 {
                     // Data Attribute
-                    return collections.GetAttributesOfType<Vim.G3dNext.Attributes.InstanceMaxsAttribute>().ToArray().MergeDataAttributes<Vim.G3dNext.Attributes.InstanceMaxsAttribute, Vim.Math3d.Vector3>();
+                    return collections.GetAttributesOfType<Vim.G3dNext.Attributes.SceneInstanceMinsAttribute>().ToArray().MergeDataAttributes<Vim.G3dNext.Attributes.SceneInstanceMinsAttribute, Vim.Math3d.Vector3>();
                 }
 
-                case Vim.G3dNext.Attributes.MeshInstanceCountsAttribute.AttributeName:
+                case Vim.G3dNext.Attributes.SceneInstanceMaxsAttribute.AttributeName:
                 {
                     // Data Attribute
-                    return collections.GetAttributesOfType<Vim.G3dNext.Attributes.MeshInstanceCountsAttribute>().ToArray().MergeDataAttributes<Vim.G3dNext.Attributes.MeshInstanceCountsAttribute, System.Int32>();
+                    return collections.GetAttributesOfType<Vim.G3dNext.Attributes.SceneInstanceMaxsAttribute>().ToArray().MergeDataAttributes<Vim.G3dNext.Attributes.SceneInstanceMaxsAttribute, Vim.Math3d.Vector3>();
                 }
 
-                case Vim.G3dNext.Attributes.MeshIndexCountsAttribute.AttributeName:
+                case Vim.G3dNext.Attributes.SceneMeshChunksAttribute.AttributeName:
                 {
                     // Data Attribute
-                    return collections.GetAttributesOfType<Vim.G3dNext.Attributes.MeshIndexCountsAttribute>().ToArray().MergeDataAttributes<Vim.G3dNext.Attributes.MeshIndexCountsAttribute, System.Int32>();
+                    return collections.GetAttributesOfType<Vim.G3dNext.Attributes.SceneMeshChunksAttribute>().ToArray().MergeDataAttributes<Vim.G3dNext.Attributes.SceneMeshChunksAttribute, System.Int32>();
                 }
 
-                case Vim.G3dNext.Attributes.MeshVertexCountsAttribute.AttributeName:
+                case Vim.G3dNext.Attributes.SceneMeshInstanceCountsAttribute.AttributeName:
                 {
                     // Data Attribute
-                    return collections.GetAttributesOfType<Vim.G3dNext.Attributes.MeshVertexCountsAttribute>().ToArray().MergeDataAttributes<Vim.G3dNext.Attributes.MeshVertexCountsAttribute, System.Int32>();
+                    return collections.GetAttributesOfType<Vim.G3dNext.Attributes.SceneMeshInstanceCountsAttribute>().ToArray().MergeDataAttributes<Vim.G3dNext.Attributes.SceneMeshInstanceCountsAttribute, System.Int32>();
                 }
 
-                case Vim.G3dNext.Attributes.MeshOpaqueIndexCountsAttribute.AttributeName:
+                case Vim.G3dNext.Attributes.SceneMeshIndexCountsAttribute.AttributeName:
                 {
                     // Data Attribute
-                    return collections.GetAttributesOfType<Vim.G3dNext.Attributes.MeshOpaqueIndexCountsAttribute>().ToArray().MergeDataAttributes<Vim.G3dNext.Attributes.MeshOpaqueIndexCountsAttribute, System.Int32>();
+                    return collections.GetAttributesOfType<Vim.G3dNext.Attributes.SceneMeshIndexCountsAttribute>().ToArray().MergeDataAttributes<Vim.G3dNext.Attributes.SceneMeshIndexCountsAttribute, System.Int32>();
                 }
 
-                case Vim.G3dNext.Attributes.MeshOpaqueVertexCountsAttribute.AttributeName:
+                case Vim.G3dNext.Attributes.SceneMeshVertexCountsAttribute.AttributeName:
                 {
                     // Data Attribute
-                    return collections.GetAttributesOfType<Vim.G3dNext.Attributes.MeshOpaqueVertexCountsAttribute>().ToArray().MergeDataAttributes<Vim.G3dNext.Attributes.MeshOpaqueVertexCountsAttribute, System.Int32>();
+                    return collections.GetAttributesOfType<Vim.G3dNext.Attributes.SceneMeshVertexCountsAttribute>().ToArray().MergeDataAttributes<Vim.G3dNext.Attributes.SceneMeshVertexCountsAttribute, System.Int32>();
+                }
+
+                case Vim.G3dNext.Attributes.SceneMeshOpaqueIndexCountsAttribute.AttributeName:
+                {
+                    // Data Attribute
+                    return collections.GetAttributesOfType<Vim.G3dNext.Attributes.SceneMeshOpaqueIndexCountsAttribute>().ToArray().MergeDataAttributes<Vim.G3dNext.Attributes.SceneMeshOpaqueIndexCountsAttribute, System.Int32>();
+                }
+
+                case Vim.G3dNext.Attributes.SceneMeshOpaqueVertexCountsAttribute.AttributeName:
+                {
+                    // Data Attribute
+                    return collections.GetAttributesOfType<Vim.G3dNext.Attributes.SceneMeshOpaqueVertexCountsAttribute>().ToArray().MergeDataAttributes<Vim.G3dNext.Attributes.SceneMeshOpaqueVertexCountsAttribute, System.Int32>();
                 }
 
                 default:
@@ -2658,44 +3006,44 @@ namespace Vim.G3dNext.Attributes
         
         public Vim.Math3d.Matrix4x4[] InstanceTransforms
         {
-            get => Attributes.MeshInstanceTransformsAttribute.TypedData;
-            set => Attributes.MeshInstanceTransformsAttribute.TypedData = value;
+            get => Attributes.InstanceTransforms.TypedData;
+            set => Attributes.InstanceTransforms.TypedData = value;
         }
 
         public System.Int32[] OpaqueSubmeshCounts
         {
-            get => Attributes.MeshOpaqueSubmeshCountsAttribute.TypedData;
-            set => Attributes.MeshOpaqueSubmeshCountsAttribute.TypedData = value;
+            get => Attributes.OpaqueSubmeshCounts.TypedData;
+            set => Attributes.OpaqueSubmeshCounts.TypedData = value;
         }
 
         public System.Int32[] SubmeshIndexOffsets
         {
-            get => Attributes.MeshSubmeshIndexOffsetsAttribute.TypedData;
-            set => Attributes.MeshSubmeshIndexOffsetsAttribute.TypedData = value;
+            get => Attributes.SubmeshIndexOffsets.TypedData;
+            set => Attributes.SubmeshIndexOffsets.TypedData = value;
         }
 
         public System.Int32[] SubmeshVertexOffsets
         {
-            get => Attributes.MeshSubmeshVertexOffsetsAttribute.TypedData;
-            set => Attributes.MeshSubmeshVertexOffsetsAttribute.TypedData = value;
+            get => Attributes.SubmeshVertexOffsets.TypedData;
+            set => Attributes.SubmeshVertexOffsets.TypedData = value;
         }
 
         public System.Int32[] SubmeshMaterials
         {
-            get => Attributes.MeshSubmeshMaterialsAttribute.TypedData;
-            set => Attributes.MeshSubmeshMaterialsAttribute.TypedData = value;
+            get => Attributes.SubmeshMaterials.TypedData;
+            set => Attributes.SubmeshMaterials.TypedData = value;
         }
 
         public Vim.Math3d.Vector3[] Positions
         {
-            get => Attributes.MeshPositionsAttribute.TypedData;
-            set => Attributes.MeshPositionsAttribute.TypedData = value;
+            get => Attributes.Positions.TypedData;
+            set => Attributes.Positions.TypedData = value;
         }
 
         public System.Int32[] Indices
         {
-            get => Attributes.MeshIndicesAttribute.TypedData;
-            set => Attributes.MeshIndicesAttribute.TypedData = value;
+            get => Attributes.Indices.TypedData;
+            set => Attributes.Indices.TypedData = value;
         }
     }
 
@@ -2734,43 +3082,43 @@ namespace Vim.G3dNext.Attributes
 
         // Named Attributes.
 
-        public Vim.G3dNext.Attributes.MeshInstanceTransformsAttribute MeshInstanceTransformsAttribute
+        public Vim.G3dNext.Attributes.MeshInstanceTransformsAttribute InstanceTransforms
         {
             get => Map.TryGetValue(Vim.G3dNext.Attributes.MeshInstanceTransformsAttribute.AttributeName, out var attr) ? attr as Vim.G3dNext.Attributes.MeshInstanceTransformsAttribute : default;
             set => Map[Vim.G3dNext.Attributes.MeshInstanceTransformsAttribute.AttributeName] = value as IAttribute;
         }
 
-        public Vim.G3dNext.Attributes.MeshOpaqueSubmeshCountsAttribute MeshOpaqueSubmeshCountsAttribute
+        public Vim.G3dNext.Attributes.MeshOpaqueSubmeshCountsAttribute OpaqueSubmeshCounts
         {
             get => Map.TryGetValue(Vim.G3dNext.Attributes.MeshOpaqueSubmeshCountsAttribute.AttributeName, out var attr) ? attr as Vim.G3dNext.Attributes.MeshOpaqueSubmeshCountsAttribute : default;
             set => Map[Vim.G3dNext.Attributes.MeshOpaqueSubmeshCountsAttribute.AttributeName] = value as IAttribute;
         }
 
-        public Vim.G3dNext.Attributes.MeshSubmeshIndexOffsetsAttribute MeshSubmeshIndexOffsetsAttribute
+        public Vim.G3dNext.Attributes.MeshSubmeshIndexOffsetsAttribute SubmeshIndexOffsets
         {
             get => Map.TryGetValue(Vim.G3dNext.Attributes.MeshSubmeshIndexOffsetsAttribute.AttributeName, out var attr) ? attr as Vim.G3dNext.Attributes.MeshSubmeshIndexOffsetsAttribute : default;
             set => Map[Vim.G3dNext.Attributes.MeshSubmeshIndexOffsetsAttribute.AttributeName] = value as IAttribute;
         }
 
-        public Vim.G3dNext.Attributes.MeshSubmeshVertexOffsetsAttribute MeshSubmeshVertexOffsetsAttribute
+        public Vim.G3dNext.Attributes.MeshSubmeshVertexOffsetsAttribute SubmeshVertexOffsets
         {
             get => Map.TryGetValue(Vim.G3dNext.Attributes.MeshSubmeshVertexOffsetsAttribute.AttributeName, out var attr) ? attr as Vim.G3dNext.Attributes.MeshSubmeshVertexOffsetsAttribute : default;
             set => Map[Vim.G3dNext.Attributes.MeshSubmeshVertexOffsetsAttribute.AttributeName] = value as IAttribute;
         }
 
-        public Vim.G3dNext.Attributes.MeshSubmeshMaterialsAttribute MeshSubmeshMaterialsAttribute
+        public Vim.G3dNext.Attributes.MeshSubmeshMaterialsAttribute SubmeshMaterials
         {
             get => Map.TryGetValue(Vim.G3dNext.Attributes.MeshSubmeshMaterialsAttribute.AttributeName, out var attr) ? attr as Vim.G3dNext.Attributes.MeshSubmeshMaterialsAttribute : default;
             set => Map[Vim.G3dNext.Attributes.MeshSubmeshMaterialsAttribute.AttributeName] = value as IAttribute;
         }
 
-        public Vim.G3dNext.Attributes.MeshPositionsAttribute MeshPositionsAttribute
+        public Vim.G3dNext.Attributes.MeshPositionsAttribute Positions
         {
             get => Map.TryGetValue(Vim.G3dNext.Attributes.MeshPositionsAttribute.AttributeName, out var attr) ? attr as Vim.G3dNext.Attributes.MeshPositionsAttribute : default;
             set => Map[Vim.G3dNext.Attributes.MeshPositionsAttribute.AttributeName] = value as IAttribute;
         }
 
-        public Vim.G3dNext.Attributes.MeshIndicesAttribute MeshIndicesAttribute
+        public Vim.G3dNext.Attributes.MeshIndicesAttribute Indices
         {
             get => Map.TryGetValue(Vim.G3dNext.Attributes.MeshIndicesAttribute.AttributeName, out var attr) ? attr as Vim.G3dNext.Attributes.MeshIndicesAttribute : default;
             set => Map[Vim.G3dNext.Attributes.MeshIndicesAttribute.AttributeName] = value as IAttribute;
@@ -2780,26 +3128,33 @@ namespace Vim.G3dNext.Attributes
         public IAttribute GetAttribute(Type attributeType)
         {
 
-            if (attributeType == typeof(Vim.G3dNext.Attributes.MeshInstanceTransformsAttribute))
-                return MeshInstanceTransformsAttribute;
 
-            if (attributeType == typeof(Vim.G3dNext.Attributes.MeshOpaqueSubmeshCountsAttribute))
-                return MeshOpaqueSubmeshCountsAttribute;
+                if (attributeType == typeof(Vim.G3dNext.Attributes.MeshInstanceTransformsAttribute))
+                    return InstanceTransforms;
 
-            if (attributeType == typeof(Vim.G3dNext.Attributes.MeshSubmeshIndexOffsetsAttribute))
-                return MeshSubmeshIndexOffsetsAttribute;
 
-            if (attributeType == typeof(Vim.G3dNext.Attributes.MeshSubmeshVertexOffsetsAttribute))
-                return MeshSubmeshVertexOffsetsAttribute;
+                if (attributeType == typeof(Vim.G3dNext.Attributes.MeshOpaqueSubmeshCountsAttribute))
+                    return OpaqueSubmeshCounts;
 
-            if (attributeType == typeof(Vim.G3dNext.Attributes.MeshSubmeshMaterialsAttribute))
-                return MeshSubmeshMaterialsAttribute;
 
-            if (attributeType == typeof(Vim.G3dNext.Attributes.MeshPositionsAttribute))
-                return MeshPositionsAttribute;
+                if (attributeType == typeof(Vim.G3dNext.Attributes.MeshSubmeshIndexOffsetsAttribute))
+                    return SubmeshIndexOffsets;
 
-            if (attributeType == typeof(Vim.G3dNext.Attributes.MeshIndicesAttribute))
-                return MeshIndicesAttribute;
+
+                if (attributeType == typeof(Vim.G3dNext.Attributes.MeshSubmeshVertexOffsetsAttribute))
+                    return SubmeshVertexOffsets;
+
+
+                if (attributeType == typeof(Vim.G3dNext.Attributes.MeshSubmeshMaterialsAttribute))
+                    return SubmeshMaterials;
+
+
+                if (attributeType == typeof(Vim.G3dNext.Attributes.MeshPositionsAttribute))
+                    return Positions;
+
+
+                if (attributeType == typeof(Vim.G3dNext.Attributes.MeshIndicesAttribute))
+                    return Indices;
 
             throw new ArgumentException("Type {attributeType.ToString()} is not supported.");
         }
@@ -2862,10 +3217,10 @@ namespace Vim.G3dNext.Attributes
             // Ensure all the indices are either -1 or within the bounds of the attributes they are indexing into.
 
             {
-                var maxIndex = GetAttribute(MeshSubmeshIndexOffsetsAttribute.IndexInto).Data.Length - 1;
-                for (var i = 0; i < MeshSubmeshIndexOffsetsAttribute.TypedData.Length; ++i)
+                var maxIndex = GetAttribute(SubmeshIndexOffsets.IndexInto).Data.Length - 1;
+                for (var i = 0; i < SubmeshIndexOffsets.TypedData.Length; ++i)
                 {
-                    var index = MeshSubmeshIndexOffsetsAttribute.TypedData[i];
+                    var index = SubmeshIndexOffsets.TypedData[i];
 
                     if (index == -1)
                         continue; // no relation.
@@ -2876,10 +3231,10 @@ namespace Vim.G3dNext.Attributes
             }
 
             {
-                var maxIndex = GetAttribute(MeshSubmeshVertexOffsetsAttribute.IndexInto).Data.Length - 1;
-                for (var i = 0; i < MeshSubmeshVertexOffsetsAttribute.TypedData.Length; ++i)
+                var maxIndex = GetAttribute(SubmeshVertexOffsets.IndexInto).Data.Length - 1;
+                for (var i = 0; i < SubmeshVertexOffsets.TypedData.Length; ++i)
                 {
-                    var index = MeshSubmeshVertexOffsetsAttribute.TypedData[i];
+                    var index = SubmeshVertexOffsets.TypedData[i];
 
                     if (index == -1)
                         continue; // no relation.
@@ -2890,10 +3245,10 @@ namespace Vim.G3dNext.Attributes
             }
 
             {
-                var maxIndex = GetAttribute(MeshSubmeshMaterialsAttribute.IndexInto).Data.Length - 1;
-                for (var i = 0; i < MeshSubmeshMaterialsAttribute.TypedData.Length; ++i)
+                var maxIndex = GetAttribute(SubmeshMaterials.IndexInto).Data.Length - 1;
+                for (var i = 0; i < SubmeshMaterials.TypedData.Length; ++i)
                 {
-                    var index = MeshSubmeshMaterialsAttribute.TypedData[i];
+                    var index = SubmeshMaterials.TypedData[i];
 
                     if (index == -1)
                         continue; // no relation.
@@ -2904,10 +3259,10 @@ namespace Vim.G3dNext.Attributes
             }
 
             {
-                var maxIndex = GetAttribute(MeshIndicesAttribute.IndexInto).Data.Length - 1;
-                for (var i = 0; i < MeshIndicesAttribute.TypedData.Length; ++i)
+                var maxIndex = GetAttribute(Indices.IndexInto).Data.Length - 1;
+                for (var i = 0; i < Indices.TypedData.Length; ++i)
                 {
-                    var index = MeshIndicesAttribute.TypedData[i];
+                    var index = Indices.TypedData[i];
 
                     if (index == -1)
                         continue; // no relation.

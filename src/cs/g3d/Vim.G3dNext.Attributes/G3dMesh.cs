@@ -7,6 +7,7 @@ namespace Vim.G3dNext.Attributes
     {
         // Field doesn't get written but is useful in builing a Vimx.
         public int[] InstanceNodes;
+        public int Chunk;
 
         void ISetup.Setup()
         {

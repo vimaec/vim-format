@@ -12,6 +12,7 @@ namespace Vim.Format.VimxNS
         public const string Scene = "scene";
         public const string Materials = "materials";
         public static string Mesh(int mesh) => $"mesh_{mesh}";
+        public static string Chunk(int mesh) => $"chunk_{mesh}";
     }
 
     public static class BufferCompression
@@ -20,7 +21,8 @@ namespace Vim.Format.VimxNS
         public const bool Meta = false;
         public const bool Scene = true;
         public const bool Materials = true;
-        public const bool Meshes = true;
+        public const bool Meshes = false;
+        public const bool Chunks = true;
     }
 
     public class Vimx
@@ -29,15 +31,15 @@ namespace Vim.Format.VimxNS
         public readonly MetaHeader Meta;
         public readonly G3dScene Scene;
         public readonly G3dMaterials Materials;
-        public readonly G3dMesh[] Meshes;
+        public readonly VimxChunk[] Chunks;
 
-        public Vimx(VimxHeader header, MetaHeader meta, G3dScene scene, G3dMaterials materials, G3dMesh[] meshes)
+        public Vimx(VimxHeader header, MetaHeader meta, G3dScene scene, G3dMaterials materials, VimxChunk[] chunks)
         {
             Meta = meta;
             Header = header;
             Scene = scene;
             Materials = materials;
-            Meshes = meshes;
+            Chunks = chunks;
         }
 
         public Vimx(BFastNext bfast)
@@ -52,9 +54,12 @@ namespace Vim.Format.VimxNS
                 bfast.GetBFast(BufferNames.Materials, BufferCompression.Materials)
             );
 
-            Meshes = Enumerable.Range(0, Scene.MeshIndexCounts.Length).Select(i =>
-                new G3dMesh(bfast.GetBFast(BufferNames.Mesh(i), BufferCompression.Meshes))
-            ).ToArray();
+            /*
+            Chunks = Enumerable.Range(0, Scene.GetChunksCount())
+                .Select(c => bfast.GetBFast(BufferNames.Chunk(c), BufferCompression.Chunks))
+                .Select(b => new VimxChunk(b))
+                .ToArray();
+            */
         }
 
         public static Vimx FromPath(string path)
@@ -67,8 +72,10 @@ namespace Vim.Format.VimxNS
             bfast.SetArray(BufferNames.Header, Header.ToBytes());
             bfast.SetBFast(BufferNames.Scene, Scene.ToBFast(), BufferCompression.Scene);
             bfast.SetBFast(BufferNames.Materials, Materials.ToBFast(), BufferCompression.Materials);
-            bfast.SetBFast(BufferNames.Mesh, Meshes.Select(m => m.ToBFast()), BufferCompression.Meshes);
+            bfast.SetBFast(BufferNames.Chunk, Chunks.Select(c => c.ToBFast()), BufferCompression.Chunks);
             return bfast;
         }
+
+
     }
 }

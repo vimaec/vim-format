@@ -1,4 +1,5 @@
 using NUnit.Framework;
+using Vim.Util;
 using Vim.Util.Tests;
 
 namespace Vim.BFastNextNS.Tests
@@ -46,7 +47,7 @@ namespace Vim.BFastNextNS.Tests
         }
 
         [Test]
-        public void EmptyBFast_GetSize_Return_64()
+            public void EmptyBFast_GetSize_Return_64()
         {
             var bfast = new BFastNext();
             Assert.That(bfast.GetSize(), Is.EqualTo(64));
@@ -155,6 +156,29 @@ namespace Vim.BFastNextNS.Tests
             var result = bfast.GetBFast("A");
 
             Assert.That(result, Is.EqualTo(b));
+        }
+
+        [Test]
+        public void Inflate_NonDeflated_Throws()
+        {
+            var bfast = new BFastNext();
+            var b = new BFastNext();
+            bfast.SetBFast("A", b);
+            Assert.That(() => bfast.GetBFast("A", inflate: true), Throws.Exception);
+        }
+
+        [Test]
+        public void Deflate_Inflate_Works()
+        {
+            var bfast = new BFastNext();
+            var b = new BFastNext();
+            b.SetArray("B", new int[3] { 0, 1, 2 });
+            bfast.SetBFast("A", b, deflate : true);
+
+            var result = bfast.GetBFast("A", inflate: true);
+            var b2 = result.GetArray<int>("B");
+            Assert.That(result.Entries.Count(), Is.EqualTo(1));
+            Assert.That(b2, Is.EqualTo(new int[3] { 0, 1, 2 }));
         }
 
         [Test]
