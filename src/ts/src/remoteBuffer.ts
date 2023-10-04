@@ -37,7 +37,7 @@ export class RetryRequest {
   onProgress: ((e: ProgressEvent<EventTarget>) => void) | undefined
 
   abort(){
-    this.xhr.abort()
+    this.xhr?.abort()
   }
 
   send () {

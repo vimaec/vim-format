@@ -217,20 +217,11 @@ class BFast {
         }
         return request.get();
     }
-    async getLocalBfast(name, unzip = false) {
+    async getLocalBfast(name, inflate = false) {
         let buffer = await this.getBuffer(name);
         if (!buffer)
             return undefined;
-        if (unzip) {
-            buffer = pako.inflate(buffer).buffer;
-        }
-        return new BFast(buffer, 0, name);
-    }
-    async getLocalBfastRaw(name, unzip = false) {
-        let buffer = await this.getBuffer(name);
-        if (!buffer)
-            return undefined;
-        if (unzip) {
+        if (inflate) {
             buffer = pako.inflateRaw(buffer).buffer;
         }
         return new BFast(buffer, 0, name);

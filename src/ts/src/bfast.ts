@@ -256,19 +256,10 @@ export function parseName(name: string): [number, NumericArrayConstructor]{
      return request.get()
    }
  
-   async getLocalBfast (name: string, unzip: boolean = false): Promise<BFast | undefined> {
-     let buffer = await this.getBuffer(name)
-     if (!buffer) return undefined
-     if(unzip){
-      buffer = pako.inflate(buffer).buffer
-     }
-     return new BFast(buffer, 0, name)
-   }
-
-   async getLocalBfastRaw (name: string, unzip: boolean = false): Promise<BFast | undefined> {
+   async getLocalBfast (name: string, inflate: boolean = false): Promise<BFast | undefined> {
     let buffer = await this.getBuffer(name)
     if (!buffer) return undefined
-    if(unzip){
+    if(inflate){
      buffer = pako.inflateRaw(buffer).buffer
     }
     return new BFast(buffer, 0, name)

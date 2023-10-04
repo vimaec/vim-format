@@ -1,13 +1,12 @@
 import * as fs from 'fs'
 import { BFast } from '../src/bfast'
-import { AbstractG3d, G3d } from '../src/g3d'
+import { G3d, VimAttributes } from '../src/g3d'
+import { AbstractG3d } from '../src/abstractG3d'
 import { RemoteG3d } from '../src/remoteG3d'
 
 export const testVimFilePath = `${__dirname}/../../../data/Wolford_Residence.r2023.om_v4.4.0.vim`
 
-export function getFilterTestFile(instance : number){
-  return 'tests/filter_'+instance+'.txt'
-}
+
 
 export function loadFile(path: string) {
     return new Promise<ArrayBuffer | undefined>((resolve, reject) => {
@@ -48,7 +47,7 @@ export async function loadAbstract(vimFilePath: string){
   const arrayBuffer = await loadFile(vimFilePath)
   const bfast = new BFast((arrayBuffer as ArrayBuffer)!)
   const g3dBfast = await bfast.getBfast('geometry')
-  const remote = await AbstractG3d.createFromBfast(g3dBfast!)
+  const remote = await AbstractG3d.createFromBfast(g3dBfast!, VimAttributes.all)
   return remote 
 }
 

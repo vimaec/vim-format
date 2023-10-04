@@ -6,7 +6,6 @@ import { RemoteValue } from "./remoteValue";
 export declare class RemoteVimx {
     bfast: BFast;
     scene: RemoteValue<G3dScene>;
-    sceneRaw: RemoteValue<G3dScene>;
     constructor(bfast: BFast);
     static fromPath(path: string): Promise<RemoteVimx>;
     /**
@@ -17,13 +16,11 @@ export declare class RemoteVimx {
      * Downloads underlying bfast making all subsequent request local.
      */
     download(): Promise<void>;
+    private requestScene;
     /**
-     * Fetches and returns the vimx G3dMeshIndex
-     */
-    private requestIndex;
-    private requestIndexRaw;
-    getIndex(): Promise<G3dScene>;
-    getIndexRaw(): Promise<G3dScene>;
+   * Fetches and returns the vimx G3dScene
+   */
+    getScene(): Promise<G3dScene>;
     /**
      * Fetches and returns the vimx G3dMaterials
      */
@@ -31,13 +28,5 @@ export declare class RemoteVimx {
     /**
      * Fetches and returns the vimx G3dMesh with given index
      */
-    getMesh(mesh: number): Promise<G3dMesh>;
-    /**
-     * Fetches and returns the vimx G3dMaterials
-     */
-    getMaterialsRaw(): Promise<G3dMaterials>;
-    /**
-     * Fetches and returns the vimx G3dMesh with given index
-     */
-    getMeshRaw(mesh: number): Promise<G3dMesh>;
+    getChunk(chunk: number): Promise<G3dMesh[]>;
 }

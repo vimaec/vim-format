@@ -21,7 +21,7 @@ class RetryRequest {
         this.responseType = responseType;
     }
     abort() {
-        this.xhr.abort();
+        this.xhr?.abort();
     }
     send() {
         this.xhr?.abort();

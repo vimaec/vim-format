@@ -13,8 +13,9 @@ export type FilterMode = undefined | 'mesh' | 'instance' | 'group' | 'tag'
  */
 export class SceneAttributes {
 
-  static instanceFiles = 'g3d:instance:file:0:int32:1'
-  static instanceIndices = 'g3d:instance:index:0:int32:1'
+  static chunkCount = 'g3d:chunk:count:0:int32:1'
+  static instanceMesh = 'g3d:instance:mesh:0:int32:1'
+  static instanceTransform = 'g3d:instance:transform:0:int32:1'
   static instanceNodes = 'g3d:instance:node:0:int32:1'
   static instanceGroups = 'g3d:instance:group:0:int32:1'
   static instanceTags = 'g3d:instance:tag:0:int64:1'
@@ -22,6 +23,8 @@ export class SceneAttributes {
   static instanceMins = 'g3d:instance:min:0:float32:3'
   static instanceMaxs = 'g3d:instance:max:0:float32:3'
 
+
+  static meshChunk = 'g3d:mesh:chunk:0:int32:1'
   static meshInstanceCounts = 'g3d:mesh:instancecount:0:int32:1'
   static meshIndexCounts = 'g3d:mesh:indexcount:0:int32:1'
   static meshVertexCounts = 'g3d:mesh:vertexcount:0:int32:1'
@@ -30,8 +33,9 @@ export class SceneAttributes {
   static meshOpaqueVertexCount = "g3d:mesh:opaquevertexcount:0:int32:1"
 
   static all = [
-    SceneAttributes.instanceFiles,
-    SceneAttributes.instanceIndices,
+    SceneAttributes.chunkCount,
+    SceneAttributes.instanceMesh,
+    SceneAttributes.instanceTransform,
     SceneAttributes.instanceNodes,
     SceneAttributes.instanceGroups,
     SceneAttributes.instanceTags,
@@ -39,6 +43,7 @@ export class SceneAttributes {
     SceneAttributes.instanceMins,
     SceneAttributes.instanceMaxs,
 
+    SceneAttributes.meshChunk,
     SceneAttributes.meshInstanceCounts,
     SceneAttributes.meshIndexCounts,
     SceneAttributes.meshVertexCounts,
@@ -56,8 +61,9 @@ export class SceneAttributes {
 export class G3dScene {
   rawG3d: AbstractG3d
 
+  chunkCount: number
   instanceMeshes: Int32Array
-  instanceIndices: Int32Array
+  instanceTransforms: Int32Array
   instanceNodes: Int32Array
   instanceGroups: Int32Array
   instanceTags : BigInt64Array
@@ -65,6 +71,7 @@ export class G3dScene {
   instanceMins: Float32Array
   instanceMaxs: Float32Array
 
+  meshChunks : Int32Array
   meshInstanceCounts: Int32Array
   meshIndexCounts: Int32Array
   meshVertexCounts: Int32Array
@@ -78,8 +85,9 @@ export class G3dScene {
   constructor(
     rawG3d: AbstractG3d,
 
-    instanceFiles: Int32Array,
-    instanceIndices: Int32Array,
+    chunkCount: Int32Array,
+    instanceMeshes: Int32Array,
+    instanceTransform: Int32Array,
     instanceNodes: Int32Array,
     instanceGroups: Int32Array,
     instanceTags: BigInt64Array,
@@ -87,6 +95,7 @@ export class G3dScene {
     instanceMins: Float32Array,
     instanceMaxs: Float32Array,
 
+    meshChunks: Int32Array,
     meshInstanceCounts: Int32Array,
     meshIndexCounts : Int32Array,
     meshVertexCounts: Int32Array, 
@@ -97,8 +106,9 @@ export class G3dScene {
 
     this.rawG3d = rawG3d
 
-    this.instanceMeshes = instanceFiles
-    this.instanceIndices = instanceIndices
+    this.chunkCount = chunkCount[0]
+    this.instanceMeshes = instanceMeshes
+    this.instanceTransforms = instanceTransform
     this.instanceNodes = instanceNodes
     this.instanceGroups = instanceGroups
     this.instanceTags =  instanceTags
@@ -106,11 +116,10 @@ export class G3dScene {
     this.instanceMins = instanceMins
     this.instanceMaxs = instanceMaxs
 
+    this.meshChunks = meshChunks
     this.meshInstanceCounts = meshInstanceCounts
-
     this.meshIndexCounts = meshIndexCounts
     this.meshVertexCounts = meshVertexCounts
-
     this.meshOpaqueIndexCounts = meshOpaqueIndexCounts
     this.meshOpaqueVertexCounts = meshOpaqueVertexCounts
 
@@ -128,7 +137,7 @@ export class G3dScene {
     const map = new Map<number,Map<number, number>>()
     for(let i =0; i < this.instanceMeshes.length; i++){
       const mesh = this.instanceMeshes[i]
-      const index = this.instanceIndices[i]
+      const index = this.instanceTransforms[i]
       const indices = map.get(mesh) ?? new Map<number, number>()
       indices.set(index, i)
       map.set(mesh, indices)
@@ -146,8 +155,9 @@ export class G3dScene {
     
     return new G3dScene(
       g3d,
-      getArray<Int32Array>(SceneAttributes.instanceFiles),
-      getArray<Int32Array>(SceneAttributes.instanceIndices),
+      getArray<Int32Array>(SceneAttributes.chunkCount),
+      getArray<Int32Array>(SceneAttributes.instanceMesh),
+      getArray<Int32Array>(SceneAttributes.instanceTransform),
       getArray<Int32Array>(SceneAttributes.instanceNodes),
       getArray<Int32Array>(SceneAttributes.instanceGroups),
       getArray<BigInt64Array>(SceneAttributes.instanceTags),
@@ -155,11 +165,10 @@ export class G3dScene {
       getArray<Float32Array>(SceneAttributes.instanceMins),
       getArray<Float32Array>(SceneAttributes.instanceMaxs),
 
+      getArray<Int32Array>(SceneAttributes.meshChunk),
       getArray<Int32Array>(SceneAttributes.meshInstanceCounts),
-
       getArray<Int32Array>(SceneAttributes.meshIndexCounts),
       getArray<Int32Array>(SceneAttributes.meshVertexCounts),
-
       getArray<Int32Array>(SceneAttributes.meshOpaqueIndexCount),
       getArray<Int32Array>(SceneAttributes.meshOpaqueVertexCount),
     )
@@ -205,7 +214,7 @@ export class G3dScene {
 
   getNodeMin(node: number){
     const instance = this.nodeToInstance.get(node)
-    if(!node){
+    if(!instance){
       return undefined
     }
     return this.getInstanceMin(instance)
@@ -213,7 +222,7 @@ export class G3dScene {
 
   getNodeMax(node: number){
     const instance = this.nodeToInstance.get(node)
-    if(!node){
+    if(!instance){
       return undefined
     }
     return this.getInstanceMax(instance)

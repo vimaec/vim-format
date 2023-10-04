@@ -1,6 +1,6 @@
 {
   "name": "vim-format",
-  "version": "1.0.6-dev.138",
+  "version": "1.0.6-dev.201",
   "description": "The VIM format is a modern and efficient open 3D data interchange format designed for BIM and manufacturing data optimized for efficient loading and rendering on low-power devices.",
   "directories": {
     "test": "tests"

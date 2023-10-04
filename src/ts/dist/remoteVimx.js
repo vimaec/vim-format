@@ -10,8 +10,7 @@ const remoteValue_1 = require("./remoteValue");
 class RemoteVimx {
     constructor(bfast) {
         this.bfast = bfast;
-        this.scene = new remoteValue_1.RemoteValue(() => this.requestIndex());
-        this.sceneRaw = new remoteValue_1.RemoteValue(() => this.requestIndexRaw());
+        this.scene = new remoteValue_1.RemoteValue(() => this.requestScene());
     }
     static async fromPath(path) {
         const buffer = new remoteBuffer_1.RemoteBuffer(path);
@@ -30,22 +29,15 @@ class RemoteVimx {
     async download() {
         this.bfast.forceDownload();
     }
-    /**
-     * Fetches and returns the vimx G3dMeshIndex
-     */
-    async requestIndex() {
+    async requestScene() {
         const index = await this.bfast.getLocalBfast('scene', true);
         return g3dScene_1.G3dScene.createFromBfast(index);
     }
-    async requestIndexRaw() {
-        const index = await this.bfast.getLocalBfastRaw('scene', true);
-        return g3dScene_1.G3dScene.createFromBfast(index);
-    }
-    async getIndex() {
+    /**
+   * Fetches and returns the vimx G3dScene
+   */
+    async getScene() {
         return this.scene.get();
-    }
-    async getIndexRaw() {
-        return this.sceneRaw.get();
     }
     /**
      * Fetches and returns the vimx G3dMaterials
@@ -57,31 +49,13 @@ class RemoteVimx {
     /**
      * Fetches and returns the vimx G3dMesh with given index
      */
-    async getMesh(mesh) {
-        const m = await this.bfast.getLocalBfast(`mesh_${mesh}`, true);
-        const result = await g3dMesh_1.G3dMesh.createFromBfast(m);
-        const scene = await this.scene.get();
-        result.scene = scene;
-        result.meshIndex = mesh;
-        return result;
-    }
-    /**
-     * Fetches and returns the vimx G3dMaterials
-     */
-    async getMaterialsRaw() {
-        const mat = await this.bfast.getLocalBfastRaw('materials', true);
-        return g3dMaterials_1.G3dMaterial.createFromBfast(mat);
-    }
-    /**
-     * Fetches and returns the vimx G3dMesh with given index
-     */
-    async getMeshRaw(mesh) {
-        const m = await this.bfast.getLocalBfastRaw(`mesh_${mesh}`, true);
-        const result = await g3dMesh_1.G3dMesh.createFromBfast(m);
-        const scene = await this.sceneRaw.get();
-        result.scene = scene;
-        result.meshIndex = mesh;
-        return result;
+    async getChunk(chunk) {
+        const chunkBFast = await this.bfast.getLocalBfast(`chunk_${chunk}`, true);
+        var ranges = await chunkBFast.getRanges();
+        const keys = [...ranges.keys()];
+        var bfasts = await Promise.all(keys.map(k => chunkBFast.getBfast(k)));
+        var meshes = await Promise.all(bfasts.map(b => g3dMesh_1.G3dMesh.createFromBfast(b)));
+        return meshes;
     }
 }
 exports.RemoteVimx = RemoteVimx;

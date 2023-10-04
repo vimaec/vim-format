@@ -61,8 +61,7 @@ export declare class BFast {
      * @param name buffer name
      */
     getBfast(name: string): Promise<BFast>;
-    getLocalBfast(name: string, unzip?: boolean): Promise<BFast | undefined>;
-    getLocalBfastRaw(name: string, unzip?: boolean): Promise<BFast | undefined>;
+    getLocalBfast(name: string, inflate?: boolean): Promise<BFast | undefined>;
     /**
      * Returns the raw buffer associated with a name
      * This value is not cached.
