@@ -60,6 +60,25 @@ namespace Vim.Util
         }
 
         /// <summary>
+        /// Ensures that the directory exists. Returns false if the directory could not be created. Should not throw.
+        /// </summary>
+        public static bool CreateDirectoryIfNotExists(string dirPath)
+        {
+            try
+            {
+                if (string.IsNullOrWhiteSpace(dirPath))
+                    return false;
+
+                return Directory.Exists(dirPath) || Directory.CreateDirectory(dirPath).Exists;
+            }
+            catch
+            {
+                // Return false if Directory.CreateDirectory threw an exception
+                return false;
+            }
+        }
+
+        /// <summary>
         /// Creates a directory if needed, or clears all of its contents otherwise
         /// </summary>
         public static string CreateAndClearDirectory(string dirPath)

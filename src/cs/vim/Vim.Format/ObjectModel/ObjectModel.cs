@@ -14,7 +14,18 @@ namespace Vim.Format.ObjectModel
         // ReSharper disable MemberHidesStaticFromOuterClass
         public static class History
         {
-            // TODO: Update this
+            // Schema additions:
+            //   Vim.AssetInViewSheet__index:Vim.Asset:Asset
+            //   Vim.AssetInViewSheet__index:Vim.ViewSheet:ViewSheet
+            //   Vim.ViewInViewSheet__index:Vim.View:View
+            //   Vim.ViewInViewSheet__index:Vim.ViewSheet:ViewSheet
+            //   Vim.ViewInViewSheetSet__index:Vim.View:View
+            //   Vim.ViewInViewSheetSet__index:Vim.ViewSheetSet:ViewSheetSet
+            //   Vim.ViewSheet__index:Vim.Element:Element
+            //   Vim.ViewSheet__index:Vim.FamilyType:FamilyType
+            //   Vim.ViewSheetInViewSheetSet__index:Vim.ViewSheet:ViewSheet
+            //   Vim.ViewSheetInViewSheetSet__index:Vim.ViewSheetSet:ViewSheetSet
+            //   Vim.ViewSheetSet__index:Vim.Element:Element
             public const string v5_1_0 = "5.1.0";
 
             // Schema removals (we still read these as fallbacks to preserve backwards compatibility):
