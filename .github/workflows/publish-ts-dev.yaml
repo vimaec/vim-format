@@ -21,6 +21,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
         with:
+          lfs: true
           token: ${{ secrets.REPO_PUSH_PAT }}
 
       - name: Setup user
