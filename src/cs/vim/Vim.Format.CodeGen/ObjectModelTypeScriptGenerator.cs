@@ -404,8 +404,8 @@ public static class ObjectModelTypeScriptGenerator
         cb.AppendLine("}");
         cb.AppendLine();
         
-        cb.AppendLine("static async createFromBfast(bfast: BFast, ignoreStrings: boolean = false): Promise<VimDocument | undefined> {");
-        cb.AppendLine("const loaded = await VimLoader.loadFromBfast(bfast, ignoreStrings)");
+        cb.AppendLine("static async createFromBfast(bfast: BFast, download:boolean, ignoreStrings: boolean = false): Promise<VimDocument | undefined> {");
+        cb.AppendLine("const loaded = await VimLoader.loadFromBfast(bfast, download, ignoreStrings)");
         cb.AppendLine();
         cb.AppendLine("if (loaded[0] === undefined)");
         cb.AppendLine("    return undefined");
