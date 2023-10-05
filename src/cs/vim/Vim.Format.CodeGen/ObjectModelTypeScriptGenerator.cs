@@ -366,7 +366,8 @@ public static class ObjectModelTypeScriptGenerator
         cb.AppendLine($"let {lowerName}: I{name}[] = []");
         cb.AppendLine();
 
-        cb.AppendLine($"for (let i = 0; i < {arrays[0]}!.length; i++) {{");
+        cb.AppendLine("const rowCount = await this.getCount()");
+        cb.AppendLine("for (let i = 0; i < rowCount; i++) {");
         cb.AppendLine($"{lowerName}.push({{");
         cb.AppendLine("index: i,");
 
