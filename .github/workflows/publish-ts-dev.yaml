@@ -37,12 +37,15 @@ jobs:
 
       - name: Install dependencies
         run: npm install
+        working-directory: ./src/ts
 
       - name: Get current version
         run: echo "CURRENT_VERSION=$(npm version --json | jq -r '.version')" >> $GITHUB_ENV
+        working-directory: ./src/ts
 
       - name: Bump dev version
         run: echo "NEW_VERSION=$(npm --no-git-tag-version version prerelease --preid=dev | cut -c 2-)" >> $GITHUB_ENV
+        working-directory: ./src/ts
 
       - name: Commit version bump
         run: git commit -am "Bump version to $NEW_VERSION"
