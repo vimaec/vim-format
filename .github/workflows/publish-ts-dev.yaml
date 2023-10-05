@@ -20,11 +20,13 @@ jobs:
 
       - name: Checkout
         uses: actions/checkout@v2
+        with:
+          token: ${{ secrets.REPO_PUSH_PAT }}
 
       - name: Setup user
         run: |
-          git config --global user.email "simon.roberge@vimaec.com"
-          git config --global user.name "Simon Roberge"
+          git config --global user.email "martin.ashton@vimaec.com"
+          git config --global user.name "vim-format robot"
 
       - name: Pull changes from remote
         run: git pull origin develop
@@ -35,8 +37,12 @@ jobs:
           node-version: '14.x'
           registry-url: 'https://registry.npmjs.org'
 
-      - name: Install dependencies
-        run: npm install
+      - name: Install dependencies and build
+        run: npm ci && npm run build
+        working-directory: ./src/ts
+
+      - name: Run tests
+        run: npm test
         working-directory: ./src/ts
 
       - name: Get current version
@@ -52,10 +58,6 @@ jobs:
 
       - name: Push changes
         run: git push
-
-      - name: Build
-        run: npm run build
-        working-directory: ./src/ts
 
       - name: Publish dev package on NPM 📦
         run: npm publish --tag=dev
