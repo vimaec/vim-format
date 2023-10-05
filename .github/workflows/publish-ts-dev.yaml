@@ -55,7 +55,8 @@ jobs:
         working-directory: ./src/ts
 
       - name: Commit version bump
-        run: git commit -am "Bump version to $NEW_VERSION"
+        # NOTE: "[skip ci]" prevents loops https://docs.github.com/en/actions/managing-workflow-runs/skipping-workflow-runs
+        run: git commit -am "[skip ci] Bump version to $NEW_VERSION"
 
       - name: Push changes
         run: git push
