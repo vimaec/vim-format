@@ -2,7 +2,7 @@
 {
     public partial class G3dScene
     {
-        //public int GetChunksCount() => ChunksCount[0];
+        public int GetChunksCount() => ChunkCount[0];
         void ISetup.Setup()
         {
             // empty

@@ -39,14 +39,29 @@ namespace Vim.Format.VimxNS.Conversion
 
         public static VimxChunk[] SplitChunks(this IEnumerable<G3dMesh> meshes)
         {
+            //2MB once compressed -> 0.5MB
+            const int ChunkSize = 2000000;
+
             var chunks = new List<VimxChunk>();
             var chunk = new VimxChunk();
+            var chunkSize = 0L;
             foreach (var mesh in meshes)
             {
+                chunkSize += mesh.GetSize();
+                if (chunkSize > ChunkSize && chunk.Meshes.Count > 0)
+                {
+                    chunks.Add(chunk);
+                    chunk = new VimxChunk();
+                    chunkSize = 0;
+                }
+                mesh.Chunk = chunks.Count;
+                mesh.ChunkIndex = chunk.Meshes.Count();
                 chunk.Meshes.Add(mesh);
-                mesh.Chunk = 0;
             }
-            chunks.Add(chunk);
+            if(chunk.Meshes.Count > 0)
+            {
+                chunks.Add(chunk);
+            }
 
             return chunks.ToArray();
         }

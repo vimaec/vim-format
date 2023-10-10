@@ -54,12 +54,12 @@ namespace Vim.Format.VimxNS
                 bfast.GetBFast(BufferNames.Materials, BufferCompression.Materials)
             );
 
-            /*
+            
             Chunks = Enumerable.Range(0, Scene.GetChunksCount())
                 .Select(c => bfast.GetBFast(BufferNames.Chunk(c), BufferCompression.Chunks))
                 .Select(b => new VimxChunk(b))
                 .ToArray();
-            */
+            
         }
 
         public static Vimx FromPath(string path)

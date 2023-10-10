@@ -1315,6 +1315,51 @@ namespace Vim.G3dNext.Attributes
         }
     }
     
+    public partial class SceneMeshChunkIndicesAttribute : IAttribute<System.Int32>
+    {
+        public const string AttributeName = "g3d:mesh:chunkindex:0:int32:1";
+
+        public string Name
+            => AttributeName;
+
+        public int Count => TypedData?.Length ?? 0;
+
+        public void AddTo(BFastNext bfast)
+        {
+            if(TypedData != null)
+            {
+                bfast.SetArray(Name, TypedData);
+            }
+        }
+
+        public void ReadBFast(BFastNext bfast)
+        {
+            TypedData = bfast.GetArray<System.Int32>("g3d:mesh:chunkindex:0:int32:1");
+        }
+
+        public IAttributeDescriptor AttributeDescriptor { get; }
+            = new AttributeDescriptor(AttributeName);
+
+        public AttributeType AttributeType { get; }
+            = AttributeType.Data;
+
+        public Type IndexInto { get; }
+            = null;
+
+        public System.Int32[] TypedData { get; set; }
+            = Array.Empty<System.Int32>();
+
+        public Array Data
+            => TypedData;
+
+        public void Write(Stream stream)
+        {
+            if (TypedData == null || TypedData.Length == 0)
+                return;
+            stream.Write(TypedData);
+        }
+    }
+    
     public partial class SceneMeshInstanceCountsAttribute : IAttribute<System.Int32>
     {
         public const string AttributeName = "g3d:mesh:instancecount:0:int32:1";
@@ -2638,6 +2683,12 @@ namespace Vim.G3dNext.Attributes
             set => Attributes.MeshChunks.TypedData = value;
         }
 
+        public System.Int32[] MeshChunkIndices
+        {
+            get => Attributes.MeshChunkIndices.TypedData;
+            set => Attributes.MeshChunkIndices.TypedData = value;
+        }
+
         public System.Int32[] MeshInstanceCounts
         {
             get => Attributes.MeshInstanceCounts.TypedData;
@@ -2703,6 +2754,7 @@ namespace Vim.G3dNext.Attributes
                 [Vim.G3dNext.Attributes.SceneInstanceMinsAttribute.AttributeName] = new Vim.G3dNext.Attributes.SceneInstanceMinsAttribute(),
                 [Vim.G3dNext.Attributes.SceneInstanceMaxsAttribute.AttributeName] = new Vim.G3dNext.Attributes.SceneInstanceMaxsAttribute(),
                 [Vim.G3dNext.Attributes.SceneMeshChunksAttribute.AttributeName] = new Vim.G3dNext.Attributes.SceneMeshChunksAttribute(),
+                [Vim.G3dNext.Attributes.SceneMeshChunkIndicesAttribute.AttributeName] = new Vim.G3dNext.Attributes.SceneMeshChunkIndicesAttribute(),
                 [Vim.G3dNext.Attributes.SceneMeshInstanceCountsAttribute.AttributeName] = new Vim.G3dNext.Attributes.SceneMeshInstanceCountsAttribute(),
                 [Vim.G3dNext.Attributes.SceneMeshIndexCountsAttribute.AttributeName] = new Vim.G3dNext.Attributes.SceneMeshIndexCountsAttribute(),
                 [Vim.G3dNext.Attributes.SceneMeshVertexCountsAttribute.AttributeName] = new Vim.G3dNext.Attributes.SceneMeshVertexCountsAttribute(),
@@ -2770,6 +2822,12 @@ namespace Vim.G3dNext.Attributes
         {
             get => Map.TryGetValue(Vim.G3dNext.Attributes.SceneMeshChunksAttribute.AttributeName, out var attr) ? attr as Vim.G3dNext.Attributes.SceneMeshChunksAttribute : default;
             set => Map[Vim.G3dNext.Attributes.SceneMeshChunksAttribute.AttributeName] = value as IAttribute;
+        }
+
+        public Vim.G3dNext.Attributes.SceneMeshChunkIndicesAttribute MeshChunkIndices
+        {
+            get => Map.TryGetValue(Vim.G3dNext.Attributes.SceneMeshChunkIndicesAttribute.AttributeName, out var attr) ? attr as Vim.G3dNext.Attributes.SceneMeshChunkIndicesAttribute : default;
+            set => Map[Vim.G3dNext.Attributes.SceneMeshChunkIndicesAttribute.AttributeName] = value as IAttribute;
         }
 
         public Vim.G3dNext.Attributes.SceneMeshInstanceCountsAttribute MeshInstanceCounts
@@ -2845,6 +2903,10 @@ namespace Vim.G3dNext.Attributes
 
                 if (attributeType == typeof(Vim.G3dNext.Attributes.SceneMeshChunksAttribute))
                     return MeshChunks;
+
+
+                if (attributeType == typeof(Vim.G3dNext.Attributes.SceneMeshChunkIndicesAttribute))
+                    return MeshChunkIndices;
 
 
                 if (attributeType == typeof(Vim.G3dNext.Attributes.SceneMeshInstanceCountsAttribute))
@@ -2933,6 +2995,12 @@ namespace Vim.G3dNext.Attributes
                 {
                     // Data Attribute
                     return collections.GetAttributesOfType<Vim.G3dNext.Attributes.SceneMeshChunksAttribute>().ToArray().MergeDataAttributes<Vim.G3dNext.Attributes.SceneMeshChunksAttribute, System.Int32>();
+                }
+
+                case Vim.G3dNext.Attributes.SceneMeshChunkIndicesAttribute.AttributeName:
+                {
+                    // Data Attribute
+                    return collections.GetAttributesOfType<Vim.G3dNext.Attributes.SceneMeshChunkIndicesAttribute>().ToArray().MergeDataAttributes<Vim.G3dNext.Attributes.SceneMeshChunkIndicesAttribute, System.Int32>();
                 }
 
                 case Vim.G3dNext.Attributes.SceneMeshInstanceCountsAttribute.AttributeName:

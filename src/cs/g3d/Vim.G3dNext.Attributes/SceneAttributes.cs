@@ -13,6 +13,7 @@ namespace Vim.G3dNext.Attributes
         typeof(SceneInstanceMinsAttribute),
         typeof(SceneInstanceMaxsAttribute),
         typeof(SceneMeshChunksAttribute),
+        typeof(SceneMeshChunkIndicesAttribute),
         typeof(SceneMeshInstanceCountsAttribute),
         typeof(SceneMeshIndexCountsAttribute),
         typeof(SceneMeshVertexCountsAttribute),
@@ -53,6 +54,9 @@ namespace Vim.G3dNext.Attributes
 
     [AttributeDescriptor("Scene", "g3d:mesh:chunk:0:int32:1", AttributeType.Data)]
     public partial class SceneMeshChunksAttribute { }
+
+    [AttributeDescriptor("Scene", "g3d:mesh:chunkindex:0:int32:1", AttributeType.Data)]
+    public partial class SceneMeshChunkIndicesAttribute { }
 
     [AttributeDescriptor("Scene", "g3d:mesh:instancecount:0:int32:1", AttributeType.Data)]
     public partial class SceneMeshInstanceCountsAttribute { }
