@@ -20,11 +20,14 @@ jobs:
 
       - name: Checkout
         uses: actions/checkout@v2
+        with:
+          lfs: true
+          token: ${{ secrets.REPO_PUSH_PAT }}
 
       - name: Setup user
         run: |
-          git config --global user.email "simon.roberge@vimaec.com"
-          git config --global user.name "Simon Roberge"
+          git config --global user.email "martin.ashton@vimaec.com"
+          git config --global user.name "vim-format robot"
 
       - name: Pull changes from remote
         run: git pull origin develop
@@ -35,24 +38,28 @@ jobs:
           node-version: '14.x'
           registry-url: 'https://registry.npmjs.org'
 
-      - name: Install dependencies
-        run: npm install
+      - name: Install dependencies and build
+        run: npm ci && npm run build
+        working-directory: ./src/ts
+
+      - name: Run tests
+        run: npm test
+        working-directory: ./src/ts
 
       - name: Get current version
         run: echo "CURRENT_VERSION=$(npm version --json | jq -r '.version')" >> $GITHUB_ENV
+        working-directory: ./src/ts
 
       - name: Bump dev version
         run: echo "NEW_VERSION=$(npm --no-git-tag-version version prerelease --preid=dev | cut -c 2-)" >> $GITHUB_ENV
+        working-directory: ./src/ts
 
       - name: Commit version bump
-        run: git commit -am "Bump version to $NEW_VERSION"
+        # NOTE: "[skip ci]" prevents loops https://docs.github.com/en/actions/managing-workflow-runs/skipping-workflow-runs
+        run: git commit -am "[skip ci] Bump version to $NEW_VERSION"
 
       - name: Push changes
         run: git push
-
-      - name: Build
-        run: npm run build
-        working-directory: ./src/ts
 
       - name: Publish dev package on NPM 📦
         run: npm publish --tag=dev
