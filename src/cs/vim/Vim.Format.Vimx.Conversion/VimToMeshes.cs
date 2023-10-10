@@ -50,7 +50,6 @@ namespace Vim.Format.VimxNS.Conversion
             }
             var instanceNodes = new int[instances.Count];
             var instanceTransforms = new Matrix4x4[instances.Count];
-            var instanceFlags = new ushort[instances.Count];
 
             var submeshIndexOffsets = new List<int>();
             var submeshVertexOffsets = new List<int>();
@@ -64,7 +63,6 @@ namespace Vim.Format.VimxNS.Conversion
                 var instance = instances[i];
                 instanceNodes[i] = instances[i];
                 instanceTransforms[i] = g3d.InstanceTransforms[instance];
-                instanceFlags[i] = g3d.InstanceFlags[instance];
             }
 
             var opaqueCount = AppendSubmeshes(

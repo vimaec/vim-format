@@ -26,7 +26,11 @@ namespace Vim.Format.VimxNS.Conversion
             scene.InstanceGroups = scene.InstanceNodes.Select(n => nodeElements[n]).ToArray();
             scene.InstanceTags = scene.InstanceNodes.Select(n => nodeElementIds[n]).ToArray();
             (scene.InstanceMins, scene.InstanceMaxs) = ComputeBoundingBoxes(meshes, scene.InstanceMeshes, scene.InstanceTransforms);
-            scene.InstanceFlags = scene.InstanceNodes.Select(i => g3d.InstanceFlags[i]).ToArray();
+
+            if (g3d.InstanceFlags != null)
+            {
+                scene.InstanceFlags = scene.InstanceNodes.Select(i => g3d.InstanceFlags[i]).ToArray();
+            }
 
             // meshes
             scene.MeshChunks = new int[meshes.Length];
