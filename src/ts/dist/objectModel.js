@@ -39,7 +39,8 @@ class AssetTable {
             (async () => { bufferName = (await localTable.getStringArray("string:BufferName")); })(),
         ]);
         let asset = [];
-        for (let i = 0; i < bufferName.length; i++) {
+        const rowCount = await this.getCount();
+        for (let i = 0; i < rowCount; i++) {
             asset.push({
                 index: i,
                 bufferName: bufferName ? bufferName[i] : undefined
@@ -95,7 +96,8 @@ class DisplayUnitTable {
             (async () => { label = (await localTable.getStringArray("string:Label")); })(),
         ]);
         let displayUnit = [];
-        for (let i = 0; i < spec.length; i++) {
+        const rowCount = await this.getCount();
+        for (let i = 0; i < rowCount; i++) {
             displayUnit.push({
                 index: i,
                 spec: spec ? spec[i] : undefined,
@@ -184,7 +186,8 @@ class ParameterDescriptorTable {
             (async () => { displayUnitIndex = (await localTable.getNumberArray("index:Vim.DisplayUnit:DisplayUnit")); })(),
         ]);
         let parameterDescriptor = [];
-        for (let i = 0; i < name.length; i++) {
+        const rowCount = await this.getCount();
+        for (let i = 0; i < rowCount; i++) {
             parameterDescriptor.push({
                 index: i,
                 name: name ? name[i] : undefined,
@@ -304,7 +307,8 @@ class ParameterTable {
             (async () => { elementIndex = (await localTable.getNumberArray("index:Vim.Element:Element")); })(),
         ]);
         let parameter = [];
-        for (let i = 0; i < value.length; i++) {
+        const rowCount = await this.getCount();
+        for (let i = 0; i < rowCount; i++) {
             parameter.push({
                 index: i,
                 value: value ? value[i] : undefined,
@@ -440,7 +444,8 @@ class ElementTable {
             (async () => { roomIndex = (await localTable.getNumberArray("index:Vim.Room:Room")); })(),
         ]);
         let element = [];
-        for (let i = 0; i < id.length; i++) {
+        const rowCount = await this.getCount();
+        for (let i = 0; i < rowCount; i++) {
             element.push({
                 index: i,
                 id: id ? id[i] : undefined,
@@ -722,7 +727,8 @@ class WorksetTable {
             (async () => { bimDocumentIndex = (await localTable.getNumberArray("index:Vim.BimDocument:BimDocument")); })(),
         ]);
         let workset = [];
-        for (let i = 0; i < id.length; i++) {
+        const rowCount = await this.getCount();
+        for (let i = 0; i < rowCount; i++) {
             workset.push({
                 index: i,
                 id: id ? id[i] : undefined,
@@ -841,7 +847,8 @@ class AssemblyInstanceTable {
             (async () => { elementIndex = (await localTable.getNumberArray("index:Vim.Element:Element")); })(),
         ]);
         let assemblyInstance = [];
-        for (let i = 0; i < assemblyTypeName.length; i++) {
+        const rowCount = await this.getCount();
+        for (let i = 0; i < rowCount; i++) {
             assemblyInstance.push({
                 index: i,
                 assemblyTypeName: assemblyTypeName ? assemblyTypeName[i] : undefined,
@@ -939,7 +946,8 @@ class GroupTable {
             (async () => { elementIndex = (await localTable.getNumberArray("index:Vim.Element:Element")); })(),
         ]);
         let group = [];
-        for (let i = 0; i < groupType.length; i++) {
+        const rowCount = await this.getCount();
+        for (let i = 0; i < rowCount; i++) {
             group.push({
                 index: i,
                 groupType: groupType ? groupType[i] : undefined,
@@ -1028,7 +1036,8 @@ class DesignOptionTable {
             (async () => { elementIndex = (await localTable.getNumberArray("index:Vim.Element:Element")); })(),
         ]);
         let designOption = [];
-        for (let i = 0; i < isPrimary.length; i++) {
+        const rowCount = await this.getCount();
+        for (let i = 0; i < rowCount; i++) {
             designOption.push({
                 index: i,
                 isPrimary: isPrimary ? isPrimary[i] : undefined,
@@ -1099,7 +1108,8 @@ class LevelTable {
             (async () => { elementIndex = (await localTable.getNumberArray("index:Vim.Element:Element")); })(),
         ]);
         let level = [];
-        for (let i = 0; i < elevation.length; i++) {
+        const rowCount = await this.getCount();
+        for (let i = 0; i < rowCount; i++) {
             level.push({
                 index: i,
                 elevation: elevation ? elevation[i] : undefined,
@@ -1178,7 +1188,8 @@ class PhaseTable {
             (async () => { elementIndex = (await localTable.getNumberArray("index:Vim.Element:Element")); })(),
         ]);
         let phase = [];
-        for (let i = 0; i < elementIndex.length; i++) {
+        const rowCount = await this.getCount();
+        for (let i = 0; i < rowCount; i++) {
             phase.push({
                 index: i,
                 elementIndex: elementIndex ? elementIndex[i] : undefined
@@ -1260,7 +1271,8 @@ class RoomTable {
             (async () => { elementIndex = (await localTable.getNumberArray("index:Vim.Element:Element")); })(),
         ]);
         let room = [];
-        for (let i = 0; i < baseOffset.length; i++) {
+        const rowCount = await this.getCount();
+        for (let i = 0; i < rowCount; i++) {
             room.push({
                 index: i,
                 baseOffset: baseOffset ? baseOffset[i] : undefined,
@@ -1474,7 +1486,8 @@ class BimDocumentTable {
             (async () => { elementIndex = (await localTable.getNumberArray("index:Vim.Element:Element")); })(),
         ]);
         let bimDocument = [];
-        for (let i = 0; i < title.length; i++) {
+        const rowCount = await this.getCount();
+        for (let i = 0; i < rowCount; i++) {
             bimDocument.push({
                 index: i,
                 title: title ? title[i] : undefined,
@@ -1773,7 +1786,8 @@ class DisplayUnitInBimDocumentTable {
             (async () => { bimDocumentIndex = (await localTable.getNumberArray("index:Vim.BimDocument:BimDocument")); })(),
         ]);
         let displayUnitInBimDocument = [];
-        for (let i = 0; i < displayUnitIndex.length; i++) {
+        const rowCount = await this.getCount();
+        for (let i = 0; i < rowCount; i++) {
             displayUnitInBimDocument.push({
                 index: i,
                 displayUnitIndex: displayUnitIndex ? displayUnitIndex[i] : undefined,
@@ -1851,7 +1865,8 @@ class PhaseOrderInBimDocumentTable {
             (async () => { bimDocumentIndex = (await localTable.getNumberArray("index:Vim.BimDocument:BimDocument")); })(),
         ]);
         let phaseOrderInBimDocument = [];
-        for (let i = 0; i < orderIndex.length; i++) {
+        const rowCount = await this.getCount();
+        for (let i = 0; i < rowCount; i++) {
             phaseOrderInBimDocument.push({
                 index: i,
                 orderIndex: orderIndex ? orderIndex[i] : undefined,
@@ -1954,7 +1969,8 @@ class CategoryTable {
             (async () => { materialIndex = (await localTable.getNumberArray("index:Vim.Material:Material")); })(),
         ]);
         let category = [];
-        for (let i = 0; i < name.length; i++) {
+        const rowCount = await this.getCount();
+        for (let i = 0; i < rowCount; i++) {
             category.push({
                 index: i,
                 name: name ? name[i] : undefined,
@@ -2090,7 +2106,8 @@ class FamilyTable {
             (async () => { elementIndex = (await localTable.getNumberArray("index:Vim.Element:Element")); })(),
         ]);
         let family = [];
-        for (let i = 0; i < structuralMaterialType.length; i++) {
+        const rowCount = await this.getCount();
+        for (let i = 0; i < rowCount; i++) {
             family.push({
                 index: i,
                 structuralMaterialType: structuralMaterialType ? structuralMaterialType[i] : undefined,
@@ -2199,7 +2216,8 @@ class FamilyTypeTable {
             (async () => { elementIndex = (await localTable.getNumberArray("index:Vim.Element:Element")); })(),
         ]);
         let familyType = [];
-        for (let i = 0; i < isSystemFamilyType.length; i++) {
+        const rowCount = await this.getCount();
+        for (let i = 0; i < rowCount; i++) {
             familyType.push({
                 index: i,
                 isSystemFamilyType: isSystemFamilyType ? isSystemFamilyType[i] : undefined,
@@ -2373,7 +2391,8 @@ class FamilyInstanceTable {
             (async () => { elementIndex = (await localTable.getNumberArray("index:Vim.Element:Element")); })(),
         ]);
         let familyInstance = [];
-        for (let i = 0; i < facingFlipped.length; i++) {
+        const rowCount = await this.getCount();
+        for (let i = 0; i < rowCount; i++) {
             familyInstance.push({
                 index: i,
                 facingFlipped: facingFlipped ? facingFlipped[i] : undefined,
@@ -2723,7 +2742,8 @@ class ViewTable {
             (async () => { elementIndex = (await localTable.getNumberArray("index:Vim.Element:Element")); })(),
         ]);
         let view = [];
-        for (let i = 0; i < title.length; i++) {
+        const rowCount = await this.getCount();
+        for (let i = 0; i < rowCount; i++) {
             view.push({
                 index: i,
                 title: title ? title[i] : undefined,
@@ -2973,7 +2993,8 @@ class ElementInViewTable {
             (async () => { elementIndex = (await localTable.getNumberArray("index:Vim.Element:Element")); })(),
         ]);
         let elementInView = [];
-        for (let i = 0; i < viewIndex.length; i++) {
+        const rowCount = await this.getCount();
+        for (let i = 0; i < rowCount; i++) {
             elementInView.push({
                 index: i,
                 viewIndex: viewIndex ? viewIndex[i] : undefined,
@@ -3048,7 +3069,8 @@ class ShapeInViewTable {
             (async () => { viewIndex = (await localTable.getNumberArray("index:Vim.View:View")); })(),
         ]);
         let shapeInView = [];
-        for (let i = 0; i < shapeIndex.length; i++) {
+        const rowCount = await this.getCount();
+        for (let i = 0; i < rowCount; i++) {
             shapeInView.push({
                 index: i,
                 shapeIndex: shapeIndex ? shapeIndex[i] : undefined,
@@ -3123,7 +3145,8 @@ class AssetInViewTable {
             (async () => { viewIndex = (await localTable.getNumberArray("index:Vim.View:View")); })(),
         ]);
         let assetInView = [];
-        for (let i = 0; i < assetIndex.length; i++) {
+        const rowCount = await this.getCount();
+        for (let i = 0; i < rowCount; i++) {
             assetInView.push({
                 index: i,
                 assetIndex: assetIndex ? assetIndex[i] : undefined,
@@ -3198,7 +3221,8 @@ class AssetInViewSheetTable {
             (async () => { viewSheetIndex = (await localTable.getNumberArray("index:Vim.ViewSheet:ViewSheet")); })(),
         ]);
         let assetInViewSheet = [];
-        for (let i = 0; i < assetIndex.length; i++) {
+        const rowCount = await this.getCount();
+        for (let i = 0; i < rowCount; i++) {
             assetInViewSheet.push({
                 index: i,
                 assetIndex: assetIndex ? assetIndex[i] : undefined,
@@ -3291,7 +3315,8 @@ class LevelInViewTable {
             (async () => { viewIndex = (await localTable.getNumberArray("index:Vim.View:View")); })(),
         ]);
         let levelInView = [];
-        for (let i = 0; i < extents_Min_X.length; i++) {
+        const rowCount = await this.getCount();
+        for (let i = 0; i < rowCount; i++) {
             levelInView.push({
                 index: i,
                 extents_Min_X: extents_Min_X ? extents_Min_X[i] : undefined,
@@ -3428,7 +3453,8 @@ class CameraTable {
             (async () => { upOffset = (await localTable.getNumberArray("double:UpOffset")); })(),
         ]);
         let camera = [];
-        for (let i = 0; i < id.length; i++) {
+        const rowCount = await this.getCount();
+        for (let i = 0; i < rowCount; i++) {
             camera.push({
                 index: i,
                 id: id ? id[i] : undefined,
@@ -3592,7 +3618,8 @@ class MaterialTable {
             (async () => { elementIndex = (await localTable.getNumberArray("index:Vim.Element:Element")); })(),
         ]);
         let material = [];
-        for (let i = 0; i < name.length; i++) {
+        const rowCount = await this.getCount();
+        for (let i = 0; i < rowCount; i++) {
             material.push({
                 index: i,
                 name: name ? name[i] : undefined,
@@ -3809,7 +3836,8 @@ class MaterialInElementTable {
             (async () => { elementIndex = (await localTable.getNumberArray("index:Vim.Element:Element")); })(),
         ]);
         let materialInElement = [];
-        for (let i = 0; i < area.length; i++) {
+        const rowCount = await this.getCount();
+        for (let i = 0; i < rowCount; i++) {
             materialInElement.push({
                 index: i,
                 area: area ? area[i] : undefined,
@@ -3914,7 +3942,8 @@ class CompoundStructureLayerTable {
             (async () => { compoundStructureIndex = (await localTable.getNumberArray("index:Vim.CompoundStructure:CompoundStructure")); })(),
         ]);
         let compoundStructureLayer = [];
-        for (let i = 0; i < orderIndex.length; i++) {
+        const rowCount = await this.getCount();
+        for (let i = 0; i < rowCount; i++) {
             compoundStructureLayer.push({
                 index: i,
                 orderIndex: orderIndex ? orderIndex[i] : undefined,
@@ -4010,7 +4039,8 @@ class CompoundStructureTable {
             (async () => { structuralLayerIndex = (await localTable.getNumberArray("index:Vim.CompoundStructureLayer:StructuralLayer")); })(),
         ]);
         let compoundStructure = [];
-        for (let i = 0; i < width.length; i++) {
+        const rowCount = await this.getCount();
+        for (let i = 0; i < rowCount; i++) {
             compoundStructure.push({
                 index: i,
                 width: width ? width[i] : undefined,
@@ -4075,7 +4105,8 @@ class NodeTable {
             (async () => { elementIndex = (await localTable.getNumberArray("index:Vim.Element:Element")); })(),
         ]);
         let node = [];
-        for (let i = 0; i < elementIndex.length; i++) {
+        const rowCount = await this.getCount();
+        for (let i = 0; i < rowCount; i++) {
             node.push({
                 index: i,
                 elementIndex: elementIndex ? elementIndex[i] : undefined
@@ -4153,7 +4184,8 @@ class GeometryTable {
             (async () => { faceCount = (await localTable.getNumberArray("int:FaceCount")); })(),
         ]);
         let geometry = [];
-        for (let i = 0; i < box_Min_X.length; i++) {
+        const rowCount = await this.getCount();
+        for (let i = 0; i < rowCount; i++) {
             geometry.push({
                 index: i,
                 box_Min_X: box_Min_X ? box_Min_X[i] : undefined,
@@ -4253,7 +4285,8 @@ class ShapeTable {
             (async () => { elementIndex = (await localTable.getNumberArray("index:Vim.Element:Element")); })(),
         ]);
         let shape = [];
-        for (let i = 0; i < elementIndex.length; i++) {
+        const rowCount = await this.getCount();
+        for (let i = 0; i < rowCount; i++) {
             shape.push({
                 index: i,
                 elementIndex: elementIndex ? elementIndex[i] : undefined
@@ -4311,7 +4344,8 @@ class ShapeCollectionTable {
             (async () => { elementIndex = (await localTable.getNumberArray("index:Vim.Element:Element")); })(),
         ]);
         let shapeCollection = [];
-        for (let i = 0; i < elementIndex.length; i++) {
+        const rowCount = await this.getCount();
+        for (let i = 0; i < rowCount; i++) {
             shapeCollection.push({
                 index: i,
                 elementIndex: elementIndex ? elementIndex[i] : undefined
@@ -4372,7 +4406,8 @@ class ShapeInShapeCollectionTable {
             (async () => { shapeCollectionIndex = (await localTable.getNumberArray("index:Vim.ShapeCollection:ShapeCollection")); })(),
         ]);
         let shapeInShapeCollection = [];
-        for (let i = 0; i < shapeIndex.length; i++) {
+        const rowCount = await this.getCount();
+        for (let i = 0; i < rowCount; i++) {
             shapeInShapeCollection.push({
                 index: i,
                 shapeIndex: shapeIndex ? shapeIndex[i] : undefined,
@@ -4450,7 +4485,8 @@ class SystemTable {
             (async () => { elementIndex = (await localTable.getNumberArray("index:Vim.Element:Element")); })(),
         ]);
         let system = [];
-        for (let i = 0; i < systemType.length; i++) {
+        const rowCount = await this.getCount();
+        for (let i = 0; i < rowCount; i++) {
             system.push({
                 index: i,
                 systemType: systemType ? systemType[i] : undefined,
@@ -4535,7 +4571,8 @@ class ElementInSystemTable {
             (async () => { elementIndex = (await localTable.getNumberArray("index:Vim.Element:Element")); })(),
         ]);
         let elementInSystem = [];
-        for (let i = 0; i < roles.length; i++) {
+        const rowCount = await this.getCount();
+        for (let i = 0; i < rowCount; i++) {
             elementInSystem.push({
                 index: i,
                 roles: roles ? roles[i] : undefined,
@@ -4623,7 +4660,8 @@ class WarningTable {
             (async () => { bimDocumentIndex = (await localTable.getNumberArray("index:Vim.BimDocument:BimDocument")); })(),
         ]);
         let warning = [];
-        for (let i = 0; i < guid.length; i++) {
+        const rowCount = await this.getCount();
+        for (let i = 0; i < rowCount; i++) {
             warning.push({
                 index: i,
                 guid: guid ? guid[i] : undefined,
@@ -4705,7 +4743,8 @@ class ElementInWarningTable {
             (async () => { elementIndex = (await localTable.getNumberArray("index:Vim.Element:Element")); })(),
         ]);
         let elementInWarning = [];
-        for (let i = 0; i < warningIndex.length; i++) {
+        const rowCount = await this.getCount();
+        for (let i = 0; i < rowCount; i++) {
             elementInWarning.push({
                 index: i,
                 warningIndex: warningIndex ? warningIndex[i] : undefined,
@@ -4798,7 +4837,8 @@ class BasePointTable {
             (async () => { elementIndex = (await localTable.getNumberArray("index:Vim.Element:Element")); })(),
         ]);
         let basePoint = [];
-        for (let i = 0; i < isSurveyPoint.length; i++) {
+        const rowCount = await this.getCount();
+        for (let i = 0; i < rowCount; i++) {
             basePoint.push({
                 index: i,
                 isSurveyPoint: isSurveyPoint ? isSurveyPoint[i] : undefined,
@@ -4917,7 +4957,8 @@ class PhaseFilterTable {
             (async () => { elementIndex = (await localTable.getNumberArray("index:Vim.Element:Element")); })(),
         ]);
         let phaseFilter = [];
-        for (let i = 0; i < _new.length; i++) {
+        const rowCount = await this.getCount();
+        for (let i = 0; i < rowCount; i++) {
             phaseFilter.push({
                 index: i,
                 _new: _new ? _new[i] : undefined,
@@ -5045,7 +5086,8 @@ class GridTable {
             (async () => { elementIndex = (await localTable.getNumberArray("index:Vim.Element:Element")); })(),
         ]);
         let grid = [];
-        for (let i = 0; i < startPoint_X.length; i++) {
+        const rowCount = await this.getCount();
+        for (let i = 0; i < rowCount; i++) {
             grid.push({
                 index: i,
                 startPoint_X: startPoint_X ? startPoint_X[i] : undefined,
@@ -5223,7 +5265,8 @@ class AreaTable {
             (async () => { elementIndex = (await localTable.getNumberArray("index:Vim.Element:Element")); })(),
         ]);
         let area = [];
-        for (let i = 0; i < value.length; i++) {
+        const rowCount = await this.getCount();
+        for (let i = 0; i < rowCount; i++) {
             area.push({
                 index: i,
                 value: value ? value[i] : undefined,
@@ -5326,7 +5369,8 @@ class AreaSchemeTable {
             (async () => { elementIndex = (await localTable.getNumberArray("index:Vim.Element:Element")); })(),
         ]);
         let areaScheme = [];
-        for (let i = 0; i < isGrossBuildingArea.length; i++) {
+        const rowCount = await this.getCount();
+        for (let i = 0; i < rowCount; i++) {
             areaScheme.push({
                 index: i,
                 isGrossBuildingArea: isGrossBuildingArea ? isGrossBuildingArea[i] : undefined,
@@ -5391,7 +5435,8 @@ class ScheduleTable {
             (async () => { elementIndex = (await localTable.getNumberArray("index:Vim.Element:Element")); })(),
         ]);
         let schedule = [];
-        for (let i = 0; i < elementIndex.length; i++) {
+        const rowCount = await this.getCount();
+        for (let i = 0; i < rowCount; i++) {
             schedule.push({
                 index: i,
                 elementIndex: elementIndex ? elementIndex[i] : undefined
@@ -5455,7 +5500,8 @@ class ScheduleColumnTable {
             (async () => { scheduleIndex = (await localTable.getNumberArray("index:Vim.Schedule:Schedule")); })(),
         ]);
         let scheduleColumn = [];
-        for (let i = 0; i < name.length; i++) {
+        const rowCount = await this.getCount();
+        for (let i = 0; i < rowCount; i++) {
             scheduleColumn.push({
                 index: i,
                 name: name ? name[i] : undefined,
@@ -5533,7 +5579,8 @@ class ScheduleCellTable {
             (async () => { scheduleColumnIndex = (await localTable.getNumberArray("index:Vim.ScheduleColumn:ScheduleColumn")); })(),
         ]);
         let scheduleCell = [];
-        for (let i = 0; i < value.length; i++) {
+        const rowCount = await this.getCount();
+        for (let i = 0; i < rowCount; i++) {
             scheduleCell.push({
                 index: i,
                 value: value ? value[i] : undefined,
@@ -5605,7 +5652,8 @@ class ViewSheetSetTable {
             (async () => { elementIndex = (await localTable.getNumberArray("index:Vim.Element:Element")); })(),
         ]);
         let viewSheetSet = [];
-        for (let i = 0; i < elementIndex.length; i++) {
+        const rowCount = await this.getCount();
+        for (let i = 0; i < rowCount; i++) {
             viewSheetSet.push({
                 index: i,
                 elementIndex: elementIndex ? elementIndex[i] : undefined
@@ -5666,7 +5714,8 @@ class ViewSheetTable {
             (async () => { elementIndex = (await localTable.getNumberArray("index:Vim.Element:Element")); })(),
         ]);
         let viewSheet = [];
-        for (let i = 0; i < familyTypeIndex.length; i++) {
+        const rowCount = await this.getCount();
+        for (let i = 0; i < rowCount; i++) {
             viewSheet.push({
                 index: i,
                 familyTypeIndex: familyTypeIndex ? familyTypeIndex[i] : undefined,
@@ -5741,7 +5790,8 @@ class ViewSheetInViewSheetSetTable {
             (async () => { viewSheetSetIndex = (await localTable.getNumberArray("index:Vim.ViewSheetSet:ViewSheetSet")); })(),
         ]);
         let viewSheetInViewSheetSet = [];
-        for (let i = 0; i < viewSheetIndex.length; i++) {
+        const rowCount = await this.getCount();
+        for (let i = 0; i < rowCount; i++) {
             viewSheetInViewSheetSet.push({
                 index: i,
                 viewSheetIndex: viewSheetIndex ? viewSheetIndex[i] : undefined,
@@ -5816,7 +5866,8 @@ class ViewInViewSheetSetTable {
             (async () => { viewSheetSetIndex = (await localTable.getNumberArray("index:Vim.ViewSheetSet:ViewSheetSet")); })(),
         ]);
         let viewInViewSheetSet = [];
-        for (let i = 0; i < viewIndex.length; i++) {
+        const rowCount = await this.getCount();
+        for (let i = 0; i < rowCount; i++) {
             viewInViewSheetSet.push({
                 index: i,
                 viewIndex: viewIndex ? viewIndex[i] : undefined,
@@ -5891,7 +5942,8 @@ class ViewInViewSheetTable {
             (async () => { viewSheetIndex = (await localTable.getNumberArray("index:Vim.ViewSheet:ViewSheet")); })(),
         ]);
         let viewInViewSheet = [];
-        for (let i = 0; i < viewIndex.length; i++) {
+        const rowCount = await this.getCount();
+        for (let i = 0; i < rowCount; i++) {
             viewInViewSheet.push({
                 index: i,
                 viewIndex: viewIndex ? viewIndex[i] : undefined,
@@ -5933,8 +5985,8 @@ class VimDocument {
         this.entities = entities;
         this.strings = strings;
     }
-    static async createFromBfast(bfast, ignoreStrings = false) {
-        const loaded = await vimLoader_1.VimLoader.loadFromBfast(bfast, ignoreStrings);
+    static async createFromBfast(bfast, download, ignoreStrings = false) {
+        const loaded = await vimLoader_1.VimLoader.loadFromBfast(bfast, download, ignoreStrings);
         if (loaded[0] === undefined)
             return undefined;
         let doc = new VimDocument(loaded[0], loaded[1]);

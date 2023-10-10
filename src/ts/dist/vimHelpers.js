@@ -43,6 +43,10 @@ async function getElementsParameters(document, elements) {
     ]);
     if (!parameterElements)
         return undefined;
+    if (!parameterValues)
+        return undefined;
+    if (!getParameterDescriptorIndices)
+        return undefined;
     const getParameterDisplayValue = (index) => {
         const value = parameterValues[index];
         const split = value.indexOf('|');
@@ -62,10 +66,10 @@ async function getElementsParameters(document, elements) {
         const descriptor = getParameterDescriptorIndices[parameter];
         const value = getParameterDisplayValue(parameter);
         const name = Number.isInteger(descriptor)
-            ? parameterDescriptorNames[descriptor]
+            ? parameterDescriptorNames?.[descriptor]
             : undefined;
         const group = Number.isInteger(descriptor)
-            ? parameterDescriptorGroups[descriptor]
+            ? parameterDescriptorGroups?.[descriptor]
             : undefined;
         return { name, value, group, isInstance };
     });

@@ -25,6 +25,7 @@ export class SceneAttributes {
 
 
   static meshChunk = 'g3d:mesh:chunk:0:int32:1'
+  static meshChunkIndices = 'g3d:mesh:chunkindex:0:int32:1';
   static meshInstanceCounts = 'g3d:mesh:instancecount:0:int32:1'
   static meshIndexCounts = 'g3d:mesh:indexcount:0:int32:1'
   static meshVertexCounts = 'g3d:mesh:vertexcount:0:int32:1'
@@ -44,6 +45,7 @@ export class SceneAttributes {
     SceneAttributes.instanceMaxs,
 
     SceneAttributes.meshChunk,
+    SceneAttributes.meshChunkIndices,
     SceneAttributes.meshInstanceCounts,
     SceneAttributes.meshIndexCounts,
     SceneAttributes.meshVertexCounts,
@@ -72,6 +74,7 @@ export class G3dScene {
   instanceMaxs: Float32Array
 
   meshChunks : Int32Array
+  meshChunkIndices : Int32Array
   meshInstanceCounts: Int32Array
   meshIndexCounts: Int32Array
   meshVertexCounts: Int32Array
@@ -96,6 +99,7 @@ export class G3dScene {
     instanceMaxs: Float32Array,
 
     meshChunks: Int32Array,
+    meshChunkIndices : Int32Array,
     meshInstanceCounts: Int32Array,
     meshIndexCounts : Int32Array,
     meshVertexCounts: Int32Array, 
@@ -117,6 +121,7 @@ export class G3dScene {
     this.instanceMaxs = instanceMaxs
 
     this.meshChunks = meshChunks
+    this.meshChunkIndices = meshChunkIndices
     this.meshInstanceCounts = meshInstanceCounts
     this.meshIndexCounts = meshIndexCounts
     this.meshVertexCounts = meshVertexCounts
@@ -166,6 +171,7 @@ export class G3dScene {
       getArray<Float32Array>(SceneAttributes.instanceMaxs),
 
       getArray<Int32Array>(SceneAttributes.meshChunk),
+      getArray<Int32Array>(SceneAttributes.meshChunkIndices),
       getArray<Int32Array>(SceneAttributes.meshInstanceCounts),
       getArray<Int32Array>(SceneAttributes.meshIndexCounts),
       getArray<Int32Array>(SceneAttributes.meshVertexCounts),

@@ -3352,5 +3352,5 @@ export declare class VimDocument {
     entities: BFast;
     strings: string[] | undefined;
     private constructor();
-    static createFromBfast(bfast: BFast, ignoreStrings?: boolean): Promise<VimDocument | undefined>;
+    static createFromBfast(bfast: BFast, download: boolean, ignoreStrings?: boolean): Promise<VimDocument | undefined>;
 }

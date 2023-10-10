@@ -9,6 +9,7 @@ const remoteBuffer_1 = require("./remoteBuffer");
 const remoteValue_1 = require("./remoteValue");
 class RemoteVimx {
     constructor(bfast) {
+        this.chunkCache = new Map();
         this.bfast = bfast;
         this.scene = new remoteValue_1.RemoteValue(() => this.requestScene());
     }
@@ -50,12 +51,30 @@ class RemoteVimx {
      * Fetches and returns the vimx G3dMesh with given index
      */
     async getChunk(chunk) {
+        var cached = this.chunkCache.get(chunk);
+        if (cached !== undefined) {
+            return cached.get();
+        }
+        var value = new remoteValue_1.RemoteValue(() => this.requestChunk(chunk));
+        this.chunkCache.set(chunk, value);
+        return value.get();
+    }
+    async requestChunk(chunk) {
         const chunkBFast = await this.bfast.getLocalBfast(`chunk_${chunk}`, true);
         var ranges = await chunkBFast.getRanges();
         const keys = [...ranges.keys()];
         var bfasts = await Promise.all(keys.map(k => chunkBFast.getBfast(k)));
         var meshes = await Promise.all(bfasts.map(b => g3dMesh_1.G3dMesh.createFromBfast(b)));
+        const scene = await this.scene.get();
+        meshes.forEach(m => m.scene = scene);
         return meshes;
+    }
+    async getMesh(mesh) {
+        var scene = await this.scene.get();
+        var chunk = scene.meshChunks[mesh];
+        var meshes = await this.getChunk(chunk);
+        var index = scene.meshChunkIndices[mesh];
+        return meshes[index];
     }
 }
 exports.RemoteVimx = RemoteVimx;
