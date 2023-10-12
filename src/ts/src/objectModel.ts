@@ -10251,7 +10251,8 @@ export class SiteTable implements ISiteTable {
         
         let site: ISite[] = []
         
-        for (let i = 0; i < latitude!.length; i++) {
+        const rowCount = await this.getCount()
+        for (let i = 0; i < rowCount; i++) {
             site.push({
                 index: i,
                 latitude: latitude ? latitude[i] : undefined,
@@ -10430,7 +10431,8 @@ export class BuildingTable implements IBuildingTable {
         
         let building: IBuilding[] = []
         
-        for (let i = 0; i < elevation!.length; i++) {
+        const rowCount = await this.getCount()
+        for (let i = 0; i < rowCount; i++) {
             building.push({
                 index: i,
                 elevation: elevation ? elevation[i] : undefined,
