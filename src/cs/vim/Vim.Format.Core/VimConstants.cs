@@ -92,6 +92,8 @@ namespace Vim.Format
         public const string SystemFamilyElementType = "System Family";
         public const string UnassignedSystem = "Unassigned System";
         public const string BimDocumentParameterHolderElementType = "BimDocument Parameter Holder";
+        public const string BuildingParameterHolderElementType = "Building Parameter Holder";
+        public const string SiteParameterHolderElementType = "Site Parameter Holder";
 
         public static HashSet<string> ComputedTableNames = new HashSet<string>
         {
