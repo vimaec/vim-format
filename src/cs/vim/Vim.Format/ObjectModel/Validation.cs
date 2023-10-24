@@ -83,22 +83,6 @@ namespace Vim.Format.ObjectModel
             // All CompoundLayers have a CompoundStructure
             if (layer.CompoundStructure == null)
                 throw new ObjectModelValidationException($"{nameof(CompoundStructureLayer)} {layer.Index} has null {nameof(CompoundStructure)}");
-
-            // Material function assignment is recognized.
-            switch (layer.MaterialFunctionAssignment)
-            {
-                case MaterialFunctionAssignment.None:
-                case MaterialFunctionAssignment.Structure:
-                case MaterialFunctionAssignment.Substrate:
-                case MaterialFunctionAssignment.Insulation:
-                case MaterialFunctionAssignment.Finish1:
-                case MaterialFunctionAssignment.Finish2:
-                case MaterialFunctionAssignment.Membrane:
-                case MaterialFunctionAssignment.StructuralDeck:
-                    break;
-                default:
-                    throw new ObjectModelValidationException($"{nameof(CompoundStructureLayer)} {layer.Index} has unrecognized {nameof(MaterialFunctionAssignment)}");
-            }
         }
 
         public static void ValidateCompoundStructures(this DocumentModel dm)
@@ -133,16 +117,6 @@ namespace Vim.Format.ObjectModel
 
             // All FamilyTypes with compound structures are system families.
             var ftArray = dm.FamilyTypeList.ToArray();
-            foreach (var ft in ftArray)
-            {
-                // Skip over family types which do not have a compound structure.
-                if (ft.CompoundStructure == null)
-                    continue;
-
-                if (!ft.IsSystemFamilyType)
-                    throw new ObjectModelValidationException($"{nameof(FamilyType)} has a compound structure but is not marked as a system family type.");
-            }
-
             var cslRelationIndices = new HashSet<int>(cslArray.Select(l => l.CompoundStructure.Index));
             var ftRelationIndices = new HashSet<int>(ftArray.Where(ft => ft.CompoundStructure != null).Select(ft => ft.CompoundStructure.Index));
             var csArray = dm.CompoundStructureList.ToArray();
