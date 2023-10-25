@@ -147,7 +147,7 @@ namespace Vim.Format.ObjectModel
         // ReSharper enable MemberHidesStaticFromOuterClass
 
         // [MAINTAIN] Add more object model SerializableVersions below and update the current one.
-        public static SerializableVersion Current => v5_1_0;
+        public static SerializableVersion Current => v5_2_0;
         public static SerializableVersion v5_2_0 => SerializableVersion.Parse(History.v5_2_0);
         public static SerializableVersion v5_1_0 => SerializableVersion.Parse(History.v5_1_0);
         public static SerializableVersion v5_0_0 => SerializableVersion.Parse(History.v5_0_0);
