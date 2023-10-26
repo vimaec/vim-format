@@ -1,6 +1,6 @@
 {
   "VimFormatVersion": "1.0.0",
-  "SchemaVersion": "5.1.0",
+  "SchemaVersion": "5.2.0",
   "Tables": {
     "Vim.Area": [
       "byte:IsGrossInterior",
@@ -75,6 +75,13 @@
       "string:User",
       "string:Version",
       "string:WeatherStationName"
+    ],
+    "Vim.Building": [
+      "double:Elevation",
+      "double:TerrainElevation",
+      "index:Vim.Element:Element",
+      "index:Vim.Site:Site",
+      "string:Address"
     ],
     "Vim.Camera": [
       "double:FarDistance",
@@ -237,6 +244,7 @@
     ],
     "Vim.Level": [
       "double:Elevation",
+      "index:Vim.Building:Building",
       "index:Vim.Element:Element",
       "index:Vim.FamilyType:FamilyType"
     ],
@@ -350,6 +358,14 @@
     "Vim.ShapeInView": [
       "index:Vim.Shape:Shape",
       "index:Vim.View:View"
+    ],
+    "Vim.Site": [
+      "double:Elevation",
+      "double:Latitude",
+      "double:Longitude",
+      "index:Vim.Element:Element",
+      "string:Address",
+      "string:Number"
     ],
     "Vim.System": [
       "index:Vim.Element:Element",

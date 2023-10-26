@@ -14,6 +14,21 @@ namespace Vim.Format.ObjectModel
         // ReSharper disable MemberHidesStaticFromOuterClass
         public static class History
         {
+            // Schema additions (Added support for IfcSite and IfcBuilding)
+            //   Vim.Building__double:Elevation
+            //   Vim.Building__double:TerrainElevation
+            //   Vim.Building__index:Vim.Element:Element
+            //   Vim.Building__index:Vim.Site:Site
+            //   Vim.Building__string:Address
+            //   Vim.Level__index:Vim.Building:Building
+            //   Vim.Site__double:Elevation
+            //   Vim.Site__double:Latitude
+            //   Vim.Site__double:Longitude
+            //   Vim.Site__index:Vim.Element:Element
+            //   Vim.Site__string:Address
+            //   Vim.Site__string:Number
+            public const string v5_2_0 = "5.2.0";
+
             // Schema additions:
             //   Vim.AssetInViewSheet__index:Vim.Asset:Asset
             //   Vim.AssetInViewSheet__index:Vim.ViewSheet:ViewSheet
@@ -144,7 +159,8 @@ namespace Vim.Format.ObjectModel
         // ReSharper enable MemberHidesStaticFromOuterClass
 
         // [MAINTAIN] Add more object model SerializableVersions below and update the current one.
-        public static SerializableVersion Current => v5_1_0;
+        public static SerializableVersion Current => v5_2_0;
+        public static SerializableVersion v5_2_0 => SerializableVersion.Parse(History.v5_2_0);
         public static SerializableVersion v5_1_0 => SerializableVersion.Parse(History.v5_1_0);
         public static SerializableVersion v5_0_0 => SerializableVersion.Parse(History.v5_0_0);
         public static SerializableVersion v4_6_0 => SerializableVersion.Parse(History.v4_6_0);
@@ -542,6 +558,11 @@ namespace Vim.Format.ObjectModel
         /// The associated Level's FamilyType (in Revit, this maps to its LevelType)
         /// </summary>
         public Relation<FamilyType> _FamilyType;
+
+        /// <summary>
+        /// The associated Level's building.
+        /// </summary>
+        public Relation<Building> _Building;
     }
 
     /// <summary>
@@ -1663,6 +1684,25 @@ namespace Vim.Format.ObjectModel
 
         public object GetStorageKey()
             => _View.CombineAsStorageKey(_ViewSheet);
+    }
+
+    [TableName(TableNames.Site)]
+    public partial class Site : EntityWithElement
+    {
+        public double Latitude;
+        public double Longitude;
+        public string Address;
+        public double Elevation;
+        public string Number;
+    }
+
+    [TableName(TableNames.Building)]
+    public partial class Building : EntityWithElement
+    {
+        public double Elevation;
+        public double TerrainElevation;
+        public string Address;
+        public Relation<Site> _Site;
     }
 
     /// <summary>

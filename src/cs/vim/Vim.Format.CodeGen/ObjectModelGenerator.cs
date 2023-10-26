@@ -316,7 +316,7 @@ public static class ObjectModelGenerator
             foreach (var fieldInfo in relationFields)
             {
                 var (indexColumnName, localFieldName) = fieldInfo.GetIndexColumnInfo();
-                cb.AppendLine($"tb.AddIndexColumn(\"{indexColumnName}\", typedEntities.Select(x => x._{localFieldName}.Index));");
+                cb.AppendLine($"tb.AddIndexColumn(\"{indexColumnName}\", typedEntities.Select(x => x._{localFieldName}?.Index ?? EntityRelation.None));");
             }
 
             cb.AppendLine("return tb;");
