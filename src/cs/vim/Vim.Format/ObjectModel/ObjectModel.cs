@@ -14,7 +14,19 @@ namespace Vim.Format.ObjectModel
         // ReSharper disable MemberHidesStaticFromOuterClass
         public static class History
         {
-            // TODO: document schema update
+            // Schema additions (Added support for IfcSite and IfcBuilding)
+            //   Vim.Building__double:Elevation
+            //   Vim.Building__double:TerrainElevation
+            //   Vim.Building__index:Vim.Element:Element
+            //   Vim.Building__index:Vim.Site:Site
+            //   Vim.Building__string:Address
+            //   Vim.Level__index:Vim.Building:Building
+            //   Vim.Site__double:Elevation
+            //   Vim.Site__double:Latitude
+            //   Vim.Site__double:Longitude
+            //   Vim.Site__index:Vim.Element:Element
+            //   Vim.Site__string:Address
+            //   Vim.Site__string:Number
             public const string v5_2_0 = "5.2.0";
 
             // Schema additions:
