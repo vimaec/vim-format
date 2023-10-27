@@ -18,6 +18,11 @@
 #include <iterator>
 #include <stdexcept>
 
+#ifdef _MSC_VER
+    // Required for MultiByteToWideChar
+    #include <Windows.h>
+#endif
+
 #ifndef DISABLE_EXCEPTIONS
     #define VIM_THROW(msg, ret) throw std::runtime_error(msg);
 #else
