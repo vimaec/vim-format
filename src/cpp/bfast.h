@@ -375,8 +375,29 @@ namespace bfast
             fclose(f);
         }
 
+#ifdef _MSC_VER
+        static std::wstring ToUtf16(std::string str)
+        {
+            std::wstring ret;
+            int len = MultiByteToWideChar(CP_UTF8, 0, str.c_str(), str.length(), NULL, 0);
+            if (len > 0)
+            {
+                ret.resize(len);
+                MultiByteToWideChar(CP_UTF8, 0, str.c_str(), str.length(), &ret[0], len);
+            }
+            return ret;
+        }
+#endif
+
+
         static Bfast read_file(string file) {
+#ifdef _MSC_VER
+            // On windows unicode file name HAVE to use utf16
+            // https://stackoverflow.com/questions/30829364/open-utf8-encoded-filename-in-c-windows
+            std::ifstream fstrm(ToUtf16(file), ios_base::in | ios_base::binary);
+#else
             std::ifstream fstrm(file, ios_base::in | ios_base::binary);
+#endif
             fstrm.seekg(0, ios_base::end);
             auto filesize = fstrm.tellg();
             fstrm.seekg(0, ios_base::beg);
