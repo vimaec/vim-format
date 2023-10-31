@@ -5,6 +5,7 @@ import { BFast } from "./bfast";
  */
 export declare type VimHeader = {
     vim: string | undefined;
+    vimx: string | undefined;
     id: string | undefined;
     revision: string | undefined;
     generator: string | undefined;

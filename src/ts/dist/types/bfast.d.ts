@@ -42,7 +42,7 @@ export declare class BFast {
     private _header;
     private _ranges;
     private _children;
-    constructor(source: RemoteBuffer | ArrayBuffer, offset?: number, name?: string);
+    constructor(source: RemoteBuffer | ArrayBuffer | string, offset?: number, name?: string);
     /**
      * Aborts all downloads from the underlying RemoteBuffer
      */
@@ -61,8 +61,7 @@ export declare class BFast {
      * @param name buffer name
      */
     getBfast(name: string): Promise<BFast>;
-    getLocalBfast(name: string, unzip?: boolean): Promise<BFast | undefined>;
-    getLocalBfastRaw(name: string, unzip?: boolean): Promise<BFast | undefined>;
+    getLocalBfast(name: string, inflate?: boolean): Promise<BFast | undefined>;
     /**
      * Returns the raw buffer associated with a name
      * This value is not cached.

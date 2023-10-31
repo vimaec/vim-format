@@ -4,6 +4,7 @@ import { BFast } from "./bfast";
  * See https://github.com/vimaec/vim#header-buffer
  */
 export declare type VimHeader = {
+    isVimx: boolean;
     vim: string | undefined;
     id: string | undefined;
     revision: string | undefined;

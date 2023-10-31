@@ -16,6 +16,10 @@ export class RemoteValue<T> {
     this.label = label ?? ''
   }
 
+  abort(){
+    this._request = undefined
+  }
+  
   /**
    * Returns a value from cache or queue up existing request or start a new requests
    */

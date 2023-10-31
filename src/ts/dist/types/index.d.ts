@@ -1,4 +1,5 @@
 export * from './bfast';
+export * from './abstractG3d';
 export * from './g3d';
 export * from './remoteVimx';
 export * from './g3dMaterials';

@@ -7,6 +7,7 @@ async function requestHeader(bfast) {
     const map = new Map(pairs.map((p) => p.split('=')).map((p) => [p[0], p[1]]));
     return {
         vim: map.get('vim'),
+        vimx: map.get('vimx'),
         id: map.get('id'),
         revision: map.get('revision'),
         generator: map.get('generator'),

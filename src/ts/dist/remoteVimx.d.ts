@@ -8,7 +8,7 @@ export declare class RemoteVimx {
     scene: RemoteValue<G3dScene>;
     chunkCache: Map<number, RemoteValue<G3dMesh[]>>;
     constructor(bfast: BFast);
-    static fromPath(path: string): Promise<RemoteVimx>;
+    static fromPath(path: string): RemoteVimx;
     /**
      * Aborts all downloads from the underlying BFAST.
      */
@@ -18,6 +18,7 @@ export declare class RemoteVimx {
      */
     download(): Promise<void>;
     private requestScene;
+    getHeader(): Promise<import("./vimHeader").VimHeader>;
     /**
    * Fetches and returns the vimx G3dScene
    */

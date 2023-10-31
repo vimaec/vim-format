@@ -7,13 +7,14 @@ const g3dMesh_1 = require("./g3dMesh");
 const g3dScene_1 = require("./g3dScene");
 const remoteBuffer_1 = require("./remoteBuffer");
 const remoteValue_1 = require("./remoteValue");
+const vimHeader_1 = require("./vimHeader");
 class RemoteVimx {
     constructor(bfast) {
         this.chunkCache = new Map();
         this.bfast = bfast;
         this.scene = new remoteValue_1.RemoteValue(() => this.requestScene());
     }
-    static async fromPath(path) {
+    static fromPath(path) {
         const buffer = new remoteBuffer_1.RemoteBuffer(path);
         const bfast = new bfast_1.BFast(buffer);
         return new RemoteVimx(bfast);
@@ -23,6 +24,8 @@ class RemoteVimx {
      */
     abort() {
         this.bfast.abort();
+        this.scene.abort();
+        this.chunkCache.forEach(c => c.abort());
     }
     /**
      * Downloads underlying bfast making all subsequent request local.
@@ -33,6 +36,9 @@ class RemoteVimx {
     async requestScene() {
         const index = await this.bfast.getLocalBfast('scene', true);
         return g3dScene_1.G3dScene.createFromBfast(index);
+    }
+    async getHeader() {
+        return (0, vimHeader_1.requestHeader)(this.bfast);
     }
     /**
    * Fetches and returns the vimx G3dScene
@@ -72,9 +78,17 @@ class RemoteVimx {
     async getMesh(mesh) {
         var scene = await this.scene.get();
         var chunk = scene.meshChunks[mesh];
+        if (chunk === undefined)
+            return undefined;
         var meshes = await this.getChunk(chunk);
+        if (meshes === undefined)
+            return undefined;
         var index = scene.meshChunkIndices[mesh];
-        return meshes[index];
+        var result = meshes[index];
+        if (result === undefined)
+            return undefined;
+        result.meshIndex = mesh;
+        return result;
     }
 }
 exports.RemoteVimx = RemoteVimx;

@@ -2,23 +2,17 @@ import { BFast } from "./bfast";
 import { G3dMaterial as G3dMaterials } from "./g3dMaterials";
 import { G3dMesh } from "./g3dMesh";
 import { G3dScene } from "./g3dScene";
-import { RemoteBuffer } from "./remoteBuffer";
 import { RemoteValue } from "./remoteValue";
+import { requestHeader } from "./vimHeader";
 
 export class RemoteVimx{
   bfast : BFast
   scene : RemoteValue<G3dScene>
   chunkCache = new Map<number, RemoteValue<G3dMesh[]>>()
 
-  constructor(bfast : BFast){
-    this.bfast = bfast
+  constructor(source : BFast | ArrayBuffer | string){
+    this.bfast = source instanceof BFast ? source : new BFast(source)
     this.scene = new RemoteValue(() => this.requestScene())
-  }
-
-  static async fromPath(path: string){
-    const buffer = new RemoteBuffer(path)
-    const bfast = new BFast(buffer)
-    return new RemoteVimx(bfast)
   }
 
   /**
@@ -26,6 +20,8 @@ export class RemoteVimx{
    */
   abort(){
     this.bfast.abort()
+    this.scene.abort()
+    this.chunkCache.forEach(c => c.abort())
   }
 
   /**
@@ -38,6 +34,10 @@ export class RemoteVimx{
   private async requestScene(){
     const index = await this.bfast.getLocalBfast('scene', true)
     return G3dScene.createFromBfast(index)
+  }
+
+  async getHeader(){
+    return requestHeader(this.bfast)
   }
 
     /**
@@ -82,8 +82,16 @@ export class RemoteVimx{
   async getMesh(mesh: number){
     var scene = await this.scene.get()
     var chunk = scene.meshChunks[mesh]
+    if(chunk === undefined) return undefined
+
     var meshes = await this.getChunk(chunk)
+    if(meshes === undefined) return undefined
+    
     var index = scene.meshChunkIndices[mesh]
-    return meshes[index]
+    var result = meshes[index]
+    if(result === undefined) return undefined
+
+    result.meshIndex = mesh
+    return result
   }
 }

@@ -206,13 +206,16 @@ export function parseName(name: string): [number, NumericArrayConstructor]{
    private _children: Map<string, RemoteValue<BFast | undefined>>
  
    constructor (
-     source: RemoteBuffer | ArrayBuffer,
+     source: RemoteBuffer | ArrayBuffer | string,
      offset: number = 0,
-     name: string = ''
+     name?: string 
    ) {
-     this.source = source
+     this.source = typeof source === 'string'
+      ? new RemoteBuffer(source)
+      : source
+
      this.offset = offset
-     this.name = name
+     this.name = name ?? (typeof source === 'string' ? source : '')
  
      this._header = new RemoteValue(() => this.requestHeader(), name + '.header')
      this._children = new Map<string, RemoteValue<BFast>>()
@@ -226,6 +229,10 @@ export function parseName(name: string): [number, NumericArrayConstructor]{
       if(this.source instanceof RemoteBuffer){
         this.source.abort()
       }
+      
+      this._header.abort()
+      this._ranges.abort()
+      this._children.forEach(c => c.abort())
    }
  
    /**

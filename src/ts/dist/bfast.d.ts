@@ -42,7 +42,7 @@ export declare class BFast {
     private _header;
     private _ranges;
     private _children;
-    constructor(source: RemoteBuffer | ArrayBuffer, offset?: number, name?: string);
+    constructor(source: RemoteBuffer | ArrayBuffer | string, offset?: number, name?: string);
     /**
      * Aborts all downloads from the underlying RemoteBuffer
      */

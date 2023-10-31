@@ -176,10 +176,12 @@ exports.BFastHeader = BFastHeader;
  * Remote mode can transition to buffer mode if server doesnt support partial http request
  */
 class BFast {
-    constructor(source, offset = 0, name = '') {
-        this.source = source;
+    constructor(source, offset = 0, name) {
+        this.source = typeof source === 'string'
+            ? new remoteBuffer_1.RemoteBuffer(source)
+            : source;
         this.offset = offset;
-        this.name = name;
+        this.name = name ?? (typeof source === 'string' ? source : '');
         this._header = new remoteValue_1.RemoteValue(() => this.requestHeader(), name + '.header');
         this._children = new Map();
         this._ranges = new remoteValue_1.RemoteValue(() => this.requestRanges(), name + '.ranges');
@@ -191,6 +193,9 @@ class BFast {
         if (this.source instanceof remoteBuffer_1.RemoteBuffer) {
             this.source.abort();
         }
+        this._header.abort();
+        this._ranges.abort();
+        this._children.forEach(c => c.abort());
     }
     /**
      * @returns Bfast Header
