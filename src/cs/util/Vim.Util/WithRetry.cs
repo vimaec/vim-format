@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Vim.Util.Logging;
@@ -9,8 +7,24 @@ namespace Vim.Util
 {
     public static class WithRetry
     {
-        public static T Run<T>(Func<T> func, string runName, ILogger logger, uint maxRetries, TimeSpan initialDelay = default)
+        public class RetryConfig
         {
+            public uint MaxRetries { get; }
+            public TimeSpan InitialDelay { get; }
+
+            public RetryConfig(uint maxRetries, TimeSpan initialDelay)
+                => (MaxRetries, InitialDelay) = (maxRetries, initialDelay);
+
+            public static RetryConfig Default => new RetryConfig(6, TimeSpan.FromSeconds(5));
+        }
+
+        public static T Run<T>(Func<T> func, string runName, ILogger logger, RetryConfig retryConfig = null)
+        {
+            retryConfig = retryConfig ?? RetryConfig.Default;
+
+            var initialDelay = retryConfig.InitialDelay;
+            var maxRetries = retryConfig.MaxRetries;
+
             var retries = 0;
             var delay = initialDelay == default ? TimeSpan.FromSeconds(1) : initialDelay;
 
@@ -41,8 +55,13 @@ namespace Vim.Util
             return func();
         }
 
-        public static async Task<T> RunAsync<T>(Func<Task<T>> createTask, string runName, ILogger logger, uint maxRetries, TimeSpan initialDelay = default)
+        public static async Task<T> RunAsync<T>(Func<Task<T>> createTask, string runName, ILogger logger, RetryConfig retryConfig = null)
         {
+            retryConfig = retryConfig ?? RetryConfig.Default;
+
+            var initialDelay = retryConfig.InitialDelay;
+            var maxRetries = retryConfig.MaxRetries;
+
             var retries = 0;
             var delay = initialDelay == default ? TimeSpan.FromSeconds(1) : initialDelay;
 
