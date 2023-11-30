@@ -1,4 +1,7 @@
-﻿using System.IO;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.IO;
 
 namespace Vim.BFastNextNS
 {
@@ -14,6 +17,8 @@ namespace Vim.BFastNextNS
     public interface IBFastNextNode : IWritable
     {
         T[] AsArray<T>() where T : unmanaged;
+        IEnumerable<T> AsEnumerable<T>() where T : unmanaged;
+        
         BFastNext AsBFast();
     }
 }

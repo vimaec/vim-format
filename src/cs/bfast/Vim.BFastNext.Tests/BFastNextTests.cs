@@ -1,4 +1,5 @@
 using NUnit.Framework;
+using System;
 using Vim.Util;
 using Vim.Util.Tests;
 
@@ -66,6 +67,106 @@ namespace Vim.BFastNextNS.Tests
         }
 
         [Test]
+        public void SetEnumerable_Adds_Entry()
+        {
+            var bfast = new BFastNext();
+            bfast.SetEnumerable("A", () => new int[3] { 0, 1, 2 });
+            Assert.That(bfast.Entries.Count(), Is.EqualTo(1));
+        }
+
+
+        [Test]
+        public void SetEnumerable_Then_GetArray()
+        {
+            var bfast = new BFastNext();
+            bfast.SetEnumerable("A", () => new int[3] { 0, 1, 2 });
+            var result = bfast.GetArray<int>("A");
+
+            Assert.That(result, Is.EqualTo(new int[3] { 0, 1, 2 }));
+        }
+
+        [Test]
+        public void SetEnumerable_Then_GetArray_Bytes()
+        {
+            var bfast = new BFastNext();
+            bfast.SetEnumerable("A", () => new int[3] { 0, 1, 2 });
+            var result = bfast.GetArray<byte>("A");
+
+            var bytes = (new int[3] { 0, 1, 2 }).SelectMany(i => BitConverter.GetBytes(i));
+            Assert.That(result, Is.EqualTo(bytes));
+        }
+
+
+        [Test]
+        public void SetEnumerable_Then_GetEnumerable_Bytes()
+        {
+            var bfast = new BFastNext();
+            bfast.SetEnumerable("A", () => new int[3] { 0, 1, 2 });
+            var result = bfast.GetEnumerable<byte>("A");
+
+            var bytes = (new int[3] { 0, 1, 2 }).SelectMany(i => BitConverter.GetBytes(i));
+            Assert.That(result, Is.EqualTo(bytes));
+        }
+
+        [Test]
+        public void SetEnumerable_Then_GetEnumerable_Float()
+        {
+            var bfast = new BFastNext();
+            bfast.SetEnumerable("A", () => new int[3] { 0, 1, 2 });
+            var result = bfast.GetEnumerable<float>("A");
+
+            var floats = (new int[3] { 0, 1, 2 }).Select(i => BitConverter.Int32BitsToSingle(i));
+            Assert.That(result, Is.EqualTo(floats));
+        }
+
+        [Test]
+        public void SetEnumerable_Then_GetArray_Float()
+        {
+            var bfast = new BFastNext();
+            bfast.SetEnumerable("A", () => new int[3] { 0, 1, 2 });
+            var result = bfast.GetArray<float>("A");
+
+            var floats = (new int[3] { 0, 1, 2 }).Select(i => BitConverter.Int32BitsToSingle(i));
+            Assert.That(result, Is.EqualTo(floats));
+        }
+
+
+        [Test]
+        public void SetEnumerable_Then_GetEnumerable()
+        {
+            var bfast = new BFastNext();
+            bfast.SetEnumerable("A", () => new int[3] { 0, 1, 2 });
+            var result = bfast.GetEnumerable<int>("A").ToArray();
+            Assert.That(result, Is.EqualTo(new int[3] { 0, 1, 2 }));
+        }
+
+        [Test]
+        public void SetEnumerable_Then_GetBFast()
+        {
+            var bfast = new BFastNext();
+            bfast.SetEnumerable("A", () => new int[3] { 0, 1, 2 });
+            var result = bfast.GetBFast("A");
+            Assert.That(result, Is.Null);
+        }
+
+        IEnumerable<int> GetLots()
+        {
+            return Enumerable.Range(0, int.MaxValue).Concat(Enumerable.Range(0, 10));
+        }
+
+
+        [Test, Explicit]
+        public void SetEnumerable_Then_GetEnumerable_Lots()
+        {
+            var bfast = new BFastNext();
+            bfast.SetEnumerable<int>("A", GetLots);
+
+            var result = bfast.GetEnumerable<int>("A");
+            Assert.That(result, Is.EqualTo(GetLots()));
+        }
+
+
+        [Test]
         public void SetArray_Adds_Entry()
         {
             var bfast = new BFastNext();
@@ -101,6 +202,38 @@ namespace Vim.BFastNextNS.Tests
             var bfast = new BFastNext();
             bfast.SetArray("A", new int[3] { 0, 1, 2 });
             var result = bfast.GetArray<float>("A");
+
+            var floats = (new int[3] { 0, 1, 2 }).Select(i => BitConverter.Int32BitsToSingle(i));
+            Assert.That(result, Is.EqualTo(floats));
+        }
+
+        [Test]
+        public void SetArray_Then_GetEnumerable()
+        {
+            var bfast = new BFastNext();
+            bfast.SetArray("A", new int[3] { 0, 1, 2 });
+            var result = bfast.GetEnumerable<int>("A");
+
+            Assert.That(result, Is.EqualTo(new int[3] { 0, 1, 2 }));
+        }
+
+        [Test]
+        public void SetArray_Then_GetEnumerable_Bytes()
+        {
+            var bfast = new BFastNext();
+            bfast.SetArray("A", new int[3] { 0, 1, 2 });
+            var result = bfast.GetEnumerable<byte>("A");
+
+            var bytes = (new int[3] { 0, 1, 2 }).SelectMany(i => BitConverter.GetBytes(i));
+            Assert.That(result, Is.EqualTo(bytes));
+        }
+
+        [Test]
+        public void SetArray_Then_GetEnumerable_Float()
+        {
+            var bfast = new BFastNext();
+            bfast.SetArray("A", new int[3] { 0, 1, 2 });
+            var result = bfast.GetEnumerable<float>("A");
 
             var floats = (new int[3] { 0, 1, 2 }).Select(i => BitConverter.Int32BitsToSingle(i));
             Assert.That(result, Is.EqualTo(floats));
@@ -300,6 +433,24 @@ namespace Vim.BFastNextNS.Tests
                 var other = new BFastNext(stream);
                 var result = other.GetArray<int>("A");
                 Assert.That(result, Is.EqualTo(new int[3] { 0, 1, 2 }));
+            }
+        }
+
+        [Test]
+        public void Write_Then_Read_Enumerable()
+        {
+            var bfast = new BFastNext();
+
+            bfast.SetEnumerable("A", () => new int[3] { 0, 1, 2 });
+            bfast.Write(Path);
+
+            using (var stream = File.OpenRead(Path))
+            {
+                var other = new BFastNext(stream);
+                var array = other.GetArray<int>("A");
+                var enumerable = other.GetEnumerable<int>("A");
+                Assert.That(array, Is.EqualTo(new int[3] { 0, 1, 2 }));
+                Assert.That(enumerable, Is.EqualTo(new int[3] { 0, 1, 2 }));
             }
         }
 

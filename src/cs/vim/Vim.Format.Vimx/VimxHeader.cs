@@ -1,34 +1,34 @@
-﻿using System.Collections.Generic;
-using System.Text;
+﻿using System.Text;
 using Vim.Util;
 
 namespace Vim.Format.VimxNS
 {
-    public class VimxHeader : SerializableHeader
+    public static class VimxHeader 
     {
-        new protected const string FormatVersionField = "vimx";
-        public VimxHeader(string generator, SerializableVersion schema, string versionString, IReadOnlyDictionary<string, string> values = null) : base(generator, schema, versionString, values)
+        static SerializableVersion CurrentVersion = SerializableVersion.Parse("0.1.0");
+        public static SerializableHeader FromString(string header)
         {
+            return SerializableHeader.Parse(header.Replace("vim", "vimx"));
+        }
+        public static SerializableHeader FromBytes(byte[] header)
+        {
+            return FromString(Encoding.UTF8.GetString(header));
         }
 
-        public VimxHeader(SerializableHeader header) : this(header.Generator, header.Schema, header.FileFormatVersion.ToString())
+        public static string ToVimxString(this SerializableHeader header)
         {
+            return header.ToString().Replace("vim", "vimx"); 
         }
 
-        public VimxHeader(string header) : this(Parse(header))
+        public static byte[] ToVimxBytes(this SerializableHeader header)
         {
+            return header.ToVimxString().ToBytesUtf8();
         }
 
-        public VimxHeader(byte[] bytes) : this(Encoding.UTF8.GetString(bytes))
+        public static SerializableHeader CreateDefault()
         {
-        }
-
-        public static VimxHeader CreateDefault()
-        {
-            return new VimxHeader(
-                "Vim.Vimx.Converter",
-                CurrentVimFormatVersion,
-                CurrentVimFormatVersion.ToString()
+            return new SerializableHeader(
+                "Vim.Vimx.Converter", new SerializableVersion(), CurrentVersion.ToString()
             );
         }
     }

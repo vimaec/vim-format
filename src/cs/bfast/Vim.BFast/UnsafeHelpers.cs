@@ -73,6 +73,15 @@ namespace Vim.BFast
             return r;
         }
 
+        public static unsafe void ReadArray<T>(this Stream stream, T[] array, int count) where T : unmanaged
+        {
+            fixed (T* pDest = array)
+            {
+                var pBytes = (byte*)pDest;
+                stream.ReadBytesBuffered(pBytes, (long)count * sizeof(T));
+            }
+        }
+
 
         /// <summary>
         /// Equivalent to ReadArray to use when you know the byte count instead of element count.
@@ -82,6 +91,7 @@ namespace Vim.BFast
             return ReadArray<T>(stream, byteLength / sizeof(T));
         }
 
+        /*
         public static unsafe T[] ConvertByteArrayToTypeArray<T>(byte[] byteArray) where T : unmanaged
         {
             if (byteArray.Length % sizeof(T) != 0)
@@ -89,16 +99,16 @@ namespace Vim.BFast
                 throw new ArgumentException("Byte array length is not a multiple of the size of the target type.");
             }
 
-            int elementCount = byteArray.Length / sizeof(T);
-            T[] resultArray = new T[elementCount];
+            var elementCount = byteArray.Length / sizeof(T);
+            var resultArray = new T[elementCount];
 
             fixed (byte* bytePtr = byteArray)
             {
                 byte* currentBytePtr = bytePtr;
                 fixed (T* resultPtr = resultArray)
                 {
-                    T* currentResultPtr = resultPtr;
-                    for (int i = 0; i < elementCount; i++)
+                    var currentResultPtr = resultPtr;
+                    for (var i = 0; i < elementCount; i++)
                     {
                         *currentResultPtr = *((T*)currentBytePtr);
                         currentBytePtr += sizeof(T);
@@ -110,6 +120,7 @@ namespace Vim.BFast
             return resultArray;
         }
 
+        */
         /// <summary>
         /// A wrapper for stream.Seek(numBytes, SeekOrigin.Current) to avoid allocating memory for unrecognized buffers.
         /// </summary>
@@ -138,7 +149,7 @@ namespace Vim.BFast
             var p = &x;
             stream.WriteBytesBuffered((byte*)p, sizeof(T));
         }
-            
+
 
         /// <summary>
         /// Helper for writing arrays of unmanaged types 
@@ -148,6 +159,17 @@ namespace Vim.BFast
             fixed (T* p = xs)
             {
                 stream.WriteBytesBuffered((byte*)p, xs.LongLength * sizeof(T));
+            }
+        }
+
+        /// <summary>
+        /// Helper for writing arrays of unmanaged types 
+        /// </summary>
+        public static unsafe void Write<T>(this Stream stream, T[] xs, long count) where T : unmanaged
+        {
+            fixed (T* p = xs)
+            {
+                stream.WriteBytesBuffered((byte*)p, count * sizeof(T));
             }
         }
     }

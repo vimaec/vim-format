@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Text;
 using Vim.BFast;
 using Vim.Util;
 
@@ -93,6 +94,11 @@ namespace Vim.Format
             schema,
             AddOptionalValues(values ?? new Dictionary<string, string>(), versionString))
         { }
+
+        public static SerializableHeader FromBytes(byte[] input)
+        {
+            return Parse(Encoding.UTF8.GetString(input));
+        }
 
         /// <summary>
         /// Parses the input. Throws exceptions if the input does not define a correctly formatted header.

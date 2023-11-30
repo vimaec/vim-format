@@ -27,13 +27,13 @@ namespace Vim.Format.VimxNS
 
     public class Vimx
     {
-        public readonly VimxHeader Header;
+        public readonly SerializableHeader Header;
         public readonly MetaHeader Meta;
         public readonly G3dScene Scene;
         public readonly G3dMaterials Materials;
         public readonly VimxChunk[] Chunks;
 
-        public Vimx(VimxHeader header, MetaHeader meta, G3dScene scene, G3dMaterials materials, VimxChunk[] chunks)
+        public Vimx(SerializableHeader header, MetaHeader meta, G3dScene scene, G3dMaterials materials, VimxChunk[] chunks)
         {
             Meta = meta;
             Header = header;
@@ -44,7 +44,7 @@ namespace Vim.Format.VimxNS
 
         public Vimx(BFastNext bfast)
         {
-            Header = new VimxHeader(bfast.GetArray<byte>(BufferNames.Header));
+            Header = VimxHeader.FromBytes(bfast.GetArray<byte>(BufferNames.Header));
 
             Scene = new G3dScene(
                 bfast.GetBFast(BufferNames.Scene, BufferCompression.Scene)
@@ -53,13 +53,11 @@ namespace Vim.Format.VimxNS
             Materials = new G3dMaterials(
                 bfast.GetBFast(BufferNames.Materials, BufferCompression.Materials)
             );
-
             
             Chunks = Enumerable.Range(0, Scene.GetChunksCount())
                 .Select(c => bfast.GetBFast(BufferNames.Chunk(c), BufferCompression.Chunks))
                 .Select(b => new VimxChunk(b))
                 .ToArray();
-            
         }
 
         public static Vimx FromPath(string path)
@@ -69,7 +67,7 @@ namespace Vim.Format.VimxNS
         {
             var bfast = new BFastNext();
             bfast.SetArray(BufferNames.Meta, MetaHeader.Default.ToBytes());
-            bfast.SetArray(BufferNames.Header, Header.ToBytes());
+            bfast.SetArray(BufferNames.Header, Header.ToVimxBytes());
             bfast.SetBFast(BufferNames.Scene, Scene.ToBFast(), BufferCompression.Scene);
             bfast.SetBFast(BufferNames.Materials, Materials.ToBFast(), BufferCompression.Materials);
             bfast.SetBFast(BufferNames.Chunk, Chunks.Select(c => c.ToBFast()), BufferCompression.Chunks);
