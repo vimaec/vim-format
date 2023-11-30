@@ -5,19 +5,13 @@ const bfast_1 = require("./bfast");
 const g3dMaterials_1 = require("./g3dMaterials");
 const g3dMesh_1 = require("./g3dMesh");
 const g3dScene_1 = require("./g3dScene");
-const remoteBuffer_1 = require("./remoteBuffer");
 const remoteValue_1 = require("./remoteValue");
 const vimHeader_1 = require("./vimHeader");
 class RemoteVimx {
-    constructor(bfast) {
+    constructor(source) {
         this.chunkCache = new Map();
-        this.bfast = bfast;
+        this.bfast = source instanceof bfast_1.BFast ? source : new bfast_1.BFast(source);
         this.scene = new remoteValue_1.RemoteValue(() => this.requestScene());
-    }
-    static fromPath(path) {
-        const buffer = new remoteBuffer_1.RemoteBuffer(path);
-        const bfast = new bfast_1.BFast(buffer);
-        return new RemoteVimx(bfast);
     }
     /**
      * Aborts all downloads from the underlying BFAST.

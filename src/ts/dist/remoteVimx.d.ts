@@ -7,8 +7,7 @@ export declare class RemoteVimx {
     bfast: BFast;
     scene: RemoteValue<G3dScene>;
     chunkCache: Map<number, RemoteValue<G3dMesh[]>>;
-    constructor(bfast: BFast);
-    static fromPath(path: string): RemoteVimx;
+    constructor(source: BFast | ArrayBuffer | string);
     /**
      * Aborts all downloads from the underlying BFAST.
      */
