@@ -26,8 +26,8 @@ namespace Vim.BFastNextNS
         public IEnumerable<T> AsEnumerable<T>() where T : unmanaged
         {
             var stream = new MemoryStream();
-            var array = new T[1000000];
-            var chunks = Chunkify(_source(), 1000000);
+            var array = new T[1048576];
+            var chunks = Chunkify(_source(), 1048576);
             while (chunks.MoveNext())
             {
                 (var chunk, var chunkSize) = chunks.Current;
