@@ -7,6 +7,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using Vim.G3d;
 using Vim.Util;
+using Vim.BFastNextNS;
 
 namespace Vim.Format
 {
@@ -191,17 +192,8 @@ namespace Vim.Format
             CreateBFastBuilder(header, assets, stringTable, entityTables, geometry).Write(stream);
         }
 
-        public static void Serialize(this SerializableDocument doc, Stream stream)
-            => doc.ToBFastBuilder().Write(stream);
-
-        public static void Serialize(this SerializableDocument document, string filePath)
-        {
-            using (var stream = File.OpenWrite(filePath))
-                document.Serialize(stream);
-        }
-
         public static SerializableHeader ToSerializableHeader(this byte[] bytes)
-            => SerializableHeader.Parse(Encoding.UTF8.GetString(bytes));
+            => SerializableHeader.FromBytes(bytes);
 
         /// <summary>
         /// Returns true if the SerializableHeader in the stream is successfully parsed.
@@ -212,7 +204,8 @@ namespace Vim.Format
             {
                 try
                 {
-                    header = stream.ReadBFastBuffer<byte>(BufferNames.Header)?.Array.ToSerializableHeader();
+                    var bytes = stream.ReadBFastBuffer<byte>(BufferNames.Header)?.Array;
+                    header = bytes != null ? SerializableHeader.FromBytes(bytes) : null;
                 }
                 catch
                 {
@@ -221,25 +214,6 @@ namespace Vim.Format
                 return header != null;
             }
         }
-
-        /// <summary>
-        /// Returns true if the SerializableHeader in the given VIM file is successfully parsed.
-        /// </summary>
-        public static bool TryParseSerializableHeader(this FileInfo fileInfo, out SerializableHeader header)
-        {
-            using (var fs = fileInfo.OpenRead())
-            {
-                return fs.TryParseSerializableHeader(out header);
-            }
-        }
-
-        /// <summary>
-        /// Returns the VIM file's header schema version. Returns null if the header schema is not found.
-        /// </summary>
-        public static string GetSchemaVersion(this FileInfo fileInfo)
-            => fileInfo.TryParseSerializableHeader(out var header)
-                ? header.Schema?.ToString()
-                : null;
 
         public static void ReadBuffer(this SerializableDocument doc, BFastBufferReader bufferReader)
         {

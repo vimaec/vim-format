@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -10,8 +9,8 @@ using Vim.Util;
 using Vim.G3d;
 using Vim.LinqArray;
 using Vim.Math3d;
-
 using IVimSceneProgress = System.IProgress<(string, double)>;
+using Vim.BFastNextNS;
 
 namespace Vim
 {
@@ -22,6 +21,28 @@ namespace Vim
     /// </summary>
     public class VimScene : IScene
     {
+        /// <summary>
+        /// Returns the VIM file's header schema version. Returns null if the header schema is not found.
+        /// </summary>
+        public static string GetSchemaVersion(string path)
+            =>  GetHeader(path)?.Schema?.ToString();
+
+        public static SerializableHeader GetHeader(string path)
+        {
+            using (var file = new FileStream(path, FileMode.OpenOrCreate))
+            {
+                return GetHeader(file);
+            }
+        }
+
+        public static SerializableHeader GetHeader(Stream stream)
+        {
+            var bfast = new BFastNext(stream);
+            var bytes = bfast.GetArray<byte>(BufferNames.Header);
+            if (bytes == null) return null;
+            return SerializableHeader.FromBytes(bytes);
+        }
+
         public static VimScene LoadVim(string f, LoadOptions loadOptions, IVimSceneProgress progress = null, bool inParallel = false, int vimIndex = 0)
             => new VimScene(Serializer.Deserialize(f, loadOptions), progress, inParallel, vimIndex);
 
@@ -223,7 +244,7 @@ namespace Vim
         }
 
         public void Save(string filePath)
-            => _SerializableDocument.Serialize(filePath);
+            => _SerializableDocument.Write(filePath);
 
         public string FileName => _SerializableDocument.FileName;
 

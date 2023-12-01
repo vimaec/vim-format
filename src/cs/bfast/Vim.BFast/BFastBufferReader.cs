@@ -60,7 +60,7 @@ namespace Vim.BFast
 
         public NamedBuffer<T> GetBuffer<T>(bool inflate = false) where T : unmanaged
         {
-            this.Seek();
+            Seek();
             if (!inflate)
             {
                 return _stream.ReadArray<T>((int)Size).ToNamedBuffer(Name);

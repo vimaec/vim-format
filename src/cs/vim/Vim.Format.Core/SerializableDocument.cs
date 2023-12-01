@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using Vim.BFast;
+using Vim.BFastNextNS;
+using Vim.G3d;
 
 namespace Vim.Format
 {
@@ -88,5 +91,45 @@ namespace Vim.Format
         /// The originating file name (if provided)
         /// </summary>
         public string FileName;
+
+
+        public void Write(string path)
+        {
+            using (var stream = new FileStream(path, FileMode.OpenOrCreate))
+            {
+                Write(stream);
+            }
+        }
+
+        public void Write(Stream stream)
+        {
+            var bfast = new BFastNext();
+            //bfast.SetArray(BufferNames.Header, Header.ToBytes());
+
+            var assets = new BFastNext();
+            foreach (var asset in Assets)
+            {
+                assets.SetArray(asset.Name, asset.ToArray<byte>());
+            }
+            bfast.SetBFast(BufferNames.Assets, assets);
+
+            var entities = new BFastNext();
+            foreach (var entity in EntityTables)
+            {
+                var b = new BFastNext();
+                foreach (var buffer in entity.ToBuffers())
+                {
+                    b.SetArray(buffer.Name, buffer.ToBytes());
+                }
+                entities.SetBFast(entity.Name, b);
+
+            }
+            bfast.SetBFast(BufferNames.Entities, entities);
+
+            bfast.SetArray(BufferNames.Strings, StringTable.PackStrings());
+
+            bfast.SetArray(BufferNames.Geometry, Geometry.WriteToBytes());
+            bfast.Write(stream);
+        }
     }
 }
