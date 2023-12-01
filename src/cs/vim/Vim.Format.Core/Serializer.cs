@@ -192,29 +192,6 @@ namespace Vim.Format
             CreateBFastBuilder(header, assets, stringTable, entityTables, geometry).Write(stream);
         }
 
-        public static SerializableHeader ToSerializableHeader(this byte[] bytes)
-            => SerializableHeader.FromBytes(bytes);
-
-        /// <summary>
-        /// Returns true if the SerializableHeader in the stream is successfully parsed.
-        /// </summary>
-        public static bool TryParseSerializableHeader(this Stream stream, out SerializableHeader header)
-        {
-            using (new SeekContext(stream))
-            {
-                try
-                {
-                    var bytes = stream.ReadBFastBuffer<byte>(BufferNames.Header)?.Array;
-                    header = bytes != null ? SerializableHeader.FromBytes(bytes) : null;
-                }
-                catch
-                {
-                    header = null;
-                }
-                return header != null;
-            }
-        }
-
         public static void ReadBuffer(this SerializableDocument doc, BFastBufferReader bufferReader)
         {
             var (name, numBytes) = bufferReader;
@@ -224,7 +201,7 @@ namespace Vim.Format
             {
                 case BufferNames.Header:
                     {
-                        doc.Header = stream.ReadArray<byte>((int)numBytes).ToSerializableHeader();
+                        doc.Header = SerializableHeader.FromBytes(stream.ReadArray<byte>((int)numBytes));
                         break;
                     }
 
