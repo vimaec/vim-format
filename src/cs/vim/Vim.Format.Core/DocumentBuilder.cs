@@ -6,6 +6,8 @@ using Vim.Math3d;
 using Vim.BFast;
 using System.IO;
 using Vim.Util;
+using Vim.BFastNextNS;
+using System.Runtime.InteropServices.ComTypes;
 
 namespace Vim.Format
 {
@@ -180,12 +182,15 @@ namespace Vim.Format
 
         public void Write(string filePath)
         {
-            IO.CreateFileDirectory(filePath);
-            using (var stream = File.OpenWrite(filePath))
-                Write(stream);
+            ToBFast().Write(filePath);
         }
 
         public void Write(Stream stream)
+        {
+            ToBFast().Write(stream);
+        }
+
+        public BFastNext ToBFast()
         {
             var assets = Assets.Select(kv => kv.Value.ToNamedBuffer(kv.Key)) as IEnumerable<INamedBuffer>;
             Debug.Assert(assets != null, "Asset conversion to IEnumerable<INamedBuffer> failed.");
@@ -194,7 +199,21 @@ namespace Vim.Format
             var entityTables = ComputeEntityTables(stringLookupInfo.StringLookup);
             var stringTable = stringLookupInfo.StringTable;
 
-            Serializer.Serialize(stream, Header, assets, stringTable, entityTables, new BigG3dWriter(Meshes, Instances, Shapes, Materials, null, UseColors));
+            var doc = new SerializableDocument()
+            {
+                Header = Header,
+                Assets = assets.ToArray(),
+                StringTable = stringTable.ToArray(),
+                EntityTables = entityTables
+            };
+            var bfast = doc.ToBFast();
+
+            var g3d = new BigG3dWriter2(Meshes, Instances, Shapes, Materials, null, UseColors);
+            bfast.SetBFast(BufferNames.Geometry, g3d.bfast);
+
+            return bfast;
         }
+
+
     }
 }

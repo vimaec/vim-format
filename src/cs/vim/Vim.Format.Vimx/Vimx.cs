@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using Vim.BFastNextNS;
 using Vim.G3dNext;
 using Vim.G3dNext.Attributes;
@@ -32,6 +33,7 @@ namespace Vim.Format.VimxNS
         public readonly G3dScene Scene;
         public readonly G3dMaterials Materials;
         public readonly VimxChunk[] Chunks;
+        public IEnumerable<G3dMesh> Meshes => Chunks.SelectMany(c => c.Meshes);
 
         public Vimx(SerializableHeader header, MetaHeader meta, G3dScene scene, G3dMaterials materials, VimxChunk[] chunks)
         {
@@ -53,7 +55,7 @@ namespace Vim.Format.VimxNS
             Materials = new G3dMaterials(
                 bfast.GetBFast(BufferNames.Materials, BufferCompression.Materials)
             );
-            
+
             Chunks = Enumerable.Range(0, Scene.GetChunksCount())
                 .Select(c => bfast.GetBFast(BufferNames.Chunk(c), BufferCompression.Chunks))
                 .Select(b => new VimxChunk(b))
@@ -65,6 +67,7 @@ namespace Vim.Format.VimxNS
 
         public BFastNext ToBFast()
         {
+            AddTransformsToScene();
             var bfast = new BFastNext();
             bfast.SetArray(BufferNames.Meta, MetaHeader.Default.ToBytes());
             bfast.SetArray(BufferNames.Header, Header.ToVimxBytes());
@@ -74,6 +77,18 @@ namespace Vim.Format.VimxNS
             return bfast;
         }
 
+        private void AddTransformsToScene()
+        {
+            Scene.InstanceTransformData = new Math3d.Matrix4x4[Scene.GetInstanceCount()];
+            for (var i = 0; i < Scene.GetInstanceCount(); i++)
+            {
+                var mesh = Scene.InstanceMeshes[i];
+                var chunk = Scene.MeshChunks[mesh];
+                var chunIndex = Scene.MeshChunkIndices[mesh];
+                var transform = Scene.InstanceTransforms[i];
+                Scene.InstanceTransformData[i] = Chunks[chunk].Meshes[chunIndex].InstanceTransforms[transform];
+            }
+        }
 
     }
 }

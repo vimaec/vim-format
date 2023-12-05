@@ -1000,6 +1000,51 @@ namespace Vim.G3dNext.Attributes
         }
     }
     
+    public partial class SceneInstanceTransformDataAttribute : IAttribute<Vim.Math3d.Matrix4x4>
+    {
+        public const string AttributeName = "g3d:instance:transform:0:float32:16";
+
+        public string Name
+            => AttributeName;
+
+        public int Count => TypedData?.Length ?? 0;
+
+        public void AddTo(BFastNext bfast)
+        {
+            if(TypedData != null)
+            {
+                bfast.SetArray(Name, TypedData);
+            }
+        }
+
+        public void ReadBFast(BFastNext bfast)
+        {
+            TypedData = bfast.GetArray<Vim.Math3d.Matrix4x4>("g3d:instance:transform:0:float32:16");
+        }
+
+        public IAttributeDescriptor AttributeDescriptor { get; }
+            = new AttributeDescriptor(AttributeName);
+
+        public AttributeType AttributeType { get; }
+            = AttributeType.Data;
+
+        public Type IndexInto { get; }
+            = null;
+
+        public Vim.Math3d.Matrix4x4[] TypedData { get; set; }
+            = Array.Empty<Vim.Math3d.Matrix4x4>();
+
+        public Array Data
+            => TypedData;
+
+        public void Write(Stream stream)
+        {
+            if (TypedData == null || TypedData.Length == 0)
+                return;
+            stream.Write(TypedData);
+        }
+    }
+    
     public partial class SceneInstanceNodesAttribute : IAttribute<System.Int32>
     {
         public const string AttributeName = "g3d:instance:node:0:int32:1";
@@ -2641,6 +2686,12 @@ namespace Vim.G3dNext.Attributes
             set => Attributes.InstanceTransforms.TypedData = value;
         }
 
+        public Vim.Math3d.Matrix4x4[] InstanceTransformData
+        {
+            get => Attributes.InstanceTransformData.TypedData;
+            set => Attributes.InstanceTransformData.TypedData = value;
+        }
+
         public System.Int32[] InstanceNodes
         {
             get => Attributes.InstanceNodes.TypedData;
@@ -2747,6 +2798,7 @@ namespace Vim.G3dNext.Attributes
                 [Vim.G3dNext.Attributes.SceneChunkCountAttribute.AttributeName] = new Vim.G3dNext.Attributes.SceneChunkCountAttribute(),
                 [Vim.G3dNext.Attributes.SceneInstanceMeshesAttribute.AttributeName] = new Vim.G3dNext.Attributes.SceneInstanceMeshesAttribute(),
                 [Vim.G3dNext.Attributes.SceneInstanceTransformsAttribute.AttributeName] = new Vim.G3dNext.Attributes.SceneInstanceTransformsAttribute(),
+                [Vim.G3dNext.Attributes.SceneInstanceTransformDataAttribute.AttributeName] = new Vim.G3dNext.Attributes.SceneInstanceTransformDataAttribute(),
                 [Vim.G3dNext.Attributes.SceneInstanceNodesAttribute.AttributeName] = new Vim.G3dNext.Attributes.SceneInstanceNodesAttribute(),
                 [Vim.G3dNext.Attributes.SceneInstanceGroupsAttribute.AttributeName] = new Vim.G3dNext.Attributes.SceneInstanceGroupsAttribute(),
                 [Vim.G3dNext.Attributes.SceneInstanceTagsAttribute.AttributeName] = new Vim.G3dNext.Attributes.SceneInstanceTagsAttribute(),
@@ -2780,6 +2832,12 @@ namespace Vim.G3dNext.Attributes
         {
             get => Map.TryGetValue(Vim.G3dNext.Attributes.SceneInstanceTransformsAttribute.AttributeName, out var attr) ? attr as Vim.G3dNext.Attributes.SceneInstanceTransformsAttribute : default;
             set => Map[Vim.G3dNext.Attributes.SceneInstanceTransformsAttribute.AttributeName] = value as IAttribute;
+        }
+
+        public Vim.G3dNext.Attributes.SceneInstanceTransformDataAttribute InstanceTransformData
+        {
+            get => Map.TryGetValue(Vim.G3dNext.Attributes.SceneInstanceTransformDataAttribute.AttributeName, out var attr) ? attr as Vim.G3dNext.Attributes.SceneInstanceTransformDataAttribute : default;
+            set => Map[Vim.G3dNext.Attributes.SceneInstanceTransformDataAttribute.AttributeName] = value as IAttribute;
         }
 
         public Vim.G3dNext.Attributes.SceneInstanceNodesAttribute InstanceNodes
@@ -2877,6 +2935,10 @@ namespace Vim.G3dNext.Attributes
                     return InstanceTransforms;
 
 
+                if (attributeType == typeof(Vim.G3dNext.Attributes.SceneInstanceTransformDataAttribute))
+                    return InstanceTransformData;
+
+
                 if (attributeType == typeof(Vim.G3dNext.Attributes.SceneInstanceNodesAttribute))
                     return InstanceNodes;
 
@@ -2953,6 +3015,12 @@ namespace Vim.G3dNext.Attributes
                 {
                     // Data Attribute
                     return collections.GetAttributesOfType<Vim.G3dNext.Attributes.SceneInstanceTransformsAttribute>().ToArray().MergeDataAttributes<Vim.G3dNext.Attributes.SceneInstanceTransformsAttribute, System.Int32>();
+                }
+
+                case Vim.G3dNext.Attributes.SceneInstanceTransformDataAttribute.AttributeName:
+                {
+                    // Data Attribute
+                    return collections.GetAttributesOfType<Vim.G3dNext.Attributes.SceneInstanceTransformDataAttribute>().ToArray().MergeDataAttributes<Vim.G3dNext.Attributes.SceneInstanceTransformDataAttribute, Vim.Math3d.Matrix4x4>();
                 }
 
                 case Vim.G3dNext.Attributes.SceneInstanceNodesAttribute.AttributeName:

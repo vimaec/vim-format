@@ -25,7 +25,7 @@ namespace Vim
         /// Returns the VIM file's header schema version. Returns null if the header schema is not found.
         /// </summary>
         public static string GetSchemaVersion(string path)
-            =>  GetHeader(path)?.Schema?.ToString();
+            => string.IsNullOrEmpty(path) ? null : GetHeader(path)?.Schema?.ToString();
 
         public static SerializableHeader GetHeader(string path)
         {
@@ -44,13 +44,20 @@ namespace Vim
         }
 
         public static VimScene LoadVim(string f, LoadOptions loadOptions, IVimSceneProgress progress = null, bool inParallel = false, int vimIndex = 0)
-            => new VimScene(Serializer.Deserialize(f, loadOptions), progress, inParallel, vimIndex);
+            => new VimScene(SerializableDocument.FromPath(f, loadOptions), progress, inParallel, vimIndex);
 
         public static VimScene LoadVim(string f, IVimSceneProgress progress = null, bool skipGeometry = false, bool skipAssets = false, bool skipNodes = false, bool inParallel = false)
             => LoadVim(f, new LoadOptions { SkipGeometry = skipGeometry, SkipAssets = skipAssets}, progress, inParallel);
 
         public static VimScene LoadVim(Stream stream, LoadOptions loadOptions, IVimSceneProgress progress = null, bool inParallel = false)
-            => new VimScene(Serializer.Deserialize(stream, loadOptions), progress, inParallel);
+            => new VimScene(SerializableDocument.FromBFast(new BFastNext(stream), loadOptions), progress, inParallel);
+
+        public static VimScene LoadVim2(Stream stream, LoadOptions loadOptions = null, IVimSceneProgress progress = null, bool inParallel = false)
+        {
+            var bfast = new BFastNext(stream);
+            var doc = SerializableDocument.FromBFast(bfast, loadOptions);
+            return new VimScene(doc, progress, inParallel);
+        }
 
         public static VimScene LoadVim(Stream stream, IVimSceneProgress progress = null, bool skipGeometry = false, bool skipAssets = false, bool skipNodes = false, bool inParallel = false)
             => LoadVim(stream, new LoadOptions { SkipGeometry = skipGeometry, SkipAssets = skipAssets}, progress, inParallel);
@@ -244,7 +251,7 @@ namespace Vim
         }
 
         public void Save(string filePath)
-            => _SerializableDocument.Write(filePath);
+            => _SerializableDocument.ToBFast().Write(filePath);
 
         public string FileName => _SerializableDocument.FileName;
 

@@ -5,6 +5,7 @@ using Vim.G3dNext.Tests;
 using Vim.Math3d;
 using Vim.Format.VimxNS.Conversion;
 using Vim.Util.Tests;
+using Vim.BFastNextNS;
 
 namespace Vim.Format.VimxNS.Tests
 {
@@ -25,10 +26,23 @@ namespace Vim.Format.VimxNS.Tests
             Assert.AreEqual(vimx.Scene.InstanceMeshes, result.Scene.InstanceMeshes);
             Assert.AreEqual(vimx.Materials.MaterialColors, result.Materials.MaterialColors);
             Assert.AreEqual(vimx.Chunks.Length, result.Chunks.Length);
+        }
+    }
+
+    [TestFixture]
+    internal class VimTests
+    {
+        [Test]
+        public static void Write_BFastNext_VsOld()
+        {
+            using (var stream = new FileStream(VimFormatRepoPaths.GetLatestWolfordResidenceVim(), FileMode.OpenOrCreate))
+            {
+ 
+            }
 
         }
 
-    }
 
+    }
 }
 

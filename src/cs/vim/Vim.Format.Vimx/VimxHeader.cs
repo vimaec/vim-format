@@ -8,7 +8,7 @@ namespace Vim.Format.VimxNS
         static SerializableVersion CurrentVersion = SerializableVersion.Parse("0.1.0");
         public static SerializableHeader FromString(string header)
         {
-            return SerializableHeader.Parse(header.Replace("vim", "vimx"));
+            return SerializableHeader.Parse(header.Replace("vimx", "vim"));
         }
         public static SerializableHeader FromBytes(byte[] header)
         {

@@ -8,6 +8,7 @@ using System.Text.RegularExpressions;
 using Vim.G3d;
 using Vim.Util;
 using Vim.BFastNextNS;
+using System.Drawing;
 
 namespace Vim.Format
 {
@@ -109,12 +110,80 @@ namespace Vim.Format
                             et.DataColumns.Add(colBr.ReadEntityTableColumn<byte>(schemaOnly));
                             break;
                         }
-                    // For flexibility, we ignore the columns which do not contain a recognized prefix.
+                        // For flexibility, we ignore the columns which do not contain a recognized prefix.
                 }
             }
 
             return et;
         }
+
+        /// <summary>
+        /// Returns a SerializableEntityTable based on the given buffer reader.
+        /// </summary>
+
+        public static SerializableEntityTable ReadEntityTable2(
+            BFastNext bfast,
+            bool schemaOnly
+           )
+        {
+            var et = new SerializableEntityTable();
+            foreach(var entry in bfast.Entries)
+            {
+                var typePrefix = entry.GetTypePrefix();
+
+                switch (typePrefix)
+                {
+                    case VimConstants.IndexColumnNameTypePrefix:
+                        {
+                            //TODO: replace named buffer with arrays
+                            var col = schemaOnly ? new int[0] : bfast.GetArray<int>(entry);
+                            et.IndexColumns.Add(col.ToNamedBuffer(entry));
+                            break;
+                        }
+                    case VimConstants.StringColumnNameTypePrefix:
+                        {
+                            var col = schemaOnly ? new int[0] : bfast.GetArray<int>(entry);
+                            et.StringColumns.Add(col.ToNamedBuffer(entry));
+                            break;
+                        }
+                    case VimConstants.IntColumnNameTypePrefix:
+                        {
+                            var col = schemaOnly ? new int[0] : bfast.GetArray<int>(entry);
+                            et.DataColumns.Add(col.ToNamedBuffer(entry));
+                            break;
+                        }
+                    case VimConstants.LongColumnNameTypePrefix:
+                        {
+                            var col = schemaOnly ? new long[0] : bfast.GetArray<long>(entry);
+                            et.DataColumns.Add(col.ToNamedBuffer(entry));
+                            break;
+                        }
+                    case VimConstants.DoubleColumnNameTypePrefix:
+                        {
+                            var col = schemaOnly ? new double[0] : bfast.GetArray<double>(entry);
+                            et.DataColumns.Add(col.ToNamedBuffer(entry));
+                            break;
+                        }
+                    case VimConstants.FloatColumnNameTypePrefix:
+                        {
+                            var col = schemaOnly ? new float[0] : bfast.GetArray<float>(entry);
+                            et.DataColumns.Add(col.ToNamedBuffer(entry));
+                            break;
+                        }
+                    case VimConstants.ByteColumnNameTypePrefix:
+                        {
+                            var col = schemaOnly ? new byte[0] : bfast.GetArray<byte>(entry);
+                            et.DataColumns.Add(col.ToNamedBuffer(entry));
+                            break;
+                        }
+                        // For flexibility, we ignore the columns which do not contain a recognized prefix.
+                }
+            }
+
+            return et;
+        }
+
+
 
         /// <summary>
         /// Enumerates the SerializableEntityTables contained in the given entities buffer.
@@ -126,6 +195,23 @@ namespace Vim.Format
             foreach (var entityTableBufferReader in entitiesBufferReader.Seek().GetBFastBufferReaders())
             {
                 yield return entityTableBufferReader.ReadEntityTable(schemaOnly);
+            }
+        }
+
+        /// <summary>
+        /// Enumerates the SerializableEntityTables contained in the given entities buffer.
+        /// </summary>
+        public static IEnumerable<SerializableEntityTable> EnumerateEntityTables2(
+            BFastNext bfast,
+            bool schemaOnly)
+        {
+            
+            foreach (var entry in bfast.Entries)
+            {
+                var b = bfast.GetBFast(entry);
+                var table = ReadEntityTable2(b, schemaOnly);
+                table.Name = entry;
+                yield return table;
             }
         }
 
@@ -192,7 +278,9 @@ namespace Vim.Format
             CreateBFastBuilder(header, assets, stringTable, entityTables, geometry).Write(stream);
         }
 
-        public static void ReadBuffer(this SerializableDocument doc, BFastBufferReader bufferReader)
+
+
+            public static void ReadBuffer(this SerializableDocument doc, BFastBufferReader bufferReader)
         {
             var (name, numBytes) = bufferReader;
             var stream = bufferReader.Seek();
@@ -247,26 +335,5 @@ namespace Vim.Format
             return joinedStringTable.Split('\0');
         }
 
-        public static SerializableDocument Deserialize(Stream stream, LoadOptions loadOptions = null)
-        {
-            var doc = new SerializableDocument { Options = loadOptions };
-
-            foreach (var buffer in stream.GetBFastBufferReaders())
-            {
-                doc.ReadBuffer(buffer);
-            }
-
-            return doc;
-        }
-
-        public static SerializableDocument Deserialize(string filePath, LoadOptions loadOptions = null)
-        {
-            using (var stream = File.OpenRead(filePath))
-            {
-                var doc = Deserialize(stream, loadOptions);
-                doc.SetFileName(filePath);
-                return doc;
-            }
-        }
     }
 }

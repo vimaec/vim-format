@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices.ComTypes;
+using System.Text;
 using Vim.BFast;
 using Vim.BFastNextNS;
 using Vim.G3d;
@@ -40,6 +42,11 @@ namespace Vim.Format
             => IndexColumns.Select(c => c.Name)
                 .Concat(StringColumns.Select(c => c.Name))
                 .Concat(DataColumns.Select(c => c.Name));
+
+        public static SerializableEntityTable FromBfast(string name, BFastNext bfast)
+        {
+            return null;
+        }
     }
 
     /// <summary>
@@ -91,17 +98,7 @@ namespace Vim.Format
         /// The originating file name (if provided)
         /// </summary>
         public string FileName;
-
-
-        public void Write(string path)
-        {
-            using (var stream = new FileStream(path, FileMode.OpenOrCreate))
-            {
-                Write(stream);
-            }
-        }
-
-        public void Write(Stream stream)
+        public BFastNext ToBFast()
         {
             var bfast = new BFastNext();
             //bfast.SetArray(BufferNames.Header, Header.ToBytes());
@@ -129,7 +126,43 @@ namespace Vim.Format
             bfast.SetArray(BufferNames.Strings, StringTable.PackStrings());
 
             bfast.SetArray(BufferNames.Geometry, Geometry.WriteToBytes());
-            bfast.Write(stream);
+            return bfast;
         }
+
+        public static SerializableDocument FromPath(string path, LoadOptions options = null)
+        {
+            using (var file = new FileStream(path, FileMode.OpenOrCreate))
+            {
+                var bfast = new BFastNext(file);
+                var doc = FromBFast(bfast);
+                doc.FileName = path;
+                return doc;
+            }
+        }
+
+        public static SerializableDocument FromBFast(BFastNext bfast, LoadOptions options = null)
+        {
+            var doc = new SerializableDocument();
+            doc.Options = options ?? new LoadOptions();
+            doc.Header = SerializableHeader.FromBytes(bfast.GetArray<byte>(BufferNames.Header));
+            if (!doc.Options.SkipAssets)
+            {
+                var asset = bfast.GetBFast(BufferNames.Assets);
+                doc.Assets = asset.ToNamedBuffers().ToArray();
+            }
+            var strs = bfast.GetArray<byte>(BufferNames.Strings);
+            doc.StringTable = Encoding.UTF8.GetString(strs).Split('\0');
+
+            if (!doc.Options.SkipGeometry)
+            {
+                var geo = bfast.GetArray<byte>(BufferNames.Geometry);
+                doc.Geometry = G3D.Read(geo);
+            }
+
+            var entities = bfast.GetBFast(BufferNames.Entities);
+            doc.EntityTables = Serializer.EnumerateEntityTables2(entities, doc.Options.SchemaOnly).ToList();
+            return doc;
+        }
+
     }
 }
