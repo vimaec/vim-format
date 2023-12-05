@@ -1,6 +1,6 @@
 using NUnit.Framework;
 using NUnit.Framework.Internal;
-using Vim.BFast;
+using Vim.BFastNextNS;
 using Vim.G3dNext.Attributes;
 using Vim.Math3d;
 using Vim.BFastNextNS;

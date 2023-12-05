@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using Vim.Math3d;
-using Vim.BFast;
+using Vim.BFastNextNS;
 using System.IO;
 using Vim.Util;
 using Vim.BFastNextNS;
 using System.Runtime.InteropServices.ComTypes;
+using static Vim.Format.DocumentBuilder;
+using Vim.Format.Geometry;
 
 namespace Vim.Format
 {
@@ -16,10 +18,7 @@ namespace Vim.Format
         public readonly SerializableHeader Header;
         public readonly Dictionary<string, EntityTableBuilder> Tables = new Dictionary<string, EntityTableBuilder>();
         public readonly Dictionary<string, byte[]> Assets = new Dictionary<string, byte[]>();
-        public readonly List<SubdividedMesh> Meshes = new List<SubdividedMesh>();
-        public readonly List<Instance> Instances = new List<Instance>();
-        public readonly List<Shape> Shapes = new List<Shape>();
-        public readonly List<Material> Materials = new List<Material>();
+        public readonly G3dBuilder Geometry = new G3dBuilder();
 
         public bool UseColors { get; set; }
 
@@ -53,51 +52,64 @@ namespace Vim.Format
             return this;
         }
 
-        public DocumentBuilder AddMesh(SubdividedMesh g)
+        public DocumentBuilder AddMesh(SubdividedMesh mesh)
         {
-            Meshes.Add(g);
+            Geometry.AddMesh(mesh);
             return this;
         }
 
-        public DocumentBuilder AddMeshes(IEnumerable<SubdividedMesh> gb)
+        public DocumentBuilder AddMeshes(IEnumerable<SubdividedMesh> meshes)
         {
-            Meshes.AddRange(gb);
+            foreach (var m in meshes)
+            {
+                AddMesh(m);
+            }
             return this;
         }
 
-        public DocumentBuilder AddInstances(IEnumerable<Instance> ib)
+        public DocumentBuilder AddInstances(IEnumerable<Instance> instances)
         {
-            Instances.AddRange(ib);
-            return this;
-        }
-        public DocumentBuilder AddMaterials(IEnumerable<Material> mb)
-        {
-            Materials.AddRange(mb);
+            foreach (var m in instances)
+            {
+                Geometry.AddInstance(m);
+            }
             return this;
         }
 
-        public DocumentBuilder AddShapes(IEnumerable<Shape> sb)
+        public DocumentBuilder AddInstance(Matrix4x4 transform, int meshIndex, int parentIndex = -1)
         {
-            Shapes.AddRange(sb);
+            var instance = new Instance()
+            {
+                Transform = transform,
+                MeshIndex = meshIndex,
+                ParentIndex = parentIndex
+            };
+            Geometry.AddInstance(instance);
+            return this;
+        }
+
+        public DocumentBuilder AddMaterials(IEnumerable<Material> materials)
+        {
+            foreach (var material in materials)
+            {
+                Geometry.AddMaterial(material);
+            }
+            return this;
+        }
+
+        public DocumentBuilder AddShapes(IEnumerable<Shape> shapes)
+        {
+            foreach (var shape in shapes)
+            {
+                Geometry.AddShape(shape);
+            }
             return this;
         }
 
         public DocumentBuilder AddAsset(INamedBuffer b)
             => AddAsset(b.Name, b.ToBytes());
 
-        public DocumentBuilder AddInstance(Matrix4x4 transform, int meshIndex, int parentIndex = -1)
-        {
-            Instances.Add(
-                new Instance()
-                {
-                    Transform = transform,
-                    MeshIndex = meshIndex,
-                    ParentIndex = parentIndex
-                }
-            );
 
-            return this;
-        }
 
         public class StringLookupInfo
         {
@@ -136,17 +148,17 @@ namespace Vim.Format
                 tb.Clear();
 
                 // Populate the box
-                var boxMinX = new float[Meshes.Count];
-                var boxMinY = new float[Meshes.Count];
-                var boxMinZ = new float[Meshes.Count];
-                
-                var boxMaxX = new float[Meshes.Count];
-                var boxMaxY = new float[Meshes.Count];
-                var boxMaxZ = new float[Meshes.Count];
+                var boxMinX = new float[Geometry.MeshCount];
+                var boxMinY = new float[Geometry.MeshCount];
+                var boxMinZ = new float[Geometry.MeshCount];
 
-                for (var i = 0; i < Meshes.Count; ++i)
+                var boxMaxX = new float[Geometry.MeshCount];
+                var boxMaxY = new float[Geometry.MeshCount];
+                var boxMaxZ = new float[Geometry.MeshCount];
+
+                for (var i = 0; i < Geometry.MeshCount; ++i)
                 {
-                    var b = AABox.Create(Meshes[i].Vertices);
+                    var b = Geometry.GetBox(i);
                     boxMinX[i] = b.Min.X;
                     boxMinY[i] = b.Min.Y;
                     boxMinZ[i] = b.Min.Z;
@@ -165,8 +177,8 @@ namespace Vim.Format
                 tb.AddDataColumn("float:Box.Max.Y", boxMaxY);
                 tb.AddDataColumn("float:Box.Max.Z", boxMaxZ);
 
-                tb.AddDataColumn("int:VertexCount", Meshes.Select(g => g.Vertices.Count));
-                tb.AddDataColumn("int:FaceCount", Meshes.Select(g => g.Indices.Count / 3));
+                tb.AddDataColumn("int:VertexCount", Geometry.GetVertexCounts());
+                tb.AddDataColumn("int:FaceCount", Geometry.GetFaceCounts());
             }
 
             // TODO: add bounding box information to the nodes 
@@ -208,12 +220,9 @@ namespace Vim.Format
             };
             var bfast = doc.ToBFast();
 
-            var g3d = new BigG3dWriter2(Meshes, Instances, Shapes, Materials, null, UseColors);
-            bfast.SetBFast(BufferNames.Geometry, g3d.bfast);
+            bfast.SetBFast(BufferNames.Geometry, Geometry.ToBFast());
 
             return bfast;
         }
-
-
     }
 }

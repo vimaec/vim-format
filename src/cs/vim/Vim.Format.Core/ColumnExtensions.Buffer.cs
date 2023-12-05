@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using Vim.BFast;
+using Vim.BFastNextNS;
 using Vim.LinqArray;
 
 namespace Vim.Format

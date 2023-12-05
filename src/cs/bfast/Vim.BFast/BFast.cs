@@ -55,6 +55,7 @@ namespace Vim.BFast
         public static long ComputePadding(BFastRange[] ranges)
             => ComputePadding(BFastPreamble.Size + ranges.Length * BFastRange.Size);
 
+
         /// <summary>
         /// Given a position in the stream, tells us whether the position is aligned.
         /// </summary>

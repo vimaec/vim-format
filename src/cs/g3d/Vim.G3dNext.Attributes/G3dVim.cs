@@ -1,5 +1,4 @@
 ﻿using System;
-using Vim.BFast;
 using Vim.BFastNextNS;
 
 namespace Vim.G3dNext.Attributes

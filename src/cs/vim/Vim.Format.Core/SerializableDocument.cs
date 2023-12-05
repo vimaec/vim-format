@@ -2,9 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices.ComTypes;
 using System.Text;
-using Vim.BFast;
 using Vim.BFastNextNS;
 using Vim.G3d;
 
@@ -43,9 +41,24 @@ namespace Vim.Format
                 .Concat(StringColumns.Select(c => c.Name))
                 .Concat(DataColumns.Select(c => c.Name));
 
+        public IEnumerable<INamedBuffer> AllColumns
+            => IndexColumns
+            .Concat(StringColumns)
+            .Concat(DataColumns);
+
         public static SerializableEntityTable FromBfast(string name, BFastNext bfast)
         {
             return null;
+        }
+
+        public BFastNext ToBFast()
+        {
+            var bfast = new BFastNext();
+            foreach (var col in AllColumns)
+            {
+                bfast.SetArray(col.Name, col.AsArray<byte>());
+            }
+            return bfast;
         }
     }
 
@@ -113,18 +126,10 @@ namespace Vim.Format
             var entities = new BFastNext();
             foreach (var entity in EntityTables)
             {
-                var b = new BFastNext();
-                foreach (var buffer in entity.ToBuffers())
-                {
-                    b.SetArray(buffer.Name, buffer.ToBytes());
-                }
-                entities.SetBFast(entity.Name, b);
-
+                entities.SetBFast(entity.Name, entity.ToBFast());
             }
             bfast.SetBFast(BufferNames.Entities, entities);
-
-            bfast.SetArray(BufferNames.Strings, StringTable.PackStrings());
-
+            bfast.SetArray(BufferNames.Strings, PackStrings(StringTable));
             bfast.SetArray(BufferNames.Geometry, Geometry.WriteToBytes());
             return bfast;
         }
@@ -160,8 +165,106 @@ namespace Vim.Format
             }
 
             var entities = bfast.GetBFast(BufferNames.Entities);
-            doc.EntityTables = Serializer.EnumerateEntityTables2(entities, doc.Options.SchemaOnly).ToList();
+            doc.EntityTables = GetEntityTables(entities, doc.Options.SchemaOnly).ToList();
             return doc;
+        }
+
+        /// <summary>
+        /// Enumerates the SerializableEntityTables contained in the given entities buffer.
+        /// </summary>
+        private static IEnumerable<SerializableEntityTable> GetEntityTables(
+            BFastNext bfast,
+            bool schemaOnly)
+        {
+
+            foreach (var entry in bfast.Entries)
+            {
+                var b = bfast.GetBFast(entry);
+                var table = ReadEntityTable2(b, schemaOnly);
+                table.Name = entry;
+                yield return table;
+            }
+        }
+
+
+        /// <summary>
+        /// Returns a SerializableEntityTable based on the given buffer reader.
+        /// </summary>
+        public static SerializableEntityTable ReadEntityTable2(
+            BFastNext bfast,
+            bool schemaOnly
+           )
+        {
+            var et = new SerializableEntityTable();
+            foreach (var entry in bfast.Entries)
+            {
+                var typePrefix = entry.GetTypePrefix();
+
+                switch (typePrefix)
+                {
+                    case VimConstants.IndexColumnNameTypePrefix:
+                        {
+                            //TODO: replace named buffer with arrays
+                            var col = schemaOnly ? new int[0] : bfast.GetArray<int>(entry);
+                            et.IndexColumns.Add(col.ToNamedBuffer(entry));
+                            break;
+                        }
+                    case VimConstants.StringColumnNameTypePrefix:
+                        {
+                            var col = schemaOnly ? new int[0] : bfast.GetArray<int>(entry);
+                            et.StringColumns.Add(col.ToNamedBuffer(entry));
+                            break;
+                        }
+                    case VimConstants.IntColumnNameTypePrefix:
+                        {
+                            var col = schemaOnly ? new int[0] : bfast.GetArray<int>(entry);
+                            et.DataColumns.Add(col.ToNamedBuffer(entry));
+                            break;
+                        }
+                    case VimConstants.LongColumnNameTypePrefix:
+                        {
+                            var col = schemaOnly ? new long[0] : bfast.GetArray<long>(entry);
+                            et.DataColumns.Add(col.ToNamedBuffer(entry));
+                            break;
+                        }
+                    case VimConstants.DoubleColumnNameTypePrefix:
+                        {
+                            var col = schemaOnly ? new double[0] : bfast.GetArray<double>(entry);
+                            et.DataColumns.Add(col.ToNamedBuffer(entry));
+                            break;
+                        }
+                    case VimConstants.FloatColumnNameTypePrefix:
+                        {
+                            var col = schemaOnly ? new float[0] : bfast.GetArray<float>(entry);
+                            et.DataColumns.Add(col.ToNamedBuffer(entry));
+                            break;
+                        }
+                    case VimConstants.ByteColumnNameTypePrefix:
+                        {
+                            var col = schemaOnly ? new byte[0] : bfast.GetArray<byte>(entry);
+                            et.DataColumns.Add(col.ToNamedBuffer(entry));
+                            break;
+                        }
+                        // For flexibility, we ignore the columns which do not contain a recognized prefix.
+                }
+            }
+
+            return et;
+        }
+
+        /// <summary>
+        /// Converts a collection of strings, into a null-separated byte[] array 
+        /// </summary>
+        public static byte[] PackStrings(IEnumerable<string> strings)
+        {
+            var r = new List<byte>();
+            foreach (var name in strings)
+            {
+                var bytes = Encoding.UTF8.GetBytes(name);
+                r.AddRange(bytes);
+                r.Add(0);
+            }
+            return r.ToArray();
         }
 
     }

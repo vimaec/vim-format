@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Vim.BFast;
 using Vim.BFastNextNS;
 
 namespace Vim.G3dNext

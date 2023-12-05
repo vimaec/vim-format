@@ -1,6 +1,6 @@
 ﻿using System.Linq;
 using Vim.LinqArray;
-using Vim.BFast;
+using Vim.BFastNextNS;
 using Vim.G3dNext.Attributes;
 using Vim.Format.ObjectModel;
 using Vim.G3dNext;

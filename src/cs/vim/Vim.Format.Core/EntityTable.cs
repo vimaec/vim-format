@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
-using Vim.BFast;
+using Vim.BFastNextNS;
 using Vim.LinqArray;
 
 namespace Vim.Format
