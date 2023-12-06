@@ -193,7 +193,7 @@ namespace Vim.BFastNextNS
             var sizes = values.Select(v => v.GetSize()).ToArray();
             var names = writables.Select(w => w.name).ToArray();
 
-            var header = BFast.BFast.CreateBFastHeader(sizes, names);
+            var header = BFastIO.CreateBFastHeader(sizes, names);
             return header.Preamble.DataEnd;
         }
     }

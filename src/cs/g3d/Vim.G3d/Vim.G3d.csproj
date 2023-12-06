@@ -48,6 +48,7 @@ It can be easily and efficiently deserialized and rendered in different language
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\bfast\Vim.BFast.Next\Vim.BFastNext.csproj" />
     <ProjectReference Include="..\..\bfast\Vim.BFast\Vim.BFast.csproj" />
     <ProjectReference Include="..\..\linqarray\Vim.LinqArray\Vim.LinqArray.csproj" />
     <ProjectReference Include="..\..\math3d\Vim.Math3D\Vim.Math3D.csproj" />

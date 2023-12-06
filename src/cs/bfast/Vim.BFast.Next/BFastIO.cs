@@ -32,8 +32,6 @@ namespace Vim.BFastNextNS
             stream.WriteBFast(header, bufferNames, bufferSizes, onBuffer);
         }
 
-        public static long NumBytes(this IBuffer buffer)
-            => (long)buffer.NumElements() * buffer.ElementSize;
 
         /// <summary>
         /// Enables a user to write a BFAST from an array of names, sizes, and a custom writing function.

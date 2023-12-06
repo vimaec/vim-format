@@ -129,7 +129,7 @@ namespace Vim.Format
                 entities.SetBFast(entity.Name, entity.ToBFast());
             }
             bfast.SetBFast(BufferNames.Entities, entities);
-            bfast.SetArray(BufferNames.Strings, PackStrings(StringTable));
+            bfast.SetArray(BufferNames.Strings, BFastIO.PackStrings(StringTable));
             bfast.SetArray(BufferNames.Geometry, Geometry.WriteToBytes());
             return bfast;
         }
@@ -252,20 +252,7 @@ namespace Vim.Format
             return et;
         }
 
-        /// <summary>
-        /// Converts a collection of strings, into a null-separated byte[] array 
-        /// </summary>
-        public static byte[] PackStrings(IEnumerable<string> strings)
-        {
-            var r = new List<byte>();
-            foreach (var name in strings)
-            {
-                var bytes = Encoding.UTF8.GetBytes(name);
-                r.AddRange(bytes);
-                r.Add(0);
-            }
-            return r.ToArray();
-        }
+
 
     }
 }
