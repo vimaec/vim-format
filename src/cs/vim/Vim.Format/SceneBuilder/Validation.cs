@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
-using Vim.BFastNextNS;
+using Vim.Buffers;
 using Vim.Format.Geometry;
 using Vim.Format.ObjectModel;
 using Vim.Util;

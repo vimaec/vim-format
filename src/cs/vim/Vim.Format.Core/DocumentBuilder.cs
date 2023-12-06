@@ -6,7 +6,7 @@ using Vim.Math3d;
 using Vim.BFastNextNS;
 using System.IO;
 using Vim.Util;
-using Vim.BFastNextNS;
+using Vim.Buffers;
 using System.Runtime.InteropServices.ComTypes;
 using static Vim.Format.DocumentBuilder;
 using Vim.Format.Geometry;

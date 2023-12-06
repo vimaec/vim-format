@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using Vim.BFast.Core;
+using Vim.Buffers;
 
 namespace Vim.BFastNextNS
 {

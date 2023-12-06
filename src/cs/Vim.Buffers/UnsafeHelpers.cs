@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 
-namespace Vim.BFastNextNS
+namespace Vim.Buffers
 {
     /// <summary>
     /// This class would benefit from being in a generic utilities class, however, having it here allows BFAST to be a standalone without dependencies.

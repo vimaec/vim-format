@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using Vim.BFastNextNS;
 using Vim.Util;
 using Vim.LinqArray;
+using Vim.Buffers;
 
 namespace Vim.Format
 {

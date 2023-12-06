@@ -5,6 +5,8 @@ using System.Linq;
 using System.Text;
 using Vim.BFastNextNS;
 using Vim.G3d;
+using Vim.Buffers;
+using Vim.BFast.Core;
 
 namespace Vim.Format
 {
@@ -129,7 +131,7 @@ namespace Vim.Format
                 entities.SetBFast(entity.Name, entity.ToBFast());
             }
             bfast.SetBFast(BufferNames.Entities, entities);
-            bfast.SetArray(BufferNames.Strings, BFastIO.PackStrings(StringTable));
+            bfast.SetArray(BufferNames.Strings, BFastStrings.Pack(StringTable));
             bfast.SetArray(BufferNames.Geometry, Geometry.WriteToBytes());
             return bfast;
         }

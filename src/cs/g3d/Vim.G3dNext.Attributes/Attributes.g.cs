@@ -5,6 +5,7 @@ using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 using Vim.BFastNextNS;
+using Vim.Buffers;
 
 namespace Vim.G3dNext.Attributes
 {

@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
+using Vim.Buffers;
+using Vim.BFast.Core;
+
 
 namespace Vim.BFastNextNS
 {
@@ -160,7 +163,7 @@ namespace Vim.BFastNextNS
         private static IEnumerable<(string name, BFastNextNode value)> GetBFastNodes(Stream stream)
         {
             var offset = stream.Position;
-            var header = stream.ReadBFastHeader();
+            var header = BFastReader.ReadHeader(stream);
             for (var i = 1; i < header.Preamble.NumArrays; i++)
             {
                 var node = new BFastNextNode(
@@ -184,7 +187,7 @@ namespace Vim.BFastNextNS
                 return bytesToWrite;
             }
 
-            stream.WriteBFast(names, sizes, onBuffer);
+            BFastWriter.Write(stream, names, sizes, onBuffer);
         }
 
         private static long GetBFastSize(IEnumerable<(string name, IWritable value)> writables)
@@ -193,7 +196,7 @@ namespace Vim.BFastNextNS
             var sizes = values.Select(v => v.GetSize()).ToArray();
             var names = writables.Select(w => w.name).ToArray();
 
-            var header = BFastIO.CreateBFastHeader(sizes, names);
+            var header = BFastWriter.CreateHeader(sizes, names);
             return header.Preamble.DataEnd;
         }
     }

@@ -1,5 +1,5 @@
 ﻿using Vim.LinqArray;
-using Vim.BFastNextNS;
+using Vim.Buffers;
 
 namespace Vim.Format
 {
