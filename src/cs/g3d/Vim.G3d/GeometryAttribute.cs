@@ -2,9 +2,10 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Vim.BFast;
+using Vim.Buffers;
 using Vim.LinqArray;
 using Vim.Math3d;
+using Vim.BFastNextNS;
 
 namespace Vim.G3d
 {
@@ -84,6 +85,13 @@ namespace Vim.G3d
         /// Loads the correct typed data from a Stream.
         /// </summary>
         public abstract GeometryAttribute Read(Stream stream, long byteCount);
+
+        /// <summary>
+        /// Loads the correct typed data from a BFastNext.
+        /// </summary>
+        public abstract GeometryAttribute Read(BFastNext bfast);
+
+        public abstract void AddTo(BFastNext bfast);
 
         /// <summary>
         /// Creates a new GeometryAttribute with the same data, but with a different index. Useful when constructing attributes 
@@ -218,6 +226,17 @@ namespace Vim.G3d
                 throw new Exception($"Trying to read {nElements} which is more than the maximum number of elements in a C# array");
             var data = stream.ReadArray<T>((int)nElements);
             return new GeometryAttribute<T>(data.ToIArray(), Descriptor);
+        }
+
+        public override GeometryAttribute Read(BFastNext bfast)
+        {
+            var array = bfast.GetArray<T>(Name);
+            return new GeometryAttribute<T>(array.ToIArray(), Descriptor);
+        }
+
+        public override void AddTo(BFastNext bfast)
+        {
+            bfast.SetArray<T>(Name, Data.ToArray());
         }
 
         public override GeometryAttribute SetIndex(int index)

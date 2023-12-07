@@ -10,7 +10,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\bfast\Vim.BFast.Next\Vim.BFastNext.csproj" />
-    <ProjectReference Include="..\..\bfast\Vim.BFast\Vim.BFast.csproj" />
   </ItemGroup>
 
 </Project>

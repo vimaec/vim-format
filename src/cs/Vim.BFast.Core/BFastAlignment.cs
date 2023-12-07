@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 
-namespace Vim.BFastNextNS
+namespace Vim.BFast.Core
 {
     internal class BFastAlignment
     {

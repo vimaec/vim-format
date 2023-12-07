@@ -16,7 +16,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\bfast\Vim.BFast\Vim.BFast.csproj" />
     <ProjectReference Include="..\..\util\Vim.Util.Tests\Vim.Util.Tests.csproj" />
     <ProjectReference Include="..\Vim.Format\Vim.Format.csproj" />
   </ItemGroup>

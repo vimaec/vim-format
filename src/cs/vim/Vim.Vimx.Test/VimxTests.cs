@@ -1,6 +1,5 @@
 using NUnit.Framework;
 using NUnit.Framework.Internal;
-using Vim.BFast;
 using Vim.G3dNext.Tests;
 using Vim.Format.VimxNS.Conversion;
 using Vim.Util.Tests;

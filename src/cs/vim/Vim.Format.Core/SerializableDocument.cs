@@ -132,7 +132,7 @@ namespace Vim.Format
             }
             bfast.SetBFast(BufferNames.Entities, entities);
             bfast.SetArray(BufferNames.Strings, BFastStrings.Pack(StringTable));
-            bfast.SetArray(BufferNames.Geometry, Geometry.WriteToBytes());
+            bfast.SetBFast(BufferNames.Geometry, Geometry.ToBFast());
             return bfast;
         }
 

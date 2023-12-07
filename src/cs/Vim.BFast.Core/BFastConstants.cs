@@ -1,4 +1,4 @@
-﻿namespace Vim.BFastNextNS
+﻿namespace Vim.BFast.Core
 {
     /// <summary>
     /// Constants.

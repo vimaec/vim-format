@@ -133,6 +133,8 @@ namespace Vim.BFastNextNS
             }
         }
 
+        public byte[] AsBytes() => (this as IBFastNextNode).AsArray<byte>();
+
         BFastNext IBFastNextNode.AsBFast()
         {
             return this;

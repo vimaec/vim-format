@@ -10,7 +10,7 @@ using Vim.Math3d;
 
 namespace Vim.G3d.Tests
 {
-    [TestFixture, Ignore("Ignored until the new version is ready")]
+    [TestFixture]
     public static class G3dTests
     {
         public class FileLoadData
@@ -128,7 +128,7 @@ namespace Vim.G3d.Tests
                     f.G3DFile = new FileInfo(outputFilePath);
 
                     f.MSecToSaveG3d = Util.GetMSecElapsed(() =>
-                        f.G3d.Write(outputFilePath));
+                        f.G3d.ToBFast().Write(outputFilePath));
                 }
                 catch (Exception e)
                 {
@@ -215,7 +215,7 @@ namespace Vim.G3d.Tests
                 .Add(materialIndices.ToIArray().ToFaceMaterialAttribute())
                 .ToG3D();
 
-            var bytes = g3d.WriteToBytes();
+            var bytes = g3d.ToBFast().AsBytes();
             var g = G3D.Read(bytes);
 
             Assert.IsNotNull(g);
@@ -253,7 +253,7 @@ namespace Vim.G3d.Tests
                 .Add(materialIndices.ToIArray().ToFaceMaterialAttribute())
                 .ToG3D();
 
-            var bytes = g3d.WriteToBytes();
+            var bytes = g3d.ToBFast().AsBytes();
             var g = G3D.Read(bytes);
 
             Assert.IsNotNull(g);
@@ -335,7 +335,7 @@ namespace Vim.G3d.Tests
             var g3d = bldr.ToG3D();
             Assert.AreEqual(nVerts, g3d.NumVertices);
             var tempFile = Path.Combine(Path.GetTempPath(), "bigfile.g3d");
-            g3d.Write(tempFile);
+            g3d.ToBFast().Write(tempFile);
             var tmp = G3D.Read(tempFile);
             ValidateSameG3D(g3d, tmp);
         }

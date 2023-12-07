@@ -5,4 +5,9 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\Vim.BFast.Core\Vim.BFast.Core.csproj" />
+    <ProjectReference Include="..\..\Vim.Buffers\Vim.Buffers.csproj" />
+  </ItemGroup>
+
 </Project>

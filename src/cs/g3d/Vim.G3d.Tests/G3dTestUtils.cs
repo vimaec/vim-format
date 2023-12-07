@@ -101,7 +101,7 @@ $@"    #animations = {scene.AnimationCount}
                 var g3d = m.ToG3D();
                 AssertSame(m, g3d);
                 var outputFile = Path.Combine(outputFolder, Path.GetFileName(fileName) + ".g3d");
-                g3d.Write(outputFile);
+                g3d.ToBFast().Write(outputFile);
                 var r = TimeLoadingFile(outputFile, G3D.Read);
                 //OutputG3DStats(g3d);
                 AssertSame(g3d, r);
