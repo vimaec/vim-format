@@ -3,10 +3,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-using Vim.BFastNextNS;
+using Vim.BFastNS;
+using Vim.BFastNS.Core;
 using Vim.G3d;
-using Vim.Buffers;
-using Vim.BFast.Core;
 
 namespace Vim.Format
 {
@@ -48,14 +47,14 @@ namespace Vim.Format
             .Concat(StringColumns)
             .Concat(DataColumns);
 
-        public static SerializableEntityTable FromBfast(string name, BFastNext bfast)
+        public static SerializableEntityTable FromBfast(string name, BFastNS.BFast bfast)
         {
             return null;
         }
 
-        public BFastNext ToBFast()
+        public BFastNS.BFast ToBFast()
         {
-            var bfast = new BFastNext();
+            var bfast = new BFastNS.BFast();
             foreach (var col in AllColumns)
             {
                 bfast.SetArray(col.Name, col.AsArray<byte>());
@@ -113,19 +112,19 @@ namespace Vim.Format
         /// The originating file name (if provided)
         /// </summary>
         public string FileName;
-        public BFastNext ToBFast()
+        public BFastNS.BFast ToBFast()
         {
-            var bfast = new BFastNext();
+            var bfast = new BFastNS.BFast();
             //bfast.SetArray(BufferNames.Header, Header.ToBytes());
 
-            var assets = new BFastNext();
+            var assets = new BFastNS.BFast();
             foreach (var asset in Assets)
             {
                 assets.SetArray(asset.Name, asset.ToArray<byte>());
             }
             bfast.SetBFast(BufferNames.Assets, assets);
 
-            var entities = new BFastNext();
+            var entities = new BFastNS.BFast();
             foreach (var entity in EntityTables)
             {
                 entities.SetBFast(entity.Name, entity.ToBFast());
@@ -140,14 +139,14 @@ namespace Vim.Format
         {
             using (var file = new FileStream(path, FileMode.OpenOrCreate))
             {
-                var bfast = new BFastNext(file);
+                var bfast = new BFastNS.BFast(file);
                 var doc = FromBFast(bfast);
                 doc.FileName = path;
                 return doc;
             }
         }
 
-        public static SerializableDocument FromBFast(BFastNext bfast, LoadOptions options = null)
+        public static SerializableDocument FromBFast(BFastNS.BFast bfast, LoadOptions options = null)
         {
             var doc = new SerializableDocument();
             doc.Options = options ?? new LoadOptions();
@@ -162,7 +161,7 @@ namespace Vim.Format
 
             if (!doc.Options.SkipGeometry)
             {
-                var geo = bfast.GetArray<byte>(BufferNames.Geometry);
+                var geo = bfast.GetBFast(BufferNames.Geometry);
                 doc.Geometry = G3D.Read(geo);
             }
 
@@ -175,7 +174,7 @@ namespace Vim.Format
         /// Enumerates the SerializableEntityTables contained in the given entities buffer.
         /// </summary>
         private static IEnumerable<SerializableEntityTable> GetEntityTables(
-            BFastNext bfast,
+            BFastNS.BFast bfast,
             bool schemaOnly)
         {
 
@@ -193,7 +192,7 @@ namespace Vim.Format
         /// Returns a SerializableEntityTable based on the given buffer reader.
         /// </summary>
         public static SerializableEntityTable ReadEntityTable2(
-            BFastNext bfast,
+            BFastNS.BFast bfast,
             bool schemaOnly
            )
         {

@@ -11,7 +11,7 @@ namespace Vim.Format.Geometry
             => mesh is G3D r ? r : mesh.Attributes.ToG3d();
 
         public static void WriteG3d(this IMesh mesh, string filePath)
-            => mesh.ToG3d().Write(filePath);
+            => mesh.ToG3d().ToBFast().Write(filePath);
 
         public static void WriteObj(this IMesh mesh, string filePath)
             => mesh.ToG3d().WriteObj(filePath);

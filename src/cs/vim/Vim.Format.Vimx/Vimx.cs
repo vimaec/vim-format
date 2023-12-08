@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Vim.BFastNextNS;
+using Vim.BFastNS;
 using Vim.G3dNext;
 using Vim.G3dNext.Attributes;
 
@@ -44,7 +44,7 @@ namespace Vim.Format.VimxNS
             Chunks = chunks;
         }
 
-        public Vimx(BFastNext bfast)
+        public Vimx(BFastNS.BFast bfast)
         {
             Header = VimxHeader.FromBytes(bfast.GetArray<byte>(BufferNames.Header));
 
@@ -65,10 +65,10 @@ namespace Vim.Format.VimxNS
         public static Vimx FromPath(string path)
             => path.ReadBFast((b) => new Vimx(b));
 
-        public BFastNext ToBFast()
+        public BFastNS.BFast ToBFast()
         {
             AddTransformsToScene();
-            var bfast = new BFastNext();
+            var bfast = new BFast();
             bfast.SetArray(BufferNames.Meta, MetaHeader.Default.ToBytes());
             bfast.SetArray(BufferNames.Header, Header.ToVimxBytes());
             bfast.SetBFast(BufferNames.Scene, Scene.ToBFast(), BufferCompression.Scene);

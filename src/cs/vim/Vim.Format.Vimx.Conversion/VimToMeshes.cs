@@ -2,7 +2,7 @@
 using System.Linq;
 using Vim.LinqArray;
 using Vim.Util;
-using Vim.BFastNextNS;
+using Vim.BFastNS;
 using Vim.Math3d;
 using Vim.G3dNext.Attributes;
 

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Vim.G3d;
-using Vim.BFastNextNS;
+using Vim.BFastNS;
 using static Vim.Format.DocumentBuilder;
 using Vim.Math3d;
 
@@ -52,9 +52,9 @@ namespace Vim.Format
         }
 
 
-        public BFastNext ToBFast()
+        public BFastNS.BFast ToBFast()
         {
-            var bfast = new BFastNext();
+            var bfast = new BFastNS.BFast();
             var totalSubmeshCount = _meshes.Select(s => s.SubmeshesIndexOffset.Count).Sum();
 
             // Compute the Vertex offsets and index offsets 
@@ -91,7 +91,7 @@ namespace Vim.Format
                 shapeVertexOffsets[i] = shapeVertexOffsets[i - 1] + _shapes[i - 1].Vertices.Count;
             }
 
-            bfast = new BFastNext();
+            bfast = new BFastNS.BFast();
             bfast.SetArray("Meta", G3dHeader.Default.ToBytes());
 
             bfast.SetEnumerable(CommonAttributes.Position, () => _meshes.SelectMany(m => m.Vertices));

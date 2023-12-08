@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
-using Vim.Buffers;
 using Vim.LinqArray;
+using Vim.BFastNS;
 
 namespace Vim.Format.Tests
 {

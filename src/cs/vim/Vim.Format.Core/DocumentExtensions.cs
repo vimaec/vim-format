@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Text.RegularExpressions;
 using Vim.LinqArray;
-using Vim.Buffers;
+using Vim.BFastNS;
 
 namespace Vim.Format
 {

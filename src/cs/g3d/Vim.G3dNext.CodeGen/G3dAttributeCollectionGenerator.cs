@@ -21,8 +21,7 @@ namespace Vim.G3dNext.CodeGen
                 cb.AppendLine("using System.IO;");
                 cb.AppendLine("using System.Collections.Generic;");
                 cb.AppendLine("using System.Linq;");
-                cb.AppendLine("using Vim.BFast;");
-                cb.AppendLine("using Vim.BFastNextNS;");
+                cb.AppendLine("using Vim.BFastNS;");
                 cb.AppendLine();
                 cb.AppendLine("namespace Vim.G3dNext.Attributes");
                 cb.AppendLine("{");
@@ -93,7 +92,7 @@ namespace Vim.G3dNext.CodeGen
 
         public int Count => TypedData?.Length ?? 0;
 
-        public void AddTo(BFastNext bfast)
+        public void AddTo(BFast bfast)
         {{
             if(TypedData != null)
             {{
@@ -101,7 +100,7 @@ namespace Vim.G3dNext.CodeGen
             }}
         }}
 
-        public void ReadBFast(BFastNext bfast)
+        public void ReadBFast(BFast bfast)
         {{
             TypedData = bfast.GetArray<{typedDataType}>(""{attributeName}"");
         }}
@@ -160,7 +159,7 @@ namespace Vim.G3dNext.CodeGen
             // empty
         }}
 
-        public {g3dName}(BFastNext bfast) : this(new {className}(bfast))
+        public {g3dName}(BFast bfast) : this(new {className}(bfast))
         {{
             // empty
         }}
@@ -173,7 +172,7 @@ namespace Vim.G3dNext.CodeGen
             (this as ISetup).Setup();
         }}
 
-        public BFastNext ToBFast()
+        public BFast ToBFast()
             => Attributes.ToBFast();
 
         {
@@ -201,12 +200,12 @@ namespace Vim.G3dNext.CodeGen
             // empty
         }}
 
-        public {className}(BFastNext bfast)
+        public {className}(BFast bfast)
         {{
             this.ReadAttributes(bfast);
         }}
 
-        public void ReadAttributes(BFastNext bfast)
+        public void ReadAttributes(BFast bfast)
         {{
             foreach (var attribute in Map.Values)
             {{

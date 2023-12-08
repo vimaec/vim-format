@@ -215,8 +215,8 @@ namespace Vim.G3d.Tests
                 .Add(materialIndices.ToIArray().ToFaceMaterialAttribute())
                 .ToG3D();
 
-            var bytes = g3d.ToBFast().AsBytes();
-            var g = G3D.Read(bytes);
+            var bfast = g3d.ToBFast();
+            var g = G3D.Read(bfast);
 
             Assert.IsNotNull(g);
 
@@ -253,8 +253,8 @@ namespace Vim.G3d.Tests
                 .Add(materialIndices.ToIArray().ToFaceMaterialAttribute())
                 .ToG3D();
 
-            var bytes = g3d.ToBFast().AsBytes();
-            var g = G3D.Read(bytes);
+            var bfast = g3d.ToBFast();
+            var g = G3D.Read(bfast);
 
             Assert.IsNotNull(g);
 

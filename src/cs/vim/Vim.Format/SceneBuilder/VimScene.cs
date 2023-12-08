@@ -10,7 +10,7 @@ using Vim.G3d;
 using Vim.LinqArray;
 using Vim.Math3d;
 using IVimSceneProgress = System.IProgress<(string, double)>;
-using Vim.BFastNextNS;
+using Vim.BFastNS;
 
 namespace Vim
 {
@@ -37,7 +37,7 @@ namespace Vim
 
         public static SerializableHeader GetHeader(Stream stream)
         {
-            var bfast = new BFastNext(stream);
+            var bfast = new BFastNS.BFast(stream);
             var bytes = bfast.GetArray<byte>(BufferNames.Header);
             if (bytes == null) return null;
             return SerializableHeader.FromBytes(bytes);
@@ -50,11 +50,11 @@ namespace Vim
             => LoadVim(f, new LoadOptions { SkipGeometry = skipGeometry, SkipAssets = skipAssets}, progress, inParallel);
 
         public static VimScene LoadVim(Stream stream, LoadOptions loadOptions, IVimSceneProgress progress = null, bool inParallel = false)
-            => new VimScene(SerializableDocument.FromBFast(new BFastNext(stream), loadOptions), progress, inParallel);
+            => new VimScene(SerializableDocument.FromBFast(new BFastNS.BFast(stream), loadOptions), progress, inParallel);
 
         public static VimScene LoadVim2(Stream stream, LoadOptions loadOptions = null, IVimSceneProgress progress = null, bool inParallel = false)
         {
-            var bfast = new BFastNext(stream);
+            var bfast = new BFastNS.BFast(stream);
             var doc = SerializableDocument.FromBFast(bfast, loadOptions);
             return new VimScene(doc, progress, inParallel);
         }

@@ -298,8 +298,8 @@ namespace Vim.Format.Tests.Geometry
                 .Add(submeshMaterials.ToIArray().ToSubmeshMaterialAttribute())
                 .ToG3D();
 
-            var bfastBytes = g3d.WriteToBytes();
-            var readG3d = G3D.Read(bfastBytes);
+            var bfast = g3d.ToBFast();
+            var readG3d = G3D.Read(bfast);
 
             Assert.IsNotNull(readG3d);
             var mesh = readG3d.ToIMesh();

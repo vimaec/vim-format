@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Text;
-using Vim.BFastNextNS;
+using Vim.BFastNS;
 using Vim.Util;
 
 namespace Vim.Format

@@ -53,15 +53,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Vim.Format.Vimx", "vim\Vim.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Vim.Format.Vimx.Test", "vim\Vim.Vimx.Test\Vim.Format.Vimx.Test.csproj", "{BBF94CBD-CD39-49F5-979A-5C9E52C29330}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Vim.BFastNext", "bfast\Vim.BFast.Next\Vim.BFastNext.csproj", "{408884EA-3CE5-4A34-97F6-1F2D64A0E745}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Vim.BFast", "bfast\Vim.BFast.Next\Vim.BFast.csproj", "{408884EA-3CE5-4A34-97F6-1F2D64A0E745}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Vim.BFastNext.Tests", "bfast\Vim.BFastNext.Tests\Vim.BFastNext.Tests.csproj", "{FD149D64-5905-4F7D-97A8-9F7DA18A257D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Vim.BFast.Tests", "bfast\Vim.BFastNext.Tests\Vim.BFast.Tests.csproj", "{FD149D64-5905-4F7D-97A8-9F7DA18A257D}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Vim.Format.Vimx.Conversion", "vim\Vim.Format.Vimx.Conversion\Vim.Format.Vimx.Conversion.csproj", "{4C4F9826-0DEF-4A39-BFC8-A834522694A0}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vim.BFast.Core", "Vim.BFast.Core\Vim.BFast.Core.csproj", "{7056183C-4DFE-4070-A714-A2AD9F47FA33}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vim.Buffers", "Vim.Buffers\Vim.Buffers.csproj", "{BDB05F66-E90A-4DAE-A839-3281EE1338CC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -157,14 +153,6 @@ Global
 		{4C4F9826-0DEF-4A39-BFC8-A834522694A0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4C4F9826-0DEF-4A39-BFC8-A834522694A0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4C4F9826-0DEF-4A39-BFC8-A834522694A0}.Release|Any CPU.Build.0 = Release|Any CPU
-		{7056183C-4DFE-4070-A714-A2AD9F47FA33}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7056183C-4DFE-4070-A714-A2AD9F47FA33}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7056183C-4DFE-4070-A714-A2AD9F47FA33}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7056183C-4DFE-4070-A714-A2AD9F47FA33}.Release|Any CPU.Build.0 = Release|Any CPU
-		{BDB05F66-E90A-4DAE-A839-3281EE1338CC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{BDB05F66-E90A-4DAE-A839-3281EE1338CC}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{BDB05F66-E90A-4DAE-A839-3281EE1338CC}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{BDB05F66-E90A-4DAE-A839-3281EE1338CC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -192,8 +180,6 @@ Global
 		{408884EA-3CE5-4A34-97F6-1F2D64A0E745} = {F3260C54-834F-4C74-A3B7-EAB622AFA492}
 		{FD149D64-5905-4F7D-97A8-9F7DA18A257D} = {F3260C54-834F-4C74-A3B7-EAB622AFA492}
 		{4C4F9826-0DEF-4A39-BFC8-A834522694A0} = {D639C635-01D1-48C4-89B5-1FD70F1AFEE9}
-		{7056183C-4DFE-4070-A714-A2AD9F47FA33} = {F3260C54-834F-4C74-A3B7-EAB622AFA492}
-		{BDB05F66-E90A-4DAE-A839-3281EE1338CC} = {F3260C54-834F-4C74-A3B7-EAB622AFA492}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7D1BF641-26E8-4809-B638-029241C51BE2}

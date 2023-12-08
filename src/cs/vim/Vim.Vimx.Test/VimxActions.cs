@@ -22,12 +22,11 @@ namespace Vim.Format.VimxNS.Actions
             var output = Path.Combine(VimFormatRepoPaths.OutDir, name + ".vimx");
 
             var vimx = VimxConverter.FromVimPath(input);
+            Console.WriteLine(vimx.Materials.MaterialSmoothness);
 
-            Console.WriteLine(vimx.Chunks.SelectMany(c => c.Meshes).Sum(m => m.Indices.Length));
-            Console.WriteLine(vimx.Chunks.SelectMany(c => c.Meshes).Sum(m => m.Positions.Length));
-
-            Console.WriteLine(vimx.Header);
             vimx.ToBFast().Write(output);
+            var v = Vimx.FromPath(output);
+            Console.WriteLine(v.Scene.InstanceTransformData.Length);
         }
     }
 }

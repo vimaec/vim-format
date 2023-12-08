@@ -1,7 +1,6 @@
 ﻿using System;
 using System.IO;
-using Vim.BFastNextNS;
-using Vim.Buffers;
+using Vim.BFastNS;
 using Vim.LinqArray;
 using System.Collections.Generic;
 
@@ -19,9 +18,9 @@ namespace Vim.G3d
             stream.Write(buffer);
         }
 
-        public static BFastNext ToBFast(this IGeometryAttributes self, G3dHeader? header = null)
+        public static BFastNS.BFast ToBFast(this IGeometryAttributes self, G3dHeader? header = null)
         {
-            var bfast = new BFastNext();
+            var bfast = new BFastNS.BFast();
             bfast.SetArray("meta", (header ?? G3dHeader.Default).ToBytes());
             foreach(var attribute in self.Attributes.ToEnumerable())
             {
@@ -30,36 +29,7 @@ namespace Vim.G3d
             return bfast;
         }
 
-        public static G3D ReadG3d(this Stream stream, Func<string, string> renameFunc = null)
-        {
-            var bfast = new BFastNext(stream);
 
-            var header = G3dHeader.FromBytesOrDefault(bfast.GetArray<byte>("meta"));
-            var attributes = new List<GeometryAttribute>();
-            foreach (var name in bfast.Entries)
-            {
-                if (name == "meta") continue;
-                var attribute = GetAttribute(name);
-                var a = attribute.Read(bfast);
-                attributes.Add(a);
-            }
-
-            return new G3D(attributes, header);
-        }
-        public static GeometryAttribute GetAttribute(string name)
-        {
-            if (!AttributeDescriptor.TryParse(name, out var attributeDescriptor))
-            {
-                return null;
-            }
-            try
-            {
-                return attributeDescriptor.ToDefaultAttribute(0);
-            }
-            catch
-            {
-                return null;
-            }
-        }
+   
     }
 }

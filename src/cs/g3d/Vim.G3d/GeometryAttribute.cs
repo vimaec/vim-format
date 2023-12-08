@@ -2,10 +2,9 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Vim.Buffers;
 using Vim.LinqArray;
 using Vim.Math3d;
-using Vim.BFastNextNS;
+using Vim.BFastNS;
 
 namespace Vim.G3d
 {
@@ -89,9 +88,9 @@ namespace Vim.G3d
         /// <summary>
         /// Loads the correct typed data from a BFastNext.
         /// </summary>
-        public abstract GeometryAttribute Read(BFastNext bfast);
+        public abstract GeometryAttribute Read(BFastNS.BFast bfast);
 
-        public abstract void AddTo(BFastNext bfast);
+        public abstract void AddTo(BFastNS.BFast bfast);
 
         /// <summary>
         /// Creates a new GeometryAttribute with the same data, but with a different index. Useful when constructing attributes 
@@ -228,13 +227,13 @@ namespace Vim.G3d
             return new GeometryAttribute<T>(data.ToIArray(), Descriptor);
         }
 
-        public override GeometryAttribute Read(BFastNext bfast)
+        public override GeometryAttribute Read(BFastNS.BFast bfast)
         {
             var array = bfast.GetArray<T>(Name);
             return new GeometryAttribute<T>(array.ToIArray(), Descriptor);
         }
 
-        public override void AddTo(BFastNext bfast)
+        public override void AddTo(BFastNS.BFast bfast)
         {
             bfast.SetArray<T>(Name, Data.ToArray());
         }

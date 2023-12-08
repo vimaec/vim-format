@@ -1,6 +1,6 @@
 ﻿using System.Linq;
 using Vim.LinqArray;
-using Vim.BFastNextNS;
+using Vim.BFastNS;
 using Vim.G3dNext.Attributes;
 using Vim.Format.ObjectModel;
 using Vim.G3dNext;
@@ -30,8 +30,7 @@ namespace Vim.Format.VimxNS.Conversion
 
             var chunks = meshes.SplitChunks();
             var scene = MeshesToScene.CreateScene(g3d, bim, chunks, meshes);
-
-            var materials = new G3dMaterials(g3d.ToBFast());
+            var materials = new G3dMaterials().ReadFromVim(g3d);
             var header = VimxHeader.CreateDefault();
             
             return new Vimx(header, MetaHeader.Default, scene, materials, chunks);

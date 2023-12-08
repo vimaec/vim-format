@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Vim.BFastNextNS;
+using Vim.BFastNS;
 
 namespace Vim.G3dNext
 {
@@ -58,13 +58,13 @@ namespace Vim.G3dNext
             => attributeCollection.Map.Values
                 .Sum(a => a.GetSizeInBytes());
 
-        public static BFastNext ToBFast(this IAttributeCollection attributeCollection)
+        public static BFastNS.BFast ToBFast(this IAttributeCollection attributeCollection)
         {
             var attributes = attributeCollection.Map.Values
                 .OrderBy(n => n.Name)
                 .ToArray(); // Order the attributes by name for consistency
 
-            var bfast = new BFastNext();
+            var bfast = new BFastNS.BFast();
             foreach (var a in attributes)
             {
                 a.AddTo(bfast);

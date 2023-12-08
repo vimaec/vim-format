@@ -3,13 +3,9 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using Vim.Math3d;
-using Vim.BFastNextNS;
+using Vim.BFastNS;
 using System.IO;
 using Vim.Util;
-using Vim.Buffers;
-using System.Runtime.InteropServices.ComTypes;
-using static Vim.Format.DocumentBuilder;
-using Vim.Format.Geometry;
 
 namespace Vim.Format
 {
@@ -202,7 +198,7 @@ namespace Vim.Format
             ToBFast().Write(stream);
         }
 
-        public BFastNext ToBFast()
+        public BFastNS.BFast ToBFast()
         {
             var assets = Assets.Select(kv => kv.Value.ToNamedBuffer(kv.Key)) as IEnumerable<INamedBuffer>;
             Debug.Assert(assets != null, "Asset conversion to IEnumerable<INamedBuffer> failed.");

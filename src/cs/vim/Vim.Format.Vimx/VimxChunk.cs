@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Vim.BFastNextNS;
+using Vim.BFastNS;
 using Vim.G3dNext.Attributes;
 
 namespace Vim.Format.VimxNS
@@ -12,16 +12,16 @@ namespace Vim.Format.VimxNS
         public VimxChunk() { }
         public VimxChunk(List<G3dMesh> meshes) { Meshes = meshes; }
 
-        public VimxChunk(BFastNext bfast)
+        public VimxChunk(BFastNS.BFast bfast)
         {
             Meshes = bfast.Entries
                 .Select(e => new G3dMesh(bfast.GetBFast(e)))
                 .ToList();
         }
 
-        public BFastNext ToBFast()
+        public BFastNS.BFast ToBFast()
         {
-            var chunk = new BFastNext();
+            var chunk = new BFastNS.BFast();
             chunk.SetBFast(
                 BufferNames.Mesh,
                 Meshes.Select(m => m.ToBFast())

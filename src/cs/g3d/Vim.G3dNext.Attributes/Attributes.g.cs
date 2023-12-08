@@ -4,8 +4,7 @@ using System;
 using System.IO;
 using System.Collections.Generic;
 using System.Linq;
-using Vim.BFastNextNS;
-using Vim.Buffers;
+using Vim.BFastNS;
 
 namespace Vim.G3dNext.Attributes
 {
@@ -19,7 +18,7 @@ namespace Vim.G3dNext.Attributes
 
         public int Count => TypedData?.Length ?? 0;
 
-        public void AddTo(BFastNext bfast)
+        public void AddTo(BFast bfast)
         {
             if(TypedData != null)
             {
@@ -27,7 +26,7 @@ namespace Vim.G3dNext.Attributes
             }
         }
 
-        public void ReadBFast(BFastNext bfast)
+        public void ReadBFast(BFast bfast)
         {
             TypedData = bfast.GetArray<Vim.Math3d.Vector3>("g3d:vertex:position:0:float32:3");
         }
@@ -64,7 +63,7 @@ namespace Vim.G3dNext.Attributes
 
         public int Count => TypedData?.Length ?? 0;
 
-        public void AddTo(BFastNext bfast)
+        public void AddTo(BFast bfast)
         {
             if(TypedData != null)
             {
@@ -72,7 +71,7 @@ namespace Vim.G3dNext.Attributes
             }
         }
 
-        public void ReadBFast(BFastNext bfast)
+        public void ReadBFast(BFast bfast)
         {
             TypedData = bfast.GetArray<System.Int32>("g3d:corner:index:0:int32:1");
         }
@@ -109,7 +108,7 @@ namespace Vim.G3dNext.Attributes
 
         public int Count => TypedData?.Length ?? 0;
 
-        public void AddTo(BFastNext bfast)
+        public void AddTo(BFast bfast)
         {
             if(TypedData != null)
             {
@@ -117,7 +116,7 @@ namespace Vim.G3dNext.Attributes
             }
         }
 
-        public void ReadBFast(BFastNext bfast)
+        public void ReadBFast(BFast bfast)
         {
             TypedData = bfast.GetArray<Vim.Math3d.Matrix4x4>("g3d:instance:transform:0:float32:16");
         }
@@ -154,7 +153,7 @@ namespace Vim.G3dNext.Attributes
 
         public int Count => TypedData?.Length ?? 0;
 
-        public void AddTo(BFastNext bfast)
+        public void AddTo(BFast bfast)
         {
             if(TypedData != null)
             {
@@ -162,7 +161,7 @@ namespace Vim.G3dNext.Attributes
             }
         }
 
-        public void ReadBFast(BFastNext bfast)
+        public void ReadBFast(BFast bfast)
         {
             TypedData = bfast.GetArray<System.Int32>("g3d:instance:parent:0:int32:1");
         }
@@ -199,7 +198,7 @@ namespace Vim.G3dNext.Attributes
 
         public int Count => TypedData?.Length ?? 0;
 
-        public void AddTo(BFastNext bfast)
+        public void AddTo(BFast bfast)
         {
             if(TypedData != null)
             {
@@ -207,7 +206,7 @@ namespace Vim.G3dNext.Attributes
             }
         }
 
-        public void ReadBFast(BFastNext bfast)
+        public void ReadBFast(BFast bfast)
         {
             TypedData = bfast.GetArray<System.UInt16>("g3d:instance:flags:0:uint16:1");
         }
@@ -244,7 +243,7 @@ namespace Vim.G3dNext.Attributes
 
         public int Count => TypedData?.Length ?? 0;
 
-        public void AddTo(BFastNext bfast)
+        public void AddTo(BFast bfast)
         {
             if(TypedData != null)
             {
@@ -252,7 +251,7 @@ namespace Vim.G3dNext.Attributes
             }
         }
 
-        public void ReadBFast(BFastNext bfast)
+        public void ReadBFast(BFast bfast)
         {
             TypedData = bfast.GetArray<System.Int32>("g3d:instance:mesh:0:int32:1");
         }
@@ -289,7 +288,7 @@ namespace Vim.G3dNext.Attributes
 
         public int Count => TypedData?.Length ?? 0;
 
-        public void AddTo(BFastNext bfast)
+        public void AddTo(BFast bfast)
         {
             if(TypedData != null)
             {
@@ -297,7 +296,7 @@ namespace Vim.G3dNext.Attributes
             }
         }
 
-        public void ReadBFast(BFastNext bfast)
+        public void ReadBFast(BFast bfast)
         {
             TypedData = bfast.GetArray<System.Int32>("g3d:mesh:submeshoffset:0:int32:1");
         }
@@ -334,7 +333,7 @@ namespace Vim.G3dNext.Attributes
 
         public int Count => TypedData?.Length ?? 0;
 
-        public void AddTo(BFastNext bfast)
+        public void AddTo(BFast bfast)
         {
             if(TypedData != null)
             {
@@ -342,7 +341,7 @@ namespace Vim.G3dNext.Attributes
             }
         }
 
-        public void ReadBFast(BFastNext bfast)
+        public void ReadBFast(BFast bfast)
         {
             TypedData = bfast.GetArray<System.Int32>("g3d:submesh:indexoffset:0:int32:1");
         }
@@ -379,7 +378,7 @@ namespace Vim.G3dNext.Attributes
 
         public int Count => TypedData?.Length ?? 0;
 
-        public void AddTo(BFastNext bfast)
+        public void AddTo(BFast bfast)
         {
             if(TypedData != null)
             {
@@ -387,7 +386,7 @@ namespace Vim.G3dNext.Attributes
             }
         }
 
-        public void ReadBFast(BFastNext bfast)
+        public void ReadBFast(BFast bfast)
         {
             TypedData = bfast.GetArray<System.Int32>("g3d:submesh:material:0:int32:1");
         }
@@ -424,7 +423,7 @@ namespace Vim.G3dNext.Attributes
 
         public int Count => TypedData?.Length ?? 0;
 
-        public void AddTo(BFastNext bfast)
+        public void AddTo(BFast bfast)
         {
             if(TypedData != null)
             {
@@ -432,7 +431,7 @@ namespace Vim.G3dNext.Attributes
             }
         }
 
-        public void ReadBFast(BFastNext bfast)
+        public void ReadBFast(BFast bfast)
         {
             TypedData = bfast.GetArray<Vim.Math3d.Vector4>("g3d:material:color:0:float32:4");
         }
@@ -469,7 +468,7 @@ namespace Vim.G3dNext.Attributes
 
         public int Count => TypedData?.Length ?? 0;
 
-        public void AddTo(BFastNext bfast)
+        public void AddTo(BFast bfast)
         {
             if(TypedData != null)
             {
@@ -477,7 +476,7 @@ namespace Vim.G3dNext.Attributes
             }
         }
 
-        public void ReadBFast(BFastNext bfast)
+        public void ReadBFast(BFast bfast)
         {
             TypedData = bfast.GetArray<System.Single>("g3d:material:glossiness:0:float32:1");
         }
@@ -514,7 +513,7 @@ namespace Vim.G3dNext.Attributes
 
         public int Count => TypedData?.Length ?? 0;
 
-        public void AddTo(BFastNext bfast)
+        public void AddTo(BFast bfast)
         {
             if(TypedData != null)
             {
@@ -522,7 +521,7 @@ namespace Vim.G3dNext.Attributes
             }
         }
 
-        public void ReadBFast(BFastNext bfast)
+        public void ReadBFast(BFast bfast)
         {
             TypedData = bfast.GetArray<System.Single>("g3d:material:smoothness:0:float32:1");
         }
@@ -559,7 +558,7 @@ namespace Vim.G3dNext.Attributes
 
         public int Count => TypedData?.Length ?? 0;
 
-        public void AddTo(BFastNext bfast)
+        public void AddTo(BFast bfast)
         {
             if(TypedData != null)
             {
@@ -567,7 +566,7 @@ namespace Vim.G3dNext.Attributes
             }
         }
 
-        public void ReadBFast(BFastNext bfast)
+        public void ReadBFast(BFast bfast)
         {
             TypedData = bfast.GetArray<Vim.Math3d.Vector3>("g3d:shapevertex:position:0:float32:3");
         }
@@ -604,7 +603,7 @@ namespace Vim.G3dNext.Attributes
 
         public int Count => TypedData?.Length ?? 0;
 
-        public void AddTo(BFastNext bfast)
+        public void AddTo(BFast bfast)
         {
             if(TypedData != null)
             {
@@ -612,7 +611,7 @@ namespace Vim.G3dNext.Attributes
             }
         }
 
-        public void ReadBFast(BFastNext bfast)
+        public void ReadBFast(BFast bfast)
         {
             TypedData = bfast.GetArray<System.Int32>("g3d:shape:vertexoffset:0:int32:1");
         }
@@ -649,7 +648,7 @@ namespace Vim.G3dNext.Attributes
 
         public int Count => TypedData?.Length ?? 0;
 
-        public void AddTo(BFastNext bfast)
+        public void AddTo(BFast bfast)
         {
             if(TypedData != null)
             {
@@ -657,7 +656,7 @@ namespace Vim.G3dNext.Attributes
             }
         }
 
-        public void ReadBFast(BFastNext bfast)
+        public void ReadBFast(BFast bfast)
         {
             TypedData = bfast.GetArray<Vim.Math3d.Vector4>("g3d:shape:color:0:float32:4");
         }
@@ -694,7 +693,7 @@ namespace Vim.G3dNext.Attributes
 
         public int Count => TypedData?.Length ?? 0;
 
-        public void AddTo(BFastNext bfast)
+        public void AddTo(BFast bfast)
         {
             if(TypedData != null)
             {
@@ -702,7 +701,7 @@ namespace Vim.G3dNext.Attributes
             }
         }
 
-        public void ReadBFast(BFastNext bfast)
+        public void ReadBFast(BFast bfast)
         {
             TypedData = bfast.GetArray<System.Single>("g3d:shape:width:0:float32:1");
         }
@@ -739,7 +738,7 @@ namespace Vim.G3dNext.Attributes
 
         public int Count => TypedData?.Length ?? 0;
 
-        public void AddTo(BFastNext bfast)
+        public void AddTo(BFast bfast)
         {
             if(TypedData != null)
             {
@@ -747,7 +746,7 @@ namespace Vim.G3dNext.Attributes
             }
         }
 
-        public void ReadBFast(BFastNext bfast)
+        public void ReadBFast(BFast bfast)
         {
             TypedData = bfast.GetArray<Vim.Math3d.Vector4>("g3d:material:color:0:float32:4");
         }
@@ -784,7 +783,7 @@ namespace Vim.G3dNext.Attributes
 
         public int Count => TypedData?.Length ?? 0;
 
-        public void AddTo(BFastNext bfast)
+        public void AddTo(BFast bfast)
         {
             if(TypedData != null)
             {
@@ -792,7 +791,7 @@ namespace Vim.G3dNext.Attributes
             }
         }
 
-        public void ReadBFast(BFastNext bfast)
+        public void ReadBFast(BFast bfast)
         {
             TypedData = bfast.GetArray<System.Single>("g3d:material:glossiness:0:float32:1");
         }
@@ -829,7 +828,7 @@ namespace Vim.G3dNext.Attributes
 
         public int Count => TypedData?.Length ?? 0;
 
-        public void AddTo(BFastNext bfast)
+        public void AddTo(BFast bfast)
         {
             if(TypedData != null)
             {
@@ -837,7 +836,7 @@ namespace Vim.G3dNext.Attributes
             }
         }
 
-        public void ReadBFast(BFastNext bfast)
+        public void ReadBFast(BFast bfast)
         {
             TypedData = bfast.GetArray<System.Single>("g3d:material:smoothness:0:float32:1");
         }
@@ -874,7 +873,7 @@ namespace Vim.G3dNext.Attributes
 
         public int Count => TypedData?.Length ?? 0;
 
-        public void AddTo(BFastNext bfast)
+        public void AddTo(BFast bfast)
         {
             if(TypedData != null)
             {
@@ -882,7 +881,7 @@ namespace Vim.G3dNext.Attributes
             }
         }
 
-        public void ReadBFast(BFastNext bfast)
+        public void ReadBFast(BFast bfast)
         {
             TypedData = bfast.GetArray<System.Int32>("g3d:chunk:count:0:int32:1");
         }
@@ -919,7 +918,7 @@ namespace Vim.G3dNext.Attributes
 
         public int Count => TypedData?.Length ?? 0;
 
-        public void AddTo(BFastNext bfast)
+        public void AddTo(BFast bfast)
         {
             if(TypedData != null)
             {
@@ -927,7 +926,7 @@ namespace Vim.G3dNext.Attributes
             }
         }
 
-        public void ReadBFast(BFastNext bfast)
+        public void ReadBFast(BFast bfast)
         {
             TypedData = bfast.GetArray<System.Int32>("g3d:instance:mesh:0:int32:1");
         }
@@ -964,7 +963,7 @@ namespace Vim.G3dNext.Attributes
 
         public int Count => TypedData?.Length ?? 0;
 
-        public void AddTo(BFastNext bfast)
+        public void AddTo(BFast bfast)
         {
             if(TypedData != null)
             {
@@ -972,7 +971,7 @@ namespace Vim.G3dNext.Attributes
             }
         }
 
-        public void ReadBFast(BFastNext bfast)
+        public void ReadBFast(BFast bfast)
         {
             TypedData = bfast.GetArray<System.Int32>("g3d:instance:transform:0:int32:1");
         }
@@ -1009,7 +1008,7 @@ namespace Vim.G3dNext.Attributes
 
         public int Count => TypedData?.Length ?? 0;
 
-        public void AddTo(BFastNext bfast)
+        public void AddTo(BFast bfast)
         {
             if(TypedData != null)
             {
@@ -1017,7 +1016,7 @@ namespace Vim.G3dNext.Attributes
             }
         }
 
-        public void ReadBFast(BFastNext bfast)
+        public void ReadBFast(BFast bfast)
         {
             TypedData = bfast.GetArray<Vim.Math3d.Matrix4x4>("g3d:instance:transform:0:float32:16");
         }
@@ -1054,7 +1053,7 @@ namespace Vim.G3dNext.Attributes
 
         public int Count => TypedData?.Length ?? 0;
 
-        public void AddTo(BFastNext bfast)
+        public void AddTo(BFast bfast)
         {
             if(TypedData != null)
             {
@@ -1062,7 +1061,7 @@ namespace Vim.G3dNext.Attributes
             }
         }
 
-        public void ReadBFast(BFastNext bfast)
+        public void ReadBFast(BFast bfast)
         {
             TypedData = bfast.GetArray<System.Int32>("g3d:instance:node:0:int32:1");
         }
@@ -1099,7 +1098,7 @@ namespace Vim.G3dNext.Attributes
 
         public int Count => TypedData?.Length ?? 0;
 
-        public void AddTo(BFastNext bfast)
+        public void AddTo(BFast bfast)
         {
             if(TypedData != null)
             {
@@ -1107,7 +1106,7 @@ namespace Vim.G3dNext.Attributes
             }
         }
 
-        public void ReadBFast(BFastNext bfast)
+        public void ReadBFast(BFast bfast)
         {
             TypedData = bfast.GetArray<System.Int32>("g3d:instance:group:0:int32:1");
         }
@@ -1144,7 +1143,7 @@ namespace Vim.G3dNext.Attributes
 
         public int Count => TypedData?.Length ?? 0;
 
-        public void AddTo(BFastNext bfast)
+        public void AddTo(BFast bfast)
         {
             if(TypedData != null)
             {
@@ -1152,7 +1151,7 @@ namespace Vim.G3dNext.Attributes
             }
         }
 
-        public void ReadBFast(BFastNext bfast)
+        public void ReadBFast(BFast bfast)
         {
             TypedData = bfast.GetArray<System.Int64>("g3d:instance:tag:0:int64:1");
         }
@@ -1189,7 +1188,7 @@ namespace Vim.G3dNext.Attributes
 
         public int Count => TypedData?.Length ?? 0;
 
-        public void AddTo(BFastNext bfast)
+        public void AddTo(BFast bfast)
         {
             if(TypedData != null)
             {
@@ -1197,7 +1196,7 @@ namespace Vim.G3dNext.Attributes
             }
         }
 
-        public void ReadBFast(BFastNext bfast)
+        public void ReadBFast(BFast bfast)
         {
             TypedData = bfast.GetArray<System.UInt16>("g3d:instance:flags:0:uint16:1");
         }
@@ -1234,7 +1233,7 @@ namespace Vim.G3dNext.Attributes
 
         public int Count => TypedData?.Length ?? 0;
 
-        public void AddTo(BFastNext bfast)
+        public void AddTo(BFast bfast)
         {
             if(TypedData != null)
             {
@@ -1242,7 +1241,7 @@ namespace Vim.G3dNext.Attributes
             }
         }
 
-        public void ReadBFast(BFastNext bfast)
+        public void ReadBFast(BFast bfast)
         {
             TypedData = bfast.GetArray<Vim.Math3d.Vector3>("g3d:instance:min:0:float32:3");
         }
@@ -1279,7 +1278,7 @@ namespace Vim.G3dNext.Attributes
 
         public int Count => TypedData?.Length ?? 0;
 
-        public void AddTo(BFastNext bfast)
+        public void AddTo(BFast bfast)
         {
             if(TypedData != null)
             {
@@ -1287,7 +1286,7 @@ namespace Vim.G3dNext.Attributes
             }
         }
 
-        public void ReadBFast(BFastNext bfast)
+        public void ReadBFast(BFast bfast)
         {
             TypedData = bfast.GetArray<Vim.Math3d.Vector3>("g3d:instance:max:0:float32:3");
         }
@@ -1324,7 +1323,7 @@ namespace Vim.G3dNext.Attributes
 
         public int Count => TypedData?.Length ?? 0;
 
-        public void AddTo(BFastNext bfast)
+        public void AddTo(BFast bfast)
         {
             if(TypedData != null)
             {
@@ -1332,7 +1331,7 @@ namespace Vim.G3dNext.Attributes
             }
         }
 
-        public void ReadBFast(BFastNext bfast)
+        public void ReadBFast(BFast bfast)
         {
             TypedData = bfast.GetArray<System.Int32>("g3d:mesh:chunk:0:int32:1");
         }
@@ -1369,7 +1368,7 @@ namespace Vim.G3dNext.Attributes
 
         public int Count => TypedData?.Length ?? 0;
 
-        public void AddTo(BFastNext bfast)
+        public void AddTo(BFast bfast)
         {
             if(TypedData != null)
             {
@@ -1377,7 +1376,7 @@ namespace Vim.G3dNext.Attributes
             }
         }
 
-        public void ReadBFast(BFastNext bfast)
+        public void ReadBFast(BFast bfast)
         {
             TypedData = bfast.GetArray<System.Int32>("g3d:mesh:chunkindex:0:int32:1");
         }
@@ -1414,7 +1413,7 @@ namespace Vim.G3dNext.Attributes
 
         public int Count => TypedData?.Length ?? 0;
 
-        public void AddTo(BFastNext bfast)
+        public void AddTo(BFast bfast)
         {
             if(TypedData != null)
             {
@@ -1422,7 +1421,7 @@ namespace Vim.G3dNext.Attributes
             }
         }
 
-        public void ReadBFast(BFastNext bfast)
+        public void ReadBFast(BFast bfast)
         {
             TypedData = bfast.GetArray<System.Int32>("g3d:mesh:instancecount:0:int32:1");
         }
@@ -1459,7 +1458,7 @@ namespace Vim.G3dNext.Attributes
 
         public int Count => TypedData?.Length ?? 0;
 
-        public void AddTo(BFastNext bfast)
+        public void AddTo(BFast bfast)
         {
             if(TypedData != null)
             {
@@ -1467,7 +1466,7 @@ namespace Vim.G3dNext.Attributes
             }
         }
 
-        public void ReadBFast(BFastNext bfast)
+        public void ReadBFast(BFast bfast)
         {
             TypedData = bfast.GetArray<System.Int32>("g3d:mesh:vertexcount:0:int32:1");
         }
@@ -1504,7 +1503,7 @@ namespace Vim.G3dNext.Attributes
 
         public int Count => TypedData?.Length ?? 0;
 
-        public void AddTo(BFastNext bfast)
+        public void AddTo(BFast bfast)
         {
             if(TypedData != null)
             {
@@ -1512,7 +1511,7 @@ namespace Vim.G3dNext.Attributes
             }
         }
 
-        public void ReadBFast(BFastNext bfast)
+        public void ReadBFast(BFast bfast)
         {
             TypedData = bfast.GetArray<System.Int32>("g3d:mesh:indexcount:0:int32:1");
         }
@@ -1549,7 +1548,7 @@ namespace Vim.G3dNext.Attributes
 
         public int Count => TypedData?.Length ?? 0;
 
-        public void AddTo(BFastNext bfast)
+        public void AddTo(BFast bfast)
         {
             if(TypedData != null)
             {
@@ -1557,7 +1556,7 @@ namespace Vim.G3dNext.Attributes
             }
         }
 
-        public void ReadBFast(BFastNext bfast)
+        public void ReadBFast(BFast bfast)
         {
             TypedData = bfast.GetArray<System.Int32>("g3d:mesh:opaquevertexcount:0:int32:1");
         }
@@ -1594,7 +1593,7 @@ namespace Vim.G3dNext.Attributes
 
         public int Count => TypedData?.Length ?? 0;
 
-        public void AddTo(BFastNext bfast)
+        public void AddTo(BFast bfast)
         {
             if(TypedData != null)
             {
@@ -1602,7 +1601,7 @@ namespace Vim.G3dNext.Attributes
             }
         }
 
-        public void ReadBFast(BFastNext bfast)
+        public void ReadBFast(BFast bfast)
         {
             TypedData = bfast.GetArray<System.Int32>("g3d:mesh:opaqueindexcount:0:int32:1");
         }
@@ -1639,7 +1638,7 @@ namespace Vim.G3dNext.Attributes
 
         public int Count => TypedData?.Length ?? 0;
 
-        public void AddTo(BFastNext bfast)
+        public void AddTo(BFast bfast)
         {
             if(TypedData != null)
             {
@@ -1647,7 +1646,7 @@ namespace Vim.G3dNext.Attributes
             }
         }
 
-        public void ReadBFast(BFastNext bfast)
+        public void ReadBFast(BFast bfast)
         {
             TypedData = bfast.GetArray<Vim.Math3d.Matrix4x4>("g3d:instance:transform:0:float32:16");
         }
@@ -1684,7 +1683,7 @@ namespace Vim.G3dNext.Attributes
 
         public int Count => TypedData?.Length ?? 0;
 
-        public void AddTo(BFastNext bfast)
+        public void AddTo(BFast bfast)
         {
             if(TypedData != null)
             {
@@ -1692,7 +1691,7 @@ namespace Vim.G3dNext.Attributes
             }
         }
 
-        public void ReadBFast(BFastNext bfast)
+        public void ReadBFast(BFast bfast)
         {
             TypedData = bfast.GetArray<System.Int32>("g3d:mesh:opaquesubmeshcount:0:int32:1");
         }
@@ -1729,7 +1728,7 @@ namespace Vim.G3dNext.Attributes
 
         public int Count => TypedData?.Length ?? 0;
 
-        public void AddTo(BFastNext bfast)
+        public void AddTo(BFast bfast)
         {
             if(TypedData != null)
             {
@@ -1737,7 +1736,7 @@ namespace Vim.G3dNext.Attributes
             }
         }
 
-        public void ReadBFast(BFastNext bfast)
+        public void ReadBFast(BFast bfast)
         {
             TypedData = bfast.GetArray<System.Int32>("g3d:submesh:indexoffset:0:int32:1");
         }
@@ -1774,7 +1773,7 @@ namespace Vim.G3dNext.Attributes
 
         public int Count => TypedData?.Length ?? 0;
 
-        public void AddTo(BFastNext bfast)
+        public void AddTo(BFast bfast)
         {
             if(TypedData != null)
             {
@@ -1782,7 +1781,7 @@ namespace Vim.G3dNext.Attributes
             }
         }
 
-        public void ReadBFast(BFastNext bfast)
+        public void ReadBFast(BFast bfast)
         {
             TypedData = bfast.GetArray<System.Int32>("g3d:submesh:vertexoffset:0:int32:1");
         }
@@ -1819,7 +1818,7 @@ namespace Vim.G3dNext.Attributes
 
         public int Count => TypedData?.Length ?? 0;
 
-        public void AddTo(BFastNext bfast)
+        public void AddTo(BFast bfast)
         {
             if(TypedData != null)
             {
@@ -1827,7 +1826,7 @@ namespace Vim.G3dNext.Attributes
             }
         }
 
-        public void ReadBFast(BFastNext bfast)
+        public void ReadBFast(BFast bfast)
         {
             TypedData = bfast.GetArray<System.Int32>("g3d:submesh:material:0:int32:1");
         }
@@ -1864,7 +1863,7 @@ namespace Vim.G3dNext.Attributes
 
         public int Count => TypedData?.Length ?? 0;
 
-        public void AddTo(BFastNext bfast)
+        public void AddTo(BFast bfast)
         {
             if(TypedData != null)
             {
@@ -1872,7 +1871,7 @@ namespace Vim.G3dNext.Attributes
             }
         }
 
-        public void ReadBFast(BFastNext bfast)
+        public void ReadBFast(BFast bfast)
         {
             TypedData = bfast.GetArray<Vim.Math3d.Vector3>("g3d:vertex:position:0:float32:3");
         }
@@ -1909,7 +1908,7 @@ namespace Vim.G3dNext.Attributes
 
         public int Count => TypedData?.Length ?? 0;
 
-        public void AddTo(BFastNext bfast)
+        public void AddTo(BFast bfast)
         {
             if(TypedData != null)
             {
@@ -1917,7 +1916,7 @@ namespace Vim.G3dNext.Attributes
             }
         }
 
-        public void ReadBFast(BFastNext bfast)
+        public void ReadBFast(BFast bfast)
         {
             TypedData = bfast.GetArray<System.Int32>("g3d:corner:index:0:int32:1");
         }
@@ -1955,7 +1954,7 @@ namespace Vim.G3dNext.Attributes
             // empty
         }
 
-        public G3dVim(BFastNext bfast) : this(new VimAttributeCollection(bfast))
+        public G3dVim(BFast bfast) : this(new VimAttributeCollection(bfast))
         {
             // empty
         }
@@ -1968,7 +1967,7 @@ namespace Vim.G3dNext.Attributes
             (this as ISetup).Setup();
         }
 
-        public BFastNext ToBFast()
+        public BFast ToBFast()
             => Attributes.ToBFast();
 
         
@@ -2077,18 +2076,21 @@ namespace Vim.G3dNext.Attributes
             // empty
         }
 
-        public VimAttributeCollection(BFastNext bfast)
+        public VimAttributeCollection(BFast bfast)
         {
             this.ReadAttributes(bfast);
         }
 
-        public void ReadAttributes(BFastNext bfast)
+        public void ReadAttributes(BFast bfast)
         {
             foreach (var attribute in Map.Values)
             {
                 attribute.ReadBFast(bfast);
             }
         }
+
+
+
 
         public IDictionary<string, IAttribute> Map { get; }
             = new Dictionary<string, IAttribute>
@@ -2501,7 +2503,7 @@ namespace Vim.G3dNext.Attributes
             // empty
         }
 
-        public G3dMaterials(BFastNext bfast) : this(new MaterialsAttributeCollection(bfast))
+        public G3dMaterials(BFast bfast) : this(new MaterialsAttributeCollection(bfast))
         {
             // empty
         }
@@ -2514,7 +2516,7 @@ namespace Vim.G3dNext.Attributes
             (this as ISetup).Setup();
         }
 
-        public BFastNext ToBFast()
+        public BFast ToBFast()
             => Attributes.ToBFast();
 
         
@@ -2545,12 +2547,12 @@ namespace Vim.G3dNext.Attributes
             // empty
         }
 
-        public MaterialsAttributeCollection(BFastNext bfast)
+        public MaterialsAttributeCollection(BFast bfast)
         {
             this.ReadAttributes(bfast);
         }
 
-        public void ReadAttributes(BFastNext bfast)
+        public void ReadAttributes(BFast bfast)
         {
             foreach (var attribute in Map.Values)
             {
@@ -2651,7 +2653,7 @@ namespace Vim.G3dNext.Attributes
             // empty
         }
 
-        public G3dScene(BFastNext bfast) : this(new SceneAttributeCollection(bfast))
+        public G3dScene(BFast bfast) : this(new SceneAttributeCollection(bfast))
         {
             // empty
         }
@@ -2664,7 +2666,7 @@ namespace Vim.G3dNext.Attributes
             (this as ISetup).Setup();
         }
 
-        public BFastNext ToBFast()
+        public BFast ToBFast()
             => Attributes.ToBFast();
 
         
@@ -2779,12 +2781,12 @@ namespace Vim.G3dNext.Attributes
             // empty
         }
 
-        public SceneAttributeCollection(BFastNext bfast)
+        public SceneAttributeCollection(BFast bfast)
         {
             this.ReadAttributes(bfast);
         }
 
-        public void ReadAttributes(BFastNext bfast)
+        public void ReadAttributes(BFast bfast)
         {
             foreach (var attribute in Map.Values)
             {
@@ -3123,7 +3125,7 @@ namespace Vim.G3dNext.Attributes
             // empty
         }
 
-        public G3dMesh(BFastNext bfast) : this(new MeshAttributeCollection(bfast))
+        public G3dMesh(BFast bfast) : this(new MeshAttributeCollection(bfast))
         {
             // empty
         }
@@ -3136,7 +3138,7 @@ namespace Vim.G3dNext.Attributes
             (this as ISetup).Setup();
         }
 
-        public BFastNext ToBFast()
+        public BFast ToBFast()
             => Attributes.ToBFast();
 
         
@@ -3191,12 +3193,12 @@ namespace Vim.G3dNext.Attributes
             // empty
         }
 
-        public MeshAttributeCollection(BFastNext bfast)
+        public MeshAttributeCollection(BFast bfast)
         {
             this.ReadAttributes(bfast);
         }
 
-        public void ReadAttributes(BFastNext bfast)
+        public void ReadAttributes(BFast bfast)
         {
             foreach (var attribute in Map.Values)
             {

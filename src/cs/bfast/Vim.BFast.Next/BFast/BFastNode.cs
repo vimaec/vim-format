@@ -1,17 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
-using Vim.BFast.Core;
-using Vim.Buffers;
+using Vim.BFastNS.Core;
 
-namespace Vim.BFastNextNS
+namespace Vim.BFastNS
 {
-    public class BFastNextNode : IBFastNextNode
+    public class BFastNode : IBFastNode
     {
         private readonly Stream _stream;
         private readonly BFastRange _range;
 
-        public static BFastNextNode FromArray<T>(T[] array) where T : unmanaged
+        public static BFastNode FromArray<T>(T[] array) where T : unmanaged
         {
             /*
             Is a memory leak created if a MemoryStream in .NET is not closed?
@@ -24,22 +24,22 @@ namespace Vim.BFastNextNS
             */
             var stream = new MemoryStream();
             stream.Write(array);
-            return new BFastNextNode(stream, stream.FullRange());
+            return new BFastNode(stream, stream.FullRange());
         }
 
 
-        public BFastNextNode(Stream stream, BFastRange range, Action cleanup = null)
+        public BFastNode(Stream stream, BFastRange range, Action cleanup = null)
         {
             _stream = stream;
             _range = range;
         }
 
-        public BFastNext AsBFast()
+        public BFast AsBFast()
         {
             _stream.Seek(_range.Begin, SeekOrigin.Begin);
             try
             {
-                return new BFastNext(_stream);
+                return new BFast(_stream);
             }
             catch (Exception ex)
             {
@@ -51,7 +51,7 @@ namespace Vim.BFastNextNS
         public T[] AsArray<T>() where T : unmanaged
         {
             _stream.Seek(_range.Begin, SeekOrigin.Begin);
-            return _stream.ReadArrayBytes<T>((int)_range.Count);
+            return _stream.ReadArrayBytes<T>(_range.Count);
         }
 
         public IEnumerable<T> AsEnumerable<T>() where T : unmanaged

@@ -1,5 +1,5 @@
 ﻿using System.Text.RegularExpressions;
-using Vim.Buffers;
+using Vim.BFastNS;
 
 namespace Vim.Format
 {

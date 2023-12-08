@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 
-namespace Vim.BFastNextNS
+namespace Vim.BFastNS
 {
     /// <summary>
     /// Anything that can be added to a BFAST must have a size and write to a stream.
@@ -14,11 +14,11 @@ namespace Vim.BFastNextNS
         void Write(Stream stream);
     }
 
-    public interface IBFastNextNode : IWritable
+    public interface IBFastNode : IWritable
     {
         T[] AsArray<T>() where T : unmanaged;
         IEnumerable<T> AsEnumerable<T>() where T : unmanaged;
-        
-        BFastNext AsBFast();
+
+        BFast AsBFast();
     }
 }

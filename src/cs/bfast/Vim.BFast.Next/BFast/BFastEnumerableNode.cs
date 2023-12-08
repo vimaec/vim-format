@@ -2,11 +2,10 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Vim.Buffers;
 
-namespace Vim.BFastNextNS
+namespace Vim.BFastNS
 {
-    public class BFastEnumerableNode<TNode> : IBFastNextNode where TNode : unmanaged
+    public class BFastEnumerableNode<TNode> : IBFastNode where TNode : unmanaged
     {
         private Func<IEnumerable<TNode>> _source;
         public BFastEnumerableNode(Func<IEnumerable<TNode>> source)
@@ -14,13 +13,13 @@ namespace Vim.BFastNextNS
             _source = source;
         }
 
-        private BFastNextNode AsMemNode()
-            => BFastNextNode.FromArray(_source().ToArray());
+        private BFastNode AsMemNode()
+            => BFastNode.FromArray(_source().ToArray());
 
         public T[] AsArray<T>() where T : unmanaged
             => AsMemNode().AsArray<T>();
 
-        public BFastNext AsBFast() => AsMemNode().AsBFast();
+        public BFast AsBFast() => AsMemNode().AsBFast();
         public IEnumerable<T> AsEnumerable<T>() where T : unmanaged
         {
             var stream = new MemoryStream();
