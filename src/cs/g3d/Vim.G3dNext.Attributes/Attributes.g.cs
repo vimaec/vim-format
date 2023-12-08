@@ -2089,9 +2089,6 @@ namespace Vim.G3dNext.Attributes
             }
         }
 
-
-
-
         public IDictionary<string, IAttribute> Map { get; }
             = new Dictionary<string, IAttribute>
             {

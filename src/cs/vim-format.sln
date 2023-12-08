@@ -53,9 +53,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Vim.Format.Vimx", "vim\Vim.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Vim.Format.Vimx.Test", "vim\Vim.Vimx.Test\Vim.Format.Vimx.Test.csproj", "{BBF94CBD-CD39-49F5-979A-5C9E52C29330}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Vim.BFast", "bfast\Vim.BFast.Next\Vim.BFast.csproj", "{408884EA-3CE5-4A34-97F6-1F2D64A0E745}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Vim.BFast", "bfast\Vim.BFast\Vim.BFast.csproj", "{408884EA-3CE5-4A34-97F6-1F2D64A0E745}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Vim.BFast.Tests", "bfast\Vim.BFastNext.Tests\Vim.BFast.Tests.csproj", "{FD149D64-5905-4F7D-97A8-9F7DA18A257D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Vim.BFast.Tests", "bfast\Vim.BFast.Tests\Vim.BFast.Tests.csproj", "{FD149D64-5905-4F7D-97A8-9F7DA18A257D}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Vim.Format.Vimx.Conversion", "vim\Vim.Format.Vimx.Conversion\Vim.Format.Vimx.Conversion.csproj", "{4C4F9826-0DEF-4A39-BFC8-A834522694A0}"
 EndProject

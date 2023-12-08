@@ -9,7 +9,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\bfast\Vim.BFast.Next\Vim.BFast.csproj" />
+    <ProjectReference Include="..\..\bfast\Vim.BFast\Vim.BFast.csproj" />
     <ProjectReference Include="..\..\g3d\Vim.G3dNext.Attributes\Vim.G3dNext.Attributes.csproj" />
     <ProjectReference Include="..\..\g3d\Vim.G3dNext\Vim.G3dNext.csproj" />
     <ProjectReference Include="..\..\util\Vim.Util\Vim.Util.csproj" />

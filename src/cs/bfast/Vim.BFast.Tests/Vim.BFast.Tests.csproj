@@ -19,7 +19,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\util\Vim.Util.Tests\Vim.Util.Tests.csproj" />
-    <ProjectReference Include="..\Vim.BFast.Next\Vim.BFast.csproj" />
+    <ProjectReference Include="..\Vim.BFast\Vim.BFast.csproj" />
   </ItemGroup>
 
 </Project>
