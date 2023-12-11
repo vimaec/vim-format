@@ -18,9 +18,9 @@ namespace Vim.G3d
             stream.Write(buffer);
         }
 
-        public static BFastNS.BFast ToBFast(this IGeometryAttributes self, G3dHeader? header = null)
+        public static BFast ToBFast(this IGeometryAttributes self, G3dHeader? header = null)
         {
-            var bfast = new BFastNS.BFast();
+            var bfast = new BFast();
             bfast.SetArray("meta", (header ?? G3dHeader.Default).ToBytes());
             foreach(var attribute in self.Attributes.ToEnumerable())
             {

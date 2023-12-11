@@ -44,7 +44,7 @@ namespace Vim.Format.VimxNS
             Chunks = chunks;
         }
 
-        public Vimx(BFastNS.BFast bfast)
+        public Vimx(BFast bfast)
         {
             Header = VimxHeader.FromBytes(bfast.GetArray<byte>(BufferNames.Header));
 
@@ -65,7 +65,7 @@ namespace Vim.Format.VimxNS
         public static Vimx FromPath(string path)
             => path.ReadBFast((b) => new Vimx(b));
 
-        public BFastNS.BFast ToBFast()
+        public BFast ToBFast()
         {
             AddTransformsToScene();
             var bfast = new BFast();

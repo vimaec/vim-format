@@ -294,13 +294,13 @@ namespace Vim.G3d
         {
             using (var stream = File.OpenRead(filePath))
             {
-                var bfast = new BFastNS.BFast(stream);
+                var bfast = new BFast(stream);
                 return Read(bfast);
             }
         }
 
 
-        public static G3D Read(BFastNS.BFast bfast)
+        public static G3D Read(BFast bfast)
         {
             var header = G3dHeader.FromBytesOrDefault(bfast.GetArray<byte>("meta"));
             var attributes = new List<GeometryAttribute>();

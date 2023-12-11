@@ -198,7 +198,7 @@ namespace Vim.Format
             ToBFast().Write(stream);
         }
 
-        public BFastNS.BFast ToBFast()
+        public BFast ToBFast()
         {
             var assets = Assets.Select(kv => kv.Value.ToNamedBuffer(kv.Key)) as IEnumerable<INamedBuffer>;
             Debug.Assert(assets != null, "Asset conversion to IEnumerable<INamedBuffer> failed.");

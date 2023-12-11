@@ -14,8 +14,8 @@ namespace Vim.G3dNext
         Type IndexInto { get; }
         Array Data { get; }
         void Write(Stream stream);
-        void AddTo(BFastNS.BFast bfast);
-        void ReadBFast(BFastNS.BFast bfast);
+        void AddTo(BFast bfast);
+        void ReadBFast(BFast bfast);
     }
 
     public interface IAttribute<T> : IAttribute

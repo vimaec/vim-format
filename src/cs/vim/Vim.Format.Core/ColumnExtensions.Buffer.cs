@@ -35,11 +35,11 @@ namespace Vim.Format
 
         public static string ValidateCanConcatBuffers(this INamedBuffer thisBuffer, INamedBuffer otherBuffer)
         {
-            var thisPrefix = thisBuffer.GetTypePrefix();
+            var thisPrefix = SerializableEntityTable.GetTypeFromName(thisBuffer.Name);
             if (string.IsNullOrEmpty(thisPrefix))
                 throw new Exception("NamedBuffer prefix not found");
 
-            var otherPrefix = otherBuffer.GetTypePrefix();
+            var otherPrefix = SerializableEntityTable.GetTypeFromName(otherBuffer.Name);
             if (string.IsNullOrEmpty(otherPrefix))
                 throw new Exception("NamedBuffer prefix not found");
 
@@ -77,7 +77,10 @@ namespace Vim.Format
         }
 
         public static object GetDataColumnValue(this INamedBuffer dataColumn, int rowIndex)
-            => dataColumn.GetDataColumnValue(dataColumn.GetTypePrefix(), rowIndex);
+        {
+            var prefix = SerializableEntityTable.GetTypeFromName(dataColumn.Name);
+            return dataColumn.GetDataColumnValue(prefix, rowIndex);
+        }
 
         public static IBuffer CreateDefaultDataColumnBuffer(int length, string typePrefix)
         {
@@ -119,7 +122,7 @@ namespace Vim.Format
 
         public static INamedBuffer CopyDataColumn(this INamedBuffer dataColumn, List<int> remapping = null)
         {
-            var typePrefix = dataColumn.GetTypePrefix();
+            var typePrefix = SerializableEntityTable.GetTypeFromName(dataColumn.Name);
             return new NamedBuffer(dataColumn.CopyDataColumn(typePrefix, remapping), dataColumn.Name);
         }
 

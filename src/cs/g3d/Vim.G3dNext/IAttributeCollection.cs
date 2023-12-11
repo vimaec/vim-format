@@ -58,13 +58,13 @@ namespace Vim.G3dNext
             => attributeCollection.Map.Values
                 .Sum(a => a.GetSizeInBytes());
 
-        public static BFastNS.BFast ToBFast(this IAttributeCollection attributeCollection)
+        public static BFast ToBFast(this IAttributeCollection attributeCollection)
         {
             var attributes = attributeCollection.Map.Values
                 .OrderBy(n => n.Name)
                 .ToArray(); // Order the attributes by name for consistency
 
-            var bfast = new BFastNS.BFast();
+            var bfast = new BFast();
             foreach (var a in attributes)
             {
                 a.AddTo(bfast);

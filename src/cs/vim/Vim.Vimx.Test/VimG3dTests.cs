@@ -43,7 +43,7 @@ namespace Vim.G3dNext.Tests
             var memoryStream = new MemoryStream();
             g3d1.ToBFast().Write(memoryStream);
             memoryStream.Seek(0, SeekOrigin.Begin);
-            var bfast = new BFastNS.BFast(memoryStream);
+            var bfast = new BFast(memoryStream);
 
             var g3d2 = new VimAttributeCollection(bfast);
             Assert.IsNotNull(g3d2);
@@ -76,7 +76,7 @@ namespace Vim.G3dNext.Tests
             var g3d = G3dVim.FromVim(TestUtils.ResidencePath);
             g3d.ToBFast().Write(memoryStream);
             memoryStream.Seek(0, SeekOrigin.Begin);
-            var bfast = new BFastNS.BFast(memoryStream);
+            var bfast = new BFast(memoryStream);
             var g3dMats = new G3dMaterials(bfast);
 
             Assert.IsNotNull(g3dMats);
@@ -115,7 +115,7 @@ namespace Vim.G3dNext.Tests
             var g3dFilePath = Path.Combine(testDir!, "merged.g3d");
             mergedG3d.ToBFast().Write(memoryStream);
             memoryStream.Seek(0, SeekOrigin.Begin);
-            var bfast = new BFastNS.BFast(memoryStream);
+            var bfast = new BFast(memoryStream);
             
 
             var g3dResult = new VimAttributeCollection(bfast);

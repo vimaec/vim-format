@@ -10,60 +10,6 @@ using Vim.G3d;
 namespace Vim.Format
 {
     /// <summary>
-    /// Tracks all of the data for a particular entity type in a conceptual table.
-    /// A column maybe a relation to another entity table (IndexColumn)
-    /// a data value stored as a double (DataColumn) or else
-    /// it is string data, stored as an index into the global lookup table (StringColumn).
-    /// </summary>
-    public class SerializableEntityTable
-    {
-        /// <summary>
-        /// Name of 
-        /// </summary>
-        public string Name;
-
-        /// <summary>
-        /// Relation to another entity table. For example surface to element. 
-        /// </summary>
-        public List<NamedBuffer<int>> IndexColumns = new List<NamedBuffer<int>>();
-
-        /// <summary>
-        /// Data encoded as strings in the global string table
-        /// </summary>
-        public List<NamedBuffer<int>> StringColumns = new List<NamedBuffer<int>>();
-
-        /// <summary>
-        /// Numeric data encoded as byte, int, float, or doubles 
-        /// </summary>
-        public List<INamedBuffer> DataColumns = new List<INamedBuffer>();
-
-        public IEnumerable<string> ColumnNames
-            => IndexColumns.Select(c => c.Name)
-                .Concat(StringColumns.Select(c => c.Name))
-                .Concat(DataColumns.Select(c => c.Name));
-
-        public IEnumerable<INamedBuffer> AllColumns
-            => IndexColumns
-            .Concat(StringColumns)
-            .Concat(DataColumns);
-
-        public static SerializableEntityTable FromBfast(string name, BFastNS.BFast bfast)
-        {
-            return null;
-        }
-
-        public BFastNS.BFast ToBFast()
-        {
-            var bfast = new BFastNS.BFast();
-            foreach (var col in AllColumns)
-            {
-                bfast.SetArray(col.Name, col.AsArray<byte>());
-            }
-            return bfast;
-        }
-    }
-
-    /// <summary>
     /// Controls what parts of the VIM file are loaded
     /// </summary>
     public class LoadOptions
@@ -112,19 +58,18 @@ namespace Vim.Format
         /// The originating file name (if provided)
         /// </summary>
         public string FileName;
-        public BFastNS.BFast ToBFast()
+        public BFast ToBFast()
         {
-            var bfast = new BFastNS.BFast();
-            //bfast.SetArray(BufferNames.Header, Header.ToBytes());
+            var bfast = new BFast();
 
-            var assets = new BFastNS.BFast();
+            var assets = new BFast();
             foreach (var asset in Assets)
             {
                 assets.SetArray(asset.Name, asset.ToArray<byte>());
             }
             bfast.SetBFast(BufferNames.Assets, assets);
-
-            var entities = new BFastNS.BFast();
+                
+            var entities = new BFast();
             foreach (var entity in EntityTables)
             {
                 entities.SetBFast(entity.Name, entity.ToBFast());
@@ -139,14 +84,14 @@ namespace Vim.Format
         {
             using (var file = new FileStream(path, FileMode.OpenOrCreate))
             {
-                var bfast = new BFastNS.BFast(file);
+                var bfast = new BFast(file);
                 var doc = FromBFast(bfast);
                 doc.FileName = path;
                 return doc;
             }
         }
 
-        public static SerializableDocument FromBFast(BFastNS.BFast bfast, LoadOptions options = null)
+        public static SerializableDocument FromBFast(BFast bfast, LoadOptions options = null)
         {
             var doc = new SerializableDocument();
             doc.Options = options ?? new LoadOptions();
@@ -174,7 +119,7 @@ namespace Vim.Format
         /// Enumerates the SerializableEntityTables contained in the given entities buffer.
         /// </summary>
         private static IEnumerable<SerializableEntityTable> GetEntityTables(
-            BFastNS.BFast bfast,
+            BFast bfast,
             bool schemaOnly)
         {
 
@@ -187,19 +132,18 @@ namespace Vim.Format
             }
         }
 
-
         /// <summary>
         /// Returns a SerializableEntityTable based on the given buffer reader.
         /// </summary>
         public static SerializableEntityTable ReadEntityTable2(
-            BFastNS.BFast bfast,
+            BFast bfast,
             bool schemaOnly
            )
         {
             var et = new SerializableEntityTable();
             foreach (var entry in bfast.Entries)
             {
-                var typePrefix = entry.GetTypePrefix();
+                var typePrefix = SerializableEntityTable.GetTypeFromName(entry);
 
                 switch (typePrefix)
                 {
@@ -252,8 +196,5 @@ namespace Vim.Format
 
             return et;
         }
-
-
-
     }
 }
