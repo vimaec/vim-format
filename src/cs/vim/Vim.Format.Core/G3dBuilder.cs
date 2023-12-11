@@ -33,7 +33,11 @@ namespace Vim.Format
         {
             _materials.Add(material);
         }
+
+        public int InstanceCount => _instances.Count;
         public int MeshCount => _meshes.Count;
+        public int MaterialCount => _materials.Count;
+        public int ShapeCount => _shapes.Count;
 
         public SubdividedMesh GetMesh(int index) => _meshes[index];
         public AABox GetBox(int meshIndex)
