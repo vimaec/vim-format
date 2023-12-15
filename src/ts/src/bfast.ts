@@ -298,6 +298,30 @@ export function parseName(name: string): [number, NumericArrayConstructor]{
      return array
    }
 
+    async getInt32Array(name: string): Promise<Int32Array | undefined> {
+      const buffer = await this.getBuffer(name)
+      if(!buffer) return
+      return new Int32Array(buffer)
+    }
+
+    async getFloat32Array(name: string): Promise<Float32Array | undefined> {
+      const buffer = await this.getBuffer(name)
+      if(!buffer) return
+      return new Float32Array(buffer)
+    }
+
+    async getBigInt64Array(name: string): Promise<BigInt64Array | undefined> {
+      const buffer = await this.getBuffer(name)
+      if(!buffer) return
+      return new BigInt64Array(buffer)
+    }
+
+    async getUint16Array(name: string): Promise<Uint16Array | undefined> {
+      const buffer = await this.getBuffer(name)
+      if(!buffer) return
+      return new Uint16Array(buffer)
+    }
+
    /**
     * Returns a single value from given buffer name
     * @param name buffer name

@@ -4,8 +4,6 @@
  */
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.G3dMesh = exports.MeshAttributes = void 0;
-const abstractG3d_1 = require("./abstractG3d");
-const bfast_1 = require("./bfast");
 const g3d_1 = require("./g3d");
 /**
  * See https://github.com/vimaec/vim#vim-geometry-attributes
@@ -13,7 +11,6 @@ const g3d_1 = require("./g3d");
 class MeshAttributes {
 }
 exports.MeshAttributes = MeshAttributes;
-MeshAttributes.instanceTransforms = 'g3d:instance:transform:0:float32:16';
 MeshAttributes.meshOpaqueSubmeshCount = 'g3d:mesh:opaquesubmeshcount:0:int32:1';
 MeshAttributes.submeshIndexOffsets = 'g3d:submesh:indexoffset:0:int32:1';
 MeshAttributes.submeshVertexOffsets = 'g3d:submesh:vertexoffset:0:int32:1';
@@ -21,7 +18,6 @@ MeshAttributes.submeshMaterials = 'g3d:submesh:material:0:int32:1';
 MeshAttributes.positions = 'g3d:vertex:position:0:float32:3';
 MeshAttributes.indices = 'g3d:corner:index:0:int32:1';
 MeshAttributes.all = [
-    MeshAttributes.instanceTransforms,
     MeshAttributes.meshOpaqueSubmeshCount,
     MeshAttributes.submeshIndexOffsets,
     MeshAttributes.submeshVertexOffsets,
@@ -37,13 +33,7 @@ MeshAttributes.all = [
  * See https://github.com/vimaec/g3d for the g3d specification.
  */
 class G3dMesh {
-    constructor(instanceTransforms, meshOpaqueSubmeshCount, submeshIndexOffsets, submeshVertexOffsets, submeshMaterials, indices, positions) {
-        /**
-         * Opaque white
-         */
-        this.DEFAULT_COLOR = new Float32Array([1, 1, 1, 1]);
-        this.getInstanceCount = () => this.instanceTransforms.length;
-        this.instanceTransforms = instanceTransforms;
+    constructor(meshOpaqueSubmeshCount, submeshIndexOffsets, submeshVertexOffsets, submeshMaterials, indices, positions) {
         this.meshOpaqueSubmeshCount = meshOpaqueSubmeshCount;
         this.submeshIndexOffset = submeshIndexOffsets;
         this.submeshVertexOffset = submeshVertexOffsets;
@@ -51,66 +41,16 @@ class G3dMesh {
         this.indices = indices instanceof Uint32Array ? indices : new Uint32Array(indices.buffer);
         this.positions = positions;
     }
-    static createFromAbstract(g3d) {
-        const instanceTransforms = g3d.findAttribute(MeshAttributes.instanceTransforms)?.data;
-        const meshOpaqueSubmeshCountArray = g3d.findAttribute(MeshAttributes.meshOpaqueSubmeshCount)?.data;
-        const meshOpaqueSubmeshCount = meshOpaqueSubmeshCountArray[0];
-        const submeshIndexOffsets = g3d.findAttribute(MeshAttributes.submeshIndexOffsets)?.data;
-        const submeshVertexOffsets = g3d.findAttribute(MeshAttributes.submeshVertexOffsets)?.data;
-        const submeshMaterial = g3d.findAttribute(MeshAttributes.submeshMaterials)
-            ?.data;
-        const indices = g3d.findAttribute(MeshAttributes.indices)?.data;
-        const positions = g3d.findAttribute(MeshAttributes.positions)
-            ?.data;
-        const result = new G3dMesh(instanceTransforms, meshOpaqueSubmeshCount, submeshIndexOffsets, submeshVertexOffsets, submeshMaterial, indices, positions);
-        result.rawG3d = g3d;
-        return result;
-    }
-    static async createFromPath(path) {
-        const f = await fetch(path);
-        const buffer = await f.arrayBuffer();
-        var g3d = this.createFromBuffer(buffer);
-        return g3d;
-    }
-    static async createFromBuffer(buffer) {
-        const bfast = new bfast_1.BFast(buffer);
-        return this.createFromBfast(bfast);
-    }
     static async createFromBfast(bfast) {
-        const g3d = await abstractG3d_1.AbstractG3d.createFromBfast(bfast, MeshAttributes.all);
-        return G3dMesh.createFromAbstract(g3d);
-    }
-    // -----------Instances---------------
-    getBimInstance(meshInstance) {
-        const sceneInstance = this.scene.getMeshSceneInstance(this.meshIndex, meshInstance);
-        return this.scene.instanceNodes[sceneInstance];
-    }
-    getInstanceMax(meshInstance) {
-        const sceneInstance = this.scene.getMeshSceneInstance(this.meshIndex, meshInstance);
-        return this.scene.instanceMaxs.subarray(sceneInstance * 3, (sceneInstance + 1) * 3);
-    }
-    getInstanceMin(meshInstance) {
-        const sceneInstance = this.scene.getMeshSceneInstance(this.meshIndex, meshInstance);
-        return this.scene.instanceMins.subarray(sceneInstance * 3, (sceneInstance + 1) * 3);
-    }
-    getInstanceGroup(meshInstance) {
-        const sceneInstance = this.scene.getMeshSceneInstance(this.meshIndex, meshInstance);
-        return this.scene.instanceGroups[sceneInstance];
-    }
-    getInstanceTag(meshInstance) {
-        const sceneInstance = this.scene.getMeshSceneInstance(this.meshIndex, meshInstance);
-        return this.scene.instanceTags[sceneInstance];
-    }
-    getInstanceHasFlag(meshInstance, flag) {
-        const sceneInstance = this.scene.getMeshSceneInstance(this.meshIndex, meshInstance);
-        return (this.scene.instanceFlags[sceneInstance] & flag) > 0;
-    }
-    /**
-     * Returns an 16 number array representation of the matrix for given instance
-     * @param instance g3d instance index
-     */
-    getInstanceMatrix(instance) {
-        return this.instanceTransforms.subarray(instance * G3dMesh.MATRIX_SIZE, (instance + 1) * G3dMesh.MATRIX_SIZE);
+        const values = await Promise.all([
+            bfast.getValue(MeshAttributes.meshOpaqueSubmeshCount, 0).then(v => v),
+            bfast.getInt32Array(MeshAttributes.submeshIndexOffsets),
+            bfast.getInt32Array(MeshAttributes.submeshVertexOffsets),
+            bfast.getInt32Array(MeshAttributes.submeshMaterials),
+            bfast.getInt32Array(MeshAttributes.indices),
+            bfast.getFloat32Array(MeshAttributes.positions)
+        ]);
+        return new G3dMesh(...values);
     }
     // ------------- Mesh -----------------
     getVertexStart(section = 'all') {
@@ -184,6 +124,9 @@ class G3dMesh {
     }
 }
 exports.G3dMesh = G3dMesh;
-G3dMesh.MATRIX_SIZE = 16;
 G3dMesh.COLOR_SIZE = 4;
 G3dMesh.POSITION_SIZE = 3;
+/**
+ * Opaque white
+ */
+G3dMesh.DEFAULT_COLOR = new Float32Array([1, 1, 1, 1]);

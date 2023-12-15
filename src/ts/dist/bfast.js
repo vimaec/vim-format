@@ -257,6 +257,30 @@ class BFast {
         const array = new Ctor(buffer);
         return array;
     }
+    async getInt32Array(name) {
+        const buffer = await this.getBuffer(name);
+        if (!buffer)
+            return;
+        return new Int32Array(buffer);
+    }
+    async getFloat32Array(name) {
+        const buffer = await this.getBuffer(name);
+        if (!buffer)
+            return;
+        return new Float32Array(buffer);
+    }
+    async getBigInt64Array(name) {
+        const buffer = await this.getBuffer(name);
+        if (!buffer)
+            return;
+        return new BigInt64Array(buffer);
+    }
+    async getUint16Array(name) {
+        const buffer = await this.getBuffer(name);
+        if (!buffer)
+            return;
+        return new Uint16Array(buffer);
+    }
     /**
      * Returns a single value from given buffer name
      * @param name buffer name

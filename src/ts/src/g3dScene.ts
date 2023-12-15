@@ -2,7 +2,6 @@
  * @module vim-ts
  */
 
-import { AbstractG3d } from './abstractG3d'
 import { BFast } from './bfast'
 import { G3d, MeshSection } from './g3d'
 
@@ -13,46 +12,25 @@ export type FilterMode = undefined | 'mesh' | 'instance' | 'group' | 'tag'
  */
 export class SceneAttributes {
 
-  static chunkCount = 'g3d:chunk:count:0:int32:1'
-  static instanceMesh = 'g3d:instance:mesh:0:int32:1'
-  static instanceTransform = 'g3d:instance:transform:0:int32:1'
-  static instanceNodes = 'g3d:instance:node:0:int32:1'
-  static instanceGroups = 'g3d:instance:group:0:int32:1'
-  static instanceTags = 'g3d:instance:tag:0:int64:1'
-  static instanceFlags = 'g3d:instance:tag:0:uint16:1'
-  static instanceMins = 'g3d:instance:min:0:float32:3'
-  static instanceMaxs = 'g3d:instance:max:0:float32:3'
+  static readonly chunkCount = 'g3d:chunk:count:0:int32:1'
+  static readonly  instanceMesh = 'g3d:instance:mesh:0:int32:1'
+  static readonly instanceMatrix = 'g3d:instance:transform:0:float32:16'
+  static readonly instanceNodes = 'g3d:instance:node:0:int32:1'
+  static readonly instanceGroups = 'g3d:instance:group:0:int32:1'
+  static readonly instanceTags = 'g3d:instance:tag:0:int64:1'
+  static readonly instanceFlags = 'g3d:instance:tag:0:uint16:1'
+  static readonly instanceMins = 'g3d:instance:min:0:float32:3'
+  static readonly instanceMaxs = 'g3d:instance:max:0:float32:3'
 
 
-  static meshChunk = 'g3d:mesh:chunk:0:int32:1'
-  static meshChunkIndices = 'g3d:mesh:chunkindex:0:int32:1';
-  static meshInstanceCounts = 'g3d:mesh:instancecount:0:int32:1'
-  static meshIndexCounts = 'g3d:mesh:indexcount:0:int32:1'
-  static meshVertexCounts = 'g3d:mesh:vertexcount:0:int32:1'
+  static readonly meshChunk = 'g3d:mesh:chunk:0:int32:1'
+  static readonly meshChunkIndices = 'g3d:mesh:chunkindex:0:int32:1';
+  static readonly meshInstanceCounts = 'g3d:mesh:instancecount:0:int32:1'
+  static readonly meshIndexCounts = 'g3d:mesh:indexcount:0:int32:1'
+  static readonly meshVertexCounts = 'g3d:mesh:vertexcount:0:int32:1'
 
-  static meshOpaqueIndexCount = "g3d:mesh:opaqueindexcount:0:int32:1"
-  static meshOpaqueVertexCount = "g3d:mesh:opaquevertexcount:0:int32:1"
-
-  static all = [
-    SceneAttributes.chunkCount,
-    SceneAttributes.instanceMesh,
-    SceneAttributes.instanceTransform,
-    SceneAttributes.instanceNodes,
-    SceneAttributes.instanceGroups,
-    SceneAttributes.instanceTags,
-    SceneAttributes.instanceFlags,
-    SceneAttributes.instanceMins,
-    SceneAttributes.instanceMaxs,
-
-    SceneAttributes.meshChunk,
-    SceneAttributes.meshChunkIndices,
-    SceneAttributes.meshInstanceCounts,
-    SceneAttributes.meshIndexCounts,
-    SceneAttributes.meshVertexCounts,
-
-    SceneAttributes.meshOpaqueIndexCount,
-    SceneAttributes.meshOpaqueVertexCount,
-  ]
+  static readonly meshOpaqueIndexCount = "g3d:mesh:opaqueindexcount:0:int32:1"
+  static readonly meshOpaqueVertexCount = "g3d:mesh:opaquevertexcount:0:int32:1"
 }
 
 /**
@@ -61,11 +39,9 @@ export class SceneAttributes {
  * Allows to preallocate geometry to render G3dMeshes.
  */
 export class G3dScene {
-  rawG3d: AbstractG3d
-
   chunkCount: number
   instanceMeshes: Int32Array
-  instanceTransforms: Int32Array
+  instanceMatrices: Float32Array
   instanceNodes: Int32Array
   instanceGroups: Int32Array
   instanceTags : BigInt64Array
@@ -83,14 +59,11 @@ export class G3dScene {
   meshOpaqueVertexCounts: Int32Array
 
   private nodeToInstance : Map<number, number>
-  private meshSceneInstances: Map<number, Map<number,number>>
 
   constructor(
-    rawG3d: AbstractG3d,
-
     chunkCount: Int32Array,
     instanceMeshes: Int32Array,
-    instanceTransform: Int32Array,
+    instanceMatrices: Float32Array,
     instanceNodes: Int32Array,
     instanceGroups: Int32Array,
     instanceTags: BigInt64Array,
@@ -107,12 +80,9 @@ export class G3dScene {
     meshOpaqueIndexCounts: Int32Array,
     meshOpaqueVertexCounts: Int32Array,
     ){
-
-    this.rawG3d = rawG3d
-
     this.chunkCount = chunkCount[0]
     this.instanceMeshes = instanceMeshes
-    this.instanceTransforms = instanceTransform
+    this.instanceMatrices = instanceMatrices
     this.instanceNodes = instanceNodes
     this.instanceGroups = instanceGroups
     this.instanceTags =  instanceTags
@@ -133,67 +103,30 @@ export class G3dScene {
     for(let i = 0; i < this.instanceNodes.length; i ++){
       this.nodeToInstance.set(this.instanceNodes[i], i)
     }
-    this.meshSceneInstances = this.createMap()
-  }
-
-  private createMap(){
-    // From : (mesh, scene-index) -> mesh-index 
-    // To: (mesh, mesh-index) -> scene-index
-    const map = new Map<number,Map<number, number>>()
-    for(let i =0; i < this.instanceMeshes.length; i++){
-      const mesh = this.instanceMeshes[i]
-      const index = this.instanceTransforms[i]
-      const indices = map.get(mesh) ?? new Map<number, number>()
-      indices.set(index, i)
-      map.set(mesh, indices)
-    }
-    return map
   }
     
-  static createFromAbstract(g3d: AbstractG3d) {
-
-    function getArray<T>(attribute: string){
-      return g3d.findAttribute(
-        attribute
-        )?.data as T
-    }
-    
-    return new G3dScene(
-      g3d,
-      getArray<Int32Array>(SceneAttributes.chunkCount),
-      getArray<Int32Array>(SceneAttributes.instanceMesh),
-      getArray<Int32Array>(SceneAttributes.instanceTransform),
-      getArray<Int32Array>(SceneAttributes.instanceNodes),
-      getArray<Int32Array>(SceneAttributes.instanceGroups),
-      getArray<BigInt64Array>(SceneAttributes.instanceTags),
-      getArray<Uint16Array>(SceneAttributes.instanceFlags),
-      getArray<Float32Array>(SceneAttributes.instanceMins),
-      getArray<Float32Array>(SceneAttributes.instanceMaxs),
-
-      getArray<Int32Array>(SceneAttributes.meshChunk),
-      getArray<Int32Array>(SceneAttributes.meshChunkIndices),
-      getArray<Int32Array>(SceneAttributes.meshInstanceCounts),
-      getArray<Int32Array>(SceneAttributes.meshIndexCounts),
-      getArray<Int32Array>(SceneAttributes.meshVertexCounts),
-      getArray<Int32Array>(SceneAttributes.meshOpaqueIndexCount),
-      getArray<Int32Array>(SceneAttributes.meshOpaqueVertexCount),
-    )
-  }
-
-  static async createFromPath (path: string) {
-    const f = await fetch(path)
-    const buffer = await f.arrayBuffer()
-    const bfast = new BFast(buffer)
-    return this.createFromBfast(bfast)
-  }
-
   static async createFromBfast (bfast: BFast) {
-    const g3d = await AbstractG3d.createFromBfast(bfast, SceneAttributes.all)
-    return G3dScene.createFromAbstract(g3d)
-  }
 
-  getMeshSceneInstance(mesh: number, meshIndex: number){
-    return this.meshSceneInstances.get(mesh)?.get(meshIndex)
+    const values = await Promise.all([
+      bfast.getInt32Array(SceneAttributes.chunkCount),
+      bfast.getInt32Array(SceneAttributes.instanceMesh),
+      bfast.getFloat32Array(SceneAttributes.instanceMatrix),
+      bfast.getInt32Array(SceneAttributes.instanceNodes),
+      bfast.getInt32Array(SceneAttributes.instanceGroups),
+      bfast.getBigInt64Array(SceneAttributes.instanceTags),
+      bfast.getUint16Array(SceneAttributes.instanceFlags),
+      bfast.getFloat32Array(SceneAttributes.instanceMins),
+      bfast.getFloat32Array(SceneAttributes.instanceMaxs),
+
+      bfast.getInt32Array(SceneAttributes.meshChunk),
+      bfast.getInt32Array(SceneAttributes.meshChunkIndices),
+      bfast.getInt32Array(SceneAttributes.meshInstanceCounts),
+      bfast.getInt32Array(SceneAttributes.meshIndexCounts),
+      bfast.getInt32Array(SceneAttributes.meshVertexCounts),
+      bfast.getInt32Array(SceneAttributes.meshOpaqueIndexCount),
+      bfast.getInt32Array(SceneAttributes.meshOpaqueVertexCount),
+    ])
+    return new G3dScene(...values)
   }
 
   getMeshCount() {
@@ -218,28 +151,16 @@ export class G3dScene {
     return this.meshInstanceCounts[mesh]
   }
 
-  getNodeMin(node: number){
-    const instance = this.nodeToInstance.get(node)
-    if(!instance){
-      return undefined
-    }
-    return this.getInstanceMin(instance)
-  }
-
-  getNodeMax(node: number){
-    const instance = this.nodeToInstance.get(node)
-    if(!instance){
-      return undefined
-    }
-    return this.getInstanceMax(instance)
-  }
-
   getInstanceMin(instance: number){
     return this.instanceMins.subarray(instance * G3d.POSITION_SIZE)
   }
 
   getInstanceMax(instance: number){
     return this.instanceMaxs.subarray(instance * G3d.POSITION_SIZE)
+  }
+
+  getInstanceMatrix(instance: number){
+    return this.instanceMatrices.subarray(instance * G3d.MATRIX_SIZE, (instance + 1)* G3d.MATRIX_SIZE)
   }
 
 }

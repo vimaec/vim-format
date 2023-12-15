@@ -1,7 +1,6 @@
 /**
  * @module vim-ts
  */
-import { AbstractG3d } from './abstractG3d';
 import { BFast } from './bfast';
 import { MeshSection } from './g3d';
 import { G3dScene } from './g3dScene';
@@ -9,7 +8,6 @@ import { G3dScene } from './g3dScene';
  * See https://github.com/vimaec/vim#vim-geometry-attributes
  */
 export declare class MeshAttributes {
-    static instanceTransforms: string;
     static meshOpaqueSubmeshCount: string;
     static submeshIndexOffsets: string;
     static submeshVertexOffsets: string;
@@ -28,38 +26,20 @@ export declare class MeshAttributes {
 export declare class G3dMesh {
     scene: G3dScene;
     meshIndex: number;
-    rawG3d: AbstractG3d;
-    instanceTransforms: Float32Array;
-    meshOpaqueSubmeshCount: number;
-    submeshIndexOffset: Int32Array;
-    submeshVertexOffset: Int32Array;
-    submeshMaterial: Int32Array;
-    positions: Float32Array;
-    indices: Uint32Array;
-    static MATRIX_SIZE: number;
-    static COLOR_SIZE: number;
-    static POSITION_SIZE: number;
+    readonly meshOpaqueSubmeshCount: number;
+    readonly submeshIndexOffset: Int32Array;
+    readonly submeshVertexOffset: Int32Array;
+    readonly submeshMaterial: Int32Array;
+    readonly positions: Float32Array;
+    readonly indices: Uint32Array;
+    static readonly COLOR_SIZE = 4;
+    static readonly POSITION_SIZE = 3;
     /**
      * Opaque white
      */
-    DEFAULT_COLOR: Float32Array;
-    constructor(instanceTransforms: Float32Array, meshOpaqueSubmeshCount: number, submeshIndexOffsets: Int32Array, submeshVertexOffsets: Int32Array, submeshMaterials: Int32Array, indices: Int32Array | Uint32Array, positions: Float32Array);
-    static createFromAbstract(g3d: AbstractG3d): G3dMesh;
-    static createFromPath(path: string): Promise<G3dMesh>;
-    static createFromBuffer(buffer: ArrayBuffer): Promise<G3dMesh>;
+    static readonly DEFAULT_COLOR: Float32Array;
+    constructor(meshOpaqueSubmeshCount: number, submeshIndexOffsets: Int32Array, submeshVertexOffsets: Int32Array, submeshMaterials: Int32Array, indices: Int32Array | Uint32Array, positions: Float32Array);
     static createFromBfast(bfast: BFast): Promise<G3dMesh>;
-    getBimInstance(meshInstance: number): number;
-    getInstanceMax(meshInstance: number): Float32Array;
-    getInstanceMin(meshInstance: number): Float32Array;
-    getInstanceGroup(meshInstance: number): number;
-    getInstanceTag(meshInstance: number): bigint;
-    getInstanceHasFlag(meshInstance: number, flag: number): boolean;
-    getInstanceCount: () => number;
-    /**
-     * Returns an 16 number array representation of the matrix for given instance
-     * @param instance g3d instance index
-     */
-    getInstanceMatrix(instance: number): Float32Array;
     getVertexStart(section?: MeshSection): number;
     getVertexEnd(section?: MeshSection): number;
     getVertexCount(section?: MeshSection): number;

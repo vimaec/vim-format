@@ -73,6 +73,10 @@ export declare class BFast {
      * @param name buffer name
      */
     getArray(name: string): Promise<NumericArray | undefined>;
+    getInt32Array(name: string): Promise<Int32Array | undefined>;
+    getFloat32Array(name: string): Promise<Float32Array | undefined>;
+    getBigInt64Array(name: string): Promise<BigInt64Array | undefined>;
+    getUint16Array(name: string): Promise<Uint16Array | undefined>;
     /**
      * Returns a single value from given buffer name
      * @param name buffer name

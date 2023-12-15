@@ -1,7 +1,6 @@
 /**
  * @module vim-ts
  */
-import { AbstractG3d } from './abstractG3d';
 import { BFast } from './bfast';
 import { MeshSection } from './g3d';
 export declare type FilterMode = undefined | 'mesh' | 'instance' | 'group' | 'tag';
@@ -9,23 +8,22 @@ export declare type FilterMode = undefined | 'mesh' | 'instance' | 'group' | 'ta
  * See https://github.com/vimaec/vim#vim-geometry-attributes
  */
 export declare class SceneAttributes {
-    static chunkCount: string;
-    static instanceMesh: string;
-    static instanceTransform: string;
-    static instanceNodes: string;
-    static instanceGroups: string;
-    static instanceTags: string;
-    static instanceFlags: string;
-    static instanceMins: string;
-    static instanceMaxs: string;
-    static meshChunk: string;
-    static meshChunkIndices: string;
-    static meshInstanceCounts: string;
-    static meshIndexCounts: string;
-    static meshVertexCounts: string;
-    static meshOpaqueIndexCount: string;
-    static meshOpaqueVertexCount: string;
-    static all: string[];
+    static readonly chunkCount = "g3d:chunk:count:0:int32:1";
+    static readonly instanceMesh = "g3d:instance:mesh:0:int32:1";
+    static readonly instanceMatrix = "g3d:instance:transform:0:float32:16";
+    static readonly instanceNodes = "g3d:instance:node:0:int32:1";
+    static readonly instanceGroups = "g3d:instance:group:0:int32:1";
+    static readonly instanceTags = "g3d:instance:tag:0:int64:1";
+    static readonly instanceFlags = "g3d:instance:tag:0:uint16:1";
+    static readonly instanceMins = "g3d:instance:min:0:float32:3";
+    static readonly instanceMaxs = "g3d:instance:max:0:float32:3";
+    static readonly meshChunk = "g3d:mesh:chunk:0:int32:1";
+    static readonly meshChunkIndices = "g3d:mesh:chunkindex:0:int32:1";
+    static readonly meshInstanceCounts = "g3d:mesh:instancecount:0:int32:1";
+    static readonly meshIndexCounts = "g3d:mesh:indexcount:0:int32:1";
+    static readonly meshVertexCounts = "g3d:mesh:vertexcount:0:int32:1";
+    static readonly meshOpaqueIndexCount = "g3d:mesh:opaqueindexcount:0:int32:1";
+    static readonly meshOpaqueVertexCount = "g3d:mesh:opaquevertexcount:0:int32:1";
 }
 /**
  * Represents the index, as in book index, of a collection of G3dMesh.
@@ -33,10 +31,9 @@ export declare class SceneAttributes {
  * Allows to preallocate geometry to render G3dMeshes.
  */
 export declare class G3dScene {
-    rawG3d: AbstractG3d;
     chunkCount: number;
     instanceMeshes: Int32Array;
-    instanceTransforms: Int32Array;
+    instanceMatrices: Float32Array;
     instanceNodes: Int32Array;
     instanceGroups: Int32Array;
     instanceTags: BigInt64Array;
@@ -51,19 +48,13 @@ export declare class G3dScene {
     meshOpaqueIndexCounts: Int32Array;
     meshOpaqueVertexCounts: Int32Array;
     private nodeToInstance;
-    private meshSceneInstances;
-    constructor(rawG3d: AbstractG3d, chunkCount: Int32Array, instanceMeshes: Int32Array, instanceTransform: Int32Array, instanceNodes: Int32Array, instanceGroups: Int32Array, instanceTags: BigInt64Array, instanceFlags: Uint16Array, instanceMins: Float32Array, instanceMaxs: Float32Array, meshChunks: Int32Array, meshChunkIndices: Int32Array, meshInstanceCounts: Int32Array, meshIndexCounts: Int32Array, meshVertexCounts: Int32Array, meshOpaqueIndexCounts: Int32Array, meshOpaqueVertexCounts: Int32Array);
-    private createMap;
-    static createFromAbstract(g3d: AbstractG3d): G3dScene;
-    static createFromPath(path: string): Promise<G3dScene>;
+    constructor(chunkCount: Int32Array, instanceMeshes: Int32Array, instanceMatrices: Float32Array, instanceNodes: Int32Array, instanceGroups: Int32Array, instanceTags: BigInt64Array, instanceFlags: Uint16Array, instanceMins: Float32Array, instanceMaxs: Float32Array, meshChunks: Int32Array, meshChunkIndices: Int32Array, meshInstanceCounts: Int32Array, meshIndexCounts: Int32Array, meshVertexCounts: Int32Array, meshOpaqueIndexCounts: Int32Array, meshOpaqueVertexCounts: Int32Array);
     static createFromBfast(bfast: BFast): Promise<G3dScene>;
-    getMeshSceneInstance(mesh: number, meshIndex: number): number;
     getMeshCount(): number;
     getMeshIndexCount(mesh: number, section: MeshSection): number;
     getMeshVertexCount(mesh: number, section: MeshSection): number;
     getMeshInstanceCount(mesh: number): number;
-    getNodeMin(node: number): Float32Array;
-    getNodeMax(node: number): Float32Array;
     getInstanceMin(instance: number): Float32Array;
     getInstanceMax(instance: number): Float32Array;
+    getInstanceMatrix(instance: number): Float32Array;
 }

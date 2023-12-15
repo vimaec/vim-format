@@ -2,7 +2,6 @@
  * @module vim-ts
  */
 
-import { AbstractG3d } from './abstractG3d'
 import { BFast } from './bfast'
 
 export type MeshSection = 'opaque' | 'transparent' | 'all'
@@ -62,9 +61,6 @@ export class G3d {
 
   submeshVertexStart: Int32Array
   submeshVertexEnd: Int32Array
-
-
-  rawG3d: AbstractG3d
 
   static MATRIX_SIZE = 16
   static COLOR_SIZE = 4
@@ -138,58 +134,6 @@ export class G3d {
     return {start, end}
   }
 
-  static createFromAbstract(g3d: AbstractG3d) {
-
-    const instanceMeshes = g3d.findAttribute(VimAttributes.instanceMeshes)
-      ?.data as Int32Array
-
-    const instanceTransforms = g3d.findAttribute(
-      VimAttributes.instanceTransforms
-    )?.data as Float32Array
-
-    const instanceFlags =
-      (g3d.findAttribute(VimAttributes.instanceFlags)?.data as Uint16Array) ??
-      new Uint16Array(instanceMeshes.length)
-
-    const instanceNodes = g3d.findAttribute(
-        VimAttributes.instanceNodes
-      )?.data as Int32Array
-
-    const meshSubmeshes = g3d.findAttribute(VimAttributes.meshSubmeshes)
-      ?.data as Int32Array
-
-    const submeshIndexOffset = g3d.findAttribute(
-      VimAttributes.submeshIndexOffsets
-    )?.data as Int32Array
-  
-    const submeshMaterial = g3d.findAttribute(VimAttributes.submeshMaterials)
-      ?.data as Int32Array
-
-    const indices = g3d.findAttribute(VimAttributes.indices)?.data as Int32Array
-
-    const positions = g3d.findAttribute(VimAttributes.positions)
-      ?.data as Float32Array
-
-    const materialColors = g3d.findAttribute(VimAttributes.materialColors)
-      ?.data as Float32Array
-
-    const result = new G3d(
-      instanceMeshes,
-      instanceFlags,
-      instanceTransforms,
-      instanceNodes,
-      meshSubmeshes,
-      submeshIndexOffset,
-      submeshMaterial,
-      indices,
-      positions,
-      materialColors
-    )
-    result.rawG3d = g3d
-
-    return result
-  }
-
   static async createFromPath (path: string) {
     const f = await fetch(path)
     const buffer = await f.arrayBuffer()
@@ -198,8 +142,20 @@ export class G3d {
   }
 
   static async createFromBfast (bfast: BFast) {
-    const g3d = await AbstractG3d.createFromBfast(bfast, VimAttributes.all)
-    return G3d.createFromAbstract(g3d)
+
+    const values = await Promise.all([
+      bfast.getInt32Array(VimAttributes.instanceMeshes),
+      bfast.getUint16Array(VimAttributes.instanceFlags),
+      bfast.getFloat32Array(VimAttributes.instanceTransforms),
+      bfast.getInt32Array(VimAttributes.instanceNodes),
+      bfast.getInt32Array(VimAttributes.meshSubmeshes),
+      bfast.getInt32Array(VimAttributes.submeshIndexOffsets),
+      bfast.getInt32Array(VimAttributes.submeshMaterials),
+      bfast.getInt32Array(VimAttributes.indices),
+      bfast.getFloat32Array(VimAttributes.positions),
+      bfast.getFloat32Array(VimAttributes.materialColors)
+    ])
+    return new G3d(...values)
   }
 
   /**
