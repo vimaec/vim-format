@@ -1404,51 +1404,6 @@ namespace Vim.G3dNext.Attributes
         }
     }
     
-    public partial class SceneMeshInstanceCountsAttribute : IAttribute<System.Int32>
-    {
-        public const string AttributeName = "g3d:mesh:instancecount:0:int32:1";
-
-        public string Name
-            => AttributeName;
-
-        public int Count => TypedData?.Length ?? 0;
-
-        public void AddTo(BFast bfast)
-        {
-            if(TypedData != null)
-            {
-                bfast.SetArray(Name, TypedData);
-            }
-        }
-
-        public void ReadBFast(BFast bfast)
-        {
-            TypedData = bfast.GetArray<System.Int32>("g3d:mesh:instancecount:0:int32:1");
-        }
-
-        public IAttributeDescriptor AttributeDescriptor { get; }
-            = new AttributeDescriptor(AttributeName);
-
-        public AttributeType AttributeType { get; }
-            = AttributeType.Data;
-
-        public Type IndexInto { get; }
-            = null;
-
-        public System.Int32[] TypedData { get; set; }
-            = Array.Empty<System.Int32>();
-
-        public Array Data
-            => TypedData;
-
-        public void Write(Stream stream)
-        {
-            if (TypedData == null || TypedData.Length == 0)
-                return;
-            stream.Write(TypedData);
-        }
-    }
-    
     public partial class SceneMeshVertexCountsAttribute : IAttribute<System.Int32>
     {
         public const string AttributeName = "g3d:mesh:vertexcount:0:int32:1";
@@ -1704,6 +1659,51 @@ namespace Vim.G3dNext.Attributes
 
         public Type IndexInto { get; }
             = null;
+
+        public System.Int32[] TypedData { get; set; }
+            = Array.Empty<System.Int32>();
+
+        public Array Data
+            => TypedData;
+
+        public void Write(Stream stream)
+        {
+            if (TypedData == null || TypedData.Length == 0)
+                return;
+            stream.Write(TypedData);
+        }
+    }
+    
+    public partial class MeshSubmeshOffsetAttribute : IAttribute<System.Int32>
+    {
+        public const string AttributeName = "g3d:mesh:submeshOffset:0:int32:1";
+
+        public string Name
+            => AttributeName;
+
+        public int Count => TypedData?.Length ?? 0;
+
+        public void AddTo(BFast bfast)
+        {
+            if(TypedData != null)
+            {
+                bfast.SetArray(Name, TypedData);
+            }
+        }
+
+        public void ReadBFast(BFast bfast)
+        {
+            TypedData = bfast.GetArray<System.Int32>("g3d:mesh:submeshOffset:0:int32:1");
+        }
+
+        public IAttributeDescriptor AttributeDescriptor { get; }
+            = new AttributeDescriptor(AttributeName);
+
+        public AttributeType AttributeType { get; }
+            = AttributeType.Index;
+
+        public Type IndexInto { get; }
+            = typeof(Vim.G3dNext.Attributes.MeshIndicesAttribute);
 
         public System.Int32[] TypedData { get; set; }
             = Array.Empty<System.Int32>();
@@ -2739,12 +2739,6 @@ namespace Vim.G3dNext.Attributes
             set => Attributes.MeshChunkIndices.TypedData = value;
         }
 
-        public System.Int32[] MeshInstanceCounts
-        {
-            get => Attributes.MeshInstanceCounts.TypedData;
-            set => Attributes.MeshInstanceCounts.TypedData = value;
-        }
-
         public System.Int32[] MeshIndexCounts
         {
             get => Attributes.MeshIndexCounts.TypedData;
@@ -2806,7 +2800,6 @@ namespace Vim.G3dNext.Attributes
                 [Vim.G3dNext.Attributes.SceneInstanceMaxsAttribute.AttributeName] = new Vim.G3dNext.Attributes.SceneInstanceMaxsAttribute(),
                 [Vim.G3dNext.Attributes.SceneMeshChunksAttribute.AttributeName] = new Vim.G3dNext.Attributes.SceneMeshChunksAttribute(),
                 [Vim.G3dNext.Attributes.SceneMeshChunkIndicesAttribute.AttributeName] = new Vim.G3dNext.Attributes.SceneMeshChunkIndicesAttribute(),
-                [Vim.G3dNext.Attributes.SceneMeshInstanceCountsAttribute.AttributeName] = new Vim.G3dNext.Attributes.SceneMeshInstanceCountsAttribute(),
                 [Vim.G3dNext.Attributes.SceneMeshIndexCountsAttribute.AttributeName] = new Vim.G3dNext.Attributes.SceneMeshIndexCountsAttribute(),
                 [Vim.G3dNext.Attributes.SceneMeshVertexCountsAttribute.AttributeName] = new Vim.G3dNext.Attributes.SceneMeshVertexCountsAttribute(),
                 [Vim.G3dNext.Attributes.SceneMeshOpaqueIndexCountsAttribute.AttributeName] = new Vim.G3dNext.Attributes.SceneMeshOpaqueIndexCountsAttribute(),
@@ -2887,12 +2880,6 @@ namespace Vim.G3dNext.Attributes
             set => Map[Vim.G3dNext.Attributes.SceneMeshChunkIndicesAttribute.AttributeName] = value as IAttribute;
         }
 
-        public Vim.G3dNext.Attributes.SceneMeshInstanceCountsAttribute MeshInstanceCounts
-        {
-            get => Map.TryGetValue(Vim.G3dNext.Attributes.SceneMeshInstanceCountsAttribute.AttributeName, out var attr) ? attr as Vim.G3dNext.Attributes.SceneMeshInstanceCountsAttribute : default;
-            set => Map[Vim.G3dNext.Attributes.SceneMeshInstanceCountsAttribute.AttributeName] = value as IAttribute;
-        }
-
         public Vim.G3dNext.Attributes.SceneMeshIndexCountsAttribute MeshIndexCounts
         {
             get => Map.TryGetValue(Vim.G3dNext.Attributes.SceneMeshIndexCountsAttribute.AttributeName, out var attr) ? attr as Vim.G3dNext.Attributes.SceneMeshIndexCountsAttribute : default;
@@ -2968,10 +2955,6 @@ namespace Vim.G3dNext.Attributes
 
                 if (attributeType == typeof(Vim.G3dNext.Attributes.SceneMeshChunkIndicesAttribute))
                     return MeshChunkIndices;
-
-
-                if (attributeType == typeof(Vim.G3dNext.Attributes.SceneMeshInstanceCountsAttribute))
-                    return MeshInstanceCounts;
 
 
                 if (attributeType == typeof(Vim.G3dNext.Attributes.SceneMeshIndexCountsAttribute))
@@ -3070,12 +3053,6 @@ namespace Vim.G3dNext.Attributes
                     return collections.GetAttributesOfType<Vim.G3dNext.Attributes.SceneMeshChunkIndicesAttribute>().ToArray().MergeDataAttributes<Vim.G3dNext.Attributes.SceneMeshChunkIndicesAttribute, System.Int32>();
                 }
 
-                case Vim.G3dNext.Attributes.SceneMeshInstanceCountsAttribute.AttributeName:
-                {
-                    // Data Attribute
-                    return collections.GetAttributesOfType<Vim.G3dNext.Attributes.SceneMeshInstanceCountsAttribute>().ToArray().MergeDataAttributes<Vim.G3dNext.Attributes.SceneMeshInstanceCountsAttribute, System.Int32>();
-                }
-
                 case Vim.G3dNext.Attributes.SceneMeshIndexCountsAttribute.AttributeName:
                 {
                     // Data Attribute
@@ -3145,6 +3122,12 @@ namespace Vim.G3dNext.Attributes
             set => Attributes.InstanceTransforms.TypedData = value;
         }
 
+        public System.Int32[] SubmeshOffset
+        {
+            get => Attributes.SubmeshOffset.TypedData;
+            set => Attributes.SubmeshOffset.TypedData = value;
+        }
+
         public System.Int32[] OpaqueSubmeshCounts
         {
             get => Attributes.OpaqueSubmeshCounts.TypedData;
@@ -3207,6 +3190,7 @@ namespace Vim.G3dNext.Attributes
             = new Dictionary<string, IAttribute>
             {
                 [Vim.G3dNext.Attributes.MeshInstanceTransformsAttribute.AttributeName] = new Vim.G3dNext.Attributes.MeshInstanceTransformsAttribute(),
+                [Vim.G3dNext.Attributes.MeshSubmeshOffsetAttribute.AttributeName] = new Vim.G3dNext.Attributes.MeshSubmeshOffsetAttribute(),
                 [Vim.G3dNext.Attributes.MeshOpaqueSubmeshCountsAttribute.AttributeName] = new Vim.G3dNext.Attributes.MeshOpaqueSubmeshCountsAttribute(),
                 [Vim.G3dNext.Attributes.MeshSubmeshIndexOffsetsAttribute.AttributeName] = new Vim.G3dNext.Attributes.MeshSubmeshIndexOffsetsAttribute(),
                 [Vim.G3dNext.Attributes.MeshSubmeshVertexOffsetsAttribute.AttributeName] = new Vim.G3dNext.Attributes.MeshSubmeshVertexOffsetsAttribute(),
@@ -3221,6 +3205,12 @@ namespace Vim.G3dNext.Attributes
         {
             get => Map.TryGetValue(Vim.G3dNext.Attributes.MeshInstanceTransformsAttribute.AttributeName, out var attr) ? attr as Vim.G3dNext.Attributes.MeshInstanceTransformsAttribute : default;
             set => Map[Vim.G3dNext.Attributes.MeshInstanceTransformsAttribute.AttributeName] = value as IAttribute;
+        }
+
+        public Vim.G3dNext.Attributes.MeshSubmeshOffsetAttribute SubmeshOffset
+        {
+            get => Map.TryGetValue(Vim.G3dNext.Attributes.MeshSubmeshOffsetAttribute.AttributeName, out var attr) ? attr as Vim.G3dNext.Attributes.MeshSubmeshOffsetAttribute : default;
+            set => Map[Vim.G3dNext.Attributes.MeshSubmeshOffsetAttribute.AttributeName] = value as IAttribute;
         }
 
         public Vim.G3dNext.Attributes.MeshOpaqueSubmeshCountsAttribute OpaqueSubmeshCounts
@@ -3268,6 +3258,10 @@ namespace Vim.G3dNext.Attributes
                     return InstanceTransforms;
 
 
+                if (attributeType == typeof(Vim.G3dNext.Attributes.MeshSubmeshOffsetAttribute))
+                    return SubmeshOffset;
+
+
                 if (attributeType == typeof(Vim.G3dNext.Attributes.MeshOpaqueSubmeshCountsAttribute))
                     return OpaqueSubmeshCounts;
 
@@ -3304,6 +3298,12 @@ namespace Vim.G3dNext.Attributes
                 {
                     // Data Attribute
                     return collections.GetAttributesOfType<Vim.G3dNext.Attributes.MeshInstanceTransformsAttribute>().ToArray().MergeDataAttributes<Vim.G3dNext.Attributes.MeshInstanceTransformsAttribute, Vim.Math3d.Matrix4x4>();
+                }
+
+                case Vim.G3dNext.Attributes.MeshSubmeshOffsetAttribute.AttributeName:
+                {
+                    // Index Attribute
+                    return collections.GetIndexedAttributesOfType<Vim.G3dNext.Attributes.MeshSubmeshOffsetAttribute>().MergeIndexAttributes();
                 }
 
                 case Vim.G3dNext.Attributes.MeshOpaqueSubmeshCountsAttribute.AttributeName:
@@ -3350,6 +3350,20 @@ namespace Vim.G3dNext.Attributes
         public void Validate() 
         {
             // Ensure all the indices are either -1 or within the bounds of the attributes they are indexing into.
+
+            {
+                var maxIndex = GetAttribute(SubmeshOffset.IndexInto).Data.Length - 1;
+                for (var i = 0; i < SubmeshOffset.TypedData.Length; ++i)
+                {
+                    var index = SubmeshOffset.TypedData[i];
+
+                    if (index == -1)
+                        continue; // no relation.
+
+                    if (index < -1 || index > maxIndex)
+                        throw new Exception($"Index out of range in Vim.G3dNext.Attributes.MeshSubmeshOffsetAttribute at position {i}. Expected either -1 for no relation, or a maximum of {maxIndex} but got {index}");
+                }
+            }
 
             {
                 var maxIndex = GetAttribute(SubmeshIndexOffsets.IndexInto).Data.Length - 1;

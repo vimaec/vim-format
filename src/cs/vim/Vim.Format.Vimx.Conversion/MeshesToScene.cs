@@ -35,7 +35,6 @@ namespace Vim.Format.VimxNS.Conversion
             // meshes
             scene.MeshChunks = new int[meshes.Length];
             scene.MeshChunkIndices = new int[meshes.Length];
-            scene.MeshInstanceCounts = new int[meshes.Length];
             scene.MeshIndexCounts = new int[meshes.Length];
             scene.MeshVertexCounts = new int[meshes.Length];
             scene.MeshOpaqueIndexCounts = new int[meshes.Length];
@@ -46,7 +45,6 @@ namespace Vim.Format.VimxNS.Conversion
                 var mesh = meshes[i];
                 scene.MeshChunks[i] = mesh.Chunk;
                 scene.MeshChunkIndices[i] = mesh.ChunkIndex;
-                scene.MeshInstanceCounts[i] = mesh.GetInstanceCount();
                 scene.MeshIndexCounts[i] = mesh.GetIndexCount();
                 scene.MeshVertexCounts[i] = mesh.GetVertexCount();
                 scene.MeshOpaqueIndexCounts[i] = mesh.GetIndexCount(MeshSection.Opaque);

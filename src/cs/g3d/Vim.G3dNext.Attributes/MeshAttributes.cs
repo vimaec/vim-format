@@ -4,6 +4,7 @@ namespace Vim.G3dNext.Attributes
 {
     [AttributeCollection(
         typeof(MeshInstanceTransformsAttribute),
+        typeof(MeshSubmeshOffsetAttribute),
         typeof(MeshOpaqueSubmeshCountsAttribute),
         typeof(MeshSubmeshIndexOffsetsAttribute),
         typeof(MeshSubmeshVertexOffsetsAttribute),
@@ -21,6 +22,9 @@ namespace Vim.G3dNext.Attributes
 
     [AttributeDescriptor("Mesh", "g3d:mesh:opaquesubmeshcount:0:int32:1", AttributeType.Data)]
     public partial class MeshOpaqueSubmeshCountsAttribute { }
+
+    [AttributeDescriptor("Mesh", "g3d:mesh:submeshOffset:0:int32:1", AttributeType.Index, IndexInto = typeof(MeshIndicesAttribute))]
+    public partial class MeshSubmeshOffsetAttribute { }
 
     [AttributeDescriptor("Mesh", "g3d:submesh:indexoffset:0:int32:1", AttributeType.Index, IndexInto = typeof(MeshIndicesAttribute))]
     public partial class MeshSubmeshIndexOffsetsAttribute { }

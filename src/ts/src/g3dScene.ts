@@ -25,7 +25,6 @@ export class SceneAttributes {
 
   static readonly meshChunk = 'g3d:mesh:chunk:0:int32:1'
   static readonly meshChunkIndices = 'g3d:mesh:chunkindex:0:int32:1';
-  static readonly meshInstanceCounts = 'g3d:mesh:instancecount:0:int32:1'
   static readonly meshIndexCounts = 'g3d:mesh:indexcount:0:int32:1'
   static readonly meshVertexCounts = 'g3d:mesh:vertexcount:0:int32:1'
 
@@ -51,7 +50,6 @@ export class G3dScene {
 
   meshChunks : Int32Array
   meshChunkIndices : Int32Array
-  meshInstanceCounts: Int32Array
   meshIndexCounts: Int32Array
   meshVertexCounts: Int32Array
 
@@ -73,7 +71,6 @@ export class G3dScene {
 
     meshChunks: Int32Array,
     meshChunkIndices : Int32Array,
-    meshInstanceCounts: Int32Array,
     meshIndexCounts : Int32Array,
     meshVertexCounts: Int32Array, 
     
@@ -92,7 +89,6 @@ export class G3dScene {
 
     this.meshChunks = meshChunks
     this.meshChunkIndices = meshChunkIndices
-    this.meshInstanceCounts = meshInstanceCounts
     this.meshIndexCounts = meshIndexCounts
     this.meshVertexCounts = meshVertexCounts
     this.meshOpaqueIndexCounts = meshOpaqueIndexCounts
@@ -120,7 +116,6 @@ export class G3dScene {
 
       bfast.getInt32Array(SceneAttributes.meshChunk),
       bfast.getInt32Array(SceneAttributes.meshChunkIndices),
-      bfast.getInt32Array(SceneAttributes.meshInstanceCounts),
       bfast.getInt32Array(SceneAttributes.meshIndexCounts),
       bfast.getInt32Array(SceneAttributes.meshVertexCounts),
       bfast.getInt32Array(SceneAttributes.meshOpaqueIndexCount),
@@ -130,7 +125,7 @@ export class G3dScene {
   }
 
   getMeshCount() {
-    return this.meshInstanceCounts.length
+    return this.meshChunks.length
   }
 
   getMeshIndexCount(mesh: number, section: MeshSection){
@@ -145,10 +140,6 @@ export class G3dScene {
     if(section === 'all') return all;
     const opaque = this.meshOpaqueVertexCounts[mesh]
       return section === 'opaque' ? opaque : all - opaque
-    }
-
-  getMeshInstanceCount(mesh:number){
-    return this.meshInstanceCounts[mesh]
   }
 
   getInstanceMin(instance: number){

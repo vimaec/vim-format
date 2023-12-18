@@ -29,13 +29,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.VimHelpers = void 0;
 // Links files to generate package type exports
 __exportStar(require("./bfast"), exports);
-__exportStar(require("./abstractG3d"), exports);
 __exportStar(require("./g3d"), exports);
 __exportStar(require("./remoteVimx"), exports);
 __exportStar(require("./g3dMaterials"), exports);
 __exportStar(require("./g3dMesh"), exports);
 __exportStar(require("./g3dScene"), exports);
-__exportStar(require("./remoteG3d"), exports);
 __exportStar(require("./remoteBuffer"), exports);
 __exportStar(require("./requestTracker"), exports);
 __exportStar(require("./requester"), exports);
