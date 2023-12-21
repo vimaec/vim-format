@@ -9,6 +9,7 @@ namespace Vim.G3dNext.Attributes
         public int[] InstanceNodes;
         public int Chunk;
         public int ChunkIndex;
+        public int[] MeshIndices;
 
         public long GetSize() => Attributes.GetSize();
 
@@ -22,44 +23,70 @@ namespace Vim.G3dNext.Attributes
         /// </summary>
         public int GetInstanceCount() => InstanceTransforms?.Length ?? 0;
 
-        /// <summary>
-        /// The total number of submeshes.
-        /// </summary>
         public int GetSubmeshCount() => SubmeshIndexOffsets?.Length ?? 0;
 
+
+        public int getMeshCount() => MeshSubmeshOffset?.Length ?? 0;
+
         /// <summary>
         /// The total number of submeshes.
         /// </summary>
-        public int GetSubmeshCount(MeshSection section)
-        {
-            var count = GetSubmeshCount();
-            if (OpaqueSubmeshCounts == null) return count;
-            var opaque = OpaqueSubmeshCounts[0];
+        public int GetSubmeshCount(int mesh, MeshSection section) =>
+            GetMeshSubmeshEnd(mesh, section) - GetMeshSubmeshStart(mesh, section);
 
-            return section == MeshSection.Opaque
-                ? opaque
-                : count - opaque;
+        public int GetMeshSubmeshStart(int mesh, MeshSection section)
+        {
+            if (section == MeshSection.Opaque || section == MeshSection.All)
+            {
+                return MeshSubmeshOffset[mesh];
+            }
+
+            return MeshSubmeshOffset[mesh] + MeshOpaqueSubmeshCounts[mesh];
         }
 
-        public int GetIndexStart(MeshSection section)
+        public int GetMeshSubmeshEnd(int mesh, MeshSection section)
         {
-            if (OpaqueSubmeshCounts == null) return 0;
-            if (section == MeshSection.Opaque) return 0;
-            var opaque = OpaqueSubmeshCounts[0];
-            return GetSubmeshIndexStart(opaque);
+            if (section == MeshSection.Opaque)
+            {
+                return MeshSubmeshOffset[mesh] + MeshOpaqueSubmeshCounts[mesh];
+            }
+            if(mesh + 1 >= MeshSubmeshOffset.Length)
+            {
+                return SubmeshIndexOffsets.Length;
+            }
+            return MeshSubmeshOffset[mesh + 1];
         }
 
-        public int GetIndexEnd(MeshSection section)
+        public int GetMeshIndexStart(int mesh, MeshSection section)
         {
-            if (OpaqueSubmeshCounts == null) return Indices.Length;
-            if (section == MeshSection.Transparent) return Indices.Length;
-            var opaque = OpaqueSubmeshCounts[0];
-            return GetSubmeshIndexEnd(opaque - 1);
+            var sub = GetMeshSubmeshStart(mesh, section);
+            return GetSubmeshIndexStart(sub);
         }
 
-        public int GetIndexCount(MeshSection section)
+        public int GetMeshIndexEnd(int mesh, MeshSection section)
         {
-            return GetIndexEnd(section) - GetIndexStart(section);
+            var sub = GetMeshSubmeshEnd(mesh, section);
+            return GetSubmeshIndexEnd(sub);
+        }
+
+        public int GetMeshIndexCount(int mesh, MeshSection section)
+        {
+            return GetMeshIndexEnd(mesh, section) - GetMeshIndexStart(mesh, section);
+        }
+
+        public AABox GetAABox(int mesh, Matrix4x4 matrix)
+        {
+            var start = GetMeshVertexStart(mesh, MeshSection.All);
+            var end = GetMeshVertexEnd(mesh, MeshSection.All);
+            var min = Positions[start].Transform(matrix);
+            var max = min;
+            for (var v = start + 1; v < end; v++)
+            {
+                var pos = Positions[v].Transform(matrix);
+                min = min.Min(pos);
+                max = max.Max(pos);
+            }
+            return new AABox(min, max);
         }
 
         /// <summary>
@@ -67,27 +94,21 @@ namespace Vim.G3dNext.Attributes
         /// </summary>
         public int GetIndexCount() => Indices?.Length ?? 0;
 
-        public int GetVertexStart(MeshSection section)
+        public int GetMeshVertexStart(int mesh, MeshSection section)
         {
-            if (OpaqueSubmeshCounts == null) return 0;
-            if (SubmeshVertexOffsets == null) return 0;
-            if (section == MeshSection.Opaque) return 0;
-            var opaque = OpaqueSubmeshCounts[0];
-            return GetSubmeshVertexStart(opaque);
+            var sub = GetMeshSubmeshStart(mesh, section);
+            return GetSubmeshVertexStart(sub);
         }
 
-        public int GetVertexEnd(MeshSection section)
+        public int GetMeshVertexEnd(int mesh, MeshSection section)
         {
-            if (OpaqueSubmeshCounts == null) return Positions.Length;
-            if (SubmeshVertexOffsets == null) return Positions.Length;
-            if (section == MeshSection.Transparent) return Positions.Length;
-            var opaque = OpaqueSubmeshCounts[0];
-            return GetSubmeshVertexEnd(opaque - 1);
+            var sub = GetMeshSubmeshEnd(mesh, section);
+            return GetSubmeshVertexEnd(sub);
         }
 
-        public int GetVertexCount(MeshSection section)
+        public int GetMeshVertexCount(int mesh, MeshSection section)
         {
-            return GetVertexEnd(section) - GetVertexStart(section);
+            return GetMeshVertexEnd(mesh, section) - GetMeshVertexStart(mesh, section);
         }
 
         /// <summary>
@@ -102,7 +123,9 @@ namespace Vim.G3dNext.Attributes
 
         public int GetSubmeshIndexEnd(int submesh)
         {
-            return submesh + 1 < GetSubmeshCount() ? SubmeshIndexOffsets[submesh + 1] : GetIndexCount();
+            return submesh + 1 < GetSubmeshCount()
+                ? SubmeshIndexOffsets[submesh + 1]
+                : GetIndexCount();
         }
 
         public int GetSubmeshIndexCount(int submesh)

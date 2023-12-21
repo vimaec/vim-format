@@ -1,7 +1,6 @@
 /**
  * @module vim-ts
  */
-import { AbstractG3d } from './abstractG3d';
 import { BFast } from './bfast';
 export declare type MeshSection = 'opaque' | 'transparent' | 'all';
 /**
@@ -43,7 +42,6 @@ export declare class G3d {
     meshOpaqueCount: Int32Array;
     submeshVertexStart: Int32Array;
     submeshVertexEnd: Int32Array;
-    rawG3d: AbstractG3d;
     static MATRIX_SIZE: number;
     static COLOR_SIZE: number;
     static POSITION_SIZE: number;
@@ -53,7 +51,6 @@ export declare class G3d {
     DEFAULT_COLOR: Float32Array;
     constructor(instanceMeshes: Int32Array, instanceFlags: Uint16Array | undefined, instanceTransforms: Float32Array, instanceNodes: Int32Array | undefined, meshSubmeshes: Int32Array, submeshIndexOffsets: Int32Array, submeshMaterials: Int32Array, indices: Int32Array | Uint32Array, positions: Float32Array, materialColors: Float32Array);
     private computeSubmeshVertexRange;
-    static createFromAbstract(g3d: AbstractG3d): G3d;
     static createFromPath(path: string): Promise<G3d>;
     static createFromBfast(bfast: BFast): Promise<G3d>;
     /**

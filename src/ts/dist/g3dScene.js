@@ -22,7 +22,6 @@ SceneAttributes.instanceMins = 'g3d:instance:min:0:float32:3';
 SceneAttributes.instanceMaxs = 'g3d:instance:max:0:float32:3';
 SceneAttributes.meshChunk = 'g3d:mesh:chunk:0:int32:1';
 SceneAttributes.meshChunkIndices = 'g3d:mesh:chunkindex:0:int32:1';
-SceneAttributes.meshInstanceCounts = 'g3d:mesh:instancecount:0:int32:1';
 SceneAttributes.meshIndexCounts = 'g3d:mesh:indexcount:0:int32:1';
 SceneAttributes.meshVertexCounts = 'g3d:mesh:vertexcount:0:int32:1';
 SceneAttributes.meshOpaqueIndexCount = "g3d:mesh:opaqueindexcount:0:int32:1";
@@ -33,7 +32,7 @@ SceneAttributes.meshOpaqueVertexCount = "g3d:mesh:opaquevertexcount:0:int32:1";
  * Allows to preallocate geometry to render G3dMeshes.
  */
 class G3dScene {
-    constructor(chunkCount, instanceMeshes, instanceMatrices, instanceNodes, instanceGroups, instanceTags, instanceFlags, instanceMins, instanceMaxs, meshChunks, meshChunkIndices, meshInstanceCounts, meshIndexCounts, meshVertexCounts, meshOpaqueIndexCounts, meshOpaqueVertexCounts) {
+    constructor(chunkCount, instanceMeshes, instanceMatrices, instanceNodes, instanceGroups, instanceTags, instanceFlags, instanceMins, instanceMaxs, meshChunks, meshChunkIndices, meshIndexCounts, meshVertexCounts, meshOpaqueIndexCounts, meshOpaqueVertexCounts) {
         this.chunkCount = chunkCount[0];
         this.instanceMeshes = instanceMeshes;
         this.instanceMatrices = instanceMatrices;
@@ -45,7 +44,6 @@ class G3dScene {
         this.instanceMaxs = instanceMaxs;
         this.meshChunks = meshChunks;
         this.meshChunkIndices = meshChunkIndices;
-        this.meshInstanceCounts = meshInstanceCounts;
         this.meshIndexCounts = meshIndexCounts;
         this.meshVertexCounts = meshVertexCounts;
         this.meshOpaqueIndexCounts = meshOpaqueIndexCounts;
@@ -69,7 +67,6 @@ class G3dScene {
             bfast.getFloat32Array(SceneAttributes.instanceMaxs),
             bfast.getInt32Array(SceneAttributes.meshChunk),
             bfast.getInt32Array(SceneAttributes.meshChunkIndices),
-            bfast.getInt32Array(SceneAttributes.meshInstanceCounts),
             bfast.getInt32Array(SceneAttributes.meshIndexCounts),
             bfast.getInt32Array(SceneAttributes.meshVertexCounts),
             bfast.getInt32Array(SceneAttributes.meshOpaqueIndexCount),
@@ -78,7 +75,7 @@ class G3dScene {
         return new G3dScene(...values);
     }
     getMeshCount() {
-        return this.meshInstanceCounts.length;
+        return this.meshChunks.length;
     }
     getMeshIndexCount(mesh, section) {
         const all = this.meshIndexCounts[mesh];
@@ -93,9 +90,6 @@ class G3dScene {
             return all;
         const opaque = this.meshOpaqueVertexCounts[mesh];
         return section === 'opaque' ? opaque : all - opaque;
-    }
-    getMeshInstanceCount(mesh) {
-        return this.meshInstanceCounts[mesh];
     }
     getInstanceMin(instance) {
         return this.instanceMins.subarray(instance * g3d_1.G3d.POSITION_SIZE);

@@ -19,7 +19,6 @@ export declare class SceneAttributes {
     static readonly instanceMaxs = "g3d:instance:max:0:float32:3";
     static readonly meshChunk = "g3d:mesh:chunk:0:int32:1";
     static readonly meshChunkIndices = "g3d:mesh:chunkindex:0:int32:1";
-    static readonly meshInstanceCounts = "g3d:mesh:instancecount:0:int32:1";
     static readonly meshIndexCounts = "g3d:mesh:indexcount:0:int32:1";
     static readonly meshVertexCounts = "g3d:mesh:vertexcount:0:int32:1";
     static readonly meshOpaqueIndexCount = "g3d:mesh:opaqueindexcount:0:int32:1";
@@ -42,18 +41,16 @@ export declare class G3dScene {
     instanceMaxs: Float32Array;
     meshChunks: Int32Array;
     meshChunkIndices: Int32Array;
-    meshInstanceCounts: Int32Array;
     meshIndexCounts: Int32Array;
     meshVertexCounts: Int32Array;
     meshOpaqueIndexCounts: Int32Array;
     meshOpaqueVertexCounts: Int32Array;
     private nodeToInstance;
-    constructor(chunkCount: Int32Array, instanceMeshes: Int32Array, instanceMatrices: Float32Array, instanceNodes: Int32Array, instanceGroups: Int32Array, instanceTags: BigInt64Array, instanceFlags: Uint16Array, instanceMins: Float32Array, instanceMaxs: Float32Array, meshChunks: Int32Array, meshChunkIndices: Int32Array, meshInstanceCounts: Int32Array, meshIndexCounts: Int32Array, meshVertexCounts: Int32Array, meshOpaqueIndexCounts: Int32Array, meshOpaqueVertexCounts: Int32Array);
+    constructor(chunkCount: Int32Array, instanceMeshes: Int32Array, instanceMatrices: Float32Array, instanceNodes: Int32Array, instanceGroups: Int32Array, instanceTags: BigInt64Array, instanceFlags: Uint16Array, instanceMins: Float32Array, instanceMaxs: Float32Array, meshChunks: Int32Array, meshChunkIndices: Int32Array, meshIndexCounts: Int32Array, meshVertexCounts: Int32Array, meshOpaqueIndexCounts: Int32Array, meshOpaqueVertexCounts: Int32Array);
     static createFromBfast(bfast: BFast): Promise<G3dScene>;
     getMeshCount(): number;
     getMeshIndexCount(mesh: number, section: MeshSection): number;
     getMeshVertexCount(mesh: number, section: MeshSection): number;
-    getMeshInstanceCount(mesh: number): number;
     getInstanceMin(instance: number): Float32Array;
     getInstanceMax(instance: number): Float32Array;
     getInstanceMatrix(instance: number): Float32Array;

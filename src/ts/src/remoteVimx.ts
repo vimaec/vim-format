@@ -1,14 +1,15 @@
 import { BFast } from "./bfast";
 import { G3dMaterial as G3dMaterials } from "./g3dMaterials";
-import { G3dMesh } from "./g3dMesh";
+import { G3dChunk } from './g3dChunk';
 import { G3dScene } from "./g3dScene";
 import { RemoteValue } from "./remoteValue";
 import { requestHeader } from "./vimHeader";
+import { G3dMesh } from "./g3dMesh";
 
 export class RemoteVimx{
   bfast : BFast
   scene : RemoteValue<G3dScene>
-  chunkCache = new Map<number, RemoteValue<G3dMesh[]>>()
+  chunkCache = new Map<number, RemoteValue<G3dChunk>>()
 
   constructor(source : BFast | ArrayBuffer | string){
     this.bfast = source instanceof BFast ? source : new BFast(source)
@@ -63,35 +64,24 @@ export class RemoteVimx{
     if(cached !== undefined){
       return cached.get()
     }
-    var value = new RemoteValue<G3dMesh[]>(() => this.requestChunk(chunk))
+    var value = new RemoteValue<G3dChunk>(() => this.requestChunk(chunk))
     this.chunkCache.set(chunk, value)
     return value.get()
   }
 
   private async requestChunk(chunk : number){
     const chunkBFast = await this.bfast.getLocalBfast(`chunk_${chunk}`, true)
-    var ranges = await chunkBFast.getRanges()
-    const keys = [...ranges.keys()]
-    var bfasts = await Promise.all(keys.map(k => chunkBFast.getBfast(k)))
-    var meshes = await Promise.all(bfasts.map(b => G3dMesh.createFromBfast(b)))
-    const scene = await this.scene.get()
-    meshes.forEach(m => m.scene = scene)
-    return meshes
+    return G3dChunk.createFromBfast(chunkBFast)
   }
 
   async getMesh(mesh: number){
     var scene = await this.scene.get()
-    var chunk = scene.meshChunks[mesh]
+    var meshChunk = scene.meshChunks[mesh]
+    if(meshChunk === undefined) return undefined
+
+    var chunk = await this.getChunk(meshChunk)
     if(chunk === undefined) return undefined
 
-    var meshes = await this.getChunk(chunk)
-    if(meshes === undefined) return undefined
-    
-    var index = scene.meshChunkIndices[mesh]
-    var result = meshes[index]
-    if(result === undefined) return undefined
-
-    result.meshIndex = mesh
-    return result
+    return new G3dMesh(scene, chunk, scene.meshChunkIndices[mesh])
   }
 }

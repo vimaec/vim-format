@@ -1,6 +1,6 @@
 {
   "name": "vim-format",
-  "version": "1.0.6-dev.230",
+  "version": "1.0.6-dev.235",
   "description": "The VIM format is a modern and efficient open 3D data interchange format designed for BIM and manufacturing data optimized for efficient loading and rendering on low-power devices.",
   "directories": {
     "test": "tests"
@@ -8,7 +8,7 @@
   "scripts": {
     "declarations": "tsc --declaration --emitDeclarationOnly --outdir ./dist/types",
     "build": "tsc",
-    "package": "npm run build && npm run declarations && npm publish",
+    "package": "npm run build && npm run declarations && npm publish",  
     "test": "jest"
   },
   "author": "VIM <hello@vimaec.com>",

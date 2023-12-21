@@ -15,6 +15,32 @@ namespace Vim.Format.VimxNS.Conversion
             );
         }
 
+        public static IEnumerable<int> OrderByBim2(G3dVim g3d, DocumentModel bim)
+        {
+            return Enumerable.Range(0, g3d.GetMeshCount())
+                .Where(m => g3d.GetMeshInstances(m).Count > 0)
+                .OrderByDescending((m) => 
+                     GetPriority(GetMeshName2(g3d, bim, m))
+                );
+        }
+
+        static string GetMeshName2(G3dVim g3d, DocumentModel bim, int mesh)
+        {
+            var node = g3d.GetMeshInstances(mesh)[0];
+
+            if (node < 0 || node >= bim.NodeElementIndex.Count) return "";
+            var element = bim.NodeElementIndex[node];
+
+            if (element < 0 || element >= bim.ElementCategoryIndex.Count) return "";
+            var category = bim.ElementCategoryIndex[element];
+
+            if (category < 0 || category >= bim.CategoryName.Count) return "";
+            var name = bim.CategoryName[category];
+
+            return name;
+        }
+
+
         static string GetMeshName(this G3dMesh mesh, DocumentModel bim)
         {
             var node = mesh.InstanceNodes[0];

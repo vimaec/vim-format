@@ -23,7 +23,7 @@ namespace Vim.Format.VimxNS
         {
             var chunk = new BFast();
             chunk.SetBFast(
-                BufferNames.Mesh,
+                BufferNames.Chunk,
                 Meshes.Select(m => m.ToBFast())
             );
             return chunk;

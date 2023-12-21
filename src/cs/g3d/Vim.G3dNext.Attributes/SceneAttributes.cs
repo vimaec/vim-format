@@ -5,7 +5,6 @@ namespace Vim.G3dNext.Attributes
     [AttributeCollection(
         typeof(SceneChunkCountAttribute),
         typeof(SceneInstanceMeshesAttribute),
-        typeof(SceneInstanceTransformsAttribute),
         typeof(SceneInstanceTransformDataAttribute),
         typeof(SceneInstanceNodesAttribute),
         typeof(SceneInstanceGroupsAttribute),
@@ -30,9 +29,6 @@ namespace Vim.G3dNext.Attributes
 
     [AttributeDescriptor("Scene", "g3d:instance:mesh:0:int32:1", AttributeType.Data)]
     public partial class SceneInstanceMeshesAttribute { }
-
-    [AttributeDescriptor("Scene", "g3d:instance:transform:0:int32:1", AttributeType.Data)]
-    public partial class SceneInstanceTransformsAttribute { }
 
     [AttributeDescriptor("Scene", "g3d:instance:transform:0:float32:16", AttributeType.Data, ArrayType = typeof(Matrix4x4))]
     public partial class SceneInstanceTransformDataAttribute { }

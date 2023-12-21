@@ -12,7 +12,6 @@ namespace Vim.Format.VimxNS
         public const string Meta = "meta";
         public const string Scene = "scene";
         public const string Materials = "materials";
-        public static string Mesh(int mesh) => $"mesh_{mesh}";
         public static string Chunk(int mesh) => $"chunk_{mesh}";
     }
 
@@ -32,10 +31,10 @@ namespace Vim.Format.VimxNS
         public readonly MetaHeader Meta;
         public readonly G3dScene Scene;
         public readonly G3dMaterials Materials;
-        public readonly VimxChunk[] Chunks;
-        public IEnumerable<G3dMesh> Meshes => Chunks.SelectMany(c => c.Meshes);
+        //public readonly VimxChunk[] Chunks;
+        public readonly G3dMesh[] Chunks;
 
-        public Vimx(SerializableHeader header, MetaHeader meta, G3dScene scene, G3dMaterials materials, VimxChunk[] chunks)
+        public Vimx(SerializableHeader header, MetaHeader meta, G3dScene scene, G3dMaterials materials, G3dMesh[] chunks)
         {
             Meta = meta;
             Header = header;
@@ -58,7 +57,7 @@ namespace Vim.Format.VimxNS
 
             Chunks = Enumerable.Range(0, Scene.GetChunksCount())
                 .Select(c => bfast.GetBFast(BufferNames.Chunk(c), BufferCompression.Chunks))
-                .Select(b => new VimxChunk(b))
+                .Select(b => new G3dMesh(b))
                 .ToArray();
         }
 
@@ -67,7 +66,6 @@ namespace Vim.Format.VimxNS
 
         public BFast ToBFast()
         {
-            AddTransformsToScene();
             var bfast = new BFast();
             bfast.SetArray(BufferNames.Meta, MetaHeader.Default.ToBytes());
             bfast.SetArray(BufferNames.Header, Header.ToVimxBytes());
@@ -77,18 +75,6 @@ namespace Vim.Format.VimxNS
             return bfast;
         }
 
-        private void AddTransformsToScene()
-        {
-            Scene.InstanceTransformData = new Math3d.Matrix4x4[Scene.GetInstanceCount()];
-            for (var i = 0; i < Scene.GetInstanceCount(); i++)
-            {
-                var mesh = Scene.InstanceMeshes[i];
-                var chunk = Scene.MeshChunks[mesh];
-                var chunIndex = Scene.MeshChunkIndices[mesh];
-                var transform = Scene.InstanceTransforms[i];
-                Scene.InstanceTransformData[i] = Chunks[chunk].Meshes[chunIndex].InstanceTransforms[transform];
-            }
-        }
 
     }
 }

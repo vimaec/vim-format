@@ -3,10 +3,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.RemoteVimx = void 0;
 const bfast_1 = require("./bfast");
 const g3dMaterials_1 = require("./g3dMaterials");
-const g3dMesh_1 = require("./g3dMesh");
+const g3dChunk_1 = require("./g3dChunk");
 const g3dScene_1 = require("./g3dScene");
 const remoteValue_1 = require("./remoteValue");
 const vimHeader_1 = require("./vimHeader");
+const g3dMesh_1 = require("./g3dMesh");
 class RemoteVimx {
     constructor(source) {
         this.chunkCache = new Map();
@@ -61,28 +62,17 @@ class RemoteVimx {
     }
     async requestChunk(chunk) {
         const chunkBFast = await this.bfast.getLocalBfast(`chunk_${chunk}`, true);
-        var ranges = await chunkBFast.getRanges();
-        const keys = [...ranges.keys()];
-        var bfasts = await Promise.all(keys.map(k => chunkBFast.getBfast(k)));
-        var meshes = await Promise.all(bfasts.map(b => g3dMesh_1.G3dMesh.createFromBfast(b)));
-        const scene = await this.scene.get();
-        meshes.forEach(m => m.scene = scene);
-        return meshes;
+        return g3dChunk_1.G3dChunk.createFromBfast(chunkBFast);
     }
     async getMesh(mesh) {
         var scene = await this.scene.get();
-        var chunk = scene.meshChunks[mesh];
+        var meshChunk = scene.meshChunks[mesh];
+        if (meshChunk === undefined)
+            return undefined;
+        var chunk = await this.getChunk(meshChunk);
         if (chunk === undefined)
             return undefined;
-        var meshes = await this.getChunk(chunk);
-        if (meshes === undefined)
-            return undefined;
-        var index = scene.meshChunkIndices[mesh];
-        var result = meshes[index];
-        if (result === undefined)
-            return undefined;
-        result.meshIndex = mesh;
-        return result;
+        return new g3dMesh_1.G3dMesh(scene, chunk, scene.meshChunkIndices[mesh]);
     }
 }
 exports.RemoteVimx = RemoteVimx;

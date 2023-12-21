@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Vim.BFastNS;
 
 namespace Vim.G3dNext.Attributes
@@ -7,10 +8,22 @@ namespace Vim.G3dNext.Attributes
     {
         // Computed field
         public int[] MeshVertexOffsets;
+        private List<int>[] _meshInstances;
+
+        public IReadOnlyList<int> GetMeshInstances(int mesh)
+        {
+            return _meshInstances[mesh];
+        }
+
+        public int GetApproxSize(int mesh)
+        {
+            return GetMeshVertexCount(mesh) * 12 + GetMeshIndexCount(mesh) * 4;
+        }
 
         void ISetup.Setup()
         {
             MeshVertexOffsets = ComputeMeshVertexOffsets();
+            _meshInstances = ComputeMeshInstances();
         }
 
         public static G3dVim FromVim(string vimPath)
@@ -32,6 +45,27 @@ namespace Vim.G3dNext.Attributes
             }
             return result;
         }
+
+        private List<int>[] ComputeMeshInstances()
+        {
+            var result = new List<int>[GetMeshCount()];
+            for (var i = 0; i < result.Length; i++)
+            {
+                result[i] = new List<int>();
+            }
+
+            for (var i = 0; i < InstanceMeshes.Length; i++)
+            {
+                var mesh = InstanceMeshes[i];
+                if (mesh >= 0)
+                {
+                    result[mesh].Add(i);
+                }
+            }
+
+            return result;
+        }
+
 
         public int GetTriangleCount()
         {

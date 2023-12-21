@@ -954,51 +954,6 @@ namespace Vim.G3dNext.Attributes
         }
     }
     
-    public partial class SceneInstanceTransformsAttribute : IAttribute<System.Int32>
-    {
-        public const string AttributeName = "g3d:instance:transform:0:int32:1";
-
-        public string Name
-            => AttributeName;
-
-        public int Count => TypedData?.Length ?? 0;
-
-        public void AddTo(BFast bfast)
-        {
-            if(TypedData != null)
-            {
-                bfast.SetArray(Name, TypedData);
-            }
-        }
-
-        public void ReadBFast(BFast bfast)
-        {
-            TypedData = bfast.GetArray<System.Int32>("g3d:instance:transform:0:int32:1");
-        }
-
-        public IAttributeDescriptor AttributeDescriptor { get; }
-            = new AttributeDescriptor(AttributeName);
-
-        public AttributeType AttributeType { get; }
-            = AttributeType.Data;
-
-        public Type IndexInto { get; }
-            = null;
-
-        public System.Int32[] TypedData { get; set; }
-            = Array.Empty<System.Int32>();
-
-        public Array Data
-            => TypedData;
-
-        public void Write(Stream stream)
-        {
-            if (TypedData == null || TypedData.Length == 0)
-                return;
-            stream.Write(TypedData);
-        }
-    }
-    
     public partial class SceneInstanceTransformDataAttribute : IAttribute<Vim.Math3d.Matrix4x4>
     {
         public const string AttributeName = "g3d:instance:transform:0:float32:16";
@@ -2679,12 +2634,6 @@ namespace Vim.G3dNext.Attributes
             set => Attributes.InstanceMeshes.TypedData = value;
         }
 
-        public System.Int32[] InstanceTransforms
-        {
-            get => Attributes.InstanceTransforms.TypedData;
-            set => Attributes.InstanceTransforms.TypedData = value;
-        }
-
         public Vim.Math3d.Matrix4x4[] InstanceTransformData
         {
             get => Attributes.InstanceTransformData.TypedData;
@@ -2790,7 +2739,6 @@ namespace Vim.G3dNext.Attributes
             {
                 [Vim.G3dNext.Attributes.SceneChunkCountAttribute.AttributeName] = new Vim.G3dNext.Attributes.SceneChunkCountAttribute(),
                 [Vim.G3dNext.Attributes.SceneInstanceMeshesAttribute.AttributeName] = new Vim.G3dNext.Attributes.SceneInstanceMeshesAttribute(),
-                [Vim.G3dNext.Attributes.SceneInstanceTransformsAttribute.AttributeName] = new Vim.G3dNext.Attributes.SceneInstanceTransformsAttribute(),
                 [Vim.G3dNext.Attributes.SceneInstanceTransformDataAttribute.AttributeName] = new Vim.G3dNext.Attributes.SceneInstanceTransformDataAttribute(),
                 [Vim.G3dNext.Attributes.SceneInstanceNodesAttribute.AttributeName] = new Vim.G3dNext.Attributes.SceneInstanceNodesAttribute(),
                 [Vim.G3dNext.Attributes.SceneInstanceGroupsAttribute.AttributeName] = new Vim.G3dNext.Attributes.SceneInstanceGroupsAttribute(),
@@ -2818,12 +2766,6 @@ namespace Vim.G3dNext.Attributes
         {
             get => Map.TryGetValue(Vim.G3dNext.Attributes.SceneInstanceMeshesAttribute.AttributeName, out var attr) ? attr as Vim.G3dNext.Attributes.SceneInstanceMeshesAttribute : default;
             set => Map[Vim.G3dNext.Attributes.SceneInstanceMeshesAttribute.AttributeName] = value as IAttribute;
-        }
-
-        public Vim.G3dNext.Attributes.SceneInstanceTransformsAttribute InstanceTransforms
-        {
-            get => Map.TryGetValue(Vim.G3dNext.Attributes.SceneInstanceTransformsAttribute.AttributeName, out var attr) ? attr as Vim.G3dNext.Attributes.SceneInstanceTransformsAttribute : default;
-            set => Map[Vim.G3dNext.Attributes.SceneInstanceTransformsAttribute.AttributeName] = value as IAttribute;
         }
 
         public Vim.G3dNext.Attributes.SceneInstanceTransformDataAttribute InstanceTransformData
@@ -2917,10 +2859,6 @@ namespace Vim.G3dNext.Attributes
                     return InstanceMeshes;
 
 
-                if (attributeType == typeof(Vim.G3dNext.Attributes.SceneInstanceTransformsAttribute))
-                    return InstanceTransforms;
-
-
                 if (attributeType == typeof(Vim.G3dNext.Attributes.SceneInstanceTransformDataAttribute))
                     return InstanceTransformData;
 
@@ -2991,12 +2929,6 @@ namespace Vim.G3dNext.Attributes
                 {
                     // Data Attribute
                     return collections.GetAttributesOfType<Vim.G3dNext.Attributes.SceneInstanceMeshesAttribute>().ToArray().MergeDataAttributes<Vim.G3dNext.Attributes.SceneInstanceMeshesAttribute, System.Int32>();
-                }
-
-                case Vim.G3dNext.Attributes.SceneInstanceTransformsAttribute.AttributeName:
-                {
-                    // Data Attribute
-                    return collections.GetAttributesOfType<Vim.G3dNext.Attributes.SceneInstanceTransformsAttribute>().ToArray().MergeDataAttributes<Vim.G3dNext.Attributes.SceneInstanceTransformsAttribute, System.Int32>();
                 }
 
                 case Vim.G3dNext.Attributes.SceneInstanceTransformDataAttribute.AttributeName:
@@ -3122,16 +3054,16 @@ namespace Vim.G3dNext.Attributes
             set => Attributes.InstanceTransforms.TypedData = value;
         }
 
-        public System.Int32[] SubmeshOffset
+        public System.Int32[] MeshSubmeshOffset
         {
-            get => Attributes.SubmeshOffset.TypedData;
-            set => Attributes.SubmeshOffset.TypedData = value;
+            get => Attributes.MeshSubmeshOffset.TypedData;
+            set => Attributes.MeshSubmeshOffset.TypedData = value;
         }
 
-        public System.Int32[] OpaqueSubmeshCounts
+        public System.Int32[] MeshOpaqueSubmeshCounts
         {
-            get => Attributes.OpaqueSubmeshCounts.TypedData;
-            set => Attributes.OpaqueSubmeshCounts.TypedData = value;
+            get => Attributes.MeshOpaqueSubmeshCounts.TypedData;
+            set => Attributes.MeshOpaqueSubmeshCounts.TypedData = value;
         }
 
         public System.Int32[] SubmeshIndexOffsets
@@ -3207,13 +3139,13 @@ namespace Vim.G3dNext.Attributes
             set => Map[Vim.G3dNext.Attributes.MeshInstanceTransformsAttribute.AttributeName] = value as IAttribute;
         }
 
-        public Vim.G3dNext.Attributes.MeshSubmeshOffsetAttribute SubmeshOffset
+        public Vim.G3dNext.Attributes.MeshSubmeshOffsetAttribute MeshSubmeshOffset
         {
             get => Map.TryGetValue(Vim.G3dNext.Attributes.MeshSubmeshOffsetAttribute.AttributeName, out var attr) ? attr as Vim.G3dNext.Attributes.MeshSubmeshOffsetAttribute : default;
             set => Map[Vim.G3dNext.Attributes.MeshSubmeshOffsetAttribute.AttributeName] = value as IAttribute;
         }
 
-        public Vim.G3dNext.Attributes.MeshOpaqueSubmeshCountsAttribute OpaqueSubmeshCounts
+        public Vim.G3dNext.Attributes.MeshOpaqueSubmeshCountsAttribute MeshOpaqueSubmeshCounts
         {
             get => Map.TryGetValue(Vim.G3dNext.Attributes.MeshOpaqueSubmeshCountsAttribute.AttributeName, out var attr) ? attr as Vim.G3dNext.Attributes.MeshOpaqueSubmeshCountsAttribute : default;
             set => Map[Vim.G3dNext.Attributes.MeshOpaqueSubmeshCountsAttribute.AttributeName] = value as IAttribute;
@@ -3259,11 +3191,11 @@ namespace Vim.G3dNext.Attributes
 
 
                 if (attributeType == typeof(Vim.G3dNext.Attributes.MeshSubmeshOffsetAttribute))
-                    return SubmeshOffset;
+                    return MeshSubmeshOffset;
 
 
                 if (attributeType == typeof(Vim.G3dNext.Attributes.MeshOpaqueSubmeshCountsAttribute))
-                    return OpaqueSubmeshCounts;
+                    return MeshOpaqueSubmeshCounts;
 
 
                 if (attributeType == typeof(Vim.G3dNext.Attributes.MeshSubmeshIndexOffsetsAttribute))
@@ -3352,10 +3284,10 @@ namespace Vim.G3dNext.Attributes
             // Ensure all the indices are either -1 or within the bounds of the attributes they are indexing into.
 
             {
-                var maxIndex = GetAttribute(SubmeshOffset.IndexInto).Data.Length - 1;
-                for (var i = 0; i < SubmeshOffset.TypedData.Length; ++i)
+                var maxIndex = GetAttribute(MeshSubmeshOffset.IndexInto).Data.Length - 1;
+                for (var i = 0; i < MeshSubmeshOffset.TypedData.Length; ++i)
                 {
-                    var index = SubmeshOffset.TypedData[i];
+                    var index = MeshSubmeshOffset.TypedData[i];
 
                     if (index == -1)
                         continue; // no relation.

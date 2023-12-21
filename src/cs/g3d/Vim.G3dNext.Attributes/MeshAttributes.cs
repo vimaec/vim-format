@@ -20,10 +20,10 @@ namespace Vim.G3dNext.Attributes
     [AttributeDescriptor("Mesh", "g3d:instance:transform:0:float32:16", AttributeType.Data, ArrayType = typeof(Matrix4x4))]
     public partial class MeshInstanceTransformsAttribute { }
 
-    [AttributeDescriptor("Mesh", "g3d:mesh:opaquesubmeshcount:0:int32:1", AttributeType.Data)]
+    [AttributeDescriptor("g3d:mesh:opaquesubmeshcount:0:int32:1", AttributeType.Data)]
     public partial class MeshOpaqueSubmeshCountsAttribute { }
 
-    [AttributeDescriptor("Mesh", "g3d:mesh:submeshOffset:0:int32:1", AttributeType.Index, IndexInto = typeof(MeshIndicesAttribute))]
+    [AttributeDescriptor("g3d:mesh:submeshOffset:0:int32:1", AttributeType.Index, IndexInto = typeof(MeshIndicesAttribute))]
     public partial class MeshSubmeshOffsetAttribute { }
 
     [AttributeDescriptor("Mesh", "g3d:submesh:indexoffset:0:int32:1", AttributeType.Index, IndexInto = typeof(MeshIndicesAttribute))]
@@ -45,6 +45,7 @@ namespace Vim.G3dNext.Attributes
 
 public enum MeshSection
 {
+    All, 
     Opaque,
     Transparent
 }

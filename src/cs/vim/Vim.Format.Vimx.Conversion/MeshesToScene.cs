@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Vim.BFastNS;
 using Vim.Format.ObjectModel;
@@ -10,6 +11,7 @@ namespace Vim.Format.VimxNS.Conversion
 {
     public static class MeshesToScene
     {
+
         public static G3dScene CreateScene(G3dVim g3d, DocumentModel bim, VimxChunk[] chunks, G3dMesh[] meshes)
         {
             var scene = new G3dScene();
@@ -22,10 +24,11 @@ namespace Vim.Format.VimxNS.Conversion
                     : bim.ElementId[n]
                 ).ToArray();
 
-            (scene.InstanceMeshes, scene.InstanceTransforms, scene.InstanceNodes) = meshes.GetInstanceIds();
+            int[] dummy;
+            (scene.InstanceMeshes, dummy, scene.InstanceNodes) = meshes.GetInstanceIds();
             scene.InstanceGroups = scene.InstanceNodes.Select(n => nodeElements[n]).ToArray();
             scene.InstanceTags = scene.InstanceNodes.Select(n => nodeElementIds[n]).ToArray();
-            (scene.InstanceMins, scene.InstanceMaxs) = ComputeBoundingBoxes(meshes, scene.InstanceMeshes, scene.InstanceTransforms);
+            (scene.InstanceMins, scene.InstanceMaxs) = ComputeBoundingBoxes(meshes, scene.InstanceMeshes, dummy);
 
             if (g3d.InstanceFlags != null)
             {
@@ -47,8 +50,8 @@ namespace Vim.Format.VimxNS.Conversion
                 scene.MeshChunkIndices[i] = mesh.ChunkIndex;
                 scene.MeshIndexCounts[i] = mesh.GetIndexCount();
                 scene.MeshVertexCounts[i] = mesh.GetVertexCount();
-                scene.MeshOpaqueIndexCounts[i] = mesh.GetIndexCount(MeshSection.Opaque);
-                scene.MeshOpaqueVertexCounts[i] = mesh.GetVertexCount(MeshSection.Opaque);
+                //scene.MeshOpaqueIndexCounts[i] = mesh.GetIndexCount(MeshSection.Opaque);
+                //scene.MeshOpaqueVertexCounts[i] = mesh.GetMeshVertexCount(MeshSection.Opaque);
             }
             return scene;
         }

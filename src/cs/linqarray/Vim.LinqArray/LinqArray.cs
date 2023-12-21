@@ -651,7 +651,7 @@ namespace Vim.LinqArray
         /// <summary>
         /// Returns the index of the first element matching the given item.
         /// </summary>
-        public static int IndexOf<T>(this IArray<T> self, Func<T, bool> predicate) 
+        public static int IndexOf<T>(this IArray<T> self, Func<T, bool> predicate)
         {
             for (var i = 0; i < self.Count; ++i)
             {
@@ -976,7 +976,7 @@ namespace Vim.LinqArray
         public static IArray<double> PrefixSums(this IArray<double> self)
             => self.Scan(0.0, (a, b) => a + b);
 
-        public static IArray<U> Scan<T,U>(this IArray<T> self, U init, Func<U, T, U> scanFunc)
+        public static IArray<U> Scan<T, U>(this IArray<T> self, U init, Func<U, T, U> scanFunc)
         {
             if (self.Count == 0)
                 return Empty<U>();
@@ -1011,6 +1011,13 @@ namespace Vim.LinqArray
             if (index < 0)
                 return self;
             return self.SetElementAt(index, value);
+        }
+
+        public static T SafeGet<T>(this IArray<T> self, int index, T defaultValue)
+        {
+            if(index < 0) return defaultValue;
+            if(index >= self.Count) return defaultValue;
+            return self[index];
         }
     }
 }

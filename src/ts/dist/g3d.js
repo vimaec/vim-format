@@ -4,7 +4,6 @@
  */
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.G3d = exports.VimAttributes = void 0;
-const abstractG3d_1 = require("./abstractG3d");
 const bfast_1 = require("./bfast");
 /**
  * See https://github.com/vimaec/vim#vim-geometry-attributes
@@ -101,27 +100,6 @@ class G3d {
         }
         return { start, end };
     }
-    static createFromAbstract(g3d) {
-        const instanceMeshes = g3d.findAttribute(VimAttributes.instanceMeshes)
-            ?.data;
-        const instanceTransforms = g3d.findAttribute(VimAttributes.instanceTransforms)?.data;
-        const instanceFlags = g3d.findAttribute(VimAttributes.instanceFlags)?.data ??
-            new Uint16Array(instanceMeshes.length);
-        const instanceNodes = g3d.findAttribute(VimAttributes.instanceNodes)?.data;
-        const meshSubmeshes = g3d.findAttribute(VimAttributes.meshSubmeshes)
-            ?.data;
-        const submeshIndexOffset = g3d.findAttribute(VimAttributes.submeshIndexOffsets)?.data;
-        const submeshMaterial = g3d.findAttribute(VimAttributes.submeshMaterials)
-            ?.data;
-        const indices = g3d.findAttribute(VimAttributes.indices)?.data;
-        const positions = g3d.findAttribute(VimAttributes.positions)
-            ?.data;
-        const materialColors = g3d.findAttribute(VimAttributes.materialColors)
-            ?.data;
-        const result = new G3d(instanceMeshes, instanceFlags, instanceTransforms, instanceNodes, meshSubmeshes, submeshIndexOffset, submeshMaterial, indices, positions, materialColors);
-        result.rawG3d = g3d;
-        return result;
-    }
     static async createFromPath(path) {
         const f = await fetch(path);
         const buffer = await f.arrayBuffer();
@@ -129,8 +107,19 @@ class G3d {
         return this.createFromBfast(bfast);
     }
     static async createFromBfast(bfast) {
-        const g3d = await abstractG3d_1.AbstractG3d.createFromBfast(bfast, VimAttributes.all);
-        return G3d.createFromAbstract(g3d);
+        const values = await Promise.all([
+            bfast.getInt32Array(VimAttributes.instanceMeshes),
+            bfast.getUint16Array(VimAttributes.instanceFlags),
+            bfast.getFloat32Array(VimAttributes.instanceTransforms),
+            bfast.getInt32Array(VimAttributes.instanceNodes),
+            bfast.getInt32Array(VimAttributes.meshSubmeshes),
+            bfast.getInt32Array(VimAttributes.submeshIndexOffsets),
+            bfast.getInt32Array(VimAttributes.submeshMaterials),
+            bfast.getInt32Array(VimAttributes.indices),
+            bfast.getFloat32Array(VimAttributes.positions),
+            bfast.getFloat32Array(VimAttributes.materialColors)
+        ]);
+        return new G3d(...values);
     }
     /**
      * Computes the index of the first vertex of each mesh
