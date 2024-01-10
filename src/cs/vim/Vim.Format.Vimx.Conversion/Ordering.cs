@@ -1,49 +1,44 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System;
 using Vim.Format.ObjectModel;
 using Vim.G3dNext.Attributes;
 
 namespace Vim.Format.VimxNS.Conversion
 {
-    public static class VimxOrdering
+    public static class Ordering
     {
-        public static IEnumerable<G3dMesh> OrderByBim(this IEnumerable<G3dMesh> meshes, DocumentModel bim)
+        public static MeshOrder ComputeOrder(G3dVim g3d, DocumentModel bim)
         {
-            return meshes.OrderByDescending((m) => (
-                GetPriority(GetMeshName(m, bim)),
-                m.GetAABB().MaxSide)
-            );
+            var meshCount = g3d.GetMeshCount();
+            var resultCount = 0;
+            for (var mesh = 0; mesh < meshCount; mesh++)
+            {
+                if (g3d.GetMeshInstances(mesh).Count > 0) resultCount++;
+            }
+
+            var i = 0;
+            var order = new int[resultCount];
+            var instanceCount = 0;
+            for (var mesh = 0; mesh < meshCount; mesh++)
+            {
+                var instances = g3d.GetMeshInstances(mesh);
+                if (instances.Count > 0)
+                {
+                    instanceCount += instances.Count;
+                    order[i++] = mesh;
+                }
+            }
+            Array.Sort(order, (a, b) =>
+            {
+                var prioA = GetPriority(GetMeshName(g3d, bim, a));
+                var prioB = GetPriority(GetMeshName(g3d, bim, b));
+                return prioA - prioB;
+            });
+            return new MeshOrder(g3d, order, instanceCount);
         }
 
-        public static IEnumerable<int> OrderByBim2(G3dVim g3d, DocumentModel bim)
-        {
-            return Enumerable.Range(0, g3d.GetMeshCount())
-                .Where(m => g3d.GetMeshInstances(m).Count > 0)
-                .OrderByDescending((m) => 
-                     GetPriority(GetMeshName2(g3d, bim, m))
-                );
-        }
-
-        static string GetMeshName2(G3dVim g3d, DocumentModel bim, int mesh)
+        static string GetMeshName(G3dVim g3d, DocumentModel bim, int mesh)
         {
             var node = g3d.GetMeshInstances(mesh)[0];
-
-            if (node < 0 || node >= bim.NodeElementIndex.Count) return "";
-            var element = bim.NodeElementIndex[node];
-
-            if (element < 0 || element >= bim.ElementCategoryIndex.Count) return "";
-            var category = bim.ElementCategoryIndex[element];
-
-            if (category < 0 || category >= bim.CategoryName.Count) return "";
-            var name = bim.CategoryName[category];
-
-            return name;
-        }
-
-
-        static string GetMeshName(this G3dMesh mesh, DocumentModel bim)
-        {
-            var node = mesh.InstanceNodes[0];
 
             if (node < 0 || node >= bim.NodeElementIndex.Count) return "";
             var element = bim.NodeElementIndex[node];

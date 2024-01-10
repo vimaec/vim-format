@@ -4,6 +4,7 @@ using Vim.G3d;
 using Vim.BFastNS;
 using static Vim.Format.DocumentBuilder;
 using Vim.Math3d;
+using Vim.G3dNext.Attributes;
 
 namespace Vim.Format
 {
@@ -94,9 +95,6 @@ namespace Vim.Format
             {
                 shapeVertexOffsets[i] = shapeVertexOffsets[i - 1] + _shapes[i - 1].Vertices.Count;
             }
-
-            bfast = new BFast();
-            bfast.SetArray("Meta", G3dHeader.Default.ToBytes());
 
             bfast.SetEnumerable(CommonAttributes.Position, () => _meshes.SelectMany(m => m.Vertices));
             bfast.SetEnumerable(CommonAttributes.Index, () => _meshes.SelectMany(m => m.Indices));

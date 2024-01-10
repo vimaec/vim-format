@@ -3,43 +3,39 @@
 namespace Vim.G3dNext.Attributes
 {
     [AttributeCollection(
-        typeof(MeshInstanceTransformsAttribute),
-        typeof(MeshSubmeshOffsetAttribute),
-        typeof(MeshOpaqueSubmeshCountsAttribute),
-        typeof(MeshSubmeshIndexOffsetsAttribute),
-        typeof(MeshSubmeshVertexOffsetsAttribute),
-        typeof(MeshSubmeshMaterialsAttribute),
-        typeof(MeshPositionsAttribute),
-        typeof(MeshIndicesAttribute)
+        typeof(ChunkMeshSubmeshOffsetAttribute),
+        typeof(ChunkMeshOpaqueSubmeshCountsAttribute),
+        typeof(ChunkSubmeshIndexOffsetsAttribute),
+        typeof(ChunkSubmeshVertexOffsetsAttribute),
+        typeof(ChunkSubmeshMaterialsAttribute),
+        typeof(ChunkPositionsAttribute),
+        typeof(ChunkIndicesAttribute)
     )]
-    public partial class MeshAttributeCollection // : IAttributeCollection
+    public partial class ChunkAttributeCollection // : IAttributeCollection
     {
 
     }
 
-    [AttributeDescriptor("Mesh", "g3d:instance:transform:0:float32:16", AttributeType.Data, ArrayType = typeof(Matrix4x4))]
-    public partial class MeshInstanceTransformsAttribute { }
+    [AttributeDescriptor("Chunk", "g3d:mesh:opaquesubmeshcount:0:int32:1", AttributeType.Data)]
+    public partial class ChunkMeshOpaqueSubmeshCountsAttribute { }
 
-    [AttributeDescriptor("g3d:mesh:opaquesubmeshcount:0:int32:1", AttributeType.Data)]
-    public partial class MeshOpaqueSubmeshCountsAttribute { }
+    [AttributeDescriptor("Chunk", "g3d:mesh:submeshOffset:0:int32:1", AttributeType.Index, IndexInto = typeof(ChunkIndicesAttribute))]
+    public partial class ChunkMeshSubmeshOffsetAttribute { }
 
-    [AttributeDescriptor("g3d:mesh:submeshOffset:0:int32:1", AttributeType.Index, IndexInto = typeof(MeshIndicesAttribute))]
-    public partial class MeshSubmeshOffsetAttribute { }
+    [AttributeDescriptor("Chunk", "g3d:submesh:indexoffset:0:int32:1", AttributeType.Index, IndexInto = typeof(ChunkIndicesAttribute))]
+    public partial class ChunkSubmeshIndexOffsetsAttribute { }
 
-    [AttributeDescriptor("Mesh", "g3d:submesh:indexoffset:0:int32:1", AttributeType.Index, IndexInto = typeof(MeshIndicesAttribute))]
-    public partial class MeshSubmeshIndexOffsetsAttribute { }
+    [AttributeDescriptor("Chunk", "g3d:submesh:vertexoffset:0:int32:1", AttributeType.Index, IndexInto = typeof(ChunkIndicesAttribute))]
+    public partial class ChunkSubmeshVertexOffsetsAttribute { }
 
-    [AttributeDescriptor("Mesh", "g3d:submesh:vertexoffset:0:int32:1", AttributeType.Index, IndexInto = typeof(MeshIndicesAttribute))]
-    public partial class MeshSubmeshVertexOffsetsAttribute { }
+    [AttributeDescriptor("Chunk", "g3d:submesh:material:0:int32:1", AttributeType.Index)]
+    public partial class ChunkSubmeshMaterialsAttribute { }
 
-    [AttributeDescriptor("Mesh", "g3d:submesh:material:0:int32:1", AttributeType.Index)]
-    public partial class MeshSubmeshMaterialsAttribute { }
+    [AttributeDescriptor("Chunk", "g3d:vertex:position:0:float32:3", AttributeType.Data, ArrayType = typeof(Vector3))]
+    public partial class ChunkPositionsAttribute { }
 
-    [AttributeDescriptor("Mesh", "g3d:vertex:position:0:float32:3", AttributeType.Data, ArrayType = typeof(Vector3))]
-    public partial class MeshPositionsAttribute { }
-
-    [AttributeDescriptor("Mesh", "g3d:corner:index:0:int32:1", AttributeType.Index, IndexInto = typeof(MeshPositionsAttribute))]
-    public partial class MeshIndicesAttribute { }
+    [AttributeDescriptor("Chunk", "g3d:corner:index:0:int32:1", AttributeType.Index, IndexInto = typeof(ChunkPositionsAttribute))]
+    public partial class ChunkIndicesAttribute { }
 }
 
 

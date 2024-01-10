@@ -6,6 +6,8 @@ using Vim.Format.ObjectModel;
 using Vim.G3dNext;
 using System.Collections.Generic;
 using Vim.Math3d;
+using System.Diagnostics;
+using System;
 
 namespace Vim.Format.VimxNS.Conversion
 {
@@ -13,159 +15,235 @@ namespace Vim.Format.VimxNS.Conversion
     {
         public static Vimx FromVimPath(string vimPath)
         {
+            var sw = Stopwatch.StartNew();
             var vim = VimScene.LoadVim(vimPath, new LoadOptions()
             {
                 SkipAssets = true,
                 SkipGeometry = true,
             });
+            Console.WriteLine("  LoadVim " + sw.ElapsedMilliseconds);
 
+            sw.Restart();
             var g3d = G3dVim.FromVim(vimPath);
-            return FromVim2(g3d, vim.DocumentModel);
+            Console.WriteLine("  G3dVim.FromVim " + sw.ElapsedMilliseconds);
+
+            sw.Restart();
+            var vimx = FromVim(g3d, vim.DocumentModel);
+            Console.WriteLine("  FromVim " + sw.ElapsedMilliseconds);
+
+            return vimx;
         }
-
-
-        public static Vimx FromVim2(G3dVim g3d, DocumentModel bim)
-        {
-            var meshOrder = VimxOrdering.OrderByBim2(g3d, bim).ToArray();
-            var instanceNodes = meshOrder.SelectMany(m => g3d.GetMeshInstances(m));
-            var instanceMeshes = meshOrder.SelectMany((m,i) => g3d.GetMeshInstances(m).Select(_ => i)).ToArray();
-            var instanceTransforms = instanceNodes.Select(n => g3d.InstanceTransforms[n]).ToArray();
-            var instanceFlags = g3d.InstanceFlags != null
-                ? instanceNodes.Select(n => g3d.InstanceFlags[n]).ToArray()
-                : null;
-
-            var nodeElements = bim.NodeElementIndex.ToArray();
-            var instanceGroups = instanceNodes.Select(n => nodeElements[n]).ToArray();
-
-            var nodeElementIds = nodeElements
-                .Select(n => bim.ElementId.SafeGet(n, -1))
-                .ToArray();
-
-            var chunks = SplitChunks2(g3d, meshOrder);
-
-            var meshes = chunks.Chunks.Select(c => VimToMeshes.GetMesh2(g3d, c)).ToArray();
-            var indexCount = meshOrder.Select((m, i) => meshes[chunks.MeshChunks[i]].GetMeshIndexCount(chunks.MeshIndex[i], MeshSection.All));
-            var vertexCount = meshOrder.Select((m, i) => meshes[chunks.MeshChunks[i]].GetMeshVertexCount(chunks.MeshIndex[i], MeshSection.All));
-            var opaqueIndexCount = meshOrder.Select((m, i) => meshes[chunks.MeshChunks[i]].GetMeshIndexCount(chunks.MeshIndex[i], MeshSection.Opaque));
-            var opaqueVertexCount = meshOrder.Select((m, i) => meshes[chunks.MeshChunks[i]].GetMeshVertexCount(chunks.MeshIndex[i], MeshSection.Opaque));
-
-            var boxes = instanceMeshes
-                .Select((m, i) => meshes[chunks.MeshChunks[m]].GetAABox(chunks.MeshIndex[m], instanceTransforms[i]))
-                .ToArray();
-            var mins = boxes.Select(b => b.Min).ToArray();
-            var maxs = boxes.Select(b => b.Max).ToArray();
-
-            var scene = new G3dScene()
-            {
-                ChunkCount = new[] { chunks.Chunks.Count },
-                InstanceMeshes = instanceMeshes.ToArray(),
-                InstanceTransformData = instanceTransforms,
-                InstanceNodes = instanceNodes.ToArray(),
-                InstanceFlags = instanceFlags,
-                InstanceGroups = instanceGroups,
-                InstanceMaxs = maxs,
-                InstanceMins = mins,
-                InstanceTags = nodeElementIds,
-                MeshChunks = chunks.MeshChunks.ToArray(),
-                MeshChunkIndices = chunks.MeshIndex.ToArray(),
-                MeshIndexCounts = indexCount.ToArray(),
-                MeshVertexCounts = vertexCount.ToArray(),
-                MeshOpaqueIndexCounts = opaqueIndexCount.ToArray(),
-                MeshOpaqueVertexCounts = opaqueVertexCount.ToArray(),
-            };
-
-            var materials = new G3dMaterials().ReadFromVim(g3d);
-            var header = VimxHeader.CreateDefault();
-
-            return new Vimx(header, MetaHeader.Default, scene, materials, meshes);
-        }
-
 
         public static Vimx FromVim(G3dVim g3d, DocumentModel bim)
         {
-            var meshes = VimToMeshes.ExtractMeshes(g3d)
-                .OrderByBim(bim)
-                .ToArray();
+            var sw = Stopwatch.StartNew();
+            // Split input Vim into chunks.
+            var chunks = CreateChunks(g3d, bim);
+            Console.WriteLine("    CreateChunks " + sw.ElapsedMilliseconds);
 
-            var chunks = meshes.SplitChunks();
-            var scene = MeshesToScene.CreateScene(g3d, bim, chunks, meshes);
+            sw.Restart();
+            // Compute the scene definition from chunks.
+            var scene = CreateScene(chunks, bim);
+            Console.WriteLine("    CreateScene " + sw.ElapsedMilliseconds);
+
+            sw.Restart();
+            // Materials are reused from input g3d.
             var materials = new G3dMaterials().ReadFromVim(g3d);
+            Console.WriteLine("    G3dMaterials " + sw.ElapsedMilliseconds);
+
             var header = VimxHeader.CreateDefault();
 
-            return new Vimx(header, MetaHeader.Default, scene, materials, meshes);
+            return new Vimx(header, MetaHeader.Default, scene, materials, chunks.Chunks);
         }
 
-        public static VimxChunk[] SplitChunks(this IEnumerable<G3dMesh> meshes)
+        public static VimChunks CreateChunks(G3dVim g3d, DocumentModel bim)
         {
-            //2MB once compressed -> 0.5MB
-            const int ChunkSize = 2000000;
+            var sw = Stopwatch.StartNew();
+            // First compute a desirable presentation order.
+            var ordering = Ordering.ComputeOrder(g3d, bim);
+            Console.WriteLine("      ComputeOrder " + sw.ElapsedMilliseconds);
 
-            var chunks = new List<VimxChunk>();
-            var chunk = new VimxChunk();
-            var chunkSize = 0L;
-            foreach (var mesh in meshes)
-            {
-                chunkSize += mesh.GetSize();
-                if (chunkSize > ChunkSize && chunk.Meshes.Count > 0)
-                {
-                    chunks.Add(chunk);
-                    chunk = new VimxChunk();
-                    chunkSize = 0;
-                }
-                mesh.Chunk = chunks.Count;
-                mesh.ChunkIndex = chunk.Meshes.Count();
-                chunk.Meshes.Add(mesh);
-            }
-            if (chunk.Meshes.Count > 0)
-            {
-                chunks.Add(chunk);
-            }
+            sw.Restart();
+            // Groups meshes up to a certain size.
+            var groups = Chunking.ComputeChunks(ordering);
+            // Append and merge geometry from g3d to create the chunks.
+            Console.WriteLine("      ComputeChunks " + sw.ElapsedMilliseconds);
 
-            return chunks.ToArray();
+            sw.Restart();
+            var chunks = Chunking.CreateChunks(groups);
+            Console.WriteLine("      CreateChunks " + sw.ElapsedMilliseconds);
+
+            return chunks;
         }
 
-        public static ChunkResult SplitChunks2(G3dVim g3d, int[] meshes)
+        public static G3dScene CreateScene(VimChunks chunks, DocumentModel bim)
         {
-            // 2MB once compressed -> 0.5MB
-            const int ChunkSize = 2000000;
+            var nodeElements = bim.NodeElementIndex.ToArray();
+            
+            var instanceCount = chunks.InstanceCount;
+            var instanceNodes = new int[instanceCount];
+            var instanceMeshes = new int[instanceCount];
+            var instanceGroups = new int[instanceCount];
+            var instanceTransforms = new Matrix4x4[instanceCount];
+            var instanceFlags = new ushort[instanceCount];
+            var instanceTags = new long[instanceCount];
+            var instanceMins = new Vector3[instanceCount];
+            var instanceMaxs = new Vector3[instanceCount];
 
-            var meshChunks = new List<int>();
-            var meshIndex = new List<int>();
+            var meshCount = chunks.MeshCount;
+            var indexCounts = new int[meshCount];
+            var vertexCounts = new int[meshCount];
+            var opaqueIndexCounts = new int[meshCount];
+            var opaqueVertexCounts = new int[meshCount];
 
-            var chunks = new List<List<int>>();
-            var chunk = new List<int>();
-            var chunkSize = 0L;
-            foreach (var mesh in meshes)
+            var sw = Stopwatch.StartNew();
+            sw.Stop();
+            var instance = 0;
+            for (var i = 0; i < meshCount; i++)
             {
-                chunkSize += g3d.GetApproxSize(mesh);
-                if (chunkSize > ChunkSize && chunk.Count > 0)
+                var meshChunk = chunks.MeshChunks[i];
+                var meshIndex = chunks.MeshIndex[i];
+                var instances = chunks.GetInstances(i);
+                var chunk = chunks.Chunks[meshChunk];
+                for (var j = 0; j < instances.Count; j++)
                 {
-                    chunks.Add(chunk);
-                    chunk = new List<int>();
-                    chunkSize = 0;
+                    var node = instances[j];
+                    var element = nodeElements[node];
+                    var transform = chunks.g3d.InstanceTransforms[node];
+
+                    // geometry
+                    instanceMeshes[instance] = i;
+                    instanceTransforms[instance] = transform;
+
+                    // bounding box
+                    sw.Start();
+                    var box = chunk.GetAABox(meshIndex, transform);
+                    sw.Stop();
+                    instanceMins[instance] = box.Min;
+                    instanceMaxs[instance] = box.Max;
+
+                    // bim
+                    instanceNodes[instance] = node;
+                    instanceGroups[instance] = element;
+                    instanceTags[instance] = bim.ElementId.SafeGet(element, -1);
+
+                    instance++;
                 }
 
-                meshChunks.Add(chunks.Count);
-                meshIndex.Add(chunk.Count);
-                chunk.Add(mesh);
-            }
-            if (chunk.Count > 0)
-            {
-                chunks.Add(chunk);
+                // geometry counts
+                indexCounts[i] = chunk.GetMeshIndexCount(meshIndex, MeshSection.All);
+                vertexCounts[i] = chunk.GetMeshVertexCount(meshIndex, MeshSection.All);
+                opaqueIndexCounts[i] = chunk.GetMeshIndexCount(meshIndex, MeshSection.Opaque);
+                opaqueVertexCounts[i] = chunk.GetMeshVertexCount(meshIndex, MeshSection.Opaque); ;
             }
 
-            return new ChunkResult {
-                MeshChunks = meshChunks,
-                MeshIndex = meshIndex,
-                Chunks = chunks
+            // InstanceFlags is not always present. 
+            if (chunks.g3d.InstanceFlags != null)
+            {
+                for(var i = 0; i < instanceNodes.Length; i++)
+                {
+                    var node = instanceNodes[i];
+                    instanceFlags[i] = chunks.g3d.InstanceFlags[node];
+                }
+            }
+
+            Console.WriteLine("AABB " + sw.ElapsedMilliseconds);
+
+            var scene = new G3dScene()
+            {
+                ChunkCount = new[] { chunks.ChunkCount},
+                InstanceMeshes = instanceMeshes,
+                InstanceTransformData = instanceTransforms,
+                InstanceNodes = instanceNodes,
+                InstanceFlags = instanceFlags,
+                InstanceGroups = instanceGroups,
+                InstanceMaxs = instanceMaxs,
+                InstanceMins = instanceMins,
+                InstanceTags = instanceTags,
+                MeshChunks = chunks.MeshChunks,
+                MeshChunkIndices = chunks.MeshIndex,
+                MeshIndexCounts = indexCounts,
+                MeshVertexCounts = vertexCounts,
+                MeshOpaqueIndexCounts = opaqueIndexCounts,
+                MeshOpaqueVertexCounts = opaqueVertexCounts,
             };
+            return scene;
+        }
+
+    }
+
+    /// <summary>
+    /// Initial step of vim->vimx conversion.
+    /// </summary>
+    public class MeshOrder
+    {
+        public readonly G3dVim g3d;
+        public readonly int[] Meshes;
+        public readonly int InstanceCount;
+
+        public MeshOrder(G3dVim g3d, int[] meshes, int instanceCount)
+        {
+            this.g3d = g3d;
+            Meshes = meshes;
+            InstanceCount = instanceCount;
         }
     }
-}
 
-public class ChunkResult
-{
-    public List<int> MeshChunks = new List<int>();
-    public List<int> MeshIndex = new List<int>();
-    public List<List<int>> Chunks = new List<List<int>>();
+    /// <summary>
+    /// Describes how the meshes from the vim will be grouped in the vimx.
+    /// </summary>
+    public class ChunksDescription
+    {
+        public readonly G3dVim g3d;
+        public readonly int[] Meshes;
+        public readonly int[] MeshChunks;
+        public readonly int[] MeshIndex;
+        public readonly List<List<int>> ChunkMeshes;
+        public readonly int InstanceCount;
+
+        public ChunksDescription(MeshOrder ordering, int[] meshChunks, int[] meshIndex, List<List<int>> chunkMeshes)
+        {
+            g3d = ordering.g3d;
+            Meshes = ordering.Meshes;
+            InstanceCount = ordering.InstanceCount;
+            MeshChunks = meshChunks;
+            MeshIndex = meshIndex;
+            ChunkMeshes = chunkMeshes;
+        }
+    }
+
+    /// <summary>
+    /// Resulting Chunks of the vim->vimx conversion.
+    /// </summary>
+    public class VimChunks
+    {
+        public readonly G3dVim g3d;
+        public readonly int[] Meshes;
+        public readonly int[] MeshChunks;
+        public readonly int[] MeshIndex;
+        public readonly List<List<int>> ChunkMeshes;
+        public readonly G3dChunk[] Chunks;
+        public readonly int InstanceCount;
+
+        public VimChunks(ChunksDescription description, G3dChunk[] chunks)
+        {
+            g3d = description.g3d;
+            Meshes = description.Meshes;
+            MeshChunks = description.MeshChunks;
+            MeshIndex = description.MeshIndex;
+            ChunkMeshes = description.ChunkMeshes;
+            InstanceCount = description.InstanceCount;
+            Chunks = chunks;
+        }
+
+        public int ChunkCount => Chunks.Length;
+
+        public int MeshCount => Meshes.Length;
+
+        public IReadOnlyList<int> GetInstances(int meshIndex)
+        {
+            var m = Meshes[meshIndex];
+            return g3d.GetMeshInstances(m);
+        }
+    }
 }

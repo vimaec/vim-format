@@ -3,16 +3,8 @@ using Vim.Math3d;
 
 namespace Vim.G3dNext.Attributes
 {
-    public partial class G3dMesh
+    public partial class G3dChunk
     {
-        // Field doesn't get written but is useful in builing a Vimx.
-        public int[] InstanceNodes;
-        public int Chunk;
-        public int ChunkIndex;
-        public int[] MeshIndices;
-
-        public long GetSize() => Attributes.GetSize();
-
         void ISetup.Setup()
         {
             // empty
@@ -21,7 +13,6 @@ namespace Vim.G3dNext.Attributes
         /// <summary>
         /// The total number of instances.
         /// </summary>
-        public int GetInstanceCount() => InstanceTransforms?.Length ?? 0;
 
         public int GetSubmeshCount() => SubmeshIndexOffsets?.Length ?? 0;
 

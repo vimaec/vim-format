@@ -1539,52 +1539,7 @@ namespace Vim.G3dNext.Attributes
         }
     }
     
-    public partial class MeshInstanceTransformsAttribute : IAttribute<Vim.Math3d.Matrix4x4>
-    {
-        public const string AttributeName = "g3d:instance:transform:0:float32:16";
-
-        public string Name
-            => AttributeName;
-
-        public int Count => TypedData?.Length ?? 0;
-
-        public void AddTo(BFast bfast)
-        {
-            if(TypedData != null)
-            {
-                bfast.SetArray(Name, TypedData);
-            }
-        }
-
-        public void ReadBFast(BFast bfast)
-        {
-            TypedData = bfast.GetArray<Vim.Math3d.Matrix4x4>("g3d:instance:transform:0:float32:16");
-        }
-
-        public IAttributeDescriptor AttributeDescriptor { get; }
-            = new AttributeDescriptor(AttributeName);
-
-        public AttributeType AttributeType { get; }
-            = AttributeType.Data;
-
-        public Type IndexInto { get; }
-            = null;
-
-        public Vim.Math3d.Matrix4x4[] TypedData { get; set; }
-            = Array.Empty<Vim.Math3d.Matrix4x4>();
-
-        public Array Data
-            => TypedData;
-
-        public void Write(Stream stream)
-        {
-            if (TypedData == null || TypedData.Length == 0)
-                return;
-            stream.Write(TypedData);
-        }
-    }
-    
-    public partial class MeshOpaqueSubmeshCountsAttribute : IAttribute<System.Int32>
+    public partial class ChunkMeshOpaqueSubmeshCountsAttribute : IAttribute<System.Int32>
     {
         public const string AttributeName = "g3d:mesh:opaquesubmeshcount:0:int32:1";
 
@@ -1629,7 +1584,7 @@ namespace Vim.G3dNext.Attributes
         }
     }
     
-    public partial class MeshSubmeshOffsetAttribute : IAttribute<System.Int32>
+    public partial class ChunkMeshSubmeshOffsetAttribute : IAttribute<System.Int32>
     {
         public const string AttributeName = "g3d:mesh:submeshOffset:0:int32:1";
 
@@ -1658,7 +1613,7 @@ namespace Vim.G3dNext.Attributes
             = AttributeType.Index;
 
         public Type IndexInto { get; }
-            = typeof(Vim.G3dNext.Attributes.MeshIndicesAttribute);
+            = typeof(Vim.G3dNext.Attributes.ChunkIndicesAttribute);
 
         public System.Int32[] TypedData { get; set; }
             = Array.Empty<System.Int32>();
@@ -1674,7 +1629,7 @@ namespace Vim.G3dNext.Attributes
         }
     }
     
-    public partial class MeshSubmeshIndexOffsetsAttribute : IAttribute<System.Int32>
+    public partial class ChunkSubmeshIndexOffsetsAttribute : IAttribute<System.Int32>
     {
         public const string AttributeName = "g3d:submesh:indexoffset:0:int32:1";
 
@@ -1703,7 +1658,7 @@ namespace Vim.G3dNext.Attributes
             = AttributeType.Index;
 
         public Type IndexInto { get; }
-            = typeof(Vim.G3dNext.Attributes.MeshIndicesAttribute);
+            = typeof(Vim.G3dNext.Attributes.ChunkIndicesAttribute);
 
         public System.Int32[] TypedData { get; set; }
             = Array.Empty<System.Int32>();
@@ -1719,7 +1674,7 @@ namespace Vim.G3dNext.Attributes
         }
     }
     
-    public partial class MeshSubmeshVertexOffsetsAttribute : IAttribute<System.Int32>
+    public partial class ChunkSubmeshVertexOffsetsAttribute : IAttribute<System.Int32>
     {
         public const string AttributeName = "g3d:submesh:vertexoffset:0:int32:1";
 
@@ -1748,7 +1703,7 @@ namespace Vim.G3dNext.Attributes
             = AttributeType.Index;
 
         public Type IndexInto { get; }
-            = typeof(Vim.G3dNext.Attributes.MeshIndicesAttribute);
+            = typeof(Vim.G3dNext.Attributes.ChunkIndicesAttribute);
 
         public System.Int32[] TypedData { get; set; }
             = Array.Empty<System.Int32>();
@@ -1764,7 +1719,7 @@ namespace Vim.G3dNext.Attributes
         }
     }
     
-    public partial class MeshSubmeshMaterialsAttribute : IAttribute<System.Int32>
+    public partial class ChunkSubmeshMaterialsAttribute : IAttribute<System.Int32>
     {
         public const string AttributeName = "g3d:submesh:material:0:int32:1";
 
@@ -1809,7 +1764,7 @@ namespace Vim.G3dNext.Attributes
         }
     }
     
-    public partial class MeshPositionsAttribute : IAttribute<Vim.Math3d.Vector3>
+    public partial class ChunkPositionsAttribute : IAttribute<Vim.Math3d.Vector3>
     {
         public const string AttributeName = "g3d:vertex:position:0:float32:3";
 
@@ -1854,7 +1809,7 @@ namespace Vim.G3dNext.Attributes
         }
     }
     
-    public partial class MeshIndicesAttribute : IAttribute<System.Int32>
+    public partial class ChunkIndicesAttribute : IAttribute<System.Int32>
     {
         public const string AttributeName = "g3d:corner:index:0:int32:1";
 
@@ -1883,7 +1838,7 @@ namespace Vim.G3dNext.Attributes
             = AttributeType.Index;
 
         public Type IndexInto { get; }
-            = typeof(Vim.G3dNext.Attributes.MeshPositionsAttribute);
+            = typeof(Vim.G3dNext.Attributes.ChunkPositionsAttribute);
 
         public System.Int32[] TypedData { get; set; }
             = Array.Empty<System.Int32>();
@@ -3022,21 +2977,21 @@ namespace Vim.G3dNext.Attributes
     }
     
     // Please provide an explicit implementation in another partial class file.
-    public partial class G3dMesh : ISetup
+    public partial class G3dChunk : ISetup
     {
-        public MeshAttributeCollection Attributes;
+        public ChunkAttributeCollection Attributes;
 
-        public G3dMesh() : this(new MeshAttributeCollection())
+        public G3dChunk() : this(new ChunkAttributeCollection())
         {
             // empty
         }
 
-        public G3dMesh(BFast bfast) : this(new MeshAttributeCollection(bfast))
+        public G3dChunk(BFast bfast) : this(new ChunkAttributeCollection(bfast))
         {
             // empty
         }
 
-        public G3dMesh(MeshAttributeCollection attributes)
+        public G3dChunk(ChunkAttributeCollection attributes)
         {
             Attributes = attributes;
 
@@ -3048,12 +3003,6 @@ namespace Vim.G3dNext.Attributes
             => Attributes.ToBFast();
 
         
-        public Vim.Math3d.Matrix4x4[] InstanceTransforms
-        {
-            get => Attributes.InstanceTransforms.TypedData;
-            set => Attributes.InstanceTransforms.TypedData = value;
-        }
-
         public System.Int32[] MeshSubmeshOffset
         {
             get => Attributes.MeshSubmeshOffset.TypedData;
@@ -3098,14 +3047,14 @@ namespace Vim.G3dNext.Attributes
     }
 
     
-    public partial class MeshAttributeCollection : IAttributeCollection
+    public partial class ChunkAttributeCollection : IAttributeCollection
     {
-        public MeshAttributeCollection()
+        public ChunkAttributeCollection()
         {
             // empty
         }
 
-        public MeshAttributeCollection(BFast bfast)
+        public ChunkAttributeCollection(BFast bfast)
         {
             this.ReadAttributes(bfast);
         }
@@ -3121,64 +3070,57 @@ namespace Vim.G3dNext.Attributes
         public IDictionary<string, IAttribute> Map { get; }
             = new Dictionary<string, IAttribute>
             {
-                [Vim.G3dNext.Attributes.MeshInstanceTransformsAttribute.AttributeName] = new Vim.G3dNext.Attributes.MeshInstanceTransformsAttribute(),
-                [Vim.G3dNext.Attributes.MeshSubmeshOffsetAttribute.AttributeName] = new Vim.G3dNext.Attributes.MeshSubmeshOffsetAttribute(),
-                [Vim.G3dNext.Attributes.MeshOpaqueSubmeshCountsAttribute.AttributeName] = new Vim.G3dNext.Attributes.MeshOpaqueSubmeshCountsAttribute(),
-                [Vim.G3dNext.Attributes.MeshSubmeshIndexOffsetsAttribute.AttributeName] = new Vim.G3dNext.Attributes.MeshSubmeshIndexOffsetsAttribute(),
-                [Vim.G3dNext.Attributes.MeshSubmeshVertexOffsetsAttribute.AttributeName] = new Vim.G3dNext.Attributes.MeshSubmeshVertexOffsetsAttribute(),
-                [Vim.G3dNext.Attributes.MeshSubmeshMaterialsAttribute.AttributeName] = new Vim.G3dNext.Attributes.MeshSubmeshMaterialsAttribute(),
-                [Vim.G3dNext.Attributes.MeshPositionsAttribute.AttributeName] = new Vim.G3dNext.Attributes.MeshPositionsAttribute(),
-                [Vim.G3dNext.Attributes.MeshIndicesAttribute.AttributeName] = new Vim.G3dNext.Attributes.MeshIndicesAttribute(),
+                [Vim.G3dNext.Attributes.ChunkMeshSubmeshOffsetAttribute.AttributeName] = new Vim.G3dNext.Attributes.ChunkMeshSubmeshOffsetAttribute(),
+                [Vim.G3dNext.Attributes.ChunkMeshOpaqueSubmeshCountsAttribute.AttributeName] = new Vim.G3dNext.Attributes.ChunkMeshOpaqueSubmeshCountsAttribute(),
+                [Vim.G3dNext.Attributes.ChunkSubmeshIndexOffsetsAttribute.AttributeName] = new Vim.G3dNext.Attributes.ChunkSubmeshIndexOffsetsAttribute(),
+                [Vim.G3dNext.Attributes.ChunkSubmeshVertexOffsetsAttribute.AttributeName] = new Vim.G3dNext.Attributes.ChunkSubmeshVertexOffsetsAttribute(),
+                [Vim.G3dNext.Attributes.ChunkSubmeshMaterialsAttribute.AttributeName] = new Vim.G3dNext.Attributes.ChunkSubmeshMaterialsAttribute(),
+                [Vim.G3dNext.Attributes.ChunkPositionsAttribute.AttributeName] = new Vim.G3dNext.Attributes.ChunkPositionsAttribute(),
+                [Vim.G3dNext.Attributes.ChunkIndicesAttribute.AttributeName] = new Vim.G3dNext.Attributes.ChunkIndicesAttribute(),
             };
 
         // Named Attributes.
 
-        public Vim.G3dNext.Attributes.MeshInstanceTransformsAttribute InstanceTransforms
+        public Vim.G3dNext.Attributes.ChunkMeshSubmeshOffsetAttribute MeshSubmeshOffset
         {
-            get => Map.TryGetValue(Vim.G3dNext.Attributes.MeshInstanceTransformsAttribute.AttributeName, out var attr) ? attr as Vim.G3dNext.Attributes.MeshInstanceTransformsAttribute : default;
-            set => Map[Vim.G3dNext.Attributes.MeshInstanceTransformsAttribute.AttributeName] = value as IAttribute;
+            get => Map.TryGetValue(Vim.G3dNext.Attributes.ChunkMeshSubmeshOffsetAttribute.AttributeName, out var attr) ? attr as Vim.G3dNext.Attributes.ChunkMeshSubmeshOffsetAttribute : default;
+            set => Map[Vim.G3dNext.Attributes.ChunkMeshSubmeshOffsetAttribute.AttributeName] = value as IAttribute;
         }
 
-        public Vim.G3dNext.Attributes.MeshSubmeshOffsetAttribute MeshSubmeshOffset
+        public Vim.G3dNext.Attributes.ChunkMeshOpaqueSubmeshCountsAttribute MeshOpaqueSubmeshCounts
         {
-            get => Map.TryGetValue(Vim.G3dNext.Attributes.MeshSubmeshOffsetAttribute.AttributeName, out var attr) ? attr as Vim.G3dNext.Attributes.MeshSubmeshOffsetAttribute : default;
-            set => Map[Vim.G3dNext.Attributes.MeshSubmeshOffsetAttribute.AttributeName] = value as IAttribute;
+            get => Map.TryGetValue(Vim.G3dNext.Attributes.ChunkMeshOpaqueSubmeshCountsAttribute.AttributeName, out var attr) ? attr as Vim.G3dNext.Attributes.ChunkMeshOpaqueSubmeshCountsAttribute : default;
+            set => Map[Vim.G3dNext.Attributes.ChunkMeshOpaqueSubmeshCountsAttribute.AttributeName] = value as IAttribute;
         }
 
-        public Vim.G3dNext.Attributes.MeshOpaqueSubmeshCountsAttribute MeshOpaqueSubmeshCounts
+        public Vim.G3dNext.Attributes.ChunkSubmeshIndexOffsetsAttribute SubmeshIndexOffsets
         {
-            get => Map.TryGetValue(Vim.G3dNext.Attributes.MeshOpaqueSubmeshCountsAttribute.AttributeName, out var attr) ? attr as Vim.G3dNext.Attributes.MeshOpaqueSubmeshCountsAttribute : default;
-            set => Map[Vim.G3dNext.Attributes.MeshOpaqueSubmeshCountsAttribute.AttributeName] = value as IAttribute;
+            get => Map.TryGetValue(Vim.G3dNext.Attributes.ChunkSubmeshIndexOffsetsAttribute.AttributeName, out var attr) ? attr as Vim.G3dNext.Attributes.ChunkSubmeshIndexOffsetsAttribute : default;
+            set => Map[Vim.G3dNext.Attributes.ChunkSubmeshIndexOffsetsAttribute.AttributeName] = value as IAttribute;
         }
 
-        public Vim.G3dNext.Attributes.MeshSubmeshIndexOffsetsAttribute SubmeshIndexOffsets
+        public Vim.G3dNext.Attributes.ChunkSubmeshVertexOffsetsAttribute SubmeshVertexOffsets
         {
-            get => Map.TryGetValue(Vim.G3dNext.Attributes.MeshSubmeshIndexOffsetsAttribute.AttributeName, out var attr) ? attr as Vim.G3dNext.Attributes.MeshSubmeshIndexOffsetsAttribute : default;
-            set => Map[Vim.G3dNext.Attributes.MeshSubmeshIndexOffsetsAttribute.AttributeName] = value as IAttribute;
+            get => Map.TryGetValue(Vim.G3dNext.Attributes.ChunkSubmeshVertexOffsetsAttribute.AttributeName, out var attr) ? attr as Vim.G3dNext.Attributes.ChunkSubmeshVertexOffsetsAttribute : default;
+            set => Map[Vim.G3dNext.Attributes.ChunkSubmeshVertexOffsetsAttribute.AttributeName] = value as IAttribute;
         }
 
-        public Vim.G3dNext.Attributes.MeshSubmeshVertexOffsetsAttribute SubmeshVertexOffsets
+        public Vim.G3dNext.Attributes.ChunkSubmeshMaterialsAttribute SubmeshMaterials
         {
-            get => Map.TryGetValue(Vim.G3dNext.Attributes.MeshSubmeshVertexOffsetsAttribute.AttributeName, out var attr) ? attr as Vim.G3dNext.Attributes.MeshSubmeshVertexOffsetsAttribute : default;
-            set => Map[Vim.G3dNext.Attributes.MeshSubmeshVertexOffsetsAttribute.AttributeName] = value as IAttribute;
+            get => Map.TryGetValue(Vim.G3dNext.Attributes.ChunkSubmeshMaterialsAttribute.AttributeName, out var attr) ? attr as Vim.G3dNext.Attributes.ChunkSubmeshMaterialsAttribute : default;
+            set => Map[Vim.G3dNext.Attributes.ChunkSubmeshMaterialsAttribute.AttributeName] = value as IAttribute;
         }
 
-        public Vim.G3dNext.Attributes.MeshSubmeshMaterialsAttribute SubmeshMaterials
+        public Vim.G3dNext.Attributes.ChunkPositionsAttribute Positions
         {
-            get => Map.TryGetValue(Vim.G3dNext.Attributes.MeshSubmeshMaterialsAttribute.AttributeName, out var attr) ? attr as Vim.G3dNext.Attributes.MeshSubmeshMaterialsAttribute : default;
-            set => Map[Vim.G3dNext.Attributes.MeshSubmeshMaterialsAttribute.AttributeName] = value as IAttribute;
+            get => Map.TryGetValue(Vim.G3dNext.Attributes.ChunkPositionsAttribute.AttributeName, out var attr) ? attr as Vim.G3dNext.Attributes.ChunkPositionsAttribute : default;
+            set => Map[Vim.G3dNext.Attributes.ChunkPositionsAttribute.AttributeName] = value as IAttribute;
         }
 
-        public Vim.G3dNext.Attributes.MeshPositionsAttribute Positions
+        public Vim.G3dNext.Attributes.ChunkIndicesAttribute Indices
         {
-            get => Map.TryGetValue(Vim.G3dNext.Attributes.MeshPositionsAttribute.AttributeName, out var attr) ? attr as Vim.G3dNext.Attributes.MeshPositionsAttribute : default;
-            set => Map[Vim.G3dNext.Attributes.MeshPositionsAttribute.AttributeName] = value as IAttribute;
-        }
-
-        public Vim.G3dNext.Attributes.MeshIndicesAttribute Indices
-        {
-            get => Map.TryGetValue(Vim.G3dNext.Attributes.MeshIndicesAttribute.AttributeName, out var attr) ? attr as Vim.G3dNext.Attributes.MeshIndicesAttribute : default;
-            set => Map[Vim.G3dNext.Attributes.MeshIndicesAttribute.AttributeName] = value as IAttribute;
+            get => Map.TryGetValue(Vim.G3dNext.Attributes.ChunkIndicesAttribute.AttributeName, out var attr) ? attr as Vim.G3dNext.Attributes.ChunkIndicesAttribute : default;
+            set => Map[Vim.G3dNext.Attributes.ChunkIndicesAttribute.AttributeName] = value as IAttribute;
         }
 
         /// <inheritdoc/>
@@ -3186,35 +3128,31 @@ namespace Vim.G3dNext.Attributes
         {
 
 
-                if (attributeType == typeof(Vim.G3dNext.Attributes.MeshInstanceTransformsAttribute))
-                    return InstanceTransforms;
-
-
-                if (attributeType == typeof(Vim.G3dNext.Attributes.MeshSubmeshOffsetAttribute))
+                if (attributeType == typeof(Vim.G3dNext.Attributes.ChunkMeshSubmeshOffsetAttribute))
                     return MeshSubmeshOffset;
 
 
-                if (attributeType == typeof(Vim.G3dNext.Attributes.MeshOpaqueSubmeshCountsAttribute))
+                if (attributeType == typeof(Vim.G3dNext.Attributes.ChunkMeshOpaqueSubmeshCountsAttribute))
                     return MeshOpaqueSubmeshCounts;
 
 
-                if (attributeType == typeof(Vim.G3dNext.Attributes.MeshSubmeshIndexOffsetsAttribute))
+                if (attributeType == typeof(Vim.G3dNext.Attributes.ChunkSubmeshIndexOffsetsAttribute))
                     return SubmeshIndexOffsets;
 
 
-                if (attributeType == typeof(Vim.G3dNext.Attributes.MeshSubmeshVertexOffsetsAttribute))
+                if (attributeType == typeof(Vim.G3dNext.Attributes.ChunkSubmeshVertexOffsetsAttribute))
                     return SubmeshVertexOffsets;
 
 
-                if (attributeType == typeof(Vim.G3dNext.Attributes.MeshSubmeshMaterialsAttribute))
+                if (attributeType == typeof(Vim.G3dNext.Attributes.ChunkSubmeshMaterialsAttribute))
                     return SubmeshMaterials;
 
 
-                if (attributeType == typeof(Vim.G3dNext.Attributes.MeshPositionsAttribute))
+                if (attributeType == typeof(Vim.G3dNext.Attributes.ChunkPositionsAttribute))
                     return Positions;
 
 
-                if (attributeType == typeof(Vim.G3dNext.Attributes.MeshIndicesAttribute))
+                if (attributeType == typeof(Vim.G3dNext.Attributes.ChunkIndicesAttribute))
                     return Indices;
 
             throw new ArgumentException("Type {attributeType.ToString()} is not supported.");
@@ -3226,52 +3164,46 @@ namespace Vim.G3dNext.Attributes
             switch (attributeName)
             {
 
-                case Vim.G3dNext.Attributes.MeshInstanceTransformsAttribute.AttributeName:
+                case Vim.G3dNext.Attributes.ChunkMeshSubmeshOffsetAttribute.AttributeName:
+                {
+                    // Index Attribute
+                    return collections.GetIndexedAttributesOfType<Vim.G3dNext.Attributes.ChunkMeshSubmeshOffsetAttribute>().MergeIndexAttributes();
+                }
+
+                case Vim.G3dNext.Attributes.ChunkMeshOpaqueSubmeshCountsAttribute.AttributeName:
                 {
                     // Data Attribute
-                    return collections.GetAttributesOfType<Vim.G3dNext.Attributes.MeshInstanceTransformsAttribute>().ToArray().MergeDataAttributes<Vim.G3dNext.Attributes.MeshInstanceTransformsAttribute, Vim.Math3d.Matrix4x4>();
+                    return collections.GetAttributesOfType<Vim.G3dNext.Attributes.ChunkMeshOpaqueSubmeshCountsAttribute>().ToArray().MergeDataAttributes<Vim.G3dNext.Attributes.ChunkMeshOpaqueSubmeshCountsAttribute, System.Int32>();
                 }
 
-                case Vim.G3dNext.Attributes.MeshSubmeshOffsetAttribute.AttributeName:
+                case Vim.G3dNext.Attributes.ChunkSubmeshIndexOffsetsAttribute.AttributeName:
                 {
                     // Index Attribute
-                    return collections.GetIndexedAttributesOfType<Vim.G3dNext.Attributes.MeshSubmeshOffsetAttribute>().MergeIndexAttributes();
+                    return collections.GetIndexedAttributesOfType<Vim.G3dNext.Attributes.ChunkSubmeshIndexOffsetsAttribute>().MergeIndexAttributes();
                 }
 
-                case Vim.G3dNext.Attributes.MeshOpaqueSubmeshCountsAttribute.AttributeName:
+                case Vim.G3dNext.Attributes.ChunkSubmeshVertexOffsetsAttribute.AttributeName:
+                {
+                    // Index Attribute
+                    return collections.GetIndexedAttributesOfType<Vim.G3dNext.Attributes.ChunkSubmeshVertexOffsetsAttribute>().MergeIndexAttributes();
+                }
+
+                case Vim.G3dNext.Attributes.ChunkSubmeshMaterialsAttribute.AttributeName:
+                {
+                    // Index Attribute
+                    return collections.GetIndexedAttributesOfType<Vim.G3dNext.Attributes.ChunkSubmeshMaterialsAttribute>().MergeIndexAttributes();
+                }
+
+                case Vim.G3dNext.Attributes.ChunkPositionsAttribute.AttributeName:
                 {
                     // Data Attribute
-                    return collections.GetAttributesOfType<Vim.G3dNext.Attributes.MeshOpaqueSubmeshCountsAttribute>().ToArray().MergeDataAttributes<Vim.G3dNext.Attributes.MeshOpaqueSubmeshCountsAttribute, System.Int32>();
+                    return collections.GetAttributesOfType<Vim.G3dNext.Attributes.ChunkPositionsAttribute>().ToArray().MergeDataAttributes<Vim.G3dNext.Attributes.ChunkPositionsAttribute, Vim.Math3d.Vector3>();
                 }
 
-                case Vim.G3dNext.Attributes.MeshSubmeshIndexOffsetsAttribute.AttributeName:
+                case Vim.G3dNext.Attributes.ChunkIndicesAttribute.AttributeName:
                 {
                     // Index Attribute
-                    return collections.GetIndexedAttributesOfType<Vim.G3dNext.Attributes.MeshSubmeshIndexOffsetsAttribute>().MergeIndexAttributes();
-                }
-
-                case Vim.G3dNext.Attributes.MeshSubmeshVertexOffsetsAttribute.AttributeName:
-                {
-                    // Index Attribute
-                    return collections.GetIndexedAttributesOfType<Vim.G3dNext.Attributes.MeshSubmeshVertexOffsetsAttribute>().MergeIndexAttributes();
-                }
-
-                case Vim.G3dNext.Attributes.MeshSubmeshMaterialsAttribute.AttributeName:
-                {
-                    // Index Attribute
-                    return collections.GetIndexedAttributesOfType<Vim.G3dNext.Attributes.MeshSubmeshMaterialsAttribute>().MergeIndexAttributes();
-                }
-
-                case Vim.G3dNext.Attributes.MeshPositionsAttribute.AttributeName:
-                {
-                    // Data Attribute
-                    return collections.GetAttributesOfType<Vim.G3dNext.Attributes.MeshPositionsAttribute>().ToArray().MergeDataAttributes<Vim.G3dNext.Attributes.MeshPositionsAttribute, Vim.Math3d.Vector3>();
-                }
-
-                case Vim.G3dNext.Attributes.MeshIndicesAttribute.AttributeName:
-                {
-                    // Index Attribute
-                    return collections.GetIndexedAttributesOfType<Vim.G3dNext.Attributes.MeshIndicesAttribute>().MergeIndexAttributes();
+                    return collections.GetIndexedAttributesOfType<Vim.G3dNext.Attributes.ChunkIndicesAttribute>().MergeIndexAttributes();
                 }
 
                 default:
@@ -3293,7 +3225,7 @@ namespace Vim.G3dNext.Attributes
                         continue; // no relation.
 
                     if (index < -1 || index > maxIndex)
-                        throw new Exception($"Index out of range in Vim.G3dNext.Attributes.MeshSubmeshOffsetAttribute at position {i}. Expected either -1 for no relation, or a maximum of {maxIndex} but got {index}");
+                        throw new Exception($"Index out of range in Vim.G3dNext.Attributes.ChunkMeshSubmeshOffsetAttribute at position {i}. Expected either -1 for no relation, or a maximum of {maxIndex} but got {index}");
                 }
             }
 
@@ -3307,7 +3239,7 @@ namespace Vim.G3dNext.Attributes
                         continue; // no relation.
 
                     if (index < -1 || index > maxIndex)
-                        throw new Exception($"Index out of range in Vim.G3dNext.Attributes.MeshSubmeshIndexOffsetsAttribute at position {i}. Expected either -1 for no relation, or a maximum of {maxIndex} but got {index}");
+                        throw new Exception($"Index out of range in Vim.G3dNext.Attributes.ChunkSubmeshIndexOffsetsAttribute at position {i}. Expected either -1 for no relation, or a maximum of {maxIndex} but got {index}");
                 }
             }
 
@@ -3321,7 +3253,7 @@ namespace Vim.G3dNext.Attributes
                         continue; // no relation.
 
                     if (index < -1 || index > maxIndex)
-                        throw new Exception($"Index out of range in Vim.G3dNext.Attributes.MeshSubmeshVertexOffsetsAttribute at position {i}. Expected either -1 for no relation, or a maximum of {maxIndex} but got {index}");
+                        throw new Exception($"Index out of range in Vim.G3dNext.Attributes.ChunkSubmeshVertexOffsetsAttribute at position {i}. Expected either -1 for no relation, or a maximum of {maxIndex} but got {index}");
                 }
             }
 
@@ -3335,7 +3267,7 @@ namespace Vim.G3dNext.Attributes
                         continue; // no relation.
 
                     if (index < -1 || index > maxIndex)
-                        throw new Exception($"Index out of range in Vim.G3dNext.Attributes.MeshSubmeshMaterialsAttribute at position {i}. Expected either -1 for no relation, or a maximum of {maxIndex} but got {index}");
+                        throw new Exception($"Index out of range in Vim.G3dNext.Attributes.ChunkSubmeshMaterialsAttribute at position {i}. Expected either -1 for no relation, or a maximum of {maxIndex} but got {index}");
                 }
             }
 
@@ -3349,7 +3281,7 @@ namespace Vim.G3dNext.Attributes
                         continue; // no relation.
 
                     if (index < -1 || index > maxIndex)
-                        throw new Exception($"Index out of range in Vim.G3dNext.Attributes.MeshIndicesAttribute at position {i}. Expected either -1 for no relation, or a maximum of {maxIndex} but got {index}");
+                        throw new Exception($"Index out of range in Vim.G3dNext.Attributes.ChunkIndicesAttribute at position {i}. Expected either -1 for no relation, or a maximum of {maxIndex} but got {index}");
                 }
             }
         }

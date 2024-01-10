@@ -31,10 +31,9 @@ namespace Vim.Format.VimxNS
         public readonly MetaHeader Meta;
         public readonly G3dScene Scene;
         public readonly G3dMaterials Materials;
-        //public readonly VimxChunk[] Chunks;
-        public readonly G3dMesh[] Chunks;
+        public readonly G3dChunk[] Chunks;
 
-        public Vimx(SerializableHeader header, MetaHeader meta, G3dScene scene, G3dMaterials materials, G3dMesh[] chunks)
+        public Vimx(SerializableHeader header, MetaHeader meta, G3dScene scene, G3dMaterials materials, G3dChunk[] chunks)
         {
             Meta = meta;
             Header = header;
@@ -57,7 +56,7 @@ namespace Vim.Format.VimxNS
 
             Chunks = Enumerable.Range(0, Scene.GetChunksCount())
                 .Select(c => bfast.GetBFast(BufferNames.Chunk(c), BufferCompression.Chunks))
-                .Select(b => new G3dMesh(b))
+                .Select(b => new G3dChunk(b))
                 .ToArray();
         }
 
