@@ -66,6 +66,8 @@ namespace Vim.Format
         public const string ViewSheetInViewSheetSet = "Vim.ViewSheetInViewSheetSet";
         public const string ViewInViewSheetSet = "Vim.ViewInViewSheetSet";
         public const string ViewInViewSheet = "Vim.ViewInViewSheet";
+        public const string Site = "Vim.Site";
+        public const string Building = "Vim.Building";
     }
 
     public static class VimConstants
@@ -90,6 +92,8 @@ namespace Vim.Format
         public const string SystemFamilyElementType = "System Family";
         public const string UnassignedSystem = "Unassigned System";
         public const string BimDocumentParameterHolderElementType = "BimDocument Parameter Holder";
+        public const string BuildingParameterHolderElementType = "Building Parameter Holder";
+        public const string SiteParameterHolderElementType = "Site Parameter Holder";
 
         public static HashSet<string> ComputedTableNames = new HashSet<string>
         {

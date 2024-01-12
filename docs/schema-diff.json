@@ -129,5 +129,21 @@
       "Vim.ViewSheetInViewSheetSet__index:Vim.ViewSheetSet:ViewSheetSet",
       "Vim.ViewSheetSet__index:Vim.Element:Element"
     ]
+  },
+  "5.1.0 to 5.2.0": {
+    "Added": [
+      "Vim.Building__double:Elevation",
+      "Vim.Building__double:TerrainElevation",
+      "Vim.Building__index:Vim.Element:Element",
+      "Vim.Building__index:Vim.Site:Site",
+      "Vim.Building__string:Address",
+      "Vim.Level__index:Vim.Building:Building",
+      "Vim.Site__double:Elevation",
+      "Vim.Site__double:Latitude",
+      "Vim.Site__double:Longitude",
+      "Vim.Site__index:Vim.Element:Element",
+      "Vim.Site__string:Address",
+      "Vim.Site__string:Number"
+    ]
   }
 }

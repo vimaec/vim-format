@@ -329,10 +329,12 @@ namespace Vim.Format.ObjectModel {
     public partial class Level
     {
         public Vim.Format.ObjectModel.FamilyType FamilyType => _FamilyType.Value;
+        public Vim.Format.ObjectModel.Building Building => _Building.Value;
         public Vim.Format.ObjectModel.Element Element => _Element.Value;
         public Level()
         {
             _FamilyType = new Relation<Vim.Format.ObjectModel.FamilyType>();
+            _Building = new Relation<Vim.Format.ObjectModel.Building>();
             _Element = new Relation<Vim.Format.ObjectModel.Element>();
         }
         
@@ -344,6 +346,7 @@ namespace Vim.Format.ObjectModel {
                     (Index == other.Index) &&
                     (Elevation == other.Elevation) &&
                     (_FamilyType?.Index == other._FamilyType?.Index) &&
+                    (_Building?.Index == other._Building?.Index) &&
                     (_Element?.Index == other._Element?.Index);
                 if (!fieldsAreEqual)
                 {
@@ -1810,6 +1813,73 @@ namespace Vim.Format.ObjectModel {
         
     } // end of class
     
+    // AUTO-GENERATED
+    public partial class Site
+    {
+        public Vim.Format.ObjectModel.Element Element => _Element.Value;
+        public Site()
+        {
+            _Element = new Relation<Vim.Format.ObjectModel.Element>();
+        }
+        
+        public override bool FieldsAreEqual(object obj)
+        {
+            if ((obj is Site other))
+            {
+                var fieldsAreEqual =
+                    (Index == other.Index) &&
+                    (Latitude == other.Latitude) &&
+                    (Longitude == other.Longitude) &&
+                    (Address == other.Address) &&
+                    (Elevation == other.Elevation) &&
+                    (Number == other.Number) &&
+                    (_Element?.Index == other._Element?.Index);
+                if (!fieldsAreEqual)
+                {
+                    return false;
+                }
+                
+                return true;
+            }
+            return false;
+        }
+        
+    } // end of class
+    
+    // AUTO-GENERATED
+    public partial class Building
+    {
+        public Vim.Format.ObjectModel.Site Site => _Site.Value;
+        public Vim.Format.ObjectModel.Element Element => _Element.Value;
+        public Building()
+        {
+            _Site = new Relation<Vim.Format.ObjectModel.Site>();
+            _Element = new Relation<Vim.Format.ObjectModel.Element>();
+        }
+        
+        public override bool FieldsAreEqual(object obj)
+        {
+            if ((obj is Building other))
+            {
+                var fieldsAreEqual =
+                    (Index == other.Index) &&
+                    (Elevation == other.Elevation) &&
+                    (TerrainElevation == other.TerrainElevation) &&
+                    (Address == other.Address) &&
+                    (_Site?.Index == other._Site?.Index) &&
+                    (_Element?.Index == other._Element?.Index);
+                if (!fieldsAreEqual)
+                {
+                    return false;
+                }
+                
+                return true;
+            }
+            return false;
+        }
+        
+    } // end of class
+    
     public partial class DocumentModel
     {
         public ElementIndexMaps ElementIndexMaps { get; }
@@ -2134,6 +2204,8 @@ namespace Vim.Format.ObjectModel {
         public Double GetLevelElevation(int index, Double defaultValue = default) => LevelElevation?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
         public IArray<int> LevelFamilyTypeIndex { get; }
         public int GetLevelFamilyTypeIndex(int index) => LevelFamilyTypeIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
+        public IArray<int> LevelBuildingIndex { get; }
+        public int GetLevelBuildingIndex(int index) => LevelBuildingIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
         public IArray<int> LevelElementIndex { get; }
         public int GetLevelElementIndex(int index) => LevelElementIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
         public int NumLevel => LevelEntityTable?.NumRows ?? 0;
@@ -2146,6 +2218,7 @@ namespace Vim.Format.ObjectModel {
             r.Index = n;
             r.Elevation = LevelElevation.ElementAtOrDefault(n);
             r._FamilyType = new Relation<Vim.Format.ObjectModel.FamilyType>(GetLevelFamilyTypeIndex(n), GetFamilyType);
+            r._Building = new Relation<Vim.Format.ObjectModel.Building>(GetLevelBuildingIndex(n), GetBuilding);
             r._Element = new Relation<Vim.Format.ObjectModel.Element>(GetLevelElementIndex(n), GetElement);
             return r;
         }
@@ -3584,6 +3657,71 @@ namespace Vim.Format.ObjectModel {
             return r;
         }
         
+        
+        // Site
+        
+        public EntityTable SiteEntityTable { get; }
+        
+        public IArray<Double> SiteLatitude { get; }
+        public Double GetSiteLatitude(int index, Double defaultValue = default) => SiteLatitude?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> SiteLongitude { get; }
+        public Double GetSiteLongitude(int index, Double defaultValue = default) => SiteLongitude?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<String> SiteAddress { get; }
+        public String GetSiteAddress(int index, String defaultValue = "") => SiteAddress?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> SiteElevation { get; }
+        public Double GetSiteElevation(int index, Double defaultValue = default) => SiteElevation?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<String> SiteNumber { get; }
+        public String GetSiteNumber(int index, String defaultValue = "") => SiteNumber?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<int> SiteElementIndex { get; }
+        public int GetSiteElementIndex(int index) => SiteElementIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
+        public int NumSite => SiteEntityTable?.NumRows ?? 0;
+        public IArray<Site> SiteList { get; }
+        public Site GetSite(int n)
+        {
+            if (n < 0) return null;
+            var r = new Site();
+            r.Document = Document;
+            r.Index = n;
+            r.Latitude = SiteLatitude.ElementAtOrDefault(n);
+            r.Longitude = SiteLongitude.ElementAtOrDefault(n);
+            r.Address = SiteAddress.ElementAtOrDefault(n);
+            r.Elevation = SiteElevation.ElementAtOrDefault(n);
+            r.Number = SiteNumber.ElementAtOrDefault(n);
+            r._Element = new Relation<Vim.Format.ObjectModel.Element>(GetSiteElementIndex(n), GetElement);
+            return r;
+        }
+        
+        
+        // Building
+        
+        public EntityTable BuildingEntityTable { get; }
+        
+        public IArray<Double> BuildingElevation { get; }
+        public Double GetBuildingElevation(int index, Double defaultValue = default) => BuildingElevation?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> BuildingTerrainElevation { get; }
+        public Double GetBuildingTerrainElevation(int index, Double defaultValue = default) => BuildingTerrainElevation?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<String> BuildingAddress { get; }
+        public String GetBuildingAddress(int index, String defaultValue = "") => BuildingAddress?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<int> BuildingSiteIndex { get; }
+        public int GetBuildingSiteIndex(int index) => BuildingSiteIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
+        public IArray<int> BuildingElementIndex { get; }
+        public int GetBuildingElementIndex(int index) => BuildingElementIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
+        public int NumBuilding => BuildingEntityTable?.NumRows ?? 0;
+        public IArray<Building> BuildingList { get; }
+        public Building GetBuilding(int n)
+        {
+            if (n < 0) return null;
+            var r = new Building();
+            r.Document = Document;
+            r.Index = n;
+            r.Elevation = BuildingElevation.ElementAtOrDefault(n);
+            r.TerrainElevation = BuildingTerrainElevation.ElementAtOrDefault(n);
+            r.Address = BuildingAddress.ElementAtOrDefault(n);
+            r._Site = new Relation<Vim.Format.ObjectModel.Site>(GetBuildingSiteIndex(n), GetSite);
+            r._Element = new Relation<Vim.Format.ObjectModel.Element>(GetBuildingElementIndex(n), GetElement);
+            return r;
+        }
+        
         // All entity collections
         public Dictionary<string, IEnumerable<Entity>> AllEntities => new Dictionary<string, IEnumerable<Entity>>() {
             {"Vim.Asset", AssetList.ToEnumerable()},
@@ -3638,6 +3776,8 @@ namespace Vim.Format.ObjectModel {
             {"Vim.ViewSheetInViewSheetSet", ViewSheetInViewSheetSetList.ToEnumerable()},
             {"Vim.ViewInViewSheetSet", ViewInViewSheetSetList.ToEnumerable()},
             {"Vim.ViewInViewSheet", ViewInViewSheetList.ToEnumerable()},
+            {"Vim.Site", SiteList.ToEnumerable()},
+            {"Vim.Building", BuildingList.ToEnumerable()},
         };
         
         // Entity types from table names
@@ -3694,6 +3834,8 @@ namespace Vim.Format.ObjectModel {
             {"Vim.ViewSheetInViewSheetSet", typeof(ViewSheetInViewSheetSet)},
             {"Vim.ViewInViewSheetSet", typeof(ViewInViewSheetSet)},
             {"Vim.ViewInViewSheet", typeof(ViewInViewSheet)},
+            {"Vim.Site", typeof(Site)},
+            {"Vim.Building", typeof(Building)},
         };
         public DocumentModel(Document d, bool inParallel = true)
         {
@@ -3752,6 +3894,8 @@ namespace Vim.Format.ObjectModel {
             ViewSheetInViewSheetSetEntityTable = Document.GetTable("Vim.ViewSheetInViewSheetSet");
             ViewInViewSheetSetEntityTable = Document.GetTable("Vim.ViewInViewSheetSet");
             ViewInViewSheetEntityTable = Document.GetTable("Vim.ViewInViewSheet");
+            SiteEntityTable = Document.GetTable("Vim.Site");
+            BuildingEntityTable = Document.GetTable("Vim.Building");
             
             // Initialize entity arrays
             AssetBufferName = AssetEntityTable?.GetStringColumnValues("string:BufferName") ?? Array.Empty<String>().ToIArray();
@@ -3972,6 +4116,14 @@ namespace Vim.Format.ObjectModel {
             ScheduleColumnColumnIndex = ScheduleColumnEntityTable?.GetDataColumnValues<Int32>("int:ColumnIndex") ?? Array.Empty<Int32>().ToIArray();
             ScheduleCellValue = ScheduleCellEntityTable?.GetStringColumnValues("string:Value") ?? Array.Empty<String>().ToIArray();
             ScheduleCellRowIndex = ScheduleCellEntityTable?.GetDataColumnValues<Int32>("int:RowIndex") ?? Array.Empty<Int32>().ToIArray();
+            SiteLatitude = SiteEntityTable?.GetDataColumnValues<Double>("double:Latitude") ?? Array.Empty<Double>().ToIArray();
+            SiteLongitude = SiteEntityTable?.GetDataColumnValues<Double>("double:Longitude") ?? Array.Empty<Double>().ToIArray();
+            SiteAddress = SiteEntityTable?.GetStringColumnValues("string:Address") ?? Array.Empty<String>().ToIArray();
+            SiteElevation = SiteEntityTable?.GetDataColumnValues<Double>("double:Elevation") ?? Array.Empty<Double>().ToIArray();
+            SiteNumber = SiteEntityTable?.GetStringColumnValues("string:Number") ?? Array.Empty<String>().ToIArray();
+            BuildingElevation = BuildingEntityTable?.GetDataColumnValues<Double>("double:Elevation") ?? Array.Empty<Double>().ToIArray();
+            BuildingTerrainElevation = BuildingEntityTable?.GetDataColumnValues<Double>("double:TerrainElevation") ?? Array.Empty<Double>().ToIArray();
+            BuildingAddress = BuildingEntityTable?.GetStringColumnValues("string:Address") ?? Array.Empty<String>().ToIArray();
             
             // Initialize entity relational columns
             ParameterDescriptorDisplayUnitIndex = ParameterDescriptorEntityTable?.GetIndexColumnValues("index:Vim.DisplayUnit:DisplayUnit") ?? Array.Empty<int>().ToIArray();
@@ -3993,6 +4145,7 @@ namespace Vim.Format.ObjectModel {
             GroupElementIndex = GroupEntityTable?.GetIndexColumnValues("index:Vim.Element:Element") ?? Array.Empty<int>().ToIArray();
             DesignOptionElementIndex = DesignOptionEntityTable?.GetIndexColumnValues("index:Vim.Element:Element") ?? Array.Empty<int>().ToIArray();
             LevelFamilyTypeIndex = LevelEntityTable?.GetIndexColumnValues("index:Vim.FamilyType:FamilyType") ?? Array.Empty<int>().ToIArray();
+            LevelBuildingIndex = LevelEntityTable?.GetIndexColumnValues("index:Vim.Building:Building") ?? Array.Empty<int>().ToIArray();
             LevelElementIndex = LevelEntityTable?.GetIndexColumnValues("index:Vim.Element:Element") ?? Array.Empty<int>().ToIArray();
             PhaseElementIndex = PhaseEntityTable?.GetIndexColumnValues("index:Vim.Element:Element") ?? Array.Empty<int>().ToIArray();
             RoomUpperLimitIndex = RoomEntityTable?.GetIndexColumnValues("index:Vim.Level:UpperLimit") ?? Array.Empty<int>().ToIArray();
@@ -4069,6 +4222,9 @@ namespace Vim.Format.ObjectModel {
             ViewInViewSheetSetViewSheetSetIndex = ViewInViewSheetSetEntityTable?.GetIndexColumnValues("index:Vim.ViewSheetSet:ViewSheetSet") ?? Array.Empty<int>().ToIArray();
             ViewInViewSheetViewIndex = ViewInViewSheetEntityTable?.GetIndexColumnValues("index:Vim.View:View") ?? Array.Empty<int>().ToIArray();
             ViewInViewSheetViewSheetIndex = ViewInViewSheetEntityTable?.GetIndexColumnValues("index:Vim.ViewSheet:ViewSheet") ?? Array.Empty<int>().ToIArray();
+            SiteElementIndex = SiteEntityTable?.GetIndexColumnValues("index:Vim.Element:Element") ?? Array.Empty<int>().ToIArray();
+            BuildingSiteIndex = BuildingEntityTable?.GetIndexColumnValues("index:Vim.Site:Site") ?? Array.Empty<int>().ToIArray();
+            BuildingElementIndex = BuildingEntityTable?.GetIndexColumnValues("index:Vim.Element:Element") ?? Array.Empty<int>().ToIArray();
             
             // Initialize entity collections
             AssetList = NumAsset.Select(i => GetAsset(i));
@@ -4123,6 +4279,8 @@ namespace Vim.Format.ObjectModel {
             ViewSheetInViewSheetSetList = NumViewSheetInViewSheetSet.Select(i => GetViewSheetInViewSheetSet(i));
             ViewInViewSheetSetList = NumViewInViewSheetSet.Select(i => GetViewInViewSheetSet(i));
             ViewInViewSheetList = NumViewInViewSheet.Select(i => GetViewInViewSheet(i));
+            SiteList = NumSite.Select(i => GetSite(i));
+            BuildingList = NumBuilding.Select(i => GetBuilding(i));
             
             // Initialize element index maps
             ElementIndexMaps = new ElementIndexMaps(this, inParallel);
@@ -4184,6 +4342,8 @@ namespace Vim.Format.ObjectModel {
             if (type == typeof(ViewSheetInViewSheetSet)) return ToViewSheetInViewSheetSetTableBuilder;
             if (type == typeof(ViewInViewSheetSet)) return ToViewInViewSheetSetTableBuilder;
             if (type == typeof(ViewInViewSheet)) return ToViewInViewSheetTableBuilder;
+            if (type == typeof(Site)) return ToSiteTableBuilder;
+            if (type == typeof(Building)) return ToBuildingTableBuilder;
             throw new ArgumentException(nameof(type));
         }
         public static EntityTableBuilder ToAssetTableBuilder(this IEnumerable<Entity> entities)
@@ -4214,7 +4374,7 @@ namespace Vim.Format.ObjectModel {
             tb.AddDataColumn("byte:IsReadOnly", typedEntities.Select(x => x.IsReadOnly));
             tb.AddDataColumn("int:Flags", typedEntities.Select(x => x.Flags));
             tb.AddStringColumn("string:Guid", typedEntities.Select(x => x.Guid));
-            tb.AddIndexColumn("index:Vim.DisplayUnit:DisplayUnit", typedEntities.Select(x => x._DisplayUnit.Index));
+            tb.AddIndexColumn("index:Vim.DisplayUnit:DisplayUnit", typedEntities.Select(x => x._DisplayUnit?.Index ?? EntityRelation.None));
             return tb;
         }
         public static EntityTableBuilder ToParameterTableBuilder(this IEnumerable<Entity> entities)
@@ -4222,8 +4382,8 @@ namespace Vim.Format.ObjectModel {
             var typedEntities = entities?.Cast<Parameter>() ?? Enumerable.Empty<Parameter>();
             var tb = new EntityTableBuilder("Vim.Parameter");
             tb.AddStringColumn("string:Value", typedEntities.Select(x => x.Value));
-            tb.AddIndexColumn("index:Vim.ParameterDescriptor:ParameterDescriptor", typedEntities.Select(x => x._ParameterDescriptor.Index));
-            tb.AddIndexColumn("index:Vim.Element:Element", typedEntities.Select(x => x._Element.Index));
+            tb.AddIndexColumn("index:Vim.ParameterDescriptor:ParameterDescriptor", typedEntities.Select(x => x._ParameterDescriptor?.Index ?? EntityRelation.None));
+            tb.AddIndexColumn("index:Vim.Element:Element", typedEntities.Select(x => x._Element?.Index ?? EntityRelation.None));
             return tb;
         }
         public static EntityTableBuilder ToElementTableBuilder(this IEnumerable<Entity> entities)
@@ -4239,17 +4399,17 @@ namespace Vim.Format.ObjectModel {
             tb.AddDataColumn("float:Location.Z", typedEntities.Select(x => x.Location_Z));
             tb.AddStringColumn("string:FamilyName", typedEntities.Select(x => x.FamilyName));
             tb.AddDataColumn("byte:IsPinned", typedEntities.Select(x => x.IsPinned));
-            tb.AddIndexColumn("index:Vim.Level:Level", typedEntities.Select(x => x._Level.Index));
-            tb.AddIndexColumn("index:Vim.Phase:PhaseCreated", typedEntities.Select(x => x._PhaseCreated.Index));
-            tb.AddIndexColumn("index:Vim.Phase:PhaseDemolished", typedEntities.Select(x => x._PhaseDemolished.Index));
-            tb.AddIndexColumn("index:Vim.Category:Category", typedEntities.Select(x => x._Category.Index));
-            tb.AddIndexColumn("index:Vim.Workset:Workset", typedEntities.Select(x => x._Workset.Index));
-            tb.AddIndexColumn("index:Vim.DesignOption:DesignOption", typedEntities.Select(x => x._DesignOption.Index));
-            tb.AddIndexColumn("index:Vim.View:OwnerView", typedEntities.Select(x => x._OwnerView.Index));
-            tb.AddIndexColumn("index:Vim.Group:Group", typedEntities.Select(x => x._Group.Index));
-            tb.AddIndexColumn("index:Vim.AssemblyInstance:AssemblyInstance", typedEntities.Select(x => x._AssemblyInstance.Index));
-            tb.AddIndexColumn("index:Vim.BimDocument:BimDocument", typedEntities.Select(x => x._BimDocument.Index));
-            tb.AddIndexColumn("index:Vim.Room:Room", typedEntities.Select(x => x._Room.Index));
+            tb.AddIndexColumn("index:Vim.Level:Level", typedEntities.Select(x => x._Level?.Index ?? EntityRelation.None));
+            tb.AddIndexColumn("index:Vim.Phase:PhaseCreated", typedEntities.Select(x => x._PhaseCreated?.Index ?? EntityRelation.None));
+            tb.AddIndexColumn("index:Vim.Phase:PhaseDemolished", typedEntities.Select(x => x._PhaseDemolished?.Index ?? EntityRelation.None));
+            tb.AddIndexColumn("index:Vim.Category:Category", typedEntities.Select(x => x._Category?.Index ?? EntityRelation.None));
+            tb.AddIndexColumn("index:Vim.Workset:Workset", typedEntities.Select(x => x._Workset?.Index ?? EntityRelation.None));
+            tb.AddIndexColumn("index:Vim.DesignOption:DesignOption", typedEntities.Select(x => x._DesignOption?.Index ?? EntityRelation.None));
+            tb.AddIndexColumn("index:Vim.View:OwnerView", typedEntities.Select(x => x._OwnerView?.Index ?? EntityRelation.None));
+            tb.AddIndexColumn("index:Vim.Group:Group", typedEntities.Select(x => x._Group?.Index ?? EntityRelation.None));
+            tb.AddIndexColumn("index:Vim.AssemblyInstance:AssemblyInstance", typedEntities.Select(x => x._AssemblyInstance?.Index ?? EntityRelation.None));
+            tb.AddIndexColumn("index:Vim.BimDocument:BimDocument", typedEntities.Select(x => x._BimDocument?.Index ?? EntityRelation.None));
+            tb.AddIndexColumn("index:Vim.Room:Room", typedEntities.Select(x => x._Room?.Index ?? EntityRelation.None));
             return tb;
         }
         public static EntityTableBuilder ToWorksetTableBuilder(this IEnumerable<Entity> entities)
@@ -4263,7 +4423,7 @@ namespace Vim.Format.ObjectModel {
             tb.AddDataColumn("byte:IsEditable", typedEntities.Select(x => x.IsEditable));
             tb.AddStringColumn("string:Owner", typedEntities.Select(x => x.Owner));
             tb.AddStringColumn("string:UniqueId", typedEntities.Select(x => x.UniqueId));
-            tb.AddIndexColumn("index:Vim.BimDocument:BimDocument", typedEntities.Select(x => x._BimDocument.Index));
+            tb.AddIndexColumn("index:Vim.BimDocument:BimDocument", typedEntities.Select(x => x._BimDocument?.Index ?? EntityRelation.None));
             return tb;
         }
         public static EntityTableBuilder ToAssemblyInstanceTableBuilder(this IEnumerable<Entity> entities)
@@ -4274,7 +4434,7 @@ namespace Vim.Format.ObjectModel {
             tb.AddDataColumn("float:Position.X", typedEntities.Select(x => x.Position_X));
             tb.AddDataColumn("float:Position.Y", typedEntities.Select(x => x.Position_Y));
             tb.AddDataColumn("float:Position.Z", typedEntities.Select(x => x.Position_Z));
-            tb.AddIndexColumn("index:Vim.Element:Element", typedEntities.Select(x => x._Element.Index));
+            tb.AddIndexColumn("index:Vim.Element:Element", typedEntities.Select(x => x._Element?.Index ?? EntityRelation.None));
             return tb;
         }
         public static EntityTableBuilder ToGroupTableBuilder(this IEnumerable<Entity> entities)
@@ -4285,7 +4445,7 @@ namespace Vim.Format.ObjectModel {
             tb.AddDataColumn("float:Position.X", typedEntities.Select(x => x.Position_X));
             tb.AddDataColumn("float:Position.Y", typedEntities.Select(x => x.Position_Y));
             tb.AddDataColumn("float:Position.Z", typedEntities.Select(x => x.Position_Z));
-            tb.AddIndexColumn("index:Vim.Element:Element", typedEntities.Select(x => x._Element.Index));
+            tb.AddIndexColumn("index:Vim.Element:Element", typedEntities.Select(x => x._Element?.Index ?? EntityRelation.None));
             return tb;
         }
         public static EntityTableBuilder ToDesignOptionTableBuilder(this IEnumerable<Entity> entities)
@@ -4293,7 +4453,7 @@ namespace Vim.Format.ObjectModel {
             var typedEntities = entities?.Cast<DesignOption>() ?? Enumerable.Empty<DesignOption>();
             var tb = new EntityTableBuilder("Vim.DesignOption");
             tb.AddDataColumn("byte:IsPrimary", typedEntities.Select(x => x.IsPrimary));
-            tb.AddIndexColumn("index:Vim.Element:Element", typedEntities.Select(x => x._Element.Index));
+            tb.AddIndexColumn("index:Vim.Element:Element", typedEntities.Select(x => x._Element?.Index ?? EntityRelation.None));
             return tb;
         }
         public static EntityTableBuilder ToLevelTableBuilder(this IEnumerable<Entity> entities)
@@ -4301,15 +4461,16 @@ namespace Vim.Format.ObjectModel {
             var typedEntities = entities?.Cast<Level>() ?? Enumerable.Empty<Level>();
             var tb = new EntityTableBuilder("Vim.Level");
             tb.AddDataColumn("double:Elevation", typedEntities.Select(x => x.Elevation));
-            tb.AddIndexColumn("index:Vim.FamilyType:FamilyType", typedEntities.Select(x => x._FamilyType.Index));
-            tb.AddIndexColumn("index:Vim.Element:Element", typedEntities.Select(x => x._Element.Index));
+            tb.AddIndexColumn("index:Vim.FamilyType:FamilyType", typedEntities.Select(x => x._FamilyType?.Index ?? EntityRelation.None));
+            tb.AddIndexColumn("index:Vim.Building:Building", typedEntities.Select(x => x._Building?.Index ?? EntityRelation.None));
+            tb.AddIndexColumn("index:Vim.Element:Element", typedEntities.Select(x => x._Element?.Index ?? EntityRelation.None));
             return tb;
         }
         public static EntityTableBuilder ToPhaseTableBuilder(this IEnumerable<Entity> entities)
         {
             var typedEntities = entities?.Cast<Phase>() ?? Enumerable.Empty<Phase>();
             var tb = new EntityTableBuilder("Vim.Phase");
-            tb.AddIndexColumn("index:Vim.Element:Element", typedEntities.Select(x => x._Element.Index));
+            tb.AddIndexColumn("index:Vim.Element:Element", typedEntities.Select(x => x._Element?.Index ?? EntityRelation.None));
             return tb;
         }
         public static EntityTableBuilder ToRoomTableBuilder(this IEnumerable<Entity> entities)
@@ -4323,8 +4484,8 @@ namespace Vim.Format.ObjectModel {
             tb.AddDataColumn("double:Perimeter", typedEntities.Select(x => x.Perimeter));
             tb.AddDataColumn("double:Area", typedEntities.Select(x => x.Area));
             tb.AddStringColumn("string:Number", typedEntities.Select(x => x.Number));
-            tb.AddIndexColumn("index:Vim.Level:UpperLimit", typedEntities.Select(x => x._UpperLimit.Index));
-            tb.AddIndexColumn("index:Vim.Element:Element", typedEntities.Select(x => x._Element.Index));
+            tb.AddIndexColumn("index:Vim.Level:UpperLimit", typedEntities.Select(x => x._UpperLimit?.Index ?? EntityRelation.None));
+            tb.AddIndexColumn("index:Vim.Element:Element", typedEntities.Select(x => x._Element?.Index ?? EntityRelation.None));
             return tb;
         }
         public static EntityTableBuilder ToBimDocumentTableBuilder(this IEnumerable<Entity> entities)
@@ -4359,18 +4520,18 @@ namespace Vim.Format.ObjectModel {
             tb.AddStringColumn("string:Product", typedEntities.Select(x => x.Product));
             tb.AddStringColumn("string:Version", typedEntities.Select(x => x.Version));
             tb.AddStringColumn("string:User", typedEntities.Select(x => x.User));
-            tb.AddIndexColumn("index:Vim.View:ActiveView", typedEntities.Select(x => x._ActiveView.Index));
-            tb.AddIndexColumn("index:Vim.Family:OwnerFamily", typedEntities.Select(x => x._OwnerFamily.Index));
-            tb.AddIndexColumn("index:Vim.BimDocument:Parent", typedEntities.Select(x => x._Parent.Index));
-            tb.AddIndexColumn("index:Vim.Element:Element", typedEntities.Select(x => x._Element.Index));
+            tb.AddIndexColumn("index:Vim.View:ActiveView", typedEntities.Select(x => x._ActiveView?.Index ?? EntityRelation.None));
+            tb.AddIndexColumn("index:Vim.Family:OwnerFamily", typedEntities.Select(x => x._OwnerFamily?.Index ?? EntityRelation.None));
+            tb.AddIndexColumn("index:Vim.BimDocument:Parent", typedEntities.Select(x => x._Parent?.Index ?? EntityRelation.None));
+            tb.AddIndexColumn("index:Vim.Element:Element", typedEntities.Select(x => x._Element?.Index ?? EntityRelation.None));
             return tb;
         }
         public static EntityTableBuilder ToDisplayUnitInBimDocumentTableBuilder(this IEnumerable<Entity> entities)
         {
             var typedEntities = entities?.Cast<DisplayUnitInBimDocument>() ?? Enumerable.Empty<DisplayUnitInBimDocument>();
             var tb = new EntityTableBuilder("Vim.DisplayUnitInBimDocument");
-            tb.AddIndexColumn("index:Vim.DisplayUnit:DisplayUnit", typedEntities.Select(x => x._DisplayUnit.Index));
-            tb.AddIndexColumn("index:Vim.BimDocument:BimDocument", typedEntities.Select(x => x._BimDocument.Index));
+            tb.AddIndexColumn("index:Vim.DisplayUnit:DisplayUnit", typedEntities.Select(x => x._DisplayUnit?.Index ?? EntityRelation.None));
+            tb.AddIndexColumn("index:Vim.BimDocument:BimDocument", typedEntities.Select(x => x._BimDocument?.Index ?? EntityRelation.None));
             return tb;
         }
         public static EntityTableBuilder ToPhaseOrderInBimDocumentTableBuilder(this IEnumerable<Entity> entities)
@@ -4378,8 +4539,8 @@ namespace Vim.Format.ObjectModel {
             var typedEntities = entities?.Cast<PhaseOrderInBimDocument>() ?? Enumerable.Empty<PhaseOrderInBimDocument>();
             var tb = new EntityTableBuilder("Vim.PhaseOrderInBimDocument");
             tb.AddDataColumn("int:OrderIndex", typedEntities.Select(x => x.OrderIndex));
-            tb.AddIndexColumn("index:Vim.Phase:Phase", typedEntities.Select(x => x._Phase.Index));
-            tb.AddIndexColumn("index:Vim.BimDocument:BimDocument", typedEntities.Select(x => x._BimDocument.Index));
+            tb.AddIndexColumn("index:Vim.Phase:Phase", typedEntities.Select(x => x._Phase?.Index ?? EntityRelation.None));
+            tb.AddIndexColumn("index:Vim.BimDocument:BimDocument", typedEntities.Select(x => x._BimDocument?.Index ?? EntityRelation.None));
             return tb;
         }
         public static EntityTableBuilder ToCategoryTableBuilder(this IEnumerable<Entity> entities)
@@ -4393,8 +4554,8 @@ namespace Vim.Format.ObjectModel {
             tb.AddDataColumn("double:LineColor.Y", typedEntities.Select(x => x.LineColor_Y));
             tb.AddDataColumn("double:LineColor.Z", typedEntities.Select(x => x.LineColor_Z));
             tb.AddStringColumn("string:BuiltInCategory", typedEntities.Select(x => x.BuiltInCategory));
-            tb.AddIndexColumn("index:Vim.Category:Parent", typedEntities.Select(x => x._Parent.Index));
-            tb.AddIndexColumn("index:Vim.Material:Material", typedEntities.Select(x => x._Material.Index));
+            tb.AddIndexColumn("index:Vim.Category:Parent", typedEntities.Select(x => x._Parent?.Index ?? EntityRelation.None));
+            tb.AddIndexColumn("index:Vim.Material:Material", typedEntities.Select(x => x._Material?.Index ?? EntityRelation.None));
             return tb;
         }
         public static EntityTableBuilder ToFamilyTableBuilder(this IEnumerable<Entity> entities)
@@ -4405,8 +4566,8 @@ namespace Vim.Format.ObjectModel {
             tb.AddStringColumn("string:StructuralSectionShape", typedEntities.Select(x => x.StructuralSectionShape));
             tb.AddDataColumn("byte:IsSystemFamily", typedEntities.Select(x => x.IsSystemFamily));
             tb.AddDataColumn("byte:IsInPlace", typedEntities.Select(x => x.IsInPlace));
-            tb.AddIndexColumn("index:Vim.Category:FamilyCategory", typedEntities.Select(x => x._FamilyCategory.Index));
-            tb.AddIndexColumn("index:Vim.Element:Element", typedEntities.Select(x => x._Element.Index));
+            tb.AddIndexColumn("index:Vim.Category:FamilyCategory", typedEntities.Select(x => x._FamilyCategory?.Index ?? EntityRelation.None));
+            tb.AddIndexColumn("index:Vim.Element:Element", typedEntities.Select(x => x._Element?.Index ?? EntityRelation.None));
             return tb;
         }
         public static EntityTableBuilder ToFamilyTypeTableBuilder(this IEnumerable<Entity> entities)
@@ -4414,9 +4575,9 @@ namespace Vim.Format.ObjectModel {
             var typedEntities = entities?.Cast<FamilyType>() ?? Enumerable.Empty<FamilyType>();
             var tb = new EntityTableBuilder("Vim.FamilyType");
             tb.AddDataColumn("byte:IsSystemFamilyType", typedEntities.Select(x => x.IsSystemFamilyType));
-            tb.AddIndexColumn("index:Vim.Family:Family", typedEntities.Select(x => x._Family.Index));
-            tb.AddIndexColumn("index:Vim.CompoundStructure:CompoundStructure", typedEntities.Select(x => x._CompoundStructure.Index));
-            tb.AddIndexColumn("index:Vim.Element:Element", typedEntities.Select(x => x._Element.Index));
+            tb.AddIndexColumn("index:Vim.Family:Family", typedEntities.Select(x => x._Family?.Index ?? EntityRelation.None));
+            tb.AddIndexColumn("index:Vim.CompoundStructure:CompoundStructure", typedEntities.Select(x => x._CompoundStructure?.Index ?? EntityRelation.None));
+            tb.AddIndexColumn("index:Vim.Element:Element", typedEntities.Select(x => x._Element?.Index ?? EntityRelation.None));
             return tb;
         }
         public static EntityTableBuilder ToFamilyInstanceTableBuilder(this IEnumerable<Entity> entities)
@@ -4446,11 +4607,11 @@ namespace Vim.Format.ObjectModel {
             tb.AddDataColumn("float:HandOrientation.X", typedEntities.Select(x => x.HandOrientation_X));
             tb.AddDataColumn("float:HandOrientation.Y", typedEntities.Select(x => x.HandOrientation_Y));
             tb.AddDataColumn("float:HandOrientation.Z", typedEntities.Select(x => x.HandOrientation_Z));
-            tb.AddIndexColumn("index:Vim.FamilyType:FamilyType", typedEntities.Select(x => x._FamilyType.Index));
-            tb.AddIndexColumn("index:Vim.Element:Host", typedEntities.Select(x => x._Host.Index));
-            tb.AddIndexColumn("index:Vim.Room:FromRoom", typedEntities.Select(x => x._FromRoom.Index));
-            tb.AddIndexColumn("index:Vim.Room:ToRoom", typedEntities.Select(x => x._ToRoom.Index));
-            tb.AddIndexColumn("index:Vim.Element:Element", typedEntities.Select(x => x._Element.Index));
+            tb.AddIndexColumn("index:Vim.FamilyType:FamilyType", typedEntities.Select(x => x._FamilyType?.Index ?? EntityRelation.None));
+            tb.AddIndexColumn("index:Vim.Element:Host", typedEntities.Select(x => x._Host?.Index ?? EntityRelation.None));
+            tb.AddIndexColumn("index:Vim.Room:FromRoom", typedEntities.Select(x => x._FromRoom?.Index ?? EntityRelation.None));
+            tb.AddIndexColumn("index:Vim.Room:ToRoom", typedEntities.Select(x => x._ToRoom?.Index ?? EntityRelation.None));
+            tb.AddIndexColumn("index:Vim.Element:Element", typedEntities.Select(x => x._Element?.Index ?? EntityRelation.None));
             return tb;
         }
         public static EntityTableBuilder ToViewTableBuilder(this IEnumerable<Entity> entities)
@@ -4480,41 +4641,41 @@ namespace Vim.Format.ObjectModel {
             tb.AddDataColumn("double:Outline.Max.X", typedEntities.Select(x => x.Outline_Max_X));
             tb.AddDataColumn("double:Outline.Max.Y", typedEntities.Select(x => x.Outline_Max_Y));
             tb.AddDataColumn("int:DetailLevel", typedEntities.Select(x => x.DetailLevel));
-            tb.AddIndexColumn("index:Vim.Camera:Camera", typedEntities.Select(x => x._Camera.Index));
-            tb.AddIndexColumn("index:Vim.FamilyType:FamilyType", typedEntities.Select(x => x._FamilyType.Index));
-            tb.AddIndexColumn("index:Vim.Element:Element", typedEntities.Select(x => x._Element.Index));
+            tb.AddIndexColumn("index:Vim.Camera:Camera", typedEntities.Select(x => x._Camera?.Index ?? EntityRelation.None));
+            tb.AddIndexColumn("index:Vim.FamilyType:FamilyType", typedEntities.Select(x => x._FamilyType?.Index ?? EntityRelation.None));
+            tb.AddIndexColumn("index:Vim.Element:Element", typedEntities.Select(x => x._Element?.Index ?? EntityRelation.None));
             return tb;
         }
         public static EntityTableBuilder ToElementInViewTableBuilder(this IEnumerable<Entity> entities)
         {
             var typedEntities = entities?.Cast<ElementInView>() ?? Enumerable.Empty<ElementInView>();
             var tb = new EntityTableBuilder("Vim.ElementInView");
-            tb.AddIndexColumn("index:Vim.View:View", typedEntities.Select(x => x._View.Index));
-            tb.AddIndexColumn("index:Vim.Element:Element", typedEntities.Select(x => x._Element.Index));
+            tb.AddIndexColumn("index:Vim.View:View", typedEntities.Select(x => x._View?.Index ?? EntityRelation.None));
+            tb.AddIndexColumn("index:Vim.Element:Element", typedEntities.Select(x => x._Element?.Index ?? EntityRelation.None));
             return tb;
         }
         public static EntityTableBuilder ToShapeInViewTableBuilder(this IEnumerable<Entity> entities)
         {
             var typedEntities = entities?.Cast<ShapeInView>() ?? Enumerable.Empty<ShapeInView>();
             var tb = new EntityTableBuilder("Vim.ShapeInView");
-            tb.AddIndexColumn("index:Vim.Shape:Shape", typedEntities.Select(x => x._Shape.Index));
-            tb.AddIndexColumn("index:Vim.View:View", typedEntities.Select(x => x._View.Index));
+            tb.AddIndexColumn("index:Vim.Shape:Shape", typedEntities.Select(x => x._Shape?.Index ?? EntityRelation.None));
+            tb.AddIndexColumn("index:Vim.View:View", typedEntities.Select(x => x._View?.Index ?? EntityRelation.None));
             return tb;
         }
         public static EntityTableBuilder ToAssetInViewTableBuilder(this IEnumerable<Entity> entities)
         {
             var typedEntities = entities?.Cast<AssetInView>() ?? Enumerable.Empty<AssetInView>();
             var tb = new EntityTableBuilder("Vim.AssetInView");
-            tb.AddIndexColumn("index:Vim.Asset:Asset", typedEntities.Select(x => x._Asset.Index));
-            tb.AddIndexColumn("index:Vim.View:View", typedEntities.Select(x => x._View.Index));
+            tb.AddIndexColumn("index:Vim.Asset:Asset", typedEntities.Select(x => x._Asset?.Index ?? EntityRelation.None));
+            tb.AddIndexColumn("index:Vim.View:View", typedEntities.Select(x => x._View?.Index ?? EntityRelation.None));
             return tb;
         }
         public static EntityTableBuilder ToAssetInViewSheetTableBuilder(this IEnumerable<Entity> entities)
         {
             var typedEntities = entities?.Cast<AssetInViewSheet>() ?? Enumerable.Empty<AssetInViewSheet>();
             var tb = new EntityTableBuilder("Vim.AssetInViewSheet");
-            tb.AddIndexColumn("index:Vim.Asset:Asset", typedEntities.Select(x => x._Asset.Index));
-            tb.AddIndexColumn("index:Vim.ViewSheet:ViewSheet", typedEntities.Select(x => x._ViewSheet.Index));
+            tb.AddIndexColumn("index:Vim.Asset:Asset", typedEntities.Select(x => x._Asset?.Index ?? EntityRelation.None));
+            tb.AddIndexColumn("index:Vim.ViewSheet:ViewSheet", typedEntities.Select(x => x._ViewSheet?.Index ?? EntityRelation.None));
             return tb;
         }
         public static EntityTableBuilder ToLevelInViewTableBuilder(this IEnumerable<Entity> entities)
@@ -4527,8 +4688,8 @@ namespace Vim.Format.ObjectModel {
             tb.AddDataColumn("double:Extents.Max.X", typedEntities.Select(x => x.Extents_Max_X));
             tb.AddDataColumn("double:Extents.Max.Y", typedEntities.Select(x => x.Extents_Max_Y));
             tb.AddDataColumn("double:Extents.Max.Z", typedEntities.Select(x => x.Extents_Max_Z));
-            tb.AddIndexColumn("index:Vim.Level:Level", typedEntities.Select(x => x._Level.Index));
-            tb.AddIndexColumn("index:Vim.View:View", typedEntities.Select(x => x._View.Index));
+            tb.AddIndexColumn("index:Vim.Level:Level", typedEntities.Select(x => x._Level?.Index ?? EntityRelation.None));
+            tb.AddIndexColumn("index:Vim.View:View", typedEntities.Select(x => x._View?.Index ?? EntityRelation.None));
             return tb;
         }
         public static EntityTableBuilder ToCameraTableBuilder(this IEnumerable<Entity> entities)
@@ -4567,9 +4728,9 @@ namespace Vim.Format.ObjectModel {
             tb.AddDataColumn("double:Glossiness", typedEntities.Select(x => x.Glossiness));
             tb.AddDataColumn("double:Smoothness", typedEntities.Select(x => x.Smoothness));
             tb.AddDataColumn("double:Transparency", typedEntities.Select(x => x.Transparency));
-            tb.AddIndexColumn("index:Vim.Asset:ColorTextureFile", typedEntities.Select(x => x._ColorTextureFile.Index));
-            tb.AddIndexColumn("index:Vim.Asset:NormalTextureFile", typedEntities.Select(x => x._NormalTextureFile.Index));
-            tb.AddIndexColumn("index:Vim.Element:Element", typedEntities.Select(x => x._Element.Index));
+            tb.AddIndexColumn("index:Vim.Asset:ColorTextureFile", typedEntities.Select(x => x._ColorTextureFile?.Index ?? EntityRelation.None));
+            tb.AddIndexColumn("index:Vim.Asset:NormalTextureFile", typedEntities.Select(x => x._NormalTextureFile?.Index ?? EntityRelation.None));
+            tb.AddIndexColumn("index:Vim.Element:Element", typedEntities.Select(x => x._Element?.Index ?? EntityRelation.None));
             return tb;
         }
         public static EntityTableBuilder ToMaterialInElementTableBuilder(this IEnumerable<Entity> entities)
@@ -4579,8 +4740,8 @@ namespace Vim.Format.ObjectModel {
             tb.AddDataColumn("double:Area", typedEntities.Select(x => x.Area));
             tb.AddDataColumn("double:Volume", typedEntities.Select(x => x.Volume));
             tb.AddDataColumn("byte:IsPaint", typedEntities.Select(x => x.IsPaint));
-            tb.AddIndexColumn("index:Vim.Material:Material", typedEntities.Select(x => x._Material.Index));
-            tb.AddIndexColumn("index:Vim.Element:Element", typedEntities.Select(x => x._Element.Index));
+            tb.AddIndexColumn("index:Vim.Material:Material", typedEntities.Select(x => x._Material?.Index ?? EntityRelation.None));
+            tb.AddIndexColumn("index:Vim.Element:Element", typedEntities.Select(x => x._Element?.Index ?? EntityRelation.None));
             return tb;
         }
         public static EntityTableBuilder ToCompoundStructureLayerTableBuilder(this IEnumerable<Entity> entities)
@@ -4590,8 +4751,8 @@ namespace Vim.Format.ObjectModel {
             tb.AddDataColumn("int:OrderIndex", typedEntities.Select(x => x.OrderIndex));
             tb.AddDataColumn("double:Width", typedEntities.Select(x => x.Width));
             tb.AddStringColumn("string:MaterialFunctionAssignment", typedEntities.Select(x => x.MaterialFunctionAssignment));
-            tb.AddIndexColumn("index:Vim.Material:Material", typedEntities.Select(x => x._Material.Index));
-            tb.AddIndexColumn("index:Vim.CompoundStructure:CompoundStructure", typedEntities.Select(x => x._CompoundStructure.Index));
+            tb.AddIndexColumn("index:Vim.Material:Material", typedEntities.Select(x => x._Material?.Index ?? EntityRelation.None));
+            tb.AddIndexColumn("index:Vim.CompoundStructure:CompoundStructure", typedEntities.Select(x => x._CompoundStructure?.Index ?? EntityRelation.None));
             return tb;
         }
         public static EntityTableBuilder ToCompoundStructureTableBuilder(this IEnumerable<Entity> entities)
@@ -4599,14 +4760,14 @@ namespace Vim.Format.ObjectModel {
             var typedEntities = entities?.Cast<CompoundStructure>() ?? Enumerable.Empty<CompoundStructure>();
             var tb = new EntityTableBuilder("Vim.CompoundStructure");
             tb.AddDataColumn("double:Width", typedEntities.Select(x => x.Width));
-            tb.AddIndexColumn("index:Vim.CompoundStructureLayer:StructuralLayer", typedEntities.Select(x => x._StructuralLayer.Index));
+            tb.AddIndexColumn("index:Vim.CompoundStructureLayer:StructuralLayer", typedEntities.Select(x => x._StructuralLayer?.Index ?? EntityRelation.None));
             return tb;
         }
         public static EntityTableBuilder ToNodeTableBuilder(this IEnumerable<Entity> entities)
         {
             var typedEntities = entities?.Cast<Node>() ?? Enumerable.Empty<Node>();
             var tb = new EntityTableBuilder("Vim.Node");
-            tb.AddIndexColumn("index:Vim.Element:Element", typedEntities.Select(x => x._Element.Index));
+            tb.AddIndexColumn("index:Vim.Element:Element", typedEntities.Select(x => x._Element?.Index ?? EntityRelation.None));
             return tb;
         }
         public static EntityTableBuilder ToGeometryTableBuilder(this IEnumerable<Entity> entities)
@@ -4627,22 +4788,22 @@ namespace Vim.Format.ObjectModel {
         {
             var typedEntities = entities?.Cast<Shape>() ?? Enumerable.Empty<Shape>();
             var tb = new EntityTableBuilder("Vim.Shape");
-            tb.AddIndexColumn("index:Vim.Element:Element", typedEntities.Select(x => x._Element.Index));
+            tb.AddIndexColumn("index:Vim.Element:Element", typedEntities.Select(x => x._Element?.Index ?? EntityRelation.None));
             return tb;
         }
         public static EntityTableBuilder ToShapeCollectionTableBuilder(this IEnumerable<Entity> entities)
         {
             var typedEntities = entities?.Cast<ShapeCollection>() ?? Enumerable.Empty<ShapeCollection>();
             var tb = new EntityTableBuilder("Vim.ShapeCollection");
-            tb.AddIndexColumn("index:Vim.Element:Element", typedEntities.Select(x => x._Element.Index));
+            tb.AddIndexColumn("index:Vim.Element:Element", typedEntities.Select(x => x._Element?.Index ?? EntityRelation.None));
             return tb;
         }
         public static EntityTableBuilder ToShapeInShapeCollectionTableBuilder(this IEnumerable<Entity> entities)
         {
             var typedEntities = entities?.Cast<ShapeInShapeCollection>() ?? Enumerable.Empty<ShapeInShapeCollection>();
             var tb = new EntityTableBuilder("Vim.ShapeInShapeCollection");
-            tb.AddIndexColumn("index:Vim.Shape:Shape", typedEntities.Select(x => x._Shape.Index));
-            tb.AddIndexColumn("index:Vim.ShapeCollection:ShapeCollection", typedEntities.Select(x => x._ShapeCollection.Index));
+            tb.AddIndexColumn("index:Vim.Shape:Shape", typedEntities.Select(x => x._Shape?.Index ?? EntityRelation.None));
+            tb.AddIndexColumn("index:Vim.ShapeCollection:ShapeCollection", typedEntities.Select(x => x._ShapeCollection?.Index ?? EntityRelation.None));
             return tb;
         }
         public static EntityTableBuilder ToSystemTableBuilder(this IEnumerable<Entity> entities)
@@ -4650,8 +4811,8 @@ namespace Vim.Format.ObjectModel {
             var typedEntities = entities?.Cast<System>() ?? Enumerable.Empty<System>();
             var tb = new EntityTableBuilder("Vim.System");
             tb.AddDataColumn("int:SystemType", typedEntities.Select(x => x.SystemType));
-            tb.AddIndexColumn("index:Vim.FamilyType:FamilyType", typedEntities.Select(x => x._FamilyType.Index));
-            tb.AddIndexColumn("index:Vim.Element:Element", typedEntities.Select(x => x._Element.Index));
+            tb.AddIndexColumn("index:Vim.FamilyType:FamilyType", typedEntities.Select(x => x._FamilyType?.Index ?? EntityRelation.None));
+            tb.AddIndexColumn("index:Vim.Element:Element", typedEntities.Select(x => x._Element?.Index ?? EntityRelation.None));
             return tb;
         }
         public static EntityTableBuilder ToElementInSystemTableBuilder(this IEnumerable<Entity> entities)
@@ -4659,8 +4820,8 @@ namespace Vim.Format.ObjectModel {
             var typedEntities = entities?.Cast<ElementInSystem>() ?? Enumerable.Empty<ElementInSystem>();
             var tb = new EntityTableBuilder("Vim.ElementInSystem");
             tb.AddDataColumn("int:Roles", typedEntities.Select(x => x.Roles));
-            tb.AddIndexColumn("index:Vim.System:System", typedEntities.Select(x => x._System.Index));
-            tb.AddIndexColumn("index:Vim.Element:Element", typedEntities.Select(x => x._Element.Index));
+            tb.AddIndexColumn("index:Vim.System:System", typedEntities.Select(x => x._System?.Index ?? EntityRelation.None));
+            tb.AddIndexColumn("index:Vim.Element:Element", typedEntities.Select(x => x._Element?.Index ?? EntityRelation.None));
             return tb;
         }
         public static EntityTableBuilder ToWarningTableBuilder(this IEnumerable<Entity> entities)
@@ -4670,15 +4831,15 @@ namespace Vim.Format.ObjectModel {
             tb.AddStringColumn("string:Guid", typedEntities.Select(x => x.Guid));
             tb.AddStringColumn("string:Severity", typedEntities.Select(x => x.Severity));
             tb.AddStringColumn("string:Description", typedEntities.Select(x => x.Description));
-            tb.AddIndexColumn("index:Vim.BimDocument:BimDocument", typedEntities.Select(x => x._BimDocument.Index));
+            tb.AddIndexColumn("index:Vim.BimDocument:BimDocument", typedEntities.Select(x => x._BimDocument?.Index ?? EntityRelation.None));
             return tb;
         }
         public static EntityTableBuilder ToElementInWarningTableBuilder(this IEnumerable<Entity> entities)
         {
             var typedEntities = entities?.Cast<ElementInWarning>() ?? Enumerable.Empty<ElementInWarning>();
             var tb = new EntityTableBuilder("Vim.ElementInWarning");
-            tb.AddIndexColumn("index:Vim.Warning:Warning", typedEntities.Select(x => x._Warning.Index));
-            tb.AddIndexColumn("index:Vim.Element:Element", typedEntities.Select(x => x._Element.Index));
+            tb.AddIndexColumn("index:Vim.Warning:Warning", typedEntities.Select(x => x._Warning?.Index ?? EntityRelation.None));
+            tb.AddIndexColumn("index:Vim.Element:Element", typedEntities.Select(x => x._Element?.Index ?? EntityRelation.None));
             return tb;
         }
         public static EntityTableBuilder ToBasePointTableBuilder(this IEnumerable<Entity> entities)
@@ -4692,7 +4853,7 @@ namespace Vim.Format.ObjectModel {
             tb.AddDataColumn("double:SharedPosition.X", typedEntities.Select(x => x.SharedPosition_X));
             tb.AddDataColumn("double:SharedPosition.Y", typedEntities.Select(x => x.SharedPosition_Y));
             tb.AddDataColumn("double:SharedPosition.Z", typedEntities.Select(x => x.SharedPosition_Z));
-            tb.AddIndexColumn("index:Vim.Element:Element", typedEntities.Select(x => x._Element.Index));
+            tb.AddIndexColumn("index:Vim.Element:Element", typedEntities.Select(x => x._Element?.Index ?? EntityRelation.None));
             return tb;
         }
         public static EntityTableBuilder ToPhaseFilterTableBuilder(this IEnumerable<Entity> entities)
@@ -4703,7 +4864,7 @@ namespace Vim.Format.ObjectModel {
             tb.AddDataColumn("int:Existing", typedEntities.Select(x => x.Existing));
             tb.AddDataColumn("int:Demolished", typedEntities.Select(x => x.Demolished));
             tb.AddDataColumn("int:Temporary", typedEntities.Select(x => x.Temporary));
-            tb.AddIndexColumn("index:Vim.Element:Element", typedEntities.Select(x => x._Element.Index));
+            tb.AddIndexColumn("index:Vim.Element:Element", typedEntities.Select(x => x._Element?.Index ?? EntityRelation.None));
             return tb;
         }
         public static EntityTableBuilder ToGridTableBuilder(this IEnumerable<Entity> entities)
@@ -4723,8 +4884,8 @@ namespace Vim.Format.ObjectModel {
             tb.AddDataColumn("double:Extents.Max.X", typedEntities.Select(x => x.Extents_Max_X));
             tb.AddDataColumn("double:Extents.Max.Y", typedEntities.Select(x => x.Extents_Max_Y));
             tb.AddDataColumn("double:Extents.Max.Z", typedEntities.Select(x => x.Extents_Max_Z));
-            tb.AddIndexColumn("index:Vim.FamilyType:FamilyType", typedEntities.Select(x => x._FamilyType.Index));
-            tb.AddIndexColumn("index:Vim.Element:Element", typedEntities.Select(x => x._Element.Index));
+            tb.AddIndexColumn("index:Vim.FamilyType:FamilyType", typedEntities.Select(x => x._FamilyType?.Index ?? EntityRelation.None));
+            tb.AddIndexColumn("index:Vim.Element:Element", typedEntities.Select(x => x._Element?.Index ?? EntityRelation.None));
             return tb;
         }
         public static EntityTableBuilder ToAreaTableBuilder(this IEnumerable<Entity> entities)
@@ -4735,8 +4896,8 @@ namespace Vim.Format.ObjectModel {
             tb.AddDataColumn("double:Perimeter", typedEntities.Select(x => x.Perimeter));
             tb.AddStringColumn("string:Number", typedEntities.Select(x => x.Number));
             tb.AddDataColumn("byte:IsGrossInterior", typedEntities.Select(x => x.IsGrossInterior));
-            tb.AddIndexColumn("index:Vim.AreaScheme:AreaScheme", typedEntities.Select(x => x._AreaScheme.Index));
-            tb.AddIndexColumn("index:Vim.Element:Element", typedEntities.Select(x => x._Element.Index));
+            tb.AddIndexColumn("index:Vim.AreaScheme:AreaScheme", typedEntities.Select(x => x._AreaScheme?.Index ?? EntityRelation.None));
+            tb.AddIndexColumn("index:Vim.Element:Element", typedEntities.Select(x => x._Element?.Index ?? EntityRelation.None));
             return tb;
         }
         public static EntityTableBuilder ToAreaSchemeTableBuilder(this IEnumerable<Entity> entities)
@@ -4744,14 +4905,14 @@ namespace Vim.Format.ObjectModel {
             var typedEntities = entities?.Cast<AreaScheme>() ?? Enumerable.Empty<AreaScheme>();
             var tb = new EntityTableBuilder("Vim.AreaScheme");
             tb.AddDataColumn("byte:IsGrossBuildingArea", typedEntities.Select(x => x.IsGrossBuildingArea));
-            tb.AddIndexColumn("index:Vim.Element:Element", typedEntities.Select(x => x._Element.Index));
+            tb.AddIndexColumn("index:Vim.Element:Element", typedEntities.Select(x => x._Element?.Index ?? EntityRelation.None));
             return tb;
         }
         public static EntityTableBuilder ToScheduleTableBuilder(this IEnumerable<Entity> entities)
         {
             var typedEntities = entities?.Cast<Schedule>() ?? Enumerable.Empty<Schedule>();
             var tb = new EntityTableBuilder("Vim.Schedule");
-            tb.AddIndexColumn("index:Vim.Element:Element", typedEntities.Select(x => x._Element.Index));
+            tb.AddIndexColumn("index:Vim.Element:Element", typedEntities.Select(x => x._Element?.Index ?? EntityRelation.None));
             return tb;
         }
         public static EntityTableBuilder ToScheduleColumnTableBuilder(this IEnumerable<Entity> entities)
@@ -4760,7 +4921,7 @@ namespace Vim.Format.ObjectModel {
             var tb = new EntityTableBuilder("Vim.ScheduleColumn");
             tb.AddStringColumn("string:Name", typedEntities.Select(x => x.Name));
             tb.AddDataColumn("int:ColumnIndex", typedEntities.Select(x => x.ColumnIndex));
-            tb.AddIndexColumn("index:Vim.Schedule:Schedule", typedEntities.Select(x => x._Schedule.Index));
+            tb.AddIndexColumn("index:Vim.Schedule:Schedule", typedEntities.Select(x => x._Schedule?.Index ?? EntityRelation.None));
             return tb;
         }
         public static EntityTableBuilder ToScheduleCellTableBuilder(this IEnumerable<Entity> entities)
@@ -4769,46 +4930,69 @@ namespace Vim.Format.ObjectModel {
             var tb = new EntityTableBuilder("Vim.ScheduleCell");
             tb.AddStringColumn("string:Value", typedEntities.Select(x => x.Value));
             tb.AddDataColumn("int:RowIndex", typedEntities.Select(x => x.RowIndex));
-            tb.AddIndexColumn("index:Vim.ScheduleColumn:ScheduleColumn", typedEntities.Select(x => x._ScheduleColumn.Index));
+            tb.AddIndexColumn("index:Vim.ScheduleColumn:ScheduleColumn", typedEntities.Select(x => x._ScheduleColumn?.Index ?? EntityRelation.None));
             return tb;
         }
         public static EntityTableBuilder ToViewSheetSetTableBuilder(this IEnumerable<Entity> entities)
         {
             var typedEntities = entities?.Cast<ViewSheetSet>() ?? Enumerable.Empty<ViewSheetSet>();
             var tb = new EntityTableBuilder("Vim.ViewSheetSet");
-            tb.AddIndexColumn("index:Vim.Element:Element", typedEntities.Select(x => x._Element.Index));
+            tb.AddIndexColumn("index:Vim.Element:Element", typedEntities.Select(x => x._Element?.Index ?? EntityRelation.None));
             return tb;
         }
         public static EntityTableBuilder ToViewSheetTableBuilder(this IEnumerable<Entity> entities)
         {
             var typedEntities = entities?.Cast<ViewSheet>() ?? Enumerable.Empty<ViewSheet>();
             var tb = new EntityTableBuilder("Vim.ViewSheet");
-            tb.AddIndexColumn("index:Vim.FamilyType:FamilyType", typedEntities.Select(x => x._FamilyType.Index));
-            tb.AddIndexColumn("index:Vim.Element:Element", typedEntities.Select(x => x._Element.Index));
+            tb.AddIndexColumn("index:Vim.FamilyType:FamilyType", typedEntities.Select(x => x._FamilyType?.Index ?? EntityRelation.None));
+            tb.AddIndexColumn("index:Vim.Element:Element", typedEntities.Select(x => x._Element?.Index ?? EntityRelation.None));
             return tb;
         }
         public static EntityTableBuilder ToViewSheetInViewSheetSetTableBuilder(this IEnumerable<Entity> entities)
         {
             var typedEntities = entities?.Cast<ViewSheetInViewSheetSet>() ?? Enumerable.Empty<ViewSheetInViewSheetSet>();
             var tb = new EntityTableBuilder("Vim.ViewSheetInViewSheetSet");
-            tb.AddIndexColumn("index:Vim.ViewSheet:ViewSheet", typedEntities.Select(x => x._ViewSheet.Index));
-            tb.AddIndexColumn("index:Vim.ViewSheetSet:ViewSheetSet", typedEntities.Select(x => x._ViewSheetSet.Index));
+            tb.AddIndexColumn("index:Vim.ViewSheet:ViewSheet", typedEntities.Select(x => x._ViewSheet?.Index ?? EntityRelation.None));
+            tb.AddIndexColumn("index:Vim.ViewSheetSet:ViewSheetSet", typedEntities.Select(x => x._ViewSheetSet?.Index ?? EntityRelation.None));
             return tb;
         }
         public static EntityTableBuilder ToViewInViewSheetSetTableBuilder(this IEnumerable<Entity> entities)
         {
             var typedEntities = entities?.Cast<ViewInViewSheetSet>() ?? Enumerable.Empty<ViewInViewSheetSet>();
             var tb = new EntityTableBuilder("Vim.ViewInViewSheetSet");
-            tb.AddIndexColumn("index:Vim.View:View", typedEntities.Select(x => x._View.Index));
-            tb.AddIndexColumn("index:Vim.ViewSheetSet:ViewSheetSet", typedEntities.Select(x => x._ViewSheetSet.Index));
+            tb.AddIndexColumn("index:Vim.View:View", typedEntities.Select(x => x._View?.Index ?? EntityRelation.None));
+            tb.AddIndexColumn("index:Vim.ViewSheetSet:ViewSheetSet", typedEntities.Select(x => x._ViewSheetSet?.Index ?? EntityRelation.None));
             return tb;
         }
         public static EntityTableBuilder ToViewInViewSheetTableBuilder(this IEnumerable<Entity> entities)
         {
             var typedEntities = entities?.Cast<ViewInViewSheet>() ?? Enumerable.Empty<ViewInViewSheet>();
             var tb = new EntityTableBuilder("Vim.ViewInViewSheet");
-            tb.AddIndexColumn("index:Vim.View:View", typedEntities.Select(x => x._View.Index));
-            tb.AddIndexColumn("index:Vim.ViewSheet:ViewSheet", typedEntities.Select(x => x._ViewSheet.Index));
+            tb.AddIndexColumn("index:Vim.View:View", typedEntities.Select(x => x._View?.Index ?? EntityRelation.None));
+            tb.AddIndexColumn("index:Vim.ViewSheet:ViewSheet", typedEntities.Select(x => x._ViewSheet?.Index ?? EntityRelation.None));
+            return tb;
+        }
+        public static EntityTableBuilder ToSiteTableBuilder(this IEnumerable<Entity> entities)
+        {
+            var typedEntities = entities?.Cast<Site>() ?? Enumerable.Empty<Site>();
+            var tb = new EntityTableBuilder("Vim.Site");
+            tb.AddDataColumn("double:Latitude", typedEntities.Select(x => x.Latitude));
+            tb.AddDataColumn("double:Longitude", typedEntities.Select(x => x.Longitude));
+            tb.AddStringColumn("string:Address", typedEntities.Select(x => x.Address));
+            tb.AddDataColumn("double:Elevation", typedEntities.Select(x => x.Elevation));
+            tb.AddStringColumn("string:Number", typedEntities.Select(x => x.Number));
+            tb.AddIndexColumn("index:Vim.Element:Element", typedEntities.Select(x => x._Element?.Index ?? EntityRelation.None));
+            return tb;
+        }
+        public static EntityTableBuilder ToBuildingTableBuilder(this IEnumerable<Entity> entities)
+        {
+            var typedEntities = entities?.Cast<Building>() ?? Enumerable.Empty<Building>();
+            var tb = new EntityTableBuilder("Vim.Building");
+            tb.AddDataColumn("double:Elevation", typedEntities.Select(x => x.Elevation));
+            tb.AddDataColumn("double:TerrainElevation", typedEntities.Select(x => x.TerrainElevation));
+            tb.AddStringColumn("string:Address", typedEntities.Select(x => x.Address));
+            tb.AddIndexColumn("index:Vim.Site:Site", typedEntities.Select(x => x._Site?.Index ?? EntityRelation.None));
+            tb.AddIndexColumn("index:Vim.Element:Element", typedEntities.Select(x => x._Element?.Index ?? EntityRelation.None));
             return tb;
         }
     } // DocumentBuilderExtensions
@@ -4869,6 +5053,8 @@ namespace Vim.Format.ObjectModel {
             {typeof(ViewSheetInViewSheetSet), new EntityTableBuilder()},
             {typeof(ViewInViewSheetSet), new EntityTableBuilder()},
             {typeof(ViewInViewSheet), new EntityTableBuilder()},
+            {typeof(Site), new EntityTableBuilder()},
+            {typeof(Building), new EntityTableBuilder()},
         };
     } // ObjectModelBuilder
 } // namespace
