@@ -6,12 +6,16 @@ namespace Vim.BFastNS.Tests
     public class BFastTests
     {
         public static string ResultPath = Path.Combine(VimFormatRepoPaths.OutDir, "input.bfast");
-        public static string ResultPath2 =Path.Combine(VimFormatRepoPaths.OutDir, "input.bfast");
+        public static string ResultPath2 = Path.Combine(VimFormatRepoPaths.OutDir, "input.bfast");
         public static string ResidencePath = VimFormatRepoPaths.GetLatestWolfordResidenceVim();
 
         [SetUp]
         public void Setup()
         {
+            if (!Directory.Exists(VimFormatRepoPaths.OutDir))
+            {
+                Directory.CreateDirectory(VimFormatRepoPaths.OutDir);
+            }
             if (File.Exists(ResultPath))
             {
                 File.Delete(ResultPath);
