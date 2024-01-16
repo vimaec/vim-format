@@ -1,27 +1,24 @@
 using NUnit.Framework;
-using System;
-using Vim.Util;
 using Vim.Util.Tests;
 
 namespace Vim.BFastNS.Tests
 {
     public class BFastTests
     {
-        public static string RootFolder = System.IO.Path.Combine(VimFormatRepoPaths.ProjDir, "..", "..");
-        public static string Path = System.IO.Path.Combine(RootFolder, "out/input.bfast");
-        public static string OutputPath = System.IO.Path.Combine(RootFolder, "out/output.bfast");
+        public static string ResultPath = Path.Combine(VimFormatRepoPaths.OutDir, "input.bfast");
+        public static string ResultPath2 =Path.Combine(VimFormatRepoPaths.OutDir, "input.bfast");
         public static string ResidencePath = VimFormatRepoPaths.GetLatestWolfordResidenceVim();
 
         [SetUp]
         public void Setup()
         {
-            if (File.Exists(Path))
+            if (File.Exists(ResultPath))
             {
-                File.Delete(Path);
+                File.Delete(ResultPath);
             }
-            if (File.Exists(OutputPath))
+            if (File.Exists(ResultPath2))
             {
-                File.Delete(OutputPath);
+                File.Delete(ResultPath2);
             }
         }
 
@@ -64,8 +61,8 @@ namespace Vim.BFastNS.Tests
         public void EmptyBFast_Writes_Header()
         {
             var bfast = new BFast();
-            bfast.Write(Path);
-            using (var stream = File.OpenRead(Path))
+            bfast.Write(ResultPath);
+            using (var stream = File.OpenRead(ResultPath))
             {
                 var bfast2 = new BFast(stream);
                 Assert.That(bfast2.GetSize(), Is.EqualTo(64));
@@ -378,9 +375,9 @@ namespace Vim.BFastNS.Tests
             bfast.SetBFast("A", new BFast());
             bfast.Remove("A");
 
-            bfast.Write(Path);
+            bfast.Write(ResultPath);
 
-            using (var stream = File.OpenRead(Path))
+            using (var stream = File.OpenRead(ResultPath))
             {
                 var other = new BFast(stream);
                 Assert.IsNull(other.GetBFast("A"));
@@ -394,9 +391,9 @@ namespace Vim.BFastNS.Tests
             var bfast = new BFast();
             bfast.SetArray("A", new int[3] { 0, 1, 2 });
             bfast.Remove("A");
-            bfast.Write(Path);
+            bfast.Write(ResultPath);
 
-            using (var stream = File.OpenRead(Path))
+            using (var stream = File.OpenRead(ResultPath))
             {
                 var other = new BFast(stream);
                 Assert.IsNull(other.GetArray<int>("A"));
@@ -413,10 +410,10 @@ namespace Vim.BFastNS.Tests
                 var geometry = input.GetBFast("geometry");
                 geometry.Remove("g3d:vertex:position:0:float32:3");
                 input.SetBFast("geometry", geometry);
-                input.Write(Path);
+                input.Write(ResultPath);
             }
 
-            using (var stream = File.OpenRead(Path))
+            using (var stream = File.OpenRead(ResultPath))
             {
                 var bfast = new BFast(stream);
                 var geometry = bfast.GetBFast("geometry");
@@ -432,9 +429,9 @@ namespace Vim.BFastNS.Tests
             var bfast = new BFast();
 
             bfast.SetArray("A", new int[3] { 0, 1, 2 });
-            bfast.Write(Path);
+            bfast.Write(ResultPath);
 
-            using (var stream = File.OpenRead(Path))
+            using (var stream = File.OpenRead(ResultPath))
             {
                 var other = new BFast(stream);
                 var result = other.GetArray<int>("A");
@@ -448,9 +445,9 @@ namespace Vim.BFastNS.Tests
             var bfast = new BFast();
 
             bfast.SetEnumerable("A", () => new int[3] { 0, 1, 2 });
-            bfast.Write(Path);
+            bfast.Write(ResultPath);
 
-            using (var stream = File.OpenRead(Path))
+            using (var stream = File.OpenRead(ResultPath))
             {
                 var other = new BFast(stream);
                 var array = other.GetArray<int>("A");
@@ -468,9 +465,9 @@ namespace Vim.BFastNS.Tests
 
             bfast.SetBFast("child", child);
             child.SetArray("A", new int[3] { 0, 1, 2 });
-            bfast.Write(Path);
+            bfast.Write(ResultPath);
 
-            using (var stream = File.OpenRead(Path))
+            using (var stream = File.OpenRead(ResultPath))
             {
                 var other = new BFast(stream);
                 var child2 = other.GetBFast("child");
@@ -491,9 +488,9 @@ namespace Vim.BFastNS.Tests
 
             bfast.SetBFast("child", child);
             child.SetBFast("grandChild", grandChild);
-            bfast.Write(Path);
+            bfast.Write(ResultPath);
 
-            using (var stream = File.OpenRead(Path))
+            using (var stream = File.OpenRead(ResultPath))
             {
                 var other = new BFast(stream);
                 var child2 = other.GetBFast("child");
@@ -517,8 +514,8 @@ namespace Vim.BFastNS.Tests
             grandChild.SetArray("A", new int[3] { 0, 1, 2 });
 
 
-            bfast.Write(Path);
-            using (var stream = File.OpenRead(Path))
+            bfast.Write(ResultPath);
+            using (var stream = File.OpenRead(ResultPath))
             {
                 var other = new BFast(stream);
                 var child2 = other.GetBFast("child");
@@ -538,9 +535,9 @@ namespace Vim.BFastNS.Tests
             var basic = new BFast();
             basic.SetArray("ints", new int[1] { 1 });
             basic.SetArray("floats", new float[1] { 2.0f });
-            basic.Write(Path);
+            basic.Write(ResultPath);
 
-            using (var stream = File.OpenRead(Path))
+            using (var stream = File.OpenRead(ResultPath))
             {
                 using (var residence = File.OpenRead(ResidencePath))
                 {
@@ -550,11 +547,11 @@ namespace Vim.BFastNS.Tests
 
                     output.SetBFast("input", input);
                     output.SetBFast("residence", inputResidence);
-                    output.Write(OutputPath);
+                    output.Write(ResultPath2);
                 }
             }
 
-            using (var stream = File.OpenRead(OutputPath))
+            using (var stream = File.OpenRead(ResultPath2))
             {
                 var bfast = new BFast(stream);
                 var input = bfast.GetBFast("input");
