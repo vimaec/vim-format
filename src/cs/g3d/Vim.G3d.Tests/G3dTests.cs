@@ -84,16 +84,6 @@ namespace Vim.G3d.Tests
             }
         }
 
-        [Test, Explicit("Use during debugging")]
-        public static void ReadG3DFiles()
-        {
-            foreach (var f in Directory.GetFiles(TestOutputFolder))
-            {
-                var g3d = G3D.Read(f);
-                G3dTestUtils.OutputStats(g3d);
-            }
-        }
-
         [Test]
         [Platform(Exclude = "Linux,Unix", Reason = "AssimpNet is failing to load its dependency on 'libdl.so'.")]
         public static void OpenAndConvertAssimpFiles()
@@ -290,7 +280,7 @@ namespace Vim.G3d.Tests
             ValidateSameG3D(g3d, tmp);
         }
 
-        [Test]
+        [Test, Explicit]
         [Platform(Exclude = "Linux,Unix", Reason = "AssimpNet is failing to load its dependency on 'libdl.so'.")]
         public static void TestWriters()
         {
