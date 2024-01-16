@@ -15,8 +15,14 @@ namespace Vim.BFastNS.Tests
         [SetUp]
         public void Setup()
         {
-            File.Delete(Path);
-            File.Delete(OutputPath);
+            if (File.Exists(Path))
+            {
+                File.Delete(Path);
+            }
+            if (File.Exists(OutputPath))
+            {
+                File.Delete(OutputPath);
+            }
         }
 
         [Test]
