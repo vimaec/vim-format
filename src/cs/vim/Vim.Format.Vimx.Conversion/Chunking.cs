@@ -96,16 +96,15 @@ namespace Vim.Format.VimxNS.Conversion
                 submeshOffsets.Add(submeshOffsets[i] + opaqueCount + transparentCount);
             }
 
-            return new G3dChunk()
-            {
-                MeshSubmeshOffset = submeshOffsets.ToArray(),
-                MeshOpaqueSubmeshCounts = opaqueCounts.ToArray(),
-                SubmeshIndexOffsets = submeshIndexOffsets.ToArray(),
-                SubmeshVertexOffsets = submeshVertexOffsets.ToArray(),
-                SubmeshMaterials = submeshMaterials.ToArray(),
-                Indices = indices.ToArray(),
-                Positions = vertices.ToArray()
-            };
+            return new G3dChunk(
+                submeshOffsets.ToArray(),
+                opaqueCounts.ToArray(),
+                submeshIndexOffsets.ToArray(),
+                submeshVertexOffsets.ToArray(),
+                submeshMaterials.ToArray(),
+                vertices.ToArray(),
+                indices.ToArray()
+            );
         }
 
 
@@ -192,16 +191,15 @@ namespace Vim.Format.VimxNS.Conversion
                 meshSubmeshOffsets[i + 1] = meshSubmeshOffsets[i] + opaqueCount + transparentCount;
             }
 
-            return new G3dChunk()
-            {
-                MeshSubmeshOffset = meshSubmeshOffsets,
-                MeshOpaqueSubmeshCounts = meshOpaqueCounts,
-                SubmeshIndexOffsets = submeshBuffer.IndexOffsets,
-                SubmeshVertexOffsets = submeshBuffer.VertexOffsets,
-                SubmeshMaterials = submeshBuffer.Materials,
-                Indices = pointsBuffer.indices,
-                Positions = pointsBuffer.vertices.ToArray()
-            };
+            return new G3dChunk(
+                meshSubmeshOffsets,
+                meshOpaqueCounts,
+                submeshBuffer.IndexOffsets,
+                submeshBuffer.VertexOffsets,
+                submeshBuffer.Materials,
+                pointsBuffer.vertices.ToArray(),
+                pointsBuffer.indices
+            );
         }
 
         private static int AppendSubmeshes(

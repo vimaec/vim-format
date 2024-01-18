@@ -48,7 +48,7 @@ namespace Vim.Format.VimxNS.Conversion
 
             sw.Restart();
             // Materials are reused from input g3d.
-            var materials = new G3dMaterials().ReadFromVim(g3d);
+            var materials = new G3dMaterials(g3d);
             Console.WriteLine("    G3dMaterials " + sw.ElapsedMilliseconds);
 
             var header = VimxHeader.CreateDefault();
@@ -149,24 +149,24 @@ namespace Vim.Format.VimxNS.Conversion
 
             Console.WriteLine("AABB " + sw.ElapsedMilliseconds);
 
-            var scene = new G3dScene()
-            {
-                ChunkCount = new[] { chunks.ChunkCount},
-                InstanceMeshes = instanceMeshes,
-                InstanceTransformData = instanceTransforms,
-                InstanceNodes = instanceNodes,
-                InstanceFlags = instanceFlags,
-                InstanceGroups = instanceGroups,
-                InstanceMaxs = instanceMaxs,
-                InstanceMins = instanceMins,
-                InstanceTags = instanceTags,
-                MeshChunks = chunks.MeshChunks,
-                MeshChunkIndices = chunks.MeshIndex,
-                MeshIndexCounts = indexCounts,
-                MeshVertexCounts = vertexCounts,
-                MeshOpaqueIndexCounts = opaqueIndexCounts,
-                MeshOpaqueVertexCounts = opaqueVertexCounts,
-            };
+            var scene = new G3dScene(
+            
+                chunkCount: new[] { chunks.ChunkCount},
+                instanceMeshes : instanceMeshes,
+                instanceTransformData: instanceTransforms,
+                instanceNodes:  instanceNodes,
+                instanceFlags:  instanceFlags,
+                instanceGroups:  instanceGroups,
+                instanceMaxs: instanceMaxs,
+                instanceMins: instanceMins,
+                instanceTags: instanceTags,
+                meshChunks: chunks.MeshChunks,
+                meshChunkIndices: chunks.MeshIndex,
+                meshIndexCounts : indexCounts,
+                meshVertexCounts:  vertexCounts,
+                meshOpaqueIndexCounts:  opaqueIndexCounts,
+                meshOpaqueVertexCounts: opaqueVertexCounts
+            );
             return scene;
         }
 

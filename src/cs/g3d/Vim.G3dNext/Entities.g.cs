@@ -1,7 +1,6 @@
 // AUTO-GENERATED FILE, DO NOT MODIFY.
 // ReSharper disable All
 using Vim.BFastNS;
-using Vim.G3dNext;
 
 namespace Vim.G3dNext.Attributes
 {
@@ -130,7 +129,6 @@ namespace Vim.G3dNext.Attributes
  			ShapeWidths.SafeEquals(other.ShapeWidths);
         }
 
-
         public G3dVim Merge(G3dVim other)
         {
             return new G3dVim(
@@ -237,7 +235,6 @@ namespace Vim.G3dNext.Attributes
  			Indices.SafeEquals(other.Indices);
         }
 
-
         public G3dChunk Merge(G3dChunk other)
         {
             return new G3dChunk(
@@ -307,7 +304,6 @@ namespace Vim.G3dNext.Attributes
  			MaterialGlossiness.SafeEquals(other.MaterialGlossiness) && 
  			MaterialSmoothness.SafeEquals(other.MaterialSmoothness);
         }
-
 
         public G3dMaterials Merge(G3dMaterials other)
         {
@@ -443,7 +439,6 @@ namespace Vim.G3dNext.Attributes
  			MeshOpaqueVertexCounts.SafeEquals(other.MeshOpaqueVertexCounts) && 
  			MeshOpaqueIndexCounts.SafeEquals(other.MeshOpaqueIndexCounts);
         }
-
 
         public G3dScene Merge(G3dScene other)
         {

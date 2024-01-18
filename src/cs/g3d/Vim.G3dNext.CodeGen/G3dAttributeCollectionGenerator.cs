@@ -1,12 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 
 namespace Vim.G3dNext.CodeGen
 {
-
     public static class G3dAttributeCollectionGenerator
     {
         public static void WriteDocument(string filePath)
@@ -15,18 +12,13 @@ namespace Vim.G3dNext.CodeGen
             {
                 var cb = new CodeBuilder();
 
-                cb.AppendLine("// AUTO-GENERATED FILE, DO NOT MODIFY WACKO3.");
+                cb.AppendLine("// AUTO-GENERATED FILE, DO NOT MODIFY.");
                 cb.AppendLine("// ReSharper disable All");
-                cb.AppendLine("using System;");
-                cb.AppendLine("using System.IO;");
-                cb.AppendLine("using System.Collections.Generic;");
-                cb.AppendLine("using System.Linq;");
                 cb.AppendLine("using Vim.BFastNS;");
                 cb.AppendLine();
                 cb.AppendLine("namespace Vim.G3dNext.Attributes");
                 cb.AppendLine("{");
-                WriteVimG3dAttributes(cb);
-                WriteVimG3dAttributeCollections(cb);
+                WriteEntities(cb);
                 cb.AppendLine("}");
                 var content = cb.ToString();
                 File.WriteAllText(filePath, content);
@@ -38,292 +30,104 @@ namespace Vim.G3dNext.CodeGen
             }
         }
 
-        public static IEnumerable<Type> GetAllClassesWithAttribute<T>() where T: Attribute
+        public static void WriteEntities(CodeBuilder cb)
         {
-            // Load the assembly containing the classes you want to examine
-            var assembly = Assembly.GetExecutingAssembly();
-
-            // Find all the types in the assembly that have the MyAttribute attribute
-            return assembly.GetTypes()
-                .Where(type => type.GetCustomAttributes<T>(false).Any());
-        } 
-
-        public static void WriteVimG3dAttributes(CodeBuilder cb)
-        {
-            var adClasses = GetAllClassesWithAttribute<AttributeDescriptorAttribute>();
-
-            foreach (var adClass in adClasses)
-                WriteVimG3dAttribute(cb, adClass);
+            foreach(var entity in Definitions.GetEntities())
+            {
+                cb.AppendLine(EntityToCode(entity));
+            }
         }
 
-        public static string GetTypedDataType(this AttributeDescriptorAttribute ada)
+        public static string EntityToCode(G3dEntity entity)
         {
-            if (ada.ArrayType != null)
-                return ada.ArrayType.ToString();
-
-            if (!AttributeDescriptor.TryParse(ada.Name, out var ad))
-                throw new Exception($"Could not parse attribute name {ada.Name}");
-
-            return ad.DataType.GetManagedType().ToString();
-        }
-
-        public static void WriteVimG3dAttribute(CodeBuilder cb, Type adClass)
-        {
-            var className = adClass.Name;
-            var ada = adClass.GetCustomAttribute<AttributeDescriptorAttribute>();
-            if (ada == null)
-                throw new Exception($"No attribute of type {nameof(AttributeDescriptorAttribute)} found on {className}");
-
-            var attributeName = ada.Name;
-            if (!AttributeDescriptor.TryParse(attributeName, out var ad))
-                throw new Exception($"Invalid attribute descriptor: {attributeName}");
-
-            var typedDataType = ada.GetTypedDataType();
-            var attributeType = ada.AttributeType;
-            var indexInto = ada.IndexInto;
-
-            cb.AppendLine($@"
-    public partial class {className} : {nameof(IAttribute)}<{typedDataType}>
+            return $@"// Please provide an explicit implementation in another partial class file.
+    public partial class {entity.ClassName} : ISetup
     {{
-        public const string AttributeName = ""{attributeName}"";
+        {string.Join("\n \t\t", entity.Buffers.Select(b =>
+            {
+                return $"public {b.ValueType}[] {b.MemberName};";
+            })).TrimStart()}
 
-        public string Name
-            => AttributeName;
-
-        public int Count => TypedData?.Length ?? 0;
-
-        public void AddTo(BFast bfast)
+        public {entity.ClassName}(
+            {string.Join(", \n \t\t\t", entity.Buffers.Select(b =>
+            {
+                return $"{b.ValueType}[] {b.ArgumentName}";
+            })).TrimStart()}
+        )
         {{
-            if(TypedData != null)
-            {{
-                bfast.SetArray(Name, TypedData);
-            }}
+            {string.Join("\n \t\t\t", entity.Buffers.Select(b =>
+            {
+                return $"{b.MemberName} = {b.ArgumentName};";
+            })).TrimStart()}
+
+            (this as ISetup).Setup();
         }}
 
-        public void ReadBFast(BFast bfast)
+        public {entity.ClassName}(BFast bfast)
         {{
-            TypedData = bfast.GetArray<{typedDataType}>(""{attributeName}"");
-        }}
+            {string.Join("\n \t\t\t", entity.Buffers.Select(b =>
+            {
+                return $"{b.MemberName} = bfast.GetArray<{b.ValueType}>(\"{b.BufferName}\");";
+            })).TrimStart()}
 
-        public {nameof(IAttributeDescriptor)} {nameof(AttributeDescriptor)} {{ get; }}
-            = new {nameof(AttributeDescriptor)}(AttributeName);
-
-        public {nameof(AttributeType)} {nameof(IAttribute.AttributeType)} {{ get; }}
-            = {nameof(AttributeType)}.{attributeType};
-
-        public Type {nameof(IAttribute.IndexInto)} {{ get; }}
-            = {(indexInto == default ? "null" : $"typeof({indexInto})")};
-
-        public {typedDataType}[] TypedData {{ get; set; }}
-            = Array.Empty<{typedDataType}>();
-
-        public Array Data
-            => TypedData;
-
-        public void Write(Stream stream)
-        {{
-            if (TypedData == null || TypedData.Length == 0)
-                return;
-            stream.Write(TypedData);
-        }}
-    }}");
-        }
-
-        public static void WriteVimG3dAttributeCollections(CodeBuilder cb)
-        {
-            var acClasses = GetAllClassesWithAttribute<AttributeCollectionAttribute>();
-
-            foreach (var acClass in acClasses)
-                WriteVimG3dAttributeCollection(cb, acClass);
-        }
-
-        public static void WriteVimG3dAttributeCollection(CodeBuilder cb, Type acClass)
-        {
-            var className = acClass.Name;
-
-            var ac = acClass.GetCustomAttribute<AttributeCollectionAttribute>();
-            if (ac == null)
-                throw new Exception($"No attribute of type {(nameof(AttributeCollectionAttribute))} found on {className}");
-
-            var attributeClasses = ac.AttributeClasses;
-            var g3dName = "G3d" + className.Replace("AttributeCollection", "");
-
-            cb.AppendLine($@"
-    // Please provide an explicit implementation in another partial class file.
-    public partial class {g3dName} : ISetup
-    {{
-        public {className} Attributes;
-
-        public {g3dName}() : this(new {className}())
-        {{
-            // empty
-        }}
-
-        public {g3dName}(BFast bfast) : this(new {className}(bfast))
-        {{
-            // empty
-        }}
-
-        public {g3dName}({className} attributes)
-        {{
-            Attributes = attributes;
-
-            // Method to implement in another partial class
             (this as ISetup).Setup();
         }}
 
         public BFast ToBFast()
-            => Attributes.ToBFast();
+        {{
+            var bfast = new BFast();
 
-        {
-            string.Join(Environment.NewLine, attributeClasses.Select(c =>
+            {string.Join("\n \t\t\t", entity.Buffers.Select(b =>
             {
-                var attribute = c.GetCustomAttribute<AttributeDescriptorAttribute>();
-                var typedDataType = attribute.GetTypedDataType();
-                var name = attribute.FormatClassName(c.Name);
-                return $@"
-        public {typedDataType}[] {attribute.FormatClassName(name)}
-        {{
-            get => Attributes.{name}.TypedData;
-            set => Attributes.{name}.TypedData = value;
-        }}";}))
-        }
-    }}
-");
+                return $"bfast.SetArray<{b.ValueType}>(\"{b.BufferName}\", {b.MemberName});";
+            })).TrimStart()}
 
-
-            cb.AppendLine($@"
-    public partial class {className} : IAttributeCollection
-    {{
-        public {className}()
-        {{
-            // empty
+            return bfast;
         }}
 
-        public {className}(BFast bfast)
+        public bool Equals({entity.ClassName} other )
         {{
-            this.ReadAttributes(bfast);
+            return {string.Join(" && \n \t\t\t", entity.Buffers.Select(b =>
+            {
+                return $"{b.MemberName}.SafeEquals(other.{b.MemberName})";
+            }))};
         }}
 
-        public void ReadAttributes(BFast bfast)
+        public {entity.ClassName} Merge({entity.ClassName} other)
         {{
-            foreach (var attribute in Map.Values)
-            {{
-                attribute.ReadBFast(bfast);
-            }}
-        }}
+            return new {entity.ClassName}(
+                {string.Join(", \n \t\t\t\t", entity.Buffers.Select(b => {
 
-        public IDictionary<string, IAttribute> Map {{ get; }}
-            = new Dictionary<string, IAttribute>
-            {{
-{string.Join(Environment.NewLine, attributeClasses.Select(c =>
-    $"                [{c}.AttributeName] = new {c}(),"))}
-            }};
-
-        // Named Attributes.
-{string.Join(Environment.NewLine, attributeClasses.Select(c =>
-    {
-        var attribute = c.GetCustomAttribute<AttributeDescriptorAttribute>();
-        var name = attribute.FormatClassName(c.Name);
-        return $@"
-        public {c} {name}
-        {{
-            get => Map.TryGetValue({c}.AttributeName, out var attr) ? attr as {c} : default;
-            set => Map[{c}.AttributeName] = value as IAttribute;
-        }}";
-    })
-)}
-
-        /// <inheritdoc/>
-        public IAttribute GetAttribute(Type attributeType)
-        {{
-{string.Join(Environment.NewLine, attributeClasses.Select(c => {
-    var attribute = c.GetCustomAttribute<AttributeDescriptorAttribute>();
-    var name = attribute.FormatClassName(c.Name);
-    return $@"
-
-                if (attributeType == typeof({c}))
-                    return {name};";
-
-    }))}
-
-            throw new ArgumentException(""Type {{attributeType.ToString()}} is not supported."");
-        }}
-
-        public IAttribute MergeAttribute(string attributeName, IReadOnlyList<IAttributeCollection> otherCollections)
-        {{
-            var collections = otherCollections.Prepend(this).ToArray();
-            switch (attributeName)
-            {{
-{string.Join(Environment.NewLine, attributeClasses.Select(c => {
-    var ada = c.GetCustomAttribute<AttributeDescriptorAttribute>();
-    var typedDataType = ada.GetTypedDataType();
-    string caseBody = null;
-    switch (ada.AttributeType)
-    {
-        case AttributeType.Singleton:
-            caseBody = $@"// Singleton Attribute (no merging)
-                    return {c.Name};";
-            break;
-        case AttributeType.Data:
-            caseBody = $@"// Data Attribute
-                    return collections.{nameof(AttributeCollectionExtensions.GetAttributesOfType)}<{c}>().ToArray().{nameof(AttributeExtensions.MergeDataAttributes)}<{c}, {typedDataType}>();";
-            break;
-        case AttributeType.Index:
-            caseBody = $@"// Index Attribute
-                    return collections.{nameof(AttributeCollectionExtensions.GetIndexedAttributesOfType)}<{c}>().{nameof(AttributeExtensions.MergeIndexAttributes)}();";
-            break;
-        default:
-            throw new ArgumentOutOfRangeException(nameof(ada.AttributeType));
-    }
-
-    return $@"
-                case {c}.AttributeName:
-                {{
-                    {caseBody}
-                }}";
-}))}
-
-                default:
-                    throw new ArgumentException(nameof(attributeName));
-            }}
+                switch (b.BufferType)
+                {
+                    case BufferType.Singleton:
+                        return $"{b.MemberName}";
+                    case BufferType.Data:
+                        return $"{b.MemberName}.MergeData(other.{b.MemberName})";
+                    case BufferType.Index:
+                        return $"{b.MemberName}.MergeIndices(other.{b.MemberName}, {b.IndexInto}?.Length ?? 0)";
+                    default:
+                        return "";
+                }
+            }))}
+            );
         }}
 
         public void Validate() 
         {{
             // Ensure all the indices are either -1 or within the bounds of the attributes they are indexing into.
-{string.Join(Environment.NewLine, attributeClasses.Select(c =>
-{
-    var ada = c.GetCustomAttribute<AttributeDescriptorAttribute>();
-    var typedDataType = ada.GetTypedDataType();
-    var name = ada.FormatClassName(c.Name);
-
-    switch (ada.AttributeType)
-    {
-        case AttributeType.Singleton:
-        case AttributeType.Data:
-            return null;
-        case AttributeType.Index:
-            return $@"
-            {{
-                var maxIndex = GetAttribute({name}.IndexInto).Data.Length - 1;
-                for (var i = 0; i < {name}.TypedData.Length; ++i)
-                {{
-                    var index = {name}.TypedData[i];
-
-                    if (index == -1)
-                        continue; // no relation.
-
-                    if (index < -1 || index > maxIndex)
-                        throw new Exception($""Index out of range in {c} at position {{i}}. Expected either -1 for no relation, or a maximum of {{maxIndex}} but got {{index}}"");
-                }}
-            }}";
-        default:
-            throw new ArgumentOutOfRangeException(nameof(ada.AttributeType));
-    }
-}).Where(s => !string.IsNullOrEmpty(s)))}
+            {string.Join("\n \t\t\t", entity.Buffers.Select(c =>
+            {
+                if (c.BufferType == BufferType.Index)
+                {
+                    return $"{c.MemberName}?.ValidateIndex({c.IndexInto}, \"{c.MemberName}\");";
+                }
+                return null;
+            }).Where(s => s != null))}
         }}
-    }}");
+    }}
+";
         }
     }
 }
+
