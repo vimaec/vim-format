@@ -12,6 +12,11 @@ namespace Vim.Format.VimxNS.Tests
         [Test]
         public static void Can_Convert_And_Read_Vimx()
         {
+            if (!Directory.Exists(VimFormatRepoPaths.OutDir))
+            {
+                Directory.CreateDirectory(VimFormatRepoPaths.OutDir);
+            }
+
             var input = TestUtils.ResidencePath;
             var name = Path.GetFileNameWithoutExtension(TestUtils.ResidencePath);
             var output = Path.Combine(VimFormatRepoPaths.OutDir, name + ".vimx");
