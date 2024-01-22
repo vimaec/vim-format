@@ -5,7 +5,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\g3d\Vim.G3dNext.Attributes\Vim.G3dNext.Attributes.csproj" />
     <ProjectReference Include="..\..\linqarray\Vim.LinqArray\Vim.LinqArray.csproj" />
     <ProjectReference Include="..\..\math3d\Vim.Math3D\Vim.Math3D.csproj" />
     <ProjectReference Include="..\Vim.Format.Vimx\Vim.Format.Vimx.csproj" />

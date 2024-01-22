@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace Vim.G3dNext.CodeGen
@@ -12,6 +13,14 @@ namespace Vim.G3dNext.CodeGen
         {
             _sb.Append(new string(' ', _indentCount * 4));
             _sb.AppendLine(line);
+            return this;
+        }
+
+        public CodeBuilder AppendLines(IEnumerable<string> lines)
+        {
+            foreach(var l in lines) {
+                AppendLine(l);
+            }
             return this;
         }
 

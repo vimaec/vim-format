@@ -55,10 +55,24 @@ namespace Vim.BFastNS
         }
 
         public void SetEnumerable<T>(string name, Func<IEnumerable<T>> enumerable) where T : unmanaged
-            => _children[name] = new BFastEnumerableNode<T>(enumerable);
+        {
+            if (enumerable == null)
+            {
+                _children.Remove(name);
+                return;
+            }
+            _children[name] = new BFastEnumerableNode<T>(enumerable);
+        }
 
         public void SetArray<T>(string name, T[] array) where T : unmanaged
-            => _children[name] = BFastNode.FromArray(array);
+        {
+            if (array == null)
+            {
+                _children.Remove(name);
+                return;
+            }
+            _children[name] = BFastNode.FromArray(array);
+        }
 
         public void SetArrays<T>(Func<int, string> getName, IEnumerable<T[]> arrays) where T : unmanaged
         {

@@ -1,9 +1,8 @@
 // AUTO-GENERATED FILE, DO NOT MODIFY.
 // ReSharper disable All
 using Vim.BFastNS;
-using Vim.G3dNext;
 
-namespace Vim.G3dNext.Attributes
+namespace Vim.G3dNext
 {
     // Please provide an explicit implementation in another partial class file.
     public partial class G3dVim : ISetup
@@ -112,57 +111,56 @@ namespace Vim.G3dNext.Attributes
 
         public bool Equals(G3dVim other )
         {
-            return Indices.SafeEquals(other.Indices) && 
- 			Positions.SafeEquals(other.Positions) && 
- 			InstanceTransforms.SafeEquals(other.InstanceTransforms) && 
- 			InstanceParents.SafeEquals(other.InstanceParents) && 
- 			InstanceFlags.SafeEquals(other.InstanceFlags) && 
- 			InstanceMeshes.SafeEquals(other.InstanceMeshes) && 
- 			MeshSubmeshOffsets.SafeEquals(other.MeshSubmeshOffsets) && 
- 			SubmeshIndexOffsets.SafeEquals(other.SubmeshIndexOffsets) && 
- 			SubmeshMaterials.SafeEquals(other.SubmeshMaterials) && 
- 			MaterialColors.SafeEquals(other.MaterialColors) && 
- 			MaterialGlossiness.SafeEquals(other.MaterialGlossiness) && 
- 			MaterialSmoothness.SafeEquals(other.MaterialSmoothness) && 
- 			ShapeVertices.SafeEquals(other.ShapeVertices) && 
- 			ShapeVertexOffsets.SafeEquals(other.ShapeVertexOffsets) && 
- 			ShapeColors.SafeEquals(other.ShapeColors) && 
- 			ShapeWidths.SafeEquals(other.ShapeWidths);
+            return BufferMethods.SafeEquals(Indices, other.Indices) && 
+ 			BufferMethods.SafeEquals(Positions, other.Positions) && 
+ 			BufferMethods.SafeEquals(InstanceTransforms, other.InstanceTransforms) && 
+ 			BufferMethods.SafeEquals(InstanceParents, other.InstanceParents) && 
+ 			BufferMethods.SafeEquals(InstanceFlags, other.InstanceFlags) && 
+ 			BufferMethods.SafeEquals(InstanceMeshes, other.InstanceMeshes) && 
+ 			BufferMethods.SafeEquals(MeshSubmeshOffsets, other.MeshSubmeshOffsets) && 
+ 			BufferMethods.SafeEquals(SubmeshIndexOffsets, other.SubmeshIndexOffsets) && 
+ 			BufferMethods.SafeEquals(SubmeshMaterials, other.SubmeshMaterials) && 
+ 			BufferMethods.SafeEquals(MaterialColors, other.MaterialColors) && 
+ 			BufferMethods.SafeEquals(MaterialGlossiness, other.MaterialGlossiness) && 
+ 			BufferMethods.SafeEquals(MaterialSmoothness, other.MaterialSmoothness) && 
+ 			BufferMethods.SafeEquals(ShapeVertices, other.ShapeVertices) && 
+ 			BufferMethods.SafeEquals(ShapeVertexOffsets, other.ShapeVertexOffsets) && 
+ 			BufferMethods.SafeEquals(ShapeColors, other.ShapeColors) && 
+ 			BufferMethods.SafeEquals(ShapeWidths, other.ShapeWidths);
         }
-
 
         public G3dVim Merge(G3dVim other)
         {
             return new G3dVim(
-                Indices.MergeIndices(other.Indices, Positions?.Length ?? 0), 
- 				Positions.MergeData(other.Positions), 
- 				InstanceTransforms.MergeData(other.InstanceTransforms), 
- 				InstanceParents.MergeIndices(other.InstanceParents, InstanceTransforms?.Length ?? 0), 
- 				InstanceFlags.MergeData(other.InstanceFlags), 
- 				InstanceMeshes.MergeIndices(other.InstanceMeshes, MeshSubmeshOffsets?.Length ?? 0), 
- 				MeshSubmeshOffsets.MergeIndices(other.MeshSubmeshOffsets, SubmeshIndexOffsets?.Length ?? 0), 
- 				SubmeshIndexOffsets.MergeIndices(other.SubmeshIndexOffsets, Indices?.Length ?? 0), 
- 				SubmeshMaterials.MergeIndices(other.SubmeshMaterials, MaterialColors?.Length ?? 0), 
- 				MaterialColors.MergeData(other.MaterialColors), 
- 				MaterialGlossiness.MergeData(other.MaterialGlossiness), 
- 				MaterialSmoothness.MergeData(other.MaterialSmoothness), 
- 				ShapeVertices.MergeData(other.ShapeVertices), 
- 				ShapeVertexOffsets.MergeIndices(other.ShapeVertexOffsets, ShapeVertices?.Length ?? 0), 
- 				ShapeColors.MergeData(other.ShapeColors), 
- 				ShapeWidths.MergeData(other.ShapeWidths)
+                BufferMethods.MergeIndex(Indices, other.Indices, Positions?.Length ?? 0), 
+ 				BufferMethods.MergeData(Positions, other.Positions), 
+ 				BufferMethods.MergeData(InstanceTransforms, other.InstanceTransforms), 
+ 				BufferMethods.MergeIndex(InstanceParents, other.InstanceParents, InstanceTransforms?.Length ?? 0), 
+ 				BufferMethods.MergeData(InstanceFlags, other.InstanceFlags), 
+ 				BufferMethods.MergeIndex(InstanceMeshes, other.InstanceMeshes, MeshSubmeshOffsets?.Length ?? 0), 
+ 				BufferMethods.MergeIndex(MeshSubmeshOffsets, other.MeshSubmeshOffsets, SubmeshIndexOffsets?.Length ?? 0), 
+ 				BufferMethods.MergeIndex(SubmeshIndexOffsets, other.SubmeshIndexOffsets, Indices?.Length ?? 0), 
+ 				BufferMethods.MergeIndex(SubmeshMaterials, other.SubmeshMaterials, MaterialColors?.Length ?? 0), 
+ 				BufferMethods.MergeData(MaterialColors, other.MaterialColors), 
+ 				BufferMethods.MergeData(MaterialGlossiness, other.MaterialGlossiness), 
+ 				BufferMethods.MergeData(MaterialSmoothness, other.MaterialSmoothness), 
+ 				BufferMethods.MergeData(ShapeVertices, other.ShapeVertices), 
+ 				BufferMethods.MergeIndex(ShapeVertexOffsets, other.ShapeVertexOffsets, ShapeVertices?.Length ?? 0), 
+ 				BufferMethods.MergeData(ShapeColors, other.ShapeColors), 
+ 				BufferMethods.MergeData(ShapeWidths, other.ShapeWidths)
             );
         }
 
         public void Validate() 
         {
             // Ensure all the indices are either -1 or within the bounds of the attributes they are indexing into.
-            Indices?.ValidateIndex(Positions, "Indices");
- 			InstanceParents?.ValidateIndex(InstanceTransforms, "InstanceParents");
- 			InstanceMeshes?.ValidateIndex(MeshSubmeshOffsets, "InstanceMeshes");
- 			MeshSubmeshOffsets?.ValidateIndex(SubmeshIndexOffsets, "MeshSubmeshOffsets");
- 			SubmeshIndexOffsets?.ValidateIndex(Indices, "SubmeshIndexOffsets");
- 			SubmeshMaterials?.ValidateIndex(MaterialColors, "SubmeshMaterials");
- 			ShapeVertexOffsets?.ValidateIndex(ShapeVertices, "ShapeVertexOffsets");
+            BufferMethods.ValidateIndex(Indices, Positions, "Indices");
+ 			BufferMethods.ValidateIndex(InstanceParents, InstanceTransforms, "InstanceParents");
+ 			BufferMethods.ValidateIndex(InstanceMeshes, MeshSubmeshOffsets, "InstanceMeshes");
+ 			BufferMethods.ValidateIndex(MeshSubmeshOffsets, SubmeshIndexOffsets, "MeshSubmeshOffsets");
+ 			BufferMethods.ValidateIndex(SubmeshIndexOffsets, Indices, "SubmeshIndexOffsets");
+ 			BufferMethods.ValidateIndex(SubmeshMaterials, MaterialColors, "SubmeshMaterials");
+ 			BufferMethods.ValidateIndex(ShapeVertexOffsets, ShapeVertices, "ShapeVertexOffsets");
         }
     }
 
@@ -228,36 +226,35 @@ namespace Vim.G3dNext.Attributes
 
         public bool Equals(G3dChunk other )
         {
-            return MeshOpaqueSubmeshCounts.SafeEquals(other.MeshOpaqueSubmeshCounts) && 
- 			MeshSubmeshOffset.SafeEquals(other.MeshSubmeshOffset) && 
- 			SubmeshIndexOffsets.SafeEquals(other.SubmeshIndexOffsets) && 
- 			SubmeshVertexOffsets.SafeEquals(other.SubmeshVertexOffsets) && 
- 			SubmeshMaterials.SafeEquals(other.SubmeshMaterials) && 
- 			Positions.SafeEquals(other.Positions) && 
- 			Indices.SafeEquals(other.Indices);
+            return BufferMethods.SafeEquals(MeshOpaqueSubmeshCounts, other.MeshOpaqueSubmeshCounts) && 
+ 			BufferMethods.SafeEquals(MeshSubmeshOffset, other.MeshSubmeshOffset) && 
+ 			BufferMethods.SafeEquals(SubmeshIndexOffsets, other.SubmeshIndexOffsets) && 
+ 			BufferMethods.SafeEquals(SubmeshVertexOffsets, other.SubmeshVertexOffsets) && 
+ 			BufferMethods.SafeEquals(SubmeshMaterials, other.SubmeshMaterials) && 
+ 			BufferMethods.SafeEquals(Positions, other.Positions) && 
+ 			BufferMethods.SafeEquals(Indices, other.Indices);
         }
-
 
         public G3dChunk Merge(G3dChunk other)
         {
             return new G3dChunk(
-                MeshOpaqueSubmeshCounts.MergeData(other.MeshOpaqueSubmeshCounts), 
- 				MeshSubmeshOffset.MergeIndices(other.MeshSubmeshOffset, Indices?.Length ?? 0), 
- 				SubmeshIndexOffsets.MergeIndices(other.SubmeshIndexOffsets, Indices?.Length ?? 0), 
- 				SubmeshVertexOffsets.MergeIndices(other.SubmeshVertexOffsets, Indices?.Length ?? 0), 
- 				SubmeshMaterials.MergeData(other.SubmeshMaterials), 
- 				Positions.MergeData(other.Positions), 
- 				Indices.MergeIndices(other.Indices, Positions?.Length ?? 0)
+                BufferMethods.MergeData(MeshOpaqueSubmeshCounts, other.MeshOpaqueSubmeshCounts), 
+ 				BufferMethods.MergeIndex(MeshSubmeshOffset, other.MeshSubmeshOffset, Indices?.Length ?? 0), 
+ 				BufferMethods.MergeIndex(SubmeshIndexOffsets, other.SubmeshIndexOffsets, Indices?.Length ?? 0), 
+ 				BufferMethods.MergeIndex(SubmeshVertexOffsets, other.SubmeshVertexOffsets, Indices?.Length ?? 0), 
+ 				BufferMethods.MergeData(SubmeshMaterials, other.SubmeshMaterials), 
+ 				BufferMethods.MergeData(Positions, other.Positions), 
+ 				BufferMethods.MergeIndex(Indices, other.Indices, Positions?.Length ?? 0)
             );
         }
 
         public void Validate() 
         {
             // Ensure all the indices are either -1 or within the bounds of the attributes they are indexing into.
-            MeshSubmeshOffset?.ValidateIndex(Indices, "MeshSubmeshOffset");
- 			SubmeshIndexOffsets?.ValidateIndex(Indices, "SubmeshIndexOffsets");
- 			SubmeshVertexOffsets?.ValidateIndex(Indices, "SubmeshVertexOffsets");
- 			Indices?.ValidateIndex(Positions, "Indices");
+            BufferMethods.ValidateIndex(MeshSubmeshOffset, Indices, "MeshSubmeshOffset");
+ 			BufferMethods.ValidateIndex(SubmeshIndexOffsets, Indices, "SubmeshIndexOffsets");
+ 			BufferMethods.ValidateIndex(SubmeshVertexOffsets, Indices, "SubmeshVertexOffsets");
+ 			BufferMethods.ValidateIndex(Indices, Positions, "Indices");
         }
     }
 
@@ -303,18 +300,17 @@ namespace Vim.G3dNext.Attributes
 
         public bool Equals(G3dMaterials other )
         {
-            return MaterialColors.SafeEquals(other.MaterialColors) && 
- 			MaterialGlossiness.SafeEquals(other.MaterialGlossiness) && 
- 			MaterialSmoothness.SafeEquals(other.MaterialSmoothness);
+            return BufferMethods.SafeEquals(MaterialColors, other.MaterialColors) && 
+ 			BufferMethods.SafeEquals(MaterialGlossiness, other.MaterialGlossiness) && 
+ 			BufferMethods.SafeEquals(MaterialSmoothness, other.MaterialSmoothness);
         }
-
 
         public G3dMaterials Merge(G3dMaterials other)
         {
             return new G3dMaterials(
-                MaterialColors.MergeData(other.MaterialColors), 
- 				MaterialGlossiness.MergeData(other.MaterialGlossiness), 
- 				MaterialSmoothness.MergeData(other.MaterialSmoothness)
+                BufferMethods.MergeData(MaterialColors, other.MaterialColors), 
+ 				BufferMethods.MergeData(MaterialGlossiness, other.MaterialGlossiness), 
+ 				BufferMethods.MergeData(MaterialSmoothness, other.MaterialSmoothness)
             );
         }
 
@@ -427,42 +423,41 @@ namespace Vim.G3dNext.Attributes
 
         public bool Equals(G3dScene other )
         {
-            return ChunkCount.SafeEquals(other.ChunkCount) && 
- 			InstanceMeshes.SafeEquals(other.InstanceMeshes) && 
- 			InstanceTransformData.SafeEquals(other.InstanceTransformData) && 
- 			InstanceNodes.SafeEquals(other.InstanceNodes) && 
- 			InstanceGroups.SafeEquals(other.InstanceGroups) && 
- 			InstanceTags.SafeEquals(other.InstanceTags) && 
- 			InstanceFlags.SafeEquals(other.InstanceFlags) && 
- 			InstanceMins.SafeEquals(other.InstanceMins) && 
- 			InstanceMaxs.SafeEquals(other.InstanceMaxs) && 
- 			MeshChunks.SafeEquals(other.MeshChunks) && 
- 			MeshChunkIndices.SafeEquals(other.MeshChunkIndices) && 
- 			MeshVertexCounts.SafeEquals(other.MeshVertexCounts) && 
- 			MeshIndexCounts.SafeEquals(other.MeshIndexCounts) && 
- 			MeshOpaqueVertexCounts.SafeEquals(other.MeshOpaqueVertexCounts) && 
- 			MeshOpaqueIndexCounts.SafeEquals(other.MeshOpaqueIndexCounts);
+            return BufferMethods.SafeEquals(ChunkCount, other.ChunkCount) && 
+ 			BufferMethods.SafeEquals(InstanceMeshes, other.InstanceMeshes) && 
+ 			BufferMethods.SafeEquals(InstanceTransformData, other.InstanceTransformData) && 
+ 			BufferMethods.SafeEquals(InstanceNodes, other.InstanceNodes) && 
+ 			BufferMethods.SafeEquals(InstanceGroups, other.InstanceGroups) && 
+ 			BufferMethods.SafeEquals(InstanceTags, other.InstanceTags) && 
+ 			BufferMethods.SafeEquals(InstanceFlags, other.InstanceFlags) && 
+ 			BufferMethods.SafeEquals(InstanceMins, other.InstanceMins) && 
+ 			BufferMethods.SafeEquals(InstanceMaxs, other.InstanceMaxs) && 
+ 			BufferMethods.SafeEquals(MeshChunks, other.MeshChunks) && 
+ 			BufferMethods.SafeEquals(MeshChunkIndices, other.MeshChunkIndices) && 
+ 			BufferMethods.SafeEquals(MeshVertexCounts, other.MeshVertexCounts) && 
+ 			BufferMethods.SafeEquals(MeshIndexCounts, other.MeshIndexCounts) && 
+ 			BufferMethods.SafeEquals(MeshOpaqueVertexCounts, other.MeshOpaqueVertexCounts) && 
+ 			BufferMethods.SafeEquals(MeshOpaqueIndexCounts, other.MeshOpaqueIndexCounts);
         }
-
 
         public G3dScene Merge(G3dScene other)
         {
             return new G3dScene(
-                ChunkCount.MergeData(other.ChunkCount), 
- 				InstanceMeshes.MergeData(other.InstanceMeshes), 
- 				InstanceTransformData.MergeData(other.InstanceTransformData), 
- 				InstanceNodes.MergeData(other.InstanceNodes), 
- 				InstanceGroups.MergeData(other.InstanceGroups), 
- 				InstanceTags.MergeData(other.InstanceTags), 
- 				InstanceFlags.MergeData(other.InstanceFlags), 
- 				InstanceMins.MergeData(other.InstanceMins), 
- 				InstanceMaxs.MergeData(other.InstanceMaxs), 
- 				MeshChunks.MergeData(other.MeshChunks), 
- 				MeshChunkIndices.MergeData(other.MeshChunkIndices), 
- 				MeshVertexCounts.MergeData(other.MeshVertexCounts), 
- 				MeshIndexCounts.MergeData(other.MeshIndexCounts), 
- 				MeshOpaqueVertexCounts.MergeData(other.MeshOpaqueVertexCounts), 
- 				MeshOpaqueIndexCounts.MergeData(other.MeshOpaqueIndexCounts)
+                BufferMethods.MergeData(ChunkCount, other.ChunkCount), 
+ 				BufferMethods.MergeData(InstanceMeshes, other.InstanceMeshes), 
+ 				BufferMethods.MergeData(InstanceTransformData, other.InstanceTransformData), 
+ 				BufferMethods.MergeData(InstanceNodes, other.InstanceNodes), 
+ 				BufferMethods.MergeData(InstanceGroups, other.InstanceGroups), 
+ 				BufferMethods.MergeData(InstanceTags, other.InstanceTags), 
+ 				BufferMethods.MergeData(InstanceFlags, other.InstanceFlags), 
+ 				BufferMethods.MergeData(InstanceMins, other.InstanceMins), 
+ 				BufferMethods.MergeData(InstanceMaxs, other.InstanceMaxs), 
+ 				BufferMethods.MergeData(MeshChunks, other.MeshChunks), 
+ 				BufferMethods.MergeData(MeshChunkIndices, other.MeshChunkIndices), 
+ 				BufferMethods.MergeData(MeshVertexCounts, other.MeshVertexCounts), 
+ 				BufferMethods.MergeData(MeshIndexCounts, other.MeshIndexCounts), 
+ 				BufferMethods.MergeData(MeshOpaqueVertexCounts, other.MeshOpaqueVertexCounts), 
+ 				BufferMethods.MergeData(MeshOpaqueIndexCounts, other.MeshOpaqueIndexCounts)
             );
         }
 
