@@ -3,10 +3,9 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using Vim.Math3d;
-using Vim.Util.Tests;
+using System.Xml.Linq;
 
-namespace Vim.G3dNext.Tests
+namespace Vim.Util.Tests
 {
     public static class TestUtils
     {
@@ -29,6 +28,12 @@ namespace Vim.G3dNext.Tests
             Directory.CreateDirectory(testDir);
 
             return testDir;
+        }
+
+        public static string PrepareOutputPath(string fileName)
+        {
+            var outputFolder = PrepareTestDir("Can_Convert_And_Read_Vimx");
+            return Path.Combine(outputFolder, fileName);
         }
 
         public static (long, long) GetMemoryConsumptionAndMSecElapsed(Action action)

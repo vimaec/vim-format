@@ -2,7 +2,7 @@
 
 namespace Vim.G3dNext.Tests
 {
-    public static class G3dTestUtils
+    public static class G3dNextTestUtils
     {
         public static G3dVim CreateTestG3d()
         {

@@ -1,6 +1,5 @@
 using NUnit.Framework;
 using NUnit.Framework.Internal;
-using Vim.G3dNext.Tests;
 using Vim.Format.VimxNS.Conversion;
 using Vim.Util.Tests;
 
@@ -14,7 +13,7 @@ namespace Vim.Format.VimxNS.Tests
         {
             var input = TestUtils.ResidencePath;
             var name = Path.GetFileNameWithoutExtension(TestUtils.ResidencePath);
-            var output = Path.Combine(VimFormatRepoPaths.OutDir, name + ".vimx");
+            var output = TestUtils.PrepareOutputPath(name + ".vimx");
 
             var vimx = VimxConverter.FromVimPath(input);
             vimx.ToBFast().Write(output);

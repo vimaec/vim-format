@@ -66,7 +66,6 @@ namespace Vim.G3dNext
             return result;
         }
 
-
         public int GetTriangleCount()
         {
             return GetIndexCount() / 3;
