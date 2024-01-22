@@ -5,7 +5,7 @@
         public static void Main(string[] args)
         {
             var file = args[0];
-            G3dAttributeCollectionGenerator.WriteDocument(file);
+            G3dCodeGen.WriteDocument(file);
         }
     }
 }

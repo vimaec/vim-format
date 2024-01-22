@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Vim.BFastNS;
-using Vim.G3dNext.Attributes;
+using Vim.G3dNext;
 
 namespace Vim.Format.VimxNS
 {

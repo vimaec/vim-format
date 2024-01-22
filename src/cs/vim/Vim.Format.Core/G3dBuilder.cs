@@ -4,7 +4,7 @@ using Vim.G3d;
 using Vim.BFastNS;
 using static Vim.Format.DocumentBuilder;
 using Vim.Math3d;
-using Vim.G3dNext.Attributes;
+using Vim.G3dNext;
 
 namespace Vim.Format
 {

@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using Vim.LinqArray;
 using Vim.BFastNS;
-using Vim.G3dNext.Attributes;
+using Vim.G3dNext;
 using Vim.Format.ObjectModel;
 using Vim.G3dNext;
 using System.Collections.Generic;
@@ -15,41 +15,28 @@ namespace Vim.Format.VimxNS.Conversion
     {
         public static Vimx FromVimPath(string vimPath)
         {
-            var sw = Stopwatch.StartNew();
             var vim = VimScene.LoadVim(vimPath, new LoadOptions()
             {
                 SkipAssets = true,
                 SkipGeometry = true,
             });
-            Console.WriteLine("  LoadVim " + sw.ElapsedMilliseconds);
 
-            sw.Restart();
             var g3d = G3dVim.FromVim(vimPath);
-            Console.WriteLine("  G3dVim.FromVim " + sw.ElapsedMilliseconds);
-
-            sw.Restart();
-            var vimx = FromVim(g3d, vim.DocumentModel);
-            Console.WriteLine("  FromVim " + sw.ElapsedMilliseconds);
+            var vimx = ConvertFromVim(g3d, vim.DocumentModel);
 
             return vimx;
         }
 
-        public static Vimx FromVim(G3dVim g3d, DocumentModel bim)
+        public static Vimx ConvertFromVim(G3dVim g3d, DocumentModel bim)
         {
-            var sw = Stopwatch.StartNew();
             // Split input Vim into chunks.
             var chunks = CreateChunks(g3d, bim);
-            Console.WriteLine("    CreateChunks " + sw.ElapsedMilliseconds);
 
-            sw.Restart();
             // Compute the scene definition from chunks.
             var scene = CreateScene(chunks, bim);
-            Console.WriteLine("    CreateScene " + sw.ElapsedMilliseconds);
 
-            sw.Restart();
             // Materials are reused from input g3d.
             var materials = new G3dMaterials(g3d);
-            Console.WriteLine("    G3dMaterials " + sw.ElapsedMilliseconds);
 
             var header = VimxHeader.CreateDefault();
 
@@ -58,20 +45,14 @@ namespace Vim.Format.VimxNS.Conversion
 
         public static VimChunks CreateChunks(G3dVim g3d, DocumentModel bim)
         {
-            var sw = Stopwatch.StartNew();
             // First compute a desirable presentation order.
             var ordering = Ordering.ComputeOrder(g3d, bim);
-            Console.WriteLine("      ComputeOrder " + sw.ElapsedMilliseconds);
 
-            sw.Restart();
             // Groups meshes up to a certain size.
             var groups = Chunking.ComputeChunks(ordering);
             // Append and merge geometry from g3d to create the chunks.
-            Console.WriteLine("      ComputeChunks " + sw.ElapsedMilliseconds);
 
-            sw.Restart();
             var chunks = Chunking.CreateChunks(groups);
-            Console.WriteLine("      CreateChunks " + sw.ElapsedMilliseconds);
 
             return chunks;
         }
@@ -147,8 +128,6 @@ namespace Vim.Format.VimxNS.Conversion
                 }
             }
 
-            Console.WriteLine("AABB " + sw.ElapsedMilliseconds);
-
             var scene = new G3dScene(
             
                 chunkCount: new[] { chunks.ChunkCount},
@@ -169,7 +148,6 @@ namespace Vim.Format.VimxNS.Conversion
             );
             return scene;
         }
-
     }
 
     /// <summary>

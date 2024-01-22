@@ -1,7 +1,6 @@
 using NUnit.Framework;
 using NUnit.Framework.Internal;
 using Vim.BFastNS;
-using Vim.G3dNext;
 
 namespace Vim.G3dNext.Tests
 {
@@ -23,7 +22,7 @@ namespace Vim.G3dNext.Tests
             // We create a g3dMaterial from the bytes of a g3dVim
             // Shows that extra attributes are ignored as they should.
 
-            var g3d = TestUtils.CreateTestG3d();
+            var g3d = G3dTestUtils.CreateTestG3d();
             var g3dMats = new G3dMaterials(g3d.ToBFast());
 
             Assert.IsNotNull(g3dMats);
@@ -35,7 +34,7 @@ namespace Vim.G3dNext.Tests
         [Test]
         public static void Can_Write_And_Read()
         {
-            var expected = TestUtils.CreateTestG3d();
+            var expected = G3dTestUtils.CreateTestG3d();
             var g3d = new G3dVim(expected.ToBFast());
             Assert.IsTrue(g3d.Equals(expected));
         }
@@ -43,7 +42,7 @@ namespace Vim.G3dNext.Tests
         [Test]
         public static void Can_Merge_two_g3d()
         {
-            var g3d = TestUtils.CreateTestG3d();
+            var g3d = G3dTestUtils.CreateTestG3d();
             var merged = g3d.Merge(g3d);
 
             var expected = new G3dVim(
@@ -67,6 +66,5 @@ namespace Vim.G3dNext.Tests
             Assert.IsTrue(merged.Equals(expected));
         }
     }
-
 }
 

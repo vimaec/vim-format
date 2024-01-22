@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace Vim.G3dNext.CodeGen
 {
-    public static class G3dAttributeCollectionGenerator
+    public static class G3dCodeGen
     {
         public static void WriteDocument(string filePath)
         {
@@ -16,7 +16,7 @@ namespace Vim.G3dNext.CodeGen
                 cb.AppendLine("// ReSharper disable All");
                 cb.AppendLine("using Vim.BFastNS;");
                 cb.AppendLine();
-                cb.AppendLine("namespace Vim.G3dNext.Attributes");
+                cb.AppendLine("namespace Vim.G3dNext");
                 cb.AppendLine("{");
                 WriteEntities(cb);
                 cb.AppendLine("}");
@@ -89,7 +89,7 @@ namespace Vim.G3dNext.CodeGen
         {{
             return {string.Join(" && \n \t\t\t", entity.Buffers.Select(b =>
             {
-                return $"{b.MemberName}.SafeEquals(other.{b.MemberName})";
+                return $"BufferMethods.SafeEquals({b.MemberName}, other.{b.MemberName})";
             }))};
         }}
 
@@ -103,9 +103,9 @@ namespace Vim.G3dNext.CodeGen
                     case BufferType.Singleton:
                         return $"{b.MemberName}";
                     case BufferType.Data:
-                        return $"{b.MemberName}.MergeData(other.{b.MemberName})";
+                        return $"BufferMethods.MergeData({b.MemberName}, other.{b.MemberName})";
                     case BufferType.Index:
-                        return $"{b.MemberName}.MergeIndices(other.{b.MemberName}, {b.IndexInto}?.Length ?? 0)";
+                        return $"BufferMethods.MergeIndex({b.MemberName}, other.{b.MemberName}, {b.IndexInto}?.Length ?? 0)";
                     default:
                         return "";
                 }
@@ -120,7 +120,7 @@ namespace Vim.G3dNext.CodeGen
             {
                 if (c.BufferType == BufferType.Index)
                 {
-                    return $"{c.MemberName}?.ValidateIndex({c.IndexInto}, \"{c.MemberName}\");";
+                    return $"BufferMethods.ValidateIndex({c.MemberName}, {c.IndexInto}, \"{c.MemberName}\");";
                 }
                 return null;
             }).Where(s => s != null))}
@@ -130,4 +130,5 @@ namespace Vim.G3dNext.CodeGen
         }
     }
 }
+
 

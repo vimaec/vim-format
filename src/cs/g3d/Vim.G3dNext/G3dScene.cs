@@ -1,4 +1,4 @@
-﻿namespace Vim.G3dNext.Attributes
+﻿namespace Vim.G3dNext
 {
     public partial class G3dScene
     {

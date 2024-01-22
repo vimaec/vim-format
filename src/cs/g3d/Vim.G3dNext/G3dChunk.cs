@@ -1,7 +1,7 @@
 ﻿using System;
 using Vim.Math3d;
 
-namespace Vim.G3dNext.Attributes
+namespace Vim.G3dNext
 {
     public partial class G3dChunk
     {

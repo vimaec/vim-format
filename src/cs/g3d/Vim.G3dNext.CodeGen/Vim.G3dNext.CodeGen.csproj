@@ -13,11 +13,10 @@
   <ItemGroup>
     <ProjectReference Include="..\..\math3d\Vim.Math3D\Vim.Math3D.csproj" />
     <ProjectReference Include="..\..\vim\Vim.Format.Vimx\Vim.Format.Vimx.csproj" />
-    <ProjectReference Include="..\Vim.G3dNext\Vim.G3dNext.csproj" />
   </ItemGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent" Condition="'$(TargetFramework)' != 'netstandard2.0'">
-    <Exec Command="dotnet &quot;$(OutDir)Vim.G3dNext.CodeGen.dll&quot; &quot;../Vim.G3dNext/Entities.g.cs&quot;" />
+    <Exec Command="dotnet &quot;$(OutDir)Vim.G3dNext.CodeGen.dll&quot; &quot;../Vim.G3dNext/G3dGenerated.g.cs&quot;" />
   </Target>
 
 </Project>

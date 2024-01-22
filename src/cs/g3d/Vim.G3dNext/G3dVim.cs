@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Vim.BFastNS;
 
-namespace Vim.G3dNext.Attributes
+namespace Vim.G3dNext
 {
     public partial class G3dVim
     {

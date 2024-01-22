@@ -25,21 +25,5 @@ namespace Vim.Format.VimxNS.Tests
             Assert.AreEqual(vimx.Chunks.Length, result.Chunks.Length);
         }
     }
-
-    [TestFixture]
-    internal class VimTests
-    {
-        [Test]
-        public static void Write_BFastNext_VsOld()
-        {
-            using (var stream = new FileStream(VimFormatRepoPaths.GetLatestWolfordResidenceVim(), FileMode.OpenOrCreate))
-            {
- 
-            }
-
-        }
-
-
-    }
 }
 
