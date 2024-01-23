@@ -82,7 +82,6 @@ namespace Vim.BFastNS
             }
         }
 
-
         /// <summary>
         /// Equivalent to ReadArray to use when you know the byte count instead of element count.
         /// </summary>
@@ -93,36 +92,6 @@ namespace Vim.BFastNS
             return ReadArray<T>(stream, (int)count);
         }
 
-        /*
-        public static unsafe T[] ConvertByteArrayToTypeArray<T>(byte[] byteArray) where T : unmanaged
-        {
-            if (byteArray.Length % sizeof(T) != 0)
-            {
-                throw new ArgumentException("Byte array length is not a multiple of the size of the target type.");
-            }
-
-            var elementCount = byteArray.Length / sizeof(T);
-            var resultArray = new T[elementCount];
-
-            fixed (byte* bytePtr = byteArray)
-            {
-                byte* currentBytePtr = bytePtr;
-                fixed (T* resultPtr = resultArray)
-                {
-                    var currentResultPtr = resultPtr;
-                    for (var i = 0; i < elementCount; i++)
-                    {
-                        *currentResultPtr = *((T*)currentBytePtr);
-                        currentBytePtr += sizeof(T);
-                        currentResultPtr++;
-                    }
-                }
-            }
-
-            return resultArray;
-        }
-
-        */
         /// <summary>
         /// A wrapper for stream.Seek(numBytes, SeekOrigin.Current) to avoid allocating memory for unrecognized buffers.
         /// </summary>
