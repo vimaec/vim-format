@@ -243,13 +243,10 @@ namespace Vim.G3d.Tests
         [Test]
         public static void UnexpectedAttributes_Are_Ignored()
         {
-            var unexpected = Path.Combine(TestInputFolder, "unexpected.g3d");
-
             var bfast = new BFast();
             bfast.SetArray("g3d:instance:potato:0:int32:1", new int[] { 5 });
-            bfast.Write(unexpected);
 
-            var g = G3D.Read(unexpected);
+            var g = G3D.Read(bfast);
             var parsedInstanceAttrs = g.Attributes.Where(ga => ga.Descriptor.Association == Association.assoc_instance).ToArray();
             var parsedPotatoAttr = parsedInstanceAttrs.Single(ga => ga.Descriptor.Semantic == "potato");
             Assert.AreEqual(new [] { 5 }, parsedPotatoAttr.AsType<int>().Data.ToArray());
@@ -272,12 +269,13 @@ namespace Vim.G3d.Tests
             var vertices = nVerts.Select(i => new Vector3(i, i, i));
             var bldr = new G3DBuilder();
             bldr.AddVertices(vertices);
-            var g3d = bldr.ToG3D();
-            Assert.AreEqual(nVerts, g3d.NumVertices);
-            var tempFile = Path.Combine(Path.GetTempPath(), "bigfile.g3d");
-            g3d.ToBFast().Write(tempFile);
-            var tmp = G3D.Read(tempFile);
-            ValidateSameG3D(g3d, tmp);
+
+            var expectedG3d = bldr.ToG3D();
+            Assert.AreEqual(nVerts, expectedG3d.NumVertices);
+            var bfast = expectedG3d.ToBFast();
+            var resultG3d = G3D.Read(bfast);
+
+            ValidateSameG3D(expectedG3d, resultG3d);
         }
 
         [Test, Explicit]
