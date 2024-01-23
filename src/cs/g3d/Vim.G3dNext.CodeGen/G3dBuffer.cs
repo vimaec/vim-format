@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 
 namespace Vim.G3dNext.CodeGen
 {
@@ -21,6 +22,8 @@ namespace Vim.G3dNext.CodeGen
 
         public G3dBuffer(string name, string bufferName, BufferType bufferType, Type valueType, string indexInto = null)
         {
+            Debug.Assert(bufferName.ToLower() == bufferName, "G3dCodeGen: Expected buffer name to be lowercase.");
+
             MemberName = name;
             BufferName = bufferName;
             BufferType = bufferType;

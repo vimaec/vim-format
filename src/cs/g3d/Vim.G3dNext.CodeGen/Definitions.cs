@@ -52,7 +52,7 @@ namespace Vim.G3dNext.CodeGen
 
         public static G3dEntity mesh = new G3dEntity("G3dChunk")
             .Data<int>("MeshOpaqueSubmeshCounts", "g3d:mesh:opaquesubmeshcount:0:int32:1")
-            .Index("MeshSubmeshOffset", "g3d:mesh:submeshOffset:0:int32:1", "Indices")
+            .Index("MeshSubmeshOffset", "g3d:mesh:submeshoffset:0:int32:1", "Indices")
             .Index("SubmeshIndexOffsets", "g3d:submesh:indexoffset:0:int32:1", "Indices")
             .Index("SubmeshVertexOffsets", "g3d:submesh:vertexoffset:0:int32:1", "Indices")
             .Index("SubmeshMaterials", "g3d:submesh:material:0:int32:1")

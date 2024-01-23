@@ -199,7 +199,7 @@ namespace Vim.G3dNext
         public G3dChunk(BFast bfast)
         {
             MeshOpaqueSubmeshCounts = bfast.GetArray<System.Int32>("g3d:mesh:opaquesubmeshcount:0:int32:1");
- 			MeshSubmeshOffset = bfast.GetArray<System.Int32>("g3d:mesh:submeshOffset:0:int32:1");
+ 			MeshSubmeshOffset = bfast.GetArray<System.Int32>("g3d:mesh:submeshoffset:0:int32:1");
  			SubmeshIndexOffsets = bfast.GetArray<System.Int32>("g3d:submesh:indexoffset:0:int32:1");
  			SubmeshVertexOffsets = bfast.GetArray<System.Int32>("g3d:submesh:vertexoffset:0:int32:1");
  			SubmeshMaterials = bfast.GetArray<System.Int32>("g3d:submesh:material:0:int32:1");
@@ -214,7 +214,7 @@ namespace Vim.G3dNext
             var bfast = new BFast();
 
             bfast.SetArray<System.Int32>("g3d:mesh:opaquesubmeshcount:0:int32:1", MeshOpaqueSubmeshCounts);
- 			bfast.SetArray<System.Int32>("g3d:mesh:submeshOffset:0:int32:1", MeshSubmeshOffset);
+ 			bfast.SetArray<System.Int32>("g3d:mesh:submeshoffset:0:int32:1", MeshSubmeshOffset);
  			bfast.SetArray<System.Int32>("g3d:submesh:indexoffset:0:int32:1", SubmeshIndexOffsets);
  			bfast.SetArray<System.Int32>("g3d:submesh:vertexoffset:0:int32:1", SubmeshVertexOffsets);
  			bfast.SetArray<System.Int32>("g3d:submesh:material:0:int32:1", SubmeshMaterials);
