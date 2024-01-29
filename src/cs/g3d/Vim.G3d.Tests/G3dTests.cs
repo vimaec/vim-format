@@ -277,38 +277,5 @@ namespace Vim.G3d.Tests
 
             ValidateSameG3D(expectedG3d, resultG3d);
         }
-
-        [Test, Explicit]
-        [Platform(Exclude = "Linux,Unix", Reason = "AssimpNet is failing to load its dependency on 'libdl.so'.")]
-        public static void TestWriters()
-        {
-            var fileName = Path.Combine(TestInputFolder, "PLY", "Wuson.ply");
-
-            var outputFileName = @"test";
-            outputFileName = Path.Combine(TestOutputFolder, outputFileName);
-
-            var g3d = LoadAssimpFile(fileName);
-
-            g3d.WritePly(outputFileName + ".ply");
-
-            // TODO compare the PLY, the OBJ and the original file.
-
-            var g3dFromPly = LoadAssimpFile(outputFileName + ".ply");
-            //var g3dFromObj = LoadAssimpFile(outputFileName + ".obj");
-
-            {
-                var g1 = g3d;
-                var g2 = g3dFromPly;
-                Assert.AreEqual(g1.NumCornersPerFace, g2.NumCornersPerFace);
-                Assert.AreEqual(g1.NumFaces, g2.NumFaces);
-                Assert.AreEqual(g1.NumCorners, g2.NumCorners);
-                Assert.AreEqual(g1.NumVertices, g2.NumVertices);
-                Assert.AreEqual(g1.NumInstances, g2.NumInstances);
-                Assert.AreEqual(g1.NumMeshes, g2.NumMeshes);
-            }
-
-            // BUG: Assimp ignores the OBJ index buffer. God knows why. 
-            //CompareG3D(g3d, g3dFromObj);
-        }
     }
 }
