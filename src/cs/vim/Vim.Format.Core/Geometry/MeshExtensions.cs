@@ -365,9 +365,6 @@ namespace Vim.Format.Geometry
         public static IArray<Triangle> Triangles(this IMesh mesh)
             => mesh.NumFaces.Select(mesh.Triangle);
 
-        public static IArray<Line> GetAllEdgesAsLines(this IMesh mesh)
-            => mesh.Triangles().SelectMany(tri => Tuple.Create(tri.AB, tri.BC, tri.CA));
-
         public static IArray<Vector3> ComputedNormals(this IMesh mesh)
             => mesh.Triangles().Select(t => t.Normal);
 
@@ -387,38 +384,6 @@ namespace Vim.Format.Geometry
         public static IArray<T> FaceDataToCornerData<T>(this IMesh mesh, IArray<T> data)
             => mesh.NumCorners.Select(i => data[i / 3]);
 
-        public static IArray<Vector3> GetOrComputeFaceNormals(this IMesh mesh)
-            => mesh.GetAttributeFaceNormal()?.Data ?? mesh.ComputedNormals();
-
-        public static IArray<Vector3> GetOrComputeVertexNormals(this IMesh mesh)
-            => mesh.VertexNormals ?? mesh.ComputeTopology().GetOrComputeVertexNormals();
-
-        /// <summary>
-        /// Returns vertex normals if present, otherwise computes vertex normals naively by averaging them.
-        /// Given a pre-computed topology, will-leverage that.
-        /// A more sophisticated algorithm would compute the weighted normal 
-        /// based on an angle.
-        /// </summary>
-        public static IArray<Vector3> GetOrComputeVertexNormals(this Topology topo)
-        {
-            var mesh = topo.Mesh;
-            var r = mesh.VertexNormals;
-            if (r != null) return r;
-            var faceNormals = mesh.GetOrComputeFaceNormals().ToArray();
-            return mesh
-                .NumVertices
-                .Select(vi =>
-                {
-                    var tmp = topo
-                        .FacesFromVertexIndex(vi)
-                        .Select(fi => faceNormals[fi])
-                        .Average();
-                    if (tmp.IsNaN())
-                        return Vector3.Zero;
-                    return tmp.SafeNormalize();
-                });
-        }
-
         public static IMesh CopyFaces(this IMesh mesh, Func<int, bool> predicate)
             => (mesh as IGeometryAttributes).CopyFaces(predicate).ToIMesh();
 
@@ -431,23 +396,5 @@ namespace Vim.Format.Geometry
         public static IMesh DeleteFaces(this IMesh mesh, Func<int, bool> predicate)
             => mesh.CopyFaces(f => !predicate(f));
         #endregion
-
-        #region Corner extensions
-        /// <summary>
-        /// Given an array of data associated with corners, return an array of data associated with
-        /// vertices. If a vertex is not referenced, no data is returned. If a vertex is referenced
-        /// multiple times, the last reference is used.
-        /// TODO: supplement with a proper interpolation system.
-        /// </summary>
-        public static IArray<T> CornerDataToVertexData<T>(this IMesh mesh, IArray<T> data)
-        {
-            var vertexData = new T[mesh.NumVertices];
-            for (var i = 0; i < data.Count; ++i)
-                vertexData[mesh.Indices[i]] = data[i];
-            return vertexData.ToIArray();
-        }
-        #endregion
-
-
     }
 }
