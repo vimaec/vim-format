@@ -86,7 +86,6 @@ namespace Vim
             => Primitives.TriMesh(
                 g3d.Vertices.ToPositionAttribute(),
                 g3d.Indices.ToIndexAttribute(),
-                g3d.VertexUvs?.ToVertexUvAttribute(),
                 g3d.SubmeshIndexOffsets?.ToSubmeshIndexOffsetAttribute(),
                 g3d.SubmeshMaterials?.ToSubmeshMaterialAttribute(),
                 g3d.MeshSubmeshOffset?.ToMeshSubmeshOffsetAttribute()

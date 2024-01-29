@@ -19,14 +19,12 @@ namespace Vim.Format.Geometry
         public static IMesh TriMesh(
             this IArray<Vector3> vertices,
             IArray<int> indices = null,
-            IArray<Vector2> uvs = null,
             IArray<Vector4> colors = null,
             IArray<int> materials = null,
             IArray<int> submeshMaterials = null)
             => TriMesh(
                 vertices?.ToPositionAttribute(),
                 indices?.ToIndexAttribute(),
-                uvs?.ToVertexUvAttribute(),
                 materials?.ToFaceMaterialAttribute(),
                 colors?.ToVertexColorAttribute(),
                 submeshMaterials?.ToSubmeshMaterialAttribute()
@@ -44,11 +42,10 @@ namespace Vim.Format.Geometry
         public static IMesh QuadMesh(this IEnumerable<GeometryAttribute> attributes)
             => new QuadMesh(attributes.Where(x => x != null)).ToTriMesh();
 
-        public static IMesh QuadMesh(this IArray<Vector3> vertices, IArray<int> indices = null, IArray<Vector2> uvs = null, IArray<int> materials = null, IArray<int> objectIds = null)
+        public static IMesh QuadMesh(this IArray<Vector3> vertices, IArray<int> indices = null, IArray<int> materials = null, IArray<int> objectIds = null)
             => QuadMesh(
                 vertices.ToPositionAttribute(),
                 indices?.ToIndexAttribute(),
-                uvs?.ToVertexUvAttribute(),
                 materials?.ToFaceMaterialAttribute()
             );
 

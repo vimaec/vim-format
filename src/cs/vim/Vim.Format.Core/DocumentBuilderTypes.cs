@@ -48,10 +48,7 @@ namespace Vim.Format
             protected List<Vector4> _colors = new List<Vector4>();
             public IReadOnlyList<Vector4> Colors => _colors;
 
-            protected List<Vector2> _uvs = new List<Vector2>();
-            public IReadOnlyList<Vector2> UVs => _uvs;
-
-            public Mesh(List<Vector3> vertices = null, List<int> indices = null, List<int> faceMaterials = null, List<Vector4> colors = null, List<Vector2> uvs = null)
+            public Mesh(List<Vector3> vertices = null, List<int> indices = null, List<int> faceMaterials = null, List<Vector4> colors = null)
             {
                 _vertices = vertices ?? new List<Vector3>();
                 _indices = indices ?? new List<int>();
@@ -68,7 +65,6 @@ namespace Vim.Format
                     throw new Exception("faceMaterials.Count must be indices.Count * 3");
 
                 _colors = colors ?? new List<Vector4>();
-                _uvs = uvs ?? new List<Vector2>();
             }
 
             public void SetMeshMaterial(int material)
@@ -96,9 +92,6 @@ namespace Vim.Format
 
             public void AppendVertices(IEnumerable<Vector3> vertices)
                 => _vertices.AddRange(vertices);
-
-            public void AppendUVs(IEnumerable<Vector2> uvs)
-                => _uvs.AddRange(uvs);
 
             public SubdividedMesh Subdivide()
                 => new SubdividedMesh(this);

@@ -505,9 +505,6 @@ namespace Vim.G3d
         public static IArray<Vector4> DefaultColors(this IGeometryAttributes self)
             => Vector4.Zero.Repeat(self.NumVertices);
 
-        public static IArray<Vector2> DefaultUvs(this IGeometryAttributes self)
-            => Vector2.Zero.Repeat(self.NumVertices);
-
         public static IGeometryAttributes Replace(this IGeometryAttributes self, Func<AttributeDescriptor, bool> selector, GeometryAttribute attribute)
             => self.Attributes.Where(a => !selector(a.Descriptor)).Append(attribute).ToGeometryAttributes();
 

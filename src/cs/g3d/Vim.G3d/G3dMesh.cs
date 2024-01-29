@@ -28,7 +28,6 @@ namespace Vim.G3d
             Vertices = G3D.Vertices?.SubArray(VertexOffset, NumVertices);
             var offset = VertexOffset;
             Indices = G3D.Indices?.SubArray(IndexOffset, NumCorners).Select(i => i - offset);
-            VertexUvs = G3D.VertexUvs?.SubArray(VertexOffset, NumVertices);
             VertexNormals = G3D.VertexNormals?.SubArray(VertexOffset, NumVertices);
             VertexColors = G3D.VertexColors?.SubArray(VertexOffset, NumVertices);
             VertexTangents = G3D.VertexTangents?.SubArray(VertexOffset, NumVertices);
@@ -57,7 +56,6 @@ namespace Vim.G3d
         public IArray<int> Indices { get; }
 
         // Vertex associated data
-        public IArray<Vector2> VertexUvs { get; }
         public IArray<Vector3> VertexNormals { get; }
         public IArray<Vector4> VertexColors { get; }
         public IArray<Vector4> VertexTangents { get; }
