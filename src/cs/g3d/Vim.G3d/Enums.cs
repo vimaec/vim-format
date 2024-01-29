@@ -62,11 +62,8 @@ namespace Vim.G3d
         public const string Position = "position";
         public const string Index = "index";
         public const string FaceSize = "facesize";
-        public const string Uv = "uv";
         public const string Normal = "normal";
         public const string Color = "color";
-        public const string Bitangent = "bitangent";
-        public const string Tangent = "tangent";
         public const string Weight = "weight";
         public const string Width = "width";
 
