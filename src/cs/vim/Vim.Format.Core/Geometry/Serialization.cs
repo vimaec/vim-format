@@ -13,9 +13,6 @@ namespace Vim.Format.Geometry
         public static void WriteG3d(this IMesh mesh, string filePath)
             => mesh.ToG3d().ToBFast().Write(filePath);
 
-        public static void WriteObj(this IMesh mesh, string filePath)
-            => mesh.ToG3d().WriteObj(filePath);
-
         public static void WritePly(this IMesh mesh, string filePath)
             => mesh.ToG3d().WritePly(filePath);
     }

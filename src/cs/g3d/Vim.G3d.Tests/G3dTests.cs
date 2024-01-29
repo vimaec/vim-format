@@ -290,7 +290,6 @@ namespace Vim.G3d.Tests
             var g3d = LoadAssimpFile(fileName);
 
             g3d.WritePly(outputFileName + ".ply");
-            g3d.WriteObj(outputFileName + ".obj");
 
             // TODO compare the PLY, the OBJ and the original file.
 
