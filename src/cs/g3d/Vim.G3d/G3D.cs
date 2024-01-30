@@ -51,7 +51,6 @@ namespace Vim.G3d
         public IArray<G3dMesh> Meshes { get; }
 
         // Instances
-        public IArray<int> InstanceParents { get; } // Index of the parent transform 
         public IArray<Matrix4x4> InstanceTransforms { get; } // A 4x4 matrix in row-column order defining the transormed
         public IArray<int> InstanceMeshes { get; } // The SubGeometry associated with the index
         public IArray<ushort> InstanceFlags { get; } // The instance flags associated with the index.
@@ -130,11 +129,6 @@ namespace Vim.G3d
                             FaceMaterials = FaceMaterials ?? attr.AsType<int>().Data;
                         if (attr.IsTypeAndAssociation<int>(Association.assoc_submesh))
                             SubmeshMaterials = SubmeshMaterials ?? attr.AsType<int>().Data;
-                        break;
-
-                    case Semantic.Parent:
-                        if (attr.IsTypeAndAssociation<int>(Association.assoc_instance))
-                            InstanceParents = InstanceParents ?? attr.AsType<int>().Data;
                         break;
 
                     case Semantic.Mesh:

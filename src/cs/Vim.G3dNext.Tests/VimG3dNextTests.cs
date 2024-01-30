@@ -49,7 +49,6 @@ namespace Vim.G3dNext.Tests
             var expected = new G3dVim(
                 instanceTransforms: g3d.InstanceTransforms.Concat(g3d.InstanceTransforms).ToArray(),
                 instanceMeshes: g3d.InstanceMeshes.Concat(g3d.InstanceMeshes.Select(i => i + g3d.GetMeshCount())).ToArray(),
-                instanceParents: g3d.InstanceParents.Concat(g3d.InstanceParents).ToArray(),
                 instanceFlags: null,
                 meshSubmeshOffsets: g3d.MeshSubmeshOffsets.Concat(g3d.MeshSubmeshOffsets.Select(i => g3d.GetSubmeshCount())).ToArray(),
                 submeshIndexOffsets: g3d.SubmeshIndexOffsets.Concat(g3d.SubmeshIndexOffsets.Select(i => i + g3d.GetIndexCount())).ToArray(),

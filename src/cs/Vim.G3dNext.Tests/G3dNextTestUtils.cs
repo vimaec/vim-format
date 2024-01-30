@@ -9,7 +9,6 @@ namespace Vim.G3dNext.Tests
             var g3d = new G3dVim(
                 instanceTransforms: new Matrix4x4[] { Matrix4x4.Identity },
                 instanceMeshes: new int[] { 0 },
-                instanceParents: new int[] { -1 },
                 instanceFlags: null,
                 meshSubmeshOffsets: new int[] { 0 },
                 submeshIndexOffsets: new int[] { 0, 3, 6 },

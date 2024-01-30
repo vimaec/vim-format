@@ -20,7 +20,6 @@ namespace Vim.G3d
         IArray<int> Indices { get; }
         IArray<ushort> InstanceFlags { get; }
         IArray<int> InstanceMeshes { get; }
-        IArray<int> InstanceParents { get; }
         IArray<Matrix4x4> InstanceTransforms { get; }
         IArray<Vector4> MaterialColors { get; }
         IArray<float> MaterialGlossiness { get; }
@@ -64,8 +63,6 @@ public class G3DAdapter : IG3D
     public IArray<ushort> InstanceFlags => throw new System.NotImplementedException();
 
     public IArray<int> InstanceMeshes => throw new System.NotImplementedException();
-
-    public IArray<int> InstanceParents => throw new System.NotImplementedException();
 
     public IArray<Matrix4x4> InstanceTransforms => throw new System.NotImplementedException();
 

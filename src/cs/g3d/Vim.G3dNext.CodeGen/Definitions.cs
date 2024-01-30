@@ -13,7 +13,6 @@ namespace Vim.G3dNext.CodeGen
             .Index("Indices", "g3d:corner:index:0:int32:1", "Positions")
             .Data<Vector3>("Positions", "g3d:vertex:position:0:float32:3")
             .Data<Matrix4x4>("InstanceTransforms", "g3d:instance:transform:0:float32:16")
-            .Index("InstanceParents", "g3d:instance:parent:0:int32:1", "InstanceTransforms")
             .Data<ushort>("InstanceFlags", "g3d:instance:flags:0:uint16:1")
             .Index("InstanceMeshes", "g3d:instance:mesh:0:int32:1", "MeshSubmeshOffsets")
             .Index("MeshSubmeshOffsets", "g3d:mesh:submeshoffset:0:int32:1", "SubmeshIndexOffsets")

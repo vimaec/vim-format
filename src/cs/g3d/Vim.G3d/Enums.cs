@@ -81,7 +81,6 @@ namespace Vim.G3d
         // Usually associated with instances
         public const string Subgeometry = "subgeometry";
         public const string Mesh = "mesh";
-        public const string Parent = "parent";
         public const string Transform = "transform";
         public const string Flags = "flags";
 

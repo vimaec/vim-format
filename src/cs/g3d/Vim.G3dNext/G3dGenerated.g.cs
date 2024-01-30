@@ -10,7 +10,6 @@ namespace Vim.G3dNext
         public System.Int32[] Indices;
  		public Vim.Math3d.Vector3[] Positions;
  		public Vim.Math3d.Matrix4x4[] InstanceTransforms;
- 		public System.Int32[] InstanceParents;
  		public System.UInt16[] InstanceFlags;
  		public System.Int32[] InstanceMeshes;
  		public System.Int32[] MeshSubmeshOffsets;
@@ -28,7 +27,6 @@ namespace Vim.G3dNext
             System.Int32[] indices, 
  			Vim.Math3d.Vector3[] positions, 
  			Vim.Math3d.Matrix4x4[] instanceTransforms, 
- 			System.Int32[] instanceParents, 
  			System.UInt16[] instanceFlags, 
  			System.Int32[] instanceMeshes, 
  			System.Int32[] meshSubmeshOffsets, 
@@ -46,7 +44,6 @@ namespace Vim.G3dNext
             Indices = indices;
  			Positions = positions;
  			InstanceTransforms = instanceTransforms;
- 			InstanceParents = instanceParents;
  			InstanceFlags = instanceFlags;
  			InstanceMeshes = instanceMeshes;
  			MeshSubmeshOffsets = meshSubmeshOffsets;
@@ -68,7 +65,6 @@ namespace Vim.G3dNext
             Indices = bfast.GetArray<System.Int32>("g3d:corner:index:0:int32:1");
  			Positions = bfast.GetArray<Vim.Math3d.Vector3>("g3d:vertex:position:0:float32:3");
  			InstanceTransforms = bfast.GetArray<Vim.Math3d.Matrix4x4>("g3d:instance:transform:0:float32:16");
- 			InstanceParents = bfast.GetArray<System.Int32>("g3d:instance:parent:0:int32:1");
  			InstanceFlags = bfast.GetArray<System.UInt16>("g3d:instance:flags:0:uint16:1");
  			InstanceMeshes = bfast.GetArray<System.Int32>("g3d:instance:mesh:0:int32:1");
  			MeshSubmeshOffsets = bfast.GetArray<System.Int32>("g3d:mesh:submeshoffset:0:int32:1");
@@ -92,7 +88,6 @@ namespace Vim.G3dNext
             bfast.SetArray<System.Int32>("g3d:corner:index:0:int32:1", Indices);
  			bfast.SetArray<Vim.Math3d.Vector3>("g3d:vertex:position:0:float32:3", Positions);
  			bfast.SetArray<Vim.Math3d.Matrix4x4>("g3d:instance:transform:0:float32:16", InstanceTransforms);
- 			bfast.SetArray<System.Int32>("g3d:instance:parent:0:int32:1", InstanceParents);
  			bfast.SetArray<System.UInt16>("g3d:instance:flags:0:uint16:1", InstanceFlags);
  			bfast.SetArray<System.Int32>("g3d:instance:mesh:0:int32:1", InstanceMeshes);
  			bfast.SetArray<System.Int32>("g3d:mesh:submeshoffset:0:int32:1", MeshSubmeshOffsets);
@@ -114,7 +109,6 @@ namespace Vim.G3dNext
             return BufferMethods.SafeEquals(Indices, other.Indices) && 
  			BufferMethods.SafeEquals(Positions, other.Positions) && 
  			BufferMethods.SafeEquals(InstanceTransforms, other.InstanceTransforms) && 
- 			BufferMethods.SafeEquals(InstanceParents, other.InstanceParents) && 
  			BufferMethods.SafeEquals(InstanceFlags, other.InstanceFlags) && 
  			BufferMethods.SafeEquals(InstanceMeshes, other.InstanceMeshes) && 
  			BufferMethods.SafeEquals(MeshSubmeshOffsets, other.MeshSubmeshOffsets) && 
@@ -135,7 +129,6 @@ namespace Vim.G3dNext
                 BufferMethods.MergeIndex(Indices, other.Indices, Positions?.Length ?? 0), 
  				BufferMethods.MergeData(Positions, other.Positions), 
  				BufferMethods.MergeData(InstanceTransforms, other.InstanceTransforms), 
- 				BufferMethods.MergeIndex(InstanceParents, other.InstanceParents, InstanceTransforms?.Length ?? 0), 
  				BufferMethods.MergeData(InstanceFlags, other.InstanceFlags), 
  				BufferMethods.MergeIndex(InstanceMeshes, other.InstanceMeshes, MeshSubmeshOffsets?.Length ?? 0), 
  				BufferMethods.MergeIndex(MeshSubmeshOffsets, other.MeshSubmeshOffsets, SubmeshIndexOffsets?.Length ?? 0), 
@@ -155,7 +148,6 @@ namespace Vim.G3dNext
         {
             // Ensure all the indices are either -1 or within the bounds of the attributes they are indexing into.
             BufferMethods.ValidateIndex(Indices, Positions, "Indices");
- 			BufferMethods.ValidateIndex(InstanceParents, InstanceTransforms, "InstanceParents");
  			BufferMethods.ValidateIndex(InstanceMeshes, MeshSubmeshOffsets, "InstanceMeshes");
  			BufferMethods.ValidateIndex(MeshSubmeshOffsets, SubmeshIndexOffsets, "MeshSubmeshOffsets");
  			BufferMethods.ValidateIndex(SubmeshIndexOffsets, Indices, "SubmeshIndexOffsets");
