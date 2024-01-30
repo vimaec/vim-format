@@ -44,8 +44,6 @@ namespace Vim.G3d
         IArray<int> SubmeshMaterials { get; }
         IArray<Vector4> VertexColors { get; }
         IArray<Vector3> Vertices { get; }
-
-        Vector3 ComputeFaceNormal(int nFace);
     }
 }
 
