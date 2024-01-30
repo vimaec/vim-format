@@ -16,7 +16,6 @@ namespace Vim.G3d
     public interface IG3D
     {
         IArray<int> FaceMaterials { get; }
-        IArray<Vector3> FaceNormals { get; }
         G3dHeader Header { get; }
         IArray<int> Indices { get; }
         IArray<ushort> InstanceFlags { get; }
@@ -44,7 +43,6 @@ namespace Vim.G3d
         IArray<int> SubmeshIndexOffsets { get; }
         IArray<int> SubmeshMaterials { get; }
         IArray<Vector4> VertexColors { get; }
-        IArray<Vector3> VertexNormals { get; }
         IArray<Vector3> Vertices { get; }
 
         Vector3 ComputeFaceNormal(int nFace);
@@ -60,8 +58,6 @@ public class G3DAdapter : IG3D
     public IArray<int> Indices => g3d.Indices.ToIArray();
 
     public IArray<int> FaceMaterials => throw new System.NotImplementedException();
-
-    public IArray<Vector3> FaceNormals => throw new System.NotImplementedException();
 
     public G3dHeader Header => throw new System.NotImplementedException();
 
@@ -116,8 +112,6 @@ public class G3DAdapter : IG3D
     public IArray<int> SubmeshMaterials => throw new System.NotImplementedException();
 
     public IArray<Vector4> VertexColors => throw new System.NotImplementedException();
-
-    public IArray<Vector3> VertexNormals => throw new System.NotImplementedException();
 
 
 

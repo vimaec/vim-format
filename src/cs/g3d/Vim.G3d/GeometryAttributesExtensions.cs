@@ -252,15 +252,13 @@ namespace Vim.G3d
         }
 
         /// <summary>
-        /// Applies a transformation function to position attributes and another to normal attributes. When deforming, we may want to
-        /// apply a similar deformation to the normals. For example a matrix can change the position, rotation, and scale of a geometry,
+        /// Applies a transformation function to position attributes and another to normal attributes.  For example a matrix can change the position, rotation, and scale of a geometry,
         /// but the only changes should be to the direction of the normal, not the length.
         /// </summary>
         public static IGeometryAttributes Deform(this IGeometryAttributes g, Func<Vector3, Vector3> positionTransform, Func<Vector3, Vector3> normalTransform)
             => g.Attributes.Select(
                 a =>
                     (a.Descriptor.Semantic == Semantic.Position && a is GeometryAttribute<Vector3> p) ? p.Data.Select(positionTransform).ToAttribute(a.Descriptor) :
-                    (a.Descriptor.Semantic == Semantic.Normal && a is GeometryAttribute<Vector3> n) ? n.Data.Select(normalTransform).ToAttribute(a.Descriptor) :
                     a)
             .ToGeometryAttributes();
 

@@ -28,9 +28,7 @@ namespace Vim.G3d
             Vertices = G3D.Vertices?.SubArray(VertexOffset, NumVertices);
             var offset = VertexOffset;
             Indices = G3D.Indices?.SubArray(IndexOffset, NumCorners).Select(i => i - offset);
-            VertexNormals = G3D.VertexNormals?.SubArray(VertexOffset, NumVertices);
             VertexColors = G3D.VertexColors?.SubArray(VertexOffset, NumVertices);
-            FaceNormals = G3D.FaceNormals?.SubArray(FaceOffset, NumFaces);
 
             // TODO: Remove need for this.
             var submeshArray = (G3D.SubmeshIndexOffsets as ArrayAdapter<int>).Array;
@@ -55,11 +53,9 @@ namespace Vim.G3d
         public IArray<int> Indices { get; }
 
         // Vertex associated data
-        public IArray<Vector3> VertexNormals { get; }
         public IArray<Vector4> VertexColors { get; }
 
         // Face associated data.
-        public IArray<Vector3> FaceNormals { get; }
 
         public IArray<int> SubmeshMaterials { get; }
         public IArray<int> SubmeshIndexOffsets { get; }

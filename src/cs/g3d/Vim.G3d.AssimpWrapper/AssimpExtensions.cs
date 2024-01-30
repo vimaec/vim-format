@@ -76,9 +76,6 @@ namespace Vim.G3d.AssimpWrapper
             bldr.AddVertices(mesh.Vertices.ToIArray().Select(ToMath3D));
             bldr.AddIndices(indices);
 
-            if (mesh.HasNormals)
-                bldr.Add(mesh.Normals.ToIArray().Select(ToMath3D).ToVertexNormalAttribute());
-
             for (var i = 0; i < mesh.TextureCoordinateChannelCount; ++i)
             {
                 var uvChannel = mesh.TextureCoordinateChannels[i];

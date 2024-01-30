@@ -37,11 +37,9 @@ namespace Vim.G3d
 
         // Vertex associated data, provided or null
         public IArray<Vector4> VertexColors { get; }
-        public IArray<Vector3> VertexNormals { get; }
 
         // Faces
         public IArray<int> FaceMaterials { get; } // Material indices per face, 
-        public IArray<Vector3> FaceNormals { get; } // If not provided, are computed dynamically as the average of all vertex normals,
 
         // Meshes
         public IArray<int> MeshIndexOffsets { get; } // Offset into the index buffer for each Mesh
@@ -127,13 +125,6 @@ namespace Vim.G3d
                             SubmeshIndexOffsets = SubmeshIndexOffsets ?? attr.AsType<int>().Data;
                         break;
 
-                    case Semantic.Normal:
-                        if (attr.IsTypeAndAssociation<Vector3>(Association.assoc_face))
-                            FaceNormals = FaceNormals ?? attr.AsType<Vector3>().Data;
-                        if (attr.IsTypeAndAssociation<Vector3>(Association.assoc_vertex))
-                            VertexNormals = VertexNormals ?? attr.AsType<Vector3>().Data;
-                        break;
-
                     case Semantic.Material:
                         if (attr.IsTypeAndAssociation<int>(Association.assoc_face))
                             FaceMaterials = FaceMaterials ?? attr.AsType<int>().Data;
@@ -190,10 +181,6 @@ namespace Vim.G3d
             // If no indices are provided then we are going to have to treat the index buffer as indices
             if (Indices == null)
                 Indices = Vertices.Indices();
-
-            // Compute face normals if possible
-            if (FaceNormals == null && VertexNormals != null)
-                FaceNormals = NumFaces.Select(ComputeFaceNormal);
 
             if (NumMeshes > 0)
             {
@@ -268,9 +255,6 @@ namespace Vim.G3d
 
         public static Vector3 Average(IArray<Vector3> xs)
             => xs.Aggregate(Vector3.Zero, (a, b) => a + b) / xs.Count;
-
-        public Vector3 ComputeFaceNormal(int nFace)
-            => Average(NumCornersPerFace.Select(c => VertexNormals[nFace * NumCornersPerFace + c]));
 
         public static G3D Read(string filePath)
         {
