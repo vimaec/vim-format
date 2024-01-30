@@ -15,7 +15,6 @@ namespace Vim.G3d
 {
     public interface IG3D
     {
-        IArray<int> FaceMaterials { get; }
         G3dHeader Header { get; }
         IArray<int> Indices { get; }
         IArray<ushort> InstanceFlags { get; }
@@ -54,10 +53,7 @@ public class G3DAdapter : IG3D
 
     public IArray<int> Indices => g3d.Indices.ToIArray();
 
-    public IArray<int> FaceMaterials => throw new System.NotImplementedException();
-
     public G3dHeader Header => throw new System.NotImplementedException();
-
 
 
     public IArray<ushort> InstanceFlags => throw new System.NotImplementedException();

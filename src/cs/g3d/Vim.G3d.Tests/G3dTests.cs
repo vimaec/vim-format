@@ -237,7 +237,6 @@ namespace Vim.G3d.Tests
 
             Assert.AreEqual(vertices, g.Vertices.ToArray());
             Assert.AreEqual(indices, g.Indices.ToArray());
-            Assert.AreEqual(materialIndices, g.FaceMaterials.ToArray());
         }
 
         [Test]

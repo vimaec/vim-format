@@ -38,9 +38,6 @@ namespace Vim.G3d
         // Vertex associated data, provided or null
         public IArray<Vector4> VertexColors { get; }
 
-        // Faces
-        public IArray<int> FaceMaterials { get; } // Material indices per face, 
-
         // Meshes
         public IArray<int> MeshIndexOffsets { get; } // Offset into the index buffer for each Mesh
         public IArray<int> MeshVertexOffsets { get; } // Offset into the vertex buffer for each Mesh
@@ -102,8 +99,6 @@ namespace Vim.G3d
                         break;
 
                     case Semantic.Color:
-                        if (desc.Association == Association.assoc_vertex)
-                            VertexColors = attr.AttributeToColors();
                         if (desc.Association == Association.assoc_shape)
                             ShapeColors = ShapeColors ?? attr.AttributeToColors();
                         if (desc.Association == Association.assoc_material)
@@ -125,8 +120,6 @@ namespace Vim.G3d
                         break;
 
                     case Semantic.Material:
-                        if (attr.IsTypeAndAssociation<int>(Association.assoc_face))
-                            FaceMaterials = FaceMaterials ?? attr.AsType<int>().Data;
                         if (attr.IsTypeAndAssociation<int>(Association.assoc_submesh))
                             SubmeshMaterials = SubmeshMaterials ?? attr.AsType<int>().Data;
                         break;
