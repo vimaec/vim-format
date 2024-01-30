@@ -21,7 +21,7 @@ namespace Vim.G3d
     /// In the case of G3D formats that are non-conformant to the expected semantics you can use GeometryAttributes.
     /// This class is inspired heavily by the structure of FBX and Assimp. 
     /// </summary>
-    public class G3D : GeometryAttributes
+    public class G3D : GeometryAttributes, IG3D
     {
         public new static G3D Empty = Create();
 
@@ -36,8 +36,7 @@ namespace Vim.G3d
         public IArray<int> Indices { get; }
 
         // Vertex associated data, provided or null
-        public List<IArray<Vector4>> AllVertexColors { get; } = new List<IArray<Vector4>>();
-        public IArray<Vector4> VertexColors => AllVertexColors?.ElementAtOrDefault(0);
+        public IArray<Vector4> VertexColors { get; }
         public IArray<Vector3> VertexNormals { get; }
 
         // Faces
@@ -107,7 +106,7 @@ namespace Vim.G3d
 
                     case Semantic.Color:
                         if (desc.Association == Association.assoc_vertex)
-                            AllVertexColors.Add(attr.AttributeToColors());
+                            VertexColors = attr.AttributeToColors();
                         if (desc.Association == Association.assoc_shape)
                             ShapeColors = ShapeColors ?? attr.AttributeToColors();
                         if (desc.Association == Association.assoc_material)
@@ -199,20 +198,20 @@ namespace Vim.G3d
             if (NumMeshes > 0)
             {
                 // Mesh offset is the same as the offset of its first submesh.
-                if(MeshSubmeshOffset != null)
+                if (MeshSubmeshOffset != null)
                 {
                     MeshIndexOffsets = MeshSubmeshOffset.Select(submesh => SubmeshIndexOffsets[submesh]);
                     MeshSubmeshCount = GetSubArrayCounts(MeshSubmeshOffset.Count, MeshSubmeshOffset, NumSubmeshes).Evaluate();
                 }
 
-                if(MeshIndexOffsets != null)
+                if (MeshIndexOffsets != null)
                 {
                     MeshIndexCounts = GetSubArrayCounts(NumMeshes, MeshIndexOffsets, NumCorners);
                     MeshVertexOffsets = MeshIndexOffsets
                         .Zip(MeshIndexCounts, (start, count) => (start, count))
                         .Select(range => Indices.SubArray(range.start, range.count).Min());
                 }
-        
+
                 if (MeshVertexOffsets != null)
                     MeshVertexCounts = GetSubArrayCounts(NumMeshes, MeshVertexOffsets, NumVertices);
             }
@@ -239,13 +238,13 @@ namespace Vim.G3d
 
             if (ShapeColors == null)
                 ShapeColors = Vector4.Zero.Repeat(0);
-             
+
             if (ShapeWidths == null)
                 ShapeWidths = Array.Empty<float>().ToIArray();
 
             // Update the instance options
             if (InstanceFlags == null)
-                InstanceFlags = ((ushort) 0).Repeat(NumInstances);
+                InstanceFlags = ((ushort)0).Repeat(NumInstances);
 
             ShapeVertexCounts = GetSubArrayCounts(NumShapes, ShapeVertexOffsets, ShapeVertices.Count);
             ValidateSubArrayCounts(ShapeVertexCounts, nameof(ShapeVertexCounts));

@@ -60,6 +60,8 @@ namespace Vim.Format.Geometry
             return gs.Merge();
         }
 
+
+        // Used in MaxVimLoader
         public static IEnumerable<(int Material, IMesh Mesh)> SplitByMaterial(this IMesh mesh)
         {
             var submeshMaterials = mesh.SubmeshMaterials;
