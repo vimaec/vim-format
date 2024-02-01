@@ -11,6 +11,7 @@ using Vim.LinqArray;
 using Vim.Math3d;
 using IVimSceneProgress = System.IProgress<(string, double)>;
 using Vim.BFastNS;
+using Vim.G3dNext;
 
 namespace Vim
 {
@@ -66,13 +67,14 @@ namespace Vim
         public IArray<IMesh> Meshes { get; private set; }
         public IArray<ISceneNode> Nodes { get; private set; }
         public IArray<VimSceneNode> VimNodes { get; private set; }
-        public IArray<VimShape> VimShapes { get; private set; }
-        public IArray<IMaterial> Materials { get; private set; }
+        public IArray<ShapeNext> VimShapes { get; private set; }
+        public IArray<MaterialNext> Materials { get; private set; }
 
         public SerializableDocument _SerializableDocument { get; }
         public Document Document { get; private set; }
         public DocumentModel DocumentModel { get; private set; }
 
+        public G3dVim Geometry => _SerializableDocument.Geometry;
         public string PersistingId
             => Document.Header.PersistingId;
 
@@ -82,14 +84,22 @@ namespace Vim
         public Vector4 GetMaterialColor(int materialIndex)
             => _SerializableDocument.Geometry.MaterialColors[materialIndex];
 
-        public static IMesh ToIMesh(G3dMesh g3d)
+        public static IMesh ToIMesh(MeshNext mesh)
             => Primitives.TriMesh(
-                g3d.Vertices.ToPositionAttribute(),
-                g3d.Indices.ToIndexAttribute(),
-                g3d.SubmeshIndexOffsets?.ToSubmeshIndexOffsetAttribute(),
-                g3d.SubmeshMaterials?.ToSubmeshMaterialAttribute(),
-                g3d.MeshSubmeshOffset?.ToMeshSubmeshOffsetAttribute()
+                mesh.Vertices.ToIArray().ToPositionAttribute(),
+                mesh.Indices.ToIArray().ToIndexAttribute(),
+                mesh.SubmeshIndexOffsets.ToIArray()?.ToSubmeshIndexOffsetAttribute(),
+                mesh.SubmeshMaterials.ToIArray()?.ToSubmeshMaterialAttribute()
             );
+
+        public static IMesh ToIMesh(G3dMesh g3d)
+    => Primitives.TriMesh(
+        g3d.Vertices.ToPositionAttribute(),
+        g3d.Indices.ToIndexAttribute(),
+        g3d.SubmeshIndexOffsets?.ToSubmeshIndexOffsetAttribute(),
+        g3d.SubmeshMaterials?.ToSubmeshMaterialAttribute(),
+        g3d.MeshSubmeshOffset?.ToMeshSubmeshOffsetAttribute()
+    );
 
         private VimScene(SerializableDocument doc)
             => _SerializableDocument = doc;
@@ -150,13 +160,13 @@ namespace Vim
             );
 
             var createMaterials = new Step(
-                () => CreateMaterials(inParallel),
+                () => CreateMaterials(),
                 "Creating Materials",
                 1f
             );
 
             var createShapes = new Step(
-                () => CreateShapes(inParallel),
+                () => CreateShapes(),
                 "Creating Shapes"
             );
 
@@ -192,29 +202,12 @@ namespace Vim
 
         private void CreateMeshes(bool inParallel)
         {
-            if (_SerializableDocument.Geometry == null)
-            {
-                return;
-            }
-
-            var srcGeo = _SerializableDocument.Geometry;
-            var tmp = srcGeo?.Meshes.Select(ToIMesh);
-            Meshes = (tmp == null)
-                ? LinqArray.LinqArray.Empty<IMesh>()
-                : inParallel 
-                    ? tmp.EvaluateInParallel() 
-                    : tmp.Evaluate();
+            Meshes = Geometry?.GetMeshes().Select(ToIMesh).ToIArray();
         }
 
-        private void CreateShapes(bool inParallel)
+        private void CreateShapes()
         {
-            if (_SerializableDocument.Geometry == null)
-            {
-                return;
-            }
-
-            var r = _SerializableDocument.Geometry.Shapes.Select((s, i) => new VimShape(this, i));
-            VimShapes = inParallel ? r.EvaluateInParallel() : r.Evaluate();
+            VimShapes = Geometry?.GetShapes().ToIArray();
         }
 
         private void CreateScene(bool inParallel)
@@ -228,25 +221,18 @@ namespace Vim
             Nodes = VimNodes.Select(n => n as ISceneNode);
         }
 
-        private void CreateMaterials(bool inParallel)
+        private void CreateMaterials()
         {
-            if (_SerializableDocument.Geometry == null)
-            {
-                return;
-            }
-
-            var query = _SerializableDocument.Geometry.Materials.Select(m => new VimMaterial(m) as IMaterial);
-            Materials = inParallel ? query.EvaluateInParallel() : query.Evaluate();
+            Materials = Geometry?.GetMaterials().ToIArray();
         }
 
-        public static IArray<VimSceneNode> CreateVimSceneNodes(VimScene scene, G3D g3d, bool inParallel)
+        public static IArray<VimSceneNode> CreateVimSceneNodes(VimScene scene, G3dVim g3d, bool inParallel)
         {
             Matrix4x4 GetMatrix(int i) => i >= 0 ? g3d.InstanceTransforms[i] : Matrix4x4.Identity;
             
-            var r = g3d.InstanceTransforms.Select((_, i) =>
-                new VimSceneNode(scene, i, g3d.InstanceMeshes[i], GetMatrix(i)));
-
-            return inParallel ? r.EvaluateInParallel() : r.Evaluate();
+            return g3d.InstanceTransforms.Select((_, i) =>
+                new VimSceneNode(scene, i, g3d.InstanceMeshes[i], GetMatrix(i)))
+                .ToIArray();
         }
 
         public void Save(string filePath)

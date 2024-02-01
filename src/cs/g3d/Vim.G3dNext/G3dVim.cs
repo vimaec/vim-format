@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Vim.BFastNS;
+using Vim.G3d;
 
 namespace Vim.G3dNext
 {
@@ -76,6 +78,29 @@ namespace Vim.G3dNext
         /// </summary>
         public int GetInstanceCount() => InstanceTransforms?.Length ?? 0;
 
+        /// <summary>
+        /// The total number of indices.
+        /// </summary>
+        public int GetIndexCount() => Indices?.Length ?? 0;
+
+        /// <summary>
+        /// The total number of vertices.
+        /// </summary>
+        public int GetVertexCount() => Positions?.Length ?? 0;
+
+        /// <summary>
+        /// The total number of materials.
+        /// </summary>
+        public int GetMaterialCount() => MaterialColors?.Length ?? 0;
+
+        public MaterialNext GetMaterial(int index) => new MaterialNext(this, index);
+
+        public IEnumerable<MaterialNext> GetMaterials()
+        {
+            return MaterialColors
+               .Select((_, i) => GetMaterial(i));
+        }
+
         #region meshes
         /// <summary>
         /// The total number of meshes.
@@ -131,6 +156,17 @@ namespace Vim.G3dNext
             return GetMeshSubmeshEnd(mesh) - GetMeshSubmeshStart(mesh);
         }
 
+        public MeshNext GetMesh(int mesh)
+        {
+            return new MeshNext(this, mesh);
+        }
+
+        public IEnumerable<MeshNext> GetMeshes()
+        {
+            return MeshSubmeshOffsets.Select((_,i) =>  new MeshNext(this, i));
+        }
+
+
         #endregion
 
         #region submesh
@@ -157,29 +193,43 @@ namespace Vim.G3dNext
 
         #endregion
 
-        /// <summary>
-        /// The total number of indices.
-        /// </summary>
-        public int GetIndexCount() => Indices?.Length ?? 0;
+      
 
-        /// <summary>
-        /// The total number of vertices.
-        /// </summary>
-        public int GetVertexCount() => Positions?.Length ?? 0;
 
-        /// <summary>
-        /// The total number of materials.
-        /// </summary>
-        public int GetMaterialCount() => MaterialColors?.Length ?? 0;
-
+        #region shapes
         /// <summary>
         /// The total number of shapes.
         /// </summary>
         public int GetShapeCount() => ShapeVertexOffsets?.Length ?? 0;
 
+        public int GetShapeVertexStart(int index)
+        {
+            return ShapeVertexOffsets[index];
+        }
+
+        public int GetShapeVertexEnd(int index)
+        {
+            return index + 1 < ShapeVertexOffsets.Length
+                ? ShapeVertexOffsets[index + 1]
+                : ShapeVertices.Length;
+        }
+
+
         /// <summary>
         /// The total number of shape vertices.
         /// </summary>
         public int GetShapeVertexCount() => ShapeVertices?.Length ?? 0;
+
+        
+        public ShapeNext GetShape(int index)
+        {
+            return new ShapeNext(this, index);
+        }
+
+        public IEnumerable<ShapeNext> GetShapes()
+        {
+            return ShapeWidths.Select((_,i) =>  new ShapeNext(this, i));
+        }
+        #endregion
     }
 }

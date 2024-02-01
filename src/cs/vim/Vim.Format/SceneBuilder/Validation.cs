@@ -27,7 +27,7 @@ namespace Vim.Format.SceneBuilder
         public static void ValidateGeometry(this VimScene vim)
         {
             // Validate the packed geometry.
-            vim.Document.Geometry.ToIMesh().Validate();
+            vim.Document.Geometry.Validate();
 
             // Validate the individual meshes.
             foreach (var g in vim.Meshes.ToEnumerable())
@@ -38,8 +38,6 @@ namespace Vim.Format.SceneBuilder
         {
             var g3d = vim._SerializableDocument.Geometry;
             var errors = new List<string>();
-
-            errors.AddRange(Vim.G3d.Validation.Validate(g3d).Select(e => e.ToString("G")));
 
             var entityTypesWithG3dReferences = new HashSet<(Type, G3dAttributeReferenceAttribute[])>(
                 ObjectModelReflection.GetEntityTypes<Entity>()
@@ -65,13 +63,13 @@ namespace Vim.Format.SceneBuilder
                         var attributeName = attr.AttributeName;
                         var isOptional = attr.AttributeIsOptional;
 
-                        var g3dAttribute = g3d.GetAttribute(attributeName);
+                        var array = g3d.GetArray(attributeName);
 
                         // We don't check the relation if the attribute is optional and absent (null).
-                        if (isOptional && g3dAttribute == null)
+                        if (isOptional && array == null)
                             continue;
 
-                        var g3dElementCount = g3dAttribute?.ElementCount ?? 0;
+                        var g3dElementCount = array?.Length ?? 0;
                         var mult = attr.AttributeReferenceMultiplicity;
 
                         // Validate one-to-one relationships
@@ -125,9 +123,9 @@ namespace Vim.Format.SceneBuilder
             Parallel.For(0, numShapes, shapeIndex =>
             {
                 var shape = shapes[shapeIndex];
-                if (shape.ElementIndex < 0)
-                    throw new VimValidationException($"{nameof(Element)} is null for {nameof(VimShape)} {shape.ShapeIndex}");
-                ValidateColorDomain($"{nameof(VimShape)} color", shape.Color, Vector4.Zero, Vector4.One, shape.ShapeIndex);
+                if (shape.Index < 0)
+                    throw new VimValidationException($"{nameof(Element)} is null for {nameof(VimShape)} {shape.Index}");
+                ValidateColorDomain($"{nameof(VimShape)} color", shape.Color, Vector4.Zero, Vector4.One, shape.Index);
             });
         }
 

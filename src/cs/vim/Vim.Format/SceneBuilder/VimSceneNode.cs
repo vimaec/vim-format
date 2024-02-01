@@ -1,4 +1,5 @@
-﻿using Vim.Format.Geometry;
+﻿using System.Linq;
+using Vim.Format.Geometry;
 using Vim.Format.ObjectModel;
 using Vim.G3d;
 using Vim.LinqArray;

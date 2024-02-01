@@ -6,6 +6,7 @@ using System.Text;
 using Vim.BFastNS;
 using Vim.BFastNS.Core;
 using Vim.G3d;
+using Vim.G3dNext;
 
 namespace Vim.Format
 {
@@ -52,7 +53,7 @@ namespace Vim.Format
         /// <summary>
         /// The uninstanced / untransformed geometry
         /// </summary>
-        public G3d.G3D Geometry;
+        public G3dVim Geometry;
 
         /// <summary>
         /// The originating file name (if provided)
@@ -106,8 +107,8 @@ namespace Vim.Format
 
             if (!doc.Options.SkipGeometry)
             {
-                var geo = bfast.GetBFast(BufferNames.Geometry);
-                doc.Geometry = G3D.Read(geo);
+                var geometry = bfast.GetBFast(BufferNames.Geometry);
+                doc.Geometry = new G3dVim(geometry);
             }
 
             var entities = bfast.GetBFast(BufferNames.Entities);

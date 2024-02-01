@@ -1,5 +1,6 @@
 ﻿using Vim.LinqArray;
 using Vim.BFastNS;
+using Vim.G3dNext;
 
 namespace Vim.Format
 {
@@ -25,6 +26,6 @@ namespace Vim.Format
         public ILookup<string, INamedBuffer> Assets { get; }
         public IArray<string> StringTable { get; }
         public string GetString(int index) => StringTable.ElementAtOrDefault(index);
-        public G3d.G3D Geometry { get; }
+        public G3dVim Geometry { get; }
     }
 }

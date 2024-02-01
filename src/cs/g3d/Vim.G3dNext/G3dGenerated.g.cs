@@ -1,6 +1,7 @@
 // AUTO-GENERATED FILE, DO NOT MODIFY.
 // ReSharper disable All
 using Vim.BFastNS;
+using System;
 
 namespace Vim.G3dNext
 {
@@ -102,6 +103,27 @@ namespace Vim.G3dNext
  			bfast.SetArray<System.Single>("g3d:shape:width:0:float32:1", ShapeWidths);
 
             return bfast;
+        }
+
+        public Array GetArray(string name)
+        {
+            if(name == "g3d:corner:index:0:int32:1") return Indices;
+ 			if(name == "g3d:vertex:position:0:float32:3") return Positions;
+ 			if(name == "g3d:instance:transform:0:float32:16") return InstanceTransforms;
+ 			if(name == "g3d:instance:flags:0:uint16:1") return InstanceFlags;
+ 			if(name == "g3d:instance:mesh:0:int32:1") return InstanceMeshes;
+ 			if(name == "g3d:mesh:submeshoffset:0:int32:1") return MeshSubmeshOffsets;
+ 			if(name == "g3d:submesh:indexoffset:0:int32:1") return SubmeshIndexOffsets;
+ 			if(name == "g3d:submesh:material:0:int32:1") return SubmeshMaterials;
+ 			if(name == "g3d:material:color:0:float32:4") return MaterialColors;
+ 			if(name == "g3d:material:glossiness:0:float32:1") return MaterialGlossiness;
+ 			if(name == "g3d:material:smoothness:0:float32:1") return MaterialSmoothness;
+ 			if(name == "g3d:shapevertex:position:0:float32:3") return ShapeVertices;
+ 			if(name == "g3d:shape:vertexoffset:0:int32:1") return ShapeVertexOffsets;
+ 			if(name == "g3d:shape:color:0:float32:4") return ShapeColors;
+ 			if(name == "g3d:shape:width:0:float32:1") return ShapeWidths;
+            
+            return null;
         }
 
         public bool Equals(G3dVim other )
@@ -216,6 +238,19 @@ namespace Vim.G3dNext
             return bfast;
         }
 
+        public Array GetArray(string name)
+        {
+            if(name == "g3d:mesh:opaquesubmeshcount:0:int32:1") return MeshOpaqueSubmeshCounts;
+ 			if(name == "g3d:mesh:submeshoffset:0:int32:1") return MeshSubmeshOffset;
+ 			if(name == "g3d:submesh:indexoffset:0:int32:1") return SubmeshIndexOffsets;
+ 			if(name == "g3d:submesh:vertexoffset:0:int32:1") return SubmeshVertexOffsets;
+ 			if(name == "g3d:submesh:material:0:int32:1") return SubmeshMaterials;
+ 			if(name == "g3d:vertex:position:0:float32:3") return Positions;
+ 			if(name == "g3d:corner:index:0:int32:1") return Indices;
+            
+            return null;
+        }
+
         public bool Equals(G3dChunk other )
         {
             return BufferMethods.SafeEquals(MeshOpaqueSubmeshCounts, other.MeshOpaqueSubmeshCounts) && 
@@ -288,6 +323,15 @@ namespace Vim.G3dNext
  			bfast.SetArray<System.Single>("g3d:material:smoothness:0:float32:1", MaterialSmoothness);
 
             return bfast;
+        }
+
+        public Array GetArray(string name)
+        {
+            if(name == "g3d:material:color:0:float32:4") return MaterialColors;
+ 			if(name == "g3d:material:glossiness:0:float32:1") return MaterialGlossiness;
+ 			if(name == "g3d:material:smoothness:0:float32:1") return MaterialSmoothness;
+            
+            return null;
         }
 
         public bool Equals(G3dMaterials other )
@@ -411,6 +455,27 @@ namespace Vim.G3dNext
  			bfast.SetArray<System.Int32>("g3d:mesh:opaqueindexcount:0:int32:1", MeshOpaqueIndexCounts);
 
             return bfast;
+        }
+
+        public Array GetArray(string name)
+        {
+            if(name == "g3d:chunk:count:0:int32:1") return ChunkCount;
+ 			if(name == "g3d:instance:mesh:0:int32:1") return InstanceMeshes;
+ 			if(name == "g3d:instance:transform:0:float32:16") return InstanceTransformData;
+ 			if(name == "g3d:instance:node:0:int32:1") return InstanceNodes;
+ 			if(name == "g3d:instance:group:0:int32:1") return InstanceGroups;
+ 			if(name == "g3d:instance:tag:0:int64:1") return InstanceTags;
+ 			if(name == "g3d:instance:flags:0:uint16:1") return InstanceFlags;
+ 			if(name == "g3d:instance:min:0:float32:3") return InstanceMins;
+ 			if(name == "g3d:instance:max:0:float32:3") return InstanceMaxs;
+ 			if(name == "g3d:mesh:chunk:0:int32:1") return MeshChunks;
+ 			if(name == "g3d:mesh:chunkindex:0:int32:1") return MeshChunkIndices;
+ 			if(name == "g3d:mesh:vertexcount:0:int32:1") return MeshVertexCounts;
+ 			if(name == "g3d:mesh:indexcount:0:int32:1") return MeshIndexCounts;
+ 			if(name == "g3d:mesh:opaquevertexcount:0:int32:1") return MeshOpaqueVertexCounts;
+ 			if(name == "g3d:mesh:opaqueindexcount:0:int32:1") return MeshOpaqueIndexCounts;
+            
+            return null;
         }
 
         public bool Equals(G3dScene other )

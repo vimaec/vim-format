@@ -21,7 +21,7 @@ namespace Vim.G3d
     /// In the case of G3D formats that are non-conformant to the expected semantics you can use GeometryAttributes.
     /// This class is inspired heavily by the structure of FBX and Assimp. 
     /// </summary>
-    public class G3D : GeometryAttributes, IG3D
+    public class G3D : GeometryAttributes
     {
         public new static G3D Empty = Create();
 
@@ -252,7 +252,6 @@ namespace Vim.G3d
             }
         }
 
-
         public static G3D Read(BFast bfast)
         {
             var header = G3dHeader.FromBytesOrDefault(bfast.GetArray<byte>("meta"));
@@ -283,12 +282,10 @@ namespace Vim.G3d
             }
         }
 
-
         public static G3D Create(params GeometryAttribute[] attributes)
             => new G3D(attributes);
 
         public static G3D Create(G3dHeader header, params GeometryAttribute[] attributes)
             => new G3D(attributes, header);
-
     }
 }

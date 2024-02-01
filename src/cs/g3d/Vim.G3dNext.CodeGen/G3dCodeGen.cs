@@ -15,6 +15,7 @@ namespace Vim.G3dNext.CodeGen
                 cb.AppendLine("// AUTO-GENERATED FILE, DO NOT MODIFY.");
                 cb.AppendLine("// ReSharper disable All");
                 cb.AppendLine("using Vim.BFastNS;");
+                cb.AppendLine("using System;");
                 cb.AppendLine();
                 cb.AppendLine("namespace Vim.G3dNext");
                 cb.AppendLine("{");
@@ -83,6 +84,16 @@ namespace Vim.G3dNext.CodeGen
             })).TrimStart()}
 
             return bfast;
+        }}
+
+        public Array GetArray(string name)
+        {{
+            {string.Join("\n \t\t\t", entity.Buffers.Select(b =>
+            {
+                return $"if(name == \"{b.BufferName}\") return {b.MemberName};";
+            })).TrimStart()}
+            
+            return null;
         }}
 
         public bool Equals({entity.ClassName} other )
