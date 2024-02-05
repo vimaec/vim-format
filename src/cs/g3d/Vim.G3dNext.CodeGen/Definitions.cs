@@ -9,6 +9,7 @@ namespace Vim.G3dNext.CodeGen
             return new G3dEntity[] { vim, mesh, materials, scene };
         }
 
+        //TODO: Add api to mark field as required.
         public static G3dEntity vim = new G3dEntity("G3dVim")
             .Index("Indices", "g3d:corner:index:0:int32:1", "Positions")
             .Data<Vector3>("Positions", "g3d:vertex:position:0:float32:3")

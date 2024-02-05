@@ -62,17 +62,6 @@ namespace Vim.Format
             CommonAttributes.InstanceTransform,
         };
 
-        public static void ValidateGeometryAttributes(this Document doc)
-        {
-            var attributes = doc.Geometry.Attributes;
-            var attributeNameSet = new HashSet<string>(attributes.Select(a => a.Name).ToEnumerable());
-            foreach (var attributeName in RequiredAttributeNames)
-            {
-                if (!attributeNameSet.Contains(attributeName))
-                    throw new Exception($"Required attribute {attributeName} was not found.");
-            }
-        }
-
         public static void ValidateAssets(this Document doc)
         {
             foreach (var asset in doc.Assets.Values.ToEnumerable())
@@ -83,7 +72,7 @@ namespace Vim.Format
         {
             doc.ValidateTableRows();
             doc.ValidateIndexColumns();
-            doc.ValidateGeometryAttributes();
+            doc.Geometry.Validate();
             doc.ValidateAssets();
         }
 
