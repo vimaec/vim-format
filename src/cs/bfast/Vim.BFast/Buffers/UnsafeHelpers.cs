@@ -54,6 +54,16 @@ namespace Vim.BFastNS
             => stream.ReadBytesBuffered((byte*)dest, sizeof(T));
 
         /// <summary>
+        /// Helper for reading arbitrary unmanaged types from a Stream. 
+        /// </summary>
+        public static unsafe T Read<T>(this Stream stream) where T : unmanaged
+        {
+            T r;
+            stream.ReadBytesBuffered((byte*)&r, sizeof(T));
+            return r;
+        }
+
+        /// <summary>
         /// Helper for reading arrays of arbitrary unmanaged types from a Stream, that might be over 2GB of size.
         /// That said, in C#, you can never load more int.MaxValue numbers of items.
         /// NOTE: Arrays are still limited to 2gb in size unless gcAllowVeryLargeObjects is set to true

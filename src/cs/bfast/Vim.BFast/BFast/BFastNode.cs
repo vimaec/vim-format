@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using Vim.BFastNS.Core;
 
@@ -56,12 +55,6 @@ namespace Vim.BFastNS
 
         public IEnumerable<T> AsEnumerable<T>() where T : unmanaged
             => AsArray<T>();
-
-
-        public long GetSize()
-        {
-            return _range.Count;
-        }
 
         public void Write(Stream stream)
         {

@@ -11,7 +11,7 @@ namespace Vim.BFastNS
     {
         private readonly Dictionary<string, IBFastNode> _children = new Dictionary<string, IBFastNode>();
         public IEnumerable<string> Entries => _children.Keys;
-        private IEnumerable<(string, IWritable)> Writables => _children.Select(kvp => (kvp.Key, kvp.Value as IWritable));
+        private IEnumerable<(string name, IWritable buffer)> Writables => _children.Select(kvp => (kvp.Key, kvp.Value as IWritable));
 
         public BFast() { }
         public BFast(Stream stream)
@@ -37,7 +37,7 @@ namespace Vim.BFastNS
             }
             else
             {
-                var a = Deflate(bfast);
+                var a = Deflate2(bfast);
                 SetArray(name, a);
             }
         }
@@ -50,6 +50,22 @@ namespace Vim.BFastNS
                 {
                     bfast.Write(decompress);
                 }
+                return output.ToArray();
+            }
+        }
+
+        private byte[] Deflate2(BFast bfast)
+        {
+            using (var input = new MemoryStream())
+            using (var output = new MemoryStream())
+            {
+                bfast.Write(input);
+                input.Seek(0, SeekOrigin.Begin);
+                using (var decompress = new DeflateStream(output, CompressionMode.Compress, true))
+                {
+                    input.CopyTo(decompress);
+                }
+                // This need to happen after the deflate stream is disposed.
                 return output.ToArray();
             }
         }
@@ -130,11 +146,13 @@ namespace Vim.BFastNS
         public void Remove(string name)
             => _children.Remove(name);
 
-        public long GetSize() => GetBFastSize(Writables);
-
         public void Write(Stream stream)
         {
-            WriteBFast(stream, Writables);
+            var list = Writables.ToList();
+            var strings = list.Select(n => n.name).ToArray();
+            var buffers = list.Select(n => n.buffer).ToArray();
+            var writer = new BFastWriter(strings, buffers);
+            writer.Write(stream);
         }
 
         public void Write(string path)
@@ -177,58 +195,16 @@ namespace Vim.BFastNS
         private static IEnumerable<(string name, BFastNode value)> GetBFastNodes(Stream stream)
         {
             var offset = stream.Position;
-            var header = BFastReader.ReadHeader(stream);
-            for (var i = 1; i < header.Preamble.NumArrays; i++)
+            var raw = BFastHeader.FromStream(stream);
+            foreach(var kvp in raw.Ranges)
             {
                 var node = new BFastNode(
                     stream,
-                    header.Ranges[i].OffsetBy(offset)
+                    kvp.Value.OffsetBy(offset)
                 );
 
-                yield return (header.Names[i - 1], node);
+                yield return (kvp.Key, node);
             }
-        }
-
-        private static void WriteBFast(Stream stream, IEnumerable<(string name, IWritable value)> writables)
-        {
-            var values = writables.Select(w => w.value).ToArray();
-            var sizes = values.Select(v => v.GetSize()).ToArray();
-            var names = writables.Select(w => w.name).ToArray();
-
-            long onBuffer(Stream writingStream, int bufferIdx, string bufferName, long bytesToWrite)
-            {
-                values[bufferIdx].Write(writingStream);
-                return bytesToWrite;
-            }
-
-            BFastWriter.Write(stream, names, sizes, onBuffer);
-        }
-
-        private static long GetBFastSize(IEnumerable<(string name, IWritable value)> writables)
-        {
-            var values = writables.Select(w => w.value).ToArray();
-            var sizes = values.Select(v => v.GetSize()).ToArray();
-            var names = writables.Select(w => w.name).ToArray();
-
-            var header = BFastWriter.CreateHeader(sizes, names);
-            return header.Preamble.DataEnd;
-        }
-    }
-
-    public static class BFastNextExtensions
-    {
-        public static T ReadBFast<T>(this string path, Func<BFast, T> process)
-        {
-            using (var file = new FileStream(path, FileMode.Open))
-            {
-                var bfast = new BFast(file);
-                return process(bfast);
-            }
-        }
-
-        public static IEnumerable<INamedBuffer> ToNamedBuffers(this BFast bfast)
-        {
-            return bfast.Entries.Select(name => bfast.GetArray<byte>(name).ToNamedBuffer(name));
         }
     }
 }

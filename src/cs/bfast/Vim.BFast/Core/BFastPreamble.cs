@@ -15,13 +15,6 @@ namespace Vim.BFastNS.Core
         [FieldOffset(24)] public long NumArrays;    // number of arrays 
 
         /// <summary>
-        /// This is where the array ranges are finished. 
-        /// Must be less than or equal to DataStart.
-        /// Must be greater than or equal to FileHeader.ByteCount
-        /// </summary>
-        public long RangesEnd => Size + NumArrays * 16;
-
-        /// <summary>
         /// The size of the FileHeader structure 
         /// </summary>
         public static long Size = 32;
@@ -52,20 +45,24 @@ namespace Vim.BFastNS.Core
             if (DataStart > DataEnd)
                 throw new Exception($"Data start {DataStart} cannot be after the data end {DataEnd}");
 
-            if (!BFastAlignment.IsAligned(DataEnd))
-                throw new Exception($"Data end {DataEnd} should be aligned");
-
             if (NumArrays < 0)
-                throw new Exception($"Number of arrays {NumArrays} is not a positive number");
+                throw new Exception($"Number of arrays {NumArrays} should be at least one");
 
             if (NumArrays > DataEnd)
                 throw new Exception($"Number of arrays {NumArrays} can't be more than the total size");
 
-            if (RangesEnd > DataStart)
-                throw new Exception($"End of range {RangesEnd} can't be after data-start {DataStart}");
-
             return this;
         }
 
-    };
+        public override int GetHashCode()
+        {
+            var hashCode = 275654494;
+            hashCode = hashCode * -1521134295 + Magic.GetHashCode();
+            hashCode = hashCode * -1521134295 + DataStart.GetHashCode();
+            hashCode = hashCode * -1521134295 + DataEnd.GetHashCode();
+            hashCode = hashCode * -1521134295 + NumArrays.GetHashCode();
+            hashCode = hashCode * -1521134295 + SameEndian.GetHashCode();
+            return hashCode;
+        }
+    }
 }

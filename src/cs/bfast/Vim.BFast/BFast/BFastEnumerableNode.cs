@@ -79,7 +79,6 @@ namespace Vim.BFastNS
             return count;
         }
 
-        public unsafe long GetSize() => _source().Count() * sizeof(TNode);
         public void Write(Stream stream)
         {
             //TODO: Use bigger chunks

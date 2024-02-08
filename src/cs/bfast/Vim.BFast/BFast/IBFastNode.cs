@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 
 namespace Vim.BFastNS
@@ -10,7 +8,6 @@ namespace Vim.BFastNS
     /// </summary>
     public interface IWritable
     {
-        long GetSize();
         void Write(Stream stream);
     }
 

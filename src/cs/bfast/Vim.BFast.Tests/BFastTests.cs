@@ -1,4 +1,5 @@
 using NUnit.Framework;
+using Vim.BFastNS.Core;
 using Vim.Util.Tests;
 
 namespace Vim.BFastNS.Tests
@@ -54,23 +55,18 @@ namespace Vim.BFastNS.Tests
             bfast.Remove("missing");
         }
 
-        [Test]
-            public void EmptyBFast_GetSize_Return_64()
-        {
-            var bfast = new BFast();
-            Assert.That(bfast.GetSize(), Is.EqualTo(64));
-        }
 
         [Test]
         public void EmptyBFast_Writes_Header()
         {
             var bfast = new BFast();
-            bfast.Write(ResultPath);
-            using (var stream = File.OpenRead(ResultPath))
-            {
-                var bfast2 = new BFast(stream);
-                Assert.That(bfast2.GetSize(), Is.EqualTo(64));
-            }
+            var stream = new MemoryStream();
+            bfast.Write(stream);
+
+            stream.Seek(0, SeekOrigin.Begin);
+            var raw = BFastHeader.FromStream(stream);
+
+            Assert.That(raw.Ranges.Count, Is.EqualTo(0));
         }
 
         [Test]
@@ -299,6 +295,26 @@ namespace Vim.BFastNS.Tests
         }
 
         [Test]
+        public void SetBFast_Then_GetBFast_Nested()
+        {
+            using (var file = File.Open(ResidencePath, FileMode.Open))
+            {
+                var (b1, b2, b3) = (new BFast(), new BFast(), new BFast());
+                b2.SetBFast("b3", b3);
+                b1.SetBFast("b2", b2);
+
+                var mem = b1.ToMemoryStream();
+                var r1 = new BFast(mem);
+                var r2 = r1.GetBFast("b2");
+                var r3 = r2.GetBFast("b3");
+
+                Assert.NotNull(r1);
+                Assert.NotNull(r2);
+                Assert.NotNull(r3);
+            }
+        }
+
+        [Test]
         public void Inflate_NonDeflated_Throws()
         {
             var bfast = new BFast();
@@ -313,9 +329,26 @@ namespace Vim.BFastNS.Tests
             var bfast = new BFast();
             var b = new BFast();
             b.SetArray("B", new int[3] { 0, 1, 2 });
-            bfast.SetBFast("A", b, deflate : true);
+            bfast.SetBFast("A", b, deflate: true);
 
             var result = bfast.GetBFast("A", inflate: true);
+            var b2 = result.GetArray<int>("B");
+            Assert.That(result.Entries.Count(), Is.EqualTo(1));
+            Assert.That(b2, Is.EqualTo(new int[3] { 0, 1, 2 }));
+        }
+
+        [Test]
+        public void Deflate_Inflate_WriteRead_Works()
+        {
+            var bfast = new BFast();
+            var b = new BFast();
+            b.SetArray("B", new int[3] { 0, 1, 2 });
+            bfast.SetBFast("A", b, deflate: true);
+            var mem = bfast.ToMemoryStream();
+
+            var read = new BFast(mem);
+
+            var result = read.GetBFast("A", inflate: true);
             var b2 = result.GetArray<int>("B");
             Assert.That(result.Entries.Count(), Is.EqualTo(1));
             Assert.That(b2, Is.EqualTo(new int[3] { 0, 1, 2 }));
@@ -537,22 +570,22 @@ namespace Vim.BFastNS.Tests
         public void Write_Then_Read_Mixed_Sources()
         {
             var basic = new BFast();
+            var dummy = new MemoryStream();
             basic.SetArray("ints", new int[1] { 1 });
             basic.SetArray("floats", new float[1] { 2.0f });
-            basic.Write(ResultPath);
+            basic.Write(dummy);
 
-            using (var stream = File.OpenRead(ResultPath))
+            using (var residence = File.OpenRead(ResidencePath))
             {
-                using (var residence = File.OpenRead(ResidencePath))
-                {
-                    var input = new BFast(stream);
-                    var inputResidence = new BFast(residence);
-                    var output = new BFast();
+                dummy.Seek(0, SeekOrigin.Begin);
+                var input = new BFast(dummy);
 
-                    output.SetBFast("input", input);
-                    output.SetBFast("residence", inputResidence);
-                    output.Write(ResultPath2);
-                }
+                var inputResidence = new BFast(residence);
+                var output = new BFast();
+
+                output.SetBFast("input", input);
+                output.SetBFast("residence", inputResidence);
+                output.Write(ResultPath2);
             }
 
             using (var stream = File.OpenRead(ResultPath2))
