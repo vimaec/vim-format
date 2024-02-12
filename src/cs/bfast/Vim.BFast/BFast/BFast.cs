@@ -106,7 +106,7 @@ namespace Vim.BFastNS
         {
             using (var mem = ToMemoryStream())
             {
-                return mem.ReadArrayBytes<T>();
+                return mem.ReadArray<T>();
             }
         }
 

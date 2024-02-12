@@ -51,15 +51,6 @@ namespace Vim.BFastNS.Tests
             Assert.That(method(next), constraint);
         }
 
-        private void TestBeforeAfter(Action method, IResolveConstraint constraint)
-        {
-            Assert.That(method, constraint);
-
-            // Test that it also works after write/read
-            var next = new BFast(bfast.ToMemoryStream());
-            Assert.That(method, constraint);
-        }
-
         private void TestBeforeAfterFile<T>(Func<BFast, T> method, IResolveConstraint constraint)
         {
             Assert.That(method(bfast), constraint);
@@ -344,15 +335,29 @@ namespace Vim.BFastNS.Tests
 
         #region compress
         [Test]
-        public void Decompress_NonCompressed_Ignored()
+        public void Compression_Decompress_Uncompressed_Returns_Null()
         {
             var expected = new BFast();
             bfast.SetBFast("A", expected);
-            TestBeforeAfter(b => bfast.GetBFast("A", decompress: true), Is.EqualTo(expected));
+            TestBeforeAfter(b => b.GetBFast("A", decompress: true), Is.Null);
         }
 
         [Test]
-        public void Compress_Decompress_Works()
+        public void Compression_Get_Compressed_Returns_Null()
+        {
+            var expected = new BFast();
+            bfast.SetBFast("A", expected, compress: true);
+            TestBeforeAfter(b => b.GetBFast("A"), Is.Null);
+        }
+
+        [Test]
+        public void Compression_Get_Uncompressed_Works()
+        {
+            // This is tested by the bfast tests.
+        }
+
+        [Test]
+        public void Compression_Decompress_Compressed_Works()
         {
             var ints = new int[3] { 0, 1, 2 };
 
