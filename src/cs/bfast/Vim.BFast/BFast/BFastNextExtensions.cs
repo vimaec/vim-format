@@ -5,23 +5,30 @@ using System.Linq;
 
 namespace Vim.BFastNS
 {
-    public static class BFastNextExtensions
+    public static class BFastHelper
     {
-        public static T ReadBFast<T>(this string path, Func<BFast, T> process)
+        public static T Read<T>(string path, Func<BFast, T> func)
         {
             using (var file = new FileStream(path, FileMode.Open))
             {
                 var bfast = new BFast(file);
-                return process(bfast);
+                return func(bfast);
             }
         }
+    }
 
+    public static class BFastNextExtensions
+    {
         public static IEnumerable<INamedBuffer> ToNamedBuffers(this BFast bfast)
         {
             return bfast.Entries.Select(name => bfast.GetArray<byte>(name).ToNamedBuffer(name));
         }
 
-        public static MemoryStream ToMemoryStream(this BFast bfast)
+        /// <summary>
+        /// Writes the current bfast to a new memory streams
+        /// The stream is returned at position 0.
+        /// </summary>
+        public static MemoryStream ToMemoryStream(this IBFastNode bfast)
         {
             var stream = new MemoryStream();
             bfast.Write(stream);

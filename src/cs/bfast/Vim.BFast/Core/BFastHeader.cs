@@ -24,7 +24,7 @@ namespace Vim.BFastNS.Core
             if (stream.Length - stream.Position < sizeof(long) * 4)
                 throw new Exception("Stream too short");
 
-            var preamble = stream.Read<BFastPreamble>();
+            var preamble = stream.ReadValue<BFastPreamble>();
 
             var ranges = stream.ReadArray<BFastRange>((int)preamble.NumArrays);
 
