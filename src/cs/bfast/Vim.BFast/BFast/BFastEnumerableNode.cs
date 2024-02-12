@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
-namespace Vim.BFastNS
+namespace Vim.BFastLib
 {
     public class BFastEnumerableNode<TNode> : IBFastNode where TNode : unmanaged
     {

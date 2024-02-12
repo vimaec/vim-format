@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using Vim.BFastNS.Core;
+using Vim.BFastLib.Core;
 
-namespace Vim.BFastNS
+namespace Vim.BFastLib
 {
     public class BFastStreamNode : IBFastNode
     {

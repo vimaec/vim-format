@@ -1,6 +1,6 @@
 ﻿using System;
 using System.IO;
-using Vim.BFastNS;
+using Vim.BFastLib;
 using Vim.LinqArray;
 using System.Collections.Generic;
 

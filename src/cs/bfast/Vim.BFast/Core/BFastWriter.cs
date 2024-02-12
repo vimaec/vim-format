@@ -1,6 +1,6 @@
 ﻿using System.IO;
 
-namespace Vim.BFastNS.Core
+namespace Vim.BFastLib.Core
 {
     /// <summary>
     /// Provide methods to write a buffer collection to a stream.

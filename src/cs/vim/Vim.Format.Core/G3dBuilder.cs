@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Vim.G3d;
-using Vim.BFastNS;
+using Vim.BFastLib;
 using static Vim.Format.DocumentBuilder;
 using Vim.Math3d;
 

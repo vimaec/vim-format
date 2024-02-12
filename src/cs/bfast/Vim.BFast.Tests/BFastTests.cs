@@ -1,10 +1,10 @@
 using NUnit.Framework;
 using NUnit.Framework.Constraints;
 using System.Data;
-using Vim.BFastNS.Core;
+using Vim.BFastLib.Core;
 using Vim.Util.Tests;
 
-namespace Vim.BFastNS.Tests
+namespace Vim.BFastLib.Tests
 {
     public class BFastTests
     {

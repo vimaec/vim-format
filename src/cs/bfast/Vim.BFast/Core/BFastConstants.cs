@@ -1,4 +1,4 @@
-﻿namespace Vim.BFastNS.Core
+﻿namespace Vim.BFastLib.Core
 {
     /// <summary>
     /// Constants.

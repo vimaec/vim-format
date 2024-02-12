@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using Vim.BFastNS;
+using Vim.BFastLib;
 
 namespace Vim.G3dNext
 {

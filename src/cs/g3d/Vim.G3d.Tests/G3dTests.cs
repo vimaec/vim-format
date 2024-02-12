@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Vim.BFastNS;
+using Vim.BFastLib;
 using Vim.G3d.AssimpWrapper;
 using Vim.LinqArray;
 using Vim.Math3d;

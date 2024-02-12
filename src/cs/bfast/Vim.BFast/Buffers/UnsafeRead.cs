@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 
-namespace Vim.BFastNS
+namespace Vim.BFastLib
 {
     public static class UnsafeRead
     {

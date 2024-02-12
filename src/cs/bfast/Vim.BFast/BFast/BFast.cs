@@ -2,10 +2,9 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Vim.BFastNS;
-using Vim.BFastNS.Core;
+using Vim.BFastLib.Core;
 
-namespace Vim.BFastNS
+namespace Vim.BFastLib
 {
     public class BFast : IBFastNode
     {

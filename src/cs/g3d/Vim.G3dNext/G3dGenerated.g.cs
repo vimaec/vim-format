@@ -1,6 +1,6 @@
 // AUTO-GENERATED FILE, DO NOT MODIFY.
 // ReSharper disable All
-using Vim.BFastNS;
+using Vim.BFastLib;
 
 namespace Vim.G3dNext
 {
@@ -287,7 +287,7 @@ namespace Vim.G3dNext
             (this as ISetup).Setup();
         }
 
-        public BFast ToBFast()
+        public Vim.BFastLib.BFast ToBFast()
         {
             var bfast = new BFast();
 

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 
-namespace Vim.BFastNS
+namespace Vim.BFastLib
 {
     /// <summary>
     /// Anything that can be added to a BFAST must have a size and write to a stream.

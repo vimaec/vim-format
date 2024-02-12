@@ -1,8 +1,8 @@
 ﻿using System.IO;
 using System.IO.Compression;
-using Vim.BFastNS.Core;
+using Vim.BFastLib.Core;
 
-namespace Vim.BFastNS
+namespace Vim.BFastLib
 {
     public class CompressibleNode : IWritable
     {

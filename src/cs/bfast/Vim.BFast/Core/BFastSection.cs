@@ -2,7 +2,7 @@
 using System.Diagnostics;
 using System.IO;
 
-namespace Vim.BFastNS.Core
+namespace Vim.BFastLib.Core
 {
     /// <summary>
     /// Represents a section of the bfast that will be written to at some point.

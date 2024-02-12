@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 
-namespace Vim.BFastNS.Core
+namespace Vim.BFastLib.Core
 {
     /// <summary>
     /// The header contains a magic number, the begin and end indices of data, and the number of arrays.

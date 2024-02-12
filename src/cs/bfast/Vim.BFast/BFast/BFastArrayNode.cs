@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 
-namespace Vim.BFastNS
+namespace Vim.BFastLib
 {
     public class BFastArrayNode<TData> : IBFastNode where TData : unmanaged
     {
