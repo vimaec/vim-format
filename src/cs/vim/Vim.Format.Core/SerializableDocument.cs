@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-using Vim.BFastNS;
-using Vim.BFastNS.Core;
+using Vim.BFastLib;
+using Vim.BFastLib.Core;
 using Vim.G3d;
 
 namespace Vim.Format

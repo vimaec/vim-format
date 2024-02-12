@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using System.Runtime.InteropServices;
 
-namespace Vim.BFastNS.Core
+namespace Vim.BFastLib.Core
 {
     /// <summary>
     /// This tells us where a particular array begins and ends in relation to the beginning of a file.

@@ -2,7 +2,7 @@
 using Vim.Format.ObjectModel;
 using Vim.G3dNext;
 
-namespace Vim.Format.VimxNS.Conversion
+namespace Vim.Format.VimxLib.Conversion
 {
     public static class Ordering
     {

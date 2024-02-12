@@ -10,7 +10,7 @@ using Vim.G3d;
 using Vim.LinqArray;
 using Vim.Math3d;
 using IVimSceneProgress = System.IProgress<(string, double)>;
-using Vim.BFastNS;
+using Vim.BFastLib;
 
 namespace Vim
 {

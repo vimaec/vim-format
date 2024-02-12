@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Vim.G3d;
 using Vim.LinqArray;
-using Vim.BFastNS;
+using Vim.BFastLib;
 
 namespace Vim.Format.Geometry
 {

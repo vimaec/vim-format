@@ -1,6 +1,6 @@
 ﻿using System;
 using Vim.LinqArray;
-using Vim.BFastNS;
+using Vim.BFastLib;
 
 namespace Vim.Format
 {

@@ -1,8 +1,8 @@
 ﻿using System.Linq;
-using Vim.BFastNS;
+using Vim.BFastLib;
 using Vim.G3dNext;
 
-namespace Vim.Format.VimxNS
+namespace Vim.Format.VimxLib
 {
     public static class BufferNames
     {
@@ -15,11 +15,8 @@ namespace Vim.Format.VimxNS
 
     public static class BufferCompression
     {
-        public const bool Header = false;
-        public const bool Meta = false;
         public const bool Scene = true;
         public const bool Materials = true;
-        public const bool Meshes = false;
         public const bool Chunks = true;
     }
 
@@ -59,7 +56,7 @@ namespace Vim.Format.VimxNS
         }
 
         public static Vimx FromPath(string path)
-            => path.ReadBFast((b) => new Vimx(b));
+            => BFastHelper.Read(path, b => new Vimx(b));
 
         public BFast ToBFast()
         {
@@ -71,7 +68,5 @@ namespace Vim.Format.VimxNS
             bfast.SetBFast(BufferNames.Chunk, Chunks.Select(c => c.ToBFast()), BufferCompression.Chunks);
             return bfast;
         }
-
-
     }
 }

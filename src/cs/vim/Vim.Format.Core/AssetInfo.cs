@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using Vim.Util;
 using Vim.LinqArray;
-using Vim.BFastNS;
+using Vim.BFastLib;
 
 namespace Vim.Format
 {

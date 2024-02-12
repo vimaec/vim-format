@@ -1,66 +1,56 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
-namespace Vim.BFastNS.Core
+namespace Vim.BFastLib.Core
 {
-    /// <summary>
-    /// This contains the BFAST data loaded or written from disk. 
-    /// </summary>
     public class BFastHeader
     {
-        public BFastPreamble Preamble = new BFastPreamble();
-        public BFastRange[] Ranges;
-        public string[] Names;
+        public readonly BFastPreamble Preamble = new BFastPreamble();
+        public readonly Dictionary<string, BFastRange> Ranges;
 
-        public override bool Equals(object o)
-            => o is BFastHeader other && Equals(other);
-
-        public bool Equals(BFastHeader other)
-            => Preamble.Equals(other.Preamble) &&
-            Ranges.Length == other.Ranges.Length &&
-            Ranges.Zip(other.Ranges, (x, y) => x.Equals(y)).All(x => x) &&
-            Names.Zip(other.Names, (x, y) => x.Equals(y)).All(x => x);
+        public BFastHeader(BFastPreamble preamble, Dictionary<string, BFastRange> ranges)
+        {
+            Preamble = preamble;
+            Ranges = ranges;
+        }
 
         /// <summary>
-        /// Checks that the header values are sensible, and throws an exception otherwise.
+        /// Reads the preamble, the ranges, and the names of the rest of the buffers. 
         /// </summary>
+        public static BFastHeader FromStream(Stream stream)
+        {
+            if (stream.Length - stream.Position < sizeof(long) * 4)
+                throw new Exception("Stream too short");
+
+            var preamble = stream.ReadValue<BFastPreamble>();
+
+            var ranges = stream.ReadArray<BFastRange>((int)preamble.NumArrays);
+
+            var nameBytes = stream.ReadArray<byte>((int)ranges[0].Count);
+            var names = BFastStrings.Unpack(nameBytes);
+            var map = names
+                .Zip(ranges.Skip(1), (n, r) => (n, r))
+                .ToDictionary(p => p.n, p => p.r);
+
+            return new BFastHeader(preamble, map).Validate();
+        }
+
         public BFastHeader Validate()
         {
-            var preamble = Preamble.Validate();
-            var ranges = Ranges;
-            var names = Names;
-
-            if (preamble.RangesEnd > preamble.DataStart)
-                throw new Exception($"Computed arrays ranges end must be less than the start of data {preamble.DataStart}");
-
-            if (ranges == null)
-                throw new Exception("Ranges must not be null");
-
-            var min = preamble.DataStart;
-            var max = preamble.DataEnd;
-
-            for (var i = 0; i < ranges.Length; ++i)
+            Preamble.Validate();
+            foreach (var range in Ranges.Values)
             {
-                var begin = ranges[i].Begin;
-                if (!BFastAlignment.IsAligned(begin))
-                    throw new Exception($"The beginning of the range is not well aligned {begin}");
-                var end = ranges[i].End;
-                if (begin < min || begin > max)
-                    throw new Exception($"Array offset begin {begin} is not in valid span of {min} to {max}");
-                if (i > 0)
+                if (range.Begin < Preamble.DataStart)
                 {
-                    if (begin < ranges[i - 1].End)
-                        throw new Exception($"Array offset begin {begin} is overlapping with previous array {ranges[i - 1].End}");
+                    throw new Exception("range.Begin must be larger than Data Start");
                 }
-
-                if (end < begin || end > max)
-                    throw new Exception($"Array offset end {end} is not in valid span of {begin} to {max}");
+                if (range.End > Preamble.DataEnd)
+                {
+                    throw new Exception("range.End must be smaller than Data End");
+                }
             }
-
-            if (names.Length < ranges.Length - 1)
-                throw new Exception($"Number of buffer names {names.Length} is not one less than the number of ranges {ranges.Length}");
-
             return this;
         }
     }

@@ -1,6 +1,6 @@
 ﻿using System.Linq;
 using Vim.LinqArray;
-using Vim.BFastNS;
+using Vim.BFastLib;
 using Vim.G3dNext;
 using Vim.Format.ObjectModel;
 using Vim.G3dNext;
@@ -9,7 +9,7 @@ using Vim.Math3d;
 using System.Diagnostics;
 using System;
 
-namespace Vim.Format.VimxNS.Conversion
+namespace Vim.Format.VimxLib.Conversion
 {
     public static class VimxConverter
     {
