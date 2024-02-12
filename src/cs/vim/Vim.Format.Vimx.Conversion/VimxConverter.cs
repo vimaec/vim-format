@@ -9,7 +9,7 @@ using Vim.Math3d;
 using System.Diagnostics;
 using System;
 
-namespace Vim.Format.VimxNS.Conversion
+namespace Vim.Format.VimxLib.Conversion
 {
     public static class VimxConverter
     {

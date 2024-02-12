@@ -1,9 +1,9 @@
 using NUnit.Framework;
 using NUnit.Framework.Internal;
-using Vim.Format.VimxNS.Conversion;
+using Vim.Format.VimxLib.Conversion;
 using Vim.Util.Tests;
 
-namespace Vim.Format.VimxNS.Tests
+namespace Vim.Format.VimxLib.Tests
 {
     [TestFixture]
     public static class VimxTests

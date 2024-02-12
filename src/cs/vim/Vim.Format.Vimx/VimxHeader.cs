@@ -1,7 +1,7 @@
 ﻿using System.Text;
 using Vim.Util;
 
-namespace Vim.Format.VimxNS
+namespace Vim.Format.VimxLib
 {
     public static class VimxHeader 
     {
