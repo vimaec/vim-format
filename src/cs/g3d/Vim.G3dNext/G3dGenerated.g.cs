@@ -287,7 +287,7 @@ namespace Vim.G3dNext
             (this as ISetup).Setup();
         }
 
-        public Vim.BFastLib.BFast ToBFast()
+        public BFast ToBFast()
         {
             var bfast = new BFast();
 
