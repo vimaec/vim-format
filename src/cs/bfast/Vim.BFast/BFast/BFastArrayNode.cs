@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 
 namespace Vim.BFastLib
@@ -27,9 +28,9 @@ namespace Vim.BFastLib
             {
                 return new BFast(_array.ToMemoryStream());
             }
-            catch
+            catch (Exception e)
             {
-                return null;
+                throw new Exception("Array data is not a valid BFast.", e);
             }
         }
 

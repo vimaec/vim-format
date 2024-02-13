@@ -32,9 +32,9 @@ namespace Vim.BFastLib
             {
                 return new BFast(_source().ToMemoryStream());
             }
-            catch 
+            catch (Exception e)
             {
-                return null;
+                throw new Exception("Enumerable data is not a valid BFast", e);
             }
         } 
         public IEnumerable<T> AsEnumerable<T>() where T : unmanaged

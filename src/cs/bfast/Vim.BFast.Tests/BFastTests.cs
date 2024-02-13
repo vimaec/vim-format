@@ -177,10 +177,12 @@ namespace Vim.BFastLib.Tests
         }
 
         [Test]
-        public void SetEnumerable_Then_GetBFast()
+        public void SetEnumerable_Then_GetBFast_Throws()
         {
             bfast.SetEnumerable("A", () => new int[3] { 0, 1, 2 });
-            TestBeforeAfter(b => b.GetBFast("A"), Is.Null);
+            TestBeforeAfter(b => {
+                Assert.That(() => b.GetBFast("A"), Throws.Exception);
+            });
         }
 
         [Test]
@@ -273,10 +275,12 @@ namespace Vim.BFastLib.Tests
         }
 
         [Test]
-        public void SetArray_Then_GetBFast_Returns_Null()
+        public void SetArray_Then_GetBFast_Throws()
         {
             bfast.SetArray("A", new int[3] { 0, 1, 2 });
-            TestBeforeAfter(b => b.GetBFast("A"), Is.Null);
+            TestBeforeAfter(b => {
+                Assert.That(() => b.GetBFast("A"), Throws.Exception);
+            });
         }
 
         [Test]
@@ -286,7 +290,10 @@ namespace Vim.BFastLib.Tests
             var floats = new float[3] { 0.1f, 0.2f, 0.3f };
             bfast.SetArray("A", ints);
             bfast.SetArray("A", floats);
-            TestBeforeAfter(b => b.GetArray<float>("A"), Is.EqualTo(floats));
+            TestBeforeAfter(b => {
+                Assert.That(b.GetArray<float>("A"), Is.EqualTo(floats));
+                Assert.That(b.GetArray<int>("A"), Is.Not.EqualTo(ints));
+            });
         }
 
         [Test]
@@ -294,7 +301,12 @@ namespace Vim.BFastLib.Tests
         {
             bfast.SetArray("A", new int[3] { 0, 1, 2 });
             bfast.SetBFast("A", new BFast());
-            TestBeforeAfter(b => b.GetArray<int>("A").Length, Is.GreaterThan(3));
+            TestBeforeAfter(b =>
+            {
+                // That's the bfast read as an ints.
+                Assert.That(b.GetArray<int>("A").Length, Is.GreaterThan(3));
+                Assert.That(b.GetBFast("A"), Is.EqualTo(new BFast()));
+            });
         }
         #endregion
 
@@ -335,11 +347,14 @@ namespace Vim.BFastLib.Tests
 
         #region compress
         [Test]
-        public void Compression_Decompress_Uncompressed_Returns_Null()
+        public void Compression_Decompress_Uncompressed_Returns_Throws()
         {
             var expected = new BFast();
             bfast.SetBFast("A", expected);
-            TestBeforeAfter(b => b.GetBFast("A", decompress: true), Is.Null);
+            TestBeforeAfter(b =>
+            {
+                Assert.That(() => b.GetBFast("A", decompress: true), Throws.Exception);
+            }); 
         }
 
         [Test]
@@ -347,7 +362,10 @@ namespace Vim.BFastLib.Tests
         {
             var expected = new BFast();
             bfast.SetBFast("A", expected, compress: true);
-            TestBeforeAfter(b => b.GetBFast("A"), Is.Null);
+            TestBeforeAfter(b =>
+            {
+                Assert.That(() => b.GetBFast("A"), Throws.Exception);
+            });
         }
 
         [Test]
@@ -400,12 +418,13 @@ namespace Vim.BFastLib.Tests
         [Test]
         public void SetBFast_Then_SetArray_Replaces()
         {
+            var ints = new int[3] { 0, 1, 2 };
             bfast.SetBFast("A", new BFast());
-            bfast.SetArray("A", new int[3] { 0, 1, 2 });
+            bfast.SetArray("A", ints);
             TestBeforeAfter((b) =>
             {
-                var result = b.GetBFast("A");
-                Assert.IsNull(result);
+                Assert.That(() => b.GetBFast("A"), Throws.Exception);
+                Assert.That(b.GetArray<int>("A"), Is.EqualTo(ints));
             });
             
         }

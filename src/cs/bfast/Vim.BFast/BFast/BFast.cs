@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Xml.Linq;
 using Vim.BFastLib.Core;
 
 namespace Vim.BFastLib
@@ -57,20 +58,20 @@ namespace Vim.BFastLib
         {
             var node = GetNode(name);
             if (node == null) return null;
-            var n = decompress ? node.Decompress() : node.Node;
+            var n = node.GetNode(decompress);
             return n.AsBFast();
         }
 
         public IEnumerable<T> GetEnumerable<T>(string name) where T : unmanaged
         {
             if (!_children.ContainsKey(name)) return null;
-            return _children[name].Node.AsEnumerable<T>();
+            return _children[name].GetNode().AsEnumerable<T>();
         }
 
         public T[] GetArray<T>(string name) where T : unmanaged
         {
             if (!_children.ContainsKey(name)) return null;
-            return _children[name].Node.AsArray<T>();
+            return _children[name].GetNode().AsArray<T>();
         }
 
         public CompressibleNode GetNode(string name)

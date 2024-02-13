@@ -23,10 +23,9 @@ namespace Vim.BFastLib
             {
                 return new BFast(_stream);
             }
-            catch 
+            catch (Exception e) 
             {
-                // It is expected most buffers are not valid bfasts.
-                return null;
+                throw new Exception("Requested data is not a valid BFast or is compressed and needs decompression.", e);
             }
         }
 

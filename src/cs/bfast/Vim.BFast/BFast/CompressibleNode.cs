@@ -6,12 +6,12 @@ namespace Vim.BFastLib
 {
     public class CompressibleNode : IWritable
     {
-        public readonly IBFastNode Node;
+        private readonly IBFastNode _node;
         private readonly bool _compress;
 
         public CompressibleNode(IBFastNode node, bool compress = false)
         {
-            Node = node;
+            _node = node;
             _compress = compress;
         }
 
@@ -23,18 +23,37 @@ namespace Vim.BFastLib
             }
             else
             {
-                Node.Write(stream);
+                _node.Write(stream);
             }
         }
 
-        public IBFastNode Decompress()
+        public IBFastNode GetNode(bool decompress = false)
         {
-            if (!(Node is BFastStreamNode)) return Node;
+            if (decompress)
+            {
+                if (_node is BFastStreamNode)
+                {
+                    return Decompress();
+                }
+                if (!_compress)
+                {
+                    throw new System.Exception("Cannot uncompress a non-compressed node.");
+                }
+                return _node;
+            }
+            if(_compress)
+            {
+                throw new System.Exception("Compressed node needs to be decompressed.");
+            }
+            return _node;
+        }
 
+        private IBFastNode Decompress()
+        {
             var output = new MemoryStream();
             using (var input = new MemoryStream())
             {
-                Node.Write(input);
+                _node.Write(input);
                 input.Seek(0, SeekOrigin.Begin);
                 using (var compress = new DeflateStream(input, CompressionMode.Decompress, true))
                 {
@@ -47,7 +66,7 @@ namespace Vim.BFastLib
 
         private void WriteCompress(Stream stream)
         {
-            using (var input = Node.ToMemoryStream())
+            using (var input = _node.ToMemoryStream())
             using (var compress = new DeflateStream(stream, CompressionMode.Compress, true))
             {
                 input.CopyTo(compress);
