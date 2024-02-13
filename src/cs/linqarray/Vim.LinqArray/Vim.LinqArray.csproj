@@ -27,7 +27,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Include="..\..\..\..\license.txt">
+    <None Include="../../../../license.txt">
       <Pack>True</Pack>
       <PackagePath></PackagePath>
     </None>

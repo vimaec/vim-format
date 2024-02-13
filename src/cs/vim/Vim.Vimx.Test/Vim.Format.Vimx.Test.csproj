@@ -16,11 +16,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\bfast\Vim.BFast\Vim.BFast.csproj" />
-    <ProjectReference Include="..\..\math3d\Vim.Math3D\Vim.Math3D.csproj" />
-    <ProjectReference Include="..\..\util\Vim.Util.Tests\Vim.Util.Tests.csproj" />
-    <ProjectReference Include="..\Vim.Format.Vimx.Conversion\Vim.Format.Vimx.Conversion.csproj" />
-    <ProjectReference Include="..\Vim.Format.Vimx\Vim.Format.Vimx.csproj" />
+    <ProjectReference Include="../../bfast/Vim.BFast/Vim.BFast.csproj" />
+    <ProjectReference Include="../../math3d/Vim.Math3D/Vim.Math3D.csproj" />
+    <ProjectReference Include="../../util/Vim.Util.Tests/Vim.Util.Tests.csproj" />
+    <ProjectReference Include="../Vim.Format.Vimx.Conversion/Vim.Format.Vimx.Conversion.csproj" />
+    <ProjectReference Include="../Vim.Format.Vimx/Vim.Format.Vimx.csproj" />
   </ItemGroup>
 
 </Project>

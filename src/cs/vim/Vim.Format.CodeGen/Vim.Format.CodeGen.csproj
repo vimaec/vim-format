@@ -8,7 +8,7 @@
     <RunPostBuildEvent>OnOutputUpdated</RunPostBuildEvent>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="..\Vim.Format\ObjectModel\ObjectModel.cs" Link="ObjectModel.cs" />
+    <Compile Include="../Vim.Format/ObjectModel/ObjectModel.cs" Link="ObjectModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="HandWrittenCpp.cpp">
@@ -16,8 +16,8 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\math3d\Vim.Math3D\Vim.Math3D.csproj" />
-    <ProjectReference Include="..\Vim.Format.Core\Vim.Format.Core.csproj" />
+    <ProjectReference Include="../../math3d/Vim.Math3D/Vim.Math3D.csproj" />
+    <ProjectReference Include="../Vim.Format.Core/Vim.Format.Core.csproj" />
   </ItemGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">

@@ -11,7 +11,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\math3d\Vim.Math3D\Vim.Math3D.csproj" />
+    <ProjectReference Include="../../math3d/Vim.Math3D/Vim.Math3D.csproj" />
   </ItemGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent" Condition="'$(TargetFramework)' != 'netstandard2.0'">

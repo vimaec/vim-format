@@ -12,9 +12,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\vim\Vim.Format\Vim.Format.csproj" />
-    <ProjectReference Include="..\Vim.G3dNext.Attributes\Vim.G3dNext.Attributes.csproj" />
-    <ProjectReference Include="..\Vim.G3dNext\Vim.G3dNext.csproj" />
+    <ProjectReference Include="../../vim/Vim.Format/Vim.Format.csproj" />
+    <ProjectReference Include="../Vim.G3dNext.Attributes/Vim.G3dNext.Attributes.csproj" />
+    <ProjectReference Include="../Vim.G3dNext/Vim.G3dNext.csproj" />
   </ItemGroup>
 
   <ItemGroup>

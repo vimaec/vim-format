@@ -12,7 +12,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\Vim.LinqArray\Vim.LinqArray.csproj" />
+        <ProjectReference Include="../Vim.LinqArray/Vim.LinqArray.csproj" />
     </ItemGroup>
 
 </Project>

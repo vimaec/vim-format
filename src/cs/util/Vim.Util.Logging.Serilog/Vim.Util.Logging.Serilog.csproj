@@ -12,7 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Vim.Util\Vim.Util.csproj" />
+    <ProjectReference Include="../Vim.Util/Vim.Util.csproj" />
   </ItemGroup>
 
 </Project>
