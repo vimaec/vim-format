@@ -21,14 +21,19 @@ namespace Vim.BFastLib.Core
         /// </summary>
         public static BFastHeader FromStream(Stream stream)
         {
+            
             if (stream.Length - stream.Position < sizeof(long) * 4)
                 throw new Exception("Stream too short");
 
-            var preamble = stream.ReadValue<BFastPreamble>();
+            var offset = stream.Position;
 
+            var preamble = stream.ReadValue<BFastPreamble>();
             var ranges = stream.ReadArray<BFastRange>((int)preamble.NumArrays);
 
+            // In a lot of existing vim there is padding before the first buffer.
+            stream.Seek(offset + ranges[0].Begin, SeekOrigin.Begin);
             var nameBytes = stream.ReadArray<byte>((int)ranges[0].Count);
+
             var names = BFastStrings.Unpack(nameBytes);
             var map = names
                 .Zip(ranges.Skip(1), (n, r) => (n, r))
