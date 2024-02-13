@@ -21,7 +21,6 @@ namespace Vim.BFastLib.Core
         /// </summary>
         public static BFastHeader FromStream(Stream stream)
         {
-            
             if (stream.Length - stream.Position < sizeof(long) * 4)
                 throw new Exception("Stream too short");
 
@@ -33,8 +32,13 @@ namespace Vim.BFastLib.Core
             // In a lot of existing vim there is padding before the first buffer.
             stream.Seek(offset + ranges[0].Begin, SeekOrigin.Begin);
             var nameBytes = stream.ReadArray<byte>((int)ranges[0].Count);
-
             var names = BFastStrings.Unpack(nameBytes);
+            
+            if (names.Distinct().Count() < names.Length)
+            {
+                throw new Exception($"Buffer names should be unique. It contains duplicates. " + string.Join(",", names));
+            }
+
             var map = names
                 .Zip(ranges.Skip(1), (n, r) => (n, r))
                 .ToDictionary(p => p.n, p => p.r);
