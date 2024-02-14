@@ -5,7 +5,6 @@ namespace Vim.BFastLib
 { 
     public static class UnsafeConvert
     {
-
         /// <summary>
         /// Converts an array of type TInput to an array of type TOutput
         /// This is not a Cast but an actual byte level conversion.
@@ -31,7 +30,7 @@ namespace Vim.BFastLib
         {
             var stream = new MemoryStream();
             var array = new TResult[chunksize];
-            var chunks = Chunkify(input, chunksize);
+            var chunks = UnsafeHelpers.Chunkify(input, chunksize);
             while (chunks.MoveNext())
             {
                 (var chunk, var size) = chunks.Current;
@@ -62,31 +61,6 @@ namespace Vim.BFastLib
             stream.Seek(0, SeekOrigin.Begin);
             stream.ReadArray<T>(array, count);
             return count;
-        }
-
-        /// <summary>
-        /// Returns an enumeration of chunks of the given size from the given enumeration.
-        /// </summary>
-        private static IEnumerator<(T[], int)> Chunkify<T>(IEnumerable<T> source, int chunkSize)
-        {
-            var chunk = new T[chunkSize];
-            var index = 0;
-
-            foreach (var item in source)
-            {
-                chunk[index++] = item;
-
-                if (index == chunkSize)
-                {
-                    yield return (chunk, index);
-                    index = 0;
-                }
-            }
-
-            if (index > 0)
-            {
-                yield return (chunk, index);
-            }
         }
     }
 }

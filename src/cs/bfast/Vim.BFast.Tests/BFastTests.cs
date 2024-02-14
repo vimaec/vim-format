@@ -203,7 +203,7 @@ namespace Vim.BFastLib.Tests
             {
                 return Enumerable.Range(0, int.MaxValue).Concat(Enumerable.Range(0, 10));
             }
-            bfast.SetEnumerable<int>("A", GetLots);
+            bfast.SetEnumerable("A", GetLots);
 
             TestBeforeAfterFile(b => b.GetEnumerable<int>("A"), Is.EqualTo(GetLots()));
         }

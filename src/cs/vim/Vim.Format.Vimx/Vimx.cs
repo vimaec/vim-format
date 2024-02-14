@@ -10,7 +10,7 @@ namespace Vim.Format.VimxLib
         public const string Meta = "meta";
         public const string Scene = "scene";
         public const string Materials = "materials";
-        public static string Chunk(int mesh) => $"chunk_{mesh}";
+        public static string Chunk(int index) => $"chunk_{index}";
     }
 
     public static class BufferCompression
@@ -65,7 +65,12 @@ namespace Vim.Format.VimxLib
             bfast.SetArray(BufferNames.Header, Header.ToVimxBytes());
             bfast.SetBFast(BufferNames.Scene, Scene.ToBFast(), BufferCompression.Scene);
             bfast.SetBFast(BufferNames.Materials, Materials.ToBFast(), BufferCompression.Materials);
-            bfast.SetBFast(BufferNames.Chunk, Chunks.Select(c => c.ToBFast()), BufferCompression.Chunks);
+
+            for(var i =0; i < Chunks.Length; i++)
+            {
+                bfast.SetBFast(BufferNames.Chunk(i), Chunks[i].ToBFast(), BufferCompression.Chunks);
+            }
+            
             return bfast;
         }
     }

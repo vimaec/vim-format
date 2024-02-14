@@ -36,7 +36,10 @@ namespace Vim.BFastLib
         }
 
         public IEnumerable<T> AsEnumerable<T>() where T : unmanaged
-            => AsArray<T>();
+        {
+            _stream.Seek(_range.Begin, SeekOrigin.Begin);
+            return _stream.ReadEnumerableByte<T>(_range.Count);
+        }
 
         public void Write(Stream stream)
         {

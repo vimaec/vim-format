@@ -3,7 +3,7 @@ using System.IO;
 
 namespace Vim.BFastLib
 {
-    public static class UnsafeRead
+    public static class UnsafeReadArray
     {
         /// <summary>
         /// Reads and converts the next value of the stream.

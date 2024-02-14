@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 
 namespace Vim.BFastLib
@@ -30,6 +31,22 @@ namespace Vim.BFastLib
             fixed (T* p = xs)
             {
                 stream.WriteBytesBuffered((byte*)p, count * sizeof(T));
+            }
+        }
+
+        /// <summary>
+        /// Converts and writes the elements of values to the given stream.
+        /// </summary>
+        public static unsafe void Write<T>(this Stream stream, IEnumerable<T> values) where T : unmanaged
+        {
+            var chunks = UnsafeHelpers.Chunkify(values);
+            while (chunks.MoveNext())
+            {
+                var (chunk, size) = chunks.Current;
+                fixed (T* p = chunk)
+                {
+                    stream.WriteBytesBuffered((byte*)p, size * sizeof(T));
+                }
             }
         }
 

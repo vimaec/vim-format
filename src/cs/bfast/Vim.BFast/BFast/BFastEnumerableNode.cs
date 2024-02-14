@@ -7,6 +7,7 @@ namespace Vim.BFastLib
 {
     public class BFastEnumerableNode<TNode> : IBFastNode where TNode : unmanaged
     {
+        // We use a Func<Enumerable> to prevent cases where the given IEnumerable can't iterated twice.
         private readonly Func<IEnumerable<TNode>> _source;
 
         public BFastEnumerableNode(Func<IEnumerable<TNode>> source)
@@ -36,7 +37,7 @@ namespace Vim.BFastLib
             {
                 throw new Exception("Enumerable data is not a valid BFast", e);
             }
-        } 
+        }
         public IEnumerable<T> AsEnumerable<T>() where T : unmanaged
         {
             if (typeof(T) == typeof(TNode))
@@ -51,13 +52,7 @@ namespace Vim.BFastLib
 
         public void Write(Stream stream)
         {
-            //TODO: Use bigger chunks
-            var array = new TNode[1];
-            foreach(var value in _source())
-            {
-                array[0] = value;
-                stream.Write(array);
-            }
+            stream.Write(_source());
         }
     }
 }
