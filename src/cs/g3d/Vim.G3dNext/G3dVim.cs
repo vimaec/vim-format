@@ -27,7 +27,7 @@ namespace Vim.G3dNext
         }
 
         public static G3dVim FromVim(string vimPath)
-            => BFastHelper.Read(vimPath, b => new G3dVim(b.GetBFast("geometry")));
+            => BFastHelpers.Read(vimPath, b => new G3dVim(b.GetBFast("geometry")));
 
         private int[] ComputeMeshVertexOffsets()
         {

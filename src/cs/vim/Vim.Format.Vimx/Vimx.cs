@@ -56,7 +56,7 @@ namespace Vim.Format.VimxLib
         }
 
         public static Vimx FromPath(string path)
-            => BFastHelper.Read(path, b => new Vimx(b));
+            => BFastHelpers.Read(path, b => new Vimx(b));
 
         public BFast ToBFast()
         {

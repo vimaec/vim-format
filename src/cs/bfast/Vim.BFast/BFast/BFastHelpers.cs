@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace Vim.BFastLib
 {
-    public static class BFastHelper
+    public static class BFastHelpers
     {
         public static T Read<T>(string path, Func<BFast, T> func)
         {
@@ -17,7 +17,7 @@ namespace Vim.BFastLib
         }
     }
 
-    public static class BFastNextExtensions
+    public static class BFastExtensions
     {
         public static IEnumerable<INamedBuffer> ToNamedBuffers(this BFast bfast)
         {
