@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using Vim.BFastLib.Core;
 
 namespace Vim.BFastLib
 {

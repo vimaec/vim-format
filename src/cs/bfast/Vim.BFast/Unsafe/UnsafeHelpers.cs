@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Vim.BFastLib
+namespace Vim.BFastLib.Core
 {
     public static class UnsafeHelpers
     {

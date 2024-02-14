@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 
-namespace Vim.BFastLib
+namespace Vim.BFastLib.Core
 {
     public static class UnsafeReadEnumerable
     {

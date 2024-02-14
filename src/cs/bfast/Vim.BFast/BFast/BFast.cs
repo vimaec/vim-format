@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -113,7 +112,7 @@ namespace Vim.BFastLib
         /// </summary>
         public void Write(Stream stream)
         {
-            var list = Writables.ToList();
+            var list = Writables.OrderBy(kvp => kvp.name).ToList();
             var strings = list.Select(n => n.name).ToArray();
             var buffers = list.Select(n => n.buffer).ToArray();
             var writer = new BFastWriter(strings, buffers);

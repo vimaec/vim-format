@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Vim.BFastLib.Core;
 
 namespace Vim.BFastLib
 {
@@ -23,7 +24,7 @@ namespace Vim.BFastLib
             }
             else
             {
-                return _source().ToArray().Cast<TNode, T>();
+                return _source().Cast<TNode, T>().ToArray();
             }
         }
 

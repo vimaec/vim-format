@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using Vim.BFastLib.Core;
 
 namespace Vim.BFastLib
 {
