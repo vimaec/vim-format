@@ -7,6 +7,9 @@ namespace Vim.BFastLib
 {
     public static class BFastHelpers
     {
+        /// <summary>
+        /// Opens a file as a BFast, applies func to it and closes the file.
+        /// </summary>
         public static T Read<T>(string path, Func<BFast, T> func)
         {
             using (var file = new FileStream(path, FileMode.Open))
@@ -19,6 +22,9 @@ namespace Vim.BFastLib
 
     public static class BFastExtensions
     {
+        /// <summary>
+        /// Returns an enumerable of all nodes of the BFast as NamedBuffers.
+        /// </summary>
         public static IEnumerable<INamedBuffer> ToNamedBuffers(this BFast bfast)
         {
             return bfast.Entries.Select(name => bfast.GetArray<byte>(name).ToNamedBuffer(name));

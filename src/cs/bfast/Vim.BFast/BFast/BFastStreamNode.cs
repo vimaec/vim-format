@@ -10,7 +10,7 @@ namespace Vim.BFastLib
         private readonly Stream _stream;
         private readonly BFastRange _range;
 
-        public BFastStreamNode(Stream stream, BFastRange range, Action cleanup = null)
+        public BFastStreamNode(Stream stream, BFastRange range)
         {
             _stream = stream;
             _range = range;
@@ -44,19 +44,7 @@ namespace Vim.BFastLib
         public void Write(Stream stream)
         {
             _stream.Seek(_range.Begin, SeekOrigin.Begin);
-            CopyStream(_stream, stream, (int)_range.Count);
-        }
-
-        private static void CopyStream(Stream input, Stream output, int bytes)
-        {
-            var buffer = new byte[32768]; //2^15
-            int read;
-            while (bytes > 0 &&
-                   (read = input.Read(buffer, 0, Math.Min(buffer.Length, bytes))) > 0)
-            {
-                output.Write(buffer, 0, read);
-                bytes -= read;
-            }
+            _stream.CopySome(stream, (int)_range.Count);
         }
     }
 }
