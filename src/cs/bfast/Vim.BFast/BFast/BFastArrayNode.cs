@@ -19,7 +19,7 @@ namespace Vim.BFastLib
             {
                 return _array as T[];
             }
-            return _array.Convert<TData, T>();
+            return _array.Cast<TData, T>();
         }
 
         public BFast AsBFast()
@@ -35,7 +35,7 @@ namespace Vim.BFastLib
         }
 
         public IEnumerable<T> AsEnumerable<T>() where T: unmanaged {
-            return (_array as IEnumerable<TData>).Convert<TData, T>();
+            return (_array as IEnumerable<TData>).Cast<TData, T>();
         }
 
         public void Write(Stream stream)

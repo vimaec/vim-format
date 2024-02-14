@@ -3,13 +3,13 @@ using System.IO;
 
 namespace Vim.BFastLib
 { 
-    public static class UnsafeConvert
+    public static class UnsafeCast
     {
         /// <summary>
-        /// Converts an array of type TInput to an array of type TOutput
+        /// Cast an array of type TInput to an array of type TOutput
         /// This is not a Cast but an actual byte level conversion.
         /// </summary>
-        public static unsafe TResult[] Convert<TInput, TResult>(this TInput[] array)
+        public static unsafe TResult[] Cast<TInput, TResult>(this TInput[] array)
             where TInput : unmanaged
             where TResult : unmanaged
         {
@@ -24,7 +24,7 @@ namespace Vim.BFastLib
         /// Converts an enumerable of type TInput to an enumerable of type TOutput
         /// This is not a Cast but an actual byte level conversion.
         /// </summary>
-        public static IEnumerable<TResult> Convert<TInput, TResult>(this IEnumerable<TInput> input, int chunksize = 1048576)
+        public static IEnumerable<TResult> Cast<TInput, TResult>(this IEnumerable<TInput> input, int chunksize = 1048576)
             where TInput : unmanaged
             where TResult : unmanaged
         {

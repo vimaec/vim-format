@@ -23,7 +23,7 @@ namespace Vim.BFastLib
             }
             else
             {
-                return _source().ToArray().Convert<TNode, T>();
+                return _source().ToArray().Cast<TNode, T>();
             }
         }
 
@@ -46,7 +46,7 @@ namespace Vim.BFastLib
             }
             else
             {
-                return _source().Convert<TNode, T>();
+                return _source().Cast<TNode, T>();
             }
         }
 

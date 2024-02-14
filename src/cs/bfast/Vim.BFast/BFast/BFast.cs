@@ -80,8 +80,8 @@ namespace Vim.BFastLib
         }
 
         /// <summary>
-        /// Tries to interpret the data at given name as an enumerable of type T.
-        /// Will throw if the data is not convertible.
+        /// Tries to cast the data at given name as an enumerable of type T.
+        /// Will throw if the data cannot be cast.
         /// </summary>
         public IEnumerable<T> GetEnumerable<T>(string name) where T : unmanaged
         {
@@ -90,8 +90,8 @@ namespace Vim.BFastLib
         }
 
         /// <summary>
-        /// Tries to interpret the data at given name as an array of type T.
-        /// Will throw if the data is not convertible.
+        /// Tries to cast the data at given name as an array of type T.
+        /// Will throw if the data cannot be cast.
         /// </summary>
         public T[] GetArray<T>(string name) where T : unmanaged
         {
