@@ -31,6 +31,9 @@ namespace Vim.BFastLib.Core
             }
         }
 
+        /// <summary>
+        /// Copies given number of bytes from input stream to output stream. Optional buffer size.
+        /// </summary>
         public static void CopySome(this Stream input, Stream output, int bytes, int bufferSize = 32768)
         {
             var buffer = new byte[bufferSize];

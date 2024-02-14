@@ -94,7 +94,6 @@ namespace Vim.BFastLib.Core
         {
             stream.Seek(start, SeekOrigin.Begin);
             return BFastSection.Write(stream, buffer);
-
         }
     }
 }

@@ -45,7 +45,6 @@ namespace Vim.BFastLib.Core
             var r = new T[count];
             fixed (T* pDest = r)
             {
-
                 var pBytes = (byte*)pDest;
                 stream.ReadBytesBuffered(pBytes, (long)count * sizeof(T));
             }

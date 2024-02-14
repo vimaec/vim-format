@@ -16,9 +16,6 @@ namespace Vim.BFastLib.Core
         
         public long AbsoluteEnd => AbsoluteStart + Length;
         public long LocalEnd => LocalStart + Length;
-        
-
-
         public long End => AbsoluteStart + Length;
         public BFastRange LocalRange => new BFastRange()
         {
@@ -102,6 +99,5 @@ namespace Vim.BFastLib.Core
             return new BFastSection(start, stream.Position - start);
         }
     }
-
 }
 

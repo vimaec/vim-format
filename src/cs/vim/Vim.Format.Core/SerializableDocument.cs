@@ -82,13 +82,9 @@ namespace Vim.Format
 
         public static SerializableDocument FromPath(string path, LoadOptions options = null)
         {
-            using (var file = new FileStream(path, FileMode.OpenOrCreate))
-            {
-                var bfast = new BFast(file);
-                var doc = FromBFast(bfast);
-                doc.FileName = path;
-                return doc;
-            }
+            var doc = BFastHelpers.Read(path, b => FromBFast(b));
+            doc.FileName = path;
+            return doc;
         }
 
         public static SerializableDocument FromBFast(BFast bfast, LoadOptions options = null)

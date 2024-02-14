@@ -7,13 +7,14 @@ namespace Vim.BFastLib.Core
 {
     public class BFastHeader
     {
-        public readonly BFastPreamble Preamble = new BFastPreamble();
-        public readonly Dictionary<string, BFastRange> Ranges;
+        public readonly BFastPreamble Preamble;
+        public IReadOnlyDictionary<string, BFastRange> Ranges => _ranges;
+        private readonly Dictionary<string, BFastRange> _ranges;
 
         public BFastHeader(BFastPreamble preamble, Dictionary<string, BFastRange> ranges)
         {
             Preamble = preamble;
-            Ranges = ranges;
+            _ranges = ranges;
         }
 
         /// <summary>
@@ -49,7 +50,7 @@ namespace Vim.BFastLib.Core
         public BFastHeader Validate()
         {
             Preamble.Validate();
-            foreach (var range in Ranges.Values)
+            foreach (var range in _ranges.Values)
             {
                 if (range.Begin < Preamble.DataStart)
                 {

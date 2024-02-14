@@ -10,12 +10,7 @@ namespace Vim.G3dNext
             // empty
         }
 
-        /// <summary>
-        /// The total number of instances.
-        /// </summary>
-
         public int GetSubmeshCount() => SubmeshIndexOffsets?.Length ?? 0;
-
 
         public int getMeshCount() => MeshSubmeshOffset?.Length ?? 0;
 
