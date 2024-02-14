@@ -5,6 +5,7 @@ using System.Linq;
 using Vim.LinqArray;
 using Vim.Math3d;
 using Vim.BFastLib;
+using Vim.BFastLib.Core;
 
 namespace Vim.G3d
 {
