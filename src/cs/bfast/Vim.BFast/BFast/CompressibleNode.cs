@@ -4,6 +4,9 @@ using Vim.BFastLib.Core;
 
 namespace Vim.BFastLib
 {
+    /// <summary>
+    /// A wrapper around a IBFastNode that manages writing and reading using compression.
+    /// </summary>
     public class CompressibleNode : IWritable
     {
         private readonly IBFastNode _node;
@@ -27,6 +30,10 @@ namespace Vim.BFastLib
             }
         }
 
+        /// <summary>
+        /// Returns the node after it is decompressed if needed.
+        /// Will throw if decompress argument doesnt match compression state.
+        /// </summary>
         public IBFastNode GetNode(bool decompress = false)
         {
             if (decompress)
@@ -37,30 +44,30 @@ namespace Vim.BFastLib
                 }
                 if (!_compress)
                 {
-                    throw new System.Exception("Cannot uncompress a non-compressed node.");
+                    throw new System.Exception("Cannot uncompress non-compressed data.");
                 }
                 return _node;
             }
             if(_compress)
             {
-                throw new System.Exception("Compressed node needs to be decompressed.");
+                throw new System.Exception("Compressed data needs to be decompressed.");
             }
             return _node;
         }
 
         private IBFastNode Decompress()
         {
+            // This memory stream is not disposed. But it's ok.
+            // It really is just an array under the hood.
+            // https://stackoverflow.com/questions/4274590/memorystream-close-or-memorystream-dispose
             var output = new MemoryStream();
-            using (var input = new MemoryStream())
+
+            using (var input = _node.ToMemoryStream())
+            using (var compress = new DeflateStream(input, CompressionMode.Decompress, true))
             {
-                _node.Write(input);
-                input.Seek(0, SeekOrigin.Begin);
-                using (var compress = new DeflateStream(input, CompressionMode.Decompress, true))
-                {
-                    compress.CopyTo(output);
-                    output.Seek(0, SeekOrigin.Begin);
-                    return new BFastStreamNode(output, output.FullRange());
-                }
+                compress.CopyTo(output);
+                output.Seek(0, SeekOrigin.Begin);
+                return new BFastStreamNode(output, output.FullRange());
             }
         }
 

@@ -5,6 +5,9 @@ namespace Vim.BFastLib
 {
     public interface IWritable
     {
+        /// <summary>
+        /// Writes the current data to the given stream.
+        /// </summary>
         void Write(Stream stream);
     }
 
