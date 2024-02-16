@@ -38,5 +38,10 @@
       <DependentUpon>ArrayOps.tt</DependentUpon>
     </Compile>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="../../../../LICENSE.txt">
+      <Pack>True</Pack>
+    </None>
+  </ItemGroup>
 
 </Project>

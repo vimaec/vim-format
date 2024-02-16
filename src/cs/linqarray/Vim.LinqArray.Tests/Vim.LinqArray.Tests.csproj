@@ -14,5 +14,10 @@
     <ItemGroup>
         <ProjectReference Include="../Vim.LinqArray/Vim.LinqArray.csproj" />
     </ItemGroup>
+    <ItemGroup>
+      <None Include="../../../../LICENSE.txt">
+        <Pack>True</Pack>
+      </None>
+    </ItemGroup>
 
 </Project>

@@ -14,5 +14,10 @@
     <ItemGroup>
         <ProjectReference Include="../Vim.Math3D/Vim.Math3D.csproj" />
     </ItemGroup>
+    <ItemGroup>
+      <None Include="../../../../LICENSE.txt">
+        <Pack>True</Pack>
+      </None>
+    </ItemGroup>
 
 </Project>

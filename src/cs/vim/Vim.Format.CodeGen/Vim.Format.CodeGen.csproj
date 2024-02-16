@@ -23,5 +23,10 @@
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
     <Exec Command="dotnet &quot;$(OutDir)Vim.Format.CodeGen.dll&quot; &quot;../Vim.Format/ObjectModel/ObjectModelGenerated.cs&quot; &quot;../../../ts/src/objectModel.ts&quot; &quot;../../../cpp/vim/object-model.h&quot;" />
   </Target>
+  <ItemGroup>
+    <None Include="../../../../LICENSE.txt">
+      <Pack>True</Pack>
+    </None>
+  </ItemGroup>
 
 </Project>

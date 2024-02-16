@@ -38,5 +38,10 @@
   <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
     <Exec Command="echo $(ProjectDir) &gt; &quot;$(ProjectDir)/Resources/ProjDir.txt&quot;" />
   </Target>
+  <ItemGroup>
+    <None Include="../../../../LICENSE.txt">
+      <Pack>True</Pack>
+    </None>
+  </ItemGroup>
 
 </Project>

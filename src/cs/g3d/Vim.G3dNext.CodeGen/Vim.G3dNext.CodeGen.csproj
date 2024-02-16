@@ -17,5 +17,9 @@
   <Target Name="PostBuild" AfterTargets="PostBuildEvent" Condition="'$(TargetFramework)' != 'netstandard2.0'">
     <Exec Command="dotnet &quot;$(OutDir)Vim.G3dNext.CodeGen.dll&quot; &quot;../Vim.G3dNext/G3dGenerated.g.cs&quot;" />
   </Target>
-
+  <ItemGroup>
+    <None Include="../../../../LICENSE.txt">
+      <Pack>True</Pack>
+    </None>
+  </ItemGroup>
 </Project>

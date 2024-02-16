@@ -15,4 +15,9 @@
     <ProjectReference Include="../Vim.Util/Vim.Util.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Include="../../../../LICENSE.txt">
+      <Pack>True</Pack>
+    </None>
+  </ItemGroup>
 </Project>
