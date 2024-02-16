@@ -31,7 +31,6 @@ containers for other data.
 * Easy to implement efficient and conformant encoders and decoders in different languages 
 * Fast random access to any point in the data format with a minimum of disk accesses
 * Format and endianess easily identified through a magic number at the front of the file
-* Data arrays are 64 byte aligned to facilitate casting to SIMD data types (eg. AVX-512)
 * Array offsets are encoded using 64-bit integers to supports large data sets
 * Positions of data buffers are encoded in the beginning of the file
 * Quick and easy to validate that a block is a valid BFAST encoding of data
@@ -68,7 +67,7 @@ The file format consists of three sections:
 
 * Header - Fixed size descriptor (32 bytes) describing the file contents   
 * Ranges - An array of offset pairs indicating the begin and end of each buffer (relative to file begin) 
-* Data   - 64-byte aligned data buffers 
+* Data   - Data buffers 
 
 ## Header Section
 
@@ -103,7 +102,7 @@ offsets relative to the beginning of the file.
 
 ## Data Section
 
-The data section starts at the first 64 byte aligned address immediately following the last `Range` value.
+The data section starts just after the last `Range` value.
 This value is stored for validation purposes in the header as `DataStart`. 
 
 ### Names Buffer
@@ -113,12 +112,3 @@ strings separated by null characters. Names may be zero-length and are not guara
 A name may contain any Utf-8 encoded character except the null character. 
 
 There must be N-1 names where N is the number of ranges (i.e. the `NumArrays` value in header). 
-
-# Implementations
-<!-- TODO: Update this? -->
-The official reference implementation of BFAST is written in C# and targets .NET Standard 2.0. The C#
-test suite uses NUnit and targets .NET Core 2.1. At VIM AEC we are using BFAST in production code that 
-targets Unity 2019.1 and .NET Framework 4.7.1.
-
-There is currently a C++ encoder and a JavaScript decoder implementation under development, but they
-are not tested and supported yet. 
