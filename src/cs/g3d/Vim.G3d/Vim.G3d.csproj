@@ -21,6 +21,7 @@ It can be easily and efficiently deserialized and rendered in different language
   <ItemGroup>
     <None Include="../../../../LICENSE.txt">
       <Pack>True</Pack>
+      <PackagePath></PackagePath>
     </None>
   </ItemGroup>
 
