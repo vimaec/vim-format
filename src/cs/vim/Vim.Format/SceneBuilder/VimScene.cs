@@ -25,7 +25,27 @@ namespace Vim
         /// Returns the VIM file's header schema version. Returns null if the header schema is not found.
         /// </summary>
         public static string GetSchemaVersion(string path)
-            => string.IsNullOrEmpty(path) ? null : GetHeader(path)?.Schema?.ToString();
+        {
+            return GetHeader(path).Schema.ToString();
+        }
+
+        /// <summary>
+        /// Returns the VIM file's header schema version. Returns null if the header schema is not found.
+        /// </summary>
+        public static bool TryGetSchemaVersion(string path, out string schema)
+        {
+            try
+            {
+                schema = GetSchemaVersion(path);
+                return true;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                schema = null;
+                return false;
+            }
+        }
 
         public static SerializableHeader GetHeader(string path)
         {
@@ -35,12 +55,50 @@ namespace Vim
             }
         }
 
+        public static bool TryGetHeader(string path, out SerializableHeader header)
+        {
+            using (var file = new FileStream(path, FileMode.OpenOrCreate))
+            {
+                return TryGetHeader(file, out header);
+            }
+        }
+
+        /// <summary>
+        /// Returns the VIM header from a vim file stream.
+        /// Will throw if the file is not a valid VIM.
+        /// </summary>
         public static SerializableHeader GetHeader(Stream stream)
         {
             var bfast = new BFast(stream);
             var bytes = bfast.GetArray<byte>(BufferNames.Header);
             if (bytes == null) return null;
             return SerializableHeader.FromBytes(bytes);
+        }
+
+        /// <summary>
+        /// Returns true along along with the VIM header from a valid vim file stream.
+        /// Returns false and null and resets the stream at given position for invalid file.
+        /// </summary>
+        public static bool TryGetHeader(Stream stream, out SerializableHeader header)
+        {
+            var position = stream.Position;
+            try
+            {
+                header = GetHeader(stream);
+                return true;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+
+                if (stream.CanSeek)
+                {
+                    stream.Seek(position, SeekOrigin.Begin);
+                }
+                
+                header = null;
+                return false;
+            }
         }
 
         public static VimScene LoadVim(string f, LoadOptions loadOptions, IVimSceneProgress progress = null, bool inParallel = false, int vimIndex = 0)
@@ -51,13 +109,6 @@ namespace Vim
 
         public static VimScene LoadVim(Stream stream, LoadOptions loadOptions, IVimSceneProgress progress = null, bool inParallel = false)
             => new VimScene(SerializableDocument.FromBFast(new BFast(stream), loadOptions), progress, inParallel);
-
-        public static VimScene LoadVim2(Stream stream, LoadOptions loadOptions = null, IVimSceneProgress progress = null, bool inParallel = false)
-        {
-            var bfast = new BFast(stream);
-            var doc = SerializableDocument.FromBFast(bfast, loadOptions);
-            return new VimScene(doc, progress, inParallel);
-        }
 
         public static VimScene LoadVim(Stream stream, IVimSceneProgress progress = null, bool skipGeometry = false, bool skipAssets = false, bool skipNodes = false, bool inParallel = false)
             => LoadVim(stream, new LoadOptions { SkipGeometry = skipGeometry, SkipAssets = skipAssets}, progress, inParallel);
