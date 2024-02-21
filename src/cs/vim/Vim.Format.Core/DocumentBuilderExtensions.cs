@@ -5,7 +5,6 @@ using Vim.Format.Geometry;
 using Vim.G3d;
 using Vim.LinqArray;
 using static Vim.Format.DocumentBuilder;
-using Vim.BFastLib;
 
 namespace Vim.Format
 {
