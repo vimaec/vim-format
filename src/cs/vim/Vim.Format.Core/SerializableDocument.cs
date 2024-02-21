@@ -122,7 +122,7 @@ namespace Vim.Format
             foreach (var entry in bfast.Entries)
             {
                 var b = bfast.GetBFast(entry);
-                var table = ReadEntityTable2(b, schemaOnly);
+                var table = ReadEntityTable(b, schemaOnly);
                 table.Name = entry;
                 yield return table;
             }
@@ -131,7 +131,7 @@ namespace Vim.Format
         /// <summary>
         /// Returns a SerializableEntityTable based on the given buffer reader.
         /// </summary>
-        public static SerializableEntityTable ReadEntityTable2(
+        public static SerializableEntityTable ReadEntityTable(
             BFast bfast,
             bool schemaOnly
            )
