@@ -61,6 +61,7 @@ namespace Vim.Format
         public BFast ToBFast()
         {
             var bfast = new BFast();
+            bfast.SetArray(BufferNames.Header, Header.ToBytes());
 
             var assets = new BFast();
             foreach (var asset in Assets)
