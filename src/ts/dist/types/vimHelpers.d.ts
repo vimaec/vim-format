@@ -1,6 +1,6 @@
 import { VimDocument } from "./objectModel";
 /**
- * Representation of ElementParamter entity from the entity model
+ * Representation of ElementParameter entity from the entity model
  * See https://github.com/vimaec/vim/blob/master/ObjectModel/object-model-schema.json
  */
 export declare type ElementParameter = {
