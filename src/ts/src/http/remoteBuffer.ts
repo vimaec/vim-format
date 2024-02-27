@@ -5,64 +5,12 @@
 import { Range } from '../bfast'
 import { RemoteValue } from './remoteValue'
 import {IProgressLogs, RequestTracker} from './requestTracker'
-import {DefaultLog, Logger, NoLog} from './logging'
+import { Logger, NoLog} from './logging'
+import { RetriableRequest } from './retriableRequest'
 
 let RemoteBufferMaxConcurency = 10
 export function setRemoteBufferMaxConcurency(value: number){
   RemoteBufferMaxConcurency =value
-}
-
-
-export class RetryRequest {
-  url: string
-  range: string | undefined
-  // eslint-disable-next-line no-undef
-  responseType: XMLHttpRequestResponseType
-  msg: string | undefined
-  xhr: XMLHttpRequest | undefined
-
-  constructor (
-    url: string,
-    range: string | undefined,
-    // eslint-disable-next-line no-undef
-    responseType: XMLHttpRequestResponseType
-  ) {
-    this.url = url
-    this.range = range
-    this.responseType = responseType
-  }
-
-  onLoad: ((result: any) => void) | undefined
-  onError: (() => void) | undefined
-  onProgress: ((e: ProgressEvent<EventTarget>) => void) | undefined
-
-  abort(){
-    this.xhr?.abort()
-  }
-
-  send () {
-    this.xhr?.abort()
-    const xhr = new XMLHttpRequest()
-    xhr.open('GET', this.url)
-    xhr.responseType = this.responseType
-
-    if (this.range) {
-      xhr.setRequestHeader('Range', this.range)
-    }
-
-    xhr.onprogress = (e) => {
-      this.onProgress?.(e)
-    }
-    xhr.onload = (e) => {
-      this.onProgress?.(e)
-      this.onLoad?.(xhr.response)
-    }
-    xhr.onerror = (_) => {
-      this.onError?.()
-    }
-    xhr.send()
-    this.xhr = xhr
-  }
 }
 
 /**
@@ -73,49 +21,16 @@ export class RemoteBuffer {
   maxConcurency: number = RemoteBufferMaxConcurency
   onProgress: (progress : IProgressLogs) => void
   logs : Logger
-  private _tracker: RequestTracker
   
-  private _queue: RetryRequest[] = []
-  private _active: Set<RetryRequest> = new Set<RetryRequest>()
-  private _encoded: RemoteValue<boolean>
+  private _tracker: RequestTracker
+  private _queue: RetriableRequest[] = []
+  private _active: Set<RetriableRequest> = new Set<RetriableRequest>()
 
   constructor (url: string) {
     this.url = url
     this.logs = new NoLog()
     this._tracker = new RequestTracker(url, this.logs)
     this._tracker.onUpdate = (p) => this.onProgress?.(p)
-    this._encoded = new RemoteValue(() => this.requestEncoding())
-  }
-
-  private async requestEncoding () {
-    const xhr = new XMLHttpRequest()
-    xhr.open('HEAD', this.url)
-    xhr.send()
-    this.logs.log(`Requesting header for ${this.url}`)
-
-    const promise = new Promise<string | undefined>((resolve, reject) => {
-      xhr.onload = (_) => {
-        let encoding: string | null | undefined
-        try {
-          encoding = xhr.getResponseHeader('content-encoding')
-        } catch (e) {
-          this.logs.error(e)
-        }
-        resolve(encoding ?? undefined)
-      }
-      xhr.onerror = (_) => resolve(undefined)
-    })
-
-    const encoding = await promise
-    const encoded = !!encoding
-
-    this.logs.log(`Encoding for ${this.url} = ${encoding}`)
-    if (encoded) {
-      this.logs.log(
-        `Defaulting to download strategy for encoded content at ${this.url}`
-      )
-    }
-    return encoded
   }
 
   abort(){
@@ -127,12 +42,13 @@ export class RemoteBuffer {
   }
 
   async http (range: Range | undefined, label: string) {
-    const useRange = range && !(await this._encoded.get())
-    const rangeStr = useRange
+    const rangeStr = range
       ? `bytes=${range.start}-${range.end - 1}`
       : undefined
-    const request = new RetryRequest(this.url, rangeStr, 'arraybuffer')
-    request.msg = useRange
+
+    const request = new RetriableRequest(this.url, rangeStr, 'arraybuffer')
+
+    request.msg = range
       ? `${label} : [${range.start}, ${range.end}] of ${this.url}`
       : `${label} of ${this.url}`
 
@@ -155,18 +71,18 @@ export class RemoteBuffer {
     })
   }
 
-  private enqueue (xhr: RetryRequest) {
+  private enqueue (xhr: RetriableRequest) {
     this._queue.push(xhr)
     this.next()
   }
 
-  private retry (xhr: RetryRequest) {
+  private retry (xhr: RetriableRequest) {
     this._active.delete(xhr)
     this.maxConcurency = Math.max(1, this.maxConcurency - 1)
     setTimeout(() => this.enqueue(xhr), 2000)
   }
 
-  private end (xhr: RetryRequest) {
+  private end (xhr: RetriableRequest) {
     this._active.delete(xhr)
     this.next()
   }

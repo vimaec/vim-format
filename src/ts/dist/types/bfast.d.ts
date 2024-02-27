@@ -1,7 +1,7 @@
 /**
  * @module vim-ts
  */
-import { RemoteBuffer } from './remoteBuffer';
+import { RemoteBuffer } from './http/remoteBuffer';
 declare type NumericArrayConstructor = Int8ArrayConstructor | Uint8ArrayConstructor | Int16ArrayConstructor | Uint16ArrayConstructor | Int32ArrayConstructor | Uint32ArrayConstructor | BigInt64ArrayConstructor | BigUint64ArrayConstructor | Float32ArrayConstructor | Float64ArrayConstructor;
 export declare type NumericArray = Int8Array | Uint8Array | Int16Array | Uint16Array | Int32Array | Uint32Array | Float32Array | Float64Array | BigInt64Array | BigUint64Array;
 export declare class Range {
