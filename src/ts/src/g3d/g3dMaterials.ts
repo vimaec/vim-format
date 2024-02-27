@@ -2,7 +2,7 @@
  * @module vim-ts
  */
 
-import { BFast } from './bfast'
+import { BFast } from '../bfast'
 
 /**
  * See https://github.com/vimaec/vim#vim-geometry-attributes

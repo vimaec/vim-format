@@ -1,4 +1,4 @@
-import { BFast } from './bfast';
+import { BFast } from '../bfast';
 
 /**
  * G3D is a simple, efficient, generic binary format for storing and transmitting geometry.

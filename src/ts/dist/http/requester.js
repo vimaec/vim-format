@@ -1,28 +1,19 @@
 "use strict";
-/**
- * @module vim-ts
- */
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.RemoteBuffer = exports.setRemoteBufferMaxConcurency = void 0;
-const requestTracker_1 = require("./requestTracker");
+exports.Requester = void 0;
 const logging_1 = require("./logging");
-const retriableRequest_1 = require("./retriableRequest");
-let RemoteBufferMaxConcurency = 10;
-function setRemoteBufferMaxConcurency(value) {
-    RemoteBufferMaxConcurency = value;
-}
-exports.setRemoteBufferMaxConcurency = setRemoteBufferMaxConcurency;
+const remoteBuffer_1 = require("./remoteBuffer");
+const requestTracker_1 = require("./requestTracker");
 /**
-* Wrapper to provide tracking for all webrequests via request logger.
-*/
-class RemoteBuffer {
-    constructor(url) {
-        this.maxConcurency = RemoteBufferMaxConcurency;
+ * Wrapper to provide tracking for all webrequests via request logger.
+ */
+class Requester {
+    constructor(verbose = false) {
+        this.maxConcurency = 10;
         this._queue = [];
         this._active = new Set();
-        this.url = url;
-        this.logs = new logging_1.NoLog();
-        this._tracker = new requestTracker_1.RequestTracker(url, this.logs);
+        this._logs = verbose ? new logging_1.DefaultLog() : new logging_1.NoLog();
+        this._tracker = new requestTracker_1.RequestTracker(undefined, this._logs);
         this._tracker.onUpdate = (p) => this.onProgress?.(p);
     }
     abort() {
@@ -32,14 +23,9 @@ class RemoteBuffer {
         this._active.clear();
         this._queue.length = 0;
     }
-    async http(range, label) {
-        const rangeStr = range
-            ? `bytes=${range.start}-${range.end - 1}`
-            : undefined;
-        const request = new retriableRequest_1.RetriableRequest(this.url, rangeStr, 'arraybuffer');
-        request.msg = range
-            ? `${label} : [${range.start}, ${range.end}] of ${this.url}`
-            : `${label} of ${this.url}`;
+    async http(url, label) {
+        const request = new remoteBuffer_1.RetryRequest(url, undefined, 'arraybuffer');
+        request.msg = url;
         this.enqueue(request);
         return new Promise((resolve, reject) => {
             this._tracker.start(label);
@@ -81,7 +67,7 @@ class RemoteBuffer {
         this._queue.shift();
         this._active.add(next);
         next.send();
-        this.logs.log('Starting ' + next.msg);
+        this._logs.log('Starting ' + next.msg);
     }
 }
-exports.RemoteBuffer = RemoteBuffer;
+exports.Requester = Requester;

@@ -2,7 +2,7 @@
  * @module vim-ts
  */
 
-import { Range } from './bfast'
+import { Range } from '../bfast'
 import { RemoteValue } from './remoteValue'
 import {IProgressLogs, RequestTracker} from './requestTracker'
 import {DefaultLog, Logger, NoLog} from './logging'
