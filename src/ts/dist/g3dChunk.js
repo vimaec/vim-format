@@ -14,7 +14,7 @@ exports.G3dChunk = exports.MeshAttributes = void 0;
 class MeshAttributes {
 }
 exports.MeshAttributes = MeshAttributes;
-MeshAttributes.meshSubmeshOffset = 'g3d:mesh:submeshOffset:0:int32:1';
+MeshAttributes.meshSubmeshOffset = 'g3d:mesh:submeshoffset:0:int32:1';
 MeshAttributes.meshOpaqueSubmeshCount = 'g3d:mesh:opaquesubmeshcount:0:int32:1';
 MeshAttributes.submeshIndexOffsets = 'g3d:submesh:indexoffset:0:int32:1';
 MeshAttributes.submeshVertexOffsets = 'g3d:submesh:vertexoffset:0:int32:1';
