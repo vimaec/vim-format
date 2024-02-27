@@ -3,21 +3,8 @@
  * @module vim-ts
  */
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.G3dMesh = exports.MeshAttributes = void 0;
+exports.G3dMesh = void 0;
 const g3d_1 = require("./g3d");
-/**
- * See https://github.com/vimaec/vim#vim-geometry-attributes
- */
-class MeshAttributes {
-}
-exports.MeshAttributes = MeshAttributes;
-MeshAttributes.meshSubmeshOffset = 'g3d:mesh:submeshOffset:0:int32:1';
-MeshAttributes.meshOpaqueSubmeshCount = 'g3d:mesh:opaquesubmeshcount:0:int32:1';
-MeshAttributes.submeshIndexOffsets = 'g3d:submesh:indexoffset:0:int32:1';
-MeshAttributes.submeshVertexOffsets = 'g3d:submesh:vertexoffset:0:int32:1';
-MeshAttributes.submeshMaterials = 'g3d:submesh:material:0:int32:1';
-MeshAttributes.positions = 'g3d:vertex:position:0:float32:3';
-MeshAttributes.indices = 'g3d:corner:index:0:int32:1';
 class G3dMesh {
     constructor(scene, chunk, index) {
         this.scene = scene;

@@ -3,6 +3,7 @@ export * from './g3d';
 export * from './remoteVimx';
 export * from './g3dMaterials';
 export * from './g3dMesh';
+export * from './g3dChunk';
 export * from './g3dScene';
 export * from './remoteBuffer';
 export * from './requestTracker';

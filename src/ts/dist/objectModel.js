@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.LevelInViewTable = exports.LevelInView = exports.AssetInViewSheetTable = exports.AssetInViewSheet = exports.AssetInViewTable = exports.AssetInView = exports.ShapeInViewTable = exports.ShapeInView = exports.ElementInViewTable = exports.ElementInView = exports.ViewTable = exports.View = exports.FamilyInstanceTable = exports.FamilyInstance = exports.FamilyTypeTable = exports.FamilyType = exports.FamilyTable = exports.Family = exports.CategoryTable = exports.Category = exports.PhaseOrderInBimDocumentTable = exports.PhaseOrderInBimDocument = exports.DisplayUnitInBimDocumentTable = exports.DisplayUnitInBimDocument = exports.BimDocumentTable = exports.BimDocument = exports.RoomTable = exports.Room = exports.PhaseTable = exports.Phase = exports.LevelTable = exports.Level = exports.DesignOptionTable = exports.DesignOption = exports.GroupTable = exports.Group = exports.AssemblyInstanceTable = exports.AssemblyInstance = exports.WorksetTable = exports.Workset = exports.ElementTable = exports.Element = exports.ParameterTable = exports.Parameter = exports.ParameterDescriptorTable = exports.ParameterDescriptor = exports.DisplayUnitTable = exports.DisplayUnit = exports.AssetTable = exports.Asset = void 0;
 exports.ViewSheetInViewSheetSetTable = exports.ViewSheetInViewSheetSet = exports.ViewSheetTable = exports.ViewSheet = exports.ViewSheetSetTable = exports.ViewSheetSet = exports.ScheduleCellTable = exports.ScheduleCell = exports.ScheduleColumnTable = exports.ScheduleColumn = exports.ScheduleTable = exports.Schedule = exports.AreaSchemeTable = exports.AreaScheme = exports.AreaTable = exports.Area = exports.GridTable = exports.Grid = exports.PhaseFilterTable = exports.PhaseFilter = exports.BasePointTable = exports.BasePoint = exports.ElementInWarningTable = exports.ElementInWarning = exports.WarningTable = exports.Warning = exports.ElementInSystemTable = exports.ElementInSystem = exports.SystemTable = exports.System = exports.ShapeInShapeCollectionTable = exports.ShapeInShapeCollection = exports.ShapeCollectionTable = exports.ShapeCollection = exports.ShapeTable = exports.Shape = exports.GeometryTable = exports.Geometry = exports.NodeTable = exports.Node = exports.CompoundStructureTable = exports.CompoundStructure = exports.CompoundStructureLayerTable = exports.CompoundStructureLayer = exports.MaterialInElementTable = exports.MaterialInElement = exports.MaterialTable = exports.Material = exports.CameraTable = exports.Camera = void 0;
-exports.VimDocument = exports.ViewInViewSheetTable = exports.ViewInViewSheet = exports.ViewInViewSheetSetTable = exports.ViewInViewSheetSet = void 0;
+exports.VimDocument = exports.BuildingTable = exports.Building = exports.SiteTable = exports.Site = exports.ViewInViewSheetTable = exports.ViewInViewSheet = exports.ViewInViewSheetSetTable = exports.ViewInViewSheetSet = void 0;
 const entityTable_1 = require("./entityTable");
 const vimLoader_1 = require("./vimLoader");
 class Asset {
@@ -1074,6 +1074,7 @@ class Level {
         await Promise.all([
             table.getElevation(index).then(v => result.elevation = v),
             table.getFamilyTypeIndex(index).then(v => result.familyTypeIndex = v),
+            table.getBuildingIndex(index).then(v => result.buildingIndex = v),
             table.getElementIndex(index).then(v => result.elementIndex = v),
         ]);
         return result;
@@ -1101,10 +1102,12 @@ class LevelTable {
         const localTable = await this.entityTable.getLocal();
         let elevation;
         let familyTypeIndex;
+        let buildingIndex;
         let elementIndex;
         await Promise.all([
             (async () => { elevation = (await localTable.getNumberArray("double:Elevation")); })(),
             (async () => { familyTypeIndex = (await localTable.getNumberArray("index:Vim.FamilyType:FamilyType")); })(),
+            (async () => { buildingIndex = (await localTable.getNumberArray("index:Vim.Building:Building")); })(),
             (async () => { elementIndex = (await localTable.getNumberArray("index:Vim.Element:Element")); })(),
         ]);
         let level = [];
@@ -1114,6 +1117,7 @@ class LevelTable {
                 index: i,
                 elevation: elevation ? elevation[i] : undefined,
                 familyTypeIndex: familyTypeIndex ? familyTypeIndex[i] : undefined,
+                buildingIndex: buildingIndex ? buildingIndex[i] : undefined,
                 elementIndex: elementIndex ? elementIndex[i] : undefined
             });
         }
@@ -1137,6 +1141,19 @@ class LevelTable {
             return undefined;
         }
         return await this.document.familyType?.get(index);
+    }
+    async getBuildingIndex(levelIndex) {
+        return await this.entityTable.getNumber(levelIndex, "index:Vim.Building:Building");
+    }
+    async getAllBuildingIndex() {
+        return await this.entityTable.getNumberArray("index:Vim.Building:Building");
+    }
+    async getBuilding(levelIndex) {
+        const index = await this.getBuildingIndex(levelIndex);
+        if (index === undefined) {
+            return undefined;
+        }
+        return await this.document.building?.get(index);
     }
     async getElementIndex(levelIndex) {
         return await this.entityTable.getNumber(levelIndex, "index:Vim.Element:Element");
@@ -5980,6 +5997,221 @@ class ViewInViewSheetTable {
     }
 }
 exports.ViewInViewSheetTable = ViewInViewSheetTable;
+class Site {
+    static async createFromTable(table, index) {
+        let result = new Site();
+        result.index = index;
+        await Promise.all([
+            table.getLatitude(index).then(v => result.latitude = v),
+            table.getLongitude(index).then(v => result.longitude = v),
+            table.getAddress(index).then(v => result.address = v),
+            table.getElevation(index).then(v => result.elevation = v),
+            table.getNumber(index).then(v => result.number = v),
+            table.getElementIndex(index).then(v => result.elementIndex = v),
+        ]);
+        return result;
+    }
+}
+exports.Site = Site;
+class SiteTable {
+    static async createFromDocument(document) {
+        const entity = await document.entities.getBfast("Vim.Site");
+        if (!entity) {
+            return undefined;
+        }
+        let table = new SiteTable();
+        table.document = document;
+        table.entityTable = new entityTable_1.EntityTable(entity, document.strings);
+        return table;
+    }
+    getCount() {
+        return this.entityTable.getCount();
+    }
+    async get(siteIndex) {
+        return await Site.createFromTable(this, siteIndex);
+    }
+    async getAll() {
+        const localTable = await this.entityTable.getLocal();
+        let latitude;
+        let longitude;
+        let address;
+        let elevation;
+        let number;
+        let elementIndex;
+        await Promise.all([
+            (async () => { latitude = (await localTable.getNumberArray("double:Latitude")); })(),
+            (async () => { longitude = (await localTable.getNumberArray("double:Longitude")); })(),
+            (async () => { address = (await localTable.getStringArray("string:Address")); })(),
+            (async () => { elevation = (await localTable.getNumberArray("double:Elevation")); })(),
+            (async () => { number = (await localTable.getStringArray("string:Number")); })(),
+            (async () => { elementIndex = (await localTable.getNumberArray("index:Vim.Element:Element")); })(),
+        ]);
+        let site = [];
+        const rowCount = await this.getCount();
+        for (let i = 0; i < rowCount; i++) {
+            site.push({
+                index: i,
+                latitude: latitude ? latitude[i] : undefined,
+                longitude: longitude ? longitude[i] : undefined,
+                address: address ? address[i] : undefined,
+                elevation: elevation ? elevation[i] : undefined,
+                number: number ? number[i] : undefined,
+                elementIndex: elementIndex ? elementIndex[i] : undefined
+            });
+        }
+        return site;
+    }
+    async getLatitude(siteIndex) {
+        return (await this.entityTable.getNumber(siteIndex, "double:Latitude"));
+    }
+    async getAllLatitude() {
+        return (await this.entityTable.getNumberArray("double:Latitude"));
+    }
+    async getLongitude(siteIndex) {
+        return (await this.entityTable.getNumber(siteIndex, "double:Longitude"));
+    }
+    async getAllLongitude() {
+        return (await this.entityTable.getNumberArray("double:Longitude"));
+    }
+    async getAddress(siteIndex) {
+        return (await this.entityTable.getString(siteIndex, "string:Address"));
+    }
+    async getAllAddress() {
+        return (await this.entityTable.getStringArray("string:Address"));
+    }
+    async getElevation(siteIndex) {
+        return (await this.entityTable.getNumber(siteIndex, "double:Elevation"));
+    }
+    async getAllElevation() {
+        return (await this.entityTable.getNumberArray("double:Elevation"));
+    }
+    async getNumber(siteIndex) {
+        return (await this.entityTable.getString(siteIndex, "string:Number"));
+    }
+    async getAllNumber() {
+        return (await this.entityTable.getStringArray("string:Number"));
+    }
+    async getElementIndex(siteIndex) {
+        return await this.entityTable.getNumber(siteIndex, "index:Vim.Element:Element");
+    }
+    async getAllElementIndex() {
+        return await this.entityTable.getNumberArray("index:Vim.Element:Element");
+    }
+    async getElement(siteIndex) {
+        const index = await this.getElementIndex(siteIndex);
+        if (index === undefined) {
+            return undefined;
+        }
+        return await this.document.element?.get(index);
+    }
+}
+exports.SiteTable = SiteTable;
+class Building {
+    static async createFromTable(table, index) {
+        let result = new Building();
+        result.index = index;
+        await Promise.all([
+            table.getElevation(index).then(v => result.elevation = v),
+            table.getTerrainElevation(index).then(v => result.terrainElevation = v),
+            table.getAddress(index).then(v => result.address = v),
+            table.getSiteIndex(index).then(v => result.siteIndex = v),
+            table.getElementIndex(index).then(v => result.elementIndex = v),
+        ]);
+        return result;
+    }
+}
+exports.Building = Building;
+class BuildingTable {
+    static async createFromDocument(document) {
+        const entity = await document.entities.getBfast("Vim.Building");
+        if (!entity) {
+            return undefined;
+        }
+        let table = new BuildingTable();
+        table.document = document;
+        table.entityTable = new entityTable_1.EntityTable(entity, document.strings);
+        return table;
+    }
+    getCount() {
+        return this.entityTable.getCount();
+    }
+    async get(buildingIndex) {
+        return await Building.createFromTable(this, buildingIndex);
+    }
+    async getAll() {
+        const localTable = await this.entityTable.getLocal();
+        let elevation;
+        let terrainElevation;
+        let address;
+        let siteIndex;
+        let elementIndex;
+        await Promise.all([
+            (async () => { elevation = (await localTable.getNumberArray("double:Elevation")); })(),
+            (async () => { terrainElevation = (await localTable.getNumberArray("double:TerrainElevation")); })(),
+            (async () => { address = (await localTable.getStringArray("string:Address")); })(),
+            (async () => { siteIndex = (await localTable.getNumberArray("index:Vim.Site:Site")); })(),
+            (async () => { elementIndex = (await localTable.getNumberArray("index:Vim.Element:Element")); })(),
+        ]);
+        let building = [];
+        const rowCount = await this.getCount();
+        for (let i = 0; i < rowCount; i++) {
+            building.push({
+                index: i,
+                elevation: elevation ? elevation[i] : undefined,
+                terrainElevation: terrainElevation ? terrainElevation[i] : undefined,
+                address: address ? address[i] : undefined,
+                siteIndex: siteIndex ? siteIndex[i] : undefined,
+                elementIndex: elementIndex ? elementIndex[i] : undefined
+            });
+        }
+        return building;
+    }
+    async getElevation(buildingIndex) {
+        return (await this.entityTable.getNumber(buildingIndex, "double:Elevation"));
+    }
+    async getAllElevation() {
+        return (await this.entityTable.getNumberArray("double:Elevation"));
+    }
+    async getTerrainElevation(buildingIndex) {
+        return (await this.entityTable.getNumber(buildingIndex, "double:TerrainElevation"));
+    }
+    async getAllTerrainElevation() {
+        return (await this.entityTable.getNumberArray("double:TerrainElevation"));
+    }
+    async getAddress(buildingIndex) {
+        return (await this.entityTable.getString(buildingIndex, "string:Address"));
+    }
+    async getAllAddress() {
+        return (await this.entityTable.getStringArray("string:Address"));
+    }
+    async getSiteIndex(buildingIndex) {
+        return await this.entityTable.getNumber(buildingIndex, "index:Vim.Site:Site");
+    }
+    async getAllSiteIndex() {
+        return await this.entityTable.getNumberArray("index:Vim.Site:Site");
+    }
+    async getSite(buildingIndex) {
+        const index = await this.getSiteIndex(buildingIndex);
+        if (index === undefined) {
+            return undefined;
+        }
+        return await this.document.site?.get(index);
+    }
+    async getElementIndex(buildingIndex) {
+        return await this.entityTable.getNumber(buildingIndex, "index:Vim.Element:Element");
+    }
+    async getAllElementIndex() {
+        return await this.entityTable.getNumberArray("index:Vim.Element:Element");
+    }
+    async getElement(buildingIndex) {
+        const index = await this.getElementIndex(buildingIndex);
+        if (index === undefined) {
+            return undefined;
+        }
+        return await this.document.element?.get(index);
+    }
+}
+exports.BuildingTable = BuildingTable;
 class VimDocument {
     constructor(entities, strings) {
         this.entities = entities;
@@ -6042,6 +6274,8 @@ class VimDocument {
         doc.viewSheetInViewSheetSet = await ViewSheetInViewSheetSetTable.createFromDocument(doc);
         doc.viewInViewSheetSet = await ViewInViewSheetSetTable.createFromDocument(doc);
         doc.viewInViewSheet = await ViewInViewSheetTable.createFromDocument(doc);
+        doc.site = await SiteTable.createFromDocument(doc);
+        doc.building = await BuildingTable.createFromDocument(doc);
         return doc;
     }
 }

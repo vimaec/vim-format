@@ -4,18 +4,6 @@
 import { G3dChunk } from './g3dChunk';
 import { MeshSection } from './g3d';
 import { G3dScene } from './g3dScene';
-/**
- * See https://github.com/vimaec/vim#vim-geometry-attributes
- */
-export declare class MeshAttributes {
-    static meshSubmeshOffset: string;
-    static meshOpaqueSubmeshCount: string;
-    static submeshIndexOffsets: string;
-    static submeshVertexOffsets: string;
-    static submeshMaterials: string;
-    static positions: string;
-    static indices: string;
-}
 export declare class G3dMesh {
     readonly scene: G3dScene;
     readonly chunk: G3dChunk;
