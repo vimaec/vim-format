@@ -73,15 +73,15 @@ export class RemoteBuffer {
   maxConcurency: number = RemoteBufferMaxConcurency
   onProgress: (progress : IProgressLogs) => void
   private _tracker: RequestTracker
-  private _logs : Logger
+  private logs : Logger
   private _queue: RetryRequest[] = []
   private _active: Set<RetryRequest> = new Set<RetryRequest>()
   private _encoded: RemoteValue<boolean>
 
-  constructor (url: string, verbose: boolean = false) {
+  constructor (url: string) {
     this.url = url
-    this._logs = verbose ? new DefaultLog() : new NoLog()
-    this._tracker = new RequestTracker(url, this._logs)
+    this.logs = new NoLog()
+    this._tracker = new RequestTracker(url, this.logs)
     this._tracker.onUpdate = (p) => this.onProgress?.(p)
     this._encoded = new RemoteValue(() => this.requestEncoding())
   }
@@ -90,7 +90,7 @@ export class RemoteBuffer {
     const xhr = new XMLHttpRequest()
     xhr.open('HEAD', this.url)
     xhr.send()
-    this._logs.log(`Requesting header for ${this.url}`)
+    this.logs.log(`Requesting header for ${this.url}`)
 
     const promise = new Promise<string | undefined>((resolve, reject) => {
       xhr.onload = (_) => {
@@ -98,7 +98,7 @@ export class RemoteBuffer {
         try {
           encoding = xhr.getResponseHeader('content-encoding')
         } catch (e) {
-          this._logs.error(e)
+          this.logs.error(e)
         }
         resolve(encoding ?? undefined)
       }
@@ -108,9 +108,9 @@ export class RemoteBuffer {
     const encoding = await promise
     const encoded = !!encoding
 
-    this._logs.log(`Encoding for ${this.url} = ${encoding}`)
+    this.logs.log(`Encoding for ${this.url} = ${encoding}`)
     if (encoded) {
-      this._logs.log(
+      this.logs.log(
         `Defaulting to download strategy for encoded content at ${this.url}`
       )
     }
@@ -183,6 +183,6 @@ export class RemoteBuffer {
     this._queue.shift()
     this._active.add(next)
     next.send()
-    this._logs.log('Starting ' + next.msg)
+    this.logs.log('Starting ' + next.msg)
   }
 }
