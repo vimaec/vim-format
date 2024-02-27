@@ -72,8 +72,9 @@ export class RemoteBuffer {
   url: string
   maxConcurency: number = RemoteBufferMaxConcurency
   onProgress: (progress : IProgressLogs) => void
+  logs : Logger
   private _tracker: RequestTracker
-  private logs : Logger
+  
   private _queue: RetryRequest[] = []
   private _active: Set<RetryRequest> = new Set<RetryRequest>()
   private _encoded: RemoteValue<boolean>
