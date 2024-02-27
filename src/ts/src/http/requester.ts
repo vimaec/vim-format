@@ -1,5 +1,5 @@
 import { DefaultLog, Logger, NoLog } from "./logging"
-import { RetryRequest } from "./remoteBuffer"
+import { RetriableRequest } from "./retriableRequest"
 import { IProgressLogs, RequestTracker } from "./requestTracker"
 
 /**
@@ -10,8 +10,8 @@ export class Requester {
   onProgress: (progress : IProgressLogs) => void
   private _tracker: RequestTracker
   private _logs : Logger
-  private _queue: RetryRequest[] = []
-  private _active: Set<RetryRequest> = new Set<RetryRequest>()
+  private _queue: RetriableRequest[] = []
+  private _active: Set<RetriableRequest> = new Set<RetriableRequest>()
 
   constructor (verbose: boolean = false) {
     this._logs = verbose ? new DefaultLog() : new NoLog()
@@ -28,7 +28,7 @@ export class Requester {
   }
 
   async http (url : string, label?: string) {
-    const request = new RetryRequest(url, undefined, 'arraybuffer')
+    const request = new RetriableRequest(url, undefined, 'arraybuffer')
     request.msg = url
 
     this.enqueue(request)
@@ -50,18 +50,18 @@ export class Requester {
     })
   }
 
-  private enqueue (xhr: RetryRequest) {
+  private enqueue (xhr: RetriableRequest) {
     this._queue.push(xhr)
     this.next()
   }
 
-  private retry (xhr: RetryRequest) {
+  private retry (xhr: RetriableRequest) {
     this._active.delete(xhr)
     this.maxConcurency = Math.max(1, this.maxConcurency - 1)
     setTimeout(() => this.enqueue(xhr), 2000)
   }
 
-  private end (xhr: RetryRequest) {
+  private end (xhr: RetriableRequest) {
     this._active.delete(xhr)
     this.next()
   }

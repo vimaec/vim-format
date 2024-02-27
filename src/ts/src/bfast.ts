@@ -215,7 +215,7 @@ export function parseName(name: string): [number, NumericArrayConstructor]{
       : source
 
      this.offset = offset
-     this.name = name
+     this.name = name ?? "root"
  
      this._header = new RemoteValue(() => this.requestHeader(), name + '.header')
      this._children = new Map<string, RemoteValue<BFast>>()

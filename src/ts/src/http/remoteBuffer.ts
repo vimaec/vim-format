@@ -71,19 +71,20 @@ export class RemoteBuffer {
     })
   }
 
-  private enqueue (xhr: RetriableRequest) {
-    this._queue.push(xhr)
+  private enqueue (request: RetriableRequest) {
+    this._queue.push(request)
     this.next()
   }
 
-  private retry (xhr: RetriableRequest) {
-    this._active.delete(xhr)
+  private retry (request: RetriableRequest) {
+    this._active.delete(request)
     this.maxConcurency = Math.max(1, this.maxConcurency - 1)
-    setTimeout(() => this.enqueue(xhr), 2000)
+    setTimeout(() => this.enqueue(request), 2000)
   }
 
-  private end (xhr: RetriableRequest) {
-    this._active.delete(xhr)
+  private end (request: RetriableRequest) {
+    this.logs.log('Finished ' + request.msg)
+    this._active.delete(request)
     this.next()
   }
 
@@ -100,6 +101,6 @@ export class RemoteBuffer {
     this._queue.shift()
     this._active.add(next)
     next.send()
-    this.logs.log('Starting ' + next.msg)
+    this.logs.log('Started ' + next.msg)
   }
 }

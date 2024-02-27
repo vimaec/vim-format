@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Requester = void 0;
 const logging_1 = require("./logging");
-const remoteBuffer_1 = require("./remoteBuffer");
+const retriableRequest_1 = require("./retriableRequest");
 const requestTracker_1 = require("./requestTracker");
 /**
  * Wrapper to provide tracking for all webrequests via request logger.
@@ -24,7 +24,7 @@ class Requester {
         this._queue.length = 0;
     }
     async http(url, label) {
-        const request = new remoteBuffer_1.RetryRequest(url, undefined, 'arraybuffer');
+        const request = new retriableRequest_1.RetriableRequest(url, undefined, 'arraybuffer');
         request.msg = url;
         this.enqueue(request);
         return new Promise((resolve, reject) => {
