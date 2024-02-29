@@ -57,17 +57,18 @@ class RemoteBuffer {
             };
         });
     }
-    enqueue(xhr) {
-        this._queue.push(xhr);
+    enqueue(request) {
+        this._queue.push(request);
         this.next();
     }
-    retry(xhr) {
-        this._active.delete(xhr);
+    retry(request) {
+        this._active.delete(request);
         this.maxConcurency = Math.max(1, this.maxConcurency - 1);
-        setTimeout(() => this.enqueue(xhr), 2000);
+        setTimeout(() => this.enqueue(request), 2000);
     }
-    end(xhr) {
-        this._active.delete(xhr);
+    end(request) {
+        this.logs.log('Finished ' + request.msg);
+        this._active.delete(request);
         this.next();
     }
     next() {
@@ -81,7 +82,7 @@ class RemoteBuffer {
         this._queue.shift();
         this._active.add(next);
         next.send();
-        this.logs.log('Starting ' + next.msg);
+        this.logs.log('Started ' + next.msg);
     }
 }
 exports.RemoteBuffer = RemoteBuffer;
