@@ -181,7 +181,7 @@ class BFast {
             ? new remoteBuffer_1.RemoteBuffer(source)
             : source;
         this.offset = offset;
-        this.name = name;
+        this.name = name ?? "root";
         this._header = new remoteValue_1.RemoteValue(() => this.requestHeader(), name + '.header');
         this._children = new Map();
         this._ranges = new remoteValue_1.RemoteValue(() => this.requestRanges(), name + '.ranges');
