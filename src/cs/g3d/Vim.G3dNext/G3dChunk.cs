@@ -88,7 +88,7 @@ namespace Vim.G3dNext
 
         public int GetMeshVertexEnd(int mesh, MeshSection section)
         {
-            var sub = GetMeshSubmeshEnd(mesh, section);
+            var sub = GetMeshSubmeshEnd(mesh, section) - 1;
             return GetSubmeshVertexEnd(sub);
         }
 
