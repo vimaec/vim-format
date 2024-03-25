@@ -61,23 +61,41 @@ namespace Vim.Format
         public BFast ToBFast()
         {
             var bfast = new BFast();
-            bfast.SetArray(BufferNames.Header, Header.ToBytes());
+            if(Header != null)
+            {
+                bfast.SetArray(BufferNames.Header, Header.ToBytes());
+            }
 
-            var assets = new BFast();
-            foreach (var asset in Assets)
+            if(Assets != null)
             {
-                assets.SetArray(asset.Name, asset.ToArray<byte>());
+                var assets = new BFast();
+                foreach (var asset in Assets)
+                {
+                    assets.SetArray(asset.Name, asset.ToArray<byte>());
+                }
+                bfast.SetBFast(BufferNames.Assets, assets);
             }
-            bfast.SetBFast(BufferNames.Assets, assets);
                 
-            var entities = new BFast();
-            foreach (var entity in EntityTables)
+            if(EntityTables != null)
             {
-                entities.SetBFast(entity.Name, entity.ToBFast());
+                var entities = new BFast();
+                foreach (var entity in EntityTables)
+                {
+                    entities.SetBFast(entity.Name, entity.ToBFast());
+                }
+                bfast.SetBFast(BufferNames.Entities, entities);
             }
-            bfast.SetBFast(BufferNames.Entities, entities);
-            bfast.SetArray(BufferNames.Strings, BFastStrings.Pack(StringTable));
-            bfast.SetBFast(BufferNames.Geometry, Geometry.ToBFast());
+
+            if (StringTable != null)
+            {
+                bfast.SetArray(BufferNames.Strings, BFastStrings.Pack(StringTable));
+            }
+
+            if(Geometry != null)
+            {
+                bfast.SetBFast(BufferNames.Geometry, Geometry?.ToBFast());
+            }
+            
             return bfast;
         }
 
