@@ -9,6 +9,108 @@ namespace Vim.Format.Geometry
 {
     public static class MeshExtensions
     {
+
+        // Used in MeshSandboxWindows.
+        public static IGeometryAttributes ReverseWindingOrder(this IMesh mesh)
+        {
+            var n = mesh.Indices.Count;
+            var r = new int[n];
+            for (var i = 0; i < n; i += 3)
+            {
+                r[i + 0] = mesh.Indices[i + 2];
+                r[i + 1] = mesh.Indices[i + 1];
+                r[i + 2] = mesh.Indices[i + 0];
+            }
+            return mesh.SetAttribute(r.ToIArray().ToIndexAttribute());
+        }
+
+        //Used in SplitMergeDedupTest
+        public static Vector3 Center(this IMesh mesh)
+       => mesh.BoundingBox().Center;
+
+        //Used in MaxVimLoader
+        public static IEnumerable<(int Material, IMesh Mesh)> SplitByMaterial(this IMesh mesh)
+        {
+            var submeshMaterials = mesh.SubmeshMaterials;
+            if (submeshMaterials == null || submeshMaterials.Count == 0)
+            {
+                // Base case: no submesh materials are defined on the mesh.
+                return new[] { (-1, mesh) };
+            }
+
+            var submeshIndexOffets = mesh.SubmeshIndexOffsets;
+            var submeshIndexCounts = mesh.SubmeshIndexCount;
+            if (submeshIndexOffets == null || submeshIndexCounts == null ||
+                submeshMaterials.Count <= 1 || submeshIndexOffets.Count <= 1 || submeshIndexCounts.Count <= 1)
+            {
+                // Base case: only one submesh material.
+                return new[] { (submeshMaterials[0], mesh) };
+            }
+
+            // Example:
+            //
+            // ------------
+            // INPUT MESH:
+            // ------------
+            // Vertices            [Va, Vb, Vc, Vd, Ve, Vf, Vg] <-- 7 vertices
+            // Indices             [0 (Va), 1 (Vb), 2 (Vc), 1 (Vb), 2 (Vc), 3 (Vd), 4 (Ve), 5 (Vf), 6 (Vg)] <-- 3 triangles referencing the 7 vertices
+            // SubmeshIndexOffsets [0, 3, 6]
+            // SubmeshIndexCount   [3, 3, 3] (computed)
+            // SubmeshMaterials    [Ma, Mb, Mc]
+            //
+            // ------------
+            // OUTPUT MESHES
+            // ------------
+            // - MESH FOR MATERIAL Ma
+            //   Vertices:             [Va, Vb, Vc]
+            //   Indices:              [0, 1, 2]
+            //   SubmeshIndexOffsets:  [0]
+            //   SubmeshMaterials:     [Ma]
+            //
+            //- MESH FOR MATERIAL Mb
+            //   Vertices:             [Vb, Vc, Vd]
+            //   Indices:              [0, 1, 2]
+            //   SubmeshIndexOffsets:  [0]
+            //   SubmeshMaterials:     [Mb]
+            //
+            //- MESH FOR MATERIAL Mc
+            //   Vertices:             [Ve, Vf, Vg]
+            //   Indices:              [0, 1, 2]
+            //   SubmeshIndexOffsets:  [0]
+            //   SubmeshMaterials:     [Mc]
+
+            return mesh.SubmeshMaterials
+                .Select((submeshMaterial, submeshIndex) => (submeshMaterial, submeshIndex))
+                .GroupBy(t => t.submeshMaterial)
+                .SelectMany(g =>
+                {
+                    var material = g.Key;
+                    var meshes = g.Select((t, _) =>
+                    {
+                        var submeshMaterial = t.submeshMaterial;
+                        var submeshStartIndex = submeshIndexOffets[t.submeshIndex];
+                        var submeshIndexCount = submeshIndexCounts[t.submeshIndex];
+                        var indexSlice = mesh.Indices.Slice(submeshStartIndex, submeshStartIndex + submeshIndexCount);
+                        var newVertexAttributes = mesh.VertexAttributes().Select(attr => attr.Remap(indexSlice));
+                        var newIndexAttribute = indexSlice.Count.Select(i => i).ToIndexAttribute();
+                        var newSubmeshIndexOffsets = 0.Repeat(1).ToSubmeshIndexOffsetAttribute();
+                        var newSubmeshMaterials = submeshMaterial.Repeat(1).ToSubmeshMaterialAttribute();
+
+                        return newVertexAttributes
+                            .Concat(mesh.NoneAttributes())
+                            .Concat(mesh.WholeGeometryAttributes())
+                            // TODO: TECH DEBT - face, edge, and corner attributes are ignored for now.
+                            .Append(newIndexAttribute)
+                            .Append(newSubmeshIndexOffsets)
+                            .Append(newSubmeshMaterials)
+                            .ToGeometryAttributes()
+                            .ToIMesh();
+                    });
+                    return meshes.Select(m => (material, m));
+                });
+        }
+
+
         public static IMesh ToIMesh(this IArray<GeometryAttribute> self)
             => self.ToEnumerable().ToIMesh();
 
