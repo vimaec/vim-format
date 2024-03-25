@@ -12,6 +12,7 @@ using System.Linq;
 using Vim.LinqArray;
 using Vim.Math3d;
 using Vim.BFastLib;
+using System.Diagnostics;
 
 namespace Vim.G3d
 {
@@ -319,7 +320,7 @@ namespace Vim.G3d
         {
             if (!AttributeDescriptor.TryParse(name, out var attributeDescriptor))
             {
-                Console.WriteLine("G3D Error: Could not parse attribute " + name);
+                Debug.WriteLine("G3D Error: Could not parse attribute " + name);
                 return null;
             }
             try
@@ -328,7 +329,7 @@ namespace Vim.G3d
             }
             catch
             {
-                Console.WriteLine("G3D Error: Could not parse attribute " + name);
+                Debug.WriteLine("G3D Error: Could not parse attribute " + name);
                 return null;
             }
         }

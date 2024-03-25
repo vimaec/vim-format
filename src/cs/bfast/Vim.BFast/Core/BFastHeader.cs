@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 
@@ -55,7 +56,7 @@ namespace Vim.BFastLib.Core
                 {
                     var count = nameSet[names[i]];
                     names[i] = names[i] + "_" + count;
-                    Console.WriteLine($"Duplicated Name {names[i]} in BFAST. Making name unique. This can result in unexpected behaviour.");
+                    Debug.WriteLine($"Duplicated Name {names[i]} in BFAST. Making name unique. This can result in unexpected behaviour.");
                 }
                 if (!nameSet.ContainsKey(names[i]))
                 {
