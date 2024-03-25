@@ -27,8 +27,8 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.BFast = exports.BFastHeader = exports.typeSize = exports.parseName = exports.Range = void 0;
-const remoteValue_1 = require("./remoteValue");
-const remoteBuffer_1 = require("./remoteBuffer");
+const remoteValue_1 = require("./http/remoteValue");
+const remoteBuffer_1 = require("./http/remoteBuffer");
 const pako = __importStar(require("pako"));
 class Range {
     constructor(start, end) {
@@ -176,12 +176,12 @@ exports.BFastHeader = BFastHeader;
  * Remote mode can transition to buffer mode if server doesnt support partial http request
  */
 class BFast {
-    constructor(source, offset = 0, name) {
+    constructor(source, offset = 0, name = '') {
         this.source = typeof source === 'string'
             ? new remoteBuffer_1.RemoteBuffer(source)
             : source;
         this.offset = offset;
-        this.name = name ?? (typeof source === 'string' ? source : '');
+        this.name = name ?? "root";
         this._header = new remoteValue_1.RemoteValue(() => this.requestHeader(), name + '.header');
         this._children = new Map();
         this._ranges = new remoteValue_1.RemoteValue(() => this.requestRanges(), name + '.ranges');

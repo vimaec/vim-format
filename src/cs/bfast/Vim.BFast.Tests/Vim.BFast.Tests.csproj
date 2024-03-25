@@ -8,6 +8,12 @@
     <IsPackable>false</IsPackable>
     <IsTestProject>true</IsTestProject>
   </PropertyGroup>
+  <ItemGroup>
+    <None Include="../../../../LICENSE.txt">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.8.0" />
@@ -16,8 +22,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\util\Vim.Util.Tests\Vim.Util.Tests.csproj" />
-    <ProjectReference Include="..\Vim.BFast\Vim.BFast.csproj" />
+    <ProjectReference Include="../../util/Vim.Util.Tests/Vim.Util.Tests.csproj" />
+    <ProjectReference Include="../Vim.BFast/Vim.BFast.csproj" />
   </ItemGroup>
 
 </Project>

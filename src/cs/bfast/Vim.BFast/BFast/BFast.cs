@@ -1,59 +1,48 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.IO.Compression;
 using System.Linq;
-using Vim.BFastNS.Core;
+using Vim.BFastLib.Core;
 
-namespace Vim.BFastNS
+namespace Vim.BFastLib
 {
+    /// <summary>
+    /// Main API to read and write bfast content.
+    /// </summary>
     public class BFast : IBFastNode
     {
-        private readonly Dictionary<string, IBFastNode> _children = new Dictionary<string, IBFastNode>();
+        private readonly Dictionary<string, CompressibleNode> _children = new Dictionary<string, CompressibleNode>();
+        
+        /// <summary>
+        /// Returns all buffer names in this bfast.
+        /// </summary>
         public IEnumerable<string> Entries => _children.Keys;
-        private IEnumerable<(string, IWritable)> Writables => _children.Select(kvp => (kvp.Key, kvp.Value as IWritable));
+        private IEnumerable<(string name, IWritable buffer)> Writables => _children.Select(kvp => (kvp.Key, kvp.Value as IWritable));
 
         public BFast() { }
         public BFast(Stream stream)
         {
-            var node = GetBFastNodes(stream);
-            _children = node.ToDictionary(c => c.name, c => c.value as IBFastNode);
+            var nodes = GetBFastNodes(stream);
+            _children = nodes.ToDictionary(c => c.name, c => new CompressibleNode(c.value));
         }
 
-        public void SetBFast(Func<int, string> getName, IEnumerable<BFast> others, bool deflate = false)
+        /// <summary>
+        /// Sets or overrides a bfast value at given name.
+        /// </summary>
+        public void SetBFast(string name, BFast bfast, bool compress = false)
         {
-            var i = 0;
-            foreach (var b in others)
+            if (bfast == null)
             {
-                SetBFast(getName(i++), b, deflate);
+                _children.Remove(name);
+                return;
             }
+
+            _children[name] = new CompressibleNode(bfast, compress);
         }
 
-        public void SetBFast(string name, BFast bfast, bool deflate = false)
-        {
-            if (deflate == false)
-            {
-                _children[name] = bfast;
-            }
-            else
-            {
-                var a = Deflate(bfast);
-                SetArray(name, a);
-            }
-        }
-
-        private byte[] Deflate(BFast bfast)
-        {
-            using (var output = new MemoryStream())
-            {
-                using (var decompress = new DeflateStream(output, CompressionMode.Compress, true))
-                {
-                    bfast.Write(decompress);
-                }
-                return output.ToArray();
-            }
-        }
-
+        /// <summary>
+        /// Sets or overrides an enumerable value at given name.
+        /// </summary>
         public void SetEnumerable<T>(string name, Func<IEnumerable<T>> enumerable) where T : unmanaged
         {
             if (enumerable == null)
@@ -61,9 +50,12 @@ namespace Vim.BFastNS
                 _children.Remove(name);
                 return;
             }
-            _children[name] = new BFastEnumerableNode<T>(enumerable);
+            _children[name] = new CompressibleNode(new BFastEnumerableNode<T>(enumerable));
         }
 
+        /// <summary>
+        /// Sets or overrides an array value at given name.
+        /// </summary>
         public void SetArray<T>(string name, T[] array) where T : unmanaged
         {
             if (array == null)
@@ -71,72 +63,65 @@ namespace Vim.BFastNS
                 _children.Remove(name);
                 return;
             }
-            _children[name] = BFastNode.FromArray(array);
+            _children[name] = new CompressibleNode(new BFastArrayNode<T>(array));
         }
 
-        public void SetArrays<T>(Func<int, string> getName, IEnumerable<T[]> arrays) where T : unmanaged
-        {
-            var index = 0;
-            foreach (var array in arrays)
-            {
-                SetArray(getName(index++), array);
-            }
-        }
-
-        public void SetNode(string name, BFastNode node)
-        {
-            _children[name] = node;
-        }
-
-        public BFast GetBFast(string name, bool inflate = false)
+        /// <summary>
+        /// Tries to interpret the data at given name as a BFast and returns it.
+        /// Will throw if the data is not a bfast or if decompress doesnt match compression.
+        /// </summary>
+        public BFast GetBFast(string name, bool decompress = false)
         {
             var node = GetNode(name);
             if (node == null) return null;
-            if (inflate == false) return node.AsBFast();
-            return InflateNode(node);
+            var n = node.GetNode(decompress);
+            return n.AsBFast();
         }
 
-        private BFast InflateNode(IBFastNode node)
-        {
-            var output = new MemoryStream();
-            using (var input = new MemoryStream())
-            {
-                node.Write(input);
-                input.Seek(0, SeekOrigin.Begin);
-                using (var compress = new DeflateStream(input, CompressionMode.Decompress, true))
-                {
-                    compress.CopyTo(output);
-                    output.Seek(0, SeekOrigin.Begin);
-                    return new BFast(output);
-                }
-            }
-        }
-
+        /// <summary>
+        /// Tries to cast the data at given name as an enumerable of type T.
+        /// Will throw if the data cannot be cast.
+        /// </summary>
         public IEnumerable<T> GetEnumerable<T>(string name) where T : unmanaged
         {
             if (!_children.ContainsKey(name)) return null;
-            return _children[name].AsEnumerable<T>();
+            return _children[name].GetNode().AsEnumerable<T>();
         }
 
+        /// <summary>
+        /// Tries to cast the data at given name as an array of type T.
+        /// Will throw if the data cannot be cast.
+        /// </summary>
         public T[] GetArray<T>(string name) where T : unmanaged
         {
             if (!_children.ContainsKey(name)) return null;
-            return _children[name].AsArray<T>();
+            return _children[name].GetNode().AsArray<T>();
         }
 
-        public IBFastNode GetNode(string name)
+        private CompressibleNode GetNode(string name)
             => _children.TryGetValue(name, out var value) ? value : null;
 
+        /// <summary>
+        /// Remove the value at name so it won't be written.
+        /// </summary>
         public void Remove(string name)
             => _children.Remove(name);
 
-        public long GetSize() => GetBFastSize(Writables);
-
+        /// <summary>
+        /// Writes the current state to a stream using bfast format.
+        /// </summary>
         public void Write(Stream stream)
         {
-            WriteBFast(stream, Writables);
+            var list = Writables.OrderBy(kvp => kvp.name).ToList();
+            var strings = list.Select(n => n.name).ToArray();
+            var buffers = list.Select(n => n.buffer).ToArray();
+            var writer = new BFastWriter(strings, buffers);
+            writer.Write(stream);
         }
 
+        /// <summary>
+        /// Writes the current state to a new file using bfast format.
+        /// </summary>
         public void Write(string path)
         {
             using (var file = new FileStream(path, FileMode.Create))
@@ -145,8 +130,6 @@ namespace Vim.BFastNS
             }
         }
 
-        public byte[] AsBytes() => (this as IBFastNode).AsArray<byte>();
-
         BFast IBFastNode.AsBFast()
         {
             return this;
@@ -154,82 +137,61 @@ namespace Vim.BFastNS
 
         T[] IBFastNode.AsArray<T>()
         {
-            using (var stream = new MemoryStream())
+            using (var mem = ToMemoryStream())
             {
-                Write(stream);
-                var end = stream.Position;
-                stream.Seek(0, SeekOrigin.Begin);
-                return stream.ReadArrayBytes<T>((int)end);
+                return mem.ReadArray<T>();
             }
         }
 
-        public IEnumerable<T> AsEnumerable<T>() where T : unmanaged
+        IEnumerable<T> IBFastNode.AsEnumerable<T>()
         {
-            using (var stream = new MemoryStream())
-            {
-                Write(stream);
-                var end = stream.Position;
-                stream.Seek(0, SeekOrigin.Begin);
-                return stream.ReadArrayBytes<T>((int)end);
-            }
+            return (this as IBFastNode).AsArray<T>();
         }
 
-        private static IEnumerable<(string name, BFastNode value)> GetBFastNodes(Stream stream)
+        private static IEnumerable<(string name, BFastStreamNode value)> GetBFastNodes(Stream stream)
         {
             var offset = stream.Position;
-            var header = BFastReader.ReadHeader(stream);
-            for (var i = 1; i < header.Preamble.NumArrays; i++)
+            var raw = BFastHeader.FromStream(stream);
+            foreach (var kvp in raw.Ranges)
             {
-                var node = new BFastNode(
+                var node = new BFastStreamNode(
                     stream,
-                    header.Ranges[i].OffsetBy(offset)
+                    kvp.Value.OffsetBy(offset)
                 );
 
-                yield return (header.Names[i - 1], node);
+                yield return (kvp.Key, node);
             }
         }
 
-        private static void WriteBFast(Stream stream, IEnumerable<(string name, IWritable value)> writables)
+        /// <summary>
+        /// Writes the current bfast to a new memory streams
+        /// The stream is returned at position 0.
+        /// </summary>
+        public MemoryStream ToMemoryStream()
         {
-            var values = writables.Select(w => w.value).ToArray();
-            var sizes = values.Select(v => v.GetSize()).ToArray();
-            var names = writables.Select(w => w.name).ToArray();
+            var stream = new MemoryStream();
+            Write(stream);
+            stream.Seek(0, SeekOrigin.Begin);
+            return stream;
+        }
 
-            long onBuffer(Stream writingStream, int bufferIdx, string bufferName, long bytesToWrite)
+        public override bool Equals(object obj)
+        {
+            if (obj is BFast)
             {
-                values[bufferIdx].Write(writingStream);
-                return bytesToWrite;
+                return Equals((BFast)obj);
             }
-
-            BFastWriter.Write(stream, names, sizes, onBuffer);
+            return false;
         }
 
-        private static long GetBFastSize(IEnumerable<(string name, IWritable value)> writables)
+        public bool Equals(BFast other)
         {
-            var values = writables.Select(w => w.value).ToArray();
-            var sizes = values.Select(v => v.GetSize()).ToArray();
-            var names = writables.Select(w => w.name).ToArray();
-
-            var header = BFastWriter.CreateHeader(sizes, names);
-            return header.Preamble.DataEnd;
-        }
-    }
-
-    public static class BFastNextExtensions
-    {
-        public static T ReadBFast<T>(this string path, Func<BFast, T> process)
-        {
-            using (var file = new FileStream(path, FileMode.Open))
-            {
-                var bfast = new BFast(file);
-                return process(bfast);
-            }
+            var a = (this as IBFastNode).AsEnumerable<byte>();
+            var b = (other as IBFastNode).AsEnumerable<byte>();
+            return a.SequenceEqual(b);
         }
 
-        public static IEnumerable<INamedBuffer> ToNamedBuffers(this BFast bfast)
-        {
-            return bfast.Entries.Select(name => bfast.GetArray<byte>(name).ToNamedBuffer(name));
-        }
+        public override int GetHashCode() => (this as IBFastNode).AsEnumerable<byte>().GetHashCode();
     }
 }
 

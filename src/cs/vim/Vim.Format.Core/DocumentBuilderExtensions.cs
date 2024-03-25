@@ -1,11 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Vim.BFastNS;
+using Vim.BFastLib;
 using Vim.Format.Geometry;
 using Vim.G3d;
 using Vim.LinqArray;
 using static Vim.Format.DocumentBuilder;
-using Vim.BFastNS;
 
 namespace Vim.Format
 {

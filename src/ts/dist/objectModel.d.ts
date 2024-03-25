@@ -593,6 +593,8 @@ export interface ILevel {
     elevation?: number;
     familyTypeIndex?: number;
     familyType?: IFamilyType;
+    buildingIndex?: number;
+    building?: IBuilding;
     elementIndex?: number;
     element?: IElement;
 }
@@ -605,6 +607,9 @@ export interface ILevelTable {
     getFamilyTypeIndex(levelIndex: number): Promise<number | undefined>;
     getAllFamilyTypeIndex(): Promise<number[] | undefined>;
     getFamilyType(levelIndex: number): Promise<IFamilyType | undefined>;
+    getBuildingIndex(levelIndex: number): Promise<number | undefined>;
+    getAllBuildingIndex(): Promise<number[] | undefined>;
+    getBuilding(levelIndex: number): Promise<IBuilding | undefined>;
     getElementIndex(levelIndex: number): Promise<number | undefined>;
     getAllElementIndex(): Promise<number[] | undefined>;
     getElement(levelIndex: number): Promise<IElement | undefined>;
@@ -614,6 +619,8 @@ export declare class Level implements ILevel {
     elevation?: number;
     familyTypeIndex?: number;
     familyType?: IFamilyType;
+    buildingIndex?: number;
+    building?: IBuilding;
     elementIndex?: number;
     element?: IElement;
     static createFromTable(table: ILevelTable, index: number): Promise<ILevel>;
@@ -630,6 +637,9 @@ export declare class LevelTable implements ILevelTable {
     getFamilyTypeIndex(levelIndex: number): Promise<number | undefined>;
     getAllFamilyTypeIndex(): Promise<number[] | undefined>;
     getFamilyType(levelIndex: number): Promise<IFamilyType | undefined>;
+    getBuildingIndex(levelIndex: number): Promise<number | undefined>;
+    getAllBuildingIndex(): Promise<number[] | undefined>;
+    getBuilding(levelIndex: number): Promise<IBuilding | undefined>;
     getElementIndex(levelIndex: number): Promise<number | undefined>;
     getAllElementIndex(): Promise<number[] | undefined>;
     getElement(levelIndex: number): Promise<IElement | undefined>;
@@ -3296,6 +3306,124 @@ export declare class ViewInViewSheetTable implements IViewInViewSheetTable {
     getAllViewSheetIndex(): Promise<number[] | undefined>;
     getViewSheet(viewInViewSheetIndex: number): Promise<IViewSheet | undefined>;
 }
+export interface ISite {
+    index: number;
+    latitude?: number;
+    longitude?: number;
+    address?: string;
+    elevation?: number;
+    number?: string;
+    elementIndex?: number;
+    element?: IElement;
+}
+export interface ISiteTable {
+    getCount(): Promise<number>;
+    get(siteIndex: number): Promise<ISite>;
+    getAll(): Promise<ISite[]>;
+    getLatitude(siteIndex: number): Promise<number | undefined>;
+    getAllLatitude(): Promise<number[] | undefined>;
+    getLongitude(siteIndex: number): Promise<number | undefined>;
+    getAllLongitude(): Promise<number[] | undefined>;
+    getAddress(siteIndex: number): Promise<string | undefined>;
+    getAllAddress(): Promise<string[] | undefined>;
+    getElevation(siteIndex: number): Promise<number | undefined>;
+    getAllElevation(): Promise<number[] | undefined>;
+    getNumber(siteIndex: number): Promise<string | undefined>;
+    getAllNumber(): Promise<string[] | undefined>;
+    getElementIndex(siteIndex: number): Promise<number | undefined>;
+    getAllElementIndex(): Promise<number[] | undefined>;
+    getElement(siteIndex: number): Promise<IElement | undefined>;
+}
+export declare class Site implements ISite {
+    index: number;
+    latitude?: number;
+    longitude?: number;
+    address?: string;
+    elevation?: number;
+    number?: string;
+    elementIndex?: number;
+    element?: IElement;
+    static createFromTable(table: ISiteTable, index: number): Promise<ISite>;
+}
+export declare class SiteTable implements ISiteTable {
+    private document;
+    private entityTable;
+    static createFromDocument(document: VimDocument): Promise<ISiteTable | undefined>;
+    getCount(): Promise<number>;
+    get(siteIndex: number): Promise<ISite>;
+    getAll(): Promise<ISite[]>;
+    getLatitude(siteIndex: number): Promise<number | undefined>;
+    getAllLatitude(): Promise<number[] | undefined>;
+    getLongitude(siteIndex: number): Promise<number | undefined>;
+    getAllLongitude(): Promise<number[] | undefined>;
+    getAddress(siteIndex: number): Promise<string | undefined>;
+    getAllAddress(): Promise<string[] | undefined>;
+    getElevation(siteIndex: number): Promise<number | undefined>;
+    getAllElevation(): Promise<number[] | undefined>;
+    getNumber(siteIndex: number): Promise<string | undefined>;
+    getAllNumber(): Promise<string[] | undefined>;
+    getElementIndex(siteIndex: number): Promise<number | undefined>;
+    getAllElementIndex(): Promise<number[] | undefined>;
+    getElement(siteIndex: number): Promise<IElement | undefined>;
+}
+export interface IBuilding {
+    index: number;
+    elevation?: number;
+    terrainElevation?: number;
+    address?: string;
+    siteIndex?: number;
+    site?: ISite;
+    elementIndex?: number;
+    element?: IElement;
+}
+export interface IBuildingTable {
+    getCount(): Promise<number>;
+    get(buildingIndex: number): Promise<IBuilding>;
+    getAll(): Promise<IBuilding[]>;
+    getElevation(buildingIndex: number): Promise<number | undefined>;
+    getAllElevation(): Promise<number[] | undefined>;
+    getTerrainElevation(buildingIndex: number): Promise<number | undefined>;
+    getAllTerrainElevation(): Promise<number[] | undefined>;
+    getAddress(buildingIndex: number): Promise<string | undefined>;
+    getAllAddress(): Promise<string[] | undefined>;
+    getSiteIndex(buildingIndex: number): Promise<number | undefined>;
+    getAllSiteIndex(): Promise<number[] | undefined>;
+    getSite(buildingIndex: number): Promise<ISite | undefined>;
+    getElementIndex(buildingIndex: number): Promise<number | undefined>;
+    getAllElementIndex(): Promise<number[] | undefined>;
+    getElement(buildingIndex: number): Promise<IElement | undefined>;
+}
+export declare class Building implements IBuilding {
+    index: number;
+    elevation?: number;
+    terrainElevation?: number;
+    address?: string;
+    siteIndex?: number;
+    site?: ISite;
+    elementIndex?: number;
+    element?: IElement;
+    static createFromTable(table: IBuildingTable, index: number): Promise<IBuilding>;
+}
+export declare class BuildingTable implements IBuildingTable {
+    private document;
+    private entityTable;
+    static createFromDocument(document: VimDocument): Promise<IBuildingTable | undefined>;
+    getCount(): Promise<number>;
+    get(buildingIndex: number): Promise<IBuilding>;
+    getAll(): Promise<IBuilding[]>;
+    getElevation(buildingIndex: number): Promise<number | undefined>;
+    getAllElevation(): Promise<number[] | undefined>;
+    getTerrainElevation(buildingIndex: number): Promise<number | undefined>;
+    getAllTerrainElevation(): Promise<number[] | undefined>;
+    getAddress(buildingIndex: number): Promise<string | undefined>;
+    getAllAddress(): Promise<string[] | undefined>;
+    getSiteIndex(buildingIndex: number): Promise<number | undefined>;
+    getAllSiteIndex(): Promise<number[] | undefined>;
+    getSite(buildingIndex: number): Promise<ISite | undefined>;
+    getElementIndex(buildingIndex: number): Promise<number | undefined>;
+    getAllElementIndex(): Promise<number[] | undefined>;
+    getElement(buildingIndex: number): Promise<IElement | undefined>;
+}
 export declare class VimDocument {
     asset: IAssetTable | undefined;
     displayUnit: IDisplayUnitTable | undefined;
@@ -3349,6 +3477,8 @@ export declare class VimDocument {
     viewSheetInViewSheetSet: IViewSheetInViewSheetSetTable | undefined;
     viewInViewSheetSet: IViewInViewSheetSetTable | undefined;
     viewInViewSheet: IViewInViewSheetTable | undefined;
+    site: ISiteTable | undefined;
+    building: IBuildingTable | undefined;
     entities: BFast;
     strings: string[] | undefined;
     private constructor();

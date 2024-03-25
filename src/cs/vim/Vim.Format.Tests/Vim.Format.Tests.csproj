@@ -16,8 +16,14 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\util\Vim.Util.Tests\Vim.Util.Tests.csproj" />
-    <ProjectReference Include="..\Vim.Format\Vim.Format.csproj" />
+    <ProjectReference Include="../../util/Vim.Util.Tests/Vim.Util.Tests.csproj" />
+    <ProjectReference Include="../Vim.Format/Vim.Format.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="../../../../LICENSE.txt">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
   </ItemGroup>
 
 </Project>

@@ -14,7 +14,7 @@ namespace Vim.G3dNext.CodeGen
 
                 cb.AppendLine("// AUTO-GENERATED FILE, DO NOT MODIFY.");
                 cb.AppendLine("// ReSharper disable All");
-                cb.AppendLine("using Vim.BFastNS;");
+                cb.AppendLine("using Vim.BFastLib;");
                 cb.AppendLine();
                 cb.AppendLine("namespace Vim.G3dNext");
                 cb.AppendLine("{");

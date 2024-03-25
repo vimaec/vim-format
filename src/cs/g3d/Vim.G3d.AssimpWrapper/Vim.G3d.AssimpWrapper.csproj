@@ -12,5 +12,10 @@
     <ItemGroup>
         <PackageReference Include="AssimpNet" Version="5.0.0-beta1" />
     </ItemGroup>
-
+    <ItemGroup>
+      <None Include="../../../../LICENSE.txt">
+        <Pack>True</Pack>
+        <PackagePath></PackagePath>
+      </None>
+    </ItemGroup>
 </Project>

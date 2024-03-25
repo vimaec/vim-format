@@ -1,6 +1,6 @@
 // AUTO-GENERATED FILE, DO NOT MODIFY.
 // ReSharper disable All
-using Vim.BFastNS;
+using Vim.BFastLib;
 
 namespace Vim.G3dNext
 {

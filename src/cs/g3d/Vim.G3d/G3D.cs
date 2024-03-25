@@ -11,7 +11,8 @@ using System.IO;
 using System.Linq;
 using Vim.LinqArray;
 using Vim.Math3d;
-using Vim.BFastNS;
+using Vim.BFastLib;
+using System.Diagnostics;
 
 namespace Vim.G3d
 {
@@ -291,6 +292,7 @@ namespace Vim.G3d
             {
                 if (name == "meta") continue;
                 var attribute = GetEmptyAttribute(name);
+                if (attribute == null) continue;
                 var a = attribute.Read(bfast);
                 attributes.Add(a);
             }
@@ -301,6 +303,7 @@ namespace Vim.G3d
         {
             if (!AttributeDescriptor.TryParse(name, out var attributeDescriptor))
             {
+                Debug.WriteLine("G3D Error: Could not parse attribute " + name);
                 return null;
             }
             try
@@ -309,6 +312,7 @@ namespace Vim.G3d
             }
             catch
             {
+                Debug.WriteLine("G3D Error: Could not parse attribute " + name);
                 return null;
             }
         }

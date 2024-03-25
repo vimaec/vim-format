@@ -10,13 +10,16 @@ namespace Vim.G3dNext.CodeGen
         Index
     }
 
+    /// <summary>
+    /// Holds all necessary data to generate the code for a g3dBuffer.
+    /// </summary>
     public class G3dBuffer
     {
-        public string MemberName;
-        public string BufferName;
-        public BufferType BufferType;
-        public Type ValueType;
-        public string IndexInto;
+        public readonly string MemberName;
+        public readonly string BufferName;
+        public readonly BufferType BufferType;
+        public readonly Type ValueType;
+        public readonly string IndexInto;
 
         public string ArgumentName => LowerFirst(MemberName);
 

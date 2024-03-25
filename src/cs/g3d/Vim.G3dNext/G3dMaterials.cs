@@ -8,7 +8,6 @@ namespace Vim.G3dNext
             // empty
         }
 
-
         public G3dMaterials(G3dVim vim)
         {
             MaterialColors = vim.MaterialColors;

@@ -2,7 +2,7 @@
  * @module vim-ts
  */
 
-import { BFast } from './bfast'
+import { BFast } from '../bfast'
 import { G3d, MeshSection } from './g3d'
 
 export type FilterMode = undefined | 'mesh' | 'instance' | 'group' | 'tag'

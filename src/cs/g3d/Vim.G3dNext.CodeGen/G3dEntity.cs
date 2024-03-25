@@ -2,10 +2,13 @@
 
 namespace Vim.G3dNext.CodeGen
 {
+    /// <summary>
+    /// Holds the data to generate the code for a g3d entity.
+    /// </summary>
     public class G3dEntity
     {
-        public string ClassName;
-        public List<G3dBuffer> Buffers = new List<G3dBuffer>();
+        public readonly string ClassName;
+        public readonly List<G3dBuffer> Buffers = new List<G3dBuffer>();
 
         public G3dEntity(string name)
         {

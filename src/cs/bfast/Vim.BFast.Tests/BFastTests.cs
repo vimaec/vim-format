@@ -1,7 +1,10 @@
 using NUnit.Framework;
+using NUnit.Framework.Constraints;
+using System.Data;
+using Vim.BFastLib.Core;
 using Vim.Util.Tests;
 
-namespace Vim.BFastNS.Tests
+namespace Vim.BFastLib.Tests
 {
     public class BFastTests
     {
@@ -9,9 +12,13 @@ namespace Vim.BFastNS.Tests
         public static string ResultPath2 = Path.Combine(VimFormatRepoPaths.OutDir, "input.bfast");
         public static string ResidencePath = VimFormatRepoPaths.GetLatestWolfordResidenceVim();
 
+        BFast bfast;
+
         [SetUp]
         public void Setup()
         {
+            bfast = new BFast();
+
             if (!Directory.Exists(VimFormatRepoPaths.OutDir))
             {
                 Directory.CreateDirectory(VimFormatRepoPaths.OutDir);
@@ -26,6 +33,40 @@ namespace Vim.BFastNS.Tests
             }
         }
 
+        private void TestBeforeAfter(Action<BFast> method)
+        {
+            method(bfast);
+
+            // Test that it also works after write/read
+            var next = new BFast(bfast.ToMemoryStream());
+            method(next);
+        }
+
+        private void TestBeforeAfter<T>(Func<BFast, T> method, IResolveConstraint constraint)
+        {
+            Assert.That(method(bfast), constraint);
+
+            // Test that it also works after write/read
+            var next = new BFast(bfast.ToMemoryStream());
+            Assert.That(method(next), constraint);
+        }
+
+        private void TestBeforeAfterFile<T>(Func<BFast, T> method, IResolveConstraint constraint)
+        {
+            Assert.That(method(bfast), constraint);
+            using (var file = File.Open(ResultPath, FileMode.CreateNew))
+            {
+                bfast.Write(file);
+                file.Seek(0, SeekOrigin.Begin);
+
+                // Test that it also works after write/read
+                var next = new BFast(file);
+                Assert.That(method(next), constraint);
+            }
+        }
+
+        #region empty
+
         [Test]
         public void EmptyBFast_Has_No_Entries()
         {
@@ -37,7 +78,7 @@ namespace Vim.BFastNS.Tests
         public void EmptyBFast_GetArray_Returns_Null()
         {
             var bfast = new BFast();
-            Assert.IsNull(bfast.GetArray<int>("missing"));
+            Assert.IsNull(bfast.GetArray<byte>("missing"));
         }
 
         [Test]
@@ -48,361 +89,380 @@ namespace Vim.BFastNS.Tests
         }
 
         [Test]
+        public void EmptyBFast_GetEnumerable_Returns_Null()
+        {
+            var bfast = new BFast();
+            Assert.IsNull(bfast.GetEnumerable<byte>("missing"));
+        }
+
+        [Test]
         public void EmptyBFast_Remove_Does_Nothing()
         {
             var bfast = new BFast();
             bfast.Remove("missing");
         }
 
-        [Test]
-            public void EmptyBFast_GetSize_Return_64()
-        {
-            var bfast = new BFast();
-            Assert.That(bfast.GetSize(), Is.EqualTo(64));
-        }
 
         [Test]
         public void EmptyBFast_Writes_Header()
         {
             var bfast = new BFast();
-            bfast.Write(ResultPath);
-            using (var stream = File.OpenRead(ResultPath))
-            {
-                var bfast2 = new BFast(stream);
-                Assert.That(bfast2.GetSize(), Is.EqualTo(64));
-            }
+            var stream = new MemoryStream();
+            bfast.Write(stream);
+
+            stream.Seek(0, SeekOrigin.Begin);
+            var raw = BFastHeader.FromStream(stream);
+
+            Assert.That(raw.Ranges.Count, Is.EqualTo(0));
         }
+        #endregion
+
+        #region enumerable
 
         [Test]
         public void SetEnumerable_Adds_Entry()
         {
-            var bfast = new BFast();
             bfast.SetEnumerable("A", () => new int[3] { 0, 1, 2 });
-            Assert.That(bfast.Entries.Count(), Is.EqualTo(1));
-        }
-
-
-        [Test]
-        public void SetEnumerable_Then_GetArray()
-        {
-            var bfast = new BFast();
-            bfast.SetEnumerable("A", () => new int[3] { 0, 1, 2 });
-            var result = bfast.GetArray<int>("A");
-
-            Assert.That(result, Is.EqualTo(new int[3] { 0, 1, 2 }));
+            TestBeforeAfter(b => b.Entries.Count(), Is.EqualTo(1));
         }
 
         [Test]
-        public void SetEnumerable_Then_GetArray_Bytes()
+        public void SetEnumerable_Then_GetEnumerable()
         {
-            var bfast = new BFast();
-            bfast.SetEnumerable("A", () => new int[3] { 0, 1, 2 });
-            var result = bfast.GetArray<byte>("A");
-
-            var bytes = (new int[3] { 0, 1, 2 }).SelectMany(i => BitConverter.GetBytes(i));
-            Assert.That(result, Is.EqualTo(bytes));
+            var expected = new int[3] { 0, 1, 2 };
+            bfast.SetEnumerable("A", () => expected);
+            TestBeforeAfter(b => b.GetEnumerable<int>("A"), Is.EqualTo(expected));
         }
-
 
         [Test]
         public void SetEnumerable_Then_GetEnumerable_Bytes()
         {
-            var bfast = new BFast();
             bfast.SetEnumerable("A", () => new int[3] { 0, 1, 2 });
-            var result = bfast.GetEnumerable<byte>("A");
-
-            var bytes = (new int[3] { 0, 1, 2 }).SelectMany(i => BitConverter.GetBytes(i));
-            Assert.That(result, Is.EqualTo(bytes));
+            var expected = (new int[3] { 0, 1, 2 }).SelectMany(i => BitConverter.GetBytes(i));
+            TestBeforeAfter(b => b.GetEnumerable<byte>("A"), Is.EqualTo(expected));
         }
 
         [Test]
         public void SetEnumerable_Then_GetEnumerable_Float()
         {
-            var bfast = new BFast();
             bfast.SetEnumerable("A", () => new int[3] { 0, 1, 2 });
-            var result = bfast.GetEnumerable<float>("A");
+            var expected = (new int[3] { 0, 1, 2 }).Select(i => BitConverter.Int32BitsToSingle(i));
+            TestBeforeAfter(b => b.GetEnumerable<float>("A"), Is.EqualTo(expected));
+        }
 
-            var floats = (new int[3] { 0, 1, 2 }).Select(i => BitConverter.Int32BitsToSingle(i));
-            Assert.That(result, Is.EqualTo(floats));
+        [Test]
+        public void SetEnumerable_Then_GetArray()
+        {
+            bfast.SetEnumerable("A", () => new int[3] { 0, 1, 2 });
+            var expected = new int[3] { 0, 1, 2 };
+            TestBeforeAfter(b => b.GetArray<int>("A"), Is.EqualTo(expected));
+        }
+
+        [Test]
+        public void SetEnumerable_Then_GetArray_Bytes()
+        {
+            bfast.SetEnumerable("A", () => new int[3] { 0, 1, 2 });
+            var expected = (new int[3] { 0, 1, 2 }).SelectMany(i => BitConverter.GetBytes(i));
+            TestBeforeAfter(b => b.GetArray<byte>("A"), Is.EqualTo(expected));
         }
 
         [Test]
         public void SetEnumerable_Then_GetArray_Float()
         {
-            var bfast = new BFast();
             bfast.SetEnumerable("A", () => new int[3] { 0, 1, 2 });
-            var result = bfast.GetArray<float>("A");
+            var expected = (new int[3] { 0, 1, 2 }).Select(i => BitConverter.Int32BitsToSingle(i));
+            // MemoryStream can't handle such size.
+            TestBeforeAfter(b => b.GetArray<float>("A"), Is.EqualTo(expected));
 
-            var floats = (new int[3] { 0, 1, 2 }).Select(i => BitConverter.Int32BitsToSingle(i));
-            Assert.That(result, Is.EqualTo(floats));
-        }
-
-
-        [Test]
-        public void SetEnumerable_Then_GetEnumerable()
-        {
-            var bfast = new BFast();
-            bfast.SetEnumerable("A", () => new int[3] { 0, 1, 2 });
-            var result = bfast.GetEnumerable<int>("A").ToArray();
-            Assert.That(result, Is.EqualTo(new int[3] { 0, 1, 2 }));
         }
 
         [Test]
-        public void SetEnumerable_Then_GetBFast()
+        public void SetEnumerable_Then_GetBFast_Throws()
         {
-            var bfast = new BFast();
             bfast.SetEnumerable("A", () => new int[3] { 0, 1, 2 });
-            var result = bfast.GetBFast("A");
-            Assert.That(result, Is.Null);
+            TestBeforeAfter(b => {
+                Assert.That(() => b.GetBFast("A"), Throws.Exception);
+            });
         }
 
-        IEnumerable<int> GetLots()
+        [Test]
+        public void SetEnumerable_Then_GetBFast_ValidBytes()
         {
-            return Enumerable.Range(0, int.MaxValue).Concat(Enumerable.Range(0, 10));
+            var sub = new BFast();
+            bfast.SetBFast("A", sub);
+            var bytes = bfast.GetArray<byte>("A");
+            bfast.SetEnumerable("A",() => bytes);
+            
+            TestBeforeAfter(b => b.GetBFast("A"), Is.EqualTo(sub));
         }
-
 
         [Test, Explicit]
         public void SetEnumerable_Then_GetEnumerable_Lots()
         {
-            var bfast = new BFast();
-            bfast.SetEnumerable<int>("A", GetLots);
+            IEnumerable<int> GetLots()
+            {
+                return Enumerable.Range(0, int.MaxValue).Concat(Enumerable.Range(0, 10));
+            }
+            bfast.SetEnumerable("A", GetLots);
 
-            var result = bfast.GetEnumerable<int>("A");
-            Assert.That(result, Is.EqualTo(GetLots()));
+            TestBeforeAfterFile(b => b.GetEnumerable<int>("A"), Is.EqualTo(GetLots()));
         }
 
+        #endregion
 
+        #region array
         [Test]
         public void SetArray_Adds_Entry()
         {
-            var bfast = new BFast();
             bfast.SetArray("A", new int[3] { 0, 1, 2 });
-
-            Assert.That(bfast.Entries.Count(), Is.EqualTo(1));
+            TestBeforeAfter(b => b.Entries.Count(), Is.EqualTo(1));
         }
 
         [Test]
         public void SetArray_Then_GetArray()
         {
-            var bfast = new BFast();
-            bfast.SetArray("A", new int[3] { 0, 1, 2 });
-            var result = bfast.GetArray<int>("A");
-
-            Assert.That(result, Is.EqualTo(new int[3] { 0, 1, 2 }));
+            var array = new int[3] { 0, 1, 2 };
+            bfast.SetArray("A", array);
+            TestBeforeAfter(b => b.GetArray<int>("A"), Is.EqualTo(array));
         }
 
         [Test]
         public void SetArray_Then_GetArray_Bytes()
         {
-            var bfast = new BFast();
-            bfast.SetArray("A", new int[3] { 0, 1, 2 });
-            var result = bfast.GetArray<byte>("A");
+            var array = new int[3] { 0, 1, 2 };
+            var expected = array.SelectMany(i => BitConverter.GetBytes(i));
 
-            var bytes = (new int[3] { 0, 1, 2 }).SelectMany(i => BitConverter.GetBytes(i));
-            Assert.That(result, Is.EqualTo(bytes));
+            bfast.SetArray("A", array);
+            TestBeforeAfter(b => bfast.GetArray<byte>("A"), Is.EqualTo(expected));
         }
 
         [Test]
         public void SetArray_Then_GetArray_Float()
         {
-            var bfast = new BFast();
-            bfast.SetArray("A", new int[3] { 0, 1, 2 });
-            var result = bfast.GetArray<float>("A");
-
-            var floats = (new int[3] { 0, 1, 2 }).Select(i => BitConverter.Int32BitsToSingle(i));
-            Assert.That(result, Is.EqualTo(floats));
+            var array = new int[3] { 0, 1, 2 };
+            var expected = array.Select(i => BitConverter.Int32BitsToSingle(i));
+            
+            bfast.SetArray("A", array);
+            TestBeforeAfter(b => bfast.GetArray<float>("A"), Is.EqualTo(expected));
         }
 
         [Test]
         public void SetArray_Then_GetEnumerable()
         {
-            var bfast = new BFast();
-            bfast.SetArray("A", new int[3] { 0, 1, 2 });
-            var result = bfast.GetEnumerable<int>("A");
-
-            Assert.That(result, Is.EqualTo(new int[3] { 0, 1, 2 }));
+            var array = new int[3] { 0, 1, 2 };
+            bfast.SetArray("A", array);
+            TestBeforeAfter(b => b.GetEnumerable<int>("A"), Is.EqualTo(array));
         }
 
         [Test]
         public void SetArray_Then_GetEnumerable_Bytes()
         {
-            var bfast = new BFast();
-            bfast.SetArray("A", new int[3] { 0, 1, 2 });
-            var result = bfast.GetEnumerable<byte>("A");
-
-            var bytes = (new int[3] { 0, 1, 2 }).SelectMany(i => BitConverter.GetBytes(i));
-            Assert.That(result, Is.EqualTo(bytes));
+            var array = new int[3] { 0, 1, 2 };
+            var expected = array.SelectMany(i => BitConverter.GetBytes(i));
+         
+            bfast.SetArray("A", array);
+            TestBeforeAfter(b => b.GetEnumerable<byte>("A"), Is.EqualTo(expected));
         }
 
         [Test]
         public void SetArray_Then_GetEnumerable_Float()
         {
-            var bfast = new BFast();
-            bfast.SetArray("A", new int[3] { 0, 1, 2 });
+            var array = new int[3] { 0, 1, 2 };
+            var expected = array.Select(i => BitConverter.Int32BitsToSingle(i));
+         
+            bfast.SetArray("A", array);
             var result = bfast.GetEnumerable<float>("A");
-
-            var floats = (new int[3] { 0, 1, 2 }).Select(i => BitConverter.Int32BitsToSingle(i));
-            Assert.That(result, Is.EqualTo(floats));
         }
 
         [Test]
-        public void SetArray_Then_GetBFast_Returns_Null()
+        public void SetArray_Then_GetBFast_Throws()
         {
-            var bfast = new BFast();
             bfast.SetArray("A", new int[3] { 0, 1, 2 });
-            var result = bfast.GetBFast("A");
-
-            Assert.IsNull(result);
+            TestBeforeAfter(b => {
+                Assert.That(() => b.GetBFast("A"), Throws.Exception);
+            });
         }
 
         [Test]
         public void SetArray_Then_SetArray_Replaces()
         {
-            var bfast = new BFast();
-            bfast.SetArray("A", new int[3] { 0, 1, 2 });
-            bfast.SetArray("A", new float[3] { 0.1f, 0.2f, 0.3f });
-            var result = bfast.GetArray<float>("A");
-
-            Assert.That(result, Is.EqualTo(new float[3] { 0.1f, 0.2f, 0.3f }));
+            var ints = new int[3] { 0, 1, 2 };
+            var floats = new float[3] { 0.1f, 0.2f, 0.3f };
+            bfast.SetArray("A", ints);
+            bfast.SetArray("A", floats);
+            TestBeforeAfter(b => {
+                Assert.That(b.GetArray<float>("A"), Is.EqualTo(floats));
+                Assert.That(b.GetArray<int>("A"), Is.Not.EqualTo(ints));
+            });
         }
 
         [Test]
         public void SetArray_Then_SetBFast_Replaces()
         {
-            var bfast = new BFast();
-
             bfast.SetArray("A", new int[3] { 0, 1, 2 });
             bfast.SetBFast("A", new BFast());
-            var result = bfast.GetArray<int>("A");
-            Assert.That(result.Length > 3);
+            TestBeforeAfter(b =>
+            {
+                // That's the bfast read as an ints.
+                Assert.That(b.GetArray<int>("A").Length, Is.GreaterThan(3));
+                Assert.That(b.GetBFast("A"), Is.EqualTo(new BFast()));
+            });
         }
+        #endregion
 
         [Test]
         public void SetBFast_Adds_Entry()
         {
-            var bfast = new BFast();
             bfast.SetBFast("A", new BFast());
-
-            Assert.That(bfast.Entries.Count(), Is.EqualTo(1));
+            TestBeforeAfter(b => b.Entries.Count(), Is.EqualTo(1));
         }
 
         [Test]
         public void SetBFast_Then_GetBFast_Returns_Same()
         {
-            var bfast = new BFast();
-            var b = new BFast();
-            bfast.SetBFast("A", b);
-            var result = bfast.GetBFast("A");
-
-            Assert.That(result, Is.EqualTo(b));
+            var expected = new BFast();
+            bfast.SetBFast("A", expected);
+            TestBeforeAfter(b => b.GetBFast("A"), Is.EqualTo(expected));
         }
 
         [Test]
-        public void Inflate_NonDeflated_Throws()
+        public void SetBFast_Then_GetBFast_Nested()
         {
-            var bfast = new BFast();
-            var b = new BFast();
-            bfast.SetBFast("A", b);
-            Assert.That(() => bfast.GetBFast("A", inflate: true), Throws.Exception);
+            using (var file = File.Open(ResidencePath, FileMode.Open))
+            {
+                var (b1, b2) = (new BFast(), new BFast());
+                b1.SetBFast("b2", b2);
+                bfast.SetBFast("b1", b1);
+
+                var mem = bfast.ToMemoryStream();
+                var r = new BFast(mem);
+                var r1 = r.GetBFast("b1");
+                var r2 = r1.GetBFast("b2");
+
+                Assert.NotNull(r);
+                Assert.NotNull(r1);
+                Assert.NotNull(r2);
+            }
+        }
+
+        #region compress
+        [Test]
+        public void Compression_Decompress_Uncompressed_Returns_Throws()
+        {
+            var expected = new BFast();
+            bfast.SetBFast("A", expected);
+            TestBeforeAfter(b =>
+            {
+                Assert.That(() => b.GetBFast("A", decompress: true), Throws.Exception);
+            }); 
         }
 
         [Test]
-        public void Deflate_Inflate_Works()
+        public void Compression_Get_Compressed_Returns_Null()
         {
-            var bfast = new BFast();
-            var b = new BFast();
-            b.SetArray("B", new int[3] { 0, 1, 2 });
-            bfast.SetBFast("A", b, deflate : true);
-
-            var result = bfast.GetBFast("A", inflate: true);
-            var b2 = result.GetArray<int>("B");
-            Assert.That(result.Entries.Count(), Is.EqualTo(1));
-            Assert.That(b2, Is.EqualTo(new int[3] { 0, 1, 2 }));
+            var expected = new BFast();
+            bfast.SetBFast("A", expected, compress: true);
+            TestBeforeAfter(b =>
+            {
+                Assert.That(() => b.GetBFast("A"), Throws.Exception);
+            });
         }
+
+        [Test]
+        public void Compression_Get_Uncompressed_Works()
+        {
+            // This is tested by the bfast tests.
+        }
+
+        [Test]
+        public void Compression_Decompress_Compressed_Works()
+        {
+            var ints = new int[3] { 0, 1, 2 };
+
+            var bfastA = new BFast();
+            bfastA.SetArray("B", ints);
+            bfast.SetBFast("A", bfastA, compress: true);
+
+            TestBeforeAfter((b) =>
+            {
+                var result = b.GetBFast("A", decompress: true);
+                var b2 = result.GetArray<int>("B");
+
+                Assert.That(result.Entries.Count(), Is.EqualTo(1));
+                Assert.That(b2, Is.EqualTo(ints));
+            });
+        }
+        #endregion
+
+        #region bfast
 
         [Test]
         public void SetBFast_Then_SetBFast_Replaces()
         {
-            var bfast = new BFast();
-            var a = new BFast();
-            var b = new BFast();
-            bfast.SetBFast("A", a);
-            bfast.SetBFast("A", b);
-            var result = bfast.GetBFast("A");
-            Assert.That(a != b);
-            Assert.That(result == b);
+            var bfastA = new BFast();
+            bfast.SetBFast("A", bfastA);
+
+            var bfastB = new BFast();
+            bfastB.SetArray("A", new int[] { 1, 2, 3 });
+            bfast.SetBFast("A", bfastB);
+
+            TestBeforeAfter((b) =>
+            {
+                var result = b.GetBFast("A");
+                Assert.That(bfastA, Is.Not.EqualTo(bfastB));
+                Assert.That(result, Is.Not.EqualTo(bfastA));
+                Assert.That(result, Is.EqualTo(bfastB));
+            });
         }
 
         [Test]
         public void SetBFast_Then_SetArray_Replaces()
         {
-            var bfast = new BFast();
+            var ints = new int[3] { 0, 1, 2 };
             bfast.SetBFast("A", new BFast());
-            bfast.SetArray("A", new int[3] { 0, 1, 2 });
-            var result = bfast.GetBFast("A");
-            Assert.IsNull(result);
+            bfast.SetArray("A", ints);
+            TestBeforeAfter((b) =>
+            {
+                Assert.That(() => b.GetBFast("A"), Throws.Exception);
+                Assert.That(b.GetArray<int>("A"), Is.EqualTo(ints));
+            });
+            
         }
+        #endregion
 
         [Test]
         public void Remove_Missing_DoesNothing()
         {
-            var bfast = new BFast();
-            bfast.Remove("A");
-            Assert.That(bfast.Entries.Count() == 0);
+            TestBeforeAfter((b) =>
+            {
+                b.Remove("A");
+                Assert.That(b.Entries.Count() == 0);
+            });
         }
 
         [Test]
         public void Remove_Array()
         {
-            var bfast = new BFast();
             bfast.SetArray("A", new int[3] { 0, 1, 2 });
             bfast.Remove("A");
-            Assert.IsNull(bfast.GetArray<int>("A"));
-            Assert.That(bfast.Entries.Count() == 0);
+            TestBeforeAfter((b) =>
+            {
+                Assert.IsNull(b.GetArray<int>("A"));
+                Assert.That(b.Entries.Count() == 0);
+            });
         }
 
         [Test]
         public void Remove_BFast()
         {
-            var bfast = new BFast();
-            bfast.SetBFast("A", new BFast());
-            bfast.Remove("A");
-            Assert.IsNull(bfast.GetBFast("A"));
-            Assert.That(bfast.Entries.Count() == 0);
-        }
-
-        [Test]
-        public void Removed_BFast_Not_Written()
-        {
-            var bfast = new BFast();
             bfast.SetBFast("A", new BFast());
             bfast.Remove("A");
 
-            bfast.Write(ResultPath);
-
-            using (var stream = File.OpenRead(ResultPath))
+            TestBeforeAfter((b) =>
             {
-                var other = new BFast(stream);
-                Assert.IsNull(other.GetBFast("A"));
-                Assert.That(other.Entries.Count() == 0);
-            }
-        }
-
-        [Test]
-        public void Removed_Array_Not_Written()
-        {
-            var bfast = new BFast();
-            bfast.SetArray("A", new int[3] { 0, 1, 2 });
-            bfast.Remove("A");
-            bfast.Write(ResultPath);
-
-            using (var stream = File.OpenRead(ResultPath))
-            {
-                var other = new BFast(stream);
-                Assert.IsNull(other.GetArray<int>("A"));
-                Assert.That(other.Entries.Count() == 0);
-            }
+                Assert.IsNull(bfast.GetBFast("A"));
+                Assert.That(bfast.Entries.Count() == 0);
+            });
         }
 
         [Test]
@@ -424,62 +484,6 @@ namespace Vim.BFastNS.Tests
                 Assert.That(bfast.Entries.Count() == 5);
                 Assert.That(geometry.Entries.Count() == 16);
                 Assert.IsNull(geometry.GetArray<float>("g3d:vertex:position:0:float32:3"));
-            }
-        }
-
-        [Test]
-        public void Write_Then_Read_Array()
-        {
-            var bfast = new BFast();
-
-            bfast.SetArray("A", new int[3] { 0, 1, 2 });
-            bfast.Write(ResultPath);
-
-            using (var stream = File.OpenRead(ResultPath))
-            {
-                var other = new BFast(stream);
-                var result = other.GetArray<int>("A");
-                Assert.That(result, Is.EqualTo(new int[3] { 0, 1, 2 }));
-            }
-        }
-
-        [Test]
-        public void Write_Then_Read_Enumerable()
-        {
-            var bfast = new BFast();
-
-            bfast.SetEnumerable("A", () => new int[3] { 0, 1, 2 });
-            bfast.Write(ResultPath);
-
-            using (var stream = File.OpenRead(ResultPath))
-            {
-                var other = new BFast(stream);
-                var array = other.GetArray<int>("A");
-                var enumerable = other.GetEnumerable<int>("A");
-                Assert.That(array, Is.EqualTo(new int[3] { 0, 1, 2 }));
-                Assert.That(enumerable, Is.EqualTo(new int[3] { 0, 1, 2 }));
-            }
-        }
-
-        [Test]
-        public void Write_Then_Read_SimpleBFast()
-        {
-            var bfast = new BFast();
-            var child = new BFast();
-
-            bfast.SetBFast("child", child);
-            child.SetArray("A", new int[3] { 0, 1, 2 });
-            bfast.Write(ResultPath);
-
-            using (var stream = File.OpenRead(ResultPath))
-            {
-                var other = new BFast(stream);
-                var child2 = other.GetBFast("child");
-                var result = child2.GetArray<int>("A");
-
-                Assert.That(other.Entries.Count() == 1);
-                Assert.That(child2.Entries.Count() == 1);
-                Assert.That(result, Is.EqualTo(new int[3] { 0, 1, 2 }));
             }
         }
 
@@ -537,22 +541,22 @@ namespace Vim.BFastNS.Tests
         public void Write_Then_Read_Mixed_Sources()
         {
             var basic = new BFast();
+            var dummy = new MemoryStream();
             basic.SetArray("ints", new int[1] { 1 });
             basic.SetArray("floats", new float[1] { 2.0f });
-            basic.Write(ResultPath);
+            basic.Write(dummy);
 
-            using (var stream = File.OpenRead(ResultPath))
+            using (var residence = File.OpenRead(ResidencePath))
             {
-                using (var residence = File.OpenRead(ResidencePath))
-                {
-                    var input = new BFast(stream);
-                    var inputResidence = new BFast(residence);
-                    var output = new BFast();
+                dummy.Seek(0, SeekOrigin.Begin);
+                var input = new BFast(dummy);
 
-                    output.SetBFast("input", input);
-                    output.SetBFast("residence", inputResidence);
-                    output.Write(ResultPath2);
-                }
+                var inputResidence = new BFast(residence);
+                var output = new BFast();
+
+                output.SetBFast("input", input);
+                output.SetBFast("residence", inputResidence);
+                output.Write(ResultPath2);
             }
 
             using (var stream = File.OpenRead(ResultPath2))

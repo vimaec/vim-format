@@ -3,6 +3,7 @@
  */
 import { Range } from './bfast';
 import { IProgressLogs } from './requestTracker';
+import { Logger } from './logging';
 export declare function setRemoteBufferMaxConcurency(value: number): void;
 export declare class RetryRequest {
     url: string;
@@ -24,12 +25,12 @@ export declare class RemoteBuffer {
     url: string;
     maxConcurency: number;
     onProgress: (progress: IProgressLogs) => void;
+    logs: Logger;
     private _tracker;
-    private _logs;
     private _queue;
     private _active;
     private _encoded;
-    constructor(url: string, verbose?: boolean);
+    constructor(url: string);
     private requestEncoding;
     abort(): void;
     http(range: Range | undefined, label: string): Promise<ArrayBuffer>;

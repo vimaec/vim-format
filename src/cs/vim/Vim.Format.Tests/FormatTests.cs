@@ -2,7 +2,7 @@
 using System.Linq;
 using NUnit.Framework;
 using Vim.LinqArray;
-using Vim.BFastNS;
+using Vim.BFastLib;
 
 namespace Vim.Format.Tests
 {

@@ -2,7 +2,7 @@
  * @module vim-ts
  */
 
-import { BFast } from './bfast'
+import { BFast } from '../bfast'
 
 export type MeshSection = 'opaque' | 'transparent' | 'all'
 

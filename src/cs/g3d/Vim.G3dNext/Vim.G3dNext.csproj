@@ -9,8 +9,14 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\bfast\Vim.BFast\Vim.BFast.csproj" />
-    <ProjectReference Include="..\..\math3d\Vim.Math3D\Vim.Math3D.csproj" />
+    <ProjectReference Include="../../bfast/Vim.BFast/Vim.BFast.csproj" />
+    <ProjectReference Include="../../math3d/Vim.Math3D/Vim.Math3D.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="../../../../LICENSE.txt">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
   </ItemGroup>
 
 </Project>

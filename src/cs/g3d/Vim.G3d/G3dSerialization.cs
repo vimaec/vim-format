@@ -1,4 +1,4 @@
-﻿using Vim.BFastNS;
+using Vim.BFastLib;
 using Vim.LinqArray;
 
 namespace Vim.G3d

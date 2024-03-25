@@ -1,6 +1,6 @@
 using NUnit.Framework;
 using NUnit.Framework.Internal;
-using Vim.BFastNS;
+using Vim.BFastLib;
 using Vim.Util.Tests;
 
 namespace Vim.G3dNext.Tests

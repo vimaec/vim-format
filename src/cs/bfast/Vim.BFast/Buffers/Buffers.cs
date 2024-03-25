@@ -1,7 +1,8 @@
 ﻿using System;
 using System.IO;
+using Vim.BFastLib.Core;
 
-namespace Vim.BFastNS
+namespace Vim.BFastLib
 {
     /// <summary>
     /// Provides an interface to an object that manages a potentially large array of elements all of the same unmanaged type.

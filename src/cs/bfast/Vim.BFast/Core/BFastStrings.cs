@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Text;
 
-namespace Vim.BFastNS.Core
+namespace Vim.BFastLib.Core
 {
     public static class BFastStrings
     {

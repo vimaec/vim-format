@@ -2,8 +2,8 @@
  * @module vim-ts
  */
 
- import { RemoteValue } from './remoteValue'
- import { RemoteBuffer } from './remoteBuffer'
+ import { RemoteValue } from './http/remoteValue'
+ import { RemoteBuffer } from './http/remoteBuffer'
  import * as pako from 'pako'
  
  type NumericArrayConstructor =
@@ -208,14 +208,14 @@ export function parseName(name: string): [number, NumericArrayConstructor]{
    constructor (
      source: RemoteBuffer | ArrayBuffer | string,
      offset: number = 0,
-     name?: string 
+     name: string = '' 
    ) {
      this.source = typeof source === 'string'
       ? new RemoteBuffer(source)
       : source
 
      this.offset = offset
-     this.name = name ?? (typeof source === 'string' ? source : '')
+     this.name = name ?? "root"
  
      this._header = new RemoteValue(() => this.requestHeader(), name + '.header')
      this._children = new Map<string, RemoteValue<BFast>>()

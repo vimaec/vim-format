@@ -1,9 +1,9 @@
 import { BFast } from "./bfast";
-import { G3dMaterial as G3dMaterials } from "./g3dMaterials";
-import { G3dChunk } from './g3dChunk';
-import { G3dScene } from "./g3dScene";
-import { RemoteValue } from "./remoteValue";
-import { G3dMesh } from "./g3dMesh";
+import { G3dMaterial as G3dMaterials } from "./g3d/g3dMaterials";
+import { G3dChunk } from './g3d/g3dChunk';
+import { G3dScene } from "./g3d/g3dScene";
+import { RemoteValue } from "./http/remoteValue";
+import { G3dMesh } from "./g3d/g3dMesh";
 export declare class RemoteVimx {
     bfast: BFast;
     scene: RemoteValue<G3dScene>;

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using Vim.Math3d;
-using Vim.BFastNS;
+using Vim.BFastLib;
 using System.IO;
 using Vim.Util;
 

@@ -1,8 +1,8 @@
 ﻿using System.Linq;
-using Vim.BFastNS;
+using Vim.BFastLib;
 using Vim.G3dNext;
 
-namespace Vim.Format.VimxNS
+namespace Vim.Format.VimxLib
 {
     public static class BufferNames
     {
@@ -10,16 +10,13 @@ namespace Vim.Format.VimxNS
         public const string Meta = "meta";
         public const string Scene = "scene";
         public const string Materials = "materials";
-        public static string Chunk(int mesh) => $"chunk_{mesh}";
+        public static string Chunk(int index) => $"chunk_{index}";
     }
 
     public static class BufferCompression
     {
-        public const bool Header = false;
-        public const bool Meta = false;
         public const bool Scene = true;
         public const bool Materials = true;
-        public const bool Meshes = false;
         public const bool Chunks = true;
     }
 
@@ -59,7 +56,7 @@ namespace Vim.Format.VimxNS
         }
 
         public static Vimx FromPath(string path)
-            => path.ReadBFast((b) => new Vimx(b));
+            => BFastHelpers.Read(path, b => new Vimx(b));
 
         public BFast ToBFast()
         {
@@ -68,10 +65,13 @@ namespace Vim.Format.VimxNS
             bfast.SetArray(BufferNames.Header, Header.ToVimxBytes());
             bfast.SetBFast(BufferNames.Scene, Scene.ToBFast(), BufferCompression.Scene);
             bfast.SetBFast(BufferNames.Materials, Materials.ToBFast(), BufferCompression.Materials);
-            bfast.SetBFast(BufferNames.Chunk, Chunks.Select(c => c.ToBFast()), BufferCompression.Chunks);
+
+            for(var i =0; i < Chunks.Length; i++)
+            {
+                bfast.SetBFast(BufferNames.Chunk(i), Chunks[i].ToBFast(), BufferCompression.Chunks);
+            }
+            
             return bfast;
         }
-
-
     }
 }
