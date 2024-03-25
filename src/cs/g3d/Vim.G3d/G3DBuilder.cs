@@ -31,9 +31,6 @@ namespace Vim.G3d
 
         public G3DBuilder AddVertices(IArray<Vector3> vertices)
             => Add(vertices.ToPositionAttribute());
-
-        public IGeometryAttributes ToIGeometryAttributes()
-            => new GeometryAttributes(Attributes);
     }
 }
 

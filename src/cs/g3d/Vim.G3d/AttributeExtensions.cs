@@ -9,21 +9,6 @@ namespace Vim.G3d
 {
     public static class AttributeExtensions
     {
-        public static GeometryAttribute<T> CheckArity<T>(this GeometryAttribute<T> self, int arity) where T : unmanaged
-            => self?.Descriptor?.DataArity == arity ? self : null;
-
-        public static GeometryAttribute<T> CheckAssociation<T>(this GeometryAttribute<T> self, Association assoc) where T : unmanaged
-            => self?.Descriptor?.Association == assoc ? self : null;
-
-        public static GeometryAttribute<T> CheckArityAndAssociation<T>(this GeometryAttribute<T> self, int arity, Association assoc) where T : unmanaged
-            => self?.CheckArity(arity)?.CheckAssociation(assoc);
-
-        public static GeometryAttribute<T> ToAttribute<T>(this IList<T> self, string desc) where T : unmanaged
-            => self.ToIArray().ToAttribute(desc);
-
-        public static GeometryAttribute<T> ToAttribute<T>(this IList<T> self, AttributeDescriptor desc) where T : unmanaged
-            => self.ToIArray().ToAttribute(desc);
-
         public static GeometryAttribute<T> ToAttribute<T>(this IArray<T> self, AttributeDescriptor desc) where T : unmanaged
             => new GeometryAttribute<T>(self, desc);
 
@@ -143,8 +128,5 @@ namespace Vim.G3d
 
         public static GeometryAttribute Merge(this IEnumerable<GeometryAttribute> attributes)
             => attributes.FirstOrDefault()?.Merge(attributes.Skip(1));
-
-        public static GeometryAttribute Merge(this IArray<GeometryAttribute> attributes)
-            => attributes.ToEnumerable().Merge();
     }
 }

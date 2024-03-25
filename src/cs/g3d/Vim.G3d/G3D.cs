@@ -320,9 +320,5 @@ namespace Vim.G3d
 
         public static G3D Create(params GeometryAttribute[] attributes)
             => new G3D(attributes);
-
-        public static G3D Create(G3dHeader header, params GeometryAttribute[] attributes)
-            => new G3D(attributes, header);
-
     }
 }
