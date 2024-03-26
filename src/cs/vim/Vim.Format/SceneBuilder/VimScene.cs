@@ -37,6 +37,14 @@ namespace Vim
             return SerializableHeader.FromPath(path);
         }
 
+        /// <summary>
+        /// Returns the VIM file's header. Returns null if the Vim has no header.
+        /// </summary>
+        public static SerializableHeader GetHeader(Stream stream)
+        {
+            return SerializableHeader.FromStream(stream);
+        }
+
         public static VimScene LoadVim(string f, LoadOptions loadOptions, IVimSceneProgress progress = null, bool inParallel = false, int vimIndex = 0)
             => new VimScene(SerializableDocument.FromPath(f, loadOptions), progress, inParallel, vimIndex);
 
