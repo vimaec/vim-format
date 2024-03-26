@@ -7,11 +7,12 @@
 
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using Vim.LinqArray;
 using Vim.Math3d;
+using Vim.BFastLib;
+using System.Diagnostics;
 
 namespace Vim.G3d
 {
@@ -293,22 +294,52 @@ namespace Vim.G3d
         public static G3D Read(string filePath)
         {
             using (var stream = File.OpenRead(filePath))
-                return stream.ReadG3d();
+            {
+                var bfast = new BFast(stream);
+                return Read(bfast);
+            }
         }
 
-        public static G3D Read(Stream stream)
-            => stream.ReadG3d();
 
-        public static G3D Read(byte[] bytes)
+        public static G3D Read(BFast bfast)
         {
-            using (var stream = new MemoryStream(bytes))
-                return stream.ReadG3d();
+            var header = G3dHeader.FromBytesOrDefault(bfast.GetArray<byte>("meta"));
+            var attributes = new List<GeometryAttribute>();
+            foreach (var name in bfast.Entries)
+            {
+                if (name == "meta") continue;
+                var attribute = GetEmptyAttribute(name);
+                if (attribute == null) continue;
+                var a = attribute.Read(bfast);
+                attributes.Add(a);
+            }
+
+            return new G3D(attributes, header);
         }
+        private static GeometryAttribute GetEmptyAttribute(string name)
+        {
+            if (!AttributeDescriptor.TryParse(name, out var attributeDescriptor))
+            {
+                Debug.WriteLine("G3D Error: Could not parse attribute " + name);
+                return null;
+            }
+            try
+            {
+                return attributeDescriptor.ToDefaultAttribute(0);
+            }
+            catch
+            {
+                Debug.WriteLine("G3D Error: Could not parse attribute " + name);
+                return null;
+            }
+        }
+
 
         public static G3D Create(params GeometryAttribute[] attributes)
             => new G3D(attributes);
 
         public static G3D Create(G3dHeader header, params GeometryAttribute[] attributes)
             => new G3D(attributes, header);
+
     }
 }

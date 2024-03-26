@@ -2,8 +2,9 @@
  * @module vim-ts
  */
 
- import { RemoteValue } from './remoteValue'
- import { RemoteBuffer } from './remoteBuffer'
+ import { RemoteValue } from './http/remoteValue'
+ import { RemoteBuffer } from './http/remoteBuffer'
+ import * as pako from 'pako'
  
  type NumericArrayConstructor =
    | Int8ArrayConstructor
@@ -205,17 +206,33 @@ export function parseName(name: string): [number, NumericArrayConstructor]{
    private _children: Map<string, RemoteValue<BFast | undefined>>
  
    constructor (
-     source: RemoteBuffer | ArrayBuffer,
+     source: RemoteBuffer | ArrayBuffer | string,
      offset: number = 0,
-     name: string = ''
+     name: string = '' 
    ) {
-     this.source = source
+     this.source = typeof source === 'string'
+      ? new RemoteBuffer(source)
+      : source
+
      this.offset = offset
-     this.name = name
+     this.name = name ?? "root"
  
      this._header = new RemoteValue(() => this.requestHeader(), name + '.header')
      this._children = new Map<string, RemoteValue<BFast>>()
      this._ranges = new RemoteValue(() => this.requestRanges(), name + '.ranges')
+   }
+
+   /**
+    * Aborts all downloads from the underlying RemoteBuffer
+    */
+   abort(){
+      if(this.source instanceof RemoteBuffer){
+        this.source.abort()
+      }
+      
+      this._header.abort()
+      this._ranges.abort()
+      this._children.forEach(c => c.abort())
    }
  
    /**
@@ -246,11 +263,14 @@ export function parseName(name: string): [number, NumericArrayConstructor]{
      return request.get()
    }
  
-   async getLocalBfast (name: string): Promise<BFast | undefined> {
-     const buffer = await this.getBuffer(name)
-     if (!buffer) return undefined
-     return new BFast(buffer, 0, name)
-   }
+   async getLocalBfast (name: string, inflate: boolean = false): Promise<BFast | undefined> {
+    let buffer = await this.getBuffer(name)
+    if (!buffer) return undefined
+    if(inflate){
+     buffer = pako.inflateRaw(buffer).buffer
+    }
+    return new BFast(buffer, 0, name)
+  }
  
    /**
     * Returns the raw buffer associated with a name
@@ -277,6 +297,30 @@ export function parseName(name: string): [number, NumericArrayConstructor]{
      const array = new Ctor(buffer)
      return array
    }
+
+    async getInt32Array(name: string): Promise<Int32Array | undefined> {
+      const buffer = await this.getBuffer(name)
+      if(!buffer) return
+      return new Int32Array(buffer)
+    }
+
+    async getFloat32Array(name: string): Promise<Float32Array | undefined> {
+      const buffer = await this.getBuffer(name)
+      if(!buffer) return
+      return new Float32Array(buffer)
+    }
+
+    async getBigInt64Array(name: string): Promise<BigInt64Array | undefined> {
+      const buffer = await this.getBuffer(name)
+      if(!buffer) return
+      return new BigInt64Array(buffer)
+    }
+
+    async getUint16Array(name: string): Promise<Uint16Array | undefined> {
+      const buffer = await this.getBuffer(name)
+      if(!buffer) return
+      return new Uint16Array(buffer)
+    }
 
    /**
     * Returns a single value from given buffer name

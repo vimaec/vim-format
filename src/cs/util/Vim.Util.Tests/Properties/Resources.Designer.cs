@@ -61,7 +61,7 @@ namespace Vim.Util.Tests.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to C:\DEV\vimaec\src\Vim\vim-format\src\cs\util\Vim.Util.Tests\ 
+        ///   Looks up a localized string similar to C:\Users\Rober\Desktop\Vim\vim-format\src\cs\util\Vim.Util.Tests\ 
         ///.
         /// </summary>
         internal static string ProjDir {

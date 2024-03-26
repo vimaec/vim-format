@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using Vim.BFast;
 using Vim.G3d;
 using Vim.LinqArray;
+using Vim.BFastLib;
 
 namespace Vim.Format.Geometry
 {

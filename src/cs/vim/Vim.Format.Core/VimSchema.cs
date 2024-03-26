@@ -45,9 +45,12 @@ namespace Vim.Format
         }
 
         public static VimSchema Create(string filePath)
-            => Create(Serializer.Deserialize(filePath).ToDocument());
+            => Create(SerializableDocument.FromPath(filePath, new LoadOptions() { SchemaOnly=true})  );
 
-        public static VimSchema Create(Document doc)
+        public static VimSchema Create(SerializableDocument doc)
+            => Create(doc.ToDocument());
+
+        private static VimSchema Create(Document doc)
         {
             var vimSchema = new VimSchema(doc.Header);
             foreach (var entityTable in doc.EntityTables.Values.ToEnumerable())

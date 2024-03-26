@@ -6,6 +6,7 @@ import { BFast } from "./bfast"
  */
 export type VimHeader = {
   vim: string | undefined
+  vimx: string | undefined
   id: string | undefined
   revision: string | undefined
   generator: string | undefined
@@ -19,6 +20,7 @@ export async function requestHeader (bfast: BFast): Promise<VimHeader> {
   const map = new Map(pairs.map((p) => p.split('=')).map((p) => [p[0], p[1]]))
   return {
     vim: map.get('vim'),
+    vimx: map.get('vimx'),
     id: map.get('id'),
     revision: map.get('revision'),
     generator: map.get('generator'),

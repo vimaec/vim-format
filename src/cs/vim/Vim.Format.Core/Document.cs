@@ -1,5 +1,5 @@
 ﻿using Vim.LinqArray;
-using Vim.BFast;
+using Vim.BFastLib;
 
 namespace Vim.Format
 {
@@ -19,7 +19,7 @@ namespace Vim.Format
         }
 
         public string FileName => _Document.FileName;
-        private SerializableDocument _Document { get; }
+        public SerializableDocument _Document { get; }
         public SerializableHeader Header { get; }
         public ILookup<string, EntityTable> EntityTables { get; }
         public ILookup<string, INamedBuffer> Assets { get; }

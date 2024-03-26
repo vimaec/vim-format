@@ -173,6 +173,6 @@ namespace Vim
             => vim.DocumentModel.GetElementInfo(element);
 
         public static VimSchema GetVimSchema(this VimScene vim)
-            => VimSchema.Create(vim.Document);
+            => VimSchema.Create(vim._SerializableDocument);
     }
 }

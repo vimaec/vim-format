@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using System.Linq;
+using System.Text;
+using Vim.BFastLib;
 using Vim.Util;
 
 namespace Vim.Format
@@ -9,8 +12,8 @@ namespace Vim.Format
     public class SerializableHeader
     {
         public static readonly SerializableVersion CurrentVimFormatVersion = VimFormatVersion.Current;
-        
-        public const string FormatVersionField = "vim";
+
+        protected const string FormatVersionField = "vim";
         public const string IdField = "id";
         public const string RevisionField = "revision";
         public const string GeneratorField = "generator";
@@ -93,6 +96,30 @@ namespace Vim.Format
             AddOptionalValues(values ?? new Dictionary<string, string>(), versionString))
         { }
 
+        public static SerializableHeader FromBytes(byte[] input)
+        {
+            return FromString(Encoding.UTF8.GetString(input));
+        }
+
+
+        /// <summary>
+        /// Returns the VIM header from a vim file stream.
+        /// Will throw if the file is not a valid VIM.
+        /// </summary>
+        public static SerializableHeader FromStream(Stream stream)
+        {
+            var bfast = new BFast(stream);
+            var bytes = bfast.GetArray<byte>(BufferNames.Header);
+            if (bytes == null) return null;
+            return SerializableHeader.FromBytes(bytes);
+        }
+
+        public static SerializableHeader FromPath(string path)
+        {
+            using (var file = new FileStream(path, FileMode.OpenOrCreate))
+            return FromStream(file);
+        }
+
         /// <summary>
         /// Parses the input. Throws exceptions if the input does not define a correctly formatted header.
         /// </summary>
@@ -100,7 +127,7 @@ namespace Vim.Format
         /// <exception cref="VimHeaderDuplicateFieldException"></exception>
         /// <exception cref="VimHeaderFieldParsingException"></exception>
         /// <exception cref="VimHeaderRequiredFieldsNotFoundException"></exception>
-        public static SerializableHeader Parse(string input)
+        public static SerializableHeader FromString(string input)
         {
             var lines = input.Split(EndOfLineChar)
                 .Where(str => !string.IsNullOrEmpty(str));
@@ -119,7 +146,7 @@ namespace Vim.Format
             {
                 var tokens = line.Split(Separator);
                 var numTokens = tokens.Length;
-                
+
                 // skip empty lines.
                 if (numTokens == 0)
                     continue;
@@ -273,5 +300,10 @@ namespace Vim.Format
         /// </summary>
         public string PersistingId
             => CreatePersistingId(Id, Revision);
+
+        public byte[] ToBytes()
+        {
+            return ToString().ToBytesUtf8();
+        }
     }
 }

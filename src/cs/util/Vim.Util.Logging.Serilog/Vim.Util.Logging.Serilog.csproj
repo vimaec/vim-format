@@ -12,7 +12,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Vim.Util\Vim.Util.csproj" />
+    <ProjectReference Include="../Vim.Util/Vim.Util.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Include="../../../../LICENSE.txt">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
+  </ItemGroup>
 </Project>

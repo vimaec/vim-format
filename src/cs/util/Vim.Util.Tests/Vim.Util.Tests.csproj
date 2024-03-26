@@ -15,8 +15,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Vim.Util.Logging.Serilog\Vim.Util.Logging.Serilog.csproj" />
-    <ProjectReference Include="..\Vim.Util\Vim.Util.csproj" />
+    <ProjectReference Include="../../math3d/Vim.Math3D\Vim.Math3D.csproj" />
+    <ProjectReference Include="../Vim.Util.Logging.Serilog/Vim.Util.Logging.Serilog.csproj" />
+    <ProjectReference Include="../Vim.Util/Vim.Util.csproj" />
   </ItemGroup>
 
   <ItemGroup>
@@ -37,5 +38,11 @@
   <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
     <Exec Command="echo $(ProjectDir) &gt; &quot;$(ProjectDir)/Resources/ProjDir.txt&quot;" />
   </Target>
+  <ItemGroup>
+    <None Include="../../../../LICENSE.txt">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
+  </ItemGroup>
 
 </Project>
