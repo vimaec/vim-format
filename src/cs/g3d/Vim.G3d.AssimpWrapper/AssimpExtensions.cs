@@ -76,12 +76,6 @@ namespace Vim.G3d.AssimpWrapper
             bldr.AddVertices(mesh.Vertices.ToIArray().Select(ToMath3D));
             bldr.AddIndices(indices);
 
-            if (mesh.HasTangentBasis)
-                bldr.Add(mesh.BiTangents.ToIArray().Select(ToMath3D).ToVertexBitangentAttribute());
-
-            if (mesh.HasTangentBasis)
-                bldr.Add(mesh.Tangents.ToIArray().Select(x => ToMath3D(x).ToVector4()).ToVertexTangentAttribute());
-
             if (mesh.HasNormals)
                 bldr.Add(mesh.Normals.ToIArray().Select(ToMath3D).ToVertexNormalAttribute());
 

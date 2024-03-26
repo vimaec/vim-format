@@ -37,12 +37,9 @@ namespace Vim.G3d
         public IArray<int> Indices { get; }
 
         // Vertex associated data, provided or null
-        public List<IArray<Vector2>> AllVertexUvs { get; } = new List<IArray<Vector2>>();
         public List<IArray<Vector4>> AllVertexColors { get; } = new List<IArray<Vector4>>();
-        public IArray<Vector2> VertexUvs => AllVertexUvs?.ElementAtOrDefault(0);
         public IArray<Vector4> VertexColors => AllVertexColors?.ElementAtOrDefault(0);
         public IArray<Vector3> VertexNormals { get; }
-        public IArray<Vector4> VertexTangents { get; }
 
         // Faces
         public IArray<int> FaceMaterials { get; } // Material indices per face, 
@@ -107,20 +104,6 @@ namespace Vim.G3d
                             Vertices = Vertices ?? attr.AsType<Vector3>().Data; // TODO: is this used?
                         if (attr.IsTypeAndAssociation<Vector3>(Association.assoc_shapevertex))
                             ShapeVertices = ShapeVertices ?? attr.AsType<Vector3>().Data;
-                        break;
-
-                    case Semantic.Tangent:
-                        if (attr.IsTypeAndAssociation<Vector3>(Association.assoc_vertex))
-                            VertexTangents = VertexTangents ?? attr.AsType<Vector3>().Data.Select(v => v.ToVector4());
-                        if (attr.IsTypeAndAssociation<Vector4>(Association.assoc_vertex))
-                            VertexTangents = VertexTangents ?? attr.AsType<Vector4>().Data;
-                        break;
-
-                    case Semantic.Uv:
-                        if (attr.IsTypeAndAssociation<Vector3>(Association.assoc_vertex))
-                            AllVertexUvs.Add(attr.AsType<Vector3>().Data.Select(uv => uv.ToVector2()));
-                        if (attr.IsTypeAndAssociation<Vector2>(Association.assoc_vertex))
-                            AllVertexUvs.Add(attr.AsType<Vector2>().Data);
                         break;
 
                     case Semantic.Color:
@@ -337,9 +320,5 @@ namespace Vim.G3d
 
         public static G3D Create(params GeometryAttribute[] attributes)
             => new G3D(attributes);
-
-        public static G3D Create(G3dHeader header, params GeometryAttribute[] attributes)
-            => new G3D(attributes, header);
-
     }
 }

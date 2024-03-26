@@ -87,58 +87,5 @@ namespace Vim.Format.Geometry
 
         public static Dictionary<MeshHash, List<IMesh>> GroupMeshesByHash(this IEnumerable<IMesh> meshes, float tolerance)
             => meshes.AsParallel().GroupBy(m => new MeshHash(m, tolerance)).ToDictionary(grp => grp.Key, grp => grp.ToList());
-
-        /// <summary>
-        /// Merges vertices that are within a certain distance and have similar normals and colors.        
-        /// </summary>
-        public static IMesh WeldVertices(this IMesh g, float threshold = (float)Math3d.Constants.MmToFeet)
-        {
-            var positions = g.Vertices;
-            var normals = g.GetOrComputeVertexNormals().ToArray();
-            var colors = g.VertexColors ?? Vector4.Zero.Repeat(positions.Count);
-
-            // Vertex indices by color, and then by normal 
-            var d = new Dictionary<IntegerPositionColorNormal, int>();
-
-            // The mapping of old indices to new ones
-            var indexRemap = new int[g.Vertices.Count];
-
-            // This is a list of vertex indices that we are keeping 
-            var vertRemap = new List<int>();
-
-            // Local helper function 
-            Int3 ToInt3(Vector3 v)
-                => new Int3((int)v.X, (int)v.Y, (int)v.Z);
-
-            for (var i = 0; i < g.NumVertices; ++i)
-            {
-                var p = ToInt3(positions[i] * (1 / threshold));
-                var c = ToInt3(colors[i].ToVector3() * 10000);
-                var n = ToInt3(normals[i] * 10000);
-
-                var pcn = new IntegerPositionColorNormal(p, c, n);
-
-                if (d.TryGetValue(pcn, out var index))
-                {
-                    indexRemap[i] = index;
-                    continue;
-                }
-
-                var newVertIndex = vertRemap.Count;
-                indexRemap[i] = newVertIndex;
-                vertRemap.Add(i);
-
-                d.Add(pcn, newVertIndex);
-            }
-
-            Debug.Assert(vertRemap.Count <= g.NumVertices);
-            for (var i = 1; i < vertRemap.Count; ++i)
-                Debug.Assert(vertRemap[i - 1] < vertRemap[i]);
-
-            return g.RemapVertices(
-                vertRemap.ToIArray(),
-                g.Indices.Select(i => indexRemap[i]))
-                .ToIMesh();
-        }
     }
 }

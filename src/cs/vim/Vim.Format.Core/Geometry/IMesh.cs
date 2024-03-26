@@ -15,7 +15,6 @@ namespace Vim.Format.Geometry
         IArray<int> Indices { get; }
         IArray<Vector4> VertexColors { get; }
         IArray<Vector3> VertexNormals { get; }
-        IArray<Vector2> VertexUvs { get; }
 
         IArray<int> SubmeshMaterials { get; }
         IArray<int> SubmeshIndexOffsets { get; }

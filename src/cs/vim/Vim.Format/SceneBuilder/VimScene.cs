@@ -22,83 +22,27 @@ namespace Vim
     public class VimScene : IScene
     {
         /// <summary>
-        /// Returns the VIM file's header schema version. Returns null if the header schema is not found.
+        /// Returns the VIM file's header schema version. Returns null if the Vim has no header.
         /// </summary>
-        public static string GetSchemaVersion(string path)
+        public static SerializableVersion GetSchemaVersion(string path)
         {
-            return GetHeader(path).Schema.ToString();
+            return GetHeader(path)?.Schema;
         }
 
         /// <summary>
-        /// Returns the VIM file's header schema version. Returns null if the header schema is not found.
+        /// Returns the VIM file's header. Returns null if the Vim has no header.
         /// </summary>
-        public static bool TryGetSchemaVersion(string path, out string schema)
-        {
-            try
-            {
-                schema = GetSchemaVersion(path);
-                return true;
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                schema = null;
-                return false;
-            }
-        }
-
         public static SerializableHeader GetHeader(string path)
         {
-            using (var file = new FileStream(path, FileMode.OpenOrCreate))
-            {
-                return GetHeader(file);
-            }
-        }
-
-        public static bool TryGetHeader(string path, out SerializableHeader header)
-        {
-            using (var file = new FileStream(path, FileMode.OpenOrCreate))
-            {
-                return TryGetHeader(file, out header);
-            }
+            return SerializableHeader.FromPath(path);
         }
 
         /// <summary>
-        /// Returns the VIM header from a vim file stream.
-        /// Will throw if the file is not a valid VIM.
+        /// Returns the VIM file's header. Returns null if the Vim has no header.
         /// </summary>
         public static SerializableHeader GetHeader(Stream stream)
         {
-            var bfast = new BFast(stream);
-            var bytes = bfast.GetArray<byte>(BufferNames.Header);
-            if (bytes == null) return null;
-            return SerializableHeader.FromBytes(bytes);
-        }
-
-        /// <summary>
-        /// Returns true along along with the VIM header from a valid vim file stream.
-        /// Returns false and null and resets the stream at given position for invalid file.
-        /// </summary>
-        public static bool TryGetHeader(Stream stream, out SerializableHeader header)
-        {
-            var position = stream.Position;
-            try
-            {
-                header = GetHeader(stream);
-                return true;
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-
-                if (stream.CanSeek)
-                {
-                    stream.Seek(position, SeekOrigin.Begin);
-                }
-                
-                header = null;
-                return false;
-            }
+            return SerializableHeader.FromStream(stream);
         }
 
         public static VimScene LoadVim(string f, LoadOptions loadOptions, IVimSceneProgress progress = null, bool inParallel = false, int vimIndex = 0)
@@ -137,7 +81,6 @@ namespace Vim
             => Primitives.TriMesh(
                 g3d.Vertices.ToPositionAttribute(),
                 g3d.Indices.ToIndexAttribute(),
-                g3d.VertexUvs?.ToVertexUvAttribute(),
                 g3d.SubmeshIndexOffsets?.ToSubmeshIndexOffsetAttribute(),
                 g3d.SubmeshMaterials?.ToSubmeshMaterialAttribute(),
                 g3d.MeshSubmeshOffset?.ToMeshSubmeshOffsetAttribute()
