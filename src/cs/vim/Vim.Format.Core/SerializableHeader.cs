@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Text;
 using Vim.BFastLib;
@@ -97,7 +98,26 @@ namespace Vim.Format
 
         public static SerializableHeader FromBytes(byte[] input)
         {
-            return Parse(Encoding.UTF8.GetString(input));
+            return FromString(Encoding.UTF8.GetString(input));
+        }
+
+
+        /// <summary>
+        /// Returns the VIM header from a vim file stream.
+        /// Will throw if the file is not a valid VIM.
+        /// </summary>
+        public static SerializableHeader FromStream(Stream stream)
+        {
+            var bfast = new BFast(stream);
+            var bytes = bfast.GetArray<byte>(BufferNames.Header);
+            if (bytes == null) return null;
+            return SerializableHeader.FromBytes(bytes);
+        }
+
+        public static SerializableHeader FromPath(string path)
+        {
+            using (var file = new FileStream(path, FileMode.OpenOrCreate))
+            return FromStream(file);
         }
 
         /// <summary>
@@ -107,7 +127,7 @@ namespace Vim.Format
         /// <exception cref="VimHeaderDuplicateFieldException"></exception>
         /// <exception cref="VimHeaderFieldParsingException"></exception>
         /// <exception cref="VimHeaderRequiredFieldsNotFoundException"></exception>
-        public static SerializableHeader Parse(string input)
+        public static SerializableHeader FromString(string input)
         {
             var lines = input.Split(EndOfLineChar)
                 .Where(str => !string.IsNullOrEmpty(str));
