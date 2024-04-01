@@ -11,6 +11,7 @@ using Vim.LinqArray;
 using Vim.Math3d;
 using IVimSceneProgress = System.IProgress<(string, double)>;
 using Vim.BFastLib;
+using Vim.G3dNext;
 
 namespace Vim
 {
@@ -59,6 +60,7 @@ namespace Vim
 
         public int VimIndex { get; set; }
         public IArray<IMesh> Meshes { get; private set; }
+        public VimMesh[] MeshesNext { get; private set; }
         public IArray<ISceneNode> Nodes { get; private set; }
         public IArray<VimSceneNode> VimNodes { get; private set; }
         public IArray<VimShape> VimShapes { get; private set; }
@@ -71,11 +73,14 @@ namespace Vim
         public string PersistingId
             => Document.Header.PersistingId;
 
-        public Material GetMaterial(int materialIndex)
-            => DocumentModel.MaterialList.ElementAtOrDefault(materialIndex);
+        public int GetMeshCount() => Meshes.Count;
+        public int GetMaterialCount() => Materials.Count;
 
         public Vector4 GetMaterialColor(int materialIndex)
             => _SerializableDocument.Geometry.MaterialColors[materialIndex];
+
+        public Vector4 GetMaterialColorNext(int materialIndex)
+         => _SerializableDocument.GeometryNext.MaterialColors[materialIndex];
 
         public static IMesh ToIMesh(G3dMesh g3d)
             => Primitives.TriMesh(
@@ -200,6 +205,7 @@ namespace Vim
                 : inParallel 
                     ? tmp.EvaluateInParallel() 
                     : tmp.Evaluate();
+            MeshesNext = _SerializableDocument.GeometryNext.GetAllMeshes().ToArray();
         }
 
         private void CreateShapes(bool inParallel)

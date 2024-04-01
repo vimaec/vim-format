@@ -43,17 +43,77 @@ namespace Vim.Format
             .Concat(StringColumns)
             .Concat(DataColumns);
 
-        public static SerializableEntityTable FromBfast(string name, BFast bfast)
-        {
-            return null;
-        }
-
         private readonly static Regex TypePrefixRegex = new Regex(@"(\w+:).*");
 
         public static string GetTypeFromName(string name)
         {
             var match = TypePrefixRegex.Match(name);
             return match.Success ? match.Groups[1].Value : "";
+        }
+
+        /// <summary>
+        /// Returns a SerializableEntityTable based on the given buffer reader.
+        /// </summary>
+        public static SerializableEntityTable FromBFast(
+            BFast bfast,
+            bool schemaOnly
+           )
+        {
+            var et = new SerializableEntityTable();
+            foreach (var entry in bfast.Entries)
+            {
+                var typePrefix = SerializableEntityTable.GetTypeFromName(entry);
+
+                switch (typePrefix)
+                {
+                    case VimConstants.IndexColumnNameTypePrefix:
+                        {
+                            //TODO: replace named buffer with arrays
+                            var col = schemaOnly ? new int[0] : bfast.GetArray<int>(entry);
+                            et.IndexColumns.Add(col.ToNamedBuffer(entry));
+                            break;
+                        }
+                    case VimConstants.StringColumnNameTypePrefix:
+                        {
+                            var col = schemaOnly ? new int[0] : bfast.GetArray<int>(entry);
+                            et.StringColumns.Add(col.ToNamedBuffer(entry));
+                            break;
+                        }
+                    case VimConstants.IntColumnNameTypePrefix:
+                        {
+                            var col = schemaOnly ? new int[0] : bfast.GetArray<int>(entry);
+                            et.DataColumns.Add(col.ToNamedBuffer(entry));
+                            break;
+                        }
+                    case VimConstants.LongColumnNameTypePrefix:
+                        {
+                            var col = schemaOnly ? new long[0] : bfast.GetArray<long>(entry);
+                            et.DataColumns.Add(col.ToNamedBuffer(entry));
+                            break;
+                        }
+                    case VimConstants.DoubleColumnNameTypePrefix:
+                        {
+                            var col = schemaOnly ? new double[0] : bfast.GetArray<double>(entry);
+                            et.DataColumns.Add(col.ToNamedBuffer(entry));
+                            break;
+                        }
+                    case VimConstants.FloatColumnNameTypePrefix:
+                        {
+                            var col = schemaOnly ? new float[0] : bfast.GetArray<float>(entry);
+                            et.DataColumns.Add(col.ToNamedBuffer(entry));
+                            break;
+                        }
+                    case VimConstants.ByteColumnNameTypePrefix:
+                        {
+                            var col = schemaOnly ? new byte[0] : bfast.GetArray<byte>(entry);
+                            et.DataColumns.Add(col.ToNamedBuffer(entry));
+                            break;
+                        }
+                        // For flexibility, we ignore the columns which do not contain a recognized prefix.
+                }
+            }
+
+            return et;
         }
 
         public BFast ToBFast()

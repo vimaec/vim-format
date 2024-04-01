@@ -9,6 +9,7 @@ using Vim.Format.ObjectModel;
 using Vim.Util;
 using Vim.LinqArray;
 using Vim.Math3d;
+using Vim.G3d;
 
 namespace Vim.Format.SceneBuilder
 {
@@ -28,18 +29,26 @@ namespace Vim.Format.SceneBuilder
         {
             // Validate the packed geometry.
             vim.Document.Geometry.ToIMesh().Validate();
+            var errors = new List<string>();
+
+            G3d.Validation.Validate(vim.Document.Geometry);
+
 
             // Validate the individual meshes.
             foreach (var g in vim.Meshes.ToEnumerable())
                 g.Validate();
         }
 
+        public static void ValidateGeometryNext(this VimScene vim)
+        {
+            //TODO: Sronger validation maybe.
+            vim.Document.GeometryNext.Validate();
+        }
+
         public static void ValidateDocumentModelToG3dInvariants(this VimScene vim)
         {
             var g3d = vim._SerializableDocument.Geometry;
             var errors = new List<string>();
-
-            errors.AddRange(Vim.G3d.Validation.Validate(g3d).Select(e => e.ToString("G")));
 
             var entityTypesWithG3dReferences = new HashSet<(Type, G3dAttributeReferenceAttribute[])>(
                 ObjectModelReflection.GetEntityTypes<Entity>()
@@ -78,6 +87,65 @@ namespace Vim.Format.SceneBuilder
                         if (mult == G3dAttributeReferenceMultiplicity.OneToOne && numEntities != g3dElementCount)
                         {
                             errors.Add($"Multiplicity Error ({mult}); the number of entities of type \"{type.Name}\" ({numEntities}) is not equal to the number of elements in the g3d attribute \"{attributeName}\" ({g3dElementCount})");
+                        }
+                    }
+                }
+                else
+                {
+                    throw new VimValidationException($"DocumentModel.{propertyName} not found");
+                }
+            }
+
+            if (errors.Count > 0)
+            {
+                throw new VimValidationException(
+                    $"DocumentModel to G3d invariant error(s):{Environment.NewLine}{string.Join(Environment.NewLine, errors)}");
+            }
+        }
+
+        
+
+        public static void ValidateDocumentModelToG3dInvariantsNext(this VimScene vim)
+        {
+            var g3d = vim.Document.GeometryNext;
+            var errors = new List<string>();
+
+            var entityTypesWithG3dReferences = new HashSet<(Type, G3dAttributeReferenceAttribute[])>(
+                ObjectModelReflection.GetEntityTypes<Entity>()
+                    .Select(t => (
+                        type: t,
+                        attrs: t.GetCustomAttributes(typeof(G3dAttributeReferenceAttribute))
+                            .Select(a => a as G3dAttributeReferenceAttribute)
+                            .ToArray()))
+                    .Where(tuple => tuple.attrs.Length != 0));
+
+            var dm = vim.DocumentModel;
+
+            foreach (var tuple in entityTypesWithG3dReferences)
+            {
+                var (type, attrs) = tuple;
+                var propertyName = type.Name + "List";
+                if (dm.GetPropertyValue(propertyName) is IArray arr)
+                {
+                    var numEntities = arr.Count;
+
+                    foreach (var attr in attrs)
+                    {
+                        var attributeName = attr.AttributeName;
+                        var isOptional = attr.AttributeIsOptional;
+
+                        var count = g3d.CountOf(attributeName);
+
+                        // We don't check the relation if the attribute is optional and absent (null).
+                        if (isOptional && count < 0)
+                            continue;
+
+                        var mult = attr.AttributeReferenceMultiplicity;
+
+                        // Validate one-to-one relationships
+                        if (mult == G3dAttributeReferenceMultiplicity.OneToOne && numEntities != count)
+                        {
+                            errors.Add($"Multiplicity Error ({mult}); the number of entities of type \"{type.Name}\" ({numEntities}) is not equal to the number of elements in the g3d attribute \"{attributeName}\" ({count})");
                         }
                     }
                 }
@@ -138,7 +206,11 @@ namespace Vim.Format.SceneBuilder
             vim.Document.Validate();
             vim.DocumentModel.Validate(options.ObjectModelValidationOptions);
             vim.ValidateGeometry();
+            vim.ValidateGeometryNext();
+
             vim.ValidateDocumentModelToG3dInvariants();
+            vim.ValidateDocumentModelToG3dInvariantsNext();
+
             vim.ValidateNodes();
             vim.ValidateShapes();
         }

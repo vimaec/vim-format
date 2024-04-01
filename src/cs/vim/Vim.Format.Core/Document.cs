@@ -1,5 +1,6 @@
 ﻿using Vim.LinqArray;
 using Vim.BFastLib;
+using Vim.G3dNext;
 
 namespace Vim.Format
 {
@@ -11,6 +12,7 @@ namespace Vim.Format
             _Document = document;
             Header = _Document.Header;
             Geometry = _Document.Geometry;
+            GeometryNext = _Document.GeometryNext;
             StringTable = _Document.StringTable.ToIArray();
             EntityTables = _Document.EntityTables.ToLookup(
                 et => et.Name,
@@ -26,5 +28,6 @@ namespace Vim.Format
         public IArray<string> StringTable { get; }
         public string GetString(int index) => StringTable.ElementAtOrDefault(index);
         public G3d.G3D Geometry { get; }
+        public G3dVim GeometryNext { get; }
     }
 }

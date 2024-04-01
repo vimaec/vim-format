@@ -151,6 +151,27 @@ namespace Vim.G3dNext
             );
         }
 
+        public int CountOf(string name)
+        {
+            if(name == "g3d:corner:index:0:int32:1") return Indices?.Length ?? -1;
+ 			if(name == "g3d:vertex:position:0:float32:3") return Positions?.Length ?? -1;
+ 			if(name == "g3d:instance:transform:0:float32:16") return InstanceTransforms?.Length ?? -1;
+ 			if(name == "g3d:instance:parent:0:int32:1") return InstanceParents?.Length ?? -1;
+ 			if(name == "g3d:instance:flags:0:uint16:1") return InstanceFlags?.Length ?? -1;
+ 			if(name == "g3d:instance:mesh:0:int32:1") return InstanceMeshes?.Length ?? -1;
+ 			if(name == "g3d:mesh:submeshoffset:0:int32:1") return MeshSubmeshOffsets?.Length ?? -1;
+ 			if(name == "g3d:submesh:indexoffset:0:int32:1") return SubmeshIndexOffsets?.Length ?? -1;
+ 			if(name == "g3d:submesh:material:0:int32:1") return SubmeshMaterials?.Length ?? -1;
+ 			if(name == "g3d:material:color:0:float32:4") return MaterialColors?.Length ?? -1;
+ 			if(name == "g3d:material:glossiness:0:float32:1") return MaterialGlossiness?.Length ?? -1;
+ 			if(name == "g3d:material:smoothness:0:float32:1") return MaterialSmoothness?.Length ?? -1;
+ 			if(name == "g3d:shapevertex:position:0:float32:3") return ShapeVertices?.Length ?? -1;
+ 			if(name == "g3d:shape:vertexoffset:0:int32:1") return ShapeVertexOffsets?.Length ?? -1;
+ 			if(name == "g3d:shape:color:0:float32:4") return ShapeColors?.Length ?? -1;
+ 			if(name == "g3d:shape:width:0:float32:1") return ShapeWidths?.Length ?? -1;
+            return -1;
+        }
+
         public void Validate() 
         {
             // Ensure all the indices are either -1 or within the bounds of the attributes they are indexing into.
@@ -248,6 +269,18 @@ namespace Vim.G3dNext
             );
         }
 
+        public int CountOf(string name)
+        {
+            if(name == "g3d:mesh:opaquesubmeshcount:0:int32:1") return MeshOpaqueSubmeshCounts?.Length ?? -1;
+ 			if(name == "g3d:mesh:submeshoffset:0:int32:1") return MeshSubmeshOffset?.Length ?? -1;
+ 			if(name == "g3d:submesh:indexoffset:0:int32:1") return SubmeshIndexOffsets?.Length ?? -1;
+ 			if(name == "g3d:submesh:vertexoffset:0:int32:1") return SubmeshVertexOffsets?.Length ?? -1;
+ 			if(name == "g3d:submesh:material:0:int32:1") return SubmeshMaterials?.Length ?? -1;
+ 			if(name == "g3d:vertex:position:0:float32:3") return Positions?.Length ?? -1;
+ 			if(name == "g3d:corner:index:0:int32:1") return Indices?.Length ?? -1;
+            return -1;
+        }
+
         public void Validate() 
         {
             // Ensure all the indices are either -1 or within the bounds of the attributes they are indexing into.
@@ -312,6 +345,14 @@ namespace Vim.G3dNext
  				BufferMethods.MergeData(MaterialGlossiness, other.MaterialGlossiness), 
  				BufferMethods.MergeData(MaterialSmoothness, other.MaterialSmoothness)
             );
+        }
+
+        public int CountOf(string name)
+        {
+            if(name == "g3d:material:color:0:float32:4") return MaterialColors?.Length ?? -1;
+ 			if(name == "g3d:material:glossiness:0:float32:1") return MaterialGlossiness?.Length ?? -1;
+ 			if(name == "g3d:material:smoothness:0:float32:1") return MaterialSmoothness?.Length ?? -1;
+            return -1;
         }
 
         public void Validate() 
@@ -459,6 +500,26 @@ namespace Vim.G3dNext
  				BufferMethods.MergeData(MeshOpaqueVertexCounts, other.MeshOpaqueVertexCounts), 
  				BufferMethods.MergeData(MeshOpaqueIndexCounts, other.MeshOpaqueIndexCounts)
             );
+        }
+
+        public int CountOf(string name)
+        {
+            if(name == "g3d:chunk:count:0:int32:1") return ChunkCount?.Length ?? -1;
+ 			if(name == "g3d:instance:mesh:0:int32:1") return InstanceMeshes?.Length ?? -1;
+ 			if(name == "g3d:instance:transform:0:float32:16") return InstanceTransformData?.Length ?? -1;
+ 			if(name == "g3d:instance:node:0:int32:1") return InstanceNodes?.Length ?? -1;
+ 			if(name == "g3d:instance:group:0:int32:1") return InstanceGroups?.Length ?? -1;
+ 			if(name == "g3d:instance:tag:0:int64:1") return InstanceTags?.Length ?? -1;
+ 			if(name == "g3d:instance:flags:0:uint16:1") return InstanceFlags?.Length ?? -1;
+ 			if(name == "g3d:instance:min:0:float32:3") return InstanceMins?.Length ?? -1;
+ 			if(name == "g3d:instance:max:0:float32:3") return InstanceMaxs?.Length ?? -1;
+ 			if(name == "g3d:mesh:chunk:0:int32:1") return MeshChunks?.Length ?? -1;
+ 			if(name == "g3d:mesh:chunkindex:0:int32:1") return MeshChunkIndices?.Length ?? -1;
+ 			if(name == "g3d:mesh:vertexcount:0:int32:1") return MeshVertexCounts?.Length ?? -1;
+ 			if(name == "g3d:mesh:indexcount:0:int32:1") return MeshIndexCounts?.Length ?? -1;
+ 			if(name == "g3d:mesh:opaquevertexcount:0:int32:1") return MeshOpaqueVertexCounts?.Length ?? -1;
+ 			if(name == "g3d:mesh:opaqueindexcount:0:int32:1") return MeshOpaqueIndexCounts?.Length ?? -1;
+            return -1;
         }
 
         public void Validate() 

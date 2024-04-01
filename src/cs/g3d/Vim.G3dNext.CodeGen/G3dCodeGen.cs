@@ -113,6 +113,14 @@ namespace Vim.G3dNext.CodeGen
             );
         }}
 
+        public int CountOf(string name)
+        {{
+            {string.Join("\n \t\t\t", entity.Buffers.Select(c => {
+                return $"if(name == \"{c.BufferName}\") return {c.MemberName}?.Length ?? -1;";
+            }))}
+            return -1;
+        }}
+
         public void Validate() 
         {{
             // Ensure all the indices are either -1 or within the bounds of the attributes they are indexing into.
