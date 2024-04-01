@@ -11,65 +11,6 @@ namespace Vim.Format.Geometry
 {
     public static class PerimeterProjection
     {
-        public static Int2 ToXYApproximation(this Vector3 v, float tolerance)
-            => new Int2((int)(v.X / tolerance), (int)(v.Y / tolerance));
-
-        public static Vector2 FromXYApproximation(this Int2 v, float tolerance)
-            => new Vector2(v.X * tolerance, v.Y * tolerance);
-
-        public static LineApprox ToXYApproximation(this Line line, float tolerance)
-            => Tuple.Create(line.A.ToXYApproximation(tolerance), line.B.ToXYApproximation(tolerance));
-
-        public static double Angle(this Int2 v)
-            => Math.Atan2(v.Y, v.X);
-
-        public static double Angle(this Int2 a, Int2 b)
-            => (a - b).Angle();
-
-        public static IEnumerable<Vector2> PerimeterXY(this IMesh mesh, float tolerance = 0.001f)
-        {
-            var srcLines = mesh.GetAllEdgesAsLines();
-            var approxLines = srcLines.Select(line => line.ToXYApproximation(tolerance));
-            var lineSet = new HashSet<LineApprox>(approxLines.ToArrayInParallel());
-            Debug.WriteLine($"Went from {srcLines.Count} to {lineSet.Count}");
-            var d = new DictionaryOfLists<Int2, LineApprox>();
-            foreach (var ab in lineSet)
-            {
-                d.Add(ab.Item1, ab);
-                d.Add(ab.Item2, ab);
-            }
-            var r = new List<Vector2>();
-            if (d.Count == 0)
-                return r;
-
-            var firstKey = d.Keys.Minimize(int.MaxValue, ab => ab.X.Min(ab.Y));
-            var currentKey = firstKey;
-            var prevAngle = 0.0;
-
-            // If we can't find the point in the dictionary we have completed 
-            while (d.ContainsKey(currentKey))
-            {
-                // Find the candidate points;
-                var candidates = d[currentKey].Select(line => line.Item1 == currentKey ? line.Item2 : line.Item1);
-
-                // Find the best match by maximizing angle 
-                var bestMatch = candidates.Maximize(0.0, c => currentKey.Angle(c) - prevAngle);
-
-                // Update the return set
-                r.Add(bestMatch.FromXYApproximation(tolerance));
-
-                // Now save the angle for the next stage. 
-                prevAngle = currentKey.Angle(bestMatch);
-
-                // Remove this key from the dictionary 
-                d.Remove(currentKey);
-
-                // Now we are at a new point 
-                currentKey = bestMatch;
-            }
-
-            return r;
-        }
 
         public static List<List<Vector2>> GeneratePerimeter(this IMesh mesh, Vector3 planeNormal, float degenerateSegmentEpsilon = 10.0f, float edgeLoopThreshold = 1e-6f)
         {
