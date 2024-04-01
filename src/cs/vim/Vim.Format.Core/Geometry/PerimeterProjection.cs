@@ -5,7 +5,6 @@ using System.Linq;
 using Vim.Util;
 using Vim.LinqArray;
 using Vim.Math3d;
-using LineApprox = System.Tuple<Vim.Math3d.Int2, Vim.Math3d.Int2>;
 
 namespace Vim.Format.Geometry
 {

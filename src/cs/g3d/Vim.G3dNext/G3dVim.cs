@@ -13,47 +13,6 @@ namespace Vim.G3dNext
         private List<int>[] _meshInstances;
 
 
-        public VimMesh GetMesh(int index)
-        {
-            var mesh = new VimMesh();
-
-            var vStart = GetMeshVertexStart(index);
-            var vEnd = GetMeshVertexEnd(index);
-            mesh.vertices = new Vector3[vEnd - vStart];
-            for (var i = 0; i < mesh.vertices.Length; i++)
-            {
-                var v = vStart + i;
-                mesh.vertices[i] = Positions[v];
-            }
-
-            var iStart = GetMeshIndexStart(index);
-            var iEnd = GetMeshIndexEnd(index);
-            mesh.indices = new int[iEnd - iStart];
-            for (var i = 0; i < mesh.indices.Length; i++)
-            {
-                var j = iStart + i;
-                mesh.indices[i] = Indices[j] - vStart;
-            }
-
-            var sStart = GetMeshSubmeshStart(index);
-            var sEnd = GetMeshSubmeshEnd(index);
-            mesh.submeshes = new int[sEnd - sStart];
-            mesh.submeshMaterials = new int[sEnd - sStart];
-
-            for (var i = 0; i < mesh.submeshMaterials.Length; i++)
-            {
-                var s = sStart + i;
-                mesh.submeshes[i] = SubmeshIndexOffsets[s] - iStart;
-                mesh.submeshMaterials[i] = SubmeshMaterials[s];
-            }
-
-            return mesh;
-        }
-
-        public IEnumerable<VimMesh> GetAllMeshes()
-        {
-            return Enumerable.Range(0, GetMeshCount()).Select(i => GetMesh(i));
-        }
 
         public IReadOnlyList<int> GetMeshInstances(int mesh)
         {

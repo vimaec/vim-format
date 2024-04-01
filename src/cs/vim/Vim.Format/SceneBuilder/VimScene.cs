@@ -60,7 +60,7 @@ namespace Vim
 
         public int VimIndex { get; set; }
         public IArray<IMesh> Meshes { get; private set; }
-        public VimMesh[] MeshesNext { get; private set; }
+        public IMeshCommon[] MeshesNext { get; private set; }
         public IArray<ISceneNode> Nodes { get; private set; }
         public IArray<VimSceneNode> VimNodes { get; private set; }
         public IArray<VimShape> VimShapes { get; private set; }
@@ -205,7 +205,7 @@ namespace Vim
                 : inParallel 
                     ? tmp.EvaluateInParallel() 
                     : tmp.Evaluate();
-            MeshesNext = _SerializableDocument.GeometryNext.GetAllMeshes().ToArray();
+            MeshesNext = VimMesh.GetAllMeshes(_SerializableDocument.GeometryNext).ToArray();
         }
 
         private void CreateShapes(bool inParallel)

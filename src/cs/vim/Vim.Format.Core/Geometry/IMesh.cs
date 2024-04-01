@@ -13,12 +13,27 @@ namespace Vim.Format.Geometry
     {
         IArray<Vector3> Vertices { get; }
         IArray<int> Indices { get; }
-        IArray<Vector4> VertexColors { get; }
-        IArray<Vector3> VertexNormals { get; }
-        IArray<Vector2> VertexUvs { get; }
 
         IArray<int> SubmeshMaterials { get; }
         IArray<int> SubmeshIndexOffsets { get; }
         IArray<int> SubmeshIndexCount { get; }
+    }
+
+    public interface IMeshCommon : ITransformable3D<IMeshCommon>
+    {
+        IArray<Vector3> Vertices { get; }
+        IArray<int> Indices { get; }
+
+        IArray<int> SubmeshMaterials { get; }
+        IArray<int> SubmeshIndexOffsets { get; }
+        IArray<int> SubmeshIndexCount { get; }
+        int NumCornersPerFace { get; }
+        int NumVertices { get; }
+        int NumCorners { get; }
+        int NumFaces { get; }
+        int NumInstances { get; }
+        int NumMeshes { get; }
+        int NumShapeVertices { get; }
+        int NumShapes { get; }
     }
 }

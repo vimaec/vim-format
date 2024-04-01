@@ -4,28 +4,6 @@ using Vim.Math3d;
 
 namespace Vim.G3dNext
 {
-    public class VimMesh : ITransformable3D<VimMesh>
-    {
-        public int[] indices;
-        public Vector3[] vertices;
-        public int[] submeshes;
-        public int[] submeshMaterials;
-
-        public VimMesh Transform(Matrix4x4 mat)
-        {
-            var mesh = new VimMesh();
-            mesh.indices = indices.ToArray();
-            mesh.vertices = new Vector3[vertices.Length];
-            mesh.submeshes = submeshes.ToArray();
-            mesh.submeshMaterials = submeshMaterials.ToArray();
-
-            for(var i =0; i < vertices.Length;i++ )
-            {
-                mesh.vertices[i] = vertices[i].Transform(mat);
-            }
-            return mesh;
-        }
-    }
 
 
     public partial class G3dChunk
@@ -35,42 +13,6 @@ namespace Vim.G3dNext
             // empty
         }
 
-        public VimMesh GetMesh(int index)
-        {
-            var mesh = new VimMesh();
-
-            var vStart = GetMeshVertexStart(index, MeshSection.All);
-            var vEnd = GetMeshVertexEnd(index, MeshSection.All);
-            mesh.vertices = new Vector3[vEnd - vStart];
-            for (var i = 0; i < mesh.vertices.Length; i++)
-            {
-                var v = vStart + i;
-                mesh.vertices[i] = Positions[v];
-            }
-
-            var iStart = GetMeshIndexStart(index, MeshSection.All);
-            var iEnd = GetMeshIndexEnd(index, MeshSection.All);
-            mesh.indices = new int[iEnd - iStart];
-            for (var i = 0; i < mesh.indices.Length; i++)
-            {
-                var j = iStart + i;
-                mesh.indices[i] = Indices[j] - vStart;
-            }
-
-            var sStart = GetMeshSubmeshStart(index, MeshSection.All);
-            var sEnd = GetMeshSubmeshEnd(index, MeshSection.All);
-            mesh.submeshes = new int[sEnd - sStart];
-            mesh.submeshMaterials = new int[sEnd - sStart];
-
-            for (var i =0; i < mesh.submeshMaterials.Length; i++)
-            {
-                var s = sStart + i;
-                mesh.submeshes[i] = SubmeshIndexOffsets[s] - vStart;
-                mesh.submeshMaterials[i] = SubmeshMaterials[s];
-            }
-
-            return mesh;
-        }
 
         public int GetSubmeshCount() => SubmeshIndexOffsets?.Length ?? 0;
 

@@ -70,13 +70,13 @@ public static class SerializableDocumentTests
         }
     }
 
-    private static void MeshesAreSame(IMesh mesh, VimMesh next)
+    private static void MeshesAreSame(IMesh mesh, IMeshCommon next)
     {
 
-        Assert.That(mesh.Indices.SequenceEquals(next.indices.ToIArray()));
-        Assert.That(mesh.Vertices.SequenceEquals(next.vertices.ToIArray()));
-        Assert.That(mesh.SubmeshIndexOffsets.SequenceEquals(next.submeshes.ToIArray()));
-        Assert.That(mesh.SubmeshMaterials.SequenceEquals(next.submeshMaterials.ToIArray()));
+        Assert.That(mesh.Indices.SequenceEquals(next.Indices));
+        Assert.That(mesh.Vertices.SequenceEquals(next.Vertices));
+        Assert.That(mesh.SubmeshIndexOffsets.SequenceEquals(next.SubmeshIndexOffsets));
+        Assert.That(mesh.SubmeshMaterials.SequenceEquals(next.SubmeshMaterials));
     }
 }
 
