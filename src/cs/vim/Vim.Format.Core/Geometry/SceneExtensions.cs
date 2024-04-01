@@ -20,23 +20,11 @@ namespace Vim.Format.Geometry
         public static IMesh MergedGeometry(this IEnumerable<ISceneNode> nodes)
             => nodes.Where(n => n.GetMesh() != null).Select(TransformedMesh).Merge();
 
-        public static IArray<IMesh> UntransformedMeshes(this IScene scene)
-            => scene.Nodes.Select(n => n.GetMesh());
-
         public static IEnumerable<Vector3> AllVertices(this IScene scene)
             => scene.TransformedMeshes().SelectMany(g => g.Vertices.ToEnumerable());
 
         public static AABox BoundingBox(this IScene scene)
             => AABox.Create(scene.AllVertices());
-
-        public static IArray<Matrix4x4> Transforms(this IScene scene)
-            => scene.Nodes.Select(n => n.Transform);
-
-        public static IArray<Vector3> NodePositions(this IScene scene)
-            => scene.Transforms().Select(m => m.Translation);
-
-        public static Sphere BoundingSphere(this IScene scene)
-            => scene.BoundingBox().ToSphere();
 
         public static IArray<Vector3> TransformedVertices(this ISceneNode node)
             => node.TransformedMesh()?.Vertices;
