@@ -3,22 +3,23 @@ using System.Linq;
 using Vim.Util;
 using Vim.LinqArray;
 using Vim.Math3d;
+using Vim.G3d;
 
 namespace Vim.Format.Geometry
 {
     public static class SceneExtensions
     {
-        public static IMesh TransformedMesh(this ISceneNode node)
+        public static IMeshCommon TransformedMesh(this ISceneNode node)
             => node.GetMesh()?.Transform(node.Transform);
 
-        public static IEnumerable<IMesh> TransformedMeshes(this IScene scene)
+        public static IEnumerable<IMeshCommon> TransformedMeshes(this IScene scene)
             => scene.Nodes.Where(n => n.GetMesh() != null).Select(TransformedMesh);
         
-        public static IMesh MergedGeometry(this IScene scene)
+        public static IMeshCommon MergedGeometry(this IScene scene)
             => scene.Nodes.ToEnumerable().MergedGeometry();
 
-        public static IMesh MergedGeometry(this IEnumerable<ISceneNode> nodes)
-            => nodes.Where(n => n.GetMesh() != null).Select(TransformedMesh).Merge();
+        public static IMeshCommon MergedGeometry(this IEnumerable<ISceneNode> nodes)
+            => nodes.Where(n => n.GetMesh() != null).Select(TransformedMesh).ToArray().Merge();
 
         public static IEnumerable<Vector3> AllVertices(this IScene scene)
             => scene.TransformedMeshes().SelectMany(g => g.Vertices.ToEnumerable());
