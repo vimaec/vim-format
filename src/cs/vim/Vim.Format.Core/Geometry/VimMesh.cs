@@ -6,6 +6,7 @@ using Vim.G3dNext;
 using Vim.LinqArray;
 using Vim.Math3d;
 using Vim.Util;
+using static System.Net.Mime.MediaTypeNames;
 using static Vim.Format.DocumentBuilder;
 
 namespace Vim.Format.Geometry
@@ -237,6 +238,34 @@ namespace Vim.Format.Geometry
             return map.Select(kvp => (kvp.Key, kvp.Value)).ToArray();
         }
 
+        public static AABox BoundingBox(this IMeshCommon mesh)
+            => AABox.Create(mesh.Vertices.ToEnumerable());
+
+        public static bool GeometryEquals(this IMeshCommon mesh, IMeshCommon other, float tolerance = Math3d.Constants.Tolerance)
+        {
+            if (!mesh.Indices.SequenceEquals(other.Indices))
+                return false;
+
+            if (!mesh.SubmeshIndexOffsets.SequenceEquals(other.SubmeshIndexOffsets))
+                return false;
+
+            if (!mesh.SubmeshMaterials.SequenceEquals(other.SubmeshMaterials))
+                return false;
+
+            if (!mesh.SubmeshIndexCounts.SequenceEquals(other.SubmeshIndexCounts))
+                return false;
+
+            if (mesh.Vertices.Count != other.Vertices.Count)
+                return false;
+
+            for(var i = 0; i < mesh.Vertices.Count; i++)
+            {
+                if(!mesh.Vertices[i].AlmostEquals(other.Vertices[i], tolerance))
+                    return false;
+            }
+
+            return true;
+        }
 
         public static (int mat, IMeshCommon mesh)[] SplitByMaterial(this IMeshCommon mesh)
         {
