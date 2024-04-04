@@ -50,7 +50,15 @@ namespace Vim.Util.Logging.Serilog
             return Instance;
         }
 
-        public static SerilogLoggerAdapter CreateLogger(string name, string filePath = null, bool writeToConsole = true, bool addEvent = false)
+        public static SerilogLoggerAdapter CreateLogger(
+            string name,
+            string filePath = null,
+            bool writeToConsole = true,
+            bool addEvent = false,
+            long? fileSizeLimitBytes = 1_000_000_000, // serilog default: 1GB
+            bool rollOnFileSizeLimit = true, // serilog default: true
+            int? retainedFileCountLimit = 31 // serilog default: 31
+        )
         {
             var config = new LoggerConfiguration()
                 .MinimumLevel.Debug();
@@ -58,7 +66,12 @@ namespace Vim.Util.Logging.Serilog
             if (!string.IsNullOrEmpty(filePath))
             {
                 IO.CreateFileDirectory(filePath);
-                config = config.WriteTo.File(filePath);
+                config = config.WriteTo.File(
+                    filePath,
+                    fileSizeLimitBytes: fileSizeLimitBytes,
+                    rollOnFileSizeLimit: rollOnFileSizeLimit,
+                    retainedFileCountLimit: retainedFileCountLimit
+                );
             }
 
             if (writeToConsole)
