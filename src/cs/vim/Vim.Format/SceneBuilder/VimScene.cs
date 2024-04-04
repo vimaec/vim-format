@@ -60,7 +60,8 @@ namespace Vim
 
         public int VimIndex { get; set; }
         public IArray<IMesh> Meshes { get; private set; }
-        public IMeshCommon[] MeshesNext { get; private set; }
+        public VimMesh[] MeshesNext { get; private set; }
+        public G3dMesh[] MeshesRaw { get; private set; }
         public IArray<ISceneNode> Nodes { get; private set; }
         public IArray<VimSceneNode> VimNodes { get; private set; }
         public IArray<VimShape> VimShapes { get; private set; }
@@ -86,10 +87,8 @@ namespace Vim
             => Primitives.TriMesh(
                 g3d.Vertices.ToPositionAttribute(),
                 g3d.Indices.ToIndexAttribute(),
-                g3d.VertexUvs?.ToVertexUvAttribute(),
                 g3d.SubmeshIndexOffsets?.ToSubmeshIndexOffsetAttribute(),
-                g3d.SubmeshMaterials?.ToSubmeshMaterialAttribute(),
-                g3d.MeshSubmeshOffset?.ToMeshSubmeshOffsetAttribute()
+                g3d.SubmeshMaterials?.ToSubmeshMaterialAttribute()
             );
 
         private VimScene(SerializableDocument doc)
@@ -206,6 +205,7 @@ namespace Vim
                     ? tmp.EvaluateInParallel() 
                     : tmp.Evaluate();
             MeshesNext = VimMesh.GetAllMeshes(_SerializableDocument.GeometryNext).ToArray();
+            MeshesRaw = srcGeo?.Meshes.ToArray();
         }
 
         private void CreateShapes(bool inParallel)
