@@ -30,8 +30,12 @@ namespace Vim.Format
                 m.SubmeshIndexOffsets.ToList(),
                 m.SubmeshMaterials.ToList());
 
-        public static void AddMesh(this DocumentBuilder db, IMesh m)
-            => db.AddMesh(m.ToDocumentBuilderSubdividedMesh());
+        public static SubdividedMesh ToDocumentBuilderSubdividedMesh(this IMeshCommon m)
+            => new SubdividedMesh(
+                m.Indices.ToList(),
+                m.Vertices.ToList(),
+                m.SubmeshIndexOffsets.ToList(),
+                m.SubmeshMaterials.ToList());
 
         public static EntityTableBuilder CreateTableCopy(this DocumentBuilder db, EntityTable table, List<int> nodeIndexRemapping = null)
         {
