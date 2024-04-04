@@ -53,9 +53,9 @@ public static class SerializableDocumentTests
         var scene = VimScene.LoadVim(path);
         for (var i = 0; i < scene.GetMeshCount(); i++)
         {
-            var mesh = scene.Meshes[i];
+            var mesh = scene.MeshesOld[i];
             var next = scene.MeshesNext[i];
-            var raw = scene.MeshesRaw[i];
+            var raw = scene.Meshes[i];
             MeshesAreSame(mesh, next);
             MeshesAreSame(mesh, raw);
         }
@@ -73,9 +73,9 @@ public static class SerializableDocumentTests
                 new Vector3(0, 0, 1),
                 new Vector3(0, 1, 0)
             );
-            var mesh = scene.Meshes[i].Transform(mat);
+            var mesh = scene.MeshesOld[i].Transform(mat);
             var next = scene.MeshesNext[i].Transform(mat);
-            var raw = scene.MeshesRaw[i].Transform(mat);
+            var raw = scene.Meshes[i].Transform(mat);
             MeshesAreSame(mesh, next);
             MeshesAreSame(mesh, raw);
         }
@@ -89,9 +89,9 @@ public static class SerializableDocumentTests
         for (var i = 0; i < scene.GetMeshCount(); i++)
         {
 
-            var mesh = scene.Meshes[i].ReverseWindingOrder().ToIMesh();
+            var mesh = scene.MeshesOld[i].ReverseWindingOrder().ToIMesh();
             var next = scene.MeshesNext[i].ReverseWindingOrder();
-            var raw = scene.MeshesRaw[i].ReverseWindingOrder();
+            var raw = scene.Meshes[i].ReverseWindingOrder();
             MeshesAreSame(mesh, next);
             MeshesAreSame(mesh, raw);
         }
@@ -104,9 +104,9 @@ public static class SerializableDocumentTests
         var scene = VimScene.LoadVim(path);
         for (var i = 0; i < scene.GetMeshCount(); i++)
         {
-            var mesh = scene.Meshes[i].GetFaceMaterials();
+            var mesh = scene.MeshesOld[i].GetFaceMaterials();
             var next = scene.MeshesNext[i].GetFaceMaterials();
-            var raw = scene.MeshesRaw[i].GetFaceMaterials();
+            var raw = scene.Meshes[i].GetFaceMaterials();
             Assert.That(mesh.SequenceEquals(next));
             Assert.That(next.SequenceEquals(raw));
         }
@@ -119,9 +119,9 @@ public static class SerializableDocumentTests
         var scene = VimScene.LoadVim(path);
         for (var i = 1; i < scene.GetMeshCount(); i++)
         {
-            var mesh = scene.Meshes[i].Merge(scene.Meshes[i - 1]);
+            var mesh = scene.MeshesOld[i].Merge(scene.MeshesOld[i - 1]);
             var next = scene.MeshesNext[i].Merge2(scene.MeshesNext[i - 1]);
-            var raw = scene.MeshesRaw[i].Merge2(scene.MeshesRaw[i - 1]);
+            var raw = scene.Meshes[i].Merge2(scene.Meshes[i - 1]);
             MeshesAreSame(mesh, next);
             MeshesAreSame(mesh, raw);
         }
@@ -133,9 +133,9 @@ public static class SerializableDocumentTests
         var path = VimFormatRepoPaths.GetLatestWolfordResidenceVim();
         var scene = VimScene.LoadVim(path);
 
-        var mesh = scene.Meshes[0].Merge(scene.Meshes.Skip(1).ToArray());
+        var mesh = scene.MeshesOld[0].Merge(scene.MeshesOld.Skip(1).ToArray());
         var next = scene.MeshesNext[0].Merge2(scene.MeshesNext.Skip(1).ToArray());
-        var raw = scene.MeshesRaw[0].Merge2(scene.MeshesRaw.Skip(1).ToArray());
+        var raw = scene.Meshes[0].Merge2(scene.Meshes.Skip(1).ToArray());
         MeshesAreSame(mesh, next);
         MeshesAreSame(mesh, raw);
     }
@@ -147,9 +147,9 @@ public static class SerializableDocumentTests
         var scene = VimScene.LoadVim(path);
         for (var i = 0; i < scene.GetMeshCount(); i++)
         {
-            var mesh = scene.Meshes[i].SplitByMaterial().ToArray();
+            var mesh = scene.MeshesOld[i].SplitByMaterial().ToArray();
             var next = scene.MeshesNext[i].SplitByMaterial();
-            var raw = scene.MeshesRaw[i].SplitByMaterial();
+            var raw = scene.Meshes[i].SplitByMaterial();
             Assert.AreEqual(mesh.Length, next.Length);
             Assert.AreEqual(mesh.Length, raw.Length);
 
@@ -159,122 +159,6 @@ public static class SerializableDocumentTests
                 MeshesAreSame(mesh[j].Mesh, raw[j].mesh);
             }
         }
-    }
-
-
-    [Test]
-    public static void SplitByMaterials_Benchmark()
-    {
-        var path = VimFormatRepoPaths.GetLatestWolfordResidenceVim();
-        var scene = VimScene.LoadVim(path);
-        var sw = new Stopwatch();
-
-        long time = 0;
-        long consumeTime =0;
-        long consumeAgain = 0;
-        for (var j=0; j < 100; j++)
-        {
-            for (var i = 0; i < scene.GetMeshCount(); i++)
-            {
-                sw.Restart();
-                var mesh = scene.Meshes[i].SplitByMaterial().ToArray();
-                sw.Stop();
-                time += sw.ElapsedTicks;
-
-                sw.Restart();
-                foreach (var (mat, m) in mesh)
-                {
-                    Consume(m);
-                }
-                sw.Stop();
-                consumeTime += sw.ElapsedTicks;
-
-                sw.Restart();
-                foreach (var (mat, m) in mesh)
-                {
-                    Consume(m);
-                }
-                sw.Stop();
-                consumeAgain += sw.ElapsedTicks;
-            }
-        }
-
-        Console.WriteLine("==Meshes==");
-        Console.WriteLine("Split:" + (time * 1.0) / Stopwatch.Frequency);
-        Console.WriteLine("Consume:" + (consumeTime * 1.0) / Stopwatch.Frequency);
-        Console.WriteLine("Consume Again:" + (consumeAgain * 1.0) / Stopwatch.Frequency);
-        Console.WriteLine("Total:" + (time + consumeTime + consumeAgain * 1.0) / Stopwatch.Frequency);
-
-        time = 0;
-        consumeTime = 0;
-        consumeAgain = 0;
-        for (var j = 0; j < 100; j++)
-        {
-            for (var i = 0; i < scene.GetMeshCount(); i++)
-            {
-                sw.Restart();
-                var next = scene.MeshesNext[i].SplitByMaterial();
-                sw.Stop();
-                time += sw.ElapsedTicks;
-
-                sw.Restart();
-                foreach (var (mat, mesh) in next)
-                {
-                    Consume(mesh);
-                }
-                sw.Stop();
-                consumeTime += sw.ElapsedTicks;
-
-                sw.Restart();
-                foreach (var (mat, m) in next)
-                {
-                    Consume(m);
-                }
-                sw.Stop();
-                consumeAgain += sw.ElapsedTicks;
-            }
-        }
-        Console.WriteLine("==Next==");
-        Console.WriteLine("Split:" + (time * 1.0) / Stopwatch.Frequency);
-        Console.WriteLine("Consume:" + (consumeTime * 1.0) / Stopwatch.Frequency);
-        Console.WriteLine("Consume Again:" + (consumeAgain * 1.0) / Stopwatch.Frequency);
-        Console.WriteLine("Total:" + (time + consumeTime + consumeAgain * 1.0) / Stopwatch.Frequency);
-
-        time =0;
-        consumeTime = 0;
-        consumeAgain = 0;
-        for (var j = 0; j < 100; j++)
-        {
-            for (var i = 0; i < scene.GetMeshCount(); i++)
-            {
-                sw.Restart();
-                var raw = scene.MeshesRaw[i].SplitByMaterial();
-                sw.Stop();
-                time += sw.ElapsedTicks;
-
-                sw.Restart();
-                foreach (var (mat, mesh) in raw)
-                {
-                    Consume(mesh);
-                }
-                sw.Stop();
-                consumeTime += sw.ElapsedTicks;
-
-                sw.Restart();
-                foreach (var (mat, m) in raw)
-                {
-                    Consume(m);
-                }
-                sw.Stop();
-                consumeAgain += sw.ElapsedTicks;
-            }
-        }
-        Console.WriteLine("==Raw==");
-        Console.WriteLine("Split:" + (time *1.0) / Stopwatch.Frequency);
-        Console.WriteLine("Consume:" + (consumeTime * 1.0) / Stopwatch.Frequency);
-        Console.WriteLine("Consume Again:" + (consumeAgain * 1.0) / Stopwatch.Frequency);
-        Console.WriteLine("Total:" + (time + consumeTime + consumeAgain * 1.0) / Stopwatch.Frequency);
-
     }
 
     private static void Consume(IMesh mesh)

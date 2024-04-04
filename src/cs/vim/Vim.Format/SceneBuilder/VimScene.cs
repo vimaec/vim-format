@@ -59,9 +59,9 @@ namespace Vim
             => LoadVim(stream, new LoadOptions { SkipGeometry = skipGeometry, SkipAssets = skipAssets}, progress, inParallel);
 
         public int VimIndex { get; set; }
-        public IArray<IMesh> Meshes { get; private set; }
+        public IArray<IMesh> MeshesOld { get; private set; }
         public VimMesh[] MeshesNext { get; private set; }
-        public G3dMesh[] MeshesRaw { get; private set; }
+        public IArray<IMeshCommon> Meshes { get; private set; }
         public IArray<ISceneNode> Nodes { get; private set; }
         public IArray<VimSceneNode> VimNodes { get; private set; }
         public IArray<VimShape> VimShapes { get; private set; }
@@ -199,13 +199,13 @@ namespace Vim
 
             var srcGeo = _SerializableDocument.Geometry;
             var tmp = srcGeo?.Meshes.Select(ToIMesh);
-            Meshes = (tmp == null)
+            MeshesOld = (tmp == null)
                 ? LinqArray.LinqArray.Empty<IMesh>()
                 : inParallel 
                     ? tmp.EvaluateInParallel() 
                     : tmp.Evaluate();
             MeshesNext = VimMesh.GetAllMeshes(_SerializableDocument.GeometryNext).ToArray();
-            MeshesRaw = srcGeo?.Meshes.ToArray();
+            Meshes = srcGeo?.Meshes.Select(m => m as IMeshCommon);
         }
 
         private void CreateShapes(bool inParallel)
@@ -256,7 +256,7 @@ namespace Vim
 
         public string FileName => _SerializableDocument.FileName;
 
-        public void TransformSceneInPlace(Func<IMesh, IMesh> meshTransform = null, Func<VimSceneNode, VimSceneNode> nodeTransform = null)
+        public void TransformSceneInPlace(Func<IMeshCommon, IMeshCommon> meshTransform = null, Func<VimSceneNode, VimSceneNode> nodeTransform = null)
         {
             if (meshTransform != null)
                 Meshes = Meshes.Select(meshTransform).EvaluateInParallel();

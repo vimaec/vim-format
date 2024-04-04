@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Vim.G3d;
 using Vim.LinqArray;
 using Vim.Math3d;
 
@@ -10,7 +11,7 @@ namespace Vim.Format.Geometry
     public interface IScene
     {
         IArray<ISceneNode> Nodes { get; }
-        IArray<IMesh> Meshes { get; }
+        IArray<IMeshCommon> Meshes { get; }
     }
 
     /// <summary>

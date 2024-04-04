@@ -35,7 +35,7 @@ namespace Vim.Format.SceneBuilder
 
 
             // Validate the individual meshes.
-            foreach (var g in vim.Meshes.ToEnumerable())
+            foreach (var g in vim.MeshesOld.ToEnumerable())
                 g.Validate();
         }
 
@@ -230,7 +230,7 @@ namespace Vim.Format.SceneBuilder
                 if (!db.Geometry.GetMesh(i).IsEquivalentTo(vimGeoBuilders[i]))
                     throw new VimValidationException($"{nameof(DocumentBuilder)} mesh {i} is not equivalent to {nameof(VimScene)} mesh {i}");
 
-                if (!db.Geometry.GetMesh(i).ToIMesh().GeometryEquals(vim.Meshes[i]))
+                if (!db.Geometry.GetMesh(i).ToIMesh().GeometryEquals(vim.MeshesOld[i]))
                     throw new VimValidationException($"{nameof(DocumentBuilder)} mesh {i} geometry is not equal to {nameof(VimScene)} mesh {i}");
             }
 
