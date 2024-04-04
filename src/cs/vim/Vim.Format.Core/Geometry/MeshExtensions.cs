@@ -32,9 +32,6 @@ namespace Vim.Format.Geometry
             => g is IMesh m ? m : g is QuadMesh q ? q.ToIMesh() : g.Attributes.ToIMesh();
         #endregion
 
-        public static double Area(this IMesh mesh)
-            => mesh.Triangles().Sum(t => t.Area);
-
         public static IArray<int> GetFaceMaterials(this IMesh mesh)
         {
             // SubmeshIndexOffsets: [0, A, B]
