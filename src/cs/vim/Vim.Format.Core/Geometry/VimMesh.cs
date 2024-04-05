@@ -46,6 +46,12 @@ namespace Vim.Format.Geometry
 
         }
 
+        public VimMesh(Vector3[] vertices)
+            : this(Enumerable.Range(0,vertices.Length).ToArray(), vertices)
+        {
+
+        }
+
         public VimMesh(
             int[] indices,
             Vector3[] vertices,
@@ -94,6 +100,7 @@ namespace Vim.Format.Geometry
             result[last] = max - offsets[last];
             return result;
         }
+
 
         public VimMesh(int indexCount, int vertexCount, int submeshCount)
         {
@@ -327,6 +334,12 @@ namespace Vim.Format.Geometry
             if (mesh.NumFaces <= 1) return true;
             var normal = mesh.Triangle(0).Normal;
             return mesh.ComputedNormals().All(n => n.AlmostEquals(normal, tolerance));
+        }
+
+        public static VimMesh Unindex(this IMeshCommon mesh)
+        {
+            var vertices = mesh.Indices.Select(i => mesh.Vertices[i]);
+            return new VimMesh(vertices.ToArray());
         }
 
         public static IArray<Vector3> ComputedNormals(this IMeshCommon mesh)
