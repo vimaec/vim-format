@@ -229,9 +229,6 @@ namespace Vim.Format.SceneBuilder
             {
                 if (!db.Geometry.GetMesh(i).IsEquivalentTo(vimGeoBuilders[i]))
                     throw new VimValidationException($"{nameof(DocumentBuilder)} mesh {i} is not equivalent to {nameof(VimScene)} mesh {i}");
-
-                if (!db.Geometry.GetMesh(i).ToIMesh().GeometryEquals(vim.MeshesOld[i]))
-                    throw new VimValidationException($"{nameof(DocumentBuilder)} mesh {i} geometry is not equal to {nameof(VimScene)} mesh {i}");
             }
 
             // Test the assets.
