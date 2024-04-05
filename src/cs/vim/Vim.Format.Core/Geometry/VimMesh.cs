@@ -241,6 +241,10 @@ namespace Vim.Format.Geometry
         public static AABox BoundingBox(this IMeshCommon mesh)
             => AABox.Create(mesh.Vertices.ToEnumerable());
 
+        public static Int3 FaceVertexIndices(this IMeshCommon mesh, int faceIndex)
+            => new Int3(mesh.Indices[faceIndex * 3], mesh.Indices[faceIndex * 3 + 1], mesh.Indices[faceIndex * 3 + 2]);
+
+
         public static bool GeometryEquals(this IMeshCommon mesh, IMeshCommon other, float tolerance = Math3d.Constants.Tolerance)
         {
             if (!mesh.Indices.SequenceEquals(other.Indices))
