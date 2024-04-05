@@ -148,6 +148,17 @@ public static class SerializableDocumentTests
     }
 
     [Test]
+    public static void FromG3d_Equals_ToIMesh()
+    {
+        var path = VimFormatRepoPaths.GetLatestWolfordResidenceVim();
+        var scene = VimScene.LoadVim(path);
+        var mesh = scene.Document.Geometry.ToIMesh();
+        var next = VimMesh.FromG3d(scene.Document.GeometryNext);
+        MeshesAreSame(mesh, next);
+
+    }
+
+    [Test]
     public static void Merge_All_IsSame()
     {
         var path = VimFormatRepoPaths.GetLatestWolfordResidenceVim();

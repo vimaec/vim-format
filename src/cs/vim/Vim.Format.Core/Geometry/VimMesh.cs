@@ -6,8 +6,6 @@ using Vim.G3dNext;
 using Vim.LinqArray;
 using Vim.Math3d;
 using Vim.Util;
-using static System.Net.Mime.MediaTypeNames;
-using static Vim.Format.DocumentBuilder;
 
 namespace Vim.Format.Geometry
 {
@@ -48,14 +46,34 @@ namespace Vim.Format.Geometry
 
         }
 
-        public VimMesh(int[] indices, Vector3[] vertices, int[] submeshIndexOffsets = null, int[] submeshMaterials = null, int[] submeshIndexCounts = null)
+        public VimMesh(
+            int[] indices,
+            Vector3[] vertices,
+            int[] submeshIndexOffsets = null,
+            int[] submeshMaterials = null,
+            int[] submeshIndexCounts = null
+            )
         {
             this.indices = indices;
             this.vertices = vertices;
+
             this.submeshIndexOffsets = submeshIndexOffsets ?? new int[1] { 0 };
-            this.submeshMaterials = submeshMaterials ?? new int[1] { -1};
-            this.submeshIndexCounts = submeshIndexCounts ?? new int[1] { indices.Length };
+            this.submeshMaterials = submeshMaterials ?? new int[1] { -1 };
+            this.submeshIndexCounts = submeshIndexCounts ?? ComputeCounts(this.submeshIndexOffsets, this.indices.Length);
         }
+
+        private static int[] ComputeCounts(int[] offsets, int max)
+        {
+            var result = new int[offsets.Length];
+            for (var i = 0; i < result.Length - 1; i++)
+            {
+                result[i] = offsets[i + 1] - offsets[i];
+            }
+            var last = result.Length - 1;
+            result[last] = max - offsets[last];
+            return result;
+        }
+
         public VimMesh(int indexCount, int vertexCount, int submeshCount)
         {
             indices = new int[indexCount];
@@ -67,12 +85,12 @@ namespace Vim.Format.Geometry
 
         public VimMesh Clone()
         {
-            var mesh = new VimMesh();
-            mesh.indices = indices;
-            mesh.vertices = vertices;
-            mesh.submeshIndexOffsets = submeshIndexOffsets;
-            mesh.submeshMaterials = submeshMaterials;
-            mesh.submeshIndexCounts = submeshIndexCounts;
+            var mesh = new VimMesh(
+                indices,
+                vertices,
+                submeshIndexOffsets,
+                submeshMaterials
+            );
             return mesh;
         }
         IMeshCommon IMeshCommon.Clone() => Clone();
@@ -124,6 +142,18 @@ namespace Vim.Format.Geometry
                 mesh.submeshMaterials[i] = g3d.SubmeshMaterials[s];
                 mesh.submeshIndexCounts[i] = g3d.GetSubmeshIndexCount(s);
             }
+
+            return mesh;
+        }
+
+        public static VimMesh FromG3d(G3dVim g3d)
+        {
+            var mesh = new VimMesh(
+                g3d.Indices,
+                g3d.Positions,
+                g3d.SubmeshIndexOffsets,
+                g3d.SubmeshMaterials
+            );
 
             return mesh;
         }
