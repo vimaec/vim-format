@@ -10,11 +10,6 @@ namespace Vim.Format
 {
     public static class DocumentBuilderExtensions
     {
-        public static IMesh ToIMesh(this SubdividedMesh gb)
-            => gb.Vertices.ToIArray().TriMesh(
-                gb.Indices.ToIArray(),
-                submeshMaterials: gb.SubmeshMaterials.ToIArray());
-
         public static Material ToDocumentBuilderMaterial(this G3dMaterial g3dMaterial)
             => new Material
             {
@@ -22,13 +17,6 @@ namespace Vim.Format
                 Glossiness = g3dMaterial.Glossiness,
                 Smoothness = g3dMaterial.Smoothness,
             };
-
-        public static SubdividedMesh ToDocumentBuilderSubdividedMesh(this IMesh m)
-            => new SubdividedMesh(
-                m.Indices.ToList(),
-                m.Vertices.ToList(),
-                m.SubmeshIndexOffsets.ToList(),
-                m.SubmeshMaterials.ToList());
 
         public static SubdividedMesh ToDocumentBuilderSubdividedMesh(this IMeshCommon m)
             => new SubdividedMesh(
