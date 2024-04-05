@@ -89,7 +89,7 @@ public static class SerializableDocumentTests
         for (var i = 0; i < scene.GetMeshCount(); i++)
         {
 
-            var mesh = scene.MeshesOld[i].ReverseWindingOrder().ToIMesh();
+            var mesh = scene.MeshesOld[i].ReverseWindingOrder() as IMesh;
             var next = scene.MeshesNext[i].ReverseWindingOrder();
             var raw = scene.Meshes[i].ReverseWindingOrder();
             MeshesAreSame(mesh, next);
@@ -132,7 +132,7 @@ public static class SerializableDocumentTests
     {
         var path = VimFormatRepoPaths.GetLatestWolfordResidenceVim();
         var scene = VimScene.LoadVim(path);
-        var mesh = scene.Document.Geometry.ToIMesh();
+        var mesh = scene.Document.Geometry as IMesh;
         var next = VimMesh.FromG3d(scene.Document.GeometryNext);
         MeshesAreSame(mesh, next);
 

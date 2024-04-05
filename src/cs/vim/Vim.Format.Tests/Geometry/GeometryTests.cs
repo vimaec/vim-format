@@ -58,20 +58,6 @@ namespace Vim.Format.Tests.Geometry
 
         public static double SmallTolerance = 0.0001;
 
-        public static void AssertEquals(IMesh g1, IMesh g2)
-        {
-
-            Assert.AreEqual(g1.NumFaces, g2.NumFaces);
-            Assert.AreEqual(g1.NumCorners, g2.NumCorners);
-            Assert.AreEqual(g1.NumVertices, g2.NumVertices);
-            for (var i = 0; i < g1.Indices.Count; i++)
-            {
-                var v1 = g1.Vertices[g1.Indices[i]];
-                var v2 = g2.Vertices[g2.Indices[i]];
-                Assert.IsTrue(v1.AlmostEquals(v2, (float)SmallTolerance));
-            }
-        }
-
         public static void GeometryNullOps(IMeshCommon g)
         {
             g.GeometryEquals(g);

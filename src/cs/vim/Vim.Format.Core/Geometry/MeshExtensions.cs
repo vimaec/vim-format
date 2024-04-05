@@ -10,28 +10,6 @@ namespace Vim.Format.Geometry
 {
     public static class MeshExtensions
     {
-        #region constructors
-        public static IMesh ToIMesh(this IArray<GeometryAttribute> self)
-            => self.ToEnumerable().ToIMesh();
-
-        public static IMesh ToIMesh(this IEnumerable<GeometryAttribute> self)
-        {
-            var tmp = new GeometryAttributes(self);
-            switch (tmp.NumCornersPerFace)
-            {
-                case 3:
-                    return new TriMesh(tmp.Attributes.ToEnumerable());
-                case 4:
-                    return new QuadMesh(tmp.Attributes.ToEnumerable()).ToTriMesh();
-                default:
-                    throw new Exception($"Can not convert a geometry with {tmp.NumCornersPerFace} to a triangle mesh: only quad meshes");
-            }
-        }
-
-        public static IMesh ToIMesh(this IGeometryAttributes g)
-            => g is IMesh m ? m : g is QuadMesh q ? q.ToIMesh() : g.Attributes.ToIMesh();
-        #endregion
-
         public static IArray<int> GetFaceMaterials(this IMesh mesh)
         {
             // SubmeshIndexOffsets: [0, A, B]
@@ -47,7 +25,7 @@ namespace Vim.Format.Geometry
         }
 
         public static IMesh Merge(this IArray<IMesh> meshes)
-            => meshes.Select(m => (IGeometryAttributes)m).Merge().ToIMesh();
+            => meshes.Select(m => (IGeometryAttributes)m).Merge() as IMesh;
 
         public static IMesh Merge(this IEnumerable<IMesh> meshes)
             => meshes.ToIArray().Merge();
@@ -137,7 +115,7 @@ namespace Vim.Format.Geometry
                             .Append(newSubmeshIndexOffsets)
                             .Append(newSubmeshMaterials)
                             .ToGeometryAttributes()
-                            .ToIMesh();
+                            as IMesh;
                     });
 
                     return meshes.Select(m => (material, m));
