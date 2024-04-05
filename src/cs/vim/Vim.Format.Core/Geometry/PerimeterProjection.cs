@@ -2,16 +2,16 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using Vim.Util;
 using Vim.LinqArray;
 using Vim.Math3d;
+using Vim.G3d;
 
 namespace Vim.Format.Geometry
 {
     public static class PerimeterProjection
     {
 
-        public static List<List<Vector2>> GeneratePerimeter(this IMesh mesh, Vector3 planeNormal, float degenerateSegmentEpsilon = 10.0f, float edgeLoopThreshold = 1e-6f)
+        public static List<List<Vector2>> GeneratePerimeter(this IMeshCommon mesh, Vector3 planeNormal, float degenerateSegmentEpsilon = 10.0f, float edgeLoopThreshold = 1e-6f)
         {
             var q = GetClusterRotation(planeNormal.Normalize(), Vector3.UnitZ);
 
@@ -307,7 +307,7 @@ namespace Vim.Format.Geometry
                 => obj.Item1.GetHashCode() ^ obj.Item2.GetHashCode();
         }
 
-        public static Dictionary<Tuple<int, int>, int> BuildEdgeDictionary(this IMesh mesh)
+        public static Dictionary<Tuple<int, int>, int> BuildEdgeDictionary(this IMeshCommon mesh)
         {
             var edges = new Dictionary<Tuple<int, int>, int>(new EdgeEqualityComparer());
 
@@ -327,7 +327,7 @@ namespace Vim.Format.Geometry
             return edges;
         }
 
-        public static List<List<Vector2>> BuildBoundarySegments(this IMesh mesh, Dictionary<Tuple<int, int>, int> edgeDictionary, Func<Vector3, Vector2> transform)
+        public static List<List<Vector2>> BuildBoundarySegments(this IMeshCommon mesh, Dictionary<Tuple<int, int>, int> edgeDictionary, Func<Vector3, Vector2> transform)
         {
             var segments = new List<List<Vector2>>();
 
