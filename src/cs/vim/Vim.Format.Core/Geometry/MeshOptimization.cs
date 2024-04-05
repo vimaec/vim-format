@@ -1,12 +1,11 @@
 ﻿using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using Vim.G3d;
 using Vim.LinqArray;
 using Vim.Math3d;
 
 namespace Vim.Format.Geometry
+{ 
 
     /// <summary>
     /// This class is used to compare quickly two meshes within a lookup table (e.g. Dictionary, HashTable).
@@ -45,7 +44,7 @@ namespace Vim.Format.Geometry
         }
 
         public override bool Equals(object obj)
-            => obj is MeshHash other && Equals(other);
+            => obj is MeshCommonHash other && Equals(other);
 
         public bool Equals(MeshCommonHash other)
             => NumFaces == other.NumFaces
