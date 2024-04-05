@@ -83,14 +83,6 @@ namespace Vim
         public Vector4 GetMaterialColorNext(int materialIndex)
          => _SerializableDocument.GeometryNext.MaterialColors[materialIndex];
 
-        public static IMesh ToIMesh(G3dMesh g3d)
-            => Primitives.TriMesh(
-                g3d.Vertices.ToPositionAttribute(),
-                g3d.Indices.ToIndexAttribute(),
-                g3d.SubmeshIndexOffsets?.ToSubmeshIndexOffsetAttribute(),
-                g3d.SubmeshMaterials?.ToSubmeshMaterialAttribute()
-            );
-
         private VimScene(SerializableDocument doc)
             => _SerializableDocument = doc;
 
@@ -198,12 +190,6 @@ namespace Vim
             }
 
             var srcGeo = _SerializableDocument.Geometry;
-            var tmp = srcGeo?.Meshes.Select(ToIMesh);
-            MeshesOld = (tmp == null)
-                ? LinqArray.LinqArray.Empty<IMesh>()
-                : inParallel 
-                    ? tmp.EvaluateInParallel() 
-                    : tmp.Evaluate();
             MeshesNext = VimMesh.GetAllMeshes(_SerializableDocument.GeometryNext).ToArray();
             Meshes = srcGeo?.Meshes.Select(m => m as IMeshCommon);
         }

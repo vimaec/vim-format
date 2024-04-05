@@ -62,6 +62,27 @@ namespace Vim.Format.Geometry
             this.submeshIndexCounts = submeshIndexCounts ?? ComputeCounts(this.submeshIndexOffsets, this.indices.Length);
         }
 
+        public G3dVim ToG3d()
+        {
+            return new G3dVim(
+                indices: indices,
+                positions: vertices,
+                instanceMeshes: new[] {0},
+                instanceTransforms: new[] { Matrix4x4.Identity },
+                instanceParents: null,
+                instanceFlags: null,
+                meshSubmeshOffsets: new[] { 0 },
+                submeshIndexOffsets: new[] { 0 },
+                submeshMaterials: new[] { -1 },
+                materialColors: null,
+                materialGlossiness: null,
+                materialSmoothness: null,
+                shapeVertices: null,
+                shapeColors: null,
+                shapeVertexOffsets: null,
+                shapeWidths: null);
+        }
+
         private static int[] ComputeCounts(int[] offsets, int max)
         {
             var result = new int[offsets.Length];
@@ -297,6 +318,25 @@ namespace Vim.Format.Geometry
             }
             return map.Select(kvp => (kvp.Key, kvp.Value)).ToArray();
         }
+
+        public static Triangle VertexIndicesToTriangle(this IMeshCommon mesh, Int3 indices)
+            => new Triangle(mesh.Vertices[indices.X], mesh.Vertices[indices.Y], mesh.Vertices[indices.Z]);
+
+        public static bool Planar(this IMeshCommon mesh, float tolerance = Math3d.Constants.Tolerance)
+        {
+            if (mesh.NumFaces <= 1) return true;
+            var normal = mesh.Triangle(0).Normal;
+            return mesh.ComputedNormals().All(n => n.AlmostEquals(normal, tolerance));
+        }
+
+        public static IArray<Vector3> ComputedNormals(this IMeshCommon mesh)
+            => mesh.Triangles().Select(t => t.Normal);
+
+        public static Triangle Triangle(this IMeshCommon mesh, int face)
+            => mesh.VertexIndicesToTriangle(mesh.FaceVertexIndices(face));
+
+        public static IArray<Triangle> Triangles(this IMeshCommon mesh)
+            => mesh.NumFaces.Select(mesh.Triangle);
 
         public static Vector3 Center(this IMeshCommon mesh)
             => mesh.BoundingBox().Center;

@@ -1,18 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using Vim.BFastLib;
-using Vim.Math3d;
 
 namespace Vim.G3dNext
 {
     public partial class G3dVim
     {
+
         // Computed field
         public int[] MeshVertexOffsets;
         private List<int>[] _meshInstances;
-
-
 
         public IReadOnlyList<int> GetMeshInstances(int mesh)
         {

@@ -89,7 +89,7 @@ namespace Vim.Format.Geometry
 
         // TODO: ValidateShapes() to validate VIM files which contain optional 2d data (shapes/overlays).
 
-        public static void ValidateIndices(this IMesh mesh)
+        public static void ValidateIndices(this IMeshCommon mesh)
         {
             foreach (var index in mesh.Indices.ToEnumerable())
             {
@@ -98,7 +98,7 @@ namespace Vim.Format.Geometry
             }
         }
 
-        public static void Validate(this IMesh mesh)
+        public static void Validate(this IMeshCommon mesh)
         {
             mesh.ValidateIndices();
         }

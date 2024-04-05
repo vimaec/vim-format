@@ -28,15 +28,10 @@ namespace Vim.Format.SceneBuilder
         public static void ValidateGeometry(this VimScene vim)
         {
             // Validate the packed geometry.
-            vim.Document.Geometry.ToIMesh().Validate();
+            VimMesh.FromG3d(vim.Document.GeometryNext).Validate();
             var errors = new List<string>();
 
             G3d.Validation.Validate(vim.Document.Geometry);
-
-
-            // Validate the individual meshes.
-            foreach (var g in vim.MeshesOld.ToEnumerable())
-                g.Validate();
         }
 
         public static void ValidateGeometryNext(this VimScene vim)
