@@ -238,6 +238,9 @@ namespace Vim.Format.Geometry
             return map.Select(kvp => (kvp.Key, kvp.Value)).ToArray();
         }
 
+        public static Vector3 Center(this IMesh mesh)
+            => mesh.BoundingBox().Center;
+
         public static AABox BoundingBox(this IMeshCommon mesh)
             => AABox.Create(mesh.Vertices.ToEnumerable());
 
