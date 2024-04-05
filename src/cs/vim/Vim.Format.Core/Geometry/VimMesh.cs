@@ -47,6 +47,15 @@ namespace Vim.Format.Geometry
         {
 
         }
+
+        public VimMesh(int[] indices, Vector3[] vertices, int[] submeshIndexOffsets = null, int[] submeshMaterials = null, int[] submeshIndexCounts = null)
+        {
+            this.indices = indices;
+            this.vertices = vertices;
+            this.submeshIndexOffsets = submeshIndexOffsets ?? new int[1] { 0 };
+            this.submeshMaterials = submeshMaterials ?? new int[1] { -1};
+            this.submeshIndexCounts = submeshIndexCounts ?? new int[1] { indices.Length };
+        }
         public VimMesh(int indexCount, int vertexCount, int submeshCount)
         {
             indices = new int[indexCount];
@@ -117,6 +126,27 @@ namespace Vim.Format.Geometry
             }
 
             return mesh;
+        }
+
+        public static VimMesh FromQuad(int[] indices, Vector3[] vertices)
+        {
+            if(indices.Length % 4 != 0)
+            {
+                throw new ArgumentException("Indices count should be a multiple of 4.");
+            }
+            var faceCount = indices.Length / 4;
+            var triIndices = new int[faceCount * 6];
+            var cur = 0;
+            for (var i = 0; i < faceCount; ++i)
+            {
+                triIndices[cur++] = indices[i * 4 + 0];
+                triIndices[cur++] = indices[i * 4 + 1];
+                triIndices[cur++] = indices[i * 4 + 2];
+                triIndices[cur++] = indices[i * 4 + 0];
+                triIndices[cur++] = indices[i * 4 + 2];
+                triIndices[cur++] = indices[i * 4 + 3];
+            }
+            return new VimMesh(triIndices, vertices);
         }
 
         public static IEnumerable<VimMesh> GetAllMeshes(G3dVim g3d)
@@ -246,6 +276,21 @@ namespace Vim.Format.Geometry
 
         public static Int3 FaceVertexIndices(this IMeshCommon mesh, int faceIndex)
             => new Int3(mesh.Indices[faceIndex * 3], mesh.Indices[faceIndex * 3 + 1], mesh.Indices[faceIndex * 3 + 2]);
+
+        /// <summary>
+        /// Low-level remap function. Maps faces and corners at the same time.
+        /// In some cases, this is important (e.g. triangulating quads).
+        /// Note: meshes are lost.
+        /// </summary>
+        public static IGeometryAttributes RemapFacesAndCorners(this IGeometryAttributes g, IArray<int> faceRemap, IArray<int> cornerRemap, int numCornersPerFace = -1)
+            => g.VertexAttributes()
+                .Concat(g.NoneAttributes())
+                .Concat(g.FaceAttributes().Select(attr => attr.Remap(faceRemap)))
+                .Concat(g.EdgeAttributes().Select(attr => attr.Remap(cornerRemap)))
+                .Concat(g.CornerAttributes().Select(attr => attr.Remap(cornerRemap)))
+                .Concat(g.WholeGeometryAttributes())
+                .SetFaceSizeAttribute(numCornersPerFace)
+                .ToGeometryAttributes();
 
 
         public static bool GeometryEquals(this IMeshCommon mesh, IMeshCommon other, float tolerance = Math3d.Constants.Tolerance)

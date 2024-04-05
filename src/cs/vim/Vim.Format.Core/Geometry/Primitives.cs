@@ -49,7 +49,9 @@ namespace Vim.Format.Geometry
                 vertices.ToPositionAttribute(),
                 indices?.ToIndexAttribute(),
                 uvs?.ToVertexUvAttribute(),
-                materials?.ToFaceMaterialAttribute()
+                materials?.ToFaceMaterialAttribute(),
+                (new int[] {0}).ToSubmeshIndexOffsetAttribute(),
+                (new int[] { -1 }).ToSubmeshMaterialAttribute()
             );
 
         public static IMesh QuadMesh(Vector3 a, Vector3 b, Vector3 c, Vector3 d)

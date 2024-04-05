@@ -128,6 +128,26 @@ public static class SerializableDocumentTests
     }
 
     [Test]
+    public static void QuadToTri_IsSame()
+    {
+        var indices = new int[] { 0, 1, 4, 3, 1, 2, 5, 4 };
+        var vertices = new Vector3[]
+        {
+            new Vector3(1,0,0),
+            new Vector3(1,1,0),
+            new Vector3(1,2,0),
+            new Vector3(0,0,0),
+            new Vector3(0,1,0),
+            new Vector3(0,2,0),
+        };
+
+        var mesh = Primitives.QuadMesh(vertices.ToIArray(), indices.ToIArray());
+        var next = VimMesh.FromQuad(indices, vertices);
+
+        MeshesAreSame(mesh, next);
+    }
+
+    [Test]
     public static void Merge_All_IsSame()
     {
         var path = VimFormatRepoPaths.GetLatestWolfordResidenceVim();

@@ -311,6 +311,7 @@ namespace Vim.G3d
         /// </summary>
         public static IGeometryAttributes RemapFacesAndCorners(this IGeometryAttributes g, IArray<int> faceRemap, IArray<int> cornerRemap, int numCornersPerFace = -1)
             => g.VertexAttributes()
+                .Concat(g.SubMeshAttributes())
                 .Concat(g.NoneAttributes())
                 .Concat(g.FaceAttributes().Select(attr => attr.Remap(faceRemap)))
                 .Concat(g.EdgeAttributes().Select(attr => attr.Remap(cornerRemap)))
