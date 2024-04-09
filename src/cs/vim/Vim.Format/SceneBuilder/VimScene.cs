@@ -59,7 +59,6 @@ namespace Vim
             => LoadVim(stream, new LoadOptions { SkipGeometry = skipGeometry, SkipAssets = skipAssets}, progress, inParallel);
 
         public int VimIndex { get; set; }
-        public IArray<IMesh> MeshesOld { get; private set; }
         public VimMesh[] MeshesNext { get; private set; }
         public IArray<IMeshCommon> Meshes { get; private set; }
         public IArray<ISceneNode> Nodes { get; private set; }
