@@ -76,7 +76,9 @@ namespace Vim
             => Document.Header.PersistingId;
 
         public int GetMeshCount() => Meshes.Count;
-        public int GetMaterialCount() => Materials.Count;
+        public int GetMaterialCount() => MaterialsNext.Length;
+
+        public int GetShapeCount() => VimShapesNext.Length;
       
         public Vector4 GetMaterialColorNext(int materialIndex)
          => _SerializableDocument.GeometryNext.MaterialColors[materialIndex];
