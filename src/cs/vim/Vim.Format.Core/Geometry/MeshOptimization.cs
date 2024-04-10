@@ -5,7 +5,7 @@ using Vim.LinqArray;
 using Vim.Math3d;
 
 namespace Vim.Format.Geometry
-{ 
+{
 
     /// <summary>
     /// This class is used to compare quickly two meshes within a lookup table (e.g. Dictionary, HashTable).
@@ -15,9 +15,9 @@ namespace Vim.Format.Geometry
     /// By converting an IMesh to a MeshHash we minimize the amount of comparisons done. It becomes 
     /// possible, but highly unlikely that two different meshes would have the same hash.
     /// </summary>
-    public class MeshCommonHash
+    public class MeshHash
     {
-        public IMeshCommon Mesh;
+        public VimMesh Mesh;
         public float Tolerance;
         public int NumFaces;
         public int NumVertices;
@@ -31,7 +31,7 @@ namespace Vim.Format.Geometry
         public Int3 Round(Vector3 v)
             => new Int3(Round(v.X), Round(v.Y), Round(v.Z));
 
-        public MeshCommonHash(IMeshCommon mesh, float tolerance)
+        public MeshHash(VimMesh mesh, float tolerance)
         {
             Mesh = mesh;
             Tolerance = tolerance;
@@ -44,9 +44,9 @@ namespace Vim.Format.Geometry
         }
 
         public override bool Equals(object obj)
-            => obj is MeshCommonHash other && Equals(other);
+            => obj is MeshHash other && Equals(other);
 
-        public bool Equals(MeshCommonHash other)
+        public bool Equals(MeshHash other)
             => NumFaces == other.NumFaces
             && NumVertices == other.NumVertices
             && BoxMin.Equals(other.BoxMin)
@@ -59,7 +59,7 @@ namespace Vim.Format.Geometry
 
     public static class Optimization
     {
-        public static Dictionary<MeshCommonHash, List<IMeshCommon>> GroupMeshesByHash(this IEnumerable<IMeshCommon> meshes, float tolerance)
-         => meshes.AsParallel().GroupBy(m => new MeshCommonHash(m, tolerance)).ToDictionary(grp => grp.Key, grp => grp.ToList());
+        public static Dictionary<MeshHash, List<VimMesh>> GroupMeshesByHash(this IEnumerable<VimMesh> meshes, float tolerance)
+         => meshes.AsParallel().GroupBy(m => new MeshHash(m, tolerance)).ToDictionary(grp => grp.Key, grp => grp.ToList());
     }
 }
