@@ -63,10 +63,10 @@ namespace Vim
         public IArray<IMeshCommon> Meshes { get; private set; }
         public IArray<ISceneNode> Nodes { get; private set; }
         public IArray<VimSceneNode> VimNodes { get; private set; }
-        public IArray<VimShape> VimShapes { get; private set; }
-        public VimShapeNext[] VimShapesNext { get; private set; }
-        public IArray<IMaterial> Materials { get; private set; }
-        public VimMaterialNext[] MaterialsNext { get; private set; }
+        public IArray<VimShape> ShapesOld { get; private set; }
+        public VimShapeNext[] Shapes { get; private set; }
+        public IArray<IMaterial> MaterialsOld { get; private set; }
+        public VimMaterialNext[] Materials { get; private set; }
 
         public SerializableDocument _SerializableDocument { get; }
         public Document Document { get; private set; }
@@ -76,9 +76,9 @@ namespace Vim
             => Document.Header.PersistingId;
 
         public int GetMeshCount() => Meshes.Count;
-        public int GetMaterialCount() => MaterialsNext.Length;
+        public int GetMaterialCount() => Materials.Length;
 
-        public int GetShapeCount() => VimShapesNext.Length;
+        public int GetShapeCount() => Shapes.Length;
       
         public Vector4 GetMaterialColorNext(int materialIndex)
          => _SerializableDocument.GeometryNext.MaterialColors[materialIndex];
@@ -201,8 +201,8 @@ namespace Vim
                 return;
             }
             var r = _SerializableDocument.Geometry.Shapes.Select((s, i) => new VimShape(this, i));
-            VimShapes = inParallel ? r.EvaluateInParallel() : r.Evaluate();
-            VimShapesNext = VimShapeNext.FromG3d(_SerializableDocument.GeometryNext).ToArray(); 
+            ShapesOld = inParallel ? r.EvaluateInParallel() : r.Evaluate();
+            Shapes = VimShapeNext.FromG3d(_SerializableDocument.GeometryNext).ToArray(); 
         }
 
         private void CreateScene(bool inParallel)
@@ -224,8 +224,8 @@ namespace Vim
             }
 
             var query = _SerializableDocument.Geometry.Materials.Select(m => new VimMaterial(m) as IMaterial);
-            Materials = inParallel ? query.EvaluateInParallel() : query.Evaluate();
-            MaterialsNext = VimMaterialNext.FromG3d(_SerializableDocument.GeometryNext).ToArray();
+            MaterialsOld = inParallel ? query.EvaluateInParallel() : query.Evaluate();
+            Materials = VimMaterialNext.FromG3d(_SerializableDocument.GeometryNext).ToArray();
 
         }
 

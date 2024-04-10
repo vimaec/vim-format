@@ -37,8 +37,8 @@ public static class SerializableDocumentTests
         var path = VimFormatRepoPaths.GetLatestWolfordResidenceVim();
         var scene = VimScene.LoadVim(path);
 
-        var shapes = scene.VimShapes;
-        var next = scene.VimShapesNext;
+        var shapes = scene.ShapesOld;
+        var next = scene.Shapes;
         Assert.AreEqual(shapes.Count, next.Length);
         for (var i = 0; i < shapes.Count; i++)
         {
@@ -54,8 +54,8 @@ public static class SerializableDocumentTests
         var path = VimFormatRepoPaths.GetLatestWolfordResidenceVim();
         var scene = VimScene.LoadVim(path);
 
-        var mats = scene.Materials;
-        var next = scene.MaterialsNext;
+        var mats = scene.MaterialsOld;
+        var next = scene.Materials;
         Assert.AreEqual(mats.Count, next.Length);
         for (var i = 0; i < mats.Count; i++)
         {

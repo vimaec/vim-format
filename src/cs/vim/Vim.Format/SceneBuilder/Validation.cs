@@ -104,7 +104,7 @@ namespace Vim.Format.SceneBuilder
 
         public static void ValidateShapes(this VimScene vim)
         {
-            var shapes = vim.VimShapes;
+            var shapes = vim.ShapesOld;
             var numShapes  = vim.DocumentModel.NumShape;
             if (shapes.Count != numShapes)
                 throw new VimValidationException($"The number of {nameof(VimShape)} ({shapes.Count}) does not match the number of shape entities ({numShapes})");
