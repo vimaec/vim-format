@@ -59,14 +59,16 @@ namespace Vim
             => LoadVim(stream, new LoadOptions { SkipGeometry = skipGeometry, SkipAssets = skipAssets}, progress, inParallel);
 
         public int VimIndex { get; set; }
-        public VimMesh[] MeshesNext { get; private set; }
-        public IArray<IMeshCommon> Meshes { get; private set; }
         public IArray<ISceneNode> Nodes { get; private set; }
         public IArray<VimSceneNode> VimNodes { get; private set; }
-        public IArray<VimShape> ShapesOld { get; private set; }
+
+        public VimMesh[] Meshes { get; private set; }
         public VimShapeNext[] Shapes { get; private set; }
-        public IArray<IMaterial> MaterialsOld { get; private set; }
         public VimMaterialNext[] Materials { get; private set; }
+
+        public IArray<VimShape> ShapesOld { get; private set; }
+        public IArray<IMaterial> MaterialsOld { get; private set; }
+        public IArray<IMeshCommon> MeshesOld { get; private set; }
 
         public SerializableDocument _SerializableDocument { get; }
         public Document Document { get; private set; }
@@ -75,9 +77,8 @@ namespace Vim
         public string PersistingId
             => Document.Header.PersistingId;
 
-        public int GetMeshCount() => Meshes.Count;
+        public int GetMeshCount() => Meshes.Length;
         public int GetMaterialCount() => Materials.Length;
-
         public int GetShapeCount() => Shapes.Length;
       
         public Vector4 GetMaterialColorNext(int materialIndex)
@@ -190,8 +191,8 @@ namespace Vim
             }
 
             var srcGeo = _SerializableDocument.Geometry;
-            MeshesNext = VimMesh.GetAllMeshes(_SerializableDocument.GeometryNext).ToArray();
-            Meshes = srcGeo?.Meshes.Select(m => m as IMeshCommon);
+            Meshes = VimMesh.GetAllMeshes(_SerializableDocument.GeometryNext).ToArray();
+            MeshesOld = srcGeo?.Meshes.Select(m => m as IMeshCommon);
         }
 
         private void CreateShapes(bool inParallel)
@@ -247,7 +248,7 @@ namespace Vim
         public void TransformSceneInPlace(Func<VimMesh, VimMesh> meshTransform = null, Func<VimSceneNode, VimSceneNode> nodeTransform = null)
         {
             if (meshTransform != null)
-                MeshesNext = MeshesNext.Select(meshTransform).ToArray();
+                Meshes = Meshes.Select(meshTransform).ToArray();
             if (nodeTransform != null)
                 VimNodes = VimNodes.Select(nodeTransform).EvaluateInParallel();
         }

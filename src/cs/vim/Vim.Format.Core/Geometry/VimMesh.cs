@@ -19,6 +19,8 @@ namespace Vim.Format.Geometry
         public IArray<int> SubmeshIndexOffsets => submeshIndexOffsets.ToIArray();
         public IArray<int> SubmeshIndexCounts => submeshIndexCounts.ToIArray();
 
+        public int SubmeshCount => submeshIndexCounts.Length;
+
         public int NumCornersPerFace => 3;
 
         public int NumVertices => vertices.Length;

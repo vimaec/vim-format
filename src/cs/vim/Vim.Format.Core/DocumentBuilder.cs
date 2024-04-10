@@ -49,13 +49,13 @@ namespace Vim.Format
             return this;
         }
 
-        public DocumentBuilder AddMesh(SubdividedMesh mesh)
+        public DocumentBuilder AddMesh(VimMesh mesh)
         {
             Geometry.AddMesh(mesh);
             return this;
         }
 
-        public DocumentBuilder AddMeshes(IEnumerable<SubdividedMesh> meshes)
+        public DocumentBuilder AddMeshes(IEnumerable<VimMesh> meshes)
         {
             foreach (var m in meshes)
             {

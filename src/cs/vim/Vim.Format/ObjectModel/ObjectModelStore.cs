@@ -28,14 +28,6 @@ namespace Vim.Format.ObjectModel
                 .AddMaterials(CreateMaterialBuilders());
         }
 
-        private IEnumerable<DocumentBuilder.Material> CreateMaterialBuilders()
-            => ObjectModelBuilder.GetEntities<Material>().Select(m => new DocumentBuilder.Material()
-            {
-                Color = new Vector4((float) m.Color.X, (float) m.Color.Y, (float) m.Color.Z, (float)(1 - m.Transparency)),
-                Glossiness = (float) m.Glossiness,
-                Smoothness = (float) m.Smoothness
-            });
-
         /// <summary>
         /// Mutates the Meshes and Instances to remove any meshes which are not referenced by at least one instance.
         /// </summary>

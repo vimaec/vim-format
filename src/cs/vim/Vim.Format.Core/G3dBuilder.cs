@@ -10,12 +10,12 @@ namespace Vim.Format
 {
     public class G3dBuilder
     {
-        private readonly List<SubdividedMesh> _meshes = new List<SubdividedMesh>();
+        private readonly List<VimMesh> _meshes = new List<VimMesh>();
         private readonly List<Instance> _instances = new List<Instance>();
         private readonly List<Shape> _shapes = new List<Shape>();
         private readonly List<IMaterial> _materials = new List<IMaterial>();
      
-        public void AddMesh(SubdividedMesh mesh)
+        public void AddMesh(VimMesh mesh)
         {
             _meshes.Add(mesh);
         }
@@ -40,10 +40,10 @@ namespace Vim.Format
         public int MaterialCount => _materials.Count;
         public int ShapeCount => _shapes.Count;
 
-        public SubdividedMesh GetMesh(int index) => _meshes[index];
+        public IMeshCommon GetMesh(int index) => _meshes[index];
         public AABox GetBox(int meshIndex)
         {
-            return AABox.Create(_meshes[meshIndex].Vertices);
+            return AABox.Create(_meshes[meshIndex].vertices);
         }
 
         public int[] GetVertexCounts()
@@ -60,7 +60,7 @@ namespace Vim.Format
         public BFast ToBFast()
         {
             var bfast = new BFast();
-            var totalSubmeshCount = _meshes.Select(s => s.SubmeshesIndexOffset.Count).Sum();
+            var totalSubmeshCount = _meshes.Select(s => s.SubmeshCount).Sum();
 
             // Compute the Vertex offsets and index offsets 
             var meshVertexOffsets = new int[_meshes.Count];
@@ -74,14 +74,14 @@ namespace Vim.Format
             {
                 meshVertexOffsets[i] = meshVertexOffsets[i - 1] + _meshes[i - 1].Vertices.Count;
                 meshIndexOffsets[i] = meshIndexOffsets[i - 1] + _meshes[i - 1].Indices.Count;
-                meshSubmeshOffset[i] = meshSubmeshOffset[i - 1] + _meshes[i - 1].SubmeshesIndexOffset.Count;
+                meshSubmeshOffset[i] = meshSubmeshOffset[i - 1] + _meshes[i - 1].SubmeshCount;
             }
 
             var subIndex = 0;
             var previousIndexCount = 0;
             foreach (var geo in _meshes)
             {
-                foreach (var sub in geo.SubmeshesIndexOffset)
+                foreach (var sub in geo.submeshIndexOffsets)
                 {
                     submeshIndexOffsets[subIndex++] = sub + previousIndexCount;
                 }
@@ -96,11 +96,11 @@ namespace Vim.Format
                 shapeVertexOffsets[i] = shapeVertexOffsets[i - 1] + _shapes[i - 1].Vertices.Count;
             }
 
-            bfast.SetEnumerable(CommonAttributes.Position, () => _meshes.SelectMany(m => m.Vertices));
-            bfast.SetEnumerable(CommonAttributes.Index, () => _meshes.SelectMany(m => m.Indices));
+            bfast.SetEnumerable(CommonAttributes.Position, () => _meshes.SelectMany(m => m.vertices));
+            bfast.SetEnumerable(CommonAttributes.Index, () => _meshes.SelectMany(m => m.indices));
             bfast.SetEnumerable(CommonAttributes.MeshSubmeshOffset, () => meshSubmeshOffset);
             bfast.SetEnumerable(CommonAttributes.SubmeshIndexOffset, () => submeshIndexOffsets);
-            bfast.SetEnumerable(CommonAttributes.SubmeshMaterial, () => _meshes.SelectMany(s => s.SubmeshMaterials));
+            bfast.SetEnumerable(CommonAttributes.SubmeshMaterial, () => _meshes.SelectMany(s => s.submeshMaterials));
             bfast.SetEnumerable(CommonAttributes.InstanceFlags, () => _instances.Select(i => (ushort)i.InstanceFlags));
             bfast.SetEnumerable(CommonAttributes.InstanceParent, () => _instances.Select(i => i.ParentIndex));
             bfast.SetEnumerable(CommonAttributes.InstanceMesh, () => _instances.Select(i => i.MeshIndex));

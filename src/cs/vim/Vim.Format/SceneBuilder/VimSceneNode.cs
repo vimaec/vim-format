@@ -1,6 +1,7 @@
 ﻿using Vim.Format.Geometry;
 using Vim.Format.ObjectModel;
 using Vim.G3d;
+using Vim.G3dNext;
 using Vim.LinqArray;
 using Vim.Math3d;
 
@@ -37,7 +38,7 @@ namespace Vim
         public int NodeIndex { get; } = -1;
 
         public IMeshCommon GetMesh() 
-            => _Scene.Meshes.ElementAtOrDefault(MeshIndex);
+            => _Scene.Meshes.SafeGet(MeshIndex);
 
         public int MeshIndex { get; }
 

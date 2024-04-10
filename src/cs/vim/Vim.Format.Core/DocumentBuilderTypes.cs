@@ -4,6 +4,7 @@ using System.Linq;
 using Vim.Format.Geometry;
 using Vim.G3d;
 using Vim.Math3d;
+using static Vim.Format.DocumentBuilder;
 
 namespace Vim.Format
 {
@@ -27,9 +28,9 @@ namespace Vim.Format
         public class Material : IMaterial
         {
             //RGBA
-            public Vector4 Color { get; private set; }
-            public float Glossiness { get; private set; }
-            public float Smoothness { get; private set; }
+            public Vector4 Color { get;  set; }
+            public float Glossiness { get; set; }
+            public float Smoothness { get; set; }
         }
 
         /// <summary>
@@ -72,6 +73,7 @@ namespace Vim.Format
                 _uvs = uvs ?? new List<Vector2>();
             }
 
+
             public void SetMeshMaterial(int material)
                 => _faceMaterials = Enumerable.Repeat(material, _indices.Count / 3).ToList();
 
@@ -101,8 +103,39 @@ namespace Vim.Format
             public void AppendUVs(IEnumerable<Vector2> uvs)
                 => _uvs.AddRange(uvs);
 
-            public SubdividedMesh Subdivide()
-                => new SubdividedMesh(this);
+            public VimMesh Subdivide()
+            {
+                if (Indices.Any(i => i < 0 && i >= Vertices.Count))
+                    throw new Exception($"Invalid mesh. Indices out of vertex range.");
+
+                var facesByMats = FaceMaterials
+                    .Select((face, index) => (face, index))
+                    .GroupBy(pair => pair.face, pair => pair.index);
+
+                var submeshIndexOffsets = new List<int>();
+                var submeshMaterials = new List<int>();
+                var indicesRemap = new List<int>();
+
+                foreach (var group in facesByMats)
+                {
+                    submeshIndexOffsets.Add(indicesRemap.Count);
+                    submeshMaterials.Add(group.Key);
+                    foreach (var face in group)
+                    {
+                        var f = face * 3;
+                        indicesRemap.Add(Indices[f]);
+                        indicesRemap.Add(Indices[f + 1]);
+                        indicesRemap.Add(Indices[f + 2]);
+                    }
+                }
+                return new VimMesh(
+                    indicesRemap.ToArray(),
+                    Vertices.ToArray(),
+                    submeshIndexOffsets.ToArray(),
+                    submeshMaterials.ToArray()
+                );
+
+            }
         }
 
         /// <summary>

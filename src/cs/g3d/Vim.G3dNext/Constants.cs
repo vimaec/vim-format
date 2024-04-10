@@ -29,6 +29,13 @@
             }
             return true;
         }
+
+        public static T SafeGet<T>(this T[] a, int i) where T : class
+        {
+            if (i < 0) return null;
+            if (i >= a.Length) return null;
+            return a[i];
+        }
     }
 
     public static class Constants

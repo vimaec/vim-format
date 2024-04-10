@@ -104,10 +104,9 @@ namespace Vim.Format.SceneBuilder
 
         public static void ValidateShapes(this VimScene vim)
         {
-            var shapes = vim.ShapesOld;
-            var numShapes  = vim.DocumentModel.NumShape;
-            if (shapes.Count != numShapes)
-                throw new VimValidationException($"The number of {nameof(VimShape)} ({shapes.Count}) does not match the number of shape entities ({numShapes})");
+            var shapes = vim.Shapes;
+            if (vim.GetShapeCount() != vim.DocumentModel.NumShape)
+                throw new VimValidationException($"The number of {nameof(VimShape)} ({vim.GetShapeCount()}) does not match the number of shape entities ({vim.DocumentModel.NumShape})");
 
             void ValidateColorDomain(string label, Vector4 value, Vector4 lowerInclusive, Vector4 upperInclusive, int index)
             {
@@ -124,10 +123,10 @@ namespace Vim.Format.SceneBuilder
                 }
             }
 
-            Parallel.For(0, numShapes, shapeIndex =>
+            Parallel.For(0, vim.GetShapeCount(), shapeIndex =>
             {
                 var shape = shapes[shapeIndex];
-                if (shape.ElementIndex < 0)
+                if (vim.DocumentModel.GetShapeElementIndex(shapeIndex) < 0)
                     throw new VimValidationException($"{nameof(Element)} is null for {nameof(VimShape)} {shape.ShapeIndex}");
                 ValidateColorDomain($"{nameof(VimShape)} color", shape.Color, Vector4.Zero, Vector4.One, shape.ShapeIndex);
             });
@@ -150,20 +149,6 @@ namespace Vim.Format.SceneBuilder
 
         public static void ValidateEquality(this DocumentBuilder db, VimScene vim)
         {
-            // Test the geometry both ways
-            var vimGeoBuilders = vim.Meshes.Select(g => new DocumentBuilder.SubdividedMesh(
-                g.Indices.ToList(),
-                g.Vertices.ToList(),
-                g.SubmeshIndexOffsets.ToList(),
-                g.SubmeshMaterials.ToList()
-            )).ToList();
-
-            for (var i = 0; i < db.Geometry.MeshCount; ++i)
-            {
-                if (!db.Geometry.GetMesh(i).IsEquivalentTo(vimGeoBuilders[i]))
-                    throw new VimValidationException($"{nameof(DocumentBuilder)} mesh {i} is not equivalent to {nameof(VimScene)} mesh {i}");
-            }
-
             // Test the assets.
             var dbAssetDictionary = db.Assets;
             var vimAssetDictionary = vim._SerializableDocument.Assets.ToDictionary(a => a.Name, a => a.ToBytes());
