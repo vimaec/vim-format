@@ -7,11 +7,7 @@ using Vim.LinqArray;
 using Vim.Math3d;
 using Vim.G3d;
 using System.Linq;
-using System.Diagnostics;
 using System;
-using Newtonsoft.Json.Linq;
-using static System.Net.Mime.MediaTypeNames;
-using static Vim.Format.DocumentBuilder;
 
 namespace Vim.Format.Tests;
 
