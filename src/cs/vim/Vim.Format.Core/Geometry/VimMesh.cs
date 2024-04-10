@@ -47,7 +47,7 @@ namespace Vim.Format.Geometry
         }
 
         public VimMesh(Vector3[] vertices)
-            : this(Enumerable.Range(0,vertices.Length).ToArray(), vertices)
+            : this(Enumerable.Range(0, vertices.Length).ToArray(), vertices)
         {
 
         }
@@ -73,7 +73,7 @@ namespace Vim.Format.Geometry
             return new G3dVim(
                 indices: indices,
                 positions: vertices,
-                instanceMeshes: new[] {0},
+                instanceMeshes: new[] { 0 },
                 instanceTransforms: new[] { Matrix4x4.Identity },
                 instanceParents: null,
                 instanceFlags: null,
@@ -123,7 +123,8 @@ namespace Vim.Format.Geometry
         }
         IMeshCommon IMeshCommon.Clone() => Clone();
 
-        public IMeshCommon Transform(Matrix4x4 mat)
+        IMeshCommon ITransformable3D<IMeshCommon>.Transform(Matrix4x4 mat) => Transform(mat);
+        public VimMesh Transform(Matrix4x4 mat)
         {
             var mesh = Clone();
 
@@ -188,7 +189,7 @@ namespace Vim.Format.Geometry
 
         public static VimMesh FromQuad(int[] indices, Vector3[] vertices)
         {
-            if(indices.Length % 4 != 0)
+            if (indices.Length % 4 != 0)
             {
                 throw new ArgumentException("Indices count should be a multiple of 4.");
             }
@@ -260,10 +261,10 @@ namespace Vim.Format.Geometry
                 .Append(mesh)
                 .Append(others)
                 .ToArray();
-            
+
             return meshes.Merge();
         }
-        
+
         public static IMeshCommon Merge(this IMeshCommon[] meshes)
         {
             void Merge(IArray<int> from, int[] to, int offset, int increment)
@@ -393,9 +394,9 @@ namespace Vim.Format.Geometry
             if (mesh.Vertices.Count != other.Vertices.Count)
                 return false;
 
-            for(var i = 0; i < mesh.Vertices.Count; i++)
+            for (var i = 0; i < mesh.Vertices.Count; i++)
             {
-                if(!mesh.Vertices[i].AlmostEquals(other.Vertices[i], tolerance))
+                if (!mesh.Vertices[i].AlmostEquals(other.Vertices[i], tolerance))
                     return false;
             }
 
@@ -413,7 +414,7 @@ namespace Vim.Format.Geometry
                 return result;
             }
 
-            for (var i =0; i < map.Length; i++)
+            for (var i = 0; i < map.Length; i++)
             {
                 var (mat, subs) = map[i];
                 var pick = mesh.PickSubmeshes(subs);

@@ -244,10 +244,10 @@ namespace Vim
 
         public string FileName => _SerializableDocument.FileName;
 
-        public void TransformSceneInPlace(Func<IMeshCommon, IMeshCommon> meshTransform = null, Func<VimSceneNode, VimSceneNode> nodeTransform = null)
+        public void TransformSceneInPlace(Func<VimMesh, VimMesh> meshTransform = null, Func<VimSceneNode, VimSceneNode> nodeTransform = null)
         {
             if (meshTransform != null)
-                Meshes = Meshes.Select(meshTransform).EvaluateInParallel();
+                MeshesNext = MeshesNext.Select(meshTransform).ToArray();
             if (nodeTransform != null)
                 VimNodes = VimNodes.Select(nodeTransform).EvaluateInParallel();
         }
