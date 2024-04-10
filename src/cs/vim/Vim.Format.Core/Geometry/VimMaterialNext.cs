@@ -5,7 +5,7 @@ using Vim.Math3d;
 
 namespace Vim.Format.Geometry
 {
-    public class VimMaterialNext
+    public class VimMaterialNext : IMaterial
     {
         public G3dVim g3d;
         public int index;
