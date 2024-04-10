@@ -36,15 +36,38 @@ public static class SerializableDocumentTests
     }
 
     [Test]
-    public static void MaterialColor_IsSame()
+    public static void ShapesAreSame()
     {
         var path = VimFormatRepoPaths.GetLatestWolfordResidenceVim();
         var scene = VimScene.LoadVim(path);
-        for (var i = 0; i < scene.GetMaterialCount(); i++)
+
+        var shapes = scene.VimShapes;
+        var next = scene.VimShapesNext;
+        Assert.AreEqual(shapes.Count, next.Length);
+        for (var i = 0; i < shapes.Count; i++)
         {
-            Assert.AreEqual(scene.GetMaterialColor(i), scene.GetMaterialColorNext(i));
+            ShapesAreSame(shapes[i], next[i]);
         }
     }
+
+
+
+    [Test]
+    public static void Materials_AreSame()
+    {
+        var path = VimFormatRepoPaths.GetLatestWolfordResidenceVim();
+        var scene = VimScene.LoadVim(path);
+
+        var mats = scene.Materials;
+        var next = scene.MaterialsNext;
+        Assert.AreEqual(mats.Count, next.Length);
+        for (var i = 0; i < mats.Count; i++)
+        {
+            MaterialsAreSame(mats[i], next[i]);
+        }
+
+    }
+
 
     //[Test]
     //public static void GetMesh_IsSameMesh()
@@ -206,6 +229,20 @@ public static class SerializableDocumentTests
         Assert.That(mesh.SubmeshIndexOffsets.SequenceEquals(next.SubmeshIndexOffsets));
         Assert.That(mesh.SubmeshMaterials.SequenceEquals(next.SubmeshMaterials));
         Assert.That(mesh.SubmeshIndexCounts.SequenceEquals(next.SubmeshIndexCounts));
+    }
+
+    private static void ShapesAreSame(VimShape mesh, VimShapeNext next)
+    {
+        Assert.That(mesh.Vertices.ToEnumerable().SequenceEqual(next.Vertices));
+        Assert.AreEqual(mesh.Color, next.Color);
+        Assert.AreEqual(mesh.Width, next.Width);
+    }
+
+    private static void MaterialsAreSame(IMaterial mesh, VimMaterialNext next)
+    {
+        Assert.AreEqual(mesh.Color, next.Color);
+        Assert.AreEqual(mesh.Glossiness, next.Glossiness);
+        Assert.AreEqual(mesh.Smoothness, next.Smoothness);
     }
 
 

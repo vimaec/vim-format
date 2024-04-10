@@ -64,7 +64,9 @@ namespace Vim
         public IArray<ISceneNode> Nodes { get; private set; }
         public IArray<VimSceneNode> VimNodes { get; private set; }
         public IArray<VimShape> VimShapes { get; private set; }
+        public VimShapeNext[] VimShapesNext { get; private set; }
         public IArray<IMaterial> Materials { get; private set; }
+        public VimMaterialNext[] MaterialsNext { get; private set; }
 
         public SerializableDocument _SerializableDocument { get; }
         public Document Document { get; private set; }
@@ -75,10 +77,7 @@ namespace Vim
 
         public int GetMeshCount() => Meshes.Count;
         public int GetMaterialCount() => Materials.Count;
-
-        public Vector4 GetMaterialColor(int materialIndex)
-            => _SerializableDocument.Geometry.MaterialColors[materialIndex];
-
+      
         public Vector4 GetMaterialColorNext(int materialIndex)
          => _SerializableDocument.GeometryNext.MaterialColors[materialIndex];
 
@@ -183,7 +182,7 @@ namespace Vim
 
         private void CreateMeshes(bool inParallel)
         {
-            if (_SerializableDocument.Geometry == null)
+            if (_SerializableDocument.GeometryNext == null)
             {
                 return;
             }
@@ -195,13 +194,13 @@ namespace Vim
 
         private void CreateShapes(bool inParallel)
         {
-            if (_SerializableDocument.Geometry == null)
+            if (_SerializableDocument.GeometryNext == null)
             {
                 return;
             }
-
             var r = _SerializableDocument.Geometry.Shapes.Select((s, i) => new VimShape(this, i));
             VimShapes = inParallel ? r.EvaluateInParallel() : r.Evaluate();
+            VimShapesNext = VimShapeNext.FromG3d(_SerializableDocument.GeometryNext).ToArray(); 
         }
 
         private void CreateScene(bool inParallel)
@@ -224,6 +223,8 @@ namespace Vim
 
             var query = _SerializableDocument.Geometry.Materials.Select(m => new VimMaterial(m) as IMaterial);
             Materials = inParallel ? query.EvaluateInParallel() : query.Evaluate();
+            MaterialsNext = VimMaterialNext.FromG3d(_SerializableDocument.GeometryNext).ToArray();
+
         }
 
         public static IArray<VimSceneNode> CreateVimSceneNodes(VimScene scene, G3D g3d, bool inParallel)

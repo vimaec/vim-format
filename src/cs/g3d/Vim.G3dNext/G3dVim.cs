@@ -178,9 +178,25 @@ namespace Vim.G3dNext
         /// </summary>
         public int GetShapeCount() => ShapeVertexOffsets?.Length ?? 0;
 
+
+        public int GetShapeVertexStart(int index)
+        {
+            return ShapeVertexOffsets[index];
+        }
+        public int GetShapeVertexEnd(int index)
+        {
+            if (index + 1 >= ShapeVertexOffsets.Length)
+            {
+                return ShapeVertices.Length;
+            }
+            return ShapeVertexOffsets[index + 1];
+        }
         /// <summary>
         /// The total number of shape vertices.
         /// </summary>
-        public int GetShapeVertexCount() => ShapeVertices?.Length ?? 0;
+        public int GetShapeVertexCount(int index)
+        {
+            return GetShapeVertexEnd(index) - GetShapeVertexStart(index);
+        }
     }
 }

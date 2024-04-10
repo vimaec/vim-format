@@ -24,7 +24,6 @@ namespace Vim.Format.SceneBuilder
         {
             public VimValidationException(string message) : base(message) { }
         }
-
         public static void ValidateGeometry(this VimScene vim)
         {
             // Validate the packed geometry.
@@ -39,66 +38,6 @@ namespace Vim.Format.SceneBuilder
             //TODO: Sronger validation maybe.
             vim.Document.GeometryNext.Validate();
         }
-
-        public static void ValidateDocumentModelToG3dInvariants(this VimScene vim)
-        {
-            var g3d = vim._SerializableDocument.Geometry;
-            var errors = new List<string>();
-
-            var entityTypesWithG3dReferences = new HashSet<(Type, G3dAttributeReferenceAttribute[])>(
-                ObjectModelReflection.GetEntityTypes<Entity>()
-                    .Select(t => (
-                        type: t,
-                        attrs: t.GetCustomAttributes(typeof(G3dAttributeReferenceAttribute))
-                            .Select(a => a as G3dAttributeReferenceAttribute)
-                            .ToArray()))
-                    .Where(tuple => tuple.attrs.Length != 0));
-
-            var dm = vim.DocumentModel;
-
-            foreach (var tuple in entityTypesWithG3dReferences)
-            {
-                var (type, attrs) = tuple;
-                var propertyName = type.Name + "List";
-                if (dm.GetPropertyValue(propertyName) is IArray arr)
-                {
-                    var numEntities = arr.Count;
-
-                    foreach (var attr in attrs)
-                    {
-                        var attributeName = attr.AttributeName;
-                        var isOptional = attr.AttributeIsOptional;
-
-                        var g3dAttribute = g3d.GetAttribute(attributeName);
-
-                        // We don't check the relation if the attribute is optional and absent (null).
-                        if (isOptional && g3dAttribute == null)
-                            continue;
-
-                        var g3dElementCount = g3dAttribute?.ElementCount ?? 0;
-                        var mult = attr.AttributeReferenceMultiplicity;
-
-                        // Validate one-to-one relationships
-                        if (mult == G3dAttributeReferenceMultiplicity.OneToOne && numEntities != g3dElementCount)
-                        {
-                            errors.Add($"Multiplicity Error ({mult}); the number of entities of type \"{type.Name}\" ({numEntities}) is not equal to the number of elements in the g3d attribute \"{attributeName}\" ({g3dElementCount})");
-                        }
-                    }
-                }
-                else
-                {
-                    throw new VimValidationException($"DocumentModel.{propertyName} not found");
-                }
-            }
-
-            if (errors.Count > 0)
-            {
-                throw new VimValidationException(
-                    $"DocumentModel to G3d invariant error(s):{Environment.NewLine}{string.Join(Environment.NewLine, errors)}");
-            }
-        }
-
-        
 
         public static void ValidateDocumentModelToG3dInvariantsNext(this VimScene vim)
         {
@@ -203,7 +142,6 @@ namespace Vim.Format.SceneBuilder
             vim.ValidateGeometry();
             vim.ValidateGeometryNext();
 
-            vim.ValidateDocumentModelToG3dInvariants();
             vim.ValidateDocumentModelToG3dInvariantsNext();
 
             vim.ValidateNodes();

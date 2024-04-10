@@ -96,9 +96,9 @@ namespace Vim.Format
                 bfast.SetArray(BufferNames.Strings, BFastStrings.Pack(StringTable));
             }
 
-            if(Geometry != null)
+            if(GeometryNext != null)
             {
-                bfast.SetBFast(BufferNames.Geometry, Geometry?.ToBFast());
+                bfast.SetBFast(BufferNames.Geometry, GeometryNext.ToBFast());
             }
             
             return bfast;
@@ -127,8 +127,8 @@ namespace Vim.Format
             if (!doc.Options.SkipGeometry)
             {
                 var geo = bfast.GetBFast(BufferNames.Geometry);
-                doc.Geometry = G3D.Read(geo);
                 doc.GeometryNext = new G3dVim(geo);
+                doc.Geometry = G3D.Read(geo);
             }
 
             var entities = bfast.GetBFast(BufferNames.Entities);
