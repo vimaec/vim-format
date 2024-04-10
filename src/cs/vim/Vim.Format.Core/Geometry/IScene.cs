@@ -23,7 +23,7 @@ namespace Vim.Format.Geometry
         IScene Scene { get; }
         Matrix4x4 Transform { get; }
         int MeshIndex { get; }
-        IMeshCommon GetMesh();
+        VimMesh GetMesh();
         ISceneNode Parent { get; }
 
         // TODO: DEPRECATE: this needs to be removed, currently only used in Vim.Max.Bridge.
@@ -52,7 +52,7 @@ namespace Vim.Format.Geometry
         public int MeshIndex => 0;
         public ISceneNode Parent => null;
         public IArray<ISceneNode> Children => null;
-        public IMeshCommon GetMesh() => null;
+        public VimMesh GetMesh() => null;
     }
 
     public class IdNode : ISceneNode
@@ -63,6 +63,6 @@ namespace Vim.Format.Geometry
         public int MeshIndex => 0;
         public ISceneNode Parent => null;
         public IArray<ISceneNode> Children => null;
-        public IMeshCommon GetMesh() => null;
+        public VimMesh GetMesh() => null;
     }
 }

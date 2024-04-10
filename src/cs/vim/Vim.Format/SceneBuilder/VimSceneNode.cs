@@ -37,7 +37,7 @@ namespace Vim
         public int VimIndex { get; } = -1;
         public int NodeIndex { get; } = -1;
 
-        public IMeshCommon GetMesh() 
+        public VimMesh GetMesh() 
             => _Scene.Meshes.SafeGet(MeshIndex);
 
         public int MeshIndex { get; }
