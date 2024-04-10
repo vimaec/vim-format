@@ -4,6 +4,7 @@ using Vim.G3d;
 using Vim.BFastLib;
 using static Vim.Format.DocumentBuilder;
 using Vim.Math3d;
+using Vim.Format.Geometry;
 
 namespace Vim.Format
 {
@@ -12,7 +13,7 @@ namespace Vim.Format
         private readonly List<SubdividedMesh> _meshes = new List<SubdividedMesh>();
         private readonly List<Instance> _instances = new List<Instance>();
         private readonly List<Shape> _shapes = new List<Shape>();
-        private readonly List<Material> _materials = new List<Material>();
+        private readonly List<IMaterial> _materials = new List<IMaterial>();
      
         public void AddMesh(SubdividedMesh mesh)
         {
@@ -29,7 +30,7 @@ namespace Vim.Format
             _shapes.Add(shape);
         }
 
-        public void AddMaterial(Material material)
+        public void AddMaterial(IMaterial material)
         {
             _materials.Add(material);
         }
