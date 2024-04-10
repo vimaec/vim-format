@@ -126,9 +126,10 @@ namespace Vim.Format.SceneBuilder
             Parallel.For(0, vim.GetShapeCount(), shapeIndex =>
             {
                 var shape = shapes[shapeIndex];
-                if (vim.DocumentModel.GetShapeElementIndex(shapeIndex) < 0)
-                    throw new VimValidationException($"{nameof(Element)} is null for {nameof(VimShape)} {shape.ShapeIndex}");
-                ValidateColorDomain($"{nameof(VimShape)} color", shape.Color, Vector4.Zero, Vector4.One, shape.ShapeIndex);
+                var element = vim.DocumentModel.GetShapeElementIndex(shapeIndex);
+                if (element < 0)
+                    throw new VimValidationException($"{nameof(Element)} is null for {nameof(VimShape)} {shape.Index}");
+                ValidateColorDomain($"{nameof(VimShape)} color", shape.Color, Vector4.Zero, Vector4.One, shape.Index);
             });
         }
 

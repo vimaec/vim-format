@@ -81,7 +81,7 @@ namespace Vim
         public int GetMaterialCount() => Materials.Length;
         public int GetShapeCount() => Shapes.Length;
       
-        public Vector4 GetMaterialColorNext(int materialIndex)
+        public Vector4 GetMaterialColor(int materialIndex)
          => _SerializableDocument.GeometryNext.MaterialColors[materialIndex];
 
         private VimScene(SerializableDocument doc)
