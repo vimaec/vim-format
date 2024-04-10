@@ -10,14 +10,6 @@ namespace Vim.Format
 {
     public static class DocumentBuilderExtensions
     {
-        public static Material ToDocumentBuilderMaterial(this G3dMaterial g3dMaterial)
-            => new Material
-            {
-                Color = g3dMaterial.Color,
-                Glossiness = g3dMaterial.Glossiness,
-                Smoothness = g3dMaterial.Smoothness,
-            };
-
         public static SubdividedMesh ToDocumentBuilderSubdividedMesh(this IMeshCommon m)
             => new SubdividedMesh(
                 m.Indices.ToList(),

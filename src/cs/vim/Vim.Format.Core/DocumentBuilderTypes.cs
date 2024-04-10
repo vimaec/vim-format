@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Vim.Format.Geometry;
 using Vim.G3d;
 using Vim.Math3d;
 
@@ -23,12 +24,12 @@ namespace Vim.Format
             public float Width;
         }
 
-        public class Material
+        public class Material : IMaterial
         {
             //RGBA
-            public Vector4 Color;
-            public float Glossiness;
-            public float Smoothness;
+            public Vector4 Color { get; private set; }
+            public float Glossiness { get; private set; }
+            public float Smoothness { get; private set; }
         }
 
         /// <summary>
