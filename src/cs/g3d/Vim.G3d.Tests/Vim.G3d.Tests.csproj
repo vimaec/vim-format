@@ -12,7 +12,6 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="../Vim.G3d.AssimpWrapper/Vim.G3d.AssimpWrapper.csproj" />
         <ProjectReference Include="../Vim.G3d/Vim.G3d.csproj" />
         <ProjectReference Include="../../bfast/Vim.BFast/Vim.BFast.csproj" />
         <ProjectReference Include="../../math3d/Vim.Math3D/Vim.Math3D.csproj" />
