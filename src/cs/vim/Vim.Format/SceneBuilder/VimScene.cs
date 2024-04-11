@@ -21,7 +21,7 @@ namespace Vim
     /// <summary>
     /// This is the top-level class of a loaded VIM file.
     /// </summary>
-    public class VimScene : IScene
+    public class VimScene
     {
         /// <summary>
         /// Returns the VIM file's header schema version. Returns null if the Vim has no header.

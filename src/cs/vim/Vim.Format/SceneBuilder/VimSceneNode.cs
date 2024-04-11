@@ -10,7 +10,7 @@ using Vim.Math3d;
 
 namespace Vim
 {
-    public sealed class VimSceneNode : ElementInfo, ISceneNode, ITransformable3D<VimSceneNode>
+    public sealed class VimSceneNode : ElementInfo, ITransformable3D<VimSceneNode>
     {
         public VimSceneNode(VimScene scene, int nodeIndex, int geometryIndex, Matrix4x4 transform)
             : base(scene.DocumentModel, scene.DocumentModel.GetNodeElementIndex(nodeIndex))
