@@ -54,10 +54,7 @@ namespace Vim.Util.Logging.Serilog
             string name,
             string filePath = null,
             bool writeToConsole = true,
-            bool addEvent = false,
-            long? fileSizeLimitBytes = 1_000_000_000, // serilog default: 1GB
-            bool rollOnFileSizeLimit = true, // serilog default: true
-            int? retainedFileCountLimit = 31 // serilog default: 31
+            bool addEvent = false
         )
         {
             var config = new LoggerConfiguration()
@@ -66,12 +63,7 @@ namespace Vim.Util.Logging.Serilog
             if (!string.IsNullOrEmpty(filePath))
             {
                 IO.CreateFileDirectory(filePath);
-                config = config.WriteTo.File(
-                    filePath,
-                    fileSizeLimitBytes: fileSizeLimitBytes,
-                    rollOnFileSizeLimit: rollOnFileSizeLimit,
-                    retainedFileCountLimit: retainedFileCountLimit
-                );
+                config = config.WriteTo.File(filePath);
             }
 
             if (writeToConsole)
