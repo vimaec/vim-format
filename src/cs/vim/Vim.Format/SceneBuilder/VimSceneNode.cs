@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Vim.Format.Geometry;
 using Vim.Format.ObjectModel;
@@ -15,15 +16,14 @@ namespace Vim
             : base(scene.DocumentModel, scene.DocumentModel.GetNodeElementIndex(nodeIndex))
         {
             VimIndex = scene.VimIndex;
-            _Scene = scene;
+            Scene = scene;
             Transform = transform;
             MeshIndex = geometryIndex;
             NodeIndex = nodeIndex;
         }
 
-        public VimScene _Scene { get; }
+        public VimScene Scene { get; }
 
-        public IScene Scene => _Scene;
         public int Id => NodeIndex;
         public Matrix4x4 Transform { get; }
 
@@ -31,7 +31,7 @@ namespace Vim
         {
             get
             {
-                var instanceFlags = (InstanceFlags)_Scene.Document.Geometry.InstanceFlags.ElementAtOrDefault(NodeIndex);
+                var instanceFlags = (InstanceFlags)Scene.Document.Geometry.InstanceFlags.ElementAtOrDefault(NodeIndex);
                 return (instanceFlags & InstanceFlags.Hidden) == InstanceFlags.Hidden;
             }
         }
@@ -40,23 +40,23 @@ namespace Vim
         public int NodeIndex { get; } = -1;
 
         public VimMesh GetMesh()
-            => _Scene.Meshes.SafeGet(MeshIndex);
+            => Scene.Meshes.SafeGet(MeshIndex);
 
         public int MeshIndex { get; }
 
         public bool HasMesh => MeshIndex != -1;
 
-        public Node NodeModel => _Scene.DocumentModel.GetNode(Id);
-        public Geometry GeometryModel => _Scene.DocumentModel.GetGeometry(MeshIndex);
+        public Node NodeModel => Scene.DocumentModel.GetNode(Id);
+        public Geometry GeometryModel => Scene.DocumentModel.GetGeometry(MeshIndex);
 
         // TODO: I think this should be "IEnumerable<ISceneNode>" in the interface
-        public ISceneNode Parent => null;
-        public IArray<ISceneNode> Children => LinqArray.LinqArray.Empty<ISceneNode>();
+        public VimSceneNode Parent => null;
+        public VimSceneNode[] Children =>  Array.Empty<VimSceneNode>();
 
         public string DisciplineName => VimSceneHelpers.GetDisiplineFromCategory(CategoryName);
 
         VimSceneNode ITransformable3D<VimSceneNode>.Transform(Matrix4x4 mat)
-            => new VimSceneNode(_Scene, Id, MeshIndex, mat * Transform);
+            => new VimSceneNode(Scene, Id, MeshIndex, mat * Transform);
 
         public IMeshCommon TransformedMesh()
              => GetMesh()?.Transform(Transform);

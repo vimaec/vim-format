@@ -60,8 +60,7 @@ namespace Vim
             => LoadVim(stream, new LoadOptions { SkipGeometry = skipGeometry, SkipAssets = skipAssets}, progress, inParallel);
 
         public int VimIndex { get; set; }
-        public IArray<ISceneNode> Nodes { get; private set; }
-        public IArray<VimSceneNode> VimNodes { get; private set; }
+        public VimSceneNode[] Nodes { get; private set; }
 
         public VimMesh[] Meshes { get; private set; }
         public VimShapeNext[] Shapes { get; private set; }
@@ -81,12 +80,13 @@ namespace Vim
         public int GetMeshCount() => Meshes.Length;
         public int GetMaterialCount() => Materials.Length;
         public int GetShapeCount() => Shapes.Length;
+        public int GetNodeCount() => Nodes.Length;
 
         public IEnumerable<IMeshCommon> TransformedMeshes()
-            => VimNodes.Where(n => n.GetMesh() != null).Select(n => n.TransformedMesh());
+            => Nodes.Where(n => n.GetMesh() != null).Select(n => n.TransformedMesh());
 
         public IMeshCommon MergedGeometry()
-            => VimNodes.ToEnumerable().MergedGeometry();
+            => Nodes.MergedGeometry();
 
         public IEnumerable<Vector3> AllVertices()
             => TransformedMeshes().SelectMany(g => g.Vertices.ToEnumerable());
@@ -226,8 +226,7 @@ namespace Vim
                 return;
             }
 
-            VimNodes = CreateVimSceneNodes(this, _SerializableDocument.Geometry, inParallel);
-            Nodes = VimNodes.Select(n => n as ISceneNode);
+            Nodes = CreateVimSceneNodes(this, _SerializableDocument.Geometry, inParallel);
         }
 
         private void CreateMaterials(bool inParallel)
@@ -243,14 +242,12 @@ namespace Vim
 
         }
 
-        public static IArray<VimSceneNode> CreateVimSceneNodes(VimScene scene, G3D g3d, bool inParallel)
+        public static VimSceneNode[] CreateVimSceneNodes(VimScene scene, G3D g3d, bool inParallel)
         {
             Matrix4x4 GetMatrix(int i) => i >= 0 ? g3d.InstanceTransforms[i] : Matrix4x4.Identity;
             
-            var r = g3d.InstanceTransforms.Select((_, i) =>
-                new VimSceneNode(scene, i, g3d.InstanceMeshes[i], GetMatrix(i)));
-
-            return inParallel ? r.EvaluateInParallel() : r.Evaluate();
+            return g3d.InstanceTransforms.Select((_, i) =>
+                new VimSceneNode(scene, i, g3d.InstanceMeshes[i], GetMatrix(i))).ToArray();
         }
 
         public void Save(string filePath)
@@ -263,7 +260,7 @@ namespace Vim
             if (meshTransform != null)
                 Meshes = Meshes.Select(meshTransform).ToArray();
             if (nodeTransform != null)
-                VimNodes = VimNodes.Select(nodeTransform).EvaluateInParallel();
+                Nodes = Nodes.Select(nodeTransform).ToArray();
         }
 
         public string GetElementName(int elementIndex, string missing = "")

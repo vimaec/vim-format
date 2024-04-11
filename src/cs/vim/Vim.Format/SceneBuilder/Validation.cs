@@ -98,8 +98,8 @@ namespace Vim.Format.SceneBuilder
 
         public static void ValidateNodes(this VimScene vim)
         {
-            if (vim.VimNodes.Count != vim.DocumentModel.NumNode)
-                throw new VimValidationException($"The number of {nameof(VimSceneNode)} ({vim.VimNodes.Count}) does not match the number of node entities ({vim.DocumentModel.NumNode})");
+            if (vim.GetNodeCount() != vim.DocumentModel.NumNode)
+                throw new VimValidationException($"The number of {nameof(VimSceneNode)} ({vim.GetNodeCount()}) does not match the number of node entities ({vim.DocumentModel.NumNode})");
         }
 
         public static void ValidateShapes(this VimScene vim)
