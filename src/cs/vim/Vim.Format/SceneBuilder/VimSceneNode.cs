@@ -1,4 +1,6 @@
-﻿using Vim.Format.Geometry;
+﻿using System.Collections.Generic;
+using System.Linq;
+using Vim.Format.Geometry;
 using Vim.Format.ObjectModel;
 using Vim.G3d;
 using Vim.G3dNext;
@@ -37,7 +39,7 @@ namespace Vim
         public int VimIndex { get; } = -1;
         public int NodeIndex { get; } = -1;
 
-        public VimMesh GetMesh() 
+        public VimMesh GetMesh()
             => _Scene.Meshes.SafeGet(MeshIndex);
 
         public int MeshIndex { get; }
@@ -55,5 +57,20 @@ namespace Vim
 
         VimSceneNode ITransformable3D<VimSceneNode>.Transform(Matrix4x4 mat)
             => new VimSceneNode(_Scene, Id, MeshIndex, mat * Transform);
+
+        public IMeshCommon TransformedMesh()
+             => GetMesh()?.Transform(Transform);
+
+        public IArray<Vector3> TransformedVertices()
+            => TransformedMesh()?.Vertices;
+
+        public AABox TransformedBoundingBox()
+            => AABox.Create(TransformedVertices()?.ToEnumerable());
+    }
+
+    public static class NodeExtensions
+    {
+        public static IMeshCommon MergedGeometry(this IEnumerable<VimSceneNode> nodes)
+           => nodes.Where(n => n.GetMesh() != null).Select(n => n.TransformedMesh()).ToArray().Merge();
     }
 }

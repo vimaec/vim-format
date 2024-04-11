@@ -12,6 +12,7 @@ using Vim.Math3d;
 using IVimSceneProgress = System.IProgress<(string, double)>;
 using Vim.BFastLib;
 using Vim.G3dNext;
+using System.Collections.Generic;
 
 namespace Vim
 {
@@ -80,7 +81,19 @@ namespace Vim
         public int GetMeshCount() => Meshes.Length;
         public int GetMaterialCount() => Materials.Length;
         public int GetShapeCount() => Shapes.Length;
-      
+
+        public IEnumerable<IMeshCommon> TransformedMeshes()
+            => VimNodes.Where(n => n.GetMesh() != null).Select(n => n.TransformedMesh());
+
+        public IMeshCommon MergedGeometry()
+            => VimNodes.ToEnumerable().MergedGeometry();
+
+        public IEnumerable<Vector3> AllVertices()
+            => TransformedMeshes().SelectMany(g => g.Vertices.ToEnumerable());
+
+        public AABox BoundingBox()
+            => AABox.Create(AllVertices());
+
         public Vector4 GetMaterialColor(int materialIndex)
          => _SerializableDocument.GeometryNext.MaterialColors[materialIndex];
 

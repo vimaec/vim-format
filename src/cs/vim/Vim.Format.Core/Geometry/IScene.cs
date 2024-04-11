@@ -11,7 +11,7 @@ namespace Vim.Format.Geometry
     public interface IScene
     {
         IArray<ISceneNode> Nodes { get; }
-        IArray<IMeshCommon> MeshesOld { get; }
+        VimMesh[] Meshes { get; }
     }
 
     /// <summary>
