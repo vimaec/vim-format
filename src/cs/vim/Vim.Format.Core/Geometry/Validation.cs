@@ -100,6 +100,7 @@ namespace Vim.Format.Geometry
 
         public static void Validate(this IMeshCommon mesh)
         {
+            //TODO: Validate better
             mesh.ValidateIndices();
         }
     }

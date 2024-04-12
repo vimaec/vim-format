@@ -24,21 +24,7 @@ namespace Vim.Format.SceneBuilder
         {
             public VimValidationException(string message) : base(message) { }
         }
-        public static void ValidateGeometry(this VimScene vim)
-        {
-            // Validate the packed geometry.
-            VimMesh.FromG3d(vim.Document.GeometryNext).Validate();
-            var errors = new List<string>();
-
-            G3d.Validation.Validate(vim.Document.Geometry);
-        }
-
-        public static void ValidateGeometryNext(this VimScene vim)
-        {
-            //TODO: Sronger validation maybe.
-            vim.Document.GeometryNext.Validate();
-        }
-
+      
         public static void ValidateDocumentModelToG3dInvariantsNext(this VimScene vim)
         {
             var g3d = vim.Document.GeometryNext;
@@ -139,8 +125,8 @@ namespace Vim.Format.SceneBuilder
 
             vim.Document.Validate();
             vim.DocumentModel.Validate(options.ObjectModelValidationOptions);
-            vim.ValidateGeometry();
-            vim.ValidateGeometryNext();
+
+            VimMesh.FromG3d(vim.Document.GeometryNext).Validate();
 
             vim.ValidateDocumentModelToG3dInvariantsNext();
 
