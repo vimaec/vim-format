@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using Vim.G3d;
 using Vim.LinqArray;
 using Vim.BFastLib;
 
@@ -42,34 +40,6 @@ namespace Vim.Format.Geometry
                     if (table == null)
                         throw new Exception($"Could not find related table for index column {ic.Name}");
                 }
-            }
-        }
-
-        public static string[] RequiredAttributeNames => new []
-        {
-            // Vertices
-            CommonAttributes.Position,
-            CommonAttributes.Index,
-            
-            // Meshes
-            CommonAttributes.MeshSubmeshOffset,
-
-            // Submeshes
-            CommonAttributes.SubmeshIndexOffset,
-
-            // Instances
-            CommonAttributes.InstanceMesh,
-            CommonAttributes.InstanceTransform,
-        };
-
-        public static void ValidateGeometryAttributes(this Document doc)
-        {
-            var attributes = doc.Geometry.Attributes;
-            var attributeNameSet = new HashSet<string>(attributes.Select(a => a.Name).ToEnumerable());
-            foreach (var attributeName in RequiredAttributeNames)
-            {
-                if (!attributeNameSet.Contains(attributeName))
-                    throw new Exception($"Required attribute {attributeName} was not found.");
             }
         }
 

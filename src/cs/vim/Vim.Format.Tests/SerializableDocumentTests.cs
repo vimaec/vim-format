@@ -1,13 +1,10 @@
 ﻿using NUnit.Framework;
-using Vim.Util.Tests;
-using Vim.Format.SceneBuilder;
-using Vim.G3dNext;
-using Vim.Format.Geometry;
-using Vim.LinqArray;
-using Vim.Math3d;
-using Vim.G3d;
-using System.Linq;
 using System;
+using System.Linq;
+using Vim.Format.Geometry;
+using Vim.Format.SceneBuilder;
+using Vim.LinqArray;
+using Vim.Util.Tests;
 
 namespace Vim.Format.Tests;
 

@@ -6,10 +6,9 @@ using System.Threading.Tasks;
 using Vim.BFastLib;
 using Vim.Format.Geometry;
 using Vim.Format.ObjectModel;
-using Vim.Util;
 using Vim.LinqArray;
 using Vim.Math3d;
-using Vim.G3d;
+using Vim.Util;
 
 namespace Vim.Format.SceneBuilder
 {

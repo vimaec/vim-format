@@ -4,7 +4,6 @@ using System.Diagnostics;
 using System.Linq;
 using Vim.LinqArray;
 using Vim.Math3d;
-using Vim.G3d;
 
 namespace Vim.Format.Geometry
 {

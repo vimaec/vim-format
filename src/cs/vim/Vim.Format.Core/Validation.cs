@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using Vim.BFastLib;
-using Vim.G3d;
 using Vim.LinqArray;
 
 namespace Vim.Format
@@ -45,34 +44,6 @@ namespace Vim.Format
             }
         }
 
-        public static string[] RequiredAttributeNames => new []
-        {
-            // Vertices
-            CommonAttributes.Position,
-            CommonAttributes.Index,
-            
-            // Meshes
-            CommonAttributes.MeshSubmeshOffset,
-
-            // Submeshes
-            CommonAttributes.SubmeshIndexOffset,
-
-            // Instances
-            CommonAttributes.InstanceMesh,
-            CommonAttributes.InstanceTransform,
-        };
-
-        public static void ValidateGeometryAttributes(this Document doc)
-        {
-            var attributes = doc.Geometry.Attributes;
-            var attributeNameSet = new HashSet<string>(attributes.Select(a => a.Name).ToEnumerable());
-            foreach (var attributeName in RequiredAttributeNames)
-            {
-                if (!attributeNameSet.Contains(attributeName))
-                    throw new Exception($"Required attribute {attributeName} was not found.");
-            }
-        }
-
         public static void ValidateAssets(this Document doc)
         {
             foreach (var asset in doc.Assets.Values.ToEnumerable())
@@ -83,7 +54,6 @@ namespace Vim.Format
         {
             doc.ValidateTableRows();
             doc.ValidateIndexColumns();
-            doc.ValidateGeometryAttributes();
             doc.ValidateAssets();
         }
 
