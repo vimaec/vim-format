@@ -40,6 +40,8 @@ namespace Vim.G3dNext.Tests
             Assert.IsTrue(g3d.Equals(expected));
         }
 
+
+
         [Test]
         public static void Can_Merge_two_g3d()
         {
@@ -65,6 +67,14 @@ namespace Vim.G3dNext.Tests
                 shapeVertexOffsets: null
             );
             Assert.IsTrue(merged.Equals(expected));
+        }
+
+
+        [Test]
+        public static void Clone_IsEqual()
+        {
+            var g3d = G3dNextTestUtils.CreateTestG3d();
+            Assert.IsTrue(g3d.Equals(g3d.Clone()));
         }
     }
 }
