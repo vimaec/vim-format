@@ -51,13 +51,13 @@ namespace Vim
             => new VimScene(SerializableDocument.FromPath(f, loadOptions), progress, inParallel, vimIndex);
 
         public static VimScene LoadVim(string f, IVimSceneProgress progress = null, bool skipGeometry = false, bool skipAssets = false, bool skipNodes = false, bool inParallel = false)
-            => LoadVim(f, new LoadOptions { SkipGeometry = skipGeometry, SkipAssets = skipAssets}, progress, inParallel);
+            => LoadVim(f, new LoadOptions { SkipGeometry = skipGeometry, SkipAssets = skipAssets }, progress, inParallel);
 
         public static VimScene LoadVim(Stream stream, LoadOptions loadOptions, IVimSceneProgress progress = null, bool inParallel = false)
             => new VimScene(SerializableDocument.FromBFast(new BFast(stream), loadOptions), progress, inParallel);
 
         public static VimScene LoadVim(Stream stream, IVimSceneProgress progress = null, bool skipGeometry = false, bool skipAssets = false, bool skipNodes = false, bool inParallel = false)
-            => LoadVim(stream, new LoadOptions { SkipGeometry = skipGeometry, SkipAssets = skipAssets}, progress, inParallel);
+            => LoadVim(stream, new LoadOptions { SkipGeometry = skipGeometry, SkipAssets = skipAssets }, progress, inParallel);
 
         public int VimIndex { get; set; }
         public VimSceneNode[] Nodes { get; private set; }
@@ -203,9 +203,8 @@ namespace Vim
                 return;
             }
 
-            var srcGeo = _SerializableDocument.Geometry;
             Meshes = VimMesh.GetAllMeshes(_SerializableDocument.GeometryNext).ToArray();
-            MeshesOld = srcGeo?.Meshes.Select(m => m as IMeshCommon);
+            MeshesOld = _SerializableDocument.Geometry?.Meshes.Select(m => m as IMeshCommon);
         }
 
         private void CreateShapes(bool inParallel)
@@ -216,12 +215,12 @@ namespace Vim
             }
             var r = _SerializableDocument.Geometry.Shapes.Select((s, i) => new VimShape(this, i));
             ShapesOld = inParallel ? r.EvaluateInParallel() : r.Evaluate();
-            Shapes = VimShapeNext.FromG3d(_SerializableDocument.GeometryNext).ToArray(); 
+            Shapes = VimShapeNext.FromG3d(_SerializableDocument.GeometryNext).ToArray();
         }
 
         private void CreateScene(bool inParallel)
         {
-            if (_SerializableDocument.Geometry == null)
+            if (_SerializableDocument.GeometryNext == null)
             {
                 return;
             }
@@ -231,7 +230,7 @@ namespace Vim
 
         private void CreateMaterials(bool inParallel)
         {
-            if (_SerializableDocument.Geometry == null)
+            if (_SerializableDocument.GeometryNext == null)
             {
                 return;
             }
@@ -245,7 +244,7 @@ namespace Vim
         public static VimSceneNode[] CreateVimSceneNodes(VimScene scene, G3D g3d, bool inParallel)
         {
             Matrix4x4 GetMatrix(int i) => i >= 0 ? g3d.InstanceTransforms[i] : Matrix4x4.Identity;
-            
+
             return g3d.InstanceTransforms.Select((_, i) =>
                 new VimSceneNode(scene, i, g3d.InstanceMeshes[i], GetMatrix(i))).ToArray();
         }
