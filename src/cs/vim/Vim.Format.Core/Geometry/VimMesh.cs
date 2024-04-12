@@ -9,7 +9,7 @@ using Vim.Util;
 
 namespace Vim.Format.Geometry
 {
-    public class VimMesh : IMeshCommon
+    public class VimMesh : ITransformable3D<VimMesh>
     {
         public IArray<Vector3> Vertices => vertices.ToIArray();
 
@@ -123,9 +123,6 @@ namespace Vim.Format.Geometry
             );
             return mesh;
         }
-        IMeshCommon IMeshCommon.Clone() => Clone();
-
-        IMeshCommon ITransformable3D<IMeshCommon>.Transform(Matrix4x4 mat) => Transform(mat);
         public VimMesh Transform(Matrix4x4 mat)
         {
             var mesh = Clone();
@@ -223,11 +220,25 @@ namespace Vim.Format.Geometry
         {
             this.indices = indices;
         }
+
+        public void Validate()
+        {
+            //TODO: Validate better
+            ValidateIndices();
+        }
+        private void ValidateIndices()
+        {
+            foreach (var index in Indices.ToEnumerable())
+            {
+                if (index < 0 || index >= NumVertices)
+                    throw new Exception($"Invalid mesh index: {index}. Expected a value greater or equal to 0 and less than {NumVertices}");
+            }
+        }
     }
 
     public static class MeshCommonExtensions
     {
-        public static IMeshCommon ReverseWindingOrder(this IMeshCommon mesh)
+        public static VimMesh ReverseWindingOrder(this VimMesh mesh)
         {
             var result = mesh.Clone();
             var count = mesh.Indices.Count;
@@ -243,7 +254,7 @@ namespace Vim.Format.Geometry
         }
 
 
-        public static IArray<int> GetFaceMaterials(this IMeshCommon mesh)
+        public static IArray<int> GetFaceMaterials(this VimMesh mesh)
         {
             // SubmeshIndexOffsets: [0, A, B]
             // SubmeshIndexCount:   [X, Y, Z]
@@ -257,9 +268,9 @@ namespace Vim.Format.Geometry
                 .ToIArray();
         }
 
-        public static IMeshCommon Merge2(this IMeshCommon mesh, params IMeshCommon[] others)
+        public static VimMesh Merge2(this VimMesh mesh, params VimMesh[] others)
         {
-            var meshes = Enumerable.Empty<IMeshCommon>()
+            var meshes = Enumerable.Empty<VimMesh>()
                 .Append(mesh)
                 .Append(others)
                 .ToArray();
@@ -267,7 +278,7 @@ namespace Vim.Format.Geometry
             return meshes.Merge();
         }
 
-        public static IMeshCommon Merge(this IMeshCommon[] meshes)
+        public static VimMesh Merge(this VimMesh[] meshes)
         {
             void Merge(IArray<int> from, int[] to, int offset, int increment)
             {
@@ -305,12 +316,12 @@ namespace Vim.Format.Geometry
             return result;
         }
 
-        public static VimMesh[] SplitSubmeshes(this IMeshCommon mesh)
+        public static VimMesh[] SplitSubmeshes(this VimMesh mesh)
         {
             return null;
         }
 
-        public static (int, List<int>)[] GroupSubmeshesByMaterials(this IMeshCommon mesh)
+        public static (int, List<int>)[] GroupSubmeshesByMaterials(this VimMesh mesh)
         {
             var submeshCount = mesh.SubmeshIndexOffsets.Count;
             var map = new Dictionary<int, List<int>>();
@@ -329,41 +340,41 @@ namespace Vim.Format.Geometry
             return map.Select(kvp => (kvp.Key, kvp.Value)).ToArray();
         }
 
-        public static Triangle VertexIndicesToTriangle(this IMeshCommon mesh, Int3 indices)
+        public static Triangle VertexIndicesToTriangle(this VimMesh mesh, Int3 indices)
             => new Triangle(mesh.Vertices[indices.X], mesh.Vertices[indices.Y], mesh.Vertices[indices.Z]);
 
-        public static bool Planar(this IMeshCommon mesh, float tolerance = Math3d.Constants.Tolerance)
+        public static bool Planar(this VimMesh mesh, float tolerance = Math3d.Constants.Tolerance)
         {
             if (mesh.NumFaces <= 1) return true;
             var normal = mesh.Triangle(0).Normal;
             return mesh.ComputedNormals().All(n => n.AlmostEquals(normal, tolerance));
         }
 
-        public static VimMesh Unindex(this IMeshCommon mesh)
+        public static VimMesh Unindex(this VimMesh mesh)
         {
             var vertices = mesh.Indices.Select(i => mesh.Vertices[i]);
             return new VimMesh(vertices.ToArray());
         }
 
-        public static IArray<Vector3> ComputedNormals(this IMeshCommon mesh)
+        public static IArray<Vector3> ComputedNormals(this VimMesh mesh)
             => mesh.Triangles().Select(t => t.Normal);
 
-        public static Triangle Triangle(this IMeshCommon mesh, int face)
+        public static Triangle Triangle(this VimMesh mesh, int face)
             => mesh.VertexIndicesToTriangle(mesh.FaceVertexIndices(face));
 
-        public static IArray<Triangle> Triangles(this IMeshCommon mesh)
+        public static IArray<Triangle> Triangles(this VimMesh mesh)
             => mesh.NumFaces.Select(mesh.Triangle);
 
-        public static Vector3 Center(this IMeshCommon mesh)
+        public static Vector3 Center(this VimMesh mesh)
             => mesh.BoundingBox().Center;
 
-        public static AABox BoundingBox(this IMeshCommon mesh)
+        public static AABox BoundingBox(this VimMesh mesh)
             => AABox.Create(mesh.Vertices.ToEnumerable());
 
-        public static Int3 FaceVertexIndices(this IMeshCommon mesh, int faceIndex)
+        public static Int3 FaceVertexIndices(this VimMesh mesh, int faceIndex)
             => new Int3(mesh.Indices[faceIndex * 3], mesh.Indices[faceIndex * 3 + 1], mesh.Indices[faceIndex * 3 + 2]);
 
-        public static bool GeometryEquals(this IMeshCommon mesh, IMeshCommon other, float tolerance = Math3d.Constants.Tolerance)
+        public static bool GeometryEquals(this VimMesh mesh, VimMesh other, float tolerance = Math3d.Constants.Tolerance)
         {
             if (!mesh.Indices.SequenceEquals(other.Indices))
                 return false;
@@ -389,11 +400,11 @@ namespace Vim.Format.Geometry
             return true;
         }
 
-        public static (int mat, IMeshCommon mesh)[] SplitByMaterial(this IMeshCommon mesh)
+        public static (int mat, VimMesh mesh)[] SplitByMaterial(this VimMesh mesh)
         {
             var map = mesh.GroupSubmeshesByMaterials();
 
-            var result = new (int, IMeshCommon)[map.Length];
+            var result = new (int, VimMesh)[map.Length];
             if (map.Length == 1)
             {
                 result[0] = (mesh.SubmeshMaterials[0], mesh);
@@ -409,7 +420,7 @@ namespace Vim.Format.Geometry
             return result;
         }
 
-        public static VimMesh PickSubmeshes(this IMeshCommon mesh, IList<int> submeshes)
+        public static VimMesh PickSubmeshes(this VimMesh mesh, IList<int> submeshes)
         {
             var map = mesh.GroupSubmeshesByMaterials();
 

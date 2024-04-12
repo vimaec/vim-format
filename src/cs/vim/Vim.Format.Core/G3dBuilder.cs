@@ -40,7 +40,7 @@ namespace Vim.Format
         public int MaterialCount => _materials.Count;
         public int ShapeCount => _shapes.Count;
 
-        public IMeshCommon GetMesh(int index) => _meshes[index];
+        public VimMesh GetMesh(int index) => _meshes[index];
         public AABox GetBox(int meshIndex)
         {
             return AABox.Create(_meshes[meshIndex].vertices);

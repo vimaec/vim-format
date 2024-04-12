@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Vim.G3d;
-using Vim.LinqArray;
 using Vim.Math3d;
 
 namespace Vim.Format.Geometry
@@ -40,7 +38,7 @@ namespace Vim.Format.Geometry
 
     public static class CatmullClarkSmoothing
     {
-        public static Dictionary<GeometryEdgeKey, GeometryEdge> CreateEdgeMap(this IMeshCommon geometry)
+        public static Dictionary<GeometryEdgeKey, GeometryEdge> CreateEdgeMap(this VimMesh geometry)
         {
             var globalEdgeIndex = 0;
             var edgeMap = new Dictionary<GeometryEdgeKey, GeometryEdge>();
@@ -69,7 +67,7 @@ namespace Vim.Format.Geometry
             return edgeMap;
         }
 
-        public static IMeshCommon CatmullClark(this IMeshCommon geometry, float smoothing = 0.0f)
+        public static VimMesh CatmullClark(this VimMesh geometry, float smoothing = 0.0f)
         {
             var edgeMap = geometry.CreateEdgeMap();
 
@@ -130,7 +128,7 @@ namespace Vim.Format.Geometry
             return GenerateMesh(geometry, newVertices, newIndices, edgeMap, facePointStartIndex, edgePointStartIndex, numQuads);
         }
 
-        public static void CalculateFaceCentroidPoints(IMeshCommon geometry, Vector3[] outFacePoints, float[] outVertexNumFaces, Vector3[] outVertexFPoints)
+        public static void CalculateFaceCentroidPoints(VimMesh geometry, Vector3[] outFacePoints, float[] outVertexNumFaces, Vector3[] outVertexFPoints)
         {
             var currentVertexIndex = 0;
             for (var faceIndex = 0; faceIndex < geometry.NumFaces; faceIndex++)
@@ -160,7 +158,7 @@ namespace Vim.Format.Geometry
             }
         }
 
-        public static void CalculateEdgePoints(IMeshCommon geometry, Dictionary<GeometryEdgeKey, GeometryEdge> edgeMap, Vector3[] facePoints, float[] outVertexNumEdges, Vector3[] outVertexRPoints, float smoothing)
+        public static void CalculateEdgePoints(VimMesh geometry, Dictionary<GeometryEdgeKey, GeometryEdge> edgeMap, Vector3[] facePoints, float[] outVertexNumEdges, Vector3[] outVertexRPoints, float smoothing)
         {
             foreach (var edge in edgeMap)
             {
@@ -187,7 +185,7 @@ namespace Vim.Format.Geometry
             }
         }
 
-        public static void CalculateVertexPoints(IMeshCommon geometry, float[] vertexNumFaces, Vector3[] vertexFPoints, float[] vertexNumEdges, Vector3[] vertexRPoints, Vector3[] outNewVertices, bool[] edgeVertices, float smoothing)
+        public static void CalculateVertexPoints(VimMesh geometry, float[] vertexNumFaces, Vector3[] vertexFPoints, float[] vertexNumEdges, Vector3[] vertexRPoints, Vector3[] outNewVertices, bool[] edgeVertices, float smoothing)
         {
             for (var index = 0; index < geometry.Vertices.Count; index++)
             {
@@ -199,7 +197,7 @@ namespace Vim.Format.Geometry
             }
         }
 
-        public static IMeshCommon GenerateMesh(IMeshCommon geometry, Vector3[] newVertices, int[] newIndices, Dictionary<GeometryEdgeKey, GeometryEdge> edgeMap, int facePointStartIndex, int edgePointStartIndex, int numQuads)
+        public static VimMesh GenerateMesh(VimMesh geometry, Vector3[] newVertices, int[] newIndices, Dictionary<GeometryEdgeKey, GeometryEdge> edgeMap, int facePointStartIndex, int edgePointStartIndex, int numQuads)
         {
             var currentNewVertexIndex = 0;
             var currentOldVertexIndex = 0;

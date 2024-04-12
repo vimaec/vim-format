@@ -10,7 +10,7 @@ namespace Vim.Format.Geometry
     // TODO: plane, cylinder, cone, ruled face, 
     public static class Primitives
     {
-        public static IMeshCommon CreateCube()
+        public static VimMesh CreateCube()
         {
             var vertices = new[] {
                 // front
@@ -49,13 +49,13 @@ namespace Vim.Format.Geometry
             return new VimMesh(indices, vertices);
         }
 
-        public static IMeshCommon CreateCube(AABox box)
+        public static VimMesh CreateCube(AABox box)
         {
             return CreateCube().Scale(box.Extent).Translate(box.Center);
         }
 
         private static float Sqrt2 = 2.0f.Sqrt();
-        public static IMeshCommon CreateTetrahedron()
+        public static VimMesh CreateTetrahedron()
         {
             var vertices = new[]
             {
@@ -67,7 +67,7 @@ namespace Vim.Format.Geometry
             var indices = new[] { 0, 1, 2, 1, 0, 3, 0, 2, 3, 1, 3, 2 };
             return new VimMesh(indices, vertices);
         }
-        public static IMeshCommon CreateSquare()
+        public static VimMesh CreateSquare()
         {
             var vertices = new[]
             {
@@ -92,7 +92,7 @@ namespace Vim.Format.Geometry
                 tube * uv.Y.Sin());
         }
 
-        public static IMeshCommon Torus(float radius, float tubeRadius, int uSegs, int vSegs)
+        public static VimMesh Torus(float radius, float tubeRadius, int uSegs, int vSegs)
             => QuadMesh(uv => TorusFunction(uv, radius, tubeRadius), uSegs, vSegs);
 
         // see: https://github.com/mrdoob/three.js/blob/9ef27d1af7809fa4d9943f8d4c4644e365ab6d2d/src/geometries/SphereBufferGeometry.js#L76
@@ -102,7 +102,7 @@ namespace Vim.Format.Geometry
                 (float)(radius * Math.Cos(uv.Y * Math3d.Constants.Pi)),
                 (float)(radius * Math.Sin(uv.X * Math3d.Constants.TwoPi) * Math.Sin(uv.Y * Math3d.Constants.Pi)));
 
-        public static IMeshCommon Sphere(float radius, int uSegs, int vSegs)
+        public static VimMesh Sphere(float radius, int uSegs, int vSegs)
             => QuadMesh(uv => SphereFunction(uv, radius), uSegs, vSegs);
 
         /// <summary>
@@ -256,13 +256,13 @@ namespace Vim.Format.Geometry
         /// <summary>
         /// Creates a quad mesh given a mapping from 2 space to 3 space 
         /// </summary>
-        public static IMeshCommon QuadMesh(this Func<Vector2, Vector3> f, int segs)
+        public static VimMesh QuadMesh(this Func<Vector2, Vector3> f, int segs)
             => QuadMesh(f, segs, segs);
 
         /// <summary>
         /// Creates a quad mesh given a mapping from 2 space to 3 space 
         /// </summary>
-        public static IMeshCommon QuadMesh(this Func<Vector2, Vector3> f, int usegs, int vsegs, bool wrapUSegs = false, bool wrapVSegs = false)
+        public static VimMesh QuadMesh(this Func<Vector2, Vector3> f, int usegs, int vsegs, bool wrapUSegs = false, bool wrapVSegs = false)
         {
             var verts = new List<Vector3>();
             var maxUSegs = wrapUSegs ? usegs : usegs + 1;
@@ -285,7 +285,7 @@ namespace Vim.Format.Geometry
         /// <summary>
         /// Creates a revolved face ... note that the last points are on top of the original 
         /// </summary>
-        public static IMeshCommon RevolveAroundAxis(this IArray<Vector3> points, Vector3 axis, int segments = 4)
+        public static VimMesh RevolveAroundAxis(this IArray<Vector3> points, Vector3 axis, int segments = 4)
         {
             var verts = new List<Vector3>();
             for (var i = 0; i < segments; ++i)

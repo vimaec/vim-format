@@ -11,14 +11,14 @@ namespace Vim.Format.Tests.Geometry
 {
     public static class GeometryTests
     {
-        public static IMeshCommon XYTriangle = new VimMesh(
+        public static VimMesh XYTriangle = new VimMesh(
             new[] { 0, 1, 2 }, new[] {
                 new Vector3(0f, 0f, 0f),
                 new Vector3(0f, 1f, 0f),
                 new Vector3(1f, 0f, 0f)
             });
 
-        public static IMeshCommon XYQuad = VimMesh.FromQuad(
+        public static VimMesh XYQuad = VimMesh.FromQuad(
             new int[] { 0, 1, 2, 3 }, new[]{
                 new Vector3(0f, 0f, 0f),
                 new Vector3(0f, 1f, 0f),
@@ -26,11 +26,11 @@ namespace Vim.Format.Tests.Geometry
                 new Vector3(1f, 0f, 0f)
             });
 
-        public static IMeshCommon XYQuadFromFunc = Primitives.QuadMesh(uv => uv.ToVector3(), 1, 1);
-        public static IMeshCommon XYQuad2x2 = Primitives.QuadMesh(uv => uv.ToVector3(), 2, 2);
-        public static IMeshCommon XYTriangleTwice = XYTriangle.Merge2(XYTriangle.Translate(new Vector3(1, 0, 0)));
+        public static VimMesh XYQuadFromFunc = Primitives.QuadMesh(uv => uv.ToVector3(), 1, 1);
+        public static VimMesh XYQuad2x2 = Primitives.QuadMesh(uv => uv.ToVector3(), 2, 2);
+        public static VimMesh XYTriangleTwice = XYTriangle.Merge2(XYTriangle.Translate(new Vector3(1, 0, 0)));
 
-        public static IMeshCommon Tetrahedron = new VimMesh(
+        public static VimMesh Tetrahedron = new VimMesh(
             new[] { 0, 1, 2, 0, 3, 1, 1, 3, 2, 2, 3, 0 }, new[] {
                 Vector3.Zero,
                 Vector3.UnitX,
@@ -38,14 +38,14 @@ namespace Vim.Format.Tests.Geometry
                 Vector3.UnitZ
             });
 
-        public static IMeshCommon Torus = Primitives.Torus(10, 0.2f, 10, 24);
+        public static VimMesh Torus = Primitives.Torus(10, 0.2f, 10, 24);
 
-        static IMeshCommon RevolvedVerticalCylinder(float height, float radius, int verticalSegments, int radialSegments)
+        static VimMesh RevolvedVerticalCylinder(float height, float radius, int verticalSegments, int radialSegments)
             => (Vector3.UnitZ * height).ToLine().Interpolate(verticalSegments).Add(-radius.AlongX()).RevolveAroundAxis(Vector3.UnitZ, radialSegments);
 
-        public static IMeshCommon Cylinder = RevolvedVerticalCylinder(5, 1, 4, 12);
+        public static VimMesh Cylinder = RevolvedVerticalCylinder(5, 1, 4, 12);
 
-        public static IMeshCommon[] AllMeshes = {
+        public static VimMesh[] AllMeshes = {
             XYTriangle, // 0
             XYQuad, // 1
             XYQuadFromFunc, // 2
@@ -58,7 +58,7 @@ namespace Vim.Format.Tests.Geometry
 
         public static double SmallTolerance = 0.0001;
 
-        public static void GeometryNullOps(IMeshCommon g)
+        public static void GeometryNullOps(VimMesh g)
         {
             g.GeometryEquals(g);
             g.Translate(Vector3.Zero).GeometryEquals(g);

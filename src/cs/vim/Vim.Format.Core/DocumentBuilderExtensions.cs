@@ -10,7 +10,7 @@ namespace Vim.Format
 {
     public static class DocumentBuilderExtensions
     {
-        public static SubdividedMesh ToDocumentBuilderSubdividedMesh(this IMeshCommon m)
+        public static SubdividedMesh ToDocumentBuilderSubdividedMesh(this VimMesh m)
             => new SubdividedMesh(
                 m.Indices.ToList(),
                 m.Vertices.ToList(),

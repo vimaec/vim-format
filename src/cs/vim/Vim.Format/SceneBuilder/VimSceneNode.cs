@@ -28,13 +28,7 @@ namespace Vim
         public Matrix4x4 Transform { get; }
 
         public bool HideByDefault
-        {
-            get
-            {
-                var instanceFlags = (InstanceFlags)Scene.Document.Geometry.InstanceFlags.ElementAtOrDefault(NodeIndex);
-                return (instanceFlags & InstanceFlags.Hidden) == InstanceFlags.Hidden;
-            }
-        }
+            => Scene.Document.GeometryNext.InstanceHasFlag(NodeIndex, G3dNext.InstanceFlags.Hidden);
 
         public int VimIndex { get; } = -1;
         public int NodeIndex { get; } = -1;
@@ -58,7 +52,7 @@ namespace Vim
         VimSceneNode ITransformable3D<VimSceneNode>.Transform(Matrix4x4 mat)
             => new VimSceneNode(Scene, Id, MeshIndex, mat * Transform);
 
-        public IMeshCommon TransformedMesh()
+        public VimMesh TransformedMesh()
              => GetMesh()?.Transform(Transform);
 
         public IArray<Vector3> TransformedVertices()
@@ -70,7 +64,7 @@ namespace Vim
 
     public static class NodeExtensions
     {
-        public static IMeshCommon MergedGeometry(this IEnumerable<VimSceneNode> nodes)
+        public static VimMesh MergedGeometry(this IEnumerable<VimSceneNode> nodes)
            => nodes.Where(n => n.GetMesh() != null).Select(n => n.TransformedMesh()).ToArray().Merge();
     }
 }

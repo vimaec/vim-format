@@ -200,32 +200,6 @@ public static class SerializableDocumentTests
     //    mesh.SubmeshMaterials.Sum();
     //}
 
-    private static void Consume(IMeshCommon mesh)
-    {
-        mesh.Indices.Sum();
-        mesh.Vertices.Sum(v => v.X);
-        mesh.SubmeshIndexOffsets.Sum();
-        mesh.SubmeshIndexCounts.Sum();
-        mesh.SubmeshMaterials.Sum();
-    }
-
-
-    //private static void MeshesAreSame(IMesh mesh, IMeshCommon next)
-    //{
-    //    Assert.That(mesh.Indices.SequenceEquals(next.Indices));
-    //    Assert.That(mesh.Vertices.SequenceEquals(next.Vertices));
-    //    Assert.That(mesh.SubmeshIndexOffsets.SequenceEquals(next.SubmeshIndexOffsets));
-    //    Assert.That(mesh.SubmeshMaterials.SequenceEquals(next.SubmeshMaterials));
-    //    Assert.That(mesh.SubmeshIndexCount.SequenceEquals(next.SubmeshIndexCounts));
-    //}
-    private static void MeshesAreSame(IMeshCommon mesh, IMeshCommon next)
-    {
-        Assert.That(mesh.Indices.SequenceEquals(next.Indices));
-        Assert.That(mesh.Vertices.SequenceEquals(next.Vertices));
-        Assert.That(mesh.SubmeshIndexOffsets.SequenceEquals(next.SubmeshIndexOffsets));
-        Assert.That(mesh.SubmeshMaterials.SequenceEquals(next.SubmeshMaterials));
-        Assert.That(mesh.SubmeshIndexCounts.SequenceEquals(next.SubmeshIndexCounts));
-    }
 
     private static void ShapesAreSame(VimShape mesh, VimShapeNext next)
     {

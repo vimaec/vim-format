@@ -82,10 +82,10 @@ namespace Vim
         public int GetShapeCount() => Shapes.Length;
         public int GetNodeCount() => Nodes.Length;
 
-        public IEnumerable<IMeshCommon> TransformedMeshes()
+        public IEnumerable<VimMesh> TransformedMeshes()
             => Nodes.Where(n => n.GetMesh() != null).Select(n => n.TransformedMesh());
 
-        public IMeshCommon MergedGeometry()
+        public VimMesh MergedGeometry()
             => Nodes.MergedGeometry();
 
         public IEnumerable<Vector3> AllVertices()
