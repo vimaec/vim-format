@@ -4,6 +4,21 @@ using Vim.BFastLib;
 
 namespace Vim.G3dNext
 {
+    [Flags]
+    public enum InstanceFlags
+    {
+        /// <summary>
+        /// Default - no instance options defined.
+        /// </summary>
+        None = 0,
+
+        /// <summary>
+        /// When enabled, indicates that the renderer (or the consuming application) should hide
+        /// the instance by default.
+        /// </summary>
+        Hidden = 1,
+    }
+
     public partial class G3dVim
     {
 
@@ -19,6 +34,11 @@ namespace Vim.G3dNext
         public int GetApproxSize(int mesh)
         {
             return GetMeshVertexCount(mesh) * 12 + GetMeshIndexCount(mesh) * 4;
+        }
+
+        public bool InstanceHasFlag(int index, InstanceFlags flag)
+        {
+            return InstanceFlags[index] == (int)flag;
         }
 
         void ISetup.Setup()
