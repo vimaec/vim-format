@@ -363,22 +363,6 @@ namespace Vim.Format.Geometry
         public static Int3 FaceVertexIndices(this IMeshCommon mesh, int faceIndex)
             => new Int3(mesh.Indices[faceIndex * 3], mesh.Indices[faceIndex * 3 + 1], mesh.Indices[faceIndex * 3 + 2]);
 
-        /// <summary>
-        /// Low-level remap function. Maps faces and corners at the same time.
-        /// In some cases, this is important (e.g. triangulating quads).
-        /// Note: meshes are lost.
-        /// </summary>
-        public static IGeometryAttributes RemapFacesAndCorners(this IGeometryAttributes g, IArray<int> faceRemap, IArray<int> cornerRemap, int numCornersPerFace = -1)
-            => g.VertexAttributes()
-                .Concat(g.NoneAttributes())
-                .Concat(g.FaceAttributes().Select(attr => attr.Remap(faceRemap)))
-                .Concat(g.EdgeAttributes().Select(attr => attr.Remap(cornerRemap)))
-                .Concat(g.CornerAttributes().Select(attr => attr.Remap(cornerRemap)))
-                .Concat(g.WholeGeometryAttributes())
-                .SetFaceSizeAttribute(numCornersPerFace)
-                .ToGeometryAttributes();
-
-
         public static bool GeometryEquals(this IMeshCommon mesh, IMeshCommon other, float tolerance = Math3d.Constants.Tolerance)
         {
             if (!mesh.Indices.SequenceEquals(other.Indices))
