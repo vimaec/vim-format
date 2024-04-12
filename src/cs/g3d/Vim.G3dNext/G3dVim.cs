@@ -87,9 +87,14 @@ namespace Vim.G3dNext
             return result;
         }
 
-        public int GetTriangleCount()
+        public G3dVim RemoveShapes()
         {
-            return GetIndexCount() / 3;
+            var result = Clone();
+            result.ShapeVertexOffsets = null;
+            result.ShapeWidths = null;
+            result.ShapeColors = null;
+            result.ShapeVertices = null;
+            return result;
         }
 
         /// <summary>
