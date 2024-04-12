@@ -85,6 +85,11 @@ namespace Vim.G3dNext.CodeGen
             return bfast;
         }}
 
+        public {entity.ClassName} Clone()
+        {{
+            return this.MemberwiseClone() as {entity.ClassName};
+        }}
+
         public bool Equals({entity.ClassName} other )
         {{
             return {string.Join(" && \n \t\t\t", entity.Buffers.Select(b =>

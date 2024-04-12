@@ -109,6 +109,11 @@ namespace Vim.G3dNext
             return bfast;
         }
 
+        public G3dVim Clone()
+        {
+            return this.MemberwiseClone() as G3dVim;
+        }
+
         public bool Equals(G3dVim other )
         {
             return BufferMethods.SafeEquals(Indices, other.Indices) && 
@@ -245,6 +250,11 @@ namespace Vim.G3dNext
             return bfast;
         }
 
+        public G3dChunk Clone()
+        {
+            return this.MemberwiseClone() as G3dChunk;
+        }
+
         public bool Equals(G3dChunk other )
         {
             return BufferMethods.SafeEquals(MeshOpaqueSubmeshCounts, other.MeshOpaqueSubmeshCounts) && 
@@ -329,6 +339,11 @@ namespace Vim.G3dNext
  			bfast.SetArray<System.Single>("g3d:material:smoothness:0:float32:1", MaterialSmoothness);
 
             return bfast;
+        }
+
+        public G3dMaterials Clone()
+        {
+            return this.MemberwiseClone() as G3dMaterials;
         }
 
         public bool Equals(G3dMaterials other )
@@ -460,6 +475,11 @@ namespace Vim.G3dNext
  			bfast.SetArray<System.Int32>("g3d:mesh:opaqueindexcount:0:int32:1", MeshOpaqueIndexCounts);
 
             return bfast;
+        }
+
+        public G3dScene Clone()
+        {
+            return this.MemberwiseClone() as G3dScene;
         }
 
         public bool Equals(G3dScene other )
