@@ -265,7 +265,7 @@ namespace Vim.Format.ObjectModel
         }
 
         public static Dictionary<int, HashSet<int>> GetViewToElementsMap(
-            this IArray<ElementInView> elementInViewList)
+            this ElementInView[] elementInViewList)
             => elementInViewList
                 .Select(eiv => (viewIndex: eiv._View?.Index ?? -1, elementIndex: eiv._Element?.Index ?? -1))
                 .GroupBy(t => t.viewIndex)
@@ -275,7 +275,7 @@ namespace Vim.Format.ObjectModel
 
         public static void ValidateShapesInView(this DocumentModel dm)
         {
-            var viewToElementsMap = dm.ElementInViewList.GetViewToElementsMap();
+            var viewToElementsMap = dm.ElementInViewList.ToArray().GetViewToElementsMap();
 
             // Validate that the shapes in view have an element which is also in the same view.
             foreach (var item in dm.ShapeInViewList.ToEnumerable())
