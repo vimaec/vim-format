@@ -28,40 +28,6 @@ public static class SerializableDocumentTests
         scene.Validate();
     }
 
-    [Test]
-    public static void ShapesAreSame()
-    {
-        var path = VimFormatRepoPaths.GetLatestWolfordResidenceVim();
-        var scene = VimScene.LoadVim(path);
-
-        var shapes = scene.ShapesOld;
-        var next = scene.Shapes;
-        Assert.AreEqual(shapes.Count, next.Length);
-        for (var i = 0; i < shapes.Count; i++)
-        {
-            ShapesAreSame(shapes[i], next[i]);
-        }
-    }
-
-
-
-    [Test]
-    public static void Materials_AreSame()
-    {
-        var path = VimFormatRepoPaths.GetLatestWolfordResidenceVim();
-        var scene = VimScene.LoadVim(path);
-
-        var mats = scene.MaterialsOld;
-        var next = scene.Materials;
-        Assert.AreEqual(mats.Count, next.Length);
-        for (var i = 0; i < mats.Count; i++)
-        {
-            MaterialsAreSame(mats[i], next[i]);
-        }
-
-    }
-
-
     //[Test]
     //public static void GetMesh_IsSameMesh()
     //{
@@ -196,14 +162,6 @@ public static class SerializableDocumentTests
     //    mesh.SubmeshIndexCount.Sum();
     //    mesh.SubmeshMaterials.Sum();
     //}
-
-
-    private static void ShapesAreSame(VimShape mesh, VimShapeNext next)
-    {
-        Assert.That(mesh.Vertices.ToEnumerable().SequenceEqual(next.Vertices));
-        Assert.AreEqual(mesh.Color, next.Color);
-        Assert.AreEqual(mesh.Width, next.Width);
-    }
 
     private static void MaterialsAreSame(IMaterial mesh, VimMaterialNext next)
     {

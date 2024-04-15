@@ -66,10 +66,6 @@ namespace Vim
         public VimShapeNext[] Shapes { get; private set; }
         public VimMaterialNext[] Materials { get; private set; }
 
-        public IArray<VimShape> ShapesOld { get; private set; }
-        public IArray<IMaterial> MaterialsOld { get; private set; }
-        public IArray<IMeshCommon> MeshesOld { get; private set; }
-
         public SerializableDocument _SerializableDocument { get; }
         public Document Document { get; private set; }
         public DocumentModel DocumentModel { get; private set; }
@@ -204,7 +200,6 @@ namespace Vim
             }
 
             Meshes = VimMesh.GetAllMeshes(_SerializableDocument.GeometryNext).ToArray();
-            MeshesOld = _SerializableDocument.Geometry?.Meshes.Select(m => m as IMeshCommon);
         }
 
         private void CreateShapes(bool inParallel)
@@ -213,8 +208,6 @@ namespace Vim
             {
                 return;
             }
-            var r = _SerializableDocument.Geometry.Shapes.Select((s, i) => new VimShape(this, i));
-            ShapesOld = inParallel ? r.EvaluateInParallel() : r.Evaluate();
             Shapes = VimShapeNext.FromG3d(_SerializableDocument.GeometryNext).ToArray();
         }
 
@@ -225,7 +218,7 @@ namespace Vim
                 return;
             }
 
-            Nodes = CreateVimSceneNodes(this, _SerializableDocument.Geometry, inParallel);
+            Nodes = CreateVimSceneNodes(this, _SerializableDocument.GeometryNext, inParallel);
         }
 
         private void CreateMaterials(bool inParallel)
@@ -234,14 +227,10 @@ namespace Vim
             {
                 return;
             }
-
-            var query = _SerializableDocument.Geometry.Materials.Select(m => new VimMaterial(m) as IMaterial);
-            MaterialsOld = inParallel ? query.EvaluateInParallel() : query.Evaluate();
             Materials = VimMaterialNext.FromG3d(_SerializableDocument.GeometryNext).ToArray();
-
         }
 
-        public static VimSceneNode[] CreateVimSceneNodes(VimScene scene, G3D g3d, bool inParallel)
+        public static VimSceneNode[] CreateVimSceneNodes(VimScene scene, G3dVim g3d, bool inParallel)
         {
             Matrix4x4 GetMatrix(int i) => i >= 0 ? g3d.InstanceTransforms[i] : Matrix4x4.Identity;
 

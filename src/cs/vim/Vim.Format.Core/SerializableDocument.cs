@@ -52,11 +52,6 @@ namespace Vim.Format
         /// <summary>
         /// The uninstanced / untransformed geometry
         /// </summary>
-        public G3d.G3D Geometry;
-
-        /// <summary>
-        /// The uninstanced / untransformed geometry
-        /// </summary>
         public G3dVim GeometryNext;
 
         /// <summary>
@@ -128,7 +123,6 @@ namespace Vim.Format
             {
                 var geo = bfast.GetBFast(BufferNames.Geometry);
                 doc.GeometryNext = new G3dVim(geo);
-                doc.Geometry = G3D.Read(geo);
             }
 
             var entities = bfast.GetBFast(BufferNames.Entities);

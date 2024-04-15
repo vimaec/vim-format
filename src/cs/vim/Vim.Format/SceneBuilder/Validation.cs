@@ -91,7 +91,7 @@ namespace Vim.Format.SceneBuilder
         {
             var shapes = vim.Shapes;
             if (vim.GetShapeCount() != vim.DocumentModel.NumShape)
-                throw new VimValidationException($"The number of {nameof(VimShape)} ({vim.GetShapeCount()}) does not match the number of shape entities ({vim.DocumentModel.NumShape})");
+                throw new VimValidationException($"The number of {nameof(VimShapeNext)} ({vim.GetShapeCount()}) does not match the number of shape entities ({vim.DocumentModel.NumShape})");
 
             void ValidateColorDomain(string label, Vector4 value, Vector4 lowerInclusive, Vector4 upperInclusive, int index)
             {
@@ -113,8 +113,8 @@ namespace Vim.Format.SceneBuilder
                 var shape = shapes[shapeIndex];
                 var element = vim.DocumentModel.GetShapeElementIndex(shapeIndex);
                 if (element < 0)
-                    throw new VimValidationException($"{nameof(Element)} is null for {nameof(VimShape)} {shape.Index}");
-                ValidateColorDomain($"{nameof(VimShape)} color", shape.Color, Vector4.Zero, Vector4.One, shape.Index);
+                    throw new VimValidationException($"{nameof(Element)} is null for {nameof(VimShapeNext)} {shape.Index}");
+                ValidateColorDomain($"{nameof(VimShapeNext)} color", shape.Color, Vector4.Zero, Vector4.One, shape.Index);
             });
         }
 

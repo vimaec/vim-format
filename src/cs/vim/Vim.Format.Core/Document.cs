@@ -11,7 +11,6 @@ namespace Vim.Format
         {
             _Document = document;
             Header = _Document.Header;
-            Geometry = _Document.Geometry;
             GeometryNext = _Document.GeometryNext;
             StringTable = _Document.StringTable.ToIArray();
             EntityTables = _Document.EntityTables.ToLookup(
@@ -27,7 +26,6 @@ namespace Vim.Format
         public ILookup<string, INamedBuffer> Assets { get; }
         public IArray<string> StringTable { get; }
         public string GetString(int index) => StringTable.ElementAtOrDefault(index);
-        public G3d.G3D Geometry { get; }
         public G3dVim GeometryNext { get; }
     }
 }
