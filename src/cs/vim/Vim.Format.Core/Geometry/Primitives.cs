@@ -280,20 +280,5 @@ namespace Vim.Format.Geometry
 
             return VimMesh.FromQuad(indices, verts.ToArray());
         }
-
-        /// <summary>
-        /// Creates a revolved face ... note that the last points are on top of the original 
-        /// </summary>
-        public static VimMesh RevolveAroundAxis(this IArray<Vector3> points, Vector3 axis, int segments = 4)
-        {
-            var verts = new List<Vector3>();
-            for (var i = 0; i < segments; ++i)
-            {
-                var angle = Math3d.Constants.TwoPi / segments;
-                points.Rotate(axis, angle).AddTo(verts);
-            }
-            var indices = ComputeQuadMeshStripIndices(segments - 1, points.Count - 1);
-            return new VimMesh(indices, verts.ToArray());
-        }
     }
 }
