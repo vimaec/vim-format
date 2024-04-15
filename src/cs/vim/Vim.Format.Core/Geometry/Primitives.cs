@@ -119,7 +119,7 @@ namespace Vim.Format.Geometry
         /// <summary>
         /// Computes the indices of a quad mesh astrip.
         /// </summary>
-        public static IArray<int> ComputeQuadMeshStripIndices(int usegs, int vsegs, bool wrapUSegs = false, bool wrapVSegs = false)
+        public static int[] ComputeQuadMeshStripIndices(int usegs, int vsegs, bool wrapUSegs = false, bool wrapVSegs = false)
         {
             var indices = new List<int>();
 
@@ -143,7 +143,7 @@ namespace Vim.Format.Geometry
                 }
             }
 
-            return indices.ToIArray();
+            return indices.ToArray();
         }
 
         /// <summary>
@@ -278,7 +278,7 @@ namespace Vim.Format.Geometry
             }
             var indices = ComputeQuadMeshStripIndices(usegs, vsegs, wrapUSegs, wrapVSegs);
 
-            return VimMesh.FromQuad(indices.ToArray(), verts.ToArray());
+            return VimMesh.FromQuad(indices, verts.ToArray());
         }
 
         /// <summary>
@@ -293,7 +293,7 @@ namespace Vim.Format.Geometry
                 points.Rotate(axis, angle).AddTo(verts);
             }
             var indices = ComputeQuadMeshStripIndices(segments - 1, points.Count - 1);
-            return new VimMesh(indices.ToArray(), verts.ToArray());
+            return new VimMesh(indices, verts.ToArray());
         }
     }
 }
