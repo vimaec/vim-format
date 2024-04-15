@@ -5,6 +5,14 @@ using Vim.Math3d;
 
 namespace Vim.Format.Geometry
 {
+    public interface IMaterial
+    {
+        Vector4 Color { get; }
+        float Smoothness { get; }
+        float Glossiness { get; }
+    }
+
+
     public class VimMaterialNext : IMaterial
     {
         public G3dVim g3d;
