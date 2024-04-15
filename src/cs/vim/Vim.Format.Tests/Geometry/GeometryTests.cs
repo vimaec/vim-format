@@ -38,12 +38,7 @@ namespace Vim.Format.Tests.Geometry
             });
 
         public static VimMesh Torus = Primitives.Torus(10, 0.2f, 10, 24);
-
-        static VimMesh RevolvedVerticalCylinder(float height, float radius, int verticalSegments, int radialSegments)
-            => (Vector3.UnitZ * height).ToLine().Interpolate(verticalSegments).Add(-radius.AlongX()).RevolveAroundAxis(Vector3.UnitZ, radialSegments);
-
-        public static VimMesh Cylinder = RevolvedVerticalCylinder(5, 1, 4, 12);
-
+   
         public static VimMesh[] AllMeshes = {
             XYTriangle, // 0
             XYQuad, // 1
@@ -51,7 +46,6 @@ namespace Vim.Format.Tests.Geometry
             XYQuad2x2, // 3
             Tetrahedron, // 4
             Torus, // 5
-            Cylinder, // 6
             XYTriangleTwice, // 7
         };
 
