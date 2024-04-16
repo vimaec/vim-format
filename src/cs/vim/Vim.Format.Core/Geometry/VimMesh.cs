@@ -259,7 +259,7 @@ namespace Vim.Format.Geometry
         {
             var meshes = Enumerable.Empty<VimMesh>()
                 .Append(mesh)
-                .Append(others)
+                .Concat(others)
                 .ToArray();
 
             return meshes.Merge();

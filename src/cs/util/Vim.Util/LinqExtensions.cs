@@ -24,7 +24,7 @@ namespace Vim.Util
         /// <summary>
         /// Returns the index of the first element matching the given item.
         /// </summary>
-        public static int IndexOf<T>(this IList<T> self, T value) where T:IEquatable<T>
+        public static int IndexOf<T>(this IList<T> self, T value) where T : IEquatable<T>
         {
             for (var i = 0; i < self.Count; ++i)
             {
@@ -32,6 +32,19 @@ namespace Vim.Util
                     return i;
             }
             return -1;
+        }
+
+        /// <summary>
+        /// [a, b, c ..] => [0, a, a+b, a+b+c ...]
+        /// </summary>
+        public static int[] OffsetsFromCounts(this IList<int> self)
+        {
+            var result = new int[self.Count];
+            for (var i = 1; i < self.Count; ++i)
+            {
+                result[i] = result[i - 1] + self[i-1];
+            }
+            return result;
         }
 
         /// <summary>
