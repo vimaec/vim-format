@@ -1,6 +1,7 @@
 ﻿using Vim.LinqArray;
 using Vim.BFastLib;
 using Vim.G3dNext;
+using Vim.Util;
 
 namespace Vim.Format
 {
@@ -12,7 +13,7 @@ namespace Vim.Format
             _Document = document;
             Header = _Document.Header;
             GeometryNext = _Document.GeometryNext;
-            StringTable = _Document.StringTable.ToIArray();
+            StringTable = _Document.StringTable;
             EntityTables = _Document.EntityTables.ToLookup(
                 et => et.Name,
                 et => et.ToEntityTable(this));
@@ -24,7 +25,7 @@ namespace Vim.Format
         public SerializableHeader Header { get; }
         public ILookup<string, EntityTable> EntityTables { get; }
         public ILookup<string, INamedBuffer> Assets { get; }
-        public IArray<string> StringTable { get; }
+        public string[] StringTable { get; }
         public string GetString(int index) => StringTable.ElementAtOrDefault(index);
         public G3dVim GeometryNext { get; }
     }

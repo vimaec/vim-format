@@ -10,7 +10,6 @@ namespace Vim.Format.Geometry
 {
     public static class ArrayOps
     {
-    
         public static IArray< int > Add(this IArray< int > self, IArray< int > other) => self.Zip(other, MathOps.Add); 
         public static IArray< int > Add(this IArray< int > self, int scalar) => self.Select(x => MathOps.Add(x, scalar)); 
         public static IArray< int > Add(this int self, IArray< int > vector) => vector.Select(x => MathOps.Add(self, x)); 

@@ -13,8 +13,8 @@ namespace Vim.Format
         public static EntityTable ToEntityTable(this SerializableEntityTable entityTable, Document document)
             => new EntityTable(document, entityTable);
 
-        public static IArray<string> GetColumnNames(this EntityTable table)
-            => table.Columns.Select(b => b.Name);
+        public static string[] GetColumnNames(this EntityTable table)
+            => table.Columns.Select(b => b.Name).ToArray();
 
         public static void ValidateRelations(this Document doc)
         {

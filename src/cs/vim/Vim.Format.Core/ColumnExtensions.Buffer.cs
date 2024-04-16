@@ -196,8 +196,8 @@ namespace Vim.Format
                 DataColumns = thisTable.DataColumns.ConcatDataColumns(otherTable.DataColumns),
             }.ValidateColumnRowsAreAligned();
 
-        public static IArray<T> GetColumnValues<T>(this INamedBuffer nb) where T : unmanaged
-            => nb.AsArray<T>().ToIArray();
+        public static T[] GetColumnValues<T>(this INamedBuffer nb) where T : unmanaged
+            => nb.AsArray<T>();
 
         /// <summary>
         /// Returns a new collection of index columns in which the designated column names have repeated values of VimConstants.NoEntityRelation.

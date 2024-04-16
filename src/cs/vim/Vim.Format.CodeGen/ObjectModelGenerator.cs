@@ -71,7 +71,7 @@ public static class ObjectModelGenerator
                 var dataColumnGetter = $"{t.Name}EntityTable?.{functionName}(\"{eci.SerializedValueColumnName}\")";
                 if (eci.EntityColumnAttribute.SerializedType != fieldType)
                 {
-                    dataColumnGetter += $"?.Select(v => ({fieldTypeName}) v)";
+                    dataColumnGetter += $"?.Select(v => ({fieldTypeName}) v).ToArray()";
                 }
                 return dataColumnGetter;
             }).ToArray();
@@ -80,9 +80,9 @@ public static class ObjectModelGenerator
                 ? $"({string.Join(" ?? ", dataColumnGetters)})"
                 : dataColumnGetters[0];
 
-            cb.AppendLine($"public IArray<{fieldTypeName}> {t.Name}{fieldName} {{ get; }}");
+            cb.AppendLine($"public {fieldTypeName}[] {t.Name}{fieldName} {{ get; }}");
             constructor.ArraysInitializers
-                       .Add($"{t.Name}{fieldName} = {dataColumnGetterString} ?? Array.Empty<{fieldTypeName}>().ToIArray();");
+                       .Add($"{t.Name}{fieldName} = {dataColumnGetterString} ?? Array.Empty<{fieldTypeName}>();");
 
             // Safe accessor.
             var defaultValue = baseStrategy == ValueSerializationStrategy.SerializeAsStringColumn ? "\"\"" : "default";
@@ -94,9 +94,9 @@ public static class ObjectModelGenerator
         {
             var (indexColumnName, localFieldName) = fieldInfo.GetIndexColumnInfo();
 
-            cb.AppendLine($"public IArray<int> {t.Name}{localFieldName}Index {{ get; }}");
+            cb.AppendLine($"public int[] {t.Name}{localFieldName}Index {{ get; }}");
             constructor.RelationalColumns
-                       .Add($"{t.Name}{localFieldName}Index = {t.Name}EntityTable?.GetIndexColumnValues(\"{indexColumnName}\") ?? Array.Empty<int>().ToIArray();");
+                       .Add($"{t.Name}{localFieldName}Index = {t.Name}EntityTable?.GetIndexColumnValues(\"{indexColumnName}\") ?? Array.Empty<int>();");
 
             cb.AppendLine($"public int Get{t.Name}{localFieldName}Index(int index) => {t.Name}{localFieldName}Index?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;");
         }
@@ -105,7 +105,7 @@ public static class ObjectModelGenerator
         cb.AppendLine($"public int Num{t.Name} => {t.Name}EntityTable?.NumRows ?? 0;");
 
         // Entity lists
-        cb.AppendLine($"public IArray<{t.Name}> {t.Name}List {{ get; }}");
+        cb.AppendLine($"public {t.Name}[] {t.Name}List {{ get; }}");
 
         // Element getter function
         cb.AppendLine($"public {t.Name} Get{t.Name}(int n)");
@@ -231,7 +231,7 @@ public static class ObjectModelGenerator
         cb.AppendLine("// All entity collections");
         cb.AppendLine("public Dictionary<string, IEnumerable<Entity>> AllEntities => new Dictionary<string, IEnumerable<Entity>>() {");
         foreach (var t in entityTypes)
-            cb.AppendLine($"{{\"{t.GetEntityTableName()}\", {t.Name}List.ToEnumerable()}},");
+            cb.AppendLine($"{{\"{t.GetEntityTableName()}\", {t.Name}List}},");
         cb.AppendLine("};");
         cb.AppendLine();
 
@@ -265,7 +265,7 @@ public static class ObjectModelGenerator
 
         cb.AppendLine("// Initialize entity collections");
         foreach (var t in entityTypes)
-            cb.AppendLine($"{t.Name}List = Num{t.Name}.Select(i => Get{t.Name}(i));");
+            cb.AppendLine($"{t.Name}List = Enumerable.Range(0, Num{t.Name}).Select(i => Get{t.Name}(i)).ToArray();");
         cb.AppendLine();
 
         cb.AppendLine("// Initialize element index maps");
@@ -352,6 +352,7 @@ public static class ObjectModelGenerator
             cb.AppendLine("using Vim.Math3d;");
             cb.AppendLine("using Vim.LinqArray;");
             cb.AppendLine("using Vim.Format.ObjectModel;");
+            cb.AppendLine("using Vim.Util;");
 
             cb.AppendLine();
 

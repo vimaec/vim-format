@@ -156,7 +156,7 @@ namespace Vim
         public static Vector4 ToDiffuseColor(this DVector3 v, double transparency)
             => new Vector4((float)v.X, (float)v.Y, (float)v.Z, 1.0f - (float)transparency);
 
-        public static IArray<Vector4> MaterialColors(this VimScene scene) => scene.DocumentModel.MaterialList.Select(GetDiffuseColor);
+        public static Vector4[] MaterialColors(this VimScene scene) => scene.DocumentModel.MaterialList.Select(GetDiffuseColor).ToArray();
 
         public static Vector4 DefaultColor = new Vector4(0.5f, 0.5f, 0.5f, 1);
 

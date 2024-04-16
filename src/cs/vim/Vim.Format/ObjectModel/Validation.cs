@@ -5,6 +5,7 @@ using System.Reflection;
 using System.Threading.Tasks;
 using Vim.LinqArray;
 using Vim.Math3d;
+using Vim.Util;
 
 namespace Vim.Format.ObjectModel
 {
@@ -58,7 +59,7 @@ namespace Vim.Format.ObjectModel
             if (dm.NumBimDocument == 0 && validationOptions.BimDocumentMustExist)
                 throw new ObjectModelValidationException($"No {nameof(BimDocument)} found.");
 
-            foreach (var bd in dm.BimDocumentList.ToEnumerable())
+            foreach (var bd in dm.BimDocumentList)
             {
                 var bdElement = bd.Element;
                 if (bdElement == null)
@@ -150,7 +151,7 @@ namespace Vim.Format.ObjectModel
 
         public static void ValidateParameters(this DocumentModel dm)
         {
-            Parallel.ForEach(dm.ParameterList.ToEnumerable(), p =>
+            Parallel.ForEach(dm.ParameterList, p =>
             {
                 // Each parameter must be associated to an element.
                 if (p._Element.Index == EntityRelation.None)
@@ -162,7 +163,7 @@ namespace Vim.Format.ObjectModel
             });
 
             // Validate the parameter descriptors.
-            foreach (var pd in dm.ParameterDescriptorList.ToEnumerable())
+            foreach (var pd in dm.ParameterDescriptorList)
             {
                 if (pd.DisplayUnit == null)
                     throw new ObjectModelValidationException($"{nameof(DisplayUnit)} is null for {nameof(ParameterDescriptor)} {pd.Index}");
@@ -198,7 +199,7 @@ namespace Vim.Format.ObjectModel
             }
 
             // Validate that the phase order information covers the set of phases.
-            var phaseIndexSet = new HashSet<int>(dm.PhaseList.Select(p => p.Index).ToEnumerable());
+            var phaseIndexSet = new HashSet<int>(dm.PhaseList.Select(p => p.Index));
             phaseIndexSet.ExceptWith(poArray.Select(po => po.Index));
             if (phaseIndexSet.Count != 0)
                 throw new ObjectModelValidationException($"{nameof(Phase)} index coverage is incomplete among {nameof(PhaseOrderInBimDocument)}");
@@ -253,7 +254,7 @@ namespace Vim.Format.ObjectModel
                 }
             }
 
-            foreach (var material in dm.MaterialList.ToEnumerable())
+            foreach (var material in dm.MaterialList)
             {
                 var index = material.Index;
                 ValidateDVector3Domain(nameof(material.Color), material.Color, DVector3.Zero, DVector3.One, index);
@@ -278,7 +279,7 @@ namespace Vim.Format.ObjectModel
             var viewToElementsMap = dm.ElementInViewList.ToArray().GetViewToElementsMap();
 
             // Validate that the shapes in view have an element which is also in the same view.
-            foreach (var item in dm.ShapeInViewList.ToEnumerable())
+            foreach (var item in dm.ShapeInViewList)
             {
                 var viewIndex = item._View.Index;
                 var shape = item.Shape;
@@ -302,7 +303,7 @@ namespace Vim.Format.ObjectModel
 
             Parallel.ForEach(entityWithElementTypes, entityWithElementType =>
             {
-                var elementIndices = ((IArray<int>)dm.GetPropertyValue(entityWithElementType.Name + "ElementIndex")).ToArray();
+                var elementIndices = ((int[])dm.GetPropertyValue(entityWithElementType.Name + "ElementIndex")).ToArray();
                 for (var i = 0; i < elementIndices.Length; ++i)
                 {
                     var elementIndex = elementIndices[i];
@@ -316,7 +317,7 @@ namespace Vim.Format.ObjectModel
 
         public static void ValidateElementInSystem(this DocumentModel dm)
         {
-            foreach (var eis in dm.ElementInSystemList.ToEnumerable())
+            foreach (var eis in dm.ElementInSystemList)
             {
                 if (eis.System == null)
                     throw new ObjectModelValidationException($"{nameof(ElementInSystem)} @ {eis.Index} has a null {nameof(ElementInSystem.System)}");
