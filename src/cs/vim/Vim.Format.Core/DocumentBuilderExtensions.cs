@@ -3,6 +3,7 @@ using System.Linq;
 using Vim.BFastLib;
 using Vim.Format.Geometry;
 using Vim.LinqArray;
+using Vim.Util;
 using static Vim.Format.DocumentBuilder;
 
 namespace Vim.Format
@@ -21,17 +22,17 @@ namespace Vim.Format
             var name = table.Name;
             var tb = db.CreateTableBuilder(name);
 
-            foreach (var col in table.IndexColumns.Values.ToEnumerable())
+            foreach (var col in table.IndexColumns.Values)
             {
                 tb.AddIndexColumn(col.Name, col.GetTypedData().RemapData(nodeIndexRemapping));
             }
 
-            foreach (var col in table.DataColumns.Values.ToEnumerable())
+            foreach (var col in table.DataColumns.Values)
             {
                 tb.AddDataColumn(col.Name, col.CopyDataColumn(nodeIndexRemapping));
             }
 
-            foreach (var col in table.StringColumns.Values.ToEnumerable())
+            foreach (var col in table.StringColumns.Values)
             {
                 var strings = col.GetTypedData().Select(i => table.Document.StringTable.ElementAtOrDefault(i, null));
                 tb.AddStringColumn(col.Name, strings.ToArray().RemapData(nodeIndexRemapping));
@@ -42,7 +43,7 @@ namespace Vim.Format
 
         public static DocumentBuilder CopyTablesFrom(this DocumentBuilder db, Document doc, List<int> nodeIndexRemapping = null)
         {
-            foreach (var table in doc.EntityTables.Values.ToEnumerable())
+            foreach (var table in doc.EntityTables.Values)
             {
                 var name = table.Name;
 

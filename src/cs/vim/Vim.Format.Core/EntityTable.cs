@@ -2,6 +2,7 @@
 using Vim.LinqArray;
 using Vim.BFastLib;
 using System.Linq;
+using System.Collections.Generic;
 
 namespace Vim.Format
 {
@@ -28,11 +29,10 @@ namespace Vim.Format
         public LinqArray.ILookup<string, INamedBuffer> DataColumns { get; }
         public LinqArray.ILookup<string, NamedBuffer<int>> StringColumns { get; }
         public LinqArray.ILookup<string, NamedBuffer<int>> IndexColumns { get; }
-        public INamedBuffer[] Columns
+        public IEnumerable<INamedBuffer> Columns
             => DataColumns.Values
-                .Concatenate(IndexColumns.Values.Select(x => (INamedBuffer)x))
-                .Concatenate(StringColumns.Values.Select(x => (INamedBuffer)x))
-                .ToArray();
+                .Concat(IndexColumns.Values.Select(x => (INamedBuffer)x))
+                .Concat(StringColumns.Values.Select(x => (INamedBuffer)x));
 
         public int[] GetIndexColumnValues(string columnName)
             => IndexColumns.GetOrDefault(columnName)?.GetColumnValues<int>();

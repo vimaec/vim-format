@@ -143,7 +143,7 @@ namespace Vim.Format.SceneBuilder
 
             // Test the entity tables.
             var tableNames = new HashSet<string>(db.Tables.Values.Select(t => t.Name));
-            foreach (var et in vim.Document.EntityTables.Keys.ToEnumerable())
+            foreach (var et in vim.Document.EntityTables.Keys)
             {
                 if (!tableNames.Contains(et))
                     throw new VimValidationException($"{nameof(DocumentBuilder)} does not contain table name {et} from {nameof(VimScene)}");

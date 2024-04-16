@@ -2,6 +2,8 @@
 using System.Text.RegularExpressions;
 using Vim.LinqArray;
 using Vim.BFastLib;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Vim.Format
 {
@@ -13,14 +15,14 @@ namespace Vim.Format
         public static EntityTable ToEntityTable(this SerializableEntityTable entityTable, Document document)
             => new EntityTable(document, entityTable);
 
-        public static string[] GetColumnNames(this EntityTable table)
-            => table.Columns.Select(b => b.Name).ToArray();
+        public static IEnumerable<string> GetColumnNames(this EntityTable table)
+            => table.Columns.Select(c => c.Name);
 
         public static void ValidateRelations(this Document doc)
         {
-            foreach (var et in doc.EntityTables.Values.ToEnumerable())
+            foreach (var et in doc.EntityTables.Values)
             {
-                foreach (var ic in et.IndexColumns.Values.ToEnumerable())
+                foreach (var ic in et.IndexColumns.Values)
                 {
                     var relatedTable = ic.GetRelatedTable(doc);
                     var maxValue = relatedTable.NumRows;

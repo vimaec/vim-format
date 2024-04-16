@@ -13,16 +13,16 @@ namespace Vim.LinqArray
     /// </summary>
     public interface ILookup<TKey, TValue>
     {
-        IArray<TKey> Keys { get; }
-        IArray<TValue> Values { get; }
+        IEnumerable<TKey> Keys { get; }
+        IEnumerable<TValue> Values { get; }
         bool Contains(TKey key);
         TValue this[TKey key] { get; }
     }
 
     public class EmptyLookup<TKey, TValue> : ILookup<TKey, TValue>
     {
-        public IArray<TKey> Keys => LinqArray.Empty<TKey>();
-        public IArray<TValue> Values => LinqArray.Empty<TValue>();
+        public IEnumerable<TKey> Keys => Enumerable.Empty<TKey>();
+        public IEnumerable<TValue> Values => Enumerable.Empty<TValue>();
         public bool Contains(TKey key) => false;
         public TValue this[TKey key] => default;
     }
@@ -37,12 +37,10 @@ namespace Vim.LinqArray
             Dictionary = d ?? new Dictionary<TKey, TValue>();
             // TODO: sort?
             _default = defaultValue;
-            Keys = d.Keys.ToIArray();
-            Values = d.Values.ToIArray();
         }
 
-        public IArray<TKey> Keys { get; }
-        public IArray<TValue> Values { get; }
+        public IEnumerable<TKey> Keys => Dictionary.Keys;
+        public IEnumerable<TValue> Values => Dictionary.Values;
         public TValue this[TKey key] => Contains(key) ? Dictionary[key] : _default;
         public bool Contains(TKey key) => Dictionary.ContainsKey(key);
     }
@@ -54,12 +52,10 @@ namespace Vim.LinqArray
         public LookupFromArray(IArray<TValue> xs)
         {
             array = xs;
-            Keys = array.Indices();
-            Values = array;
         }
 
-        public IArray<int> Keys { get; }
-        public IArray<TValue> Values { get; }
+        public IEnumerable<int> Keys => array.Indices().ToEnumerable();
+        public IEnumerable<TValue> Values => array.ToEnumerable();
         public TValue this[int key] => array[key];
         public bool Contains(int key) => key >= 0 && key <= array.Count;
     }
@@ -73,6 +69,6 @@ namespace Vim.LinqArray
             => lookup.Contains(key) ? lookup[key] : default;
 
         public static IEnumerable<TValue> GetValues<TKey, TValue>(this ILookup<TKey, TValue> lookup)
-            => lookup.Keys.ToEnumerable().Select(k => lookup[k]);
+            => lookup.Keys.Select(k => lookup[k]);
     }
 }
