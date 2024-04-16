@@ -48,12 +48,12 @@ namespace Vim.Format
 
         public int[] GetVertexCounts()
         {
-            return _meshes.Select(m => m.Vertices.Count).ToArray();
+            return _meshes.Select(m => m.vertices.Length).ToArray();
         }
 
         public int[] GetFaceCounts()
         {
-            return _meshes.Select(m => m.Indices.Count / 3).ToArray();
+            return _meshes.Select(m => m.NumFaces).ToArray();
         }
 
 
@@ -72,8 +72,8 @@ namespace Vim.Format
 
             for (var i = 1; i < n; ++i)
             {
-                meshVertexOffsets[i] = meshVertexOffsets[i - 1] + _meshes[i - 1].Vertices.Count;
-                meshIndexOffsets[i] = meshIndexOffsets[i - 1] + _meshes[i - 1].Indices.Count;
+                meshVertexOffsets[i] = meshVertexOffsets[i - 1] + _meshes[i - 1].vertices.Length;
+                meshIndexOffsets[i] = meshIndexOffsets[i - 1] + _meshes[i - 1].indices.Length;
                 meshSubmeshOffset[i] = meshSubmeshOffset[i - 1] + _meshes[i - 1].SubmeshCount;
             }
 
@@ -85,7 +85,7 @@ namespace Vim.Format
                 {
                     submeshIndexOffsets[subIndex++] = sub + previousIndexCount;
                 }
-                previousIndexCount += geo.Indices.Count;
+                previousIndexCount += geo.indices.Length;
             }
 
             // Compute the shape vertex offsets

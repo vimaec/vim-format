@@ -36,7 +36,7 @@ namespace Vim.Format.Geometry
             Tolerance = tolerance;
             NumFaces = mesh.NumFaces;
             NumVertices = mesh.NumVertices;
-            TopologyHash = Hash.Combine(mesh.Indices.ToArray());
+            TopologyHash = Hash.Combine(mesh.indices);
             var box = mesh.BoundingBox();
             BoxMin = Round(box.Min);
             BoxExtents = Round(box.Extent);

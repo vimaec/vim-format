@@ -310,9 +310,9 @@ namespace Vim.Format.Geometry
         {
             var edges = new Dictionary<Tuple<int, int>, int>(new EdgeEqualityComparer());
 
-            var indices = mesh.Indices;
+            var indices = mesh.indices;
 
-            for (var i = 0; i < indices.Count; i += 3)
+            for (var i = 0; i < indices.Length; i += 3)
             {
                 var i0 = indices[i + 0];
                 var i1 = indices[i + 1];
@@ -330,10 +330,10 @@ namespace Vim.Format.Geometry
         {
             var segments = new List<List<Vector2>>();
 
-            var indices = mesh.Indices;
-            var vertices = mesh.Vertices;
+            var indices = mesh.indices;
+            var vertices = mesh.vertices;
 
-            for (var i = 0; i < indices.Count; i += 3)
+            for (var i = 0; i < indices.Length; i += 3)
             {
                 var i0 = indices[i + 0];
                 var i1 = indices[i + 1];

@@ -10,14 +10,6 @@ namespace Vim.Format.Geometry
 {
     public class VimMesh : ITransformable3D<VimMesh>
     {
-        public IArray<Vector3> Vertices => vertices.ToIArray();
-
-        public IArray<int> Indices => indices.ToIArray();
-
-        public IArray<int> SubmeshMaterials => submeshMaterials.ToIArray();
-        public IArray<int> SubmeshIndexOffsets => submeshIndexOffsets.ToIArray();
-        public IArray<int> SubmeshIndexCounts => submeshIndexCounts.ToIArray();
-
         public int SubmeshCount => submeshIndexCounts.Length;
 
         public int NumCornersPerFace => 3;
@@ -28,19 +20,16 @@ namespace Vim.Format.Geometry
 
         public int NumFaces => indices.Length / 3;
 
-        public int NumInstances => 0;
-
-        public int NumMeshes => 1;
-
-        public int NumShapeVertices => 0;
-
-        public int NumShapes => 0;
 
         public int[] indices;
         public Vector3[] vertices;
         public int[] submeshIndexOffsets;
         public int[] submeshMaterials;
         public int[] submeshIndexCounts;
+
+        public int GetIndexCount() => indices.Length;
+        public int GetVertexCount() => vertices.Length;
+
 
         public VimMesh()
         {
@@ -227,7 +216,7 @@ namespace Vim.Format.Geometry
         }
         private void ValidateIndices()
         {
-            foreach (var index in Indices.ToEnumerable())
+            foreach (var index in indices)
             {
                 if (index < 0 || index >= NumVertices)
                     throw new Exception($"Invalid mesh index: {index}. Expected a value greater or equal to 0 and less than {NumVertices}");
@@ -240,20 +229,20 @@ namespace Vim.Format.Geometry
         public static VimMesh ReverseWindingOrder(this VimMesh mesh)
         {
             var result = mesh.Clone();
-            var count = mesh.Indices.Count;
+            var count = mesh.indices.Length;
             var indices = new int[count];
             for (var i = 0; i < count; i += 3)
             {
-                indices[i + 0] = mesh.Indices[i + 2];
-                indices[i + 1] = mesh.Indices[i + 1];
-                indices[i + 2] = mesh.Indices[i + 0];
+                indices[i + 0] = mesh.indices[i + 2];
+                indices[i + 1] = mesh.indices[i + 1];
+                indices[i + 2] = mesh.indices[i + 0];
             }
             result.SetIndices(indices);
             return result;
         }
 
 
-        public static IArray<int> GetFaceMaterials(this VimMesh mesh)
+        public static int[] GetFaceMaterials(this VimMesh mesh)
         {
             // SubmeshIndexOffsets: [0, A, B]
             // SubmeshIndexCount:   [X, Y, Z]
@@ -261,10 +250,9 @@ namespace Vim.Format.Geometry
             // ---
             // FaceMaterials:       [...Repeat(L, X / 3), ...Repeat(M, Y / 3), ...Repeat(N, Z / 3)] <-- divide by 3 for the number of corners per Triangular face
             var numCornersPerFace = mesh.NumCornersPerFace;
-            return mesh.SubmeshIndexCounts
-                .ToEnumerable()
-                .SelectMany((indexCount, i) => Enumerable.Repeat(mesh.SubmeshMaterials[i], indexCount / numCornersPerFace))
-                .ToIArray();
+            return mesh.submeshIndexCounts
+                .SelectMany((indexCount, i) => Enumerable.Repeat(mesh.submeshMaterials[i], indexCount / numCornersPerFace))
+                .ToArray();
         }
 
         public static VimMesh Merge2(this VimMesh mesh, params VimMesh[] others)
@@ -279,18 +267,18 @@ namespace Vim.Format.Geometry
 
         public static VimMesh Merge(this VimMesh[] meshes)
         {
-            void Merge(IArray<int> from, int[] to, int offset, int increment)
+            void Merge(int[] from, int[] to, int offset, int increment)
             {
-                for (var i = 0; i < from.Count; i++)
+                for (var i = 0; i < from.Length; i++)
                 {
                     to[i + offset] = from[i] + increment;
                 }
             }
 
             // Init arrays
-            var indexCount = meshes.Sum(m => m.Indices.Count);
-            var vertexCount = meshes.Sum(m => m.Vertices.Count);
-            var submeshCount = meshes.Sum(m => m.SubmeshIndexOffsets.Count);
+            var indexCount = meshes.Sum(m => m.indices.Length);
+            var vertexCount = meshes.Sum(m => m.vertices.Length);
+            var submeshCount = meshes.Sum(m => m.submeshIndexOffsets.Length);
             var result = new VimMesh(indexCount, vertexCount, submeshCount);
 
             var indexOffset = 0;
@@ -301,15 +289,15 @@ namespace Vim.Format.Geometry
             {
                 var mesh = meshes[m];
 
-                Merge(mesh.Indices, result.indices, indexOffset, vertexOffset);
-                mesh.Vertices.CopyTo(result.vertices, vertexOffset);
-                mesh.SubmeshMaterials.CopyTo(result.submeshMaterials, submeshOffset);
-                mesh.SubmeshIndexCounts.CopyTo(result.submeshIndexCounts, submeshOffset);
-                Merge(mesh.SubmeshIndexOffsets, result.submeshIndexOffsets, submeshOffset, indexOffset);
+                Merge(mesh.indices, result.indices, indexOffset, vertexOffset);
+                mesh.vertices.CopyTo(result.vertices, vertexOffset);
+                mesh.submeshMaterials.CopyTo(result.submeshMaterials, submeshOffset);
+                mesh.submeshIndexCounts.CopyTo(result.submeshIndexCounts, submeshOffset);
+                Merge(mesh.submeshIndexOffsets, result.submeshIndexOffsets, submeshOffset, indexOffset);
 
-                indexOffset += mesh.Indices.Count;
-                vertexOffset += mesh.Vertices.Count;
-                submeshOffset += mesh.SubmeshIndexOffsets.Count;
+                indexOffset += mesh.indices.Length;
+                vertexOffset += mesh.vertices.Length;
+                submeshOffset += mesh.submeshIndexOffsets.Length;
 
             }
             return result;
@@ -322,11 +310,11 @@ namespace Vim.Format.Geometry
 
         public static (int, List<int>)[] GroupSubmeshesByMaterials(this VimMesh mesh)
         {
-            var submeshCount = mesh.SubmeshIndexOffsets.Count;
+            var submeshCount = mesh.submeshIndexOffsets.Length;
             var map = new Dictionary<int, List<int>>();
             for (var i = 0; i < submeshCount; i++)
             {
-                var mat = mesh.SubmeshMaterials[i];
+                var mat = mesh.submeshMaterials[i];
                 if (map.ContainsKey(mat))
                 {
                     map[mat].Add(i);
@@ -340,7 +328,7 @@ namespace Vim.Format.Geometry
         }
 
         public static Triangle VertexIndicesToTriangle(this VimMesh mesh, Int3 indices)
-            => new Triangle(mesh.Vertices[indices.X], mesh.Vertices[indices.Y], mesh.Vertices[indices.Z]);
+            => new Triangle(mesh.vertices[indices.X], mesh.vertices[indices.Y], mesh.vertices[indices.Z]);
 
         public static bool Planar(this VimMesh mesh, float tolerance = Math3d.Constants.Tolerance)
         {
@@ -351,48 +339,48 @@ namespace Vim.Format.Geometry
 
         public static VimMesh Unindex(this VimMesh mesh)
         {
-            var vertices = mesh.Indices.Select(i => mesh.Vertices[i]);
+            var vertices = mesh.indices.Select(i => mesh.vertices[i]);
             return new VimMesh(vertices.ToArray());
         }
 
-        public static IArray<Vector3> ComputedNormals(this VimMesh mesh)
-            => mesh.Triangles().Select(t => t.Normal);
+        public static Vector3[] ComputedNormals(this VimMesh mesh)
+            => mesh.Triangles().Select(t => t.Normal).ToArray();
 
         public static Triangle Triangle(this VimMesh mesh, int face)
             => mesh.VertexIndicesToTriangle(mesh.FaceVertexIndices(face));
 
-        public static IArray<Triangle> Triangles(this VimMesh mesh)
-            => mesh.NumFaces.Select(mesh.Triangle);
+        public static Triangle[] Triangles(this VimMesh mesh)
+            => Enumerable.Range(0, mesh.NumFaces).Select(mesh.Triangle).ToArray();
 
         public static Vector3 Center(this VimMesh mesh)
             => mesh.BoundingBox().Center;
 
         public static AABox BoundingBox(this VimMesh mesh)
-            => AABox.Create(mesh.Vertices.ToEnumerable());
+            => AABox.Create(mesh.vertices);
 
         public static Int3 FaceVertexIndices(this VimMesh mesh, int faceIndex)
-            => new Int3(mesh.Indices[faceIndex * 3], mesh.Indices[faceIndex * 3 + 1], mesh.Indices[faceIndex * 3 + 2]);
+            => new Int3(mesh.indices[faceIndex * 3], mesh.indices[faceIndex * 3 + 1], mesh.indices[faceIndex * 3 + 2]);
 
         public static bool GeometryEquals(this VimMesh mesh, VimMesh other, float tolerance = Math3d.Constants.Tolerance)
         {
-            if (!mesh.Indices.SequenceEquals(other.Indices))
+            if (!mesh.indices.SequenceEqual(other.indices))
                 return false;
 
-            if (!mesh.SubmeshIndexOffsets.SequenceEquals(other.SubmeshIndexOffsets))
+            if (!mesh.submeshIndexOffsets.SequenceEqual(other.submeshIndexOffsets))
                 return false;
 
-            if (!mesh.SubmeshMaterials.SequenceEquals(other.SubmeshMaterials))
+            if (!mesh.submeshMaterials.SequenceEqual(other.submeshMaterials))
                 return false;
 
-            if (!mesh.SubmeshIndexCounts.SequenceEquals(other.SubmeshIndexCounts))
+            if (!mesh.submeshIndexCounts.SequenceEqual(other.submeshIndexCounts))
                 return false;
 
-            if (mesh.Vertices.Count != other.Vertices.Count)
+            if (mesh.vertices.Length != other.vertices.Length)
                 return false;
 
-            for (var i = 0; i < mesh.Vertices.Count; i++)
+            for (var i = 0; i < mesh.vertices.Length; i++)
             {
-                if (!mesh.Vertices[i].AlmostEquals(other.Vertices[i], tolerance))
+                if (!mesh.vertices[i].AlmostEquals(other.vertices[i], tolerance))
                     return false;
             }
 
@@ -406,7 +394,7 @@ namespace Vim.Format.Geometry
             var result = new (int, VimMesh)[map.Length];
             if (map.Length == 1)
             {
-                result[0] = (mesh.SubmeshMaterials[0], mesh);
+                result[0] = (mesh.submeshMaterials[0], mesh);
                 return result;
             }
 
@@ -424,7 +412,7 @@ namespace Vim.Format.Geometry
             var map = mesh.GroupSubmeshesByMaterials();
 
             // Allocate arrays of the final sizes
-            var indexCount = submeshes.Sum(s => mesh.SubmeshIndexCounts[s]);
+            var indexCount = submeshes.Sum(s => mesh.submeshIndexCounts[s]);
             var result = new VimMesh(indexCount, indexCount, submeshes.Count);
 
             var indexOffset = 0;
@@ -434,18 +422,18 @@ namespace Vim.Format.Geometry
                 var submesh = submeshes[s];
 
                 // copy indices at their new positions
-                var indexStart = mesh.SubmeshIndexOffsets[submesh];
-                var indexEnd = indexStart + mesh.SubmeshIndexCounts[submesh];
+                var indexStart = mesh.submeshIndexOffsets[submesh];
+                var indexEnd = indexStart + mesh.submeshIndexCounts[submesh];
                 for (var i = indexStart; i < indexEnd; i++)
                 {
                     result.indices[index] = indexOffset + i - indexStart;
-                    result.vertices[index] = mesh.Vertices[mesh.Indices[i]];
+                    result.vertices[index] = mesh.vertices[mesh.indices[i]];
                     index++;
                 }
 
                 // submesh data is mostly the same
-                result.submeshIndexCounts[s] = mesh.SubmeshIndexCounts[submesh];
-                result.submeshMaterials[s] = mesh.SubmeshMaterials[submesh];
+                result.submeshIndexCounts[s] = mesh.submeshIndexCounts[submesh];
+                result.submeshMaterials[s] = mesh.submeshMaterials[submesh];
                 result.submeshIndexOffsets[s] = indexOffset;
 
                 // Update offset for next submesh

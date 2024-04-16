@@ -107,11 +107,11 @@ namespace Vim.Format.Geometry
         /// <summary>
         /// Returns a collection of circular points.
         /// </summary>
-        public static IArray<Vector2> CirclePoints(float radius, int numPoints)
-            => CirclePoints(numPoints).Select(x => x * radius);
+        public static Vector2[] CirclePoints(float radius, int numPoints)
+            => CirclePoints(numPoints).Select(x => x * radius).ToArray();
 
-        public static IArray<Vector2> CirclePoints(int numPoints)
-            => numPoints.Select(i => CirclePoint(i, numPoints));
+        public static Vector2[] CirclePoints(int numPoints)
+            => numPoints.Select(i => CirclePoint(i, numPoints)).ToArray();
 
         public static Vector2 CirclePoint(int i, int numPoints)
             => new Vector2((i * (Math3d.Constants.TwoPi / numPoints)).Cos(), (i * (Math3d.Constants.TwoPi / numPoints)).Sin());
@@ -150,7 +150,7 @@ namespace Vim.Format.Geometry
         /// Returns the index buffer of a quad mesh strip.
         /// Returns an empty array if either numRowPoints or numPointsPerRow is less than 2.
         /// </summary>
-        public static IArray<int> QuadMeshStripIndicesFromPointRows(
+        public static int[] QuadMeshStripIndicesFromPointRows(
             int numPointRows,
             int numPointsPerRow,
             bool clockwise = false)
@@ -206,10 +206,10 @@ namespace Vim.Format.Geometry
                 }
             }
 
-            return indices.ToIArray();
+            return indices.ToArray();
         }
 
-        public static IArray<int> TriMeshCylinderCapIndices(int numEdgeVertices)
+        public static int[] TriMeshCylinderCapIndices(int numEdgeVertices)
         {
             // Example cap where numEdgeVertices is 6:
             //
@@ -249,7 +249,7 @@ namespace Vim.Format.Geometry
             indices.Add(lastTriangleIndex1);
             indices.Add(lastTriangleIndex2);
 
-            return indices.ToIArray();
+            return indices.ToArray();
         }
 
         /// <summary>

@@ -11,10 +11,10 @@ namespace Vim.Format
     {
         public static SubdividedMesh ToDocumentBuilderSubdividedMesh(this VimMesh m)
             => new SubdividedMesh(
-                m.Indices.ToList(),
-                m.Vertices.ToList(),
-                m.SubmeshIndexOffsets.ToList(),
-                m.SubmeshMaterials.ToList());
+                m.indices,
+                m.vertices,
+                m.submeshIndexOffsets,
+                m.submeshMaterials);
 
         public static EntityTableBuilder CreateTableCopy(this DocumentBuilder db, EntityTable table, List<int> nodeIndexRemapping = null)
         {

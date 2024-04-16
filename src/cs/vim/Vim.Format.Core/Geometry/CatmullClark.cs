@@ -48,7 +48,7 @@ namespace Vim.Format.Geometry
                 var faceSize = 3;
                 for (var edgeIndex = 0; edgeIndex < faceSize; edgeIndex++)
                 {
-                    var geometryEdgeKey = new GeometryEdgeKey(geometry.Indices[currentIndex + edgeIndex], geometry.Indices[currentIndex + (edgeIndex + 1) % faceSize]);
+                    var geometryEdgeKey = new GeometryEdgeKey(geometry.indices[currentIndex + edgeIndex], geometry.indices[currentIndex + (edgeIndex + 1) % faceSize]);
                     if (edgeMap.ContainsKey(geometryEdgeKey))
                     {
                         edgeMap[geometryEdgeKey].Face1 = faceIndex;
@@ -72,16 +72,16 @@ namespace Vim.Format.Geometry
             var edgeMap = geometry.CreateEdgeMap();
 
             var numQuads = geometry.NumFaces * 3;
-            var numVertices = geometry.Vertices.Count + edgeMap.Count + geometry.NumFaces;
+            var numVertices = geometry.vertices.Length + edgeMap.Count + geometry.NumFaces;
 
             var facePoints = new Vector3[geometry.NumFaces];
-            var vertexFPoints = new Vector3[geometry.Vertices.Count];
-            var vertexRPoints = new Vector3[geometry.Vertices.Count];
-            var vertexNumFaces = new float[geometry.Vertices.Count];
-            var vertexNumEdges = new float[geometry.Vertices.Count];
+            var vertexFPoints = new Vector3[geometry.vertices.Length];
+            var vertexRPoints = new Vector3[geometry.vertices.Length];
+            var vertexNumFaces = new float[geometry.vertices.Length];
+            var vertexNumEdges = new float[geometry.vertices.Length];
             var newVertices = new Vector3[numVertices];
             var newIndices = new int[numQuads * 4];
-            var edgeVertices = new bool[geometry.Vertices.Count];
+            var edgeVertices = new bool[geometry.vertices.Length];
 
             foreach (var edge in edgeMap)
             {
@@ -112,7 +112,7 @@ namespace Vim.Format.Geometry
             CalculateEdgePoints(geometry, edgeMap, facePoints, vertexNumEdges, vertexRPoints, smoothing);
             CalculateVertexPoints(geometry, vertexNumFaces, vertexFPoints, vertexNumEdges, vertexRPoints, newVertices, edgeVertices, smoothing);
 
-            var facePointStartIndex = geometry.Vertices.Count;
+            var facePointStartIndex = geometry.vertices.Length;
             var edgePointStartIndex = facePointStartIndex + facePoints.Length;
 
             // Copy all points into a single buffer
@@ -139,8 +139,8 @@ namespace Vim.Format.Geometry
 
                 for (var edgeIndex = 0; edgeIndex < faceSize; edgeIndex++)
                 {
-                    var vertexIndex = geometry.Indices[currentVertexIndex + edgeIndex];
-                    facePoint += geometry.Vertices[vertexIndex];
+                    var vertexIndex = geometry.indices[currentVertexIndex + edgeIndex];
+                    facePoint += geometry.vertices[vertexIndex];
                 }
 
                 facePoint /= faceSize;
@@ -149,7 +149,7 @@ namespace Vim.Format.Geometry
 
                 for (var edgeIndex = 0; edgeIndex < faceSize; edgeIndex++)
                 {
-                    var vertexIndex = geometry.Indices[currentVertexIndex + edgeIndex];
+                    var vertexIndex = geometry.indices[currentVertexIndex + edgeIndex];
                     outVertexNumFaces[vertexIndex]++;
                     outVertexFPoints[vertexIndex] += facePoint;
                 }
@@ -163,7 +163,7 @@ namespace Vim.Format.Geometry
             foreach (var edge in edgeMap)
             {
                 var n = 2.0f;
-                var middlePoint = geometry.Vertices[edge.Key.Vertex0] + geometry.Vertices[edge.Key.Vertex1];
+                var middlePoint = geometry.vertices[edge.Key.Vertex0] + geometry.vertices[edge.Key.Vertex1];
                 var edgePoint = middlePoint;
 
                 if (edge.Value.Face0 >= 0 && edge.Value.Face1 >= 0)
@@ -187,13 +187,13 @@ namespace Vim.Format.Geometry
 
         public static void CalculateVertexPoints(VimMesh geometry, float[] vertexNumFaces, Vector3[] vertexFPoints, float[] vertexNumEdges, Vector3[] vertexRPoints, Vector3[] outNewVertices, bool[] edgeVertices, float smoothing)
         {
-            for (var index = 0; index < geometry.Vertices.Count; index++)
+            for (var index = 0; index < geometry.vertices.Length; index++)
             {
                 var numFaces = vertexNumFaces[index];
                 var numEdges = vertexNumEdges[index];
-                var newVertex = (vertexFPoints[index] / numFaces + 2.0f * vertexRPoints[index] / numEdges + (numFaces - 3.0f) * geometry.Vertices[index]) / numFaces;
+                var newVertex = (vertexFPoints[index] / numFaces + 2.0f * vertexRPoints[index] / numEdges + (numFaces - 3.0f) * geometry.vertices[index]) / numFaces;
 
-                outNewVertices[index] = edgeVertices[index] ? geometry.Vertices[index] : smoothing * newVertex + (1.0f - smoothing) * geometry.Vertices[index];
+                outNewVertices[index] = edgeVertices[index] ? geometry.vertices[index] : smoothing * newVertex + (1.0f - smoothing) * geometry.vertices[index];
             }
         }
 
@@ -207,9 +207,9 @@ namespace Vim.Format.Geometry
 
                 for (var i = 0; i < faceSize; i++)
                 {
-                    var prevFaceVertexIndex = geometry.Indices[currentOldVertexIndex + i];
-                    var faceVertexIndex = geometry.Indices[currentOldVertexIndex + (i + 1) % faceSize];
-                    var nextFaceVertexIndex = geometry.Indices[currentOldVertexIndex + (i + 2) % faceSize];
+                    var prevFaceVertexIndex = geometry.indices[currentOldVertexIndex + i];
+                    var faceVertexIndex = geometry.indices[currentOldVertexIndex + (i + 1) % faceSize];
+                    var nextFaceVertexIndex = geometry.indices[currentOldVertexIndex + (i + 2) % faceSize];
 
                     var edgeKey0 = new GeometryEdgeKey(prevFaceVertexIndex, faceVertexIndex);
                     var edgeKey1 = new GeometryEdgeKey(faceVertexIndex, nextFaceVertexIndex);

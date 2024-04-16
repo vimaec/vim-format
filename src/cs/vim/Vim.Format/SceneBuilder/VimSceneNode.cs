@@ -54,11 +54,11 @@ namespace Vim
         public VimMesh TransformedMesh()
              => GetMesh()?.Transform(Transform);
 
-        public IArray<Vector3> TransformedVertices()
-            => TransformedMesh()?.Vertices;
+        public Vector3[] TransformedVertices()
+            => TransformedMesh()?.vertices;
 
         public AABox TransformedBoundingBox()
-            => AABox.Create(TransformedVertices()?.ToEnumerable());
+            => AABox.Create(TransformedVertices());
     }
 
     public static class NodeExtensions

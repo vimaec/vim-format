@@ -84,7 +84,7 @@ namespace Vim
             => Nodes.MergedGeometry();
 
         public IEnumerable<Vector3> AllVertices()
-            => TransformedMeshes().SelectMany(g => g.Vertices.ToEnumerable());
+            => TransformedMeshes().SelectMany(g => g.vertices);
 
         public AABox BoundingBox()
             => AABox.Create(AllVertices());

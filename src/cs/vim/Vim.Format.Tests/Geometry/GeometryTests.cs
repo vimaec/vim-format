@@ -72,42 +72,42 @@ namespace Vim.Format.Tests.Geometry
 
             Assert.AreEqual(3, XYTriangle.NumCornersPerFace);
             Assert.AreEqual(1, XYTriangle.NumFaces);
-            Assert.AreEqual(3, XYTriangle.Vertices.Count);
-            Assert.AreEqual(3, XYTriangle.Indices.Count);
+            Assert.AreEqual(3, XYTriangle.vertices.Length);
+            Assert.AreEqual(3, XYTriangle.indices.Length);
             Assert.AreEqual(1, XYTriangle.Triangles().Count);
             Assert.IsTrue(XYTriangle.Planar());
-            Assert.AreEqual(new[] { 0, 1, 2 }, XYTriangle.Indices.ToArray());
+            Assert.AreEqual(new[] { 0, 1, 2 }, XYTriangle.indices.Length);
 
             Assert.AreEqual(3, XYQuad.NumCornersPerFace);
             Assert.AreEqual(2, XYQuad.NumFaces);
-            Assert.AreEqual(4, XYQuad.Vertices.Count);
-            Assert.AreEqual(6, XYQuad.Indices.Count);
+            Assert.AreEqual(4, XYQuad.vertices.Length);
+            Assert.AreEqual(6, XYQuad.indices.Length);
 
             Assert.IsTrue(XYQuad.Planar());
-            Assert.AreEqual(new[] { 0, 1, 2, 0, 2, 3 }, XYQuad.Indices.ToArray());
+            Assert.AreEqual(new[] { 0, 1, 2, 0, 2, 3 }, XYQuad.indices.ToArray());
 
             Assert.AreEqual(3, XYQuadFromFunc.NumCornersPerFace);
             Assert.AreEqual(2, XYQuadFromFunc.NumFaces);
-            Assert.AreEqual(4, XYQuadFromFunc.Vertices.Count);
-            Assert.AreEqual(6, XYQuadFromFunc.Indices.Count);
+            Assert.AreEqual(4, XYQuadFromFunc.vertices.Length);
+            Assert.AreEqual(6, XYQuadFromFunc.indices.Length);
 
             Assert.AreEqual(3, XYQuad2x2.NumCornersPerFace);
             Assert.AreEqual(8, XYQuad2x2.NumFaces);
-            Assert.AreEqual(9, XYQuad2x2.Vertices.Count);
-            Assert.AreEqual(24, XYQuad2x2.Indices.Count);
+            Assert.AreEqual(9, XYQuad2x2.vertices.Length);
+            Assert.AreEqual(24, XYQuad2x2.indices.Length);
 
             Assert.AreEqual(3, Tetrahedron.NumCornersPerFace);
             Assert.AreEqual(4, Tetrahedron.NumFaces);
-            Assert.AreEqual(4, Tetrahedron.Vertices.Count);
-            Assert.AreEqual(12, Tetrahedron.Indices.Count);
+            Assert.AreEqual(4, Tetrahedron.vertices.Length);
+            Assert.AreEqual(12, Tetrahedron.indices.Length);
 
             Assert.AreEqual(3, XYTriangleTwice.NumCornersPerFace);
             Assert.AreEqual(2, XYTriangleTwice.NumFaces);
-            Assert.AreEqual(6, XYTriangleTwice.Vertices.Count);
-            Assert.AreEqual(6, XYTriangleTwice.Indices.Count);
+            Assert.AreEqual(6, XYTriangleTwice.vertices.Length);
+            Assert.AreEqual(6, XYTriangleTwice.indices.Length);
             Assert.AreEqual(2, XYTriangleTwice.Triangles().Count);
             Assert.IsTrue(XYTriangleTwice.Planar());
-            Assert.AreEqual(new[] { 0, 1, 2, 3, 4, 5 }, XYTriangleTwice.Indices.ToArray());
+            Assert.AreEqual(new[] { 0, 1, 2, 3, 4, 5 }, XYTriangleTwice.indices);
         }
 
         [Test]
@@ -124,16 +124,16 @@ namespace Vim.Format.Tests.Geometry
             foreach (var g in AllMeshes)
             {
                 Console.WriteLine($"Geometry {n++}");
-                for (var i = 0; i < g.Vertices.Count && i < 10; ++i)
+                for (var i = 0; i < g.vertices.Length && i < 10; ++i)
                 {
-                    Console.WriteLine($"Vertex {i} {g.Vertices[i]}");
+                    Console.WriteLine($"Vertex {i} {g.vertices[i]}");
                 }
 
-                if (g.Vertices.Count > 10)
+                if (g.vertices.Length > 10)
                 {
-                    var last = g.Vertices.Count - 1;
+                    var last = g.vertices.Length - 1;
                     Console.WriteLine("...");
-                    Console.WriteLine($"Vertex {last} {g.Vertices[last]}");
+                    Console.WriteLine($"Vertex {last} {g.vertices[last]}");
                 }
 
                 for (var i = 0; i < g.NumFaces && i < 10; ++i)
@@ -141,7 +141,7 @@ namespace Vim.Format.Tests.Geometry
                     Console.WriteLine($"Face {i}: {g.Triangle(i)}");
                 }
 
-                if (g.Vertices.Count > 10)
+                if (g.vertices.Length > 10)
                 {
                     var last = g.NumFaces - 1;
                     Console.WriteLine("...");
@@ -154,22 +154,22 @@ namespace Vim.Format.Tests.Geometry
         public static void StripIndicesTests()
         {
             var emptyStrip00 = Primitives.QuadMeshStripIndicesFromPointRows(0, 0);
-            Assert.AreEqual(0, emptyStrip00.Count);
+            Assert.AreEqual(0, emptyStrip00.Length);
 
             var emptyStrip01 = Primitives.QuadMeshStripIndicesFromPointRows(0, 1);
-            Assert.AreEqual(0, emptyStrip01.Count);
+            Assert.AreEqual(0, emptyStrip01.Length);
 
             var emptyStrip10 = Primitives.QuadMeshStripIndicesFromPointRows(1, 0);
-            Assert.AreEqual(0, emptyStrip10.Count);
+            Assert.AreEqual(0, emptyStrip10.Length);
 
             var emptyStrip11 = Primitives.QuadMeshStripIndicesFromPointRows(1, 1);
-            Assert.AreEqual(0, emptyStrip11.Count);
+            Assert.AreEqual(0, emptyStrip11.Length);
 
             var emptyStrip12 = Primitives.QuadMeshStripIndicesFromPointRows(1, 2);
-            Assert.AreEqual(0, emptyStrip12.Count);
+            Assert.AreEqual(0, emptyStrip12.Length);
 
             var emptyStrip21 = Primitives.QuadMeshStripIndicesFromPointRows(2, 1);
-            Assert.AreEqual(0, emptyStrip21.Count);
+            Assert.AreEqual(0, emptyStrip21.Length);
 
             // COUNTER-CLOCKWISE TEST (DEFAULT)
             //   2------3   <--- row 1: [2,3]
@@ -177,7 +177,7 @@ namespace Vim.Format.Tests.Geometry
             //   |      |
             //   0------1   <--- row 0: [0,1]
             var strip22 = Primitives.QuadMeshStripIndicesFromPointRows(2, 2);
-            Assert.AreEqual(4, strip22.Count);
+            Assert.AreEqual(4, strip22.Length);
             Assert.AreEqual(0, strip22[0]);
             Assert.AreEqual(1, strip22[1]);
             Assert.AreEqual(3, strip22[2]);
@@ -189,13 +189,13 @@ namespace Vim.Format.Tests.Geometry
             //   |      |
             //   0------1   <--- row 0: [0,1]
             var clockwiseStrip22 = Primitives.QuadMeshStripIndicesFromPointRows(2, 2, true);
-            Assert.AreEqual(4, clockwiseStrip22.Count);
+            Assert.AreEqual(4, clockwiseStrip22.Length);
             Assert.AreEqual(2, clockwiseStrip22[0]);
             Assert.AreEqual(3, clockwiseStrip22[1]);
             Assert.AreEqual(1, clockwiseStrip22[2]);
             Assert.AreEqual(0, clockwiseStrip22[3]);
-            var reversed22 = clockwiseStrip22.Reverse();
-            for (var i = 0; i < strip22.Count; ++i)
+            var reversed22 = clockwiseStrip22.Reverse().ToArray();
+            for (var i = 0; i < strip22.Length; ++i)
             {
                 Assert.AreEqual(strip22[i], reversed22[i]);
             }
@@ -205,7 +205,7 @@ namespace Vim.Format.Tests.Geometry
             //   |      |      |
             //   *------*------*
             var strip23 = Primitives.QuadMeshStripIndicesFromPointRows(2, 3);
-            Assert.AreEqual(4 * 2, strip23.Count);
+            Assert.AreEqual(4 * 2, strip23.Length);
 
             //   *------*------*------*
             //   |      |      |      |
@@ -215,7 +215,7 @@ namespace Vim.Format.Tests.Geometry
             //   |      |      |      |
             //   *------*------*------*
             var strip34 = Primitives.QuadMeshStripIndicesFromPointRows(3, 4);
-            Assert.AreEqual(4 * 6, strip34.Count);
+            Assert.AreEqual(4 * 6, strip34.Length);
         }
 
         [Test]
@@ -238,12 +238,12 @@ namespace Vim.Format.Tests.Geometry
             result.Validate();
 
             Assert.AreEqual(3, result.NumVertices);
-            Assert.AreEqual(new Vector3(0, 0, 0), result.Vertices[0]);
-            Assert.AreEqual(new Vector3(0, 1, 0), result.Vertices[1]);
-            Assert.AreEqual(new Vector3(0, 1, 1), result.Vertices[2]);
+            Assert.AreEqual(new Vector3(0, 0, 0), result.vertices[0]);
+            Assert.AreEqual(new Vector3(0, 1, 0), result.vertices[1]);
+            Assert.AreEqual(new Vector3(0, 1, 1), result.vertices[2]);
             Assert.AreEqual(1, result.NumFaces);
-            Assert.AreEqual(0, result.SubmeshIndexOffsets.ToEnumerable().Single());
-            Assert.AreEqual(-1, result.SubmeshMaterials.ToEnumerable().Single());
+            Assert.AreEqual(0, result.submeshIndexOffsets.Single());
+            Assert.AreEqual(-1, result.submeshMaterials.Single());
             Assert.AreEqual(-1, result.GetFaceMaterials().First());
         }
     }
