@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using Vim.BFastLib;
 using Vim.Format.Geometry;
 using Vim.Format.ObjectModel;
-using Vim.LinqArray;
 using Vim.Math3d;
 using Vim.Util;
 
@@ -44,9 +43,9 @@ namespace Vim.Format.SceneBuilder
             {
                 var (type, attrs) = tuple;
                 var propertyName = type.Name + "List";
-                if (dm.GetPropertyValue(propertyName) is IArray arr)
+                if (dm.GetPropertyValue(propertyName) is Array arr)
                 {
-                    var numEntities = arr.Count;
+                    var numEntities = arr.Length;
 
                     foreach (var attr in attrs)
                     {

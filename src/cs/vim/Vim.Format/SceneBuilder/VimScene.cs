@@ -8,7 +8,6 @@ using Vim.Format;
 using Vim.Format.Geometry;
 using Vim.Format.ObjectModel;
 using Vim.G3dNext;
-using Vim.LinqArray;
 using Vim.Math3d;
 using Vim.Util;
 using IVimSceneProgress = System.IProgress<(string, double)>;

@@ -2,7 +2,6 @@
 using System.Linq;
 using Vim.BFastLib;
 using Vim.Format.Geometry;
-using Vim.LinqArray;
 using Vim.Util;
 using static Vim.Format.DocumentBuilder;
 

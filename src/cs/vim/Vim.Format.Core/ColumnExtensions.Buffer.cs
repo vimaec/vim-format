@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using Vim.LinqArray;
 using Vim.BFastLib;
 
 namespace Vim.Format
@@ -206,7 +205,7 @@ namespace Vim.Format
             this IEnumerable<NamedBuffer<int>> indexColumns,
             params string[] indexColumnNames)
             => indexColumns.Select(ic => indexColumnNames.Contains(ic.Name)
-                ? new NamedBuffer<int>(VimConstants.NoEntityRelation.Repeat(ic.Data.Length).ToArray(), ic.Name)
+                ? new NamedBuffer<int>(Enumerable.Repeat(VimConstants.NoEntityRelation, ic.Data.Length).ToArray(), ic.Name)
                 : ic);
 
         /// <summary>

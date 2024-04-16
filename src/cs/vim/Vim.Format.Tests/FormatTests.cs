@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
-using Vim.LinqArray;
 using Vim.BFastLib;
+using Vim.Util;
 
 namespace Vim.Format.Tests
 {
@@ -29,17 +29,6 @@ namespace Vim.Format.Tests
             Assert.AreEqual(t1.StringColumns.Count, t2.StringColumns.Count);
             for (var i = 0; i < t1.StringColumns.Count; ++i)
                 AssertNameAndSizesAreEqual(t1.StringColumns[i], t2.StringColumns[i]);
-
-            /* Can't expect the numerical values to be precise, because of non-determinism of parallelism when generating string table.
-            for (var i=0; i < t1.Properties.Length; ++i)
-            {
-                var p1 = t1.Properties[i];
-                var p2 = t2.Properties[i];
-                Assert.AreEqual(p1.EntityId, p2.EntityId);
-                Assert.AreEqual(p1.Name, p2.Name);
-                Assert.AreEqual(p1.Value, p2.Value);
-            }
-            */
         }
 
         public static void AssertEquals(SerializableDocument d1, SerializableDocument d2, bool compareStringTables = true)
