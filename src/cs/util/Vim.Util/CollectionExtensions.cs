@@ -18,6 +18,28 @@ namespace Vim.Util
 
 
         /// <summary>
+        /// Returns the index of the first element matching the given item.
+        /// </summary>
+        public static int IndexOf<T>(this IArray<T> self, T item) where T : IEquatable<T>
+            => self.IndexOf(x => x.Equals(item));
+
+        /// <summary>
+        /// Returns the index of the first element matching the given item.
+        /// </summary>
+        public static int IndexOf<T>(this IArray<T> self, Func<T, bool> predicate)
+        {
+            for (var i = 0; i < self.Count; ++i)
+            {
+                if (predicate(self[i]))
+                    return i;
+            }
+
+            return -1;
+        }
+
+
+
+        /// <summary>
         /// Returns an IEnumerable containing only indices of the array for which the function satisfies a specific predicate.
         /// </summary>
         public static IEnumerable<int> IndicesWhere<T>(this IList<T> self, Func<T, bool> predicate)
