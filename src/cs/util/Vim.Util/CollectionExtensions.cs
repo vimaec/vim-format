@@ -2,51 +2,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace Vim.Util
 {
-    public static class LinqExtensions
+    public static class CollectionExtensions
     {
-        /// <summary>
-        /// Returns the index of the first element matching the given predicate.
-        /// </summary>
-        public static int IndexOf<T>(this IList<T> self, Func<T, bool> predicate)
-        {
-            for (var i = 0; i < self.Count; ++i)
-            {
-                if (predicate(self[i]))
-                    return i;
-            }
-            return -1;
-        }
-
-        /// <summary>
-        /// Returns the index of the first element matching the given item.
-        /// </summary>
-        public static int IndexOf<T>(this IList<T> self, T value) where T : IEquatable<T>
-        {
-            for (var i = 0; i < self.Count; ++i)
-            {
-                if (self[i].Equals(value))
-                    return i;
-            }
-            return -1;
-        }
-
-        /// <summary>
-        /// [a, b, c ..] => [0, a, a+b, a+b+c ...]
-        /// </summary>
-        public static int[] OffsetsFromCounts(this IList<int> self)
-        {
-            var result = new int[self.Count];
-            for (var i = 1; i < self.Count; ++i)
-            {
-                result[i] = result[i - 1] + self[i-1];
-            }
-            return result;
-        }
-
+      
         /// <summary>
         /// Returns an IEnumerable containing only indices of the array for which the function satisfies a specific predicate.
         /// </summary>
