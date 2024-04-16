@@ -20,15 +20,15 @@ namespace Vim.Util
         /// <summary>
         /// Returns the index of the first element matching the given item.
         /// </summary>
-        public static int IndexOf<T>(this IArray<T> self, T item) where T : IEquatable<T>
+        public static int IndexOf<T>(this T[] self, T item) where T : IEquatable<T>
             => self.IndexOf(x => x.Equals(item));
 
         /// <summary>
         /// Returns the index of the first element matching the given item.
         /// </summary>
-        public static int IndexOf<T>(this IArray<T> self, Func<T, bool> predicate)
+        public static int IndexOf<T>(this T[] self, Func<T, bool> predicate)
         {
-            for (var i = 0; i < self.Count; ++i)
+            for (var i = 0; i < self.Length; ++i)
             {
                 if (predicate(self[i]))
                     return i;
