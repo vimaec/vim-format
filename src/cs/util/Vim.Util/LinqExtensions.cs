@@ -77,12 +77,6 @@ namespace Vim.Util
             return items?.Count == 1 ? items[0] : default;
         }
 
-        /// <summary>
-        /// A helper function for append one or more items to an IEnumerable.
-        /// </summary>
-        public static IEnumerable<T> Append<T>(this IEnumerable<T> xs, params T[] x)
-            => xs.Concat(x);
-
         public static T ElementAtOrDefault<T>(this IReadOnlyList<T> items, int index, T @default = default(T))
             => index < 0 || index >= items.Count ? @default : items[index];
 
