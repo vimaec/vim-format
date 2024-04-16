@@ -42,6 +42,19 @@ namespace Vim.Util
         }
 
         /// <summary>
+        /// [a, b, c ..] => [0, a, a+b, a+b+c ...]
+        /// </summary>
+        public static int[] OffsetsFromCounts(this IList<int> self)
+        {
+            var result = new int[self.Count];
+            for (var i = 1; i < self.Count; ++i)
+            {
+                result[i] = result[i - 1] + self[i - 1];
+            }
+            return result;
+        }
+
+        /// <summary>
         /// Returns the top of a stack, or the default T value if none is present.
         /// </summary>
         public static T PeekOrDefault<T>(this Stack<T> self)
