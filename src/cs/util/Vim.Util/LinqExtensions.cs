@@ -9,7 +9,7 @@ namespace Vim.Util
     public static class LinqExtensions
     {
         /// <summary>
-        /// Returns the index of the first element matching the given item.
+        /// Returns the index of the first element matching the given predicate.
         /// </summary>
         public static int IndexOf<T>(this IList<T> self, Func<T, bool> predicate)
         {
@@ -22,14 +22,38 @@ namespace Vim.Util
         }
 
         /// <summary>
+        /// Returns the index of the first element matching the given item.
+        /// </summary>
+        public static int IndexOf<T>(this IList<T> self, T value) where T:IEquatable<T>
+        {
+            for (var i = 0; i < self.Count; ++i)
+            {
+                if (self[i].Equals(value))
+                    return i;
+            }
+            return -1;
+        }
+
+        /// <summary>
         /// Returns an IEnumerable containing only indices of the array for which the function satisfies a specific predicate.
-        /// An IArray is not created automatically because it is an expensive operation that is potentially unneeded.
         /// </summary>
         public static IEnumerable<int> IndicesWhere<T>(this IList<T> self, Func<T, bool> predicate)
         {
             for (var i = 0; i < self.Count; ++i)
             {
                 if (predicate(self[i]))
+                    yield return i;
+            }
+        }
+
+        /// <summary>
+        /// Returns an IEnumerable containing only indices of the array for which the function satisfies a specific predicate.
+        /// </summary>
+        public static IEnumerable<int> IndicesWhere<T>(this IList<T> self, Func<T, int, bool> predicate)
+        {
+            for (var i = 0; i < self.Count; ++i)
+            {
+                if (predicate(self[i], i))
                     yield return i;
             }
         }
