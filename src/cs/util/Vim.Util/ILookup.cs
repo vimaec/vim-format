@@ -6,7 +6,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Vim.LinqArray
+namespace Vim.Util
 {
     /// <summary>
     /// Lookup table: mapping from a key to some value.
@@ -47,17 +47,17 @@ namespace Vim.LinqArray
 
     public class LookupFromArray<TValue> : ILookup<int, TValue>
     {
-        private IArray<TValue> array;
+        private TValue[] array;
 
-        public LookupFromArray(IArray<TValue> xs)
+        public LookupFromArray(TValue[] xs)
         {
             array = xs;
         }
 
-        public IEnumerable<int> Keys => array.Indices().ToEnumerable();
-        public IEnumerable<TValue> Values => array.ToEnumerable();
+        public IEnumerable<int> Keys => Enumerable.Range(0, array.Length);
+        public IEnumerable<TValue> Values => array;
         public TValue this[int key] => array[key];
-        public bool Contains(int key) => key >= 0 && key <= array.Count;
+        public bool Contains(int key) => key >= 0 && key <= array.Length;
     }
 
     public static class LookupExtensions

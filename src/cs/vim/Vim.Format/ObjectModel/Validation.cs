@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
-using Vim.LinqArray;
 using Vim.Math3d;
 using Vim.Util;
 

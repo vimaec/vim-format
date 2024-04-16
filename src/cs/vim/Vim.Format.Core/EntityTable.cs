@@ -1,8 +1,8 @@
 ﻿using System;
-using Vim.LinqArray;
 using Vim.BFastLib;
 using System.Linq;
 using System.Collections.Generic;
+using Vim.Util;
 
 namespace Vim.Format
 {
@@ -14,9 +14,9 @@ namespace Vim.Format
             _EntityTable = entityTable;
             Name = _EntityTable.Name;
 
-            DataColumns = LinqArray.LinqArray.ToLookup(_EntityTable.DataColumns, c => c.Name, c => c);
-            IndexColumns = LinqArray.LinqArray.ToLookup(_EntityTable.IndexColumns, c => c.Name, c => c);
-            StringColumns = LinqArray.LinqArray.ToLookup(_EntityTable.StringColumns, c => c.Name, c => c);
+            DataColumns = _EntityTable.DataColumns.ToVimLookup( c => c.Name, c => c);
+            IndexColumns = _EntityTable.IndexColumns.ToVimLookup(c => c.Name, c => c);
+            StringColumns = _EntityTable.StringColumns.ToVimLookup(c => c.Name, c => c);
             NumRows = Columns.FirstOrDefault()?.NumElements() ?? 0;
 
             Columns.ValidateColumnRowsAreAligned();
@@ -26,9 +26,9 @@ namespace Vim.Format
         public Document Document { get; }
         public string Name { get; }
         public int NumRows { get; }
-        public LinqArray.ILookup<string, INamedBuffer> DataColumns { get; }
-        public LinqArray.ILookup<string, NamedBuffer<int>> StringColumns { get; }
-        public LinqArray.ILookup<string, NamedBuffer<int>> IndexColumns { get; }
+        public Vim.Util.ILookup<string, INamedBuffer> DataColumns { get; }
+        public Vim.Util.ILookup<string, NamedBuffer<int>> StringColumns { get; }
+        public Vim.Util.ILookup<string, NamedBuffer<int>> IndexColumns { get; }
         public IEnumerable<INamedBuffer> Columns
             => DataColumns.Values
                 .Concat(IndexColumns.Values.Select(x => (INamedBuffer)x))

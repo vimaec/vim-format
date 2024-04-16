@@ -1,5 +1,4 @@
 ﻿using System;
-using Vim.LinqArray;
 using Vim.BFastLib;
 
 namespace Vim.Format.Geometry

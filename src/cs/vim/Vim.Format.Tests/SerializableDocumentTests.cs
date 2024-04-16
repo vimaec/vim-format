@@ -1,11 +1,7 @@
 ﻿using NUnit.Framework;
-using System;
-using System.Linq;
 using Vim.Format.Geometry;
 using Vim.Format.SceneBuilder;
-using Vim.LinqArray;
 using Vim.Util.Tests;
-using Vim.Util;
 
 namespace Vim.Format.Tests;
 

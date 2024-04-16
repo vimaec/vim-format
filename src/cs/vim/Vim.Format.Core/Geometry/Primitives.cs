@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Vim.LinqArray;
 using Vim.Math3d;
 
 namespace Vim.Format.Geometry
@@ -111,7 +110,7 @@ namespace Vim.Format.Geometry
             => CirclePoints(numPoints).Select(x => x * radius).ToArray();
 
         public static Vector2[] CirclePoints(int numPoints)
-            => numPoints.Select(i => CirclePoint(i, numPoints)).ToArray();
+            => Enumerable.Range(0, numPoints).Select(i => CirclePoint(i, numPoints)).ToArray();
 
         public static Vector2 CirclePoint(int i, int numPoints)
             => new Vector2((i * (Math3d.Constants.TwoPi / numPoints)).Cos(), (i * (Math3d.Constants.TwoPi / numPoints)).Sin());

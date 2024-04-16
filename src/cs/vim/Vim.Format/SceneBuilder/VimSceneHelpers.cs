@@ -4,7 +4,6 @@ using System.Linq;
 using Vim.Format;
 using Vim.Format.ObjectModel;
 using Vim.Util;
-using Vim.LinqArray;
 using Vim.Math3d;
 
 namespace Vim

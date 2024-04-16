@@ -4,7 +4,6 @@ using System.Linq;
 using Vim.BFastLib;
 using Vim.Format.ObjectModel;
 using Vim.G3dNext;
-using Vim.LinqArray;
 using Vim.Math3d;
 using Vim.Util;
 

@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Text.RegularExpressions;
-using Vim.LinqArray;
 using Vim.BFastLib;
 using System.Collections.Generic;
 using System.Linq;
+using Vim.Util;
 
 namespace Vim.Format
 {

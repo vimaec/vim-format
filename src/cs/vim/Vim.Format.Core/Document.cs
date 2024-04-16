@@ -1,5 +1,4 @@
-﻿using Vim.LinqArray;
-using Vim.BFastLib;
+﻿using Vim.BFastLib;
 using Vim.G3dNext;
 using Vim.Util;
 
@@ -14,10 +13,10 @@ namespace Vim.Format
             Header = _Document.Header;
             GeometryNext = _Document.GeometryNext;
             StringTable = _Document.StringTable;
-            EntityTables = _Document.EntityTables.ToLookup(
+            EntityTables = _Document.EntityTables.ToVimLookup(
                 et => et.Name,
                 et => et.ToEntityTable(this));
-            Assets = _Document.Assets.ToLookup(et => et.Name, et => et);
+            Assets = _Document.Assets.ToVimLookup(et => et.Name, et => et);
         }
 
         public string FileName => _Document.FileName;

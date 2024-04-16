@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using Vim.BFastLib;
-using Vim.LinqArray;
 
 namespace Vim.Format
 {

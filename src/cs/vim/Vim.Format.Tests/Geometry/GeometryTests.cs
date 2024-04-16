@@ -3,7 +3,6 @@ using System;
 using System.Linq;
 using Vim.Format.Geometry;
 using Vim.G3dNext;
-using Vim.LinqArray;
 using Vim.Math3d;
 
 namespace Vim.Format.Tests.Geometry

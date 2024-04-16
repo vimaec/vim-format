@@ -943,14 +943,12 @@ namespace Vim.LinqArray
         public static bool Contains<T>(this IArray<T> xs, T value)
             => xs.Any(x => x.Equals(value));
 
-        public static ILookup<TKey, TValue> ToLookup<TSource, TKey, TValue>(this IEnumerable<TSource> input, Func<TSource, TKey> keyFunc, Func<TSource, TValue> valueFunc)
-            => input.ToDictionary(keyFunc, valueFunc).ToLookup();
+
+
 
         public static ILookup<TKey, TValue> ToLookup<TSource, TKey, TValue>(this IArray<TSource> input, Func<TSource, TKey> keyFunc, Func<TSource, TValue> valueFunc)
             => input.ToEnumerable().ToLookup(keyFunc, valueFunc);
 
-        public static ILookup<TKey, TSource> ToLookup<TSource, TKey>(this IEnumerable<TSource> input, Func<TSource, TKey> keyFunc)
-            => input.ToDictionary(keyFunc, x => x).ToLookup();
 
         public static ILookup<TKey, TSource> ToLookup<TSource, TKey>(this IArray<TSource> input, Func<TSource, TKey> keyFunc)
             => input.ToEnumerable().ToLookup(keyFunc, x => x);

@@ -4,7 +4,6 @@ using System.Data;
 using System.IO;
 using System.Linq;
 using Vim.Util;
-using Vim.LinqArray;
 
 namespace Vim.Format.ObjectModel
 {
@@ -153,7 +152,7 @@ namespace Vim.Format.ObjectModel
 
             var columnSet = new HashSet<int>(columns.Select(c => c.Index));
 
-            var cellRecords = dm.ScheduleCellScheduleColumnIndex.ToIArray()
+            var cellRecords = dm.ScheduleCellScheduleColumnIndex
                 .IndicesWhere((colIndex, _) => columnSet.Contains(colIndex))
                 .Select(cellIndex => new CellData(
                     dm.GetScheduleCellValue(cellIndex),

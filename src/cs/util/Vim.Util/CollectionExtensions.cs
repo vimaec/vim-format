@@ -7,7 +7,16 @@ namespace Vim.Util
 {
     public static class CollectionExtensions
     {
-      
+        public static TValue GetOrDefault<TKey, TValue>(this ILookup<TKey, TValue> lookup, TKey key, TValue @default = default(TValue))
+            => lookup.Contains(key) ? lookup[key] : @default;
+
+        public static ILookup<TKey, TValue> ToVimLookup<TSource, TKey, TValue>(this IEnumerable<TSource> input, Func<TSource, TKey> keyFunc, Func<TSource, TValue> valueFunc)
+            => input.ToDictionary(keyFunc, valueFunc).ToLookup();
+
+        public static ILookup<TKey, TSource> ToVimLookup<TSource, TKey>(this IEnumerable<TSource> input, Func<TSource, TKey> keyFunc)
+            => input.ToDictionary(keyFunc, x => x).ToLookup();
+
+
         /// <summary>
         /// Returns an IEnumerable containing only indices of the array for which the function satisfies a specific predicate.
         /// </summary>

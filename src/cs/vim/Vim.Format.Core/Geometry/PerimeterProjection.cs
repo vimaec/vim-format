@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using Vim.LinqArray;
 using Vim.Math3d;
 
 namespace Vim.Format.Geometry
