@@ -40,13 +40,13 @@ namespace Vim.Format.VimxLib.Conversion
         {
             var node = g3d.GetMeshInstances(mesh)[0];
 
-            if (node < 0 || node >= bim.NodeElementIndex.Count) return "";
+            if (node < 0 || node >= bim.NodeElementIndex.Length) return "";
             var element = bim.NodeElementIndex[node];
 
-            if (element < 0 || element >= bim.ElementCategoryIndex.Count) return "";
+            if (element < 0 || element >= bim.ElementCategoryIndex.Length) return "";
             var category = bim.ElementCategoryIndex[element];
 
-            if (category < 0 || category >= bim.CategoryName.Count) return "";
+            if (category < 0 || category >= bim.CategoryName.Length) return "";
             var name = bim.CategoryName[category];
 
             return name;

@@ -68,12 +68,12 @@ namespace Vim.Format.Tests
         public static void AssertEquals(EntityTable et1, EntityTable et2)
         {
             Assert.AreEqual(et1.Name, et2.Name);
-            Assert.AreEqual(et1.DataColumns.Keys.ToEnumerable().OrderBy(n => n).ToArray(), et2.DataColumns.Keys.ToEnumerable().OrderBy(n => n).ToArray());
-            Assert.AreEqual(et1.IndexColumns.Keys.ToEnumerable().OrderBy(n => n).ToArray(), et2.IndexColumns.Keys.ToEnumerable().OrderBy(n => n).ToArray());
-            Assert.AreEqual(et1.StringColumns.Keys.ToEnumerable().OrderBy(n => n).ToArray(), et2.StringColumns.Keys.ToEnumerable().OrderBy(n => n).ToArray());
+            Assert.AreEqual(et1.DataColumns.Keys.OrderBy(n => n).ToArray(), et2.DataColumns.Keys.OrderBy(n => n).ToArray());
+            Assert.AreEqual(et1.IndexColumns.Keys.OrderBy(n => n).ToArray(), et2.IndexColumns.Keys.OrderBy(n => n).ToArray());
+            Assert.AreEqual(et1.StringColumns.Keys.OrderBy(n => n).ToArray(), et2.StringColumns.Keys.OrderBy(n => n).ToArray());
 
-            var columns1 = et1.Columns.ToEnumerable().OrderBy(c => c.Name).ToArray();
-            var columns2 = et2.Columns.ToEnumerable().OrderBy(c => c.Name).ToArray();
+            var columns1 = et1.Columns.OrderBy(c => c.Name).ToArray();
+            var columns2 = et2.Columns.OrderBy(c => c.Name).ToArray();
 
             Assert.AreEqual(
                 columns1.Select(ec => ec.Name).ToArray(),
@@ -104,9 +104,9 @@ namespace Vim.Format.Tests
         public static void AssertIsSupersetOf(EntityTable et1, EntityTable et2)
         {
             Assert.AreEqual(et1.Name, et2.Name);
-            Assert.IsTrue(IsSupersetOf(et1.DataColumns.Keys.ToEnumerable(), et2.DataColumns.Keys.ToEnumerable()));
-            Assert.IsTrue(IsSupersetOf(et1.IndexColumns.Keys.ToEnumerable(), et2.IndexColumns.Keys.ToEnumerable()));
-            Assert.IsTrue(IsSupersetOf(et1.StringColumns.Keys.ToEnumerable(), et2.StringColumns.Keys.ToEnumerable()));
+            Assert.IsTrue(IsSupersetOf(et1.DataColumns.Keys, et2.DataColumns.Keys));
+            Assert.IsTrue(IsSupersetOf(et1.IndexColumns.Keys, et2.IndexColumns.Keys));
+            Assert.IsTrue(IsSupersetOf(et1.StringColumns.Keys, et2.StringColumns.Keys));
 
             var columns1 = et1.Columns.ToArray();
             var columns2 = et2.Columns.ToArray();
@@ -137,9 +137,9 @@ namespace Vim.Format.Tests
 
             var etKeys1 = d1.EntityTables.Keys;
             var etKeys2 = d2.EntityTables.Keys;
-            Assert.IsTrue(IsSupersetOf(etKeys1.ToEnumerable(), etKeys2.ToEnumerable()));
+            Assert.IsTrue(IsSupersetOf(etKeys1, etKeys2));
 
-            foreach (var key in etKeys2.ToEnumerable())
+            foreach (var key in etKeys2)
             {
                 if (skipGeometryAndNodes && key.ToLowerInvariant().Contains("geometry"))
                     continue;
@@ -158,8 +158,8 @@ namespace Vim.Format.Tests
             var schema2 = VimSchema.Create(d2._Document);
             Assert.IsTrue(VimSchema.IsSame(schema1, schema2));
 
-            var entityTables1 = d1.EntityTables.Keys.ToEnumerable().OrderBy(n => n).ToArray();
-            var entityTables2 = d2.EntityTables.Keys.ToEnumerable().OrderBy(n => n).ToArray();
+            var entityTables1 = d1.EntityTables.Keys.OrderBy(n => n).ToArray();
+            var entityTables2 = d2.EntityTables.Keys.OrderBy(n => n).ToArray();
             Assert.AreEqual(entityTables1, entityTables2);
 
             foreach (var k in entityTables1)
