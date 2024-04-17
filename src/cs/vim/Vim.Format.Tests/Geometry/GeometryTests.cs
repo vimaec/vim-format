@@ -2,7 +2,7 @@
 using System;
 using System.Linq;
 using Vim.Format.Geometry;
-using Vim.G3dNext;
+using Vim.G3d;
 using Vim.Math3d;
 
 namespace Vim.Format.Tests.Geometry

@@ -3,7 +3,7 @@ using NUnit.Framework.Internal;
 using Vim.BFastLib;
 using Vim.Util.Tests;
 
-namespace Vim.G3dNext.Tests
+namespace Vim.G3d.Tests
 {
     [TestFixture]
     public static class VimG3dNextTests

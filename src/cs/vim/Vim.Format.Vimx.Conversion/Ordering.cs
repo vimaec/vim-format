@@ -1,6 +1,6 @@
 ﻿using System;
 using Vim.Format.ObjectModel;
-using Vim.G3dNext;
+using Vim.G3d;
 
 namespace Vim.Format.VimxLib.Conversion
 {

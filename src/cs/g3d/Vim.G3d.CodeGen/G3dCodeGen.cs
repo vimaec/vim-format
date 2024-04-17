@@ -2,7 +2,7 @@
 using System.IO;
 using System.Linq;
 
-namespace Vim.G3dNext.CodeGen
+namespace Vim.G3d.CodeGen
 {
     public static class G3dCodeGen
     {
@@ -16,7 +16,7 @@ namespace Vim.G3dNext.CodeGen
                 cb.AppendLine("// ReSharper disable All");
                 cb.AppendLine("using Vim.BFastLib;");
                 cb.AppendLine();
-                cb.AppendLine("namespace Vim.G3dNext");
+                cb.AppendLine("namespace Vim.G3d");
                 cb.AppendLine("{");
                 WriteEntities(cb);
                 cb.AppendLine("}");

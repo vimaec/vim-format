@@ -1,5 +1,5 @@
 ﻿using Vim.BFastLib;
-using Vim.G3dNext;
+using Vim.G3d;
 using Vim.Util;
 
 namespace Vim.Format

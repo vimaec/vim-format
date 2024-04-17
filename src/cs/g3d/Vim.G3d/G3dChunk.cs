@@ -2,7 +2,7 @@
 using System.Linq;
 using Vim.Math3d;
 
-namespace Vim.G3dNext
+namespace Vim.G3d
 {
 
 

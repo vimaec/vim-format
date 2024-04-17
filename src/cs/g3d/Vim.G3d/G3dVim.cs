@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Vim.BFastLib;
 
-namespace Vim.G3dNext
+namespace Vim.G3d
 {
     [Flags]
     public enum InstanceFlags

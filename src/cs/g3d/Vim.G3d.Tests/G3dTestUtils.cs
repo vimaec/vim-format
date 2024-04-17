@@ -1,6 +1,6 @@
 ﻿using Vim.Math3d;
 
-namespace Vim.G3dNext.Tests
+namespace Vim.G3d.Tests
 {
     public static class G3dNextTestUtils
     {

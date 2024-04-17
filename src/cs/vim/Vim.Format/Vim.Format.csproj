@@ -33,7 +33,6 @@
       <DisableTransitiveFrameworkReferences>true</DisableTransitiveFrameworkReferences>
       <SkipGetTargetFrameworkProperties>true</SkipGetTargetFrameworkProperties>
     </ProjectReference>
-    <ProjectReference Include="..\..\g3d\Vim.G3dNext\Vim.G3dNext.csproj" />
   </ItemGroup>
 
   <ItemGroup>

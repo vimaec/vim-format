@@ -2,7 +2,7 @@
 // ReSharper disable All
 using Vim.BFastLib;
 
-namespace Vim.G3dNext
+namespace Vim.G3d
 {
     // Please provide an explicit implementation in another partial class file.
     public partial class G3dVim : ISetup

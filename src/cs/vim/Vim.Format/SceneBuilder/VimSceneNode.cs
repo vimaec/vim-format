@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Vim.Format.Geometry;
 using Vim.Format.ObjectModel;
-using Vim.G3dNext;
+using Vim.G3d;
 using Vim.Math3d;
 
 namespace Vim
@@ -26,7 +26,7 @@ namespace Vim
         public Matrix4x4 Transform { get; }
 
         public bool HideByDefault
-            => Scene.Document.GeometryNext.InstanceHasFlag(NodeIndex, G3dNext.InstanceFlags.Hidden);
+            => Scene.Document.GeometryNext.InstanceHasFlag(NodeIndex, InstanceFlags.Hidden);
 
         public int VimIndex { get; } = -1;
         public int NodeIndex { get; } = -1;

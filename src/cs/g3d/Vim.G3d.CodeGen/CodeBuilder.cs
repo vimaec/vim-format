@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Text;
 
-namespace Vim.G3dNext.CodeGen
+namespace Vim.G3d.CodeGen
 {
     public class CodeBuilder
     {
