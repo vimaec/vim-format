@@ -1,4 +1,4 @@
-﻿namespace Vim.G3dNext.CodeGen
+﻿namespace Vim.G3d.CodeGen
 {
     public static class Program
     {

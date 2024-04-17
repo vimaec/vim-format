@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Vim.Math3d;
-using Vim.G3dNext;
+using Vim.G3d;
 
 namespace Vim.Format.VimxLib.Conversion
 {

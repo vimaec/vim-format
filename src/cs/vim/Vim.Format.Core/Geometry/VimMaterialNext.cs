@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using Vim.G3dNext;
+using Vim.G3d;
 using Vim.Math3d;
 
 namespace Vim.Format.Geometry

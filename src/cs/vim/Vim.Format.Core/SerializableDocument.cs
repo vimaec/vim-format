@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using Vim.BFastLib;
 using Vim.BFastLib.Core;
-using Vim.G3dNext;
+using Vim.G3d;
 
 namespace Vim.Format
 {

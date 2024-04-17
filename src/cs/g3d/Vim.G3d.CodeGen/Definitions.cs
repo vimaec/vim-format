@@ -1,6 +1,6 @@
 ﻿using Vim.Math3d;
 
-namespace Vim.G3dNext.CodeGen
+namespace Vim.G3d.CodeGen
 {
     internal class Definitions
     {

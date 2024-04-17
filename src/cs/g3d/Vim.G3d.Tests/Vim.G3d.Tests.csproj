@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
@@ -16,9 +16,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="../bfast/Vim.BFast/Vim.BFast.csproj" />
-    <ProjectReference Include="../g3d/Vim.G3dNext/Vim.G3dNext.csproj" />
-    <ProjectReference Include="../util/Vim.Util.Tests/Vim.Util.Tests.csproj" />
+    <ProjectReference Include="..\..\util\Vim.Util.Tests\Vim.Util.Tests.csproj" />
+    <ProjectReference Include="..\Vim.G3d\Vim.G3d.csproj" />
   </ItemGroup>
   <ItemGroup>
     <None Include="../../../../LICENSE.txt">

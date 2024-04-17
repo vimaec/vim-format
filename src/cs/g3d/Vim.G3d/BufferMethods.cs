@@ -2,7 +2,7 @@
 using System.IO;
 using System.Linq;
 
-namespace Vim.G3dNext
+namespace Vim.G3d
 {
     public static class BufferMethods
     {

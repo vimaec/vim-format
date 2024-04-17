@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Vim.G3dNext.CodeGen
+namespace Vim.G3d.CodeGen
 {
     /// <summary>
     /// Holds the data to generate the code for a g3d entity.

@@ -1,4 +1,4 @@
-﻿namespace Vim.G3dNext
+﻿namespace Vim.G3d
 {
     /// <summary>
     /// Defines method for additionnal setup after constructors in generated G3d classes.
