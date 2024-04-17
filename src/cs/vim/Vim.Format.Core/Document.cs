@@ -1,4 +1,6 @@
-﻿using Vim.BFastLib;
+﻿using System.Collections.Generic;
+using System.Linq;
+using Vim.BFastLib;
 using Vim.G3d;
 using Vim.Util;
 
@@ -13,17 +15,17 @@ namespace Vim.Format
             Header = _Document.Header;
             GeometryNext = _Document.GeometryNext;
             StringTable = _Document.StringTable;
-            EntityTables = _Document.EntityTables.ToVimLookup(
+            EntityTables = _Document.EntityTables.ToDictionary(
                 et => et.Name,
                 et => et.ToEntityTable(this));
-            Assets = _Document.Assets.ToVimLookup(et => et.Name, et => et);
+            Assets = _Document.Assets.ToDictionary(et => et.Name, et => et);
         }
 
         public string FileName => _Document.FileName;
         public SerializableDocument _Document { get; }
         public SerializableHeader Header { get; }
-        public ILookup<string, EntityTable> EntityTables { get; }
-        public ILookup<string, INamedBuffer> Assets { get; }
+        public Dictionary<string, EntityTable> EntityTables { get; }
+        public Dictionary<string, INamedBuffer> Assets { get; }
         public string[] StringTable { get; }
         public string GetString(int index) => StringTable.ElementAtOrDefault(index);
         public G3dVim GeometryNext { get; }

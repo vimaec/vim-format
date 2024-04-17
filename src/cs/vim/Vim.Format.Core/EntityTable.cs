@@ -14,9 +14,9 @@ namespace Vim.Format
             _EntityTable = entityTable;
             Name = _EntityTable.Name;
 
-            DataColumns = _EntityTable.DataColumns.ToVimLookup( c => c.Name, c => c);
-            IndexColumns = _EntityTable.IndexColumns.ToVimLookup(c => c.Name, c => c);
-            StringColumns = _EntityTable.StringColumns.ToVimLookup(c => c.Name, c => c);
+            DataColumns = _EntityTable.DataColumns.ToDictionary( c => c.Name, c => c);
+            IndexColumns = _EntityTable.IndexColumns.ToDictionary(c => c.Name, c => c);
+            StringColumns = _EntityTable.StringColumns.ToDictionary(c => c.Name, c => c);
             NumRows = Columns.FirstOrDefault()?.NumElements() ?? 0;
 
             Columns.ValidateColumnRowsAreAligned();
@@ -26,9 +26,9 @@ namespace Vim.Format
         public Document Document { get; }
         public string Name { get; }
         public int NumRows { get; }
-        public Vim.Util.ILookup<string, INamedBuffer> DataColumns { get; }
-        public Vim.Util.ILookup<string, NamedBuffer<int>> StringColumns { get; }
-        public Vim.Util.ILookup<string, NamedBuffer<int>> IndexColumns { get; }
+        public Dictionary<string, INamedBuffer> DataColumns { get; }
+        public Dictionary<string, NamedBuffer<int>> StringColumns { get; }
+        public Dictionary<string, NamedBuffer<int>> IndexColumns { get; }
         public IEnumerable<INamedBuffer> Columns
             => DataColumns.Values
                 .Concat(IndexColumns.Values.Select(x => (INamedBuffer)x))
