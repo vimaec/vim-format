@@ -143,7 +143,7 @@ namespace Vim.Format.ObjectModel
             var assetEntities = dm.AssetList.ToArray();
             foreach (var asset in assetEntities)
             {
-                if (!assetBuffers.Contains(asset.BufferName))
+                if (!assetBuffers.ContainsKey(asset.BufferName))
                     throw new ObjectModelValidationException($"No matching asset buffer found for asset entity {asset.Index} with {nameof(asset.BufferName)} '{asset.BufferName}'");
             }
         }
