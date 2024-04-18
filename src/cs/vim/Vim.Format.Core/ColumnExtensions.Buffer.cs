@@ -8,9 +8,6 @@ namespace Vim.Format
 {
     public static partial class ColumnExtensions
     {
-        public static IEnumerable<INamedBuffer> GetAllColumns(this SerializableEntityTable et)
-            => et.DataColumns.Concat(et.IndexColumns).Concat(et.StringColumns).ToList();
-
         public static void ValidateColumnRowsAreAligned(this IEnumerable<INamedBuffer> columns)
         {
             var numRows = columns.FirstOrDefault()?.NumElements() ?? 0;
@@ -28,7 +25,7 @@ namespace Vim.Format
 
         public static SerializableEntityTable ValidateColumnRowsAreAligned(this SerializableEntityTable et)
         {
-            et.GetAllColumns().ValidateColumnRowsAreAligned();
+            et.AllColumns.ValidateColumnRowsAreAligned();
             return et;
         }
 
