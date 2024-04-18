@@ -120,8 +120,8 @@ namespace Vim.Format.Tests
         /// </summary>
         public static void AssertIsSuperSetOf(Document d1, Document d2, bool skipGeometryAndNodes = true)
         {
-            var schema1 = VimSchema.Create(d1._Document);
-            var schema2 = VimSchema.Create(d2._Document);
+            var schema1 = d1.GetSchema();
+            var schema2 = d2.GetSchema();
             Assert.IsTrue(VimSchema.IsSuperSetOf(schema1, schema2));
 
             var etKeys1 = d1.EntityTables.Keys;
@@ -143,8 +143,8 @@ namespace Vim.Format.Tests
 
         public static void AssertEquals(Document d1, Document d2, bool skipGeometryAndNodes = false)
         {
-            var schema1 = VimSchema.Create(d1._Document);
-            var schema2 = VimSchema.Create(d2._Document);
+            var schema1 = d1.GetSchema();
+            var schema2 = d2.GetSchema();
             Assert.IsTrue(VimSchema.IsSame(schema1, schema2));
 
             var entityTables1 = d1.EntityTables.Keys.OrderBy(n => n).ToArray();

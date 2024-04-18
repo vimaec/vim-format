@@ -21,6 +21,8 @@ namespace Vim.Format
             Assets = _Document.Assets.ToDictionary(et => et.Name, et => et);
         }
 
+        public VimSchema GetSchema() => VimSchema.Create(_Document);
+
         public string FileName => _Document.FileName;
         public SerializableDocument _Document { get; }
         public SerializableHeader Header { get; }
