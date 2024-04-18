@@ -1,58 +1,68 @@
-﻿using Vim.Format.Geometry;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using Vim.Format.Geometry;
 using Vim.Format.ObjectModel;
 using Vim.G3d;
-using Vim.LinqArray;
 using Vim.Math3d;
 
 namespace Vim
 {
-    public sealed class VimSceneNode : ElementInfo, ISceneNode, ITransformable3D<VimSceneNode>
+    public sealed class VimSceneNode : ElementInfo, ITransformable3D<VimSceneNode>
     {
         public VimSceneNode(VimScene scene, int nodeIndex, int geometryIndex, Matrix4x4 transform)
             : base(scene.DocumentModel, scene.DocumentModel.GetNodeElementIndex(nodeIndex))
         {
             VimIndex = scene.VimIndex;
-            _Scene = scene;
+            Scene = scene;
             Transform = transform;
             MeshIndex = geometryIndex;
             NodeIndex = nodeIndex;
         }
 
-        public VimScene _Scene { get; }
+        public VimScene Scene { get; }
 
-        public IScene Scene => _Scene;
         public int Id => NodeIndex;
         public Matrix4x4 Transform { get; }
 
         public bool HideByDefault
-        {
-            get
-            {
-                var instanceFlags = (InstanceFlags)_Scene.Document.Geometry.InstanceFlags.ElementAtOrDefault(NodeIndex);
-                return (instanceFlags & InstanceFlags.Hidden) == InstanceFlags.Hidden;
-            }
-        }
+            => Scene.Document.GeometryNext.InstanceHasFlag(NodeIndex, InstanceFlags.Hidden);
 
         public int VimIndex { get; } = -1;
         public int NodeIndex { get; } = -1;
 
-        public IMesh GetMesh() 
-            => _Scene.Meshes.ElementAtOrDefault(MeshIndex);
+        public VimMesh GetMesh()
+            => Scene.Meshes.SafeGet(MeshIndex);
 
         public int MeshIndex { get; }
 
         public bool HasMesh => MeshIndex != -1;
 
-        public Node NodeModel => _Scene.DocumentModel.GetNode(Id);
-        public Geometry GeometryModel => _Scene.DocumentModel.GetGeometry(MeshIndex);
+        public Node NodeModel => Scene.DocumentModel.GetNode(Id);
+        public Geometry GeometryModel => Scene.DocumentModel.GetGeometry(MeshIndex);
 
         // TODO: I think this should be "IEnumerable<ISceneNode>" in the interface
-        public ISceneNode Parent => null;
-        public IArray<ISceneNode> Children => LinqArray.LinqArray.Empty<ISceneNode>();
+        public VimSceneNode Parent => null;
+        public VimSceneNode[] Children =>  Array.Empty<VimSceneNode>();
 
         public string DisciplineName => VimSceneHelpers.GetDisiplineFromCategory(CategoryName);
 
         VimSceneNode ITransformable3D<VimSceneNode>.Transform(Matrix4x4 mat)
-            => new VimSceneNode(_Scene, Id, MeshIndex, mat * Transform);
+            => new VimSceneNode(Scene, Id, MeshIndex, mat * Transform);
+
+        public VimMesh TransformedMesh()
+             => GetMesh()?.Transform(Transform);
+
+        public Vector3[] TransformedVertices()
+            => TransformedMesh()?.vertices;
+
+        public AABox TransformedBoundingBox()
+            => AABox.Create(TransformedVertices());
+    }
+
+    public static class NodeExtensions
+    {
+        public static VimMesh MergedGeometry(this IEnumerable<VimSceneNode> nodes)
+           => nodes.Where(n => n.GetMesh() != null).Select(n => n.TransformedMesh()).ToArray().Merge();
     }
 }

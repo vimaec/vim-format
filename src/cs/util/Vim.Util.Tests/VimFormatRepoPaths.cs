@@ -26,7 +26,7 @@ namespace Vim.Util.Tests
         /// </summary>
         public static string GetLatestWolfordResidenceVim()
         {
-            var matchingVim = Directory.GetFiles(DataDir, "Wolford_Residence*.vim", SearchOption.AllDirectories).FirstOrDefault();
+            var matchingVim = Directory.GetFiles(DataDir, "Wolford_Residence*.vim", SearchOption.AllDirectories).OrderByDescending(p => p).FirstOrDefault();
 
             if (matchingVim == null)
                 throw new FileNotFoundException($"Could not find the latest Wolford Residence VIM.");

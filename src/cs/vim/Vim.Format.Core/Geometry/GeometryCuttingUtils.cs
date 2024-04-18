@@ -123,51 +123,5 @@ namespace Vim.Format.Geometry
             var closestPoint = v + t * (w - v);  // Projection falls on the segment
             return (p - closestPoint).Length();
         }
-
-
-
-        // Apply a surface function that projects a 2d triangulation in UV space into a 3d triangulation
-        /*      public static IGeometry ApplySurfaceFunction(this List<EarClipTriangulation> triangulations, Func<Vector2, Vector3> surfaceFunction)
-              {
-                  var allIndices = new List<int>();
-                  var allVertices = new List<Vector3>();
-
-                  foreach (var triangulation in triangulations)
-                  {
-                      var vertices = triangulation.Points.ToList();
-                      var indices = triangulation.TriangleIndices;
-
-                      while (true)
-                      {
-                          List<int> outIndices;
-                          List<Vector2> outVertices;
-                          bool done = SubdivideLargeTriangles(vertices, indices, out outVertices, out outIndices, 0.3f);
-
-                          vertices = outVertices;
-                          indices = outIndices;
-
-                          if (done)
-                          {
-                              break;
-                          }
-                      }
-
-                      // Apply surface function
-                      var vertices3d = vertices.Select(x => surfaceFunction(x.ToVector()));
-
-                      // Merge all triangulations
-                      int startIndex = allVertices.Count;
-                      allVertices.AddRange(vertices3d);
-                      allIndices.AddRange(indices.Select(x => x + startIndex));
-                  }
-
-                  var cutGeometry = new G3D(
-                      allVertices.ToIArray().ToVertexAttribute(),
-                      allIndices.ToIArray().ToIndexAttribute(),
-                      new FunctionalArray<int>(allIndices.Count / 3, x => 3).ToFaceSizeAttribute()
-                      ).ToIMesh();
-
-                  return cutGeometry;
-              }*/
     }
 }

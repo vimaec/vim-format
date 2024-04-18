@@ -18,8 +18,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="../../g3d/Vim.G3d/Vim.G3d.csproj" />
-    <ProjectReference Include="../../linqarray/Vim.LinqArray/Vim.LinqArray.csproj" />
     <ProjectReference Include="../../math3d/Vim.Math3D/Vim.Math3D.csproj" />
     <ProjectReference Include="../Vim.Format.Core/Vim.Format.Core.csproj" />
     <ProjectReference Include="../Vim.Format.CodeGen/Vim.Format.CodeGen.csproj">

@@ -8,10 +8,9 @@
 
   <ItemGroup>
     <ProjectReference Include="../../bfast\Vim.BFast/Vim.BFast.csproj" />
-    <ProjectReference Include="../../g3d/Vim.G3d/Vim.G3d.csproj" />
-    <ProjectReference Include="../../linqarray/Vim.LinqArray/Vim.LinqArray.csproj" />
     <ProjectReference Include="../../math3d/Vim.Math3D/Vim.Math3D.csproj" />
     <ProjectReference Include="../../util/Vim.Util/Vim.Util.csproj" />
+    <ProjectReference Include="..\..\g3d\Vim.G3d\Vim.G3d.csproj" />
   </ItemGroup>
 
   <ItemGroup>
@@ -22,21 +21,6 @@
 
   <ItemGroup>
     <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Update="Geometry\ArrayOps.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>ArrayOps.cs</LastGenOutput>
-    </None>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Update="Geometry\ArrayOps.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>ArrayOps.tt</DependentUpon>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
     <None Include="../../../../LICENSE.txt">

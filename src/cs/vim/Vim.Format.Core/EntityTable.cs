@@ -1,6 +1,8 @@
 ﻿using System;
-using Vim.LinqArray;
 using Vim.BFastLib;
+using System.Linq;
+using System.Collections.Generic;
+using Vim.Util;
 
 namespace Vim.Format
 {
@@ -12,52 +14,72 @@ namespace Vim.Format
             _EntityTable = entityTable;
             Name = _EntityTable.Name;
 
-            DataColumns = LinqArray.LinqArray.ToLookup(_EntityTable.DataColumns, c => c.Name, c => c);
-            IndexColumns = LinqArray.LinqArray.ToLookup(_EntityTable.IndexColumns, c => c.Name, c => c);
-            StringColumns = LinqArray.LinqArray.ToLookup(_EntityTable.StringColumns, c => c.Name, c => c);
+            _dataColumns = _EntityTable.DataColumns.ToDictionary( c => c.Name, c => c);
+            _indexColumns = _EntityTable.IndexColumns.ToDictionary(c => c.Name, c => c);
+            _stringColumns = _EntityTable.StringColumns.ToDictionary(c => c.Name, c => c);
             NumRows = Columns.FirstOrDefault()?.NumElements() ?? 0;
 
-            Columns.ToEnumerable().ValidateColumnRowsAreAligned();
+            Columns.ValidateColumnRowsAreAligned();
         }
 
         private SerializableEntityTable _EntityTable { get; }
         public Document Document { get; }
         public string Name { get; }
         public int NumRows { get; }
-        public LinqArray.ILookup<string, INamedBuffer> DataColumns { get; }
-        public LinqArray.ILookup<string, NamedBuffer<int>> StringColumns { get; }
-        public LinqArray.ILookup<string, NamedBuffer<int>> IndexColumns { get; }
-        public IArray<INamedBuffer> Columns
-            => DataColumns.Values
-                .Concatenate(IndexColumns.Values.Select(x => (INamedBuffer)x))
-                .Concatenate(StringColumns.Values.Select(x => (INamedBuffer)x));
+        private Dictionary<string, INamedBuffer> _dataColumns { get; }
+        private Dictionary<string, NamedBuffer<int>> _stringColumns { get; }
+        private Dictionary<string, NamedBuffer<int>> _indexColumns { get; }
 
-        public IArray<int> GetIndexColumnValues(string columnName)
-            => IndexColumns.GetOrDefault(columnName)?.GetColumnValues<int>();
 
-        public IArray<string> GetStringColumnValues(string columnName)
-            => StringColumns.GetOrDefault(columnName)
-                ?.GetColumnValues<int>()
-                ?.Select(Document.GetString);
+        // Data
+        public bool HasDataColumns(string name) => _dataColumns.ContainsKey(name);
+        public IEnumerable<INamedBuffer> DataColumns => _dataColumns.Values;
+        public IEnumerable<string> DataColumnNames => _dataColumns.Keys;
 
-        public IArray<T> GetDataColumnValues<T>(string columnName) where T : unmanaged
+        // Strings
+        public IEnumerable<NamedBuffer<int>> StringColumns => _stringColumns.Values;
+        public bool HasStringColumn(string name) => _stringColumns.ContainsKey(name);
+        public NamedBuffer<int> GetStringColumn(string name) => _stringColumns.GetOrDefault(name);
+        public IEnumerable<string> StringColumnNames => _stringColumns.Keys;
+
+        //Data
+        public IEnumerable<NamedBuffer<int>> IndexColumns => _indexColumns.Values;
+        public IEnumerable<string> IndexColumnNames => _indexColumns.Keys;
+        public bool HasIndexColumn(string name) => _indexColumns.ContainsKey(name);
+        public NamedBuffer<int> GetIndexColumn(string name) => _indexColumns.GetOrDefault(name);
+
+
+        public IEnumerable<INamedBuffer> Columns
+            => DataColumns
+                .Concat(IndexColumns.Select(x => (INamedBuffer)x))
+                .Concat(StringColumns.Select(x => (INamedBuffer)x));
+
+        public int[] GetIndexColumnValues(string columnName)
+            => GetIndexColumn(columnName)?.AsArray<int>();
+
+        public string[] GetStringColumnValues(string columnName)
+            => _stringColumns.GetOrDefault(columnName)
+                ?.AsArray<int>()
+                ?.Select(Document.GetString).ToArray();
+
+        public T[] GetDataColumnValues<T>(string columnName) where T : unmanaged
         {
             var type = typeof(T);
 
             if (!ColumnExtensions.DataColumnTypes.Contains(type))
                 throw new Exception($"{nameof(GetDataColumnValues)} error - unsupported data column type {type}");
 
-            var namedBuffer = DataColumns.GetOrDefault(columnName);
+            var namedBuffer = _dataColumns.GetOrDefault(columnName);
             if (namedBuffer == null)
                 return null;
 
             if (type == typeof(short))
-                return namedBuffer.GetColumnValues<int>().Select(i => (short)i) as IArray<T>;
+                return namedBuffer.AsArray<int>().Select(i => (short)i) as T[];
 
             if (type == typeof(bool))
-                return namedBuffer.GetColumnValues<byte>().Select(b => b != 0) as IArray<T>;
+                return namedBuffer.AsArray<byte>().Select(b => b != 0) as T[];
 
-            return namedBuffer.GetColumnValues<T>();
+            return namedBuffer.AsArray<T>();
         }
     }
 }

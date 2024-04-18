@@ -6,6 +6,7 @@ using Vim.Math3d;
 using Vim.BFastLib;
 using System.IO;
 using Vim.Util;
+using Vim.Format.Geometry;
 
 namespace Vim.Format
 {
@@ -48,13 +49,13 @@ namespace Vim.Format
             return this;
         }
 
-        public DocumentBuilder AddMesh(SubdividedMesh mesh)
+        public DocumentBuilder AddMesh(VimMesh mesh)
         {
             Geometry.AddMesh(mesh);
             return this;
         }
 
-        public DocumentBuilder AddMeshes(IEnumerable<SubdividedMesh> meshes)
+        public DocumentBuilder AddMeshes(IEnumerable<VimMesh> meshes)
         {
             foreach (var m in meshes)
             {
@@ -84,7 +85,7 @@ namespace Vim.Format
             return this;
         }
 
-        public DocumentBuilder AddMaterials(IEnumerable<Material> materials)
+        public DocumentBuilder AddMaterials(IEnumerable<IMaterial> materials)
         {
             foreach (var material in materials)
             {

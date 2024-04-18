@@ -1,13 +1,11 @@
-﻿using System.Linq;
-using Vim.LinqArray;
-using Vim.BFastLib;
-using Vim.G3dNext;
-using Vim.Format.ObjectModel;
-using Vim.G3dNext;
-using System.Collections.Generic;
-using Vim.Math3d;
+﻿using System.Collections.Generic;
 using System.Diagnostics;
-using System;
+using System.Linq;
+using Vim.BFastLib;
+using Vim.Format.ObjectModel;
+using Vim.G3d;
+using Vim.Math3d;
+using Vim.Util;
 
 namespace Vim.Format.VimxLib.Conversion
 {
@@ -106,7 +104,7 @@ namespace Vim.Format.VimxLib.Conversion
                     // bim
                     instanceNodes[instance] = node;
                     instanceGroups[instance] = element;
-                    instanceTags[instance] = bim.ElementId.SafeGet(element, -1);
+                    instanceTags[instance] = bim.ElementId.ElementAtOrDefault(element, -1);
 
                     instance++;
                 }

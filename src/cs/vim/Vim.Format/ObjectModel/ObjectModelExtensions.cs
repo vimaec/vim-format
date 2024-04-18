@@ -4,7 +4,6 @@ using System.Data;
 using System.IO;
 using System.Linq;
 using Vim.Util;
-using Vim.LinqArray;
 
 namespace Vim.Format.ObjectModel
 {
@@ -40,22 +39,22 @@ namespace Vim.Format.ObjectModel
         public static string GetBimDocumentFileName(this DocumentModel dm, int bimDocumentIndex)
             => Path.GetFileName(dm.GetBimDocumentPathName(bimDocumentIndex));
 
-        public static IArray<DisplayUnit> GetBimDocumentDisplayUnits(this DocumentModel dm, BimDocument bd)
+        public static DisplayUnit[] GetBimDocumentDisplayUnits(this DocumentModel dm, BimDocument bd)
             => dm.DisplayUnitInBimDocumentList
                 .Where(item => item.BimDocument.Index == bd.Index)
                 .Select(item => item.DisplayUnit)
-                .ToIArray();
+                .ToArray();
 
-        public static IArray<Phase> GetBimDocumentPhases(this DocumentModel dm, BimDocument bd)
+        public static Phase[] GetBimDocumentPhases(this DocumentModel dm, BimDocument bd)
             => dm.PhaseOrderInBimDocumentList
                 .Where(item => item.BimDocument.Index == bd.Index)
                 .Select(item => item.Phase)
-                .ToIArray();
+                .ToArray();
 
         public const string LengthSpecLegacyPrefix = "UT_Length";
         public const string LengthSpecPrefix = "autodesk.spec.aec:length";
 
-        public static DisplayUnit GetLengthDisplayUnit(this IArray<DisplayUnit> displayUnits)
+        public static DisplayUnit GetLengthDisplayUnit(this DisplayUnit[] displayUnits)
             => displayUnits.FirstOrDefault(du =>
             {
                 var spec = du.Spec;

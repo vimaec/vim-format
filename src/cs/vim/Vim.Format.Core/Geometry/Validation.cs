@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using Vim.G3d;
-using Vim.LinqArray;
 using Vim.BFastLib;
 
 namespace Vim.Format.Geometry
@@ -10,21 +7,21 @@ namespace Vim.Format.Geometry
     {
         public static void ValidateTableRows(this Document doc)
         {
-            foreach (var et in doc.EntityTables.Values.ToArray())
+            foreach (var et in doc.Tables)
             {
-                foreach (var c in et.IndexColumns.Values.ToArray())
+                foreach (var c in et.IndexColumns)
                 {
                     if (c.Array.Length != et.NumRows)
                         throw new Exception($"Expected array length {c.Array.Length} of column {c.Name} to be the same as number of rows {et.NumRows}");
                 }
 
-                foreach (var c in et.DataColumns.Values.ToArray())
+                foreach (var c in et.DataColumns)
                 {
                     if (c.NumElements() != et.NumRows)
                         throw new Exception($"Expected array length {c.NumElements()} of column {c.Name} to be the same as number of rows {et.NumRows}");
                 }
 
-                foreach (var c in et.StringColumns.Values.ToArray())
+                foreach (var c in et.StringColumns)
                 {
                     if (c.Array.Length != et.NumRows)
                         throw new Exception($"Expected array length {c.Array.Length} of column {c.Name} to be the same as number of rows {et.NumRows}");
@@ -34,9 +31,9 @@ namespace Vim.Format.Geometry
 
         public static void ValidateIndexColumns(this Document doc)
         {
-            foreach (var et in doc.EntityTables.Values.ToArray())
+            foreach (var et in doc.Tables)
             {
-                foreach (var ic in et.IndexColumns.Values.ToEnumerable())
+                foreach (var ic in et.IndexColumns)
                 {
                     var table = ic.GetRelatedTable(doc);
                     if (table == null)
@@ -45,37 +42,9 @@ namespace Vim.Format.Geometry
             }
         }
 
-        public static string[] RequiredAttributeNames => new []
-        {
-            // Vertices
-            CommonAttributes.Position,
-            CommonAttributes.Index,
-            
-            // Meshes
-            CommonAttributes.MeshSubmeshOffset,
-
-            // Submeshes
-            CommonAttributes.SubmeshIndexOffset,
-
-            // Instances
-            CommonAttributes.InstanceMesh,
-            CommonAttributes.InstanceTransform,
-        };
-
-        public static void ValidateGeometryAttributes(this Document doc)
-        {
-            var attributes = doc.Geometry.Attributes;
-            var attributeNameSet = new HashSet<string>(attributes.Select(a => a.Name).ToEnumerable());
-            foreach (var attributeName in RequiredAttributeNames)
-            {
-                if (!attributeNameSet.Contains(attributeName))
-                    throw new Exception($"Required attribute {attributeName} was not found.");
-            }
-        }
-
         public static void ValidateAssets(this Document doc)
         {
-            foreach (var asset in doc.Assets.Values.ToEnumerable())
+            foreach (var asset in doc.Assets.Values)
                 AssetInfo.Parse(asset.Name); // This will throw if it fails to parse.
         }
 
@@ -83,24 +52,7 @@ namespace Vim.Format.Geometry
         {
             doc.ValidateTableRows();
             doc.ValidateIndexColumns();
-            doc.ValidateGeometryAttributes();
             doc.ValidateAssets();
-        }
-
-        // TODO: ValidateShapes() to validate VIM files which contain optional 2d data (shapes/overlays).
-
-        public static void ValidateIndices(this IMesh mesh)
-        {
-            foreach (var index in mesh.Indices.ToEnumerable())
-            {
-                if (index < 0 || index >= mesh.NumVertices)
-                    throw new Exception($"Invalid mesh index: {index}. Expected a value greater or equal to 0 and less than {mesh.NumVertices}");
-            }
-        }
-
-        public static void Validate(this IMesh mesh)
-        {
-            mesh.ValidateIndices();
         }
     }
 }
