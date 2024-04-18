@@ -35,7 +35,7 @@ namespace Vim.Format
 
         public static DocumentBuilder CopyTablesFrom(this DocumentBuilder db, Document doc, List<int> nodeIndexRemapping = null)
         {
-            foreach (var table in doc.EntityTables.Values)
+            foreach (var table in doc.Tables)
             {
                 var name = table.Name;
 
