@@ -8,9 +8,6 @@ namespace Vim.Format
 {
     public static partial class ColumnExtensions
     {
-        public static IEnumerable<INamedBuffer> GetAllColumns(this SerializableEntityTable et)
-            => et.DataColumns.Concat(et.IndexColumns).Concat(et.StringColumns).ToList();
-
         public static void ValidateColumnRowsAreAligned(this IEnumerable<INamedBuffer> columns)
         {
             var numRows = columns.FirstOrDefault()?.NumElements() ?? 0;
@@ -28,7 +25,7 @@ namespace Vim.Format
 
         public static SerializableEntityTable ValidateColumnRowsAreAligned(this SerializableEntityTable et)
         {
-            et.GetAllColumns().ValidateColumnRowsAreAligned();
+            et.AllColumns.ValidateColumnRowsAreAligned();
             return et;
         }
 
@@ -183,43 +180,8 @@ namespace Vim.Format
             => thisColumnList.ConcatColumns(otherColumnList, 
                 (a, b) => new NamedBuffer<int>(a.GetTypedData().Concat(b.GetTypedData()).ToArray(), a.Name));
 
-        /// <summary>
-        /// Returns a concatenated SerializableEntityTable based on the column names of thisTable.
-        /// </summary>
-        public static SerializableEntityTable Concat(this SerializableEntityTable thisTable, SerializableEntityTable otherTable)
-            => new SerializableEntityTable
-            {
-                Name = thisTable.Name,
-                IndexColumns = thisTable.IndexColumns.ConcatIntColumns(otherTable.IndexColumns),
-                StringColumns = thisTable.StringColumns.ConcatIntColumns(otherTable.StringColumns),
-                DataColumns = thisTable.DataColumns.ConcatDataColumns(otherTable.DataColumns),
-            }.ValidateColumnRowsAreAligned();
-
         public static T[] GetColumnValues<T>(this INamedBuffer nb) where T : unmanaged
             => nb.AsArray<T>();
-
-        /// <summary>
-        /// Returns a new collection of index columns in which the designated column names have repeated values of VimConstants.NoEntityRelation.
-        /// </summary>
-        public static IEnumerable<NamedBuffer<int>> NoneIndexColumnRelations(
-            this IEnumerable<NamedBuffer<int>> indexColumns,
-            params string[] indexColumnNames)
-            => indexColumns.Select(ic => indexColumnNames.Contains(ic.Name)
-                ? new NamedBuffer<int>(Enumerable.Repeat(VimConstants.NoEntityRelation, ic.Data.Length).ToArray(), ic.Name)
-                : ic);
-
-        /// <summary>
-        /// Replaces the designated index columns of the entity table with repeated values of VimConstants.NoEntityRelation.
-        /// </summary>
-        public static void NoneIndexColumnRelations(
-            this SerializableEntityTable et,
-            params string[] indexColumnNames)
-        {
-            if (et == null)
-                return;
-
-            et.IndexColumns = et.IndexColumns.NoneIndexColumnRelations(indexColumnNames).ToList();
-        }
 
         /// <summary>
         /// Replaces the entity table contained in the document with the given entity table if it is not null.
