@@ -26,7 +26,7 @@ namespace Vim.Format
 
             foreach (var col in table.StringColumns.Values)
             {
-                var strings = col.GetTypedData().Select(i => table.Document.StringTable.ElementAtOrDefault(i, null));
+                var strings = col.GetTypedData().Select(i => table.Document.GetString(i));
                 tb.AddStringColumn(col.Name, strings.ToArray().RemapData(nodeIndexRemapping));
             }
 
