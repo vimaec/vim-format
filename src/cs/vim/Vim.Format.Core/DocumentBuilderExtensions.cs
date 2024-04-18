@@ -19,7 +19,7 @@ namespace Vim.Format
                 tb.AddIndexColumn(col.Name, col.GetTypedData().RemapData(nodeIndexRemapping));
             }
 
-            foreach (var col in table.DataColumns.Values)
+            foreach (var col in table.AllDataColumns)
             {
                 tb.AddDataColumn(col.Name, col.CopyDataColumn(nodeIndexRemapping));
             }

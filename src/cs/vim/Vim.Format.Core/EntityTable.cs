@@ -14,7 +14,7 @@ namespace Vim.Format
             _EntityTable = entityTable;
             Name = _EntityTable.Name;
 
-            DataColumns = _EntityTable.DataColumns.ToDictionary( c => c.Name, c => c);
+            _dataColumns = _EntityTable.DataColumns.ToDictionary( c => c.Name, c => c);
             IndexColumns = _EntityTable.IndexColumns.ToDictionary(c => c.Name, c => c);
             StringColumns = _EntityTable.StringColumns.ToDictionary(c => c.Name, c => c);
             NumRows = Columns.FirstOrDefault()?.NumElements() ?? 0;
@@ -26,11 +26,14 @@ namespace Vim.Format
         public Document Document { get; }
         public string Name { get; }
         public int NumRows { get; }
-        public Dictionary<string, INamedBuffer> DataColumns { get; }
+        private Dictionary<string, INamedBuffer> _dataColumns { get; }
         public Dictionary<string, NamedBuffer<int>> StringColumns { get; }
         public Dictionary<string, NamedBuffer<int>> IndexColumns { get; }
+
+        public IEnumerable<INamedBuffer> AllDataColumns => _dataColumns.Values;
+
         public IEnumerable<INamedBuffer> Columns
-            => DataColumns.Values
+            => AllDataColumns
                 .Concat(IndexColumns.Values.Select(x => (INamedBuffer)x))
                 .Concat(StringColumns.Values.Select(x => (INamedBuffer)x));
 
@@ -49,16 +52,16 @@ namespace Vim.Format
             if (!ColumnExtensions.DataColumnTypes.Contains(type))
                 throw new Exception($"{nameof(GetDataColumnValues)} error - unsupported data column type {type}");
 
-            var namedBuffer = DataColumns.GetOrDefault(columnName);
+            var namedBuffer = _dataColumns.GetOrDefault(columnName);
             if (namedBuffer == null)
                 return null;
 
             if (type == typeof(short))
-                return namedBuffer.GetColumnValues<int>().Select(i => (short)i) as T[];
+                return namedBuffer.AsArray<int>().Select(i => (short)i) as T[];
 
             if (type == typeof(bool))
-                return namedBuffer.GetColumnValues<byte>().Select(b => b != 0) as T[];
-            return namedBuffer.GetColumnValues<T>();
+                return namedBuffer.AsArray<byte>().Select(b => b != 0) as T[];
+            return namedBuffer.AsArray<T>();
         }
     }
 }
