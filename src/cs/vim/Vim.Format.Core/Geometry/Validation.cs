@@ -15,13 +15,13 @@ namespace Vim.Format.Geometry
                         throw new Exception($"Expected array length {c.Array.Length} of column {c.Name} to be the same as number of rows {et.NumRows}");
                 }
 
-                foreach (var c in et.AllDataColumns)
+                foreach (var c in et.DataColumns)
                 {
                     if (c.NumElements() != et.NumRows)
                         throw new Exception($"Expected array length {c.NumElements()} of column {c.Name} to be the same as number of rows {et.NumRows}");
                 }
 
-                foreach (var c in et.StringColumns.Values)
+                foreach (var c in et.StringColumns)
                 {
                     if (c.Array.Length != et.NumRows)
                         throw new Exception($"Expected array length {c.Array.Length} of column {c.Name} to be the same as number of rows {et.NumRows}");

@@ -1,9 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Vim.BFastLib;
-using Vim.Format.Geometry;
-using Vim.Util;
-using static Vim.Format.DocumentBuilder;
 
 namespace Vim.Format
 {
@@ -19,12 +16,12 @@ namespace Vim.Format
                 tb.AddIndexColumn(col.Name, col.GetTypedData().RemapData(nodeIndexRemapping));
             }
 
-            foreach (var col in table.AllDataColumns)
+            foreach (var col in table.DataColumns)
             {
                 tb.AddDataColumn(col.Name, col.CopyDataColumn(nodeIndexRemapping));
             }
 
-            foreach (var col in table.StringColumns.Values)
+            foreach (var col in table.StringColumns)
             {
                 var strings = col.GetTypedData().Select(i => table.Document.GetString(i));
                 tb.AddStringColumn(col.Name, strings.ToArray().RemapData(nodeIndexRemapping));
