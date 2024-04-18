@@ -60,9 +60,6 @@ namespace Vim.Format
             return $"{typePrefix}{fieldInfo.GetSerializedValueName()}";
         }
 
-        public static string GetSerializedIndexName(this FieldInfo fieldInfo)
-            => fieldInfo.Name.Trim('_');
-
         public static bool IsRelationType(this Type t)
             => t.Name == "Relation`1";
 

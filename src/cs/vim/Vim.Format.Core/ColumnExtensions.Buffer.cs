@@ -183,18 +183,6 @@ namespace Vim.Format
             => thisColumnList.ConcatColumns(otherColumnList, 
                 (a, b) => new NamedBuffer<int>(a.GetTypedData().Concat(b.GetTypedData()).ToArray(), a.Name));
 
-        /// <summary>
-        /// Returns a concatenated SerializableEntityTable based on the column names of thisTable.
-        /// </summary>
-        public static SerializableEntityTable Concat(this SerializableEntityTable thisTable, SerializableEntityTable otherTable)
-            => new SerializableEntityTable
-            {
-                Name = thisTable.Name,
-                IndexColumns = thisTable.IndexColumns.ConcatIntColumns(otherTable.IndexColumns),
-                StringColumns = thisTable.StringColumns.ConcatIntColumns(otherTable.StringColumns),
-                DataColumns = thisTable.DataColumns.ConcatDataColumns(otherTable.DataColumns),
-            }.ValidateColumnRowsAreAligned();
-
         public static T[] GetColumnValues<T>(this INamedBuffer nb) where T : unmanaged
             => nb.AsArray<T>();
 

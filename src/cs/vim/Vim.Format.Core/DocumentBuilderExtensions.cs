@@ -9,13 +9,6 @@ namespace Vim.Format
 {
     public static class DocumentBuilderExtensions
     {
-        public static SubdividedMesh ToDocumentBuilderSubdividedMesh(this VimMesh m)
-            => new SubdividedMesh(
-                m.indices,
-                m.vertices,
-                m.submeshIndexOffsets,
-                m.submeshMaterials);
-
         public static EntityTableBuilder CreateTableCopy(this DocumentBuilder db, EntityTable table, List<int> nodeIndexRemapping = null)
         {
             var name = table.Name;

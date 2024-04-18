@@ -15,30 +15,6 @@ namespace Vim.Format
         public static EntityTable ToEntityTable(this SerializableEntityTable entityTable, Document document)
             => new EntityTable(document, entityTable);
 
-        public static IEnumerable<string> GetColumnNames(this EntityTable table)
-            => table.Columns.Select(c => c.Name);
-
-        public static void ValidateRelations(this Document doc)
-        {
-            foreach (var et in doc.EntityTables.Values)
-            {
-                foreach (var ic in et.IndexColumns.Values)
-                {
-                    var relatedTable = ic.GetRelatedTable(doc);
-                    var maxValue = relatedTable.NumRows;
-                    var data = ic.GetTypedData();
-                    for (var i = 0; i < data.Length; ++i)
-                    {
-                        var v = data[i];
-                        if (v < -1 || v > maxValue)
-                        {
-                            throw new Exception($"Invalid relation {v} out of range of -1 to {maxValue}");
-                        }
-                    }
-                }
-            }
-        }
-
         public static readonly Regex IndexColumnNameComponentsRegex = new Regex(@"(\w+:)((?:\w|\.)+):(.+)");
 
         public class IndexColumnNameComponents
@@ -65,12 +41,6 @@ namespace Vim.Format
         public static string GetRelatedTableNameFromColumnName(string name)
             => SplitIndexColumnName(name).TableName;
 
-        public static string GetFieldNameFromColumnName(string name)
-            => SplitIndexColumnName(name).FieldName;
-
-        public static string GetFieldName(this INamedBuffer<int> ic)
-            => GetFieldNameFromColumnName(ic.Name);
-
         public static string GetRelatedTableName(this INamedBuffer<int> ic)
             => GetRelatedTableNameFromColumnName(ic.Name);
 
@@ -79,11 +49,6 @@ namespace Vim.Format
 
         public static EntityTable GetTable(this Document doc, string name)
             => doc.EntityTables.GetOrDefault(name);
-
-        public static SerializableDocument SetFileName(this SerializableDocument doc, string fileName)
-        {
-            doc.FileName = fileName;
-            return doc;
-        }
+     
     }
 }
