@@ -97,6 +97,33 @@ namespace Vim.Format
             => StringColumns.Values.SelectMany(sc => sc)
             .Where(x => x != null);
 
+        public SerializableEntityTable ToSerializableEntityTable(IReadOnlyDictionary<string, int> stringLookup)
+        {
+            var table = new SerializableEntityTable
+            {
+                // Set the table name
+                Name = Name,
+
+                // Convert the columns to named buffers 
+                IndexColumns = IndexColumns
+                    .Select(kv => kv.Value.ToNamedBuffer(kv.Key))
+                    .ToList(),
+                DataColumns = DataColumns
+                    .Select(kv => kv.Value.ToNamedBuffer(kv.Key) as INamedBuffer)
+                    .ToList(),
+                StringColumns = StringColumns
+                    .Select(kv => kv.Value
+                        .Select(s => stringLookup[s ?? string.Empty])
+                        .ToArray()
+                        .ToNamedBuffer(kv.Key))
+                    .ToList(),
+            };
+
+            table.ValidateColumnRowsAreAligned();
+
+            return table;
+        }
+
         public void Clear()
         {
             NumRows = 0;

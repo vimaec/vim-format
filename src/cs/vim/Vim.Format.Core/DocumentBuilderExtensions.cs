@@ -49,32 +49,6 @@ namespace Vim.Format
             return db;
         }
 
-        public static SerializableEntityTable ToSerializableEntityTable(this EntityTableBuilder tb,
-            IReadOnlyDictionary<string, int> stringLookup)
-        {
-            var table = new SerializableEntityTable
-            {
-                // Set the table name
-                Name = tb.Name,
-
-                // Convert the columns to named buffers 
-                IndexColumns = tb.IndexColumns
-                    .Select(kv => kv.Value.ToNamedBuffer(kv.Key))
-                    .ToList(),
-                DataColumns = tb.DataColumns
-                    .Select(kv => kv.Value.ToNamedBuffer(kv.Key) as INamedBuffer)
-                    .ToList(),
-                StringColumns = tb.StringColumns
-                    .Select(kv => kv.Value
-                        .Select(s => stringLookup[s ?? string.Empty])
-                        .ToArray()
-                        .ToNamedBuffer(kv.Key))
-                    .ToList(),
-            };
-
-            table.ValidateColumnRowsAreAligned();
-
-            return table;
-        }
+    
     }
 }
