@@ -46,9 +46,5 @@ namespace Vim.Format
 
         public static EntityTable GetRelatedTable(this INamedBuffer<int> ic, Document doc)
             => doc.GetTable(ic.GetRelatedTableName());
-
-        public static EntityTable GetTable(this Document doc, string name)
-            => doc.EntityTables.GetOrDefault(name);
-     
     }
 }

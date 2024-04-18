@@ -7,7 +7,7 @@ namespace Vim.Format
     {
         public static void ValidateTableRows(this Document doc)
         {
-            foreach (var et in doc.EntityTables.Values)
+            foreach (var et in doc.Tables)
             {
                 foreach (var c in et.IndexColumns.Values)
                 {
@@ -31,7 +31,7 @@ namespace Vim.Format
 
         public static void ValidateIndexColumns(this Document doc)
         {
-            foreach (var et in doc.EntityTables.Values)
+            foreach (var et in doc.Tables)
             {
                 foreach (var ic in et.IndexColumns.Values)
                 {

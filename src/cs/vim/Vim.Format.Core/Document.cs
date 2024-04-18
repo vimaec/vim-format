@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using Vim.BFastLib;
 using Vim.G3d;
@@ -21,6 +22,11 @@ namespace Vim.Format
             Assets = _Document.Assets.ToDictionary(et => et.Name, et => et);
         }
 
+        public EntityTable GetTable(string name)
+            => EntityTables.GetOrDefault(name);
+
+        public IEnumerable<string> TableNames => _Document.EntityTables.Select(e => e.Name);
+        public IEnumerable<EntityTable> Tables => EntityTables.Values;
         public VimSchema GetSchema() => VimSchema.Create(_Document);
 
         public string FileName => _Document.FileName;

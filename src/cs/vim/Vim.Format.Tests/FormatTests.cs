@@ -124,8 +124,8 @@ namespace Vim.Format.Tests
             var schema2 = d2.GetSchema();
             Assert.IsTrue(VimSchema.IsSuperSetOf(schema1, schema2));
 
-            var etKeys1 = d1.EntityTables.Keys;
-            var etKeys2 = d2.EntityTables.Keys;
+            var etKeys1 = d1.TableNames;
+            var etKeys2 = d2.TableNames;
             Assert.IsTrue(IsSupersetOf(etKeys1, etKeys2));
 
             foreach (var key in etKeys2)
@@ -133,8 +133,8 @@ namespace Vim.Format.Tests
                 if (skipGeometryAndNodes && key.ToLowerInvariant().Contains("geometry"))
                     continue;
 
-                var et2 = d2.EntityTables[key];
-                var et1 = d1.EntityTables.GetOrDefault(key);
+                var et2 = d2.GetTable(key);
+                var et1 = d1.GetTable(key);
                 if (et1 == null)
                     Assert.Fail($"No matching entity table found: {key}");
                 AssertIsSupersetOf(et1, et2);
@@ -147,15 +147,15 @@ namespace Vim.Format.Tests
             var schema2 = d2.GetSchema();
             Assert.IsTrue(VimSchema.IsSame(schema1, schema2));
 
-            var entityTables1 = d1.EntityTables.Keys.OrderBy(n => n).ToArray();
-            var entityTables2 = d2.EntityTables.Keys.OrderBy(n => n).ToArray();
+            var entityTables1 = d1.TableNames.OrderBy(n => n).ToArray();
+            var entityTables2 = d2.TableNames.OrderBy(n => n).ToArray();
             Assert.AreEqual(entityTables1, entityTables2);
 
             foreach (var k in entityTables1)
             {
                 if (skipGeometryAndNodes && k.ToLowerInvariant().Contains("geometry"))
                     continue;
-                AssertEquals(d1.EntityTables[k], d2.EntityTables[k]);
+                AssertEquals(d1.GetTable(k), d2.GetTable(k));
             }
         }
     }
