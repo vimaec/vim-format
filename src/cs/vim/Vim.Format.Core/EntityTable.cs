@@ -15,7 +15,7 @@ namespace Vim.Format
             Name = _EntityTable.Name;
 
             _dataColumns = _EntityTable.DataColumns.ToDictionary( c => c.Name, c => c);
-            IndexColumns = _EntityTable.IndexColumns.ToDictionary(c => c.Name, c => c);
+            _indexColumns = _EntityTable.IndexColumns.ToDictionary(c => c.Name, c => c);
             _stringColumns = _EntityTable.StringColumns.ToDictionary(c => c.Name, c => c);
             NumRows = Columns.FirstOrDefault()?.NumElements() ?? 0;
 
@@ -28,29 +28,38 @@ namespace Vim.Format
         public int NumRows { get; }
         private Dictionary<string, INamedBuffer> _dataColumns { get; }
         private Dictionary<string, NamedBuffer<int>> _stringColumns { get; }
-        public Dictionary<string, NamedBuffer<int>> IndexColumns { get; }
+        private Dictionary<string, NamedBuffer<int>> _indexColumns { get; }
 
 
+        // Data
         public bool HasDataColumns(string name) => _dataColumns.ContainsKey(name);
         public IEnumerable<INamedBuffer> DataColumns => _dataColumns.Values;
         public IEnumerable<string> DataColumnNames => _dataColumns.Keys;
 
+        // Strings
         public IEnumerable<NamedBuffer<int>> StringColumns => _stringColumns.Values;
         public bool HasStringColumn(string name) => _stringColumns.ContainsKey(name);
         public NamedBuffer<int> GetStringColumn(string name) => _stringColumns.GetOrDefault(name);
         public IEnumerable<string> StringColumnNames => _stringColumns.Keys;
 
+        //Data
+        public IEnumerable<NamedBuffer<int>> IndexColumns => _indexColumns.Values;
+        public IEnumerable<string> IndexColumnNames => _indexColumns.Keys;
+        public bool HasIndexColumn(string name) => _indexColumns.ContainsKey(name);
+        public NamedBuffer<int> GetIndexColumn(string name) => _indexColumns.GetOrDefault(name);
+
+
         public IEnumerable<INamedBuffer> Columns
             => DataColumns
-                .Concat(IndexColumns.Values.Select(x => (INamedBuffer)x))
-                .Concat(_stringColumns.Values.Select(x => (INamedBuffer)x));
+                .Concat(IndexColumns.Select(x => (INamedBuffer)x))
+                .Concat(StringColumns.Select(x => (INamedBuffer)x));
 
         public int[] GetIndexColumnValues(string columnName)
-            => IndexColumns.GetOrDefault(columnName)?.GetColumnValues<int>();
+            => GetIndexColumn(columnName)?.AsArray<int>();
 
         public string[] GetStringColumnValues(string columnName)
             => _stringColumns.GetOrDefault(columnName)
-                ?.GetColumnValues<int>()
+                ?.AsArray<int>()
                 ?.Select(Document.GetString).ToArray();
 
         public T[] GetDataColumnValues<T>(string columnName) where T : unmanaged

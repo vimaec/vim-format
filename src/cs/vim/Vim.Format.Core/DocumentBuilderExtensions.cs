@@ -11,7 +11,7 @@ namespace Vim.Format
             var name = table.Name;
             var tb = db.CreateTableBuilder(name);
 
-            foreach (var col in table.IndexColumns.Values)
+            foreach (var col in table.IndexColumns)
             {
                 tb.AddIndexColumn(col.Name, col.GetTypedData().RemapData(nodeIndexRemapping));
             }

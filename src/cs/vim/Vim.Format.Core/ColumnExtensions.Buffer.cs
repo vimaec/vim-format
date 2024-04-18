@@ -180,9 +180,6 @@ namespace Vim.Format
             => thisColumnList.ConcatColumns(otherColumnList, 
                 (a, b) => new NamedBuffer<int>(a.GetTypedData().Concat(b.GetTypedData()).ToArray(), a.Name));
 
-        public static T[] GetColumnValues<T>(this INamedBuffer nb) where T : unmanaged
-            => nb.AsArray<T>();
-
         /// <summary>
         /// Replaces the entity table contained in the document with the given entity table if it is not null.
         /// </summary>

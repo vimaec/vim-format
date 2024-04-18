@@ -58,7 +58,7 @@ namespace Vim.Format.Tests
         {
             Assert.AreEqual(et1.Name, et2.Name);
             Assert.AreEqual(et1.DataColumnNames.OrderBy(n => n).ToArray(), et2.DataColumnNames.OrderBy(n => n).ToArray());
-            Assert.AreEqual(et1.IndexColumns.Keys.OrderBy(n => n).ToArray(), et2.IndexColumns.Keys.OrderBy(n => n).ToArray());
+            Assert.AreEqual(et1.IndexColumnNames.OrderBy(n => n).ToArray(), et2.IndexColumnNames.OrderBy(n => n).ToArray());
             Assert.AreEqual(et1.StringColumnNames.OrderBy(n => n).ToArray(), et2.StringColumnNames.OrderBy(n => n).ToArray());
 
             var columns1 = et1.Columns.OrderBy(c => c.Name).ToArray();
@@ -94,7 +94,7 @@ namespace Vim.Format.Tests
         {
             Assert.AreEqual(et1.Name, et2.Name);
             Assert.IsTrue(IsSupersetOf(et1.DataColumnNames, et2.DataColumnNames));
-            Assert.IsTrue(IsSupersetOf(et1.IndexColumns.Keys, et2.IndexColumns.Keys));
+            Assert.IsTrue(IsSupersetOf(et1.IndexColumnNames, et2.IndexColumnNames));
             Assert.IsTrue(IsSupersetOf(et1.StringColumnNames, et2.StringColumnNames));
 
             var columns1 = et1.Columns.ToArray();
