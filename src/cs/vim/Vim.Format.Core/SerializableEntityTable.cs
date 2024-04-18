@@ -36,6 +36,13 @@ namespace Vim.Format
         public List<INamedBuffer> DataColumns = new List<INamedBuffer>();
         public Dictionary<string, INamedBuffer> DataColumnsMap = new Dictionary<string, INamedBuffer>();
 
+        public void BreakIndices(params string[] columns)
+        {
+            var set = new HashSet<string>(columns);
+            IndexColumns = IndexColumns.Select(c => set.Contains(c.Name) ? c.Fill(VimConstants.NoEntityRelation) : c).ToList();
+            IndexColumnsMap = IndexColumns.ToDictionary(c => c.Name, c => c);
+        }
+
         public void AddDataColumn(INamedBuffer buffer)
         {
             DataColumns.Add(buffer);

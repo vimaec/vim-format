@@ -184,29 +184,6 @@ namespace Vim.Format
             => nb.AsArray<T>();
 
         /// <summary>
-        /// Returns a new collection of index columns in which the designated column names have repeated values of VimConstants.NoEntityRelation.
-        /// </summary>
-        public static IEnumerable<NamedBuffer<int>> NoneIndexColumnRelations(
-            this IEnumerable<NamedBuffer<int>> indexColumns,
-            params string[] indexColumnNames)
-            => indexColumns.Select(ic => indexColumnNames.Contains(ic.Name)
-                ? new NamedBuffer<int>(Enumerable.Repeat(VimConstants.NoEntityRelation, ic.Data.Length).ToArray(), ic.Name)
-                : ic);
-
-        /// <summary>
-        /// Replaces the designated index columns of the entity table with repeated values of VimConstants.NoEntityRelation.
-        /// </summary>
-        public static void NoneIndexColumnRelations(
-            this SerializableEntityTable et,
-            params string[] indexColumnNames)
-        {
-            if (et == null)
-                return;
-
-            et.IndexColumns = et.IndexColumns.NoneIndexColumnRelations(indexColumnNames).ToList();
-        }
-
-        /// <summary>
         /// Replaces the entity table contained in the document with the given entity table if it is not null.
         /// </summary>
         public static void ReplaceEntityTable(this SerializableDocument document, SerializableEntityTable et)
