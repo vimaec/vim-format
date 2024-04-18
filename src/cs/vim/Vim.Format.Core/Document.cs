@@ -22,6 +22,8 @@ namespace Vim.Format
             Assets = _Document.Assets.ToDictionary(et => et.Name, et => et);
         }
 
+        public int TableCount => Tables.Count();
+
         public EntityTable GetTable(string name)
             => EntityTables.GetOrDefault(name);
 
