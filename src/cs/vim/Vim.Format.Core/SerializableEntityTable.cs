@@ -36,6 +36,7 @@ namespace Vim.Format
         public List<INamedBuffer> DataColumns = new List<INamedBuffer>();
         public Dictionary<string, INamedBuffer> DataColumnsMap = new Dictionary<string, INamedBuffer>();
 
+
         public void BreakIndices(params string[] columns)
         {
             var set = new HashSet<string>(columns);
@@ -149,7 +150,7 @@ namespace Vim.Format
             var bfast = new BFast();
             foreach (var col in AllColumns)
             {
-                bfast.SetArray(col.Name, col.AsArray<byte>());
+                bfast.SetArray(col.Name, col.ToBytes());
             }
             return bfast;
         }
