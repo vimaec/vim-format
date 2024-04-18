@@ -30,6 +30,8 @@ namespace Vim.Format
         public Dictionary<string, NamedBuffer<int>> StringColumns { get; }
         public Dictionary<string, NamedBuffer<int>> IndexColumns { get; }
 
+
+        public bool HasDataColumns(string name) => _dataColumns.ContainsKey(name);
         public IEnumerable<INamedBuffer> AllDataColumns => _dataColumns.Values;
 
         public IEnumerable<INamedBuffer> Columns
@@ -61,6 +63,7 @@ namespace Vim.Format
 
             if (type == typeof(bool))
                 return namedBuffer.AsArray<byte>().Select(b => b != 0) as T[];
+
             return namedBuffer.AsArray<T>();
         }
     }
