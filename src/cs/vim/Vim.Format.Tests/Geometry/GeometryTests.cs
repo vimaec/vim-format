@@ -75,7 +75,7 @@ namespace Vim.Format.Tests.Geometry
             Assert.AreEqual(3, XYTriangle.indices.Length);
             Assert.AreEqual(1, XYTriangle.Triangles().Length);
             Assert.IsTrue(XYTriangle.Planar());
-            Assert.AreEqual(new[] { 0, 1, 2 }, XYTriangle.indices.Length);
+            Assert.AreEqual(new[] { 0, 1, 2 }, XYTriangle.indices);
 
             Assert.AreEqual(3, XYQuad.NumCornersPerFace);
             Assert.AreEqual(2, XYQuad.NumFaces);
