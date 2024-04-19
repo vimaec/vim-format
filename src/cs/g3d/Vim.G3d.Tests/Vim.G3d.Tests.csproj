@@ -14,6 +14,8 @@
     <ItemGroup>
         <ProjectReference Include="../Vim.G3d.AssimpWrapper/Vim.G3d.AssimpWrapper.csproj" />
         <ProjectReference Include="../Vim.G3d/Vim.G3d.csproj" />
+        <ProjectReference Include="../../bfast/Vim.BFast/Vim.BFast.csproj" />
+        <ProjectReference Include="../../math3d/Vim.Math3D/Vim.Math3D.csproj" />
     </ItemGroup>
 
     <ItemGroup>
@@ -34,4 +36,10 @@
     <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
         <Exec Command="echo $(ProjectDir) &gt; &quot;$(ProjectDir)/Resources/ProjDir.txt&quot;" />
     </Target>
+    <ItemGroup>
+      <None Include="../../../../LICENSE.txt">
+        <Pack>True</Pack>
+        <PackagePath></PackagePath>
+      </None>
+    </ItemGroup>
 </Project>

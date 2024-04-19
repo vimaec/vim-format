@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -10,8 +9,8 @@ using Vim.Util;
 using Vim.G3d;
 using Vim.LinqArray;
 using Vim.Math3d;
-
 using IVimSceneProgress = System.IProgress<(string, double)>;
+using Vim.BFastLib;
 
 namespace Vim
 {
@@ -22,14 +21,38 @@ namespace Vim
     /// </summary>
     public class VimScene : IScene
     {
+        /// <summary>
+        /// Returns the VIM file's header schema version. Returns null if the Vim has no header.
+        /// </summary>
+        public static SerializableVersion GetSchemaVersion(string path)
+        {
+            return GetHeader(path)?.Schema;
+        }
+
+        /// <summary>
+        /// Returns the VIM file's header. Returns null if the Vim has no header.
+        /// </summary>
+        public static SerializableHeader GetHeader(string path)
+        {
+            return SerializableHeader.FromPath(path);
+        }
+
+        /// <summary>
+        /// Returns the VIM file's header. Returns null if the Vim has no header.
+        /// </summary>
+        public static SerializableHeader GetHeader(Stream stream)
+        {
+            return SerializableHeader.FromStream(stream);
+        }
+
         public static VimScene LoadVim(string f, LoadOptions loadOptions, IVimSceneProgress progress = null, bool inParallel = false, int vimIndex = 0)
-            => new VimScene(Serializer.Deserialize(f, loadOptions), progress, inParallel, vimIndex);
+            => new VimScene(SerializableDocument.FromPath(f, loadOptions), progress, inParallel, vimIndex);
 
         public static VimScene LoadVim(string f, IVimSceneProgress progress = null, bool skipGeometry = false, bool skipAssets = false, bool skipNodes = false, bool inParallel = false)
             => LoadVim(f, new LoadOptions { SkipGeometry = skipGeometry, SkipAssets = skipAssets}, progress, inParallel);
 
         public static VimScene LoadVim(Stream stream, LoadOptions loadOptions, IVimSceneProgress progress = null, bool inParallel = false)
-            => new VimScene(Serializer.Deserialize(stream, loadOptions), progress, inParallel);
+            => new VimScene(SerializableDocument.FromBFast(new BFast(stream), loadOptions), progress, inParallel);
 
         public static VimScene LoadVim(Stream stream, IVimSceneProgress progress = null, bool skipGeometry = false, bool skipAssets = false, bool skipNodes = false, bool inParallel = false)
             => LoadVim(stream, new LoadOptions { SkipGeometry = skipGeometry, SkipAssets = skipAssets}, progress, inParallel);
@@ -165,6 +188,11 @@ namespace Vim
 
         private void CreateMeshes(bool inParallel)
         {
+            if (_SerializableDocument.Geometry == null)
+            {
+                return;
+            }
+
             var srcGeo = _SerializableDocument.Geometry;
             var tmp = srcGeo?.Meshes.Select(ToIMesh);
             Meshes = (tmp == null)
@@ -176,18 +204,33 @@ namespace Vim
 
         private void CreateShapes(bool inParallel)
         {
+            if (_SerializableDocument.Geometry == null)
+            {
+                return;
+            }
+
             var r = _SerializableDocument.Geometry.Shapes.Select((s, i) => new VimShape(this, i));
             VimShapes = inParallel ? r.EvaluateInParallel() : r.Evaluate();
         }
 
         private void CreateScene(bool inParallel)
         {
+            if (_SerializableDocument.Geometry == null)
+            {
+                return;
+            }
+
             VimNodes = CreateVimSceneNodes(this, _SerializableDocument.Geometry, inParallel);
             Nodes = VimNodes.Select(n => n as ISceneNode);
         }
 
         private void CreateMaterials(bool inParallel)
         {
+            if (_SerializableDocument.Geometry == null)
+            {
+                return;
+            }
+
             var query = _SerializableDocument.Geometry.Materials.Select(m => new VimMaterial(m) as IMaterial);
             Materials = inParallel ? query.EvaluateInParallel() : query.Evaluate();
         }
@@ -203,7 +246,7 @@ namespace Vim
         }
 
         public void Save(string filePath)
-            => _SerializableDocument.Serialize(filePath);
+            => _SerializableDocument.ToBFast().Write(filePath);
 
         public string FileName => _SerializableDocument.FileName;
 

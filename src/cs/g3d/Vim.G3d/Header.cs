@@ -40,6 +40,18 @@ namespace Vim.G3d
             }
             .Validate();
 
+        public static G3dHeader FromBytesOrDefault(byte[] bytes)
+        {
+            try
+            {
+                return FromBytes(bytes).Validate();
+            }
+            catch (Exception)
+            {
+                return Default;
+            }
+        }
+
         public static G3dHeader Default
             = new G3dHeader
             {

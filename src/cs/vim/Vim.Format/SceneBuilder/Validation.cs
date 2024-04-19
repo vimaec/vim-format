@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
-using Vim.BFast;
+using Vim.BFastLib;
 using Vim.Format.Geometry;
 using Vim.Format.ObjectModel;
 using Vim.Util;
@@ -153,12 +153,12 @@ namespace Vim.Format.SceneBuilder
                 g.SubmeshMaterials.ToList()
             )).ToList();
 
-            for (var i = 0; i < db.Meshes.Count; ++i)
+            for (var i = 0; i < db.Geometry.MeshCount; ++i)
             {
-                if (!db.Meshes[i].IsEquivalentTo(vimGeoBuilders[i]))
+                if (!db.Geometry.GetMesh(i).IsEquivalentTo(vimGeoBuilders[i]))
                     throw new VimValidationException($"{nameof(DocumentBuilder)} mesh {i} is not equivalent to {nameof(VimScene)} mesh {i}");
 
-                if (!db.Meshes[i].ToIMesh().GeometryEquals(vim.Meshes[i]))
+                if (!db.Geometry.GetMesh(i).ToIMesh().GeometryEquals(vim.Meshes[i]))
                     throw new VimValidationException($"{nameof(DocumentBuilder)} mesh {i} geometry is not equal to {nameof(VimScene)} mesh {i}");
             }
 
