@@ -2,16 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using Vim.BFast;
-using Vim.LinqArray;
+using Vim.BFastLib;
 
 namespace Vim.Format
 {
     public static partial class ColumnExtensions
     {
-        public static IEnumerable<INamedBuffer> GetAllColumns(this SerializableEntityTable et)
-            => et.DataColumns.Concat(et.IndexColumns).Concat(et.StringColumns).ToList();
-
         public static void ValidateColumnRowsAreAligned(this IEnumerable<INamedBuffer> columns)
         {
             var numRows = columns.FirstOrDefault()?.NumElements() ?? 0;
@@ -29,17 +25,17 @@ namespace Vim.Format
 
         public static SerializableEntityTable ValidateColumnRowsAreAligned(this SerializableEntityTable et)
         {
-            et.GetAllColumns().ValidateColumnRowsAreAligned();
+            et.AllColumns.ValidateColumnRowsAreAligned();
             return et;
         }
 
         public static string ValidateCanConcatBuffers(this INamedBuffer thisBuffer, INamedBuffer otherBuffer)
         {
-            var thisPrefix = thisBuffer.GetTypePrefix();
+            var thisPrefix = SerializableEntityTable.GetTypeFromName(thisBuffer.Name);
             if (string.IsNullOrEmpty(thisPrefix))
                 throw new Exception("NamedBuffer prefix not found");
 
-            var otherPrefix = otherBuffer.GetTypePrefix();
+            var otherPrefix = SerializableEntityTable.GetTypeFromName(otherBuffer.Name);
             if (string.IsNullOrEmpty(otherPrefix))
                 throw new Exception("NamedBuffer prefix not found");
 
@@ -77,7 +73,10 @@ namespace Vim.Format
         }
 
         public static object GetDataColumnValue(this INamedBuffer dataColumn, int rowIndex)
-            => dataColumn.GetDataColumnValue(dataColumn.GetTypePrefix(), rowIndex);
+        {
+            var prefix = SerializableEntityTable.GetTypeFromName(dataColumn.Name);
+            return dataColumn.GetDataColumnValue(prefix, rowIndex);
+        }
 
         public static IBuffer CreateDefaultDataColumnBuffer(int length, string typePrefix)
         {
@@ -119,7 +118,7 @@ namespace Vim.Format
 
         public static INamedBuffer CopyDataColumn(this INamedBuffer dataColumn, List<int> remapping = null)
         {
-            var typePrefix = dataColumn.GetTypePrefix();
+            var typePrefix = SerializableEntityTable.GetTypeFromName(dataColumn.Name);
             return new NamedBuffer(dataColumn.CopyDataColumn(typePrefix, remapping), dataColumn.Name);
         }
 
@@ -181,20 +180,8 @@ namespace Vim.Format
             => thisColumnList.ConcatColumns(otherColumnList, 
                 (a, b) => new NamedBuffer<int>(a.GetTypedData().Concat(b.GetTypedData()).ToArray(), a.Name));
 
-        /// <summary>
-        /// Returns a concatenated SerializableEntityTable based on the column names of thisTable.
-        /// </summary>
-        public static SerializableEntityTable Concat(this SerializableEntityTable thisTable, SerializableEntityTable otherTable)
-            => new SerializableEntityTable
-            {
-                Name = thisTable.Name,
-                IndexColumns = thisTable.IndexColumns.ConcatIntColumns(otherTable.IndexColumns),
-                StringColumns = thisTable.StringColumns.ConcatIntColumns(otherTable.StringColumns),
-                DataColumns = thisTable.DataColumns.ConcatDataColumns(otherTable.DataColumns),
-            }.ValidateColumnRowsAreAligned();
-
-        public static IArray<T> GetColumnValues<T>(this INamedBuffer nb) where T : unmanaged
-            => nb.AsArray<T>().ToIArray();
+        public static T[] GetColumnValues<T>(this INamedBuffer nb) where T : unmanaged
+            => nb.AsArray<T>();
 
         /// <summary>
         /// Returns a new collection of index columns in which the designated column names have repeated values of VimConstants.NoEntityRelation.
@@ -203,7 +190,7 @@ namespace Vim.Format
             this IEnumerable<NamedBuffer<int>> indexColumns,
             params string[] indexColumnNames)
             => indexColumns.Select(ic => indexColumnNames.Contains(ic.Name)
-                ? new NamedBuffer<int>(VimConstants.NoEntityRelation.Repeat(ic.Data.Length).ToArray(), ic.Name)
+                ? new NamedBuffer<int>(Enumerable.Repeat(VimConstants.NoEntityRelation, ic.Data.Length).ToArray(), ic.Name)
                 : ic);
 
         /// <summary>

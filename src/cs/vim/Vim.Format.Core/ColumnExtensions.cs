@@ -19,9 +19,6 @@ namespace Vim.Format
                 new ColumnInfo(ColumnType.DataColumn, VimConstants.FloatColumnNameTypePrefix, typeof(float)),
             };
 
-        public static readonly IReadOnlyDictionary<string, ColumnType> TypePrefixToColumnTypeMap
-            = AllColumnInfos.ToDictionary(t => t.TypePrefix, t => t.ColumnType);
-
         public static readonly IReadOnlyDictionary<Type, string> DataColumnTypeToPrefixMap
             = AllColumnInfos
                 .Where(t => t.ColumnType == ColumnType.DataColumn)

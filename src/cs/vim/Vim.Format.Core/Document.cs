@@ -1,5 +1,8 @@
-﻿using Vim.LinqArray;
-using Vim.BFast;
+﻿using System.Collections.Generic;
+using System.Linq;
+using Vim.BFastLib;
+using Vim.G3d;
+using Vim.Util;
 
 namespace Vim.Format
 {
@@ -10,21 +13,21 @@ namespace Vim.Format
         {
             _Document = document;
             Header = _Document.Header;
-            Geometry = _Document.Geometry;
-            StringTable = _Document.StringTable.ToIArray();
-            EntityTables = _Document.EntityTables.ToLookup(
+            GeometryNext = _Document.GeometryNext;
+            StringTable = _Document.StringTable;
+            EntityTables = _Document.EntityTables.ToDictionary(
                 et => et.Name,
                 et => et.ToEntityTable(this));
-            Assets = _Document.Assets.ToLookup(et => et.Name, et => et);
+            Assets = _Document.Assets.ToDictionary(et => et.Name, et => et);
         }
 
         public string FileName => _Document.FileName;
-        private SerializableDocument _Document { get; }
+        public SerializableDocument _Document { get; }
         public SerializableHeader Header { get; }
-        public ILookup<string, EntityTable> EntityTables { get; }
-        public ILookup<string, INamedBuffer> Assets { get; }
-        public IArray<string> StringTable { get; }
+        public Dictionary<string, EntityTable> EntityTables { get; }
+        public Dictionary<string, INamedBuffer> Assets { get; }
+        public string[] StringTable { get; }
         public string GetString(int index) => StringTable.ElementAtOrDefault(index);
-        public G3d.G3D Geometry { get; }
+        public G3dVim GeometryNext { get; }
     }
 }
