@@ -50,7 +50,12 @@ namespace Vim.Util.Logging.Serilog
             return Instance;
         }
 
-        public static SerilogLoggerAdapter CreateLogger(string name, string filePath = null, bool writeToConsole = true, bool addEvent = false)
+        public static SerilogLoggerAdapter CreateLogger(
+            string name,
+            string filePath = null,
+            bool writeToConsole = true,
+            bool addEvent = false
+        )
         {
             var config = new LoggerConfiguration()
                 .MinimumLevel.Debug();
