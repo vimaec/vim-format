@@ -29,6 +29,7 @@ public static class CronTests
 
     public static IEnumerable<PTC> ParseTestCases() => new[]
     {
+        // You can test these cron expressions manually here: https://crontab.cronhub.io/
         new PTC(null, false, null, default),
         new PTC("", false, null, default),
         new PTC(" ", false, null, default),
