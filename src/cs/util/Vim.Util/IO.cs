@@ -200,6 +200,30 @@ namespace Vim.Util
             => GetFiles(path, searchPattern, true);
 
         /// <summary>
+        /// Returns an unused file path, incrementing the extension with the following scheme: 'name.0001.ext'
+        /// </summary>
+        public static string GetUnusedFilePath(string filePath)
+        {
+            var directory = Path.GetDirectoryName(filePath);
+            var fileNameWithoutExtension = Path.GetFileNameWithoutExtension(filePath);
+            var extension = Path.GetExtension(filePath);
+
+            // Check if the original file exists
+            if (!File.Exists(filePath))
+                return filePath;
+
+            var counter = 1;
+            string newFileName;
+            do
+            {
+                newFileName = Path.Combine(directory, $"{fileNameWithoutExtension}.{counter:D4}{extension}");
+                counter++;
+            } while (File.Exists(newFileName));
+
+            return newFileName;
+        }
+
+        /// <summary>
         /// Generates a Regular Expression character set from an array of characters
         /// </summary>
         private static Regex CharSetToRegex(params char[] chars)
