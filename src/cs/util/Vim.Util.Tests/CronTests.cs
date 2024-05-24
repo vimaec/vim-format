@@ -90,6 +90,9 @@ public static class CronTests
         // Every day 7am (relative DateTime is 7:01am, so next run should be the day after)
         new TNO("0 0 7 ? * *", new DateTime(2024, 10, 1, 7, 0, 1), new DateTime(2024, 10, 2, 7, 0, 0), true),
 
+        // Every day 7:01am (relative DateTime is 7:01am, so next run should be immediate)
+        new TNO("1 0 7 ? * *", new DateTime(2024, 10, 1, 7, 0, 1), new DateTime(2024, 10, 1, 7, 0, 1), true),
+
         // Every Saturday at midnight
         new TNO("0 0 0 ? * 6", new DateTime(2024, 7, 11), new DateTime(2024, 7, 13), true),
 

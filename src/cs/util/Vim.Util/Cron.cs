@@ -2,15 +2,23 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace Vim.Util
 {
+    /// <summary>
+    /// Cron expression utilities (used for scheduling)
+    /// </summary>
     public static class Cron
     {
+        /// <summary>
+        /// Returns a Cron expression based on the days of the week and the time of day.
+        /// </summary>
         public static string GenerateCronExpression(IEnumerable<DayOfWeek> cronDaysOfTheWeek, TimeSpan timeOfDay)
             => $"{timeOfDay.Seconds} {timeOfDay.Minutes} {timeOfDay.Hours} ? * {string.Join(",", cronDaysOfTheWeek.Select(d => (int)d))}";
 
+        /// <summary>
+        /// Parses the given Cron expression and returns true upon success. The applicable days of the week and time of day are returned as out parameters.
+        /// </summary>
         public static bool TryParseCronExpression(string cronExpression, out DayOfWeek[] daysOfWeek, out TimeSpan timeOfDay)
         {
             daysOfWeek = null;
@@ -48,10 +56,13 @@ namespace Vim.Util
             }
         }
 
-        public static bool TryParseNextOccurrence(string cronExpression, DateTime relativeTo, out DateTime dateTime, out TimeSpan delay)
+        /// <summary>
+        /// Parses the given Cron expression and returns the next DateTime and TimeSpan delta relative to the given DateTime.
+        /// </summary>
+        public static bool TryParseNextOccurrence(string cronExpression, DateTime relativeTo, out DateTime dateTime, out TimeSpan delta)
         {
             dateTime = default;
-            delay = default;
+            delta = default;
 
             if (!TryParseCronExpression(cronExpression, out var daysOfWeek, out var timeOfDay))
                 return false;
@@ -60,8 +71,6 @@ namespace Vim.Util
                 return false;
 
             var now = relativeTo;
-
-            // Find the minimum time between now and the next.
             var thisDayOfTheWeek = now.DayOfWeek;
 
             var tuples = daysOfWeek
@@ -85,7 +94,7 @@ namespace Vim.Util
                 })
                 .ToArray();
 
-            (dateTime, delay) = tuples.Minimize(TimeSpan.MaxValue, t => t.delay);
+            (dateTime, delta) = tuples.Minimize(TimeSpan.MaxValue, t => t.delay);
 
             return dateTime != default;
         }
