@@ -1,28 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace Vim.Util
 {
     public static class Cron
     {
-        public enum Days
-        {
-            SUN = 0,
-            MON = 1,
-            TUE = 2,
-            WED = 3,
-            THU = 4,
-            FRI = 5,
-            SAT = 6,
-        }
-
-        public static IReadOnlyList<string> DayNames => Enum.GetNames(typeof(Days));
-
-        public static string GenerateCronExpression(IEnumerable<Days> cronDaysOfTheWeek, TimeSpan timeOfDay)
+        public static string GenerateCronExpression(IEnumerable<DayOfWeek> cronDaysOfTheWeek, TimeSpan timeOfDay)
             => $"{timeOfDay.Seconds} {timeOfDay.Minutes} {timeOfDay.Hours} ? * {string.Join(",", cronDaysOfTheWeek.Select(d => (int)d))}";
 
-        public static bool TryParseCronExpression(string cronExpression, out Days[] daysOfWeek, out TimeSpan timeOfDay)
+        public static bool TryParseCronExpression(string cronExpression, out DayOfWeek[] daysOfWeek, out TimeSpan timeOfDay)
         {
             daysOfWeek = null;
             timeOfDay = default;
@@ -59,11 +48,53 @@ namespace Vim.Util
             }
         }
 
-        private static Days[] ParseDayOfWeekComponent(string dayOfWeekComponent)
+        public static bool TryParseNextOccurrence(string cronExpression, DateTime relativeTo, out DateTime dateTime, out TimeSpan delay)
         {
-            var daysOfWeek = new List<Days>();
+            dateTime = default;
+            delay = default;
 
-            var allDaysAsInts = Enum.GetValues(typeof(Days)).Cast<int>().ToArray();
+            if (!TryParseCronExpression(cronExpression, out var daysOfWeek, out var timeOfDay))
+                return false;
+
+            if (daysOfWeek.Length == 0)
+                return false;
+
+            var now = relativeTo;
+
+            // Find the minimum time between now and the next.
+            var thisDayOfTheWeek = now.DayOfWeek;
+
+            var tuples = daysOfWeek
+                .Select(dayOfWeek =>
+                {
+                    var daysUntilNext = ((int)dayOfWeek - (int)thisDayOfTheWeek + 7) % 7;
+
+                    var nextOccurrence = now.Date.AddDays(daysUntilNext).Add(timeOfDay);
+
+                    var _delta = nextOccurrence - now;
+                    if (_delta.Ticks < 0 && daysUntilNext == 0)
+                    {
+                        // Corner case: this happened previously (today), so the next occurrence should be in 7 days.
+                        nextOccurrence = now.Date.AddDays(7).Add(timeOfDay);
+                        _delta = nextOccurrence - now;
+                    }
+
+                    Debug.Assert(_delta.Ticks >= 0, "Delay is less than zero");
+
+                    return (nextOccurrence, delay: _delta);
+                })
+                .ToArray();
+
+            (dateTime, delay) = tuples.Minimize(TimeSpan.MaxValue, t => t.delay);
+
+            return dateTime != default;
+        }
+
+        private static DayOfWeek[] ParseDayOfWeekComponent(string dayOfWeekComponent)
+        {
+            var daysOfWeek = new List<DayOfWeek>();
+
+            var allDaysAsInts = Enum.GetValues(typeof(DayOfWeek)).Cast<int>().ToArray();
             var minDay = allDaysAsInts.Min();
             var maxDay = allDaysAsInts.Max();
 
@@ -74,7 +105,7 @@ namespace Vim.Util
 
                 day %= (maxDay + 1); // 7 (also SUN) becomes 0 (SUN)
 
-                daysOfWeek.Add((Days) day);
+                daysOfWeek.Add((DayOfWeek) day);
             }
 
             if (dayOfWeekComponent.Contains(","))
@@ -106,7 +137,7 @@ namespace Vim.Util
             else if (dayOfWeekComponent.Equals("*"))
             {
                 // Handle all days of the week
-                daysOfWeek.AddRange(Enum.GetValues(typeof(Days)).Cast<Days>());
+                daysOfWeek.AddRange(Enum.GetValues(typeof(DayOfWeek)).Cast<DayOfWeek>());
             }
             else if (int.TryParse(dayOfWeekComponent, out var day))
             {
