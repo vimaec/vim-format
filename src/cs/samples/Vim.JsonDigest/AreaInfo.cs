@@ -49,6 +49,9 @@ namespace Vim.JsonDigest
         /// </summary>
         public bool IsGrossInterior { get; set; }
 
+        /// <summary>
+        /// JSON Constructor.
+        /// </summary>
         [JsonConstructor]
         public AreaInfo() { }
 
@@ -59,6 +62,7 @@ namespace Vim.JsonDigest
         public static IEnumerable<AreaInfo> GetAreaInfoCollection(VimScene vimScene)
             => vimScene.DocumentModel.AreaList.Select(a => new AreaInfo
             {
+                // Note: An area is an element, so we can get its BIM document, its ID, and its name from its .Element relation.
                 BimDocumentName = a.Element.BimDocument.Name,
                 ElementId = a.Element.Id,
                 ElementUniqueId = a.Element.UniqueId,

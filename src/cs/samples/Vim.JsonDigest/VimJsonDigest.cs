@@ -3,7 +3,6 @@ using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Vim.Format;
 
 namespace Vim.JsonDigest
 {
@@ -38,7 +37,7 @@ namespace Vim.JsonDigest
         /// Stream constructor used for serialization. Note: this stream must be seekable.
         /// </summary>
         public VimJsonDigest(Stream stream)
-            : this(VimScene.LoadVim(stream, new LoadOptions() { SkipGeometry = true, SkipAssets = true }))
+            : this(VimScene.LoadVim(stream))
         { }
 
         public JObject ToJObject()
@@ -46,5 +45,8 @@ namespace Vim.JsonDigest
 
         public string ToJson(Formatting formatting = Formatting.Indented)
             => ToJObject().ToString(formatting);
+
+        public static VimJsonDigest FromJson(string jsonContent)
+            => JsonConvert.DeserializeObject<VimJsonDigest>(jsonContent);
     }
 }

@@ -54,9 +54,11 @@ namespace Vim.JsonDigest
         /// </summary>
         public static IEnumerable<MaterialInfo> GetMaterialInfoCollection(VimScene vimScene)
         {
+            // First, we initialize the collection of MaterialInfo instances based on each material in the VIM scene.
             var materialInfos = vimScene.DocumentModel.MaterialList.Select(m =>
                 new MaterialInfo()
                 {
+                    // Note: a material is an element, so we can get its BIM document, its ID, and its name from its .Element relation.
                     BimDocumentName = m.Element.BimDocument.Name,
                     MaterialElementId = m.Element.Id,
                     MaterialElementUniqueId = m.Element.UniqueId,
@@ -67,7 +69,7 @@ namespace Vim.JsonDigest
                     MaterialInElementInfo = new List<MaterialInElementInfo>()
                 }).ToArray();
 
-            // Visit all the material in element associative objects and update the material infos we created above.
+            // Next, we iterate over all the MaterialInElement associative objects and update the MaterialInfos we created above.
             foreach (var materialInElement in vimScene.DocumentModel.MaterialInElementList.ToEnumerable())
             {
                 var material = materialInElement.Material;
@@ -86,19 +88,19 @@ namespace Vim.JsonDigest
                 });
             }
 
-            // Aggregate the total areas and volumes.
+            // Finally, we sum up the total areas and volumes.
             foreach (var materialInfo in materialInfos)
             {
                 materialInfo.TotalArea = materialInfo.MaterialInElementInfo.Sum(m => m.Area);
                 materialInfo.TotalVolume = materialInfo.MaterialInElementInfo.Sum(m => m.Volume);
             }
 
-            return materialInfos;
+            return materialInfos.Where(mi => mi.MaterialInElementInfo.Count > 0);
         }
     }
 
     /// <summary>
-    /// Represents an association of a material in or on an element.
+    /// Represents an association of a material inside (or on) an element.
     /// </summary>
     public class MaterialInElementInfo
     {

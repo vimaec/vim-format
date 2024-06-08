@@ -54,6 +54,7 @@ namespace Vim.JsonDigest
         public static IEnumerable<RoomInfo> GetRoomInfoCollection(VimScene vimScene)
             => vimScene.DocumentModel.RoomList.Select(r => new RoomInfo()
             {
+                // Note: A room is an element, so we can get its BIM document, its ID, and its name from its .Element relation.
                 BimDocumentName = r.Element.BimDocument.Name,
                 ElementId = r.Element.Id,
                 ElementUniqueId = r.Element.UniqueId,
