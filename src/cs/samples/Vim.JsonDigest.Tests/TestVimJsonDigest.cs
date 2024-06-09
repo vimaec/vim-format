@@ -1,7 +1,7 @@
 ﻿using NUnit.Framework;
-using System;
 using System.IO;
 using System.Threading.Tasks;
+using Vim.Util;
 using Vim.Util.Logging;
 using Vim.Util.Tests;
 
@@ -18,31 +18,29 @@ namespace Vim.JsonDigest.Tests
             var testDir = ctx.PrepareDirectory();
             var logger = ctx.CreateLogger();
 
-            // Obtain a seekable stream to the VIM file.
-            //var vimFileInfo = new FileInfo(Path.Combine(VimFormatRepoPaths.DataDir, "RoomTest.vim"));
-            var url = "https://github.com/vimaec/vim-format/raw/mavimaec/samples/data/RoomTest.vim";
+            // Download the given VIM file.
+            var url = "https://vimdevelopment01storage.blob.core.windows.net/samples/RoomTest.vim";
             
             using var memoryStream = new MemoryStream();
-            var progressMessage = 0;
-            var progress = new Progress<double>(p =>
+            using (var _ = logger.LogDuration($"Downloading VIM file from: {url}"))
             {
-                // TODO: why is this not showing up in order???
-                logger.LogInformation($"[{progressMessage++}] Downloading {p:P}");
-            });
-            await Util.Http.DownloadAsync(url, memoryStream, progress, bufferSize: Util.Http.DefaultDownloadBufferSize * 10);
-            
-            //var vimFileInfo = new FileInfo(Path.Combine(VimFormatRepoPaths.DataDir, "RoomTest.vim"));
-            //using var fileStream = vimFileInfo.OpenRead();
+                var progress = new SynchronousProgress<double>(p => 
+                    logger.LogInformation($"Downloading {p:P}"));
 
-            // Create a VimJsonDigest with the given stream.
+                var bytesDownloaded = await Http.DownloadAsync(url, memoryStream, progress, bufferSize: Http.DefaultDownloadBufferSize * 10);
+                logger.LogInformation($"Downloaded {bytesDownloaded} bytes");
+            }
+
+            // Create a VIM json digest from the memory stream.
             var vimJsonDigest = new VimJsonDigest(memoryStream);
             var jsonContent = vimJsonDigest.ToJson();
 
+            // Assert the contained collections are not empty.
             Assert.IsNotEmpty(vimJsonDigest.RoomInfoCollection, "Room info collection is empty.");
             Assert.IsNotEmpty(vimJsonDigest.MaterialInfoCollection, "Material info collection is empty.");
             Assert.IsNotEmpty(vimJsonDigest.AreaInfoCollection, "Area info collection is empty.");
 
-            // Write the digest to a file.
+            // Write the digest to a json file.
             var outputJsonFilePath = Path.Combine(testDir, "vim-digest.json");
             File.WriteAllText(outputJsonFilePath, jsonContent);
             Assert.IsTrue(File.Exists(outputJsonFilePath), "VIM json digest file not found.");
