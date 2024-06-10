@@ -53,6 +53,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Vim.JsonDigest", "samples\V
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Vim.JsonDigest.Tests", "samples\Vim.JsonDigest.Tests\Vim.JsonDigest.Tests.csproj", "{E09ADC19-3E9F-4DD5-AB74-A9EB765ED894}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Vim.JsonDigest.AzureFunction", "samples\Vim.JsonDigest.AzureFunction\Vim.JsonDigest.AzureFunction.csproj", "{A0FA4646-67AC-4310-9BA5-53D2D7CF218F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -131,6 +133,10 @@ Global
 		{E09ADC19-3E9F-4DD5-AB74-A9EB765ED894}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E09ADC19-3E9F-4DD5-AB74-A9EB765ED894}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E09ADC19-3E9F-4DD5-AB74-A9EB765ED894}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A0FA4646-67AC-4310-9BA5-53D2D7CF218F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A0FA4646-67AC-4310-9BA5-53D2D7CF218F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A0FA4646-67AC-4310-9BA5-53D2D7CF218F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A0FA4646-67AC-4310-9BA5-53D2D7CF218F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -154,6 +160,7 @@ Global
 		{6B9E6432-A7BB-4487-905A-0C3117398140} = {A279C2F9-3418-484B-A36E-D1D1C67A0B2D}
 		{A315C6D7-BEFF-4BD6-9786-88959E579F5D} = {E2EBD5E0-81EC-4720-833C-05ECE1BA84A1}
 		{E09ADC19-3E9F-4DD5-AB74-A9EB765ED894} = {E2EBD5E0-81EC-4720-833C-05ECE1BA84A1}
+		{A0FA4646-67AC-4310-9BA5-53D2D7CF218F} = {E2EBD5E0-81EC-4720-833C-05ECE1BA84A1}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7D1BF641-26E8-4809-B638-029241C51BE2}
