@@ -15,7 +15,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\util\Vim.Util.Tests\Vim.Util.Tests.csproj" />
     <ProjectReference Include="..\Vim.JsonDigest\Vim.JsonDigest.csproj" />
   </ItemGroup>
 
