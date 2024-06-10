@@ -6,6 +6,10 @@ using System.Linq;
 
 namespace Vim.JsonDigest
 {
+    /// <summary>
+    /// This class represents aggregated data from a VIM file about its rooms, areas, and materials.
+    /// This class is intended to be serialized to JSON for subsequent analysis in a data pipeline.
+    /// </summary>
     public class VimJsonDigest
     {
         [JsonProperty("rooms")]
