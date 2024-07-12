@@ -1,6 +1,6 @@
 # VIM Format Samples
 
-This folder contains a collection of code samples which make use of the VIM file format C# API. If you are new to VIM, we invite you to [get started here](https://docs-devel.vimaec.com/docs/vim-for-windows/getting-started).
+This folder contains a collection of code samples which make use of the VIM file format C# API. If you are new to VIM, we invite you to [get started here](https://docs.vimaec.com/docs/vim-for-windows/getting-started).
 
 Note that the projects in this folder reference the C# project [Vim.Format.csproj](../vim/Vim.Format/Vim.Format.csproj) directly to programatically interact with VIM files. You can clone this repository, or follow along in your own C# projects using the [Vim.Format](https://www.nuget.org/packages/Vim.Format) NuGet package.
 
