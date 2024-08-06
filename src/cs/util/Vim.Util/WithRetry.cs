@@ -12,12 +12,14 @@ namespace Vim.Util
             public uint MaxRetries { get; }
             public TimeSpan InitialDelay { get; }
             public CancellationToken CancellationToken { get; }
+            public Func<Exception, bool> ThrowOnException { get; }
 
-            public RetryConfig(uint maxRetries, TimeSpan initialDelay, CancellationToken ct = default)
+            public RetryConfig(uint maxRetries, TimeSpan initialDelay, CancellationToken ct = default, Func<Exception, bool> throwOnException = null)
             {
                 MaxRetries = maxRetries;
                 InitialDelay = initialDelay;
                 CancellationToken = ct;
+                ThrowOnException = throwOnException;
             }
 
             public static RetryConfig Default => new RetryConfig(6, TimeSpan.FromSeconds(5));
@@ -48,6 +50,9 @@ namespace Vim.Util
                 }
                 catch (Exception e)
                 {
+                    if (retryConfig.ThrowOnException != null && retryConfig.ThrowOnException(e))
+                        throw;
+
                     // Log the exception
                     logger.LogWarning($"[{nameof(WithRetry)}.{nameof(Run)} > {runName} ({retries}/{maxRetries})] Exception caught: {e}");
                 }
@@ -92,6 +97,9 @@ namespace Vim.Util
                 }
                 catch (Exception e)
                 {
+                    if (retryConfig.ThrowOnException != null && retryConfig.ThrowOnException(e))
+                        throw;
+
                     // Log the exception
                     logger.LogWarning($"[{nameof(WithRetry)}.{nameof(RunAsync)} > {runName} ({retries}/{maxRetries})] Exception caught: {e}");
                 }
