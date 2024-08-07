@@ -24,14 +24,11 @@ namespace Vim
         public int Id => NodeIndex;
         public Matrix4x4 Transform { get; }
 
+        public InstanceFlags InstanceFlags
+            => (InstanceFlags)_Scene.Document.Geometry.InstanceFlags.ElementAtOrDefault(NodeIndex);
+
         public bool HideByDefault
-        {
-            get
-            {
-                var instanceFlags = (InstanceFlags)_Scene.Document.Geometry.InstanceFlags.ElementAtOrDefault(NodeIndex);
-                return (instanceFlags & InstanceFlags.Hidden) == InstanceFlags.Hidden;
-            }
-        }
+            => (InstanceFlags & InstanceFlags.Hidden) == InstanceFlags.Hidden;
 
         public int VimIndex { get; } = -1;
         public int NodeIndex { get; } = -1;
