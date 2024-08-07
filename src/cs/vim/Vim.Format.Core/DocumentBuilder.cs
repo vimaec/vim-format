@@ -181,6 +181,7 @@ namespace Vim.Format
         public void Write(string filePath)
         {
             IO.CreateFileDirectory(filePath);
+            IO.Delete(filePath);
             using (var stream = File.OpenWrite(filePath))
                 Write(stream);
         }
