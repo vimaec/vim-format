@@ -74,7 +74,7 @@ namespace Vim.Format
             public void SetMeshMaterial(int material)
                 => _faceMaterials = Enumerable.Repeat(material, _indices.Count / 3).ToList();
 
-            public void AppendFaces(List<int> indices, List<int> materials)
+            public void AppendFaces(IList<int> indices, IList<int> materials)
             {
                 if (indices.Count != materials.Count * 3)
                     throw new Exception("index.Count must be material.Count*3");
