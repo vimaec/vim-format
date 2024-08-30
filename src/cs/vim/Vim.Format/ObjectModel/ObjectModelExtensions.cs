@@ -26,7 +26,13 @@ namespace Vim.Format.ObjectModel
             => Urn.GetBimDocumentUrn(Urn.VimNID, bd);
 
         public static Element CreateSyntheticElement(string name, string type)
-            => new Element { Id = VimConstants.SyntheticElementId, Name = name, Type = type };
+            => new Element
+            {
+                Id = VimConstants.SyntheticElementId,
+                Name = name,
+                Type = type,
+                UniqueId = $"{name}_{type}" // NOTE: we need to assign a UniqueId for merging purposes.
+            };
 
         public static Element CreateParameterHolderElement(string bimDocumentName)
             => CreateSyntheticElement(bimDocumentName, VimConstants.BimDocumentParameterHolderElementType);
