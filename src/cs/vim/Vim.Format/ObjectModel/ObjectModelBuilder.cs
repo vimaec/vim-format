@@ -38,22 +38,35 @@ namespace Vim.Format.ObjectModel
             public readonly IndexedSet<object> KeyToEntityIndex = new IndexedSet<object>();
 
             /// <summary>
-            /// Adds the provided entity and assigns it to the given key.
+            /// Adds the entity but does not update the KeyToEntityIndex member.
+            /// NOTE: Revit Parameters take up a *LOT* of memory and have previously caused System.OutOfMemoryExceptions
+            /// when KeyToEntityIndex was trying to resize itself. To work around this issue, AddUntracked should be used
+            /// when objects can be blindly added into the entity table.
+            /// </summary>
+            public TEntity AddUntracked<TEntity>(TEntity entity) where TEntity : Entity
+            {
+                // Update the entity's index.
+                var index = Entities.Count;
+                entity.Index = index;
+
+                Entities.Add(entity);
+
+                return entity;
+            }
+
+            /// <summary>
+            /// Adds the provided entity and assigns it to the given key. Tracks the entity in the 
             /// NOTE: this method mutates the entity's Index.
             /// </summary>
             public GetOrAddResult<TEntity> Add<TEntity>(object key, TEntity entity) where TEntity : Entity
             {
                 Debug.Assert(KeyToEntityIndex.Count == Entities.Count);
 
-                // Update the entity's index.
-                var index = Entities.Count;
-                entity.Index = index;
+                var addedEntity = AddUntracked(entity); // mutates entity.Index; addedEntity == entity.
 
-                // Add the entity to the local collections.
-                Entities.Add(entity);
-                KeyToEntityIndex.Add(key, index);
+                KeyToEntityIndex.Add(key, addedEntity.Index);
 
-                return new GetOrAddResult<TEntity>(entity, true);
+                return new GetOrAddResult<TEntity>(addedEntity, true);
             }
 
             /// <summary>
@@ -103,6 +116,9 @@ namespace Vim.Format.ObjectModel
 
         public TEntity Add<TEntity>(TEntity e) where TEntity : Entity
             => GetOrAddEntityTableBuilder<TEntity>().Add(e).Entity;
+
+        public TEntity AddUntracked<TEntity>(TEntity e) where TEntity : Entity
+            => GetOrAddEntityTableBuilder<TEntity>().AddUntracked(e);
 
         public bool TryGet<TEntity>(object key, out TEntity value) where TEntity : Entity
         {

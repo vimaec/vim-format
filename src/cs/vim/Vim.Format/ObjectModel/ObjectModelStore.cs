@@ -29,12 +29,34 @@ namespace Vim.Format.ObjectModel
         }
 
         private IEnumerable<DocumentBuilder.Material> CreateMaterialBuilders()
-            => ObjectModelBuilder.GetEntities<Material>().Select(m => new DocumentBuilder.Material()
+            => ObjectModelBuilder.GetEntities<Material>().Select(ConvertMaterialEntityToRenderableMaterial);
+
+        public static DocumentBuilder.Material ConvertMaterialEntityToRenderableMaterial(Material m)
+            => ConvertMaterialEntityFieldsToRenderableMaterial(
+                m.Color.X,
+                m.Color.Y,
+                m.Color.Z,
+                m.Transparency,
+                m.Glossiness,
+                m.Smoothness);
+
+        public static DocumentBuilder.Material ConvertMaterialEntityFieldsToRenderableMaterial(
+            double colorX,
+            double colorY,
+            double colorZ,
+            double transparency,
+            double glossiness,
+            double smoothness)
+            => new DocumentBuilder.Material()
             {
-                Color = new Vector4((float) m.Color.X, (float) m.Color.Y, (float) m.Color.Z, (float)(1 - m.Transparency)),
-                Glossiness = (float) m.Glossiness,
-                Smoothness = (float) m.Smoothness
-            });
+                Color = new Vector4(
+                    (float) colorX,
+                    (float) colorY,
+                    (float) colorZ,
+                    (float)(1 - transparency)), // TECH DEBT: rendered material value is 1.0f - transparency
+                Glossiness = (float) glossiness,
+                Smoothness = (float) smoothness
+            };
 
         /// <summary>
         /// Mutates the Meshes and Instances to remove any meshes which are not referenced by at least one instance.

@@ -117,8 +117,9 @@ namespace Vim.Util
         /// </summary>
         public static V GetOrCompute<K, V>(this IDictionary<K, V> self, K key, Func<K, V> func)
         {
-            if (self.ContainsKey(key))
-                return self[key];
+            if (self.TryGetValue(key, out var v))
+                return v;
+
             var value = func(key);
             self.Add(key, value);
             return value;
