@@ -9,6 +9,10 @@ namespace Vim.Format
         VimHeaderDuplicateFieldError,
         VimHeaderFieldParsingError,
         VimHeaderRequiredFieldsNotFoundError,
+
+        VimMergeObjectModelMajorVersionMismatch,
+        VimMergeConfigFilePathIsEmpty,
+        VimMergeInputFileNotFound,
     }
 
     public class VimHeaderTokenizationException : HResultException
