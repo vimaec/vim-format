@@ -254,6 +254,9 @@ namespace Vim.Math3d
         [MethodImpl(MethodImplOptions.AggressiveInlining)] public static Vector4 ToVector4(this Vector2 v) => new Vector4(v.X, v.Y, 0, 0);
         [MethodImpl(MethodImplOptions.AggressiveInlining)] public static Vector4 ToVector4(this Vector3 v) => new Vector4(v.X, v.Y, v.Z, 0);
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)] public static DVector3 ToDVector3(this DVector4 v) => new DVector3(v.X, v.Y, v.Z);
+        [MethodImpl(MethodImplOptions.AggressiveInlining)] public static DVector4 ToDVector4(this DVector3 v) => new DVector4(v.X, v.Y, v.Z, 0);
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Vector3 Rotate(this Vector3 self, Vector3 axis, float angle)
             => self.Transform(Matrix4x4.CreateFromAxisAngle(axis, angle));
