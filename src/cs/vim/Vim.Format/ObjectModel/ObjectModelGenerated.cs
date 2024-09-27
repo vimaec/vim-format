@@ -85,6 +85,7 @@ namespace Vim.Format.ObjectModel {
                     (IsReadOnly == other.IsReadOnly) &&
                     (Flags == other.Flags) &&
                     (Guid == other.Guid) &&
+                    (StorageType == other.StorageType) &&
                     (_DisplayUnit?.Index == other._DisplayUnit?.Index);
                 if (!fieldsAreEqual)
                 {
@@ -1948,6 +1949,8 @@ namespace Vim.Format.ObjectModel {
         public Int32 GetParameterDescriptorFlags(int index, Int32 defaultValue = default) => ParameterDescriptorFlags?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
         public IArray<String> ParameterDescriptorGuid { get; }
         public String GetParameterDescriptorGuid(int index, String defaultValue = "") => ParameterDescriptorGuid?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Int32> ParameterDescriptorStorageType { get; }
+        public Int32 GetParameterDescriptorStorageType(int index, Int32 defaultValue = default) => ParameterDescriptorStorageType?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
         public IArray<int> ParameterDescriptorDisplayUnitIndex { get; }
         public int GetParameterDescriptorDisplayUnitIndex(int index) => ParameterDescriptorDisplayUnitIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
         public int NumParameterDescriptor => ParameterDescriptorEntityTable?.NumRows ?? 0;
@@ -1966,6 +1969,7 @@ namespace Vim.Format.ObjectModel {
             r.IsReadOnly = ParameterDescriptorIsReadOnly.ElementAtOrDefault(n);
             r.Flags = ParameterDescriptorFlags.ElementAtOrDefault(n);
             r.Guid = ParameterDescriptorGuid.ElementAtOrDefault(n);
+            r.StorageType = ParameterDescriptorStorageType.ElementAtOrDefault(n);
             r._DisplayUnit = new Relation<Vim.Format.ObjectModel.DisplayUnit>(GetParameterDescriptorDisplayUnitIndex(n), GetDisplayUnit);
             return r;
         }
@@ -3910,6 +3914,7 @@ namespace Vim.Format.ObjectModel {
             ParameterDescriptorIsReadOnly = ParameterDescriptorEntityTable?.GetDataColumnValues<Boolean>("byte:IsReadOnly") ?? Array.Empty<Boolean>().ToIArray();
             ParameterDescriptorFlags = ParameterDescriptorEntityTable?.GetDataColumnValues<Int32>("int:Flags") ?? Array.Empty<Int32>().ToIArray();
             ParameterDescriptorGuid = ParameterDescriptorEntityTable?.GetStringColumnValues("string:Guid") ?? Array.Empty<String>().ToIArray();
+            ParameterDescriptorStorageType = ParameterDescriptorEntityTable?.GetDataColumnValues<Int32>("int:StorageType") ?? Array.Empty<Int32>().ToIArray();
             ParameterValue = ParameterEntityTable?.GetStringColumnValues("string:Value") ?? Array.Empty<String>().ToIArray();
             ElementId = (ElementEntityTable?.GetDataColumnValues<Int64>("long:Id") ?? ElementEntityTable?.GetDataColumnValues<Int32>("int:Id")?.Select(v => (Int64) v)) ?? Array.Empty<Int64>().ToIArray();
             ElementType = ElementEntityTable?.GetStringColumnValues("string:Type") ?? Array.Empty<String>().ToIArray();
@@ -4374,6 +4379,7 @@ namespace Vim.Format.ObjectModel {
             tb.AddDataColumn("byte:IsReadOnly", typedEntities.Select(x => x.IsReadOnly));
             tb.AddDataColumn("int:Flags", typedEntities.Select(x => x.Flags));
             tb.AddStringColumn("string:Guid", typedEntities.Select(x => x.Guid));
+            tb.AddDataColumn("int:StorageType", typedEntities.Select(x => x.StorageType));
             tb.AddIndexColumn("index:Vim.DisplayUnit:DisplayUnit", typedEntities.Select(x => x._DisplayUnit?.Index ?? EntityRelation.None));
             return tb;
         }

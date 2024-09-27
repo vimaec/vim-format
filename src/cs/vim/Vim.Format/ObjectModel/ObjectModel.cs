@@ -14,6 +14,10 @@ namespace Vim.Format.ObjectModel
         // ReSharper disable MemberHidesStaticFromOuterClass
         public static class History
         {
+            // Schema additions
+            // TODO
+            public const string v5_2_1 = "5.2.1";
+
             // Schema additions (Added support for IfcSite and IfcBuilding)
             //   Vim.Building__double:Elevation
             //   Vim.Building__double:TerrainElevation
@@ -323,6 +327,18 @@ namespace Vim.Format.ObjectModel
     }
 
     /// <summary>
+    /// Defines the storage type of the parameter descriptor.
+    /// </summary>
+    public enum ParameterDescriptorStorageType
+    {
+        Unknown = 0,
+        Integer = 1,
+        Double = 2,
+        String = 3,
+        ElementId = 4
+    }
+
+    /// <summary>
     /// Represents a parameter descriptor.
     /// </summary>
     [TableName(TableNames.ParameterDescriptor)]
@@ -361,6 +377,11 @@ namespace Vim.Format.ObjectModel
         /// </summary>
         public string Guid;
 
+        /// <summary>
+        /// The storage type of the parameter serialized as an int (see enum ParameterDescriptorStorageType)
+        /// </summary>
+        public int StorageType;
+
         public Relation<DisplayUnit> _DisplayUnit;
 
         public object GetStorageKey()
@@ -372,6 +393,7 @@ namespace Vim.Format.ObjectModel
                 ParameterType,
                 Flags,
                 Guid,
+                StorageType,
                 _DisplayUnit?.Index ?? -1);
 
         public bool IsBuiltIn
@@ -408,6 +430,9 @@ namespace Vim.Format.ObjectModel
 
         public ParameterDescriptorFlag GetParameterDescriptorFlags()
             => (ParameterDescriptorFlag) Flags;
+
+        public ParameterDescriptorStorageType GetParameterDescriptorStorageType()
+            => (ParameterDescriptorStorageType) StorageType;
     }
 
     /// <summary>
