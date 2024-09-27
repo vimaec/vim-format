@@ -15,8 +15,8 @@ namespace Vim.Format.ObjectModel
         public static class History
         {
             // Schema additions
-            // TODO
-            public const string v5_2_1 = "5.2.1";
+            //   Vim.ParameterDescriptor__int:StorageType
+            public const string v5_3_0 = "5.3.0";
 
             // Schema additions (Added support for IfcSite and IfcBuilding)
             //   Vim.Building__double:Elevation
@@ -163,7 +163,8 @@ namespace Vim.Format.ObjectModel
         // ReSharper enable MemberHidesStaticFromOuterClass
 
         // [MAINTAIN] Add more object model SerializableVersions below and update the current one.
-        public static SerializableVersion Current => v5_2_0;
+        public static SerializableVersion Current => v5_3_0;
+        public static SerializableVersion v5_3_0 => SerializableVersion.Parse(History.v5_3_0);
         public static SerializableVersion v5_2_0 => SerializableVersion.Parse(History.v5_2_0);
         public static SerializableVersion v5_1_0 => SerializableVersion.Parse(History.v5_1_0);
         public static SerializableVersion v5_0_0 => SerializableVersion.Parse(History.v5_0_0);
