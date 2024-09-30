@@ -120,9 +120,13 @@ namespace Vim.Format
         /// </summary>
         public static IEnumerable<SerializableEntityTable> EnumerateEntityTables(
             this BFastBufferReader entitiesBufferReader,
-            bool schemaOnly)
+            bool schemaOnly,
+            Func<string, bool> entityTableNameFilterFunc = null)
         {
-            foreach (var entityTableBufferReader in entitiesBufferReader.Seek().GetBFastBufferReaders())
+            var entityTableBufferReaders = entitiesBufferReader.Seek()
+                .GetBFastBufferReaders(br => entityTableNameFilterFunc?.Invoke(br.Name) ?? true);
+            
+            foreach (var entityTableBufferReader in entityTableBufferReaders)
             {
                 yield return entityTableBufferReader.ReadEntityTable(schemaOnly);
             }
@@ -131,15 +135,18 @@ namespace Vim.Format
         /// <summary>
         /// Enumerates the SerializableEntityTables contained in the given VIM file.
         /// </summary>
-        public static IEnumerable<SerializableEntityTable> EnumerateEntityTables(this FileInfo vimFileInfo, bool schemaOnly)
+        public static IEnumerable<SerializableEntityTable> EnumerateEntityTables(
+            this FileInfo vimFileInfo,
+            bool schemaOnly,
+            Func<string, bool> entityTableNameFilterFunc = null)
         {
             using (var stream = vimFileInfo.OpenRead())
             {
-                var entitiesBufferReader = stream.GetBFastBufferReaders(b => b.Name == BufferNames.Entities).FirstOrDefault();
+                var entitiesBufferReader = stream.GetBFastBufferReader(BufferNames.Entities);
                 if (entitiesBufferReader == null)
                     yield break;
 
-                foreach (var entityTable in entitiesBufferReader.EnumerateEntityTables(schemaOnly))
+                foreach (var entityTable in entitiesBufferReader.EnumerateEntityTables(schemaOnly, entityTableNameFilterFunc))
                 {
                     yield return entityTable;
                 }
