@@ -1,6 +1,6 @@
 {
   "VimFormatVersion": "1.0.0",
-  "SchemaVersion": "5.2.0",
+  "SchemaVersion": "5.3.0",
   "Tables": {
     "Vim.Area": [
       "byte:IsGrossInterior",
@@ -301,6 +301,7 @@
       "byte:IsShared",
       "index:Vim.DisplayUnit:DisplayUnit",
       "int:Flags",
+      "int:StorageType",
       "string:Group",
       "string:Guid",
       "string:Name",
