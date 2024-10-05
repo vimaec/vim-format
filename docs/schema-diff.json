@@ -145,5 +145,10 @@
       "Vim.Site__string:Address",
       "Vim.Site__string:Number"
     ]
+  },
+  "5.2.0 to 5.3.0": {
+    "Added": [
+      "Vim.ParameterDescriptor__int:StorageType"
+    ]
   }
 }

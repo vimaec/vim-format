@@ -14,6 +14,10 @@ namespace Vim.Format.ObjectModel
         // ReSharper disable MemberHidesStaticFromOuterClass
         public static class History
         {
+            // Schema additions
+            //   Vim.ParameterDescriptor__int:StorageType
+            public const string v5_3_0 = "5.3.0";
+
             // Schema additions (Added support for IfcSite and IfcBuilding)
             //   Vim.Building__double:Elevation
             //   Vim.Building__double:TerrainElevation
@@ -159,7 +163,8 @@ namespace Vim.Format.ObjectModel
         // ReSharper enable MemberHidesStaticFromOuterClass
 
         // [MAINTAIN] Add more object model SerializableVersions below and update the current one.
-        public static SerializableVersion Current => v5_2_0;
+        public static SerializableVersion Current => v5_3_0;
+        public static SerializableVersion v5_3_0 => SerializableVersion.Parse(History.v5_3_0);
         public static SerializableVersion v5_2_0 => SerializableVersion.Parse(History.v5_2_0);
         public static SerializableVersion v5_1_0 => SerializableVersion.Parse(History.v5_1_0);
         public static SerializableVersion v5_0_0 => SerializableVersion.Parse(History.v5_0_0);
@@ -323,6 +328,18 @@ namespace Vim.Format.ObjectModel
     }
 
     /// <summary>
+    /// Defines the storage type of the parameter descriptor.
+    /// </summary>
+    public enum ParameterDescriptorStorageType
+    {
+        Unknown = 0,
+        Integer = 1,
+        Double = 2,
+        String = 3,
+        ElementId = 4
+    }
+
+    /// <summary>
     /// Represents a parameter descriptor.
     /// </summary>
     [TableName(TableNames.ParameterDescriptor)]
@@ -361,6 +378,11 @@ namespace Vim.Format.ObjectModel
         /// </summary>
         public string Guid;
 
+        /// <summary>
+        /// The storage type of the parameter serialized as an int (see enum ParameterDescriptorStorageType)
+        /// </summary>
+        public int StorageType;
+
         public Relation<DisplayUnit> _DisplayUnit;
 
         public object GetStorageKey()
@@ -372,6 +394,7 @@ namespace Vim.Format.ObjectModel
                 ParameterType,
                 Flags,
                 Guid,
+                StorageType,
                 _DisplayUnit?.Index ?? -1);
 
         public bool IsBuiltIn
@@ -408,6 +431,9 @@ namespace Vim.Format.ObjectModel
 
         public ParameterDescriptorFlag GetParameterDescriptorFlags()
             => (ParameterDescriptorFlag) Flags;
+
+        public ParameterDescriptorStorageType GetParameterDescriptorStorageType()
+            => (ParameterDescriptorStorageType) StorageType;
     }
 
     /// <summary>

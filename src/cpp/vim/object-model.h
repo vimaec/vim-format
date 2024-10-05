@@ -451,6 +451,7 @@ namespace Vim
         bool mIsReadOnly;
         int mFlags;
         std::string mGuid;
+        int mStorageType;
         
         int mDisplayUnitIndex;
         DisplayUnit* mDisplayUnit;
@@ -483,6 +484,7 @@ namespace Vim
             parameterDescriptor->mIsReadOnly = GetIsReadOnly(parameterDescriptorIndex);
             parameterDescriptor->mFlags = GetFlags(parameterDescriptorIndex);
             parameterDescriptor->mGuid = GetGuid(parameterDescriptorIndex);
+            parameterDescriptor->mStorageType = GetStorageType(parameterDescriptorIndex);
             parameterDescriptor->mDisplayUnitIndex = GetDisplayUnitIndex(parameterDescriptorIndex);
             return parameterDescriptor;
         }
@@ -497,6 +499,7 @@ namespace Vim
             bool existsIsReadOnly = mEntityTable.column_exists("byte:IsReadOnly");
             bool existsFlags = mEntityTable.column_exists("int:Flags");
             bool existsGuid = mEntityTable.column_exists("string:Guid");
+            bool existsStorageType = mEntityTable.column_exists("int:StorageType");
             bool existsDisplayUnit = mEntityTable.column_exists("index:Vim.DisplayUnit:DisplayUnit");
             
             const auto count = GetCount();
@@ -532,6 +535,11 @@ namespace Vim
             
             const std::vector<int>& guidData = mEntityTable.column_exists("string:Guid") ? mEntityTable.mStringColumns["string:Guid"] : std::vector<int>();
             
+            int* storageTypeData = new int[count];
+            if (mEntityTable.column_exists("int:StorageType")) {
+                memcpy(storageTypeData, mEntityTable.mDataColumns["int:StorageType"].begin(), count * sizeof(int));
+            }
+            
             const std::vector<int>& displayUnitData = mEntityTable.column_exists("index:Vim.DisplayUnit:DisplayUnit") ? mEntityTable.mIndexColumns["index:Vim.DisplayUnit:DisplayUnit"] : std::vector<int>();
             
             for (int i = 0; i < count; ++i)
@@ -554,6 +562,8 @@ namespace Vim
                     entity.mFlags = flagsData[i];
                 if (existsGuid)
                     entity.mGuid = std::string(reinterpret_cast<const char*>(mStrings[guidData[i]]));
+                if (existsStorageType)
+                    entity.mStorageType = storageTypeData[i];
                 entity.mDisplayUnitIndex = existsDisplayUnit ? displayUnitData[i] : -1;
                 parameterDescriptor->push_back(entity);
             }
@@ -562,6 +572,7 @@ namespace Vim
             delete[] isSharedData;
             delete[] isReadOnlyData;
             delete[] flagsData;
+            delete[] storageTypeData;
             
             return parameterDescriptor;
         }
@@ -790,6 +801,34 @@ namespace Vim
             {
                 result->push_back(std::string(reinterpret_cast<const char*>(mStrings[guidData[i]])));
             }
+            
+            return result;
+        }
+        
+        int GetStorageType(int parameterDescriptorIndex)
+        {
+            if (parameterDescriptorIndex < 0 || parameterDescriptorIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("int:StorageType")) {
+                return *reinterpret_cast<int*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["int:StorageType"].begin() + parameterDescriptorIndex * sizeof(int)));
+            }
+            
+            return {};
+        }
+        
+        std::vector<int>* GetAllStorageType()
+        {
+            const auto count = GetCount();
+            
+            int* storageTypeData = new int[count];
+            if (mEntityTable.column_exists("int:StorageType")) {
+                memcpy(storageTypeData, mEntityTable.mDataColumns["int:StorageType"].begin(), count * sizeof(int));
+            }
+            
+            std::vector<int>* result = new std::vector<int>(storageTypeData, storageTypeData + count);
+            
+            delete[] storageTypeData;
             
             return result;
         }
