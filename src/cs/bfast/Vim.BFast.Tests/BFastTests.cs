@@ -6,6 +6,7 @@ using Vim.Util.Tests;
 
 namespace Vim.BFastLib.Tests
 {
+    [TestFixture]
     public class BFastTests
     {
         public static string ResultPath = Path.Combine(VimFormatRepoPaths.OutDir, "input.bfast");

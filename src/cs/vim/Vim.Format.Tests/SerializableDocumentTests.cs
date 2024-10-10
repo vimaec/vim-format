@@ -160,7 +160,7 @@ public static class SerializableDocumentTests
     //    mesh.SubmeshMaterials.Sum();
     //}
 
-    private static void MaterialsAreSame(IMaterial mesh, VimMaterialNext next)
+    private static void MaterialsAreSame(IMaterial mesh, VimMaterial next)
     {
         Assert.AreEqual(mesh.Color, next.Color);
         Assert.AreEqual(mesh.Glossiness, next.Glossiness);

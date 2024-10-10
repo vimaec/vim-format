@@ -61,8 +61,8 @@ namespace Vim
         public VimSceneNode[] Nodes { get; private set; }
 
         public VimMesh[] Meshes { get; private set; }
-        public VimShapeNext[] Shapes { get; private set; }
-        public VimMaterialNext[] Materials { get; private set; }
+        public VimShape[] Shapes { get; private set; }
+        public VimMaterial[] Materials { get; private set; }
 
         public SerializableDocument _SerializableDocument { get; }
         public Document Document { get; private set; }
@@ -206,7 +206,7 @@ namespace Vim
             {
                 return;
             }
-            Shapes = VimShapeNext.FromG3d(_SerializableDocument.GeometryNext).ToArray();
+            Shapes = VimShape.FromG3d(_SerializableDocument.GeometryNext).ToArray();
         }
 
         private void CreateScene(bool inParallel)
@@ -225,7 +225,7 @@ namespace Vim
             {
                 return;
             }
-            Materials = VimMaterialNext.FromG3d(_SerializableDocument.GeometryNext).ToArray();
+            Materials = VimMaterial.FromG3d(_SerializableDocument.GeometryNext).ToArray();
         }
 
         public static VimSceneNode[] CreateVimSceneNodes(VimScene scene, G3dVim g3d, bool inParallel)

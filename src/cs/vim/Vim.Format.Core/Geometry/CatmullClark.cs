@@ -137,7 +137,7 @@ namespace Vim.Format.Geometry
 
                 var facePoint = new Vector3();
 
-                for (var edgeIndex = 0; edgeIndex < faceSize; edgeIndex++)
+                for (var edgeIndex = 0; edgeIndex < 3; edgeIndex++)
                 {
                     var vertexIndex = geometry.indices[currentVertexIndex + edgeIndex];
                     facePoint += geometry.vertices[vertexIndex];
