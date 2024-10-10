@@ -7,6 +7,7 @@ import { RemoteValue } from './remoteValue'
 import {IProgressLogs, RequestTracker} from './requestTracker'
 import { Logger, NoLog} from './logging'
 import { RetriableRequest } from './retriableRequest'
+import { isLocalResource } from '../utils'
 
 let RemoteBufferMaxConcurency = 10
 export function setRemoteBufferMaxConcurency(value: number){
@@ -27,6 +28,9 @@ export class RemoteBuffer {
   private _active: Set<RetriableRequest> = new Set<RetriableRequest>()
 
   constructor (url: string) {
+    if(isLocalResource(url)){
+      throw new Error(`Local resources are not supported: ${url}`)
+    }
     this.url = url
     this.logs = new NoLog()
     this._tracker = new RequestTracker(url, this.logs)

@@ -5,6 +5,7 @@
  import { RemoteValue } from './http/remoteValue'
  import { RemoteBuffer } from './http/remoteBuffer'
  import * as pako from 'pako'
+import { isLocalResource } from './utils'
  
  type NumericArrayConstructor =
    | Int8ArrayConstructor
@@ -210,9 +211,15 @@ export function parseName(name: string): [number, NumericArrayConstructor]{
      offset: number = 0,
      name: string = '' 
    ) {
-     this.source = typeof source === 'string'
-      ? new RemoteBuffer(source)
-      : source
+    if(typeof source === 'string'){
+      if(isLocalResource(source)){
+        throw new Error(`Local resources are not supported: ${source}`)
+      }
+      this.source = new RemoteBuffer(source)
+    }
+    else{
+      this.source = source
+    }
 
      this.offset = offset
      this.name = name ?? "root"
