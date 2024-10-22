@@ -222,7 +222,6 @@ export interface IParameterDescriptor {
     isReadOnly?: boolean
     flags?: number
     guid?: string
-    storageType?: number
     
     displayUnitIndex?: number
     displayUnit?: IDisplayUnit
@@ -249,8 +248,6 @@ export interface IParameterDescriptorTable {
     getAllFlags(): Promise<number[] | undefined>
     getGuid(parameterDescriptorIndex: number): Promise<string | undefined>
     getAllGuid(): Promise<string[] | undefined>
-    getStorageType(parameterDescriptorIndex: number): Promise<number | undefined>
-    getAllStorageType(): Promise<number[] | undefined>
     
     getDisplayUnitIndex(parameterDescriptorIndex: number): Promise<number | undefined>
     getAllDisplayUnitIndex(): Promise<number[] | undefined>
@@ -267,7 +264,6 @@ export class ParameterDescriptor implements IParameterDescriptor {
     isReadOnly?: boolean
     flags?: number
     guid?: string
-    storageType?: number
     
     displayUnitIndex?: number
     displayUnit?: IDisplayUnit
@@ -285,7 +281,6 @@ export class ParameterDescriptor implements IParameterDescriptor {
             table.getIsReadOnly(index).then(v => result.isReadOnly = v),
             table.getFlags(index).then(v => result.flags = v),
             table.getGuid(index).then(v => result.guid = v),
-            table.getStorageType(index).then(v => result.storageType = v),
             table.getDisplayUnitIndex(index).then(v => result.displayUnitIndex = v),
         ])
         
@@ -330,7 +325,6 @@ export class ParameterDescriptorTable implements IParameterDescriptorTable {
         let isReadOnly: boolean[] | undefined
         let flags: number[] | undefined
         let guid: string[] | undefined
-        let storageType: number[] | undefined
         let displayUnitIndex: number[] | undefined
         
         await Promise.all([
@@ -342,7 +336,6 @@ export class ParameterDescriptorTable implements IParameterDescriptorTable {
             (async () => { isReadOnly = (await localTable.getBooleanArray("byte:IsReadOnly")) })(),
             (async () => { flags = (await localTable.getNumberArray("int:Flags")) })(),
             (async () => { guid = (await localTable.getStringArray("string:Guid")) })(),
-            (async () => { storageType = (await localTable.getNumberArray("int:StorageType")) })(),
             (async () => { displayUnitIndex = (await localTable.getNumberArray("index:Vim.DisplayUnit:DisplayUnit")) })(),
         ])
         
@@ -360,7 +353,6 @@ export class ParameterDescriptorTable implements IParameterDescriptorTable {
                 isReadOnly: isReadOnly ? isReadOnly[i] : undefined,
                 flags: flags ? flags[i] : undefined,
                 guid: guid ? guid[i] : undefined,
-                storageType: storageType ? storageType[i] : undefined,
                 displayUnitIndex: displayUnitIndex ? displayUnitIndex[i] : undefined
             })
         }
@@ -430,14 +422,6 @@ export class ParameterDescriptorTable implements IParameterDescriptorTable {
     
     async getAllGuid(): Promise<string[] | undefined> {
         return (await this.entityTable.getStringArray("string:Guid"))
-    }
-    
-    async getStorageType(parameterDescriptorIndex: number): Promise<number | undefined> {
-        return (await this.entityTable.getNumber(parameterDescriptorIndex, "int:StorageType"))
-    }
-    
-    async getAllStorageType(): Promise<number[] | undefined> {
-        return (await this.entityTable.getNumberArray("int:StorageType"))
     }
     
     async getDisplayUnitIndex(parameterDescriptorIndex: number): Promise<number | undefined> {
@@ -10588,8 +10572,8 @@ export class VimDocument {
         this.strings = strings
     }
     
-    static async createFromBfast(bfast: BFast, ignoreStrings: boolean = false): Promise<VimDocument | undefined> {
-        const loaded = await VimLoader.loadFromBfast(bfast, ignoreStrings)
+    static async createFromBfast(bfast: BFast, download:boolean, ignoreStrings: boolean = false): Promise<VimDocument | undefined> {
+        const loaded = await VimLoader.loadFromBfast(bfast, download, ignoreStrings)
         
         if (loaded[0] === undefined)
             return undefined

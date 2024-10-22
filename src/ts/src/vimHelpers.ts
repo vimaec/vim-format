@@ -1,7 +1,7 @@
 import { VimDocument } from "./objectModel"
 
 /**
- * Representation of ElementParamter entity from the entity model
+ * Representation of ElementParameter entity from the entity model
  * See https://github.com/vimaec/vim/blob/master/ObjectModel/object-model-schema.json
  */
 export type ElementParameter = {
@@ -58,7 +58,9 @@ export type ElementParameter = {
       document.parameterDescriptor.getAllName(),
       document.parameterDescriptor.getAllGroup()
     ])
-    if (!parameterElements) return undefined
+    if(!parameterElements) return undefined
+    if(!parameterValues) return undefined
+    if(!getParameterDescriptorIndices) return undefined
 
     const getParameterDisplayValue = (index: number) => {
       const value = parameterValues[index]
@@ -81,11 +83,11 @@ export type ElementParameter = {
       const value = getParameterDisplayValue(parameter)
 
       const name = Number.isInteger(descriptor)
-       ? parameterDescriptorNames[descriptor]
+       ? parameterDescriptorNames?.[descriptor]
        : undefined
 
       const group = Number.isInteger(descriptor)
-       ? parameterDescriptorGroups[descriptor]
+       ? parameterDescriptorGroups?.[descriptor]
        : undefined
 
       return {name, value, group, isInstance} as ElementParameter
