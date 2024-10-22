@@ -3,8 +3,107 @@
  * @module vim-ts
  */
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.G3d = exports.VimAttributes = void 0;
-const bfast_1 = require("./bfast");
+exports.G3d = exports.VimAttributes = exports.AbstractG3d = exports.G3dAttribute = exports.G3dAttributeDescriptor = void 0;
+class G3dAttributeDescriptor {
+    constructor(description, association, semantic, attributeTypeIndex, dataType, dataArity) {
+        if (!description.startsWith('g3d:')) {
+            throw new Error(`${description} must start with 'g3d'`);
+        }
+        this.description = description;
+        this.association = association;
+        this.semantic = semantic;
+        this.attributeTypeIndex = attributeTypeIndex;
+        this.dataType = dataType;
+        this.dataArity = parseInt(dataArity);
+    }
+    static fromString(descriptor) {
+        const desc = descriptor.split(':');
+        if (desc.length !== 6) {
+            throw new Error(`${descriptor}, must have 6 components delimited by ':'`);
+        }
+        return new this(descriptor, desc[1], desc[2], desc[3], desc[4], desc[5]);
+    }
+    matches(other) {
+        const match = (a, b) => a === '*' || b === '*' || a === b;
+        return (match(this.association, other.association) &&
+            match(this.semantic, other.semantic) &&
+            match(this.attributeTypeIndex, other.attributeTypeIndex) &&
+            match(this.dataType, other.dataType));
+    }
+}
+exports.G3dAttributeDescriptor = G3dAttributeDescriptor;
+class G3dAttribute {
+    constructor(descriptor, bytes) {
+        this.descriptor = descriptor;
+        this.bytes = bytes;
+        this.data = G3dAttribute.castData(bytes, descriptor.dataType);
+    }
+    static fromString(descriptor, buffer) {
+        return new this(G3dAttributeDescriptor.fromString(descriptor), buffer);
+    }
+    // Converts a VIM attribute into a typed array from its raw data
+    static castData(bytes, dataType) {
+        switch (dataType) {
+            case 'float32':
+                return new Float32Array(bytes.buffer, bytes.byteOffset, bytes.byteLength / 4);
+            case 'float64':
+                throw new Float64Array(bytes.buffer, bytes.byteOffset, bytes.byteLength / 8);
+            case 'uint8':
+            case 'int8':
+                return bytes;
+            case 'int16':
+                return new Int16Array(bytes.buffer, bytes.byteOffset, bytes.byteLength / 2);
+            case 'uint16':
+                return new Uint16Array(bytes.buffer, bytes.byteOffset, bytes.byteLength / 2);
+            case 'int32':
+                return new Int32Array(bytes.buffer, bytes.byteOffset, bytes.byteLength / 4);
+            case 'uint32':
+                return new Uint32Array(bytes.buffer, bytes.byteOffset, bytes.byteLength / 4);
+            case 'int64':
+            case 'uint64':
+                console.error('G3d: 64-bit buffers unsuported');
+                return;
+            default:
+                console.error('Unrecognized attribute data type ' + dataType);
+        }
+    }
+}
+exports.G3dAttribute = G3dAttribute;
+/**
+ * G3D is a simple, efficient, generic binary format for storing and transmitting geometry.
+ * The G3D format is designed to be used either as a serialization format or as an in-memory data structure.
+ * See https://github.com/vimaec/g3d
+ */
+class AbstractG3d {
+    constructor(meta, attributes) {
+        this.meta = meta;
+        this.attributes = attributes;
+    }
+    findAttribute(descriptor) {
+        const filter = G3dAttributeDescriptor.fromString(descriptor);
+        for (let i = 0; i < this.attributes.length; ++i) {
+            const attribute = this.attributes[i];
+            if (attribute.descriptor.matches(filter))
+                return attribute;
+        }
+    }
+    /**
+     * Create g3d from bfast by requesting all necessary buffers individually.
+     */
+    static async createFromBfast(bfast) {
+        const attributes = await Promise.all(VimAttributes.all.map(async (a) => {
+            const bytes = await bfast.getBytes(a);
+            if (!bytes)
+                return;
+            const decriptor = G3dAttributeDescriptor.fromString(a);
+            return new G3dAttribute(decriptor, bytes);
+        }));
+        const validAttributes = attributes.filter((a) => a !== undefined);
+        const g3d = new AbstractG3d('meta', validAttributes);
+        return g3d;
+    }
+}
+exports.AbstractG3d = AbstractG3d;
 /**
  * See https://github.com/vimaec/vim#vim-geometry-attributes
  */
@@ -45,8 +144,25 @@ class G3d {
          * Opaque white
          */
         this.DEFAULT_COLOR = new Float32Array([1, 1, 1, 1]);
+        /**
+         * Computes all instances pointing to each mesh.
+         */
+        this.computeMeshInstances = () => {
+            const result = [];
+            for (let i = 0; i < this.instanceMeshes.length; i++) {
+                const mesh = this.instanceMeshes[i];
+                if (mesh < 0)
+                    continue;
+                const instanceIndices = result[mesh];
+                if (instanceIndices)
+                    instanceIndices.push(i);
+                else
+                    result[mesh] = [i];
+            }
+            return result;
+        };
+        // ------------- All -----------------
         this.getVertexCount = () => this.positions.length / G3d.POSITION_SIZE;
-        this.getIndexCount = () => this.indices.length;
         // ------------- Meshes -----------------
         this.getMeshCount = () => this.meshSubmeshes.length;
         // ------------- Instances -----------------
@@ -77,49 +193,31 @@ class G3d {
         this.meshInstances = this.computeMeshInstances();
         this.meshOpaqueCount = this.computeMeshOpaqueCount();
         this.sortSubmeshes();
-        const range = this.computeSubmeshVertexRange();
-        this.submeshVertexStart = range.start;
-        this.submeshVertexEnd = range.end;
     }
-    computeSubmeshVertexRange() {
-        const submeshCount = this.getSubmeshCount();
-        const start = new Int32Array(submeshCount);
-        const end = new Int32Array(submeshCount);
-        for (let sub = 0; sub < submeshCount; sub++) {
-            let min = Number.MAX_SAFE_INTEGER;
-            let max = Number.MIN_SAFE_INTEGER;
-            const subStart = this.getSubmeshIndexStart(sub);
-            const subEnd = this.getSubmeshIndexEnd(sub);
-            for (let i = subStart; i < subEnd; i++) {
-                const index = this.indices[i];
-                min = Math.min(min, index);
-                max = Math.max(min, index);
-            }
-            start[sub] = min;
-            end[sub] = max;
-        }
-        return { start, end };
-    }
-    static async createFromPath(path) {
-        const f = await fetch(path);
-        const buffer = await f.arrayBuffer();
-        const bfast = new bfast_1.BFast(buffer);
-        return this.createFromBfast(bfast);
+    static createFromAbstract(g3d) {
+        const instanceMeshes = g3d.findAttribute(VimAttributes.instanceMeshes)
+            ?.data;
+        const instanceTransforms = g3d.findAttribute(VimAttributes.instanceTransforms)?.data;
+        const instanceFlags = g3d.findAttribute(VimAttributes.instanceFlags)?.data ??
+            new Uint16Array(instanceMeshes.length);
+        const instanceNodes = g3d.findAttribute(VimAttributes.instanceNodes)?.data;
+        const meshSubmeshes = g3d.findAttribute(VimAttributes.meshSubmeshes)
+            ?.data;
+        const submeshIndexOffset = g3d.findAttribute(VimAttributes.submeshIndexOffsets)?.data;
+        const submeshMaterial = g3d.findAttribute(VimAttributes.submeshMaterials)
+            ?.data;
+        const indices = g3d.findAttribute(VimAttributes.indices)?.data;
+        const positions = g3d.findAttribute(VimAttributes.positions)
+            ?.data;
+        const materialColors = g3d.findAttribute(VimAttributes.materialColors)
+            ?.data;
+        const result = new G3d(instanceMeshes, instanceFlags, instanceTransforms, instanceNodes, meshSubmeshes, submeshIndexOffset, submeshMaterial, indices, positions, materialColors);
+        result.rawG3d = g3d;
+        return result;
     }
     static async createFromBfast(bfast) {
-        const values = await Promise.all([
-            bfast.getInt32Array(VimAttributes.instanceMeshes),
-            bfast.getUint16Array(VimAttributes.instanceFlags),
-            bfast.getFloat32Array(VimAttributes.instanceTransforms),
-            bfast.getInt32Array(VimAttributes.instanceNodes),
-            bfast.getInt32Array(VimAttributes.meshSubmeshes),
-            bfast.getInt32Array(VimAttributes.submeshIndexOffsets),
-            bfast.getInt32Array(VimAttributes.submeshMaterials),
-            bfast.getInt32Array(VimAttributes.indices),
-            bfast.getFloat32Array(VimAttributes.positions),
-            bfast.getFloat32Array(VimAttributes.materialColors)
-        ]);
-        return new G3d(...values);
+        const g3d = await AbstractG3d.createFromBfast(bfast);
+        return G3d.createFromAbstract(g3d);
     }
     /**
      * Computes the index of the first vertex of each mesh
@@ -134,23 +232,6 @@ class G3d {
                 min = Math.min(min, this.indices[i]);
             }
             result[m] = min;
-        }
-        return result;
-    }
-    /**
-     * Computes all instances pointing to each mesh.
-     */
-    computeMeshInstances() {
-        const result = new Array(this.getMeshCount());
-        for (let i = 0; i < this.instanceMeshes.length; i++) {
-            const mesh = this.instanceMeshes[i];
-            if (mesh < 0)
-                continue;
-            const instanceIndices = result[mesh];
-            if (instanceIndices)
-                instanceIndices.push(i);
-            else
-                result[mesh] = [i];
         }
         return result;
     }
@@ -283,22 +364,11 @@ class G3d {
             }
         }
     }
-    unbaseIndices() {
-        const count = this.getMeshCount();
-        for (let m = 0; m < count; m++) {
-            const offset = this.meshVertexOffsets[m];
-            const start = this.getMeshIndexStart(m, 'all');
-            const end = this.getMeshIndexEnd(m, 'all');
-            for (let i = start; i < end; i++) {
-                this.indices[i] += offset;
-            }
-        }
-    }
     /**
      * Computes an array where true if any of the materials used by a mesh has transparency.
      */
     computeMeshOpaqueCount() {
-        const result = new Int32Array(this.getMeshCount());
+        const result = new Array(this.getMeshCount()).fill(0);
         for (let m = 0; m < result.length; m++) {
             const subStart = this.getMeshSubmeshStart(m, 'all');
             const subEnd = this.getMeshSubmeshEnd(m, 'all');
@@ -308,18 +378,6 @@ class G3d {
             }
         }
         return result;
-    }
-    // ------------- All -----------------
-    /**Given VIM instance indices returns the corresponding G3d indices */
-    remapInstances(instances) {
-        const map = new Map();
-        for (let i = 0; i < instances.length; i++) {
-            map.set(this.instanceNodes[i], i);
-        }
-        return instances.map((i) => map.get(i));
-    }
-    getMeshInstanceCount(mesh) {
-        return this.meshInstances[mesh]?.length ?? 0;
     }
     getMeshIndexStart(mesh, section = 'all') {
         const sub = this.getMeshSubmeshStart(mesh, section);
@@ -380,15 +438,6 @@ class G3d {
     getSubmeshIndexCount(submesh) {
         return this.getSubmeshIndexEnd(submesh) - this.getSubmeshIndexStart(submesh);
     }
-    getSubmeshVertexStart(submesh) {
-        return this.submeshVertexStart[submesh];
-    }
-    getSubmeshVertexEnd(submesh) {
-        return this.submeshVertexEnd[submesh];
-    }
-    getSubmeshVertexCount(submesh) {
-        return this.getSubmeshVertexEnd(submesh) - this.getSubmeshVertexStart(submesh);
-    }
     /**
      * Returns color of given submesh as a 4-number array (RGBA)
      * @param submesh g3d submesh index
@@ -416,11 +465,6 @@ class G3d {
     getSubmeshCount() {
         return this.submeshIndexOffset.length;
     }
-    /**
-     * Returns true if instance has given flag enabled.
-     * @param instance instance to check.
-     * @param flag to check against.
-     */
     getInstanceHasFlag(instance, flag) {
         return (this.instanceFlags[instance] & flag) > 0;
     }
@@ -447,10 +491,6 @@ class G3d {
             return this.DEFAULT_COLOR;
         return this.materialColors.subarray(material * G3d.COLOR_SIZE, (material + 1) * G3d.COLOR_SIZE);
     }
-    /**
-     * Returns the alpha component of given material
-     * @param material
-     */
     getMaterialAlpha(material) {
         if (material < 0)
             return 1;
@@ -458,10 +498,6 @@ class G3d {
         const result = this.materialColors[index];
         return result;
     }
-    /**
-     * Concatenates two g3ds into a new g3d.
-     * @deprecated
-     */
     append(other) {
         const _instanceFlags = new Uint16Array(this.instanceFlags.length + other.instanceFlags.length);
         _instanceFlags.set(this.instanceFlags);
@@ -475,13 +511,9 @@ class G3d {
         const _positions = new Float32Array(this.positions.length + other.positions.length);
         _positions.set(this.positions);
         _positions.set(other.positions, this.positions.length);
-        this.unbaseIndices();
-        other.unbaseIndices();
         const _indices = new Uint32Array(this.indices.length + other.indices.length);
         _indices.set(this.indices);
         _indices.set(other.indices.map(i => i + this.positions.length / 3), this.indices.length);
-        this.rebaseIndices();
-        other.rebaseIndices();
         const _meshSubmeshes = new Int32Array(this.meshSubmeshes.length + other.meshSubmeshes.length);
         _meshSubmeshes.set(this.meshSubmeshes);
         _meshSubmeshes.set(other.meshSubmeshes.map(s => s + this.submeshIndexOffset.length), this.meshSubmeshes.length);
@@ -495,6 +527,116 @@ class G3d {
         _materialColors.set(this.materialColors);
         _materialColors.set(other.materialColors, this.materialColors.length);
         const g3d = new G3d(_instanceMeshes, _instanceFlags, _instanceTransforms, undefined, _meshSubmeshes, _submeshIndexOffsets, _submeshMaterials, _indices, _positions, _materialColors);
+        return g3d;
+    }
+    slice(instance) {
+        return this.filter([instance]);
+    }
+    filter(instances) {
+        const instanceSet = new Set(instances);
+        // Instances
+        const _instanceMeshes = new Int32Array(instances.length);
+        const _instanceFlags = new Uint16Array(instances.length);
+        const _instanceTransforms = new Float32Array(instances.length * 16);
+        let instance_i = 0;
+        for (let i = 0; i < this.getInstanceCount(); i++) {
+            if (!instanceSet.has(i))
+                continue;
+            _instanceFlags[instance_i] = this.instanceFlags[i];
+            _instanceMeshes[instance_i] = this.instanceMeshes[i];
+            for (let j = 0; j < 16; j++) {
+                _instanceTransforms[instance_i * 16 + j] = this.instanceTransforms[i * 16 + j];
+            }
+            instance_i++;
+        }
+        // Meshes
+        const meshMap = new Map();
+        const meshSet = new Set(_instanceMeshes);
+        meshSet.delete(-1);
+        const _meshSubmeshes = new Int32Array(meshSet.size);
+        let last = -1;
+        let mesh_i = 0;
+        for (let i = 0; i < this.getMeshCount(); i++) {
+            if (!meshSet.has(i))
+                continue;
+            const offset = mesh_i > 0 ? _meshSubmeshes[mesh_i - 1] : 0;
+            const lastCount = last < 0 ? 0 : this.getMeshSubmeshCount(last);
+            _meshSubmeshes[mesh_i] = lastCount + offset;
+            meshMap.set(i, mesh_i);
+            last = i;
+            mesh_i++;
+        }
+        // Remap Instance Meshes
+        for (let i = 0; i < _instanceMeshes.length; i++) {
+            _instanceMeshes[i] = meshMap.get(_instanceMeshes[i]) ?? -1;
+        }
+        // Mesh Attributes Count 
+        let submeshCount = 0;
+        let positionCount = 0;
+        let indiceCount = 0;
+        for (let m = 0; m < this.getMeshCount(); m++) {
+            if (!meshSet.has(m))
+                continue;
+            positionCount += this.getMeshVertexCount(m);
+            indiceCount += this.getMeshIndexCount(m);
+            submeshCount += this.getMeshSubmeshCount(m);
+        }
+        // Meshes
+        let indices_i = 0;
+        let positions_i = 0;
+        let submesh_i = 0;
+        let submeshOffset = 0;
+        let meshOffset = 0;
+        const _submeshIndexOffsets = new Int32Array(submeshCount);
+        const _submeshMaterials = new Int32Array(submeshCount);
+        const _positions = new Float32Array(positionCount * 3);
+        const _indices = new Uint32Array(indiceCount);
+        for (let mesh = 0; mesh < this.getMeshCount(); mesh++) {
+            if (!meshSet.has(mesh))
+                continue;
+            // submeshes
+            const subStart = this.getMeshSubmeshStart(mesh);
+            const subEnd = this.getMeshSubmeshEnd(mesh);
+            for (let j = subStart; j < subEnd; j++) {
+                const start = this.submeshIndexOffset[subStart];
+                _submeshIndexOffsets[submesh_i] = this.submeshIndexOffset[j] - start + submeshOffset;
+                _submeshMaterials[submesh_i] = this.submeshMaterial[j];
+                submesh_i++;
+            }
+            submeshOffset += this.getMeshIndexCount(mesh);
+            // indices
+            const indexStart = this.getMeshIndexStart(mesh);
+            const indexEnd = this.getMeshIndexEnd(mesh);
+            for (let j = indexStart; j < indexEnd; j++) {
+                _indices[indices_i++] = this.indices[j] + meshOffset;
+            }
+            meshOffset += this.getMeshVertexCount(mesh);
+            // vertices
+            const vertexStart = this.getMeshVertexStart(mesh);
+            const vertexEnd = this.getMeshVertexEnd(mesh);
+            for (let j = vertexStart * 3; j < vertexEnd * 3; j++) {
+                _positions[positions_i++] = this.positions[j];
+            }
+        }
+        // Material Colors
+        let color_i = 0;
+        const materialSet = new Set(_submeshMaterials);
+        const materialMap = new Map();
+        const _materialColors = new Float32Array(materialSet.size * 4);
+        for (let i = 0; i < this.materialColors.length; i++) {
+            if (materialSet.has(i)) {
+                materialMap.set(i, color_i);
+                for (let j = 0; j < 4; j++) {
+                    _materialColors[color_i * 4 + j] = this.materialColors[i * 4 + j];
+                }
+                color_i++;
+            }
+        }
+        // Remap Submesh Materials
+        for (let i = 0; i < _submeshMaterials.length; i++) {
+            _submeshMaterials[i] = _submeshMaterials[i] < 0 ? -1 : materialMap.get(_submeshMaterials[i]);
+        }
+        const g3d = new G3d(_instanceMeshes, _instanceFlags, _instanceTransforms, new Int32Array(instances), _meshSubmeshes, _submeshIndexOffsets, _submeshMaterials, _indices, _positions, _materialColors);
         return g3d;
     }
     validate() {

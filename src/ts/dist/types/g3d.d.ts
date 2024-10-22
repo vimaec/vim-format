@@ -2,7 +2,42 @@
  * @module vim-ts
  */
 import { BFast } from './bfast';
+export declare class G3dAttributeDescriptor {
+    description: string;
+    association: string;
+    semantic: string;
+    attributeTypeIndex: string;
+    dataType: string;
+    dataArity: number;
+    constructor(description: string, association: string, semantic: string, attributeTypeIndex: string, dataType: string, dataArity: string);
+    static fromString(descriptor: string): G3dAttributeDescriptor;
+    matches(other: G3dAttributeDescriptor): boolean;
+}
 export declare type MeshSection = 'opaque' | 'transparent' | 'all';
+export declare type TypedArray = Uint8Array | Int16Array | Uint16Array | Int32Array | Uint32Array | Float32Array | Uint32Array | Float64Array;
+export declare class G3dAttribute {
+    descriptor: G3dAttributeDescriptor;
+    bytes: Uint8Array;
+    data: TypedArray | undefined;
+    constructor(descriptor: G3dAttributeDescriptor, bytes: Uint8Array);
+    static fromString(descriptor: string, buffer: Uint8Array): G3dAttribute;
+    static castData(bytes: Uint8Array, dataType: string): TypedArray | undefined;
+}
+/**
+ * G3D is a simple, efficient, generic binary format for storing and transmitting geometry.
+ * The G3D format is designed to be used either as a serialization format or as an in-memory data structure.
+ * See https://github.com/vimaec/g3d
+ */
+export declare class AbstractG3d {
+    meta: string;
+    attributes: G3dAttribute[];
+    constructor(meta: string, attributes: G3dAttribute[]);
+    findAttribute(descriptor: string): G3dAttribute | undefined;
+    /**
+     * Create g3d from bfast by requesting all necessary buffers individually.
+     */
+    static createFromBfast(bfast: BFast): Promise<AbstractG3d>;
+}
 /**
  * See https://github.com/vimaec/vim#vim-geometry-attributes
  */
@@ -39,9 +74,8 @@ export declare class G3d {
     instanceNodes: Int32Array;
     meshVertexOffsets: Int32Array;
     meshInstances: Array<Array<number>>;
-    meshOpaqueCount: Int32Array;
-    submeshVertexStart: Int32Array;
-    submeshVertexEnd: Int32Array;
+    meshOpaqueCount: Array<number>;
+    rawG3d: AbstractG3d;
     static MATRIX_SIZE: number;
     static COLOR_SIZE: number;
     static POSITION_SIZE: number;
@@ -50,8 +84,7 @@ export declare class G3d {
      */
     DEFAULT_COLOR: Float32Array;
     constructor(instanceMeshes: Int32Array, instanceFlags: Uint16Array | undefined, instanceTransforms: Float32Array, instanceNodes: Int32Array | undefined, meshSubmeshes: Int32Array, submeshIndexOffsets: Int32Array, submeshMaterials: Int32Array, indices: Int32Array | Uint32Array, positions: Float32Array, materialColors: Float32Array);
-    private computeSubmeshVertexRange;
-    static createFromPath(path: string): Promise<G3d>;
+    static createFromAbstract(g3d: AbstractG3d): G3d;
     static createFromBfast(bfast: BFast): Promise<G3d>;
     /**
      * Computes the index of the first vertex of each mesh
@@ -92,17 +125,12 @@ export declare class G3d {
      * Rebase indices to be relative to its own mesh instead of to the whole g3d
      */
     private rebaseIndices;
-    private unbaseIndices;
     /**
      * Computes an array where true if any of the materials used by a mesh has transparency.
      */
     private computeMeshOpaqueCount;
-    /**Given VIM instance indices returns the corresponding G3d indices */
-    remapInstances(instances: number[]): number[];
     getVertexCount: () => number;
-    getIndexCount: () => number;
     getMeshCount: () => number;
-    getMeshInstanceCount(mesh: number): number;
     getMeshIndexStart(mesh: number, section?: MeshSection): number;
     getMeshIndexEnd(mesh: number, section?: MeshSection): number;
     getMeshIndexCount(mesh: number, section?: MeshSection): number;
@@ -116,9 +144,6 @@ export declare class G3d {
     getSubmeshIndexStart(submesh: number): number;
     getSubmeshIndexEnd(submesh: number): number;
     getSubmeshIndexCount(submesh: number): number;
-    getSubmeshVertexStart(submesh: number): number;
-    getSubmeshVertexEnd(submesh: number): number;
-    getSubmeshVertexCount(submesh: number): number;
     /**
      * Returns color of given submesh as a 4-number array (RGBA)
      * @param submesh g3d submesh index
@@ -139,11 +164,6 @@ export declare class G3d {
      */
     getSubmeshCount(): number;
     getInstanceCount: () => number;
-    /**
-     * Returns true if instance has given flag enabled.
-     * @param instance instance to check.
-     * @param flag to check against.
-     */
     getInstanceHasFlag(instance: number, flag: number): boolean;
     /**
      * Returns mesh index of given instance
@@ -161,15 +181,9 @@ export declare class G3d {
      * @param material g3d material index
      */
     getMaterialColor(material: number): Float32Array;
-    /**
-     * Returns the alpha component of given material
-     * @param material
-     */
     getMaterialAlpha(material: number): number;
-    /**
-     * Concatenates two g3ds into a new g3d.
-     * @deprecated
-     */
     append(other: G3d): G3d;
+    slice(instance: number): G3d;
+    filter(instances: number[]): G3d;
     validate(): void;
 }

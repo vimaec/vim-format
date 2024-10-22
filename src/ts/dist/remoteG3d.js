@@ -3,7 +3,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.RemoteG3d = exports.RemoteAbstractG3d = void 0;
 const bfast_1 = require("./bfast");
 const g3d_1 = require("./g3d");
-const g3dAttributes_1 = require("./g3dAttributes");
 class G3dRemoteAttribute {
     constructor(descriptor, bfast) {
         this.descriptor = descriptor;
@@ -13,7 +12,7 @@ class G3dRemoteAttribute {
         const bytes = await this.bfast.getBytes(this.descriptor.description);
         if (!bytes)
             return;
-        const data = g3dAttributes_1.G3dAttribute.castData(bytes, this.descriptor.dataType);
+        const data = g3d_1.G3dAttribute.castData(bytes, this.descriptor.dataType);
         return data;
     }
     async getByte(index) {
@@ -36,7 +35,7 @@ class G3dRemoteAttribute {
         return count;
     }
     static fromString(description, bfast) {
-        return new G3dRemoteAttribute(g3dAttributes_1.G3dAttributeDescriptor.fromString(description), bfast);
+        return new G3dRemoteAttribute(g3d_1.G3dAttributeDescriptor.fromString(description), bfast);
     }
 }
 /**
@@ -50,7 +49,7 @@ class RemoteAbstractG3d {
         this.attributes = attributes;
     }
     findAttribute(descriptor) {
-        const filter = g3dAttributes_1.G3dAttributeDescriptor.fromString(descriptor);
+        const filter = g3d_1.G3dAttributeDescriptor.fromString(descriptor);
         for (let i = 0; i < this.attributes.length; ++i) {
             const attribute = this.attributes[i];
             if (attribute.descriptor.matches(filter))

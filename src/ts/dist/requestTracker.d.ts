@@ -31,7 +31,7 @@ export declare class RequestTracker {
      * callback on update, called at most every delay time.
      */
     onUpdate: ((self: RequestTracker) => void) | undefined;
-    constructor(source?: string, logger?: Logger);
+    constructor(source: string, logger?: Logger);
     /**
      * Returns the sum of .loaded across all requests
      */

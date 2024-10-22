@@ -9,8 +9,7 @@ export declare class RemoteValue<T> {
     private _getter;
     private _value;
     private _request;
-    constructor(getter: () => Promise<T | undefined>, label?: string);
-    abort(): void;
+    constructor(getter: () => Promise<T>, label?: string);
     /**
      * Returns a value from cache or queue up existing request or start a new requests
      */

@@ -1,6 +1,5 @@
 import { BFast } from "./bfast";
-import { G3d } from "./g3d";
-import { G3dAttributeDescriptor, TypedArray } from "./g3dAttributes";
+import { G3d, G3dAttributeDescriptor, TypedArray } from "./g3d";
 declare class G3dRemoteAttribute {
     descriptor: G3dAttributeDescriptor;
     bfast: BFast;
