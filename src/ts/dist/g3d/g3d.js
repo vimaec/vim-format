@@ -103,7 +103,7 @@ class G3d {
     static async createFromPath(path) {
         const f = await fetch(path);
         const buffer = await f.arrayBuffer();
-        const bfast = new bfast_1.BFast(buffer);
+        const bfast = new bfast_1.BFast({ buffer });
         return this.createFromBfast(bfast);
     }
     static async createFromBfast(bfast) {

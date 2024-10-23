@@ -11,8 +11,8 @@ export class RemoteVimx{
   scene : RemoteValue<G3dScene>
   chunkCache = new Map<number, RemoteValue<G3dChunk>>()
 
-  constructor(source : BFast | BFastSource){
-    this.bfast = source instanceof BFast ? source : new BFast(source)
+  constructor(bfast : BFast){
+    this.bfast = bfast
     this.scene = new RemoteValue(() => this.requestScene())
   }
 

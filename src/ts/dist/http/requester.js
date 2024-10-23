@@ -23,8 +23,8 @@ class Requester {
         this._active.clear();
         this._queue.length = 0;
     }
-    async http(url, label) {
-        const request = new retriableRequest_1.RetriableRequest(url, undefined, 'arraybuffer');
+    async http(url, headers = {}, label) {
+        const request = new retriableRequest_1.RetriableRequest(url, headers, undefined, 'arraybuffer');
         request.msg = url;
         this.enqueue(request);
         return new Promise((resolve, reject) => {

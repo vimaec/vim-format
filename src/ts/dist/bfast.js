@@ -177,14 +177,20 @@ exports.BFastHeader = BFastHeader;
  */
 class BFast {
     constructor(source, offset = 0, name = '') {
-        this.source = typeof source === 'string'
-            ? new remoteBuffer_1.RemoteBuffer(source)
-            : source;
+        this.source = source.buffer
+            ? source.buffer
+            : new remoteBuffer_1.RemoteBuffer(source.url, source.headers);
         this.offset = offset;
         this.name = name ?? "root";
         this._header = new remoteValue_1.RemoteValue(() => this.requestHeader(), name + '.header');
         this._children = new Map();
         this._ranges = new remoteValue_1.RemoteValue(() => this.requestRanges(), name + '.ranges');
+    }
+    /**
+     * @returns url of the underlying RemoteBuffer if available
+     */
+    get url() {
+        return this.source instanceof remoteBuffer_1.RemoteBuffer ? this.source.url : undefined;
     }
     /**
      * Aborts all downloads from the underlying RemoteBuffer
@@ -229,7 +235,7 @@ class BFast {
         if (inflate) {
             buffer = pako.inflateRaw(buffer).buffer;
         }
-        return new BFast(buffer, 0, name);
+        return new BFast({ buffer }, 0, name);
     }
     /**
      * Returns the raw buffer associated with a name
@@ -370,7 +376,7 @@ class BFast {
         const range = ranges.get(name);
         if (!range)
             return undefined;
-        const result = new BFast(this.source, this.offset + range.start, this.name + '.' + name);
+        const result = new BFast({ buffer: this.source }, this.offset + range.start, this.name + '.' + name);
         return result;
     }
     /**
@@ -469,7 +475,7 @@ class BFast {
         const header = await this._header.get();
         const range = new Range(0, header.dataEnd);
         const buffer = await this.request(range, this.name);
-        const result = new BFast(buffer, 0, this.name);
+        const result = new BFast({ buffer }, 0, this.name);
         return result;
     }
 }

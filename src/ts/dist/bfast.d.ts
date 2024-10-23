@@ -29,6 +29,11 @@ export declare class BFastHeader {
     static createFromArray(array: Uint32Array): BFastHeader;
     static createFromBuffer(array: ArrayBuffer): BFastHeader;
 }
+export declare type BFastSource = {
+    url?: string;
+    headers?: Record<string, string>;
+    buffer?: RemoteBuffer | ArrayBuffer;
+};
 /**
  * See https://github.com/vimaec/bfast for bfast format spec
  * This implementation can either lazily request content as needed from http
@@ -42,7 +47,11 @@ export declare class BFast {
     private _header;
     private _ranges;
     private _children;
-    constructor(source: RemoteBuffer | ArrayBuffer | string, offset?: number, name?: string);
+    constructor(source: BFastSource, offset?: number, name?: string);
+    /**
+     * @returns url of the underlying RemoteBuffer if available
+     */
+    get url(): string;
     /**
      * Aborts all downloads from the underlying RemoteBuffer
      */
