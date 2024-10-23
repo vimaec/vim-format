@@ -1,4 +1,4 @@
-import { BFast } from "./bfast";
+import { BFast, BFastSource } from "./bfast";
 import { G3dMaterial as G3dMaterials } from "./g3d/g3dMaterials";
 import { G3dChunk } from './g3d/g3dChunk';
 import { G3dScene } from "./g3d/g3dScene";
@@ -11,7 +11,7 @@ export class RemoteVimx{
   scene : RemoteValue<G3dScene>
   chunkCache = new Map<number, RemoteValue<G3dChunk>>()
 
-  constructor(source : BFast | ArrayBuffer | string){
+  constructor(source : BFast | BFastSource){
     this.bfast = source instanceof BFast ? source : new BFast(source)
     this.scene = new RemoteValue(() => this.requestScene())
   }

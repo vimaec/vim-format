@@ -27,8 +27,8 @@ export class Requester {
     this._queue.length = 0
   }
 
-  async http (url : string, label?: string) {
-    const request = new RetriableRequest(url, undefined, 'arraybuffer')
+  async http (url : string, headers : Record<string, string> = {}, label?: string) {
+    const request = new RetriableRequest(url, headers, undefined, 'arraybuffer')
     request.msg = url
 
     this.enqueue(request)

@@ -191,6 +191,12 @@ export function parseName(name: string): [number, NumericArrayConstructor]{
    }
  }
  
+ export type BFastSource = {
+    url?: string
+    headers?: Record<string, string>
+    buffer?: RemoteBuffer | ArrayBuffer
+ }
+
  /**
   * See https://github.com/vimaec/bfast for bfast format spec
   * This implementation can either lazily request content as needed from http
@@ -201,18 +207,20 @@ export function parseName(name: string): [number, NumericArrayConstructor]{
    source: RemoteBuffer | ArrayBuffer
    offset: number
    name: string
+   
    private _header: RemoteValue<BFastHeader>
    private _ranges: RemoteValue<Map<string, Range>>
    private _children: Map<string, RemoteValue<BFast | undefined>>
  
    constructor (
-     source: RemoteBuffer | ArrayBuffer | string,
+     source: BFastSource,
      offset: number = 0,
      name: string = '' 
    ) {
-     this.source = typeof source === 'string'
-      ? new RemoteBuffer(source)
-      : source
+    
+     this.source = source.buffer
+      ? source.buffer
+      : new RemoteBuffer(source.url, source.headers)
 
      this.offset = offset
      this.name = name ?? "root"
@@ -220,6 +228,13 @@ export function parseName(name: string): [number, NumericArrayConstructor]{
      this._header = new RemoteValue(() => this.requestHeader(), name + '.header')
      this._children = new Map<string, RemoteValue<BFast>>()
      this._ranges = new RemoteValue(() => this.requestRanges(), name + '.ranges')
+   }
+
+   /**
+    * @returns url of the underlying RemoteBuffer if available
+    */
+   get url(){
+      return this.source instanceof RemoteBuffer ? this.source.url : undefined
    }
 
    /**
@@ -269,7 +284,7 @@ export function parseName(name: string): [number, NumericArrayConstructor]{
     if(inflate){
      buffer = pako.inflateRaw(buffer).buffer
     }
-    return new BFast(buffer, 0, name)
+    return new BFast({buffer}, 0, name)
   }
  
    /**
@@ -420,7 +435,7 @@ export function parseName(name: string): [number, NumericArrayConstructor]{
      if (!range) return undefined
  
      const result = new BFast(
-       this.source,
+       {buffer: this.source},
        this.offset + range.start,
        this.name + '.' + name
      )
@@ -536,7 +551,7 @@ export function parseName(name: string): [number, NumericArrayConstructor]{
     const header = await this._header.get()
     const range = new Range(0, header.dataEnd)
     const buffer = await this.request(range, this.name)
-    const result = new BFast(buffer!, 0, this.name)
+    const result = new BFast({buffer}, 0, this.name)
     return result
   }
  }

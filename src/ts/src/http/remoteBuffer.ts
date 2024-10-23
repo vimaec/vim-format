@@ -17,7 +17,8 @@ export function setRemoteBufferMaxConcurency(value: number){
  * Wrapper to provide tracking for all webrequests via request logger.
  */
 export class RemoteBuffer {
-  url: string
+  readonly url: string
+  readonly headers : Record<string, string> = {}
   maxConcurency: number = RemoteBufferMaxConcurency
   onProgress: (progress : IProgressLogs) => void
   logs : Logger
@@ -26,9 +27,10 @@ export class RemoteBuffer {
   private _queue: RetriableRequest[] = []
   private _active: Set<RetriableRequest> = new Set<RetriableRequest>()
 
-  constructor (url: string) {
+  constructor (url: string, headers : Record<string, string> = {}) {
     this.url = url
     this.logs = new NoLog()
+    this.headers = headers
     this._tracker = new RequestTracker(url, this.logs)
     this._tracker.onUpdate = (p) => this.onProgress?.(p)
   }
@@ -46,7 +48,7 @@ export class RemoteBuffer {
       ? `bytes=${range.start}-${range.end - 1}`
       : undefined
 
-    const request = new RetriableRequest(this.url, rangeStr, 'arraybuffer')
+    const request = new RetriableRequest(this.url, this.headers, rangeStr, 'arraybuffer')
 
     request.msg = range
       ? `${label} : [${range.start}, ${range.end}] of ${this.url}`
