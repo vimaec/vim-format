@@ -40,7 +40,7 @@ describe('testing VIM loading file', () => {
     test.each(testCases)('loading VIM file', async (testCase) => {
         const arrayBuffer = await testCase.loadFile()
 
-        const bfast = new BFast((arrayBuffer as ArrayBuffer)!)
+        const bfast = new BFast({buffer: arrayBuffer})
         const doc = await VimDocument.createFromBfast(bfast, false)
 
         expect(doc).not.toBe(undefined)
@@ -52,7 +52,7 @@ describe('testing objectModel.ts file', () => {
     test.each(testCases)('getting one element', async (testCase) => {
         const arrayBuffer = await testCase.loadFile()
 
-        const bfast = new BFast((arrayBuffer as ArrayBuffer)!)
+        const bfast = new BFast({buffer: arrayBuffer})
         const doc = await VimDocument.createFromBfast(bfast, false)
 
         expect(doc).not.toBe(undefined)
@@ -89,7 +89,7 @@ describe('testing objectModel.ts array getter', () => {
     test.each(testCases)('getting an array of IDs', async (testCase) => {
         const arrayBuffer = await testCase.loadFile()
 
-        const bfast = new BFast((arrayBuffer as ArrayBuffer)!)
+        const bfast = new BFast({buffer: arrayBuffer})
         const doc = await VimDocument.createFromBfast(bfast, false)
         const ids = await doc?.element?.getAllId()
 
@@ -105,7 +105,7 @@ describe('testing objectModel.ts get-all getter', () => {
     test.each(testCases)('getting all levels', async (testCase) => {
         const arrayBuffer = await testCase.loadFile()
 
-        const bfast = new BFast((arrayBuffer as ArrayBuffer)!)
+        const bfast = new BFast({buffer: arrayBuffer})
         const doc = await VimDocument.createFromBfast(bfast, false)
         const levels = await doc?.level?.getAll()
 
@@ -118,9 +118,9 @@ describe('testing objectModel.ts ignoreStrings flag', () => {
     test.each(testCases)('getting an element from a document without strings', async (testCase) => {
         const arrayBuffer = await testCase.loadFile()
 
-        const bfast = new BFast((arrayBuffer as ArrayBuffer)!)
-        const docWithStrings = await VimDocument.createFromBfast(bfast, false, false)
-        const docWithoutStrings = await VimDocument.createFromBfast(bfast, false, true)
+        const bfast = new BFast({buffer: arrayBuffer})
+        const docWithStrings = await VimDocument.createFromBfast(bfast, false)
+        const docWithoutStrings = await VimDocument.createFromBfast(bfast, true)
 
         const elementWithStrings = await getElementById(docWithStrings!, 374011n)
         const elementWithoutStrings = await getElementById(docWithoutStrings!, 374011n)
