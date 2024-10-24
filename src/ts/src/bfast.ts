@@ -2,9 +2,16 @@
  * @module vim-ts
  */
 
- import { RemoteValue } from './remoteValue'
- import { RemoteBuffer } from './remoteBuffer'
+ import { RemoteValue } from './http/remoteValue'
+ import { RemoteBuffer } from './http/remoteBuffer'
+ import * as pako from 'pako'
  
+ export type BFastSource = {
+  url?: string
+  headers?: Record<string, string>
+  buffer?: RemoteBuffer | ArrayBuffer
+}
+
  type NumericArrayConstructor =
    | Int8ArrayConstructor
    | Uint8ArrayConstructor
@@ -190,6 +197,8 @@ export function parseName(name: string): [number, NumericArrayConstructor]{
    }
  }
  
+
+
  /**
   * See https://github.com/vimaec/bfast for bfast format spec
   * This implementation can either lazily request content as needed from http
@@ -200,22 +209,47 @@ export function parseName(name: string): [number, NumericArrayConstructor]{
    source: RemoteBuffer | ArrayBuffer
    offset: number
    name: string
+   
    private _header: RemoteValue<BFastHeader>
    private _ranges: RemoteValue<Map<string, Range>>
    private _children: Map<string, RemoteValue<BFast | undefined>>
  
    constructor (
-     source: RemoteBuffer | ArrayBuffer,
+     source: BFastSource,
      offset: number = 0,
-     name: string = ''
+     name: string = '' 
    ) {
-     this.source = source
+    
+     this.source = source.buffer
+      ? source.buffer
+      : new RemoteBuffer(source.url, source.headers)
+
      this.offset = offset
-     this.name = name
+     this.name = name ?? "root"
  
      this._header = new RemoteValue(() => this.requestHeader(), name + '.header')
      this._children = new Map<string, RemoteValue<BFast>>()
      this._ranges = new RemoteValue(() => this.requestRanges(), name + '.ranges')
+   }
+
+   /**
+    * @returns url of the underlying RemoteBuffer if available
+    */
+   get url(){
+      return this.source instanceof RemoteBuffer ? this.source.url : undefined
+   }
+
+   /**
+    * Aborts all downloads from the underlying RemoteBuffer
+    */
+   abort(){
+      if(this.source instanceof RemoteBuffer){
+        this.source.abort()
+      }
+      
+      this._header.abort()
+      this._ranges.abort()
+      this._children.forEach(c => c.abort())
    }
  
    /**
@@ -246,11 +280,14 @@ export function parseName(name: string): [number, NumericArrayConstructor]{
      return request.get()
    }
  
-   async getLocalBfast (name: string): Promise<BFast | undefined> {
-     const buffer = await this.getBuffer(name)
-     if (!buffer) return undefined
-     return new BFast(buffer, 0, name)
-   }
+   async getLocalBfast (name: string, inflate: boolean = false): Promise<BFast | undefined> {
+    let buffer = await this.getBuffer(name)
+    if (!buffer) return undefined
+    if(inflate){
+     buffer = pako.inflateRaw(buffer).buffer
+    }
+    return new BFast({buffer}, 0, name)
+  }
  
    /**
     * Returns the raw buffer associated with a name
@@ -277,6 +314,30 @@ export function parseName(name: string): [number, NumericArrayConstructor]{
      const array = new Ctor(buffer)
      return array
    }
+
+    async getInt32Array(name: string): Promise<Int32Array | undefined> {
+      const buffer = await this.getBuffer(name)
+      if(!buffer) return
+      return new Int32Array(buffer)
+    }
+
+    async getFloat32Array(name: string): Promise<Float32Array | undefined> {
+      const buffer = await this.getBuffer(name)
+      if(!buffer) return
+      return new Float32Array(buffer)
+    }
+
+    async getBigInt64Array(name: string): Promise<BigInt64Array | undefined> {
+      const buffer = await this.getBuffer(name)
+      if(!buffer) return
+      return new BigInt64Array(buffer)
+    }
+
+    async getUint16Array(name: string): Promise<Uint16Array | undefined> {
+      const buffer = await this.getBuffer(name)
+      if(!buffer) return
+      return new Uint16Array(buffer)
+    }
 
    /**
     * Returns a single value from given buffer name
@@ -376,7 +437,7 @@ export function parseName(name: string): [number, NumericArrayConstructor]{
      if (!range) return undefined
  
      const result = new BFast(
-       this.source,
+       {buffer: this.source},
        this.offset + range.start,
        this.name + '.' + name
      )
@@ -492,7 +553,7 @@ export function parseName(name: string): [number, NumericArrayConstructor]{
     const header = await this._header.get()
     const range = new Range(0, header.dataEnd)
     const buffer = await this.request(range, this.name)
-    const result = new BFast(buffer!, 0, this.name)
+    const result = new BFast({buffer}, 0, this.name)
     return result
   }
  }

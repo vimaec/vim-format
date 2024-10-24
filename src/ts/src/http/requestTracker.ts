@@ -40,7 +40,7 @@ export class RequestTracker {
    */
   onUpdate: ((self: RequestTracker) => void) | undefined = undefined
 
-  constructor (source: string, logger : Logger = new NoLog()) {
+  constructor (source?: string, logger : Logger = new NoLog()) {
     this.source = source
     this.logs = logger
   }

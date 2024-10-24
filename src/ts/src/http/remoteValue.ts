@@ -11,11 +11,15 @@ export class RemoteValue<T> {
   private _value: T | undefined
   private _request: Promise<T> | undefined
 
-  constructor (getter: () => Promise<T>, label?: string) {
+  constructor (getter: () => Promise<T | undefined>, label?: string) {
     this._getter = getter
     this.label = label ?? ''
   }
 
+  abort(){
+    this._request = undefined
+  }
+  
   /**
    * Returns a value from cache or queue up existing request or start a new requests
    */
