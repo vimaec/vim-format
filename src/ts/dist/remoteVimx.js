@@ -1,7 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.RemoteVimx = void 0;
-const bfast_1 = require("./bfast");
 const g3dMaterials_1 = require("./g3d/g3dMaterials");
 const g3dChunk_1 = require("./g3d/g3dChunk");
 const g3dScene_1 = require("./g3d/g3dScene");
@@ -9,9 +8,9 @@ const remoteValue_1 = require("./http/remoteValue");
 const vimHeader_1 = require("./vimHeader");
 const g3dMesh_1 = require("./g3d/g3dMesh");
 class RemoteVimx {
-    constructor(source) {
+    constructor(bfast) {
         this.chunkCache = new Map();
-        this.bfast = source instanceof bfast_1.BFast ? source : new bfast_1.BFast(source);
+        this.bfast = bfast;
         this.scene = new remoteValue_1.RemoteValue(() => this.requestScene());
     }
     /**

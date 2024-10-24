@@ -6,6 +6,12 @@
  import { RemoteBuffer } from './http/remoteBuffer'
  import * as pako from 'pako'
  
+ export type BFastSource = {
+  url?: string
+  headers?: Record<string, string>
+  buffer?: RemoteBuffer | ArrayBuffer
+}
+
  type NumericArrayConstructor =
    | Int8ArrayConstructor
    | Uint8ArrayConstructor
@@ -191,11 +197,7 @@ export function parseName(name: string): [number, NumericArrayConstructor]{
    }
  }
  
- export type BFastSource = {
-    url?: string
-    headers?: Record<string, string>
-    buffer?: RemoteBuffer | ArrayBuffer
- }
+
 
  /**
   * See https://github.com/vimaec/bfast for bfast format spec

@@ -16,14 +16,14 @@ exports.setRemoteBufferMaxConcurency = setRemoteBufferMaxConcurency;
  * Wrapper to provide tracking for all webrequests via request logger.
  */
 class RemoteBuffer {
-    constructor(url, headers = {}) {
+    constructor(url, headers) {
         this.headers = {};
         this.maxConcurency = RemoteBufferMaxConcurency;
         this._queue = [];
         this._active = new Set();
         this.url = url;
         this.logs = new logging_1.NoLog();
-        this.headers = headers;
+        this.headers = headers ?? {};
         this._tracker = new requestTracker_1.RequestTracker(url, this.logs);
         this._tracker.onUpdate = (p) => this.onProgress?.(p);
     }

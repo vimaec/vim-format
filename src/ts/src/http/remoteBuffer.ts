@@ -27,10 +27,10 @@ export class RemoteBuffer {
   private _queue: RetriableRequest[] = []
   private _active: Set<RetriableRequest> = new Set<RetriableRequest>()
 
-  constructor (url: string, headers : Record<string, string> = {}) {
+  constructor (url: string, headers? : Record<string, string>) {
     this.url = url
     this.logs = new NoLog()
-    this.headers = headers
+    this.headers = headers ?? {}
     this._tracker = new RequestTracker(url, this.logs)
     this._tracker.onUpdate = (p) => this.onProgress?.(p)
   }

@@ -1,4 +1,4 @@
-import { BFast, BFastSource } from "./bfast";
+import { BFast } from "./bfast";
 import { G3dMaterial as G3dMaterials } from "./g3d/g3dMaterials";
 import { G3dChunk } from './g3d/g3dChunk';
 import { G3dScene } from "./g3d/g3dScene";
@@ -8,7 +8,7 @@ export declare class RemoteVimx {
     bfast: BFast;
     scene: RemoteValue<G3dScene>;
     chunkCache: Map<number, RemoteValue<G3dChunk>>;
-    constructor(source: BFast | BFastSource);
+    constructor(bfast: BFast);
     /**
      * Aborts all downloads from the underlying BFAST.
      */
