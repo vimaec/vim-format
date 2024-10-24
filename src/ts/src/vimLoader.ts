@@ -5,13 +5,14 @@
 import { BFast } from "./bfast"
 
 export class VimLoader {
-    static async loadFromBfast(bfast: BFast, download: boolean, ignoreStrings: boolean): Promise<[BFast | undefined, string[] | undefined]> {
+    static async loadFromBfast(bfast: BFast, ignoreStrings: boolean): Promise<[BFast | undefined, string[] | undefined]> {
 
       const [entity, strings] = await Promise.all([
         
-          VimLoader.requestEntities(bfast, download),
+          VimLoader.requestEntities(bfast),
           ignoreStrings ? Promise.resolve(undefined) : VimLoader.requestStrings(bfast)
       ])
+      
       return [entity, strings] as [BFast, string[]]
     }
 
@@ -25,11 +26,8 @@ export class VimLoader {
         return strings
     }
 
-    private static async requestEntities (bfast: BFast, download :boolean) {
-        const entities = download
-          ? await bfast.getLocalBfast('entities')
-          : await bfast.getBfast('entities')
-        
+    private static async requestEntities (bfast: BFast) {
+        const entities = await bfast.getBfast('entities')
         if (!entities) {
             console.error('Could not get String Data from VIM file. Bim features will be disabled.')
         }
