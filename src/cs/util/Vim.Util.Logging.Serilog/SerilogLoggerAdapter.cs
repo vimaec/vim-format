@@ -1,11 +1,13 @@
-﻿using SerilogLogger = Serilog.Core.Logger;
+﻿using System;
+using SerilogLogger = Serilog.Core.Logger;
 using SerilogLogEventLevel = Serilog.Events.LogEventLevel;
 
 namespace Vim.Util.Logging.Serilog
 {
-    public class SerilogLoggerAdapter : ILogger
+    public class SerilogLoggerAdapter : ILogger, IDisposable
     {
         public readonly SerilogLogger Logger;
+        private bool _isDisposed;
 
         public SerilogLoggerAdapter(SerilogLogger logger)
             => Logger = logger;
@@ -14,6 +16,16 @@ namespace Vim.Util.Logging.Serilog
         {
             Logger.Write(level.ToSerilogLogEventLevel(), message);
             return this;
+        }
+
+        public void Dispose()
+        {
+            if (_isDisposed)
+                return;
+
+            _isDisposed = true;
+
+            Logger.Dispose();
         }
     }
 

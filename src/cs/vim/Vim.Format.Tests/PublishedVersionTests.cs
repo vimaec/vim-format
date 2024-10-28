@@ -25,7 +25,7 @@ namespace Vim.Format.Tests
         {
             var ctx = new CallerTestContext();
             ctx.PrepareDirectory();
-            var logger = ctx.CreateLogger();
+            using var logger = ctx.CreateLogger();
 
             // Parse BFast version
 

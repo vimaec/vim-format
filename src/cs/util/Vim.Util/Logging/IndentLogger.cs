@@ -1,17 +1,28 @@
 ﻿using System;
-using System.Collections.Generic;
 
 namespace Vim.Util.Logging
 {
-    public class IndentLogger : ILogger
+    public class IndentLogger : ILogger, IDisposable
     {
         private const string _indentation = "  ";
 
         public readonly ILogger InnerLogger;
         private string _indentPrefix = string.Empty;
+        private bool _isDisposed;
 
         public IndentLogger(ILogger innerLogger)
             => InnerLogger = innerLogger;
+
+        public void Dispose()
+        {
+            if (_isDisposed)
+                return;
+
+            _isDisposed = true;
+
+            if (InnerLogger is IDisposable d)
+                d.Dispose();
+        }
 
         public IndentLogger Indent()
         {

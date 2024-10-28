@@ -2,7 +2,6 @@
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using Vim.Util.Logging;
 using Vim.Util.Logging.Serilog;
 
 namespace Vim.Util.Tests
@@ -18,7 +17,7 @@ namespace Vim.Util.Tests
         public string GetLogPath(string name = null)
             => Path.Combine(DirPath, $"{name ?? TestName}.log");
 
-        public ILogger CreateLogger(string name = null)
+        public SerilogLoggerAdapter CreateLogger(string name = null)
             => Log.CreateLogger(name ?? TestName, GetLogPath(name ?? TestName));
 
         public string PrepareDirectory()

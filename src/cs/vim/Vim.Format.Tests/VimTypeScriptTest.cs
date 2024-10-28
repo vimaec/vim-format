@@ -47,7 +47,7 @@ public static class VimTypeScriptTest
     {
         var ctx = new CallerTestContext();
         ctx.PrepareDirectory();
-        var logger = ctx.CreateLogger();
+        using var logger = ctx.CreateLogger();
 
         // npm install
         using (var _ = logger.LogDuration($"Running 'npm install' in {VimTypeScriptRepoPath}"))

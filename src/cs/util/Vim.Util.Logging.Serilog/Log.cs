@@ -42,12 +42,12 @@ namespace Vim.Util.Logging.Serilog
         public static DurationLogger Duration(string name)
             => Instance.LogDuration(name);
 
-        public static ILogger Init(string name, string filepath, bool writeToConsole = true, bool addEvent = false)
+        public static SerilogLoggerAdapter Init(string name, string filepath, bool writeToConsole = true, bool addEvent = false)
         {
             var logger = CreateLogger(name, filepath, writeToConsole, addEvent);
             SerilogLog.Logger = logger.Logger;
             Instance = logger;
-            return Instance;
+            return logger;
         }
 
         public static SerilogLoggerAdapter CreateLogger(
