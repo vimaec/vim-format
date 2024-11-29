@@ -136,7 +136,7 @@ namespace Vim.Format.Merge
             ct.ThrowIfCancellationRequested();
 
             var materialCounts = vims.Select(v => v.Materials.Count);
-            var materialOffsets = materialCounts.ToIArray().PartialSums().DropLast();
+            var materialOffsets = materialCounts.ToIArray().PostAccumulate((x, y) => x + y).DropLast();
 
             db.Meshes.AddRange(vims
                 .SelectMany((vim, vimIndex) => vim.Meshes.Select(mesh => (mesh, vimIndex)).ToEnumerable())
@@ -163,7 +163,7 @@ namespace Vim.Format.Merge
             }
 
             var meshCounts = vims.Select(v => v.Meshes.Count);
-            var meshOffsets = meshCounts.ToIArray().PartialSums().DropLast();
+            var meshOffsets = meshCounts.ToIArray().PostAccumulate((x, y) => x + y).DropLast();
 
             // Merge the instances
             progress?.Report("Merging instances");

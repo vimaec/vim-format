@@ -178,5 +178,19 @@ namespace Vim.Format.SceneBuilder
                 // TODO: compare entity table equality.
             }
         }
+
+        private static void ValidateIndices(this IMesh mesh)
+        {
+            foreach (var index in mesh.Indices.ToEnumerable())
+            {
+                if (index < 0 || index >= mesh.NumVertices)
+                    throw new Exception($"Invalid mesh index: {index}. Expected a value greater or equal to 0 and less than {mesh.NumVertices}");
+            }
+        }
+
+        private static void Validate(this IMesh mesh)
+        {
+            mesh.ValidateIndices();
+        }
     }
 }

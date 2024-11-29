@@ -45,7 +45,6 @@ namespace Vim
 
         // TODO: I think this should be "IEnumerable<ISceneNode>" in the interface
         public ISceneNode Parent => null;
-        public IArray<ISceneNode> Children => LinqArray.LinqArray.Empty<ISceneNode>();
 
         public string DisciplineName => VimSceneHelpers.GetDisiplineFromCategory(CategoryName);
 
