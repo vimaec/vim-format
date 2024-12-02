@@ -137,7 +137,7 @@ namespace Vim.Format.Merge
                     var indexColumn = kv.Value;
 
                     // Get the related index remapping.
-                    var tableName = TableNameExtensions.GetTableNameFromIndexColumnName(indexColumnName);
+                    var tableName = TableNameExtensions.GetRelatedTableNameFromIndexColumnName(indexColumnName);
                     if (!remappedTableIndices.TryGetValue(tableName, out var oldToNewIndexMap))
                         continue;
 
