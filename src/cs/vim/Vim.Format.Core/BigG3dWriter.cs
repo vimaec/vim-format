@@ -13,21 +13,21 @@ namespace Vim.Format
     /// </summary>
     public class BigG3dWriter : IBFastComponent
     {
-        public INamedBuffer Meta { get; }
-        public string[] Names { get; }
-        public long[] Sizes { get; }
-        public BFastHeader Header { get; }
-        public List<SubdividedMesh> Meshes { get; }
-        public List<Instance> Instances { get; }
-        public List<Shape> Shapes { get; }
-        public List<Material> Materials { get; }
+        private INamedBuffer Meta { get; }
+        private string[] Names { get; }
+        private long[] Sizes { get; }
+        private BFastHeader Header { get; }
+        private List<SubdividedMesh> Meshes { get; }
+        private List<Instance> Instances { get; }
+        private List<Shape> Shapes { get; }
+        private List<Material> Materials { get; }
 
         // Computed fields
-        public int[] MeshVertexOffsets { get; }
-        public int[] MeshIndexOffsets { get; }
-        public int[] MeshSubmeshOffset { get; }
-        public int[] SubmeshIndexOffsets { get; }
-        public int[] ShapeVertexOffsets { get; }
+        private int[] MeshVertexOffsets { get; }
+        private int[] MeshIndexOffsets { get; }
+        private int[] MeshSubmeshOffset { get; }
+        private int[] SubmeshIndexOffsets { get; }
+        private int[] ShapeVertexOffsets { get; }
 
         public BigG3dWriter(List<SubdividedMesh> meshes, List<Instance> instances, List<Shape> shapes, List<Material> materials, G3dHeader? header = null, bool useColors = false)
         {

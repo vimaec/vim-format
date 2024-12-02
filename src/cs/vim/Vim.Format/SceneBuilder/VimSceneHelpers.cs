@@ -163,16 +163,7 @@ namespace Vim
         public static IEnumerable<(string assetBufferName, FileInfo assetFileInfo)> ExtractAssets(this VimScene vim, DirectoryInfo directory)
             => vim.Document.ExtractAssets(directory);
 
-        public static FileInfo ExtractAsset(this VimScene vim, string assetBufferName, FileInfo fileInfo)
-            => vim.Document.ExtractAsset(assetBufferName, fileInfo);
-
-        public static ElementInfo GetElementInfo(this VimScene vim, int elementIndex)
-            => vim.DocumentModel.GetElementInfo(elementIndex);
-
         public static ElementInfo GetElementInfo(this VimScene vim, Element element)
             => vim.DocumentModel.GetElementInfo(element);
-
-        public static VimSchema GetVimSchema(this VimScene vim)
-            => VimSchema.Create(vim.Document);
     }
 }

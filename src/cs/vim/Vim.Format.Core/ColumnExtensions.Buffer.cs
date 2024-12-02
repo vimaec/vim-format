@@ -9,8 +9,8 @@ namespace Vim.Format
 {
     public static partial class ColumnExtensions
     {
-        public static INamedBuffer[] GetAllColumns(this SerializableEntityTable et)
-            => et.DataColumns.Concat(et.IndexColumns).Concat(et.StringColumns).ToArray();
+        private static IEnumerable<INamedBuffer> GetAllColumns(this SerializableEntityTable et)
+            => et.DataColumns.Concat(et.IndexColumns).Concat(et.StringColumns);
 
         public static INamedBuffer[] ValidateColumnRowsAreAligned(this INamedBuffer[] columns)
         {
@@ -32,7 +32,7 @@ namespace Vim.Format
         public static INamedBuffer[] ValidateColumnRowsAreAligned(this SerializableEntityTable et)
             => et.GetAllColumns().ValidateColumnRowsAreAligned();
 
-        public static string ValidateCanConcatBuffers(this INamedBuffer thisBuffer, INamedBuffer otherBuffer)
+        private static string ValidateCanConcatBuffers(this INamedBuffer thisBuffer, INamedBuffer otherBuffer)
         {
             var thisPrefix = thisBuffer.GetTypePrefix();
             if (string.IsNullOrEmpty(thisPrefix))
@@ -54,9 +54,9 @@ namespace Vim.Format
         public static IBuffer ToBuffer<T>(this T[] array) where T : unmanaged
             => new Buffer<T>(array);
 
-        public const string UnknownNamedBufferPrefix = "Unknown NamedBuffer prefix";
+        private const string UnknownNamedBufferPrefix = "Unknown NamedBuffer prefix";
 
-        public static object GetDataColumnValue(this IBuffer dataColumn, string typePrefix, int rowIndex)
+        private static object GetDataColumnValue(this IBuffer dataColumn, string typePrefix, int rowIndex)
         {
             switch (typePrefix)
             {
@@ -122,7 +122,7 @@ namespace Vim.Format
             return new NamedBuffer(dataColumn.CopyDataColumn(typePrefix, remapping), dataColumn.Name);
         }
 
-        public static IBuffer Concat<T>(this IBuffer thisBuffer, IBuffer otherBuffer) where T : unmanaged
+        private static IBuffer Concat<T>(this IBuffer thisBuffer, IBuffer otherBuffer) where T : unmanaged
             => thisBuffer.AsArray<T>().Concat(otherBuffer.AsArray<T>()).ToArray().ToBuffer();
 
         public static IBuffer ConcatDataColumnBuffers(this IBuffer thisBuffer, IBuffer otherBuffer, string typePrefix)
@@ -144,14 +144,14 @@ namespace Vim.Format
             }
         }
 
-        public static INamedBuffer ConcatDataColumns(this INamedBuffer thisColumn, INamedBuffer otherColumn)
+        private static INamedBuffer ConcatDataColumns(this INamedBuffer thisColumn, INamedBuffer otherColumn)
         {
             var typePrefix = thisColumn.ValidateCanConcatBuffers(otherColumn);
             var combinedBuffer = thisColumn.ConcatDataColumnBuffers(otherColumn, typePrefix);
             return new NamedBuffer(combinedBuffer, thisColumn.Name);
         }
 
-        public static List<T> ConcatColumns<T>(
+        private static List<T> ConcatColumns<T>(
             this IReadOnlyList<T> thisColumnList,
             IReadOnlyList<T> otherColumnList,
             Func<T, T, T> concatFunc) where T : INamedBuffer
@@ -172,14 +172,15 @@ namespace Vim.Format
             return mergedColumns;
         }
 
-        public static List<INamedBuffer> ConcatDataColumns(this IReadOnlyList<INamedBuffer> thisColumnList, IReadOnlyList<INamedBuffer> otherColumnList)
+        private static List<INamedBuffer> ConcatDataColumns(this IReadOnlyList<INamedBuffer> thisColumnList, IReadOnlyList<INamedBuffer> otherColumnList)
             => thisColumnList.ConcatColumns(otherColumnList,
                 (a, b) => a.ConcatDataColumns(b));
 
-        public static List<NamedBuffer<int>> ConcatIntColumns(this IReadOnlyList<NamedBuffer<int>> thisColumnList, IReadOnlyList<NamedBuffer<int>> otherColumnList)
+        private static List<NamedBuffer<int>> ConcatIntColumns(this IReadOnlyList<NamedBuffer<int>> thisColumnList, IReadOnlyList<NamedBuffer<int>> otherColumnList)
             => thisColumnList.ConcatColumns(otherColumnList, 
                 (a, b) => new NamedBuffer<int>(a.GetTypedData().Concat(b.GetTypedData()).ToArray(), a.Name));
 
+<<<<<<< HEAD
         /// <summary>
         /// Returns a concatenated SerializableEntityTable based on the column names of thisTable.
         /// </summary>
@@ -200,11 +201,15 @@ namespace Vim.Format
 
         public static T[] GetColumnValues<T>(this INamedBuffer nb) where T : unmanaged
             => nb.AsArray<T>();
+=======
+        public static IArray<T> GetColumnValues<T>(this INamedBuffer nb) where T : unmanaged
+            => nb.AsArray<T>().ToIArray();
+>>>>>>> ae310f2 (Refacroting API: public->private + cleanup unused)
 
         /// <summary>
         /// Returns a new collection of index columns in which the designated column names have repeated values of VimConstants.NoEntityRelation.
         /// </summary>
-        public static IEnumerable<NamedBuffer<int>> NoneIndexColumnRelations(
+        private static IEnumerable<NamedBuffer<int>> NoneIndexColumnRelations(
             this IEnumerable<NamedBuffer<int>> indexColumns,
             params string[] indexColumnNames)
             => indexColumns.Select(ic => indexColumnNames.Contains(ic.Name)

@@ -15,16 +15,16 @@ namespace Vim.Format
     {
         public readonly ColumnType ColumnType;
         public readonly string TypePrefix;
-        public readonly Type SerializedType;
-        public readonly ISet<Type> CastTypes;
+        private readonly Type _serializedType;
+        private readonly ISet<Type> _castTypes;
 
         public ColumnInfo(ColumnType columnType, string typePrefix, Type serializedType, params Type[] castTypes)
         {
-            (ColumnType, TypePrefix, SerializedType) = (columnType, typePrefix, serializedType);
-            CastTypes = new HashSet<Type>(castTypes);
+            (ColumnType, TypePrefix, _serializedType) = (columnType, typePrefix, serializedType);
+            _castTypes = new HashSet<Type>(castTypes);
         }
 
         public IEnumerable<Type> RelatedTypes
-            => CastTypes.Prepend(SerializedType);
+            => _castTypes.Prepend(_serializedType);
     }
 }

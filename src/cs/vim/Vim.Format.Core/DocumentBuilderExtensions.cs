@@ -30,10 +30,7 @@ namespace Vim.Format
                 m.SubmeshIndexOffsets.ToList(),
                 m.SubmeshMaterials.ToList());
 
-        public static void AddMesh(this DocumentBuilder db, IMesh m)
-            => db.AddMesh(m.ToDocumentBuilderSubdividedMesh());
-
-        public static EntityTableBuilder CreateTableCopy(this DocumentBuilder db, EntityTable table, List<int> nodeIndexRemapping = null)
+        private static void CreateTableCopy(this DocumentBuilder db, EntityTable table, List<int> nodeIndexRemapping = null)
         {
             var name = table.Name;
             var tb = db.CreateTableBuilder(name);
@@ -53,11 +50,9 @@ namespace Vim.Format
                 var strings = col.GetTypedData().Select(i => table.Document.StringTable.ElementAtOrDefault(i, null));
                 tb.AddStringColumn(col.Name, strings.ToArray().RemapData(nodeIndexRemapping));
             }
-
-            return tb;
         }
 
-        public static DocumentBuilder CopyTablesFrom(this DocumentBuilder db, Document doc, List<int> nodeIndexRemapping = null)
+        public static void CopyTablesFrom(this DocumentBuilder db, Document doc, List<int> nodeIndexRemapping = null)
         {
             foreach (var table in doc.EntityTables.Values.ToEnumerable())
             {
@@ -69,8 +64,6 @@ namespace Vim.Format
 
                 db.CreateTableCopy(table, name == TableNames.Node ? nodeIndexRemapping : null);
             }
-
-            return db;
         }
 
         public static SerializableEntityTable ToSerializableEntityTable(this EntityTableBuilder tb,

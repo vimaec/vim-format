@@ -8,7 +8,7 @@ using Vim.Util;
 
 namespace Vim.Format.Merge
 {
-    public class MergedTableBuilder
+    internal class MergedTableBuilder
     {
         public readonly string Name;
         public int NumRows;

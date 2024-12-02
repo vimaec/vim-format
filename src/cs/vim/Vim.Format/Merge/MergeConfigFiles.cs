@@ -14,18 +14,6 @@ namespace Vim.Format.Merge
         public (string VimFilePath, Matrix4x4 Transform)[] InputVimFilePathsAndTransforms { get; }
 
         /// <summary>
-        /// The input VIM file paths
-        /// </summary>
-        public string[] InputVimFilePaths
-            => InputVimFilePathsAndTransforms.Select(t => t.VimFilePath).ToArray();
-
-        /// <summary>
-        /// The input VIM file path transforms
-        /// </summary>
-        public Matrix4x4[] InputTransforms
-            => InputVimFilePathsAndTransforms.Select(t => t.Transform).ToArray();
-
-        /// <summary>
         /// The merged VIM file path.
         /// </summary>
         public string MergedVimFilePath { get; }

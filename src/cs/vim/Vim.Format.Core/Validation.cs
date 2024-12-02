@@ -8,7 +8,7 @@ namespace Vim.Format
 {
     public static class Validation
     {
-        public static void ValidateTableRows(this Document doc)
+        private static void ValidateTableRows(this Document doc)
         {
             foreach (var et in doc.EntityTables.Values.ToArray())
             {
@@ -32,7 +32,7 @@ namespace Vim.Format
             }
         }
 
-        public static void ValidateIndexColumns(this Document doc)
+        private static void ValidateIndexColumns(this Document doc)
         {
             foreach (var et in doc.EntityTables.Values.ToArray())
             {
@@ -45,7 +45,7 @@ namespace Vim.Format
             }
         }
 
-        public static string[] RequiredAttributeNames => new []
+        private static string[] RequiredAttributeNames => new []
         {
             // Vertices
             CommonAttributes.Position,
@@ -62,7 +62,7 @@ namespace Vim.Format
             CommonAttributes.InstanceTransform,
         };
 
-        public static void ValidateGeometryAttributes(this Document doc)
+        private static void ValidateGeometryAttributes(this Document doc)
         {
             var attributes = doc.Geometry.Attributes;
             var attributeNameSet = new HashSet<string>(attributes.Select(a => a.Name).ToEnumerable());
@@ -73,7 +73,7 @@ namespace Vim.Format
             }
         }
 
-        public static void ValidateAssets(this Document doc)
+        private static void ValidateAssets(this Document doc)
         {
             foreach (var asset in doc.Assets.Values.ToEnumerable())
                 AssetInfo.Parse(asset.Name); // This will throw if it fails to parse.

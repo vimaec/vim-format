@@ -100,7 +100,7 @@ namespace Vim
         private IStep[] GetInitSteps(bool inParallel)
         {
             var createDocument = new Step(
-                () => Document = _SerializableDocument.ToDocument(),
+                () => Document = new Document(_SerializableDocument),
                 "Creating Document"
             );
 

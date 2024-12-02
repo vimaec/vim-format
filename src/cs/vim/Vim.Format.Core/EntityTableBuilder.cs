@@ -17,20 +17,19 @@ namespace Vim.Format
         public EntityTableBuilder(string name)
             => Name = name;
 
-        public EntityTableBuilder UpdateOrValidateRows(int n)
+        private void UpdateOrValidateRows(int n)
         {
             if (NumRows == 0) NumRows = n;
             else if (NumRows != n) throw new Exception($"Value count {n} does not match the expected number of rows {NumRows}");
-            return this;
         }
 
-        public void ValidateHasDataColumnPrefix(string columnName)
+        private static void ValidateHasDataColumnPrefix(string columnName)
         {
             if (!ColumnExtensions.IsDataColumnName(columnName))
                 throw new Exception($"{nameof(columnName)} {columnName} does not begin with a data column prefix");
         }
 
-        public void ValidateHasPrefix(string columnName, string expectedPrefix)
+        private static void ValidateHasPrefix(string columnName, string expectedPrefix)
         {
             if (!columnName.StartsWith(expectedPrefix))
                 throw new Exception($"{nameof(columnName)} {columnName} must start with {expectedPrefix}");
@@ -44,8 +43,10 @@ namespace Vim.Format
             return this;
         }
 
-        public EntityTableBuilder AddIndexColumn(string columnName, IEnumerable<int> ids)
-            => AddIndexColumn(columnName, ids.ToArray());
+        public void AddIndexColumn(string columnName, IEnumerable<int> ids)
+        {
+            AddIndexColumn(columnName, ids.ToArray());
+        }
 
         public EntityTableBuilder AddStringColumn(string columnName, string[] values)
         {

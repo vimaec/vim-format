@@ -95,26 +95,16 @@ namespace Vim.Format
         public const string BuildingParameterHolderElementType = "Building Parameter Holder";
         public const string SiteParameterHolderElementType = "Site Parameter Holder";
 
-        public static HashSet<string> ComputedTableNames = new HashSet<string>
+        public static readonly HashSet<string> ComputedTableNames = new HashSet<string>
         {
             TableNames.Geometry
         };
 
-        public static HashSet<string> NonBimNames = new HashSet<string>
+        public static readonly HashSet<string> NonBimNames = new HashSet<string>
         {
             TableNames.Geometry,
             TableNames.Asset,
             TableNames.Material,
         };
-
-        public static class DisciplineNames
-        {
-            public const string Mechanical = nameof(Mechanical);
-            public const string Architecture = nameof(Architecture);
-            public const string Generic = nameof(Generic);
-            public const string Electrical = nameof(Electrical);
-            public const string Plumbing = nameof(Plumbing);
-            public const string Structural = nameof(Structural);
-        }
     }
 }

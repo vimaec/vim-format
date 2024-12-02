@@ -320,7 +320,7 @@ namespace Vim.Format
             using (var stream = File.OpenRead(filePath))
             {
                 var doc = Deserialize(stream, loadOptions);
-                doc.SetFileName(filePath);
+                doc.FileName = filePath;
                 return doc;
             }
         }

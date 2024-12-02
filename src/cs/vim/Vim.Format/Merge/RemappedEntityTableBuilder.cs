@@ -6,7 +6,7 @@ using Vim.Format.ObjectModel;
 
 namespace Vim.Format.Merge
 {
-    public class RemappedEntityTableBuilder
+    internal class RemappedEntityTableBuilder
     {
         public EntityTableBuilder EntityTableBuilder { get; }
         public int[] OldToNewIndexMap { get; }
@@ -137,7 +137,7 @@ namespace Vim.Format.Merge
                     var indexColumn = kv.Value;
 
                     // Get the related index remapping.
-                    var tableName = DocumentExtensions.GetRelatedTableNameFromColumnName(indexColumnName);
+                    var tableName = TableNameExtensions.GetTableNameFromIndexColumnName(indexColumnName);
                     if (!remappedTableIndices.TryGetValue(tableName, out var oldToNewIndexMap))
                         continue;
 

@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
-using System.Linq;
 using Vim.BFast;
 using Vim.LinqArray;
 
@@ -14,10 +12,9 @@ namespace Vim.Format
             _EntityTable = entityTable;
             Name = _EntityTable.Name;
 
-            DataColumns = LinqArray.LinqArray.ToLookup(_EntityTable.DataColumns, c => c.Name, c => c);
-            IndexColumns = LinqArray.LinqArray.ToLookup(_EntityTable.IndexColumns, c => c.Name, c => c);
-            StringColumns = LinqArray.LinqArray.ToLookup(_EntityTable.StringColumns, c => c.Name, c => c);
-            Columns = entityTable.ValidateColumnRowsAreAligned();
+            DataColumns = _EntityTable.DataColumns.ToLookup(c => c.Name, c => c);
+            IndexColumns = _EntityTable.IndexColumns.ToLookup(c => c.Name, c => c);
+            StringColumns = _EntityTable.StringColumns.ToLookup(c => c.Name, c => c);
             NumRows = Columns.FirstOrDefault()?.NumElements() ?? 0;
         }
 
@@ -25,10 +22,13 @@ namespace Vim.Format
         public Document Document { get; }
         public string Name { get; }
         public int NumRows { get; }
-        public LinqArray.ILookup<string, INamedBuffer> DataColumns { get; }
-        public LinqArray.ILookup<string, NamedBuffer<int>> StringColumns { get; }
-        public LinqArray.ILookup<string, NamedBuffer<int>> IndexColumns { get; }
-        public INamedBuffer[] Columns { get; }
+        public ILookup<string, INamedBuffer> DataColumns { get; }
+        public ILookup<string, NamedBuffer<int>> StringColumns { get; }
+        public ILookup<string, NamedBuffer<int>> IndexColumns { get; }
+        public IArray<INamedBuffer> Columns
+            => DataColumns.Values
+                .Concatenate(IndexColumns.Values.Select(x => (INamedBuffer)x))
+                .Concatenate(StringColumns.Values.Select(x => (INamedBuffer)x));
 
         public IArray<int> GetIndexColumnValues(string columnName)
             => IndexColumns.GetOrDefault(columnName)?.GetColumnValues<int>().ToIArray();

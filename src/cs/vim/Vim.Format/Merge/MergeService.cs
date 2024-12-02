@@ -195,7 +195,7 @@ namespace Vim.Format.Merge
         /// <summary>
         /// Throws if the given VIM files do not all have the same object model schema major version.
         /// </summary>
-        public static void ValidateSameObjectModelSchemaMajorVersion(VimScene[] vims)
+        private static void ValidateSameObjectModelSchemaMajorVersion(VimScene[] vims)
         {
             var objectModelMajorVersions = vims
                 .Select(v => v.Document.Header.Schema.Major)
@@ -222,7 +222,7 @@ namespace Vim.Format.Merge
         /// <summary>
         /// Returns a collection of transforms based on the largest dimension of the largest VIM bounding box.
         /// </summary>
-        public static Matrix4x4[] GetGridTransforms(VimScene[] vims, float padding)
+        private static Matrix4x4[] GetGridTransforms(VimScene[] vims, float padding)
         {
             var boxes = vims.Select(v => v.BoundingBox()).ToArray();
             var centerBottomTransforms = boxes.Select(b => Matrix4x4.CreateTranslation(-b.CenterBottom)).ToIArray();

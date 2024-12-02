@@ -14,11 +14,10 @@ namespace Vim.Format
             StringTable = _Document.StringTable.ToIArray();
             EntityTables = _Document.EntityTables.ToLookup(
                 et => et.Name,
-                et => et.ToEntityTable(this));
+                et => new EntityTable(this, et));
             Assets = _Document.Assets.ToLookup(et => et.Name, et => et);
         }
 
-        public string FileName => _Document.FileName;
         private SerializableDocument _Document { get; }
         public SerializableHeader Header { get; }
         public ILookup<string, EntityTable> EntityTables { get; }
@@ -26,5 +25,8 @@ namespace Vim.Format
         public IArray<string> StringTable { get; }
         public string GetString(int index) => StringTable.ElementAtOrDefault(index);
         public G3d.G3D Geometry { get; }
+
+        public EntityTable GetTable(string name)
+            => EntityTables.GetOrDefault(name);
     }
 }

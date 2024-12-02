@@ -7,7 +7,7 @@ namespace Vim.Format
 {
     public static partial class ColumnExtensions
     {
-        public static readonly IReadOnlyCollection<ColumnInfo> AllColumnInfos
+        private static readonly IReadOnlyCollection<ColumnInfo> AllColumnInfos
             = new[]
             {
                 new ColumnInfo(ColumnType.IndexColumn, VimConstants.IndexColumnNameTypePrefix, typeof(int)),
@@ -22,7 +22,7 @@ namespace Vim.Format
         public static readonly IReadOnlyDictionary<string, ColumnType> TypePrefixToColumnTypeMap
             = AllColumnInfos.ToDictionary(t => t.TypePrefix, t => t.ColumnType);
 
-        public static readonly IReadOnlyDictionary<Type, string> DataColumnTypeToPrefixMap
+        private static readonly IReadOnlyDictionary<Type, string> DataColumnTypeToPrefixMap
             = AllColumnInfos
                 .Where(t => t.ColumnType == ColumnType.DataColumn)
                 .SelectMany(t => t.RelatedTypes.Select(type => (Type: type, t.TypePrefix)))
@@ -31,13 +31,13 @@ namespace Vim.Format
         public static readonly ISet<Type> DataColumnTypes
             = new HashSet<Type>(AllColumnInfos.Where(t => t.ColumnType == ColumnType.DataColumn).SelectMany(t => t.RelatedTypes));
 
-        public static readonly ISet<string> DataColumnNameTypePrefixes
+        private static readonly ISet<string> DataColumnNameTypePrefixes
             = new HashSet<string>(AllColumnInfos.Where(t => t.ColumnType == ColumnType.DataColumn).Select(t => t.TypePrefix));
 
-        public static readonly Regex DataColumnTypePrefixRegex
+        private static readonly Regex DataColumnTypePrefixRegex
             = new Regex($@"^(?:{string.Join("|", DataColumnNameTypePrefixes)})");
 
-        public static bool TryGetDataColumnNameTypePrefix(string columnName, out string typePrefix)
+        private static bool TryGetDataColumnNameTypePrefix(string columnName, out string typePrefix)
         {
             typePrefix = null;
             if (string.IsNullOrEmpty(columnName))
@@ -51,7 +51,7 @@ namespace Vim.Format
         public static bool IsDataColumnName(string columnName)
             => TryGetDataColumnNameTypePrefix(columnName, out _);
 
-        public const string RelatedTableNameFieldNameSeparator = ":";
+        private const string RelatedTableNameFieldNameSeparator = ":";
 
         public static string GetIndexColumnName(string relatedTableName, string localFieldName)
             => VimConstants.IndexColumnNameTypePrefix + relatedTableName + RelatedTableNameFieldNameSeparator + localFieldName;

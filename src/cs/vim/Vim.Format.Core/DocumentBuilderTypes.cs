@@ -36,19 +36,19 @@ namespace Vim.Format
         /// </summary>
         public class Mesh
         {
-            protected List<Vector3> _vertices = new List<Vector3>();
+            private readonly List<Vector3> _vertices;
             public IReadOnlyList<Vector3> Vertices => _vertices;
 
-            protected List<int> _indices = new List<int>();
+            private readonly List<int> _indices;
             public IReadOnlyList<int> Indices => _indices;
 
-            protected List<int> _faceMaterials = new List<int>();
+            private List<int> _faceMaterials;
             public IReadOnlyList<int> FaceMaterials => _faceMaterials;
 
-            protected List<Vector4> _colors = new List<Vector4>();
+            private readonly List<Vector4> _colors;
             public IReadOnlyList<Vector4> Colors => _colors;
 
-            protected List<Vector2> _uvs = new List<Vector2>();
+            private readonly List<Vector2> _uvs;
             public IReadOnlyList<Vector2> UVs => _uvs;
 
             public Mesh(List<Vector3> vertices = null, List<int> indices = null, List<int> faceMaterials = null, List<Vector4> colors = null, List<Vector2> uvs = null)
