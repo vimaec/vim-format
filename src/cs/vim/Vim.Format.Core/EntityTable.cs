@@ -1,5 +1,5 @@
 ﻿using System;
-using Vim.BFast;
+using Vim.BFastLib;
 using Vim.LinqArray;
 
 namespace Vim.Format

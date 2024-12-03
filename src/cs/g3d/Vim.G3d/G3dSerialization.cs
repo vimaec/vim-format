@@ -1,7 +1,8 @@
 ﻿using System;
 using System.IO;
-using System.Linq;
-using Vim.BFast;
+using Vim.BFastLib;
+using Vim.LinqArray;
+using System.Collections.Generic;
 
 namespace Vim.G3d
 {
@@ -17,107 +18,18 @@ namespace Vim.G3d
             stream.Write(buffer);
         }
 
-        public static G3dWriter ToG3DWriter(this IGeometryAttributes self, G3dHeader? header = null)
-            => new G3dWriter(self, header);
-
-        public static void Write(this IGeometryAttributes self, Stream stream, G3dHeader? header = null)
-            => self.ToG3DWriter(header).Write(stream);
-
-        public static void Write(this IGeometryAttributes self, string filePath, G3dHeader? header = null)
+        public static BFast ToBFast(this IGeometryAttributes self, G3dHeader? header = null)
         {
-            using (var stream = File.OpenWrite(filePath))
-                self.Write(stream, header);
+            var bfast = new BFast();
+            bfast.SetArray("meta", (header ?? G3dHeader.Default).ToBytes());
+            foreach(var attribute in self.Attributes.ToEnumerable())
+            {
+                attribute.AddTo(bfast);
+            }
+            return bfast;
         }
 
-        public static byte[] WriteToBytes(this IGeometryAttributes self)
-        {
-            using (var memoryStream = new MemoryStream())
-            {
-                self.Write(memoryStream);
-                return memoryStream.ToArray();
-            }
-        }
 
-        public static bool TryReadHeader(Stream stream, long size, out G3dHeader outHeader)
-        {
-            var buffer = stream.ReadArray<byte>((int)size);
-
-            if (buffer[0] == G3dHeader.MagicA && buffer[1] == G3dHeader.MagicB)
-            {
-                outHeader = G3dHeader.FromBytes(buffer);
-                return true;
-            }
-            else
-            {
-                outHeader = default;
-                return false;
-            }
-        }
-
-        public static bool TryReadGeometryAttribute(Stream stream, string name, long size, out GeometryAttribute geometryAttribute)
-        {
-            geometryAttribute = null;
-
-            bool ReadFailure()
-            {
-                // Update the seek head to consume the stream and return false.
-                stream.Seek((int)size, SeekOrigin.Current);
-                return false;
-            }
-
-            if (!AttributeDescriptor.TryParse(name, out var attributeDescriptor))
-            {
-                // Skip unknown attribute descriptors.
-                return ReadFailure();
-            }
-
-            // Populate a default attribute with the parsed attribute descriptor.
-            GeometryAttribute defaultAttribute;
-            try
-            {
-                defaultAttribute = attributeDescriptor.ToDefaultAttribute(0);
-            }
-            catch
-            {
-                // Eat the exception and return.
-                return ReadFailure();
-            }
-
-            // Success; consume the stream.
-            geometryAttribute = defaultAttribute.Read(stream, size);
-            return true;
-        }
-
-        public static G3D ReadG3d(this Stream stream, Func<string, string> renameFunc = null)
-        {
-            var header = G3dHeader.Default;
-
-            GeometryAttribute ReadG3dSegment(Stream s2, string name, long size)
-            {
-                name = renameFunc?.Invoke(name) ?? name;
-
-                // Check for the G3dHeader 
-                if (name == "meta" && size == 8)
-                {
-                    if (TryReadHeader(s2, size, out var outHeader))
-                    {
-                        // Assign to the header variable in the closure.
-                        header = outHeader;
-                    }
-
-                    return null;
-                }
-                else
-                {
-                    return TryReadGeometryAttribute(s2, name, size, out var geometryAttribute)
-                        ? geometryAttribute
-                        : null;
-                }
-
-            }
-
-            var results = stream.ReadBFast(ReadG3dSegment).Select(r => r.Item2);
-            return new G3D(results.Where(x => x != null), header);
-        }
+   
     }
 }

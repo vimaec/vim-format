@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Text.RegularExpressions;
-using Vim.BFast;
+using Vim.BFastLib;
 
 namespace Vim.Format
 {

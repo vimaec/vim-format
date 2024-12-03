@@ -1,30 +1,33 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using System.Linq;
+using System.Text;
+using Vim.BFastLib;
 using Vim.Util;
 
 namespace Vim.Format
 {
     public class SerializableHeader
     {
-        private static readonly SerializableVersion CurrentVimFormatVersion = VimFormatVersion.Current;
+        public static readonly SerializableVersion CurrentVimFormatVersion = VimFormatVersion.Current;
 
-        private const string FormatVersionField = "vim";
-        private const string IdField = "id";
-        private const string RevisionField = "revision";
-        private const string GeneratorField = "generator";
-        private const string CreationDateField = "created";
-        private const string SchemaField = "schema";
+        protected const string FormatVersionField = "vim";
+        public const string IdField = "id";
+        public const string RevisionField = "revision";
+        public const string GeneratorField = "generator";
+        public const string CreationDateField = "created";
+        public const string SchemaField = "schema";
         public const string BuildField = "build"; // optional
 
-        private const char Separator = '=';
-        private const char EndOfLineChar = '\n';
-        private const string EndOfLineString = "\n";
-        private const string PersistingIdSeparator = "::";
-        private const string DummyPersistingIdPrefix = "unknown_";
+        public const char Separator = '=';
+        public const char EndOfLineChar = '\n';
+        public const string EndOfLineString = "\n";
+        public const string PersistingIdSeparator = "::";
+        public const string DummyPersistingIdPrefix = "unknown_";
 
-        private static readonly string[] RequiredFields =
+        public static readonly string[] RequiredFields =
         {
             FormatVersionField,
             IdField,
@@ -93,6 +96,30 @@ namespace Vim.Format
             AddOptionalValues(values ?? new Dictionary<string, string>(), versionString))
         { }
 
+        public static SerializableHeader FromBytes(byte[] input)
+        {
+            return FromString(Encoding.UTF8.GetString(input));
+        }
+
+
+        /// <summary>
+        /// Returns the VIM header from a vim file stream.
+        /// Will throw if the file is not a valid VIM.
+        /// </summary>
+        public static SerializableHeader FromStream(Stream stream)
+        {
+            var bfast = new BFast(stream);
+            var bytes = bfast.GetArray<byte>(BufferNames.Header);
+            if (bytes == null) return null;
+            return SerializableHeader.FromBytes(bytes);
+        }
+
+        public static SerializableHeader FromPath(string path)
+        {
+            using (var file = new FileStream(path, FileMode.OpenOrCreate))
+            return FromStream(file);
+        }
+
         /// <summary>
         /// Parses the input. Throws exceptions if the input does not define a correctly formatted header.
         /// </summary>
@@ -100,7 +127,7 @@ namespace Vim.Format
         /// <exception cref="VimHeaderDuplicateFieldException"></exception>
         /// <exception cref="VimHeaderFieldParsingException"></exception>
         /// <exception cref="VimHeaderRequiredFieldsNotFoundException"></exception>
-        public static SerializableHeader Parse(string input)
+        public static SerializableHeader FromString(string input)
         {
             var lines = input.Split(EndOfLineChar)
                 .Where(str => !string.IsNullOrEmpty(str));
@@ -119,7 +146,7 @@ namespace Vim.Format
             {
                 var tokens = line.Split(Separator);
                 var numTokens = tokens.Length;
-                
+
                 // skip empty lines.
                 if (numTokens == 0)
                     continue;
@@ -252,6 +279,9 @@ namespace Vim.Format
         public override int GetHashCode()
             => ToString().GetHashCode();
 
+        public static string CreatePersistingId(Guid id, Guid revision)
+            => string.Join(PersistingIdSeparator, id.ToString(), revision.ToString());
+
         /// <summary>
         /// Used to generate an unknown persistence ID to avoid id collisions with other unknown references.
         /// </summary>
@@ -269,6 +299,11 @@ namespace Vim.Format
         /// </list>
         /// </summary>
         public string PersistingId
-            => string.Join(PersistingIdSeparator, Id.ToString(), Revision.ToString());
+            => CreatePersistingId(Id, Revision);
+
+        public byte[] ToBytes()
+        {
+            return ToString().ToBytesUtf8();
+        }
     }
 }

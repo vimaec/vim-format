@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
-using Vim.BFast;
+using Vim.BFastLib;
 using Vim.Format.Geometry;
 using Vim.Format.ObjectModel;
 using Vim.Util;
@@ -19,12 +19,12 @@ namespace Vim.Format.SceneBuilder
 
     public static class Validation
     {
-        public class VimValidationException : Exception
+        private class VimValidationException : Exception
         {
             public VimValidationException(string message) : base(message) { }
         }
 
-        public static void ValidateGeometry(this VimScene vim)
+        private static void ValidateGeometry(this VimScene vim)
         {
             // Validate the packed geometry.
             vim.Document.Geometry.ToIMesh().Validate();
@@ -34,7 +34,7 @@ namespace Vim.Format.SceneBuilder
                 g.Validate();
         }
 
-        public static void ValidateDocumentModelToG3dInvariants(this VimScene vim)
+        private static void ValidateDocumentModelToG3dInvariants(this VimScene vim)
         {
             var g3d = vim._SerializableDocument.Geometry;
             var errors = new List<string>();
@@ -94,13 +94,13 @@ namespace Vim.Format.SceneBuilder
             }
         }
 
-        public static void ValidateNodes(this VimScene vim)
+        private static void ValidateNodes(this VimScene vim)
         {
             if (vim.VimNodes.Count != vim.DocumentModel.NumNode)
                 throw new VimValidationException($"The number of {nameof(VimSceneNode)} ({vim.VimNodes.Count}) does not match the number of node entities ({vim.DocumentModel.NumNode})");
         }
 
-        public static void ValidateShapes(this VimScene vim)
+        private static void ValidateShapes(this VimScene vim)
         {
             var shapes = vim.VimShapes;
             var numShapes  = vim.DocumentModel.NumShape;
@@ -153,12 +153,12 @@ namespace Vim.Format.SceneBuilder
                 g.SubmeshMaterials.ToList()
             )).ToList();
 
-            for (var i = 0; i < db.Meshes.Count; ++i)
+            for (var i = 0; i < db.Geometry.MeshCount; ++i)
             {
-                if (!db.Meshes[i].IsEquivalentTo(vimGeoBuilders[i]))
+                if (!db.Geometry.GetMesh(i).IsEquivalentTo(vimGeoBuilders[i]))
                     throw new VimValidationException($"{nameof(DocumentBuilder)} mesh {i} is not equivalent to {nameof(VimScene)} mesh {i}");
 
-                if (!db.Meshes[i].ToIMesh().GeometryEquals(vim.Meshes[i]))
+                if (!db.Geometry.GetMesh(i).ToIMesh().GeometryEquals(vim.Meshes[i]))
                     throw new VimValidationException($"{nameof(DocumentBuilder)} mesh {i} geometry is not equal to {nameof(VimScene)} mesh {i}");
             }
 
@@ -177,20 +177,6 @@ namespace Vim.Format.SceneBuilder
 
                 // TODO: compare entity table equality.
             }
-        }
-
-        private static void ValidateIndices(this IMesh mesh)
-        {
-            foreach (var index in mesh.Indices.ToEnumerable())
-            {
-                if (index < 0 || index >= mesh.NumVertices)
-                    throw new Exception($"Invalid mesh index: {index}. Expected a value greater or equal to 0 and less than {mesh.NumVertices}");
-            }
-        }
-
-        private static void Validate(this IMesh mesh)
-        {
-            mesh.ValidateIndices();
         }
     }
 }

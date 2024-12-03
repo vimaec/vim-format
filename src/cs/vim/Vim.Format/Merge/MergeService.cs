@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using Vim.BFast;
+using Vim.BFastLib;
 using Vim.Format.Geometry;
 using Vim.LinqArray;
 using Vim.Math3d;
@@ -120,7 +120,7 @@ namespace Vim.Format.Merge
 
                 for (var i = 0; i < materialTable.NumRows; ++i)
                 {
-                    db.Materials.Add(ObjectModelStore.ConvertMaterialEntityFieldsToRenderableMaterial(
+                    db.Geometry.AddMaterial(ObjectModelStore.ConvertMaterialEntityFieldsToRenderableMaterial(
                         colorX: (float)colorXColumn.ElementAtOrDefault(i),
                         colorY: (float)colorYColumn.ElementAtOrDefault(i),
                         colorZ: (float)colorZColumn.ElementAtOrDefault(i),
@@ -138,7 +138,7 @@ namespace Vim.Format.Merge
             var materialCounts = vims.Select(v => v.Materials.Count);
             var materialOffsets = materialCounts.ToIArray().PostAccumulate((x, y) => x + y).DropLast();
 
-            db.Meshes.AddRange(vims
+            db.Geometry.AddMeshes(vims
                 .SelectMany((vim, vimIndex) => vim.Meshes.Select(mesh => (mesh, vimIndex)).ToEnumerable())
                 .Select(
                     pair => new DocumentBuilder.SubdividedMesh(
@@ -170,7 +170,7 @@ namespace Vim.Format.Merge
             ct.ThrowIfCancellationRequested();
 
             var allIdentity = vimTransforms.All(t => t.IsIdentity);
-            db.Instances.AddRange(
+            db.Geometry.AddInstances(
                 vims
                 .SelectMany((vim, vimIndex) => vim.VimNodes.Select(node => (node, vimIndex)).ToEnumerable())
                 .Select(pair => new DocumentBuilder.Instance()

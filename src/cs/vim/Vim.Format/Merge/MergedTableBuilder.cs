@@ -2,7 +2,7 @@
 using System.Diagnostics;
 using System.Linq;
 using System.Threading;
-using Vim.BFast;
+using Vim.BFastLib;
 using Vim.LinqArray;
 using Vim.Util;
 
@@ -16,9 +16,9 @@ namespace Vim.Format.Merge
         public MergedTableBuilder(string name)
             => Name = name;
 
-        public Dictionary<string, IBuffer> DataColumns = new Dictionary<string, IBuffer>();
-        public DictionaryOfLists<string, int> IndexColumns = new DictionaryOfLists<string, int>();
-        public DictionaryOfLists<string, string> StringColumns = new DictionaryOfLists<string, string>();
+        private readonly Dictionary<string, IBuffer> DataColumns = new Dictionary<string, IBuffer>();
+        private readonly DictionaryOfLists<string, int> IndexColumns = new DictionaryOfLists<string, int>();
+        private readonly DictionaryOfLists<string, string> StringColumns = new DictionaryOfLists<string, string>();
 
         public void AddTable(EntityTable entityTable, Dictionary<EntityTable, int> entityIndexOffsets)
         {

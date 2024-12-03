@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
-using Vim.BFast;
+using Vim.BFastLib;
 using Vim.LinqArray;
 
 namespace Vim.Format.Tests

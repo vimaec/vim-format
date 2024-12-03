@@ -4,13 +4,14 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Vim.BFastLib;
 using Vim.G3d.AssimpWrapper;
 using Vim.LinqArray;
 using Vim.Math3d;
 
 namespace Vim.G3d.Tests
 {
-    [TestFixture, Ignore("Ignored until the new version is ready")]
+    [TestFixture]
     public static class G3dTests
     {
         public class FileLoadData
@@ -37,6 +38,23 @@ namespace Vim.G3d.Tests
         public static string RootFolder = Path.Combine(ProjectFolder, "..", "..", "..", "..");
         public static string TestInputFolder = Path.Combine(RootFolder, "data", "g3d-test-data", "models");
         public static string TestOutputFolder = Path.Combine(RootFolder, "data", "g3d-test-data", "output");
+        
+        [SetUp]
+        public static void Setup()
+        {
+            if (!Directory.Exists(RootFolder))
+            {
+                Directory.CreateDirectory(RootFolder);
+            }
+            if (!Directory.Exists(TestInputFolder))
+            {
+                Directory.CreateDirectory(TestInputFolder);
+            }
+            if (!Directory.Exists(TestOutputFolder))
+            {
+                Directory.CreateDirectory(TestOutputFolder);
+            }
+        }
 
         public static IEnumerable<string> GetInputFiles()
             => Directory.GetFiles(TestInputFolder, "*.*", SearchOption.AllDirectories);
@@ -63,16 +81,6 @@ namespace Vim.G3d.Tests
                 ValidateSame(attr1.Name, attr2.Name, $"Attribute[{i}].Name");
                 ValidateSame(attr1.GetByteSize(), attr2.GetByteSize(), $"Attribute[{i}].ByteSize");
                 ValidateSame(attr1.ElementCount, attr2.ElementCount, $"Attribute[{i}].ElementCount");
-            }
-        }
-
-        [Test, Explicit("Use during debugging")]
-        public static void ReadG3DFiles()
-        {
-            foreach (var f in Directory.GetFiles(TestOutputFolder))
-            {
-                var g3d = G3D.Read(f);
-                G3dTestUtils.OutputStats(g3d);
             }
         }
 
@@ -128,7 +136,7 @@ namespace Vim.G3d.Tests
                     f.G3DFile = new FileInfo(outputFilePath);
 
                     f.MSecToSaveG3d = Util.GetMSecElapsed(() =>
-                        f.G3d.Write(outputFilePath));
+                        f.G3d.ToBFast().Write(outputFilePath));
                 }
                 catch (Exception e)
                 {
@@ -215,8 +223,8 @@ namespace Vim.G3d.Tests
                 .Add(materialIndices.ToIArray().ToFaceMaterialAttribute())
                 .ToG3D();
 
-            var bytes = g3d.WriteToBytes();
-            var g = G3D.Read(bytes);
+            var bfast = g3d.ToBFast();
+            var g = G3D.Read(bfast);
 
             Assert.IsNotNull(g);
 
@@ -233,84 +241,13 @@ namespace Vim.G3d.Tests
         }
 
         [Test]
-        public static void QuadAndCopyTest()
+        public static void UnexpectedAttributes_Are_Ignored()
         {
-            // Serialize a triangle g3d as bytes and read it back.
-            var vertices = new[]
-            {
-                new Vector3(0, 0, 0),
-                new Vector3(0, 1, 0),
-                new Vector3(0, 1, 1),
-                new Vector3(1, 1, 1)
-            };
+            var bfast = new BFast();
+            bfast.SetArray("g3d:instance:potato:0:int32:1", new int[] { 5 });
 
-            var indices = new[] { 0, 1, 2, 3 };
-            var materialIndices = new[] { 5 };
-
-            var g3d = new G3DBuilder()
-                .AddVertices(vertices.ToIArray())
-                .AddIndices(indices.ToIArray())
-                .Add(materialIndices.ToIArray().ToFaceMaterialAttribute())
-                .ToG3D();
-
-            var bytes = g3d.WriteToBytes();
-            var g = G3D.Read(bytes);
-
-            Assert.IsNotNull(g);
-
-            Assert.AreEqual(4, g.NumCornersPerFace);
-            Assert.AreEqual(4, g.NumVertices);
-            Assert.AreEqual(4, g.NumCorners);
-            Assert.AreEqual(1, g.NumFaces);
-            Assert.AreEqual(0, g.NumMeshes);
-            Assert.AreEqual(0, g.NumInstances);
-
-            Assert.AreEqual(vertices, g.Vertices.ToArray());
-            Assert.AreEqual(indices, g.Indices.ToArray());
-            Assert.AreEqual(materialIndices, g.FaceMaterials.ToArray());
-
-            var g2 = g.TriangulateQuadMesh();
-
-            Assert.AreEqual(3, g2.NumCornersPerFace);
-            Assert.AreEqual(4, g2.NumVertices);
-            Assert.AreEqual(6, g2.NumCorners);
-            Assert.AreEqual(2, g2.NumFaces);
-            Assert.AreEqual(0, g2.NumMeshes);
-            Assert.AreEqual(0, g2.NumInstances);
-
-            Assert.AreEqual(vertices, g2.GetAttributeDataPosition().ToArray());
-            Assert.AreEqual(new[] { 0, 1, 2, 0, 2, 3 }, g2.GetAttributeDataIndex().ToArray());
-            Assert.AreEqual(new[] { 5, 5 }, g2.GetAttributeDataFaceMaterial().ToArray());
-
-            g2 = g2.CopyFaces(1, 1);
-
-            Assert.AreEqual(3, g2.NumCornersPerFace);
-            Assert.AreEqual(4, g2.NumVertices);
-            Assert.AreEqual(3, g2.NumCorners);
-            Assert.AreEqual(1, g2.NumFaces);
-
-            Assert.AreEqual(vertices, g2.GetAttributeDataPosition().ToArray());
-            Assert.AreEqual(new[] { 0, 2, 3 }, g2.GetAttributeDataIndex().ToArray());
-            Assert.AreEqual(new[] { 5 }, g2.GetAttributeDataFaceMaterial().ToArray());
-        }
-
-        [Test]
-        public static void UnexpectedAttributeTest()
-        {
-            // This test validates that unrecognized g3d attributes are simply ignored in the deserialization process.
-            //
-            // "unexpected.g3d" was generated using the following code snippet. Note that the code was temporarily modified such
-            // that UNKNOWN mapped to a ulong data type value (8 bits):
-            //
-            // var g3d = new G3DBuilder()
-            //    .Add(new GeometryAttribute<int>(new int[] { 5 }.ToIArray(), AttributeDescriptor.Parse("g3d:instance:potato:0:int32:1")))
-            //    .Add(new GeometryAttribute<ulong>(new ulong[] { 42 }.ToIArray(), AttributeDescriptor.Parse("g3d:instance:beep:0:UNKNOWN:1")))
-            //    .ToG3D();
-
-            var g = G3D.Read(Path.Combine(TestInputFolder, "unexpected.g3d"));
-
+            var g = G3D.Read(bfast);
             var parsedInstanceAttrs = g.Attributes.Where(ga => ga.Descriptor.Association == Association.assoc_instance).ToArray();
-            Assert.AreEqual(1, parsedInstanceAttrs.Length); // NOTE: we only expect one attribute (the one with the "potato" semantic) because UNKNOWN is currently ignored as a datatype.
             var parsedPotatoAttr = parsedInstanceAttrs.Single(ga => ga.Descriptor.Semantic == "potato");
             Assert.AreEqual(new [] { 5 }, parsedPotatoAttr.AsType<int>().Data.ToArray());
         }
@@ -332,15 +269,16 @@ namespace Vim.G3d.Tests
             var vertices = nVerts.Select(i => new Vector3(i, i, i));
             var bldr = new G3DBuilder();
             bldr.AddVertices(vertices);
-            var g3d = bldr.ToG3D();
-            Assert.AreEqual(nVerts, g3d.NumVertices);
-            var tempFile = Path.Combine(Path.GetTempPath(), "bigfile.g3d");
-            g3d.Write(tempFile);
-            var tmp = G3D.Read(tempFile);
-            ValidateSameG3D(g3d, tmp);
+
+            var expectedG3d = bldr.ToG3D();
+            Assert.AreEqual(nVerts, expectedG3d.NumVertices);
+            var bfast = expectedG3d.ToBFast();
+            var resultG3d = G3D.Read(bfast);
+
+            ValidateSameG3D(expectedG3d, resultG3d);
         }
 
-        [Test]
+        [Test, Explicit]
         [Platform(Exclude = "Linux,Unix", Reason = "AssimpNet is failing to load its dependency on 'libdl.so'.")]
         public static void TestWriters()
         {

@@ -45,7 +45,7 @@ namespace Vim.Format
         }
 
         public static VimSchema Create(string filePath)
-            => Create(new Document(Serializer.Deserialize(filePath)));
+            => Create(new Document(SerializableDocument.FromPath(filePath)));
 
         public static VimSchema Create(Document doc)
         {

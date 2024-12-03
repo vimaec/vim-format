@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Vim.BFastLib.Core;
 
-namespace Vim.BFast
+namespace Vim.BFastLib
 {
     /// <summary>
     /// Helper functions for working with buffers 
@@ -75,7 +76,7 @@ namespace Vim.BFast
             => (long)buffer.NumElements() * buffer.ElementSize;
 
         public static Buffer<T> ReadBufferFromNumberOfBytes<T>(this Stream stream, long numBytes) where T : unmanaged
-            => stream.ReadArrayFromNumberOfBytes<T>(numBytes).ToBuffer();
+            => stream.ReadArrayBytes<T>(numBytes).ToBuffer();
 
         public static Buffer<T> ReadBuffer<T>(this Stream stream, int numElements) where T : unmanaged
             => stream.ReadArray<T>(numElements).ToBuffer();
