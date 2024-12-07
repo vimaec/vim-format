@@ -6,10 +6,9 @@ using System.Threading;
 using System.Threading.Tasks;
 using Vim.BFastLib;
 using Vim.Format.Geometry;
-using Vim.LinqArray;
 using Vim.Math3d;
 using Vim.Format.ObjectModel;
-
+using Vim.G3d;
 using Vim.Util;
 
 namespace Vim.Format.Merge
@@ -135,11 +134,11 @@ namespace Vim.Format.Merge
             progress?.Report("Merging geometry");
             ct.ThrowIfCancellationRequested();
 
-            var materialCounts = vims.Select(v => v.Materials.Count);
-            var materialOffsets = materialCounts.ToIArray().PostAccumulate((x, y) => x + y).DropLast();
+            var materialCounts = vims.Select(v => v.Materials.Count).ToArray();
+            var materialOffsets = materialCounts.PostAccumulate((x, y) => x + y).DropLast();
 
             db.Geometry.AddMeshes(vims
-                .SelectMany((vim, vimIndex) => vim.Meshes.Select(mesh => (mesh, vimIndex)).ToEnumerable())
+                .SelectMany((vim, vimIndex) => vim.Meshes.Select(mesh => (mesh, vimIndex)))
                 .Select(
                     pair => new DocumentBuilder.SubdividedMesh(
                         indices: pair.mesh.Indices?.ToList(),
@@ -162,8 +161,8 @@ namespace Vim.Format.Merge
                 vimTransforms = gridTransforms.Zip(vimTransforms, (g, t) => g * t).ToArray();
             }
 
-            var meshCounts = vims.Select(v => v.Meshes.Count);
-            var meshOffsets = meshCounts.ToIArray().PostAccumulate((x, y) => x + y).DropLast();
+            var meshCounts = vims.Select(v => v.Meshes.Count).ToArray();
+            var meshOffsets = meshCounts.PostAccumulate((x, y) => x + y).DropLast();
 
             // Merge the instances
             progress?.Report("Merging instances");
@@ -172,7 +171,7 @@ namespace Vim.Format.Merge
             var allIdentity = vimTransforms.All(t => t.IsIdentity);
             db.Geometry.AddInstances(
                 vims
-                .SelectMany((vim, vimIndex) => vim.VimNodes.Select(node => (node, vimIndex)).ToEnumerable())
+                .SelectMany((vim, vimIndex) => vim.VimNodes.Select(node => (node, vimIndex)))
                 .Select(pair => new DocumentBuilder.Instance()
                 {
                     ParentIndex = -1,
@@ -186,7 +185,7 @@ namespace Vim.Format.Merge
             // Merge the assets
             progress?.Report("Merging assets");
             ct.ThrowIfCancellationRequested();
-            foreach (var asset in vims.SelectMany(vim => vim.Document.Assets.Values.ToEnumerable()))
+            foreach (var asset in vims.SelectMany(vim => vim.Document.Assets.Values))
                 db.AddAsset(asset);
 
             return db;
@@ -225,7 +224,7 @@ namespace Vim.Format.Merge
         private static Matrix4x4[] GetGridTransforms(VimScene[] vims, float padding)
         {
             var boxes = vims.Select(v => v.BoundingBox()).ToArray();
-            var centerBottomTransforms = boxes.Select(b => Matrix4x4.CreateTranslation(-b.CenterBottom)).ToIArray();
+            var centerBottomTransforms = boxes.Select(b => Matrix4x4.CreateTranslation(-b.CenterBottom)).ToArray();
 
             var columnSize = boxes.Select(b => b.Extent.X).Max() + padding;
             var rowSize = boxes.Select(b => b.Extent.Y).Max() + padding;
@@ -243,7 +242,7 @@ namespace Vim.Format.Merge
             return transforms;
         }
 
-        private static IArray<Matrix4x4> GetGridOfTransforms(int count, int numRows, float xSide, float ySide)
+        private static IList<Matrix4x4> GetGridOfTransforms(int count, int numRows, float xSide, float ySide)
             => count.Select(i => Matrix4x4.CreateTranslation(i % numRows * xSide, i / numRows * ySide, 0));
 
         private static void MergeEntities(
@@ -261,7 +260,7 @@ namespace Vim.Format.Merge
             {
                 cancellationToken.ThrowIfCancellationRequested();
 
-                foreach (var entityTable in vim.Document.EntityTables.Values.ToEnumerable())
+                foreach (var entityTable in vim.Document.EntityTables.Values)
                 {
                     cancellationToken.ThrowIfCancellationRequested();
 
@@ -299,7 +298,7 @@ namespace Vim.Format.Merge
             var entityTableOffsetMap = new Dictionary<EntityTable, int>();
             foreach (var doc in documents)
             {
-                foreach (var entityTable in doc.EntityTables.Values.ToEnumerable())
+                foreach (var entityTable in doc.EntityTables.Values)
                 {
                     var entityTableName = entityTable.Name;
 

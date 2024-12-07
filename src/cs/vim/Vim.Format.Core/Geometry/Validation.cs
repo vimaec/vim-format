@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Vim.G3d;
-using Vim.LinqArray;
 using Vim.BFastLib;
 
 namespace Vim.Format.Geometry
 {
     public static class Validation
     {
-        public static void ValidateTableRows(this Document doc)
+        private static void ValidateTableRows(this Document doc)
         {
             foreach (var et in doc.EntityTables.Values.ToArray())
             {
@@ -32,11 +32,11 @@ namespace Vim.Format.Geometry
             }
         }
 
-        public static void ValidateIndexColumns(this Document doc)
+        private static void ValidateIndexColumns(this Document doc)
         {
             foreach (var et in doc.EntityTables.Values.ToArray())
             {
-                foreach (var ic in et.IndexColumns.Values.ToEnumerable())
+                foreach (var ic in et.IndexColumns.Values)
                 {
                     var table = ic.GetRelatedTable(doc);
                     if (table == null)
@@ -45,7 +45,7 @@ namespace Vim.Format.Geometry
             }
         }
 
-        public static string[] RequiredAttributeNames => new []
+        private static string[] RequiredAttributeNames => new []
         {
             // Vertices
             CommonAttributes.Position,
@@ -62,10 +62,10 @@ namespace Vim.Format.Geometry
             CommonAttributes.InstanceTransform,
         };
 
-        public static void ValidateGeometryAttributes(this Document doc)
+        private static void ValidateGeometryAttributes(this Document doc)
         {
             var attributes = doc.Geometry.Attributes;
-            var attributeNameSet = new HashSet<string>(attributes.Select(a => a.Name).ToEnumerable());
+            var attributeNameSet = new HashSet<string>(attributes.Select(a => a.Name));
             foreach (var attributeName in RequiredAttributeNames)
             {
                 if (!attributeNameSet.Contains(attributeName))
@@ -73,9 +73,9 @@ namespace Vim.Format.Geometry
             }
         }
 
-        public static void ValidateAssets(this Document doc)
+        private static void ValidateAssets(this Document doc)
         {
-            foreach (var asset in doc.Assets.Values.ToEnumerable())
+            foreach (var asset in doc.Assets.Values)
                 AssetInfo.Parse(asset.Name); // This will throw if it fails to parse.
         }
 
@@ -89,9 +89,9 @@ namespace Vim.Format.Geometry
 
         // TODO: ValidateShapes() to validate VIM files which contain optional 2d data (shapes/overlays).
 
-        public static void ValidateIndices(this IMesh mesh)
+        private static void ValidateIndices(this IMesh mesh)
         {
-            foreach (var index in mesh.Indices.ToEnumerable())
+            foreach (var index in mesh.Indices)
             {
                 if (index < 0 || index >= mesh.NumVertices)
                     throw new Exception($"Invalid mesh index: {index}. Expected a value greater or equal to 0 and less than {mesh.NumVertices}");

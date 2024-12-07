@@ -2,25 +2,21 @@
 using System.Collections.Generic;
 using System.Linq;
 using Vim.G3d;
-using Vim.LinqArray;
 using Vim.Math3d;
 
 namespace Vim.Format.Geometry
 {
     public static class MeshExtensions
     {
-        public static IMesh ToIMesh(this IArray<GeometryAttribute> self)
-            => self.ToEnumerable().ToIMesh();
-
         public static IMesh ToIMesh(this IEnumerable<GeometryAttribute> self)
         {
             var tmp = new GeometryAttributes(self);
             switch (tmp.NumCornersPerFace)
             {
                 case 3:
-                    return new TriMesh(tmp.Attributes.ToEnumerable());
+                    return new TriMesh(tmp.Attributes);
                 case 4:
-                    return new QuadMesh(tmp.Attributes.ToEnumerable()).ToTriMesh();
+                    return new QuadMesh(tmp.Attributes).ToTriMesh();
                 default:
                     throw new Exception($"Can not convert a geometry with {tmp.NumCornersPerFace} to a triangle mesh: only quad meshes");
             }
@@ -29,7 +25,7 @@ namespace Vim.Format.Geometry
         public static IMesh ToIMesh(this IGeometryAttributes g)
             => g is IMesh m ? m : g is QuadMesh q ? q.ToIMesh() : g.Attributes.ToIMesh();
 
-        public static IArray<int> GetFaceMaterials(this IMesh mesh)
+        public static IList<int> GetFaceMaterials(this IMesh mesh)
         {
             // SubmeshIndexOffsets: [0, A, B]
             // SubmeshIndexCount:   [X, Y, Z]
@@ -38,16 +34,15 @@ namespace Vim.Format.Geometry
             // FaceMaterials:       [...Repeat(L, X / 3), ...Repeat(M, Y / 3), ...Repeat(N, Z / 3)] <-- divide by 3 for the number of corners per Triangular face
             var numCornersPerFace = mesh.NumCornersPerFace;
             return mesh.SubmeshIndexCount
-                .ToEnumerable()
                 .SelectMany((indexCount, i) => Enumerable.Repeat(mesh.SubmeshMaterials[i], indexCount / numCornersPerFace))
-                .ToIArray();
+                .ToArray();
         }
 
-        public static IMesh Merge(this IArray<IMesh> meshes)
-            => meshes.Select(m => (IGeometryAttributes)m).Merge().ToIMesh();
+        public static IMesh Merge(this IList<IMesh> meshes)
+            => meshes.Select(m => (IGeometryAttributes)m).ToArray().Merge().ToIMesh();
 
         public static IMesh Merge(this IEnumerable<IMesh> meshes)
-            => meshes.ToIArray().Merge();
+            => meshes.Merge();
 
         public static IEnumerable<(int Material, IMesh Mesh)> SplitByMaterial(this IMesh mesh)
         {
@@ -151,11 +146,11 @@ namespace Vim.Format.Geometry
                 r[i + 1] = mesh.Indices[i + 1];
                 r[i + 2] = mesh.Indices[i + 0];
             }
-            return mesh.SetAttribute(r.ToIArray().ToIndexAttribute());
+            return mesh.SetAttribute(r.ToIndexAttribute());
         }
 
         public static AABox BoundingBox(this IMesh mesh)
-            => AABox.Create(mesh.Vertices.ToEnumerable());
+            => AABox.Create(mesh.Vertices);
 
         public static Vector3 Center(this IMesh mesh)
             => mesh.BoundingBox().Center;
@@ -169,7 +164,7 @@ namespace Vim.Format.Geometry
         public static Triangle Triangle(this IMesh mesh, int face)
             => mesh.VertexIndicesToTriangle(mesh.FaceVertexIndices(face));
 
-        public static IArray<Triangle> Triangles(this IMesh mesh)
+        public static IList<Triangle> Triangles(this IMesh mesh)
             => mesh.NumFaces.Select(mesh.Triangle);
     }
 }

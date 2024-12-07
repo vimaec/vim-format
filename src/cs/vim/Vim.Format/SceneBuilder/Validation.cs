@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -7,7 +8,6 @@ using Vim.BFastLib;
 using Vim.Format.Geometry;
 using Vim.Format.ObjectModel;
 using Vim.Util;
-using Vim.LinqArray;
 using Vim.Math3d;
 
 namespace Vim.Format.SceneBuilder
@@ -30,7 +30,7 @@ namespace Vim.Format.SceneBuilder
             vim.Document.Geometry.ToIMesh().Validate();
 
             // Validate the individual meshes.
-            foreach (var g in vim.Meshes.ToEnumerable())
+            foreach (var g in vim.Meshes)
                 g.Validate();
         }
 
@@ -56,7 +56,8 @@ namespace Vim.Format.SceneBuilder
             {
                 var (type, attrs) = tuple;
                 var propertyName = type.Name + "List";
-                if (dm.GetPropertyValue(propertyName) is IArray arr)
+
+                if (dm.GetPropertyValue(propertyName) is IList arr)
                 {
                     var numEntities = arr.Count;
 
@@ -170,7 +171,7 @@ namespace Vim.Format.SceneBuilder
 
             // Test the entity tables.
             var tableNames = new HashSet<string>(db.Tables.Values.Select(t => t.Name));
-            foreach (var et in vim.Document.EntityTables.Keys.ToEnumerable())
+            foreach (var et in vim.Document.EntityTables.Keys)
             {
                 if (!tableNames.Contains(et))
                     throw new VimValidationException($"{nameof(DocumentBuilder)} does not contain table name {et} from {nameof(VimScene)}");

@@ -8,7 +8,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Vim.LinqArray;
 
 namespace Vim.G3d
 {
@@ -30,7 +29,7 @@ namespace Vim.G3d
         public int NumShapeVertices { get; } = -1;
         public int NumShapes { get; } = -1;
 
-        public IArray<GeometryAttribute> Attributes { get; }
+        public IList<GeometryAttribute> Attributes { get; }
 
         public GeometryAttribute GetAttribute(string name)
             => Lookup.TryGetValue(name, out var val) ? val : null;
@@ -119,7 +118,7 @@ namespace Vim.G3d
             }
 
             // Now we create the public ordered list of attributes 
-            Attributes = Lookup.Values.OrderBy(attr => attr.Name).ToIArray();
+            Attributes = Lookup.Values.OrderBy(attr => attr.Name).ToArray();
 
 
             // If the number of corner and faces are observed, one has to be a multiple of the other

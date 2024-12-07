@@ -9,7 +9,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Vim.LinqArray;
 using Vim.Math3d;
 using Vim.BFastLib;
 using System.Diagnostics;
@@ -31,64 +30,64 @@ namespace Vim.G3d
         // These are the values of the most common attributes. Some are retrieved directly from data, others are computed on demand, or coerced. 
 
         // Vertex buffer. Usually present.
-        public IArray<Vector3> Vertices { get; }
+        public IList<Vector3> Vertices { get; }
 
         // Index buffer (one index per corner, and per half-edge). Computed if absent. 
-        public IArray<int> Indices { get; }
+        public IList<int> Indices { get; }
 
         // Vertex associated data, provided or null
-        public List<IArray<Vector2>> AllVertexUvs { get; } = new List<IArray<Vector2>>();
-        public List<IArray<Vector4>> AllVertexColors { get; } = new List<IArray<Vector4>>();
-        public IArray<Vector2> VertexUvs => AllVertexUvs?.ElementAtOrDefault(0);
-        public IArray<Vector4> VertexColors => AllVertexColors?.ElementAtOrDefault(0);
-        public IArray<Vector3> VertexNormals { get; }
-        public IArray<Vector4> VertexTangents { get; }
+        public List<IList<Vector2>> AllVertexUvs { get; } = new List<IList<Vector2>>();
+        public List<IList<Vector4>> AllVertexColors { get; } = new List<IList<Vector4>>();
+        public IList<Vector2> VertexUvs => AllVertexUvs?.ElementAtOrDefault(0);
+        public IList<Vector4> VertexColors => AllVertexColors?.ElementAtOrDefault(0);
+        public IList<Vector3> VertexNormals { get; }
+        public IList<Vector4> VertexTangents { get; }
 
         // Faces
-        public IArray<int> FaceMaterials { get; } // Material indices per face, 
-        public IArray<Vector3> FaceNormals { get; } // If not provided, are computed dynamically as the average of all vertex normals,
+        public IList<int> FaceMaterials { get; } // Material indices per face, 
+        public IList<Vector3> FaceNormals { get; } // If not provided, are computed dynamically as the average of all vertex normals,
 
         // Meshes
-        public IArray<int> MeshIndexOffsets { get; } // Offset into the index buffer for each Mesh
-        public IArray<int> MeshVertexOffsets { get; } // Offset into the vertex buffer for each Mesh
-        public IArray<int> MeshIndexCounts { get; } // Computed
-        public IArray<int> MeshVertexCounts { get; } // Computed
-        public IArray<int> MeshSubmeshOffset { get; }
-        public IArray<int> MeshSubmeshCount { get; } // Computed
-        public IArray<G3dMesh> Meshes { get; }
+        public IList<int> MeshIndexOffsets { get; } // Offset into the index buffer for each Mesh
+        public IList<int> MeshVertexOffsets { get; } // Offset into the vertex buffer for each Mesh
+        public IList<int> MeshIndexCounts { get; } // Computed
+        public IList<int> MeshVertexCounts { get; } // Computed
+        public IList<int> MeshSubmeshOffset { get; }
+        public IList<int> MeshSubmeshCount { get; } // Computed
+        public IList<G3dMesh> Meshes { get; }
 
         // Instances
-        public IArray<int> InstanceParents { get; } // Index of the parent transform 
-        public IArray<Matrix4x4> InstanceTransforms { get; } // A 4x4 matrix in row-column order defining the transormed
-        public IArray<int> InstanceMeshes { get; } // The SubGeometry associated with the index
-        public IArray<ushort> InstanceFlags { get; } // The instance flags associated with the index.
+        public IList<int> InstanceParents { get; } // Index of the parent transform 
+        public IList<Matrix4x4> InstanceTransforms { get; } // A 4x4 matrix in row-column order defining the transormed
+        public IList<int> InstanceMeshes { get; } // The SubGeometry associated with the index
+        public IList<ushort> InstanceFlags { get; } // The instance flags associated with the index.
 
         // Shapes
-        public IArray<Vector3> ShapeVertices { get; }
-        public IArray<int> ShapeVertexOffsets { get; }
-        public IArray<Vector4> ShapeColors { get; }
-        public IArray<float> ShapeWidths { get; }
-        public IArray<int> ShapeVertexCounts { get; } // Computed
-        public IArray<G3dShape> Shapes { get; } // Computed
+        public IList<Vector3> ShapeVertices { get; }
+        public IList<int> ShapeVertexOffsets { get; }
+        public IList<Vector4> ShapeColors { get; }
+        public IList<float> ShapeWidths { get; }
+        public IList<int> ShapeVertexCounts { get; } // Computed
+        public IList<G3dShape> Shapes { get; } // Computed
 
         // Materials
-        public IArray<Vector4> MaterialColors { get; } // RGBA with transparency.
-        public IArray<float> MaterialGlossiness { get; }
-        public IArray<float> MaterialSmoothness { get; }
-        public IArray<G3dMaterial> Materials { get; }
+        public IList<Vector4> MaterialColors { get; } // RGBA with transparency.
+        public IList<float> MaterialGlossiness { get; }
+        public IList<float> MaterialSmoothness { get; }
+        public IList<G3dMaterial> Materials { get; }
 
 
         // Submeshes
-        public IArray<int> SubmeshIndexOffsets { get; }
-        public IArray<int> SubmeshIndexCount { get; }
-        public IArray<int> SubmeshMaterials { get; }
+        public IList<int> SubmeshIndexOffsets { get; }
+        public IList<int> SubmeshIndexCount { get; }
+        public IList<int> SubmeshMaterials { get; }
 
         public G3D(IEnumerable<GeometryAttribute> attributes, G3dHeader? header = null, int numCornersPerFaceOverride = -1)
             : base(attributes, numCornersPerFaceOverride)
         {
             Header = header ?? new G3dHeader();
 
-            foreach (var attr in Attributes.ToEnumerable())
+            foreach (var attr in Attributes)
             {
                 var desc = attr.Descriptor;
                 switch (desc.Semantic)
@@ -97,7 +96,7 @@ namespace Vim.G3d
                         if (attr.IsTypeAndAssociation<int>(Association.assoc_corner))
                             Indices = Indices ?? attr.AsType<int>().Data;
                         if (attr.IsTypeAndAssociation<short>(Association.assoc_corner))
-                            Indices = Indices ?? attr.AsType<short>().Data.Select(x => (int)x);
+                            Indices = Indices ?? attr.AsType<short>().Data.Select(x => (int)x).ToArray();
                         break;
 
                     case Semantic.Position:
@@ -111,14 +110,14 @@ namespace Vim.G3d
 
                     case Semantic.Tangent:
                         if (attr.IsTypeAndAssociation<Vector3>(Association.assoc_vertex))
-                            VertexTangents = VertexTangents ?? attr.AsType<Vector3>().Data.Select(v => v.ToVector4());
+                            VertexTangents = VertexTangents ?? attr.AsType<Vector3>().Data.Select(v => v.ToVector4()).ToArray();
                         if (attr.IsTypeAndAssociation<Vector4>(Association.assoc_vertex))
                             VertexTangents = VertexTangents ?? attr.AsType<Vector4>().Data;
                         break;
 
                     case Semantic.Uv:
                         if (attr.IsTypeAndAssociation<Vector3>(Association.assoc_vertex))
-                            AllVertexUvs.Add(attr.AsType<Vector3>().Data.Select(uv => uv.ToVector2()));
+                            AllVertexUvs.Add(attr.AsType<Vector3>().Data.Select(uv => uv.ToVector2()).ToArray());
                         if (attr.IsTypeAndAssociation<Vector2>(Association.assoc_vertex))
                             AllVertexUvs.Add(attr.AsType<Vector2>().Data);
                         break;
@@ -208,7 +207,7 @@ namespace Vim.G3d
 
             // If no indices are provided then we are going to have to treat the index buffer as indices
             if (Indices == null)
-                Indices = Vertices.Indices();
+                Indices = Vertices.Indices().ToArray();
 
             // Compute face normals if possible
             if (FaceNormals == null && VertexNormals != null)
@@ -219,8 +218,8 @@ namespace Vim.G3d
                 // Mesh offset is the same as the offset of its first submesh.
                 if(MeshSubmeshOffset != null)
                 {
-                    MeshIndexOffsets = MeshSubmeshOffset.Select(submesh => SubmeshIndexOffsets[submesh]);
-                    MeshSubmeshCount = GetSubArrayCounts(MeshSubmeshOffset.Count, MeshSubmeshOffset, NumSubmeshes).Evaluate();
+                    MeshIndexOffsets = MeshSubmeshOffset.Select(submesh => SubmeshIndexOffsets[submesh]).ToArray();
+                    MeshSubmeshCount = GetSubArrayCounts(MeshSubmeshOffset.Count, MeshSubmeshOffset, NumSubmeshes);
                 }
 
                 if(MeshIndexOffsets != null)
@@ -228,7 +227,8 @@ namespace Vim.G3d
                     MeshIndexCounts = GetSubArrayCounts(NumMeshes, MeshIndexOffsets, NumCorners);
                     MeshVertexOffsets = MeshIndexOffsets
                         .Zip(MeshIndexCounts, (start, count) => (start, count))
-                        .Select(range => Indices.SubArray(range.start, range.count).Min());
+                        .Select(range => Indices.SubArray(range.start, range.count).Min())
+                        .ToArray();
                 }
         
                 if (MeshVertexOffsets != null)
@@ -236,11 +236,11 @@ namespace Vim.G3d
             }
             else
             {
-                MeshSubmeshCount = Array.Empty<int>().ToIArray();
+                MeshSubmeshCount = Array.Empty<int>();
             }
 
             if (SubmeshIndexOffsets != null)
-                SubmeshIndexCount = GetSubArrayCounts(SubmeshIndexOffsets.Count, SubmeshIndexOffsets, NumCorners).Evaluate();
+                SubmeshIndexCount = GetSubArrayCounts(SubmeshIndexOffsets.Count, SubmeshIndexOffsets, NumCorners);
 
             // Compute all meshes
             Meshes = NumMeshes.Select(i => new G3dMesh(this, i));
@@ -253,13 +253,13 @@ namespace Vim.G3d
                 ShapeVertices = Vector3.Zero.Repeat(0);
 
             if (ShapeVertexOffsets == null)
-                ShapeVertexOffsets = Array.Empty<int>().ToIArray();
+                ShapeVertexOffsets = Array.Empty<int>();
 
             if (ShapeColors == null)
                 ShapeColors = Vector4.Zero.Repeat(0);
              
             if (ShapeWidths == null)
-                ShapeWidths = Array.Empty<float>().ToIArray();
+                ShapeWidths = Array.Empty<float>();
 
             // Update the instance options
             if (InstanceFlags == null)
@@ -271,12 +271,12 @@ namespace Vim.G3d
             Shapes = NumShapes.Select(i => new G3dShape(this, i));
         }
 
-        private static IArray<int> GetSubArrayCounts(int numItems, IArray<int> offsets, int totalCount)
+        private static IList<int> GetSubArrayCounts(int numItems, IList<int> offsets, int totalCount)
             => numItems.Select(i => i < (numItems - 1)
                 ? offsets[i + 1] - offsets[i]
                 : totalCount - offsets[i]);
 
-        private static void ValidateSubArrayCounts(IArray<int> subArrayCounts, string memberName)
+        private static void ValidateSubArrayCounts(IList<int> subArrayCounts, string memberName)
         {
             for (var i = 0; i < subArrayCounts.Count; ++i)
             {
@@ -285,10 +285,10 @@ namespace Vim.G3d
             }
         }
 
-        public static Vector3 Average(IArray<Vector3> xs)
+        private static Vector3 Average(IList<Vector3> xs)
             => xs.Aggregate(Vector3.Zero, (a, b) => a + b) / xs.Count;
 
-        public Vector3 ComputeFaceNormal(int nFace)
+        private Vector3 ComputeFaceNormal(int nFace)
             => Average(NumCornersPerFace.Select(c => VertexNormals[nFace * NumCornersPerFace + c]));
 
         public static G3D Read(string filePath)

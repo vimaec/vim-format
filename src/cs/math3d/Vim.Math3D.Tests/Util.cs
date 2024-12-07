@@ -99,7 +99,7 @@ namespace Vim.Math3d.Tests
                 return value;
             }
 
-            dynamic dyn = (dynamic)value;
+            var dyn = (dynamic)value;
             var abs = Math.Abs(dyn);
             var ret = (T)abs;
             return ret;

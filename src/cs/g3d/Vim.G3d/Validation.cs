@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using Vim.LinqArray;
+using System.Linq;
 
 namespace Vim.G3d
 {

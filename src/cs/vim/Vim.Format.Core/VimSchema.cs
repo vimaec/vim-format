@@ -50,7 +50,7 @@ namespace Vim.Format
         public static VimSchema Create(Document doc)
         {
             var vimSchema = new VimSchema(doc.Header);
-            foreach (var entityTable in doc.EntityTables.Values.ToEnumerable())
+            foreach (var entityTable in doc.EntityTables.Values)
             {
                 var ets = vimSchema.AddEntityTableSchema(entityTable.Name);
 

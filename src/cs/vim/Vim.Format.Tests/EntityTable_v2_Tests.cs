@@ -21,9 +21,8 @@ public static class EntityTable_v2_Tests
         var dm = vim.DocumentModel;
 
         // EntityTable_v2 manual construction.
-        var fileInfo = new FileInfo(vimFilePath);
-        var entityTables = fileInfo.EnumerateEntityTables(false).ToArray();
-        var entityTableSet = new EntityTableSet(entityTables, stringBuffer);
+        var entityTableSet = new EntityTableSet(
+            SerializableDocument.FromPath(vimFilePath).EntityTables.ToArray(), stringBuffer);
 
         var baseElementCount = dm.NumElement;
         var nextElementCount = entityTableSet.ElementTable.RowCount;

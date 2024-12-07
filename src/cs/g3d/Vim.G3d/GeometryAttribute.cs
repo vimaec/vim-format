@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Vim.LinqArray;
 using Vim.Math3d;
 using Vim.BFastLib;
 using Vim.BFastLib.Core;
@@ -56,7 +55,7 @@ namespace Vim.G3d
         /// <summary>
         /// A mesh attribute can be remapped, using the given indices. 
         /// </summary>
-        public abstract GeometryAttribute Remap(IArray<int> indices);
+        public abstract GeometryAttribute Remap(IList<int> indices);
 
         /// <summary>
         /// Converted to an INamedBuffer which consists of a name and an array of unmanaged types. 
@@ -106,9 +105,9 @@ namespace Vim.G3d
     /// </summary>
     public class GeometryAttribute<T> : GeometryAttribute where T : unmanaged
     {
-        public IArray<T> Data;
+        public IList<T> Data;
 
-        public GeometryAttribute(IArray<T> data, AttributeDescriptor descriptor)
+        public GeometryAttribute(IList<T> data, AttributeDescriptor descriptor)
             : base(descriptor, data.Count)
         {
             Data = data;
@@ -205,13 +204,12 @@ namespace Vim.G3d
             return others
                 .Select(ma => ma as GeometryAttribute<T>)
                 .Prepend(this)
-                .ToIArray()
-                .Select(attr => attr.Data)
-                .Flatten()
+                .SelectMany(attr => attr.Data)
+                .ToArray()
                 .ToAttribute(Descriptor);
         }
 
-        public override GeometryAttribute Remap(IArray<int> indices)
+        public override GeometryAttribute Remap(IList<int> indices)
             => Data.SelectByIndex(indices).ToAttribute(Descriptor);
 
         public override INamedBuffer ToBuffer()
@@ -225,13 +223,13 @@ namespace Vim.G3d
             if (nElements > int.MaxValue)
                 throw new Exception($"Trying to read {nElements} which is more than the maximum number of elements in a C# array");
             var data = stream.ReadArray<T>((int)nElements);
-            return new GeometryAttribute<T>(data.ToIArray(), Descriptor);
+            return new GeometryAttribute<T>(data, Descriptor);
         }
 
         public override GeometryAttribute Read(BFast bfast)
         {
             var array = bfast.GetArray<T>(Name);
-            return new GeometryAttribute<T>(array.ToIArray(), Descriptor);
+            return new GeometryAttribute<T>(array, Descriptor);
         }
 
         public override void AddTo(BFast bfast)

@@ -49,7 +49,7 @@ string[] namesDescriptorAndTypes = {
 };
 #>
 
-using Vim.LinqArray;
+using System.Collections.Generic;
 using Vim.Math3d;
 
 namespace Vim.G3d
@@ -81,12 +81,10 @@ namespace Vim.G3d
         var type = namesDescriptorAndTypes[i + 2];
         var codeName = "CommonAttributes." + name;
 #>
-        public static GeometryAttribute<<#= type #>> To<#= name #>Attribute(this IArray<<#= type #>> xs, int index) => xs.ToAttribute(<#= codeName #>, index);
-        public static GeometryAttribute<<#= type #>> To<#= name #>Attribute(this IArray<<#= type #>> xs) => xs.ToAttribute(<#= codeName #>);
-        public static GeometryAttribute<<#= type #>> To<#= name #>Attribute(this <#= type #>[] xs, int index) => xs.ToIArray().To<#= name #>Attribute(index);
-        public static GeometryAttribute<<#= type #>> To<#= name #>Attribute(this <#= type #>[] xs) => xs.ToIArray().To<#= name #>Attribute();
+        public static GeometryAttribute<<#= type #>> To<#= name #>Attribute(this IList<<#= type #>> xs, int index) => xs.ToAttribute(<#= codeName #>, index);
+        public static GeometryAttribute<<#= type #>> To<#= name #>Attribute(this IList<<#= type #>> xs) => xs.ToAttribute(<#= codeName #>);
         public static GeometryAttribute<<#= type #>> GetAttribute<#= name #>(this IGeometryAttributes self) => self.GetAttribute<<#= type #>>(<#= codeName #>);
-        public static IArray<<#= type #>> GetAttributeData<#= name #>(this IGeometryAttributes self) => self.GetAttribute<#= name #>()?.Data;
+        public static IList<<#= type #>> GetAttributeData<#= name #>(this IGeometryAttributes self) => self.GetAttribute<#= name #>()?.Data;
 <#
     }
 #>

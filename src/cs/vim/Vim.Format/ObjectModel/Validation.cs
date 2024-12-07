@@ -5,6 +5,7 @@ using System.Reflection;
 using System.Threading.Tasks;
 using Vim.LinqArray;
 using Vim.Math3d;
+using Vim.G3d;
 
 namespace Vim.Format.ObjectModel
 {
@@ -143,7 +144,7 @@ namespace Vim.Format.ObjectModel
             var assetEntities = dm.AssetList.ToArray();
             foreach (var asset in assetEntities)
             {
-                if (!assetBuffers.Contains(asset.BufferName))
+                if (!assetBuffers.ContainsKey(asset.BufferName))
                     throw new ObjectModelValidationException($"No matching asset buffer found for asset entity {asset.Index} with {nameof(asset.BufferName)} '{asset.BufferName}'");
             }
         }
@@ -253,7 +254,7 @@ namespace Vim.Format.ObjectModel
                 }
             }
 
-            foreach (var material in dm.MaterialList.ToEnumerable())
+            foreach (var material in dm.MaterialList)
             {
                 var index = material.Index;
                 ValidateDVector3Domain(nameof(material.Color), material.Color, DVector3.Zero, DVector3.One, index);
@@ -316,7 +317,7 @@ namespace Vim.Format.ObjectModel
 
         public static void ValidateElementInSystem(this DocumentModel dm)
         {
-            foreach (var eis in dm.ElementInSystemList.ToEnumerable())
+            foreach (var eis in dm.ElementInSystemList)
             {
                 if (eis.System == null)
                     throw new ObjectModelValidationException($"{nameof(ElementInSystem)} @ {eis.Index} has a null {nameof(ElementInSystem.System)}");

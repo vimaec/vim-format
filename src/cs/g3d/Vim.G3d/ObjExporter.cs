@@ -15,7 +15,7 @@ namespace Vim.G3d
             // Write the vertices 
             var vertices = g3d.Vertices;
             var uvs = g3d.VertexUvs;
-            foreach (var v in vertices.ToEnumerable())
+            foreach (var v in vertices)
                 yield return ($"v {v.X} {v.Y} {v.Z}");
             if (uvs != null)
             {

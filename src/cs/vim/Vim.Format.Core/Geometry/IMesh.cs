@@ -1,5 +1,5 @@
-﻿using Vim.G3d;
-using Vim.LinqArray;
+﻿using System.Collections.Generic;
+using Vim.G3d;
 using Vim.Math3d;
 
 namespace Vim.Format.Geometry
@@ -11,14 +11,14 @@ namespace Vim.Format.Geometry
         IGeometryAttributes,
         ITransformable3D<IMesh>
     {
-        IArray<Vector3> Vertices { get; }
-        IArray<int> Indices { get; }
-        IArray<Vector4> VertexColors { get; }
-        IArray<Vector3> VertexNormals { get; }
-        IArray<Vector2> VertexUvs { get; }
+        IList<Vector3> Vertices { get; }
+        IList<int> Indices { get; }
+        IList<Vector4> VertexColors { get; }
+        IList<Vector3> VertexNormals { get; }
+        IList<Vector2> VertexUvs { get; }
 
-        IArray<int> SubmeshMaterials { get; }
-        IArray<int> SubmeshIndexOffsets { get; }
-        IArray<int> SubmeshIndexCount { get; }
+        IList<int> SubmeshMaterials { get; }
+        IList<int> SubmeshIndexOffsets { get; }
+        IList<int> SubmeshIndexCount { get; }
     }
 }

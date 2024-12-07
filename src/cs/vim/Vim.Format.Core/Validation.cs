@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Vim.BFastLib;
 using Vim.G3d;
 using Vim.LinqArray;
@@ -36,7 +37,7 @@ namespace Vim.Format
         {
             foreach (var et in doc.EntityTables.Values.ToArray())
             {
-                foreach (var ic in et.IndexColumns.Values.ToEnumerable())
+                foreach (var ic in et.IndexColumns.Values)
                 {
                     var table = ic.GetRelatedTable(doc);
                     if (table == null)
@@ -65,7 +66,7 @@ namespace Vim.Format
         private static void ValidateGeometryAttributes(this Document doc)
         {
             var attributes = doc.Geometry.Attributes;
-            var attributeNameSet = new HashSet<string>(attributes.Select(a => a.Name).ToEnumerable());
+            var attributeNameSet = new HashSet<string>(attributes.Select(a => a.Name));
             foreach (var attributeName in RequiredAttributeNames)
             {
                 if (!attributeNameSet.Contains(attributeName))
@@ -75,7 +76,7 @@ namespace Vim.Format
 
         private static void ValidateAssets(this Document doc)
         {
-            foreach (var asset in doc.Assets.Values.ToEnumerable())
+            foreach (var asset in doc.Assets.Values)
                 AssetInfo.Parse(asset.Name); // This will throw if it fails to parse.
         }
 

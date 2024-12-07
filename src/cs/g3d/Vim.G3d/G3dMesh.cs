@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using Vim.LinqArray;
+using System.Linq;
 using Vim.Math3d;
 
 namespace Vim.G3d
@@ -27,7 +27,7 @@ namespace Vim.G3d
             (G3D, Index) = (parent, index);
             Vertices = G3D.Vertices?.SubArray(VertexOffset, NumVertices);
             var offset = VertexOffset;
-            Indices = G3D.Indices?.SubArray(IndexOffset, NumCorners).Select(i => i - offset);
+            Indices = G3D.Indices?.SubArray(IndexOffset, NumCorners).Select(i => i - offset).ToArray();
             VertexUvs = G3D.VertexUvs?.SubArray(VertexOffset, NumVertices);
             VertexNormals = G3D.VertexNormals?.SubArray(VertexOffset, NumVertices);
             VertexColors = G3D.VertexColors?.SubArray(VertexOffset, NumVertices);
@@ -35,10 +35,10 @@ namespace Vim.G3d
             FaceNormals = G3D.FaceNormals?.SubArray(FaceOffset, NumFaces);
 
             // TODO: Remove need for this.
-            var submeshArray = (G3D.SubmeshIndexOffsets as ArrayAdapter<int>).Array;
-            var submeshIndex = Array.BinarySearch(submeshArray, IndexOffset);
+            var submeshArray = G3D.SubmeshIndexOffsets;
+            var submeshIndex = Array.BinarySearch(submeshArray.ToArray(), IndexOffset);
             var submeshCount = 0;
-            for(var i = submeshIndex; i < submeshArray.Length; i++)
+            for(var i = submeshIndex; i < submeshArray.Count; i++)
             {
                 var indexOffset = submeshArray[i];
                 if (indexOffset - IndexOffset >= NumCorners)
@@ -46,27 +46,27 @@ namespace Vim.G3d
                 submeshCount++;
             }
             SubmeshMaterials = G3D.SubmeshMaterials?.SubArray(submeshIndex, submeshCount);
-            SubmeshIndexOffsets = G3D.SubmeshIndexOffsets?.SubArray(submeshIndex, submeshCount).Select(i => i-IndexOffset);
-            MeshSubmeshOffset = new List<int>() {0}.ToIArray();
+            SubmeshIndexOffsets = G3D.SubmeshIndexOffsets?.SubArray(submeshIndex, submeshCount).Select(i => i-IndexOffset).ToArray();
+            MeshSubmeshOffset = Array.Empty<int>();
         }
 
         // Vertex buffer. Usually present.
-        public IArray<Vector3> Vertices { get; }
+        public IList<Vector3> Vertices { get; }
 
         // Index buffer (one index per corner, and per half-edge)
-        public IArray<int> Indices { get; }
+        public IList<int> Indices { get; }
 
         // Vertex associated data
-        public IArray<Vector2> VertexUvs { get; }
-        public IArray<Vector3> VertexNormals { get; }
-        public IArray<Vector4> VertexColors { get; }
-        public IArray<Vector4> VertexTangents { get; }
+        public IList<Vector2> VertexUvs { get; }
+        public IList<Vector3> VertexNormals { get; }
+        public IList<Vector4> VertexColors { get; }
+        public IList<Vector4> VertexTangents { get; }
 
         // Face associated data.
-        public IArray<Vector3> FaceNormals { get; }
+        public IList<Vector3> FaceNormals { get; }
 
-        public IArray<int> SubmeshMaterials { get; }
-        public IArray<int> SubmeshIndexOffsets { get; }
-        public IArray<int> MeshSubmeshOffset { get; }
+        public IList<int> SubmeshMaterials { get; }
+        public IList<int> SubmeshIndexOffsets { get; }
+        public IList<int> MeshSubmeshOffset { get; }
     }
 }

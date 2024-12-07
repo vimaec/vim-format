@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Vim.G3d;
-using Vim.LinqArray;
 using Vim.Math3d;
 
 namespace Vim.Format.Geometry
@@ -15,12 +14,12 @@ namespace Vim.Format.Geometry
             => TriMesh(attributes.AsEnumerable());
 
         public static IMesh TriMesh(
-            this IArray<Vector3> vertices,
-            IArray<int> indices = null,
-            IArray<Vector2> uvs = null,
-            IArray<Vector4> colors = null,
-            IArray<int> materials = null,
-            IArray<int> submeshMaterials = null)
+            this IList<Vector3> vertices,
+            IList<int> indices = null,
+            IList<Vector2> uvs = null,
+            IList<Vector4> colors = null,
+            IList<int> materials = null,
+            IList<int> submeshMaterials = null)
             => TriMesh(
                 vertices?.ToPositionAttribute(),
                 indices?.ToIndexAttribute(),
@@ -29,6 +28,12 @@ namespace Vim.Format.Geometry
                 colors?.ToVertexColorAttribute(),
                 submeshMaterials?.ToSubmeshMaterialAttribute()
             );
+
+        public static IMesh TriMesh(this IList<Vector3> vertices, IList<int> indices = null, params GeometryAttribute[] attributes)
+            => new GeometryAttribute[] {
+                vertices?.ToPositionAttribute(),
+                indices?.ToIndexAttribute(),
+            }.Concat(attributes).ToIMesh();
 
         public static IMesh Cube
         {
@@ -45,7 +50,7 @@ namespace Vim.Format.Geometry
                     new Vector3(0.5f, -0.5f, -0.5f),
                     new Vector3(0.5f,  0.5f, -0.5f),
                     new Vector3(-0.5f,  0.5f, -0.5f)
-                }.ToIArray();
+                };
 
                 var indices = new[] {
                     // front
@@ -66,7 +71,7 @@ namespace Vim.Format.Geometry
                     // top
                     3, 2, 6,
                     6, 7, 3
-                }.ToIArray();
+                };
 
                 return vertices.TriMesh(indices);
             }
@@ -77,7 +82,7 @@ namespace Vim.Format.Geometry
             get
             {
                 var cube = Cube;
-                return cube.Indices.Select(i => cube.Vertices[i]).TriMesh(cube.Indices.Count.Range());
+                return cube.Indices.Select(i => cube.Vertices[i]).ToArray().TriMesh(cube.Indices.Count.Range());
             }
         }
 

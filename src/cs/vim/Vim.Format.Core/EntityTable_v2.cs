@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Vim.BFast;
+using Vim.BFastLib;
 using Vim.Util;
 
 namespace Vim.Format
@@ -37,7 +37,7 @@ namespace Vim.Format
             string[] stringBuffer)
         {
             Name = et.Name;
-            Columns = et.ValidateColumnRowsAreAligned();
+            Columns = et.ValidateColumnRowsAreAligned().ToArray();
             RowCount = Columns.FirstOrDefault()?.NumElements() ?? 0;
 
             foreach (var column in et.IndexColumns)
@@ -58,7 +58,7 @@ namespace Vim.Format
         /// <summary>
         /// Returns the index column based on the given column name.
         /// </summary>
-        public int[] GetIndexColumnValues(string columnName)
+        public IList<int> GetIndexColumnValues(string columnName)
             => GetColumnOrDefault(IndexColumns, columnName)?.GetColumnValues<int>();
 
         /// <summary>
@@ -69,7 +69,7 @@ namespace Vim.Format
             var stringIndices = GetColumnOrDefault(StringColumns, columnName)
                  ?.GetColumnValues<int>() ?? Array.Empty<int>();
 
-            var strings = new string[stringIndices.Length];
+            var strings = new string[stringIndices.Count];
 
             for (var i = 0; i < strings.Length; i++)
             {
@@ -84,7 +84,7 @@ namespace Vim.Format
         /// <summary>
         /// Returns the data column based on the given column name.
         /// </summary>
-        public T[] GetDataColumnValues<T>(string columnName) where T : unmanaged
+        public IList<T> GetDataColumnValues<T>(string columnName) where T : unmanaged
         {
             var type = typeof(T);
 

@@ -1,4 +1,4 @@
-﻿using Vim.LinqArray;
+﻿using System.Collections.Generic;
 
 namespace Vim.G3d
 {
@@ -16,7 +16,7 @@ namespace Vim.G3d
         int NumShapeVertices { get; }
         int NumShapes { get; }
 
-        IArray<GeometryAttribute> Attributes { get; }
+        IList<GeometryAttribute> Attributes { get; }
         GeometryAttribute GetAttribute(string name);
     }
 }

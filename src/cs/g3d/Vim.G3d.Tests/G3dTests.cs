@@ -6,7 +6,6 @@ using System.IO;
 using System.Linq;
 using Vim.BFastLib;
 using Vim.G3d.AssimpWrapper;
-using Vim.LinqArray;
 using Vim.Math3d;
 
 namespace Vim.G3d.Tests
@@ -218,9 +217,9 @@ namespace Vim.G3d.Tests
             var materialIndices = new[] { 5 };
 
             var g3d = new G3DBuilder()
-                .AddVertices(vertices.ToIArray())
-                .AddIndices(indices.ToIArray())
-                .Add(materialIndices.ToIArray().ToFaceMaterialAttribute())
+                .AddVertices(vertices)
+                .AddIndices(indices)
+                .Add(materialIndices.ToFaceMaterialAttribute())
                 .ToG3D();
 
             var bfast = g3d.ToBFast();

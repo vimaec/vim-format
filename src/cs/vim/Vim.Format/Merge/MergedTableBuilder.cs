@@ -25,7 +25,7 @@ namespace Vim.Format.Merge
             Debug.Assert(entityIndexOffsets[entityTable] == NumRows);
 
             // Add index columns from the entity table
-            foreach (var k in entityTable.IndexColumns.Keys.ToEnumerable())
+            foreach (var k in entityTable.IndexColumns.Keys)
             {
                 var col = entityTable.IndexColumns[k];
                 var indexColumnFullName = col.Name;
@@ -43,7 +43,7 @@ namespace Vim.Format.Merge
             }
 
             // Add data columns from the entity table 
-            foreach (var colName in entityTable.DataColumns.Keys.ToEnumerable())
+            foreach (var colName in entityTable.DataColumns.Keys)
             {
                 var col = entityTable.DataColumns[colName];
                 if (!DataColumns.ContainsKey(colName))
@@ -58,7 +58,7 @@ namespace Vim.Format.Merge
             }
 
             // Add string columns from the entity table 
-            foreach (var k in entityTable.StringColumns.Keys.ToEnumerable())
+            foreach (var k in entityTable.StringColumns.Keys)
             {
                 if (!StringColumns.ContainsKey(k))
                     StringColumns.Add(k, Enumerable.Repeat("", NumRows).ToList());
@@ -75,7 +75,7 @@ namespace Vim.Format.Merge
             {
                 var colName = kv.Key;
                 var typePrefix = colName.GetTypePrefix();
-                if (!entityTable.DataColumns.Contains(colName))
+                if (!entityTable.DataColumns.ContainsKey(colName))
                 {
                     var cur = DataColumns[colName];
                     var defaultBuffer = ColumnExtensions.CreateDefaultDataColumnBuffer(entityTable.NumRows, typePrefix);
@@ -85,13 +85,13 @@ namespace Vim.Format.Merge
 
             foreach (var kv in IndexColumns)
             {
-                if (!entityTable.IndexColumns.Contains(kv.Key))
+                if (!entityTable.IndexColumns.ContainsKey(kv.Key))
                     IndexColumns[kv.Key].AddRange(Enumerable.Repeat(-1, entityTable.NumRows));
             }
 
             foreach (var kv in StringColumns)
             {
-                if (!entityTable.StringColumns.Contains(kv.Key))
+                if (!entityTable.StringColumns.ContainsKey(kv.Key))
                     StringColumns[kv.Key].AddRange(Enumerable.Repeat("", entityTable.NumRows));
             }
 

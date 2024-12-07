@@ -1,4 +1,4 @@
-﻿using Vim.LinqArray;
+﻿using System.Collections.Generic;
 using Vim.Math3d;
 
 namespace Vim.Format.Geometry
@@ -8,8 +8,8 @@ namespace Vim.Format.Geometry
     /// </summary>
     public interface IScene
     {
-        IArray<ISceneNode> Nodes { get; }
-        IArray<IMesh> Meshes { get; }
+        IList<ISceneNode> Nodes { get; }
+        IList<IMesh> Meshes { get; }
     }
 
     /// <summary>

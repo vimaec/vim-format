@@ -1,8 +1,6 @@
 ﻿using System;
 using System.IO;
 using Vim.BFastLib;
-using Vim.LinqArray;
-using System.Collections.Generic;
 
 namespace Vim.G3d
 {
@@ -22,7 +20,7 @@ namespace Vim.G3d
         {
             var bfast = new BFast();
             bfast.SetArray("meta", (header ?? G3dHeader.Default).ToBytes());
-            foreach(var attribute in self.Attributes.ToEnumerable())
+            foreach(var attribute in self.Attributes)
             {
                 attribute.AddTo(bfast);
             }

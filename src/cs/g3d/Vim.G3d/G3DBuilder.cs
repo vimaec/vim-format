@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using Vim.LinqArray;
 using Vim.Math3d;
 
 namespace Vim.G3d
@@ -20,16 +19,13 @@ namespace Vim.G3d
             return this;
         }
 
-        public G3DBuilder AddIndices(int[] indices)
-            => Add(indices.ToIndexAttribute());
-
-        public G3DBuilder AddIndices(IArray<int> indices)
+        public G3DBuilder AddIndices(IList<int> indices)
             => Add(indices.ToIndexAttribute());
 
         public G3DBuilder SetObjectFaceSize(int objectFaceSize)
-            => Add(new[] { objectFaceSize }.ToIArray().ToObjectFaceSizeAttribute());
+            => Add(new[] { objectFaceSize }.ToObjectFaceSizeAttribute());
 
-        public G3DBuilder AddVertices(IArray<Vector3> vertices)
+        public G3DBuilder AddVertices(IList<Vector3> vertices)
             => Add(vertices.ToPositionAttribute());
 
         public IGeometryAttributes ToIGeometryAttributes()

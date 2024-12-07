@@ -3,14 +3,13 @@ using System.Linq;
 using NUnit.Framework;
 using Vim.Format.Geometry;
 using Vim.G3d;
-using Vim.LinqArray;
 using Vim.Math3d;
 
 namespace Vim.Format.Tests.Geometry
 {
     public static class GeometryTests
     {
-        public static IMesh XYTriangle = new[] { new Vector3(0f, 0f, 0f), new Vector3(0f, 1f, 0f), new Vector3(1f, 0f, 0f) }.ToIArray().TriMesh(3.Range());
+        public static IMesh XYTriangle = new[] { new Vector3(0f, 0f, 0f), new Vector3(0f, 1f, 0f), new Vector3(1f, 0f, 0f) }.TriMesh(3.Range());
         //public static IMesh XYQuad = new[] { new Vector3(0f, 0f, 0f), new Vector3(0f, 1f, 0f), new Vector3(1f, 1f, 0f), new Vector3(1f, 0f, 0f) }.ToIArray().QuadMesh(4.Range());
         //public static IMesh XYQuadFromFunc = Primitives.QuadMesh(uv => uv.ToVector3(), 1, 1);
         //public static IMesh XYQuad2x2 = Primitives.QuadMesh(uv => uv.ToVector3(), 2, 2);
@@ -20,7 +19,7 @@ namespace Vim.Format.Tests.Geometry
         public static readonly int[] TestTetrahedronIndices = { 0, 1, 2, 0, 3, 1, 1, 3, 2, 2, 3, 0 };
 
         public static IMesh Tetrahedron =
-            TestTetrahedronVertices.ToIArray().TriMesh(TestTetrahedronIndices.ToIArray());
+            TestTetrahedronVertices.TriMesh(TestTetrahedronIndices);
 
         //public static IMesh Torus = Primitives.Torus(10, 0.2f, 10, 24);
 
@@ -252,10 +251,9 @@ namespace Vim.Format.Tests.Geometry
             Assert.AreEqual(3, clockwiseStrip22[1]);
             Assert.AreEqual(1, clockwiseStrip22[2]);
             Assert.AreEqual(0, clockwiseStrip22[3]);
-            var reversed22 = clockwiseStrip22.ToIArray().Reverse();
             for (var i = 0; i < strip22.Count; ++i)
             {
-                Assert.AreEqual(strip22[i], reversed22[i]);
+                Assert.AreEqual(strip22[i], clockwiseStrip22[^i]);
             }
 
             //   *------*------*
@@ -292,10 +290,10 @@ namespace Vim.Format.Tests.Geometry
             var submeshMaterials = new[] { 0 };
 
             var g3d = new G3DBuilder()
-                .AddVertices(vertices.ToIArray())
-                .AddIndices(indices.ToIArray())
-                .Add(submeshIndexOffsets.ToIArray().ToSubmeshIndexOffsetAttribute())
-                .Add(submeshMaterials.ToIArray().ToSubmeshMaterialAttribute())
+                .AddVertices(vertices)
+                .AddIndices(indices)
+                .Add(submeshIndexOffsets.ToSubmeshIndexOffsetAttribute())
+                .Add(submeshMaterials.ToSubmeshMaterialAttribute())
                 .ToG3D();
 
             var bfast = g3d.ToBFast();
@@ -310,8 +308,8 @@ namespace Vim.Format.Tests.Geometry
             Assert.AreEqual(new Vector3(0, 1, 0), mesh.Vertices[1]);
             Assert.AreEqual(new Vector3(0, 1, 1), mesh.Vertices[2]);
             Assert.AreEqual(1, mesh.NumFaces);
-            Assert.AreEqual(0, mesh.SubmeshIndexOffsets.ToEnumerable().Single());
-            Assert.AreEqual(0, mesh.SubmeshMaterials.ToEnumerable().Single());
+            Assert.AreEqual(0, mesh.SubmeshIndexOffsets.Single());
+            Assert.AreEqual(0, mesh.SubmeshMaterials.Single());
             Assert.AreEqual(0, mesh.GetFaceMaterials().First());
         }
     }

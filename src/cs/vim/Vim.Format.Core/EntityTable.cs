@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Vim.BFastLib;
-using Vim.LinqArray;
+using Vim.Util;
 
 namespace Vim.Format
 {
@@ -12,34 +14,37 @@ namespace Vim.Format
             _EntityTable = entityTable;
             Name = _EntityTable.Name;
 
-            DataColumns = _EntityTable.DataColumns.ToLookup(c => c.Name, c => c);
-            IndexColumns = _EntityTable.IndexColumns.ToLookup(c => c.Name, c => c);
-            StringColumns = _EntityTable.StringColumns.ToLookup(c => c.Name, c => c);
+            DataColumns = _EntityTable.DataColumns.ToDictionary(c => c.Name, c => c);
+            IndexColumns = _EntityTable.IndexColumns.ToDictionary(c => c.Name, c => c);
+            StringColumns = _EntityTable.StringColumns.ToDictionary(c => c.Name, c => c);
             NumRows = Columns.FirstOrDefault()?.NumElements() ?? 0;
+
+            Columns.ValidateColumnRowsAreAligned();
         }
 
         private SerializableEntityTable _EntityTable { get; }
         public Document Document { get; }
         public string Name { get; }
         public int NumRows { get; }
-        public ILookup<string, INamedBuffer> DataColumns { get; }
-        public ILookup<string, NamedBuffer<int>> StringColumns { get; }
-        public ILookup<string, NamedBuffer<int>> IndexColumns { get; }
-        public IArray<INamedBuffer> Columns
+        public IDictionary<string, INamedBuffer> DataColumns { get; }
+        public IDictionary<string, NamedBuffer<int>> StringColumns { get; }
+        public IDictionary<string, NamedBuffer<int>> IndexColumns { get; }
+        public IList<INamedBuffer> Columns
             => DataColumns.Values
-                .Concatenate(IndexColumns.Values.Select(x => (INamedBuffer)x))
-                .Concatenate(StringColumns.Values.Select(x => (INamedBuffer)x));
+                .Concat(IndexColumns.Values.Select(x => (INamedBuffer)x))
+                .Concat(StringColumns.Values.Select(x => (INamedBuffer)x))
+                .ToArray();
 
-        public IArray<int> GetIndexColumnValues(string columnName)
-            => IndexColumns.GetOrDefault(columnName)?.GetColumnValues<int>().ToIArray();
+        public IList<int> GetIndexColumnValues(string columnName)
+            => IndexColumns.GetOrDefault(columnName)?.GetColumnValues<int>();
 
-        public IArray<string> GetStringColumnValues(string columnName)
+        public IList<string> GetStringColumnValues(string columnName)
             => StringColumns.GetOrDefault(columnName)
                 ?.GetColumnValues<int>()
                 ?.Select(Document.GetString)
-                .ToIArray();
+                 .ToArray();
 
-        public IArray<T> GetDataColumnValues<T>(string columnName) where T : unmanaged
+        public IList<T> GetDataColumnValues<T>(string columnName) where T : unmanaged
         {
             var type = typeof(T);
 
@@ -51,12 +56,12 @@ namespace Vim.Format
                 return null;
 
             if (type == typeof(short))
-                return namedBuffer.GetColumnValues<int>().Select(i => (short)i).ToIArray() as IArray<T>;
+                return namedBuffer.GetColumnValues<int>().Select(i => (short)i) as IList<T>;
 
             if (type == typeof(bool))
-                return namedBuffer.GetColumnValues<byte>().Select(b => b != 0).ToIArray() as IArray<T>;
+                return namedBuffer.GetColumnValues<byte>().Select(b => b != 0) as IList<T>;
 
-            return namedBuffer.GetColumnValues<T>().ToIArray();
+            return namedBuffer.GetColumnValues<T>();
         }
     }
 }

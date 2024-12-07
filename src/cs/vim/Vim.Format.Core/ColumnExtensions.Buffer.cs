@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using Vim.BFastLib;
-using Vim.LinqArray;
+using Vim.G3d;
 
 namespace Vim.Format
 {
@@ -12,11 +12,12 @@ namespace Vim.Format
         private static IEnumerable<INamedBuffer> GetAllColumns(this SerializableEntityTable et)
             => et.DataColumns.Concat(et.IndexColumns).Concat(et.StringColumns);
 
-        public static INamedBuffer[] ValidateColumnRowsAreAligned(this INamedBuffer[] columns)
+        public static IList<INamedBuffer> ValidateColumnRowsAreAligned(this IEnumerable<INamedBuffer> columns)
         {
-            var numRows = columns.FirstOrDefault()?.NumElements() ?? 0;
+            var result = columns.ToArray();
+            var numRows = result.FirstOrDefault()?.NumElements() ?? 0;
 
-            foreach (var column in columns)
+            foreach (var column in result)
             {
                 var columnRows = column.NumElements();
                 if (columnRows == numRows)
@@ -26,10 +27,10 @@ namespace Vim.Format
                 Debug.Fail(msg);
             }
 
-            return columns;
+            return result;
         }
 
-        public static INamedBuffer[] ValidateColumnRowsAreAligned(this SerializableEntityTable et)
+        public static IList<INamedBuffer> ValidateColumnRowsAreAligned(this SerializableEntityTable et)
             => et.GetAllColumns().ValidateColumnRowsAreAligned();
 
         private static string ValidateCanConcatBuffers(this INamedBuffer thisBuffer, INamedBuffer otherBuffer)
@@ -180,7 +181,6 @@ namespace Vim.Format
             => thisColumnList.ConcatColumns(otherColumnList, 
                 (a, b) => new NamedBuffer<int>(a.GetTypedData().Concat(b.GetTypedData()).ToArray(), a.Name));
 
-<<<<<<< HEAD
         /// <summary>
         /// Returns a concatenated SerializableEntityTable based on the column names of thisTable.
         /// </summary>
@@ -199,12 +199,8 @@ namespace Vim.Format
             return concatenated;
         }
 
-        public static T[] GetColumnValues<T>(this INamedBuffer nb) where T : unmanaged
+        public static IList<T> GetColumnValues<T>(this INamedBuffer nb) where T : unmanaged
             => nb.AsArray<T>();
-=======
-        public static IArray<T> GetColumnValues<T>(this INamedBuffer nb) where T : unmanaged
-            => nb.AsArray<T>().ToIArray();
->>>>>>> ae310f2 (Refacroting API: public->private + cleanup unused)
 
         /// <summary>
         /// Returns a new collection of index columns in which the designated column names have repeated values of VimConstants.NoEntityRelation.

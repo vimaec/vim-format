@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 using System.Collections.Generic;
-using Vim.LinqArray;
+using System.Linq;
 
 namespace Vim.JsonDigest
 {
@@ -71,6 +71,6 @@ namespace Vim.JsonDigest
                 Area = a.Value,
                 Perimeter = a.Perimeter,
                 IsGrossInterior = a.IsGrossInterior
-            }).ToEnumerable();
+            });
     }
 }

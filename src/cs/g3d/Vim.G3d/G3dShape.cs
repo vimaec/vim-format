@@ -1,4 +1,4 @@
-﻿using Vim.LinqArray;
+﻿using System.Collections.Generic;
 using Vim.Math3d;
 
 namespace Vim.G3d
@@ -7,7 +7,7 @@ namespace Vim.G3d
     {
         public readonly G3D G3D;
         public readonly int Index;
-        public readonly IArray<Vector3> Vertices;
+        public readonly IList<Vector3> Vertices;
 
         public int ShapeVertexOffset => G3D.ShapeVertexOffsets[Index];
         public int NumVertices => G3D.ShapeVertexCounts[Index];

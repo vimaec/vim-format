@@ -70,7 +70,7 @@ namespace Vim.JsonDigest
                 }).ToArray();
 
             // Next, we iterate over all the MaterialInElement associative objects and update the MaterialInfos we created above.
-            foreach (var materialInElement in vimScene.DocumentModel.MaterialInElementList.ToEnumerable())
+            foreach (var materialInElement in vimScene.DocumentModel.MaterialInElementList)
             {
                 var material = materialInElement.Material;
                 var element = materialInElement.Element;

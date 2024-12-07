@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.IO;
 using System.Linq;
+using Vim.G3d;
 using Vim.Util;
 using Vim.LinqArray;
 
@@ -160,7 +161,8 @@ namespace Vim.Format.ObjectModel
             var columnSet = new HashSet<int>(columns.Select(c => c.Index));
 
             var cellRecords = dm.ScheduleCellScheduleColumnIndex
-                .IndicesWhere((colIndex, _) => columnSet.Contains(colIndex))
+                .Indices()
+                .Where((colIndex, _) => columnSet.Contains(colIndex))
                 .Select(cellIndex => new CellData(
                     dm.GetScheduleCellValue(cellIndex),
                     dm.GetScheduleCellScheduleColumnIndex(cellIndex),

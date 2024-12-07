@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using Vim.LinqArray;
 using Vim.Math3d;
 
 namespace Vim.G3d
@@ -18,22 +17,16 @@ namespace Vim.G3d
         public static GeometryAttribute<T> CheckArityAndAssociation<T>(this GeometryAttribute<T> self, int arity, Association assoc) where T : unmanaged
             => self?.CheckArity(arity)?.CheckAssociation(assoc);
 
-        public static GeometryAttribute<T> ToAttribute<T>(this IList<T> self, string desc) where T : unmanaged
-            => self.ToIArray().ToAttribute(desc);
-
         public static GeometryAttribute<T> ToAttribute<T>(this IList<T> self, AttributeDescriptor desc) where T : unmanaged
-            => self.ToIArray().ToAttribute(desc);
-
-        public static GeometryAttribute<T> ToAttribute<T>(this IArray<T> self, AttributeDescriptor desc) where T : unmanaged
             => new GeometryAttribute<T>(self, desc);
 
-        public static GeometryAttribute<T> ToAttribute<T>(this IArray<T> self, string desc) where T : unmanaged
+        public static GeometryAttribute<T> ToAttribute<T>(this IList<T> self, string desc) where T : unmanaged
             => self.ToAttribute(AttributeDescriptor.Parse(desc));
 
-        public static GeometryAttribute<T> ToAttribute<T>(this IArray<T> self, string desc, int index) where T : unmanaged
+        public static GeometryAttribute<T> ToAttribute<T>(this IList<T> self, string desc, int index) where T : unmanaged
             => self.ToAttribute(AttributeDescriptor.Parse(desc).SetIndex(index));
 
-        public static IArray<Vector4> AttributeToColors(this GeometryAttribute attr)
+        public static IList<Vector4> AttributeToColors(this GeometryAttribute attr)
         {
             var desc = attr.Descriptor;
             if (desc.DataType == DataType.dt_float32)
@@ -41,22 +34,22 @@ namespace Vim.G3d
                 if (desc.DataArity == 4)
                     return attr.AsType<Vector4>().Data;
                 if (desc.DataArity == 3)
-                    return attr.AsType<Vector3>().Data.Select(vc => new Vector4(vc, 1f));
+                    return attr.AsType<Vector3>().Data.Select(vc => new Vector4(vc, 1f)).ToArray();
                 if (desc.DataArity == 2)
-                    return attr.AsType<Vector2>().Data.Select(vc => new Vector4(vc.X, vc.Y, 0, 1f));
+                    return attr.AsType<Vector2>().Data.Select(vc => new Vector4(vc.X, vc.Y, 0, 1f)).ToArray();
                 if (desc.DataArity == 1)
-                    return attr.AsType<float>().Data.Select(vc => new Vector4(vc, vc, vc, 1f));
+                    return attr.AsType<float>().Data.Select(vc => new Vector4(vc, vc, vc, 1f)).ToArray();
             }
             if (desc.DataType == DataType.dt_int8)
             {
                 if (desc.DataArity == 4)
-                    return attr.AsType<Byte4>().Data.Select(b => new Vector4(b.X / 255f, b.Y / 255f, b.Z / 255f, b.W / 255f));
+                    return attr.AsType<Byte4>().Data.Select(b => new Vector4(b.X / 255f, b.Y / 255f, b.Z / 255f, b.W / 255f)).ToArray();
                 if (desc.DataArity == 3)
-                    return attr.AsType<Byte3>().Data.Select(b => new Vector4(b.X / 255f, b.Y / 255f, b.Z / 255f, 1f));
+                    return attr.AsType<Byte3>().Data.Select(b => new Vector4(b.X / 255f, b.Y / 255f, b.Z / 255f, 1f)).ToArray();
                 if (desc.DataArity == 2)
-                    return attr.AsType<Byte2>().Data.Select(b => new Vector4(b.X / 255f, b.Y / 255f, 0f, 1f));
+                    return attr.AsType<Byte2>().Data.Select(b => new Vector4(b.X / 255f, b.Y / 255f, 0f, 1f)).ToArray();
                 if (desc.DataArity == 1)
-                    return attr.AsType<byte>().Data.Select(b => new Vector4(b / 255f, b / 255f, b / 255f, 1f));
+                    return attr.AsType<byte>().Data.Select(b => new Vector4(b / 255f, b / 255f, b / 255f, 1f)).ToArray();
             }
             Debug.WriteLine($"Failed to recongize color format {attr.Descriptor}");
             return null;
@@ -140,11 +133,5 @@ namespace Vim.G3d
 
         public static long GetByteSize(this GeometryAttribute attribute)
             => (long)attribute.ElementCount * attribute.Descriptor.DataElementSize;
-
-        public static GeometryAttribute Merge(this IEnumerable<GeometryAttribute> attributes)
-            => attributes.FirstOrDefault()?.Merge(attributes.Skip(1));
-
-        public static GeometryAttribute Merge(this IArray<GeometryAttribute> attributes)
-            => attributes.ToEnumerable().Merge();
     }
 }

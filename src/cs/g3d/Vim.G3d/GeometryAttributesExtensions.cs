@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Vim.LinqArray;
 using Vim.Math3d;
 
 namespace Vim.G3d
@@ -36,8 +35,8 @@ namespace Vim.G3d
             return -1;
         }
 
-        public static IArray<string> AttributeNames(this IGeometryAttributes g)
-            => g.Attributes.Select(attr => attr.Name);
+        public static string[] AttributeNames(this IGeometryAttributes g)
+            => g.Attributes.Select(attr => attr.Name).ToArray();
 
         public static GeometryAttribute<T> GetAttribute<T>(this IGeometryAttributes g, string attributeName) where T : unmanaged
             => g.GetAttribute(attributeName)?.AsType<T>();
@@ -93,20 +92,20 @@ namespace Vim.G3d
         /// <summary>
         /// Given a set of face indices, creates an array of corner indices
         /// </summary>
-        public static IArray<int> FaceIndicesToCornerIndices(this IGeometryAttributes g, IArray<int> faceIndices)
+        public static IList<int> FaceIndicesToCornerIndices(this IGeometryAttributes g, IList<int> faceIndices)
             => (faceIndices.Count * g.NumCornersPerFace)
                 .Select(i => g.FaceToCorner(faceIndices[i / g.NumCornersPerFace]) + i % g.NumCornersPerFace);
 
         /// <summary>
         /// Given a set of face indices, creates an array of indices of the first corner in each face
         /// </summary>
-        public static IArray<int> FaceIndicesToFirstCornerIndices(this IGeometryAttributes g, IArray<int> faceIndices)
-            => faceIndices.Select(f => f * g.NumCornersPerFace);
+        public static int[] FaceIndicesToFirstCornerIndices(this IGeometryAttributes g, IList<int> faceIndices)
+            => faceIndices.Select(f => f * g.NumCornersPerFace).ToArray();
 
         public static int CornerToFace(this IGeometryAttributes g, int c)
             => c / g.NumCornersPerFace;
 
-        public static IArray<int> CornersToFaces(this IGeometryAttributes g)
+        public static IList<int> CornersToFaces(this IGeometryAttributes g)
             => g.NumCorners.Select(g.CornerToFace);
 
         public static int CornerNumber(this IGeometryAttributes g, int c)
@@ -115,22 +114,16 @@ namespace Vim.G3d
         public static IGeometryAttributes ToGeometryAttributes(this IEnumerable<GeometryAttribute> attributes)
             => new GeometryAttributes(attributes);
 
-        public static IGeometryAttributes ToGeometryAttributes(this IArray<GeometryAttribute> attributes)
-            => attributes.ToEnumerable().ToGeometryAttributes();
-
         public static IGeometryAttributes AddAttributes(this IGeometryAttributes attributes, params GeometryAttribute[] newAttributes)
-            => attributes.Attributes.ToEnumerable().Concat(newAttributes).ToGeometryAttributes();
+            => attributes.Attributes.Concat(newAttributes).ToGeometryAttributes();
 
         public static GeometryAttribute GetAttributeOrDefault(this IGeometryAttributes g, string name)
             => g.GetAttribute(name) ?? g.DefaultAttribute(name);
 
-        public static IGeometryAttributes Merge(this IArray<G3D> gs)
-            => gs.Select(x => (IGeometryAttributes)x).Merge();
-
         public static IGeometryAttributes Merge(this IGeometryAttributes self, params IGeometryAttributes[] gs)
-            => gs.ToIArray().Prepend(self).Merge();
+            => gs.Prepend(self).Merge();
 
-        public static IGeometryAttributes Merge(this IArray<IGeometryAttributes> geometryAttributesArray)
+        public static IGeometryAttributes Merge(this IList<IGeometryAttributes> geometryAttributesArray)
         {
             if (geometryAttributesArray.Count == 0)
                 return GeometryAttributes.Empty;
@@ -156,7 +149,7 @@ namespace Vim.G3d
                 .ToArray();
 
             // Merge the non-indexed attributes
-            var others = geometryAttributesArray.Skip(1).ToEnumerable();
+            var others = geometryAttributesArray.Skip(1);
             var attributeList = attributes.Select(
                 attr => attr.Merge(others.Select(g => g.GetAttributeOrDefault(attr.Name)))).ToList();
 
@@ -194,7 +187,7 @@ namespace Vim.G3d
         /// representing the merged and offset values.
         /// </summary>
         public static int[] MergeIndexedAttribute(
-            this IArray<IGeometryAttributes> geometryAttributesArray,
+            this IList<IGeometryAttributes> geometryAttributesArray,
             Func<IGeometryAttributes, GeometryAttribute<int>> getIndexedAttributeFunc,
             Func<IGeometryAttributes, int> getValueOffsetFunc,
             int initialValueOffset = 0)
@@ -236,7 +229,7 @@ namespace Vim.G3d
         /// Merges the attributes based on the given transformations and returns an array of merged values.
         /// </summary>
         public static T[] MergeAttributes<T>(
-            this IArray<IGeometryAttributes> geometryAttributesArray,
+            this IList<IGeometryAttributes> geometryAttributesArray,
             Func<IGeometryAttributes, GeometryAttribute<T>> getAttributeFunc,
             Func<(IGeometryAttributes Parent, GeometryAttribute<T> Attribute)[], T[]> mergeFunc) where T : unmanaged
         {
@@ -259,8 +252,8 @@ namespace Vim.G3d
         public static IGeometryAttributes Deform(this IGeometryAttributes g, Func<Vector3, Vector3> positionTransform, Func<Vector3, Vector3> normalTransform)
             => g.Attributes.Select(
                 a =>
-                    (a.Descriptor.Semantic == Semantic.Position && a is GeometryAttribute<Vector3> p) ? p.Data.Select(positionTransform).ToAttribute(a.Descriptor) :
-                    (a.Descriptor.Semantic == Semantic.Normal && a is GeometryAttribute<Vector3> n) ? n.Data.Select(normalTransform).ToAttribute(a.Descriptor) :
+                    (a.Descriptor.Semantic == Semantic.Position && a is GeometryAttribute<Vector3> p) ? p.Data.Select(positionTransform).ToArray().ToAttribute(a.Descriptor) :
+                    (a.Descriptor.Semantic == Semantic.Normal && a is GeometryAttribute<Vector3> n) ? n.Data.Select(normalTransform).ToArray().ToAttribute(a.Descriptor) :
                     a)
             .ToGeometryAttributes();
 
@@ -270,7 +263,7 @@ namespace Vim.G3d
         public static IGeometryAttributes Deform(this IGeometryAttributes g, Func<Vector3, Vector3> positionTransform)
             => g.Attributes.Select(
                 a =>
-                    (a.Descriptor.Semantic == Semantic.Position && a is GeometryAttribute<Vector3> p) ? p.Data.Select(positionTransform).ToAttribute(a.Descriptor) :
+                    (a.Descriptor.Semantic == Semantic.Position && a is GeometryAttribute<Vector3> p) ? p.Data.Select(positionTransform).ToArray().ToAttribute(a.Descriptor) :
                     a)
             .ToGeometryAttributes();
 
@@ -280,13 +273,13 @@ namespace Vim.G3d
         public static IGeometryAttributes Transform(this IGeometryAttributes g, Matrix4x4 matrix)
             => g.Deform(v => v.Transform(matrix), v => v.TransformNormal(matrix));
 
-        public static IGeometryAttributes SetPosition(this IGeometryAttributes g, IArray<Vector3> points)
+        public static IGeometryAttributes SetPosition(this IGeometryAttributes g, Vector3[] points)
             => g.SetAttribute(points.ToPositionAttribute());
 
         public static IGeometryAttributes SetAttribute(this IGeometryAttributes self, GeometryAttribute attr)
             => self.Attributes.Where(a => !a.Descriptor.Equals(attr.Descriptor)).Append(attr).ToGeometryAttributes();
 
-        public static IGeometryAttributes SetAttribute<ValueT>(this IGeometryAttributes self, IArray<ValueT> values, AttributeDescriptor desc) where ValueT : unmanaged
+        public static IGeometryAttributes SetAttribute<ValueT>(this IGeometryAttributes self, ValueT[] values, AttributeDescriptor desc) where ValueT : unmanaged
             => self.SetAttribute(values.ToAttribute(desc));
 
         /// <summary>
@@ -294,7 +287,7 @@ namespace Vim.G3d
         /// The newFaces array is a list of indices into the old face array.
         /// Note: meshes are lost.
         /// </summary>
-        public static IGeometryAttributes RemapFaces(this IGeometryAttributes g, IArray<int> faceRemap)
+        public static IGeometryAttributes RemapFaces(this IGeometryAttributes g, IList<int> faceRemap)
             => g.RemapFacesAndCorners(faceRemap, g.FaceIndicesToCornerIndices(faceRemap));
 
         public static IEnumerable<GeometryAttribute> SetFaceSizeAttribute(this IEnumerable<GeometryAttribute> attributes, int numCornersPerFaces)
@@ -309,7 +302,7 @@ namespace Vim.G3d
         /// In some cases, this is important (e.g. triangulating quads).
         /// Note: meshes are lost.
         /// </summary>
-        public static IGeometryAttributes RemapFacesAndCorners(this IGeometryAttributes g, IArray<int> faceRemap, IArray<int> cornerRemap, int numCornersPerFace = -1)
+        public static IGeometryAttributes RemapFacesAndCorners(this IGeometryAttributes g, IList<int> faceRemap, IList<int> cornerRemap, int numCornersPerFace = -1)
             => g.VertexAttributes()
                 .Concat(g.NoneAttributes())
                 .Concat(g.FaceAttributes().Select(attr => attr.Remap(faceRemap)))
@@ -342,17 +335,17 @@ namespace Vim.G3d
                 faceRemap[i * 2 + 1] = i;
             }
 
-            return g.RemapFacesAndCorners(faceRemap.ToIArray(), cornerRemap.ToIArray(), 3);
+            return g.RemapFacesAndCorners(faceRemap, cornerRemap, 3);
         }
 
-        public static IGeometryAttributes CopyFaces(this IGeometryAttributes g, IArray<bool> keep)
+        public static IGeometryAttributes CopyFaces(this IGeometryAttributes g, bool[] keep)
             => g.CopyFaces(i => keep[i]);
 
-        public static IGeometryAttributes CopyFaces(this IGeometryAttributes g, IArray<int> keep)
+        public static IGeometryAttributes CopyFaces(this IGeometryAttributes g, int[] keep)
             => g.RemapFaces(keep);
 
         public static IGeometryAttributes CopyFaces(this IGeometryAttributes self, Func<int, bool> predicate)
-            => self.RemapFaces(self.NumFaces.Select(i => i).IndicesWhere(predicate).ToIArray());
+            => self.RemapFaces(self.NumFaces.Select(i => i).Indices().Where(predicate).ToArray());
 
         public static IGeometryAttributes DeleteFaces(this IGeometryAttributes g, Func<int, bool> predicate)
             => g.CopyFaces(i => !predicate(i));
@@ -364,7 +357,7 @@ namespace Vim.G3d
         /// Updates the vertex buffer (e.g. after identifying unwanted faces) and the index
         /// buffer. Vertices are either re-ordered, removed, or deleted. Does not affect any other
         /// </summary>
-        public static IGeometryAttributes RemapVertices(this IGeometryAttributes g, IArray<int> newVertices, IArray<int> newIndices)
+        public static IGeometryAttributes RemapVertices(this IGeometryAttributes g, int[] newVertices, int[] newIndices)
             => (new[] { newIndices.ToIndexAttribute() }
                 .Concat(
                     g.VertexAttributes()
@@ -384,17 +377,17 @@ namespace Vim.G3d
         /// then this will throw an exception.
         /// The values in the index buffer will change, but it will stay the same length.
         /// </summary>
-        public static IGeometryAttributes RemapVertices(this IGeometryAttributes g, IArray<int> vertRemap)
+        public static IGeometryAttributes RemapVertices(this IGeometryAttributes g, int[] vertRemap)
         {
             var vertLookup = (-1).Repeat(g.NumVertices).ToArray();
-            for (var i = 0; i < vertRemap.Count; ++i)
+            for (var i = 0; i < vertRemap.Length; ++i)
             {
                 var oldVert = vertRemap[i];
                 vertLookup[oldVert] = i;
             }
 
             var oldIndices = g.GetAttributeIndex()?.Data ?? g.NumVertices.Range();
-            var newIndices = oldIndices.Select(i => vertLookup[i]).Evaluate();
+            var newIndices = oldIndices.Select(i => vertLookup[i]).ToArray();
 
             if (newIndices.Any(x => x == -1))
                 throw new Exception("At least one of the indices references a vertex that no longer exists");
@@ -406,21 +399,21 @@ namespace Vim.G3d
         /// For mesh g, create a new mesh from the passed selected faces,
         /// discarding un-referenced data and generating new index, vertex & face buffers.
         /// </summary>
-        public static IGeometryAttributes SelectFaces(this IGeometryAttributes g, IArray<int> faces)
+        public static IGeometryAttributes SelectFaces(this IGeometryAttributes g, int[] faces)
         {
             // Early exit, if all selected no need to do anything
-            if (g.NumFaces == faces.Count)
+            if (g.NumFaces == faces.Length)
                 return g;
 
             // Early exit, if none selected no need to do anything
-            if (faces.Count == 0)
+            if (faces.Length == 0)
                 return null;
 
             // First, get all the indices for this array of faces
             var oldIndices = g.GetAttributeIndex();
-            var oldSelIndices = new int[faces.Count * g.NumCornersPerFace];
+            var oldSelIndices = new int[faces.Length * g.NumCornersPerFace];
             // var oldIndices = faces.SelectMany(f => f.Indices());
-            for (var i = 0; i < faces.Count; i++)
+            for (var i = 0; i < faces.Length; i++)
             {
                 for (var t = 0; t < 3; t++)
                     oldSelIndices[i * 3 + t] = oldIndices.Data[faces[i] * g.NumCornersPerFace + t];
@@ -455,7 +448,7 @@ namespace Vim.G3d
             }
 
             //var faceRemapping = faces.Select(f => f.Index);
-            var vertRemapping = usedVertices.Take(numUsedVertices).ToIArray();
+            var vertRemapping = usedVertices.Take(numUsedVertices).ToArray();
             var cornerRemapping = g.FaceIndicesToCornerIndices(faces);
 
             return g.VertexAttributes()
@@ -472,10 +465,7 @@ namespace Vim.G3d
         public static G3D ToG3d(this IEnumerable<GeometryAttribute> attributes, G3dHeader? header = null)
             => new G3D(attributes, header);
 
-        public static G3D ToG3d(this IArray<GeometryAttribute> attributes, G3dHeader? header = null)
-            => attributes.ToEnumerable().ToG3d(header);
-
-        public static IArray<int> IndexFlippedRemapping(this IGeometryAttributes g)
+        public static IList<int> IndexFlippedRemapping(this IGeometryAttributes g)
             => g.NumCorners.Select(c => ((c / g.NumCornersPerFace) + 1) * g.NumCornersPerFace - 1 - c % g.NumCornersPerFace);
 
         public static bool IsNormalAttribute(this GeometryAttribute attr)
@@ -483,7 +473,7 @@ namespace Vim.G3d
 
         public static IEnumerable<GeometryAttribute> FlipNormalAttributes(this IEnumerable<GeometryAttribute> self)
             => self.Select(attr => attr.IsNormalAttribute()
-                ? attr.AsType<Vector3>().Data.Select(v => v.Inverse()).ToAttribute(attr.Descriptor)
+                ? attr.AsType<Vector3>().Data.Select(v => v.Inverse()).ToArray().ToAttribute(attr.Descriptor)
                 : attr);
 
         public static IGeometryAttributes FlipWindingOrder(this IGeometryAttributes g)
@@ -499,13 +489,13 @@ namespace Vim.G3d
         public static IGeometryAttributes DoubleSided(this IGeometryAttributes g)
             => g.Merge(g.FlipWindingOrder());
 
-        public static IArray<int> DefaultMaterials(this IGeometryAttributes self)
+        public static IList<int> DefaultMaterials(this IGeometryAttributes self)
             => (-1).Repeat(self.NumFaces);
 
-        public static IArray<Vector4> DefaultColors(this IGeometryAttributes self)
+        public static IList<Vector4> DefaultColors(this IGeometryAttributes self)
             => Vector4.Zero.Repeat(self.NumVertices);
 
-        public static IArray<Vector2> DefaultUvs(this IGeometryAttributes self)
+        public static IList<Vector2> DefaultUvs(this IGeometryAttributes self)
             => Vector2.Zero.Repeat(self.NumVertices);
 
         public static IGeometryAttributes Replace(this IGeometryAttributes self, Func<AttributeDescriptor, bool> selector, GeometryAttribute attribute)

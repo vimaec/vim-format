@@ -110,7 +110,7 @@ namespace Vim.Format
         public static IEnumerable<(string assetBufferName, FileInfo assetFileInfo)> ExtractAssets(this Document doc, DirectoryInfo directoryInfo)
         {
             var result = new List<(string assetBufferName, FileInfo assetFileInfo)>();
-            foreach (var assetBuffer in doc.Assets.Values.ToEnumerable())
+            foreach (var assetBuffer in doc.Assets.Values)
             {
                 var assetBufferName = assetBuffer.Name;
                 var assetFilePath = assetBuffer.ExtractAsset(directoryInfo);
