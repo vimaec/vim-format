@@ -1,0 +1,19 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="SharpGLTF.Core" Version="1.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!--
+        NOTE: use the Vim.Format nuget package to run this code outside of this repository
+        https://www.nuget.org/packages/Vim.Format/ 
+    -->
+    <ProjectReference Include="..\..\vim\Vim.Format\Vim.Format.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -88,6 +88,7 @@ namespace Vim.Format
 
         public const int NoEntityRelation = -1;
         public const long SyntheticElementId = -1;
+        public const long SyntheticCategoryId = -1;
         public const string SystemFamilyTypeElementType = "System Family Type";
         public const string SystemFamilyElementType = "System Family";
         public const string UnassignedSystem = "Unassigned System";
