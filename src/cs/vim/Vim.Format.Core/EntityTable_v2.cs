@@ -58,7 +58,7 @@ namespace Vim.Format
         /// <summary>
         /// Returns the index column based on the given column name.
         /// </summary>
-        public IList<int> GetIndexColumnValues(string columnName)
+        public int[] GetIndexColumnValues(string columnName)
             => GetColumnOrDefault(IndexColumns, columnName)?.GetColumnValues<int>();
 
         /// <summary>
@@ -69,7 +69,7 @@ namespace Vim.Format
             var stringIndices = GetColumnOrDefault(StringColumns, columnName)
                  ?.GetColumnValues<int>() ?? Array.Empty<int>();
 
-            var strings = new string[stringIndices.Count];
+            var strings = new string[stringIndices.Length];
 
             for (var i = 0; i < strings.Length; i++)
             {
@@ -84,7 +84,7 @@ namespace Vim.Format
         /// <summary>
         /// Returns the data column based on the given column name.
         /// </summary>
-        public IList<T> GetDataColumnValues<T>(string columnName) where T : unmanaged
+        public T[] GetDataColumnValues<T>(string columnName) where T : unmanaged
         {
             var type = typeof(T);
 

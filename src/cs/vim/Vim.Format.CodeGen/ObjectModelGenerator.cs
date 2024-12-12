@@ -83,7 +83,7 @@ public static class ObjectModelGenerator
                 var dataColumnGetter = $"{t.Name}EntityTable?.{functionName}(\"{eci.SerializedValueColumnName}\")";
                 if (eci.EntityColumnAttribute.SerializedType != fieldType)
                 {
-                    dataColumnGetter += $"?.Select(v => ({fieldTypeName}) v)";
+                    dataColumnGetter += $"?.Select(v => ({fieldTypeName}) v).ToArray()";
                 }
                 return dataColumnGetter;
             }).ToArray();
@@ -241,7 +241,7 @@ public static class ObjectModelGenerator
         cb.AppendLine("// All entity collections");
         cb.AppendLine("public Dictionary<string, IEnumerable<Entity>> AllEntities => new Dictionary<string, IEnumerable<Entity>>() {");
         foreach (var t in entityTypes)
-            cb.AppendLine($"{{\"{t.GetEntityTableName()}\", {t.Name}List.ToEnumerable()}},");
+            cb.AppendLine($"{{\"{t.GetEntityTableName()}\", {t.Name}List}},");
         cb.AppendLine("};");
         cb.AppendLine();
 
@@ -506,8 +506,7 @@ public static class ObjectModelGenerator
             cb.AppendLine("using System.Collections.Generic;");
             cb.AppendLine("using System.Linq;");
             cb.AppendLine("using Vim.Math3d;");
-            cb.AppendLine("using Vim.Format.ObjectModel;");
-            cb.AppendLine("using Vim.Util;");
+            cb.AppendLine("using Vim.G3d;");
 
             cb.AppendLine();
 

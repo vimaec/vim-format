@@ -3,9 +3,8 @@ using SharpGLTF.Validation;
 using System.Diagnostics;
 using System.Linq;
 using System.Numerics;
-using Vim.BFast;
+using Vim.BFastLib;
 using Vim.G3d;
-using Vim.LinqArray;
 
 namespace Vim.Gltf.Converter
 {
@@ -26,7 +25,7 @@ namespace Vim.Gltf.Converter
             var gltfModel = ModelRoot.CreateModel();
             var gltfScene = gltfModel.UseScene(0);
 
-            foreach (var vimMaterial in vim.Materials.ToEnumerable())
+            foreach (var vimMaterial in vim.Materials)
             {
                 var gltfMaterial = gltfModel.CreateMaterial();
                 gltfMaterial.InitializePBRMetallicRoughness();
@@ -56,7 +55,7 @@ namespace Vim.Gltf.Converter
             gltfVertexAccessor.SetVertexData(gltfVertexBufferView, 0, g3d.Vertices.Count);
 
             // Initialize a flat index buffer.
-            var vimIndexBufferBytes = g3d.Indices.ToEnumerable().Select(i => (uint)i).ToArray().ToBytes();
+            var vimIndexBufferBytes = g3d.Indices.Select(i => (uint)i).ToArray().ToBytes();
             var gltfIndexBufferView = gltfModel.UseBufferView(vimIndexBufferBytes);
 
             // Create the meshes and their primitives (submeshes)

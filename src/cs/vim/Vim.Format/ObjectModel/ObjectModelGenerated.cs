@@ -5,8 +5,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Vim.Math3d;
-using Vim.Format.ObjectModel;
-using Vim.Util;
+using Vim.G3d;
 
 namespace Vim.Format.ObjectModel {
     // AUTO-GENERATED
@@ -3735,60 +3734,60 @@ namespace Vim.Format.ObjectModel {
         
         // All entity collections
         public Dictionary<string, IEnumerable<Entity>> AllEntities => new Dictionary<string, IEnumerable<Entity>>() {
-            {"Vim.Asset", AssetList.ToEnumerable()},
-            {"Vim.DisplayUnit", DisplayUnitList.ToEnumerable()},
-            {"Vim.ParameterDescriptor", ParameterDescriptorList.ToEnumerable()},
-            {"Vim.Parameter", ParameterList.ToEnumerable()},
-            {"Vim.Element", ElementList.ToEnumerable()},
-            {"Vim.Workset", WorksetList.ToEnumerable()},
-            {"Vim.AssemblyInstance", AssemblyInstanceList.ToEnumerable()},
-            {"Vim.Group", GroupList.ToEnumerable()},
-            {"Vim.DesignOption", DesignOptionList.ToEnumerable()},
-            {"Vim.Level", LevelList.ToEnumerable()},
-            {"Vim.Phase", PhaseList.ToEnumerable()},
-            {"Vim.Room", RoomList.ToEnumerable()},
-            {"Vim.BimDocument", BimDocumentList.ToEnumerable()},
-            {"Vim.DisplayUnitInBimDocument", DisplayUnitInBimDocumentList.ToEnumerable()},
-            {"Vim.PhaseOrderInBimDocument", PhaseOrderInBimDocumentList.ToEnumerable()},
-            {"Vim.Category", CategoryList.ToEnumerable()},
-            {"Vim.Family", FamilyList.ToEnumerable()},
-            {"Vim.FamilyType", FamilyTypeList.ToEnumerable()},
-            {"Vim.FamilyInstance", FamilyInstanceList.ToEnumerable()},
-            {"Vim.View", ViewList.ToEnumerable()},
-            {"Vim.ElementInView", ElementInViewList.ToEnumerable()},
-            {"Vim.ShapeInView", ShapeInViewList.ToEnumerable()},
-            {"Vim.AssetInView", AssetInViewList.ToEnumerable()},
-            {"Vim.AssetInViewSheet", AssetInViewSheetList.ToEnumerable()},
-            {"Vim.LevelInView", LevelInViewList.ToEnumerable()},
-            {"Vim.Camera", CameraList.ToEnumerable()},
-            {"Vim.Material", MaterialList.ToEnumerable()},
-            {"Vim.MaterialInElement", MaterialInElementList.ToEnumerable()},
-            {"Vim.CompoundStructureLayer", CompoundStructureLayerList.ToEnumerable()},
-            {"Vim.CompoundStructure", CompoundStructureList.ToEnumerable()},
-            {"Vim.Node", NodeList.ToEnumerable()},
-            {"Vim.Geometry", GeometryList.ToEnumerable()},
-            {"Vim.Shape", ShapeList.ToEnumerable()},
-            {"Vim.ShapeCollection", ShapeCollectionList.ToEnumerable()},
-            {"Vim.ShapeInShapeCollection", ShapeInShapeCollectionList.ToEnumerable()},
-            {"Vim.System", SystemList.ToEnumerable()},
-            {"Vim.ElementInSystem", ElementInSystemList.ToEnumerable()},
-            {"Vim.Warning", WarningList.ToEnumerable()},
-            {"Vim.ElementInWarning", ElementInWarningList.ToEnumerable()},
-            {"Vim.BasePoint", BasePointList.ToEnumerable()},
-            {"Vim.PhaseFilter", PhaseFilterList.ToEnumerable()},
-            {"Vim.Grid", GridList.ToEnumerable()},
-            {"Vim.Area", AreaList.ToEnumerable()},
-            {"Vim.AreaScheme", AreaSchemeList.ToEnumerable()},
-            {"Vim.Schedule", ScheduleList.ToEnumerable()},
-            {"Vim.ScheduleColumn", ScheduleColumnList.ToEnumerable()},
-            {"Vim.ScheduleCell", ScheduleCellList.ToEnumerable()},
-            {"Vim.ViewSheetSet", ViewSheetSetList.ToEnumerable()},
-            {"Vim.ViewSheet", ViewSheetList.ToEnumerable()},
-            {"Vim.ViewSheetInViewSheetSet", ViewSheetInViewSheetSetList.ToEnumerable()},
-            {"Vim.ViewInViewSheetSet", ViewInViewSheetSetList.ToEnumerable()},
-            {"Vim.ViewInViewSheet", ViewInViewSheetList.ToEnumerable()},
-            {"Vim.Site", SiteList.ToEnumerable()},
-            {"Vim.Building", BuildingList.ToEnumerable()},
+            {"Vim.Asset", AssetList},
+            {"Vim.DisplayUnit", DisplayUnitList},
+            {"Vim.ParameterDescriptor", ParameterDescriptorList},
+            {"Vim.Parameter", ParameterList},
+            {"Vim.Element", ElementList},
+            {"Vim.Workset", WorksetList},
+            {"Vim.AssemblyInstance", AssemblyInstanceList},
+            {"Vim.Group", GroupList},
+            {"Vim.DesignOption", DesignOptionList},
+            {"Vim.Level", LevelList},
+            {"Vim.Phase", PhaseList},
+            {"Vim.Room", RoomList},
+            {"Vim.BimDocument", BimDocumentList},
+            {"Vim.DisplayUnitInBimDocument", DisplayUnitInBimDocumentList},
+            {"Vim.PhaseOrderInBimDocument", PhaseOrderInBimDocumentList},
+            {"Vim.Category", CategoryList},
+            {"Vim.Family", FamilyList},
+            {"Vim.FamilyType", FamilyTypeList},
+            {"Vim.FamilyInstance", FamilyInstanceList},
+            {"Vim.View", ViewList},
+            {"Vim.ElementInView", ElementInViewList},
+            {"Vim.ShapeInView", ShapeInViewList},
+            {"Vim.AssetInView", AssetInViewList},
+            {"Vim.AssetInViewSheet", AssetInViewSheetList},
+            {"Vim.LevelInView", LevelInViewList},
+            {"Vim.Camera", CameraList},
+            {"Vim.Material", MaterialList},
+            {"Vim.MaterialInElement", MaterialInElementList},
+            {"Vim.CompoundStructureLayer", CompoundStructureLayerList},
+            {"Vim.CompoundStructure", CompoundStructureList},
+            {"Vim.Node", NodeList},
+            {"Vim.Geometry", GeometryList},
+            {"Vim.Shape", ShapeList},
+            {"Vim.ShapeCollection", ShapeCollectionList},
+            {"Vim.ShapeInShapeCollection", ShapeInShapeCollectionList},
+            {"Vim.System", SystemList},
+            {"Vim.ElementInSystem", ElementInSystemList},
+            {"Vim.Warning", WarningList},
+            {"Vim.ElementInWarning", ElementInWarningList},
+            {"Vim.BasePoint", BasePointList},
+            {"Vim.PhaseFilter", PhaseFilterList},
+            {"Vim.Grid", GridList},
+            {"Vim.Area", AreaList},
+            {"Vim.AreaScheme", AreaSchemeList},
+            {"Vim.Schedule", ScheduleList},
+            {"Vim.ScheduleColumn", ScheduleColumnList},
+            {"Vim.ScheduleCell", ScheduleCellList},
+            {"Vim.ViewSheetSet", ViewSheetSetList},
+            {"Vim.ViewSheet", ViewSheetList},
+            {"Vim.ViewSheetInViewSheetSet", ViewSheetInViewSheetSetList},
+            {"Vim.ViewInViewSheetSet", ViewInViewSheetSetList},
+            {"Vim.ViewInViewSheet", ViewInViewSheetList},
+            {"Vim.Site", SiteList},
+            {"Vim.Building", BuildingList},
         };
         
         // Entity types from table names
@@ -3923,7 +3922,7 @@ namespace Vim.Format.ObjectModel {
             ParameterDescriptorGuid = ParameterDescriptorEntityTable?.GetStringColumnValues("string:Guid") ?? Array.Empty<String>();
             ParameterDescriptorStorageType = ParameterDescriptorEntityTable?.GetDataColumnValues<Int32>("int:StorageType") ?? Array.Empty<Int32>();
             ParameterValue = ParameterEntityTable?.GetStringColumnValues("string:Value") ?? Array.Empty<String>();
-            ElementId = (ElementEntityTable?.GetDataColumnValues<Int64>("long:Id") ?? ElementEntityTable?.GetDataColumnValues<Int32>("int:Id")?.Select(v => (Int64) v)) ?? Array.Empty<Int64>();
+            ElementId = (ElementEntityTable?.GetDataColumnValues<Int64>("long:Id") ?? ElementEntityTable?.GetDataColumnValues<Int32>("int:Id")?.Select(v => (Int64) v).ToArray()) ?? Array.Empty<Int64>();
             ElementType = ElementEntityTable?.GetStringColumnValues("string:Type") ?? Array.Empty<String>();
             ElementName = ElementEntityTable?.GetStringColumnValues("string:Name") ?? Array.Empty<String>();
             ElementUniqueId = ElementEntityTable?.GetStringColumnValues("string:UniqueId") ?? Array.Empty<String>();
@@ -3986,7 +3985,7 @@ namespace Vim.Format.ObjectModel {
             BimDocumentUser = BimDocumentEntityTable?.GetStringColumnValues("string:User") ?? Array.Empty<String>();
             PhaseOrderInBimDocumentOrderIndex = PhaseOrderInBimDocumentEntityTable?.GetDataColumnValues<Int32>("int:OrderIndex") ?? Array.Empty<Int32>();
             CategoryName = CategoryEntityTable?.GetStringColumnValues("string:Name") ?? Array.Empty<String>();
-            CategoryId = (CategoryEntityTable?.GetDataColumnValues<Int64>("long:Id") ?? CategoryEntityTable?.GetDataColumnValues<Int32>("int:Id")?.Select(v => (Int64) v)) ?? Array.Empty<Int64>();
+            CategoryId = (CategoryEntityTable?.GetDataColumnValues<Int64>("long:Id") ?? CategoryEntityTable?.GetDataColumnValues<Int32>("int:Id")?.Select(v => (Int64) v).ToArray()) ?? Array.Empty<Int64>();
             CategoryCategoryType = CategoryEntityTable?.GetStringColumnValues("string:CategoryType") ?? Array.Empty<String>();
             CategoryLineColor_X = CategoryEntityTable?.GetDataColumnValues<Double>("double:LineColor.X") ?? Array.Empty<Double>();
             CategoryLineColor_Y = CategoryEntityTable?.GetDataColumnValues<Double>("double:LineColor.Y") ?? Array.Empty<Double>();

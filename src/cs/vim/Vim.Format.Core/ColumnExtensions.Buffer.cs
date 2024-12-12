@@ -199,7 +199,7 @@ namespace Vim.Format
             return concatenated;
         }
 
-        public static IList<T> GetColumnValues<T>(this INamedBuffer nb) where T : unmanaged
+        public static T[] GetColumnValues<T>(this INamedBuffer nb) where T : unmanaged
             => nb.AsArray<T>();
 
         /// <summary>
