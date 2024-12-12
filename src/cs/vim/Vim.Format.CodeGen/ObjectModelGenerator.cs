@@ -92,9 +92,9 @@ public static class ObjectModelGenerator
                 ? $"({string.Join(" ?? ", dataColumnGetters)})"
                 : dataColumnGetters[0];
 
-            cb.AppendLine($"public IArray<{fieldTypeName}> {t.Name}{fieldName} {{ get; }}");
+            cb.AppendLine($"public IList<{fieldTypeName}> {t.Name}{fieldName} {{ get; }}");
             constructor.ArraysInitializers
-                       .Add($"{t.Name}{fieldName} = {dataColumnGetterString} ?? Array.Empty<{fieldTypeName}>().ToIArray();");
+                       .Add($"{t.Name}{fieldName} = {dataColumnGetterString} ?? Array.Empty<{fieldTypeName}>();");
 
             // Safe accessor.
             var defaultValue = baseStrategy == ValueSerializationStrategy.SerializeAsStringColumn ? "\"\"" : "default";
@@ -106,9 +106,9 @@ public static class ObjectModelGenerator
         {
             var (indexColumnName, localFieldName) = fieldInfo.GetIndexColumnInfo();
 
-            cb.AppendLine($"public IArray<int> {t.Name}{localFieldName}Index {{ get; }}");
+            cb.AppendLine($"public IList<int> {t.Name}{localFieldName}Index {{ get; }}");
             constructor.RelationalColumns
-                       .Add($"{t.Name}{localFieldName}Index = {t.Name}EntityTable?.GetIndexColumnValues(\"{indexColumnName}\") ?? Array.Empty<int>().ToIArray();");
+                       .Add($"{t.Name}{localFieldName}Index = {t.Name}EntityTable?.GetIndexColumnValues(\"{indexColumnName}\") ?? Array.Empty<int>();");
 
             cb.AppendLine($"public int Get{t.Name}{localFieldName}Index(int index) => {t.Name}{localFieldName}Index?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;");
         }
@@ -117,7 +117,7 @@ public static class ObjectModelGenerator
         cb.AppendLine($"public int Num{t.Name} => {t.Name}EntityTable?.NumRows ?? 0;");
 
         // Entity lists
-        cb.AppendLine($"public IArray<{t.Name}> {t.Name}List {{ get; }}");
+        cb.AppendLine($"public IList<{t.Name}> {t.Name}List {{ get; }}");
 
         // Element getter function
         cb.AppendLine($"public {t.Name} Get{t.Name}(int n)");
@@ -506,7 +506,6 @@ public static class ObjectModelGenerator
             cb.AppendLine("using System.Collections.Generic;");
             cb.AppendLine("using System.Linq;");
             cb.AppendLine("using Vim.Math3d;");
-            cb.AppendLine("using Vim.LinqArray;");
             cb.AppendLine("using Vim.Format.ObjectModel;");
             cb.AppendLine("using Vim.Util;");
 

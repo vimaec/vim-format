@@ -6,7 +6,6 @@ using System.Linq;
 using Vim.Format.Merge;
 using Vim.Format.ObjectModel;
 using Vim.Format.SceneBuilder;
-using Vim.LinqArray;
 using Vim.Math3d;
 using Vim.Util;
 using Vim.Util.Tests;
@@ -105,15 +104,15 @@ namespace Vim.Format.Tests
             mergedVim.Validate();
 
             // The categories in the merged VIM must be a distinct count of the categories in vim1 and vim2.
-            var categoriesVim1 = vim1.DocumentModel.CategoryList.ToEnumerable();
-            var categoriesVim2 = vim2.DocumentModel.CategoryList.ToEnumerable();
+            var categoriesVim1 = vim1.DocumentModel.CategoryList;
+            var categoriesVim2 = vim2.DocumentModel.CategoryList;
             var distinctCategoryCount = categoriesVim1.Concat(categoriesVim2).Distinct(new CategoryEqualityComparer()).Count();
             var mergedCategoryCount = mergedVim.DocumentModel.NumCategory;
             Assert.AreEqual(distinctCategoryCount, mergedCategoryCount);
             
             // The display units in the merged VIM must be a distinct count of the display units in vim1 and vim2.
-            var displayUnitsVim1 = vim1.DocumentModel.DisplayUnitList.ToEnumerable();
-            var displayUnitsVim2 = vim2.DocumentModel.DisplayUnitList.ToEnumerable();
+            var displayUnitsVim1 = vim1.DocumentModel.DisplayUnitList;
+            var displayUnitsVim2 = vim2.DocumentModel.DisplayUnitList;
             var distinctDisplayUnitCount = displayUnitsVim1.Concat(displayUnitsVim2).Distinct(new DisplayUnitEqualityComparer()).Count();
             var mergedDisplayUnitCount = mergedVim.DocumentModel.NumDisplayUnit;
             Assert.AreEqual(distinctDisplayUnitCount, mergedDisplayUnitCount);

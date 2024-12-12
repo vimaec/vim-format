@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
-using Vim.LinqArray;
 using Vim.Math3d;
 using Vim.G3d;
 
@@ -53,13 +52,13 @@ namespace Vim.Format.ObjectModel
 
     public static class Validation
     {
-        public static void ValidateBimDocument(this DocumentModel dm, ObjectModelValidationOptions validationOptions)
+        private static void ValidateBimDocument(this DocumentModel dm, ObjectModelValidationOptions validationOptions)
         {
             // There is at least one BimDocument in the document model.
             if (dm.NumBimDocument == 0 && validationOptions.BimDocumentMustExist)
                 throw new ObjectModelValidationException($"No {nameof(BimDocument)} found.");
 
-            foreach (var bd in dm.BimDocumentList.ToEnumerable())
+            foreach (var bd in dm.BimDocumentList)
             {
                 var bdElement = bd.Element;
                 if (bdElement == null)
@@ -79,14 +78,14 @@ namespace Vim.Format.ObjectModel
             }
         }
 
-        public static void ValidateCompoundStructureLayer(this CompoundStructureLayer layer)
+        private static void ValidateCompoundStructureLayer(this CompoundStructureLayer layer)
         {
             // All CompoundLayers have a CompoundStructure
             if (layer.CompoundStructure == null)
                 throw new ObjectModelValidationException($"{nameof(CompoundStructureLayer)} {layer.Index} has null {nameof(CompoundStructure)}");
         }
 
-        public static void ValidateCompoundStructures(this DocumentModel dm)
+        private static void ValidateCompoundStructures(this DocumentModel dm)
         {
             var cslArray = dm.CompoundStructureLayerList.ToArray();
 
@@ -137,7 +136,7 @@ namespace Vim.Format.ObjectModel
                 throw new ObjectModelValidationException($"A {nameof(CompoundStructure)} must be referenced by exactly one {nameof(FamilyType)}.");
         }
 
-        public static void ValidateAssets(this DocumentModel dm)
+        private static void ValidateAssets(this DocumentModel dm)
         {
             // Validate that the assets contained in the buffers matches the assets entity table.
             var assetBuffers = dm.Document.Assets;
@@ -149,9 +148,9 @@ namespace Vim.Format.ObjectModel
             }
         }
 
-        public static void ValidateParameters(this DocumentModel dm)
+        private static void ValidateParameters(this DocumentModel dm)
         {
-            Parallel.ForEach(dm.ParameterList.ToEnumerable(), p =>
+            Parallel.ForEach(dm.ParameterList, p =>
             {
                 // Each parameter must be associated to an element.
                 if (p._Element.Index == EntityRelation.None)
@@ -163,14 +162,14 @@ namespace Vim.Format.ObjectModel
             });
 
             // Validate the parameter descriptors.
-            foreach (var pd in dm.ParameterDescriptorList.ToEnumerable())
+            foreach (var pd in dm.ParameterDescriptorList)
             {
                 if (pd.DisplayUnit == null)
                     throw new ObjectModelValidationException($"{nameof(DisplayUnit)} is null for {nameof(ParameterDescriptor)} {pd.Index}");
             }
         }
 
-        public static void ValidatePhases(this DocumentModel dm)
+        private static void ValidatePhases(this DocumentModel dm)
         {
             // Validate the phase order information.
             var poArray = dm.PhaseOrderInBimDocumentList.ToArray();
@@ -199,7 +198,7 @@ namespace Vim.Format.ObjectModel
             }
 
             // Validate that the phase order information covers the set of phases.
-            var phaseIndexSet = new HashSet<int>(dm.PhaseList.Select(p => p.Index).ToEnumerable());
+            var phaseIndexSet = new HashSet<int>(dm.PhaseList.Select(p => p.Index));
             phaseIndexSet.ExceptWith(poArray.Select(po => po.Index));
             if (phaseIndexSet.Count != 0)
                 throw new ObjectModelValidationException($"{nameof(Phase)} index coverage is incomplete among {nameof(PhaseOrderInBimDocument)}");
@@ -208,7 +207,7 @@ namespace Vim.Format.ObjectModel
         /// <summary>
         /// Generic storage key check; ensures that the keys only appear once in the keySet.
         /// </summary>
-        public static void ValidateStorageKeys(IEnumerable<IStorageKey> storageKeyEntities)
+        private static void ValidateStorageKeys(IEnumerable<IStorageKey> storageKeyEntities)
         {
             var keySet = new HashSet<object>();
             foreach (var entity in storageKeyEntities)
@@ -222,7 +221,7 @@ namespace Vim.Format.ObjectModel
         /// <summary>
         /// Validate that the entities which inherit from IStorageKey all have unique storage key values.
         /// </summary>
-        public static void ValidateStorageKeys(this DocumentModel dm)
+        private static void ValidateStorageKeys(this DocumentModel dm)
         {
             // ReSharper disable once SuspiciousTypeConversion.Global
             var storageKeyEntityLists = dm.AllEntities
@@ -233,7 +232,7 @@ namespace Vim.Format.ObjectModel
             }
         }
 
-        public static void ValidateMaterials(this DocumentModel dm)
+        private static void ValidateMaterials(this DocumentModel dm)
         {
             void ValidateDomain(string label, double value, double lowerInclusive, double upperInclusive, int index)
             {
@@ -265,8 +264,8 @@ namespace Vim.Format.ObjectModel
             }
         }
 
-        public static Dictionary<int, HashSet<int>> GetViewToElementsMap(
-            this IArray<ElementInView> elementInViewList)
+        private static Dictionary<int, HashSet<int>> GetViewToElementsMap(
+            this IList<ElementInView> elementInViewList)
             => elementInViewList
                 .Select(eiv => (viewIndex: eiv._View?.Index ?? -1, elementIndex: eiv._Element?.Index ?? -1))
                 .GroupBy(t => t.viewIndex)
@@ -274,12 +273,12 @@ namespace Vim.Format.ObjectModel
                     g => g.Key,
                     g => new HashSet<int>(g.Select(t => t.elementIndex)));
 
-        public static void ValidateShapesInView(this DocumentModel dm)
+        private static void ValidateShapesInView(this DocumentModel dm)
         {
             var viewToElementsMap = dm.ElementInViewList.GetViewToElementsMap();
 
             // Validate that the shapes in view have an element which is also in the same view.
-            foreach (var item in dm.ShapeInViewList.ToEnumerable())
+            foreach (var item in dm.ShapeInViewList)
             {
                 var viewIndex = item._View.Index;
                 var shape = item.Shape;
@@ -294,7 +293,7 @@ namespace Vim.Format.ObjectModel
             }
         }
 
-        public static void ValidateEntitiesWithElement(this DocumentModel dm)
+        private static void ValidateEntitiesWithElement(this DocumentModel dm)
         {
             var entityWithElementTypes = new HashSet<Type>(ObjectModelReflection.GetEntityTypes<EntityWithElement>()
                 .Where(t => t.GetCustomAttributes(typeof(G3dAttributeReferenceAttribute)).Count() == 0));
@@ -303,8 +302,8 @@ namespace Vim.Format.ObjectModel
 
             Parallel.ForEach(entityWithElementTypes, entityWithElementType =>
             {
-                var elementIndices = ((IArray<int>)dm.GetPropertyValue(entityWithElementType.Name + "ElementIndex")).ToArray();
-                for (var i = 0; i < elementIndices.Length; ++i)
+                var elementIndices = (IList<int>) dm.GetPropertyValue(entityWithElementType.Name + "ElementIndex");
+                for (var i = 0; i < elementIndices.Count; ++i)
                 {
                     var elementIndex = elementIndices[i];
                     if (elementIndex < 0)
@@ -315,7 +314,7 @@ namespace Vim.Format.ObjectModel
             });
         }
 
-        public static void ValidateElementInSystem(this DocumentModel dm)
+        private static void ValidateElementInSystem(this DocumentModel dm)
         {
             foreach (var eis in dm.ElementInSystemList)
             {

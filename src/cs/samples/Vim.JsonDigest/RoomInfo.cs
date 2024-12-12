@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Vim.LinqArray;
 
 namespace Vim.JsonDigest
@@ -63,6 +64,6 @@ namespace Vim.JsonDigest
                 Area = r.Area,
                 Volume = r.Volume,
                 Perimeter = r.Perimeter
-            }).ToEnumerable();
+            });
     }
 }
