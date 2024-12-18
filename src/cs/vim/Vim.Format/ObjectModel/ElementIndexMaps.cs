@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Vim.Util;
 using IndexMap = System.Collections.Generic.Dictionary<int, int>;
@@ -90,7 +91,7 @@ namespace Vim.Format.ObjectModel
         public static DictionaryOfLists<int, int> GetElementIndicesMap(EntityTable et)
         {
             var indicesMap = new DictionaryOfLists<int, int>();
-            var elementIndices = et?.IndexColumns[ElementIndexColumnName]?.GetTypedData();
+            var elementIndices = et?.IndexColumns.FirstOrDefault(col => col.Name == ElementIndexColumnName)?.GetTypedData();
             if (elementIndices == null)
                 return indicesMap;
             for (var i = 0; i < elementIndices.Length; ++i)
@@ -112,7 +113,7 @@ namespace Vim.Format.ObjectModel
         public static IndexMap GetElementIndexMap(EntityTable et)
         {
             var indexMap = new IndexMap();
-            var elementIndices = et?.IndexColumns[ElementIndexColumnName]?.GetTypedData();
+            var elementIndices = et?.IndexColumns.FirstOrDefault(col => col.Name == ElementIndexColumnName)?.GetTypedData();
             if (elementIndices == null)
                 return indexMap;
             for (var i = 0; i < elementIndices.Length; ++i)

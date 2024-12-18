@@ -37,7 +37,7 @@ namespace Vim.Format
             string[] stringBuffer)
         {
             Name = et.Name;
-            Columns = et.ValidateColumnRowsAreAligned().ToArray();
+            Columns = et.ValidateColumnRowsAreAligned().AllColumns.ToArray();
             RowCount = Columns.FirstOrDefault()?.NumElements() ?? 0;
 
             foreach (var column in et.IndexColumns)

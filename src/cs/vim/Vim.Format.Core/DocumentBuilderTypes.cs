@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Vim.Format.Geometry;
 using Vim.G3d;
 using Vim.Math3d;
 
@@ -23,12 +24,12 @@ namespace Vim.Format
             public float Width;
         }
 
-        public class Material
+        public class Material : IMaterial
         {
             //RGBA
-            public Vector4 Color;
-            public float Glossiness;
-            public float Smoothness;
+            public Vector4 Color { get;  set; }
+            public float Glossiness { get; set; }
+            public float Smoothness { get; set; }
         }
 
         /// <summary>
@@ -36,19 +37,19 @@ namespace Vim.Format
         /// </summary>
         public class Mesh
         {
-            private readonly List<Vector3> _vertices;
+            protected List<Vector3> _vertices = new List<Vector3>();
             public IReadOnlyList<Vector3> Vertices => _vertices;
 
-            private readonly List<int> _indices;
+            protected List<int> _indices = new List<int>();
             public IReadOnlyList<int> Indices => _indices;
 
-            private List<int> _faceMaterials;
+            protected List<int> _faceMaterials = new List<int>();
             public IReadOnlyList<int> FaceMaterials => _faceMaterials;
 
-            private readonly List<Vector4> _colors;
+            protected List<Vector4> _colors = new List<Vector4>();
             public IReadOnlyList<Vector4> Colors => _colors;
 
-            private readonly List<Vector2> _uvs;
+            protected List<Vector2> _uvs = new List<Vector2>();
             public IReadOnlyList<Vector2> UVs => _uvs;
 
             public Mesh(List<Vector3> vertices = null, List<int> indices = null, List<int> faceMaterials = null, List<Vector4> colors = null, List<Vector2> uvs = null)
@@ -71,15 +72,16 @@ namespace Vim.Format
                 _uvs = uvs ?? new List<Vector2>();
             }
 
+
             public void SetMeshMaterial(int material)
                 => _faceMaterials = Enumerable.Repeat(material, _indices.Count / 3).ToList();
 
-            public void AppendFaces(IList<int> indices, IList<int> materials)
+            public void AppendFaces(int[] indices, int[] materials)
             {
-                if (indices.Count != materials.Count * 3)
-                    throw new Exception("index.Count must be material.Count*3");
+                if (indices.Length != materials.Length * 3)
+                    throw new Exception("index.Length must be material.Length*3");
 
-                for (var i = 0; i < materials.Count; i++)
+                for (var i = 0; i < materials.Length; i++)
                 {
                     var index = i * 3;
                     AppendFace(indices[index], indices[index + 1], indices[index + 2], materials[i]);
@@ -100,8 +102,39 @@ namespace Vim.Format
             public void AppendUVs(IEnumerable<Vector2> uvs)
                 => _uvs.AddRange(uvs);
 
-            public SubdividedMesh Subdivide()
-                => new SubdividedMesh(this);
+            public VimMesh Subdivide()
+            {
+                if (Indices.Any(i => i < 0 && i >= Vertices.Count))
+                    throw new Exception($"Invalid mesh. Indices out of vertex range.");
+
+                var facesByMats = FaceMaterials
+                    .Select((face, index) => (face, index))
+                    .GroupBy(pair => pair.face, pair => pair.index);
+
+                var submeshIndexOffsets = new List<int>();
+                var submeshMaterials = new List<int>();
+                var indicesRemap = new List<int>();
+
+                foreach (var group in facesByMats)
+                {
+                    submeshIndexOffsets.Add(indicesRemap.Count);
+                    submeshMaterials.Add(group.Key);
+                    foreach (var face in group)
+                    {
+                        var f = face * 3;
+                        indicesRemap.Add(Indices[f]);
+                        indicesRemap.Add(Indices[f + 1]);
+                        indicesRemap.Add(Indices[f + 2]);
+                    }
+                }
+                return new VimMesh(
+                    indicesRemap.ToArray(),
+                    Vertices.ToArray(),
+                    submeshIndexOffsets.ToArray(),
+                    submeshMaterials.ToArray()
+                );
+
+            }
         }
 
         /// <summary>

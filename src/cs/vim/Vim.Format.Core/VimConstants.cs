@@ -107,5 +107,15 @@ namespace Vim.Format
             TableNames.Asset,
             TableNames.Material,
         };
+
+        public static class DisciplineNames
+        {
+            public const string Mechanical = nameof(Mechanical);
+            public const string Architecture = nameof(Architecture);
+            public const string Generic = nameof(Generic);
+            public const string Electrical = nameof(Electrical);
+            public const string Plumbing = nameof(Plumbing);
+            public const string Structural = nameof(Structural);
+        }
     }
 }

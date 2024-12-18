@@ -86,5 +86,15 @@ namespace Vim.BFastLib
 
         public static void Write(this Stream stream, IBuffer buffer)
             => buffer.Write(stream);
+
+        public static NamedBuffer<T> Fill<T>(this NamedBuffer<T> buffer, T value) where T : unmanaged
+        {
+            var array = new T[buffer.Data.Length];
+            for (var i = 0; i < array.Length; i++)
+            {
+                array[i] = value;
+            }
+            return array.ToNamedBuffer(buffer.Name);
+        }
     }
 }

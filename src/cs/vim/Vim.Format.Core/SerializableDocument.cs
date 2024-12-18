@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Text;
 using Vim.BFastLib;
@@ -52,7 +51,7 @@ namespace Vim.Format
         /// <summary>
         /// The uninstanced / untransformed geometry
         /// </summary>
-        public G3d.G3D Geometry;
+        public G3dVim GeometryNext;
 
         /// <summary>
         /// The originating file name (if provided)
@@ -91,9 +90,9 @@ namespace Vim.Format
                 bfast.SetArray(BufferNames.Strings, BFastStrings.Pack(StringTable));
             }
 
-            if(Geometry != null)
+            if(GeometryNext != null)
             {
-                bfast.SetBFast(BufferNames.Geometry, Geometry?.ToBFast());
+                bfast.SetBFast(BufferNames.Geometry, GeometryNext.ToBFast());
             }
             
             return bfast;
@@ -122,7 +121,7 @@ namespace Vim.Format
             if (!doc.Options.SkipGeometry)
             {
                 var geo = bfast.GetBFast(BufferNames.Geometry);
-                doc.Geometry = G3D.Read(geo);
+                doc.GeometryNext = new G3dVim(geo);
             }
 
             var entities = bfast.GetBFast(BufferNames.Entities);
@@ -141,75 +140,10 @@ namespace Vim.Format
             foreach (var entry in bfast.Entries)
             {
                 var b = bfast.GetBFast(entry);
-                var table = ReadEntityTable(b, schemaOnly);
+                var table = SerializableEntityTable.FromBFast(b, schemaOnly);
                 table.Name = entry;
                 yield return table;
             }
-        }
-
-        /// <summary>
-        /// Returns a SerializableEntityTable based on the given buffer reader.
-        /// </summary>
-        public static SerializableEntityTable ReadEntityTable(
-            BFast bfast,
-            bool schemaOnly
-           )
-        {
-            var et = new SerializableEntityTable();
-            foreach (var entry in bfast.Entries)
-            {
-                var typePrefix = SerializableEntityTable.GetTypeFromName(entry);
-
-                switch (typePrefix)
-                {
-                    case VimConstants.IndexColumnNameTypePrefix:
-                        {
-                            //TODO: replace named buffer with arrays
-                            var col = schemaOnly ? new int[0] : bfast.GetArray<int>(entry);
-                            et.IndexColumns.Add(col.ToNamedBuffer(entry));
-                            break;
-                        }
-                    case VimConstants.StringColumnNameTypePrefix:
-                        {
-                            var col = schemaOnly ? new int[0] : bfast.GetArray<int>(entry);
-                            et.StringColumns.Add(col.ToNamedBuffer(entry));
-                            break;
-                        }
-                    case VimConstants.IntColumnNameTypePrefix:
-                        {
-                            var col = schemaOnly ? new int[0] : bfast.GetArray<int>(entry);
-                            et.DataColumns.Add(col.ToNamedBuffer(entry));
-                            break;
-                        }
-                    case VimConstants.LongColumnNameTypePrefix:
-                        {
-                            var col = schemaOnly ? new long[0] : bfast.GetArray<long>(entry);
-                            et.DataColumns.Add(col.ToNamedBuffer(entry));
-                            break;
-                        }
-                    case VimConstants.DoubleColumnNameTypePrefix:
-                        {
-                            var col = schemaOnly ? new double[0] : bfast.GetArray<double>(entry);
-                            et.DataColumns.Add(col.ToNamedBuffer(entry));
-                            break;
-                        }
-                    case VimConstants.FloatColumnNameTypePrefix:
-                        {
-                            var col = schemaOnly ? new float[0] : bfast.GetArray<float>(entry);
-                            et.DataColumns.Add(col.ToNamedBuffer(entry));
-                            break;
-                        }
-                    case VimConstants.ByteColumnNameTypePrefix:
-                        {
-                            var col = schemaOnly ? new byte[0] : bfast.GetArray<byte>(entry);
-                            et.DataColumns.Add(col.ToNamedBuffer(entry));
-                            break;
-                        }
-                        // For flexibility, we ignore the columns which do not contain a recognized prefix.
-                }
-            }
-
-            return et;
         }
     }
 }

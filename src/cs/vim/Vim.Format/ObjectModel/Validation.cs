@@ -4,7 +4,7 @@ using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using Vim.Math3d;
-using Vim.G3d;
+using Vim.Util;
 
 namespace Vim.Format.ObjectModel
 {
@@ -52,7 +52,7 @@ namespace Vim.Format.ObjectModel
 
     public static class Validation
     {
-        private static void ValidateBimDocument(this DocumentModel dm, ObjectModelValidationOptions validationOptions)
+        public static void ValidateBimDocument(this DocumentModel dm, ObjectModelValidationOptions validationOptions)
         {
             // There is at least one BimDocument in the document model.
             if (dm.NumBimDocument == 0 && validationOptions.BimDocumentMustExist)
@@ -78,14 +78,14 @@ namespace Vim.Format.ObjectModel
             }
         }
 
-        private static void ValidateCompoundStructureLayer(this CompoundStructureLayer layer)
+        public static void ValidateCompoundStructureLayer(this CompoundStructureLayer layer)
         {
             // All CompoundLayers have a CompoundStructure
             if (layer.CompoundStructure == null)
                 throw new ObjectModelValidationException($"{nameof(CompoundStructureLayer)} {layer.Index} has null {nameof(CompoundStructure)}");
         }
 
-        private static void ValidateCompoundStructures(this DocumentModel dm)
+        public static void ValidateCompoundStructures(this DocumentModel dm)
         {
             var cslArray = dm.CompoundStructureLayerList.ToArray();
 
@@ -136,7 +136,7 @@ namespace Vim.Format.ObjectModel
                 throw new ObjectModelValidationException($"A {nameof(CompoundStructure)} must be referenced by exactly one {nameof(FamilyType)}.");
         }
 
-        private static void ValidateAssets(this DocumentModel dm)
+        public static void ValidateAssets(this DocumentModel dm)
         {
             // Validate that the assets contained in the buffers matches the assets entity table.
             var assetBuffers = dm.Document.Assets;
@@ -148,7 +148,7 @@ namespace Vim.Format.ObjectModel
             }
         }
 
-        private static void ValidateParameters(this DocumentModel dm)
+        public static void ValidateParameters(this DocumentModel dm)
         {
             Parallel.ForEach(dm.ParameterList, p =>
             {
@@ -169,7 +169,7 @@ namespace Vim.Format.ObjectModel
             }
         }
 
-        private static void ValidatePhases(this DocumentModel dm)
+        public static void ValidatePhases(this DocumentModel dm)
         {
             // Validate the phase order information.
             var poArray = dm.PhaseOrderInBimDocumentList.ToArray();
@@ -207,7 +207,7 @@ namespace Vim.Format.ObjectModel
         /// <summary>
         /// Generic storage key check; ensures that the keys only appear once in the keySet.
         /// </summary>
-        private static void ValidateStorageKeys(IEnumerable<IStorageKey> storageKeyEntities)
+        public static void ValidateStorageKeys(IEnumerable<IStorageKey> storageKeyEntities)
         {
             var keySet = new HashSet<object>();
             foreach (var entity in storageKeyEntities)
@@ -221,7 +221,7 @@ namespace Vim.Format.ObjectModel
         /// <summary>
         /// Validate that the entities which inherit from IStorageKey all have unique storage key values.
         /// </summary>
-        private static void ValidateStorageKeys(this DocumentModel dm)
+        public static void ValidateStorageKeys(this DocumentModel dm)
         {
             // ReSharper disable once SuspiciousTypeConversion.Global
             var storageKeyEntityLists = dm.AllEntities
@@ -232,7 +232,7 @@ namespace Vim.Format.ObjectModel
             }
         }
 
-        private static void ValidateMaterials(this DocumentModel dm)
+        public static void ValidateMaterials(this DocumentModel dm)
         {
             void ValidateDomain(string label, double value, double lowerInclusive, double upperInclusive, int index)
             {
@@ -264,8 +264,8 @@ namespace Vim.Format.ObjectModel
             }
         }
 
-        private static Dictionary<int, HashSet<int>> GetViewToElementsMap(
-            this IList<ElementInView> elementInViewList)
+        public static Dictionary<int, HashSet<int>> GetViewToElementsMap(
+            this ElementInView[] elementInViewList)
             => elementInViewList
                 .Select(eiv => (viewIndex: eiv._View?.Index ?? -1, elementIndex: eiv._Element?.Index ?? -1))
                 .GroupBy(t => t.viewIndex)
@@ -273,9 +273,9 @@ namespace Vim.Format.ObjectModel
                     g => g.Key,
                     g => new HashSet<int>(g.Select(t => t.elementIndex)));
 
-        private static void ValidateShapesInView(this DocumentModel dm)
+        public static void ValidateShapesInView(this DocumentModel dm)
         {
-            var viewToElementsMap = dm.ElementInViewList.GetViewToElementsMap();
+            var viewToElementsMap = dm.ElementInViewList.ToArray().GetViewToElementsMap();
 
             // Validate that the shapes in view have an element which is also in the same view.
             foreach (var item in dm.ShapeInViewList)
@@ -293,7 +293,7 @@ namespace Vim.Format.ObjectModel
             }
         }
 
-        private static void ValidateEntitiesWithElement(this DocumentModel dm)
+        public static void ValidateEntitiesWithElement(this DocumentModel dm)
         {
             var entityWithElementTypes = new HashSet<Type>(ObjectModelReflection.GetEntityTypes<EntityWithElement>()
                 .Where(t => t.GetCustomAttributes(typeof(G3dAttributeReferenceAttribute)).Count() == 0));
@@ -302,8 +302,8 @@ namespace Vim.Format.ObjectModel
 
             Parallel.ForEach(entityWithElementTypes, entityWithElementType =>
             {
-                var elementIndices = (IList<int>) dm.GetPropertyValue(entityWithElementType.Name + "ElementIndex");
-                for (var i = 0; i < elementIndices.Count; ++i)
+                var elementIndices = ((int[])dm.GetPropertyValue(entityWithElementType.Name + "ElementIndex")).ToArray();
+                for (var i = 0; i < elementIndices.Length; ++i)
                 {
                     var elementIndex = elementIndices[i];
                     if (elementIndex < 0)
@@ -314,7 +314,7 @@ namespace Vim.Format.ObjectModel
             });
         }
 
-        private static void ValidateElementInSystem(this DocumentModel dm)
+        public static void ValidateElementInSystem(this DocumentModel dm)
         {
             foreach (var eis in dm.ElementInSystemList)
             {

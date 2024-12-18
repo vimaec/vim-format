@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using Vim.G3d;
+using System.Linq;
 
 namespace Vim.Format.ObjectModel
 {
@@ -29,8 +29,8 @@ namespace Vim.Format.ObjectModel
             }
         }
 
-        private IList<int> _parameterIndices;
-        public IList<int> ParameterIndices
+        private int[] _parameterIndices;
+        public int[] ParameterIndices
         {
             get
             {
@@ -38,7 +38,8 @@ namespace Vim.Format.ObjectModel
                     return _parameterIndices;
 
                 _parameterIndices = (DocumentModel.ElementIndexMaps.ParameterIndicesFromElementIndex
-                    .TryGetValue(ElementIndex, out var parameterIndices) ? parameterIndices.ToArray() : Array.Empty<int>());
+                    .TryGetValue(ElementIndex, out var parameterIndices) ? parameterIndices : new List<int>())
+                    .ToArray();
 
                 return _parameterIndices;
             }
@@ -107,7 +108,7 @@ namespace Vim.Format.ObjectModel
         public Family Family => DocumentModel.FamilyList.ElementAtOrDefault(FamilyIndex);
         public System System => DocumentModel.SystemList.ElementAtOrDefault(SystemIndex);
         public Element SystemElement => DocumentModel.ElementList.ElementAtOrDefault(SystemElementIndex);
-        public IEnumerable<Parameter> Parameters => DocumentModel.ParameterList.SelectByIndex(ParameterIndices);
+        public IEnumerable<Parameter> Parameters => ParameterIndices.Select(i => DocumentModel.ParameterList[i]);
 
         [Flags]
         public enum ParameterScope

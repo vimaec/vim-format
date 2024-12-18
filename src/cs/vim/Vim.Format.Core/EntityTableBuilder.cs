@@ -17,19 +17,20 @@ namespace Vim.Format
         public EntityTableBuilder(string name)
             => Name = name;
 
-        private void UpdateOrValidateRows(int n)
+        public EntityTableBuilder UpdateOrValidateRows(int n)
         {
             if (NumRows == 0) NumRows = n;
             else if (NumRows != n) throw new Exception($"Value count {n} does not match the expected number of rows {NumRows}");
+            return this;
         }
 
-        private static void ValidateHasDataColumnPrefix(string columnName)
+        public void ValidateHasDataColumnPrefix(string columnName)
         {
             if (!ColumnExtensions.IsDataColumnName(columnName))
                 throw new Exception($"{nameof(columnName)} {columnName} does not begin with a data column prefix");
         }
 
-        private static void ValidateHasPrefix(string columnName, string expectedPrefix)
+        public void ValidateHasPrefix(string columnName, string expectedPrefix)
         {
             if (!columnName.StartsWith(expectedPrefix))
                 throw new Exception($"{nameof(columnName)} {columnName} must start with {expectedPrefix}");
@@ -43,10 +44,8 @@ namespace Vim.Format
             return this;
         }
 
-        public void AddIndexColumn(string columnName, IEnumerable<int> ids)
-        {
-            AddIndexColumn(columnName, ids.ToArray());
-        }
+        public EntityTableBuilder AddIndexColumn(string columnName, IEnumerable<int> ids)
+            => AddIndexColumn(columnName, ids.ToArray());
 
         public EntityTableBuilder AddStringColumn(string columnName, string[] values)
         {
@@ -97,6 +96,33 @@ namespace Vim.Format
         public IEnumerable<string> GetAllStrings()
             => StringColumns.Values.SelectMany(sc => sc)
             .Where(x => x != null);
+
+        public SerializableEntityTable ToSerializableEntityTable(IReadOnlyDictionary<string, int> stringLookup)
+        {
+            var table = new SerializableEntityTable
+            {
+                // Set the table name
+                Name = Name,
+
+                // Convert the columns to named buffers 
+                IndexColumns = IndexColumns
+                    .Select(kv => kv.Value.ToNamedBuffer(kv.Key))
+                    .ToList(),
+                DataColumns = DataColumns
+                    .Select(kv => kv.Value.ToNamedBuffer(kv.Key) as INamedBuffer)
+                    .ToList(),
+                StringColumns = StringColumns
+                    .Select(kv => kv.Value
+                        .Select(s => stringLookup[s ?? string.Empty])
+                        .ToArray()
+                        .ToNamedBuffer(kv.Key))
+                    .ToList(),
+            };
+
+            table.ValidateColumnRowsAreAligned();
+
+            return table;
+        }
 
         public void Clear()
         {

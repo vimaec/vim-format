@@ -34,7 +34,7 @@ namespace Vim.Format.Geometry
         {
             if (IsSplit)
                 throw new Exception("Cannot add meshes after split");
-            Box = Box.Merge(item.Bounds);
+            Box = item.UpdateBounds(Box);
             Items.Add(item);
         }
 

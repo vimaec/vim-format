@@ -1,57 +1,22 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Description>G3D is a simple, efficient, generic binary format for storing and transmitting geometry. The G3D format is designed to be used either as a serialization format or as an in-memory data structure. G3D can represent triangular meshes, quadrilateral meshes, polygonal meshes, point clouds, and line segments.
-It can be easily and efficiently deserialized and rendered in different languages and on different platforms.</Description>
-    <EmbedUntrackedSources>true</EmbedUntrackedSources>
-    <IncludeSymbols>true</IncludeSymbols>
-    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <TargetFrameworks>netstandard2.0</TargetFrameworks>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU' OR '$(Configuration)|$(Platform)'=='LocalSrc_Release|AnyCPU'">
-    <Optimize>true</Optimize>
-  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="All" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+  </ItemGroup>
 
-  <PropertyGroup Condition="'$(GITHUB_ACTIONS)' == 'true'">
-    <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
-  </PropertyGroup>
-
+  <ItemGroup>
+    <ProjectReference Include="../../bfast/Vim.BFast/Vim.BFast.csproj" />
+    <ProjectReference Include="../../math3d/Vim.Math3D/Vim.Math3D.csproj" />
+  </ItemGroup>
   <ItemGroup>
     <None Include="../../../../LICENSE.txt">
       <Pack>True</Pack>
       <PackagePath></PackagePath>
     </None>
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="All" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Update="CommonAttributes.cs">
-      <DependentUpon>CommonAttributes.tt</DependentUpon>
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-    </Compile>
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Update="CommonAttributes.tt">
-      <LastGenOutput>CommonAttributes.cs</LastGenOutput>
-      <Generator>TextTemplatingFileGenerator</Generator>
-    </None>
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="../../bfast/Vim.BFast/Vim.BFast.csproj" />
-    <ProjectReference Include="../../linqarray/Vim.LinqArray/Vim.LinqArray.csproj" />
-    <ProjectReference Include="../../math3d/Vim.Math3D/Vim.Math3D.csproj" />
   </ItemGroup>
 
 </Project>

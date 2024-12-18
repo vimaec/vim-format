@@ -10,7 +10,7 @@
     <RepositoryType>GitHub</RepositoryType>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <Version>1.1.0</Version>
+    <Version>1.0.2</Version>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
     <IncludeSymbols>true</IncludeSymbols>
@@ -18,12 +18,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\bfast\Vim.BFast\Vim.BFast.csproj" />
-    <ProjectReference Include="..\..\g3d\Vim.G3d\Vim.G3d.csproj" />
-    <ProjectReference Include="..\..\linqarray\Vim.LinqArray\Vim.LinqArray.csproj" />
-    <ProjectReference Include="..\..\math3d\Vim.Math3D\Vim.Math3D.csproj" />
-    <ProjectReference Include="..\Vim.Format.Core\Vim.Format.Core.csproj" />
-    <ProjectReference Include="..\Vim.Format.CodeGen\Vim.Format.CodeGen.csproj">
+    <ProjectReference Include="../../math3d/Vim.Math3D/Vim.Math3D.csproj" />
+    <ProjectReference Include="../Vim.Format.Core/Vim.Format.Core.csproj" />
+    <ProjectReference Include="../Vim.Format.CodeGen/Vim.Format.CodeGen.csproj">
       <!--
        NOTE: We are referencing the codegen project for build sequencing but we do not want any of its build artifacts
        See: https://github.com/dotnet/msbuild/issues/8099#issuecomment-1355501771
@@ -44,6 +41,12 @@
 
   <ItemGroup>
     <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="../../../../LICENSE.txt">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
   </ItemGroup>
 
 </Project>

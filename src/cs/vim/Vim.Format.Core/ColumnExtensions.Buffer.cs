@@ -3,21 +3,17 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using Vim.BFastLib;
-using Vim.G3d;
+using Vim.Util;
 
 namespace Vim.Format
 {
     public static partial class ColumnExtensions
     {
-        private static IEnumerable<INamedBuffer> GetAllColumns(this SerializableEntityTable et)
-            => et.DataColumns.Concat(et.IndexColumns).Concat(et.StringColumns);
-
-        public static IList<INamedBuffer> ValidateColumnRowsAreAligned(this IEnumerable<INamedBuffer> columns)
+        public static void ValidateColumnRowsAreAligned(this IEnumerable<INamedBuffer> columns)
         {
-            var result = columns.ToArray();
-            var numRows = result.FirstOrDefault()?.NumElements() ?? 0;
+            var numRows = columns.FirstOrDefault()?.NumElements() ?? 0;
 
-            foreach (var column in result)
+            foreach (var column in columns)
             {
                 var columnRows = column.NumElements();
                 if (columnRows == numRows)
@@ -26,20 +22,21 @@ namespace Vim.Format
                 var msg = $"Column '{column.Name}' has {columnRows} rows which does not match the first column's {numRows} rows";
                 Debug.Fail(msg);
             }
-
-            return result;
         }
 
-        public static IList<INamedBuffer> ValidateColumnRowsAreAligned(this SerializableEntityTable et)
-            => et.GetAllColumns().ValidateColumnRowsAreAligned();
-
-        private static string ValidateCanConcatBuffers(this INamedBuffer thisBuffer, INamedBuffer otherBuffer)
+        public static SerializableEntityTable ValidateColumnRowsAreAligned(this SerializableEntityTable et)
         {
-            var thisPrefix = thisBuffer.GetTypePrefix();
+            et.AllColumns.ValidateColumnRowsAreAligned();
+            return et;
+        }
+
+        public static string ValidateCanConcatBuffers(this INamedBuffer thisBuffer, INamedBuffer otherBuffer)
+        {
+            var thisPrefix = SerializableEntityTable.GetTypeFromName(thisBuffer.Name);
             if (string.IsNullOrEmpty(thisPrefix))
                 throw new Exception("NamedBuffer prefix not found");
 
-            var otherPrefix = otherBuffer.GetTypePrefix();
+            var otherPrefix = SerializableEntityTable.GetTypeFromName(otherBuffer.Name);
             if (string.IsNullOrEmpty(otherPrefix))
                 throw new Exception("NamedBuffer prefix not found");
 
@@ -55,9 +52,9 @@ namespace Vim.Format
         public static IBuffer ToBuffer<T>(this T[] array) where T : unmanaged
             => new Buffer<T>(array);
 
-        private const string UnknownNamedBufferPrefix = "Unknown NamedBuffer prefix";
+        public const string UnknownNamedBufferPrefix = "Unknown NamedBuffer prefix";
 
-        private static object GetDataColumnValue(this IBuffer dataColumn, string typePrefix, int rowIndex)
+        public static object GetDataColumnValue(this IBuffer dataColumn, string typePrefix, int rowIndex)
         {
             switch (typePrefix)
             {
@@ -77,7 +74,10 @@ namespace Vim.Format
         }
 
         public static object GetDataColumnValue(this INamedBuffer dataColumn, int rowIndex)
-            => dataColumn.GetDataColumnValue(dataColumn.GetTypePrefix(), rowIndex);
+        {
+            var prefix = SerializableEntityTable.GetTypeFromName(dataColumn.Name);
+            return dataColumn.GetDataColumnValue(prefix, rowIndex);
+        }
 
         public static IBuffer CreateDefaultDataColumnBuffer(int length, string typePrefix)
         {
@@ -119,11 +119,11 @@ namespace Vim.Format
 
         public static INamedBuffer CopyDataColumn(this INamedBuffer dataColumn, List<int> remapping = null)
         {
-            var typePrefix = dataColumn.GetTypePrefix();
+            var typePrefix = SerializableEntityTable.GetTypeFromName(dataColumn.Name);
             return new NamedBuffer(dataColumn.CopyDataColumn(typePrefix, remapping), dataColumn.Name);
         }
 
-        private static IBuffer Concat<T>(this IBuffer thisBuffer, IBuffer otherBuffer) where T : unmanaged
+        public static IBuffer Concat<T>(this IBuffer thisBuffer, IBuffer otherBuffer) where T : unmanaged
             => thisBuffer.AsArray<T>().Concat(otherBuffer.AsArray<T>()).ToArray().ToBuffer();
 
         public static IBuffer ConcatDataColumnBuffers(this IBuffer thisBuffer, IBuffer otherBuffer, string typePrefix)
@@ -145,14 +145,14 @@ namespace Vim.Format
             }
         }
 
-        private static INamedBuffer ConcatDataColumns(this INamedBuffer thisColumn, INamedBuffer otherColumn)
+        public static INamedBuffer ConcatDataColumns(this INamedBuffer thisColumn, INamedBuffer otherColumn)
         {
             var typePrefix = thisColumn.ValidateCanConcatBuffers(otherColumn);
             var combinedBuffer = thisColumn.ConcatDataColumnBuffers(otherColumn, typePrefix);
             return new NamedBuffer(combinedBuffer, thisColumn.Name);
         }
 
-        private static List<T> ConcatColumns<T>(
+        public static List<T> ConcatColumns<T>(
             this IReadOnlyList<T> thisColumnList,
             IReadOnlyList<T> otherColumnList,
             Func<T, T, T> concatFunc) where T : INamedBuffer
@@ -173,11 +173,11 @@ namespace Vim.Format
             return mergedColumns;
         }
 
-        private static List<INamedBuffer> ConcatDataColumns(this IReadOnlyList<INamedBuffer> thisColumnList, IReadOnlyList<INamedBuffer> otherColumnList)
+        public static List<INamedBuffer> ConcatDataColumns(this IReadOnlyList<INamedBuffer> thisColumnList, IReadOnlyList<INamedBuffer> otherColumnList)
             => thisColumnList.ConcatColumns(otherColumnList,
                 (a, b) => a.ConcatDataColumns(b));
 
-        private static List<NamedBuffer<int>> ConcatIntColumns(this IReadOnlyList<NamedBuffer<int>> thisColumnList, IReadOnlyList<NamedBuffer<int>> otherColumnList)
+        public static List<NamedBuffer<int>> ConcatIntColumns(this IReadOnlyList<NamedBuffer<int>> thisColumnList, IReadOnlyList<NamedBuffer<int>> otherColumnList)
             => thisColumnList.ConcatColumns(otherColumnList, 
                 (a, b) => new NamedBuffer<int>(a.GetTypedData().Concat(b.GetTypedData()).ToArray(), a.Name));
 

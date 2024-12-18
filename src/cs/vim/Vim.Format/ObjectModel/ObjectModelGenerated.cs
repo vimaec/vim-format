@@ -1,11 +1,11 @@
 // AUTO-GENERATED FILE, DO NOT MODIFY.
 // ReSharper disable All
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Vim.Math3d;
-using Vim.G3d;
+using Vim.Format.ObjectModel;
+using Vim.Util;
 
 namespace Vim.Format.ObjectModel {
     // AUTO-GENERATED
@@ -1892,10 +1892,10 @@ namespace Vim.Format.ObjectModel {
         
         public EntityTable AssetEntityTable { get; }
         
-        public IList<String> AssetBufferName { get; }
+        public String[] AssetBufferName { get; }
         public String GetAssetBufferName(int index, String defaultValue = "") => AssetBufferName?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
         public int NumAsset => AssetEntityTable?.NumRows ?? 0;
-        public IList<Asset> AssetList { get; }
+        public Asset[] AssetList { get; }
         public Asset GetAsset(int n)
         {
             if (n < 0) return null;
@@ -1911,14 +1911,14 @@ namespace Vim.Format.ObjectModel {
         
         public EntityTable DisplayUnitEntityTable { get; }
         
-        public IList<String> DisplayUnitSpec { get; }
+        public String[] DisplayUnitSpec { get; }
         public String GetDisplayUnitSpec(int index, String defaultValue = "") => DisplayUnitSpec?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<String> DisplayUnitType { get; }
+        public String[] DisplayUnitType { get; }
         public String GetDisplayUnitType(int index, String defaultValue = "") => DisplayUnitType?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<String> DisplayUnitLabel { get; }
+        public String[] DisplayUnitLabel { get; }
         public String GetDisplayUnitLabel(int index, String defaultValue = "") => DisplayUnitLabel?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
         public int NumDisplayUnit => DisplayUnitEntityTable?.NumRows ?? 0;
-        public IList<DisplayUnit> DisplayUnitList { get; }
+        public DisplayUnit[] DisplayUnitList { get; }
         public DisplayUnit GetDisplayUnit(int n)
         {
             if (n < 0) return null;
@@ -1936,28 +1936,28 @@ namespace Vim.Format.ObjectModel {
         
         public EntityTable ParameterDescriptorEntityTable { get; }
         
-        public IList<String> ParameterDescriptorName { get; }
+        public String[] ParameterDescriptorName { get; }
         public String GetParameterDescriptorName(int index, String defaultValue = "") => ParameterDescriptorName?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<String> ParameterDescriptorGroup { get; }
+        public String[] ParameterDescriptorGroup { get; }
         public String GetParameterDescriptorGroup(int index, String defaultValue = "") => ParameterDescriptorGroup?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<String> ParameterDescriptorParameterType { get; }
+        public String[] ParameterDescriptorParameterType { get; }
         public String GetParameterDescriptorParameterType(int index, String defaultValue = "") => ParameterDescriptorParameterType?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<Boolean> ParameterDescriptorIsInstance { get; }
+        public Boolean[] ParameterDescriptorIsInstance { get; }
         public Boolean GetParameterDescriptorIsInstance(int index, Boolean defaultValue = default) => ParameterDescriptorIsInstance?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<Boolean> ParameterDescriptorIsShared { get; }
+        public Boolean[] ParameterDescriptorIsShared { get; }
         public Boolean GetParameterDescriptorIsShared(int index, Boolean defaultValue = default) => ParameterDescriptorIsShared?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<Boolean> ParameterDescriptorIsReadOnly { get; }
+        public Boolean[] ParameterDescriptorIsReadOnly { get; }
         public Boolean GetParameterDescriptorIsReadOnly(int index, Boolean defaultValue = default) => ParameterDescriptorIsReadOnly?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<Int32> ParameterDescriptorFlags { get; }
+        public Int32[] ParameterDescriptorFlags { get; }
         public Int32 GetParameterDescriptorFlags(int index, Int32 defaultValue = default) => ParameterDescriptorFlags?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<String> ParameterDescriptorGuid { get; }
+        public String[] ParameterDescriptorGuid { get; }
         public String GetParameterDescriptorGuid(int index, String defaultValue = "") => ParameterDescriptorGuid?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<Int32> ParameterDescriptorStorageType { get; }
+        public Int32[] ParameterDescriptorStorageType { get; }
         public Int32 GetParameterDescriptorStorageType(int index, Int32 defaultValue = default) => ParameterDescriptorStorageType?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<int> ParameterDescriptorDisplayUnitIndex { get; }
+        public int[] ParameterDescriptorDisplayUnitIndex { get; }
         public int GetParameterDescriptorDisplayUnitIndex(int index) => ParameterDescriptorDisplayUnitIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
         public int NumParameterDescriptor => ParameterDescriptorEntityTable?.NumRows ?? 0;
-        public IList<ParameterDescriptor> ParameterDescriptorList { get; }
+        public ParameterDescriptor[] ParameterDescriptorList { get; }
         public ParameterDescriptor GetParameterDescriptor(int n)
         {
             if (n < 0) return null;
@@ -1982,14 +1982,14 @@ namespace Vim.Format.ObjectModel {
         
         public EntityTable ParameterEntityTable { get; }
         
-        public IList<String> ParameterValue { get; }
+        public String[] ParameterValue { get; }
         public String GetParameterValue(int index, String defaultValue = "") => ParameterValue?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<int> ParameterParameterDescriptorIndex { get; }
+        public int[] ParameterParameterDescriptorIndex { get; }
         public int GetParameterParameterDescriptorIndex(int index) => ParameterParameterDescriptorIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
-        public IList<int> ParameterElementIndex { get; }
+        public int[] ParameterElementIndex { get; }
         public int GetParameterElementIndex(int index) => ParameterElementIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
         public int NumParameter => ParameterEntityTable?.NumRows ?? 0;
-        public IList<Parameter> ParameterList { get; }
+        public Parameter[] ParameterList { get; }
         public Parameter GetParameter(int n)
         {
             if (n < 0) return null;
@@ -2007,48 +2007,48 @@ namespace Vim.Format.ObjectModel {
         
         public EntityTable ElementEntityTable { get; }
         
-        public IList<Int64> ElementId { get; }
+        public Int64[] ElementId { get; }
         public Int64 GetElementId(int index, Int64 defaultValue = default) => ElementId?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<String> ElementType { get; }
+        public String[] ElementType { get; }
         public String GetElementType(int index, String defaultValue = "") => ElementType?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<String> ElementName { get; }
+        public String[] ElementName { get; }
         public String GetElementName(int index, String defaultValue = "") => ElementName?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<String> ElementUniqueId { get; }
+        public String[] ElementUniqueId { get; }
         public String GetElementUniqueId(int index, String defaultValue = "") => ElementUniqueId?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<Single> ElementLocation_X { get; }
+        public Single[] ElementLocation_X { get; }
         public Single GetElementLocation_X(int index, Single defaultValue = default) => ElementLocation_X?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<Single> ElementLocation_Y { get; }
+        public Single[] ElementLocation_Y { get; }
         public Single GetElementLocation_Y(int index, Single defaultValue = default) => ElementLocation_Y?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<Single> ElementLocation_Z { get; }
+        public Single[] ElementLocation_Z { get; }
         public Single GetElementLocation_Z(int index, Single defaultValue = default) => ElementLocation_Z?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<String> ElementFamilyName { get; }
+        public String[] ElementFamilyName { get; }
         public String GetElementFamilyName(int index, String defaultValue = "") => ElementFamilyName?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<Boolean> ElementIsPinned { get; }
+        public Boolean[] ElementIsPinned { get; }
         public Boolean GetElementIsPinned(int index, Boolean defaultValue = default) => ElementIsPinned?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<int> ElementLevelIndex { get; }
+        public int[] ElementLevelIndex { get; }
         public int GetElementLevelIndex(int index) => ElementLevelIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
-        public IList<int> ElementPhaseCreatedIndex { get; }
+        public int[] ElementPhaseCreatedIndex { get; }
         public int GetElementPhaseCreatedIndex(int index) => ElementPhaseCreatedIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
-        public IList<int> ElementPhaseDemolishedIndex { get; }
+        public int[] ElementPhaseDemolishedIndex { get; }
         public int GetElementPhaseDemolishedIndex(int index) => ElementPhaseDemolishedIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
-        public IList<int> ElementCategoryIndex { get; }
+        public int[] ElementCategoryIndex { get; }
         public int GetElementCategoryIndex(int index) => ElementCategoryIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
-        public IList<int> ElementWorksetIndex { get; }
+        public int[] ElementWorksetIndex { get; }
         public int GetElementWorksetIndex(int index) => ElementWorksetIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
-        public IList<int> ElementDesignOptionIndex { get; }
+        public int[] ElementDesignOptionIndex { get; }
         public int GetElementDesignOptionIndex(int index) => ElementDesignOptionIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
-        public IList<int> ElementOwnerViewIndex { get; }
+        public int[] ElementOwnerViewIndex { get; }
         public int GetElementOwnerViewIndex(int index) => ElementOwnerViewIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
-        public IList<int> ElementGroupIndex { get; }
+        public int[] ElementGroupIndex { get; }
         public int GetElementGroupIndex(int index) => ElementGroupIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
-        public IList<int> ElementAssemblyInstanceIndex { get; }
+        public int[] ElementAssemblyInstanceIndex { get; }
         public int GetElementAssemblyInstanceIndex(int index) => ElementAssemblyInstanceIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
-        public IList<int> ElementBimDocumentIndex { get; }
+        public int[] ElementBimDocumentIndex { get; }
         public int GetElementBimDocumentIndex(int index) => ElementBimDocumentIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
-        public IList<int> ElementRoomIndex { get; }
+        public int[] ElementRoomIndex { get; }
         public int GetElementRoomIndex(int index) => ElementRoomIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
         public int NumElement => ElementEntityTable?.NumRows ?? 0;
-        public IList<Element> ElementList { get; }
+        public Element[] ElementList { get; }
         public Element GetElement(int n)
         {
             if (n < 0) return null;
@@ -2083,24 +2083,24 @@ namespace Vim.Format.ObjectModel {
         
         public EntityTable WorksetEntityTable { get; }
         
-        public IList<Int32> WorksetId { get; }
+        public Int32[] WorksetId { get; }
         public Int32 GetWorksetId(int index, Int32 defaultValue = default) => WorksetId?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<String> WorksetName { get; }
+        public String[] WorksetName { get; }
         public String GetWorksetName(int index, String defaultValue = "") => WorksetName?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<String> WorksetKind { get; }
+        public String[] WorksetKind { get; }
         public String GetWorksetKind(int index, String defaultValue = "") => WorksetKind?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<Boolean> WorksetIsOpen { get; }
+        public Boolean[] WorksetIsOpen { get; }
         public Boolean GetWorksetIsOpen(int index, Boolean defaultValue = default) => WorksetIsOpen?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<Boolean> WorksetIsEditable { get; }
+        public Boolean[] WorksetIsEditable { get; }
         public Boolean GetWorksetIsEditable(int index, Boolean defaultValue = default) => WorksetIsEditable?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<String> WorksetOwner { get; }
+        public String[] WorksetOwner { get; }
         public String GetWorksetOwner(int index, String defaultValue = "") => WorksetOwner?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<String> WorksetUniqueId { get; }
+        public String[] WorksetUniqueId { get; }
         public String GetWorksetUniqueId(int index, String defaultValue = "") => WorksetUniqueId?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<int> WorksetBimDocumentIndex { get; }
+        public int[] WorksetBimDocumentIndex { get; }
         public int GetWorksetBimDocumentIndex(int index) => WorksetBimDocumentIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
         public int NumWorkset => WorksetEntityTable?.NumRows ?? 0;
-        public IList<Workset> WorksetList { get; }
+        public Workset[] WorksetList { get; }
         public Workset GetWorkset(int n)
         {
             if (n < 0) return null;
@@ -2123,18 +2123,18 @@ namespace Vim.Format.ObjectModel {
         
         public EntityTable AssemblyInstanceEntityTable { get; }
         
-        public IList<String> AssemblyInstanceAssemblyTypeName { get; }
+        public String[] AssemblyInstanceAssemblyTypeName { get; }
         public String GetAssemblyInstanceAssemblyTypeName(int index, String defaultValue = "") => AssemblyInstanceAssemblyTypeName?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<Single> AssemblyInstancePosition_X { get; }
+        public Single[] AssemblyInstancePosition_X { get; }
         public Single GetAssemblyInstancePosition_X(int index, Single defaultValue = default) => AssemblyInstancePosition_X?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<Single> AssemblyInstancePosition_Y { get; }
+        public Single[] AssemblyInstancePosition_Y { get; }
         public Single GetAssemblyInstancePosition_Y(int index, Single defaultValue = default) => AssemblyInstancePosition_Y?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<Single> AssemblyInstancePosition_Z { get; }
+        public Single[] AssemblyInstancePosition_Z { get; }
         public Single GetAssemblyInstancePosition_Z(int index, Single defaultValue = default) => AssemblyInstancePosition_Z?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<int> AssemblyInstanceElementIndex { get; }
+        public int[] AssemblyInstanceElementIndex { get; }
         public int GetAssemblyInstanceElementIndex(int index) => AssemblyInstanceElementIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
         public int NumAssemblyInstance => AssemblyInstanceEntityTable?.NumRows ?? 0;
-        public IList<AssemblyInstance> AssemblyInstanceList { get; }
+        public AssemblyInstance[] AssemblyInstanceList { get; }
         public AssemblyInstance GetAssemblyInstance(int n)
         {
             if (n < 0) return null;
@@ -2154,18 +2154,18 @@ namespace Vim.Format.ObjectModel {
         
         public EntityTable GroupEntityTable { get; }
         
-        public IList<String> GroupGroupType { get; }
+        public String[] GroupGroupType { get; }
         public String GetGroupGroupType(int index, String defaultValue = "") => GroupGroupType?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<Single> GroupPosition_X { get; }
+        public Single[] GroupPosition_X { get; }
         public Single GetGroupPosition_X(int index, Single defaultValue = default) => GroupPosition_X?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<Single> GroupPosition_Y { get; }
+        public Single[] GroupPosition_Y { get; }
         public Single GetGroupPosition_Y(int index, Single defaultValue = default) => GroupPosition_Y?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<Single> GroupPosition_Z { get; }
+        public Single[] GroupPosition_Z { get; }
         public Single GetGroupPosition_Z(int index, Single defaultValue = default) => GroupPosition_Z?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<int> GroupElementIndex { get; }
+        public int[] GroupElementIndex { get; }
         public int GetGroupElementIndex(int index) => GroupElementIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
         public int NumGroup => GroupEntityTable?.NumRows ?? 0;
-        public IList<Group> GroupList { get; }
+        public Group[] GroupList { get; }
         public Group GetGroup(int n)
         {
             if (n < 0) return null;
@@ -2185,12 +2185,12 @@ namespace Vim.Format.ObjectModel {
         
         public EntityTable DesignOptionEntityTable { get; }
         
-        public IList<Boolean> DesignOptionIsPrimary { get; }
+        public Boolean[] DesignOptionIsPrimary { get; }
         public Boolean GetDesignOptionIsPrimary(int index, Boolean defaultValue = default) => DesignOptionIsPrimary?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<int> DesignOptionElementIndex { get; }
+        public int[] DesignOptionElementIndex { get; }
         public int GetDesignOptionElementIndex(int index) => DesignOptionElementIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
         public int NumDesignOption => DesignOptionEntityTable?.NumRows ?? 0;
-        public IList<DesignOption> DesignOptionList { get; }
+        public DesignOption[] DesignOptionList { get; }
         public DesignOption GetDesignOption(int n)
         {
             if (n < 0) return null;
@@ -2207,16 +2207,16 @@ namespace Vim.Format.ObjectModel {
         
         public EntityTable LevelEntityTable { get; }
         
-        public IList<Double> LevelElevation { get; }
+        public Double[] LevelElevation { get; }
         public Double GetLevelElevation(int index, Double defaultValue = default) => LevelElevation?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<int> LevelFamilyTypeIndex { get; }
+        public int[] LevelFamilyTypeIndex { get; }
         public int GetLevelFamilyTypeIndex(int index) => LevelFamilyTypeIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
-        public IList<int> LevelBuildingIndex { get; }
+        public int[] LevelBuildingIndex { get; }
         public int GetLevelBuildingIndex(int index) => LevelBuildingIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
-        public IList<int> LevelElementIndex { get; }
+        public int[] LevelElementIndex { get; }
         public int GetLevelElementIndex(int index) => LevelElementIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
         public int NumLevel => LevelEntityTable?.NumRows ?? 0;
-        public IList<Level> LevelList { get; }
+        public Level[] LevelList { get; }
         public Level GetLevel(int n)
         {
             if (n < 0) return null;
@@ -2235,10 +2235,10 @@ namespace Vim.Format.ObjectModel {
         
         public EntityTable PhaseEntityTable { get; }
         
-        public IList<int> PhaseElementIndex { get; }
+        public int[] PhaseElementIndex { get; }
         public int GetPhaseElementIndex(int index) => PhaseElementIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
         public int NumPhase => PhaseEntityTable?.NumRows ?? 0;
-        public IList<Phase> PhaseList { get; }
+        public Phase[] PhaseList { get; }
         public Phase GetPhase(int n)
         {
             if (n < 0) return null;
@@ -2254,26 +2254,26 @@ namespace Vim.Format.ObjectModel {
         
         public EntityTable RoomEntityTable { get; }
         
-        public IList<Double> RoomBaseOffset { get; }
+        public Double[] RoomBaseOffset { get; }
         public Double GetRoomBaseOffset(int index, Double defaultValue = default) => RoomBaseOffset?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<Double> RoomLimitOffset { get; }
+        public Double[] RoomLimitOffset { get; }
         public Double GetRoomLimitOffset(int index, Double defaultValue = default) => RoomLimitOffset?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<Double> RoomUnboundedHeight { get; }
+        public Double[] RoomUnboundedHeight { get; }
         public Double GetRoomUnboundedHeight(int index, Double defaultValue = default) => RoomUnboundedHeight?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<Double> RoomVolume { get; }
+        public Double[] RoomVolume { get; }
         public Double GetRoomVolume(int index, Double defaultValue = default) => RoomVolume?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<Double> RoomPerimeter { get; }
+        public Double[] RoomPerimeter { get; }
         public Double GetRoomPerimeter(int index, Double defaultValue = default) => RoomPerimeter?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<Double> RoomArea { get; }
+        public Double[] RoomArea { get; }
         public Double GetRoomArea(int index, Double defaultValue = default) => RoomArea?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<String> RoomNumber { get; }
+        public String[] RoomNumber { get; }
         public String GetRoomNumber(int index, String defaultValue = "") => RoomNumber?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<int> RoomUpperLimitIndex { get; }
+        public int[] RoomUpperLimitIndex { get; }
         public int GetRoomUpperLimitIndex(int index) => RoomUpperLimitIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
-        public IList<int> RoomElementIndex { get; }
+        public int[] RoomElementIndex { get; }
         public int GetRoomElementIndex(int index) => RoomElementIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
         public int NumRoom => RoomEntityTable?.NumRows ?? 0;
-        public IList<Room> RoomList { get; }
+        public Room[] RoomList { get; }
         public Room GetRoom(int n)
         {
             if (n < 0) return null;
@@ -2297,72 +2297,72 @@ namespace Vim.Format.ObjectModel {
         
         public EntityTable BimDocumentEntityTable { get; }
         
-        public IList<String> BimDocumentTitle { get; }
+        public String[] BimDocumentTitle { get; }
         public String GetBimDocumentTitle(int index, String defaultValue = "") => BimDocumentTitle?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<Boolean> BimDocumentIsMetric { get; }
+        public Boolean[] BimDocumentIsMetric { get; }
         public Boolean GetBimDocumentIsMetric(int index, Boolean defaultValue = default) => BimDocumentIsMetric?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<String> BimDocumentGuid { get; }
+        public String[] BimDocumentGuid { get; }
         public String GetBimDocumentGuid(int index, String defaultValue = "") => BimDocumentGuid?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<Int32> BimDocumentNumSaves { get; }
+        public Int32[] BimDocumentNumSaves { get; }
         public Int32 GetBimDocumentNumSaves(int index, Int32 defaultValue = default) => BimDocumentNumSaves?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<Boolean> BimDocumentIsLinked { get; }
+        public Boolean[] BimDocumentIsLinked { get; }
         public Boolean GetBimDocumentIsLinked(int index, Boolean defaultValue = default) => BimDocumentIsLinked?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<Boolean> BimDocumentIsDetached { get; }
+        public Boolean[] BimDocumentIsDetached { get; }
         public Boolean GetBimDocumentIsDetached(int index, Boolean defaultValue = default) => BimDocumentIsDetached?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<Boolean> BimDocumentIsWorkshared { get; }
+        public Boolean[] BimDocumentIsWorkshared { get; }
         public Boolean GetBimDocumentIsWorkshared(int index, Boolean defaultValue = default) => BimDocumentIsWorkshared?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<String> BimDocumentPathName { get; }
+        public String[] BimDocumentPathName { get; }
         public String GetBimDocumentPathName(int index, String defaultValue = "") => BimDocumentPathName?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<Double> BimDocumentLatitude { get; }
+        public Double[] BimDocumentLatitude { get; }
         public Double GetBimDocumentLatitude(int index, Double defaultValue = default) => BimDocumentLatitude?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<Double> BimDocumentLongitude { get; }
+        public Double[] BimDocumentLongitude { get; }
         public Double GetBimDocumentLongitude(int index, Double defaultValue = default) => BimDocumentLongitude?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<Double> BimDocumentTimeZone { get; }
+        public Double[] BimDocumentTimeZone { get; }
         public Double GetBimDocumentTimeZone(int index, Double defaultValue = default) => BimDocumentTimeZone?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<String> BimDocumentPlaceName { get; }
+        public String[] BimDocumentPlaceName { get; }
         public String GetBimDocumentPlaceName(int index, String defaultValue = "") => BimDocumentPlaceName?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<String> BimDocumentWeatherStationName { get; }
+        public String[] BimDocumentWeatherStationName { get; }
         public String GetBimDocumentWeatherStationName(int index, String defaultValue = "") => BimDocumentWeatherStationName?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<Double> BimDocumentElevation { get; }
+        public Double[] BimDocumentElevation { get; }
         public Double GetBimDocumentElevation(int index, Double defaultValue = default) => BimDocumentElevation?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<String> BimDocumentProjectLocation { get; }
+        public String[] BimDocumentProjectLocation { get; }
         public String GetBimDocumentProjectLocation(int index, String defaultValue = "") => BimDocumentProjectLocation?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<String> BimDocumentIssueDate { get; }
+        public String[] BimDocumentIssueDate { get; }
         public String GetBimDocumentIssueDate(int index, String defaultValue = "") => BimDocumentIssueDate?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<String> BimDocumentStatus { get; }
+        public String[] BimDocumentStatus { get; }
         public String GetBimDocumentStatus(int index, String defaultValue = "") => BimDocumentStatus?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<String> BimDocumentClientName { get; }
+        public String[] BimDocumentClientName { get; }
         public String GetBimDocumentClientName(int index, String defaultValue = "") => BimDocumentClientName?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<String> BimDocumentAddress { get; }
+        public String[] BimDocumentAddress { get; }
         public String GetBimDocumentAddress(int index, String defaultValue = "") => BimDocumentAddress?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<String> BimDocumentName { get; }
+        public String[] BimDocumentName { get; }
         public String GetBimDocumentName(int index, String defaultValue = "") => BimDocumentName?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<String> BimDocumentNumber { get; }
+        public String[] BimDocumentNumber { get; }
         public String GetBimDocumentNumber(int index, String defaultValue = "") => BimDocumentNumber?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<String> BimDocumentAuthor { get; }
+        public String[] BimDocumentAuthor { get; }
         public String GetBimDocumentAuthor(int index, String defaultValue = "") => BimDocumentAuthor?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<String> BimDocumentBuildingName { get; }
+        public String[] BimDocumentBuildingName { get; }
         public String GetBimDocumentBuildingName(int index, String defaultValue = "") => BimDocumentBuildingName?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<String> BimDocumentOrganizationName { get; }
+        public String[] BimDocumentOrganizationName { get; }
         public String GetBimDocumentOrganizationName(int index, String defaultValue = "") => BimDocumentOrganizationName?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<String> BimDocumentOrganizationDescription { get; }
+        public String[] BimDocumentOrganizationDescription { get; }
         public String GetBimDocumentOrganizationDescription(int index, String defaultValue = "") => BimDocumentOrganizationDescription?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<String> BimDocumentProduct { get; }
+        public String[] BimDocumentProduct { get; }
         public String GetBimDocumentProduct(int index, String defaultValue = "") => BimDocumentProduct?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<String> BimDocumentVersion { get; }
+        public String[] BimDocumentVersion { get; }
         public String GetBimDocumentVersion(int index, String defaultValue = "") => BimDocumentVersion?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<String> BimDocumentUser { get; }
+        public String[] BimDocumentUser { get; }
         public String GetBimDocumentUser(int index, String defaultValue = "") => BimDocumentUser?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<int> BimDocumentActiveViewIndex { get; }
+        public int[] BimDocumentActiveViewIndex { get; }
         public int GetBimDocumentActiveViewIndex(int index) => BimDocumentActiveViewIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
-        public IList<int> BimDocumentOwnerFamilyIndex { get; }
+        public int[] BimDocumentOwnerFamilyIndex { get; }
         public int GetBimDocumentOwnerFamilyIndex(int index) => BimDocumentOwnerFamilyIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
-        public IList<int> BimDocumentParentIndex { get; }
+        public int[] BimDocumentParentIndex { get; }
         public int GetBimDocumentParentIndex(int index) => BimDocumentParentIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
-        public IList<int> BimDocumentElementIndex { get; }
+        public int[] BimDocumentElementIndex { get; }
         public int GetBimDocumentElementIndex(int index) => BimDocumentElementIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
         public int NumBimDocument => BimDocumentEntityTable?.NumRows ?? 0;
-        public IList<BimDocument> BimDocumentList { get; }
+        public BimDocument[] BimDocumentList { get; }
         public BimDocument GetBimDocument(int n)
         {
             if (n < 0) return null;
@@ -2409,12 +2409,12 @@ namespace Vim.Format.ObjectModel {
         
         public EntityTable DisplayUnitInBimDocumentEntityTable { get; }
         
-        public IList<int> DisplayUnitInBimDocumentDisplayUnitIndex { get; }
+        public int[] DisplayUnitInBimDocumentDisplayUnitIndex { get; }
         public int GetDisplayUnitInBimDocumentDisplayUnitIndex(int index) => DisplayUnitInBimDocumentDisplayUnitIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
-        public IList<int> DisplayUnitInBimDocumentBimDocumentIndex { get; }
+        public int[] DisplayUnitInBimDocumentBimDocumentIndex { get; }
         public int GetDisplayUnitInBimDocumentBimDocumentIndex(int index) => DisplayUnitInBimDocumentBimDocumentIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
         public int NumDisplayUnitInBimDocument => DisplayUnitInBimDocumentEntityTable?.NumRows ?? 0;
-        public IList<DisplayUnitInBimDocument> DisplayUnitInBimDocumentList { get; }
+        public DisplayUnitInBimDocument[] DisplayUnitInBimDocumentList { get; }
         public DisplayUnitInBimDocument GetDisplayUnitInBimDocument(int n)
         {
             if (n < 0) return null;
@@ -2431,14 +2431,14 @@ namespace Vim.Format.ObjectModel {
         
         public EntityTable PhaseOrderInBimDocumentEntityTable { get; }
         
-        public IList<Int32> PhaseOrderInBimDocumentOrderIndex { get; }
+        public Int32[] PhaseOrderInBimDocumentOrderIndex { get; }
         public Int32 GetPhaseOrderInBimDocumentOrderIndex(int index, Int32 defaultValue = default) => PhaseOrderInBimDocumentOrderIndex?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<int> PhaseOrderInBimDocumentPhaseIndex { get; }
+        public int[] PhaseOrderInBimDocumentPhaseIndex { get; }
         public int GetPhaseOrderInBimDocumentPhaseIndex(int index) => PhaseOrderInBimDocumentPhaseIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
-        public IList<int> PhaseOrderInBimDocumentBimDocumentIndex { get; }
+        public int[] PhaseOrderInBimDocumentBimDocumentIndex { get; }
         public int GetPhaseOrderInBimDocumentBimDocumentIndex(int index) => PhaseOrderInBimDocumentBimDocumentIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
         public int NumPhaseOrderInBimDocument => PhaseOrderInBimDocumentEntityTable?.NumRows ?? 0;
-        public IList<PhaseOrderInBimDocument> PhaseOrderInBimDocumentList { get; }
+        public PhaseOrderInBimDocument[] PhaseOrderInBimDocumentList { get; }
         public PhaseOrderInBimDocument GetPhaseOrderInBimDocument(int n)
         {
             if (n < 0) return null;
@@ -2456,26 +2456,26 @@ namespace Vim.Format.ObjectModel {
         
         public EntityTable CategoryEntityTable { get; }
         
-        public IList<String> CategoryName { get; }
+        public String[] CategoryName { get; }
         public String GetCategoryName(int index, String defaultValue = "") => CategoryName?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<Int64> CategoryId { get; }
+        public Int64[] CategoryId { get; }
         public Int64 GetCategoryId(int index, Int64 defaultValue = default) => CategoryId?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<String> CategoryCategoryType { get; }
+        public String[] CategoryCategoryType { get; }
         public String GetCategoryCategoryType(int index, String defaultValue = "") => CategoryCategoryType?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<Double> CategoryLineColor_X { get; }
+        public Double[] CategoryLineColor_X { get; }
         public Double GetCategoryLineColor_X(int index, Double defaultValue = default) => CategoryLineColor_X?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<Double> CategoryLineColor_Y { get; }
+        public Double[] CategoryLineColor_Y { get; }
         public Double GetCategoryLineColor_Y(int index, Double defaultValue = default) => CategoryLineColor_Y?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<Double> CategoryLineColor_Z { get; }
+        public Double[] CategoryLineColor_Z { get; }
         public Double GetCategoryLineColor_Z(int index, Double defaultValue = default) => CategoryLineColor_Z?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<String> CategoryBuiltInCategory { get; }
+        public String[] CategoryBuiltInCategory { get; }
         public String GetCategoryBuiltInCategory(int index, String defaultValue = "") => CategoryBuiltInCategory?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<int> CategoryParentIndex { get; }
+        public int[] CategoryParentIndex { get; }
         public int GetCategoryParentIndex(int index) => CategoryParentIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
-        public IList<int> CategoryMaterialIndex { get; }
+        public int[] CategoryMaterialIndex { get; }
         public int GetCategoryMaterialIndex(int index) => CategoryMaterialIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
         public int NumCategory => CategoryEntityTable?.NumRows ?? 0;
-        public IList<Category> CategoryList { get; }
+        public Category[] CategoryList { get; }
         public Category GetCategory(int n)
         {
             if (n < 0) return null;
@@ -2499,20 +2499,20 @@ namespace Vim.Format.ObjectModel {
         
         public EntityTable FamilyEntityTable { get; }
         
-        public IList<String> FamilyStructuralMaterialType { get; }
+        public String[] FamilyStructuralMaterialType { get; }
         public String GetFamilyStructuralMaterialType(int index, String defaultValue = "") => FamilyStructuralMaterialType?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<String> FamilyStructuralSectionShape { get; }
+        public String[] FamilyStructuralSectionShape { get; }
         public String GetFamilyStructuralSectionShape(int index, String defaultValue = "") => FamilyStructuralSectionShape?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<Boolean> FamilyIsSystemFamily { get; }
+        public Boolean[] FamilyIsSystemFamily { get; }
         public Boolean GetFamilyIsSystemFamily(int index, Boolean defaultValue = default) => FamilyIsSystemFamily?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<Boolean> FamilyIsInPlace { get; }
+        public Boolean[] FamilyIsInPlace { get; }
         public Boolean GetFamilyIsInPlace(int index, Boolean defaultValue = default) => FamilyIsInPlace?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<int> FamilyFamilyCategoryIndex { get; }
+        public int[] FamilyFamilyCategoryIndex { get; }
         public int GetFamilyFamilyCategoryIndex(int index) => FamilyFamilyCategoryIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
-        public IList<int> FamilyElementIndex { get; }
+        public int[] FamilyElementIndex { get; }
         public int GetFamilyElementIndex(int index) => FamilyElementIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
         public int NumFamily => FamilyEntityTable?.NumRows ?? 0;
-        public IList<Family> FamilyList { get; }
+        public Family[] FamilyList { get; }
         public Family GetFamily(int n)
         {
             if (n < 0) return null;
@@ -2533,16 +2533,16 @@ namespace Vim.Format.ObjectModel {
         
         public EntityTable FamilyTypeEntityTable { get; }
         
-        public IList<Boolean> FamilyTypeIsSystemFamilyType { get; }
+        public Boolean[] FamilyTypeIsSystemFamilyType { get; }
         public Boolean GetFamilyTypeIsSystemFamilyType(int index, Boolean defaultValue = default) => FamilyTypeIsSystemFamilyType?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<int> FamilyTypeFamilyIndex { get; }
+        public int[] FamilyTypeFamilyIndex { get; }
         public int GetFamilyTypeFamilyIndex(int index) => FamilyTypeFamilyIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
-        public IList<int> FamilyTypeCompoundStructureIndex { get; }
+        public int[] FamilyTypeCompoundStructureIndex { get; }
         public int GetFamilyTypeCompoundStructureIndex(int index) => FamilyTypeCompoundStructureIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
-        public IList<int> FamilyTypeElementIndex { get; }
+        public int[] FamilyTypeElementIndex { get; }
         public int GetFamilyTypeElementIndex(int index) => FamilyTypeElementIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
         public int NumFamilyType => FamilyTypeEntityTable?.NumRows ?? 0;
-        public IList<FamilyType> FamilyTypeList { get; }
+        public FamilyType[] FamilyTypeList { get; }
         public FamilyType GetFamilyType(int n)
         {
             if (n < 0) return null;
@@ -2561,66 +2561,66 @@ namespace Vim.Format.ObjectModel {
         
         public EntityTable FamilyInstanceEntityTable { get; }
         
-        public IList<Boolean> FamilyInstanceFacingFlipped { get; }
+        public Boolean[] FamilyInstanceFacingFlipped { get; }
         public Boolean GetFamilyInstanceFacingFlipped(int index, Boolean defaultValue = default) => FamilyInstanceFacingFlipped?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<Single> FamilyInstanceFacingOrientation_X { get; }
+        public Single[] FamilyInstanceFacingOrientation_X { get; }
         public Single GetFamilyInstanceFacingOrientation_X(int index, Single defaultValue = default) => FamilyInstanceFacingOrientation_X?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<Single> FamilyInstanceFacingOrientation_Y { get; }
+        public Single[] FamilyInstanceFacingOrientation_Y { get; }
         public Single GetFamilyInstanceFacingOrientation_Y(int index, Single defaultValue = default) => FamilyInstanceFacingOrientation_Y?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<Single> FamilyInstanceFacingOrientation_Z { get; }
+        public Single[] FamilyInstanceFacingOrientation_Z { get; }
         public Single GetFamilyInstanceFacingOrientation_Z(int index, Single defaultValue = default) => FamilyInstanceFacingOrientation_Z?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<Boolean> FamilyInstanceHandFlipped { get; }
+        public Boolean[] FamilyInstanceHandFlipped { get; }
         public Boolean GetFamilyInstanceHandFlipped(int index, Boolean defaultValue = default) => FamilyInstanceHandFlipped?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<Boolean> FamilyInstanceMirrored { get; }
+        public Boolean[] FamilyInstanceMirrored { get; }
         public Boolean GetFamilyInstanceMirrored(int index, Boolean defaultValue = default) => FamilyInstanceMirrored?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<Boolean> FamilyInstanceHasModifiedGeometry { get; }
+        public Boolean[] FamilyInstanceHasModifiedGeometry { get; }
         public Boolean GetFamilyInstanceHasModifiedGeometry(int index, Boolean defaultValue = default) => FamilyInstanceHasModifiedGeometry?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<Single> FamilyInstanceScale { get; }
+        public Single[] FamilyInstanceScale { get; }
         public Single GetFamilyInstanceScale(int index, Single defaultValue = default) => FamilyInstanceScale?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<Single> FamilyInstanceBasisX_X { get; }
+        public Single[] FamilyInstanceBasisX_X { get; }
         public Single GetFamilyInstanceBasisX_X(int index, Single defaultValue = default) => FamilyInstanceBasisX_X?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<Single> FamilyInstanceBasisX_Y { get; }
+        public Single[] FamilyInstanceBasisX_Y { get; }
         public Single GetFamilyInstanceBasisX_Y(int index, Single defaultValue = default) => FamilyInstanceBasisX_Y?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<Single> FamilyInstanceBasisX_Z { get; }
+        public Single[] FamilyInstanceBasisX_Z { get; }
         public Single GetFamilyInstanceBasisX_Z(int index, Single defaultValue = default) => FamilyInstanceBasisX_Z?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<Single> FamilyInstanceBasisY_X { get; }
+        public Single[] FamilyInstanceBasisY_X { get; }
         public Single GetFamilyInstanceBasisY_X(int index, Single defaultValue = default) => FamilyInstanceBasisY_X?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<Single> FamilyInstanceBasisY_Y { get; }
+        public Single[] FamilyInstanceBasisY_Y { get; }
         public Single GetFamilyInstanceBasisY_Y(int index, Single defaultValue = default) => FamilyInstanceBasisY_Y?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<Single> FamilyInstanceBasisY_Z { get; }
+        public Single[] FamilyInstanceBasisY_Z { get; }
         public Single GetFamilyInstanceBasisY_Z(int index, Single defaultValue = default) => FamilyInstanceBasisY_Z?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<Single> FamilyInstanceBasisZ_X { get; }
+        public Single[] FamilyInstanceBasisZ_X { get; }
         public Single GetFamilyInstanceBasisZ_X(int index, Single defaultValue = default) => FamilyInstanceBasisZ_X?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<Single> FamilyInstanceBasisZ_Y { get; }
+        public Single[] FamilyInstanceBasisZ_Y { get; }
         public Single GetFamilyInstanceBasisZ_Y(int index, Single defaultValue = default) => FamilyInstanceBasisZ_Y?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<Single> FamilyInstanceBasisZ_Z { get; }
+        public Single[] FamilyInstanceBasisZ_Z { get; }
         public Single GetFamilyInstanceBasisZ_Z(int index, Single defaultValue = default) => FamilyInstanceBasisZ_Z?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<Single> FamilyInstanceTranslation_X { get; }
+        public Single[] FamilyInstanceTranslation_X { get; }
         public Single GetFamilyInstanceTranslation_X(int index, Single defaultValue = default) => FamilyInstanceTranslation_X?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<Single> FamilyInstanceTranslation_Y { get; }
+        public Single[] FamilyInstanceTranslation_Y { get; }
         public Single GetFamilyInstanceTranslation_Y(int index, Single defaultValue = default) => FamilyInstanceTranslation_Y?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<Single> FamilyInstanceTranslation_Z { get; }
+        public Single[] FamilyInstanceTranslation_Z { get; }
         public Single GetFamilyInstanceTranslation_Z(int index, Single defaultValue = default) => FamilyInstanceTranslation_Z?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<Single> FamilyInstanceHandOrientation_X { get; }
+        public Single[] FamilyInstanceHandOrientation_X { get; }
         public Single GetFamilyInstanceHandOrientation_X(int index, Single defaultValue = default) => FamilyInstanceHandOrientation_X?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<Single> FamilyInstanceHandOrientation_Y { get; }
+        public Single[] FamilyInstanceHandOrientation_Y { get; }
         public Single GetFamilyInstanceHandOrientation_Y(int index, Single defaultValue = default) => FamilyInstanceHandOrientation_Y?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<Single> FamilyInstanceHandOrientation_Z { get; }
+        public Single[] FamilyInstanceHandOrientation_Z { get; }
         public Single GetFamilyInstanceHandOrientation_Z(int index, Single defaultValue = default) => FamilyInstanceHandOrientation_Z?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<int> FamilyInstanceFamilyTypeIndex { get; }
+        public int[] FamilyInstanceFamilyTypeIndex { get; }
         public int GetFamilyInstanceFamilyTypeIndex(int index) => FamilyInstanceFamilyTypeIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
-        public IList<int> FamilyInstanceHostIndex { get; }
+        public int[] FamilyInstanceHostIndex { get; }
         public int GetFamilyInstanceHostIndex(int index) => FamilyInstanceHostIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
-        public IList<int> FamilyInstanceFromRoomIndex { get; }
+        public int[] FamilyInstanceFromRoomIndex { get; }
         public int GetFamilyInstanceFromRoomIndex(int index) => FamilyInstanceFromRoomIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
-        public IList<int> FamilyInstanceToRoomIndex { get; }
+        public int[] FamilyInstanceToRoomIndex { get; }
         public int GetFamilyInstanceToRoomIndex(int index) => FamilyInstanceToRoomIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
-        public IList<int> FamilyInstanceSuperComponentIndex { get; }
+        public int[] FamilyInstanceSuperComponentIndex { get; }
         public int GetFamilyInstanceSuperComponentIndex(int index) => FamilyInstanceSuperComponentIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
-        public IList<int> FamilyInstanceElementIndex { get; }
+        public int[] FamilyInstanceElementIndex { get; }
         public int GetFamilyInstanceElementIndex(int index) => FamilyInstanceElementIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
         public int NumFamilyInstance => FamilyInstanceEntityTable?.NumRows ?? 0;
-        public IList<FamilyInstance> FamilyInstanceList { get; }
+        public FamilyInstance[] FamilyInstanceList { get; }
         public FamilyInstance GetFamilyInstance(int n)
         {
             if (n < 0) return null;
@@ -2664,60 +2664,60 @@ namespace Vim.Format.ObjectModel {
         
         public EntityTable ViewEntityTable { get; }
         
-        public IList<String> ViewTitle { get; }
+        public String[] ViewTitle { get; }
         public String GetViewTitle(int index, String defaultValue = "") => ViewTitle?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<String> ViewViewType { get; }
+        public String[] ViewViewType { get; }
         public String GetViewViewType(int index, String defaultValue = "") => ViewViewType?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<Double> ViewUp_X { get; }
+        public Double[] ViewUp_X { get; }
         public Double GetViewUp_X(int index, Double defaultValue = default) => ViewUp_X?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<Double> ViewUp_Y { get; }
+        public Double[] ViewUp_Y { get; }
         public Double GetViewUp_Y(int index, Double defaultValue = default) => ViewUp_Y?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<Double> ViewUp_Z { get; }
+        public Double[] ViewUp_Z { get; }
         public Double GetViewUp_Z(int index, Double defaultValue = default) => ViewUp_Z?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<Double> ViewRight_X { get; }
+        public Double[] ViewRight_X { get; }
         public Double GetViewRight_X(int index, Double defaultValue = default) => ViewRight_X?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<Double> ViewRight_Y { get; }
+        public Double[] ViewRight_Y { get; }
         public Double GetViewRight_Y(int index, Double defaultValue = default) => ViewRight_Y?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<Double> ViewRight_Z { get; }
+        public Double[] ViewRight_Z { get; }
         public Double GetViewRight_Z(int index, Double defaultValue = default) => ViewRight_Z?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<Double> ViewOrigin_X { get; }
+        public Double[] ViewOrigin_X { get; }
         public Double GetViewOrigin_X(int index, Double defaultValue = default) => ViewOrigin_X?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<Double> ViewOrigin_Y { get; }
+        public Double[] ViewOrigin_Y { get; }
         public Double GetViewOrigin_Y(int index, Double defaultValue = default) => ViewOrigin_Y?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<Double> ViewOrigin_Z { get; }
+        public Double[] ViewOrigin_Z { get; }
         public Double GetViewOrigin_Z(int index, Double defaultValue = default) => ViewOrigin_Z?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<Double> ViewViewDirection_X { get; }
+        public Double[] ViewViewDirection_X { get; }
         public Double GetViewViewDirection_X(int index, Double defaultValue = default) => ViewViewDirection_X?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<Double> ViewViewDirection_Y { get; }
+        public Double[] ViewViewDirection_Y { get; }
         public Double GetViewViewDirection_Y(int index, Double defaultValue = default) => ViewViewDirection_Y?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<Double> ViewViewDirection_Z { get; }
+        public Double[] ViewViewDirection_Z { get; }
         public Double GetViewViewDirection_Z(int index, Double defaultValue = default) => ViewViewDirection_Z?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<Double> ViewViewPosition_X { get; }
+        public Double[] ViewViewPosition_X { get; }
         public Double GetViewViewPosition_X(int index, Double defaultValue = default) => ViewViewPosition_X?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<Double> ViewViewPosition_Y { get; }
+        public Double[] ViewViewPosition_Y { get; }
         public Double GetViewViewPosition_Y(int index, Double defaultValue = default) => ViewViewPosition_Y?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<Double> ViewViewPosition_Z { get; }
+        public Double[] ViewViewPosition_Z { get; }
         public Double GetViewViewPosition_Z(int index, Double defaultValue = default) => ViewViewPosition_Z?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<Double> ViewScale { get; }
+        public Double[] ViewScale { get; }
         public Double GetViewScale(int index, Double defaultValue = default) => ViewScale?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<Double> ViewOutline_Min_X { get; }
+        public Double[] ViewOutline_Min_X { get; }
         public Double GetViewOutline_Min_X(int index, Double defaultValue = default) => ViewOutline_Min_X?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<Double> ViewOutline_Min_Y { get; }
+        public Double[] ViewOutline_Min_Y { get; }
         public Double GetViewOutline_Min_Y(int index, Double defaultValue = default) => ViewOutline_Min_Y?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<Double> ViewOutline_Max_X { get; }
+        public Double[] ViewOutline_Max_X { get; }
         public Double GetViewOutline_Max_X(int index, Double defaultValue = default) => ViewOutline_Max_X?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<Double> ViewOutline_Max_Y { get; }
+        public Double[] ViewOutline_Max_Y { get; }
         public Double GetViewOutline_Max_Y(int index, Double defaultValue = default) => ViewOutline_Max_Y?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<Int32> ViewDetailLevel { get; }
+        public Int32[] ViewDetailLevel { get; }
         public Int32 GetViewDetailLevel(int index, Int32 defaultValue = default) => ViewDetailLevel?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<int> ViewCameraIndex { get; }
+        public int[] ViewCameraIndex { get; }
         public int GetViewCameraIndex(int index) => ViewCameraIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
-        public IList<int> ViewFamilyTypeIndex { get; }
+        public int[] ViewFamilyTypeIndex { get; }
         public int GetViewFamilyTypeIndex(int index) => ViewFamilyTypeIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
-        public IList<int> ViewElementIndex { get; }
+        public int[] ViewElementIndex { get; }
         public int GetViewElementIndex(int index) => ViewElementIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
         public int NumView => ViewEntityTable?.NumRows ?? 0;
-        public IList<View> ViewList { get; }
+        public View[] ViewList { get; }
         public View GetView(int n)
         {
             if (n < 0) return null;
@@ -2758,12 +2758,12 @@ namespace Vim.Format.ObjectModel {
         
         public EntityTable ElementInViewEntityTable { get; }
         
-        public IList<int> ElementInViewViewIndex { get; }
+        public int[] ElementInViewViewIndex { get; }
         public int GetElementInViewViewIndex(int index) => ElementInViewViewIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
-        public IList<int> ElementInViewElementIndex { get; }
+        public int[] ElementInViewElementIndex { get; }
         public int GetElementInViewElementIndex(int index) => ElementInViewElementIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
         public int NumElementInView => ElementInViewEntityTable?.NumRows ?? 0;
-        public IList<ElementInView> ElementInViewList { get; }
+        public ElementInView[] ElementInViewList { get; }
         public ElementInView GetElementInView(int n)
         {
             if (n < 0) return null;
@@ -2780,12 +2780,12 @@ namespace Vim.Format.ObjectModel {
         
         public EntityTable ShapeInViewEntityTable { get; }
         
-        public IList<int> ShapeInViewShapeIndex { get; }
+        public int[] ShapeInViewShapeIndex { get; }
         public int GetShapeInViewShapeIndex(int index) => ShapeInViewShapeIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
-        public IList<int> ShapeInViewViewIndex { get; }
+        public int[] ShapeInViewViewIndex { get; }
         public int GetShapeInViewViewIndex(int index) => ShapeInViewViewIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
         public int NumShapeInView => ShapeInViewEntityTable?.NumRows ?? 0;
-        public IList<ShapeInView> ShapeInViewList { get; }
+        public ShapeInView[] ShapeInViewList { get; }
         public ShapeInView GetShapeInView(int n)
         {
             if (n < 0) return null;
@@ -2802,12 +2802,12 @@ namespace Vim.Format.ObjectModel {
         
         public EntityTable AssetInViewEntityTable { get; }
         
-        public IList<int> AssetInViewAssetIndex { get; }
+        public int[] AssetInViewAssetIndex { get; }
         public int GetAssetInViewAssetIndex(int index) => AssetInViewAssetIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
-        public IList<int> AssetInViewViewIndex { get; }
+        public int[] AssetInViewViewIndex { get; }
         public int GetAssetInViewViewIndex(int index) => AssetInViewViewIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
         public int NumAssetInView => AssetInViewEntityTable?.NumRows ?? 0;
-        public IList<AssetInView> AssetInViewList { get; }
+        public AssetInView[] AssetInViewList { get; }
         public AssetInView GetAssetInView(int n)
         {
             if (n < 0) return null;
@@ -2824,12 +2824,12 @@ namespace Vim.Format.ObjectModel {
         
         public EntityTable AssetInViewSheetEntityTable { get; }
         
-        public IList<int> AssetInViewSheetAssetIndex { get; }
+        public int[] AssetInViewSheetAssetIndex { get; }
         public int GetAssetInViewSheetAssetIndex(int index) => AssetInViewSheetAssetIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
-        public IList<int> AssetInViewSheetViewSheetIndex { get; }
+        public int[] AssetInViewSheetViewSheetIndex { get; }
         public int GetAssetInViewSheetViewSheetIndex(int index) => AssetInViewSheetViewSheetIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
         public int NumAssetInViewSheet => AssetInViewSheetEntityTable?.NumRows ?? 0;
-        public IList<AssetInViewSheet> AssetInViewSheetList { get; }
+        public AssetInViewSheet[] AssetInViewSheetList { get; }
         public AssetInViewSheet GetAssetInViewSheet(int n)
         {
             if (n < 0) return null;
@@ -2846,24 +2846,24 @@ namespace Vim.Format.ObjectModel {
         
         public EntityTable LevelInViewEntityTable { get; }
         
-        public IList<Double> LevelInViewExtents_Min_X { get; }
+        public Double[] LevelInViewExtents_Min_X { get; }
         public Double GetLevelInViewExtents_Min_X(int index, Double defaultValue = default) => LevelInViewExtents_Min_X?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<Double> LevelInViewExtents_Min_Y { get; }
+        public Double[] LevelInViewExtents_Min_Y { get; }
         public Double GetLevelInViewExtents_Min_Y(int index, Double defaultValue = default) => LevelInViewExtents_Min_Y?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<Double> LevelInViewExtents_Min_Z { get; }
+        public Double[] LevelInViewExtents_Min_Z { get; }
         public Double GetLevelInViewExtents_Min_Z(int index, Double defaultValue = default) => LevelInViewExtents_Min_Z?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<Double> LevelInViewExtents_Max_X { get; }
+        public Double[] LevelInViewExtents_Max_X { get; }
         public Double GetLevelInViewExtents_Max_X(int index, Double defaultValue = default) => LevelInViewExtents_Max_X?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<Double> LevelInViewExtents_Max_Y { get; }
+        public Double[] LevelInViewExtents_Max_Y { get; }
         public Double GetLevelInViewExtents_Max_Y(int index, Double defaultValue = default) => LevelInViewExtents_Max_Y?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<Double> LevelInViewExtents_Max_Z { get; }
+        public Double[] LevelInViewExtents_Max_Z { get; }
         public Double GetLevelInViewExtents_Max_Z(int index, Double defaultValue = default) => LevelInViewExtents_Max_Z?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<int> LevelInViewLevelIndex { get; }
+        public int[] LevelInViewLevelIndex { get; }
         public int GetLevelInViewLevelIndex(int index) => LevelInViewLevelIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
-        public IList<int> LevelInViewViewIndex { get; }
+        public int[] LevelInViewViewIndex { get; }
         public int GetLevelInViewViewIndex(int index) => LevelInViewViewIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
         public int NumLevelInView => LevelInViewEntityTable?.NumRows ?? 0;
-        public IList<LevelInView> LevelInViewList { get; }
+        public LevelInView[] LevelInViewList { get; }
         public LevelInView GetLevelInView(int n)
         {
             if (n < 0) return null;
@@ -2886,26 +2886,26 @@ namespace Vim.Format.ObjectModel {
         
         public EntityTable CameraEntityTable { get; }
         
-        public IList<Int32> CameraId { get; }
+        public Int32[] CameraId { get; }
         public Int32 GetCameraId(int index, Int32 defaultValue = default) => CameraId?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<Int32> CameraIsPerspective { get; }
+        public Int32[] CameraIsPerspective { get; }
         public Int32 GetCameraIsPerspective(int index, Int32 defaultValue = default) => CameraIsPerspective?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<Double> CameraVerticalExtent { get; }
+        public Double[] CameraVerticalExtent { get; }
         public Double GetCameraVerticalExtent(int index, Double defaultValue = default) => CameraVerticalExtent?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<Double> CameraHorizontalExtent { get; }
+        public Double[] CameraHorizontalExtent { get; }
         public Double GetCameraHorizontalExtent(int index, Double defaultValue = default) => CameraHorizontalExtent?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<Double> CameraFarDistance { get; }
+        public Double[] CameraFarDistance { get; }
         public Double GetCameraFarDistance(int index, Double defaultValue = default) => CameraFarDistance?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<Double> CameraNearDistance { get; }
+        public Double[] CameraNearDistance { get; }
         public Double GetCameraNearDistance(int index, Double defaultValue = default) => CameraNearDistance?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<Double> CameraTargetDistance { get; }
+        public Double[] CameraTargetDistance { get; }
         public Double GetCameraTargetDistance(int index, Double defaultValue = default) => CameraTargetDistance?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<Double> CameraRightOffset { get; }
+        public Double[] CameraRightOffset { get; }
         public Double GetCameraRightOffset(int index, Double defaultValue = default) => CameraRightOffset?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<Double> CameraUpOffset { get; }
+        public Double[] CameraUpOffset { get; }
         public Double GetCameraUpOffset(int index, Double defaultValue = default) => CameraUpOffset?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
         public int NumCamera => CameraEntityTable?.NumRows ?? 0;
-        public IList<Camera> CameraList { get; }
+        public Camera[] CameraList { get; }
         public Camera GetCamera(int n)
         {
             if (n < 0) return null;
@@ -2929,48 +2929,48 @@ namespace Vim.Format.ObjectModel {
         
         public EntityTable MaterialEntityTable { get; }
         
-        public IList<String> MaterialName { get; }
+        public String[] MaterialName { get; }
         public String GetMaterialName(int index, String defaultValue = "") => MaterialName?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<String> MaterialMaterialCategory { get; }
+        public String[] MaterialMaterialCategory { get; }
         public String GetMaterialMaterialCategory(int index, String defaultValue = "") => MaterialMaterialCategory?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<Double> MaterialColor_X { get; }
+        public Double[] MaterialColor_X { get; }
         public Double GetMaterialColor_X(int index, Double defaultValue = default) => MaterialColor_X?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<Double> MaterialColor_Y { get; }
+        public Double[] MaterialColor_Y { get; }
         public Double GetMaterialColor_Y(int index, Double defaultValue = default) => MaterialColor_Y?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<Double> MaterialColor_Z { get; }
+        public Double[] MaterialColor_Z { get; }
         public Double GetMaterialColor_Z(int index, Double defaultValue = default) => MaterialColor_Z?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<Double> MaterialColorUvScaling_X { get; }
+        public Double[] MaterialColorUvScaling_X { get; }
         public Double GetMaterialColorUvScaling_X(int index, Double defaultValue = default) => MaterialColorUvScaling_X?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<Double> MaterialColorUvScaling_Y { get; }
+        public Double[] MaterialColorUvScaling_Y { get; }
         public Double GetMaterialColorUvScaling_Y(int index, Double defaultValue = default) => MaterialColorUvScaling_Y?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<Double> MaterialColorUvOffset_X { get; }
+        public Double[] MaterialColorUvOffset_X { get; }
         public Double GetMaterialColorUvOffset_X(int index, Double defaultValue = default) => MaterialColorUvOffset_X?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<Double> MaterialColorUvOffset_Y { get; }
+        public Double[] MaterialColorUvOffset_Y { get; }
         public Double GetMaterialColorUvOffset_Y(int index, Double defaultValue = default) => MaterialColorUvOffset_Y?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<Double> MaterialNormalUvScaling_X { get; }
+        public Double[] MaterialNormalUvScaling_X { get; }
         public Double GetMaterialNormalUvScaling_X(int index, Double defaultValue = default) => MaterialNormalUvScaling_X?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<Double> MaterialNormalUvScaling_Y { get; }
+        public Double[] MaterialNormalUvScaling_Y { get; }
         public Double GetMaterialNormalUvScaling_Y(int index, Double defaultValue = default) => MaterialNormalUvScaling_Y?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<Double> MaterialNormalUvOffset_X { get; }
+        public Double[] MaterialNormalUvOffset_X { get; }
         public Double GetMaterialNormalUvOffset_X(int index, Double defaultValue = default) => MaterialNormalUvOffset_X?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<Double> MaterialNormalUvOffset_Y { get; }
+        public Double[] MaterialNormalUvOffset_Y { get; }
         public Double GetMaterialNormalUvOffset_Y(int index, Double defaultValue = default) => MaterialNormalUvOffset_Y?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<Double> MaterialNormalAmount { get; }
+        public Double[] MaterialNormalAmount { get; }
         public Double GetMaterialNormalAmount(int index, Double defaultValue = default) => MaterialNormalAmount?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<Double> MaterialGlossiness { get; }
+        public Double[] MaterialGlossiness { get; }
         public Double GetMaterialGlossiness(int index, Double defaultValue = default) => MaterialGlossiness?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<Double> MaterialSmoothness { get; }
+        public Double[] MaterialSmoothness { get; }
         public Double GetMaterialSmoothness(int index, Double defaultValue = default) => MaterialSmoothness?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<Double> MaterialTransparency { get; }
+        public Double[] MaterialTransparency { get; }
         public Double GetMaterialTransparency(int index, Double defaultValue = default) => MaterialTransparency?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<int> MaterialColorTextureFileIndex { get; }
+        public int[] MaterialColorTextureFileIndex { get; }
         public int GetMaterialColorTextureFileIndex(int index) => MaterialColorTextureFileIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
-        public IList<int> MaterialNormalTextureFileIndex { get; }
+        public int[] MaterialNormalTextureFileIndex { get; }
         public int GetMaterialNormalTextureFileIndex(int index) => MaterialNormalTextureFileIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
-        public IList<int> MaterialElementIndex { get; }
+        public int[] MaterialElementIndex { get; }
         public int GetMaterialElementIndex(int index) => MaterialElementIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
         public int NumMaterial => MaterialEntityTable?.NumRows ?? 0;
-        public IList<Material> MaterialList { get; }
+        public Material[] MaterialList { get; }
         public Material GetMaterial(int n)
         {
             if (n < 0) return null;
@@ -3005,18 +3005,18 @@ namespace Vim.Format.ObjectModel {
         
         public EntityTable MaterialInElementEntityTable { get; }
         
-        public IList<Double> MaterialInElementArea { get; }
+        public Double[] MaterialInElementArea { get; }
         public Double GetMaterialInElementArea(int index, Double defaultValue = default) => MaterialInElementArea?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<Double> MaterialInElementVolume { get; }
+        public Double[] MaterialInElementVolume { get; }
         public Double GetMaterialInElementVolume(int index, Double defaultValue = default) => MaterialInElementVolume?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<Boolean> MaterialInElementIsPaint { get; }
+        public Boolean[] MaterialInElementIsPaint { get; }
         public Boolean GetMaterialInElementIsPaint(int index, Boolean defaultValue = default) => MaterialInElementIsPaint?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<int> MaterialInElementMaterialIndex { get; }
+        public int[] MaterialInElementMaterialIndex { get; }
         public int GetMaterialInElementMaterialIndex(int index) => MaterialInElementMaterialIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
-        public IList<int> MaterialInElementElementIndex { get; }
+        public int[] MaterialInElementElementIndex { get; }
         public int GetMaterialInElementElementIndex(int index) => MaterialInElementElementIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
         public int NumMaterialInElement => MaterialInElementEntityTable?.NumRows ?? 0;
-        public IList<MaterialInElement> MaterialInElementList { get; }
+        public MaterialInElement[] MaterialInElementList { get; }
         public MaterialInElement GetMaterialInElement(int n)
         {
             if (n < 0) return null;
@@ -3036,18 +3036,18 @@ namespace Vim.Format.ObjectModel {
         
         public EntityTable CompoundStructureLayerEntityTable { get; }
         
-        public IList<Int32> CompoundStructureLayerOrderIndex { get; }
+        public Int32[] CompoundStructureLayerOrderIndex { get; }
         public Int32 GetCompoundStructureLayerOrderIndex(int index, Int32 defaultValue = default) => CompoundStructureLayerOrderIndex?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<Double> CompoundStructureLayerWidth { get; }
+        public Double[] CompoundStructureLayerWidth { get; }
         public Double GetCompoundStructureLayerWidth(int index, Double defaultValue = default) => CompoundStructureLayerWidth?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<String> CompoundStructureLayerMaterialFunctionAssignment { get; }
+        public String[] CompoundStructureLayerMaterialFunctionAssignment { get; }
         public String GetCompoundStructureLayerMaterialFunctionAssignment(int index, String defaultValue = "") => CompoundStructureLayerMaterialFunctionAssignment?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<int> CompoundStructureLayerMaterialIndex { get; }
+        public int[] CompoundStructureLayerMaterialIndex { get; }
         public int GetCompoundStructureLayerMaterialIndex(int index) => CompoundStructureLayerMaterialIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
-        public IList<int> CompoundStructureLayerCompoundStructureIndex { get; }
+        public int[] CompoundStructureLayerCompoundStructureIndex { get; }
         public int GetCompoundStructureLayerCompoundStructureIndex(int index) => CompoundStructureLayerCompoundStructureIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
         public int NumCompoundStructureLayer => CompoundStructureLayerEntityTable?.NumRows ?? 0;
-        public IList<CompoundStructureLayer> CompoundStructureLayerList { get; }
+        public CompoundStructureLayer[] CompoundStructureLayerList { get; }
         public CompoundStructureLayer GetCompoundStructureLayer(int n)
         {
             if (n < 0) return null;
@@ -3067,12 +3067,12 @@ namespace Vim.Format.ObjectModel {
         
         public EntityTable CompoundStructureEntityTable { get; }
         
-        public IList<Double> CompoundStructureWidth { get; }
+        public Double[] CompoundStructureWidth { get; }
         public Double GetCompoundStructureWidth(int index, Double defaultValue = default) => CompoundStructureWidth?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<int> CompoundStructureStructuralLayerIndex { get; }
+        public int[] CompoundStructureStructuralLayerIndex { get; }
         public int GetCompoundStructureStructuralLayerIndex(int index) => CompoundStructureStructuralLayerIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
         public int NumCompoundStructure => CompoundStructureEntityTable?.NumRows ?? 0;
-        public IList<CompoundStructure> CompoundStructureList { get; }
+        public CompoundStructure[] CompoundStructureList { get; }
         public CompoundStructure GetCompoundStructure(int n)
         {
             if (n < 0) return null;
@@ -3089,10 +3089,10 @@ namespace Vim.Format.ObjectModel {
         
         public EntityTable NodeEntityTable { get; }
         
-        public IList<int> NodeElementIndex { get; }
+        public int[] NodeElementIndex { get; }
         public int GetNodeElementIndex(int index) => NodeElementIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
         public int NumNode => NodeEntityTable?.NumRows ?? 0;
-        public IList<Node> NodeList { get; }
+        public Node[] NodeList { get; }
         public Node GetNode(int n)
         {
             if (n < 0) return null;
@@ -3108,24 +3108,24 @@ namespace Vim.Format.ObjectModel {
         
         public EntityTable GeometryEntityTable { get; }
         
-        public IList<Single> GeometryBox_Min_X { get; }
+        public Single[] GeometryBox_Min_X { get; }
         public Single GetGeometryBox_Min_X(int index, Single defaultValue = default) => GeometryBox_Min_X?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<Single> GeometryBox_Min_Y { get; }
+        public Single[] GeometryBox_Min_Y { get; }
         public Single GetGeometryBox_Min_Y(int index, Single defaultValue = default) => GeometryBox_Min_Y?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<Single> GeometryBox_Min_Z { get; }
+        public Single[] GeometryBox_Min_Z { get; }
         public Single GetGeometryBox_Min_Z(int index, Single defaultValue = default) => GeometryBox_Min_Z?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<Single> GeometryBox_Max_X { get; }
+        public Single[] GeometryBox_Max_X { get; }
         public Single GetGeometryBox_Max_X(int index, Single defaultValue = default) => GeometryBox_Max_X?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<Single> GeometryBox_Max_Y { get; }
+        public Single[] GeometryBox_Max_Y { get; }
         public Single GetGeometryBox_Max_Y(int index, Single defaultValue = default) => GeometryBox_Max_Y?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<Single> GeometryBox_Max_Z { get; }
+        public Single[] GeometryBox_Max_Z { get; }
         public Single GetGeometryBox_Max_Z(int index, Single defaultValue = default) => GeometryBox_Max_Z?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<Int32> GeometryVertexCount { get; }
+        public Int32[] GeometryVertexCount { get; }
         public Int32 GetGeometryVertexCount(int index, Int32 defaultValue = default) => GeometryVertexCount?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<Int32> GeometryFaceCount { get; }
+        public Int32[] GeometryFaceCount { get; }
         public Int32 GetGeometryFaceCount(int index, Int32 defaultValue = default) => GeometryFaceCount?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
         public int NumGeometry => GeometryEntityTable?.NumRows ?? 0;
-        public IList<Geometry> GeometryList { get; }
+        public Geometry[] GeometryList { get; }
         public Geometry GetGeometry(int n)
         {
             if (n < 0) return null;
@@ -3148,10 +3148,10 @@ namespace Vim.Format.ObjectModel {
         
         public EntityTable ShapeEntityTable { get; }
         
-        public IList<int> ShapeElementIndex { get; }
+        public int[] ShapeElementIndex { get; }
         public int GetShapeElementIndex(int index) => ShapeElementIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
         public int NumShape => ShapeEntityTable?.NumRows ?? 0;
-        public IList<Shape> ShapeList { get; }
+        public Shape[] ShapeList { get; }
         public Shape GetShape(int n)
         {
             if (n < 0) return null;
@@ -3167,10 +3167,10 @@ namespace Vim.Format.ObjectModel {
         
         public EntityTable ShapeCollectionEntityTable { get; }
         
-        public IList<int> ShapeCollectionElementIndex { get; }
+        public int[] ShapeCollectionElementIndex { get; }
         public int GetShapeCollectionElementIndex(int index) => ShapeCollectionElementIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
         public int NumShapeCollection => ShapeCollectionEntityTable?.NumRows ?? 0;
-        public IList<ShapeCollection> ShapeCollectionList { get; }
+        public ShapeCollection[] ShapeCollectionList { get; }
         public ShapeCollection GetShapeCollection(int n)
         {
             if (n < 0) return null;
@@ -3186,12 +3186,12 @@ namespace Vim.Format.ObjectModel {
         
         public EntityTable ShapeInShapeCollectionEntityTable { get; }
         
-        public IList<int> ShapeInShapeCollectionShapeIndex { get; }
+        public int[] ShapeInShapeCollectionShapeIndex { get; }
         public int GetShapeInShapeCollectionShapeIndex(int index) => ShapeInShapeCollectionShapeIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
-        public IList<int> ShapeInShapeCollectionShapeCollectionIndex { get; }
+        public int[] ShapeInShapeCollectionShapeCollectionIndex { get; }
         public int GetShapeInShapeCollectionShapeCollectionIndex(int index) => ShapeInShapeCollectionShapeCollectionIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
         public int NumShapeInShapeCollection => ShapeInShapeCollectionEntityTable?.NumRows ?? 0;
-        public IList<ShapeInShapeCollection> ShapeInShapeCollectionList { get; }
+        public ShapeInShapeCollection[] ShapeInShapeCollectionList { get; }
         public ShapeInShapeCollection GetShapeInShapeCollection(int n)
         {
             if (n < 0) return null;
@@ -3208,14 +3208,14 @@ namespace Vim.Format.ObjectModel {
         
         public EntityTable SystemEntityTable { get; }
         
-        public IList<Int32> SystemSystemType { get; }
+        public Int32[] SystemSystemType { get; }
         public Int32 GetSystemSystemType(int index, Int32 defaultValue = default) => SystemSystemType?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<int> SystemFamilyTypeIndex { get; }
+        public int[] SystemFamilyTypeIndex { get; }
         public int GetSystemFamilyTypeIndex(int index) => SystemFamilyTypeIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
-        public IList<int> SystemElementIndex { get; }
+        public int[] SystemElementIndex { get; }
         public int GetSystemElementIndex(int index) => SystemElementIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
         public int NumSystem => SystemEntityTable?.NumRows ?? 0;
-        public IList<System> SystemList { get; }
+        public System[] SystemList { get; }
         public System GetSystem(int n)
         {
             if (n < 0) return null;
@@ -3233,14 +3233,14 @@ namespace Vim.Format.ObjectModel {
         
         public EntityTable ElementInSystemEntityTable { get; }
         
-        public IList<Int32> ElementInSystemRoles { get; }
+        public Int32[] ElementInSystemRoles { get; }
         public Int32 GetElementInSystemRoles(int index, Int32 defaultValue = default) => ElementInSystemRoles?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<int> ElementInSystemSystemIndex { get; }
+        public int[] ElementInSystemSystemIndex { get; }
         public int GetElementInSystemSystemIndex(int index) => ElementInSystemSystemIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
-        public IList<int> ElementInSystemElementIndex { get; }
+        public int[] ElementInSystemElementIndex { get; }
         public int GetElementInSystemElementIndex(int index) => ElementInSystemElementIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
         public int NumElementInSystem => ElementInSystemEntityTable?.NumRows ?? 0;
-        public IList<ElementInSystem> ElementInSystemList { get; }
+        public ElementInSystem[] ElementInSystemList { get; }
         public ElementInSystem GetElementInSystem(int n)
         {
             if (n < 0) return null;
@@ -3258,16 +3258,16 @@ namespace Vim.Format.ObjectModel {
         
         public EntityTable WarningEntityTable { get; }
         
-        public IList<String> WarningGuid { get; }
+        public String[] WarningGuid { get; }
         public String GetWarningGuid(int index, String defaultValue = "") => WarningGuid?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<String> WarningSeverity { get; }
+        public String[] WarningSeverity { get; }
         public String GetWarningSeverity(int index, String defaultValue = "") => WarningSeverity?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<String> WarningDescription { get; }
+        public String[] WarningDescription { get; }
         public String GetWarningDescription(int index, String defaultValue = "") => WarningDescription?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<int> WarningBimDocumentIndex { get; }
+        public int[] WarningBimDocumentIndex { get; }
         public int GetWarningBimDocumentIndex(int index) => WarningBimDocumentIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
         public int NumWarning => WarningEntityTable?.NumRows ?? 0;
-        public IList<Warning> WarningList { get; }
+        public Warning[] WarningList { get; }
         public Warning GetWarning(int n)
         {
             if (n < 0) return null;
@@ -3286,12 +3286,12 @@ namespace Vim.Format.ObjectModel {
         
         public EntityTable ElementInWarningEntityTable { get; }
         
-        public IList<int> ElementInWarningWarningIndex { get; }
+        public int[] ElementInWarningWarningIndex { get; }
         public int GetElementInWarningWarningIndex(int index) => ElementInWarningWarningIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
-        public IList<int> ElementInWarningElementIndex { get; }
+        public int[] ElementInWarningElementIndex { get; }
         public int GetElementInWarningElementIndex(int index) => ElementInWarningElementIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
         public int NumElementInWarning => ElementInWarningEntityTable?.NumRows ?? 0;
-        public IList<ElementInWarning> ElementInWarningList { get; }
+        public ElementInWarning[] ElementInWarningList { get; }
         public ElementInWarning GetElementInWarning(int n)
         {
             if (n < 0) return null;
@@ -3308,24 +3308,24 @@ namespace Vim.Format.ObjectModel {
         
         public EntityTable BasePointEntityTable { get; }
         
-        public IList<Boolean> BasePointIsSurveyPoint { get; }
+        public Boolean[] BasePointIsSurveyPoint { get; }
         public Boolean GetBasePointIsSurveyPoint(int index, Boolean defaultValue = default) => BasePointIsSurveyPoint?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<Double> BasePointPosition_X { get; }
+        public Double[] BasePointPosition_X { get; }
         public Double GetBasePointPosition_X(int index, Double defaultValue = default) => BasePointPosition_X?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<Double> BasePointPosition_Y { get; }
+        public Double[] BasePointPosition_Y { get; }
         public Double GetBasePointPosition_Y(int index, Double defaultValue = default) => BasePointPosition_Y?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<Double> BasePointPosition_Z { get; }
+        public Double[] BasePointPosition_Z { get; }
         public Double GetBasePointPosition_Z(int index, Double defaultValue = default) => BasePointPosition_Z?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<Double> BasePointSharedPosition_X { get; }
+        public Double[] BasePointSharedPosition_X { get; }
         public Double GetBasePointSharedPosition_X(int index, Double defaultValue = default) => BasePointSharedPosition_X?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<Double> BasePointSharedPosition_Y { get; }
+        public Double[] BasePointSharedPosition_Y { get; }
         public Double GetBasePointSharedPosition_Y(int index, Double defaultValue = default) => BasePointSharedPosition_Y?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<Double> BasePointSharedPosition_Z { get; }
+        public Double[] BasePointSharedPosition_Z { get; }
         public Double GetBasePointSharedPosition_Z(int index, Double defaultValue = default) => BasePointSharedPosition_Z?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<int> BasePointElementIndex { get; }
+        public int[] BasePointElementIndex { get; }
         public int GetBasePointElementIndex(int index) => BasePointElementIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
         public int NumBasePoint => BasePointEntityTable?.NumRows ?? 0;
-        public IList<BasePoint> BasePointList { get; }
+        public BasePoint[] BasePointList { get; }
         public BasePoint GetBasePoint(int n)
         {
             if (n < 0) return null;
@@ -3348,18 +3348,18 @@ namespace Vim.Format.ObjectModel {
         
         public EntityTable PhaseFilterEntityTable { get; }
         
-        public IList<Int32> PhaseFilterNew { get; }
+        public Int32[] PhaseFilterNew { get; }
         public Int32 GetPhaseFilterNew(int index, Int32 defaultValue = default) => PhaseFilterNew?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<Int32> PhaseFilterExisting { get; }
+        public Int32[] PhaseFilterExisting { get; }
         public Int32 GetPhaseFilterExisting(int index, Int32 defaultValue = default) => PhaseFilterExisting?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<Int32> PhaseFilterDemolished { get; }
+        public Int32[] PhaseFilterDemolished { get; }
         public Int32 GetPhaseFilterDemolished(int index, Int32 defaultValue = default) => PhaseFilterDemolished?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<Int32> PhaseFilterTemporary { get; }
+        public Int32[] PhaseFilterTemporary { get; }
         public Int32 GetPhaseFilterTemporary(int index, Int32 defaultValue = default) => PhaseFilterTemporary?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<int> PhaseFilterElementIndex { get; }
+        public int[] PhaseFilterElementIndex { get; }
         public int GetPhaseFilterElementIndex(int index) => PhaseFilterElementIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
         public int NumPhaseFilter => PhaseFilterEntityTable?.NumRows ?? 0;
-        public IList<PhaseFilter> PhaseFilterList { get; }
+        public PhaseFilter[] PhaseFilterList { get; }
         public PhaseFilter GetPhaseFilter(int n)
         {
             if (n < 0) return null;
@@ -3379,38 +3379,38 @@ namespace Vim.Format.ObjectModel {
         
         public EntityTable GridEntityTable { get; }
         
-        public IList<Double> GridStartPoint_X { get; }
+        public Double[] GridStartPoint_X { get; }
         public Double GetGridStartPoint_X(int index, Double defaultValue = default) => GridStartPoint_X?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<Double> GridStartPoint_Y { get; }
+        public Double[] GridStartPoint_Y { get; }
         public Double GetGridStartPoint_Y(int index, Double defaultValue = default) => GridStartPoint_Y?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<Double> GridStartPoint_Z { get; }
+        public Double[] GridStartPoint_Z { get; }
         public Double GetGridStartPoint_Z(int index, Double defaultValue = default) => GridStartPoint_Z?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<Double> GridEndPoint_X { get; }
+        public Double[] GridEndPoint_X { get; }
         public Double GetGridEndPoint_X(int index, Double defaultValue = default) => GridEndPoint_X?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<Double> GridEndPoint_Y { get; }
+        public Double[] GridEndPoint_Y { get; }
         public Double GetGridEndPoint_Y(int index, Double defaultValue = default) => GridEndPoint_Y?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<Double> GridEndPoint_Z { get; }
+        public Double[] GridEndPoint_Z { get; }
         public Double GetGridEndPoint_Z(int index, Double defaultValue = default) => GridEndPoint_Z?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<Boolean> GridIsCurved { get; }
+        public Boolean[] GridIsCurved { get; }
         public Boolean GetGridIsCurved(int index, Boolean defaultValue = default) => GridIsCurved?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<Double> GridExtents_Min_X { get; }
+        public Double[] GridExtents_Min_X { get; }
         public Double GetGridExtents_Min_X(int index, Double defaultValue = default) => GridExtents_Min_X?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<Double> GridExtents_Min_Y { get; }
+        public Double[] GridExtents_Min_Y { get; }
         public Double GetGridExtents_Min_Y(int index, Double defaultValue = default) => GridExtents_Min_Y?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<Double> GridExtents_Min_Z { get; }
+        public Double[] GridExtents_Min_Z { get; }
         public Double GetGridExtents_Min_Z(int index, Double defaultValue = default) => GridExtents_Min_Z?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<Double> GridExtents_Max_X { get; }
+        public Double[] GridExtents_Max_X { get; }
         public Double GetGridExtents_Max_X(int index, Double defaultValue = default) => GridExtents_Max_X?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<Double> GridExtents_Max_Y { get; }
+        public Double[] GridExtents_Max_Y { get; }
         public Double GetGridExtents_Max_Y(int index, Double defaultValue = default) => GridExtents_Max_Y?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<Double> GridExtents_Max_Z { get; }
+        public Double[] GridExtents_Max_Z { get; }
         public Double GetGridExtents_Max_Z(int index, Double defaultValue = default) => GridExtents_Max_Z?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<int> GridFamilyTypeIndex { get; }
+        public int[] GridFamilyTypeIndex { get; }
         public int GetGridFamilyTypeIndex(int index) => GridFamilyTypeIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
-        public IList<int> GridElementIndex { get; }
+        public int[] GridElementIndex { get; }
         public int GetGridElementIndex(int index) => GridElementIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
         public int NumGrid => GridEntityTable?.NumRows ?? 0;
-        public IList<Grid> GridList { get; }
+        public Grid[] GridList { get; }
         public Grid GetGrid(int n)
         {
             if (n < 0) return null;
@@ -3440,20 +3440,20 @@ namespace Vim.Format.ObjectModel {
         
         public EntityTable AreaEntityTable { get; }
         
-        public IList<Double> AreaValue { get; }
+        public Double[] AreaValue { get; }
         public Double GetAreaValue(int index, Double defaultValue = default) => AreaValue?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<Double> AreaPerimeter { get; }
+        public Double[] AreaPerimeter { get; }
         public Double GetAreaPerimeter(int index, Double defaultValue = default) => AreaPerimeter?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<String> AreaNumber { get; }
+        public String[] AreaNumber { get; }
         public String GetAreaNumber(int index, String defaultValue = "") => AreaNumber?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<Boolean> AreaIsGrossInterior { get; }
+        public Boolean[] AreaIsGrossInterior { get; }
         public Boolean GetAreaIsGrossInterior(int index, Boolean defaultValue = default) => AreaIsGrossInterior?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<int> AreaAreaSchemeIndex { get; }
+        public int[] AreaAreaSchemeIndex { get; }
         public int GetAreaAreaSchemeIndex(int index) => AreaAreaSchemeIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
-        public IList<int> AreaElementIndex { get; }
+        public int[] AreaElementIndex { get; }
         public int GetAreaElementIndex(int index) => AreaElementIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
         public int NumArea => AreaEntityTable?.NumRows ?? 0;
-        public IList<Area> AreaList { get; }
+        public Area[] AreaList { get; }
         public Area GetArea(int n)
         {
             if (n < 0) return null;
@@ -3474,12 +3474,12 @@ namespace Vim.Format.ObjectModel {
         
         public EntityTable AreaSchemeEntityTable { get; }
         
-        public IList<Boolean> AreaSchemeIsGrossBuildingArea { get; }
+        public Boolean[] AreaSchemeIsGrossBuildingArea { get; }
         public Boolean GetAreaSchemeIsGrossBuildingArea(int index, Boolean defaultValue = default) => AreaSchemeIsGrossBuildingArea?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<int> AreaSchemeElementIndex { get; }
+        public int[] AreaSchemeElementIndex { get; }
         public int GetAreaSchemeElementIndex(int index) => AreaSchemeElementIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
         public int NumAreaScheme => AreaSchemeEntityTable?.NumRows ?? 0;
-        public IList<AreaScheme> AreaSchemeList { get; }
+        public AreaScheme[] AreaSchemeList { get; }
         public AreaScheme GetAreaScheme(int n)
         {
             if (n < 0) return null;
@@ -3496,10 +3496,10 @@ namespace Vim.Format.ObjectModel {
         
         public EntityTable ScheduleEntityTable { get; }
         
-        public IList<int> ScheduleElementIndex { get; }
+        public int[] ScheduleElementIndex { get; }
         public int GetScheduleElementIndex(int index) => ScheduleElementIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
         public int NumSchedule => ScheduleEntityTable?.NumRows ?? 0;
-        public IList<Schedule> ScheduleList { get; }
+        public Schedule[] ScheduleList { get; }
         public Schedule GetSchedule(int n)
         {
             if (n < 0) return null;
@@ -3515,14 +3515,14 @@ namespace Vim.Format.ObjectModel {
         
         public EntityTable ScheduleColumnEntityTable { get; }
         
-        public IList<String> ScheduleColumnName { get; }
+        public String[] ScheduleColumnName { get; }
         public String GetScheduleColumnName(int index, String defaultValue = "") => ScheduleColumnName?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<Int32> ScheduleColumnColumnIndex { get; }
+        public Int32[] ScheduleColumnColumnIndex { get; }
         public Int32 GetScheduleColumnColumnIndex(int index, Int32 defaultValue = default) => ScheduleColumnColumnIndex?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<int> ScheduleColumnScheduleIndex { get; }
+        public int[] ScheduleColumnScheduleIndex { get; }
         public int GetScheduleColumnScheduleIndex(int index) => ScheduleColumnScheduleIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
         public int NumScheduleColumn => ScheduleColumnEntityTable?.NumRows ?? 0;
-        public IList<ScheduleColumn> ScheduleColumnList { get; }
+        public ScheduleColumn[] ScheduleColumnList { get; }
         public ScheduleColumn GetScheduleColumn(int n)
         {
             if (n < 0) return null;
@@ -3540,14 +3540,14 @@ namespace Vim.Format.ObjectModel {
         
         public EntityTable ScheduleCellEntityTable { get; }
         
-        public IList<String> ScheduleCellValue { get; }
+        public String[] ScheduleCellValue { get; }
         public String GetScheduleCellValue(int index, String defaultValue = "") => ScheduleCellValue?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<Int32> ScheduleCellRowIndex { get; }
+        public Int32[] ScheduleCellRowIndex { get; }
         public Int32 GetScheduleCellRowIndex(int index, Int32 defaultValue = default) => ScheduleCellRowIndex?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<int> ScheduleCellScheduleColumnIndex { get; }
+        public int[] ScheduleCellScheduleColumnIndex { get; }
         public int GetScheduleCellScheduleColumnIndex(int index) => ScheduleCellScheduleColumnIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
         public int NumScheduleCell => ScheduleCellEntityTable?.NumRows ?? 0;
-        public IList<ScheduleCell> ScheduleCellList { get; }
+        public ScheduleCell[] ScheduleCellList { get; }
         public ScheduleCell GetScheduleCell(int n)
         {
             if (n < 0) return null;
@@ -3565,10 +3565,10 @@ namespace Vim.Format.ObjectModel {
         
         public EntityTable ViewSheetSetEntityTable { get; }
         
-        public IList<int> ViewSheetSetElementIndex { get; }
+        public int[] ViewSheetSetElementIndex { get; }
         public int GetViewSheetSetElementIndex(int index) => ViewSheetSetElementIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
         public int NumViewSheetSet => ViewSheetSetEntityTable?.NumRows ?? 0;
-        public IList<ViewSheetSet> ViewSheetSetList { get; }
+        public ViewSheetSet[] ViewSheetSetList { get; }
         public ViewSheetSet GetViewSheetSet(int n)
         {
             if (n < 0) return null;
@@ -3584,12 +3584,12 @@ namespace Vim.Format.ObjectModel {
         
         public EntityTable ViewSheetEntityTable { get; }
         
-        public IList<int> ViewSheetFamilyTypeIndex { get; }
+        public int[] ViewSheetFamilyTypeIndex { get; }
         public int GetViewSheetFamilyTypeIndex(int index) => ViewSheetFamilyTypeIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
-        public IList<int> ViewSheetElementIndex { get; }
+        public int[] ViewSheetElementIndex { get; }
         public int GetViewSheetElementIndex(int index) => ViewSheetElementIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
         public int NumViewSheet => ViewSheetEntityTable?.NumRows ?? 0;
-        public IList<ViewSheet> ViewSheetList { get; }
+        public ViewSheet[] ViewSheetList { get; }
         public ViewSheet GetViewSheet(int n)
         {
             if (n < 0) return null;
@@ -3606,12 +3606,12 @@ namespace Vim.Format.ObjectModel {
         
         public EntityTable ViewSheetInViewSheetSetEntityTable { get; }
         
-        public IList<int> ViewSheetInViewSheetSetViewSheetIndex { get; }
+        public int[] ViewSheetInViewSheetSetViewSheetIndex { get; }
         public int GetViewSheetInViewSheetSetViewSheetIndex(int index) => ViewSheetInViewSheetSetViewSheetIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
-        public IList<int> ViewSheetInViewSheetSetViewSheetSetIndex { get; }
+        public int[] ViewSheetInViewSheetSetViewSheetSetIndex { get; }
         public int GetViewSheetInViewSheetSetViewSheetSetIndex(int index) => ViewSheetInViewSheetSetViewSheetSetIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
         public int NumViewSheetInViewSheetSet => ViewSheetInViewSheetSetEntityTable?.NumRows ?? 0;
-        public IList<ViewSheetInViewSheetSet> ViewSheetInViewSheetSetList { get; }
+        public ViewSheetInViewSheetSet[] ViewSheetInViewSheetSetList { get; }
         public ViewSheetInViewSheetSet GetViewSheetInViewSheetSet(int n)
         {
             if (n < 0) return null;
@@ -3628,12 +3628,12 @@ namespace Vim.Format.ObjectModel {
         
         public EntityTable ViewInViewSheetSetEntityTable { get; }
         
-        public IList<int> ViewInViewSheetSetViewIndex { get; }
+        public int[] ViewInViewSheetSetViewIndex { get; }
         public int GetViewInViewSheetSetViewIndex(int index) => ViewInViewSheetSetViewIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
-        public IList<int> ViewInViewSheetSetViewSheetSetIndex { get; }
+        public int[] ViewInViewSheetSetViewSheetSetIndex { get; }
         public int GetViewInViewSheetSetViewSheetSetIndex(int index) => ViewInViewSheetSetViewSheetSetIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
         public int NumViewInViewSheetSet => ViewInViewSheetSetEntityTable?.NumRows ?? 0;
-        public IList<ViewInViewSheetSet> ViewInViewSheetSetList { get; }
+        public ViewInViewSheetSet[] ViewInViewSheetSetList { get; }
         public ViewInViewSheetSet GetViewInViewSheetSet(int n)
         {
             if (n < 0) return null;
@@ -3650,12 +3650,12 @@ namespace Vim.Format.ObjectModel {
         
         public EntityTable ViewInViewSheetEntityTable { get; }
         
-        public IList<int> ViewInViewSheetViewIndex { get; }
+        public int[] ViewInViewSheetViewIndex { get; }
         public int GetViewInViewSheetViewIndex(int index) => ViewInViewSheetViewIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
-        public IList<int> ViewInViewSheetViewSheetIndex { get; }
+        public int[] ViewInViewSheetViewSheetIndex { get; }
         public int GetViewInViewSheetViewSheetIndex(int index) => ViewInViewSheetViewSheetIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
         public int NumViewInViewSheet => ViewInViewSheetEntityTable?.NumRows ?? 0;
-        public IList<ViewInViewSheet> ViewInViewSheetList { get; }
+        public ViewInViewSheet[] ViewInViewSheetList { get; }
         public ViewInViewSheet GetViewInViewSheet(int n)
         {
             if (n < 0) return null;
@@ -3672,20 +3672,20 @@ namespace Vim.Format.ObjectModel {
         
         public EntityTable SiteEntityTable { get; }
         
-        public IList<Double> SiteLatitude { get; }
+        public Double[] SiteLatitude { get; }
         public Double GetSiteLatitude(int index, Double defaultValue = default) => SiteLatitude?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<Double> SiteLongitude { get; }
+        public Double[] SiteLongitude { get; }
         public Double GetSiteLongitude(int index, Double defaultValue = default) => SiteLongitude?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<String> SiteAddress { get; }
+        public String[] SiteAddress { get; }
         public String GetSiteAddress(int index, String defaultValue = "") => SiteAddress?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<Double> SiteElevation { get; }
+        public Double[] SiteElevation { get; }
         public Double GetSiteElevation(int index, Double defaultValue = default) => SiteElevation?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<String> SiteNumber { get; }
+        public String[] SiteNumber { get; }
         public String GetSiteNumber(int index, String defaultValue = "") => SiteNumber?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<int> SiteElementIndex { get; }
+        public int[] SiteElementIndex { get; }
         public int GetSiteElementIndex(int index) => SiteElementIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
         public int NumSite => SiteEntityTable?.NumRows ?? 0;
-        public IList<Site> SiteList { get; }
+        public Site[] SiteList { get; }
         public Site GetSite(int n)
         {
             if (n < 0) return null;
@@ -3706,18 +3706,18 @@ namespace Vim.Format.ObjectModel {
         
         public EntityTable BuildingEntityTable { get; }
         
-        public IList<Double> BuildingElevation { get; }
+        public Double[] BuildingElevation { get; }
         public Double GetBuildingElevation(int index, Double defaultValue = default) => BuildingElevation?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<Double> BuildingTerrainElevation { get; }
+        public Double[] BuildingTerrainElevation { get; }
         public Double GetBuildingTerrainElevation(int index, Double defaultValue = default) => BuildingTerrainElevation?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<String> BuildingAddress { get; }
+        public String[] BuildingAddress { get; }
         public String GetBuildingAddress(int index, String defaultValue = "") => BuildingAddress?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
-        public IList<int> BuildingSiteIndex { get; }
+        public int[] BuildingSiteIndex { get; }
         public int GetBuildingSiteIndex(int index) => BuildingSiteIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
-        public IList<int> BuildingElementIndex { get; }
+        public int[] BuildingElementIndex { get; }
         public int GetBuildingElementIndex(int index) => BuildingElementIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
         public int NumBuilding => BuildingEntityTable?.NumRows ?? 0;
-        public IList<Building> BuildingList { get; }
+        public Building[] BuildingList { get; }
         public Building GetBuilding(int n)
         {
             if (n < 0) return null;
@@ -4239,60 +4239,60 @@ namespace Vim.Format.ObjectModel {
             BuildingElementIndex = BuildingEntityTable?.GetIndexColumnValues("index:Vim.Element:Element") ?? Array.Empty<int>();
             
             // Initialize entity collections
-            AssetList = NumAsset.Select(i => GetAsset(i));
-            DisplayUnitList = NumDisplayUnit.Select(i => GetDisplayUnit(i));
-            ParameterDescriptorList = NumParameterDescriptor.Select(i => GetParameterDescriptor(i));
-            ParameterList = NumParameter.Select(i => GetParameter(i));
-            ElementList = NumElement.Select(i => GetElement(i));
-            WorksetList = NumWorkset.Select(i => GetWorkset(i));
-            AssemblyInstanceList = NumAssemblyInstance.Select(i => GetAssemblyInstance(i));
-            GroupList = NumGroup.Select(i => GetGroup(i));
-            DesignOptionList = NumDesignOption.Select(i => GetDesignOption(i));
-            LevelList = NumLevel.Select(i => GetLevel(i));
-            PhaseList = NumPhase.Select(i => GetPhase(i));
-            RoomList = NumRoom.Select(i => GetRoom(i));
-            BimDocumentList = NumBimDocument.Select(i => GetBimDocument(i));
-            DisplayUnitInBimDocumentList = NumDisplayUnitInBimDocument.Select(i => GetDisplayUnitInBimDocument(i));
-            PhaseOrderInBimDocumentList = NumPhaseOrderInBimDocument.Select(i => GetPhaseOrderInBimDocument(i));
-            CategoryList = NumCategory.Select(i => GetCategory(i));
-            FamilyList = NumFamily.Select(i => GetFamily(i));
-            FamilyTypeList = NumFamilyType.Select(i => GetFamilyType(i));
-            FamilyInstanceList = NumFamilyInstance.Select(i => GetFamilyInstance(i));
-            ViewList = NumView.Select(i => GetView(i));
-            ElementInViewList = NumElementInView.Select(i => GetElementInView(i));
-            ShapeInViewList = NumShapeInView.Select(i => GetShapeInView(i));
-            AssetInViewList = NumAssetInView.Select(i => GetAssetInView(i));
-            AssetInViewSheetList = NumAssetInViewSheet.Select(i => GetAssetInViewSheet(i));
-            LevelInViewList = NumLevelInView.Select(i => GetLevelInView(i));
-            CameraList = NumCamera.Select(i => GetCamera(i));
-            MaterialList = NumMaterial.Select(i => GetMaterial(i));
-            MaterialInElementList = NumMaterialInElement.Select(i => GetMaterialInElement(i));
-            CompoundStructureLayerList = NumCompoundStructureLayer.Select(i => GetCompoundStructureLayer(i));
-            CompoundStructureList = NumCompoundStructure.Select(i => GetCompoundStructure(i));
-            NodeList = NumNode.Select(i => GetNode(i));
-            GeometryList = NumGeometry.Select(i => GetGeometry(i));
-            ShapeList = NumShape.Select(i => GetShape(i));
-            ShapeCollectionList = NumShapeCollection.Select(i => GetShapeCollection(i));
-            ShapeInShapeCollectionList = NumShapeInShapeCollection.Select(i => GetShapeInShapeCollection(i));
-            SystemList = NumSystem.Select(i => GetSystem(i));
-            ElementInSystemList = NumElementInSystem.Select(i => GetElementInSystem(i));
-            WarningList = NumWarning.Select(i => GetWarning(i));
-            ElementInWarningList = NumElementInWarning.Select(i => GetElementInWarning(i));
-            BasePointList = NumBasePoint.Select(i => GetBasePoint(i));
-            PhaseFilterList = NumPhaseFilter.Select(i => GetPhaseFilter(i));
-            GridList = NumGrid.Select(i => GetGrid(i));
-            AreaList = NumArea.Select(i => GetArea(i));
-            AreaSchemeList = NumAreaScheme.Select(i => GetAreaScheme(i));
-            ScheduleList = NumSchedule.Select(i => GetSchedule(i));
-            ScheduleColumnList = NumScheduleColumn.Select(i => GetScheduleColumn(i));
-            ScheduleCellList = NumScheduleCell.Select(i => GetScheduleCell(i));
-            ViewSheetSetList = NumViewSheetSet.Select(i => GetViewSheetSet(i));
-            ViewSheetList = NumViewSheet.Select(i => GetViewSheet(i));
-            ViewSheetInViewSheetSetList = NumViewSheetInViewSheetSet.Select(i => GetViewSheetInViewSheetSet(i));
-            ViewInViewSheetSetList = NumViewInViewSheetSet.Select(i => GetViewInViewSheetSet(i));
-            ViewInViewSheetList = NumViewInViewSheet.Select(i => GetViewInViewSheet(i));
-            SiteList = NumSite.Select(i => GetSite(i));
-            BuildingList = NumBuilding.Select(i => GetBuilding(i));
+            AssetList = Enumerable.Range(0, NumAsset).Select(i => GetAsset(i)).ToArray();
+            DisplayUnitList = Enumerable.Range(0, NumDisplayUnit).Select(i => GetDisplayUnit(i)).ToArray();
+            ParameterDescriptorList = Enumerable.Range(0, NumParameterDescriptor).Select(i => GetParameterDescriptor(i)).ToArray();
+            ParameterList = Enumerable.Range(0, NumParameter).Select(i => GetParameter(i)).ToArray();
+            ElementList = Enumerable.Range(0, NumElement).Select(i => GetElement(i)).ToArray();
+            WorksetList = Enumerable.Range(0, NumWorkset).Select(i => GetWorkset(i)).ToArray();
+            AssemblyInstanceList = Enumerable.Range(0, NumAssemblyInstance).Select(i => GetAssemblyInstance(i)).ToArray();
+            GroupList = Enumerable.Range(0, NumGroup).Select(i => GetGroup(i)).ToArray();
+            DesignOptionList = Enumerable.Range(0, NumDesignOption).Select(i => GetDesignOption(i)).ToArray();
+            LevelList = Enumerable.Range(0, NumLevel).Select(i => GetLevel(i)).ToArray();
+            PhaseList = Enumerable.Range(0, NumPhase).Select(i => GetPhase(i)).ToArray();
+            RoomList = Enumerable.Range(0, NumRoom).Select(i => GetRoom(i)).ToArray();
+            BimDocumentList = Enumerable.Range(0, NumBimDocument).Select(i => GetBimDocument(i)).ToArray();
+            DisplayUnitInBimDocumentList = Enumerable.Range(0, NumDisplayUnitInBimDocument).Select(i => GetDisplayUnitInBimDocument(i)).ToArray();
+            PhaseOrderInBimDocumentList = Enumerable.Range(0, NumPhaseOrderInBimDocument).Select(i => GetPhaseOrderInBimDocument(i)).ToArray();
+            CategoryList = Enumerable.Range(0, NumCategory).Select(i => GetCategory(i)).ToArray();
+            FamilyList = Enumerable.Range(0, NumFamily).Select(i => GetFamily(i)).ToArray();
+            FamilyTypeList = Enumerable.Range(0, NumFamilyType).Select(i => GetFamilyType(i)).ToArray();
+            FamilyInstanceList = Enumerable.Range(0, NumFamilyInstance).Select(i => GetFamilyInstance(i)).ToArray();
+            ViewList = Enumerable.Range(0, NumView).Select(i => GetView(i)).ToArray();
+            ElementInViewList = Enumerable.Range(0, NumElementInView).Select(i => GetElementInView(i)).ToArray();
+            ShapeInViewList = Enumerable.Range(0, NumShapeInView).Select(i => GetShapeInView(i)).ToArray();
+            AssetInViewList = Enumerable.Range(0, NumAssetInView).Select(i => GetAssetInView(i)).ToArray();
+            AssetInViewSheetList = Enumerable.Range(0, NumAssetInViewSheet).Select(i => GetAssetInViewSheet(i)).ToArray();
+            LevelInViewList = Enumerable.Range(0, NumLevelInView).Select(i => GetLevelInView(i)).ToArray();
+            CameraList = Enumerable.Range(0, NumCamera).Select(i => GetCamera(i)).ToArray();
+            MaterialList = Enumerable.Range(0, NumMaterial).Select(i => GetMaterial(i)).ToArray();
+            MaterialInElementList = Enumerable.Range(0, NumMaterialInElement).Select(i => GetMaterialInElement(i)).ToArray();
+            CompoundStructureLayerList = Enumerable.Range(0, NumCompoundStructureLayer).Select(i => GetCompoundStructureLayer(i)).ToArray();
+            CompoundStructureList = Enumerable.Range(0, NumCompoundStructure).Select(i => GetCompoundStructure(i)).ToArray();
+            NodeList = Enumerable.Range(0, NumNode).Select(i => GetNode(i)).ToArray();
+            GeometryList = Enumerable.Range(0, NumGeometry).Select(i => GetGeometry(i)).ToArray();
+            ShapeList = Enumerable.Range(0, NumShape).Select(i => GetShape(i)).ToArray();
+            ShapeCollectionList = Enumerable.Range(0, NumShapeCollection).Select(i => GetShapeCollection(i)).ToArray();
+            ShapeInShapeCollectionList = Enumerable.Range(0, NumShapeInShapeCollection).Select(i => GetShapeInShapeCollection(i)).ToArray();
+            SystemList = Enumerable.Range(0, NumSystem).Select(i => GetSystem(i)).ToArray();
+            ElementInSystemList = Enumerable.Range(0, NumElementInSystem).Select(i => GetElementInSystem(i)).ToArray();
+            WarningList = Enumerable.Range(0, NumWarning).Select(i => GetWarning(i)).ToArray();
+            ElementInWarningList = Enumerable.Range(0, NumElementInWarning).Select(i => GetElementInWarning(i)).ToArray();
+            BasePointList = Enumerable.Range(0, NumBasePoint).Select(i => GetBasePoint(i)).ToArray();
+            PhaseFilterList = Enumerable.Range(0, NumPhaseFilter).Select(i => GetPhaseFilter(i)).ToArray();
+            GridList = Enumerable.Range(0, NumGrid).Select(i => GetGrid(i)).ToArray();
+            AreaList = Enumerable.Range(0, NumArea).Select(i => GetArea(i)).ToArray();
+            AreaSchemeList = Enumerable.Range(0, NumAreaScheme).Select(i => GetAreaScheme(i)).ToArray();
+            ScheduleList = Enumerable.Range(0, NumSchedule).Select(i => GetSchedule(i)).ToArray();
+            ScheduleColumnList = Enumerable.Range(0, NumScheduleColumn).Select(i => GetScheduleColumn(i)).ToArray();
+            ScheduleCellList = Enumerable.Range(0, NumScheduleCell).Select(i => GetScheduleCell(i)).ToArray();
+            ViewSheetSetList = Enumerable.Range(0, NumViewSheetSet).Select(i => GetViewSheetSet(i)).ToArray();
+            ViewSheetList = Enumerable.Range(0, NumViewSheet).Select(i => GetViewSheet(i)).ToArray();
+            ViewSheetInViewSheetSetList = Enumerable.Range(0, NumViewSheetInViewSheetSet).Select(i => GetViewSheetInViewSheetSet(i)).ToArray();
+            ViewInViewSheetSetList = Enumerable.Range(0, NumViewInViewSheetSet).Select(i => GetViewInViewSheetSet(i)).ToArray();
+            ViewInViewSheetList = Enumerable.Range(0, NumViewInViewSheet).Select(i => GetViewInViewSheet(i)).ToArray();
+            SiteList = Enumerable.Range(0, NumSite).Select(i => GetSite(i)).ToArray();
+            BuildingList = Enumerable.Range(0, NumBuilding).Select(i => GetBuilding(i)).ToArray();
             
             // Initialize element index maps
             ElementIndexMaps = new ElementIndexMaps(this, inParallel);

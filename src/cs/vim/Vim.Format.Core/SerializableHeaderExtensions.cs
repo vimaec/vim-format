@@ -1,9 +1,15 @@
-﻿using System.IO;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Text;
 
 namespace Vim.Format
 {
     public static class SerializableHeaderExtensions
     {
+        /// <summary>
+        /// Returns true if the SerializableHeader in the stream is successfully parsed.
+        /// </summary>
         public static bool TryParseSerializableHeader(this Stream stream, out SerializableHeader header)
         {
             try
@@ -17,16 +23,23 @@ namespace Vim.Format
             return header != null;
         }
 
-        public static bool TryParseSerializableHeader(this FileInfo fileInfo, out SerializableHeader header)
+        /// <summary>
+        /// Returns true if the SerializableHeader in the stream is successfully parsed.
+        /// </summary>
+        public static bool TryParseSerializableHeader(this FileInfo file, out SerializableHeader header)
         {
-            try
+            using (var stream = file.OpenRead())
             {
-                header = SerializableHeader.FromPath(fileInfo.FullName);
+                try
+                {
+                    header = SerializableHeader.FromStream(stream);
+                }
+                catch
+                {
+                    header = null;
+                }
             }
-            catch
-            {
-                header = null;
-            }
+
             return header != null;
         }
 

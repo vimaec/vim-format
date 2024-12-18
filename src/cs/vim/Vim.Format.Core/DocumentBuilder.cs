@@ -6,7 +6,7 @@ using Vim.Math3d;
 using Vim.BFastLib;
 using System.IO;
 using Vim.Util;
-using Vim.G3d;
+using Vim.Format.Geometry;
 
 namespace Vim.Format
 {
@@ -15,11 +15,8 @@ namespace Vim.Format
         public readonly SerializableHeader Header;
         public readonly Dictionary<string, EntityTableBuilder> Tables = new Dictionary<string, EntityTableBuilder>();
         public readonly Dictionary<string, byte[]> Assets = new Dictionary<string, byte[]>();
-        //public readonly List<SubdividedMesh> Meshes = new List<SubdividedMesh>();
-        //public readonly List<Instance> Instances = new List<Instance>();
-        //public readonly List<Shape> Shapes = new List<Shape>();
-        //public readonly List<Material> Materials = new List<Material>();
         public readonly G3dBuilder Geometry = new G3dBuilder();
+
         public bool UseColors { get; set; }
 
         public DocumentBuilder(
@@ -52,13 +49,13 @@ namespace Vim.Format
             return this;
         }
 
-        public DocumentBuilder AddMesh(SubdividedMesh mesh)
+        public DocumentBuilder AddMesh(VimMesh mesh)
         {
             Geometry.AddMesh(mesh);
             return this;
         }
 
-        public DocumentBuilder AddMeshes(IEnumerable<SubdividedMesh> meshes)
+        public DocumentBuilder AddMeshes(IEnumerable<VimMesh> meshes)
         {
             foreach (var m in meshes)
             {
@@ -88,7 +85,7 @@ namespace Vim.Format
             return this;
         }
 
-        public DocumentBuilder AddMaterials(IEnumerable<Material> materials)
+        public DocumentBuilder AddMaterials(IEnumerable<IMaterial> materials)
         {
             foreach (var material in materials)
             {

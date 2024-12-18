@@ -155,14 +155,23 @@ namespace Vim
         public static Vector4 ToDiffuseColor(this DVector3 v, double transparency)
             => new Vector4((float)v.X, (float)v.Y, (float)v.Z, 1.0f - (float)transparency);
 
-        public static IList<Vector4> MaterialColors(this VimScene scene) => scene.DocumentModel.MaterialList.Select(GetDiffuseColor).ToArray();
+        public static Vector4[] MaterialColors(this VimScene scene) => scene.DocumentModel.MaterialList.Select(GetDiffuseColor).ToArray();
 
         public static Vector4 DefaultColor = new Vector4(0.5f, 0.5f, 0.5f, 1);
 
         public static IEnumerable<(string assetBufferName, FileInfo assetFileInfo)> ExtractAssets(this VimScene vim, DirectoryInfo directory)
             => vim.Document.ExtractAssets(directory);
 
+        public static FileInfo ExtractAsset(this VimScene vim, string assetBufferName, FileInfo fileInfo)
+            => vim.Document.ExtractAsset(assetBufferName, fileInfo);
+
+        public static ElementInfo GetElementInfo(this VimScene vim, int elementIndex)
+            => vim.DocumentModel.GetElementInfo(elementIndex);
+
         public static ElementInfo GetElementInfo(this VimScene vim, Element element)
             => vim.DocumentModel.GetElementInfo(element);
+
+        public static VimSchema GetVimSchema(this VimScene vim)
+            => VimSchema.Create(vim._SerializableDocument);
     }
 }

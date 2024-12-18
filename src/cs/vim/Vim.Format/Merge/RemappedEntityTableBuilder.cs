@@ -96,7 +96,7 @@ namespace Vim.Format.Merge
             {
                 var colName = kv.Key;
                 var col = kv.Value;
-                var typePrefix = colName.GetTypePrefix();
+                var typePrefix = SerializableEntityTable.GetTypeFromName(colName);
                 var newCol = col.CopyDataColumn(typePrefix, retainedIndices);
                 remapped.AddDataColumn(colName, newCol);
             }

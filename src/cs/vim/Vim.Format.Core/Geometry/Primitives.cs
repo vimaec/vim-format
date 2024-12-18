@@ -1,96 +1,155 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
-using Vim.G3d;
 using Vim.Math3d;
 
 namespace Vim.Format.Geometry
 {
+    // TODO: plane, cylinder, cone, ruled face, 
     public static class Primitives
     {
-        public static IMesh TriMesh(IEnumerable<GeometryAttribute> attributes)
-            => attributes.Where(x => x != null).ToIMesh();
-
-        public static IMesh TriMesh(params GeometryAttribute[] attributes)
-            => TriMesh(attributes.AsEnumerable());
-
-        public static IMesh TriMesh(
-            this IList<Vector3> vertices,
-            IList<int> indices = null,
-            IList<Vector2> uvs = null,
-            IList<Vector4> colors = null,
-            IList<int> materials = null,
-            IList<int> submeshMaterials = null)
-            => TriMesh(
-                vertices?.ToPositionAttribute(),
-                indices?.ToIndexAttribute(),
-                uvs?.ToVertexUvAttribute(),
-                materials?.ToFaceMaterialAttribute(),
-                colors?.ToVertexColorAttribute(),
-                submeshMaterials?.ToSubmeshMaterialAttribute()
-            );
-
-        public static IMesh TriMesh(this IList<Vector3> vertices, IList<int> indices = null, params GeometryAttribute[] attributes)
-            => new GeometryAttribute[] {
-                vertices?.ToPositionAttribute(),
-                indices?.ToIndexAttribute(),
-            }.Concat(attributes).ToIMesh();
-
-        public static IMesh Cube
+        public static VimMesh CreateCube()
         {
-            get
-            {
-                var vertices = new[] {
-                    // front
-                    new Vector3(-0.5f, -0.5f,  0.5f),
-                    new Vector3(0.5f, -0.5f,  0.5f),
-                    new Vector3(0.5f,  0.5f,  0.5f),
-                    new Vector3(-0.5f,  0.5f,  0.5f),
-                    // back
-                    new Vector3(-0.5f, -0.5f, -0.5f),
-                    new Vector3(0.5f, -0.5f, -0.5f),
-                    new Vector3(0.5f,  0.5f, -0.5f),
-                    new Vector3(-0.5f,  0.5f, -0.5f)
-                };
+            var vertices = new[] {
+                // front
+                new Vector3(-0.5f, -0.5f,  0.5f),
+                new Vector3(0.5f, -0.5f,  0.5f),
+                new Vector3(0.5f,  0.5f,  0.5f),
+                new Vector3(-0.5f,  0.5f,  0.5f),
+                // back
+                new Vector3(-0.5f, -0.5f, -0.5f),
+                new Vector3(0.5f, -0.5f, -0.5f),
+                new Vector3(0.5f,  0.5f, -0.5f),
+                new Vector3(-0.5f,  0.5f, -0.5f)
+            };
 
-                var indices = new[] {
-                    // front
-                    0, 1, 2,
-                    2, 3, 0,
-                    // right
-                    1, 5, 6,
-                    6, 2, 1,
-                    // back
-                    7, 6, 5,
-                    5, 4, 7,
-                    // left
-                    4, 0, 3,
-                    3, 7, 4,
-                    // bottom
-                    4, 5, 1,
-                    1, 0, 4,
-                    // top
-                    3, 2, 6,
-                    6, 7, 3
-                };
+            var indices = new[] {
+                // front
+                0, 1, 2,
+                2, 3, 0,
+                // right
+                1, 5, 6,
+                6, 2, 1,
+                // back
+                7, 6, 5,
+                5, 4, 7,
+                // left
+                4, 0, 3,
+                3, 7, 4,
+                // bottom
+                4, 5, 1,
+                1, 0, 4,
+                // top
+                3, 2, 6,
+                6, 7, 3
+            };
 
-                return vertices.TriMesh(indices);
-            }
+            return new VimMesh(indices, vertices);
         }
 
-        public static IMesh CubeFaceted
+        public static VimMesh CreateCube(AABox box)
         {
-            get
+            return CreateCube().Scale(box.Extent).Translate(box.Center);
+        }
+
+        private static float Sqrt2 = 2.0f.Sqrt();
+        public static VimMesh CreateTetrahedron()
+        {
+            var vertices = new[]
             {
-                var cube = Cube;
-                return cube.Indices.Select(i => cube.Vertices[i]).ToArray().TriMesh(cube.Indices.Count.Range());
+                new Vector3(1f, 0.0f, -1f / Sqrt2),
+                new Vector3(-1f, 0.0f, -1f / Sqrt2),
+                new Vector3(0.0f, 1f, 1f / Sqrt2),
+                new Vector3(0.0f, -1f, 1f / Sqrt2)
+            };
+            var indices = new[] { 0, 1, 2, 1, 0, 3, 0, 2, 3, 1, 3, 2 };
+            return new VimMesh(indices, vertices);
+        }
+        public static VimMesh CreateSquare()
+        {
+            var vertices = new[]
+            {
+                new Vector3(-0.5f, -0.5f, 0f),
+                new Vector3(-0.5f, 0.5f, 0f),
+                new Vector3(0.5f, 0.5f, 0f),
+                new Vector3(0.5f, -0.5f, 0f)
+            };
+
+            var indices = new[] { 0, 1, 2, 2, 3, 0 };
+
+            return new VimMesh(indices, vertices);
+        }
+
+        // see: https://github.com/mrdoob/three.js/blob/9ef27d1af7809fa4d9943f8d4c4644e365ab6d2d/src/geometries/TorusBufferGeometry.js#L52
+        public static Vector3 TorusFunction(Vector2 uv, float radius, float tube)
+        {
+            uv *= Math3d.Constants.TwoPi;
+            return new Vector3(
+                (radius + tube * uv.Y.Cos()) * uv.X.Cos(),
+                (radius + tube * uv.Y.Cos()) * uv.X.Sin(),
+                tube * uv.Y.Sin());
+        }
+
+        public static VimMesh Torus(float radius, float tubeRadius, int uSegs, int vSegs)
+            => QuadMesh(uv => TorusFunction(uv, radius, tubeRadius), uSegs, vSegs);
+
+        // see: https://github.com/mrdoob/three.js/blob/9ef27d1af7809fa4d9943f8d4c4644e365ab6d2d/src/geometries/SphereBufferGeometry.js#L76
+        public static Vector3 SphereFunction(Vector2 uv, float radius)
+            => new Vector3(
+                (float)(-radius * Math.Cos(uv.X * Math3d.Constants.TwoPi) * Math.Sin(uv.Y * Math3d.Constants.Pi)),
+                (float)(radius * Math.Cos(uv.Y * Math3d.Constants.Pi)),
+                (float)(radius * Math.Sin(uv.X * Math3d.Constants.TwoPi) * Math.Sin(uv.Y * Math3d.Constants.Pi)));
+
+        public static VimMesh Sphere(float radius, int uSegs, int vSegs)
+            => QuadMesh(uv => SphereFunction(uv, radius), uSegs, vSegs);
+
+        /// <summary>
+        /// Returns a collection of circular points.
+        /// </summary>
+        public static Vector2[] CirclePoints(float radius, int numPoints)
+            => CirclePoints(numPoints).Select(x => x * radius).ToArray();
+
+        public static Vector2[] CirclePoints(int numPoints)
+            => Enumerable.Range(0, numPoints).Select(i => CirclePoint(i, numPoints)).ToArray();
+
+        public static Vector2 CirclePoint(int i, int numPoints)
+            => new Vector2((i * (Math3d.Constants.TwoPi / numPoints)).Cos(), (i * (Math3d.Constants.TwoPi / numPoints)).Sin());
+
+        /// <summary>
+        /// Computes the indices of a quad mesh astrip.
+        /// </summary>
+        public static int[] ComputeQuadMeshStripIndices(int usegs, int vsegs, bool wrapUSegs = false, bool wrapVSegs = false)
+        {
+            var indices = new List<int>();
+
+            var maxUSegs = wrapUSegs ? usegs : usegs + 1;
+            var maxVSegs = wrapVSegs ? vsegs : vsegs + 1;
+
+            for (var i = 0; i < vsegs; ++i)
+            {
+                var rowA = i * maxUSegs;
+                var rowB = ((i + 1) % maxVSegs) * maxUSegs;
+
+                for (var j = 0; j < usegs; ++j)
+                {
+                    var colA = j;
+                    var colB = (j + 1) % maxUSegs;
+
+                    indices.Add(rowA + colA);
+                    indices.Add(rowA + colB);
+                    indices.Add(rowB + colB);
+                    indices.Add(rowB + colA);
+                }
             }
+
+            return indices.ToArray();
         }
 
         /// <summary>
         /// Returns the index buffer of a quad mesh strip.
         /// Returns an empty array if either numRowPoints or numPointsPerRow is less than 2.
         /// </summary>
-        public static List<int> QuadMeshStripIndicesFromPointRows(
+        public static int[] QuadMeshStripIndicesFromPointRows(
             int numPointRows,
             int numPointsPerRow,
             bool clockwise = false)
@@ -146,7 +205,7 @@ namespace Vim.Format.Geometry
                 }
             }
 
-            return indices;
+            return indices.ToArray();
         }
 
         public static int[] TriMeshCylinderCapIndices(int numEdgeVertices)
@@ -190,6 +249,35 @@ namespace Vim.Format.Geometry
             indices.Add(lastTriangleIndex2);
 
             return indices.ToArray();
+        }
+
+        /// <summary>
+        /// Creates a quad mesh given a mapping from 2 space to 3 space 
+        /// </summary>
+        public static VimMesh QuadMesh(this Func<Vector2, Vector3> f, int segs)
+            => QuadMesh(f, segs, segs);
+
+        /// <summary>
+        /// Creates a quad mesh given a mapping from 2 space to 3 space 
+        /// </summary>
+        public static VimMesh QuadMesh(this Func<Vector2, Vector3> f, int usegs, int vsegs, bool wrapUSegs = false, bool wrapVSegs = false)
+        {
+            var verts = new List<Vector3>();
+            var maxUSegs = wrapUSegs ? usegs : usegs + 1;
+            var maxVSegs = wrapVSegs ? vsegs : vsegs + 1;
+
+            for (var i = 0; i < maxVSegs; ++i)
+            {
+                var v = (float)i / vsegs;
+                for (var j = 0; j < maxUSegs; ++j)
+                {
+                    var u = (float)j / usegs;
+                    verts.Add(f(new Vector2(u, v)));
+                }
+            }
+            var indices = ComputeQuadMeshStripIndices(usegs, vsegs, wrapUSegs, wrapVSegs);
+
+            return VimMesh.FromQuad(indices, verts.ToArray());
         }
     }
 }

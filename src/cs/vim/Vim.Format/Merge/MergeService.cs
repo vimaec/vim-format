@@ -134,18 +134,18 @@ namespace Vim.Format.Merge
             progress?.Report("Merging geometry");
             ct.ThrowIfCancellationRequested();
 
-            var materialCounts = vims.Select(v => v.Materials.Count).ToArray();
+            var materialCounts = vims.Select(v => v.Materials.Length).ToArray();
             var materialOffsets = materialCounts.PostAccumulate((x, y) => x + y).DropLast();
 
             db.Geometry.AddMeshes(vims
                 .SelectMany((vim, vimIndex) => vim.Meshes.Select(mesh => (mesh, vimIndex)))
                 .Select(
-                    pair => new DocumentBuilder.SubdividedMesh(
-                        indices: pair.mesh.Indices?.ToList(),
-                        vertices: pair.mesh.Vertices?.ToList(),
-                        submeshesIndexOffset: pair.mesh.SubmeshIndexOffsets?.ToList(),
-                        submeshMaterials: pair.mesh.SubmeshMaterials.Select(
-                            mat => mat == -1 ? -1 : mat + materialOffsets[pair.vimIndex])?.ToList()
+                    pair => new VimMesh(
+                        indices: pair.mesh.indices,
+                        vertices: pair.mesh.vertices,
+                        submeshIndexOffsets: pair.mesh.submeshIndexOffsets,
+                        submeshMaterials: pair.mesh.submeshMaterials.Select(
+                            mat => mat == -1 ? -1 : mat + materialOffsets[pair.vimIndex]).ToArray()
                     )
                 )
                 .ToList());
@@ -161,7 +161,7 @@ namespace Vim.Format.Merge
                 vimTransforms = gridTransforms.Zip(vimTransforms, (g, t) => g * t).ToArray();
             }
 
-            var meshCounts = vims.Select(v => v.Meshes.Count).ToArray();
+            var meshCounts = vims.Select(v => v.Meshes.Length).ToArray();
             var meshOffsets = meshCounts.PostAccumulate((x, y) => x + y).DropLast();
 
             // Merge the instances
@@ -171,7 +171,7 @@ namespace Vim.Format.Merge
             var allIdentity = vimTransforms.All(t => t.IsIdentity);
             db.Geometry.AddInstances(
                 vims
-                .SelectMany((vim, vimIndex) => vim.VimNodes.Select(node => (node, vimIndex)))
+                .SelectMany((vim, vimIndex) => vim.Nodes.Select(node => (node, vimIndex)))
                 .Select(pair => new DocumentBuilder.Instance()
                 {
                     ParentIndex = -1,

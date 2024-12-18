@@ -92,7 +92,7 @@ public static class ObjectModelGenerator
                 ? $"({string.Join(" ?? ", dataColumnGetters)})"
                 : dataColumnGetters[0];
 
-            cb.AppendLine($"public IList<{fieldTypeName}> {t.Name}{fieldName} {{ get; }}");
+            cb.AppendLine($"public {fieldTypeName}[] {t.Name}{fieldName} {{ get; }}");
             constructor.ArraysInitializers
                        .Add($"{t.Name}{fieldName} = {dataColumnGetterString} ?? Array.Empty<{fieldTypeName}>();");
 
@@ -106,7 +106,7 @@ public static class ObjectModelGenerator
         {
             var (indexColumnName, localFieldName) = fieldInfo.GetIndexColumnInfo();
 
-            cb.AppendLine($"public IList<int> {t.Name}{localFieldName}Index {{ get; }}");
+            cb.AppendLine($"public int[] {t.Name}{localFieldName}Index {{ get; }}");
             constructor.RelationalColumns
                        .Add($"{t.Name}{localFieldName}Index = {t.Name}EntityTable?.GetIndexColumnValues(\"{indexColumnName}\") ?? Array.Empty<int>();");
 
@@ -117,7 +117,7 @@ public static class ObjectModelGenerator
         cb.AppendLine($"public int Num{t.Name} => {t.Name}EntityTable?.NumRows ?? 0;");
 
         // Entity lists
-        cb.AppendLine($"public IList<{t.Name}> {t.Name}List {{ get; }}");
+        cb.AppendLine($"public {t.Name}[] {t.Name}List {{ get; }}");
 
         // Element getter function
         cb.AppendLine($"public {t.Name} Get{t.Name}(int n)");
@@ -222,8 +222,10 @@ public static class ObjectModelGenerator
         return cb;
     }
 
-    private static CodeBuilder WriteDocument(CodeBuilder cb)
+    private static CodeBuilder WriteDocument(CodeBuilder cb = null)
     {
+        cb = cb ?? new CodeBuilder();
+
         var entityTypes = ObjectModelReflection.GetEntityTypes().ToArray();
 
         foreach (var et in entityTypes)
@@ -275,7 +277,7 @@ public static class ObjectModelGenerator
 
         cb.AppendLine("// Initialize entity collections");
         foreach (var t in entityTypes)
-            cb.AppendLine($"{t.Name}List = Num{t.Name}.Select(i => Get{t.Name}(i));");
+            cb.AppendLine($"{t.Name}List = Enumerable.Range(0, Num{t.Name}).Select(i => Get{t.Name}(i)).ToArray();");
         cb.AppendLine();
 
         cb.AppendLine("// Initialize element index maps");
@@ -502,11 +504,11 @@ public static class ObjectModelGenerator
             cb.AppendLine("// AUTO-GENERATED FILE, DO NOT MODIFY.");
             cb.AppendLine("// ReSharper disable All");
             cb.AppendLine("using System;");
-            cb.AppendLine("using System.Collections;");
             cb.AppendLine("using System.Collections.Generic;");
             cb.AppendLine("using System.Linq;");
             cb.AppendLine("using Vim.Math3d;");
-            cb.AppendLine("using Vim.G3d;");
+            cb.AppendLine("using Vim.Format.ObjectModel;");
+            cb.AppendLine("using Vim.Util;");
 
             cb.AppendLine();
 

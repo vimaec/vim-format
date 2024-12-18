@@ -3,7 +3,6 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using Vim.BFastLib;
-using Vim.LinqArray;
 using Vim.Util;
 
 namespace Vim.Format.Merge
@@ -25,9 +24,8 @@ namespace Vim.Format.Merge
             Debug.Assert(entityIndexOffsets[entityTable] == NumRows);
 
             // Add index columns from the entity table
-            foreach (var k in entityTable.IndexColumns.Keys)
+            foreach (var col in entityTable.IndexColumns)
             {
-                var col = entityTable.IndexColumns[k];
                 var indexColumnFullName = col.Name;
 
                 if (!IndexColumns.ContainsKey(indexColumnFullName))
@@ -43,29 +41,27 @@ namespace Vim.Format.Merge
             }
 
             // Add data columns from the entity table 
-            foreach (var colName in entityTable.DataColumns.Keys)
+            foreach (var col in entityTable.DataColumns)
             {
-                var col = entityTable.DataColumns[colName];
-                if (!DataColumns.ContainsKey(colName))
+                if (!DataColumns.ContainsKey(col.Name))
                 {
-                    DataColumns[colName] = col;
+                    DataColumns[col.Name] = col;
                 }
                 else
                 {
-                    var cur = DataColumns[colName];
-                    DataColumns[colName] = cur.ConcatDataColumnBuffers(col, colName.GetTypePrefix());
+                    var cur = DataColumns[col.Name];
+                    DataColumns[col.Name] = cur.ConcatDataColumnBuffers(col,  SerializableEntityTable.GetTypeFromName(col.Name));
                 }
             }
 
             // Add string columns from the entity table 
-            foreach (var k in entityTable.StringColumns.Keys)
+            foreach (var col in entityTable.StringColumns)
             {
-                if (!StringColumns.ContainsKey(k))
-                    StringColumns.Add(k, Enumerable.Repeat("", NumRows).ToList());
+                if (!StringColumns.ContainsKey(col.Name))
+                    StringColumns.Add(col.Name, Enumerable.Repeat("", NumRows).ToList());
 
-                var col = entityTable.StringColumns[k];
                 Debug.Assert(col.Array.Length == entityTable.NumRows);
-                var vals = StringColumns[k];
+                var vals = StringColumns[col.Name];
                 foreach (var v in col.Array)
                     vals.Add(entityTable.Document.GetString(v));
             }
@@ -74,8 +70,8 @@ namespace Vim.Format.Merge
             foreach (var kv in DataColumns)
             {
                 var colName = kv.Key;
-                var typePrefix = colName.GetTypePrefix();
-                if (!entityTable.DataColumns.ContainsKey(colName))
+                var typePrefix = SerializableEntityTable.GetTypeFromName(colName);
+                if (entityTable.DataColumns.All(c => c.Name != colName))
                 {
                     var cur = DataColumns[colName];
                     var defaultBuffer = ColumnExtensions.CreateDefaultDataColumnBuffer(entityTable.NumRows, typePrefix);
@@ -85,13 +81,13 @@ namespace Vim.Format.Merge
 
             foreach (var kv in IndexColumns)
             {
-                if (!entityTable.IndexColumns.ContainsKey(kv.Key))
+                if (entityTable.IndexColumns.All(c => c.Name != kv.Key))
                     IndexColumns[kv.Key].AddRange(Enumerable.Repeat(-1, entityTable.NumRows));
             }
 
             foreach (var kv in StringColumns)
             {
-                if (!entityTable.StringColumns.ContainsKey(kv.Key))
+                if (entityTable.StringColumns.All(c => c.Name != kv.Key))
                     StringColumns[kv.Key].AddRange(Enumerable.Repeat("", entityTable.NumRows));
             }
 
