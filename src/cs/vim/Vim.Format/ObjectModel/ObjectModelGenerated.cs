@@ -1,10 +1,10 @@
 // AUTO-GENERATED FILE, DO NOT MODIFY.
 // ReSharper disable All
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Vim.Math3d;
-using Vim.Format.ObjectModel;
 using Vim.Util;
 
 namespace Vim.Format.ObjectModel {

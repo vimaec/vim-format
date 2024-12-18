@@ -504,10 +504,10 @@ public static class ObjectModelGenerator
             cb.AppendLine("// AUTO-GENERATED FILE, DO NOT MODIFY.");
             cb.AppendLine("// ReSharper disable All");
             cb.AppendLine("using System;");
+            cb.AppendLine("using System.Collections;");
             cb.AppendLine("using System.Collections.Generic;");
             cb.AppendLine("using System.Linq;");
             cb.AppendLine("using Vim.Math3d;");
-            cb.AppendLine("using Vim.Format.ObjectModel;");
             cb.AppendLine("using Vim.Util;");
 
             cb.AppendLine();
