@@ -23,10 +23,10 @@ namespace Vim.Format.Geometry
         public Int3 BoxExtents;
         public Int3 BoxMin;
 
-        public int Round(float f)
+        private int Round(float f)
             => (int)(f / Tolerance);
 
-        public Int3 Round(Vector3 v)
+        private Int3 Round(Vector3 v)
             => new Int3(Round(v.X), Round(v.Y), Round(v.Z));
 
         public MeshHash(VimMesh mesh, float tolerance)
@@ -44,7 +44,7 @@ namespace Vim.Format.Geometry
         public override bool Equals(object obj)
             => obj is MeshHash other && Equals(other);
 
-        public bool Equals(MeshHash other)
+        private bool Equals(MeshHash other)
             => NumFaces == other.NumFaces
             && NumVertices == other.NumVertices
             && BoxMin.Equals(other.BoxMin)
@@ -53,11 +53,5 @@ namespace Vim.Format.Geometry
 
         public override int GetHashCode()
             => Hash.Combine(NumFaces, NumVertices, TopologyHash, BoxMin.GetHashCode(), BoxExtents.GetHashCode());
-    }
-
-    public static class Optimization
-    {
-        public static Dictionary<MeshHash, List<VimMesh>> GroupMeshesByHash(this IEnumerable<VimMesh> meshes, float tolerance)
-         => meshes.AsParallel().GroupBy(m => new MeshHash(m, tolerance)).ToDictionary(grp => grp.Key, grp => grp.ToList());
     }
 }

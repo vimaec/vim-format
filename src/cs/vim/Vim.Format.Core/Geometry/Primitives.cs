@@ -47,41 +47,8 @@ namespace Vim.Format.Geometry
             return new VimMesh(indices, vertices);
         }
 
-        public static VimMesh CreateCube(AABox box)
-        {
-            return CreateCube().Scale(box.Extent).Translate(box.Center);
-        }
-
-        private static float Sqrt2 = 2.0f.Sqrt();
-        public static VimMesh CreateTetrahedron()
-        {
-            var vertices = new[]
-            {
-                new Vector3(1f, 0.0f, -1f / Sqrt2),
-                new Vector3(-1f, 0.0f, -1f / Sqrt2),
-                new Vector3(0.0f, 1f, 1f / Sqrt2),
-                new Vector3(0.0f, -1f, 1f / Sqrt2)
-            };
-            var indices = new[] { 0, 1, 2, 1, 0, 3, 0, 2, 3, 1, 3, 2 };
-            return new VimMesh(indices, vertices);
-        }
-        public static VimMesh CreateSquare()
-        {
-            var vertices = new[]
-            {
-                new Vector3(-0.5f, -0.5f, 0f),
-                new Vector3(-0.5f, 0.5f, 0f),
-                new Vector3(0.5f, 0.5f, 0f),
-                new Vector3(0.5f, -0.5f, 0f)
-            };
-
-            var indices = new[] { 0, 1, 2, 2, 3, 0 };
-
-            return new VimMesh(indices, vertices);
-        }
-
         // see: https://github.com/mrdoob/three.js/blob/9ef27d1af7809fa4d9943f8d4c4644e365ab6d2d/src/geometries/TorusBufferGeometry.js#L52
-        public static Vector3 TorusFunction(Vector2 uv, float radius, float tube)
+        private static Vector3 TorusFunction(Vector2 uv, float radius, float tube)
         {
             uv *= Math3d.Constants.TwoPi;
             return new Vector3(
@@ -93,32 +60,10 @@ namespace Vim.Format.Geometry
         public static VimMesh Torus(float radius, float tubeRadius, int uSegs, int vSegs)
             => QuadMesh(uv => TorusFunction(uv, radius, tubeRadius), uSegs, vSegs);
 
-        // see: https://github.com/mrdoob/three.js/blob/9ef27d1af7809fa4d9943f8d4c4644e365ab6d2d/src/geometries/SphereBufferGeometry.js#L76
-        public static Vector3 SphereFunction(Vector2 uv, float radius)
-            => new Vector3(
-                (float)(-radius * Math.Cos(uv.X * Math3d.Constants.TwoPi) * Math.Sin(uv.Y * Math3d.Constants.Pi)),
-                (float)(radius * Math.Cos(uv.Y * Math3d.Constants.Pi)),
-                (float)(radius * Math.Sin(uv.X * Math3d.Constants.TwoPi) * Math.Sin(uv.Y * Math3d.Constants.Pi)));
-
-        public static VimMesh Sphere(float radius, int uSegs, int vSegs)
-            => QuadMesh(uv => SphereFunction(uv, radius), uSegs, vSegs);
-
-        /// <summary>
-        /// Returns a collection of circular points.
-        /// </summary>
-        public static Vector2[] CirclePoints(float radius, int numPoints)
-            => CirclePoints(numPoints).Select(x => x * radius).ToArray();
-
-        public static Vector2[] CirclePoints(int numPoints)
-            => Enumerable.Range(0, numPoints).Select(i => CirclePoint(i, numPoints)).ToArray();
-
-        public static Vector2 CirclePoint(int i, int numPoints)
-            => new Vector2((i * (Math3d.Constants.TwoPi / numPoints)).Cos(), (i * (Math3d.Constants.TwoPi / numPoints)).Sin());
-
         /// <summary>
         /// Computes the indices of a quad mesh astrip.
         /// </summary>
-        public static int[] ComputeQuadMeshStripIndices(int usegs, int vsegs, bool wrapUSegs = false, bool wrapVSegs = false)
+        private static int[] ComputeQuadMeshStripIndices(int usegs, int vsegs, bool wrapUSegs = false, bool wrapVSegs = false)
         {
             var indices = new List<int>();
 
@@ -250,12 +195,6 @@ namespace Vim.Format.Geometry
 
             return indices.ToArray();
         }
-
-        /// <summary>
-        /// Creates a quad mesh given a mapping from 2 space to 3 space 
-        /// </summary>
-        public static VimMesh QuadMesh(this Func<Vector2, Vector3> f, int segs)
-            => QuadMesh(f, segs, segs);
 
         /// <summary>
         /// Creates a quad mesh given a mapping from 2 space to 3 space 

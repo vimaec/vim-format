@@ -301,12 +301,7 @@ namespace Vim.Format.Geometry
             return result;
         }
 
-        public static VimMesh[] SplitSubmeshes(this VimMesh mesh)
-        {
-            return null;
-        }
-
-        public static (int, List<int>)[] GroupSubmeshesByMaterials(this VimMesh mesh)
+        private static (int, List<int>)[] GroupSubmeshesByMaterials(this VimMesh mesh)
         {
             var submeshCount = mesh.submeshIndexOffsets.Length;
             var map = new Dictionary<int, List<int>>();
@@ -325,7 +320,7 @@ namespace Vim.Format.Geometry
             return map.Select(kvp => (kvp.Key, kvp.Value)).ToArray();
         }
 
-        public static Triangle VertexIndicesToTriangle(this VimMesh mesh, Int3 indices)
+        private static Triangle VertexIndicesToTriangle(this VimMesh mesh, Int3 indices)
             => new Triangle(mesh.vertices[indices.X], mesh.vertices[indices.Y], mesh.vertices[indices.Z]);
 
         public static bool Planar(this VimMesh mesh, float tolerance = Math3d.Constants.Tolerance)
@@ -335,13 +330,7 @@ namespace Vim.Format.Geometry
             return mesh.ComputedNormals().All(n => n.AlmostEquals(normal, tolerance));
         }
 
-        public static VimMesh Unindex(this VimMesh mesh)
-        {
-            var vertices = mesh.indices.Select(i => mesh.vertices[i]);
-            return new VimMesh(vertices.ToArray());
-        }
-
-        public static Vector3[] ComputedNormals(this VimMesh mesh)
+        private static Vector3[] ComputedNormals(this VimMesh mesh)
             => mesh.Triangles().Select(t => t.Normal).ToArray();
 
         public static Triangle Triangle(this VimMesh mesh, int face)
@@ -405,7 +394,7 @@ namespace Vim.Format.Geometry
             return result;
         }
 
-        public static VimMesh PickSubmeshes(this VimMesh mesh, IList<int> submeshes)
+        private static VimMesh PickSubmeshes(this VimMesh mesh, IList<int> submeshes)
         {
             var map = mesh.GroupSubmeshesByMaterials();
 

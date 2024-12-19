@@ -113,7 +113,7 @@ namespace Vim.Format
             }
 
             bfast.SetEnumerable(CommonAttributes.Position, () => _meshes.SelectMany(m => m.vertices));
-            bfast.SetEnumerable(CommonAttributes.Index, () => _meshes.SelectMany(m => m.indices));
+            bfast.SetEnumerable(CommonAttributes.Index, () => _meshes.SelectMany((m, ix) => m.indices.Select(i => i + meshVertexOffsets[ix])));
             bfast.SetEnumerable(CommonAttributes.MeshSubmeshOffset, () => meshSubmeshOffset);
             bfast.SetEnumerable(CommonAttributes.SubmeshIndexOffset, () => submeshIndexOffsets);
             bfast.SetEnumerable(CommonAttributes.SubmeshMaterial, () => _meshes.SelectMany(s => s.submeshMaterials));
