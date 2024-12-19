@@ -10,30 +10,30 @@ namespace Vim.Format.Merge
     internal class MergedTableBuilder
     {
         public readonly string Name;
-        public int NumRows;
+        private int _numRows;
 
         public MergedTableBuilder(string name)
             => Name = name;
 
-        private readonly Dictionary<string, IBuffer> DataColumns = new Dictionary<string, IBuffer>();
-        private readonly DictionaryOfLists<string, int> IndexColumns = new DictionaryOfLists<string, int>();
-        private readonly DictionaryOfLists<string, string> StringColumns = new DictionaryOfLists<string, string>();
+        private readonly Dictionary<string, IBuffer> _dataColumns = new Dictionary<string, IBuffer>();
+        private readonly DictionaryOfLists<string, int> _indexColumns = new DictionaryOfLists<string, int>();
+        private readonly DictionaryOfLists<string, string> _stringColumns = new DictionaryOfLists<string, string>();
 
         public void AddTable(EntityTable entityTable, Dictionary<EntityTable, int> entityIndexOffsets)
         {
-            Debug.Assert(entityIndexOffsets[entityTable] == NumRows);
+            Debug.Assert(entityIndexOffsets[entityTable] == _numRows);
 
             // Add index columns from the entity table
             foreach (var col in entityTable.IndexColumns)
             {
                 var indexColumnFullName = col.Name;
 
-                if (!IndexColumns.ContainsKey(indexColumnFullName))
-                    IndexColumns.Add(indexColumnFullName, Enumerable.Repeat(-1, NumRows).ToList());
+                if (!_indexColumns.ContainsKey(indexColumnFullName))
+                    _indexColumns.Add(indexColumnFullName, Enumerable.Repeat(-1, _numRows).ToList());
 
                 Debug.Assert(col.Array.Length == entityTable.NumRows);
                 var relatedTable = col.GetRelatedTable(entityTable.Document);
-                var vals = IndexColumns[indexColumnFullName];
+                var vals = _indexColumns[indexColumnFullName];
 
                 var offset = entityIndexOffsets[relatedTable];
                 foreach (var v in col.Array)
@@ -43,79 +43,79 @@ namespace Vim.Format.Merge
             // Add data columns from the entity table 
             foreach (var col in entityTable.DataColumns)
             {
-                if (!DataColumns.ContainsKey(col.Name))
+                if (!_dataColumns.ContainsKey(col.Name))
                 {
-                    DataColumns[col.Name] = col;
+                    _dataColumns[col.Name] = col;
                 }
                 else
                 {
-                    var cur = DataColumns[col.Name];
-                    DataColumns[col.Name] = cur.ConcatDataColumnBuffers(col,  SerializableEntityTable.GetTypeFromName(col.Name));
+                    var cur = _dataColumns[col.Name];
+                    _dataColumns[col.Name] = cur.ConcatDataColumnBuffers(col,  SerializableEntityTable.GetTypeFromName(col.Name));
                 }
             }
 
             // Add string columns from the entity table 
             foreach (var col in entityTable.StringColumns)
             {
-                if (!StringColumns.ContainsKey(col.Name))
-                    StringColumns.Add(col.Name, Enumerable.Repeat("", NumRows).ToList());
+                if (!_stringColumns.ContainsKey(col.Name))
+                    _stringColumns.Add(col.Name, Enumerable.Repeat("", _numRows).ToList());
 
                 Debug.Assert(col.Array.Length == entityTable.NumRows);
-                var vals = StringColumns[col.Name];
+                var vals = _stringColumns[col.Name];
                 foreach (var v in col.Array)
                     vals.Add(entityTable.Document.GetString(v));
             }
 
             // For each column in the builder but not in the entity table add default values
-            foreach (var kv in DataColumns)
+            foreach (var kv in _dataColumns)
             {
                 var colName = kv.Key;
                 var typePrefix = SerializableEntityTable.GetTypeFromName(colName);
                 if (entityTable.DataColumns.All(c => c.Name != colName))
                 {
-                    var cur = DataColumns[colName];
+                    var cur = _dataColumns[colName];
                     var defaultBuffer = ColumnExtensions.CreateDefaultDataColumnBuffer(entityTable.NumRows, typePrefix);
-                    DataColumns[colName] = cur.ConcatDataColumnBuffers(defaultBuffer, typePrefix);
+                    _dataColumns[colName] = cur.ConcatDataColumnBuffers(defaultBuffer, typePrefix);
                 }
             }
 
-            foreach (var kv in IndexColumns)
+            foreach (var kv in _indexColumns)
             {
                 if (entityTable.IndexColumns.All(c => c.Name != kv.Key))
-                    IndexColumns[kv.Key].AddRange(Enumerable.Repeat(-1, entityTable.NumRows));
+                    _indexColumns[kv.Key].AddRange(Enumerable.Repeat(-1, entityTable.NumRows));
             }
 
-            foreach (var kv in StringColumns)
+            foreach (var kv in _stringColumns)
             {
                 if (entityTable.StringColumns.All(c => c.Name != kv.Key))
-                    StringColumns[kv.Key].AddRange(Enumerable.Repeat("", entityTable.NumRows));
+                    _stringColumns[kv.Key].AddRange(Enumerable.Repeat("", entityTable.NumRows));
             }
 
-            NumRows += entityTable.NumRows;
+            _numRows += entityTable.NumRows;
 
-            foreach (var kv in DataColumns)
-                Debug.Assert(kv.Value.Data.Length == NumRows);
-            foreach (var kv in IndexColumns)
-                Debug.Assert(kv.Value.Count == NumRows);
-            foreach (var kv in StringColumns)
-                Debug.Assert(kv.Value.Count == NumRows);
+            foreach (var kv in _dataColumns)
+                Debug.Assert(kv.Value.Data.Length == _numRows);
+            foreach (var kv in _indexColumns)
+                Debug.Assert(kv.Value.Count == _numRows);
+            foreach (var kv in _stringColumns)
+                Debug.Assert(kv.Value.Count == _numRows);
         }
 
         public void UpdateTableBuilder(EntityTableBuilder tb, CancellationToken cancellationToken = default)
         {
-            foreach (var kv in DataColumns)
+            foreach (var kv in _dataColumns)
             {
                 cancellationToken.ThrowIfCancellationRequested();
                 tb.AddDataColumn(kv.Key, kv.Value);
             }
 
-            foreach (var kv in StringColumns)
+            foreach (var kv in _stringColumns)
             {
                 cancellationToken.ThrowIfCancellationRequested();
                 tb.AddStringColumn(kv.Key, kv.Value.ToArray());
             }
 
-            foreach (var kv in IndexColumns)
+            foreach (var kv in _indexColumns)
             {
                 cancellationToken.ThrowIfCancellationRequested();
                 tb.AddIndexColumn(kv.Key, kv.Value.ToArray());

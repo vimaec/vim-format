@@ -22,14 +22,14 @@ namespace Vim.Format.ObjectModel
         //     urn:epc:id:sscc:0614141.1234567890	Serial Shipping Container Code
         //
 
-        public const string Separator = ":";
+        private const string Separator = ":";
         public const string VimNID = "vim";
-        public const string SystemPrefix = "sys";
-        public const string DocumentPrefix = "doc";
-        public const string ElementPrefix = "elem";
-        public const string Null = "null";
+        private const string SystemPrefix = "sys";
+        private const string DocumentPrefix = "doc";
+        private const string ElementPrefix = "elem";
+        private const string Null = "null";
 
-        public static string CreateUrn(string nid, params string[] nss)
+        private static string CreateUrn(string nid, params string[] nss)
             => string.Join(Separator, new[] {"urn", nid}.Concat(nss));
 
         // Context-specific helpers
@@ -40,7 +40,7 @@ namespace Vim.Format.ObjectModel
         public static string GetBimDocumentUrn(string nid, string guid, int numSaves)
             => CreateUrn(nid, DocumentPrefix, guid, numSaves.ToString());
 
-        public static string GetBimDocumentUrn(string nid, BimDocument bimDocument)
+        private static string GetBimDocumentUrn(string nid, BimDocument bimDocument)
             => GetBimDocumentUrn(nid, bimDocument?.Guid ?? Null, bimDocument?.NumSaves ?? default);
 
         public static string GetElementUrn(string documentUrn, int elementId)
@@ -48,9 +48,6 @@ namespace Vim.Format.ObjectModel
 
         public static string GetElementUrn(string documentUrn, long elementId)
             => documentUrn + Separator + ElementPrefix + Separator + elementId;
-
-        public static string GetElementUrn(string nid, string documentGuid, int documentNumSaves, int elementId)
-            => GetElementUrn(GetBimDocumentUrn(nid, documentGuid, documentNumSaves), elementId);
 
         public static string GetElementUrn(string nid, Element element)
             => GetElementUrn(GetBimDocumentUrn(nid, element?.BimDocument), element?.Id ?? -1);

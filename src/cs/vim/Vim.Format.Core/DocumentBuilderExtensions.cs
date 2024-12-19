@@ -1,12 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Vim.BFastLib;
 
 namespace Vim.Format
 {
     public static class DocumentBuilderExtensions
     {
-        public static EntityTableBuilder CreateTableCopy(this DocumentBuilder db, EntityTable table, List<int> nodeIndexRemapping = null)
+        private static EntityTableBuilder CreateTableCopy(this DocumentBuilder db, EntityTable table, List<int> nodeIndexRemapping = null)
         {
             var name = table.Name;
             var tb = db.CreateTableBuilder(name);

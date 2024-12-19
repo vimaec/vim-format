@@ -140,38 +140,27 @@ namespace Vim
 "Structural:OST_FabricAreas"
         };
 
-        public static Dictionary<string, string> CategoryToDiscipline
+        private static readonly Dictionary<string, string> CategoryToDiscipline
             = DisciplineAndCategories.ToDictionary(c => c.Substring(c.IndexOf(':') + 1), c => c.Substring(0, c.IndexOf(':')));
 
-        public static string[] Categories
-            = CategoryToDiscipline.Keys.OrderBy(x => x).ToArray();
-
-        public static string GetDisiplineFromCategory(string category, string defaultDiscipline = "Generic")
+        public static string GetDisciplineFromCategory(string category, string defaultDiscipline = "Generic")
             => CategoryToDiscipline.GetOrDefault(category ?? "", defaultDiscipline);
-        
-        public static Vector4 GetDiffuseColor(this Material m)
+
+        private static Vector4 GetDiffuseColor(this Material m)
             => m?.Color.ToDiffuseColor(m.Transparency) ?? DefaultColor;
 
-        public static Vector4 ToDiffuseColor(this DVector3 v, double transparency)
+        private static Vector4 ToDiffuseColor(this DVector3 v, double transparency)
             => new Vector4((float)v.X, (float)v.Y, (float)v.Z, 1.0f - (float)transparency);
 
         public static Vector4[] MaterialColors(this VimScene scene) => scene.DocumentModel.MaterialList.Select(GetDiffuseColor).ToArray();
 
-        public static Vector4 DefaultColor = new Vector4(0.5f, 0.5f, 0.5f, 1);
+        private static readonly Vector4 DefaultColor = new Vector4(0.5f, 0.5f, 0.5f, 1);
 
         public static IEnumerable<(string assetBufferName, FileInfo assetFileInfo)> ExtractAssets(this VimScene vim, DirectoryInfo directory)
             => vim.Document.ExtractAssets(directory);
 
-        public static FileInfo ExtractAsset(this VimScene vim, string assetBufferName, FileInfo fileInfo)
-            => vim.Document.ExtractAsset(assetBufferName, fileInfo);
-
-        public static ElementInfo GetElementInfo(this VimScene vim, int elementIndex)
-            => vim.DocumentModel.GetElementInfo(elementIndex);
-
         public static ElementInfo GetElementInfo(this VimScene vim, Element element)
             => vim.DocumentModel.GetElementInfo(element);
 
-        public static VimSchema GetVimSchema(this VimScene vim)
-            => VimSchema.Create(vim._SerializableDocument);
     }
 }

@@ -18,12 +18,12 @@ namespace Vim.Format.SceneBuilder
 
     public static class Validation
     {
-        public class VimValidationException : Exception
+        private class VimValidationException : Exception
         {
             public VimValidationException(string message) : base(message) { }
         }
-      
-        public static void ValidateDocumentModelToG3dInvariantsNext(this VimScene vim)
+
+        private static void ValidateDocumentModelToG3dInvariantsNext(this VimScene vim)
         {
             var g3d = vim.Document.GeometryNext;
             var errors = new List<string>();
@@ -80,13 +80,13 @@ namespace Vim.Format.SceneBuilder
             }
         }
 
-        public static void ValidateNodes(this VimScene vim)
+        private static void ValidateNodes(this VimScene vim)
         {
             if (vim.GetNodeCount() != vim.DocumentModel.NumNode)
                 throw new VimValidationException($"The number of {nameof(VimSceneNode)} ({vim.GetNodeCount()}) does not match the number of node entities ({vim.DocumentModel.NumNode})");
         }
 
-        public static void ValidateShapes(this VimScene vim)
+        private static void ValidateShapes(this VimScene vim)
         {
             var shapes = vim.Shapes;
             if (vim.GetShapeCount() != vim.DocumentModel.NumShape)

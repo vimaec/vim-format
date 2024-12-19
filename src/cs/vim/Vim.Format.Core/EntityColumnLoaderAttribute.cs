@@ -5,7 +5,7 @@ using Vim.Util;
 namespace Vim.Format
 {
     [AttributeUsage(AttributeTargets.Field, AllowMultiple = true)]
-    public partial class EntityColumnLoaderAttribute : Attribute
+    public class EntityColumnLoaderAttribute : Attribute
     {
         /// <summary>
         /// The name of the serialized column.

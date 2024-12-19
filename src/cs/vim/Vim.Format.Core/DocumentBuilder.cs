@@ -17,7 +17,6 @@ namespace Vim.Format
         public readonly Dictionary<string, byte[]> Assets = new Dictionary<string, byte[]>();
         public readonly G3dBuilder Geometry = new G3dBuilder();
 
-        public bool UseColors { get; set; }
 
         public DocumentBuilder(
             string generator,
@@ -128,13 +127,13 @@ namespace Vim.Format
             }
         }
 
-        public static StringLookupInfo GetStringLookupInfo(IEnumerable<EntityTableBuilder> tableBuilders, int indexOffset = 0)
+        private static StringLookupInfo GetStringLookupInfo(IEnumerable<EntityTableBuilder> tableBuilders, int indexOffset = 0)
             => new StringLookupInfo(tableBuilders.SelectMany(tb => tb.GetAllStrings()), indexOffset);
 
-        public StringLookupInfo GetStringLookupInfo()
+        private StringLookupInfo GetStringLookupInfo()
             => GetStringLookupInfo(Tables.Values);
 
-        public List<SerializableEntityTable> ComputeEntityTables(IReadOnlyDictionary<string, int> stringLookup)
+        private List<SerializableEntityTable> ComputeEntityTables(IReadOnlyDictionary<string, int> stringLookup)
         {
             // Create the new Entity tables
             var tableList = new List<SerializableEntityTable>();

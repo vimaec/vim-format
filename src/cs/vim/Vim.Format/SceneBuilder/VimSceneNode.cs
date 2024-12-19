@@ -48,7 +48,7 @@ namespace Vim
         public VimSceneNode Parent => null;
         public VimSceneNode[] Children =>  Array.Empty<VimSceneNode>();
 
-        public string DisciplineName => VimSceneHelpers.GetDisiplineFromCategory(CategoryName);
+        public string DisciplineName => VimSceneHelpers.GetDisciplineFromCategory(CategoryName);
 
         VimSceneNode ITransformable3D<VimSceneNode>.Transform(Matrix4x4 mat)
             => new VimSceneNode(Scene, Id, MeshIndex, mat * Transform);

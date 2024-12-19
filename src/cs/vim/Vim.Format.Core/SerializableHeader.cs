@@ -11,23 +11,23 @@ namespace Vim.Format
 {
     public class SerializableHeader
     {
-        public static readonly SerializableVersion CurrentVimFormatVersion = VimFormatVersion.Current;
+        private static readonly SerializableVersion CurrentVimFormatVersion = VimFormatVersion.Current;
 
-        protected const string FormatVersionField = "vim";
-        public const string IdField = "id";
-        public const string RevisionField = "revision";
-        public const string GeneratorField = "generator";
-        public const string CreationDateField = "created";
-        public const string SchemaField = "schema";
+        private const string FormatVersionField = "vim";
+        private const string IdField = "id";
+        private const string RevisionField = "revision";
+        private const string GeneratorField = "generator";
+        private const string CreationDateField = "created";
+        private const string SchemaField = "schema";
         public const string BuildField = "build"; // optional
 
-        public const char Separator = '=';
-        public const char EndOfLineChar = '\n';
-        public const string EndOfLineString = "\n";
-        public const string PersistingIdSeparator = "::";
-        public const string DummyPersistingIdPrefix = "unknown_";
+        private const char Separator = '=';
+        private const char EndOfLineChar = '\n';
+        private const string EndOfLineString = "\n";
+        private const string PersistingIdSeparator = "::";
+        private const string DummyPersistingIdPrefix = "unknown_";
 
-        public static readonly string[] RequiredFields =
+        private static readonly string[] RequiredFields =
         {
             FormatVersionField,
             IdField,
@@ -279,7 +279,7 @@ namespace Vim.Format
         public override int GetHashCode()
             => ToString().GetHashCode();
 
-        public static string CreatePersistingId(Guid id, Guid revision)
+        private static string CreatePersistingId(Guid id, Guid revision)
             => string.Join(PersistingIdSeparator, id.ToString(), revision.ToString());
 
         /// <summary>
@@ -305,5 +305,52 @@ namespace Vim.Format
         {
             return ToString().ToBytesUtf8();
         }
+    }
+
+    public static class SerializableHeaderExtensions
+    {
+        /// <summary>
+        /// Returns true if the SerializableHeader in the stream is successfully parsed.
+        /// </summary>
+        public static bool TryParseSerializableHeader(this Stream stream, out SerializableHeader header)
+        {
+            try
+            {
+                header = SerializableHeader.FromStream(stream);
+            }
+            catch
+            {
+                header = null;
+            }
+            return header != null;
+        }
+
+        /// <summary>
+        /// Returns true if the SerializableHeader in the stream is successfully parsed.
+        /// </summary>
+        public static bool TryParseSerializableHeader(this FileInfo file, out SerializableHeader header)
+        {
+            using (var stream = file.OpenRead())
+            {
+                try
+                {
+                    header = SerializableHeader.FromStream(stream);
+                }
+                catch
+                {
+                    header = null;
+                }
+            }
+
+            return header != null;
+        }
+
+        /// <summary>
+        /// Returns the VIM file's header schema version. Returns null if the header schema is not found.
+        /// </summary>
+        public static string GetSchemaVersion(this FileInfo fileInfo)
+            => fileInfo.TryParseSerializableHeader(out var header)
+                ? header.Schema?.ToString()
+                : null;
     }
 }

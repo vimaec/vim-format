@@ -5,7 +5,7 @@ namespace Vim.Format
 {
     public static class Validation
     {
-        public static void ValidateTableRows(this Document doc)
+        private static void ValidateTableRows(this Document doc)
         {
             foreach (var et in doc.Tables)
             {
@@ -29,7 +29,7 @@ namespace Vim.Format
             }
         }
 
-        public static void ValidateIndexColumns(this Document doc)
+        private static void ValidateIndexColumns(this Document doc)
         {
             foreach (var et in doc.Tables)
             {
@@ -42,7 +42,7 @@ namespace Vim.Format
             }
         }
 
-        public static void ValidateAssets(this Document doc)
+        private static void ValidateAssets(this Document doc)
         {
             foreach (var asset in doc.Assets.Values)
                 AssetInfo.Parse(asset.Name); // This will throw if it fails to parse.

@@ -8,7 +8,6 @@ using Vim.BFastLib;
 using Vim.Format.Geometry;
 using Vim.Math3d;
 using Vim.Format.ObjectModel;
-using Vim.G3d;
 using Vim.Util;
 
 namespace Vim.Format.Merge

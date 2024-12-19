@@ -8,7 +8,7 @@ namespace Vim.Format.Merge
         /// <summary>
         /// The input VIM scenes and their transforms.
         /// </summary>
-        public (VimScene VimScene, Matrix4x4 Transform)[] InputVimScenesAndTransforms { get; }
+        private (VimScene VimScene, Matrix4x4 Transform)[] InputVimScenesAndTransforms { get; }
 
         /// <summary>
         /// The input VIM scenes

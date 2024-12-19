@@ -7,39 +7,39 @@ namespace Vim.Format
 {
     public class VimSchema
     {
-        public const string TableNameSeparator = "__";
+        private const string TableNameSeparator = "__";
 
         public readonly SerializableVersion VimFormatVersion;
         public readonly SerializableVersion SchemaVersion;
-        public readonly Dictionary<string, EntityTableSchema> EntityTableSchemas = new Dictionary<string, EntityTableSchema>();
+        private readonly Dictionary<string, EntityTableSchema> _entityTableSchemas = new Dictionary<string, EntityTableSchema>();
 
         public VimSchema(SerializableVersion vimFormatVersion, SerializableVersion schemaVersion)
             => (VimFormatVersion, SchemaVersion) = (vimFormatVersion, schemaVersion);
 
-        public VimSchema(SerializableHeader header)
+        private VimSchema(SerializableHeader header)
             : this(header.FileFormatVersion, header.Schema)
         { }
 
         public IEnumerable<(string TableName, string[] ColumnName)> GetTableNamesAndColumns()
-            => EntityTableSchemas.Values
+            => _entityTableSchemas.Values
                 .Select(ets => (ets.TableName, ets.ColumnNames.OrderBy(n => n).ToArray()))
                 .OrderBy(n => n);
 
-        public IEnumerable<(string TableName, string ColumnName)> GetFlattenedTableNamesAndColumnNames()
-            => EntityTableSchemas.Values.SelectMany(ets => ets.ColumnNames.Select(c => (ets.TableName, c)));
+        private IEnumerable<(string TableName, string ColumnName)> GetFlattenedTableNamesAndColumnNames()
+            => _entityTableSchemas.Values.SelectMany(ets => ets.ColumnNames.Select(c => (ets.TableName, c)));
 
-        public IEnumerable<string> GetAllQualifiedColumnNames()
+        private IEnumerable<string> GetAllQualifiedColumnNames()
             => GetFlattenedTableNamesAndColumnNames()
                 .Select(t => string.Join(TableNameSeparator, t.TableName, t.ColumnName))
                 .OrderBy(x => x);
 
         public EntityTableSchema AddEntityTableSchema(string entityTableName)
         {
-            if (EntityTableSchemas.ContainsKey(entityTableName))
+            if (_entityTableSchemas.ContainsKey(entityTableName))
                 throw new Exception($"Entity Table {entityTableName} already exists in the VIM schema");
 
             var ets = new EntityTableSchema(entityTableName);
-            EntityTableSchemas.Add(entityTableName, ets);
+            _entityTableSchemas.Add(entityTableName, ets);
             return ets;
         }
 
@@ -63,7 +63,7 @@ namespace Vim.Format
             return vimSchema;
         }
 
-        public VimSchemaDiff Diff(VimSchema other)
+        private VimSchemaDiff Diff(VimSchema other)
         {
             var aCols = GetAllQualifiedColumnNames().ToArray();
             var bCols = other.GetAllQualifiedColumnNames().ToArray();
@@ -73,7 +73,7 @@ namespace Vim.Format
         public static VimSchemaDiff Diff(VimSchema a, VimSchema b)
             => a.Diff(b);
 
-        public bool IsSame(VimSchema other)
+        private bool IsSame(VimSchema other)
         {
             var diff = Diff(other);
             return diff.AddedQualifiedColumnNames.Length == 0 && diff.RemovedQualifiedColumnNames.Length == 0;

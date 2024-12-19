@@ -30,12 +30,10 @@ namespace Vim.Format
             var tables = document.EntityTables.ToDictionary(
                et => et.Name,
                et => new EntityTable(this, et));
-            _bim = new Bim(tables, _Document.StringTable);
+            _bim = new Bim(tables);
         }
 
-        Bim _bim;
-
-        public int TableCount => _bim.TableCount;
+        private readonly Bim _bim;
 
         public EntityTable GetTable(string name)
             => _bim.GetTable(name);
@@ -44,8 +42,7 @@ namespace Vim.Format
         public IEnumerable<EntityTable> Tables => _bim.Tables;
         public VimSchema GetSchema() => VimSchema.Create(_Document);
 
-        public string FileName => _Document.FileName;
-        public SerializableDocument _Document { get; }
+        private SerializableDocument _Document { get; }
         public SerializableHeader Header { get; }
         public Dictionary<string, EntityTable> EntityTables { get; }
         public Dictionary<string, INamedBuffer> Assets { get; }
@@ -57,16 +54,12 @@ namespace Vim.Format
 
 public class Bim
 {
-    private string[] _strings;
-    private Dictionary<string, EntityTable> _tables { get; }
+    private readonly Dictionary<string, EntityTable> _tables;
 
-    public Bim(Dictionary<string, EntityTable> tables, string[] strings)
+    public Bim(Dictionary<string, EntityTable> tables)
     {
         _tables = tables;
-        _strings = strings;
     }
-
-    public int TableCount => Tables.Count();
 
     public EntityTable GetTable(string name)
         => _tables.GetOrDefault(name);

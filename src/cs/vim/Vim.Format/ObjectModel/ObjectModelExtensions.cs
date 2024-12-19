@@ -21,61 +21,14 @@ namespace Vim.Format.ObjectModel
         public static string GetUrn(this ElementInfo elementInfo)
             => Urn.GetElementUrn(Urn.VimNID, elementInfo.Element);
 
-        public static string GetUrn(this BimDocument bd)
-            => Urn.GetBimDocumentUrn(Urn.VimNID, bd);
-
         public static Element CreateSyntheticElement(string name, string type)
             => new Element { Id = VimConstants.SyntheticElementId, Name = name, Type = type };
 
-        public static Element CreateParameterHolderElement(string bimDocumentName)
-            => CreateSyntheticElement(bimDocumentName, VimConstants.BimDocumentParameterHolderElementType);
-
         public static Element CreateParameterHolderElement(this BimDocument bd)
-            => CreateParameterHolderElement(bd.Name);
-
-        public static DictionaryOfLists<int, AssetInView> GetAssetsInViewOrderedByViewIndex(this DocumentModel dm)
-            => dm.AssetInViewList.GroupBy(aiv => aiv.View.Index).ToDictionaryOfLists();
+            => CreateSyntheticElement(bd.Name, VimConstants.BimDocumentParameterHolderElementType);
 
         public static string GetBimDocumentFileName(this DocumentModel dm, int bimDocumentIndex)
             => Path.GetFileName(dm.GetBimDocumentPathName(bimDocumentIndex));
-
-        public static DisplayUnit[] GetBimDocumentDisplayUnits(this DocumentModel dm, BimDocument bd)
-            => dm.DisplayUnitInBimDocumentList
-                .Where(item => item.BimDocument.Index == bd.Index)
-                .Select(item => item.DisplayUnit)
-                .ToArray();
-
-        public static Phase[] GetBimDocumentPhases(this DocumentModel dm, BimDocument bd)
-            => dm.PhaseOrderInBimDocumentList
-                .Where(item => item.BimDocument.Index == bd.Index)
-                .Select(item => item.Phase)
-                .ToArray();
-
-        public const string LengthSpecLegacyPrefix = "UT_Length";
-        public const string LengthSpecPrefix = "autodesk.spec.aec:length";
-
-        public static DisplayUnit GetLengthDisplayUnit(this DisplayUnit[] displayUnits)
-            => displayUnits.FirstOrDefault(du =>
-            {
-                var spec = du.Spec;
-                return spec.StartsWith(LengthSpecPrefix, StringComparison.InvariantCultureIgnoreCase) ||
-                       spec.StartsWith(LengthSpecLegacyPrefix, StringComparison.InvariantCultureIgnoreCase);
-            });
-
-        public static FamilyType GetFamilyType(this FamilyInstance fi)
-            => fi?.FamilyType;
-
-        public static string GetFamilyTypeName(this FamilyInstance fi)
-            => fi?.FamilyType?.Element?.Name ?? "";
-
-        public static Family GetFamily(this FamilyType ft)
-            => ft?.Family;
-
-        public static Family GetFamily(this FamilyInstance fi)
-            => fi?.GetFamilyType()?.GetFamily();
-
-        public static string GetFamilyName(this FamilyInstance fi)
-            => fi?.GetFamily()?.Element?.Name ?? "";
 
         /// <summary>
         /// Extension method using pre-allocated parser for improved performance.

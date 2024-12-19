@@ -86,9 +86,9 @@ namespace Vim.Format.ObjectModel
             }
         }
 
-        public static readonly string ElementIndexColumnName = ColumnExtensions.GetIndexColumnName(TableNames.Element, nameof(Element));
+        private static readonly string ElementIndexColumnName = ColumnExtensions.GetIndexColumnName(TableNames.Element, nameof(Element));
 
-        public static DictionaryOfLists<int, int> GetElementIndicesMap(EntityTable et)
+        private static DictionaryOfLists<int, int> GetElementIndicesMap(EntityTable et)
         {
             var indicesMap = new DictionaryOfLists<int, int>();
             var elementIndices = et?.IndexColumns.FirstOrDefault(col => col.Name == ElementIndexColumnName)?.GetTypedData();
@@ -99,7 +99,7 @@ namespace Vim.Format.ObjectModel
             return indicesMap;
         }
 
-        public static DictionaryOfLists<int, int> GetElementIndicesMap(EntityTable_v2 et)
+        private static DictionaryOfLists<int, int> GetElementIndicesMap(EntityTable_v2 et)
         {
             var indicesMap = new DictionaryOfLists<int, int>();
             var elementIndices = et?.IndexColumns[ElementIndexColumnName]?.GetTypedData();
@@ -110,7 +110,7 @@ namespace Vim.Format.ObjectModel
             return indicesMap;
         }
 
-        public static IndexMap GetElementIndexMap(EntityTable et)
+        private static IndexMap GetElementIndexMap(EntityTable et)
         {
             var indexMap = new IndexMap();
             var elementIndices = et?.IndexColumns.FirstOrDefault(col => col.Name == ElementIndexColumnName)?.GetTypedData();
@@ -121,7 +121,7 @@ namespace Vim.Format.ObjectModel
             return indexMap;
         }
 
-        public static IndexMap GetElementIndexMap(EntityTable_v2 et)
+        private static IndexMap GetElementIndexMap(EntityTable_v2 et)
         {
             var indexMap = new IndexMap();
             var elementIndices = et?.IndexColumns[ElementIndexColumnName]?.GetTypedData();

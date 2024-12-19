@@ -37,19 +37,19 @@ namespace Vim.Format
         /// </summary>
         public class Mesh
         {
-            protected List<Vector3> _vertices = new List<Vector3>();
+            private readonly List<Vector3> _vertices;
             public IReadOnlyList<Vector3> Vertices => _vertices;
 
-            protected List<int> _indices = new List<int>();
+            private readonly List<int> _indices;
             public IReadOnlyList<int> Indices => _indices;
 
-            protected List<int> _faceMaterials = new List<int>();
+            private List<int> _faceMaterials;
             public IReadOnlyList<int> FaceMaterials => _faceMaterials;
 
-            protected List<Vector4> _colors = new List<Vector4>();
+            private readonly List<Vector4> _colors;
             public IReadOnlyList<Vector4> Colors => _colors;
 
-            protected List<Vector2> _uvs = new List<Vector2>();
+            private readonly List<Vector2> _uvs;
             public IReadOnlyList<Vector2> UVs => _uvs;
 
             public Mesh(List<Vector3> vertices = null, List<int> indices = null, List<int> faceMaterials = null, List<Vector4> colors = null, List<Vector2> uvs = null)
@@ -135,68 +135,6 @@ namespace Vim.Format
                 );
 
             }
-        }
-
-        /// <summary>
-        /// An immutable mesh were faces have been organized by submesh/material
-        /// </summary>
-        public class SubdividedMesh
-        {
-            public IReadOnlyList<int> Indices { get; private set; }
-            public IReadOnlyList<Vector3> Vertices { get; private set; }
-            public IReadOnlyList<int> SubmeshesIndexOffset { get; private set; }
-            public IReadOnlyList<int> SubmeshMaterials { get; private set; }
-
-            public SubdividedMesh(Mesh mesh)
-            {
-                if (mesh.Indices.Any(i => i < 0 && i >= mesh.Vertices.Count))
-                    throw new Exception($"Invalid mesh. Indices out of vertex range.");
-
-                var facesByMats = mesh.FaceMaterials
-                    .Select((face, index) => (face, index))
-                    .GroupBy(pair => pair.face, pair => pair.index);
-
-                var submeshIndexOffset = new List<int>();
-                var submeshMaterials = new List<int>();
-                var indicesRemap = new List<int>();
-
-                foreach (var group in facesByMats)
-                {
-                    submeshIndexOffset.Add(indicesRemap.Count);
-                    submeshMaterials.Add(group.Key);
-                    foreach (var face in group)
-                    {
-                        var f = face * 3;
-                        indicesRemap.Add(mesh.Indices[f]);
-                        indicesRemap.Add(mesh.Indices[f + 1]);
-                        indicesRemap.Add(mesh.Indices[f + 2]);
-                    }
-                }
-                Indices = indicesRemap;
-                SubmeshMaterials = submeshMaterials;
-                SubmeshesIndexOffset = submeshIndexOffset;
-
-                Vertices = mesh.Vertices;
-            }
-
-            public SubdividedMesh(
-                IReadOnlyList<int> indices,
-                IReadOnlyList<Vector3> vertices,
-                IReadOnlyList<int> submeshesIndexOffset,
-                IReadOnlyList<int> submeshMaterials
-            )
-            {
-                Indices = indices;
-                Vertices = vertices;
-                SubmeshesIndexOffset = submeshesIndexOffset;
-                SubmeshMaterials = submeshMaterials;
-            }
-
-            public bool IsEquivalentTo(SubdividedMesh other)
-                => Vertices.SequenceEqual(other.Vertices)
-                   && Indices.SequenceEqual(other.Indices)
-                    && SubmeshesIndexOffset.SequenceEqual(other.SubmeshesIndexOffset)
-                    && SubmeshMaterials.SequenceEqual(other.SubmeshMaterials);
         }
     }
 }

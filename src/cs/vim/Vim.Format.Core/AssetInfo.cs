@@ -18,7 +18,7 @@ namespace Vim.Format
     /// </summary>
     public class AssetInfo
     {
-        public const char Separator = '/';
+        private const char Separator = '/';
 
         public readonly string Name;
 
@@ -27,7 +27,7 @@ namespace Vim.Format
         public AssetInfo(string name, AssetType assetType)
             => (Name, AssetType) = (name, assetType);
 
-        public static string[] SplitAssetBufferName(string assetBufferName)
+        private static string[] SplitAssetBufferName(string assetBufferName)
             => assetBufferName?.Split(Separator);
 
         public static AssetInfo Parse(string assetBufferName)
@@ -63,10 +63,10 @@ namespace Vim.Format
             }
         }
 
-        public static string AssetTypeToString(AssetType assetType)
+        private static string AssetTypeToString(AssetType assetType)
             => assetType.ToString("G").ToLowerInvariant();
 
-        public string AssetTypeString
+        private string AssetTypeString
             => AssetTypeToString(AssetType);
 
         public override string ToString()
@@ -81,19 +81,13 @@ namespace Vim.Format
 
     public static class AssetInfoExtensions
     {
-        public static bool IsTexture(this INamedBuffer buffer)
-            => AssetInfo.TryParse(buffer.Name, out var assetInfo) && assetInfo.AssetType == AssetType.Texture;
-
-        public static INamedBuffer GetAssetBuffer(this Document doc, string assetBufferName)
+        private static INamedBuffer GetAssetBuffer(this Document doc, string assetBufferName)
             => doc.Assets.GetOrDefault(assetBufferName);
-
-        public static IEnumerable<INamedBuffer> GetTextures(this Document d)
-            => d.Assets.Values.Where(IsTexture);
 
         /// <summary>
         /// Extracts the asset buffer to the file designated by the given FileInfo.
         /// </summary>
-        public static FileInfo ExtractAsset(this INamedBuffer assetBuffer, FileInfo fileInfo)
+        private static FileInfo ExtractAsset(this INamedBuffer assetBuffer, FileInfo fileInfo)
         {
             Util.IO.CreateFileDirectory(fileInfo.FullName);
             using (var stream = fileInfo.Create())
@@ -105,7 +99,7 @@ namespace Vim.Format
         /// Extracts the asset and returns a FileInfo representing the extracted asset on disk.<br/>
         /// Returns null if the asset could not be extracted.
         /// </summary>
-        public static FileInfo ExtractAsset(this INamedBuffer assetBuffer, DirectoryInfo directoryInfo)
+        private static FileInfo ExtractAsset(this INamedBuffer assetBuffer, DirectoryInfo directoryInfo)
             => !AssetInfo.TryParse(assetBuffer.Name, out var assetInfo)
                 ? null
                 : assetBuffer.ExtractAsset(new FileInfo(assetInfo.GetDefaultAssetFilePathInDirectory(directoryInfo)));
@@ -135,7 +129,7 @@ namespace Vim.Format
         /// <summary>
         /// Gets the byte array which defines the given asset. Returns false if the asset was not found or if the byte array is empty or null.
         /// </summary>
-        public static bool TryGetAssetBytes(this Document doc, string assetBufferName, out byte[] bytes)
+        private static bool TryGetAssetBytes(this Document doc, string assetBufferName, out byte[] bytes)
         {
             bytes = null;
 
@@ -151,7 +145,7 @@ namespace Vim.Format
         /// <summary>
         /// Gets the byte array which defines the given asset. Returns false if the asset was not found or if the byte array is empty or null.
         /// </summary>
-        public static bool TryGetAssetBytes(this Document doc, AssetType assetType, string assetName, out byte[] bytes)
+        private static bool TryGetAssetBytes(this Document doc, AssetType assetType, string assetName, out byte[] bytes)
             => doc.TryGetAssetBytes(new AssetInfo(assetName, assetType).ToString(), out bytes);
 
         /// <summary>

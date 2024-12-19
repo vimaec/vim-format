@@ -16,10 +16,10 @@ namespace Vim.Format
             throw new Exception($"{nameof(GetDataColumnNameTypePrefix)} error: no matching data column name prefix for {type}");
         }
 
-        public static bool CanSerializeAsStringColumn(this Type type)
+        private static bool CanSerializeAsStringColumn(this Type type)
             => type == typeof(string);
 
-        public static bool CanSerializeAsDataColumn(this Type type)
+        private static bool CanSerializeAsDataColumn(this Type type)
             => DataColumnTypes.Contains(type);
 
         public static ValueSerializationStrategy GetValueSerializationStrategy(this Type type)
@@ -60,7 +60,7 @@ namespace Vim.Format
             return $"{typePrefix}{fieldInfo.GetSerializedValueName()}";
         }
 
-        public static bool IsRelationType(this Type t)
+        private static bool IsRelationType(this Type t)
             => t.Name == "Relation`1";
 
         public static Type RelationTypeParameter(this Type t)
