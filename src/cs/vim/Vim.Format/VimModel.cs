@@ -1,5 +1,7 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
+using Vim.BFastLib;
 using Vim.Format.ObjectModel;
 using Vim.G3d;
 using Vim.Math3d;
@@ -7,120 +9,23 @@ using Vim.Util;
 
 namespace Vim.Format
 {
-    public interface IVimModel
+    public class VimInstance : IVimInstance
     {
-        /// <summary>
-        /// The schema version contained in the header of the VIM file.
-        /// </summary>
-        SerializableVersion SchemaVersion { get; }
+        public int Index => Node.Index;
+        public InstanceFlags InstanceFlags { get; }
+        public Matrix4x4 WorldTransform { get; }
+        public IVimMesh Mesh { get; }
+        public Node Node { get; }
+        public AABox BoundingBox { get; }
 
-        /// <summary>
-        /// The header of the VIM file.
-        /// </summary>
-        SerializableHeader Header { get; }
-
-        /// <summary>
-        /// The serializable version of the VIM model.
-        /// </summary>
-        SerializableDocument SerializableDocument { get; }
-
-        /// <summary>
-        /// The VIM file path if it was loaded from a file on disk.
-        /// </summary>
-        string FilePath { get; } // not null if the VIM was loaded from a file on disk
-
-        /// <summary>
-        /// The string buffer for the Entities
-        /// </summary>
-        string[] StringBuffer { get; }
-
-        /// <summary>
-        /// The entities contained in the VIM.
-        /// </summary>
-        EntityTableSet Entities { get; }
-
-        /// <summary>
-        /// The collection of all instances in the VIM (i.e. the renderable geometry)
-        /// </summary>
-        IVimInstance[] Instances { get; }
-
-        /// <summary>
-        /// The world-space bounding box surrounding all the instances in the model.
-        /// </summary>
-        AABox BoundingBox { get; }
-
-        /// <summary>
-        /// Merges this VIM model with the other VIM model and returns a new one.
-        /// </summary>
-        IVimModel Merge(IVimModel other);
-
-        /// <summary>
-        /// Writes the VIM model to the given stream
-        /// </summary>
-        void Write(Stream stream);
-
-        /// <summary>
-        /// Writes the VIM model to the given file path.
-        /// Deletes any existing file prior to writing.
-        /// Creates the parent directory if it does not already exist.
-        /// </summary>
-        void Write(string filePath);
-    }
-
-    public interface IVimInstance
-    {
-        /// <summary>
-        /// The index of the instance.
-        /// </summary>
-        int Index { get; }
-
-        /// <summary>
-        /// The instance flags associated to this instance.
-        /// </summary>
-        InstanceFlags InstanceFlags { get; }
-
-        /// <summary>
-        /// The world transform of the instance.
-        /// </summary>
-        Matrix4x4 WorldTransform { get; }
-
-        /// <summary>
-        /// The mesh associated to an instance can be null.
-        /// </summary>
-        IVimMesh Mesh { get; }
-        
-        /// <summary>
-        /// The Node entity related to this instance.
-        /// There is a 1:1 relationship between instances and nodes.
-        /// </summary>
-        Node Node { get; }
-
-        /// <summary>
-        /// The world-space axis aligned bounding box of the instance.
-        /// </summary>
-        AABox BoundingBox { get; }
-    }
-
-    public interface IVimMesh
-    {
-        int Index { get; }
-        IVimSubmesh[] Submeshes { get; }
-    }
-
-    public interface IVimSubmesh
-    {
-        int Index { get; }
-        IVimRenderMaterial Material { get; }
-        Vector3[] Vertices { get; }
-        int[] Indices { get; }
-    }
-
-    public interface IVimRenderMaterial
-    {
-        int Index { get; }
-        Vector4 Color { get; } // rgba
-        float Glossiness { get; }
-        float Smoothness { get; }
+        public VimInstance(G3dVim g3d, Node node)
+        {
+            InstanceFlags = (InstanceFlags) g3d.InstanceFlags.ElementAtOrDefault(node.Index);
+            WorldTransform = node.Index >= 0 ? g3d.InstanceTransforms[node.Index] : Matrix4x4.Identity;
+            // Mesh = new VimMesh(g3d.InstanceMeshes[node.Index]);
+            Node = node;
+            BoundingBox = AABox.Create(Mesh.Submeshes.SelectMany(s => s.Vertices));
+        }
     }
 
     public class VimModel : IVimModel
@@ -129,25 +34,45 @@ namespace Vim.Format
             Stream stream,
             LoadOptions loadOptions = null)
         {
-            throw new NotImplementedException();
+            var doc = SerializableDocument.FromBFast(new BFast(stream), loadOptions);
+            return new VimModel(doc);
         }
 
         public static IVimModel Load(
             string filePath,
             LoadOptions loadOptions = null)
         {
-            // TODO: create a read file stream and invoke Load with the stream
-            throw new NotImplementedException();
+            using (var stream = File.OpenRead(filePath))
+            {
+                return Load(stream, loadOptions);
+            }
         }
 
-        public SerializableVersion SchemaVersion { get; }
-        public SerializableHeader Header { get; }
+        public SerializableVersion SchemaVersion => SerializableDocument.Header.FileFormatVersion;
+        public SerializableHeader Header => SerializableDocument.Header;
         public SerializableDocument SerializableDocument { get; }
-        public string FilePath { get; }
-        public string[] StringBuffer { get; }
+        public string FilePath => SerializableDocument.FileName;
+        public string[] StringBuffer => SerializableDocument.StringTable;
         public EntityTableSet Entities { get; }
         public IVimInstance[] Instances { get; }
         public AABox BoundingBox { get; }
+
+        private VimModel(SerializableDocument serializableDocument)
+        {
+            SerializableDocument = serializableDocument;
+            Entities = new EntityTableSet(SerializableDocument.EntityTables.ToArray(), StringBuffer);
+            Instances = CreateVimSceneNodes(SerializableDocument.GeometryNext);
+            BoundingBox = Instances
+                .Select(i => i.BoundingBox)
+                .Aggregate(Instances[0].BoundingBox, (b1, b2) => b1.Merge(b2));
+        }
+
+        private IVimInstance[] CreateVimSceneNodes(G3dVim g3d)
+        {
+            return g3d.InstanceTransforms.Select((_, i) =>
+                new VimInstance(g3d, Entities.GetNode(i))).ToArray<IVimInstance>();
+        }
+
         public IVimModel Merge(IVimModel other) => throw new NotImplementedException();
 
         public void Write(Stream stream) => throw new NotImplementedException();
