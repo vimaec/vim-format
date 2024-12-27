@@ -24,6 +24,7 @@ namespace Vim.G3d
 
         // Computed field
         public int[] MeshVertexOffsets;
+        public int[] SubmeshVertexOffsets;
         private List<int>[] _meshInstances;
 
         public IReadOnlyList<int> GetMeshInstances(int mesh)
@@ -44,6 +45,7 @@ namespace Vim.G3d
         void ISetup.Setup()
         {
             MeshVertexOffsets = ComputeMeshVertexOffsets();
+            SubmeshVertexOffsets = ComputeSubmeshVertexOffsets();
             _meshInstances = ComputeMeshInstances();
         }
 
@@ -58,6 +60,23 @@ namespace Vim.G3d
                 var min = int.MaxValue;
                 var start = GetMeshIndexStart(m);
                 var end = GetMeshIndexEnd(m);
+                for (var i = start; i < end; i++)
+                {
+                    min = Math.Min(min, Indices[i]);
+                }
+                result[m] = min;
+            }
+            return result;
+        }
+        
+        private int[] ComputeSubmeshVertexOffsets()
+        {
+            var result = new int[GetSubmeshCount()];
+            for (var m = 0; m < result.Length; m++)
+            {
+                var min = int.MaxValue;
+                var start = SubmeshIndexOffsets[m];
+                var end = m < SubmeshIndexOffsets.Length ? SubmeshIndexOffsets[m + 1] : SubmeshIndexOffsets.Length;
                 for (var i = start; i < end; i++)
                 {
                     min = Math.Min(min, Indices[i]);

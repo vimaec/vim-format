@@ -22,7 +22,7 @@ namespace Vim.Format
         {
             InstanceFlags = (InstanceFlags) g3d.InstanceFlags.ElementAtOrDefault(node.Index);
             WorldTransform = node.Index >= 0 ? g3d.InstanceTransforms[node.Index] : Matrix4x4.Identity;
-            // Mesh = new VimMesh(g3d.InstanceMeshes[node.Index]);
+            Mesh = VimMesh2.FromG3d(g3d, g3d.InstanceMeshes[node.Index]);
             Node = node;
             BoundingBox = AABox.Create(Mesh.Submeshes.SelectMany(s => s.Vertices));
         }
