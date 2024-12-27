@@ -50,5 +50,19 @@ namespace Vim.Format
 
             return new VimMesh2(index, submeshes);
         }
+        
+        public static bool GeometryEquals(VimMesh2 a, VimMesh2 b, float tolerance = Math3d.Constants.Tolerance)
+        {
+            if (a.Submeshes.Length != b.Submeshes.Length)
+                return false;
+
+            for (var i = 0; i < a.Submeshes.Length; i++)
+            {
+                if (!VimSubmesh2.GeometryEquals((VimSubmesh2) a.Submeshes[i], (VimSubmesh2) b.Submeshes[i], tolerance))
+                    return false;
+            }
+
+            return true;
+        }
     }
 }
