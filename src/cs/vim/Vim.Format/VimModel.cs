@@ -73,10 +73,23 @@ namespace Vim.Format
                 new VimInstance(g3d, Entities.GetNode(i))).ToArray<IVimInstance>();
         }
 
-        public IVimModel Merge(IVimModel other) => throw new NotImplementedException();
+        public IVimModel Merge(IVimModel other)
+        {
+            // using MergeService?
+            throw new NotImplementedException();
+        }
 
-        public void Write(Stream stream) => throw new NotImplementedException();
+        public void Write(Stream stream)
+        {
+            SerializableDocument.ToBFast().Write(stream);
+        }
 
-        public void Write(string filePath) => throw new NotImplementedException();
+        public void Write(string filePath)
+        {
+            using (var stream = File.Create(filePath))
+            {
+                Write(stream);
+            }
+        }
     }
 }
