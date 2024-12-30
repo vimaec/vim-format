@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using Vim.Math3d;
 
@@ -16,6 +17,20 @@ namespace Vim.Format
             Material = material;
             Vertices = vertices;
             Indices = indices;
+        }
+
+        public void Validate()
+        {
+            ValidateIndices();
+        }
+
+        private void ValidateIndices()
+        {
+            foreach (int index in Indices)
+            {
+                if (index < 0 || index >= Vertices.Length)
+                    throw new Exception($"Invalid mesh index: {index}. Expected a value greater or equal to 0 and less than {Vertices.Length}");
+            }
         }
 
         public static bool GeometryEquals(VimSubmesh2 a, VimSubmesh2 b, float tolerance = Constants.Tolerance)

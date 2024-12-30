@@ -50,7 +50,20 @@ namespace Vim.Format
 
             return new VimMesh2(index, submeshes);
         }
-        
+
+        public void Validate()
+        {
+            ValidateIndices();
+        }
+
+        private void ValidateIndices()
+        {
+            foreach (var submesh in Submeshes)
+            {
+                submesh.Validate();
+            }
+        }
+
         public static bool GeometryEquals(VimMesh2 a, VimMesh2 b, float tolerance = Math3d.Constants.Tolerance)
         {
             if (a.Submeshes.Length != b.Submeshes.Length)
