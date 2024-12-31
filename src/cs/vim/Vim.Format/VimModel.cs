@@ -1,7 +1,7 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Linq;
 using Vim.BFastLib;
+using Vim.Format.Merge;
 using Vim.Format.ObjectModel;
 using Vim.G3d;
 using Vim.Math3d;
@@ -75,8 +75,7 @@ namespace Vim.Format
 
         public IVimModel Merge(IVimModel other)
         {
-            // using MergeService?
-            throw new NotImplementedException();
+            return MergeService2.MergeVimModels(new[] { this, other });
         }
 
         public void Write(Stream stream)
