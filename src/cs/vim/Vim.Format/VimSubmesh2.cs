@@ -33,6 +33,18 @@ namespace Vim.Format
             }
         }
 
+        public IVimSubmesh Transform(Matrix4x4 mat)
+        {
+            var newVertices = new Vector3[Vertices.Length];
+
+            for (var i = 0; i < Vertices.Length; i++)
+            {
+                newVertices[i] = Vertices[i].Transform(mat);
+            }
+
+            return new VimSubmesh2(Index, Material, newVertices, Indices);
+        }
+
         public static bool GeometryEquals(VimSubmesh2 a, VimSubmesh2 b, float tolerance = Constants.Tolerance)
         {
             if (!a.Indices.SequenceEqual(b.Indices))

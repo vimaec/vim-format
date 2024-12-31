@@ -64,6 +64,18 @@ namespace Vim.Format
             }
         }
 
+        public IVimMesh Transform(Matrix4x4 mat)
+        {
+            var submeshes = new IVimSubmesh[Submeshes.Length];
+
+            for (var i = 0; i < Submeshes.Length; i++)
+            {
+                submeshes[i] = Submeshes[i].Transform(mat);
+            }
+
+            return new VimMesh2(Index, submeshes);
+        }
+
         public static bool GeometryEquals(VimMesh2 a, VimMesh2 b, float tolerance = Math3d.Constants.Tolerance)
         {
             if (a.Submeshes.Length != b.Submeshes.Length)

@@ -105,9 +105,7 @@ namespace Vim.Format
         int Index { get; }
         IVimSubmesh[] Submeshes { get; }
         void Validate();
-
-        // this method would be used in one file only. do we need it?
-        // public IVimMesh Transform(Matrix4x4 mat) // research if this is used somewhere else
+        IVimMesh Transform(Matrix4x4 mat);
     }
 
     public interface IVimSubmesh
@@ -117,6 +115,7 @@ namespace Vim.Format
         Vector3[] Vertices { get; }
         int[] Indices { get; }
         void Validate();
+        IVimSubmesh Transform(Matrix4x4 mat);
     }
 
     public interface IVimRenderMaterial
