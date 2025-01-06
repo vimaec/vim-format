@@ -267,7 +267,7 @@ namespace Vim.Format.Merge
             var entityTableOffsetMap = new Dictionary<string, int>();
             foreach (var set in entities)
             {
-                foreach ((string name, var table) in set.RawTableMap)
+                foreach ((var name, var table) in set.RawTableMap)
                 {
                     // Add the entity table name to the aggregate offset map
                     aggregateOffsetMap.TryAdd(name, 0);
