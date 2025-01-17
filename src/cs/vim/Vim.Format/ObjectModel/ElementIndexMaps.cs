@@ -123,11 +123,16 @@ namespace Vim.Format.ObjectModel
         public static IndexMap GetElementIndexMap(EntityTable_v2 et)
         {
             var indexMap = new IndexMap();
-            var elementIndices = et?.IndexColumns[ElementIndexColumnName]?.GetTypedData();
+            if (et?.IndexColumns.TryGetValue(ElementIndexColumnName, out var buffer) != true || buffer == null)
+                return indexMap;
+
+            var elementIndices = buffer.GetTypedData();
             if (elementIndices == null)
                 return indexMap;
+
             for (var i = 0; i < elementIndices.Length; ++i)
                 indexMap.TryAdd(elementIndices[i], i);
+
             return indexMap;
         }
     }
