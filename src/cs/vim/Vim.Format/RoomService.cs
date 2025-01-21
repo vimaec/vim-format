@@ -8,17 +8,25 @@ using Vim.Math3d;
 
 namespace Vim.Format
 {
+    public class ElementInRoom
+    {
+        public int ElementIndex { get; }
+        public int RoomIndex { get; }
+
+        public ElementInRoom(int elementIndex, int roomIndex)
+        {
+            ElementIndex = elementIndex;
+            RoomIndex = roomIndex;
+        }
+    }
+
     public static class RoomService
     {
-        public delegate bool CategoryFilter(Category category);
+        public delegate bool ElementInfoFilter(ElementInfo elementInfo);
 
-        public static ElementInRoom[] ComputeElementsInRoom(VimScene vim, CategoryFilter categoryFilter)
+        public static ElementInRoom[] ComputeElementsInRoom(VimScene vim, ElementInfoFilter elementInfoFilter)
         {
             var dm = vim.DocumentModel;
-
-            var categoryIndices = new HashSet<int>(dm.CategoryList.ToEnumerable().Where(c => categoryFilter(c)).Select(c => c.Index));
-            if (categoryIndices.Count == 0)
-                return Array.Empty<ElementInRoom>(); // no categories which satisfy the filter.
 
             var roomElementIndices = new HashSet<int>(dm.RoomElementIndex.ToEnumerable());
             if (roomElementIndices.Count == 0)
@@ -57,16 +65,14 @@ namespace Vim.Format
                 .AsParallel()
                 .Where(g =>
                 {
-                    // Filter the elements by category.
+                    // Filter the elements
                     var elementInfo = g.First();
-                    if (!categoryIndices.Contains(elementInfo.CategoryIndex))
+                    if (!elementInfoFilter(elementInfo))
                         return false;
 
                     // Ignore room elements.
                     if (roomElementIndices.Contains(elementInfo.ElementIndex))
                         return false;
-
-                    // TODO: Only take elements which don't already have a room association
 
                     return true;
                 }).Select(g =>
@@ -96,30 +102,19 @@ namespace Vim.Format
             return filteredElementGeometricNodes;
         }
 
-        public class ElementInRoom
+        private class RoomGeometry
         {
-            public int ElementIndex { get; }
-            public int RoomIndex { get; }
+            private readonly Vector3[] _vertices;
+            private readonly int[] _indices;
 
-            public ElementInRoom(int elementIndex, int roomIndex)
-            {
-                ElementIndex = elementIndex;
-                RoomIndex = roomIndex;
-            }
-        }
-
-        public class RoomGeometry
-        {
             public int RoomIndex { get; }
-            public Vector3[] Vertices { get; }
-            public int[] Indices { get; }
             public AABox AABox { get; }
 
             public RoomGeometry(int roomIndex, Vector3[] vertices, int[] indices)
             {
                 RoomIndex = roomIndex;
-                Vertices = vertices;
-                Indices = indices;
+                _vertices = vertices;
+                _indices = indices;
                 AABox = AABox.Create(vertices);
             }
 
@@ -129,11 +124,11 @@ namespace Vim.Format
 
                 var ray = new Ray(point, Vector3.UnitZ);
 
-                for (var i = 0; i < Indices.Length; i += 3)
+                for (var i = 0; i < _indices.Length; i += 3)
                 {
-                    var v0 = Vertices[Indices[i]];
-                    var v1 = Vertices[Indices[i + 1]];
-                    var v2 = Vertices[Indices[i + 2]];
+                    var v0 = _vertices[_indices[i]];
+                    var v1 = _vertices[_indices[i + 1]];
+                    var v2 = _vertices[_indices[i + 2]];
 
                     var triangle = new Triangle(v0, v1, v2);
 
@@ -145,7 +140,6 @@ namespace Vim.Format
 
                 return intersections % 2 == 1; // Inside if odd intersections
             }
-
         }
     }
 }
