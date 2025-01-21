@@ -22,9 +22,9 @@ namespace Vim.Format
 
     public static class RoomService
     {
-        public delegate bool ElementInfoFilter(ElementInfo elementInfo);
+        public delegate bool GeometricElementInfoFilter(ElementInfo elementInfo);
 
-        public static ElementInRoom[] ComputeElementsInRoom(VimScene vim, ElementInfoFilter elementInfoFilter)
+        public static ElementInRoom[] ComputeElementsInRoom(VimScene vim, GeometricElementInfoFilter geometricElementInfoFilter)
         {
             var dm = vim.DocumentModel;
 
@@ -67,7 +67,7 @@ namespace Vim.Format
                 {
                     // Filter the elements
                     var elementInfo = g.First();
-                    if (!elementInfoFilter(elementInfo))
+                    if (!geometricElementInfoFilter(elementInfo))
                         return false;
 
                     // Ignore room elements.
