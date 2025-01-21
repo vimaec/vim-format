@@ -86,6 +86,8 @@ namespace Vim.Format.ObjectModel
         public int CategoryIndex => DocumentModel.GetElementCategoryIndex(ElementIndex);
         public int LevelIndex => DocumentModel.GetElementLevelIndex(ElementIndex);
         public int LevelElementIndex => DocumentModel.GetLevelElementIndex(LevelIndex);
+        public int RoomIndex => DocumentModel.GetElementRoomIndex(ElementIndex);
+        public int RoomElementIndex => DocumentModel.GetRoomElementIndex(RoomIndex);
         public int BimDocumentIndex => DocumentModel.GetElementBimDocumentIndex(ElementIndex);
         public int WorksetIndex => DocumentModel.GetElementWorksetIndex(ElementIndex);
         public int FamilyInstanceElementIndex => DocumentModel.GetFamilyInstanceElementIndex(FamilyInstanceIndex);
@@ -100,6 +102,7 @@ namespace Vim.Format.ObjectModel
         public Element Element => DocumentModel.ElementList.ElementAtOrDefault(ElementIndex);
         public Category Category => DocumentModel.CategoryList.ElementAtOrDefault(CategoryIndex);
         public Level Level => DocumentModel.LevelList.ElementAtOrDefault(LevelIndex);
+        public Room Room => DocumentModel.RoomList.ElementAtOrDefault(RoomIndex);
         public BimDocument BimDocument => DocumentModel.BimDocumentList.ElementAtOrDefault(BimDocumentIndex);
         public Workset Workset => DocumentModel.WorksetList.ElementAtOrDefault(WorksetIndex);
         public FamilyInstance FamilyInstance => DocumentModel.FamilyInstanceList.ElementAtOrDefault(FamilyInstanceIndex);
@@ -164,6 +167,7 @@ namespace Vim.Format.ObjectModel
 
         public string ElementName => DocumentModel.GetElementName(ElementIndex);
         public string CategoryName => DocumentModel.GetCategoryName(CategoryIndex);
+        public string CategoryBuiltInName => DocumentModel.GetCategoryBuiltInCategory(CategoryIndex);
         public string LevelName => DocumentModel.GetElementName(LevelElementIndex);
         public string FamilyName => DocumentModel.GetElementName(FamilyElementIndex, DocumentModel.GetElementFamilyName(ElementIndex));
         public string FamilyTypeName => DocumentModel.GetElementName(FamilyTypeElementIndex);
