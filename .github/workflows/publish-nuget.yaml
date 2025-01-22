@@ -30,7 +30,7 @@ jobs:
       with:
           lfs: true
     steps:
-    - uses: actions/checkout@master
+    - name: Install NuGet
     - uses: nuget/setup-nuget@v2
       with:
         nuget-version: '5.x'
