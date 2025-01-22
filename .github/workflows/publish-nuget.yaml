@@ -31,7 +31,7 @@ jobs:
           lfs: true
 
     - name: Install NuGet
-    - uses: nuget/setup-nuget@v2
+      uses: nuget/setup-nuget@v2
       with:
         nuget-version: '5.x'
 
