@@ -72,7 +72,6 @@ namespace Vim
             VimIndex = vimIndex;
             progress?.Report(($"Creating scene from {doc.FileName}", 0.0));
 
-
             var actions = GetInitStepsWithProgress(inParallel, progress);
 
             if (inParallel)
