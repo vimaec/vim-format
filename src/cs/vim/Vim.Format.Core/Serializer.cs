@@ -133,24 +133,6 @@ namespace Vim.Format
         }
 
         /// <summary>
-        /// Enumerates the SerializableEntityTables contained in the given readable and seekable stream representing the VIM file.
-        /// </summary>
-        public static IEnumerable<SerializableEntityTable> EnumerateEntityTables(
-            this Stream seekableReadStream,
-            bool schemaOnly,
-            Func<string, bool> entityTableNameFilterFunc = null)
-        {
-            var entitiesBufferReader = seekableReadStream.GetBFastBufferReader(BufferNames.Entities);
-            if (entitiesBufferReader == null)
-                yield break;
-
-            foreach (var entityTable in entitiesBufferReader.EnumerateEntityTables(schemaOnly, entityTableNameFilterFunc))
-            {
-                yield return entityTable;
-            }
-        }
-
-        /// <summary>
         /// Enumerates the SerializableEntityTables contained in the given VIM file.
         /// </summary>
         public static IEnumerable<SerializableEntityTable> EnumerateEntityTables(
@@ -160,7 +142,14 @@ namespace Vim.Format
         {
             using (var stream = vimFileInfo.OpenRead())
             {
-                return stream.EnumerateEntityTables(schemaOnly, entityTableNameFilterFunc);
+                var entitiesBufferReader = stream.GetBFastBufferReader(BufferNames.Entities);
+                if (entitiesBufferReader == null)
+                    yield break;
+
+                foreach (var entityTable in entitiesBufferReader.EnumerateEntityTables(schemaOnly, entityTableNameFilterFunc))
+                {
+                    yield return entityTable;
+                }
             }
         }
 
