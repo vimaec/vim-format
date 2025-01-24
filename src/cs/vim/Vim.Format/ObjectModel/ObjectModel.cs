@@ -1222,6 +1222,7 @@ namespace Vim.Format.ObjectModel
     /// Represents a mesh in the G3D buffer of the VIM file.
     /// </summary>
     [TableName(TableNames.Geometry)]
+    [G3dAttributeReference("g3d:mesh:submeshoffset:0:int32:1", G3dAttributeReferenceMultiplicity.OneToOne)]
     public partial class Geometry : Entity
     {
         public float Box_Min_X;
