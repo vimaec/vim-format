@@ -22,8 +22,7 @@ public static class EntityTable_v2_Tests
 
         // EntityTable_v2 manual construction.
         var fileInfo = new FileInfo(vimFilePath);
-        var entityTables = fileInfo.EnumerateEntityTables(false).ToArray();
-        var entityTableSet = new EntityTableSet(entityTables, stringBuffer);
+        var entityTableSet = new EntityTableSet(fileInfo, false, stringBuffer);
 
         var baseElementCount = dm.NumElement;
         var nextElementCount = entityTableSet.ElementTable.RowCount;
