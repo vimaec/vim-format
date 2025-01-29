@@ -52,8 +52,6 @@ public static class TestVimGltfConverter
         VimToGltfStore.Convert(vimFilePath, gltfFilePath);
 
         Assert.IsTrue(File.Exists(gltfFilePath), $"Output GLTF file not found: {gltfFilePath}");
-
-        Util.IO.OpenFile(gltfFilePath);
     }
 
     //[Test, Explicit("Local")]
