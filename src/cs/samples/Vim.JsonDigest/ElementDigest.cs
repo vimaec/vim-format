@@ -76,17 +76,17 @@ namespace Vim.JsonDigest
         public bool IsSystem { get; set; }
 
         /// <summary>
-        /// The reference to the BIM Document to which the element belongs. (See BimDocumentDigest.BimDocumentVimIndex)
+        /// The reference to the BIM Document to which the element belongs (i.e. a foreign key on BimDocumentDigest.VimIndex)
         /// </summary>
         public int Ref_BimDocumentDigest_VimIndex { get; set; }
 
         /// <summary>
-        /// The reference to the Level to which the element belongs.
+        /// The reference to the Level to which the element belongs (i.e. a foreign key on LevelDigest.VimIndex)
         /// </summary>
         public int Ref_LevelDigest_VimIndex { get; set; }
 
         /// <summary>
-        /// The reference to the Room in which the element belongs.
+        /// The reference to the Room in which the element belongs. (i.e. a foreign key on RoomDigest.VimIndex)
         /// </summary>
         public int Ref_RoomDigest_VimIndex { get; set; }
 
