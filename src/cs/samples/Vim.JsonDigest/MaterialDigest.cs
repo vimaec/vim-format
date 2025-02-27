@@ -1,28 +1,34 @@
-﻿using System.Collections.Generic;
+﻿using Newtonsoft.Json;
+using System.Collections.Generic;
 using System.Linq;
 using Vim.LinqArray;
 
 namespace Vim.JsonDigest
 {
     /// <summary>
-    /// Represents a material in a BIM document
+    /// Represents a material
     /// </summary>
-    public class MaterialInfo
+    public class MaterialDigest
     {
         /// <summary>
-        /// The BIM document in which the material belongs.
+        /// The index of the material in the VIM scene.
         /// </summary>
-        public string BimDocumentName { get; set; }
+        public int VimIndex { get; set; }
 
         /// <summary>
         /// Material element's ID.
         /// </summary>
-        public long MaterialElementId { get; set; }
+        public long ElementId { get; set; }
 
         /// <summary>
         /// Material element's unique ID.
         /// </summary>
-        public string MaterialElementUniqueId { get; set; }
+        public string ElementUniqueId { get; set; }
+
+        /// <summary>
+        /// The reference to the element which contains the parameters for this material.
+        /// </summary>
+        public int Ref_ElementDigest_VimIndex { get; set; }
 
         /// <summary>
         /// Material name.
@@ -47,26 +53,32 @@ namespace Vim.JsonDigest
         /// <summary>
         /// The occurrences of materials per element.
         /// </summary>
-        public List<MaterialInElementInfo> MaterialInElementInfo { get; set; }
+        public List<MaterialInElementDigest> MaterialInElementDigestCollection { get; set; }
 
         /// <summary>
-        /// Returns the collection of material infos for each material in the given VIM scene.
+        /// JSON Constructor.
         /// </summary>
-        public static IEnumerable<MaterialInfo> GetMaterialInfoCollection(VimScene vimScene)
+        [JsonConstructor]
+        public MaterialDigest() { }
+
+        /// <summary>
+        /// Returns the collection of material digests for each material in the given VIM scene.
+        /// </summary>
+        public static IEnumerable<MaterialDigest> GetMaterialDigestCollection(VimScene vimScene)
         {
             // First, we initialize the collection of MaterialInfo instances based on each material in the VIM scene.
-            var materialInfos = vimScene.DocumentModel.MaterialList.Select(m =>
-                new MaterialInfo()
+            var materialDigests = vimScene.DocumentModel.MaterialList.Select(m =>
+                new MaterialDigest()
                 {
-                    // Note: a material is an element, so we can get its BIM document, its ID, and its name from its .Element relation.
-                    BimDocumentName = m.Element.BimDocument.Name,
-                    MaterialElementId = m.Element.Id,
-                    MaterialElementUniqueId = m.Element.UniqueId,
+                    VimIndex = m.Index,
+                    ElementId = m.Element.Id,
+                    ElementUniqueId = m.Element.UniqueId,
+                    Ref_ElementDigest_VimIndex = m.Element.Index,
                     Name = m.Element.Name,
                     MaterialCategory = m.MaterialCategory,
                     TotalArea = 0, // This will get updated below
                     TotalVolume = 0, // This will get updated below
-                    MaterialInElementInfo = new List<MaterialInElementInfo>()
+                    MaterialInElementDigestCollection = new List<MaterialInElementDigest>(),
                 }).ToArray();
 
             // Next, we iterate over all the MaterialInElement associative objects and update the MaterialInfos we created above.
@@ -75,13 +87,14 @@ namespace Vim.JsonDigest
                 var material = materialInElement.Material;
                 var element = materialInElement.Element;
 
-                var materialInfo = materialInfos[material.Index];
+                var materialInfo = materialDigests[material.Index];
 
-                materialInfo.MaterialInElementInfo.Add(new MaterialInElementInfo()
+                materialInfo.MaterialInElementDigestCollection.Add(new MaterialInElementDigest()
                 {
                     ElementId = element.Id,
                     ElementUniqueId = element.UniqueId,
                     ElementName = element.Name,
+                    Ref_ElementDigest_VimIndex = element.Index,
                     Area = materialInElement.Area,
                     Volume = materialInElement.Volume,
                     IsPaint = materialInElement.IsPaint
@@ -89,20 +102,20 @@ namespace Vim.JsonDigest
             }
 
             // Finally, we sum up the total areas and volumes.
-            foreach (var materialInfo in materialInfos)
+            foreach (var materialInfo in materialDigests)
             {
-                materialInfo.TotalArea = materialInfo.MaterialInElementInfo.Sum(m => m.Area);
-                materialInfo.TotalVolume = materialInfo.MaterialInElementInfo.Sum(m => m.Volume);
+                materialInfo.TotalArea = materialInfo.MaterialInElementDigestCollection.Sum(m => m.Area);
+                materialInfo.TotalVolume = materialInfo.MaterialInElementDigestCollection.Sum(m => m.Volume);
             }
 
-            return materialInfos.Where(mi => mi.MaterialInElementInfo.Count > 0);
+            return materialDigests.Where(mi => mi.MaterialInElementDigestCollection.Count > 0);
         }
     }
 
     /// <summary>
     /// Represents an association of a material inside (or on) an element.
     /// </summary>
-    public class MaterialInElementInfo
+    public class MaterialInElementDigest
     {
         /// <summary>
         /// Associated element's ID.
@@ -118,6 +131,11 @@ namespace Vim.JsonDigest
         /// Associated element's name
         /// </summary>
         public string ElementName { get; set; }
+
+        /// <summary>
+        /// Associated element's VIM index.
+        /// </summary>
+        public int Ref_ElementDigest_VimIndex { get; set; }
 
         /// <summary>
         /// Material area in square feet.

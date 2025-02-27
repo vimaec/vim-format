@@ -12,7 +12,7 @@ namespace Vim.JsonDigest.Tests
         /// <summary>
         /// Validates that the given VIM file at the provided URL can be analyzed using a VimJsonDigest instance.
         /// </summary>
-        [TestCase("https://vimdevelopment01storage.blob.core.windows.net/samples/RoomTest.vim")]
+        [TestCase("https://storage.cdn.vimaec.com/samples/RoomTest.vim")]
         public static async Task Test_VimJsonDigest(string url)
         {
             var logger = new StdLogger();
@@ -32,16 +32,22 @@ namespace Vim.JsonDigest.Tests
             var vimJsonDigest = new VimJsonDigest(memoryStream);
 
             // Assert the contained collections are not empty.
-            Assert.IsNotEmpty(vimJsonDigest.RoomInfoCollection, "Room info collection is empty.");
-            Assert.IsNotEmpty(vimJsonDigest.MaterialInfoCollection, "Material info collection is empty.");
-            Assert.IsNotEmpty(vimJsonDigest.AreaInfoCollection, "Area info collection is empty.");
+            Assert.IsNotEmpty(vimJsonDigest.BimDocumentDigestCollection, "BimDocument digest collection is empty.");
+            Assert.IsNotEmpty(vimJsonDigest.ElementDigestCollection, "Element digest collection is empty.");
+            Assert.IsNotEmpty(vimJsonDigest.LevelDigestCollection, "Level digest collection is empty.");
+            Assert.IsNotEmpty(vimJsonDigest.RoomDigestCollection, "Room digest collection is empty.");
+            Assert.IsNotEmpty(vimJsonDigest.MaterialDigestCollection, "Material digest collection is empty.");
+            Assert.IsNotEmpty(vimJsonDigest.AreaDigestCollection, "Area digest collection is empty.");
 
             // Assert that we can read the json content and reconstruct the VIM json digest.
             var jsonContent = vimJsonDigest.ToJson();
             var readVimJsonDigest = VimJsonDigest.FromJson(jsonContent);
-            Assert.AreEqual(vimJsonDigest.RoomInfoCollection.Count, readVimJsonDigest.RoomInfoCollection.Count);
-            Assert.AreEqual(vimJsonDigest.AreaInfoCollection.Count, readVimJsonDigest.AreaInfoCollection.Count);
-            Assert.AreEqual(vimJsonDigest.MaterialInfoCollection.Count, readVimJsonDigest.MaterialInfoCollection.Count);
+            Assert.AreEqual(vimJsonDigest.BimDocumentDigestCollection.Count, readVimJsonDigest.BimDocumentDigestCollection.Count);
+            Assert.AreEqual(vimJsonDigest.ElementDigestCollection.Count, readVimJsonDigest.ElementDigestCollection.Count);
+            Assert.AreEqual(vimJsonDigest.LevelDigestCollection.Count, readVimJsonDigest.LevelDigestCollection.Count);
+            Assert.AreEqual(vimJsonDigest.RoomDigestCollection.Count, readVimJsonDigest.RoomDigestCollection.Count);
+            Assert.AreEqual(vimJsonDigest.AreaDigestCollection.Count, readVimJsonDigest.AreaDigestCollection.Count);
+            Assert.AreEqual(vimJsonDigest.MaterialDigestCollection.Count, readVimJsonDigest.MaterialDigestCollection.Count);
         }
     }
 }

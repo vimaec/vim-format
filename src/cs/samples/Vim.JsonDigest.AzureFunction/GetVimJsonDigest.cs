@@ -22,7 +22,7 @@ public class GetVimJsonDigest
     /// <summary>
     /// Responds to GET or POST HTTP requests containing a "vim_url" argument. Returns a JSON payload describing the collection of rooms, areas, and materials contained in the given VIM file.
     /// <br/><br/>
-    /// Sample usage (localhost): http://localhost:7071/api/GetVimJsonDigest?vim_url=https://vimdevelopment01storage.blob.core.windows.net/samples/RoomTest.vim
+    /// Sample usage (localhost): http://localhost:7071/api/GetVimJsonDigest?vim_url=https://storage.cdn.vimaec.com/samples/RoomTest.vim
     /// </summary>
     [Function(nameof(GetVimJsonDigest))]
     public async Task<HttpResponseData> Run([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post")] HttpRequestData req)

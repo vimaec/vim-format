@@ -7,19 +7,28 @@ using System.Linq;
 namespace Vim.JsonDigest
 {
     /// <summary>
-    /// This class represents aggregated data from a VIM file about its rooms, areas, and materials.
+    /// This class represents aggregated data from a VIM file about its rooms, areas, materials, and element parameters.
     /// This class is intended to be serialized to JSON for subsequent analysis in a data pipeline.
     /// </summary>
     public class VimJsonDigest
     {
+        [JsonProperty("bimdocuments")]
+        public List<BimDocumentDigest> BimDocumentDigestCollection { get; set; }
+
+        [JsonProperty("elements")]
+        public List<ElementDigest> ElementDigestCollection { get; set; }
+
+        [JsonProperty("levels")]
+        public List<LevelDigest> LevelDigestCollection { get; set; }
+
         [JsonProperty("rooms")]
-        public List<RoomInfo> RoomInfoCollection { get; set; }
+        public List<RoomDigest> RoomDigestCollection { get; set; }
 
         [JsonProperty("areas")]
-        public List<AreaInfo> AreaInfoCollection { get; set; }
+        public List<AreaDigest> AreaDigestCollection { get; set; }
 
         [JsonProperty("materials")]
-        public List<MaterialInfo> MaterialInfoCollection { get; set; }
+        public List<MaterialDigest> MaterialDigestCollection { get; set; }
 
         /// <summary>
         /// JSON Constructor used for deserialization.
@@ -32,9 +41,12 @@ namespace Vim.JsonDigest
         /// </summary>
         public VimJsonDigest(VimScene vimScene)
         {
-            RoomInfoCollection = RoomInfo.GetRoomInfoCollection(vimScene).ToList();
-            AreaInfoCollection = AreaInfo.GetAreaInfoCollection(vimScene).ToList();
-            MaterialInfoCollection = MaterialInfo.GetMaterialInfoCollection(vimScene).ToList();
+            BimDocumentDigestCollection = BimDocumentDigest.GetBimDocumentDigestCollection(vimScene).ToList(); 
+            ElementDigestCollection = ElementDigest.GetElementDigestCollection(vimScene).ToList();
+            LevelDigestCollection = LevelDigest.GetLevelDigestCollection(vimScene).ToList();
+            RoomDigestCollection = RoomDigest.GetRoomDigestCollection(vimScene).ToList();
+            AreaDigestCollection = AreaDigest.GetAreaDigestCollection(vimScene).ToList();
+            MaterialDigestCollection = MaterialDigest.GetMaterialDigestCollection(vimScene).ToList();
         }
 
         /// <summary>
