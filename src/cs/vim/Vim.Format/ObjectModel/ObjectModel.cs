@@ -15,6 +15,10 @@ namespace Vim.Format.ObjectModel
         public static class History
         {
             // Schema additions
+            //   Vim.Level__double:ProjectElevation
+            public const string v5_5_0 = "5.5.0";
+
+            // Schema additions
             //   Vim.FamilyInstance__index:Vim.Element:SuperComponent
             public const string v5_4_0 = "5.4.0";
 
@@ -167,7 +171,8 @@ namespace Vim.Format.ObjectModel
         // ReSharper enable MemberHidesStaticFromOuterClass
 
         // [MAINTAIN] Add more object model SerializableVersions below and update the current one.
-        public static SerializableVersion Current => v5_4_0;
+        public static SerializableVersion Current => v5_5_0;
+        public static SerializableVersion v5_5_0 => SerializableVersion.Parse(History.v5_5_0);
         public static SerializableVersion v5_4_0 => SerializableVersion.Parse(History.v5_4_0);
         public static SerializableVersion v5_3_0 => SerializableVersion.Parse(History.v5_3_0);
         public static SerializableVersion v5_2_0 => SerializableVersion.Parse(History.v5_2_0);
@@ -582,8 +587,17 @@ namespace Vim.Format.ObjectModel
     {
         /// <summary>
         /// The elevation above or below the ground level.
+        /// - Revit: maps to Level.Elevation
+        /// - IFC: maps to IfcBuildingStorey.Elevation
         /// </summary>
         public double Elevation;
+
+        /// <summary>
+        /// The elevation relative to the project origin.
+        /// - Revit: maps to Level.ProjectElevation
+        /// - IFC: maps to IfcBuildingStorey.Elevation + IfcBuilding.ElevationOfRefHeight
+        /// </summary>
+        public double ProjectElevation;
 
         /// <summary>
         /// The associated Level's FamilyType (in Revit, this maps to its LevelType)
@@ -1732,9 +1746,24 @@ namespace Vim.Format.ObjectModel
     [TableName(TableNames.Building)]
     public partial class Building : EntityWithElement
     {
+        /// <summary>
+        /// Revit: maps to Document.SiteLocation.Elevation
+        /// IFC: maps to IfcBuilding.ElevationOfRefHeight
+        /// </summary>
         public double Elevation;
+
+        /// <summary>
+        /// Revit: maps to Document.SiteLocation.Elevation
+        /// IFC: maps to IfcBuilding.ElevationOfTerrain
+        /// </summary>
         public double TerrainElevation;
+
+        /// <summary>
+        /// Revit: maps to Document.ProjectInformation.Address
+        /// IFC: maps to IfcBuilding.BuildingAddress
+        /// </summary>
         public string Address;
+
         public Relation<Site> _Site;
     }
 

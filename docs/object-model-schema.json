@@ -1,6 +1,6 @@
 {
   "VimFormatVersion": "1.0.0",
-  "SchemaVersion": "5.4.0",
+  "SchemaVersion": "5.5.0",
   "Tables": {
     "Vim.Area": [
       "byte:IsGrossInterior",
@@ -245,6 +245,7 @@
     ],
     "Vim.Level": [
       "double:Elevation",
+      "double:ProjectElevation",
       "index:Vim.Building:Building",
       "index:Vim.Element:Element",
       "index:Vim.FamilyType:FamilyType"

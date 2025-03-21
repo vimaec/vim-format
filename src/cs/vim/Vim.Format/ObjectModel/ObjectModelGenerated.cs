@@ -348,6 +348,7 @@ namespace Vim.Format.ObjectModel {
                 var fieldsAreEqual =
                     (Index == other.Index) &&
                     (Elevation == other.Elevation) &&
+                    (ProjectElevation == other.ProjectElevation) &&
                     (_FamilyType?.Index == other._FamilyType?.Index) &&
                     (_Building?.Index == other._Building?.Index) &&
                     (_Element?.Index == other._Element?.Index);
@@ -2211,6 +2212,8 @@ namespace Vim.Format.ObjectModel {
         
         public IArray<Double> LevelElevation { get; }
         public Double GetLevelElevation(int index, Double defaultValue = default) => LevelElevation?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> LevelProjectElevation { get; }
+        public Double GetLevelProjectElevation(int index, Double defaultValue = default) => LevelProjectElevation?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
         public IArray<int> LevelFamilyTypeIndex { get; }
         public int GetLevelFamilyTypeIndex(int index) => LevelFamilyTypeIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
         public IArray<int> LevelBuildingIndex { get; }
@@ -2226,6 +2229,7 @@ namespace Vim.Format.ObjectModel {
             r.Document = Document;
             r.Index = n;
             r.Elevation = LevelElevation.ElementAtOrDefault(n);
+            r.ProjectElevation = LevelProjectElevation.ElementAtOrDefault(n);
             r._FamilyType = new Relation<Vim.Format.ObjectModel.FamilyType>(GetLevelFamilyTypeIndex(n), GetFamilyType);
             r._Building = new Relation<Vim.Format.ObjectModel.Building>(GetLevelBuildingIndex(n), GetBuilding);
             r._Element = new Relation<Vim.Format.ObjectModel.Element>(GetLevelElementIndex(n), GetElement);
@@ -3950,6 +3954,7 @@ namespace Vim.Format.ObjectModel {
             GroupPosition_Z = GroupEntityTable?.GetDataColumnValues<Single>("float:Position.Z") ?? Array.Empty<Single>().ToIArray();
             DesignOptionIsPrimary = DesignOptionEntityTable?.GetDataColumnValues<Boolean>("byte:IsPrimary") ?? Array.Empty<Boolean>().ToIArray();
             LevelElevation = LevelEntityTable?.GetDataColumnValues<Double>("double:Elevation") ?? Array.Empty<Double>().ToIArray();
+            LevelProjectElevation = LevelEntityTable?.GetDataColumnValues<Double>("double:ProjectElevation") ?? Array.Empty<Double>().ToIArray();
             RoomBaseOffset = RoomEntityTable?.GetDataColumnValues<Double>("double:BaseOffset") ?? Array.Empty<Double>().ToIArray();
             RoomLimitOffset = RoomEntityTable?.GetDataColumnValues<Double>("double:LimitOffset") ?? Array.Empty<Double>().ToIArray();
             RoomUnboundedHeight = RoomEntityTable?.GetDataColumnValues<Double>("double:UnboundedHeight") ?? Array.Empty<Double>().ToIArray();
@@ -5099,6 +5104,7 @@ namespace Vim.Format.ObjectModel {
         {
             _parentTableSet = parentTableSet;
             Column_Elevation = GetDataColumnValues<Double>("double:Elevation") ?? Array.Empty<Double>();
+            Column_ProjectElevation = GetDataColumnValues<Double>("double:ProjectElevation") ?? Array.Empty<Double>();
             Column_FamilyTypeIndex = GetIndexColumnValues("index:Vim.FamilyType:FamilyType") ?? Array.Empty<int>();
             Column_BuildingIndex = GetIndexColumnValues("index:Vim.Building:Building") ?? Array.Empty<int>();
             Column_ElementIndex = GetIndexColumnValues("index:Vim.Element:Element") ?? Array.Empty<int>();
@@ -5106,6 +5112,8 @@ namespace Vim.Format.ObjectModel {
         
         public Double[] Column_Elevation { get; }
         public Double GetElevation(int index, Double @default = default) => Column_Elevation.ElementAtOrDefault(index, @default);
+        public Double[] Column_ProjectElevation { get; }
+        public Double GetProjectElevation(int index, Double @default = default) => Column_ProjectElevation.ElementAtOrDefault(index, @default);
         public int[] Column_FamilyTypeIndex { get; }
         public int GetFamilyTypeIndex(int index) => Column_FamilyTypeIndex.ElementAtOrDefault(index, EntityRelation.None);
         public FamilyType GetFamilyType(int index) => _GetReferencedFamilyType(GetFamilyTypeIndex(index));
@@ -5125,6 +5133,7 @@ namespace Vim.Format.ObjectModel {
             var r = new Level();
             r.Index = index;
             r.Elevation = GetElevation(index);
+            r.ProjectElevation = GetProjectElevation(index);
             r._FamilyType = new Relation<Vim.Format.ObjectModel.FamilyType>(GetFamilyTypeIndex(index), _GetReferencedFamilyType);
             r._Building = new Relation<Vim.Format.ObjectModel.Building>(GetBuildingIndex(index), _GetReferencedBuilding);
             r._Element = new Relation<Vim.Format.ObjectModel.Element>(GetElementIndex(index), _GetReferencedElement);
@@ -7681,6 +7690,7 @@ namespace Vim.Format.ObjectModel {
             var typedEntities = entities?.Cast<Level>() ?? Enumerable.Empty<Level>();
             var tb = new EntityTableBuilder("Vim.Level");
             tb.AddDataColumn("double:Elevation", typedEntities.Select(x => x.Elevation));
+            tb.AddDataColumn("double:ProjectElevation", typedEntities.Select(x => x.ProjectElevation));
             tb.AddIndexColumn("index:Vim.FamilyType:FamilyType", typedEntities.Select(x => x._FamilyType?.Index ?? EntityRelation.None));
             tb.AddIndexColumn("index:Vim.Building:Building", typedEntities.Select(x => x._Building?.Index ?? EntityRelation.None));
             tb.AddIndexColumn("index:Vim.Element:Element", typedEntities.Select(x => x._Element?.Index ?? EntityRelation.None));
