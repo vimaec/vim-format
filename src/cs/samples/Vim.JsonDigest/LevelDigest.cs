@@ -42,6 +42,11 @@ namespace Vim.JsonDigest
         public double Elevation { get; set; }
 
         /// <summary>
+        /// Level project elevation.
+        /// </summary>
+        public double ProjectElevation { get; set; }
+
+        /// <summary>
         /// JSON Constructor.
         /// </summary>
         [JsonConstructor]
@@ -64,6 +69,7 @@ namespace Vim.JsonDigest
                     Name = levelElement.Name,
                     BimDocumentName = levelElement.BimDocument.Name,
                     Elevation = l.Elevation,
+                    ProjectElevation = l.ProjectElevation,
                 };
             }).ToEnumerable();
     }

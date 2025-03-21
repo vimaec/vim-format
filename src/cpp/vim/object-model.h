@@ -2514,6 +2514,7 @@ namespace Vim
     public:
         int mIndex;
         double mElevation;
+        double mProjectElevation;
         
         int mFamilyTypeIndex;
         FamilyType* mFamilyType;
@@ -2543,6 +2544,7 @@ namespace Vim
             Level* level = new Level();
             level->mIndex = levelIndex;
             level->mElevation = GetElevation(levelIndex);
+            level->mProjectElevation = GetProjectElevation(levelIndex);
             level->mFamilyTypeIndex = GetFamilyTypeIndex(levelIndex);
             level->mBuildingIndex = GetBuildingIndex(levelIndex);
             level->mElementIndex = GetElementIndex(levelIndex);
@@ -2552,6 +2554,7 @@ namespace Vim
         std::vector<Level>* GetAll()
         {
             bool existsElevation = mEntityTable.column_exists("double:Elevation");
+            bool existsProjectElevation = mEntityTable.column_exists("double:ProjectElevation");
             bool existsFamilyType = mEntityTable.column_exists("index:Vim.FamilyType:FamilyType");
             bool existsBuilding = mEntityTable.column_exists("index:Vim.Building:Building");
             bool existsElement = mEntityTable.column_exists("index:Vim.Element:Element");
@@ -2566,6 +2569,11 @@ namespace Vim
                 memcpy(elevationData, mEntityTable.mDataColumns["double:Elevation"].begin(), count * sizeof(double));
             }
             
+            double* projectElevationData = new double[count];
+            if (mEntityTable.column_exists("double:ProjectElevation")) {
+                memcpy(projectElevationData, mEntityTable.mDataColumns["double:ProjectElevation"].begin(), count * sizeof(double));
+            }
+            
             const std::vector<int>& familyTypeData = mEntityTable.column_exists("index:Vim.FamilyType:FamilyType") ? mEntityTable.mIndexColumns["index:Vim.FamilyType:FamilyType"] : std::vector<int>();
             const std::vector<int>& buildingData = mEntityTable.column_exists("index:Vim.Building:Building") ? mEntityTable.mIndexColumns["index:Vim.Building:Building"] : std::vector<int>();
             const std::vector<int>& elementData = mEntityTable.column_exists("index:Vim.Element:Element") ? mEntityTable.mIndexColumns["index:Vim.Element:Element"] : std::vector<int>();
@@ -2576,6 +2584,8 @@ namespace Vim
                 entity.mIndex = i;
                 if (existsElevation)
                     entity.mElevation = elevationData[i];
+                if (existsProjectElevation)
+                    entity.mProjectElevation = projectElevationData[i];
                 entity.mFamilyTypeIndex = existsFamilyType ? familyTypeData[i] : -1;
                 entity.mBuildingIndex = existsBuilding ? buildingData[i] : -1;
                 entity.mElementIndex = existsElement ? elementData[i] : -1;
@@ -2583,6 +2593,7 @@ namespace Vim
             }
             
             delete[] elevationData;
+            delete[] projectElevationData;
             
             return level;
         }
@@ -2611,6 +2622,34 @@ namespace Vim
             std::vector<double>* result = new std::vector<double>(elevationData, elevationData + count);
             
             delete[] elevationData;
+            
+            return result;
+        }
+        
+        double GetProjectElevation(int levelIndex)
+        {
+            if (levelIndex < 0 || levelIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("double:ProjectElevation")) {
+                return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:ProjectElevation"].begin() + levelIndex * sizeof(double)));
+            }
+            
+            return {};
+        }
+        
+        std::vector<double>* GetAllProjectElevation()
+        {
+            const auto count = GetCount();
+            
+            double* projectElevationData = new double[count];
+            if (mEntityTable.column_exists("double:ProjectElevation")) {
+                memcpy(projectElevationData, mEntityTable.mDataColumns["double:ProjectElevation"].begin(), count * sizeof(double));
+            }
+            
+            std::vector<double>* result = new std::vector<double>(projectElevationData, projectElevationData + count);
+            
+            delete[] projectElevationData;
             
             return result;
         }
