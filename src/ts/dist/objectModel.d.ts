@@ -597,6 +597,7 @@ export declare class DesignOptionTable implements IDesignOptionTable {
 export interface ILevel {
     index: number;
     elevation?: number;
+    projectElevation?: number;
     familyTypeIndex?: number;
     familyType?: IFamilyType;
     buildingIndex?: number;
@@ -610,6 +611,8 @@ export interface ILevelTable {
     getAll(): Promise<ILevel[]>;
     getElevation(levelIndex: number): Promise<number | undefined>;
     getAllElevation(): Promise<number[] | undefined>;
+    getProjectElevation(levelIndex: number): Promise<number | undefined>;
+    getAllProjectElevation(): Promise<number[] | undefined>;
     getFamilyTypeIndex(levelIndex: number): Promise<number | undefined>;
     getAllFamilyTypeIndex(): Promise<number[] | undefined>;
     getFamilyType(levelIndex: number): Promise<IFamilyType | undefined>;
@@ -623,6 +626,7 @@ export interface ILevelTable {
 export declare class Level implements ILevel {
     index: number;
     elevation?: number;
+    projectElevation?: number;
     familyTypeIndex?: number;
     familyType?: IFamilyType;
     buildingIndex?: number;
@@ -640,6 +644,8 @@ export declare class LevelTable implements ILevelTable {
     getAll(): Promise<ILevel[]>;
     getElevation(levelIndex: number): Promise<number | undefined>;
     getAllElevation(): Promise<number[] | undefined>;
+    getProjectElevation(levelIndex: number): Promise<number | undefined>;
+    getAllProjectElevation(): Promise<number[] | undefined>;
     getFamilyTypeIndex(levelIndex: number): Promise<number | undefined>;
     getAllFamilyTypeIndex(): Promise<number[] | undefined>;
     getFamilyType(levelIndex: number): Promise<IFamilyType | undefined>;

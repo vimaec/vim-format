@@ -1083,6 +1083,7 @@ class Level {
         result.index = index;
         await Promise.all([
             table.getElevation(index).then(v => result.elevation = v),
+            table.getProjectElevation(index).then(v => result.projectElevation = v),
             table.getFamilyTypeIndex(index).then(v => result.familyTypeIndex = v),
             table.getBuildingIndex(index).then(v => result.buildingIndex = v),
             table.getElementIndex(index).then(v => result.elementIndex = v),
@@ -1111,11 +1112,13 @@ class LevelTable {
     async getAll() {
         const localTable = await this.entityTable.getLocal();
         let elevation;
+        let projectElevation;
         let familyTypeIndex;
         let buildingIndex;
         let elementIndex;
         await Promise.all([
             (async () => { elevation = (await localTable.getNumberArray("double:Elevation")); })(),
+            (async () => { projectElevation = (await localTable.getNumberArray("double:ProjectElevation")); })(),
             (async () => { familyTypeIndex = (await localTable.getNumberArray("index:Vim.FamilyType:FamilyType")); })(),
             (async () => { buildingIndex = (await localTable.getNumberArray("index:Vim.Building:Building")); })(),
             (async () => { elementIndex = (await localTable.getNumberArray("index:Vim.Element:Element")); })(),
@@ -1126,6 +1129,7 @@ class LevelTable {
             level.push({
                 index: i,
                 elevation: elevation ? elevation[i] : undefined,
+                projectElevation: projectElevation ? projectElevation[i] : undefined,
                 familyTypeIndex: familyTypeIndex ? familyTypeIndex[i] : undefined,
                 buildingIndex: buildingIndex ? buildingIndex[i] : undefined,
                 elementIndex: elementIndex ? elementIndex[i] : undefined
@@ -1138,6 +1142,12 @@ class LevelTable {
     }
     async getAllElevation() {
         return (await this.entityTable.getNumberArray("double:Elevation"));
+    }
+    async getProjectElevation(levelIndex) {
+        return (await this.entityTable.getNumber(levelIndex, "double:ProjectElevation"));
+    }
+    async getAllProjectElevation() {
+        return (await this.entityTable.getNumberArray("double:ProjectElevation"));
     }
     async getFamilyTypeIndex(levelIndex) {
         return await this.entityTable.getNumber(levelIndex, "index:Vim.FamilyType:FamilyType");
