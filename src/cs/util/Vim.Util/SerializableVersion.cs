@@ -81,24 +81,51 @@ namespace Vim.Util
         public bool IsLessThan(SerializableVersion other)
         {
             if (Major < other.Major)
+            {
                 return true;
-            
-            if (Major == other.Major && Minor < other.Minor)
-                return true;
-            
-            if (Major == other.Major && Minor == other.Minor && Patch < other.Patch)
-                return true;
-
-            var hasQualifier = !string.IsNullOrEmpty(Qualifier);
-            var otherHasQualifier = !string.IsNullOrEmpty(other.Qualifier);
-
-            if (!hasQualifier && otherHasQualifier)
-                return true;
-
-            if (hasQualifier && !otherHasQualifier)
+            }
+            else if (Major > other.Major)
+            {
                 return false;
+            }
+            else 
+            {
+                // Major == other.Major
+                if (Minor < other.Minor)
+                {
+                    return true;
+                }
+                else if (Minor > other.Minor)
+                {
+                    return false;
+                }
+                else
+                {
+                    // Major == other.Major and Minor == other.Minor
+                    if (Patch < other.Patch)
+                    {
+                        return true;
+                    }
+                    else if (Patch > other.Patch)
+                    {
+                        return false;
+                    }
+                    else
+                    {
+                        // Major == other.Major and Minor == other.Minor and Patch == other.Patch
+                        var hasQualifier = !string.IsNullOrEmpty(Qualifier);
+                        var otherHasQualifier = !string.IsNullOrEmpty(other.Qualifier);
 
-            return string.Compare(Qualifier, other.Qualifier, StringComparison.InvariantCultureIgnoreCase) < 0;
+                        if (!hasQualifier && otherHasQualifier)
+                            return true;
+
+                        if (hasQualifier && !otherHasQualifier)
+                            return false;
+
+                        return string.Compare(Qualifier, other.Qualifier, StringComparison.InvariantCultureIgnoreCase) < 0;
+                    }
+                }
+            }
         }
 
         public bool IsGreaterThanOrEqual(SerializableVersion other)

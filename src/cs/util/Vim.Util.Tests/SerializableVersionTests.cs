@@ -1,4 +1,5 @@
 ﻿using NUnit.Framework;
+using System.Collections.Generic;
 
 namespace Vim.Util.Tests
 {
@@ -54,34 +55,37 @@ namespace Vim.Util.Tests
             Assert.IsTrue(v4_5_6_z.IsEqualTo(v4_5_6_z));
         }
 
-        [Test]
-        public static void TestVersionComparison()
+        public static IEnumerable<(SerializableVersion less, SerializableVersion greaterOrEqual)> Cases = new[]
         {
-            var cases = new[]
-            {
-                (SerializableVersion.Parse("0"), SerializableVersion.Parse("1")),
-                (SerializableVersion.Parse("0.0.0"), SerializableVersion.Parse("0.0.1")),
-                (SerializableVersion.Parse("0.0.1"), SerializableVersion.Parse("0.1.0")),
-                (SerializableVersion.Parse("0.1.0"), SerializableVersion.Parse("1.0.0")),
-                (SerializableVersion.Parse("1.0.0"), SerializableVersion.Parse("1.0.0.a")),
-                (SerializableVersion.Parse("1.0.0.a"), SerializableVersion.Parse("1.0.0.aa")),
-                (SerializableVersion.Parse("1.0.0.a"), SerializableVersion.Parse("1.0.0.b")),
-                (SerializableVersion.Parse("1.0.0.aa"), SerializableVersion.Parse("1.0.0.b")),
-                (SerializableVersion.Parse("1.0.0.b"), SerializableVersion.Parse("1.0.0.bb")),
-            };
+            (SerializableVersion.Parse("0"), SerializableVersion.Parse("1")),
+            (SerializableVersion.Parse("0.0.0"), SerializableVersion.Parse("0.0.1")),
+            (SerializableVersion.Parse("0.0.1"), SerializableVersion.Parse("0.1.0")),
+            (SerializableVersion.Parse("0.1.0"), SerializableVersion.Parse("1.0.0")),
+            (SerializableVersion.Parse("1.0.0"), SerializableVersion.Parse("1.0.0.a")),
+            (SerializableVersion.Parse("1.0.0.a"), SerializableVersion.Parse("1.0.0.aa")),
+            (SerializableVersion.Parse("1.0.0.a"), SerializableVersion.Parse("1.0.0.b")),
+            (SerializableVersion.Parse("1.0.0.aa"), SerializableVersion.Parse("1.0.0.b")),
+            (SerializableVersion.Parse("1.0.0.b"), SerializableVersion.Parse("1.0.0.bb")),
+            (SerializableVersion.Parse("5.4.0.c"), SerializableVersion.Parse("5.5.0")),
+        };
 
-            foreach (var (a, b) in cases)
-            {
-                Assert.IsNotNull(a);
-                Assert.IsNotNull(b);
-                Assert.IsTrue(a.IsLessThan(b));
-                Assert.IsFalse(b.IsLessThan(a));
-                Assert.IsTrue(b.IsGreaterThanOrEqual(a));
-                Assert.IsFalse(a.IsGreaterThanOrEqual(b));
-                Assert.IsFalse(a.Equals(b));
-                Assert.IsFalse(b.Equals(a));
-            }
+        [TestCaseSource(nameof(Cases))]
+        public static void TestVersionComparison((SerializableVersion less, SerializableVersion greaterOrEqual) testCase)
+        {
+            var (a, b) = testCase;
+            Assert.IsNotNull(a);
+            Assert.IsNotNull(b);
+            Assert.IsTrue(a.IsLessThan(b));
+            Assert.IsFalse(b.IsLessThan(a));
+            Assert.IsTrue(b.IsGreaterThanOrEqual(a));
+            Assert.IsFalse(a.IsGreaterThanOrEqual(b));
+            Assert.IsFalse(a.Equals(b));
+            Assert.IsFalse(b.Equals(a));
+        }
 
+        [Test]
+        public static void TestSpecialCase()
+        {
             // Special case that tripped up some logic:
             var v4_4_0_a = SerializableVersion.Parse("4.4.0.a");
             Assert.IsTrue(v4_4_0_a.IsGreaterThanOrEqual(v4_4_0_a));
