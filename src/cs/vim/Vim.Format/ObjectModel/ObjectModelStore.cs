@@ -21,11 +21,40 @@ namespace Vim.Format.ObjectModel
 
         public DocumentBuilder ToDocumentBuilder(string generator, string versionString)
         {
-            return ObjectModelBuilder.ToDocumentBuilder(generator, versionString)
+            var db = ObjectModelBuilder.ToDocumentBuilder(generator, versionString);
+            AddFaceSilhouetteBuffers(db);
+
+            return db
                 .AddMeshes(Meshes.Select(g => g.Subdivide()))
                 .AddInstances(Instances)
                 .AddShapes(Shapes)
                 .AddMaterials(CreateMaterialBuilders());
+        }
+
+        public List<int> FaceSilhouetteIndexBuffer { get; } = new List<int>();
+        public List<Vector3> FaceSilhouetteVertexBuffer { get; } = new List<Vector3>();
+
+        private void AddFaceSilhouetteBuffers(DocumentBuilder documentBuilder)
+        {
+#if DEBUG
+            // Validate the index buffer and the vertex buffer
+            foreach (var index in FaceSilhouetteIndexBuffer)
+                Debug.Assert(index >= 0 && index < FaceSilhouetteVertexBuffer.Count);
+#endif
+
+            // Add the face silhouette index buffer.
+            {
+                var tb = new EntityTableBuilder(TableNames.FaceSilhouetteIndexBuffer);
+                tb.AddDataColumn("index:Vim.FaceSilhouetteVertexBuffer:VertexIndex", FaceSilhouetteIndexBuffer);
+                documentBuilder.Tables.Add(TableNames.FaceSilhouetteIndexBuffer, tb);
+            }
+
+            // Add the face silhouette vertex buffer.
+            {
+                var tb = new EntityTableBuilder(TableNames.FaceSilhouetteVertexBuffer);
+                tb.AddDataColumn("vector3:Vertex", FaceSilhouetteVertexBuffer);
+                documentBuilder.Tables.Add(TableNames.FaceSilhouetteVertexBuffer, tb);
+            }
         }
 
         private IEnumerable<DocumentBuilder.Material> CreateMaterialBuilders()

@@ -224,7 +224,9 @@ public static class ObjectModelGenerator
 
     private static CodeBuilder WriteDocument(CodeBuilder cb)
     {
-        var entityTypes = ObjectModelReflection.GetEntityTypes().ToArray();
+        var entityTypes = ObjectModelReflection.GetEntityTypes()
+            .Where(t => !t.IsEntityTableBuffer())
+            .ToArray();
 
         foreach (var et in entityTypes)
             WriteEntityClass(et, cb);
@@ -433,7 +435,9 @@ public static class ObjectModelGenerator
 
     private static void WriteDocumentBuilder(CodeBuilder cb)
     {
-        var entityTypes = ObjectModelReflection.GetEntityTypes().ToArray();
+        var entityTypes = ObjectModelReflection.GetEntityTypes()
+            .Where(t => !t.IsEntityTableBuffer())
+            .ToArray();
 
         cb.AppendLine("public static class DocumentBuilderExtensions");
         cb.AppendLine("{");

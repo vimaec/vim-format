@@ -10578,6 +10578,8 @@ export interface IFaceSilhouette {
     faceSilhouetteIndexBufferEnd?: IFaceSilhouetteIndexBuffer
     viewIndex?: number
     view?: IView
+    materialIndex?: number
+    material?: IMaterial
     elementIndex?: number
     element?: IElement
 }
@@ -10596,6 +10598,9 @@ export interface IFaceSilhouetteTable {
     getViewIndex(faceSilhouetteIndex: number): Promise<number | undefined>
     getAllViewIndex(): Promise<number[] | undefined>
     getView(faceSilhouetteIndex: number): Promise<IView | undefined>
+    getMaterialIndex(faceSilhouetteIndex: number): Promise<number | undefined>
+    getAllMaterialIndex(): Promise<number[] | undefined>
+    getMaterial(faceSilhouetteIndex: number): Promise<IMaterial | undefined>
     getElementIndex(faceSilhouetteIndex: number): Promise<number | undefined>
     getAllElementIndex(): Promise<number[] | undefined>
     getElement(faceSilhouetteIndex: number): Promise<IElement | undefined>
@@ -10610,6 +10615,8 @@ export class FaceSilhouette implements IFaceSilhouette {
     faceSilhouetteIndexBufferEnd?: IFaceSilhouetteIndexBuffer
     viewIndex?: number
     view?: IView
+    materialIndex?: number
+    material?: IMaterial
     elementIndex?: number
     element?: IElement
     
@@ -10621,6 +10628,7 @@ export class FaceSilhouette implements IFaceSilhouette {
             table.getFaceSilhouetteIndexBufferStartIndex(index).then(v => result.faceSilhouetteIndexBufferStartIndex = v),
             table.getFaceSilhouetteIndexBufferEndIndex(index).then(v => result.faceSilhouetteIndexBufferEndIndex = v),
             table.getViewIndex(index).then(v => result.viewIndex = v),
+            table.getMaterialIndex(index).then(v => result.materialIndex = v),
             table.getElementIndex(index).then(v => result.elementIndex = v),
         ])
         
@@ -10660,12 +10668,14 @@ export class FaceSilhouetteTable implements IFaceSilhouetteTable {
         let faceSilhouetteIndexBufferStartIndex: number[] | undefined
         let faceSilhouetteIndexBufferEndIndex: number[] | undefined
         let viewIndex: number[] | undefined
+        let materialIndex: number[] | undefined
         let elementIndex: number[] | undefined
         
         await Promise.all([
             (async () => { faceSilhouetteIndexBufferStartIndex = (await localTable.getNumberArray("index:Vim.FaceSilhouetteIndexBuffer:FaceSilhouetteIndexBufferStart")) })(),
             (async () => { faceSilhouetteIndexBufferEndIndex = (await localTable.getNumberArray("index:Vim.FaceSilhouetteIndexBuffer:FaceSilhouetteIndexBufferEnd")) })(),
             (async () => { viewIndex = (await localTable.getNumberArray("index:Vim.View:View")) })(),
+            (async () => { materialIndex = (await localTable.getNumberArray("index:Vim.Material:Material")) })(),
             (async () => { elementIndex = (await localTable.getNumberArray("index:Vim.Element:Element")) })(),
         ])
         
@@ -10678,6 +10688,7 @@ export class FaceSilhouetteTable implements IFaceSilhouetteTable {
                 faceSilhouetteIndexBufferStartIndex: faceSilhouetteIndexBufferStartIndex ? faceSilhouetteIndexBufferStartIndex[i] : undefined,
                 faceSilhouetteIndexBufferEndIndex: faceSilhouetteIndexBufferEndIndex ? faceSilhouetteIndexBufferEndIndex[i] : undefined,
                 viewIndex: viewIndex ? viewIndex[i] : undefined,
+                materialIndex: materialIndex ? materialIndex[i] : undefined,
                 elementIndex: elementIndex ? elementIndex[i] : undefined
             })
         }
@@ -10737,6 +10748,24 @@ export class FaceSilhouetteTable implements IFaceSilhouetteTable {
         }
         
         return await this.document.view?.get(index)
+    }
+    
+    async getMaterialIndex(faceSilhouetteIndex: number): Promise<number | undefined> {
+        return await this.entityTable.getNumber(faceSilhouetteIndex, "index:Vim.Material:Material")
+    }
+    
+    async getAllMaterialIndex(): Promise<number[] | undefined> {
+        return await this.entityTable.getNumberArray("index:Vim.Material:Material")
+    }
+    
+    async getMaterial(faceSilhouetteIndex: number): Promise<IMaterial | undefined> {
+        const index = await this.getMaterialIndex(faceSilhouetteIndex)
+        
+        if (index === undefined) {
+            return undefined
+        }
+        
+        return await this.document.material?.get(index)
     }
     
     async getElementIndex(faceSilhouetteIndex: number): Promise<number | undefined> {

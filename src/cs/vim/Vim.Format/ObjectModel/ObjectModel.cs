@@ -1781,19 +1781,21 @@ namespace Vim.Format.ObjectModel
         public Relation<FaceSilhouetteIndexBuffer> _FaceSilhouetteIndexBufferStart;
         public Relation<FaceSilhouetteIndexBuffer> _FaceSilhouetteIndexBufferEnd;
         public Relation<View> _View;
-        //public Relation<Material> _Material; // later?
+        public Relation<Material> _Material;
     }
 
     /// <summary>
     /// Represents a continuous index buffer of triangular faces.
     /// </summary>
     [TableName(TableNames.FaceSilhouetteIndexBuffer)]
+    [EntityBuffer]
     public partial class FaceSilhouetteIndexBuffer : Entity
     {
         public Relation<FaceSilhouetteVertexBuffer> _VertexIndex;
     }
 
     [TableName(TableNames.FaceSilhouetteVertexBuffer)]
+    [EntityBuffer]
     public partial class FaceSilhouetteVertexBuffer : Entity
     {
         public Vector3 Vertex;
