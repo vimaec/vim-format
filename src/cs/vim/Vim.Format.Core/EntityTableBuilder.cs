@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Vim.BFast;
+using Vim.Math3d;
 
 namespace Vim.Format
 {
@@ -92,6 +93,12 @@ namespace Vim.Format
 
         public EntityTableBuilder AddDataColumn(string columnName, IEnumerable<bool> values)
             => AddDataColumn(columnName, values.Select(x => x ? (byte)1 : (byte)0).ToArray());
+
+        public EntityTableBuilder AddDataColumn(string columnName, IEnumerable<Vector3> values)
+            => AddDataColumn(columnName, values.ToArray());
+
+        public EntityTableBuilder AddDataColumn(string columnName, IEnumerable<Matrix4x4> values)
+            => AddDataColumn(columnName, values.ToArray());
 
         public IEnumerable<string> GetAllStrings()
             => StringColumns.Values.SelectMany(sc => sc)

@@ -15,6 +15,10 @@ namespace Vim.Format.ObjectModel
         public static class History
         {
             // Schema additions
+            //   TODO
+            public const string v5_6_0 = "5.6.0";
+
+            // Schema additions
             //   Vim.Level__double:ProjectElevation
             public const string v5_5_0 = "5.5.0";
 
@@ -171,7 +175,8 @@ namespace Vim.Format.ObjectModel
         // ReSharper enable MemberHidesStaticFromOuterClass
 
         // [MAINTAIN] Add more object model SerializableVersions below and update the current one.
-        public static SerializableVersion Current => v5_5_0;
+        public static SerializableVersion Current => v5_6_0;
+        public static SerializableVersion v5_6_0 => SerializableVersion.Parse(History.v5_6_0);
         public static SerializableVersion v5_5_0 => SerializableVersion.Parse(History.v5_5_0);
         public static SerializableVersion v5_4_0 => SerializableVersion.Parse(History.v5_4_0);
         public static SerializableVersion v5_3_0 => SerializableVersion.Parse(History.v5_3_0);
@@ -1765,6 +1770,33 @@ namespace Vim.Format.ObjectModel
         public string Address;
 
         public Relation<Site> _Site;
+    }
+
+    /// <summary>
+    /// Represents an element face projected in a View
+    /// </summary>
+    [TableName(TableNames.FaceSilhouette)]
+    public partial class FaceSilhouette : EntityWithElement
+    {
+        public Relation<FaceSilhouetteIndexBuffer> _FaceSilhouetteIndexBufferStart;
+        public Relation<FaceSilhouetteIndexBuffer> _FaceSilhouetteIndexBufferEnd;
+        public Relation<View> _View;
+        //public Relation<Material> _Material; // later?
+    }
+
+    /// <summary>
+    /// Represents a continuous index buffer of triangular faces.
+    /// </summary>
+    [TableName(TableNames.FaceSilhouetteIndexBuffer)]
+    public partial class FaceSilhouetteIndexBuffer : Entity
+    {
+        public Relation<FaceSilhouetteVertexBuffer> _VertexIndex;
+    }
+
+    [TableName(TableNames.FaceSilhouetteVertexBuffer)]
+    public partial class FaceSilhouetteVertexBuffer : Entity
+    {
+        public Vector3 Vertex;
     }
 
     /// <summary>

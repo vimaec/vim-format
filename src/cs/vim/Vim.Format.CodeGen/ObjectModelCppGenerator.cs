@@ -33,6 +33,8 @@ public static class ObjectModelCppGenerator
             "String" or "string" => "std::string",
             "Int32" or "int" => "int",
             "Int64" or "Long" or "long" => "long long",
+            "Vector3" or "vector3" => "Vector3",
+            "Matrix4x4" or "matrix4x4" => "Matrix4x4",
             _ => throw new ArgumentOutOfRangeException(nameof(type), type, $"Type {type} not supported")
         };
 

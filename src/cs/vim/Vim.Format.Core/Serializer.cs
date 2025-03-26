@@ -6,6 +6,7 @@ using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
 using Vim.G3d;
+using Vim.Math3d;
 using Vim.Util;
 
 namespace Vim.Format
@@ -106,6 +107,16 @@ namespace Vim.Format
                     case VimConstants.ByteColumnNameTypePrefix:
                         {
                             et.DataColumns.Add(colBr.ReadEntityTableColumn<byte>(schemaOnly));
+                            break;
+                        }
+                    case VimConstants.Vector3ColumnNameTypePrefix:
+                        {
+                            et.DataColumns.Add(colBr.ReadEntityTableColumn<Vector3>(schemaOnly));
+                            break;
+                        }
+                    case VimConstants.Matrix4x4ColumnNameTypePrefix:
+                        {
+                            et.DataColumns.Add(colBr.ReadEntityTableColumn<Matrix4x4>(schemaOnly));
                             break;
                         }
                     // For flexibility, we ignore the columns which do not contain a recognized prefix.

@@ -42,6 +42,37 @@ namespace Vim
     static const std::string data_column_ulong_prefix = "ulong:";
     static const std::string data_column_float_prefix = "float:";
     static const std::string data_column_double_prefix = "double:";
+    static const std::string data_column_vector3_prefix = "vector3:";
+    static const std::string data_column_matrix4x4_prefix = "matrix4x4:";
+
+    class Vector3
+    {
+    public:
+        float X = 0.0f;
+        float Y = 0.0f;
+        float Z = 0.0f;
+    };
+
+    class Matrix4x4
+    {
+    public:
+        float M11; // row 1, column 1
+        float M12; // row 1, column 2
+        float M13; // ...
+        float M14;
+        float M21;
+        float M22;
+        float M23;
+        float M24;
+        float M31;
+        float M32;
+        float M33;
+        float M34;
+        float M41;
+        float M42;
+        float M43;
+        float M44;
+    };
 
     class EntityTable
     {

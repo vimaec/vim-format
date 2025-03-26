@@ -3,6 +3,7 @@
  */
 
 import { BFast, NumericArray, Range } from './bfast'
+import { Vector3, Matrix4x4 } from './structures'
 
 export class EntityTable {
     private readonly bfast: BFast
@@ -40,6 +41,16 @@ export class EntityTable {
         if (colName.startsWith('short:') ||
             colName.startsWith('ushort:')) {
             return 2 // 2 bytes
+        }
+
+        if (colName.startsWith('vector3:'))
+        {
+            return 4 * 3 // 4 bytes (float) times 3 (x,y,z)
+        }
+
+        if (colName.startsWith('matrix4x4:'))
+        {
+            return 4 * 16 // 4 bytes (float) times 16 (4x4 matrix)
         }
 
         return 1 // default to 1 byte
@@ -169,5 +180,54 @@ export class EntityTable {
             result[i] = this.strings[this.toIndex(array[i])]
         }
         return result
+    }
+
+    async getVector3(elementIndex: number, columnName: string): Promise<Vector3>
+    {
+        const arrayBuffer = await this.bfast.getBuffer(columnName)
+        const floatView = new Float32Array(arrayBuffer)
+
+        const startIndex = elementIndex * 3; // (x,y,z) => 3
+        return {
+          x: floatView[startIndex],
+          y: floatView[startIndex + 1],
+          z: floatView[startIndex + 2]
+        }
+    }
+
+    // TODO: Promise<any> is a shortcut... should actually be Promise<ArrayBuffer>
+    async getVector3Array(columnName: string): Promise<any> {
+        return await this.bfast.getBuffer(columnName)
+    }
+
+    async getMatrix4x4(elementIndex: number, columnName: string): Promise<Matrix4x4>
+    {
+        const arrayBuffer = await this.bfast.getBuffer(columnName)
+        const floatView = new Float32Array(arrayBuffer)
+
+        const startIndex = elementIndex * 16; // (4x4) => 16
+        return {
+            m11: floatView[startIndex],
+            m12: floatView[startIndex + 1],
+            m13: floatView[startIndex + 2],
+            m14: floatView[startIndex + 3],
+            m21: floatView[startIndex + 4],
+            m22: floatView[startIndex + 5],
+            m23: floatView[startIndex + 6],
+            m24: floatView[startIndex + 7],
+            m31: floatView[startIndex + 8],
+            m32: floatView[startIndex + 9],
+            m33: floatView[startIndex + 10],
+            m34: floatView[startIndex + 11],
+            m41: floatView[startIndex + 12],
+            m42: floatView[startIndex + 13],
+            m43: floatView[startIndex + 14],
+            m44: floatView[startIndex + 15],
+        }
+    }
+
+    // TODO: Promise<any> is a shortcut... should actually be Promise<ArrayBuffer>
+    async getMatrix4x4Array(columnName: string): Promise<any> {
+        return await this.bfast.getBuffer(columnName)
     }
 }

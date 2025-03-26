@@ -10569,6 +10569,385 @@ export class BuildingTable implements IBuildingTable {
     
 }
 
+export interface IFaceSilhouette {
+    index: number
+    
+    faceSilhouetteIndexBufferStartIndex?: number
+    faceSilhouetteIndexBufferStart?: IFaceSilhouetteIndexBuffer
+    faceSilhouetteIndexBufferEndIndex?: number
+    faceSilhouetteIndexBufferEnd?: IFaceSilhouetteIndexBuffer
+    viewIndex?: number
+    view?: IView
+    elementIndex?: number
+    element?: IElement
+}
+
+export interface IFaceSilhouetteTable {
+    getCount(): Promise<number>
+    get(faceSilhouetteIndex: number): Promise<IFaceSilhouette>
+    getAll(): Promise<IFaceSilhouette[]>
+    
+    getFaceSilhouetteIndexBufferStartIndex(faceSilhouetteIndex: number): Promise<number | undefined>
+    getAllFaceSilhouetteIndexBufferStartIndex(): Promise<number[] | undefined>
+    getFaceSilhouetteIndexBufferStart(faceSilhouetteIndex: number): Promise<IFaceSilhouetteIndexBuffer | undefined>
+    getFaceSilhouetteIndexBufferEndIndex(faceSilhouetteIndex: number): Promise<number | undefined>
+    getAllFaceSilhouetteIndexBufferEndIndex(): Promise<number[] | undefined>
+    getFaceSilhouetteIndexBufferEnd(faceSilhouetteIndex: number): Promise<IFaceSilhouetteIndexBuffer | undefined>
+    getViewIndex(faceSilhouetteIndex: number): Promise<number | undefined>
+    getAllViewIndex(): Promise<number[] | undefined>
+    getView(faceSilhouetteIndex: number): Promise<IView | undefined>
+    getElementIndex(faceSilhouetteIndex: number): Promise<number | undefined>
+    getAllElementIndex(): Promise<number[] | undefined>
+    getElement(faceSilhouetteIndex: number): Promise<IElement | undefined>
+}
+
+export class FaceSilhouette implements IFaceSilhouette {
+    index: number
+    
+    faceSilhouetteIndexBufferStartIndex?: number
+    faceSilhouetteIndexBufferStart?: IFaceSilhouetteIndexBuffer
+    faceSilhouetteIndexBufferEndIndex?: number
+    faceSilhouetteIndexBufferEnd?: IFaceSilhouetteIndexBuffer
+    viewIndex?: number
+    view?: IView
+    elementIndex?: number
+    element?: IElement
+    
+    static async createFromTable(table: IFaceSilhouetteTable, index: number): Promise<IFaceSilhouette> {
+        let result = new FaceSilhouette()
+        result.index = index
+        
+        await Promise.all([
+            table.getFaceSilhouetteIndexBufferStartIndex(index).then(v => result.faceSilhouetteIndexBufferStartIndex = v),
+            table.getFaceSilhouetteIndexBufferEndIndex(index).then(v => result.faceSilhouetteIndexBufferEndIndex = v),
+            table.getViewIndex(index).then(v => result.viewIndex = v),
+            table.getElementIndex(index).then(v => result.elementIndex = v),
+        ])
+        
+        return result
+    }
+}
+
+export class FaceSilhouetteTable implements IFaceSilhouetteTable {
+    private document: VimDocument
+    private entityTable: EntityTable
+    
+    static async createFromDocument(document: VimDocument): Promise<IFaceSilhouetteTable | undefined> {
+        const entity = await document.entities.getBfast("Vim.FaceSilhouette")
+        
+        if (!entity) {
+            return undefined
+        }
+        
+        let table = new FaceSilhouetteTable()
+        table.document = document
+        table.entityTable = new EntityTable(entity, document.strings)
+        
+        return table
+    }
+    
+    getCount(): Promise<number> {
+        return this.entityTable.getCount()
+    }
+    
+    async get(faceSilhouetteIndex: number): Promise<IFaceSilhouette> {
+        return await FaceSilhouette.createFromTable(this, faceSilhouetteIndex)
+    }
+    
+    async getAll(): Promise<IFaceSilhouette[]> {
+        const localTable = await this.entityTable.getLocal()
+        
+        let faceSilhouetteIndexBufferStartIndex: number[] | undefined
+        let faceSilhouetteIndexBufferEndIndex: number[] | undefined
+        let viewIndex: number[] | undefined
+        let elementIndex: number[] | undefined
+        
+        await Promise.all([
+            (async () => { faceSilhouetteIndexBufferStartIndex = (await localTable.getNumberArray("index:Vim.FaceSilhouetteIndexBuffer:FaceSilhouetteIndexBufferStart")) })(),
+            (async () => { faceSilhouetteIndexBufferEndIndex = (await localTable.getNumberArray("index:Vim.FaceSilhouetteIndexBuffer:FaceSilhouetteIndexBufferEnd")) })(),
+            (async () => { viewIndex = (await localTable.getNumberArray("index:Vim.View:View")) })(),
+            (async () => { elementIndex = (await localTable.getNumberArray("index:Vim.Element:Element")) })(),
+        ])
+        
+        let faceSilhouette: IFaceSilhouette[] = []
+        
+        const rowCount = await this.getCount()
+        for (let i = 0; i < rowCount; i++) {
+            faceSilhouette.push({
+                index: i,
+                faceSilhouetteIndexBufferStartIndex: faceSilhouetteIndexBufferStartIndex ? faceSilhouetteIndexBufferStartIndex[i] : undefined,
+                faceSilhouetteIndexBufferEndIndex: faceSilhouetteIndexBufferEndIndex ? faceSilhouetteIndexBufferEndIndex[i] : undefined,
+                viewIndex: viewIndex ? viewIndex[i] : undefined,
+                elementIndex: elementIndex ? elementIndex[i] : undefined
+            })
+        }
+        
+        return faceSilhouette
+    }
+    
+    async getFaceSilhouetteIndexBufferStartIndex(faceSilhouetteIndex: number): Promise<number | undefined> {
+        return await this.entityTable.getNumber(faceSilhouetteIndex, "index:Vim.FaceSilhouetteIndexBuffer:FaceSilhouetteIndexBufferStart")
+    }
+    
+    async getAllFaceSilhouetteIndexBufferStartIndex(): Promise<number[] | undefined> {
+        return await this.entityTable.getNumberArray("index:Vim.FaceSilhouetteIndexBuffer:FaceSilhouetteIndexBufferStart")
+    }
+    
+    async getFaceSilhouetteIndexBufferStart(faceSilhouetteIndex: number): Promise<IFaceSilhouetteIndexBuffer | undefined> {
+        const index = await this.getFaceSilhouetteIndexBufferStartIndex(faceSilhouetteIndex)
+        
+        if (index === undefined) {
+            return undefined
+        }
+        
+        return await this.document.faceSilhouetteIndexBuffer?.get(index)
+    }
+    
+    async getFaceSilhouetteIndexBufferEndIndex(faceSilhouetteIndex: number): Promise<number | undefined> {
+        return await this.entityTable.getNumber(faceSilhouetteIndex, "index:Vim.FaceSilhouetteIndexBuffer:FaceSilhouetteIndexBufferEnd")
+    }
+    
+    async getAllFaceSilhouetteIndexBufferEndIndex(): Promise<number[] | undefined> {
+        return await this.entityTable.getNumberArray("index:Vim.FaceSilhouetteIndexBuffer:FaceSilhouetteIndexBufferEnd")
+    }
+    
+    async getFaceSilhouetteIndexBufferEnd(faceSilhouetteIndex: number): Promise<IFaceSilhouetteIndexBuffer | undefined> {
+        const index = await this.getFaceSilhouetteIndexBufferEndIndex(faceSilhouetteIndex)
+        
+        if (index === undefined) {
+            return undefined
+        }
+        
+        return await this.document.faceSilhouetteIndexBuffer?.get(index)
+    }
+    
+    async getViewIndex(faceSilhouetteIndex: number): Promise<number | undefined> {
+        return await this.entityTable.getNumber(faceSilhouetteIndex, "index:Vim.View:View")
+    }
+    
+    async getAllViewIndex(): Promise<number[] | undefined> {
+        return await this.entityTable.getNumberArray("index:Vim.View:View")
+    }
+    
+    async getView(faceSilhouetteIndex: number): Promise<IView | undefined> {
+        const index = await this.getViewIndex(faceSilhouetteIndex)
+        
+        if (index === undefined) {
+            return undefined
+        }
+        
+        return await this.document.view?.get(index)
+    }
+    
+    async getElementIndex(faceSilhouetteIndex: number): Promise<number | undefined> {
+        return await this.entityTable.getNumber(faceSilhouetteIndex, "index:Vim.Element:Element")
+    }
+    
+    async getAllElementIndex(): Promise<number[] | undefined> {
+        return await this.entityTable.getNumberArray("index:Vim.Element:Element")
+    }
+    
+    async getElement(faceSilhouetteIndex: number): Promise<IElement | undefined> {
+        const index = await this.getElementIndex(faceSilhouetteIndex)
+        
+        if (index === undefined) {
+            return undefined
+        }
+        
+        return await this.document.element?.get(index)
+    }
+    
+}
+
+export interface IFaceSilhouetteIndexBuffer {
+    index: number
+    
+    vertexIndexIndex?: number
+    vertexIndex?: IFaceSilhouetteVertexBuffer
+}
+
+export interface IFaceSilhouetteIndexBufferTable {
+    getCount(): Promise<number>
+    get(faceSilhouetteIndexBufferIndex: number): Promise<IFaceSilhouetteIndexBuffer>
+    getAll(): Promise<IFaceSilhouetteIndexBuffer[]>
+    
+    getVertexIndexIndex(faceSilhouetteIndexBufferIndex: number): Promise<number | undefined>
+    getAllVertexIndexIndex(): Promise<number[] | undefined>
+    getVertexIndex(faceSilhouetteIndexBufferIndex: number): Promise<IFaceSilhouetteVertexBuffer | undefined>
+}
+
+export class FaceSilhouetteIndexBuffer implements IFaceSilhouetteIndexBuffer {
+    index: number
+    
+    vertexIndexIndex?: number
+    vertexIndex?: IFaceSilhouetteVertexBuffer
+    
+    static async createFromTable(table: IFaceSilhouetteIndexBufferTable, index: number): Promise<IFaceSilhouetteIndexBuffer> {
+        let result = new FaceSilhouetteIndexBuffer()
+        result.index = index
+        
+        await Promise.all([
+            table.getVertexIndexIndex(index).then(v => result.vertexIndexIndex = v),
+        ])
+        
+        return result
+    }
+}
+
+export class FaceSilhouetteIndexBufferTable implements IFaceSilhouetteIndexBufferTable {
+    private document: VimDocument
+    private entityTable: EntityTable
+    
+    static async createFromDocument(document: VimDocument): Promise<IFaceSilhouetteIndexBufferTable | undefined> {
+        const entity = await document.entities.getBfast("Vim.FaceSilhouetteIndexBuffer")
+        
+        if (!entity) {
+            return undefined
+        }
+        
+        let table = new FaceSilhouetteIndexBufferTable()
+        table.document = document
+        table.entityTable = new EntityTable(entity, document.strings)
+        
+        return table
+    }
+    
+    getCount(): Promise<number> {
+        return this.entityTable.getCount()
+    }
+    
+    async get(faceSilhouetteIndexBufferIndex: number): Promise<IFaceSilhouetteIndexBuffer> {
+        return await FaceSilhouetteIndexBuffer.createFromTable(this, faceSilhouetteIndexBufferIndex)
+    }
+    
+    async getAll(): Promise<IFaceSilhouetteIndexBuffer[]> {
+        const localTable = await this.entityTable.getLocal()
+        
+        let vertexIndexIndex: number[] | undefined
+        
+        await Promise.all([
+            (async () => { vertexIndexIndex = (await localTable.getNumberArray("index:Vim.FaceSilhouetteVertexBuffer:VertexIndex")) })(),
+        ])
+        
+        let faceSilhouetteIndexBuffer: IFaceSilhouetteIndexBuffer[] = []
+        
+        const rowCount = await this.getCount()
+        for (let i = 0; i < rowCount; i++) {
+            faceSilhouetteIndexBuffer.push({
+                index: i,
+                vertexIndexIndex: vertexIndexIndex ? vertexIndexIndex[i] : undefined
+            })
+        }
+        
+        return faceSilhouetteIndexBuffer
+    }
+    
+    async getVertexIndexIndex(faceSilhouetteIndexBufferIndex: number): Promise<number | undefined> {
+        return await this.entityTable.getNumber(faceSilhouetteIndexBufferIndex, "index:Vim.FaceSilhouetteVertexBuffer:VertexIndex")
+    }
+    
+    async getAllVertexIndexIndex(): Promise<number[] | undefined> {
+        return await this.entityTable.getNumberArray("index:Vim.FaceSilhouetteVertexBuffer:VertexIndex")
+    }
+    
+    async getVertexIndex(faceSilhouetteIndexBufferIndex: number): Promise<IFaceSilhouetteVertexBuffer | undefined> {
+        const index = await this.getVertexIndexIndex(faceSilhouetteIndexBufferIndex)
+        
+        if (index === undefined) {
+            return undefined
+        }
+        
+        return await this.document.faceSilhouetteVertexBuffer?.get(index)
+    }
+    
+}
+
+export interface IFaceSilhouetteVertexBuffer {
+    index: number
+    vertex?: Vector3
+}
+
+export interface IFaceSilhouetteVertexBufferTable {
+    getCount(): Promise<number>
+    get(faceSilhouetteVertexBufferIndex: number): Promise<IFaceSilhouetteVertexBuffer>
+    getAll(): Promise<IFaceSilhouetteVertexBuffer[]>
+    
+    getVertex(faceSilhouetteVertexBufferIndex: number): Promise<Vector3 | undefined>
+    getAllVertex(): Promise<Vector3[] | undefined>
+}
+
+export class FaceSilhouetteVertexBuffer implements IFaceSilhouetteVertexBuffer {
+    index: number
+    vertex?: Vector3
+    
+    static async createFromTable(table: IFaceSilhouetteVertexBufferTable, index: number): Promise<IFaceSilhouetteVertexBuffer> {
+        let result = new FaceSilhouetteVertexBuffer()
+        result.index = index
+        
+        await Promise.all([
+            table.getVertex(index).then(v => result.vertex = v),
+        ])
+        
+        return result
+    }
+}
+
+export class FaceSilhouetteVertexBufferTable implements IFaceSilhouetteVertexBufferTable {
+    private entityTable: EntityTable
+    
+    static async createFromDocument(document: VimDocument): Promise<IFaceSilhouetteVertexBufferTable | undefined> {
+        const entity = await document.entities.getBfast("Vim.FaceSilhouetteVertexBuffer")
+        
+        if (!entity) {
+            return undefined
+        }
+        
+        let table = new FaceSilhouetteVertexBufferTable()
+        table.entityTable = new EntityTable(entity, document.strings)
+        
+        return table
+    }
+    
+    getCount(): Promise<number> {
+        return this.entityTable.getCount()
+    }
+    
+    async get(faceSilhouetteVertexBufferIndex: number): Promise<IFaceSilhouetteVertexBuffer> {
+        return await FaceSilhouetteVertexBuffer.createFromTable(this, faceSilhouetteVertexBufferIndex)
+    }
+    
+    async getAll(): Promise<IFaceSilhouetteVertexBuffer[]> {
+        const localTable = await this.entityTable.getLocal()
+        
+        let vertex: Vector3[] | undefined
+        
+        await Promise.all([
+            (async () => { vertex = (await localTable.getVector3Array("vector3:Vertex")) })(),
+        ])
+        
+        let faceSilhouetteVertexBuffer: IFaceSilhouetteVertexBuffer[] = []
+        
+        const rowCount = await this.getCount()
+        for (let i = 0; i < rowCount; i++) {
+            faceSilhouetteVertexBuffer.push({
+                index: i,
+                vertex: vertex ? vertex[i] : undefined
+            })
+        }
+        
+        return faceSilhouetteVertexBuffer
+    }
+    
+    async getVertex(faceSilhouetteVertexBufferIndex: number): Promise<Vector3 | undefined> {
+        return (await this.entityTable.getVector3(faceSilhouetteVertexBufferIndex, "vector3:Vertex"))
+    }
+    
+    async getAllVertex(): Promise<Vector3[] | undefined> {
+        return (await this.entityTable.getVector3Array("vector3:Vertex"))
+    }
+    
+}
+
 export class VimDocument {
     asset: IAssetTable | undefined
     displayUnit: IDisplayUnitTable | undefined
@@ -10624,6 +11003,9 @@ export class VimDocument {
     viewInViewSheet: IViewInViewSheetTable | undefined
     site: ISiteTable | undefined
     building: IBuildingTable | undefined
+    faceSilhouette: IFaceSilhouetteTable | undefined
+    faceSilhouetteIndexBuffer: IFaceSilhouetteIndexBufferTable | undefined
+    faceSilhouetteVertexBuffer: IFaceSilhouetteVertexBufferTable | undefined
     
     entities: BFast
     strings: string[] | undefined
@@ -10695,6 +11077,9 @@ export class VimDocument {
         doc.viewInViewSheet = await ViewInViewSheetTable.createFromDocument(doc)
         doc.site = await SiteTable.createFromDocument(doc)
         doc.building = await BuildingTable.createFromDocument(doc)
+        doc.faceSilhouette = await FaceSilhouetteTable.createFromDocument(doc)
+        doc.faceSilhouetteIndexBuffer = await FaceSilhouetteIndexBufferTable.createFromDocument(doc)
+        doc.faceSilhouetteVertexBuffer = await FaceSilhouetteVertexBufferTable.createFromDocument(doc)
         
         return doc
     }

@@ -68,6 +68,9 @@ namespace Vim.Format
         public const string ViewInViewSheet = "Vim.ViewInViewSheet";
         public const string Site = "Vim.Site";
         public const string Building = "Vim.Building";
+        public const string FaceSilhouette = "Vim.FaceSilhouette";
+        public const string FaceSilhouetteIndexBuffer = "Vim.FaceSilhouetteIndexBuffer";
+        public const string FaceSilhouetteVertexBuffer = "Vim.FaceSilhouetteVertexBuffer";
     }
 
     public static class VimConstants
@@ -85,6 +88,8 @@ namespace Vim.Format
         public const string UbyteColumNameTypePrefix = "ubyte:"; // unused for now
         public const string FloatColumnNameTypePrefix = "float:";
         public const string DoubleColumnNameTypePrefix = "double:";
+        public const string Vector3ColumnNameTypePrefix = "vector3:";
+        public const string Matrix4x4ColumnNameTypePrefix = "matrix4x4:";
 
         public const int NoEntityRelation = -1;
         public const long SyntheticElementId = -1;
