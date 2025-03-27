@@ -447,7 +447,5 @@ namespace Vim.Format.Geometry
             return vertexData.ToIArray();
         }
         #endregion
-
-
     }
 }

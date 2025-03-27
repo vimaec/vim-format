@@ -31,29 +31,29 @@ namespace Vim.Format.ObjectModel
                 .AddMaterials(CreateMaterialBuilders());
         }
 
-        public List<int> FaceSilhouetteIndexBuffer { get; } = new List<int>();
-        public List<Vector3> FaceSilhouetteVertexBuffer { get; } = new List<Vector3>();
+        public List<int> FaceMeshIndexBuffer { get; } = new List<int>();
+        public List<Vector3> FaceMeshVertexBuffer { get; } = new List<Vector3>();
 
         private void AddFaceSilhouetteBuffers(DocumentBuilder documentBuilder)
         {
 #if DEBUG
             // Validate the index buffer and the vertex buffer
-            foreach (var index in FaceSilhouetteIndexBuffer)
-                Debug.Assert(index >= 0 && index < FaceSilhouetteVertexBuffer.Count);
+            foreach (var index in FaceMeshIndexBuffer)
+                Debug.Assert(index >= 0 && index < FaceMeshVertexBuffer.Count);
 #endif
 
             // Add the face silhouette index buffer.
             {
-                var tb = new EntityTableBuilder(TableNames.FaceSilhouetteIndexBuffer);
-                tb.AddDataColumn("index:Vim.FaceSilhouetteVertexBuffer:VertexIndex", FaceSilhouetteIndexBuffer);
-                documentBuilder.Tables.Add(TableNames.FaceSilhouetteIndexBuffer, tb);
+                var tb = new EntityTableBuilder(TableNames.FaceMeshIndexBuffer);
+                tb.AddIndexColumn("index:Vim.FaceSilhouetteVertexBuffer:VertexIndex", FaceMeshIndexBuffer);
+                documentBuilder.Tables.Add(TableNames.FaceMeshIndexBuffer, tb);
             }
 
             // Add the face silhouette vertex buffer.
             {
-                var tb = new EntityTableBuilder(TableNames.FaceSilhouetteVertexBuffer);
-                tb.AddDataColumn("vector3:Vertex", FaceSilhouetteVertexBuffer);
-                documentBuilder.Tables.Add(TableNames.FaceSilhouetteVertexBuffer, tb);
+                var tb = new EntityTableBuilder(TableNames.FaceMeshVertexBuffer);
+                tb.AddDataColumn("vector3:Vertex", FaceMeshVertexBuffer);
+                documentBuilder.Tables.Add(TableNames.FaceMeshVertexBuffer, tb);
             }
         }
 

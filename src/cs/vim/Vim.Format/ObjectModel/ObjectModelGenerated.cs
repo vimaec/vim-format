@@ -1888,17 +1888,17 @@ namespace Vim.Format.ObjectModel {
     } // end of class
     
     // AUTO-GENERATED
-    public partial class FaceSilhouette
+    public partial class FaceMesh
     {
-        public Vim.Format.ObjectModel.FaceSilhouetteIndexBuffer FaceSilhouetteIndexBufferStart => _FaceSilhouetteIndexBufferStart.Value;
-        public Vim.Format.ObjectModel.FaceSilhouetteIndexBuffer FaceSilhouetteIndexBufferEnd => _FaceSilhouetteIndexBufferEnd.Value;
+        public Vim.Format.ObjectModel.FaceMeshIndexBuffer FaceMeshIndexBufferStart => _FaceMeshIndexBufferStart.Value;
+        public Vim.Format.ObjectModel.FaceMeshIndexBuffer FaceMeshIndexBufferEnd => _FaceMeshIndexBufferEnd.Value;
         public Vim.Format.ObjectModel.View View => _View.Value;
         public Vim.Format.ObjectModel.Material Material => _Material.Value;
         public Vim.Format.ObjectModel.Element Element => _Element.Value;
-        public FaceSilhouette()
+        public FaceMesh()
         {
-            _FaceSilhouetteIndexBufferStart = new Relation<Vim.Format.ObjectModel.FaceSilhouetteIndexBuffer>();
-            _FaceSilhouetteIndexBufferEnd = new Relation<Vim.Format.ObjectModel.FaceSilhouetteIndexBuffer>();
+            _FaceMeshIndexBufferStart = new Relation<Vim.Format.ObjectModel.FaceMeshIndexBuffer>();
+            _FaceMeshIndexBufferEnd = new Relation<Vim.Format.ObjectModel.FaceMeshIndexBuffer>();
             _View = new Relation<Vim.Format.ObjectModel.View>();
             _Material = new Relation<Vim.Format.ObjectModel.Material>();
             _Element = new Relation<Vim.Format.ObjectModel.Element>();
@@ -1906,15 +1906,69 @@ namespace Vim.Format.ObjectModel {
         
         public override bool FieldsAreEqual(object obj)
         {
-            if ((obj is FaceSilhouette other))
+            if ((obj is FaceMesh other))
             {
                 var fieldsAreEqual =
                     (Index == other.Index) &&
-                    (_FaceSilhouetteIndexBufferStart?.Index == other._FaceSilhouetteIndexBufferStart?.Index) &&
-                    (_FaceSilhouetteIndexBufferEnd?.Index == other._FaceSilhouetteIndexBufferEnd?.Index) &&
+                    (_FaceMeshIndexBufferStart?.Index == other._FaceMeshIndexBufferStart?.Index) &&
+                    (_FaceMeshIndexBufferEnd?.Index == other._FaceMeshIndexBufferEnd?.Index) &&
                     (_View?.Index == other._View?.Index) &&
                     (_Material?.Index == other._Material?.Index) &&
                     (_Element?.Index == other._Element?.Index);
+                if (!fieldsAreEqual)
+                {
+                    return false;
+                }
+                
+                return true;
+            }
+            return false;
+        }
+        
+    } // end of class
+    
+    // AUTO-GENERATED
+    public partial class FaceMeshIndexBuffer
+    {
+        public Vim.Format.ObjectModel.FaceMeshVertexBuffer VertexIndex => _VertexIndex.Value;
+        public FaceMeshIndexBuffer()
+        {
+            _VertexIndex = new Relation<Vim.Format.ObjectModel.FaceMeshVertexBuffer>();
+        }
+        
+        public override bool FieldsAreEqual(object obj)
+        {
+            if ((obj is FaceMeshIndexBuffer other))
+            {
+                var fieldsAreEqual =
+                    (Index == other.Index) &&
+                    (_VertexIndex?.Index == other._VertexIndex?.Index);
+                if (!fieldsAreEqual)
+                {
+                    return false;
+                }
+                
+                return true;
+            }
+            return false;
+        }
+        
+    } // end of class
+    
+    // AUTO-GENERATED
+    public partial class FaceMeshVertexBuffer
+    {
+        public FaceMeshVertexBuffer()
+        {
+        }
+        
+        public override bool FieldsAreEqual(object obj)
+        {
+            if ((obj is FaceMeshVertexBuffer other))
+            {
+                var fieldsAreEqual =
+                    (Index == other.Index) &&
+                    (Vertex == other.Vertex);
                 if (!fieldsAreEqual)
                 {
                     return false;
@@ -3779,33 +3833,71 @@ namespace Vim.Format.ObjectModel {
         }
         
         
-        // FaceSilhouette
+        // FaceMesh
         
-        public EntityTable FaceSilhouetteEntityTable { get; }
+        public EntityTable FaceMeshEntityTable { get; }
         
-        public IArray<int> FaceSilhouetteFaceSilhouetteIndexBufferStartIndex { get; }
-        public int GetFaceSilhouetteFaceSilhouetteIndexBufferStartIndex(int index) => FaceSilhouetteFaceSilhouetteIndexBufferStartIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
-        public IArray<int> FaceSilhouetteFaceSilhouetteIndexBufferEndIndex { get; }
-        public int GetFaceSilhouetteFaceSilhouetteIndexBufferEndIndex(int index) => FaceSilhouetteFaceSilhouetteIndexBufferEndIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
-        public IArray<int> FaceSilhouetteViewIndex { get; }
-        public int GetFaceSilhouetteViewIndex(int index) => FaceSilhouetteViewIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
-        public IArray<int> FaceSilhouetteMaterialIndex { get; }
-        public int GetFaceSilhouetteMaterialIndex(int index) => FaceSilhouetteMaterialIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
-        public IArray<int> FaceSilhouetteElementIndex { get; }
-        public int GetFaceSilhouetteElementIndex(int index) => FaceSilhouetteElementIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
-        public int NumFaceSilhouette => FaceSilhouetteEntityTable?.NumRows ?? 0;
-        public IArray<FaceSilhouette> FaceSilhouetteList { get; }
-        public FaceSilhouette GetFaceSilhouette(int n)
+        public IArray<int> FaceMeshFaceMeshIndexBufferStartIndex { get; }
+        public int GetFaceMeshFaceMeshIndexBufferStartIndex(int index) => FaceMeshFaceMeshIndexBufferStartIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
+        public IArray<int> FaceMeshFaceMeshIndexBufferEndIndex { get; }
+        public int GetFaceMeshFaceMeshIndexBufferEndIndex(int index) => FaceMeshFaceMeshIndexBufferEndIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
+        public IArray<int> FaceMeshViewIndex { get; }
+        public int GetFaceMeshViewIndex(int index) => FaceMeshViewIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
+        public IArray<int> FaceMeshMaterialIndex { get; }
+        public int GetFaceMeshMaterialIndex(int index) => FaceMeshMaterialIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
+        public IArray<int> FaceMeshElementIndex { get; }
+        public int GetFaceMeshElementIndex(int index) => FaceMeshElementIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
+        public int NumFaceMesh => FaceMeshEntityTable?.NumRows ?? 0;
+        public IArray<FaceMesh> FaceMeshList { get; }
+        public FaceMesh GetFaceMesh(int n)
         {
             if (n < 0) return null;
-            var r = new FaceSilhouette();
+            var r = new FaceMesh();
             r.Document = Document;
             r.Index = n;
-            r._FaceSilhouetteIndexBufferStart = new Relation<Vim.Format.ObjectModel.FaceSilhouetteIndexBuffer>(GetFaceSilhouetteFaceSilhouetteIndexBufferStartIndex(n), GetFaceSilhouetteIndexBuffer);
-            r._FaceSilhouetteIndexBufferEnd = new Relation<Vim.Format.ObjectModel.FaceSilhouetteIndexBuffer>(GetFaceSilhouetteFaceSilhouetteIndexBufferEndIndex(n), GetFaceSilhouetteIndexBuffer);
-            r._View = new Relation<Vim.Format.ObjectModel.View>(GetFaceSilhouetteViewIndex(n), GetView);
-            r._Material = new Relation<Vim.Format.ObjectModel.Material>(GetFaceSilhouetteMaterialIndex(n), GetMaterial);
-            r._Element = new Relation<Vim.Format.ObjectModel.Element>(GetFaceSilhouetteElementIndex(n), GetElement);
+            r._FaceMeshIndexBufferStart = new Relation<Vim.Format.ObjectModel.FaceMeshIndexBuffer>(GetFaceMeshFaceMeshIndexBufferStartIndex(n), GetFaceMeshIndexBuffer);
+            r._FaceMeshIndexBufferEnd = new Relation<Vim.Format.ObjectModel.FaceMeshIndexBuffer>(GetFaceMeshFaceMeshIndexBufferEndIndex(n), GetFaceMeshIndexBuffer);
+            r._View = new Relation<Vim.Format.ObjectModel.View>(GetFaceMeshViewIndex(n), GetView);
+            r._Material = new Relation<Vim.Format.ObjectModel.Material>(GetFaceMeshMaterialIndex(n), GetMaterial);
+            r._Element = new Relation<Vim.Format.ObjectModel.Element>(GetFaceMeshElementIndex(n), GetElement);
+            return r;
+        }
+        
+        
+        // FaceMeshIndexBuffer
+        
+        public EntityTable FaceMeshIndexBufferEntityTable { get; }
+        
+        public IArray<int> FaceMeshIndexBufferVertexIndexIndex { get; }
+        public int GetFaceMeshIndexBufferVertexIndexIndex(int index) => FaceMeshIndexBufferVertexIndexIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
+        public int NumFaceMeshIndexBuffer => FaceMeshIndexBufferEntityTable?.NumRows ?? 0;
+        public IArray<FaceMeshIndexBuffer> FaceMeshIndexBufferList { get; }
+        public FaceMeshIndexBuffer GetFaceMeshIndexBuffer(int n)
+        {
+            if (n < 0) return null;
+            var r = new FaceMeshIndexBuffer();
+            r.Document = Document;
+            r.Index = n;
+            r._VertexIndex = new Relation<Vim.Format.ObjectModel.FaceMeshVertexBuffer>(GetFaceMeshIndexBufferVertexIndexIndex(n), GetFaceMeshVertexBuffer);
+            return r;
+        }
+        
+        
+        // FaceMeshVertexBuffer
+        
+        public EntityTable FaceMeshVertexBufferEntityTable { get; }
+        
+        public IArray<Vector3> FaceMeshVertexBufferVertex { get; }
+        public Vector3 GetFaceMeshVertexBufferVertex(int index, Vector3 defaultValue = default) => FaceMeshVertexBufferVertex?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public int NumFaceMeshVertexBuffer => FaceMeshVertexBufferEntityTable?.NumRows ?? 0;
+        public IArray<FaceMeshVertexBuffer> FaceMeshVertexBufferList { get; }
+        public FaceMeshVertexBuffer GetFaceMeshVertexBuffer(int n)
+        {
+            if (n < 0) return null;
+            var r = new FaceMeshVertexBuffer();
+            r.Document = Document;
+            r.Index = n;
+            r.Vertex = FaceMeshVertexBufferVertex.ElementAtOrDefault(n);
             return r;
         }
         
@@ -3865,7 +3957,9 @@ namespace Vim.Format.ObjectModel {
             {"Vim.ViewInViewSheet", ViewInViewSheetList.ToEnumerable()},
             {"Vim.Site", SiteList.ToEnumerable()},
             {"Vim.Building", BuildingList.ToEnumerable()},
-            {"Vim.FaceSilhouette", FaceSilhouetteList.ToEnumerable()},
+            {"Vim.FaceSilhouette", FaceMeshList.ToEnumerable()},
+            {"Vim.FaceSilhouetteIndexBuffer", FaceMeshIndexBufferList.ToEnumerable()},
+            {"Vim.FaceSilhouetteVertexBuffer", FaceMeshVertexBufferList.ToEnumerable()},
         };
         
         // Entity types from table names
@@ -3924,7 +4018,9 @@ namespace Vim.Format.ObjectModel {
             {"Vim.ViewInViewSheet", typeof(ViewInViewSheet)},
             {"Vim.Site", typeof(Site)},
             {"Vim.Building", typeof(Building)},
-            {"Vim.FaceSilhouette", typeof(FaceSilhouette)},
+            {"Vim.FaceSilhouette", typeof(FaceMesh)},
+            {"Vim.FaceSilhouetteIndexBuffer", typeof(FaceMeshIndexBuffer)},
+            {"Vim.FaceSilhouetteVertexBuffer", typeof(FaceMeshVertexBuffer)},
         };
         public DocumentModel(Document d, bool inParallel = true)
         {
@@ -3985,7 +4081,9 @@ namespace Vim.Format.ObjectModel {
             ViewInViewSheetEntityTable = Document.GetTable("Vim.ViewInViewSheet");
             SiteEntityTable = Document.GetTable("Vim.Site");
             BuildingEntityTable = Document.GetTable("Vim.Building");
-            FaceSilhouetteEntityTable = Document.GetTable("Vim.FaceSilhouette");
+            FaceMeshEntityTable = Document.GetTable("Vim.FaceSilhouette");
+            FaceMeshIndexBufferEntityTable = Document.GetTable("Vim.FaceSilhouetteIndexBuffer");
+            FaceMeshVertexBufferEntityTable = Document.GetTable("Vim.FaceSilhouetteVertexBuffer");
             
             // Initialize entity arrays
             AssetBufferName = AssetEntityTable?.GetStringColumnValues("string:BufferName") ?? Array.Empty<String>().ToIArray();
@@ -4216,6 +4314,7 @@ namespace Vim.Format.ObjectModel {
             BuildingElevation = BuildingEntityTable?.GetDataColumnValues<Double>("double:Elevation") ?? Array.Empty<Double>().ToIArray();
             BuildingTerrainElevation = BuildingEntityTable?.GetDataColumnValues<Double>("double:TerrainElevation") ?? Array.Empty<Double>().ToIArray();
             BuildingAddress = BuildingEntityTable?.GetStringColumnValues("string:Address") ?? Array.Empty<String>().ToIArray();
+            FaceMeshVertexBufferVertex = FaceMeshVertexBufferEntityTable?.GetDataColumnValues<Vector3>("vector3:Vertex") ?? Array.Empty<Vector3>().ToIArray();
             
             // Initialize entity relational columns
             ParameterDescriptorDisplayUnitIndex = ParameterDescriptorEntityTable?.GetIndexColumnValues("index:Vim.DisplayUnit:DisplayUnit") ?? Array.Empty<int>().ToIArray();
@@ -4318,11 +4417,12 @@ namespace Vim.Format.ObjectModel {
             SiteElementIndex = SiteEntityTable?.GetIndexColumnValues("index:Vim.Element:Element") ?? Array.Empty<int>().ToIArray();
             BuildingSiteIndex = BuildingEntityTable?.GetIndexColumnValues("index:Vim.Site:Site") ?? Array.Empty<int>().ToIArray();
             BuildingElementIndex = BuildingEntityTable?.GetIndexColumnValues("index:Vim.Element:Element") ?? Array.Empty<int>().ToIArray();
-            FaceSilhouetteFaceSilhouetteIndexBufferStartIndex = FaceSilhouetteEntityTable?.GetIndexColumnValues("index:Vim.FaceSilhouetteIndexBuffer:FaceSilhouetteIndexBufferStart") ?? Array.Empty<int>().ToIArray();
-            FaceSilhouetteFaceSilhouetteIndexBufferEndIndex = FaceSilhouetteEntityTable?.GetIndexColumnValues("index:Vim.FaceSilhouetteIndexBuffer:FaceSilhouetteIndexBufferEnd") ?? Array.Empty<int>().ToIArray();
-            FaceSilhouetteViewIndex = FaceSilhouetteEntityTable?.GetIndexColumnValues("index:Vim.View:View") ?? Array.Empty<int>().ToIArray();
-            FaceSilhouetteMaterialIndex = FaceSilhouetteEntityTable?.GetIndexColumnValues("index:Vim.Material:Material") ?? Array.Empty<int>().ToIArray();
-            FaceSilhouetteElementIndex = FaceSilhouetteEntityTable?.GetIndexColumnValues("index:Vim.Element:Element") ?? Array.Empty<int>().ToIArray();
+            FaceMeshFaceMeshIndexBufferStartIndex = FaceMeshEntityTable?.GetIndexColumnValues("index:Vim.FaceSilhouetteIndexBuffer:FaceMeshIndexBufferStart") ?? Array.Empty<int>().ToIArray();
+            FaceMeshFaceMeshIndexBufferEndIndex = FaceMeshEntityTable?.GetIndexColumnValues("index:Vim.FaceSilhouetteIndexBuffer:FaceMeshIndexBufferEnd") ?? Array.Empty<int>().ToIArray();
+            FaceMeshViewIndex = FaceMeshEntityTable?.GetIndexColumnValues("index:Vim.View:View") ?? Array.Empty<int>().ToIArray();
+            FaceMeshMaterialIndex = FaceMeshEntityTable?.GetIndexColumnValues("index:Vim.Material:Material") ?? Array.Empty<int>().ToIArray();
+            FaceMeshElementIndex = FaceMeshEntityTable?.GetIndexColumnValues("index:Vim.Element:Element") ?? Array.Empty<int>().ToIArray();
+            FaceMeshIndexBufferVertexIndexIndex = FaceMeshIndexBufferEntityTable?.GetIndexColumnValues("index:Vim.FaceSilhouetteVertexBuffer:VertexIndex") ?? Array.Empty<int>().ToIArray();
             
             // Initialize entity collections
             AssetList = NumAsset.Select(i => GetAsset(i));
@@ -4379,7 +4479,9 @@ namespace Vim.Format.ObjectModel {
             ViewInViewSheetList = NumViewInViewSheet.Select(i => GetViewInViewSheet(i));
             SiteList = NumSite.Select(i => GetSite(i));
             BuildingList = NumBuilding.Select(i => GetBuilding(i));
-            FaceSilhouetteList = NumFaceSilhouette.Select(i => GetFaceSilhouette(i));
+            FaceMeshList = NumFaceMesh.Select(i => GetFaceMesh(i));
+            FaceMeshIndexBufferList = NumFaceMeshIndexBuffer.Select(i => GetFaceMeshIndexBuffer(i));
+            FaceMeshVertexBufferList = NumFaceMeshVertexBuffer.Select(i => GetFaceMeshVertexBuffer(i));
             
             // Initialize element index maps
             ElementIndexMaps = new ElementIndexMaps(this, inParallel);
@@ -4563,14 +4665,14 @@ namespace Vim.Format.ObjectModel {
             if (GetRawTableOrDefault("Vim.Building") is SerializableEntityTable buildingTable)
                 BuildingTable = new BuildingTable(buildingTable, stringBuffer);
             
-            if (GetRawTableOrDefault("Vim.FaceSilhouette") is SerializableEntityTable facesilhouetteTable)
-                FaceSilhouetteTable = new FaceSilhouetteTable(facesilhouetteTable, stringBuffer);
+            if (GetRawTableOrDefault("Vim.FaceSilhouette") is SerializableEntityTable facemeshTable)
+                FaceMeshTable = new FaceMeshTable(facemeshTable, stringBuffer);
             
-            if (GetRawTableOrDefault("Vim.FaceSilhouetteIndexBuffer") is SerializableEntityTable facesilhouetteindexbufferTable)
-                FaceSilhouetteIndexBufferTable = new FaceSilhouetteIndexBufferTable(facesilhouetteindexbufferTable, stringBuffer);
+            if (GetRawTableOrDefault("Vim.FaceSilhouetteIndexBuffer") is SerializableEntityTable facemeshindexbufferTable)
+                FaceMeshIndexBufferTable = new FaceMeshIndexBufferTable(facemeshindexbufferTable, stringBuffer);
             
-            if (GetRawTableOrDefault("Vim.FaceSilhouetteVertexBuffer") is SerializableEntityTable facesilhouettevertexbufferTable)
-                FaceSilhouetteVertexBufferTable = new FaceSilhouetteVertexBufferTable(facesilhouettevertexbufferTable, stringBuffer);
+            if (GetRawTableOrDefault("Vim.FaceSilhouetteVertexBuffer") is SerializableEntityTable facemeshvertexbufferTable)
+                FaceMeshVertexBufferTable = new FaceMeshVertexBufferTable(facemeshvertexbufferTable, stringBuffer);
             
             // Initialize element index maps
             ElementIndexMaps = new ElementIndexMaps(this, inParallel);
@@ -4685,12 +4787,12 @@ namespace Vim.Format.ObjectModel {
         public Site GetSite(int index) => SiteTable?.Get(index);
         public BuildingTable BuildingTable { get; } // can be null
         public Building GetBuilding(int index) => BuildingTable?.Get(index);
-        public FaceSilhouetteTable FaceSilhouetteTable { get; } // can be null
-        public FaceSilhouette GetFaceSilhouette(int index) => FaceSilhouetteTable?.Get(index);
-        public FaceSilhouetteIndexBufferTable FaceSilhouetteIndexBufferTable { get; } // can be null
-        public FaceSilhouetteIndexBuffer GetFaceSilhouetteIndexBuffer(int index) => FaceSilhouetteIndexBufferTable?.Get(index);
-        public FaceSilhouetteVertexBufferTable FaceSilhouetteVertexBufferTable { get; } // can be null
-        public FaceSilhouetteVertexBuffer GetFaceSilhouetteVertexBuffer(int index) => FaceSilhouetteVertexBufferTable?.Get(index);
+        public FaceMeshTable FaceMeshTable { get; } // can be null
+        public FaceMesh GetFaceMesh(int index) => FaceMeshTable?.Get(index);
+        public FaceMeshIndexBufferTable FaceMeshIndexBufferTable { get; } // can be null
+        public FaceMeshIndexBuffer GetFaceMeshIndexBuffer(int index) => FaceMeshIndexBufferTable?.Get(index);
+        public FaceMeshVertexBufferTable FaceMeshVertexBufferTable { get; } // can be null
+        public FaceMeshVertexBuffer GetFaceMeshVertexBuffer(int index) => FaceMeshVertexBufferTable?.Get(index);
     } // class EntityTableSet
     
     public partial class AssetTable : EntityTable_v2, IEnumerable<Asset>
@@ -7609,28 +7711,28 @@ namespace Vim.Format.ObjectModel {
         }
     } // class BuildingTable 
     
-    public partial class FaceSilhouetteTable : EntityTable_v2, IEnumerable<FaceSilhouette>
+    public partial class FaceMeshTable : EntityTable_v2, IEnumerable<FaceMesh>
     {
         private readonly EntityTableSet _parentTableSet; // can be null
         
-        public FaceSilhouetteTable(SerializableEntityTable rawTable, string[] stringBuffer, EntityTableSet parentTableSet = null) : base(rawTable, stringBuffer)
+        public FaceMeshTable(SerializableEntityTable rawTable, string[] stringBuffer, EntityTableSet parentTableSet = null) : base(rawTable, stringBuffer)
         {
             _parentTableSet = parentTableSet;
-            Column_FaceSilhouetteIndexBufferStartIndex = GetIndexColumnValues("index:Vim.FaceSilhouetteIndexBuffer:FaceSilhouetteIndexBufferStart") ?? Array.Empty<int>();
-            Column_FaceSilhouetteIndexBufferEndIndex = GetIndexColumnValues("index:Vim.FaceSilhouetteIndexBuffer:FaceSilhouetteIndexBufferEnd") ?? Array.Empty<int>();
+            Column_FaceMeshIndexBufferStartIndex = GetIndexColumnValues("index:Vim.FaceSilhouetteIndexBuffer:FaceMeshIndexBufferStart") ?? Array.Empty<int>();
+            Column_FaceMeshIndexBufferEndIndex = GetIndexColumnValues("index:Vim.FaceSilhouetteIndexBuffer:FaceMeshIndexBufferEnd") ?? Array.Empty<int>();
             Column_ViewIndex = GetIndexColumnValues("index:Vim.View:View") ?? Array.Empty<int>();
             Column_MaterialIndex = GetIndexColumnValues("index:Vim.Material:Material") ?? Array.Empty<int>();
             Column_ElementIndex = GetIndexColumnValues("index:Vim.Element:Element") ?? Array.Empty<int>();
         }
         
-        public int[] Column_FaceSilhouetteIndexBufferStartIndex { get; }
-        public int GetFaceSilhouetteIndexBufferStartIndex(int index) => Column_FaceSilhouetteIndexBufferStartIndex.ElementAtOrDefault(index, EntityRelation.None);
-        public FaceSilhouetteIndexBuffer GetFaceSilhouetteIndexBufferStart(int index) => _GetReferencedFaceSilhouetteIndexBufferStart(GetFaceSilhouetteIndexBufferStartIndex(index));
-        private FaceSilhouetteIndexBuffer _GetReferencedFaceSilhouetteIndexBufferStart(int referencedIndex) => _parentTableSet.GetFaceSilhouetteIndexBuffer(referencedIndex);
-        public int[] Column_FaceSilhouetteIndexBufferEndIndex { get; }
-        public int GetFaceSilhouetteIndexBufferEndIndex(int index) => Column_FaceSilhouetteIndexBufferEndIndex.ElementAtOrDefault(index, EntityRelation.None);
-        public FaceSilhouetteIndexBuffer GetFaceSilhouetteIndexBufferEnd(int index) => _GetReferencedFaceSilhouetteIndexBufferEnd(GetFaceSilhouetteIndexBufferEndIndex(index));
-        private FaceSilhouetteIndexBuffer _GetReferencedFaceSilhouetteIndexBufferEnd(int referencedIndex) => _parentTableSet.GetFaceSilhouetteIndexBuffer(referencedIndex);
+        public int[] Column_FaceMeshIndexBufferStartIndex { get; }
+        public int GetFaceMeshIndexBufferStartIndex(int index) => Column_FaceMeshIndexBufferStartIndex.ElementAtOrDefault(index, EntityRelation.None);
+        public FaceMeshIndexBuffer GetFaceMeshIndexBufferStart(int index) => _GetReferencedFaceMeshIndexBufferStart(GetFaceMeshIndexBufferStartIndex(index));
+        private FaceMeshIndexBuffer _GetReferencedFaceMeshIndexBufferStart(int referencedIndex) => _parentTableSet.GetFaceMeshIndexBuffer(referencedIndex);
+        public int[] Column_FaceMeshIndexBufferEndIndex { get; }
+        public int GetFaceMeshIndexBufferEndIndex(int index) => Column_FaceMeshIndexBufferEndIndex.ElementAtOrDefault(index, EntityRelation.None);
+        public FaceMeshIndexBuffer GetFaceMeshIndexBufferEnd(int index) => _GetReferencedFaceMeshIndexBufferEnd(GetFaceMeshIndexBufferEndIndex(index));
+        private FaceMeshIndexBuffer _GetReferencedFaceMeshIndexBufferEnd(int referencedIndex) => _parentTableSet.GetFaceMeshIndexBuffer(referencedIndex);
         public int[] Column_ViewIndex { get; }
         public int GetViewIndex(int index) => Column_ViewIndex.ElementAtOrDefault(index, EntityRelation.None);
         public View GetView(int index) => _GetReferencedView(GetViewIndex(index));
@@ -7644,13 +7746,13 @@ namespace Vim.Format.ObjectModel {
         public Element GetElement(int index) => _GetReferencedElement(GetElementIndex(index));
         private Element _GetReferencedElement(int referencedIndex) => _parentTableSet.GetElement(referencedIndex);
         // Object Getter
-        public FaceSilhouette Get(int index)
+        public FaceMesh Get(int index)
         {
             if (index < 0) return null;
-            var r = new FaceSilhouette();
+            var r = new FaceMesh();
             r.Index = index;
-            r._FaceSilhouetteIndexBufferStart = new Relation<Vim.Format.ObjectModel.FaceSilhouetteIndexBuffer>(GetFaceSilhouetteIndexBufferStartIndex(index), _GetReferencedFaceSilhouetteIndexBufferStart);
-            r._FaceSilhouetteIndexBufferEnd = new Relation<Vim.Format.ObjectModel.FaceSilhouetteIndexBuffer>(GetFaceSilhouetteIndexBufferEndIndex(index), _GetReferencedFaceSilhouetteIndexBufferEnd);
+            r._FaceMeshIndexBufferStart = new Relation<Vim.Format.ObjectModel.FaceMeshIndexBuffer>(GetFaceMeshIndexBufferStartIndex(index), _GetReferencedFaceMeshIndexBufferStart);
+            r._FaceMeshIndexBufferEnd = new Relation<Vim.Format.ObjectModel.FaceMeshIndexBuffer>(GetFaceMeshIndexBufferEndIndex(index), _GetReferencedFaceMeshIndexBufferEnd);
             r._View = new Relation<Vim.Format.ObjectModel.View>(GetViewIndex(index), _GetReferencedView);
             r._Material = new Relation<Vim.Format.ObjectModel.Material>(GetMaterialIndex(index), _GetReferencedMaterial);
             r._Element = new Relation<Vim.Format.ObjectModel.Element>(GetElementIndex(index), _GetReferencedElement);
@@ -7658,18 +7760,18 @@ namespace Vim.Format.ObjectModel {
         }
         // Enumerator
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
-        public IEnumerator<FaceSilhouette> GetEnumerator()
+        public IEnumerator<FaceMesh> GetEnumerator()
         {
             for (var i = 0; i < RowCount; ++i)
                 yield return Get(i);
         }
-    } // class FaceSilhouetteTable 
+    } // class FaceMeshTable 
     
-    public partial class FaceSilhouetteIndexBufferTable : EntityTable_v2, IEnumerable<FaceSilhouetteIndexBuffer>
+    public partial class FaceMeshIndexBufferTable : EntityTable_v2, IEnumerable<FaceMeshIndexBuffer>
     {
         private readonly EntityTableSet _parentTableSet; // can be null
         
-        public FaceSilhouetteIndexBufferTable(SerializableEntityTable rawTable, string[] stringBuffer, EntityTableSet parentTableSet = null) : base(rawTable, stringBuffer)
+        public FaceMeshIndexBufferTable(SerializableEntityTable rawTable, string[] stringBuffer, EntityTableSet parentTableSet = null) : base(rawTable, stringBuffer)
         {
             _parentTableSet = parentTableSet;
             Column_VertexIndexIndex = GetIndexColumnValues("index:Vim.FaceSilhouetteVertexBuffer:VertexIndex") ?? Array.Empty<int>();
@@ -7677,31 +7779,31 @@ namespace Vim.Format.ObjectModel {
         
         public int[] Column_VertexIndexIndex { get; }
         public int GetVertexIndexIndex(int index) => Column_VertexIndexIndex.ElementAtOrDefault(index, EntityRelation.None);
-        public FaceSilhouetteVertexBuffer GetVertexIndex(int index) => _GetReferencedVertexIndex(GetVertexIndexIndex(index));
-        private FaceSilhouetteVertexBuffer _GetReferencedVertexIndex(int referencedIndex) => _parentTableSet.GetFaceSilhouetteVertexBuffer(referencedIndex);
+        public FaceMeshVertexBuffer GetVertexIndex(int index) => _GetReferencedVertexIndex(GetVertexIndexIndex(index));
+        private FaceMeshVertexBuffer _GetReferencedVertexIndex(int referencedIndex) => _parentTableSet.GetFaceMeshVertexBuffer(referencedIndex);
         // Object Getter
-        public FaceSilhouetteIndexBuffer Get(int index)
+        public FaceMeshIndexBuffer Get(int index)
         {
             if (index < 0) return null;
-            var r = new FaceSilhouetteIndexBuffer();
+            var r = new FaceMeshIndexBuffer();
             r.Index = index;
-            r._VertexIndex = new Relation<Vim.Format.ObjectModel.FaceSilhouetteVertexBuffer>(GetVertexIndexIndex(index), _GetReferencedVertexIndex);
+            r._VertexIndex = new Relation<Vim.Format.ObjectModel.FaceMeshVertexBuffer>(GetVertexIndexIndex(index), _GetReferencedVertexIndex);
             return r;
         }
         // Enumerator
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
-        public IEnumerator<FaceSilhouetteIndexBuffer> GetEnumerator()
+        public IEnumerator<FaceMeshIndexBuffer> GetEnumerator()
         {
             for (var i = 0; i < RowCount; ++i)
                 yield return Get(i);
         }
-    } // class FaceSilhouetteIndexBufferTable 
+    } // class FaceMeshIndexBufferTable 
     
-    public partial class FaceSilhouetteVertexBufferTable : EntityTable_v2, IEnumerable<FaceSilhouetteVertexBuffer>
+    public partial class FaceMeshVertexBufferTable : EntityTable_v2, IEnumerable<FaceMeshVertexBuffer>
     {
         private readonly EntityTableSet _parentTableSet; // can be null
         
-        public FaceSilhouetteVertexBufferTable(SerializableEntityTable rawTable, string[] stringBuffer, EntityTableSet parentTableSet = null) : base(rawTable, stringBuffer)
+        public FaceMeshVertexBufferTable(SerializableEntityTable rawTable, string[] stringBuffer, EntityTableSet parentTableSet = null) : base(rawTable, stringBuffer)
         {
             _parentTableSet = parentTableSet;
             Column_Vertex = GetDataColumnValues<Vector3>("vector3:Vertex") ?? Array.Empty<Vector3>();
@@ -7710,22 +7812,22 @@ namespace Vim.Format.ObjectModel {
         public Vector3[] Column_Vertex { get; }
         public Vector3 GetVertex(int index, Vector3 @default = default) => Column_Vertex.ElementAtOrDefault(index, @default);
         // Object Getter
-        public FaceSilhouetteVertexBuffer Get(int index)
+        public FaceMeshVertexBuffer Get(int index)
         {
             if (index < 0) return null;
-            var r = new FaceSilhouetteVertexBuffer();
+            var r = new FaceMeshVertexBuffer();
             r.Index = index;
             r.Vertex = GetVertex(index);
             return r;
         }
         // Enumerator
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
-        public IEnumerator<FaceSilhouetteVertexBuffer> GetEnumerator()
+        public IEnumerator<FaceMeshVertexBuffer> GetEnumerator()
         {
             for (var i = 0; i < RowCount; ++i)
                 yield return Get(i);
         }
-    } // class FaceSilhouetteVertexBufferTable 
+    } // class FaceMeshVertexBufferTable 
     
     public static class DocumentBuilderExtensions
     {
@@ -7785,7 +7887,7 @@ namespace Vim.Format.ObjectModel {
             if (type == typeof(ViewInViewSheet)) return ToViewInViewSheetTableBuilder;
             if (type == typeof(Site)) return ToSiteTableBuilder;
             if (type == typeof(Building)) return ToBuildingTableBuilder;
-            if (type == typeof(FaceSilhouette)) return ToFaceSilhouetteTableBuilder;
+            if (type == typeof(FaceMesh)) return ToFaceMeshTableBuilder;
             throw new ArgumentException(nameof(type));
         }
         public static EntityTableBuilder ToAssetTableBuilder(this IEnumerable<Entity> entities)
@@ -8440,12 +8542,12 @@ namespace Vim.Format.ObjectModel {
             tb.AddIndexColumn("index:Vim.Element:Element", typedEntities.Select(x => x._Element?.Index ?? EntityRelation.None));
             return tb;
         }
-        public static EntityTableBuilder ToFaceSilhouetteTableBuilder(this IEnumerable<Entity> entities)
+        public static EntityTableBuilder ToFaceMeshTableBuilder(this IEnumerable<Entity> entities)
         {
-            var typedEntities = entities?.Cast<FaceSilhouette>() ?? Enumerable.Empty<FaceSilhouette>();
+            var typedEntities = entities?.Cast<FaceMesh>() ?? Enumerable.Empty<FaceMesh>();
             var tb = new EntityTableBuilder("Vim.FaceSilhouette");
-            tb.AddIndexColumn("index:Vim.FaceSilhouetteIndexBuffer:FaceSilhouetteIndexBufferStart", typedEntities.Select(x => x._FaceSilhouetteIndexBufferStart?.Index ?? EntityRelation.None));
-            tb.AddIndexColumn("index:Vim.FaceSilhouetteIndexBuffer:FaceSilhouetteIndexBufferEnd", typedEntities.Select(x => x._FaceSilhouetteIndexBufferEnd?.Index ?? EntityRelation.None));
+            tb.AddIndexColumn("index:Vim.FaceSilhouetteIndexBuffer:FaceMeshIndexBufferStart", typedEntities.Select(x => x._FaceMeshIndexBufferStart?.Index ?? EntityRelation.None));
+            tb.AddIndexColumn("index:Vim.FaceSilhouetteIndexBuffer:FaceMeshIndexBufferEnd", typedEntities.Select(x => x._FaceMeshIndexBufferEnd?.Index ?? EntityRelation.None));
             tb.AddIndexColumn("index:Vim.View:View", typedEntities.Select(x => x._View?.Index ?? EntityRelation.None));
             tb.AddIndexColumn("index:Vim.Material:Material", typedEntities.Select(x => x._Material?.Index ?? EntityRelation.None));
             tb.AddIndexColumn("index:Vim.Element:Element", typedEntities.Select(x => x._Element?.Index ?? EntityRelation.None));
@@ -8511,7 +8613,7 @@ namespace Vim.Format.ObjectModel {
             {typeof(ViewInViewSheet), new EntityTableBuilder()},
             {typeof(Site), new EntityTableBuilder()},
             {typeof(Building), new EntityTableBuilder()},
-            {typeof(FaceSilhouette), new EntityTableBuilder()},
+            {typeof(FaceMesh), new EntityTableBuilder()},
         };
     } // ObjectModelBuilder
 } // namespace

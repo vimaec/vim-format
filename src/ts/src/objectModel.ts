@@ -10569,13 +10569,13 @@ export class BuildingTable implements IBuildingTable {
     
 }
 
-export interface IFaceSilhouette {
+export interface IFaceMesh {
     index: number
     
-    faceSilhouetteIndexBufferStartIndex?: number
-    faceSilhouetteIndexBufferStart?: IFaceSilhouetteIndexBuffer
-    faceSilhouetteIndexBufferEndIndex?: number
-    faceSilhouetteIndexBufferEnd?: IFaceSilhouetteIndexBuffer
+    faceMeshIndexBufferStartIndex?: number
+    faceMeshIndexBufferStart?: IFaceMeshIndexBuffer
+    faceMeshIndexBufferEndIndex?: number
+    faceMeshIndexBufferEnd?: IFaceMeshIndexBuffer
     viewIndex?: number
     view?: IView
     materialIndex?: number
@@ -10584,35 +10584,35 @@ export interface IFaceSilhouette {
     element?: IElement
 }
 
-export interface IFaceSilhouetteTable {
+export interface IFaceMeshTable {
     getCount(): Promise<number>
-    get(faceSilhouetteIndex: number): Promise<IFaceSilhouette>
-    getAll(): Promise<IFaceSilhouette[]>
+    get(faceMeshIndex: number): Promise<IFaceMesh>
+    getAll(): Promise<IFaceMesh[]>
     
-    getFaceSilhouetteIndexBufferStartIndex(faceSilhouetteIndex: number): Promise<number | undefined>
-    getAllFaceSilhouetteIndexBufferStartIndex(): Promise<number[] | undefined>
-    getFaceSilhouetteIndexBufferStart(faceSilhouetteIndex: number): Promise<IFaceSilhouetteIndexBuffer | undefined>
-    getFaceSilhouetteIndexBufferEndIndex(faceSilhouetteIndex: number): Promise<number | undefined>
-    getAllFaceSilhouetteIndexBufferEndIndex(): Promise<number[] | undefined>
-    getFaceSilhouetteIndexBufferEnd(faceSilhouetteIndex: number): Promise<IFaceSilhouetteIndexBuffer | undefined>
-    getViewIndex(faceSilhouetteIndex: number): Promise<number | undefined>
+    getFaceMeshIndexBufferStartIndex(faceMeshIndex: number): Promise<number | undefined>
+    getAllFaceMeshIndexBufferStartIndex(): Promise<number[] | undefined>
+    getFaceMeshIndexBufferStart(faceMeshIndex: number): Promise<IFaceMeshIndexBuffer | undefined>
+    getFaceMeshIndexBufferEndIndex(faceMeshIndex: number): Promise<number | undefined>
+    getAllFaceMeshIndexBufferEndIndex(): Promise<number[] | undefined>
+    getFaceMeshIndexBufferEnd(faceMeshIndex: number): Promise<IFaceMeshIndexBuffer | undefined>
+    getViewIndex(faceMeshIndex: number): Promise<number | undefined>
     getAllViewIndex(): Promise<number[] | undefined>
-    getView(faceSilhouetteIndex: number): Promise<IView | undefined>
-    getMaterialIndex(faceSilhouetteIndex: number): Promise<number | undefined>
+    getView(faceMeshIndex: number): Promise<IView | undefined>
+    getMaterialIndex(faceMeshIndex: number): Promise<number | undefined>
     getAllMaterialIndex(): Promise<number[] | undefined>
-    getMaterial(faceSilhouetteIndex: number): Promise<IMaterial | undefined>
-    getElementIndex(faceSilhouetteIndex: number): Promise<number | undefined>
+    getMaterial(faceMeshIndex: number): Promise<IMaterial | undefined>
+    getElementIndex(faceMeshIndex: number): Promise<number | undefined>
     getAllElementIndex(): Promise<number[] | undefined>
-    getElement(faceSilhouetteIndex: number): Promise<IElement | undefined>
+    getElement(faceMeshIndex: number): Promise<IElement | undefined>
 }
 
-export class FaceSilhouette implements IFaceSilhouette {
+export class FaceMesh implements IFaceMesh {
     index: number
     
-    faceSilhouetteIndexBufferStartIndex?: number
-    faceSilhouetteIndexBufferStart?: IFaceSilhouetteIndexBuffer
-    faceSilhouetteIndexBufferEndIndex?: number
-    faceSilhouetteIndexBufferEnd?: IFaceSilhouetteIndexBuffer
+    faceMeshIndexBufferStartIndex?: number
+    faceMeshIndexBufferStart?: IFaceMeshIndexBuffer
+    faceMeshIndexBufferEndIndex?: number
+    faceMeshIndexBufferEnd?: IFaceMeshIndexBuffer
     viewIndex?: number
     view?: IView
     materialIndex?: number
@@ -10620,13 +10620,13 @@ export class FaceSilhouette implements IFaceSilhouette {
     elementIndex?: number
     element?: IElement
     
-    static async createFromTable(table: IFaceSilhouetteTable, index: number): Promise<IFaceSilhouette> {
-        let result = new FaceSilhouette()
+    static async createFromTable(table: IFaceMeshTable, index: number): Promise<IFaceMesh> {
+        let result = new FaceMesh()
         result.index = index
         
         await Promise.all([
-            table.getFaceSilhouetteIndexBufferStartIndex(index).then(v => result.faceSilhouetteIndexBufferStartIndex = v),
-            table.getFaceSilhouetteIndexBufferEndIndex(index).then(v => result.faceSilhouetteIndexBufferEndIndex = v),
+            table.getFaceMeshIndexBufferStartIndex(index).then(v => result.faceMeshIndexBufferStartIndex = v),
+            table.getFaceMeshIndexBufferEndIndex(index).then(v => result.faceMeshIndexBufferEndIndex = v),
             table.getViewIndex(index).then(v => result.viewIndex = v),
             table.getMaterialIndex(index).then(v => result.materialIndex = v),
             table.getElementIndex(index).then(v => result.elementIndex = v),
@@ -10636,18 +10636,18 @@ export class FaceSilhouette implements IFaceSilhouette {
     }
 }
 
-export class FaceSilhouetteTable implements IFaceSilhouetteTable {
+export class FaceMeshTable implements IFaceMeshTable {
     private document: VimDocument
     private entityTable: EntityTable
     
-    static async createFromDocument(document: VimDocument): Promise<IFaceSilhouetteTable | undefined> {
+    static async createFromDocument(document: VimDocument): Promise<IFaceMeshTable | undefined> {
         const entity = await document.entities.getBfast("Vim.FaceSilhouette")
         
         if (!entity) {
             return undefined
         }
         
-        let table = new FaceSilhouetteTable()
+        let table = new FaceMeshTable()
         table.document = document
         table.entityTable = new EntityTable(entity, document.strings)
         
@@ -10658,90 +10658,90 @@ export class FaceSilhouetteTable implements IFaceSilhouetteTable {
         return this.entityTable.getCount()
     }
     
-    async get(faceSilhouetteIndex: number): Promise<IFaceSilhouette> {
-        return await FaceSilhouette.createFromTable(this, faceSilhouetteIndex)
+    async get(faceMeshIndex: number): Promise<IFaceMesh> {
+        return await FaceMesh.createFromTable(this, faceMeshIndex)
     }
     
-    async getAll(): Promise<IFaceSilhouette[]> {
+    async getAll(): Promise<IFaceMesh[]> {
         const localTable = await this.entityTable.getLocal()
         
-        let faceSilhouetteIndexBufferStartIndex: number[] | undefined
-        let faceSilhouetteIndexBufferEndIndex: number[] | undefined
+        let faceMeshIndexBufferStartIndex: number[] | undefined
+        let faceMeshIndexBufferEndIndex: number[] | undefined
         let viewIndex: number[] | undefined
         let materialIndex: number[] | undefined
         let elementIndex: number[] | undefined
         
         await Promise.all([
-            (async () => { faceSilhouetteIndexBufferStartIndex = (await localTable.getNumberArray("index:Vim.FaceSilhouetteIndexBuffer:FaceSilhouetteIndexBufferStart")) })(),
-            (async () => { faceSilhouetteIndexBufferEndIndex = (await localTable.getNumberArray("index:Vim.FaceSilhouetteIndexBuffer:FaceSilhouetteIndexBufferEnd")) })(),
+            (async () => { faceMeshIndexBufferStartIndex = (await localTable.getNumberArray("index:Vim.FaceSilhouetteIndexBuffer:FaceMeshIndexBufferStart")) })(),
+            (async () => { faceMeshIndexBufferEndIndex = (await localTable.getNumberArray("index:Vim.FaceSilhouetteIndexBuffer:FaceMeshIndexBufferEnd")) })(),
             (async () => { viewIndex = (await localTable.getNumberArray("index:Vim.View:View")) })(),
             (async () => { materialIndex = (await localTable.getNumberArray("index:Vim.Material:Material")) })(),
             (async () => { elementIndex = (await localTable.getNumberArray("index:Vim.Element:Element")) })(),
         ])
         
-        let faceSilhouette: IFaceSilhouette[] = []
+        let faceMesh: IFaceMesh[] = []
         
         const rowCount = await this.getCount()
         for (let i = 0; i < rowCount; i++) {
-            faceSilhouette.push({
+            faceMesh.push({
                 index: i,
-                faceSilhouetteIndexBufferStartIndex: faceSilhouetteIndexBufferStartIndex ? faceSilhouetteIndexBufferStartIndex[i] : undefined,
-                faceSilhouetteIndexBufferEndIndex: faceSilhouetteIndexBufferEndIndex ? faceSilhouetteIndexBufferEndIndex[i] : undefined,
+                faceMeshIndexBufferStartIndex: faceMeshIndexBufferStartIndex ? faceMeshIndexBufferStartIndex[i] : undefined,
+                faceMeshIndexBufferEndIndex: faceMeshIndexBufferEndIndex ? faceMeshIndexBufferEndIndex[i] : undefined,
                 viewIndex: viewIndex ? viewIndex[i] : undefined,
                 materialIndex: materialIndex ? materialIndex[i] : undefined,
                 elementIndex: elementIndex ? elementIndex[i] : undefined
             })
         }
         
-        return faceSilhouette
+        return faceMesh
     }
     
-    async getFaceSilhouetteIndexBufferStartIndex(faceSilhouetteIndex: number): Promise<number | undefined> {
-        return await this.entityTable.getNumber(faceSilhouetteIndex, "index:Vim.FaceSilhouetteIndexBuffer:FaceSilhouetteIndexBufferStart")
+    async getFaceMeshIndexBufferStartIndex(faceMeshIndex: number): Promise<number | undefined> {
+        return await this.entityTable.getNumber(faceMeshIndex, "index:Vim.FaceSilhouetteIndexBuffer:FaceMeshIndexBufferStart")
     }
     
-    async getAllFaceSilhouetteIndexBufferStartIndex(): Promise<number[] | undefined> {
-        return await this.entityTable.getNumberArray("index:Vim.FaceSilhouetteIndexBuffer:FaceSilhouetteIndexBufferStart")
+    async getAllFaceMeshIndexBufferStartIndex(): Promise<number[] | undefined> {
+        return await this.entityTable.getNumberArray("index:Vim.FaceSilhouetteIndexBuffer:FaceMeshIndexBufferStart")
     }
     
-    async getFaceSilhouetteIndexBufferStart(faceSilhouetteIndex: number): Promise<IFaceSilhouetteIndexBuffer | undefined> {
-        const index = await this.getFaceSilhouetteIndexBufferStartIndex(faceSilhouetteIndex)
+    async getFaceMeshIndexBufferStart(faceMeshIndex: number): Promise<IFaceMeshIndexBuffer | undefined> {
+        const index = await this.getFaceMeshIndexBufferStartIndex(faceMeshIndex)
         
         if (index === undefined) {
             return undefined
         }
         
-        return await this.document.faceSilhouetteIndexBuffer?.get(index)
+        return await this.document.faceMeshIndexBuffer?.get(index)
     }
     
-    async getFaceSilhouetteIndexBufferEndIndex(faceSilhouetteIndex: number): Promise<number | undefined> {
-        return await this.entityTable.getNumber(faceSilhouetteIndex, "index:Vim.FaceSilhouetteIndexBuffer:FaceSilhouetteIndexBufferEnd")
+    async getFaceMeshIndexBufferEndIndex(faceMeshIndex: number): Promise<number | undefined> {
+        return await this.entityTable.getNumber(faceMeshIndex, "index:Vim.FaceSilhouetteIndexBuffer:FaceMeshIndexBufferEnd")
     }
     
-    async getAllFaceSilhouetteIndexBufferEndIndex(): Promise<number[] | undefined> {
-        return await this.entityTable.getNumberArray("index:Vim.FaceSilhouetteIndexBuffer:FaceSilhouetteIndexBufferEnd")
+    async getAllFaceMeshIndexBufferEndIndex(): Promise<number[] | undefined> {
+        return await this.entityTable.getNumberArray("index:Vim.FaceSilhouetteIndexBuffer:FaceMeshIndexBufferEnd")
     }
     
-    async getFaceSilhouetteIndexBufferEnd(faceSilhouetteIndex: number): Promise<IFaceSilhouetteIndexBuffer | undefined> {
-        const index = await this.getFaceSilhouetteIndexBufferEndIndex(faceSilhouetteIndex)
+    async getFaceMeshIndexBufferEnd(faceMeshIndex: number): Promise<IFaceMeshIndexBuffer | undefined> {
+        const index = await this.getFaceMeshIndexBufferEndIndex(faceMeshIndex)
         
         if (index === undefined) {
             return undefined
         }
         
-        return await this.document.faceSilhouetteIndexBuffer?.get(index)
+        return await this.document.faceMeshIndexBuffer?.get(index)
     }
     
-    async getViewIndex(faceSilhouetteIndex: number): Promise<number | undefined> {
-        return await this.entityTable.getNumber(faceSilhouetteIndex, "index:Vim.View:View")
+    async getViewIndex(faceMeshIndex: number): Promise<number | undefined> {
+        return await this.entityTable.getNumber(faceMeshIndex, "index:Vim.View:View")
     }
     
     async getAllViewIndex(): Promise<number[] | undefined> {
         return await this.entityTable.getNumberArray("index:Vim.View:View")
     }
     
-    async getView(faceSilhouetteIndex: number): Promise<IView | undefined> {
-        const index = await this.getViewIndex(faceSilhouetteIndex)
+    async getView(faceMeshIndex: number): Promise<IView | undefined> {
+        const index = await this.getViewIndex(faceMeshIndex)
         
         if (index === undefined) {
             return undefined
@@ -10750,16 +10750,16 @@ export class FaceSilhouetteTable implements IFaceSilhouetteTable {
         return await this.document.view?.get(index)
     }
     
-    async getMaterialIndex(faceSilhouetteIndex: number): Promise<number | undefined> {
-        return await this.entityTable.getNumber(faceSilhouetteIndex, "index:Vim.Material:Material")
+    async getMaterialIndex(faceMeshIndex: number): Promise<number | undefined> {
+        return await this.entityTable.getNumber(faceMeshIndex, "index:Vim.Material:Material")
     }
     
     async getAllMaterialIndex(): Promise<number[] | undefined> {
         return await this.entityTable.getNumberArray("index:Vim.Material:Material")
     }
     
-    async getMaterial(faceSilhouetteIndex: number): Promise<IMaterial | undefined> {
-        const index = await this.getMaterialIndex(faceSilhouetteIndex)
+    async getMaterial(faceMeshIndex: number): Promise<IMaterial | undefined> {
+        const index = await this.getMaterialIndex(faceMeshIndex)
         
         if (index === undefined) {
             return undefined
@@ -10768,16 +10768,16 @@ export class FaceSilhouetteTable implements IFaceSilhouetteTable {
         return await this.document.material?.get(index)
     }
     
-    async getElementIndex(faceSilhouetteIndex: number): Promise<number | undefined> {
-        return await this.entityTable.getNumber(faceSilhouetteIndex, "index:Vim.Element:Element")
+    async getElementIndex(faceMeshIndex: number): Promise<number | undefined> {
+        return await this.entityTable.getNumber(faceMeshIndex, "index:Vim.Element:Element")
     }
     
     async getAllElementIndex(): Promise<number[] | undefined> {
         return await this.entityTable.getNumberArray("index:Vim.Element:Element")
     }
     
-    async getElement(faceSilhouetteIndex: number): Promise<IElement | undefined> {
-        const index = await this.getElementIndex(faceSilhouetteIndex)
+    async getElement(faceMeshIndex: number): Promise<IElement | undefined> {
+        const index = await this.getElementIndex(faceMeshIndex)
         
         if (index === undefined) {
             return undefined
@@ -10788,31 +10788,31 @@ export class FaceSilhouetteTable implements IFaceSilhouetteTable {
     
 }
 
-export interface IFaceSilhouetteIndexBuffer {
+export interface IFaceMeshIndexBuffer {
     index: number
     
     vertexIndexIndex?: number
-    vertexIndex?: IFaceSilhouetteVertexBuffer
+    vertexIndex?: IFaceMeshVertexBuffer
 }
 
-export interface IFaceSilhouetteIndexBufferTable {
+export interface IFaceMeshIndexBufferTable {
     getCount(): Promise<number>
-    get(faceSilhouetteIndexBufferIndex: number): Promise<IFaceSilhouetteIndexBuffer>
-    getAll(): Promise<IFaceSilhouetteIndexBuffer[]>
+    get(faceMeshIndexBufferIndex: number): Promise<IFaceMeshIndexBuffer>
+    getAll(): Promise<IFaceMeshIndexBuffer[]>
     
-    getVertexIndexIndex(faceSilhouetteIndexBufferIndex: number): Promise<number | undefined>
+    getVertexIndexIndex(faceMeshIndexBufferIndex: number): Promise<number | undefined>
     getAllVertexIndexIndex(): Promise<number[] | undefined>
-    getVertexIndex(faceSilhouetteIndexBufferIndex: number): Promise<IFaceSilhouetteVertexBuffer | undefined>
+    getVertexIndex(faceMeshIndexBufferIndex: number): Promise<IFaceMeshVertexBuffer | undefined>
 }
 
-export class FaceSilhouetteIndexBuffer implements IFaceSilhouetteIndexBuffer {
+export class FaceMeshIndexBuffer implements IFaceMeshIndexBuffer {
     index: number
     
     vertexIndexIndex?: number
-    vertexIndex?: IFaceSilhouetteVertexBuffer
+    vertexIndex?: IFaceMeshVertexBuffer
     
-    static async createFromTable(table: IFaceSilhouetteIndexBufferTable, index: number): Promise<IFaceSilhouetteIndexBuffer> {
-        let result = new FaceSilhouetteIndexBuffer()
+    static async createFromTable(table: IFaceMeshIndexBufferTable, index: number): Promise<IFaceMeshIndexBuffer> {
+        let result = new FaceMeshIndexBuffer()
         result.index = index
         
         await Promise.all([
@@ -10823,18 +10823,18 @@ export class FaceSilhouetteIndexBuffer implements IFaceSilhouetteIndexBuffer {
     }
 }
 
-export class FaceSilhouetteIndexBufferTable implements IFaceSilhouetteIndexBufferTable {
+export class FaceMeshIndexBufferTable implements IFaceMeshIndexBufferTable {
     private document: VimDocument
     private entityTable: EntityTable
     
-    static async createFromDocument(document: VimDocument): Promise<IFaceSilhouetteIndexBufferTable | undefined> {
+    static async createFromDocument(document: VimDocument): Promise<IFaceMeshIndexBufferTable | undefined> {
         const entity = await document.entities.getBfast("Vim.FaceSilhouetteIndexBuffer")
         
         if (!entity) {
             return undefined
         }
         
-        let table = new FaceSilhouetteIndexBufferTable()
+        let table = new FaceMeshIndexBufferTable()
         table.document = document
         table.entityTable = new EntityTable(entity, document.strings)
         
@@ -10845,11 +10845,11 @@ export class FaceSilhouetteIndexBufferTable implements IFaceSilhouetteIndexBuffe
         return this.entityTable.getCount()
     }
     
-    async get(faceSilhouetteIndexBufferIndex: number): Promise<IFaceSilhouetteIndexBuffer> {
-        return await FaceSilhouetteIndexBuffer.createFromTable(this, faceSilhouetteIndexBufferIndex)
+    async get(faceMeshIndexBufferIndex: number): Promise<IFaceMeshIndexBuffer> {
+        return await FaceMeshIndexBuffer.createFromTable(this, faceMeshIndexBufferIndex)
     }
     
-    async getAll(): Promise<IFaceSilhouetteIndexBuffer[]> {
+    async getAll(): Promise<IFaceMeshIndexBuffer[]> {
         const localTable = await this.entityTable.getLocal()
         
         let vertexIndexIndex: number[] | undefined
@@ -10858,59 +10858,59 @@ export class FaceSilhouetteIndexBufferTable implements IFaceSilhouetteIndexBuffe
             (async () => { vertexIndexIndex = (await localTable.getNumberArray("index:Vim.FaceSilhouetteVertexBuffer:VertexIndex")) })(),
         ])
         
-        let faceSilhouetteIndexBuffer: IFaceSilhouetteIndexBuffer[] = []
+        let faceMeshIndexBuffer: IFaceMeshIndexBuffer[] = []
         
         const rowCount = await this.getCount()
         for (let i = 0; i < rowCount; i++) {
-            faceSilhouetteIndexBuffer.push({
+            faceMeshIndexBuffer.push({
                 index: i,
                 vertexIndexIndex: vertexIndexIndex ? vertexIndexIndex[i] : undefined
             })
         }
         
-        return faceSilhouetteIndexBuffer
+        return faceMeshIndexBuffer
     }
     
-    async getVertexIndexIndex(faceSilhouetteIndexBufferIndex: number): Promise<number | undefined> {
-        return await this.entityTable.getNumber(faceSilhouetteIndexBufferIndex, "index:Vim.FaceSilhouetteVertexBuffer:VertexIndex")
+    async getVertexIndexIndex(faceMeshIndexBufferIndex: number): Promise<number | undefined> {
+        return await this.entityTable.getNumber(faceMeshIndexBufferIndex, "index:Vim.FaceSilhouetteVertexBuffer:VertexIndex")
     }
     
     async getAllVertexIndexIndex(): Promise<number[] | undefined> {
         return await this.entityTable.getNumberArray("index:Vim.FaceSilhouetteVertexBuffer:VertexIndex")
     }
     
-    async getVertexIndex(faceSilhouetteIndexBufferIndex: number): Promise<IFaceSilhouetteVertexBuffer | undefined> {
-        const index = await this.getVertexIndexIndex(faceSilhouetteIndexBufferIndex)
+    async getVertexIndex(faceMeshIndexBufferIndex: number): Promise<IFaceMeshVertexBuffer | undefined> {
+        const index = await this.getVertexIndexIndex(faceMeshIndexBufferIndex)
         
         if (index === undefined) {
             return undefined
         }
         
-        return await this.document.faceSilhouetteVertexBuffer?.get(index)
+        return await this.document.faceMeshVertexBuffer?.get(index)
     }
     
 }
 
-export interface IFaceSilhouetteVertexBuffer {
+export interface IFaceMeshVertexBuffer {
     index: number
     vertex?: Vector3
 }
 
-export interface IFaceSilhouetteVertexBufferTable {
+export interface IFaceMeshVertexBufferTable {
     getCount(): Promise<number>
-    get(faceSilhouetteVertexBufferIndex: number): Promise<IFaceSilhouetteVertexBuffer>
-    getAll(): Promise<IFaceSilhouetteVertexBuffer[]>
+    get(faceMeshVertexBufferIndex: number): Promise<IFaceMeshVertexBuffer>
+    getAll(): Promise<IFaceMeshVertexBuffer[]>
     
-    getVertex(faceSilhouetteVertexBufferIndex: number): Promise<Vector3 | undefined>
+    getVertex(faceMeshVertexBufferIndex: number): Promise<Vector3 | undefined>
     getAllVertex(): Promise<Vector3[] | undefined>
 }
 
-export class FaceSilhouetteVertexBuffer implements IFaceSilhouetteVertexBuffer {
+export class FaceMeshVertexBuffer implements IFaceMeshVertexBuffer {
     index: number
     vertex?: Vector3
     
-    static async createFromTable(table: IFaceSilhouetteVertexBufferTable, index: number): Promise<IFaceSilhouetteVertexBuffer> {
-        let result = new FaceSilhouetteVertexBuffer()
+    static async createFromTable(table: IFaceMeshVertexBufferTable, index: number): Promise<IFaceMeshVertexBuffer> {
+        let result = new FaceMeshVertexBuffer()
         result.index = index
         
         await Promise.all([
@@ -10921,17 +10921,17 @@ export class FaceSilhouetteVertexBuffer implements IFaceSilhouetteVertexBuffer {
     }
 }
 
-export class FaceSilhouetteVertexBufferTable implements IFaceSilhouetteVertexBufferTable {
+export class FaceMeshVertexBufferTable implements IFaceMeshVertexBufferTable {
     private entityTable: EntityTable
     
-    static async createFromDocument(document: VimDocument): Promise<IFaceSilhouetteVertexBufferTable | undefined> {
+    static async createFromDocument(document: VimDocument): Promise<IFaceMeshVertexBufferTable | undefined> {
         const entity = await document.entities.getBfast("Vim.FaceSilhouetteVertexBuffer")
         
         if (!entity) {
             return undefined
         }
         
-        let table = new FaceSilhouetteVertexBufferTable()
+        let table = new FaceMeshVertexBufferTable()
         table.entityTable = new EntityTable(entity, document.strings)
         
         return table
@@ -10941,11 +10941,11 @@ export class FaceSilhouetteVertexBufferTable implements IFaceSilhouetteVertexBuf
         return this.entityTable.getCount()
     }
     
-    async get(faceSilhouetteVertexBufferIndex: number): Promise<IFaceSilhouetteVertexBuffer> {
-        return await FaceSilhouetteVertexBuffer.createFromTable(this, faceSilhouetteVertexBufferIndex)
+    async get(faceMeshVertexBufferIndex: number): Promise<IFaceMeshVertexBuffer> {
+        return await FaceMeshVertexBuffer.createFromTable(this, faceMeshVertexBufferIndex)
     }
     
-    async getAll(): Promise<IFaceSilhouetteVertexBuffer[]> {
+    async getAll(): Promise<IFaceMeshVertexBuffer[]> {
         const localTable = await this.entityTable.getLocal()
         
         let vertex: Vector3[] | undefined
@@ -10954,21 +10954,21 @@ export class FaceSilhouetteVertexBufferTable implements IFaceSilhouetteVertexBuf
             (async () => { vertex = (await localTable.getVector3Array("vector3:Vertex")) })(),
         ])
         
-        let faceSilhouetteVertexBuffer: IFaceSilhouetteVertexBuffer[] = []
+        let faceMeshVertexBuffer: IFaceMeshVertexBuffer[] = []
         
         const rowCount = await this.getCount()
         for (let i = 0; i < rowCount; i++) {
-            faceSilhouetteVertexBuffer.push({
+            faceMeshVertexBuffer.push({
                 index: i,
                 vertex: vertex ? vertex[i] : undefined
             })
         }
         
-        return faceSilhouetteVertexBuffer
+        return faceMeshVertexBuffer
     }
     
-    async getVertex(faceSilhouetteVertexBufferIndex: number): Promise<Vector3 | undefined> {
-        return (await this.entityTable.getVector3(faceSilhouetteVertexBufferIndex, "vector3:Vertex"))
+    async getVertex(faceMeshVertexBufferIndex: number): Promise<Vector3 | undefined> {
+        return (await this.entityTable.getVector3(faceMeshVertexBufferIndex, "vector3:Vertex"))
     }
     
     async getAllVertex(): Promise<Vector3[] | undefined> {
@@ -11032,9 +11032,9 @@ export class VimDocument {
     viewInViewSheet: IViewInViewSheetTable | undefined
     site: ISiteTable | undefined
     building: IBuildingTable | undefined
-    faceSilhouette: IFaceSilhouetteTable | undefined
-    faceSilhouetteIndexBuffer: IFaceSilhouetteIndexBufferTable | undefined
-    faceSilhouetteVertexBuffer: IFaceSilhouetteVertexBufferTable | undefined
+    faceMesh: IFaceMeshTable | undefined
+    faceMeshIndexBuffer: IFaceMeshIndexBufferTable | undefined
+    faceMeshVertexBuffer: IFaceMeshVertexBufferTable | undefined
     
     entities: BFast
     strings: string[] | undefined
@@ -11106,9 +11106,9 @@ export class VimDocument {
         doc.viewInViewSheet = await ViewInViewSheetTable.createFromDocument(doc)
         doc.site = await SiteTable.createFromDocument(doc)
         doc.building = await BuildingTable.createFromDocument(doc)
-        doc.faceSilhouette = await FaceSilhouetteTable.createFromDocument(doc)
-        doc.faceSilhouetteIndexBuffer = await FaceSilhouetteIndexBufferTable.createFromDocument(doc)
-        doc.faceSilhouetteVertexBuffer = await FaceSilhouetteVertexBufferTable.createFromDocument(doc)
+        doc.faceMesh = await FaceMeshTable.createFromDocument(doc)
+        doc.faceMeshIndexBuffer = await FaceMeshIndexBufferTable.createFromDocument(doc)
+        doc.faceMeshVertexBuffer = await FaceMeshVertexBufferTable.createFromDocument(doc)
         
         return doc
     }

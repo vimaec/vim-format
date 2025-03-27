@@ -1285,6 +1285,7 @@ namespace Vim.Format.ObjectModel
     [G3dAttributeReference("g3d:shape:vertexoffset:0:int32:1", G3dAttributeReferenceMultiplicity.OneToMany, true)]
     [G3dAttributeReference("g3d:shape:color:0:float32:4", G3dAttributeReferenceMultiplicity.OneToMany, true)]
     [G3dAttributeReference("g3d:shape:width:0:float32:1", G3dAttributeReferenceMultiplicity.OneToMany, true)]
+    [Obsolete("Replaced with FaceSilhouette")]
     public partial class ShapeCollection : EntityWithElement
     {
     }
@@ -1773,13 +1774,14 @@ namespace Vim.Format.ObjectModel
     }
 
     /// <summary>
-    /// Represents an element face projected in a View
+    /// Represents an element face in a View
     /// </summary>
-    [TableName(TableNames.FaceSilhouette)]
-    public partial class FaceSilhouette : EntityWithElement
+    [TableName(TableNames.FaceMesh)]
+    // TODO: VimSqlIgnore
+    public partial class FaceMesh : EntityWithElement
     {
-        public Relation<FaceSilhouetteIndexBuffer> _FaceSilhouetteIndexBufferStart;
-        public Relation<FaceSilhouetteIndexBuffer> _FaceSilhouetteIndexBufferEnd;
+        public Relation<FaceMeshIndexBuffer> _FaceMeshIndexBufferStart;
+        public Relation<FaceMeshIndexBuffer> _FaceMeshIndexBufferEnd;
         public Relation<View> _View;
         public Relation<Material> _Material;
     }
@@ -1787,16 +1789,19 @@ namespace Vim.Format.ObjectModel
     /// <summary>
     /// Represents a continuous index buffer of triangular faces.
     /// </summary>
-    [TableName(TableNames.FaceSilhouetteIndexBuffer)]
+    [TableName(TableNames.FaceMeshIndexBuffer)]
     [EntityBuffer]
-    public partial class FaceSilhouetteIndexBuffer : Entity
+    public partial class FaceMeshIndexBuffer : Entity
     {
-        public Relation<FaceSilhouetteVertexBuffer> _VertexIndex;
+        public Relation<FaceMeshVertexBuffer> _VertexIndex;
     }
 
-    [TableName(TableNames.FaceSilhouetteVertexBuffer)]
+    /// <summary>
+    /// Represents a continuous vertex buffer.
+    /// </summary>
+    [TableName(TableNames.FaceMeshVertexBuffer)]
     [EntityBuffer]
-    public partial class FaceSilhouetteVertexBuffer : Entity
+    public partial class FaceMeshVertexBuffer : Entity
     {
         public Vector3 Vertex;
     }

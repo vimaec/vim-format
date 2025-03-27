@@ -225,7 +225,6 @@ public static class ObjectModelGenerator
     private static CodeBuilder WriteDocument(CodeBuilder cb)
     {
         var entityTypes = ObjectModelReflection.GetEntityTypes()
-            .Where(t => !t.IsEntityTableBuffer())
             .ToArray();
 
         foreach (var et in entityTypes)
