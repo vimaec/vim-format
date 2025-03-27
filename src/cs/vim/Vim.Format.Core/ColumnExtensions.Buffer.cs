@@ -73,6 +73,8 @@ namespace Vim.Format
                     return dataColumn.AsArray<double>().ElementAtOrDefault(rowIndex);
                 case VimConstants.Vector3ColumnNameTypePrefix:
                     return dataColumn.AsArray<Vector3>().ElementAtOrDefault(rowIndex);
+                case VimConstants.Vector4ColumnNameTypePrefix:
+                    return dataColumn.AsArray<Vector4>().ElementAtOrDefault(rowIndex);
                 case VimConstants.Matrix4x4ColumnNameTypePrefix:
                     return dataColumn.AsArray<Matrix4x4>().ElementAtOrDefault(rowIndex);
                 default:
@@ -99,6 +101,8 @@ namespace Vim.Format
                     return new double[length].ToBuffer();
                 case (VimConstants.Vector3ColumnNameTypePrefix):
                     return new Vector3[length].ToBuffer();
+                case (VimConstants.Vector4ColumnNameTypePrefix):
+                    return new Vector4[length].ToBuffer();
                 case (VimConstants.Matrix4x4ColumnNameTypePrefix):
                     return new Matrix4x4[length].ToBuffer();
                 default:
@@ -122,6 +126,8 @@ namespace Vim.Format
                     return (dataColumn.Data as byte[]).RemapData(remapping).ToBuffer();
                 case (VimConstants.Vector3ColumnNameTypePrefix):
                     return (dataColumn.Data as Vector3[]).RemapData(remapping).ToBuffer();
+                case (VimConstants.Vector4ColumnNameTypePrefix):
+                    return (dataColumn.Data as Vector4[]).RemapData(remapping).ToBuffer();
                 case (VimConstants.Matrix4x4ColumnNameTypePrefix):
                     return (dataColumn.Data as Matrix4x4[]).RemapData(remapping).ToBuffer();
                 default:
@@ -154,6 +160,8 @@ namespace Vim.Format
                     return thisBuffer.Concat<double>(otherBuffer);
                 case (VimConstants.Vector3ColumnNameTypePrefix):
                     return thisBuffer.Concat<Vector3>(otherBuffer);
+                case (VimConstants.Vector4ColumnNameTypePrefix):
+                    return thisBuffer.Concat<Vector4>(otherBuffer);
                 case (VimConstants.Matrix4x4ColumnNameTypePrefix):
                     return thisBuffer.Concat<Matrix4x4>(otherBuffer);
                 default:

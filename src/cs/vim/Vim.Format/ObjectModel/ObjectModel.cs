@@ -939,6 +939,7 @@ namespace Vim.Format.ObjectModel
     /// An associative table binding a Shape to a View.
     /// </summary>
     [TableName(TableNames.ShapeInView)]
+    [Obsolete("Moved to LineShape")]
     public partial class ShapeInView : Entity, IStorageKey
     {
         public Relation<Shape> _Shape;
@@ -1269,12 +1270,12 @@ namespace Vim.Format.ObjectModel
     /// The ordering and number of Shapes matches the ordering and number of shapes in the G3D buffer.
     /// </summary>
     [TableName(TableNames.Shape)]
-    [G3dAttributeReference("g3d:shape:vertexoffset:0:int32:1", G3dAttributeReferenceMultiplicity.OneToOne, true)]
-    [G3dAttributeReference("g3d:shape:color:0:float32:4", G3dAttributeReferenceMultiplicity.OneToOne, true)]
-    [G3dAttributeReference("g3d:shape:width:0:float32:1", G3dAttributeReferenceMultiplicity.OneToOne, true)]
+    //[G3dAttributeReference("g3d:shape:vertexoffset:0:int32:1", G3dAttributeReferenceMultiplicity.OneToOne, true)]
+    //[G3dAttributeReference("g3d:shape:color:0:float32:4", G3dAttributeReferenceMultiplicity.OneToOne, true)]
+    //[G3dAttributeReference("g3d:shape:width:0:float32:1", G3dAttributeReferenceMultiplicity.OneToOne, true)]
+    [Obsolete("Replaced with LineShape")]
     public partial class Shape : EntityWithElement
-    {
-    }
+    { }
 
     /// <summary>
     /// Represents a collection of shapes associated with an Element.
@@ -1282,10 +1283,10 @@ namespace Vim.Format.ObjectModel
     /// faces may have a number of curve loops which may designate the contour of the face and its holes.
     /// </summary>
     [TableName(TableNames.ShapeCollection)]
-    [G3dAttributeReference("g3d:shape:vertexoffset:0:int32:1", G3dAttributeReferenceMultiplicity.OneToMany, true)]
-    [G3dAttributeReference("g3d:shape:color:0:float32:4", G3dAttributeReferenceMultiplicity.OneToMany, true)]
-    [G3dAttributeReference("g3d:shape:width:0:float32:1", G3dAttributeReferenceMultiplicity.OneToMany, true)]
-    [Obsolete("Replaced with FaceSilhouette")]
+    //[G3dAttributeReference("g3d:shape:vertexoffset:0:int32:1", G3dAttributeReferenceMultiplicity.OneToMany, true)]
+    //[G3dAttributeReference("g3d:shape:color:0:float32:4", G3dAttributeReferenceMultiplicity.OneToMany, true)]
+    //[G3dAttributeReference("g3d:shape:width:0:float32:1", G3dAttributeReferenceMultiplicity.OneToMany, true)]
+    [Obsolete("Replaced with FaceMesh")]
     public partial class ShapeCollection : EntityWithElement
     {
     }
@@ -1294,6 +1295,7 @@ namespace Vim.Format.ObjectModel
     /// An associative table binding a Shape to a ShapeCollection.
     /// </summary>
     [TableName(TableNames.ShapeInShapeCollection)]
+    [Obsolete("Replaced with FaceMesh")]
     public partial class ShapeInShapeCollection : Entity, IStorageKey
     {
         public Relation<Shape> _Shape;
@@ -1804,6 +1806,31 @@ namespace Vim.Format.ObjectModel
     [EntityBuffer]
     [VimSqlIgnore]
     public partial class FaceMeshVertexBuffer : Entity
+    {
+        public Vector3 Vertex;
+    }
+
+    /// <summary>
+    /// Represents a sequence of points connected by line segments
+    /// </summary>
+    [TableName(TableNames.LineShape)]
+    [VimSqlIgnore]
+    public partial class LineShape : EntityWithElement
+    {
+        public Vector4 Color; // [0..1f] per XYZW component. W component is alpha (0f = transparent, 1f = opaque).
+        public double Width;
+        public Relation<LineShapeVertexBuffer> _LineShapeVertexBufferStart;
+        public Relation<LineShapeVertexBuffer> _LineShapeVertexBufferEnd;
+        public Relation<View> _View;
+    }
+
+    /// <summary>
+    /// Represents the vertex buffer for LineShapes
+    /// </summary>
+    [TableName(TableNames.LineShapeVertexBuffer)]
+    [EntityBuffer]
+    [VimSqlIgnore]
+    public partial class LineShapeVertexBuffer : Entity
     {
         public Vector3 Vertex;
     }

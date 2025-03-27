@@ -22,6 +22,7 @@ public static class ObjectModelTypeScriptGenerator
             "Int64" or "Long" or "long" => "bigint",
             "String" or "string" => "string",
             "Vector3" => "Vector3",
+            "Vector4" => "Vector4",
             "Matrix4x4" => "Matrix4x4"
         };
 
@@ -237,6 +238,7 @@ public static class ObjectModelTypeScriptGenerator
             "bigint" => "getBigInt",
             "string" => "getString",
             "Vector3" => "getVector3",
+            "Vector4" => "getVector4",
             "Matrix4x4" => "getMatrix4x4",
             _ => throw new ArgumentOutOfRangeException($"There's no getter function for {fieldInfo.FieldType.Name}")
         };
@@ -249,6 +251,7 @@ public static class ObjectModelTypeScriptGenerator
             "bigint" => "getBigIntArray",
             "string" => "getStringArray",
             "Vector3" => "getVector3Array",
+            "Vector4" => "getVector4Array",
             "Matrix4x4" => "getMatrix4x4Array",
             _ => throw new ArgumentOutOfRangeException($"There's no getter function for {fieldInfo.FieldType.Name}")
         };

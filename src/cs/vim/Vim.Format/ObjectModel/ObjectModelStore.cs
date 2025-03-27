@@ -22,7 +22,7 @@ namespace Vim.Format.ObjectModel
         public DocumentBuilder ToDocumentBuilder(string generator, string versionString)
         {
             var db = ObjectModelBuilder.ToDocumentBuilder(generator, versionString);
-            AddFaceSilhouetteBuffers(db);
+            AddEntityTableBuffers(db);
 
             return db
                 .AddMeshes(Meshes.Select(g => g.Subdivide()))
@@ -34,7 +34,9 @@ namespace Vim.Format.ObjectModel
         public List<int> FaceMeshIndexBuffer { get; } = new List<int>();
         public List<Vector3> FaceMeshVertexBuffer { get; } = new List<Vector3>();
 
-        private void AddFaceSilhouetteBuffers(DocumentBuilder documentBuilder)
+        public List<Vector3> LineShapeVertexBuffer { get; } = new List<Vector3>();
+
+        private void AddEntityTableBuffers(DocumentBuilder documentBuilder)
         {
 #if DEBUG
             // Validate the index buffer and the vertex buffer
@@ -42,18 +44,25 @@ namespace Vim.Format.ObjectModel
                 Debug.Assert(index >= 0 && index < FaceMeshVertexBuffer.Count);
 #endif
 
-            // Add the face silhouette index buffer.
+            // Add the face mesh index buffer.
             {
                 var tb = new EntityTableBuilder(TableNames.FaceMeshIndexBuffer);
-                tb.AddIndexColumn("index:Vim.FaceSilhouetteVertexBuffer:VertexIndex", FaceMeshIndexBuffer);
-                documentBuilder.Tables.Add(TableNames.FaceMeshIndexBuffer, tb);
+                tb.AddIndexColumn($"index:{TableNames.FaceMeshVertexBuffer}:{nameof(ObjectModel.FaceMeshIndexBuffer.VertexIndex)}", FaceMeshIndexBuffer);
+                documentBuilder.Tables.Add(tb.Name, tb);
             }
 
-            // Add the face silhouette vertex buffer.
+            // Add the face mesh vertex buffer.
             {
                 var tb = new EntityTableBuilder(TableNames.FaceMeshVertexBuffer);
-                tb.AddDataColumn("vector3:Vertex", FaceMeshVertexBuffer);
-                documentBuilder.Tables.Add(TableNames.FaceMeshVertexBuffer, tb);
+                tb.AddDataColumn($"vector3:{nameof(ObjectModel.FaceMeshVertexBuffer.Vertex)}", FaceMeshVertexBuffer);
+                documentBuilder.Tables.Add(tb.Name, tb);
+            }
+
+            // Add the line shape vertex buffer.
+            {
+                var tb = new EntityTableBuilder(TableNames.LineShapeVertexBuffer);
+                tb.AddDataColumn($"vector3:{nameof(ObjectModel.LineShapeVertexBuffer.Vertex)}", LineShapeVertexBuffer);
+                documentBuilder.Tables.Add(tb.Name, tb);
             }
         }
 

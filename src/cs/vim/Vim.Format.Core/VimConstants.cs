@@ -71,6 +71,8 @@ namespace Vim.Format
         public const string FaceMesh = "Vim.FaceMesh";
         public const string FaceMeshIndexBuffer = "Vim.FaceMeshIndexBuffer";
         public const string FaceMeshVertexBuffer = "Vim.FaceMeshVertexBuffer";
+        public const string LineShape = "Vim.LineShape";
+        public const string LineShapeVertexBuffer = "Vim.LineShapeVertexBuffer";
     }
 
     public static class VimConstants
@@ -89,6 +91,7 @@ namespace Vim.Format
         public const string FloatColumnNameTypePrefix = "float:";
         public const string DoubleColumnNameTypePrefix = "double:";
         public const string Vector3ColumnNameTypePrefix = "vector3:";
+        public const string Vector4ColumnNameTypePrefix = "vector4:";
         public const string Matrix4x4ColumnNameTypePrefix = "matrix4x4:";
 
         public const int NoEntityRelation = -1;

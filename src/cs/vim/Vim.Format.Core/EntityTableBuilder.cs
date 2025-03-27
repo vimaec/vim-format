@@ -97,6 +97,9 @@ namespace Vim.Format
         public EntityTableBuilder AddDataColumn(string columnName, IEnumerable<Vector3> values)
             => AddDataColumn(columnName, values.ToArray());
 
+        public EntityTableBuilder AddDataColumn(string columnName, IEnumerable<Vector4> values)
+            => AddDataColumn(columnName, values.ToArray());
+
         public EntityTableBuilder AddDataColumn(string columnName, IEnumerable<Matrix4x4> values)
             => AddDataColumn(columnName, values.ToArray());
 

@@ -119,7 +119,7 @@ namespace Vim.Format.Geometry
             var oldToNewIndexMap = new Dictionary<int, int>();
             var newVertexBuffer = new List<Vector3>();
 
-            // Create a slice of the face silhouette index buffer.
+            // Create a slice of the index buffer.
             var oldIndexSlice = new int[indexBufferEnd - indexBufferStart + 1];
             for (var i = 0; i < oldIndexSlice.Length; i++)
             {

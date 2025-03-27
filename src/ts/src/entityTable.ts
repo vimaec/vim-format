@@ -3,7 +3,7 @@
  */
 
 import { BFast, NumericArray, Range } from './bfast'
-import { Vector3, Matrix4x4 } from './structures'
+import { Vector3, Matrix4x4, Vector4 } from './structures'
 
 export class EntityTable {
     private readonly bfast: BFast
@@ -197,6 +197,25 @@ export class EntityTable {
 
     // TODO: Promise<any> is a shortcut... should actually be Promise<ArrayBuffer>
     async getVector3Array(columnName: string): Promise<any> {
+        return await this.bfast.getBuffer(columnName)
+    }
+
+    async getVector4(elementIndex: number, columnName: string): Promise<Vector4>
+    {
+        const arrayBuffer = await this.bfast.getBuffer(columnName)
+        const floatView = new Float32Array(arrayBuffer)
+
+        const startIndex = elementIndex * 4; // (x,y,z,w) => 4
+        return {
+          x: floatView[startIndex],
+          y: floatView[startIndex + 1],
+          z: floatView[startIndex + 2],
+          w: floatView[startIndex + 3]
+        }
+    }
+
+    // TODO: Promise<any> is a shortcut... should actually be Promise<ArrayBuffer>
+    async getVector4Array(columnName: string): Promise<any> {
         return await this.bfast.getBuffer(columnName)
     }
 

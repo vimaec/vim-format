@@ -43,6 +43,7 @@ namespace Vim
     static const std::string data_column_float_prefix = "float:";
     static const std::string data_column_double_prefix = "double:";
     static const std::string data_column_vector3_prefix = "vector3:";
+    static const std::string data_column_vector4_prefix = "vector4:";
     static const std::string data_column_matrix4x4_prefix = "matrix4x4:";
 
     class Vector3
@@ -51,6 +52,15 @@ namespace Vim
         float X = 0.0f;
         float Y = 0.0f;
         float Z = 0.0f;
+    };
+
+    class Vector4
+    {
+    public:
+        float X = 0.0f;
+        float Y = 0.0f;
+        float Z = 0.0f;
+        float W = 0.0f;
     };
 
     class Matrix4x4

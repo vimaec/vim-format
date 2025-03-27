@@ -1,6 +1,5 @@
 ﻿using NUnit.Framework;
 using System.IO;
-using System.Linq;
 using Vim.Format.ObjectModel;
 using Vim.LinqArray;
 using Vim.Util.Tests;

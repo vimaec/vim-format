@@ -114,6 +114,11 @@ namespace Vim.Format
                             et.DataColumns.Add(colBr.ReadEntityTableColumn<Vector3>(schemaOnly));
                             break;
                         }
+                    case VimConstants.Vector4ColumnNameTypePrefix:
+                        {
+                            et.DataColumns.Add(colBr.ReadEntityTableColumn<Vector4>(schemaOnly));
+                            break;
+                        }
                     case VimConstants.Matrix4x4ColumnNameTypePrefix:
                         {
                             et.DataColumns.Add(colBr.ReadEntityTableColumn<Matrix4x4>(schemaOnly));

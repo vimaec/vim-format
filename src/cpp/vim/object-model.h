@@ -126,6 +126,10 @@ namespace Vim
     class FaceMeshIndexBufferTable;
     class FaceMeshVertexBuffer;
     class FaceMeshVertexBufferTable;
+    class LineShape;
+    class LineShapeTable;
+    class LineShapeVertexBuffer;
+    class LineShapeVertexBufferTable;
     
     class DocumentModel
     {
@@ -187,6 +191,8 @@ namespace Vim
         FaceMeshTable* mFaceMesh;
         FaceMeshIndexBufferTable* mFaceMeshIndexBuffer;
         FaceMeshVertexBufferTable* mFaceMeshVertexBuffer;
+        LineShapeTable* mLineShape;
+        LineShapeVertexBufferTable* mLineShapeVertexBuffer;
         
         DocumentModel(Scene& scene);
         ~DocumentModel();
@@ -14215,6 +14221,311 @@ namespace Vim
         return new FaceMeshVertexBufferTable(scene.mEntityTables["Vim.FaceMeshVertexBuffer"], scene.mStrings);
     }
     
+    class LineShape
+    {
+    public:
+        int mIndex;
+        Vector4 mColor;
+        double mWidth;
+        
+        int mLineShapeVertexBufferStartIndex;
+        LineShapeVertexBuffer* mLineShapeVertexBufferStart;
+        int mLineShapeVertexBufferEndIndex;
+        LineShapeVertexBuffer* mLineShapeVertexBufferEnd;
+        int mViewIndex;
+        View* mView;
+        int mElementIndex;
+        Element* mElement;
+        
+        LineShape() {}
+    };
+    
+    class LineShapeTable
+    {
+        EntityTable& mEntityTable;
+        std::vector<const bfast::byte*>& mStrings;
+    public:
+        LineShapeTable(EntityTable& entityTable, std::vector<const bfast::byte*>& strings):
+            mEntityTable(entityTable), mStrings(strings) {}
+        
+        size_t GetCount()
+        {
+            return mEntityTable.get_count();
+        }
+        
+        LineShape* Get(int lineShapeIndex)
+        {
+            LineShape* lineShape = new LineShape();
+            lineShape->mIndex = lineShapeIndex;
+            lineShape->mColor = GetColor(lineShapeIndex);
+            lineShape->mWidth = GetWidth(lineShapeIndex);
+            lineShape->mLineShapeVertexBufferStartIndex = GetLineShapeVertexBufferStartIndex(lineShapeIndex);
+            lineShape->mLineShapeVertexBufferEndIndex = GetLineShapeVertexBufferEndIndex(lineShapeIndex);
+            lineShape->mViewIndex = GetViewIndex(lineShapeIndex);
+            lineShape->mElementIndex = GetElementIndex(lineShapeIndex);
+            return lineShape;
+        }
+        
+        std::vector<LineShape>* GetAll()
+        {
+            bool existsColor = mEntityTable.column_exists("vector4:Color");
+            bool existsWidth = mEntityTable.column_exists("double:Width");
+            bool existsLineShapeVertexBufferStart = mEntityTable.column_exists("index:Vim.LineShapeVertexBuffer:LineShapeVertexBufferStart");
+            bool existsLineShapeVertexBufferEnd = mEntityTable.column_exists("index:Vim.LineShapeVertexBuffer:LineShapeVertexBufferEnd");
+            bool existsView = mEntityTable.column_exists("index:Vim.View:View");
+            bool existsElement = mEntityTable.column_exists("index:Vim.Element:Element");
+            
+            const auto count = GetCount();
+            
+            std::vector<LineShape>* lineShape = new std::vector<LineShape>();
+            lineShape->reserve(count);
+            
+            Vector4* colorData = new Vector4[count];
+            if (mEntityTable.column_exists("vector4:Color")) {
+                memcpy(colorData, mEntityTable.mDataColumns["vector4:Color"].begin(), count * sizeof(Vector4));
+            }
+            
+            double* widthData = new double[count];
+            if (mEntityTable.column_exists("double:Width")) {
+                memcpy(widthData, mEntityTable.mDataColumns["double:Width"].begin(), count * sizeof(double));
+            }
+            
+            const std::vector<int>& lineShapeVertexBufferStartData = mEntityTable.column_exists("index:Vim.LineShapeVertexBuffer:LineShapeVertexBufferStart") ? mEntityTable.mIndexColumns["index:Vim.LineShapeVertexBuffer:LineShapeVertexBufferStart"] : std::vector<int>();
+            const std::vector<int>& lineShapeVertexBufferEndData = mEntityTable.column_exists("index:Vim.LineShapeVertexBuffer:LineShapeVertexBufferEnd") ? mEntityTable.mIndexColumns["index:Vim.LineShapeVertexBuffer:LineShapeVertexBufferEnd"] : std::vector<int>();
+            const std::vector<int>& viewData = mEntityTable.column_exists("index:Vim.View:View") ? mEntityTable.mIndexColumns["index:Vim.View:View"] : std::vector<int>();
+            const std::vector<int>& elementData = mEntityTable.column_exists("index:Vim.Element:Element") ? mEntityTable.mIndexColumns["index:Vim.Element:Element"] : std::vector<int>();
+            
+            for (int i = 0; i < count; ++i)
+            {
+                LineShape entity;
+                entity.mIndex = i;
+                if (existsColor)
+                    entity.mColor = colorData[i];
+                if (existsWidth)
+                    entity.mWidth = widthData[i];
+                entity.mLineShapeVertexBufferStartIndex = existsLineShapeVertexBufferStart ? lineShapeVertexBufferStartData[i] : -1;
+                entity.mLineShapeVertexBufferEndIndex = existsLineShapeVertexBufferEnd ? lineShapeVertexBufferEndData[i] : -1;
+                entity.mViewIndex = existsView ? viewData[i] : -1;
+                entity.mElementIndex = existsElement ? elementData[i] : -1;
+                lineShape->push_back(entity);
+            }
+            
+            delete[] colorData;
+            delete[] widthData;
+            
+            return lineShape;
+        }
+        
+        Vector4 GetColor(int lineShapeIndex)
+        {
+            if (lineShapeIndex < 0 || lineShapeIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("vector4:Color")) {
+                return *reinterpret_cast<Vector4*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["vector4:Color"].begin() + lineShapeIndex * sizeof(Vector4)));
+            }
+            
+            return {};
+        }
+        
+        std::vector<Vector4>* GetAllColor()
+        {
+            const auto count = GetCount();
+            
+            Vector4* colorData = new Vector4[count];
+            if (mEntityTable.column_exists("vector4:Color")) {
+                memcpy(colorData, mEntityTable.mDataColumns["vector4:Color"].begin(), count * sizeof(Vector4));
+            }
+            
+            std::vector<Vector4>* result = new std::vector<Vector4>(colorData, colorData + count);
+            
+            delete[] colorData;
+            
+            return result;
+        }
+        
+        double GetWidth(int lineShapeIndex)
+        {
+            if (lineShapeIndex < 0 || lineShapeIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("double:Width")) {
+                return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:Width"].begin() + lineShapeIndex * sizeof(double)));
+            }
+            
+            return {};
+        }
+        
+        std::vector<double>* GetAllWidth()
+        {
+            const auto count = GetCount();
+            
+            double* widthData = new double[count];
+            if (mEntityTable.column_exists("double:Width")) {
+                memcpy(widthData, mEntityTable.mDataColumns["double:Width"].begin(), count * sizeof(double));
+            }
+            
+            std::vector<double>* result = new std::vector<double>(widthData, widthData + count);
+            
+            delete[] widthData;
+            
+            return result;
+        }
+        
+        int GetLineShapeVertexBufferStartIndex(int lineShapeIndex)
+        {
+            if (!mEntityTable.column_exists("index:Vim.LineShapeVertexBuffer:LineShapeVertexBufferStart")) {
+                return -1;
+            }
+            
+            if (lineShapeIndex < 0 || lineShapeIndex >= GetCount())
+                return -1;
+            
+            return mEntityTable.mIndexColumns["index:Vim.LineShapeVertexBuffer:LineShapeVertexBufferStart"][lineShapeIndex];
+        }
+        
+        int GetLineShapeVertexBufferEndIndex(int lineShapeIndex)
+        {
+            if (!mEntityTable.column_exists("index:Vim.LineShapeVertexBuffer:LineShapeVertexBufferEnd")) {
+                return -1;
+            }
+            
+            if (lineShapeIndex < 0 || lineShapeIndex >= GetCount())
+                return -1;
+            
+            return mEntityTable.mIndexColumns["index:Vim.LineShapeVertexBuffer:LineShapeVertexBufferEnd"][lineShapeIndex];
+        }
+        
+        int GetViewIndex(int lineShapeIndex)
+        {
+            if (!mEntityTable.column_exists("index:Vim.View:View")) {
+                return -1;
+            }
+            
+            if (lineShapeIndex < 0 || lineShapeIndex >= GetCount())
+                return -1;
+            
+            return mEntityTable.mIndexColumns["index:Vim.View:View"][lineShapeIndex];
+        }
+        
+        int GetElementIndex(int lineShapeIndex)
+        {
+            if (!mEntityTable.column_exists("index:Vim.Element:Element")) {
+                return -1;
+            }
+            
+            if (lineShapeIndex < 0 || lineShapeIndex >= GetCount())
+                return -1;
+            
+            return mEntityTable.mIndexColumns["index:Vim.Element:Element"][lineShapeIndex];
+        }
+        
+    };
+    
+    static LineShapeTable* GetLineShapeTable(Scene& scene)
+    {
+        if (scene.mEntityTables.find("Vim.LineShape") == scene.mEntityTables.end())
+            return {};
+        
+        return new LineShapeTable(scene.mEntityTables["Vim.LineShape"], scene.mStrings);
+    }
+    
+    class LineShapeVertexBuffer
+    {
+    public:
+        int mIndex;
+        Vector3 mVertex;
+        
+        LineShapeVertexBuffer() {}
+    };
+    
+    class LineShapeVertexBufferTable
+    {
+        EntityTable& mEntityTable;
+        std::vector<const bfast::byte*>& mStrings;
+    public:
+        LineShapeVertexBufferTable(EntityTable& entityTable, std::vector<const bfast::byte*>& strings):
+            mEntityTable(entityTable), mStrings(strings) {}
+        
+        size_t GetCount()
+        {
+            return mEntityTable.get_count();
+        }
+        
+        LineShapeVertexBuffer* Get(int lineShapeVertexBufferIndex)
+        {
+            LineShapeVertexBuffer* lineShapeVertexBuffer = new LineShapeVertexBuffer();
+            lineShapeVertexBuffer->mIndex = lineShapeVertexBufferIndex;
+            lineShapeVertexBuffer->mVertex = GetVertex(lineShapeVertexBufferIndex);
+            return lineShapeVertexBuffer;
+        }
+        
+        std::vector<LineShapeVertexBuffer>* GetAll()
+        {
+            bool existsVertex = mEntityTable.column_exists("vector3:Vertex");
+            
+            const auto count = GetCount();
+            
+            std::vector<LineShapeVertexBuffer>* lineShapeVertexBuffer = new std::vector<LineShapeVertexBuffer>();
+            lineShapeVertexBuffer->reserve(count);
+            
+            Vector3* vertexData = new Vector3[count];
+            if (mEntityTable.column_exists("vector3:Vertex")) {
+                memcpy(vertexData, mEntityTable.mDataColumns["vector3:Vertex"].begin(), count * sizeof(Vector3));
+            }
+            
+            for (int i = 0; i < count; ++i)
+            {
+                LineShapeVertexBuffer entity;
+                entity.mIndex = i;
+                if (existsVertex)
+                    entity.mVertex = vertexData[i];
+                lineShapeVertexBuffer->push_back(entity);
+            }
+            
+            delete[] vertexData;
+            
+            return lineShapeVertexBuffer;
+        }
+        
+        Vector3 GetVertex(int lineShapeVertexBufferIndex)
+        {
+            if (lineShapeVertexBufferIndex < 0 || lineShapeVertexBufferIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("vector3:Vertex")) {
+                return *reinterpret_cast<Vector3*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["vector3:Vertex"].begin() + lineShapeVertexBufferIndex * sizeof(Vector3)));
+            }
+            
+            return {};
+        }
+        
+        std::vector<Vector3>* GetAllVertex()
+        {
+            const auto count = GetCount();
+            
+            Vector3* vertexData = new Vector3[count];
+            if (mEntityTable.column_exists("vector3:Vertex")) {
+                memcpy(vertexData, mEntityTable.mDataColumns["vector3:Vertex"].begin(), count * sizeof(Vector3));
+            }
+            
+            std::vector<Vector3>* result = new std::vector<Vector3>(vertexData, vertexData + count);
+            
+            delete[] vertexData;
+            
+            return result;
+        }
+        
+    };
+    
+    static LineShapeVertexBufferTable* GetLineShapeVertexBufferTable(Scene& scene)
+    {
+        if (scene.mEntityTables.find("Vim.LineShapeVertexBuffer") == scene.mEntityTables.end())
+            return {};
+        
+        return new LineShapeVertexBufferTable(scene.mEntityTables["Vim.LineShapeVertexBuffer"], scene.mStrings);
+    }
+    
     DocumentModel::DocumentModel(Scene& scene)
     {
         mAsset = GetAssetTable(scene);
@@ -14274,6 +14585,8 @@ namespace Vim
         mFaceMesh = GetFaceMeshTable(scene);
         mFaceMeshIndexBuffer = GetFaceMeshIndexBufferTable(scene);
         mFaceMeshVertexBuffer = GetFaceMeshVertexBufferTable(scene);
+        mLineShape = GetLineShapeTable(scene);
+        mLineShapeVertexBuffer = GetLineShapeVertexBufferTable(scene);
     }
     
     DocumentModel::~DocumentModel()
@@ -14335,6 +14648,8 @@ namespace Vim
         delete mFaceMesh;
         delete mFaceMeshIndexBuffer;
         delete mFaceMeshVertexBuffer;
+        delete mLineShape;
+        delete mLineShapeVertexBuffer;
     }
 }
 

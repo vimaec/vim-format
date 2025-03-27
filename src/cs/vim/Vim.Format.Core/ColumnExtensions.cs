@@ -19,6 +19,7 @@ namespace Vim.Format
                 new ColumnInfo(ColumnType.DataColumn, VimConstants.DoubleColumnNameTypePrefix, typeof(double)),
                 new ColumnInfo(ColumnType.DataColumn, VimConstants.FloatColumnNameTypePrefix, typeof(float)),
                 new ColumnInfo(ColumnType.DataColumn, VimConstants.Vector3ColumnNameTypePrefix, typeof(Vector3)),
+                new ColumnInfo(ColumnType.DataColumn, VimConstants.Vector4ColumnNameTypePrefix, typeof(Vector4)),
                 new ColumnInfo(ColumnType.DataColumn, VimConstants.Matrix4x4ColumnNameTypePrefix, typeof(Matrix4x4))
             };
 

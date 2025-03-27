@@ -10977,6 +10977,315 @@ export class FaceMeshVertexBufferTable implements IFaceMeshVertexBufferTable {
     
 }
 
+export interface ILineShape {
+    index: number
+    color?: Vector4
+    width?: number
+    
+    lineShapeVertexBufferStartIndex?: number
+    lineShapeVertexBufferStart?: ILineShapeVertexBuffer
+    lineShapeVertexBufferEndIndex?: number
+    lineShapeVertexBufferEnd?: ILineShapeVertexBuffer
+    viewIndex?: number
+    view?: IView
+    elementIndex?: number
+    element?: IElement
+}
+
+export interface ILineShapeTable {
+    getCount(): Promise<number>
+    get(lineShapeIndex: number): Promise<ILineShape>
+    getAll(): Promise<ILineShape[]>
+    
+    getColor(lineShapeIndex: number): Promise<Vector4 | undefined>
+    getAllColor(): Promise<Vector4[] | undefined>
+    getWidth(lineShapeIndex: number): Promise<number | undefined>
+    getAllWidth(): Promise<number[] | undefined>
+    
+    getLineShapeVertexBufferStartIndex(lineShapeIndex: number): Promise<number | undefined>
+    getAllLineShapeVertexBufferStartIndex(): Promise<number[] | undefined>
+    getLineShapeVertexBufferStart(lineShapeIndex: number): Promise<ILineShapeVertexBuffer | undefined>
+    getLineShapeVertexBufferEndIndex(lineShapeIndex: number): Promise<number | undefined>
+    getAllLineShapeVertexBufferEndIndex(): Promise<number[] | undefined>
+    getLineShapeVertexBufferEnd(lineShapeIndex: number): Promise<ILineShapeVertexBuffer | undefined>
+    getViewIndex(lineShapeIndex: number): Promise<number | undefined>
+    getAllViewIndex(): Promise<number[] | undefined>
+    getView(lineShapeIndex: number): Promise<IView | undefined>
+    getElementIndex(lineShapeIndex: number): Promise<number | undefined>
+    getAllElementIndex(): Promise<number[] | undefined>
+    getElement(lineShapeIndex: number): Promise<IElement | undefined>
+}
+
+export class LineShape implements ILineShape {
+    index: number
+    color?: Vector4
+    width?: number
+    
+    lineShapeVertexBufferStartIndex?: number
+    lineShapeVertexBufferStart?: ILineShapeVertexBuffer
+    lineShapeVertexBufferEndIndex?: number
+    lineShapeVertexBufferEnd?: ILineShapeVertexBuffer
+    viewIndex?: number
+    view?: IView
+    elementIndex?: number
+    element?: IElement
+    
+    static async createFromTable(table: ILineShapeTable, index: number): Promise<ILineShape> {
+        let result = new LineShape()
+        result.index = index
+        
+        await Promise.all([
+            table.getColor(index).then(v => result.color = v),
+            table.getWidth(index).then(v => result.width = v),
+            table.getLineShapeVertexBufferStartIndex(index).then(v => result.lineShapeVertexBufferStartIndex = v),
+            table.getLineShapeVertexBufferEndIndex(index).then(v => result.lineShapeVertexBufferEndIndex = v),
+            table.getViewIndex(index).then(v => result.viewIndex = v),
+            table.getElementIndex(index).then(v => result.elementIndex = v),
+        ])
+        
+        return result
+    }
+}
+
+export class LineShapeTable implements ILineShapeTable {
+    private document: VimDocument
+    private entityTable: EntityTable
+    
+    static async createFromDocument(document: VimDocument): Promise<ILineShapeTable | undefined> {
+        const entity = await document.entities.getBfast("Vim.LineShape")
+        
+        if (!entity) {
+            return undefined
+        }
+        
+        let table = new LineShapeTable()
+        table.document = document
+        table.entityTable = new EntityTable(entity, document.strings)
+        
+        return table
+    }
+    
+    getCount(): Promise<number> {
+        return this.entityTable.getCount()
+    }
+    
+    async get(lineShapeIndex: number): Promise<ILineShape> {
+        return await LineShape.createFromTable(this, lineShapeIndex)
+    }
+    
+    async getAll(): Promise<ILineShape[]> {
+        const localTable = await this.entityTable.getLocal()
+        
+        let color: Vector4[] | undefined
+        let width: number[] | undefined
+        let lineShapeVertexBufferStartIndex: number[] | undefined
+        let lineShapeVertexBufferEndIndex: number[] | undefined
+        let viewIndex: number[] | undefined
+        let elementIndex: number[] | undefined
+        
+        await Promise.all([
+            (async () => { color = (await localTable.getVector4Array("vector4:Color")) })(),
+            (async () => { width = (await localTable.getNumberArray("double:Width")) })(),
+            (async () => { lineShapeVertexBufferStartIndex = (await localTable.getNumberArray("index:Vim.LineShapeVertexBuffer:LineShapeVertexBufferStart")) })(),
+            (async () => { lineShapeVertexBufferEndIndex = (await localTable.getNumberArray("index:Vim.LineShapeVertexBuffer:LineShapeVertexBufferEnd")) })(),
+            (async () => { viewIndex = (await localTable.getNumberArray("index:Vim.View:View")) })(),
+            (async () => { elementIndex = (await localTable.getNumberArray("index:Vim.Element:Element")) })(),
+        ])
+        
+        let lineShape: ILineShape[] = []
+        
+        const rowCount = await this.getCount()
+        for (let i = 0; i < rowCount; i++) {
+            lineShape.push({
+                index: i,
+                color: color ? color[i] : undefined,
+                width: width ? width[i] : undefined,
+                lineShapeVertexBufferStartIndex: lineShapeVertexBufferStartIndex ? lineShapeVertexBufferStartIndex[i] : undefined,
+                lineShapeVertexBufferEndIndex: lineShapeVertexBufferEndIndex ? lineShapeVertexBufferEndIndex[i] : undefined,
+                viewIndex: viewIndex ? viewIndex[i] : undefined,
+                elementIndex: elementIndex ? elementIndex[i] : undefined
+            })
+        }
+        
+        return lineShape
+    }
+    
+    async getColor(lineShapeIndex: number): Promise<Vector4 | undefined> {
+        return (await this.entityTable.getVector4(lineShapeIndex, "vector4:Color"))
+    }
+    
+    async getAllColor(): Promise<Vector4[] | undefined> {
+        return (await this.entityTable.getVector4Array("vector4:Color"))
+    }
+    
+    async getWidth(lineShapeIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(lineShapeIndex, "double:Width"))
+    }
+    
+    async getAllWidth(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:Width"))
+    }
+    
+    async getLineShapeVertexBufferStartIndex(lineShapeIndex: number): Promise<number | undefined> {
+        return await this.entityTable.getNumber(lineShapeIndex, "index:Vim.LineShapeVertexBuffer:LineShapeVertexBufferStart")
+    }
+    
+    async getAllLineShapeVertexBufferStartIndex(): Promise<number[] | undefined> {
+        return await this.entityTable.getNumberArray("index:Vim.LineShapeVertexBuffer:LineShapeVertexBufferStart")
+    }
+    
+    async getLineShapeVertexBufferStart(lineShapeIndex: number): Promise<ILineShapeVertexBuffer | undefined> {
+        const index = await this.getLineShapeVertexBufferStartIndex(lineShapeIndex)
+        
+        if (index === undefined) {
+            return undefined
+        }
+        
+        return await this.document.lineShapeVertexBuffer?.get(index)
+    }
+    
+    async getLineShapeVertexBufferEndIndex(lineShapeIndex: number): Promise<number | undefined> {
+        return await this.entityTable.getNumber(lineShapeIndex, "index:Vim.LineShapeVertexBuffer:LineShapeVertexBufferEnd")
+    }
+    
+    async getAllLineShapeVertexBufferEndIndex(): Promise<number[] | undefined> {
+        return await this.entityTable.getNumberArray("index:Vim.LineShapeVertexBuffer:LineShapeVertexBufferEnd")
+    }
+    
+    async getLineShapeVertexBufferEnd(lineShapeIndex: number): Promise<ILineShapeVertexBuffer | undefined> {
+        const index = await this.getLineShapeVertexBufferEndIndex(lineShapeIndex)
+        
+        if (index === undefined) {
+            return undefined
+        }
+        
+        return await this.document.lineShapeVertexBuffer?.get(index)
+    }
+    
+    async getViewIndex(lineShapeIndex: number): Promise<number | undefined> {
+        return await this.entityTable.getNumber(lineShapeIndex, "index:Vim.View:View")
+    }
+    
+    async getAllViewIndex(): Promise<number[] | undefined> {
+        return await this.entityTable.getNumberArray("index:Vim.View:View")
+    }
+    
+    async getView(lineShapeIndex: number): Promise<IView | undefined> {
+        const index = await this.getViewIndex(lineShapeIndex)
+        
+        if (index === undefined) {
+            return undefined
+        }
+        
+        return await this.document.view?.get(index)
+    }
+    
+    async getElementIndex(lineShapeIndex: number): Promise<number | undefined> {
+        return await this.entityTable.getNumber(lineShapeIndex, "index:Vim.Element:Element")
+    }
+    
+    async getAllElementIndex(): Promise<number[] | undefined> {
+        return await this.entityTable.getNumberArray("index:Vim.Element:Element")
+    }
+    
+    async getElement(lineShapeIndex: number): Promise<IElement | undefined> {
+        const index = await this.getElementIndex(lineShapeIndex)
+        
+        if (index === undefined) {
+            return undefined
+        }
+        
+        return await this.document.element?.get(index)
+    }
+    
+}
+
+export interface ILineShapeVertexBuffer {
+    index: number
+    vertex?: Vector3
+}
+
+export interface ILineShapeVertexBufferTable {
+    getCount(): Promise<number>
+    get(lineShapeVertexBufferIndex: number): Promise<ILineShapeVertexBuffer>
+    getAll(): Promise<ILineShapeVertexBuffer[]>
+    
+    getVertex(lineShapeVertexBufferIndex: number): Promise<Vector3 | undefined>
+    getAllVertex(): Promise<Vector3[] | undefined>
+}
+
+export class LineShapeVertexBuffer implements ILineShapeVertexBuffer {
+    index: number
+    vertex?: Vector3
+    
+    static async createFromTable(table: ILineShapeVertexBufferTable, index: number): Promise<ILineShapeVertexBuffer> {
+        let result = new LineShapeVertexBuffer()
+        result.index = index
+        
+        await Promise.all([
+            table.getVertex(index).then(v => result.vertex = v),
+        ])
+        
+        return result
+    }
+}
+
+export class LineShapeVertexBufferTable implements ILineShapeVertexBufferTable {
+    private entityTable: EntityTable
+    
+    static async createFromDocument(document: VimDocument): Promise<ILineShapeVertexBufferTable | undefined> {
+        const entity = await document.entities.getBfast("Vim.LineShapeVertexBuffer")
+        
+        if (!entity) {
+            return undefined
+        }
+        
+        let table = new LineShapeVertexBufferTable()
+        table.entityTable = new EntityTable(entity, document.strings)
+        
+        return table
+    }
+    
+    getCount(): Promise<number> {
+        return this.entityTable.getCount()
+    }
+    
+    async get(lineShapeVertexBufferIndex: number): Promise<ILineShapeVertexBuffer> {
+        return await LineShapeVertexBuffer.createFromTable(this, lineShapeVertexBufferIndex)
+    }
+    
+    async getAll(): Promise<ILineShapeVertexBuffer[]> {
+        const localTable = await this.entityTable.getLocal()
+        
+        let vertex: Vector3[] | undefined
+        
+        await Promise.all([
+            (async () => { vertex = (await localTable.getVector3Array("vector3:Vertex")) })(),
+        ])
+        
+        let lineShapeVertexBuffer: ILineShapeVertexBuffer[] = []
+        
+        const rowCount = await this.getCount()
+        for (let i = 0; i < rowCount; i++) {
+            lineShapeVertexBuffer.push({
+                index: i,
+                vertex: vertex ? vertex[i] : undefined
+            })
+        }
+        
+        return lineShapeVertexBuffer
+    }
+    
+    async getVertex(lineShapeVertexBufferIndex: number): Promise<Vector3 | undefined> {
+        return (await this.entityTable.getVector3(lineShapeVertexBufferIndex, "vector3:Vertex"))
+    }
+    
+    async getAllVertex(): Promise<Vector3[] | undefined> {
+        return (await this.entityTable.getVector3Array("vector3:Vertex"))
+    }
+    
+}
+
 export class VimDocument {
     asset: IAssetTable | undefined
     displayUnit: IDisplayUnitTable | undefined
@@ -11035,6 +11344,8 @@ export class VimDocument {
     faceMesh: IFaceMeshTable | undefined
     faceMeshIndexBuffer: IFaceMeshIndexBufferTable | undefined
     faceMeshVertexBuffer: IFaceMeshVertexBufferTable | undefined
+    lineShape: ILineShapeTable | undefined
+    lineShapeVertexBuffer: ILineShapeVertexBufferTable | undefined
     
     entities: BFast
     strings: string[] | undefined
@@ -11109,6 +11420,8 @@ export class VimDocument {
         doc.faceMesh = await FaceMeshTable.createFromDocument(doc)
         doc.faceMeshIndexBuffer = await FaceMeshIndexBufferTable.createFromDocument(doc)
         doc.faceMeshVertexBuffer = await FaceMeshVertexBufferTable.createFromDocument(doc)
+        doc.lineShape = await LineShapeTable.createFromDocument(doc)
+        doc.lineShapeVertexBuffer = await LineShapeVertexBufferTable.createFromDocument(doc)
         
         return doc
     }

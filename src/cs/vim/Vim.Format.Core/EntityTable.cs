@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Linq;
 using Vim.BFast;
 using Vim.LinqArray;
@@ -60,6 +59,6 @@ namespace Vim.Format
         }
 
         public IArray<T> GetDataColumnValues<T>(string columnName) where T : unmanaged
-            => GetDataColumnAsTypedArray<T>(columnName).ToIArray();
+            => GetDataColumnAsTypedArray<T>(columnName)?.ToIArray();
     }
 }
