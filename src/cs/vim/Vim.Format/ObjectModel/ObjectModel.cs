@@ -1777,7 +1777,7 @@ namespace Vim.Format.ObjectModel
     /// Represents an element face in a View
     /// </summary>
     [TableName(TableNames.FaceMesh)]
-    // TODO: VimSqlIgnore
+    [VimSqlIgnore]
     public partial class FaceMesh : EntityWithElement
     {
         public Relation<FaceMeshIndexBuffer> _FaceMeshIndexBufferStart;
@@ -1791,6 +1791,7 @@ namespace Vim.Format.ObjectModel
     /// </summary>
     [TableName(TableNames.FaceMeshIndexBuffer)]
     [EntityBuffer]
+    [VimSqlIgnore]
     public partial class FaceMeshIndexBuffer : Entity
     {
         public Relation<FaceMeshVertexBuffer> _VertexIndex;
@@ -1801,6 +1802,7 @@ namespace Vim.Format.ObjectModel
     /// </summary>
     [TableName(TableNames.FaceMeshVertexBuffer)]
     [EntityBuffer]
+    [VimSqlIgnore]
     public partial class FaceMeshVertexBuffer : Entity
     {
         public Vector3 Vertex;
