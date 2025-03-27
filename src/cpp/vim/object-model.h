@@ -13941,8 +13941,8 @@ namespace Vim
         
         std::vector<FaceMesh>* GetAll()
         {
-            bool existsFaceMeshIndexBufferStart = mEntityTable.column_exists("index:Vim.FaceSilhouetteIndexBuffer:FaceMeshIndexBufferStart");
-            bool existsFaceMeshIndexBufferEnd = mEntityTable.column_exists("index:Vim.FaceSilhouetteIndexBuffer:FaceMeshIndexBufferEnd");
+            bool existsFaceMeshIndexBufferStart = mEntityTable.column_exists("index:Vim.FaceMeshIndexBuffer:FaceMeshIndexBufferStart");
+            bool existsFaceMeshIndexBufferEnd = mEntityTable.column_exists("index:Vim.FaceMeshIndexBuffer:FaceMeshIndexBufferEnd");
             bool existsView = mEntityTable.column_exists("index:Vim.View:View");
             bool existsMaterial = mEntityTable.column_exists("index:Vim.Material:Material");
             bool existsElement = mEntityTable.column_exists("index:Vim.Element:Element");
@@ -13952,8 +13952,8 @@ namespace Vim
             std::vector<FaceMesh>* faceMesh = new std::vector<FaceMesh>();
             faceMesh->reserve(count);
             
-            const std::vector<int>& faceMeshIndexBufferStartData = mEntityTable.column_exists("index:Vim.FaceSilhouetteIndexBuffer:FaceMeshIndexBufferStart") ? mEntityTable.mIndexColumns["index:Vim.FaceSilhouetteIndexBuffer:FaceMeshIndexBufferStart"] : std::vector<int>();
-            const std::vector<int>& faceMeshIndexBufferEndData = mEntityTable.column_exists("index:Vim.FaceSilhouetteIndexBuffer:FaceMeshIndexBufferEnd") ? mEntityTable.mIndexColumns["index:Vim.FaceSilhouetteIndexBuffer:FaceMeshIndexBufferEnd"] : std::vector<int>();
+            const std::vector<int>& faceMeshIndexBufferStartData = mEntityTable.column_exists("index:Vim.FaceMeshIndexBuffer:FaceMeshIndexBufferStart") ? mEntityTable.mIndexColumns["index:Vim.FaceMeshIndexBuffer:FaceMeshIndexBufferStart"] : std::vector<int>();
+            const std::vector<int>& faceMeshIndexBufferEndData = mEntityTable.column_exists("index:Vim.FaceMeshIndexBuffer:FaceMeshIndexBufferEnd") ? mEntityTable.mIndexColumns["index:Vim.FaceMeshIndexBuffer:FaceMeshIndexBufferEnd"] : std::vector<int>();
             const std::vector<int>& viewData = mEntityTable.column_exists("index:Vim.View:View") ? mEntityTable.mIndexColumns["index:Vim.View:View"] : std::vector<int>();
             const std::vector<int>& materialData = mEntityTable.column_exists("index:Vim.Material:Material") ? mEntityTable.mIndexColumns["index:Vim.Material:Material"] : std::vector<int>();
             const std::vector<int>& elementData = mEntityTable.column_exists("index:Vim.Element:Element") ? mEntityTable.mIndexColumns["index:Vim.Element:Element"] : std::vector<int>();
@@ -13975,26 +13975,26 @@ namespace Vim
         
         int GetFaceMeshIndexBufferStartIndex(int faceMeshIndex)
         {
-            if (!mEntityTable.column_exists("index:Vim.FaceSilhouetteIndexBuffer:FaceMeshIndexBufferStart")) {
+            if (!mEntityTable.column_exists("index:Vim.FaceMeshIndexBuffer:FaceMeshIndexBufferStart")) {
                 return -1;
             }
             
             if (faceMeshIndex < 0 || faceMeshIndex >= GetCount())
                 return -1;
             
-            return mEntityTable.mIndexColumns["index:Vim.FaceSilhouetteIndexBuffer:FaceMeshIndexBufferStart"][faceMeshIndex];
+            return mEntityTable.mIndexColumns["index:Vim.FaceMeshIndexBuffer:FaceMeshIndexBufferStart"][faceMeshIndex];
         }
         
         int GetFaceMeshIndexBufferEndIndex(int faceMeshIndex)
         {
-            if (!mEntityTable.column_exists("index:Vim.FaceSilhouetteIndexBuffer:FaceMeshIndexBufferEnd")) {
+            if (!mEntityTable.column_exists("index:Vim.FaceMeshIndexBuffer:FaceMeshIndexBufferEnd")) {
                 return -1;
             }
             
             if (faceMeshIndex < 0 || faceMeshIndex >= GetCount())
                 return -1;
             
-            return mEntityTable.mIndexColumns["index:Vim.FaceSilhouetteIndexBuffer:FaceMeshIndexBufferEnd"][faceMeshIndex];
+            return mEntityTable.mIndexColumns["index:Vim.FaceMeshIndexBuffer:FaceMeshIndexBufferEnd"][faceMeshIndex];
         }
         
         int GetViewIndex(int faceMeshIndex)
@@ -14037,10 +14037,10 @@ namespace Vim
     
     static FaceMeshTable* GetFaceMeshTable(Scene& scene)
     {
-        if (scene.mEntityTables.find("Vim.FaceSilhouette") == scene.mEntityTables.end())
+        if (scene.mEntityTables.find("Vim.FaceMesh") == scene.mEntityTables.end())
             return {};
         
-        return new FaceMeshTable(scene.mEntityTables["Vim.FaceSilhouette"], scene.mStrings);
+        return new FaceMeshTable(scene.mEntityTables["Vim.FaceMesh"], scene.mStrings);
     }
     
     class FaceMeshIndexBuffer
@@ -14077,14 +14077,14 @@ namespace Vim
         
         std::vector<FaceMeshIndexBuffer>* GetAll()
         {
-            bool existsVertexIndex = mEntityTable.column_exists("index:Vim.FaceSilhouetteVertexBuffer:VertexIndex");
+            bool existsVertexIndex = mEntityTable.column_exists("index:Vim.FaceMeshVertexBuffer:VertexIndex");
             
             const auto count = GetCount();
             
             std::vector<FaceMeshIndexBuffer>* faceMeshIndexBuffer = new std::vector<FaceMeshIndexBuffer>();
             faceMeshIndexBuffer->reserve(count);
             
-            const std::vector<int>& vertexIndexData = mEntityTable.column_exists("index:Vim.FaceSilhouetteVertexBuffer:VertexIndex") ? mEntityTable.mIndexColumns["index:Vim.FaceSilhouetteVertexBuffer:VertexIndex"] : std::vector<int>();
+            const std::vector<int>& vertexIndexData = mEntityTable.column_exists("index:Vim.FaceMeshVertexBuffer:VertexIndex") ? mEntityTable.mIndexColumns["index:Vim.FaceMeshVertexBuffer:VertexIndex"] : std::vector<int>();
             
             for (int i = 0; i < count; ++i)
             {
@@ -14099,24 +14099,24 @@ namespace Vim
         
         int GetVertexIndexIndex(int faceMeshIndexBufferIndex)
         {
-            if (!mEntityTable.column_exists("index:Vim.FaceSilhouetteVertexBuffer:VertexIndex")) {
+            if (!mEntityTable.column_exists("index:Vim.FaceMeshVertexBuffer:VertexIndex")) {
                 return -1;
             }
             
             if (faceMeshIndexBufferIndex < 0 || faceMeshIndexBufferIndex >= GetCount())
                 return -1;
             
-            return mEntityTable.mIndexColumns["index:Vim.FaceSilhouetteVertexBuffer:VertexIndex"][faceMeshIndexBufferIndex];
+            return mEntityTable.mIndexColumns["index:Vim.FaceMeshVertexBuffer:VertexIndex"][faceMeshIndexBufferIndex];
         }
         
     };
     
     static FaceMeshIndexBufferTable* GetFaceMeshIndexBufferTable(Scene& scene)
     {
-        if (scene.mEntityTables.find("Vim.FaceSilhouetteIndexBuffer") == scene.mEntityTables.end())
+        if (scene.mEntityTables.find("Vim.FaceMeshIndexBuffer") == scene.mEntityTables.end())
             return {};
         
-        return new FaceMeshIndexBufferTable(scene.mEntityTables["Vim.FaceSilhouetteIndexBuffer"], scene.mStrings);
+        return new FaceMeshIndexBufferTable(scene.mEntityTables["Vim.FaceMeshIndexBuffer"], scene.mStrings);
     }
     
     class FaceMeshVertexBuffer
@@ -14209,10 +14209,10 @@ namespace Vim
     
     static FaceMeshVertexBufferTable* GetFaceMeshVertexBufferTable(Scene& scene)
     {
-        if (scene.mEntityTables.find("Vim.FaceSilhouetteVertexBuffer") == scene.mEntityTables.end())
+        if (scene.mEntityTables.find("Vim.FaceMeshVertexBuffer") == scene.mEntityTables.end())
             return {};
         
-        return new FaceMeshVertexBufferTable(scene.mEntityTables["Vim.FaceSilhouetteVertexBuffer"], scene.mStrings);
+        return new FaceMeshVertexBufferTable(scene.mEntityTables["Vim.FaceMeshVertexBuffer"], scene.mStrings);
     }
     
     DocumentModel::DocumentModel(Scene& scene)
