@@ -36,43 +36,39 @@ namespace Vim.Format
         /// </summary>
         public class Mesh
         {
-            protected List<Vector3> _vertices = new List<Vector3>();
-            public IReadOnlyList<Vector3> Vertices => _vertices;
+            public List<Vector3> Vertices { get; set; }
+            public List<int> Indices { get; set; }
+            public List<int> FaceMaterials { get; set; }
+            public List<Vector4> Colors { get; set; }
+            public List<Vector2> UVs { get; set; }
 
-            protected List<int> _indices = new List<int>();
-            public IReadOnlyList<int> Indices => _indices;
-
-            protected List<int> _faceMaterials = new List<int>();
-            public IReadOnlyList<int> FaceMaterials => _faceMaterials;
-
-            protected List<Vector4> _colors = new List<Vector4>();
-            public IReadOnlyList<Vector4> Colors => _colors;
-
-            protected List<Vector2> _uvs = new List<Vector2>();
-            public IReadOnlyList<Vector2> UVs => _uvs;
-
-            public Mesh(List<Vector3> vertices = null, List<int> indices = null, List<int> faceMaterials = null, List<Vector4> colors = null, List<Vector2> uvs = null)
+            public Mesh(
+                List<Vector3> vertices = null,
+                List<int> indices = null,
+                List<int> faceMaterials = null,
+                List<Vector4> colors = null,
+                List<Vector2> uvs = null)
             {
-                _vertices = vertices ?? new List<Vector3>();
-                _indices = indices ?? new List<int>();
+                Vertices = vertices ?? new List<Vector3>();
+                Indices = indices ?? new List<int>();
 
-                if (_indices.Any(i => i < 0 && i >= _vertices.Count))
+                if (Indices.Any(i => i < 0 && i >= Vertices.Count))
                     throw new Exception($"Invalid mesh. Indices out of vertex range.");
 
-                if (_indices.Count % 3 != 0)
+                if (Indices.Count % 3 != 0)
                     throw new Exception("indices.Count must be a multiple of 3.");
 
-                _faceMaterials = faceMaterials ?? new List<int>(Enumerable.Repeat(-1, _indices.Count / 3));
+                FaceMaterials = faceMaterials ?? new List<int>(Enumerable.Repeat(-1, Indices.Count / 3));
 
-                if (_faceMaterials.Count * 3 != _indices.Count)
+                if (FaceMaterials.Count * 3 != Indices.Count)
                     throw new Exception("faceMaterials.Count must be indices.Count * 3");
 
-                _colors = colors ?? new List<Vector4>();
-                _uvs = uvs ?? new List<Vector2>();
+                Colors = colors ?? new List<Vector4>();
+                UVs = uvs ?? new List<Vector2>();
             }
 
             public void SetMeshMaterial(int material)
-                => _faceMaterials = Enumerable.Repeat(material, _indices.Count / 3).ToList();
+                => FaceMaterials = Enumerable.Repeat(material, Indices.Count / 3).ToList();
 
             public void AppendFaces(IList<int> indices, IList<int> materials)
             {
@@ -88,17 +84,17 @@ namespace Vim.Format
 
             public void AppendFace(int v0, int v1, int v2, int material)
             {
-                _indices.Add(v0);
-                _indices.Add(v1);
-                _indices.Add(v2);
-                _faceMaterials.Add(material);
+                Indices.Add(v0);
+                Indices.Add(v1);
+                Indices.Add(v2);
+                FaceMaterials.Add(material);
             }
 
             public void AppendVertices(IEnumerable<Vector3> vertices)
-                => _vertices.AddRange(vertices);
+                => Vertices.AddRange(vertices);
 
             public void AppendUVs(IEnumerable<Vector2> uvs)
-                => _uvs.AddRange(uvs);
+                => UVs.AddRange(uvs);
 
             public SubdividedMesh Subdivide()
                 => new SubdividedMesh(this);
@@ -109,10 +105,10 @@ namespace Vim.Format
         /// </summary>
         public class SubdividedMesh
         {
-            public IReadOnlyList<int> Indices { get; private set; }
-            public IReadOnlyList<Vector3> Vertices { get; private set; }
-            public IReadOnlyList<int> SubmeshesIndexOffset { get; private set; }
-            public IReadOnlyList<int> SubmeshMaterials { get; private set; }
+            public IReadOnlyList<int> Indices { get; }
+            public IReadOnlyList<Vector3> Vertices { get; }
+            public IReadOnlyList<int> SubmeshesIndexOffset { get; }
+            public IReadOnlyList<int> SubmeshMaterials { get; }
 
             public SubdividedMesh(Mesh mesh)
             {
