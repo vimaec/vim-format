@@ -15,6 +15,10 @@ namespace Vim.Format.ObjectModel
         public static class History
         {
             // Schema additions
+            //   TODO
+            public const string v5_6_0 = "5.6.0";
+
+            // Schema additions
             //   Vim.Level__double:ProjectElevation
             public const string v5_5_0 = "5.5.0";
 
@@ -171,7 +175,8 @@ namespace Vim.Format.ObjectModel
         // ReSharper enable MemberHidesStaticFromOuterClass
 
         // [MAINTAIN] Add more object model SerializableVersions below and update the current one.
-        public static SerializableVersion Current => v5_5_0;
+        public static SerializableVersion Current => v5_6_0;
+        public static SerializableVersion v5_6_0 => SerializableVersion.Parse(History.v5_6_0);
         public static SerializableVersion v5_5_0 => SerializableVersion.Parse(History.v5_5_0);
         public static SerializableVersion v5_4_0 => SerializableVersion.Parse(History.v5_4_0);
         public static SerializableVersion v5_3_0 => SerializableVersion.Parse(History.v5_3_0);
@@ -934,6 +939,7 @@ namespace Vim.Format.ObjectModel
     /// An associative table binding a Shape to a View.
     /// </summary>
     [TableName(TableNames.ShapeInView)]
+    [Obsolete("Moved to LineShape")]
     public partial class ShapeInView : Entity, IStorageKey
     {
         public Relation<Shape> _Shape;
@@ -1264,12 +1270,12 @@ namespace Vim.Format.ObjectModel
     /// The ordering and number of Shapes matches the ordering and number of shapes in the G3D buffer.
     /// </summary>
     [TableName(TableNames.Shape)]
-    [G3dAttributeReference("g3d:shape:vertexoffset:0:int32:1", G3dAttributeReferenceMultiplicity.OneToOne, true)]
-    [G3dAttributeReference("g3d:shape:color:0:float32:4", G3dAttributeReferenceMultiplicity.OneToOne, true)]
-    [G3dAttributeReference("g3d:shape:width:0:float32:1", G3dAttributeReferenceMultiplicity.OneToOne, true)]
+    //[G3dAttributeReference("g3d:shape:vertexoffset:0:int32:1", G3dAttributeReferenceMultiplicity.OneToOne, true)]
+    //[G3dAttributeReference("g3d:shape:color:0:float32:4", G3dAttributeReferenceMultiplicity.OneToOne, true)]
+    //[G3dAttributeReference("g3d:shape:width:0:float32:1", G3dAttributeReferenceMultiplicity.OneToOne, true)]
+    [Obsolete("Replaced with LineShape")]
     public partial class Shape : EntityWithElement
-    {
-    }
+    { }
 
     /// <summary>
     /// Represents a collection of shapes associated with an Element.
@@ -1277,9 +1283,10 @@ namespace Vim.Format.ObjectModel
     /// faces may have a number of curve loops which may designate the contour of the face and its holes.
     /// </summary>
     [TableName(TableNames.ShapeCollection)]
-    [G3dAttributeReference("g3d:shape:vertexoffset:0:int32:1", G3dAttributeReferenceMultiplicity.OneToMany, true)]
-    [G3dAttributeReference("g3d:shape:color:0:float32:4", G3dAttributeReferenceMultiplicity.OneToMany, true)]
-    [G3dAttributeReference("g3d:shape:width:0:float32:1", G3dAttributeReferenceMultiplicity.OneToMany, true)]
+    //[G3dAttributeReference("g3d:shape:vertexoffset:0:int32:1", G3dAttributeReferenceMultiplicity.OneToMany, true)]
+    //[G3dAttributeReference("g3d:shape:color:0:float32:4", G3dAttributeReferenceMultiplicity.OneToMany, true)]
+    //[G3dAttributeReference("g3d:shape:width:0:float32:1", G3dAttributeReferenceMultiplicity.OneToMany, true)]
+    [Obsolete("Replaced with FaceMesh")]
     public partial class ShapeCollection : EntityWithElement
     {
     }
@@ -1288,6 +1295,7 @@ namespace Vim.Format.ObjectModel
     /// An associative table binding a Shape to a ShapeCollection.
     /// </summary>
     [TableName(TableNames.ShapeInShapeCollection)]
+    [Obsolete("Replaced with FaceMesh")]
     public partial class ShapeInShapeCollection : Entity, IStorageKey
     {
         public Relation<Shape> _Shape;
@@ -1765,6 +1773,146 @@ namespace Vim.Format.ObjectModel
         public string Address;
 
         public Relation<Site> _Site;
+    }
+
+
+    TODO // Table names
+    /// <summary>
+    /// A group of instances which represents an element in a view.
+    /// </summary>
+    public partial class InstanceGroup : EntityWithElement
+    {
+        public int InstanceFlags; // None | Hidden | IsRoom | IsLevel  ... // 32
+        public Relation<View> _View; // Optional for IFC case // 32
+        public Relation<Transform> _Transform; // 32
+        public Relation<InstanceIndex> _InstanceIndexStart; // 32
+        public int InstanceIndexCount; // 32
+    }
+
+    /// <summary>
+    /// Contains sequences of instance indices. Referenced by instance group.
+    /// </summary>
+    public partial class InstanceIndex : Entity
+    {
+        public Relation<Instance> _Instance;
+    }
+
+    /// <summary>
+    /// An instance of a mesh with a local transform.
+    /// </summary>
+    public partial class Instance : Entity
+    {
+        public Relation<Mesh> _Mesh;
+        public Relation<Material> _Material;
+        public Relation<Transform> _LocalTransform;
+    }
+
+    /// <summary>
+    /// A mesh composed of vertex indices and vertices.
+    /// </summary>
+    public partial class Mesh : Entity
+    {
+        public Relation<MeshIndexBuffer> _MeshIndexBufferStart;
+        public int MeshIndexBufferCount;
+        public Relation<MeshVertexBuffer> _MeshVertexBufferStart;
+        public int MeshVertexBufferCount;
+    }
+
+    /// <summary>
+    /// Contains sequences of vertex indices. Referenced by meshes.
+    /// </summary>
+    public partial class MeshIndexBuffer : Entity
+    {
+        // ex: [ ..., 10300, 10301, 10302, 10300, 10302, 10303, ...] <-- indexes into MeshVertexBuffer
+        public Relation<MeshVertexBuffer> _VertexIndex;
+    }
+
+    /// <summary>
+    /// Contains sequences of vertices. Referenced by meshes.
+    /// </summary>
+    public partial class MeshVertexBuffer : Entity
+    {
+        public Vector3 Vertex;
+    }
+
+    /// <summary>
+    /// Transformation matrices.
+    /// </summary>
+    public partial class Transform : Entity
+    {
+        public Matrix4x4 Matrix4x4;
+    }
+
+    //[TableName(TableNames.Instance)]
+    //[VimSqlIgnore]
+    //public partial class Instance : EntityWithElement
+    //{
+    //    public Matrix4x4 Transform;
+    //    public int InstanceFlags;
+    //    public Relation<View> _View; // Optional for IFC case
+    //    public Relation<Material> _Material;
+    //    public Relation<Mesh> _Mesh;
+    //}
+
+    ///// <summary>
+    ///// Represents a mesh
+    ///// </summary>
+    //[TableName(TableNames.Mesh)]
+    //[VimSqlIgnore]
+    //public partial class Mesh : Entity
+    //{
+    //    public Relation<MeshIndexBuffer> _MeshIndexBufferStart;
+    //    public Relation<MeshIndexBuffer> _MeshIndexBufferEnd;
+    //    public Relation<MeshVertexBuffer> _MeshVertexBufferStart;
+    //    public Relation<MeshVertexBuffer> _MeshVertexBufferEnd;
+    //}
+
+    ///// <summary>
+    ///// Represents a continuous index buffer of triangular meshes.
+    ///// </summary>
+    //[TableName(TableNames.MeshIndexBuffer)]
+    //[EntityBuffer]
+    //[VimSqlIgnore]
+    //public partial class MeshIndexBuffer : Entity
+    //{
+    //    // ex: [ ..., 10300, 10301, 10302, 10300, 10302, 10303, ...] <-- indexes into the VertexBuffer
+    //    public Relation<MeshVertexBuffer> _VertexIndex;
+    //}
+
+    ///// <summary>
+    ///// Represents a continuous vertex buffer.
+    ///// </summary>
+    //[TableName(TableNames.MeshVertexBuffer)]
+    //[EntityBuffer]
+    //[VimSqlIgnore]
+    //public partial class MeshVertexBuffer : Entity
+    //{
+    //    public Vector3 Vertex;
+    //}
+
+    /// <summary>
+    /// Represents a sequence of points connected by line segments
+    /// </summary>
+    [TableName(TableNames.LineShape)]
+    [VimSqlIgnore]
+    public partial class LineShape : EntityWithElement
+    {
+        public Vector4 Color; // [0..1f] per XYZW component. W component is alpha (0f = transparent, 1f = opaque).
+        public double Width;
+        public Relation<LineShapeVertexBuffer> _LineShapeVertexBufferStart;
+        public Relation<LineShapeVertexBuffer> _LineShapeVertexBufferEnd;
+        public Relation<View> _View;
+    }
+
+    /// <summary>
+    /// Represents the vertex buffer for LineShapes
+    /// </summary>
+    [TableName(TableNames.LineShapeVertexBuffer)]
+    [EntityBuffer]
+    [VimSqlIgnore]
+    public partial class LineShapeVertexBuffer : Entity
+    {
+        public Vector3 Vertex;
     }
 
     /// <summary>

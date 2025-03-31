@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using Vim.BFast;
 using Vim.LinqArray;
+using Vim.Math3d;
 
 namespace Vim.Format
 {
@@ -70,6 +71,12 @@ namespace Vim.Format
                     return dataColumn.AsArray<float>().ElementAtOrDefault(rowIndex);
                 case VimConstants.DoubleColumnNameTypePrefix:
                     return dataColumn.AsArray<double>().ElementAtOrDefault(rowIndex);
+                case VimConstants.Vector3ColumnNameTypePrefix:
+                    return dataColumn.AsArray<Vector3>().ElementAtOrDefault(rowIndex);
+                case VimConstants.Vector4ColumnNameTypePrefix:
+                    return dataColumn.AsArray<Vector4>().ElementAtOrDefault(rowIndex);
+                case VimConstants.Matrix4x4ColumnNameTypePrefix:
+                    return dataColumn.AsArray<Matrix4x4>().ElementAtOrDefault(rowIndex);
                 default:
                     return null;
             }
@@ -92,6 +99,12 @@ namespace Vim.Format
                     return new float[length].ToBuffer();
                 case (VimConstants.DoubleColumnNameTypePrefix):
                     return new double[length].ToBuffer();
+                case (VimConstants.Vector3ColumnNameTypePrefix):
+                    return new Vector3[length].ToBuffer();
+                case (VimConstants.Vector4ColumnNameTypePrefix):
+                    return new Vector4[length].ToBuffer();
+                case (VimConstants.Matrix4x4ColumnNameTypePrefix):
+                    return new Matrix4x4[length].ToBuffer();
                 default:
                     throw new Exception($"{nameof(CreateDefaultDataColumnBuffer)} - {UnknownNamedBufferPrefix}");
             }
@@ -111,6 +124,12 @@ namespace Vim.Format
                     return (dataColumn.Data as float[]).RemapData(remapping).ToBuffer();
                 case (VimConstants.ByteColumnNameTypePrefix):
                     return (dataColumn.Data as byte[]).RemapData(remapping).ToBuffer();
+                case (VimConstants.Vector3ColumnNameTypePrefix):
+                    return (dataColumn.Data as Vector3[]).RemapData(remapping).ToBuffer();
+                case (VimConstants.Vector4ColumnNameTypePrefix):
+                    return (dataColumn.Data as Vector4[]).RemapData(remapping).ToBuffer();
+                case (VimConstants.Matrix4x4ColumnNameTypePrefix):
+                    return (dataColumn.Data as Matrix4x4[]).RemapData(remapping).ToBuffer();
                 default:
                     throw new Exception($"{nameof(CopyDataColumn)} - {UnknownNamedBufferPrefix}");
             }
@@ -139,6 +158,12 @@ namespace Vim.Format
                     return thisBuffer.Concat<float>(otherBuffer);
                 case (VimConstants.DoubleColumnNameTypePrefix):
                     return thisBuffer.Concat<double>(otherBuffer);
+                case (VimConstants.Vector3ColumnNameTypePrefix):
+                    return thisBuffer.Concat<Vector3>(otherBuffer);
+                case (VimConstants.Vector4ColumnNameTypePrefix):
+                    return thisBuffer.Concat<Vector4>(otherBuffer);
+                case (VimConstants.Matrix4x4ColumnNameTypePrefix):
+                    return thisBuffer.Concat<Matrix4x4>(otherBuffer);
                 default:
                     throw new Exception($"{nameof(ConcatDataColumnBuffers)} - {UnknownNamedBufferPrefix}");
             }

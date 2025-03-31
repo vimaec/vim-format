@@ -1887,6 +1887,165 @@ namespace Vim.Format.ObjectModel {
         
     } // end of class
     
+    // AUTO-GENERATED
+    public partial class Mesh
+    {
+        public Vim.Format.ObjectModel.MeshIndexList MeshIndexListStart => _MeshIndexBufferStart.Value;
+        public Vim.Format.ObjectModel.MeshIndexList MeshIndexListEnd => _MeshIndexBufferEnd.Value;
+        public Vim.Format.ObjectModel.View View => _View.Value;
+        public Vim.Format.ObjectModel.Material Material => _Material.Value;
+        public Vim.Format.ObjectModel.Element Element => _Element.Value;
+        public Mesh()
+        {
+            _MeshIndexBufferStart = new Relation<Vim.Format.ObjectModel.MeshIndexList>();
+            _MeshIndexBufferEnd = new Relation<Vim.Format.ObjectModel.MeshIndexList>();
+            _View = new Relation<Vim.Format.ObjectModel.View>();
+            _Material = new Relation<Vim.Format.ObjectModel.Material>();
+            _Element = new Relation<Vim.Format.ObjectModel.Element>();
+        }
+        
+        public override bool FieldsAreEqual(object obj)
+        {
+            if ((obj is Mesh other))
+            {
+                var fieldsAreEqual =
+                    (Index == other.Index) &&
+                    (_MeshIndexBufferStart?.Index == other._MeshIndexBufferStart?.Index) &&
+                    (_MeshIndexBufferEnd?.Index == other._MeshIndexBufferEnd?.Index) &&
+                    (_View?.Index == other._View?.Index) &&
+                    (_Material?.Index == other._Material?.Index) &&
+                    (_Element?.Index == other._Element?.Index);
+                if (!fieldsAreEqual)
+                {
+                    return false;
+                }
+                
+                return true;
+            }
+            return false;
+        }
+        
+    } // end of class
+    
+    // AUTO-GENERATED
+    public partial class MeshIndexList
+    {
+        public Vim.Format.ObjectModel.MeshVertexList VertexIndex => _VertexIndex.Value;
+        public MeshIndexList()
+        {
+            _VertexIndex = new Relation<Vim.Format.ObjectModel.MeshVertexList>();
+        }
+        
+        public override bool FieldsAreEqual(object obj)
+        {
+            if ((obj is MeshIndexList other))
+            {
+                var fieldsAreEqual =
+                    (Index == other.Index) &&
+                    (_VertexIndex?.Index == other._VertexIndex?.Index);
+                if (!fieldsAreEqual)
+                {
+                    return false;
+                }
+                
+                return true;
+            }
+            return false;
+        }
+        
+    } // end of class
+    
+    // AUTO-GENERATED
+    public partial class MeshVertexList
+    {
+        public MeshVertexList()
+        {
+        }
+        
+        public override bool FieldsAreEqual(object obj)
+        {
+            if ((obj is MeshVertexList other))
+            {
+                var fieldsAreEqual =
+                    (Index == other.Index) &&
+                    (Vertex == other.Vertex);
+                if (!fieldsAreEqual)
+                {
+                    return false;
+                }
+                
+                return true;
+            }
+            return false;
+        }
+        
+    } // end of class
+    
+    // AUTO-GENERATED
+    public partial class LineShape
+    {
+        public Vim.Format.ObjectModel.LineShapeVertexBuffer LineShapeVertexBufferStart => _LineShapeVertexBufferStart.Value;
+        public Vim.Format.ObjectModel.LineShapeVertexBuffer LineShapeVertexBufferEnd => _LineShapeVertexBufferEnd.Value;
+        public Vim.Format.ObjectModel.View View => _View.Value;
+        public Vim.Format.ObjectModel.Element Element => _Element.Value;
+        public LineShape()
+        {
+            _LineShapeVertexBufferStart = new Relation<Vim.Format.ObjectModel.LineShapeVertexBuffer>();
+            _LineShapeVertexBufferEnd = new Relation<Vim.Format.ObjectModel.LineShapeVertexBuffer>();
+            _View = new Relation<Vim.Format.ObjectModel.View>();
+            _Element = new Relation<Vim.Format.ObjectModel.Element>();
+        }
+        
+        public override bool FieldsAreEqual(object obj)
+        {
+            if ((obj is LineShape other))
+            {
+                var fieldsAreEqual =
+                    (Index == other.Index) &&
+                    (Color == other.Color) &&
+                    (Width == other.Width) &&
+                    (_LineShapeVertexBufferStart?.Index == other._LineShapeVertexBufferStart?.Index) &&
+                    (_LineShapeVertexBufferEnd?.Index == other._LineShapeVertexBufferEnd?.Index) &&
+                    (_View?.Index == other._View?.Index) &&
+                    (_Element?.Index == other._Element?.Index);
+                if (!fieldsAreEqual)
+                {
+                    return false;
+                }
+                
+                return true;
+            }
+            return false;
+        }
+        
+    } // end of class
+    
+    // AUTO-GENERATED
+    public partial class LineShapeVertexBuffer
+    {
+        public LineShapeVertexBuffer()
+        {
+        }
+        
+        public override bool FieldsAreEqual(object obj)
+        {
+            if ((obj is LineShapeVertexBuffer other))
+            {
+                var fieldsAreEqual =
+                    (Index == other.Index) &&
+                    (Vertex == other.Vertex);
+                if (!fieldsAreEqual)
+                {
+                    return false;
+                }
+                
+                return true;
+            }
+            return false;
+        }
+        
+    } // end of class
+    
     public partial class DocumentModel
     {
         public ElementIndexMaps ElementIndexMaps { get; }
@@ -3738,6 +3897,128 @@ namespace Vim.Format.ObjectModel {
             return r;
         }
         
+        
+        // FaceMesh
+        
+        public EntityTable FaceMeshEntityTable { get; }
+        
+        public IArray<int> FaceMeshFaceMeshIndexBufferStartIndex { get; }
+        public int GetFaceMeshFaceMeshIndexBufferStartIndex(int index) => FaceMeshFaceMeshIndexBufferStartIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
+        public IArray<int> FaceMeshFaceMeshIndexBufferEndIndex { get; }
+        public int GetFaceMeshFaceMeshIndexBufferEndIndex(int index) => FaceMeshFaceMeshIndexBufferEndIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
+        public IArray<int> FaceMeshViewIndex { get; }
+        public int GetFaceMeshViewIndex(int index) => FaceMeshViewIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
+        public IArray<int> FaceMeshMaterialIndex { get; }
+        public int GetFaceMeshMaterialIndex(int index) => FaceMeshMaterialIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
+        public IArray<int> FaceMeshElementIndex { get; }
+        public int GetFaceMeshElementIndex(int index) => FaceMeshElementIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
+        public int NumFaceMesh => FaceMeshEntityTable?.NumRows ?? 0;
+        public IArray<Mesh> FaceMeshList { get; }
+        public Mesh GetFaceMesh(int n)
+        {
+            if (n < 0) return null;
+            var r = new Mesh();
+            r.Document = Document;
+            r.Index = n;
+            r._MeshIndexBufferStart = new Relation<Vim.Format.ObjectModel.MeshIndexList>(GetFaceMeshFaceMeshIndexBufferStartIndex(n), GetFaceMeshIndexBuffer);
+            r._MeshIndexBufferEnd = new Relation<Vim.Format.ObjectModel.MeshIndexList>(GetFaceMeshFaceMeshIndexBufferEndIndex(n), GetFaceMeshIndexBuffer);
+            r._View = new Relation<Vim.Format.ObjectModel.View>(GetFaceMeshViewIndex(n), GetView);
+            r._Material = new Relation<Vim.Format.ObjectModel.Material>(GetFaceMeshMaterialIndex(n), GetMaterial);
+            r._Element = new Relation<Vim.Format.ObjectModel.Element>(GetFaceMeshElementIndex(n), GetElement);
+            return r;
+        }
+        
+        
+        // FaceMeshIndexBuffer
+        
+        public EntityTable FaceMeshIndexBufferEntityTable { get; }
+        
+        public IArray<int> FaceMeshIndexBufferVertexIndexIndex { get; }
+        public int GetFaceMeshIndexBufferVertexIndexIndex(int index) => FaceMeshIndexBufferVertexIndexIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
+        public int NumFaceMeshIndexBuffer => FaceMeshIndexBufferEntityTable?.NumRows ?? 0;
+        public IArray<MeshIndexList> FaceMeshIndexBufferList { get; }
+        public MeshIndexList GetFaceMeshIndexBuffer(int n)
+        {
+            if (n < 0) return null;
+            var r = new MeshIndexList();
+            r.Document = Document;
+            r.Index = n;
+            r._VertexIndex = new Relation<Vim.Format.ObjectModel.MeshVertexList>(GetFaceMeshIndexBufferVertexIndexIndex(n), GetFaceMeshVertexBuffer);
+            return r;
+        }
+        
+        
+        // FaceMeshVertexBuffer
+        
+        public EntityTable FaceMeshVertexBufferEntityTable { get; }
+        
+        public IArray<Vector3> FaceMeshVertexBufferVertex { get; }
+        public Vector3 GetFaceMeshVertexBufferVertex(int index, Vector3 defaultValue = default) => FaceMeshVertexBufferVertex?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public int NumFaceMeshVertexBuffer => FaceMeshVertexBufferEntityTable?.NumRows ?? 0;
+        public IArray<MeshVertexList> FaceMeshVertexBufferList { get; }
+        public MeshVertexList GetFaceMeshVertexBuffer(int n)
+        {
+            if (n < 0) return null;
+            var r = new MeshVertexList();
+            r.Document = Document;
+            r.Index = n;
+            r.Vertex = FaceMeshVertexBufferVertex.ElementAtOrDefault(n);
+            return r;
+        }
+        
+        
+        // LineShape
+        
+        public EntityTable LineShapeEntityTable { get; }
+        
+        public IArray<Vector4> LineShapeColor { get; }
+        public Vector4 GetLineShapeColor(int index, Vector4 defaultValue = default) => LineShapeColor?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> LineShapeWidth { get; }
+        public Double GetLineShapeWidth(int index, Double defaultValue = default) => LineShapeWidth?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<int> LineShapeLineShapeVertexBufferStartIndex { get; }
+        public int GetLineShapeLineShapeVertexBufferStartIndex(int index) => LineShapeLineShapeVertexBufferStartIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
+        public IArray<int> LineShapeLineShapeVertexBufferEndIndex { get; }
+        public int GetLineShapeLineShapeVertexBufferEndIndex(int index) => LineShapeLineShapeVertexBufferEndIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
+        public IArray<int> LineShapeViewIndex { get; }
+        public int GetLineShapeViewIndex(int index) => LineShapeViewIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
+        public IArray<int> LineShapeElementIndex { get; }
+        public int GetLineShapeElementIndex(int index) => LineShapeElementIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
+        public int NumLineShape => LineShapeEntityTable?.NumRows ?? 0;
+        public IArray<LineShape> LineShapeList { get; }
+        public LineShape GetLineShape(int n)
+        {
+            if (n < 0) return null;
+            var r = new LineShape();
+            r.Document = Document;
+            r.Index = n;
+            r.Color = LineShapeColor.ElementAtOrDefault(n);
+            r.Width = LineShapeWidth.ElementAtOrDefault(n);
+            r._LineShapeVertexBufferStart = new Relation<Vim.Format.ObjectModel.LineShapeVertexBuffer>(GetLineShapeLineShapeVertexBufferStartIndex(n), GetLineShapeVertexBuffer);
+            r._LineShapeVertexBufferEnd = new Relation<Vim.Format.ObjectModel.LineShapeVertexBuffer>(GetLineShapeLineShapeVertexBufferEndIndex(n), GetLineShapeVertexBuffer);
+            r._View = new Relation<Vim.Format.ObjectModel.View>(GetLineShapeViewIndex(n), GetView);
+            r._Element = new Relation<Vim.Format.ObjectModel.Element>(GetLineShapeElementIndex(n), GetElement);
+            return r;
+        }
+        
+        
+        // LineShapeVertexBuffer
+        
+        public EntityTable LineShapeVertexBufferEntityTable { get; }
+        
+        public IArray<Vector3> LineShapeVertexBufferVertex { get; }
+        public Vector3 GetLineShapeVertexBufferVertex(int index, Vector3 defaultValue = default) => LineShapeVertexBufferVertex?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public int NumLineShapeVertexBuffer => LineShapeVertexBufferEntityTable?.NumRows ?? 0;
+        public IArray<LineShapeVertexBuffer> LineShapeVertexBufferList { get; }
+        public LineShapeVertexBuffer GetLineShapeVertexBuffer(int n)
+        {
+            if (n < 0) return null;
+            var r = new LineShapeVertexBuffer();
+            r.Document = Document;
+            r.Index = n;
+            r.Vertex = LineShapeVertexBufferVertex.ElementAtOrDefault(n);
+            return r;
+        }
+        
         // All entity collections
         public Dictionary<string, IEnumerable<Entity>> AllEntities => new Dictionary<string, IEnumerable<Entity>>() {
             {"Vim.Asset", AssetList.ToEnumerable()},
@@ -3794,6 +4075,11 @@ namespace Vim.Format.ObjectModel {
             {"Vim.ViewInViewSheet", ViewInViewSheetList.ToEnumerable()},
             {"Vim.Site", SiteList.ToEnumerable()},
             {"Vim.Building", BuildingList.ToEnumerable()},
+            {"Vim.FaceMesh", FaceMeshList.ToEnumerable()},
+            {"Vim.FaceMeshIndexBuffer", FaceMeshIndexBufferList.ToEnumerable()},
+            {"Vim.FaceMeshVertexBuffer", FaceMeshVertexBufferList.ToEnumerable()},
+            {"Vim.LineShape", LineShapeList.ToEnumerable()},
+            {"Vim.LineShapeVertexBuffer", LineShapeVertexBufferList.ToEnumerable()},
         };
         
         // Entity types from table names
@@ -3852,6 +4138,11 @@ namespace Vim.Format.ObjectModel {
             {"Vim.ViewInViewSheet", typeof(ViewInViewSheet)},
             {"Vim.Site", typeof(Site)},
             {"Vim.Building", typeof(Building)},
+            {"Vim.FaceMesh", typeof(Mesh)},
+            {"Vim.FaceMeshIndexBuffer", typeof(MeshIndexList)},
+            {"Vim.FaceMeshVertexBuffer", typeof(MeshVertexList)},
+            {"Vim.LineShape", typeof(LineShape)},
+            {"Vim.LineShapeVertexBuffer", typeof(LineShapeVertexBuffer)},
         };
         public DocumentModel(Document d, bool inParallel = true)
         {
@@ -3912,6 +4203,11 @@ namespace Vim.Format.ObjectModel {
             ViewInViewSheetEntityTable = Document.GetTable("Vim.ViewInViewSheet");
             SiteEntityTable = Document.GetTable("Vim.Site");
             BuildingEntityTable = Document.GetTable("Vim.Building");
+            FaceMeshEntityTable = Document.GetTable("Vim.FaceMesh");
+            FaceMeshIndexBufferEntityTable = Document.GetTable("Vim.FaceMeshIndexBuffer");
+            FaceMeshVertexBufferEntityTable = Document.GetTable("Vim.FaceMeshVertexBuffer");
+            LineShapeEntityTable = Document.GetTable("Vim.LineShape");
+            LineShapeVertexBufferEntityTable = Document.GetTable("Vim.LineShapeVertexBuffer");
             
             // Initialize entity arrays
             AssetBufferName = AssetEntityTable?.GetStringColumnValues("string:BufferName") ?? Array.Empty<String>().ToIArray();
@@ -4142,6 +4438,10 @@ namespace Vim.Format.ObjectModel {
             BuildingElevation = BuildingEntityTable?.GetDataColumnValues<Double>("double:Elevation") ?? Array.Empty<Double>().ToIArray();
             BuildingTerrainElevation = BuildingEntityTable?.GetDataColumnValues<Double>("double:TerrainElevation") ?? Array.Empty<Double>().ToIArray();
             BuildingAddress = BuildingEntityTable?.GetStringColumnValues("string:Address") ?? Array.Empty<String>().ToIArray();
+            FaceMeshVertexBufferVertex = FaceMeshVertexBufferEntityTable?.GetDataColumnValues<Vector3>("vector3:Vertex") ?? Array.Empty<Vector3>().ToIArray();
+            LineShapeColor = LineShapeEntityTable?.GetDataColumnValues<Vector4>("vector4:Color") ?? Array.Empty<Vector4>().ToIArray();
+            LineShapeWidth = LineShapeEntityTable?.GetDataColumnValues<Double>("double:Width") ?? Array.Empty<Double>().ToIArray();
+            LineShapeVertexBufferVertex = LineShapeVertexBufferEntityTable?.GetDataColumnValues<Vector3>("vector3:Vertex") ?? Array.Empty<Vector3>().ToIArray();
             
             // Initialize entity relational columns
             ParameterDescriptorDisplayUnitIndex = ParameterDescriptorEntityTable?.GetIndexColumnValues("index:Vim.DisplayUnit:DisplayUnit") ?? Array.Empty<int>().ToIArray();
@@ -4244,6 +4544,16 @@ namespace Vim.Format.ObjectModel {
             SiteElementIndex = SiteEntityTable?.GetIndexColumnValues("index:Vim.Element:Element") ?? Array.Empty<int>().ToIArray();
             BuildingSiteIndex = BuildingEntityTable?.GetIndexColumnValues("index:Vim.Site:Site") ?? Array.Empty<int>().ToIArray();
             BuildingElementIndex = BuildingEntityTable?.GetIndexColumnValues("index:Vim.Element:Element") ?? Array.Empty<int>().ToIArray();
+            FaceMeshFaceMeshIndexBufferStartIndex = FaceMeshEntityTable?.GetIndexColumnValues("index:Vim.FaceMeshIndexBuffer:FaceMeshIndexBufferStart") ?? Array.Empty<int>().ToIArray();
+            FaceMeshFaceMeshIndexBufferEndIndex = FaceMeshEntityTable?.GetIndexColumnValues("index:Vim.FaceMeshIndexBuffer:FaceMeshIndexBufferEnd") ?? Array.Empty<int>().ToIArray();
+            FaceMeshViewIndex = FaceMeshEntityTable?.GetIndexColumnValues("index:Vim.View:View") ?? Array.Empty<int>().ToIArray();
+            FaceMeshMaterialIndex = FaceMeshEntityTable?.GetIndexColumnValues("index:Vim.Material:Material") ?? Array.Empty<int>().ToIArray();
+            FaceMeshElementIndex = FaceMeshEntityTable?.GetIndexColumnValues("index:Vim.Element:Element") ?? Array.Empty<int>().ToIArray();
+            FaceMeshIndexBufferVertexIndexIndex = FaceMeshIndexBufferEntityTable?.GetIndexColumnValues("index:Vim.FaceMeshVertexBuffer:VertexIndex") ?? Array.Empty<int>().ToIArray();
+            LineShapeLineShapeVertexBufferStartIndex = LineShapeEntityTable?.GetIndexColumnValues("index:Vim.LineShapeVertexBuffer:LineShapeVertexBufferStart") ?? Array.Empty<int>().ToIArray();
+            LineShapeLineShapeVertexBufferEndIndex = LineShapeEntityTable?.GetIndexColumnValues("index:Vim.LineShapeVertexBuffer:LineShapeVertexBufferEnd") ?? Array.Empty<int>().ToIArray();
+            LineShapeViewIndex = LineShapeEntityTable?.GetIndexColumnValues("index:Vim.View:View") ?? Array.Empty<int>().ToIArray();
+            LineShapeElementIndex = LineShapeEntityTable?.GetIndexColumnValues("index:Vim.Element:Element") ?? Array.Empty<int>().ToIArray();
             
             // Initialize entity collections
             AssetList = NumAsset.Select(i => GetAsset(i));
@@ -4300,6 +4610,11 @@ namespace Vim.Format.ObjectModel {
             ViewInViewSheetList = NumViewInViewSheet.Select(i => GetViewInViewSheet(i));
             SiteList = NumSite.Select(i => GetSite(i));
             BuildingList = NumBuilding.Select(i => GetBuilding(i));
+            FaceMeshList = NumFaceMesh.Select(i => GetFaceMesh(i));
+            FaceMeshIndexBufferList = NumFaceMeshIndexBuffer.Select(i => GetFaceMeshIndexBuffer(i));
+            FaceMeshVertexBufferList = NumFaceMeshVertexBuffer.Select(i => GetFaceMeshVertexBuffer(i));
+            LineShapeList = NumLineShape.Select(i => GetLineShape(i));
+            LineShapeVertexBufferList = NumLineShapeVertexBuffer.Select(i => GetLineShapeVertexBuffer(i));
             
             // Initialize element index maps
             ElementIndexMaps = new ElementIndexMaps(this, inParallel);
@@ -4483,6 +4798,21 @@ namespace Vim.Format.ObjectModel {
             if (GetRawTableOrDefault("Vim.Building") is SerializableEntityTable buildingTable)
                 BuildingTable = new BuildingTable(buildingTable, stringBuffer);
             
+            if (GetRawTableOrDefault("Vim.FaceMesh") is SerializableEntityTable facemeshTable)
+                FaceMeshTable = new FaceMeshTable(facemeshTable, stringBuffer);
+            
+            if (GetRawTableOrDefault("Vim.FaceMeshIndexBuffer") is SerializableEntityTable facemeshindexbufferTable)
+                FaceMeshIndexBufferTable = new FaceMeshIndexBufferTable(facemeshindexbufferTable, stringBuffer);
+            
+            if (GetRawTableOrDefault("Vim.FaceMeshVertexBuffer") is SerializableEntityTable facemeshvertexbufferTable)
+                FaceMeshVertexBufferTable = new FaceMeshVertexBufferTable(facemeshvertexbufferTable, stringBuffer);
+            
+            if (GetRawTableOrDefault("Vim.LineShape") is SerializableEntityTable lineshapeTable)
+                LineShapeTable = new LineShapeTable(lineshapeTable, stringBuffer);
+            
+            if (GetRawTableOrDefault("Vim.LineShapeVertexBuffer") is SerializableEntityTable lineshapevertexbufferTable)
+                LineShapeVertexBufferTable = new LineShapeVertexBufferTable(lineshapevertexbufferTable, stringBuffer);
+            
             // Initialize element index maps
             ElementIndexMaps = new ElementIndexMaps(this, inParallel);
             
@@ -4596,6 +4926,16 @@ namespace Vim.Format.ObjectModel {
         public Site GetSite(int index) => SiteTable?.Get(index);
         public BuildingTable BuildingTable { get; } // can be null
         public Building GetBuilding(int index) => BuildingTable?.Get(index);
+        public FaceMeshTable FaceMeshTable { get; } // can be null
+        public Mesh GetFaceMesh(int index) => FaceMeshTable?.Get(index);
+        public FaceMeshIndexBufferTable FaceMeshIndexBufferTable { get; } // can be null
+        public MeshIndexList GetFaceMeshIndexBuffer(int index) => FaceMeshIndexBufferTable?.Get(index);
+        public FaceMeshVertexBufferTable FaceMeshVertexBufferTable { get; } // can be null
+        public MeshVertexList GetFaceMeshVertexBuffer(int index) => FaceMeshVertexBufferTable?.Get(index);
+        public LineShapeTable LineShapeTable { get; } // can be null
+        public LineShape GetLineShape(int index) => LineShapeTable?.Get(index);
+        public LineShapeVertexBufferTable LineShapeVertexBufferTable { get; } // can be null
+        public LineShapeVertexBuffer GetLineShapeVertexBuffer(int index) => LineShapeVertexBufferTable?.Get(index);
     } // class EntityTableSet
     
     public partial class AssetTable : EntityTable_v2, IEnumerable<Asset>
@@ -7514,6 +7854,212 @@ namespace Vim.Format.ObjectModel {
         }
     } // class BuildingTable 
     
+    public partial class FaceMeshTable : EntityTable_v2, IEnumerable<Mesh>
+    {
+        private readonly EntityTableSet _parentTableSet; // can be null
+        
+        public FaceMeshTable(SerializableEntityTable rawTable, string[] stringBuffer, EntityTableSet parentTableSet = null) : base(rawTable, stringBuffer)
+        {
+            _parentTableSet = parentTableSet;
+            Column_FaceMeshIndexBufferStartIndex = GetIndexColumnValues("index:Vim.FaceMeshIndexBuffer:FaceMeshIndexBufferStart") ?? Array.Empty<int>();
+            Column_FaceMeshIndexBufferEndIndex = GetIndexColumnValues("index:Vim.FaceMeshIndexBuffer:FaceMeshIndexBufferEnd") ?? Array.Empty<int>();
+            Column_ViewIndex = GetIndexColumnValues("index:Vim.View:View") ?? Array.Empty<int>();
+            Column_MaterialIndex = GetIndexColumnValues("index:Vim.Material:Material") ?? Array.Empty<int>();
+            Column_ElementIndex = GetIndexColumnValues("index:Vim.Element:Element") ?? Array.Empty<int>();
+        }
+        
+        public int[] Column_FaceMeshIndexBufferStartIndex { get; }
+        public int GetFaceMeshIndexBufferStartIndex(int index) => Column_FaceMeshIndexBufferStartIndex.ElementAtOrDefault(index, EntityRelation.None);
+        public MeshIndexList GetFaceMeshIndexBufferStart(int index) => _GetReferencedFaceMeshIndexBufferStart(GetFaceMeshIndexBufferStartIndex(index));
+        private MeshIndexList _GetReferencedFaceMeshIndexBufferStart(int referencedIndex) => _parentTableSet.GetFaceMeshIndexBuffer(referencedIndex);
+        public int[] Column_FaceMeshIndexBufferEndIndex { get; }
+        public int GetFaceMeshIndexBufferEndIndex(int index) => Column_FaceMeshIndexBufferEndIndex.ElementAtOrDefault(index, EntityRelation.None);
+        public MeshIndexList GetFaceMeshIndexBufferEnd(int index) => _GetReferencedFaceMeshIndexBufferEnd(GetFaceMeshIndexBufferEndIndex(index));
+        private MeshIndexList _GetReferencedFaceMeshIndexBufferEnd(int referencedIndex) => _parentTableSet.GetFaceMeshIndexBuffer(referencedIndex);
+        public int[] Column_ViewIndex { get; }
+        public int GetViewIndex(int index) => Column_ViewIndex.ElementAtOrDefault(index, EntityRelation.None);
+        public View GetView(int index) => _GetReferencedView(GetViewIndex(index));
+        private View _GetReferencedView(int referencedIndex) => _parentTableSet.GetView(referencedIndex);
+        public int[] Column_MaterialIndex { get; }
+        public int GetMaterialIndex(int index) => Column_MaterialIndex.ElementAtOrDefault(index, EntityRelation.None);
+        public Material GetMaterial(int index) => _GetReferencedMaterial(GetMaterialIndex(index));
+        private Material _GetReferencedMaterial(int referencedIndex) => _parentTableSet.GetMaterial(referencedIndex);
+        public int[] Column_ElementIndex { get; }
+        public int GetElementIndex(int index) => Column_ElementIndex.ElementAtOrDefault(index, EntityRelation.None);
+        public Element GetElement(int index) => _GetReferencedElement(GetElementIndex(index));
+        private Element _GetReferencedElement(int referencedIndex) => _parentTableSet.GetElement(referencedIndex);
+        // Object Getter
+        public Mesh Get(int index)
+        {
+            if (index < 0) return null;
+            var r = new Mesh();
+            r.Index = index;
+            r._MeshIndexBufferStart = new Relation<Vim.Format.ObjectModel.MeshIndexList>(GetFaceMeshIndexBufferStartIndex(index), _GetReferencedFaceMeshIndexBufferStart);
+            r._MeshIndexBufferEnd = new Relation<Vim.Format.ObjectModel.MeshIndexList>(GetFaceMeshIndexBufferEndIndex(index), _GetReferencedFaceMeshIndexBufferEnd);
+            r._View = new Relation<Vim.Format.ObjectModel.View>(GetViewIndex(index), _GetReferencedView);
+            r._Material = new Relation<Vim.Format.ObjectModel.Material>(GetMaterialIndex(index), _GetReferencedMaterial);
+            r._Element = new Relation<Vim.Format.ObjectModel.Element>(GetElementIndex(index), _GetReferencedElement);
+            return r;
+        }
+        // Enumerator
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+        public IEnumerator<Mesh> GetEnumerator()
+        {
+            for (var i = 0; i < RowCount; ++i)
+                yield return Get(i);
+        }
+    } // class FaceMeshTable 
+    
+    public partial class FaceMeshIndexBufferTable : EntityTable_v2, IEnumerable<MeshIndexList>
+    {
+        private readonly EntityTableSet _parentTableSet; // can be null
+        
+        public FaceMeshIndexBufferTable(SerializableEntityTable rawTable, string[] stringBuffer, EntityTableSet parentTableSet = null) : base(rawTable, stringBuffer)
+        {
+            _parentTableSet = parentTableSet;
+            Column_VertexIndexIndex = GetIndexColumnValues("index:Vim.FaceMeshVertexBuffer:VertexIndex") ?? Array.Empty<int>();
+        }
+        
+        public int[] Column_VertexIndexIndex { get; }
+        public int GetVertexIndexIndex(int index) => Column_VertexIndexIndex.ElementAtOrDefault(index, EntityRelation.None);
+        public MeshVertexList GetVertexIndex(int index) => _GetReferencedVertexIndex(GetVertexIndexIndex(index));
+        private MeshVertexList _GetReferencedVertexIndex(int referencedIndex) => _parentTableSet.GetFaceMeshVertexBuffer(referencedIndex);
+        // Object Getter
+        public MeshIndexList Get(int index)
+        {
+            if (index < 0) return null;
+            var r = new MeshIndexList();
+            r.Index = index;
+            r._VertexIndex = new Relation<Vim.Format.ObjectModel.MeshVertexList>(GetVertexIndexIndex(index), _GetReferencedVertexIndex);
+            return r;
+        }
+        // Enumerator
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+        public IEnumerator<MeshIndexList> GetEnumerator()
+        {
+            for (var i = 0; i < RowCount; ++i)
+                yield return Get(i);
+        }
+    } // class FaceMeshIndexBufferTable 
+    
+    public partial class FaceMeshVertexBufferTable : EntityTable_v2, IEnumerable<MeshVertexList>
+    {
+        private readonly EntityTableSet _parentTableSet; // can be null
+        
+        public FaceMeshVertexBufferTable(SerializableEntityTable rawTable, string[] stringBuffer, EntityTableSet parentTableSet = null) : base(rawTable, stringBuffer)
+        {
+            _parentTableSet = parentTableSet;
+            Column_Vertex = GetDataColumnValues<Vector3>("vector3:Vertex") ?? Array.Empty<Vector3>();
+        }
+        
+        public Vector3[] Column_Vertex { get; }
+        public Vector3 GetVertex(int index, Vector3 @default = default) => Column_Vertex.ElementAtOrDefault(index, @default);
+        // Object Getter
+        public MeshVertexList Get(int index)
+        {
+            if (index < 0) return null;
+            var r = new MeshVertexList();
+            r.Index = index;
+            r.Vertex = GetVertex(index);
+            return r;
+        }
+        // Enumerator
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+        public IEnumerator<MeshVertexList> GetEnumerator()
+        {
+            for (var i = 0; i < RowCount; ++i)
+                yield return Get(i);
+        }
+    } // class FaceMeshVertexBufferTable 
+    
+    public partial class LineShapeTable : EntityTable_v2, IEnumerable<LineShape>
+    {
+        private readonly EntityTableSet _parentTableSet; // can be null
+        
+        public LineShapeTable(SerializableEntityTable rawTable, string[] stringBuffer, EntityTableSet parentTableSet = null) : base(rawTable, stringBuffer)
+        {
+            _parentTableSet = parentTableSet;
+            Column_Color = GetDataColumnValues<Vector4>("vector4:Color") ?? Array.Empty<Vector4>();
+            Column_Width = GetDataColumnValues<Double>("double:Width") ?? Array.Empty<Double>();
+            Column_LineShapeVertexBufferStartIndex = GetIndexColumnValues("index:Vim.LineShapeVertexBuffer:LineShapeVertexBufferStart") ?? Array.Empty<int>();
+            Column_LineShapeVertexBufferEndIndex = GetIndexColumnValues("index:Vim.LineShapeVertexBuffer:LineShapeVertexBufferEnd") ?? Array.Empty<int>();
+            Column_ViewIndex = GetIndexColumnValues("index:Vim.View:View") ?? Array.Empty<int>();
+            Column_ElementIndex = GetIndexColumnValues("index:Vim.Element:Element") ?? Array.Empty<int>();
+        }
+        
+        public Vector4[] Column_Color { get; }
+        public Vector4 GetColor(int index, Vector4 @default = default) => Column_Color.ElementAtOrDefault(index, @default);
+        public Double[] Column_Width { get; }
+        public Double GetWidth(int index, Double @default = default) => Column_Width.ElementAtOrDefault(index, @default);
+        public int[] Column_LineShapeVertexBufferStartIndex { get; }
+        public int GetLineShapeVertexBufferStartIndex(int index) => Column_LineShapeVertexBufferStartIndex.ElementAtOrDefault(index, EntityRelation.None);
+        public LineShapeVertexBuffer GetLineShapeVertexBufferStart(int index) => _GetReferencedLineShapeVertexBufferStart(GetLineShapeVertexBufferStartIndex(index));
+        private LineShapeVertexBuffer _GetReferencedLineShapeVertexBufferStart(int referencedIndex) => _parentTableSet.GetLineShapeVertexBuffer(referencedIndex);
+        public int[] Column_LineShapeVertexBufferEndIndex { get; }
+        public int GetLineShapeVertexBufferEndIndex(int index) => Column_LineShapeVertexBufferEndIndex.ElementAtOrDefault(index, EntityRelation.None);
+        public LineShapeVertexBuffer GetLineShapeVertexBufferEnd(int index) => _GetReferencedLineShapeVertexBufferEnd(GetLineShapeVertexBufferEndIndex(index));
+        private LineShapeVertexBuffer _GetReferencedLineShapeVertexBufferEnd(int referencedIndex) => _parentTableSet.GetLineShapeVertexBuffer(referencedIndex);
+        public int[] Column_ViewIndex { get; }
+        public int GetViewIndex(int index) => Column_ViewIndex.ElementAtOrDefault(index, EntityRelation.None);
+        public View GetView(int index) => _GetReferencedView(GetViewIndex(index));
+        private View _GetReferencedView(int referencedIndex) => _parentTableSet.GetView(referencedIndex);
+        public int[] Column_ElementIndex { get; }
+        public int GetElementIndex(int index) => Column_ElementIndex.ElementAtOrDefault(index, EntityRelation.None);
+        public Element GetElement(int index) => _GetReferencedElement(GetElementIndex(index));
+        private Element _GetReferencedElement(int referencedIndex) => _parentTableSet.GetElement(referencedIndex);
+        // Object Getter
+        public LineShape Get(int index)
+        {
+            if (index < 0) return null;
+            var r = new LineShape();
+            r.Index = index;
+            r.Color = GetColor(index);
+            r.Width = GetWidth(index);
+            r._LineShapeVertexBufferStart = new Relation<Vim.Format.ObjectModel.LineShapeVertexBuffer>(GetLineShapeVertexBufferStartIndex(index), _GetReferencedLineShapeVertexBufferStart);
+            r._LineShapeVertexBufferEnd = new Relation<Vim.Format.ObjectModel.LineShapeVertexBuffer>(GetLineShapeVertexBufferEndIndex(index), _GetReferencedLineShapeVertexBufferEnd);
+            r._View = new Relation<Vim.Format.ObjectModel.View>(GetViewIndex(index), _GetReferencedView);
+            r._Element = new Relation<Vim.Format.ObjectModel.Element>(GetElementIndex(index), _GetReferencedElement);
+            return r;
+        }
+        // Enumerator
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+        public IEnumerator<LineShape> GetEnumerator()
+        {
+            for (var i = 0; i < RowCount; ++i)
+                yield return Get(i);
+        }
+    } // class LineShapeTable 
+    
+    public partial class LineShapeVertexBufferTable : EntityTable_v2, IEnumerable<LineShapeVertexBuffer>
+    {
+        private readonly EntityTableSet _parentTableSet; // can be null
+        
+        public LineShapeVertexBufferTable(SerializableEntityTable rawTable, string[] stringBuffer, EntityTableSet parentTableSet = null) : base(rawTable, stringBuffer)
+        {
+            _parentTableSet = parentTableSet;
+            Column_Vertex = GetDataColumnValues<Vector3>("vector3:Vertex") ?? Array.Empty<Vector3>();
+        }
+        
+        public Vector3[] Column_Vertex { get; }
+        public Vector3 GetVertex(int index, Vector3 @default = default) => Column_Vertex.ElementAtOrDefault(index, @default);
+        // Object Getter
+        public LineShapeVertexBuffer Get(int index)
+        {
+            if (index < 0) return null;
+            var r = new LineShapeVertexBuffer();
+            r.Index = index;
+            r.Vertex = GetVertex(index);
+            return r;
+        }
+        // Enumerator
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+        public IEnumerator<LineShapeVertexBuffer> GetEnumerator()
+        {
+            for (var i = 0; i < RowCount; ++i)
+                yield return Get(i);
+        }
+    } // class LineShapeVertexBufferTable 
+    
     public static class DocumentBuilderExtensions
     {
         public static Func<IEnumerable<Entity>, EntityTableBuilder> GetTableBuilderFunc(this Type type)
@@ -7572,6 +8118,8 @@ namespace Vim.Format.ObjectModel {
             if (type == typeof(ViewInViewSheet)) return ToViewInViewSheetTableBuilder;
             if (type == typeof(Site)) return ToSiteTableBuilder;
             if (type == typeof(Building)) return ToBuildingTableBuilder;
+            if (type == typeof(Mesh)) return ToFaceMeshTableBuilder;
+            if (type == typeof(LineShape)) return ToLineShapeTableBuilder;
             throw new ArgumentException(nameof(type));
         }
         public static EntityTableBuilder ToAssetTableBuilder(this IEnumerable<Entity> entities)
@@ -8226,6 +8774,29 @@ namespace Vim.Format.ObjectModel {
             tb.AddIndexColumn("index:Vim.Element:Element", typedEntities.Select(x => x._Element?.Index ?? EntityRelation.None));
             return tb;
         }
+        public static EntityTableBuilder ToFaceMeshTableBuilder(this IEnumerable<Entity> entities)
+        {
+            var typedEntities = entities?.Cast<Mesh>() ?? Enumerable.Empty<Mesh>();
+            var tb = new EntityTableBuilder("Vim.FaceMesh");
+            tb.AddIndexColumn("index:Vim.FaceMeshIndexBuffer:FaceMeshIndexBufferStart", typedEntities.Select(x => x._MeshIndexBufferStart?.Index ?? EntityRelation.None));
+            tb.AddIndexColumn("index:Vim.FaceMeshIndexBuffer:FaceMeshIndexBufferEnd", typedEntities.Select(x => x._MeshIndexBufferEnd?.Index ?? EntityRelation.None));
+            tb.AddIndexColumn("index:Vim.View:View", typedEntities.Select(x => x._View?.Index ?? EntityRelation.None));
+            tb.AddIndexColumn("index:Vim.Material:Material", typedEntities.Select(x => x._Material?.Index ?? EntityRelation.None));
+            tb.AddIndexColumn("index:Vim.Element:Element", typedEntities.Select(x => x._Element?.Index ?? EntityRelation.None));
+            return tb;
+        }
+        public static EntityTableBuilder ToLineShapeTableBuilder(this IEnumerable<Entity> entities)
+        {
+            var typedEntities = entities?.Cast<LineShape>() ?? Enumerable.Empty<LineShape>();
+            var tb = new EntityTableBuilder("Vim.LineShape");
+            tb.AddDataColumn("vector4:Color", typedEntities.Select(x => x.Color));
+            tb.AddDataColumn("double:Width", typedEntities.Select(x => x.Width));
+            tb.AddIndexColumn("index:Vim.LineShapeVertexBuffer:LineShapeVertexBufferStart", typedEntities.Select(x => x._LineShapeVertexBufferStart?.Index ?? EntityRelation.None));
+            tb.AddIndexColumn("index:Vim.LineShapeVertexBuffer:LineShapeVertexBufferEnd", typedEntities.Select(x => x._LineShapeVertexBufferEnd?.Index ?? EntityRelation.None));
+            tb.AddIndexColumn("index:Vim.View:View", typedEntities.Select(x => x._View?.Index ?? EntityRelation.None));
+            tb.AddIndexColumn("index:Vim.Element:Element", typedEntities.Select(x => x._Element?.Index ?? EntityRelation.None));
+            return tb;
+        }
     } // DocumentBuilderExtensions
     
     public partial class ObjectModelBuilder
@@ -8286,6 +8857,8 @@ namespace Vim.Format.ObjectModel {
             {typeof(ViewInViewSheet), new EntityTableBuilder()},
             {typeof(Site), new EntityTableBuilder()},
             {typeof(Building), new EntityTableBuilder()},
+            {typeof(Mesh), new EntityTableBuilder()},
+            {typeof(LineShape), new EntityTableBuilder()},
         };
     } // ObjectModelBuilder
 } // namespace

@@ -21,11 +21,49 @@ namespace Vim.Format.ObjectModel
 
         public DocumentBuilder ToDocumentBuilder(string generator, string versionString)
         {
-            return ObjectModelBuilder.ToDocumentBuilder(generator, versionString)
+            var db = ObjectModelBuilder.ToDocumentBuilder(generator, versionString);
+            AddEntityTableBuffers(db);
+
+            return db
                 .AddMeshes(Meshes.Select(g => g.Subdivide()))
                 .AddInstances(Instances)
                 .AddShapes(Shapes)
                 .AddMaterials(CreateMaterialBuilders());
+        }
+
+        public List<int> FaceMeshIndexBuffer { get; } = new List<int>();
+        public List<Vector3> FaceMeshVertexBuffer { get; } = new List<Vector3>();
+
+        public List<Vector3> LineShapeVertexBuffer { get; } = new List<Vector3>();
+
+        private void AddEntityTableBuffers(DocumentBuilder documentBuilder)
+        {
+#if DEBUG
+            // Validate the index buffer and the vertex buffer
+            foreach (var index in FaceMeshIndexBuffer)
+                Debug.Assert(index >= 0 && index < FaceMeshVertexBuffer.Count);
+#endif
+
+            // Add the face mesh index buffer.
+            {
+                var tb = new EntityTableBuilder(TableNames.MeshIndexBuffer);
+                tb.AddIndexColumn($"index:{TableNames.MeshVertexBuffer}:{nameof(ObjectModel.MeshIndexList.VertexIndex)}", FaceMeshIndexBuffer);
+                documentBuilder.Tables.Add(tb.Name, tb);
+            }
+
+            // Add the face mesh vertex buffer.
+            {
+                var tb = new EntityTableBuilder(TableNames.MeshVertexBuffer);
+                tb.AddDataColumn($"vector3:{nameof(ObjectModel.MeshVertexList.Vertex)}", FaceMeshVertexBuffer);
+                documentBuilder.Tables.Add(tb.Name, tb);
+            }
+
+            // Add the line shape vertex buffer.
+            {
+                var tb = new EntityTableBuilder(TableNames.LineShapeVertexBuffer);
+                tb.AddDataColumn($"vector3:{nameof(ObjectModel.LineShapeVertexBuffer.Vertex)}", LineShapeVertexBuffer);
+                documentBuilder.Tables.Add(tb.Name, tb);
+            }
         }
 
         private IEnumerable<DocumentBuilder.Material> CreateMaterialBuilders()

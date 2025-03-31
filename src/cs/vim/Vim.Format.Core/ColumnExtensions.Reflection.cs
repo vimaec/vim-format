@@ -75,6 +75,12 @@ namespace Vim.Format
         public static string GetEntityTableName(this Type t)
             => (t.GetCustomAttribute(typeof(TableNameAttribute)) as TableNameAttribute)?.Name;
 
+        public static bool IsEntityTableBuffer(this Type t)
+            => (t.GetCustomAttribute(typeof(EntityBufferAttribute)) as EntityBufferAttribute) != null;
+
+        public static bool IsEntityTableVimSqlIgnore(this Type t)
+            => (t.GetCustomAttribute(typeof(VimSqlIgnoreAttribute)) as VimSqlIgnoreAttribute) != null;
+
         public static (string IndexColumnName, string LocalFieldName) GetIndexColumnInfo(this FieldInfo fieldInfo)
         {
             if (!fieldInfo.Name.StartsWith("_"))

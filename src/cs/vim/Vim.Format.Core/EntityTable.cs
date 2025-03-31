@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Linq;
 using Vim.BFast;
 using Vim.LinqArray;
@@ -39,7 +38,7 @@ namespace Vim.Format
                 ?.Select(Document.GetString)
                 .ToIArray();
 
-        public IArray<T> GetDataColumnValues<T>(string columnName) where T : unmanaged
+        public T[] GetDataColumnAsTypedArray<T>(string columnName) where T : unmanaged
         {
             var type = typeof(T);
 
@@ -51,12 +50,15 @@ namespace Vim.Format
                 return null;
 
             if (type == typeof(short))
-                return namedBuffer.GetColumnValues<int>().Select(i => (short)i).ToIArray() as IArray<T>;
+                return namedBuffer.GetColumnValues<int>().Select(i => (short)i).Cast<T>().ToArray();
 
             if (type == typeof(bool))
-                return namedBuffer.GetColumnValues<byte>().Select(b => b != 0).ToIArray() as IArray<T>;
+                return namedBuffer.GetColumnValues<byte>().Select(b => b != 0).Cast<T>().ToArray();
 
-            return namedBuffer.GetColumnValues<T>().ToIArray();
+            return namedBuffer.GetColumnValues<T>();
         }
+
+        public IArray<T> GetDataColumnValues<T>(string columnName) where T : unmanaged
+            => GetDataColumnAsTypedArray<T>(columnName)?.ToIArray();
     }
 }
