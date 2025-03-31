@@ -68,9 +68,10 @@ namespace Vim.Format
         public const string ViewInViewSheet = "Vim.ViewInViewSheet";
         public const string Site = "Vim.Site";
         public const string Building = "Vim.Building";
-        public const string FaceMesh = "Vim.FaceMesh";
-        public const string FaceMeshIndexBuffer = "Vim.FaceMeshIndexBuffer";
-        public const string FaceMeshVertexBuffer = "Vim.FaceMeshVertexBuffer";
+        public const string Instance = "Vim.Instance";
+        public const string Mesh = "Vim.Mesh";
+        public const string MeshIndexBuffer = "Vim.MeshIndexBuffer";
+        public const string MeshVertexBuffer = "Vim.MeshVertexBuffer";
         public const string LineShape = "Vim.LineShape";
         public const string LineShapeVertexBuffer = "Vim.LineShapeVertexBuffer";
     }

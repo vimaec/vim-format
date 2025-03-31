@@ -1775,40 +1775,120 @@ namespace Vim.Format.ObjectModel
         public Relation<Site> _Site;
     }
 
+
+    TODO // Table names
     /// <summary>
-    /// Represents an element face in a View
+    /// A group of instances which represents an element in a view.
     /// </summary>
-    [TableName(TableNames.FaceMesh)]
-    [VimSqlIgnore]
-    public partial class FaceMesh : EntityWithElement
+    public partial class InstanceGroup : EntityWithElement
     {
-        public Relation<FaceMeshIndexBuffer> _FaceMeshIndexBufferStart;
-        public Relation<FaceMeshIndexBuffer> _FaceMeshIndexBufferEnd;
-        public Relation<View> _View;
+        public int InstanceFlags; // None | Hidden | IsRoom | IsLevel  ... // 32
+        public Relation<View> _View; // Optional for IFC case // 32
+        public Relation<Transform> _Transform; // 32
+        public Relation<InstanceIndex> _InstanceIndexStart; // 32
+        public int InstanceIndexCount; // 32
+    }
+
+    /// <summary>
+    /// Contains sequences of instance indices. Referenced by instance group.
+    /// </summary>
+    public partial class InstanceIndex : Entity
+    {
+        public Relation<Instance> _Instance;
+    }
+
+    /// <summary>
+    /// An instance of a mesh with a local transform.
+    /// </summary>
+    public partial class Instance : Entity
+    {
+        public Relation<Mesh> _Mesh;
         public Relation<Material> _Material;
+        public Relation<Transform> _LocalTransform;
     }
 
     /// <summary>
-    /// Represents a continuous index buffer of triangular faces.
+    /// A mesh composed of vertex indices and vertices.
     /// </summary>
-    [TableName(TableNames.FaceMeshIndexBuffer)]
-    [EntityBuffer]
-    [VimSqlIgnore]
-    public partial class FaceMeshIndexBuffer : Entity
+    public partial class Mesh : Entity
     {
-        public Relation<FaceMeshVertexBuffer> _VertexIndex;
+        public Relation<MeshIndexBuffer> _MeshIndexBufferStart;
+        public int MeshIndexBufferCount;
+        public Relation<MeshVertexBuffer> _MeshVertexBufferStart;
+        public int MeshVertexBufferCount;
     }
 
     /// <summary>
-    /// Represents a continuous vertex buffer.
+    /// Contains sequences of vertex indices. Referenced by meshes.
     /// </summary>
-    [TableName(TableNames.FaceMeshVertexBuffer)]
-    [EntityBuffer]
-    [VimSqlIgnore]
-    public partial class FaceMeshVertexBuffer : Entity
+    public partial class MeshIndexBuffer : Entity
+    {
+        // ex: [ ..., 10300, 10301, 10302, 10300, 10302, 10303, ...] <-- indexes into MeshVertexBuffer
+        public Relation<MeshVertexBuffer> _VertexIndex;
+    }
+
+    /// <summary>
+    /// Contains sequences of vertices. Referenced by meshes.
+    /// </summary>
+    public partial class MeshVertexBuffer : Entity
     {
         public Vector3 Vertex;
     }
+
+    /// <summary>
+    /// Transformation matrices.
+    /// </summary>
+    public partial class Transform : Entity
+    {
+        public Matrix4x4 Matrix4x4;
+    }
+
+    //[TableName(TableNames.Instance)]
+    //[VimSqlIgnore]
+    //public partial class Instance : EntityWithElement
+    //{
+    //    public Matrix4x4 Transform;
+    //    public int InstanceFlags;
+    //    public Relation<View> _View; // Optional for IFC case
+    //    public Relation<Material> _Material;
+    //    public Relation<Mesh> _Mesh;
+    //}
+
+    ///// <summary>
+    ///// Represents a mesh
+    ///// </summary>
+    //[TableName(TableNames.Mesh)]
+    //[VimSqlIgnore]
+    //public partial class Mesh : Entity
+    //{
+    //    public Relation<MeshIndexBuffer> _MeshIndexBufferStart;
+    //    public Relation<MeshIndexBuffer> _MeshIndexBufferEnd;
+    //    public Relation<MeshVertexBuffer> _MeshVertexBufferStart;
+    //    public Relation<MeshVertexBuffer> _MeshVertexBufferEnd;
+    //}
+
+    ///// <summary>
+    ///// Represents a continuous index buffer of triangular meshes.
+    ///// </summary>
+    //[TableName(TableNames.MeshIndexBuffer)]
+    //[EntityBuffer]
+    //[VimSqlIgnore]
+    //public partial class MeshIndexBuffer : Entity
+    //{
+    //    // ex: [ ..., 10300, 10301, 10302, 10300, 10302, 10303, ...] <-- indexes into the VertexBuffer
+    //    public Relation<MeshVertexBuffer> _VertexIndex;
+    //}
+
+    ///// <summary>
+    ///// Represents a continuous vertex buffer.
+    ///// </summary>
+    //[TableName(TableNames.MeshVertexBuffer)]
+    //[EntityBuffer]
+    //[VimSqlIgnore]
+    //public partial class MeshVertexBuffer : Entity
+    //{
+    //    public Vector3 Vertex;
+    //}
 
     /// <summary>
     /// Represents a sequence of points connected by line segments

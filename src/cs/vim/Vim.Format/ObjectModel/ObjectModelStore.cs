@@ -46,15 +46,15 @@ namespace Vim.Format.ObjectModel
 
             // Add the face mesh index buffer.
             {
-                var tb = new EntityTableBuilder(TableNames.FaceMeshIndexBuffer);
-                tb.AddIndexColumn($"index:{TableNames.FaceMeshVertexBuffer}:{nameof(ObjectModel.FaceMeshIndexBuffer.VertexIndex)}", FaceMeshIndexBuffer);
+                var tb = new EntityTableBuilder(TableNames.MeshIndexBuffer);
+                tb.AddIndexColumn($"index:{TableNames.MeshVertexBuffer}:{nameof(ObjectModel.MeshIndexList.VertexIndex)}", FaceMeshIndexBuffer);
                 documentBuilder.Tables.Add(tb.Name, tb);
             }
 
             // Add the face mesh vertex buffer.
             {
-                var tb = new EntityTableBuilder(TableNames.FaceMeshVertexBuffer);
-                tb.AddDataColumn($"vector3:{nameof(ObjectModel.FaceMeshVertexBuffer.Vertex)}", FaceMeshVertexBuffer);
+                var tb = new EntityTableBuilder(TableNames.MeshVertexBuffer);
+                tb.AddDataColumn($"vector3:{nameof(ObjectModel.MeshVertexList.Vertex)}", FaceMeshVertexBuffer);
                 documentBuilder.Tables.Add(tb.Name, tb);
             }
 
