@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using Vim.Format.ObjectModel;
+using Vim.Util;
 
 namespace Vim.Format.CodeGen;
 

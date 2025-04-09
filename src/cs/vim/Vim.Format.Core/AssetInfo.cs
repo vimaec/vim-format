@@ -95,7 +95,7 @@ namespace Vim.Format
         /// </summary>
         public static FileInfo ExtractAsset(this INamedBuffer assetBuffer, FileInfo fileInfo)
         {
-            Util.IO.CreateFileDirectory(fileInfo.FullName);
+            IO.CreateFileDirectory(fileInfo.FullName);
             using (var stream = fileInfo.Create())
                 assetBuffer.Write(stream);
             return fileInfo;

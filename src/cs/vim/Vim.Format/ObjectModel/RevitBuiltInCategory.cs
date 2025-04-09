@@ -1,1217 +1,2322 @@
-﻿// ReSharper disable InconsistentNaming
+﻿// FILE ORIGINALLY GENERATED FROM GenerateRevitBuiltInCategories.cs
+using System.Collections.Generic;
 
 namespace Vim.Format.ObjectModel
 {
-    /// <summary>
-    /// Built-in categories (last updated on 2025-04-09 using Revit 2025
-    /// </summary>
     public enum RevitBuiltInCategory : long
     {
-        OST_StackedWalls_Obsolete_IdInWrongRange = -20034100, // 0xFFFFFFFFFECE4DCC
-        OST_MassTags_Obsolete_IdInWrongRange = -20034005, // 0xFFFFFFFFFECE4E2B
-        OST_MassSurface_Obsolete_IdInWrongRange = -20034004, // 0xFFFFFFFFFECE4E2C
-        OST_MassFloor_Obsolete_IdInWrongRange = -20034003, // 0xFFFFFFFFFECE4E2D
-        OST_Mass_Obsolete_IdInWrongRange = -20034000, // 0xFFFFFFFFFECE4E30
-        OST_WallRefPlanes_Obsolete_IdInWrongRange = -20000896, // 0xFFFFFFFFFECECF80
-        OST_StickSymbols_Obsolete_IdInWrongRange = -20000828, // 0xFFFFFFFFFECECFC4
-        OST_RemovedGridSeg_Obsolete_IdInWrongRange = -20000827, // 0xFFFFFFFFFECECFC5
-        OST_PointClouds = -2010001, // 0xFFFFFFFFFFE1546F
-        OST_AnalyticalPanelLocalCoordSys = -2009667, // 0xFFFFFFFFFFE155BD
-        OST_AnalyticalMemberLocalCoordSys = -2009666, // 0xFFFFFFFFFFE155BE
-        OST_AnalyticalOpening = -2009665, // 0xFFFFFFFFFFE155BF
-        OST_AnalyticalPanel = -2009664, // 0xFFFFFFFFFFE155C0
-        OST_AnalyticalMemberTags = -2009663, // 0xFFFFFFFFFFE155C1
-        OST_AnalyticalMember = -2009662, // 0xFFFFFFFFFFE155C2
-        OST_AssemblyOrigin_Lines = -2009661, // 0xFFFFFFFFFFE155C3
-        OST_AssemblyOrigin_Planes = -2009660, // 0xFFFFFFFFFFE155C4
-        OST_AssemblyOrigin_Points = -2009659, // 0xFFFFFFFFFFE155C5
-        OST_AssemblyOrigin = -2009658, // 0xFFFFFFFFFFE155C6
-        OST_LinksAnalytical = -2009657, // 0xFFFFFFFFFFE155C7
-        OST_FoundationSlabAnalyticalTags = -2009656, // 0xFFFFFFFFFFE155C8
-        OST_WallFoundationAnalyticalTags = -2009655, // 0xFFFFFFFFFFE155C9
-        OST_IsolatedFoundationAnalyticalTags = -2009654, // 0xFFFFFFFFFFE155CA
-        OST_WallAnalyticalTags = -2009653, // 0xFFFFFFFFFFE155CB
-        OST_FloorAnalyticalTags = -2009652, // 0xFFFFFFFFFFE155CC
-        OST_ColumnAnalyticalTags = -2009651, // 0xFFFFFFFFFFE155CD
-        OST_BraceAnalyticalTags = -2009650, // 0xFFFFFFFFFFE155CE
-        OST_BeamAnalyticalTags = -2009649, // 0xFFFFFFFFFFE155CF
-        OST_AnalyticalNodes_Lines = -2009648, // 0xFFFFFFFFFFE155D0
-        OST_AnalyticalNodes_Planes = -2009647, // 0xFFFFFFFFFFE155D1
-        OST_AnalyticalNodes_Points = -2009646, // 0xFFFFFFFFFFE155D2
-        OST_AnalyticalNodes = -2009645, // 0xFFFFFFFFFFE155D3
-        OST_RigidLinksAnalytical = -2009644, // 0xFFFFFFFFFFE155D4
-        OST_FoundationSlabAnalytical = -2009643, // 0xFFFFFFFFFFE155D5
-        OST_WallFoundationAnalytical = -2009642, // 0xFFFFFFFFFFE155D6
-        OST_IsolatedFoundationAnalytical = -2009641, // 0xFFFFFFFFFFE155D7
-        OST_WallAnalytical = -2009640, // 0xFFFFFFFFFFE155D8
-        OST_FloorAnalytical = -2009639, // 0xFFFFFFFFFFE155D9
-        OST_ColumnEndSegment = -2009638, // 0xFFFFFFFFFFE155DA
-        OST_ColumnStartSegment = -2009637, // 0xFFFFFFFFFFE155DB
-        OST_ColumnAnalytical = -2009636, // 0xFFFFFFFFFFE155DC
-        OST_BraceEndSegment = -2009635, // 0xFFFFFFFFFFE155DD
-        OST_BraceStartSegment = -2009634, // 0xFFFFFFFFFFE155DE
-        OST_BraceAnalytical = -2009633, // 0xFFFFFFFFFFE155DF
-        OST_BeamEndSegment = -2009632, // 0xFFFFFFFFFFE155E0
-        OST_BeamStartSegment = -2009631, // 0xFFFFFFFFFFE155E1
-        OST_BeamAnalytical = -2009630, // 0xFFFFFFFFFFE155E2
-        OST_CompassSecondaryMonth = -2009624, // 0xFFFFFFFFFFE155E8
-        OST_CompassPrimaryMonth = -2009623, // 0xFFFFFFFFFFE155E9
-        OST_CompassSectionFilled = -2009622, // 0xFFFFFFFFFFE155EA
-        OST_LightLine = -2009621, // 0xFFFFFFFFFFE155EB
-        OST_MultiSurface = -2009620, // 0xFFFFFFFFFFE155EC
-        OST_SunSurface = -2009619, // 0xFFFFFFFFFFE155ED
-        OST_Analemma = -2009618, // 0xFFFFFFFFFFE155EE
-        OST_SunsetText = -2009617, // 0xFFFFFFFFFFE155EF
-        OST_CompassSection = -2009616, // 0xFFFFFFFFFFE155F0
-        OST_CompassOuter = -2009615, // 0xFFFFFFFFFFE155F1
-        OST_SunriseText = -2009614, // 0xFFFFFFFFFFE155F2
-        OST_CompassInner = -2009613, // 0xFFFFFFFFFFE155F3
-        OST_SunPath2 = -2009612, // 0xFFFFFFFFFFE155F4
-        OST_SunPath1 = -2009611, // 0xFFFFFFFFFFE155F5
-        OST_Sun = -2009610, // 0xFFFFFFFFFFE155F6
-        OST_SunStudy = -2009609, // 0xFFFFFFFFFFE155F7
-        OST_StructuralTrussStickSymbols = -2009608, // 0xFFFFFFFFFFE155F8
-        OST_StructuralTrussHiddenLines = -2009607, // 0xFFFFFFFFFFE155F9
-        OST_TrussChord = -2009606, // 0xFFFFFFFFFFE155FA
-        OST_TrussWeb = -2009605, // 0xFFFFFFFFFFE155FB
-        OST_TrussBottomChordCurve = -2009604, // 0xFFFFFFFFFFE155FC
-        OST_TrussTopChordCurve = -2009603, // 0xFFFFFFFFFFE155FD
-        OST_TrussVertWebCurve = -2009602, // 0xFFFFFFFFFFE155FE
-        OST_TrussDiagWebCurve = -2009601, // 0xFFFFFFFFFFE155FF
-        OST_Truss = -2009600, // 0xFFFFFFFFFFE15600
-        OST_PlumbingEquipmentHiddenLines = -2009551, // 0xFFFFFFFFFFE15631
-        OST_MechanicalControlDevicesHiddenLines = -2009550, // 0xFFFFFFFFFFE15632
-        OST_RailingSystemTransitionHiddenLines_Deprecated = -2009549, // 0xFFFFFFFFFFE15633
-        OST_RailingSystemTerminationHiddenLines_Deprecated = -2009548, // 0xFFFFFFFFFFE15634
-        OST_RailingSystemRailHiddenLines_Deprecated = -2009547, // 0xFFFFFFFFFFE15635
-        OST_RailingSystemTopRailHiddenLines_Deprecated = -2009546, // 0xFFFFFFFFFFE15636
-        OST_RailingSystemHandRailBracketHiddenLines_Deprecated = -2009545, // 0xFFFFFFFFFFE15637
-        OST_RailingSystemHandRailHiddenLines_Deprecated = -2009544, // 0xFFFFFFFFFFE15638
-        OST_RailingSystemPanelBracketHiddenLines_Deprecated = -2009543, // 0xFFFFFFFFFFE15639
-        OST_RailingSystemPanelHiddenLines_Deprecated = -2009542, // 0xFFFFFFFFFFE1563A
-        OST_RailingSystemBalusterHiddenLines_Deprecated = -2009541, // 0xFFFFFFFFFFE1563B
-        OST_RailingSystemPostHiddenLines_Deprecated = -2009540, // 0xFFFFFFFFFFE1563C
-        OST_RailingSystemSegmentHiddenLines_Deprecated = -2009539, // 0xFFFFFFFFFFE1563D
-        OST_RailingSystemHiddenLines_Deprecated = -2009538, // 0xFFFFFFFFFFE1563E
-        OST_StairStringer2012HiddenLines_Deprecated = -2009537, // 0xFFFFFFFFFFE1563F
-        OST_StairTread2012HiddenLines_Deprecated = -2009536, // 0xFFFFFFFFFFE15640
-        OST_StairLanding2012HiddenLines_Deprecated = -2009535, // 0xFFFFFFFFFFE15641
-        OST_StairRun2012HiddenLines_Deprecated = -2009534, // 0xFFFFFFFFFFE15642
-        OST_Stairs2012HiddenLines_Deprecated = -2009533, // 0xFFFFFFFFFFE15643
-        OST_MassHiddenLines = -2009532, // 0xFFFFFFFFFFE15644
-        OST_CurtaSystemHiddenLines = -2009531, // 0xFFFFFFFFFFE15645
-        OST_OBSOLETE_ElemArrayHiddenLines = -2009530, // 0xFFFFFFFFFFE15646
-        OST_EntourageHiddenLines = -2009529, // 0xFFFFFFFFFFE15647
-        OST_PlantingHiddenLines = -2009528, // 0xFFFFFFFFFFE15648
-        OST_SpecialityEquipmentHiddenLines = -2009527, // 0xFFFFFFFFFFE15649
-        OST_TopographyHiddenLines = -2009526, // 0xFFFFFFFFFFE1564A
-        OST_StructuralFramingSystemHiddenLines_Obsolete = -2009525, // 0xFFFFFFFFFFE1564B
-        OST_SiteHiddenLines = -2009524, // 0xFFFFFFFFFFE1564C
-        OST_RoadsHiddenLines = -2009523, // 0xFFFFFFFFFFE1564D
-        OST_ParkingHiddenLines = -2009522, // 0xFFFFFFFFFFE1564E
-        OST_PlumbingFixturesHiddenLines = -2009521, // 0xFFFFFFFFFFE1564F
-        OST_MechanicalEquipmentHiddenLines = -2009520, // 0xFFFFFFFFFFE15650
-        OST_LightingFixturesHiddenLines = -2009519, // 0xFFFFFFFFFFE15651
-        OST_FurnitureSystemsHiddenLines = -2009518, // 0xFFFFFFFFFFE15652
-        OST_ElectricalFixturesHiddenLines = -2009517, // 0xFFFFFFFFFFE15653
-        OST_ElectricalEquipmentHiddenLines = -2009516, // 0xFFFFFFFFFFE15654
-        OST_CaseworkHiddenLines = -2009515, // 0xFFFFFFFFFFE15655
-        OST_DetailComponentsHiddenLines = -2009514, // 0xFFFFFFFFFFE15656
-        OST_ShaftOpeningHiddenLines = -2009513, // 0xFFFFFFFFFFE15657
-        OST_GenericModelHiddenLines = -2009512, // 0xFFFFFFFFFFE15658
-        OST_CurtainWallMullionsHiddenLines = -2009511, // 0xFFFFFFFFFFE15659
-        OST_CurtainWallPanelsHiddenLines = -2009510, // 0xFFFFFFFFFFE1565A
-        OST_RampsHiddenLines = -2009509, // 0xFFFFFFFFFFE1565B
-        OST_StairsRailingHiddenLines = -2009508, // 0xFFFFFFFFFFE1565C
-        OST_StairsHiddenLines = -2009507, // 0xFFFFFFFFFFE1565D
-        OST_ColumnsHiddenLines = -2009506, // 0xFFFFFFFFFFE1565E
-        OST_FurnitureHiddenLines = -2009505, // 0xFFFFFFFFFFE1565F
-        OST_LinesHiddenLines = -2009504, // 0xFFFFFFFFFFE15660
-        OST_CeilingsHiddenLines = -2009503, // 0xFFFFFFFFFFE15661
-        OST_RoofsHiddenLines = -2009502, // 0xFFFFFFFFFFE15662
-        OST_DoorsHiddenLines = -2009501, // 0xFFFFFFFFFFE15663
-        OST_WindowsHiddenLines = -2009500, // 0xFFFFFFFFFFE15664
-        OST_StructConnectionProfilesTags = -2009064, // 0xFFFFFFFFFFE15818
-        OST_StructConnectionHoleTags = -2009063, // 0xFFFFFFFFFFE15819
-        OST_CouplerHiddenLines = -2009062, // 0xFFFFFFFFFFE1581A
-        OST_CouplerTags = -2009061, // 0xFFFFFFFFFFE1581B
-        OST_Coupler = -2009060, // 0xFFFFFFFFFFE1581C
-        OST_StructConnectionWeldTags = -2009059, // 0xFFFFFFFFFFE1581D
-        OST_StructConnectionShearStudTags = -2009058, // 0xFFFFFFFFFFE1581E
-        OST_StructConnectionAnchorTags = -2009057, // 0xFFFFFFFFFFE1581F
-        OST_StructConnectionBoltTags = -2009056, // 0xFFFFFFFFFFE15820
-        OST_StructConnectionPlateTags = -2009055, // 0xFFFFFFFFFFE15821
-        OST_RebarHiddenLines = -2009050, // 0xFFFFFFFFFFE15826
-        OST_StructSubConnections = -2009049, // 0xFFFFFFFFFFE15827
-        OST_SteelElementStale = -2009048, // 0xFFFFFFFFFFE15828
-        OST_StructConnectionModifiers = -2009047, // 0xFFFFFFFFFFE15829
-        OST_StructConnectionWelds = -2009046, // 0xFFFFFFFFFFE1582A
-        OST_StructConnectionHoles = -2009045, // 0xFFFFFFFFFFE1582B
-        OST_StructConnectionShearStuds = -2009044, // 0xFFFFFFFFFFE1582C
-        OST_StructConnectionNobleWarning = -2009043, // 0xFFFFFFFFFFE1582D
-        OST_StructConnectionOthers = -2009042, // 0xFFFFFFFFFFE1582E
-        OST_StructConnectionBolts = -2009041, // 0xFFFFFFFFFFE1582F
-        OST_StructConnectionTags = -2009040, // 0xFFFFFFFFFFE15830
-        OST_StructConnectionAnchors = -2009039, // 0xFFFFFFFFFFE15831
-        OST_StructConnectionPlates = -2009038, // 0xFFFFFFFFFFE15832
-        OST_StructConnectionProfiles = -2009037, // 0xFFFFFFFFFFE15833
-        OST_StructConnectionReference = -2009036, // 0xFFFFFFFFFFE15834
-        OST_StructConnectionFailed = -2009035, // 0xFFFFFFFFFFE15835
-        OST_StructConnectionStale = -2009034, // 0xFFFFFFFFFFE15836
-        OST_StructConnectionSymbol = -2009033, // 0xFFFFFFFFFFE15837
-        OST_StructConnectionHiddenLines = -2009032, // 0xFFFFFFFFFFE15838
-        OST_StructWeldLines = -2009031, // 0xFFFFFFFFFFE15839
-        OST_StructConnections = -2009030, // 0xFFFFFFFFFFE1583A
-        OST_FabricAreaBoundary = -2009029, // 0xFFFFFFFFFFE1583B
-        OST_FabricReinSpanSymbol = -2009028, // 0xFFFFFFFFFFE1583C
-        OST_FabricReinforcementWire = -2009027, // 0xFFFFFFFFFFE1583D
-        OST_FabricReinforcementBoundary = -2009026, // 0xFFFFFFFFFFE1583E
-        OST_RebarSetToggle = -2009025, // 0xFFFFFFFFFFE1583F
-        OST_FabricAreaTags = -2009023, // 0xFFFFFFFFFFE15841
-        OST_FabricReinforcementTags = -2009022, // 0xFFFFFFFFFFE15842
-        OST_AreaReinTags = -2009021, // 0xFFFFFFFFFFE15843
-        OST_RebarTags = -2009020, // 0xFFFFFFFFFFE15844
-        OST_FabricAreaSketchSheetsLines = -2009019, // 0xFFFFFFFFFFE15845
-        OST_FabricAreaSketchEnvelopeLines = -2009018, // 0xFFFFFFFFFFE15846
-        OST_FabricAreas = -2009017, // 0xFFFFFFFFFFE15847
-        OST_FabricReinforcement = -2009016, // 0xFFFFFFFFFFE15848
-        OST_RebarCover = -2009015, // 0xFFFFFFFFFFE15849
-        OST_CoverType = -2009014, // 0xFFFFFFFFFFE1584A
-        OST_RebarShape = -2009013, // 0xFFFFFFFFFFE1584B
-        OST_PathReinBoundary = -2009012, // 0xFFFFFFFFFFE1584C
-        OST_PathReinTags = -2009011, // 0xFFFFFFFFFFE1584D
-        OST_PathReinSpanSymbol = -2009010, // 0xFFFFFFFFFFE1584E
-        OST_PathRein = -2009009, // 0xFFFFFFFFFFE1584F
-        OST_Cage = -2009008, // 0xFFFFFFFFFFE15850
-        OST_AreaReinXVisibility = -2009007, // 0xFFFFFFFFFFE15851
-        OST_AreaReinBoundary = -2009006, // 0xFFFFFFFFFFE15852
-        OST_AreaReinSpanSymbol = -2009005, // 0xFFFFFFFFFFE15853
-        OST_AreaReinSketchOverride = -2009004, // 0xFFFFFFFFFFE15854
-        OST_AreaRein = -2009003, // 0xFFFFFFFFFFE15855
-        OST_RebarLines = -2009002, // 0xFFFFFFFFFFE15856
-        OST_RebarSketchLines = -2009001, // 0xFFFFFFFFFFE15857
-        OST_Rebar = -2009000, // 0xFFFFFFFFFFE15858
-        OST_MEPAncillaryFramingTags = -2008236, // 0xFFFFFFFFFFE15B54
-        OST_PlumbingEquipmentTags = -2008235, // 0xFFFFFFFFFFE15B55
-        OST_PlumbingEquipment = -2008234, // 0xFFFFFFFFFFE15B56
-        OST_MechanicalControlDeviceTags = -2008233, // 0xFFFFFFFFFFE15B57
-        OST_MechanicalControlDevices = -2008232, // 0xFFFFFFFFFFE15B58
-        OST_MEPAncillaryFraming = -2008231, // 0xFFFFFFFFFFE15B59
-        OST_MEPAncillaries_Obsolete = -2008230, // 0xFFFFFFFFFFE15B5A
-        OST_FabricationDuctworkStiffenerTags = -2008229, // 0xFFFFFFFFFFE15B5B
-        OST_FabricationDuctworkStiffeners = -2008228, // 0xFFFFFFFFFFE15B5C
-        OST_ELECTRICAL_AreaBasedLoads_Reference_Visibility = -2008227, // 0xFFFFFFFFFFE15B5D
-        OST_ELECTRICAL_AreaBasedLoads_InteriorFill_Visibility = -2008226, // 0xFFFFFFFFFFE15B5E
-        OST_ELECTRICAL_AreaBasedLoads_ColorFill_Obsolete = -2008225, // 0xFFFFFFFFFFE15B5F
-        OST_ELECTRICAL_AreaBasedLoads_Reference = -2008224, // 0xFFFFFFFFFFE15B60
-        OST_ELECTRICAL_AreaBasedLoads_InteriorFill = -2008223, // 0xFFFFFFFFFFE15B61
-        OST_ELECTRICAL_AreaBasedLoads_Boundary = -2008222, // 0xFFFFFFFFFFE15B62
-        OST_FabricationPipeworkInsulation = -2008221, // 0xFFFFFFFFFFE15B63
-        OST_FabricationDuctworkLining = -2008220, // 0xFFFFFFFFFFE15B64
-        OST_FabricationContainmentDrop = -2008219, // 0xFFFFFFFFFFE15B65
-        OST_FabricationContainmentRise = -2008218, // 0xFFFFFFFFFFE15B66
-        OST_FabricationPipeworkDrop = -2008217, // 0xFFFFFFFFFFE15B67
-        OST_FabricationPipeworkRise = -2008216, // 0xFFFFFFFFFFE15B68
-        OST_FabricationContainmentSymbology = -2008215, // 0xFFFFFFFFFFE15B69
-        OST_FabricationContainmentCenterLine = -2008214, // 0xFFFFFFFFFFE15B6A
-        OST_FabricationContainmentTags = -2008213, // 0xFFFFFFFFFFE15B6B
-        OST_FabricationContainment = -2008212, // 0xFFFFFFFFFFE15B6C
-        OST_FabricationPipeworkSymbology = -2008211, // 0xFFFFFFFFFFE15B6D
-        OST_FabricationPipeworkCenterLine = -2008210, // 0xFFFFFFFFFFE15B6E
-        OST_FabricationPipeworkTags = -2008209, // 0xFFFFFFFFFFE15B6F
-        OST_FabricationPipework = -2008208, // 0xFFFFFFFFFFE15B70
-        OST_FabricationDuctworkSymbology = -2008207, // 0xFFFFFFFFFFE15B71
-        OST_FabricationDuctworkDrop = -2008206, // 0xFFFFFFFFFFE15B72
-        OST_FabricationDuctworkRise = -2008205, // 0xFFFFFFFFFFE15B73
-        OST_FabricationHangerTags = -2008204, // 0xFFFFFFFFFFE15B74
-        OST_FabricationHangers = -2008203, // 0xFFFFFFFFFFE15B75
-        OST_OBSOLETE_FabricationPartsTmpGraphicDropDrag = -2008202, // 0xFFFFFFFFFFE15B76
-        OST_FabricationPartsTmpGraphicDrag = -2008201, // 0xFFFFFFFFFFE15B77
-        OST_OBSOLETE_FabricationPartsTmpGraphicDrop = -2008200, // 0xFFFFFFFFFFE15B78
-        OST_FabricationPartsTmpGraphicEnd = -2008199, // 0xFFFFFFFFFFE15B79
-        OST_FabricationDuctworkInsulation = -2008198, // 0xFFFFFFFFFFE15B7A
-        OST_LayoutNodes = -2008197, // 0xFFFFFFFFFFE15B7B
-        OST_FabricationDuctworkCenterLine = -2008196, // 0xFFFFFFFFFFE15B7C
-        OST_FabricationServiceElements = -2008195, // 0xFFFFFFFFFFE15B7D
-        OST_FabricationDuctworkTags = -2008194, // 0xFFFFFFFFFFE15B7E
-        OST_FabricationDuctwork = -2008193, // 0xFFFFFFFFFFE15B7F
-        OST_LayoutPathBase_Pipings = -2008192, // 0xFFFFFFFFFFE15B80
-        OST_NumberingSchemas = -2008191, // 0xFFFFFFFFFFE15B81
-        OST_DivisionRules = -2008190, // 0xFFFFFFFFFFE15B82
-        OST_gbXML_Shade = -2008187, // 0xFFFFFFFFFFE15B85
-        OST_AnalyticSurfaces = -2008186, // 0xFFFFFFFFFFE15B86
-        OST_AnalyticSpaces = -2008185, // 0xFFFFFFFFFFE15B87
-        OST_gbXML_OpeningAir = -2008184, // 0xFFFFFFFFFFE15B88
-        OST_gbXML_NonSlidingDoor = -2008183, // 0xFFFFFFFFFFE15B89
-        OST_gbXML_SlidingDoor = -2008182, // 0xFFFFFFFFFFE15B8A
-        OST_gbXML_OperableSkylight = -2008181, // 0xFFFFFFFFFFE15B8B
-        OST_gbXML_FixedSkylight = -2008180, // 0xFFFFFFFFFFE15B8C
-        OST_gbXML_OperableWindow = -2008179, // 0xFFFFFFFFFFE15B8D
-        OST_gbXML_FixedWindow = -2008178, // 0xFFFFFFFFFFE15B8E
-        OST_gbXML_UndergroundCeiling = -2008177, // 0xFFFFFFFFFFE15B8F
-        OST_gbXML_UndergroundSlab = -2008176, // 0xFFFFFFFFFFE15B90
-        OST_gbXML_UndergroundWall = -2008175, // 0xFFFFFFFFFFE15B91
-        OST_gbXML_SurfaceAir = -2008174, // 0xFFFFFFFFFFE15B92
-        OST_gbXML_Ceiling = -2008173, // 0xFFFFFFFFFFE15B93
-        OST_gbXML_InteriorFloor = -2008172, // 0xFFFFFFFFFFE15B94
-        OST_gbXML_InteriorWall = -2008171, // 0xFFFFFFFFFFE15B95
-        OST_gbXML_SlabOnGrade = -2008170, // 0xFFFFFFFFFFE15B96
-        OST_gbXML_RaisedFloor = -2008169, // 0xFFFFFFFFFFE15B97
-        OST_gbXML_Roof = -2008168, // 0xFFFFFFFFFFE15B98
-        OST_gbXML_ExteriorWall = -2008167, // 0xFFFFFFFFFFE15B99
-        OST_DivisionProfile = -2008165, // 0xFFFFFFFFFFE15B9B
-        OST_SplitterProfile = -2008164, // 0xFFFFFFFFFFE15B9C
-        OST_PipeSegments = -2008163, // 0xFFFFFFFFFFE15B9D
-        OST_GraphicalWarning_OpenConnector = -2008162, // 0xFFFFFFFFFFE15B9E
-        OST_PlaceHolderPipes = -2008161, // 0xFFFFFFFFFFE15B9F
-        OST_PlaceHolderDucts = -2008160, // 0xFFFFFFFFFFE15BA0
-        OST_PipingSystem_Reference_Visibility = -2008159, // 0xFFFFFFFFFFE15BA1
-        OST_PipingSystem_Reference = -2008158, // 0xFFFFFFFFFFE15BA2
-        OST_DuctSystem_Reference_Visibility = -2008157, // 0xFFFFFFFFFFE15BA3
-        OST_DuctSystem_Reference = -2008156, // 0xFFFFFFFFFFE15BA4
-        OST_PipeInsulationsTags = -2008155, // 0xFFFFFFFFFFE15BA5
-        OST_DuctLiningsTags = -2008154, // 0xFFFFFFFFFFE15BA6
-        OST_DuctInsulationsTags = -2008153, // 0xFFFFFFFFFFE15BA7
-        OST_ElectricalInternalCircuits = -2008152, // 0xFFFFFFFFFFE15BA8
-        OST_PanelScheduleGraphics = -2008151, // 0xFFFFFFFFFFE15BA9
-        OST_CableTrayRun = -2008150, // 0xFFFFFFFFFFE15BAA
-        OST_ConduitRun = -2008149, // 0xFFFFFFFFFFE15BAB
-        OST_ParamElemElectricalLoadClassification = -2008148, // 0xFFFFFFFFFFE15BAC
-        OST_DataPanelScheduleTemplates = -2008147, // 0xFFFFFFFFFFE15BAD
-        OST_SwitchboardScheduleTemplates = -2008146, // 0xFFFFFFFFFFE15BAE
-        OST_BranchPanelScheduleTemplates = -2008145, // 0xFFFFFFFFFFE15BAF
-        OST_ConduitStandards = -2008144, // 0xFFFFFFFFFFE15BB0
-        OST_ElectricalLoadClassifications = -2008143, // 0xFFFFFFFFFFE15BB1
-        OST_ElectricalDemandFactorDefinitions = -2008142, // 0xFFFFFFFFFFE15BB2
-        OST_ConduitFittingCenterLine = -2008141, // 0xFFFFFFFFFFE15BB3
-        OST_CableTrayFittingCenterLine = -2008140, // 0xFFFFFFFFFFE15BB4
-        OST_ConduitCenterLine = -2008139, // 0xFFFFFFFFFFE15BB5
-        OST_ConduitDrop = -2008138, // 0xFFFFFFFFFFE15BB6
-        OST_ConduitRiseDrop = -2008137, // 0xFFFFFFFFFFE15BB7
-        OST_CableTrayCenterLine = -2008136, // 0xFFFFFFFFFFE15BB8
-        OST_CableTrayDrop = -2008135, // 0xFFFFFFFFFFE15BB9
-        OST_CableTrayRiseDrop = -2008134, // 0xFFFFFFFFFFE15BBA
-        OST_ConduitTags = -2008133, // 0xFFFFFFFFFFE15BBB
-        OST_Conduit = -2008132, // 0xFFFFFFFFFFE15BBC
-        OST_CableTrayTags = -2008131, // 0xFFFFFFFFFFE15BBD
-        OST_CableTray = -2008130, // 0xFFFFFFFFFFE15BBE
-        OST_ConduitFittingTags = -2008129, // 0xFFFFFFFFFFE15BBF
-        OST_ConduitFitting = -2008128, // 0xFFFFFFFFFFE15BC0
-        OST_CableTrayFittingTags = -2008127, // 0xFFFFFFFFFFE15BC1
-        OST_CableTrayFitting = -2008126, // 0xFFFFFFFFFFE15BC2
-        OST_RoutingPreferences = -2008125, // 0xFFFFFFFFFFE15BC3
-        OST_DuctLinings = -2008124, // 0xFFFFFFFFFFE15BC4
-        OST_DuctInsulations = -2008123, // 0xFFFFFFFFFFE15BC5
-        OST_PipeInsulations = -2008122, // 0xFFFFFFFFFFE15BC6
-        OST_HVAC_Load_Schedules = -2008121, // 0xFFFFFFFFFFE15BC7
-        OST_HVAC_Load_Building_Types = -2008120, // 0xFFFFFFFFFFE15BC8
-        OST_HVAC_Load_Space_Types = -2008119, // 0xFFFFFFFFFFE15BC9
-        OST_HVAC_Zones_Reference_Visibility = -2008118, // 0xFFFFFFFFFFE15BCA
-        OST_HVAC_Zones_InteriorFill_Visibility = -2008117, // 0xFFFFFFFFFFE15BCB
-        OST_HVAC_Zones_ColorFill = -2008116, // 0xFFFFFFFFFFE15BCC
-        OST_ZoneTags = -2008115, // 0xFFFFFFFFFFE15BCD
-        OST_LayoutPath_Bases = -2008114, // 0xFFFFFFFFFFE15BCE
-        OST_WireTemperatureRatings = -2008113, // 0xFFFFFFFFFFE15BCF
-        OST_WireInsulations = -2008112, // 0xFFFFFFFFFFE15BD0
-        OST_WireMaterials = -2008111, // 0xFFFFFFFFFFE15BD1
-        OST_HVAC_Zones_Reference = -2008110, // 0xFFFFFFFFFFE15BD2
-        OST_HVAC_Zones_InteriorFill = -2008109, // 0xFFFFFFFFFFE15BD3
-        OST_HVAC_Zones_Boundary = -2008108, // 0xFFFFFFFFFFE15BD4
-        OST_HVAC_Zones = -2008107, // 0xFFFFFFFFFFE15BD5
-        OST_Fluids = -2008106, // 0xFFFFFFFFFFE15BD6
-        OST_PipeSchedules = -2008105, // 0xFFFFFFFFFFE15BD7
-        OST_PipeMaterials = -2008104, // 0xFFFFFFFFFFE15BD8
-        OST_PipeConnections = -2008103, // 0xFFFFFFFFFFE15BD9
-        OST_EAConstructions = -2008102, // 0xFFFFFFFFFFE15BDA
-        OST_SwitchSystem = -2008101, // 0xFFFFFFFFFFE15BDB
-        OST_SprinklerTags = -2008100, // 0xFFFFFFFFFFE15BDC
-        OST_Sprinklers = -2008099, // 0xFFFFFFFFFFE15BDD
-        OST_RouteCurveBranch = -2008098, // 0xFFFFFFFFFFE15BDE
-        OST_RouteCurveMain = -2008097, // 0xFFFFFFFFFFE15BDF
-        OST_RouteCurve = -2008096, // 0xFFFFFFFFFFE15BE0
-        OST_GbXML_Opening = -2008095, // 0xFFFFFFFFFFE15BE1
-        OST_GbXML_SType_Underground = -2008094, // 0xFFFFFFFFFFE15BE2
-        OST_GbXML_SType_Shade = -2008093, // 0xFFFFFFFFFFE15BE3
-        OST_GbXML_SType_Exterior = -2008092, // 0xFFFFFFFFFFE15BE4
-        OST_GbXML_SType_Interior = -2008091, // 0xFFFFFFFFFFE15BE5
-        OST_GbXMLFaces = -2008090, // 0xFFFFFFFFFFE15BE6
-        OST_WireHomeRunArrows = -2008089, // 0xFFFFFFFFFFE15BE7
-        OST_LightingDeviceTags = -2008088, // 0xFFFFFFFFFFE15BE8
-        OST_LightingDevices = -2008087, // 0xFFFFFFFFFFE15BE9
-        OST_FireAlarmDeviceTags = -2008086, // 0xFFFFFFFFFFE15BEA
-        OST_FireAlarmDevices = -2008085, // 0xFFFFFFFFFFE15BEB
-        OST_DataDeviceTags = -2008084, // 0xFFFFFFFFFFE15BEC
-        OST_DataDevices = -2008083, // 0xFFFFFFFFFFE15BED
-        OST_CommunicationDeviceTags = -2008082, // 0xFFFFFFFFFFE15BEE
-        OST_CommunicationDevices = -2008081, // 0xFFFFFFFFFFE15BEF
-        OST_SecurityDeviceTags = -2008080, // 0xFFFFFFFFFFE15BF0
-        OST_SecurityDevices = -2008079, // 0xFFFFFFFFFFE15BF1
-        OST_NurseCallDeviceTags = -2008078, // 0xFFFFFFFFFFE15BF2
-        OST_NurseCallDevices = -2008077, // 0xFFFFFFFFFFE15BF3
-        OST_TelephoneDeviceTags = -2008076, // 0xFFFFFFFFFFE15BF4
-        OST_TelephoneDevices = -2008075, // 0xFFFFFFFFFFE15BF5
-        OST_WireTickMarks = -2008074, // 0xFFFFFFFFFFE15BF6
-        OST_PipeFittingInsulation = -2008073, // 0xFFFFFFFFFFE15BF7
-        OST_PipeFittingCenterLine = -2008072, // 0xFFFFFFFFFFE15BF8
-        OST_FlexPipeCurvesInsulation = -2008071, // 0xFFFFFFFFFFE15BF9
-        OST_PipeCurvesInsulation = -2008070, // 0xFFFFFFFFFFE15BFA
-        OST_PipeCurvesDrop = -2008069, // 0xFFFFFFFFFFE15BFB
-        OST_DuctFittingLining = -2008068, // 0xFFFFFFFFFFE15BFC
-        OST_DuctFittingInsulation = -2008067, // 0xFFFFFFFFFFE15BFD
-        OST_DuctFittingCenterLine = -2008066, // 0xFFFFFFFFFFE15BFE
-        OST_FlexDuctCurvesInsulation = -2008065, // 0xFFFFFFFFFFE15BFF
-        OST_DuctCurvesLining = -2008064, // 0xFFFFFFFFFFE15C00
-        OST_DuctCurvesInsulation = -2008063, // 0xFFFFFFFFFFE15C01
-        OST_DuctCurvesDrop = -2008062, // 0xFFFFFFFFFFE15C02
-        OST_DuctFittingTags = -2008061, // 0xFFFFFFFFFFE15C03
-        OST_PipeFittingTags = -2008060, // 0xFFFFFFFFFFE15C04
-        OST_PipeColorFills = -2008059, // 0xFFFFFFFFFFE15C05
-        OST_PipeColorFillLegends = -2008058, // 0xFFFFFFFFFFE15C06
-        OST_WireTags = -2008057, // 0xFFFFFFFFFFE15C07
-        OST_PipeAccessoryTags = -2008056, // 0xFFFFFFFFFFE15C08
-        OST_PipeAccessory = -2008055, // 0xFFFFFFFFFFE15C09
-        OST_PipeCurvesRiseDrop = -2008054, // 0xFFFFFFFFFFE15C0A
-        OST_FlexPipeCurvesPattern = -2008053, // 0xFFFFFFFFFFE15C0B
-        OST_FlexPipeCurvesContour = -2008052, // 0xFFFFFFFFFFE15C0C
-        OST_FlexPipeCurvesCenterLine = -2008051, // 0xFFFFFFFFFFE15C0D
-        OST_FlexPipeCurves = -2008050, // 0xFFFFFFFFFFE15C0E
-        OST_PipeFitting = -2008049, // 0xFFFFFFFFFFE15C0F
-        OST_FlexPipeTags = -2008048, // 0xFFFFFFFFFFE15C10
-        OST_PipeTags = -2008047, // 0xFFFFFFFFFFE15C11
-        OST_PipeCurvesContour = -2008046, // 0xFFFFFFFFFFE15C12
-        OST_PipeCurvesCenterLine = -2008045, // 0xFFFFFFFFFFE15C13
-        OST_PipeCurves = -2008044, // 0xFFFFFFFFFFE15C14
-        OST_PipingSystem = -2008043, // 0xFFFFFFFFFFE15C15
-        OST_ElectricalDemandFactor = -2008042, // 0xFFFFFFFFFFE15C16
-        OST_ElecDistributionSys = -2008041, // 0xFFFFFFFFFFE15C17
-        OST_ElectricalVoltage = -2008040, // 0xFFFFFFFFFFE15C18
-        OST_Wire = -2008039, // 0xFFFFFFFFFFE15C19
-        OST_ElectricalCircuitTags = -2008038, // 0xFFFFFFFFFFE15C1A
-        OST_ElectricalCircuit = -2008037, // 0xFFFFFFFFFFE15C1B
-        OST_DuctCurvesRiseDrop = -2008036, // 0xFFFFFFFFFFE15C1C
-        OST_FlexDuctCurvesPattern = -2008023, // 0xFFFFFFFFFFE15C29
-        OST_FlexDuctCurvesContour = -2008022, // 0xFFFFFFFFFFE15C2A
-        OST_FlexDuctCurvesCenterLine = -2008021, // 0xFFFFFFFFFFE15C2B
-        OST_FlexDuctCurves = -2008020, // 0xFFFFFFFFFFE15C2C
-        OST_DuctAccessoryTags = -2008017, // 0xFFFFFFFFFFE15C2F
-        OST_DuctAccessory = -2008016, // 0xFFFFFFFFFFE15C30
-        OST_DuctSystem = -2008015, // 0xFFFFFFFFFFE15C31
-        OST_DuctTerminalTags = -2008014, // 0xFFFFFFFFFFE15C32
-        OST_DuctTerminal = -2008013, // 0xFFFFFFFFFFE15C33
-        OST_DuctFitting = -2008010, // 0xFFFFFFFFFFE15C36
-        OST_DuctColorFills = -2008005, // 0xFFFFFFFFFFE15C3B
-        OST_FlexDuctTags = -2008004, // 0xFFFFFFFFFFE15C3C
-        OST_DuctTags = -2008003, // 0xFFFFFFFFFFE15C3D
-        OST_DuctCurvesContour = -2008002, // 0xFFFFFFFFFFE15C3E
-        OST_DuctCurvesCenterLine = -2008001, // 0xFFFFFFFFFFE15C3F
-        OST_DuctCurves = -2008000, // 0xFFFFFFFFFFE15C40
-        OST_DuctColorFillLegends = -2007004, // 0xFFFFFFFFFFE16024
-        OST_ConnectorElemZAxis = -2007003, // 0xFFFFFFFFFFE16025
-        OST_ConnectorElemYAxis = -2007002, // 0xFFFFFFFFFFE16026
-        OST_ConnectorElemXAxis = -2007001, // 0xFFFFFFFFFFE16027
-        OST_ConnectorElem = -2007000, // 0xFFFFFFFFFFE16028
-        OST_VibrationManagementTags = -2006282, // 0xFFFFFFFFFFE162F6
-        OST_BridgeFramingTrussTags = -2006281, // 0xFFFFFFFFFFE162F7
-        OST_BridgeFramingDiaphragmTags = -2006279, // 0xFFFFFFFFFFE162F9
-        OST_BridgeFramingCrossBracingTags = -2006278, // 0xFFFFFFFFFFE162FA
-        OST_StructuralTendonTags = -2006276, // 0xFFFFFFFFFFE162FC
-        OST_StructuralTendonHiddenLines = -2006275, // 0xFFFFFFFFFFE162FD
-        OST_StructuralTendons = -2006274, // 0xFFFFFFFFFFE162FE
-        OST_ExpansionJointTags = -2006273, // 0xFFFFFFFFFFE162FF
-        OST_ExpansionJointHiddenLines = -2006272, // 0xFFFFFFFFFFE16300
-        OST_ExpansionJoints = -2006271, // 0xFFFFFFFFFFE16301
-        OST_VibrationIsolatorTags = -2006266, // 0xFFFFFFFFFFE16306
-        OST_VibrationIsolators = -2006265, // 0xFFFFFFFFFFE16307
-        OST_VibrationDamperTags = -2006264, // 0xFFFFFFFFFFE16308
-        OST_VibrationDampers = -2006263, // 0xFFFFFFFFFFE16309
-        OST_VibrationManagementHiddenLines = -2006262, // 0xFFFFFFFFFFE1630A
-        OST_VibrationManagement = -2006261, // 0xFFFFFFFFFFE1630B
-        OST_BridgeFramingTrusses = -2006248, // 0xFFFFFFFFFFE16318
-        OST_BridgeFramingDiaphragms = -2006246, // 0xFFFFFFFFFFE1631A
-        OST_BridgeFramingCrossBracing = -2006245, // 0xFFFFFFFFFFE1631B
-        OST_BridgeFramingTags = -2006243, // 0xFFFFFFFFFFE1631D
-        OST_BridgeFramingHiddenLines = -2006242, // 0xFFFFFFFFFFE1631E
-        OST_BridgeFraming = -2006241, // 0xFFFFFFFFFFE1631F
-        OST_PierWallTags = -2006230, // 0xFFFFFFFFFFE1632A
-        OST_PierWalls = -2006229, // 0xFFFFFFFFFFE1632B
-        OST_PierPileTags = -2006226, // 0xFFFFFFFFFFE1632E
-        OST_PierPiles = -2006225, // 0xFFFFFFFFFFE1632F
-        OST_PierColumnTags = -2006222, // 0xFFFFFFFFFFE16332
-        OST_PierColumns = -2006221, // 0xFFFFFFFFFFE16333
-        OST_PierCapTags = -2006220, // 0xFFFFFFFFFFE16334
-        OST_PierCaps = -2006219, // 0xFFFFFFFFFFE16335
-        OST_ApproachSlabTags = -2006211, // 0xFFFFFFFFFFE1633D
-        OST_AbutmentWallTags = -2006210, // 0xFFFFFFFFFFE1633E
-        OST_AbutmentPileTags = -2006209, // 0xFFFFFFFFFFE1633F
-        OST_AbutmentFoundationTags = -2006208, // 0xFFFFFFFFFFE16340
-        OST_ApproachSlabs = -2006205, // 0xFFFFFFFFFFE16343
-        OST_AbutmentWalls = -2006204, // 0xFFFFFFFFFFE16344
-        OST_AbutmentPiles = -2006203, // 0xFFFFFFFFFFE16345
-        OST_AbutmentFoundations = -2006202, // 0xFFFFFFFFFFE16346
-        OST_BridgeBearingTags = -2006178, // 0xFFFFFFFFFFE1635E
-        OST_BridgeGirderTags = -2006177, // 0xFFFFFFFFFFE1635F
-        OST_BridgeFoundationTags = -2006176, // 0xFFFFFFFFFFE16360
-        OST_BridgeDeckTags = -2006175, // 0xFFFFFFFFFFE16361
-        OST_BridgeArchTags = -2006174, // 0xFFFFFFFFFFE16362
-        OST_BridgeCableTags = -2006173, // 0xFFFFFFFFFFE16363
-        OST_BridgeTowerTags = -2006172, // 0xFFFFFFFFFFE16364
-        OST_BridgePierTags = -2006171, // 0xFFFFFFFFFFE16365
-        OST_BridgeAbutmentTags = -2006170, // 0xFFFFFFFFFFE16366
-        OST_BridgeBearingHiddenLines = -2006158, // 0xFFFFFFFFFFE16372
-        OST_BridgeGirderHiddenLines2021_Deprecated = -2006157, // 0xFFFFFFFFFFE16373
-        OST_BridgeFoundationHiddenLines2021_Deprecated = -2006156, // 0xFFFFFFFFFFE16374
-        OST_BridgeDeckHiddenLines = -2006155, // 0xFFFFFFFFFFE16375
-        OST_BridgeArchHiddenLines2021_Deprecated = -2006154, // 0xFFFFFFFFFFE16376
-        OST_BridgeCableHiddenLines2021_Deprecated = -2006153, // 0xFFFFFFFFFFE16377
-        OST_BridgeTowerHiddenLines2021_Deprecated = -2006152, // 0xFFFFFFFFFFE16378
-        OST_BridgePierHiddenLines = -2006151, // 0xFFFFFFFFFFE16379
-        OST_BridgeAbutmentHiddenLines = -2006150, // 0xFFFFFFFFFFE1637A
-        OST_BridgeBearings = -2006138, // 0xFFFFFFFFFFE16386
-        OST_BridgeGirders = -2006137, // 0xFFFFFFFFFFE16387
-        OST_BridgeFoundations = -2006136, // 0xFFFFFFFFFFE16388
-        OST_BridgeDecks = -2006135, // 0xFFFFFFFFFFE16389
-        OST_BridgeArches = -2006134, // 0xFFFFFFFFFFE1638A
-        OST_BridgeCables = -2006133, // 0xFFFFFFFFFFE1638B
-        OST_BridgeTowers = -2006132, // 0xFFFFFFFFFFE1638C
-        OST_BridgePiers = -2006131, // 0xFFFFFFFFFFE1638D
-        OST_BridgeAbutments = -2006130, // 0xFFFFFFFFFFE1638E
-        OST_DesignOptions = -2006114, // 0xFFFFFFFFFFE1639E
-        OST_DesignOptionSets = -2006112, // 0xFFFFFFFFFFE163A0
-        OST_StructuralBracePlanReps = -2006110, // 0xFFFFFFFFFFE163A2
-        OST_StructConnectionSymbols = -2006100, // 0xFFFFFFFFFFE163AC
-        OST_StructuralAnnotations = -2006090, // 0xFFFFFFFFFFE163B6
-        OST_RevisionCloudTags = -2006080, // 0xFFFFFFFFFFE163C0
-        OST_RevisionNumberingSequences = -2006071, // 0xFFFFFFFFFFE163C9
-        OST_Revisions = -2006070, // 0xFFFFFFFFFFE163CA
-        OST_RevisionClouds = -2006060, // 0xFFFFFFFFFFE163D4
-        OST_EditCutProfile = -2006050, // 0xFFFFFFFFFFE163DE
-        OST_ElevationMarks = -2006045, // 0xFFFFFFFFFFE163E3
-        OST_GridHeads = -2006040, // 0xFFFFFFFFFFE163E8
-        OST_LevelHeads = -2006020, // 0xFFFFFFFFFFE163FC
-        OST_DecalType = -2006002, // 0xFFFFFFFFFFE1640E
-        OST_DecalElement = -2006001, // 0xFFFFFFFFFFE1640F
-        OST_VolumeOfInterest = -2006000, // 0xFFFFFFFFFFE16410
-        OST_BoundaryConditions = -2005301, // 0xFFFFFFFFFFE166CB
-        OST_InternalAreaLoadTags = -2005255, // 0xFFFFFFFFFFE166F9
-        OST_InternalLineLoadTags = -2005254, // 0xFFFFFFFFFFE166FA
-        OST_InternalPointLoadTags = -2005253, // 0xFFFFFFFFFFE166FB
-        OST_AreaLoadTags = -2005252, // 0xFFFFFFFFFFE166FC
-        OST_LineLoadTags = -2005251, // 0xFFFFFFFFFFE166FD
-        OST_PointLoadTags = -2005250, // 0xFFFFFFFFFFE166FE
-        OST_LoadCasesSeismic = -2005218, // 0xFFFFFFFFFFE1671E
-        OST_LoadCasesTemperature = -2005217, // 0xFFFFFFFFFFE1671F
-        OST_LoadCasesAccidental = -2005216, // 0xFFFFFFFFFFE16720
-        OST_LoadCasesRoofLive = -2005215, // 0xFFFFFFFFFFE16721
-        OST_LoadCasesSnow = -2005214, // 0xFFFFFFFFFFE16722
-        OST_LoadCasesWind = -2005213, // 0xFFFFFFFFFFE16723
-        OST_LoadCasesLive = -2005212, // 0xFFFFFFFFFFE16724
-        OST_LoadCasesDead = -2005211, // 0xFFFFFFFFFFE16725
-        OST_LoadCases = -2005210, // 0xFFFFFFFFFFE16726
-        OST_InternalAreaLoads = -2005207, // 0xFFFFFFFFFFE16729
-        OST_InternalLineLoads = -2005206, // 0xFFFFFFFFFFE1672A
-        OST_InternalPointLoads = -2005205, // 0xFFFFFFFFFFE1672B
-        OST_InternalLoads = -2005204, // 0xFFFFFFFFFFE1672C
-        OST_AreaLoads = -2005203, // 0xFFFFFFFFFFE1672D
-        OST_LineLoads = -2005202, // 0xFFFFFFFFFFE1672E
-        OST_PointLoads = -2005201, // 0xFFFFFFFFFFE1672F
-        OST_Loads = -2005200, // 0xFFFFFFFFFFE16730
-        OST_BeamSystemTags = -2005130, // 0xFFFFFFFFFFE16776
-        OST_FootingSpanDirectionSymbol = -2005111, // 0xFFFFFFFFFFE16789
-        OST_SpanDirectionSymbol = -2005110, // 0xFFFFFFFFFFE1678A
-        OST_SpotSlopesSymbols = -2005102, // 0xFFFFFFFFFFE16792
-        OST_SpotCoordinateSymbols = -2005101, // 0xFFFFFFFFFFE16793
-        OST_SpotElevSymbols = -2005100, // 0xFFFFFFFFFFE16794
-        OST_MultiLeaderTag = -2005033, // 0xFFFFFFFFFFE167D7
-        OST_CurtainWallMullionTags = -2005032, // 0xFFFFFFFFFFE167D8
-        OST_StructuralConnectionHandlerTags_Deprecated = -2005031, // 0xFFFFFFFFFFE167D9
-        OST_TrussTags = -2005030, // 0xFFFFFFFFFFE167DA
-        OST_KeynoteTags = -2005029, // 0xFFFFFFFFFFE167DB
-        OST_DetailComponentTags = -2005028, // 0xFFFFFFFFFFE167DC
-        OST_MaterialTags = -2005027, // 0xFFFFFFFFFFE167DD
-        OST_FloorTags = -2005026, // 0xFFFFFFFFFFE167DE
-        OST_CurtaSystemTags = -2005025, // 0xFFFFFFFFFFE167DF
-        OST_HostFinTags = -2005024, // 0xFFFFFFFFFFE167E0
-        OST_StairsTags = -2005023, // 0xFFFFFFFFFFE167E1
-        OST_MultiCategoryTags = -2005022, // 0xFFFFFFFFFFE167E2
-        OST_PlantingTags = -2005021, // 0xFFFFFFFFFFE167E3
-        OST_AreaTags = -2005020, // 0xFFFFFFFFFFE167E4
-        OST_StructuralFoundationTags = -2005019, // 0xFFFFFFFFFFE167E5
-        OST_StructuralColumnTags = -2005018, // 0xFFFFFFFFFFE167E6
-        OST_ParkingTags = -2005017, // 0xFFFFFFFFFFE167E7
-        OST_SiteTags = -2005016, // 0xFFFFFFFFFFE167E8
-        OST_StructuralFramingTags = -2005015, // 0xFFFFFFFFFFE167E9
-        OST_SpecialityEquipmentTags = -2005014, // 0xFFFFFFFFFFE167EA
-        OST_GenericModelTags = -2005013, // 0xFFFFFFFFFFE167EB
-        OST_CurtainWallPanelTags = -2005012, // 0xFFFFFFFFFFE167EC
-        OST_WallTags = -2005011, // 0xFFFFFFFFFFE167ED
-        OST_PlumbingFixtureTags = -2005010, // 0xFFFFFFFFFFE167EE
-        OST_MechanicalEquipmentTags = -2005009, // 0xFFFFFFFFFFE167EF
-        OST_LightingFixtureTags = -2005008, // 0xFFFFFFFFFFE167F0
-        OST_FurnitureSystemTags = -2005007, // 0xFFFFFFFFFFE167F1
-        OST_FurnitureTags = -2005006, // 0xFFFFFFFFFFE167F2
-        OST_ElectricalFixtureTags = -2005004, // 0xFFFFFFFFFFE167F4
-        OST_ElectricalEquipmentTags = -2005003, // 0xFFFFFFFFFFE167F5
-        OST_CeilingTags = -2005002, // 0xFFFFFFFFFFE167F6
-        OST_CaseworkTags = -2005001, // 0xFFFFFFFFFFE167F7
-        OST_Tags = -2005000, // 0xFFFFFFFFFFE167F8
-        OST_MEPSpaceColorFill = -2003605, // 0xFFFFFFFFFFE16D6B
-        OST_MEPSpaceReference = -2003604, // 0xFFFFFFFFFFE16D6C
-        OST_MEPSpaceInteriorFill = -2003603, // 0xFFFFFFFFFFE16D6D
-        OST_MEPSpaceReferenceVisibility = -2003602, // 0xFFFFFFFFFFE16D6E
-        OST_MEPSpaceInteriorFillVisibility = -2003601, // 0xFFFFFFFFFFE16D6F
-        OST_MEPSpaces = -2003600, // 0xFFFFFFFFFFE16D70
-        OST_StackedWalls = -2003500, // 0xFFFFFFFFFFE16DD4
-        OST_MassGlazingAll = -2003423, // 0xFFFFFFFFFFE16E21
-        OST_MassFloorsAll = -2003422, // 0xFFFFFFFFFFE16E22
-        OST_MassWallsAll = -2003421, // 0xFFFFFFFFFFE16E23
-        OST_MassExteriorWallUnderground = -2003420, // 0xFFFFFFFFFFE16E24
-        OST_MassSlab = -2003419, // 0xFFFFFFFFFFE16E25
-        OST_MassShade = -2003418, // 0xFFFFFFFFFFE16E26
-        OST_MassOpening = -2003417, // 0xFFFFFFFFFFE16E27
-        OST_MassSkylights = -2003416, // 0xFFFFFFFFFFE16E28
-        OST_MassGlazing = -2003415, // 0xFFFFFFFFFFE16E29
-        OST_MassRoof = -2003414, // 0xFFFFFFFFFFE16E2A
-        OST_MassExteriorWall = -2003413, // 0xFFFFFFFFFFE16E2B
-        OST_MassInteriorWall = -2003412, // 0xFFFFFFFFFFE16E2C
-        OST_MassZone = -2003411, // 0xFFFFFFFFFFE16E2D
-        OST_MassAreaFaceTags = -2003410, // 0xFFFFFFFFFFE16E2E
-        OST_HostTemplate = -2003409, // 0xFFFFFFFFFFE16E2F
-        OST_MassFaceSplitter = -2003408, // 0xFFFFFFFFFFE16E30
-        OST_MassCutter = -2003407, // 0xFFFFFFFFFFE16E31
-        OST_ZoningEnvelope = -2003406, // 0xFFFFFFFFFFE16E32
-        OST_MassTags = -2003405, // 0xFFFFFFFFFFE16E33
-        OST_MassForm = -2003404, // 0xFFFFFFFFFFE16E34
-        OST_MassFloor = -2003403, // 0xFFFFFFFFFFE16E35
-        OST_Mass = -2003400, // 0xFFFFFFFFFFE16E38
-        OST_DividedSurface_DiscardedDivisionLines = -2003333, // 0xFFFFFFFFFFE16E7B
-        OST_DividedSurfaceBelt = -2003332, // 0xFFFFFFFFFFE16E7C
-        OST_TilePatterns = -2003331, // 0xFFFFFFFFFFE16E7D
-        OST_AlwaysExcludedInAllViews = -2003330, // 0xFFFFFFFFFFE16E7E
-        OST_DividedSurface_TransparentFace = -2003329, // 0xFFFFFFFFFFE16E7F
-        OST_DividedSurface_PreDividedSurface = -2003328, // 0xFFFFFFFFFFE16E80
-        OST_DividedSurface_PatternFill = -2003327, // 0xFFFFFFFFFFE16E81
-        OST_DividedSurface_PatternLines = -2003326, // 0xFFFFFFFFFFE16E82
-        OST_DividedSurface_Gridlines = -2003325, // 0xFFFFFFFFFFE16E83
-        OST_DividedSurface_Nodes = -2003324, // 0xFFFFFFFFFFE16E84
-        OST_DividedSurface = -2003323, // 0xFFFFFFFFFFE16E85
-        OST_RepeatingDetailLines = -2003321, // 0xFFFFFFFFFFE16E87
-        OST_RampsDownArrow = -2003308, // 0xFFFFFFFFFFE16E94
-        OST_RampsUpArrow = -2003307, // 0xFFFFFFFFFFE16E95
-        OST_RampsDownText = -2003306, // 0xFFFFFFFFFFE16E96
-        OST_RampsUpText = -2003305, // 0xFFFFFFFFFFE16E97
-        OST_RampsStringerAboveCut = -2003304, // 0xFFFFFFFFFFE16E98
-        OST_RampsStringer = -2003303, // 0xFFFFFFFFFFE16E99
-        OST_RampsAboveCut = -2003302, // 0xFFFFFFFFFFE16E9A
-        OST_RampsIncomplete = -2003301, // 0xFFFFFFFFFFE16E9B
-        OST_TrussDummy = -2003300, // 0xFFFFFFFFFFE16E9C
-        OST_ZoneSchemes = -2003225, // 0xFFFFFFFFFFE16EE7
-        OST_AreaSchemes = -2003201, // 0xFFFFFFFFFFE16EFF
-        OST_Areas = -2003200, // 0xFFFFFFFFFFE16F00
-        OST_ProjectInformation = -2003101, // 0xFFFFFFFFFFE16F63
-        OST_Sheets = -2003100, // 0xFFFFFFFFFFE16F64
-        OST_ProfileFamilies = -2003000, // 0xFFFFFFFFFFE16FC8
-        OST_DetailComponents = -2002000, // 0xFFFFFFFFFFE173B0
-        OST_RoofSoffit = -2001393, // 0xFFFFFFFFFFE1760F
-        OST_EdgeSlab = -2001392, // 0xFFFFFFFFFFE17610
-        OST_Gutter = -2001391, // 0xFFFFFFFFFFE17611
-        OST_Fascia = -2001390, // 0xFFFFFFFFFFE17612
-        OST_Entourage = -2001370, // 0xFFFFFFFFFFE17626
-        OST_Planting = -2001360, // 0xFFFFFFFFFFE17630
-        OST_Blocks = -2001359, // 0xFFFFFFFFFFE17631
-        OST_StructuralStiffenerHiddenLines = -2001358, // 0xFFFFFFFFFFE17632
-        OST_StructuralColumnLocationLine = -2001357, // 0xFFFFFFFFFFE17633
-        OST_StructuralFramingLocationLine = -2001356, // 0xFFFFFFFFFFE17634
-        OST_StructuralStiffenerTags = -2001355, // 0xFFFFFFFFFFE17635
-        OST_StructuralStiffener = -2001354, // 0xFFFFFFFFFFE17636
-        OST_FootingAnalyticalGeometry = -2001353, // 0xFFFFFFFFFFE17637
-        OST_RvtLinks = -2001352, // 0xFFFFFFFFFFE17638
-        OST_Automatic = -2001351, // 0xFFFFFFFFFFE17639
-        OST_SpecialityEquipment = -2001350, // 0xFFFFFFFFFFE1763A
-        OST_ColumnAnalyticalRigidLinks = -2001344, // 0xFFFFFFFFFFE17640
-        OST_SecondaryTopographyContours = -2001343, // 0xFFFFFFFFFFE17641
-        OST_TopographyContours = -2001342, // 0xFFFFFFFFFFE17642
-        OST_TopographySurface = -2001341, // 0xFFFFFFFFFFE17643
-        OST_Topography = -2001340, // 0xFFFFFFFFFFE17644
-        OST_TopographyLink = -2001339, // 0xFFFFFFFFFFE17645
-        OST_StructuralTruss = -2001336, // 0xFFFFFFFFFFE17648
-        OST_StructuralColumnStickSymbols = -2001335, // 0xFFFFFFFFFFE17649
-        OST_HiddenStructuralColumnLines = -2001334, // 0xFFFFFFFFFFE1764A
-        OST_AnalyticalRigidLinks = -2001333, // 0xFFFFFFFFFFE1764B
-        OST_ColumnAnalyticalGeometry = -2001332, // 0xFFFFFFFFFFE1764C
-        OST_FramingAnalyticalGeometry = -2001331, // 0xFFFFFFFFFFE1764D
-        OST_StructuralColumns = -2001330, // 0xFFFFFFFFFFE1764E
-        OST_HiddenStructuralFramingLines = -2001329, // 0xFFFFFFFFFFE1764F
-        OST_KickerBracing = -2001328, // 0xFFFFFFFFFFE17650
-        OST_StructuralFramingSystem = -2001327, // 0xFFFFFFFFFFE17651
-        OST_VerticalBracing = -2001326, // 0xFFFFFFFFFFE17652
-        OST_HorizontalBracing = -2001325, // 0xFFFFFFFFFFE17653
-        OST_Purlin = -2001324, // 0xFFFFFFFFFFE17654
-        OST_Joist = -2001323, // 0xFFFFFFFFFFE17655
-        OST_Girder = -2001322, // 0xFFFFFFFFFFE17656
-        OST_StructuralFramingOther = -2001321, // 0xFFFFFFFFFFE17657
-        OST_StructuralFraming = -2001320, // 0xFFFFFFFFFFE17658
-        OST_HiddenStructuralFoundationLines = -2001302, // 0xFFFFFFFFFFE1766A
-        OST_StructuralFoundation = -2001300, // 0xFFFFFFFFFFE1766C
-        OST_LinkBasePoint = -2001276, // 0xFFFFFFFFFFE17684
-        OST_BasePointAxisZ = -2001275, // 0xFFFFFFFFFFE17685
-        OST_BasePointAxisY = -2001274, // 0xFFFFFFFFFFE17686
-        OST_BasePointAxisX = -2001273, // 0xFFFFFFFFFFE17687
-        OST_SharedBasePoint = -2001272, // 0xFFFFFFFFFFE17688
-        OST_ProjectBasePoint = -2001271, // 0xFFFFFFFFFFE17689
-        OST_SiteRegion = -2001270, // 0xFFFFFFFFFFE1768A
-        OST_SitePropertyLineSegmentTags = -2001269, // 0xFFFFFFFFFFE1768B
-        OST_SitePropertyLineSegment = -2001268, // 0xFFFFFFFFFFE1768C
-        OST_SitePropertyTags = -2001267, // 0xFFFFFFFFFFE1768D
-        OST_SitePointBoundary = -2001266, // 0xFFFFFFFFFFE1768E
-        OST_SiteProperty = -2001265, // 0xFFFFFFFFFFE1768F
-        OST_BuildingPad = -2001263, // 0xFFFFFFFFFFE17691
-        OST_SitePoint = -2001262, // 0xFFFFFFFFFFE17692
-        OST_SiteSurface = -2001261, // 0xFFFFFFFFFFE17693
-        OST_Site = -2001260, // 0xFFFFFFFFFFE17694
-        OST_Sewer = -2001240, // 0xFFFFFFFFFFE176A8
-        OST_RoadTags = -2001221, // 0xFFFFFFFFFFE176BB
-        OST_Roads = -2001220, // 0xFFFFFFFFFFE176BC
-        OST_Property = -2001200, // 0xFFFFFFFFFFE176D0
-        OST_Parking = -2001180, // 0xFFFFFFFFFFE176E4
-        OST_PlumbingFixtures = -2001160, // 0xFFFFFFFFFFE176F8
-        OST_MechanicalEquipment = -2001140, // 0xFFFFFFFFFFE1770C
-        OST_LightingFixtureSource = -2001121, // 0xFFFFFFFFFFE1771F
-        OST_LightingFixtures = -2001120, // 0xFFFFFFFFFFE17720
-        OST_DuctAnalyticalSegmentTags = -2001116, // 0xFFFFFFFFFFE17724
-        OST_DuctAnalyticalSegments = -2001115, // 0xFFFFFFFFFFE17725
-        OST_PipeAnalyticalSegmentTags = -2001114, // 0xFFFFFFFFFFE17726
-        OST_PipeAnalyticalSegments = -2001113, // 0xFFFFFFFFFFE17727
-        OST_SheetCollections = -2001112, // 0xFFFFFFFFFFE17728
-        OST_DuctFlowDirectionSymbols_Obsolete = -2001111, // 0xFFFFFFFFFFE17729
-        OST_PipeFlowDirectionSymbols_Obsolete = -2001110, // 0xFFFFFFFFFFE1772A
-        OST_RebarSpliceType = -2001109, // 0xFFFFFFFFFFE1772B
-        OST_RebarSpliceLines = -2001108, // 0xFFFFFFFFFFE1772C
-        OST_DataExchanges = -2001107, // 0xFFFFFFFFFFE1772D
-        OST_FloorLayers = -2001106, // 0xFFFFFFFFFFE1772E
-        OST_WallLayers = -2001105, // 0xFFFFFFFFFFE1772F
-        OST_RebarBendingDetails = -2001104, // 0xFFFFFFFFFFE17730
-        OST_ToposolidLinkTags = -2001103, // 0xFFFFFFFFFFE17731
-        OST_ElectricalConnectorTags = -2001102, // 0xFFFFFFFFFFE17732
-        OST_ElectricalConnector = -2001101, // 0xFFFFFFFFFFE17733
-        OST_FurnitureSystems = -2001100, // 0xFFFFFFFFFFE17734
-        OST_ElectricalLoadCase = -2001099, // 0xFFFFFFFFFFE17735
-        OST_ElectricalLoadSet = -2001098, // 0xFFFFFFFFFFE17736
-        OST_ToposolidLink = -2001097, // 0xFFFFFFFFFFE17737
-        OST_ElectricalAnalyticalFeeder = -2001096, // 0xFFFFFFFFFFE17738
-        OST_ToposolidOpening = -2001095, // 0xFFFFFFFFFFE17739
-        OST_ToposolidTags = -2001094, // 0xFFFFFFFFFFE1773A
-        OST_ToposolidInsulation = -2001093, // 0xFFFFFFFFFFE1773B
-        OST_ToposolidSurfacePattern = -2001092, // 0xFFFFFFFFFFE1773C
-        OST_ToposolidFinish2 = -2001091, // 0xFFFFFFFFFFE1773D
-        OST_ToposolidFinish1 = -2001090, // 0xFFFFFFFFFFE1773E
-        OST_ToposolidSubstrate = -2001089, // 0xFFFFFFFFFFE1773F
-        OST_ToposolidStructure = -2001088, // 0xFFFFFFFFFFE17740
-        OST_ToposolidMembrane = -2001087, // 0xFFFFFFFFFFE17741
-        OST_ToposolidCutPattern = -2001086, // 0xFFFFFFFFFFE17742
-        OST_ToposolidDefault = -2001085, // 0xFFFFFFFFFFE17743
-        OST_ToposolidSplitLines = -2001084, // 0xFFFFFFFFFFE17744
-        OST_ToposolidFoldingLines = -2001083, // 0xFFFFFFFFFFE17745
-        OST_ToposolidSecondaryContours = -2001082, // 0xFFFFFFFFFFE17746
-        OST_ToposolidContours = -2001081, // 0xFFFFFFFFFFE17747
-        OST_ToposolidHiddenLines = -2001080, // 0xFFFFFFFFFFE17748
-        OST_Toposolid = -2001079, // 0xFFFFFFFFFFE17749
-        OST_ELECTRICAL_AreaBasedLoads_Tags = -2001078, // 0xFFFFFFFFFFE1774A
-        OST_ElectricalAnalyticalTransformer = -2001077, // 0xFFFFFFFFFFE1774B
-        OST_FloorsSplitLines = -2001076, // 0xFFFFFFFFFFE1774C
-        OST_AnalyticalMemberCrossSection = -2001075, // 0xFFFFFFFFFFE1774D
-        OST_RvtLinksTags = -2001074, // 0xFFFFFFFFFFE1774E
-        OST_ModelGroupTags = -2001073, // 0xFFFFFFFFFFE1774F
-        OST_WallSweepTags = -2001072, // 0xFFFFFFFFFFE17750
-        OST_TopRailTags = -2001071, // 0xFFFFFFFFFFE17751
-        OST_SlabEdgeTags = -2001070, // 0xFFFFFFFFFFE17752
-        OST_RoofSoffitTags = -2001069, // 0xFFFFFFFFFFE17753
-        OST_RampTags = -2001068, // 0xFFFFFFFFFFE17754
-        OST_PadTags = -2001067, // 0xFFFFFFFFFFE17755
-        OST_HandrailTags = -2001066, // 0xFFFFFFFFFFE17756
-        OST_GutterTags = -2001065, // 0xFFFFFFFFFFE17757
-        OST_EntourageTags = -2001064, // 0xFFFFFFFFFFE17758
-        OST_ColumnTags = -2001063, // 0xFFFFFFFFFFE17759
-        OST_FasciaTags = -2001062, // 0xFFFFFFFFFFE1775A
-        OST_SignageTags = -2001061, // 0xFFFFFFFFFFE1775B
-        OST_ElectricalFixtures = -2001060, // 0xFFFFFFFFFFE1775C
-        OST_SignageHiddenLines = -2001059, // 0xFFFFFFFFFFE1775D
-        OST_Signage = -2001058, // 0xFFFFFFFFFFE1775E
-        OST_AudioVisualDeviceTags = -2001057, // 0xFFFFFFFFFFE1775F
-        OST_AudioVisualDevicesHiddenLines = -2001056, // 0xFFFFFFFFFFE17760
-        OST_AudioVisualDevices = -2001055, // 0xFFFFFFFFFFE17761
-        OST_VerticalCirculationTags = -2001054, // 0xFFFFFFFFFFE17762
-        OST_VerticalCirculationHiddenLines = -2001053, // 0xFFFFFFFFFFE17763
-        OST_VerticalCirculation = -2001052, // 0xFFFFFFFFFFE17764
-        OST_FireProtectionTags = -2001051, // 0xFFFFFFFFFFE17765
-        OST_FireProtectionHiddenLines = -2001050, // 0xFFFFFFFFFFE17766
-        OST_FireProtection = -2001049, // 0xFFFFFFFFFFE17767
-        OST_MedicalEquipmentTags = -2001048, // 0xFFFFFFFFFFE17768
-        OST_MedicalEquipmentHiddenLines = -2001047, // 0xFFFFFFFFFFE17769
-        OST_MedicalEquipment = -2001046, // 0xFFFFFFFFFFE1776A
-        OST_FoodServiceEquipmentTags = -2001045, // 0xFFFFFFFFFFE1776B
-        OST_FoodServiceEquipmentHiddenLines = -2001044, // 0xFFFFFFFFFFE1776C
-        OST_FoodServiceEquipment = -2001043, // 0xFFFFFFFFFFE1776D
-        OST_TemporaryStructureTags = -2001042, // 0xFFFFFFFFFFE1776E
-        OST_TemporaryStructureHiddenLines = -2001041, // 0xFFFFFFFFFFE1776F
-        OST_ElectricalEquipment = -2001040, // 0xFFFFFFFFFFE17770
-        OST_TemporaryStructure = -2001039, // 0xFFFFFFFFFFE17771
-        OST_HardscapeTags = -2001038, // 0xFFFFFFFFFFE17772
-        OST_HardscapeHiddenLines = -2001037, // 0xFFFFFFFFFFE17773
-        OST_Hardscape = -2001036, // 0xFFFFFFFFFFE17774
-        OST_WallCoreLayer = -2001035, // 0xFFFFFFFFFFE17775
-        OST_WallNonCoreLayer = -2001034, // 0xFFFFFFFFFFE17776
-        OST_MEPLoadAreaSeparationLines = -2001033, // 0xFFFFFFFFFFE17777
-        OST_MEPLoadAreaReferenceVisibility = -2001031, // 0xFFFFFFFFFFE17779
-        OST_MEPLoadAreaInteriorFillVisibility = -2001030, // 0xFFFFFFFFFFE1777A
-        OST_MEPLoadAreaReference = -2001029, // 0xFFFFFFFFFFE1777B
-        OST_MEPLoadAreaInteriorFill = -2001028, // 0xFFFFFFFFFFE1777C
-        OST_MEPLoadAreaColorFill = -2001027, // 0xFFFFFFFFFFE1777D
-        OST_ElectricalPowerSource = -2001026, // 0xFFFFFFFFFFE1777E
-        OST_MEPLoadAreaTags_OBSOLETE = -2001025, // 0xFFFFFFFFFFE1777F
-        OST_MEPLoadAreas = -2001024, // 0xFFFFFFFFFFE17780
-        OST_MEPAnalyticalTransferSwitch = -2001023, // 0xFFFFFFFFFFE17781
-        OST_OBSOLETE_MEPAnalyticalElectricalBranch = -2001022, // 0xFFFFFFFFFFE17782
-        OST_MEPAnalyticalBus = -2001021, // 0xFFFFFFFFFFE17783
-        OST_ElectricalLoadZoneInstance = -2001020, // 0xFFFFFFFFFFE17784
-        OST_ElectricalLoadZoneType = -2001019, // 0xFFFFFFFFFFE17785
-        OST_ElectricalZoneEquipment_Obsolete = -2001018, // 0xFFFFFFFFFFE17786
-        OST_AlignmentStationLabels = -2001017, // 0xFFFFFFFFFFE17787
-        OST_AlignmentStationLabelSets = -2001016, // 0xFFFFFFFFFFE17788
-        OST_AlignmentsTags = -2001015, // 0xFFFFFFFFFFE17789
-        OST_MinorStations_Deprecated = -2001014, // 0xFFFFFFFFFFE1778A
-        OST_MajorStations_Deprecated = -2001013, // 0xFFFFFFFFFFE1778B
-        OST_Alignments = -2001012, // 0xFFFFFFFFFFE1778C
-        OST_ElectricalCircuitNaming = -2001011, // 0xFFFFFFFFFFE1778D
-        OST_ZoneEquipment = -2001010, // 0xFFFFFFFFFFE1778E
-        OST_MEPAnalyticalWaterLoop = -2001009, // 0xFFFFFFFFFFE1778F
-        OST_MEPAnalyticalAirLoop = -2001008, // 0xFFFFFFFFFFE17790
-        OST_MEPSystemZoneTags = -2001007, // 0xFFFFFFFFFFE17791
-        OST_MEPSystemZoneReferenceLinesVisibility = -2001006, // 0xFFFFFFFFFFE17792
-        OST_MEPSystemZoneInteriorFillVisibility = -2001005, // 0xFFFFFFFFFFE17793
-        OST_MEPSystemZoneReferenceLines = -2001004, // 0xFFFFFFFFFFE17794
-        OST_MEPSystemZoneInteriorFill = -2001003, // 0xFFFFFFFFFFE17795
-        OST_MEPSystemZoneBoundary = -2001002, // 0xFFFFFFFFFFE17796
-        OST_MEPSystemZone = -2001001, // 0xFFFFFFFFFFE17797
-        OST_Casework = -2001000, // 0xFFFFFFFFFFE17798
-        OST_ArcWallRectOpening = -2000999, // 0xFFFFFFFFFFE17799
-        OST_DormerOpeningIncomplete = -2000998, // 0xFFFFFFFFFFE1779A
-        OST_SWallRectOpening = -2000997, // 0xFFFFFFFFFFE1779B
-        OST_ShaftOpening = -2000996, // 0xFFFFFFFFFFE1779C
-        OST_StructuralFramingOpening = -2000995, // 0xFFFFFFFFFFE1779D
-        OST_ColumnOpening = -2000994, // 0xFFFFFFFFFFE1779E
-        OST_RiseDropSymbols = -2000989, // 0xFFFFFFFFFFE177A3
-        OST_PipeHydronicSeparationSymbols = -2000988, // 0xFFFFFFFFFFE177A4
-        OST_MechanicalEquipmentSetBoundaryLines = -2000987, // 0xFFFFFFFFFFE177A5
-        OST_MechanicalEquipmentSetTags = -2000986, // 0xFFFFFFFFFFE177A6
-        OST_MechanicalEquipmentSet = -2000985, // 0xFFFFFFFFFFE177A7
-        OST_AnalyticalPipeConnectionLineSymbol = -2000984, // 0xFFFFFFFFFFE177A8
-        OST_AnalyticalPipeConnections = -2000983, // 0xFFFFFFFFFFE177A9
-        OST_Coordination_Model = -2000982, // 0xFFFFFFFFFFE177AA
-        OST_MultistoryStairs = -2000980, // 0xFFFFFFFFFFE177AC
-        OST_HiddenStructuralConnectionLines_Deprecated = -2000979, // 0xFFFFFFFFFFE177AD
-        OST_StructuralConnectionHandler_Deprecated = -2000978, // 0xFFFFFFFFFFE177AE
-        OST_CoordinateSystem = -2000977, // 0xFFFFFFFFFFE177AF
-        OST_FndSlabLocalCoordSys = -2000976, // 0xFFFFFFFFFFE177B0
-        OST_FloorLocalCoordSys = -2000975, // 0xFFFFFFFFFFE177B1
-        OST_WallLocalCoordSys = -2000974, // 0xFFFFFFFFFFE177B2
-        OST_BraceLocalCoordSys = -2000973, // 0xFFFFFFFFFFE177B3
-        OST_ColumnLocalCoordSys = -2000972, // 0xFFFFFFFFFFE177B4
-        OST_BeamLocalCoordSys = -2000971, // 0xFFFFFFFFFFE177B5
-        OST_MultiReferenceAnnotations = -2000970, // 0xFFFFFFFFFFE177B6
-        OST_DSR_LeaderTickMarkStyleId = -2000969, // 0xFFFFFFFFFFE177B7
-        OST_DSR_InteriorTickMarkStyleId = -2000968, // 0xFFFFFFFFFFE177B8
-        OST_DSR_ArrowHeadStyleId = -2000967, // 0xFFFFFFFFFFE177B9
-        OST_DSR_CenterlineTickMarkStyleId = -2000966, // 0xFFFFFFFFFFE177BA
-        OST_DSR_CenterlinePatternCatId = -2000965, // 0xFFFFFFFFFFE177BB
-        OST_DSR_DimStyleHeavyEndCategoryId = -2000964, // 0xFFFFFFFFFFE177BC
-        OST_DSR_DimStyleHeavyEndCatId = -2000963, // 0xFFFFFFFFFFE177BD
-        OST_DSR_DimStyleTickCategoryId = -2000962, // 0xFFFFFFFFFFE177BE
-        OST_DSR_LineAndTextAttrFontId = -2000961, // 0xFFFFFFFFFFE177BF
-        OST_DSR_LineAndTextAttrCategoryId = -2000960, // 0xFFFFFFFFFFE177C0
-        OST_AnalyticalOpeningTags = -2000958, // 0xFFFFFFFFFFE177C2
-        OST_AnalyticalPanelTags = -2000957, // 0xFFFFFFFFFFE177C3
-        OST_NodeAnalyticalTags = -2000956, // 0xFFFFFFFFFFE177C4
-        OST_LinkAnalyticalTags = -2000955, // 0xFFFFFFFFFFE177C5
-        OST_RailingRailPathExtensionLines = -2000954, // 0xFFFFFFFFFFE177C6
-        OST_RailingRailPathLines = -2000953, // 0xFFFFFFFFFFE177C7
-        OST_StairsSupports = -2000952, // 0xFFFFFFFFFFE177C8
-        OST_RailingHandRailAboveCut = -2000951, // 0xFFFFFFFFFFE177C9
-        OST_RailingTopRailAboveCut = -2000950, // 0xFFFFFFFFFFE177CA
-        OST_RailingTermination = -2000949, // 0xFFFFFFFFFFE177CB
-        OST_RailingSupport = -2000948, // 0xFFFFFFFFFFE177CC
-        OST_RailingHandRail = -2000947, // 0xFFFFFFFFFFE177CD
-        OST_RailingTopRail = -2000946, // 0xFFFFFFFFFFE177CE
-        OST_StairsSketchPathLines = -2000945, // 0xFFFFFFFFFFE177CF
-        OST_StairsTriserNumbers = -2000944, // 0xFFFFFFFFFFE177D0
-        OST_StairsTriserTags = -2000943, // 0xFFFFFFFFFFE177D1
-        OST_StairsSupportTags = -2000942, // 0xFFFFFFFFFFE177D2
-        OST_StairsLandingTags = -2000941, // 0xFFFFFFFFFFE177D3
-        OST_StairsRunTags = -2000940, // 0xFFFFFFFFFFE177D4
-        OST_StairsPathsAboveCut = -2000939, // 0xFFFFFFFFFFE177D5
-        OST_StairsPaths = -2000938, // 0xFFFFFFFFFFE177D6
-        OST_StairsRiserLinesAboveCut = -2000937, // 0xFFFFFFFFFFE177D7
-        OST_StairsRiserLines = -2000936, // 0xFFFFFFFFFFE177D8
-        OST_StairsOutlinesAboveCut = -2000935, // 0xFFFFFFFFFFE177D9
-        OST_StairsOutlines = -2000934, // 0xFFFFFFFFFFE177DA
-        OST_StairsNosingLinesAboveCut = -2000933, // 0xFFFFFFFFFFE177DB
-        OST_StairsNosingLines = -2000932, // 0xFFFFFFFFFFE177DC
-        OST_StairsCutMarksAboveCut = -2000931, // 0xFFFFFFFFFFE177DD
-        OST_StairsCutMarks = -2000930, // 0xFFFFFFFFFFE177DE
-        OST_ComponentRepeaterSlot = -2000928, // 0xFFFFFFFFFFE177E0
-        OST_ComponentRepeater = -2000927, // 0xFFFFFFFFFFE177E1
-        OST_DividedPath = -2000926, // 0xFFFFFFFFFFE177E2
-        OST_IOSRoomCalculationPoint = -2000925, // 0xFFFFFFFFFFE177E3
-        OST_PropertySet = -2000924, // 0xFFFFFFFFFFE177E4
-        OST_AppearanceAsset = -2000923, // 0xFFFFFFFFFFE177E5
-        OST_StairStringer2012_Deprecated = -2000922, // 0xFFFFFFFFFFE177E6
-        OST_StairsTrisers = -2000921, // 0xFFFFFFFFFFE177E7
-        OST_StairsLandings = -2000920, // 0xFFFFFFFFFFE177E8
-        OST_StairsRuns = -2000919, // 0xFFFFFFFFFFE177E9
-        OST_Stair2012_Deprecated = -2000918, // 0xFFFFFFFFFFE177EA
-        OST_RailingSystemTags = -2000917, // 0xFFFFFFFFFFE177EB
-        OST_RailingSystemTransition = -2000916, // 0xFFFFFFFFFFE177EC
-        OST_RailingSystemTermination = -2000915, // 0xFFFFFFFFFFE177ED
-        OST_RailingSystemRail = -2000914, // 0xFFFFFFFFFFE177EE
-        OST_RailingSystemTopRail = -2000913, // 0xFFFFFFFFFFE177EF
-        OST_RailingSystemHandRailBracket = -2000912, // 0xFFFFFFFFFFE177F0
-        OST_RailingSystemHandRail = -2000911, // 0xFFFFFFFFFFE177F1
-        OST_RailingSystemHardware = -2000910, // 0xFFFFFFFFFFE177F2
-        OST_RailingSystemPanel = -2000909, // 0xFFFFFFFFFFE177F3
-        OST_RailingSystemBaluster = -2000908, // 0xFFFFFFFFFFE177F4
-        OST_RailingSystemPost = -2000907, // 0xFFFFFFFFFFE177F5
-        OST_RailingSystemSegment = -2000906, // 0xFFFFFFFFFFE177F6
-        OST_RailingSystem = -2000905, // 0xFFFFFFFFFFE177F7
-        OST_AdaptivePoints_HiddenLines = -2000904, // 0xFFFFFFFFFFE177F8
-        OST_AdaptivePoints_Lines = -2000903, // 0xFFFFFFFFFFE177F9
-        OST_AdaptivePoints_Planes = -2000902, // 0xFFFFFFFFFFE177FA
-        OST_AdaptivePoints_Points = -2000901, // 0xFFFFFFFFFFE177FB
-        OST_AdaptivePoints = -2000900, // 0xFFFFFFFFFFE177FC
-        OST_CeilingOpening = -2000899, // 0xFFFFFFFFFFE177FD
-        OST_FloorOpening = -2000898, // 0xFFFFFFFFFFE177FE
-        OST_RoofOpening = -2000897, // 0xFFFFFFFFFFE177FF
-        OST_WallRefPlanes = -2000896, // 0xFFFFFFFFFFE17800
-        OST_StructLocationLineControl = -2000880, // 0xFFFFFFFFFFE17810
-        OST_PathOfTravelTags = -2000834, // 0xFFFFFFFFFFE1783E
-        OST_PathOfTravelLines = -2000833, // 0xFFFFFFFFFFE1783F
-        OST_DimLockControlLeader = -2000832, // 0xFFFFFFFFFFE17840
-        OST_MEPSpaceSeparationLines = -2000831, // 0xFFFFFFFFFFE17841
-        OST_AreaPolylines = -2000830, // 0xFFFFFFFFFFE17842
-        OST_RoomPolylines = -2000829, // 0xFFFFFFFFFFE17843
-        OST_InstanceDrivenLineStyle = -2000828, // 0xFFFFFFFFFFE17844
-        OST_RemovedGridSeg = -2000827, // 0xFFFFFFFFFFE17845
-        OST_IOSOpening = -2000810, // 0xFFFFFFFFFFE17856
-        OST_IOSTilePatternGrid = -2000800, // 0xFFFFFFFFFFE17860
-        OST_ControlLocal = -2000774, // 0xFFFFFFFFFFE1787A
-        OST_ControlAxisZ = -2000773, // 0xFFFFFFFFFFE1787B
-        OST_ControlAxisY = -2000772, // 0xFFFFFFFFFFE1787C
-        OST_ControlAxisX = -2000721, // 0xFFFFFFFFFFE178AF
-        OST_XRayConstrainedProfileEdge = -2000720, // 0xFFFFFFFFFFE178B0
-        OST_XRayImplicitPathCurve = -2000719, // 0xFFFFFFFFFFE178B1
-        OST_XRayPathPoint = -2000718, // 0xFFFFFFFFFFE178B2
-        OST_XRayPathCurve = -2000717, // 0xFFFFFFFFFFE178B3
-        OST_XRaySideEdge = -2000716, // 0xFFFFFFFFFFE178B4
-        OST_XRayProfileEdge = -2000715, // 0xFFFFFFFFFFE178B5
-        OST_ReferencePoints_HiddenLines = -2000714, // 0xFFFFFFFFFFE178B6
-        OST_ReferencePoints_Lines = -2000713, // 0xFFFFFFFFFFE178B7
-        OST_ReferencePoints_Planes = -2000712, // 0xFFFFFFFFFFE178B8
-        OST_ReferencePoints_Points = -2000711, // 0xFFFFFFFFFFE178B9
-        OST_ReferencePoints = -2000710, // 0xFFFFFFFFFFE178BA
-        OST_Materials = -2000700, // 0xFFFFFFFFFFE178C4
-        OST_CeilingsCutPattern = -2000617, // 0xFFFFFFFFFFE17917
-        OST_CeilingsDefault = -2000616, // 0xFFFFFFFFFFE17918
-        OST_CeilingsFinish2 = -2000615, // 0xFFFFFFFFFFE17919
-        OST_CeilingsFinish1 = -2000614, // 0xFFFFFFFFFFE1791A
-        OST_CeilingsSubstrate = -2000613, // 0xFFFFFFFFFFE1791B
-        OST_CeilingsInsulation = -2000612, // 0xFFFFFFFFFFE1791C
-        OST_CeilingsStructure = -2000611, // 0xFFFFFFFFFFE1791D
-        OST_CeilingsMembrane = -2000610, // 0xFFFFFFFFFFE1791E
-        OST_FloorsInteriorEdges = -2000609, // 0xFFFFFFFFFFE1791F
-        OST_FloorsCutPattern = -2000608, // 0xFFFFFFFFFFE17920
-        OST_HiddenFloorLines = -2000607, // 0xFFFFFFFFFFE17921
-        OST_FloorsDefault = -2000606, // 0xFFFFFFFFFFE17922
-        OST_FloorsFinish2 = -2000605, // 0xFFFFFFFFFFE17923
-        OST_FloorsFinish1 = -2000604, // 0xFFFFFFFFFFE17924
-        OST_FloorsSubstrate = -2000603, // 0xFFFFFFFFFFE17925
-        OST_FloorsInsulation = -2000602, // 0xFFFFFFFFFFE17926
-        OST_FloorsStructure = -2000601, // 0xFFFFFFFFFFE17927
-        OST_FloorsMembrane = -2000600, // 0xFFFFFFFFFFE17928
-        OST_RoofsInteriorEdges = -2000598, // 0xFFFFFFFFFFE1792A
-        OST_RoofsCutPattern = -2000597, // 0xFFFFFFFFFFE1792B
-        OST_RoofsDefault = -2000596, // 0xFFFFFFFFFFE1792C
-        OST_RoofsFinish2 = -2000595, // 0xFFFFFFFFFFE1792D
-        OST_RoofsFinish1 = -2000594, // 0xFFFFFFFFFFE1792E
-        OST_RoofsSubstrate = -2000593, // 0xFFFFFFFFFFE1792F
-        OST_RoofsInsulation = -2000592, // 0xFFFFFFFFFFE17930
-        OST_RoofsStructure = -2000591, // 0xFFFFFFFFFFE17931
-        OST_RoofsMembrane = -2000590, // 0xFFFFFFFFFFE17932
-        OST_WallsCutPattern = -2000588, // 0xFFFFFFFFFFE17934
-        OST_HiddenWallLines = -2000587, // 0xFFFFFFFFFFE17935
-        OST_WallsDefault = -2000586, // 0xFFFFFFFFFFE17936
-        OST_WallsFinish2 = -2000585, // 0xFFFFFFFFFFE17937
-        OST_WallsFinish1 = -2000584, // 0xFFFFFFFFFFE17938
-        OST_WallsSubstrate = -2000583, // 0xFFFFFFFFFFE17939
-        OST_WallsInsulation = -2000582, // 0xFFFFFFFFFFE1793A
-        OST_WallsStructure = -2000581, // 0xFFFFFFFFFFE1793B
-        OST_WallsMembrane = -2000580, // 0xFFFFFFFFFFE1793C
-        OST_PreviewLegendComponents = -2000576, // 0xFFFFFFFFFFE17940
-        OST_LegendComponents = -2000575, // 0xFFFFFFFFFFE17941
-        OST_Schedules = -2000573, // 0xFFFFFFFFFFE17943
-        OST_ScheduleGraphics = -2000570, // 0xFFFFFFFFFFE17946
-        OST_RasterImages = -2000560, // 0xFFFFFFFFFFE17950
-        OST_ColorFillSchema = -2000552, // 0xFFFFFFFFFFE17958
-        OST_RoomColorFill = -2000551, // 0xFFFFFFFFFFE17959
-        OST_ColorFillLegends = -2000550, // 0xFFFFFFFFFFE1795A
-        OST_AnnotationCropSpecial = -2000549, // 0xFFFFFFFFFFE1795B
-        OST_CropBoundarySpecial = -2000548, // 0xFFFFFFFFFFE1795C
-        OST_AnnotationCrop = -2000547, // 0xFFFFFFFFFFE1795D
-        OST_FloorsAnalyticalGeometry = -2000546, // 0xFFFFFFFFFFE1795E
-        OST_WallsAnalyticalGeometry = -2000545, // 0xFFFFFFFFFFE1795F
-        OST_CalloutLeaderLine = -2000544, // 0xFFFFFFFFFFE17960
-        OST_CeilingsSurfacePattern = -2000543, // 0xFFFFFFFFFFE17961
-        OST_RoofsSurfacePattern = -2000542, // 0xFFFFFFFFFFE17962
-        OST_FloorsSurfacePattern = -2000541, // 0xFFFFFFFFFFE17963
-        OST_WallsSurfacePattern = -2000540, // 0xFFFFFFFFFFE17964
-        OST_CalloutBoundary = -2000539, // 0xFFFFFFFFFFE17965
-        OST_CalloutHeads = -2000538, // 0xFFFFFFFFFFE17966
-        OST_Callouts = -2000537, // 0xFFFFFFFFFFE17967
-        OST_CropBoundary = -2000536, // 0xFFFFFFFFFFE17968
-        OST_Elev = -2000535, // 0xFFFFFFFFFFE17969
-        OST_AxisZ = -2000533, // 0xFFFFFFFFFFE1796B
-        OST_AxisY = -2000532, // 0xFFFFFFFFFFE1796C
-        OST_AxisX = -2000531, // 0xFFFFFFFFFFE1796D
-        OST_CLines = -2000530, // 0xFFFFFFFFFFE1796E
-        OST_Lights = -2000520, // 0xFFFFFFFFFFE17978
-        OST_ViewportLabel = -2000515, // 0xFFFFFFFFFFE1797D
-        OST_Viewports = -2000510, // 0xFFFFFFFFFFE17982
-        OST_Camera_Lines = -2000501, // 0xFFFFFFFFFFE1798B
-        OST_Cameras = -2000500, // 0xFFFFFFFFFFE1798C
-        OST_MEPSpaceTags = -2000485, // 0xFFFFFFFFFFE1799B
-        OST_RoomTags = -2000480, // 0xFFFFFFFFFFE179A0
-        OST_DoorTags = -2000460, // 0xFFFFFFFFFFE179B4
-        OST_WindowTags = -2000450, // 0xFFFFFFFFFFE179BE
-        OST_SectionHeadWideLines = -2000404, // 0xFFFFFFFFFFE179EC
-        OST_SectionHeadMediumLines = -2000403, // 0xFFFFFFFFFFE179ED
-        OST_SectionHeadThinLines = -2000401, // 0xFFFFFFFFFFE179EF
-        OST_SectionHeads = -2000400, // 0xFFFFFFFFFFE179F0
-        OST_ContourLabels = -2000350, // 0xFFFFFFFFFFE17A22
-        OST_CurtaSystemFaceManager = -2000341, // 0xFFFFFFFFFFE17A2B
-        OST_CurtaSystem = -2000340, // 0xFFFFFFFFFFE17A2C
-        OST_AreaReport_Arc_Minus = -2000328, // 0xFFFFFFFFFFE17A38
-        OST_AreaReport_Arc_Plus = -2000327, // 0xFFFFFFFFFFE17A39
-        OST_AreaReport_Boundary = -2000326, // 0xFFFFFFFFFFE17A3A
-        OST_AreaReport_Triangle = -2000325, // 0xFFFFFFFFFFE17A3B
-        OST_CurtainGridsCurtaSystem = -2000323, // 0xFFFFFFFFFFE17A3D
-        OST_CurtainGridsSystem = -2000322, // 0xFFFFFFFFFFE17A3E
-        OST_CurtainGridsWall = -2000321, // 0xFFFFFFFFFFE17A3F
-        OST_CurtainGridsRoof = -2000320, // 0xFFFFFFFFFFE17A40
-        OST_HostFinHF = -2000315, // 0xFFFFFFFFFFE17A45
-        OST_HostFinWall = -2000314, // 0xFFFFFFFFFFE17A46
-        OST_HostFinCeiling = -2000313, // 0xFFFFFFFFFFE17A47
-        OST_HostFinRoof = -2000312, // 0xFFFFFFFFFFE17A48
-        OST_HostFinFloor = -2000311, // 0xFFFFFFFFFFE17A49
-        OST_HostFin = -2000310, // 0xFFFFFFFFFFE17A4A
-        OST_AnalysisDisplayStyle = -2000304, // 0xFFFFFFFFFFE17A50
-        OST_AnalysisResults = -2000303, // 0xFFFFFFFFFFE17A51
-        OST_RenderRegions = -2000302, // 0xFFFFFFFFFFE17A52
-        OST_SectionBox = -2000301, // 0xFFFFFFFFFFE17A53
-        OST_TextNotes = -2000300, // 0xFFFFFFFFFFE17A54
-        OST_Divisions = -2000291, // 0xFFFFFFFFFFE17A5D
-        OST_Catalogs = -2000290, // 0xFFFFFFFFFFE17A5E
-        OST_DirectionEdgeLines = -2000289, // 0xFFFFFFFFFFE17A5F
-        OST_CenterLines = -2000288, // 0xFFFFFFFFFFE17A60
-        OST_LinesBeyond = -2000287, // 0xFFFFFFFFFFE17A61
-        OST_HiddenLines = -2000286, // 0xFFFFFFFFFFE17A62
-        OST_DemolishedLines = -2000285, // 0xFFFFFFFFFFE17A63
-        OST_OverheadLines = -2000284, // 0xFFFFFFFFFFE17A64
-        OST_TitleBlockWideLines = -2000283, // 0xFFFFFFFFFFE17A65
-        OST_TitleBlockMediumLines = -2000282, // 0xFFFFFFFFFFE17A66
-        OST_TitleBlockThinLines = -2000281, // 0xFFFFFFFFFFE17A67
-        OST_TitleBlocks = -2000280, // 0xFFFFFFFFFFE17A68
-        OST_Views = -2000279, // 0xFFFFFFFFFFE17A69
-        OST_Viewers = -2000278, // 0xFFFFFFFFFFE17A6A
-        OST_PartHiddenLines = -2000271, // 0xFFFFFFFFFFE17A71
-        OST_PartTags = -2000270, // 0xFFFFFFFFFFE17A72
-        OST_Parts = -2000269, // 0xFFFFFFFFFFE17A73
-        OST_AssemblyTags = -2000268, // 0xFFFFFFFFFFE17A74
-        OST_Assemblies = -2000267, // 0xFFFFFFFFFFE17A75
-        OST_RoofTags = -2000266, // 0xFFFFFFFFFFE17A76
-        OST_SpotSlopes = -2000265, // 0xFFFFFFFFFFE17A77
-        OST_SpotCoordinates = -2000264, // 0xFFFFFFFFFFE17A78
-        OST_SpotElevations = -2000263, // 0xFFFFFFFFFFE17A79
-        OST_Constraints = -2000262, // 0xFFFFFFFFFFE17A7A
-        OST_WeakDims = -2000261, // 0xFFFFFFFFFFE17A7B
-        OST_Dimensions = -2000260, // 0xFFFFFFFFFFE17A7C
-        OST_Levels = -2000240, // 0xFFFFFFFFFFE17A90
-        OST_DisplacementPath = -2000223, // 0xFFFFFFFFFFE17AA1
-        OST_DisplacementElements = -2000222, // 0xFFFFFFFFFFE17AA2
-        OST_GridChains = -2000221, // 0xFFFFFFFFFFE17AA3
-        OST_Grids = -2000220, // 0xFFFFFFFFFFE17AA4
-        OST_BrokenSectionLine = -2000202, // 0xFFFFFFFFFFE17AB6
-        OST_SectionLine = -2000201, // 0xFFFFFFFFFFE17AB7
-        OST_Sections = -2000200, // 0xFFFFFFFFFFE17AB8
-        OST_ReferenceViewer = -2000198, // 0xFFFFFFFFFFE17ABA
-        OST_ReferenceViewerSymbol = -2000197, // 0xFFFFFFFFFFE17ABB
-        OST_ImportObjectStyles = -2000196, // 0xFFFFFFFFFFE17ABC
-        OST_ModelText = -2000195, // 0xFFFFFFFFFFE17ABD
-        OST_MaskingRegion = -2000194, // 0xFFFFFFFFFFE17ABE
-        OST_Matchline = -2000193, // 0xFFFFFFFFFFE17ABF
-        OST_FaceSplitter = -2000192, // 0xFFFFFFFFFFE17AC0
-        OST_PlanRegion = -2000191, // 0xFFFFFFFFFFE17AC1
-        OST_FilledRegion = -2000190, // 0xFFFFFFFFFFE17AC2
-        OST_MassingProjectionOutlines = -2000187, // 0xFFFFFFFFFFE17AC5
-        OST_MassingCutOutlines = -2000186, // 0xFFFFFFFFFFE17AC6
-        OST_Massing = -2000185, // 0xFFFFFFFFFFE17AC7
-        OST_Reveals = -2000182, // 0xFFFFFFFFFFE17ACA
-        OST_Cornices = -2000181, // 0xFFFFFFFFFFE17ACB
-        OST_Ramps = -2000180, // 0xFFFFFFFFFFE17ACC
-        OST_RailingBalusterRailCut = -2000177, // 0xFFFFFFFFFFE17ACF
-        OST_RailingBalusterRail = -2000176, // 0xFFFFFFFFFFE17AD0
-        OST_Railings = -2000175, // 0xFFFFFFFFFFE17AD1
-        OST_CurtainGrids = -2000173, // 0xFFFFFFFFFFE17AD3
-        OST_CurtainWallMullionsCut = -2000172, // 0xFFFFFFFFFFE17AD4
-        OST_CurtainWallMullions = -2000171, // 0xFFFFFFFFFFE17AD5
-        OST_CurtainWallPanels = -2000170, // 0xFFFFFFFFFFE17AD6
-        OST_AreaReference = -2000169, // 0xFFFFFFFFFFE17AD7
-        OST_AreaInteriorFill = -2000168, // 0xFFFFFFFFFFE17AD8
-        OST_RoomReference = -2000167, // 0xFFFFFFFFFFE17AD9
-        OST_RoomInteriorFill = -2000166, // 0xFFFFFFFFFFE17ADA
-        OST_AreaColorFill = -2000165, // 0xFFFFFFFFFFE17ADB
-        OST_AreaReferenceVisibility = -2000164, // 0xFFFFFFFFFFE17ADC
-        OST_AreaInteriorFillVisibility = -2000163, // 0xFFFFFFFFFFE17ADD
-        OST_RoomReferenceVisibility = -2000162, // 0xFFFFFFFFFFE17ADE
-        OST_RoomInteriorFillVisibility = -2000161, // 0xFFFFFFFFFFE17ADF
-        OST_Rooms = -2000160, // 0xFFFFFFFFFFE17AE0
-        OST_GenericModel = -2000151, // 0xFFFFFFFFFFE17AE9
-        OST_GenericAnnotation = -2000150, // 0xFFFFFFFFFFE17AEA
-        OST_Fixtures = -2000140, // 0xFFFFFFFFFFE17AF4
-        OST_StairsRailingTags = -2000133, // 0xFFFFFFFFFFE17AFB
-        OST_StairsRailingAboveCut = -2000132, // 0xFFFFFFFFFFE17AFC
-        OST_StairsDownArrows = -2000131, // 0xFFFFFFFFFFE17AFD
-        OST_StairsUpArrows = -2000130, // 0xFFFFFFFFFFE17AFE
-        OST_StairsDownText = -2000129, // 0xFFFFFFFFFFE17AFF
-        OST_StairsRailingRail = -2000128, // 0xFFFFFFFFFFE17B00
-        OST_StairsRailingBaluster = -2000127, // 0xFFFFFFFFFFE17B01
-        OST_StairsRailing = -2000126, // 0xFFFFFFFFFFE17B02
-        OST_StairsUpText = -2000125, // 0xFFFFFFFFFFE17B03
-        OST_StairsSupportsAboveCut = -2000124, // 0xFFFFFFFFFFE17B04
-        OST_StairsStringerCarriage = -2000123, // 0xFFFFFFFFFFE17B05
-        OST_StairsAboveCut_ToBeDeprecated = -2000122, // 0xFFFFFFFFFFE17B06
-        OST_StairsIncomplete_Deprecated = -2000121, // 0xFFFFFFFFFFE17B07
-        OST_Stairs = -2000120, // 0xFFFFFFFFFFE17B08
-        OST_IOSNavWheelPivotBall = -2000117, // 0xFFFFFFFFFFE17B0B
-        OST_IOSRoomComputationHeight = -2000116, // 0xFFFFFFFFFFE17B0C
-        OST_IOSRoomUpperLowerLines = -2000115, // 0xFFFFFFFFFFE17B0D
-        OST_IOSDragBoxInverted = -2000114, // 0xFFFFFFFFFFE17B0E
-        OST_IOSDragBox = -2000113, // 0xFFFFFFFFFFE17B0F
-        OST_Phases = -2000112, // 0xFFFFFFFFFFE17B10
-        OST_IOS_GeoSite = -2000111, // 0xFFFFFFFFFFE17B11
-        OST_IOS_GeoLocations = -2000110, // 0xFFFFFFFFFFE17B12
-        OST_IOSFabricReinSpanSymbolCtrl = -2000109, // 0xFFFFFFFFFFE17B13
-        OST_GuideGrid = -2000107, // 0xFFFFFFFFFFE17B15
-        OST_EPS_Future = -2000106, // 0xFFFFFFFFFFE17B16
-        OST_EPS_Temporary = -2000105, // 0xFFFFFFFFFFE17B17
-        OST_EPS_New = -2000104, // 0xFFFFFFFFFFE17B18
-        OST_EPS_Demolished = -2000103, // 0xFFFFFFFFFFE17B19
-        OST_EPS_Existing = -2000102, // 0xFFFFFFFFFFE17B1A
-        OST_IOSMeasureLineScreenSize = -2000101, // 0xFFFFFFFFFFE17B1B
-        OST_Columns = -2000100, // 0xFFFFFFFFFFE17B1C
-        OST_IOSRebarSystemSpanSymbolCtrl = -2000099, // 0xFFFFFFFFFFE17B1D
-        OST_IOSRoomTagToRoomLines = -2000098, // 0xFFFFFFFFFFE17B1E
-        OST_IOSAttachedDetailGroups = -2000097, // 0xFFFFFFFFFFE17B1F
-        OST_IOSDetailGroups = -2000096, // 0xFFFFFFFFFFE17B20
-        OST_IOSModelGroups = -2000095, // 0xFFFFFFFFFFE17B21
-        OST_IOSSuspendedSketch = -2000094, // 0xFFFFFFFFFFE17B22
-        OST_IOSWallCoreBoundary = -2000093, // 0xFFFFFFFFFFE17B23
-        OST_IOSMeasureLine = -2000092, // 0xFFFFFFFFFFE17B24
-        OST_IOSArrays = -2000091, // 0xFFFFFFFFFFE17B25
-        OST_Curtain_Systems = -2000090, // 0xFFFFFFFFFFE17B26
-        OST_IOSBBoxScreenSize = -2000089, // 0xFFFFFFFFFFE17B27
-        OST_IOSSlabShapeEditorPointInterior = -2000088, // 0xFFFFFFFFFFE17B28
-        OST_IOSSlabShapeEditorPointBoundary = -2000087, // 0xFFFFFFFFFFE17B29
-        OST_IOSSlabShapeEditorBoundary = -2000086, // 0xFFFFFFFFFFE17B2A
-        OST_IOSSlabShapeEditorAutoCrease = -2000085, // 0xFFFFFFFFFFE17B2B
-        OST_IOSSlabShapeEditorExplitCrease = -2000084, // 0xFFFFFFFFFFE17B2C
-        OST_ReferenceLines = -2000083, // 0xFFFFFFFFFFE17B2D
-        OST_IOSNotSilhouette = -2000082, // 0xFFFFFFFFFFE17B2E
-        OST_FillPatterns = -2000081, // 0xFFFFFFFFFFE17B2F
-        OST_Furniture = -2000080, // 0xFFFFFFFFFFE17B30
-        OST_AreaSchemeLines = -2000079, // 0xFFFFFFFFFFE17B31
-        OST_GenericLines = -2000078, // 0xFFFFFFFFFFE17B32
-        OST_InsulationLines = -2000077, // 0xFFFFFFFFFFE17B33
-        OST_CloudLines = -2000076, // 0xFFFFFFFFFFE17B34
-        OST_IOSRoomPerimeterLines = -2000075, // 0xFFFFFFFFFFE17B35
-        OST_IOSCuttingGeometry = -2000074, // 0xFFFFFFFFFFE17B36
-        OST_IOSCrashGraphics = -2000073, // 0xFFFFFFFFFFE17B37
-        OST_IOSGroups = -2000072, // 0xFFFFFFFFFFE17B38
-        OST_IOSGhost = -2000071, // 0xFFFFFFFFFFE17B39
-        OST_StairsSketchLandingCenterLines = -2000070, // 0xFFFFFFFFFFE17B3A
-        OST_StairsSketchRunLines = -2000069, // 0xFFFFFFFFFFE17B3B
-        OST_StairsSketchRiserLines = -2000068, // 0xFFFFFFFFFFE17B3C
-        OST_StairsSketchBoundaryLines = -2000067, // 0xFFFFFFFFFFE17B3D
-        OST_RoomSeparationLines = -2000066, // 0xFFFFFFFFFFE17B3E
-        OST_AxisOfRotation = -2000065, // 0xFFFFFFFFFFE17B3F
-        OST_InvisibleLines = -2000064, // 0xFFFFFFFFFFE17B40
-        OST_IOSThinPixel_DashDot = -2000063, // 0xFFFFFFFFFFE17B41
-        OST_IOSThinPixel_Dash = -2000062, // 0xFFFFFFFFFFE17B42
-        OST_IOSThinPixel_Dot = -2000061, // 0xFFFFFFFFFFE17B43
-        OST_Extrusions = -2000060, // 0xFFFFFFFFFFE17B44
-        OST_IOS = -2000059, // 0xFFFFFFFFFFE17B45
-        OST_CutOutlines = -2000058, // 0xFFFFFFFFFFE17B46
-        OST_IOSThinPixel = -2000057, // 0xFFFFFFFFFFE17B47
-        OST_IOSFlipControl = -2000056, // 0xFFFFFFFFFFE17B48
-        OST_IOSSketchGrid = -2000055, // 0xFFFFFFFFFFE17B49
-        OST_IOSSuspendedSketch_obsolete = -2000054, // 0xFFFFFFFFFFE17B4A
-        OST_IOSFreeSnapLine = -2000053, // 0xFFFFFFFFFFE17B4B
-        OST_IOSDatumPlane = -2000052, // 0xFFFFFFFFFFE17B4C
-        OST_Lines = -2000051, // 0xFFFFFFFFFFE17B4D
-        OST_IOSConstructionLine = -2000050, // 0xFFFFFFFFFFE17B4E
-        OST_IOSAlignmentGraphics = -2000049, // 0xFFFFFFFFFFE17B4F
-        OST_IOSAligningLine = -2000048, // 0xFFFFFFFFFFE17B50
-        OST_IOSBackedUpElements = -2000047, // 0xFFFFFFFFFFE17B51
-        OST_IOSRegeneratedElements = -2000046, // 0xFFFFFFFFFFE17B52
-        OST_SketchLines = -2000045, // 0xFFFFFFFFFFE17B53
-        OST_CurvesWideLines = -2000044, // 0xFFFFFFFFFFE17B54
-        OST_CurvesMediumLines = -2000043, // 0xFFFFFFFFFFE17B55
-        OST_CurvesThinLines = -2000042, // 0xFFFFFFFFFFE17B56
-        OST_Curves = -2000041, // 0xFFFFFFFFFFE17B57
-        OST_CeilingsProjection = -2000040, // 0xFFFFFFFFFFE17B58
-        OST_CeilingsCut = -2000039, // 0xFFFFFFFFFFE17B59
-        OST_Ceilings = -2000038, // 0xFFFFFFFFFFE17B5A
-        OST_RoofsProjection = -2000037, // 0xFFFFFFFFFFE17B5B
-        OST_RoofsCut = -2000036, // 0xFFFFFFFFFFE17B5C
-        OST_Roofs = -2000035, // 0xFFFFFFFFFFE17B5D
-        OST_FloorsProjection = -2000034, // 0xFFFFFFFFFFE17B5E
-        OST_FloorsCut = -2000033, // 0xFFFFFFFFFFE17B5F
-        OST_Floors = -2000032, // 0xFFFFFFFFFFE17B60
-        OST_DoorsGlassProjection = -2000031, // 0xFFFFFFFFFFE17B61
-        OST_DoorsGlassCut = -2000030, // 0xFFFFFFFFFFE17B62
-        OST_DoorsFrameMullionProjection = -2000029, // 0xFFFFFFFFFFE17B63
-        OST_DoorsFrameMullionCut = -2000028, // 0xFFFFFFFFFFE17B64
-        OST_DoorsOpeningProjection = -2000027, // 0xFFFFFFFFFFE17B65
-        OST_DoorsOpeningCut = -2000026, // 0xFFFFFFFFFFE17B66
-        OST_DoorsPanelProjection = -2000025, // 0xFFFFFFFFFFE17B67
-        OST_DoorsPanelCut = -2000024, // 0xFFFFFFFFFFE17B68
-        OST_Doors = -2000023, // 0xFFFFFFFFFFE17B69
-        OST_WindowsOpeningProjection = -2000022, // 0xFFFFFFFFFFE17B6A
-        OST_WindowsOpeningCut = -2000021, // 0xFFFFFFFFFFE17B6B
-        OST_WindowsSillHeadProjection = -2000020, // 0xFFFFFFFFFFE17B6C
-        OST_WindowsSillHeadCut = -2000019, // 0xFFFFFFFFFFE17B6D
-        OST_WindowsFrameMullionProjection = -2000018, // 0xFFFFFFFFFFE17B6E
-        OST_WindowsFrameMullionCut = -2000017, // 0xFFFFFFFFFFE17B6F
-        OST_WindowsGlassProjection = -2000016, // 0xFFFFFFFFFFE17B70
-        OST_WindowsGlassCut = -2000015, // 0xFFFFFFFFFFE17B71
-        OST_Windows = -2000014, // 0xFFFFFFFFFFE17B72
-        OST_WallsProjectionOutlines = -2000013, // 0xFFFFFFFFFFE17B73
-        OST_WallsCutOutlines = -2000012, // 0xFFFFFFFFFFE17B74
-        OST_Walls = -2000011, // 0xFFFFFFFFFFE17B75
-        OST_IOSRegenerationFailure = -2000010, // 0xFFFFFFFFFFE17B76
-        OST_ScheduleViewParamGroup = -2000008, // 0xFFFFFFFFFFE17B78
-        OST_MatchSiteComponent = -2000007, // 0xFFFFFFFFFFE17B79
-        OST_MatchProfile = -2000006, // 0xFFFFFFFFFFE17B7A
-        OST_MatchDetail = -2000005, // 0xFFFFFFFFFFE17B7B
-        OST_MatchAnnotation = -2000004, // 0xFFFFFFFFFFE17B7C
-        OST_MatchModel = -2000003, // 0xFFFFFFFFFFE17B7D
-        OST_MatchAll = -2000002, // 0xFFFFFFFFFFE17B7E
-        INVALID = -1, // 0xFFFFFFFFFFFFFFFF
+        OST_AbutmentFoundations = -2006202,
+        OST_AbutmentFoundationTags = -2006208,
+        OST_AbutmentPiles = -2006203,
+        OST_AbutmentPileTags = -2006209,
+        OST_AbutmentWalls = -2006204,
+        OST_AbutmentWallTags = -2006210,
+        OST_AdaptivePoints = -2000900,
+        OST_AdaptivePoints_Lines = -2000903,
+        OST_AdaptivePoints_Planes = -2000902,
+        OST_AdaptivePoints_Points = -2000901,
+        OST_Alignments = -2001012,
+        OST_AlignmentsTags = -2001015,
+        OST_AlignmentStationLabels = -2001017,
+        OST_AlignmentStationLabelSets = -2001016,
+        OST_AnalysisDisplayStyle = -2000304,
+        OST_AnalysisResults = -2000303,
+        OST_AnalyticalMember = -2009662,
+        OST_AnalyticalMemberCrossSection = -2001075,
+        OST_AnalyticalMemberLocalCoordSys = -2009666,
+        OST_AnalyticalMemberTags = -2009663,
+        OST_AnalyticalNodes = -2009645,
+        OST_AnalyticalOpening = -2009665,
+        OST_AnalyticalOpeningTags = -2000958,
+        OST_AnalyticalPanel = -2009664,
+        OST_AnalyticalPanelLocalCoordSys = -2009667,
+        OST_AnalyticalPanelTags = -2000957,
+        OST_AnalyticalPipeConnectionLineSymbol = -2000984,
+        OST_AnalyticalPipeConnections = -2000983,
+        OST_AnalyticSpaces = -2008185,
+        OST_AnalyticSurfaces = -2008186,
+        OST_AnnotationCrop = -2000547,
+        OST_AnnotationCropSpecial = -2000549,
+        OST_ApproachSlabs = -2006205,
+        OST_ApproachSlabTags = -2006211,
+        OST_AreaColorFill = -2000165,
+        OST_AreaInteriorFillVisibility = -2000163,
+        OST_AreaLoads = -2005203,
+        OST_AreaLoadTags = -2005252,
+        OST_AreaReferenceVisibility = -2000164,
+        OST_AreaRein = -2009003,
+        OST_AreaReinBoundary = -2009006,
+        OST_AreaReinSpanSymbol = -2009005,
+        OST_AreaReinTags = -2009021,
+        OST_Areas = -2003200,
+        OST_AreaSchemeLines = -2000079,
+        OST_AreaTags = -2005020,
+        OST_Assemblies = -2000267,
+        OST_AssemblyTags = -2000268,
+        OST_AudioVisualDevices = -2001055,
+        OST_AudioVisualDevicesHiddenLines = -2001056,
+        OST_AudioVisualDeviceTags = -2001057,
+        OST_AxisOfRotation = -2000065,
+        OST_BeamSystemTags = -2005130,
+        OST_BoundaryConditions = -2005301,
+        OST_BridgeAbutmentHiddenLines = -2006150,
+        OST_BridgeAbutments = -2006130,
+        OST_BridgeAbutmentTags = -2006170,
+        OST_BridgeArches = -2006134,
+        OST_BridgeBearingHiddenLines = -2006158,
+        OST_BridgeBearings = -2006138,
+        OST_BridgeBearingTags = -2006178,
+        OST_BridgeCables = -2006133,
+        OST_BridgeCableTags = -2006173,
+        OST_BridgeDeckHiddenLines = -2006155,
+        OST_BridgeDecks = -2006135,
+        OST_BridgeDeckTags = -2006175,
+        OST_BridgeFoundations = -2006136,
+        OST_BridgeFoundationTags = -2006176,
+        OST_BridgeFraming = -2006241,
+        OST_BridgeFramingCrossBracing = -2006245,
+        OST_BridgeFramingCrossBracingTags = -2006278,
+        OST_BridgeFramingDiaphragms = -2006246,
+        OST_BridgeFramingDiaphragmTags = -2006279,
+        OST_BridgeFramingHiddenLines = -2006242,
+        OST_BridgeFramingTags = -2006243,
+        OST_BridgeFramingTrusses = -2006248,
+        OST_BridgeFramingTrussTags = -2006281,
+        OST_BridgeGirders = -2006137,
+        OST_BridgePierHiddenLines = -2006151,
+        OST_BridgePiers = -2006131,
+        OST_BridgePierTags = -2006171,
+        OST_BridgeTowers = -2006132,
+        OST_BridgeTowerTags = -2006172,
+        OST_BrokenSectionLine = -2000202,
+        OST_BuildingPad = -2001263,
+        OST_CableTray = -2008130,
+        OST_CableTrayCenterLine = -2008136,
+        OST_CableTrayDrop = -2008135,
+        OST_CableTrayFitting = -2008126,
+        OST_CableTrayFittingCenterLine = -2008140,
+        OST_CableTrayFittingTags = -2008127,
+        OST_CableTrayRiseDrop = -2008134,
+        OST_CableTrayRun = -2008150,
+        OST_CableTrayTags = -2008131,
+        OST_CalloutBoundary = -2000539,
+        OST_CalloutHeads = -2000538,
+        OST_CalloutLeaderLine = -2000544,
+        OST_Callouts = -2000537,
+        OST_Camera_Lines = -2000501,
+        OST_Casework = -2001000,
+        OST_CaseworkHiddenLines = -2009515,
+        OST_CaseworkTags = -2005001,
+        OST_Ceilings = -2000038,
+        OST_CeilingsCutPattern = -2000617,
+        OST_CeilingsDefault = -2000616,
+        OST_CeilingsFinish1 = -2000614,
+        OST_CeilingsFinish2 = -2000615,
+        OST_CeilingsHiddenLines = -2009503,
+        OST_CeilingsInsulation = -2000612,
+        OST_CeilingsMembrane = -2000610,
+        OST_CeilingsStructure = -2000611,
+        OST_CeilingsSubstrate = -2000613,
+        OST_CeilingsSurfacePattern = -2000543,
+        OST_CeilingTags = -2005002,
+        OST_CenterLines = -2000288,
+        OST_CLines = -2000530,
+        OST_ColorFillLegends = -2000550,
+        OST_Columns = -2000100,
+        OST_ColumnsHiddenLines = -2009506,
+        OST_ColumnTags = -2001063,
+        OST_CommunicationDevices = -2008081,
+        OST_CommunicationDeviceTags = -2008082,
+        OST_Conduit = -2008132,
+        OST_ConduitCenterLine = -2008139,
+        OST_ConduitDrop = -2008138,
+        OST_ConduitFitting = -2008128,
+        OST_ConduitFittingCenterLine = -2008141,
+        OST_ConduitFittingTags = -2008129,
+        OST_ConduitRiseDrop = -2008137,
+        OST_ConduitRun = -2008149,
+        OST_ConduitTags = -2008133,
+        OST_ContourLabels = -2000350,
+        OST_CoordinateSystem = -2000977,
+        OST_Coordination_Model = -2000982,
+        OST_Cornices = -2000181,
+        OST_Coupler = -2009060,
+        OST_CouplerHiddenLines = -2009062,
+        OST_CouplerTags = -2009061,
+        OST_CropBoundary = -2000536,
+        OST_CropBoundarySpecial = -2000548,
+        OST_CurtainGrids = -2000173,
+        OST_CurtainGridsCurtaSystem = -2000323,
+        OST_CurtainGridsRoof = -2000320,
+        OST_CurtainGridsWall = -2000321,
+        OST_CurtainWallMullions = -2000171,
+        OST_CurtainWallMullionsHiddenLines = -2009511,
+        OST_CurtainWallMullionTags = -2005032,
+        OST_CurtainWallPanels = -2000170,
+        OST_CurtainWallPanelsHiddenLines = -2009510,
+        OST_CurtainWallPanelTags = -2005012,
+        OST_CurtaSystem = -2000340,
+        OST_CurtaSystemHiddenLines = -2009531,
+        OST_CurtaSystemTags = -2005025,
+        OST_CurvesMediumLines = -2000043,
+        OST_CurvesThinLines = -2000042,
+        OST_CurvesWideLines = -2000044,
+        OST_DataDevices = -2008083,
+        OST_DataDeviceTags = -2008084,
+        OST_DataExchanges = -2001107,
+        OST_DemolishedLines = -2000285,
+        OST_DetailComponents = -2002000,
+        OST_DetailComponentsHiddenLines = -2009514,
+        OST_DetailComponentTags = -2005028,
+        OST_Dimensions = -2000260,
+        OST_DisplacementPath = -2000223,
+        OST_DividedSurface_Gridlines = -2003325,
+        OST_DividedSurface_Nodes = -2003324,
+        OST_DividedSurface_PatternFill = -2003327,
+        OST_DividedSurface_PatternLines = -2003326,
+        OST_Doors = -2000023,
+        OST_DoorsFrameMullionProjection = -2000029,
+        OST_DoorsGlassProjection = -2000031,
+        OST_DoorsHiddenLines = -2009501,
+        OST_DoorsOpeningProjection = -2000027,
+        OST_DoorsPanelProjection = -2000025,
+        OST_DoorTags = -2000460,
+        OST_DuctAccessory = -2008016,
+        OST_DuctAccessoryTags = -2008017,
+        OST_DuctAnalyticalSegments = -2001115,
+        OST_DuctAnalyticalSegmentTags = -2001116,
+        OST_DuctColorFillLegends = -2007004,
+        OST_DuctColorFills = -2008005,
+        OST_DuctCurves = -2008000,
+        OST_DuctCurvesCenterLine = -2008001,
+        OST_DuctCurvesDrop = -2008062,
+        OST_DuctCurvesRiseDrop = -2008036,
+        OST_DuctFitting = -2008010,
+        OST_DuctFittingCenterLine = -2008066,
+        OST_DuctFittingTags = -2008061,
+        OST_DuctInsulations = -2008123,
+        OST_DuctInsulationsTags = -2008153,
+        OST_DuctLinings = -2008124,
+        OST_DuctLiningsTags = -2008154,
+        OST_DuctSystem = -2008015,
+        OST_DuctSystem_Reference_Visibility = -2008157,
+        OST_DuctTags = -2008003,
+        OST_DuctTerminal = -2008013,
+        OST_DuctTerminalTags = -2008014,
+        OST_EdgeSlab = -2001392,
+        OST_ELECTRICAL_AreaBasedLoads_Boundary = -2008222,
+        OST_ELECTRICAL_AreaBasedLoads_InteriorFill_Visibility = -2008226,
+        OST_ELECTRICAL_AreaBasedLoads_Reference_Visibility = -2008227,
+        OST_ELECTRICAL_AreaBasedLoads_Tags = -2001078,
+        OST_ElectricalAnalyticalTransformer = -2001077,
+        OST_ElectricalCircuit = -2008037,
+        OST_ElectricalEquipment = -2001040,
+        OST_ElectricalEquipmentHiddenLines = -2009516,
+        OST_ElectricalEquipmentTags = -2005003,
+        OST_ElectricalFixtures = -2001060,
+        OST_ElectricalFixturesHiddenLines = -2009517,
+        OST_ElectricalFixtureTags = -2005004,
+        OST_ElectricalInternalCircuits = -2008152,
+        OST_ElectricalLoadSet = -2001098,
+        OST_ElectricalLoadZoneInstance = -2001020,
+        OST_ElectricalPowerSource = -2001026,
+        OST_Elev = -2000535,
+        OST_ElevationMarks = -2006045,
+        OST_Entourage = -2001370,
+        OST_EntourageHiddenLines = -2009529,
+        OST_EntourageTags = -2001064,
+        OST_ExpansionJointHiddenLines = -2006272,
+        OST_ExpansionJoints = -2006271,
+        OST_ExpansionJointTags = -2006273,
+        OST_FabricAreaBoundary = -2009029,
+        OST_FabricAreas = -2009017,
+        OST_FabricAreaSketchEnvelopeLines = -2009018,
+        OST_FabricAreaSketchSheetsLines = -2009019,
+        OST_FabricationContainment = -2008212,
+        OST_FabricationContainmentCenterLine = -2008214,
+        OST_FabricationContainmentDrop = -2008219,
+        OST_FabricationContainmentRise = -2008218,
+        OST_FabricationContainmentSymbology = -2008215,
+        OST_FabricationContainmentTags = -2008213,
+        OST_FabricationDuctwork = -2008193,
+        OST_FabricationDuctworkCenterLine = -2008196,
+        OST_FabricationDuctworkDrop = -2008206,
+        OST_FabricationDuctworkInsulation = -2008198,
+        OST_FabricationDuctworkLining = -2008220,
+        OST_FabricationDuctworkRise = -2008205,
+        OST_FabricationDuctworkStiffeners = -2008228,
+        OST_FabricationDuctworkStiffenerTags = -2008229,
+        OST_FabricationDuctworkSymbology = -2008207,
+        OST_FabricationDuctworkTags = -2008194,
+        OST_FabricationHangers = -2008203,
+        OST_FabricationHangerTags = -2008204,
+        OST_FabricationPipework = -2008208,
+        OST_FabricationPipeworkCenterLine = -2008210,
+        OST_FabricationPipeworkDrop = -2008217,
+        OST_FabricationPipeworkInsulation = -2008221,
+        OST_FabricationPipeworkRise = -2008216,
+        OST_FabricationPipeworkSymbology = -2008211,
+        OST_FabricationPipeworkTags = -2008209,
+        OST_FabricReinforcement = -2009016,
+        OST_FabricReinforcementBoundary = -2009026,
+        OST_FabricReinforcementTags = -2009022,
+        OST_FabricReinforcementWire = -2009027,
+        OST_FabricReinSpanSymbol = -2009028,
+        OST_Fascia = -2001390,
+        OST_FasciaTags = -2001062,
+        OST_FilledRegion = -2000190,
+        OST_FireAlarmDevices = -2008085,
+        OST_FireAlarmDeviceTags = -2008086,
+        OST_FireProtection = -2001049,
+        OST_FireProtectionHiddenLines = -2001050,
+        OST_FireProtectionTags = -2001051,
+        OST_FlexDuctCurves = -2008020,
+        OST_FlexDuctCurvesCenterLine = -2008021,
+        OST_FlexDuctCurvesPattern = -2008023,
+        OST_FlexDuctTags = -2008004,
+        OST_FlexPipeCurves = -2008050,
+        OST_FlexPipeCurvesCenterLine = -2008051,
+        OST_FlexPipeCurvesPattern = -2008053,
+        OST_FlexPipeTags = -2008048,
+        OST_Floors = -2000032,
+        OST_FloorsCutPattern = -2000608,
+        OST_FloorsDefault = -2000606,
+        OST_FloorsFinish1 = -2000604,
+        OST_FloorsFinish2 = -2000605,
+        OST_FloorsInsulation = -2000602,
+        OST_FloorsInteriorEdges = -2000609,
+        OST_FloorsMembrane = -2000600,
+        OST_FloorsSplitLines = -2001076,
+        OST_FloorsStructure = -2000601,
+        OST_FloorsSubstrate = -2000603,
+        OST_FloorsSurfacePattern = -2000541,
+        OST_FloorTags = -2005026,
+        OST_FoodServiceEquipment = -2001043,
+        OST_FoodServiceEquipmentHiddenLines = -2001044,
+        OST_FoodServiceEquipmentTags = -2001045,
+        OST_FootingSpanDirectionSymbol = -2005111,
+        OST_Furniture = -2000080,
+        OST_FurnitureHiddenLines = -2009505,
+        OST_FurnitureSystems = -2001100,
+        OST_FurnitureSystemsHiddenLines = -2009518,
+        OST_FurnitureSystemTags = -2005007,
+        OST_FurnitureTags = -2005006,
+        OST_gbXML_Ceiling = -2008173,
+        OST_gbXML_ExteriorWall = -2008167,
+        OST_gbXML_FixedSkylight = -2008180,
+        OST_gbXML_FixedWindow = -2008178,
+        OST_gbXML_InteriorFloor = -2008172,
+        OST_gbXML_InteriorWall = -2008171,
+        OST_gbXML_NonSlidingDoor = -2008183,
+        OST_GbXML_Opening = -2008095,
+        OST_gbXML_OpeningAir = -2008184,
+        OST_gbXML_OperableSkylight = -2008181,
+        OST_gbXML_OperableWindow = -2008179,
+        OST_gbXML_RaisedFloor = -2008169,
+        OST_gbXML_Roof = -2008168,
+        OST_gbXML_Shade = -2008187,
+        OST_gbXML_SlabOnGrade = -2008170,
+        OST_gbXML_SlidingDoor = -2008182,
+        OST_GbXML_SType_Exterior = -2008092,
+        OST_GbXML_SType_Interior = -2008091,
+        OST_GbXML_SType_Shade = -2008093,
+        OST_GbXML_SType_Underground = -2008094,
+        OST_gbXML_SurfaceAir = -2008174,
+        OST_gbXML_UndergroundCeiling = -2008177,
+        OST_gbXML_UndergroundSlab = -2008176,
+        OST_gbXML_UndergroundWall = -2008175,
+        OST_GbXMLFaces = -2008090,
+        OST_GenericAnnotation = -2000150,
+        OST_GenericLines = -2000078,
+        OST_GenericModel = -2000151,
+        OST_GenericModelHiddenLines = -2009512,
+        OST_GenericModelTags = -2005013,
+        OST_Girder = -2001322,
+        OST_GridChains = -2000221,
+        OST_GridHeads = -2006040,
+        OST_Grids = -2000220,
+        OST_GuideGrid = -2000107,
+        OST_Gutter = -2001391,
+        OST_GutterTags = -2001065,
+        OST_HandrailTags = -2001066,
+        OST_Hardscape = -2001036,
+        OST_HardscapeHiddenLines = -2001037,
+        OST_HardscapeTags = -2001038,
+        OST_HiddenFloorLines = -2000607,
+        OST_HiddenLines = -2000286,
+        OST_HiddenStructuralColumnLines = -2001334,
+        OST_HiddenStructuralFoundationLines = -2001302,
+        OST_HiddenStructuralFramingLines = -2001329,
+        OST_HiddenWallLines = -2000587,
+        OST_HorizontalBracing = -2001325,
+        OST_HVAC_Load_Building_Types = -2008120,
+        OST_HVAC_Load_Space_Types = -2008119,
+        OST_HVAC_Zones = -2008107,
+        OST_HVAC_Zones_Boundary = -2008108,
+        OST_HVAC_Zones_ColorFill = -2008116,
+        OST_HVAC_Zones_InteriorFill_Visibility = -2008117,
+        OST_HVAC_Zones_Reference_Visibility = -2008118,
+        OST_ImportObjectStyles = -2000196,
+        OST_InsulationLines = -2000077,
+        OST_InternalAreaLoads = -2005207,
+        OST_InternalAreaLoadTags = -2005255,
+        OST_InternalLineLoads = -2005206,
+        OST_InternalLineLoadTags = -2005254,
+        OST_InternalLoads = -2005204,
+        OST_InternalPointLoads = -2005205,
+        OST_InternalPointLoadTags = -2005253,
+        OST_IOSModelGroups = -2000095,
+        OST_Joist = -2001323,
+        OST_KeynoteTags = -2005029,
+        OST_KickerBracing = -2001328,
+        OST_LevelHeads = -2006020,
+        OST_Levels = -2000240,
+        OST_LightingDevices = -2008087,
+        OST_LightingDeviceTags = -2008088,
+        OST_LightingFixtures = -2001120,
+        OST_LightingFixturesHiddenLines = -2009519,
+        OST_LightingFixtureSource = -2001121,
+        OST_LightingFixtureTags = -2005008,
+        OST_LineLoads = -2005202,
+        OST_LineLoadTags = -2005251,
+        OST_Lines = -2000051,
+        OST_LinesBeyond = -2000287,
+        OST_LinesHiddenLines = -2009504,
+        OST_LinkAnalyticalTags = -2000955,
+        OST_LinksAnalytical = -2009657,
+        OST_LoadCases = -2005210,
+        OST_LoadCasesAccidental = -2005216,
+        OST_LoadCasesDead = -2005211,
+        OST_LoadCasesLive = -2005212,
+        OST_LoadCasesRoofLive = -2005215,
+        OST_LoadCasesSeismic = -2005218,
+        OST_LoadCasesSnow = -2005214,
+        OST_LoadCasesTemperature = -2005217,
+        OST_LoadCasesWind = -2005213,
+        OST_Loads = -2005200,
+        OST_MaskingRegion = -2000194,
+        OST_Mass = -2003400,
+        OST_MassAreaFaceTags = -2003410,
+        OST_MassExteriorWall = -2003413,
+        OST_MassFloor = -2003403,
+        OST_MassForm = -2003404,
+        OST_MassGlazing = -2003415,
+        OST_MassHiddenLines = -2009532,
+        OST_MassInteriorWall = -2003412,
+        OST_MassOpening = -2003417,
+        OST_MassRoof = -2003414,
+        OST_MassShade = -2003418,
+        OST_MassSkylights = -2003416,
+        OST_MassTags = -2003405,
+        OST_MassZone = -2003411,
+        OST_Matchline = -2000193,
+        OST_Materials = -2000700,
+        OST_MaterialTags = -2005027,
+        OST_MechanicalControlDevices = -2008232,
+        OST_MechanicalControlDevicesHiddenLines = -2009550,
+        OST_MechanicalControlDeviceTags = -2008233,
+        OST_MechanicalEquipment = -2001140,
+        OST_MechanicalEquipmentHiddenLines = -2009520,
+        OST_MechanicalEquipmentSet = -2000985,
+        OST_MechanicalEquipmentSetBoundaryLines = -2000987,
+        OST_MechanicalEquipmentSetTags = -2000986,
+        OST_MechanicalEquipmentTags = -2005009,
+        OST_MedicalEquipment = -2001046,
+        OST_MedicalEquipmentHiddenLines = -2001047,
+        OST_MedicalEquipmentTags = -2001048,
+        OST_MEPAnalyticalAirLoop = -2001008,
+        OST_MEPAnalyticalBus = -2001021,
+        OST_MEPAnalyticalTransferSwitch = -2001023,
+        OST_MEPAnalyticalWaterLoop = -2001009,
+        OST_MEPAncillaryFraming = -2008231,
+        OST_MEPAncillaryFramingTags = -2008236,
+        OST_MEPLoadAreas = -2001024,
+        OST_MEPLoadAreaSeparationLines = -2001033,
+        OST_MEPSpaceColorFill = -2003605,
+        OST_MEPSpaceInteriorFillVisibility = -2003601,
+        OST_MEPSpaceReferenceVisibility = -2003602,
+        OST_MEPSpaces = -2003600,
+        OST_MEPSpaceSeparationLines = -2000831,
+        OST_MEPSpaceTags = -2000485,
+        OST_MEPSystemZone = -2001001,
+        OST_MEPSystemZoneTags = -2001007,
+        OST_ModelGroupTags = -2001073,
+        OST_MultiCategoryTags = -2005022,
+        OST_MultiReferenceAnnotations = -2000970,
+        OST_NodeAnalyticalTags = -2000956,
+        OST_NurseCallDevices = -2008077,
+        OST_NurseCallDeviceTags = -2008078,
+        OST_OverheadLines = -2000284,
+        OST_PadTags = -2001067,
+        OST_PanelScheduleGraphics = -2008151,
+        OST_Parking = -2001180,
+        OST_ParkingHiddenLines = -2009522,
+        OST_ParkingTags = -2005017,
+        OST_PartHiddenLines = -2000271,
+        OST_Parts = -2000269,
+        OST_PartTags = -2000270,
+        OST_PathOfTravelLines = -2000833,
+        OST_PathOfTravelTags = -2000834,
+        OST_PathRein = -2009009,
+        OST_PathReinBoundary = -2009012,
+        OST_PathReinSpanSymbol = -2009010,
+        OST_PathReinTags = -2009011,
+        OST_Phases = -2000112,
+        OST_PierCaps = -2006219,
+        OST_PierCapTags = -2006220,
+        OST_PierColumns = -2006221,
+        OST_PierColumnTags = -2006222,
+        OST_PierPiles = -2006225,
+        OST_PierPileTags = -2006226,
+        OST_PierWalls = -2006229,
+        OST_PierWallTags = -2006230,
+        OST_PipeAccessory = -2008055,
+        OST_PipeAccessoryTags = -2008056,
+        OST_PipeAnalyticalSegments = -2001113,
+        OST_PipeAnalyticalSegmentTags = -2001114,
+        OST_PipeColorFillLegends = -2008058,
+        OST_PipeColorFills = -2008059,
+        OST_PipeCurves = -2008044,
+        OST_PipeCurvesCenterLine = -2008045,
+        OST_PipeCurvesDrop = -2008069,
+        OST_PipeCurvesRiseDrop = -2008054,
+        OST_PipeFitting = -2008049,
+        OST_PipeFittingCenterLine = -2008072,
+        OST_PipeFittingTags = -2008060,
+        OST_PipeHydronicSeparationSymbols = -2000988,
+        OST_PipeInsulations = -2008122,
+        OST_PipeInsulationsTags = -2008155,
+        OST_PipeSegments = -2008163,
+        OST_PipeTags = -2008047,
+        OST_PipingSystem = -2008043,
+        OST_PipingSystem_Reference_Visibility = -2008159,
+        OST_PlaceHolderDucts = -2008160,
+        OST_PlaceHolderPipes = -2008161,
+        OST_PlanRegion = -2000191,
+        OST_Planting = -2001360,
+        OST_PlantingHiddenLines = -2009528,
+        OST_PlantingTags = -2005021,
+        OST_PlumbingEquipment = -2008234,
+        OST_PlumbingEquipmentHiddenLines = -2009551,
+        OST_PlumbingEquipmentTags = -2008235,
+        OST_PlumbingFixtures = -2001160,
+        OST_PlumbingFixturesHiddenLines = -2009521,
+        OST_PlumbingFixtureTags = -2005010,
+        OST_PointClouds = -2010001,
+        OST_PointLoads = -2005201,
+        OST_PointLoadTags = -2005250,
+        OST_ProjectBasePoint = -2001271,
+        OST_ProjectInformation = -2003101,
+        OST_Purlin = -2001324,
+        OST_RailingHandRail = -2000947,
+        OST_RailingHandRailAboveCut = -2000951,
+        OST_RailingSupport = -2000948,
+        OST_RailingTermination = -2000949,
+        OST_RailingTopRail = -2000946,
+        OST_RailingTopRailAboveCut = -2000950,
+        OST_Ramps = -2000180,
+        OST_RampsAboveCut = -2003302,
+        OST_RampsDownArrow = -2003308,
+        OST_RampsDownText = -2003306,
+        OST_RampsHiddenLines = -2009509,
+        OST_RampsStringer = -2003303,
+        OST_RampsStringerAboveCut = -2003304,
+        OST_RampsUpArrow = -2003307,
+        OST_RampsUpText = -2003305,
+        OST_RampTags = -2001068,
+        OST_RasterImages = -2000560,
+        OST_Rebar = -2009000,
+        OST_RebarBendingDetails = -2001104,
+        OST_RebarCover = -2009015,
+        OST_RebarHiddenLines = -2009050,
+        OST_RebarSetToggle = -2009025,
+        OST_RebarShape = -2009013,
+        OST_RebarSpliceLines = -2001108,
+        OST_RebarTags = -2009020,
+        OST_ReferenceLines = -2000083,
+        OST_ReferencePoints = -2000710,
+        OST_ReferencePoints_Lines = -2000713,
+        OST_ReferencePoints_Planes = -2000712,
+        OST_ReferencePoints_Points = -2000711,
+        OST_ReferenceViewer = -2000198,
+        OST_ReferenceViewerSymbol = -2000197,
+        OST_RenderRegions = -2000302,
+        OST_RevisionClouds = -2006060,
+        OST_RevisionCloudTags = -2006080,
+        OST_Roads = -2001220,
+        OST_RoadsHiddenLines = -2009523,
+        OST_RoadTags = -2001221,
+        OST_Roofs = -2000035,
+        OST_RoofsCutPattern = -2000597,
+        OST_RoofsDefault = -2000596,
+        OST_RoofsFinish1 = -2000594,
+        OST_RoofsFinish2 = -2000595,
+        OST_RoofsHiddenLines = -2009502,
+        OST_RoofsInsulation = -2000592,
+        OST_RoofsInteriorEdges = -2000598,
+        OST_RoofsMembrane = -2000590,
+        OST_RoofSoffit = -2001393,
+        OST_RoofSoffitTags = -2001069,
+        OST_RoofsStructure = -2000591,
+        OST_RoofsSubstrate = -2000593,
+        OST_RoofsSurfacePattern = -2000542,
+        OST_RoofTags = -2000266,
+        OST_RoomColorFill = -2000551,
+        OST_RoomInteriorFillVisibility = -2000161,
+        OST_RoomReferenceVisibility = -2000162,
+        OST_Rooms = -2000160,
+        OST_RoomSeparationLines = -2000066,
+        OST_RoomTags = -2000480,
+        OST_RoutingPreferences = -2008125,
+        OST_RvtLinks = -2001352,
+        OST_RvtLinksTags = -2001074,
+        OST_ScheduleGraphics = -2000570,
+        OST_Schedules = -2000573,
+        OST_SecondaryTopographyContours = -2001343,
+        OST_SectionBox = -2000301,
+        OST_SectionHeadMediumLines = -2000403,
+        OST_SectionHeads = -2000400,
+        OST_SectionHeadThinLines = -2000401,
+        OST_SectionHeadWideLines = -2000404,
+        OST_SectionLine = -2000201,
+        OST_Sections = -2000200,
+        OST_SecurityDevices = -2008079,
+        OST_SecurityDeviceTags = -2008080,
+        OST_ShaftOpening = -2000996,
+        OST_ShaftOpeningHiddenLines = -2009513,
+        OST_SharedBasePoint = -2001272,
+        OST_SheetCollections = -2001112,
+        OST_Sheets = -2003100,
+        OST_Signage = -2001058,
+        OST_SignageHiddenLines = -2001059,
+        OST_SignageTags = -2001061,
+        OST_Site = -2001260,
+        OST_SiteHiddenLines = -2009524,
+        OST_SitePoint = -2001262,
+        OST_SitePointBoundary = -2001266,
+        OST_SiteProperty = -2001265,
+        OST_SitePropertyLineSegment = -2001268,
+        OST_SitePropertyLineSegmentTags = -2001269,
+        OST_SitePropertyTags = -2001267,
+        OST_SiteTags = -2005016,
+        OST_SketchLines = -2000045,
+        OST_SlabEdgeTags = -2001070,
+        OST_SpanDirectionSymbol = -2005110,
+        OST_SpecialityEquipment = -2001350,
+        OST_SpecialityEquipmentHiddenLines = -2009527,
+        OST_SpecialityEquipmentTags = -2005014,
+        OST_SpotCoordinates = -2000264,
+        OST_SpotElevations = -2000263,
+        OST_SpotElevSymbols = -2005100,
+        OST_SpotSlopes = -2000265,
+        OST_Sprinklers = -2008099,
+        OST_SprinklerTags = -2008100,
+        OST_Stairs = -2000120,
+        OST_StairsCutMarks = -2000930,
+        OST_StairsCutMarksAboveCut = -2000931,
+        OST_StairsDownArrows = -2000131,
+        OST_StairsDownText = -2000129,
+        OST_StairsHiddenLines = -2009507,
+        OST_StairsLandings = -2000920,
+        OST_StairsLandingTags = -2000941,
+        OST_StairsNosingLines = -2000932,
+        OST_StairsNosingLinesAboveCut = -2000933,
+        OST_StairsOutlines = -2000934,
+        OST_StairsOutlinesAboveCut = -2000935,
+        OST_StairsPaths = -2000938,
+        OST_StairsPathsAboveCut = -2000939,
+        OST_StairsRailing = -2000126,
+        OST_StairsRailingAboveCut = -2000132,
+        OST_StairsRailingBaluster = -2000127,
+        OST_StairsRailingHiddenLines = -2009508,
+        OST_StairsRailingRail = -2000128,
+        OST_StairsRailingTags = -2000133,
+        OST_StairsRiserLines = -2000936,
+        OST_StairsRiserLinesAboveCut = -2000937,
+        OST_StairsRuns = -2000919,
+        OST_StairsRunTags = -2000940,
+        OST_StairsSupports = -2000952,
+        OST_StairsSupportsAboveCut = -2000124,
+        OST_StairsSupportTags = -2000942,
+        OST_StairsTags = -2005023,
+        OST_StairsTriserNumbers = -2000944,
+        OST_StairsTrisers = -2000921,
+        OST_StairsUpArrows = -2000130,
+        OST_StairsUpText = -2000125,
+        OST_StructConnectionAnchors = -2009039,
+        OST_StructConnectionAnchorTags = -2009057,
+        OST_StructConnectionBolts = -2009041,
+        OST_StructConnectionBoltTags = -2009056,
+        OST_StructConnectionHiddenLines = -2009032,
+        OST_StructConnectionHoles = -2009045,
+        OST_StructConnectionHoleTags = -2009063,
+        OST_StructConnectionModifiers = -2009047,
+        OST_StructConnectionOthers = -2009042,
+        OST_StructConnectionPlates = -2009038,
+        OST_StructConnectionPlateTags = -2009055,
+        OST_StructConnectionProfiles = -2009037,
+        OST_StructConnectionProfilesTags = -2009064,
+        OST_StructConnectionReference = -2009036,
+        OST_StructConnections = -2009030,
+        OST_StructConnectionShearStuds = -2009044,
+        OST_StructConnectionShearStudTags = -2009058,
+        OST_StructConnectionSymbol = -2009033,
+        OST_StructConnectionSymbols = -2006100,
+        OST_StructConnectionTags = -2009040,
+        OST_StructConnectionWelds = -2009046,
+        OST_StructConnectionWeldTags = -2009059,
+        OST_StructuralAnnotations = -2006090,
+        OST_StructuralBracePlanReps = -2006110,
+        OST_StructuralColumnLocationLine = -2001357,
+        OST_StructuralColumns = -2001330,
+        OST_StructuralColumnStickSymbols = -2001335,
+        OST_StructuralColumnTags = -2005018,
+        OST_StructuralFoundation = -2001300,
+        OST_StructuralFoundationTags = -2005019,
+        OST_StructuralFraming = -2001320,
+        OST_StructuralFramingLocationLine = -2001356,
+        OST_StructuralFramingOther = -2001321,
+        OST_StructuralFramingSystem = -2001327,
+        OST_StructuralFramingTags = -2005015,
+        OST_StructuralStiffener = -2001354,
+        OST_StructuralStiffenerHiddenLines = -2001358,
+        OST_StructuralStiffenerTags = -2001355,
+        OST_StructuralTendonHiddenLines = -2006275,
+        OST_StructuralTendons = -2006274,
+        OST_StructuralTendonTags = -2006276,
+        OST_StructuralTruss = -2001336,
+        OST_StructuralTrussStickSymbols = -2009608,
+        OST_SwitchSystem = -2008101,
+        OST_TelephoneDevices = -2008075,
+        OST_TelephoneDeviceTags = -2008076,
+        OST_TemporaryStructure = -2001039,
+        OST_TemporaryStructureHiddenLines = -2001041,
+        OST_TemporaryStructureTags = -2001042,
+        OST_TextNotes = -2000300,
+        OST_TitleBlockMediumLines = -2000282,
+        OST_TitleBlocks = -2000280,
+        OST_TitleBlockThinLines = -2000281,
+        OST_TitleBlockWideLines = -2000283,
+        OST_Topography = -2001340,
+        OST_TopographyContours = -2001342,
+        OST_TopographyHiddenLines = -2009526,
+        OST_TopographyLink = -2001339,
+        OST_TopographySurface = -2001341,
+        OST_Toposolid = -2001079,
+        OST_ToposolidContours = -2001081,
+        OST_ToposolidCutPattern = -2001086,
+        OST_ToposolidDefault = -2001085,
+        OST_ToposolidFinish1 = -2001090,
+        OST_ToposolidFinish2 = -2001091,
+        OST_ToposolidFoldingLines = -2001083,
+        OST_ToposolidHiddenLines = -2001080,
+        OST_ToposolidInsulation = -2001093,
+        OST_ToposolidLink = -2001097,
+        OST_ToposolidLinkTags = -2001103,
+        OST_ToposolidMembrane = -2001087,
+        OST_ToposolidSecondaryContours = -2001082,
+        OST_ToposolidSplitLines = -2001084,
+        OST_ToposolidStructure = -2001088,
+        OST_ToposolidSubstrate = -2001089,
+        OST_ToposolidSurfacePattern = -2001092,
+        OST_ToposolidTags = -2001094,
+        OST_TopRailTags = -2001071,
+        OST_TrussChord = -2009606,
+        OST_TrussTags = -2005030,
+        OST_TrussWeb = -2009605,
+        OST_VerticalBracing = -2001326,
+        OST_VerticalCirculation = -2001052,
+        OST_VerticalCirculationHiddenLines = -2001053,
+        OST_VerticalCirculationTags = -2001054,
+        OST_VibrationDampers = -2006263,
+        OST_VibrationDamperTags = -2006264,
+        OST_VibrationIsolators = -2006265,
+        OST_VibrationIsolatorTags = -2006266,
+        OST_VibrationManagement = -2006261,
+        OST_VibrationManagementHiddenLines = -2006262,
+        OST_VibrationManagementTags = -2006282,
+        OST_Viewers = -2000278,
+        OST_ViewportLabel = -2000515,
+        OST_Viewports = -2000510,
+        OST_Views = -2000279,
+        OST_VolumeOfInterest = -2006000,
+        OST_WallNonCoreLayer = -2001034,
+        OST_Walls = -2000011,
+        OST_WallsCutPattern = -2000588,
+        OST_WallsDefault = -2000586,
+        OST_WallsFinish1 = -2000584,
+        OST_WallsFinish2 = -2000585,
+        OST_WallsInsulation = -2000582,
+        OST_WallsMembrane = -2000580,
+        OST_WallsStructure = -2000581,
+        OST_WallsSubstrate = -2000583,
+        OST_WallsSurfacePattern = -2000540,
+        OST_WallSweepTags = -2001072,
+        OST_WallTags = -2005011,
+        OST_WeakDims = -2000261,
+        OST_Windows = -2000014,
+        OST_WindowsFrameMullionProjection = -2000018,
+        OST_WindowsGlassProjection = -2000016,
+        OST_WindowsHiddenLines = -2009500,
+        OST_WindowsOpeningProjection = -2000022,
+        OST_WindowsSillHeadProjection = -2000020,
+        OST_WindowTags = -2000450,
+        OST_Wire = -2008039,
+        OST_WireHomeRunArrows = -2008089,
+        OST_WireTags = -2008057,
+        OST_WireTickMarks = -2008074,
+        OST_ZoneEquipment = -2001010,
+        OST_ZoneTags = -2008115,
+        INVALID = -1,
+    }
+
+    public static class RevitBuiltInCategoryExtensions
+    {
+        public static bool TryGetEnglishName(this RevitBuiltInCategory cat, out string name)
+        {
+            name = string.Empty;
+            return RevitBuiltInCategoryToEnglishNameMap.TryGetValue(cat, out name);
+        }
+
+        public static bool TryGetCategoryFromEnglishName(string name, out RevitBuiltInCategory cat)
+        {
+            cat = RevitBuiltInCategory.INVALID;
+            return EnglishNameToRevitBuiltInCategoryMap.TryGetValue(name, out cat);
+        }
+
+        public static IReadOnlyDictionary<RevitBuiltInCategory, string> RevitBuiltInCategoryToEnglishNameMap { get; } = new Dictionary<RevitBuiltInCategory, string>()
+        {
+            {RevitBuiltInCategory.OST_AbutmentFoundations, "Abutment Foundations"},
+            {RevitBuiltInCategory.OST_AbutmentFoundationTags, "Abutment Foundation Tags"},
+            {RevitBuiltInCategory.OST_AbutmentPiles, "Abutment Piles"},
+            {RevitBuiltInCategory.OST_AbutmentPileTags, "Abutment Pile Tags"},
+            {RevitBuiltInCategory.OST_AbutmentWalls, "Abutment Walls"},
+            {RevitBuiltInCategory.OST_AbutmentWallTags, "Abutment Wall Tags"},
+            {RevitBuiltInCategory.OST_AdaptivePoints, "Adaptive Points"},
+            {RevitBuiltInCategory.OST_AdaptivePoints_Lines, "Lines"},
+            {RevitBuiltInCategory.OST_AdaptivePoints_Planes, "Planes"},
+            {RevitBuiltInCategory.OST_AdaptivePoints_Points, "Points"},
+            {RevitBuiltInCategory.OST_Alignments, "Alignments"},
+            {RevitBuiltInCategory.OST_AlignmentsTags, "Alignment Tags"},
+            {RevitBuiltInCategory.OST_AlignmentStationLabels, "Alignment Station Labels"},
+            {RevitBuiltInCategory.OST_AlignmentStationLabelSets, "Alignment Station Label Sets"},
+            {RevitBuiltInCategory.OST_AnalysisDisplayStyle, "Analysis Display Style"},
+            {RevitBuiltInCategory.OST_AnalysisResults, "Analysis Results"},
+            {RevitBuiltInCategory.OST_AnalyticalMember, "Analytical Members"},
+            {RevitBuiltInCategory.OST_AnalyticalMemberCrossSection, "Cross Section"},
+            {RevitBuiltInCategory.OST_AnalyticalMemberLocalCoordSys, "Local Coordinate System"},
+            {RevitBuiltInCategory.OST_AnalyticalMemberTags, "Analytical Member Tags"},
+            {RevitBuiltInCategory.OST_AnalyticalNodes, "Analytical Nodes"},
+            {RevitBuiltInCategory.OST_AnalyticalOpening, "Analytical Openings"},
+            {RevitBuiltInCategory.OST_AnalyticalOpeningTags, "Analytical Opening Tags"},
+            {RevitBuiltInCategory.OST_AnalyticalPanel, "Analytical Panels"},
+            {RevitBuiltInCategory.OST_AnalyticalPanelLocalCoordSys, "Local Coordinate System"},
+            {RevitBuiltInCategory.OST_AnalyticalPanelTags, "Analytical Panel Tags"},
+            {RevitBuiltInCategory.OST_AnalyticalPipeConnectionLineSymbol, "Connection Line Symbol"},
+            {RevitBuiltInCategory.OST_AnalyticalPipeConnections, "Analytical Pipe Connections"},
+            {RevitBuiltInCategory.OST_AnalyticSpaces, "Analytical Spaces"},
+            {RevitBuiltInCategory.OST_AnalyticSurfaces, "Analytical Surfaces"},
+            {RevitBuiltInCategory.OST_AnnotationCrop, "Annotation Crop Boundary"},
+            {RevitBuiltInCategory.OST_AnnotationCropSpecial, "Annotation Crop Boundary"},
+            {RevitBuiltInCategory.OST_ApproachSlabs, "Approach Slabs"},
+            {RevitBuiltInCategory.OST_ApproachSlabTags, "Approach Slab Tags"},
+            {RevitBuiltInCategory.OST_AreaColorFill, "Color Fill"},
+            {RevitBuiltInCategory.OST_AreaInteriorFillVisibility, "Interior Fill"},
+            {RevitBuiltInCategory.OST_AreaLoads, "Area Loads"},
+            {RevitBuiltInCategory.OST_AreaLoadTags, "Area Load Tags"},
+            {RevitBuiltInCategory.OST_AreaReferenceVisibility, "Reference"},
+            {RevitBuiltInCategory.OST_AreaRein, "Structural Area Reinforcement"},
+            {RevitBuiltInCategory.OST_AreaReinBoundary, "Boundary"},
+            {RevitBuiltInCategory.OST_AreaReinSpanSymbol, "Structural Area Reinforcement Symbols"},
+            {RevitBuiltInCategory.OST_AreaReinTags, "Structural Area Reinforcement Tags"},
+            {RevitBuiltInCategory.OST_Areas, "Areas"},
+            {RevitBuiltInCategory.OST_AreaSchemeLines, "<Area Boundary>"},
+            {RevitBuiltInCategory.OST_AreaTags, "Area Tags"},
+            {RevitBuiltInCategory.OST_Assemblies, "Assemblies"},
+            {RevitBuiltInCategory.OST_AssemblyTags, "Assembly Tags"},
+            {RevitBuiltInCategory.OST_AudioVisualDevices, "Audio Visual Devices"},
+            {RevitBuiltInCategory.OST_AudioVisualDevicesHiddenLines, "<Hidden Lines>"},
+            {RevitBuiltInCategory.OST_AudioVisualDeviceTags, "Audio Visual Device Tags"},
+            {RevitBuiltInCategory.OST_AxisOfRotation, "<Axis of Rotation>"},
+            {RevitBuiltInCategory.OST_BeamSystemTags, "Structural Beam System Tags"},
+            {RevitBuiltInCategory.OST_BoundaryConditions, "Boundary Conditions"},
+            {RevitBuiltInCategory.OST_BridgeAbutmentHiddenLines, "<Hidden Lines>"},
+            {RevitBuiltInCategory.OST_BridgeAbutments, "Abutments"},
+            {RevitBuiltInCategory.OST_BridgeAbutmentTags, "Abutment Tags"},
+            {RevitBuiltInCategory.OST_BridgeArches, "Arches"},
+            {RevitBuiltInCategory.OST_BridgeBearingHiddenLines, "<Hidden Lines>"},
+            {RevitBuiltInCategory.OST_BridgeBearings, "Bearings"},
+            {RevitBuiltInCategory.OST_BridgeBearingTags, "Bearing Tags"},
+            {RevitBuiltInCategory.OST_BridgeCables, "Bridge Cables"},
+            {RevitBuiltInCategory.OST_BridgeCableTags, "Bridge Cable Tags"},
+            {RevitBuiltInCategory.OST_BridgeDeckHiddenLines, "<Hidden Lines>"},
+            {RevitBuiltInCategory.OST_BridgeDecks, "Bridge Decks"},
+            {RevitBuiltInCategory.OST_BridgeDeckTags, "Bridge Deck Tags"},
+            {RevitBuiltInCategory.OST_BridgeFoundations, "Pier Foundations"},
+            {RevitBuiltInCategory.OST_BridgeFoundationTags, "Pier Foundation Tags"},
+            {RevitBuiltInCategory.OST_BridgeFraming, "Bridge Framing"},
+            {RevitBuiltInCategory.OST_BridgeFramingCrossBracing, "Cross Bracing"},
+            {RevitBuiltInCategory.OST_BridgeFramingCrossBracingTags, "Bridge Cross Bracing Tags"},
+            {RevitBuiltInCategory.OST_BridgeFramingDiaphragms, "Diaphragms"},
+            {RevitBuiltInCategory.OST_BridgeFramingDiaphragmTags, "Bridge Diaphragm Tags"},
+            {RevitBuiltInCategory.OST_BridgeFramingHiddenLines, "<Hidden Lines>"},
+            {RevitBuiltInCategory.OST_BridgeFramingTags, "Bridge Framing Tags"},
+            {RevitBuiltInCategory.OST_BridgeFramingTrusses, "Trusses"},
+            {RevitBuiltInCategory.OST_BridgeFramingTrussTags, "Bridge Truss Tags"},
+            {RevitBuiltInCategory.OST_BridgeGirders, "Primarys"},
+            {RevitBuiltInCategory.OST_BridgePierHiddenLines, "<Hidden Lines>"},
+            {RevitBuiltInCategory.OST_BridgePiers, "Piers"},
+            {RevitBuiltInCategory.OST_BridgePierTags, "Pier Tags"},
+            {RevitBuiltInCategory.OST_BridgeTowers, "Pier Towers"},
+            {RevitBuiltInCategory.OST_BridgeTowerTags, "Pier Tower Tags"},
+            {RevitBuiltInCategory.OST_BrokenSectionLine, "Broken Section Line"},
+            {RevitBuiltInCategory.OST_BuildingPad, "Pads"},
+            {RevitBuiltInCategory.OST_CableTray, "Cable Trays"},
+            {RevitBuiltInCategory.OST_CableTrayCenterLine, "Center Line"},
+            {RevitBuiltInCategory.OST_CableTrayDrop, "Drop"},
+            {RevitBuiltInCategory.OST_CableTrayFitting, "Cable Tray Fittings"},
+            {RevitBuiltInCategory.OST_CableTrayFittingCenterLine, "Center Line"},
+            {RevitBuiltInCategory.OST_CableTrayFittingTags, "Cable Tray Fitting Tags"},
+            {RevitBuiltInCategory.OST_CableTrayRiseDrop, "Rise"},
+            {RevitBuiltInCategory.OST_CableTrayRun, "Cable Tray Runs"},
+            {RevitBuiltInCategory.OST_CableTrayTags, "Cable Tray Tags"},
+            {RevitBuiltInCategory.OST_CalloutBoundary, "Callout Boundary"},
+            {RevitBuiltInCategory.OST_CalloutHeads, "Callout Heads"},
+            {RevitBuiltInCategory.OST_CalloutLeaderLine, "Callout Leader Line"},
+            {RevitBuiltInCategory.OST_Callouts, "Callouts"},
+            {RevitBuiltInCategory.OST_Camera_Lines, "Cameras"},
+            {RevitBuiltInCategory.OST_Casework, "Casework"},
+            {RevitBuiltInCategory.OST_CaseworkHiddenLines, "<Hidden Lines>"},
+            {RevitBuiltInCategory.OST_CaseworkTags, "Casework Tags"},
+            {RevitBuiltInCategory.OST_Ceilings, "Ceilings"},
+            {RevitBuiltInCategory.OST_CeilingsCutPattern, "Cut Pattern"},
+            {RevitBuiltInCategory.OST_CeilingsDefault, "Common Edges"},
+            {RevitBuiltInCategory.OST_CeilingsFinish1, "Finish 1 [4]"},
+            {RevitBuiltInCategory.OST_CeilingsFinish2, "Finish 2 [5]"},
+            {RevitBuiltInCategory.OST_CeilingsHiddenLines, "<Hidden Lines>"},
+            {RevitBuiltInCategory.OST_CeilingsInsulation, "Thermal/Air Layer [3]"},
+            {RevitBuiltInCategory.OST_CeilingsMembrane, "Membrane Layer"},
+            {RevitBuiltInCategory.OST_CeilingsStructure, "Structure [1]"},
+            {RevitBuiltInCategory.OST_CeilingsSubstrate, "Substrate [2]"},
+            {RevitBuiltInCategory.OST_CeilingsSurfacePattern, "Surface Pattern"},
+            {RevitBuiltInCategory.OST_CeilingTags, "Ceiling Tags"},
+            {RevitBuiltInCategory.OST_CenterLines, "<Centerline>"},
+            {RevitBuiltInCategory.OST_CLines, "Reference Planes"},
+            {RevitBuiltInCategory.OST_ColorFillLegends, "Color Fill Legends"},
+            {RevitBuiltInCategory.OST_Columns, "Columns"},
+            {RevitBuiltInCategory.OST_ColumnsHiddenLines, "<Hidden Lines>"},
+            {RevitBuiltInCategory.OST_ColumnTags, "Column Tags"},
+            {RevitBuiltInCategory.OST_CommunicationDevices, "Communication Devices"},
+            {RevitBuiltInCategory.OST_CommunicationDeviceTags, "Communication Device Tags"},
+            {RevitBuiltInCategory.OST_Conduit, "Conduits"},
+            {RevitBuiltInCategory.OST_ConduitCenterLine, "Center Line"},
+            {RevitBuiltInCategory.OST_ConduitDrop, "Drop"},
+            {RevitBuiltInCategory.OST_ConduitFitting, "Conduit Fittings"},
+            {RevitBuiltInCategory.OST_ConduitFittingCenterLine, "Center Line"},
+            {RevitBuiltInCategory.OST_ConduitFittingTags, "Conduit Fitting Tags"},
+            {RevitBuiltInCategory.OST_ConduitRiseDrop, "Rise"},
+            {RevitBuiltInCategory.OST_ConduitRun, "Conduit Runs"},
+            {RevitBuiltInCategory.OST_ConduitTags, "Conduit Tags"},
+            {RevitBuiltInCategory.OST_ContourLabels, "Contour Labels"},
+            {RevitBuiltInCategory.OST_CoordinateSystem, "Internal Origin"},
+            {RevitBuiltInCategory.OST_Coordination_Model, "Coordination Model"},
+            {RevitBuiltInCategory.OST_Cornices, "Wall Sweeps"},
+            {RevitBuiltInCategory.OST_Coupler, "Structural Rebar Couplers"},
+            {RevitBuiltInCategory.OST_CouplerHiddenLines, "<Hidden Lines>"},
+            {RevitBuiltInCategory.OST_CouplerTags, "Structural Rebar Coupler Tags"},
+            {RevitBuiltInCategory.OST_CropBoundary, "Crop Boundaries"},
+            {RevitBuiltInCategory.OST_CropBoundarySpecial, "Crop Boundaries"},
+            {RevitBuiltInCategory.OST_CurtainGrids, "Curtain Grids"},
+            {RevitBuiltInCategory.OST_CurtainGridsCurtaSystem, "Curtain System Grids"},
+            {RevitBuiltInCategory.OST_CurtainGridsRoof, "Curtain Roof Grids"},
+            {RevitBuiltInCategory.OST_CurtainGridsWall, "Curtain Wall Grids"},
+            {RevitBuiltInCategory.OST_CurtainWallMullions, "Curtain Wall Mullions"},
+            {RevitBuiltInCategory.OST_CurtainWallMullionsHiddenLines, "<Hidden Lines>"},
+            {RevitBuiltInCategory.OST_CurtainWallMullionTags, "Curtain Wall Mullion Tags"},
+            {RevitBuiltInCategory.OST_CurtainWallPanels, "Curtain Panels"},
+            {RevitBuiltInCategory.OST_CurtainWallPanelsHiddenLines, "<Hidden Lines>"},
+            {RevitBuiltInCategory.OST_CurtainWallPanelTags, "Curtain Panel Tags"},
+            {RevitBuiltInCategory.OST_CurtaSystem, "Curtain Systems"},
+            {RevitBuiltInCategory.OST_CurtaSystemHiddenLines, "<Hidden Lines>"},
+            {RevitBuiltInCategory.OST_CurtaSystemTags, "Curtain System Tags"},
+            {RevitBuiltInCategory.OST_CurvesMediumLines, "<Medium Lines>"},
+            {RevitBuiltInCategory.OST_CurvesThinLines, "<Thin Lines>"},
+            {RevitBuiltInCategory.OST_CurvesWideLines, "<Wide Lines>"},
+            {RevitBuiltInCategory.OST_DataDevices, "Data Devices"},
+            {RevitBuiltInCategory.OST_DataDeviceTags, "Data Device Tags"},
+            {RevitBuiltInCategory.OST_DataExchanges, "Data Exchanges"},
+            {RevitBuiltInCategory.OST_DemolishedLines, "<Demolished>"},
+            {RevitBuiltInCategory.OST_DetailComponents, "Detail Items"},
+            {RevitBuiltInCategory.OST_DetailComponentsHiddenLines, "<Hidden Lines>"},
+            {RevitBuiltInCategory.OST_DetailComponentTags, "Detail Item Tags"},
+            {RevitBuiltInCategory.OST_Dimensions, "Dimensions"},
+            {RevitBuiltInCategory.OST_DisplacementPath, "Displacement Path"},
+            {RevitBuiltInCategory.OST_DividedSurface_Gridlines, "Gridlines"},
+            {RevitBuiltInCategory.OST_DividedSurface_Nodes, "Nodes"},
+            {RevitBuiltInCategory.OST_DividedSurface_PatternFill, "Pattern Fill"},
+            {RevitBuiltInCategory.OST_DividedSurface_PatternLines, "Pattern Lines"},
+            {RevitBuiltInCategory.OST_Doors, "Doors"},
+            {RevitBuiltInCategory.OST_DoorsFrameMullionProjection, "Frame/Mullion"},
+            {RevitBuiltInCategory.OST_DoorsGlassProjection, "Glass"},
+            {RevitBuiltInCategory.OST_DoorsHiddenLines, "<Hidden Lines>"},
+            {RevitBuiltInCategory.OST_DoorsOpeningProjection, "Opening"},
+            {RevitBuiltInCategory.OST_DoorsPanelProjection, "Panel"},
+            {RevitBuiltInCategory.OST_DoorTags, "Door Tags"},
+            {RevitBuiltInCategory.OST_DuctAccessory, "Duct Accessories"},
+            {RevitBuiltInCategory.OST_DuctAccessoryTags, "Duct Accessory Tags"},
+            {RevitBuiltInCategory.OST_DuctAnalyticalSegments, "Analytical Duct Segments"},
+            {RevitBuiltInCategory.OST_DuctAnalyticalSegmentTags, "Analytical Duct Segment Tags"},
+            {RevitBuiltInCategory.OST_DuctColorFillLegends, "Duct Color Fill Legends"},
+            {RevitBuiltInCategory.OST_DuctColorFills, "Duct Color Fill"},
+            {RevitBuiltInCategory.OST_DuctCurves, "Ducts"},
+            {RevitBuiltInCategory.OST_DuctCurvesCenterLine, "Center Line"},
+            {RevitBuiltInCategory.OST_DuctCurvesDrop, "Drop"},
+            {RevitBuiltInCategory.OST_DuctCurvesRiseDrop, "Rise"},
+            {RevitBuiltInCategory.OST_DuctFitting, "Duct Fittings"},
+            {RevitBuiltInCategory.OST_DuctFittingCenterLine, "Center Line"},
+            {RevitBuiltInCategory.OST_DuctFittingTags, "Duct Fitting Tags"},
+            {RevitBuiltInCategory.OST_DuctInsulations, "Duct Insulations"},
+            {RevitBuiltInCategory.OST_DuctInsulationsTags, "Duct Insulation Tags"},
+            {RevitBuiltInCategory.OST_DuctLinings, "Duct Linings"},
+            {RevitBuiltInCategory.OST_DuctLiningsTags, "Duct Lining Tags"},
+            {RevitBuiltInCategory.OST_DuctSystem, "Duct Systems"},
+            {RevitBuiltInCategory.OST_DuctSystem_Reference_Visibility, "Reference Lines"},
+            {RevitBuiltInCategory.OST_DuctTags, "Duct Tags"},
+            {RevitBuiltInCategory.OST_DuctTerminal, "Air Terminals"},
+            {RevitBuiltInCategory.OST_DuctTerminalTags, "Air Terminal Tags"},
+            {RevitBuiltInCategory.OST_EdgeSlab, "Slab Edges"},
+            {RevitBuiltInCategory.OST_ELECTRICAL_AreaBasedLoads_Boundary, "Boundary"},
+            {RevitBuiltInCategory.OST_ELECTRICAL_AreaBasedLoads_InteriorFill_Visibility, "Interior Fill"},
+            {RevitBuiltInCategory.OST_ELECTRICAL_AreaBasedLoads_Reference_Visibility, "Reference Lines"},
+            {RevitBuiltInCategory.OST_ELECTRICAL_AreaBasedLoads_Tags, "Area Based Load Tags"},
+            {RevitBuiltInCategory.OST_ElectricalAnalyticalTransformer, "Electrical Analytical Transformer"},
+            {RevitBuiltInCategory.OST_ElectricalCircuit, "Electrical Circuits"},
+            {RevitBuiltInCategory.OST_ElectricalEquipment, "Electrical Equipment"},
+            {RevitBuiltInCategory.OST_ElectricalEquipmentHiddenLines, "<Hidden Lines>"},
+            {RevitBuiltInCategory.OST_ElectricalEquipmentTags, "Electrical Equipment Tags"},
+            {RevitBuiltInCategory.OST_ElectricalFixtures, "Electrical Fixtures"},
+            {RevitBuiltInCategory.OST_ElectricalFixturesHiddenLines, "<Hidden Lines>"},
+            {RevitBuiltInCategory.OST_ElectricalFixtureTags, "Electrical Fixture Tags"},
+            {RevitBuiltInCategory.OST_ElectricalInternalCircuits, "Electrical Spare/Space Circuits"},
+            {RevitBuiltInCategory.OST_ElectricalLoadSet, "Electrical Analytical Load Set"},
+            {RevitBuiltInCategory.OST_ElectricalLoadZoneInstance, "Electrical Analytical Loads"},
+            {RevitBuiltInCategory.OST_ElectricalPowerSource, "Electrical Analytical Power Source"},
+            {RevitBuiltInCategory.OST_Elev, "Elevations"},
+            {RevitBuiltInCategory.OST_ElevationMarks, "Elevation Marks"},
+            {RevitBuiltInCategory.OST_Entourage, "Entourage"},
+            {RevitBuiltInCategory.OST_EntourageHiddenLines, "<Hidden Lines>"},
+            {RevitBuiltInCategory.OST_EntourageTags, "Entourage Tags"},
+            {RevitBuiltInCategory.OST_ExpansionJointHiddenLines, "<Hidden Lines>"},
+            {RevitBuiltInCategory.OST_ExpansionJoints, "Expansion Joints"},
+            {RevitBuiltInCategory.OST_ExpansionJointTags, "Expansion Joint Tags"},
+            {RevitBuiltInCategory.OST_FabricAreaBoundary, "Boundary"},
+            {RevitBuiltInCategory.OST_FabricAreas, "Structural Fabric Areas"},
+            {RevitBuiltInCategory.OST_FabricAreaSketchEnvelopeLines, "<Fabric Envelope>"},
+            {RevitBuiltInCategory.OST_FabricAreaSketchSheetsLines, "<Fabric Sheets>"},
+            {RevitBuiltInCategory.OST_FabricationContainment, "MEP Fabrication Containment"},
+            {RevitBuiltInCategory.OST_FabricationContainmentCenterLine, "Center Line"},
+            {RevitBuiltInCategory.OST_FabricationContainmentDrop, "Drop"},
+            {RevitBuiltInCategory.OST_FabricationContainmentRise, "Rise"},
+            {RevitBuiltInCategory.OST_FabricationContainmentSymbology, "Symbology"},
+            {RevitBuiltInCategory.OST_FabricationContainmentTags, "MEP Fabrication Containment Tags"},
+            {RevitBuiltInCategory.OST_FabricationDuctwork, "MEP Fabrication Ductwork"},
+            {RevitBuiltInCategory.OST_FabricationDuctworkCenterLine, "Center Line"},
+            {RevitBuiltInCategory.OST_FabricationDuctworkDrop, "Drop"},
+            {RevitBuiltInCategory.OST_FabricationDuctworkInsulation, "Insulation"},
+            {RevitBuiltInCategory.OST_FabricationDuctworkLining, "Lining"},
+            {RevitBuiltInCategory.OST_FabricationDuctworkRise, "Rise"},
+            {RevitBuiltInCategory.OST_FabricationDuctworkStiffeners, "MEP Fabrication Ductwork Stiffeners"},
+            {RevitBuiltInCategory.OST_FabricationDuctworkStiffenerTags, "MEP Fabrication Ductwork Stiffener Tags"},
+            {RevitBuiltInCategory.OST_FabricationDuctworkSymbology, "Symbology"},
+            {RevitBuiltInCategory.OST_FabricationDuctworkTags, "MEP Fabrication Ductwork Tags"},
+            {RevitBuiltInCategory.OST_FabricationHangers, "MEP Fabrication Hangers"},
+            {RevitBuiltInCategory.OST_FabricationHangerTags, "MEP Fabrication Hanger Tags"},
+            {RevitBuiltInCategory.OST_FabricationPipework, "MEP Fabrication Pipework"},
+            {RevitBuiltInCategory.OST_FabricationPipeworkCenterLine, "Center Line"},
+            {RevitBuiltInCategory.OST_FabricationPipeworkDrop, "Drop"},
+            {RevitBuiltInCategory.OST_FabricationPipeworkInsulation, "Insulation"},
+            {RevitBuiltInCategory.OST_FabricationPipeworkRise, "Rise"},
+            {RevitBuiltInCategory.OST_FabricationPipeworkSymbology, "Symbology"},
+            {RevitBuiltInCategory.OST_FabricationPipeworkTags, "MEP Fabrication Pipework Tags"},
+            {RevitBuiltInCategory.OST_FabricReinforcement, "Structural Fabric Reinforcement"},
+            {RevitBuiltInCategory.OST_FabricReinforcementBoundary, "Boundary"},
+            {RevitBuiltInCategory.OST_FabricReinforcementTags, "Structural Fabric Reinforcement Tags"},
+            {RevitBuiltInCategory.OST_FabricReinforcementWire, "Fabric Wire"},
+            {RevitBuiltInCategory.OST_FabricReinSpanSymbol, "Structural Fabric Reinforcement Symbols"},
+            {RevitBuiltInCategory.OST_Fascia, "Fascias"},
+            {RevitBuiltInCategory.OST_FasciaTags, "Fascia Tags"},
+            {RevitBuiltInCategory.OST_FilledRegion, "Filled region"},
+            {RevitBuiltInCategory.OST_FireAlarmDevices, "Fire Alarm Devices"},
+            {RevitBuiltInCategory.OST_FireAlarmDeviceTags, "Fire Alarm Device Tags"},
+            {RevitBuiltInCategory.OST_FireProtection, "Fire Protection"},
+            {RevitBuiltInCategory.OST_FireProtectionHiddenLines, "<Hidden Lines>"},
+            {RevitBuiltInCategory.OST_FireProtectionTags, "Fire Protection Tags"},
+            {RevitBuiltInCategory.OST_FlexDuctCurves, "Flex Ducts"},
+            {RevitBuiltInCategory.OST_FlexDuctCurvesCenterLine, "Center Line"},
+            {RevitBuiltInCategory.OST_FlexDuctCurvesPattern, "Pattern"},
+            {RevitBuiltInCategory.OST_FlexDuctTags, "Flex Duct Tags"},
+            {RevitBuiltInCategory.OST_FlexPipeCurves, "Flex Pipes"},
+            {RevitBuiltInCategory.OST_FlexPipeCurvesCenterLine, "Center Line"},
+            {RevitBuiltInCategory.OST_FlexPipeCurvesPattern, "Pattern"},
+            {RevitBuiltInCategory.OST_FlexPipeTags, "Flex Pipe Tags"},
+            {RevitBuiltInCategory.OST_Floors, "Floors"},
+            {RevitBuiltInCategory.OST_FloorsCutPattern, "Cut Pattern"},
+            {RevitBuiltInCategory.OST_FloorsDefault, "Common Edges"},
+            {RevitBuiltInCategory.OST_FloorsFinish1, "Finish 1 [4]"},
+            {RevitBuiltInCategory.OST_FloorsFinish2, "Finish 2 [5]"},
+            {RevitBuiltInCategory.OST_FloorsInsulation, "Thermal/Air Layer [3]"},
+            {RevitBuiltInCategory.OST_FloorsInteriorEdges, "Folding Lines"},
+            {RevitBuiltInCategory.OST_FloorsMembrane, "Membrane Layer"},
+            {RevitBuiltInCategory.OST_FloorsSplitLines, "Split Lines"},
+            {RevitBuiltInCategory.OST_FloorsStructure, "Structure [1]"},
+            {RevitBuiltInCategory.OST_FloorsSubstrate, "Substrate [2]"},
+            {RevitBuiltInCategory.OST_FloorsSurfacePattern, "Surface Pattern"},
+            {RevitBuiltInCategory.OST_FloorTags, "Floor Tags"},
+            {RevitBuiltInCategory.OST_FoodServiceEquipment, "Food Service Equipment"},
+            {RevitBuiltInCategory.OST_FoodServiceEquipmentHiddenLines, "<Hidden Lines>"},
+            {RevitBuiltInCategory.OST_FoodServiceEquipmentTags, "Food Service Equipment Tags"},
+            {RevitBuiltInCategory.OST_FootingSpanDirectionSymbol, "Foundation Span Direction Symbol"},
+            {RevitBuiltInCategory.OST_Furniture, "Furniture"},
+            {RevitBuiltInCategory.OST_FurnitureHiddenLines, "<Hidden Lines>"},
+            {RevitBuiltInCategory.OST_FurnitureSystems, "Furniture Systems"},
+            {RevitBuiltInCategory.OST_FurnitureSystemsHiddenLines, "<Hidden Lines>"},
+            {RevitBuiltInCategory.OST_FurnitureSystemTags, "Furniture System Tags"},
+            {RevitBuiltInCategory.OST_FurnitureTags, "Furniture Tags"},
+            {RevitBuiltInCategory.OST_gbXML_Ceiling, "Ceilings"},
+            {RevitBuiltInCategory.OST_gbXML_ExteriorWall, "Exterior Walls"},
+            {RevitBuiltInCategory.OST_gbXML_FixedSkylight, "Fixed Skylights"},
+            {RevitBuiltInCategory.OST_gbXML_FixedWindow, "Fixed Windows"},
+            {RevitBuiltInCategory.OST_gbXML_InteriorFloor, "Interior Floors"},
+            {RevitBuiltInCategory.OST_gbXML_InteriorWall, "Interior Walls"},
+            {RevitBuiltInCategory.OST_gbXML_NonSlidingDoor, "Non-sliding Doors"},
+            {RevitBuiltInCategory.OST_GbXML_Opening, "Opening"},
+            {RevitBuiltInCategory.OST_gbXML_OpeningAir, "Air Openings"},
+            {RevitBuiltInCategory.OST_gbXML_OperableSkylight, "Operable Skylights"},
+            {RevitBuiltInCategory.OST_gbXML_OperableWindow, "Operable Windows"},
+            {RevitBuiltInCategory.OST_gbXML_RaisedFloor, "Raised Floors"},
+            {RevitBuiltInCategory.OST_gbXML_Roof, "Roofs"},
+            {RevitBuiltInCategory.OST_gbXML_Shade, "Shades"},
+            {RevitBuiltInCategory.OST_gbXML_SlabOnGrade, "Slabs on Grade"},
+            {RevitBuiltInCategory.OST_gbXML_SlidingDoor, "Sliding Doors"},
+            {RevitBuiltInCategory.OST_GbXML_SType_Exterior, "Exterior"},
+            {RevitBuiltInCategory.OST_GbXML_SType_Interior, "Interior"},
+            {RevitBuiltInCategory.OST_GbXML_SType_Shade, "Shades"},
+            {RevitBuiltInCategory.OST_GbXML_SType_Underground, "Underground"},
+            {RevitBuiltInCategory.OST_gbXML_SurfaceAir, "Air Surfaces"},
+            {RevitBuiltInCategory.OST_gbXML_UndergroundCeiling, "Underground Ceilings"},
+            {RevitBuiltInCategory.OST_gbXML_UndergroundSlab, "Underground Slabs"},
+            {RevitBuiltInCategory.OST_gbXML_UndergroundWall, "Underground Walls"},
+            {RevitBuiltInCategory.OST_GbXMLFaces, "Analytical Surfaces"},
+            {RevitBuiltInCategory.OST_GenericAnnotation, "Generic Annotations"},
+            {RevitBuiltInCategory.OST_GenericLines, "<Lines>"},
+            {RevitBuiltInCategory.OST_GenericModel, "Generic Models"},
+            {RevitBuiltInCategory.OST_GenericModelHiddenLines, "<Hidden Lines>"},
+            {RevitBuiltInCategory.OST_GenericModelTags, "Generic Model Tags"},
+            {RevitBuiltInCategory.OST_Girder, "Primary"},
+            {RevitBuiltInCategory.OST_GridChains, "Multi-segmented Grid"},
+            {RevitBuiltInCategory.OST_GridHeads, "Grid Heads"},
+            {RevitBuiltInCategory.OST_Grids, "Grids"},
+            {RevitBuiltInCategory.OST_GuideGrid, "Guide Grid"},
+            {RevitBuiltInCategory.OST_Gutter, "Gutters"},
+            {RevitBuiltInCategory.OST_GutterTags, "Gutter Tags"},
+            {RevitBuiltInCategory.OST_HandrailTags, "Handrail Tags"},
+            {RevitBuiltInCategory.OST_Hardscape, "Hardscape"},
+            {RevitBuiltInCategory.OST_HardscapeHiddenLines, "<Hidden Lines>"},
+            {RevitBuiltInCategory.OST_HardscapeTags, "Hardscape Tags"},
+            {RevitBuiltInCategory.OST_HiddenFloorLines, "<Hidden Lines>"},
+            {RevitBuiltInCategory.OST_HiddenLines, "<Hidden>"},
+            {RevitBuiltInCategory.OST_HiddenStructuralColumnLines, "<Hidden Lines>"},
+            {RevitBuiltInCategory.OST_HiddenStructuralFoundationLines, "<Hidden Lines>"},
+            {RevitBuiltInCategory.OST_HiddenStructuralFramingLines, "<Hidden Lines>"},
+            {RevitBuiltInCategory.OST_HiddenWallLines, "<Hidden Lines>"},
+            {RevitBuiltInCategory.OST_HorizontalBracing, "Plan Bracing"},
+            {RevitBuiltInCategory.OST_HVAC_Load_Building_Types, "Building Type Settings"},
+            {RevitBuiltInCategory.OST_HVAC_Load_Space_Types, "Space Type Settings"},
+            {RevitBuiltInCategory.OST_HVAC_Zones, "HVAC Zones"},
+            {RevitBuiltInCategory.OST_HVAC_Zones_Boundary, "Boundary"},
+            {RevitBuiltInCategory.OST_HVAC_Zones_ColorFill, "Color Fill"},
+            {RevitBuiltInCategory.OST_HVAC_Zones_InteriorFill_Visibility, "Interior Fill"},
+            {RevitBuiltInCategory.OST_HVAC_Zones_Reference_Visibility, "Reference Lines"},
+            {RevitBuiltInCategory.OST_ImportObjectStyles, "Imports in Families"},
+            {RevitBuiltInCategory.OST_InsulationLines, "<Insulation Batting Lines>"},
+            {RevitBuiltInCategory.OST_InternalAreaLoads, "Internal Area Loads"},
+            {RevitBuiltInCategory.OST_InternalAreaLoadTags, "Internal Area Load Tags"},
+            {RevitBuiltInCategory.OST_InternalLineLoads, "Internal Line Loads"},
+            {RevitBuiltInCategory.OST_InternalLineLoadTags, "Internal Line Load Tags"},
+            {RevitBuiltInCategory.OST_InternalLoads, "Structural Internal Loads"},
+            {RevitBuiltInCategory.OST_InternalPointLoads, "Internal Point Loads"},
+            {RevitBuiltInCategory.OST_InternalPointLoadTags, "Internal Point Load Tags"},
+            {RevitBuiltInCategory.OST_IOSModelGroups, "Model Groups"},
+            {RevitBuiltInCategory.OST_Joist, "Secondary"},
+            {RevitBuiltInCategory.OST_KeynoteTags, "Keynote Tags"},
+            {RevitBuiltInCategory.OST_KickerBracing, "Kicker Bracing"},
+            {RevitBuiltInCategory.OST_LevelHeads, "Level Heads"},
+            {RevitBuiltInCategory.OST_Levels, "Levels"},
+            {RevitBuiltInCategory.OST_LightingDevices, "Lighting Devices"},
+            {RevitBuiltInCategory.OST_LightingDeviceTags, "Lighting Device Tags"},
+            {RevitBuiltInCategory.OST_LightingFixtures, "Lighting Fixtures"},
+            {RevitBuiltInCategory.OST_LightingFixturesHiddenLines, "<Hidden Lines>"},
+            {RevitBuiltInCategory.OST_LightingFixtureSource, "Light Source"},
+            {RevitBuiltInCategory.OST_LightingFixtureTags, "Lighting Fixture Tags"},
+            {RevitBuiltInCategory.OST_LineLoads, "Line Loads"},
+            {RevitBuiltInCategory.OST_LineLoadTags, "Line Load Tags"},
+            {RevitBuiltInCategory.OST_Lines, "Lines"},
+            {RevitBuiltInCategory.OST_LinesBeyond, "<Beyond>"},
+            {RevitBuiltInCategory.OST_LinesHiddenLines, "<Hidden Lines>"},
+            {RevitBuiltInCategory.OST_LinkAnalyticalTags, "Analytical Link Tags"},
+            {RevitBuiltInCategory.OST_LinksAnalytical, "Analytical Links"},
+            {RevitBuiltInCategory.OST_LoadCases, "Structural Load Cases"},
+            {RevitBuiltInCategory.OST_LoadCasesAccidental, "Accidental Loads"},
+            {RevitBuiltInCategory.OST_LoadCasesDead, "Dead Loads"},
+            {RevitBuiltInCategory.OST_LoadCasesLive, "Live Loads"},
+            {RevitBuiltInCategory.OST_LoadCasesRoofLive, "Roof Live Loads"},
+            {RevitBuiltInCategory.OST_LoadCasesSeismic, "Seismic Loads"},
+            {RevitBuiltInCategory.OST_LoadCasesSnow, "Snow Loads"},
+            {RevitBuiltInCategory.OST_LoadCasesTemperature, "Temperature Loads"},
+            {RevitBuiltInCategory.OST_LoadCasesWind, "Wind Loads"},
+            {RevitBuiltInCategory.OST_Loads, "Structural Loads"},
+            {RevitBuiltInCategory.OST_MaskingRegion, "Masking Region"},
+            {RevitBuiltInCategory.OST_Mass, "Mass"},
+            {RevitBuiltInCategory.OST_MassAreaFaceTags, "Mass Floor Tags"},
+            {RevitBuiltInCategory.OST_MassExteriorWall, "Mass Exterior Wall"},
+            {RevitBuiltInCategory.OST_MassFloor, "Mass Floor"},
+            {RevitBuiltInCategory.OST_MassForm, "Form"},
+            {RevitBuiltInCategory.OST_MassGlazing, "Mass Glazing"},
+            {RevitBuiltInCategory.OST_MassHiddenLines, "<Hidden Lines>"},
+            {RevitBuiltInCategory.OST_MassInteriorWall, "Mass Interior Wall"},
+            {RevitBuiltInCategory.OST_MassOpening, "Mass Opening"},
+            {RevitBuiltInCategory.OST_MassRoof, "Mass Roof"},
+            {RevitBuiltInCategory.OST_MassShade, "Mass Shade"},
+            {RevitBuiltInCategory.OST_MassSkylights, "Mass Skylight"},
+            {RevitBuiltInCategory.OST_MassTags, "Mass Tags"},
+            {RevitBuiltInCategory.OST_MassZone, "Mass Zone"},
+            {RevitBuiltInCategory.OST_Matchline, "Matchline"},
+            {RevitBuiltInCategory.OST_Materials, "Materials"},
+            {RevitBuiltInCategory.OST_MaterialTags, "Material Tags"},
+            {RevitBuiltInCategory.OST_MechanicalControlDevices, "Mechanical Control Devices"},
+            {RevitBuiltInCategory.OST_MechanicalControlDevicesHiddenLines, "<Hidden Lines>"},
+            {RevitBuiltInCategory.OST_MechanicalControlDeviceTags, "Mechanical Control Device Tags"},
+            {RevitBuiltInCategory.OST_MechanicalEquipment, "Mechanical Equipment"},
+            {RevitBuiltInCategory.OST_MechanicalEquipmentHiddenLines, "<Hidden Lines>"},
+            {RevitBuiltInCategory.OST_MechanicalEquipmentSet, "Mechanical Equipment Sets"},
+            {RevitBuiltInCategory.OST_MechanicalEquipmentSetBoundaryLines, "Mechanical Equipment Set Boundary Lines"},
+            {RevitBuiltInCategory.OST_MechanicalEquipmentSetTags, "Mechanical Equipment Set Tags"},
+            {RevitBuiltInCategory.OST_MechanicalEquipmentTags, "Mechanical Equipment Tags"},
+            {RevitBuiltInCategory.OST_MedicalEquipment, "Medical Equipment"},
+            {RevitBuiltInCategory.OST_MedicalEquipmentHiddenLines, "<Hidden Lines>"},
+            {RevitBuiltInCategory.OST_MedicalEquipmentTags, "Medical Equipment Tags"},
+            {RevitBuiltInCategory.OST_MEPAnalyticalAirLoop, "Air Systems"},
+            {RevitBuiltInCategory.OST_MEPAnalyticalBus, "Electrical Analytical Bus"},
+            {RevitBuiltInCategory.OST_MEPAnalyticalTransferSwitch, "Electrical Analytical Transfer Switch"},
+            {RevitBuiltInCategory.OST_MEPAnalyticalWaterLoop, "Water Loops"},
+            {RevitBuiltInCategory.OST_MEPAncillaryFraming, "MEP Ancillary Framing"},
+            {RevitBuiltInCategory.OST_MEPAncillaryFramingTags, "MEP Ancillary Framing Tags"},
+            {RevitBuiltInCategory.OST_MEPLoadAreas, "Electrical Load Areas"},
+            {RevitBuiltInCategory.OST_MEPLoadAreaSeparationLines, "<Area Based Load Boundary>"},
+            {RevitBuiltInCategory.OST_MEPSpaceColorFill, "Color Fill"},
+            {RevitBuiltInCategory.OST_MEPSpaceInteriorFillVisibility, "Interior"},
+            {RevitBuiltInCategory.OST_MEPSpaceReferenceVisibility, "Reference"},
+            {RevitBuiltInCategory.OST_MEPSpaces, "Spaces"},
+            {RevitBuiltInCategory.OST_MEPSpaceSeparationLines, "<Space Separation>"},
+            {RevitBuiltInCategory.OST_MEPSpaceTags, "Space Tags"},
+            {RevitBuiltInCategory.OST_MEPSystemZone, "System-Zones"},
+            {RevitBuiltInCategory.OST_MEPSystemZoneTags, "System-Zone Tags"},
+            {RevitBuiltInCategory.OST_ModelGroupTags, "Model Group Tags"},
+            {RevitBuiltInCategory.OST_MultiCategoryTags, "Multi-Category Tags"},
+            {RevitBuiltInCategory.OST_MultiReferenceAnnotations, "Multi-Rebar Annotations"},
+            {RevitBuiltInCategory.OST_NodeAnalyticalTags, "Analytical Node Tags"},
+            {RevitBuiltInCategory.OST_NurseCallDevices, "Nurse Call Devices"},
+            {RevitBuiltInCategory.OST_NurseCallDeviceTags, "Nurse Call Device Tags"},
+            {RevitBuiltInCategory.OST_OverheadLines, "<Overhead>"},
+            {RevitBuiltInCategory.OST_PadTags, "Pad Tags"},
+            {RevitBuiltInCategory.OST_PanelScheduleGraphics, "Panel Schedule Graphics"},
+            {RevitBuiltInCategory.OST_Parking, "Parking"},
+            {RevitBuiltInCategory.OST_ParkingHiddenLines, "<Hidden Lines>"},
+            {RevitBuiltInCategory.OST_ParkingTags, "Parking Tags"},
+            {RevitBuiltInCategory.OST_PartHiddenLines, "<Hidden Lines>"},
+            {RevitBuiltInCategory.OST_Parts, "Parts"},
+            {RevitBuiltInCategory.OST_PartTags, "Part Tags"},
+            {RevitBuiltInCategory.OST_PathOfTravelLines, "<Path of Travel Lines>"},
+            {RevitBuiltInCategory.OST_PathOfTravelTags, "Path of Travel Tags"},
+            {RevitBuiltInCategory.OST_PathRein, "Structural Path Reinforcement"},
+            {RevitBuiltInCategory.OST_PathReinBoundary, "Boundary"},
+            {RevitBuiltInCategory.OST_PathReinSpanSymbol, "Structural Path Reinforcement Symbols"},
+            {RevitBuiltInCategory.OST_PathReinTags, "Structural Path Reinforcement Tags"},
+            {RevitBuiltInCategory.OST_Phases, "Phases"},
+            {RevitBuiltInCategory.OST_PierCaps, "Pier Caps"},
+            {RevitBuiltInCategory.OST_PierCapTags, "Pier Cap Tags"},
+            {RevitBuiltInCategory.OST_PierColumns, "Pier Columns"},
+            {RevitBuiltInCategory.OST_PierColumnTags, "Pier Column Tags"},
+            {RevitBuiltInCategory.OST_PierPiles, "Pier Piles"},
+            {RevitBuiltInCategory.OST_PierPileTags, "Pier Pile Tags"},
+            {RevitBuiltInCategory.OST_PierWalls, "Pier Walls"},
+            {RevitBuiltInCategory.OST_PierWallTags, "Pier Wall Tags"},
+            {RevitBuiltInCategory.OST_PipeAccessory, "Pipe Accessories"},
+            {RevitBuiltInCategory.OST_PipeAccessoryTags, "Pipe Accessory Tags"},
+            {RevitBuiltInCategory.OST_PipeAnalyticalSegments, "Analytical Pipe Segments"},
+            {RevitBuiltInCategory.OST_PipeAnalyticalSegmentTags, "Analytical Pipe Segment Tags"},
+            {RevitBuiltInCategory.OST_PipeColorFillLegends, "Pipe Color Fill Legends"},
+            {RevitBuiltInCategory.OST_PipeColorFills, "Pipe Color Fill"},
+            {RevitBuiltInCategory.OST_PipeCurves, "Pipes"},
+            {RevitBuiltInCategory.OST_PipeCurvesCenterLine, "Center Line"},
+            {RevitBuiltInCategory.OST_PipeCurvesDrop, "Drop"},
+            {RevitBuiltInCategory.OST_PipeCurvesRiseDrop, "Rise"},
+            {RevitBuiltInCategory.OST_PipeFitting, "Pipe Fittings"},
+            {RevitBuiltInCategory.OST_PipeFittingCenterLine, "Center Line"},
+            {RevitBuiltInCategory.OST_PipeFittingTags, "Pipe Fitting Tags"},
+            {RevitBuiltInCategory.OST_PipeHydronicSeparationSymbols, "Hydraulic Separation Symbols"},
+            {RevitBuiltInCategory.OST_PipeInsulations, "Pipe Insulations"},
+            {RevitBuiltInCategory.OST_PipeInsulationsTags, "Pipe Insulation Tags"},
+            {RevitBuiltInCategory.OST_PipeSegments, "Pipe Segments"},
+            {RevitBuiltInCategory.OST_PipeTags, "Pipe Tags"},
+            {RevitBuiltInCategory.OST_PipingSystem, "Piping Systems"},
+            {RevitBuiltInCategory.OST_PipingSystem_Reference_Visibility, "Reference Lines"},
+            {RevitBuiltInCategory.OST_PlaceHolderDucts, "Duct Placeholders"},
+            {RevitBuiltInCategory.OST_PlaceHolderPipes, "Pipe Placeholders"},
+            {RevitBuiltInCategory.OST_PlanRegion, "Plan Region"},
+            {RevitBuiltInCategory.OST_Planting, "Planting"},
+            {RevitBuiltInCategory.OST_PlantingHiddenLines, "<Hidden Lines>"},
+            {RevitBuiltInCategory.OST_PlantingTags, "Planting Tags"},
+            {RevitBuiltInCategory.OST_PlumbingEquipment, "Plumbing Equipment"},
+            {RevitBuiltInCategory.OST_PlumbingEquipmentHiddenLines, "<Hidden Lines>"},
+            {RevitBuiltInCategory.OST_PlumbingEquipmentTags, "Plumbing Equipment Tags"},
+            {RevitBuiltInCategory.OST_PlumbingFixtures, "Plumbing Fixtures"},
+            {RevitBuiltInCategory.OST_PlumbingFixturesHiddenLines, "<Hidden Lines>"},
+            {RevitBuiltInCategory.OST_PlumbingFixtureTags, "Plumbing Fixture Tags"},
+            {RevitBuiltInCategory.OST_PointClouds, "Point Clouds"},
+            {RevitBuiltInCategory.OST_PointLoads, "Point Loads"},
+            {RevitBuiltInCategory.OST_PointLoadTags, "Point Load Tags"},
+            {RevitBuiltInCategory.OST_ProjectBasePoint, "Project Base Point"},
+            {RevitBuiltInCategory.OST_ProjectInformation, "Project Information"},
+            {RevitBuiltInCategory.OST_Purlin, "Tertiary"},
+            {RevitBuiltInCategory.OST_RailingHandRail, "Handrails"},
+            {RevitBuiltInCategory.OST_RailingHandRailAboveCut, "<Above> Handrails"},
+            {RevitBuiltInCategory.OST_RailingSupport, "Supports"},
+            {RevitBuiltInCategory.OST_RailingTermination, "Terminations"},
+            {RevitBuiltInCategory.OST_RailingTopRail, "Top Rails"},
+            {RevitBuiltInCategory.OST_RailingTopRailAboveCut, "<Above> Top Rails"},
+            {RevitBuiltInCategory.OST_Ramps, "Ramps"},
+            {RevitBuiltInCategory.OST_RampsAboveCut, "Ramps Beyond Cut Line"},
+            {RevitBuiltInCategory.OST_RampsDownArrow, "Down Arrow"},
+            {RevitBuiltInCategory.OST_RampsDownText, "DOWN text"},
+            {RevitBuiltInCategory.OST_RampsHiddenLines, "<Hidden Lines>"},
+            {RevitBuiltInCategory.OST_RampsStringer, "Stringers"},
+            {RevitBuiltInCategory.OST_RampsStringerAboveCut, "Stringers Beyond Cut Line"},
+            {RevitBuiltInCategory.OST_RampsUpArrow, "Up Arrow"},
+            {RevitBuiltInCategory.OST_RampsUpText, "UP text"},
+            {RevitBuiltInCategory.OST_RampTags, "Ramp Tags"},
+            {RevitBuiltInCategory.OST_RasterImages, "Raster Images"},
+            {RevitBuiltInCategory.OST_Rebar, "Structural Rebar"},
+            {RevitBuiltInCategory.OST_RebarBendingDetails, "Structural Rebar Bending Details"},
+            {RevitBuiltInCategory.OST_RebarCover, "Rebar Cover References"},
+            {RevitBuiltInCategory.OST_RebarHiddenLines, "<Hidden Lines>"},
+            {RevitBuiltInCategory.OST_RebarSetToggle, "Rebar Set Toggle"},
+            {RevitBuiltInCategory.OST_RebarShape, "Rebar Shape"},
+            {RevitBuiltInCategory.OST_RebarSpliceLines, "Splice Location Lines"},
+            {RevitBuiltInCategory.OST_RebarTags, "Structural Rebar Tags"},
+            {RevitBuiltInCategory.OST_ReferenceLines, "Reference Lines"},
+            {RevitBuiltInCategory.OST_ReferencePoints, "Reference Points"},
+            {RevitBuiltInCategory.OST_ReferencePoints_Lines, "Lines"},
+            {RevitBuiltInCategory.OST_ReferencePoints_Planes, "Planes"},
+            {RevitBuiltInCategory.OST_ReferencePoints_Points, "Points"},
+            {RevitBuiltInCategory.OST_ReferenceViewer, "View References"},
+            {RevitBuiltInCategory.OST_ReferenceViewerSymbol, "View Reference"},
+            {RevitBuiltInCategory.OST_RenderRegions, "Render Regions"},
+            {RevitBuiltInCategory.OST_RevisionClouds, "Revision Clouds"},
+            {RevitBuiltInCategory.OST_RevisionCloudTags, "Revision Cloud Tags"},
+            {RevitBuiltInCategory.OST_Roads, "Roads"},
+            {RevitBuiltInCategory.OST_RoadsHiddenLines, "<Hidden Lines>"},
+            {RevitBuiltInCategory.OST_RoadTags, "Road Tags"},
+            {RevitBuiltInCategory.OST_Roofs, "Roofs"},
+            {RevitBuiltInCategory.OST_RoofsCutPattern, "Cut Pattern"},
+            {RevitBuiltInCategory.OST_RoofsDefault, "Common Edges"},
+            {RevitBuiltInCategory.OST_RoofsFinish1, "Finish 1 [4]"},
+            {RevitBuiltInCategory.OST_RoofsFinish2, "Finish 2 [5]"},
+            {RevitBuiltInCategory.OST_RoofsHiddenLines, "<Hidden Lines>"},
+            {RevitBuiltInCategory.OST_RoofsInsulation, "Thermal/Air Layer [3]"},
+            {RevitBuiltInCategory.OST_RoofsInteriorEdges, "Interior Edges"},
+            {RevitBuiltInCategory.OST_RoofsMembrane, "Membrane Layer"},
+            {RevitBuiltInCategory.OST_RoofSoffit, "Roof Soffits"},
+            {RevitBuiltInCategory.OST_RoofSoffitTags, "Roof Soffit Tags"},
+            {RevitBuiltInCategory.OST_RoofsStructure, "Structure [1]"},
+            {RevitBuiltInCategory.OST_RoofsSubstrate, "Substrate [2]"},
+            {RevitBuiltInCategory.OST_RoofsSurfacePattern, "Surface Pattern"},
+            {RevitBuiltInCategory.OST_RoofTags, "Roof Tags"},
+            {RevitBuiltInCategory.OST_RoomColorFill, "Color Fill"},
+            {RevitBuiltInCategory.OST_RoomInteriorFillVisibility, "Interior Fill"},
+            {RevitBuiltInCategory.OST_RoomReferenceVisibility, "Reference"},
+            {RevitBuiltInCategory.OST_Rooms, "Rooms"},
+            {RevitBuiltInCategory.OST_RoomSeparationLines, "<Room Separation>"},
+            {RevitBuiltInCategory.OST_RoomTags, "Room Tags"},
+            {RevitBuiltInCategory.OST_RoutingPreferences, "Routing Preferences"},
+            {RevitBuiltInCategory.OST_RvtLinks, "RVT Links"},
+            {RevitBuiltInCategory.OST_RvtLinksTags, "RVT Link Tags"},
+            {RevitBuiltInCategory.OST_ScheduleGraphics, "Schedule Graphics"},
+            {RevitBuiltInCategory.OST_Schedules, "Schedules"},
+            {RevitBuiltInCategory.OST_SecondaryTopographyContours, "Secondary Contours"},
+            {RevitBuiltInCategory.OST_SectionBox, "Section Boxes"},
+            {RevitBuiltInCategory.OST_SectionHeadMediumLines, "<Medium Lines>"},
+            {RevitBuiltInCategory.OST_SectionHeads, "Section Marks"},
+            {RevitBuiltInCategory.OST_SectionHeadThinLines, "<Thin Lines>"},
+            {RevitBuiltInCategory.OST_SectionHeadWideLines, "<Wide Lines>"},
+            {RevitBuiltInCategory.OST_SectionLine, "Section Line"},
+            {RevitBuiltInCategory.OST_Sections, "Sections"},
+            {RevitBuiltInCategory.OST_SecurityDevices, "Security Devices"},
+            {RevitBuiltInCategory.OST_SecurityDeviceTags, "Security Device Tags"},
+            {RevitBuiltInCategory.OST_ShaftOpening, "Shaft Openings"},
+            {RevitBuiltInCategory.OST_ShaftOpeningHiddenLines, "<Hidden Lines>"},
+            {RevitBuiltInCategory.OST_SharedBasePoint, "Survey Point"},
+            {RevitBuiltInCategory.OST_SheetCollections, "Sheet Collections"},
+            {RevitBuiltInCategory.OST_Sheets, "Sheets"},
+            {RevitBuiltInCategory.OST_Signage, "Signage"},
+            {RevitBuiltInCategory.OST_SignageHiddenLines, "<Hidden Lines>"},
+            {RevitBuiltInCategory.OST_SignageTags, "Signage Tags"},
+            {RevitBuiltInCategory.OST_Site, "Site"},
+            {RevitBuiltInCategory.OST_SiteHiddenLines, "<Hidden Lines>"},
+            {RevitBuiltInCategory.OST_SitePoint, "Interior Point"},
+            {RevitBuiltInCategory.OST_SitePointBoundary, "Boundary Point"},
+            {RevitBuiltInCategory.OST_SiteProperty, "Property Lines"},
+            {RevitBuiltInCategory.OST_SitePropertyLineSegment, "Property Line Segments"},
+            {RevitBuiltInCategory.OST_SitePropertyLineSegmentTags, "Property Line Segment Tags"},
+            {RevitBuiltInCategory.OST_SitePropertyTags, "Property Tags"},
+            {RevitBuiltInCategory.OST_SiteTags, "Site Tags"},
+            {RevitBuiltInCategory.OST_SketchLines, "<Sketch>"},
+            {RevitBuiltInCategory.OST_SlabEdgeTags, "Slab Edge Tags"},
+            {RevitBuiltInCategory.OST_SpanDirectionSymbol, "Span Direction Symbol"},
+            {RevitBuiltInCategory.OST_SpecialityEquipment, "Specialty Equipment"},
+            {RevitBuiltInCategory.OST_SpecialityEquipmentHiddenLines, "<Hidden Lines>"},
+            {RevitBuiltInCategory.OST_SpecialityEquipmentTags, "Specialty Equipment Tags"},
+            {RevitBuiltInCategory.OST_SpotCoordinates, "Spot Coordinates"},
+            {RevitBuiltInCategory.OST_SpotElevations, "Spot Elevations"},
+            {RevitBuiltInCategory.OST_SpotElevSymbols, "Spot Elevation Symbols"},
+            {RevitBuiltInCategory.OST_SpotSlopes, "Spot Slopes"},
+            {RevitBuiltInCategory.OST_Sprinklers, "Sprinklers"},
+            {RevitBuiltInCategory.OST_SprinklerTags, "Sprinkler Tags"},
+            {RevitBuiltInCategory.OST_Stairs, "Stairs"},
+            {RevitBuiltInCategory.OST_StairsCutMarks, "Cut Marks"},
+            {RevitBuiltInCategory.OST_StairsCutMarksAboveCut, "<Above> Cut Marks"},
+            {RevitBuiltInCategory.OST_StairsDownArrows, "Down Arrows"},
+            {RevitBuiltInCategory.OST_StairsDownText, "DOWN text"},
+            {RevitBuiltInCategory.OST_StairsHiddenLines, "<Hidden Lines>"},
+            {RevitBuiltInCategory.OST_StairsLandings, "Landings"},
+            {RevitBuiltInCategory.OST_StairsLandingTags, "Stair Landing Tags"},
+            {RevitBuiltInCategory.OST_StairsNosingLines, "Nosing Lines"},
+            {RevitBuiltInCategory.OST_StairsNosingLinesAboveCut, "<Above> Nosing Lines"},
+            {RevitBuiltInCategory.OST_StairsOutlines, "Outlines"},
+            {RevitBuiltInCategory.OST_StairsOutlinesAboveCut, "<Above> Outlines"},
+            {RevitBuiltInCategory.OST_StairsPaths, "Stair Paths"},
+            {RevitBuiltInCategory.OST_StairsPathsAboveCut, "<Above> Up Arrows"},
+            {RevitBuiltInCategory.OST_StairsRailing, "Railings"},
+            {RevitBuiltInCategory.OST_StairsRailingAboveCut, "<Above> Railings Cut Line"},
+            {RevitBuiltInCategory.OST_StairsRailingBaluster, "Balusters"},
+            {RevitBuiltInCategory.OST_StairsRailingHiddenLines, "<Hidden Lines>"},
+            {RevitBuiltInCategory.OST_StairsRailingRail, "Rails"},
+            {RevitBuiltInCategory.OST_StairsRailingTags, "Railing Tags"},
+            {RevitBuiltInCategory.OST_StairsRiserLines, "Riser Lines"},
+            {RevitBuiltInCategory.OST_StairsRiserLinesAboveCut, "<Above> Riser Lines"},
+            {RevitBuiltInCategory.OST_StairsRuns, "Runs"},
+            {RevitBuiltInCategory.OST_StairsRunTags, "Stair Run Tags"},
+            {RevitBuiltInCategory.OST_StairsSupports, "Supports"},
+            {RevitBuiltInCategory.OST_StairsSupportsAboveCut, "<Above> Supports"},
+            {RevitBuiltInCategory.OST_StairsSupportTags, "Stair Support Tags"},
+            {RevitBuiltInCategory.OST_StairsTags, "Stair Tags"},
+            {RevitBuiltInCategory.OST_StairsTriserNumbers, "Stair Tread/Riser Numbers"},
+            {RevitBuiltInCategory.OST_StairsTrisers, "Treads/Risers"},
+            {RevitBuiltInCategory.OST_StairsUpArrows, "Up Arrows"},
+            {RevitBuiltInCategory.OST_StairsUpText, "UP text"},
+            {RevitBuiltInCategory.OST_StructConnectionAnchors, "Anchors"},
+            {RevitBuiltInCategory.OST_StructConnectionAnchorTags, "Anchor Tags"},
+            {RevitBuiltInCategory.OST_StructConnectionBolts, "Bolts"},
+            {RevitBuiltInCategory.OST_StructConnectionBoltTags, "Bolt Tags"},
+            {RevitBuiltInCategory.OST_StructConnectionHiddenLines, "<Hidden Lines>"},
+            {RevitBuiltInCategory.OST_StructConnectionHoles, "Holes"},
+            {RevitBuiltInCategory.OST_StructConnectionHoleTags, "Hole Tags"},
+            {RevitBuiltInCategory.OST_StructConnectionModifiers, "Modifiers"},
+            {RevitBuiltInCategory.OST_StructConnectionOthers, "Others"},
+            {RevitBuiltInCategory.OST_StructConnectionPlates, "Plates"},
+            {RevitBuiltInCategory.OST_StructConnectionPlateTags, "Plate Tags"},
+            {RevitBuiltInCategory.OST_StructConnectionProfiles, "Profiles"},
+            {RevitBuiltInCategory.OST_StructConnectionProfilesTags, "Profile Tags"},
+            {RevitBuiltInCategory.OST_StructConnectionReference, "Reference"},
+            {RevitBuiltInCategory.OST_StructConnections, "Structural Connections"},
+            {RevitBuiltInCategory.OST_StructConnectionShearStuds, "Shear Studs"},
+            {RevitBuiltInCategory.OST_StructConnectionShearStudTags, "Shear Stud Tags"},
+            {RevitBuiltInCategory.OST_StructConnectionSymbol, "Symbol"},
+            {RevitBuiltInCategory.OST_StructConnectionSymbols, "Connection Symbols"},
+            {RevitBuiltInCategory.OST_StructConnectionTags, "Structural Connection Tags"},
+            {RevitBuiltInCategory.OST_StructConnectionWelds, "Welds"},
+            {RevitBuiltInCategory.OST_StructConnectionWeldTags, "Weld Tags"},
+            {RevitBuiltInCategory.OST_StructuralAnnotations, "Structural Annotations"},
+            {RevitBuiltInCategory.OST_StructuralBracePlanReps, "Brace in Plan View Symbols"},
+            {RevitBuiltInCategory.OST_StructuralColumnLocationLine, "Location Lines"},
+            {RevitBuiltInCategory.OST_StructuralColumns, "Structural Columns"},
+            {RevitBuiltInCategory.OST_StructuralColumnStickSymbols, "Stick Symbols"},
+            {RevitBuiltInCategory.OST_StructuralColumnTags, "Structural Column Tags"},
+            {RevitBuiltInCategory.OST_StructuralFoundation, "Structural Foundations"},
+            {RevitBuiltInCategory.OST_StructuralFoundationTags, "Structural Foundation Tags"},
+            {RevitBuiltInCategory.OST_StructuralFraming, "Structural Framing"},
+            {RevitBuiltInCategory.OST_StructuralFramingLocationLine, "Location Lines"},
+            {RevitBuiltInCategory.OST_StructuralFramingOther, "Other"},
+            {RevitBuiltInCategory.OST_StructuralFramingSystem, "Structural Beam Systems"},
+            {RevitBuiltInCategory.OST_StructuralFramingTags, "Structural Framing Tags"},
+            {RevitBuiltInCategory.OST_StructuralStiffener, "Structural Stiffeners"},
+            {RevitBuiltInCategory.OST_StructuralStiffenerHiddenLines, "<Hidden Lines>"},
+            {RevitBuiltInCategory.OST_StructuralStiffenerTags, "Structural Stiffener Tags"},
+            {RevitBuiltInCategory.OST_StructuralTendonHiddenLines, "<Hidden Lines>"},
+            {RevitBuiltInCategory.OST_StructuralTendons, "Structural Tendons"},
+            {RevitBuiltInCategory.OST_StructuralTendonTags, "Structural Tendon Tags"},
+            {RevitBuiltInCategory.OST_StructuralTruss, "Structural Trusses"},
+            {RevitBuiltInCategory.OST_StructuralTrussStickSymbols, "Stick Symbols"},
+            {RevitBuiltInCategory.OST_SwitchSystem, "Switch System"},
+            {RevitBuiltInCategory.OST_TelephoneDevices, "Telephone Devices"},
+            {RevitBuiltInCategory.OST_TelephoneDeviceTags, "Telephone Device Tags"},
+            {RevitBuiltInCategory.OST_TemporaryStructure, "Temporary Structures"},
+            {RevitBuiltInCategory.OST_TemporaryStructureHiddenLines, "<Hidden Lines>"},
+            {RevitBuiltInCategory.OST_TemporaryStructureTags, "Temporary Structure Tags"},
+            {RevitBuiltInCategory.OST_TextNotes, "Text Notes"},
+            {RevitBuiltInCategory.OST_TitleBlockMediumLines, "<Medium Lines>"},
+            {RevitBuiltInCategory.OST_TitleBlocks, "Title Blocks"},
+            {RevitBuiltInCategory.OST_TitleBlockThinLines, "<Thin Lines>"},
+            {RevitBuiltInCategory.OST_TitleBlockWideLines, "<Wide Lines>"},
+            {RevitBuiltInCategory.OST_Topography, "Topography"},
+            {RevitBuiltInCategory.OST_TopographyContours, "Primary Contours"},
+            {RevitBuiltInCategory.OST_TopographyHiddenLines, "<Hidden Lines>"},
+            {RevitBuiltInCategory.OST_TopographyLink, "Topography Links"},
+            {RevitBuiltInCategory.OST_TopographySurface, "Triangulation Edges"},
+            {RevitBuiltInCategory.OST_Toposolid, "Toposolid"},
+            {RevitBuiltInCategory.OST_ToposolidContours, "Primary Contours"},
+            {RevitBuiltInCategory.OST_ToposolidCutPattern, "Cut Pattern"},
+            {RevitBuiltInCategory.OST_ToposolidDefault, "Common Edges"},
+            {RevitBuiltInCategory.OST_ToposolidFinish1, "Finish 1 [4]"},
+            {RevitBuiltInCategory.OST_ToposolidFinish2, "Finish 2 [5]"},
+            {RevitBuiltInCategory.OST_ToposolidFoldingLines, "Folding Lines"},
+            {RevitBuiltInCategory.OST_ToposolidHiddenLines, "<Hidden Lines>"},
+            {RevitBuiltInCategory.OST_ToposolidInsulation, "Thermal/Air Layer [3]"},
+            {RevitBuiltInCategory.OST_ToposolidLink, "Toposolid Links"},
+            {RevitBuiltInCategory.OST_ToposolidLinkTags, "Toposolid Link Tags"},
+            {RevitBuiltInCategory.OST_ToposolidMembrane, "Membrane Layer"},
+            {RevitBuiltInCategory.OST_ToposolidSecondaryContours, "Secondary Contours"},
+            {RevitBuiltInCategory.OST_ToposolidSplitLines, "Split Lines"},
+            {RevitBuiltInCategory.OST_ToposolidStructure, "Structure [1]"},
+            {RevitBuiltInCategory.OST_ToposolidSubstrate, "Substrate [2]"},
+            {RevitBuiltInCategory.OST_ToposolidSurfacePattern, "Surface Pattern"},
+            {RevitBuiltInCategory.OST_ToposolidTags, "Toposolid Tags"},
+            {RevitBuiltInCategory.OST_TopRailTags, "Top Rail Tags"},
+            {RevitBuiltInCategory.OST_TrussChord, "Chord"},
+            {RevitBuiltInCategory.OST_TrussTags, "Structural Truss Tags"},
+            {RevitBuiltInCategory.OST_TrussWeb, "Web"},
+            {RevitBuiltInCategory.OST_VerticalBracing, "Vertical Bracing"},
+            {RevitBuiltInCategory.OST_VerticalCirculation, "Vertical Circulation"},
+            {RevitBuiltInCategory.OST_VerticalCirculationHiddenLines, "<Hidden Lines>"},
+            {RevitBuiltInCategory.OST_VerticalCirculationTags, "Vertical Circulation Tags"},
+            {RevitBuiltInCategory.OST_VibrationDampers, "Vibration Dampers"},
+            {RevitBuiltInCategory.OST_VibrationDamperTags, "Vibration Damper Tags"},
+            {RevitBuiltInCategory.OST_VibrationIsolators, "Vibration Isolators"},
+            {RevitBuiltInCategory.OST_VibrationIsolatorTags, "Vibration Isolator Tags"},
+            {RevitBuiltInCategory.OST_VibrationManagement, "Vibration Management"},
+            {RevitBuiltInCategory.OST_VibrationManagementHiddenLines, "<Hidden Lines>"},
+            {RevitBuiltInCategory.OST_VibrationManagementTags, "Vibration Management Tags"},
+            {RevitBuiltInCategory.OST_Viewers, "Views"},
+            {RevitBuiltInCategory.OST_ViewportLabel, "View Titles"},
+            {RevitBuiltInCategory.OST_Viewports, "Viewports"},
+            {RevitBuiltInCategory.OST_Views, "Views"},
+            {RevitBuiltInCategory.OST_VolumeOfInterest, "Scope Boxes"},
+            {RevitBuiltInCategory.OST_WallNonCoreLayer, "Non-Core Layers"},
+            {RevitBuiltInCategory.OST_Walls, "Walls"},
+            {RevitBuiltInCategory.OST_WallsCutPattern, "Cut Pattern"},
+            {RevitBuiltInCategory.OST_WallsDefault, "Common Edges"},
+            {RevitBuiltInCategory.OST_WallsFinish1, "Finish 1 [4]"},
+            {RevitBuiltInCategory.OST_WallsFinish2, "Finish 2 [5]"},
+            {RevitBuiltInCategory.OST_WallsInsulation, "Thermal/Air Layer [3]"},
+            {RevitBuiltInCategory.OST_WallsMembrane, "Membrane Layer"},
+            {RevitBuiltInCategory.OST_WallsStructure, "Structure [1]"},
+            {RevitBuiltInCategory.OST_WallsSubstrate, "Substrate [2]"},
+            {RevitBuiltInCategory.OST_WallsSurfacePattern, "Surface Pattern"},
+            {RevitBuiltInCategory.OST_WallSweepTags, "Wall Sweep Tags"},
+            {RevitBuiltInCategory.OST_WallTags, "Wall Tags"},
+            {RevitBuiltInCategory.OST_WeakDims, "Automatic Sketch Dimensions"},
+            {RevitBuiltInCategory.OST_Windows, "Windows"},
+            {RevitBuiltInCategory.OST_WindowsFrameMullionProjection, "Frame/Mullion"},
+            {RevitBuiltInCategory.OST_WindowsGlassProjection, "Glass"},
+            {RevitBuiltInCategory.OST_WindowsHiddenLines, "<Hidden Lines>"},
+            {RevitBuiltInCategory.OST_WindowsOpeningProjection, "Opening"},
+            {RevitBuiltInCategory.OST_WindowsSillHeadProjection, "Sill/Head"},
+            {RevitBuiltInCategory.OST_WindowTags, "Window Tags"},
+            {RevitBuiltInCategory.OST_Wire, "Wires"},
+            {RevitBuiltInCategory.OST_WireHomeRunArrows, "Home Run Arrows"},
+            {RevitBuiltInCategory.OST_WireTags, "Wire Tags"},
+            {RevitBuiltInCategory.OST_WireTickMarks, "Wire Tick Marks"},
+            {RevitBuiltInCategory.OST_ZoneEquipment, "Zone Equipment"},
+            {RevitBuiltInCategory.OST_ZoneTags, "Zone Tags"},
+            {RevitBuiltInCategory.INVALID, "Invalid"},
+        };
+
+        public static IReadOnlyDictionary<string, RevitBuiltInCategory> EnglishNameToRevitBuiltInCategoryMap { get; } = new Dictionary<string, RevitBuiltInCategory>()
+        {
+            {"Abutment Foundations", RevitBuiltInCategory.OST_AbutmentFoundations},
+            {"Abutment Foundation Tags", RevitBuiltInCategory.OST_AbutmentFoundationTags},
+            {"Abutment Piles", RevitBuiltInCategory.OST_AbutmentPiles},
+            {"Abutment Pile Tags", RevitBuiltInCategory.OST_AbutmentPileTags},
+            {"Abutment Walls", RevitBuiltInCategory.OST_AbutmentWalls},
+            {"Abutment Wall Tags", RevitBuiltInCategory.OST_AbutmentWallTags},
+            {"Adaptive Points", RevitBuiltInCategory.OST_AdaptivePoints},
+            {"Lines", RevitBuiltInCategory.OST_AdaptivePoints_Lines},
+            {"Planes", RevitBuiltInCategory.OST_AdaptivePoints_Planes},
+            {"Points", RevitBuiltInCategory.OST_AdaptivePoints_Points},
+            {"Alignments", RevitBuiltInCategory.OST_Alignments},
+            {"Alignment Tags", RevitBuiltInCategory.OST_AlignmentsTags},
+            {"Alignment Station Labels", RevitBuiltInCategory.OST_AlignmentStationLabels},
+            {"Alignment Station Label Sets", RevitBuiltInCategory.OST_AlignmentStationLabelSets},
+            {"Analysis Display Style", RevitBuiltInCategory.OST_AnalysisDisplayStyle},
+            {"Analysis Results", RevitBuiltInCategory.OST_AnalysisResults},
+            {"Analytical Members", RevitBuiltInCategory.OST_AnalyticalMember},
+            {"Cross Section", RevitBuiltInCategory.OST_AnalyticalMemberCrossSection},
+            {"Local Coordinate System", RevitBuiltInCategory.OST_AnalyticalMemberLocalCoordSys},
+            {"Analytical Member Tags", RevitBuiltInCategory.OST_AnalyticalMemberTags},
+            {"Analytical Nodes", RevitBuiltInCategory.OST_AnalyticalNodes},
+            {"Analytical Openings", RevitBuiltInCategory.OST_AnalyticalOpening},
+            {"Analytical Opening Tags", RevitBuiltInCategory.OST_AnalyticalOpeningTags},
+            {"Analytical Panels", RevitBuiltInCategory.OST_AnalyticalPanel},
+            {"Local Coordinate System", RevitBuiltInCategory.OST_AnalyticalPanelLocalCoordSys},
+            {"Analytical Panel Tags", RevitBuiltInCategory.OST_AnalyticalPanelTags},
+            {"Connection Line Symbol", RevitBuiltInCategory.OST_AnalyticalPipeConnectionLineSymbol},
+            {"Analytical Pipe Connections", RevitBuiltInCategory.OST_AnalyticalPipeConnections},
+            {"Analytical Spaces", RevitBuiltInCategory.OST_AnalyticSpaces},
+            {"Analytical Surfaces", RevitBuiltInCategory.OST_AnalyticSurfaces},
+            {"Annotation Crop Boundary", RevitBuiltInCategory.OST_AnnotationCrop},
+            {"Annotation Crop Boundary", RevitBuiltInCategory.OST_AnnotationCropSpecial},
+            {"Approach Slabs", RevitBuiltInCategory.OST_ApproachSlabs},
+            {"Approach Slab Tags", RevitBuiltInCategory.OST_ApproachSlabTags},
+            {"Color Fill", RevitBuiltInCategory.OST_AreaColorFill},
+            {"Interior Fill", RevitBuiltInCategory.OST_AreaInteriorFillVisibility},
+            {"Area Loads", RevitBuiltInCategory.OST_AreaLoads},
+            {"Area Load Tags", RevitBuiltInCategory.OST_AreaLoadTags},
+            {"Reference", RevitBuiltInCategory.OST_AreaReferenceVisibility},
+            {"Structural Area Reinforcement", RevitBuiltInCategory.OST_AreaRein},
+            {"Boundary", RevitBuiltInCategory.OST_AreaReinBoundary},
+            {"Structural Area Reinforcement Symbols", RevitBuiltInCategory.OST_AreaReinSpanSymbol},
+            {"Structural Area Reinforcement Tags", RevitBuiltInCategory.OST_AreaReinTags},
+            {"Areas", RevitBuiltInCategory.OST_Areas},
+            {"<Area Boundary>", RevitBuiltInCategory.OST_AreaSchemeLines},
+            {"Area Tags", RevitBuiltInCategory.OST_AreaTags},
+            {"Assemblies", RevitBuiltInCategory.OST_Assemblies},
+            {"Assembly Tags", RevitBuiltInCategory.OST_AssemblyTags},
+            {"Audio Visual Devices", RevitBuiltInCategory.OST_AudioVisualDevices},
+            {"<Hidden Lines>", RevitBuiltInCategory.OST_AudioVisualDevicesHiddenLines},
+            {"Audio Visual Device Tags", RevitBuiltInCategory.OST_AudioVisualDeviceTags},
+            {"<Axis of Rotation>", RevitBuiltInCategory.OST_AxisOfRotation},
+            {"Structural Beam System Tags", RevitBuiltInCategory.OST_BeamSystemTags},
+            {"Boundary Conditions", RevitBuiltInCategory.OST_BoundaryConditions},
+            {"<Hidden Lines>", RevitBuiltInCategory.OST_BridgeAbutmentHiddenLines},
+            {"Abutments", RevitBuiltInCategory.OST_BridgeAbutments},
+            {"Abutment Tags", RevitBuiltInCategory.OST_BridgeAbutmentTags},
+            {"Arches", RevitBuiltInCategory.OST_BridgeArches},
+            {"<Hidden Lines>", RevitBuiltInCategory.OST_BridgeBearingHiddenLines},
+            {"Bearings", RevitBuiltInCategory.OST_BridgeBearings},
+            {"Bearing Tags", RevitBuiltInCategory.OST_BridgeBearingTags},
+            {"Bridge Cables", RevitBuiltInCategory.OST_BridgeCables},
+            {"Bridge Cable Tags", RevitBuiltInCategory.OST_BridgeCableTags},
+            {"<Hidden Lines>", RevitBuiltInCategory.OST_BridgeDeckHiddenLines},
+            {"Bridge Decks", RevitBuiltInCategory.OST_BridgeDecks},
+            {"Bridge Deck Tags", RevitBuiltInCategory.OST_BridgeDeckTags},
+            {"Pier Foundations", RevitBuiltInCategory.OST_BridgeFoundations},
+            {"Pier Foundation Tags", RevitBuiltInCategory.OST_BridgeFoundationTags},
+            {"Bridge Framing", RevitBuiltInCategory.OST_BridgeFraming},
+            {"Cross Bracing", RevitBuiltInCategory.OST_BridgeFramingCrossBracing},
+            {"Bridge Cross Bracing Tags", RevitBuiltInCategory.OST_BridgeFramingCrossBracingTags},
+            {"Diaphragms", RevitBuiltInCategory.OST_BridgeFramingDiaphragms},
+            {"Bridge Diaphragm Tags", RevitBuiltInCategory.OST_BridgeFramingDiaphragmTags},
+            {"<Hidden Lines>", RevitBuiltInCategory.OST_BridgeFramingHiddenLines},
+            {"Bridge Framing Tags", RevitBuiltInCategory.OST_BridgeFramingTags},
+            {"Trusses", RevitBuiltInCategory.OST_BridgeFramingTrusses},
+            {"Bridge Truss Tags", RevitBuiltInCategory.OST_BridgeFramingTrussTags},
+            {"Primarys", RevitBuiltInCategory.OST_BridgeGirders},
+            {"<Hidden Lines>", RevitBuiltInCategory.OST_BridgePierHiddenLines},
+            {"Piers", RevitBuiltInCategory.OST_BridgePiers},
+            {"Pier Tags", RevitBuiltInCategory.OST_BridgePierTags},
+            {"Pier Towers", RevitBuiltInCategory.OST_BridgeTowers},
+            {"Pier Tower Tags", RevitBuiltInCategory.OST_BridgeTowerTags},
+            {"Broken Section Line", RevitBuiltInCategory.OST_BrokenSectionLine},
+            {"Pads", RevitBuiltInCategory.OST_BuildingPad},
+            {"Cable Trays", RevitBuiltInCategory.OST_CableTray},
+            {"Center Line", RevitBuiltInCategory.OST_CableTrayCenterLine},
+            {"Drop", RevitBuiltInCategory.OST_CableTrayDrop},
+            {"Cable Tray Fittings", RevitBuiltInCategory.OST_CableTrayFitting},
+            {"Center Line", RevitBuiltInCategory.OST_CableTrayFittingCenterLine},
+            {"Cable Tray Fitting Tags", RevitBuiltInCategory.OST_CableTrayFittingTags},
+            {"Rise", RevitBuiltInCategory.OST_CableTrayRiseDrop},
+            {"Cable Tray Runs", RevitBuiltInCategory.OST_CableTrayRun},
+            {"Cable Tray Tags", RevitBuiltInCategory.OST_CableTrayTags},
+            {"Callout Boundary", RevitBuiltInCategory.OST_CalloutBoundary},
+            {"Callout Heads", RevitBuiltInCategory.OST_CalloutHeads},
+            {"Callout Leader Line", RevitBuiltInCategory.OST_CalloutLeaderLine},
+            {"Callouts", RevitBuiltInCategory.OST_Callouts},
+            {"Cameras", RevitBuiltInCategory.OST_Camera_Lines},
+            {"Casework", RevitBuiltInCategory.OST_Casework},
+            {"<Hidden Lines>", RevitBuiltInCategory.OST_CaseworkHiddenLines},
+            {"Casework Tags", RevitBuiltInCategory.OST_CaseworkTags},
+            {"Ceilings", RevitBuiltInCategory.OST_Ceilings},
+            {"Cut Pattern", RevitBuiltInCategory.OST_CeilingsCutPattern},
+            {"Common Edges", RevitBuiltInCategory.OST_CeilingsDefault},
+            {"Finish 1 [4]", RevitBuiltInCategory.OST_CeilingsFinish1},
+            {"Finish 2 [5]", RevitBuiltInCategory.OST_CeilingsFinish2},
+            {"<Hidden Lines>", RevitBuiltInCategory.OST_CeilingsHiddenLines},
+            {"Thermal/Air Layer [3]", RevitBuiltInCategory.OST_CeilingsInsulation},
+            {"Membrane Layer", RevitBuiltInCategory.OST_CeilingsMembrane},
+            {"Structure [1]", RevitBuiltInCategory.OST_CeilingsStructure},
+            {"Substrate [2]", RevitBuiltInCategory.OST_CeilingsSubstrate},
+            {"Surface Pattern", RevitBuiltInCategory.OST_CeilingsSurfacePattern},
+            {"Ceiling Tags", RevitBuiltInCategory.OST_CeilingTags},
+            {"<Centerline>", RevitBuiltInCategory.OST_CenterLines},
+            {"Reference Planes", RevitBuiltInCategory.OST_CLines},
+            {"Color Fill Legends", RevitBuiltInCategory.OST_ColorFillLegends},
+            {"Columns", RevitBuiltInCategory.OST_Columns},
+            {"<Hidden Lines>", RevitBuiltInCategory.OST_ColumnsHiddenLines},
+            {"Column Tags", RevitBuiltInCategory.OST_ColumnTags},
+            {"Communication Devices", RevitBuiltInCategory.OST_CommunicationDevices},
+            {"Communication Device Tags", RevitBuiltInCategory.OST_CommunicationDeviceTags},
+            {"Conduits", RevitBuiltInCategory.OST_Conduit},
+            {"Center Line", RevitBuiltInCategory.OST_ConduitCenterLine},
+            {"Drop", RevitBuiltInCategory.OST_ConduitDrop},
+            {"Conduit Fittings", RevitBuiltInCategory.OST_ConduitFitting},
+            {"Center Line", RevitBuiltInCategory.OST_ConduitFittingCenterLine},
+            {"Conduit Fitting Tags", RevitBuiltInCategory.OST_ConduitFittingTags},
+            {"Rise", RevitBuiltInCategory.OST_ConduitRiseDrop},
+            {"Conduit Runs", RevitBuiltInCategory.OST_ConduitRun},
+            {"Conduit Tags", RevitBuiltInCategory.OST_ConduitTags},
+            {"Contour Labels", RevitBuiltInCategory.OST_ContourLabels},
+            {"Internal Origin", RevitBuiltInCategory.OST_CoordinateSystem},
+            {"Coordination Model", RevitBuiltInCategory.OST_Coordination_Model},
+            {"Wall Sweeps", RevitBuiltInCategory.OST_Cornices},
+            {"Structural Rebar Couplers", RevitBuiltInCategory.OST_Coupler},
+            {"<Hidden Lines>", RevitBuiltInCategory.OST_CouplerHiddenLines},
+            {"Structural Rebar Coupler Tags", RevitBuiltInCategory.OST_CouplerTags},
+            {"Crop Boundaries", RevitBuiltInCategory.OST_CropBoundary},
+            {"Crop Boundaries", RevitBuiltInCategory.OST_CropBoundarySpecial},
+            {"Curtain Grids", RevitBuiltInCategory.OST_CurtainGrids},
+            {"Curtain System Grids", RevitBuiltInCategory.OST_CurtainGridsCurtaSystem},
+            {"Curtain Roof Grids", RevitBuiltInCategory.OST_CurtainGridsRoof},
+            {"Curtain Wall Grids", RevitBuiltInCategory.OST_CurtainGridsWall},
+            {"Curtain Wall Mullions", RevitBuiltInCategory.OST_CurtainWallMullions},
+            {"<Hidden Lines>", RevitBuiltInCategory.OST_CurtainWallMullionsHiddenLines},
+            {"Curtain Wall Mullion Tags", RevitBuiltInCategory.OST_CurtainWallMullionTags},
+            {"Curtain Panels", RevitBuiltInCategory.OST_CurtainWallPanels},
+            {"<Hidden Lines>", RevitBuiltInCategory.OST_CurtainWallPanelsHiddenLines},
+            {"Curtain Panel Tags", RevitBuiltInCategory.OST_CurtainWallPanelTags},
+            {"Curtain Systems", RevitBuiltInCategory.OST_CurtaSystem},
+            {"<Hidden Lines>", RevitBuiltInCategory.OST_CurtaSystemHiddenLines},
+            {"Curtain System Tags", RevitBuiltInCategory.OST_CurtaSystemTags},
+            {"<Medium Lines>", RevitBuiltInCategory.OST_CurvesMediumLines},
+            {"<Thin Lines>", RevitBuiltInCategory.OST_CurvesThinLines},
+            {"<Wide Lines>", RevitBuiltInCategory.OST_CurvesWideLines},
+            {"Data Devices", RevitBuiltInCategory.OST_DataDevices},
+            {"Data Device Tags", RevitBuiltInCategory.OST_DataDeviceTags},
+            {"Data Exchanges", RevitBuiltInCategory.OST_DataExchanges},
+            {"<Demolished>", RevitBuiltInCategory.OST_DemolishedLines},
+            {"Detail Items", RevitBuiltInCategory.OST_DetailComponents},
+            {"<Hidden Lines>", RevitBuiltInCategory.OST_DetailComponentsHiddenLines},
+            {"Detail Item Tags", RevitBuiltInCategory.OST_DetailComponentTags},
+            {"Dimensions", RevitBuiltInCategory.OST_Dimensions},
+            {"Displacement Path", RevitBuiltInCategory.OST_DisplacementPath},
+            {"Gridlines", RevitBuiltInCategory.OST_DividedSurface_Gridlines},
+            {"Nodes", RevitBuiltInCategory.OST_DividedSurface_Nodes},
+            {"Pattern Fill", RevitBuiltInCategory.OST_DividedSurface_PatternFill},
+            {"Pattern Lines", RevitBuiltInCategory.OST_DividedSurface_PatternLines},
+            {"Doors", RevitBuiltInCategory.OST_Doors},
+            {"Frame/Mullion", RevitBuiltInCategory.OST_DoorsFrameMullionProjection},
+            {"Glass", RevitBuiltInCategory.OST_DoorsGlassProjection},
+            {"<Hidden Lines>", RevitBuiltInCategory.OST_DoorsHiddenLines},
+            {"Opening", RevitBuiltInCategory.OST_DoorsOpeningProjection},
+            {"Panel", RevitBuiltInCategory.OST_DoorsPanelProjection},
+            {"Door Tags", RevitBuiltInCategory.OST_DoorTags},
+            {"Duct Accessories", RevitBuiltInCategory.OST_DuctAccessory},
+            {"Duct Accessory Tags", RevitBuiltInCategory.OST_DuctAccessoryTags},
+            {"Analytical Duct Segments", RevitBuiltInCategory.OST_DuctAnalyticalSegments},
+            {"Analytical Duct Segment Tags", RevitBuiltInCategory.OST_DuctAnalyticalSegmentTags},
+            {"Duct Color Fill Legends", RevitBuiltInCategory.OST_DuctColorFillLegends},
+            {"Duct Color Fill", RevitBuiltInCategory.OST_DuctColorFills},
+            {"Ducts", RevitBuiltInCategory.OST_DuctCurves},
+            {"Center Line", RevitBuiltInCategory.OST_DuctCurvesCenterLine},
+            {"Drop", RevitBuiltInCategory.OST_DuctCurvesDrop},
+            {"Rise", RevitBuiltInCategory.OST_DuctCurvesRiseDrop},
+            {"Duct Fittings", RevitBuiltInCategory.OST_DuctFitting},
+            {"Center Line", RevitBuiltInCategory.OST_DuctFittingCenterLine},
+            {"Duct Fitting Tags", RevitBuiltInCategory.OST_DuctFittingTags},
+            {"Duct Insulations", RevitBuiltInCategory.OST_DuctInsulations},
+            {"Duct Insulation Tags", RevitBuiltInCategory.OST_DuctInsulationsTags},
+            {"Duct Linings", RevitBuiltInCategory.OST_DuctLinings},
+            {"Duct Lining Tags", RevitBuiltInCategory.OST_DuctLiningsTags},
+            {"Duct Systems", RevitBuiltInCategory.OST_DuctSystem},
+            {"Reference Lines", RevitBuiltInCategory.OST_DuctSystem_Reference_Visibility},
+            {"Duct Tags", RevitBuiltInCategory.OST_DuctTags},
+            {"Air Terminals", RevitBuiltInCategory.OST_DuctTerminal},
+            {"Air Terminal Tags", RevitBuiltInCategory.OST_DuctTerminalTags},
+            {"Slab Edges", RevitBuiltInCategory.OST_EdgeSlab},
+            {"Boundary", RevitBuiltInCategory.OST_ELECTRICAL_AreaBasedLoads_Boundary},
+            {"Interior Fill", RevitBuiltInCategory.OST_ELECTRICAL_AreaBasedLoads_InteriorFill_Visibility},
+            {"Reference Lines", RevitBuiltInCategory.OST_ELECTRICAL_AreaBasedLoads_Reference_Visibility},
+            {"Area Based Load Tags", RevitBuiltInCategory.OST_ELECTRICAL_AreaBasedLoads_Tags},
+            {"Electrical Analytical Transformer", RevitBuiltInCategory.OST_ElectricalAnalyticalTransformer},
+            {"Electrical Circuits", RevitBuiltInCategory.OST_ElectricalCircuit},
+            {"Electrical Equipment", RevitBuiltInCategory.OST_ElectricalEquipment},
+            {"<Hidden Lines>", RevitBuiltInCategory.OST_ElectricalEquipmentHiddenLines},
+            {"Electrical Equipment Tags", RevitBuiltInCategory.OST_ElectricalEquipmentTags},
+            {"Electrical Fixtures", RevitBuiltInCategory.OST_ElectricalFixtures},
+            {"<Hidden Lines>", RevitBuiltInCategory.OST_ElectricalFixturesHiddenLines},
+            {"Electrical Fixture Tags", RevitBuiltInCategory.OST_ElectricalFixtureTags},
+            {"Electrical Spare/Space Circuits", RevitBuiltInCategory.OST_ElectricalInternalCircuits},
+            {"Electrical Analytical Load Set", RevitBuiltInCategory.OST_ElectricalLoadSet},
+            {"Electrical Analytical Loads", RevitBuiltInCategory.OST_ElectricalLoadZoneInstance},
+            {"Electrical Analytical Power Source", RevitBuiltInCategory.OST_ElectricalPowerSource},
+            {"Elevations", RevitBuiltInCategory.OST_Elev},
+            {"Elevation Marks", RevitBuiltInCategory.OST_ElevationMarks},
+            {"Entourage", RevitBuiltInCategory.OST_Entourage},
+            {"<Hidden Lines>", RevitBuiltInCategory.OST_EntourageHiddenLines},
+            {"Entourage Tags", RevitBuiltInCategory.OST_EntourageTags},
+            {"<Hidden Lines>", RevitBuiltInCategory.OST_ExpansionJointHiddenLines},
+            {"Expansion Joints", RevitBuiltInCategory.OST_ExpansionJoints},
+            {"Expansion Joint Tags", RevitBuiltInCategory.OST_ExpansionJointTags},
+            {"Boundary", RevitBuiltInCategory.OST_FabricAreaBoundary},
+            {"Structural Fabric Areas", RevitBuiltInCategory.OST_FabricAreas},
+            {"<Fabric Envelope>", RevitBuiltInCategory.OST_FabricAreaSketchEnvelopeLines},
+            {"<Fabric Sheets>", RevitBuiltInCategory.OST_FabricAreaSketchSheetsLines},
+            {"MEP Fabrication Containment", RevitBuiltInCategory.OST_FabricationContainment},
+            {"Center Line", RevitBuiltInCategory.OST_FabricationContainmentCenterLine},
+            {"Drop", RevitBuiltInCategory.OST_FabricationContainmentDrop},
+            {"Rise", RevitBuiltInCategory.OST_FabricationContainmentRise},
+            {"Symbology", RevitBuiltInCategory.OST_FabricationContainmentSymbology},
+            {"MEP Fabrication Containment Tags", RevitBuiltInCategory.OST_FabricationContainmentTags},
+            {"MEP Fabrication Ductwork", RevitBuiltInCategory.OST_FabricationDuctwork},
+            {"Center Line", RevitBuiltInCategory.OST_FabricationDuctworkCenterLine},
+            {"Drop", RevitBuiltInCategory.OST_FabricationDuctworkDrop},
+            {"Insulation", RevitBuiltInCategory.OST_FabricationDuctworkInsulation},
+            {"Lining", RevitBuiltInCategory.OST_FabricationDuctworkLining},
+            {"Rise", RevitBuiltInCategory.OST_FabricationDuctworkRise},
+            {"MEP Fabrication Ductwork Stiffeners", RevitBuiltInCategory.OST_FabricationDuctworkStiffeners},
+            {"MEP Fabrication Ductwork Stiffener Tags", RevitBuiltInCategory.OST_FabricationDuctworkStiffenerTags},
+            {"Symbology", RevitBuiltInCategory.OST_FabricationDuctworkSymbology},
+            {"MEP Fabrication Ductwork Tags", RevitBuiltInCategory.OST_FabricationDuctworkTags},
+            {"MEP Fabrication Hangers", RevitBuiltInCategory.OST_FabricationHangers},
+            {"MEP Fabrication Hanger Tags", RevitBuiltInCategory.OST_FabricationHangerTags},
+            {"MEP Fabrication Pipework", RevitBuiltInCategory.OST_FabricationPipework},
+            {"Center Line", RevitBuiltInCategory.OST_FabricationPipeworkCenterLine},
+            {"Drop", RevitBuiltInCategory.OST_FabricationPipeworkDrop},
+            {"Insulation", RevitBuiltInCategory.OST_FabricationPipeworkInsulation},
+            {"Rise", RevitBuiltInCategory.OST_FabricationPipeworkRise},
+            {"Symbology", RevitBuiltInCategory.OST_FabricationPipeworkSymbology},
+            {"MEP Fabrication Pipework Tags", RevitBuiltInCategory.OST_FabricationPipeworkTags},
+            {"Structural Fabric Reinforcement", RevitBuiltInCategory.OST_FabricReinforcement},
+            {"Boundary", RevitBuiltInCategory.OST_FabricReinforcementBoundary},
+            {"Structural Fabric Reinforcement Tags", RevitBuiltInCategory.OST_FabricReinforcementTags},
+            {"Fabric Wire", RevitBuiltInCategory.OST_FabricReinforcementWire},
+            {"Structural Fabric Reinforcement Symbols", RevitBuiltInCategory.OST_FabricReinSpanSymbol},
+            {"Fascias", RevitBuiltInCategory.OST_Fascia},
+            {"Fascia Tags", RevitBuiltInCategory.OST_FasciaTags},
+            {"Filled region", RevitBuiltInCategory.OST_FilledRegion},
+            {"Fire Alarm Devices", RevitBuiltInCategory.OST_FireAlarmDevices},
+            {"Fire Alarm Device Tags", RevitBuiltInCategory.OST_FireAlarmDeviceTags},
+            {"Fire Protection", RevitBuiltInCategory.OST_FireProtection},
+            {"<Hidden Lines>", RevitBuiltInCategory.OST_FireProtectionHiddenLines},
+            {"Fire Protection Tags", RevitBuiltInCategory.OST_FireProtectionTags},
+            {"Flex Ducts", RevitBuiltInCategory.OST_FlexDuctCurves},
+            {"Center Line", RevitBuiltInCategory.OST_FlexDuctCurvesCenterLine},
+            {"Pattern", RevitBuiltInCategory.OST_FlexDuctCurvesPattern},
+            {"Flex Duct Tags", RevitBuiltInCategory.OST_FlexDuctTags},
+            {"Flex Pipes", RevitBuiltInCategory.OST_FlexPipeCurves},
+            {"Center Line", RevitBuiltInCategory.OST_FlexPipeCurvesCenterLine},
+            {"Pattern", RevitBuiltInCategory.OST_FlexPipeCurvesPattern},
+            {"Flex Pipe Tags", RevitBuiltInCategory.OST_FlexPipeTags},
+            {"Floors", RevitBuiltInCategory.OST_Floors},
+            {"Cut Pattern", RevitBuiltInCategory.OST_FloorsCutPattern},
+            {"Common Edges", RevitBuiltInCategory.OST_FloorsDefault},
+            {"Finish 1 [4]", RevitBuiltInCategory.OST_FloorsFinish1},
+            {"Finish 2 [5]", RevitBuiltInCategory.OST_FloorsFinish2},
+            {"Thermal/Air Layer [3]", RevitBuiltInCategory.OST_FloorsInsulation},
+            {"Folding Lines", RevitBuiltInCategory.OST_FloorsInteriorEdges},
+            {"Membrane Layer", RevitBuiltInCategory.OST_FloorsMembrane},
+            {"Split Lines", RevitBuiltInCategory.OST_FloorsSplitLines},
+            {"Structure [1]", RevitBuiltInCategory.OST_FloorsStructure},
+            {"Substrate [2]", RevitBuiltInCategory.OST_FloorsSubstrate},
+            {"Surface Pattern", RevitBuiltInCategory.OST_FloorsSurfacePattern},
+            {"Floor Tags", RevitBuiltInCategory.OST_FloorTags},
+            {"Food Service Equipment", RevitBuiltInCategory.OST_FoodServiceEquipment},
+            {"<Hidden Lines>", RevitBuiltInCategory.OST_FoodServiceEquipmentHiddenLines},
+            {"Food Service Equipment Tags", RevitBuiltInCategory.OST_FoodServiceEquipmentTags},
+            {"Foundation Span Direction Symbol", RevitBuiltInCategory.OST_FootingSpanDirectionSymbol},
+            {"Furniture", RevitBuiltInCategory.OST_Furniture},
+            {"<Hidden Lines>", RevitBuiltInCategory.OST_FurnitureHiddenLines},
+            {"Furniture Systems", RevitBuiltInCategory.OST_FurnitureSystems},
+            {"<Hidden Lines>", RevitBuiltInCategory.OST_FurnitureSystemsHiddenLines},
+            {"Furniture System Tags", RevitBuiltInCategory.OST_FurnitureSystemTags},
+            {"Furniture Tags", RevitBuiltInCategory.OST_FurnitureTags},
+            {"Ceilings", RevitBuiltInCategory.OST_gbXML_Ceiling},
+            {"Exterior Walls", RevitBuiltInCategory.OST_gbXML_ExteriorWall},
+            {"Fixed Skylights", RevitBuiltInCategory.OST_gbXML_FixedSkylight},
+            {"Fixed Windows", RevitBuiltInCategory.OST_gbXML_FixedWindow},
+            {"Interior Floors", RevitBuiltInCategory.OST_gbXML_InteriorFloor},
+            {"Interior Walls", RevitBuiltInCategory.OST_gbXML_InteriorWall},
+            {"Non-sliding Doors", RevitBuiltInCategory.OST_gbXML_NonSlidingDoor},
+            {"Opening", RevitBuiltInCategory.OST_GbXML_Opening},
+            {"Air Openings", RevitBuiltInCategory.OST_gbXML_OpeningAir},
+            {"Operable Skylights", RevitBuiltInCategory.OST_gbXML_OperableSkylight},
+            {"Operable Windows", RevitBuiltInCategory.OST_gbXML_OperableWindow},
+            {"Raised Floors", RevitBuiltInCategory.OST_gbXML_RaisedFloor},
+            {"Roofs", RevitBuiltInCategory.OST_gbXML_Roof},
+            {"Shades", RevitBuiltInCategory.OST_gbXML_Shade},
+            {"Slabs on Grade", RevitBuiltInCategory.OST_gbXML_SlabOnGrade},
+            {"Sliding Doors", RevitBuiltInCategory.OST_gbXML_SlidingDoor},
+            {"Exterior", RevitBuiltInCategory.OST_GbXML_SType_Exterior},
+            {"Interior", RevitBuiltInCategory.OST_GbXML_SType_Interior},
+            {"Shades", RevitBuiltInCategory.OST_GbXML_SType_Shade},
+            {"Underground", RevitBuiltInCategory.OST_GbXML_SType_Underground},
+            {"Air Surfaces", RevitBuiltInCategory.OST_gbXML_SurfaceAir},
+            {"Underground Ceilings", RevitBuiltInCategory.OST_gbXML_UndergroundCeiling},
+            {"Underground Slabs", RevitBuiltInCategory.OST_gbXML_UndergroundSlab},
+            {"Underground Walls", RevitBuiltInCategory.OST_gbXML_UndergroundWall},
+            {"Analytical Surfaces", RevitBuiltInCategory.OST_GbXMLFaces},
+            {"Generic Annotations", RevitBuiltInCategory.OST_GenericAnnotation},
+            {"<Lines>", RevitBuiltInCategory.OST_GenericLines},
+            {"Generic Models", RevitBuiltInCategory.OST_GenericModel},
+            {"<Hidden Lines>", RevitBuiltInCategory.OST_GenericModelHiddenLines},
+            {"Generic Model Tags", RevitBuiltInCategory.OST_GenericModelTags},
+            {"Primary", RevitBuiltInCategory.OST_Girder},
+            {"Multi-segmented Grid", RevitBuiltInCategory.OST_GridChains},
+            {"Grid Heads", RevitBuiltInCategory.OST_GridHeads},
+            {"Grids", RevitBuiltInCategory.OST_Grids},
+            {"Guide Grid", RevitBuiltInCategory.OST_GuideGrid},
+            {"Gutters", RevitBuiltInCategory.OST_Gutter},
+            {"Gutter Tags", RevitBuiltInCategory.OST_GutterTags},
+            {"Handrail Tags", RevitBuiltInCategory.OST_HandrailTags},
+            {"Hardscape", RevitBuiltInCategory.OST_Hardscape},
+            {"<Hidden Lines>", RevitBuiltInCategory.OST_HardscapeHiddenLines},
+            {"Hardscape Tags", RevitBuiltInCategory.OST_HardscapeTags},
+            {"<Hidden Lines>", RevitBuiltInCategory.OST_HiddenFloorLines},
+            {"<Hidden>", RevitBuiltInCategory.OST_HiddenLines},
+            {"<Hidden Lines>", RevitBuiltInCategory.OST_HiddenStructuralColumnLines},
+            {"<Hidden Lines>", RevitBuiltInCategory.OST_HiddenStructuralFoundationLines},
+            {"<Hidden Lines>", RevitBuiltInCategory.OST_HiddenStructuralFramingLines},
+            {"<Hidden Lines>", RevitBuiltInCategory.OST_HiddenWallLines},
+            {"Plan Bracing", RevitBuiltInCategory.OST_HorizontalBracing},
+            {"Building Type Settings", RevitBuiltInCategory.OST_HVAC_Load_Building_Types},
+            {"Space Type Settings", RevitBuiltInCategory.OST_HVAC_Load_Space_Types},
+            {"HVAC Zones", RevitBuiltInCategory.OST_HVAC_Zones},
+            {"Boundary", RevitBuiltInCategory.OST_HVAC_Zones_Boundary},
+            {"Color Fill", RevitBuiltInCategory.OST_HVAC_Zones_ColorFill},
+            {"Interior Fill", RevitBuiltInCategory.OST_HVAC_Zones_InteriorFill_Visibility},
+            {"Reference Lines", RevitBuiltInCategory.OST_HVAC_Zones_Reference_Visibility},
+            {"Imports in Families", RevitBuiltInCategory.OST_ImportObjectStyles},
+            {"<Insulation Batting Lines>", RevitBuiltInCategory.OST_InsulationLines},
+            {"Internal Area Loads", RevitBuiltInCategory.OST_InternalAreaLoads},
+            {"Internal Area Load Tags", RevitBuiltInCategory.OST_InternalAreaLoadTags},
+            {"Internal Line Loads", RevitBuiltInCategory.OST_InternalLineLoads},
+            {"Internal Line Load Tags", RevitBuiltInCategory.OST_InternalLineLoadTags},
+            {"Structural Internal Loads", RevitBuiltInCategory.OST_InternalLoads},
+            {"Internal Point Loads", RevitBuiltInCategory.OST_InternalPointLoads},
+            {"Internal Point Load Tags", RevitBuiltInCategory.OST_InternalPointLoadTags},
+            {"Model Groups", RevitBuiltInCategory.OST_IOSModelGroups},
+            {"Secondary", RevitBuiltInCategory.OST_Joist},
+            {"Keynote Tags", RevitBuiltInCategory.OST_KeynoteTags},
+            {"Kicker Bracing", RevitBuiltInCategory.OST_KickerBracing},
+            {"Level Heads", RevitBuiltInCategory.OST_LevelHeads},
+            {"Levels", RevitBuiltInCategory.OST_Levels},
+            {"Lighting Devices", RevitBuiltInCategory.OST_LightingDevices},
+            {"Lighting Device Tags", RevitBuiltInCategory.OST_LightingDeviceTags},
+            {"Lighting Fixtures", RevitBuiltInCategory.OST_LightingFixtures},
+            {"<Hidden Lines>", RevitBuiltInCategory.OST_LightingFixturesHiddenLines},
+            {"Light Source", RevitBuiltInCategory.OST_LightingFixtureSource},
+            {"Lighting Fixture Tags", RevitBuiltInCategory.OST_LightingFixtureTags},
+            {"Line Loads", RevitBuiltInCategory.OST_LineLoads},
+            {"Line Load Tags", RevitBuiltInCategory.OST_LineLoadTags},
+            {"Lines", RevitBuiltInCategory.OST_Lines},
+            {"<Beyond>", RevitBuiltInCategory.OST_LinesBeyond},
+            {"<Hidden Lines>", RevitBuiltInCategory.OST_LinesHiddenLines},
+            {"Analytical Link Tags", RevitBuiltInCategory.OST_LinkAnalyticalTags},
+            {"Analytical Links", RevitBuiltInCategory.OST_LinksAnalytical},
+            {"Structural Load Cases", RevitBuiltInCategory.OST_LoadCases},
+            {"Accidental Loads", RevitBuiltInCategory.OST_LoadCasesAccidental},
+            {"Dead Loads", RevitBuiltInCategory.OST_LoadCasesDead},
+            {"Live Loads", RevitBuiltInCategory.OST_LoadCasesLive},
+            {"Roof Live Loads", RevitBuiltInCategory.OST_LoadCasesRoofLive},
+            {"Seismic Loads", RevitBuiltInCategory.OST_LoadCasesSeismic},
+            {"Snow Loads", RevitBuiltInCategory.OST_LoadCasesSnow},
+            {"Temperature Loads", RevitBuiltInCategory.OST_LoadCasesTemperature},
+            {"Wind Loads", RevitBuiltInCategory.OST_LoadCasesWind},
+            {"Structural Loads", RevitBuiltInCategory.OST_Loads},
+            {"Masking Region", RevitBuiltInCategory.OST_MaskingRegion},
+            {"Mass", RevitBuiltInCategory.OST_Mass},
+            {"Mass Floor Tags", RevitBuiltInCategory.OST_MassAreaFaceTags},
+            {"Mass Exterior Wall", RevitBuiltInCategory.OST_MassExteriorWall},
+            {"Mass Floor", RevitBuiltInCategory.OST_MassFloor},
+            {"Form", RevitBuiltInCategory.OST_MassForm},
+            {"Mass Glazing", RevitBuiltInCategory.OST_MassGlazing},
+            {"<Hidden Lines>", RevitBuiltInCategory.OST_MassHiddenLines},
+            {"Mass Interior Wall", RevitBuiltInCategory.OST_MassInteriorWall},
+            {"Mass Opening", RevitBuiltInCategory.OST_MassOpening},
+            {"Mass Roof", RevitBuiltInCategory.OST_MassRoof},
+            {"Mass Shade", RevitBuiltInCategory.OST_MassShade},
+            {"Mass Skylight", RevitBuiltInCategory.OST_MassSkylights},
+            {"Mass Tags", RevitBuiltInCategory.OST_MassTags},
+            {"Mass Zone", RevitBuiltInCategory.OST_MassZone},
+            {"Matchline", RevitBuiltInCategory.OST_Matchline},
+            {"Materials", RevitBuiltInCategory.OST_Materials},
+            {"Material Tags", RevitBuiltInCategory.OST_MaterialTags},
+            {"Mechanical Control Devices", RevitBuiltInCategory.OST_MechanicalControlDevices},
+            {"<Hidden Lines>", RevitBuiltInCategory.OST_MechanicalControlDevicesHiddenLines},
+            {"Mechanical Control Device Tags", RevitBuiltInCategory.OST_MechanicalControlDeviceTags},
+            {"Mechanical Equipment", RevitBuiltInCategory.OST_MechanicalEquipment},
+            {"<Hidden Lines>", RevitBuiltInCategory.OST_MechanicalEquipmentHiddenLines},
+            {"Mechanical Equipment Sets", RevitBuiltInCategory.OST_MechanicalEquipmentSet},
+            {"Mechanical Equipment Set Boundary Lines", RevitBuiltInCategory.OST_MechanicalEquipmentSetBoundaryLines},
+            {"Mechanical Equipment Set Tags", RevitBuiltInCategory.OST_MechanicalEquipmentSetTags},
+            {"Mechanical Equipment Tags", RevitBuiltInCategory.OST_MechanicalEquipmentTags},
+            {"Medical Equipment", RevitBuiltInCategory.OST_MedicalEquipment},
+            {"<Hidden Lines>", RevitBuiltInCategory.OST_MedicalEquipmentHiddenLines},
+            {"Medical Equipment Tags", RevitBuiltInCategory.OST_MedicalEquipmentTags},
+            {"Air Systems", RevitBuiltInCategory.OST_MEPAnalyticalAirLoop},
+            {"Electrical Analytical Bus", RevitBuiltInCategory.OST_MEPAnalyticalBus},
+            {"Electrical Analytical Transfer Switch", RevitBuiltInCategory.OST_MEPAnalyticalTransferSwitch},
+            {"Water Loops", RevitBuiltInCategory.OST_MEPAnalyticalWaterLoop},
+            {"MEP Ancillary Framing", RevitBuiltInCategory.OST_MEPAncillaryFraming},
+            {"MEP Ancillary Framing Tags", RevitBuiltInCategory.OST_MEPAncillaryFramingTags},
+            {"Electrical Load Areas", RevitBuiltInCategory.OST_MEPLoadAreas},
+            {"<Area Based Load Boundary>", RevitBuiltInCategory.OST_MEPLoadAreaSeparationLines},
+            {"Color Fill", RevitBuiltInCategory.OST_MEPSpaceColorFill},
+            {"Interior", RevitBuiltInCategory.OST_MEPSpaceInteriorFillVisibility},
+            {"Reference", RevitBuiltInCategory.OST_MEPSpaceReferenceVisibility},
+            {"Spaces", RevitBuiltInCategory.OST_MEPSpaces},
+            {"<Space Separation>", RevitBuiltInCategory.OST_MEPSpaceSeparationLines},
+            {"Space Tags", RevitBuiltInCategory.OST_MEPSpaceTags},
+            {"System-Zones", RevitBuiltInCategory.OST_MEPSystemZone},
+            {"System-Zone Tags", RevitBuiltInCategory.OST_MEPSystemZoneTags},
+            {"Model Group Tags", RevitBuiltInCategory.OST_ModelGroupTags},
+            {"Multi-Category Tags", RevitBuiltInCategory.OST_MultiCategoryTags},
+            {"Multi-Rebar Annotations", RevitBuiltInCategory.OST_MultiReferenceAnnotations},
+            {"Analytical Node Tags", RevitBuiltInCategory.OST_NodeAnalyticalTags},
+            {"Nurse Call Devices", RevitBuiltInCategory.OST_NurseCallDevices},
+            {"Nurse Call Device Tags", RevitBuiltInCategory.OST_NurseCallDeviceTags},
+            {"<Overhead>", RevitBuiltInCategory.OST_OverheadLines},
+            {"Pad Tags", RevitBuiltInCategory.OST_PadTags},
+            {"Panel Schedule Graphics", RevitBuiltInCategory.OST_PanelScheduleGraphics},
+            {"Parking", RevitBuiltInCategory.OST_Parking},
+            {"<Hidden Lines>", RevitBuiltInCategory.OST_ParkingHiddenLines},
+            {"Parking Tags", RevitBuiltInCategory.OST_ParkingTags},
+            {"<Hidden Lines>", RevitBuiltInCategory.OST_PartHiddenLines},
+            {"Parts", RevitBuiltInCategory.OST_Parts},
+            {"Part Tags", RevitBuiltInCategory.OST_PartTags},
+            {"<Path of Travel Lines>", RevitBuiltInCategory.OST_PathOfTravelLines},
+            {"Path of Travel Tags", RevitBuiltInCategory.OST_PathOfTravelTags},
+            {"Structural Path Reinforcement", RevitBuiltInCategory.OST_PathRein},
+            {"Boundary", RevitBuiltInCategory.OST_PathReinBoundary},
+            {"Structural Path Reinforcement Symbols", RevitBuiltInCategory.OST_PathReinSpanSymbol},
+            {"Structural Path Reinforcement Tags", RevitBuiltInCategory.OST_PathReinTags},
+            {"Phases", RevitBuiltInCategory.OST_Phases},
+            {"Pier Caps", RevitBuiltInCategory.OST_PierCaps},
+            {"Pier Cap Tags", RevitBuiltInCategory.OST_PierCapTags},
+            {"Pier Columns", RevitBuiltInCategory.OST_PierColumns},
+            {"Pier Column Tags", RevitBuiltInCategory.OST_PierColumnTags},
+            {"Pier Piles", RevitBuiltInCategory.OST_PierPiles},
+            {"Pier Pile Tags", RevitBuiltInCategory.OST_PierPileTags},
+            {"Pier Walls", RevitBuiltInCategory.OST_PierWalls},
+            {"Pier Wall Tags", RevitBuiltInCategory.OST_PierWallTags},
+            {"Pipe Accessories", RevitBuiltInCategory.OST_PipeAccessory},
+            {"Pipe Accessory Tags", RevitBuiltInCategory.OST_PipeAccessoryTags},
+            {"Analytical Pipe Segments", RevitBuiltInCategory.OST_PipeAnalyticalSegments},
+            {"Analytical Pipe Segment Tags", RevitBuiltInCategory.OST_PipeAnalyticalSegmentTags},
+            {"Pipe Color Fill Legends", RevitBuiltInCategory.OST_PipeColorFillLegends},
+            {"Pipe Color Fill", RevitBuiltInCategory.OST_PipeColorFills},
+            {"Pipes", RevitBuiltInCategory.OST_PipeCurves},
+            {"Center Line", RevitBuiltInCategory.OST_PipeCurvesCenterLine},
+            {"Drop", RevitBuiltInCategory.OST_PipeCurvesDrop},
+            {"Rise", RevitBuiltInCategory.OST_PipeCurvesRiseDrop},
+            {"Pipe Fittings", RevitBuiltInCategory.OST_PipeFitting},
+            {"Center Line", RevitBuiltInCategory.OST_PipeFittingCenterLine},
+            {"Pipe Fitting Tags", RevitBuiltInCategory.OST_PipeFittingTags},
+            {"Hydraulic Separation Symbols", RevitBuiltInCategory.OST_PipeHydronicSeparationSymbols},
+            {"Pipe Insulations", RevitBuiltInCategory.OST_PipeInsulations},
+            {"Pipe Insulation Tags", RevitBuiltInCategory.OST_PipeInsulationsTags},
+            {"Pipe Segments", RevitBuiltInCategory.OST_PipeSegments},
+            {"Pipe Tags", RevitBuiltInCategory.OST_PipeTags},
+            {"Piping Systems", RevitBuiltInCategory.OST_PipingSystem},
+            {"Reference Lines", RevitBuiltInCategory.OST_PipingSystem_Reference_Visibility},
+            {"Duct Placeholders", RevitBuiltInCategory.OST_PlaceHolderDucts},
+            {"Pipe Placeholders", RevitBuiltInCategory.OST_PlaceHolderPipes},
+            {"Plan Region", RevitBuiltInCategory.OST_PlanRegion},
+            {"Planting", RevitBuiltInCategory.OST_Planting},
+            {"<Hidden Lines>", RevitBuiltInCategory.OST_PlantingHiddenLines},
+            {"Planting Tags", RevitBuiltInCategory.OST_PlantingTags},
+            {"Plumbing Equipment", RevitBuiltInCategory.OST_PlumbingEquipment},
+            {"<Hidden Lines>", RevitBuiltInCategory.OST_PlumbingEquipmentHiddenLines},
+            {"Plumbing Equipment Tags", RevitBuiltInCategory.OST_PlumbingEquipmentTags},
+            {"Plumbing Fixtures", RevitBuiltInCategory.OST_PlumbingFixtures},
+            {"<Hidden Lines>", RevitBuiltInCategory.OST_PlumbingFixturesHiddenLines},
+            {"Plumbing Fixture Tags", RevitBuiltInCategory.OST_PlumbingFixtureTags},
+            {"Point Clouds", RevitBuiltInCategory.OST_PointClouds},
+            {"Point Loads", RevitBuiltInCategory.OST_PointLoads},
+            {"Point Load Tags", RevitBuiltInCategory.OST_PointLoadTags},
+            {"Project Base Point", RevitBuiltInCategory.OST_ProjectBasePoint},
+            {"Project Information", RevitBuiltInCategory.OST_ProjectInformation},
+            {"Tertiary", RevitBuiltInCategory.OST_Purlin},
+            {"Handrails", RevitBuiltInCategory.OST_RailingHandRail},
+            {"<Above> Handrails", RevitBuiltInCategory.OST_RailingHandRailAboveCut},
+            {"Supports", RevitBuiltInCategory.OST_RailingSupport},
+            {"Terminations", RevitBuiltInCategory.OST_RailingTermination},
+            {"Top Rails", RevitBuiltInCategory.OST_RailingTopRail},
+            {"<Above> Top Rails", RevitBuiltInCategory.OST_RailingTopRailAboveCut},
+            {"Ramps", RevitBuiltInCategory.OST_Ramps},
+            {"Ramps Beyond Cut Line", RevitBuiltInCategory.OST_RampsAboveCut},
+            {"Down Arrow", RevitBuiltInCategory.OST_RampsDownArrow},
+            {"DOWN text", RevitBuiltInCategory.OST_RampsDownText},
+            {"<Hidden Lines>", RevitBuiltInCategory.OST_RampsHiddenLines},
+            {"Stringers", RevitBuiltInCategory.OST_RampsStringer},
+            {"Stringers Beyond Cut Line", RevitBuiltInCategory.OST_RampsStringerAboveCut},
+            {"Up Arrow", RevitBuiltInCategory.OST_RampsUpArrow},
+            {"UP text", RevitBuiltInCategory.OST_RampsUpText},
+            {"Ramp Tags", RevitBuiltInCategory.OST_RampTags},
+            {"Raster Images", RevitBuiltInCategory.OST_RasterImages},
+            {"Structural Rebar", RevitBuiltInCategory.OST_Rebar},
+            {"Structural Rebar Bending Details", RevitBuiltInCategory.OST_RebarBendingDetails},
+            {"Rebar Cover References", RevitBuiltInCategory.OST_RebarCover},
+            {"<Hidden Lines>", RevitBuiltInCategory.OST_RebarHiddenLines},
+            {"Rebar Set Toggle", RevitBuiltInCategory.OST_RebarSetToggle},
+            {"Rebar Shape", RevitBuiltInCategory.OST_RebarShape},
+            {"Splice Location Lines", RevitBuiltInCategory.OST_RebarSpliceLines},
+            {"Structural Rebar Tags", RevitBuiltInCategory.OST_RebarTags},
+            {"Reference Lines", RevitBuiltInCategory.OST_ReferenceLines},
+            {"Reference Points", RevitBuiltInCategory.OST_ReferencePoints},
+            {"Lines", RevitBuiltInCategory.OST_ReferencePoints_Lines},
+            {"Planes", RevitBuiltInCategory.OST_ReferencePoints_Planes},
+            {"Points", RevitBuiltInCategory.OST_ReferencePoints_Points},
+            {"View References", RevitBuiltInCategory.OST_ReferenceViewer},
+            {"View Reference", RevitBuiltInCategory.OST_ReferenceViewerSymbol},
+            {"Render Regions", RevitBuiltInCategory.OST_RenderRegions},
+            {"Revision Clouds", RevitBuiltInCategory.OST_RevisionClouds},
+            {"Revision Cloud Tags", RevitBuiltInCategory.OST_RevisionCloudTags},
+            {"Roads", RevitBuiltInCategory.OST_Roads},
+            {"<Hidden Lines>", RevitBuiltInCategory.OST_RoadsHiddenLines},
+            {"Road Tags", RevitBuiltInCategory.OST_RoadTags},
+            {"Roofs", RevitBuiltInCategory.OST_Roofs},
+            {"Cut Pattern", RevitBuiltInCategory.OST_RoofsCutPattern},
+            {"Common Edges", RevitBuiltInCategory.OST_RoofsDefault},
+            {"Finish 1 [4]", RevitBuiltInCategory.OST_RoofsFinish1},
+            {"Finish 2 [5]", RevitBuiltInCategory.OST_RoofsFinish2},
+            {"<Hidden Lines>", RevitBuiltInCategory.OST_RoofsHiddenLines},
+            {"Thermal/Air Layer [3]", RevitBuiltInCategory.OST_RoofsInsulation},
+            {"Interior Edges", RevitBuiltInCategory.OST_RoofsInteriorEdges},
+            {"Membrane Layer", RevitBuiltInCategory.OST_RoofsMembrane},
+            {"Roof Soffits", RevitBuiltInCategory.OST_RoofSoffit},
+            {"Roof Soffit Tags", RevitBuiltInCategory.OST_RoofSoffitTags},
+            {"Structure [1]", RevitBuiltInCategory.OST_RoofsStructure},
+            {"Substrate [2]", RevitBuiltInCategory.OST_RoofsSubstrate},
+            {"Surface Pattern", RevitBuiltInCategory.OST_RoofsSurfacePattern},
+            {"Roof Tags", RevitBuiltInCategory.OST_RoofTags},
+            {"Color Fill", RevitBuiltInCategory.OST_RoomColorFill},
+            {"Interior Fill", RevitBuiltInCategory.OST_RoomInteriorFillVisibility},
+            {"Reference", RevitBuiltInCategory.OST_RoomReferenceVisibility},
+            {"Rooms", RevitBuiltInCategory.OST_Rooms},
+            {"<Room Separation>", RevitBuiltInCategory.OST_RoomSeparationLines},
+            {"Room Tags", RevitBuiltInCategory.OST_RoomTags},
+            {"Routing Preferences", RevitBuiltInCategory.OST_RoutingPreferences},
+            {"RVT Links", RevitBuiltInCategory.OST_RvtLinks},
+            {"RVT Link Tags", RevitBuiltInCategory.OST_RvtLinksTags},
+            {"Schedule Graphics", RevitBuiltInCategory.OST_ScheduleGraphics},
+            {"Schedules", RevitBuiltInCategory.OST_Schedules},
+            {"Secondary Contours", RevitBuiltInCategory.OST_SecondaryTopographyContours},
+            {"Section Boxes", RevitBuiltInCategory.OST_SectionBox},
+            {"<Medium Lines>", RevitBuiltInCategory.OST_SectionHeadMediumLines},
+            {"Section Marks", RevitBuiltInCategory.OST_SectionHeads},
+            {"<Thin Lines>", RevitBuiltInCategory.OST_SectionHeadThinLines},
+            {"<Wide Lines>", RevitBuiltInCategory.OST_SectionHeadWideLines},
+            {"Section Line", RevitBuiltInCategory.OST_SectionLine},
+            {"Sections", RevitBuiltInCategory.OST_Sections},
+            {"Security Devices", RevitBuiltInCategory.OST_SecurityDevices},
+            {"Security Device Tags", RevitBuiltInCategory.OST_SecurityDeviceTags},
+            {"Shaft Openings", RevitBuiltInCategory.OST_ShaftOpening},
+            {"<Hidden Lines>", RevitBuiltInCategory.OST_ShaftOpeningHiddenLines},
+            {"Survey Point", RevitBuiltInCategory.OST_SharedBasePoint},
+            {"Sheet Collections", RevitBuiltInCategory.OST_SheetCollections},
+            {"Sheets", RevitBuiltInCategory.OST_Sheets},
+            {"Signage", RevitBuiltInCategory.OST_Signage},
+            {"<Hidden Lines>", RevitBuiltInCategory.OST_SignageHiddenLines},
+            {"Signage Tags", RevitBuiltInCategory.OST_SignageTags},
+            {"Site", RevitBuiltInCategory.OST_Site},
+            {"<Hidden Lines>", RevitBuiltInCategory.OST_SiteHiddenLines},
+            {"Interior Point", RevitBuiltInCategory.OST_SitePoint},
+            {"Boundary Point", RevitBuiltInCategory.OST_SitePointBoundary},
+            {"Property Lines", RevitBuiltInCategory.OST_SiteProperty},
+            {"Property Line Segments", RevitBuiltInCategory.OST_SitePropertyLineSegment},
+            {"Property Line Segment Tags", RevitBuiltInCategory.OST_SitePropertyLineSegmentTags},
+            {"Property Tags", RevitBuiltInCategory.OST_SitePropertyTags},
+            {"Site Tags", RevitBuiltInCategory.OST_SiteTags},
+            {"<Sketch>", RevitBuiltInCategory.OST_SketchLines},
+            {"Slab Edge Tags", RevitBuiltInCategory.OST_SlabEdgeTags},
+            {"Span Direction Symbol", RevitBuiltInCategory.OST_SpanDirectionSymbol},
+            {"Specialty Equipment", RevitBuiltInCategory.OST_SpecialityEquipment},
+            {"<Hidden Lines>", RevitBuiltInCategory.OST_SpecialityEquipmentHiddenLines},
+            {"Specialty Equipment Tags", RevitBuiltInCategory.OST_SpecialityEquipmentTags},
+            {"Spot Coordinates", RevitBuiltInCategory.OST_SpotCoordinates},
+            {"Spot Elevations", RevitBuiltInCategory.OST_SpotElevations},
+            {"Spot Elevation Symbols", RevitBuiltInCategory.OST_SpotElevSymbols},
+            {"Spot Slopes", RevitBuiltInCategory.OST_SpotSlopes},
+            {"Sprinklers", RevitBuiltInCategory.OST_Sprinklers},
+            {"Sprinkler Tags", RevitBuiltInCategory.OST_SprinklerTags},
+            {"Stairs", RevitBuiltInCategory.OST_Stairs},
+            {"Cut Marks", RevitBuiltInCategory.OST_StairsCutMarks},
+            {"<Above> Cut Marks", RevitBuiltInCategory.OST_StairsCutMarksAboveCut},
+            {"Down Arrows", RevitBuiltInCategory.OST_StairsDownArrows},
+            {"DOWN text", RevitBuiltInCategory.OST_StairsDownText},
+            {"<Hidden Lines>", RevitBuiltInCategory.OST_StairsHiddenLines},
+            {"Landings", RevitBuiltInCategory.OST_StairsLandings},
+            {"Stair Landing Tags", RevitBuiltInCategory.OST_StairsLandingTags},
+            {"Nosing Lines", RevitBuiltInCategory.OST_StairsNosingLines},
+            {"<Above> Nosing Lines", RevitBuiltInCategory.OST_StairsNosingLinesAboveCut},
+            {"Outlines", RevitBuiltInCategory.OST_StairsOutlines},
+            {"<Above> Outlines", RevitBuiltInCategory.OST_StairsOutlinesAboveCut},
+            {"Stair Paths", RevitBuiltInCategory.OST_StairsPaths},
+            {"<Above> Up Arrows", RevitBuiltInCategory.OST_StairsPathsAboveCut},
+            {"Railings", RevitBuiltInCategory.OST_StairsRailing},
+            {"<Above> Railings Cut Line", RevitBuiltInCategory.OST_StairsRailingAboveCut},
+            {"Balusters", RevitBuiltInCategory.OST_StairsRailingBaluster},
+            {"<Hidden Lines>", RevitBuiltInCategory.OST_StairsRailingHiddenLines},
+            {"Rails", RevitBuiltInCategory.OST_StairsRailingRail},
+            {"Railing Tags", RevitBuiltInCategory.OST_StairsRailingTags},
+            {"Riser Lines", RevitBuiltInCategory.OST_StairsRiserLines},
+            {"<Above> Riser Lines", RevitBuiltInCategory.OST_StairsRiserLinesAboveCut},
+            {"Runs", RevitBuiltInCategory.OST_StairsRuns},
+            {"Stair Run Tags", RevitBuiltInCategory.OST_StairsRunTags},
+            {"Supports", RevitBuiltInCategory.OST_StairsSupports},
+            {"<Above> Supports", RevitBuiltInCategory.OST_StairsSupportsAboveCut},
+            {"Stair Support Tags", RevitBuiltInCategory.OST_StairsSupportTags},
+            {"Stair Tags", RevitBuiltInCategory.OST_StairsTags},
+            {"Stair Tread/Riser Numbers", RevitBuiltInCategory.OST_StairsTriserNumbers},
+            {"Treads/Risers", RevitBuiltInCategory.OST_StairsTrisers},
+            {"Up Arrows", RevitBuiltInCategory.OST_StairsUpArrows},
+            {"UP text", RevitBuiltInCategory.OST_StairsUpText},
+            {"Anchors", RevitBuiltInCategory.OST_StructConnectionAnchors},
+            {"Anchor Tags", RevitBuiltInCategory.OST_StructConnectionAnchorTags},
+            {"Bolts", RevitBuiltInCategory.OST_StructConnectionBolts},
+            {"Bolt Tags", RevitBuiltInCategory.OST_StructConnectionBoltTags},
+            {"<Hidden Lines>", RevitBuiltInCategory.OST_StructConnectionHiddenLines},
+            {"Holes", RevitBuiltInCategory.OST_StructConnectionHoles},
+            {"Hole Tags", RevitBuiltInCategory.OST_StructConnectionHoleTags},
+            {"Modifiers", RevitBuiltInCategory.OST_StructConnectionModifiers},
+            {"Others", RevitBuiltInCategory.OST_StructConnectionOthers},
+            {"Plates", RevitBuiltInCategory.OST_StructConnectionPlates},
+            {"Plate Tags", RevitBuiltInCategory.OST_StructConnectionPlateTags},
+            {"Profiles", RevitBuiltInCategory.OST_StructConnectionProfiles},
+            {"Profile Tags", RevitBuiltInCategory.OST_StructConnectionProfilesTags},
+            {"Reference", RevitBuiltInCategory.OST_StructConnectionReference},
+            {"Structural Connections", RevitBuiltInCategory.OST_StructConnections},
+            {"Shear Studs", RevitBuiltInCategory.OST_StructConnectionShearStuds},
+            {"Shear Stud Tags", RevitBuiltInCategory.OST_StructConnectionShearStudTags},
+            {"Symbol", RevitBuiltInCategory.OST_StructConnectionSymbol},
+            {"Connection Symbols", RevitBuiltInCategory.OST_StructConnectionSymbols},
+            {"Structural Connection Tags", RevitBuiltInCategory.OST_StructConnectionTags},
+            {"Welds", RevitBuiltInCategory.OST_StructConnectionWelds},
+            {"Weld Tags", RevitBuiltInCategory.OST_StructConnectionWeldTags},
+            {"Structural Annotations", RevitBuiltInCategory.OST_StructuralAnnotations},
+            {"Brace in Plan View Symbols", RevitBuiltInCategory.OST_StructuralBracePlanReps},
+            {"Location Lines", RevitBuiltInCategory.OST_StructuralColumnLocationLine},
+            {"Structural Columns", RevitBuiltInCategory.OST_StructuralColumns},
+            {"Stick Symbols", RevitBuiltInCategory.OST_StructuralColumnStickSymbols},
+            {"Structural Column Tags", RevitBuiltInCategory.OST_StructuralColumnTags},
+            {"Structural Foundations", RevitBuiltInCategory.OST_StructuralFoundation},
+            {"Structural Foundation Tags", RevitBuiltInCategory.OST_StructuralFoundationTags},
+            {"Structural Framing", RevitBuiltInCategory.OST_StructuralFraming},
+            {"Location Lines", RevitBuiltInCategory.OST_StructuralFramingLocationLine},
+            {"Other", RevitBuiltInCategory.OST_StructuralFramingOther},
+            {"Structural Beam Systems", RevitBuiltInCategory.OST_StructuralFramingSystem},
+            {"Structural Framing Tags", RevitBuiltInCategory.OST_StructuralFramingTags},
+            {"Structural Stiffeners", RevitBuiltInCategory.OST_StructuralStiffener},
+            {"<Hidden Lines>", RevitBuiltInCategory.OST_StructuralStiffenerHiddenLines},
+            {"Structural Stiffener Tags", RevitBuiltInCategory.OST_StructuralStiffenerTags},
+            {"<Hidden Lines>", RevitBuiltInCategory.OST_StructuralTendonHiddenLines},
+            {"Structural Tendons", RevitBuiltInCategory.OST_StructuralTendons},
+            {"Structural Tendon Tags", RevitBuiltInCategory.OST_StructuralTendonTags},
+            {"Structural Trusses", RevitBuiltInCategory.OST_StructuralTruss},
+            {"Stick Symbols", RevitBuiltInCategory.OST_StructuralTrussStickSymbols},
+            {"Switch System", RevitBuiltInCategory.OST_SwitchSystem},
+            {"Telephone Devices", RevitBuiltInCategory.OST_TelephoneDevices},
+            {"Telephone Device Tags", RevitBuiltInCategory.OST_TelephoneDeviceTags},
+            {"Temporary Structures", RevitBuiltInCategory.OST_TemporaryStructure},
+            {"<Hidden Lines>", RevitBuiltInCategory.OST_TemporaryStructureHiddenLines},
+            {"Temporary Structure Tags", RevitBuiltInCategory.OST_TemporaryStructureTags},
+            {"Text Notes", RevitBuiltInCategory.OST_TextNotes},
+            {"<Medium Lines>", RevitBuiltInCategory.OST_TitleBlockMediumLines},
+            {"Title Blocks", RevitBuiltInCategory.OST_TitleBlocks},
+            {"<Thin Lines>", RevitBuiltInCategory.OST_TitleBlockThinLines},
+            {"<Wide Lines>", RevitBuiltInCategory.OST_TitleBlockWideLines},
+            {"Topography", RevitBuiltInCategory.OST_Topography},
+            {"Primary Contours", RevitBuiltInCategory.OST_TopographyContours},
+            {"<Hidden Lines>", RevitBuiltInCategory.OST_TopographyHiddenLines},
+            {"Topography Links", RevitBuiltInCategory.OST_TopographyLink},
+            {"Triangulation Edges", RevitBuiltInCategory.OST_TopographySurface},
+            {"Toposolid", RevitBuiltInCategory.OST_Toposolid},
+            {"Primary Contours", RevitBuiltInCategory.OST_ToposolidContours},
+            {"Cut Pattern", RevitBuiltInCategory.OST_ToposolidCutPattern},
+            {"Common Edges", RevitBuiltInCategory.OST_ToposolidDefault},
+            {"Finish 1 [4]", RevitBuiltInCategory.OST_ToposolidFinish1},
+            {"Finish 2 [5]", RevitBuiltInCategory.OST_ToposolidFinish2},
+            {"Folding Lines", RevitBuiltInCategory.OST_ToposolidFoldingLines},
+            {"<Hidden Lines>", RevitBuiltInCategory.OST_ToposolidHiddenLines},
+            {"Thermal/Air Layer [3]", RevitBuiltInCategory.OST_ToposolidInsulation},
+            {"Toposolid Links", RevitBuiltInCategory.OST_ToposolidLink},
+            {"Toposolid Link Tags", RevitBuiltInCategory.OST_ToposolidLinkTags},
+            {"Membrane Layer", RevitBuiltInCategory.OST_ToposolidMembrane},
+            {"Secondary Contours", RevitBuiltInCategory.OST_ToposolidSecondaryContours},
+            {"Split Lines", RevitBuiltInCategory.OST_ToposolidSplitLines},
+            {"Structure [1]", RevitBuiltInCategory.OST_ToposolidStructure},
+            {"Substrate [2]", RevitBuiltInCategory.OST_ToposolidSubstrate},
+            {"Surface Pattern", RevitBuiltInCategory.OST_ToposolidSurfacePattern},
+            {"Toposolid Tags", RevitBuiltInCategory.OST_ToposolidTags},
+            {"Top Rail Tags", RevitBuiltInCategory.OST_TopRailTags},
+            {"Chord", RevitBuiltInCategory.OST_TrussChord},
+            {"Structural Truss Tags", RevitBuiltInCategory.OST_TrussTags},
+            {"Web", RevitBuiltInCategory.OST_TrussWeb},
+            {"Vertical Bracing", RevitBuiltInCategory.OST_VerticalBracing},
+            {"Vertical Circulation", RevitBuiltInCategory.OST_VerticalCirculation},
+            {"<Hidden Lines>", RevitBuiltInCategory.OST_VerticalCirculationHiddenLines},
+            {"Vertical Circulation Tags", RevitBuiltInCategory.OST_VerticalCirculationTags},
+            {"Vibration Dampers", RevitBuiltInCategory.OST_VibrationDampers},
+            {"Vibration Damper Tags", RevitBuiltInCategory.OST_VibrationDamperTags},
+            {"Vibration Isolators", RevitBuiltInCategory.OST_VibrationIsolators},
+            {"Vibration Isolator Tags", RevitBuiltInCategory.OST_VibrationIsolatorTags},
+            {"Vibration Management", RevitBuiltInCategory.OST_VibrationManagement},
+            {"<Hidden Lines>", RevitBuiltInCategory.OST_VibrationManagementHiddenLines},
+            {"Vibration Management Tags", RevitBuiltInCategory.OST_VibrationManagementTags},
+            {"Views", RevitBuiltInCategory.OST_Viewers},
+            {"View Titles", RevitBuiltInCategory.OST_ViewportLabel},
+            {"Viewports", RevitBuiltInCategory.OST_Viewports},
+            {"Views", RevitBuiltInCategory.OST_Views},
+            {"Scope Boxes", RevitBuiltInCategory.OST_VolumeOfInterest},
+            {"Non-Core Layers", RevitBuiltInCategory.OST_WallNonCoreLayer},
+            {"Walls", RevitBuiltInCategory.OST_Walls},
+            {"Cut Pattern", RevitBuiltInCategory.OST_WallsCutPattern},
+            {"Common Edges", RevitBuiltInCategory.OST_WallsDefault},
+            {"Finish 1 [4]", RevitBuiltInCategory.OST_WallsFinish1},
+            {"Finish 2 [5]", RevitBuiltInCategory.OST_WallsFinish2},
+            {"Thermal/Air Layer [3]", RevitBuiltInCategory.OST_WallsInsulation},
+            {"Membrane Layer", RevitBuiltInCategory.OST_WallsMembrane},
+            {"Structure [1]", RevitBuiltInCategory.OST_WallsStructure},
+            {"Substrate [2]", RevitBuiltInCategory.OST_WallsSubstrate},
+            {"Surface Pattern", RevitBuiltInCategory.OST_WallsSurfacePattern},
+            {"Wall Sweep Tags", RevitBuiltInCategory.OST_WallSweepTags},
+            {"Wall Tags", RevitBuiltInCategory.OST_WallTags},
+            {"Automatic Sketch Dimensions", RevitBuiltInCategory.OST_WeakDims},
+            {"Windows", RevitBuiltInCategory.OST_Windows},
+            {"Frame/Mullion", RevitBuiltInCategory.OST_WindowsFrameMullionProjection},
+            {"Glass", RevitBuiltInCategory.OST_WindowsGlassProjection},
+            {"<Hidden Lines>", RevitBuiltInCategory.OST_WindowsHiddenLines},
+            {"Opening", RevitBuiltInCategory.OST_WindowsOpeningProjection},
+            {"Sill/Head", RevitBuiltInCategory.OST_WindowsSillHeadProjection},
+            {"Window Tags", RevitBuiltInCategory.OST_WindowTags},
+            {"Wires", RevitBuiltInCategory.OST_Wire},
+            {"Home Run Arrows", RevitBuiltInCategory.OST_WireHomeRunArrows},
+            {"Wire Tags", RevitBuiltInCategory.OST_WireTags},
+            {"Wire Tick Marks", RevitBuiltInCategory.OST_WireTickMarks},
+            {"Zone Equipment", RevitBuiltInCategory.OST_ZoneEquipment},
+            {"Zone Tags", RevitBuiltInCategory.OST_ZoneTags},
+            {"Invalid", RevitBuiltInCategory.INVALID},
+        };
+
     }
 }

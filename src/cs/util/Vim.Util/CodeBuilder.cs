@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using System.Text;
 
-namespace Vim.Format.CodeGen
+namespace Vim.Util
 {
     public class CodeBuilder
     {
