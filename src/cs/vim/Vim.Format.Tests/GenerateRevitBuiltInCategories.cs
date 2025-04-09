@@ -82,32 +82,12 @@ internal static class GenerateRevitBuiltInCategories
                 cb.AppendLine("}");
                 cb.AppendLine();
 
-                cb.AppendLine("public static bool TryGetCategoryFromEnglishName(string name, out RevitBuiltInCategory cat)");
-                cb.AppendLine("{");
-                {
-                    cb.AppendLine("cat = RevitBuiltInCategory.INVALID;");
-                    cb.AppendLine("return EnglishNameToRevitBuiltInCategoryMap.TryGetValue(name, out cat);");
-                }
-                cb.AppendLine("}");
-                cb.AppendLine();
-
                 cb.AppendLine("public static IReadOnlyDictionary<RevitBuiltInCategory, string> RevitBuiltInCategoryToEnglishNameMap { get; } = new Dictionary<RevitBuiltInCategory, string>()");
                 cb.AppendLine("{");
                 {
                     foreach (var cat in categories)
                     {
                         cb.AppendLine($"{{RevitBuiltInCategory.{cat.BuiltInName}, \"{cat.Name}\"}},");
-                    }
-                }
-                cb.AppendLine("};");
-                cb.AppendLine();
-
-                cb.AppendLine("public static IReadOnlyDictionary<string, RevitBuiltInCategory> EnglishNameToRevitBuiltInCategoryMap { get; } = new Dictionary<string, RevitBuiltInCategory>()");
-                cb.AppendLine("{");
-                {
-                    foreach (var cat in categories)
-                    {
-                        cb.AppendLine($"{{\"{cat.Name}\", RevitBuiltInCategory.{cat.BuiltInName}}},");
                     }
                 }
                 cb.AppendLine("};");
