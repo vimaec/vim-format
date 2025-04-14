@@ -30,4 +30,21 @@ This sample illustrates how to extract BIM data from a VIM file and how to trans
   
     - Upon success, you will receive a JSON response describing the aggregate information contained in the VIM file.
 
-  
+## Vim.Gltf.Converter
+
+**Concepts**
+
+This sample illustrates how to convert a GLTF file into a VIM file and how to convert a VIM file into a GLTF file. Given the differences in both file formats, this conversion is lossy, however it does illustrate how to read/write geometry and BIM data in the VIM file.
+
+**Projects**
+
+[Vim.Gltf.Converter.csproj](./Vim.Gltf.Converter/Vim.Gltf.Converter.csproj)
+
+  - Defines the class [VimToGltfStore.cs](./Vim.Gltf.Converter/VimToGltfStore.cs) which converts a VIM file into a GLTF file.
+
+  - Defines the class [GltfToVimStore.cs](./Vim.Gltf.Converter/GltfToVimStore.cs) which converts a GLTF file into a VIM file.
+
+[Vim.Gltf.Converter.Tests.csproj](./Vim.Gltf.Converter.Tests/Vim.Gltf.Converter.Tests.csproj)
+
+  - NUnit test project used to validate the VIM to GLTF and GLTF to VIM conversion code sample.
+
