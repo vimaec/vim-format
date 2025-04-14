@@ -20,7 +20,7 @@ namespace Vim.Gltf.Converter
         public static readonly string VersionString = $"v{AssemblyVersion.Major}.{AssemblyVersion.Minor}.{AssemblyVersion.Build}";
         private const string GeneratorString = "Vim.Gltf.Converter";
 
-        // NOTE: IN GLTF, units are assumed to be in meters however in VIM they are in feet.
+        // NOTE: In GLTF, units are assumed to be in meters however in VIM they are in feet.
         public const float MetersToFeet = 3.280839895f;
 
         /// <summary>
