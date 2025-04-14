@@ -14,7 +14,7 @@ using Vim.Util.Tests;
 namespace Vim.Format.Tests
 {
     [TestFixture]
-    public static class MergeTests
+    public static class MergeServiceTests
     {
         [Test]
         public static void TestSameMergeFile()
