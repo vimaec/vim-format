@@ -1,6 +1,7 @@
 ﻿using NUnit.Framework;
 using System.IO;
 using System.Linq;
+using Vim.Format.SceneBuilder;
 using Vim.LinqArray;
 using Vim.Util.Tests;
 
@@ -34,6 +35,13 @@ public static class TransformServiceTests
         Assert.IsTrue(File.Exists(transformedVimFilePath));
 
         var transformedVim = VimScene.LoadVim(transformedVimFilePath);
+        transformedVim.Validate();
+
         Assert.IsTrue(transformedVim.VimNodes.ToEnumerable().All(n => n.CategoryName == "Walls"));
+        
+        var dm = transformedVim.DocumentModel;
+        Assert.IsTrue(dm.FamilyInstanceList.All(fi => fi.Element.Category.Name == "Walls"));
+        Assert.IsTrue(dm.NodeList.All(n => n.Element.Category.Name == "Walls"));
+        Assert.IsTrue(dm.ParameterList.All(p => p.Element.Category.Name == "Walls"));
     }
 }

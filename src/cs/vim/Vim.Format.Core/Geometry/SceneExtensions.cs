@@ -17,20 +17,6 @@ namespace Vim.Format.Geometry
         public static IMesh ToIMesh(this IScene scene)
             => scene.TransformedMeshes().Merge();
 
-        public static bool HasLoop(this ISceneNode n)
-        {
-            if (n == null) return false;
-            var visited = new HashSet<ISceneNode>();
-            for (; n != null; n = n.Parent)
-            {
-                if (visited.Contains(n))
-                    return true;
-                visited.Add(n);
-            }
-
-            return false;
-        }
-
         public static IMesh MergedGeometry(this IScene scene)
             => scene.Nodes.ToEnumerable().MergedGeometry();
 

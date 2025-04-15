@@ -450,6 +450,7 @@ namespace Vim.Format.ObjectModel
     /// Represents a parameter associated to an Element. An Element can contain 0..* Parameters.
     /// </summary>
     [TableName(TableNames.Parameter)]
+    [CascadeElementRemap]
     public partial class Parameter : EntityWithElement
     {
         /// <summary>
@@ -768,6 +769,7 @@ namespace Vim.Format.ObjectModel
     /// may have a length of 12 feet, whereas another FamilyInstance may have a different length of 8 feet.
     /// </summary>
     [TableName(TableNames.FamilyInstance)]
+    [CascadeElementRemap]
     public partial class FamilyInstance : EntityWithElement
     {
         public bool FacingFlipped;
@@ -922,6 +924,7 @@ namespace Vim.Format.ObjectModel
     /// An associative table binding an Element to a View.
     /// </summary>
     [TableName(TableNames.ElementInView)]
+    [CascadeElementRemap]
     public partial class ElementInView : EntityWithElement, IStorageKey
     {
         public Relation<View> _View;
@@ -1155,6 +1158,7 @@ namespace Vim.Format.ObjectModel
     /// An associative table binding a Material to an Element.
     /// </summary>
     [TableName(TableNames.MaterialInElement)]
+    [CascadeElementRemap]
     public partial class MaterialInElement : EntityWithElement, IStorageKey
     {
         public double Area;
@@ -1224,6 +1228,7 @@ namespace Vim.Format.ObjectModel
     /// This serves to bridge the gap between the Element entities and their corresponding instance geometry.
     /// </summary>
     [TableName(TableNames.Node)]
+    [CascadeElementRemap]
     [G3dAttributeReference("g3d:instance:transform:0:float32:16", G3dAttributeReferenceMultiplicity.OneToOne)]
     [G3dAttributeReference("g3d:instance:parent:0:int32:1", G3dAttributeReferenceMultiplicity.OneToOne)]
     [G3dAttributeReference("g3d:instance:mesh:0:int32:1", G3dAttributeReferenceMultiplicity.OneToOne)]
@@ -1363,6 +1368,7 @@ namespace Vim.Format.ObjectModel
     /// An associative table binding an Element to a System.
     /// </summary>
     [TableName(TableNames.ElementInSystem)]
+    [CascadeElementRemap]
     public partial class ElementInSystem : EntityWithElement, IStorageKey
     {
         /// <summary>
@@ -1411,6 +1417,7 @@ namespace Vim.Format.ObjectModel
     /// An associative table binding an Element to a Warning.
     /// </summary>
     [TableName(TableNames.ElementInWarning)]
+    [CascadeElementRemap]
     public partial class ElementInWarning : EntityWithElement, IStorageKey
     {
         public Relation<Warning> _Warning;
