@@ -48,9 +48,6 @@ namespace Vim.Format
             return thisPrefix;
         }
 
-        public static T[] RemapData<T>(this T[] self, List<int> remapping = null)
-            => remapping?.Select(x => self[x])?.ToArray() ?? self;
-
         public static IBuffer ToBuffer<T>(this T[] array) where T : unmanaged
             => new Buffer<T>(array);
 
@@ -97,29 +94,72 @@ namespace Vim.Format
             }
         }
 
-        public static IBuffer CopyDataColumn(this IBuffer dataColumn, string typePrefix, List<int> remapping = null)
+        public static IBuffer RemapOrSelfDataColumn(this IBuffer dataColumn, string typePrefix, List<int> remapping = null)
         {
             switch (typePrefix)
             {
                 case (VimConstants.IntColumnNameTypePrefix):
-                    return (dataColumn.Data as int[]).RemapData(remapping).ToBuffer();
+                    return (dataColumn.Data as int[]).RemapOrSelf(remapping).ToBuffer();
                 case (VimConstants.LongColumnNameTypePrefix):
-                    return (dataColumn.Data as long[]).RemapData(remapping).ToBuffer();
+                    return (dataColumn.Data as long[]).RemapOrSelf(remapping).ToBuffer();
                 case (VimConstants.DoubleColumnNameTypePrefix):
-                    return (dataColumn.Data as double[]).RemapData(remapping).ToBuffer();
+                    return (dataColumn.Data as double[]).RemapOrSelf(remapping).ToBuffer();
                 case (VimConstants.FloatColumnNameTypePrefix):
-                    return (dataColumn.Data as float[]).RemapData(remapping).ToBuffer();
+                    return (dataColumn.Data as float[]).RemapOrSelf(remapping).ToBuffer();
                 case (VimConstants.ByteColumnNameTypePrefix):
-                    return (dataColumn.Data as byte[]).RemapData(remapping).ToBuffer();
+                    return (dataColumn.Data as byte[]).RemapOrSelf(remapping).ToBuffer();
                 default:
-                    throw new Exception($"{nameof(CopyDataColumn)} - {UnknownNamedBufferPrefix}");
+                    throw new Exception($"{nameof(RemapOrSelfDataColumn)} - {UnknownNamedBufferPrefix}");
             }
         }
 
-        public static INamedBuffer CopyDataColumn(this INamedBuffer dataColumn, List<int> remapping = null)
+        public static INamedBuffer RemapOrSelfDataColumn(this INamedBuffer dataColumn, List<int> remapping = null)
         {
             var typePrefix = dataColumn.GetTypePrefix();
-            return new NamedBuffer(dataColumn.CopyDataColumn(typePrefix, remapping), dataColumn.Name);
+            return new NamedBuffer(dataColumn.RemapOrSelfDataColumn(typePrefix, remapping), dataColumn.Name);
+        }
+
+        public static T[] RemapOrSelf<T>(this T[] source, List<int> remapping = null)
+        {
+            if (remapping == null)
+                return source;
+
+            var dst = new T[remapping.Count];
+
+            for (var i = 0; i < dst.Length; ++i)
+            {
+                var remappedIndex = remapping[i];
+                dst[i] = source[remappedIndex];
+            }
+
+            return dst;
+        }
+
+        public static T[] Copy<T>(this T[] source, List<int> remapping = null)
+        {
+            T[] result;
+
+            if (remapping == null)
+            {
+                // Copy from the source.
+                result = new T[source.Length];
+
+                for (var i = 0; i < result.Length; ++i)
+                    result[i] = source[i];
+            }
+            else
+            {
+                // Copy from the remapping.
+                result = new T[remapping.Count];
+
+                for (var i = 0; i < result.Length; ++i)
+                {
+                    var remappedIndex = remapping[i];
+                    result[i] = source[remappedIndex];
+                }
+            }
+
+            return result;
         }
 
         public static IBuffer Concat<T>(this IBuffer thisBuffer, IBuffer otherBuffer) where T : unmanaged

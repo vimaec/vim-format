@@ -561,6 +561,7 @@ namespace Vim.Format.ObjectModel
     }
 
     [TableName(TableNames.Group)]
+    [CascadeElementRemap] // Groups can be family instances
     public partial class Group : EntityWithElement
     {
         public string GroupType;
@@ -1228,7 +1229,6 @@ namespace Vim.Format.ObjectModel
     /// This serves to bridge the gap between the Element entities and their corresponding instance geometry.
     /// </summary>
     [TableName(TableNames.Node)]
-    [CascadeElementRemap]
     [G3dAttributeReference("g3d:instance:transform:0:float32:16", G3dAttributeReferenceMultiplicity.OneToOne)]
     [G3dAttributeReference("g3d:instance:parent:0:int32:1", G3dAttributeReferenceMultiplicity.OneToOne)]
     [G3dAttributeReference("g3d:instance:mesh:0:int32:1", G3dAttributeReferenceMultiplicity.OneToOne)]
