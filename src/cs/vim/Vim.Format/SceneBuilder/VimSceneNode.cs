@@ -20,8 +20,6 @@ namespace Vim
 
         public VimScene _Scene { get; }
 
-        public IScene Scene => _Scene;
-        public int Id => NodeIndex;
         public Matrix4x4 Transform { get; }
 
         public InstanceFlags InstanceFlags
@@ -40,16 +38,12 @@ namespace Vim
 
         public bool HasMesh => MeshIndex != -1;
 
-        public Node NodeModel => _Scene.DocumentModel.GetNode(Id);
-        public Geometry GeometryModel => _Scene.DocumentModel.GetGeometry(MeshIndex);
-
         // TODO: I think this should be "IEnumerable<ISceneNode>" in the interface
         public ISceneNode Parent => null;
-        public IArray<ISceneNode> Children => LinqArray.LinqArray.Empty<ISceneNode>();
 
         public string DisciplineName => VimSceneHelpers.GetDisiplineFromCategory(CategoryName);
 
         VimSceneNode ITransformable3D<VimSceneNode>.Transform(Matrix4x4 mat)
-            => new VimSceneNode(_Scene, Id, MeshIndex, mat * Transform);
+            => new VimSceneNode(_Scene, NodeIndex, MeshIndex, mat * Transform);
     }
 }

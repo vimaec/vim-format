@@ -5,6 +5,7 @@ using System.Linq;
 using Vim.Math3d;
 using Vim.BFast;
 using System.IO;
+using Vim.G3d;
 using Vim.Util;
 
 namespace Vim.Format
@@ -83,14 +84,15 @@ namespace Vim.Format
         public DocumentBuilder AddAsset(INamedBuffer b)
             => AddAsset(b.Name, b.ToBytes());
 
-        public DocumentBuilder AddInstance(Matrix4x4 transform, int meshIndex, int parentIndex = -1)
+        public DocumentBuilder AddInstance(Matrix4x4 transform, int meshIndex, InstanceFlags flags, int parentIndex = -1)
         {
             Instances.Add(
                 new Instance()
                 {
                     Transform = transform,
                     MeshIndex = meshIndex,
-                    ParentIndex = parentIndex
+                    ParentIndex = parentIndex,
+                    InstanceFlags = flags,
                 }
             );
 

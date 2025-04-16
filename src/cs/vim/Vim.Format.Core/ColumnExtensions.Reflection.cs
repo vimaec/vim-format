@@ -75,6 +75,9 @@ namespace Vim.Format
         public static string GetEntityTableName(this Type t)
             => (t.GetCustomAttribute(typeof(TableNameAttribute)) as TableNameAttribute)?.Name;
 
+        public static bool HasCascadeElementRemap(this Type t)
+            => (t.GetCustomAttribute(typeof(CascadeElementRemapAttribute)) as CascadeElementRemapAttribute) != null;
+
         public static (string IndexColumnName, string LocalFieldName) GetIndexColumnInfo(this FieldInfo fieldInfo)
         {
             if (!fieldInfo.Name.StartsWith("_"))
