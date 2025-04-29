@@ -798,6 +798,7 @@ export interface IBimDocument {
     product?: string;
     version?: string;
     user?: string;
+    fileLength?: bigint;
     activeViewIndex?: number;
     activeView?: IView;
     ownerFamilyIndex?: number;
@@ -867,6 +868,8 @@ export interface IBimDocumentTable {
     getAllVersion(): Promise<string[] | undefined>;
     getUser(bimDocumentIndex: number): Promise<string | undefined>;
     getAllUser(): Promise<string[] | undefined>;
+    getFileLength(bimDocumentIndex: number): Promise<bigint | undefined>;
+    getAllFileLength(): Promise<BigInt64Array | undefined>;
     getActiveViewIndex(bimDocumentIndex: number): Promise<number | undefined>;
     getAllActiveViewIndex(): Promise<number[] | undefined>;
     getActiveView(bimDocumentIndex: number): Promise<IView | undefined>;
@@ -910,6 +913,7 @@ export declare class BimDocument implements IBimDocument {
     product?: string;
     version?: string;
     user?: string;
+    fileLength?: bigint;
     activeViewIndex?: number;
     activeView?: IView;
     ownerFamilyIndex?: number;
@@ -983,6 +987,8 @@ export declare class BimDocumentTable implements IBimDocumentTable {
     getAllVersion(): Promise<string[] | undefined>;
     getUser(bimDocumentIndex: number): Promise<string | undefined>;
     getAllUser(): Promise<string[] | undefined>;
+    getFileLength(bimDocumentIndex: number): Promise<bigint | undefined>;
+    getAllFileLength(): Promise<BigInt64Array | undefined>;
     getActiveViewIndex(bimDocumentIndex: number): Promise<number | undefined>;
     getAllActiveViewIndex(): Promise<number[] | undefined>;
     getActiveView(bimDocumentIndex: number): Promise<IView | undefined>;
