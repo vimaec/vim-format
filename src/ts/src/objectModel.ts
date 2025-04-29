@@ -2391,6 +2391,7 @@ export interface IBimDocument {
     product?: string
     version?: string
     user?: string
+    fileLength?: bigint
     
     activeViewIndex?: number
     activeView?: IView
@@ -2463,6 +2464,8 @@ export interface IBimDocumentTable {
     getAllVersion(): Promise<string[] | undefined>
     getUser(bimDocumentIndex: number): Promise<string | undefined>
     getAllUser(): Promise<string[] | undefined>
+    getFileLength(bimDocumentIndex: number): Promise<bigint | undefined>
+    getAllFileLength(): Promise<BigInt64Array | undefined>
     
     getActiveViewIndex(bimDocumentIndex: number): Promise<number | undefined>
     getAllActiveViewIndex(): Promise<number[] | undefined>
@@ -2508,6 +2511,7 @@ export class BimDocument implements IBimDocument {
     product?: string
     version?: string
     user?: string
+    fileLength?: bigint
     
     activeViewIndex?: number
     activeView?: IView
@@ -2551,6 +2555,7 @@ export class BimDocument implements IBimDocument {
             table.getProduct(index).then(v => result.product = v),
             table.getVersion(index).then(v => result.version = v),
             table.getUser(index).then(v => result.user = v),
+            table.getFileLength(index).then(v => result.fileLength = v),
             table.getActiveViewIndex(index).then(v => result.activeViewIndex = v),
             table.getOwnerFamilyIndex(index).then(v => result.ownerFamilyIndex = v),
             table.getParentIndex(index).then(v => result.parentIndex = v),
@@ -2618,6 +2623,7 @@ export class BimDocumentTable implements IBimDocumentTable {
         let product: string[] | undefined
         let version: string[] | undefined
         let user: string[] | undefined
+        let fileLength: BigInt64Array | undefined
         let activeViewIndex: number[] | undefined
         let ownerFamilyIndex: number[] | undefined
         let parentIndex: number[] | undefined
@@ -2652,6 +2658,7 @@ export class BimDocumentTable implements IBimDocumentTable {
             (async () => { product = (await localTable.getStringArray("string:Product")) })(),
             (async () => { version = (await localTable.getStringArray("string:Version")) })(),
             (async () => { user = (await localTable.getStringArray("string:User")) })(),
+            (async () => { fileLength = (await localTable.getBigIntArray("long:FileLength")) })(),
             (async () => { activeViewIndex = (await localTable.getNumberArray("index:Vim.View:ActiveView")) })(),
             (async () => { ownerFamilyIndex = (await localTable.getNumberArray("index:Vim.Family:OwnerFamily")) })(),
             (async () => { parentIndex = (await localTable.getNumberArray("index:Vim.BimDocument:Parent")) })(),
@@ -2692,6 +2699,7 @@ export class BimDocumentTable implements IBimDocumentTable {
                 product: product ? product[i] : undefined,
                 version: version ? version[i] : undefined,
                 user: user ? user[i] : undefined,
+                fileLength: fileLength ? fileLength[i] : undefined,
                 activeViewIndex: activeViewIndex ? activeViewIndex[i] : undefined,
                 ownerFamilyIndex: ownerFamilyIndex ? ownerFamilyIndex[i] : undefined,
                 parentIndex: parentIndex ? parentIndex[i] : undefined,
@@ -2924,6 +2932,14 @@ export class BimDocumentTable implements IBimDocumentTable {
     
     async getAllUser(): Promise<string[] | undefined> {
         return (await this.entityTable.getStringArray("string:User"))
+    }
+    
+    async getFileLength(bimDocumentIndex: number): Promise<bigint | undefined> {
+        return (await this.entityTable.getBigInt(bimDocumentIndex, "long:FileLength"))
+    }
+    
+    async getAllFileLength(): Promise<BigInt64Array | undefined> {
+        return (await this.entityTable.getBigIntArray("long:FileLength"))
     }
     
     async getActiveViewIndex(bimDocumentIndex: number): Promise<number | undefined> {

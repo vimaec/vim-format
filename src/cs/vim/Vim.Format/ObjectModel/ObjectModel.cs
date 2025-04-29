@@ -15,6 +15,10 @@ namespace Vim.Format.ObjectModel
         public static class History
         {
             // Schema additions
+            //   Vim.BimDocument__long:FileLength
+            public const string v5_6_0 = "5.6.0";
+
+            // Schema additions
             //   Vim.Level__double:ProjectElevation
             public const string v5_5_0 = "5.5.0";
 
@@ -171,7 +175,8 @@ namespace Vim.Format.ObjectModel
         // ReSharper enable MemberHidesStaticFromOuterClass
 
         // [MAINTAIN] Add more object model SerializableVersions below and update the current one.
-        public static SerializableVersion Current => v5_5_0;
+        public static SerializableVersion Current => v5_6_0;
+        public static SerializableVersion v5_6_0 => SerializableVersion.Parse(History.v5_6_0);
         public static SerializableVersion v5_5_0 => SerializableVersion.Parse(History.v5_5_0);
         public static SerializableVersion v5_4_0 => SerializableVersion.Parse(History.v5_4_0);
         public static SerializableVersion v5_3_0 => SerializableVersion.Parse(History.v5_3_0);
@@ -674,6 +679,10 @@ namespace Vim.Format.ObjectModel
         public string Product;
         public string Version;
         public string User;
+        /// <summary>
+        /// File length in bytes
+        /// </summary>
+        public long FileLength;
         public Relation<View> _ActiveView;
         public Relation<Family> _OwnerFamily;
         public Relation<BimDocument> _Parent;

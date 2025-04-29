@@ -478,6 +478,7 @@ namespace Vim.Format.ObjectModel {
                     (Product == other.Product) &&
                     (Version == other.Version) &&
                     (User == other.User) &&
+                    (FileLength == other.FileLength) &&
                     (_ActiveView?.Index == other._ActiveView?.Index) &&
                     (_OwnerFamily?.Index == other._OwnerFamily?.Index) &&
                     (_Parent?.Index == other._Parent?.Index) &&
@@ -2359,6 +2360,8 @@ namespace Vim.Format.ObjectModel {
         public String GetBimDocumentVersion(int index, String defaultValue = "") => BimDocumentVersion?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
         public IArray<String> BimDocumentUser { get; }
         public String GetBimDocumentUser(int index, String defaultValue = "") => BimDocumentUser?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Int64> BimDocumentFileLength { get; }
+        public Int64 GetBimDocumentFileLength(int index, Int64 defaultValue = default) => BimDocumentFileLength?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
         public IArray<int> BimDocumentActiveViewIndex { get; }
         public int GetBimDocumentActiveViewIndex(int index) => BimDocumentActiveViewIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
         public IArray<int> BimDocumentOwnerFamilyIndex { get; }
@@ -2403,6 +2406,7 @@ namespace Vim.Format.ObjectModel {
             r.Product = BimDocumentProduct.ElementAtOrDefault(n);
             r.Version = BimDocumentVersion.ElementAtOrDefault(n);
             r.User = BimDocumentUser.ElementAtOrDefault(n);
+            r.FileLength = BimDocumentFileLength.ElementAtOrDefault(n);
             r._ActiveView = new Relation<Vim.Format.ObjectModel.View>(GetBimDocumentActiveViewIndex(n), GetView);
             r._OwnerFamily = new Relation<Vim.Format.ObjectModel.Family>(GetBimDocumentOwnerFamilyIndex(n), GetFamily);
             r._Parent = new Relation<Vim.Format.ObjectModel.BimDocument>(GetBimDocumentParentIndex(n), GetBimDocument);
@@ -3990,6 +3994,7 @@ namespace Vim.Format.ObjectModel {
             BimDocumentProduct = BimDocumentEntityTable?.GetStringColumnValues("string:Product") ?? Array.Empty<String>().ToIArray();
             BimDocumentVersion = BimDocumentEntityTable?.GetStringColumnValues("string:Version") ?? Array.Empty<String>().ToIArray();
             BimDocumentUser = BimDocumentEntityTable?.GetStringColumnValues("string:User") ?? Array.Empty<String>().ToIArray();
+            BimDocumentFileLength = BimDocumentEntityTable?.GetDataColumnValues<Int64>("long:FileLength") ?? Array.Empty<Int64>().ToIArray();
             PhaseOrderInBimDocumentOrderIndex = PhaseOrderInBimDocumentEntityTable?.GetDataColumnValues<Int32>("int:OrderIndex") ?? Array.Empty<Int32>().ToIArray();
             CategoryName = CategoryEntityTable?.GetStringColumnValues("string:Name") ?? Array.Empty<String>().ToIArray();
             CategoryId = (CategoryEntityTable?.GetDataColumnValues<Int64>("long:Id") ?? CategoryEntityTable?.GetDataColumnValues<Int32>("int:Id")?.Select(v => (Int64) v)) ?? Array.Empty<Int64>().ToIArray();
@@ -5281,6 +5286,7 @@ namespace Vim.Format.ObjectModel {
             Column_Product = GetStringColumnValues("string:Product") ?? Array.Empty<String>();
             Column_Version = GetStringColumnValues("string:Version") ?? Array.Empty<String>();
             Column_User = GetStringColumnValues("string:User") ?? Array.Empty<String>();
+            Column_FileLength = GetDataColumnValues<Int64>("long:FileLength") ?? Array.Empty<Int64>();
             Column_ActiveViewIndex = GetIndexColumnValues("index:Vim.View:ActiveView") ?? Array.Empty<int>();
             Column_OwnerFamilyIndex = GetIndexColumnValues("index:Vim.Family:OwnerFamily") ?? Array.Empty<int>();
             Column_ParentIndex = GetIndexColumnValues("index:Vim.BimDocument:Parent") ?? Array.Empty<int>();
@@ -5343,6 +5349,8 @@ namespace Vim.Format.ObjectModel {
         public String GetVersion(int index, String @default = "") => Column_Version.ElementAtOrDefault(index, @default);
         public String[] Column_User { get; }
         public String GetUser(int index, String @default = "") => Column_User.ElementAtOrDefault(index, @default);
+        public Int64[] Column_FileLength { get; }
+        public Int64 GetFileLength(int index, Int64 @default = default) => Column_FileLength.ElementAtOrDefault(index, @default);
         public int[] Column_ActiveViewIndex { get; }
         public int GetActiveViewIndex(int index) => Column_ActiveViewIndex.ElementAtOrDefault(index, EntityRelation.None);
         public View GetActiveView(int index) => _GetReferencedActiveView(GetActiveViewIndex(index));
@@ -5393,6 +5401,7 @@ namespace Vim.Format.ObjectModel {
             r.Product = GetProduct(index);
             r.Version = GetVersion(index);
             r.User = GetUser(index);
+            r.FileLength = GetFileLength(index);
             r._ActiveView = new Relation<Vim.Format.ObjectModel.View>(GetActiveViewIndex(index), _GetReferencedActiveView);
             r._OwnerFamily = new Relation<Vim.Format.ObjectModel.Family>(GetOwnerFamilyIndex(index), _GetReferencedOwnerFamily);
             r._Parent = new Relation<Vim.Format.ObjectModel.BimDocument>(GetParentIndex(index), _GetReferencedParent);
@@ -7750,6 +7759,7 @@ namespace Vim.Format.ObjectModel {
             tb.AddStringColumn("string:Product", typedEntities.Select(x => x.Product));
             tb.AddStringColumn("string:Version", typedEntities.Select(x => x.Version));
             tb.AddStringColumn("string:User", typedEntities.Select(x => x.User));
+            tb.AddDataColumn("long:FileLength", typedEntities.Select(x => x.FileLength));
             tb.AddIndexColumn("index:Vim.View:ActiveView", typedEntities.Select(x => x._ActiveView?.Index ?? EntityRelation.None));
             tb.AddIndexColumn("index:Vim.Family:OwnerFamily", typedEntities.Select(x => x._OwnerFamily?.Index ?? EntityRelation.None));
             tb.AddIndexColumn("index:Vim.BimDocument:Parent", typedEntities.Select(x => x._Parent?.Index ?? EntityRelation.None));

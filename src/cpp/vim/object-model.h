@@ -3173,6 +3173,7 @@ namespace Vim
         std::string mProduct;
         std::string mVersion;
         std::string mUser;
+        long long mFileLength;
         
         int mActiveViewIndex;
         View* mActiveView;
@@ -3231,6 +3232,7 @@ namespace Vim
             bimDocument->mProduct = GetProduct(bimDocumentIndex);
             bimDocument->mVersion = GetVersion(bimDocumentIndex);
             bimDocument->mUser = GetUser(bimDocumentIndex);
+            bimDocument->mFileLength = GetFileLength(bimDocumentIndex);
             bimDocument->mActiveViewIndex = GetActiveViewIndex(bimDocumentIndex);
             bimDocument->mOwnerFamilyIndex = GetOwnerFamilyIndex(bimDocumentIndex);
             bimDocument->mParentIndex = GetParentIndex(bimDocumentIndex);
@@ -3268,6 +3270,7 @@ namespace Vim
             bool existsProduct = mEntityTable.column_exists("string:Product");
             bool existsVersion = mEntityTable.column_exists("string:Version");
             bool existsUser = mEntityTable.column_exists("string:User");
+            bool existsFileLength = mEntityTable.column_exists("long:FileLength");
             bool existsActiveView = mEntityTable.column_exists("index:Vim.View:ActiveView");
             bool existsOwnerFamily = mEntityTable.column_exists("index:Vim.Family:OwnerFamily");
             bool existsParent = mEntityTable.column_exists("index:Vim.BimDocument:Parent");
@@ -3361,6 +3364,11 @@ namespace Vim
             
             const std::vector<int>& userData = mEntityTable.column_exists("string:User") ? mEntityTable.mStringColumns["string:User"] : std::vector<int>();
             
+            long long* fileLengthData = new long long[count];
+            if (mEntityTable.column_exists("long:FileLength")) {
+                memcpy(fileLengthData, mEntityTable.mDataColumns["long:FileLength"].begin(), count * sizeof(long long));
+            }
+            
             const std::vector<int>& activeViewData = mEntityTable.column_exists("index:Vim.View:ActiveView") ? mEntityTable.mIndexColumns["index:Vim.View:ActiveView"] : std::vector<int>();
             const std::vector<int>& ownerFamilyData = mEntityTable.column_exists("index:Vim.Family:OwnerFamily") ? mEntityTable.mIndexColumns["index:Vim.Family:OwnerFamily"] : std::vector<int>();
             const std::vector<int>& parentData = mEntityTable.column_exists("index:Vim.BimDocument:Parent") ? mEntityTable.mIndexColumns["index:Vim.BimDocument:Parent"] : std::vector<int>();
@@ -3426,6 +3434,8 @@ namespace Vim
                     entity.mVersion = std::string(reinterpret_cast<const char*>(mStrings[versionData[i]]));
                 if (existsUser)
                     entity.mUser = std::string(reinterpret_cast<const char*>(mStrings[userData[i]]));
+                if (existsFileLength)
+                    entity.mFileLength = fileLengthData[i];
                 entity.mActiveViewIndex = existsActiveView ? activeViewData[i] : -1;
                 entity.mOwnerFamilyIndex = existsOwnerFamily ? ownerFamilyData[i] : -1;
                 entity.mParentIndex = existsParent ? parentData[i] : -1;
@@ -3442,6 +3452,7 @@ namespace Vim
             delete[] longitudeData;
             delete[] timeZoneData;
             delete[] elevationData;
+            delete[] fileLengthData;
             
             return bimDocument;
         }
@@ -4245,6 +4256,34 @@ namespace Vim
             {
                 result->push_back(std::string(reinterpret_cast<const char*>(mStrings[userData[i]])));
             }
+            
+            return result;
+        }
+        
+        long long GetFileLength(int bimDocumentIndex)
+        {
+            if (bimDocumentIndex < 0 || bimDocumentIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("long:FileLength")) {
+                return *reinterpret_cast<long long*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["long:FileLength"].begin() + bimDocumentIndex * sizeof(long long)));
+            }
+            
+            return {};
+        }
+        
+        std::vector<long long>* GetAllFileLength()
+        {
+            const auto count = GetCount();
+            
+            long long* fileLengthData = new long long[count];
+            if (mEntityTable.column_exists("long:FileLength")) {
+                memcpy(fileLengthData, mEntityTable.mDataColumns["long:FileLength"].begin(), count * sizeof(long long));
+            }
+            
+            std::vector<long long>* result = new std::vector<long long>(fileLengthData, fileLengthData + count);
+            
+            delete[] fileLengthData;
             
             return result;
         }
