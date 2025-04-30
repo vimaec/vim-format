@@ -160,5 +160,10 @@
     "Added": [
       "Vim.Level__double:ProjectElevation"
     ]
+  },
+  "5.5.0 to 5.6.0": {
+    "Added": [
+      "Vim.BimDocument__long:FileLength"
+    ]
   }
 }

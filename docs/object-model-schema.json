@@ -1,6 +1,6 @@
 {
   "VimFormatVersion": "1.0.0",
-  "SchemaVersion": "5.5.0",
+  "SchemaVersion": "5.6.0",
   "Tables": {
     "Vim.Area": [
       "byte:IsGrossInterior",
@@ -56,6 +56,7 @@
       "index:Vim.Family:OwnerFamily",
       "index:Vim.View:ActiveView",
       "int:NumSaves",
+      "long:FileLength",
       "string:Address",
       "string:Author",
       "string:BuildingName",
