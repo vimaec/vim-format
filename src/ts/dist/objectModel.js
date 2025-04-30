@@ -1428,6 +1428,7 @@ class BimDocument {
             table.getProduct(index).then(v => result.product = v),
             table.getVersion(index).then(v => result.version = v),
             table.getUser(index).then(v => result.user = v),
+            table.getFileLength(index).then(v => result.fileLength = v),
             table.getActiveViewIndex(index).then(v => result.activeViewIndex = v),
             table.getOwnerFamilyIndex(index).then(v => result.ownerFamilyIndex = v),
             table.getParentIndex(index).then(v => result.parentIndex = v),
@@ -1484,6 +1485,7 @@ class BimDocumentTable {
         let product;
         let version;
         let user;
+        let fileLength;
         let activeViewIndex;
         let ownerFamilyIndex;
         let parentIndex;
@@ -1517,6 +1519,7 @@ class BimDocumentTable {
             (async () => { product = (await localTable.getStringArray("string:Product")); })(),
             (async () => { version = (await localTable.getStringArray("string:Version")); })(),
             (async () => { user = (await localTable.getStringArray("string:User")); })(),
+            (async () => { fileLength = (await localTable.getBigIntArray("long:FileLength")); })(),
             (async () => { activeViewIndex = (await localTable.getNumberArray("index:Vim.View:ActiveView")); })(),
             (async () => { ownerFamilyIndex = (await localTable.getNumberArray("index:Vim.Family:OwnerFamily")); })(),
             (async () => { parentIndex = (await localTable.getNumberArray("index:Vim.BimDocument:Parent")); })(),
@@ -1555,6 +1558,7 @@ class BimDocumentTable {
                 product: product ? product[i] : undefined,
                 version: version ? version[i] : undefined,
                 user: user ? user[i] : undefined,
+                fileLength: fileLength ? fileLength[i] : undefined,
                 activeViewIndex: activeViewIndex ? activeViewIndex[i] : undefined,
                 ownerFamilyIndex: ownerFamilyIndex ? ownerFamilyIndex[i] : undefined,
                 parentIndex: parentIndex ? parentIndex[i] : undefined,
@@ -1730,6 +1734,12 @@ class BimDocumentTable {
     }
     async getAllUser() {
         return (await this.entityTable.getStringArray("string:User"));
+    }
+    async getFileLength(bimDocumentIndex) {
+        return (await this.entityTable.getBigInt(bimDocumentIndex, "long:FileLength"));
+    }
+    async getAllFileLength() {
+        return (await this.entityTable.getBigIntArray("long:FileLength"));
     }
     async getActiveViewIndex(bimDocumentIndex) {
         return await this.entityTable.getNumber(bimDocumentIndex, "index:Vim.View:ActiveView");
