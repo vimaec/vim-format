@@ -1,0 +1,40 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>netstandard2.0</TargetFramework>
+        <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+        <RunPostBuildEvent>Always</RunPostBuildEvent>
+        <AssemblyName>Vim.Format.ILMerge</AssemblyName>
+        <!--
+        https://learn.microsoft.com/en-us/dotnet/core/project-sdk/msbuild-props#copylocallockfileassemblies
+        "If you set this property to true, any transitive NuGet package dependencies are copied to the output directory."
+        -->
+        <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+    </PropertyGroup>
+  
+    <ItemGroup>
+        <ProjectReference Include="..\Vim.Format\Vim.Format.csproj" />
+        <ProjectReference Include="..\..\util\Vim.Util.Logging.Serilog\Vim.Util.Logging.Serilog.csproj" />
+        <!-- Required by serilog post-merge -->
+        <PackageReference Include="System.Diagnostics.EventLog" Version="4.5.0"/>
+        <PackageReference Include="ILMerge" Version="3.0.29" />
+    </ItemGroup>
+
+    <Target Name="ILMerge" AfterTargets="PostBuildEvent">
+      <Exec Command='$(ILMergeConsolePath) ^
+        /out:$(OutputPath)Vim.Format.Standalone.dll ^
+        $(OutputPath)Vim.Format.dll ^
+        $(OutputPath)Vim.Format.Core.dll ^
+        $(OutputPath)Vim.BFast.dll ^
+        $(OutputPath)Vim.G3d.dll ^
+        $(OutputPath)Vim.LinqArray.dll ^
+        $(OutputPath)Vim.Math3D.dll ^
+        $(OutputPath)Vim.Util.dll ^
+        $(OutputPath)Vim.Util.Logging.Serilog.dll ^
+        $(OutputPath)Serilog.dll ^
+        $(OutputPath)Serilog.Sinks.Console.dll ^
+        $(OutputPath)Serilog.Sinks.EventLog.dll ^
+        $(OutputPath)Serilog.Sinks.File.dll ^
+        $(OutputPath)Serilog.Sinks.RollingFile.dll' />
+    </Target>
+</Project>
