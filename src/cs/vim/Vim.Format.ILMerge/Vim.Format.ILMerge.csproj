@@ -15,13 +15,16 @@
     <ItemGroup>
         <ProjectReference Include="..\Vim.Format\Vim.Format.csproj" />
         <ProjectReference Include="..\..\util\Vim.Util.Logging.Serilog\Vim.Util.Logging.Serilog.csproj" />
-        <!-- Required by serilog post-merge -->
-        <PackageReference Include="System.Diagnostics.EventLog" Version="4.5.0"/>
-        <PackageReference Include="ILMerge" Version="3.0.29" />
+        <PackageReference Include="ILRepack" Version="2.0.42">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
     </ItemGroup>
 
     <Target Name="ILMerge" AfterTargets="PostBuildEvent">
-      <Exec Command='$(ILMergeConsolePath) ^
+      <Exec Command='$(ILRepack) ^
+        /parallel ^
+        /targetplatform:v4 ^
         /out:$(OutputPath)Vim.Format.Standalone.dll ^
         $(OutputPath)Vim.Format.dll ^
         $(OutputPath)Vim.Format.Core.dll ^
