@@ -1,0 +1,31 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <RunPostBuildEvent>Always</RunPostBuildEvent>
+    <AssemblyName>Vim.Format.ILMerge</AssemblyName>
+    <!--
+    https://learn.microsoft.com/en-us/dotnet/core/project-sdk/msbuild-props#copylocallockfileassemblies
+    "If you set this property to true, any transitive NuGet package dependencies are copied to the output directory."
+    -->
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+  </PropertyGroup>
+  
+  <ItemGroup>
+    <ProjectReference Include="..\Vim.Format\Vim.Format.csproj" />
+    <ProjectReference Include="..\..\util\Vim.Util.Logging.Serilog\Vim.Util.Logging.Serilog.csproj" />
+    <PackageReference Include="ILRepack" Version="2.0.42">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="ILRepack.Lib.MSBuild.Task" Version="2.0.40" />
+  </ItemGroup>
+
+  <Target Name="ILMergeClean" AfterTargets="Clean">
+    <Message Text="### Cleaning ILMerge artifacts" Importance="high" />
+    <Delete Files="$(OutputPath)/Vim.Format.Standalone.dll" />
+    <Delete Files="$(OutputPath)/Vim.Format.Standalone.pdb" />
+  </Target>
+
+</Project>
