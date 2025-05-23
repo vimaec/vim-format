@@ -42,9 +42,9 @@ namespace Vim.Util.Logging.Serilog
         public static DurationLogger Duration(string name)
             => Instance.LogDuration(name);
 
-        public static ILogger Init(string name, string filepath, bool writeToConsole = true, bool addEvent = false)
+        public static ILogger Init(string name, string filepath, bool writeToConsole = true)
         {
-            var logger = CreateLogger(name, filepath, writeToConsole, addEvent);
+            var logger = CreateLogger(name, filepath, writeToConsole);
             SerilogLog.Logger = logger.Logger;
             Instance = logger;
             return Instance;
@@ -68,9 +68,6 @@ namespace Vim.Util.Logging.Serilog
 
             if (writeToConsole)
                 config.WriteTo.Console();
-
-            if (addEvent)
-                config.WriteTo.EventLog(name);
 
             return new SerilogLoggerAdapter(config.CreateLogger());
         }

@@ -12,9 +12,7 @@
             <InputAssemblies Include="$(OutputPath)Vim.Util.Logging.Serilog.dll" />
             <InputAssemblies Include="$(OutputPath)Serilog.dll" />
             <InputAssemblies Include="$(OutputPath)Serilog.Sinks.Console.dll" />
-            <InputAssemblies Include="$(OutputPath)Serilog.Sinks.EventLog.dll" />
             <InputAssemblies Include="$(OutputPath)Serilog.Sinks.File.dll" />
-            <InputAssemblies Include="$(OutputPath)Serilog.Sinks.RollingFile.dll" />
         </ItemGroup>
         <ILRepack
             Parallel="true"
