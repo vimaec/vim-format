@@ -18,7 +18,6 @@
         </ItemGroup>
         <ILRepack
             Parallel="true"
-            TargetPlatformVersion="v4"
             TargetKind="Dll"
             InputAssemblies="@(InputAssemblies)"
             OutputFile="$(OutputPath)/Vim.Format.Standalone.dll"
