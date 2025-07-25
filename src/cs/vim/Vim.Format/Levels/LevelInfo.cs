@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Linq;
 using Vim.Format.ObjectModel;
+using Vim.LinqArray;
 using Vim.Util;
 
 namespace Vim.Format.Levels
@@ -88,7 +90,7 @@ namespace Vim.Format.Levels
         /// The elevation in meters relative to the bim document's project base point, or null if no project base point exists.
         /// </summary>
         public double? ElevationRelativeToProjectBasePointMeters
-            => Util.Units.FeetToMeters(ElevationRelativeToProjectBasePointFeet);
+            => Units.FeetToMeters(ElevationRelativeToProjectBasePointFeet);
 
         /// <summary>
         /// The elevation in feet relative to the bim document's survey point, or null if no survey point exists.
@@ -99,7 +101,7 @@ namespace Vim.Format.Levels
         /// The elevation in meters relative to the bim document's survey point, or null if no survey point exists.
         /// </summary>
         public double? ElevationRelativeToSurveyPointMeters
-            => Util.Units.FeetToMeters(ElevationRelativeToSurveyPointFeet);
+            => Units.FeetToMeters(ElevationRelativeToSurveyPointFeet);
 
         /// <summary>
         /// true: level is relative to bim document's project base point
@@ -117,8 +119,6 @@ namespace Vim.Format.Levels
         /// Determines whether the level is considered a building story.
         /// </summary>
         public bool IsBuildingStory { get; }
-
-        private Level _buildingStoryAbove;
 
         /// <summary>
         /// The building story above this one. Can be null if this is the last level (ex: roof)
@@ -141,10 +141,56 @@ namespace Vim.Format.Levels
         {
             Level = level;
 
-            var levelName = dm.ElementName[level._Element.Index];
-            // {-| }{elevationFractionalFeetAndInchesWithLeadingZeroes}ft - {name}
-            //FullNameFeet = 
+            var levelElement = level.Element;
+            var levelName = levelElement?.Name ?? "";
 
+            const string feetPartFormatString = "0000";
+            const string metersFormatString = "0000.000"; // millimeter accuracy
+            const string positivePrefix = "+";
+
+            FullNameFeet =
+                $"{Units.ToFeetAndFractionalInchesString(Level.Elevation, feetPartFormatString, positivePrefix)} - {levelName}";
+
+            FullNameMeters =
+                $"{Units.ToMetersString(Units.FeetToMeters(Level.Elevation), metersFormatString, positivePrefix)} - {levelName}";
+
+            var bimDocumentIndex = levelElement?.BimDocument.IndexOrDefault();
+
+            var basePoints = dm.BasePointList
+                .Where(bp =>
+                {
+                    var basePointBimDocumentIndex = bp.Element.BimDocument.IndexOrDefault();
+                    return basePointBimDocumentIndex != EntityRelation.None &&
+                           basePointBimDocumentIndex == bimDocumentIndex;
+                }).ToArray();
+
+            var projectBasePoint = basePoints.FirstOrDefault(bp => bp.IsSurveyPoint == false);
+            ElevationRelativeToProjectBasePointFeet = projectBasePoint == null
+                ? (double?) null
+                : Level.ProjectElevation - projectBasePoint.Position_Z;
+            
+            var surveyPoint = basePoints.FirstOrDefault(bp => bp.IsSurveyPoint);
+            ElevationRelativeToSurveyPointFeet = surveyPoint == null
+                ? (double?)null
+                : Level.ProjectElevation - surveyPoint.Position_Z;
+
+            IsRelativeToProjectBasePoint = false;
+            IsStructural = false;
+            IsBuildingStory = false;
+            if (dm.ElementIndexMaps.ParameterIndicesFromElementIndex.TryGetValue(levelElement.IndexOrDefault(), out var levelElementParameterIndices) && levelElementParameterIndices.Count > 0)
+            {
+                var parameters = levelElementParameterIndices.Select(dm.GetParameter);
+                foreach (var p in parameters)
+                {
+                    // TODO: IsStructural
+                    // TODO: IsBuildingStory
+                    Console.WriteLine(p.ParameterDescriptor.Name);
+                }
+            }
+
+            // TODO: IsRelativeToProjectBasePoint FROM LEVEL FAMILY TYPE....
+
+            // TODO: BuildingStoryAbove (updated by service after constructor is called)
         }
 
         public override string ToString()

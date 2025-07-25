@@ -31,11 +31,9 @@ public static class LevelServiceTests
 
         foreach (var levelInfo in levelInfos)
         {
-            logger.Log(levelInfo.ToString());
+            logger.Log($@"
+{levelInfo}
+");
         }
     }
-
-    
-
-
 }

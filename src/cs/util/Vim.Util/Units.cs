@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Globalization;
-using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 
@@ -15,11 +14,35 @@ namespace Vim.Util
         public static double? FeetToMeters(double? feet)
             => FeetToMetersRatio * feet;
 
-        public static string ToFeetAndFractionalInchesString(double? feet)
+        public static string ToFeetAndFractionalInchesString(
+            double? feet,
+            string feetFormatString = "",
+            string positivePrefix = "",
+            string negativePrefix = "-")
             => feet.HasValue
-                ? FormatAsFractionalFeetAndInches(feet.Value)
+                ? FormatAsFractionalFeetAndInches(feet.Value, feetFormatString, positivePrefix, negativePrefix)
                 : "";
 
+        public static string ToMetersString(
+            double? meters,
+            string metersFormatString = "",
+            string positiveSign = "",
+            string negativeSign = "-")
+        {
+            if (!meters.HasValue)
+                return "";
+
+            var value = meters.Value;
+            var absValue = Math.Abs(value);
+
+            var sb = new StringBuilder();
+
+            sb.Append(value < 0 ? negativeSign : positiveSign);
+            sb.Append(absValue.ToString(metersFormatString));
+            sb.Append("m");
+
+            return sb.ToString();
+        }
 
         /// <summary>
         /// Converts a value to fractional feet and inches.
@@ -28,40 +51,41 @@ namespace Vim.Util
         ///  4 converts to 4'.
         ///  0.1667 converts to 2".
         /// </summary>
-        /// <param name="value"></param>
-        /// <param name="skipRounding"></param>
-        /// <param name="decimalPlaces"></param>
-        /// <returns></returns>
-        public static string FormatAsFractionalFeetAndInches(double value, bool skipRounding = false, double decimalPlaces = FractionConverter.OneSixteenth)
+        public static string FormatAsFractionalFeetAndInches(
+            double value,
+            string feetFormatString = "",
+            string positiveSign = "",
+            string negativeSign = "-",
+            bool skipRounding = false,
+            double decimalPlaces = FractionConverter.OneSixteenth)
         {
             if (value == 0)
-                return "0'";
+                return $"{positiveSign}0'";
 
             var absValue = Math.Abs(value);
 
-            var feetDecimal = Math.Floor(absValue);
-            var inchesDecimal = Math.Round((absValue - feetDecimal) * 12, 2);
+            var feet = Math.Floor(absValue);
+            var inchesDecimal = Math.Round((absValue - feet) * 12, 2);
 
             var sb = new StringBuilder();
 
-            if (value < 0)
-                sb.Append("-");
+            sb.Append(value < 0 ? negativeSign : positiveSign);
 
-            if (feetDecimal != 0)
-                sb.Append($"{feetDecimal}'");
+            if (feet != 0)
+                sb.Append($"{feet.ToString(feetFormatString)}'");
 
             if (inchesDecimal != 0)
             {
-                if (feetDecimal != 0)
+                if (feet != 0)
                     sb.Append(" ");
 
                 sb.Append($"{FractionConverter.ToFractionString(inchesDecimal, skipRounding, decimalPlaces)}\"");
             }
 
-            var result = sb.ToString().Trim();
+            var result = sb.ToString().TrimEnd();
 
             return string.IsNullOrWhiteSpace(result)
-                ? "0'"
+                ? $"{positiveSign}0'"
                 : result;
         }
 
