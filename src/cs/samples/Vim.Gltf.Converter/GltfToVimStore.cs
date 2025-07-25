@@ -7,6 +7,7 @@ using System.Linq;
 using Vim.Format;
 using Vim.Format.ObjectModel;
 using Vim.Math3d;
+using Vim.Util;
 
 namespace Vim.Gltf.Converter
 {
@@ -21,7 +22,7 @@ namespace Vim.Gltf.Converter
         private const string GeneratorString = "Vim.Gltf.Converter";
 
         // NOTE: In GLTF, units are assumed to be in meters however in VIM they are in feet.
-        public const float MetersToFeet = 3.280839895f;
+        public const float MetersToFeet = (float) Units.MetersToFeetRatio;
 
         /// <summary>
         /// Converts a GLTF file into a VIM file.
