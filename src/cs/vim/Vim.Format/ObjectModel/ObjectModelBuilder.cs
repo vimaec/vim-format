@@ -95,6 +95,42 @@ namespace Vim.Format.ObjectModel
                 // Add the entity and sets its index.
                 return Add(key, entity);
             }
+
+            /// <summary>
+            /// Gets or adds the provided entity based on the given key.
+            /// </summary>
+            public GetOrAddResult<TEntity> GetOrAdd<TEntity>(object key, Func<TEntity> createEntity) where TEntity : Entity
+            {
+                if (KeyToEntityIndex.TryGetValue(key, out var storedEntityIndex))
+                    return new GetOrAddResult<TEntity>(Entities[storedEntityIndex] as TEntity, false);
+
+                Debug.Assert(KeyToEntityIndex.Count == Entities.Count);
+
+                // Create the entity
+                var entity = createEntity();
+                if (entity == null)
+                    return new GetOrAddResult<TEntity>(null, false);
+                
+                // Add the entity and sets its index.
+                return Add(key, entity);
+            }
+
+            /// <summary>
+            /// Gets or adds the provided entity based on the given key.
+            /// </summary>
+            public GetOrAddResult<TEntity> GetOrAdd<TEntity>(object key, TEntity newEntity) where TEntity : Entity
+            {
+                if (KeyToEntityIndex.TryGetValue(key, out var storedEntityIndex))
+                    return new GetOrAddResult<TEntity>(Entities[storedEntityIndex] as TEntity, false);
+
+                Debug.Assert(KeyToEntityIndex.Count == Entities.Count);
+
+                if (newEntity == null)
+                    return new GetOrAddResult<TEntity>(null, false);
+
+                // Add the entity and sets its index.
+                return Add(key, newEntity);
+            }
         }
 
         public DocumentBuilder AddEntityTablesToDocumentBuilder(DocumentBuilder db)
@@ -113,6 +149,12 @@ namespace Vim.Format.ObjectModel
 
         public GetOrAddResult<TEntity> GetOrAdd<TEntity>(object key, Func<object, TEntity> getEntity) where TEntity : Entity
             => GetOrAddEntityTableBuilder<TEntity>().GetOrAdd(key, getEntity);
+
+        public GetOrAddResult<TEntity> GetOrAdd<TEntity>(object key, Func<TEntity> getEntity) where TEntity : Entity
+            => GetOrAddEntityTableBuilder<TEntity>().GetOrAdd(key, getEntity);
+
+        public GetOrAddResult<TEntity> GetOrAdd<TEntity>(object key, TEntity newEntity) where TEntity : Entity
+            => GetOrAddEntityTableBuilder<TEntity>().GetOrAdd(key, newEntity);
 
         public TEntity Add<TEntity>(TEntity e) where TEntity : Entity
             => GetOrAddEntityTableBuilder<TEntity>().Add(e).Entity;
