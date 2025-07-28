@@ -13,7 +13,7 @@ public static class EntityTable_v2_Tests
     [Test]
     public static void TestEntityTable_v2_Parity()
     {
-        var vimFilePath = VimFormatRepoPaths.GetLatestWolfordResidenceVim();
+        var vimFilePath = VimFormatRepoPaths.GetDataFilePath("Dwelling*.vim", true);
 
         // Classic deserialization (using VIM Scene)
         var vim = VimScene.LoadVim(vimFilePath);

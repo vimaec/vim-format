@@ -13,7 +13,7 @@ public static class ReferenceAppTests
     [Test]
     public static void Validate()
     {
-        var vim = VimFormatRepoPaths.GetLatestWolfordResidenceVim();
+        var vim = VimFormatRepoPaths.GetDataFilePath("Wolford_Residence*.vim", true);
 
         Console.WriteLine("Welcome to the VIM Reference application");
         Console.WriteLine("This application demonstrates how to parse a VIM file");

@@ -10,9 +10,18 @@ namespace Vim.Util
         public const double MetersToFeetRatio = 3.280839895d;
 
         public const double FeetToMetersRatio = 1.0d / MetersToFeetRatio;
-        
-        public static double? FeetToMeters(double? feet)
-            => FeetToMetersRatio * feet;
+
+        public static double? FeetToMeters(double? feet, int digitRounding = -1)
+        {
+            if (feet == null)
+                return null;
+
+            var meters = FeetToMetersRatio * feet.Value;
+
+            return digitRounding < 0
+                ? meters
+                : Math.Round(meters, digitRounding);
+        }
 
         public static string ToFeetAndFractionalInchesString(
             double? feet,
@@ -23,26 +32,41 @@ namespace Vim.Util
                 ? FormatAsFractionalFeetAndInches(feet.Value, feetFormatString, positivePrefix, negativePrefix)
                 : "";
 
-        public static string ToMetersString(
-            double? meters,
-            string metersFormatString = "",
+        public static string ToPaddedString(
+            double? inValue,
+            string suffix = "",
+            string formatString = "",
             string positiveSign = "",
             string negativeSign = "-")
         {
-            if (!meters.HasValue)
+            if (!inValue.HasValue)
                 return "";
 
-            var value = meters.Value;
+            var value = inValue.Value;
             var absValue = Math.Abs(value);
 
             var sb = new StringBuilder();
 
             sb.Append(value < 0 ? negativeSign : positiveSign);
-            sb.Append(absValue.ToString(metersFormatString));
-            sb.Append("m");
+            sb.Append(absValue.ToString(formatString));
+            sb.Append(suffix);
 
             return sb.ToString();
         }
+
+        public static string ToDecimalFeetString(
+            double? feet,
+            string formatString = "",
+            string positiveSign = "",
+            string negativeSign = "-")
+            => ToPaddedString(feet, "ft", formatString, positiveSign, negativeSign);
+
+        public static string ToMetersString(
+            double? meters,
+            string formatString = "",
+            string positiveSign = "",
+            string negativeSign = "-")
+            => ToPaddedString(meters, "m", formatString, positiveSign, negativeSign);
 
         /// <summary>
         /// Converts a value to fractional feet and inches.

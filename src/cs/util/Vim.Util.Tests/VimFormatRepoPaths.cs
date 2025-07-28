@@ -8,7 +8,6 @@ namespace Vim.Util.Tests
     /// </summary>
     public static class VimFormatRepoPaths
     {
-
         /// <summary>
         /// This value ProjDir is set by a pre-build step to our projects folder
         /// We use it to set our Repo dir (which is the parent of this folder)
@@ -22,14 +21,18 @@ namespace Vim.Util.Tests
         public static string DataDir => Path.Combine(RootDir, "data");
 
         /// <summary>
-        /// Returns the file path to the highest versioned mechanical room file among the version snapshots.
+        /// Returns the file path to the highest versioned file among the version snapshots.
+        /// Files matched by the pattern are ordered by name in ascending order.
         /// </summary>
-        public static string GetLatestWolfordResidenceVim()
+        public static string GetDataFilePath(string filePattern, bool last)
         {
-            var matchingVim = Directory.GetFiles(DataDir, "Wolford_Residence*.vim", SearchOption.AllDirectories).FirstOrDefault();
+            var matches = Directory.GetFiles(DataDir, filePattern, SearchOption.AllDirectories)
+                .OrderBy(f => f);
+
+            var matchingVim = last ? matches.LastOrDefault() : matches.FirstOrDefault();
 
             if (matchingVim == null)
-                throw new FileNotFoundException($"Could not find the latest Wolford Residence VIM.");
+                throw new FileNotFoundException($"Could not find any files matching the pattern: {filePattern}");
 
             return matchingVim;
         }

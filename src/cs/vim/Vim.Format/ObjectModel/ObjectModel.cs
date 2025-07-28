@@ -313,15 +313,29 @@ namespace Vim.Format.ObjectModel
     }
 
     /// <summary>
-    /// Defines how a parameter is displayed by indicating whether the value's type is a length, a volume, etc,
-    /// and how that value should be shown via its spec (ex: as fractional inches, etc).
+    /// Defines the display units of a ParameterDefinition
     /// </summary>
     [TableName(TableNames.DisplayUnit)]
     public partial class DisplayUnit : Entity, IStorageKey
     {
-        public string Spec; // ex: "UT_Length" in Revit 2020 and prior, or "autodesk.spec.aec:length-1.0.0" in Revit 2021 and up.
-        public string Type; // ex: "DUT_FEET_FRACTIONAL_INCHES" in Revit 2020 and prior, or "autodesk.unit.unit:feetFractionalInches-1.0.0" in Revit 2021 and up.
-        public string Label; // The localized label, ex: "Feet and fractional inches"
+        /// <summary>
+        /// Corresponds to an underlying physical unit, for example a length, an area, a volume, etc.
+        /// In Revit 2020 and earlier, this is serialized as an internal string, ex: "UT_Length".
+        /// In Revit 2021 and beyond, this is serialized as a ForgeTypeId, ex: "autodesk.spec.aec:length-1.0.0"
+        /// </summary>
+        public string Spec;
+
+        /// <summary>
+        /// Corresponds to the display unit type.
+        /// In Revit 2020 and earlier, this is serialized as an internal string, ex: "DUT_FEET_FRACTIONAL_INCHES"
+        /// In Revit 2021 and beyond, this is serialized as a ForgeTypeId, ex: "autodesk.unit.unit:feetFractionalInches-1.0.0"
+        /// </summary>
+        public string Type;
+
+        /// <summary>
+        /// Corresponds to the localized display unit type, ex: "Feet and Fractional Inches".
+        /// </summary>
+        public string Label;
 
         public object GetStorageKey()
             => (Spec, Type, Label);
@@ -360,8 +374,19 @@ namespace Vim.Format.ObjectModel
     [TableName(TableNames.ParameterDescriptor)]
     public partial class ParameterDescriptor : Entity, IStorageKey
     {
+        /// <summary>
+        /// The name of the parameter.
+        /// </summary>
         public string Name;
+
+        /// <summary>
+        /// The group in which the parameter belongs.
+        /// </summary>
         public string Group;
+
+        /// <summary>
+        /// The serialized type of the parameter value.
+        /// </summary>
         public string ParameterType;
 
         // Maintenance note: IsInstance, IsShared, and IsReadOnly were added prior to object model v4.2.0 and are preserved for backwards compatibility.
@@ -389,12 +414,16 @@ namespace Vim.Format.ObjectModel
         public int Flags;
         
         /// <summary>
-        /// The string representation of the parameter GUID. In Revit, this GUID only exists if IsShared is true.
+        /// If the parameter definition is shared (IsShared==true), represents the GUID if the shared parameter.
+        /// If the parameter definition is internal (IsShared==false) represents:
+        /// - (In Revit 2021 and earlier) the ID of the parameter.
+        /// - (In Revit 2022 and later) the TypeId of the parameter (ForgeTypeId).
         /// </summary>
         public string Guid;
 
         /// <summary>
         /// The storage type of the parameter serialized as an int (see enum ParameterDescriptorStorageType)
+        /// Unknown = 0, Integer = 1, Double = 2, String = 3, ElementId = 4
         /// </summary>
         public int StorageType;
 
@@ -489,6 +518,50 @@ namespace Vim.Format.ObjectModel
 
             // values contains more than one item.
             return (values[0], values[1]);
+        }
+
+        public bool TryParseRevitParameterAsDouble(out double result)
+            => double.TryParse(Values.NativeValue, out result);
+
+        public bool TryParseRevitParameterAsLong(out long result)
+            => long.TryParse(Values.NativeValue, out result);
+
+        public bool TryParseRevitParameterValueAsElementId(out long result)
+            => TryParseRevitParameterAsLong(out result);
+
+        public bool TryParseRevitParameterValueAsBoolean(ParameterDescriptor desc, out bool result)
+        {
+            result = false;
+            var nativeValue = Values.NativeValue;
+
+            switch ((ParameterDescriptorStorageType)desc.StorageType)
+            {
+                case ParameterDescriptorStorageType.ElementId:
+                    if (!long.TryParse(nativeValue, out var parsedElementId))
+                        return false;
+
+                    result = parsedElementId != -1L; // -1 Element id indicates an unassigned element ID in Revit
+                    return true;
+
+                case ParameterDescriptorStorageType.Integer:
+                    if (!long.TryParse(nativeValue, out var parsedLong))
+                        return false;
+
+                    result = parsedLong != 0L; // 0 = false in Revit
+                    return true;
+
+                case ParameterDescriptorStorageType.Double:
+                    if (!double.TryParse(nativeValue, out var parsedDouble))
+                        return false;
+
+                    result = parsedDouble != 0d; // 0 = false in Revit
+                    return true;
+
+                case ParameterDescriptorStorageType.String:
+                case ParameterDescriptorStorageType.Unknown:
+                default:
+                    return bool.TryParse(nativeValue, out result);
+            }
         }
     }
 

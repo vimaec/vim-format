@@ -1,12 +1,6 @@
 ﻿using NUnit.Framework;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Vim.Format.Levels;
-using Vim.LinqArray;
-using Vim.Util;
 using Vim.Util.Tests;
 
 namespace Vim.Format.Tests;
@@ -21,15 +15,13 @@ public static class LevelServiceTests
         var dir = ctx.PrepareDirectory();
         var logger = ctx.CreateLogger();
 
-        var vim = VimFormatRepoPaths.GetLatestWolfordResidenceVim();
+        var vim = VimFormatRepoPaths.GetDataFilePath("Dwelling*.vim", true);
 
         var vimScene = VimScene.LoadVim(vim);
 
-        var dm = vimScene.DocumentModel;
+        var levelInfos = LevelService.GetLevelInfo(vimScene);
 
-        var levelInfos = dm.LevelList.Select(l => new LevelInfo(dm, l)).ToArray();
-
-        foreach (var levelInfo in levelInfos)
+        foreach (var levelInfo in levelInfos.OrderBy(l => l.NameWithElevationFeetAndFractionalInches))
         {
             logger.Log($@"
 {levelInfo}

@@ -1,7 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Vim.Format.ObjectModel;
-using Vim.LinqArray;
 using Vim.Util;
 
 namespace Vim.Format.Levels
@@ -9,7 +9,8 @@ namespace Vim.Format.Levels
     public class LevelInfo
     {
         // SOME BACKGROUND INFORMATION ABOUT REVIT LEVELS
-        // (Martin Ashton, July 25 2025)
+        //
+        // by: Martin Ashton, July 25 2025
         //
         // In Revit, a Level has two elevation values:
         //
@@ -67,130 +68,260 @@ namespace Vim.Format.Levels
         // We refer to the "Primary" level as the first non-null level association among the ones listed above.
 
         /// <summary>
-        /// The current Level.
+        /// The Level.
         /// </summary>
         public Level Level { get; }
+        
+        /// <summary>
+        /// The name of the Level.
+        /// </summary>
+        public string LevelName
+            => Level?.Element?.Name ?? "";
+
+        const string WholeFeetFormatString = "0000";
+        const string DecimalFormatString = "0000.0000";
+        const string PositivePrefix = "+";
+        private const int RoundingDigits = 4;
 
         /// <summary>
-        /// "{-| }{elevationFractionalFeetAndInchesWithLeadingZeroes}ft - {name}
+        /// "{-|+}{elevationDecimalFeetWithLeadingZeroes}ft - {name}
         /// </summary>
-        public string FullNameFeet { get; }
+        public string NameWithElevationFeetDecimal
+            => $"{Units.ToDecimalFeetString(Level.Elevation, DecimalFormatString, PositivePrefix)} - {LevelName}";
 
         /// <summary>
-        /// "{-| }{elevationMetersWithLeadingZeroes}m - {name}
+        /// "{-|+}{elevationFractionalFeetAndInchesWithLeadingZeroes} - {name}
         /// </summary>
-        public string FullNameMeters { get; }
+        public string NameWithElevationFeetAndFractionalInches
+            => $"{Units.ToFeetAndFractionalInchesString(Level.Elevation, WholeFeetFormatString, PositivePrefix)} - {LevelName}";
 
         /// <summary>
-        /// The elevation in feet relative to the bim document's project base point, or null if no project base point exists.
+        /// "{-|+}{elevationMetersWithLeadingZeroes}m - {name}
         /// </summary>
-        public double? ElevationRelativeToProjectBasePointFeet { get; }
+        public string NameWithElevationMeters
+            => $"{Units.ToMetersString(Units.FeetToMeters(Level.Elevation, RoundingDigits), DecimalFormatString, PositivePrefix)} - {LevelName}";
+
+        /// <summary>
+        /// The elevation in feet relative to the bim document's project base point (unrounded), or null if no project base point exists.
+        /// </summary>
+        public double? ElevationRelativeToProjectBasePointDecimalFeetUnrounded { get; }
+
+        /// <summary>
+        /// The elevation in decimal feet relative to the bim document's project base point (rounded to 4 digits), or null if no project base point exists.
+        /// </summary>
+        public double? ElevationRelativeToProjectBasePointDecimalFeet
+            => ElevationRelativeToProjectBasePointDecimalFeetUnrounded == null
+                ? (double?) null
+                : Math.Round(ElevationRelativeToProjectBasePointDecimalFeetUnrounded.Value, RoundingDigits);
+
+        /// <summary>
+        /// The elevation in feet and fractional inches relative to the bim document's project base point, or empty if no project base point exists.
+        /// </summary>
+        public string ElevationRelativeToProjectBasePointFeetAndFractionalInches
+            => Units.ToFeetAndFractionalInchesString(ElevationRelativeToProjectBasePointDecimalFeetUnrounded);
 
         /// <summary>
         /// The elevation in meters relative to the bim document's project base point, or null if no project base point exists.
         /// </summary>
         public double? ElevationRelativeToProjectBasePointMeters
-            => Units.FeetToMeters(ElevationRelativeToProjectBasePointFeet);
+            => Units.FeetToMeters(ElevationRelativeToProjectBasePointDecimalFeetUnrounded, RoundingDigits);
 
         /// <summary>
-        /// The elevation in feet relative to the bim document's survey point, or null if no survey point exists.
+        /// The elevation in feet relative to the bim document's survey point (unrounded), or null if no survey point exists.
         /// </summary>
-        public double? ElevationRelativeToSurveyPointFeet { get; }
+        public double? ElevationRelativeToSurveyPointDecimalFeetUnrounded { get; }
+
+        /// <summary>
+        /// The elevation in feet relative to the bim document's survey point (rounded to 4 digits), or null if no survey point exists.
+        /// </summary>
+        public double? ElevationRelativeToSurveyPointDecimalFeet
+            => ElevationRelativeToSurveyPointDecimalFeetUnrounded == null
+                ? (double?)null
+                : Math.Round(ElevationRelativeToSurveyPointDecimalFeetUnrounded.Value, RoundingDigits);
+
+        /// <summary>
+        /// The elevation in feet and fractional inches relative to the bim document's survey point, or empty if no survey point exists.
+        /// </summary>
+        public string ElevationRelativeToSurveyPointFeetAndFractionalInches
+            => Units.ToFeetAndFractionalInchesString(ElevationRelativeToSurveyPointDecimalFeetUnrounded);
 
         /// <summary>
         /// The elevation in meters relative to the bim document's survey point, or null if no survey point exists.
         /// </summary>
         public double? ElevationRelativeToSurveyPointMeters
-            => Units.FeetToMeters(ElevationRelativeToSurveyPointFeet);
+            => Units.FeetToMeters(ElevationRelativeToSurveyPointDecimalFeetUnrounded, RoundingDigits);
 
         /// <summary>
-        /// true: level is relative to bim document's project base point
-        /// false: level is relative to bim document's survey point
-        /// null: not specified
+        /// This is derived from the level's type.
+        ///   - true: level is relative to bim document's project base point
+        ///   - false: level is relative to bim document's survey point
+        ///   - null: not specified
         /// </summary>
-        public bool? IsRelativeToProjectBasePoint { get; }
+        public bool? IsRelativeToProjectBasePoint { get; private set; }
+        public const string ParameterDescriptorTypeIdElevationBase = "autodesk.revit.parameter:levelRelativeBaseType"; // Revit 2022 and beyond
+        public const string ParameterDescriptorIdElevationBase = "-1007109"; // Revit 2021 and prior
+        public bool ParameterDescriptorIsProjectBasePoint(ParameterDescriptor pd)
+            => pd.Guid.StartsWith(ParameterDescriptorTypeIdElevationBase, StringComparison.InvariantCultureIgnoreCase) ||
+               pd.Guid == ParameterDescriptorIdElevationBase;
 
         /// <summary>
         /// Determines whether the level is considered a structural level.
         /// </summary>
-        public bool IsStructural { get; }
+        public bool IsStructural { get; private set; }
+        public const string ParameterDescriptorTypeIdIsStructural = "autodesk.revit.parameter:levelIsStructural"; // Revit 2022 and beyond
+        public const string ParameterDescriptorIdIsStructural = "-1007112"; // Revit 2021 and prior
+        public bool ParameterDescriptorIsStructural(ParameterDescriptor pd)
+            => pd.Guid.StartsWith(ParameterDescriptorTypeIdIsStructural, StringComparison.InvariantCultureIgnoreCase) ||
+               pd.Guid == ParameterDescriptorIdIsStructural;
 
         /// <summary>
         /// Determines whether the level is considered a building story.
         /// </summary>
-        public bool IsBuildingStory { get; }
+        public bool IsBuildingStory { get; private set; }
+        public const string ParameterDescriptorTypeIdIsBuildingStory = "autodesk.revit.parameter:levelIsBuildingStory"; // Revit 2022 and beyond
+        public const string ParameterDescriptorIdIsBuildingStory = "-1007111"; // Revit 2021 and prior
+        public bool ParameterDescriptorIsBuildingStory(ParameterDescriptor pd)
+            => pd.Guid.StartsWith(ParameterDescriptorTypeIdIsBuildingStory, StringComparison.InvariantCultureIgnoreCase) ||
+               pd.Guid == ParameterDescriptorIdIsBuildingStory;
 
         /// <summary>
-        /// The building story above this one. Can be null if this is the last level (ex: roof)
+        /// The building story above this one. Can be null if this is set to "Default" in Revit or if the level is the topmost building story.
         /// </summary>
         public Level BuildingStoryAbove { get; set; }
+        public const string ParameterDescriptorTypeIdBuildingStoryAbove = "autodesk.revit.parameter:levelUpToLevel"; // Revit 2022 and beyond
+        public const string ParameterDescriptorIdBuildingStoryAbove = "-1007110"; // Revit 2021 and prior
+        public bool ParameterDescriptorIsBuildingStoryAbove(ParameterDescriptor pd)
+            => pd.Guid.StartsWith(ParameterDescriptorTypeIdBuildingStoryAbove, StringComparison.InvariantCultureIgnoreCase) ||
+               pd.Guid == ParameterDescriptorIdBuildingStoryAbove;
 
         /// <summary>
-        /// The height of the building story above in feet.
+        /// The height of the building story above in decimal feet (unrounded).
+        /// </summary>
+        public double? BuildingStoryAboveHeightFeetDecimalUnrounded
+            => BuildingStoryAbove == null
+                ? (double?)null
+                : BuildingStoryAbove.ProjectElevation - Level.ProjectElevation;
+
+        /// <summary>
+        /// The height of the building story above in decimal feet.
         /// Calculated based on the difference in BuildingStoryAbove.ProjectElevation and Level.ProjectElevation.
         /// </summary>
-        public double? BuildingStoryAboveHeight
-            => BuildingStoryAbove == null
+        public double? BuildingStoryAboveHeightFeetDecimal
+            => BuildingStoryAboveHeightFeetDecimalUnrounded == null
                 ? (double?) null
-                : BuildingStoryAbove.ProjectElevation - Level.ProjectElevation;
+                : Math.Round(BuildingStoryAboveHeightFeetDecimalUnrounded.Value, RoundingDigits);
+
+        /// <summary>
+        /// The height of the building story above in feet and fractional inches.
+        /// </summary>
+        public string BuildingStoryAboveFeetAndFractionalInches
+            => Units.ToFeetAndFractionalInchesString(BuildingStoryAboveHeightFeetDecimalUnrounded);
+
+        /// <summary>
+        /// The height of the building story above in meters.
+        /// Calculated based on the difference in BuildingStoryAbove.ProjectElevation and Level.ProjectElevation.
+        /// </summary>
+        public double? BuildingStoryAboveHeightMeters
+            => Units.FeetToMeters(BuildingStoryAboveHeightFeetDecimalUnrounded, RoundingDigits);
+
+        /// <summary>
+        /// Returns true if the level info has a BuildingStoryAbove.
+        /// </summary>
+        public bool HasBuildingStoryAbove
+            => BuildingStoryAbove != null;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public LevelInfo(DocumentModel dm, Level level)
+        public LevelInfo(DocumentModel dm, Level level, IReadOnlyList<Level> levelsInBimDocument, IReadOnlyList<BasePoint> basePointsInBimDocument)
         {
             Level = level;
 
-            var levelElement = level.Element;
-            var levelName = levelElement?.Name ?? "";
-
-            const string feetPartFormatString = "0000";
-            const string metersFormatString = "0000.000"; // millimeter accuracy
-            const string positivePrefix = "+";
-
-            FullNameFeet =
-                $"{Units.ToFeetAndFractionalInchesString(Level.Elevation, feetPartFormatString, positivePrefix)} - {levelName}";
-
-            FullNameMeters =
-                $"{Units.ToMetersString(Units.FeetToMeters(Level.Elevation), metersFormatString, positivePrefix)} - {levelName}";
-
-            var bimDocumentIndex = levelElement?.BimDocument.IndexOrDefault();
-
-            var basePoints = dm.BasePointList
-                .Where(bp =>
-                {
-                    var basePointBimDocumentIndex = bp.Element.BimDocument.IndexOrDefault();
-                    return basePointBimDocumentIndex != EntityRelation.None &&
-                           basePointBimDocumentIndex == bimDocumentIndex;
-                }).ToArray();
-
-            var projectBasePoint = basePoints.FirstOrDefault(bp => bp.IsSurveyPoint == false);
-            ElevationRelativeToProjectBasePointFeet = projectBasePoint == null
+            var projectBasePoint = basePointsInBimDocument.FirstOrDefault(bp => bp.IsSurveyPoint == false);
+            ElevationRelativeToProjectBasePointDecimalFeetUnrounded = projectBasePoint == null
                 ? (double?) null
                 : Level.ProjectElevation - projectBasePoint.Position_Z;
             
-            var surveyPoint = basePoints.FirstOrDefault(bp => bp.IsSurveyPoint);
-            ElevationRelativeToSurveyPointFeet = surveyPoint == null
-                ? (double?)null
+            var surveyPoint = basePointsInBimDocument.FirstOrDefault(bp => bp.IsSurveyPoint);
+            ElevationRelativeToSurveyPointDecimalFeetUnrounded = surveyPoint == null
+                ? (double?) null
                 : Level.ProjectElevation - surveyPoint.Position_Z;
 
-            IsRelativeToProjectBasePoint = false;
-            IsStructural = false;
-            IsBuildingStory = false;
-            if (dm.ElementIndexMaps.ParameterIndicesFromElementIndex.TryGetValue(levelElement.IndexOrDefault(), out var levelElementParameterIndices) && levelElementParameterIndices.Count > 0)
+            ReadLevelParameters(dm, levelsInBimDocument);
+
+            ReadLevelTypeParameters(dm);
+        }
+
+        private void ReadLevelParameters(DocumentModel dm, IReadOnlyList<Level> levelsInBimDocument)
+        {
+            var levelElementIndex = Level.Element?.IndexOrDefault() ?? EntityRelation.None;
+            if (!dm.ElementIndexMaps.ParameterIndicesFromElementIndex.TryGetValue(levelElementIndex, out var levelElementParameterIndices) ||
+                levelElementParameterIndices.Count <= 0)
             {
-                var parameters = levelElementParameterIndices.Select(dm.GetParameter);
-                foreach (var p in parameters)
-                {
-                    // TODO: IsStructural
-                    // TODO: IsBuildingStory
-                    Console.WriteLine(p.ParameterDescriptor.Name);
-                }
+                return;
             }
 
-            // TODO: IsRelativeToProjectBasePoint FROM LEVEL FAMILY TYPE....
+            var parameters = levelElementParameterIndices.Select(dm.GetParameter);
+            foreach (var p in parameters)
+            {
+                var desc = p.ParameterDescriptor;
 
-            // TODO: BuildingStoryAbove (updated by service after constructor is called)
+                if (ParameterDescriptorIsStructural(desc) &&
+                    p.TryParseRevitParameterValueAsBoolean(desc, out var isStructural))
+                {
+                    IsStructural = isStructural;
+                }
+                else if (
+                    ParameterDescriptorIsBuildingStory(desc) &&
+                    p.TryParseRevitParameterValueAsBoolean(desc, out var isBuildingStory))
+                {
+                    IsBuildingStory = isBuildingStory;
+                }
+                else if (
+                    ParameterDescriptorIsBuildingStoryAbove(desc) &&
+                    p.TryParseRevitParameterValueAsElementId(out var storyAboveElementId))
+                {
+                    // If the building story above has an element ID of -1, then it could be set to "Default" in Revit,
+                    // meaning that the building story above must be calculated in a separate pass (see LevelService.PatchBuildingStoryAbove)
+                    BuildingStoryAbove = TryGetLevelFromElementId(storyAboveElementId, levelsInBimDocument, out var buildingStoryAbove)
+                        ? buildingStoryAbove
+                        : null;
+                }
+            }
+        }
+
+        private void ReadLevelTypeParameters(DocumentModel dm)
+        {
+            var levelTypeElementIndex = Level.FamilyType?.Element.IndexOrDefault() ?? EntityRelation.None;
+            if (!dm.ElementIndexMaps.ParameterIndicesFromElementIndex.TryGetValue(levelTypeElementIndex, out var levelTypeParameterIndices) ||
+                levelTypeParameterIndices.Count <= 0)
+            {
+                return;
+            }
+
+            var typeParameters = levelTypeParameterIndices.Select(dm.GetParameter);
+            foreach (var p in typeParameters)
+            {
+                var desc = p.ParameterDescriptor;
+
+                if (ParameterDescriptorIsProjectBasePoint(desc) &&
+                    p.TryParseRevitParameterAsLong(out var relativeToProjectBasePoint))
+                {
+                    IsRelativeToProjectBasePoint = relativeToProjectBasePoint == 0L; // 0L == "Project Base Point", 1L == "Survey Point"
+                }
+            }
+        }
+
+        private static bool TryGetLevelFromElementId(long levelElementId, IReadOnlyList<Level> levelsInBimDocument, out Level level)
+        {
+            level = null;
+
+            if (levelElementId == -1L)
+                return false;
+
+            level = levelsInBimDocument.FirstOrDefault(l => l.Element.Id == levelElementId);
+
+            return level != null;
         }
 
         public override string ToString()
