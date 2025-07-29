@@ -11,9 +11,21 @@ namespace Vim.Format.ObjectModel
         public readonly List<TEntity> Entities = new List<TEntity>();
         public readonly IndexedSet<object> KeyToEntityIndex = new IndexedSet<object>();
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public EntitySetBuilder(string entityTableName)
         {
             EntityTableName = entityTableName;
+        }
+
+        /// <summary>
+        /// Clears the records in the entities and the key to entity index map.
+        /// </summary>
+        public void Clear()
+        {
+            Entities.Clear();
+            KeyToEntityIndex.Clear();
         }
 
         /// <summary>

@@ -494,6 +494,16 @@ public static class ObjectModelGenerator
         cb.AppendLine();
         cb.AppendLine("return db;");
         cb.AppendLine("} // AddEntityTableSets");
+
+        cb.AppendLine();
+        cb.AppendLine("public void Clear()");
+        cb.AppendLine("{");
+        foreach (var et in entityTypes)
+        {
+            cb.AppendLine($"{et.Name}Builder.Clear();");
+        }
+        cb.AppendLine("} // Clear");
+
         cb.AppendLine("} // ObjectModelBuilder");
     }
 

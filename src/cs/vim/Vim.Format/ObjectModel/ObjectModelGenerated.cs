@@ -8296,5 +8296,63 @@ namespace Vim.Format.ObjectModel {
             
             return db;
         } // AddEntityTableSets
+        
+        public void Clear()
+        {
+            AssetBuilder.Clear();
+            DisplayUnitBuilder.Clear();
+            ParameterDescriptorBuilder.Clear();
+            ParameterBuilder.Clear();
+            ElementBuilder.Clear();
+            WorksetBuilder.Clear();
+            AssemblyInstanceBuilder.Clear();
+            GroupBuilder.Clear();
+            DesignOptionBuilder.Clear();
+            LevelBuilder.Clear();
+            PhaseBuilder.Clear();
+            RoomBuilder.Clear();
+            BimDocumentBuilder.Clear();
+            DisplayUnitInBimDocumentBuilder.Clear();
+            PhaseOrderInBimDocumentBuilder.Clear();
+            CategoryBuilder.Clear();
+            FamilyBuilder.Clear();
+            FamilyTypeBuilder.Clear();
+            FamilyInstanceBuilder.Clear();
+            ViewBuilder.Clear();
+            ElementInViewBuilder.Clear();
+            ShapeInViewBuilder.Clear();
+            AssetInViewBuilder.Clear();
+            AssetInViewSheetBuilder.Clear();
+            LevelInViewBuilder.Clear();
+            CameraBuilder.Clear();
+            MaterialBuilder.Clear();
+            MaterialInElementBuilder.Clear();
+            CompoundStructureLayerBuilder.Clear();
+            CompoundStructureBuilder.Clear();
+            NodeBuilder.Clear();
+            GeometryBuilder.Clear();
+            ShapeBuilder.Clear();
+            ShapeCollectionBuilder.Clear();
+            ShapeInShapeCollectionBuilder.Clear();
+            SystemBuilder.Clear();
+            ElementInSystemBuilder.Clear();
+            WarningBuilder.Clear();
+            ElementInWarningBuilder.Clear();
+            BasePointBuilder.Clear();
+            PhaseFilterBuilder.Clear();
+            GridBuilder.Clear();
+            AreaBuilder.Clear();
+            AreaSchemeBuilder.Clear();
+            ScheduleBuilder.Clear();
+            ScheduleColumnBuilder.Clear();
+            ScheduleCellBuilder.Clear();
+            ViewSheetSetBuilder.Clear();
+            ViewSheetBuilder.Clear();
+            ViewSheetInViewSheetSetBuilder.Clear();
+            ViewInViewSheetSetBuilder.Clear();
+            ViewInViewSheetBuilder.Clear();
+            SiteBuilder.Clear();
+            BuildingBuilder.Clear();
+        } // Clear
     } // ObjectModelBuilder
 } // namespace
