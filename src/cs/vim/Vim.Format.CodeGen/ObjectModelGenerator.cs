@@ -442,12 +442,14 @@ public static class ObjectModelGenerator
         foreach (var et in entityTypes)
         {
             var entityType = et.Name;
-            cb.AppendLine($"public static EntityTableBuilder To{entityType}TableBuilder(this IEnumerable<Entity> entities)");
+            cb.AppendLine($"public static EntityTableBuilder To{entityType}TableBuilder(this EntitySetBuilder<{entityType}> entitySet)");
             cb.AppendLine("{");
 
-            cb.AppendLine($"var typedEntities = entities?.Cast<{entityType}>() ?? Enumerable.Empty<{entityType}>();");
+            //cb.AppendLine($"var typedEntities = entities?.Cast<{entityType}>() ?? Enumerable.Empty<{entityType}>();");
             var tableName = et.GetEntityTableName();
             cb.AppendLine($"var tb = new EntityTableBuilder(\"{tableName}\");");
+            cb.AppendLine("var entities = entitySet.Entities;");
+            cb.AppendLine("var entityCount = entities.Count;");
 
             var entityFields = et.GetEntityFields().ToArray();
             var relationFields = et.GetRelationFields().ToArray();
@@ -459,13 +461,21 @@ public static class ObjectModelGenerator
             {
                 var (strategy, _) = fieldInfo.FieldType.GetValueSerializationStrategyAndTypePrefix();
                 var functionName = strategy.GetEntityTableBuilderAddFunctionName(fieldInfo.FieldType);
-                cb.AppendLine($"tb.{functionName}(\"{fieldInfo.GetSerializedValueColumnName()}\", typedEntities.Select(x => x.{fieldInfo.Name}));");
+                cb.AppendLine("{");
+                cb.AppendLine($"var columnData = new {fieldInfo.FieldType.Name}[entityCount];");
+                cb.AppendLine($"for (var i = 0; i < columnData.Length; ++i) {{ columnData[i] = entities[i].{fieldInfo.Name}; }}");
+                cb.AppendLine($"tb.{functionName}(\"{fieldInfo.GetSerializedValueColumnName()}\", columnData);");
+                cb.AppendLine("}");
             }
 
             foreach (var fieldInfo in relationFields)
             {
                 var (indexColumnName, localFieldName) = fieldInfo.GetIndexColumnInfo();
-                cb.AppendLine($"tb.AddIndexColumn(\"{indexColumnName}\", typedEntities.Select(x => x._{localFieldName}?.Index ?? EntityRelation.None));");
+                cb.AppendLine("{");
+                cb.AppendLine("var columnData = new int[entityCount];");
+                cb.AppendLine($"for (var i = 0; i < columnData.Length; ++i) {{ columnData[i] = entities[i]._{localFieldName}?.Index ?? EntityRelation.None; }}");
+                cb.AppendLine($"tb.AddIndexColumn(\"{indexColumnName}\", columnData);");
+                cb.AppendLine("}");
             }
 
             cb.AppendLine("return tb;");
@@ -489,7 +499,7 @@ public static class ObjectModelGenerator
         cb.AppendLine("{");
         foreach (var et in entityTypes)
         {
-            cb.AppendLine($"db.Tables.Add({et.Name}Builder.EntityTableName, {et.Name}Builder.Entities.To{et.Name}TableBuilder());");
+            cb.AppendLine($"db.Tables.Add({et.Name}Builder.EntityTableName, {et.Name}Builder.To{et.Name}TableBuilder());");
         }
         cb.AppendLine();
         cb.AppendLine("return db;");

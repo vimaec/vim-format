@@ -7525,657 +7525,2027 @@ namespace Vim.Format.ObjectModel {
     
     public static class DocumentBuilderExtensions
     {
-        public static EntityTableBuilder ToAssetTableBuilder(this IEnumerable<Entity> entities)
+        public static EntityTableBuilder ToAssetTableBuilder(this EntitySetBuilder<Asset> entitySet)
         {
-            var typedEntities = entities?.Cast<Asset>() ?? Enumerable.Empty<Asset>();
             var tb = new EntityTableBuilder("Vim.Asset");
-            tb.AddStringColumn("string:BufferName", typedEntities.Select(x => x.BufferName));
+            var entities = entitySet.Entities;
+            var entityCount = entities.Count;
+            {
+                var columnData = new String[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].BufferName; }
+                tb.AddStringColumn("string:BufferName", columnData);
+            }
             return tb;
         }
-        public static EntityTableBuilder ToDisplayUnitTableBuilder(this IEnumerable<Entity> entities)
+        public static EntityTableBuilder ToDisplayUnitTableBuilder(this EntitySetBuilder<DisplayUnit> entitySet)
         {
-            var typedEntities = entities?.Cast<DisplayUnit>() ?? Enumerable.Empty<DisplayUnit>();
             var tb = new EntityTableBuilder("Vim.DisplayUnit");
-            tb.AddStringColumn("string:Spec", typedEntities.Select(x => x.Spec));
-            tb.AddStringColumn("string:Type", typedEntities.Select(x => x.Type));
-            tb.AddStringColumn("string:Label", typedEntities.Select(x => x.Label));
+            var entities = entitySet.Entities;
+            var entityCount = entities.Count;
+            {
+                var columnData = new String[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Spec; }
+                tb.AddStringColumn("string:Spec", columnData);
+            }
+            {
+                var columnData = new String[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Type; }
+                tb.AddStringColumn("string:Type", columnData);
+            }
+            {
+                var columnData = new String[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Label; }
+                tb.AddStringColumn("string:Label", columnData);
+            }
             return tb;
         }
-        public static EntityTableBuilder ToParameterDescriptorTableBuilder(this IEnumerable<Entity> entities)
+        public static EntityTableBuilder ToParameterDescriptorTableBuilder(this EntitySetBuilder<ParameterDescriptor> entitySet)
         {
-            var typedEntities = entities?.Cast<ParameterDescriptor>() ?? Enumerable.Empty<ParameterDescriptor>();
             var tb = new EntityTableBuilder("Vim.ParameterDescriptor");
-            tb.AddStringColumn("string:Name", typedEntities.Select(x => x.Name));
-            tb.AddStringColumn("string:Group", typedEntities.Select(x => x.Group));
-            tb.AddStringColumn("string:ParameterType", typedEntities.Select(x => x.ParameterType));
-            tb.AddDataColumn("byte:IsInstance", typedEntities.Select(x => x.IsInstance));
-            tb.AddDataColumn("byte:IsShared", typedEntities.Select(x => x.IsShared));
-            tb.AddDataColumn("byte:IsReadOnly", typedEntities.Select(x => x.IsReadOnly));
-            tb.AddDataColumn("int:Flags", typedEntities.Select(x => x.Flags));
-            tb.AddStringColumn("string:Guid", typedEntities.Select(x => x.Guid));
-            tb.AddDataColumn("int:StorageType", typedEntities.Select(x => x.StorageType));
-            tb.AddIndexColumn("index:Vim.DisplayUnit:DisplayUnit", typedEntities.Select(x => x._DisplayUnit?.Index ?? EntityRelation.None));
+            var entities = entitySet.Entities;
+            var entityCount = entities.Count;
+            {
+                var columnData = new String[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Name; }
+                tb.AddStringColumn("string:Name", columnData);
+            }
+            {
+                var columnData = new String[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Group; }
+                tb.AddStringColumn("string:Group", columnData);
+            }
+            {
+                var columnData = new String[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].ParameterType; }
+                tb.AddStringColumn("string:ParameterType", columnData);
+            }
+            {
+                var columnData = new Boolean[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].IsInstance; }
+                tb.AddDataColumn("byte:IsInstance", columnData);
+            }
+            {
+                var columnData = new Boolean[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].IsShared; }
+                tb.AddDataColumn("byte:IsShared", columnData);
+            }
+            {
+                var columnData = new Boolean[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].IsReadOnly; }
+                tb.AddDataColumn("byte:IsReadOnly", columnData);
+            }
+            {
+                var columnData = new Int32[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Flags; }
+                tb.AddDataColumn("int:Flags", columnData);
+            }
+            {
+                var columnData = new String[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Guid; }
+                tb.AddStringColumn("string:Guid", columnData);
+            }
+            {
+                var columnData = new Int32[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].StorageType; }
+                tb.AddDataColumn("int:StorageType", columnData);
+            }
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._DisplayUnit?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.DisplayUnit:DisplayUnit", columnData);
+            }
             return tb;
         }
-        public static EntityTableBuilder ToParameterTableBuilder(this IEnumerable<Entity> entities)
+        public static EntityTableBuilder ToParameterTableBuilder(this EntitySetBuilder<Parameter> entitySet)
         {
-            var typedEntities = entities?.Cast<Parameter>() ?? Enumerable.Empty<Parameter>();
             var tb = new EntityTableBuilder("Vim.Parameter");
-            tb.AddStringColumn("string:Value", typedEntities.Select(x => x.Value));
-            tb.AddIndexColumn("index:Vim.ParameterDescriptor:ParameterDescriptor", typedEntities.Select(x => x._ParameterDescriptor?.Index ?? EntityRelation.None));
-            tb.AddIndexColumn("index:Vim.Element:Element", typedEntities.Select(x => x._Element?.Index ?? EntityRelation.None));
+            var entities = entitySet.Entities;
+            var entityCount = entities.Count;
+            {
+                var columnData = new String[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Value; }
+                tb.AddStringColumn("string:Value", columnData);
+            }
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._ParameterDescriptor?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.ParameterDescriptor:ParameterDescriptor", columnData);
+            }
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._Element?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.Element:Element", columnData);
+            }
             return tb;
         }
-        public static EntityTableBuilder ToElementTableBuilder(this IEnumerable<Entity> entities)
+        public static EntityTableBuilder ToElementTableBuilder(this EntitySetBuilder<Element> entitySet)
         {
-            var typedEntities = entities?.Cast<Element>() ?? Enumerable.Empty<Element>();
             var tb = new EntityTableBuilder("Vim.Element");
-            tb.AddDataColumn("long:Id", typedEntities.Select(x => x.Id));
-            tb.AddStringColumn("string:Type", typedEntities.Select(x => x.Type));
-            tb.AddStringColumn("string:Name", typedEntities.Select(x => x.Name));
-            tb.AddStringColumn("string:UniqueId", typedEntities.Select(x => x.UniqueId));
-            tb.AddDataColumn("float:Location.X", typedEntities.Select(x => x.Location_X));
-            tb.AddDataColumn("float:Location.Y", typedEntities.Select(x => x.Location_Y));
-            tb.AddDataColumn("float:Location.Z", typedEntities.Select(x => x.Location_Z));
-            tb.AddStringColumn("string:FamilyName", typedEntities.Select(x => x.FamilyName));
-            tb.AddDataColumn("byte:IsPinned", typedEntities.Select(x => x.IsPinned));
-            tb.AddIndexColumn("index:Vim.Level:Level", typedEntities.Select(x => x._Level?.Index ?? EntityRelation.None));
-            tb.AddIndexColumn("index:Vim.Phase:PhaseCreated", typedEntities.Select(x => x._PhaseCreated?.Index ?? EntityRelation.None));
-            tb.AddIndexColumn("index:Vim.Phase:PhaseDemolished", typedEntities.Select(x => x._PhaseDemolished?.Index ?? EntityRelation.None));
-            tb.AddIndexColumn("index:Vim.Category:Category", typedEntities.Select(x => x._Category?.Index ?? EntityRelation.None));
-            tb.AddIndexColumn("index:Vim.Workset:Workset", typedEntities.Select(x => x._Workset?.Index ?? EntityRelation.None));
-            tb.AddIndexColumn("index:Vim.DesignOption:DesignOption", typedEntities.Select(x => x._DesignOption?.Index ?? EntityRelation.None));
-            tb.AddIndexColumn("index:Vim.View:OwnerView", typedEntities.Select(x => x._OwnerView?.Index ?? EntityRelation.None));
-            tb.AddIndexColumn("index:Vim.Group:Group", typedEntities.Select(x => x._Group?.Index ?? EntityRelation.None));
-            tb.AddIndexColumn("index:Vim.AssemblyInstance:AssemblyInstance", typedEntities.Select(x => x._AssemblyInstance?.Index ?? EntityRelation.None));
-            tb.AddIndexColumn("index:Vim.BimDocument:BimDocument", typedEntities.Select(x => x._BimDocument?.Index ?? EntityRelation.None));
-            tb.AddIndexColumn("index:Vim.Room:Room", typedEntities.Select(x => x._Room?.Index ?? EntityRelation.None));
+            var entities = entitySet.Entities;
+            var entityCount = entities.Count;
+            {
+                var columnData = new Int64[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Id; }
+                tb.AddDataColumn("long:Id", columnData);
+            }
+            {
+                var columnData = new String[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Type; }
+                tb.AddStringColumn("string:Type", columnData);
+            }
+            {
+                var columnData = new String[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Name; }
+                tb.AddStringColumn("string:Name", columnData);
+            }
+            {
+                var columnData = new String[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].UniqueId; }
+                tb.AddStringColumn("string:UniqueId", columnData);
+            }
+            {
+                var columnData = new Single[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Location_X; }
+                tb.AddDataColumn("float:Location.X", columnData);
+            }
+            {
+                var columnData = new Single[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Location_Y; }
+                tb.AddDataColumn("float:Location.Y", columnData);
+            }
+            {
+                var columnData = new Single[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Location_Z; }
+                tb.AddDataColumn("float:Location.Z", columnData);
+            }
+            {
+                var columnData = new String[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].FamilyName; }
+                tb.AddStringColumn("string:FamilyName", columnData);
+            }
+            {
+                var columnData = new Boolean[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].IsPinned; }
+                tb.AddDataColumn("byte:IsPinned", columnData);
+            }
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._Level?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.Level:Level", columnData);
+            }
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._PhaseCreated?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.Phase:PhaseCreated", columnData);
+            }
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._PhaseDemolished?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.Phase:PhaseDemolished", columnData);
+            }
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._Category?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.Category:Category", columnData);
+            }
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._Workset?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.Workset:Workset", columnData);
+            }
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._DesignOption?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.DesignOption:DesignOption", columnData);
+            }
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._OwnerView?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.View:OwnerView", columnData);
+            }
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._Group?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.Group:Group", columnData);
+            }
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._AssemblyInstance?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.AssemblyInstance:AssemblyInstance", columnData);
+            }
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._BimDocument?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.BimDocument:BimDocument", columnData);
+            }
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._Room?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.Room:Room", columnData);
+            }
             return tb;
         }
-        public static EntityTableBuilder ToWorksetTableBuilder(this IEnumerable<Entity> entities)
+        public static EntityTableBuilder ToWorksetTableBuilder(this EntitySetBuilder<Workset> entitySet)
         {
-            var typedEntities = entities?.Cast<Workset>() ?? Enumerable.Empty<Workset>();
             var tb = new EntityTableBuilder("Vim.Workset");
-            tb.AddDataColumn("int:Id", typedEntities.Select(x => x.Id));
-            tb.AddStringColumn("string:Name", typedEntities.Select(x => x.Name));
-            tb.AddStringColumn("string:Kind", typedEntities.Select(x => x.Kind));
-            tb.AddDataColumn("byte:IsOpen", typedEntities.Select(x => x.IsOpen));
-            tb.AddDataColumn("byte:IsEditable", typedEntities.Select(x => x.IsEditable));
-            tb.AddStringColumn("string:Owner", typedEntities.Select(x => x.Owner));
-            tb.AddStringColumn("string:UniqueId", typedEntities.Select(x => x.UniqueId));
-            tb.AddIndexColumn("index:Vim.BimDocument:BimDocument", typedEntities.Select(x => x._BimDocument?.Index ?? EntityRelation.None));
+            var entities = entitySet.Entities;
+            var entityCount = entities.Count;
+            {
+                var columnData = new Int32[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Id; }
+                tb.AddDataColumn("int:Id", columnData);
+            }
+            {
+                var columnData = new String[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Name; }
+                tb.AddStringColumn("string:Name", columnData);
+            }
+            {
+                var columnData = new String[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Kind; }
+                tb.AddStringColumn("string:Kind", columnData);
+            }
+            {
+                var columnData = new Boolean[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].IsOpen; }
+                tb.AddDataColumn("byte:IsOpen", columnData);
+            }
+            {
+                var columnData = new Boolean[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].IsEditable; }
+                tb.AddDataColumn("byte:IsEditable", columnData);
+            }
+            {
+                var columnData = new String[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Owner; }
+                tb.AddStringColumn("string:Owner", columnData);
+            }
+            {
+                var columnData = new String[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].UniqueId; }
+                tb.AddStringColumn("string:UniqueId", columnData);
+            }
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._BimDocument?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.BimDocument:BimDocument", columnData);
+            }
             return tb;
         }
-        public static EntityTableBuilder ToAssemblyInstanceTableBuilder(this IEnumerable<Entity> entities)
+        public static EntityTableBuilder ToAssemblyInstanceTableBuilder(this EntitySetBuilder<AssemblyInstance> entitySet)
         {
-            var typedEntities = entities?.Cast<AssemblyInstance>() ?? Enumerable.Empty<AssemblyInstance>();
             var tb = new EntityTableBuilder("Vim.AssemblyInstance");
-            tb.AddStringColumn("string:AssemblyTypeName", typedEntities.Select(x => x.AssemblyTypeName));
-            tb.AddDataColumn("float:Position.X", typedEntities.Select(x => x.Position_X));
-            tb.AddDataColumn("float:Position.Y", typedEntities.Select(x => x.Position_Y));
-            tb.AddDataColumn("float:Position.Z", typedEntities.Select(x => x.Position_Z));
-            tb.AddIndexColumn("index:Vim.Element:Element", typedEntities.Select(x => x._Element?.Index ?? EntityRelation.None));
+            var entities = entitySet.Entities;
+            var entityCount = entities.Count;
+            {
+                var columnData = new String[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].AssemblyTypeName; }
+                tb.AddStringColumn("string:AssemblyTypeName", columnData);
+            }
+            {
+                var columnData = new Single[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Position_X; }
+                tb.AddDataColumn("float:Position.X", columnData);
+            }
+            {
+                var columnData = new Single[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Position_Y; }
+                tb.AddDataColumn("float:Position.Y", columnData);
+            }
+            {
+                var columnData = new Single[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Position_Z; }
+                tb.AddDataColumn("float:Position.Z", columnData);
+            }
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._Element?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.Element:Element", columnData);
+            }
             return tb;
         }
-        public static EntityTableBuilder ToGroupTableBuilder(this IEnumerable<Entity> entities)
+        public static EntityTableBuilder ToGroupTableBuilder(this EntitySetBuilder<Group> entitySet)
         {
-            var typedEntities = entities?.Cast<Group>() ?? Enumerable.Empty<Group>();
             var tb = new EntityTableBuilder("Vim.Group");
-            tb.AddStringColumn("string:GroupType", typedEntities.Select(x => x.GroupType));
-            tb.AddDataColumn("float:Position.X", typedEntities.Select(x => x.Position_X));
-            tb.AddDataColumn("float:Position.Y", typedEntities.Select(x => x.Position_Y));
-            tb.AddDataColumn("float:Position.Z", typedEntities.Select(x => x.Position_Z));
-            tb.AddIndexColumn("index:Vim.Element:Element", typedEntities.Select(x => x._Element?.Index ?? EntityRelation.None));
+            var entities = entitySet.Entities;
+            var entityCount = entities.Count;
+            {
+                var columnData = new String[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].GroupType; }
+                tb.AddStringColumn("string:GroupType", columnData);
+            }
+            {
+                var columnData = new Single[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Position_X; }
+                tb.AddDataColumn("float:Position.X", columnData);
+            }
+            {
+                var columnData = new Single[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Position_Y; }
+                tb.AddDataColumn("float:Position.Y", columnData);
+            }
+            {
+                var columnData = new Single[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Position_Z; }
+                tb.AddDataColumn("float:Position.Z", columnData);
+            }
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._Element?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.Element:Element", columnData);
+            }
             return tb;
         }
-        public static EntityTableBuilder ToDesignOptionTableBuilder(this IEnumerable<Entity> entities)
+        public static EntityTableBuilder ToDesignOptionTableBuilder(this EntitySetBuilder<DesignOption> entitySet)
         {
-            var typedEntities = entities?.Cast<DesignOption>() ?? Enumerable.Empty<DesignOption>();
             var tb = new EntityTableBuilder("Vim.DesignOption");
-            tb.AddDataColumn("byte:IsPrimary", typedEntities.Select(x => x.IsPrimary));
-            tb.AddIndexColumn("index:Vim.Element:Element", typedEntities.Select(x => x._Element?.Index ?? EntityRelation.None));
+            var entities = entitySet.Entities;
+            var entityCount = entities.Count;
+            {
+                var columnData = new Boolean[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].IsPrimary; }
+                tb.AddDataColumn("byte:IsPrimary", columnData);
+            }
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._Element?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.Element:Element", columnData);
+            }
             return tb;
         }
-        public static EntityTableBuilder ToLevelTableBuilder(this IEnumerable<Entity> entities)
+        public static EntityTableBuilder ToLevelTableBuilder(this EntitySetBuilder<Level> entitySet)
         {
-            var typedEntities = entities?.Cast<Level>() ?? Enumerable.Empty<Level>();
             var tb = new EntityTableBuilder("Vim.Level");
-            tb.AddDataColumn("double:Elevation", typedEntities.Select(x => x.Elevation));
-            tb.AddDataColumn("double:ProjectElevation", typedEntities.Select(x => x.ProjectElevation));
-            tb.AddIndexColumn("index:Vim.FamilyType:FamilyType", typedEntities.Select(x => x._FamilyType?.Index ?? EntityRelation.None));
-            tb.AddIndexColumn("index:Vim.Building:Building", typedEntities.Select(x => x._Building?.Index ?? EntityRelation.None));
-            tb.AddIndexColumn("index:Vim.Element:Element", typedEntities.Select(x => x._Element?.Index ?? EntityRelation.None));
+            var entities = entitySet.Entities;
+            var entityCount = entities.Count;
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Elevation; }
+                tb.AddDataColumn("double:Elevation", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].ProjectElevation; }
+                tb.AddDataColumn("double:ProjectElevation", columnData);
+            }
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._FamilyType?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.FamilyType:FamilyType", columnData);
+            }
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._Building?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.Building:Building", columnData);
+            }
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._Element?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.Element:Element", columnData);
+            }
             return tb;
         }
-        public static EntityTableBuilder ToPhaseTableBuilder(this IEnumerable<Entity> entities)
+        public static EntityTableBuilder ToPhaseTableBuilder(this EntitySetBuilder<Phase> entitySet)
         {
-            var typedEntities = entities?.Cast<Phase>() ?? Enumerable.Empty<Phase>();
             var tb = new EntityTableBuilder("Vim.Phase");
-            tb.AddIndexColumn("index:Vim.Element:Element", typedEntities.Select(x => x._Element?.Index ?? EntityRelation.None));
+            var entities = entitySet.Entities;
+            var entityCount = entities.Count;
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._Element?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.Element:Element", columnData);
+            }
             return tb;
         }
-        public static EntityTableBuilder ToRoomTableBuilder(this IEnumerable<Entity> entities)
+        public static EntityTableBuilder ToRoomTableBuilder(this EntitySetBuilder<Room> entitySet)
         {
-            var typedEntities = entities?.Cast<Room>() ?? Enumerable.Empty<Room>();
             var tb = new EntityTableBuilder("Vim.Room");
-            tb.AddDataColumn("double:BaseOffset", typedEntities.Select(x => x.BaseOffset));
-            tb.AddDataColumn("double:LimitOffset", typedEntities.Select(x => x.LimitOffset));
-            tb.AddDataColumn("double:UnboundedHeight", typedEntities.Select(x => x.UnboundedHeight));
-            tb.AddDataColumn("double:Volume", typedEntities.Select(x => x.Volume));
-            tb.AddDataColumn("double:Perimeter", typedEntities.Select(x => x.Perimeter));
-            tb.AddDataColumn("double:Area", typedEntities.Select(x => x.Area));
-            tb.AddStringColumn("string:Number", typedEntities.Select(x => x.Number));
-            tb.AddIndexColumn("index:Vim.Level:UpperLimit", typedEntities.Select(x => x._UpperLimit?.Index ?? EntityRelation.None));
-            tb.AddIndexColumn("index:Vim.Element:Element", typedEntities.Select(x => x._Element?.Index ?? EntityRelation.None));
+            var entities = entitySet.Entities;
+            var entityCount = entities.Count;
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].BaseOffset; }
+                tb.AddDataColumn("double:BaseOffset", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].LimitOffset; }
+                tb.AddDataColumn("double:LimitOffset", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].UnboundedHeight; }
+                tb.AddDataColumn("double:UnboundedHeight", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Volume; }
+                tb.AddDataColumn("double:Volume", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Perimeter; }
+                tb.AddDataColumn("double:Perimeter", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Area; }
+                tb.AddDataColumn("double:Area", columnData);
+            }
+            {
+                var columnData = new String[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Number; }
+                tb.AddStringColumn("string:Number", columnData);
+            }
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._UpperLimit?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.Level:UpperLimit", columnData);
+            }
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._Element?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.Element:Element", columnData);
+            }
             return tb;
         }
-        public static EntityTableBuilder ToBimDocumentTableBuilder(this IEnumerable<Entity> entities)
+        public static EntityTableBuilder ToBimDocumentTableBuilder(this EntitySetBuilder<BimDocument> entitySet)
         {
-            var typedEntities = entities?.Cast<BimDocument>() ?? Enumerable.Empty<BimDocument>();
             var tb = new EntityTableBuilder("Vim.BimDocument");
-            tb.AddStringColumn("string:Title", typedEntities.Select(x => x.Title));
-            tb.AddDataColumn("byte:IsMetric", typedEntities.Select(x => x.IsMetric));
-            tb.AddStringColumn("string:Guid", typedEntities.Select(x => x.Guid));
-            tb.AddDataColumn("int:NumSaves", typedEntities.Select(x => x.NumSaves));
-            tb.AddDataColumn("byte:IsLinked", typedEntities.Select(x => x.IsLinked));
-            tb.AddDataColumn("byte:IsDetached", typedEntities.Select(x => x.IsDetached));
-            tb.AddDataColumn("byte:IsWorkshared", typedEntities.Select(x => x.IsWorkshared));
-            tb.AddStringColumn("string:PathName", typedEntities.Select(x => x.PathName));
-            tb.AddDataColumn("double:Latitude", typedEntities.Select(x => x.Latitude));
-            tb.AddDataColumn("double:Longitude", typedEntities.Select(x => x.Longitude));
-            tb.AddDataColumn("double:TimeZone", typedEntities.Select(x => x.TimeZone));
-            tb.AddStringColumn("string:PlaceName", typedEntities.Select(x => x.PlaceName));
-            tb.AddStringColumn("string:WeatherStationName", typedEntities.Select(x => x.WeatherStationName));
-            tb.AddDataColumn("double:Elevation", typedEntities.Select(x => x.Elevation));
-            tb.AddStringColumn("string:ProjectLocation", typedEntities.Select(x => x.ProjectLocation));
-            tb.AddStringColumn("string:IssueDate", typedEntities.Select(x => x.IssueDate));
-            tb.AddStringColumn("string:Status", typedEntities.Select(x => x.Status));
-            tb.AddStringColumn("string:ClientName", typedEntities.Select(x => x.ClientName));
-            tb.AddStringColumn("string:Address", typedEntities.Select(x => x.Address));
-            tb.AddStringColumn("string:Name", typedEntities.Select(x => x.Name));
-            tb.AddStringColumn("string:Number", typedEntities.Select(x => x.Number));
-            tb.AddStringColumn("string:Author", typedEntities.Select(x => x.Author));
-            tb.AddStringColumn("string:BuildingName", typedEntities.Select(x => x.BuildingName));
-            tb.AddStringColumn("string:OrganizationName", typedEntities.Select(x => x.OrganizationName));
-            tb.AddStringColumn("string:OrganizationDescription", typedEntities.Select(x => x.OrganizationDescription));
-            tb.AddStringColumn("string:Product", typedEntities.Select(x => x.Product));
-            tb.AddStringColumn("string:Version", typedEntities.Select(x => x.Version));
-            tb.AddStringColumn("string:User", typedEntities.Select(x => x.User));
-            tb.AddDataColumn("long:FileLength", typedEntities.Select(x => x.FileLength));
-            tb.AddIndexColumn("index:Vim.View:ActiveView", typedEntities.Select(x => x._ActiveView?.Index ?? EntityRelation.None));
-            tb.AddIndexColumn("index:Vim.Family:OwnerFamily", typedEntities.Select(x => x._OwnerFamily?.Index ?? EntityRelation.None));
-            tb.AddIndexColumn("index:Vim.BimDocument:Parent", typedEntities.Select(x => x._Parent?.Index ?? EntityRelation.None));
-            tb.AddIndexColumn("index:Vim.Element:Element", typedEntities.Select(x => x._Element?.Index ?? EntityRelation.None));
+            var entities = entitySet.Entities;
+            var entityCount = entities.Count;
+            {
+                var columnData = new String[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Title; }
+                tb.AddStringColumn("string:Title", columnData);
+            }
+            {
+                var columnData = new Boolean[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].IsMetric; }
+                tb.AddDataColumn("byte:IsMetric", columnData);
+            }
+            {
+                var columnData = new String[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Guid; }
+                tb.AddStringColumn("string:Guid", columnData);
+            }
+            {
+                var columnData = new Int32[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].NumSaves; }
+                tb.AddDataColumn("int:NumSaves", columnData);
+            }
+            {
+                var columnData = new Boolean[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].IsLinked; }
+                tb.AddDataColumn("byte:IsLinked", columnData);
+            }
+            {
+                var columnData = new Boolean[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].IsDetached; }
+                tb.AddDataColumn("byte:IsDetached", columnData);
+            }
+            {
+                var columnData = new Boolean[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].IsWorkshared; }
+                tb.AddDataColumn("byte:IsWorkshared", columnData);
+            }
+            {
+                var columnData = new String[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].PathName; }
+                tb.AddStringColumn("string:PathName", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Latitude; }
+                tb.AddDataColumn("double:Latitude", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Longitude; }
+                tb.AddDataColumn("double:Longitude", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].TimeZone; }
+                tb.AddDataColumn("double:TimeZone", columnData);
+            }
+            {
+                var columnData = new String[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].PlaceName; }
+                tb.AddStringColumn("string:PlaceName", columnData);
+            }
+            {
+                var columnData = new String[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].WeatherStationName; }
+                tb.AddStringColumn("string:WeatherStationName", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Elevation; }
+                tb.AddDataColumn("double:Elevation", columnData);
+            }
+            {
+                var columnData = new String[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].ProjectLocation; }
+                tb.AddStringColumn("string:ProjectLocation", columnData);
+            }
+            {
+                var columnData = new String[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].IssueDate; }
+                tb.AddStringColumn("string:IssueDate", columnData);
+            }
+            {
+                var columnData = new String[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Status; }
+                tb.AddStringColumn("string:Status", columnData);
+            }
+            {
+                var columnData = new String[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].ClientName; }
+                tb.AddStringColumn("string:ClientName", columnData);
+            }
+            {
+                var columnData = new String[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Address; }
+                tb.AddStringColumn("string:Address", columnData);
+            }
+            {
+                var columnData = new String[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Name; }
+                tb.AddStringColumn("string:Name", columnData);
+            }
+            {
+                var columnData = new String[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Number; }
+                tb.AddStringColumn("string:Number", columnData);
+            }
+            {
+                var columnData = new String[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Author; }
+                tb.AddStringColumn("string:Author", columnData);
+            }
+            {
+                var columnData = new String[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].BuildingName; }
+                tb.AddStringColumn("string:BuildingName", columnData);
+            }
+            {
+                var columnData = new String[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].OrganizationName; }
+                tb.AddStringColumn("string:OrganizationName", columnData);
+            }
+            {
+                var columnData = new String[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].OrganizationDescription; }
+                tb.AddStringColumn("string:OrganizationDescription", columnData);
+            }
+            {
+                var columnData = new String[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Product; }
+                tb.AddStringColumn("string:Product", columnData);
+            }
+            {
+                var columnData = new String[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Version; }
+                tb.AddStringColumn("string:Version", columnData);
+            }
+            {
+                var columnData = new String[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].User; }
+                tb.AddStringColumn("string:User", columnData);
+            }
+            {
+                var columnData = new Int64[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].FileLength; }
+                tb.AddDataColumn("long:FileLength", columnData);
+            }
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._ActiveView?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.View:ActiveView", columnData);
+            }
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._OwnerFamily?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.Family:OwnerFamily", columnData);
+            }
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._Parent?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.BimDocument:Parent", columnData);
+            }
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._Element?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.Element:Element", columnData);
+            }
             return tb;
         }
-        public static EntityTableBuilder ToDisplayUnitInBimDocumentTableBuilder(this IEnumerable<Entity> entities)
+        public static EntityTableBuilder ToDisplayUnitInBimDocumentTableBuilder(this EntitySetBuilder<DisplayUnitInBimDocument> entitySet)
         {
-            var typedEntities = entities?.Cast<DisplayUnitInBimDocument>() ?? Enumerable.Empty<DisplayUnitInBimDocument>();
             var tb = new EntityTableBuilder("Vim.DisplayUnitInBimDocument");
-            tb.AddIndexColumn("index:Vim.DisplayUnit:DisplayUnit", typedEntities.Select(x => x._DisplayUnit?.Index ?? EntityRelation.None));
-            tb.AddIndexColumn("index:Vim.BimDocument:BimDocument", typedEntities.Select(x => x._BimDocument?.Index ?? EntityRelation.None));
+            var entities = entitySet.Entities;
+            var entityCount = entities.Count;
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._DisplayUnit?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.DisplayUnit:DisplayUnit", columnData);
+            }
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._BimDocument?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.BimDocument:BimDocument", columnData);
+            }
             return tb;
         }
-        public static EntityTableBuilder ToPhaseOrderInBimDocumentTableBuilder(this IEnumerable<Entity> entities)
+        public static EntityTableBuilder ToPhaseOrderInBimDocumentTableBuilder(this EntitySetBuilder<PhaseOrderInBimDocument> entitySet)
         {
-            var typedEntities = entities?.Cast<PhaseOrderInBimDocument>() ?? Enumerable.Empty<PhaseOrderInBimDocument>();
             var tb = new EntityTableBuilder("Vim.PhaseOrderInBimDocument");
-            tb.AddDataColumn("int:OrderIndex", typedEntities.Select(x => x.OrderIndex));
-            tb.AddIndexColumn("index:Vim.Phase:Phase", typedEntities.Select(x => x._Phase?.Index ?? EntityRelation.None));
-            tb.AddIndexColumn("index:Vim.BimDocument:BimDocument", typedEntities.Select(x => x._BimDocument?.Index ?? EntityRelation.None));
+            var entities = entitySet.Entities;
+            var entityCount = entities.Count;
+            {
+                var columnData = new Int32[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].OrderIndex; }
+                tb.AddDataColumn("int:OrderIndex", columnData);
+            }
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._Phase?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.Phase:Phase", columnData);
+            }
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._BimDocument?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.BimDocument:BimDocument", columnData);
+            }
             return tb;
         }
-        public static EntityTableBuilder ToCategoryTableBuilder(this IEnumerable<Entity> entities)
+        public static EntityTableBuilder ToCategoryTableBuilder(this EntitySetBuilder<Category> entitySet)
         {
-            var typedEntities = entities?.Cast<Category>() ?? Enumerable.Empty<Category>();
             var tb = new EntityTableBuilder("Vim.Category");
-            tb.AddStringColumn("string:Name", typedEntities.Select(x => x.Name));
-            tb.AddDataColumn("long:Id", typedEntities.Select(x => x.Id));
-            tb.AddStringColumn("string:CategoryType", typedEntities.Select(x => x.CategoryType));
-            tb.AddDataColumn("double:LineColor.X", typedEntities.Select(x => x.LineColor_X));
-            tb.AddDataColumn("double:LineColor.Y", typedEntities.Select(x => x.LineColor_Y));
-            tb.AddDataColumn("double:LineColor.Z", typedEntities.Select(x => x.LineColor_Z));
-            tb.AddStringColumn("string:BuiltInCategory", typedEntities.Select(x => x.BuiltInCategory));
-            tb.AddIndexColumn("index:Vim.Category:Parent", typedEntities.Select(x => x._Parent?.Index ?? EntityRelation.None));
-            tb.AddIndexColumn("index:Vim.Material:Material", typedEntities.Select(x => x._Material?.Index ?? EntityRelation.None));
+            var entities = entitySet.Entities;
+            var entityCount = entities.Count;
+            {
+                var columnData = new String[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Name; }
+                tb.AddStringColumn("string:Name", columnData);
+            }
+            {
+                var columnData = new Int64[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Id; }
+                tb.AddDataColumn("long:Id", columnData);
+            }
+            {
+                var columnData = new String[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].CategoryType; }
+                tb.AddStringColumn("string:CategoryType", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].LineColor_X; }
+                tb.AddDataColumn("double:LineColor.X", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].LineColor_Y; }
+                tb.AddDataColumn("double:LineColor.Y", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].LineColor_Z; }
+                tb.AddDataColumn("double:LineColor.Z", columnData);
+            }
+            {
+                var columnData = new String[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].BuiltInCategory; }
+                tb.AddStringColumn("string:BuiltInCategory", columnData);
+            }
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._Parent?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.Category:Parent", columnData);
+            }
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._Material?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.Material:Material", columnData);
+            }
             return tb;
         }
-        public static EntityTableBuilder ToFamilyTableBuilder(this IEnumerable<Entity> entities)
+        public static EntityTableBuilder ToFamilyTableBuilder(this EntitySetBuilder<Family> entitySet)
         {
-            var typedEntities = entities?.Cast<Family>() ?? Enumerable.Empty<Family>();
             var tb = new EntityTableBuilder("Vim.Family");
-            tb.AddStringColumn("string:StructuralMaterialType", typedEntities.Select(x => x.StructuralMaterialType));
-            tb.AddStringColumn("string:StructuralSectionShape", typedEntities.Select(x => x.StructuralSectionShape));
-            tb.AddDataColumn("byte:IsSystemFamily", typedEntities.Select(x => x.IsSystemFamily));
-            tb.AddDataColumn("byte:IsInPlace", typedEntities.Select(x => x.IsInPlace));
-            tb.AddIndexColumn("index:Vim.Category:FamilyCategory", typedEntities.Select(x => x._FamilyCategory?.Index ?? EntityRelation.None));
-            tb.AddIndexColumn("index:Vim.Element:Element", typedEntities.Select(x => x._Element?.Index ?? EntityRelation.None));
+            var entities = entitySet.Entities;
+            var entityCount = entities.Count;
+            {
+                var columnData = new String[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].StructuralMaterialType; }
+                tb.AddStringColumn("string:StructuralMaterialType", columnData);
+            }
+            {
+                var columnData = new String[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].StructuralSectionShape; }
+                tb.AddStringColumn("string:StructuralSectionShape", columnData);
+            }
+            {
+                var columnData = new Boolean[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].IsSystemFamily; }
+                tb.AddDataColumn("byte:IsSystemFamily", columnData);
+            }
+            {
+                var columnData = new Boolean[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].IsInPlace; }
+                tb.AddDataColumn("byte:IsInPlace", columnData);
+            }
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._FamilyCategory?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.Category:FamilyCategory", columnData);
+            }
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._Element?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.Element:Element", columnData);
+            }
             return tb;
         }
-        public static EntityTableBuilder ToFamilyTypeTableBuilder(this IEnumerable<Entity> entities)
+        public static EntityTableBuilder ToFamilyTypeTableBuilder(this EntitySetBuilder<FamilyType> entitySet)
         {
-            var typedEntities = entities?.Cast<FamilyType>() ?? Enumerable.Empty<FamilyType>();
             var tb = new EntityTableBuilder("Vim.FamilyType");
-            tb.AddDataColumn("byte:IsSystemFamilyType", typedEntities.Select(x => x.IsSystemFamilyType));
-            tb.AddIndexColumn("index:Vim.Family:Family", typedEntities.Select(x => x._Family?.Index ?? EntityRelation.None));
-            tb.AddIndexColumn("index:Vim.CompoundStructure:CompoundStructure", typedEntities.Select(x => x._CompoundStructure?.Index ?? EntityRelation.None));
-            tb.AddIndexColumn("index:Vim.Element:Element", typedEntities.Select(x => x._Element?.Index ?? EntityRelation.None));
+            var entities = entitySet.Entities;
+            var entityCount = entities.Count;
+            {
+                var columnData = new Boolean[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].IsSystemFamilyType; }
+                tb.AddDataColumn("byte:IsSystemFamilyType", columnData);
+            }
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._Family?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.Family:Family", columnData);
+            }
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._CompoundStructure?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.CompoundStructure:CompoundStructure", columnData);
+            }
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._Element?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.Element:Element", columnData);
+            }
             return tb;
         }
-        public static EntityTableBuilder ToFamilyInstanceTableBuilder(this IEnumerable<Entity> entities)
+        public static EntityTableBuilder ToFamilyInstanceTableBuilder(this EntitySetBuilder<FamilyInstance> entitySet)
         {
-            var typedEntities = entities?.Cast<FamilyInstance>() ?? Enumerable.Empty<FamilyInstance>();
             var tb = new EntityTableBuilder("Vim.FamilyInstance");
-            tb.AddDataColumn("byte:FacingFlipped", typedEntities.Select(x => x.FacingFlipped));
-            tb.AddDataColumn("float:FacingOrientation.X", typedEntities.Select(x => x.FacingOrientation_X));
-            tb.AddDataColumn("float:FacingOrientation.Y", typedEntities.Select(x => x.FacingOrientation_Y));
-            tb.AddDataColumn("float:FacingOrientation.Z", typedEntities.Select(x => x.FacingOrientation_Z));
-            tb.AddDataColumn("byte:HandFlipped", typedEntities.Select(x => x.HandFlipped));
-            tb.AddDataColumn("byte:Mirrored", typedEntities.Select(x => x.Mirrored));
-            tb.AddDataColumn("byte:HasModifiedGeometry", typedEntities.Select(x => x.HasModifiedGeometry));
-            tb.AddDataColumn("float:Scale", typedEntities.Select(x => x.Scale));
-            tb.AddDataColumn("float:BasisX.X", typedEntities.Select(x => x.BasisX_X));
-            tb.AddDataColumn("float:BasisX.Y", typedEntities.Select(x => x.BasisX_Y));
-            tb.AddDataColumn("float:BasisX.Z", typedEntities.Select(x => x.BasisX_Z));
-            tb.AddDataColumn("float:BasisY.X", typedEntities.Select(x => x.BasisY_X));
-            tb.AddDataColumn("float:BasisY.Y", typedEntities.Select(x => x.BasisY_Y));
-            tb.AddDataColumn("float:BasisY.Z", typedEntities.Select(x => x.BasisY_Z));
-            tb.AddDataColumn("float:BasisZ.X", typedEntities.Select(x => x.BasisZ_X));
-            tb.AddDataColumn("float:BasisZ.Y", typedEntities.Select(x => x.BasisZ_Y));
-            tb.AddDataColumn("float:BasisZ.Z", typedEntities.Select(x => x.BasisZ_Z));
-            tb.AddDataColumn("float:Translation.X", typedEntities.Select(x => x.Translation_X));
-            tb.AddDataColumn("float:Translation.Y", typedEntities.Select(x => x.Translation_Y));
-            tb.AddDataColumn("float:Translation.Z", typedEntities.Select(x => x.Translation_Z));
-            tb.AddDataColumn("float:HandOrientation.X", typedEntities.Select(x => x.HandOrientation_X));
-            tb.AddDataColumn("float:HandOrientation.Y", typedEntities.Select(x => x.HandOrientation_Y));
-            tb.AddDataColumn("float:HandOrientation.Z", typedEntities.Select(x => x.HandOrientation_Z));
-            tb.AddIndexColumn("index:Vim.FamilyType:FamilyType", typedEntities.Select(x => x._FamilyType?.Index ?? EntityRelation.None));
-            tb.AddIndexColumn("index:Vim.Element:Host", typedEntities.Select(x => x._Host?.Index ?? EntityRelation.None));
-            tb.AddIndexColumn("index:Vim.Room:FromRoom", typedEntities.Select(x => x._FromRoom?.Index ?? EntityRelation.None));
-            tb.AddIndexColumn("index:Vim.Room:ToRoom", typedEntities.Select(x => x._ToRoom?.Index ?? EntityRelation.None));
-            tb.AddIndexColumn("index:Vim.Element:SuperComponent", typedEntities.Select(x => x._SuperComponent?.Index ?? EntityRelation.None));
-            tb.AddIndexColumn("index:Vim.Element:Element", typedEntities.Select(x => x._Element?.Index ?? EntityRelation.None));
+            var entities = entitySet.Entities;
+            var entityCount = entities.Count;
+            {
+                var columnData = new Boolean[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].FacingFlipped; }
+                tb.AddDataColumn("byte:FacingFlipped", columnData);
+            }
+            {
+                var columnData = new Single[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].FacingOrientation_X; }
+                tb.AddDataColumn("float:FacingOrientation.X", columnData);
+            }
+            {
+                var columnData = new Single[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].FacingOrientation_Y; }
+                tb.AddDataColumn("float:FacingOrientation.Y", columnData);
+            }
+            {
+                var columnData = new Single[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].FacingOrientation_Z; }
+                tb.AddDataColumn("float:FacingOrientation.Z", columnData);
+            }
+            {
+                var columnData = new Boolean[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].HandFlipped; }
+                tb.AddDataColumn("byte:HandFlipped", columnData);
+            }
+            {
+                var columnData = new Boolean[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Mirrored; }
+                tb.AddDataColumn("byte:Mirrored", columnData);
+            }
+            {
+                var columnData = new Boolean[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].HasModifiedGeometry; }
+                tb.AddDataColumn("byte:HasModifiedGeometry", columnData);
+            }
+            {
+                var columnData = new Single[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Scale; }
+                tb.AddDataColumn("float:Scale", columnData);
+            }
+            {
+                var columnData = new Single[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].BasisX_X; }
+                tb.AddDataColumn("float:BasisX.X", columnData);
+            }
+            {
+                var columnData = new Single[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].BasisX_Y; }
+                tb.AddDataColumn("float:BasisX.Y", columnData);
+            }
+            {
+                var columnData = new Single[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].BasisX_Z; }
+                tb.AddDataColumn("float:BasisX.Z", columnData);
+            }
+            {
+                var columnData = new Single[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].BasisY_X; }
+                tb.AddDataColumn("float:BasisY.X", columnData);
+            }
+            {
+                var columnData = new Single[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].BasisY_Y; }
+                tb.AddDataColumn("float:BasisY.Y", columnData);
+            }
+            {
+                var columnData = new Single[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].BasisY_Z; }
+                tb.AddDataColumn("float:BasisY.Z", columnData);
+            }
+            {
+                var columnData = new Single[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].BasisZ_X; }
+                tb.AddDataColumn("float:BasisZ.X", columnData);
+            }
+            {
+                var columnData = new Single[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].BasisZ_Y; }
+                tb.AddDataColumn("float:BasisZ.Y", columnData);
+            }
+            {
+                var columnData = new Single[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].BasisZ_Z; }
+                tb.AddDataColumn("float:BasisZ.Z", columnData);
+            }
+            {
+                var columnData = new Single[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Translation_X; }
+                tb.AddDataColumn("float:Translation.X", columnData);
+            }
+            {
+                var columnData = new Single[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Translation_Y; }
+                tb.AddDataColumn("float:Translation.Y", columnData);
+            }
+            {
+                var columnData = new Single[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Translation_Z; }
+                tb.AddDataColumn("float:Translation.Z", columnData);
+            }
+            {
+                var columnData = new Single[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].HandOrientation_X; }
+                tb.AddDataColumn("float:HandOrientation.X", columnData);
+            }
+            {
+                var columnData = new Single[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].HandOrientation_Y; }
+                tb.AddDataColumn("float:HandOrientation.Y", columnData);
+            }
+            {
+                var columnData = new Single[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].HandOrientation_Z; }
+                tb.AddDataColumn("float:HandOrientation.Z", columnData);
+            }
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._FamilyType?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.FamilyType:FamilyType", columnData);
+            }
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._Host?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.Element:Host", columnData);
+            }
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._FromRoom?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.Room:FromRoom", columnData);
+            }
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._ToRoom?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.Room:ToRoom", columnData);
+            }
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._SuperComponent?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.Element:SuperComponent", columnData);
+            }
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._Element?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.Element:Element", columnData);
+            }
             return tb;
         }
-        public static EntityTableBuilder ToViewTableBuilder(this IEnumerable<Entity> entities)
+        public static EntityTableBuilder ToViewTableBuilder(this EntitySetBuilder<View> entitySet)
         {
-            var typedEntities = entities?.Cast<View>() ?? Enumerable.Empty<View>();
             var tb = new EntityTableBuilder("Vim.View");
-            tb.AddStringColumn("string:Title", typedEntities.Select(x => x.Title));
-            tb.AddStringColumn("string:ViewType", typedEntities.Select(x => x.ViewType));
-            tb.AddDataColumn("double:Up.X", typedEntities.Select(x => x.Up_X));
-            tb.AddDataColumn("double:Up.Y", typedEntities.Select(x => x.Up_Y));
-            tb.AddDataColumn("double:Up.Z", typedEntities.Select(x => x.Up_Z));
-            tb.AddDataColumn("double:Right.X", typedEntities.Select(x => x.Right_X));
-            tb.AddDataColumn("double:Right.Y", typedEntities.Select(x => x.Right_Y));
-            tb.AddDataColumn("double:Right.Z", typedEntities.Select(x => x.Right_Z));
-            tb.AddDataColumn("double:Origin.X", typedEntities.Select(x => x.Origin_X));
-            tb.AddDataColumn("double:Origin.Y", typedEntities.Select(x => x.Origin_Y));
-            tb.AddDataColumn("double:Origin.Z", typedEntities.Select(x => x.Origin_Z));
-            tb.AddDataColumn("double:ViewDirection.X", typedEntities.Select(x => x.ViewDirection_X));
-            tb.AddDataColumn("double:ViewDirection.Y", typedEntities.Select(x => x.ViewDirection_Y));
-            tb.AddDataColumn("double:ViewDirection.Z", typedEntities.Select(x => x.ViewDirection_Z));
-            tb.AddDataColumn("double:ViewPosition.X", typedEntities.Select(x => x.ViewPosition_X));
-            tb.AddDataColumn("double:ViewPosition.Y", typedEntities.Select(x => x.ViewPosition_Y));
-            tb.AddDataColumn("double:ViewPosition.Z", typedEntities.Select(x => x.ViewPosition_Z));
-            tb.AddDataColumn("double:Scale", typedEntities.Select(x => x.Scale));
-            tb.AddDataColumn("double:Outline.Min.X", typedEntities.Select(x => x.Outline_Min_X));
-            tb.AddDataColumn("double:Outline.Min.Y", typedEntities.Select(x => x.Outline_Min_Y));
-            tb.AddDataColumn("double:Outline.Max.X", typedEntities.Select(x => x.Outline_Max_X));
-            tb.AddDataColumn("double:Outline.Max.Y", typedEntities.Select(x => x.Outline_Max_Y));
-            tb.AddDataColumn("int:DetailLevel", typedEntities.Select(x => x.DetailLevel));
-            tb.AddIndexColumn("index:Vim.Camera:Camera", typedEntities.Select(x => x._Camera?.Index ?? EntityRelation.None));
-            tb.AddIndexColumn("index:Vim.FamilyType:FamilyType", typedEntities.Select(x => x._FamilyType?.Index ?? EntityRelation.None));
-            tb.AddIndexColumn("index:Vim.Element:Element", typedEntities.Select(x => x._Element?.Index ?? EntityRelation.None));
+            var entities = entitySet.Entities;
+            var entityCount = entities.Count;
+            {
+                var columnData = new String[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Title; }
+                tb.AddStringColumn("string:Title", columnData);
+            }
+            {
+                var columnData = new String[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].ViewType; }
+                tb.AddStringColumn("string:ViewType", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Up_X; }
+                tb.AddDataColumn("double:Up.X", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Up_Y; }
+                tb.AddDataColumn("double:Up.Y", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Up_Z; }
+                tb.AddDataColumn("double:Up.Z", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Right_X; }
+                tb.AddDataColumn("double:Right.X", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Right_Y; }
+                tb.AddDataColumn("double:Right.Y", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Right_Z; }
+                tb.AddDataColumn("double:Right.Z", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Origin_X; }
+                tb.AddDataColumn("double:Origin.X", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Origin_Y; }
+                tb.AddDataColumn("double:Origin.Y", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Origin_Z; }
+                tb.AddDataColumn("double:Origin.Z", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].ViewDirection_X; }
+                tb.AddDataColumn("double:ViewDirection.X", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].ViewDirection_Y; }
+                tb.AddDataColumn("double:ViewDirection.Y", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].ViewDirection_Z; }
+                tb.AddDataColumn("double:ViewDirection.Z", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].ViewPosition_X; }
+                tb.AddDataColumn("double:ViewPosition.X", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].ViewPosition_Y; }
+                tb.AddDataColumn("double:ViewPosition.Y", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].ViewPosition_Z; }
+                tb.AddDataColumn("double:ViewPosition.Z", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Scale; }
+                tb.AddDataColumn("double:Scale", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Outline_Min_X; }
+                tb.AddDataColumn("double:Outline.Min.X", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Outline_Min_Y; }
+                tb.AddDataColumn("double:Outline.Min.Y", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Outline_Max_X; }
+                tb.AddDataColumn("double:Outline.Max.X", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Outline_Max_Y; }
+                tb.AddDataColumn("double:Outline.Max.Y", columnData);
+            }
+            {
+                var columnData = new Int32[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].DetailLevel; }
+                tb.AddDataColumn("int:DetailLevel", columnData);
+            }
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._Camera?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.Camera:Camera", columnData);
+            }
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._FamilyType?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.FamilyType:FamilyType", columnData);
+            }
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._Element?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.Element:Element", columnData);
+            }
             return tb;
         }
-        public static EntityTableBuilder ToElementInViewTableBuilder(this IEnumerable<Entity> entities)
+        public static EntityTableBuilder ToElementInViewTableBuilder(this EntitySetBuilder<ElementInView> entitySet)
         {
-            var typedEntities = entities?.Cast<ElementInView>() ?? Enumerable.Empty<ElementInView>();
             var tb = new EntityTableBuilder("Vim.ElementInView");
-            tb.AddIndexColumn("index:Vim.View:View", typedEntities.Select(x => x._View?.Index ?? EntityRelation.None));
-            tb.AddIndexColumn("index:Vim.Element:Element", typedEntities.Select(x => x._Element?.Index ?? EntityRelation.None));
+            var entities = entitySet.Entities;
+            var entityCount = entities.Count;
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._View?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.View:View", columnData);
+            }
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._Element?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.Element:Element", columnData);
+            }
             return tb;
         }
-        public static EntityTableBuilder ToShapeInViewTableBuilder(this IEnumerable<Entity> entities)
+        public static EntityTableBuilder ToShapeInViewTableBuilder(this EntitySetBuilder<ShapeInView> entitySet)
         {
-            var typedEntities = entities?.Cast<ShapeInView>() ?? Enumerable.Empty<ShapeInView>();
             var tb = new EntityTableBuilder("Vim.ShapeInView");
-            tb.AddIndexColumn("index:Vim.Shape:Shape", typedEntities.Select(x => x._Shape?.Index ?? EntityRelation.None));
-            tb.AddIndexColumn("index:Vim.View:View", typedEntities.Select(x => x._View?.Index ?? EntityRelation.None));
+            var entities = entitySet.Entities;
+            var entityCount = entities.Count;
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._Shape?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.Shape:Shape", columnData);
+            }
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._View?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.View:View", columnData);
+            }
             return tb;
         }
-        public static EntityTableBuilder ToAssetInViewTableBuilder(this IEnumerable<Entity> entities)
+        public static EntityTableBuilder ToAssetInViewTableBuilder(this EntitySetBuilder<AssetInView> entitySet)
         {
-            var typedEntities = entities?.Cast<AssetInView>() ?? Enumerable.Empty<AssetInView>();
             var tb = new EntityTableBuilder("Vim.AssetInView");
-            tb.AddIndexColumn("index:Vim.Asset:Asset", typedEntities.Select(x => x._Asset?.Index ?? EntityRelation.None));
-            tb.AddIndexColumn("index:Vim.View:View", typedEntities.Select(x => x._View?.Index ?? EntityRelation.None));
+            var entities = entitySet.Entities;
+            var entityCount = entities.Count;
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._Asset?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.Asset:Asset", columnData);
+            }
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._View?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.View:View", columnData);
+            }
             return tb;
         }
-        public static EntityTableBuilder ToAssetInViewSheetTableBuilder(this IEnumerable<Entity> entities)
+        public static EntityTableBuilder ToAssetInViewSheetTableBuilder(this EntitySetBuilder<AssetInViewSheet> entitySet)
         {
-            var typedEntities = entities?.Cast<AssetInViewSheet>() ?? Enumerable.Empty<AssetInViewSheet>();
             var tb = new EntityTableBuilder("Vim.AssetInViewSheet");
-            tb.AddIndexColumn("index:Vim.Asset:Asset", typedEntities.Select(x => x._Asset?.Index ?? EntityRelation.None));
-            tb.AddIndexColumn("index:Vim.ViewSheet:ViewSheet", typedEntities.Select(x => x._ViewSheet?.Index ?? EntityRelation.None));
+            var entities = entitySet.Entities;
+            var entityCount = entities.Count;
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._Asset?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.Asset:Asset", columnData);
+            }
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._ViewSheet?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.ViewSheet:ViewSheet", columnData);
+            }
             return tb;
         }
-        public static EntityTableBuilder ToLevelInViewTableBuilder(this IEnumerable<Entity> entities)
+        public static EntityTableBuilder ToLevelInViewTableBuilder(this EntitySetBuilder<LevelInView> entitySet)
         {
-            var typedEntities = entities?.Cast<LevelInView>() ?? Enumerable.Empty<LevelInView>();
             var tb = new EntityTableBuilder("Vim.LevelInView");
-            tb.AddDataColumn("double:Extents.Min.X", typedEntities.Select(x => x.Extents_Min_X));
-            tb.AddDataColumn("double:Extents.Min.Y", typedEntities.Select(x => x.Extents_Min_Y));
-            tb.AddDataColumn("double:Extents.Min.Z", typedEntities.Select(x => x.Extents_Min_Z));
-            tb.AddDataColumn("double:Extents.Max.X", typedEntities.Select(x => x.Extents_Max_X));
-            tb.AddDataColumn("double:Extents.Max.Y", typedEntities.Select(x => x.Extents_Max_Y));
-            tb.AddDataColumn("double:Extents.Max.Z", typedEntities.Select(x => x.Extents_Max_Z));
-            tb.AddIndexColumn("index:Vim.Level:Level", typedEntities.Select(x => x._Level?.Index ?? EntityRelation.None));
-            tb.AddIndexColumn("index:Vim.View:View", typedEntities.Select(x => x._View?.Index ?? EntityRelation.None));
+            var entities = entitySet.Entities;
+            var entityCount = entities.Count;
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Extents_Min_X; }
+                tb.AddDataColumn("double:Extents.Min.X", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Extents_Min_Y; }
+                tb.AddDataColumn("double:Extents.Min.Y", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Extents_Min_Z; }
+                tb.AddDataColumn("double:Extents.Min.Z", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Extents_Max_X; }
+                tb.AddDataColumn("double:Extents.Max.X", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Extents_Max_Y; }
+                tb.AddDataColumn("double:Extents.Max.Y", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Extents_Max_Z; }
+                tb.AddDataColumn("double:Extents.Max.Z", columnData);
+            }
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._Level?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.Level:Level", columnData);
+            }
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._View?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.View:View", columnData);
+            }
             return tb;
         }
-        public static EntityTableBuilder ToCameraTableBuilder(this IEnumerable<Entity> entities)
+        public static EntityTableBuilder ToCameraTableBuilder(this EntitySetBuilder<Camera> entitySet)
         {
-            var typedEntities = entities?.Cast<Camera>() ?? Enumerable.Empty<Camera>();
             var tb = new EntityTableBuilder("Vim.Camera");
-            tb.AddDataColumn("int:Id", typedEntities.Select(x => x.Id));
-            tb.AddDataColumn("int:IsPerspective", typedEntities.Select(x => x.IsPerspective));
-            tb.AddDataColumn("double:VerticalExtent", typedEntities.Select(x => x.VerticalExtent));
-            tb.AddDataColumn("double:HorizontalExtent", typedEntities.Select(x => x.HorizontalExtent));
-            tb.AddDataColumn("double:FarDistance", typedEntities.Select(x => x.FarDistance));
-            tb.AddDataColumn("double:NearDistance", typedEntities.Select(x => x.NearDistance));
-            tb.AddDataColumn("double:TargetDistance", typedEntities.Select(x => x.TargetDistance));
-            tb.AddDataColumn("double:RightOffset", typedEntities.Select(x => x.RightOffset));
-            tb.AddDataColumn("double:UpOffset", typedEntities.Select(x => x.UpOffset));
+            var entities = entitySet.Entities;
+            var entityCount = entities.Count;
+            {
+                var columnData = new Int32[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Id; }
+                tb.AddDataColumn("int:Id", columnData);
+            }
+            {
+                var columnData = new Int32[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].IsPerspective; }
+                tb.AddDataColumn("int:IsPerspective", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].VerticalExtent; }
+                tb.AddDataColumn("double:VerticalExtent", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].HorizontalExtent; }
+                tb.AddDataColumn("double:HorizontalExtent", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].FarDistance; }
+                tb.AddDataColumn("double:FarDistance", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].NearDistance; }
+                tb.AddDataColumn("double:NearDistance", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].TargetDistance; }
+                tb.AddDataColumn("double:TargetDistance", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].RightOffset; }
+                tb.AddDataColumn("double:RightOffset", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].UpOffset; }
+                tb.AddDataColumn("double:UpOffset", columnData);
+            }
             return tb;
         }
-        public static EntityTableBuilder ToMaterialTableBuilder(this IEnumerable<Entity> entities)
+        public static EntityTableBuilder ToMaterialTableBuilder(this EntitySetBuilder<Material> entitySet)
         {
-            var typedEntities = entities?.Cast<Material>() ?? Enumerable.Empty<Material>();
             var tb = new EntityTableBuilder("Vim.Material");
-            tb.AddStringColumn("string:Name", typedEntities.Select(x => x.Name));
-            tb.AddStringColumn("string:MaterialCategory", typedEntities.Select(x => x.MaterialCategory));
-            tb.AddDataColumn("double:Color.X", typedEntities.Select(x => x.Color_X));
-            tb.AddDataColumn("double:Color.Y", typedEntities.Select(x => x.Color_Y));
-            tb.AddDataColumn("double:Color.Z", typedEntities.Select(x => x.Color_Z));
-            tb.AddDataColumn("double:ColorUvScaling.X", typedEntities.Select(x => x.ColorUvScaling_X));
-            tb.AddDataColumn("double:ColorUvScaling.Y", typedEntities.Select(x => x.ColorUvScaling_Y));
-            tb.AddDataColumn("double:ColorUvOffset.X", typedEntities.Select(x => x.ColorUvOffset_X));
-            tb.AddDataColumn("double:ColorUvOffset.Y", typedEntities.Select(x => x.ColorUvOffset_Y));
-            tb.AddDataColumn("double:NormalUvScaling.X", typedEntities.Select(x => x.NormalUvScaling_X));
-            tb.AddDataColumn("double:NormalUvScaling.Y", typedEntities.Select(x => x.NormalUvScaling_Y));
-            tb.AddDataColumn("double:NormalUvOffset.X", typedEntities.Select(x => x.NormalUvOffset_X));
-            tb.AddDataColumn("double:NormalUvOffset.Y", typedEntities.Select(x => x.NormalUvOffset_Y));
-            tb.AddDataColumn("double:NormalAmount", typedEntities.Select(x => x.NormalAmount));
-            tb.AddDataColumn("double:Glossiness", typedEntities.Select(x => x.Glossiness));
-            tb.AddDataColumn("double:Smoothness", typedEntities.Select(x => x.Smoothness));
-            tb.AddDataColumn("double:Transparency", typedEntities.Select(x => x.Transparency));
-            tb.AddIndexColumn("index:Vim.Asset:ColorTextureFile", typedEntities.Select(x => x._ColorTextureFile?.Index ?? EntityRelation.None));
-            tb.AddIndexColumn("index:Vim.Asset:NormalTextureFile", typedEntities.Select(x => x._NormalTextureFile?.Index ?? EntityRelation.None));
-            tb.AddIndexColumn("index:Vim.Element:Element", typedEntities.Select(x => x._Element?.Index ?? EntityRelation.None));
+            var entities = entitySet.Entities;
+            var entityCount = entities.Count;
+            {
+                var columnData = new String[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Name; }
+                tb.AddStringColumn("string:Name", columnData);
+            }
+            {
+                var columnData = new String[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].MaterialCategory; }
+                tb.AddStringColumn("string:MaterialCategory", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Color_X; }
+                tb.AddDataColumn("double:Color.X", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Color_Y; }
+                tb.AddDataColumn("double:Color.Y", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Color_Z; }
+                tb.AddDataColumn("double:Color.Z", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].ColorUvScaling_X; }
+                tb.AddDataColumn("double:ColorUvScaling.X", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].ColorUvScaling_Y; }
+                tb.AddDataColumn("double:ColorUvScaling.Y", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].ColorUvOffset_X; }
+                tb.AddDataColumn("double:ColorUvOffset.X", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].ColorUvOffset_Y; }
+                tb.AddDataColumn("double:ColorUvOffset.Y", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].NormalUvScaling_X; }
+                tb.AddDataColumn("double:NormalUvScaling.X", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].NormalUvScaling_Y; }
+                tb.AddDataColumn("double:NormalUvScaling.Y", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].NormalUvOffset_X; }
+                tb.AddDataColumn("double:NormalUvOffset.X", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].NormalUvOffset_Y; }
+                tb.AddDataColumn("double:NormalUvOffset.Y", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].NormalAmount; }
+                tb.AddDataColumn("double:NormalAmount", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Glossiness; }
+                tb.AddDataColumn("double:Glossiness", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Smoothness; }
+                tb.AddDataColumn("double:Smoothness", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Transparency; }
+                tb.AddDataColumn("double:Transparency", columnData);
+            }
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._ColorTextureFile?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.Asset:ColorTextureFile", columnData);
+            }
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._NormalTextureFile?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.Asset:NormalTextureFile", columnData);
+            }
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._Element?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.Element:Element", columnData);
+            }
             return tb;
         }
-        public static EntityTableBuilder ToMaterialInElementTableBuilder(this IEnumerable<Entity> entities)
+        public static EntityTableBuilder ToMaterialInElementTableBuilder(this EntitySetBuilder<MaterialInElement> entitySet)
         {
-            var typedEntities = entities?.Cast<MaterialInElement>() ?? Enumerable.Empty<MaterialInElement>();
             var tb = new EntityTableBuilder("Vim.MaterialInElement");
-            tb.AddDataColumn("double:Area", typedEntities.Select(x => x.Area));
-            tb.AddDataColumn("double:Volume", typedEntities.Select(x => x.Volume));
-            tb.AddDataColumn("byte:IsPaint", typedEntities.Select(x => x.IsPaint));
-            tb.AddIndexColumn("index:Vim.Material:Material", typedEntities.Select(x => x._Material?.Index ?? EntityRelation.None));
-            tb.AddIndexColumn("index:Vim.Element:Element", typedEntities.Select(x => x._Element?.Index ?? EntityRelation.None));
+            var entities = entitySet.Entities;
+            var entityCount = entities.Count;
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Area; }
+                tb.AddDataColumn("double:Area", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Volume; }
+                tb.AddDataColumn("double:Volume", columnData);
+            }
+            {
+                var columnData = new Boolean[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].IsPaint; }
+                tb.AddDataColumn("byte:IsPaint", columnData);
+            }
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._Material?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.Material:Material", columnData);
+            }
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._Element?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.Element:Element", columnData);
+            }
             return tb;
         }
-        public static EntityTableBuilder ToCompoundStructureLayerTableBuilder(this IEnumerable<Entity> entities)
+        public static EntityTableBuilder ToCompoundStructureLayerTableBuilder(this EntitySetBuilder<CompoundStructureLayer> entitySet)
         {
-            var typedEntities = entities?.Cast<CompoundStructureLayer>() ?? Enumerable.Empty<CompoundStructureLayer>();
             var tb = new EntityTableBuilder("Vim.CompoundStructureLayer");
-            tb.AddDataColumn("int:OrderIndex", typedEntities.Select(x => x.OrderIndex));
-            tb.AddDataColumn("double:Width", typedEntities.Select(x => x.Width));
-            tb.AddStringColumn("string:MaterialFunctionAssignment", typedEntities.Select(x => x.MaterialFunctionAssignment));
-            tb.AddIndexColumn("index:Vim.Material:Material", typedEntities.Select(x => x._Material?.Index ?? EntityRelation.None));
-            tb.AddIndexColumn("index:Vim.CompoundStructure:CompoundStructure", typedEntities.Select(x => x._CompoundStructure?.Index ?? EntityRelation.None));
+            var entities = entitySet.Entities;
+            var entityCount = entities.Count;
+            {
+                var columnData = new Int32[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].OrderIndex; }
+                tb.AddDataColumn("int:OrderIndex", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Width; }
+                tb.AddDataColumn("double:Width", columnData);
+            }
+            {
+                var columnData = new String[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].MaterialFunctionAssignment; }
+                tb.AddStringColumn("string:MaterialFunctionAssignment", columnData);
+            }
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._Material?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.Material:Material", columnData);
+            }
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._CompoundStructure?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.CompoundStructure:CompoundStructure", columnData);
+            }
             return tb;
         }
-        public static EntityTableBuilder ToCompoundStructureTableBuilder(this IEnumerable<Entity> entities)
+        public static EntityTableBuilder ToCompoundStructureTableBuilder(this EntitySetBuilder<CompoundStructure> entitySet)
         {
-            var typedEntities = entities?.Cast<CompoundStructure>() ?? Enumerable.Empty<CompoundStructure>();
             var tb = new EntityTableBuilder("Vim.CompoundStructure");
-            tb.AddDataColumn("double:Width", typedEntities.Select(x => x.Width));
-            tb.AddIndexColumn("index:Vim.CompoundStructureLayer:StructuralLayer", typedEntities.Select(x => x._StructuralLayer?.Index ?? EntityRelation.None));
+            var entities = entitySet.Entities;
+            var entityCount = entities.Count;
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Width; }
+                tb.AddDataColumn("double:Width", columnData);
+            }
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._StructuralLayer?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.CompoundStructureLayer:StructuralLayer", columnData);
+            }
             return tb;
         }
-        public static EntityTableBuilder ToNodeTableBuilder(this IEnumerable<Entity> entities)
+        public static EntityTableBuilder ToNodeTableBuilder(this EntitySetBuilder<Node> entitySet)
         {
-            var typedEntities = entities?.Cast<Node>() ?? Enumerable.Empty<Node>();
             var tb = new EntityTableBuilder("Vim.Node");
-            tb.AddIndexColumn("index:Vim.Element:Element", typedEntities.Select(x => x._Element?.Index ?? EntityRelation.None));
+            var entities = entitySet.Entities;
+            var entityCount = entities.Count;
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._Element?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.Element:Element", columnData);
+            }
             return tb;
         }
-        public static EntityTableBuilder ToGeometryTableBuilder(this IEnumerable<Entity> entities)
+        public static EntityTableBuilder ToGeometryTableBuilder(this EntitySetBuilder<Geometry> entitySet)
         {
-            var typedEntities = entities?.Cast<Geometry>() ?? Enumerable.Empty<Geometry>();
             var tb = new EntityTableBuilder("Vim.Geometry");
-            tb.AddDataColumn("float:Box.Min.X", typedEntities.Select(x => x.Box_Min_X));
-            tb.AddDataColumn("float:Box.Min.Y", typedEntities.Select(x => x.Box_Min_Y));
-            tb.AddDataColumn("float:Box.Min.Z", typedEntities.Select(x => x.Box_Min_Z));
-            tb.AddDataColumn("float:Box.Max.X", typedEntities.Select(x => x.Box_Max_X));
-            tb.AddDataColumn("float:Box.Max.Y", typedEntities.Select(x => x.Box_Max_Y));
-            tb.AddDataColumn("float:Box.Max.Z", typedEntities.Select(x => x.Box_Max_Z));
-            tb.AddDataColumn("int:VertexCount", typedEntities.Select(x => x.VertexCount));
-            tb.AddDataColumn("int:FaceCount", typedEntities.Select(x => x.FaceCount));
+            var entities = entitySet.Entities;
+            var entityCount = entities.Count;
+            {
+                var columnData = new Single[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Box_Min_X; }
+                tb.AddDataColumn("float:Box.Min.X", columnData);
+            }
+            {
+                var columnData = new Single[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Box_Min_Y; }
+                tb.AddDataColumn("float:Box.Min.Y", columnData);
+            }
+            {
+                var columnData = new Single[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Box_Min_Z; }
+                tb.AddDataColumn("float:Box.Min.Z", columnData);
+            }
+            {
+                var columnData = new Single[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Box_Max_X; }
+                tb.AddDataColumn("float:Box.Max.X", columnData);
+            }
+            {
+                var columnData = new Single[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Box_Max_Y; }
+                tb.AddDataColumn("float:Box.Max.Y", columnData);
+            }
+            {
+                var columnData = new Single[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Box_Max_Z; }
+                tb.AddDataColumn("float:Box.Max.Z", columnData);
+            }
+            {
+                var columnData = new Int32[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].VertexCount; }
+                tb.AddDataColumn("int:VertexCount", columnData);
+            }
+            {
+                var columnData = new Int32[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].FaceCount; }
+                tb.AddDataColumn("int:FaceCount", columnData);
+            }
             return tb;
         }
-        public static EntityTableBuilder ToShapeTableBuilder(this IEnumerable<Entity> entities)
+        public static EntityTableBuilder ToShapeTableBuilder(this EntitySetBuilder<Shape> entitySet)
         {
-            var typedEntities = entities?.Cast<Shape>() ?? Enumerable.Empty<Shape>();
             var tb = new EntityTableBuilder("Vim.Shape");
-            tb.AddIndexColumn("index:Vim.Element:Element", typedEntities.Select(x => x._Element?.Index ?? EntityRelation.None));
+            var entities = entitySet.Entities;
+            var entityCount = entities.Count;
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._Element?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.Element:Element", columnData);
+            }
             return tb;
         }
-        public static EntityTableBuilder ToShapeCollectionTableBuilder(this IEnumerable<Entity> entities)
+        public static EntityTableBuilder ToShapeCollectionTableBuilder(this EntitySetBuilder<ShapeCollection> entitySet)
         {
-            var typedEntities = entities?.Cast<ShapeCollection>() ?? Enumerable.Empty<ShapeCollection>();
             var tb = new EntityTableBuilder("Vim.ShapeCollection");
-            tb.AddIndexColumn("index:Vim.Element:Element", typedEntities.Select(x => x._Element?.Index ?? EntityRelation.None));
+            var entities = entitySet.Entities;
+            var entityCount = entities.Count;
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._Element?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.Element:Element", columnData);
+            }
             return tb;
         }
-        public static EntityTableBuilder ToShapeInShapeCollectionTableBuilder(this IEnumerable<Entity> entities)
+        public static EntityTableBuilder ToShapeInShapeCollectionTableBuilder(this EntitySetBuilder<ShapeInShapeCollection> entitySet)
         {
-            var typedEntities = entities?.Cast<ShapeInShapeCollection>() ?? Enumerable.Empty<ShapeInShapeCollection>();
             var tb = new EntityTableBuilder("Vim.ShapeInShapeCollection");
-            tb.AddIndexColumn("index:Vim.Shape:Shape", typedEntities.Select(x => x._Shape?.Index ?? EntityRelation.None));
-            tb.AddIndexColumn("index:Vim.ShapeCollection:ShapeCollection", typedEntities.Select(x => x._ShapeCollection?.Index ?? EntityRelation.None));
+            var entities = entitySet.Entities;
+            var entityCount = entities.Count;
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._Shape?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.Shape:Shape", columnData);
+            }
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._ShapeCollection?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.ShapeCollection:ShapeCollection", columnData);
+            }
             return tb;
         }
-        public static EntityTableBuilder ToSystemTableBuilder(this IEnumerable<Entity> entities)
+        public static EntityTableBuilder ToSystemTableBuilder(this EntitySetBuilder<System> entitySet)
         {
-            var typedEntities = entities?.Cast<System>() ?? Enumerable.Empty<System>();
             var tb = new EntityTableBuilder("Vim.System");
-            tb.AddDataColumn("int:SystemType", typedEntities.Select(x => x.SystemType));
-            tb.AddIndexColumn("index:Vim.FamilyType:FamilyType", typedEntities.Select(x => x._FamilyType?.Index ?? EntityRelation.None));
-            tb.AddIndexColumn("index:Vim.Element:Element", typedEntities.Select(x => x._Element?.Index ?? EntityRelation.None));
+            var entities = entitySet.Entities;
+            var entityCount = entities.Count;
+            {
+                var columnData = new Int32[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].SystemType; }
+                tb.AddDataColumn("int:SystemType", columnData);
+            }
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._FamilyType?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.FamilyType:FamilyType", columnData);
+            }
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._Element?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.Element:Element", columnData);
+            }
             return tb;
         }
-        public static EntityTableBuilder ToElementInSystemTableBuilder(this IEnumerable<Entity> entities)
+        public static EntityTableBuilder ToElementInSystemTableBuilder(this EntitySetBuilder<ElementInSystem> entitySet)
         {
-            var typedEntities = entities?.Cast<ElementInSystem>() ?? Enumerable.Empty<ElementInSystem>();
             var tb = new EntityTableBuilder("Vim.ElementInSystem");
-            tb.AddDataColumn("int:Roles", typedEntities.Select(x => x.Roles));
-            tb.AddIndexColumn("index:Vim.System:System", typedEntities.Select(x => x._System?.Index ?? EntityRelation.None));
-            tb.AddIndexColumn("index:Vim.Element:Element", typedEntities.Select(x => x._Element?.Index ?? EntityRelation.None));
+            var entities = entitySet.Entities;
+            var entityCount = entities.Count;
+            {
+                var columnData = new Int32[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Roles; }
+                tb.AddDataColumn("int:Roles", columnData);
+            }
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._System?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.System:System", columnData);
+            }
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._Element?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.Element:Element", columnData);
+            }
             return tb;
         }
-        public static EntityTableBuilder ToWarningTableBuilder(this IEnumerable<Entity> entities)
+        public static EntityTableBuilder ToWarningTableBuilder(this EntitySetBuilder<Warning> entitySet)
         {
-            var typedEntities = entities?.Cast<Warning>() ?? Enumerable.Empty<Warning>();
             var tb = new EntityTableBuilder("Vim.Warning");
-            tb.AddStringColumn("string:Guid", typedEntities.Select(x => x.Guid));
-            tb.AddStringColumn("string:Severity", typedEntities.Select(x => x.Severity));
-            tb.AddStringColumn("string:Description", typedEntities.Select(x => x.Description));
-            tb.AddIndexColumn("index:Vim.BimDocument:BimDocument", typedEntities.Select(x => x._BimDocument?.Index ?? EntityRelation.None));
+            var entities = entitySet.Entities;
+            var entityCount = entities.Count;
+            {
+                var columnData = new String[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Guid; }
+                tb.AddStringColumn("string:Guid", columnData);
+            }
+            {
+                var columnData = new String[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Severity; }
+                tb.AddStringColumn("string:Severity", columnData);
+            }
+            {
+                var columnData = new String[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Description; }
+                tb.AddStringColumn("string:Description", columnData);
+            }
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._BimDocument?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.BimDocument:BimDocument", columnData);
+            }
             return tb;
         }
-        public static EntityTableBuilder ToElementInWarningTableBuilder(this IEnumerable<Entity> entities)
+        public static EntityTableBuilder ToElementInWarningTableBuilder(this EntitySetBuilder<ElementInWarning> entitySet)
         {
-            var typedEntities = entities?.Cast<ElementInWarning>() ?? Enumerable.Empty<ElementInWarning>();
             var tb = new EntityTableBuilder("Vim.ElementInWarning");
-            tb.AddIndexColumn("index:Vim.Warning:Warning", typedEntities.Select(x => x._Warning?.Index ?? EntityRelation.None));
-            tb.AddIndexColumn("index:Vim.Element:Element", typedEntities.Select(x => x._Element?.Index ?? EntityRelation.None));
+            var entities = entitySet.Entities;
+            var entityCount = entities.Count;
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._Warning?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.Warning:Warning", columnData);
+            }
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._Element?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.Element:Element", columnData);
+            }
             return tb;
         }
-        public static EntityTableBuilder ToBasePointTableBuilder(this IEnumerable<Entity> entities)
+        public static EntityTableBuilder ToBasePointTableBuilder(this EntitySetBuilder<BasePoint> entitySet)
         {
-            var typedEntities = entities?.Cast<BasePoint>() ?? Enumerable.Empty<BasePoint>();
             var tb = new EntityTableBuilder("Vim.BasePoint");
-            tb.AddDataColumn("byte:IsSurveyPoint", typedEntities.Select(x => x.IsSurveyPoint));
-            tb.AddDataColumn("double:Position.X", typedEntities.Select(x => x.Position_X));
-            tb.AddDataColumn("double:Position.Y", typedEntities.Select(x => x.Position_Y));
-            tb.AddDataColumn("double:Position.Z", typedEntities.Select(x => x.Position_Z));
-            tb.AddDataColumn("double:SharedPosition.X", typedEntities.Select(x => x.SharedPosition_X));
-            tb.AddDataColumn("double:SharedPosition.Y", typedEntities.Select(x => x.SharedPosition_Y));
-            tb.AddDataColumn("double:SharedPosition.Z", typedEntities.Select(x => x.SharedPosition_Z));
-            tb.AddIndexColumn("index:Vim.Element:Element", typedEntities.Select(x => x._Element?.Index ?? EntityRelation.None));
+            var entities = entitySet.Entities;
+            var entityCount = entities.Count;
+            {
+                var columnData = new Boolean[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].IsSurveyPoint; }
+                tb.AddDataColumn("byte:IsSurveyPoint", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Position_X; }
+                tb.AddDataColumn("double:Position.X", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Position_Y; }
+                tb.AddDataColumn("double:Position.Y", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Position_Z; }
+                tb.AddDataColumn("double:Position.Z", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].SharedPosition_X; }
+                tb.AddDataColumn("double:SharedPosition.X", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].SharedPosition_Y; }
+                tb.AddDataColumn("double:SharedPosition.Y", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].SharedPosition_Z; }
+                tb.AddDataColumn("double:SharedPosition.Z", columnData);
+            }
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._Element?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.Element:Element", columnData);
+            }
             return tb;
         }
-        public static EntityTableBuilder ToPhaseFilterTableBuilder(this IEnumerable<Entity> entities)
+        public static EntityTableBuilder ToPhaseFilterTableBuilder(this EntitySetBuilder<PhaseFilter> entitySet)
         {
-            var typedEntities = entities?.Cast<PhaseFilter>() ?? Enumerable.Empty<PhaseFilter>();
             var tb = new EntityTableBuilder("Vim.PhaseFilter");
-            tb.AddDataColumn("int:New", typedEntities.Select(x => x.New));
-            tb.AddDataColumn("int:Existing", typedEntities.Select(x => x.Existing));
-            tb.AddDataColumn("int:Demolished", typedEntities.Select(x => x.Demolished));
-            tb.AddDataColumn("int:Temporary", typedEntities.Select(x => x.Temporary));
-            tb.AddIndexColumn("index:Vim.Element:Element", typedEntities.Select(x => x._Element?.Index ?? EntityRelation.None));
+            var entities = entitySet.Entities;
+            var entityCount = entities.Count;
+            {
+                var columnData = new Int32[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].New; }
+                tb.AddDataColumn("int:New", columnData);
+            }
+            {
+                var columnData = new Int32[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Existing; }
+                tb.AddDataColumn("int:Existing", columnData);
+            }
+            {
+                var columnData = new Int32[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Demolished; }
+                tb.AddDataColumn("int:Demolished", columnData);
+            }
+            {
+                var columnData = new Int32[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Temporary; }
+                tb.AddDataColumn("int:Temporary", columnData);
+            }
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._Element?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.Element:Element", columnData);
+            }
             return tb;
         }
-        public static EntityTableBuilder ToGridTableBuilder(this IEnumerable<Entity> entities)
+        public static EntityTableBuilder ToGridTableBuilder(this EntitySetBuilder<Grid> entitySet)
         {
-            var typedEntities = entities?.Cast<Grid>() ?? Enumerable.Empty<Grid>();
             var tb = new EntityTableBuilder("Vim.Grid");
-            tb.AddDataColumn("double:StartPoint.X", typedEntities.Select(x => x.StartPoint_X));
-            tb.AddDataColumn("double:StartPoint.Y", typedEntities.Select(x => x.StartPoint_Y));
-            tb.AddDataColumn("double:StartPoint.Z", typedEntities.Select(x => x.StartPoint_Z));
-            tb.AddDataColumn("double:EndPoint.X", typedEntities.Select(x => x.EndPoint_X));
-            tb.AddDataColumn("double:EndPoint.Y", typedEntities.Select(x => x.EndPoint_Y));
-            tb.AddDataColumn("double:EndPoint.Z", typedEntities.Select(x => x.EndPoint_Z));
-            tb.AddDataColumn("byte:IsCurved", typedEntities.Select(x => x.IsCurved));
-            tb.AddDataColumn("double:Extents.Min.X", typedEntities.Select(x => x.Extents_Min_X));
-            tb.AddDataColumn("double:Extents.Min.Y", typedEntities.Select(x => x.Extents_Min_Y));
-            tb.AddDataColumn("double:Extents.Min.Z", typedEntities.Select(x => x.Extents_Min_Z));
-            tb.AddDataColumn("double:Extents.Max.X", typedEntities.Select(x => x.Extents_Max_X));
-            tb.AddDataColumn("double:Extents.Max.Y", typedEntities.Select(x => x.Extents_Max_Y));
-            tb.AddDataColumn("double:Extents.Max.Z", typedEntities.Select(x => x.Extents_Max_Z));
-            tb.AddIndexColumn("index:Vim.FamilyType:FamilyType", typedEntities.Select(x => x._FamilyType?.Index ?? EntityRelation.None));
-            tb.AddIndexColumn("index:Vim.Element:Element", typedEntities.Select(x => x._Element?.Index ?? EntityRelation.None));
+            var entities = entitySet.Entities;
+            var entityCount = entities.Count;
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].StartPoint_X; }
+                tb.AddDataColumn("double:StartPoint.X", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].StartPoint_Y; }
+                tb.AddDataColumn("double:StartPoint.Y", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].StartPoint_Z; }
+                tb.AddDataColumn("double:StartPoint.Z", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].EndPoint_X; }
+                tb.AddDataColumn("double:EndPoint.X", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].EndPoint_Y; }
+                tb.AddDataColumn("double:EndPoint.Y", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].EndPoint_Z; }
+                tb.AddDataColumn("double:EndPoint.Z", columnData);
+            }
+            {
+                var columnData = new Boolean[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].IsCurved; }
+                tb.AddDataColumn("byte:IsCurved", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Extents_Min_X; }
+                tb.AddDataColumn("double:Extents.Min.X", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Extents_Min_Y; }
+                tb.AddDataColumn("double:Extents.Min.Y", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Extents_Min_Z; }
+                tb.AddDataColumn("double:Extents.Min.Z", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Extents_Max_X; }
+                tb.AddDataColumn("double:Extents.Max.X", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Extents_Max_Y; }
+                tb.AddDataColumn("double:Extents.Max.Y", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Extents_Max_Z; }
+                tb.AddDataColumn("double:Extents.Max.Z", columnData);
+            }
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._FamilyType?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.FamilyType:FamilyType", columnData);
+            }
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._Element?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.Element:Element", columnData);
+            }
             return tb;
         }
-        public static EntityTableBuilder ToAreaTableBuilder(this IEnumerable<Entity> entities)
+        public static EntityTableBuilder ToAreaTableBuilder(this EntitySetBuilder<Area> entitySet)
         {
-            var typedEntities = entities?.Cast<Area>() ?? Enumerable.Empty<Area>();
             var tb = new EntityTableBuilder("Vim.Area");
-            tb.AddDataColumn("double:Value", typedEntities.Select(x => x.Value));
-            tb.AddDataColumn("double:Perimeter", typedEntities.Select(x => x.Perimeter));
-            tb.AddStringColumn("string:Number", typedEntities.Select(x => x.Number));
-            tb.AddDataColumn("byte:IsGrossInterior", typedEntities.Select(x => x.IsGrossInterior));
-            tb.AddIndexColumn("index:Vim.AreaScheme:AreaScheme", typedEntities.Select(x => x._AreaScheme?.Index ?? EntityRelation.None));
-            tb.AddIndexColumn("index:Vim.Element:Element", typedEntities.Select(x => x._Element?.Index ?? EntityRelation.None));
+            var entities = entitySet.Entities;
+            var entityCount = entities.Count;
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Value; }
+                tb.AddDataColumn("double:Value", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Perimeter; }
+                tb.AddDataColumn("double:Perimeter", columnData);
+            }
+            {
+                var columnData = new String[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Number; }
+                tb.AddStringColumn("string:Number", columnData);
+            }
+            {
+                var columnData = new Boolean[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].IsGrossInterior; }
+                tb.AddDataColumn("byte:IsGrossInterior", columnData);
+            }
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._AreaScheme?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.AreaScheme:AreaScheme", columnData);
+            }
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._Element?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.Element:Element", columnData);
+            }
             return tb;
         }
-        public static EntityTableBuilder ToAreaSchemeTableBuilder(this IEnumerable<Entity> entities)
+        public static EntityTableBuilder ToAreaSchemeTableBuilder(this EntitySetBuilder<AreaScheme> entitySet)
         {
-            var typedEntities = entities?.Cast<AreaScheme>() ?? Enumerable.Empty<AreaScheme>();
             var tb = new EntityTableBuilder("Vim.AreaScheme");
-            tb.AddDataColumn("byte:IsGrossBuildingArea", typedEntities.Select(x => x.IsGrossBuildingArea));
-            tb.AddIndexColumn("index:Vim.Element:Element", typedEntities.Select(x => x._Element?.Index ?? EntityRelation.None));
+            var entities = entitySet.Entities;
+            var entityCount = entities.Count;
+            {
+                var columnData = new Boolean[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].IsGrossBuildingArea; }
+                tb.AddDataColumn("byte:IsGrossBuildingArea", columnData);
+            }
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._Element?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.Element:Element", columnData);
+            }
             return tb;
         }
-        public static EntityTableBuilder ToScheduleTableBuilder(this IEnumerable<Entity> entities)
+        public static EntityTableBuilder ToScheduleTableBuilder(this EntitySetBuilder<Schedule> entitySet)
         {
-            var typedEntities = entities?.Cast<Schedule>() ?? Enumerable.Empty<Schedule>();
             var tb = new EntityTableBuilder("Vim.Schedule");
-            tb.AddIndexColumn("index:Vim.Element:Element", typedEntities.Select(x => x._Element?.Index ?? EntityRelation.None));
+            var entities = entitySet.Entities;
+            var entityCount = entities.Count;
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._Element?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.Element:Element", columnData);
+            }
             return tb;
         }
-        public static EntityTableBuilder ToScheduleColumnTableBuilder(this IEnumerable<Entity> entities)
+        public static EntityTableBuilder ToScheduleColumnTableBuilder(this EntitySetBuilder<ScheduleColumn> entitySet)
         {
-            var typedEntities = entities?.Cast<ScheduleColumn>() ?? Enumerable.Empty<ScheduleColumn>();
             var tb = new EntityTableBuilder("Vim.ScheduleColumn");
-            tb.AddStringColumn("string:Name", typedEntities.Select(x => x.Name));
-            tb.AddDataColumn("int:ColumnIndex", typedEntities.Select(x => x.ColumnIndex));
-            tb.AddIndexColumn("index:Vim.Schedule:Schedule", typedEntities.Select(x => x._Schedule?.Index ?? EntityRelation.None));
+            var entities = entitySet.Entities;
+            var entityCount = entities.Count;
+            {
+                var columnData = new String[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Name; }
+                tb.AddStringColumn("string:Name", columnData);
+            }
+            {
+                var columnData = new Int32[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].ColumnIndex; }
+                tb.AddDataColumn("int:ColumnIndex", columnData);
+            }
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._Schedule?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.Schedule:Schedule", columnData);
+            }
             return tb;
         }
-        public static EntityTableBuilder ToScheduleCellTableBuilder(this IEnumerable<Entity> entities)
+        public static EntityTableBuilder ToScheduleCellTableBuilder(this EntitySetBuilder<ScheduleCell> entitySet)
         {
-            var typedEntities = entities?.Cast<ScheduleCell>() ?? Enumerable.Empty<ScheduleCell>();
             var tb = new EntityTableBuilder("Vim.ScheduleCell");
-            tb.AddStringColumn("string:Value", typedEntities.Select(x => x.Value));
-            tb.AddDataColumn("int:RowIndex", typedEntities.Select(x => x.RowIndex));
-            tb.AddIndexColumn("index:Vim.ScheduleColumn:ScheduleColumn", typedEntities.Select(x => x._ScheduleColumn?.Index ?? EntityRelation.None));
+            var entities = entitySet.Entities;
+            var entityCount = entities.Count;
+            {
+                var columnData = new String[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Value; }
+                tb.AddStringColumn("string:Value", columnData);
+            }
+            {
+                var columnData = new Int32[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].RowIndex; }
+                tb.AddDataColumn("int:RowIndex", columnData);
+            }
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._ScheduleColumn?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.ScheduleColumn:ScheduleColumn", columnData);
+            }
             return tb;
         }
-        public static EntityTableBuilder ToViewSheetSetTableBuilder(this IEnumerable<Entity> entities)
+        public static EntityTableBuilder ToViewSheetSetTableBuilder(this EntitySetBuilder<ViewSheetSet> entitySet)
         {
-            var typedEntities = entities?.Cast<ViewSheetSet>() ?? Enumerable.Empty<ViewSheetSet>();
             var tb = new EntityTableBuilder("Vim.ViewSheetSet");
-            tb.AddIndexColumn("index:Vim.Element:Element", typedEntities.Select(x => x._Element?.Index ?? EntityRelation.None));
+            var entities = entitySet.Entities;
+            var entityCount = entities.Count;
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._Element?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.Element:Element", columnData);
+            }
             return tb;
         }
-        public static EntityTableBuilder ToViewSheetTableBuilder(this IEnumerable<Entity> entities)
+        public static EntityTableBuilder ToViewSheetTableBuilder(this EntitySetBuilder<ViewSheet> entitySet)
         {
-            var typedEntities = entities?.Cast<ViewSheet>() ?? Enumerable.Empty<ViewSheet>();
             var tb = new EntityTableBuilder("Vim.ViewSheet");
-            tb.AddIndexColumn("index:Vim.FamilyType:FamilyType", typedEntities.Select(x => x._FamilyType?.Index ?? EntityRelation.None));
-            tb.AddIndexColumn("index:Vim.Element:Element", typedEntities.Select(x => x._Element?.Index ?? EntityRelation.None));
+            var entities = entitySet.Entities;
+            var entityCount = entities.Count;
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._FamilyType?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.FamilyType:FamilyType", columnData);
+            }
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._Element?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.Element:Element", columnData);
+            }
             return tb;
         }
-        public static EntityTableBuilder ToViewSheetInViewSheetSetTableBuilder(this IEnumerable<Entity> entities)
+        public static EntityTableBuilder ToViewSheetInViewSheetSetTableBuilder(this EntitySetBuilder<ViewSheetInViewSheetSet> entitySet)
         {
-            var typedEntities = entities?.Cast<ViewSheetInViewSheetSet>() ?? Enumerable.Empty<ViewSheetInViewSheetSet>();
             var tb = new EntityTableBuilder("Vim.ViewSheetInViewSheetSet");
-            tb.AddIndexColumn("index:Vim.ViewSheet:ViewSheet", typedEntities.Select(x => x._ViewSheet?.Index ?? EntityRelation.None));
-            tb.AddIndexColumn("index:Vim.ViewSheetSet:ViewSheetSet", typedEntities.Select(x => x._ViewSheetSet?.Index ?? EntityRelation.None));
+            var entities = entitySet.Entities;
+            var entityCount = entities.Count;
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._ViewSheet?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.ViewSheet:ViewSheet", columnData);
+            }
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._ViewSheetSet?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.ViewSheetSet:ViewSheetSet", columnData);
+            }
             return tb;
         }
-        public static EntityTableBuilder ToViewInViewSheetSetTableBuilder(this IEnumerable<Entity> entities)
+        public static EntityTableBuilder ToViewInViewSheetSetTableBuilder(this EntitySetBuilder<ViewInViewSheetSet> entitySet)
         {
-            var typedEntities = entities?.Cast<ViewInViewSheetSet>() ?? Enumerable.Empty<ViewInViewSheetSet>();
             var tb = new EntityTableBuilder("Vim.ViewInViewSheetSet");
-            tb.AddIndexColumn("index:Vim.View:View", typedEntities.Select(x => x._View?.Index ?? EntityRelation.None));
-            tb.AddIndexColumn("index:Vim.ViewSheetSet:ViewSheetSet", typedEntities.Select(x => x._ViewSheetSet?.Index ?? EntityRelation.None));
+            var entities = entitySet.Entities;
+            var entityCount = entities.Count;
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._View?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.View:View", columnData);
+            }
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._ViewSheetSet?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.ViewSheetSet:ViewSheetSet", columnData);
+            }
             return tb;
         }
-        public static EntityTableBuilder ToViewInViewSheetTableBuilder(this IEnumerable<Entity> entities)
+        public static EntityTableBuilder ToViewInViewSheetTableBuilder(this EntitySetBuilder<ViewInViewSheet> entitySet)
         {
-            var typedEntities = entities?.Cast<ViewInViewSheet>() ?? Enumerable.Empty<ViewInViewSheet>();
             var tb = new EntityTableBuilder("Vim.ViewInViewSheet");
-            tb.AddIndexColumn("index:Vim.View:View", typedEntities.Select(x => x._View?.Index ?? EntityRelation.None));
-            tb.AddIndexColumn("index:Vim.ViewSheet:ViewSheet", typedEntities.Select(x => x._ViewSheet?.Index ?? EntityRelation.None));
+            var entities = entitySet.Entities;
+            var entityCount = entities.Count;
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._View?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.View:View", columnData);
+            }
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._ViewSheet?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.ViewSheet:ViewSheet", columnData);
+            }
             return tb;
         }
-        public static EntityTableBuilder ToSiteTableBuilder(this IEnumerable<Entity> entities)
+        public static EntityTableBuilder ToSiteTableBuilder(this EntitySetBuilder<Site> entitySet)
         {
-            var typedEntities = entities?.Cast<Site>() ?? Enumerable.Empty<Site>();
             var tb = new EntityTableBuilder("Vim.Site");
-            tb.AddDataColumn("double:Latitude", typedEntities.Select(x => x.Latitude));
-            tb.AddDataColumn("double:Longitude", typedEntities.Select(x => x.Longitude));
-            tb.AddStringColumn("string:Address", typedEntities.Select(x => x.Address));
-            tb.AddDataColumn("double:Elevation", typedEntities.Select(x => x.Elevation));
-            tb.AddStringColumn("string:Number", typedEntities.Select(x => x.Number));
-            tb.AddIndexColumn("index:Vim.Element:Element", typedEntities.Select(x => x._Element?.Index ?? EntityRelation.None));
+            var entities = entitySet.Entities;
+            var entityCount = entities.Count;
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Latitude; }
+                tb.AddDataColumn("double:Latitude", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Longitude; }
+                tb.AddDataColumn("double:Longitude", columnData);
+            }
+            {
+                var columnData = new String[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Address; }
+                tb.AddStringColumn("string:Address", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Elevation; }
+                tb.AddDataColumn("double:Elevation", columnData);
+            }
+            {
+                var columnData = new String[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Number; }
+                tb.AddStringColumn("string:Number", columnData);
+            }
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._Element?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.Element:Element", columnData);
+            }
             return tb;
         }
-        public static EntityTableBuilder ToBuildingTableBuilder(this IEnumerable<Entity> entities)
+        public static EntityTableBuilder ToBuildingTableBuilder(this EntitySetBuilder<Building> entitySet)
         {
-            var typedEntities = entities?.Cast<Building>() ?? Enumerable.Empty<Building>();
             var tb = new EntityTableBuilder("Vim.Building");
-            tb.AddDataColumn("double:Elevation", typedEntities.Select(x => x.Elevation));
-            tb.AddDataColumn("double:TerrainElevation", typedEntities.Select(x => x.TerrainElevation));
-            tb.AddStringColumn("string:Address", typedEntities.Select(x => x.Address));
-            tb.AddIndexColumn("index:Vim.Site:Site", typedEntities.Select(x => x._Site?.Index ?? EntityRelation.None));
-            tb.AddIndexColumn("index:Vim.Element:Element", typedEntities.Select(x => x._Element?.Index ?? EntityRelation.None));
+            var entities = entitySet.Entities;
+            var entityCount = entities.Count;
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Elevation; }
+                tb.AddDataColumn("double:Elevation", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].TerrainElevation; }
+                tb.AddDataColumn("double:TerrainElevation", columnData);
+            }
+            {
+                var columnData = new String[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Address; }
+                tb.AddStringColumn("string:Address", columnData);
+            }
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._Site?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.Site:Site", columnData);
+            }
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._Element?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.Element:Element", columnData);
+            }
             return tb;
         }
     } // DocumentBuilderExtensions
@@ -8239,60 +9609,60 @@ namespace Vim.Format.ObjectModel {
         
         public DocumentBuilder AddEntityTableSets(DocumentBuilder db)
         {
-            db.Tables.Add(AssetBuilder.EntityTableName, AssetBuilder.Entities.ToAssetTableBuilder());
-            db.Tables.Add(DisplayUnitBuilder.EntityTableName, DisplayUnitBuilder.Entities.ToDisplayUnitTableBuilder());
-            db.Tables.Add(ParameterDescriptorBuilder.EntityTableName, ParameterDescriptorBuilder.Entities.ToParameterDescriptorTableBuilder());
-            db.Tables.Add(ParameterBuilder.EntityTableName, ParameterBuilder.Entities.ToParameterTableBuilder());
-            db.Tables.Add(ElementBuilder.EntityTableName, ElementBuilder.Entities.ToElementTableBuilder());
-            db.Tables.Add(WorksetBuilder.EntityTableName, WorksetBuilder.Entities.ToWorksetTableBuilder());
-            db.Tables.Add(AssemblyInstanceBuilder.EntityTableName, AssemblyInstanceBuilder.Entities.ToAssemblyInstanceTableBuilder());
-            db.Tables.Add(GroupBuilder.EntityTableName, GroupBuilder.Entities.ToGroupTableBuilder());
-            db.Tables.Add(DesignOptionBuilder.EntityTableName, DesignOptionBuilder.Entities.ToDesignOptionTableBuilder());
-            db.Tables.Add(LevelBuilder.EntityTableName, LevelBuilder.Entities.ToLevelTableBuilder());
-            db.Tables.Add(PhaseBuilder.EntityTableName, PhaseBuilder.Entities.ToPhaseTableBuilder());
-            db.Tables.Add(RoomBuilder.EntityTableName, RoomBuilder.Entities.ToRoomTableBuilder());
-            db.Tables.Add(BimDocumentBuilder.EntityTableName, BimDocumentBuilder.Entities.ToBimDocumentTableBuilder());
-            db.Tables.Add(DisplayUnitInBimDocumentBuilder.EntityTableName, DisplayUnitInBimDocumentBuilder.Entities.ToDisplayUnitInBimDocumentTableBuilder());
-            db.Tables.Add(PhaseOrderInBimDocumentBuilder.EntityTableName, PhaseOrderInBimDocumentBuilder.Entities.ToPhaseOrderInBimDocumentTableBuilder());
-            db.Tables.Add(CategoryBuilder.EntityTableName, CategoryBuilder.Entities.ToCategoryTableBuilder());
-            db.Tables.Add(FamilyBuilder.EntityTableName, FamilyBuilder.Entities.ToFamilyTableBuilder());
-            db.Tables.Add(FamilyTypeBuilder.EntityTableName, FamilyTypeBuilder.Entities.ToFamilyTypeTableBuilder());
-            db.Tables.Add(FamilyInstanceBuilder.EntityTableName, FamilyInstanceBuilder.Entities.ToFamilyInstanceTableBuilder());
-            db.Tables.Add(ViewBuilder.EntityTableName, ViewBuilder.Entities.ToViewTableBuilder());
-            db.Tables.Add(ElementInViewBuilder.EntityTableName, ElementInViewBuilder.Entities.ToElementInViewTableBuilder());
-            db.Tables.Add(ShapeInViewBuilder.EntityTableName, ShapeInViewBuilder.Entities.ToShapeInViewTableBuilder());
-            db.Tables.Add(AssetInViewBuilder.EntityTableName, AssetInViewBuilder.Entities.ToAssetInViewTableBuilder());
-            db.Tables.Add(AssetInViewSheetBuilder.EntityTableName, AssetInViewSheetBuilder.Entities.ToAssetInViewSheetTableBuilder());
-            db.Tables.Add(LevelInViewBuilder.EntityTableName, LevelInViewBuilder.Entities.ToLevelInViewTableBuilder());
-            db.Tables.Add(CameraBuilder.EntityTableName, CameraBuilder.Entities.ToCameraTableBuilder());
-            db.Tables.Add(MaterialBuilder.EntityTableName, MaterialBuilder.Entities.ToMaterialTableBuilder());
-            db.Tables.Add(MaterialInElementBuilder.EntityTableName, MaterialInElementBuilder.Entities.ToMaterialInElementTableBuilder());
-            db.Tables.Add(CompoundStructureLayerBuilder.EntityTableName, CompoundStructureLayerBuilder.Entities.ToCompoundStructureLayerTableBuilder());
-            db.Tables.Add(CompoundStructureBuilder.EntityTableName, CompoundStructureBuilder.Entities.ToCompoundStructureTableBuilder());
-            db.Tables.Add(NodeBuilder.EntityTableName, NodeBuilder.Entities.ToNodeTableBuilder());
-            db.Tables.Add(GeometryBuilder.EntityTableName, GeometryBuilder.Entities.ToGeometryTableBuilder());
-            db.Tables.Add(ShapeBuilder.EntityTableName, ShapeBuilder.Entities.ToShapeTableBuilder());
-            db.Tables.Add(ShapeCollectionBuilder.EntityTableName, ShapeCollectionBuilder.Entities.ToShapeCollectionTableBuilder());
-            db.Tables.Add(ShapeInShapeCollectionBuilder.EntityTableName, ShapeInShapeCollectionBuilder.Entities.ToShapeInShapeCollectionTableBuilder());
-            db.Tables.Add(SystemBuilder.EntityTableName, SystemBuilder.Entities.ToSystemTableBuilder());
-            db.Tables.Add(ElementInSystemBuilder.EntityTableName, ElementInSystemBuilder.Entities.ToElementInSystemTableBuilder());
-            db.Tables.Add(WarningBuilder.EntityTableName, WarningBuilder.Entities.ToWarningTableBuilder());
-            db.Tables.Add(ElementInWarningBuilder.EntityTableName, ElementInWarningBuilder.Entities.ToElementInWarningTableBuilder());
-            db.Tables.Add(BasePointBuilder.EntityTableName, BasePointBuilder.Entities.ToBasePointTableBuilder());
-            db.Tables.Add(PhaseFilterBuilder.EntityTableName, PhaseFilterBuilder.Entities.ToPhaseFilterTableBuilder());
-            db.Tables.Add(GridBuilder.EntityTableName, GridBuilder.Entities.ToGridTableBuilder());
-            db.Tables.Add(AreaBuilder.EntityTableName, AreaBuilder.Entities.ToAreaTableBuilder());
-            db.Tables.Add(AreaSchemeBuilder.EntityTableName, AreaSchemeBuilder.Entities.ToAreaSchemeTableBuilder());
-            db.Tables.Add(ScheduleBuilder.EntityTableName, ScheduleBuilder.Entities.ToScheduleTableBuilder());
-            db.Tables.Add(ScheduleColumnBuilder.EntityTableName, ScheduleColumnBuilder.Entities.ToScheduleColumnTableBuilder());
-            db.Tables.Add(ScheduleCellBuilder.EntityTableName, ScheduleCellBuilder.Entities.ToScheduleCellTableBuilder());
-            db.Tables.Add(ViewSheetSetBuilder.EntityTableName, ViewSheetSetBuilder.Entities.ToViewSheetSetTableBuilder());
-            db.Tables.Add(ViewSheetBuilder.EntityTableName, ViewSheetBuilder.Entities.ToViewSheetTableBuilder());
-            db.Tables.Add(ViewSheetInViewSheetSetBuilder.EntityTableName, ViewSheetInViewSheetSetBuilder.Entities.ToViewSheetInViewSheetSetTableBuilder());
-            db.Tables.Add(ViewInViewSheetSetBuilder.EntityTableName, ViewInViewSheetSetBuilder.Entities.ToViewInViewSheetSetTableBuilder());
-            db.Tables.Add(ViewInViewSheetBuilder.EntityTableName, ViewInViewSheetBuilder.Entities.ToViewInViewSheetTableBuilder());
-            db.Tables.Add(SiteBuilder.EntityTableName, SiteBuilder.Entities.ToSiteTableBuilder());
-            db.Tables.Add(BuildingBuilder.EntityTableName, BuildingBuilder.Entities.ToBuildingTableBuilder());
+            db.Tables.Add(AssetBuilder.EntityTableName, AssetBuilder.ToAssetTableBuilder());
+            db.Tables.Add(DisplayUnitBuilder.EntityTableName, DisplayUnitBuilder.ToDisplayUnitTableBuilder());
+            db.Tables.Add(ParameterDescriptorBuilder.EntityTableName, ParameterDescriptorBuilder.ToParameterDescriptorTableBuilder());
+            db.Tables.Add(ParameterBuilder.EntityTableName, ParameterBuilder.ToParameterTableBuilder());
+            db.Tables.Add(ElementBuilder.EntityTableName, ElementBuilder.ToElementTableBuilder());
+            db.Tables.Add(WorksetBuilder.EntityTableName, WorksetBuilder.ToWorksetTableBuilder());
+            db.Tables.Add(AssemblyInstanceBuilder.EntityTableName, AssemblyInstanceBuilder.ToAssemblyInstanceTableBuilder());
+            db.Tables.Add(GroupBuilder.EntityTableName, GroupBuilder.ToGroupTableBuilder());
+            db.Tables.Add(DesignOptionBuilder.EntityTableName, DesignOptionBuilder.ToDesignOptionTableBuilder());
+            db.Tables.Add(LevelBuilder.EntityTableName, LevelBuilder.ToLevelTableBuilder());
+            db.Tables.Add(PhaseBuilder.EntityTableName, PhaseBuilder.ToPhaseTableBuilder());
+            db.Tables.Add(RoomBuilder.EntityTableName, RoomBuilder.ToRoomTableBuilder());
+            db.Tables.Add(BimDocumentBuilder.EntityTableName, BimDocumentBuilder.ToBimDocumentTableBuilder());
+            db.Tables.Add(DisplayUnitInBimDocumentBuilder.EntityTableName, DisplayUnitInBimDocumentBuilder.ToDisplayUnitInBimDocumentTableBuilder());
+            db.Tables.Add(PhaseOrderInBimDocumentBuilder.EntityTableName, PhaseOrderInBimDocumentBuilder.ToPhaseOrderInBimDocumentTableBuilder());
+            db.Tables.Add(CategoryBuilder.EntityTableName, CategoryBuilder.ToCategoryTableBuilder());
+            db.Tables.Add(FamilyBuilder.EntityTableName, FamilyBuilder.ToFamilyTableBuilder());
+            db.Tables.Add(FamilyTypeBuilder.EntityTableName, FamilyTypeBuilder.ToFamilyTypeTableBuilder());
+            db.Tables.Add(FamilyInstanceBuilder.EntityTableName, FamilyInstanceBuilder.ToFamilyInstanceTableBuilder());
+            db.Tables.Add(ViewBuilder.EntityTableName, ViewBuilder.ToViewTableBuilder());
+            db.Tables.Add(ElementInViewBuilder.EntityTableName, ElementInViewBuilder.ToElementInViewTableBuilder());
+            db.Tables.Add(ShapeInViewBuilder.EntityTableName, ShapeInViewBuilder.ToShapeInViewTableBuilder());
+            db.Tables.Add(AssetInViewBuilder.EntityTableName, AssetInViewBuilder.ToAssetInViewTableBuilder());
+            db.Tables.Add(AssetInViewSheetBuilder.EntityTableName, AssetInViewSheetBuilder.ToAssetInViewSheetTableBuilder());
+            db.Tables.Add(LevelInViewBuilder.EntityTableName, LevelInViewBuilder.ToLevelInViewTableBuilder());
+            db.Tables.Add(CameraBuilder.EntityTableName, CameraBuilder.ToCameraTableBuilder());
+            db.Tables.Add(MaterialBuilder.EntityTableName, MaterialBuilder.ToMaterialTableBuilder());
+            db.Tables.Add(MaterialInElementBuilder.EntityTableName, MaterialInElementBuilder.ToMaterialInElementTableBuilder());
+            db.Tables.Add(CompoundStructureLayerBuilder.EntityTableName, CompoundStructureLayerBuilder.ToCompoundStructureLayerTableBuilder());
+            db.Tables.Add(CompoundStructureBuilder.EntityTableName, CompoundStructureBuilder.ToCompoundStructureTableBuilder());
+            db.Tables.Add(NodeBuilder.EntityTableName, NodeBuilder.ToNodeTableBuilder());
+            db.Tables.Add(GeometryBuilder.EntityTableName, GeometryBuilder.ToGeometryTableBuilder());
+            db.Tables.Add(ShapeBuilder.EntityTableName, ShapeBuilder.ToShapeTableBuilder());
+            db.Tables.Add(ShapeCollectionBuilder.EntityTableName, ShapeCollectionBuilder.ToShapeCollectionTableBuilder());
+            db.Tables.Add(ShapeInShapeCollectionBuilder.EntityTableName, ShapeInShapeCollectionBuilder.ToShapeInShapeCollectionTableBuilder());
+            db.Tables.Add(SystemBuilder.EntityTableName, SystemBuilder.ToSystemTableBuilder());
+            db.Tables.Add(ElementInSystemBuilder.EntityTableName, ElementInSystemBuilder.ToElementInSystemTableBuilder());
+            db.Tables.Add(WarningBuilder.EntityTableName, WarningBuilder.ToWarningTableBuilder());
+            db.Tables.Add(ElementInWarningBuilder.EntityTableName, ElementInWarningBuilder.ToElementInWarningTableBuilder());
+            db.Tables.Add(BasePointBuilder.EntityTableName, BasePointBuilder.ToBasePointTableBuilder());
+            db.Tables.Add(PhaseFilterBuilder.EntityTableName, PhaseFilterBuilder.ToPhaseFilterTableBuilder());
+            db.Tables.Add(GridBuilder.EntityTableName, GridBuilder.ToGridTableBuilder());
+            db.Tables.Add(AreaBuilder.EntityTableName, AreaBuilder.ToAreaTableBuilder());
+            db.Tables.Add(AreaSchemeBuilder.EntityTableName, AreaSchemeBuilder.ToAreaSchemeTableBuilder());
+            db.Tables.Add(ScheduleBuilder.EntityTableName, ScheduleBuilder.ToScheduleTableBuilder());
+            db.Tables.Add(ScheduleColumnBuilder.EntityTableName, ScheduleColumnBuilder.ToScheduleColumnTableBuilder());
+            db.Tables.Add(ScheduleCellBuilder.EntityTableName, ScheduleCellBuilder.ToScheduleCellTableBuilder());
+            db.Tables.Add(ViewSheetSetBuilder.EntityTableName, ViewSheetSetBuilder.ToViewSheetSetTableBuilder());
+            db.Tables.Add(ViewSheetBuilder.EntityTableName, ViewSheetBuilder.ToViewSheetTableBuilder());
+            db.Tables.Add(ViewSheetInViewSheetSetBuilder.EntityTableName, ViewSheetInViewSheetSetBuilder.ToViewSheetInViewSheetSetTableBuilder());
+            db.Tables.Add(ViewInViewSheetSetBuilder.EntityTableName, ViewInViewSheetSetBuilder.ToViewInViewSheetSetTableBuilder());
+            db.Tables.Add(ViewInViewSheetBuilder.EntityTableName, ViewInViewSheetBuilder.ToViewInViewSheetTableBuilder());
+            db.Tables.Add(SiteBuilder.EntityTableName, SiteBuilder.ToSiteTableBuilder());
+            db.Tables.Add(BuildingBuilder.EntityTableName, BuildingBuilder.ToBuildingTableBuilder());
             
             return db;
         } // AddEntityTableSets
