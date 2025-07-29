@@ -439,13 +439,6 @@ public static class ObjectModelGenerator
         cb.AppendLine("public static class DocumentBuilderExtensions");
         cb.AppendLine("{");
 
-        cb.AppendLine("public static Func<IEnumerable<Entity>, EntityTableBuilder> GetTableBuilderFunc(this Type type)");
-        cb.AppendLine("{");
-        foreach (var et in entityTypes)
-            cb.AppendLine($"if (type == typeof({et.Name})) return To{et.Name}TableBuilder;");
-        cb.AppendLine("throw new ArgumentException(nameof(type));");
-        cb.AppendLine("}");
-
         foreach (var et in entityTypes)
         {
             var entityType = et.Name;
@@ -484,13 +477,23 @@ public static class ObjectModelGenerator
 
         cb.AppendLine("public partial class ObjectModelBuilder");
         cb.AppendLine("{");
-        // NOTE: the following line must not be made static since the ObjectModelBuilder is instantiated upon each new export.
-        // Making this static will cause the contained EntityTableBuilders to accumulate data from previous exports during the lifetime of the program.
-        cb.AppendLine("public readonly Dictionary<Type, EntityTableBuilder> EntityTableBuilders = new Dictionary<Type, EntityTableBuilder>()");
+        // NOTE: the following lines must not be made static since the ObjectModelBuilder is instantiated upon each new export.
+        // Making this static will cause the contained EntitySetBuilders to accumulate data from previous exports during the lifetime of the program.
+
+        // Instantiates a named entity table builder for each type.
+        foreach (var et in entityTypes)
+            cb.AppendLine($"public readonly EntitySetBuilder<{et.Name}> {et.Name}Builder = new EntitySetBuilder<{et.Name}>(\"{et.GetEntityTableName()}\");");
+
+        cb.AppendLine();
+        cb.AppendLine("public DocumentBuilder AddEntityTableSets(DocumentBuilder db)");
         cb.AppendLine("{");
         foreach (var et in entityTypes)
-            cb.AppendLine($"{{typeof({et.Name}), new EntityTableBuilder()}},");
-        cb.AppendLine("};");
+        {
+            cb.AppendLine($"db.Tables.Add({et.Name}Builder.EntityTableName, {et.Name}Builder.Entities.To{et.Name}TableBuilder());");
+        }
+        cb.AppendLine();
+        cb.AppendLine("return db;");
+        cb.AppendLine("} // AddEntityTableSets");
         cb.AppendLine("} // ObjectModelBuilder");
     }
 

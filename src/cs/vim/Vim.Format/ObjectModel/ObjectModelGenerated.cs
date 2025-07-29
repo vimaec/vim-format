@@ -7525,64 +7525,6 @@ namespace Vim.Format.ObjectModel {
     
     public static class DocumentBuilderExtensions
     {
-        public static Func<IEnumerable<Entity>, EntityTableBuilder> GetTableBuilderFunc(this Type type)
-        {
-            if (type == typeof(Asset)) return ToAssetTableBuilder;
-            if (type == typeof(DisplayUnit)) return ToDisplayUnitTableBuilder;
-            if (type == typeof(ParameterDescriptor)) return ToParameterDescriptorTableBuilder;
-            if (type == typeof(Parameter)) return ToParameterTableBuilder;
-            if (type == typeof(Element)) return ToElementTableBuilder;
-            if (type == typeof(Workset)) return ToWorksetTableBuilder;
-            if (type == typeof(AssemblyInstance)) return ToAssemblyInstanceTableBuilder;
-            if (type == typeof(Group)) return ToGroupTableBuilder;
-            if (type == typeof(DesignOption)) return ToDesignOptionTableBuilder;
-            if (type == typeof(Level)) return ToLevelTableBuilder;
-            if (type == typeof(Phase)) return ToPhaseTableBuilder;
-            if (type == typeof(Room)) return ToRoomTableBuilder;
-            if (type == typeof(BimDocument)) return ToBimDocumentTableBuilder;
-            if (type == typeof(DisplayUnitInBimDocument)) return ToDisplayUnitInBimDocumentTableBuilder;
-            if (type == typeof(PhaseOrderInBimDocument)) return ToPhaseOrderInBimDocumentTableBuilder;
-            if (type == typeof(Category)) return ToCategoryTableBuilder;
-            if (type == typeof(Family)) return ToFamilyTableBuilder;
-            if (type == typeof(FamilyType)) return ToFamilyTypeTableBuilder;
-            if (type == typeof(FamilyInstance)) return ToFamilyInstanceTableBuilder;
-            if (type == typeof(View)) return ToViewTableBuilder;
-            if (type == typeof(ElementInView)) return ToElementInViewTableBuilder;
-            if (type == typeof(ShapeInView)) return ToShapeInViewTableBuilder;
-            if (type == typeof(AssetInView)) return ToAssetInViewTableBuilder;
-            if (type == typeof(AssetInViewSheet)) return ToAssetInViewSheetTableBuilder;
-            if (type == typeof(LevelInView)) return ToLevelInViewTableBuilder;
-            if (type == typeof(Camera)) return ToCameraTableBuilder;
-            if (type == typeof(Material)) return ToMaterialTableBuilder;
-            if (type == typeof(MaterialInElement)) return ToMaterialInElementTableBuilder;
-            if (type == typeof(CompoundStructureLayer)) return ToCompoundStructureLayerTableBuilder;
-            if (type == typeof(CompoundStructure)) return ToCompoundStructureTableBuilder;
-            if (type == typeof(Node)) return ToNodeTableBuilder;
-            if (type == typeof(Geometry)) return ToGeometryTableBuilder;
-            if (type == typeof(Shape)) return ToShapeTableBuilder;
-            if (type == typeof(ShapeCollection)) return ToShapeCollectionTableBuilder;
-            if (type == typeof(ShapeInShapeCollection)) return ToShapeInShapeCollectionTableBuilder;
-            if (type == typeof(System)) return ToSystemTableBuilder;
-            if (type == typeof(ElementInSystem)) return ToElementInSystemTableBuilder;
-            if (type == typeof(Warning)) return ToWarningTableBuilder;
-            if (type == typeof(ElementInWarning)) return ToElementInWarningTableBuilder;
-            if (type == typeof(BasePoint)) return ToBasePointTableBuilder;
-            if (type == typeof(PhaseFilter)) return ToPhaseFilterTableBuilder;
-            if (type == typeof(Grid)) return ToGridTableBuilder;
-            if (type == typeof(Area)) return ToAreaTableBuilder;
-            if (type == typeof(AreaScheme)) return ToAreaSchemeTableBuilder;
-            if (type == typeof(Schedule)) return ToScheduleTableBuilder;
-            if (type == typeof(ScheduleColumn)) return ToScheduleColumnTableBuilder;
-            if (type == typeof(ScheduleCell)) return ToScheduleCellTableBuilder;
-            if (type == typeof(ViewSheetSet)) return ToViewSheetSetTableBuilder;
-            if (type == typeof(ViewSheet)) return ToViewSheetTableBuilder;
-            if (type == typeof(ViewSheetInViewSheetSet)) return ToViewSheetInViewSheetSetTableBuilder;
-            if (type == typeof(ViewInViewSheetSet)) return ToViewInViewSheetSetTableBuilder;
-            if (type == typeof(ViewInViewSheet)) return ToViewInViewSheetTableBuilder;
-            if (type == typeof(Site)) return ToSiteTableBuilder;
-            if (type == typeof(Building)) return ToBuildingTableBuilder;
-            throw new ArgumentException(nameof(type));
-        }
         public static EntityTableBuilder ToAssetTableBuilder(this IEnumerable<Entity> entities)
         {
             var typedEntities = entities?.Cast<Asset>() ?? Enumerable.Empty<Asset>();
@@ -8240,62 +8182,119 @@ namespace Vim.Format.ObjectModel {
     
     public partial class ObjectModelBuilder
     {
-        public readonly Dictionary<Type, EntityTableBuilder> EntityTableBuilders = new Dictionary<Type, EntityTableBuilder>()
+        public readonly EntitySetBuilder<Asset> AssetBuilder = new EntitySetBuilder<Asset>("Vim.Asset");
+        public readonly EntitySetBuilder<DisplayUnit> DisplayUnitBuilder = new EntitySetBuilder<DisplayUnit>("Vim.DisplayUnit");
+        public readonly EntitySetBuilder<ParameterDescriptor> ParameterDescriptorBuilder = new EntitySetBuilder<ParameterDescriptor>("Vim.ParameterDescriptor");
+        public readonly EntitySetBuilder<Parameter> ParameterBuilder = new EntitySetBuilder<Parameter>("Vim.Parameter");
+        public readonly EntitySetBuilder<Element> ElementBuilder = new EntitySetBuilder<Element>("Vim.Element");
+        public readonly EntitySetBuilder<Workset> WorksetBuilder = new EntitySetBuilder<Workset>("Vim.Workset");
+        public readonly EntitySetBuilder<AssemblyInstance> AssemblyInstanceBuilder = new EntitySetBuilder<AssemblyInstance>("Vim.AssemblyInstance");
+        public readonly EntitySetBuilder<Group> GroupBuilder = new EntitySetBuilder<Group>("Vim.Group");
+        public readonly EntitySetBuilder<DesignOption> DesignOptionBuilder = new EntitySetBuilder<DesignOption>("Vim.DesignOption");
+        public readonly EntitySetBuilder<Level> LevelBuilder = new EntitySetBuilder<Level>("Vim.Level");
+        public readonly EntitySetBuilder<Phase> PhaseBuilder = new EntitySetBuilder<Phase>("Vim.Phase");
+        public readonly EntitySetBuilder<Room> RoomBuilder = new EntitySetBuilder<Room>("Vim.Room");
+        public readonly EntitySetBuilder<BimDocument> BimDocumentBuilder = new EntitySetBuilder<BimDocument>("Vim.BimDocument");
+        public readonly EntitySetBuilder<DisplayUnitInBimDocument> DisplayUnitInBimDocumentBuilder = new EntitySetBuilder<DisplayUnitInBimDocument>("Vim.DisplayUnitInBimDocument");
+        public readonly EntitySetBuilder<PhaseOrderInBimDocument> PhaseOrderInBimDocumentBuilder = new EntitySetBuilder<PhaseOrderInBimDocument>("Vim.PhaseOrderInBimDocument");
+        public readonly EntitySetBuilder<Category> CategoryBuilder = new EntitySetBuilder<Category>("Vim.Category");
+        public readonly EntitySetBuilder<Family> FamilyBuilder = new EntitySetBuilder<Family>("Vim.Family");
+        public readonly EntitySetBuilder<FamilyType> FamilyTypeBuilder = new EntitySetBuilder<FamilyType>("Vim.FamilyType");
+        public readonly EntitySetBuilder<FamilyInstance> FamilyInstanceBuilder = new EntitySetBuilder<FamilyInstance>("Vim.FamilyInstance");
+        public readonly EntitySetBuilder<View> ViewBuilder = new EntitySetBuilder<View>("Vim.View");
+        public readonly EntitySetBuilder<ElementInView> ElementInViewBuilder = new EntitySetBuilder<ElementInView>("Vim.ElementInView");
+        public readonly EntitySetBuilder<ShapeInView> ShapeInViewBuilder = new EntitySetBuilder<ShapeInView>("Vim.ShapeInView");
+        public readonly EntitySetBuilder<AssetInView> AssetInViewBuilder = new EntitySetBuilder<AssetInView>("Vim.AssetInView");
+        public readonly EntitySetBuilder<AssetInViewSheet> AssetInViewSheetBuilder = new EntitySetBuilder<AssetInViewSheet>("Vim.AssetInViewSheet");
+        public readonly EntitySetBuilder<LevelInView> LevelInViewBuilder = new EntitySetBuilder<LevelInView>("Vim.LevelInView");
+        public readonly EntitySetBuilder<Camera> CameraBuilder = new EntitySetBuilder<Camera>("Vim.Camera");
+        public readonly EntitySetBuilder<Material> MaterialBuilder = new EntitySetBuilder<Material>("Vim.Material");
+        public readonly EntitySetBuilder<MaterialInElement> MaterialInElementBuilder = new EntitySetBuilder<MaterialInElement>("Vim.MaterialInElement");
+        public readonly EntitySetBuilder<CompoundStructureLayer> CompoundStructureLayerBuilder = new EntitySetBuilder<CompoundStructureLayer>("Vim.CompoundStructureLayer");
+        public readonly EntitySetBuilder<CompoundStructure> CompoundStructureBuilder = new EntitySetBuilder<CompoundStructure>("Vim.CompoundStructure");
+        public readonly EntitySetBuilder<Node> NodeBuilder = new EntitySetBuilder<Node>("Vim.Node");
+        public readonly EntitySetBuilder<Geometry> GeometryBuilder = new EntitySetBuilder<Geometry>("Vim.Geometry");
+        public readonly EntitySetBuilder<Shape> ShapeBuilder = new EntitySetBuilder<Shape>("Vim.Shape");
+        public readonly EntitySetBuilder<ShapeCollection> ShapeCollectionBuilder = new EntitySetBuilder<ShapeCollection>("Vim.ShapeCollection");
+        public readonly EntitySetBuilder<ShapeInShapeCollection> ShapeInShapeCollectionBuilder = new EntitySetBuilder<ShapeInShapeCollection>("Vim.ShapeInShapeCollection");
+        public readonly EntitySetBuilder<System> SystemBuilder = new EntitySetBuilder<System>("Vim.System");
+        public readonly EntitySetBuilder<ElementInSystem> ElementInSystemBuilder = new EntitySetBuilder<ElementInSystem>("Vim.ElementInSystem");
+        public readonly EntitySetBuilder<Warning> WarningBuilder = new EntitySetBuilder<Warning>("Vim.Warning");
+        public readonly EntitySetBuilder<ElementInWarning> ElementInWarningBuilder = new EntitySetBuilder<ElementInWarning>("Vim.ElementInWarning");
+        public readonly EntitySetBuilder<BasePoint> BasePointBuilder = new EntitySetBuilder<BasePoint>("Vim.BasePoint");
+        public readonly EntitySetBuilder<PhaseFilter> PhaseFilterBuilder = new EntitySetBuilder<PhaseFilter>("Vim.PhaseFilter");
+        public readonly EntitySetBuilder<Grid> GridBuilder = new EntitySetBuilder<Grid>("Vim.Grid");
+        public readonly EntitySetBuilder<Area> AreaBuilder = new EntitySetBuilder<Area>("Vim.Area");
+        public readonly EntitySetBuilder<AreaScheme> AreaSchemeBuilder = new EntitySetBuilder<AreaScheme>("Vim.AreaScheme");
+        public readonly EntitySetBuilder<Schedule> ScheduleBuilder = new EntitySetBuilder<Schedule>("Vim.Schedule");
+        public readonly EntitySetBuilder<ScheduleColumn> ScheduleColumnBuilder = new EntitySetBuilder<ScheduleColumn>("Vim.ScheduleColumn");
+        public readonly EntitySetBuilder<ScheduleCell> ScheduleCellBuilder = new EntitySetBuilder<ScheduleCell>("Vim.ScheduleCell");
+        public readonly EntitySetBuilder<ViewSheetSet> ViewSheetSetBuilder = new EntitySetBuilder<ViewSheetSet>("Vim.ViewSheetSet");
+        public readonly EntitySetBuilder<ViewSheet> ViewSheetBuilder = new EntitySetBuilder<ViewSheet>("Vim.ViewSheet");
+        public readonly EntitySetBuilder<ViewSheetInViewSheetSet> ViewSheetInViewSheetSetBuilder = new EntitySetBuilder<ViewSheetInViewSheetSet>("Vim.ViewSheetInViewSheetSet");
+        public readonly EntitySetBuilder<ViewInViewSheetSet> ViewInViewSheetSetBuilder = new EntitySetBuilder<ViewInViewSheetSet>("Vim.ViewInViewSheetSet");
+        public readonly EntitySetBuilder<ViewInViewSheet> ViewInViewSheetBuilder = new EntitySetBuilder<ViewInViewSheet>("Vim.ViewInViewSheet");
+        public readonly EntitySetBuilder<Site> SiteBuilder = new EntitySetBuilder<Site>("Vim.Site");
+        public readonly EntitySetBuilder<Building> BuildingBuilder = new EntitySetBuilder<Building>("Vim.Building");
+        
+        public DocumentBuilder AddEntityTableSets(DocumentBuilder db)
         {
-            {typeof(Asset), new EntityTableBuilder()},
-            {typeof(DisplayUnit), new EntityTableBuilder()},
-            {typeof(ParameterDescriptor), new EntityTableBuilder()},
-            {typeof(Parameter), new EntityTableBuilder()},
-            {typeof(Element), new EntityTableBuilder()},
-            {typeof(Workset), new EntityTableBuilder()},
-            {typeof(AssemblyInstance), new EntityTableBuilder()},
-            {typeof(Group), new EntityTableBuilder()},
-            {typeof(DesignOption), new EntityTableBuilder()},
-            {typeof(Level), new EntityTableBuilder()},
-            {typeof(Phase), new EntityTableBuilder()},
-            {typeof(Room), new EntityTableBuilder()},
-            {typeof(BimDocument), new EntityTableBuilder()},
-            {typeof(DisplayUnitInBimDocument), new EntityTableBuilder()},
-            {typeof(PhaseOrderInBimDocument), new EntityTableBuilder()},
-            {typeof(Category), new EntityTableBuilder()},
-            {typeof(Family), new EntityTableBuilder()},
-            {typeof(FamilyType), new EntityTableBuilder()},
-            {typeof(FamilyInstance), new EntityTableBuilder()},
-            {typeof(View), new EntityTableBuilder()},
-            {typeof(ElementInView), new EntityTableBuilder()},
-            {typeof(ShapeInView), new EntityTableBuilder()},
-            {typeof(AssetInView), new EntityTableBuilder()},
-            {typeof(AssetInViewSheet), new EntityTableBuilder()},
-            {typeof(LevelInView), new EntityTableBuilder()},
-            {typeof(Camera), new EntityTableBuilder()},
-            {typeof(Material), new EntityTableBuilder()},
-            {typeof(MaterialInElement), new EntityTableBuilder()},
-            {typeof(CompoundStructureLayer), new EntityTableBuilder()},
-            {typeof(CompoundStructure), new EntityTableBuilder()},
-            {typeof(Node), new EntityTableBuilder()},
-            {typeof(Geometry), new EntityTableBuilder()},
-            {typeof(Shape), new EntityTableBuilder()},
-            {typeof(ShapeCollection), new EntityTableBuilder()},
-            {typeof(ShapeInShapeCollection), new EntityTableBuilder()},
-            {typeof(System), new EntityTableBuilder()},
-            {typeof(ElementInSystem), new EntityTableBuilder()},
-            {typeof(Warning), new EntityTableBuilder()},
-            {typeof(ElementInWarning), new EntityTableBuilder()},
-            {typeof(BasePoint), new EntityTableBuilder()},
-            {typeof(PhaseFilter), new EntityTableBuilder()},
-            {typeof(Grid), new EntityTableBuilder()},
-            {typeof(Area), new EntityTableBuilder()},
-            {typeof(AreaScheme), new EntityTableBuilder()},
-            {typeof(Schedule), new EntityTableBuilder()},
-            {typeof(ScheduleColumn), new EntityTableBuilder()},
-            {typeof(ScheduleCell), new EntityTableBuilder()},
-            {typeof(ViewSheetSet), new EntityTableBuilder()},
-            {typeof(ViewSheet), new EntityTableBuilder()},
-            {typeof(ViewSheetInViewSheetSet), new EntityTableBuilder()},
-            {typeof(ViewInViewSheetSet), new EntityTableBuilder()},
-            {typeof(ViewInViewSheet), new EntityTableBuilder()},
-            {typeof(Site), new EntityTableBuilder()},
-            {typeof(Building), new EntityTableBuilder()},
-        };
+            db.Tables.Add(AssetBuilder.EntityTableName, AssetBuilder.Entities.ToAssetTableBuilder());
+            db.Tables.Add(DisplayUnitBuilder.EntityTableName, DisplayUnitBuilder.Entities.ToDisplayUnitTableBuilder());
+            db.Tables.Add(ParameterDescriptorBuilder.EntityTableName, ParameterDescriptorBuilder.Entities.ToParameterDescriptorTableBuilder());
+            db.Tables.Add(ParameterBuilder.EntityTableName, ParameterBuilder.Entities.ToParameterTableBuilder());
+            db.Tables.Add(ElementBuilder.EntityTableName, ElementBuilder.Entities.ToElementTableBuilder());
+            db.Tables.Add(WorksetBuilder.EntityTableName, WorksetBuilder.Entities.ToWorksetTableBuilder());
+            db.Tables.Add(AssemblyInstanceBuilder.EntityTableName, AssemblyInstanceBuilder.Entities.ToAssemblyInstanceTableBuilder());
+            db.Tables.Add(GroupBuilder.EntityTableName, GroupBuilder.Entities.ToGroupTableBuilder());
+            db.Tables.Add(DesignOptionBuilder.EntityTableName, DesignOptionBuilder.Entities.ToDesignOptionTableBuilder());
+            db.Tables.Add(LevelBuilder.EntityTableName, LevelBuilder.Entities.ToLevelTableBuilder());
+            db.Tables.Add(PhaseBuilder.EntityTableName, PhaseBuilder.Entities.ToPhaseTableBuilder());
+            db.Tables.Add(RoomBuilder.EntityTableName, RoomBuilder.Entities.ToRoomTableBuilder());
+            db.Tables.Add(BimDocumentBuilder.EntityTableName, BimDocumentBuilder.Entities.ToBimDocumentTableBuilder());
+            db.Tables.Add(DisplayUnitInBimDocumentBuilder.EntityTableName, DisplayUnitInBimDocumentBuilder.Entities.ToDisplayUnitInBimDocumentTableBuilder());
+            db.Tables.Add(PhaseOrderInBimDocumentBuilder.EntityTableName, PhaseOrderInBimDocumentBuilder.Entities.ToPhaseOrderInBimDocumentTableBuilder());
+            db.Tables.Add(CategoryBuilder.EntityTableName, CategoryBuilder.Entities.ToCategoryTableBuilder());
+            db.Tables.Add(FamilyBuilder.EntityTableName, FamilyBuilder.Entities.ToFamilyTableBuilder());
+            db.Tables.Add(FamilyTypeBuilder.EntityTableName, FamilyTypeBuilder.Entities.ToFamilyTypeTableBuilder());
+            db.Tables.Add(FamilyInstanceBuilder.EntityTableName, FamilyInstanceBuilder.Entities.ToFamilyInstanceTableBuilder());
+            db.Tables.Add(ViewBuilder.EntityTableName, ViewBuilder.Entities.ToViewTableBuilder());
+            db.Tables.Add(ElementInViewBuilder.EntityTableName, ElementInViewBuilder.Entities.ToElementInViewTableBuilder());
+            db.Tables.Add(ShapeInViewBuilder.EntityTableName, ShapeInViewBuilder.Entities.ToShapeInViewTableBuilder());
+            db.Tables.Add(AssetInViewBuilder.EntityTableName, AssetInViewBuilder.Entities.ToAssetInViewTableBuilder());
+            db.Tables.Add(AssetInViewSheetBuilder.EntityTableName, AssetInViewSheetBuilder.Entities.ToAssetInViewSheetTableBuilder());
+            db.Tables.Add(LevelInViewBuilder.EntityTableName, LevelInViewBuilder.Entities.ToLevelInViewTableBuilder());
+            db.Tables.Add(CameraBuilder.EntityTableName, CameraBuilder.Entities.ToCameraTableBuilder());
+            db.Tables.Add(MaterialBuilder.EntityTableName, MaterialBuilder.Entities.ToMaterialTableBuilder());
+            db.Tables.Add(MaterialInElementBuilder.EntityTableName, MaterialInElementBuilder.Entities.ToMaterialInElementTableBuilder());
+            db.Tables.Add(CompoundStructureLayerBuilder.EntityTableName, CompoundStructureLayerBuilder.Entities.ToCompoundStructureLayerTableBuilder());
+            db.Tables.Add(CompoundStructureBuilder.EntityTableName, CompoundStructureBuilder.Entities.ToCompoundStructureTableBuilder());
+            db.Tables.Add(NodeBuilder.EntityTableName, NodeBuilder.Entities.ToNodeTableBuilder());
+            db.Tables.Add(GeometryBuilder.EntityTableName, GeometryBuilder.Entities.ToGeometryTableBuilder());
+            db.Tables.Add(ShapeBuilder.EntityTableName, ShapeBuilder.Entities.ToShapeTableBuilder());
+            db.Tables.Add(ShapeCollectionBuilder.EntityTableName, ShapeCollectionBuilder.Entities.ToShapeCollectionTableBuilder());
+            db.Tables.Add(ShapeInShapeCollectionBuilder.EntityTableName, ShapeInShapeCollectionBuilder.Entities.ToShapeInShapeCollectionTableBuilder());
+            db.Tables.Add(SystemBuilder.EntityTableName, SystemBuilder.Entities.ToSystemTableBuilder());
+            db.Tables.Add(ElementInSystemBuilder.EntityTableName, ElementInSystemBuilder.Entities.ToElementInSystemTableBuilder());
+            db.Tables.Add(WarningBuilder.EntityTableName, WarningBuilder.Entities.ToWarningTableBuilder());
+            db.Tables.Add(ElementInWarningBuilder.EntityTableName, ElementInWarningBuilder.Entities.ToElementInWarningTableBuilder());
+            db.Tables.Add(BasePointBuilder.EntityTableName, BasePointBuilder.Entities.ToBasePointTableBuilder());
+            db.Tables.Add(PhaseFilterBuilder.EntityTableName, PhaseFilterBuilder.Entities.ToPhaseFilterTableBuilder());
+            db.Tables.Add(GridBuilder.EntityTableName, GridBuilder.Entities.ToGridTableBuilder());
+            db.Tables.Add(AreaBuilder.EntityTableName, AreaBuilder.Entities.ToAreaTableBuilder());
+            db.Tables.Add(AreaSchemeBuilder.EntityTableName, AreaSchemeBuilder.Entities.ToAreaSchemeTableBuilder());
+            db.Tables.Add(ScheduleBuilder.EntityTableName, ScheduleBuilder.Entities.ToScheduleTableBuilder());
+            db.Tables.Add(ScheduleColumnBuilder.EntityTableName, ScheduleColumnBuilder.Entities.ToScheduleColumnTableBuilder());
+            db.Tables.Add(ScheduleCellBuilder.EntityTableName, ScheduleCellBuilder.Entities.ToScheduleCellTableBuilder());
+            db.Tables.Add(ViewSheetSetBuilder.EntityTableName, ViewSheetSetBuilder.Entities.ToViewSheetSetTableBuilder());
+            db.Tables.Add(ViewSheetBuilder.EntityTableName, ViewSheetBuilder.Entities.ToViewSheetTableBuilder());
+            db.Tables.Add(ViewSheetInViewSheetSetBuilder.EntityTableName, ViewSheetInViewSheetSetBuilder.Entities.ToViewSheetInViewSheetSetTableBuilder());
+            db.Tables.Add(ViewInViewSheetSetBuilder.EntityTableName, ViewInViewSheetSetBuilder.Entities.ToViewInViewSheetSetTableBuilder());
+            db.Tables.Add(ViewInViewSheetBuilder.EntityTableName, ViewInViewSheetBuilder.Entities.ToViewInViewSheetTableBuilder());
+            db.Tables.Add(SiteBuilder.EntityTableName, SiteBuilder.Entities.ToSiteTableBuilder());
+            db.Tables.Add(BuildingBuilder.EntityTableName, BuildingBuilder.Entities.ToBuildingTableBuilder());
+            
+            return db;
+        } // AddEntityTableSets
     } // ObjectModelBuilder
 } // namespace
