@@ -1,6 +1,7 @@
 ﻿using NUnit.Framework;
 using System.Linq;
 using Vim.Format.Levels;
+using Vim.Util.Logging;
 using Vim.Util.Tests;
 
 namespace Vim.Format.Tests;
@@ -22,13 +23,25 @@ public static class LevelServiceTests
 
         var vimScene = VimScene.LoadVim(vim);
 
-        var (levelInfos, familyInstanceLevelInfos) = LevelService.GetLevelInfo(vimScene);
-
-        foreach (var levelInfo in levelInfos.OrderBy(l => l.NameWithElevationFeetAndFractionalInches))
+        Assert.DoesNotThrow(() =>
         {
-            logger.Log($@"
-{levelInfo}
+            using var _ = logger.LogDuration("GetLevelInfo");
+
+            var (levelInfos, familyInstanceLevelInfos) = LevelService.GetLevelInfo(vimScene);
+
+            foreach (var levelInfo in levelInfos.OrderBy(l => l.NameWithElevationFeetAndFractionalInches))
+            {
+                logger.Log($@"
+{levelInfo.PropertiesToString()}
 ");
-        }
+            }
+
+            foreach (var familyInstanceInfo in familyInstanceLevelInfos)
+            {
+                logger.Log($@"
+{familyInstanceInfo.PropertiesToString()}
+");
+            }
+        });
     }
 }

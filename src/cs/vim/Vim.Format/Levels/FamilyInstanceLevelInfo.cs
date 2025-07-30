@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using Vim.Format.ObjectModel;
@@ -275,12 +276,12 @@ namespace Vim.Format.Levels
         /// <summary>
         /// The building story immediately below the family instance's geometry minimum z coordinate. Can be null.
         /// </summary>
-        public LevelInfo GeometryMinBuildingStory { get; }
+        public LevelInfo BuildingStoryGeometryMin { get; }
 
         /// <summary>
         /// The building story immediately below the family instance's geometry maximum z coordinate. Can be null.
         /// </summary>
-        public LevelInfo GeometryMaxBuildingStory { get; }
+        public LevelInfo BuildingStoryGeometryMax { get; }
 
         /// <summary>
         /// Constructor
@@ -340,13 +341,13 @@ namespace Vim.Format.Levels
                 orderedLevelInfosByProjectElevation,
                 out var maybeBuildingStoryAbove,
                 out var maybeBuildingStoryCurrentOrBelow,
-                out var maybeGeometryMinBuildingStory,
-                out var maybeGeometryMaxBuildingStory);
+                out var maybeBuildingStoryGeometryMin,
+                out var maybeBuildingStoryGeometryMax);
 
             BuildingStoryAbovePrimaryLevel = maybeBuildingStoryAbove;
             BuildingStoryCurrentOrBelowPrimaryLevel = maybeBuildingStoryCurrentOrBelow;
-            GeometryMinBuildingStory = maybeGeometryMinBuildingStory;
-            GeometryMaxBuildingStory = maybeGeometryMaxBuildingStory;
+            BuildingStoryGeometryMin = maybeBuildingStoryGeometryMin;
+            BuildingStoryGeometryMax = maybeBuildingStoryGeometryMax;
         }
 
         /// <summary>
@@ -423,13 +424,13 @@ namespace Vim.Format.Levels
             IReadOnlyList<LevelInfo> orderedLevelInfosByProjectElevation,
             out LevelInfo maybeBuildingStoryAbove, 
             out LevelInfo maybeBuildingStoryCurrentOrBelow,
-            out LevelInfo maybeGeometryMinBuildingStory,
-            out LevelInfo maybeGeometryMaxBuildingStory)
+            out LevelInfo maybeBuildingStoryGeometryMin,
+            out LevelInfo maybeBuildingStoryGeometryMax)
         {
             maybeBuildingStoryAbove = null;
             maybeBuildingStoryCurrentOrBelow = null;
-            maybeGeometryMinBuildingStory = null;
-            maybeGeometryMaxBuildingStory = null;
+            maybeBuildingStoryGeometryMin = null;
+            maybeBuildingStoryGeometryMax = null;
 
             if (primaryProjectElevation == null)
                 return BuildingStoryGeometryContainment.Unknown;
@@ -462,13 +463,13 @@ namespace Vim.Format.Levels
                 if (bbMin >= levelProjectElevation)
                 {
                     // Find the building story below or at the geometric minimum.
-                    maybeGeometryMinBuildingStory = levelInfo;
+                    maybeBuildingStoryGeometryMin = levelInfo;
                 }
 
                 if (bbMax >= levelProjectElevation)
                 {
                     // Find the first building story below or at the geometric maximum.
-                    maybeGeometryMaxBuildingStory = levelInfo;
+                    maybeBuildingStoryGeometryMax = levelInfo;
                 }
             }
 
@@ -557,5 +558,8 @@ namespace Vim.Format.Levels
 
             return BuildingStoryGeometryContainment.Unknown;
         }
+
+        public string PropertiesToString()
+            => string.Join(Environment.NewLine, this.PropertiesToStrings());
     }
 }

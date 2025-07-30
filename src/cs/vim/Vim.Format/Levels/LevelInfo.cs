@@ -281,7 +281,7 @@ namespace Vim.Format.Levels
             }
         }
 
-        public override string ToString()
+        public string PropertiesToString()
             => string.Join(Environment.NewLine, this.PropertiesToStrings());
     }
 }
