@@ -8,7 +8,7 @@ using Vim.Format.ObjectModel;
 using Vim.G3d;
 using Vim.LinqArray;
 using Vim.Math3d;
-
+using Vim.Util;
 using IVimSceneProgress = System.IProgress<(string, double)>;
 
 namespace Vim
@@ -61,6 +61,19 @@ namespace Vim
                 g3d.SubmeshMaterials?.ToSubmeshMaterialAttribute(),
                 g3d.MeshSubmeshOffset?.ToMeshSubmeshOffsetAttribute()
             );
+
+        public AABox GetElementWorldSpaceBoundingBox(int elementIndex, DictionaryOfLists<int, int> elementIndexToNodeIndicesMap)
+        {
+            var aabb = AABox.Create();
+
+            if (!elementIndexToNodeIndicesMap.TryGetValue(elementIndex, out var nodeIndices))
+                return aabb;
+
+            foreach (var nodeIndex in nodeIndices)
+                aabb = aabb.Merge(VimNodes[nodeIndex].TransformedBoundingBox());
+
+            return aabb;
+        }
 
         private VimScene(SerializableDocument doc)
             => _SerializableDocument = doc;
@@ -212,19 +225,7 @@ namespace Vim
                 VimNodes = VimNodes.Select(nodeTransform).EvaluateInParallel();
         }
 
-        public string GetElementName(int elementIndex, string missing = "")
-            => DocumentModel.GetElementName(elementIndex, missing);
 
-        public string GetBimDocumentFileName(int index = 0, string missing = "")
-        {
-            var bimDocumentPathName = DocumentModel.GetBimDocumentPathName(index, null);
-            return bimDocumentPathName == null
-                ? missing
-                : Path.GetFileName(bimDocumentPathName);
-        }
-
-        public BimDocument GetBimDocument(int index = 0)
-            => DocumentModel.GetBimDocument(index);
 
         private class Step : IStep
         {

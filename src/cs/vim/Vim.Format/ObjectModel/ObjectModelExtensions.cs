@@ -174,5 +174,82 @@ namespace Vim.Format.ObjectModel
 
             return dataTable;
         }
+
+        /// <summary>
+        /// Returns the list of parameter indices associated with the given element index.
+        /// </summary>
+        public static List<int> GetParameterIndicesFromElementIndex(this DocumentModel dm, int elementIndex)
+        {
+            if (dm == null)
+                return new List<int>();
+
+            return dm.ElementIndexMaps.ParameterIndicesFromElementIndex.TryGetValue(elementIndex, out var parameterIndices)
+                ? parameterIndices
+                : new List<int>();
+        }
+
+        /// <summary>
+        /// Returns a grouping of entities representing elements by bim document index.
+        /// </summary>
+        public static IEnumerable<IGrouping<int, T>> GroupByBimDocumentIndex<T>(this IReadOnlyList<T> entityWithElementCollection, DocumentModel dm)
+            where T : IElementIndex
+        {
+            var elementBimDocumentIndices = dm.ElementBimDocumentIndex;
+
+            return entityWithElementCollection.GroupBy(e =>
+                elementBimDocumentIndices.ElementAtOrDefault(e.GetElementIndexOrNone(), EntityRelation.None));
+        }
+
+        /// <summary>
+        /// Returns a dictionary mapping a bim document index to a dictionary of entities whose keys are those entities' element IDs.
+        /// This is useful when you want to scope elements in a BIM document and when you are referring to elements by their IDs.
+        /// Note 1: Element IDs are only unique within their respective BIM documents.
+        /// Note 2: Entities which do not have an element association will not appear in the returned value.
+        /// </summary>
+        public static Dictionary<int, Dictionary<long, T>> GroupByBimDocumentIndexAndElementId<T>(this IReadOnlyList<T> entityWithElementCollection, DocumentModel dm)
+            where T : IElementIndex
+        {
+            if (dm == null)
+                return new Dictionary<int, Dictionary<long, T>>();
+
+            var elementIds = dm.ElementId.ToArray();
+
+            var result = entityWithElementCollection
+                .GroupByBimDocumentIndex(dm)
+                // For each bim document group, create a mapping from elementID to each entity.
+                .ToDictionary(
+                    groupByBimDocumentIndex => groupByBimDocumentIndex.Key,
+                    groupByBimDocumentIndex =>
+                    {
+                        var elementIdToEntityWithElementMap = new Dictionary<long, T>();
+
+                        foreach (var entityWithElement in groupByBimDocumentIndex)
+                        {
+                            var elementIndex = entityWithElement.GetElementIndexOrNone();
+                            if (elementIndex == EntityRelation.None)
+                                continue; // Skip entities which do not have an element index.
+
+                            var elementId = elementIds.ElementAtOrDefault(elementIndex);
+                            elementIdToEntityWithElementMap[elementId] = entityWithElement;
+                        }
+                        return elementIdToEntityWithElementMap;
+                    });
+
+            return result;
+        }
+
+        /// <summary>
+        /// Returns the entity corresponding to the given element ID.
+        /// IMPORTANT: if the given element ID is -1 or is not present in the given map, returns false and the item will be null.
+        /// </summary>
+        public static bool TryGetEntityFromElementId<T>(
+            this IReadOnlyDictionary<long, T> elementIdMap,
+            long elementId,
+            out T item)
+            where T: class
+        {
+            item = null;
+            return elementId != -1L && elementIdMap.TryGetValue(elementId, out item);
+        }
     }
 }

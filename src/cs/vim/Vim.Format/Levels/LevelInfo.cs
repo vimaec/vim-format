@@ -4,9 +4,11 @@ using System.Linq;
 using Vim.Format.ObjectModel;
 using Vim.Util;
 
+// ReSharper disable InconsistentNaming
+
 namespace Vim.Format.Levels
 {
-    public class LevelInfo
+    public class LevelInfo : IElementIndex
     {
         // SOME BACKGROUND INFORMATION ABOUT REVIT LEVELS
         //
@@ -31,46 +33,18 @@ namespace Vim.Format.Levels
         //   - When the level is not a building story, it can be a working plane used by the designer to align things
         //     like mechanical items in the ceiling, stair systems, etc.
         //
-        // What's more, family instance elements in Revit are not always directly associated to a level in the Element.Level property.
-        // In some cases, the element's level must be calculated or inferred. Here is the ordering of calculated level:
-        //
-        //   1. "Schedule Level"
-        //     - Corresponds to the schedule level parameter on a family instance which specifically defines its level.
-        //     - Not always present; the parameter must be explicitly assigned.
-        //
-        //   2. "Level"
-        //     - Corresponds to the Element.Level property.
-        //     - Not always present; if family instance (A) is hosted on another family instance (B),
-        //       then (A) will have an empty Element.Level property.
-        //
-        //   3. "Host Level":
-        //     - Corresponds to the host level parameter on a family instance. This parameter may point to either
-        //       a Level element or another family instance. In the later case, we infer that the host level is
-        //       the level of the host family instance.
-        //     - Not always present; the family instance must be hosted on either a level or another instance.
-        //
-        //   4. "Reference Level"
-        //     - Corresponds to the reference level parameter on a family instance.
-        //     - Not always present; the family instance must be associated with a reference level.
-        //
-        //   5. "Base Level"
-        //     - Corresponds to the base level constraint parameter on a family instance.
-        //     - Not always present; the family instance must be constrained.
-        //
-        //   6. "Group Level"
-        //     - The level associated to the parent group of the family instance.
-        //     - Not always present; the family instance must be part of a group.
-        //
-        //   7. "System Level"
-        //     - The level associated to the system of the family instance.
-        //     - Not always present; the family instance must be part of a system.
-        //
-        // We refer to the "Primary" level as the first non-null level association among the ones listed above.
+        // ... other relevant notes in FamilyInstanceLevelInfo.cs ...
 
         /// <summary>
         /// The Level.
         /// </summary>
         public Level Level { get; }
+
+        /// <summary>
+        /// The element index of the level.
+        /// </summary>
+        public int GetElementIndexOrNone()
+            => Level.GetElementIndexOrNone();
         
         /// <summary>
         /// The name of the Level.
@@ -158,41 +132,37 @@ namespace Vim.Format.Levels
         ///   - null: not specified
         /// </summary>
         public bool? IsRelativeToProjectBasePoint { get; private set; }
-        public const string ParameterDescriptorTypeIdElevationBase = "autodesk.revit.parameter:levelRelativeBaseType"; // Revit 2022 and beyond
-        public const string ParameterDescriptorIdElevationBase = "-1007109"; // Revit 2021 and prior
-        public bool ParameterDescriptorIsProjectBasePoint(ParameterDescriptor pd)
-            => pd.Guid.StartsWith(ParameterDescriptorTypeIdElevationBase, StringComparison.InvariantCultureIgnoreCase) ||
-               pd.Guid == ParameterDescriptorIdElevationBase;
+        //public const string TypeId_ElevationBase = "autodesk.revit.parameter:levelRelativeBaseType";
+        public const string BuiltInId_ElevationBase = "-1007109";
+        public static bool DescriptorIsProjectBasePoint(ParameterDescriptor pd)
+            => pd.Guid == BuiltInId_ElevationBase;
 
         /// <summary>
         /// Determines whether the level is considered a structural level.
         /// </summary>
         public bool IsStructural { get; private set; }
-        public const string ParameterDescriptorTypeIdIsStructural = "autodesk.revit.parameter:levelIsStructural"; // Revit 2022 and beyond
-        public const string ParameterDescriptorIdIsStructural = "-1007112"; // Revit 2021 and prior
-        public bool ParameterDescriptorIsStructural(ParameterDescriptor pd)
-            => pd.Guid.StartsWith(ParameterDescriptorTypeIdIsStructural, StringComparison.InvariantCultureIgnoreCase) ||
-               pd.Guid == ParameterDescriptorIdIsStructural;
+        //public const string TypeId_IsStructural = "autodesk.revit.parameter:levelIsStructural";
+        public const string BuiltInId_IsStructural = "-1007112";
+        public static bool DescriptorIsStructural(ParameterDescriptor pd)
+            => pd.Guid == BuiltInId_IsStructural;
 
         /// <summary>
         /// Determines whether the level is considered a building story.
         /// </summary>
         public bool IsBuildingStory { get; private set; }
-        public const string ParameterDescriptorTypeIdIsBuildingStory = "autodesk.revit.parameter:levelIsBuildingStory"; // Revit 2022 and beyond
-        public const string ParameterDescriptorIdIsBuildingStory = "-1007111"; // Revit 2021 and prior
-        public bool ParameterDescriptorIsBuildingStory(ParameterDescriptor pd)
-            => pd.Guid.StartsWith(ParameterDescriptorTypeIdIsBuildingStory, StringComparison.InvariantCultureIgnoreCase) ||
-               pd.Guid == ParameterDescriptorIdIsBuildingStory;
+        //public const string TypeId_IsBuildingStory = "autodesk.revit.parameter:levelIsBuildingStory";
+        public const string BuiltInId_IsBuildingStory = "-1007111";
+        public static bool DescriptorIsBuildingStory(ParameterDescriptor pd)
+            => pd.Guid == BuiltInId_IsBuildingStory;
 
         /// <summary>
         /// The building story above this one. Can be null if this is set to "Default" in Revit or if the level is the topmost building story.
         /// </summary>
         public Level BuildingStoryAbove { get; set; }
-        public const string ParameterDescriptorTypeIdBuildingStoryAbove = "autodesk.revit.parameter:levelUpToLevel"; // Revit 2022 and beyond
-        public const string ParameterDescriptorIdBuildingStoryAbove = "-1007110"; // Revit 2021 and prior
-        public bool ParameterDescriptorIsBuildingStoryAbove(ParameterDescriptor pd)
-            => pd.Guid.StartsWith(ParameterDescriptorTypeIdBuildingStoryAbove, StringComparison.InvariantCultureIgnoreCase) ||
-               pd.Guid == ParameterDescriptorIdBuildingStoryAbove;
+        //public const string TypeId_BuildingStoryAbove = "autodesk.revit.parameter:levelUpToLevel";
+        public const string BuiltInId_BuildingStoryAbove = "-1007110";
+        public static bool DescriptorIsBuildingStoryAbove(ParameterDescriptor pd)
+            => pd.Guid == BuiltInId_BuildingStoryAbove;
 
         /// <summary>
         /// The height of the building story above in decimal feet (unrounded).
@@ -233,66 +203,65 @@ namespace Vim.Format.Levels
         /// <summary>
         /// Constructor
         /// </summary>
-        public LevelInfo(DocumentModel dm, Level level, IReadOnlyList<Level> levelsInBimDocument, IReadOnlyList<BasePoint> basePointsInBimDocument)
+        public LevelInfo(
+            DocumentModel dm,
+            Level level,
+            IReadOnlyDictionary<long, Level> elementIdToLevelMap,
+            IReadOnlyDictionary<long, BasePoint> elementIdToBasePointMap)
         {
             Level = level;
 
-            var projectBasePoint = basePointsInBimDocument.FirstOrDefault(bp => bp.IsSurveyPoint == false);
+            var projectBasePoint = elementIdToBasePointMap.Values.FirstOrDefault(bp => bp.IsSurveyPoint == false);
             ElevationRelativeToProjectBasePointDecimalFeetUnrounded = projectBasePoint == null
                 ? (double?) null
                 : Level.ProjectElevation - projectBasePoint.Position_Z;
             
-            var surveyPoint = basePointsInBimDocument.FirstOrDefault(bp => bp.IsSurveyPoint);
+            var surveyPoint = elementIdToBasePointMap.Values.FirstOrDefault(bp => bp.IsSurveyPoint);
             ElevationRelativeToSurveyPointDecimalFeetUnrounded = surveyPoint == null
                 ? (double?) null
                 : Level.ProjectElevation - surveyPoint.Position_Z;
 
-            ReadLevelParameters(dm, levelsInBimDocument);
+            ReadLevelParameters(dm, elementIdToLevelMap);
 
             ReadLevelTypeParameters(dm);
         }
 
-        private void ReadLevelParameters(DocumentModel dm, IReadOnlyList<Level> levelsInBimDocument)
+        private void ReadLevelParameters(DocumentModel dm, IReadOnlyDictionary<long, Level> elementIdToLevelMap)
         {
-            var levelElementIndex = Level.Element?.IndexOrDefault() ?? EntityRelation.None;
-            if (!dm.ElementIndexMaps.ParameterIndicesFromElementIndex.TryGetValue(levelElementIndex, out var levelElementParameterIndices) ||
-                levelElementParameterIndices.Count <= 0)
-            {
-                return;
-            }
+            var levelElementParameterIndices = dm.GetParameterIndicesFromElementIndex(GetElementIndexOrNone());
 
-            var parameters = levelElementParameterIndices.Select(dm.GetParameter);
-            foreach (var p in parameters)
+            foreach (var paramIndex in levelElementParameterIndices)
             {
+                var p = dm.GetParameter(paramIndex);
                 var desc = p.ParameterDescriptor;
 
-                if (ParameterDescriptorIsStructural(desc) &&
+                if (DescriptorIsStructural(desc) &&
                     p.TryParseRevitParameterValueAsBoolean(desc, out var isStructural))
                 {
                     IsStructural = isStructural;
                 }
                 else if (
-                    ParameterDescriptorIsBuildingStory(desc) &&
+                    DescriptorIsBuildingStory(desc) &&
                     p.TryParseRevitParameterValueAsBoolean(desc, out var isBuildingStory))
                 {
                     IsBuildingStory = isBuildingStory;
                 }
                 else if (
-                    ParameterDescriptorIsBuildingStoryAbove(desc) &&
-                    p.TryParseRevitParameterValueAsElementId(out var storyAboveElementId))
+                    DescriptorIsBuildingStoryAbove(desc) &&
+                    p.TryParseRevitParameterValueAsElementId(out var storyAboveElementId) &&
+                    elementIdToLevelMap.TryGetEntityFromElementId(storyAboveElementId, out var buildingStoryAbove))
                 {
                     // If the building story above has an element ID of -1, then it could be set to "Default" in Revit,
-                    // meaning that the building story above must be calculated in a separate pass (see LevelService.PatchBuildingStoryAbove)
-                    BuildingStoryAbove = TryGetLevelFromElementId(storyAboveElementId, levelsInBimDocument, out var buildingStoryAbove)
-                        ? buildingStoryAbove
-                        : null;
+                    // and so BuildingStoryAbove will remain null here. To resolve this, the BuildingStoryAbove must
+                    // be calculated in a subsequent pass (see LevelService.PatchBuildingStoryAbove)
+                    BuildingStoryAbove = buildingStoryAbove;
                 }
             }
         }
 
         private void ReadLevelTypeParameters(DocumentModel dm)
         {
-            var levelTypeElementIndex = Level.FamilyType?.Element.IndexOrDefault() ?? EntityRelation.None;
+            var levelTypeElementIndex = Level.FamilyType?._Element?.Index ?? EntityRelation.None;
             if (!dm.ElementIndexMaps.ParameterIndicesFromElementIndex.TryGetValue(levelTypeElementIndex, out var levelTypeParameterIndices) ||
                 levelTypeParameterIndices.Count <= 0)
             {
@@ -304,24 +273,12 @@ namespace Vim.Format.Levels
             {
                 var desc = p.ParameterDescriptor;
 
-                if (ParameterDescriptorIsProjectBasePoint(desc) &&
+                if (DescriptorIsProjectBasePoint(desc) &&
                     p.TryParseRevitParameterAsLong(out var relativeToProjectBasePoint))
                 {
                     IsRelativeToProjectBasePoint = relativeToProjectBasePoint == 0L; // 0L == "Project Base Point", 1L == "Survey Point"
                 }
             }
-        }
-
-        private static bool TryGetLevelFromElementId(long levelElementId, IReadOnlyList<Level> levelsInBimDocument, out Level level)
-        {
-            level = null;
-
-            if (levelElementId == -1L)
-                return false;
-
-            level = levelsInBimDocument.FirstOrDefault(l => l.Element.Id == levelElementId);
-
-            return level != null;
         }
 
         public override string ToString()

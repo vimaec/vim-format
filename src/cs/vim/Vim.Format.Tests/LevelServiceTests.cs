@@ -15,11 +15,14 @@ public static class LevelServiceTests
         var dir = ctx.PrepareDirectory();
         var logger = ctx.CreateLogger();
 
+        // TODO: test skanska
+        // TODO: test with an IFC file
+        // TODO: test with empty VIM file
         var vim = VimFormatRepoPaths.GetDataFilePath("Dwelling*.vim", true);
 
         var vimScene = VimScene.LoadVim(vim);
 
-        var levelInfos = LevelService.GetLevelInfo(vimScene);
+        var (levelInfos, familyInstanceLevelInfos) = LevelService.GetLevelInfo(vimScene);
 
         foreach (var levelInfo in levelInfos.OrderBy(l => l.NameWithElevationFeetAndFractionalInches))
         {

@@ -292,12 +292,20 @@ namespace Vim.Format.ObjectModel
             => Index = index;
     }
 
+    public interface IElementIndex
+    {
+        int GetElementIndexOrNone();
+    }
+
     /// <summary>
     /// Represents an Entity which contains a Relation to an Element.
     /// </summary>
-    public partial class EntityWithElement : Entity
+    public partial class EntityWithElement : Entity, IElementIndex
     {
         public Relation<Element> _Element;
+
+        public int GetElementIndexOrNone()
+            => _Element?.Index ?? EntityRelation.None;
     }
 
     /// <summary>

@@ -7,72 +7,66 @@ using Vim.Util;
 
 namespace Vim.Format.Levels
 {
-    public class LevelService
+    public static class LevelService
     {
         /// <summary>
         /// Returns an array of LevelInfo objects representing harmonized information about the levels in the given VIM Scene (see comment in LevelInfo.cs)
         /// </summary>
-        public static LevelInfo[] GetLevelInfo(VimScene vimScene)
+        public static (LevelInfo[], FamilyInstanceLevelInfo[]) GetLevelInfo(VimScene vimScene)
         {
             var dm = vimScene.DocumentModel;
 
             var levels = dm.LevelList.ToArray();
 
-            var levelsByBimDocumentIndex = levels
-                .GroupBy(l => l?.Element?.BimDocument?.IndexOrDefault() ?? EntityRelation.None)
-                .ToDictionary(g => g.Key, g => (IReadOnlyList<Level>) g.ToArray());
+            var levelsByBimDocumentIndexAndElementId = levels.GroupByBimDocumentIndexAndElementId(dm);
+            var basePointsByBimDocumentIndexAndElementId = dm.BasePointList.ToArray().GroupByBimDocumentIndexAndElementId(dm);
 
-            var basePointsByBimDocumentIndex = dm.BasePointList
-                .GroupBy(b => b?.Element?.BimDocument.IndexOrDefault() ?? EntityRelation.None)
-                .ToDictionary(g => g.Key, g => (IReadOnlyList<BasePoint>) g.ToArray());
+            var levelInfos = CreateLevelInfos(dm, levels, levelsByBimDocumentIndexAndElementId, basePointsByBimDocumentIndexAndElementId);
+            var levelInfoByBimDocumentIndex = levelInfos.GroupByBimDocumentIndexAndElementId(dm);
+            PatchBuildingStoryAbove(levelInfoByBimDocumentIndex);
 
-            var levelInfos = CreateLevelInfos(dm, levels, levelsByBimDocumentIndex, basePointsByBimDocumentIndex);
+            var familyInstances = dm.FamilyInstanceList.ToArray();
+            var familyInstanceLevelInfos = CreateFamilyInstanceLevelInfos(vimScene, familyInstances, levelInfoByBimDocumentIndex);
 
-            PatchBuildingStoryAbove(levelInfos);
-
-            return levelInfos;
+            return (levelInfos, familyInstanceLevelInfos);
         }
 
         /// <summary>
         /// Instantiates the level infos in parallel based on the given list of levels.
         /// </summary>
         private static LevelInfo[] CreateLevelInfos(
-            DocumentModel documentModel,
+            DocumentModel dm,
             IReadOnlyList<Level> levels,
-            IReadOnlyDictionary<int, IReadOnlyList<Level>> levelsByBimDocumentIndex,
-            IReadOnlyDictionary<int, IReadOnlyList<BasePoint>> basePointsByBimDocumentIndex)
-            => levels
+            IReadOnlyDictionary<int, Dictionary<long, Level>> levelsByBimDocumentIndexAndElementId,
+            IReadOnlyDictionary<int, Dictionary<long, BasePoint>> basePointsByBimDocumentIndexAndElementId)
+        {
+            var elementBimDocumentIndex = dm.ElementBimDocumentIndex.ToArray();
+
+            return levels
                 .AsParallel()
                 .Select(level =>
                 {
-                    var bimDocumentIndex = level?.Element?.BimDocument?.IndexOrDefault() ?? EntityRelation.None;
+                    var bimDocumentIndex = elementBimDocumentIndex[level.GetElementIndexOrNone()];
 
-                    var levelsInBimDocument =
-                        levelsByBimDocumentIndex.TryGetValue(bimDocumentIndex, out var levelList)
-                            ? levelList
-                            : Array.Empty<Level>();
+                    if (!levelsByBimDocumentIndexAndElementId.TryGetValue(bimDocumentIndex, out var elementIdToLevelMap))
+                        elementIdToLevelMap = new Dictionary<long, Level>();
 
-                    var basePointsInBimDocument =
-                        basePointsByBimDocumentIndex.TryGetValue(bimDocumentIndex, out var basePointList)
-                            ? basePointList
-                            : Array.Empty<BasePoint>();
+                    if (!basePointsByBimDocumentIndexAndElementId.TryGetValue(bimDocumentIndex, out var elementIdToBasePointMap))
+                        elementIdToBasePointMap = new Dictionary<long, BasePoint>();
 
-                    return new LevelInfo(documentModel, level, levelsInBimDocument, basePointsInBimDocument);
+                    return new LevelInfo(dm, level, elementIdToLevelMap, elementIdToBasePointMap);
                 })
                 .ToArray();
+        }
 
         /// <summary>
         /// Populates the LevelInfo.BuildingStoryAbove property if it is null.
         /// </summary>
-        private static void PatchBuildingStoryAbove(IReadOnlyList<LevelInfo> levelInfos)
+        private static void PatchBuildingStoryAbove(this IReadOnlyDictionary<int, Dictionary<long, LevelInfo>> levelInfoByBimDocumentIndex)
         {
-            var levelInfosByBimDocumentIndex = levelInfos
-                .GroupBy(l => l.Level?.Element?.BimDocument.IndexOrDefault() ?? EntityRelation.None)
-                .ToDictionary(g => g.Key, g => (IReadOnlyList<LevelInfo>)g.ToArray());
-
-            foreach (var (_, levelInfosInBimDocument) in levelInfosByBimDocumentIndex)
+            foreach (var (_, levelInfosInBimDocument) in levelInfoByBimDocumentIndex)
             {
-                var levelInfosOrderedByProjectElevation = levelInfosInBimDocument.OrderBy(l => l.Level.ProjectElevation).ToArray();
+                var levelInfosOrderedByProjectElevation = levelInfosInBimDocument.Values.OrderBy(l => l.Level.ProjectElevation).ToArray();
 
                 foreach (var levelInfo in levelInfosOrderedByProjectElevation)
                 {
@@ -84,6 +78,51 @@ namespace Vim.Format.Levels
                         ?.Level;
                 }
             }
+        }
+
+        /// <summary>
+        /// Returns an array of family instance level infos based on the given list of family instances.
+        /// </summary>
+        private static FamilyInstanceLevelInfo[] CreateFamilyInstanceLevelInfos(
+            VimScene vimScene,
+            IReadOnlyList<FamilyInstance> familyInstances,
+            IReadOnlyDictionary<int, Dictionary<long, LevelInfo>> levelInfoByBimDocumentIndex)
+        {
+            var dm = vimScene.DocumentModel;
+
+            var elementIds = dm.ElementId.ToArray();
+            var elementLevelIndices = dm.ElementLevelIndex.ToArray();
+            var elementBimDocumentIndices = dm.ElementBimDocumentIndex.ToArray();
+            var levelElementIndices = dm.LevelElementIndex.ToArray();
+            var elementIndexToNodeIndicesMap = ElementIndexMaps.GetElementIndicesMap(vimScene.DocumentModel.NodeEntityTable);
+
+            var orderedLevelInfoByBimDocumentIndex = levelInfoByBimDocumentIndex.ToDictionary(
+                kv => kv.Key,
+                kv => kv.Value.Values.OrderBy(li => li.Level.ProjectElevation).ToArray());
+
+            return familyInstances
+                .AsParallel()
+                .Select(fi =>
+                {
+                    var bimDocumentIndex = elementBimDocumentIndices[fi.GetElementIndexOrNone()];
+
+                    if (!orderedLevelInfoByBimDocumentIndex.TryGetValue(bimDocumentIndex, out var orderedLevelInfosByProjectElevation))
+                        orderedLevelInfosByProjectElevation = Array.Empty<LevelInfo>();
+
+                    if (!levelInfoByBimDocumentIndex.TryGetValue(bimDocumentIndex, out var elementIdToLevelInfoMap))
+                        elementIdToLevelInfoMap = new Dictionary<long, LevelInfo>();
+
+                    return new FamilyInstanceLevelInfo(
+                        vimScene,
+                        fi,
+                        elementIds,
+                        elementLevelIndices,
+                        levelElementIndices,
+                        orderedLevelInfosByProjectElevation,
+                        elementIdToLevelInfoMap,
+                        elementIndexToNodeIndicesMap);
+                })
+                .ToArray();
         }
     }
 }
