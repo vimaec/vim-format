@@ -1,18 +1,31 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using Vim.Format.ObjectModel;
 using Vim.LinqArray;
 using Vim.Util;
 
+using ElementIndexToNodeAndGeometryMap = Vim.Util.DictionaryOfLists<int, (int NodeIndex, int GeometryIndex)>;
+
 namespace Vim.Format.Levels
 {
-    public static class LevelService
+    public class LevelInfoService
     {
+        ElementIndexToNodeAndGeometryMap ElementIndexToNodeAndGeometryIndexMap { get; }
+        private EntityTableSet TableSet { get; }
+        
+        public LevelInfoService(
+            FileInfo vimFileInfo,
+            ElementIndexToNodeAndGeometryMap elementIndexToNodeAndGeometryIndexMap)
+        {
+
+        }
+
         /// <summary>
         /// Returns an array of LevelInfo objects representing harmonized information about the levels in the given VIM Scene (see comment in LevelInfo.cs)
         /// </summary>
-        public static (LevelInfo[], FamilyInstanceLevelInfo[]) GetLevelInfo(VimScene vimScene)
+        public (LevelInfo[], FamilyInstanceLevelInfo[]) GetLevelInfos()
         {
             var dm = vimScene.DocumentModel;
 
