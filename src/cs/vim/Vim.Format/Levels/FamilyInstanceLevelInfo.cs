@@ -49,8 +49,6 @@ namespace Vim.Format.Levels
         HostLevel = 3,
         ReferenceLevel = 4,
         BaseLevel = 5,
-        GroupLevel = 6,
-        SystemLevel = 7
     }
 
     public enum BuildingStoryGeometryContainment
