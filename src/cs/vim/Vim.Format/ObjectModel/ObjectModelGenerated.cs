@@ -67,7 +67,8 @@ namespace Vim.Format.ObjectModel {
     // AUTO-GENERATED
     public partial class ParameterDescriptor
     {
-        public Vim.Format.ObjectModel.DisplayUnit DisplayUnit => _DisplayUnit.Value;
+        public Vim.Format.ObjectModel.DisplayUnit DisplayUnit => _DisplayUnit?.Value;
+        public int DisplayUnitIndex => _DisplayUnit?.Index ?? EntityRelation.None;
         public ParameterDescriptor()
         {
             _DisplayUnit = new Relation<Vim.Format.ObjectModel.DisplayUnit>();
@@ -104,8 +105,10 @@ namespace Vim.Format.ObjectModel {
     // AUTO-GENERATED
     public partial class Parameter
     {
-        public Vim.Format.ObjectModel.ParameterDescriptor ParameterDescriptor => _ParameterDescriptor.Value;
-        public Vim.Format.ObjectModel.Element Element => _Element.Value;
+        public Vim.Format.ObjectModel.ParameterDescriptor ParameterDescriptor => _ParameterDescriptor?.Value;
+        public int ParameterDescriptorIndex => _ParameterDescriptor?.Index ?? EntityRelation.None;
+        public Vim.Format.ObjectModel.Element Element => _Element?.Value;
+        public int ElementIndex => _Element?.Index ?? EntityRelation.None;
         public Parameter()
         {
             _ParameterDescriptor = new Relation<Vim.Format.ObjectModel.ParameterDescriptor>();
@@ -136,17 +139,28 @@ namespace Vim.Format.ObjectModel {
     // AUTO-GENERATED
     public partial class Element
     {
-        public Vim.Format.ObjectModel.Level Level => _Level.Value;
-        public Vim.Format.ObjectModel.Phase PhaseCreated => _PhaseCreated.Value;
-        public Vim.Format.ObjectModel.Phase PhaseDemolished => _PhaseDemolished.Value;
-        public Vim.Format.ObjectModel.Category Category => _Category.Value;
-        public Vim.Format.ObjectModel.Workset Workset => _Workset.Value;
-        public Vim.Format.ObjectModel.DesignOption DesignOption => _DesignOption.Value;
-        public Vim.Format.ObjectModel.View OwnerView => _OwnerView.Value;
-        public Vim.Format.ObjectModel.Group Group => _Group.Value;
-        public Vim.Format.ObjectModel.AssemblyInstance AssemblyInstance => _AssemblyInstance.Value;
-        public Vim.Format.ObjectModel.BimDocument BimDocument => _BimDocument.Value;
-        public Vim.Format.ObjectModel.Room Room => _Room.Value;
+        public Vim.Format.ObjectModel.Level Level => _Level?.Value;
+        public int LevelIndex => _Level?.Index ?? EntityRelation.None;
+        public Vim.Format.ObjectModel.Phase PhaseCreated => _PhaseCreated?.Value;
+        public int PhaseCreatedIndex => _PhaseCreated?.Index ?? EntityRelation.None;
+        public Vim.Format.ObjectModel.Phase PhaseDemolished => _PhaseDemolished?.Value;
+        public int PhaseDemolishedIndex => _PhaseDemolished?.Index ?? EntityRelation.None;
+        public Vim.Format.ObjectModel.Category Category => _Category?.Value;
+        public int CategoryIndex => _Category?.Index ?? EntityRelation.None;
+        public Vim.Format.ObjectModel.Workset Workset => _Workset?.Value;
+        public int WorksetIndex => _Workset?.Index ?? EntityRelation.None;
+        public Vim.Format.ObjectModel.DesignOption DesignOption => _DesignOption?.Value;
+        public int DesignOptionIndex => _DesignOption?.Index ?? EntityRelation.None;
+        public Vim.Format.ObjectModel.View OwnerView => _OwnerView?.Value;
+        public int OwnerViewIndex => _OwnerView?.Index ?? EntityRelation.None;
+        public Vim.Format.ObjectModel.Group Group => _Group?.Value;
+        public int GroupIndex => _Group?.Index ?? EntityRelation.None;
+        public Vim.Format.ObjectModel.AssemblyInstance AssemblyInstance => _AssemblyInstance?.Value;
+        public int AssemblyInstanceIndex => _AssemblyInstance?.Index ?? EntityRelation.None;
+        public Vim.Format.ObjectModel.BimDocument BimDocument => _BimDocument?.Value;
+        public int BimDocumentIndex => _BimDocument?.Index ?? EntityRelation.None;
+        public Vim.Format.ObjectModel.Room Room => _Room?.Value;
+        public int RoomIndex => _Room?.Index ?? EntityRelation.None;
         public Element()
         {
             _Level = new Relation<Vim.Format.ObjectModel.Level>();
@@ -203,7 +217,8 @@ namespace Vim.Format.ObjectModel {
     // AUTO-GENERATED
     public partial class Workset
     {
-        public Vim.Format.ObjectModel.BimDocument BimDocument => _BimDocument.Value;
+        public Vim.Format.ObjectModel.BimDocument BimDocument => _BimDocument?.Value;
+        public int BimDocumentIndex => _BimDocument?.Index ?? EntityRelation.None;
         public Workset()
         {
             _BimDocument = new Relation<Vim.Format.ObjectModel.BimDocument>();
@@ -238,7 +253,8 @@ namespace Vim.Format.ObjectModel {
     // AUTO-GENERATED
     public partial class AssemblyInstance
     {
-        public Vim.Format.ObjectModel.Element Element => _Element.Value;
+        public Vim.Format.ObjectModel.Element Element => _Element?.Value;
+        public int ElementIndex => _Element?.Index ?? EntityRelation.None;
         public AssemblyInstance()
         {
             _Element = new Relation<Vim.Format.ObjectModel.Element>();
@@ -270,7 +286,8 @@ namespace Vim.Format.ObjectModel {
     // AUTO-GENERATED
     public partial class Group
     {
-        public Vim.Format.ObjectModel.Element Element => _Element.Value;
+        public Vim.Format.ObjectModel.Element Element => _Element?.Value;
+        public int ElementIndex => _Element?.Index ?? EntityRelation.None;
         public Group()
         {
             _Element = new Relation<Vim.Format.ObjectModel.Element>();
@@ -302,7 +319,8 @@ namespace Vim.Format.ObjectModel {
     // AUTO-GENERATED
     public partial class DesignOption
     {
-        public Vim.Format.ObjectModel.Element Element => _Element.Value;
+        public Vim.Format.ObjectModel.Element Element => _Element?.Value;
+        public int ElementIndex => _Element?.Index ?? EntityRelation.None;
         public DesignOption()
         {
             _Element = new Relation<Vim.Format.ObjectModel.Element>();
@@ -331,9 +349,12 @@ namespace Vim.Format.ObjectModel {
     // AUTO-GENERATED
     public partial class Level
     {
-        public Vim.Format.ObjectModel.FamilyType FamilyType => _FamilyType.Value;
-        public Vim.Format.ObjectModel.Building Building => _Building.Value;
-        public Vim.Format.ObjectModel.Element Element => _Element.Value;
+        public Vim.Format.ObjectModel.FamilyType FamilyType => _FamilyType?.Value;
+        public int FamilyTypeIndex => _FamilyType?.Index ?? EntityRelation.None;
+        public Vim.Format.ObjectModel.Building Building => _Building?.Value;
+        public int BuildingIndex => _Building?.Index ?? EntityRelation.None;
+        public Vim.Format.ObjectModel.Element Element => _Element?.Value;
+        public int ElementIndex => _Element?.Index ?? EntityRelation.None;
         public Level()
         {
             _FamilyType = new Relation<Vim.Format.ObjectModel.FamilyType>();
@@ -367,7 +388,8 @@ namespace Vim.Format.ObjectModel {
     // AUTO-GENERATED
     public partial class Phase
     {
-        public Vim.Format.ObjectModel.Element Element => _Element.Value;
+        public Vim.Format.ObjectModel.Element Element => _Element?.Value;
+        public int ElementIndex => _Element?.Index ?? EntityRelation.None;
         public Phase()
         {
             _Element = new Relation<Vim.Format.ObjectModel.Element>();
@@ -395,8 +417,10 @@ namespace Vim.Format.ObjectModel {
     // AUTO-GENERATED
     public partial class Room
     {
-        public Vim.Format.ObjectModel.Level UpperLimit => _UpperLimit.Value;
-        public Vim.Format.ObjectModel.Element Element => _Element.Value;
+        public Vim.Format.ObjectModel.Level UpperLimit => _UpperLimit?.Value;
+        public int UpperLimitIndex => _UpperLimit?.Index ?? EntityRelation.None;
+        public Vim.Format.ObjectModel.Element Element => _Element?.Value;
+        public int ElementIndex => _Element?.Index ?? EntityRelation.None;
         public Room()
         {
             _UpperLimit = new Relation<Vim.Format.ObjectModel.Level>();
@@ -433,10 +457,14 @@ namespace Vim.Format.ObjectModel {
     // AUTO-GENERATED
     public partial class BimDocument
     {
-        public Vim.Format.ObjectModel.View ActiveView => _ActiveView.Value;
-        public Vim.Format.ObjectModel.Family OwnerFamily => _OwnerFamily.Value;
-        public Vim.Format.ObjectModel.BimDocument Parent => _Parent.Value;
-        public Vim.Format.ObjectModel.Element Element => _Element.Value;
+        public Vim.Format.ObjectModel.View ActiveView => _ActiveView?.Value;
+        public int ActiveViewIndex => _ActiveView?.Index ?? EntityRelation.None;
+        public Vim.Format.ObjectModel.Family OwnerFamily => _OwnerFamily?.Value;
+        public int OwnerFamilyIndex => _OwnerFamily?.Index ?? EntityRelation.None;
+        public Vim.Format.ObjectModel.BimDocument Parent => _Parent?.Value;
+        public int ParentIndex => _Parent?.Index ?? EntityRelation.None;
+        public Vim.Format.ObjectModel.Element Element => _Element?.Value;
+        public int ElementIndex => _Element?.Index ?? EntityRelation.None;
         public BimDocument()
         {
             _ActiveView = new Relation<Vim.Format.ObjectModel.View>();
@@ -498,8 +526,10 @@ namespace Vim.Format.ObjectModel {
     // AUTO-GENERATED
     public partial class DisplayUnitInBimDocument
     {
-        public Vim.Format.ObjectModel.DisplayUnit DisplayUnit => _DisplayUnit.Value;
-        public Vim.Format.ObjectModel.BimDocument BimDocument => _BimDocument.Value;
+        public Vim.Format.ObjectModel.DisplayUnit DisplayUnit => _DisplayUnit?.Value;
+        public int DisplayUnitIndex => _DisplayUnit?.Index ?? EntityRelation.None;
+        public Vim.Format.ObjectModel.BimDocument BimDocument => _BimDocument?.Value;
+        public int BimDocumentIndex => _BimDocument?.Index ?? EntityRelation.None;
         public DisplayUnitInBimDocument()
         {
             _DisplayUnit = new Relation<Vim.Format.ObjectModel.DisplayUnit>();
@@ -529,8 +559,10 @@ namespace Vim.Format.ObjectModel {
     // AUTO-GENERATED
     public partial class PhaseOrderInBimDocument
     {
-        public Vim.Format.ObjectModel.Phase Phase => _Phase.Value;
-        public Vim.Format.ObjectModel.BimDocument BimDocument => _BimDocument.Value;
+        public Vim.Format.ObjectModel.Phase Phase => _Phase?.Value;
+        public int PhaseIndex => _Phase?.Index ?? EntityRelation.None;
+        public Vim.Format.ObjectModel.BimDocument BimDocument => _BimDocument?.Value;
+        public int BimDocumentIndex => _BimDocument?.Index ?? EntityRelation.None;
         public PhaseOrderInBimDocument()
         {
             _Phase = new Relation<Vim.Format.ObjectModel.Phase>();
@@ -561,8 +593,10 @@ namespace Vim.Format.ObjectModel {
     // AUTO-GENERATED
     public partial class Category
     {
-        public Vim.Format.ObjectModel.Category Parent => _Parent.Value;
-        public Vim.Format.ObjectModel.Material Material => _Material.Value;
+        public Vim.Format.ObjectModel.Category Parent => _Parent?.Value;
+        public int ParentIndex => _Parent?.Index ?? EntityRelation.None;
+        public Vim.Format.ObjectModel.Material Material => _Material?.Value;
+        public int MaterialIndex => _Material?.Index ?? EntityRelation.None;
         public Category()
         {
             _Parent = new Relation<Vim.Format.ObjectModel.Category>();
@@ -599,8 +633,10 @@ namespace Vim.Format.ObjectModel {
     // AUTO-GENERATED
     public partial class Family
     {
-        public Vim.Format.ObjectModel.Category FamilyCategory => _FamilyCategory.Value;
-        public Vim.Format.ObjectModel.Element Element => _Element.Value;
+        public Vim.Format.ObjectModel.Category FamilyCategory => _FamilyCategory?.Value;
+        public int FamilyCategoryIndex => _FamilyCategory?.Index ?? EntityRelation.None;
+        public Vim.Format.ObjectModel.Element Element => _Element?.Value;
+        public int ElementIndex => _Element?.Index ?? EntityRelation.None;
         public Family()
         {
             _FamilyCategory = new Relation<Vim.Format.ObjectModel.Category>();
@@ -634,9 +670,12 @@ namespace Vim.Format.ObjectModel {
     // AUTO-GENERATED
     public partial class FamilyType
     {
-        public Vim.Format.ObjectModel.Family Family => _Family.Value;
-        public Vim.Format.ObjectModel.CompoundStructure CompoundStructure => _CompoundStructure.Value;
-        public Vim.Format.ObjectModel.Element Element => _Element.Value;
+        public Vim.Format.ObjectModel.Family Family => _Family?.Value;
+        public int FamilyIndex => _Family?.Index ?? EntityRelation.None;
+        public Vim.Format.ObjectModel.CompoundStructure CompoundStructure => _CompoundStructure?.Value;
+        public int CompoundStructureIndex => _CompoundStructure?.Index ?? EntityRelation.None;
+        public Vim.Format.ObjectModel.Element Element => _Element?.Value;
+        public int ElementIndex => _Element?.Index ?? EntityRelation.None;
         public FamilyType()
         {
             _Family = new Relation<Vim.Format.ObjectModel.Family>();
@@ -669,12 +708,18 @@ namespace Vim.Format.ObjectModel {
     // AUTO-GENERATED
     public partial class FamilyInstance
     {
-        public Vim.Format.ObjectModel.FamilyType FamilyType => _FamilyType.Value;
-        public Vim.Format.ObjectModel.Element Host => _Host.Value;
-        public Vim.Format.ObjectModel.Room FromRoom => _FromRoom.Value;
-        public Vim.Format.ObjectModel.Room ToRoom => _ToRoom.Value;
-        public Vim.Format.ObjectModel.Element SuperComponent => _SuperComponent.Value;
-        public Vim.Format.ObjectModel.Element Element => _Element.Value;
+        public Vim.Format.ObjectModel.FamilyType FamilyType => _FamilyType?.Value;
+        public int FamilyTypeIndex => _FamilyType?.Index ?? EntityRelation.None;
+        public Vim.Format.ObjectModel.Element Host => _Host?.Value;
+        public int HostIndex => _Host?.Index ?? EntityRelation.None;
+        public Vim.Format.ObjectModel.Room FromRoom => _FromRoom?.Value;
+        public int FromRoomIndex => _FromRoom?.Index ?? EntityRelation.None;
+        public Vim.Format.ObjectModel.Room ToRoom => _ToRoom?.Value;
+        public int ToRoomIndex => _ToRoom?.Index ?? EntityRelation.None;
+        public Vim.Format.ObjectModel.Element SuperComponent => _SuperComponent?.Value;
+        public int SuperComponentIndex => _SuperComponent?.Index ?? EntityRelation.None;
+        public Vim.Format.ObjectModel.Element Element => _Element?.Value;
+        public int ElementIndex => _Element?.Index ?? EntityRelation.None;
         public FamilyInstance()
         {
             _FamilyType = new Relation<Vim.Format.ObjectModel.FamilyType>();
@@ -735,9 +780,12 @@ namespace Vim.Format.ObjectModel {
     // AUTO-GENERATED
     public partial class View
     {
-        public Vim.Format.ObjectModel.Camera Camera => _Camera.Value;
-        public Vim.Format.ObjectModel.FamilyType FamilyType => _FamilyType.Value;
-        public Vim.Format.ObjectModel.Element Element => _Element.Value;
+        public Vim.Format.ObjectModel.Camera Camera => _Camera?.Value;
+        public int CameraIndex => _Camera?.Index ?? EntityRelation.None;
+        public Vim.Format.ObjectModel.FamilyType FamilyType => _FamilyType?.Value;
+        public int FamilyTypeIndex => _FamilyType?.Index ?? EntityRelation.None;
+        public Vim.Format.ObjectModel.Element Element => _Element?.Value;
+        public int ElementIndex => _Element?.Index ?? EntityRelation.None;
         public View()
         {
             _Camera = new Relation<Vim.Format.ObjectModel.Camera>();
@@ -792,8 +840,10 @@ namespace Vim.Format.ObjectModel {
     // AUTO-GENERATED
     public partial class ElementInView
     {
-        public Vim.Format.ObjectModel.View View => _View.Value;
-        public Vim.Format.ObjectModel.Element Element => _Element.Value;
+        public Vim.Format.ObjectModel.View View => _View?.Value;
+        public int ViewIndex => _View?.Index ?? EntityRelation.None;
+        public Vim.Format.ObjectModel.Element Element => _Element?.Value;
+        public int ElementIndex => _Element?.Index ?? EntityRelation.None;
         public ElementInView()
         {
             _View = new Relation<Vim.Format.ObjectModel.View>();
@@ -823,8 +873,10 @@ namespace Vim.Format.ObjectModel {
     // AUTO-GENERATED
     public partial class ShapeInView
     {
-        public Vim.Format.ObjectModel.Shape Shape => _Shape.Value;
-        public Vim.Format.ObjectModel.View View => _View.Value;
+        public Vim.Format.ObjectModel.Shape Shape => _Shape?.Value;
+        public int ShapeIndex => _Shape?.Index ?? EntityRelation.None;
+        public Vim.Format.ObjectModel.View View => _View?.Value;
+        public int ViewIndex => _View?.Index ?? EntityRelation.None;
         public ShapeInView()
         {
             _Shape = new Relation<Vim.Format.ObjectModel.Shape>();
@@ -854,8 +906,10 @@ namespace Vim.Format.ObjectModel {
     // AUTO-GENERATED
     public partial class AssetInView
     {
-        public Vim.Format.ObjectModel.Asset Asset => _Asset.Value;
-        public Vim.Format.ObjectModel.View View => _View.Value;
+        public Vim.Format.ObjectModel.Asset Asset => _Asset?.Value;
+        public int AssetIndex => _Asset?.Index ?? EntityRelation.None;
+        public Vim.Format.ObjectModel.View View => _View?.Value;
+        public int ViewIndex => _View?.Index ?? EntityRelation.None;
         public AssetInView()
         {
             _Asset = new Relation<Vim.Format.ObjectModel.Asset>();
@@ -885,8 +939,10 @@ namespace Vim.Format.ObjectModel {
     // AUTO-GENERATED
     public partial class AssetInViewSheet
     {
-        public Vim.Format.ObjectModel.Asset Asset => _Asset.Value;
-        public Vim.Format.ObjectModel.ViewSheet ViewSheet => _ViewSheet.Value;
+        public Vim.Format.ObjectModel.Asset Asset => _Asset?.Value;
+        public int AssetIndex => _Asset?.Index ?? EntityRelation.None;
+        public Vim.Format.ObjectModel.ViewSheet ViewSheet => _ViewSheet?.Value;
+        public int ViewSheetIndex => _ViewSheet?.Index ?? EntityRelation.None;
         public AssetInViewSheet()
         {
             _Asset = new Relation<Vim.Format.ObjectModel.Asset>();
@@ -916,8 +972,10 @@ namespace Vim.Format.ObjectModel {
     // AUTO-GENERATED
     public partial class LevelInView
     {
-        public Vim.Format.ObjectModel.Level Level => _Level.Value;
-        public Vim.Format.ObjectModel.View View => _View.Value;
+        public Vim.Format.ObjectModel.Level Level => _Level?.Value;
+        public int LevelIndex => _Level?.Index ?? EntityRelation.None;
+        public Vim.Format.ObjectModel.View View => _View?.Value;
+        public int ViewIndex => _View?.Index ?? EntityRelation.None;
         public LevelInView()
         {
             _Level = new Relation<Vim.Format.ObjectModel.Level>();
@@ -987,9 +1045,12 @@ namespace Vim.Format.ObjectModel {
     // AUTO-GENERATED
     public partial class Material
     {
-        public Vim.Format.ObjectModel.Asset ColorTextureFile => _ColorTextureFile.Value;
-        public Vim.Format.ObjectModel.Asset NormalTextureFile => _NormalTextureFile.Value;
-        public Vim.Format.ObjectModel.Element Element => _Element.Value;
+        public Vim.Format.ObjectModel.Asset ColorTextureFile => _ColorTextureFile?.Value;
+        public int ColorTextureFileIndex => _ColorTextureFile?.Index ?? EntityRelation.None;
+        public Vim.Format.ObjectModel.Asset NormalTextureFile => _NormalTextureFile?.Value;
+        public int NormalTextureFileIndex => _NormalTextureFile?.Index ?? EntityRelation.None;
+        public Vim.Format.ObjectModel.Element Element => _Element?.Value;
+        public int ElementIndex => _Element?.Index ?? EntityRelation.None;
         public Material()
         {
             _ColorTextureFile = new Relation<Vim.Format.ObjectModel.Asset>();
@@ -1038,8 +1099,10 @@ namespace Vim.Format.ObjectModel {
     // AUTO-GENERATED
     public partial class MaterialInElement
     {
-        public Vim.Format.ObjectModel.Material Material => _Material.Value;
-        public Vim.Format.ObjectModel.Element Element => _Element.Value;
+        public Vim.Format.ObjectModel.Material Material => _Material?.Value;
+        public int MaterialIndex => _Material?.Index ?? EntityRelation.None;
+        public Vim.Format.ObjectModel.Element Element => _Element?.Value;
+        public int ElementIndex => _Element?.Index ?? EntityRelation.None;
         public MaterialInElement()
         {
             _Material = new Relation<Vim.Format.ObjectModel.Material>();
@@ -1072,8 +1135,10 @@ namespace Vim.Format.ObjectModel {
     // AUTO-GENERATED
     public partial class CompoundStructureLayer
     {
-        public Vim.Format.ObjectModel.Material Material => _Material.Value;
-        public Vim.Format.ObjectModel.CompoundStructure CompoundStructure => _CompoundStructure.Value;
+        public Vim.Format.ObjectModel.Material Material => _Material?.Value;
+        public int MaterialIndex => _Material?.Index ?? EntityRelation.None;
+        public Vim.Format.ObjectModel.CompoundStructure CompoundStructure => _CompoundStructure?.Value;
+        public int CompoundStructureIndex => _CompoundStructure?.Index ?? EntityRelation.None;
         public CompoundStructureLayer()
         {
             _Material = new Relation<Vim.Format.ObjectModel.Material>();
@@ -1106,7 +1171,8 @@ namespace Vim.Format.ObjectModel {
     // AUTO-GENERATED
     public partial class CompoundStructure
     {
-        public Vim.Format.ObjectModel.CompoundStructureLayer StructuralLayer => _StructuralLayer.Value;
+        public Vim.Format.ObjectModel.CompoundStructureLayer StructuralLayer => _StructuralLayer?.Value;
+        public int StructuralLayerIndex => _StructuralLayer?.Index ?? EntityRelation.None;
         public CompoundStructure()
         {
             _StructuralLayer = new Relation<Vim.Format.ObjectModel.CompoundStructureLayer>();
@@ -1135,7 +1201,8 @@ namespace Vim.Format.ObjectModel {
     // AUTO-GENERATED
     public partial class Node
     {
-        public Vim.Format.ObjectModel.Element Element => _Element.Value;
+        public Vim.Format.ObjectModel.Element Element => _Element?.Value;
+        public int ElementIndex => _Element?.Index ?? EntityRelation.None;
         public Node()
         {
             _Element = new Relation<Vim.Format.ObjectModel.Element>();
@@ -1196,7 +1263,8 @@ namespace Vim.Format.ObjectModel {
     // AUTO-GENERATED
     public partial class Shape
     {
-        public Vim.Format.ObjectModel.Element Element => _Element.Value;
+        public Vim.Format.ObjectModel.Element Element => _Element?.Value;
+        public int ElementIndex => _Element?.Index ?? EntityRelation.None;
         public Shape()
         {
             _Element = new Relation<Vim.Format.ObjectModel.Element>();
@@ -1224,7 +1292,8 @@ namespace Vim.Format.ObjectModel {
     // AUTO-GENERATED
     public partial class ShapeCollection
     {
-        public Vim.Format.ObjectModel.Element Element => _Element.Value;
+        public Vim.Format.ObjectModel.Element Element => _Element?.Value;
+        public int ElementIndex => _Element?.Index ?? EntityRelation.None;
         public ShapeCollection()
         {
             _Element = new Relation<Vim.Format.ObjectModel.Element>();
@@ -1252,8 +1321,10 @@ namespace Vim.Format.ObjectModel {
     // AUTO-GENERATED
     public partial class ShapeInShapeCollection
     {
-        public Vim.Format.ObjectModel.Shape Shape => _Shape.Value;
-        public Vim.Format.ObjectModel.ShapeCollection ShapeCollection => _ShapeCollection.Value;
+        public Vim.Format.ObjectModel.Shape Shape => _Shape?.Value;
+        public int ShapeIndex => _Shape?.Index ?? EntityRelation.None;
+        public Vim.Format.ObjectModel.ShapeCollection ShapeCollection => _ShapeCollection?.Value;
+        public int ShapeCollectionIndex => _ShapeCollection?.Index ?? EntityRelation.None;
         public ShapeInShapeCollection()
         {
             _Shape = new Relation<Vim.Format.ObjectModel.Shape>();
@@ -1283,8 +1354,10 @@ namespace Vim.Format.ObjectModel {
     // AUTO-GENERATED
     public partial class System
     {
-        public Vim.Format.ObjectModel.FamilyType FamilyType => _FamilyType.Value;
-        public Vim.Format.ObjectModel.Element Element => _Element.Value;
+        public Vim.Format.ObjectModel.FamilyType FamilyType => _FamilyType?.Value;
+        public int FamilyTypeIndex => _FamilyType?.Index ?? EntityRelation.None;
+        public Vim.Format.ObjectModel.Element Element => _Element?.Value;
+        public int ElementIndex => _Element?.Index ?? EntityRelation.None;
         public System()
         {
             _FamilyType = new Relation<Vim.Format.ObjectModel.FamilyType>();
@@ -1315,8 +1388,10 @@ namespace Vim.Format.ObjectModel {
     // AUTO-GENERATED
     public partial class ElementInSystem
     {
-        public Vim.Format.ObjectModel.System System => _System.Value;
-        public Vim.Format.ObjectModel.Element Element => _Element.Value;
+        public Vim.Format.ObjectModel.System System => _System?.Value;
+        public int SystemIndex => _System?.Index ?? EntityRelation.None;
+        public Vim.Format.ObjectModel.Element Element => _Element?.Value;
+        public int ElementIndex => _Element?.Index ?? EntityRelation.None;
         public ElementInSystem()
         {
             _System = new Relation<Vim.Format.ObjectModel.System>();
@@ -1347,7 +1422,8 @@ namespace Vim.Format.ObjectModel {
     // AUTO-GENERATED
     public partial class Warning
     {
-        public Vim.Format.ObjectModel.BimDocument BimDocument => _BimDocument.Value;
+        public Vim.Format.ObjectModel.BimDocument BimDocument => _BimDocument?.Value;
+        public int BimDocumentIndex => _BimDocument?.Index ?? EntityRelation.None;
         public Warning()
         {
             _BimDocument = new Relation<Vim.Format.ObjectModel.BimDocument>();
@@ -1378,8 +1454,10 @@ namespace Vim.Format.ObjectModel {
     // AUTO-GENERATED
     public partial class ElementInWarning
     {
-        public Vim.Format.ObjectModel.Warning Warning => _Warning.Value;
-        public Vim.Format.ObjectModel.Element Element => _Element.Value;
+        public Vim.Format.ObjectModel.Warning Warning => _Warning?.Value;
+        public int WarningIndex => _Warning?.Index ?? EntityRelation.None;
+        public Vim.Format.ObjectModel.Element Element => _Element?.Value;
+        public int ElementIndex => _Element?.Index ?? EntityRelation.None;
         public ElementInWarning()
         {
             _Warning = new Relation<Vim.Format.ObjectModel.Warning>();
@@ -1409,7 +1487,8 @@ namespace Vim.Format.ObjectModel {
     // AUTO-GENERATED
     public partial class BasePoint
     {
-        public Vim.Format.ObjectModel.Element Element => _Element.Value;
+        public Vim.Format.ObjectModel.Element Element => _Element?.Value;
+        public int ElementIndex => _Element?.Index ?? EntityRelation.None;
         public BasePoint()
         {
             _Element = new Relation<Vim.Format.ObjectModel.Element>();
@@ -1444,7 +1523,8 @@ namespace Vim.Format.ObjectModel {
     // AUTO-GENERATED
     public partial class PhaseFilter
     {
-        public Vim.Format.ObjectModel.Element Element => _Element.Value;
+        public Vim.Format.ObjectModel.Element Element => _Element?.Value;
+        public int ElementIndex => _Element?.Index ?? EntityRelation.None;
         public PhaseFilter()
         {
             _Element = new Relation<Vim.Format.ObjectModel.Element>();
@@ -1476,8 +1556,10 @@ namespace Vim.Format.ObjectModel {
     // AUTO-GENERATED
     public partial class Grid
     {
-        public Vim.Format.ObjectModel.FamilyType FamilyType => _FamilyType.Value;
-        public Vim.Format.ObjectModel.Element Element => _Element.Value;
+        public Vim.Format.ObjectModel.FamilyType FamilyType => _FamilyType?.Value;
+        public int FamilyTypeIndex => _FamilyType?.Index ?? EntityRelation.None;
+        public Vim.Format.ObjectModel.Element Element => _Element?.Value;
+        public int ElementIndex => _Element?.Index ?? EntityRelation.None;
         public Grid()
         {
             _FamilyType = new Relation<Vim.Format.ObjectModel.FamilyType>();
@@ -1520,8 +1602,10 @@ namespace Vim.Format.ObjectModel {
     // AUTO-GENERATED
     public partial class Area
     {
-        public Vim.Format.ObjectModel.AreaScheme AreaScheme => _AreaScheme.Value;
-        public Vim.Format.ObjectModel.Element Element => _Element.Value;
+        public Vim.Format.ObjectModel.AreaScheme AreaScheme => _AreaScheme?.Value;
+        public int AreaSchemeIndex => _AreaScheme?.Index ?? EntityRelation.None;
+        public Vim.Format.ObjectModel.Element Element => _Element?.Value;
+        public int ElementIndex => _Element?.Index ?? EntityRelation.None;
         public Area()
         {
             _AreaScheme = new Relation<Vim.Format.ObjectModel.AreaScheme>();
@@ -1555,7 +1639,8 @@ namespace Vim.Format.ObjectModel {
     // AUTO-GENERATED
     public partial class AreaScheme
     {
-        public Vim.Format.ObjectModel.Element Element => _Element.Value;
+        public Vim.Format.ObjectModel.Element Element => _Element?.Value;
+        public int ElementIndex => _Element?.Index ?? EntityRelation.None;
         public AreaScheme()
         {
             _Element = new Relation<Vim.Format.ObjectModel.Element>();
@@ -1584,7 +1669,8 @@ namespace Vim.Format.ObjectModel {
     // AUTO-GENERATED
     public partial class Schedule
     {
-        public Vim.Format.ObjectModel.Element Element => _Element.Value;
+        public Vim.Format.ObjectModel.Element Element => _Element?.Value;
+        public int ElementIndex => _Element?.Index ?? EntityRelation.None;
         public Schedule()
         {
             _Element = new Relation<Vim.Format.ObjectModel.Element>();
@@ -1612,7 +1698,8 @@ namespace Vim.Format.ObjectModel {
     // AUTO-GENERATED
     public partial class ScheduleColumn
     {
-        public Vim.Format.ObjectModel.Schedule Schedule => _Schedule.Value;
+        public Vim.Format.ObjectModel.Schedule Schedule => _Schedule?.Value;
+        public int ScheduleIndex => _Schedule?.Index ?? EntityRelation.None;
         public ScheduleColumn()
         {
             _Schedule = new Relation<Vim.Format.ObjectModel.Schedule>();
@@ -1642,7 +1729,8 @@ namespace Vim.Format.ObjectModel {
     // AUTO-GENERATED
     public partial class ScheduleCell
     {
-        public Vim.Format.ObjectModel.ScheduleColumn ScheduleColumn => _ScheduleColumn.Value;
+        public Vim.Format.ObjectModel.ScheduleColumn ScheduleColumn => _ScheduleColumn?.Value;
+        public int ScheduleColumnIndex => _ScheduleColumn?.Index ?? EntityRelation.None;
         public ScheduleCell()
         {
             _ScheduleColumn = new Relation<Vim.Format.ObjectModel.ScheduleColumn>();
@@ -1672,7 +1760,8 @@ namespace Vim.Format.ObjectModel {
     // AUTO-GENERATED
     public partial class ViewSheetSet
     {
-        public Vim.Format.ObjectModel.Element Element => _Element.Value;
+        public Vim.Format.ObjectModel.Element Element => _Element?.Value;
+        public int ElementIndex => _Element?.Index ?? EntityRelation.None;
         public ViewSheetSet()
         {
             _Element = new Relation<Vim.Format.ObjectModel.Element>();
@@ -1700,8 +1789,10 @@ namespace Vim.Format.ObjectModel {
     // AUTO-GENERATED
     public partial class ViewSheet
     {
-        public Vim.Format.ObjectModel.FamilyType FamilyType => _FamilyType.Value;
-        public Vim.Format.ObjectModel.Element Element => _Element.Value;
+        public Vim.Format.ObjectModel.FamilyType FamilyType => _FamilyType?.Value;
+        public int FamilyTypeIndex => _FamilyType?.Index ?? EntityRelation.None;
+        public Vim.Format.ObjectModel.Element Element => _Element?.Value;
+        public int ElementIndex => _Element?.Index ?? EntityRelation.None;
         public ViewSheet()
         {
             _FamilyType = new Relation<Vim.Format.ObjectModel.FamilyType>();
@@ -1731,8 +1822,10 @@ namespace Vim.Format.ObjectModel {
     // AUTO-GENERATED
     public partial class ViewSheetInViewSheetSet
     {
-        public Vim.Format.ObjectModel.ViewSheet ViewSheet => _ViewSheet.Value;
-        public Vim.Format.ObjectModel.ViewSheetSet ViewSheetSet => _ViewSheetSet.Value;
+        public Vim.Format.ObjectModel.ViewSheet ViewSheet => _ViewSheet?.Value;
+        public int ViewSheetIndex => _ViewSheet?.Index ?? EntityRelation.None;
+        public Vim.Format.ObjectModel.ViewSheetSet ViewSheetSet => _ViewSheetSet?.Value;
+        public int ViewSheetSetIndex => _ViewSheetSet?.Index ?? EntityRelation.None;
         public ViewSheetInViewSheetSet()
         {
             _ViewSheet = new Relation<Vim.Format.ObjectModel.ViewSheet>();
@@ -1762,8 +1855,10 @@ namespace Vim.Format.ObjectModel {
     // AUTO-GENERATED
     public partial class ViewInViewSheetSet
     {
-        public Vim.Format.ObjectModel.View View => _View.Value;
-        public Vim.Format.ObjectModel.ViewSheetSet ViewSheetSet => _ViewSheetSet.Value;
+        public Vim.Format.ObjectModel.View View => _View?.Value;
+        public int ViewIndex => _View?.Index ?? EntityRelation.None;
+        public Vim.Format.ObjectModel.ViewSheetSet ViewSheetSet => _ViewSheetSet?.Value;
+        public int ViewSheetSetIndex => _ViewSheetSet?.Index ?? EntityRelation.None;
         public ViewInViewSheetSet()
         {
             _View = new Relation<Vim.Format.ObjectModel.View>();
@@ -1793,8 +1888,10 @@ namespace Vim.Format.ObjectModel {
     // AUTO-GENERATED
     public partial class ViewInViewSheet
     {
-        public Vim.Format.ObjectModel.View View => _View.Value;
-        public Vim.Format.ObjectModel.ViewSheet ViewSheet => _ViewSheet.Value;
+        public Vim.Format.ObjectModel.View View => _View?.Value;
+        public int ViewIndex => _View?.Index ?? EntityRelation.None;
+        public Vim.Format.ObjectModel.ViewSheet ViewSheet => _ViewSheet?.Value;
+        public int ViewSheetIndex => _ViewSheet?.Index ?? EntityRelation.None;
         public ViewInViewSheet()
         {
             _View = new Relation<Vim.Format.ObjectModel.View>();
@@ -1824,7 +1921,8 @@ namespace Vim.Format.ObjectModel {
     // AUTO-GENERATED
     public partial class Site
     {
-        public Vim.Format.ObjectModel.Element Element => _Element.Value;
+        public Vim.Format.ObjectModel.Element Element => _Element?.Value;
+        public int ElementIndex => _Element?.Index ?? EntityRelation.None;
         public Site()
         {
             _Element = new Relation<Vim.Format.ObjectModel.Element>();
@@ -1857,8 +1955,10 @@ namespace Vim.Format.ObjectModel {
     // AUTO-GENERATED
     public partial class Building
     {
-        public Vim.Format.ObjectModel.Site Site => _Site.Value;
-        public Vim.Format.ObjectModel.Element Element => _Element.Value;
+        public Vim.Format.ObjectModel.Site Site => _Site?.Value;
+        public int SiteIndex => _Site?.Index ?? EntityRelation.None;
+        public Vim.Format.ObjectModel.Element Element => _Element?.Value;
+        public int ElementIndex => _Element?.Index ?? EntityRelation.None;
         public Building()
         {
             _Site = new Relation<Vim.Format.ObjectModel.Site>();
@@ -4327,166 +4427,166 @@ namespace Vim.Format.ObjectModel {
             
             // Populate the entity tables.
             if (GetRawTableOrDefault("Vim.Asset") is SerializableEntityTable assetTable)
-                AssetTable = new AssetTable(assetTable, stringBuffer);
+                AssetTable = new AssetTable(assetTable, stringBuffer, this);
             
             if (GetRawTableOrDefault("Vim.DisplayUnit") is SerializableEntityTable displayunitTable)
-                DisplayUnitTable = new DisplayUnitTable(displayunitTable, stringBuffer);
+                DisplayUnitTable = new DisplayUnitTable(displayunitTable, stringBuffer, this);
             
             if (GetRawTableOrDefault("Vim.ParameterDescriptor") is SerializableEntityTable parameterdescriptorTable)
-                ParameterDescriptorTable = new ParameterDescriptorTable(parameterdescriptorTable, stringBuffer);
+                ParameterDescriptorTable = new ParameterDescriptorTable(parameterdescriptorTable, stringBuffer, this);
             
             if (GetRawTableOrDefault("Vim.Parameter") is SerializableEntityTable parameterTable)
-                ParameterTable = new ParameterTable(parameterTable, stringBuffer);
+                ParameterTable = new ParameterTable(parameterTable, stringBuffer, this);
             
             if (GetRawTableOrDefault("Vim.Element") is SerializableEntityTable elementTable)
-                ElementTable = new ElementTable(elementTable, stringBuffer);
+                ElementTable = new ElementTable(elementTable, stringBuffer, this);
             
             if (GetRawTableOrDefault("Vim.Workset") is SerializableEntityTable worksetTable)
-                WorksetTable = new WorksetTable(worksetTable, stringBuffer);
+                WorksetTable = new WorksetTable(worksetTable, stringBuffer, this);
             
             if (GetRawTableOrDefault("Vim.AssemblyInstance") is SerializableEntityTable assemblyinstanceTable)
-                AssemblyInstanceTable = new AssemblyInstanceTable(assemblyinstanceTable, stringBuffer);
+                AssemblyInstanceTable = new AssemblyInstanceTable(assemblyinstanceTable, stringBuffer, this);
             
             if (GetRawTableOrDefault("Vim.Group") is SerializableEntityTable groupTable)
-                GroupTable = new GroupTable(groupTable, stringBuffer);
+                GroupTable = new GroupTable(groupTable, stringBuffer, this);
             
             if (GetRawTableOrDefault("Vim.DesignOption") is SerializableEntityTable designoptionTable)
-                DesignOptionTable = new DesignOptionTable(designoptionTable, stringBuffer);
+                DesignOptionTable = new DesignOptionTable(designoptionTable, stringBuffer, this);
             
             if (GetRawTableOrDefault("Vim.Level") is SerializableEntityTable levelTable)
-                LevelTable = new LevelTable(levelTable, stringBuffer);
+                LevelTable = new LevelTable(levelTable, stringBuffer, this);
             
             if (GetRawTableOrDefault("Vim.Phase") is SerializableEntityTable phaseTable)
-                PhaseTable = new PhaseTable(phaseTable, stringBuffer);
+                PhaseTable = new PhaseTable(phaseTable, stringBuffer, this);
             
             if (GetRawTableOrDefault("Vim.Room") is SerializableEntityTable roomTable)
-                RoomTable = new RoomTable(roomTable, stringBuffer);
+                RoomTable = new RoomTable(roomTable, stringBuffer, this);
             
             if (GetRawTableOrDefault("Vim.BimDocument") is SerializableEntityTable bimdocumentTable)
-                BimDocumentTable = new BimDocumentTable(bimdocumentTable, stringBuffer);
+                BimDocumentTable = new BimDocumentTable(bimdocumentTable, stringBuffer, this);
             
             if (GetRawTableOrDefault("Vim.DisplayUnitInBimDocument") is SerializableEntityTable displayunitinbimdocumentTable)
-                DisplayUnitInBimDocumentTable = new DisplayUnitInBimDocumentTable(displayunitinbimdocumentTable, stringBuffer);
+                DisplayUnitInBimDocumentTable = new DisplayUnitInBimDocumentTable(displayunitinbimdocumentTable, stringBuffer, this);
             
             if (GetRawTableOrDefault("Vim.PhaseOrderInBimDocument") is SerializableEntityTable phaseorderinbimdocumentTable)
-                PhaseOrderInBimDocumentTable = new PhaseOrderInBimDocumentTable(phaseorderinbimdocumentTable, stringBuffer);
+                PhaseOrderInBimDocumentTable = new PhaseOrderInBimDocumentTable(phaseorderinbimdocumentTable, stringBuffer, this);
             
             if (GetRawTableOrDefault("Vim.Category") is SerializableEntityTable categoryTable)
-                CategoryTable = new CategoryTable(categoryTable, stringBuffer);
+                CategoryTable = new CategoryTable(categoryTable, stringBuffer, this);
             
             if (GetRawTableOrDefault("Vim.Family") is SerializableEntityTable familyTable)
-                FamilyTable = new FamilyTable(familyTable, stringBuffer);
+                FamilyTable = new FamilyTable(familyTable, stringBuffer, this);
             
             if (GetRawTableOrDefault("Vim.FamilyType") is SerializableEntityTable familytypeTable)
-                FamilyTypeTable = new FamilyTypeTable(familytypeTable, stringBuffer);
+                FamilyTypeTable = new FamilyTypeTable(familytypeTable, stringBuffer, this);
             
             if (GetRawTableOrDefault("Vim.FamilyInstance") is SerializableEntityTable familyinstanceTable)
-                FamilyInstanceTable = new FamilyInstanceTable(familyinstanceTable, stringBuffer);
+                FamilyInstanceTable = new FamilyInstanceTable(familyinstanceTable, stringBuffer, this);
             
             if (GetRawTableOrDefault("Vim.View") is SerializableEntityTable viewTable)
-                ViewTable = new ViewTable(viewTable, stringBuffer);
+                ViewTable = new ViewTable(viewTable, stringBuffer, this);
             
             if (GetRawTableOrDefault("Vim.ElementInView") is SerializableEntityTable elementinviewTable)
-                ElementInViewTable = new ElementInViewTable(elementinviewTable, stringBuffer);
+                ElementInViewTable = new ElementInViewTable(elementinviewTable, stringBuffer, this);
             
             if (GetRawTableOrDefault("Vim.ShapeInView") is SerializableEntityTable shapeinviewTable)
-                ShapeInViewTable = new ShapeInViewTable(shapeinviewTable, stringBuffer);
+                ShapeInViewTable = new ShapeInViewTable(shapeinviewTable, stringBuffer, this);
             
             if (GetRawTableOrDefault("Vim.AssetInView") is SerializableEntityTable assetinviewTable)
-                AssetInViewTable = new AssetInViewTable(assetinviewTable, stringBuffer);
+                AssetInViewTable = new AssetInViewTable(assetinviewTable, stringBuffer, this);
             
             if (GetRawTableOrDefault("Vim.AssetInViewSheet") is SerializableEntityTable assetinviewsheetTable)
-                AssetInViewSheetTable = new AssetInViewSheetTable(assetinviewsheetTable, stringBuffer);
+                AssetInViewSheetTable = new AssetInViewSheetTable(assetinviewsheetTable, stringBuffer, this);
             
             if (GetRawTableOrDefault("Vim.LevelInView") is SerializableEntityTable levelinviewTable)
-                LevelInViewTable = new LevelInViewTable(levelinviewTable, stringBuffer);
+                LevelInViewTable = new LevelInViewTable(levelinviewTable, stringBuffer, this);
             
             if (GetRawTableOrDefault("Vim.Camera") is SerializableEntityTable cameraTable)
-                CameraTable = new CameraTable(cameraTable, stringBuffer);
+                CameraTable = new CameraTable(cameraTable, stringBuffer, this);
             
             if (GetRawTableOrDefault("Vim.Material") is SerializableEntityTable materialTable)
-                MaterialTable = new MaterialTable(materialTable, stringBuffer);
+                MaterialTable = new MaterialTable(materialTable, stringBuffer, this);
             
             if (GetRawTableOrDefault("Vim.MaterialInElement") is SerializableEntityTable materialinelementTable)
-                MaterialInElementTable = new MaterialInElementTable(materialinelementTable, stringBuffer);
+                MaterialInElementTable = new MaterialInElementTable(materialinelementTable, stringBuffer, this);
             
             if (GetRawTableOrDefault("Vim.CompoundStructureLayer") is SerializableEntityTable compoundstructurelayerTable)
-                CompoundStructureLayerTable = new CompoundStructureLayerTable(compoundstructurelayerTable, stringBuffer);
+                CompoundStructureLayerTable = new CompoundStructureLayerTable(compoundstructurelayerTable, stringBuffer, this);
             
             if (GetRawTableOrDefault("Vim.CompoundStructure") is SerializableEntityTable compoundstructureTable)
-                CompoundStructureTable = new CompoundStructureTable(compoundstructureTable, stringBuffer);
+                CompoundStructureTable = new CompoundStructureTable(compoundstructureTable, stringBuffer, this);
             
             if (GetRawTableOrDefault("Vim.Node") is SerializableEntityTable nodeTable)
-                NodeTable = new NodeTable(nodeTable, stringBuffer);
+                NodeTable = new NodeTable(nodeTable, stringBuffer, this);
             
             if (GetRawTableOrDefault("Vim.Geometry") is SerializableEntityTable geometryTable)
-                GeometryTable = new GeometryTable(geometryTable, stringBuffer);
+                GeometryTable = new GeometryTable(geometryTable, stringBuffer, this);
             
             if (GetRawTableOrDefault("Vim.Shape") is SerializableEntityTable shapeTable)
-                ShapeTable = new ShapeTable(shapeTable, stringBuffer);
+                ShapeTable = new ShapeTable(shapeTable, stringBuffer, this);
             
             if (GetRawTableOrDefault("Vim.ShapeCollection") is SerializableEntityTable shapecollectionTable)
-                ShapeCollectionTable = new ShapeCollectionTable(shapecollectionTable, stringBuffer);
+                ShapeCollectionTable = new ShapeCollectionTable(shapecollectionTable, stringBuffer, this);
             
             if (GetRawTableOrDefault("Vim.ShapeInShapeCollection") is SerializableEntityTable shapeinshapecollectionTable)
-                ShapeInShapeCollectionTable = new ShapeInShapeCollectionTable(shapeinshapecollectionTable, stringBuffer);
+                ShapeInShapeCollectionTable = new ShapeInShapeCollectionTable(shapeinshapecollectionTable, stringBuffer, this);
             
             if (GetRawTableOrDefault("Vim.System") is SerializableEntityTable systemTable)
-                SystemTable = new SystemTable(systemTable, stringBuffer);
+                SystemTable = new SystemTable(systemTable, stringBuffer, this);
             
             if (GetRawTableOrDefault("Vim.ElementInSystem") is SerializableEntityTable elementinsystemTable)
-                ElementInSystemTable = new ElementInSystemTable(elementinsystemTable, stringBuffer);
+                ElementInSystemTable = new ElementInSystemTable(elementinsystemTable, stringBuffer, this);
             
             if (GetRawTableOrDefault("Vim.Warning") is SerializableEntityTable warningTable)
-                WarningTable = new WarningTable(warningTable, stringBuffer);
+                WarningTable = new WarningTable(warningTable, stringBuffer, this);
             
             if (GetRawTableOrDefault("Vim.ElementInWarning") is SerializableEntityTable elementinwarningTable)
-                ElementInWarningTable = new ElementInWarningTable(elementinwarningTable, stringBuffer);
+                ElementInWarningTable = new ElementInWarningTable(elementinwarningTable, stringBuffer, this);
             
             if (GetRawTableOrDefault("Vim.BasePoint") is SerializableEntityTable basepointTable)
-                BasePointTable = new BasePointTable(basepointTable, stringBuffer);
+                BasePointTable = new BasePointTable(basepointTable, stringBuffer, this);
             
             if (GetRawTableOrDefault("Vim.PhaseFilter") is SerializableEntityTable phasefilterTable)
-                PhaseFilterTable = new PhaseFilterTable(phasefilterTable, stringBuffer);
+                PhaseFilterTable = new PhaseFilterTable(phasefilterTable, stringBuffer, this);
             
             if (GetRawTableOrDefault("Vim.Grid") is SerializableEntityTable gridTable)
-                GridTable = new GridTable(gridTable, stringBuffer);
+                GridTable = new GridTable(gridTable, stringBuffer, this);
             
             if (GetRawTableOrDefault("Vim.Area") is SerializableEntityTable areaTable)
-                AreaTable = new AreaTable(areaTable, stringBuffer);
+                AreaTable = new AreaTable(areaTable, stringBuffer, this);
             
             if (GetRawTableOrDefault("Vim.AreaScheme") is SerializableEntityTable areaschemeTable)
-                AreaSchemeTable = new AreaSchemeTable(areaschemeTable, stringBuffer);
+                AreaSchemeTable = new AreaSchemeTable(areaschemeTable, stringBuffer, this);
             
             if (GetRawTableOrDefault("Vim.Schedule") is SerializableEntityTable scheduleTable)
-                ScheduleTable = new ScheduleTable(scheduleTable, stringBuffer);
+                ScheduleTable = new ScheduleTable(scheduleTable, stringBuffer, this);
             
             if (GetRawTableOrDefault("Vim.ScheduleColumn") is SerializableEntityTable schedulecolumnTable)
-                ScheduleColumnTable = new ScheduleColumnTable(schedulecolumnTable, stringBuffer);
+                ScheduleColumnTable = new ScheduleColumnTable(schedulecolumnTable, stringBuffer, this);
             
             if (GetRawTableOrDefault("Vim.ScheduleCell") is SerializableEntityTable schedulecellTable)
-                ScheduleCellTable = new ScheduleCellTable(schedulecellTable, stringBuffer);
+                ScheduleCellTable = new ScheduleCellTable(schedulecellTable, stringBuffer, this);
             
             if (GetRawTableOrDefault("Vim.ViewSheetSet") is SerializableEntityTable viewsheetsetTable)
-                ViewSheetSetTable = new ViewSheetSetTable(viewsheetsetTable, stringBuffer);
+                ViewSheetSetTable = new ViewSheetSetTable(viewsheetsetTable, stringBuffer, this);
             
             if (GetRawTableOrDefault("Vim.ViewSheet") is SerializableEntityTable viewsheetTable)
-                ViewSheetTable = new ViewSheetTable(viewsheetTable, stringBuffer);
+                ViewSheetTable = new ViewSheetTable(viewsheetTable, stringBuffer, this);
             
             if (GetRawTableOrDefault("Vim.ViewSheetInViewSheetSet") is SerializableEntityTable viewsheetinviewsheetsetTable)
-                ViewSheetInViewSheetSetTable = new ViewSheetInViewSheetSetTable(viewsheetinviewsheetsetTable, stringBuffer);
+                ViewSheetInViewSheetSetTable = new ViewSheetInViewSheetSetTable(viewsheetinviewsheetsetTable, stringBuffer, this);
             
             if (GetRawTableOrDefault("Vim.ViewInViewSheetSet") is SerializableEntityTable viewinviewsheetsetTable)
-                ViewInViewSheetSetTable = new ViewInViewSheetSetTable(viewinviewsheetsetTable, stringBuffer);
+                ViewInViewSheetSetTable = new ViewInViewSheetSetTable(viewinviewsheetsetTable, stringBuffer, this);
             
             if (GetRawTableOrDefault("Vim.ViewInViewSheet") is SerializableEntityTable viewinviewsheetTable)
-                ViewInViewSheetTable = new ViewInViewSheetTable(viewinviewsheetTable, stringBuffer);
+                ViewInViewSheetTable = new ViewInViewSheetTable(viewinviewsheetTable, stringBuffer, this);
             
             if (GetRawTableOrDefault("Vim.Site") is SerializableEntityTable siteTable)
-                SiteTable = new SiteTable(siteTable, stringBuffer);
+                SiteTable = new SiteTable(siteTable, stringBuffer, this);
             
             if (GetRawTableOrDefault("Vim.Building") is SerializableEntityTable buildingTable)
-                BuildingTable = new BuildingTable(buildingTable, stringBuffer);
+                BuildingTable = new BuildingTable(buildingTable, stringBuffer, this);
             
             // Initialize element index maps
             ElementIndexMaps = new ElementIndexMaps(this, inParallel);
@@ -4605,11 +4705,11 @@ namespace Vim.Format.ObjectModel {
     
     public partial class AssetTable : EntityTable_v2, IEnumerable<Asset>
     {
-        private readonly EntityTableSet _parentTableSet; // can be null
+        public EntityTableSet ParentTableSet { get; } // can be null
         
         public AssetTable(SerializableEntityTable rawTable, string[] stringBuffer, EntityTableSet parentTableSet = null) : base(rawTable, stringBuffer)
         {
-            _parentTableSet = parentTableSet;
+            ParentTableSet = parentTableSet;
             Column_BufferName = GetStringColumnValues("string:BufferName") ?? Array.Empty<String>();
         }
         
@@ -4635,11 +4735,11 @@ namespace Vim.Format.ObjectModel {
     
     public partial class DisplayUnitTable : EntityTable_v2, IEnumerable<DisplayUnit>
     {
-        private readonly EntityTableSet _parentTableSet; // can be null
+        public EntityTableSet ParentTableSet { get; } // can be null
         
         public DisplayUnitTable(SerializableEntityTable rawTable, string[] stringBuffer, EntityTableSet parentTableSet = null) : base(rawTable, stringBuffer)
         {
-            _parentTableSet = parentTableSet;
+            ParentTableSet = parentTableSet;
             Column_Spec = GetStringColumnValues("string:Spec") ?? Array.Empty<String>();
             Column_Type = GetStringColumnValues("string:Type") ?? Array.Empty<String>();
             Column_Label = GetStringColumnValues("string:Label") ?? Array.Empty<String>();
@@ -4673,11 +4773,11 @@ namespace Vim.Format.ObjectModel {
     
     public partial class ParameterDescriptorTable : EntityTable_v2, IEnumerable<ParameterDescriptor>
     {
-        private readonly EntityTableSet _parentTableSet; // can be null
+        public EntityTableSet ParentTableSet { get; } // can be null
         
         public ParameterDescriptorTable(SerializableEntityTable rawTable, string[] stringBuffer, EntityTableSet parentTableSet = null) : base(rawTable, stringBuffer)
         {
-            _parentTableSet = parentTableSet;
+            ParentTableSet = parentTableSet;
             Column_Name = GetStringColumnValues("string:Name") ?? Array.Empty<String>();
             Column_Group = GetStringColumnValues("string:Group") ?? Array.Empty<String>();
             Column_ParameterType = GetStringColumnValues("string:ParameterType") ?? Array.Empty<String>();
@@ -4711,7 +4811,7 @@ namespace Vim.Format.ObjectModel {
         public int[] Column_DisplayUnitIndex { get; }
         public int GetDisplayUnitIndex(int index) => Column_DisplayUnitIndex.ElementAtOrDefault(index, EntityRelation.None);
         public DisplayUnit GetDisplayUnit(int index) => _GetReferencedDisplayUnit(GetDisplayUnitIndex(index));
-        private DisplayUnit _GetReferencedDisplayUnit(int referencedIndex) => _parentTableSet.GetDisplayUnit(referencedIndex);
+        private DisplayUnit _GetReferencedDisplayUnit(int referencedIndex) => ParentTableSet.GetDisplayUnit(referencedIndex);
         // Object Getter
         public ParameterDescriptor Get(int index)
         {
@@ -4741,11 +4841,11 @@ namespace Vim.Format.ObjectModel {
     
     public partial class ParameterTable : EntityTable_v2, IEnumerable<Parameter>
     {
-        private readonly EntityTableSet _parentTableSet; // can be null
+        public EntityTableSet ParentTableSet { get; } // can be null
         
         public ParameterTable(SerializableEntityTable rawTable, string[] stringBuffer, EntityTableSet parentTableSet = null) : base(rawTable, stringBuffer)
         {
-            _parentTableSet = parentTableSet;
+            ParentTableSet = parentTableSet;
             Column_Value = GetStringColumnValues("string:Value") ?? Array.Empty<String>();
             Column_ParameterDescriptorIndex = GetIndexColumnValues("index:Vim.ParameterDescriptor:ParameterDescriptor") ?? Array.Empty<int>();
             Column_ElementIndex = GetIndexColumnValues("index:Vim.Element:Element") ?? Array.Empty<int>();
@@ -4756,11 +4856,11 @@ namespace Vim.Format.ObjectModel {
         public int[] Column_ParameterDescriptorIndex { get; }
         public int GetParameterDescriptorIndex(int index) => Column_ParameterDescriptorIndex.ElementAtOrDefault(index, EntityRelation.None);
         public ParameterDescriptor GetParameterDescriptor(int index) => _GetReferencedParameterDescriptor(GetParameterDescriptorIndex(index));
-        private ParameterDescriptor _GetReferencedParameterDescriptor(int referencedIndex) => _parentTableSet.GetParameterDescriptor(referencedIndex);
+        private ParameterDescriptor _GetReferencedParameterDescriptor(int referencedIndex) => ParentTableSet.GetParameterDescriptor(referencedIndex);
         public int[] Column_ElementIndex { get; }
         public int GetElementIndex(int index) => Column_ElementIndex.ElementAtOrDefault(index, EntityRelation.None);
         public Element GetElement(int index) => _GetReferencedElement(GetElementIndex(index));
-        private Element _GetReferencedElement(int referencedIndex) => _parentTableSet.GetElement(referencedIndex);
+        private Element _GetReferencedElement(int referencedIndex) => ParentTableSet.GetElement(referencedIndex);
         // Object Getter
         public Parameter Get(int index)
         {
@@ -4783,11 +4883,11 @@ namespace Vim.Format.ObjectModel {
     
     public partial class ElementTable : EntityTable_v2, IEnumerable<Element>
     {
-        private readonly EntityTableSet _parentTableSet; // can be null
+        public EntityTableSet ParentTableSet { get; } // can be null
         
         public ElementTable(SerializableEntityTable rawTable, string[] stringBuffer, EntityTableSet parentTableSet = null) : base(rawTable, stringBuffer)
         {
-            _parentTableSet = parentTableSet;
+            ParentTableSet = parentTableSet;
             Column_Id = (GetDataColumnValues<Int64>("long:Id") ?? GetDataColumnValues<Int32>("int:Id")?.Select(v => (Int64) v).ToArray()) ?? Array.Empty<Int64>();
             Column_Type = GetStringColumnValues("string:Type") ?? Array.Empty<String>();
             Column_Name = GetStringColumnValues("string:Name") ?? Array.Empty<String>();
@@ -4831,47 +4931,47 @@ namespace Vim.Format.ObjectModel {
         public int[] Column_LevelIndex { get; }
         public int GetLevelIndex(int index) => Column_LevelIndex.ElementAtOrDefault(index, EntityRelation.None);
         public Level GetLevel(int index) => _GetReferencedLevel(GetLevelIndex(index));
-        private Level _GetReferencedLevel(int referencedIndex) => _parentTableSet.GetLevel(referencedIndex);
+        private Level _GetReferencedLevel(int referencedIndex) => ParentTableSet.GetLevel(referencedIndex);
         public int[] Column_PhaseCreatedIndex { get; }
         public int GetPhaseCreatedIndex(int index) => Column_PhaseCreatedIndex.ElementAtOrDefault(index, EntityRelation.None);
         public Phase GetPhaseCreated(int index) => _GetReferencedPhaseCreated(GetPhaseCreatedIndex(index));
-        private Phase _GetReferencedPhaseCreated(int referencedIndex) => _parentTableSet.GetPhase(referencedIndex);
+        private Phase _GetReferencedPhaseCreated(int referencedIndex) => ParentTableSet.GetPhase(referencedIndex);
         public int[] Column_PhaseDemolishedIndex { get; }
         public int GetPhaseDemolishedIndex(int index) => Column_PhaseDemolishedIndex.ElementAtOrDefault(index, EntityRelation.None);
         public Phase GetPhaseDemolished(int index) => _GetReferencedPhaseDemolished(GetPhaseDemolishedIndex(index));
-        private Phase _GetReferencedPhaseDemolished(int referencedIndex) => _parentTableSet.GetPhase(referencedIndex);
+        private Phase _GetReferencedPhaseDemolished(int referencedIndex) => ParentTableSet.GetPhase(referencedIndex);
         public int[] Column_CategoryIndex { get; }
         public int GetCategoryIndex(int index) => Column_CategoryIndex.ElementAtOrDefault(index, EntityRelation.None);
         public Category GetCategory(int index) => _GetReferencedCategory(GetCategoryIndex(index));
-        private Category _GetReferencedCategory(int referencedIndex) => _parentTableSet.GetCategory(referencedIndex);
+        private Category _GetReferencedCategory(int referencedIndex) => ParentTableSet.GetCategory(referencedIndex);
         public int[] Column_WorksetIndex { get; }
         public int GetWorksetIndex(int index) => Column_WorksetIndex.ElementAtOrDefault(index, EntityRelation.None);
         public Workset GetWorkset(int index) => _GetReferencedWorkset(GetWorksetIndex(index));
-        private Workset _GetReferencedWorkset(int referencedIndex) => _parentTableSet.GetWorkset(referencedIndex);
+        private Workset _GetReferencedWorkset(int referencedIndex) => ParentTableSet.GetWorkset(referencedIndex);
         public int[] Column_DesignOptionIndex { get; }
         public int GetDesignOptionIndex(int index) => Column_DesignOptionIndex.ElementAtOrDefault(index, EntityRelation.None);
         public DesignOption GetDesignOption(int index) => _GetReferencedDesignOption(GetDesignOptionIndex(index));
-        private DesignOption _GetReferencedDesignOption(int referencedIndex) => _parentTableSet.GetDesignOption(referencedIndex);
+        private DesignOption _GetReferencedDesignOption(int referencedIndex) => ParentTableSet.GetDesignOption(referencedIndex);
         public int[] Column_OwnerViewIndex { get; }
         public int GetOwnerViewIndex(int index) => Column_OwnerViewIndex.ElementAtOrDefault(index, EntityRelation.None);
         public View GetOwnerView(int index) => _GetReferencedOwnerView(GetOwnerViewIndex(index));
-        private View _GetReferencedOwnerView(int referencedIndex) => _parentTableSet.GetView(referencedIndex);
+        private View _GetReferencedOwnerView(int referencedIndex) => ParentTableSet.GetView(referencedIndex);
         public int[] Column_GroupIndex { get; }
         public int GetGroupIndex(int index) => Column_GroupIndex.ElementAtOrDefault(index, EntityRelation.None);
         public Group GetGroup(int index) => _GetReferencedGroup(GetGroupIndex(index));
-        private Group _GetReferencedGroup(int referencedIndex) => _parentTableSet.GetGroup(referencedIndex);
+        private Group _GetReferencedGroup(int referencedIndex) => ParentTableSet.GetGroup(referencedIndex);
         public int[] Column_AssemblyInstanceIndex { get; }
         public int GetAssemblyInstanceIndex(int index) => Column_AssemblyInstanceIndex.ElementAtOrDefault(index, EntityRelation.None);
         public AssemblyInstance GetAssemblyInstance(int index) => _GetReferencedAssemblyInstance(GetAssemblyInstanceIndex(index));
-        private AssemblyInstance _GetReferencedAssemblyInstance(int referencedIndex) => _parentTableSet.GetAssemblyInstance(referencedIndex);
+        private AssemblyInstance _GetReferencedAssemblyInstance(int referencedIndex) => ParentTableSet.GetAssemblyInstance(referencedIndex);
         public int[] Column_BimDocumentIndex { get; }
         public int GetBimDocumentIndex(int index) => Column_BimDocumentIndex.ElementAtOrDefault(index, EntityRelation.None);
         public BimDocument GetBimDocument(int index) => _GetReferencedBimDocument(GetBimDocumentIndex(index));
-        private BimDocument _GetReferencedBimDocument(int referencedIndex) => _parentTableSet.GetBimDocument(referencedIndex);
+        private BimDocument _GetReferencedBimDocument(int referencedIndex) => ParentTableSet.GetBimDocument(referencedIndex);
         public int[] Column_RoomIndex { get; }
         public int GetRoomIndex(int index) => Column_RoomIndex.ElementAtOrDefault(index, EntityRelation.None);
         public Room GetRoom(int index) => _GetReferencedRoom(GetRoomIndex(index));
-        private Room _GetReferencedRoom(int referencedIndex) => _parentTableSet.GetRoom(referencedIndex);
+        private Room _GetReferencedRoom(int referencedIndex) => ParentTableSet.GetRoom(referencedIndex);
         // Object Getter
         public Element Get(int index)
         {
@@ -4911,11 +5011,11 @@ namespace Vim.Format.ObjectModel {
     
     public partial class WorksetTable : EntityTable_v2, IEnumerable<Workset>
     {
-        private readonly EntityTableSet _parentTableSet; // can be null
+        public EntityTableSet ParentTableSet { get; } // can be null
         
         public WorksetTable(SerializableEntityTable rawTable, string[] stringBuffer, EntityTableSet parentTableSet = null) : base(rawTable, stringBuffer)
         {
-            _parentTableSet = parentTableSet;
+            ParentTableSet = parentTableSet;
             Column_Id = GetDataColumnValues<Int32>("int:Id") ?? Array.Empty<Int32>();
             Column_Name = GetStringColumnValues("string:Name") ?? Array.Empty<String>();
             Column_Kind = GetStringColumnValues("string:Kind") ?? Array.Empty<String>();
@@ -4943,7 +5043,7 @@ namespace Vim.Format.ObjectModel {
         public int[] Column_BimDocumentIndex { get; }
         public int GetBimDocumentIndex(int index) => Column_BimDocumentIndex.ElementAtOrDefault(index, EntityRelation.None);
         public BimDocument GetBimDocument(int index) => _GetReferencedBimDocument(GetBimDocumentIndex(index));
-        private BimDocument _GetReferencedBimDocument(int referencedIndex) => _parentTableSet.GetBimDocument(referencedIndex);
+        private BimDocument _GetReferencedBimDocument(int referencedIndex) => ParentTableSet.GetBimDocument(referencedIndex);
         // Object Getter
         public Workset Get(int index)
         {
@@ -4971,11 +5071,11 @@ namespace Vim.Format.ObjectModel {
     
     public partial class AssemblyInstanceTable : EntityTable_v2, IEnumerable<AssemblyInstance>
     {
-        private readonly EntityTableSet _parentTableSet; // can be null
+        public EntityTableSet ParentTableSet { get; } // can be null
         
         public AssemblyInstanceTable(SerializableEntityTable rawTable, string[] stringBuffer, EntityTableSet parentTableSet = null) : base(rawTable, stringBuffer)
         {
-            _parentTableSet = parentTableSet;
+            ParentTableSet = parentTableSet;
             Column_AssemblyTypeName = GetStringColumnValues("string:AssemblyTypeName") ?? Array.Empty<String>();
             Column_Position_X = GetDataColumnValues<Single>("float:Position.X") ?? Array.Empty<Single>();
             Column_Position_Y = GetDataColumnValues<Single>("float:Position.Y") ?? Array.Empty<Single>();
@@ -4994,7 +5094,7 @@ namespace Vim.Format.ObjectModel {
         public int[] Column_ElementIndex { get; }
         public int GetElementIndex(int index) => Column_ElementIndex.ElementAtOrDefault(index, EntityRelation.None);
         public Element GetElement(int index) => _GetReferencedElement(GetElementIndex(index));
-        private Element _GetReferencedElement(int referencedIndex) => _parentTableSet.GetElement(referencedIndex);
+        private Element _GetReferencedElement(int referencedIndex) => ParentTableSet.GetElement(referencedIndex);
         // Object Getter
         public AssemblyInstance Get(int index)
         {
@@ -5019,11 +5119,11 @@ namespace Vim.Format.ObjectModel {
     
     public partial class GroupTable : EntityTable_v2, IEnumerable<Group>
     {
-        private readonly EntityTableSet _parentTableSet; // can be null
+        public EntityTableSet ParentTableSet { get; } // can be null
         
         public GroupTable(SerializableEntityTable rawTable, string[] stringBuffer, EntityTableSet parentTableSet = null) : base(rawTable, stringBuffer)
         {
-            _parentTableSet = parentTableSet;
+            ParentTableSet = parentTableSet;
             Column_GroupType = GetStringColumnValues("string:GroupType") ?? Array.Empty<String>();
             Column_Position_X = GetDataColumnValues<Single>("float:Position.X") ?? Array.Empty<Single>();
             Column_Position_Y = GetDataColumnValues<Single>("float:Position.Y") ?? Array.Empty<Single>();
@@ -5042,7 +5142,7 @@ namespace Vim.Format.ObjectModel {
         public int[] Column_ElementIndex { get; }
         public int GetElementIndex(int index) => Column_ElementIndex.ElementAtOrDefault(index, EntityRelation.None);
         public Element GetElement(int index) => _GetReferencedElement(GetElementIndex(index));
-        private Element _GetReferencedElement(int referencedIndex) => _parentTableSet.GetElement(referencedIndex);
+        private Element _GetReferencedElement(int referencedIndex) => ParentTableSet.GetElement(referencedIndex);
         // Object Getter
         public Group Get(int index)
         {
@@ -5067,11 +5167,11 @@ namespace Vim.Format.ObjectModel {
     
     public partial class DesignOptionTable : EntityTable_v2, IEnumerable<DesignOption>
     {
-        private readonly EntityTableSet _parentTableSet; // can be null
+        public EntityTableSet ParentTableSet { get; } // can be null
         
         public DesignOptionTable(SerializableEntityTable rawTable, string[] stringBuffer, EntityTableSet parentTableSet = null) : base(rawTable, stringBuffer)
         {
-            _parentTableSet = parentTableSet;
+            ParentTableSet = parentTableSet;
             Column_IsPrimary = GetDataColumnValues<Boolean>("byte:IsPrimary") ?? Array.Empty<Boolean>();
             Column_ElementIndex = GetIndexColumnValues("index:Vim.Element:Element") ?? Array.Empty<int>();
         }
@@ -5081,7 +5181,7 @@ namespace Vim.Format.ObjectModel {
         public int[] Column_ElementIndex { get; }
         public int GetElementIndex(int index) => Column_ElementIndex.ElementAtOrDefault(index, EntityRelation.None);
         public Element GetElement(int index) => _GetReferencedElement(GetElementIndex(index));
-        private Element _GetReferencedElement(int referencedIndex) => _parentTableSet.GetElement(referencedIndex);
+        private Element _GetReferencedElement(int referencedIndex) => ParentTableSet.GetElement(referencedIndex);
         // Object Getter
         public DesignOption Get(int index)
         {
@@ -5103,11 +5203,11 @@ namespace Vim.Format.ObjectModel {
     
     public partial class LevelTable : EntityTable_v2, IEnumerable<Level>
     {
-        private readonly EntityTableSet _parentTableSet; // can be null
+        public EntityTableSet ParentTableSet { get; } // can be null
         
         public LevelTable(SerializableEntityTable rawTable, string[] stringBuffer, EntityTableSet parentTableSet = null) : base(rawTable, stringBuffer)
         {
-            _parentTableSet = parentTableSet;
+            ParentTableSet = parentTableSet;
             Column_Elevation = GetDataColumnValues<Double>("double:Elevation") ?? Array.Empty<Double>();
             Column_ProjectElevation = GetDataColumnValues<Double>("double:ProjectElevation") ?? Array.Empty<Double>();
             Column_FamilyTypeIndex = GetIndexColumnValues("index:Vim.FamilyType:FamilyType") ?? Array.Empty<int>();
@@ -5122,15 +5222,15 @@ namespace Vim.Format.ObjectModel {
         public int[] Column_FamilyTypeIndex { get; }
         public int GetFamilyTypeIndex(int index) => Column_FamilyTypeIndex.ElementAtOrDefault(index, EntityRelation.None);
         public FamilyType GetFamilyType(int index) => _GetReferencedFamilyType(GetFamilyTypeIndex(index));
-        private FamilyType _GetReferencedFamilyType(int referencedIndex) => _parentTableSet.GetFamilyType(referencedIndex);
+        private FamilyType _GetReferencedFamilyType(int referencedIndex) => ParentTableSet.GetFamilyType(referencedIndex);
         public int[] Column_BuildingIndex { get; }
         public int GetBuildingIndex(int index) => Column_BuildingIndex.ElementAtOrDefault(index, EntityRelation.None);
         public Building GetBuilding(int index) => _GetReferencedBuilding(GetBuildingIndex(index));
-        private Building _GetReferencedBuilding(int referencedIndex) => _parentTableSet.GetBuilding(referencedIndex);
+        private Building _GetReferencedBuilding(int referencedIndex) => ParentTableSet.GetBuilding(referencedIndex);
         public int[] Column_ElementIndex { get; }
         public int GetElementIndex(int index) => Column_ElementIndex.ElementAtOrDefault(index, EntityRelation.None);
         public Element GetElement(int index) => _GetReferencedElement(GetElementIndex(index));
-        private Element _GetReferencedElement(int referencedIndex) => _parentTableSet.GetElement(referencedIndex);
+        private Element _GetReferencedElement(int referencedIndex) => ParentTableSet.GetElement(referencedIndex);
         // Object Getter
         public Level Get(int index)
         {
@@ -5155,18 +5255,18 @@ namespace Vim.Format.ObjectModel {
     
     public partial class PhaseTable : EntityTable_v2, IEnumerable<Phase>
     {
-        private readonly EntityTableSet _parentTableSet; // can be null
+        public EntityTableSet ParentTableSet { get; } // can be null
         
         public PhaseTable(SerializableEntityTable rawTable, string[] stringBuffer, EntityTableSet parentTableSet = null) : base(rawTable, stringBuffer)
         {
-            _parentTableSet = parentTableSet;
+            ParentTableSet = parentTableSet;
             Column_ElementIndex = GetIndexColumnValues("index:Vim.Element:Element") ?? Array.Empty<int>();
         }
         
         public int[] Column_ElementIndex { get; }
         public int GetElementIndex(int index) => Column_ElementIndex.ElementAtOrDefault(index, EntityRelation.None);
         public Element GetElement(int index) => _GetReferencedElement(GetElementIndex(index));
-        private Element _GetReferencedElement(int referencedIndex) => _parentTableSet.GetElement(referencedIndex);
+        private Element _GetReferencedElement(int referencedIndex) => ParentTableSet.GetElement(referencedIndex);
         // Object Getter
         public Phase Get(int index)
         {
@@ -5187,11 +5287,11 @@ namespace Vim.Format.ObjectModel {
     
     public partial class RoomTable : EntityTable_v2, IEnumerable<Room>
     {
-        private readonly EntityTableSet _parentTableSet; // can be null
+        public EntityTableSet ParentTableSet { get; } // can be null
         
         public RoomTable(SerializableEntityTable rawTable, string[] stringBuffer, EntityTableSet parentTableSet = null) : base(rawTable, stringBuffer)
         {
-            _parentTableSet = parentTableSet;
+            ParentTableSet = parentTableSet;
             Column_BaseOffset = GetDataColumnValues<Double>("double:BaseOffset") ?? Array.Empty<Double>();
             Column_LimitOffset = GetDataColumnValues<Double>("double:LimitOffset") ?? Array.Empty<Double>();
             Column_UnboundedHeight = GetDataColumnValues<Double>("double:UnboundedHeight") ?? Array.Empty<Double>();
@@ -5220,11 +5320,11 @@ namespace Vim.Format.ObjectModel {
         public int[] Column_UpperLimitIndex { get; }
         public int GetUpperLimitIndex(int index) => Column_UpperLimitIndex.ElementAtOrDefault(index, EntityRelation.None);
         public Level GetUpperLimit(int index) => _GetReferencedUpperLimit(GetUpperLimitIndex(index));
-        private Level _GetReferencedUpperLimit(int referencedIndex) => _parentTableSet.GetLevel(referencedIndex);
+        private Level _GetReferencedUpperLimit(int referencedIndex) => ParentTableSet.GetLevel(referencedIndex);
         public int[] Column_ElementIndex { get; }
         public int GetElementIndex(int index) => Column_ElementIndex.ElementAtOrDefault(index, EntityRelation.None);
         public Element GetElement(int index) => _GetReferencedElement(GetElementIndex(index));
-        private Element _GetReferencedElement(int referencedIndex) => _parentTableSet.GetElement(referencedIndex);
+        private Element _GetReferencedElement(int referencedIndex) => ParentTableSet.GetElement(referencedIndex);
         // Object Getter
         public Room Get(int index)
         {
@@ -5253,11 +5353,11 @@ namespace Vim.Format.ObjectModel {
     
     public partial class BimDocumentTable : EntityTable_v2, IEnumerable<BimDocument>
     {
-        private readonly EntityTableSet _parentTableSet; // can be null
+        public EntityTableSet ParentTableSet { get; } // can be null
         
         public BimDocumentTable(SerializableEntityTable rawTable, string[] stringBuffer, EntityTableSet parentTableSet = null) : base(rawTable, stringBuffer)
         {
-            _parentTableSet = parentTableSet;
+            ParentTableSet = parentTableSet;
             Column_Title = GetStringColumnValues("string:Title") ?? Array.Empty<String>();
             Column_IsMetric = GetDataColumnValues<Boolean>("byte:IsMetric") ?? Array.Empty<Boolean>();
             Column_Guid = GetStringColumnValues("string:Guid") ?? Array.Empty<String>();
@@ -5354,19 +5454,19 @@ namespace Vim.Format.ObjectModel {
         public int[] Column_ActiveViewIndex { get; }
         public int GetActiveViewIndex(int index) => Column_ActiveViewIndex.ElementAtOrDefault(index, EntityRelation.None);
         public View GetActiveView(int index) => _GetReferencedActiveView(GetActiveViewIndex(index));
-        private View _GetReferencedActiveView(int referencedIndex) => _parentTableSet.GetView(referencedIndex);
+        private View _GetReferencedActiveView(int referencedIndex) => ParentTableSet.GetView(referencedIndex);
         public int[] Column_OwnerFamilyIndex { get; }
         public int GetOwnerFamilyIndex(int index) => Column_OwnerFamilyIndex.ElementAtOrDefault(index, EntityRelation.None);
         public Family GetOwnerFamily(int index) => _GetReferencedOwnerFamily(GetOwnerFamilyIndex(index));
-        private Family _GetReferencedOwnerFamily(int referencedIndex) => _parentTableSet.GetFamily(referencedIndex);
+        private Family _GetReferencedOwnerFamily(int referencedIndex) => ParentTableSet.GetFamily(referencedIndex);
         public int[] Column_ParentIndex { get; }
         public int GetParentIndex(int index) => Column_ParentIndex.ElementAtOrDefault(index, EntityRelation.None);
         public BimDocument GetParent(int index) => _GetReferencedParent(GetParentIndex(index));
-        private BimDocument _GetReferencedParent(int referencedIndex) => _parentTableSet.GetBimDocument(referencedIndex);
+        private BimDocument _GetReferencedParent(int referencedIndex) => ParentTableSet.GetBimDocument(referencedIndex);
         public int[] Column_ElementIndex { get; }
         public int GetElementIndex(int index) => Column_ElementIndex.ElementAtOrDefault(index, EntityRelation.None);
         public Element GetElement(int index) => _GetReferencedElement(GetElementIndex(index));
-        private Element _GetReferencedElement(int referencedIndex) => _parentTableSet.GetElement(referencedIndex);
+        private Element _GetReferencedElement(int referencedIndex) => ParentTableSet.GetElement(referencedIndex);
         // Object Getter
         public BimDocument Get(int index)
         {
@@ -5419,11 +5519,11 @@ namespace Vim.Format.ObjectModel {
     
     public partial class DisplayUnitInBimDocumentTable : EntityTable_v2, IEnumerable<DisplayUnitInBimDocument>
     {
-        private readonly EntityTableSet _parentTableSet; // can be null
+        public EntityTableSet ParentTableSet { get; } // can be null
         
         public DisplayUnitInBimDocumentTable(SerializableEntityTable rawTable, string[] stringBuffer, EntityTableSet parentTableSet = null) : base(rawTable, stringBuffer)
         {
-            _parentTableSet = parentTableSet;
+            ParentTableSet = parentTableSet;
             Column_DisplayUnitIndex = GetIndexColumnValues("index:Vim.DisplayUnit:DisplayUnit") ?? Array.Empty<int>();
             Column_BimDocumentIndex = GetIndexColumnValues("index:Vim.BimDocument:BimDocument") ?? Array.Empty<int>();
         }
@@ -5431,11 +5531,11 @@ namespace Vim.Format.ObjectModel {
         public int[] Column_DisplayUnitIndex { get; }
         public int GetDisplayUnitIndex(int index) => Column_DisplayUnitIndex.ElementAtOrDefault(index, EntityRelation.None);
         public DisplayUnit GetDisplayUnit(int index) => _GetReferencedDisplayUnit(GetDisplayUnitIndex(index));
-        private DisplayUnit _GetReferencedDisplayUnit(int referencedIndex) => _parentTableSet.GetDisplayUnit(referencedIndex);
+        private DisplayUnit _GetReferencedDisplayUnit(int referencedIndex) => ParentTableSet.GetDisplayUnit(referencedIndex);
         public int[] Column_BimDocumentIndex { get; }
         public int GetBimDocumentIndex(int index) => Column_BimDocumentIndex.ElementAtOrDefault(index, EntityRelation.None);
         public BimDocument GetBimDocument(int index) => _GetReferencedBimDocument(GetBimDocumentIndex(index));
-        private BimDocument _GetReferencedBimDocument(int referencedIndex) => _parentTableSet.GetBimDocument(referencedIndex);
+        private BimDocument _GetReferencedBimDocument(int referencedIndex) => ParentTableSet.GetBimDocument(referencedIndex);
         // Object Getter
         public DisplayUnitInBimDocument Get(int index)
         {
@@ -5457,11 +5557,11 @@ namespace Vim.Format.ObjectModel {
     
     public partial class PhaseOrderInBimDocumentTable : EntityTable_v2, IEnumerable<PhaseOrderInBimDocument>
     {
-        private readonly EntityTableSet _parentTableSet; // can be null
+        public EntityTableSet ParentTableSet { get; } // can be null
         
         public PhaseOrderInBimDocumentTable(SerializableEntityTable rawTable, string[] stringBuffer, EntityTableSet parentTableSet = null) : base(rawTable, stringBuffer)
         {
-            _parentTableSet = parentTableSet;
+            ParentTableSet = parentTableSet;
             Column_OrderIndex = GetDataColumnValues<Int32>("int:OrderIndex") ?? Array.Empty<Int32>();
             Column_PhaseIndex = GetIndexColumnValues("index:Vim.Phase:Phase") ?? Array.Empty<int>();
             Column_BimDocumentIndex = GetIndexColumnValues("index:Vim.BimDocument:BimDocument") ?? Array.Empty<int>();
@@ -5472,11 +5572,11 @@ namespace Vim.Format.ObjectModel {
         public int[] Column_PhaseIndex { get; }
         public int GetPhaseIndex(int index) => Column_PhaseIndex.ElementAtOrDefault(index, EntityRelation.None);
         public Phase GetPhase(int index) => _GetReferencedPhase(GetPhaseIndex(index));
-        private Phase _GetReferencedPhase(int referencedIndex) => _parentTableSet.GetPhase(referencedIndex);
+        private Phase _GetReferencedPhase(int referencedIndex) => ParentTableSet.GetPhase(referencedIndex);
         public int[] Column_BimDocumentIndex { get; }
         public int GetBimDocumentIndex(int index) => Column_BimDocumentIndex.ElementAtOrDefault(index, EntityRelation.None);
         public BimDocument GetBimDocument(int index) => _GetReferencedBimDocument(GetBimDocumentIndex(index));
-        private BimDocument _GetReferencedBimDocument(int referencedIndex) => _parentTableSet.GetBimDocument(referencedIndex);
+        private BimDocument _GetReferencedBimDocument(int referencedIndex) => ParentTableSet.GetBimDocument(referencedIndex);
         // Object Getter
         public PhaseOrderInBimDocument Get(int index)
         {
@@ -5499,11 +5599,11 @@ namespace Vim.Format.ObjectModel {
     
     public partial class CategoryTable : EntityTable_v2, IEnumerable<Category>
     {
-        private readonly EntityTableSet _parentTableSet; // can be null
+        public EntityTableSet ParentTableSet { get; } // can be null
         
         public CategoryTable(SerializableEntityTable rawTable, string[] stringBuffer, EntityTableSet parentTableSet = null) : base(rawTable, stringBuffer)
         {
-            _parentTableSet = parentTableSet;
+            ParentTableSet = parentTableSet;
             Column_Name = GetStringColumnValues("string:Name") ?? Array.Empty<String>();
             Column_Id = (GetDataColumnValues<Int64>("long:Id") ?? GetDataColumnValues<Int32>("int:Id")?.Select(v => (Int64) v).ToArray()) ?? Array.Empty<Int64>();
             Column_CategoryType = GetStringColumnValues("string:CategoryType") ?? Array.Empty<String>();
@@ -5532,11 +5632,11 @@ namespace Vim.Format.ObjectModel {
         public int[] Column_ParentIndex { get; }
         public int GetParentIndex(int index) => Column_ParentIndex.ElementAtOrDefault(index, EntityRelation.None);
         public Category GetParent(int index) => _GetReferencedParent(GetParentIndex(index));
-        private Category _GetReferencedParent(int referencedIndex) => _parentTableSet.GetCategory(referencedIndex);
+        private Category _GetReferencedParent(int referencedIndex) => ParentTableSet.GetCategory(referencedIndex);
         public int[] Column_MaterialIndex { get; }
         public int GetMaterialIndex(int index) => Column_MaterialIndex.ElementAtOrDefault(index, EntityRelation.None);
         public Material GetMaterial(int index) => _GetReferencedMaterial(GetMaterialIndex(index));
-        private Material _GetReferencedMaterial(int referencedIndex) => _parentTableSet.GetMaterial(referencedIndex);
+        private Material _GetReferencedMaterial(int referencedIndex) => ParentTableSet.GetMaterial(referencedIndex);
         // Object Getter
         public Category Get(int index)
         {
@@ -5565,11 +5665,11 @@ namespace Vim.Format.ObjectModel {
     
     public partial class FamilyTable : EntityTable_v2, IEnumerable<Family>
     {
-        private readonly EntityTableSet _parentTableSet; // can be null
+        public EntityTableSet ParentTableSet { get; } // can be null
         
         public FamilyTable(SerializableEntityTable rawTable, string[] stringBuffer, EntityTableSet parentTableSet = null) : base(rawTable, stringBuffer)
         {
-            _parentTableSet = parentTableSet;
+            ParentTableSet = parentTableSet;
             Column_StructuralMaterialType = GetStringColumnValues("string:StructuralMaterialType") ?? Array.Empty<String>();
             Column_StructuralSectionShape = GetStringColumnValues("string:StructuralSectionShape") ?? Array.Empty<String>();
             Column_IsSystemFamily = GetDataColumnValues<Boolean>("byte:IsSystemFamily") ?? Array.Empty<Boolean>();
@@ -5589,11 +5689,11 @@ namespace Vim.Format.ObjectModel {
         public int[] Column_FamilyCategoryIndex { get; }
         public int GetFamilyCategoryIndex(int index) => Column_FamilyCategoryIndex.ElementAtOrDefault(index, EntityRelation.None);
         public Category GetFamilyCategory(int index) => _GetReferencedFamilyCategory(GetFamilyCategoryIndex(index));
-        private Category _GetReferencedFamilyCategory(int referencedIndex) => _parentTableSet.GetCategory(referencedIndex);
+        private Category _GetReferencedFamilyCategory(int referencedIndex) => ParentTableSet.GetCategory(referencedIndex);
         public int[] Column_ElementIndex { get; }
         public int GetElementIndex(int index) => Column_ElementIndex.ElementAtOrDefault(index, EntityRelation.None);
         public Element GetElement(int index) => _GetReferencedElement(GetElementIndex(index));
-        private Element _GetReferencedElement(int referencedIndex) => _parentTableSet.GetElement(referencedIndex);
+        private Element _GetReferencedElement(int referencedIndex) => ParentTableSet.GetElement(referencedIndex);
         // Object Getter
         public Family Get(int index)
         {
@@ -5619,11 +5719,11 @@ namespace Vim.Format.ObjectModel {
     
     public partial class FamilyTypeTable : EntityTable_v2, IEnumerable<FamilyType>
     {
-        private readonly EntityTableSet _parentTableSet; // can be null
+        public EntityTableSet ParentTableSet { get; } // can be null
         
         public FamilyTypeTable(SerializableEntityTable rawTable, string[] stringBuffer, EntityTableSet parentTableSet = null) : base(rawTable, stringBuffer)
         {
-            _parentTableSet = parentTableSet;
+            ParentTableSet = parentTableSet;
             Column_IsSystemFamilyType = GetDataColumnValues<Boolean>("byte:IsSystemFamilyType") ?? Array.Empty<Boolean>();
             Column_FamilyIndex = GetIndexColumnValues("index:Vim.Family:Family") ?? Array.Empty<int>();
             Column_CompoundStructureIndex = GetIndexColumnValues("index:Vim.CompoundStructure:CompoundStructure") ?? Array.Empty<int>();
@@ -5635,15 +5735,15 @@ namespace Vim.Format.ObjectModel {
         public int[] Column_FamilyIndex { get; }
         public int GetFamilyIndex(int index) => Column_FamilyIndex.ElementAtOrDefault(index, EntityRelation.None);
         public Family GetFamily(int index) => _GetReferencedFamily(GetFamilyIndex(index));
-        private Family _GetReferencedFamily(int referencedIndex) => _parentTableSet.GetFamily(referencedIndex);
+        private Family _GetReferencedFamily(int referencedIndex) => ParentTableSet.GetFamily(referencedIndex);
         public int[] Column_CompoundStructureIndex { get; }
         public int GetCompoundStructureIndex(int index) => Column_CompoundStructureIndex.ElementAtOrDefault(index, EntityRelation.None);
         public CompoundStructure GetCompoundStructure(int index) => _GetReferencedCompoundStructure(GetCompoundStructureIndex(index));
-        private CompoundStructure _GetReferencedCompoundStructure(int referencedIndex) => _parentTableSet.GetCompoundStructure(referencedIndex);
+        private CompoundStructure _GetReferencedCompoundStructure(int referencedIndex) => ParentTableSet.GetCompoundStructure(referencedIndex);
         public int[] Column_ElementIndex { get; }
         public int GetElementIndex(int index) => Column_ElementIndex.ElementAtOrDefault(index, EntityRelation.None);
         public Element GetElement(int index) => _GetReferencedElement(GetElementIndex(index));
-        private Element _GetReferencedElement(int referencedIndex) => _parentTableSet.GetElement(referencedIndex);
+        private Element _GetReferencedElement(int referencedIndex) => ParentTableSet.GetElement(referencedIndex);
         // Object Getter
         public FamilyType Get(int index)
         {
@@ -5667,11 +5767,11 @@ namespace Vim.Format.ObjectModel {
     
     public partial class FamilyInstanceTable : EntityTable_v2, IEnumerable<FamilyInstance>
     {
-        private readonly EntityTableSet _parentTableSet; // can be null
+        public EntityTableSet ParentTableSet { get; } // can be null
         
         public FamilyInstanceTable(SerializableEntityTable rawTable, string[] stringBuffer, EntityTableSet parentTableSet = null) : base(rawTable, stringBuffer)
         {
-            _parentTableSet = parentTableSet;
+            ParentTableSet = parentTableSet;
             Column_FacingFlipped = GetDataColumnValues<Boolean>("byte:FacingFlipped") ?? Array.Empty<Boolean>();
             Column_FacingOrientation_X = GetDataColumnValues<Single>("float:FacingOrientation.X") ?? Array.Empty<Single>();
             Column_FacingOrientation_Y = GetDataColumnValues<Single>("float:FacingOrientation.Y") ?? Array.Empty<Single>();
@@ -5752,27 +5852,27 @@ namespace Vim.Format.ObjectModel {
         public int[] Column_FamilyTypeIndex { get; }
         public int GetFamilyTypeIndex(int index) => Column_FamilyTypeIndex.ElementAtOrDefault(index, EntityRelation.None);
         public FamilyType GetFamilyType(int index) => _GetReferencedFamilyType(GetFamilyTypeIndex(index));
-        private FamilyType _GetReferencedFamilyType(int referencedIndex) => _parentTableSet.GetFamilyType(referencedIndex);
+        private FamilyType _GetReferencedFamilyType(int referencedIndex) => ParentTableSet.GetFamilyType(referencedIndex);
         public int[] Column_HostIndex { get; }
         public int GetHostIndex(int index) => Column_HostIndex.ElementAtOrDefault(index, EntityRelation.None);
         public Element GetHost(int index) => _GetReferencedHost(GetHostIndex(index));
-        private Element _GetReferencedHost(int referencedIndex) => _parentTableSet.GetElement(referencedIndex);
+        private Element _GetReferencedHost(int referencedIndex) => ParentTableSet.GetElement(referencedIndex);
         public int[] Column_FromRoomIndex { get; }
         public int GetFromRoomIndex(int index) => Column_FromRoomIndex.ElementAtOrDefault(index, EntityRelation.None);
         public Room GetFromRoom(int index) => _GetReferencedFromRoom(GetFromRoomIndex(index));
-        private Room _GetReferencedFromRoom(int referencedIndex) => _parentTableSet.GetRoom(referencedIndex);
+        private Room _GetReferencedFromRoom(int referencedIndex) => ParentTableSet.GetRoom(referencedIndex);
         public int[] Column_ToRoomIndex { get; }
         public int GetToRoomIndex(int index) => Column_ToRoomIndex.ElementAtOrDefault(index, EntityRelation.None);
         public Room GetToRoom(int index) => _GetReferencedToRoom(GetToRoomIndex(index));
-        private Room _GetReferencedToRoom(int referencedIndex) => _parentTableSet.GetRoom(referencedIndex);
+        private Room _GetReferencedToRoom(int referencedIndex) => ParentTableSet.GetRoom(referencedIndex);
         public int[] Column_SuperComponentIndex { get; }
         public int GetSuperComponentIndex(int index) => Column_SuperComponentIndex.ElementAtOrDefault(index, EntityRelation.None);
         public Element GetSuperComponent(int index) => _GetReferencedSuperComponent(GetSuperComponentIndex(index));
-        private Element _GetReferencedSuperComponent(int referencedIndex) => _parentTableSet.GetElement(referencedIndex);
+        private Element _GetReferencedSuperComponent(int referencedIndex) => ParentTableSet.GetElement(referencedIndex);
         public int[] Column_ElementIndex { get; }
         public int GetElementIndex(int index) => Column_ElementIndex.ElementAtOrDefault(index, EntityRelation.None);
         public Element GetElement(int index) => _GetReferencedElement(GetElementIndex(index));
-        private Element _GetReferencedElement(int referencedIndex) => _parentTableSet.GetElement(referencedIndex);
+        private Element _GetReferencedElement(int referencedIndex) => ParentTableSet.GetElement(referencedIndex);
         // Object Getter
         public FamilyInstance Get(int index)
         {
@@ -5821,11 +5921,11 @@ namespace Vim.Format.ObjectModel {
     
     public partial class ViewTable : EntityTable_v2, IEnumerable<View>
     {
-        private readonly EntityTableSet _parentTableSet; // can be null
+        public EntityTableSet ParentTableSet { get; } // can be null
         
         public ViewTable(SerializableEntityTable rawTable, string[] stringBuffer, EntityTableSet parentTableSet = null) : base(rawTable, stringBuffer)
         {
-            _parentTableSet = parentTableSet;
+            ParentTableSet = parentTableSet;
             Column_Title = GetStringColumnValues("string:Title") ?? Array.Empty<String>();
             Column_ViewType = GetStringColumnValues("string:ViewType") ?? Array.Empty<String>();
             Column_Up_X = GetDataColumnValues<Double>("double:Up.X") ?? Array.Empty<Double>();
@@ -5903,15 +6003,15 @@ namespace Vim.Format.ObjectModel {
         public int[] Column_CameraIndex { get; }
         public int GetCameraIndex(int index) => Column_CameraIndex.ElementAtOrDefault(index, EntityRelation.None);
         public Camera GetCamera(int index) => _GetReferencedCamera(GetCameraIndex(index));
-        private Camera _GetReferencedCamera(int referencedIndex) => _parentTableSet.GetCamera(referencedIndex);
+        private Camera _GetReferencedCamera(int referencedIndex) => ParentTableSet.GetCamera(referencedIndex);
         public int[] Column_FamilyTypeIndex { get; }
         public int GetFamilyTypeIndex(int index) => Column_FamilyTypeIndex.ElementAtOrDefault(index, EntityRelation.None);
         public FamilyType GetFamilyType(int index) => _GetReferencedFamilyType(GetFamilyTypeIndex(index));
-        private FamilyType _GetReferencedFamilyType(int referencedIndex) => _parentTableSet.GetFamilyType(referencedIndex);
+        private FamilyType _GetReferencedFamilyType(int referencedIndex) => ParentTableSet.GetFamilyType(referencedIndex);
         public int[] Column_ElementIndex { get; }
         public int GetElementIndex(int index) => Column_ElementIndex.ElementAtOrDefault(index, EntityRelation.None);
         public Element GetElement(int index) => _GetReferencedElement(GetElementIndex(index));
-        private Element _GetReferencedElement(int referencedIndex) => _parentTableSet.GetElement(referencedIndex);
+        private Element _GetReferencedElement(int referencedIndex) => ParentTableSet.GetElement(referencedIndex);
         // Object Getter
         public View Get(int index)
         {
@@ -5957,11 +6057,11 @@ namespace Vim.Format.ObjectModel {
     
     public partial class ElementInViewTable : EntityTable_v2, IEnumerable<ElementInView>
     {
-        private readonly EntityTableSet _parentTableSet; // can be null
+        public EntityTableSet ParentTableSet { get; } // can be null
         
         public ElementInViewTable(SerializableEntityTable rawTable, string[] stringBuffer, EntityTableSet parentTableSet = null) : base(rawTable, stringBuffer)
         {
-            _parentTableSet = parentTableSet;
+            ParentTableSet = parentTableSet;
             Column_ViewIndex = GetIndexColumnValues("index:Vim.View:View") ?? Array.Empty<int>();
             Column_ElementIndex = GetIndexColumnValues("index:Vim.Element:Element") ?? Array.Empty<int>();
         }
@@ -5969,11 +6069,11 @@ namespace Vim.Format.ObjectModel {
         public int[] Column_ViewIndex { get; }
         public int GetViewIndex(int index) => Column_ViewIndex.ElementAtOrDefault(index, EntityRelation.None);
         public View GetView(int index) => _GetReferencedView(GetViewIndex(index));
-        private View _GetReferencedView(int referencedIndex) => _parentTableSet.GetView(referencedIndex);
+        private View _GetReferencedView(int referencedIndex) => ParentTableSet.GetView(referencedIndex);
         public int[] Column_ElementIndex { get; }
         public int GetElementIndex(int index) => Column_ElementIndex.ElementAtOrDefault(index, EntityRelation.None);
         public Element GetElement(int index) => _GetReferencedElement(GetElementIndex(index));
-        private Element _GetReferencedElement(int referencedIndex) => _parentTableSet.GetElement(referencedIndex);
+        private Element _GetReferencedElement(int referencedIndex) => ParentTableSet.GetElement(referencedIndex);
         // Object Getter
         public ElementInView Get(int index)
         {
@@ -5995,11 +6095,11 @@ namespace Vim.Format.ObjectModel {
     
     public partial class ShapeInViewTable : EntityTable_v2, IEnumerable<ShapeInView>
     {
-        private readonly EntityTableSet _parentTableSet; // can be null
+        public EntityTableSet ParentTableSet { get; } // can be null
         
         public ShapeInViewTable(SerializableEntityTable rawTable, string[] stringBuffer, EntityTableSet parentTableSet = null) : base(rawTable, stringBuffer)
         {
-            _parentTableSet = parentTableSet;
+            ParentTableSet = parentTableSet;
             Column_ShapeIndex = GetIndexColumnValues("index:Vim.Shape:Shape") ?? Array.Empty<int>();
             Column_ViewIndex = GetIndexColumnValues("index:Vim.View:View") ?? Array.Empty<int>();
         }
@@ -6007,11 +6107,11 @@ namespace Vim.Format.ObjectModel {
         public int[] Column_ShapeIndex { get; }
         public int GetShapeIndex(int index) => Column_ShapeIndex.ElementAtOrDefault(index, EntityRelation.None);
         public Shape GetShape(int index) => _GetReferencedShape(GetShapeIndex(index));
-        private Shape _GetReferencedShape(int referencedIndex) => _parentTableSet.GetShape(referencedIndex);
+        private Shape _GetReferencedShape(int referencedIndex) => ParentTableSet.GetShape(referencedIndex);
         public int[] Column_ViewIndex { get; }
         public int GetViewIndex(int index) => Column_ViewIndex.ElementAtOrDefault(index, EntityRelation.None);
         public View GetView(int index) => _GetReferencedView(GetViewIndex(index));
-        private View _GetReferencedView(int referencedIndex) => _parentTableSet.GetView(referencedIndex);
+        private View _GetReferencedView(int referencedIndex) => ParentTableSet.GetView(referencedIndex);
         // Object Getter
         public ShapeInView Get(int index)
         {
@@ -6033,11 +6133,11 @@ namespace Vim.Format.ObjectModel {
     
     public partial class AssetInViewTable : EntityTable_v2, IEnumerable<AssetInView>
     {
-        private readonly EntityTableSet _parentTableSet; // can be null
+        public EntityTableSet ParentTableSet { get; } // can be null
         
         public AssetInViewTable(SerializableEntityTable rawTable, string[] stringBuffer, EntityTableSet parentTableSet = null) : base(rawTable, stringBuffer)
         {
-            _parentTableSet = parentTableSet;
+            ParentTableSet = parentTableSet;
             Column_AssetIndex = GetIndexColumnValues("index:Vim.Asset:Asset") ?? Array.Empty<int>();
             Column_ViewIndex = GetIndexColumnValues("index:Vim.View:View") ?? Array.Empty<int>();
         }
@@ -6045,11 +6145,11 @@ namespace Vim.Format.ObjectModel {
         public int[] Column_AssetIndex { get; }
         public int GetAssetIndex(int index) => Column_AssetIndex.ElementAtOrDefault(index, EntityRelation.None);
         public Asset GetAsset(int index) => _GetReferencedAsset(GetAssetIndex(index));
-        private Asset _GetReferencedAsset(int referencedIndex) => _parentTableSet.GetAsset(referencedIndex);
+        private Asset _GetReferencedAsset(int referencedIndex) => ParentTableSet.GetAsset(referencedIndex);
         public int[] Column_ViewIndex { get; }
         public int GetViewIndex(int index) => Column_ViewIndex.ElementAtOrDefault(index, EntityRelation.None);
         public View GetView(int index) => _GetReferencedView(GetViewIndex(index));
-        private View _GetReferencedView(int referencedIndex) => _parentTableSet.GetView(referencedIndex);
+        private View _GetReferencedView(int referencedIndex) => ParentTableSet.GetView(referencedIndex);
         // Object Getter
         public AssetInView Get(int index)
         {
@@ -6071,11 +6171,11 @@ namespace Vim.Format.ObjectModel {
     
     public partial class AssetInViewSheetTable : EntityTable_v2, IEnumerable<AssetInViewSheet>
     {
-        private readonly EntityTableSet _parentTableSet; // can be null
+        public EntityTableSet ParentTableSet { get; } // can be null
         
         public AssetInViewSheetTable(SerializableEntityTable rawTable, string[] stringBuffer, EntityTableSet parentTableSet = null) : base(rawTable, stringBuffer)
         {
-            _parentTableSet = parentTableSet;
+            ParentTableSet = parentTableSet;
             Column_AssetIndex = GetIndexColumnValues("index:Vim.Asset:Asset") ?? Array.Empty<int>();
             Column_ViewSheetIndex = GetIndexColumnValues("index:Vim.ViewSheet:ViewSheet") ?? Array.Empty<int>();
         }
@@ -6083,11 +6183,11 @@ namespace Vim.Format.ObjectModel {
         public int[] Column_AssetIndex { get; }
         public int GetAssetIndex(int index) => Column_AssetIndex.ElementAtOrDefault(index, EntityRelation.None);
         public Asset GetAsset(int index) => _GetReferencedAsset(GetAssetIndex(index));
-        private Asset _GetReferencedAsset(int referencedIndex) => _parentTableSet.GetAsset(referencedIndex);
+        private Asset _GetReferencedAsset(int referencedIndex) => ParentTableSet.GetAsset(referencedIndex);
         public int[] Column_ViewSheetIndex { get; }
         public int GetViewSheetIndex(int index) => Column_ViewSheetIndex.ElementAtOrDefault(index, EntityRelation.None);
         public ViewSheet GetViewSheet(int index) => _GetReferencedViewSheet(GetViewSheetIndex(index));
-        private ViewSheet _GetReferencedViewSheet(int referencedIndex) => _parentTableSet.GetViewSheet(referencedIndex);
+        private ViewSheet _GetReferencedViewSheet(int referencedIndex) => ParentTableSet.GetViewSheet(referencedIndex);
         // Object Getter
         public AssetInViewSheet Get(int index)
         {
@@ -6109,11 +6209,11 @@ namespace Vim.Format.ObjectModel {
     
     public partial class LevelInViewTable : EntityTable_v2, IEnumerable<LevelInView>
     {
-        private readonly EntityTableSet _parentTableSet; // can be null
+        public EntityTableSet ParentTableSet { get; } // can be null
         
         public LevelInViewTable(SerializableEntityTable rawTable, string[] stringBuffer, EntityTableSet parentTableSet = null) : base(rawTable, stringBuffer)
         {
-            _parentTableSet = parentTableSet;
+            ParentTableSet = parentTableSet;
             Column_Extents_Min_X = GetDataColumnValues<Double>("double:Extents.Min.X") ?? Array.Empty<Double>();
             Column_Extents_Min_Y = GetDataColumnValues<Double>("double:Extents.Min.Y") ?? Array.Empty<Double>();
             Column_Extents_Min_Z = GetDataColumnValues<Double>("double:Extents.Min.Z") ?? Array.Empty<Double>();
@@ -6139,11 +6239,11 @@ namespace Vim.Format.ObjectModel {
         public int[] Column_LevelIndex { get; }
         public int GetLevelIndex(int index) => Column_LevelIndex.ElementAtOrDefault(index, EntityRelation.None);
         public Level GetLevel(int index) => _GetReferencedLevel(GetLevelIndex(index));
-        private Level _GetReferencedLevel(int referencedIndex) => _parentTableSet.GetLevel(referencedIndex);
+        private Level _GetReferencedLevel(int referencedIndex) => ParentTableSet.GetLevel(referencedIndex);
         public int[] Column_ViewIndex { get; }
         public int GetViewIndex(int index) => Column_ViewIndex.ElementAtOrDefault(index, EntityRelation.None);
         public View GetView(int index) => _GetReferencedView(GetViewIndex(index));
-        private View _GetReferencedView(int referencedIndex) => _parentTableSet.GetView(referencedIndex);
+        private View _GetReferencedView(int referencedIndex) => ParentTableSet.GetView(referencedIndex);
         // Object Getter
         public LevelInView Get(int index)
         {
@@ -6171,11 +6271,11 @@ namespace Vim.Format.ObjectModel {
     
     public partial class CameraTable : EntityTable_v2, IEnumerable<Camera>
     {
-        private readonly EntityTableSet _parentTableSet; // can be null
+        public EntityTableSet ParentTableSet { get; } // can be null
         
         public CameraTable(SerializableEntityTable rawTable, string[] stringBuffer, EntityTableSet parentTableSet = null) : base(rawTable, stringBuffer)
         {
-            _parentTableSet = parentTableSet;
+            ParentTableSet = parentTableSet;
             Column_Id = GetDataColumnValues<Int32>("int:Id") ?? Array.Empty<Int32>();
             Column_IsPerspective = GetDataColumnValues<Int32>("int:IsPerspective") ?? Array.Empty<Int32>();
             Column_VerticalExtent = GetDataColumnValues<Double>("double:VerticalExtent") ?? Array.Empty<Double>();
@@ -6233,11 +6333,11 @@ namespace Vim.Format.ObjectModel {
     
     public partial class MaterialTable : EntityTable_v2, IEnumerable<Material>
     {
-        private readonly EntityTableSet _parentTableSet; // can be null
+        public EntityTableSet ParentTableSet { get; } // can be null
         
         public MaterialTable(SerializableEntityTable rawTable, string[] stringBuffer, EntityTableSet parentTableSet = null) : base(rawTable, stringBuffer)
         {
-            _parentTableSet = parentTableSet;
+            ParentTableSet = parentTableSet;
             Column_Name = GetStringColumnValues("string:Name") ?? Array.Empty<String>();
             Column_MaterialCategory = GetStringColumnValues("string:MaterialCategory") ?? Array.Empty<String>();
             Column_Color_X = GetDataColumnValues<Double>("double:Color.X") ?? Array.Empty<Double>();
@@ -6297,15 +6397,15 @@ namespace Vim.Format.ObjectModel {
         public int[] Column_ColorTextureFileIndex { get; }
         public int GetColorTextureFileIndex(int index) => Column_ColorTextureFileIndex.ElementAtOrDefault(index, EntityRelation.None);
         public Asset GetColorTextureFile(int index) => _GetReferencedColorTextureFile(GetColorTextureFileIndex(index));
-        private Asset _GetReferencedColorTextureFile(int referencedIndex) => _parentTableSet.GetAsset(referencedIndex);
+        private Asset _GetReferencedColorTextureFile(int referencedIndex) => ParentTableSet.GetAsset(referencedIndex);
         public int[] Column_NormalTextureFileIndex { get; }
         public int GetNormalTextureFileIndex(int index) => Column_NormalTextureFileIndex.ElementAtOrDefault(index, EntityRelation.None);
         public Asset GetNormalTextureFile(int index) => _GetReferencedNormalTextureFile(GetNormalTextureFileIndex(index));
-        private Asset _GetReferencedNormalTextureFile(int referencedIndex) => _parentTableSet.GetAsset(referencedIndex);
+        private Asset _GetReferencedNormalTextureFile(int referencedIndex) => ParentTableSet.GetAsset(referencedIndex);
         public int[] Column_ElementIndex { get; }
         public int GetElementIndex(int index) => Column_ElementIndex.ElementAtOrDefault(index, EntityRelation.None);
         public Element GetElement(int index) => _GetReferencedElement(GetElementIndex(index));
-        private Element _GetReferencedElement(int referencedIndex) => _parentTableSet.GetElement(referencedIndex);
+        private Element _GetReferencedElement(int referencedIndex) => ParentTableSet.GetElement(referencedIndex);
         // Object Getter
         public Material Get(int index)
         {
@@ -6345,11 +6445,11 @@ namespace Vim.Format.ObjectModel {
     
     public partial class MaterialInElementTable : EntityTable_v2, IEnumerable<MaterialInElement>
     {
-        private readonly EntityTableSet _parentTableSet; // can be null
+        public EntityTableSet ParentTableSet { get; } // can be null
         
         public MaterialInElementTable(SerializableEntityTable rawTable, string[] stringBuffer, EntityTableSet parentTableSet = null) : base(rawTable, stringBuffer)
         {
-            _parentTableSet = parentTableSet;
+            ParentTableSet = parentTableSet;
             Column_Area = GetDataColumnValues<Double>("double:Area") ?? Array.Empty<Double>();
             Column_Volume = GetDataColumnValues<Double>("double:Volume") ?? Array.Empty<Double>();
             Column_IsPaint = GetDataColumnValues<Boolean>("byte:IsPaint") ?? Array.Empty<Boolean>();
@@ -6366,11 +6466,11 @@ namespace Vim.Format.ObjectModel {
         public int[] Column_MaterialIndex { get; }
         public int GetMaterialIndex(int index) => Column_MaterialIndex.ElementAtOrDefault(index, EntityRelation.None);
         public Material GetMaterial(int index) => _GetReferencedMaterial(GetMaterialIndex(index));
-        private Material _GetReferencedMaterial(int referencedIndex) => _parentTableSet.GetMaterial(referencedIndex);
+        private Material _GetReferencedMaterial(int referencedIndex) => ParentTableSet.GetMaterial(referencedIndex);
         public int[] Column_ElementIndex { get; }
         public int GetElementIndex(int index) => Column_ElementIndex.ElementAtOrDefault(index, EntityRelation.None);
         public Element GetElement(int index) => _GetReferencedElement(GetElementIndex(index));
-        private Element _GetReferencedElement(int referencedIndex) => _parentTableSet.GetElement(referencedIndex);
+        private Element _GetReferencedElement(int referencedIndex) => ParentTableSet.GetElement(referencedIndex);
         // Object Getter
         public MaterialInElement Get(int index)
         {
@@ -6395,11 +6495,11 @@ namespace Vim.Format.ObjectModel {
     
     public partial class CompoundStructureLayerTable : EntityTable_v2, IEnumerable<CompoundStructureLayer>
     {
-        private readonly EntityTableSet _parentTableSet; // can be null
+        public EntityTableSet ParentTableSet { get; } // can be null
         
         public CompoundStructureLayerTable(SerializableEntityTable rawTable, string[] stringBuffer, EntityTableSet parentTableSet = null) : base(rawTable, stringBuffer)
         {
-            _parentTableSet = parentTableSet;
+            ParentTableSet = parentTableSet;
             Column_OrderIndex = GetDataColumnValues<Int32>("int:OrderIndex") ?? Array.Empty<Int32>();
             Column_Width = GetDataColumnValues<Double>("double:Width") ?? Array.Empty<Double>();
             Column_MaterialFunctionAssignment = GetStringColumnValues("string:MaterialFunctionAssignment") ?? Array.Empty<String>();
@@ -6416,11 +6516,11 @@ namespace Vim.Format.ObjectModel {
         public int[] Column_MaterialIndex { get; }
         public int GetMaterialIndex(int index) => Column_MaterialIndex.ElementAtOrDefault(index, EntityRelation.None);
         public Material GetMaterial(int index) => _GetReferencedMaterial(GetMaterialIndex(index));
-        private Material _GetReferencedMaterial(int referencedIndex) => _parentTableSet.GetMaterial(referencedIndex);
+        private Material _GetReferencedMaterial(int referencedIndex) => ParentTableSet.GetMaterial(referencedIndex);
         public int[] Column_CompoundStructureIndex { get; }
         public int GetCompoundStructureIndex(int index) => Column_CompoundStructureIndex.ElementAtOrDefault(index, EntityRelation.None);
         public CompoundStructure GetCompoundStructure(int index) => _GetReferencedCompoundStructure(GetCompoundStructureIndex(index));
-        private CompoundStructure _GetReferencedCompoundStructure(int referencedIndex) => _parentTableSet.GetCompoundStructure(referencedIndex);
+        private CompoundStructure _GetReferencedCompoundStructure(int referencedIndex) => ParentTableSet.GetCompoundStructure(referencedIndex);
         // Object Getter
         public CompoundStructureLayer Get(int index)
         {
@@ -6445,11 +6545,11 @@ namespace Vim.Format.ObjectModel {
     
     public partial class CompoundStructureTable : EntityTable_v2, IEnumerable<CompoundStructure>
     {
-        private readonly EntityTableSet _parentTableSet; // can be null
+        public EntityTableSet ParentTableSet { get; } // can be null
         
         public CompoundStructureTable(SerializableEntityTable rawTable, string[] stringBuffer, EntityTableSet parentTableSet = null) : base(rawTable, stringBuffer)
         {
-            _parentTableSet = parentTableSet;
+            ParentTableSet = parentTableSet;
             Column_Width = GetDataColumnValues<Double>("double:Width") ?? Array.Empty<Double>();
             Column_StructuralLayerIndex = GetIndexColumnValues("index:Vim.CompoundStructureLayer:StructuralLayer") ?? Array.Empty<int>();
         }
@@ -6459,7 +6559,7 @@ namespace Vim.Format.ObjectModel {
         public int[] Column_StructuralLayerIndex { get; }
         public int GetStructuralLayerIndex(int index) => Column_StructuralLayerIndex.ElementAtOrDefault(index, EntityRelation.None);
         public CompoundStructureLayer GetStructuralLayer(int index) => _GetReferencedStructuralLayer(GetStructuralLayerIndex(index));
-        private CompoundStructureLayer _GetReferencedStructuralLayer(int referencedIndex) => _parentTableSet.GetCompoundStructureLayer(referencedIndex);
+        private CompoundStructureLayer _GetReferencedStructuralLayer(int referencedIndex) => ParentTableSet.GetCompoundStructureLayer(referencedIndex);
         // Object Getter
         public CompoundStructure Get(int index)
         {
@@ -6481,18 +6581,18 @@ namespace Vim.Format.ObjectModel {
     
     public partial class NodeTable : EntityTable_v2, IEnumerable<Node>
     {
-        private readonly EntityTableSet _parentTableSet; // can be null
+        public EntityTableSet ParentTableSet { get; } // can be null
         
         public NodeTable(SerializableEntityTable rawTable, string[] stringBuffer, EntityTableSet parentTableSet = null) : base(rawTable, stringBuffer)
         {
-            _parentTableSet = parentTableSet;
+            ParentTableSet = parentTableSet;
             Column_ElementIndex = GetIndexColumnValues("index:Vim.Element:Element") ?? Array.Empty<int>();
         }
         
         public int[] Column_ElementIndex { get; }
         public int GetElementIndex(int index) => Column_ElementIndex.ElementAtOrDefault(index, EntityRelation.None);
         public Element GetElement(int index) => _GetReferencedElement(GetElementIndex(index));
-        private Element _GetReferencedElement(int referencedIndex) => _parentTableSet.GetElement(referencedIndex);
+        private Element _GetReferencedElement(int referencedIndex) => ParentTableSet.GetElement(referencedIndex);
         // Object Getter
         public Node Get(int index)
         {
@@ -6513,11 +6613,11 @@ namespace Vim.Format.ObjectModel {
     
     public partial class GeometryTable : EntityTable_v2, IEnumerable<Geometry>
     {
-        private readonly EntityTableSet _parentTableSet; // can be null
+        public EntityTableSet ParentTableSet { get; } // can be null
         
         public GeometryTable(SerializableEntityTable rawTable, string[] stringBuffer, EntityTableSet parentTableSet = null) : base(rawTable, stringBuffer)
         {
-            _parentTableSet = parentTableSet;
+            ParentTableSet = parentTableSet;
             Column_Box_Min_X = GetDataColumnValues<Single>("float:Box.Min.X") ?? Array.Empty<Single>();
             Column_Box_Min_Y = GetDataColumnValues<Single>("float:Box.Min.Y") ?? Array.Empty<Single>();
             Column_Box_Min_Z = GetDataColumnValues<Single>("float:Box.Min.Z") ?? Array.Empty<Single>();
@@ -6571,18 +6671,18 @@ namespace Vim.Format.ObjectModel {
     
     public partial class ShapeTable : EntityTable_v2, IEnumerable<Shape>
     {
-        private readonly EntityTableSet _parentTableSet; // can be null
+        public EntityTableSet ParentTableSet { get; } // can be null
         
         public ShapeTable(SerializableEntityTable rawTable, string[] stringBuffer, EntityTableSet parentTableSet = null) : base(rawTable, stringBuffer)
         {
-            _parentTableSet = parentTableSet;
+            ParentTableSet = parentTableSet;
             Column_ElementIndex = GetIndexColumnValues("index:Vim.Element:Element") ?? Array.Empty<int>();
         }
         
         public int[] Column_ElementIndex { get; }
         public int GetElementIndex(int index) => Column_ElementIndex.ElementAtOrDefault(index, EntityRelation.None);
         public Element GetElement(int index) => _GetReferencedElement(GetElementIndex(index));
-        private Element _GetReferencedElement(int referencedIndex) => _parentTableSet.GetElement(referencedIndex);
+        private Element _GetReferencedElement(int referencedIndex) => ParentTableSet.GetElement(referencedIndex);
         // Object Getter
         public Shape Get(int index)
         {
@@ -6603,18 +6703,18 @@ namespace Vim.Format.ObjectModel {
     
     public partial class ShapeCollectionTable : EntityTable_v2, IEnumerable<ShapeCollection>
     {
-        private readonly EntityTableSet _parentTableSet; // can be null
+        public EntityTableSet ParentTableSet { get; } // can be null
         
         public ShapeCollectionTable(SerializableEntityTable rawTable, string[] stringBuffer, EntityTableSet parentTableSet = null) : base(rawTable, stringBuffer)
         {
-            _parentTableSet = parentTableSet;
+            ParentTableSet = parentTableSet;
             Column_ElementIndex = GetIndexColumnValues("index:Vim.Element:Element") ?? Array.Empty<int>();
         }
         
         public int[] Column_ElementIndex { get; }
         public int GetElementIndex(int index) => Column_ElementIndex.ElementAtOrDefault(index, EntityRelation.None);
         public Element GetElement(int index) => _GetReferencedElement(GetElementIndex(index));
-        private Element _GetReferencedElement(int referencedIndex) => _parentTableSet.GetElement(referencedIndex);
+        private Element _GetReferencedElement(int referencedIndex) => ParentTableSet.GetElement(referencedIndex);
         // Object Getter
         public ShapeCollection Get(int index)
         {
@@ -6635,11 +6735,11 @@ namespace Vim.Format.ObjectModel {
     
     public partial class ShapeInShapeCollectionTable : EntityTable_v2, IEnumerable<ShapeInShapeCollection>
     {
-        private readonly EntityTableSet _parentTableSet; // can be null
+        public EntityTableSet ParentTableSet { get; } // can be null
         
         public ShapeInShapeCollectionTable(SerializableEntityTable rawTable, string[] stringBuffer, EntityTableSet parentTableSet = null) : base(rawTable, stringBuffer)
         {
-            _parentTableSet = parentTableSet;
+            ParentTableSet = parentTableSet;
             Column_ShapeIndex = GetIndexColumnValues("index:Vim.Shape:Shape") ?? Array.Empty<int>();
             Column_ShapeCollectionIndex = GetIndexColumnValues("index:Vim.ShapeCollection:ShapeCollection") ?? Array.Empty<int>();
         }
@@ -6647,11 +6747,11 @@ namespace Vim.Format.ObjectModel {
         public int[] Column_ShapeIndex { get; }
         public int GetShapeIndex(int index) => Column_ShapeIndex.ElementAtOrDefault(index, EntityRelation.None);
         public Shape GetShape(int index) => _GetReferencedShape(GetShapeIndex(index));
-        private Shape _GetReferencedShape(int referencedIndex) => _parentTableSet.GetShape(referencedIndex);
+        private Shape _GetReferencedShape(int referencedIndex) => ParentTableSet.GetShape(referencedIndex);
         public int[] Column_ShapeCollectionIndex { get; }
         public int GetShapeCollectionIndex(int index) => Column_ShapeCollectionIndex.ElementAtOrDefault(index, EntityRelation.None);
         public ShapeCollection GetShapeCollection(int index) => _GetReferencedShapeCollection(GetShapeCollectionIndex(index));
-        private ShapeCollection _GetReferencedShapeCollection(int referencedIndex) => _parentTableSet.GetShapeCollection(referencedIndex);
+        private ShapeCollection _GetReferencedShapeCollection(int referencedIndex) => ParentTableSet.GetShapeCollection(referencedIndex);
         // Object Getter
         public ShapeInShapeCollection Get(int index)
         {
@@ -6673,11 +6773,11 @@ namespace Vim.Format.ObjectModel {
     
     public partial class SystemTable : EntityTable_v2, IEnumerable<System>
     {
-        private readonly EntityTableSet _parentTableSet; // can be null
+        public EntityTableSet ParentTableSet { get; } // can be null
         
         public SystemTable(SerializableEntityTable rawTable, string[] stringBuffer, EntityTableSet parentTableSet = null) : base(rawTable, stringBuffer)
         {
-            _parentTableSet = parentTableSet;
+            ParentTableSet = parentTableSet;
             Column_SystemType = GetDataColumnValues<Int32>("int:SystemType") ?? Array.Empty<Int32>();
             Column_FamilyTypeIndex = GetIndexColumnValues("index:Vim.FamilyType:FamilyType") ?? Array.Empty<int>();
             Column_ElementIndex = GetIndexColumnValues("index:Vim.Element:Element") ?? Array.Empty<int>();
@@ -6688,11 +6788,11 @@ namespace Vim.Format.ObjectModel {
         public int[] Column_FamilyTypeIndex { get; }
         public int GetFamilyTypeIndex(int index) => Column_FamilyTypeIndex.ElementAtOrDefault(index, EntityRelation.None);
         public FamilyType GetFamilyType(int index) => _GetReferencedFamilyType(GetFamilyTypeIndex(index));
-        private FamilyType _GetReferencedFamilyType(int referencedIndex) => _parentTableSet.GetFamilyType(referencedIndex);
+        private FamilyType _GetReferencedFamilyType(int referencedIndex) => ParentTableSet.GetFamilyType(referencedIndex);
         public int[] Column_ElementIndex { get; }
         public int GetElementIndex(int index) => Column_ElementIndex.ElementAtOrDefault(index, EntityRelation.None);
         public Element GetElement(int index) => _GetReferencedElement(GetElementIndex(index));
-        private Element _GetReferencedElement(int referencedIndex) => _parentTableSet.GetElement(referencedIndex);
+        private Element _GetReferencedElement(int referencedIndex) => ParentTableSet.GetElement(referencedIndex);
         // Object Getter
         public System Get(int index)
         {
@@ -6715,11 +6815,11 @@ namespace Vim.Format.ObjectModel {
     
     public partial class ElementInSystemTable : EntityTable_v2, IEnumerable<ElementInSystem>
     {
-        private readonly EntityTableSet _parentTableSet; // can be null
+        public EntityTableSet ParentTableSet { get; } // can be null
         
         public ElementInSystemTable(SerializableEntityTable rawTable, string[] stringBuffer, EntityTableSet parentTableSet = null) : base(rawTable, stringBuffer)
         {
-            _parentTableSet = parentTableSet;
+            ParentTableSet = parentTableSet;
             Column_Roles = GetDataColumnValues<Int32>("int:Roles") ?? Array.Empty<Int32>();
             Column_SystemIndex = GetIndexColumnValues("index:Vim.System:System") ?? Array.Empty<int>();
             Column_ElementIndex = GetIndexColumnValues("index:Vim.Element:Element") ?? Array.Empty<int>();
@@ -6730,11 +6830,11 @@ namespace Vim.Format.ObjectModel {
         public int[] Column_SystemIndex { get; }
         public int GetSystemIndex(int index) => Column_SystemIndex.ElementAtOrDefault(index, EntityRelation.None);
         public System GetSystem(int index) => _GetReferencedSystem(GetSystemIndex(index));
-        private System _GetReferencedSystem(int referencedIndex) => _parentTableSet.GetSystem(referencedIndex);
+        private System _GetReferencedSystem(int referencedIndex) => ParentTableSet.GetSystem(referencedIndex);
         public int[] Column_ElementIndex { get; }
         public int GetElementIndex(int index) => Column_ElementIndex.ElementAtOrDefault(index, EntityRelation.None);
         public Element GetElement(int index) => _GetReferencedElement(GetElementIndex(index));
-        private Element _GetReferencedElement(int referencedIndex) => _parentTableSet.GetElement(referencedIndex);
+        private Element _GetReferencedElement(int referencedIndex) => ParentTableSet.GetElement(referencedIndex);
         // Object Getter
         public ElementInSystem Get(int index)
         {
@@ -6757,11 +6857,11 @@ namespace Vim.Format.ObjectModel {
     
     public partial class WarningTable : EntityTable_v2, IEnumerable<Warning>
     {
-        private readonly EntityTableSet _parentTableSet; // can be null
+        public EntityTableSet ParentTableSet { get; } // can be null
         
         public WarningTable(SerializableEntityTable rawTable, string[] stringBuffer, EntityTableSet parentTableSet = null) : base(rawTable, stringBuffer)
         {
-            _parentTableSet = parentTableSet;
+            ParentTableSet = parentTableSet;
             Column_Guid = GetStringColumnValues("string:Guid") ?? Array.Empty<String>();
             Column_Severity = GetStringColumnValues("string:Severity") ?? Array.Empty<String>();
             Column_Description = GetStringColumnValues("string:Description") ?? Array.Empty<String>();
@@ -6777,7 +6877,7 @@ namespace Vim.Format.ObjectModel {
         public int[] Column_BimDocumentIndex { get; }
         public int GetBimDocumentIndex(int index) => Column_BimDocumentIndex.ElementAtOrDefault(index, EntityRelation.None);
         public BimDocument GetBimDocument(int index) => _GetReferencedBimDocument(GetBimDocumentIndex(index));
-        private BimDocument _GetReferencedBimDocument(int referencedIndex) => _parentTableSet.GetBimDocument(referencedIndex);
+        private BimDocument _GetReferencedBimDocument(int referencedIndex) => ParentTableSet.GetBimDocument(referencedIndex);
         // Object Getter
         public Warning Get(int index)
         {
@@ -6801,11 +6901,11 @@ namespace Vim.Format.ObjectModel {
     
     public partial class ElementInWarningTable : EntityTable_v2, IEnumerable<ElementInWarning>
     {
-        private readonly EntityTableSet _parentTableSet; // can be null
+        public EntityTableSet ParentTableSet { get; } // can be null
         
         public ElementInWarningTable(SerializableEntityTable rawTable, string[] stringBuffer, EntityTableSet parentTableSet = null) : base(rawTable, stringBuffer)
         {
-            _parentTableSet = parentTableSet;
+            ParentTableSet = parentTableSet;
             Column_WarningIndex = GetIndexColumnValues("index:Vim.Warning:Warning") ?? Array.Empty<int>();
             Column_ElementIndex = GetIndexColumnValues("index:Vim.Element:Element") ?? Array.Empty<int>();
         }
@@ -6813,11 +6913,11 @@ namespace Vim.Format.ObjectModel {
         public int[] Column_WarningIndex { get; }
         public int GetWarningIndex(int index) => Column_WarningIndex.ElementAtOrDefault(index, EntityRelation.None);
         public Warning GetWarning(int index) => _GetReferencedWarning(GetWarningIndex(index));
-        private Warning _GetReferencedWarning(int referencedIndex) => _parentTableSet.GetWarning(referencedIndex);
+        private Warning _GetReferencedWarning(int referencedIndex) => ParentTableSet.GetWarning(referencedIndex);
         public int[] Column_ElementIndex { get; }
         public int GetElementIndex(int index) => Column_ElementIndex.ElementAtOrDefault(index, EntityRelation.None);
         public Element GetElement(int index) => _GetReferencedElement(GetElementIndex(index));
-        private Element _GetReferencedElement(int referencedIndex) => _parentTableSet.GetElement(referencedIndex);
+        private Element _GetReferencedElement(int referencedIndex) => ParentTableSet.GetElement(referencedIndex);
         // Object Getter
         public ElementInWarning Get(int index)
         {
@@ -6839,11 +6939,11 @@ namespace Vim.Format.ObjectModel {
     
     public partial class BasePointTable : EntityTable_v2, IEnumerable<BasePoint>
     {
-        private readonly EntityTableSet _parentTableSet; // can be null
+        public EntityTableSet ParentTableSet { get; } // can be null
         
         public BasePointTable(SerializableEntityTable rawTable, string[] stringBuffer, EntityTableSet parentTableSet = null) : base(rawTable, stringBuffer)
         {
-            _parentTableSet = parentTableSet;
+            ParentTableSet = parentTableSet;
             Column_IsSurveyPoint = GetDataColumnValues<Boolean>("byte:IsSurveyPoint") ?? Array.Empty<Boolean>();
             Column_Position_X = GetDataColumnValues<Double>("double:Position.X") ?? Array.Empty<Double>();
             Column_Position_Y = GetDataColumnValues<Double>("double:Position.Y") ?? Array.Empty<Double>();
@@ -6871,7 +6971,7 @@ namespace Vim.Format.ObjectModel {
         public int[] Column_ElementIndex { get; }
         public int GetElementIndex(int index) => Column_ElementIndex.ElementAtOrDefault(index, EntityRelation.None);
         public Element GetElement(int index) => _GetReferencedElement(GetElementIndex(index));
-        private Element _GetReferencedElement(int referencedIndex) => _parentTableSet.GetElement(referencedIndex);
+        private Element _GetReferencedElement(int referencedIndex) => ParentTableSet.GetElement(referencedIndex);
         // Object Getter
         public BasePoint Get(int index)
         {
@@ -6899,11 +6999,11 @@ namespace Vim.Format.ObjectModel {
     
     public partial class PhaseFilterTable : EntityTable_v2, IEnumerable<PhaseFilter>
     {
-        private readonly EntityTableSet _parentTableSet; // can be null
+        public EntityTableSet ParentTableSet { get; } // can be null
         
         public PhaseFilterTable(SerializableEntityTable rawTable, string[] stringBuffer, EntityTableSet parentTableSet = null) : base(rawTable, stringBuffer)
         {
-            _parentTableSet = parentTableSet;
+            ParentTableSet = parentTableSet;
             Column_New = GetDataColumnValues<Int32>("int:New") ?? Array.Empty<Int32>();
             Column_Existing = GetDataColumnValues<Int32>("int:Existing") ?? Array.Empty<Int32>();
             Column_Demolished = GetDataColumnValues<Int32>("int:Demolished") ?? Array.Empty<Int32>();
@@ -6922,7 +7022,7 @@ namespace Vim.Format.ObjectModel {
         public int[] Column_ElementIndex { get; }
         public int GetElementIndex(int index) => Column_ElementIndex.ElementAtOrDefault(index, EntityRelation.None);
         public Element GetElement(int index) => _GetReferencedElement(GetElementIndex(index));
-        private Element _GetReferencedElement(int referencedIndex) => _parentTableSet.GetElement(referencedIndex);
+        private Element _GetReferencedElement(int referencedIndex) => ParentTableSet.GetElement(referencedIndex);
         // Object Getter
         public PhaseFilter Get(int index)
         {
@@ -6947,11 +7047,11 @@ namespace Vim.Format.ObjectModel {
     
     public partial class GridTable : EntityTable_v2, IEnumerable<Grid>
     {
-        private readonly EntityTableSet _parentTableSet; // can be null
+        public EntityTableSet ParentTableSet { get; } // can be null
         
         public GridTable(SerializableEntityTable rawTable, string[] stringBuffer, EntityTableSet parentTableSet = null) : base(rawTable, stringBuffer)
         {
-            _parentTableSet = parentTableSet;
+            ParentTableSet = parentTableSet;
             Column_StartPoint_X = GetDataColumnValues<Double>("double:StartPoint.X") ?? Array.Empty<Double>();
             Column_StartPoint_Y = GetDataColumnValues<Double>("double:StartPoint.Y") ?? Array.Empty<Double>();
             Column_StartPoint_Z = GetDataColumnValues<Double>("double:StartPoint.Z") ?? Array.Empty<Double>();
@@ -6998,11 +7098,11 @@ namespace Vim.Format.ObjectModel {
         public int[] Column_FamilyTypeIndex { get; }
         public int GetFamilyTypeIndex(int index) => Column_FamilyTypeIndex.ElementAtOrDefault(index, EntityRelation.None);
         public FamilyType GetFamilyType(int index) => _GetReferencedFamilyType(GetFamilyTypeIndex(index));
-        private FamilyType _GetReferencedFamilyType(int referencedIndex) => _parentTableSet.GetFamilyType(referencedIndex);
+        private FamilyType _GetReferencedFamilyType(int referencedIndex) => ParentTableSet.GetFamilyType(referencedIndex);
         public int[] Column_ElementIndex { get; }
         public int GetElementIndex(int index) => Column_ElementIndex.ElementAtOrDefault(index, EntityRelation.None);
         public Element GetElement(int index) => _GetReferencedElement(GetElementIndex(index));
-        private Element _GetReferencedElement(int referencedIndex) => _parentTableSet.GetElement(referencedIndex);
+        private Element _GetReferencedElement(int referencedIndex) => ParentTableSet.GetElement(referencedIndex);
         // Object Getter
         public Grid Get(int index)
         {
@@ -7037,11 +7137,11 @@ namespace Vim.Format.ObjectModel {
     
     public partial class AreaTable : EntityTable_v2, IEnumerable<Area>
     {
-        private readonly EntityTableSet _parentTableSet; // can be null
+        public EntityTableSet ParentTableSet { get; } // can be null
         
         public AreaTable(SerializableEntityTable rawTable, string[] stringBuffer, EntityTableSet parentTableSet = null) : base(rawTable, stringBuffer)
         {
-            _parentTableSet = parentTableSet;
+            ParentTableSet = parentTableSet;
             Column_Value = GetDataColumnValues<Double>("double:Value") ?? Array.Empty<Double>();
             Column_Perimeter = GetDataColumnValues<Double>("double:Perimeter") ?? Array.Empty<Double>();
             Column_Number = GetStringColumnValues("string:Number") ?? Array.Empty<String>();
@@ -7061,11 +7161,11 @@ namespace Vim.Format.ObjectModel {
         public int[] Column_AreaSchemeIndex { get; }
         public int GetAreaSchemeIndex(int index) => Column_AreaSchemeIndex.ElementAtOrDefault(index, EntityRelation.None);
         public AreaScheme GetAreaScheme(int index) => _GetReferencedAreaScheme(GetAreaSchemeIndex(index));
-        private AreaScheme _GetReferencedAreaScheme(int referencedIndex) => _parentTableSet.GetAreaScheme(referencedIndex);
+        private AreaScheme _GetReferencedAreaScheme(int referencedIndex) => ParentTableSet.GetAreaScheme(referencedIndex);
         public int[] Column_ElementIndex { get; }
         public int GetElementIndex(int index) => Column_ElementIndex.ElementAtOrDefault(index, EntityRelation.None);
         public Element GetElement(int index) => _GetReferencedElement(GetElementIndex(index));
-        private Element _GetReferencedElement(int referencedIndex) => _parentTableSet.GetElement(referencedIndex);
+        private Element _GetReferencedElement(int referencedIndex) => ParentTableSet.GetElement(referencedIndex);
         // Object Getter
         public Area Get(int index)
         {
@@ -7091,11 +7191,11 @@ namespace Vim.Format.ObjectModel {
     
     public partial class AreaSchemeTable : EntityTable_v2, IEnumerable<AreaScheme>
     {
-        private readonly EntityTableSet _parentTableSet; // can be null
+        public EntityTableSet ParentTableSet { get; } // can be null
         
         public AreaSchemeTable(SerializableEntityTable rawTable, string[] stringBuffer, EntityTableSet parentTableSet = null) : base(rawTable, stringBuffer)
         {
-            _parentTableSet = parentTableSet;
+            ParentTableSet = parentTableSet;
             Column_IsGrossBuildingArea = GetDataColumnValues<Boolean>("byte:IsGrossBuildingArea") ?? Array.Empty<Boolean>();
             Column_ElementIndex = GetIndexColumnValues("index:Vim.Element:Element") ?? Array.Empty<int>();
         }
@@ -7105,7 +7205,7 @@ namespace Vim.Format.ObjectModel {
         public int[] Column_ElementIndex { get; }
         public int GetElementIndex(int index) => Column_ElementIndex.ElementAtOrDefault(index, EntityRelation.None);
         public Element GetElement(int index) => _GetReferencedElement(GetElementIndex(index));
-        private Element _GetReferencedElement(int referencedIndex) => _parentTableSet.GetElement(referencedIndex);
+        private Element _GetReferencedElement(int referencedIndex) => ParentTableSet.GetElement(referencedIndex);
         // Object Getter
         public AreaScheme Get(int index)
         {
@@ -7127,18 +7227,18 @@ namespace Vim.Format.ObjectModel {
     
     public partial class ScheduleTable : EntityTable_v2, IEnumerable<Schedule>
     {
-        private readonly EntityTableSet _parentTableSet; // can be null
+        public EntityTableSet ParentTableSet { get; } // can be null
         
         public ScheduleTable(SerializableEntityTable rawTable, string[] stringBuffer, EntityTableSet parentTableSet = null) : base(rawTable, stringBuffer)
         {
-            _parentTableSet = parentTableSet;
+            ParentTableSet = parentTableSet;
             Column_ElementIndex = GetIndexColumnValues("index:Vim.Element:Element") ?? Array.Empty<int>();
         }
         
         public int[] Column_ElementIndex { get; }
         public int GetElementIndex(int index) => Column_ElementIndex.ElementAtOrDefault(index, EntityRelation.None);
         public Element GetElement(int index) => _GetReferencedElement(GetElementIndex(index));
-        private Element _GetReferencedElement(int referencedIndex) => _parentTableSet.GetElement(referencedIndex);
+        private Element _GetReferencedElement(int referencedIndex) => ParentTableSet.GetElement(referencedIndex);
         // Object Getter
         public Schedule Get(int index)
         {
@@ -7159,11 +7259,11 @@ namespace Vim.Format.ObjectModel {
     
     public partial class ScheduleColumnTable : EntityTable_v2, IEnumerable<ScheduleColumn>
     {
-        private readonly EntityTableSet _parentTableSet; // can be null
+        public EntityTableSet ParentTableSet { get; } // can be null
         
         public ScheduleColumnTable(SerializableEntityTable rawTable, string[] stringBuffer, EntityTableSet parentTableSet = null) : base(rawTable, stringBuffer)
         {
-            _parentTableSet = parentTableSet;
+            ParentTableSet = parentTableSet;
             Column_Name = GetStringColumnValues("string:Name") ?? Array.Empty<String>();
             Column_ColumnIndex = GetDataColumnValues<Int32>("int:ColumnIndex") ?? Array.Empty<Int32>();
             Column_ScheduleIndex = GetIndexColumnValues("index:Vim.Schedule:Schedule") ?? Array.Empty<int>();
@@ -7176,7 +7276,7 @@ namespace Vim.Format.ObjectModel {
         public int[] Column_ScheduleIndex { get; }
         public int GetScheduleIndex(int index) => Column_ScheduleIndex.ElementAtOrDefault(index, EntityRelation.None);
         public Schedule GetSchedule(int index) => _GetReferencedSchedule(GetScheduleIndex(index));
-        private Schedule _GetReferencedSchedule(int referencedIndex) => _parentTableSet.GetSchedule(referencedIndex);
+        private Schedule _GetReferencedSchedule(int referencedIndex) => ParentTableSet.GetSchedule(referencedIndex);
         // Object Getter
         public ScheduleColumn Get(int index)
         {
@@ -7199,11 +7299,11 @@ namespace Vim.Format.ObjectModel {
     
     public partial class ScheduleCellTable : EntityTable_v2, IEnumerable<ScheduleCell>
     {
-        private readonly EntityTableSet _parentTableSet; // can be null
+        public EntityTableSet ParentTableSet { get; } // can be null
         
         public ScheduleCellTable(SerializableEntityTable rawTable, string[] stringBuffer, EntityTableSet parentTableSet = null) : base(rawTable, stringBuffer)
         {
-            _parentTableSet = parentTableSet;
+            ParentTableSet = parentTableSet;
             Column_Value = GetStringColumnValues("string:Value") ?? Array.Empty<String>();
             Column_RowIndex = GetDataColumnValues<Int32>("int:RowIndex") ?? Array.Empty<Int32>();
             Column_ScheduleColumnIndex = GetIndexColumnValues("index:Vim.ScheduleColumn:ScheduleColumn") ?? Array.Empty<int>();
@@ -7216,7 +7316,7 @@ namespace Vim.Format.ObjectModel {
         public int[] Column_ScheduleColumnIndex { get; }
         public int GetScheduleColumnIndex(int index) => Column_ScheduleColumnIndex.ElementAtOrDefault(index, EntityRelation.None);
         public ScheduleColumn GetScheduleColumn(int index) => _GetReferencedScheduleColumn(GetScheduleColumnIndex(index));
-        private ScheduleColumn _GetReferencedScheduleColumn(int referencedIndex) => _parentTableSet.GetScheduleColumn(referencedIndex);
+        private ScheduleColumn _GetReferencedScheduleColumn(int referencedIndex) => ParentTableSet.GetScheduleColumn(referencedIndex);
         // Object Getter
         public ScheduleCell Get(int index)
         {
@@ -7239,18 +7339,18 @@ namespace Vim.Format.ObjectModel {
     
     public partial class ViewSheetSetTable : EntityTable_v2, IEnumerable<ViewSheetSet>
     {
-        private readonly EntityTableSet _parentTableSet; // can be null
+        public EntityTableSet ParentTableSet { get; } // can be null
         
         public ViewSheetSetTable(SerializableEntityTable rawTable, string[] stringBuffer, EntityTableSet parentTableSet = null) : base(rawTable, stringBuffer)
         {
-            _parentTableSet = parentTableSet;
+            ParentTableSet = parentTableSet;
             Column_ElementIndex = GetIndexColumnValues("index:Vim.Element:Element") ?? Array.Empty<int>();
         }
         
         public int[] Column_ElementIndex { get; }
         public int GetElementIndex(int index) => Column_ElementIndex.ElementAtOrDefault(index, EntityRelation.None);
         public Element GetElement(int index) => _GetReferencedElement(GetElementIndex(index));
-        private Element _GetReferencedElement(int referencedIndex) => _parentTableSet.GetElement(referencedIndex);
+        private Element _GetReferencedElement(int referencedIndex) => ParentTableSet.GetElement(referencedIndex);
         // Object Getter
         public ViewSheetSet Get(int index)
         {
@@ -7271,11 +7371,11 @@ namespace Vim.Format.ObjectModel {
     
     public partial class ViewSheetTable : EntityTable_v2, IEnumerable<ViewSheet>
     {
-        private readonly EntityTableSet _parentTableSet; // can be null
+        public EntityTableSet ParentTableSet { get; } // can be null
         
         public ViewSheetTable(SerializableEntityTable rawTable, string[] stringBuffer, EntityTableSet parentTableSet = null) : base(rawTable, stringBuffer)
         {
-            _parentTableSet = parentTableSet;
+            ParentTableSet = parentTableSet;
             Column_FamilyTypeIndex = GetIndexColumnValues("index:Vim.FamilyType:FamilyType") ?? Array.Empty<int>();
             Column_ElementIndex = GetIndexColumnValues("index:Vim.Element:Element") ?? Array.Empty<int>();
         }
@@ -7283,11 +7383,11 @@ namespace Vim.Format.ObjectModel {
         public int[] Column_FamilyTypeIndex { get; }
         public int GetFamilyTypeIndex(int index) => Column_FamilyTypeIndex.ElementAtOrDefault(index, EntityRelation.None);
         public FamilyType GetFamilyType(int index) => _GetReferencedFamilyType(GetFamilyTypeIndex(index));
-        private FamilyType _GetReferencedFamilyType(int referencedIndex) => _parentTableSet.GetFamilyType(referencedIndex);
+        private FamilyType _GetReferencedFamilyType(int referencedIndex) => ParentTableSet.GetFamilyType(referencedIndex);
         public int[] Column_ElementIndex { get; }
         public int GetElementIndex(int index) => Column_ElementIndex.ElementAtOrDefault(index, EntityRelation.None);
         public Element GetElement(int index) => _GetReferencedElement(GetElementIndex(index));
-        private Element _GetReferencedElement(int referencedIndex) => _parentTableSet.GetElement(referencedIndex);
+        private Element _GetReferencedElement(int referencedIndex) => ParentTableSet.GetElement(referencedIndex);
         // Object Getter
         public ViewSheet Get(int index)
         {
@@ -7309,11 +7409,11 @@ namespace Vim.Format.ObjectModel {
     
     public partial class ViewSheetInViewSheetSetTable : EntityTable_v2, IEnumerable<ViewSheetInViewSheetSet>
     {
-        private readonly EntityTableSet _parentTableSet; // can be null
+        public EntityTableSet ParentTableSet { get; } // can be null
         
         public ViewSheetInViewSheetSetTable(SerializableEntityTable rawTable, string[] stringBuffer, EntityTableSet parentTableSet = null) : base(rawTable, stringBuffer)
         {
-            _parentTableSet = parentTableSet;
+            ParentTableSet = parentTableSet;
             Column_ViewSheetIndex = GetIndexColumnValues("index:Vim.ViewSheet:ViewSheet") ?? Array.Empty<int>();
             Column_ViewSheetSetIndex = GetIndexColumnValues("index:Vim.ViewSheetSet:ViewSheetSet") ?? Array.Empty<int>();
         }
@@ -7321,11 +7421,11 @@ namespace Vim.Format.ObjectModel {
         public int[] Column_ViewSheetIndex { get; }
         public int GetViewSheetIndex(int index) => Column_ViewSheetIndex.ElementAtOrDefault(index, EntityRelation.None);
         public ViewSheet GetViewSheet(int index) => _GetReferencedViewSheet(GetViewSheetIndex(index));
-        private ViewSheet _GetReferencedViewSheet(int referencedIndex) => _parentTableSet.GetViewSheet(referencedIndex);
+        private ViewSheet _GetReferencedViewSheet(int referencedIndex) => ParentTableSet.GetViewSheet(referencedIndex);
         public int[] Column_ViewSheetSetIndex { get; }
         public int GetViewSheetSetIndex(int index) => Column_ViewSheetSetIndex.ElementAtOrDefault(index, EntityRelation.None);
         public ViewSheetSet GetViewSheetSet(int index) => _GetReferencedViewSheetSet(GetViewSheetSetIndex(index));
-        private ViewSheetSet _GetReferencedViewSheetSet(int referencedIndex) => _parentTableSet.GetViewSheetSet(referencedIndex);
+        private ViewSheetSet _GetReferencedViewSheetSet(int referencedIndex) => ParentTableSet.GetViewSheetSet(referencedIndex);
         // Object Getter
         public ViewSheetInViewSheetSet Get(int index)
         {
@@ -7347,11 +7447,11 @@ namespace Vim.Format.ObjectModel {
     
     public partial class ViewInViewSheetSetTable : EntityTable_v2, IEnumerable<ViewInViewSheetSet>
     {
-        private readonly EntityTableSet _parentTableSet; // can be null
+        public EntityTableSet ParentTableSet { get; } // can be null
         
         public ViewInViewSheetSetTable(SerializableEntityTable rawTable, string[] stringBuffer, EntityTableSet parentTableSet = null) : base(rawTable, stringBuffer)
         {
-            _parentTableSet = parentTableSet;
+            ParentTableSet = parentTableSet;
             Column_ViewIndex = GetIndexColumnValues("index:Vim.View:View") ?? Array.Empty<int>();
             Column_ViewSheetSetIndex = GetIndexColumnValues("index:Vim.ViewSheetSet:ViewSheetSet") ?? Array.Empty<int>();
         }
@@ -7359,11 +7459,11 @@ namespace Vim.Format.ObjectModel {
         public int[] Column_ViewIndex { get; }
         public int GetViewIndex(int index) => Column_ViewIndex.ElementAtOrDefault(index, EntityRelation.None);
         public View GetView(int index) => _GetReferencedView(GetViewIndex(index));
-        private View _GetReferencedView(int referencedIndex) => _parentTableSet.GetView(referencedIndex);
+        private View _GetReferencedView(int referencedIndex) => ParentTableSet.GetView(referencedIndex);
         public int[] Column_ViewSheetSetIndex { get; }
         public int GetViewSheetSetIndex(int index) => Column_ViewSheetSetIndex.ElementAtOrDefault(index, EntityRelation.None);
         public ViewSheetSet GetViewSheetSet(int index) => _GetReferencedViewSheetSet(GetViewSheetSetIndex(index));
-        private ViewSheetSet _GetReferencedViewSheetSet(int referencedIndex) => _parentTableSet.GetViewSheetSet(referencedIndex);
+        private ViewSheetSet _GetReferencedViewSheetSet(int referencedIndex) => ParentTableSet.GetViewSheetSet(referencedIndex);
         // Object Getter
         public ViewInViewSheetSet Get(int index)
         {
@@ -7385,11 +7485,11 @@ namespace Vim.Format.ObjectModel {
     
     public partial class ViewInViewSheetTable : EntityTable_v2, IEnumerable<ViewInViewSheet>
     {
-        private readonly EntityTableSet _parentTableSet; // can be null
+        public EntityTableSet ParentTableSet { get; } // can be null
         
         public ViewInViewSheetTable(SerializableEntityTable rawTable, string[] stringBuffer, EntityTableSet parentTableSet = null) : base(rawTable, stringBuffer)
         {
-            _parentTableSet = parentTableSet;
+            ParentTableSet = parentTableSet;
             Column_ViewIndex = GetIndexColumnValues("index:Vim.View:View") ?? Array.Empty<int>();
             Column_ViewSheetIndex = GetIndexColumnValues("index:Vim.ViewSheet:ViewSheet") ?? Array.Empty<int>();
         }
@@ -7397,11 +7497,11 @@ namespace Vim.Format.ObjectModel {
         public int[] Column_ViewIndex { get; }
         public int GetViewIndex(int index) => Column_ViewIndex.ElementAtOrDefault(index, EntityRelation.None);
         public View GetView(int index) => _GetReferencedView(GetViewIndex(index));
-        private View _GetReferencedView(int referencedIndex) => _parentTableSet.GetView(referencedIndex);
+        private View _GetReferencedView(int referencedIndex) => ParentTableSet.GetView(referencedIndex);
         public int[] Column_ViewSheetIndex { get; }
         public int GetViewSheetIndex(int index) => Column_ViewSheetIndex.ElementAtOrDefault(index, EntityRelation.None);
         public ViewSheet GetViewSheet(int index) => _GetReferencedViewSheet(GetViewSheetIndex(index));
-        private ViewSheet _GetReferencedViewSheet(int referencedIndex) => _parentTableSet.GetViewSheet(referencedIndex);
+        private ViewSheet _GetReferencedViewSheet(int referencedIndex) => ParentTableSet.GetViewSheet(referencedIndex);
         // Object Getter
         public ViewInViewSheet Get(int index)
         {
@@ -7423,11 +7523,11 @@ namespace Vim.Format.ObjectModel {
     
     public partial class SiteTable : EntityTable_v2, IEnumerable<Site>
     {
-        private readonly EntityTableSet _parentTableSet; // can be null
+        public EntityTableSet ParentTableSet { get; } // can be null
         
         public SiteTable(SerializableEntityTable rawTable, string[] stringBuffer, EntityTableSet parentTableSet = null) : base(rawTable, stringBuffer)
         {
-            _parentTableSet = parentTableSet;
+            ParentTableSet = parentTableSet;
             Column_Latitude = GetDataColumnValues<Double>("double:Latitude") ?? Array.Empty<Double>();
             Column_Longitude = GetDataColumnValues<Double>("double:Longitude") ?? Array.Empty<Double>();
             Column_Address = GetStringColumnValues("string:Address") ?? Array.Empty<String>();
@@ -7449,7 +7549,7 @@ namespace Vim.Format.ObjectModel {
         public int[] Column_ElementIndex { get; }
         public int GetElementIndex(int index) => Column_ElementIndex.ElementAtOrDefault(index, EntityRelation.None);
         public Element GetElement(int index) => _GetReferencedElement(GetElementIndex(index));
-        private Element _GetReferencedElement(int referencedIndex) => _parentTableSet.GetElement(referencedIndex);
+        private Element _GetReferencedElement(int referencedIndex) => ParentTableSet.GetElement(referencedIndex);
         // Object Getter
         public Site Get(int index)
         {
@@ -7475,11 +7575,11 @@ namespace Vim.Format.ObjectModel {
     
     public partial class BuildingTable : EntityTable_v2, IEnumerable<Building>
     {
-        private readonly EntityTableSet _parentTableSet; // can be null
+        public EntityTableSet ParentTableSet { get; } // can be null
         
         public BuildingTable(SerializableEntityTable rawTable, string[] stringBuffer, EntityTableSet parentTableSet = null) : base(rawTable, stringBuffer)
         {
-            _parentTableSet = parentTableSet;
+            ParentTableSet = parentTableSet;
             Column_Elevation = GetDataColumnValues<Double>("double:Elevation") ?? Array.Empty<Double>();
             Column_TerrainElevation = GetDataColumnValues<Double>("double:TerrainElevation") ?? Array.Empty<Double>();
             Column_Address = GetStringColumnValues("string:Address") ?? Array.Empty<String>();
@@ -7496,11 +7596,11 @@ namespace Vim.Format.ObjectModel {
         public int[] Column_SiteIndex { get; }
         public int GetSiteIndex(int index) => Column_SiteIndex.ElementAtOrDefault(index, EntityRelation.None);
         public Site GetSite(int index) => _GetReferencedSite(GetSiteIndex(index));
-        private Site _GetReferencedSite(int referencedIndex) => _parentTableSet.GetSite(referencedIndex);
+        private Site _GetReferencedSite(int referencedIndex) => ParentTableSet.GetSite(referencedIndex);
         public int[] Column_ElementIndex { get; }
         public int GetElementIndex(int index) => Column_ElementIndex.ElementAtOrDefault(index, EntityRelation.None);
         public Element GetElement(int index) => _GetReferencedElement(GetElementIndex(index));
-        private Element _GetReferencedElement(int referencedIndex) => _parentTableSet.GetElement(referencedIndex);
+        private Element _GetReferencedElement(int referencedIndex) => ParentTableSet.GetElement(referencedIndex);
         // Object Getter
         public Building Get(int index)
         {

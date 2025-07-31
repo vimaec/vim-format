@@ -156,7 +156,9 @@ public static class ObjectModelGenerator
         cb.AppendLine($"public partial class {t.Name}").AppendLine("{");
         foreach (var fieldInfo in relationFields)
         {
-            cb.AppendLine($"public {fieldInfo.FieldType.RelationTypeParameter()} {fieldInfo.Name.Substring(1)} => {fieldInfo.Name}.Value;");
+            var relationFieldName = fieldInfo.Name.Substring(1);
+            cb.AppendLine($"public {fieldInfo.FieldType.RelationTypeParameter()} {relationFieldName} => {fieldInfo.Name}?.Value;");
+            cb.AppendLine($"public int {relationFieldName}Index => {fieldInfo.Name}?.Index ?? EntityRelation.None;");
         }
 
         cb.AppendLine($"public {t.Name}()");
@@ -314,7 +316,7 @@ public static class ObjectModelGenerator
             var etName = t.GetEntityTableName();
             var tmp = $"{t.Name.ToLowerInvariant()}Table";
             cb.AppendLine($"if (GetRawTableOrDefault(\"{etName}\") is SerializableEntityTable {tmp})");
-            cb.AppendLine($"    {t.Name}Table = new {t.Name}Table({tmp}, stringBuffer);");
+            cb.AppendLine($"    {t.Name}Table = new {t.Name}Table({tmp}, stringBuffer, this);");
             cb.AppendLine();
         }
         cb.AppendLine("// Initialize element index maps");
@@ -343,11 +345,11 @@ public static class ObjectModelGenerator
 
         cb.AppendLine($"public partial class {t.Name}Table : EntityTable_v2, IEnumerable<{t.Name}>");
         cb.AppendLine("{");
-        cb.AppendLine("private readonly EntityTableSet _parentTableSet; // can be null");
+        cb.AppendLine("public EntityTableSet ParentTableSet { get; } // can be null");
         cb.AppendLine();
         cb.AppendLine($"public {t.Name}Table(SerializableEntityTable rawTable, string[] stringBuffer, EntityTableSet parentTableSet = null) : base(rawTable, stringBuffer)");
         cb.AppendLine("{");
-        cb.AppendLine("_parentTableSet = parentTableSet;");
+        cb.AppendLine("ParentTableSet = parentTableSet;");
         foreach (var f in entityFields)
         {
             var fieldName = f.Name;
@@ -398,7 +400,7 @@ public static class ObjectModelGenerator
             cb.AppendLine($"public int[] Column_{localFieldName}Index {{ get; }}");
             cb.AppendLine($"public int Get{localFieldName}Index(int index) => Column_{localFieldName}Index.ElementAtOrDefault(index, EntityRelation.None);");
             cb.AppendLine($"public {relType.Name} Get{localFieldName}(int index) => _GetReferenced{localFieldName}(Get{localFieldName}Index(index));");
-            cb.AppendLine($"private {relType.Name} _GetReferenced{localFieldName}(int referencedIndex) => _parentTableSet.Get{relType.Name}(referencedIndex);");
+            cb.AppendLine($"private {relType.Name} _GetReferenced{localFieldName}(int referencedIndex) => ParentTableSet.Get{relType.Name}(referencedIndex);");
         }
 
         cb.AppendLine("// Object Getter");

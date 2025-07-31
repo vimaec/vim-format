@@ -3,7 +3,11 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using Vim.Format.ObjectModel;
+using Vim.G3d;
+using Vim.Math3d;
 using Vim.Util;
+
+using ElementIndexToNodeAndGeometryMap = Vim.Util.DictionaryOfLists<int, (int NodeIndex, int GeometryIndex)>;
 
 // ReSharper disable InconsistentNaming
 
@@ -285,14 +289,15 @@ namespace Vim.Format.Levels
         /// Constructor
         /// </summary>
         public FamilyInstanceLevelInfo(
-            VimScene vimScene,
             FamilyInstance fi,
-            IReadOnlyList<long> elementIds, // an optimization to avoid re-instantiating the object chain in calls to familyInstance.Host.Id or Element.Id
-            IReadOnlyList<int> elementLevelIndices, // an optimization to avoid re-instantiating the object chain in calls to familyInstance.Element.Level
-            IReadOnlyList<int> levelElementIndices, // an optimization to avoid re-instantiating the object chain in calls to Level.Element
+            ElementTable elementTable,
+            LevelTable levelTable,
+            ParameterTable parameterTable,
+            ElementIndexMaps elementIndexMaps,
             IReadOnlyList<LevelInfo> orderedLevelInfosByProjectElevation,
             IReadOnlyDictionary<long, LevelInfo> elementIdToLevelInfoMap,
-            DictionaryOfLists<int, int> elementIndexToNodeIndicesMap) 
+            G3D g3d,
+            ElementIndexToNodeAndGeometryMap elementIndexToNodeAndGeometryMap) 
         {
             FamilyInstance = fi;
 
@@ -301,19 +306,17 @@ namespace Vim.Format.Levels
             // The level index of the family instance's element
             if (familyInstanceElementIndex != EntityRelation.None)
             {
-                var familyInstanceElementLevelIndex = elementLevelIndices[familyInstanceElementIndex];
+                var familyInstanceElementLevelIndex = elementTable.GetLevelIndex(familyInstanceElementIndex);
                 if (familyInstanceElementLevelIndex != EntityRelation.None)
                     LevelInfo = orderedLevelInfosByProjectElevation.FirstOrDefault(li => li.GetElementIndexOrNone() == familyInstanceElementLevelIndex);
             }
             
-            if (TryGetHostLevel(fi, elementIds, elementLevelIndices, levelElementIndices, elementIdToLevelInfoMap, out var hostLevelInfo))
+            if (TryGetHostLevel(fi, elementTable, levelTable, elementIdToLevelInfoMap, out var hostLevelInfo))
                 HostLevelInfo = hostLevelInfo;
 
-            var dm = vimScene.DocumentModel;
-
-            var paramInfo = dm.GetParameterIndicesFromElementIndex(familyInstanceElementIndex).Select(i =>
+            var paramInfo = elementIndexMaps.GetParameterIndicesFromElementIndex(familyInstanceElementIndex).Select(i =>
             {
-                var p = dm.GetParameter(i);
+                var p = parameterTable.Get(i);
 
                 // NOTE 1: we cache the ParameterDescriptor's Guid here to avoid having to re-instantiate the ParameterDescriptor object every time we access p.ParameterDescriptor
                 // NOTE 2: Guid is either the built-in ID (if the parameter is built-in), or a guid (if the parameter is shared).
@@ -332,11 +335,11 @@ namespace Vim.Format.Levels
                 BaseLevelInfo = baseLevelInfo;
 
             BuildingStoryGeometryContainment = GetBuildingStoryGeometryContainment(
-                vimScene,
                 familyInstanceElementIndex,
                 PrimaryLevelInfo?.Level?.ProjectElevation,
-                elementIndexToNodeIndicesMap,
                 orderedLevelInfosByProjectElevation,
+                g3d,
+                elementIndexToNodeAndGeometryMap,
                 out var maybeBuildingStoryAbove,
                 out var maybeBuildingStoryCurrentOrBelow,
                 out var maybeBuildingStoryGeometryMin,
@@ -353,9 +356,8 @@ namespace Vim.Format.Levels
         /// </summary>
         private static bool TryGetHostLevel(
             FamilyInstance fi,
-            IReadOnlyList<long> elementIds,         // for optimized data access
-            IReadOnlyList<int> elementLevelIndices, // for optimized data access
-            IReadOnlyList<int> levelElementIndices, // for optimized data access
+            ElementTable elementTable,
+            LevelTable levelTable,
             IReadOnlyDictionary<long, LevelInfo> elementIdToLevelMap,
             out LevelInfo hostLevelInfo)
         {
@@ -365,22 +367,22 @@ namespace Vim.Format.Levels
             if (hostElementIndex == EntityRelation.None)
                 return false;
 
-            var hostElementId = elementIds[hostElementIndex];
+            var hostElementId = elementTable.GetId(hostElementIndex);
 
             // If the host element is a level, use it.
             if (elementIdToLevelMap.TryGetEntityFromElementId(hostElementId, out hostLevelInfo))
                 return true;
 
             // If the host element is just a regular instance, then return the host element's level.
-            var hostElementLevelIndex = elementLevelIndices[hostElementIndex];
+            var hostElementLevelIndex = elementTable.GetLevelIndex(hostElementIndex);
             if (hostElementLevelIndex == EntityRelation.None)
                 return false;
 
-            var hostElementLevelElementIndex = levelElementIndices[hostElementLevelIndex];
+            var hostElementLevelElementIndex = levelTable.GetElementIndex(hostElementLevelIndex);
             if (hostElementLevelElementIndex == EntityRelation.None)
                 return false;
 
-            var hostElementLevelElementId = elementIds[hostElementLevelElementIndex];
+            var hostElementLevelElementId = elementTable.GetId(hostElementLevelElementIndex);
 
             return elementIdToLevelMap.TryGetEntityFromElementId(hostElementLevelElementId, out hostLevelInfo);
         }
@@ -415,11 +417,11 @@ namespace Vim.Format.Levels
         /// Returns the building story info and calculates the geometry
         /// </summary>
         private static BuildingStoryGeometryContainment GetBuildingStoryGeometryContainment(
-            VimScene vimScene,
             int elementIndex,
             double? primaryProjectElevation,
-            DictionaryOfLists<int, int> elementIndexToNodeIndicesMap,
             IReadOnlyList<LevelInfo> orderedLevelInfosByProjectElevation,
+            G3D g3d,
+            ElementIndexToNodeAndGeometryMap elementIndexToNodeAndGeometryMap,
             out LevelInfo maybeBuildingStoryAbove, 
             out LevelInfo maybeBuildingStoryCurrentOrBelow,
             out LevelInfo maybeBuildingStoryGeometryMin,
@@ -434,7 +436,7 @@ namespace Vim.Format.Levels
                 return BuildingStoryGeometryContainment.Unknown;
 
             // Note: Level.ProjectElevation is relative to the internal scene origin (0,0,0), and so is the vim scene's geometry.
-            var bb = vimScene.GetElementWorldSpaceBoundingBox(elementIndex, elementIndexToNodeIndicesMap);
+            var hasBb = VimScene.TryGetElementWorldSpaceBoundingBox(g3d, elementIndex, elementIndexToNodeAndGeometryMap, out var bb) && bb.IsValid;
             var bbMin = bb.Min.Z;
             var bbMax = bb.Max.Z;
 
@@ -458,13 +460,13 @@ namespace Vim.Format.Levels
                     maybeBuildingStoryAbove = levelInfo;
                 }
 
-                if (bbMin >= levelProjectElevation)
+                if (hasBb && bbMin >= levelProjectElevation)
                 {
                     // Find the building story below or at the geometric minimum.
                     maybeBuildingStoryGeometryMin = levelInfo;
                 }
 
-                if (bbMax >= levelProjectElevation)
+                if (hasBb && bbMax >= levelProjectElevation)
                 {
                     // Find the first building story below or at the geometric maximum.
                     maybeBuildingStoryGeometryMax = levelInfo;

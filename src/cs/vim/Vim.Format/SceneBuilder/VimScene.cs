@@ -9,6 +9,8 @@ using Vim.G3d;
 using Vim.LinqArray;
 using Vim.Math3d;
 using Vim.Util;
+
+using ElementIndexToNodeAndGeometryMap = Vim.Util.DictionaryOfLists<int, (int NodeIndex, int GeometryIndex)>;
 using IVimSceneProgress = System.IProgress<(string, double)>;
 
 namespace Vim
@@ -62,17 +64,39 @@ namespace Vim
                 g3d.MeshSubmeshOffset?.ToMeshSubmeshOffsetAttribute()
             );
 
-        public AABox GetElementWorldSpaceBoundingBox(int elementIndex, DictionaryOfLists<int, int> elementIndexToNodeIndicesMap)
+        /// <summary>
+        /// Returns the world-space bounding box of the element.
+        /// </summary>
+        public static bool TryGetElementWorldSpaceBoundingBox(
+            G3D g3d,
+            int elementIndex,
+            ElementIndexToNodeAndGeometryMap elementIndexToNodeAndGeometryMap,
+            out AABox aabb)
         {
-            var aabb = AABox.Create();
+            aabb = AABox.Create();
 
-            if (!elementIndexToNodeIndicesMap.TryGetValue(elementIndex, out var nodeIndices))
-                return aabb;
+            if (!elementIndexToNodeAndGeometryMap.TryGetValue(elementIndex, out var nodeAndGeometryIndices))
+                return false;
 
-            foreach (var nodeIndex in nodeIndices)
-                aabb = aabb.Merge(VimNodes[nodeIndex].TransformedBoundingBox());
+            foreach (var (nodeIndex, geometryIndex) in nodeAndGeometryIndices)
+            {
+                if (nodeIndex < 0 || nodeIndex >= g3d.InstanceTransforms.Count ||
+                    geometryIndex < 0 || geometryIndex >= g3d.Meshes.Count)
+                    continue;
 
-            return aabb;
+                var vertices = g3d.Meshes[geometryIndex].Vertices;
+                if (vertices == null)
+                    continue;
+                
+                var instanceTransform = g3d.InstanceTransforms[nodeIndex];
+                var worldSpaceVertices = vertices.Transform(instanceTransform);
+
+                var bbWorldSpace = AABox.Create(worldSpaceVertices.ToEnumerable());
+
+                aabb = aabb.Merge(bbWorldSpace);
+            }
+
+            return true;
         }
 
         private VimScene(SerializableDocument doc)

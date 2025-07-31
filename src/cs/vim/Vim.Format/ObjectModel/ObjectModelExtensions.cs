@@ -3,8 +3,11 @@ using System.Collections.Generic;
 using System.Data;
 using System.IO;
 using System.Linq;
+using Vim.Format.Geometry;
+using Vim.G3d;
 using Vim.Util;
 using Vim.LinqArray;
+using Vim.Math3d;
 
 namespace Vim.Format.ObjectModel
 {
@@ -178,12 +181,9 @@ namespace Vim.Format.ObjectModel
         /// <summary>
         /// Returns the list of parameter indices associated with the given element index.
         /// </summary>
-        public static List<int> GetParameterIndicesFromElementIndex(this DocumentModel dm, int elementIndex)
+        public static List<int> GetParameterIndicesFromElementIndex(this ElementIndexMaps elementIndexMaps, int elementIndex)
         {
-            if (dm == null)
-                return new List<int>();
-
-            return dm.ElementIndexMaps.ParameterIndicesFromElementIndex.TryGetValue(elementIndex, out var parameterIndices)
+            return elementIndexMaps.ParameterIndicesFromElementIndex.TryGetValue(elementIndex, out var parameterIndices)
                 ? parameterIndices
                 : new List<int>();
         }
@@ -191,10 +191,12 @@ namespace Vim.Format.ObjectModel
         /// <summary>
         /// Returns a grouping of entities representing elements by bim document index.
         /// </summary>
-        public static IEnumerable<IGrouping<int, T>> GroupByBimDocumentIndex<T>(this IReadOnlyList<T> entityWithElementCollection, DocumentModel dm)
+        public static IEnumerable<IGrouping<int, T>> GroupByBimDocumentIndex<T>(
+            this IEnumerable<T> entityWithElementCollection,
+            ElementTable elementTable)
             where T : IElementIndex
         {
-            var elementBimDocumentIndices = dm.ElementBimDocumentIndex;
+            var elementBimDocumentIndices = elementTable.Column_BimDocumentIndex;
 
             return entityWithElementCollection.GroupBy(e =>
                 elementBimDocumentIndices.ElementAtOrDefault(e.GetElementIndexOrNone(), EntityRelation.None));
@@ -206,16 +208,15 @@ namespace Vim.Format.ObjectModel
         /// Note 1: Element IDs are only unique within their respective BIM documents.
         /// Note 2: Entities which do not have an element association will not appear in the returned value.
         /// </summary>
-        public static Dictionary<int, Dictionary<long, T>> GroupByBimDocumentIndexAndElementId<T>(this IReadOnlyList<T> entityWithElementCollection, DocumentModel dm)
+        public static Dictionary<int, Dictionary<long, T>> GroupByBimDocumentIndexAndElementId<T>(
+            this IEnumerable<T> entityWithElementCollection,
+            ElementTable elementTable)
             where T : IElementIndex
         {
-            if (dm == null)
-                return new Dictionary<int, Dictionary<long, T>>();
-
-            var elementIds = dm.ElementId.ToArray();
+            var elementIds = elementTable.Column_Id;
 
             var result = entityWithElementCollection
-                .GroupByBimDocumentIndex(dm)
+                .GroupByBimDocumentIndex(elementTable)
                 // For each bim document group, create a mapping from elementID to each entity.
                 .ToDictionary(
                     groupByBimDocumentIndex => groupByBimDocumentIndex.Key,

@@ -204,8 +204,10 @@ namespace Vim.Format.Levels
         /// Constructor
         /// </summary>
         public LevelInfo(
-            DocumentModel dm,
             Level level,
+            FamilyTypeTable familyTypeTable,
+            ParameterTable parameterTable,
+            ElementIndexMaps elementIndexMaps,
             IReadOnlyDictionary<long, Level> elementIdToLevelMap,
             IReadOnlyDictionary<long, BasePoint> elementIdToBasePointMap)
         {
@@ -221,18 +223,21 @@ namespace Vim.Format.Levels
                 ? (double?) null
                 : Level.ProjectElevation - surveyPoint.Position_Z;
 
-            ReadLevelParameters(dm, elementIdToLevelMap);
+            ReadLevelParameters(parameterTable, elementIndexMaps, elementIdToLevelMap);
 
-            ReadLevelTypeParameters(dm);
+            ReadLevelTypeParameters(familyTypeTable, parameterTable, elementIndexMaps);
         }
 
-        private void ReadLevelParameters(DocumentModel dm, IReadOnlyDictionary<long, Level> elementIdToLevelMap)
+        private void ReadLevelParameters(
+            ParameterTable parameterTable,
+            ElementIndexMaps elementIndexMaps,
+            IReadOnlyDictionary<long, Level> elementIdToLevelMap)
         {
-            var levelElementParameterIndices = dm.GetParameterIndicesFromElementIndex(GetElementIndexOrNone());
+            var levelElementParameterIndices = elementIndexMaps.GetParameterIndicesFromElementIndex(GetElementIndexOrNone());
 
             foreach (var paramIndex in levelElementParameterIndices)
             {
-                var p = dm.GetParameter(paramIndex);
+                var p = parameterTable.Get(paramIndex);
                 var desc = p.ParameterDescriptor;
 
                 if (DescriptorIsStructural(desc) &&
@@ -259,16 +264,20 @@ namespace Vim.Format.Levels
             }
         }
 
-        private void ReadLevelTypeParameters(DocumentModel dm)
+        private void ReadLevelTypeParameters(
+            FamilyTypeTable familyTypeTable,
+            ParameterTable parameterTable,
+            ElementIndexMaps elementIndexMaps)
         {
-            var levelTypeElementIndex = Level.FamilyType?._Element?.Index ?? EntityRelation.None;
-            if (!dm.ElementIndexMaps.ParameterIndicesFromElementIndex.TryGetValue(levelTypeElementIndex, out var levelTypeParameterIndices) ||
+            var levelTypeElementIndex = familyTypeTable.GetElementIndex(Level.FamilyTypeIndex);
+
+            if (!elementIndexMaps.ParameterIndicesFromElementIndex.TryGetValue(levelTypeElementIndex, out var levelTypeParameterIndices) ||
                 levelTypeParameterIndices.Count <= 0)
             {
                 return;
             }
 
-            var typeParameters = levelTypeParameterIndices.Select(dm.GetParameter);
+            var typeParameters = levelTypeParameterIndices.Select(parameterTable.Get);
             foreach (var p in typeParameters)
             {
                 var desc = p.ParameterDescriptor;

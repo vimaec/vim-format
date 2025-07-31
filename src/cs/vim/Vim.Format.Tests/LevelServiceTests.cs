@@ -1,4 +1,5 @@
 ﻿using NUnit.Framework;
+using System.IO;
 using System.Linq;
 using Vim.Format.Levels;
 using Vim.Util.Logging;
@@ -19,14 +20,16 @@ public static class LevelServiceTests
         // TODO: test skanska
         // TODO: test with an IFC file
         // TODO: test with empty VIM file
-        var vim = VimFormatRepoPaths.GetDataFilePath("Dwelling*.vim", true);
-
-        var vimScene = VimScene.LoadVim(vim);
+        
 
         Assert.DoesNotThrow(() =>
         {
             using var _ = logger.LogDuration("GetLevelInfo");
 
+            var vimFilePath = VimFormatRepoPaths.GetDataFilePath("Dwelling*.vim", true);
+            var vimSchemaOnly = Serializer.Deserialize(vimFilePath, new() { SchemaOnly = true, SkipAssets = true });
+
+            var levelService = new LevelInfoService(new FileInfo(vimFilePath));
             var (levelInfos, familyInstanceLevelInfos) = LevelService.GetLevelInfo(vimScene);
 
             foreach (var levelInfo in levelInfos.OrderBy(l => l.NameWithElevationFeetAndFractionalInches))
