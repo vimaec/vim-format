@@ -16,9 +16,14 @@ namespace Vim.Format.Levels
         /// <summary>
         /// Constructor
         /// </summary>
-        public LevelInfoService(FileInfo vimFileInfo, string[] stringTable, ElementGeometryMap elementGeometryMap)
+        public LevelInfoService(
+            FileInfo vimFileInfo,
+            string[] stringTable = null,
+            ElementGeometryMap elementGeometryMap = null)
         {
-            TableSet = new EntityTableSet(vimFileInfo, false, stringTable,
+            TableSet = new EntityTableSet(
+                vimFileInfo,
+                stringTable,
                 n =>
                     n is TableNames.Element ||
                     n is TableNames.Level ||
@@ -28,7 +33,7 @@ namespace Vim.Format.Levels
                     n is TableNames.BasePoint ||
                     n is TableNames.ParameterDescriptor);
 
-            ElementGeometryMap = elementGeometryMap;
+            ElementGeometryMap = elementGeometryMap ?? new ElementGeometryMap(vimFileInfo);
         }
 
         /// <summary>

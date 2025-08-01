@@ -68,9 +68,13 @@ namespace Vim.Format.ObjectModel
         /// <summary>
         /// Constructor.
         /// </summary>
-        public ElementGeometryMap(FileInfo vimFileInfo, G3D g3d)
+        public ElementGeometryMap(FileInfo vimFileInfo, G3D g3d = null)
         {
-            var tableSet = new EntityTableSet(vimFileInfo, false, Array.Empty<string>(),
+            g3d = g3d ?? vimFileInfo.GetGeometry();
+
+            var tableSet = new EntityTableSet(
+                vimFileInfo,
+                Array.Empty<string>(),
                 n => n is TableNames.Node || n is TableNames.Element);
 
             var elementCount = tableSet.ElementTable?.RowCount ?? 0;

@@ -25,15 +25,16 @@ public static class LevelServiceTests
         using var _ = logger.LogDuration($"GetLevelInfo: {vimFilePath}");
 
         var vimFileInfo = new FileInfo(vimFilePath);
-        var doc = Serializer.Deserialize(vimFileInfo.FullName, new LoadOptions { SchemaOnly = true, SkipAssets = true });
-        var stringTable = doc.StringTable;
-        var elementGeometryMap = new ElementGeometryMap(vimFileInfo, doc.Geometry);
 
-        var levelService = new LevelInfoService(vimFileInfo, stringTable, elementGeometryMap);
+        var stringTable = vimFileInfo.GetStringTable();
+
+        var levelService = new LevelInfoService(vimFileInfo, stringTable);
 
         var (levelInfos, familyInstanceLevelInfos) = levelService.GetLevelInfos();
 
-        var validationTableSet = new EntityTableSet(vimFileInfo, false, stringTable,
+        var validationTableSet = new EntityTableSet(
+            vimFileInfo,
+            stringTable,
             n => n is TableNames.Level or TableNames.FamilyInstance);
 
         Assert.AreEqual(validationTableSet.LevelTable.RowCount, levelInfos.Length);

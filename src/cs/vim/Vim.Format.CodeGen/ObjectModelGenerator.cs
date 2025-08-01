@@ -296,8 +296,9 @@ public static class ObjectModelGenerator
 
         cb.AppendLine("public partial class EntityTableSet");
         cb.AppendLine("{");
-        cb.AppendLine(
-            "public Dictionary<string, SerializableEntityTable> RawTableMap { get; } = new Dictionary<string, SerializableEntityTable>();");
+        cb.AppendLine("public string[] StringTable { get; }");
+        cb.AppendLine();
+        cb.AppendLine("public Dictionary<string, SerializableEntityTable> RawTableMap { get; } = new Dictionary<string, SerializableEntityTable>();");
         cb.AppendLine();
         cb.AppendLine("private SerializableEntityTable GetRawTableOrDefault(string tableName)");
         cb.AppendLine("    => RawTableMap.TryGetValue(tableName, out var result) ? result : null;");
@@ -305,8 +306,10 @@ public static class ObjectModelGenerator
         cb.AppendLine("public ElementIndexMaps ElementIndexMaps { get; }");
         cb.AppendLine();
 
-        cb.AppendLine("public EntityTableSet(SerializableEntityTable[] rawTables, string[] stringBuffer, bool inParallel = true)");
+        cb.AppendLine("public EntityTableSet(SerializableEntityTable[] rawTables, string[] stringTable, bool inParallel = true)");
         cb.AppendLine("{");
+        cb.AppendLine("StringTable = stringTable;");
+        cb.AppendLine();
         cb.AppendLine("foreach (var rawTable in rawTables)");
         cb.AppendLine("    RawTableMap[rawTable.Name] = rawTable;");
         cb.AppendLine();
@@ -316,7 +319,7 @@ public static class ObjectModelGenerator
             var etName = t.GetEntityTableName();
             var tmp = $"{t.Name.ToLowerInvariant()}Table";
             cb.AppendLine($"if (GetRawTableOrDefault(\"{etName}\") is SerializableEntityTable {tmp})");
-            cb.AppendLine($"    {t.Name}Table = new {t.Name}Table({tmp}, stringBuffer, this);");
+            cb.AppendLine($"    {t.Name}Table = new {t.Name}Table({tmp}, stringTable, this);");
             cb.AppendLine();
         }
         cb.AppendLine("// Initialize element index maps");
@@ -347,7 +350,7 @@ public static class ObjectModelGenerator
         cb.AppendLine("{");
         cb.AppendLine("public EntityTableSet ParentTableSet { get; } // can be null");
         cb.AppendLine();
-        cb.AppendLine($"public {t.Name}Table(SerializableEntityTable rawTable, string[] stringBuffer, EntityTableSet parentTableSet = null) : base(rawTable, stringBuffer)");
+        cb.AppendLine($"public {t.Name}Table(SerializableEntityTable rawTable, string[] stringTable, EntityTableSet parentTableSet = null) : base(rawTable, stringTable)");
         cb.AppendLine("{");
         cb.AppendLine("ParentTableSet = parentTableSet;");
         foreach (var f in entityFields)

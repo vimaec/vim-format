@@ -4413,6 +4413,8 @@ namespace Vim.Format.ObjectModel {
     
     public partial class EntityTableSet
     {
+        public string[] StringTable { get; }
+        
         public Dictionary<string, SerializableEntityTable> RawTableMap { get; } = new Dictionary<string, SerializableEntityTable>();
         
         private SerializableEntityTable GetRawTableOrDefault(string tableName)
@@ -4420,173 +4422,175 @@ namespace Vim.Format.ObjectModel {
         
         public ElementIndexMaps ElementIndexMaps { get; }
         
-        public EntityTableSet(SerializableEntityTable[] rawTables, string[] stringBuffer, bool inParallel = true)
+        public EntityTableSet(SerializableEntityTable[] rawTables, string[] stringTable, bool inParallel = true)
         {
+            StringTable = stringTable;
+            
             foreach (var rawTable in rawTables)
                 RawTableMap[rawTable.Name] = rawTable;
             
             // Populate the entity tables.
             if (GetRawTableOrDefault("Vim.Asset") is SerializableEntityTable assetTable)
-                AssetTable = new AssetTable(assetTable, stringBuffer, this);
+                AssetTable = new AssetTable(assetTable, stringTable, this);
             
             if (GetRawTableOrDefault("Vim.DisplayUnit") is SerializableEntityTable displayunitTable)
-                DisplayUnitTable = new DisplayUnitTable(displayunitTable, stringBuffer, this);
+                DisplayUnitTable = new DisplayUnitTable(displayunitTable, stringTable, this);
             
             if (GetRawTableOrDefault("Vim.ParameterDescriptor") is SerializableEntityTable parameterdescriptorTable)
-                ParameterDescriptorTable = new ParameterDescriptorTable(parameterdescriptorTable, stringBuffer, this);
+                ParameterDescriptorTable = new ParameterDescriptorTable(parameterdescriptorTable, stringTable, this);
             
             if (GetRawTableOrDefault("Vim.Parameter") is SerializableEntityTable parameterTable)
-                ParameterTable = new ParameterTable(parameterTable, stringBuffer, this);
+                ParameterTable = new ParameterTable(parameterTable, stringTable, this);
             
             if (GetRawTableOrDefault("Vim.Element") is SerializableEntityTable elementTable)
-                ElementTable = new ElementTable(elementTable, stringBuffer, this);
+                ElementTable = new ElementTable(elementTable, stringTable, this);
             
             if (GetRawTableOrDefault("Vim.Workset") is SerializableEntityTable worksetTable)
-                WorksetTable = new WorksetTable(worksetTable, stringBuffer, this);
+                WorksetTable = new WorksetTable(worksetTable, stringTable, this);
             
             if (GetRawTableOrDefault("Vim.AssemblyInstance") is SerializableEntityTable assemblyinstanceTable)
-                AssemblyInstanceTable = new AssemblyInstanceTable(assemblyinstanceTable, stringBuffer, this);
+                AssemblyInstanceTable = new AssemblyInstanceTable(assemblyinstanceTable, stringTable, this);
             
             if (GetRawTableOrDefault("Vim.Group") is SerializableEntityTable groupTable)
-                GroupTable = new GroupTable(groupTable, stringBuffer, this);
+                GroupTable = new GroupTable(groupTable, stringTable, this);
             
             if (GetRawTableOrDefault("Vim.DesignOption") is SerializableEntityTable designoptionTable)
-                DesignOptionTable = new DesignOptionTable(designoptionTable, stringBuffer, this);
+                DesignOptionTable = new DesignOptionTable(designoptionTable, stringTable, this);
             
             if (GetRawTableOrDefault("Vim.Level") is SerializableEntityTable levelTable)
-                LevelTable = new LevelTable(levelTable, stringBuffer, this);
+                LevelTable = new LevelTable(levelTable, stringTable, this);
             
             if (GetRawTableOrDefault("Vim.Phase") is SerializableEntityTable phaseTable)
-                PhaseTable = new PhaseTable(phaseTable, stringBuffer, this);
+                PhaseTable = new PhaseTable(phaseTable, stringTable, this);
             
             if (GetRawTableOrDefault("Vim.Room") is SerializableEntityTable roomTable)
-                RoomTable = new RoomTable(roomTable, stringBuffer, this);
+                RoomTable = new RoomTable(roomTable, stringTable, this);
             
             if (GetRawTableOrDefault("Vim.BimDocument") is SerializableEntityTable bimdocumentTable)
-                BimDocumentTable = new BimDocumentTable(bimdocumentTable, stringBuffer, this);
+                BimDocumentTable = new BimDocumentTable(bimdocumentTable, stringTable, this);
             
             if (GetRawTableOrDefault("Vim.DisplayUnitInBimDocument") is SerializableEntityTable displayunitinbimdocumentTable)
-                DisplayUnitInBimDocumentTable = new DisplayUnitInBimDocumentTable(displayunitinbimdocumentTable, stringBuffer, this);
+                DisplayUnitInBimDocumentTable = new DisplayUnitInBimDocumentTable(displayunitinbimdocumentTable, stringTable, this);
             
             if (GetRawTableOrDefault("Vim.PhaseOrderInBimDocument") is SerializableEntityTable phaseorderinbimdocumentTable)
-                PhaseOrderInBimDocumentTable = new PhaseOrderInBimDocumentTable(phaseorderinbimdocumentTable, stringBuffer, this);
+                PhaseOrderInBimDocumentTable = new PhaseOrderInBimDocumentTable(phaseorderinbimdocumentTable, stringTable, this);
             
             if (GetRawTableOrDefault("Vim.Category") is SerializableEntityTable categoryTable)
-                CategoryTable = new CategoryTable(categoryTable, stringBuffer, this);
+                CategoryTable = new CategoryTable(categoryTable, stringTable, this);
             
             if (GetRawTableOrDefault("Vim.Family") is SerializableEntityTable familyTable)
-                FamilyTable = new FamilyTable(familyTable, stringBuffer, this);
+                FamilyTable = new FamilyTable(familyTable, stringTable, this);
             
             if (GetRawTableOrDefault("Vim.FamilyType") is SerializableEntityTable familytypeTable)
-                FamilyTypeTable = new FamilyTypeTable(familytypeTable, stringBuffer, this);
+                FamilyTypeTable = new FamilyTypeTable(familytypeTable, stringTable, this);
             
             if (GetRawTableOrDefault("Vim.FamilyInstance") is SerializableEntityTable familyinstanceTable)
-                FamilyInstanceTable = new FamilyInstanceTable(familyinstanceTable, stringBuffer, this);
+                FamilyInstanceTable = new FamilyInstanceTable(familyinstanceTable, stringTable, this);
             
             if (GetRawTableOrDefault("Vim.View") is SerializableEntityTable viewTable)
-                ViewTable = new ViewTable(viewTable, stringBuffer, this);
+                ViewTable = new ViewTable(viewTable, stringTable, this);
             
             if (GetRawTableOrDefault("Vim.ElementInView") is SerializableEntityTable elementinviewTable)
-                ElementInViewTable = new ElementInViewTable(elementinviewTable, stringBuffer, this);
+                ElementInViewTable = new ElementInViewTable(elementinviewTable, stringTable, this);
             
             if (GetRawTableOrDefault("Vim.ShapeInView") is SerializableEntityTable shapeinviewTable)
-                ShapeInViewTable = new ShapeInViewTable(shapeinviewTable, stringBuffer, this);
+                ShapeInViewTable = new ShapeInViewTable(shapeinviewTable, stringTable, this);
             
             if (GetRawTableOrDefault("Vim.AssetInView") is SerializableEntityTable assetinviewTable)
-                AssetInViewTable = new AssetInViewTable(assetinviewTable, stringBuffer, this);
+                AssetInViewTable = new AssetInViewTable(assetinviewTable, stringTable, this);
             
             if (GetRawTableOrDefault("Vim.AssetInViewSheet") is SerializableEntityTable assetinviewsheetTable)
-                AssetInViewSheetTable = new AssetInViewSheetTable(assetinviewsheetTable, stringBuffer, this);
+                AssetInViewSheetTable = new AssetInViewSheetTable(assetinviewsheetTable, stringTable, this);
             
             if (GetRawTableOrDefault("Vim.LevelInView") is SerializableEntityTable levelinviewTable)
-                LevelInViewTable = new LevelInViewTable(levelinviewTable, stringBuffer, this);
+                LevelInViewTable = new LevelInViewTable(levelinviewTable, stringTable, this);
             
             if (GetRawTableOrDefault("Vim.Camera") is SerializableEntityTable cameraTable)
-                CameraTable = new CameraTable(cameraTable, stringBuffer, this);
+                CameraTable = new CameraTable(cameraTable, stringTable, this);
             
             if (GetRawTableOrDefault("Vim.Material") is SerializableEntityTable materialTable)
-                MaterialTable = new MaterialTable(materialTable, stringBuffer, this);
+                MaterialTable = new MaterialTable(materialTable, stringTable, this);
             
             if (GetRawTableOrDefault("Vim.MaterialInElement") is SerializableEntityTable materialinelementTable)
-                MaterialInElementTable = new MaterialInElementTable(materialinelementTable, stringBuffer, this);
+                MaterialInElementTable = new MaterialInElementTable(materialinelementTable, stringTable, this);
             
             if (GetRawTableOrDefault("Vim.CompoundStructureLayer") is SerializableEntityTable compoundstructurelayerTable)
-                CompoundStructureLayerTable = new CompoundStructureLayerTable(compoundstructurelayerTable, stringBuffer, this);
+                CompoundStructureLayerTable = new CompoundStructureLayerTable(compoundstructurelayerTable, stringTable, this);
             
             if (GetRawTableOrDefault("Vim.CompoundStructure") is SerializableEntityTable compoundstructureTable)
-                CompoundStructureTable = new CompoundStructureTable(compoundstructureTable, stringBuffer, this);
+                CompoundStructureTable = new CompoundStructureTable(compoundstructureTable, stringTable, this);
             
             if (GetRawTableOrDefault("Vim.Node") is SerializableEntityTable nodeTable)
-                NodeTable = new NodeTable(nodeTable, stringBuffer, this);
+                NodeTable = new NodeTable(nodeTable, stringTable, this);
             
             if (GetRawTableOrDefault("Vim.Geometry") is SerializableEntityTable geometryTable)
-                GeometryTable = new GeometryTable(geometryTable, stringBuffer, this);
+                GeometryTable = new GeometryTable(geometryTable, stringTable, this);
             
             if (GetRawTableOrDefault("Vim.Shape") is SerializableEntityTable shapeTable)
-                ShapeTable = new ShapeTable(shapeTable, stringBuffer, this);
+                ShapeTable = new ShapeTable(shapeTable, stringTable, this);
             
             if (GetRawTableOrDefault("Vim.ShapeCollection") is SerializableEntityTable shapecollectionTable)
-                ShapeCollectionTable = new ShapeCollectionTable(shapecollectionTable, stringBuffer, this);
+                ShapeCollectionTable = new ShapeCollectionTable(shapecollectionTable, stringTable, this);
             
             if (GetRawTableOrDefault("Vim.ShapeInShapeCollection") is SerializableEntityTable shapeinshapecollectionTable)
-                ShapeInShapeCollectionTable = new ShapeInShapeCollectionTable(shapeinshapecollectionTable, stringBuffer, this);
+                ShapeInShapeCollectionTable = new ShapeInShapeCollectionTable(shapeinshapecollectionTable, stringTable, this);
             
             if (GetRawTableOrDefault("Vim.System") is SerializableEntityTable systemTable)
-                SystemTable = new SystemTable(systemTable, stringBuffer, this);
+                SystemTable = new SystemTable(systemTable, stringTable, this);
             
             if (GetRawTableOrDefault("Vim.ElementInSystem") is SerializableEntityTable elementinsystemTable)
-                ElementInSystemTable = new ElementInSystemTable(elementinsystemTable, stringBuffer, this);
+                ElementInSystemTable = new ElementInSystemTable(elementinsystemTable, stringTable, this);
             
             if (GetRawTableOrDefault("Vim.Warning") is SerializableEntityTable warningTable)
-                WarningTable = new WarningTable(warningTable, stringBuffer, this);
+                WarningTable = new WarningTable(warningTable, stringTable, this);
             
             if (GetRawTableOrDefault("Vim.ElementInWarning") is SerializableEntityTable elementinwarningTable)
-                ElementInWarningTable = new ElementInWarningTable(elementinwarningTable, stringBuffer, this);
+                ElementInWarningTable = new ElementInWarningTable(elementinwarningTable, stringTable, this);
             
             if (GetRawTableOrDefault("Vim.BasePoint") is SerializableEntityTable basepointTable)
-                BasePointTable = new BasePointTable(basepointTable, stringBuffer, this);
+                BasePointTable = new BasePointTable(basepointTable, stringTable, this);
             
             if (GetRawTableOrDefault("Vim.PhaseFilter") is SerializableEntityTable phasefilterTable)
-                PhaseFilterTable = new PhaseFilterTable(phasefilterTable, stringBuffer, this);
+                PhaseFilterTable = new PhaseFilterTable(phasefilterTable, stringTable, this);
             
             if (GetRawTableOrDefault("Vim.Grid") is SerializableEntityTable gridTable)
-                GridTable = new GridTable(gridTable, stringBuffer, this);
+                GridTable = new GridTable(gridTable, stringTable, this);
             
             if (GetRawTableOrDefault("Vim.Area") is SerializableEntityTable areaTable)
-                AreaTable = new AreaTable(areaTable, stringBuffer, this);
+                AreaTable = new AreaTable(areaTable, stringTable, this);
             
             if (GetRawTableOrDefault("Vim.AreaScheme") is SerializableEntityTable areaschemeTable)
-                AreaSchemeTable = new AreaSchemeTable(areaschemeTable, stringBuffer, this);
+                AreaSchemeTable = new AreaSchemeTable(areaschemeTable, stringTable, this);
             
             if (GetRawTableOrDefault("Vim.Schedule") is SerializableEntityTable scheduleTable)
-                ScheduleTable = new ScheduleTable(scheduleTable, stringBuffer, this);
+                ScheduleTable = new ScheduleTable(scheduleTable, stringTable, this);
             
             if (GetRawTableOrDefault("Vim.ScheduleColumn") is SerializableEntityTable schedulecolumnTable)
-                ScheduleColumnTable = new ScheduleColumnTable(schedulecolumnTable, stringBuffer, this);
+                ScheduleColumnTable = new ScheduleColumnTable(schedulecolumnTable, stringTable, this);
             
             if (GetRawTableOrDefault("Vim.ScheduleCell") is SerializableEntityTable schedulecellTable)
-                ScheduleCellTable = new ScheduleCellTable(schedulecellTable, stringBuffer, this);
+                ScheduleCellTable = new ScheduleCellTable(schedulecellTable, stringTable, this);
             
             if (GetRawTableOrDefault("Vim.ViewSheetSet") is SerializableEntityTable viewsheetsetTable)
-                ViewSheetSetTable = new ViewSheetSetTable(viewsheetsetTable, stringBuffer, this);
+                ViewSheetSetTable = new ViewSheetSetTable(viewsheetsetTable, stringTable, this);
             
             if (GetRawTableOrDefault("Vim.ViewSheet") is SerializableEntityTable viewsheetTable)
-                ViewSheetTable = new ViewSheetTable(viewsheetTable, stringBuffer, this);
+                ViewSheetTable = new ViewSheetTable(viewsheetTable, stringTable, this);
             
             if (GetRawTableOrDefault("Vim.ViewSheetInViewSheetSet") is SerializableEntityTable viewsheetinviewsheetsetTable)
-                ViewSheetInViewSheetSetTable = new ViewSheetInViewSheetSetTable(viewsheetinviewsheetsetTable, stringBuffer, this);
+                ViewSheetInViewSheetSetTable = new ViewSheetInViewSheetSetTable(viewsheetinviewsheetsetTable, stringTable, this);
             
             if (GetRawTableOrDefault("Vim.ViewInViewSheetSet") is SerializableEntityTable viewinviewsheetsetTable)
-                ViewInViewSheetSetTable = new ViewInViewSheetSetTable(viewinviewsheetsetTable, stringBuffer, this);
+                ViewInViewSheetSetTable = new ViewInViewSheetSetTable(viewinviewsheetsetTable, stringTable, this);
             
             if (GetRawTableOrDefault("Vim.ViewInViewSheet") is SerializableEntityTable viewinviewsheetTable)
-                ViewInViewSheetTable = new ViewInViewSheetTable(viewinviewsheetTable, stringBuffer, this);
+                ViewInViewSheetTable = new ViewInViewSheetTable(viewinviewsheetTable, stringTable, this);
             
             if (GetRawTableOrDefault("Vim.Site") is SerializableEntityTable siteTable)
-                SiteTable = new SiteTable(siteTable, stringBuffer, this);
+                SiteTable = new SiteTable(siteTable, stringTable, this);
             
             if (GetRawTableOrDefault("Vim.Building") is SerializableEntityTable buildingTable)
-                BuildingTable = new BuildingTable(buildingTable, stringBuffer, this);
+                BuildingTable = new BuildingTable(buildingTable, stringTable, this);
             
             // Initialize element index maps
             ElementIndexMaps = new ElementIndexMaps(this, inParallel);
@@ -4707,7 +4711,7 @@ namespace Vim.Format.ObjectModel {
     {
         public EntityTableSet ParentTableSet { get; } // can be null
         
-        public AssetTable(SerializableEntityTable rawTable, string[] stringBuffer, EntityTableSet parentTableSet = null) : base(rawTable, stringBuffer)
+        public AssetTable(SerializableEntityTable rawTable, string[] stringTable, EntityTableSet parentTableSet = null) : base(rawTable, stringTable)
         {
             ParentTableSet = parentTableSet;
             Column_BufferName = GetStringColumnValues("string:BufferName") ?? Array.Empty<String>();
@@ -4737,7 +4741,7 @@ namespace Vim.Format.ObjectModel {
     {
         public EntityTableSet ParentTableSet { get; } // can be null
         
-        public DisplayUnitTable(SerializableEntityTable rawTable, string[] stringBuffer, EntityTableSet parentTableSet = null) : base(rawTable, stringBuffer)
+        public DisplayUnitTable(SerializableEntityTable rawTable, string[] stringTable, EntityTableSet parentTableSet = null) : base(rawTable, stringTable)
         {
             ParentTableSet = parentTableSet;
             Column_Spec = GetStringColumnValues("string:Spec") ?? Array.Empty<String>();
@@ -4775,7 +4779,7 @@ namespace Vim.Format.ObjectModel {
     {
         public EntityTableSet ParentTableSet { get; } // can be null
         
-        public ParameterDescriptorTable(SerializableEntityTable rawTable, string[] stringBuffer, EntityTableSet parentTableSet = null) : base(rawTable, stringBuffer)
+        public ParameterDescriptorTable(SerializableEntityTable rawTable, string[] stringTable, EntityTableSet parentTableSet = null) : base(rawTable, stringTable)
         {
             ParentTableSet = parentTableSet;
             Column_Name = GetStringColumnValues("string:Name") ?? Array.Empty<String>();
@@ -4843,7 +4847,7 @@ namespace Vim.Format.ObjectModel {
     {
         public EntityTableSet ParentTableSet { get; } // can be null
         
-        public ParameterTable(SerializableEntityTable rawTable, string[] stringBuffer, EntityTableSet parentTableSet = null) : base(rawTable, stringBuffer)
+        public ParameterTable(SerializableEntityTable rawTable, string[] stringTable, EntityTableSet parentTableSet = null) : base(rawTable, stringTable)
         {
             ParentTableSet = parentTableSet;
             Column_Value = GetStringColumnValues("string:Value") ?? Array.Empty<String>();
@@ -4885,7 +4889,7 @@ namespace Vim.Format.ObjectModel {
     {
         public EntityTableSet ParentTableSet { get; } // can be null
         
-        public ElementTable(SerializableEntityTable rawTable, string[] stringBuffer, EntityTableSet parentTableSet = null) : base(rawTable, stringBuffer)
+        public ElementTable(SerializableEntityTable rawTable, string[] stringTable, EntityTableSet parentTableSet = null) : base(rawTable, stringTable)
         {
             ParentTableSet = parentTableSet;
             Column_Id = (GetDataColumnValues<Int64>("long:Id") ?? GetDataColumnValues<Int32>("int:Id")?.Select(v => (Int64) v).ToArray()) ?? Array.Empty<Int64>();
@@ -5013,7 +5017,7 @@ namespace Vim.Format.ObjectModel {
     {
         public EntityTableSet ParentTableSet { get; } // can be null
         
-        public WorksetTable(SerializableEntityTable rawTable, string[] stringBuffer, EntityTableSet parentTableSet = null) : base(rawTable, stringBuffer)
+        public WorksetTable(SerializableEntityTable rawTable, string[] stringTable, EntityTableSet parentTableSet = null) : base(rawTable, stringTable)
         {
             ParentTableSet = parentTableSet;
             Column_Id = GetDataColumnValues<Int32>("int:Id") ?? Array.Empty<Int32>();
@@ -5073,7 +5077,7 @@ namespace Vim.Format.ObjectModel {
     {
         public EntityTableSet ParentTableSet { get; } // can be null
         
-        public AssemblyInstanceTable(SerializableEntityTable rawTable, string[] stringBuffer, EntityTableSet parentTableSet = null) : base(rawTable, stringBuffer)
+        public AssemblyInstanceTable(SerializableEntityTable rawTable, string[] stringTable, EntityTableSet parentTableSet = null) : base(rawTable, stringTable)
         {
             ParentTableSet = parentTableSet;
             Column_AssemblyTypeName = GetStringColumnValues("string:AssemblyTypeName") ?? Array.Empty<String>();
@@ -5121,7 +5125,7 @@ namespace Vim.Format.ObjectModel {
     {
         public EntityTableSet ParentTableSet { get; } // can be null
         
-        public GroupTable(SerializableEntityTable rawTable, string[] stringBuffer, EntityTableSet parentTableSet = null) : base(rawTable, stringBuffer)
+        public GroupTable(SerializableEntityTable rawTable, string[] stringTable, EntityTableSet parentTableSet = null) : base(rawTable, stringTable)
         {
             ParentTableSet = parentTableSet;
             Column_GroupType = GetStringColumnValues("string:GroupType") ?? Array.Empty<String>();
@@ -5169,7 +5173,7 @@ namespace Vim.Format.ObjectModel {
     {
         public EntityTableSet ParentTableSet { get; } // can be null
         
-        public DesignOptionTable(SerializableEntityTable rawTable, string[] stringBuffer, EntityTableSet parentTableSet = null) : base(rawTable, stringBuffer)
+        public DesignOptionTable(SerializableEntityTable rawTable, string[] stringTable, EntityTableSet parentTableSet = null) : base(rawTable, stringTable)
         {
             ParentTableSet = parentTableSet;
             Column_IsPrimary = GetDataColumnValues<Boolean>("byte:IsPrimary") ?? Array.Empty<Boolean>();
@@ -5205,7 +5209,7 @@ namespace Vim.Format.ObjectModel {
     {
         public EntityTableSet ParentTableSet { get; } // can be null
         
-        public LevelTable(SerializableEntityTable rawTable, string[] stringBuffer, EntityTableSet parentTableSet = null) : base(rawTable, stringBuffer)
+        public LevelTable(SerializableEntityTable rawTable, string[] stringTable, EntityTableSet parentTableSet = null) : base(rawTable, stringTable)
         {
             ParentTableSet = parentTableSet;
             Column_Elevation = GetDataColumnValues<Double>("double:Elevation") ?? Array.Empty<Double>();
@@ -5257,7 +5261,7 @@ namespace Vim.Format.ObjectModel {
     {
         public EntityTableSet ParentTableSet { get; } // can be null
         
-        public PhaseTable(SerializableEntityTable rawTable, string[] stringBuffer, EntityTableSet parentTableSet = null) : base(rawTable, stringBuffer)
+        public PhaseTable(SerializableEntityTable rawTable, string[] stringTable, EntityTableSet parentTableSet = null) : base(rawTable, stringTable)
         {
             ParentTableSet = parentTableSet;
             Column_ElementIndex = GetIndexColumnValues("index:Vim.Element:Element") ?? Array.Empty<int>();
@@ -5289,7 +5293,7 @@ namespace Vim.Format.ObjectModel {
     {
         public EntityTableSet ParentTableSet { get; } // can be null
         
-        public RoomTable(SerializableEntityTable rawTable, string[] stringBuffer, EntityTableSet parentTableSet = null) : base(rawTable, stringBuffer)
+        public RoomTable(SerializableEntityTable rawTable, string[] stringTable, EntityTableSet parentTableSet = null) : base(rawTable, stringTable)
         {
             ParentTableSet = parentTableSet;
             Column_BaseOffset = GetDataColumnValues<Double>("double:BaseOffset") ?? Array.Empty<Double>();
@@ -5355,7 +5359,7 @@ namespace Vim.Format.ObjectModel {
     {
         public EntityTableSet ParentTableSet { get; } // can be null
         
-        public BimDocumentTable(SerializableEntityTable rawTable, string[] stringBuffer, EntityTableSet parentTableSet = null) : base(rawTable, stringBuffer)
+        public BimDocumentTable(SerializableEntityTable rawTable, string[] stringTable, EntityTableSet parentTableSet = null) : base(rawTable, stringTable)
         {
             ParentTableSet = parentTableSet;
             Column_Title = GetStringColumnValues("string:Title") ?? Array.Empty<String>();
@@ -5521,7 +5525,7 @@ namespace Vim.Format.ObjectModel {
     {
         public EntityTableSet ParentTableSet { get; } // can be null
         
-        public DisplayUnitInBimDocumentTable(SerializableEntityTable rawTable, string[] stringBuffer, EntityTableSet parentTableSet = null) : base(rawTable, stringBuffer)
+        public DisplayUnitInBimDocumentTable(SerializableEntityTable rawTable, string[] stringTable, EntityTableSet parentTableSet = null) : base(rawTable, stringTable)
         {
             ParentTableSet = parentTableSet;
             Column_DisplayUnitIndex = GetIndexColumnValues("index:Vim.DisplayUnit:DisplayUnit") ?? Array.Empty<int>();
@@ -5559,7 +5563,7 @@ namespace Vim.Format.ObjectModel {
     {
         public EntityTableSet ParentTableSet { get; } // can be null
         
-        public PhaseOrderInBimDocumentTable(SerializableEntityTable rawTable, string[] stringBuffer, EntityTableSet parentTableSet = null) : base(rawTable, stringBuffer)
+        public PhaseOrderInBimDocumentTable(SerializableEntityTable rawTable, string[] stringTable, EntityTableSet parentTableSet = null) : base(rawTable, stringTable)
         {
             ParentTableSet = parentTableSet;
             Column_OrderIndex = GetDataColumnValues<Int32>("int:OrderIndex") ?? Array.Empty<Int32>();
@@ -5601,7 +5605,7 @@ namespace Vim.Format.ObjectModel {
     {
         public EntityTableSet ParentTableSet { get; } // can be null
         
-        public CategoryTable(SerializableEntityTable rawTable, string[] stringBuffer, EntityTableSet parentTableSet = null) : base(rawTable, stringBuffer)
+        public CategoryTable(SerializableEntityTable rawTable, string[] stringTable, EntityTableSet parentTableSet = null) : base(rawTable, stringTable)
         {
             ParentTableSet = parentTableSet;
             Column_Name = GetStringColumnValues("string:Name") ?? Array.Empty<String>();
@@ -5667,7 +5671,7 @@ namespace Vim.Format.ObjectModel {
     {
         public EntityTableSet ParentTableSet { get; } // can be null
         
-        public FamilyTable(SerializableEntityTable rawTable, string[] stringBuffer, EntityTableSet parentTableSet = null) : base(rawTable, stringBuffer)
+        public FamilyTable(SerializableEntityTable rawTable, string[] stringTable, EntityTableSet parentTableSet = null) : base(rawTable, stringTable)
         {
             ParentTableSet = parentTableSet;
             Column_StructuralMaterialType = GetStringColumnValues("string:StructuralMaterialType") ?? Array.Empty<String>();
@@ -5721,7 +5725,7 @@ namespace Vim.Format.ObjectModel {
     {
         public EntityTableSet ParentTableSet { get; } // can be null
         
-        public FamilyTypeTable(SerializableEntityTable rawTable, string[] stringBuffer, EntityTableSet parentTableSet = null) : base(rawTable, stringBuffer)
+        public FamilyTypeTable(SerializableEntityTable rawTable, string[] stringTable, EntityTableSet parentTableSet = null) : base(rawTable, stringTable)
         {
             ParentTableSet = parentTableSet;
             Column_IsSystemFamilyType = GetDataColumnValues<Boolean>("byte:IsSystemFamilyType") ?? Array.Empty<Boolean>();
@@ -5769,7 +5773,7 @@ namespace Vim.Format.ObjectModel {
     {
         public EntityTableSet ParentTableSet { get; } // can be null
         
-        public FamilyInstanceTable(SerializableEntityTable rawTable, string[] stringBuffer, EntityTableSet parentTableSet = null) : base(rawTable, stringBuffer)
+        public FamilyInstanceTable(SerializableEntityTable rawTable, string[] stringTable, EntityTableSet parentTableSet = null) : base(rawTable, stringTable)
         {
             ParentTableSet = parentTableSet;
             Column_FacingFlipped = GetDataColumnValues<Boolean>("byte:FacingFlipped") ?? Array.Empty<Boolean>();
@@ -5923,7 +5927,7 @@ namespace Vim.Format.ObjectModel {
     {
         public EntityTableSet ParentTableSet { get; } // can be null
         
-        public ViewTable(SerializableEntityTable rawTable, string[] stringBuffer, EntityTableSet parentTableSet = null) : base(rawTable, stringBuffer)
+        public ViewTable(SerializableEntityTable rawTable, string[] stringTable, EntityTableSet parentTableSet = null) : base(rawTable, stringTable)
         {
             ParentTableSet = parentTableSet;
             Column_Title = GetStringColumnValues("string:Title") ?? Array.Empty<String>();
@@ -6059,7 +6063,7 @@ namespace Vim.Format.ObjectModel {
     {
         public EntityTableSet ParentTableSet { get; } // can be null
         
-        public ElementInViewTable(SerializableEntityTable rawTable, string[] stringBuffer, EntityTableSet parentTableSet = null) : base(rawTable, stringBuffer)
+        public ElementInViewTable(SerializableEntityTable rawTable, string[] stringTable, EntityTableSet parentTableSet = null) : base(rawTable, stringTable)
         {
             ParentTableSet = parentTableSet;
             Column_ViewIndex = GetIndexColumnValues("index:Vim.View:View") ?? Array.Empty<int>();
@@ -6097,7 +6101,7 @@ namespace Vim.Format.ObjectModel {
     {
         public EntityTableSet ParentTableSet { get; } // can be null
         
-        public ShapeInViewTable(SerializableEntityTable rawTable, string[] stringBuffer, EntityTableSet parentTableSet = null) : base(rawTable, stringBuffer)
+        public ShapeInViewTable(SerializableEntityTable rawTable, string[] stringTable, EntityTableSet parentTableSet = null) : base(rawTable, stringTable)
         {
             ParentTableSet = parentTableSet;
             Column_ShapeIndex = GetIndexColumnValues("index:Vim.Shape:Shape") ?? Array.Empty<int>();
@@ -6135,7 +6139,7 @@ namespace Vim.Format.ObjectModel {
     {
         public EntityTableSet ParentTableSet { get; } // can be null
         
-        public AssetInViewTable(SerializableEntityTable rawTable, string[] stringBuffer, EntityTableSet parentTableSet = null) : base(rawTable, stringBuffer)
+        public AssetInViewTable(SerializableEntityTable rawTable, string[] stringTable, EntityTableSet parentTableSet = null) : base(rawTable, stringTable)
         {
             ParentTableSet = parentTableSet;
             Column_AssetIndex = GetIndexColumnValues("index:Vim.Asset:Asset") ?? Array.Empty<int>();
@@ -6173,7 +6177,7 @@ namespace Vim.Format.ObjectModel {
     {
         public EntityTableSet ParentTableSet { get; } // can be null
         
-        public AssetInViewSheetTable(SerializableEntityTable rawTable, string[] stringBuffer, EntityTableSet parentTableSet = null) : base(rawTable, stringBuffer)
+        public AssetInViewSheetTable(SerializableEntityTable rawTable, string[] stringTable, EntityTableSet parentTableSet = null) : base(rawTable, stringTable)
         {
             ParentTableSet = parentTableSet;
             Column_AssetIndex = GetIndexColumnValues("index:Vim.Asset:Asset") ?? Array.Empty<int>();
@@ -6211,7 +6215,7 @@ namespace Vim.Format.ObjectModel {
     {
         public EntityTableSet ParentTableSet { get; } // can be null
         
-        public LevelInViewTable(SerializableEntityTable rawTable, string[] stringBuffer, EntityTableSet parentTableSet = null) : base(rawTable, stringBuffer)
+        public LevelInViewTable(SerializableEntityTable rawTable, string[] stringTable, EntityTableSet parentTableSet = null) : base(rawTable, stringTable)
         {
             ParentTableSet = parentTableSet;
             Column_Extents_Min_X = GetDataColumnValues<Double>("double:Extents.Min.X") ?? Array.Empty<Double>();
@@ -6273,7 +6277,7 @@ namespace Vim.Format.ObjectModel {
     {
         public EntityTableSet ParentTableSet { get; } // can be null
         
-        public CameraTable(SerializableEntityTable rawTable, string[] stringBuffer, EntityTableSet parentTableSet = null) : base(rawTable, stringBuffer)
+        public CameraTable(SerializableEntityTable rawTable, string[] stringTable, EntityTableSet parentTableSet = null) : base(rawTable, stringTable)
         {
             ParentTableSet = parentTableSet;
             Column_Id = GetDataColumnValues<Int32>("int:Id") ?? Array.Empty<Int32>();
@@ -6335,7 +6339,7 @@ namespace Vim.Format.ObjectModel {
     {
         public EntityTableSet ParentTableSet { get; } // can be null
         
-        public MaterialTable(SerializableEntityTable rawTable, string[] stringBuffer, EntityTableSet parentTableSet = null) : base(rawTable, stringBuffer)
+        public MaterialTable(SerializableEntityTable rawTable, string[] stringTable, EntityTableSet parentTableSet = null) : base(rawTable, stringTable)
         {
             ParentTableSet = parentTableSet;
             Column_Name = GetStringColumnValues("string:Name") ?? Array.Empty<String>();
@@ -6447,7 +6451,7 @@ namespace Vim.Format.ObjectModel {
     {
         public EntityTableSet ParentTableSet { get; } // can be null
         
-        public MaterialInElementTable(SerializableEntityTable rawTable, string[] stringBuffer, EntityTableSet parentTableSet = null) : base(rawTable, stringBuffer)
+        public MaterialInElementTable(SerializableEntityTable rawTable, string[] stringTable, EntityTableSet parentTableSet = null) : base(rawTable, stringTable)
         {
             ParentTableSet = parentTableSet;
             Column_Area = GetDataColumnValues<Double>("double:Area") ?? Array.Empty<Double>();
@@ -6497,7 +6501,7 @@ namespace Vim.Format.ObjectModel {
     {
         public EntityTableSet ParentTableSet { get; } // can be null
         
-        public CompoundStructureLayerTable(SerializableEntityTable rawTable, string[] stringBuffer, EntityTableSet parentTableSet = null) : base(rawTable, stringBuffer)
+        public CompoundStructureLayerTable(SerializableEntityTable rawTable, string[] stringTable, EntityTableSet parentTableSet = null) : base(rawTable, stringTable)
         {
             ParentTableSet = parentTableSet;
             Column_OrderIndex = GetDataColumnValues<Int32>("int:OrderIndex") ?? Array.Empty<Int32>();
@@ -6547,7 +6551,7 @@ namespace Vim.Format.ObjectModel {
     {
         public EntityTableSet ParentTableSet { get; } // can be null
         
-        public CompoundStructureTable(SerializableEntityTable rawTable, string[] stringBuffer, EntityTableSet parentTableSet = null) : base(rawTable, stringBuffer)
+        public CompoundStructureTable(SerializableEntityTable rawTable, string[] stringTable, EntityTableSet parentTableSet = null) : base(rawTable, stringTable)
         {
             ParentTableSet = parentTableSet;
             Column_Width = GetDataColumnValues<Double>("double:Width") ?? Array.Empty<Double>();
@@ -6583,7 +6587,7 @@ namespace Vim.Format.ObjectModel {
     {
         public EntityTableSet ParentTableSet { get; } // can be null
         
-        public NodeTable(SerializableEntityTable rawTable, string[] stringBuffer, EntityTableSet parentTableSet = null) : base(rawTable, stringBuffer)
+        public NodeTable(SerializableEntityTable rawTable, string[] stringTable, EntityTableSet parentTableSet = null) : base(rawTable, stringTable)
         {
             ParentTableSet = parentTableSet;
             Column_ElementIndex = GetIndexColumnValues("index:Vim.Element:Element") ?? Array.Empty<int>();
@@ -6615,7 +6619,7 @@ namespace Vim.Format.ObjectModel {
     {
         public EntityTableSet ParentTableSet { get; } // can be null
         
-        public GeometryTable(SerializableEntityTable rawTable, string[] stringBuffer, EntityTableSet parentTableSet = null) : base(rawTable, stringBuffer)
+        public GeometryTable(SerializableEntityTable rawTable, string[] stringTable, EntityTableSet parentTableSet = null) : base(rawTable, stringTable)
         {
             ParentTableSet = parentTableSet;
             Column_Box_Min_X = GetDataColumnValues<Single>("float:Box.Min.X") ?? Array.Empty<Single>();
@@ -6673,7 +6677,7 @@ namespace Vim.Format.ObjectModel {
     {
         public EntityTableSet ParentTableSet { get; } // can be null
         
-        public ShapeTable(SerializableEntityTable rawTable, string[] stringBuffer, EntityTableSet parentTableSet = null) : base(rawTable, stringBuffer)
+        public ShapeTable(SerializableEntityTable rawTable, string[] stringTable, EntityTableSet parentTableSet = null) : base(rawTable, stringTable)
         {
             ParentTableSet = parentTableSet;
             Column_ElementIndex = GetIndexColumnValues("index:Vim.Element:Element") ?? Array.Empty<int>();
@@ -6705,7 +6709,7 @@ namespace Vim.Format.ObjectModel {
     {
         public EntityTableSet ParentTableSet { get; } // can be null
         
-        public ShapeCollectionTable(SerializableEntityTable rawTable, string[] stringBuffer, EntityTableSet parentTableSet = null) : base(rawTable, stringBuffer)
+        public ShapeCollectionTable(SerializableEntityTable rawTable, string[] stringTable, EntityTableSet parentTableSet = null) : base(rawTable, stringTable)
         {
             ParentTableSet = parentTableSet;
             Column_ElementIndex = GetIndexColumnValues("index:Vim.Element:Element") ?? Array.Empty<int>();
@@ -6737,7 +6741,7 @@ namespace Vim.Format.ObjectModel {
     {
         public EntityTableSet ParentTableSet { get; } // can be null
         
-        public ShapeInShapeCollectionTable(SerializableEntityTable rawTable, string[] stringBuffer, EntityTableSet parentTableSet = null) : base(rawTable, stringBuffer)
+        public ShapeInShapeCollectionTable(SerializableEntityTable rawTable, string[] stringTable, EntityTableSet parentTableSet = null) : base(rawTable, stringTable)
         {
             ParentTableSet = parentTableSet;
             Column_ShapeIndex = GetIndexColumnValues("index:Vim.Shape:Shape") ?? Array.Empty<int>();
@@ -6775,7 +6779,7 @@ namespace Vim.Format.ObjectModel {
     {
         public EntityTableSet ParentTableSet { get; } // can be null
         
-        public SystemTable(SerializableEntityTable rawTable, string[] stringBuffer, EntityTableSet parentTableSet = null) : base(rawTable, stringBuffer)
+        public SystemTable(SerializableEntityTable rawTable, string[] stringTable, EntityTableSet parentTableSet = null) : base(rawTable, stringTable)
         {
             ParentTableSet = parentTableSet;
             Column_SystemType = GetDataColumnValues<Int32>("int:SystemType") ?? Array.Empty<Int32>();
@@ -6817,7 +6821,7 @@ namespace Vim.Format.ObjectModel {
     {
         public EntityTableSet ParentTableSet { get; } // can be null
         
-        public ElementInSystemTable(SerializableEntityTable rawTable, string[] stringBuffer, EntityTableSet parentTableSet = null) : base(rawTable, stringBuffer)
+        public ElementInSystemTable(SerializableEntityTable rawTable, string[] stringTable, EntityTableSet parentTableSet = null) : base(rawTable, stringTable)
         {
             ParentTableSet = parentTableSet;
             Column_Roles = GetDataColumnValues<Int32>("int:Roles") ?? Array.Empty<Int32>();
@@ -6859,7 +6863,7 @@ namespace Vim.Format.ObjectModel {
     {
         public EntityTableSet ParentTableSet { get; } // can be null
         
-        public WarningTable(SerializableEntityTable rawTable, string[] stringBuffer, EntityTableSet parentTableSet = null) : base(rawTable, stringBuffer)
+        public WarningTable(SerializableEntityTable rawTable, string[] stringTable, EntityTableSet parentTableSet = null) : base(rawTable, stringTable)
         {
             ParentTableSet = parentTableSet;
             Column_Guid = GetStringColumnValues("string:Guid") ?? Array.Empty<String>();
@@ -6903,7 +6907,7 @@ namespace Vim.Format.ObjectModel {
     {
         public EntityTableSet ParentTableSet { get; } // can be null
         
-        public ElementInWarningTable(SerializableEntityTable rawTable, string[] stringBuffer, EntityTableSet parentTableSet = null) : base(rawTable, stringBuffer)
+        public ElementInWarningTable(SerializableEntityTable rawTable, string[] stringTable, EntityTableSet parentTableSet = null) : base(rawTable, stringTable)
         {
             ParentTableSet = parentTableSet;
             Column_WarningIndex = GetIndexColumnValues("index:Vim.Warning:Warning") ?? Array.Empty<int>();
@@ -6941,7 +6945,7 @@ namespace Vim.Format.ObjectModel {
     {
         public EntityTableSet ParentTableSet { get; } // can be null
         
-        public BasePointTable(SerializableEntityTable rawTable, string[] stringBuffer, EntityTableSet parentTableSet = null) : base(rawTable, stringBuffer)
+        public BasePointTable(SerializableEntityTable rawTable, string[] stringTable, EntityTableSet parentTableSet = null) : base(rawTable, stringTable)
         {
             ParentTableSet = parentTableSet;
             Column_IsSurveyPoint = GetDataColumnValues<Boolean>("byte:IsSurveyPoint") ?? Array.Empty<Boolean>();
@@ -7001,7 +7005,7 @@ namespace Vim.Format.ObjectModel {
     {
         public EntityTableSet ParentTableSet { get; } // can be null
         
-        public PhaseFilterTable(SerializableEntityTable rawTable, string[] stringBuffer, EntityTableSet parentTableSet = null) : base(rawTable, stringBuffer)
+        public PhaseFilterTable(SerializableEntityTable rawTable, string[] stringTable, EntityTableSet parentTableSet = null) : base(rawTable, stringTable)
         {
             ParentTableSet = parentTableSet;
             Column_New = GetDataColumnValues<Int32>("int:New") ?? Array.Empty<Int32>();
@@ -7049,7 +7053,7 @@ namespace Vim.Format.ObjectModel {
     {
         public EntityTableSet ParentTableSet { get; } // can be null
         
-        public GridTable(SerializableEntityTable rawTable, string[] stringBuffer, EntityTableSet parentTableSet = null) : base(rawTable, stringBuffer)
+        public GridTable(SerializableEntityTable rawTable, string[] stringTable, EntityTableSet parentTableSet = null) : base(rawTable, stringTable)
         {
             ParentTableSet = parentTableSet;
             Column_StartPoint_X = GetDataColumnValues<Double>("double:StartPoint.X") ?? Array.Empty<Double>();
@@ -7139,7 +7143,7 @@ namespace Vim.Format.ObjectModel {
     {
         public EntityTableSet ParentTableSet { get; } // can be null
         
-        public AreaTable(SerializableEntityTable rawTable, string[] stringBuffer, EntityTableSet parentTableSet = null) : base(rawTable, stringBuffer)
+        public AreaTable(SerializableEntityTable rawTable, string[] stringTable, EntityTableSet parentTableSet = null) : base(rawTable, stringTable)
         {
             ParentTableSet = parentTableSet;
             Column_Value = GetDataColumnValues<Double>("double:Value") ?? Array.Empty<Double>();
@@ -7193,7 +7197,7 @@ namespace Vim.Format.ObjectModel {
     {
         public EntityTableSet ParentTableSet { get; } // can be null
         
-        public AreaSchemeTable(SerializableEntityTable rawTable, string[] stringBuffer, EntityTableSet parentTableSet = null) : base(rawTable, stringBuffer)
+        public AreaSchemeTable(SerializableEntityTable rawTable, string[] stringTable, EntityTableSet parentTableSet = null) : base(rawTable, stringTable)
         {
             ParentTableSet = parentTableSet;
             Column_IsGrossBuildingArea = GetDataColumnValues<Boolean>("byte:IsGrossBuildingArea") ?? Array.Empty<Boolean>();
@@ -7229,7 +7233,7 @@ namespace Vim.Format.ObjectModel {
     {
         public EntityTableSet ParentTableSet { get; } // can be null
         
-        public ScheduleTable(SerializableEntityTable rawTable, string[] stringBuffer, EntityTableSet parentTableSet = null) : base(rawTable, stringBuffer)
+        public ScheduleTable(SerializableEntityTable rawTable, string[] stringTable, EntityTableSet parentTableSet = null) : base(rawTable, stringTable)
         {
             ParentTableSet = parentTableSet;
             Column_ElementIndex = GetIndexColumnValues("index:Vim.Element:Element") ?? Array.Empty<int>();
@@ -7261,7 +7265,7 @@ namespace Vim.Format.ObjectModel {
     {
         public EntityTableSet ParentTableSet { get; } // can be null
         
-        public ScheduleColumnTable(SerializableEntityTable rawTable, string[] stringBuffer, EntityTableSet parentTableSet = null) : base(rawTable, stringBuffer)
+        public ScheduleColumnTable(SerializableEntityTable rawTable, string[] stringTable, EntityTableSet parentTableSet = null) : base(rawTable, stringTable)
         {
             ParentTableSet = parentTableSet;
             Column_Name = GetStringColumnValues("string:Name") ?? Array.Empty<String>();
@@ -7301,7 +7305,7 @@ namespace Vim.Format.ObjectModel {
     {
         public EntityTableSet ParentTableSet { get; } // can be null
         
-        public ScheduleCellTable(SerializableEntityTable rawTable, string[] stringBuffer, EntityTableSet parentTableSet = null) : base(rawTable, stringBuffer)
+        public ScheduleCellTable(SerializableEntityTable rawTable, string[] stringTable, EntityTableSet parentTableSet = null) : base(rawTable, stringTable)
         {
             ParentTableSet = parentTableSet;
             Column_Value = GetStringColumnValues("string:Value") ?? Array.Empty<String>();
@@ -7341,7 +7345,7 @@ namespace Vim.Format.ObjectModel {
     {
         public EntityTableSet ParentTableSet { get; } // can be null
         
-        public ViewSheetSetTable(SerializableEntityTable rawTable, string[] stringBuffer, EntityTableSet parentTableSet = null) : base(rawTable, stringBuffer)
+        public ViewSheetSetTable(SerializableEntityTable rawTable, string[] stringTable, EntityTableSet parentTableSet = null) : base(rawTable, stringTable)
         {
             ParentTableSet = parentTableSet;
             Column_ElementIndex = GetIndexColumnValues("index:Vim.Element:Element") ?? Array.Empty<int>();
@@ -7373,7 +7377,7 @@ namespace Vim.Format.ObjectModel {
     {
         public EntityTableSet ParentTableSet { get; } // can be null
         
-        public ViewSheetTable(SerializableEntityTable rawTable, string[] stringBuffer, EntityTableSet parentTableSet = null) : base(rawTable, stringBuffer)
+        public ViewSheetTable(SerializableEntityTable rawTable, string[] stringTable, EntityTableSet parentTableSet = null) : base(rawTable, stringTable)
         {
             ParentTableSet = parentTableSet;
             Column_FamilyTypeIndex = GetIndexColumnValues("index:Vim.FamilyType:FamilyType") ?? Array.Empty<int>();
@@ -7411,7 +7415,7 @@ namespace Vim.Format.ObjectModel {
     {
         public EntityTableSet ParentTableSet { get; } // can be null
         
-        public ViewSheetInViewSheetSetTable(SerializableEntityTable rawTable, string[] stringBuffer, EntityTableSet parentTableSet = null) : base(rawTable, stringBuffer)
+        public ViewSheetInViewSheetSetTable(SerializableEntityTable rawTable, string[] stringTable, EntityTableSet parentTableSet = null) : base(rawTable, stringTable)
         {
             ParentTableSet = parentTableSet;
             Column_ViewSheetIndex = GetIndexColumnValues("index:Vim.ViewSheet:ViewSheet") ?? Array.Empty<int>();
@@ -7449,7 +7453,7 @@ namespace Vim.Format.ObjectModel {
     {
         public EntityTableSet ParentTableSet { get; } // can be null
         
-        public ViewInViewSheetSetTable(SerializableEntityTable rawTable, string[] stringBuffer, EntityTableSet parentTableSet = null) : base(rawTable, stringBuffer)
+        public ViewInViewSheetSetTable(SerializableEntityTable rawTable, string[] stringTable, EntityTableSet parentTableSet = null) : base(rawTable, stringTable)
         {
             ParentTableSet = parentTableSet;
             Column_ViewIndex = GetIndexColumnValues("index:Vim.View:View") ?? Array.Empty<int>();
@@ -7487,7 +7491,7 @@ namespace Vim.Format.ObjectModel {
     {
         public EntityTableSet ParentTableSet { get; } // can be null
         
-        public ViewInViewSheetTable(SerializableEntityTable rawTable, string[] stringBuffer, EntityTableSet parentTableSet = null) : base(rawTable, stringBuffer)
+        public ViewInViewSheetTable(SerializableEntityTable rawTable, string[] stringTable, EntityTableSet parentTableSet = null) : base(rawTable, stringTable)
         {
             ParentTableSet = parentTableSet;
             Column_ViewIndex = GetIndexColumnValues("index:Vim.View:View") ?? Array.Empty<int>();
@@ -7525,7 +7529,7 @@ namespace Vim.Format.ObjectModel {
     {
         public EntityTableSet ParentTableSet { get; } // can be null
         
-        public SiteTable(SerializableEntityTable rawTable, string[] stringBuffer, EntityTableSet parentTableSet = null) : base(rawTable, stringBuffer)
+        public SiteTable(SerializableEntityTable rawTable, string[] stringTable, EntityTableSet parentTableSet = null) : base(rawTable, stringTable)
         {
             ParentTableSet = parentTableSet;
             Column_Latitude = GetDataColumnValues<Double>("double:Latitude") ?? Array.Empty<Double>();
@@ -7577,7 +7581,7 @@ namespace Vim.Format.ObjectModel {
     {
         public EntityTableSet ParentTableSet { get; } // can be null
         
-        public BuildingTable(SerializableEntityTable rawTable, string[] stringBuffer, EntityTableSet parentTableSet = null) : base(rawTable, stringBuffer)
+        public BuildingTable(SerializableEntityTable rawTable, string[] stringTable, EntityTableSet parentTableSet = null) : base(rawTable, stringTable)
         {
             ParentTableSet = parentTableSet;
             Column_Elevation = GetDataColumnValues<Double>("double:Elevation") ?? Array.Empty<Double>();

@@ -153,6 +153,42 @@ namespace Vim.Format
             }
         }
 
+        /// <summary>
+        /// Returns the string table contained in the given VIM file.
+        /// </summary>
+        public static string[] GetStringTable(this FileInfo vimFileInfo)
+        {
+            using (var stream = vimFileInfo.OpenRead())
+            {
+                var stringTableReader = stream.GetBFastBufferReader(BufferNames.Strings);
+                if (stringTableReader == null)
+                    return Array.Empty<string>();
+
+                stringTableReader.Seek();
+
+                var (_, numBytes) = stringTableReader;
+
+                return ReadStrings(stream, numBytes);
+            }
+        }
+
+        /// <summary>
+        /// Returns the geometry contained in the given VIM file.
+        /// </summary>
+        public static G3D GetGeometry(this FileInfo vimFileInfo)
+        {
+            using (var stream = vimFileInfo.OpenRead())
+            {
+                var geometryReader = stream.GetBFastBufferReader(BufferNames.Geometry);
+                if (geometryReader == null)
+                    return G3D.Empty;
+
+                geometryReader.Seek();
+
+                return G3D.Read(stream);
+            }
+        }
+
         public static BFastBuilder ToBFastBuilder(this IEnumerable<SerializableEntityTable> entityTables)
         {
             var bldr = new BFastBuilder();
