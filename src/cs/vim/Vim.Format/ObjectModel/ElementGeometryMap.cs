@@ -9,46 +9,51 @@ using Vim.Util;
 
 namespace Vim.Format.ObjectModel
 {
-    /// <summary>
-    /// Represents the association between an element and its geometry.
-    /// Note: one element may have more than one ElementGeometry record if it is composed of multiple nodes and geometries.
-    /// </summary>
-    public class ElementGeometry
+    public class ElementGeometryInfo
     {
-        public int ElementIndex { get; }
-        public int NodeIndex { get; }
-        public int InstanceIndex => NodeIndex; // INVARIANT: there is a 1:1 relationship between Node entities and instances in the g3d buffer.
-        public int GeometryIndex { get; }
+        public int VertexCount { get; }
+        public int FaceCount { get; }
+        public int NodeCount { get; }
+        public AABox WorldSpaceBoundingBox { get; }
 
         /// <summary>
-        /// Constructor.
+        /// Constructor
         /// </summary>
-        public ElementGeometry(int elementIndex, int nodeIndex, int geometryIndex)
+        public ElementGeometryInfo(int vertexCount, int faceCount, int nodeCount, AABox worldSpaceBoundingBox)
         {
-            ElementIndex = elementIndex;
-            NodeIndex = nodeIndex;
-            GeometryIndex = geometryIndex;
+            VertexCount = vertexCount;
+            FaceCount = faceCount;
+            NodeCount = nodeCount;
+            WorldSpaceBoundingBox = worldSpaceBoundingBox;
         }
-
-        // TODO: compute bounding box per collection of element geometry so we only need it once.
     }
 
     /// <summary>
-    /// A mapping of { ElementIndex -> [(NodeIndex, GeometryIndex)] }
+    /// A mapping of { ElementIndex -> [(NodeIndex, GeometryIndex)] }. Also provides information about the element's geometry.
     /// </summary>
-    public class ElementGeometryMap : DictionaryOfLists<int, ElementGeometry>
+    public class ElementGeometryMap : DictionaryOfLists<int, (int NodeIndex, int GeometryIndex)>
     {
         private readonly EntityTableSet _tableSet;
-
-        public G3D G3d { get; }
+        private readonly G3D _g3d;
         
+        public IReadOnlyDictionary<int, ElementGeometryInfo> ElementGeometryInfo { get; }
+
         /// <summary>
         /// Constructor.
         /// </summary>
         public ElementGeometryMap(FileInfo vimFileInfo, G3D g3d = null)
         {
+            _g3d = g3d;
             _tableSet = new EntityTableSet(vimFileInfo, false, Array.Empty<string>(), n => n is TableNames.Node);
+            PopulateElementGeometryMap();
+            ElementGeometryInfo = GetElementGeometryInfoMap(this);
+        }
 
+        /// <summary>
+        /// Populates the mapping { ElementIndex -> [(NodeIndex, GeometryIndex)] }
+        /// </summary>
+        private void PopulateElementGeometryMap()
+        {
             if (!(_tableSet.NodeTable is NodeTable nodeTable))
                 return;
 
@@ -66,10 +71,10 @@ namespace Vim.Format.ObjectModel
                     // INVARIANT: there is a 1:1 relationship between Node entities and instances in the g3d buffer.
                     var instanceIndex = nodeIndex;
 
-                    if (!TryGetGeometryIndex(g3d, instanceIndex, out var geometryIndex))
+                    if (!TryGetGeometryIndex(_g3d, instanceIndex, out var geometryIndex))
                         continue; // Skip nodes with no geometry.
 
-                    Add(elementIndex, new ElementGeometry(elementIndex, nodeIndex, geometryIndex));
+                    Add(elementIndex, (nodeIndex, geometryIndex));
                 }
             }
         }
@@ -79,6 +84,48 @@ namespace Vim.Format.ObjectModel
             geometryIndex = -1;
             geometryIndex = g3d.InstanceMeshes.ElementAtOrDefault(instanceIndex, -1);
             return geometryIndex >= 0;
+        }
+
+        private static Dictionary<int, ElementGeometryInfo> GetElementGeometryInfoMap(ElementGeometryMap egm)
+        {
+            var result = new Dictionary<int, ElementGeometryInfo>();
+
+            foreach (var kv in egm)
+            {
+                var elementIndex = kv.Key;
+                var list = kv.Value;
+
+                var nodeCount = list.Count;
+                var vertexCount = 0;
+                var faceCount = 0;
+                var bb = new AABox(Vector3.MaxValue, Vector3.MinValue); // world space element bounding box
+
+                // Aggregate the geometry info
+                foreach (var (nodeIndex, geometryIndex) in list)
+                {
+                    // INVARIANT: there is a 1:1 relationship between Node entities and instances in the g3d buffer.
+                    var instanceIndex = nodeIndex;
+
+                    if (!egm.TryGetTransformedGeometryInfo(
+                            instanceIndex,
+                            geometryIndex,
+                            out var geometryVertexCount,
+                            out var geometryFaceCount,
+                            out var nodeBb))
+                    {
+                        continue;
+                    }
+
+                    // Aggregate the ElementGeometry data
+                    vertexCount += geometryVertexCount;
+                    faceCount += geometryFaceCount;
+                    bb = bb.Merge(nodeBb);
+                }
+
+                result[elementIndex] = new ElementGeometryInfo(vertexCount, faceCount, nodeCount, bb);
+            }
+
+            return result;
         }
 
         public bool TryGetTransformedGeometryInfo(
@@ -95,24 +142,19 @@ namespace Vim.Format.ObjectModel
             if (geometryIndex < 0)
                 return false;
 
-            var g3dMesh = G3d.Meshes.ElementAtOrDefault(geometryIndex);
+            var g3dMesh = _g3d.Meshes.ElementAtOrDefault(geometryIndex);
             if (g3dMesh == null)
                 return false;
 
             vertexCount = g3dMesh.NumVertices;
             faceCount = g3dMesh.NumFaces;
 
-            var transform = G3d.InstanceTransforms.ElementAtOrDefault(instanceIndex, Matrix4x4.Identity);
+            var transform = _g3d.InstanceTransforms.ElementAtOrDefault(instanceIndex, Matrix4x4.Identity);
 
             // Calculate the world-space bounding box of the mesh.
             worldSpaceBb = AABox.Create(g3dMesh.Vertices.ToArray().Select(v => v.Transform(transform)));
 
             return true;
-        }
-
-        public Dictionary<int, AABox> GetElementWorldSpaceBoundingBoxes()
-        {
-
         }
     }
 }

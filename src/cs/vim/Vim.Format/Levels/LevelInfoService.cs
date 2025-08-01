@@ -3,34 +3,20 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Vim.Format.ObjectModel;
-using Vim.G3d;
 using Vim.Util;
-
-using ElementIndexToNodeAndGeometryMap = Vim.Util.DictionaryOfLists<int, (int NodeIndex, int GeometryIndex)>;
 
 namespace Vim.Format.Levels
 {
     public class LevelInfoService
     {
-        private G3D G3d { get; }
-
-        private ElementIndexToNodeAndGeometryMap ElementIndexToNodeAndGeometryIndexMap { get; }
+        private ElementGeometryMap ElementGeometryMap { get; }
 
         private EntityTableSet TableSet { get; }
-
-        public LevelInfoService(FileInfo vimFileInfo)
-        {
-
-        }
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public LevelInfoService(
-            FileInfo vimFileInfo,
-            string[] stringTable,
-            ElementIndexToNodeAndGeometryMap elementIndexToNodeAndGeometryIndexMap,
-            G3D g3d)
+        public LevelInfoService(FileInfo vimFileInfo, string[] stringTable, ElementGeometryMap elementGeometryMap)
         {
             TableSet = new EntityTableSet(vimFileInfo, false, stringTable,
                 n =>
@@ -41,9 +27,7 @@ namespace Vim.Format.Levels
                     n is TableNames.Parameter ||
                     n is TableNames.ParameterDescriptor);
 
-            ElementIndexToNodeAndGeometryIndexMap = elementIndexToNodeAndGeometryIndexMap;
-
-            G3d = g3d;
+            ElementGeometryMap = elementGeometryMap;
         }
 
         /// <summary>
@@ -84,8 +68,7 @@ namespace Vim.Format.Levels
                 levelTable,
                 parameterTable,
                 elementIndexMaps,
-                G3d,
-                ElementIndexToNodeAndGeometryIndexMap);
+                ElementGeometryMap);
 
             return (levelInfos, familyInstanceLevelInfos);
         }
@@ -156,8 +139,7 @@ namespace Vim.Format.Levels
             LevelTable levelTable,
             ParameterTable parameterTable,
             ElementIndexMaps elementIndexMaps,
-            G3D g3d,
-            ElementIndexToNodeAndGeometryMap elementIndexToNodeAndGeometryMap)
+            ElementGeometryMap elementGeometryMap)
         {
             var orderedLevelInfoByBimDocumentIndex = levelInfoByBimDocumentIndex.ToDictionary(
                 kv => kv.Key,
@@ -181,10 +163,9 @@ namespace Vim.Format.Levels
                         levelTable,
                         parameterTable,
                         elementIndexMaps,
+                        elementGeometryMap,
                         orderedLevelInfosByProjectElevation,
-                        elementIdToLevelInfoMap,
-                        g3d,
-                        elementIndexToNodeAndGeometryMap);
+                        elementIdToLevelInfoMap);
                 })
                 .ToArray();
         }

@@ -7,8 +7,6 @@ using Vim.G3d;
 using Vim.Math3d;
 using Vim.Util;
 
-using ElementIndexToNodeAndGeometryMap = Vim.Util.DictionaryOfLists<int, (int NodeIndex, int GeometryIndex)>;
-
 // ReSharper disable InconsistentNaming
 
 // SOME BACKGROUND INFORMATION ABOUT REVIT LEVELS AND FAMILY INSTANCES
@@ -294,10 +292,9 @@ namespace Vim.Format.Levels
             LevelTable levelTable,
             ParameterTable parameterTable,
             ElementIndexMaps elementIndexMaps,
+            ElementGeometryMap elementGeometryMap,
             IReadOnlyList<LevelInfo> orderedLevelInfosByProjectElevation,
-            IReadOnlyDictionary<long, LevelInfo> elementIdToLevelInfoMap,
-            G3D g3d,
-            ElementIndexToNodeAndGeometryMap elementIndexToNodeAndGeometryMap) 
+            IReadOnlyDictionary<long, LevelInfo> elementIdToLevelInfoMap)
         {
             FamilyInstance = fi;
 
@@ -338,8 +335,7 @@ namespace Vim.Format.Levels
                 familyInstanceElementIndex,
                 PrimaryLevelInfo?.Level?.ProjectElevation,
                 orderedLevelInfosByProjectElevation,
-                g3d,
-                elementIndexToNodeAndGeometryMap,
+                elementGeometryMap,
                 out var maybeBuildingStoryAbove,
                 out var maybeBuildingStoryCurrentOrBelow,
                 out var maybeBuildingStoryGeometryMin,
@@ -420,8 +416,7 @@ namespace Vim.Format.Levels
             int elementIndex,
             double? primaryProjectElevation,
             IReadOnlyList<LevelInfo> orderedLevelInfosByProjectElevation,
-            G3D g3d,
-            ElementIndexToNodeAndGeometryMap elementIndexToNodeAndGeometryMap,
+            ElementGeometryMap elementGeometryMap,
             out LevelInfo maybeBuildingStoryAbove, 
             out LevelInfo maybeBuildingStoryCurrentOrBelow,
             out LevelInfo maybeBuildingStoryGeometryMin,
@@ -436,7 +431,9 @@ namespace Vim.Format.Levels
                 return BuildingStoryGeometryContainment.Unknown;
 
             // Note: Level.ProjectElevation is relative to the internal scene origin (0,0,0), and so is the vim scene's geometry.
-            var hasBb = VimScene.TryGetElementWorldSpaceBoundingBox(g3d, elementIndex, elementIndexToNodeAndGeometryMap, out var bb) && bb.IsValid;
+            var hasGeometry = elementGeometryMap.ElementGeometryInfo.TryGetValue(elementIndex, out var elementGeometryInfo);
+            var bb = hasGeometry ? elementGeometryInfo.WorldSpaceBoundingBox : AABox.Empty;
+            var bbIsValid = hasGeometry && bb.IsValid;
             var bbMin = bb.Min.Z;
             var bbMax = bb.Max.Z;
 
@@ -460,13 +457,13 @@ namespace Vim.Format.Levels
                     maybeBuildingStoryAbove = levelInfo;
                 }
 
-                if (hasBb && bbMin >= levelProjectElevation)
+                if (bbIsValid && bbMin >= levelProjectElevation)
                 {
                     // Find the building story below or at the geometric minimum.
                     maybeBuildingStoryGeometryMin = levelInfo;
                 }
 
-                if (hasBb && bbMax >= levelProjectElevation)
+                if (bbIsValid && bbMax >= levelProjectElevation)
                 {
                     // Find the first building story below or at the geometric maximum.
                     maybeBuildingStoryGeometryMax = levelInfo;

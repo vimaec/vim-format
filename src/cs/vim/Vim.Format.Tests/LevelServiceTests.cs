@@ -2,6 +2,8 @@
 using System.IO;
 using System.Linq;
 using Vim.Format.Levels;
+using Vim.Format.ObjectModel;
+using Vim.G3d;
 using Vim.Util.Logging;
 using Vim.Util.Tests;
 
@@ -20,17 +22,20 @@ public static class LevelServiceTests
         // TODO: test skanska
         // TODO: test with an IFC file
         // TODO: test with empty VIM file
-        
 
         Assert.DoesNotThrow(() =>
         {
             using var _ = logger.LogDuration("GetLevelInfo");
 
             var vimFilePath = VimFormatRepoPaths.GetDataFilePath("Dwelling*.vim", true);
-            var vimSchemaOnly = Serializer.Deserialize(vimFilePath, new() { SchemaOnly = true, SkipAssets = true });
+            var vimFileInfo = new FileInfo(vimFilePath);
+            var doc = Serializer.Deserialize(vimFileInfo.FullName, new LoadOptions { SchemaOnly = true, SkipAssets = true });
+            var stringTable = doc.StringTable;
+            var elementGeometryMap = new ElementGeometryMap(vimFileInfo, doc.Geometry);
 
-            var levelService = new LevelInfoService(new FileInfo(vimFilePath));
-            var (levelInfos, familyInstanceLevelInfos) = LevelService.GetLevelInfo(vimScene);
+            var levelService = new LevelInfoService(vimFileInfo, stringTable, elementGeometryMap);
+
+            var (levelInfos, familyInstanceLevelInfos) = levelService.GetLevelInfos();
 
             foreach (var levelInfo in levelInfos.OrderBy(l => l.NameWithElevationFeetAndFractionalInches))
             {
