@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using Vim.Format.ObjectModel;
-using Vim.G3d;
 using Vim.Math3d;
 using Vim.Util;
 
@@ -293,6 +292,7 @@ namespace Vim.Format.Levels
             ParameterTable parameterTable,
             ElementIndexMaps elementIndexMaps,
             ElementGeometryMap elementGeometryMap,
+            IReadOnlyDictionary<int, LevelInfo> levelInfoMap,
             IReadOnlyList<LevelInfo> orderedLevelInfosByProjectElevation,
             IReadOnlyDictionary<long, LevelInfo> elementIdToLevelInfoMap)
         {
@@ -304,8 +304,11 @@ namespace Vim.Format.Levels
             if (familyInstanceElementIndex != EntityRelation.None)
             {
                 var familyInstanceElementLevelIndex = elementTable.GetLevelIndex(familyInstanceElementIndex);
-                if (familyInstanceElementLevelIndex != EntityRelation.None)
-                    LevelInfo = orderedLevelInfosByProjectElevation.FirstOrDefault(li => li.GetElementIndexOrNone() == familyInstanceElementLevelIndex);
+                if (familyInstanceElementLevelIndex != EntityRelation.None &&
+                    levelInfoMap.TryGetValue(familyInstanceElementLevelIndex, out var levelInfo))
+                {
+                    LevelInfo = levelInfo;
+                }
             }
             
             if (TryGetHostLevel(fi, elementTable, levelTable, elementIdToLevelInfoMap, out var hostLevelInfo))

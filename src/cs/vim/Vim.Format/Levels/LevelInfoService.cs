@@ -25,6 +25,7 @@ namespace Vim.Format.Levels
                     n is TableNames.FamilyInstance ||
                     n is TableNames.FamilyType ||
                     n is TableNames.Parameter ||
+                    n is TableNames.BasePoint ||
                     n is TableNames.ParameterDescriptor);
 
             ElementGeometryMap = elementGeometryMap;
@@ -57,18 +58,19 @@ namespace Vim.Format.Levels
                 basePointsByBimDocumentIndexAndElementId);
 
             var levelInfoByBimDocumentIndex = levelInfos.GroupByBimDocumentIndexAndElementId(elementTable);
+            var levelInfoMap = levelInfos.ToDictionaryIgnoreDuplicates(li => li.Level.Index, li => li);
 
             PatchBuildingStoryAbove(levelInfoByBimDocumentIndex);
 
-            var familyInstances = familyInstanceTable.AsParallel().ToArray();
             var familyInstanceLevelInfos = CreateFamilyInstanceLevelInfos(
-                familyInstances,
-                levelInfoByBimDocumentIndex,
+                familyInstanceTable,
                 elementTable,
                 levelTable,
                 parameterTable,
                 elementIndexMaps,
-                ElementGeometryMap);
+                ElementGeometryMap,
+                levelInfoMap,
+                levelInfoByBimDocumentIndex);
 
             return (levelInfos, familyInstanceLevelInfos);
         }
@@ -133,25 +135,26 @@ namespace Vim.Format.Levels
         /// Returns an array of family instance level infos based on the given list of family instances.
         /// </summary>
         private static FamilyInstanceLevelInfo[] CreateFamilyInstanceLevelInfos(
-            IReadOnlyList<FamilyInstance> familyInstances,
-            IReadOnlyDictionary<int, Dictionary<long, LevelInfo>> levelInfoByBimDocumentIndex,
+            FamilyInstanceTable familyInstanceTable,
             ElementTable elementTable,
             LevelTable levelTable,
             ParameterTable parameterTable,
             ElementIndexMaps elementIndexMaps,
-            ElementGeometryMap elementGeometryMap)
+            ElementGeometryMap elementGeometryMap,
+            IReadOnlyDictionary<int, LevelInfo> levelInfoMap,
+            IReadOnlyDictionary<int, Dictionary<long, LevelInfo>> levelInfoByBimDocumentIndex)
         {
-            var orderedLevelInfoByBimDocumentIndex = levelInfoByBimDocumentIndex.ToDictionary(
+            var levelInfoByBimDocumentIndexOrdered = levelInfoByBimDocumentIndex.ToDictionary(
                 kv => kv.Key,
                 kv => kv.Value.Values.OrderBy(li => li.Level.ProjectElevation).ToArray());
 
-            return familyInstances
+            return familyInstanceTable
                 .AsParallel()
                 .Select(fi =>
                 {
                     var bimDocumentIndex = elementTable.GetBimDocumentIndex(fi.GetElementIndexOrNone());
 
-                    if (!orderedLevelInfoByBimDocumentIndex.TryGetValue(bimDocumentIndex, out var orderedLevelInfosByProjectElevation))
+                    if (!levelInfoByBimDocumentIndexOrdered.TryGetValue(bimDocumentIndex, out var orderedLevelInfosByProjectElevation))
                         orderedLevelInfosByProjectElevation = Array.Empty<LevelInfo>();
 
                     if (!levelInfoByBimDocumentIndex.TryGetValue(bimDocumentIndex, out var elementIdToLevelInfoMap))
@@ -164,6 +167,7 @@ namespace Vim.Format.Levels
                         parameterTable,
                         elementIndexMaps,
                         elementGeometryMap,
+                        levelInfoMap,
                         orderedLevelInfosByProjectElevation,
                         elementIdToLevelInfoMap);
                 })

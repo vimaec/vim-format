@@ -3,7 +3,6 @@ using System.IO;
 using System.Linq;
 using Vim.Format.Levels;
 using Vim.Format.ObjectModel;
-using Vim.G3d;
 using Vim.Util.Logging;
 using Vim.Util.Tests;
 
@@ -19,6 +18,7 @@ public static class LevelServiceTests
         var dir = ctx.PrepareDirectory();
         var logger = ctx.CreateLogger();
 
+        // TODO: test with older VIM file (v4.0.0)
         // TODO: test skanska
         // TODO: test with an IFC file
         // TODO: test with empty VIM file

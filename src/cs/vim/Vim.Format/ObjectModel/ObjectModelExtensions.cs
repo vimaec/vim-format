@@ -196,6 +196,8 @@ namespace Vim.Format.ObjectModel
             ElementTable elementTable)
             where T : IElementIndex
         {
+            entityWithElementCollection = entityWithElementCollection ?? Array.Empty<T>();
+
             var elementBimDocumentIndices = elementTable.Column_BimDocumentIndex;
 
             return entityWithElementCollection.GroupBy(e =>
@@ -213,6 +215,8 @@ namespace Vim.Format.ObjectModel
             ElementTable elementTable)
             where T : IElementIndex
         {
+            entityWithElementCollection = entityWithElementCollection ?? Array.Empty<T>();
+
             var elementIds = elementTable.Column_Id;
 
             var result = entityWithElementCollection
