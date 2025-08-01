@@ -434,7 +434,8 @@ namespace Vim.Format.Levels
                 return BuildingStoryGeometryContainment.Unknown;
 
             // Note: Level.ProjectElevation is relative to the internal scene origin (0,0,0), and so is the vim scene's geometry.
-            var hasGeometry = elementGeometryMap.ElementGeometryInfo.TryGetValue(elementIndex, out var elementGeometryInfo);
+            var elementGeometryInfo = elementGeometryMap.ElementAtOrDefault(elementIndex);
+            var hasGeometry = elementGeometryInfo?.HasGeometry ?? false;
             var bb = hasGeometry ? elementGeometryInfo.WorldSpaceBoundingBox : AABox.Empty;
             var bbIsValid = hasGeometry && bb.IsValid;
             var bbMin = bb.Min.Z;

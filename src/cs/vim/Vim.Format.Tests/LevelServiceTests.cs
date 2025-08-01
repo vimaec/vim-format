@@ -1,4 +1,5 @@
 ﻿using NUnit.Framework;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Vim.Format.Levels;
@@ -11,45 +12,40 @@ namespace Vim.Format.Tests;
 [TestFixture]
 public static class LevelServiceTests
 {
-    [Test]
-    public static void TestLevelInfo()
+    public static IEnumerable<string> TestVimFilePaths => TestFiles.VimFilePaths;
+
+    [TestCaseSource(nameof(TestVimFilePaths))]
+    public static void TestLevelInfoDoesNotThrow(string vimFilePath)
     {
-        var ctx = new CallerTestContext();
+        var fileName = Path.GetFileName(vimFilePath);
+        var ctx = new CallerTestContext(subDirComponents: fileName);
         var dir = ctx.PrepareDirectory();
         var logger = ctx.CreateLogger();
 
-        // TODO: test with older VIM file (v4.0.0)
-        // TODO: test skanska
-        // TODO: test with an IFC file
-        // TODO: test with empty VIM file
+        using var _ = logger.LogDuration($"GetLevelInfo: {vimFilePath}");
 
-        Assert.DoesNotThrow(() =>
-        {
-            using var _ = logger.LogDuration("GetLevelInfo");
+        var vimFileInfo = new FileInfo(vimFilePath);
+        var doc = Serializer.Deserialize(vimFileInfo.FullName, new LoadOptions { SchemaOnly = true, SkipAssets = true });
+        var stringTable = doc.StringTable;
+        var elementGeometryMap = new ElementGeometryMap(vimFileInfo, doc.Geometry);
 
-            var vimFilePath = VimFormatRepoPaths.GetDataFilePath("Dwelling*.vim", true);
-            var vimFileInfo = new FileInfo(vimFilePath);
-            var doc = Serializer.Deserialize(vimFileInfo.FullName, new LoadOptions { SchemaOnly = true, SkipAssets = true });
-            var stringTable = doc.StringTable;
-            var elementGeometryMap = new ElementGeometryMap(vimFileInfo, doc.Geometry);
+        var levelService = new LevelInfoService(vimFileInfo, stringTable, elementGeometryMap);
 
-            var levelService = new LevelInfoService(vimFileInfo, stringTable, elementGeometryMap);
+        var (levelInfos, familyInstanceLevelInfos) = levelService.GetLevelInfos();
 
-            var (levelInfos, familyInstanceLevelInfos) = levelService.GetLevelInfos();
+        var validationTableSet = new EntityTableSet(vimFileInfo, false, stringTable,
+            n => n is TableNames.Level or TableNames.FamilyInstance);
 
-            foreach (var levelInfo in levelInfos.OrderBy(l => l.NameWithElevationFeetAndFractionalInches))
-            {
-                logger.Log($@"
-{levelInfo.PropertiesToString()}
-");
-            }
+        Assert.AreEqual(validationTableSet.LevelTable.RowCount, levelInfos.Length);
+        
+        var familyInstanceCount = validationTableSet.FamilyInstanceTable.RowCount;
+        Assert.AreEqual(familyInstanceCount, familyInstanceLevelInfos.Length);
 
-            foreach (var familyInstanceInfo in familyInstanceLevelInfos)
-            {
-                logger.Log($@"
-{familyInstanceInfo.PropertiesToString()}
-");
-            }
-        });
+        var knownCount = familyInstanceLevelInfos.Count(fi => fi.PrimaryLevelKind != PrimaryLevelKind.Unknown);
+        var unknownCount = familyInstanceLevelInfos.Count(fi => fi.PrimaryLevelKind == PrimaryLevelKind.Unknown);
+        Assert.GreaterOrEqual(knownCount, unknownCount);
+
+        if (familyInstanceCount > 0)
+            Assert.Greater(knownCount, 0);
     }
 }

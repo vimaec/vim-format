@@ -64,41 +64,6 @@ namespace Vim
                 g3d.MeshSubmeshOffset?.ToMeshSubmeshOffsetAttribute()
             );
 
-        /// <summary>
-        /// Returns the world-space bounding box of the element.
-        /// </summary>
-        public static bool TryGetElementWorldSpaceBoundingBox(
-            G3D g3d,
-            int elementIndex,
-            ElementIndexToNodeAndGeometryMap elementIndexToNodeAndGeometryMap,
-            out AABox aabb)
-        {
-            aabb = AABox.Create();
-
-            if (!elementIndexToNodeAndGeometryMap.TryGetValue(elementIndex, out var nodeAndGeometryIndices))
-                return false;
-
-            foreach (var (nodeIndex, geometryIndex) in nodeAndGeometryIndices)
-            {
-                if (nodeIndex < 0 || nodeIndex >= g3d.InstanceTransforms.Count ||
-                    geometryIndex < 0 || geometryIndex >= g3d.Meshes.Count)
-                    continue;
-
-                var vertices = g3d.Meshes[geometryIndex].Vertices;
-                if (vertices == null)
-                    continue;
-                
-                var instanceTransform = g3d.InstanceTransforms[nodeIndex];
-                var worldSpaceVertices = vertices.Transform(instanceTransform);
-
-                var bbWorldSpace = AABox.Create(worldSpaceVertices.ToEnumerable());
-
-                aabb = aabb.Merge(bbWorldSpace);
-            }
-
-            return true;
-        }
-
         private VimScene(SerializableDocument doc)
             => _SerializableDocument = doc;
 
