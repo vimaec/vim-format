@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using CliWrap;
+using NUnit.Framework;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -33,18 +34,20 @@ public static class LevelInfoServiceTests
         var validationTableSet = new EntityTableSet(
             vimFileInfo,
             stringTable,
-            n => n is TableNames.Level or TableNames.Element);
+            n => n is TableNames.Level or TableNames.Element or TableNames.FamilyInstance);
 
         Assert.AreEqual(validationTableSet.LevelTable.RowCount, levelInfos.Length);
         
         var elementInstanceCount = validationTableSet.ElementTable.RowCount;
         Assert.AreEqual(elementInstanceCount, elementLevelInfos.Length);
 
-        var knownCount = elementLevelInfos.Count(fi => fi.PrimaryLevelKind != PrimaryLevelKind.Unknown);
-        var unknownCount = elementLevelInfos.Count(fi => fi.PrimaryLevelKind == PrimaryLevelKind.Unknown);
-        Assert.GreaterOrEqual(knownCount, unknownCount);
+        var familyInstanceElementMap = validationTableSet.ElementIndexMaps.FamilyInstanceIndexFromElementIndex;
 
-        if (elementInstanceCount > 0)
-            Assert.Greater(knownCount, 0);
+        var knownFamilyInstanceCount = elementLevelInfos.Count(eli => familyInstanceElementMap.ContainsKey(eli.GetElementIndexOrNone()) && eli.PrimaryLevelKind != PrimaryLevelKind.Unknown);
+        var unknownFamilyInstanceCount = elementLevelInfos.Count(eli => familyInstanceElementMap.ContainsKey(eli.GetElementIndexOrNone()) && eli.PrimaryLevelKind == PrimaryLevelKind.Unknown);
+        Assert.GreaterOrEqual(knownFamilyInstanceCount, unknownFamilyInstanceCount);
+
+        if (familyInstanceElementMap.Count > 0)
+            Assert.Greater(knownFamilyInstanceCount, 0);
     }
 }
