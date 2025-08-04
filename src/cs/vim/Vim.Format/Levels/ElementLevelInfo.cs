@@ -8,35 +8,35 @@ using Vim.Util;
 
 // ReSharper disable InconsistentNaming
 
-// SOME BACKGROUND INFORMATION ABOUT REVIT LEVELS AND FAMILY INSTANCES
+// SOME BACKGROUND INFORMATION ABOUT REVIT LEVELS AND ELEMENTS
 //
 // by: Martin Ashton, July 29, 2025
 //
-// Family instance elements in Revit are not always directly associated to a level via their Element.Level property.
+// Elements in Revit are not always directly associated to a level via their Element.Level property.
 // In some cases, the element's level must be calculated or inferred. Here is the ordering of calculated level:
 //
 //   1. "Schedule Level"
-//     - Corresponds to the schedule level parameter on a family instance which specifically defines its level.
+//     - Corresponds to the schedule level parameter on an element which specifically defines its level.
 //     - Not always present; the parameter must be explicitly assigned.
 //
 //   2. "Level"
 //     - Corresponds to the Element.Level property.
-//     - Not always present; if family instance (A) is hosted on another family instance (B),
+//     - Not always present; if element (A) is hosted on another element (B),
 //       then (A) will have an empty Element.Level property.
 //
 //   3. "Host Level":
-//     - Corresponds to the host level parameter on a family instance. This parameter may point to either
-//       a Level element or another family instance. In the later case, we infer that the host level is
-//       the level of the host family instance.
-//     - Not always present; the family instance must be hosted on either a level or another instance.
+//     - Corresponds to the host level parameter on an element. This parameter may point to either
+//       a Level element or another element. In the later case, we infer that the host level is
+//       the level of the host element.
+//     - Not always present; the element must be hosted on either a level or another element.
 //
 //   4. "Reference Level"
-//     - Corresponds to the reference level parameter on a family instance.
-//     - Not always present; the family instance must be associated with a reference level.
+//     - Corresponds to the reference level parameter on an element.
+//     - Not always present; the element must be associated with a reference level.
 //
 //   5. "Base Level"
-//     - Corresponds to the base level constraint parameter on a family instance.
-//     - Not always present; the family instance must be constrained.
+//     - Corresponds to the base level constraint parameter on an element.
+//     - Not always present; the element must be constrained.
 //
 // We refer to the "Primary" level as the first non-null level association among the ones listed above.
 
@@ -67,21 +67,21 @@ namespace Vim.Format.Levels
         SpanningBelowAndAbove = 6,  // min < lvlLow < lvlHi < max
     }
 
-    public class FamilyInstanceLevelInfo : IElementIndex
+    public class ElementLevelInfo : IElementIndex
     {
         /// <summary>
-        /// The family instance.
+        /// The element.
         /// </summary>
-        public FamilyInstance FamilyInstance { get; }
+        public Element Element { get; }
 
         /// <summary>
-        /// Returns the element index of the family instance.
+        /// Returns the element index.
         /// </summary>
         public int GetElementIndexOrNone()
-            => FamilyInstance.GetElementIndexOrNone();
+            => Element.IndexOrDefault();
 
         /// <summary>
-        /// The schedule level associated to the family instance's element parameters. Can be null.
+        /// The schedule level associated to the element parameters. Can be null.
         /// </summary>
         public LevelInfo ScheduleLevelInfo { get; }
         //public const string TypeId_ScheduleLevel = "autodesk.revit.parameter:instanceScheduleOnlyLevelParam";
@@ -89,17 +89,17 @@ namespace Vim.Format.Levels
         public static readonly HashSet<string> ScheduleLevelBuiltInIds = new HashSet<string> { BuiltInId_ScheduleLevel };
 
         /// <summary>
-        /// The level associated with the family instance's element. Can be null.
+        /// The level associated with the element. Can be null.
         /// </summary>
         public LevelInfo LevelInfo { get; }
 
         /// <summary>
-        /// The level of the host element (or the level element) if the family instance is hosted. Can be null.
+        /// The level of the host element (or the level element) if the element is hosted. Can be null.
         /// </summary>
         public LevelInfo HostLevelInfo { get; }
 
         /// <summary>
-        /// The level of the reference of the family instance. Can be null.
+        /// The level of the reference of the element. Can be null.
         /// </summary>
         public LevelInfo ReferenceLevelInfo { get; }
 
@@ -158,7 +158,7 @@ namespace Vim.Format.Levels
         };
 
         /// <summary>
-        /// The base level of the family instance if it is constrained. Can be null.
+        /// The base level of the element if it is constrained. Can be null.
         /// </summary>
         public LevelInfo BaseLevelInfo { get; }
 
@@ -204,7 +204,7 @@ namespace Vim.Format.Levels
         };
 
         /// <summary>
-        /// The primary level associated with the family instance. Can be null.
+        /// The primary level associated with the element. Can be null.
         /// </summary>
         public LevelInfo PrimaryLevelInfo
         {
@@ -230,7 +230,7 @@ namespace Vim.Format.Levels
         }
 
         /// <summary>
-        /// The primary level kind associated with the family instance.
+        /// The primary level kind associated with the element.
         /// </summary>
         public PrimaryLevelKind PrimaryLevelKind
         {
@@ -268,26 +268,27 @@ namespace Vim.Format.Levels
         public LevelInfo BuildingStoryCurrentOrBelowPrimaryLevelInfo { get; }
 
         /// <summary>
-        /// The containment type of the family instance's geometry relative to the BuildingStoryAbove and the BuildingStoryCurrentOrBelow.
+        /// The containment type of the element's geometry relative to the BuildingStoryAbove and the BuildingStoryCurrentOrBelow.
         /// </summary>
         public BuildingStoryGeometryContainment BuildingStoryGeometryContainment { get; }
 
         /// <summary>
-        /// The building story immediately below the family instance's geometry minimum z coordinate. Can be null.
+        /// The building story immediately below the element's geometry minimum z coordinate. Can be null.
         /// </summary>
         public LevelInfo BuildingStoryGeometryMinLevelInfo { get; }
 
         /// <summary>
-        /// The building story immediately below the family instance's geometry maximum z coordinate. Can be null.
+        /// The building story immediately below the element's geometry maximum z coordinate. Can be null.
         /// </summary>
         public LevelInfo BuildingStoryGeometryMaxLevelInfo { get; }
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public FamilyInstanceLevelInfo(
-            FamilyInstance fi,
+        public ElementLevelInfo(
+            Element element,
             ElementTable elementTable,
+            FamilyInstanceTable familyInstanceTable,
             LevelTable levelTable,
             ParameterTable parameterTable,
             ElementIndexMaps elementIndexMaps,
@@ -296,25 +297,25 @@ namespace Vim.Format.Levels
             IReadOnlyList<LevelInfo> orderedLevelInfosByProjectElevation,
             IReadOnlyDictionary<long, LevelInfo> elementIdToLevelInfoMap)
         {
-            FamilyInstance = fi;
+            Element = element;
 
-            var familyInstanceElementIndex = GetElementIndexOrNone();
+            var elementIndex = GetElementIndexOrNone();
 
-            // The level index of the family instance's element
-            if (familyInstanceElementIndex != EntityRelation.None)
+            // The level index of the element
+            if (elementIndex != EntityRelation.None)
             {
-                var familyInstanceElementLevelIndex = elementTable.GetLevelIndex(familyInstanceElementIndex);
-                if (familyInstanceElementLevelIndex != EntityRelation.None &&
-                    levelInfoMap.TryGetValue(familyInstanceElementLevelIndex, out var levelInfo))
+                var elementLevelIndex = elementTable.GetLevelIndex(elementIndex);
+                if (elementLevelIndex != EntityRelation.None &&
+                    levelInfoMap.TryGetValue(elementLevelIndex, out var levelInfo))
                 {
                     LevelInfo = levelInfo;
                 }
             }
             
-            if (TryGetHostLevel(fi, elementTable, levelTable, elementIdToLevelInfoMap, out var hostLevelInfo))
+            if (TryGetHostLevel(element, elementTable, familyInstanceTable, levelTable, elementIndexMaps, elementIdToLevelInfoMap, out var hostLevelInfo))
                 HostLevelInfo = hostLevelInfo;
 
-            var paramInfo = elementIndexMaps.GetParameterIndicesFromElementIndex(familyInstanceElementIndex).Select(i =>
+            var paramInfo = elementIndexMaps.GetParameterIndicesFromElementIndex(elementIndex).Select(i =>
             {
                 var p = parameterTable.Get(i);
 
@@ -335,7 +336,7 @@ namespace Vim.Format.Levels
                 BaseLevelInfo = baseLevelInfo;
 
             BuildingStoryGeometryContainment = GetBuildingStoryGeometryContainment(
-                familyInstanceElementIndex,
+                elementIndex,
                 PrimaryLevelInfo?.Level?.ProjectElevation,
                 orderedLevelInfosByProjectElevation,
                 elementGeometryMap,
@@ -351,25 +352,30 @@ namespace Vim.Format.Levels
         }
 
         /// <summary>
-        /// Returns the host level of the family instance.
+        /// Returns the host level of the element.
         /// </summary>
         private static bool TryGetHostLevel(
-            FamilyInstance fi,
+            Element element,
             ElementTable elementTable,
+            FamilyInstanceTable familyInstanceTable,
             LevelTable levelTable,
-            IReadOnlyDictionary<long, LevelInfo> elementIdToLevelMap,
+            ElementIndexMaps elementIndexMaps,
+            IReadOnlyDictionary<long, LevelInfo> elementIdToLevelInfoMap,
             out LevelInfo hostLevelInfo)
         {
             hostLevelInfo = null;
 
-            var hostElementIndex = fi._Host?.Index ?? EntityRelation.None;
+            if (!elementIndexMaps.FamilyInstanceIndexFromElementIndex.TryGetValue(element.Index, out var familyInstanceIndex))
+                return false;
+
+            var hostElementIndex = familyInstanceTable.GetHostIndex(familyInstanceIndex);
             if (hostElementIndex == EntityRelation.None)
                 return false;
 
             var hostElementId = elementTable.GetId(hostElementIndex);
 
             // If the host element is a level, use it.
-            if (elementIdToLevelMap.TryGetEntityFromElementId(hostElementId, out hostLevelInfo))
+            if (elementIdToLevelInfoMap.TryGetEntityFromElementId(hostElementId, out hostLevelInfo))
                 return true;
 
             // If the host element is just a regular instance, then return the host element's level.
@@ -383,7 +389,7 @@ namespace Vim.Format.Levels
 
             var hostElementLevelElementId = elementTable.GetId(hostElementLevelElementIndex);
 
-            return elementIdToLevelMap.TryGetEntityFromElementId(hostElementLevelElementId, out hostLevelInfo);
+            return elementIdToLevelInfoMap.TryGetEntityFromElementId(hostElementLevelElementId, out hostLevelInfo);
         }
 
         /// <summary>

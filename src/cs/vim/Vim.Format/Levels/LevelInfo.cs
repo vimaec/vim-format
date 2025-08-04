@@ -33,7 +33,7 @@ namespace Vim.Format.Levels
         //   - When the level is not a building story, it can be a working plane used by the designer to align things
         //     like mechanical items in the ceiling, stair systems, etc.
         //
-        // ... other relevant notes in FamilyInstanceLevelInfo.cs ...
+        // ... other relevant notes in ElementLevelInfo.cs ...
 
         /// <summary>
         /// The Level.

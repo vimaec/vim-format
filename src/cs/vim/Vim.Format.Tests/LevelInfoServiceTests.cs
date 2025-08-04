@@ -28,23 +28,23 @@ public static class LevelInfoServiceTests
 
         var stringTable = vimFileInfo.GetStringTable();
 
-        var (levelInfos, familyInstanceLevelInfos) = LevelInfoService.GetLevelInfos(vimFileInfo, stringTable);
+        var (levelInfos, elementLevelInfos) = LevelInfoService.GetLevelInfos(vimFileInfo, stringTable);
 
         var validationTableSet = new EntityTableSet(
             vimFileInfo,
             stringTable,
-            n => n is TableNames.Level or TableNames.FamilyInstance);
+            n => n is TableNames.Level or TableNames.Element);
 
         Assert.AreEqual(validationTableSet.LevelTable.RowCount, levelInfos.Length);
         
-        var familyInstanceCount = validationTableSet.FamilyInstanceTable.RowCount;
-        Assert.AreEqual(familyInstanceCount, familyInstanceLevelInfos.Length);
+        var elementInstanceCount = validationTableSet.ElementTable.RowCount;
+        Assert.AreEqual(elementInstanceCount, elementLevelInfos.Length);
 
-        var knownCount = familyInstanceLevelInfos.Count(fi => fi.PrimaryLevelKind != PrimaryLevelKind.Unknown);
-        var unknownCount = familyInstanceLevelInfos.Count(fi => fi.PrimaryLevelKind == PrimaryLevelKind.Unknown);
+        var knownCount = elementLevelInfos.Count(fi => fi.PrimaryLevelKind != PrimaryLevelKind.Unknown);
+        var unknownCount = elementLevelInfos.Count(fi => fi.PrimaryLevelKind == PrimaryLevelKind.Unknown);
         Assert.GreaterOrEqual(knownCount, unknownCount);
 
-        if (familyInstanceCount > 0)
+        if (elementInstanceCount > 0)
             Assert.Greater(knownCount, 0);
     }
 }
