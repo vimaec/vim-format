@@ -259,13 +259,13 @@ namespace Vim.Format.Levels
         /// The building story above the primary level.
         /// Null if the primary level is null.
         /// </summary>
-        public LevelInfo BuildingStoryAbovePrimaryLevel { get; }
+        public LevelInfo BuildingStoryAbovePrimaryLevelInfo { get; }
 
         /// <summary>
         /// The building story below the primary level if the primary level is not a building story, or the primary level if it is a building story.
         /// Null if the primary level is null.
         /// </summary>
-        public LevelInfo BuildingStoryCurrentOrBelowPrimaryLevel { get; }
+        public LevelInfo BuildingStoryCurrentOrBelowPrimaryLevelInfo { get; }
 
         /// <summary>
         /// The containment type of the family instance's geometry relative to the BuildingStoryAbove and the BuildingStoryCurrentOrBelow.
@@ -275,12 +275,12 @@ namespace Vim.Format.Levels
         /// <summary>
         /// The building story immediately below the family instance's geometry minimum z coordinate. Can be null.
         /// </summary>
-        public LevelInfo BuildingStoryGeometryMin { get; }
+        public LevelInfo BuildingStoryGeometryMinLevelInfo { get; }
 
         /// <summary>
         /// The building story immediately below the family instance's geometry maximum z coordinate. Can be null.
         /// </summary>
-        public LevelInfo BuildingStoryGeometryMax { get; }
+        public LevelInfo BuildingStoryGeometryMaxLevelInfo { get; }
 
         /// <summary>
         /// Constructor
@@ -344,10 +344,10 @@ namespace Vim.Format.Levels
                 out var maybeBuildingStoryGeometryMin,
                 out var maybeBuildingStoryGeometryMax);
 
-            BuildingStoryAbovePrimaryLevel = maybeBuildingStoryAbove;
-            BuildingStoryCurrentOrBelowPrimaryLevel = maybeBuildingStoryCurrentOrBelow;
-            BuildingStoryGeometryMin = maybeBuildingStoryGeometryMin;
-            BuildingStoryGeometryMax = maybeBuildingStoryGeometryMax;
+            BuildingStoryAbovePrimaryLevelInfo = maybeBuildingStoryAbove;
+            BuildingStoryCurrentOrBelowPrimaryLevelInfo = maybeBuildingStoryCurrentOrBelow;
+            BuildingStoryGeometryMinLevelInfo = maybeBuildingStoryGeometryMin;
+            BuildingStoryGeometryMaxLevelInfo = maybeBuildingStoryGeometryMax;
         }
 
         /// <summary>

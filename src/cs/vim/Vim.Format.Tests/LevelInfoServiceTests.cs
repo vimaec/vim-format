@@ -10,12 +10,12 @@ using Vim.Util.Tests;
 namespace Vim.Format.Tests;
 
 [TestFixture]
-public static class LevelServiceTests
+public static class LevelInfoServiceTests
 {
     public static IEnumerable<string> TestVimFilePaths => TestFiles.VimFilePaths;
 
     [TestCaseSource(nameof(TestVimFilePaths))]
-    public static void TestLevelInfoDoesNotThrow(string vimFilePath)
+    public static void TestLevelInfoService(string vimFilePath)
     {
         var fileName = Path.GetFileName(vimFilePath);
         var ctx = new CallerTestContext(subDirComponents: fileName);
@@ -28,9 +28,7 @@ public static class LevelServiceTests
 
         var stringTable = vimFileInfo.GetStringTable();
 
-        var levelService = new LevelInfoService(vimFileInfo, stringTable);
-
-        var (levelInfos, familyInstanceLevelInfos) = levelService.GetLevelInfos();
+        var (levelInfos, familyInstanceLevelInfos) = LevelInfoService.GetLevelInfos(vimFileInfo, stringTable);
 
         var validationTableSet = new EntityTableSet(
             vimFileInfo,

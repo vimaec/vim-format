@@ -7,21 +7,19 @@ using Vim.Util;
 
 namespace Vim.Format.Levels
 {
-    public class LevelInfoService
+    public static class LevelInfoService
     {
-        private ElementGeometryMap ElementGeometryMap { get; }
-
-        private EntityTableSet TableSet { get; }
-
         /// <summary>
-        /// Constructor
+        /// Returns an array of LevelInfo objects representing harmonized information about the levels in the given VIM Scene (see comment in LevelInfo.cs)
         /// </summary>
-        public LevelInfoService(
+        public static (LevelInfo[], FamilyInstanceLevelInfo[]) GetLevelInfos(
             FileInfo vimFileInfo,
             string[] stringTable = null,
             ElementGeometryMap elementGeometryMap = null)
         {
-            TableSet = new EntityTableSet(
+            elementGeometryMap = elementGeometryMap ?? new ElementGeometryMap(vimFileInfo);
+
+            var tableSet = new EntityTableSet(
                 vimFileInfo,
                 stringTable,
                 n =>
@@ -33,21 +31,13 @@ namespace Vim.Format.Levels
                     n is TableNames.BasePoint ||
                     n is TableNames.ParameterDescriptor);
 
-            ElementGeometryMap = elementGeometryMap ?? new ElementGeometryMap(vimFileInfo);
-        }
-
-        /// <summary>
-        /// Returns an array of LevelInfo objects representing harmonized information about the levels in the given VIM Scene (see comment in LevelInfo.cs)
-        /// </summary>
-        public (LevelInfo[], FamilyInstanceLevelInfo[]) GetLevelInfos()
-        {
-            var elementIndexMaps = TableSet.ElementIndexMaps;
-            var elementTable = TableSet.ElementTable;
-            var parameterTable = TableSet.ParameterTable;
-            var familyInstanceTable = TableSet.FamilyInstanceTable;
-            var familyTypeTable = TableSet.FamilyTypeTable;
-            var basePointTable = TableSet.BasePointTable;
-            var levelTable = TableSet.LevelTable;
+            var elementIndexMaps = tableSet.ElementIndexMaps;
+            var elementTable = tableSet.ElementTable;
+            var parameterTable = tableSet.ParameterTable;
+            var familyInstanceTable = tableSet.FamilyInstanceTable;
+            var familyTypeTable = tableSet.FamilyTypeTable;
+            var basePointTable = tableSet.BasePointTable;
+            var levelTable = tableSet.LevelTable;
 
             var levels = levelTable.ToArray();
             var levelsByBimDocumentIndexAndElementId = levels.GroupByBimDocumentIndexAndElementId(elementTable);
@@ -63,6 +53,7 @@ namespace Vim.Format.Levels
                 basePointsByBimDocumentIndexAndElementId);
 
             var levelInfoByBimDocumentIndex = levelInfos.GroupByBimDocumentIndexAndElementId(elementTable);
+
             var levelInfoMap = levelInfos.ToDictionaryIgnoreDuplicates(li => li.Level.Index, li => li);
 
             PatchBuildingStoryAbove(levelInfoByBimDocumentIndex);
@@ -73,7 +64,7 @@ namespace Vim.Format.Levels
                 levelTable,
                 parameterTable,
                 elementIndexMaps,
-                ElementGeometryMap,
+                elementGeometryMap,
                 levelInfoMap,
                 levelInfoByBimDocumentIndex);
 
@@ -91,8 +82,7 @@ namespace Vim.Format.Levels
             ElementIndexMaps elementIndexMaps,
             IReadOnlyDictionary<int, Dictionary<long, Level>> levelsByBimDocumentIndexAndElementId,
             IReadOnlyDictionary<int, Dictionary<long, BasePoint>> basePointsByBimDocumentIndexAndElementId)
-        {
-            return levels
+            => levels
                 .AsParallel()
                 .Select(level =>
                 {
@@ -113,7 +103,6 @@ namespace Vim.Format.Levels
                         elementIdToBasePointMap);
                 })
                 .ToArray();
-        }
 
         /// <summary>
         /// Populates the LevelInfo.BuildingStoryAbove property if it is null.
