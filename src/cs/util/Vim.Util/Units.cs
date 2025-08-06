@@ -8,20 +8,43 @@ namespace Vim.Util
     public static class Units
     {
         public const double MetersToFeetRatio = 3.280839895d;
-
         public const double FeetToMetersRatio = 1.0d / MetersToFeetRatio;
 
-        public static double? FeetToMeters(double? feet, int digitRounding = -1)
+        public const double SquareMetersToSquareFeetRatio = 10.7639d;
+        public const double SquareFeetToSquareMetersRatio = 1.0d / SquareMetersToSquareFeetRatio;
+
+        public const double CubicMetersToCubicFeetRatio = 35.3147d;
+        public const double CubicFeetToCubicMetersRatio = 1.0d / CubicMetersToCubicFeetRatio;
+
+        public const double RadiansToDegreesRatio = 180d / Math.PI;
+        public const double DegreesToRadiansRatio = 1.0d / RadiansToDegreesRatio;
+
+        public static double? ConvertMeasure(double? source, double sourceToDestinationRatio, int digitRounding = -1)
         {
-            if (feet == null)
+            if (source == null)
                 return null;
 
-            var meters = FeetToMetersRatio * feet.Value;
+            var destination = sourceToDestinationRatio * source.Value;
 
             return digitRounding < 0
-                ? meters
-                : Math.Round(meters, digitRounding);
+                ? destination
+                : Math.Round(destination, digitRounding);
         }
+
+        public static double? FeetToMeters(double? feet, int digitRounding = -1)
+            => ConvertMeasure(feet, FeetToMetersRatio, digitRounding);
+
+        public static double? SquareFeetToSquareMeters(double? squareFeet, int digitRounding = -1)
+            => ConvertMeasure(squareFeet, SquareFeetToSquareMetersRatio, digitRounding);
+
+        public static double? CubicFeetToCubicMeters(double? cubicFeet, int digitRounding = -1)
+            => ConvertMeasure(cubicFeet, CubicFeetToCubicMetersRatio, digitRounding);
+
+        public static double? RadiansToDegrees(double? radians, int digitRounding = -1)
+            => ConvertMeasure(radians, RadiansToDegreesRatio, digitRounding);
+
+        public static double? DegreesToRadians(double? degrees, int digitRounding = -1)
+            => ConvertMeasure(degrees, DegreesToRadiansRatio, digitRounding);
 
         public static string ToFeetAndFractionalInchesString(
             double? feet,

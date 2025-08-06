@@ -6,7 +6,7 @@ using Vim.Util;
 
 // ReSharper disable InconsistentNaming
 
-namespace Vim.Format.Levels
+namespace Vim.Format.ElementParameterInfo
 {
     public class LevelInfo : IElementIndex
     {
@@ -241,19 +241,19 @@ namespace Vim.Format.Levels
                 var desc = p.ParameterDescriptor;
 
                 if (DescriptorIsStructural(desc) &&
-                    p.TryParseRevitParameterValueAsBoolean(desc, out var isStructural))
+                    p.TryParseNativeValueAsBoolean(desc, out var isStructural))
                 {
                     IsStructural = isStructural;
                 }
                 else if (
                     DescriptorIsBuildingStory(desc) &&
-                    p.TryParseRevitParameterValueAsBoolean(desc, out var isBuildingStory))
+                    p.TryParseNativeValueAsBoolean(desc, out var isBuildingStory))
                 {
                     IsBuildingStory = isBuildingStory;
                 }
                 else if (
                     DescriptorIsBuildingStoryAbove(desc) &&
-                    p.TryParseRevitParameterValueAsElementId(out var storyAboveElementId) &&
+                    p.TryParseNativeValueAsElementId(out var storyAboveElementId) &&
                     elementIdToLevelMap.TryGetEntityFromElementId(storyAboveElementId, out var buildingStoryAbove))
                 {
                     // If the building story above has an element ID of -1, then it could be set to "Default" in Revit,
@@ -283,7 +283,7 @@ namespace Vim.Format.Levels
                 var desc = p.ParameterDescriptor;
 
                 if (DescriptorIsProjectBasePoint(desc) &&
-                    p.TryParseRevitParameterAsLong(out var relativeToProjectBasePoint))
+                    p.TryParseNativeValueAsLong(out var relativeToProjectBasePoint))
                 {
                     IsRelativeToProjectBasePoint = relativeToProjectBasePoint == 0L; // 0L == "Project Base Point", 1L == "Survey Point"
                 }

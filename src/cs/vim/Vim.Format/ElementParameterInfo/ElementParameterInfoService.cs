@@ -5,14 +5,17 @@ using System.Linq;
 using Vim.Format.ObjectModel;
 using Vim.Util;
 
-namespace Vim.Format.Levels
+namespace Vim.Format.ElementParameterInfo
 {
-    public static class LevelInfoService
+    public static class ElementParameterInfoService
     {
         /// <summary>
-        /// Returns an array of LevelInfo objects representing harmonized information about the levels in the given VIM Scene (see comment in LevelInfo.cs)
+        /// Returns:
+        /// - an array of LevelInfo objects representing harmonized information about the levels in the given VIM Scene (see comment in LevelInfo.cs)
+        /// - an array of ElementLevelInfo objects representing detailed information of element level associations.
+        /// - an array of ElementMeasureInfo objects representing information about element measures (angle/slope, length, width, height, area, volume)
         /// </summary>
-        public static (LevelInfo[], ElementLevelInfo[]) GetLevelInfos(
+        public static (LevelInfo[], ElementLevelInfo[], ElementMeasureInfo[]) GetElementParameterInfos(
             FileInfo vimFileInfo,
             string[] stringTable = null,
             ElementGeometryMap elementGeometryMap = null)
@@ -58,15 +61,19 @@ namespace Vim.Format.Levels
 
             PatchBuildingStoryAbove(levelInfoByBimDocumentIndex);
 
-            var elementLevelInfos = CreateElementLevelInfos(elementTable,
+            var elementLevelInfos = CreateElementLevelInfos(
+                elementTable,
                 familyInstanceTable,
                 parameterTable,
                 levelTable,
                 elementIndexMaps,
                 elementGeometryMap,
-                levelInfoMap, levelInfoByBimDocumentIndex);
+                levelInfoMap,
+                levelInfoByBimDocumentIndex);
 
-            return (levelInfos, elementLevelInfos);
+            var elementQuantityInfos = CreateElementQuantityInfos(elementTable, parameterTable, elementIndexMaps);
+
+            return (levelInfos, elementLevelInfos, elementQuantityInfos);
         }
 
         /// <summary>
@@ -166,5 +173,14 @@ namespace Vim.Format.Levels
                 })
                 .ToArray();
         }
+
+        private static ElementMeasureInfo[] CreateElementQuantityInfos(
+            ElementTable elementTable,
+            ParameterTable parameterTable,
+            ElementIndexMaps elementIndexMaps)
+            => elementTable
+                .AsParallel()
+                .Select(e => new ElementMeasureInfo(e, parameterTable, elementIndexMaps))
+                .ToArray();
     }
 }

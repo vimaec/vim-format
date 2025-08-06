@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using Vim.Format.ObjectModel;
 using Vim.Math3d;
 using Vim.Util;
@@ -40,7 +39,7 @@ using Vim.Util;
 //
 // We refer to the "Primary" level as the first non-null level association among the ones listed above.
 
-namespace Vim.Format.Levels
+namespace Vim.Format.ElementParameterInfo
 {
     public enum PrimaryLevelKind
     {
@@ -103,58 +102,18 @@ namespace Vim.Format.Levels
         /// </summary>
         public LevelInfo ReferenceLevelInfo { get; }
 
-        // NOTE 1: the BuiltInId_ values are correlated to the parameters named "Reference Level" in the BuiltInParameter enumerations https://www.revitapidocs.com/2025/fb011c91-be7e-f737-28c7-3f1e1917a0e0.htm
-        // NOTE 2: The TypeId_ values are kept here for reference - they were added in Revit 2022 and beyond, however to keep comparisons simple, we just use the built-in IDs which Revit continues to use internally.
-        //         These TypeId values were obtained by exporting a VIM file after building Vim.Revit.Core with <DefineConstants>$(DefineConstants);COLLECT_ALL_PARAMETER_TYPE_IDS</DefineConstants>,
-        //         which writes all the built-in parameter ForgeTypeIds into the log file.
-
-        // "Reference Level" for instances
-        //public const string TypeId_InstanceReferenceLevel = "autodesk.revit.parameter:instanceReferenceLevelParam";
-        public const string BuiltInId_InstanceReferenceLevel = "-1001383";
-
-        // "Reference Level" for roof constraints
-        //public const string TypeId_RoofConstraintLevel = "autodesk.revit.parameter:roofConstraintLevelParam";
-        public const string BuiltInId_RoofConstraintLevel = "-1001651";
-
-        // "Reference Level" for faceroof (???)
-        //public const string TypeId_FaceRoofLevel = "autodesk.revit.parameter:faceroofLevelParam";
-        public const string BuiltInId_FaceRoofLevel = "-1001715";
-
-        // "Reference Level" for rbs (???)
-        //public const string TypeId_RbsStartLevel = "autodesk.revit.parameter:rbsStartLevelParam";
-        public const string BuiltInId_RbsStartLevel = "-1114000";
-
-        // "Reference Level" for space (???)
-        //public const string TypeId_SpaceReferenceLevel = "autodesk.revit.parameter:spaceReferenceLevelParam";
-        public const string BuiltInId_SpaceReferenceLevel = "-1114817";
-
-        // "Reference Level" for group
-        //public const string TypeId_GroupLevel = "autodesk.revit.parameter:groupLevel";
-        public const string BuiltInId_GroupLevel = "-1133500";
-
-        // "Reference Level" for truss
-        //public const string TypeId_TrussLevel = "autodesk.revit.parameter:trussElementReferenceLevelParam";
-        public const string BuiltInId_TrussLevel = "-1140709";
-
-        // "Reference Level" for fabrication
-        //public const string TypeId_FabricationLevel = "autodesk.revit.parameter:fabricationLevelParam";
-        public const string BuiltInId_FabricationLevel = "-1140916";
-
-        // "Reference Level" for multistory stairs
-        //public const string TypeId_MultiStoryStairLevel = "autodesk.revit.parameter:multistoryStairsRefLevel";
-        public const string BuiltInId_MultiStoryStairLevel = "-1154630";
-
+        // NOTE: the values are correlated to the parameters named "Reference Level" in the BuiltInParameter enumerations https://www.revitapidocs.com/2025/fb011c91-be7e-f737-28c7-3f1e1917a0e0.htm
         public static readonly HashSet<string> ReferenceLevelBuiltInIds = new HashSet<string>
         {
-            BuiltInId_InstanceReferenceLevel,
-            BuiltInId_RoofConstraintLevel,
-            BuiltInId_FaceRoofLevel,
-            BuiltInId_RbsStartLevel,
-            BuiltInId_SpaceReferenceLevel,
-            BuiltInId_GroupLevel,
-            BuiltInId_TrussLevel,
-            BuiltInId_FabricationLevel,
-            BuiltInId_MultiStoryStairLevel
+            "-1001383", // InstanceReferenceLevel,
+            "-1001651", // RoofConstraintLevel,
+            "-1001715", // FaceRoofLevel,
+            "-1114000", // RbsStartLevel,
+            "-1114817", // SpaceReferenceLevel,
+            "-1133500", // GroupLevel,
+            "-1140709", // TrussLevel
+            "-1140916", // FabricationLevel,
+            "-1154630", // MultiStoryStairLevel
         };
 
         /// <summary>
@@ -162,45 +121,16 @@ namespace Vim.Format.Levels
         /// </summary>
         public LevelInfo BaseLevelInfo { get; }
 
-        // NOTE : the BuiltInId_ values are correlated to the parameters named "Base Level" in the BuiltInParameter enumerations https://www.revitapidocs.com/2025/fb011c91-be7e-f737-28c7-3f1e1917a0e0.htm
-
-        // "Base Level" for roof
-        //public const string TypeId_RoofBaseLevel = "autodesk.revit.parameter:roofBaseLevelParam";
-        public const string BuiltInId_RoofBaseLevel = "-1001708";
-
-        // "Base Level" for schedule
-        //public const string TypeId_ScheduleBaseLevel = "autodesk.revit.parameter:scheduleBaseLevelParam";
-        public const string BuiltInId_ScheduleBaseLevel = "-1002063";
-
-        // "Base Level" for stairs
-        //public const string TypeId_StairsBaseLevelParam = "autodesk.revit.parameter:stairsBaseLevelParam";
-        public const string BuiltInId_StairsBaseLevelParam = "-1007200";
-
-        // "Base Level" for stairs (another?)
-        //public const string TypeId_StairsBaseLevel = "autodesk.revit.parameter:stairsBaseLevel";
-        public const string BuiltInId_StairsBaseLevel = "-1151101";
-
-        // "Base Level" for stair railing
-        //public const string TypeId_StairsRailingBaseLevel = "autodesk.revit.parameter:stairsRailingBaseLevelParam";
-        public const string BuiltInId_StairsRailingBaseLevel = "-1008620";
-
-        // "Base Level" for dpart (???)
-        //public const string TypeId_DpartBaseLevel = "autodesk.revit.parameter:dpartBaseLevel";
-        public const string BuiltInId_DpartBaseLevel = "-1152335";
-
-        // "Base Level" for dpart (??? DPART_BASE_LEVEL_BY_ORIGINAL ???)
-        //public const string TypeId_DpartBaseLevelByOriginal = "autodesk.revit.parameter:dpartBaseLevelByOriginal";
-        public const string BuiltInId_DpartBaseLevelByOriginal = "-1152336";
-
+        // NOTE: the values are correlated to the parameters named "Base Level" in the BuiltInParameter enumerations https://www.revitapidocs.com/2025/fb011c91-be7e-f737-28c7-3f1e1917a0e0.htm
         public static readonly HashSet<string> BaseLevelBuiltInIds = new HashSet<string>
         {
-            BuiltInId_RoofBaseLevel,
-            BuiltInId_ScheduleBaseLevel,
-            BuiltInId_StairsBaseLevelParam,
-            BuiltInId_StairsBaseLevel,
-            BuiltInId_StairsRailingBaseLevel,
-            BuiltInId_DpartBaseLevel,
-            BuiltInId_DpartBaseLevelByOriginal
+            "-1001708", // RoofBaseLevel,
+            "-1002063", // ScheduleBaseLevel,
+            "-1007200", // StairsBaseLevelParam,
+            "-1151101", // StairsBaseLevel,
+            "-1008620", // StairsRailingBaseLevel,
+            "-1152335", // DpartBaseLevel,
+            "-1152336", // DpartBaseLevelByOriginal
         };
 
         /// <summary>
@@ -315,25 +245,35 @@ namespace Vim.Format.Levels
             if (TryGetHostLevel(element, elementTable, familyInstanceTable, levelTable, elementIndexMaps, elementIdToLevelInfoMap, out var hostLevelInfo))
                 HostLevelInfo = hostLevelInfo;
 
-            var paramInfo = elementIndexMaps.GetParameterIndicesFromElementIndex(elementIndex).Select(i =>
+            var elementParameterIndices = elementIndexMaps.GetParameterIndicesFromElementIndex(elementIndex);
+            foreach (var parameterIndex in elementParameterIndices)
             {
-                var p = parameterTable.Get(i);
+                var p = parameterTable.Get(parameterIndex);
+                var (nativeValue, _) = p.Values;
+                var d = p.ParameterDescriptor;
 
-                // NOTE 1: we cache the ParameterDescriptor's Guid here to avoid having to re-instantiate the ParameterDescriptor object every time we access p.ParameterDescriptor
-                // NOTE 2: Guid is either the built-in ID (if the parameter is built-in), or a guid (if the parameter is shared).
-                var builtInId = p.ParameterDescriptor.Guid; 
+                // NOTE: Guid is either the built-in ID (if the parameter is built-in), or a guid (if the parameter is shared).
+                var paramNameLowerInvariant = d.Name.ToLowerInvariant();
+                var builtInId = d.Guid;
 
-                return (p, builtInId);
-            }).ToArray();
-
-            if (TryGetLevelParameter(paramInfo, ScheduleLevelBuiltInIds, elementIdToLevelInfoMap, out var scheduleLevelInfo))
-                ScheduleLevelInfo = scheduleLevelInfo;
-
-            if (TryGetLevelParameter(paramInfo, ReferenceLevelBuiltInIds, elementIdToLevelInfoMap, out var referenceLevelInfo))
-                ReferenceLevelInfo = referenceLevelInfo;
-
-            if (TryGetLevelParameter(paramInfo, BaseLevelBuiltInIds, elementIdToLevelInfoMap, out var baseLevelInfo))
-                BaseLevelInfo = baseLevelInfo;
+                if (ScheduleLevelInfo == null &&
+                    TryGetLevelInfoFromParameter(nativeValue, builtInId, paramNameLowerInvariant, "schedule level", ScheduleLevelBuiltInIds, elementIdToLevelInfoMap, out var scheduleLevelInfo))
+                {
+                    ScheduleLevelInfo = scheduleLevelInfo;
+                }
+                else if (
+                    ReferenceLevelInfo == null &&
+                    TryGetLevelInfoFromParameter(nativeValue, builtInId, paramNameLowerInvariant, "reference level", ReferenceLevelBuiltInIds, elementIdToLevelInfoMap, out var referenceLevelInfo))
+                {
+                    ReferenceLevelInfo = referenceLevelInfo;
+                }
+                else if (
+                    BaseLevelInfo == null &&
+                    TryGetLevelInfoFromParameter(nativeValue, builtInId, paramNameLowerInvariant, "base level", BaseLevelBuiltInIds, elementIdToLevelInfoMap, out var baseLevelInfo))
+                {
+                    BaseLevelInfo = baseLevelInfo;
+                }
+            }
 
             BuildingStoryGeometryContainment = GetBuildingStoryGeometryContainment(
                 elementIndex,
@@ -393,26 +333,23 @@ namespace Vim.Format.Levels
         }
 
         /// <summary>
-        /// Returns a level based on the given built-in parameter id set, if present.
+        /// Returns a level info based on the given built-in parameter id set, if present.
         /// </summary>
-        private static bool TryGetLevelParameter(
-            (Parameter, string)[] paramInfo,
+        private static bool TryGetLevelInfoFromParameter(
+            string nativeValue,
+            string builtInId,
+            string paramNameLowerInvariant,
+            string expectedParamNameLowerInvariant,
             HashSet<string> builtInIds,
             IReadOnlyDictionary<long, LevelInfo> elementIdToLevelInfoMap,
             out LevelInfo levelInfo)
         {
             levelInfo = null;
 
-            foreach (var (p, builtInId) in paramInfo)
+            if (paramNameLowerInvariant.Equals(expectedParamNameLowerInvariant) || builtInIds.Contains(builtInId))
             {
-                if (!builtInIds.Contains(builtInId))
-                    continue;
-
-                if (p.TryParseRevitParameterValueAsElementId(out var levelElementId) &&
-                    elementIdToLevelInfoMap.TryGetEntityFromElementId(levelElementId, out levelInfo))
-                {
-                    return true;
-                }
+                return Parameter.TryParseNativeValueAsElementId(nativeValue, out var levelElementId) &&
+                       elementIdToLevelInfoMap.TryGetEntityFromElementId(levelElementId, out levelInfo);
             }
 
             return false;

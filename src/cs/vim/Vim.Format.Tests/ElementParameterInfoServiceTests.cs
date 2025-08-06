@@ -1,9 +1,8 @@
-﻿using CliWrap;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Vim.Format.Levels;
+using Vim.Format.ElementParameterInfo;
 using Vim.Format.ObjectModel;
 using Vim.Util.Logging;
 using Vim.Util.Tests;
@@ -11,7 +10,7 @@ using Vim.Util.Tests;
 namespace Vim.Format.Tests;
 
 [TestFixture]
-public static class LevelInfoServiceTests
+public static class ElementParameterInfoServiceTests
 {
     public static IEnumerable<string> TestVimFilePaths => TestFiles.VimFilePaths;
 
@@ -29,7 +28,7 @@ public static class LevelInfoServiceTests
 
         var stringTable = vimFileInfo.GetStringTable();
 
-        var (levelInfos, elementLevelInfos) = LevelInfoService.GetLevelInfos(vimFileInfo, stringTable);
+        var (levelInfos, elementLevelInfos, elementMeasureInfos) = ElementParameterInfoService.GetElementParameterInfos(vimFileInfo, stringTable);
 
         var validationTableSet = new EntityTableSet(
             vimFileInfo,
@@ -37,9 +36,10 @@ public static class LevelInfoServiceTests
             n => n is TableNames.Level or TableNames.Element or TableNames.FamilyInstance);
 
         Assert.AreEqual(validationTableSet.LevelTable.RowCount, levelInfos.Length);
-        
+
         var elementInstanceCount = validationTableSet.ElementTable.RowCount;
         Assert.AreEqual(elementInstanceCount, elementLevelInfos.Length);
+        Assert.AreEqual(elementInstanceCount, elementMeasureInfos.Length);
 
         var familyInstanceElementMap = validationTableSet.ElementIndexMaps.FamilyInstanceIndexFromElementIndex;
 

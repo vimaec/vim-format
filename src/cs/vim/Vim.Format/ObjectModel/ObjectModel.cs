@@ -528,19 +528,27 @@ namespace Vim.Format.ObjectModel
             return (values[0], values[1]);
         }
 
-        public bool TryParseRevitParameterAsDouble(out double result)
-            => double.TryParse(Values.NativeValue, out result);
+        public static bool TryParseNativeValueAsDouble(string nativeValue, out double result)
+            => double.TryParse(nativeValue, out result);
 
-        public bool TryParseRevitParameterAsLong(out long result)
-            => long.TryParse(Values.NativeValue, out result);
+        public bool TryParseNativeValueAsDouble(out double result)
+            => TryParseNativeValueAsDouble(Values.NativeValue, out result);
 
-        public bool TryParseRevitParameterValueAsElementId(out long result)
-            => TryParseRevitParameterAsLong(out result);
+        public static bool TryParseNativeValueAsLong(string nativeValue, out long result)
+            => long.TryParse(nativeValue, out result);
 
-        public bool TryParseRevitParameterValueAsBoolean(ParameterDescriptor desc, out bool result)
+        public bool TryParseNativeValueAsLong(out long result)
+            => TryParseNativeValueAsLong(Values.NativeValue, out result);
+
+        public static bool TryParseNativeValueAsElementId(string nativeValue, out long result)
+            => TryParseNativeValueAsLong(nativeValue, out result);
+
+        public bool TryParseNativeValueAsElementId(out long result)
+            => TryParseNativeValueAsLong(out result);
+
+        public static bool TryParseNativeValueAsBoolean(string nativeValue, ParameterDescriptor desc, out bool result)
         {
             result = false;
-            var nativeValue = Values.NativeValue;
 
             switch ((ParameterDescriptorStorageType)desc.StorageType)
             {
@@ -571,6 +579,9 @@ namespace Vim.Format.ObjectModel
                     return bool.TryParse(nativeValue, out result);
             }
         }
+
+        public bool TryParseNativeValueAsBoolean(ParameterDescriptor desc, out bool result)
+            => TryParseNativeValueAsBoolean(Values.NativeValue, desc, out result);
     }
 
     /// <summary>
