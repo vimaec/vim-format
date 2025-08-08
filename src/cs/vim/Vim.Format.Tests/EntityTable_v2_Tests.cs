@@ -1,4 +1,5 @@
 ﻿using NUnit.Framework;
+using System;
 using System.IO;
 using System.Linq;
 using Vim.Format.ObjectModel;
@@ -55,5 +56,40 @@ public static class EntityTable_v2_Tests
             Assert.AreEqual(@base._BimDocument.Index, next._BimDocument.Index);
             Assert.AreEqual(@base._Room.Index, next._Room.Index);
         }
+    }
+
+    [Test]
+    public static void TestElementTableKinds()
+    {
+        var fileInfo = new FileInfo(VimFormatRepoPaths.GetDataFilePath("Dwelling*.vim", true));
+
+        Console.WriteLine($"Loading {fileInfo.FullName}");
+
+        var elementKinds = EntityTableSet.GetElementKinds(fileInfo);
+
+        var ets = new EntityTableSet(fileInfo);
+
+        Assert.IsNotEmpty(elementKinds);
+        Assert.AreEqual(ets.ElementTable.RowCount, elementKinds.Length);
+        
+        var familyInstanceCount = elementKinds.Count(e => e == ElementKind.FamilyInstance);
+        Assert.Greater(familyInstanceCount, 0);
+
+        // Family instances can also be considered as groups or systems when converting from Revit
+        Assert.IsTrue(ets.FamilyInstanceTable.Column_ElementIndex.All(ei =>
+            ei == EntityRelation.None ||
+            elementKinds[ei] == ElementKind.FamilyInstance ||
+            elementKinds[ei] == ElementKind.Group ||
+            elementKinds[ei] == ElementKind.System));
+
+        var familyTypeCount = elementKinds.Count(e => e == ElementKind.FamilyType);
+        Assert.Greater(familyTypeCount, 0);
+        Assert.AreEqual(ets.FamilyTypeTable.Column_ElementIndex.Distinct().Count(ei => ei != EntityRelation.None), familyTypeCount);
+        Assert.IsTrue(ets.FamilyTypeTable.Column_ElementIndex.All(ei => ei == EntityRelation.None || elementKinds[ei] == ElementKind.FamilyType));
+
+        var familyCount = elementKinds.Count(e => e == ElementKind.Family);
+        Assert.Greater(familyCount, 0);
+        Assert.AreEqual(ets.FamilyTable.Column_ElementIndex.Distinct().Count(ei => ei != EntityRelation.None), familyCount);
+        Assert.IsTrue(ets.FamilyTable.Column_ElementIndex.All(ei => ei == EntityRelation.None || elementKinds[ei] == ElementKind.Family));
     }
 }

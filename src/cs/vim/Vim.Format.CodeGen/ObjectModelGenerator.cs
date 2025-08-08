@@ -334,6 +334,46 @@ public static class ObjectModelGenerator
             cb.AppendLine($"public {t.Name} Get{t.Name}(int index) => {t.Name}Table?.Get(index);");
         }
 
+        var elementKindEntityTypes = entityTypes
+            .Select(t => (t, t.GetElementKind()))
+            .Where(tuple => tuple.Item2 != ElementKind.Unknown)
+            .ToArray();
+        cb.AppendLine();
+        cb.AppendLine("public static HashSet<string> GetElementKindTableNames()");
+        cb.AppendLine("    => new HashSet<string>()");
+        cb.AppendLine("    {");
+        foreach (var (t, _) in elementKindEntityTypes)
+        {
+            cb.AppendLine(        $"\"{t.GetEntityTableName()}\",");
+        }
+        cb.AppendLine("    };");
+
+        cb.AppendLine();
+        cb.AppendLine("// Returns an array defining a 1:1 association of Element to its ElementKind");
+        cb.AppendLine("public ElementKind[] GetElementKinds()");
+        cb.AppendLine("{");
+        cb.AppendLine("var elementKinds = new ElementKind[ElementTable?.RowCount ?? 0];");
+        cb.AppendLine();
+        cb.AppendLine("if (elementKinds.Length == 0) return elementKinds;");
+        cb.AppendLine();
+        cb.AppendLine("// Initialize all element kinds to unknown");
+        cb.AppendLine("for (var i = 0; i < elementKinds.Length; ++i) { elementKinds[i] = ElementKind.Unknown; }");
+        cb.AppendLine();
+        cb.AppendLine("// Populate the element kinds from the relevant entity tables");
+        foreach (var (t, elementKind) in elementKindEntityTypes)
+        {
+            var etPropertyName = $"{t.Name}Table";
+            cb.AppendLine($"for (var i = 0; i < {etPropertyName}.RowCount; ++i)");
+            cb.AppendLine("{");
+            cb.AppendLine($"var elementIndex = {etPropertyName}?.Column_ElementIndex[i] ?? EntityRelation.None;");
+            cb.AppendLine($"if (elementIndex < 0 || elementIndex >= elementKinds.Length || ElementKind.{elementKind:G} <= elementKinds[elementIndex]) continue;");
+            cb.AppendLine($"elementKinds[elementIndex] = ElementKind.{elementKind:G};");
+            cb.AppendLine("}");
+            cb.AppendLine();
+        }
+        cb.AppendLine("return elementKinds;");
+        cb.AppendLine("} // GetElementKinds()");
+
         cb.AppendLine("} // class EntityTableSet");
         cb.AppendLine();
 

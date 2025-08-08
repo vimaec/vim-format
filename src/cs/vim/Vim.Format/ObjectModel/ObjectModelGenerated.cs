@@ -4705,6 +4705,209 @@ namespace Vim.Format.ObjectModel {
         public Site GetSite(int index) => SiteTable?.Get(index);
         public BuildingTable BuildingTable { get; } // can be null
         public Building GetBuilding(int index) => BuildingTable?.Get(index);
+        
+        public static HashSet<string> GetElementKindTableNames()
+            => new HashSet<string>()
+            {
+            "Vim.AssemblyInstance",
+            "Vim.Group",
+            "Vim.DesignOption",
+            "Vim.Level",
+            "Vim.Phase",
+            "Vim.Room",
+            "Vim.BimDocument",
+            "Vim.Family",
+            "Vim.FamilyType",
+            "Vim.FamilyInstance",
+            "Vim.View",
+            "Vim.Material",
+            "Vim.System",
+            "Vim.BasePoint",
+            "Vim.PhaseFilter",
+            "Vim.Grid",
+            "Vim.Area",
+            "Vim.AreaScheme",
+            "Vim.Schedule",
+            "Vim.ViewSheetSet",
+            "Vim.ViewSheet",
+            "Vim.Site",
+            "Vim.Building",
+            };
+        
+        // Returns an array defining a 1:1 association of Element to its ElementKind
+        public ElementKind[] GetElementKinds()
+        {
+            var elementKinds = new ElementKind[ElementTable?.RowCount ?? 0];
+            
+            if (elementKinds.Length == 0) return elementKinds;
+            
+            // Initialize all element kinds to unknown
+            for (var i = 0; i < elementKinds.Length; ++i) { elementKinds[i] = ElementKind.Unknown; }
+            
+            // Populate the element kinds from the relevant entity tables
+            for (var i = 0; i < AssemblyInstanceTable.RowCount; ++i)
+            {
+                var elementIndex = AssemblyInstanceTable?.Column_ElementIndex[i] ?? EntityRelation.None;
+                if (elementIndex < 0 || elementIndex >= elementKinds.Length || ElementKind.AssemblyInstance <= elementKinds[elementIndex]) continue;
+                elementKinds[elementIndex] = ElementKind.AssemblyInstance;
+            }
+            
+            for (var i = 0; i < GroupTable.RowCount; ++i)
+            {
+                var elementIndex = GroupTable?.Column_ElementIndex[i] ?? EntityRelation.None;
+                if (elementIndex < 0 || elementIndex >= elementKinds.Length || ElementKind.Group <= elementKinds[elementIndex]) continue;
+                elementKinds[elementIndex] = ElementKind.Group;
+            }
+            
+            for (var i = 0; i < DesignOptionTable.RowCount; ++i)
+            {
+                var elementIndex = DesignOptionTable?.Column_ElementIndex[i] ?? EntityRelation.None;
+                if (elementIndex < 0 || elementIndex >= elementKinds.Length || ElementKind.DesignOption <= elementKinds[elementIndex]) continue;
+                elementKinds[elementIndex] = ElementKind.DesignOption;
+            }
+            
+            for (var i = 0; i < LevelTable.RowCount; ++i)
+            {
+                var elementIndex = LevelTable?.Column_ElementIndex[i] ?? EntityRelation.None;
+                if (elementIndex < 0 || elementIndex >= elementKinds.Length || ElementKind.Level <= elementKinds[elementIndex]) continue;
+                elementKinds[elementIndex] = ElementKind.Level;
+            }
+            
+            for (var i = 0; i < PhaseTable.RowCount; ++i)
+            {
+                var elementIndex = PhaseTable?.Column_ElementIndex[i] ?? EntityRelation.None;
+                if (elementIndex < 0 || elementIndex >= elementKinds.Length || ElementKind.Phase <= elementKinds[elementIndex]) continue;
+                elementKinds[elementIndex] = ElementKind.Phase;
+            }
+            
+            for (var i = 0; i < RoomTable.RowCount; ++i)
+            {
+                var elementIndex = RoomTable?.Column_ElementIndex[i] ?? EntityRelation.None;
+                if (elementIndex < 0 || elementIndex >= elementKinds.Length || ElementKind.Room <= elementKinds[elementIndex]) continue;
+                elementKinds[elementIndex] = ElementKind.Room;
+            }
+            
+            for (var i = 0; i < BimDocumentTable.RowCount; ++i)
+            {
+                var elementIndex = BimDocumentTable?.Column_ElementIndex[i] ?? EntityRelation.None;
+                if (elementIndex < 0 || elementIndex >= elementKinds.Length || ElementKind.BimDocument <= elementKinds[elementIndex]) continue;
+                elementKinds[elementIndex] = ElementKind.BimDocument;
+            }
+            
+            for (var i = 0; i < FamilyTable.RowCount; ++i)
+            {
+                var elementIndex = FamilyTable?.Column_ElementIndex[i] ?? EntityRelation.None;
+                if (elementIndex < 0 || elementIndex >= elementKinds.Length || ElementKind.Family <= elementKinds[elementIndex]) continue;
+                elementKinds[elementIndex] = ElementKind.Family;
+            }
+            
+            for (var i = 0; i < FamilyTypeTable.RowCount; ++i)
+            {
+                var elementIndex = FamilyTypeTable?.Column_ElementIndex[i] ?? EntityRelation.None;
+                if (elementIndex < 0 || elementIndex >= elementKinds.Length || ElementKind.FamilyType <= elementKinds[elementIndex]) continue;
+                elementKinds[elementIndex] = ElementKind.FamilyType;
+            }
+            
+            for (var i = 0; i < FamilyInstanceTable.RowCount; ++i)
+            {
+                var elementIndex = FamilyInstanceTable?.Column_ElementIndex[i] ?? EntityRelation.None;
+                if (elementIndex < 0 || elementIndex >= elementKinds.Length || ElementKind.FamilyInstance <= elementKinds[elementIndex]) continue;
+                elementKinds[elementIndex] = ElementKind.FamilyInstance;
+            }
+            
+            for (var i = 0; i < ViewTable.RowCount; ++i)
+            {
+                var elementIndex = ViewTable?.Column_ElementIndex[i] ?? EntityRelation.None;
+                if (elementIndex < 0 || elementIndex >= elementKinds.Length || ElementKind.View <= elementKinds[elementIndex]) continue;
+                elementKinds[elementIndex] = ElementKind.View;
+            }
+            
+            for (var i = 0; i < MaterialTable.RowCount; ++i)
+            {
+                var elementIndex = MaterialTable?.Column_ElementIndex[i] ?? EntityRelation.None;
+                if (elementIndex < 0 || elementIndex >= elementKinds.Length || ElementKind.Material <= elementKinds[elementIndex]) continue;
+                elementKinds[elementIndex] = ElementKind.Material;
+            }
+            
+            for (var i = 0; i < SystemTable.RowCount; ++i)
+            {
+                var elementIndex = SystemTable?.Column_ElementIndex[i] ?? EntityRelation.None;
+                if (elementIndex < 0 || elementIndex >= elementKinds.Length || ElementKind.System <= elementKinds[elementIndex]) continue;
+                elementKinds[elementIndex] = ElementKind.System;
+            }
+            
+            for (var i = 0; i < BasePointTable.RowCount; ++i)
+            {
+                var elementIndex = BasePointTable?.Column_ElementIndex[i] ?? EntityRelation.None;
+                if (elementIndex < 0 || elementIndex >= elementKinds.Length || ElementKind.BasePoint <= elementKinds[elementIndex]) continue;
+                elementKinds[elementIndex] = ElementKind.BasePoint;
+            }
+            
+            for (var i = 0; i < PhaseFilterTable.RowCount; ++i)
+            {
+                var elementIndex = PhaseFilterTable?.Column_ElementIndex[i] ?? EntityRelation.None;
+                if (elementIndex < 0 || elementIndex >= elementKinds.Length || ElementKind.PhaseFilter <= elementKinds[elementIndex]) continue;
+                elementKinds[elementIndex] = ElementKind.PhaseFilter;
+            }
+            
+            for (var i = 0; i < GridTable.RowCount; ++i)
+            {
+                var elementIndex = GridTable?.Column_ElementIndex[i] ?? EntityRelation.None;
+                if (elementIndex < 0 || elementIndex >= elementKinds.Length || ElementKind.Grid <= elementKinds[elementIndex]) continue;
+                elementKinds[elementIndex] = ElementKind.Grid;
+            }
+            
+            for (var i = 0; i < AreaTable.RowCount; ++i)
+            {
+                var elementIndex = AreaTable?.Column_ElementIndex[i] ?? EntityRelation.None;
+                if (elementIndex < 0 || elementIndex >= elementKinds.Length || ElementKind.Area <= elementKinds[elementIndex]) continue;
+                elementKinds[elementIndex] = ElementKind.Area;
+            }
+            
+            for (var i = 0; i < AreaSchemeTable.RowCount; ++i)
+            {
+                var elementIndex = AreaSchemeTable?.Column_ElementIndex[i] ?? EntityRelation.None;
+                if (elementIndex < 0 || elementIndex >= elementKinds.Length || ElementKind.AreaScheme <= elementKinds[elementIndex]) continue;
+                elementKinds[elementIndex] = ElementKind.AreaScheme;
+            }
+            
+            for (var i = 0; i < ScheduleTable.RowCount; ++i)
+            {
+                var elementIndex = ScheduleTable?.Column_ElementIndex[i] ?? EntityRelation.None;
+                if (elementIndex < 0 || elementIndex >= elementKinds.Length || ElementKind.Schedule <= elementKinds[elementIndex]) continue;
+                elementKinds[elementIndex] = ElementKind.Schedule;
+            }
+            
+            for (var i = 0; i < ViewSheetSetTable.RowCount; ++i)
+            {
+                var elementIndex = ViewSheetSetTable?.Column_ElementIndex[i] ?? EntityRelation.None;
+                if (elementIndex < 0 || elementIndex >= elementKinds.Length || ElementKind.ViewSheetSet <= elementKinds[elementIndex]) continue;
+                elementKinds[elementIndex] = ElementKind.ViewSheetSet;
+            }
+            
+            for (var i = 0; i < ViewSheetTable.RowCount; ++i)
+            {
+                var elementIndex = ViewSheetTable?.Column_ElementIndex[i] ?? EntityRelation.None;
+                if (elementIndex < 0 || elementIndex >= elementKinds.Length || ElementKind.ViewSheet <= elementKinds[elementIndex]) continue;
+                elementKinds[elementIndex] = ElementKind.ViewSheet;
+            }
+            
+            for (var i = 0; i < SiteTable.RowCount; ++i)
+            {
+                var elementIndex = SiteTable?.Column_ElementIndex[i] ?? EntityRelation.None;
+                if (elementIndex < 0 || elementIndex >= elementKinds.Length || ElementKind.Site <= elementKinds[elementIndex]) continue;
+                elementKinds[elementIndex] = ElementKind.Site;
+            }
+            
+            for (var i = 0; i < BuildingTable.RowCount; ++i)
+            {
+                var elementIndex = BuildingTable?.Column_ElementIndex[i] ?? EntityRelation.None;
+                if (elementIndex < 0 || elementIndex >= elementKinds.Length || ElementKind.Building <= elementKinds[elementIndex]) continue;
+                elementKinds[elementIndex] = ElementKind.Building;
+            }
+            
+            return elementKinds;
+        } // GetElementKinds()
     } // class EntityTableSet
     
     public partial class AssetTable : EntityTable_v2, IEnumerable<Asset>
