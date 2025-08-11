@@ -366,8 +366,18 @@ public static class ObjectModelGenerator
             cb.AppendLine($"for (var i = 0; i < {etPropertyName}.RowCount; ++i)");
             cb.AppendLine("{");
             cb.AppendLine($"var elementIndex = {etPropertyName}?.Column_ElementIndex[i] ?? EntityRelation.None;");
-            cb.AppendLine($"if (elementIndex < 0 || elementIndex >= elementKinds.Length || ElementKind.{elementKind:G} <= elementKinds[elementIndex]) continue;");
-            cb.AppendLine($"elementKinds[elementIndex] = ElementKind.{elementKind:G};");
+            cb.AppendLine("if (elementIndex < 0 || elementIndex >= elementKinds.Length) continue;");
+            cb.AppendLine();
+            cb.AppendLine("var currentElementKind = elementKinds[elementIndex];");
+            cb.AppendLine($"var candidateElementKind = ElementKind.{elementKind:G};");
+            cb.AppendLine();
+            // NOTE: In some cases, a Group entity shares the same element as a FamilyInstance entity.
+            // Likewise, sometimes a System entity shares the same element as a FamilyInstance entity.
+            // In these cases, the ElementKind.FamilyInstance takes priority because of the comparison between the currentElementKind and the candidateElementKind.
+            cb.AppendLine("// Only update the element kind if it is unknown or if it is less than the current kind.");
+            cb.AppendLine("if (currentElementKind != ElementKind.Unknown && currentElementKind <= candidateElementKind) continue;");
+            cb.AppendLine();
+            cb.AppendLine("elementKinds[elementIndex] = candidateElementKind;");
             cb.AppendLine("}");
             cb.AppendLine();
         }
@@ -388,6 +398,9 @@ public static class ObjectModelGenerator
 
         cb.AppendLine($"public partial class {t.Name}Table : EntityTable_v2, IEnumerable<{t.Name}>");
         cb.AppendLine("{");
+        cb.AppendLine();
+        cb.AppendLine($"public const string TableName = \"{t.GetEntityTableName()}\";");
+        cb.AppendLine();
         cb.AppendLine("public EntityTableSet ParentTableSet { get; } // can be null");
         cb.AppendLine();
         cb.AppendLine($"public {t.Name}Table(SerializableEntityTable rawTable, string[] stringTable, EntityTableSet parentTableSet = null) : base(rawTable, stringTable)");

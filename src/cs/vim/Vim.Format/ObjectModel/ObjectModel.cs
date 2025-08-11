@@ -246,7 +246,9 @@ namespace Vim.Format.ObjectModel
         Schedule = 21,
         AssemblyInstance = 22,
         DesignOption = 23,
-        // [MAINTAIN] Add more element kinds here if new element entities are added; do not re-order this enum!
+        // [MAINTAIN]
+        // - Add more element kinds here if new element entities are added; do not re-order this enum!
+        // - Also create a new SQL vw_Element_v* view with new element kind mapping.
     }
 
     [AttributeUsage(AttributeTargets.Class)]

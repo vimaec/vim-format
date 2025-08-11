@@ -4748,162 +4748,323 @@ namespace Vim.Format.ObjectModel {
             for (var i = 0; i < AssemblyInstanceTable.RowCount; ++i)
             {
                 var elementIndex = AssemblyInstanceTable?.Column_ElementIndex[i] ?? EntityRelation.None;
-                if (elementIndex < 0 || elementIndex >= elementKinds.Length || ElementKind.AssemblyInstance <= elementKinds[elementIndex]) continue;
-                elementKinds[elementIndex] = ElementKind.AssemblyInstance;
+                if (elementIndex < 0 || elementIndex >= elementKinds.Length) continue;
+                
+                var currentElementKind = elementKinds[elementIndex];
+                var candidateElementKind = ElementKind.AssemblyInstance;
+                
+                // Only update the element kind if it is unknown or if it is less than the current kind.
+                if (currentElementKind != ElementKind.Unknown && currentElementKind <= candidateElementKind) continue;
+                
+                elementKinds[elementIndex] = candidateElementKind;
             }
             
             for (var i = 0; i < GroupTable.RowCount; ++i)
             {
                 var elementIndex = GroupTable?.Column_ElementIndex[i] ?? EntityRelation.None;
-                if (elementIndex < 0 || elementIndex >= elementKinds.Length || ElementKind.Group <= elementKinds[elementIndex]) continue;
-                elementKinds[elementIndex] = ElementKind.Group;
+                if (elementIndex < 0 || elementIndex >= elementKinds.Length) continue;
+                
+                var currentElementKind = elementKinds[elementIndex];
+                var candidateElementKind = ElementKind.Group;
+                
+                // Only update the element kind if it is unknown or if it is less than the current kind.
+                if (currentElementKind != ElementKind.Unknown && currentElementKind <= candidateElementKind) continue;
+                
+                elementKinds[elementIndex] = candidateElementKind;
             }
             
             for (var i = 0; i < DesignOptionTable.RowCount; ++i)
             {
                 var elementIndex = DesignOptionTable?.Column_ElementIndex[i] ?? EntityRelation.None;
-                if (elementIndex < 0 || elementIndex >= elementKinds.Length || ElementKind.DesignOption <= elementKinds[elementIndex]) continue;
-                elementKinds[elementIndex] = ElementKind.DesignOption;
+                if (elementIndex < 0 || elementIndex >= elementKinds.Length) continue;
+                
+                var currentElementKind = elementKinds[elementIndex];
+                var candidateElementKind = ElementKind.DesignOption;
+                
+                // Only update the element kind if it is unknown or if it is less than the current kind.
+                if (currentElementKind != ElementKind.Unknown && currentElementKind <= candidateElementKind) continue;
+                
+                elementKinds[elementIndex] = candidateElementKind;
             }
             
             for (var i = 0; i < LevelTable.RowCount; ++i)
             {
                 var elementIndex = LevelTable?.Column_ElementIndex[i] ?? EntityRelation.None;
-                if (elementIndex < 0 || elementIndex >= elementKinds.Length || ElementKind.Level <= elementKinds[elementIndex]) continue;
-                elementKinds[elementIndex] = ElementKind.Level;
+                if (elementIndex < 0 || elementIndex >= elementKinds.Length) continue;
+                
+                var currentElementKind = elementKinds[elementIndex];
+                var candidateElementKind = ElementKind.Level;
+                
+                // Only update the element kind if it is unknown or if it is less than the current kind.
+                if (currentElementKind != ElementKind.Unknown && currentElementKind <= candidateElementKind) continue;
+                
+                elementKinds[elementIndex] = candidateElementKind;
             }
             
             for (var i = 0; i < PhaseTable.RowCount; ++i)
             {
                 var elementIndex = PhaseTable?.Column_ElementIndex[i] ?? EntityRelation.None;
-                if (elementIndex < 0 || elementIndex >= elementKinds.Length || ElementKind.Phase <= elementKinds[elementIndex]) continue;
-                elementKinds[elementIndex] = ElementKind.Phase;
+                if (elementIndex < 0 || elementIndex >= elementKinds.Length) continue;
+                
+                var currentElementKind = elementKinds[elementIndex];
+                var candidateElementKind = ElementKind.Phase;
+                
+                // Only update the element kind if it is unknown or if it is less than the current kind.
+                if (currentElementKind != ElementKind.Unknown && currentElementKind <= candidateElementKind) continue;
+                
+                elementKinds[elementIndex] = candidateElementKind;
             }
             
             for (var i = 0; i < RoomTable.RowCount; ++i)
             {
                 var elementIndex = RoomTable?.Column_ElementIndex[i] ?? EntityRelation.None;
-                if (elementIndex < 0 || elementIndex >= elementKinds.Length || ElementKind.Room <= elementKinds[elementIndex]) continue;
-                elementKinds[elementIndex] = ElementKind.Room;
+                if (elementIndex < 0 || elementIndex >= elementKinds.Length) continue;
+                
+                var currentElementKind = elementKinds[elementIndex];
+                var candidateElementKind = ElementKind.Room;
+                
+                // Only update the element kind if it is unknown or if it is less than the current kind.
+                if (currentElementKind != ElementKind.Unknown && currentElementKind <= candidateElementKind) continue;
+                
+                elementKinds[elementIndex] = candidateElementKind;
             }
             
             for (var i = 0; i < BimDocumentTable.RowCount; ++i)
             {
                 var elementIndex = BimDocumentTable?.Column_ElementIndex[i] ?? EntityRelation.None;
-                if (elementIndex < 0 || elementIndex >= elementKinds.Length || ElementKind.BimDocument <= elementKinds[elementIndex]) continue;
-                elementKinds[elementIndex] = ElementKind.BimDocument;
+                if (elementIndex < 0 || elementIndex >= elementKinds.Length) continue;
+                
+                var currentElementKind = elementKinds[elementIndex];
+                var candidateElementKind = ElementKind.BimDocument;
+                
+                // Only update the element kind if it is unknown or if it is less than the current kind.
+                if (currentElementKind != ElementKind.Unknown && currentElementKind <= candidateElementKind) continue;
+                
+                elementKinds[elementIndex] = candidateElementKind;
             }
             
             for (var i = 0; i < FamilyTable.RowCount; ++i)
             {
                 var elementIndex = FamilyTable?.Column_ElementIndex[i] ?? EntityRelation.None;
-                if (elementIndex < 0 || elementIndex >= elementKinds.Length || ElementKind.Family <= elementKinds[elementIndex]) continue;
-                elementKinds[elementIndex] = ElementKind.Family;
+                if (elementIndex < 0 || elementIndex >= elementKinds.Length) continue;
+                
+                var currentElementKind = elementKinds[elementIndex];
+                var candidateElementKind = ElementKind.Family;
+                
+                // Only update the element kind if it is unknown or if it is less than the current kind.
+                if (currentElementKind != ElementKind.Unknown && currentElementKind <= candidateElementKind) continue;
+                
+                elementKinds[elementIndex] = candidateElementKind;
             }
             
             for (var i = 0; i < FamilyTypeTable.RowCount; ++i)
             {
                 var elementIndex = FamilyTypeTable?.Column_ElementIndex[i] ?? EntityRelation.None;
-                if (elementIndex < 0 || elementIndex >= elementKinds.Length || ElementKind.FamilyType <= elementKinds[elementIndex]) continue;
-                elementKinds[elementIndex] = ElementKind.FamilyType;
+                if (elementIndex < 0 || elementIndex >= elementKinds.Length) continue;
+                
+                var currentElementKind = elementKinds[elementIndex];
+                var candidateElementKind = ElementKind.FamilyType;
+                
+                // Only update the element kind if it is unknown or if it is less than the current kind.
+                if (currentElementKind != ElementKind.Unknown && currentElementKind <= candidateElementKind) continue;
+                
+                elementKinds[elementIndex] = candidateElementKind;
             }
             
             for (var i = 0; i < FamilyInstanceTable.RowCount; ++i)
             {
                 var elementIndex = FamilyInstanceTable?.Column_ElementIndex[i] ?? EntityRelation.None;
-                if (elementIndex < 0 || elementIndex >= elementKinds.Length || ElementKind.FamilyInstance <= elementKinds[elementIndex]) continue;
-                elementKinds[elementIndex] = ElementKind.FamilyInstance;
+                if (elementIndex < 0 || elementIndex >= elementKinds.Length) continue;
+                
+                var currentElementKind = elementKinds[elementIndex];
+                var candidateElementKind = ElementKind.FamilyInstance;
+                
+                // Only update the element kind if it is unknown or if it is less than the current kind.
+                if (currentElementKind != ElementKind.Unknown && currentElementKind <= candidateElementKind) continue;
+                
+                elementKinds[elementIndex] = candidateElementKind;
             }
             
             for (var i = 0; i < ViewTable.RowCount; ++i)
             {
                 var elementIndex = ViewTable?.Column_ElementIndex[i] ?? EntityRelation.None;
-                if (elementIndex < 0 || elementIndex >= elementKinds.Length || ElementKind.View <= elementKinds[elementIndex]) continue;
-                elementKinds[elementIndex] = ElementKind.View;
+                if (elementIndex < 0 || elementIndex >= elementKinds.Length) continue;
+                
+                var currentElementKind = elementKinds[elementIndex];
+                var candidateElementKind = ElementKind.View;
+                
+                // Only update the element kind if it is unknown or if it is less than the current kind.
+                if (currentElementKind != ElementKind.Unknown && currentElementKind <= candidateElementKind) continue;
+                
+                elementKinds[elementIndex] = candidateElementKind;
             }
             
             for (var i = 0; i < MaterialTable.RowCount; ++i)
             {
                 var elementIndex = MaterialTable?.Column_ElementIndex[i] ?? EntityRelation.None;
-                if (elementIndex < 0 || elementIndex >= elementKinds.Length || ElementKind.Material <= elementKinds[elementIndex]) continue;
-                elementKinds[elementIndex] = ElementKind.Material;
+                if (elementIndex < 0 || elementIndex >= elementKinds.Length) continue;
+                
+                var currentElementKind = elementKinds[elementIndex];
+                var candidateElementKind = ElementKind.Material;
+                
+                // Only update the element kind if it is unknown or if it is less than the current kind.
+                if (currentElementKind != ElementKind.Unknown && currentElementKind <= candidateElementKind) continue;
+                
+                elementKinds[elementIndex] = candidateElementKind;
             }
             
             for (var i = 0; i < SystemTable.RowCount; ++i)
             {
                 var elementIndex = SystemTable?.Column_ElementIndex[i] ?? EntityRelation.None;
-                if (elementIndex < 0 || elementIndex >= elementKinds.Length || ElementKind.System <= elementKinds[elementIndex]) continue;
-                elementKinds[elementIndex] = ElementKind.System;
+                if (elementIndex < 0 || elementIndex >= elementKinds.Length) continue;
+                
+                var currentElementKind = elementKinds[elementIndex];
+                var candidateElementKind = ElementKind.System;
+                
+                // Only update the element kind if it is unknown or if it is less than the current kind.
+                if (currentElementKind != ElementKind.Unknown && currentElementKind <= candidateElementKind) continue;
+                
+                elementKinds[elementIndex] = candidateElementKind;
             }
             
             for (var i = 0; i < BasePointTable.RowCount; ++i)
             {
                 var elementIndex = BasePointTable?.Column_ElementIndex[i] ?? EntityRelation.None;
-                if (elementIndex < 0 || elementIndex >= elementKinds.Length || ElementKind.BasePoint <= elementKinds[elementIndex]) continue;
-                elementKinds[elementIndex] = ElementKind.BasePoint;
+                if (elementIndex < 0 || elementIndex >= elementKinds.Length) continue;
+                
+                var currentElementKind = elementKinds[elementIndex];
+                var candidateElementKind = ElementKind.BasePoint;
+                
+                // Only update the element kind if it is unknown or if it is less than the current kind.
+                if (currentElementKind != ElementKind.Unknown && currentElementKind <= candidateElementKind) continue;
+                
+                elementKinds[elementIndex] = candidateElementKind;
             }
             
             for (var i = 0; i < PhaseFilterTable.RowCount; ++i)
             {
                 var elementIndex = PhaseFilterTable?.Column_ElementIndex[i] ?? EntityRelation.None;
-                if (elementIndex < 0 || elementIndex >= elementKinds.Length || ElementKind.PhaseFilter <= elementKinds[elementIndex]) continue;
-                elementKinds[elementIndex] = ElementKind.PhaseFilter;
+                if (elementIndex < 0 || elementIndex >= elementKinds.Length) continue;
+                
+                var currentElementKind = elementKinds[elementIndex];
+                var candidateElementKind = ElementKind.PhaseFilter;
+                
+                // Only update the element kind if it is unknown or if it is less than the current kind.
+                if (currentElementKind != ElementKind.Unknown && currentElementKind <= candidateElementKind) continue;
+                
+                elementKinds[elementIndex] = candidateElementKind;
             }
             
             for (var i = 0; i < GridTable.RowCount; ++i)
             {
                 var elementIndex = GridTable?.Column_ElementIndex[i] ?? EntityRelation.None;
-                if (elementIndex < 0 || elementIndex >= elementKinds.Length || ElementKind.Grid <= elementKinds[elementIndex]) continue;
-                elementKinds[elementIndex] = ElementKind.Grid;
+                if (elementIndex < 0 || elementIndex >= elementKinds.Length) continue;
+                
+                var currentElementKind = elementKinds[elementIndex];
+                var candidateElementKind = ElementKind.Grid;
+                
+                // Only update the element kind if it is unknown or if it is less than the current kind.
+                if (currentElementKind != ElementKind.Unknown && currentElementKind <= candidateElementKind) continue;
+                
+                elementKinds[elementIndex] = candidateElementKind;
             }
             
             for (var i = 0; i < AreaTable.RowCount; ++i)
             {
                 var elementIndex = AreaTable?.Column_ElementIndex[i] ?? EntityRelation.None;
-                if (elementIndex < 0 || elementIndex >= elementKinds.Length || ElementKind.Area <= elementKinds[elementIndex]) continue;
-                elementKinds[elementIndex] = ElementKind.Area;
+                if (elementIndex < 0 || elementIndex >= elementKinds.Length) continue;
+                
+                var currentElementKind = elementKinds[elementIndex];
+                var candidateElementKind = ElementKind.Area;
+                
+                // Only update the element kind if it is unknown or if it is less than the current kind.
+                if (currentElementKind != ElementKind.Unknown && currentElementKind <= candidateElementKind) continue;
+                
+                elementKinds[elementIndex] = candidateElementKind;
             }
             
             for (var i = 0; i < AreaSchemeTable.RowCount; ++i)
             {
                 var elementIndex = AreaSchemeTable?.Column_ElementIndex[i] ?? EntityRelation.None;
-                if (elementIndex < 0 || elementIndex >= elementKinds.Length || ElementKind.AreaScheme <= elementKinds[elementIndex]) continue;
-                elementKinds[elementIndex] = ElementKind.AreaScheme;
+                if (elementIndex < 0 || elementIndex >= elementKinds.Length) continue;
+                
+                var currentElementKind = elementKinds[elementIndex];
+                var candidateElementKind = ElementKind.AreaScheme;
+                
+                // Only update the element kind if it is unknown or if it is less than the current kind.
+                if (currentElementKind != ElementKind.Unknown && currentElementKind <= candidateElementKind) continue;
+                
+                elementKinds[elementIndex] = candidateElementKind;
             }
             
             for (var i = 0; i < ScheduleTable.RowCount; ++i)
             {
                 var elementIndex = ScheduleTable?.Column_ElementIndex[i] ?? EntityRelation.None;
-                if (elementIndex < 0 || elementIndex >= elementKinds.Length || ElementKind.Schedule <= elementKinds[elementIndex]) continue;
-                elementKinds[elementIndex] = ElementKind.Schedule;
+                if (elementIndex < 0 || elementIndex >= elementKinds.Length) continue;
+                
+                var currentElementKind = elementKinds[elementIndex];
+                var candidateElementKind = ElementKind.Schedule;
+                
+                // Only update the element kind if it is unknown or if it is less than the current kind.
+                if (currentElementKind != ElementKind.Unknown && currentElementKind <= candidateElementKind) continue;
+                
+                elementKinds[elementIndex] = candidateElementKind;
             }
             
             for (var i = 0; i < ViewSheetSetTable.RowCount; ++i)
             {
                 var elementIndex = ViewSheetSetTable?.Column_ElementIndex[i] ?? EntityRelation.None;
-                if (elementIndex < 0 || elementIndex >= elementKinds.Length || ElementKind.ViewSheetSet <= elementKinds[elementIndex]) continue;
-                elementKinds[elementIndex] = ElementKind.ViewSheetSet;
+                if (elementIndex < 0 || elementIndex >= elementKinds.Length) continue;
+                
+                var currentElementKind = elementKinds[elementIndex];
+                var candidateElementKind = ElementKind.ViewSheetSet;
+                
+                // Only update the element kind if it is unknown or if it is less than the current kind.
+                if (currentElementKind != ElementKind.Unknown && currentElementKind <= candidateElementKind) continue;
+                
+                elementKinds[elementIndex] = candidateElementKind;
             }
             
             for (var i = 0; i < ViewSheetTable.RowCount; ++i)
             {
                 var elementIndex = ViewSheetTable?.Column_ElementIndex[i] ?? EntityRelation.None;
-                if (elementIndex < 0 || elementIndex >= elementKinds.Length || ElementKind.ViewSheet <= elementKinds[elementIndex]) continue;
-                elementKinds[elementIndex] = ElementKind.ViewSheet;
+                if (elementIndex < 0 || elementIndex >= elementKinds.Length) continue;
+                
+                var currentElementKind = elementKinds[elementIndex];
+                var candidateElementKind = ElementKind.ViewSheet;
+                
+                // Only update the element kind if it is unknown or if it is less than the current kind.
+                if (currentElementKind != ElementKind.Unknown && currentElementKind <= candidateElementKind) continue;
+                
+                elementKinds[elementIndex] = candidateElementKind;
             }
             
             for (var i = 0; i < SiteTable.RowCount; ++i)
             {
                 var elementIndex = SiteTable?.Column_ElementIndex[i] ?? EntityRelation.None;
-                if (elementIndex < 0 || elementIndex >= elementKinds.Length || ElementKind.Site <= elementKinds[elementIndex]) continue;
-                elementKinds[elementIndex] = ElementKind.Site;
+                if (elementIndex < 0 || elementIndex >= elementKinds.Length) continue;
+                
+                var currentElementKind = elementKinds[elementIndex];
+                var candidateElementKind = ElementKind.Site;
+                
+                // Only update the element kind if it is unknown or if it is less than the current kind.
+                if (currentElementKind != ElementKind.Unknown && currentElementKind <= candidateElementKind) continue;
+                
+                elementKinds[elementIndex] = candidateElementKind;
             }
             
             for (var i = 0; i < BuildingTable.RowCount; ++i)
             {
                 var elementIndex = BuildingTable?.Column_ElementIndex[i] ?? EntityRelation.None;
-                if (elementIndex < 0 || elementIndex >= elementKinds.Length || ElementKind.Building <= elementKinds[elementIndex]) continue;
-                elementKinds[elementIndex] = ElementKind.Building;
+                if (elementIndex < 0 || elementIndex >= elementKinds.Length) continue;
+                
+                var currentElementKind = elementKinds[elementIndex];
+                var candidateElementKind = ElementKind.Building;
+                
+                // Only update the element kind if it is unknown or if it is less than the current kind.
+                if (currentElementKind != ElementKind.Unknown && currentElementKind <= candidateElementKind) continue;
+                
+                elementKinds[elementIndex] = candidateElementKind;
             }
             
             return elementKinds;
@@ -4912,6 +5073,9 @@ namespace Vim.Format.ObjectModel {
     
     public partial class AssetTable : EntityTable_v2, IEnumerable<Asset>
     {
+        
+        public const string TableName = "Vim.Asset";
+        
         public EntityTableSet ParentTableSet { get; } // can be null
         
         public AssetTable(SerializableEntityTable rawTable, string[] stringTable, EntityTableSet parentTableSet = null) : base(rawTable, stringTable)
@@ -4942,6 +5106,9 @@ namespace Vim.Format.ObjectModel {
     
     public partial class DisplayUnitTable : EntityTable_v2, IEnumerable<DisplayUnit>
     {
+        
+        public const string TableName = "Vim.DisplayUnit";
+        
         public EntityTableSet ParentTableSet { get; } // can be null
         
         public DisplayUnitTable(SerializableEntityTable rawTable, string[] stringTable, EntityTableSet parentTableSet = null) : base(rawTable, stringTable)
@@ -4980,6 +5147,9 @@ namespace Vim.Format.ObjectModel {
     
     public partial class ParameterDescriptorTable : EntityTable_v2, IEnumerable<ParameterDescriptor>
     {
+        
+        public const string TableName = "Vim.ParameterDescriptor";
+        
         public EntityTableSet ParentTableSet { get; } // can be null
         
         public ParameterDescriptorTable(SerializableEntityTable rawTable, string[] stringTable, EntityTableSet parentTableSet = null) : base(rawTable, stringTable)
@@ -5048,6 +5218,9 @@ namespace Vim.Format.ObjectModel {
     
     public partial class ParameterTable : EntityTable_v2, IEnumerable<Parameter>
     {
+        
+        public const string TableName = "Vim.Parameter";
+        
         public EntityTableSet ParentTableSet { get; } // can be null
         
         public ParameterTable(SerializableEntityTable rawTable, string[] stringTable, EntityTableSet parentTableSet = null) : base(rawTable, stringTable)
@@ -5090,6 +5263,9 @@ namespace Vim.Format.ObjectModel {
     
     public partial class ElementTable : EntityTable_v2, IEnumerable<Element>
     {
+        
+        public const string TableName = "Vim.Element";
+        
         public EntityTableSet ParentTableSet { get; } // can be null
         
         public ElementTable(SerializableEntityTable rawTable, string[] stringTable, EntityTableSet parentTableSet = null) : base(rawTable, stringTable)
@@ -5218,6 +5394,9 @@ namespace Vim.Format.ObjectModel {
     
     public partial class WorksetTable : EntityTable_v2, IEnumerable<Workset>
     {
+        
+        public const string TableName = "Vim.Workset";
+        
         public EntityTableSet ParentTableSet { get; } // can be null
         
         public WorksetTable(SerializableEntityTable rawTable, string[] stringTable, EntityTableSet parentTableSet = null) : base(rawTable, stringTable)
@@ -5278,6 +5457,9 @@ namespace Vim.Format.ObjectModel {
     
     public partial class AssemblyInstanceTable : EntityTable_v2, IEnumerable<AssemblyInstance>
     {
+        
+        public const string TableName = "Vim.AssemblyInstance";
+        
         public EntityTableSet ParentTableSet { get; } // can be null
         
         public AssemblyInstanceTable(SerializableEntityTable rawTable, string[] stringTable, EntityTableSet parentTableSet = null) : base(rawTable, stringTable)
@@ -5326,6 +5508,9 @@ namespace Vim.Format.ObjectModel {
     
     public partial class GroupTable : EntityTable_v2, IEnumerable<Group>
     {
+        
+        public const string TableName = "Vim.Group";
+        
         public EntityTableSet ParentTableSet { get; } // can be null
         
         public GroupTable(SerializableEntityTable rawTable, string[] stringTable, EntityTableSet parentTableSet = null) : base(rawTable, stringTable)
@@ -5374,6 +5559,9 @@ namespace Vim.Format.ObjectModel {
     
     public partial class DesignOptionTable : EntityTable_v2, IEnumerable<DesignOption>
     {
+        
+        public const string TableName = "Vim.DesignOption";
+        
         public EntityTableSet ParentTableSet { get; } // can be null
         
         public DesignOptionTable(SerializableEntityTable rawTable, string[] stringTable, EntityTableSet parentTableSet = null) : base(rawTable, stringTable)
@@ -5410,6 +5598,9 @@ namespace Vim.Format.ObjectModel {
     
     public partial class LevelTable : EntityTable_v2, IEnumerable<Level>
     {
+        
+        public const string TableName = "Vim.Level";
+        
         public EntityTableSet ParentTableSet { get; } // can be null
         
         public LevelTable(SerializableEntityTable rawTable, string[] stringTable, EntityTableSet parentTableSet = null) : base(rawTable, stringTable)
@@ -5462,6 +5653,9 @@ namespace Vim.Format.ObjectModel {
     
     public partial class PhaseTable : EntityTable_v2, IEnumerable<Phase>
     {
+        
+        public const string TableName = "Vim.Phase";
+        
         public EntityTableSet ParentTableSet { get; } // can be null
         
         public PhaseTable(SerializableEntityTable rawTable, string[] stringTable, EntityTableSet parentTableSet = null) : base(rawTable, stringTable)
@@ -5494,6 +5688,9 @@ namespace Vim.Format.ObjectModel {
     
     public partial class RoomTable : EntityTable_v2, IEnumerable<Room>
     {
+        
+        public const string TableName = "Vim.Room";
+        
         public EntityTableSet ParentTableSet { get; } // can be null
         
         public RoomTable(SerializableEntityTable rawTable, string[] stringTable, EntityTableSet parentTableSet = null) : base(rawTable, stringTable)
@@ -5560,6 +5757,9 @@ namespace Vim.Format.ObjectModel {
     
     public partial class BimDocumentTable : EntityTable_v2, IEnumerable<BimDocument>
     {
+        
+        public const string TableName = "Vim.BimDocument";
+        
         public EntityTableSet ParentTableSet { get; } // can be null
         
         public BimDocumentTable(SerializableEntityTable rawTable, string[] stringTable, EntityTableSet parentTableSet = null) : base(rawTable, stringTable)
@@ -5726,6 +5926,9 @@ namespace Vim.Format.ObjectModel {
     
     public partial class DisplayUnitInBimDocumentTable : EntityTable_v2, IEnumerable<DisplayUnitInBimDocument>
     {
+        
+        public const string TableName = "Vim.DisplayUnitInBimDocument";
+        
         public EntityTableSet ParentTableSet { get; } // can be null
         
         public DisplayUnitInBimDocumentTable(SerializableEntityTable rawTable, string[] stringTable, EntityTableSet parentTableSet = null) : base(rawTable, stringTable)
@@ -5764,6 +5967,9 @@ namespace Vim.Format.ObjectModel {
     
     public partial class PhaseOrderInBimDocumentTable : EntityTable_v2, IEnumerable<PhaseOrderInBimDocument>
     {
+        
+        public const string TableName = "Vim.PhaseOrderInBimDocument";
+        
         public EntityTableSet ParentTableSet { get; } // can be null
         
         public PhaseOrderInBimDocumentTable(SerializableEntityTable rawTable, string[] stringTable, EntityTableSet parentTableSet = null) : base(rawTable, stringTable)
@@ -5806,6 +6012,9 @@ namespace Vim.Format.ObjectModel {
     
     public partial class CategoryTable : EntityTable_v2, IEnumerable<Category>
     {
+        
+        public const string TableName = "Vim.Category";
+        
         public EntityTableSet ParentTableSet { get; } // can be null
         
         public CategoryTable(SerializableEntityTable rawTable, string[] stringTable, EntityTableSet parentTableSet = null) : base(rawTable, stringTable)
@@ -5872,6 +6081,9 @@ namespace Vim.Format.ObjectModel {
     
     public partial class FamilyTable : EntityTable_v2, IEnumerable<Family>
     {
+        
+        public const string TableName = "Vim.Family";
+        
         public EntityTableSet ParentTableSet { get; } // can be null
         
         public FamilyTable(SerializableEntityTable rawTable, string[] stringTable, EntityTableSet parentTableSet = null) : base(rawTable, stringTable)
@@ -5926,6 +6138,9 @@ namespace Vim.Format.ObjectModel {
     
     public partial class FamilyTypeTable : EntityTable_v2, IEnumerable<FamilyType>
     {
+        
+        public const string TableName = "Vim.FamilyType";
+        
         public EntityTableSet ParentTableSet { get; } // can be null
         
         public FamilyTypeTable(SerializableEntityTable rawTable, string[] stringTable, EntityTableSet parentTableSet = null) : base(rawTable, stringTable)
@@ -5974,6 +6189,9 @@ namespace Vim.Format.ObjectModel {
     
     public partial class FamilyInstanceTable : EntityTable_v2, IEnumerable<FamilyInstance>
     {
+        
+        public const string TableName = "Vim.FamilyInstance";
+        
         public EntityTableSet ParentTableSet { get; } // can be null
         
         public FamilyInstanceTable(SerializableEntityTable rawTable, string[] stringTable, EntityTableSet parentTableSet = null) : base(rawTable, stringTable)
@@ -6128,6 +6346,9 @@ namespace Vim.Format.ObjectModel {
     
     public partial class ViewTable : EntityTable_v2, IEnumerable<View>
     {
+        
+        public const string TableName = "Vim.View";
+        
         public EntityTableSet ParentTableSet { get; } // can be null
         
         public ViewTable(SerializableEntityTable rawTable, string[] stringTable, EntityTableSet parentTableSet = null) : base(rawTable, stringTable)
@@ -6264,6 +6485,9 @@ namespace Vim.Format.ObjectModel {
     
     public partial class ElementInViewTable : EntityTable_v2, IEnumerable<ElementInView>
     {
+        
+        public const string TableName = "Vim.ElementInView";
+        
         public EntityTableSet ParentTableSet { get; } // can be null
         
         public ElementInViewTable(SerializableEntityTable rawTable, string[] stringTable, EntityTableSet parentTableSet = null) : base(rawTable, stringTable)
@@ -6302,6 +6526,9 @@ namespace Vim.Format.ObjectModel {
     
     public partial class ShapeInViewTable : EntityTable_v2, IEnumerable<ShapeInView>
     {
+        
+        public const string TableName = "Vim.ShapeInView";
+        
         public EntityTableSet ParentTableSet { get; } // can be null
         
         public ShapeInViewTable(SerializableEntityTable rawTable, string[] stringTable, EntityTableSet parentTableSet = null) : base(rawTable, stringTable)
@@ -6340,6 +6567,9 @@ namespace Vim.Format.ObjectModel {
     
     public partial class AssetInViewTable : EntityTable_v2, IEnumerable<AssetInView>
     {
+        
+        public const string TableName = "Vim.AssetInView";
+        
         public EntityTableSet ParentTableSet { get; } // can be null
         
         public AssetInViewTable(SerializableEntityTable rawTable, string[] stringTable, EntityTableSet parentTableSet = null) : base(rawTable, stringTable)
@@ -6378,6 +6608,9 @@ namespace Vim.Format.ObjectModel {
     
     public partial class AssetInViewSheetTable : EntityTable_v2, IEnumerable<AssetInViewSheet>
     {
+        
+        public const string TableName = "Vim.AssetInViewSheet";
+        
         public EntityTableSet ParentTableSet { get; } // can be null
         
         public AssetInViewSheetTable(SerializableEntityTable rawTable, string[] stringTable, EntityTableSet parentTableSet = null) : base(rawTable, stringTable)
@@ -6416,6 +6649,9 @@ namespace Vim.Format.ObjectModel {
     
     public partial class LevelInViewTable : EntityTable_v2, IEnumerable<LevelInView>
     {
+        
+        public const string TableName = "Vim.LevelInView";
+        
         public EntityTableSet ParentTableSet { get; } // can be null
         
         public LevelInViewTable(SerializableEntityTable rawTable, string[] stringTable, EntityTableSet parentTableSet = null) : base(rawTable, stringTable)
@@ -6478,6 +6714,9 @@ namespace Vim.Format.ObjectModel {
     
     public partial class CameraTable : EntityTable_v2, IEnumerable<Camera>
     {
+        
+        public const string TableName = "Vim.Camera";
+        
         public EntityTableSet ParentTableSet { get; } // can be null
         
         public CameraTable(SerializableEntityTable rawTable, string[] stringTable, EntityTableSet parentTableSet = null) : base(rawTable, stringTable)
@@ -6540,6 +6779,9 @@ namespace Vim.Format.ObjectModel {
     
     public partial class MaterialTable : EntityTable_v2, IEnumerable<Material>
     {
+        
+        public const string TableName = "Vim.Material";
+        
         public EntityTableSet ParentTableSet { get; } // can be null
         
         public MaterialTable(SerializableEntityTable rawTable, string[] stringTable, EntityTableSet parentTableSet = null) : base(rawTable, stringTable)
@@ -6652,6 +6894,9 @@ namespace Vim.Format.ObjectModel {
     
     public partial class MaterialInElementTable : EntityTable_v2, IEnumerable<MaterialInElement>
     {
+        
+        public const string TableName = "Vim.MaterialInElement";
+        
         public EntityTableSet ParentTableSet { get; } // can be null
         
         public MaterialInElementTable(SerializableEntityTable rawTable, string[] stringTable, EntityTableSet parentTableSet = null) : base(rawTable, stringTable)
@@ -6702,6 +6947,9 @@ namespace Vim.Format.ObjectModel {
     
     public partial class CompoundStructureLayerTable : EntityTable_v2, IEnumerable<CompoundStructureLayer>
     {
+        
+        public const string TableName = "Vim.CompoundStructureLayer";
+        
         public EntityTableSet ParentTableSet { get; } // can be null
         
         public CompoundStructureLayerTable(SerializableEntityTable rawTable, string[] stringTable, EntityTableSet parentTableSet = null) : base(rawTable, stringTable)
@@ -6752,6 +7000,9 @@ namespace Vim.Format.ObjectModel {
     
     public partial class CompoundStructureTable : EntityTable_v2, IEnumerable<CompoundStructure>
     {
+        
+        public const string TableName = "Vim.CompoundStructure";
+        
         public EntityTableSet ParentTableSet { get; } // can be null
         
         public CompoundStructureTable(SerializableEntityTable rawTable, string[] stringTable, EntityTableSet parentTableSet = null) : base(rawTable, stringTable)
@@ -6788,6 +7039,9 @@ namespace Vim.Format.ObjectModel {
     
     public partial class NodeTable : EntityTable_v2, IEnumerable<Node>
     {
+        
+        public const string TableName = "Vim.Node";
+        
         public EntityTableSet ParentTableSet { get; } // can be null
         
         public NodeTable(SerializableEntityTable rawTable, string[] stringTable, EntityTableSet parentTableSet = null) : base(rawTable, stringTable)
@@ -6820,6 +7074,9 @@ namespace Vim.Format.ObjectModel {
     
     public partial class GeometryTable : EntityTable_v2, IEnumerable<Geometry>
     {
+        
+        public const string TableName = "Vim.Geometry";
+        
         public EntityTableSet ParentTableSet { get; } // can be null
         
         public GeometryTable(SerializableEntityTable rawTable, string[] stringTable, EntityTableSet parentTableSet = null) : base(rawTable, stringTable)
@@ -6878,6 +7135,9 @@ namespace Vim.Format.ObjectModel {
     
     public partial class ShapeTable : EntityTable_v2, IEnumerable<Shape>
     {
+        
+        public const string TableName = "Vim.Shape";
+        
         public EntityTableSet ParentTableSet { get; } // can be null
         
         public ShapeTable(SerializableEntityTable rawTable, string[] stringTable, EntityTableSet parentTableSet = null) : base(rawTable, stringTable)
@@ -6910,6 +7170,9 @@ namespace Vim.Format.ObjectModel {
     
     public partial class ShapeCollectionTable : EntityTable_v2, IEnumerable<ShapeCollection>
     {
+        
+        public const string TableName = "Vim.ShapeCollection";
+        
         public EntityTableSet ParentTableSet { get; } // can be null
         
         public ShapeCollectionTable(SerializableEntityTable rawTable, string[] stringTable, EntityTableSet parentTableSet = null) : base(rawTable, stringTable)
@@ -6942,6 +7205,9 @@ namespace Vim.Format.ObjectModel {
     
     public partial class ShapeInShapeCollectionTable : EntityTable_v2, IEnumerable<ShapeInShapeCollection>
     {
+        
+        public const string TableName = "Vim.ShapeInShapeCollection";
+        
         public EntityTableSet ParentTableSet { get; } // can be null
         
         public ShapeInShapeCollectionTable(SerializableEntityTable rawTable, string[] stringTable, EntityTableSet parentTableSet = null) : base(rawTable, stringTable)
@@ -6980,6 +7246,9 @@ namespace Vim.Format.ObjectModel {
     
     public partial class SystemTable : EntityTable_v2, IEnumerable<System>
     {
+        
+        public const string TableName = "Vim.System";
+        
         public EntityTableSet ParentTableSet { get; } // can be null
         
         public SystemTable(SerializableEntityTable rawTable, string[] stringTable, EntityTableSet parentTableSet = null) : base(rawTable, stringTable)
@@ -7022,6 +7291,9 @@ namespace Vim.Format.ObjectModel {
     
     public partial class ElementInSystemTable : EntityTable_v2, IEnumerable<ElementInSystem>
     {
+        
+        public const string TableName = "Vim.ElementInSystem";
+        
         public EntityTableSet ParentTableSet { get; } // can be null
         
         public ElementInSystemTable(SerializableEntityTable rawTable, string[] stringTable, EntityTableSet parentTableSet = null) : base(rawTable, stringTable)
@@ -7064,6 +7336,9 @@ namespace Vim.Format.ObjectModel {
     
     public partial class WarningTable : EntityTable_v2, IEnumerable<Warning>
     {
+        
+        public const string TableName = "Vim.Warning";
+        
         public EntityTableSet ParentTableSet { get; } // can be null
         
         public WarningTable(SerializableEntityTable rawTable, string[] stringTable, EntityTableSet parentTableSet = null) : base(rawTable, stringTable)
@@ -7108,6 +7383,9 @@ namespace Vim.Format.ObjectModel {
     
     public partial class ElementInWarningTable : EntityTable_v2, IEnumerable<ElementInWarning>
     {
+        
+        public const string TableName = "Vim.ElementInWarning";
+        
         public EntityTableSet ParentTableSet { get; } // can be null
         
         public ElementInWarningTable(SerializableEntityTable rawTable, string[] stringTable, EntityTableSet parentTableSet = null) : base(rawTable, stringTable)
@@ -7146,6 +7424,9 @@ namespace Vim.Format.ObjectModel {
     
     public partial class BasePointTable : EntityTable_v2, IEnumerable<BasePoint>
     {
+        
+        public const string TableName = "Vim.BasePoint";
+        
         public EntityTableSet ParentTableSet { get; } // can be null
         
         public BasePointTable(SerializableEntityTable rawTable, string[] stringTable, EntityTableSet parentTableSet = null) : base(rawTable, stringTable)
@@ -7206,6 +7487,9 @@ namespace Vim.Format.ObjectModel {
     
     public partial class PhaseFilterTable : EntityTable_v2, IEnumerable<PhaseFilter>
     {
+        
+        public const string TableName = "Vim.PhaseFilter";
+        
         public EntityTableSet ParentTableSet { get; } // can be null
         
         public PhaseFilterTable(SerializableEntityTable rawTable, string[] stringTable, EntityTableSet parentTableSet = null) : base(rawTable, stringTable)
@@ -7254,6 +7538,9 @@ namespace Vim.Format.ObjectModel {
     
     public partial class GridTable : EntityTable_v2, IEnumerable<Grid>
     {
+        
+        public const string TableName = "Vim.Grid";
+        
         public EntityTableSet ParentTableSet { get; } // can be null
         
         public GridTable(SerializableEntityTable rawTable, string[] stringTable, EntityTableSet parentTableSet = null) : base(rawTable, stringTable)
@@ -7344,6 +7631,9 @@ namespace Vim.Format.ObjectModel {
     
     public partial class AreaTable : EntityTable_v2, IEnumerable<Area>
     {
+        
+        public const string TableName = "Vim.Area";
+        
         public EntityTableSet ParentTableSet { get; } // can be null
         
         public AreaTable(SerializableEntityTable rawTable, string[] stringTable, EntityTableSet parentTableSet = null) : base(rawTable, stringTable)
@@ -7398,6 +7688,9 @@ namespace Vim.Format.ObjectModel {
     
     public partial class AreaSchemeTable : EntityTable_v2, IEnumerable<AreaScheme>
     {
+        
+        public const string TableName = "Vim.AreaScheme";
+        
         public EntityTableSet ParentTableSet { get; } // can be null
         
         public AreaSchemeTable(SerializableEntityTable rawTable, string[] stringTable, EntityTableSet parentTableSet = null) : base(rawTable, stringTable)
@@ -7434,6 +7727,9 @@ namespace Vim.Format.ObjectModel {
     
     public partial class ScheduleTable : EntityTable_v2, IEnumerable<Schedule>
     {
+        
+        public const string TableName = "Vim.Schedule";
+        
         public EntityTableSet ParentTableSet { get; } // can be null
         
         public ScheduleTable(SerializableEntityTable rawTable, string[] stringTable, EntityTableSet parentTableSet = null) : base(rawTable, stringTable)
@@ -7466,6 +7762,9 @@ namespace Vim.Format.ObjectModel {
     
     public partial class ScheduleColumnTable : EntityTable_v2, IEnumerable<ScheduleColumn>
     {
+        
+        public const string TableName = "Vim.ScheduleColumn";
+        
         public EntityTableSet ParentTableSet { get; } // can be null
         
         public ScheduleColumnTable(SerializableEntityTable rawTable, string[] stringTable, EntityTableSet parentTableSet = null) : base(rawTable, stringTable)
@@ -7506,6 +7805,9 @@ namespace Vim.Format.ObjectModel {
     
     public partial class ScheduleCellTable : EntityTable_v2, IEnumerable<ScheduleCell>
     {
+        
+        public const string TableName = "Vim.ScheduleCell";
+        
         public EntityTableSet ParentTableSet { get; } // can be null
         
         public ScheduleCellTable(SerializableEntityTable rawTable, string[] stringTable, EntityTableSet parentTableSet = null) : base(rawTable, stringTable)
@@ -7546,6 +7848,9 @@ namespace Vim.Format.ObjectModel {
     
     public partial class ViewSheetSetTable : EntityTable_v2, IEnumerable<ViewSheetSet>
     {
+        
+        public const string TableName = "Vim.ViewSheetSet";
+        
         public EntityTableSet ParentTableSet { get; } // can be null
         
         public ViewSheetSetTable(SerializableEntityTable rawTable, string[] stringTable, EntityTableSet parentTableSet = null) : base(rawTable, stringTable)
@@ -7578,6 +7883,9 @@ namespace Vim.Format.ObjectModel {
     
     public partial class ViewSheetTable : EntityTable_v2, IEnumerable<ViewSheet>
     {
+        
+        public const string TableName = "Vim.ViewSheet";
+        
         public EntityTableSet ParentTableSet { get; } // can be null
         
         public ViewSheetTable(SerializableEntityTable rawTable, string[] stringTable, EntityTableSet parentTableSet = null) : base(rawTable, stringTable)
@@ -7616,6 +7924,9 @@ namespace Vim.Format.ObjectModel {
     
     public partial class ViewSheetInViewSheetSetTable : EntityTable_v2, IEnumerable<ViewSheetInViewSheetSet>
     {
+        
+        public const string TableName = "Vim.ViewSheetInViewSheetSet";
+        
         public EntityTableSet ParentTableSet { get; } // can be null
         
         public ViewSheetInViewSheetSetTable(SerializableEntityTable rawTable, string[] stringTable, EntityTableSet parentTableSet = null) : base(rawTable, stringTable)
@@ -7654,6 +7965,9 @@ namespace Vim.Format.ObjectModel {
     
     public partial class ViewInViewSheetSetTable : EntityTable_v2, IEnumerable<ViewInViewSheetSet>
     {
+        
+        public const string TableName = "Vim.ViewInViewSheetSet";
+        
         public EntityTableSet ParentTableSet { get; } // can be null
         
         public ViewInViewSheetSetTable(SerializableEntityTable rawTable, string[] stringTable, EntityTableSet parentTableSet = null) : base(rawTable, stringTable)
@@ -7692,6 +8006,9 @@ namespace Vim.Format.ObjectModel {
     
     public partial class ViewInViewSheetTable : EntityTable_v2, IEnumerable<ViewInViewSheet>
     {
+        
+        public const string TableName = "Vim.ViewInViewSheet";
+        
         public EntityTableSet ParentTableSet { get; } // can be null
         
         public ViewInViewSheetTable(SerializableEntityTable rawTable, string[] stringTable, EntityTableSet parentTableSet = null) : base(rawTable, stringTable)
@@ -7730,6 +8047,9 @@ namespace Vim.Format.ObjectModel {
     
     public partial class SiteTable : EntityTable_v2, IEnumerable<Site>
     {
+        
+        public const string TableName = "Vim.Site";
+        
         public EntityTableSet ParentTableSet { get; } // can be null
         
         public SiteTable(SerializableEntityTable rawTable, string[] stringTable, EntityTableSet parentTableSet = null) : base(rawTable, stringTable)
@@ -7782,6 +8102,9 @@ namespace Vim.Format.ObjectModel {
     
     public partial class BuildingTable : EntityTable_v2, IEnumerable<Building>
     {
+        
+        public const string TableName = "Vim.Building";
+        
         public EntityTableSet ParentTableSet { get; } // can be null
         
         public BuildingTable(SerializableEntityTable rawTable, string[] stringTable, EntityTableSet parentTableSet = null) : base(rawTable, stringTable)
