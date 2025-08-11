@@ -19,6 +19,8 @@ namespace Vim.Util
         public const double RadiansToDegreesRatio = 180d / Math.PI;
         public const double DegreesToRadiansRatio = 1.0d / RadiansToDegreesRatio;
 
+        public const int GoodEnoughRoundingDigits = 4;
+
         public static double? ConvertMeasure(double? source, double sourceToDestinationRatio, int digitRounding = -1)
         {
             if (source == null)

@@ -9,13 +9,22 @@ namespace Vim.Format.ElementParameterInfo
 {
     public static class ElementParameterInfoService
     {
+        public struct ElementParameterInfo
+        {
+            public LevelInfo[] LevelInfos;
+            public ElementLevelInfo[] ElementLevelInfos;
+            public ElementMeasureInfo[] ElementMeasureInfos;
+            public MeasureType[] ParameterMeasureTypes;
+        }
+
         /// <summary>
         /// Returns:
         /// - an array of LevelInfo objects representing harmonized information about the levels in the given VIM Scene (see comment in LevelInfo.cs)
         /// - an array of ElementLevelInfo objects representing detailed information of element level associations.
         /// - an array of ElementMeasureInfo objects representing information about element measures (angle/slope, length, width, height, area, volume)
+        /// - an array of ParameterQuantityInfo objects representing information about parameters and their MeasureType.
         /// </summary>
-        public static (LevelInfo[], ElementLevelInfo[], ElementMeasureInfo[]) GetElementParameterInfos(
+        public static ElementParameterInfo GetElementParameterInfos(
             FileInfo vimFileInfo,
             string[] stringTable = null,
             ElementGeometryMap elementGeometryMap = null)
@@ -27,16 +36,18 @@ namespace Vim.Format.ElementParameterInfo
                 stringTable,
                 n =>
                     n is TableNames.Element ||
-                    n is TableNames.Level ||
                     n is TableNames.FamilyInstance ||
                     n is TableNames.FamilyType ||
                     n is TableNames.Parameter ||
-                    n is TableNames.BasePoint ||
-                    n is TableNames.ParameterDescriptor);
+                    n is TableNames.ParameterDescriptor ||
+                    n is TableNames.DisplayUnit ||
+                    n is TableNames.Level ||
+                    n is TableNames.BasePoint);
 
             var elementIndexMaps = tableSet.ElementIndexMaps;
             var elementTable = tableSet.ElementTable;
             var parameterTable = tableSet.ParameterTable;
+            var descriptorTable = tableSet.ParameterDescriptorTable;
             var familyInstanceTable = tableSet.FamilyInstanceTable;
             var familyTypeTable = tableSet.FamilyTypeTable;
             var basePointTable = tableSet.BasePointTable;
@@ -71,9 +82,17 @@ namespace Vim.Format.ElementParameterInfo
                 levelInfoMap,
                 levelInfoByBimDocumentIndex);
 
-            var elementQuantityInfos = CreateElementQuantityInfos(elementTable, parameterTable, elementIndexMaps);
+            var parameterMeasureTypes = CreateParameterMeasureTypes(parameterTable, descriptorTable);
 
-            return (levelInfos, elementLevelInfos, elementQuantityInfos);
+            var elementMeasureInfos = CreateElementMeasureInfos(elementTable, parameterTable, parameterMeasureTypes, elementIndexMaps);
+
+            return new ElementParameterInfo
+            {
+                LevelInfos = levelInfos,
+                ElementLevelInfos = elementLevelInfos,
+                ElementMeasureInfos = elementMeasureInfos,
+                ParameterMeasureTypes = parameterMeasureTypes
+            };
         }
 
         /// <summary>
@@ -174,13 +193,27 @@ namespace Vim.Format.ElementParameterInfo
                 .ToArray();
         }
 
-        private static ElementMeasureInfo[] CreateElementQuantityInfos(
+        public static MeasureType[] CreateParameterMeasureTypes(
+            ParameterTable parameterTable,
+            ParameterDescriptorTable parameterDescriptorTable)
+            => parameterTable.Column_ParameterDescriptorIndex
+                .AsParallel()
+                .Select(pdi =>
+                {
+                    var parameterDescriptorNameLowerInvariant = parameterDescriptorTable.GetName(pdi).ToLowerInvariant();
+                    var parameterDescriptorGuid = parameterDescriptorTable.GetGuid(pdi);
+                    return ParameterMeasureInfo.ParseMeasureType(parameterDescriptorNameLowerInvariant, parameterDescriptorGuid);
+                })
+                .ToArray();
+
+        public static ElementMeasureInfo[] CreateElementMeasureInfos(
             ElementTable elementTable,
             ParameterTable parameterTable,
+            MeasureType[] parameterMeasureTypes,
             ElementIndexMaps elementIndexMaps)
             => elementTable
                 .AsParallel()
-                .Select(e => new ElementMeasureInfo(e, parameterTable, elementIndexMaps))
+                .Select(e => new ElementMeasureInfo(e, parameterTable, parameterMeasureTypes, elementIndexMaps))
                 .ToArray();
     }
 }

@@ -15,31 +15,38 @@ public static class ElementParameterInfoServiceTests
     public static IEnumerable<string> TestVimFilePaths => TestFiles.VimFilePaths;
 
     [TestCaseSource(nameof(TestVimFilePaths))]
-    public static void TestLevelInfoService(string vimFilePath)
+    public static void TestElementParameterInfoService(string vimFilePath)
     {
         var fileName = Path.GetFileName(vimFilePath);
         var ctx = new CallerTestContext(subDirComponents: fileName);
         var dir = ctx.PrepareDirectory();
         var logger = ctx.CreateLogger();
 
-        using var _ = logger.LogDuration($"GetLevelInfo: {vimFilePath}");
+        using var _ = logger.LogDuration($"{nameof(TestElementParameterInfoService)}: {vimFilePath}");
 
         var vimFileInfo = new FileInfo(vimFilePath);
 
         var stringTable = vimFileInfo.GetStringTable();
 
-        var (levelInfos, elementLevelInfos, elementMeasureInfos) = ElementParameterInfoService.GetElementParameterInfos(vimFileInfo, stringTable);
+        var infos = ElementParameterInfoService.GetElementParameterInfos(vimFileInfo, stringTable);
+        var levelInfos = infos.LevelInfos;
+        var elementLevelInfos = infos.ElementLevelInfos;
+        var elementMeasureInfos = infos.ElementMeasureInfos;
+        var parameterMeasureTypes = infos.ParameterMeasureTypes;
 
         var validationTableSet = new EntityTableSet(
             vimFileInfo,
             stringTable,
-            n => n is TableNames.Level or TableNames.Element or TableNames.FamilyInstance);
+            n => n is TableNames.Level or TableNames.Element or TableNames.FamilyInstance or TableNames.Parameter);
 
         Assert.AreEqual(validationTableSet.LevelTable.RowCount, levelInfos.Length);
 
         var elementInstanceCount = validationTableSet.ElementTable.RowCount;
         Assert.AreEqual(elementInstanceCount, elementLevelInfos.Length);
         Assert.AreEqual(elementInstanceCount, elementMeasureInfos.Length);
+
+        var parameterCount = validationTableSet.ParameterTable.RowCount;
+        Assert.AreEqual(parameterCount, parameterMeasureTypes.Length);
 
         var familyInstanceElementMap = validationTableSet.ElementIndexMaps.FamilyInstanceIndexFromElementIndex;
 

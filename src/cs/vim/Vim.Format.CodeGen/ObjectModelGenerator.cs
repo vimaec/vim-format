@@ -300,7 +300,7 @@ public static class ObjectModelGenerator
         cb.AppendLine();
         cb.AppendLine("public Dictionary<string, SerializableEntityTable> RawTableMap { get; } = new Dictionary<string, SerializableEntityTable>();");
         cb.AppendLine();
-        cb.AppendLine("private SerializableEntityTable GetRawTableOrDefault(string tableName)");
+        cb.AppendLine("public SerializableEntityTable GetRawTableOrDefault(string tableName)");
         cb.AppendLine("    => RawTableMap.TryGetValue(tableName, out var result) ? result : null;");
         cb.AppendLine();
         cb.AppendLine("public ElementIndexMaps ElementIndexMaps { get; }");

@@ -55,7 +55,7 @@ namespace Vim.Format.ElementParameterInfo
         const string WholeFeetFormatString = "0000";
         const string DecimalFormatString = "0000.0000";
         const string PositivePrefix = "+";
-        private const int RoundingDigits = 4;
+        private const int RoundingDigits = Units.GoodEnoughRoundingDigits;
 
         /// <summary>
         /// "{-|+}{elevationDecimalFeetWithLeadingZeroes}ft - {name}

@@ -4417,7 +4417,7 @@ namespace Vim.Format.ObjectModel {
         
         public Dictionary<string, SerializableEntityTable> RawTableMap { get; } = new Dictionary<string, SerializableEntityTable>();
         
-        private SerializableEntityTable GetRawTableOrDefault(string tableName)
+        public SerializableEntityTable GetRawTableOrDefault(string tableName)
             => RawTableMap.TryGetValue(tableName, out var result) ? result : null;
         
         public ElementIndexMaps ElementIndexMaps { get; }

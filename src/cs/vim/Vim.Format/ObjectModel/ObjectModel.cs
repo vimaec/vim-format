@@ -571,10 +571,13 @@ namespace Vim.Format.ObjectModel
         }
 
         public static bool TryParseNativeValueAsDouble(string nativeValue, out double result)
-            => double.TryParse(nativeValue, out result);
+            => double.TryParse(nativeValue, out result) && !result.IsInfinity() && !result.IsNaN();
 
         public bool TryParseNativeValueAsDouble(out double result)
             => TryParseNativeValueAsDouble(Values.NativeValue, out result);
+
+        public static double? ParseNativeValueAsDouble(string nativeValue)
+            => TryParseNativeValueAsDouble(nativeValue, out var result) ? result : (double?) null;
 
         public static bool TryParseNativeValueAsLong(string nativeValue, out long result)
             => long.TryParse(nativeValue, out result);
@@ -582,11 +585,17 @@ namespace Vim.Format.ObjectModel
         public bool TryParseNativeValueAsLong(out long result)
             => TryParseNativeValueAsLong(Values.NativeValue, out result);
 
+        public static long? ParseNativeValueAsLong(string nativeValue)
+            => TryParseNativeValueAsLong(nativeValue, out var result) ? result : (long?) null;
+
         public static bool TryParseNativeValueAsElementId(string nativeValue, out long result)
             => TryParseNativeValueAsLong(nativeValue, out result);
 
         public bool TryParseNativeValueAsElementId(out long result)
             => TryParseNativeValueAsLong(out result);
+
+        public static long? ParseNativeValueAsElementId(string nativeValue)
+            => ParseNativeValueAsLong(nativeValue);
 
         public static bool TryParseNativeValueAsBoolean(string nativeValue, ParameterDescriptor desc, out bool result)
         {
