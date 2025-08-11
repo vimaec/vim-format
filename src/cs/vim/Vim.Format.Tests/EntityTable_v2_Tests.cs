@@ -74,13 +74,8 @@ public static class EntityTable_v2_Tests
         
         var familyInstanceCount = elementKinds.Count(e => e == ElementKind.FamilyInstance);
         Assert.Greater(familyInstanceCount, 0);
-
-        // Family instances can also be considered as groups or systems when converting from Revit
-        Assert.IsTrue(ets.FamilyInstanceTable.Column_ElementIndex.All(ei =>
-            ei == EntityRelation.None ||
-            elementKinds[ei] == ElementKind.FamilyInstance ||
-            elementKinds[ei] == ElementKind.Group ||
-            elementKinds[ei] == ElementKind.System));
+        Assert.AreEqual(ets.FamilyInstanceTable.Column_ElementIndex.Distinct().Count(ei => ei != EntityRelation.None), familyInstanceCount);
+        Assert.IsTrue(ets.FamilyInstanceTable.Column_ElementIndex.All(ei => ei == EntityRelation.None || elementKinds[ei] == ElementKind.FamilyInstance));
 
         var familyTypeCount = elementKinds.Count(e => e == ElementKind.FamilyType);
         Assert.Greater(familyTypeCount, 0);
