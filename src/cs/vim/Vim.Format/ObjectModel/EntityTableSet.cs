@@ -67,4 +67,27 @@ namespace Vim.Format.ObjectModel
             return ets.GetElementKinds();
         }
     }
+
+    public partial class CategoryTable
+    {
+        /// <summary>
+        /// Returns the full name of the category, ex: "parentCategoryName: categoryName" or just "categoryName" if there is no parent.
+        /// </summary>
+        public static string GetNameFull(string parentCategoryName, string categoryName)
+            => !string.IsNullOrEmpty(parentCategoryName)
+                ? $"{parentCategoryName}: {categoryName}"
+                : categoryName;
+
+        /// <summary>
+        /// Returns the full name of the category, ex: "parentCategoryName: categoryName" or just "categoryName" if there is no parent.
+        /// </summary>
+        public string GetNameFull(int categoryIndex)
+        {
+            var categoryName = GetName(categoryIndex);
+            var parentIndex = GetParentIndex(categoryIndex);
+            var parentCategoryName = parentIndex >= 0 ? GetName(parentIndex) : "";
+
+            return GetNameFull(parentCategoryName, categoryName);
+        }
+    }
 }
