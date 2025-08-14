@@ -109,7 +109,7 @@ namespace Vim.Util
             double decimalPlaces = FractionConverter.OneSixteenth)
         {
             if (value == 0)
-                return $"{positiveSign}0'";
+                return $"{positiveSign}{0.ToString(feetFormatString)}'";
 
             var absValue = Math.Abs(value);
 
@@ -134,7 +134,7 @@ namespace Vim.Util
             var result = sb.ToString().TrimEnd();
 
             return string.IsNullOrWhiteSpace(result)
-                ? $"{positiveSign}0'"
+                ? $"{positiveSign}{0.ToString(feetFormatString)}'"
                 : result;
         }
 
