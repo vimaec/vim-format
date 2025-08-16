@@ -4966,7 +4966,7 @@ namespace Vim.Format.ObjectModel {
     public partial class AssetTable : EntityTable_v2, IEnumerable<Asset>
     {
         
-        public const string TableName = TableNames.Asset";
+        public const string TableName = TableNames.Asset;
         
         public EntityTableSet ParentTableSet { get; } // can be null
         
@@ -4999,7 +4999,7 @@ namespace Vim.Format.ObjectModel {
     public partial class DisplayUnitTable : EntityTable_v2, IEnumerable<DisplayUnit>
     {
         
-        public const string TableName = TableNames.DisplayUnit";
+        public const string TableName = TableNames.DisplayUnit;
         
         public EntityTableSet ParentTableSet { get; } // can be null
         
@@ -5040,7 +5040,7 @@ namespace Vim.Format.ObjectModel {
     public partial class ParameterDescriptorTable : EntityTable_v2, IEnumerable<ParameterDescriptor>
     {
         
-        public const string TableName = TableNames.ParameterDescriptor";
+        public const string TableName = TableNames.ParameterDescriptor;
         
         public EntityTableSet ParentTableSet { get; } // can be null
         
@@ -5111,7 +5111,7 @@ namespace Vim.Format.ObjectModel {
     public partial class ParameterTable : EntityTable_v2, IEnumerable<Parameter>
     {
         
-        public const string TableName = TableNames.Parameter";
+        public const string TableName = TableNames.Parameter;
         
         public EntityTableSet ParentTableSet { get; } // can be null
         
@@ -5156,7 +5156,7 @@ namespace Vim.Format.ObjectModel {
     public partial class ElementTable : EntityTable_v2, IEnumerable<Element>
     {
         
-        public const string TableName = TableNames.Element";
+        public const string TableName = TableNames.Element;
         
         public EntityTableSet ParentTableSet { get; } // can be null
         
@@ -5287,7 +5287,7 @@ namespace Vim.Format.ObjectModel {
     public partial class WorksetTable : EntityTable_v2, IEnumerable<Workset>
     {
         
-        public const string TableName = TableNames.Workset";
+        public const string TableName = TableNames.Workset;
         
         public EntityTableSet ParentTableSet { get; } // can be null
         
@@ -5350,7 +5350,7 @@ namespace Vim.Format.ObjectModel {
     public partial class AssemblyInstanceTable : EntityTable_v2, IEnumerable<AssemblyInstance>
     {
         
-        public const string TableName = TableNames.AssemblyInstance";
+        public const string TableName = TableNames.AssemblyInstance;
         
         public EntityTableSet ParentTableSet { get; } // can be null
         
@@ -5401,7 +5401,7 @@ namespace Vim.Format.ObjectModel {
     public partial class GroupTable : EntityTable_v2, IEnumerable<Group>
     {
         
-        public const string TableName = TableNames.Group";
+        public const string TableName = TableNames.Group;
         
         public EntityTableSet ParentTableSet { get; } // can be null
         
@@ -5452,7 +5452,7 @@ namespace Vim.Format.ObjectModel {
     public partial class DesignOptionTable : EntityTable_v2, IEnumerable<DesignOption>
     {
         
-        public const string TableName = TableNames.DesignOption";
+        public const string TableName = TableNames.DesignOption;
         
         public EntityTableSet ParentTableSet { get; } // can be null
         
@@ -5491,7 +5491,7 @@ namespace Vim.Format.ObjectModel {
     public partial class LevelTable : EntityTable_v2, IEnumerable<Level>
     {
         
-        public const string TableName = TableNames.Level";
+        public const string TableName = TableNames.Level;
         
         public EntityTableSet ParentTableSet { get; } // can be null
         
@@ -5546,7 +5546,7 @@ namespace Vim.Format.ObjectModel {
     public partial class PhaseTable : EntityTable_v2, IEnumerable<Phase>
     {
         
-        public const string TableName = TableNames.Phase";
+        public const string TableName = TableNames.Phase;
         
         public EntityTableSet ParentTableSet { get; } // can be null
         
@@ -5581,7 +5581,7 @@ namespace Vim.Format.ObjectModel {
     public partial class RoomTable : EntityTable_v2, IEnumerable<Room>
     {
         
-        public const string TableName = TableNames.Room";
+        public const string TableName = TableNames.Room;
         
         public EntityTableSet ParentTableSet { get; } // can be null
         
@@ -5650,7 +5650,7 @@ namespace Vim.Format.ObjectModel {
     public partial class BimDocumentTable : EntityTable_v2, IEnumerable<BimDocument>
     {
         
-        public const string TableName = TableNames.BimDocument";
+        public const string TableName = TableNames.BimDocument;
         
         public EntityTableSet ParentTableSet { get; } // can be null
         
@@ -5819,7 +5819,7 @@ namespace Vim.Format.ObjectModel {
     public partial class DisplayUnitInBimDocumentTable : EntityTable_v2, IEnumerable<DisplayUnitInBimDocument>
     {
         
-        public const string TableName = TableNames.DisplayUnitInBimDocument";
+        public const string TableName = TableNames.DisplayUnitInBimDocument;
         
         public EntityTableSet ParentTableSet { get; } // can be null
         
@@ -5860,7 +5860,7 @@ namespace Vim.Format.ObjectModel {
     public partial class PhaseOrderInBimDocumentTable : EntityTable_v2, IEnumerable<PhaseOrderInBimDocument>
     {
         
-        public const string TableName = TableNames.PhaseOrderInBimDocument";
+        public const string TableName = TableNames.PhaseOrderInBimDocument;
         
         public EntityTableSet ParentTableSet { get; } // can be null
         
@@ -5905,7 +5905,7 @@ namespace Vim.Format.ObjectModel {
     public partial class CategoryTable : EntityTable_v2, IEnumerable<Category>
     {
         
-        public const string TableName = TableNames.Category";
+        public const string TableName = TableNames.Category;
         
         public EntityTableSet ParentTableSet { get; } // can be null
         
@@ -5974,7 +5974,7 @@ namespace Vim.Format.ObjectModel {
     public partial class FamilyTable : EntityTable_v2, IEnumerable<Family>
     {
         
-        public const string TableName = TableNames.Family";
+        public const string TableName = TableNames.Family;
         
         public EntityTableSet ParentTableSet { get; } // can be null
         
@@ -6031,7 +6031,7 @@ namespace Vim.Format.ObjectModel {
     public partial class FamilyTypeTable : EntityTable_v2, IEnumerable<FamilyType>
     {
         
-        public const string TableName = TableNames.FamilyType";
+        public const string TableName = TableNames.FamilyType;
         
         public EntityTableSet ParentTableSet { get; } // can be null
         
@@ -6082,7 +6082,7 @@ namespace Vim.Format.ObjectModel {
     public partial class FamilyInstanceTable : EntityTable_v2, IEnumerable<FamilyInstance>
     {
         
-        public const string TableName = TableNames.FamilyInstance";
+        public const string TableName = TableNames.FamilyInstance;
         
         public EntityTableSet ParentTableSet { get; } // can be null
         
@@ -6239,7 +6239,7 @@ namespace Vim.Format.ObjectModel {
     public partial class ViewTable : EntityTable_v2, IEnumerable<View>
     {
         
-        public const string TableName = TableNames.View";
+        public const string TableName = TableNames.View;
         
         public EntityTableSet ParentTableSet { get; } // can be null
         
@@ -6378,7 +6378,7 @@ namespace Vim.Format.ObjectModel {
     public partial class ElementInViewTable : EntityTable_v2, IEnumerable<ElementInView>
     {
         
-        public const string TableName = TableNames.ElementInView";
+        public const string TableName = TableNames.ElementInView;
         
         public EntityTableSet ParentTableSet { get; } // can be null
         
@@ -6419,7 +6419,7 @@ namespace Vim.Format.ObjectModel {
     public partial class ShapeInViewTable : EntityTable_v2, IEnumerable<ShapeInView>
     {
         
-        public const string TableName = TableNames.ShapeInView";
+        public const string TableName = TableNames.ShapeInView;
         
         public EntityTableSet ParentTableSet { get; } // can be null
         
@@ -6460,7 +6460,7 @@ namespace Vim.Format.ObjectModel {
     public partial class AssetInViewTable : EntityTable_v2, IEnumerable<AssetInView>
     {
         
-        public const string TableName = TableNames.AssetInView";
+        public const string TableName = TableNames.AssetInView;
         
         public EntityTableSet ParentTableSet { get; } // can be null
         
@@ -6501,7 +6501,7 @@ namespace Vim.Format.ObjectModel {
     public partial class AssetInViewSheetTable : EntityTable_v2, IEnumerable<AssetInViewSheet>
     {
         
-        public const string TableName = TableNames.AssetInViewSheet";
+        public const string TableName = TableNames.AssetInViewSheet;
         
         public EntityTableSet ParentTableSet { get; } // can be null
         
@@ -6542,7 +6542,7 @@ namespace Vim.Format.ObjectModel {
     public partial class LevelInViewTable : EntityTable_v2, IEnumerable<LevelInView>
     {
         
-        public const string TableName = TableNames.LevelInView";
+        public const string TableName = TableNames.LevelInView;
         
         public EntityTableSet ParentTableSet { get; } // can be null
         
@@ -6607,7 +6607,7 @@ namespace Vim.Format.ObjectModel {
     public partial class CameraTable : EntityTable_v2, IEnumerable<Camera>
     {
         
-        public const string TableName = TableNames.Camera";
+        public const string TableName = TableNames.Camera;
         
         public EntityTableSet ParentTableSet { get; } // can be null
         
@@ -6672,7 +6672,7 @@ namespace Vim.Format.ObjectModel {
     public partial class MaterialTable : EntityTable_v2, IEnumerable<Material>
     {
         
-        public const string TableName = TableNames.Material";
+        public const string TableName = TableNames.Material;
         
         public EntityTableSet ParentTableSet { get; } // can be null
         
@@ -6787,7 +6787,7 @@ namespace Vim.Format.ObjectModel {
     public partial class MaterialInElementTable : EntityTable_v2, IEnumerable<MaterialInElement>
     {
         
-        public const string TableName = TableNames.MaterialInElement";
+        public const string TableName = TableNames.MaterialInElement;
         
         public EntityTableSet ParentTableSet { get; } // can be null
         
@@ -6840,7 +6840,7 @@ namespace Vim.Format.ObjectModel {
     public partial class CompoundStructureLayerTable : EntityTable_v2, IEnumerable<CompoundStructureLayer>
     {
         
-        public const string TableName = TableNames.CompoundStructureLayer";
+        public const string TableName = TableNames.CompoundStructureLayer;
         
         public EntityTableSet ParentTableSet { get; } // can be null
         
@@ -6893,7 +6893,7 @@ namespace Vim.Format.ObjectModel {
     public partial class CompoundStructureTable : EntityTable_v2, IEnumerable<CompoundStructure>
     {
         
-        public const string TableName = TableNames.CompoundStructure";
+        public const string TableName = TableNames.CompoundStructure;
         
         public EntityTableSet ParentTableSet { get; } // can be null
         
@@ -6932,7 +6932,7 @@ namespace Vim.Format.ObjectModel {
     public partial class NodeTable : EntityTable_v2, IEnumerable<Node>
     {
         
-        public const string TableName = TableNames.Node";
+        public const string TableName = TableNames.Node;
         
         public EntityTableSet ParentTableSet { get; } // can be null
         
@@ -6967,7 +6967,7 @@ namespace Vim.Format.ObjectModel {
     public partial class GeometryTable : EntityTable_v2, IEnumerable<Geometry>
     {
         
-        public const string TableName = TableNames.Geometry";
+        public const string TableName = TableNames.Geometry;
         
         public EntityTableSet ParentTableSet { get; } // can be null
         
@@ -7028,7 +7028,7 @@ namespace Vim.Format.ObjectModel {
     public partial class ShapeTable : EntityTable_v2, IEnumerable<Shape>
     {
         
-        public const string TableName = TableNames.Shape";
+        public const string TableName = TableNames.Shape;
         
         public EntityTableSet ParentTableSet { get; } // can be null
         
@@ -7063,7 +7063,7 @@ namespace Vim.Format.ObjectModel {
     public partial class ShapeCollectionTable : EntityTable_v2, IEnumerable<ShapeCollection>
     {
         
-        public const string TableName = TableNames.ShapeCollection";
+        public const string TableName = TableNames.ShapeCollection;
         
         public EntityTableSet ParentTableSet { get; } // can be null
         
@@ -7098,7 +7098,7 @@ namespace Vim.Format.ObjectModel {
     public partial class ShapeInShapeCollectionTable : EntityTable_v2, IEnumerable<ShapeInShapeCollection>
     {
         
-        public const string TableName = TableNames.ShapeInShapeCollection";
+        public const string TableName = TableNames.ShapeInShapeCollection;
         
         public EntityTableSet ParentTableSet { get; } // can be null
         
@@ -7139,7 +7139,7 @@ namespace Vim.Format.ObjectModel {
     public partial class SystemTable : EntityTable_v2, IEnumerable<System>
     {
         
-        public const string TableName = TableNames.System";
+        public const string TableName = TableNames.System;
         
         public EntityTableSet ParentTableSet { get; } // can be null
         
@@ -7184,7 +7184,7 @@ namespace Vim.Format.ObjectModel {
     public partial class ElementInSystemTable : EntityTable_v2, IEnumerable<ElementInSystem>
     {
         
-        public const string TableName = TableNames.ElementInSystem";
+        public const string TableName = TableNames.ElementInSystem;
         
         public EntityTableSet ParentTableSet { get; } // can be null
         
@@ -7229,7 +7229,7 @@ namespace Vim.Format.ObjectModel {
     public partial class WarningTable : EntityTable_v2, IEnumerable<Warning>
     {
         
-        public const string TableName = TableNames.Warning";
+        public const string TableName = TableNames.Warning;
         
         public EntityTableSet ParentTableSet { get; } // can be null
         
@@ -7276,7 +7276,7 @@ namespace Vim.Format.ObjectModel {
     public partial class ElementInWarningTable : EntityTable_v2, IEnumerable<ElementInWarning>
     {
         
-        public const string TableName = TableNames.ElementInWarning";
+        public const string TableName = TableNames.ElementInWarning;
         
         public EntityTableSet ParentTableSet { get; } // can be null
         
@@ -7317,7 +7317,7 @@ namespace Vim.Format.ObjectModel {
     public partial class BasePointTable : EntityTable_v2, IEnumerable<BasePoint>
     {
         
-        public const string TableName = TableNames.BasePoint";
+        public const string TableName = TableNames.BasePoint;
         
         public EntityTableSet ParentTableSet { get; } // can be null
         
@@ -7380,7 +7380,7 @@ namespace Vim.Format.ObjectModel {
     public partial class PhaseFilterTable : EntityTable_v2, IEnumerable<PhaseFilter>
     {
         
-        public const string TableName = TableNames.PhaseFilter";
+        public const string TableName = TableNames.PhaseFilter;
         
         public EntityTableSet ParentTableSet { get; } // can be null
         
@@ -7431,7 +7431,7 @@ namespace Vim.Format.ObjectModel {
     public partial class GridTable : EntityTable_v2, IEnumerable<Grid>
     {
         
-        public const string TableName = TableNames.Grid";
+        public const string TableName = TableNames.Grid;
         
         public EntityTableSet ParentTableSet { get; } // can be null
         
@@ -7524,7 +7524,7 @@ namespace Vim.Format.ObjectModel {
     public partial class AreaTable : EntityTable_v2, IEnumerable<Area>
     {
         
-        public const string TableName = TableNames.Area";
+        public const string TableName = TableNames.Area;
         
         public EntityTableSet ParentTableSet { get; } // can be null
         
@@ -7581,7 +7581,7 @@ namespace Vim.Format.ObjectModel {
     public partial class AreaSchemeTable : EntityTable_v2, IEnumerable<AreaScheme>
     {
         
-        public const string TableName = TableNames.AreaScheme";
+        public const string TableName = TableNames.AreaScheme;
         
         public EntityTableSet ParentTableSet { get; } // can be null
         
@@ -7620,7 +7620,7 @@ namespace Vim.Format.ObjectModel {
     public partial class ScheduleTable : EntityTable_v2, IEnumerable<Schedule>
     {
         
-        public const string TableName = TableNames.Schedule";
+        public const string TableName = TableNames.Schedule;
         
         public EntityTableSet ParentTableSet { get; } // can be null
         
@@ -7655,7 +7655,7 @@ namespace Vim.Format.ObjectModel {
     public partial class ScheduleColumnTable : EntityTable_v2, IEnumerable<ScheduleColumn>
     {
         
-        public const string TableName = TableNames.ScheduleColumn";
+        public const string TableName = TableNames.ScheduleColumn;
         
         public EntityTableSet ParentTableSet { get; } // can be null
         
@@ -7698,7 +7698,7 @@ namespace Vim.Format.ObjectModel {
     public partial class ScheduleCellTable : EntityTable_v2, IEnumerable<ScheduleCell>
     {
         
-        public const string TableName = TableNames.ScheduleCell";
+        public const string TableName = TableNames.ScheduleCell;
         
         public EntityTableSet ParentTableSet { get; } // can be null
         
@@ -7741,7 +7741,7 @@ namespace Vim.Format.ObjectModel {
     public partial class ViewSheetSetTable : EntityTable_v2, IEnumerable<ViewSheetSet>
     {
         
-        public const string TableName = TableNames.ViewSheetSet";
+        public const string TableName = TableNames.ViewSheetSet;
         
         public EntityTableSet ParentTableSet { get; } // can be null
         
@@ -7776,7 +7776,7 @@ namespace Vim.Format.ObjectModel {
     public partial class ViewSheetTable : EntityTable_v2, IEnumerable<ViewSheet>
     {
         
-        public const string TableName = TableNames.ViewSheet";
+        public const string TableName = TableNames.ViewSheet;
         
         public EntityTableSet ParentTableSet { get; } // can be null
         
@@ -7817,7 +7817,7 @@ namespace Vim.Format.ObjectModel {
     public partial class ViewSheetInViewSheetSetTable : EntityTable_v2, IEnumerable<ViewSheetInViewSheetSet>
     {
         
-        public const string TableName = TableNames.ViewSheetInViewSheetSet";
+        public const string TableName = TableNames.ViewSheetInViewSheetSet;
         
         public EntityTableSet ParentTableSet { get; } // can be null
         
@@ -7858,7 +7858,7 @@ namespace Vim.Format.ObjectModel {
     public partial class ViewInViewSheetSetTable : EntityTable_v2, IEnumerable<ViewInViewSheetSet>
     {
         
-        public const string TableName = TableNames.ViewInViewSheetSet";
+        public const string TableName = TableNames.ViewInViewSheetSet;
         
         public EntityTableSet ParentTableSet { get; } // can be null
         
@@ -7899,7 +7899,7 @@ namespace Vim.Format.ObjectModel {
     public partial class ViewInViewSheetTable : EntityTable_v2, IEnumerable<ViewInViewSheet>
     {
         
-        public const string TableName = TableNames.ViewInViewSheet";
+        public const string TableName = TableNames.ViewInViewSheet;
         
         public EntityTableSet ParentTableSet { get; } // can be null
         
@@ -7940,7 +7940,7 @@ namespace Vim.Format.ObjectModel {
     public partial class SiteTable : EntityTable_v2, IEnumerable<Site>
     {
         
-        public const string TableName = TableNames.Site";
+        public const string TableName = TableNames.Site;
         
         public EntityTableSet ParentTableSet { get; } // can be null
         
@@ -7995,7 +7995,7 @@ namespace Vim.Format.ObjectModel {
     public partial class BuildingTable : EntityTable_v2, IEnumerable<Building>
     {
         
-        public const string TableName = TableNames.Building";
+        public const string TableName = TableNames.Building;
         
         public EntityTableSet ParentTableSet { get; } // can be null
         
