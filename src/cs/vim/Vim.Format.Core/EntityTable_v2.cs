@@ -8,7 +8,7 @@ namespace Vim.Format
 {
     public class EntityTable_v2
     {
-        private readonly string[] _stringBuffer;
+        private readonly string[] _stringTable;
 
         public Dictionary<string, NamedBuffer<int>> IndexColumns { get; } = new Dictionary<string, NamedBuffer<int>>();
         public Dictionary<string, NamedBuffer<int>> StringColumns { get; } = new Dictionary<string, NamedBuffer<int>>();
@@ -34,7 +34,7 @@ namespace Vim.Format
         /// </summary>
         public EntityTable_v2(
             SerializableEntityTable et,
-            string[] stringBuffer)
+            string[] stringTable)
         {
             Name = et.Name;
             Columns = et.ValidateColumnRowsAreAligned();
@@ -49,7 +49,7 @@ namespace Vim.Format
             foreach (var column in et.DataColumns)
                 DataColumns[column.Name] = column;
 
-            _stringBuffer = stringBuffer;
+            _stringTable = stringTable;
         }
 
         private static T GetColumnOrDefault<T>(Dictionary<string, T> map, string key, T defaultValue = default)
@@ -73,9 +73,9 @@ namespace Vim.Format
 
             for (var i = 0; i < strings.Length; i++)
             {
-                strings[i] = _stringBuffer == null || _stringBuffer.Length == 0
+                strings[i] = _stringTable == null || _stringTable.Length == 0
                     ? "" // Guard against the case where the string buffer is null or empty.
-                    : _stringBuffer.ElementAtOrDefault(stringIndices[i], "");
+                    : _stringTable.ElementAtOrDefault(stringIndices[i], "");
             }
 
             return strings;

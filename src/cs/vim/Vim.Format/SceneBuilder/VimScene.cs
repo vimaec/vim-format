@@ -8,7 +8,9 @@ using Vim.Format.ObjectModel;
 using Vim.G3d;
 using Vim.LinqArray;
 using Vim.Math3d;
+using Vim.Util;
 
+using ElementIndexToNodeAndGeometryMap = Vim.Util.DictionaryOfLists<int, (int NodeIndex, int GeometryIndex)>;
 using IVimSceneProgress = System.IProgress<(string, double)>;
 
 namespace Vim
@@ -212,19 +214,7 @@ namespace Vim
                 VimNodes = VimNodes.Select(nodeTransform).EvaluateInParallel();
         }
 
-        public string GetElementName(int elementIndex, string missing = "")
-            => DocumentModel.GetElementName(elementIndex, missing);
 
-        public string GetBimDocumentFileName(int index = 0, string missing = "")
-        {
-            var bimDocumentPathName = DocumentModel.GetBimDocumentPathName(index, null);
-            return bimDocumentPathName == null
-                ? missing
-                : Path.GetFileName(bimDocumentPathName);
-        }
-
-        public BimDocument GetBimDocument(int index = 0)
-            => DocumentModel.GetBimDocument(index);
 
         private class Step : IStep
         {

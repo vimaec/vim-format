@@ -90,20 +90,31 @@ namespace Vim.Format.ObjectModel
         public static DictionaryOfLists<int, int> GetElementIndicesMap(EntityTable et)
         {
             var indicesMap = new DictionaryOfLists<int, int>();
-            var elementIndices = et?.IndexColumns[ElementIndexColumnName]?.GetTypedData();
+
+            if (et?.IndexColumns?.Contains(ElementIndexColumnName) != true)
+                return indicesMap;
+
+            var elementIndices = et.IndexColumns[ElementIndexColumnName]?.GetTypedData();
             if (elementIndices == null)
                 return indicesMap;
+
             for (var i = 0; i < elementIndices.Length; ++i)
                 indicesMap.Add(elementIndices[i], i);
+
             return indicesMap;
         }
 
         public static DictionaryOfLists<int, int> GetElementIndicesMap(EntityTable_v2 et)
         {
             var indicesMap = new DictionaryOfLists<int, int>();
-            var elementIndices = et?.IndexColumns[ElementIndexColumnName]?.GetTypedData();
+
+            if (et?.IndexColumns?.TryGetValue(ElementIndexColumnName, out var buffer) != true || buffer == null)
+                return indicesMap;
+
+            var elementIndices = buffer.GetTypedData();
             if (elementIndices == null)
                 return indicesMap;
+
             for (var i = 0; i < elementIndices.Length; ++i)
                 indicesMap.Add(elementIndices[i], i);
             return indicesMap;
@@ -112,18 +123,25 @@ namespace Vim.Format.ObjectModel
         public static IndexMap GetElementIndexMap(EntityTable et)
         {
             var indexMap = new IndexMap();
-            var elementIndices = et?.IndexColumns[ElementIndexColumnName]?.GetTypedData();
+
+            if (et?.IndexColumns?.Contains(ElementIndexColumnName) != true)
+                return indexMap;
+
+            var elementIndices = et.IndexColumns[ElementIndexColumnName]?.GetTypedData();
             if (elementIndices == null)
                 return indexMap;
+
             for (var i = 0; i < elementIndices.Length; ++i)
                 indexMap.TryAdd(elementIndices[i], i);
+
             return indexMap;
         }
 
         public static IndexMap GetElementIndexMap(EntityTable_v2 et)
         {
             var indexMap = new IndexMap();
-            if (et?.IndexColumns.TryGetValue(ElementIndexColumnName, out var buffer) != true || buffer == null)
+
+            if (et?.IndexColumns?.TryGetValue(ElementIndexColumnName, out var buffer) != true || buffer == null)
                 return indexMap;
 
             var elementIndices = buffer.GetTypedData();

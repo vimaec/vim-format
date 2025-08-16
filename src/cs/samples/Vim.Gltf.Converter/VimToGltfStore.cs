@@ -14,12 +14,12 @@ namespace Vim.Gltf.Converter
     /// </summary>
     public class VimToGltfStore
     {
-        public const float FeetToMeters = 1.0f / 3.280839895f;
+        
 
         /// <summary>
         /// Converts the given VIM file into a GLTF (.glb) file.
         /// </summary>
-        public static void Convert(string vimFilePath, string gltfFilePath, float scale = FeetToMeters, bool validateGltf = true)
+        public static void Convert(string vimFilePath, string gltfFilePath, float scale = (float) Util.Units.FeetToMetersRatio, bool validateGltf = true)
         {
             var vim = VimScene.LoadVim(vimFilePath);
 

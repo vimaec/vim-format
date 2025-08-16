@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
+using static Vim.Format.Serializer;
 
 namespace Vim.Format.ObjectModel
 {
@@ -10,18 +11,83 @@ namespace Vim.Format.ObjectModel
     public partial class EntityTableSet
     {
         /// <summary>
-        /// Convenience constructor for seeking entity table information in a VIM file.
+        ///   Represents a collection of entity tables.
         /// </summary>
+        /// <param name="vimFileInfo">
+        ///     The VIM file from which to load the entity tables.
+        /// </param>
+        /// <param name="stringTable">
+        ///     The string table, which can be loaded separately.
+        ///     If null (and schemaOnly is false), the string table will be loaded from the VIM file.
+        ///     Provide an empty array to avoid loading the string table.
+        /// </param>
+        /// <param name="entityTableNameFilterFunc">
+        ///     A filter which specifies which entity tables to load by name.
+        /// </param>
+        /// <param name="entityTableColumnFilter">
+        ///     A filter which specifies which entity table column to load by name.
+        /// </param>
+        /// <param name="inParallel">
+        ///     Determines whether the loading process may occur in parallel (speeds up the loading time).
+        /// </param>
+        /// <param name="schemaOnly">
+        ///     If true, only the table schema will be returned.
+        /// </param>
         public EntityTableSet(
             FileInfo vimFileInfo,
-            bool schemaOnly,
-            string[] stringBuffer,
+            string[] stringTable = null,
             Func<string, bool> entityTableNameFilterFunc = null,
-            bool inParallel = true)
+            EntityTableColumnFilter entityTableColumnFilter = null,
+            bool inParallel = true,
+            bool schemaOnly = false)
             : this(
-                vimFileInfo.EnumerateEntityTables(schemaOnly, entityTableNameFilterFunc).ToArray(),
-                stringBuffer,
+                vimFileInfo.EnumerateEntityTables(schemaOnly, entityTableNameFilterFunc, entityTableColumnFilter).ToArray(),
+                stringTable ?? (schemaOnly ? null : vimFileInfo.GetStringTable()),
                 inParallel)
         { }
+
+        public static ElementKind[] GetElementKinds(FileInfo vimFileInfo)
+        {
+            var elementTableName = TableNames.Element;
+
+            var elementKindTableNames = GetElementKindTableNames();
+            elementKindTableNames.Add(elementTableName);
+            
+            var ets = new EntityTableSet(
+                vimFileInfo,
+                Array.Empty<string>(),
+                entityTableName => elementKindTableNames.Contains(entityTableName),
+                (entityTableName, colName) =>
+                    // If we're dealing with the element table, load a single column from the element table (i.e. the ID column)
+                    (entityTableName == elementTableName && (colName is "long:Id" || colName is "int:Id")) ||
+                    // Otherwise, load the element index column.
+                    colName == "index:Vim.Element:Element"
+            );
+
+            return ets.GetElementKinds();
+        }
+    }
+
+    public partial class CategoryTable
+    {
+        /// <summary>
+        /// Returns the full name of the category, ex: "parentCategoryName: categoryName" or just "categoryName" if there is no parent.
+        /// </summary>
+        public static string GetNameFull(string parentCategoryName, string categoryName)
+            => !string.IsNullOrEmpty(parentCategoryName)
+                ? $"{parentCategoryName}: {categoryName}"
+                : categoryName;
+
+        /// <summary>
+        /// Returns the full name of the category, ex: "parentCategoryName: categoryName" or just "categoryName" if there is no parent.
+        /// </summary>
+        public string GetNameFull(int categoryIndex)
+        {
+            var categoryName = GetName(categoryIndex);
+            var parentIndex = GetParentIndex(categoryIndex);
+            var parentCategoryName = parentIndex >= 0 ? GetName(parentIndex) : "";
+
+            return GetNameFull(parentCategoryName, categoryName);
+        }
     }
 }

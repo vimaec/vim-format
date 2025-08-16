@@ -150,7 +150,7 @@ public static class TransformServiceTests
         var ctx = new CallerTestContext();
         var dir = ctx.PrepareDirectory();
 
-        var vimFilePath = Path.Combine(VimFormatRepoPaths.DataDir, "Dwelling.r2019.om_v5.5.0.vim");
+        var vimFilePath = VimFormatRepoPaths.GetDataFilePath("Dwelling*.vim", true);
 
         // Setup: Merge two identical VIM files as a grid.
         var vim1 = VimScene.LoadVim(vimFilePath);

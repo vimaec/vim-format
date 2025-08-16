@@ -29,7 +29,7 @@ namespace Vim.Format.ObjectModel
         }
 
         private IEnumerable<DocumentBuilder.Material> CreateMaterialBuilders()
-            => ObjectModelBuilder.GetEntities<Material>().Select(ConvertMaterialEntityToRenderableMaterial);
+            => ObjectModelBuilder.MaterialBuilder.Entities.Select(ConvertMaterialEntityToRenderableMaterial);
 
         public static DocumentBuilder.Material ConvertMaterialEntityToRenderableMaterial(Material m)
             => ConvertMaterialEntityFieldsToRenderableMaterial(

@@ -220,6 +220,48 @@ namespace Vim.Format.ObjectModel
         }
     }
 
+    public enum ElementKind
+    {
+        Unknown = 0,
+        FamilyInstance = 1,
+        FamilyType = 2,
+        Family = 3,
+        Group = 4,
+        System = 5,
+        Room = 6,
+        Area = 7,
+        AreaScheme = 8,
+        Level = 9,
+        Grid = 10,
+        Building = 11,
+        Site = 12,
+        BasePoint = 13,
+        BimDocument = 14,
+        Material = 15,
+        Phase = 16,
+        PhaseFilter = 17,
+        View = 18,
+        ViewSheet = 19,
+        ViewSheetSet = 20,
+        Schedule = 21,
+        AssemblyInstance = 22,
+        DesignOption = 23,
+        // [MAINTAIN]
+        // - Add more element kinds here if new element entities are added; do not re-order this enum!
+        // - Also create a new SQL vw_Element_v* view with new element kind mapping.
+    }
+
+    [AttributeUsage(AttributeTargets.Class)]
+    public class ElementKindAttribute : Attribute
+    {
+        public ElementKind ElementKind;
+
+        public ElementKindAttribute(ElementKind elementKind)
+        {
+            ElementKind = elementKind;
+        }
+    }
+
     [AttributeUsage(AttributeTargets.Field)]
     public class IgnoreInEquality : Attribute { }
 
@@ -292,12 +334,20 @@ namespace Vim.Format.ObjectModel
             => Index = index;
     }
 
+    public interface IElementIndex
+    {
+        int GetElementIndexOrNone();
+    }
+
     /// <summary>
     /// Represents an Entity which contains a Relation to an Element.
     /// </summary>
-    public partial class EntityWithElement : Entity
+    public partial class EntityWithElement : Entity, IElementIndex
     {
         public Relation<Element> _Element;
+
+        public int GetElementIndexOrNone()
+            => _Element?.Index ?? EntityRelation.None;
     }
 
     /// <summary>
@@ -313,15 +363,29 @@ namespace Vim.Format.ObjectModel
     }
 
     /// <summary>
-    /// Defines how a parameter is displayed by indicating whether the value's type is a length, a volume, etc,
-    /// and how that value should be shown via its spec (ex: as fractional inches, etc).
+    /// Defines the display units of a ParameterDefinition
     /// </summary>
     [TableName(TableNames.DisplayUnit)]
     public partial class DisplayUnit : Entity, IStorageKey
     {
-        public string Spec; // ex: "UT_Length" in Revit 2020 and prior, or "autodesk.spec.aec:length-1.0.0" in Revit 2021 and up.
-        public string Type; // ex: "DUT_FEET_FRACTIONAL_INCHES" in Revit 2020 and prior, or "autodesk.unit.unit:feetFractionalInches-1.0.0" in Revit 2021 and up.
-        public string Label; // The localized label, ex: "Feet and fractional inches"
+        /// <summary>
+        /// Corresponds to an underlying physical unit, for example a length, an area, a volume, etc.
+        /// In Revit 2020 and earlier, this is serialized as an internal string, ex: "UT_Length".
+        /// In Revit 2021 and beyond, this is serialized as a ForgeTypeId, ex: "autodesk.spec.aec:length-1.0.0"
+        /// </summary>
+        public string Spec;
+
+        /// <summary>
+        /// Corresponds to the display unit type.
+        /// In Revit 2020 and earlier, this is serialized as an internal string, ex: "DUT_FEET_FRACTIONAL_INCHES"
+        /// In Revit 2021 and beyond, this is serialized as a ForgeTypeId, ex: "autodesk.unit.unit:feetFractionalInches-1.0.0"
+        /// </summary>
+        public string Type;
+
+        /// <summary>
+        /// Corresponds to the localized display unit type, ex: "Feet and Fractional Inches".
+        /// </summary>
+        public string Label;
 
         public object GetStorageKey()
             => (Spec, Type, Label);
@@ -360,8 +424,19 @@ namespace Vim.Format.ObjectModel
     [TableName(TableNames.ParameterDescriptor)]
     public partial class ParameterDescriptor : Entity, IStorageKey
     {
+        /// <summary>
+        /// The name of the parameter.
+        /// </summary>
         public string Name;
+
+        /// <summary>
+        /// The group in which the parameter belongs.
+        /// </summary>
         public string Group;
+
+        /// <summary>
+        /// The serialized type of the parameter value.
+        /// </summary>
         public string ParameterType;
 
         // Maintenance note: IsInstance, IsShared, and IsReadOnly were added prior to object model v4.2.0 and are preserved for backwards compatibility.
@@ -389,12 +464,16 @@ namespace Vim.Format.ObjectModel
         public int Flags;
         
         /// <summary>
-        /// The string representation of the parameter GUID. In Revit, this GUID only exists if IsShared is true.
+        /// If the parameter definition is shared (IsShared==true), represents the GUID if the shared parameter.
+        /// If the parameter definition is internal (IsShared==false) represents:
+        /// - (In Revit 2021 and earlier) the ID of the parameter.
+        /// - (In Revit 2022 and later) the TypeId of the parameter (ForgeTypeId).
         /// </summary>
         public string Guid;
 
         /// <summary>
         /// The storage type of the parameter serialized as an int (see enum ParameterDescriptorStorageType)
+        /// Unknown = 0, Integer = 1, Double = 2, String = 3, ElementId = 4
         /// </summary>
         public int StorageType;
 
@@ -490,6 +569,70 @@ namespace Vim.Format.ObjectModel
             // values contains more than one item.
             return (values[0], values[1]);
         }
+
+        public static bool TryParseNativeValueAsDouble(string nativeValue, out double result)
+            => double.TryParse(nativeValue, out result) && !result.IsInfinity() && !result.IsNaN();
+
+        public bool TryParseNativeValueAsDouble(out double result)
+            => TryParseNativeValueAsDouble(Values.NativeValue, out result);
+
+        public static double? ParseNativeValueAsDouble(string nativeValue)
+            => TryParseNativeValueAsDouble(nativeValue, out var result) ? result : (double?) null;
+
+        public static bool TryParseNativeValueAsLong(string nativeValue, out long result)
+            => long.TryParse(nativeValue, out result);
+
+        public bool TryParseNativeValueAsLong(out long result)
+            => TryParseNativeValueAsLong(Values.NativeValue, out result);
+
+        public static long? ParseNativeValueAsLong(string nativeValue)
+            => TryParseNativeValueAsLong(nativeValue, out var result) ? result : (long?) null;
+
+        public static bool TryParseNativeValueAsElementId(string nativeValue, out long result)
+            => TryParseNativeValueAsLong(nativeValue, out result);
+
+        public bool TryParseNativeValueAsElementId(out long result)
+            => TryParseNativeValueAsLong(out result);
+
+        public static long? ParseNativeValueAsElementId(string nativeValue)
+            => ParseNativeValueAsLong(nativeValue);
+
+        public static bool TryParseNativeValueAsBoolean(string nativeValue, ParameterDescriptor desc, out bool result)
+        {
+            result = false;
+
+            switch ((ParameterDescriptorStorageType)desc.StorageType)
+            {
+                case ParameterDescriptorStorageType.ElementId:
+                    if (!long.TryParse(nativeValue, out var parsedElementId))
+                        return false;
+
+                    result = parsedElementId != -1L; // -1 Element id indicates an unassigned element ID in Revit
+                    return true;
+
+                case ParameterDescriptorStorageType.Integer:
+                    if (!long.TryParse(nativeValue, out var parsedLong))
+                        return false;
+
+                    result = parsedLong != 0L; // 0 = false in Revit
+                    return true;
+
+                case ParameterDescriptorStorageType.Double:
+                    if (!double.TryParse(nativeValue, out var parsedDouble))
+                        return false;
+
+                    result = parsedDouble != 0d; // 0 = false in Revit
+                    return true;
+
+                case ParameterDescriptorStorageType.String:
+                case ParameterDescriptorStorageType.Unknown:
+                default:
+                    return bool.TryParse(nativeValue, out result);
+            }
+        }
+
+        public bool TryParseNativeValueAsBoolean(ParameterDescriptor desc, out bool result)
+            => TryParseNativeValueAsBoolean(Values.NativeValue, desc, out result);
     }
 
     /// <summary>
@@ -552,6 +695,7 @@ namespace Vim.Format.ObjectModel
     }
 
     [TableName(TableNames.AssemblyInstance)]
+    [ElementKind(ElementKind.AssemblyInstance)]
     public partial class AssemblyInstance : EntityWithElement
     {
         public string AssemblyTypeName;
@@ -567,6 +711,7 @@ namespace Vim.Format.ObjectModel
 
     [TableName(TableNames.Group)]
     [CascadeElementRemap] // Groups can be family instances
+    [ElementKind(ElementKind.Group)]
     public partial class Group : EntityWithElement
     {
         public string GroupType;
@@ -581,6 +726,7 @@ namespace Vim.Format.ObjectModel
     }
 
     [TableName(TableNames.DesignOption)]
+    [ElementKind(ElementKind.DesignOption)]
     public partial class DesignOption : EntityWithElement
     {
         public bool IsPrimary;
@@ -590,6 +736,7 @@ namespace Vim.Format.ObjectModel
     /// Represents an XY plane at a specific Z coordinate in the model.
     /// </summary>
     [TableName(TableNames.Level)]
+    [ElementKind(ElementKind.Level)]
     public partial class Level : EntityWithElement
     {
         /// <summary>
@@ -621,14 +768,15 @@ namespace Vim.Format.ObjectModel
     /// Represents a phase of construction.
     /// </summary>
     [TableName(TableNames.Phase)]
+    [ElementKind(ElementKind.Phase)]
     public partial class Phase : EntityWithElement
-    {
-    }
+    { }
 
     /// <summary>
     /// Represents a room in the model.
     /// </summary>
     [TableName(TableNames.Room)]
+    [ElementKind(ElementKind.Room)]
     public partial class Room : EntityWithElement
     {
         public double BaseOffset;
@@ -645,6 +793,7 @@ namespace Vim.Format.ObjectModel
     /// Represents a source BIM document, for example: a Revit file, or an IFC file.
     /// </summary>
     [TableName(TableNames.BimDocument)]
+    [ElementKind(ElementKind.BimDocument)]
     public partial class BimDocument : EntityWithElement
     {
         public string Title;
@@ -751,6 +900,7 @@ namespace Vim.Format.ObjectModel
     /// Represents a collection FamilyTypes, for example an 'I Beam' Family.
     /// </summary>
     [TableName(TableNames.Family)]
+    [ElementKind(ElementKind.Family)]
     public partial class Family : EntityWithElement
     {
         public string StructuralMaterialType;
@@ -766,6 +916,7 @@ namespace Vim.Format.ObjectModel
     /// In the Revit API, the FamilyType closely correlates to the FamilySymbol class.
     /// </summary>
     [TableName(TableNames.FamilyType)]
+    [ElementKind(ElementKind.FamilyType)]
     public partial class FamilyType : EntityWithElement
     {
         public bool IsSystemFamilyType;
@@ -780,6 +931,7 @@ namespace Vim.Format.ObjectModel
     /// </summary>
     [TableName(TableNames.FamilyInstance)]
     [CascadeElementRemap]
+    [ElementKind(ElementKind.FamilyInstance)]
     public partial class FamilyInstance : EntityWithElement
     {
         public bool FacingFlipped;
@@ -855,6 +1007,7 @@ namespace Vim.Format.ObjectModel
     /// Represents a 3D or a 2D view.
     /// </summary>
     [TableName(TableNames.View)]
+    [ElementKind(ElementKind.View)]
     public partial class View : EntityWithElement
     {
         public string Title;
@@ -1072,6 +1225,7 @@ namespace Vim.Format.ObjectModel
     [G3dAttributeReference("g3d:material:color:0:float32:4", G3dAttributeReferenceMultiplicity.OneToOne)]
     [G3dAttributeReference("g3d:material:glossiness:0:float32:1", G3dAttributeReferenceMultiplicity.OneToOne)]
     [G3dAttributeReference("g3d:material:smoothness:0:float32:1", G3dAttributeReferenceMultiplicity.OneToOne)]
+    [ElementKind(ElementKind.Material)]
     public partial class Material : EntityWithElement
     {
         /// <summary>
@@ -1334,6 +1488,7 @@ namespace Vim.Format.ObjectModel
     /// Represents a collection of Elements which compose a System. These may be mechanical systems, piping systems, electrical systems, curtain walls, stairs, etc.
     /// </summary>
     [TableName(TableNames.System)]
+    [ElementKind(ElementKind.System)]
     public partial class System : EntityWithElement
     {
         /// <summary>
@@ -1440,6 +1595,7 @@ namespace Vim.Format.ObjectModel
     /// BasePoints are only exported in Revit 2021+
     /// </summary>
     [TableName(TableNames.BasePoint)]
+    [ElementKind(ElementKind.BasePoint)]
     public partial class BasePoint : EntityWithElement
     {
         /// <summary>
@@ -1500,6 +1656,7 @@ namespace Vim.Format.ObjectModel
     /// Represents a row in the Phase Filters view in Revit.
     /// </summary>
     [TableName(TableNames.PhaseFilter)]
+    [ElementKind(ElementKind.PhaseFilter)]
     public partial class PhaseFilter : EntityWithElement
     {
         /// <summary>
@@ -1539,6 +1696,7 @@ namespace Vim.Format.ObjectModel
     /// Represents a vertical plane (or a vertical cylindrical segment when curved).
     /// </summary>
     [TableName(TableNames.Grid)]
+    [ElementKind(ElementKind.Grid)]
     public partial class Grid : EntityWithElement
     {
         /// <summary>
@@ -1600,6 +1758,7 @@ namespace Vim.Format.ObjectModel
     /// Represents a planar region which can be used to represent places like parking spots.
     /// </summary>
     [TableName(TableNames.Area)]
+    [ElementKind(ElementKind.Area)]
     public partial class Area : EntityWithElement
     {
         /// <summary>
@@ -1632,6 +1791,7 @@ namespace Vim.Format.ObjectModel
     /// Represents an area categorization, for example to differentiate between parking areas and waste/dump areas.
     /// </summary>
     [TableName(TableNames.AreaScheme)]
+    [ElementKind(ElementKind.AreaScheme)]
     public partial class AreaScheme : EntityWithElement
     {
         /// <summary>
@@ -1644,6 +1804,8 @@ namespace Vim.Format.ObjectModel
     /// Represents tabular data composed of named columns and cells containing string values.
     /// </summary>
     [TableName(TableNames.Schedule)]
+    [ElementKind(ElementKind.Schedule)]
+
     public partial class Schedule : EntityWithElement
     { }
 
@@ -1695,13 +1857,16 @@ namespace Vim.Format.ObjectModel
     /// Represents a view sheet set, which is a collection of views and view sheets.
     /// </summary>
     [TableName(TableNames.ViewSheetSet)]
+    [ElementKind(ElementKind.ViewSheetSet)]
     public partial class ViewSheetSet : EntityWithElement
-    { }
+    {
+    }
 
     /// <summary>
     /// Represents a view sheet, which can contain multiple views.
     /// </summary>
     [TableName(TableNames.ViewSheet)]
+    [ElementKind(ElementKind.ViewSheet)]
     public partial class ViewSheet : EntityWithElement
     {
         /// <summary>
@@ -1750,6 +1915,7 @@ namespace Vim.Format.ObjectModel
     }
 
     [TableName(TableNames.Site)]
+    [ElementKind(ElementKind.Site)]
     public partial class Site : EntityWithElement
     {
         public double Latitude;
@@ -1760,6 +1926,7 @@ namespace Vim.Format.ObjectModel
     }
 
     [TableName(TableNames.Building)]
+    [ElementKind(ElementKind.Building)]
     public partial class Building : EntityWithElement
     {
         /// <summary>
@@ -1799,6 +1966,18 @@ namespace Vim.Format.ObjectModel
 
         public static bool IsEntityAndHasTableNameAttribute(this Type t)
             => typeof(Entity).IsAssignableFrom(t) && t.GetCustomAttribute(typeof(TableNameAttribute)) != null;
+
+        public static ElementKind GetElementKind(this Type t)
+        {
+            if (t.GetCustomAttribute(typeof(ElementKindAttribute)) is ElementKindAttribute attr)
+            {
+                return attr.ElementKind;
+            }
+            else
+            {
+                return ElementKind.Unknown;
+            }
+        }
 
         public static IEnumerable<Type> GetEntityTypes<T>() where T : Entity
             => typeof(T).Assembly.GetAllSubclassesOf(typeof(T));

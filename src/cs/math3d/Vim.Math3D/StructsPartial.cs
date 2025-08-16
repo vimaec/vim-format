@@ -235,6 +235,16 @@ namespace Vim.Math3d
             => new Vector3((float)X, (float)Y, (float)Z);
 
         /// <summary>
+        /// Transforms a vector by the given matrix.
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public DVector3 Transform(DMatrix4x4 matrix)
+            => new DVector3(
+                X * matrix.M11 + Y * matrix.M21 + Z * matrix.M31 + matrix.M41,
+                X * matrix.M12 + Y * matrix.M22 + Z * matrix.M32 + matrix.M42,
+                X * matrix.M13 + Y * matrix.M23 + Z * matrix.M33 + matrix.M43);
+
+        /// <summary>
         /// Computes the cross product of two vectors.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

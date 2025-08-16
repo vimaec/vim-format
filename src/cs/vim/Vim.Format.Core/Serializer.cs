@@ -57,12 +57,15 @@ namespace Vim.Format
                 .ToNamedBuffer(name);
         }
 
+        public delegate bool EntityTableColumnFilter(string entityTableName, string columnName);
+
         /// <summary>
         /// Returns a SerializableEntityTable based on the given buffer reader.
         /// </summary>
         public static SerializableEntityTable ReadEntityTable(
             this BFastBufferReader entityTableBufferReader,
-            bool schemaOnly)
+            bool schemaOnly,
+            EntityTableColumnFilter entityTableColumnFilter = null)
         {
             var et = new SerializableEntityTable { Name = entityTableBufferReader.Name };
 
@@ -70,6 +73,9 @@ namespace Vim.Format
             {
                 var name = colBr.Name;
                 var typePrefix = name.GetTypePrefix();
+
+                if (entityTableColumnFilter != null && !entityTableColumnFilter(et.Name, name))
+                    continue;
 
                 switch (typePrefix)
                 {
@@ -121,14 +127,15 @@ namespace Vim.Format
         public static IEnumerable<SerializableEntityTable> EnumerateEntityTables(
             this BFastBufferReader entitiesBufferReader,
             bool schemaOnly,
-            Func<string, bool> entityTableNameFilterFunc = null)
+            Func<string, bool> entityTableNameFilterFunc = null,
+            EntityTableColumnFilter entityTableColumnFilter = null)
         {
             var entityTableBufferReaders = entitiesBufferReader.Seek()
                 .GetBFastBufferReaders(br => entityTableNameFilterFunc?.Invoke(br.Name) ?? true);
             
             foreach (var entityTableBufferReader in entityTableBufferReaders)
             {
-                yield return entityTableBufferReader.ReadEntityTable(schemaOnly);
+                yield return entityTableBufferReader.ReadEntityTable(schemaOnly, entityTableColumnFilter);
             }
         }
 
@@ -138,7 +145,8 @@ namespace Vim.Format
         public static IEnumerable<SerializableEntityTable> EnumerateEntityTables(
             this FileInfo vimFileInfo,
             bool schemaOnly,
-            Func<string, bool> entityTableNameFilterFunc = null)
+            Func<string, bool> entityTableNameFilterFunc = null,
+            EntityTableColumnFilter entityTableColumnFilter = null)
         {
             using (var stream = vimFileInfo.OpenRead())
             {
@@ -146,10 +154,46 @@ namespace Vim.Format
                 if (entitiesBufferReader == null)
                     yield break;
 
-                foreach (var entityTable in entitiesBufferReader.EnumerateEntityTables(schemaOnly, entityTableNameFilterFunc))
+                foreach (var entityTable in entitiesBufferReader.EnumerateEntityTables(schemaOnly, entityTableNameFilterFunc, entityTableColumnFilter))
                 {
                     yield return entityTable;
                 }
+            }
+        }
+
+        /// <summary>
+        /// Returns the string table contained in the given VIM file.
+        /// </summary>
+        public static string[] GetStringTable(this FileInfo vimFileInfo)
+        {
+            using (var stream = vimFileInfo.OpenRead())
+            {
+                var stringTableReader = stream.GetBFastBufferReader(BufferNames.Strings);
+                if (stringTableReader == null)
+                    return Array.Empty<string>();
+
+                stringTableReader.Seek();
+
+                var (_, numBytes) = stringTableReader;
+
+                return ReadStrings(stream, numBytes);
+            }
+        }
+
+        /// <summary>
+        /// Returns the geometry contained in the given VIM file.
+        /// </summary>
+        public static G3D GetGeometry(this FileInfo vimFileInfo)
+        {
+            using (var stream = vimFileInfo.OpenRead())
+            {
+                var geometryReader = stream.GetBFastBufferReader(BufferNames.Geometry);
+                if (geometryReader == null)
+                    return G3D.Empty;
+
+                geometryReader.Seek();
+
+                return G3D.Read(stream);
             }
         }
 

@@ -28,9 +28,5 @@ namespace Vim.Math3d
         public const double DegreesToRadians = 0.017453292519943295769236907684886;
 
         public const double OneTenthOfADegree = DegreesToRadians / 10;
-
-        // TODO: BUG: these two values are inverted dumb-dumb
-        public const double MmToFeet = 0.00328084;
-        public const double FeetToMm = 1 / MmToFeet;
     }
 }
