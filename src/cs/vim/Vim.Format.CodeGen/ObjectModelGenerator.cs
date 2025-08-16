@@ -395,7 +395,7 @@ public static class ObjectModelGenerator
         cb.AppendLine($"public partial class {t.Name}Table : EntityTable_v2, IEnumerable<{t.Name}>");
         cb.AppendLine("{");
         cb.AppendLine();
-        cb.AppendLine($"public const string TableName = TableNames.{t.Name}\";");
+        cb.AppendLine($"public const string TableName = TableNames.{t.Name};");
         cb.AppendLine();
         cb.AppendLine("public EntityTableSet ParentTableSet { get; } // can be null");
         cb.AppendLine();
