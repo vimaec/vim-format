@@ -300,8 +300,8 @@ public static class ObjectModelGenerator
         cb.AppendLine();
         cb.AppendLine("public Dictionary<string, SerializableEntityTable> RawTableMap { get; } = new Dictionary<string, SerializableEntityTable>();");
         cb.AppendLine();
-        cb.AppendLine("public SerializableEntityTable GetRawTableOrDefault(string tableName)");
-        cb.AppendLine("    => RawTableMap.TryGetValue(tableName, out var result) ? result : null;");
+        cb.AppendLine("public SerializableEntityTable GetSerializableTableOrEmpty(string tableName)");
+        cb.AppendLine("    => RawTableMap.TryGetValue(tableName, out var result) ? result : new SerializableEntityTable { Name = tableName };");
         cb.AppendLine();
         cb.AppendLine("public ElementIndexMaps ElementIndexMaps { get; }");
         cb.AppendLine();
@@ -316,11 +316,7 @@ public static class ObjectModelGenerator
         cb.AppendLine("// Populate the entity tables.");
         foreach (var t in entityTypes)
         {
-            var etName = t.GetEntityTableName();
-            var tmp = $"{t.Name.ToLowerInvariant()}Table";
-            cb.AppendLine($"if (GetRawTableOrDefault(\"{etName}\") is SerializableEntityTable {tmp})");
-            cb.AppendLine($"    {t.Name}Table = new {t.Name}Table({tmp}, stringTable, this);");
-            cb.AppendLine();
+            cb.AppendLine($"{t.Name}Table = new {t.Name}Table(GetSerializableTableOrEmpty(TableNames.{t.Name}), stringTable, this);");
         }
         cb.AppendLine("// Initialize element index maps");
         cb.AppendLine("ElementIndexMaps = new ElementIndexMaps(this, inParallel);");
@@ -344,7 +340,7 @@ public static class ObjectModelGenerator
         cb.AppendLine("    {");
         foreach (var (t, _) in elementKindEntityTypes)
         {
-            cb.AppendLine(        $"\"{t.GetEntityTableName()}\",");
+            cb.AppendLine(        $"TableNames.{t.Name},");
         }
         cb.AppendLine("    };");
 
@@ -363,7 +359,7 @@ public static class ObjectModelGenerator
         foreach (var (t, elementKind) in elementKindEntityTypes)
         {
             var etPropertyName = $"{t.Name}Table";
-            cb.AppendLine($"for (var i = 0; i < {etPropertyName}.RowCount; ++i)");
+            cb.AppendLine($"for (var i = 0; i < ({etPropertyName}?.RowCount ?? 0); ++i)");
             cb.AppendLine("{");
             cb.AppendLine($"var elementIndex = {etPropertyName}?.Column_ElementIndex[i] ?? EntityRelation.None;");
             cb.AppendLine("if (elementIndex < 0 || elementIndex >= elementKinds.Length) continue;");
@@ -399,7 +395,7 @@ public static class ObjectModelGenerator
         cb.AppendLine($"public partial class {t.Name}Table : EntityTable_v2, IEnumerable<{t.Name}>");
         cb.AppendLine("{");
         cb.AppendLine();
-        cb.AppendLine($"public const string TableName = \"{t.GetEntityTableName()}\";");
+        cb.AppendLine($"public const string TableName = TableNames.{t.Name}\";");
         cb.AppendLine();
         cb.AppendLine("public EntityTableSet ParentTableSet { get; } // can be null");
         cb.AppendLine();
@@ -505,7 +501,7 @@ public static class ObjectModelGenerator
 
             //cb.AppendLine($"var typedEntities = entities?.Cast<{entityType}>() ?? Enumerable.Empty<{entityType}>();");
             var tableName = et.GetEntityTableName();
-            cb.AppendLine($"var tb = new EntityTableBuilder(\"{tableName}\");");
+            cb.AppendLine($"var tb = new EntityTableBuilder(TableNames.{et.Name});");
             cb.AppendLine("var entities = entitySet.Entities;");
             cb.AppendLine("var entityCount = entities.Count;");
 
@@ -550,7 +546,7 @@ public static class ObjectModelGenerator
 
         // Instantiates a named entity table builder for each type.
         foreach (var et in entityTypes)
-            cb.AppendLine($"public readonly EntitySetBuilder<{et.Name}> {et.Name}Builder = new EntitySetBuilder<{et.Name}>(\"{et.GetEntityTableName()}\");");
+            cb.AppendLine($"public readonly EntitySetBuilder<{et.Name}> {et.Name}Builder = new EntitySetBuilder<{et.Name}>(TableNames.{et.Name});");
 
         cb.AppendLine();
         cb.AppendLine("public DocumentBuilder AddEntityTableSets(DocumentBuilder db)");

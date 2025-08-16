@@ -4417,8 +4417,8 @@ namespace Vim.Format.ObjectModel {
         
         public Dictionary<string, SerializableEntityTable> RawTableMap { get; } = new Dictionary<string, SerializableEntityTable>();
         
-        public SerializableEntityTable GetRawTableOrDefault(string tableName)
-            => RawTableMap.TryGetValue(tableName, out var result) ? result : null;
+        public SerializableEntityTable GetSerializableTableOrEmpty(string tableName)
+            => RawTableMap.TryGetValue(tableName, out var result) ? result : new SerializableEntityTable { Name = tableName };
         
         public ElementIndexMaps ElementIndexMaps { get; }
         
@@ -4430,168 +4430,60 @@ namespace Vim.Format.ObjectModel {
                 RawTableMap[rawTable.Name] = rawTable;
             
             // Populate the entity tables.
-            if (GetRawTableOrDefault("Vim.Asset") is SerializableEntityTable assetTable)
-                AssetTable = new AssetTable(assetTable, stringTable, this);
-            
-            if (GetRawTableOrDefault("Vim.DisplayUnit") is SerializableEntityTable displayunitTable)
-                DisplayUnitTable = new DisplayUnitTable(displayunitTable, stringTable, this);
-            
-            if (GetRawTableOrDefault("Vim.ParameterDescriptor") is SerializableEntityTable parameterdescriptorTable)
-                ParameterDescriptorTable = new ParameterDescriptorTable(parameterdescriptorTable, stringTable, this);
-            
-            if (GetRawTableOrDefault("Vim.Parameter") is SerializableEntityTable parameterTable)
-                ParameterTable = new ParameterTable(parameterTable, stringTable, this);
-            
-            if (GetRawTableOrDefault("Vim.Element") is SerializableEntityTable elementTable)
-                ElementTable = new ElementTable(elementTable, stringTable, this);
-            
-            if (GetRawTableOrDefault("Vim.Workset") is SerializableEntityTable worksetTable)
-                WorksetTable = new WorksetTable(worksetTable, stringTable, this);
-            
-            if (GetRawTableOrDefault("Vim.AssemblyInstance") is SerializableEntityTable assemblyinstanceTable)
-                AssemblyInstanceTable = new AssemblyInstanceTable(assemblyinstanceTable, stringTable, this);
-            
-            if (GetRawTableOrDefault("Vim.Group") is SerializableEntityTable groupTable)
-                GroupTable = new GroupTable(groupTable, stringTable, this);
-            
-            if (GetRawTableOrDefault("Vim.DesignOption") is SerializableEntityTable designoptionTable)
-                DesignOptionTable = new DesignOptionTable(designoptionTable, stringTable, this);
-            
-            if (GetRawTableOrDefault("Vim.Level") is SerializableEntityTable levelTable)
-                LevelTable = new LevelTable(levelTable, stringTable, this);
-            
-            if (GetRawTableOrDefault("Vim.Phase") is SerializableEntityTable phaseTable)
-                PhaseTable = new PhaseTable(phaseTable, stringTable, this);
-            
-            if (GetRawTableOrDefault("Vim.Room") is SerializableEntityTable roomTable)
-                RoomTable = new RoomTable(roomTable, stringTable, this);
-            
-            if (GetRawTableOrDefault("Vim.BimDocument") is SerializableEntityTable bimdocumentTable)
-                BimDocumentTable = new BimDocumentTable(bimdocumentTable, stringTable, this);
-            
-            if (GetRawTableOrDefault("Vim.DisplayUnitInBimDocument") is SerializableEntityTable displayunitinbimdocumentTable)
-                DisplayUnitInBimDocumentTable = new DisplayUnitInBimDocumentTable(displayunitinbimdocumentTable, stringTable, this);
-            
-            if (GetRawTableOrDefault("Vim.PhaseOrderInBimDocument") is SerializableEntityTable phaseorderinbimdocumentTable)
-                PhaseOrderInBimDocumentTable = new PhaseOrderInBimDocumentTable(phaseorderinbimdocumentTable, stringTable, this);
-            
-            if (GetRawTableOrDefault("Vim.Category") is SerializableEntityTable categoryTable)
-                CategoryTable = new CategoryTable(categoryTable, stringTable, this);
-            
-            if (GetRawTableOrDefault("Vim.Family") is SerializableEntityTable familyTable)
-                FamilyTable = new FamilyTable(familyTable, stringTable, this);
-            
-            if (GetRawTableOrDefault("Vim.FamilyType") is SerializableEntityTable familytypeTable)
-                FamilyTypeTable = new FamilyTypeTable(familytypeTable, stringTable, this);
-            
-            if (GetRawTableOrDefault("Vim.FamilyInstance") is SerializableEntityTable familyinstanceTable)
-                FamilyInstanceTable = new FamilyInstanceTable(familyinstanceTable, stringTable, this);
-            
-            if (GetRawTableOrDefault("Vim.View") is SerializableEntityTable viewTable)
-                ViewTable = new ViewTable(viewTable, stringTable, this);
-            
-            if (GetRawTableOrDefault("Vim.ElementInView") is SerializableEntityTable elementinviewTable)
-                ElementInViewTable = new ElementInViewTable(elementinviewTable, stringTable, this);
-            
-            if (GetRawTableOrDefault("Vim.ShapeInView") is SerializableEntityTable shapeinviewTable)
-                ShapeInViewTable = new ShapeInViewTable(shapeinviewTable, stringTable, this);
-            
-            if (GetRawTableOrDefault("Vim.AssetInView") is SerializableEntityTable assetinviewTable)
-                AssetInViewTable = new AssetInViewTable(assetinviewTable, stringTable, this);
-            
-            if (GetRawTableOrDefault("Vim.AssetInViewSheet") is SerializableEntityTable assetinviewsheetTable)
-                AssetInViewSheetTable = new AssetInViewSheetTable(assetinviewsheetTable, stringTable, this);
-            
-            if (GetRawTableOrDefault("Vim.LevelInView") is SerializableEntityTable levelinviewTable)
-                LevelInViewTable = new LevelInViewTable(levelinviewTable, stringTable, this);
-            
-            if (GetRawTableOrDefault("Vim.Camera") is SerializableEntityTable cameraTable)
-                CameraTable = new CameraTable(cameraTable, stringTable, this);
-            
-            if (GetRawTableOrDefault("Vim.Material") is SerializableEntityTable materialTable)
-                MaterialTable = new MaterialTable(materialTable, stringTable, this);
-            
-            if (GetRawTableOrDefault("Vim.MaterialInElement") is SerializableEntityTable materialinelementTable)
-                MaterialInElementTable = new MaterialInElementTable(materialinelementTable, stringTable, this);
-            
-            if (GetRawTableOrDefault("Vim.CompoundStructureLayer") is SerializableEntityTable compoundstructurelayerTable)
-                CompoundStructureLayerTable = new CompoundStructureLayerTable(compoundstructurelayerTable, stringTable, this);
-            
-            if (GetRawTableOrDefault("Vim.CompoundStructure") is SerializableEntityTable compoundstructureTable)
-                CompoundStructureTable = new CompoundStructureTable(compoundstructureTable, stringTable, this);
-            
-            if (GetRawTableOrDefault("Vim.Node") is SerializableEntityTable nodeTable)
-                NodeTable = new NodeTable(nodeTable, stringTable, this);
-            
-            if (GetRawTableOrDefault("Vim.Geometry") is SerializableEntityTable geometryTable)
-                GeometryTable = new GeometryTable(geometryTable, stringTable, this);
-            
-            if (GetRawTableOrDefault("Vim.Shape") is SerializableEntityTable shapeTable)
-                ShapeTable = new ShapeTable(shapeTable, stringTable, this);
-            
-            if (GetRawTableOrDefault("Vim.ShapeCollection") is SerializableEntityTable shapecollectionTable)
-                ShapeCollectionTable = new ShapeCollectionTable(shapecollectionTable, stringTable, this);
-            
-            if (GetRawTableOrDefault("Vim.ShapeInShapeCollection") is SerializableEntityTable shapeinshapecollectionTable)
-                ShapeInShapeCollectionTable = new ShapeInShapeCollectionTable(shapeinshapecollectionTable, stringTable, this);
-            
-            if (GetRawTableOrDefault("Vim.System") is SerializableEntityTable systemTable)
-                SystemTable = new SystemTable(systemTable, stringTable, this);
-            
-            if (GetRawTableOrDefault("Vim.ElementInSystem") is SerializableEntityTable elementinsystemTable)
-                ElementInSystemTable = new ElementInSystemTable(elementinsystemTable, stringTable, this);
-            
-            if (GetRawTableOrDefault("Vim.Warning") is SerializableEntityTable warningTable)
-                WarningTable = new WarningTable(warningTable, stringTable, this);
-            
-            if (GetRawTableOrDefault("Vim.ElementInWarning") is SerializableEntityTable elementinwarningTable)
-                ElementInWarningTable = new ElementInWarningTable(elementinwarningTable, stringTable, this);
-            
-            if (GetRawTableOrDefault("Vim.BasePoint") is SerializableEntityTable basepointTable)
-                BasePointTable = new BasePointTable(basepointTable, stringTable, this);
-            
-            if (GetRawTableOrDefault("Vim.PhaseFilter") is SerializableEntityTable phasefilterTable)
-                PhaseFilterTable = new PhaseFilterTable(phasefilterTable, stringTable, this);
-            
-            if (GetRawTableOrDefault("Vim.Grid") is SerializableEntityTable gridTable)
-                GridTable = new GridTable(gridTable, stringTable, this);
-            
-            if (GetRawTableOrDefault("Vim.Area") is SerializableEntityTable areaTable)
-                AreaTable = new AreaTable(areaTable, stringTable, this);
-            
-            if (GetRawTableOrDefault("Vim.AreaScheme") is SerializableEntityTable areaschemeTable)
-                AreaSchemeTable = new AreaSchemeTable(areaschemeTable, stringTable, this);
-            
-            if (GetRawTableOrDefault("Vim.Schedule") is SerializableEntityTable scheduleTable)
-                ScheduleTable = new ScheduleTable(scheduleTable, stringTable, this);
-            
-            if (GetRawTableOrDefault("Vim.ScheduleColumn") is SerializableEntityTable schedulecolumnTable)
-                ScheduleColumnTable = new ScheduleColumnTable(schedulecolumnTable, stringTable, this);
-            
-            if (GetRawTableOrDefault("Vim.ScheduleCell") is SerializableEntityTable schedulecellTable)
-                ScheduleCellTable = new ScheduleCellTable(schedulecellTable, stringTable, this);
-            
-            if (GetRawTableOrDefault("Vim.ViewSheetSet") is SerializableEntityTable viewsheetsetTable)
-                ViewSheetSetTable = new ViewSheetSetTable(viewsheetsetTable, stringTable, this);
-            
-            if (GetRawTableOrDefault("Vim.ViewSheet") is SerializableEntityTable viewsheetTable)
-                ViewSheetTable = new ViewSheetTable(viewsheetTable, stringTable, this);
-            
-            if (GetRawTableOrDefault("Vim.ViewSheetInViewSheetSet") is SerializableEntityTable viewsheetinviewsheetsetTable)
-                ViewSheetInViewSheetSetTable = new ViewSheetInViewSheetSetTable(viewsheetinviewsheetsetTable, stringTable, this);
-            
-            if (GetRawTableOrDefault("Vim.ViewInViewSheetSet") is SerializableEntityTable viewinviewsheetsetTable)
-                ViewInViewSheetSetTable = new ViewInViewSheetSetTable(viewinviewsheetsetTable, stringTable, this);
-            
-            if (GetRawTableOrDefault("Vim.ViewInViewSheet") is SerializableEntityTable viewinviewsheetTable)
-                ViewInViewSheetTable = new ViewInViewSheetTable(viewinviewsheetTable, stringTable, this);
-            
-            if (GetRawTableOrDefault("Vim.Site") is SerializableEntityTable siteTable)
-                SiteTable = new SiteTable(siteTable, stringTable, this);
-            
-            if (GetRawTableOrDefault("Vim.Building") is SerializableEntityTable buildingTable)
-                BuildingTable = new BuildingTable(buildingTable, stringTable, this);
-            
+            AssetTable = new AssetTable(GetSerializableTableOrEmpty(TableNames.Asset), stringTable, this);
+            DisplayUnitTable = new DisplayUnitTable(GetSerializableTableOrEmpty(TableNames.DisplayUnit), stringTable, this);
+            ParameterDescriptorTable = new ParameterDescriptorTable(GetSerializableTableOrEmpty(TableNames.ParameterDescriptor), stringTable, this);
+            ParameterTable = new ParameterTable(GetSerializableTableOrEmpty(TableNames.Parameter), stringTable, this);
+            ElementTable = new ElementTable(GetSerializableTableOrEmpty(TableNames.Element), stringTable, this);
+            WorksetTable = new WorksetTable(GetSerializableTableOrEmpty(TableNames.Workset), stringTable, this);
+            AssemblyInstanceTable = new AssemblyInstanceTable(GetSerializableTableOrEmpty(TableNames.AssemblyInstance), stringTable, this);
+            GroupTable = new GroupTable(GetSerializableTableOrEmpty(TableNames.Group), stringTable, this);
+            DesignOptionTable = new DesignOptionTable(GetSerializableTableOrEmpty(TableNames.DesignOption), stringTable, this);
+            LevelTable = new LevelTable(GetSerializableTableOrEmpty(TableNames.Level), stringTable, this);
+            PhaseTable = new PhaseTable(GetSerializableTableOrEmpty(TableNames.Phase), stringTable, this);
+            RoomTable = new RoomTable(GetSerializableTableOrEmpty(TableNames.Room), stringTable, this);
+            BimDocumentTable = new BimDocumentTable(GetSerializableTableOrEmpty(TableNames.BimDocument), stringTable, this);
+            DisplayUnitInBimDocumentTable = new DisplayUnitInBimDocumentTable(GetSerializableTableOrEmpty(TableNames.DisplayUnitInBimDocument), stringTable, this);
+            PhaseOrderInBimDocumentTable = new PhaseOrderInBimDocumentTable(GetSerializableTableOrEmpty(TableNames.PhaseOrderInBimDocument), stringTable, this);
+            CategoryTable = new CategoryTable(GetSerializableTableOrEmpty(TableNames.Category), stringTable, this);
+            FamilyTable = new FamilyTable(GetSerializableTableOrEmpty(TableNames.Family), stringTable, this);
+            FamilyTypeTable = new FamilyTypeTable(GetSerializableTableOrEmpty(TableNames.FamilyType), stringTable, this);
+            FamilyInstanceTable = new FamilyInstanceTable(GetSerializableTableOrEmpty(TableNames.FamilyInstance), stringTable, this);
+            ViewTable = new ViewTable(GetSerializableTableOrEmpty(TableNames.View), stringTable, this);
+            ElementInViewTable = new ElementInViewTable(GetSerializableTableOrEmpty(TableNames.ElementInView), stringTable, this);
+            ShapeInViewTable = new ShapeInViewTable(GetSerializableTableOrEmpty(TableNames.ShapeInView), stringTable, this);
+            AssetInViewTable = new AssetInViewTable(GetSerializableTableOrEmpty(TableNames.AssetInView), stringTable, this);
+            AssetInViewSheetTable = new AssetInViewSheetTable(GetSerializableTableOrEmpty(TableNames.AssetInViewSheet), stringTable, this);
+            LevelInViewTable = new LevelInViewTable(GetSerializableTableOrEmpty(TableNames.LevelInView), stringTable, this);
+            CameraTable = new CameraTable(GetSerializableTableOrEmpty(TableNames.Camera), stringTable, this);
+            MaterialTable = new MaterialTable(GetSerializableTableOrEmpty(TableNames.Material), stringTable, this);
+            MaterialInElementTable = new MaterialInElementTable(GetSerializableTableOrEmpty(TableNames.MaterialInElement), stringTable, this);
+            CompoundStructureLayerTable = new CompoundStructureLayerTable(GetSerializableTableOrEmpty(TableNames.CompoundStructureLayer), stringTable, this);
+            CompoundStructureTable = new CompoundStructureTable(GetSerializableTableOrEmpty(TableNames.CompoundStructure), stringTable, this);
+            NodeTable = new NodeTable(GetSerializableTableOrEmpty(TableNames.Node), stringTable, this);
+            GeometryTable = new GeometryTable(GetSerializableTableOrEmpty(TableNames.Geometry), stringTable, this);
+            ShapeTable = new ShapeTable(GetSerializableTableOrEmpty(TableNames.Shape), stringTable, this);
+            ShapeCollectionTable = new ShapeCollectionTable(GetSerializableTableOrEmpty(TableNames.ShapeCollection), stringTable, this);
+            ShapeInShapeCollectionTable = new ShapeInShapeCollectionTable(GetSerializableTableOrEmpty(TableNames.ShapeInShapeCollection), stringTable, this);
+            SystemTable = new SystemTable(GetSerializableTableOrEmpty(TableNames.System), stringTable, this);
+            ElementInSystemTable = new ElementInSystemTable(GetSerializableTableOrEmpty(TableNames.ElementInSystem), stringTable, this);
+            WarningTable = new WarningTable(GetSerializableTableOrEmpty(TableNames.Warning), stringTable, this);
+            ElementInWarningTable = new ElementInWarningTable(GetSerializableTableOrEmpty(TableNames.ElementInWarning), stringTable, this);
+            BasePointTable = new BasePointTable(GetSerializableTableOrEmpty(TableNames.BasePoint), stringTable, this);
+            PhaseFilterTable = new PhaseFilterTable(GetSerializableTableOrEmpty(TableNames.PhaseFilter), stringTable, this);
+            GridTable = new GridTable(GetSerializableTableOrEmpty(TableNames.Grid), stringTable, this);
+            AreaTable = new AreaTable(GetSerializableTableOrEmpty(TableNames.Area), stringTable, this);
+            AreaSchemeTable = new AreaSchemeTable(GetSerializableTableOrEmpty(TableNames.AreaScheme), stringTable, this);
+            ScheduleTable = new ScheduleTable(GetSerializableTableOrEmpty(TableNames.Schedule), stringTable, this);
+            ScheduleColumnTable = new ScheduleColumnTable(GetSerializableTableOrEmpty(TableNames.ScheduleColumn), stringTable, this);
+            ScheduleCellTable = new ScheduleCellTable(GetSerializableTableOrEmpty(TableNames.ScheduleCell), stringTable, this);
+            ViewSheetSetTable = new ViewSheetSetTable(GetSerializableTableOrEmpty(TableNames.ViewSheetSet), stringTable, this);
+            ViewSheetTable = new ViewSheetTable(GetSerializableTableOrEmpty(TableNames.ViewSheet), stringTable, this);
+            ViewSheetInViewSheetSetTable = new ViewSheetInViewSheetSetTable(GetSerializableTableOrEmpty(TableNames.ViewSheetInViewSheetSet), stringTable, this);
+            ViewInViewSheetSetTable = new ViewInViewSheetSetTable(GetSerializableTableOrEmpty(TableNames.ViewInViewSheetSet), stringTable, this);
+            ViewInViewSheetTable = new ViewInViewSheetTable(GetSerializableTableOrEmpty(TableNames.ViewInViewSheet), stringTable, this);
+            SiteTable = new SiteTable(GetSerializableTableOrEmpty(TableNames.Site), stringTable, this);
+            BuildingTable = new BuildingTable(GetSerializableTableOrEmpty(TableNames.Building), stringTable, this);
             // Initialize element index maps
             ElementIndexMaps = new ElementIndexMaps(this, inParallel);
             
@@ -4709,29 +4601,29 @@ namespace Vim.Format.ObjectModel {
         public static HashSet<string> GetElementKindTableNames()
             => new HashSet<string>()
             {
-            "Vim.AssemblyInstance",
-            "Vim.Group",
-            "Vim.DesignOption",
-            "Vim.Level",
-            "Vim.Phase",
-            "Vim.Room",
-            "Vim.BimDocument",
-            "Vim.Family",
-            "Vim.FamilyType",
-            "Vim.FamilyInstance",
-            "Vim.View",
-            "Vim.Material",
-            "Vim.System",
-            "Vim.BasePoint",
-            "Vim.PhaseFilter",
-            "Vim.Grid",
-            "Vim.Area",
-            "Vim.AreaScheme",
-            "Vim.Schedule",
-            "Vim.ViewSheetSet",
-            "Vim.ViewSheet",
-            "Vim.Site",
-            "Vim.Building",
+            TableNames.AssemblyInstance,
+            TableNames.Group,
+            TableNames.DesignOption,
+            TableNames.Level,
+            TableNames.Phase,
+            TableNames.Room,
+            TableNames.BimDocument,
+            TableNames.Family,
+            TableNames.FamilyType,
+            TableNames.FamilyInstance,
+            TableNames.View,
+            TableNames.Material,
+            TableNames.System,
+            TableNames.BasePoint,
+            TableNames.PhaseFilter,
+            TableNames.Grid,
+            TableNames.Area,
+            TableNames.AreaScheme,
+            TableNames.Schedule,
+            TableNames.ViewSheetSet,
+            TableNames.ViewSheet,
+            TableNames.Site,
+            TableNames.Building,
             };
         
         // Returns an array defining a 1:1 association of Element to its ElementKind
@@ -4745,7 +4637,7 @@ namespace Vim.Format.ObjectModel {
             for (var i = 0; i < elementKinds.Length; ++i) { elementKinds[i] = ElementKind.Unknown; }
             
             // Populate the element kinds from the relevant entity tables
-            for (var i = 0; i < AssemblyInstanceTable.RowCount; ++i)
+            for (var i = 0; i < (AssemblyInstanceTable?.RowCount ?? 0); ++i)
             {
                 var elementIndex = AssemblyInstanceTable?.Column_ElementIndex[i] ?? EntityRelation.None;
                 if (elementIndex < 0 || elementIndex >= elementKinds.Length) continue;
@@ -4759,7 +4651,7 @@ namespace Vim.Format.ObjectModel {
                 elementKinds[elementIndex] = candidateElementKind;
             }
             
-            for (var i = 0; i < GroupTable.RowCount; ++i)
+            for (var i = 0; i < (GroupTable?.RowCount ?? 0); ++i)
             {
                 var elementIndex = GroupTable?.Column_ElementIndex[i] ?? EntityRelation.None;
                 if (elementIndex < 0 || elementIndex >= elementKinds.Length) continue;
@@ -4773,7 +4665,7 @@ namespace Vim.Format.ObjectModel {
                 elementKinds[elementIndex] = candidateElementKind;
             }
             
-            for (var i = 0; i < DesignOptionTable.RowCount; ++i)
+            for (var i = 0; i < (DesignOptionTable?.RowCount ?? 0); ++i)
             {
                 var elementIndex = DesignOptionTable?.Column_ElementIndex[i] ?? EntityRelation.None;
                 if (elementIndex < 0 || elementIndex >= elementKinds.Length) continue;
@@ -4787,7 +4679,7 @@ namespace Vim.Format.ObjectModel {
                 elementKinds[elementIndex] = candidateElementKind;
             }
             
-            for (var i = 0; i < LevelTable.RowCount; ++i)
+            for (var i = 0; i < (LevelTable?.RowCount ?? 0); ++i)
             {
                 var elementIndex = LevelTable?.Column_ElementIndex[i] ?? EntityRelation.None;
                 if (elementIndex < 0 || elementIndex >= elementKinds.Length) continue;
@@ -4801,7 +4693,7 @@ namespace Vim.Format.ObjectModel {
                 elementKinds[elementIndex] = candidateElementKind;
             }
             
-            for (var i = 0; i < PhaseTable.RowCount; ++i)
+            for (var i = 0; i < (PhaseTable?.RowCount ?? 0); ++i)
             {
                 var elementIndex = PhaseTable?.Column_ElementIndex[i] ?? EntityRelation.None;
                 if (elementIndex < 0 || elementIndex >= elementKinds.Length) continue;
@@ -4815,7 +4707,7 @@ namespace Vim.Format.ObjectModel {
                 elementKinds[elementIndex] = candidateElementKind;
             }
             
-            for (var i = 0; i < RoomTable.RowCount; ++i)
+            for (var i = 0; i < (RoomTable?.RowCount ?? 0); ++i)
             {
                 var elementIndex = RoomTable?.Column_ElementIndex[i] ?? EntityRelation.None;
                 if (elementIndex < 0 || elementIndex >= elementKinds.Length) continue;
@@ -4829,7 +4721,7 @@ namespace Vim.Format.ObjectModel {
                 elementKinds[elementIndex] = candidateElementKind;
             }
             
-            for (var i = 0; i < BimDocumentTable.RowCount; ++i)
+            for (var i = 0; i < (BimDocumentTable?.RowCount ?? 0); ++i)
             {
                 var elementIndex = BimDocumentTable?.Column_ElementIndex[i] ?? EntityRelation.None;
                 if (elementIndex < 0 || elementIndex >= elementKinds.Length) continue;
@@ -4843,7 +4735,7 @@ namespace Vim.Format.ObjectModel {
                 elementKinds[elementIndex] = candidateElementKind;
             }
             
-            for (var i = 0; i < FamilyTable.RowCount; ++i)
+            for (var i = 0; i < (FamilyTable?.RowCount ?? 0); ++i)
             {
                 var elementIndex = FamilyTable?.Column_ElementIndex[i] ?? EntityRelation.None;
                 if (elementIndex < 0 || elementIndex >= elementKinds.Length) continue;
@@ -4857,7 +4749,7 @@ namespace Vim.Format.ObjectModel {
                 elementKinds[elementIndex] = candidateElementKind;
             }
             
-            for (var i = 0; i < FamilyTypeTable.RowCount; ++i)
+            for (var i = 0; i < (FamilyTypeTable?.RowCount ?? 0); ++i)
             {
                 var elementIndex = FamilyTypeTable?.Column_ElementIndex[i] ?? EntityRelation.None;
                 if (elementIndex < 0 || elementIndex >= elementKinds.Length) continue;
@@ -4871,7 +4763,7 @@ namespace Vim.Format.ObjectModel {
                 elementKinds[elementIndex] = candidateElementKind;
             }
             
-            for (var i = 0; i < FamilyInstanceTable.RowCount; ++i)
+            for (var i = 0; i < (FamilyInstanceTable?.RowCount ?? 0); ++i)
             {
                 var elementIndex = FamilyInstanceTable?.Column_ElementIndex[i] ?? EntityRelation.None;
                 if (elementIndex < 0 || elementIndex >= elementKinds.Length) continue;
@@ -4885,7 +4777,7 @@ namespace Vim.Format.ObjectModel {
                 elementKinds[elementIndex] = candidateElementKind;
             }
             
-            for (var i = 0; i < ViewTable.RowCount; ++i)
+            for (var i = 0; i < (ViewTable?.RowCount ?? 0); ++i)
             {
                 var elementIndex = ViewTable?.Column_ElementIndex[i] ?? EntityRelation.None;
                 if (elementIndex < 0 || elementIndex >= elementKinds.Length) continue;
@@ -4899,7 +4791,7 @@ namespace Vim.Format.ObjectModel {
                 elementKinds[elementIndex] = candidateElementKind;
             }
             
-            for (var i = 0; i < MaterialTable.RowCount; ++i)
+            for (var i = 0; i < (MaterialTable?.RowCount ?? 0); ++i)
             {
                 var elementIndex = MaterialTable?.Column_ElementIndex[i] ?? EntityRelation.None;
                 if (elementIndex < 0 || elementIndex >= elementKinds.Length) continue;
@@ -4913,7 +4805,7 @@ namespace Vim.Format.ObjectModel {
                 elementKinds[elementIndex] = candidateElementKind;
             }
             
-            for (var i = 0; i < SystemTable.RowCount; ++i)
+            for (var i = 0; i < (SystemTable?.RowCount ?? 0); ++i)
             {
                 var elementIndex = SystemTable?.Column_ElementIndex[i] ?? EntityRelation.None;
                 if (elementIndex < 0 || elementIndex >= elementKinds.Length) continue;
@@ -4927,7 +4819,7 @@ namespace Vim.Format.ObjectModel {
                 elementKinds[elementIndex] = candidateElementKind;
             }
             
-            for (var i = 0; i < BasePointTable.RowCount; ++i)
+            for (var i = 0; i < (BasePointTable?.RowCount ?? 0); ++i)
             {
                 var elementIndex = BasePointTable?.Column_ElementIndex[i] ?? EntityRelation.None;
                 if (elementIndex < 0 || elementIndex >= elementKinds.Length) continue;
@@ -4941,7 +4833,7 @@ namespace Vim.Format.ObjectModel {
                 elementKinds[elementIndex] = candidateElementKind;
             }
             
-            for (var i = 0; i < PhaseFilterTable.RowCount; ++i)
+            for (var i = 0; i < (PhaseFilterTable?.RowCount ?? 0); ++i)
             {
                 var elementIndex = PhaseFilterTable?.Column_ElementIndex[i] ?? EntityRelation.None;
                 if (elementIndex < 0 || elementIndex >= elementKinds.Length) continue;
@@ -4955,7 +4847,7 @@ namespace Vim.Format.ObjectModel {
                 elementKinds[elementIndex] = candidateElementKind;
             }
             
-            for (var i = 0; i < GridTable.RowCount; ++i)
+            for (var i = 0; i < (GridTable?.RowCount ?? 0); ++i)
             {
                 var elementIndex = GridTable?.Column_ElementIndex[i] ?? EntityRelation.None;
                 if (elementIndex < 0 || elementIndex >= elementKinds.Length) continue;
@@ -4969,7 +4861,7 @@ namespace Vim.Format.ObjectModel {
                 elementKinds[elementIndex] = candidateElementKind;
             }
             
-            for (var i = 0; i < AreaTable.RowCount; ++i)
+            for (var i = 0; i < (AreaTable?.RowCount ?? 0); ++i)
             {
                 var elementIndex = AreaTable?.Column_ElementIndex[i] ?? EntityRelation.None;
                 if (elementIndex < 0 || elementIndex >= elementKinds.Length) continue;
@@ -4983,7 +4875,7 @@ namespace Vim.Format.ObjectModel {
                 elementKinds[elementIndex] = candidateElementKind;
             }
             
-            for (var i = 0; i < AreaSchemeTable.RowCount; ++i)
+            for (var i = 0; i < (AreaSchemeTable?.RowCount ?? 0); ++i)
             {
                 var elementIndex = AreaSchemeTable?.Column_ElementIndex[i] ?? EntityRelation.None;
                 if (elementIndex < 0 || elementIndex >= elementKinds.Length) continue;
@@ -4997,7 +4889,7 @@ namespace Vim.Format.ObjectModel {
                 elementKinds[elementIndex] = candidateElementKind;
             }
             
-            for (var i = 0; i < ScheduleTable.RowCount; ++i)
+            for (var i = 0; i < (ScheduleTable?.RowCount ?? 0); ++i)
             {
                 var elementIndex = ScheduleTable?.Column_ElementIndex[i] ?? EntityRelation.None;
                 if (elementIndex < 0 || elementIndex >= elementKinds.Length) continue;
@@ -5011,7 +4903,7 @@ namespace Vim.Format.ObjectModel {
                 elementKinds[elementIndex] = candidateElementKind;
             }
             
-            for (var i = 0; i < ViewSheetSetTable.RowCount; ++i)
+            for (var i = 0; i < (ViewSheetSetTable?.RowCount ?? 0); ++i)
             {
                 var elementIndex = ViewSheetSetTable?.Column_ElementIndex[i] ?? EntityRelation.None;
                 if (elementIndex < 0 || elementIndex >= elementKinds.Length) continue;
@@ -5025,7 +4917,7 @@ namespace Vim.Format.ObjectModel {
                 elementKinds[elementIndex] = candidateElementKind;
             }
             
-            for (var i = 0; i < ViewSheetTable.RowCount; ++i)
+            for (var i = 0; i < (ViewSheetTable?.RowCount ?? 0); ++i)
             {
                 var elementIndex = ViewSheetTable?.Column_ElementIndex[i] ?? EntityRelation.None;
                 if (elementIndex < 0 || elementIndex >= elementKinds.Length) continue;
@@ -5039,7 +4931,7 @@ namespace Vim.Format.ObjectModel {
                 elementKinds[elementIndex] = candidateElementKind;
             }
             
-            for (var i = 0; i < SiteTable.RowCount; ++i)
+            for (var i = 0; i < (SiteTable?.RowCount ?? 0); ++i)
             {
                 var elementIndex = SiteTable?.Column_ElementIndex[i] ?? EntityRelation.None;
                 if (elementIndex < 0 || elementIndex >= elementKinds.Length) continue;
@@ -5053,7 +4945,7 @@ namespace Vim.Format.ObjectModel {
                 elementKinds[elementIndex] = candidateElementKind;
             }
             
-            for (var i = 0; i < BuildingTable.RowCount; ++i)
+            for (var i = 0; i < (BuildingTable?.RowCount ?? 0); ++i)
             {
                 var elementIndex = BuildingTable?.Column_ElementIndex[i] ?? EntityRelation.None;
                 if (elementIndex < 0 || elementIndex >= elementKinds.Length) continue;
@@ -5074,7 +4966,7 @@ namespace Vim.Format.ObjectModel {
     public partial class AssetTable : EntityTable_v2, IEnumerable<Asset>
     {
         
-        public const string TableName = "Vim.Asset";
+        public const string TableName = TableNames.Asset";
         
         public EntityTableSet ParentTableSet { get; } // can be null
         
@@ -5107,7 +4999,7 @@ namespace Vim.Format.ObjectModel {
     public partial class DisplayUnitTable : EntityTable_v2, IEnumerable<DisplayUnit>
     {
         
-        public const string TableName = "Vim.DisplayUnit";
+        public const string TableName = TableNames.DisplayUnit";
         
         public EntityTableSet ParentTableSet { get; } // can be null
         
@@ -5148,7 +5040,7 @@ namespace Vim.Format.ObjectModel {
     public partial class ParameterDescriptorTable : EntityTable_v2, IEnumerable<ParameterDescriptor>
     {
         
-        public const string TableName = "Vim.ParameterDescriptor";
+        public const string TableName = TableNames.ParameterDescriptor";
         
         public EntityTableSet ParentTableSet { get; } // can be null
         
@@ -5219,7 +5111,7 @@ namespace Vim.Format.ObjectModel {
     public partial class ParameterTable : EntityTable_v2, IEnumerable<Parameter>
     {
         
-        public const string TableName = "Vim.Parameter";
+        public const string TableName = TableNames.Parameter";
         
         public EntityTableSet ParentTableSet { get; } // can be null
         
@@ -5264,7 +5156,7 @@ namespace Vim.Format.ObjectModel {
     public partial class ElementTable : EntityTable_v2, IEnumerable<Element>
     {
         
-        public const string TableName = "Vim.Element";
+        public const string TableName = TableNames.Element";
         
         public EntityTableSet ParentTableSet { get; } // can be null
         
@@ -5395,7 +5287,7 @@ namespace Vim.Format.ObjectModel {
     public partial class WorksetTable : EntityTable_v2, IEnumerable<Workset>
     {
         
-        public const string TableName = "Vim.Workset";
+        public const string TableName = TableNames.Workset";
         
         public EntityTableSet ParentTableSet { get; } // can be null
         
@@ -5458,7 +5350,7 @@ namespace Vim.Format.ObjectModel {
     public partial class AssemblyInstanceTable : EntityTable_v2, IEnumerable<AssemblyInstance>
     {
         
-        public const string TableName = "Vim.AssemblyInstance";
+        public const string TableName = TableNames.AssemblyInstance";
         
         public EntityTableSet ParentTableSet { get; } // can be null
         
@@ -5509,7 +5401,7 @@ namespace Vim.Format.ObjectModel {
     public partial class GroupTable : EntityTable_v2, IEnumerable<Group>
     {
         
-        public const string TableName = "Vim.Group";
+        public const string TableName = TableNames.Group";
         
         public EntityTableSet ParentTableSet { get; } // can be null
         
@@ -5560,7 +5452,7 @@ namespace Vim.Format.ObjectModel {
     public partial class DesignOptionTable : EntityTable_v2, IEnumerable<DesignOption>
     {
         
-        public const string TableName = "Vim.DesignOption";
+        public const string TableName = TableNames.DesignOption";
         
         public EntityTableSet ParentTableSet { get; } // can be null
         
@@ -5599,7 +5491,7 @@ namespace Vim.Format.ObjectModel {
     public partial class LevelTable : EntityTable_v2, IEnumerable<Level>
     {
         
-        public const string TableName = "Vim.Level";
+        public const string TableName = TableNames.Level";
         
         public EntityTableSet ParentTableSet { get; } // can be null
         
@@ -5654,7 +5546,7 @@ namespace Vim.Format.ObjectModel {
     public partial class PhaseTable : EntityTable_v2, IEnumerable<Phase>
     {
         
-        public const string TableName = "Vim.Phase";
+        public const string TableName = TableNames.Phase";
         
         public EntityTableSet ParentTableSet { get; } // can be null
         
@@ -5689,7 +5581,7 @@ namespace Vim.Format.ObjectModel {
     public partial class RoomTable : EntityTable_v2, IEnumerable<Room>
     {
         
-        public const string TableName = "Vim.Room";
+        public const string TableName = TableNames.Room";
         
         public EntityTableSet ParentTableSet { get; } // can be null
         
@@ -5758,7 +5650,7 @@ namespace Vim.Format.ObjectModel {
     public partial class BimDocumentTable : EntityTable_v2, IEnumerable<BimDocument>
     {
         
-        public const string TableName = "Vim.BimDocument";
+        public const string TableName = TableNames.BimDocument";
         
         public EntityTableSet ParentTableSet { get; } // can be null
         
@@ -5927,7 +5819,7 @@ namespace Vim.Format.ObjectModel {
     public partial class DisplayUnitInBimDocumentTable : EntityTable_v2, IEnumerable<DisplayUnitInBimDocument>
     {
         
-        public const string TableName = "Vim.DisplayUnitInBimDocument";
+        public const string TableName = TableNames.DisplayUnitInBimDocument";
         
         public EntityTableSet ParentTableSet { get; } // can be null
         
@@ -5968,7 +5860,7 @@ namespace Vim.Format.ObjectModel {
     public partial class PhaseOrderInBimDocumentTable : EntityTable_v2, IEnumerable<PhaseOrderInBimDocument>
     {
         
-        public const string TableName = "Vim.PhaseOrderInBimDocument";
+        public const string TableName = TableNames.PhaseOrderInBimDocument";
         
         public EntityTableSet ParentTableSet { get; } // can be null
         
@@ -6013,7 +5905,7 @@ namespace Vim.Format.ObjectModel {
     public partial class CategoryTable : EntityTable_v2, IEnumerable<Category>
     {
         
-        public const string TableName = "Vim.Category";
+        public const string TableName = TableNames.Category";
         
         public EntityTableSet ParentTableSet { get; } // can be null
         
@@ -6082,7 +5974,7 @@ namespace Vim.Format.ObjectModel {
     public partial class FamilyTable : EntityTable_v2, IEnumerable<Family>
     {
         
-        public const string TableName = "Vim.Family";
+        public const string TableName = TableNames.Family";
         
         public EntityTableSet ParentTableSet { get; } // can be null
         
@@ -6139,7 +6031,7 @@ namespace Vim.Format.ObjectModel {
     public partial class FamilyTypeTable : EntityTable_v2, IEnumerable<FamilyType>
     {
         
-        public const string TableName = "Vim.FamilyType";
+        public const string TableName = TableNames.FamilyType";
         
         public EntityTableSet ParentTableSet { get; } // can be null
         
@@ -6190,7 +6082,7 @@ namespace Vim.Format.ObjectModel {
     public partial class FamilyInstanceTable : EntityTable_v2, IEnumerable<FamilyInstance>
     {
         
-        public const string TableName = "Vim.FamilyInstance";
+        public const string TableName = TableNames.FamilyInstance";
         
         public EntityTableSet ParentTableSet { get; } // can be null
         
@@ -6347,7 +6239,7 @@ namespace Vim.Format.ObjectModel {
     public partial class ViewTable : EntityTable_v2, IEnumerable<View>
     {
         
-        public const string TableName = "Vim.View";
+        public const string TableName = TableNames.View";
         
         public EntityTableSet ParentTableSet { get; } // can be null
         
@@ -6486,7 +6378,7 @@ namespace Vim.Format.ObjectModel {
     public partial class ElementInViewTable : EntityTable_v2, IEnumerable<ElementInView>
     {
         
-        public const string TableName = "Vim.ElementInView";
+        public const string TableName = TableNames.ElementInView";
         
         public EntityTableSet ParentTableSet { get; } // can be null
         
@@ -6527,7 +6419,7 @@ namespace Vim.Format.ObjectModel {
     public partial class ShapeInViewTable : EntityTable_v2, IEnumerable<ShapeInView>
     {
         
-        public const string TableName = "Vim.ShapeInView";
+        public const string TableName = TableNames.ShapeInView";
         
         public EntityTableSet ParentTableSet { get; } // can be null
         
@@ -6568,7 +6460,7 @@ namespace Vim.Format.ObjectModel {
     public partial class AssetInViewTable : EntityTable_v2, IEnumerable<AssetInView>
     {
         
-        public const string TableName = "Vim.AssetInView";
+        public const string TableName = TableNames.AssetInView";
         
         public EntityTableSet ParentTableSet { get; } // can be null
         
@@ -6609,7 +6501,7 @@ namespace Vim.Format.ObjectModel {
     public partial class AssetInViewSheetTable : EntityTable_v2, IEnumerable<AssetInViewSheet>
     {
         
-        public const string TableName = "Vim.AssetInViewSheet";
+        public const string TableName = TableNames.AssetInViewSheet";
         
         public EntityTableSet ParentTableSet { get; } // can be null
         
@@ -6650,7 +6542,7 @@ namespace Vim.Format.ObjectModel {
     public partial class LevelInViewTable : EntityTable_v2, IEnumerable<LevelInView>
     {
         
-        public const string TableName = "Vim.LevelInView";
+        public const string TableName = TableNames.LevelInView";
         
         public EntityTableSet ParentTableSet { get; } // can be null
         
@@ -6715,7 +6607,7 @@ namespace Vim.Format.ObjectModel {
     public partial class CameraTable : EntityTable_v2, IEnumerable<Camera>
     {
         
-        public const string TableName = "Vim.Camera";
+        public const string TableName = TableNames.Camera";
         
         public EntityTableSet ParentTableSet { get; } // can be null
         
@@ -6780,7 +6672,7 @@ namespace Vim.Format.ObjectModel {
     public partial class MaterialTable : EntityTable_v2, IEnumerable<Material>
     {
         
-        public const string TableName = "Vim.Material";
+        public const string TableName = TableNames.Material";
         
         public EntityTableSet ParentTableSet { get; } // can be null
         
@@ -6895,7 +6787,7 @@ namespace Vim.Format.ObjectModel {
     public partial class MaterialInElementTable : EntityTable_v2, IEnumerable<MaterialInElement>
     {
         
-        public const string TableName = "Vim.MaterialInElement";
+        public const string TableName = TableNames.MaterialInElement";
         
         public EntityTableSet ParentTableSet { get; } // can be null
         
@@ -6948,7 +6840,7 @@ namespace Vim.Format.ObjectModel {
     public partial class CompoundStructureLayerTable : EntityTable_v2, IEnumerable<CompoundStructureLayer>
     {
         
-        public const string TableName = "Vim.CompoundStructureLayer";
+        public const string TableName = TableNames.CompoundStructureLayer";
         
         public EntityTableSet ParentTableSet { get; } // can be null
         
@@ -7001,7 +6893,7 @@ namespace Vim.Format.ObjectModel {
     public partial class CompoundStructureTable : EntityTable_v2, IEnumerable<CompoundStructure>
     {
         
-        public const string TableName = "Vim.CompoundStructure";
+        public const string TableName = TableNames.CompoundStructure";
         
         public EntityTableSet ParentTableSet { get; } // can be null
         
@@ -7040,7 +6932,7 @@ namespace Vim.Format.ObjectModel {
     public partial class NodeTable : EntityTable_v2, IEnumerable<Node>
     {
         
-        public const string TableName = "Vim.Node";
+        public const string TableName = TableNames.Node";
         
         public EntityTableSet ParentTableSet { get; } // can be null
         
@@ -7075,7 +6967,7 @@ namespace Vim.Format.ObjectModel {
     public partial class GeometryTable : EntityTable_v2, IEnumerable<Geometry>
     {
         
-        public const string TableName = "Vim.Geometry";
+        public const string TableName = TableNames.Geometry";
         
         public EntityTableSet ParentTableSet { get; } // can be null
         
@@ -7136,7 +7028,7 @@ namespace Vim.Format.ObjectModel {
     public partial class ShapeTable : EntityTable_v2, IEnumerable<Shape>
     {
         
-        public const string TableName = "Vim.Shape";
+        public const string TableName = TableNames.Shape";
         
         public EntityTableSet ParentTableSet { get; } // can be null
         
@@ -7171,7 +7063,7 @@ namespace Vim.Format.ObjectModel {
     public partial class ShapeCollectionTable : EntityTable_v2, IEnumerable<ShapeCollection>
     {
         
-        public const string TableName = "Vim.ShapeCollection";
+        public const string TableName = TableNames.ShapeCollection";
         
         public EntityTableSet ParentTableSet { get; } // can be null
         
@@ -7206,7 +7098,7 @@ namespace Vim.Format.ObjectModel {
     public partial class ShapeInShapeCollectionTable : EntityTable_v2, IEnumerable<ShapeInShapeCollection>
     {
         
-        public const string TableName = "Vim.ShapeInShapeCollection";
+        public const string TableName = TableNames.ShapeInShapeCollection";
         
         public EntityTableSet ParentTableSet { get; } // can be null
         
@@ -7247,7 +7139,7 @@ namespace Vim.Format.ObjectModel {
     public partial class SystemTable : EntityTable_v2, IEnumerable<System>
     {
         
-        public const string TableName = "Vim.System";
+        public const string TableName = TableNames.System";
         
         public EntityTableSet ParentTableSet { get; } // can be null
         
@@ -7292,7 +7184,7 @@ namespace Vim.Format.ObjectModel {
     public partial class ElementInSystemTable : EntityTable_v2, IEnumerable<ElementInSystem>
     {
         
-        public const string TableName = "Vim.ElementInSystem";
+        public const string TableName = TableNames.ElementInSystem";
         
         public EntityTableSet ParentTableSet { get; } // can be null
         
@@ -7337,7 +7229,7 @@ namespace Vim.Format.ObjectModel {
     public partial class WarningTable : EntityTable_v2, IEnumerable<Warning>
     {
         
-        public const string TableName = "Vim.Warning";
+        public const string TableName = TableNames.Warning";
         
         public EntityTableSet ParentTableSet { get; } // can be null
         
@@ -7384,7 +7276,7 @@ namespace Vim.Format.ObjectModel {
     public partial class ElementInWarningTable : EntityTable_v2, IEnumerable<ElementInWarning>
     {
         
-        public const string TableName = "Vim.ElementInWarning";
+        public const string TableName = TableNames.ElementInWarning";
         
         public EntityTableSet ParentTableSet { get; } // can be null
         
@@ -7425,7 +7317,7 @@ namespace Vim.Format.ObjectModel {
     public partial class BasePointTable : EntityTable_v2, IEnumerable<BasePoint>
     {
         
-        public const string TableName = "Vim.BasePoint";
+        public const string TableName = TableNames.BasePoint";
         
         public EntityTableSet ParentTableSet { get; } // can be null
         
@@ -7488,7 +7380,7 @@ namespace Vim.Format.ObjectModel {
     public partial class PhaseFilterTable : EntityTable_v2, IEnumerable<PhaseFilter>
     {
         
-        public const string TableName = "Vim.PhaseFilter";
+        public const string TableName = TableNames.PhaseFilter";
         
         public EntityTableSet ParentTableSet { get; } // can be null
         
@@ -7539,7 +7431,7 @@ namespace Vim.Format.ObjectModel {
     public partial class GridTable : EntityTable_v2, IEnumerable<Grid>
     {
         
-        public const string TableName = "Vim.Grid";
+        public const string TableName = TableNames.Grid";
         
         public EntityTableSet ParentTableSet { get; } // can be null
         
@@ -7632,7 +7524,7 @@ namespace Vim.Format.ObjectModel {
     public partial class AreaTable : EntityTable_v2, IEnumerable<Area>
     {
         
-        public const string TableName = "Vim.Area";
+        public const string TableName = TableNames.Area";
         
         public EntityTableSet ParentTableSet { get; } // can be null
         
@@ -7689,7 +7581,7 @@ namespace Vim.Format.ObjectModel {
     public partial class AreaSchemeTable : EntityTable_v2, IEnumerable<AreaScheme>
     {
         
-        public const string TableName = "Vim.AreaScheme";
+        public const string TableName = TableNames.AreaScheme";
         
         public EntityTableSet ParentTableSet { get; } // can be null
         
@@ -7728,7 +7620,7 @@ namespace Vim.Format.ObjectModel {
     public partial class ScheduleTable : EntityTable_v2, IEnumerable<Schedule>
     {
         
-        public const string TableName = "Vim.Schedule";
+        public const string TableName = TableNames.Schedule";
         
         public EntityTableSet ParentTableSet { get; } // can be null
         
@@ -7763,7 +7655,7 @@ namespace Vim.Format.ObjectModel {
     public partial class ScheduleColumnTable : EntityTable_v2, IEnumerable<ScheduleColumn>
     {
         
-        public const string TableName = "Vim.ScheduleColumn";
+        public const string TableName = TableNames.ScheduleColumn";
         
         public EntityTableSet ParentTableSet { get; } // can be null
         
@@ -7806,7 +7698,7 @@ namespace Vim.Format.ObjectModel {
     public partial class ScheduleCellTable : EntityTable_v2, IEnumerable<ScheduleCell>
     {
         
-        public const string TableName = "Vim.ScheduleCell";
+        public const string TableName = TableNames.ScheduleCell";
         
         public EntityTableSet ParentTableSet { get; } // can be null
         
@@ -7849,7 +7741,7 @@ namespace Vim.Format.ObjectModel {
     public partial class ViewSheetSetTable : EntityTable_v2, IEnumerable<ViewSheetSet>
     {
         
-        public const string TableName = "Vim.ViewSheetSet";
+        public const string TableName = TableNames.ViewSheetSet";
         
         public EntityTableSet ParentTableSet { get; } // can be null
         
@@ -7884,7 +7776,7 @@ namespace Vim.Format.ObjectModel {
     public partial class ViewSheetTable : EntityTable_v2, IEnumerable<ViewSheet>
     {
         
-        public const string TableName = "Vim.ViewSheet";
+        public const string TableName = TableNames.ViewSheet";
         
         public EntityTableSet ParentTableSet { get; } // can be null
         
@@ -7925,7 +7817,7 @@ namespace Vim.Format.ObjectModel {
     public partial class ViewSheetInViewSheetSetTable : EntityTable_v2, IEnumerable<ViewSheetInViewSheetSet>
     {
         
-        public const string TableName = "Vim.ViewSheetInViewSheetSet";
+        public const string TableName = TableNames.ViewSheetInViewSheetSet";
         
         public EntityTableSet ParentTableSet { get; } // can be null
         
@@ -7966,7 +7858,7 @@ namespace Vim.Format.ObjectModel {
     public partial class ViewInViewSheetSetTable : EntityTable_v2, IEnumerable<ViewInViewSheetSet>
     {
         
-        public const string TableName = "Vim.ViewInViewSheetSet";
+        public const string TableName = TableNames.ViewInViewSheetSet";
         
         public EntityTableSet ParentTableSet { get; } // can be null
         
@@ -8007,7 +7899,7 @@ namespace Vim.Format.ObjectModel {
     public partial class ViewInViewSheetTable : EntityTable_v2, IEnumerable<ViewInViewSheet>
     {
         
-        public const string TableName = "Vim.ViewInViewSheet";
+        public const string TableName = TableNames.ViewInViewSheet";
         
         public EntityTableSet ParentTableSet { get; } // can be null
         
@@ -8048,7 +7940,7 @@ namespace Vim.Format.ObjectModel {
     public partial class SiteTable : EntityTable_v2, IEnumerable<Site>
     {
         
-        public const string TableName = "Vim.Site";
+        public const string TableName = TableNames.Site";
         
         public EntityTableSet ParentTableSet { get; } // can be null
         
@@ -8103,7 +7995,7 @@ namespace Vim.Format.ObjectModel {
     public partial class BuildingTable : EntityTable_v2, IEnumerable<Building>
     {
         
-        public const string TableName = "Vim.Building";
+        public const string TableName = TableNames.Building";
         
         public EntityTableSet ParentTableSet { get; } // can be null
         
@@ -8157,7 +8049,7 @@ namespace Vim.Format.ObjectModel {
     {
         public static EntityTableBuilder ToAssetTableBuilder(this EntitySetBuilder<Asset> entitySet)
         {
-            var tb = new EntityTableBuilder("Vim.Asset");
+            var tb = new EntityTableBuilder(TableNames.Asset);
             var entities = entitySet.Entities;
             var entityCount = entities.Count;
             {
@@ -8169,7 +8061,7 @@ namespace Vim.Format.ObjectModel {
         }
         public static EntityTableBuilder ToDisplayUnitTableBuilder(this EntitySetBuilder<DisplayUnit> entitySet)
         {
-            var tb = new EntityTableBuilder("Vim.DisplayUnit");
+            var tb = new EntityTableBuilder(TableNames.DisplayUnit);
             var entities = entitySet.Entities;
             var entityCount = entities.Count;
             {
@@ -8191,7 +8083,7 @@ namespace Vim.Format.ObjectModel {
         }
         public static EntityTableBuilder ToParameterDescriptorTableBuilder(this EntitySetBuilder<ParameterDescriptor> entitySet)
         {
-            var tb = new EntityTableBuilder("Vim.ParameterDescriptor");
+            var tb = new EntityTableBuilder(TableNames.ParameterDescriptor);
             var entities = entitySet.Entities;
             var entityCount = entities.Count;
             {
@@ -8248,7 +8140,7 @@ namespace Vim.Format.ObjectModel {
         }
         public static EntityTableBuilder ToParameterTableBuilder(this EntitySetBuilder<Parameter> entitySet)
         {
-            var tb = new EntityTableBuilder("Vim.Parameter");
+            var tb = new EntityTableBuilder(TableNames.Parameter);
             var entities = entitySet.Entities;
             var entityCount = entities.Count;
             {
@@ -8270,7 +8162,7 @@ namespace Vim.Format.ObjectModel {
         }
         public static EntityTableBuilder ToElementTableBuilder(this EntitySetBuilder<Element> entitySet)
         {
-            var tb = new EntityTableBuilder("Vim.Element");
+            var tb = new EntityTableBuilder(TableNames.Element);
             var entities = entitySet.Entities;
             var entityCount = entities.Count;
             {
@@ -8377,7 +8269,7 @@ namespace Vim.Format.ObjectModel {
         }
         public static EntityTableBuilder ToWorksetTableBuilder(this EntitySetBuilder<Workset> entitySet)
         {
-            var tb = new EntityTableBuilder("Vim.Workset");
+            var tb = new EntityTableBuilder(TableNames.Workset);
             var entities = entitySet.Entities;
             var entityCount = entities.Count;
             {
@@ -8424,7 +8316,7 @@ namespace Vim.Format.ObjectModel {
         }
         public static EntityTableBuilder ToAssemblyInstanceTableBuilder(this EntitySetBuilder<AssemblyInstance> entitySet)
         {
-            var tb = new EntityTableBuilder("Vim.AssemblyInstance");
+            var tb = new EntityTableBuilder(TableNames.AssemblyInstance);
             var entities = entitySet.Entities;
             var entityCount = entities.Count;
             {
@@ -8456,7 +8348,7 @@ namespace Vim.Format.ObjectModel {
         }
         public static EntityTableBuilder ToGroupTableBuilder(this EntitySetBuilder<Group> entitySet)
         {
-            var tb = new EntityTableBuilder("Vim.Group");
+            var tb = new EntityTableBuilder(TableNames.Group);
             var entities = entitySet.Entities;
             var entityCount = entities.Count;
             {
@@ -8488,7 +8380,7 @@ namespace Vim.Format.ObjectModel {
         }
         public static EntityTableBuilder ToDesignOptionTableBuilder(this EntitySetBuilder<DesignOption> entitySet)
         {
-            var tb = new EntityTableBuilder("Vim.DesignOption");
+            var tb = new EntityTableBuilder(TableNames.DesignOption);
             var entities = entitySet.Entities;
             var entityCount = entities.Count;
             {
@@ -8505,7 +8397,7 @@ namespace Vim.Format.ObjectModel {
         }
         public static EntityTableBuilder ToLevelTableBuilder(this EntitySetBuilder<Level> entitySet)
         {
-            var tb = new EntityTableBuilder("Vim.Level");
+            var tb = new EntityTableBuilder(TableNames.Level);
             var entities = entitySet.Entities;
             var entityCount = entities.Count;
             {
@@ -8537,7 +8429,7 @@ namespace Vim.Format.ObjectModel {
         }
         public static EntityTableBuilder ToPhaseTableBuilder(this EntitySetBuilder<Phase> entitySet)
         {
-            var tb = new EntityTableBuilder("Vim.Phase");
+            var tb = new EntityTableBuilder(TableNames.Phase);
             var entities = entitySet.Entities;
             var entityCount = entities.Count;
             {
@@ -8549,7 +8441,7 @@ namespace Vim.Format.ObjectModel {
         }
         public static EntityTableBuilder ToRoomTableBuilder(this EntitySetBuilder<Room> entitySet)
         {
-            var tb = new EntityTableBuilder("Vim.Room");
+            var tb = new EntityTableBuilder(TableNames.Room);
             var entities = entitySet.Entities;
             var entityCount = entities.Count;
             {
@@ -8601,7 +8493,7 @@ namespace Vim.Format.ObjectModel {
         }
         public static EntityTableBuilder ToBimDocumentTableBuilder(this EntitySetBuilder<BimDocument> entitySet)
         {
-            var tb = new EntityTableBuilder("Vim.BimDocument");
+            var tb = new EntityTableBuilder(TableNames.BimDocument);
             var entities = entitySet.Entities;
             var entityCount = entities.Count;
             {
@@ -8773,7 +8665,7 @@ namespace Vim.Format.ObjectModel {
         }
         public static EntityTableBuilder ToDisplayUnitInBimDocumentTableBuilder(this EntitySetBuilder<DisplayUnitInBimDocument> entitySet)
         {
-            var tb = new EntityTableBuilder("Vim.DisplayUnitInBimDocument");
+            var tb = new EntityTableBuilder(TableNames.DisplayUnitInBimDocument);
             var entities = entitySet.Entities;
             var entityCount = entities.Count;
             {
@@ -8790,7 +8682,7 @@ namespace Vim.Format.ObjectModel {
         }
         public static EntityTableBuilder ToPhaseOrderInBimDocumentTableBuilder(this EntitySetBuilder<PhaseOrderInBimDocument> entitySet)
         {
-            var tb = new EntityTableBuilder("Vim.PhaseOrderInBimDocument");
+            var tb = new EntityTableBuilder(TableNames.PhaseOrderInBimDocument);
             var entities = entitySet.Entities;
             var entityCount = entities.Count;
             {
@@ -8812,7 +8704,7 @@ namespace Vim.Format.ObjectModel {
         }
         public static EntityTableBuilder ToCategoryTableBuilder(this EntitySetBuilder<Category> entitySet)
         {
-            var tb = new EntityTableBuilder("Vim.Category");
+            var tb = new EntityTableBuilder(TableNames.Category);
             var entities = entitySet.Entities;
             var entityCount = entities.Count;
             {
@@ -8864,7 +8756,7 @@ namespace Vim.Format.ObjectModel {
         }
         public static EntityTableBuilder ToFamilyTableBuilder(this EntitySetBuilder<Family> entitySet)
         {
-            var tb = new EntityTableBuilder("Vim.Family");
+            var tb = new EntityTableBuilder(TableNames.Family);
             var entities = entitySet.Entities;
             var entityCount = entities.Count;
             {
@@ -8901,7 +8793,7 @@ namespace Vim.Format.ObjectModel {
         }
         public static EntityTableBuilder ToFamilyTypeTableBuilder(this EntitySetBuilder<FamilyType> entitySet)
         {
-            var tb = new EntityTableBuilder("Vim.FamilyType");
+            var tb = new EntityTableBuilder(TableNames.FamilyType);
             var entities = entitySet.Entities;
             var entityCount = entities.Count;
             {
@@ -8928,7 +8820,7 @@ namespace Vim.Format.ObjectModel {
         }
         public static EntityTableBuilder ToFamilyInstanceTableBuilder(this EntitySetBuilder<FamilyInstance> entitySet)
         {
-            var tb = new EntityTableBuilder("Vim.FamilyInstance");
+            var tb = new EntityTableBuilder(TableNames.FamilyInstance);
             var entities = entitySet.Entities;
             var entityCount = entities.Count;
             {
@@ -9080,7 +8972,7 @@ namespace Vim.Format.ObjectModel {
         }
         public static EntityTableBuilder ToViewTableBuilder(this EntitySetBuilder<View> entitySet)
         {
-            var tb = new EntityTableBuilder("Vim.View");
+            var tb = new EntityTableBuilder(TableNames.View);
             var entities = entitySet.Entities;
             var entityCount = entities.Count;
             {
@@ -9217,7 +9109,7 @@ namespace Vim.Format.ObjectModel {
         }
         public static EntityTableBuilder ToElementInViewTableBuilder(this EntitySetBuilder<ElementInView> entitySet)
         {
-            var tb = new EntityTableBuilder("Vim.ElementInView");
+            var tb = new EntityTableBuilder(TableNames.ElementInView);
             var entities = entitySet.Entities;
             var entityCount = entities.Count;
             {
@@ -9234,7 +9126,7 @@ namespace Vim.Format.ObjectModel {
         }
         public static EntityTableBuilder ToShapeInViewTableBuilder(this EntitySetBuilder<ShapeInView> entitySet)
         {
-            var tb = new EntityTableBuilder("Vim.ShapeInView");
+            var tb = new EntityTableBuilder(TableNames.ShapeInView);
             var entities = entitySet.Entities;
             var entityCount = entities.Count;
             {
@@ -9251,7 +9143,7 @@ namespace Vim.Format.ObjectModel {
         }
         public static EntityTableBuilder ToAssetInViewTableBuilder(this EntitySetBuilder<AssetInView> entitySet)
         {
-            var tb = new EntityTableBuilder("Vim.AssetInView");
+            var tb = new EntityTableBuilder(TableNames.AssetInView);
             var entities = entitySet.Entities;
             var entityCount = entities.Count;
             {
@@ -9268,7 +9160,7 @@ namespace Vim.Format.ObjectModel {
         }
         public static EntityTableBuilder ToAssetInViewSheetTableBuilder(this EntitySetBuilder<AssetInViewSheet> entitySet)
         {
-            var tb = new EntityTableBuilder("Vim.AssetInViewSheet");
+            var tb = new EntityTableBuilder(TableNames.AssetInViewSheet);
             var entities = entitySet.Entities;
             var entityCount = entities.Count;
             {
@@ -9285,7 +9177,7 @@ namespace Vim.Format.ObjectModel {
         }
         public static EntityTableBuilder ToLevelInViewTableBuilder(this EntitySetBuilder<LevelInView> entitySet)
         {
-            var tb = new EntityTableBuilder("Vim.LevelInView");
+            var tb = new EntityTableBuilder(TableNames.LevelInView);
             var entities = entitySet.Entities;
             var entityCount = entities.Count;
             {
@@ -9332,7 +9224,7 @@ namespace Vim.Format.ObjectModel {
         }
         public static EntityTableBuilder ToCameraTableBuilder(this EntitySetBuilder<Camera> entitySet)
         {
-            var tb = new EntityTableBuilder("Vim.Camera");
+            var tb = new EntityTableBuilder(TableNames.Camera);
             var entities = entitySet.Entities;
             var entityCount = entities.Count;
             {
@@ -9384,7 +9276,7 @@ namespace Vim.Format.ObjectModel {
         }
         public static EntityTableBuilder ToMaterialTableBuilder(this EntitySetBuilder<Material> entitySet)
         {
-            var tb = new EntityTableBuilder("Vim.Material");
+            var tb = new EntityTableBuilder(TableNames.Material);
             var entities = entitySet.Entities;
             var entityCount = entities.Count;
             {
@@ -9491,7 +9383,7 @@ namespace Vim.Format.ObjectModel {
         }
         public static EntityTableBuilder ToMaterialInElementTableBuilder(this EntitySetBuilder<MaterialInElement> entitySet)
         {
-            var tb = new EntityTableBuilder("Vim.MaterialInElement");
+            var tb = new EntityTableBuilder(TableNames.MaterialInElement);
             var entities = entitySet.Entities;
             var entityCount = entities.Count;
             {
@@ -9523,7 +9415,7 @@ namespace Vim.Format.ObjectModel {
         }
         public static EntityTableBuilder ToCompoundStructureLayerTableBuilder(this EntitySetBuilder<CompoundStructureLayer> entitySet)
         {
-            var tb = new EntityTableBuilder("Vim.CompoundStructureLayer");
+            var tb = new EntityTableBuilder(TableNames.CompoundStructureLayer);
             var entities = entitySet.Entities;
             var entityCount = entities.Count;
             {
@@ -9555,7 +9447,7 @@ namespace Vim.Format.ObjectModel {
         }
         public static EntityTableBuilder ToCompoundStructureTableBuilder(this EntitySetBuilder<CompoundStructure> entitySet)
         {
-            var tb = new EntityTableBuilder("Vim.CompoundStructure");
+            var tb = new EntityTableBuilder(TableNames.CompoundStructure);
             var entities = entitySet.Entities;
             var entityCount = entities.Count;
             {
@@ -9572,7 +9464,7 @@ namespace Vim.Format.ObjectModel {
         }
         public static EntityTableBuilder ToNodeTableBuilder(this EntitySetBuilder<Node> entitySet)
         {
-            var tb = new EntityTableBuilder("Vim.Node");
+            var tb = new EntityTableBuilder(TableNames.Node);
             var entities = entitySet.Entities;
             var entityCount = entities.Count;
             {
@@ -9584,7 +9476,7 @@ namespace Vim.Format.ObjectModel {
         }
         public static EntityTableBuilder ToGeometryTableBuilder(this EntitySetBuilder<Geometry> entitySet)
         {
-            var tb = new EntityTableBuilder("Vim.Geometry");
+            var tb = new EntityTableBuilder(TableNames.Geometry);
             var entities = entitySet.Entities;
             var entityCount = entities.Count;
             {
@@ -9631,7 +9523,7 @@ namespace Vim.Format.ObjectModel {
         }
         public static EntityTableBuilder ToShapeTableBuilder(this EntitySetBuilder<Shape> entitySet)
         {
-            var tb = new EntityTableBuilder("Vim.Shape");
+            var tb = new EntityTableBuilder(TableNames.Shape);
             var entities = entitySet.Entities;
             var entityCount = entities.Count;
             {
@@ -9643,7 +9535,7 @@ namespace Vim.Format.ObjectModel {
         }
         public static EntityTableBuilder ToShapeCollectionTableBuilder(this EntitySetBuilder<ShapeCollection> entitySet)
         {
-            var tb = new EntityTableBuilder("Vim.ShapeCollection");
+            var tb = new EntityTableBuilder(TableNames.ShapeCollection);
             var entities = entitySet.Entities;
             var entityCount = entities.Count;
             {
@@ -9655,7 +9547,7 @@ namespace Vim.Format.ObjectModel {
         }
         public static EntityTableBuilder ToShapeInShapeCollectionTableBuilder(this EntitySetBuilder<ShapeInShapeCollection> entitySet)
         {
-            var tb = new EntityTableBuilder("Vim.ShapeInShapeCollection");
+            var tb = new EntityTableBuilder(TableNames.ShapeInShapeCollection);
             var entities = entitySet.Entities;
             var entityCount = entities.Count;
             {
@@ -9672,7 +9564,7 @@ namespace Vim.Format.ObjectModel {
         }
         public static EntityTableBuilder ToSystemTableBuilder(this EntitySetBuilder<System> entitySet)
         {
-            var tb = new EntityTableBuilder("Vim.System");
+            var tb = new EntityTableBuilder(TableNames.System);
             var entities = entitySet.Entities;
             var entityCount = entities.Count;
             {
@@ -9694,7 +9586,7 @@ namespace Vim.Format.ObjectModel {
         }
         public static EntityTableBuilder ToElementInSystemTableBuilder(this EntitySetBuilder<ElementInSystem> entitySet)
         {
-            var tb = new EntityTableBuilder("Vim.ElementInSystem");
+            var tb = new EntityTableBuilder(TableNames.ElementInSystem);
             var entities = entitySet.Entities;
             var entityCount = entities.Count;
             {
@@ -9716,7 +9608,7 @@ namespace Vim.Format.ObjectModel {
         }
         public static EntityTableBuilder ToWarningTableBuilder(this EntitySetBuilder<Warning> entitySet)
         {
-            var tb = new EntityTableBuilder("Vim.Warning");
+            var tb = new EntityTableBuilder(TableNames.Warning);
             var entities = entitySet.Entities;
             var entityCount = entities.Count;
             {
@@ -9743,7 +9635,7 @@ namespace Vim.Format.ObjectModel {
         }
         public static EntityTableBuilder ToElementInWarningTableBuilder(this EntitySetBuilder<ElementInWarning> entitySet)
         {
-            var tb = new EntityTableBuilder("Vim.ElementInWarning");
+            var tb = new EntityTableBuilder(TableNames.ElementInWarning);
             var entities = entitySet.Entities;
             var entityCount = entities.Count;
             {
@@ -9760,7 +9652,7 @@ namespace Vim.Format.ObjectModel {
         }
         public static EntityTableBuilder ToBasePointTableBuilder(this EntitySetBuilder<BasePoint> entitySet)
         {
-            var tb = new EntityTableBuilder("Vim.BasePoint");
+            var tb = new EntityTableBuilder(TableNames.BasePoint);
             var entities = entitySet.Entities;
             var entityCount = entities.Count;
             {
@@ -9807,7 +9699,7 @@ namespace Vim.Format.ObjectModel {
         }
         public static EntityTableBuilder ToPhaseFilterTableBuilder(this EntitySetBuilder<PhaseFilter> entitySet)
         {
-            var tb = new EntityTableBuilder("Vim.PhaseFilter");
+            var tb = new EntityTableBuilder(TableNames.PhaseFilter);
             var entities = entitySet.Entities;
             var entityCount = entities.Count;
             {
@@ -9839,7 +9731,7 @@ namespace Vim.Format.ObjectModel {
         }
         public static EntityTableBuilder ToGridTableBuilder(this EntitySetBuilder<Grid> entitySet)
         {
-            var tb = new EntityTableBuilder("Vim.Grid");
+            var tb = new EntityTableBuilder(TableNames.Grid);
             var entities = entitySet.Entities;
             var entityCount = entities.Count;
             {
@@ -9921,7 +9813,7 @@ namespace Vim.Format.ObjectModel {
         }
         public static EntityTableBuilder ToAreaTableBuilder(this EntitySetBuilder<Area> entitySet)
         {
-            var tb = new EntityTableBuilder("Vim.Area");
+            var tb = new EntityTableBuilder(TableNames.Area);
             var entities = entitySet.Entities;
             var entityCount = entities.Count;
             {
@@ -9958,7 +9850,7 @@ namespace Vim.Format.ObjectModel {
         }
         public static EntityTableBuilder ToAreaSchemeTableBuilder(this EntitySetBuilder<AreaScheme> entitySet)
         {
-            var tb = new EntityTableBuilder("Vim.AreaScheme");
+            var tb = new EntityTableBuilder(TableNames.AreaScheme);
             var entities = entitySet.Entities;
             var entityCount = entities.Count;
             {
@@ -9975,7 +9867,7 @@ namespace Vim.Format.ObjectModel {
         }
         public static EntityTableBuilder ToScheduleTableBuilder(this EntitySetBuilder<Schedule> entitySet)
         {
-            var tb = new EntityTableBuilder("Vim.Schedule");
+            var tb = new EntityTableBuilder(TableNames.Schedule);
             var entities = entitySet.Entities;
             var entityCount = entities.Count;
             {
@@ -9987,7 +9879,7 @@ namespace Vim.Format.ObjectModel {
         }
         public static EntityTableBuilder ToScheduleColumnTableBuilder(this EntitySetBuilder<ScheduleColumn> entitySet)
         {
-            var tb = new EntityTableBuilder("Vim.ScheduleColumn");
+            var tb = new EntityTableBuilder(TableNames.ScheduleColumn);
             var entities = entitySet.Entities;
             var entityCount = entities.Count;
             {
@@ -10009,7 +9901,7 @@ namespace Vim.Format.ObjectModel {
         }
         public static EntityTableBuilder ToScheduleCellTableBuilder(this EntitySetBuilder<ScheduleCell> entitySet)
         {
-            var tb = new EntityTableBuilder("Vim.ScheduleCell");
+            var tb = new EntityTableBuilder(TableNames.ScheduleCell);
             var entities = entitySet.Entities;
             var entityCount = entities.Count;
             {
@@ -10031,7 +9923,7 @@ namespace Vim.Format.ObjectModel {
         }
         public static EntityTableBuilder ToViewSheetSetTableBuilder(this EntitySetBuilder<ViewSheetSet> entitySet)
         {
-            var tb = new EntityTableBuilder("Vim.ViewSheetSet");
+            var tb = new EntityTableBuilder(TableNames.ViewSheetSet);
             var entities = entitySet.Entities;
             var entityCount = entities.Count;
             {
@@ -10043,7 +9935,7 @@ namespace Vim.Format.ObjectModel {
         }
         public static EntityTableBuilder ToViewSheetTableBuilder(this EntitySetBuilder<ViewSheet> entitySet)
         {
-            var tb = new EntityTableBuilder("Vim.ViewSheet");
+            var tb = new EntityTableBuilder(TableNames.ViewSheet);
             var entities = entitySet.Entities;
             var entityCount = entities.Count;
             {
@@ -10060,7 +9952,7 @@ namespace Vim.Format.ObjectModel {
         }
         public static EntityTableBuilder ToViewSheetInViewSheetSetTableBuilder(this EntitySetBuilder<ViewSheetInViewSheetSet> entitySet)
         {
-            var tb = new EntityTableBuilder("Vim.ViewSheetInViewSheetSet");
+            var tb = new EntityTableBuilder(TableNames.ViewSheetInViewSheetSet);
             var entities = entitySet.Entities;
             var entityCount = entities.Count;
             {
@@ -10077,7 +9969,7 @@ namespace Vim.Format.ObjectModel {
         }
         public static EntityTableBuilder ToViewInViewSheetSetTableBuilder(this EntitySetBuilder<ViewInViewSheetSet> entitySet)
         {
-            var tb = new EntityTableBuilder("Vim.ViewInViewSheetSet");
+            var tb = new EntityTableBuilder(TableNames.ViewInViewSheetSet);
             var entities = entitySet.Entities;
             var entityCount = entities.Count;
             {
@@ -10094,7 +9986,7 @@ namespace Vim.Format.ObjectModel {
         }
         public static EntityTableBuilder ToViewInViewSheetTableBuilder(this EntitySetBuilder<ViewInViewSheet> entitySet)
         {
-            var tb = new EntityTableBuilder("Vim.ViewInViewSheet");
+            var tb = new EntityTableBuilder(TableNames.ViewInViewSheet);
             var entities = entitySet.Entities;
             var entityCount = entities.Count;
             {
@@ -10111,7 +10003,7 @@ namespace Vim.Format.ObjectModel {
         }
         public static EntityTableBuilder ToSiteTableBuilder(this EntitySetBuilder<Site> entitySet)
         {
-            var tb = new EntityTableBuilder("Vim.Site");
+            var tb = new EntityTableBuilder(TableNames.Site);
             var entities = entitySet.Entities;
             var entityCount = entities.Count;
             {
@@ -10148,7 +10040,7 @@ namespace Vim.Format.ObjectModel {
         }
         public static EntityTableBuilder ToBuildingTableBuilder(this EntitySetBuilder<Building> entitySet)
         {
-            var tb = new EntityTableBuilder("Vim.Building");
+            var tb = new EntityTableBuilder(TableNames.Building);
             var entities = entitySet.Entities;
             var entityCount = entities.Count;
             {
@@ -10182,60 +10074,60 @@ namespace Vim.Format.ObjectModel {
     
     public partial class ObjectModelBuilder
     {
-        public readonly EntitySetBuilder<Asset> AssetBuilder = new EntitySetBuilder<Asset>("Vim.Asset");
-        public readonly EntitySetBuilder<DisplayUnit> DisplayUnitBuilder = new EntitySetBuilder<DisplayUnit>("Vim.DisplayUnit");
-        public readonly EntitySetBuilder<ParameterDescriptor> ParameterDescriptorBuilder = new EntitySetBuilder<ParameterDescriptor>("Vim.ParameterDescriptor");
-        public readonly EntitySetBuilder<Parameter> ParameterBuilder = new EntitySetBuilder<Parameter>("Vim.Parameter");
-        public readonly EntitySetBuilder<Element> ElementBuilder = new EntitySetBuilder<Element>("Vim.Element");
-        public readonly EntitySetBuilder<Workset> WorksetBuilder = new EntitySetBuilder<Workset>("Vim.Workset");
-        public readonly EntitySetBuilder<AssemblyInstance> AssemblyInstanceBuilder = new EntitySetBuilder<AssemblyInstance>("Vim.AssemblyInstance");
-        public readonly EntitySetBuilder<Group> GroupBuilder = new EntitySetBuilder<Group>("Vim.Group");
-        public readonly EntitySetBuilder<DesignOption> DesignOptionBuilder = new EntitySetBuilder<DesignOption>("Vim.DesignOption");
-        public readonly EntitySetBuilder<Level> LevelBuilder = new EntitySetBuilder<Level>("Vim.Level");
-        public readonly EntitySetBuilder<Phase> PhaseBuilder = new EntitySetBuilder<Phase>("Vim.Phase");
-        public readonly EntitySetBuilder<Room> RoomBuilder = new EntitySetBuilder<Room>("Vim.Room");
-        public readonly EntitySetBuilder<BimDocument> BimDocumentBuilder = new EntitySetBuilder<BimDocument>("Vim.BimDocument");
-        public readonly EntitySetBuilder<DisplayUnitInBimDocument> DisplayUnitInBimDocumentBuilder = new EntitySetBuilder<DisplayUnitInBimDocument>("Vim.DisplayUnitInBimDocument");
-        public readonly EntitySetBuilder<PhaseOrderInBimDocument> PhaseOrderInBimDocumentBuilder = new EntitySetBuilder<PhaseOrderInBimDocument>("Vim.PhaseOrderInBimDocument");
-        public readonly EntitySetBuilder<Category> CategoryBuilder = new EntitySetBuilder<Category>("Vim.Category");
-        public readonly EntitySetBuilder<Family> FamilyBuilder = new EntitySetBuilder<Family>("Vim.Family");
-        public readonly EntitySetBuilder<FamilyType> FamilyTypeBuilder = new EntitySetBuilder<FamilyType>("Vim.FamilyType");
-        public readonly EntitySetBuilder<FamilyInstance> FamilyInstanceBuilder = new EntitySetBuilder<FamilyInstance>("Vim.FamilyInstance");
-        public readonly EntitySetBuilder<View> ViewBuilder = new EntitySetBuilder<View>("Vim.View");
-        public readonly EntitySetBuilder<ElementInView> ElementInViewBuilder = new EntitySetBuilder<ElementInView>("Vim.ElementInView");
-        public readonly EntitySetBuilder<ShapeInView> ShapeInViewBuilder = new EntitySetBuilder<ShapeInView>("Vim.ShapeInView");
-        public readonly EntitySetBuilder<AssetInView> AssetInViewBuilder = new EntitySetBuilder<AssetInView>("Vim.AssetInView");
-        public readonly EntitySetBuilder<AssetInViewSheet> AssetInViewSheetBuilder = new EntitySetBuilder<AssetInViewSheet>("Vim.AssetInViewSheet");
-        public readonly EntitySetBuilder<LevelInView> LevelInViewBuilder = new EntitySetBuilder<LevelInView>("Vim.LevelInView");
-        public readonly EntitySetBuilder<Camera> CameraBuilder = new EntitySetBuilder<Camera>("Vim.Camera");
-        public readonly EntitySetBuilder<Material> MaterialBuilder = new EntitySetBuilder<Material>("Vim.Material");
-        public readonly EntitySetBuilder<MaterialInElement> MaterialInElementBuilder = new EntitySetBuilder<MaterialInElement>("Vim.MaterialInElement");
-        public readonly EntitySetBuilder<CompoundStructureLayer> CompoundStructureLayerBuilder = new EntitySetBuilder<CompoundStructureLayer>("Vim.CompoundStructureLayer");
-        public readonly EntitySetBuilder<CompoundStructure> CompoundStructureBuilder = new EntitySetBuilder<CompoundStructure>("Vim.CompoundStructure");
-        public readonly EntitySetBuilder<Node> NodeBuilder = new EntitySetBuilder<Node>("Vim.Node");
-        public readonly EntitySetBuilder<Geometry> GeometryBuilder = new EntitySetBuilder<Geometry>("Vim.Geometry");
-        public readonly EntitySetBuilder<Shape> ShapeBuilder = new EntitySetBuilder<Shape>("Vim.Shape");
-        public readonly EntitySetBuilder<ShapeCollection> ShapeCollectionBuilder = new EntitySetBuilder<ShapeCollection>("Vim.ShapeCollection");
-        public readonly EntitySetBuilder<ShapeInShapeCollection> ShapeInShapeCollectionBuilder = new EntitySetBuilder<ShapeInShapeCollection>("Vim.ShapeInShapeCollection");
-        public readonly EntitySetBuilder<System> SystemBuilder = new EntitySetBuilder<System>("Vim.System");
-        public readonly EntitySetBuilder<ElementInSystem> ElementInSystemBuilder = new EntitySetBuilder<ElementInSystem>("Vim.ElementInSystem");
-        public readonly EntitySetBuilder<Warning> WarningBuilder = new EntitySetBuilder<Warning>("Vim.Warning");
-        public readonly EntitySetBuilder<ElementInWarning> ElementInWarningBuilder = new EntitySetBuilder<ElementInWarning>("Vim.ElementInWarning");
-        public readonly EntitySetBuilder<BasePoint> BasePointBuilder = new EntitySetBuilder<BasePoint>("Vim.BasePoint");
-        public readonly EntitySetBuilder<PhaseFilter> PhaseFilterBuilder = new EntitySetBuilder<PhaseFilter>("Vim.PhaseFilter");
-        public readonly EntitySetBuilder<Grid> GridBuilder = new EntitySetBuilder<Grid>("Vim.Grid");
-        public readonly EntitySetBuilder<Area> AreaBuilder = new EntitySetBuilder<Area>("Vim.Area");
-        public readonly EntitySetBuilder<AreaScheme> AreaSchemeBuilder = new EntitySetBuilder<AreaScheme>("Vim.AreaScheme");
-        public readonly EntitySetBuilder<Schedule> ScheduleBuilder = new EntitySetBuilder<Schedule>("Vim.Schedule");
-        public readonly EntitySetBuilder<ScheduleColumn> ScheduleColumnBuilder = new EntitySetBuilder<ScheduleColumn>("Vim.ScheduleColumn");
-        public readonly EntitySetBuilder<ScheduleCell> ScheduleCellBuilder = new EntitySetBuilder<ScheduleCell>("Vim.ScheduleCell");
-        public readonly EntitySetBuilder<ViewSheetSet> ViewSheetSetBuilder = new EntitySetBuilder<ViewSheetSet>("Vim.ViewSheetSet");
-        public readonly EntitySetBuilder<ViewSheet> ViewSheetBuilder = new EntitySetBuilder<ViewSheet>("Vim.ViewSheet");
-        public readonly EntitySetBuilder<ViewSheetInViewSheetSet> ViewSheetInViewSheetSetBuilder = new EntitySetBuilder<ViewSheetInViewSheetSet>("Vim.ViewSheetInViewSheetSet");
-        public readonly EntitySetBuilder<ViewInViewSheetSet> ViewInViewSheetSetBuilder = new EntitySetBuilder<ViewInViewSheetSet>("Vim.ViewInViewSheetSet");
-        public readonly EntitySetBuilder<ViewInViewSheet> ViewInViewSheetBuilder = new EntitySetBuilder<ViewInViewSheet>("Vim.ViewInViewSheet");
-        public readonly EntitySetBuilder<Site> SiteBuilder = new EntitySetBuilder<Site>("Vim.Site");
-        public readonly EntitySetBuilder<Building> BuildingBuilder = new EntitySetBuilder<Building>("Vim.Building");
+        public readonly EntitySetBuilder<Asset> AssetBuilder = new EntitySetBuilder<Asset>(TableNames.Asset);
+        public readonly EntitySetBuilder<DisplayUnit> DisplayUnitBuilder = new EntitySetBuilder<DisplayUnit>(TableNames.DisplayUnit);
+        public readonly EntitySetBuilder<ParameterDescriptor> ParameterDescriptorBuilder = new EntitySetBuilder<ParameterDescriptor>(TableNames.ParameterDescriptor);
+        public readonly EntitySetBuilder<Parameter> ParameterBuilder = new EntitySetBuilder<Parameter>(TableNames.Parameter);
+        public readonly EntitySetBuilder<Element> ElementBuilder = new EntitySetBuilder<Element>(TableNames.Element);
+        public readonly EntitySetBuilder<Workset> WorksetBuilder = new EntitySetBuilder<Workset>(TableNames.Workset);
+        public readonly EntitySetBuilder<AssemblyInstance> AssemblyInstanceBuilder = new EntitySetBuilder<AssemblyInstance>(TableNames.AssemblyInstance);
+        public readonly EntitySetBuilder<Group> GroupBuilder = new EntitySetBuilder<Group>(TableNames.Group);
+        public readonly EntitySetBuilder<DesignOption> DesignOptionBuilder = new EntitySetBuilder<DesignOption>(TableNames.DesignOption);
+        public readonly EntitySetBuilder<Level> LevelBuilder = new EntitySetBuilder<Level>(TableNames.Level);
+        public readonly EntitySetBuilder<Phase> PhaseBuilder = new EntitySetBuilder<Phase>(TableNames.Phase);
+        public readonly EntitySetBuilder<Room> RoomBuilder = new EntitySetBuilder<Room>(TableNames.Room);
+        public readonly EntitySetBuilder<BimDocument> BimDocumentBuilder = new EntitySetBuilder<BimDocument>(TableNames.BimDocument);
+        public readonly EntitySetBuilder<DisplayUnitInBimDocument> DisplayUnitInBimDocumentBuilder = new EntitySetBuilder<DisplayUnitInBimDocument>(TableNames.DisplayUnitInBimDocument);
+        public readonly EntitySetBuilder<PhaseOrderInBimDocument> PhaseOrderInBimDocumentBuilder = new EntitySetBuilder<PhaseOrderInBimDocument>(TableNames.PhaseOrderInBimDocument);
+        public readonly EntitySetBuilder<Category> CategoryBuilder = new EntitySetBuilder<Category>(TableNames.Category);
+        public readonly EntitySetBuilder<Family> FamilyBuilder = new EntitySetBuilder<Family>(TableNames.Family);
+        public readonly EntitySetBuilder<FamilyType> FamilyTypeBuilder = new EntitySetBuilder<FamilyType>(TableNames.FamilyType);
+        public readonly EntitySetBuilder<FamilyInstance> FamilyInstanceBuilder = new EntitySetBuilder<FamilyInstance>(TableNames.FamilyInstance);
+        public readonly EntitySetBuilder<View> ViewBuilder = new EntitySetBuilder<View>(TableNames.View);
+        public readonly EntitySetBuilder<ElementInView> ElementInViewBuilder = new EntitySetBuilder<ElementInView>(TableNames.ElementInView);
+        public readonly EntitySetBuilder<ShapeInView> ShapeInViewBuilder = new EntitySetBuilder<ShapeInView>(TableNames.ShapeInView);
+        public readonly EntitySetBuilder<AssetInView> AssetInViewBuilder = new EntitySetBuilder<AssetInView>(TableNames.AssetInView);
+        public readonly EntitySetBuilder<AssetInViewSheet> AssetInViewSheetBuilder = new EntitySetBuilder<AssetInViewSheet>(TableNames.AssetInViewSheet);
+        public readonly EntitySetBuilder<LevelInView> LevelInViewBuilder = new EntitySetBuilder<LevelInView>(TableNames.LevelInView);
+        public readonly EntitySetBuilder<Camera> CameraBuilder = new EntitySetBuilder<Camera>(TableNames.Camera);
+        public readonly EntitySetBuilder<Material> MaterialBuilder = new EntitySetBuilder<Material>(TableNames.Material);
+        public readonly EntitySetBuilder<MaterialInElement> MaterialInElementBuilder = new EntitySetBuilder<MaterialInElement>(TableNames.MaterialInElement);
+        public readonly EntitySetBuilder<CompoundStructureLayer> CompoundStructureLayerBuilder = new EntitySetBuilder<CompoundStructureLayer>(TableNames.CompoundStructureLayer);
+        public readonly EntitySetBuilder<CompoundStructure> CompoundStructureBuilder = new EntitySetBuilder<CompoundStructure>(TableNames.CompoundStructure);
+        public readonly EntitySetBuilder<Node> NodeBuilder = new EntitySetBuilder<Node>(TableNames.Node);
+        public readonly EntitySetBuilder<Geometry> GeometryBuilder = new EntitySetBuilder<Geometry>(TableNames.Geometry);
+        public readonly EntitySetBuilder<Shape> ShapeBuilder = new EntitySetBuilder<Shape>(TableNames.Shape);
+        public readonly EntitySetBuilder<ShapeCollection> ShapeCollectionBuilder = new EntitySetBuilder<ShapeCollection>(TableNames.ShapeCollection);
+        public readonly EntitySetBuilder<ShapeInShapeCollection> ShapeInShapeCollectionBuilder = new EntitySetBuilder<ShapeInShapeCollection>(TableNames.ShapeInShapeCollection);
+        public readonly EntitySetBuilder<System> SystemBuilder = new EntitySetBuilder<System>(TableNames.System);
+        public readonly EntitySetBuilder<ElementInSystem> ElementInSystemBuilder = new EntitySetBuilder<ElementInSystem>(TableNames.ElementInSystem);
+        public readonly EntitySetBuilder<Warning> WarningBuilder = new EntitySetBuilder<Warning>(TableNames.Warning);
+        public readonly EntitySetBuilder<ElementInWarning> ElementInWarningBuilder = new EntitySetBuilder<ElementInWarning>(TableNames.ElementInWarning);
+        public readonly EntitySetBuilder<BasePoint> BasePointBuilder = new EntitySetBuilder<BasePoint>(TableNames.BasePoint);
+        public readonly EntitySetBuilder<PhaseFilter> PhaseFilterBuilder = new EntitySetBuilder<PhaseFilter>(TableNames.PhaseFilter);
+        public readonly EntitySetBuilder<Grid> GridBuilder = new EntitySetBuilder<Grid>(TableNames.Grid);
+        public readonly EntitySetBuilder<Area> AreaBuilder = new EntitySetBuilder<Area>(TableNames.Area);
+        public readonly EntitySetBuilder<AreaScheme> AreaSchemeBuilder = new EntitySetBuilder<AreaScheme>(TableNames.AreaScheme);
+        public readonly EntitySetBuilder<Schedule> ScheduleBuilder = new EntitySetBuilder<Schedule>(TableNames.Schedule);
+        public readonly EntitySetBuilder<ScheduleColumn> ScheduleColumnBuilder = new EntitySetBuilder<ScheduleColumn>(TableNames.ScheduleColumn);
+        public readonly EntitySetBuilder<ScheduleCell> ScheduleCellBuilder = new EntitySetBuilder<ScheduleCell>(TableNames.ScheduleCell);
+        public readonly EntitySetBuilder<ViewSheetSet> ViewSheetSetBuilder = new EntitySetBuilder<ViewSheetSet>(TableNames.ViewSheetSet);
+        public readonly EntitySetBuilder<ViewSheet> ViewSheetBuilder = new EntitySetBuilder<ViewSheet>(TableNames.ViewSheet);
+        public readonly EntitySetBuilder<ViewSheetInViewSheetSet> ViewSheetInViewSheetSetBuilder = new EntitySetBuilder<ViewSheetInViewSheetSet>(TableNames.ViewSheetInViewSheetSet);
+        public readonly EntitySetBuilder<ViewInViewSheetSet> ViewInViewSheetSetBuilder = new EntitySetBuilder<ViewInViewSheetSet>(TableNames.ViewInViewSheetSet);
+        public readonly EntitySetBuilder<ViewInViewSheet> ViewInViewSheetBuilder = new EntitySetBuilder<ViewInViewSheet>(TableNames.ViewInViewSheet);
+        public readonly EntitySetBuilder<Site> SiteBuilder = new EntitySetBuilder<Site>(TableNames.Site);
+        public readonly EntitySetBuilder<Building> BuildingBuilder = new EntitySetBuilder<Building>(TableNames.Building);
         
         public DocumentBuilder AddEntityTableSets(DocumentBuilder db)
         {
