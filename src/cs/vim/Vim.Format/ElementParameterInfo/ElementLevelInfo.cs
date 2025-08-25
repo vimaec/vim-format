@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using Vim.Format.ObjectModel;
-using Vim.Math3d;
 using Vim.Util;
 
 // ReSharper disable InconsistentNaming
@@ -64,6 +63,7 @@ namespace Vim.Format.ElementParameterInfo
         CrossingAbove = 4,          // lvlLow < min < lvlHi < max
         CompletelyAbove = 5,        // lvlLow < lvlHi < min < max
         SpanningBelowAndAbove = 6,  // min < lvlLow < lvlHi < max
+        NoGeometry = 7,             // The element does not have geometry.
     }
 
     public class ElementLevelInfo : IElementIndex
@@ -378,9 +378,13 @@ namespace Vim.Format.ElementParameterInfo
 
             // Note: Level.ProjectElevation is relative to the internal scene origin (0,0,0), and so is the vim scene's geometry.
             var elementGeometryInfo = elementGeometryMap.ElementAtOrDefault(elementIndex);
+
             var hasGeometry = elementGeometryInfo?.HasGeometry ?? false;
-            var bb = hasGeometry ? elementGeometryInfo.WorldSpaceBoundingBox : AABox.Empty;
-            var bbIsValid = hasGeometry && bb.IsValid;
+            if (!hasGeometry)
+                return BuildingStoryGeometryContainment.NoGeometry;
+
+            var bb = elementGeometryInfo.WorldSpaceBoundingBox;
+            var bbIsValid = bb.IsValid;
             var bbMin = bb.Min.Z;
             var bbMax = bb.Max.Z;
 
