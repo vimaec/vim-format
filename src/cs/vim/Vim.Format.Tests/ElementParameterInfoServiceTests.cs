@@ -1,4 +1,5 @@
 ﻿using NUnit.Framework;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -32,6 +33,7 @@ public static class ElementParameterInfoServiceTests
         var levelInfos = infos.LevelInfos;
         var elementLevelInfos = infos.ElementLevelInfos;
         var elementMeasureInfos = infos.ElementMeasureInfos;
+        var elementIfcInfos = infos.ElementIfcInfos;
         var parameterMeasureTypes = infos.ParameterMeasureTypes;
 
         var validationTableSet = new EntityTableSet(
@@ -44,6 +46,7 @@ public static class ElementParameterInfoServiceTests
         var elementInstanceCount = validationTableSet.ElementTable.RowCount;
         Assert.AreEqual(elementInstanceCount, elementLevelInfos.Length);
         Assert.AreEqual(elementInstanceCount, elementMeasureInfos.Length);
+        Assert.AreEqual(elementInstanceCount, elementIfcInfos.Length);
 
         var parameterCount = validationTableSet.ParameterTable.RowCount;
         Assert.AreEqual(parameterCount, parameterMeasureTypes.Length);
@@ -56,5 +59,23 @@ public static class ElementParameterInfoServiceTests
 
         if (familyInstanceElementMap.Count > 0)
             Assert.Greater(knownFamilyInstanceCount, 0);
+    }
+
+    [Test]
+    public static void TestIfcGuidParseRoundTrip()
+    {
+        var testGuids = Enumerable.Range(0, 10000).Select(i => Guid.NewGuid()).Prepend(Guid.Empty);
+
+        foreach (var guid in testGuids)
+        {
+            Assert.AreEqual(ElementIfcInfo.IfcGuidCanonicalLength, guid.ToString().Length);
+
+            var ifcGuid = ElementIfcInfo.ToIfcGuid(guid);
+            Assert.IsFalse(string.IsNullOrEmpty(ifcGuid), $"Converted IFC guid is null or empty. Source: {guid.ToString()}");
+            Assert.AreEqual(ElementIfcInfo.IfcGuidLength, ifcGuid.Length, $"Converted IFC must be 22 characters long. Source: {guid.ToString()} | IFC Guid: {ifcGuid}");
+            Assert.IsTrue(ifcGuid.All(c => ElementIfcInfo.Base64Chars.IndexOf(c) != -1), $"All IFC guid characters must be in the Base64Chars string. Source: {guid.ToString()} | IFC Guid: {ifcGuid}");
+            Assert.IsTrue(ElementIfcInfo.TryParseIfcGuidAsCanonicalGuid(ifcGuid, out var parsedGuid), $"Failed to parse IFC Guid. Source: {guid.ToString()} | IFC Guid: {ifcGuid}");
+            Assert.AreEqual(guid, parsedGuid);
+        }
     }
 }
