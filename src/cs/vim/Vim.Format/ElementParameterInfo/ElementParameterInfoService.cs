@@ -15,6 +15,7 @@ namespace Vim.Format.ElementParameterInfo
             public ElementLevelInfo[] ElementLevelInfos;
             public ElementMeasureInfo[] ElementMeasureInfos;
             public MeasureType[] ParameterMeasureTypes;
+            public ElementIfcInfo[] ElementIfcInfos;
         }
 
         /// <summary>
@@ -86,12 +87,15 @@ namespace Vim.Format.ElementParameterInfo
 
             var elementMeasureInfos = CreateElementMeasureInfos(elementTable, parameterTable, parameterMeasureTypes, elementIndexMaps);
 
+            var elementIfcInfos = CreateElementIfcInfos(elementTable, parameterTable, elementIndexMaps);
+
             return new ElementParameterInfo
             {
                 LevelInfos = levelInfos,
                 ElementLevelInfos = elementLevelInfos,
                 ElementMeasureInfos = elementMeasureInfos,
-                ParameterMeasureTypes = parameterMeasureTypes
+                ParameterMeasureTypes = parameterMeasureTypes,
+                ElementIfcInfos = elementIfcInfos,
             };
         }
 
@@ -214,6 +218,15 @@ namespace Vim.Format.ElementParameterInfo
             => elementTable
                 .AsParallel()
                 .Select(e => new ElementMeasureInfo(e, parameterTable, parameterMeasureTypes, elementIndexMaps))
+                .ToArray();
+
+        public static ElementIfcInfo[] CreateElementIfcInfos(
+            ElementTable elementTable,
+            ParameterTable parameterTable,
+            ElementIndexMaps elementIndexMaps)
+            => elementTable
+                .AsParallel()
+                .Select(e => new ElementIfcInfo(e, parameterTable, elementIndexMaps))
                 .ToArray();
     }
 }
