@@ -87,7 +87,7 @@ namespace Vim.Util
             => ((IDictionary<K, int>)_dictionary).Add(item);
 
         public void Clear()
-            => throw new System.NotSupportedException();
+            => _dictionary.Clear();
 
         public bool Contains(KeyValuePair<K, int> item)
             => ((IDictionary<K, int>)_dictionary).Contains(item);
