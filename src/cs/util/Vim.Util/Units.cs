@@ -7,14 +7,47 @@ namespace Vim.Util
 {
     public static class Units
     {
+        // Imperial units
+
+        public const double MilesToFeetRatio = 5290d;
+        public const double FeetToMilesRatio = 1.0d / MilesToFeetRatio;
+
+        public const double YardsToFeetRatio = 3.0d;
+        public const double FeetToYardsRatio = 1.0d / YardsToFeetRatio;
+
+        public const double InchesToFeetRatio = 1.0d / 12.0d;
+        public const double FeetToInchesRatio = 1.0d / InchesToFeetRatio;
+
+        public const double MilsToFeetRatio = 8.33333e-5d; // note: one "mil" is one thousandth of an inch
+        public const double FeetToMilsRatio = 1.0d / MilsToFeetRatio;
+
+        public const double MicroinchesToFeetRatio = 8.333333333E-8d;
+        public const double FeetToMicroinchesRatio = 1.0d / MicroinchesToFeetRatio;
+
+        // Metric units
+
+        public const double KilometersToFeetRatio = 3280.84d;
+        public const double FeetToKilometersRatio = 1.0d / KilometersToFeetRatio;
+
         public const double MetersToFeetRatio = 3.280839895d;
         public const double FeetToMetersRatio = 1.0d / MetersToFeetRatio;
+
+        public const double CentimetersToFeetRatio = 0.0328084d;
+        public const double FeetToCentimetersRatio = 1.0d / CentimetersToFeetRatio;
+
+        public const double MillimetersToFeetRatio = 0.00328084d;
+        public const double FeetToMillimetersRatio = 1.0d / MillimetersToFeetRatio;
+
+        public const double MicrometersToFeetRatio = 3.2808e-6d;
+        public const double FeetToMicrometersRatio = 1.0d / MicrometersToFeetRatio;
 
         public const double SquareMetersToSquareFeetRatio = 10.7639d;
         public const double SquareFeetToSquareMetersRatio = 1.0d / SquareMetersToSquareFeetRatio;
 
         public const double CubicMetersToCubicFeetRatio = 35.3147d;
         public const double CubicFeetToCubicMetersRatio = 1.0d / CubicMetersToCubicFeetRatio;
+
+        // Angle units
 
         public const double RadiansToDegreesRatio = 180d / Math.PI;
         public const double DegreesToRadiansRatio = 1.0d / RadiansToDegreesRatio;
