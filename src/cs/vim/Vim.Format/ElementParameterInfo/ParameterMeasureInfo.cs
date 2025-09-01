@@ -89,11 +89,13 @@ namespace Vim.Format.ElementParameterInfo
             double? maybeQuantity,
             string displayValue,
             MeasureType measureType,
+            out double? outQuantityInMeters,
             out string outQuantityInFeetRvtOrDisplayValue,
             out string outQuantityInMetersOrDisplayValue)
         {
             outQuantityInFeetRvtOrDisplayValue = "";
             outQuantityInMetersOrDisplayValue = "";
+            outQuantityInMeters = maybeQuantity;
 
             if (maybeQuantity == null)
             {
@@ -109,7 +111,9 @@ namespace Vim.Format.ElementParameterInfo
             {
                 case MeasureType.Angle:
                 case MeasureType.Slope:
-                    outQuantityInFeetRvtOrDisplayValue = outQuantityInMetersOrDisplayValue = (Units.RadiansToDegrees(q) ?? 0d).ToString(CultureInfo.InvariantCulture);
+                    // HACK: degrees aren't actually related to meters but for simplicity we stuff this value here.
+                    outQuantityInMeters = (Units.RadiansToDegrees(q) ?? 0d);
+                    outQuantityInFeetRvtOrDisplayValue = outQuantityInMetersOrDisplayValue = outQuantityInMeters?.ToString(CultureInfo.InvariantCulture);
                     break;
                 case MeasureType.Length:
                 case MeasureType.Width:
@@ -123,15 +127,18 @@ namespace Vim.Format.ElementParameterInfo
                 case MeasureType.Size:
                 case MeasureType.Distance:
                     outQuantityInFeetRvtOrDisplayValue = q.ToString(CultureInfo.InvariantCulture);
-                    outQuantityInMetersOrDisplayValue = (Units.FeetToMeters(q) ?? 0d).ToString(CultureInfo.InvariantCulture);
+                    outQuantityInMeters = (Units.FeetToMeters(q) ?? 0d);
+                    outQuantityInMetersOrDisplayValue = outQuantityInMeters?.ToString(CultureInfo.InvariantCulture);
                     break;
                 case MeasureType.Area:
                     outQuantityInFeetRvtOrDisplayValue = q.ToString(CultureInfo.InvariantCulture);
-                    outQuantityInMetersOrDisplayValue = (Units.SquareFeetToSquareMeters(q) ?? 0d).ToString(CultureInfo.InvariantCulture);
+                    outQuantityInMeters = (Units.SquareFeetToSquareMeters(q) ?? 0d);
+                    outQuantityInMetersOrDisplayValue = outQuantityInMeters?.ToString(CultureInfo.InvariantCulture);
                     break;
                 case MeasureType.Volume:
                     outQuantityInFeetRvtOrDisplayValue = q.ToString(CultureInfo.InvariantCulture);
-                    outQuantityInMetersOrDisplayValue = (Units.CubicFeetToCubicMeters(q) ?? 0d).ToString(CultureInfo.InvariantCulture);
+                    outQuantityInMeters = (Units.CubicFeetToCubicMeters(q) ?? 0d);
+                    outQuantityInMetersOrDisplayValue = outQuantityInMeters?.ToString(CultureInfo.InvariantCulture);
                     break;
                 case MeasureType.Unknown:
                 default:
