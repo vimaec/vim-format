@@ -213,6 +213,11 @@ namespace Vim.Format.ElementParameterInfo
         public LevelInfo BuildingStoryGeometryMaxLevelInfo { get; }
 
         /// <summary>
+        /// The default tolerance value for the geometry level containment calculation.
+        /// </summary>
+        public const double DefaultGeometryContainmentTolerance = 0.001d;
+
+        /// <summary>
         /// Constructor
         /// </summary>
         public ElementLevelInfo(
@@ -225,7 +230,8 @@ namespace Vim.Format.ElementParameterInfo
             ElementGeometryMap elementGeometryMap,
             IReadOnlyDictionary<int, LevelInfo> levelInfoMap,
             IReadOnlyList<LevelInfo> orderedLevelInfosByProjectElevation,
-            IReadOnlyDictionary<long, LevelInfo> elementIdToLevelInfoMap)
+            IReadOnlyDictionary<long, LevelInfo> elementIdToLevelInfoMap,
+            double geometryContainmentTolerance = DefaultGeometryContainmentTolerance)
         {
             Element = element;
 
@@ -280,6 +286,7 @@ namespace Vim.Format.ElementParameterInfo
                 PrimaryLevelInfo?.Level?.ProjectElevation,
                 orderedLevelInfosByProjectElevation,
                 elementGeometryMap,
+                geometryContainmentTolerance,
                 out var maybeBuildingStoryAbove,
                 out var maybeBuildingStoryCurrentOrBelow,
                 out var maybeBuildingStoryGeometryMin,
@@ -363,6 +370,7 @@ namespace Vim.Format.ElementParameterInfo
             double? primaryProjectElevation,
             IReadOnlyList<LevelInfo> orderedLevelInfosByProjectElevation,
             ElementGeometryMap elementGeometryMap,
+            double geometryContainmentTolerance,
             out LevelInfo maybeBuildingStoryAbove, 
             out LevelInfo maybeBuildingStoryCurrentOrBelow,
             out LevelInfo maybeBuildingStoryGeometryMin,
@@ -484,25 +492,30 @@ namespace Vim.Format.ElementParameterInfo
             var lvlLow = maybeLvlLow ?? double.MinValue;
             var lvlHi = maybeLvlHi ?? double.MaxValue;
 
-            if (bbMin < lvlLow && bbMax < lvlLow)
+            // Nudge the bounding box min/max z values to avoid numeric precision issues.
+            var nudge = Math.Abs(geometryContainmentTolerance);
+            var nudgedBbMin = bbMin + nudge;
+            var nudgedBbMax = bbMax - nudge;
+
+            if (nudgedBbMin < lvlLow && nudgedBbMax < lvlLow)
                 return BuildingStoryGeometryContainment.CompletelyBelow;
 
-            if (bbMin < lvlLow && bbMax >= lvlLow && bbMax <= lvlHi)
+            if (nudgedBbMin < lvlLow && nudgedBbMax >= lvlLow && nudgedBbMax <= lvlHi)
                 return BuildingStoryGeometryContainment.CrossingBelow;
 
-            if (bbMin >= lvlLow && bbMax <= lvlHi)
+            if (nudgedBbMin >= lvlLow && nudgedBbMax <= lvlHi)
                 return BuildingStoryGeometryContainment.Contained;
 
-            if (bbMin >= lvlLow && bbMin <= lvlHi && bbMax > lvlHi)
+            if (nudgedBbMin >= lvlLow && nudgedBbMin <= lvlHi && nudgedBbMax > lvlHi)
                 return BuildingStoryGeometryContainment.CrossingAbove;
 
-            if (bbMin > lvlHi && bbMax > lvlHi)
+            if (nudgedBbMin > lvlHi && nudgedBbMax > lvlHi)
                 return BuildingStoryGeometryContainment.CompletelyAbove;
 
-            if (bbMin < lvlLow && bbMax > lvlHi)
+            if (nudgedBbMin < lvlLow && nudgedBbMax > lvlHi)
                 return BuildingStoryGeometryContainment.SpanningBelowAndAbove;
 
-            Debug.Fail($"Unexpected geometry containment case. bbMin: {bbMin}, bbMax: {bbMax}, lvlLow: {lvlLow}, lvlHi: {lvlHi}");
+            Debug.Fail($"Unexpected geometry containment case. nudgedBbMin: {nudgedBbMin}, nudgedBbMax: {nudgedBbMax}, lvlLow: {lvlLow}, lvlHi: {lvlHi}");
 
             return BuildingStoryGeometryContainment.Unknown;
         }
