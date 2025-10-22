@@ -32,6 +32,9 @@ namespace Vim.Format
         public static INamedBuffer[] ValidateColumnRowsAreAligned(this SerializableEntityTable et)
             => et.GetAllColumns().ValidateColumnRowsAreAligned();
 
+        public static int GetRowCount(this SerializableEntityTable et)
+            => et.ValidateColumnRowsAreAligned().FirstOrDefault()?.NumElements() ?? 0;
+
         public static string ValidateCanConcatBuffers(this INamedBuffer thisBuffer, INamedBuffer otherBuffer)
         {
             var thisPrefix = thisBuffer.GetTypePrefix();
