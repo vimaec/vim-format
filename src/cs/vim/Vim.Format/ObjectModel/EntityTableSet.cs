@@ -46,6 +46,13 @@ namespace Vim.Format.ObjectModel
                 inParallel)
         { }
 
+        /// <summary>
+        /// Represents a collection of entity tables contained in the serializable document.
+        /// </summary>
+        public EntityTableSet(SerializableDocument serializableDocument, bool inParallel = true)
+            : this(serializableDocument.EntityTables.ToArray(), serializableDocument.StringTable, inParallel)
+        {}
+
         public static ElementKind[] GetElementKinds(FileInfo vimFileInfo)
         {
             var elementTableName = TableNames.Element;

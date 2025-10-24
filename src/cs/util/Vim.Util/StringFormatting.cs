@@ -56,5 +56,27 @@ namespace Vim.Util
         /// </summary>
         public static string GetTimeStamp()
             => DateTime.Now.ToNormalizedString();
+
+        /// <summary>
+        /// Adds a zero-width character after each lowercase letter
+        /// to force PowerBI into treating the string in a case-sensitive manner.
+        /// See: https://blog.crossjoin.co.uk/2019/10/06/power-bi-and-case-sensitivity/
+        /// </summary>
+        public static string ToPbiCaseSensitiveString(this string input)
+        {
+            const char zeroWidthChar = (char)8203;
+            var sb = new StringBuilder(input.Length * 2);
+
+            foreach (var c in input)
+            {
+                sb.Append(c);
+                if (char.IsLower(c))
+                {
+                    sb.Append(zeroWidthChar);
+                }
+            }
+
+            return sb.ToString();
+        }
     }
 }
