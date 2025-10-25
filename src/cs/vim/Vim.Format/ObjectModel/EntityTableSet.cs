@@ -1,7 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Vim.Util;
 using static Vim.Format.Serializer;
+
+using ReadOnlyIndexMap = System.Collections.Generic.IReadOnlyDictionary<int, int>;
 
 namespace Vim.Format.ObjectModel
 {
@@ -95,6 +99,144 @@ namespace Vim.Format.ObjectModel
             var parentCategoryName = parentIndex >= 0 ? GetName(parentIndex) : "";
 
             return GetNameFull(parentCategoryName, categoryName);
+        }
+    }
+
+    public partial class ElementTable
+    {
+        public bool IsFamilyInstance(int elementIndex)
+            => ParentTableSet.ElementIndexMaps.FamilyInstanceIndexFromElementIndex.ContainsKey(elementIndex);
+
+        public bool IsFamilyType(int elementIndex)
+            => ParentTableSet.ElementIndexMaps.FamilyTypeIndexFromElementIndex.ContainsKey(elementIndex);
+
+        public bool IsFamily(int elementIndex)
+            => ParentTableSet.ElementIndexMaps.FamilyIndexFromElementIndex.ContainsKey(elementIndex);
+
+        public bool IsSystem(int elementIndex)
+            => ParentTableSet.ElementIndexMaps.SystemIndexFromElementIndex.ContainsKey(elementIndex);
+
+        // Index properties
+
+        private int GetRelatedIndex(int elementIndex, ReadOnlyIndexMap indexMap)
+            => indexMap.TryGetValue(elementIndex, out var value) ? value : EntityRelation.None;
+
+        public int GetLevelElementIndex(int elementIndex)
+            => ParentTableSet.LevelTable.GetElementIndex(GetLevelIndex(elementIndex));
+
+        public int GetRoomElementIndex(int elementIndex)
+            => ParentTableSet.RoomTable.GetElementIndex(GetRoomIndex(elementIndex));
+
+        public int GetSystemElementIndex(int elementIndex)
+            => ParentTableSet.SystemTable.GetElementIndex(GetSystemIndex(elementIndex));
+
+        public int GetSystemIndex(int elementIndex)
+            => GetRelatedIndex(elementIndex, ParentTableSet.ElementIndexMaps.SystemIndexFromElementIndex);
+
+        public int GetFamilyInstanceIndex(int elementIndex)
+            => GetRelatedIndex(elementIndex, ParentTableSet.ElementIndexMaps.FamilyInstanceIndexFromElementIndex);
+
+        public int GetFamilyInstanceElementIndex(int elementIndex)
+            => ParentTableSet.FamilyInstanceTable.GetElementIndex(GetFamilyInstanceIndex(elementIndex));
+
+        public int GetFamilyTypeIndex(int elementIndex)
+            => IsFamilyInstance(elementIndex)
+                ? ParentTableSet.FamilyInstanceTable.GetFamilyTypeIndex(GetFamilyInstanceIndex(elementIndex))
+                : GetRelatedIndex(elementIndex, ParentTableSet.ElementIndexMaps.FamilyTypeIndexFromElementIndex);
+
+        public int GetFamilyTypeElementIndex(int elementIndex)
+            => ParentTableSet.FamilyTypeTable.GetElementIndex(GetFamilyTypeIndex(elementIndex));
+
+        public int GetFamilyIndex(int elementIndex)
+            => IsFamilyInstance(elementIndex) || IsFamilyType(elementIndex)
+                ? GetFamilyTypeIndex(elementIndex)
+                : GetRelatedIndex(elementIndex, ParentTableSet.ElementIndexMaps.FamilyIndexFromElementIndex);
+        
+        public int GetFamilyElementIndex(int elementIndex)
+            => ParentTableSet.FamilyTable.GetElementIndex(GetFamilyIndex(elementIndex));
+
+        // Object-generating properties
+
+        public FamilyInstance GetFamilyInstance(int elementIndex)
+            => ParentTableSet.FamilyInstanceTable.Get(GetFamilyInstanceIndex(elementIndex));
+
+        public Element GetFamilyInstanceElement(int elementIndex)
+            => Get(GetFamilyInstanceElementIndex(elementIndex));
+
+        public FamilyType GetFamilyType(int elementIndex)
+            => ParentTableSet.FamilyTypeTable.Get(GetFamilyTypeIndex(elementIndex));
+
+        public Element GetFamilyTypeElement(int elementIndex)
+            => Get(GetFamilyTypeElementIndex(elementIndex));
+
+        public Family GetFamily(int elementIndex)
+            => ParentTableSet.FamilyTable.Get(GetFamilyIndex(elementIndex));
+
+        public Element GetFamilyElement(int elementIndex)
+            => Get(GetFamilyElementIndex(elementIndex));
+
+        public System GetSystem(int elementIndex)
+            => ParentTableSet.SystemTable.Get(GetSystemIndex(elementIndex));
+
+        public Element GetSystemElement(int elementIndex)
+            => Get(GetSystemElementIndex(elementIndex));
+
+        // Parameters
+
+        [Flags]
+        public enum ParameterScope
+        {
+            None = 0,
+            FamilyInstance = 1,
+            FamilyType = 1 << 1,
+            Family = 1 << 2,
+            All = FamilyInstance | FamilyType | Family,
+        }
+
+        public List<int> GetParameterIndices(int elementIndex)
+            => ParentTableSet.ElementIndexMaps.ParameterIndicesFromElementIndex
+                .TryGetValue(elementIndex, out var pIndices) ? pIndices : new List<int>();
+
+        public IEnumerable<Parameter> GetParameters(int elementIndex)
+            => GetParameterIndices(elementIndex).Select(i => ParentTableSet.ParameterTable.Get(i));
+
+        public Dictionary<ParameterScope, IEnumerable<Parameter>> GetScopedParameters(
+            int elementIndex,
+            ParameterScope scope = ParameterScope.All)
+        {
+            var result = new Dictionary<ParameterScope, IEnumerable<Parameter>>();
+
+            if (elementIndex < 0)
+                return result;
+
+            if ((scope & ParameterScope.FamilyInstance) == ParameterScope.FamilyInstance)
+            {
+                var familyInstanceElementIndex = GetFamilyInstanceElementIndex(elementIndex);
+                if (familyInstanceElementIndex != EntityRelation.None)
+                {
+                    result[ParameterScope.FamilyInstance] = GetParameters(familyInstanceElementIndex);
+                }
+            }
+
+            if ((scope & ParameterScope.FamilyType) == ParameterScope.FamilyType)
+            {
+                var familyTypeElementIndex = GetFamilyTypeElementIndex(elementIndex);
+                if (familyTypeElementIndex != EntityRelation.None)
+                {
+                    result[ParameterScope.FamilyType] = GetParameters(familyTypeElementIndex);
+                }
+            }
+
+            if ((scope & ParameterScope.Family) == ParameterScope.Family)
+            {
+                var familyElementIndex = GetFamilyElementIndex(elementIndex);
+                if (familyElementIndex != EntityRelation.None)
+                {
+                    result[ParameterScope.Family] = GetParameters(familyElementIndex);
+                }
+            }
+
+            return result;
         }
     }
 }
