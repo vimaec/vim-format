@@ -105,6 +105,7 @@ namespace Vim.Format
                         throw new Exception($"Index column name {columnName} could not be separated into its components.");
 
                     RelatedTableName = indexMatch.Groups[2].Value;
+                    FieldName = indexMatch.Groups[3].Value; // Update the field name.
                 }
             }
 
@@ -130,9 +131,6 @@ namespace Vim.Format
         public static string GetRelatedTableNameFromColumnName(string name)
             => new ColumnNameComponents(name).RelatedTableName;
 
-        public static string GetFieldNameFromIndexColumnName(string name)
-            => new ColumnNameComponents(name).FieldName;
-
         public static string GetRelatedTableName(this INamedBuffer<int> ic)
             => GetRelatedTableNameFromColumnName(ic.Name);
 
@@ -140,7 +138,7 @@ namespace Vim.Format
             => doc.GetTable(ic.GetRelatedTableName());
 
         public static string GetIndexColumnFieldName(this INamedBuffer<int> ic)
-            => GetFieldNameFromIndexColumnName(ic.Name);
+            => new ColumnNameComponents(ic.Name).FieldName;
 
         public static string GetStringColumnFieldName(this INamedBuffer<int> sc)
             => new ColumnNameComponents(sc.Name).FieldName;
