@@ -64,7 +64,7 @@ namespace Vim.Format
         public ElementHierarchyService(
             EntityTableSet tableSet,
             ElementGeometryMap elementGeometryMap,
-            bool isElementAndDescendantPrimaryKey)
+            bool isElementAndDescendantPrimaryKey = false)
         {
             TableSet = tableSet;
             ElementGeometryMap = elementGeometryMap;
@@ -77,7 +77,7 @@ namespace Vim.Format
         public ElementHierarchyService(
             FileInfo vimFileInfo,
             ElementGeometryMap elementGeometryMap,
-            bool isElementAndDescendantPrimaryKey)
+            bool isElementAndDescendantPrimaryKey = false)
             : this(
                 new EntityTableSet(
                     vimFileInfo,

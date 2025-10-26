@@ -239,4 +239,21 @@ namespace Vim.Format.ObjectModel
             return result;
         }
     }
+
+    public partial class FamilyInstanceTable
+    {
+        public int GetSuperComponentDistance(int familyInstanceIndex, int depth = 0)
+        {
+            var parentElementIndex = GetSuperComponentIndex(familyInstanceIndex);
+            if (parentElementIndex == EntityRelation.None)
+                return depth;
+
+            var hasParentFamilyInstanceIndex = ParentTableSet.ElementIndexMaps.FamilyInstanceIndexFromElementIndex
+                .TryGetValue(parentElementIndex, out var parentFamilyInstanceIndex);
+
+            return hasParentFamilyInstanceIndex
+                ? GetSuperComponentDistance(parentFamilyInstanceIndex, depth + 1)
+                : depth;
+        }
+    }
 }
