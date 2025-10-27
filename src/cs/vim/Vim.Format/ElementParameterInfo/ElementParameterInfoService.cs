@@ -7,23 +7,46 @@ using Vim.Util;
 
 namespace Vim.Format.ElementParameterInfo
 {
-    public static class ElementParameterInfoService
+    /// <summary>
+    /// Contains data derived from element parameters.
+    /// </summary>
+    public class ElementParameterInfo
     {
-        public struct ElementParameterInfo
-        {
-            public LevelInfo[] LevelInfos;
-            public ElementLevelInfo[] ElementLevelInfos;
-            public ElementMeasureInfo[] ElementMeasureInfos;
-            public MeasureType[] ParameterMeasureTypes;
-            public ElementIfcInfo[] ElementIfcInfos;
-        }
+        /// <summary>
+        /// An array of LevelInfo objects representing harmonized information about the levels in the given VIM Scene (see comment in LevelInfo.cs).
+        /// Items in this array are aligned to the Level table.
+        /// </summary>
+        public LevelInfo[] LevelInfos { get; set; }
 
         /// <summary>
-        /// Returns:
-        /// - an array of LevelInfo objects representing harmonized information about the levels in the given VIM Scene (see comment in LevelInfo.cs)
-        /// - an array of ElementLevelInfo objects representing detailed information of element level associations.
-        /// - an array of ElementMeasureInfo objects representing information about element measures (angle/slope, length, width, height, area, volume)
-        /// - an array of ParameterQuantityInfo objects representing information about parameters and their MeasureType.
+        /// An array of ElementLevelInfo objects representing detailed information of element level associations.
+        /// Items in this array are aligned to the Element table.
+        /// </summary>
+        public ElementLevelInfo[] ElementLevelInfos { get; set; }
+
+        /// <summary>
+        /// An array of ElementMeasureInfo objects representing information about element measures (angle/slope, length, width, height, area, volume).
+        /// Items in this array are aligned to the Element table.
+        /// </summary>
+        public ElementMeasureInfo[] ElementMeasureInfos { get; set; }
+
+        /// <summary>
+        /// An array of ElementIfcInfo objects representing information about element IFC data.
+        /// Items in this array are aligned to the Element table.
+        /// </summary>
+        public ElementIfcInfo[] ElementIfcInfos { get; set; }
+
+        /// <summary>
+        /// An array of MeasureType values representing the measure types of each Parameter.
+        /// Items in this array are aligned to the Parameter table.
+        /// </summary>
+        public MeasureType[] ParameterMeasureTypes { get; set; }
+    }
+
+    public static class ElementParameterInfoService
+    {
+        /// <summary>
+        /// Returns the element parameter information from the given VIM file.
         /// </summary>
         public static ElementParameterInfo GetElementParameterInfos(
             FileInfo vimFileInfo,
@@ -45,6 +68,16 @@ namespace Vim.Format.ElementParameterInfo
                     n is TableNames.Level ||
                     n is TableNames.BasePoint);
 
+            return GetElementParameterInfos(tableSet, elementGeometryMap);
+        }
+
+        /// <summary>
+        /// Returns the element parameter information from the given entity table set and element geometry map.
+        /// </summary>
+        public static ElementParameterInfo GetElementParameterInfos(
+            EntityTableSet tableSet,
+            ElementGeometryMap elementGeometryMap)
+        {
             var elementIndexMaps = tableSet.ElementIndexMaps;
             var elementTable = tableSet.ElementTable;
             var parameterTable = tableSet.ParameterTable;
