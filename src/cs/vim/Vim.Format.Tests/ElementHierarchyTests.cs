@@ -78,7 +78,7 @@ public static class ElementHierarchyTests
             treeRoot,
             false,
             dummyMap)
-            .OrderBy(r => (Element: r.ElementIndex, Descendant: r.DescendantElementIndex, r.Distance, r.RootDistance))
+            .OrderBy(r => (Element: r.Element, Descendant: r.Descendant, r.Distance, r.RootDistance))
             .ToList();
 
         var expected = new List<ElementHierarchy>()
@@ -86,8 +86,8 @@ public static class ElementHierarchyTests
             // A | A | 0 | 0
             new ()
             {
-                ElementIndex = A.Value,
-                DescendantElementIndex = A.Value,
+                Element = A.Value,
+                Descendant = A.Value,
                 Distance = 0,
                 RootDistance = 0,
                 DescendantNodeIndex = null,
@@ -96,8 +96,8 @@ public static class ElementHierarchyTests
             // A | B | 1 | 1
             new ()
             {
-                ElementIndex = A.Value,
-                DescendantElementIndex = B.Value,
+                Element = A.Value,
+                Descendant = B.Value,
                 Distance = 1,
                 RootDistance = 1,
                 DescendantNodeIndex = null,
@@ -106,8 +106,8 @@ public static class ElementHierarchyTests
             // A | E | 1 | 1
             new ()
             {
-                ElementIndex = A.Value,
-                DescendantElementIndex = E.Value,
+                Element = A.Value,
+                Descendant = E.Value,
                 Distance = 1,
                 RootDistance = 1,
                 DescendantNodeIndex = 44,
@@ -116,8 +116,8 @@ public static class ElementHierarchyTests
             // E | E | 0 | 1
             new ()
             {
-                ElementIndex = E.Value,
-                DescendantElementIndex = E.Value,
+                Element = E.Value,
+                Descendant = E.Value,
                 Distance = 0,
                 RootDistance = 1,
                 DescendantNodeIndex = 44,
@@ -126,8 +126,8 @@ public static class ElementHierarchyTests
             //   A | C | 2 | 2
             new ()
             {
-                ElementIndex = A.Value,
-                DescendantElementIndex = C.Value,
+                Element = A.Value,
+                Descendant = C.Value,
                 Distance = 2,
                 RootDistance = 2,
                 DescendantNodeIndex = null,
@@ -136,8 +136,8 @@ public static class ElementHierarchyTests
             //   A | D | 3 | 3
             new ()
             {
-                ElementIndex = A.Value,
-                DescendantElementIndex = D.Value,
+                Element = A.Value,
+                Descendant = D.Value,
                 Distance = 3,
                 RootDistance = 3,
                 DescendantNodeIndex = 33,
@@ -146,8 +146,8 @@ public static class ElementHierarchyTests
             //   B | B | 0 | 1
             new ()
             {
-                ElementIndex = B.Value,
-                DescendantElementIndex = B.Value,
+                Element = B.Value,
+                Descendant = B.Value,
                 Distance = 0,
                 RootDistance = 1,
                 DescendantNodeIndex = null,
@@ -156,8 +156,8 @@ public static class ElementHierarchyTests
             //   B | C | 1 | 2
             new ()
             {
-                ElementIndex = B.Value,
-                DescendantElementIndex = C.Value,
+                Element = B.Value,
+                Descendant = C.Value,
                 Distance = 1,
                 RootDistance = 2,
                 DescendantNodeIndex = null,
@@ -166,8 +166,8 @@ public static class ElementHierarchyTests
             //   B | D | 2 | 3
             new ()
             {
-                ElementIndex = B.Value,
-                DescendantElementIndex = D.Value,
+                Element = B.Value,
+                Descendant = D.Value,
                 Distance = 2,
                 RootDistance = 3,
                 DescendantNodeIndex = 33,
@@ -176,8 +176,8 @@ public static class ElementHierarchyTests
             //   C | C | 0 | 2
             new ()
             {
-                ElementIndex = C.Value,
-                DescendantElementIndex = C.Value,
+                Element = C.Value,
+                Descendant = C.Value,
                 Distance = 0,
                 RootDistance = 2,
                 DescendantNodeIndex = null,
@@ -186,8 +186,8 @@ public static class ElementHierarchyTests
             //   C | D | 1 | 3
             new ()
             {
-                ElementIndex = C.Value,
-                DescendantElementIndex = D.Value,
+                Element = C.Value,
+                Descendant = D.Value,
                 Distance = 1,
                 RootDistance = 3,
                 DescendantNodeIndex = 33,
@@ -196,15 +196,15 @@ public static class ElementHierarchyTests
             //   D | D | 0 | 3
             new ()
             {
-                ElementIndex = D.Value,
-                DescendantElementIndex = D.Value,
+                Element = D.Value,
+                Descendant = D.Value,
                 Distance = 0,
                 RootDistance = 3,
                 DescendantNodeIndex = 33,
                 DescendantGeometryIndex = 33,
             },
         }
-        .OrderBy(r => (Element: r.ElementIndex, Descendant: r.DescendantElementIndex, r.Distance, r.RootDistance))
+        .OrderBy(r => (Element: r.Element, Descendant: r.Descendant, r.Distance, r.RootDistance))
         .ToList();
 
         void logRecords(IReadOnlyCollection<ElementHierarchy> records, string title)
@@ -212,7 +212,7 @@ public static class ElementHierarchyTests
             logger.Log($"~~~ {title} ({records.Count}) ~~~");
             foreach (var item in records)
             {
-                logger.Log($"Element: {item.ElementIndex}, Descendant: {item.DescendantElementIndex}, Distance: {item.Distance}, RootDistance: {item.RootDistance}, NodeIndex: {item.DescendantNodeIndex}, GeometryIndex: {item.DescendantGeometryIndex}");
+                logger.Log($"Element: {item.Element}, Descendant: {item.Descendant}, Distance: {item.Distance}, RootDistance: {item.RootDistance}, NodeIndex: {item.DescendantNodeIndex}, GeometryIndex: {item.DescendantGeometryIndex}");
             }
 
             logger.Log("~~~");
@@ -224,10 +224,10 @@ public static class ElementHierarchyTests
 
         foreach (var e in expected)
         {
-            var found = flattened.FirstOrDefault(r => r.ElementIndex == e.ElementIndex && r.DescendantElementIndex == e.DescendantElementIndex);
+            var found = flattened.FirstOrDefault(r => r.Element == e.Element && r.Descendant == e.Descendant);
             Assert.IsNotNull(found);
-            Assert.AreEqual(e.ElementIndex, found.ElementIndex);
-            Assert.AreEqual(e.DescendantElementIndex, found.DescendantElementIndex);
+            Assert.AreEqual(e.Element, found.Element);
+            Assert.AreEqual(e.Descendant, found.Descendant);
             Assert.AreEqual(e.Distance, found.Distance);
             Assert.AreEqual(e.RootDistance, found.RootDistance);
             Assert.AreEqual(e.DescendantNodeIndex, found.DescendantNodeIndex);
@@ -261,7 +261,7 @@ public static class ElementHierarchyTests
             var nodes = vim.DocumentModel.NodeList.ToArray();
             foreach (var item in flatHierarchy)
             {
-                var descendantElementIndex = item.DescendantElementIndex;
+                var descendantElementIndex = item.Descendant;
                 var descendantNodeIndex = item.DescendantNodeIndex;
                 if (!descendantNodeIndex.HasValue)
                     continue;

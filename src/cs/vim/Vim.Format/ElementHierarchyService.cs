@@ -10,19 +10,14 @@ namespace Vim.Format
     public class ElementHierarchy
     {
         /// <summary>
-        /// Primary key; uniquely identifies the element hierarchy record.
+        /// The index of the ancestor Element.
         /// </summary>
-        public int _key { get; set; }
+        public int Element { get; set; }
 
         /// <summary>
-        /// The foreign key relation to the ancestor Element.
+        /// The index of the descendant Element.
         /// </summary>
-        public int ElementIndex { get; set; }
-
-        /// <summary>
-        /// The foreign key relation to the descendant Element.
-        /// </summary>
-        public int DescendantElementIndex { get; set; }
+        public int Descendant { get; set; }
 
         /// <summary>
         /// The Descendant Element's Node index in the VIM file.
@@ -236,13 +231,13 @@ namespace Vim.Format
                 if (_isElementAndDescendantPrimaryKey)
                 {
                     // v5.4.0.a and prior
-                    return x.ElementIndex == y.ElementIndex && x.DescendantElementIndex == y.DescendantElementIndex;
+                    return x.Element == y.Element && x.Descendant == y.Descendant;
                 }
                 else
                 {
                     // v5.4.0.b and later
-                    return x.ElementIndex == y.ElementIndex &&
-                           x.DescendantElementIndex == y.DescendantElementIndex &&
+                    return x.Element == y.Element &&
+                           x.Descendant == y.Descendant &&
                            x.DescendantNodeIndex == y.DescendantNodeIndex &&
                            x.DescendantGeometryIndex == y.DescendantGeometryIndex &&
                            x.Distance == y.Distance;
@@ -251,7 +246,7 @@ namespace Vim.Format
 
             public int GetHashCode(ElementHierarchy obj)
             {
-                return HashCodeStd2.Combine(obj.ElementIndex, obj.DescendantElementIndex, obj.Distance);
+                return HashCodeStd2.Combine(obj.Element, obj.Descendant, obj.Distance);
             }
         }
 
@@ -315,9 +310,8 @@ namespace Vim.Format
                             {
                                 result.Add(new ElementHierarchy
                                 {
-                                    _key = result.Count,
-                                    ElementIndex = ancestorElementIndex,
-                                    DescendantElementIndex = descendantElementIndex,
+                                    Element = ancestorElementIndex,
+                                    Descendant = descendantElementIndex,
                                     DescendantNodeIndex = descendantNodeIndex,
                                     DescendantGeometryIndex = descendantGeometryIndex,
                                     Distance = distance,
@@ -330,9 +324,8 @@ namespace Vim.Format
                             // Node and geometry info is absent.
                             result.Add(new ElementHierarchy
                             {
-                                _key = result.Count,
-                                ElementIndex = ancestorElementIndex,
-                                DescendantElementIndex = descendantElementIndex,
+                                Element = ancestorElementIndex,
+                                Descendant = descendantElementIndex,
                                 Distance = distance,
                                 RootDistance = rootToLeafDistance - distanceFromLeaf
                             });
