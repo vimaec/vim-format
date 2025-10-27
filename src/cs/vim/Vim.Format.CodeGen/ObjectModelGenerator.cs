@@ -392,7 +392,9 @@ public static class ObjectModelGenerator
         var entityFields = t.GetEntityFields().ToArray();
         var relationFields = t.GetRelationFields().ToArray();
 
-        cb.AppendLine($"public partial class {t.Name}Table : EntityTable_v2, IEnumerable<{t.Name}>");
+        var elementKind = t.GetElementKind();
+
+        cb.AppendLine($"public partial class {t.Name}Table : EntityTable_v2, IEnumerable<{t.Name}>{(elementKind != ElementKind.Unknown ? " , IElementKindTable" : "")}");
         cb.AppendLine("{");
         cb.AppendLine();
         cb.AppendLine($"public const string TableName = TableNames.{t.Name};");

@@ -249,6 +249,12 @@ namespace Vim.Format.ObjectModel
         // [MAINTAIN]
         // - Add more element kinds here if new element entities are added; do not re-order this enum!
         // - Also create a new SQL vw_Element_v* view with new element kind mapping.
+        // - Also update ParquetEntityTableExtraData.cs
+    }
+
+    public interface IElementKindTable
+    {
+        int GetElementIndex(int entityIndex);
     }
 
     [AttributeUsage(AttributeTargets.Class)]

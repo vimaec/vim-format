@@ -5347,7 +5347,7 @@ namespace Vim.Format.ObjectModel {
         }
     } // class WorksetTable 
     
-    public partial class AssemblyInstanceTable : EntityTable_v2, IEnumerable<AssemblyInstance>
+    public partial class AssemblyInstanceTable : EntityTable_v2, IEnumerable<AssemblyInstance> , IElementKindTable
     {
         
         public const string TableName = TableNames.AssemblyInstance;
@@ -5398,7 +5398,7 @@ namespace Vim.Format.ObjectModel {
         }
     } // class AssemblyInstanceTable 
     
-    public partial class GroupTable : EntityTable_v2, IEnumerable<Group>
+    public partial class GroupTable : EntityTable_v2, IEnumerable<Group> , IElementKindTable
     {
         
         public const string TableName = TableNames.Group;
@@ -5449,7 +5449,7 @@ namespace Vim.Format.ObjectModel {
         }
     } // class GroupTable 
     
-    public partial class DesignOptionTable : EntityTable_v2, IEnumerable<DesignOption>
+    public partial class DesignOptionTable : EntityTable_v2, IEnumerable<DesignOption> , IElementKindTable
     {
         
         public const string TableName = TableNames.DesignOption;
@@ -5488,7 +5488,7 @@ namespace Vim.Format.ObjectModel {
         }
     } // class DesignOptionTable 
     
-    public partial class LevelTable : EntityTable_v2, IEnumerable<Level>
+    public partial class LevelTable : EntityTable_v2, IEnumerable<Level> , IElementKindTable
     {
         
         public const string TableName = TableNames.Level;
@@ -5543,7 +5543,7 @@ namespace Vim.Format.ObjectModel {
         }
     } // class LevelTable 
     
-    public partial class PhaseTable : EntityTable_v2, IEnumerable<Phase>
+    public partial class PhaseTable : EntityTable_v2, IEnumerable<Phase> , IElementKindTable
     {
         
         public const string TableName = TableNames.Phase;
@@ -5578,7 +5578,7 @@ namespace Vim.Format.ObjectModel {
         }
     } // class PhaseTable 
     
-    public partial class RoomTable : EntityTable_v2, IEnumerable<Room>
+    public partial class RoomTable : EntityTable_v2, IEnumerable<Room> , IElementKindTable
     {
         
         public const string TableName = TableNames.Room;
@@ -5647,7 +5647,7 @@ namespace Vim.Format.ObjectModel {
         }
     } // class RoomTable 
     
-    public partial class BimDocumentTable : EntityTable_v2, IEnumerable<BimDocument>
+    public partial class BimDocumentTable : EntityTable_v2, IEnumerable<BimDocument> , IElementKindTable
     {
         
         public const string TableName = TableNames.BimDocument;
@@ -5971,7 +5971,7 @@ namespace Vim.Format.ObjectModel {
         }
     } // class CategoryTable 
     
-    public partial class FamilyTable : EntityTable_v2, IEnumerable<Family>
+    public partial class FamilyTable : EntityTable_v2, IEnumerable<Family> , IElementKindTable
     {
         
         public const string TableName = TableNames.Family;
@@ -6028,7 +6028,7 @@ namespace Vim.Format.ObjectModel {
         }
     } // class FamilyTable 
     
-    public partial class FamilyTypeTable : EntityTable_v2, IEnumerable<FamilyType>
+    public partial class FamilyTypeTable : EntityTable_v2, IEnumerable<FamilyType> , IElementKindTable
     {
         
         public const string TableName = TableNames.FamilyType;
@@ -6079,7 +6079,7 @@ namespace Vim.Format.ObjectModel {
         }
     } // class FamilyTypeTable 
     
-    public partial class FamilyInstanceTable : EntityTable_v2, IEnumerable<FamilyInstance>
+    public partial class FamilyInstanceTable : EntityTable_v2, IEnumerable<FamilyInstance> , IElementKindTable
     {
         
         public const string TableName = TableNames.FamilyInstance;
@@ -6236,7 +6236,7 @@ namespace Vim.Format.ObjectModel {
         }
     } // class FamilyInstanceTable 
     
-    public partial class ViewTable : EntityTable_v2, IEnumerable<View>
+    public partial class ViewTable : EntityTable_v2, IEnumerable<View> , IElementKindTable
     {
         
         public const string TableName = TableNames.View;
@@ -6669,7 +6669,7 @@ namespace Vim.Format.ObjectModel {
         }
     } // class CameraTable 
     
-    public partial class MaterialTable : EntityTable_v2, IEnumerable<Material>
+    public partial class MaterialTable : EntityTable_v2, IEnumerable<Material> , IElementKindTable
     {
         
         public const string TableName = TableNames.Material;
@@ -7136,7 +7136,7 @@ namespace Vim.Format.ObjectModel {
         }
     } // class ShapeInShapeCollectionTable 
     
-    public partial class SystemTable : EntityTable_v2, IEnumerable<System>
+    public partial class SystemTable : EntityTable_v2, IEnumerable<System> , IElementKindTable
     {
         
         public const string TableName = TableNames.System;
@@ -7314,7 +7314,7 @@ namespace Vim.Format.ObjectModel {
         }
     } // class ElementInWarningTable 
     
-    public partial class BasePointTable : EntityTable_v2, IEnumerable<BasePoint>
+    public partial class BasePointTable : EntityTable_v2, IEnumerable<BasePoint> , IElementKindTable
     {
         
         public const string TableName = TableNames.BasePoint;
@@ -7377,7 +7377,7 @@ namespace Vim.Format.ObjectModel {
         }
     } // class BasePointTable 
     
-    public partial class PhaseFilterTable : EntityTable_v2, IEnumerable<PhaseFilter>
+    public partial class PhaseFilterTable : EntityTable_v2, IEnumerable<PhaseFilter> , IElementKindTable
     {
         
         public const string TableName = TableNames.PhaseFilter;
@@ -7428,7 +7428,7 @@ namespace Vim.Format.ObjectModel {
         }
     } // class PhaseFilterTable 
     
-    public partial class GridTable : EntityTable_v2, IEnumerable<Grid>
+    public partial class GridTable : EntityTable_v2, IEnumerable<Grid> , IElementKindTable
     {
         
         public const string TableName = TableNames.Grid;
@@ -7521,7 +7521,7 @@ namespace Vim.Format.ObjectModel {
         }
     } // class GridTable 
     
-    public partial class AreaTable : EntityTable_v2, IEnumerable<Area>
+    public partial class AreaTable : EntityTable_v2, IEnumerable<Area> , IElementKindTable
     {
         
         public const string TableName = TableNames.Area;
@@ -7578,7 +7578,7 @@ namespace Vim.Format.ObjectModel {
         }
     } // class AreaTable 
     
-    public partial class AreaSchemeTable : EntityTable_v2, IEnumerable<AreaScheme>
+    public partial class AreaSchemeTable : EntityTable_v2, IEnumerable<AreaScheme> , IElementKindTable
     {
         
         public const string TableName = TableNames.AreaScheme;
@@ -7617,7 +7617,7 @@ namespace Vim.Format.ObjectModel {
         }
     } // class AreaSchemeTable 
     
-    public partial class ScheduleTable : EntityTable_v2, IEnumerable<Schedule>
+    public partial class ScheduleTable : EntityTable_v2, IEnumerable<Schedule> , IElementKindTable
     {
         
         public const string TableName = TableNames.Schedule;
@@ -7738,7 +7738,7 @@ namespace Vim.Format.ObjectModel {
         }
     } // class ScheduleCellTable 
     
-    public partial class ViewSheetSetTable : EntityTable_v2, IEnumerable<ViewSheetSet>
+    public partial class ViewSheetSetTable : EntityTable_v2, IEnumerable<ViewSheetSet> , IElementKindTable
     {
         
         public const string TableName = TableNames.ViewSheetSet;
@@ -7773,7 +7773,7 @@ namespace Vim.Format.ObjectModel {
         }
     } // class ViewSheetSetTable 
     
-    public partial class ViewSheetTable : EntityTable_v2, IEnumerable<ViewSheet>
+    public partial class ViewSheetTable : EntityTable_v2, IEnumerable<ViewSheet> , IElementKindTable
     {
         
         public const string TableName = TableNames.ViewSheet;
@@ -7937,7 +7937,7 @@ namespace Vim.Format.ObjectModel {
         }
     } // class ViewInViewSheetTable 
     
-    public partial class SiteTable : EntityTable_v2, IEnumerable<Site>
+    public partial class SiteTable : EntityTable_v2, IEnumerable<Site> , IElementKindTable
     {
         
         public const string TableName = TableNames.Site;
@@ -7992,7 +7992,7 @@ namespace Vim.Format.ObjectModel {
         }
     } // class SiteTable 
     
-    public partial class BuildingTable : EntityTable_v2, IEnumerable<Building>
+    public partial class BuildingTable : EntityTable_v2, IEnumerable<Building> , IElementKindTable
     {
         
         public const string TableName = TableNames.Building;
