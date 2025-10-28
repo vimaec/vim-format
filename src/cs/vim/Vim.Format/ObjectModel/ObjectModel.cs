@@ -249,7 +249,6 @@ namespace Vim.Format.ObjectModel
         // [MAINTAIN]
         // - Add more element kinds here if new element entities are added; do not re-order this enum!
         // - Also create a new SQL vw_Element_v* view with new element kind mapping.
-        // - Also update ParquetEntityTableExtraData.cs
     }
 
     public interface IElementKindTable : IEntityTable
@@ -1696,6 +1695,21 @@ namespace Vim.Format.ObjectModel
 
         public PhaseStatusPresentation GetTemporaryPhaseStatusPresentation()
             => (PhaseStatusPresentation) Temporary;
+
+        public static string PhaseStatusPresentationToString(int phaseStatusPresentation)
+        {
+            switch (phaseStatusPresentation)
+            {
+                case ((int)PhaseStatusPresentation.DontShow):
+                    return "Not Displayed";
+                case ((int)PhaseStatusPresentation.ShowByCategory):
+                    return "By Category";
+                case ((int)PhaseStatusPresentation.ShowOverridden):
+                    return "Overridden";
+                default:
+                    return "Unknown";
+            }
+        }
     }
 
     /// <summary>
