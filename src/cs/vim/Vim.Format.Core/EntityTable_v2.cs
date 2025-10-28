@@ -6,7 +6,12 @@ using Vim.Util;
 
 namespace Vim.Format
 {
-    public class EntityTable_v2
+    public interface IEntityTable
+    {
+        int RowCount { get; }
+    }
+
+    public class EntityTable_v2 : IEntityTable
     {
         private readonly string[] _stringTable;
 

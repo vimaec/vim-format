@@ -300,6 +300,8 @@ public static class ObjectModelGenerator
         cb.AppendLine();
         cb.AppendLine("public Dictionary<string, SerializableEntityTable> RawTableMap { get; } = new Dictionary<string, SerializableEntityTable>();");
         cb.AppendLine();
+        cb.AppendLine("public Dictionary<string, EntityTable_v2> Tables { get; } = new Dictionary<string, EntityTable_v2>();");
+        cb.AppendLine();
         cb.AppendLine("public SerializableEntityTable GetSerializableTableOrEmpty(string tableName)");
         cb.AppendLine("    => RawTableMap.TryGetValue(tableName, out var result) ? result : new SerializableEntityTable { Name = tableName };");
         cb.AppendLine();
@@ -316,8 +318,9 @@ public static class ObjectModelGenerator
         cb.AppendLine("// Populate the entity tables.");
         foreach (var t in entityTypes)
         {
-            cb.AppendLine($"{t.Name}Table = new {t.Name}Table(GetSerializableTableOrEmpty(TableNames.{t.Name}), stringTable, this);");
+            cb.AppendLine($"Tables[TableNames.{t.Name}] = {t.Name}Table = new {t.Name}Table(GetSerializableTableOrEmpty(TableNames.{t.Name}), stringTable, this);");
         }
+        cb.AppendLine();
         cb.AppendLine("// Initialize element index maps");
         cb.AppendLine("ElementIndexMaps = new ElementIndexMaps(this, inParallel);");
         cb.AppendLine();

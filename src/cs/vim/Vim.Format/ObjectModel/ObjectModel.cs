@@ -252,7 +252,7 @@ namespace Vim.Format.ObjectModel
         // - Also update ParquetEntityTableExtraData.cs
     }
 
-    public interface IElementKindTable
+    public interface IElementKindTable : IEntityTable
     {
         int GetElementIndex(int entityIndex);
     }

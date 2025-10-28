@@ -4417,6 +4417,8 @@ namespace Vim.Format.ObjectModel {
         
         public Dictionary<string, SerializableEntityTable> RawTableMap { get; } = new Dictionary<string, SerializableEntityTable>();
         
+        public Dictionary<string, EntityTable_v2> Tables { get; } = new Dictionary<string, EntityTable_v2>();
+        
         public SerializableEntityTable GetSerializableTableOrEmpty(string tableName)
             => RawTableMap.TryGetValue(tableName, out var result) ? result : new SerializableEntityTable { Name = tableName };
         
@@ -4430,60 +4432,61 @@ namespace Vim.Format.ObjectModel {
                 RawTableMap[rawTable.Name] = rawTable;
             
             // Populate the entity tables.
-            AssetTable = new AssetTable(GetSerializableTableOrEmpty(TableNames.Asset), stringTable, this);
-            DisplayUnitTable = new DisplayUnitTable(GetSerializableTableOrEmpty(TableNames.DisplayUnit), stringTable, this);
-            ParameterDescriptorTable = new ParameterDescriptorTable(GetSerializableTableOrEmpty(TableNames.ParameterDescriptor), stringTable, this);
-            ParameterTable = new ParameterTable(GetSerializableTableOrEmpty(TableNames.Parameter), stringTable, this);
-            ElementTable = new ElementTable(GetSerializableTableOrEmpty(TableNames.Element), stringTable, this);
-            WorksetTable = new WorksetTable(GetSerializableTableOrEmpty(TableNames.Workset), stringTable, this);
-            AssemblyInstanceTable = new AssemblyInstanceTable(GetSerializableTableOrEmpty(TableNames.AssemblyInstance), stringTable, this);
-            GroupTable = new GroupTable(GetSerializableTableOrEmpty(TableNames.Group), stringTable, this);
-            DesignOptionTable = new DesignOptionTable(GetSerializableTableOrEmpty(TableNames.DesignOption), stringTable, this);
-            LevelTable = new LevelTable(GetSerializableTableOrEmpty(TableNames.Level), stringTable, this);
-            PhaseTable = new PhaseTable(GetSerializableTableOrEmpty(TableNames.Phase), stringTable, this);
-            RoomTable = new RoomTable(GetSerializableTableOrEmpty(TableNames.Room), stringTable, this);
-            BimDocumentTable = new BimDocumentTable(GetSerializableTableOrEmpty(TableNames.BimDocument), stringTable, this);
-            DisplayUnitInBimDocumentTable = new DisplayUnitInBimDocumentTable(GetSerializableTableOrEmpty(TableNames.DisplayUnitInBimDocument), stringTable, this);
-            PhaseOrderInBimDocumentTable = new PhaseOrderInBimDocumentTable(GetSerializableTableOrEmpty(TableNames.PhaseOrderInBimDocument), stringTable, this);
-            CategoryTable = new CategoryTable(GetSerializableTableOrEmpty(TableNames.Category), stringTable, this);
-            FamilyTable = new FamilyTable(GetSerializableTableOrEmpty(TableNames.Family), stringTable, this);
-            FamilyTypeTable = new FamilyTypeTable(GetSerializableTableOrEmpty(TableNames.FamilyType), stringTable, this);
-            FamilyInstanceTable = new FamilyInstanceTable(GetSerializableTableOrEmpty(TableNames.FamilyInstance), stringTable, this);
-            ViewTable = new ViewTable(GetSerializableTableOrEmpty(TableNames.View), stringTable, this);
-            ElementInViewTable = new ElementInViewTable(GetSerializableTableOrEmpty(TableNames.ElementInView), stringTable, this);
-            ShapeInViewTable = new ShapeInViewTable(GetSerializableTableOrEmpty(TableNames.ShapeInView), stringTable, this);
-            AssetInViewTable = new AssetInViewTable(GetSerializableTableOrEmpty(TableNames.AssetInView), stringTable, this);
-            AssetInViewSheetTable = new AssetInViewSheetTable(GetSerializableTableOrEmpty(TableNames.AssetInViewSheet), stringTable, this);
-            LevelInViewTable = new LevelInViewTable(GetSerializableTableOrEmpty(TableNames.LevelInView), stringTable, this);
-            CameraTable = new CameraTable(GetSerializableTableOrEmpty(TableNames.Camera), stringTable, this);
-            MaterialTable = new MaterialTable(GetSerializableTableOrEmpty(TableNames.Material), stringTable, this);
-            MaterialInElementTable = new MaterialInElementTable(GetSerializableTableOrEmpty(TableNames.MaterialInElement), stringTable, this);
-            CompoundStructureLayerTable = new CompoundStructureLayerTable(GetSerializableTableOrEmpty(TableNames.CompoundStructureLayer), stringTable, this);
-            CompoundStructureTable = new CompoundStructureTable(GetSerializableTableOrEmpty(TableNames.CompoundStructure), stringTable, this);
-            NodeTable = new NodeTable(GetSerializableTableOrEmpty(TableNames.Node), stringTable, this);
-            GeometryTable = new GeometryTable(GetSerializableTableOrEmpty(TableNames.Geometry), stringTable, this);
-            ShapeTable = new ShapeTable(GetSerializableTableOrEmpty(TableNames.Shape), stringTable, this);
-            ShapeCollectionTable = new ShapeCollectionTable(GetSerializableTableOrEmpty(TableNames.ShapeCollection), stringTable, this);
-            ShapeInShapeCollectionTable = new ShapeInShapeCollectionTable(GetSerializableTableOrEmpty(TableNames.ShapeInShapeCollection), stringTable, this);
-            SystemTable = new SystemTable(GetSerializableTableOrEmpty(TableNames.System), stringTable, this);
-            ElementInSystemTable = new ElementInSystemTable(GetSerializableTableOrEmpty(TableNames.ElementInSystem), stringTable, this);
-            WarningTable = new WarningTable(GetSerializableTableOrEmpty(TableNames.Warning), stringTable, this);
-            ElementInWarningTable = new ElementInWarningTable(GetSerializableTableOrEmpty(TableNames.ElementInWarning), stringTable, this);
-            BasePointTable = new BasePointTable(GetSerializableTableOrEmpty(TableNames.BasePoint), stringTable, this);
-            PhaseFilterTable = new PhaseFilterTable(GetSerializableTableOrEmpty(TableNames.PhaseFilter), stringTable, this);
-            GridTable = new GridTable(GetSerializableTableOrEmpty(TableNames.Grid), stringTable, this);
-            AreaTable = new AreaTable(GetSerializableTableOrEmpty(TableNames.Area), stringTable, this);
-            AreaSchemeTable = new AreaSchemeTable(GetSerializableTableOrEmpty(TableNames.AreaScheme), stringTable, this);
-            ScheduleTable = new ScheduleTable(GetSerializableTableOrEmpty(TableNames.Schedule), stringTable, this);
-            ScheduleColumnTable = new ScheduleColumnTable(GetSerializableTableOrEmpty(TableNames.ScheduleColumn), stringTable, this);
-            ScheduleCellTable = new ScheduleCellTable(GetSerializableTableOrEmpty(TableNames.ScheduleCell), stringTable, this);
-            ViewSheetSetTable = new ViewSheetSetTable(GetSerializableTableOrEmpty(TableNames.ViewSheetSet), stringTable, this);
-            ViewSheetTable = new ViewSheetTable(GetSerializableTableOrEmpty(TableNames.ViewSheet), stringTable, this);
-            ViewSheetInViewSheetSetTable = new ViewSheetInViewSheetSetTable(GetSerializableTableOrEmpty(TableNames.ViewSheetInViewSheetSet), stringTable, this);
-            ViewInViewSheetSetTable = new ViewInViewSheetSetTable(GetSerializableTableOrEmpty(TableNames.ViewInViewSheetSet), stringTable, this);
-            ViewInViewSheetTable = new ViewInViewSheetTable(GetSerializableTableOrEmpty(TableNames.ViewInViewSheet), stringTable, this);
-            SiteTable = new SiteTable(GetSerializableTableOrEmpty(TableNames.Site), stringTable, this);
-            BuildingTable = new BuildingTable(GetSerializableTableOrEmpty(TableNames.Building), stringTable, this);
+            Tables[TableNames.Asset] = AssetTable = new AssetTable(GetSerializableTableOrEmpty(TableNames.Asset), stringTable, this);
+            Tables[TableNames.DisplayUnit] = DisplayUnitTable = new DisplayUnitTable(GetSerializableTableOrEmpty(TableNames.DisplayUnit), stringTable, this);
+            Tables[TableNames.ParameterDescriptor] = ParameterDescriptorTable = new ParameterDescriptorTable(GetSerializableTableOrEmpty(TableNames.ParameterDescriptor), stringTable, this);
+            Tables[TableNames.Parameter] = ParameterTable = new ParameterTable(GetSerializableTableOrEmpty(TableNames.Parameter), stringTable, this);
+            Tables[TableNames.Element] = ElementTable = new ElementTable(GetSerializableTableOrEmpty(TableNames.Element), stringTable, this);
+            Tables[TableNames.Workset] = WorksetTable = new WorksetTable(GetSerializableTableOrEmpty(TableNames.Workset), stringTable, this);
+            Tables[TableNames.AssemblyInstance] = AssemblyInstanceTable = new AssemblyInstanceTable(GetSerializableTableOrEmpty(TableNames.AssemblyInstance), stringTable, this);
+            Tables[TableNames.Group] = GroupTable = new GroupTable(GetSerializableTableOrEmpty(TableNames.Group), stringTable, this);
+            Tables[TableNames.DesignOption] = DesignOptionTable = new DesignOptionTable(GetSerializableTableOrEmpty(TableNames.DesignOption), stringTable, this);
+            Tables[TableNames.Level] = LevelTable = new LevelTable(GetSerializableTableOrEmpty(TableNames.Level), stringTable, this);
+            Tables[TableNames.Phase] = PhaseTable = new PhaseTable(GetSerializableTableOrEmpty(TableNames.Phase), stringTable, this);
+            Tables[TableNames.Room] = RoomTable = new RoomTable(GetSerializableTableOrEmpty(TableNames.Room), stringTable, this);
+            Tables[TableNames.BimDocument] = BimDocumentTable = new BimDocumentTable(GetSerializableTableOrEmpty(TableNames.BimDocument), stringTable, this);
+            Tables[TableNames.DisplayUnitInBimDocument] = DisplayUnitInBimDocumentTable = new DisplayUnitInBimDocumentTable(GetSerializableTableOrEmpty(TableNames.DisplayUnitInBimDocument), stringTable, this);
+            Tables[TableNames.PhaseOrderInBimDocument] = PhaseOrderInBimDocumentTable = new PhaseOrderInBimDocumentTable(GetSerializableTableOrEmpty(TableNames.PhaseOrderInBimDocument), stringTable, this);
+            Tables[TableNames.Category] = CategoryTable = new CategoryTable(GetSerializableTableOrEmpty(TableNames.Category), stringTable, this);
+            Tables[TableNames.Family] = FamilyTable = new FamilyTable(GetSerializableTableOrEmpty(TableNames.Family), stringTable, this);
+            Tables[TableNames.FamilyType] = FamilyTypeTable = new FamilyTypeTable(GetSerializableTableOrEmpty(TableNames.FamilyType), stringTable, this);
+            Tables[TableNames.FamilyInstance] = FamilyInstanceTable = new FamilyInstanceTable(GetSerializableTableOrEmpty(TableNames.FamilyInstance), stringTable, this);
+            Tables[TableNames.View] = ViewTable = new ViewTable(GetSerializableTableOrEmpty(TableNames.View), stringTable, this);
+            Tables[TableNames.ElementInView] = ElementInViewTable = new ElementInViewTable(GetSerializableTableOrEmpty(TableNames.ElementInView), stringTable, this);
+            Tables[TableNames.ShapeInView] = ShapeInViewTable = new ShapeInViewTable(GetSerializableTableOrEmpty(TableNames.ShapeInView), stringTable, this);
+            Tables[TableNames.AssetInView] = AssetInViewTable = new AssetInViewTable(GetSerializableTableOrEmpty(TableNames.AssetInView), stringTable, this);
+            Tables[TableNames.AssetInViewSheet] = AssetInViewSheetTable = new AssetInViewSheetTable(GetSerializableTableOrEmpty(TableNames.AssetInViewSheet), stringTable, this);
+            Tables[TableNames.LevelInView] = LevelInViewTable = new LevelInViewTable(GetSerializableTableOrEmpty(TableNames.LevelInView), stringTable, this);
+            Tables[TableNames.Camera] = CameraTable = new CameraTable(GetSerializableTableOrEmpty(TableNames.Camera), stringTable, this);
+            Tables[TableNames.Material] = MaterialTable = new MaterialTable(GetSerializableTableOrEmpty(TableNames.Material), stringTable, this);
+            Tables[TableNames.MaterialInElement] = MaterialInElementTable = new MaterialInElementTable(GetSerializableTableOrEmpty(TableNames.MaterialInElement), stringTable, this);
+            Tables[TableNames.CompoundStructureLayer] = CompoundStructureLayerTable = new CompoundStructureLayerTable(GetSerializableTableOrEmpty(TableNames.CompoundStructureLayer), stringTable, this);
+            Tables[TableNames.CompoundStructure] = CompoundStructureTable = new CompoundStructureTable(GetSerializableTableOrEmpty(TableNames.CompoundStructure), stringTable, this);
+            Tables[TableNames.Node] = NodeTable = new NodeTable(GetSerializableTableOrEmpty(TableNames.Node), stringTable, this);
+            Tables[TableNames.Geometry] = GeometryTable = new GeometryTable(GetSerializableTableOrEmpty(TableNames.Geometry), stringTable, this);
+            Tables[TableNames.Shape] = ShapeTable = new ShapeTable(GetSerializableTableOrEmpty(TableNames.Shape), stringTable, this);
+            Tables[TableNames.ShapeCollection] = ShapeCollectionTable = new ShapeCollectionTable(GetSerializableTableOrEmpty(TableNames.ShapeCollection), stringTable, this);
+            Tables[TableNames.ShapeInShapeCollection] = ShapeInShapeCollectionTable = new ShapeInShapeCollectionTable(GetSerializableTableOrEmpty(TableNames.ShapeInShapeCollection), stringTable, this);
+            Tables[TableNames.System] = SystemTable = new SystemTable(GetSerializableTableOrEmpty(TableNames.System), stringTable, this);
+            Tables[TableNames.ElementInSystem] = ElementInSystemTable = new ElementInSystemTable(GetSerializableTableOrEmpty(TableNames.ElementInSystem), stringTable, this);
+            Tables[TableNames.Warning] = WarningTable = new WarningTable(GetSerializableTableOrEmpty(TableNames.Warning), stringTable, this);
+            Tables[TableNames.ElementInWarning] = ElementInWarningTable = new ElementInWarningTable(GetSerializableTableOrEmpty(TableNames.ElementInWarning), stringTable, this);
+            Tables[TableNames.BasePoint] = BasePointTable = new BasePointTable(GetSerializableTableOrEmpty(TableNames.BasePoint), stringTable, this);
+            Tables[TableNames.PhaseFilter] = PhaseFilterTable = new PhaseFilterTable(GetSerializableTableOrEmpty(TableNames.PhaseFilter), stringTable, this);
+            Tables[TableNames.Grid] = GridTable = new GridTable(GetSerializableTableOrEmpty(TableNames.Grid), stringTable, this);
+            Tables[TableNames.Area] = AreaTable = new AreaTable(GetSerializableTableOrEmpty(TableNames.Area), stringTable, this);
+            Tables[TableNames.AreaScheme] = AreaSchemeTable = new AreaSchemeTable(GetSerializableTableOrEmpty(TableNames.AreaScheme), stringTable, this);
+            Tables[TableNames.Schedule] = ScheduleTable = new ScheduleTable(GetSerializableTableOrEmpty(TableNames.Schedule), stringTable, this);
+            Tables[TableNames.ScheduleColumn] = ScheduleColumnTable = new ScheduleColumnTable(GetSerializableTableOrEmpty(TableNames.ScheduleColumn), stringTable, this);
+            Tables[TableNames.ScheduleCell] = ScheduleCellTable = new ScheduleCellTable(GetSerializableTableOrEmpty(TableNames.ScheduleCell), stringTable, this);
+            Tables[TableNames.ViewSheetSet] = ViewSheetSetTable = new ViewSheetSetTable(GetSerializableTableOrEmpty(TableNames.ViewSheetSet), stringTable, this);
+            Tables[TableNames.ViewSheet] = ViewSheetTable = new ViewSheetTable(GetSerializableTableOrEmpty(TableNames.ViewSheet), stringTable, this);
+            Tables[TableNames.ViewSheetInViewSheetSet] = ViewSheetInViewSheetSetTable = new ViewSheetInViewSheetSetTable(GetSerializableTableOrEmpty(TableNames.ViewSheetInViewSheetSet), stringTable, this);
+            Tables[TableNames.ViewInViewSheetSet] = ViewInViewSheetSetTable = new ViewInViewSheetSetTable(GetSerializableTableOrEmpty(TableNames.ViewInViewSheetSet), stringTable, this);
+            Tables[TableNames.ViewInViewSheet] = ViewInViewSheetTable = new ViewInViewSheetTable(GetSerializableTableOrEmpty(TableNames.ViewInViewSheet), stringTable, this);
+            Tables[TableNames.Site] = SiteTable = new SiteTable(GetSerializableTableOrEmpty(TableNames.Site), stringTable, this);
+            Tables[TableNames.Building] = BuildingTable = new BuildingTable(GetSerializableTableOrEmpty(TableNames.Building), stringTable, this);
+            
             // Initialize element index maps
             ElementIndexMaps = new ElementIndexMaps(this, inParallel);
             
