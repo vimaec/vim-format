@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Vim.Util;
+
 using static Vim.Format.Serializer;
 
 using ReadOnlyIndexMap = System.Collections.Generic.IReadOnlyDictionary<int, int>;
@@ -140,20 +140,45 @@ namespace Vim.Format.ObjectModel
             => ParentTableSet.FamilyInstanceTable.GetElementIndex(GetFamilyInstanceIndex(elementIndex));
 
         public int GetFamilyTypeIndex(int elementIndex)
-            => IsFamilyInstance(elementIndex)
-                ? ParentTableSet.FamilyInstanceTable.GetFamilyTypeIndex(GetFamilyInstanceIndex(elementIndex))
-                : GetRelatedIndex(elementIndex, ParentTableSet.ElementIndexMaps.FamilyTypeIndexFromElementIndex);
+        {
+            if (IsFamilyInstance(elementIndex))
+            {
+                var familyInstanceIndex = GetFamilyInstanceIndex(elementIndex);
+                return ParentTableSet.FamilyInstanceTable.GetFamilyTypeIndex(familyInstanceIndex);
+            }
+
+            return GetRelatedIndex(elementIndex, ParentTableSet.ElementIndexMaps.FamilyTypeIndexFromElementIndex);
+        }
 
         public int GetFamilyTypeElementIndex(int elementIndex)
             => ParentTableSet.FamilyTypeTable.GetElementIndex(GetFamilyTypeIndex(elementIndex));
 
+        public string GetFamilyTypeName(int elementIndex)
+            => ParentTableSet.ElementTable.GetName(GetFamilyTypeElementIndex(elementIndex));
+
         public int GetFamilyIndex(int elementIndex)
-            => IsFamilyInstance(elementIndex) || IsFamilyType(elementIndex)
-                ? GetFamilyTypeIndex(elementIndex)
-                : GetRelatedIndex(elementIndex, ParentTableSet.ElementIndexMaps.FamilyIndexFromElementIndex);
+        {
+            if (IsFamilyInstance(elementIndex))
+            {
+                var familyInstanceIndex = GetFamilyInstanceIndex(elementIndex);
+                var familyTypeIndex = ParentTableSet.FamilyInstanceTable.GetFamilyTypeIndex(familyInstanceIndex);
+                return ParentTableSet.FamilyTypeTable.GetFamilyIndex(familyTypeIndex);
+            }
+
+            if (IsFamilyType(elementIndex))
+            {
+                var familyTypeIndex = GetRelatedIndex(elementIndex, ParentTableSet.ElementIndexMaps.FamilyTypeIndexFromElementIndex);
+                return ParentTableSet.FamilyTypeTable.GetFamilyIndex(familyTypeIndex);
+            }
+            
+            return GetRelatedIndex(elementIndex, ParentTableSet.ElementIndexMaps.FamilyIndexFromElementIndex);
+        }
         
         public int GetFamilyElementIndex(int elementIndex)
             => ParentTableSet.FamilyTable.GetElementIndex(GetFamilyIndex(elementIndex));
+
+        public string GetFamilyName(int elementIndex)
+            => ParentTableSet.ElementTable.GetName(GetFamilyElementIndex(elementIndex));
 
         // Object-generating properties
 
