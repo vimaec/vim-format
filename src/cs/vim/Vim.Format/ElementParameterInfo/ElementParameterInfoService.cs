@@ -43,6 +43,12 @@ namespace Vim.Format.ElementParameterInfo
         public FamilyOmniClassInfo[] FamilyOmniClassInfos { get; set; }
 
         /// <summary>
+        /// An array of FamilyTypeUniformatInfo objects representing Uniformat information about the FamilyType.
+        /// Items in this array are aligned to the FamilyType table.
+        /// </summary>
+        public FamilyTypeUniformatInfo[] FamilyTypeUniformatInfos { get; set; }
+
+        /// <summary>
         /// An array of MeasureType values representing the measure types of each Parameter.
         /// Items in this array are aligned to the Parameter table.
         /// </summary>
@@ -132,6 +138,8 @@ namespace Vim.Format.ElementParameterInfo
 
             var familyOmniClassInfos = CreateFamilyOmniClassInfos(familyTable, parameterTable, elementIndexMaps);
 
+            var familyTypeUniformatInfos = CreateFamilyTypeUniformatInfos(familyTypeTable, parameterTable, elementIndexMaps);
+
             return new ElementParameterInfo
             {
                 LevelInfos = levelInfos,
@@ -140,6 +148,7 @@ namespace Vim.Format.ElementParameterInfo
                 ParameterMeasureTypes = parameterMeasureTypes,
                 ElementIfcInfos = elementIfcInfos,
                 FamilyOmniClassInfos = familyOmniClassInfos,
+                FamilyTypeUniformatInfos = familyTypeUniformatInfos,
             };
         }
 
@@ -279,6 +288,14 @@ namespace Vim.Format.ElementParameterInfo
             ElementIndexMaps elementIndexMaps)
             => familyTable.AsParallel()
                 .Select(f => new FamilyOmniClassInfo(f, parameterTable, elementIndexMaps))
+                .ToArray();
+
+        public static FamilyTypeUniformatInfo[] CreateFamilyTypeUniformatInfos(
+            FamilyTypeTable familyTypeTable,
+            ParameterTable parameterTable,
+            ElementIndexMaps elementIndexMaps)
+            => familyTypeTable.AsParallel()
+                .Select(ft => new FamilyTypeUniformatInfo(ft, parameterTable, elementIndexMaps))
                 .ToArray();
     }
 }

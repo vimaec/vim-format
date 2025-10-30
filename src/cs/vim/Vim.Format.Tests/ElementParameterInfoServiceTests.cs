@@ -78,4 +78,29 @@ public static class ElementParameterInfoServiceTests
             Assert.AreEqual(guid, parsedGuid);
         }
     }
+
+    [Test]
+    public static void TestUniformatLevelSplit()
+    {
+        var valid = "B1010240";
+
+        Assert.AreEqual("B", FamilyTypeUniformatInfo.GetUniformatLevel1(valid));
+        Assert.AreEqual("B10", FamilyTypeUniformatInfo.GetUniformatLevel2(valid));
+        Assert.AreEqual("B1010", FamilyTypeUniformatInfo.GetUniformatLevel3(valid));
+
+        var empty = "";
+        Assert.AreEqual("", FamilyTypeUniformatInfo.GetUniformatLevel1(empty));
+        Assert.AreEqual("", FamilyTypeUniformatInfo.GetUniformatLevel2(empty));
+        Assert.AreEqual("", FamilyTypeUniformatInfo.GetUniformatLevel3(empty));
+
+        var incomplete1 = "B";
+        Assert.AreEqual("B", FamilyTypeUniformatInfo.GetUniformatLevel1(incomplete1));
+        Assert.AreEqual("", FamilyTypeUniformatInfo.GetUniformatLevel2(incomplete1));
+        Assert.AreEqual("", FamilyTypeUniformatInfo.GetUniformatLevel3(incomplete1));
+
+        var partial = "B20";
+        Assert.AreEqual("B", FamilyTypeUniformatInfo.GetUniformatLevel1(partial));
+        Assert.AreEqual("B20", FamilyTypeUniformatInfo.GetUniformatLevel2(partial));
+        Assert.AreEqual("", FamilyTypeUniformatInfo.GetUniformatLevel3(partial));
+    }
 }
