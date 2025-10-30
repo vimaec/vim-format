@@ -37,6 +37,12 @@ namespace Vim.Format.ElementParameterInfo
         public ElementIfcInfo[] ElementIfcInfos { get; set; }
 
         /// <summary>
+        /// An array of FamilyOmniClassInfo objects representing OmniClass information about the Family.
+        /// Items in this array are aligned to the Family table.
+        /// </summary>
+        public FamilyOmniClassInfo[] FamilyOmniClassInfos { get; set; }
+
+        /// <summary>
         /// An array of MeasureType values representing the measure types of each Parameter.
         /// Items in this array are aligned to the Parameter table.
         /// </summary>
@@ -60,6 +66,7 @@ namespace Vim.Format.ElementParameterInfo
                 stringTable,
                 n =>
                     n is TableNames.Element ||
+                    n is TableNames.Family ||
                     n is TableNames.FamilyInstance ||
                     n is TableNames.FamilyType ||
                     n is TableNames.Parameter ||
@@ -84,6 +91,7 @@ namespace Vim.Format.ElementParameterInfo
             var descriptorTable = tableSet.ParameterDescriptorTable;
             var familyInstanceTable = tableSet.FamilyInstanceTable;
             var familyTypeTable = tableSet.FamilyTypeTable;
+            var familyTable = tableSet.FamilyTable;
             var basePointTable = tableSet.BasePointTable;
             var levelTable = tableSet.LevelTable;
 
@@ -122,6 +130,8 @@ namespace Vim.Format.ElementParameterInfo
 
             var elementIfcInfos = CreateElementIfcInfos(elementTable, parameterTable, elementIndexMaps);
 
+            var familyOmniClassInfos = CreateFamilyOmniClassInfos(familyTable, parameterTable, elementIndexMaps);
+
             return new ElementParameterInfo
             {
                 LevelInfos = levelInfos,
@@ -129,6 +139,7 @@ namespace Vim.Format.ElementParameterInfo
                 ElementMeasureInfos = elementMeasureInfos,
                 ParameterMeasureTypes = parameterMeasureTypes,
                 ElementIfcInfos = elementIfcInfos,
+                FamilyOmniClassInfos = familyOmniClassInfos,
             };
         }
 
@@ -260,6 +271,14 @@ namespace Vim.Format.ElementParameterInfo
             => elementTable
                 .AsParallel()
                 .Select(e => new ElementIfcInfo(e, parameterTable, elementIndexMaps))
+                .ToArray();
+
+        public static FamilyOmniClassInfo[] CreateFamilyOmniClassInfos(
+            FamilyTable familyTable,
+            ParameterTable parameterTable,
+            ElementIndexMaps elementIndexMaps)
+            => familyTable.AsParallel()
+                .Select(f => new FamilyOmniClassInfo(f, parameterTable, elementIndexMaps))
                 .ToArray();
     }
 }
