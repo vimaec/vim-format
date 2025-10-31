@@ -305,6 +305,9 @@ namespace Vim.Format.ObjectModel
 
     public partial class FamilyInstanceTable
     {
+        /// <summary>
+        /// Returns the super component distance of the family instance.
+        /// </summary>
         public int GetSuperComponentDistance(int familyInstanceIndex, int depth = 0)
         {
             var parentElementIndex = GetSuperComponentIndex(familyInstanceIndex);
@@ -317,6 +320,54 @@ namespace Vim.Format.ObjectModel
             return hasParentFamilyInstanceIndex
                 ? GetSuperComponentDistance(parentFamilyInstanceIndex, depth + 1)
                 : depth;
+        }
+    }
+
+    public partial class CompoundStructureTable
+    {
+        /// <summary>
+        /// Returns an array aligned 1:1 with the CompoundStructureTable records which defines the FamilyType index of the CompoundStructure.
+        /// </summary>
+        public int[] GetFamilyTypeIndices()
+        {
+            // Initialize the result array which is aligned with the CompoundStructureTable records.
+            var result = new int[RowCount];
+            for (var i = 0; i < result.Length; ++i) { result[i] = EntityRelation.None; }
+
+            // O(n) iteration over the family type records to populate the result.
+            var familyTypeTable = ParentTableSet.FamilyTypeTable;
+            for (var familyTypeIndex = 0; familyTypeIndex < familyTypeTable.RowCount; ++familyTypeIndex)
+            {
+                var compoundStructureIndex = familyTypeTable.GetCompoundStructureIndex(familyTypeIndex);
+                if (compoundStructureIndex == EntityRelation.None)
+                    continue;
+
+                result[compoundStructureIndex] = familyTypeIndex;
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// Returns an array aligned 1:1 with the CompoundStructureTable records which defines the number of CompoundStructureLayers associated with the CompoundStructure.
+        /// </summary>
+        public int[] GetCompoundStructureLayerCounts()
+        {
+            var result = new int[RowCount];
+            for (var i = 0; i < result.Length; ++i) { result[i] = 0; }
+
+            // O(n) iteration over the CompoundStructureLayer records to count the layers in each CompoundStructure.
+            var layerTable = ParentTableSet.CompoundStructureLayerTable;
+            for (var layerIndex = 0; layerIndex < layerTable.RowCount; ++layerIndex)
+            {
+                var compoundStructureIndex = layerTable.GetCompoundStructureIndex(layerIndex);
+                if (compoundStructureIndex == EntityRelation.None)
+                    continue;
+
+                result[compoundStructureIndex] += 1;
+            }
+
+            return result;
         }
     }
 }
