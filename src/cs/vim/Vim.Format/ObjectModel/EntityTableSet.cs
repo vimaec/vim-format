@@ -263,6 +263,44 @@ namespace Vim.Format.ObjectModel
 
             return result;
         }
+
+        /// <summary>
+        /// Returns an array of booleans aligned 1:1 with the element table.
+        /// Items are true if the element is visible in at least one 3d view.
+        /// </summary>
+        public bool[] GetIsVisibleIn3dView()
+        {
+            // Result is 1:1 aligned with the elements.
+            var elementVisibility = new bool[RowCount];
+
+            // Initialize with false visibility.
+            for (var i = 0; i < elementVisibility.Length; ++i)
+            {
+                elementVisibility[i] = false;
+            }
+
+            var viewTable = ParentTableSet.ViewTable;
+
+            // O(n) traversal of ElementInView table to extract element visibility in 3d views.
+            var elementInViewTable = ParentTableSet.ElementInViewTable;
+            for (var i = 0; i < elementInViewTable.RowCount; ++i)
+            {
+                var viewIndex = elementInViewTable.GetViewIndex(i);
+                var viewType = viewTable.GetViewType(viewIndex);
+
+                // Only target records whose ViewType is "ThreeD" (applies to Revit only).
+                if (!viewType.Equals("ThreeD", StringComparison.InvariantCultureIgnoreCase))
+                    continue;
+
+                var elementIndex = elementInViewTable.GetElementIndex(i);
+                if (elementIndex == EntityRelation.None)
+                    continue;
+
+                elementVisibility[elementIndex] = true;
+            }
+
+            return elementVisibility;
+        }
     }
 
     public partial class FamilyInstanceTable
