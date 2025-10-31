@@ -115,7 +115,6 @@ namespace Vim.Format.ElementParameterInfo
                 return false;
 
             var bytes = new byte[16];
-            var bitPos = 0;
             var bytePos = 0;
             var value = 0;
             var bitsLeft = 0;
