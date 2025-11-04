@@ -177,7 +177,7 @@ namespace Vim.Format.ObjectModel
         public int GetFamilyElementIndex(int elementIndex)
             => ParentTableSet.FamilyTable.GetElementIndex(GetFamilyIndex(elementIndex));
 
-        public string GetFamilyName(int elementIndex)
+        public string GetFamilyNameEx(int elementIndex)
             => ParentTableSet.ElementTable.GetName(GetFamilyElementIndex(elementIndex));
 
         // Object-generating properties
