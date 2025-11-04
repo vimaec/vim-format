@@ -1,0 +1,184 @@
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Text.RegularExpressions;
+using Vim.BFast;
+
+namespace Vim.Format.api_v2
+{
+    public class VimDataTable
+    {
+        /// <summary>
+        /// The name of the data table.
+        /// </summary>
+        public string Name { get; set; }
+
+        /// <summary>
+        /// The relational index columns of the data table.
+        /// </summary>
+        public List<NamedBuffer<int>> IndexColumns { get; set; } = new List<NamedBuffer<int>>();
+
+        /// <summary>
+        /// The string columns of the data table.
+        /// </summary>
+        public List<NamedBuffer<int>> StringColumns { get; set; } = new List<NamedBuffer<int>>();
+
+        /// <summary>
+        /// The data columns of the data table.
+        /// </summary>
+        public List<INamedBuffer> DataColumns { get; set; } = new List<INamedBuffer>();
+
+        /// <summary>
+        /// A delegate which filters data columns.
+        /// </summary>
+        public delegate bool DataTableColumnFilter(string dataTableName, string columnName);
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public VimDataTable(
+            BFastBufferReader dataTableBufferReader,
+            bool schemaOnly,
+            DataTableColumnFilter dataTableColumnFilter = null)
+        {
+            Name = dataTableBufferReader.Name;
+
+            foreach (var colBr in dataTableBufferReader.Seek().GetBFastBufferReaders())
+            {
+                var name = colBr.Name;
+                var typePrefix = name.GetTypePrefix();
+
+                if (dataTableColumnFilter != null && !dataTableColumnFilter(Name, name))
+                    continue;
+
+                switch (typePrefix)
+                {
+                    case VimConstants.IndexColumnNameTypePrefix:
+                        {
+                            IndexColumns.Add(colBr.ReadEntityTableColumn<int>(schemaOnly));
+                            break;
+                        }
+                    case VimConstants.StringColumnNameTypePrefix:
+                        {
+                            StringColumns.Add(colBr.ReadEntityTableColumn<int>(schemaOnly));
+                            break;
+                        }
+                    case VimConstants.IntColumnNameTypePrefix:
+                        {
+                            DataColumns.Add(colBr.ReadEntityTableColumn<int>(schemaOnly));
+                            break;
+                        }
+                    case VimConstants.LongColumnNameTypePrefix:
+                        {
+                            DataColumns.Add(colBr.ReadEntityTableColumn<long>(schemaOnly));
+                            break;
+                        }
+                    case VimConstants.DoubleColumnNameTypePrefix:
+                        {
+                            DataColumns.Add(colBr.ReadEntityTableColumn<double>(schemaOnly));
+                            break;
+                        }
+                    case VimConstants.FloatColumnNameTypePrefix:
+                        {
+                            DataColumns.Add(colBr.ReadEntityTableColumn<float>(schemaOnly));
+                            break;
+                        }
+                    case VimConstants.ByteColumnNameTypePrefix:
+                        {
+                            DataColumns.Add(colBr.ReadEntityTableColumn<byte>(schemaOnly));
+                            break;
+                        }
+                        // For flexibility, we ignore the columns which do not contain a recognized prefix.
+                }
+            }
+        }
+
+        public IEnumerable<string> ColumnNames
+            => IndexColumns.Select(c => c.Name)
+                .Concat(StringColumns.Select(c => c.Name))
+                .Concat(DataColumns.Select(c => c.Name));
+
+        public List<INamedBuffer> ToBuffers()
+        {
+            var r = new List<INamedBuffer>();
+
+            r.AddRange(DataColumns);
+            r.AddRange(IndexColumns);
+            r.AddRange(StringColumns);
+
+            return r;
+        }
+
+        /// <summary>
+        /// Enumerates the VimDataTables contained in the given VIM file.
+        /// </summary>
+        public static IEnumerable<VimDataTable> EnumerateDataTables(
+            FileInfo vimFileInfo,
+            bool schemaOnly,
+            Func<string, bool> dataTableNameFilterFunc = null,
+            DataTableColumnFilter dataTableColumnFilter = null)
+        {
+            using (var stream = vimFileInfo.OpenRead())
+            {
+                var entitiesBufferReader = stream.GetBFastBufferReader(BufferNames.Entities);
+                if (entitiesBufferReader == null)
+                    yield break;
+
+                foreach (var dataTable in EnumerateDataTables(entitiesBufferReader, schemaOnly, dataTableNameFilterFunc, dataTableColumnFilter))
+                {
+                    yield return dataTable;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Enumerates the VimDataTables contained in the given buffer.
+        /// </summary>
+        public static IEnumerable<VimDataTable> EnumerateDataTables(
+            BFastBufferReader entitiesBufferReader,
+            bool schemaOnly,
+            Func<string, bool> dataTableNameFilterFunc = null,
+            DataTableColumnFilter dataTableColumnFilter = null)
+        {
+            var dataTableBufferReaders = entitiesBufferReader.Seek()
+                .GetBFastBufferReaders(br => dataTableNameFilterFunc?.Invoke(br.Name) ?? true);
+            
+            foreach (var dataTableBufferReader in dataTableBufferReaders)
+            {
+                yield return new VimDataTable(dataTableBufferReader, schemaOnly, dataTableColumnFilter);
+            }
+        }
+
+        public static readonly Regex TypePrefixRegex = new Regex(@"(\w+:).*");
+
+        public static string GetTypePrefix(string name)
+        {
+            var match = TypePrefixRegex.Match(name);
+            return match.Success ? match.Groups[1].Value : "";
+        }
+
+        public static string GetTypePrefix(INamedBuffer namedBuffer)
+            => namedBuffer.Name.GetTypePrefix();
+
+        /// <summary>
+        /// Returns a NamedBuffer representing a data table column.
+        /// If schemaOnly is enabled, the column is returned without any of its contained data;
+        /// this is useful for rapidly querying the schema of the table.
+        /// </summary>
+        public static NamedBuffer<T> ReadDataTableColumn<T>(
+            BFastBufferReader columnBufferReader,
+            bool schemaOnly) where T : unmanaged
+        {
+            var (name, size) = columnBufferReader;
+
+            if (schemaOnly)
+                return new Buffer<T>(Array.Empty<T>()).ToNamedBuffer(name);
+
+            return columnBufferReader
+                .Seek()
+                .ReadBufferFromNumberOfBytes<T>(size)
+                .ToNamedBuffer(name);
+        }
+    }
+}
