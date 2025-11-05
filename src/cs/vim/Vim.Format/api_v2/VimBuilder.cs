@@ -80,7 +80,7 @@ namespace Vim.Format.api_v2
 
             bfastBuilder.Add(VIM.HeaderBufferName, vim.Header.ToBuffer());
             bfastBuilder.Add(VIM.AssetsBufferName, vim.Assets ?? Array.Empty<INamedBuffer>());
-            bfastBuilder.Add(VIM.DataTablesBufferName, VimDataTable.GetBFastBuilder(vim.DataTables));
+            bfastBuilder.Add(VIM.EntityTablesBufferName, VimEntityTable.GetBFastBuilder(vim.EntityTables));
             bfastBuilder.Add(VIM.StringTableBufferName, vim.StringTable.PackStrings().ToBuffer());
             bfastBuilder.Add(VIM.GeometryBufferName, geometryWriter);
 

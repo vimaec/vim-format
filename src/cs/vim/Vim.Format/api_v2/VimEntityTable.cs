@@ -7,49 +7,49 @@ using Vim.BFast;
 
 namespace Vim.Format.api_v2
 {
-    public class VimDataTable
+    public class VimEntityTable
     {
         /// <summary>
-        /// The name of the data table.
+        /// The name of the entity table.
         /// </summary>
         public string Name { get; set; }
 
         /// <summary>
-        /// The relational index columns of the data table.
+        /// The relational index columns of the entity table.
         /// </summary>
         public List<NamedBuffer<int>> IndexColumns { get; set; } = new List<NamedBuffer<int>>();
 
         /// <summary>
-        /// The string columns of the data table.
+        /// The string columns of the entity table.
         /// </summary>
         public List<NamedBuffer<int>> StringColumns { get; set; } = new List<NamedBuffer<int>>();
 
         /// <summary>
-        /// The data columns of the data table.
+        /// The data columns of the entity table.
         /// </summary>
         public List<INamedBuffer> DataColumns { get; set; } = new List<INamedBuffer>();
 
         /// <summary>
-        /// A delegate which filters data columns.
+        /// A delegate which filters entity table columns.
         /// </summary>
-        public delegate bool DataTableColumnFilter(string dataTableName, string columnName);
+        public delegate bool EntityTableColumnFilter(string entityTableName, string columnName);
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public VimDataTable(
-            BFastBufferReader dataTableBufferReader,
+        public VimEntityTable(
+            BFastBufferReader entityTableBufferReader,
             bool schemaOnly,
-            DataTableColumnFilter dataTableColumnFilter = null)
+            EntityTableColumnFilter entityTableColumnFilter = null)
         {
-            Name = dataTableBufferReader.Name;
+            Name = entityTableBufferReader.Name;
 
-            foreach (var colBr in dataTableBufferReader.Seek().GetBFastBufferReaders())
+            foreach (var colBr in entityTableBufferReader.Seek().GetBFastBufferReaders())
             {
                 var name = colBr.Name;
                 var typePrefix = name.GetTypePrefix();
 
-                if (dataTableColumnFilter != null && !dataTableColumnFilter(Name, name))
+                if (entityTableColumnFilter != null && !entityTableColumnFilter(Name, name))
                     continue;
 
                 switch (typePrefix)
@@ -95,7 +95,7 @@ namespace Vim.Format.api_v2
         }
 
         /// <summary>
-        /// Returns the column names contained in the data table.
+        /// Returns the column names contained in the entity table.
         /// </summary>
         public IEnumerable<string> ColumnNames
             => IndexColumns.Select(c => c.Name)
@@ -117,12 +117,12 @@ namespace Vim.Format.api_v2
         }
 
         /// <summary>
-        /// Returns a BFastBuilder used to serialize the given collection of data tables.
+        /// Returns a BFastBuilder used to serialize the given collection of entity tables.
         /// </summary>
-        public static BFastBuilder GetBFastBuilder(IEnumerable<VimDataTable> dataTables)
+        public static BFastBuilder GetBFastBuilder(IEnumerable<VimEntityTable> entityTables)
         {
             var bldr = new BFastBuilder();
-            foreach (var et in dataTables)
+            foreach (var et in entityTables)
             {
                 bldr.Add(et.Name, et.ToBuffers());
             }
@@ -130,13 +130,13 @@ namespace Vim.Format.api_v2
         }
 
         /// <summary>
-        /// Enumerates the VimDataTables contained in the given VIM file.
+        /// Enumerates the VimEntityTables contained in the given VIM file.
         /// </summary>
-        public static IEnumerable<VimDataTable> EnumerateDataTables(
+        public static IEnumerable<VimEntityTable> EnumerateEntityTables(
             FileInfo vimFileInfo,
             bool schemaOnly,
-            Func<string, bool> dataTableNameFilterFunc = null,
-            DataTableColumnFilter dataTableColumnFilter = null)
+            Func<string, bool> entityTableNameFilterFunc = null,
+            EntityTableColumnFilter entityTableColumnFilter = null)
         {
             using (var stream = vimFileInfo.OpenRead())
             {
@@ -144,28 +144,28 @@ namespace Vim.Format.api_v2
                 if (entitiesBufferReader == null)
                     yield break;
 
-                foreach (var dataTable in EnumerateDataTables(entitiesBufferReader, schemaOnly, dataTableNameFilterFunc, dataTableColumnFilter))
+                foreach (var entityTable in EnumerateEntityTables(entitiesBufferReader, schemaOnly, entityTableNameFilterFunc, entityTableColumnFilter))
                 {
-                    yield return dataTable;
+                    yield return entityTable;
                 }
             }
         }
 
         /// <summary>
-        /// Enumerates the VimDataTables contained in the given buffer.
+        /// Enumerates the VimEntityTables contained in the given buffer.
         /// </summary>
-        public static IEnumerable<VimDataTable> EnumerateDataTables(
+        public static IEnumerable<VimEntityTable> EnumerateEntityTables(
             BFastBufferReader entitiesBufferReader,
             bool schemaOnly,
-            Func<string, bool> dataTableNameFilterFunc = null,
-            DataTableColumnFilter dataTableColumnFilter = null)
+            Func<string, bool> entityTableNameFilterFunc = null,
+            EntityTableColumnFilter entityTableColumnFilter = null)
         {
-            var dataTableBufferReaders = entitiesBufferReader.Seek()
-                .GetBFastBufferReaders(br => dataTableNameFilterFunc?.Invoke(br.Name) ?? true);
+            var entityTableBufferReaders = entitiesBufferReader.Seek()
+                .GetBFastBufferReaders(br => entityTableNameFilterFunc?.Invoke(br.Name) ?? true);
             
-            foreach (var dataTableBufferReader in dataTableBufferReaders)
+            foreach (var entityTableBufferReader in entityTableBufferReaders)
             {
-                yield return new VimDataTable(dataTableBufferReader, schemaOnly, dataTableColumnFilter);
+                yield return new VimEntityTable(entityTableBufferReader, schemaOnly, entityTableColumnFilter);
             }
         }
 
@@ -181,11 +181,11 @@ namespace Vim.Format.api_v2
             => namedBuffer.Name.GetTypePrefix();
 
         /// <summary>
-        /// Returns a NamedBuffer representing a data table column.
+        /// Returns a NamedBuffer representing a entity table column.
         /// If schemaOnly is enabled, the column is returned without any of its contained data;
         /// this is useful for rapidly querying the schema of the table.
         /// </summary>
-        public static NamedBuffer<T> ReadDataTableColumn<T>(
+        public static NamedBuffer<T> ReadEntityTableColumn<T>(
             BFastBufferReader columnBufferReader,
             bool schemaOnly) where T : unmanaged
         {

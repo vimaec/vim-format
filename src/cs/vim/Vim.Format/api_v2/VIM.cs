@@ -32,16 +32,19 @@ namespace Vim.Format.api_v2
         public const string GeometryBufferName = "geometry";
 
         /// <summary>
-        /// The string table for the entities defined among the data tables. Strings are de-duplicated in this table and indexed using string columns to avoid repetition.
+        /// The string table for the entities defined among the entity tables. Strings are de-duplicated in this table and indexed using string columns to avoid repetition.
         /// </summary>
         public string[] StringTable { get; set; } = Array.Empty<string>();
         public const string StringTableBufferName = "strings";
 
         /// <summary>
-        /// The data tables which define the various data entities in the building model.
+        /// The entity tables which define the various entities in the building model.
         /// </summary>
-        public List<VimDataTable> DataTables { get; set; } = new List<VimDataTable>();
-        public const string DataTablesBufferName = "entities";
+        public List<VimEntityTable> EntityTables { get; set; } = new List<VimEntityTable>();
+        public const string EntityTablesBufferName = "entities";
+
+        // Search & replace:
+        // - entity table (case sensitive) -> entity table
 
         /// <summary>
         /// The binary assets contained in the building model, including renders, textures, etc.
@@ -142,12 +145,12 @@ namespace Vim.Format.api_v2
                             break;
                         }
 
-                    case DataTablesBufferName:
+                    case EntityTablesBufferName:
                         {
-                            if (options.IncludeDataTables)
+                            if (options.IncludeEntityTables)
                             {
-                                progress?.Report("Reading VIM data tables");
-                                vim.DataTables = VimDataTable.EnumerateDataTables(bufferReader, options.SchemaOnly).ToList();
+                                progress?.Report("Reading VIM entity tables");
+                                vim.EntityTables = VimEntityTable.EnumerateEntityTables(bufferReader, options.SchemaOnly).ToList();
                             }
                             break;
                         }
