@@ -10,6 +10,7 @@ using Vim.Format.ObjectModel;
 
 // TODO
 // - Load EntityTableSet from VimEntityTables
+// - EntityTable_v2 is now VimEntityObjectTable
 // - Implement VimBuilder
 //   - Populate "Tables" with some code generation.
 //   - Test guinea pig: gltf converter
@@ -54,17 +55,96 @@ namespace Vim.Format.api_v2
         /// <summary>
         /// The entity tables which define the various entities in the building model.
         /// </summary>
-        public List<VimEntityTable> EntityTables { get; set; } = new List<VimEntityTable>();
+        public List<VimEntityTableData> EntityTables { get; set; } = new List<VimEntityTableData>();
         public const string EntityTablesBufferName = "entities";
-
-        // Search & replace:
-        // - entity table (case sensitive) -> entity table
 
         /// <summary>
         /// The binary assets contained in the building model, including renders, textures, etc.
         /// </summary>
         public INamedBuffer[] Assets { get; set; } = Array.Empty<INamedBuffer>();
         public const string AssetsBufferName = "assets";
+
+        /// <summary>
+        /// Default constructor
+        /// </summary>
+        public VIM()
+        { }
+
+        /// <summary>
+        /// Stream-based constructor.
+        /// </summary>
+        public VIM(
+            Stream vimStream,
+            string vimFilePath,
+            VimOpenOptions options = null,
+            IProgress<string> progress = null,
+            CancellationToken ct = default)
+        {
+            vimStream.ThrowIfNotSeekable("Could not open VIM file");
+
+            options = options ?? new VimOpenOptions();
+
+            FilePath = vimFilePath;
+
+            foreach (var bufferReader in vimStream.GetBFastBufferReaders())
+            {
+                ct.ThrowIfCancellationRequested();
+
+                var (name, numBytes) = bufferReader;
+                bufferReader.Seek();
+
+                switch (name)
+                {
+                    case HeaderBufferName:
+                        {
+                            progress?.Report("Reading VIM header");
+                            var headerString = Encoding.UTF8.GetString(vimStream.ReadArray<byte>((int)numBytes));
+                            Header = VimHeader.Parse(headerString);
+                            break;
+                        }
+
+                    case AssetsBufferName:
+                        {
+                            if (options.IncludeAssets)
+                            {
+                                progress?.Report("Reading VIM assets");
+                                Assets = vimStream.ReadBFast().ToArray();
+                            }
+                            break;
+                        }
+
+                    case StringTableBufferName:
+                        {
+                            if (options.IncludeStringTable)
+                            {
+                                progress?.Report("Reading VIM string table");
+                                StringTable = ReadStringTable(vimStream, numBytes);
+                            }
+                            break;
+                        }
+
+                    case GeometryBufferName:
+                        {
+                            if (options.IncludeGeometry)
+                            {
+                                progress?.Report("Reading VIM geometry");
+                                Geometry = VimGeometry.Read(vimStream);
+                            }
+                            break;
+                        }
+
+                    case EntityTablesBufferName:
+                        {
+                            if (options.IncludeEntityTables)
+                            {
+                                progress?.Report("Reading VIM entity tables");
+                                EntityTables = VimEntityTableData.EnumerateEntityTables(bufferReader, options.SchemaOnly).ToList();
+                            }
+                            break;
+                        }
+                }
+            }
+        }
 
         /// <summary>
         /// Opens the VIM file defined at the given file path.
@@ -89,9 +169,9 @@ namespace Vim.Format.api_v2
         {
             vimFileInfo.ThrowIfNotExists("VIM file not found");
 
-            using (var fileStream = vimFileInfo.OpenRead())
+            using (var vimFileStream = vimFileInfo.OpenRead())
             {
-                return Open(fileStream, vimFileInfo.FullName, options, progress, ct);
+                return Open(vimFileStream, vimFileInfo.FullName, options, progress, ct);
             }
         }
 
@@ -100,78 +180,13 @@ namespace Vim.Format.api_v2
         /// Note: The given filePath is assigned to the VIM's FilePath property.
         /// </summary>
         public static VIM Open(
-            Stream stream,
-            string filePath,
+            Stream vimStream,
+            string vimFilePath,
             VimOpenOptions options = null,
             IProgress<string> progress = null,
             CancellationToken ct = default)
         {
-            stream.ThrowIfNotSeekable("Could not open VIM file");
-
-            options = options ?? new VimOpenOptions();
-
-            var vim = new VIM() { FilePath = filePath };
-
-            foreach (var bufferReader in stream.GetBFastBufferReaders())
-            {
-                ct.ThrowIfCancellationRequested();
-
-                var (name, numBytes) = bufferReader;
-                bufferReader.Seek();
-
-                switch (name)
-                {
-                    case HeaderBufferName:
-                        {
-                            progress?.Report("Reading VIM header");
-                            var headerString = Encoding.UTF8.GetString(stream.ReadArray<byte>((int)numBytes));
-                            vim.Header = VimHeader.Parse(headerString);
-                            break;
-                        }
-
-                    case AssetsBufferName:
-                        {
-                            if (options.IncludeAssets)
-                            {
-                                progress?.Report("Reading VIM assets");
-                                vim.Assets = stream.ReadBFast().ToArray();
-                            }
-                            break;
-                        }
-
-                    case StringTableBufferName:
-                        {
-                            if (options.IncludeStringTable)
-                            {
-                                progress?.Report("Reading VIM string table");
-                                vim.StringTable = ReadStringTable(stream, numBytes);
-                            }
-                            break;
-                        }
-
-                    case GeometryBufferName:
-                        {
-                            if (options.IncludeGeometry)
-                            {
-                                progress?.Report("Reading VIM geometry");
-                                vim.Geometry = VimGeometry.Read(stream);
-                            }
-                            break;
-                        }
-
-                    case EntityTablesBufferName:
-                        {
-                            if (options.IncludeEntityTables)
-                            {
-                                progress?.Report("Reading VIM entity tables");
-                                vim.EntityTables = VimEntityTable.EnumerateEntityTables(bufferReader, options.SchemaOnly).ToList();
-                            }
-                            break;
-                        }
-                }
-            }
-
-            return vim;
+            return new VIM(vimStream, vimFilePath, options, progress, ct);
         }
 
         /// <summary>
@@ -251,20 +266,37 @@ namespace Vim.Format.api_v2
         /// <summary>
         /// Returns the entity table set contained in the given VIM file.
         /// </summary>
-        public EntityTableSet GetEntityTableSet(string vimFilePath)
+        public static VimEntityTableSet GetEntityTableSet(string vimFilePath, VimEntityTableSetOptions options = null)
         {
-            return GetEntityTableSet(new FileInfo(vimFilePath));
+            return GetEntityTableSet(new FileInfo(vimFilePath), options);
         }
 
         /// <summary>
         /// Returns the entity table set contained in the given VIM file.
         /// </summary>
-        public EntityTableSet GetEntityTableSet(FileInfo vimFileInfo)
+        public static VimEntityTableSet GetEntityTableSet(FileInfo vimFileInfo, VimEntityTableSetOptions options = null)
         {
             vimFileInfo.ThrowIfNotExists("Could not get the entity table set.");
+            
+            var stringTable = options.StringTable
+                ?? (options.SchemaOnly ? null : GetStringTable(vimFileInfo));
 
-            // TODO: code generate an EntityTableSet constructor with VimEntityTable
-            throw new NotImplementedException();
+            var entityTableData = VimEntityTableData.EnumerateEntityTables(
+                vimFileInfo,
+                options.SchemaOnly,
+                options.EntityTableNameFilterFunc,
+                options.EntityTableColumnFilter)
+                .ToArray();
+
+            return new VimEntityTableSet(stringTable, entityTableData, options.InParallel);
+        }
+
+        /// <summary>
+        /// Returns the entity table set contained in this VIM file.
+        /// </summary>
+        public VimEntityTableSet GetEntityTableSet(bool inParallel = true)
+        {
+            return new VimEntityTableSet(StringTable, EntityTables.ToArray(), inParallel);
         }
     }
 }

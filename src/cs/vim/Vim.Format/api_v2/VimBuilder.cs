@@ -102,7 +102,7 @@ namespace Vim.Format.api_v2
             bfastBuilder.Write(vimStream);
         }
 
-        private static BFastBuilder GetBFastBuilder(IEnumerable<VimEntityTable> entityTables)
+        private static BFastBuilder GetBFastBuilder(IEnumerable<VimEntityTableData> entityTables)
         {
             var bldr = new BFastBuilder();
             foreach (var et in entityTables)
@@ -139,9 +139,9 @@ namespace Vim.Format.api_v2
             { }
         }
 
-        private IEnumerable<VimEntityTable> GetVimEntityTables(StringLookupInfo stringLookupInfo)
+        private IEnumerable<VimEntityTableData> GetVimEntityTables(StringLookupInfo stringLookupInfo)
             => WithGeometryTable(Tables.Values)
-                .Select(tb => new VimEntityTable(tb, stringLookupInfo.StringLookup));
+                .Select(tb => new VimEntityTableData(tb, stringLookupInfo.StringLookup));
 
         private IEnumerable<EntityTableBuilder> WithGeometryTable(IEnumerable<EntityTableBuilder> tableBuilders)
         {
