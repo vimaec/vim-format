@@ -132,7 +132,7 @@ namespace Vim.Util
                     result = dWhole + result; // add whole number 
                                               // and fractional part and we're done.
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
                     result = 0;
                 }
@@ -144,7 +144,7 @@ namespace Vim.Util
                 {
                     result = Convert.ToDouble(whole + dec);
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
                     // bad input so return 0.
                     result = 0;
