@@ -94,11 +94,17 @@ namespace Vim.Format.api_v2
             }
         }
 
+        /// <summary>
+        /// Returns the column names contained in the data table.
+        /// </summary>
         public IEnumerable<string> ColumnNames
             => IndexColumns.Select(c => c.Name)
                 .Concat(StringColumns.Select(c => c.Name))
                 .Concat(DataColumns.Select(c => c.Name));
 
+        /// <summary>
+        /// Returns the columns as named buffers.
+        /// </summary>
         public List<INamedBuffer> ToBuffers()
         {
             var r = new List<INamedBuffer>();
@@ -108,6 +114,19 @@ namespace Vim.Format.api_v2
             r.AddRange(StringColumns);
 
             return r;
+        }
+
+        /// <summary>
+        /// Returns a BFastBuilder used to serialize the given collection of data tables.
+        /// </summary>
+        public static BFastBuilder GetBFastBuilder(IEnumerable<VimDataTable> dataTables)
+        {
+            var bldr = new BFastBuilder();
+            foreach (var et in dataTables)
+            {
+                bldr.Add(et.Name, et.ToBuffers());
+            }
+            return bldr;
         }
 
         /// <summary>

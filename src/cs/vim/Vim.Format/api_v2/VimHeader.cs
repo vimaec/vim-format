@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using Vim.BFast;
 using Vim.Util;
 
 namespace Vim.Format.api_v2
@@ -82,7 +83,11 @@ namespace Vim.Format.api_v2
         /// <summary>
         /// Constructor used during serialization of a new VIM.
         /// </summary>
-        public VimHeader(string generator, SerializableVersion schema, string versionString, IReadOnlyDictionary<string, string> values = null)
+        public VimHeader(
+            string generator,
+            SerializableVersion schema,
+            string versionString,
+            IReadOnlyDictionary<string, string> values = null)
             : this(
             CurrentVimFormatVersion,
             Guid.NewGuid(),
@@ -91,6 +96,12 @@ namespace Vim.Format.api_v2
             DateTime.UtcNow,
             schema,
             AddOptionalValues(values ?? new Dictionary<string, string>(), versionString))
+        { }
+
+        /// <summary>
+        /// Default constructor.
+        /// </summary>
+        public VimHeader() : this("", new SerializableVersion(), "")
         { }
 
         /// <summary>
@@ -273,5 +284,11 @@ namespace Vim.Format.api_v2
         /// </summary>
         public string PersistingId
             => CreatePersistingId(Id, Revision);
+
+        /// <summary>
+        /// Returns the serializable buffer representation of this VIM header.
+        /// </summary>
+        public IBuffer ToBuffer()
+            => ToString().ToBytesUtf8().ToBuffer();
     }
 }
