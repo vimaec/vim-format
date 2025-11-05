@@ -6,6 +6,20 @@ using System.Linq;
 using Vim.BFast;
 using Vim.Util;
 using System.Threading;
+using Vim.Format.ObjectModel;
+
+// TODO
+// - Load EntityTableSet from VimEntityTables
+// - Implement VimBuilder
+//   - Populate "Tables" with some code generation.
+//   - Test guinea pig: gltf converter
+// - Rework ElementGeometryMap to use VimGeometry
+// - Adapt all test code to new API & fill in the gaps
+// - Adapt the merge service
+// - Port ColumnExtensions.cs
+// - Port ColumnExtensions.Buffers.cs
+// - Port ColumnExtensions.Reflection.cs
+// - Test beyond this repository (i.e. with Revit exporter) > check the buildup using VimMesh
 
 namespace Vim.Format.api_v2
 {
@@ -202,7 +216,7 @@ namespace Vim.Format.api_v2
         public static string[] GetStringTable(FileInfo vimFileInfo)
         {
             vimFileInfo.ThrowIfNotExists("VIM file not found. Could not get string table.");
-            
+
             using (var fileStream = vimFileInfo.OpenRead())
             {
                 return GetStringTable(fileStream);
@@ -235,11 +249,21 @@ namespace Vim.Format.api_v2
         }
 
         /// <summary>
-        /// Returns a new VIM representing the merge of this VIM with the other VIM.
+        /// Returns the entity table set contained in the given VIM file.
         /// </summary>
-        public VIM Merge(VIM other)
+        public EntityTableSet GetEntityTableSet(string vimFilePath)
         {
-            // TODO
+            return GetEntityTableSet(new FileInfo(vimFilePath));
+        }
+
+        /// <summary>
+        /// Returns the entity table set contained in the given VIM file.
+        /// </summary>
+        public EntityTableSet GetEntityTableSet(FileInfo vimFileInfo)
+        {
+            vimFileInfo.ThrowIfNotExists("Could not get the entity table set.");
+
+            // TODO: code generate an EntityTableSet constructor with VimEntityTable
             throw new NotImplementedException();
         }
     }

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -35,7 +36,7 @@ namespace Vim.Format.api_v2
         public delegate bool EntityTableColumnFilter(string entityTableName, string columnName);
 
         /// <summary>
-        /// Constructor
+        /// Constructor. Loads data from an entity table buffer reader.
         /// </summary>
         public VimEntityTable(
             BFastBufferReader entityTableBufferReader,
@@ -95,6 +96,35 @@ namespace Vim.Format.api_v2
         }
 
         /// <summary>
+        /// Constructor. Loads data from an entity table builder.
+        /// </summary>
+        public VimEntityTable(EntityTableBuilder tb, IReadOnlyDictionary<string, int> stringLookup)
+        {
+            Name = tb.Name;
+
+            IndexColumns = tb.IndexColumns
+                .Select(kv => kv.Value.ToNamedBuffer(kv.Key))
+                .ToList();
+
+            DataColumns = tb.DataColumns
+                .Select(kv => kv.Value.ToNamedBuffer(kv.Key) as INamedBuffer)
+                .ToList();
+
+            StringColumns = tb.StringColumns
+                .Select(kv => kv.Value
+                    .Select(s => stringLookup[s ?? string.Empty])
+                    .ToArray()
+                    .ToNamedBuffer(kv.Key))
+                .ToList();
+        }
+
+        /// <summary>
+        /// Returns all the columns as an array of named buffers.
+        /// </summary>
+        public INamedBuffer[] GetAllColumns()
+            => DataColumns.Concat(IndexColumns).Concat(StringColumns).ToArray();
+
+        /// <summary>
         /// Returns the column names contained in the entity table.
         /// </summary>
         public IEnumerable<string> ColumnNames
@@ -103,31 +133,36 @@ namespace Vim.Format.api_v2
                 .Concat(DataColumns.Select(c => c.Name));
 
         /// <summary>
-        /// Returns the columns as named buffers.
+        /// Causes an assertion error in debug mode if the number of rows is not consistent among the columns. 
         /// </summary>
-        public List<INamedBuffer> ToBuffers()
+        public INamedBuffer[] AssertColumnRowsAreAligned()
+            => AssertColumnRowsAreAligned(GetAllColumns());
+
+        /// <summary>
+        /// Causes an assertion error in debug mode if the number of rows is not consistent among the columns. 
+        /// </summary>
+        public static INamedBuffer[] AssertColumnRowsAreAligned(INamedBuffer[] columns)
         {
-            var r = new List<INamedBuffer>();
+            var numRows = columns.FirstOrDefault()?.NumElements() ?? 0;
 
-            r.AddRange(DataColumns);
-            r.AddRange(IndexColumns);
-            r.AddRange(StringColumns);
+            foreach (var column in columns)
+            {
+                var columnRows = column.NumElements();
+                if (columnRows == numRows)
+                    continue;
 
-            return r;
+                var msg = $"Column '{column.Name}' has {columnRows} rows which does not match the first column's {numRows} rows";
+                Debug.Fail(msg);
+            }
+
+            return columns;
         }
 
         /// <summary>
-        /// Returns a BFastBuilder used to serialize the given collection of entity tables.
+        /// Returns the number of rows in the entity table.
         /// </summary>
-        public static BFastBuilder GetBFastBuilder(IEnumerable<VimEntityTable> entityTables)
-        {
-            var bldr = new BFastBuilder();
-            foreach (var et in entityTables)
-            {
-                bldr.Add(et.Name, et.ToBuffers());
-            }
-            return bldr;
-        }
+        public int GetRowCount()
+            => AssertColumnRowsAreAligned().FirstOrDefault()?.NumElements() ?? 0;
 
         /// <summary>
         /// Enumerates the VimEntityTables contained in the given VIM file.
@@ -171,14 +206,20 @@ namespace Vim.Format.api_v2
 
         public static readonly Regex TypePrefixRegex = new Regex(@"(\w+:).*");
 
-        public static string GetTypePrefix(string name)
+        /// <summary>
+        /// Returns the type prefix of the column name.
+        /// </summary>
+        public static string GetTypePrefix(string columnName)
         {
-            var match = TypePrefixRegex.Match(name);
+            var match = TypePrefixRegex.Match(columnName);
             return match.Success ? match.Groups[1].Value : "";
         }
 
+        /// <summary>
+        /// Returns the type prefix of the buffer's name.
+        /// </summary>
         public static string GetTypePrefix(INamedBuffer namedBuffer)
-            => namedBuffer.Name.GetTypePrefix();
+            => GetTypePrefix(namedBuffer.Name);
 
         /// <summary>
         /// Returns a NamedBuffer representing a entity table column.
