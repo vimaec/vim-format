@@ -51,7 +51,7 @@ namespace Vim.Format.api_v2
                 meshSubmeshOffsets[i] = meshSubmeshOffsets[i - 1] + meshes[i - 1].SubmeshesIndexOffset.Count;
             }
 
-            var subIndex =0;
+            var subIndex = 0;
             var previousIndexCount = 0;
             foreach(var geo in meshes)
             {
