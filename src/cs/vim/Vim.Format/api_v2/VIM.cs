@@ -284,7 +284,7 @@ namespace Vim.Format.api_v2
             var entityTableData = VimEntityTableData.EnumerateEntityTables(
                 vimFileInfo,
                 options.SchemaOnly,
-                options.EntityTableNameFilterFunc,
+                options.EntityTableNameFilter,
                 options.EntityTableColumnFilter)
                 .ToArray();
 

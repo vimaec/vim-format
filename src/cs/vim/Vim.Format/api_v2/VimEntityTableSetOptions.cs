@@ -12,7 +12,7 @@ namespace Vim.Format.api_v2
         /// <summary>
         /// A filter which specifies which entity tables to load by name.
         /// </summary>
-        public VimEntityTableData.EntityTableFilter EntityTableNameFilterFunc { get; set; } = null;
+        public VimEntityTableData.EntityTableFilter EntityTableNameFilter { get; set; } = null;
 
         /// <summary>
         /// A filter which specifies which entity table columns to load based on the name of the tablea nd the name of the column.
