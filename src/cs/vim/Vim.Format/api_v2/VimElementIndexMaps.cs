@@ -53,13 +53,13 @@ namespace Vim.Format.api_v2
         }
 
         public static readonly string ElementIndexColumnName
-            = ColumnExtensions.GetIndexColumnName(TableNames.Element, "Element");
+            = ColumnExtensions.GetIndexColumnName(VimEntityTableNames.Element, "Element");
 
         public static DictionaryOfLists<int, int> GetElementIndicesMap(VimEntityTable et)
         {
             var indicesMap = new DictionaryOfLists<int, int>();
 
-            if (et?.IndexColumns?.TryGetValue(ElementIndexColumnName, out var buffer) != true || buffer == null)
+            if (et?.IndexColumnMap?.TryGetValue(ElementIndexColumnName, out var buffer) != true || buffer == null)
                 return indicesMap;
 
             var elementIndices = buffer.GetTypedData();
@@ -75,7 +75,7 @@ namespace Vim.Format.api_v2
         {
             var indexMap = new IndexMap();
 
-            if (et?.IndexColumns?.TryGetValue(ElementIndexColumnName, out var buffer) != true || buffer == null)
+            if (et?.IndexColumnMap?.TryGetValue(ElementIndexColumnName, out var buffer) != true || buffer == null)
                 return indexMap;
 
             var elementIndices = buffer.GetTypedData();

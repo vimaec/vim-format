@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 namespace Vim.Format.api_v2
 {
-    public static class TableNames
+    public static class VimEntityTableNames
     {
         public const string Geometry = "Vim.Geometry";
         public const string Node = "Vim.Node";

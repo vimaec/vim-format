@@ -33,7 +33,7 @@ namespace Vim.Format.api_v2
         /// <summary>
         /// The dictionary of all entity table builders, keyed by entity table name.
         /// </summary>
-        public readonly Dictionary<string, EntityTableBuilder> Tables = new Dictionary<string, EntityTableBuilder>();
+        public readonly Dictionary<string, VimEntityTableBuilder> Tables = new Dictionary<string, VimEntityTableBuilder>();
 
         /// <summary>
         /// The dictionary of all binary assets, keyed by buffer name.
@@ -134,7 +134,7 @@ namespace Vim.Format.api_v2
                 StringLookup = stringLookup;
             }
 
-            public StringLookupInfo(IEnumerable<EntityTableBuilder> tableBuilders, int indexOffset = 0)
+            public StringLookupInfo(IEnumerable<VimEntityTableBuilder> tableBuilders, int indexOffset = 0)
                 : this(tableBuilders.SelectMany(tb => tb.GetAllStrings()), indexOffset)
             { }
         }
@@ -143,18 +143,18 @@ namespace Vim.Format.api_v2
             => WithGeometryTable(Tables.Values)
                 .Select(tb => new VimEntityTableData(tb, stringLookupInfo.StringLookup));
 
-        private IEnumerable<EntityTableBuilder> WithGeometryTable(IEnumerable<EntityTableBuilder> tableBuilders)
+        private IEnumerable<VimEntityTableBuilder> WithGeometryTable(IEnumerable<VimEntityTableBuilder> tableBuilders)
         {
-            var result = tableBuilders.Where(tb => tb.Name != TableNames.Geometry);
+            var result = tableBuilders.Where(tb => tb.Name != VimEntityTableNames.Geometry);
             
             result.Append(CreateGeometryTable());
             
             return result.ToList();
         }
         
-        private EntityTableBuilder CreateGeometryTable()
+        private VimEntityTableBuilder CreateGeometryTable()
         {
-            var tb = new EntityTableBuilder(TableNames.Geometry);
+            var tb = new VimEntityTableBuilder(VimEntityTableNames.Geometry);
             tb.Clear();
 
             // Populate the box

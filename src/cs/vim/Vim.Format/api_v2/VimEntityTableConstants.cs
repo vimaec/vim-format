@@ -1,6 +1,6 @@
 namespace Vim.Format.api_v2
 {
-    public static class EntityConstants
+    public static class VimEntityTableConstants
     {
         public const int NoEntityRelation = -1;
         public const long SyntheticElementId = -1;

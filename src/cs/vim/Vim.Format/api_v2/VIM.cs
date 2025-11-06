@@ -9,8 +9,8 @@ using System.Threading;
 using Vim.Format.ObjectModel;
 
 // TODO
+// - code-generate new VimEntityTableSet members + per-entity tables which inherit from VimEntityTable
 // - Load EntityTableSet from VimEntityTables
-// - EntityTable_v2 is now VimEntityObjectTable
 // - Implement VimBuilder
 //   - Populate "Tables" with some code generation.
 //   - Test guinea pig: gltf converter
@@ -277,7 +277,7 @@ namespace Vim.Format.api_v2
         public static VimEntityTableSet GetEntityTableSet(FileInfo vimFileInfo, VimEntityTableSetOptions options = null)
         {
             vimFileInfo.ThrowIfNotExists("Could not get the entity table set.");
-            
+
             var stringTable = options.StringTable
                 ?? (options.SchemaOnly ? null : GetStringTable(vimFileInfo));
 

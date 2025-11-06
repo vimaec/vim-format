@@ -61,44 +61,46 @@ namespace Vim.Format.api_v2
             foreach (var colBr in entityTableBufferReader.Seek().GetBFastBufferReaders())
             {
                 var columnName = colBr.Name;
-                var columnTypePrefix = ColumnTypePrefixes.GetColumnTypePrefix(columnName);
+
+                if (!VimEntityTableColumnName.TryParseColumnTypePrefix(columnName, out var columnTypePrefix))
+                    continue;
 
                 if (entityTableColumnFilter != null && !entityTableColumnFilter(Name, columnName))
                     continue;
 
                 switch (columnTypePrefix)
                 {
-                    case ColumnTypePrefixes.IndexColumnNameTypePrefix:
+                    case VimEntityTableColumnName.IndexColumnNameTypePrefix:
                         {
                             IndexColumns.Add(ReadEntityTableColumn<int>(colBr, schemaOnly));
                             break;
                         }
-                    case ColumnTypePrefixes.StringColumnNameTypePrefix:
+                    case VimEntityTableColumnName.StringColumnNameTypePrefix:
                         {
                             StringColumns.Add(ReadEntityTableColumn<int>(colBr, schemaOnly));
                             break;
                         }
-                    case ColumnTypePrefixes.IntColumnNameTypePrefix:
+                    case VimEntityTableColumnName.IntColumnNameTypePrefix:
                         {
                             DataColumns.Add(ReadEntityTableColumn<int>(colBr, schemaOnly));
                             break;
                         }
-                    case ColumnTypePrefixes.LongColumnNameTypePrefix:
+                    case VimEntityTableColumnName.LongColumnNameTypePrefix:
                         {
                             DataColumns.Add(ReadEntityTableColumn<long>(colBr, schemaOnly));
                             break;
                         }
-                    case ColumnTypePrefixes.DoubleColumnNameTypePrefix:
+                    case VimEntityTableColumnName.DoubleColumnNameTypePrefix:
                         {
                             DataColumns.Add(ReadEntityTableColumn<double>(colBr, schemaOnly));
                             break;
                         }
-                    case ColumnTypePrefixes.FloatColumnNameTypePrefix:
+                    case VimEntityTableColumnName.FloatColumnNameTypePrefix:
                         {
                             DataColumns.Add(ReadEntityTableColumn<float>(colBr, schemaOnly));
                             break;
                         }
-                    case ColumnTypePrefixes.ByteColumnNameTypePrefix:
+                    case VimEntityTableColumnName.ByteColumnNameTypePrefix:
                         {
                             DataColumns.Add(ReadEntityTableColumn<byte>(colBr, schemaOnly));
                             break;
@@ -132,7 +134,7 @@ namespace Vim.Format.api_v2
         /// <summary>
         /// Constructor. Loads data from an entity table builder.
         /// </summary>
-        public VimEntityTableData(EntityTableBuilder tb, IReadOnlyDictionary<string, int> stringLookup)
+        public VimEntityTableData(VimEntityTableBuilder tb, IReadOnlyDictionary<string, int> stringLookup)
         {
             Name = tb.Name;
 
@@ -231,11 +233,43 @@ namespace Vim.Format.api_v2
         {
             var entityTableBufferReaders = entitiesBufferReader.Seek()
                 .GetBFastBufferReaders(br => entityTableNameFilter?.Invoke(br.Name) ?? true);
-            
+
             foreach (var entityTableBufferReader in entityTableBufferReaders)
             {
                 yield return new VimEntityTableData(entityTableBufferReader, schemaOnly, entityTableColumnFilter);
             }
+        }
+        
+        /// <summary>
+        /// Returns true along with the buffer, type prefix, and column type based on the given column field name, if it matches 
+        /// any of the columns in the data.
+        /// </summary>
+        public bool TryGetColumnByFieldName(
+            string columnFieldName,
+            out INamedBuffer buffer,
+            out string typePrefix,
+            out VimEntityTableColumnType columnType)
+        {
+            buffer = null;
+            columnType = VimEntityTableColumnType.IndexColumn;
+            typePrefix = null;
+
+            foreach (var column in GetAllColumns())
+            {
+                if (!VimEntityTableColumnName.TryParseVimEntityTableColumnName(column.Name, out var components))
+                    continue;
+
+                if (components.FieldName != columnFieldName)
+                    continue;
+
+                columnType = components.ColumnType;
+                typePrefix = components.TypePrefix;
+                buffer = column;
+
+                return true;
+            }
+
+            return false;
         }
     }
 }
