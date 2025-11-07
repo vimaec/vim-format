@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using Vim.BFast;
+using Vim.Util;
 
 namespace Vim.Format.api_v2
 {
@@ -132,29 +133,6 @@ namespace Vim.Format.api_v2
         }
 
         /// <summary>
-        /// Constructor. Loads data from an entity table builder.
-        /// </summary>
-        public VimEntityTableData(VimEntityTableBuilder tb, IReadOnlyDictionary<string, int> stringLookup)
-        {
-            Name = tb.Name;
-
-            IndexColumns = tb.IndexColumns
-                .Select(kv => kv.Value.ToNamedBuffer(kv.Key))
-                .ToList();
-
-            DataColumns = tb.DataColumns
-                .Select(kv => kv.Value.ToNamedBuffer(kv.Key) as INamedBuffer)
-                .ToList();
-
-            StringColumns = tb.StringColumns
-                .Select(kv => kv.Value
-                    .Select(s => stringLookup[s ?? string.Empty])
-                    .ToArray()
-                    .ToNamedBuffer(kv.Key))
-                .ToList();
-        }
-
-        /// <summary>
         /// Returns all the columns as an array of named buffers.
         /// </summary>
         public INamedBuffer[] GetAllColumns()
@@ -209,16 +187,30 @@ namespace Vim.Format.api_v2
             EntityTableFilter entityTableNameFilter = null,
             EntityTableColumnFilter entityTableColumnFilter = null)
         {
-            using (var stream = vimFileInfo.OpenRead())
+            using (var fileStream = vimFileInfo.OpenRead())
             {
-                var entitiesBufferReader = stream.GetBFastBufferReader(BufferNames.Entities);
-                if (entitiesBufferReader == null)
-                    yield break;
+                return EnumerateEntityTables(fileStream, schemaOnly, entityTableNameFilter, entityTableColumnFilter);
+            }
+        }
 
-                foreach (var entityTable in EnumerateEntityTables(entitiesBufferReader, schemaOnly, entityTableNameFilter, entityTableColumnFilter))
-                {
-                    yield return entityTable;
-                }
+        /// <summary>
+        /// Enumerates the VimEntityTables contained in the given VIM stream.
+        /// </summary>
+        public static IEnumerable<VimEntityTableData> EnumerateEntityTables(
+            Stream vimStream,
+            bool schemaOnly,
+            EntityTableFilter entityTableNameFilter = null,
+            EntityTableColumnFilter entityTableColumnFilter = null)
+        {
+            vimStream.ThrowIfNotSeekable("Could not enumerate entity tables.");
+
+            var entitiesBufferReader = vimStream.GetBFastBufferReader(BufferNames.Entities);
+            if (entitiesBufferReader == null)
+                yield break;
+
+            foreach (var entityTable in EnumerateEntityTables(entitiesBufferReader, schemaOnly, entityTableNameFilter, entityTableColumnFilter))
+            {
+                yield return entityTable;
             }
         }
 
@@ -239,7 +231,7 @@ namespace Vim.Format.api_v2
                 yield return new VimEntityTableData(entityTableBufferReader, schemaOnly, entityTableColumnFilter);
             }
         }
-        
+
         /// <summary>
         /// Returns true along with the buffer, type prefix, and column type based on the given column field name, if it matches 
         /// any of the columns in the data.

@@ -30,10 +30,7 @@ namespace Vim.Format.api_v2
         /// </summary>
         public List<VimMaterial> Materials { get; } = new List<VimMaterial>();
 
-        /// <summary>
-        /// The dictionary of all entity table builders, keyed by entity table name.
-        /// </summary>
-        public readonly Dictionary<string, VimEntityTableBuilder> Tables = new Dictionary<string, VimEntityTableBuilder>();
+        // NOTE: see other partial class definition for entity set builder definitions
 
         /// <summary>
         /// The dictionary of all binary assets, keyed by buffer name.
@@ -76,7 +73,9 @@ namespace Vim.Format.api_v2
         /// </summary>
         public void Write(Stream vimStream)
         {
-            var stringLookupInfo = new StringLookupInfo(Tables.Values);
+            var tableBuilders = GetVimEntityTableBuilders(); // code-generated.
+
+            var stringLookupInfo = new StringLookupInfo(tableBuilders);
 
             // Instantiate a new VIM object and apply the header we created in the constructor.
             var vim = new VIM()
@@ -84,10 +83,10 @@ namespace Vim.Format.api_v2
                 Header = VimHeader,
                 Assets = Assets.Select(kv => kv.Value.ToNamedBuffer(kv.Key)).ToArray<INamedBuffer>(),
                 StringTable = stringLookupInfo.StringTable,
-                EntityTables = GetVimEntityTables(stringLookupInfo).ToList()
+                EntityTableData = GetVimEntityTableData(tableBuilders, stringLookupInfo).ToList()
             };
 
-            // For efficiency, we create a geometryWriter to avoid extra allocations in memory.
+            // For efficiency, we create a geometryWriter to avoid extra allocations in memory while writing.
             var geometryWriter = new VimGeometryWriter(Meshes, Instances, Materials);
 
             // Write the VIM's buffers using a BFastBuilder.
@@ -95,9 +94,9 @@ namespace Vim.Format.api_v2
 
             bfastBuilder.Add(VIM.HeaderBufferName, vim.Header.ToBuffer());
             bfastBuilder.Add(VIM.AssetsBufferName, vim.Assets ?? Array.Empty<INamedBuffer>());
-            bfastBuilder.Add(VIM.EntityTablesBufferName, GetBFastBuilder(vim.EntityTables));
+            bfastBuilder.Add(VIM.EntityTableDataBufferName, GetBFastBuilder(vim.EntityTableData));
             bfastBuilder.Add(VIM.StringTableBufferName, vim.StringTable.PackStrings().ToBuffer());
-            bfastBuilder.Add(VIM.GeometryBufferName, geometryWriter);
+            bfastBuilder.Add(VIM.GeometryDataBufferName, geometryWriter);
 
             bfastBuilder.Write(vimStream);
         }
@@ -139,21 +138,36 @@ namespace Vim.Format.api_v2
             { }
         }
 
-        private IEnumerable<VimEntityTableData> GetVimEntityTables(StringLookupInfo stringLookupInfo)
-            => WithGeometryTable(Tables.Values)
-                .Select(tb => new VimEntityTableData(tb, stringLookupInfo.StringLookup));
+        private IEnumerable<VimEntityTableData> GetVimEntityTableData(List<VimEntityTableBuilder> tableBuilders, StringLookupInfo stringLookupInfo)
+            => WithGeometryTable(tableBuilders)
+                .Select(tb =>
+                    // Transfer each table builder's data
+                    new VimEntityTableData()
+                    {
+                        Name = tb.Name,
+                        IndexColumns = tb.IndexColumns
+                            .Select(kv => kv.Value.ToNamedBuffer(kv.Key))
+                            .ToList(),
+                        StringColumns = tb.StringColumns
+                            .Select(kv => kv.Value
+                                .Select(s => stringLookupInfo.StringLookup[s ?? string.Empty])
+                                .ToArray()
+                                .ToNamedBuffer(kv.Key))
+                            .ToList(),
+                        DataColumns = tb.DataColumns
+                            .Select(kv => kv.Value.ToNamedBuffer(kv.Key) as INamedBuffer)
+                            .ToList()
+                    }
+                );
 
         private IEnumerable<VimEntityTableBuilder> WithGeometryTable(IEnumerable<VimEntityTableBuilder> tableBuilders)
-        {
-            var result = tableBuilders.Where(tb => tb.Name != VimEntityTableNames.Geometry);
-            
-            result.Append(CreateGeometryTable());
-            
-            return result.ToList();
-        }
-        
+            => tableBuilders.Where(tb => tb.Name != VimEntityTableNames.Geometry)
+                .Append(CreateGeometryTable());
+
         private VimEntityTableBuilder CreateGeometryTable()
         {
+            // At the last moment, we generate the geometry table based on the mesh bounding boxes.
+
             var tb = new VimEntityTableBuilder(VimEntityTableNames.Geometry);
             tb.Clear();
 

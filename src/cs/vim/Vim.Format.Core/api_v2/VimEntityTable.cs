@@ -8,7 +8,6 @@ namespace Vim.Format.api_v2
 {
     public class VimEntityTable
     {
-        public VimEntityTableSet TableSet { get; }
         public VimEntityTableData TableData { get; }
         public string Name => TableData.Name;
         protected string[] StringTable { get; }
@@ -20,9 +19,8 @@ namespace Vim.Format.api_v2
         /// <summary>
         /// Constructor
         /// </summary>
-        public VimEntityTable(VimEntityTableSet tableSet, VimEntityTableData tableData, string[] stringTable)
+        public VimEntityTable(VimEntityTableData tableData, string[] stringTable)
         {
-            TableSet = tableSet;
             TableData = tableData;
             StringTable = stringTable;
 

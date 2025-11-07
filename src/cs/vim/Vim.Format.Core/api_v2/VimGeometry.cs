@@ -9,7 +9,7 @@ namespace Vim.Format.api_v2
     /// <summary>
     /// Represents the geometric elements which compose a building design.
     /// </summary>
-    public class VimGeometry
+    public class VimGeometryData
     {
         /// <summary>
         /// A header buffer which identifies that this collection of buffers is a VimGeometry. Preserved for continuity.
@@ -104,11 +104,11 @@ namespace Vim.Format.api_v2
         /// <summary>
         /// Reads the stream and returns a VimGeometry instance.
         /// </summary>
-        public static VimGeometry Read(Stream stream)
+        public static VimGeometryData Read(Stream stream)
         {
             stream.ThrowIfNotSeekable("Could not read geometry");
 
-            var vimGeometry = new VimGeometry();
+            var vimGeometry = new VimGeometryData();
 
             foreach (var bufferReader in stream.GetBFastBufferReaders())
             {

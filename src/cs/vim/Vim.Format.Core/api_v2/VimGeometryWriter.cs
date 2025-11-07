@@ -75,7 +75,7 @@ namespace Vim.Format.api_v2
             // Prepare buffer info
             //-------------------------------------------
 
-            var vimGeometryHeaderBuffer = new VimGeometryHeader().ToBytes().ToNamedBuffer(VimGeometry.HeaderBufferName);
+            var vimGeometryHeaderBuffer = new VimGeometryHeader().ToBytes().ToNamedBuffer(VimGeometryData.HeaderBufferName);
 
             (string BufferName, long BufferSizeInBytes) GetWritableBufferInfo(string bufferName, int dataItemSizeInBytes, int itemCount)
                 => (bufferName, dataItemSizeInBytes * itemCount);
@@ -83,22 +83,22 @@ namespace Vim.Format.api_v2
             var writableBufferInfos = new List<(string BufferName, long BufferSizeInBytes)>()
             {
                 (vimGeometryHeaderBuffer.Name, vimGeometryHeaderBuffer.NumBytes()),
-                GetWritableBufferInfo(VimGeometry.VerticesBufferName, VimGeometry.VerticesBufferDataItemSizeInBytes, totalVertices),
-                GetWritableBufferInfo(VimGeometry.IndicesBufferName, VimGeometry.IndicesBufferDataItemSizeInBytes, totalIndices),
+                GetWritableBufferInfo(VimGeometryData.VerticesBufferName, VimGeometryData.VerticesBufferDataItemSizeInBytes, totalVertices),
+                GetWritableBufferInfo(VimGeometryData.IndicesBufferName, VimGeometryData.IndicesBufferDataItemSizeInBytes, totalIndices),
 
-                GetWritableBufferInfo(VimGeometry.MeshSubmeshOffsetsBufferName, VimGeometry.MeshSubmeshOffsetsDataItemSizeInBytes, meshCount),
+                GetWritableBufferInfo(VimGeometryData.MeshSubmeshOffsetsBufferName, VimGeometryData.MeshSubmeshOffsetsDataItemSizeInBytes, meshCount),
 
-                GetWritableBufferInfo(VimGeometry.SubmeshIndexOffsetsBufferName, VimGeometry.SubmeshIndexOffsetsDataItemSizeInBytes, submeshCount),
-                GetWritableBufferInfo(VimGeometry.SubmeshMaterialsBufferName, VimGeometry.SubmeshMaterialsDataItemSizeInBytes, submeshCount),
+                GetWritableBufferInfo(VimGeometryData.SubmeshIndexOffsetsBufferName, VimGeometryData.SubmeshIndexOffsetsDataItemSizeInBytes, submeshCount),
+                GetWritableBufferInfo(VimGeometryData.SubmeshMaterialsBufferName, VimGeometryData.SubmeshMaterialsDataItemSizeInBytes, submeshCount),
 
-                GetWritableBufferInfo(VimGeometry.InstanceTransformsBufferName, VimGeometry.InstanceTransformsDataItemSizeInBytes, instanceCount),
-                GetWritableBufferInfo(VimGeometry.InstanceParentsBufferName, VimGeometry.InstanceParentsDataItemSizeInBytes, instanceCount),
-                GetWritableBufferInfo(VimGeometry.InstanceMeshesBufferName, VimGeometry.InstanceMeshesDataItemSizeInBytes, instanceCount),
-                GetWritableBufferInfo(VimGeometry.InstanceFlagsBufferName, VimGeometry.InstanceFlagsDataItemSizeInBytes, instanceCount),
+                GetWritableBufferInfo(VimGeometryData.InstanceTransformsBufferName, VimGeometryData.InstanceTransformsDataItemSizeInBytes, instanceCount),
+                GetWritableBufferInfo(VimGeometryData.InstanceParentsBufferName, VimGeometryData.InstanceParentsDataItemSizeInBytes, instanceCount),
+                GetWritableBufferInfo(VimGeometryData.InstanceMeshesBufferName, VimGeometryData.InstanceMeshesDataItemSizeInBytes, instanceCount),
+                GetWritableBufferInfo(VimGeometryData.InstanceFlagsBufferName, VimGeometryData.InstanceFlagsDataItemSizeInBytes, instanceCount),
 
-                GetWritableBufferInfo(VimGeometry.MaterialColorsBufferName, VimGeometry.MaterialColorsDataItemSizeInBytes, materialCount),
-                GetWritableBufferInfo(VimGeometry.MaterialGlossinessBufferName, VimGeometry.MaterialGlossinessDataItemSizeInBytes, materialCount),
-                GetWritableBufferInfo(VimGeometry.MaterialSmoothnessBufferName, VimGeometry.MaterialSmoothnessDataItemSizeInBytes, materialCount),
+                GetWritableBufferInfo(VimGeometryData.MaterialColorsBufferName, VimGeometryData.MaterialColorsDataItemSizeInBytes, materialCount),
+                GetWritableBufferInfo(VimGeometryData.MaterialGlossinessBufferName, VimGeometryData.MaterialGlossinessDataItemSizeInBytes, materialCount),
+                GetWritableBufferInfo(VimGeometryData.MaterialSmoothnessBufferName, VimGeometryData.MaterialSmoothnessDataItemSizeInBytes, materialCount),
             };
 
             var bufferNames = writableBufferInfos.Select(w => w.BufferName).ToArray();
@@ -117,17 +117,17 @@ namespace Vim.Format.api_v2
                 {
                     switch (bufferName)
                     {
-                        case VimGeometry.HeaderBufferName:
+                        case VimGeometryData.HeaderBufferName:
                             _stream.Write(vimGeometryHeaderBuffer);
                             break;
 
                         // Vertices
-                        case VimGeometry.VerticesBufferName:
+                        case VimGeometryData.VerticesBufferName:
                             meshes.ForEach(g => stream.Write(g.Vertices.ToArray()));
                             break;
 
                         // Indices
-                        case VimGeometry.IndicesBufferName:
+                        case VimGeometryData.IndicesBufferName:
                             for (var i = 0; i < meshes.Count; ++i)
                             {
                                 var g = meshes[i];
@@ -137,40 +137,40 @@ namespace Vim.Format.api_v2
                             break;
 
                         // Meshes
-                        case VimGeometry.MeshSubmeshOffsetsBufferName:
+                        case VimGeometryData.MeshSubmeshOffsetsBufferName:
                             stream.Write(meshSubmeshOffsets);
                             break;
 
                         // Submeshes
-                        case VimGeometry.SubmeshIndexOffsetsBufferName:
+                        case VimGeometryData.SubmeshIndexOffsetsBufferName:
                             stream.Write(submeshIndexOffsets);
                             break;
-                        case VimGeometry.SubmeshMaterialsBufferName:
+                        case VimGeometryData.SubmeshMaterialsBufferName:
                             stream.Write(meshes.SelectMany(s => s.SubmeshMaterials).ToArray());
                             break;
 
                         // Instances
-                        case VimGeometry.InstanceMeshesBufferName:
+                        case VimGeometryData.InstanceMeshesBufferName:
                             stream.Write(instances.Select(i => i.MeshIndex).ToArray());
                             break;
-                        case VimGeometry.InstanceTransformsBufferName:
+                        case VimGeometryData.InstanceTransformsBufferName:
                             stream.Write(instances.Select(i => i.Transform).ToArray());
                             break;
-                        case VimGeometry.InstanceParentsBufferName:
+                        case VimGeometryData.InstanceParentsBufferName:
                             stream.Write(instances.Select(i => i.ParentIndex).ToArray());
                             break;
-                        case VimGeometry.InstanceFlagsBufferName:
+                        case VimGeometryData.InstanceFlagsBufferName:
                             stream.Write(instances.Select(i => (ushort)i.InstanceFlags).ToArray());
                             break;
 
                         // Materials
-                        case VimGeometry.MaterialColorsBufferName:
+                        case VimGeometryData.MaterialColorsBufferName:
                             stream.Write(materials.Select(i => i.Color).ToArray());
                             break;
-                        case VimGeometry.MaterialGlossinessBufferName:
+                        case VimGeometryData.MaterialGlossinessBufferName:
                             stream.Write(materials.Select(i => i.Glossiness).ToArray());
                             break;
-                        case VimGeometry.MaterialSmoothnessBufferName:
+                        case VimGeometryData.MaterialSmoothnessBufferName:
                             stream.Write(materials.Select(i => i.Smoothness).ToArray());
                             break;
 

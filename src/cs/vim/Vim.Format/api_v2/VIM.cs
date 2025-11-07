@@ -6,15 +6,11 @@ using System.Linq;
 using Vim.BFast;
 using Vim.Util;
 using System.Threading;
-using Vim.Format.ObjectModel;
 
 // TODO
-// - code-generate new VimEntityTableSet members + per-entity tables which inherit from VimEntityTable
-// - Load EntityTableSet from VimEntityTables
-// - Implement VimBuilder
-//   - Populate "Tables" with some code generation.
-//   - Test guinea pig: gltf converter
 // - Rework ElementGeometryMap to use VimGeometry
+// - Test guinea pig: gltf converter
+// - Move references to ColumnExtensions.Reflection
 // - Adapt all test code to new API & fill in the gaps
 // - Adapt the merge service
 // - Port ColumnExtensions.cs
@@ -43,8 +39,8 @@ namespace Vim.Format.api_v2
         /// <summary>
         /// The geometry of the building elements.
         /// </summary>
-        public VimGeometry Geometry { get; set; } = new VimGeometry();
-        public const string GeometryBufferName = "geometry";
+        public VimGeometryData GeometryData { get; set; } = new VimGeometryData();
+        public const string GeometryDataBufferName = "geometry";
 
         /// <summary>
         /// The string table for the entities defined among the entity tables. Strings are de-duplicated in this table and indexed using string columns to avoid repetition.
@@ -55,8 +51,8 @@ namespace Vim.Format.api_v2
         /// <summary>
         /// The entity tables which define the various entities in the building model.
         /// </summary>
-        public List<VimEntityTableData> EntityTables { get; set; } = new List<VimEntityTableData>();
-        public const string EntityTablesBufferName = "entities";
+        public List<VimEntityTableData> EntityTableData { get; set; } = new List<VimEntityTableData>();
+        public const string EntityTableDataBufferName = "entities";
 
         /// <summary>
         /// The binary assets contained in the building model, including renders, textures, etc.
@@ -123,22 +119,22 @@ namespace Vim.Format.api_v2
                             break;
                         }
 
-                    case GeometryBufferName:
+                    case GeometryDataBufferName:
                         {
                             if (options.IncludeGeometry)
                             {
                                 progress?.Report("Reading VIM geometry");
-                                Geometry = VimGeometry.Read(vimStream);
+                                GeometryData = VimGeometryData.Read(vimStream);
                             }
                             break;
                         }
 
-                    case EntityTablesBufferName:
+                    case EntityTableDataBufferName:
                         {
                             if (options.IncludeEntityTables)
                             {
                                 progress?.Report("Reading VIM entity tables");
-                                EntityTables = VimEntityTableData.EnumerateEntityTables(bufferReader, options.SchemaOnly).ToList();
+                                EntityTableData = VimEntityTableData.EnumerateEntityTables(bufferReader, options.SchemaOnly).ToList();
                             }
                             break;
                         }
@@ -192,7 +188,7 @@ namespace Vim.Format.api_v2
         /// <summary>
         /// Returns the VimGeometry contained in the VIM at the given file path.
         /// </summary>
-        public static VimGeometry GetGeometry(string vimFilePath)
+        public static VimGeometryData GetGeometry(string vimFilePath)
         {
             return GetGeometry(new FileInfo(vimFilePath));
         }
@@ -200,7 +196,7 @@ namespace Vim.Format.api_v2
         /// <summary>
         /// Returns the VimGeometry contained in the VIM in the given FileInfo.
         /// </summary>
-        public static VimGeometry GetGeometry(FileInfo vimFileInfo)
+        public static VimGeometryData GetGeometry(FileInfo vimFileInfo)
         {
             vimFileInfo.ThrowIfNotExists("Could not get VIM geometry");
             using (var stream = vimFileInfo.OpenRead())
@@ -212,17 +208,17 @@ namespace Vim.Format.api_v2
         /// <summary>
         /// Returns the VimGeometry contained in the VIM in the given stream.
         /// </summary>
-        public static VimGeometry GetGeometry(Stream vimStream)
+        public static VimGeometryData GetGeometry(Stream vimStream)
         {
             vimStream.ThrowIfNotSeekable("Could not get VIM geometry");
 
-            var geometryBufferReader = vimStream.GetBFastBufferReader(GeometryBufferName);
+            var geometryBufferReader = vimStream.GetBFastBufferReader(GeometryDataBufferName);
             if (geometryBufferReader == null)
-                return new VimGeometry();
+                return new VimGeometryData();
 
             geometryBufferReader.Seek(); // Seek to the correct position in the stream.
 
-            return VimGeometry.Read(vimStream); // read teh stream at the seeked position
+            return VimGeometryData.Read(vimStream); // read teh stream at the seeked position
         }
 
         /// <summary>
@@ -288,7 +284,7 @@ namespace Vim.Format.api_v2
                 options.EntityTableColumnFilter)
                 .ToArray();
 
-            return new VimEntityTableSet(stringTable, entityTableData, options.InParallel);
+            return new VimEntityTableSet(entityTableData, stringTable, options.InParallel);
         }
 
         /// <summary>
@@ -296,7 +292,24 @@ namespace Vim.Format.api_v2
         /// </summary>
         public VimEntityTableSet GetEntityTableSet(bool inParallel = true)
         {
-            return new VimEntityTableSet(StringTable, EntityTables.ToArray(), inParallel);
+            return new VimEntityTableSet(EntityTableData.ToArray(), StringTable, inParallel);
+        }
+
+        /// <summary>
+        /// Returns an array aligned with the Element table designating the ElementKind of each element in the VIM file.
+        /// </summary>
+        public ObjectModel.ElementKind[] GetElementKinds(string vimFilePath)
+        {
+            return GetElementKinds(new FileInfo(vimFilePath));
+        }
+
+        /// <summary>
+        /// Returns an array aligned with the Element table designating the ElementKind of each element in the VIM file.
+        /// </summary>
+        public ObjectModel.ElementKind[] GetElementKinds(FileInfo vimFileInfo)
+        {
+            vimFileInfo.ThrowIfNotExists("Could not get the element kinds.");
+            return VimEntityTableSet.GetElementKinds(vimFileInfo);
         }
     }
 }

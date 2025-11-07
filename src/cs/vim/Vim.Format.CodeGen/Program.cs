@@ -4,13 +4,15 @@
     {
         public static void Main(string[] args)
         {
-            var file = args[0];
-            var tsFile = args[1];
-            var hFile = args[2];
+            var legacyObjectModelFilePath = args[0];
+            var v2ObjectModelFilePath = args[1];
+            var tsFilePath = args[2];
+            var hFilePath = args[3];
 
-            ObjectModelGenerator.WriteDocument(file);
-            ObjectModelTypeScriptGenerator.WriteDocument(tsFile);
-            ObjectModelCppGenerator.WriteDocument(hFile);
+            ObjectModelGenerator.WriteDocument(legacyObjectModelFilePath);
+            VimEntityCodeGen.WriteDocument(v2ObjectModelFilePath);
+            ObjectModelTypeScriptGenerator.WriteDocument(tsFilePath);
+            ObjectModelCppGenerator.WriteDocument(hFilePath);
         }
     }
 }
