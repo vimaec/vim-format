@@ -1,5 +1,7 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using System.Linq;
+using System.Text;
 
 namespace Vim.Util
 {
@@ -37,10 +39,48 @@ StdErr: {StdErr}";
         /// </summary>
         public static ProcessResult GetResult(this Process process)
         {
-            var stdOut = process.StartInfo.RedirectStandardOutput ? process.StandardOutput.ReadToEnd() : null;
-            var stdErr = process.StartInfo.RedirectStandardError ? process.StandardError.ReadToEnd() : null;
-            process.WaitForExit();
-            return new ProcessResult(process, stdOut, stdErr);
+            var redirectStdOut = process.StartInfo.RedirectStandardOutput;
+            var redirectStdErr = process.StartInfo.RedirectStandardError;
+
+            var stdOutStringBuilder = new StringBuilder();
+            var stdErrStringBuilder = new StringBuilder();
+
+            void HandleOutputDataReceived(object sender, DataReceivedEventArgs e)
+            {
+                if (e.Data == null) return;
+                stdOutStringBuilder.AppendLine(e.Data);
+                Console.WriteLine($"[{process.ProcessName}:{process.Id}] {e.Data}");
+            }
+
+            void HandleErrorDataReceived(object sender, DataReceivedEventArgs e)
+            {
+                if (e.Data == null) return;
+                stdErrStringBuilder.AppendLine(e.Data);
+                Console.Error.WriteLine($"[{process.ProcessName}:{process.Id}] {e.Data}");
+            }
+
+            try
+            {
+                if (redirectStdOut)
+                {
+                    process.OutputDataReceived += HandleOutputDataReceived;
+                    process.BeginOutputReadLine();
+                }
+
+                if (redirectStdErr)
+                {
+                    process.ErrorDataReceived += HandleErrorDataReceived;
+                    process.BeginErrorReadLine();
+                }
+
+                process.WaitForExit();
+                return new ProcessResult(process, stdOutStringBuilder.ToString(), stdErrStringBuilder.ToString());
+            }
+            finally
+            {
+                if (redirectStdOut) { process.OutputDataReceived -= HandleOutputDataReceived; }
+                if (redirectStdErr) { process.ErrorDataReceived -= HandleErrorDataReceived;  }
+            }
         }
 
         /// <summary>
