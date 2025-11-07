@@ -10,7 +10,7 @@ namespace Vim.Format.api_v2
     /// <summary>
     /// A helper class which writes large collections of meshes and instances efficiently into a serializable stream.
     /// </summary>
-    public class VimGeometryWriter : IBFastComponent
+    public class VimGeometryDataWriter : IBFastComponent
     {
         /// <summary>
         /// The deferred serialization function.
@@ -25,7 +25,7 @@ namespace Vim.Format.api_v2
         /// <summary>
         /// Constructor
         /// </summary>
-        public VimGeometryWriter(
+        public VimGeometryDataWriter(
             List<VimSubdividedMesh> meshes,
             List<VimInstance> instances,
             List<VimMaterial> materials)
@@ -75,7 +75,7 @@ namespace Vim.Format.api_v2
             // Prepare buffer info
             //-------------------------------------------
 
-            var vimGeometryHeaderBuffer = new VimGeometryHeader().ToBytes().ToNamedBuffer(VimGeometryData.HeaderBufferName);
+            var vimGeometryHeaderBuffer = new VimGeometryDataHeader().ToBytes().ToNamedBuffer(VimGeometryData.HeaderBufferName);
 
             (string BufferName, long BufferSizeInBytes) GetWritableBufferInfo(string bufferName, int dataItemSizeInBytes, int itemCount)
                 => (bufferName, dataItemSizeInBytes * itemCount);

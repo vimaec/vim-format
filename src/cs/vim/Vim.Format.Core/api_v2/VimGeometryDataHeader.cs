@@ -6,7 +6,7 @@ using Vim.Util;
 
 namespace Vim.Format.api_v2
 {
-    public class VimGeometryHeader
+    public class VimGeometryDataHeader
     {
         public static class Constants
         {
@@ -33,7 +33,7 @@ namespace Vim.Format.api_v2
         /// <summary>
         /// Constructor. Creates a default header with correctly populated values.
         /// </summary>
-        public VimGeometryHeader()
+        public VimGeometryDataHeader()
         {
             MagicA = Constants.MagicA;
             MagicB = Constants.MagicB;
@@ -48,7 +48,7 @@ namespace Vim.Format.api_v2
         /// <summary>
         /// Constructor. Loads and validates the byte values to create the header.
         /// </summary>
-        public VimGeometryHeader(byte[] bytes)
+        public VimGeometryDataHeader(byte[] bytes)
         {
             if (bytes.Length < 7)
                 throw new ArgumentException($"Failed to read VIM Geometry Header: {nameof(bytes)} argument must have length 7 or greater but received length {bytes.Length}");
@@ -65,13 +65,13 @@ namespace Vim.Format.api_v2
             Validate();
         }
 
-        public static VimGeometryHeader Read(Stream stream, long size)
+        public static VimGeometryDataHeader Read(Stream stream, long size)
         {
             stream.ThrowIfNotSeekable("Failed to read VIM Geometry Header");
 
             var bytes  = stream.ReadArray<byte>((int)size);
 
-            return new VimGeometryHeader(bytes);
+            return new VimGeometryDataHeader(bytes);
         }
 
         private string Units => Encoding.ASCII.GetString(new byte[] { UnitA, UnitB });

@@ -87,7 +87,7 @@ namespace Vim.Format.api_v2
             };
 
             // For efficiency, we create a geometryWriter to avoid extra allocations in memory while writing.
-            var geometryWriter = new VimGeometryWriter(Meshes, Instances, Materials);
+            var geometryWriter = new VimGeometryDataWriter(Meshes, Instances, Materials);
 
             // Write the VIM's buffers using a BFastBuilder.
             var bfastBuilder = new BFastBuilder();

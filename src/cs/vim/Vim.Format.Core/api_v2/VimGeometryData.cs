@@ -14,7 +14,7 @@ namespace Vim.Format.api_v2
         /// <summary>
         /// A header buffer which identifies that this collection of buffers is a VimGeometry. Preserved for continuity.
         /// </summary>
-        public VimGeometryHeader Header { get; set; } = new VimGeometryHeader();
+        public VimGeometryDataHeader Header { get; set; } = new VimGeometryDataHeader();
         public const string HeaderBufferName = "meta";
 
         /// <summary>
@@ -119,7 +119,7 @@ namespace Vim.Format.api_v2
                 switch (name)
                 {
                     case HeaderBufferName:
-                        vimGeometry.Header = VimGeometryHeader.Read(stream, bufferSizeInBytes);
+                        vimGeometry.Header = VimGeometryDataHeader.Read(stream, bufferSizeInBytes);
                         break;
                     case VerticesBufferName:
                         vimGeometry.Vertices = ReadDataItems<Vector3>(stream, bufferSizeInBytes, VerticesBufferDataItemSizeInBytes);
