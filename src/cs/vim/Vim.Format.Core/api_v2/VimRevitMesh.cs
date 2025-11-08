@@ -5,7 +5,7 @@ using Vim.Math3d;
 
 namespace Vim.Format.api_v2
 {
-    public class VimMesh
+    public class VimRevitMesh
     {
         public List<Vector3> Vertices { get; set; }
         public List<int> Indices { get; set; }
@@ -13,7 +13,7 @@ namespace Vim.Format.api_v2
         public List<Vector4> Colors { get; set; }
         public List<Vector2> UVs { get; set; }
 
-        public VimMesh(
+        public VimRevitMesh(
             List<Vector3> vertices = null,
             List<int> indices = null,
             List<int> faceMaterials = null,

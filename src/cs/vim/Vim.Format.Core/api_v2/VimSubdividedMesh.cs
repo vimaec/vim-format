@@ -12,7 +12,7 @@ namespace Vim.Format.api_v2
         public IReadOnlyList<int> SubmeshesIndexOffset { get; }
         public IReadOnlyList<int> SubmeshMaterials { get; }
 
-        public VimSubdividedMesh(VimMesh mesh)
+        public VimSubdividedMesh(VimRevitMesh mesh)
         {
             if (mesh.Indices.Any(i => i < 0 && i >= mesh.Vertices.Count))
                 throw new Exception($"Invalid mesh. Indices out of vertex range.");
