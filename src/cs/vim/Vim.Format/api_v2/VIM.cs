@@ -321,6 +321,73 @@ namespace Vim.Format.api_v2
 
             return _cachedElementHierarchyService;
         }
+
+        /// <summary>
+        /// Returns the asset buffer based on the given name.
+        /// </summary>
+        public bool TryGetAssetBuffer(string assetBufferName, out INamedBuffer assetBuffer)
+        {
+            assetBuffer = Assets.FirstOrDefault(buffer => buffer.Name == assetBufferName);
+            return assetBuffer != null;
+        }
+
+        /// <summary>
+        /// Extracts the asset corresponding to the assetBufferName and returns a FileInfo representing the extracted asset on disk.<br/>
+        /// Returns null if the asset could not be extracted.
+        /// </summary>
+        public FileInfo ExtractAsset(string assetBufferName, FileInfo fileInfo)
+        {
+            if (!TryGetAssetBuffer(assetBufferName, out var assetBuffer))
+                return null;
+
+            return VimAssetInfo.ExtractAsset(assetBuffer, fileInfo);
+        }
+
+        /// <summary>
+        /// Extracts the assets contained in the Document to the given directory.
+        /// </summary>
+        public IEnumerable<(string assetBufferName, FileInfo assetFileInfo)>
+            ExtractAssets(DirectoryInfo directoryInfo)
+        {
+            var result = new List<(string assetBufferName, FileInfo assetFileInfo)>();
+            foreach (var assetBuffer in Assets)
+            {
+                var assetBufferName = assetBuffer.Name;
+                var assetFilePath = assetBuffer.ExtractAsset(directoryInfo);
+                result.Add((assetBufferName, assetFilePath));
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// Gets the byte array which defines the given asset. Returns false if the asset was not found or if the byte array is empty or null.
+        /// </summary>
+        public bool TryGetAssetBytes(string assetBufferName, out byte[] bytes)
+        {
+            bytes = null;
+
+            if (!TryGetAssetBuffer(assetBufferName, out var assetBuffer))
+                return false;
+
+            if (!(assetBuffer is NamedBuffer<byte> byteBuffer))
+                return false;
+
+            bytes = byteBuffer.Array;
+
+            return bytes != null && bytes.Length > 0;
+        }
+
+        /// <summary>
+        /// Gets the byte array which defines the given asset. Returns false if the asset was not found or if the byte array is empty or null.
+        /// </summary>
+        public bool TryGetAssetBytes(VimAssetType assetType, string assetName, out byte[] bytes)
+            => TryGetAssetBytes(new VimAssetInfo(assetName, assetType).ToString(), out bytes);
+
+        /// <summary>
+        /// Gets the byte array which defines the main image asset. Returns false if the asset was not found or if the byte array is empty or null.
+        /// </summary>
+        public bool TryGetMainImageBytes(out byte[] bytes)
+            => TryGetAssetBytes(VimAssetType.Render, VimAssetInfo.MainPng, out bytes);
     }
 }
 

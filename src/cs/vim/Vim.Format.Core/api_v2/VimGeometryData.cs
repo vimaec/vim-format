@@ -1,4 +1,6 @@
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Vim.BFast;
@@ -263,6 +265,14 @@ namespace Vim.Format.api_v2
             vimMeshData = new VimMeshData(this, meshIndex);
 
             return true;
+        }
+
+        public IEnumerable<VimMeshData> GetMeshData()
+        {
+            for (var i = 0; i < MeshCount; ++i)
+            {
+                yield return new VimMeshData(this, i);
+            }
         }
     }
 }

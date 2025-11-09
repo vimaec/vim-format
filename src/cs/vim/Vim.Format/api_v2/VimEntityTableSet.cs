@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Threading;
 using Vim.Util;
 
 using ReadOnlyIndexMap = System.Collections.Generic.IReadOnlyDictionary<int, int>;
@@ -52,6 +51,9 @@ namespace Vim.Format.api_v2
         /// </summary>
         public VimEntityTableData GetEntityTableDataOrEmpty(string tableName)
             => TableData.TryGetValue(tableName, out var result) ? result : new VimEntityTableData { Name = tableName };
+
+        public bool TryGetEntityTable(string tableName, out VimEntityTable entityTable)
+            => Tables.TryGetValue(tableName, out entityTable);
 
         /// <summary>
         /// Returns an array aligned with the Element table which defines the kind of each element (ex: FamilyInstance, FamilyType, Family, Level, Room, Material, Phase, etc)
