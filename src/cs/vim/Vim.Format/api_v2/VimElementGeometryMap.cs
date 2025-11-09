@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Vim.Math3d;
@@ -120,6 +121,27 @@ namespace Vim.Format.api_v2
         public VimElementGeometryMap(IEnumerable<VimElementGeometryInfo> items)
         {
             _elementGeometryInfos = items.ToArray();
+        }
+
+        /// <summary>
+        /// Returns a VimElementGeometryMap based on the givem VIM file.
+        /// </summary>
+        public static VimElementGeometryMap GetElementGeometryMap(
+            FileInfo vimFileInfo,
+            VimEntityTableSet tableSetWithNodeAndElement = null)
+        {
+            vimFileInfo.ThrowIfNotExists("Could not get VIM element geometry map.");
+
+            var tableSet = tableSetWithNodeAndElement ??
+                VimEntityTableSet.GetEntityTableSetByTableName(
+                    vimFileInfo,
+                    VimEntityTableNames.Node,
+                    VimEntityTableNames.Element
+                );
+
+            var vimGeometryData = VIM.GetGeometryData(vimFileInfo);
+
+            return new VimElementGeometryMap(tableSet, vimGeometryData);
         }
 
         private static bool TryGetGeometryIndex(VimGeometryData vimGeometryData, int instanceIndex, out int geometryIndex)

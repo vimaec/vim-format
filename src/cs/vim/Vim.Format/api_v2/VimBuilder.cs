@@ -78,13 +78,12 @@ namespace Vim.Format.api_v2
             var stringLookupInfo = new StringLookupInfo(tableBuilders);
 
             // Instantiate a new VIM object and apply the header we created in the constructor.
-            var vim = new VIM()
-            {
-                Header = VimHeader,
-                Assets = Assets.Select(kv => kv.Value.ToNamedBuffer(kv.Key)).ToArray<INamedBuffer>(),
-                StringTable = stringLookupInfo.StringTable,
-                EntityTableData = GetVimEntityTableData(tableBuilders, stringLookupInfo).ToList()
-            };
+            var vim = new VIM(
+                VimHeader,
+                stringLookupInfo.StringTable,
+                GetVimEntityTableData(tableBuilders, stringLookupInfo).ToList(),
+                Assets.Select(kv => kv.Value.ToNamedBuffer(kv.Key)).ToArray<INamedBuffer>()
+            );
 
             // For efficiency, we create a geometryWriter to avoid extra allocations in memory while writing.
             var geometryWriter = new VimGeometryDataWriter(Meshes, Instances, Materials);

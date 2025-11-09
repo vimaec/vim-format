@@ -25,45 +25,55 @@ namespace Vim.Format.api_v2
     public class VIM
     {
         /// <summary>
-        /// The file path of the VIM. Can be empty if the VIM was created in memory.
+        /// The file path of the opened VIM. Can be empty if the VIM is being written.
         /// </summary>
-        public string FilePath { get; set; } = "";
+        public string FilePath { get; } = "";
 
         /// <summary>
         /// The header of the VIM, which contains IDs used to distinguish different VIM files and information about the provenance of the VIM.
         /// </summary>
-        public VimHeader Header { get; set; } = new VimHeader();
+        public VimHeader Header { get; } = new VimHeader();
         public const string HeaderBufferName = "header";
 
         /// <summary>
         /// The geometry of the building elements.
         /// </summary>
-        public VimGeometryData GeometryData { get; set; } = new VimGeometryData();
+        public VimGeometryData GeometryData { get; } = new VimGeometryData();
         public const string GeometryDataBufferName = "geometry";
 
         /// <summary>
         /// The string table for the entities defined among the entity tables. Strings are de-duplicated in this table and indexed using string columns to avoid repetition.
         /// </summary>
-        public string[] StringTable { get; set; } = Array.Empty<string>();
+        public string[] StringTable { get; } = Array.Empty<string>();
         public const string StringTableBufferName = "strings";
 
         /// <summary>
         /// The entity tables which define the various entities in the building model.
         /// </summary>
-        public List<VimEntityTableData> EntityTableData { get; set; } = new List<VimEntityTableData>();
+        public List<VimEntityTableData> EntityTableData { get; } = new List<VimEntityTableData>();
         public const string EntityTableDataBufferName = "entities";
 
         /// <summary>
         /// The binary assets contained in the building model, including renders, textures, etc.
         /// </summary>
-        public INamedBuffer[] Assets { get; set; } = Array.Empty<INamedBuffer>();
+        public INamedBuffer[] Assets { get; } = Array.Empty<INamedBuffer>();
         public const string AssetsBufferName = "assets";
 
         /// <summary>
-        /// Default constructor
+        /// Serialization constructor
         /// </summary>
-        public VIM()
-        { }
+        public VIM(
+            VimHeader header,
+            string[] stringTable,
+            List<VimEntityTableData> entityTableData,
+            INamedBuffer[] assets)
+        {
+            Header = header;
+            StringTable = stringTable;
+            EntityTableData = entityTableData;
+            Assets = assets;
+            // ... GeometryData is serialized in VimBuilder ...
+        }
 
         /// <summary>
         /// Stream-based constructor.
@@ -192,27 +202,27 @@ namespace Vim.Format.api_v2
         /// <summary>
         /// Returns the VimGeometryData contained in the VIM at the given file path.
         /// </summary>
-        public static VimGeometryData GetVimGeometryData(string vimFilePath)
+        public static VimGeometryData GetGeometryData(string vimFilePath)
         {
-            return GetVimGeometryData(new FileInfo(vimFilePath));
+            return GetGeometryData(new FileInfo(vimFilePath));
         }
 
         /// <summary>
         /// Returns the VimGeometryData contained in the VIM in the given FileInfo.
         /// </summary>
-        public static VimGeometryData GetVimGeometryData(FileInfo vimFileInfo)
+        public static VimGeometryData GetGeometryData(FileInfo vimFileInfo)
         {
             vimFileInfo.ThrowIfNotExists("Could not get VIM geometry");
             using (var stream = vimFileInfo.OpenRead())
             {
-                return GetVimGeometryData(stream);
+                return GetGeometryData(stream);
             }
         }
 
         /// <summary>
         /// Returns the VimGeometryData contained in the VIM in the given stream.
         /// </summary>
-        public static VimGeometryData GetVimGeometryData(Stream vimStream)
+        public static VimGeometryData GetGeometryData(Stream vimStream)
         {
             vimStream.ThrowIfNotSeekable("Could not get VIM geometry");
 
@@ -264,92 +274,52 @@ namespace Vim.Format.api_v2
             return joinedStringTable.Split('\0');
         }
 
-        /// <summary>
-        /// Returns the VimEntityTableSet contained in the given VIM file.
-        /// </summary>
-        public static VimEntityTableSet GetVimEntityTableSet(string vimFilePath, VimEntityTableSetOptions options = null)
-        {
-            return GetVimEntityTableSet(new FileInfo(vimFilePath), options);
-        }
-
-        /// <summary>
-        /// Returns the VimEntityTableSet contained in the given VIM file.
-        /// </summary>
-        public static VimEntityTableSet GetVimEntityTableSet(FileInfo vimFileInfo, VimEntityTableSetOptions options = null)
-        {
-            vimFileInfo.ThrowIfNotExists("Could not get the entity table set.");
-
-            var stringTable = options.StringTable
-                ?? (options.SchemaOnly ? null : GetStringTable(vimFileInfo));
-
-            var entityTableData = VimEntityTableData.EnumerateEntityTables(
-                vimFileInfo,
-                options.SchemaOnly,
-                options.EntityTableNameFilter,
-                options.EntityTableColumnFilter)
-                .ToArray();
-
-            return new VimEntityTableSet(entityTableData, stringTable, options.InParallel);
-        }
+        private VimEntityTableSet _cachedEntityTableSet = null;
 
         /// <summary>
         /// Returns the VimEntityTableSet contained in this VIM file.
         /// </summary>
-        public VimEntityTableSet GetVimEntityTableSet(bool inParallel = true)
+        public VimEntityTableSet GetEntityTableSet(bool inParallel = true)
         {
-            return new VimEntityTableSet(EntityTableData.ToArray(), StringTable, inParallel);
-        }
-
-        /// <summary>
-        /// Returns an array aligned with the Element table designating the ElementKind of each element in the VIM file.
-        /// </summary>
-        public static ObjectModel.ElementKind[] GetElementKinds(string vimFilePath)
-        {
-            return GetElementKinds(new FileInfo(vimFilePath));
-        }
-
-        /// <summary>
-        /// Returns an array aligned with the Element table designating the ElementKind of each element in the VIM file.
-        /// </summary>
-        public static ObjectModel.ElementKind[] GetElementKinds(FileInfo vimFileInfo)
-        {
-            vimFileInfo.ThrowIfNotExists("Could not get the element kinds.");
-
-            return VimEntityTableSet.GetElementKinds(vimFileInfo);
-        }
-
-        /// <summary>
-        /// Returns an array aligned with the Element table designating the ElementKind of each element in the VIM file.
-        /// </summary>
-        public ObjectModel.ElementKind[] GetElementKinds(VimEntityTableSet tableSet)
-        {
-            return tableSet.GetElementKinds();
-        }
-
-        /// <summary>
-        /// Returns a VimElementGeometryMap based on the givem VIM file path.
-        /// </summary>
-        public static VimElementGeometryMap GetVimElementGeometryMap(string vimFilePath)
-        {
-            return GetVimElementGeometryMap(new FileInfo(vimFilePath));
-        }
-
-        /// <summary>
-        /// Returns a VimElementGeometryMap based on the givem VIM file.
-        /// </summary>
-        public static VimElementGeometryMap GetVimElementGeometryMap(FileInfo vimFileInfo, VimEntityTableSet tableSetWithNodeAndElement = null)
-        {
-            vimFileInfo.ThrowIfNotExists("Could not get VIM element geometry map");
-
-            var tableSet = tableSetWithNodeAndElement ?? GetVimEntityTableSet(vimFileInfo, new VimEntityTableSetOptions()
+            if (_cachedEntityTableSet == null)
             {
-                StringTable = Array.Empty<string>(),
-                EntityTableNameFilter = n => n is VimEntityTableNames.Node || n is VimEntityTableNames.Element
-            });
+                _cachedEntityTableSet = new VimEntityTableSet(EntityTableData.ToArray(), StringTable, inParallel);
+            }
 
-            var vimGeometryData = GetVimGeometryData(vimFileInfo);
+            return _cachedEntityTableSet; 
+        }
 
-            return new VimElementGeometryMap(tableSet, vimGeometryData);
+        private VimElementGeometryMap _cachedElementGeometryMap = null;
+
+        /// <summary>
+        /// Returns the VimElementGeometryMap contained in this VIM file.
+        /// </summary>
+        public VimElementGeometryMap GetElementGeometryMap()
+        {
+            if (_cachedElementGeometryMap == null)
+            {
+                _cachedElementGeometryMap = new VimElementGeometryMap(GetEntityTableSet(), GeometryData);
+            }
+
+            return _cachedElementGeometryMap;
+        }
+
+        private VimElementHierarchyService _cachedElementHierarchyService;
+
+        /// <summary>
+        /// Returns the VimElementHierarchyService contained in this VIM file.
+        /// </summary>
+        public VimElementHierarchyService GetElementHierarchyService(bool isElementAndDescendantPrimaryKey = false)
+        {
+            if (_cachedElementHierarchyService == null)
+            {
+                _cachedElementHierarchyService = new VimElementHierarchyService(
+                    GetEntityTableSet(),
+                    GetElementGeometryMap(),
+                    isElementAndDescendantPrimaryKey);
+            }
+
+            return _cachedElementHierarchyService;
         }
     }
 }

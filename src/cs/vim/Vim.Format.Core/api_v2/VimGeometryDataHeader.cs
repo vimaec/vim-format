@@ -12,9 +12,32 @@ namespace Vim.Format.api_v2
         {
             public const byte MagicA = 0x63; // MagicA + MagicB -> 63D0 (for continuity with the original G3D file format, VIM geometry maintains these magic numbers)
             public const byte MagicB = 0xD0;
-            public const byte UnitA = (byte)'f'; // UnitA + UnitB -> 'ft' (for historical reasons related to Revit's precision, VIM geometry is always in feet)
-            public const byte UnitB = (byte)'t';
-            public const string Units = "ft";
+
+            //------------------------------------------------------------------------------------
+            // HISTORICAL NOTES ABOUT THE FIELDS NOW KNOWN AS 'FieldA' and 'FieldB'
+            //
+            // Martin Ashton, November 8 2025
+            //
+            // First off, the VIM file format's geometry has always been in feet to mirror Autodesk Revit's internal units (which are in feet).
+            //
+            // Prior to refactoring this code, the following constants were defined in the G3D header:
+            // - 'UnitA'
+            // - 'UnitB'
+            //
+            // The intent of 'UnitA' and 'UnitB' was to identify the units of scale of the geometry. In theory, you could combine both bytes to declare
+            // units like 'm', 'cm', 'in', 'ft', etc (i.e. 'c' + 'm' = 'cm').
+            // 
+            // In practice however, 'UnitA' was always hard-coded to 'm' and 'UnitB' was always 0. This oversight was misleading since VIM's geometry is de-facto
+            // defined in feet ('ft'). Thankfully, 'UnitA' and 'UnitB' were never actually consumed; all readers of VIM's geometry correctly interpreted it in feet.
+            //
+            // Now that I'm cleaning things up, I'm going to declare that 'UnitA' and 'UnitB' shall henceforth be known as 'FieldA' and 'FieldB',
+            // and that 'FieldA' will always be 'm' and that 'FieldB' will always be empty.
+            //
+            // Since I'm the only one in here anyway, I'll also add that the 'm' stands for 'meow meow'. There, I said it. No takesie-backsies.
+            //
+            public const byte FieldA = (byte)'m';
+            public const byte FieldB = 0;
+            //------------------------------------------------------------------------------------
             public const byte UpAxis = 2; // 2 -> z axis (preserved for continuity)
             public const byte ForwardVector = 0; // 0 -> x axis (preserved for continuity)
             public const byte Handedness = 0; // 0 -> left handed (preserved for continuity)
@@ -23,8 +46,8 @@ namespace Vim.Format.api_v2
 
         public byte MagicA { get; private set; }
         public byte MagicB { get; private set; }
-        public byte UnitA { get; private set; }
-        public byte UnitB { get; private set; }
+        public byte FieldA { get; private set; }
+        public byte FieldB { get; private set; }
         public byte UpAxis { get; private set; }
         public byte ForwardVector { get; private set; }
         public byte Handedness { get; private set; }
@@ -37,8 +60,8 @@ namespace Vim.Format.api_v2
         {
             MagicA = Constants.MagicA;
             MagicB = Constants.MagicB;
-            UnitA = Constants.UnitA;
-            UnitB = Constants.UnitB;
+            FieldA = Constants.FieldA;
+            FieldB = Constants.FieldB;
             UpAxis = Constants.UpAxis;
             ForwardVector = Constants.ForwardVector;
             Handedness = Constants.Handedness;
@@ -55,8 +78,8 @@ namespace Vim.Format.api_v2
 
             MagicA = bytes[0];
             MagicB = bytes[1];
-            UnitA = bytes[2];
-            UnitB = bytes[3];
+            FieldA = bytes[2];
+            FieldB = bytes[3];
             UpAxis = bytes[4];
             ForwardVector = bytes[5];
             Handedness = bytes[6];
@@ -74,14 +97,12 @@ namespace Vim.Format.api_v2
             return new VimGeometryDataHeader(bytes);
         }
 
-        private string Units => Encoding.ASCII.GetString(new byte[] { UnitA, UnitB });
-
         public byte[] ToBytes()
             => new[] {
                 MagicA,
                 MagicB,
-                UnitA,
-                UnitB,
+                FieldA,
+                FieldB,
                 UpAxis,
                 ForwardVector,
                 Handedness,
@@ -92,7 +113,8 @@ namespace Vim.Format.api_v2
         {
             if (MagicA != Constants.MagicA) throw new Exception($"First magic number must be {Constants.MagicA} and not {MagicA}");
             if (MagicB != Constants.MagicB) throw new Exception($"Second magic number must be {Constants.MagicB} and not {MagicB}");
-            if (Units != Constants.Units) throw new Exception($"Units must be '{Constants.Units}' and not {Units}");
+            if (FieldA != Constants.FieldA) throw new Exception($"FieldA must be {Constants.FieldA} and not {FieldA}");
+            if (FieldB != Constants.FieldB) throw new Exception($"FieldB must be {Constants.FieldB} and not {FieldB}");
             if (UpAxis != Constants.UpAxis) throw new Exception($"Up axis must be {Constants.UpAxis} and not {UpAxis}");
             if (ForwardVector != Constants.ForwardVector) throw new Exception($"Forward vector must be {Constants.ForwardVector} and not {ForwardVector}");
             if (Handedness != Constants.Handedness) throw new Exception($"Handedness must be {Constants.Handedness} and not {Handedness}");

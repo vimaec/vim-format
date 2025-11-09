@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading;
+using Vim.Util;
 
 using ReadOnlyIndexMap = System.Collections.Generic.IReadOnlyDictionary<int, int>;
 
@@ -52,8 +53,13 @@ namespace Vim.Format.api_v2
         public VimEntityTableData GetEntityTableDataOrEmpty(string tableName)
             => TableData.TryGetValue(tableName, out var result) ? result : new VimEntityTableData { Name = tableName };
 
+        /// <summary>
+        /// Returns an array aligned with the Element table which defines the kind of each element (ex: FamilyInstance, FamilyType, Family, Level, Room, Material, Phase, etc)
+        /// </summary>
         public static Vim.Format.ObjectModel.ElementKind[] GetElementKinds(FileInfo vimFileInfo)
         {
+            vimFileInfo.ThrowIfNotExists("Could not get the element kinds.");
+
             var elementTableName = VimEntityTableNames.Element;
 
             var elementKindTableNames = GetElementKindTableNames();
@@ -73,6 +79,56 @@ namespace Vim.Format.api_v2
             var ets = new VimEntityTableSet(entityTableData, Array.Empty<string>());
 
             return ets.GetElementKinds();
+        }
+
+        /// <summary>
+        /// Returns the VimEntityTableSet contained in the given VIM file.
+        /// </summary>
+        public static VimEntityTableSet GetEntityTableSet(
+            string vimFilePath,
+            VimEntityTableSetOptions options = null)
+        {
+            return GetEntityTableSet(new FileInfo(vimFilePath), options);
+        }
+
+        /// <summary>
+        /// Returns the VimEntityTableSet contained in the given VIM file.
+        /// </summary>
+        public static VimEntityTableSet GetEntityTableSet(
+            FileInfo vimFileInfo,
+            VimEntityTableSetOptions options = null)
+        {
+            vimFileInfo.ThrowIfNotExists("Could not get the entity table set.");
+
+            var stringTable = options.StringTable
+                ?? (options.SchemaOnly ? null : VIM.GetStringTable(vimFileInfo));
+
+            var entityTableData = VimEntityTableData.EnumerateEntityTables(
+                vimFileInfo,
+                options.SchemaOnly,
+                options.EntityTableNameFilter,
+                options.EntityTableColumnFilter)
+                .ToArray();
+
+            return new VimEntityTableSet(entityTableData, stringTable, options.InParallel);
+        }
+
+        /// <summary>
+        /// Returns an entity table set from the given VIM file containing only the specified tables by name.
+        /// If no entity table names are specified, all entity tables are loaded.
+        /// Useful for loading specific entity tables without loading the whole file into memory.
+        /// </summary>
+        public static VimEntityTableSet GetEntityTableSetByTableName(
+            FileInfo vimFileInfo,
+            params string[] tableNames)
+        {
+            var tableSet = new HashSet<string>(tableNames);
+
+            return GetEntityTableSet(vimFileInfo, new VimEntityTableSetOptions()
+            {
+                StringTable = Array.Empty<string>(),
+                EntityTableNameFilter = n => tableSet.Count == 0 ? true : tableSet.Contains(n)
+            });
         }
     }
 
