@@ -248,7 +248,57 @@ namespace Vim.Format.ObjectModel
         DesignOption = 23,
         // [MAINTAIN]
         // - Add more element kinds here if new element entities are added; do not re-order this enum!
+        // - Update the ToDisplayString extension function below.
         // - Also create a new SQL vw_Element_v* view with new element kind mapping.
+    }
+
+    public static class ElementKindExtensions
+    {
+        /// <summary>
+        /// Returns a display string representation of the element kind, allowing it to be ranked visually in user interfaces.
+        /// </summary>
+        public static string ToDisplayString(this ElementKind k)
+        {
+            var rank = (int)k;
+            string str;
+            switch (k)
+            {
+                case ElementKind.FamilyInstance:
+                    str = "Family Instance";
+                    break;
+                case ElementKind.FamilyType:
+                    str = "Family Type";
+                    break;
+                case ElementKind.AreaScheme:
+                    str = "Area Scheme";
+                    break;
+                case ElementKind.BasePoint:
+                    str = "Base Point";
+                    break;
+                case ElementKind.BimDocument:
+                    str = "BIM Document";
+                    break;
+                case ElementKind.PhaseFilter:
+                    str = "Phase Filter";
+                    break;
+                case ElementKind.ViewSheet:
+                    str = "View Sheet";
+                    break;
+                case ElementKind.ViewSheetSet:
+                    str = "View Sheet Set";
+                    break;
+                case ElementKind.AssemblyInstance:
+                    str = "Assembly Instance";
+                    break;
+                case ElementKind.DesignOption:
+                    str = "Design Option";
+                    break;
+                default:
+                    str = k.ToString("G");
+                    break;
+            }
+            return $"{rank} - {str}";
+        }
     }
 
     public interface IElementKindTable : IEntityTable
