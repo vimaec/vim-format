@@ -109,6 +109,7 @@ namespace Vim.Format.api_v2
         public int SubmeshCount => SubmeshIndexOffsets?.Length ?? 0;
         public int IndexCount => Indices?.Length ?? 0;
         public int VertexCount => Vertices?.Length ?? 0;
+        public int MaterialCount => MaterialColors?.Length ?? 0;
 
         public int[] MeshIndexOffsets { get; } = Array.Empty<int>();
         public int[] MeshSubmeshCount { get; } = Array.Empty<int>();
@@ -272,6 +273,51 @@ namespace Vim.Format.api_v2
             for (var i = 0; i < MeshCount; ++i)
             {
                 yield return new VimMeshData(this, i);
+            }
+        }
+
+        public int GetItemCountByBufferName(string bufferName)
+        {
+            switch (bufferName)
+            {
+                case VerticesBufferName:
+                    return Vertices.Length;
+                
+                case IndicesBufferName:
+                    return Indices.Length;
+                
+                case SubmeshIndexOffsetsBufferName:
+                    return SubmeshIndexOffsets.Length;
+                
+                case SubmeshMaterialsBufferName:
+                    return SubmeshMaterials.Length;
+                
+                case MeshSubmeshOffsetsBufferName:
+                    return MeshSubmeshOffsets.Length;
+                
+                case MaterialColorsBufferName:
+                    return MaterialColors.Length;
+
+                case MaterialGlossinessBufferName:
+                    return MaterialGlossiness.Length;
+
+                case MaterialSmoothnessBufferName:
+                    return MaterialSmoothness.Length;
+
+                case InstanceTransformsBufferName:
+                    return InstanceTransforms.Length;
+
+                case InstanceFlagsBufferName:
+                    return InstanceFlags.Length;
+
+                case InstanceParentsBufferName:
+                    return InstanceParents.Length;
+
+                case InstanceMeshesBufferName:
+                    return InstanceMeshes.Length;
+
+                default:
+                    throw new ArgumentException($"Unknown geometry buffer name: {bufferName}");
             }
         }
     }
