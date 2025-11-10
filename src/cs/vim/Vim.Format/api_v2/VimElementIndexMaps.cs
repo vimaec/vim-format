@@ -93,5 +93,15 @@ namespace Vim.Format.api_v2
 
             return indexMap;
         }
+
+        /// <summary>
+        /// Returns the list of parameter indices associated with the given element index.
+        /// </summary>
+        public List<int> GetParameterIndicesFromElementIndex(int elementIndex)
+        {
+            return ParameterIndicesFromElementIndex.TryGetValue(elementIndex, out var parameterIndices)
+                ? parameterIndices
+                : new List<int>();
+        }
     }
 }

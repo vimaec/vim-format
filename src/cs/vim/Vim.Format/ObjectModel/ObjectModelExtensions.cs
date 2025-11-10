@@ -193,7 +193,7 @@ namespace Vim.Format.ObjectModel
         /// </summary>
         public static IEnumerable<IGrouping<int, T>> GroupByBimDocumentIndex<T>(
             this IEnumerable<T> entityWithElementCollection,
-            ElementTable elementTable)
+            api_v2.ElementTable elementTable)
             where T : IElementIndex
         {
             entityWithElementCollection = entityWithElementCollection ?? Array.Empty<T>();
@@ -212,7 +212,7 @@ namespace Vim.Format.ObjectModel
         /// </summary>
         public static Dictionary<int, Dictionary<long, T>> GroupByBimDocumentIndexAndElementId<T>(
             this IEnumerable<T> entityWithElementCollection,
-            ElementTable elementTable)
+            api_v2.ElementTable elementTable)
             where T : IElementIndex
         {
             entityWithElementCollection = entityWithElementCollection ?? Array.Empty<T>();

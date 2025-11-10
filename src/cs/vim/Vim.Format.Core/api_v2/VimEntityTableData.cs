@@ -189,7 +189,10 @@ namespace Vim.Format.api_v2
         {
             using (var fileStream = vimFileInfo.OpenRead())
             {
-                return EnumerateEntityTables(fileStream, schemaOnly, entityTableNameFilter, entityTableColumnFilter);
+                foreach (var entityTable in EnumerateEntityTables(fileStream, schemaOnly, entityTableNameFilter, entityTableColumnFilter))
+                {
+                    yield return entityTable;
+                }
             }
         }
 

@@ -8,7 +8,7 @@ using Vim.Util;
 using System.Threading;
 
 // TODO
-// - Test file open
+// - Port tests
 // - Read/Write implementation guinea pig: gltf converter
 // - Adapt all test code to new API & fill in the gaps
 // - Adapt the merge service

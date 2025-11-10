@@ -1,4 +1,4 @@
-﻿using Vim.Format.ObjectModel;
+﻿using Vim.Format.api_v2;
 using Vim.Util;
 
 namespace Vim.Format.ElementParameterInfo
@@ -6,18 +6,18 @@ namespace Vim.Format.ElementParameterInfo
     /// <summary>
     /// Convenience class which extracts angle/slope/length/width/height/area/volume from the Element's parameters.
     /// </summary>
-    public class ElementMeasureInfo : IElementIndex
+    public class ElementMeasureInfo : ObjectModel.IElementIndex
     {
         /// <summary>
         /// The element.
         /// </summary>
-        public Element Element { get; }
+        public ObjectModel.Element Element { get; }
 
         /// <summary>
         /// Returns the element index.
         /// </summary>
         public int GetElementIndexOrNone()
-            => Element.IndexOrDefault();
+            => ObjectModel.EntityRelation.IndexOrDefault(Element);
 
         public double? Angle { get; }
 
@@ -37,10 +37,10 @@ namespace Vim.Format.ElementParameterInfo
         /// Constructor
         /// </summary>
         public ElementMeasureInfo(
-            Element element,
+            ObjectModel.Element element,
             ParameterTable parameterTable,
             MeasureType[] parameterMeasureInfos,
-            ElementIndexMaps elementIndexMaps)
+            VimElementIndexMaps elementIndexMaps)
         {
             Element = element;
 
@@ -52,8 +52,8 @@ namespace Vim.Format.ElementParameterInfo
             {
                 var mt = parameterMeasureInfos[parameterIndex];
 
-                var (nativeValue, _) = Parameter.SplitValues(parameterTable.Column_Value[parameterIndex]);
-                var parsed = Parameter.ParseNativeValueAsDouble(nativeValue);
+                var (nativeValue, _) = ObjectModel.Parameter.SplitValues(parameterTable.Column_Value[parameterIndex]);
+                var parsed = ObjectModel.Parameter.ParseNativeValueAsDouble(nativeValue);
 
                 switch (mt)
                 {

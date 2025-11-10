@@ -3,15 +3,16 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Vim.Format.api_v2;
 using Vim.Format.ElementParameterInfo;
 using Vim.Format.ObjectModel;
 using Vim.Util.Logging;
 using Vim.Util.Tests;
 
-namespace Vim.Format.Tests;
+namespace Vim.Format.Tests.api_v2;
 
 [TestFixture]
-public static class ElementParameterInfoServiceTests
+public static class VimElementParameterInfoServiceTests
 {
     public static IEnumerable<string> TestVimFilePaths => TestFiles.VimFilePaths;
 
@@ -27,9 +28,9 @@ public static class ElementParameterInfoServiceTests
 
         var vimFileInfo = new FileInfo(vimFilePath);
 
-        var stringTable = vimFileInfo.GetStringTable();
+        var stringTable = VIM.GetStringTable(vimFileInfo);
 
-        var infos = ElementParameterInfoService.GetElementParameterInfos(vimFileInfo, stringTable);
+        var infos = VimElementParameterInfoService.GetElementParameterInfos(vimFileInfo, stringTable);
         var levelInfos = infos.LevelInfos;
         var elementLevelInfos = infos.ElementLevelInfos;
         var elementMeasureInfos = infos.ElementMeasureInfos;

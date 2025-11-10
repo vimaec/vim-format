@@ -1,11 +1,11 @@
 ﻿using System;
-using Vim.Format.ObjectModel;
+using Vim.Format.api_v2;
 
 namespace Vim.Format.ElementParameterInfo
 {
     public class FamilyOmniClassInfo
     {
-        public Family Family { get; }
+        public ObjectModel.Family Family { get; }
 
         /// <summary>
         /// The value of the "OmniClass Number" parameter
@@ -13,7 +13,7 @@ namespace Vim.Format.ElementParameterInfo
         public string OmniClassNumber { get; } = "";
         public const string OmniClassNumberParameterName = "OmniClass Number";
         public const string OmniClassNumberBuiltInId = "-1002502";
-        public static bool DescriptorIsOmniClassNumber(ParameterDescriptor pd)
+        public static bool DescriptorIsOmniClassNumber(ObjectModel.ParameterDescriptor pd)
             => pd.Guid == OmniClassNumberBuiltInId ||
                pd.Name.Equals(OmniClassNumberParameterName, StringComparison.InvariantCultureIgnoreCase);
 
@@ -23,7 +23,7 @@ namespace Vim.Format.ElementParameterInfo
         public string OmniClassTitle { get; } = "";
         public const string OmniClassTitleParameterName = "OmniClass Title";
         public const string OmniClassTitleBuiltInId = "-1002503";
-        public static bool DescriptorIsOmniClassTitle(ParameterDescriptor pd)
+        public static bool DescriptorIsOmniClassTitle(ObjectModel.ParameterDescriptor pd)
             => pd.Guid == OmniClassTitleBuiltInId ||
                pd.Name.Equals(OmniClassTitleParameterName);
 
@@ -77,14 +77,14 @@ namespace Vim.Format.ElementParameterInfo
         }
 
         public FamilyOmniClassInfo(
-            Family family,
+            ObjectModel.Family family,
             ParameterTable parameterTable,
-            ElementIndexMaps elementIndexMaps)
+            VimElementIndexMaps elementIndexMaps)
         {
             Family = family;
 
             var elementIndex = Family.GetElementIndexOrNone();
-            if (elementIndex == EntityRelation.None)
+            if (elementIndex == ObjectModel.EntityRelation.None)
                 return;
 
             var parameterIndices = elementIndexMaps.GetParameterIndicesFromElementIndex(elementIndex);

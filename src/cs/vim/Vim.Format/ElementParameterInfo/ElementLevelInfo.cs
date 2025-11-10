@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using Vim.Format.ObjectModel;
+using Vim.Format.api_v2;
 using Vim.Util;
+
+using static Vim.Format.ObjectModel.ObjectModelExtensions;
 
 // ReSharper disable InconsistentNaming
 
@@ -66,18 +68,18 @@ namespace Vim.Format.ElementParameterInfo
         NoGeometry = 7,             // The element does not have geometry.
     }
 
-    public class ElementLevelInfo : IElementIndex
+    public class ElementLevelInfo : ObjectModel.IElementIndex
     {
         /// <summary>
         /// The element.
         /// </summary>
-        public Element Element { get; }
+        public ObjectModel.Element Element { get; }
 
         /// <summary>
         /// Returns the element index.
         /// </summary>
         public int GetElementIndexOrNone()
-            => Element.IndexOrDefault();
+            => ObjectModel.EntityRelation.IndexOrDefault(Element);
 
         /// <summary>
         /// The schedule level associated to the element parameters. Can be null.
@@ -221,13 +223,13 @@ namespace Vim.Format.ElementParameterInfo
         /// Constructor
         /// </summary>
         public ElementLevelInfo(
-            Element element,
+            ObjectModel.Element element,
             ElementTable elementTable,
             FamilyInstanceTable familyInstanceTable,
             LevelTable levelTable,
             ParameterTable parameterTable,
-            ElementIndexMaps elementIndexMaps,
-            ElementGeometryMap elementGeometryMap,
+            VimElementIndexMaps elementIndexMaps,
+            VimElementGeometryMap elementGeometryMap,
             IReadOnlyDictionary<int, LevelInfo> levelInfoMap,
             IReadOnlyList<LevelInfo> orderedLevelInfosByProjectElevation,
             IReadOnlyDictionary<long, LevelInfo> elementIdToLevelInfoMap,
@@ -238,16 +240,16 @@ namespace Vim.Format.ElementParameterInfo
             var elementIndex = GetElementIndexOrNone();
 
             // The level index of the element
-            if (elementIndex != EntityRelation.None)
+            if (elementIndex != ObjectModel.EntityRelation.None)
             {
                 var elementLevelIndex = elementTable.GetLevelIndex(elementIndex);
-                if (elementLevelIndex != EntityRelation.None &&
+                if (elementLevelIndex != ObjectModel.EntityRelation.None &&
                     levelInfoMap.TryGetValue(elementLevelIndex, out var levelInfo))
                 {
                     LevelInfo = levelInfo;
                 }
             }
-            
+
             if (TryGetHostLevel(element, elementTable, familyInstanceTable, levelTable, elementIndexMaps, elementIdToLevelInfoMap, out var hostLevelInfo))
                 HostLevelInfo = hostLevelInfo;
 
@@ -302,11 +304,11 @@ namespace Vim.Format.ElementParameterInfo
         /// Returns the host level of the element.
         /// </summary>
         private static bool TryGetHostLevel(
-            Element element,
+            ObjectModel.Element element,
             ElementTable elementTable,
             FamilyInstanceTable familyInstanceTable,
             LevelTable levelTable,
-            ElementIndexMaps elementIndexMaps,
+            VimElementIndexMaps elementIndexMaps,
             IReadOnlyDictionary<long, LevelInfo> elementIdToLevelInfoMap,
             out LevelInfo hostLevelInfo)
         {
@@ -316,7 +318,7 @@ namespace Vim.Format.ElementParameterInfo
                 return false;
 
             var hostElementIndex = familyInstanceTable.GetHostIndex(familyInstanceIndex);
-            if (hostElementIndex == EntityRelation.None)
+            if (hostElementIndex == ObjectModel.EntityRelation.None)
                 return false;
 
             var hostElementId = elementTable.GetId(hostElementIndex);
@@ -327,11 +329,11 @@ namespace Vim.Format.ElementParameterInfo
 
             // If the host element is just a regular instance, then return the host element's level.
             var hostElementLevelIndex = elementTable.GetLevelIndex(hostElementIndex);
-            if (hostElementLevelIndex == EntityRelation.None)
+            if (hostElementLevelIndex == ObjectModel.EntityRelation.None)
                 return false;
 
             var hostElementLevelElementIndex = levelTable.GetElementIndex(hostElementLevelIndex);
-            if (hostElementLevelElementIndex == EntityRelation.None)
+            if (hostElementLevelElementIndex == ObjectModel.EntityRelation.None)
                 return false;
 
             var hostElementLevelElementId = elementTable.GetId(hostElementLevelElementIndex);
@@ -355,7 +357,7 @@ namespace Vim.Format.ElementParameterInfo
 
             if (paramNameLowerInvariant.Equals(expectedParamNameLowerInvariant) || builtInIds.Contains(builtInId))
             {
-                return Parameter.TryParseNativeValueAsElementId(nativeValue, out var levelElementId) &&
+                return ObjectModel.Parameter.TryParseNativeValueAsElementId(nativeValue, out var levelElementId) &&
                        elementIdToLevelInfoMap.TryGetEntityFromElementId(levelElementId, out levelInfo);
             }
 
@@ -369,9 +371,9 @@ namespace Vim.Format.ElementParameterInfo
             int elementIndex,
             double? primaryProjectElevation,
             IReadOnlyList<LevelInfo> orderedLevelInfosByProjectElevation,
-            ElementGeometryMap elementGeometryMap,
+            VimElementGeometryMap elementGeometryMap,
             double geometryContainmentTolerance,
-            out LevelInfo maybeBuildingStoryAbove, 
+            out LevelInfo maybeBuildingStoryAbove,
             out LevelInfo maybeBuildingStoryCurrentOrBelow,
             out LevelInfo maybeBuildingStoryGeometryMin,
             out LevelInfo maybeBuildingStoryGeometryMax)

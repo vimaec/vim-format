@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Vim.Format.ObjectModel;
+using Vim.Format.api_v2;
 using Vim.Util;
+
+using static Vim.Format.ObjectModel.ObjectModelExtensions;
 
 namespace Vim.Format.ElementParameterInfo
 {
@@ -55,7 +57,7 @@ namespace Vim.Format.ElementParameterInfo
         public MeasureType[] ParameterMeasureTypes { get; set; }
     }
 
-    public static class ElementParameterInfoService
+    public static class VimElementParameterInfoService
     {
         /// <summary>
         /// Returns the element parameter information from the given VIM file.
@@ -63,14 +65,14 @@ namespace Vim.Format.ElementParameterInfo
         public static ElementParameterInfo GetElementParameterInfos(
             FileInfo vimFileInfo,
             string[] stringTable = null,
-            ElementGeometryMap elementGeometryMap = null)
+            VimElementGeometryMap elementGeometryMap = null)
         {
-            elementGeometryMap = elementGeometryMap ?? new ElementGeometryMap(vimFileInfo);
+            elementGeometryMap = elementGeometryMap ?? VimElementGeometryMap.GetElementGeometryMap(vimFileInfo);
 
-            var tableSet = new EntityTableSet(
-                vimFileInfo,
-                stringTable,
-                n =>
+            var tableSet = VimEntityTableSet.GetEntityTableSet(vimFileInfo, new VimEntityTableSetOptions()
+            {
+                StringTable = stringTable,
+                EntityTableNameFilter = n =>
                     n is TableNames.Element ||
                     n is TableNames.Family ||
                     n is TableNames.FamilyInstance ||
@@ -79,7 +81,8 @@ namespace Vim.Format.ElementParameterInfo
                     n is TableNames.ParameterDescriptor ||
                     n is TableNames.DisplayUnit ||
                     n is TableNames.Level ||
-                    n is TableNames.BasePoint);
+                    n is TableNames.BasePoint
+            });
 
             return GetElementParameterInfos(tableSet, elementGeometryMap);
         }
@@ -88,8 +91,8 @@ namespace Vim.Format.ElementParameterInfo
         /// Returns the element parameter information from the given entity table set and element geometry map.
         /// </summary>
         public static ElementParameterInfo GetElementParameterInfos(
-            EntityTableSet tableSet,
-            ElementGeometryMap elementGeometryMap)
+            VimEntityTableSet tableSet,
+            VimElementGeometryMap elementGeometryMap)
         {
             var elementIndexMaps = tableSet.ElementIndexMaps;
             var elementTable = tableSet.ElementTable;
@@ -156,13 +159,13 @@ namespace Vim.Format.ElementParameterInfo
         /// Instantiates the level infos in parallel based on the given list of levels.
         /// </summary>
         private static LevelInfo[] CreateLevelInfos(
-            IReadOnlyList<Level> levels,
+            IReadOnlyList<ObjectModel.Level> levels,
             ElementTable elementTable,
             FamilyTypeTable familyTypeTable,
             ParameterTable parameterTable,
-            ElementIndexMaps elementIndexMaps,
-            IReadOnlyDictionary<int, Dictionary<long, Level>> levelsByBimDocumentIndexAndElementId,
-            IReadOnlyDictionary<int, Dictionary<long, BasePoint>> basePointsByBimDocumentIndexAndElementId)
+            VimElementIndexMaps elementIndexMaps,
+            IReadOnlyDictionary<int, Dictionary<long, ObjectModel.Level>> levelsByBimDocumentIndexAndElementId,
+            IReadOnlyDictionary<int, Dictionary<long, ObjectModel.BasePoint>> basePointsByBimDocumentIndexAndElementId)
             => levels
                 .AsParallel()
                 .Select(level =>
@@ -170,10 +173,10 @@ namespace Vim.Format.ElementParameterInfo
                     var bimDocumentIndex = elementTable.GetBimDocumentIndex(level.GetElementIndexOrNone());
 
                     if (!levelsByBimDocumentIndexAndElementId.TryGetValue(bimDocumentIndex, out var elementIdToLevelMap))
-                        elementIdToLevelMap = new Dictionary<long, Level>();
+                        elementIdToLevelMap = new Dictionary<long, ObjectModel.Level>();
 
                     if (!basePointsByBimDocumentIndexAndElementId.TryGetValue(bimDocumentIndex, out var elementIdToBasePointMap))
-                        elementIdToBasePointMap = new Dictionary<long, BasePoint>();
+                        elementIdToBasePointMap = new Dictionary<long, ObjectModel.BasePoint>();
 
                     return new LevelInfo(
                         level,
@@ -214,8 +217,8 @@ namespace Vim.Format.ElementParameterInfo
             FamilyInstanceTable familyInstanceTable,
             ParameterTable parameterTable,
             LevelTable levelTable,
-            ElementIndexMaps elementIndexMaps,
-            ElementGeometryMap elementGeometryMap,
+            VimElementIndexMaps elementIndexMaps,
+            VimElementGeometryMap elementGeometryMap,
             IReadOnlyDictionary<int, LevelInfo> levelInfoMap,
             IReadOnlyDictionary<int, Dictionary<long, LevelInfo>> levelInfoByBimDocumentIndex)
         {
@@ -267,7 +270,7 @@ namespace Vim.Format.ElementParameterInfo
             ElementTable elementTable,
             ParameterTable parameterTable,
             MeasureType[] parameterMeasureTypes,
-            ElementIndexMaps elementIndexMaps)
+            VimElementIndexMaps elementIndexMaps)
             => elementTable
                 .AsParallel()
                 .Select(e => new ElementMeasureInfo(e, parameterTable, parameterMeasureTypes, elementIndexMaps))
@@ -276,7 +279,7 @@ namespace Vim.Format.ElementParameterInfo
         public static ElementIfcInfo[] CreateElementIfcInfos(
             ElementTable elementTable,
             ParameterTable parameterTable,
-            ElementIndexMaps elementIndexMaps)
+            VimElementIndexMaps elementIndexMaps)
             => elementTable
                 .AsParallel()
                 .Select(e => new ElementIfcInfo(e, parameterTable, elementIndexMaps))
@@ -285,7 +288,7 @@ namespace Vim.Format.ElementParameterInfo
         public static FamilyOmniClassInfo[] CreateFamilyOmniClassInfos(
             FamilyTable familyTable,
             ParameterTable parameterTable,
-            ElementIndexMaps elementIndexMaps)
+            VimElementIndexMaps elementIndexMaps)
             => familyTable.AsParallel()
                 .Select(f => new FamilyOmniClassInfo(f, parameterTable, elementIndexMaps))
                 .ToArray();
@@ -293,7 +296,7 @@ namespace Vim.Format.ElementParameterInfo
         public static FamilyTypeUniformatInfo[] CreateFamilyTypeUniformatInfos(
             FamilyTypeTable familyTypeTable,
             ParameterTable parameterTable,
-            ElementIndexMaps elementIndexMaps)
+            VimElementIndexMaps elementIndexMaps)
             => familyTypeTable.AsParallel()
                 .Select(ft => new FamilyTypeUniformatInfo(ft, parameterTable, elementIndexMaps))
                 .ToArray();
