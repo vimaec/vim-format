@@ -1539,6 +1539,30 @@ namespace Vim.Format.ObjectModel
         UnassignedPipe
     }
 
+    public static class SystemTypeExtensions
+    {
+        public static string ToDisplayString(this SystemType systemType)
+        {
+            switch (systemType)
+            {
+                case SystemType.StackedWall:
+                    return "Stacked Wall";
+                case SystemType.CurtainWall:
+                    return "Curtain Wall";
+                case SystemType.CurtainSystem:
+                    return "Curtain System";
+                case SystemType.UnassignedMechanical:
+                    return "Unassigned Mechanical";
+                case SystemType.UnassignedElectrical:
+                    return "Unassigned Electrical";
+                case SystemType.UnassignedPipe:
+                    return "Unassigned Pipe";
+                default:
+                    return systemType.ToString("G");
+            }
+        }
+    }
+
     /// <summary>
     /// Represents a collection of Elements which compose a System. These may be mechanical systems, piping systems, electrical systems, curtain walls, stairs, etc.
     /// </summary>
