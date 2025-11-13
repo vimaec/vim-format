@@ -50,6 +50,26 @@ namespace Vim.Format.ElementParameterInfo
         BaseLevel = 5,
     }
 
+    public static class PrimaryLevelKindExtensions
+    {
+        public static string ToDisplayString(this PrimaryLevelKind p)
+        {
+            switch (p)
+            {
+                case PrimaryLevelKind.ScheduleLevel:
+                    return "Schedule Level";
+                case PrimaryLevelKind.HostLevel:
+                    return "Host Level";
+                case PrimaryLevelKind.ReferenceLevel:
+                    return "Reference Level";
+                case PrimaryLevelKind.BaseLevel:
+                    return "Base Level";
+                default:
+                    return p.ToString("G");
+            }
+        }
+    }
+
     public enum BuildingStoryGeometryContainment
     {
         // Definitions:
@@ -64,6 +84,52 @@ namespace Vim.Format.ElementParameterInfo
         CompletelyAbove = 5,        // lvlLow < lvlHi < min < max
         SpanningBelowAndAbove = 6,  // min < lvlLow < lvlHi < max
         NoGeometry = 7,             // The element does not have geometry.
+    }
+
+    public static class BuildingStoryGeometryContainmentExtensions
+    {
+        public static string ToDisplayString(this BuildingStoryGeometryContainment b)
+        {
+            switch (b)
+            {
+                case BuildingStoryGeometryContainment.CompletelyBelow:
+                    return "Completely Below";
+                case BuildingStoryGeometryContainment.CrossingBelow:
+                    return "Crossing Below";
+                case BuildingStoryGeometryContainment.CrossingAbove:
+                    return "Crossing Above";
+                case BuildingStoryGeometryContainment.CompletelyAbove:
+                    return "Completely Above";
+                case BuildingStoryGeometryContainment.SpanningBelowAndAbove:
+                    return "Spanning Below And Above";
+                case BuildingStoryGeometryContainment.NoGeometry:
+                    return "No Geometry";
+                default:
+                    return b.ToString("G");
+            }
+        }
+
+        public static string ToHexColor(this BuildingStoryGeometryContainment b)
+        {
+            switch (b)
+            {
+                case BuildingStoryGeometryContainment.CompletelyBelow:
+                    return "#8338ec";
+                case BuildingStoryGeometryContainment.CrossingBelow:
+                    return "#3a86ff";
+                case BuildingStoryGeometryContainment.Contained:
+                    return "#06d6a0";
+                case BuildingStoryGeometryContainment.CrossingAbove:
+                    return "#fcbf49";
+                case BuildingStoryGeometryContainment.CompletelyAbove:
+                    return "#d62828";
+                case BuildingStoryGeometryContainment.SpanningBelowAndAbove:
+                    return "#b08968";
+                case BuildingStoryGeometryContainment.NoGeometry:
+                default:
+                    return "#ede0d4";
+            }
+        }
     }
 
     public class ElementLevelInfo : IElementIndex

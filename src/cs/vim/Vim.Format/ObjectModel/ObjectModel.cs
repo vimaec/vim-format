@@ -259,7 +259,6 @@ namespace Vim.Format.ObjectModel
         /// </summary>
         public static string ToDisplayString(this ElementKind k)
         {
-            var rank = (int)k;
             string str;
             switch (k)
             {
@@ -297,7 +296,7 @@ namespace Vim.Format.ObjectModel
                     str = k.ToString("G");
                     break;
             }
-            return $"{rank} - {str}";
+            return str;
         }
     }
 
