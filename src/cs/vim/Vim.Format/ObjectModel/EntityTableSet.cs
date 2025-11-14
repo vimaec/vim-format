@@ -266,9 +266,9 @@ namespace Vim.Format.ObjectModel
 
         /// <summary>
         /// Returns an array of booleans aligned 1:1 with the element table.
-        /// Items are true if the element is visible in at least one 3d view.
+        /// Items are true if the element is visible in at least one Revit 3d view.
         /// </summary>
-        public bool[] GetIsVisibleIn3dView()
+        public bool[] GetIsVisibleInRevit3dView()
         {
             // Result is 1:1 aligned with the elements.
             var elementVisibility = new bool[RowCount];
