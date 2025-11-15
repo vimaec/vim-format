@@ -2,17 +2,18 @@
 using System;
 using System.IO;
 using System.Linq;
+using Vim.Format.api_v2;
 using Vim.Format.ObjectModel;
 using Vim.LinqArray;
 using Vim.Util.Tests;
 
-namespace Vim.Format.Tests;
+namespace Vim.Format.Tests.api_v2;
 
 [TestFixture]
-public static class EntityTable_v2_Tests
+public static class VimEntityTableParityTests
 {
     [Test]
-    public static void TestEntityTable_v2_Parity()
+    public static void VimEntityTableParityTest()
     {
         var vimFilePath = VimFormatRepoPaths.GetDataFilePath("Dwelling*.vim", true);
 
@@ -23,7 +24,8 @@ public static class EntityTable_v2_Tests
 
         // EntityTable_v2 manual construction.
         var fileInfo = new FileInfo(vimFilePath);
-        var entityTableSet = new EntityTableSet(fileInfo, stringBuffer);
+        var vim_v2 = VIM.Open(fileInfo);
+        var entityTableSet = vim_v2.GetEntityTableSet();
 
         var baseElementCount = dm.NumElement;
         var nextElementCount = entityTableSet.ElementTable.RowCount;
@@ -65,9 +67,9 @@ public static class EntityTable_v2_Tests
 
         Console.WriteLine($"Loading {fileInfo.FullName}");
 
-        var elementKinds = EntityTableSet.GetElementKinds(fileInfo);
+        var elementKinds = VimEntityTableSet.GetElementKinds(fileInfo);
 
-        var ets = new EntityTableSet(fileInfo);
+        var ets = VIM.Open(fileInfo).GetEntityTableSet();
 
         Assert.IsNotEmpty(elementKinds);
         Assert.AreEqual(ets.ElementTable.RowCount, elementKinds.Length);
