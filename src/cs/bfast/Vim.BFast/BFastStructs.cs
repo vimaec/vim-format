@@ -25,15 +25,6 @@ namespace Vim.BFast
         public BFastPreamble Preamble = new BFastPreamble();
         public BFastRange[] Ranges;
         public string[] Names;
-
-        public override bool Equals(object o)
-            => o is BFastHeader other && Equals(other);
-
-        public bool Equals(BFastHeader other)
-            => Preamble.Equals(other.Preamble) &&
-            Ranges.Length == other.Ranges.Length &&
-            Ranges.Zip(other.Ranges, (x, y) => x.Equals(y)).All(x => x) &&
-            Names.Zip(other.Names, (x, y) => x.Equals(y)).All(x => x);
     }
 
     /// <summary>
@@ -68,12 +59,6 @@ namespace Vim.BFast
 
         public long Count => End - Begin;
         public static long Size = 16;
-
-        public override bool Equals(object x)
-            => x is BFastRange other && Equals(other);
-
-        public bool Equals(BFastRange other)
-            => Begin == other.Begin && End == other.End;
     }
 
     /// <summary>
@@ -103,11 +88,5 @@ namespace Vim.BFast
         /// Returns true if the producer of the BFast file has the same endianness as the current library
         /// </summary>
         public bool SameEndian => Magic == Constants.SameEndian;
-
-        public override bool Equals(object x)
-            => x is BFastPreamble other && Equals(other);
-
-        public bool Equals(BFastPreamble other)
-            => Magic == other.Magic && DataStart == other.DataStart && DataEnd == other.DataEnd && NumArrays == other.NumArrays;
     };
 }
