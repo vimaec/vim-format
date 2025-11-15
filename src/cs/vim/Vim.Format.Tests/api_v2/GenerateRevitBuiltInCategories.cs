@@ -5,7 +5,7 @@ using System.IO;
 using Vim.Util;
 using Vim.Util.Tests;
 
-namespace Vim.Format.Tests;
+namespace Vim.Format.Tests.api_v2;
 
 [TestFixture]
 internal static class GenerateRevitBuiltInCategories
