@@ -50,14 +50,14 @@ public static class VimElementHierarchyTests
         var dummyE = new VimElementGeometryInfo(4);
         dummyE.NodeAndGeometryIndices.Add((44, 44));
 
-        var dummyMap = new VimElementGeometryMap(new[]
+        var dummyMap = new[]
         {
             dummyA,
             dummyB,
             dummyC,
             dummyD,
             dummyE
-        });
+        };
 
         var A = new Tree<int> { Value = dummyA.ElementIndex };
         var B = new Tree<int> { Value = dummyB.ElementIndex };

@@ -49,7 +49,7 @@ namespace Vim.Format.api_v2
 
     public class VimElementHierarchyService
     {
-        private VimElementGeometryMap ElementGeometryMap { get; }
+        private VimElementGeometryInfo[] ElementGeometryMap { get; }
         private VimEntityTableSet TableSet { get; }
         private bool IsElementAndDescendantPrimaryKey { get; }
 
@@ -58,7 +58,7 @@ namespace Vim.Format.api_v2
         /// </summary>
         public VimElementHierarchyService(
             VimEntityTableSet tableSet,
-            VimElementGeometryMap elementGeometryMap,
+            VimElementGeometryInfo[] elementGeometryMap,
             bool isElementAndDescendantPrimaryKey = false)
         {
             TableSet = tableSet;
@@ -72,7 +72,7 @@ namespace Vim.Format.api_v2
         public static VimElementHierarchyService GetElementHierarchyService(
             FileInfo vimFileInfo,
             VimEntityTableSet tableSetForElementHierarchyService = null,
-            VimElementGeometryMap geometryMap = null,
+            VimElementGeometryInfo[] geometryMap = null,
             bool isElementAndDescendantPrimaryKey = false)
         {
             vimFileInfo.ThrowIfNotExists("Could not get VIM element hierarchy service");
@@ -87,7 +87,7 @@ namespace Vim.Format.api_v2
                     VimEntityTableNames.ElementInSystem
                 );
 
-            geometryMap = geometryMap ?? VimElementGeometryMap.GetElementGeometryMap(vimFileInfo, tableSet);
+            geometryMap = geometryMap ?? VimElementGeometryInfo.GetElementGeometryInfoList(vimFileInfo, tableSet);
 
             return new VimElementHierarchyService(tableSet, geometryMap, isElementAndDescendantPrimaryKey);
         }
@@ -256,7 +256,7 @@ namespace Vim.Format.api_v2
         public static HashSet<VimElementHierarchy> FlattenElementHierarchy(
             Tree<int> root,
             bool isElementAndDescendantPrimaryKey,
-            VimElementGeometryMap elementGeometryMap)
+            VimElementGeometryInfo[] elementGeometryMap)
         {
             // Visits the tree and flattens it to a list of records representing the hierarchy.
             //

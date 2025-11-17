@@ -65,9 +65,9 @@ namespace Vim.Format.ElementParameterInfo
         public static ElementParameterInfo GetElementParameterInfos(
             FileInfo vimFileInfo,
             string[] stringTable = null,
-            VimElementGeometryMap elementGeometryMap = null)
+            VimElementGeometryInfo[] elementGeometryMap = null)
         {
-            elementGeometryMap = elementGeometryMap ?? VimElementGeometryMap.GetElementGeometryMap(vimFileInfo);
+            elementGeometryMap = elementGeometryMap ?? VimElementGeometryInfo.GetElementGeometryInfoList(vimFileInfo);
 
             var tableSet = VimEntityTableSet.GetEntityTableSet(vimFileInfo, new VimEntityTableSetOptions()
             {
@@ -92,7 +92,7 @@ namespace Vim.Format.ElementParameterInfo
         /// </summary>
         public static ElementParameterInfo GetElementParameterInfos(
             VimEntityTableSet tableSet,
-            VimElementGeometryMap elementGeometryMap)
+            VimElementGeometryInfo[] elementGeometryMap)
         {
             var elementIndexMaps = tableSet.ElementIndexMaps;
             var elementTable = tableSet.ElementTable;
@@ -218,7 +218,7 @@ namespace Vim.Format.ElementParameterInfo
             ParameterTable parameterTable,
             LevelTable levelTable,
             VimElementIndexMaps elementIndexMaps,
-            VimElementGeometryMap elementGeometryMap,
+            VimElementGeometryInfo[] elementGeometryMap,
             IReadOnlyDictionary<int, LevelInfo> levelInfoMap,
             IReadOnlyDictionary<int, Dictionary<long, LevelInfo>> levelInfoByBimDocumentIndex)
         {

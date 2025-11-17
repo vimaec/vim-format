@@ -3,14 +3,14 @@ using System.IO;
 using System.Linq;
 using Vim.Format.Merge;
 using Vim.Format.ObjectModel;
-using Vim.Format.SceneBuilder;
 using Vim.Math3d;
+using Vim.Format.api_v2;
 using Vim.Util.Tests;
 
-namespace Vim.Format.Tests;
+namespace Vim.Format.Tests.api_v2;
 
 [TestFixture]
-public static class RoomServiceTests
+public static class VimRoomServiceTests
 {
     /// <summary>
     /// Merges two unrelated VIM files and then calculates the inclusion of elements
@@ -58,7 +58,7 @@ public static class RoomServiceTests
         var wolfordFamilyInstanceElementIndices = wolfordFamilyInstances.Select(ei => ei.ElementIndex).ToHashSet();
 
         // Compute the element association in each room.
-        var familyInstancesInRooms = RoomService.ComputeElementsInRoom(
+        var familyInstancesInRooms = VimRoomService.ComputeElementsInRoom(
             mergedVim,
             ei => wolfordFamilyInstanceElementIndices.Contains(ei.ElementIndex));
 

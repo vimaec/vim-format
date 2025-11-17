@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -256,23 +255,43 @@ namespace Vim.Format.api_v2
             return counts;
         }
 
-        public bool TryGetVimMeshData(int meshIndex, out VimMeshData vimMeshData)
+        public bool TryGetVimMeshView(int meshIndex, out VimMeshView vimMeshView)
         {
-            vimMeshData = default;
+            vimMeshView = default;
 
             if (meshIndex < 0 || meshIndex >= MeshCount)
                 return false;
 
-            vimMeshData = new VimMeshData(this, meshIndex);
+            vimMeshView = new VimMeshView(this, meshIndex);
 
             return true;
         }
 
-        public IEnumerable<VimMeshData> GetMeshData()
+        public bool TryGetTransformedMesh(int instanceIndex, int meshIndex, out VimMeshData vimMeshData)
+        {
+            vimMeshData = default;
+
+            if (!TryGetVimMeshView(meshIndex, out var vimMeshView))
+                return false;
+
+            var transform = InstanceTransforms.ElementAtOrDefault(instanceIndex, Matrix4x4.Identity);
+
+            var sourceVertices = vimMeshView.GetVertices();
+            var transformedVertices = new Vector3[sourceVertices.Length];
+            for (var i = 0; i < sourceVertices.Length; ++i)
+            {
+                transformedVertices[i] = sourceVertices[i].Transform(transform);
+            }
+
+            vimMeshData = new VimMeshData(transformedVertices, vimMeshView.GetIndices());
+            return true;
+        }
+
+        public IEnumerable<VimMeshView> GetMeshView()
         {
             for (var i = 0; i < MeshCount; ++i)
             {
-                yield return new VimMeshData(this, i);
+                yield return new VimMeshView(this, i);
             }
         }
 

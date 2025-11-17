@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using Vim.Format.api_v2;
 using Vim.Util;
 
@@ -229,7 +230,7 @@ namespace Vim.Format.ElementParameterInfo
             LevelTable levelTable,
             ParameterTable parameterTable,
             VimElementIndexMaps elementIndexMaps,
-            VimElementGeometryMap elementGeometryMap,
+            VimElementGeometryInfo[] elementGeometryMap,
             IReadOnlyDictionary<int, LevelInfo> levelInfoMap,
             IReadOnlyList<LevelInfo> orderedLevelInfosByProjectElevation,
             IReadOnlyDictionary<long, LevelInfo> elementIdToLevelInfoMap,
@@ -371,7 +372,7 @@ namespace Vim.Format.ElementParameterInfo
             int elementIndex,
             double? primaryProjectElevation,
             IReadOnlyList<LevelInfo> orderedLevelInfosByProjectElevation,
-            VimElementGeometryMap elementGeometryMap,
+            VimElementGeometryInfo[] elementGeometryMap,
             double geometryContainmentTolerance,
             out LevelInfo maybeBuildingStoryAbove,
             out LevelInfo maybeBuildingStoryCurrentOrBelow,

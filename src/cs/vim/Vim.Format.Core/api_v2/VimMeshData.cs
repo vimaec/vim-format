@@ -6,9 +6,42 @@ using Vim.Util;
 namespace Vim.Format.api_v2
 {
     /// <summary>
-    /// A struct representing triangular mesh data composed of submeshes each having their own materials.
+    /// An interface for simple tri-meshes with vertices and indices.
     /// </summary>
-    public struct VimMeshData
+    public interface IVimMesh
+    {
+        Vector3[] GetVertices();
+        int[] GetIndices();
+        int FaceCount { get; }
+    }
+
+    public struct VimMeshData : IVimMesh
+    {
+        public readonly Vector3[] Vertices;
+        public readonly int[] Indices;
+        public const int IndexCountPerFace = 3; // VimMeshData defines meshes composed of triangles (i.e. 3 vertex indices per face)
+        public int FaceCount => Indices.Length / IndexCountPerFace;
+
+        /// <summary>
+        /// Constructor.
+        /// </summary>
+        /// <param name="vertices"></param>
+        /// <param name="indices"></param>
+        public VimMeshData(Vector3[] vertices, int[] indices)
+        {
+            Vertices = vertices;
+            Indices = indices;
+        }
+
+        public Vector3[] GetVertices() => Vertices;
+        public int[] GetIndices() => Indices;
+    }
+
+    /// <summary>
+    /// A struct representing a view of triangular mesh data contained in VimGeometryData composed
+    /// of submeshes each having their own materials.
+    /// </summary>
+    public struct VimMeshView : IVimMesh
     {
         public VimGeometryData VimGeometryData { get; }
         public int MeshIndex { get; }
@@ -16,13 +49,12 @@ namespace Vim.Format.api_v2
         public int VertexCount => VimGeometryData.MeshVertexCounts[MeshIndex];
         public int IndexOffset => VimGeometryData.MeshIndexOffsets[MeshIndex];
         public int IndexCount => VimGeometryData.MeshIndexCounts[MeshIndex];
-        public const int NumIndicesPerFace = 3; // VimMeshData defines meshes composed of triangles (i.e. 3 vertex indices per face)
-        public int FaceCount => IndexCount / NumIndicesPerFace;
+        public int FaceCount => IndexCount / VimMeshData.IndexCountPerFace;
 
         /// <summary>
         /// Constructor.
         /// </summary>
-        public VimMeshData(VimGeometryData vimGeometryData, int meshIndex)
+        public VimMeshView(VimGeometryData vimGeometryData, int meshIndex)
         {
             VimGeometryData = vimGeometryData;
             MeshIndex = meshIndex;

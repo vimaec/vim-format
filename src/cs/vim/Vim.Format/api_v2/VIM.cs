@@ -9,6 +9,10 @@ using System.Threading;
 
 // TODO
 // - Port tests
+//  - MergeServiceTests.cs => re-implement merge service
+//  - (needs MergeService) RoomServiceTests.cs => re-implement room service
+//  - TransformServiceTests.cs => re-implement transform service
+//  - ...See if we can create a simple example to modify node render materials as well.
 // - Read/Write implementation guinea pig: gltf converter
 // - Adapt all test code to new API & fill in the gaps
 // - Adapt the merge service
@@ -286,19 +290,19 @@ namespace Vim.Format.api_v2
                 _cachedEntityTableSet = new VimEntityTableSet(EntityTableData.ToArray(), StringTable, inParallel);
             }
 
-            return _cachedEntityTableSet; 
+            return _cachedEntityTableSet;
         }
 
-        private VimElementGeometryMap _cachedElementGeometryMap = null;
+        private VimElementGeometryInfo[] _cachedElementGeometryMap = null;
 
         /// <summary>
         /// Returns the VimElementGeometryMap contained in this VIM file.
         /// </summary>
-        public VimElementGeometryMap GetElementGeometryMap()
+        public VimElementGeometryInfo[] GetElementGeometryInfoList()
         {
             if (_cachedElementGeometryMap == null)
             {
-                _cachedElementGeometryMap = new VimElementGeometryMap(GetEntityTableSet(), GeometryData);
+                _cachedElementGeometryMap = VimElementGeometryInfo.GetElementGeometryInfoList(GetEntityTableSet(), GeometryData);
             }
 
             return _cachedElementGeometryMap;
@@ -315,7 +319,7 @@ namespace Vim.Format.api_v2
             {
                 _cachedElementHierarchyService = new VimElementHierarchyService(
                     GetEntityTableSet(),
-                    GetElementGeometryMap(),
+                    GetElementGeometryInfoList(),
                     isElementAndDescendantPrimaryKey);
             }
 
