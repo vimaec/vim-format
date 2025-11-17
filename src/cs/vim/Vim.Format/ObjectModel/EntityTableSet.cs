@@ -208,60 +208,44 @@ namespace Vim.Format.ObjectModel
 
         // Parameters
 
-        [Flags]
-        public enum ParameterScope
-        {
-            None = 0,
-            FamilyInstance = 1,
-            FamilyType = 1 << 1,
-            Family = 1 << 2,
-            All = FamilyInstance | FamilyType | Family,
-        }
-
         public List<int> GetParameterIndices(int elementIndex)
             => ParentTableSet.ElementIndexMaps.ParameterIndicesFromElementIndex
                 .TryGetValue(elementIndex, out var pIndices) ? pIndices : new List<int>();
 
-        public IEnumerable<Parameter> GetParameters(int elementIndex)
-            => GetParameterIndices(elementIndex).Select(i => ParentTableSet.ParameterTable.Get(i));
-
-        public Dictionary<ParameterScope, IEnumerable<Parameter>> GetScopedParameters(
-            int elementIndex,
-            ParameterScope scope = ParameterScope.All)
+        public List<int> GetFamilyInstanceParameterIndices(int elementIndex)
         {
-            var result = new Dictionary<ParameterScope, IEnumerable<Parameter>>();
-
             if (elementIndex < 0)
-                return result;
+                return new List<int>();
 
-            if ((scope & ParameterScope.FamilyInstance) == ParameterScope.FamilyInstance)
-            {
-                var familyInstanceElementIndex = GetFamilyInstanceElementIndex(elementIndex);
-                if (familyInstanceElementIndex != EntityRelation.None)
-                {
-                    result[ParameterScope.FamilyInstance] = GetParameters(familyInstanceElementIndex);
-                }
-            }
+            var familyInstanceElementIndex = GetFamilyInstanceElementIndex(elementIndex);
+            if (familyInstanceElementIndex == EntityRelation.None)
+                return new List<int>();
 
-            if ((scope & ParameterScope.FamilyType) == ParameterScope.FamilyType)
-            {
-                var familyTypeElementIndex = GetFamilyTypeElementIndex(elementIndex);
-                if (familyTypeElementIndex != EntityRelation.None)
-                {
-                    result[ParameterScope.FamilyType] = GetParameters(familyTypeElementIndex);
-                }
-            }
+            return GetParameterIndices(familyInstanceElementIndex);
+        }
 
-            if ((scope & ParameterScope.Family) == ParameterScope.Family)
-            {
-                var familyElementIndex = GetFamilyElementIndex(elementIndex);
-                if (familyElementIndex != EntityRelation.None)
-                {
-                    result[ParameterScope.Family] = GetParameters(familyElementIndex);
-                }
-            }
+        public List<int> GetFamilyTypeParameterIndices(int elementIndex)
+        {
+            if (elementIndex < 0)
+                return new List<int>();
 
-            return result;
+            var familyTypeElementIndex = GetFamilyTypeElementIndex(elementIndex);
+            if (familyTypeElementIndex == EntityRelation.None)
+                return new List<int>();
+
+            return GetParameterIndices(familyTypeElementIndex);
+        }
+
+        public List<int> GetFamilyParameterIndices(int elementIndex)
+        {
+            if (elementIndex < 0)
+                return new List<int>();
+
+            var familyElementIndex = GetFamilyElementIndex(elementIndex);
+            if (familyElementIndex == EntityRelation.None)
+                return new List<int>();
+
+            return GetParameterIndices(familyElementIndex);
         }
 
         /// <summary>

@@ -1,4 +1,5 @@
-﻿using Vim.Format.ObjectModel;
+﻿using System.Collections.Generic;
+using Vim.Format.ObjectModel;
 using Vim.Util;
 
 namespace Vim.Format.ElementParameterInfo
@@ -19,36 +20,58 @@ namespace Vim.Format.ElementParameterInfo
         public int GetElementIndexOrNone()
             => Element.IndexOrDefault();
 
-        public double? Angle { get; }
+        public double? Angle { get; set; }
 
-        public double? Slope { get; }
+        public double? Slope { get; set; }
 
-        public double? Length { get; }
+        public double? Length { get; set; }
 
-        public double? Width { get; }
+        public double? Width { get; set; }
 
-        public double? Height { get; }
+        public double? Height { get; set; }
 
-        public double? Area { get; }
+        public double? Area { get; set; }
 
-        public double? Volume { get; }
+        public double? Volume { get; set; }
+
+        public double? Depth { get; set; }
+
+        public double? Diameter { get; set; }
 
         /// <summary>
         /// Constructor
         /// </summary>
         public ElementMeasureInfo(
             Element element,
+            ElementTable elementTable,
             ParameterTable parameterTable,
-            MeasureType[] parameterMeasureInfos,
-            ElementIndexMaps elementIndexMaps)
+            MeasureType[] parameterMeasureInfos)
         {
             Element = element;
 
             var elementIndex = GetElementIndexOrNone();
+            if (elementIndex < 0)
+                return;
 
-            var elementParameterIndices = elementIndexMaps.GetParameterIndicesFromElementIndex(elementIndex);
+            // First supplement with family parameter info
+            var familyParameterIndices = elementTable.GetFamilyParameterIndices(elementIndex);
+            ReadParameters(parameterTable, parameterMeasureInfos, familyParameterIndices);
 
-            foreach (var parameterIndex in elementParameterIndices)
+            // Then supplement with family type parameter info
+            var familyTypeParameterIndices = elementTable.GetFamilyTypeParameterIndices(elementIndex);
+            ReadParameters(parameterTable, parameterMeasureInfos, familyTypeParameterIndices);
+
+            // Lastly read this element's parameters (includes the case of this element being a FamilyInstance)
+            var elementParameterIndices = elementTable.GetParameterIndices(elementIndex);
+            ReadParameters(parameterTable, parameterMeasureInfos, elementParameterIndices);
+        }
+
+        private void ReadParameters(
+            ParameterTable parameterTable,
+            MeasureType[] parameterMeasureInfos,
+            IReadOnlyList<int> parameterIndices)
+        {
+            foreach (var parameterIndex in parameterIndices)
             {
                 var mt = parameterMeasureInfos[parameterIndex];
 
@@ -77,6 +100,12 @@ namespace Vim.Format.ElementParameterInfo
                         break;
                     case MeasureType.Volume:
                         Volume = parsed;
+                        break;
+                    case MeasureType.Depth:
+                        Depth = parsed;
+                        break;
+                    case MeasureType.Diameter:
+                        Diameter = parsed;
                         break;
                     case MeasureType.Unknown:
                     default:
@@ -149,5 +178,20 @@ namespace Vim.Format.ElementParameterInfo
 
         public double? VolumeInCubicMeters
             => Units.CubicFeetToCubicMeters(VolumeInCubicFeet);
+
+        // When reading from Revit, depth parameters are always stored in feet.
+        public double? DepthInFeet
+            => ElementMeasureInfo.Depth;
+
+        public double? DepthInMeters
+            => Units.FeetToMeters(DepthInFeet);
+
+        // When reading from Revit, diameter parameters are always stored in feet.
+        public double? DiameterInFeet
+            => ElementMeasureInfo.Diameter;
+
+        public double? DiameterInMeters
+            => Units.FeetToMeters(DiameterInFeet);
+
     }
 }

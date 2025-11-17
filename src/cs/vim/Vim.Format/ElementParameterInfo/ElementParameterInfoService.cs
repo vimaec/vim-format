@@ -138,7 +138,7 @@ namespace Vim.Format.ElementParameterInfo
 
             var parameterMeasureTypes = CreateParameterMeasureTypes(parameterTable, descriptorTable);
 
-            var elementMeasureInfos = CreateElementMeasureInfos(elementTable, parameterTable, parameterMeasureTypes, elementIndexMaps);
+            var elementMeasureInfos = CreateElementMeasureInfos(elementTable, parameterTable, parameterMeasureTypes);
 
             var elementOffsetInfos = CreateElementOffsetInfos(elementTable, parameterTable, elementIndexMaps);
 
@@ -275,11 +275,10 @@ namespace Vim.Format.ElementParameterInfo
         public static ElementMeasureInfo[] CreateElementMeasureInfos(
             ElementTable elementTable,
             ParameterTable parameterTable,
-            MeasureType[] parameterMeasureTypes,
-            ElementIndexMaps elementIndexMaps)
+            MeasureType[] parameterMeasureTypes)
             => elementTable
                 .AsParallel()
-                .Select(e => new ElementMeasureInfo(e, parameterTable, parameterMeasureTypes, elementIndexMaps))
+                .Select(e => new ElementMeasureInfo(e, elementTable, parameterTable, parameterMeasureTypes))
                 .ToArray();
 
         public static ElementOffsetInfo[] CreateElementOffsetInfos(
