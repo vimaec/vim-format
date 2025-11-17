@@ -31,6 +31,12 @@ namespace Vim.Format.ElementParameterInfo
         public ElementMeasureInfo[] ElementMeasureInfos { get; set; }
 
         /// <summary>
+        /// An array of ElementOffsetInfo objects representing element Top Offset and Base Offset values.
+        /// Items in this array are aligned to the Element table.
+        /// </summary>
+        public ElementOffsetInfo[] ElementOffsetInfos { get; set; }
+
+        /// <summary>
         /// An array of ElementIfcInfo objects representing information about element IFC data.
         /// Items in this array are aligned to the Element table.
         /// </summary>
@@ -134,6 +140,8 @@ namespace Vim.Format.ElementParameterInfo
 
             var elementMeasureInfos = CreateElementMeasureInfos(elementTable, parameterTable, parameterMeasureTypes, elementIndexMaps);
 
+            var elementOffsetInfos = CreateElementOffsetInfos(elementTable, parameterTable, elementIndexMaps);
+
             var elementIfcInfos = CreateElementIfcInfos(elementTable, parameterTable, elementIndexMaps);
 
             var familyOmniClassInfos = CreateFamilyOmniClassInfos(familyTable, parameterTable, elementIndexMaps);
@@ -145,6 +153,7 @@ namespace Vim.Format.ElementParameterInfo
                 LevelInfos = levelInfos,
                 ElementLevelInfos = elementLevelInfos,
                 ElementMeasureInfos = elementMeasureInfos,
+                ElementOffsetInfos = elementOffsetInfos,
                 ParameterMeasureTypes = parameterMeasureTypes,
                 ElementIfcInfos = elementIfcInfos,
                 FamilyOmniClassInfos = familyOmniClassInfos,
@@ -271,6 +280,15 @@ namespace Vim.Format.ElementParameterInfo
             => elementTable
                 .AsParallel()
                 .Select(e => new ElementMeasureInfo(e, parameterTable, parameterMeasureTypes, elementIndexMaps))
+                .ToArray();
+
+        public static ElementOffsetInfo[] CreateElementOffsetInfos(
+            ElementTable elementTable,
+            ParameterTable parameterTable,
+            ElementIndexMaps elementIndexMaps)
+            => elementTable
+                .AsParallel()
+                .Select(e => new ElementOffsetInfo(e, parameterTable, elementIndexMaps))
                 .ToArray();
 
         public static ElementIfcInfo[] CreateElementIfcInfos(
