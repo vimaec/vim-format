@@ -47,15 +47,15 @@ namespace Vim.Format.ElementParameterInfo
         /// <summary>
         /// Maps the lowercase parameter name to the regex which detects whether it ends with the parameter name followed by an optional space and digits (ex: "Pipe Length 1")
         /// </summary>
-        public static readonly Regex[] MeasureTypeRegex =
-            Enum.GetValues(typeof(MeasureType))
-                .OfType<MeasureType>()
-                .Select(mt =>
-                {
-                    var lowerStringEscaped = Regex.Escape(mt.ToString("G").ToLowerInvariant());
-                    return new Regex($@"^(?:{lowerStringEscaped}|.*{lowerStringEscaped}\s*\d*)$", RegexOptions.Compiled);
-                })
-                .ToArray();
+        //public static readonly Regex[] MeasureTypeRegex =
+        //    Enum.GetValues(typeof(MeasureType))
+        //        .OfType<MeasureType>()
+        //        .Select(mt =>
+        //        {
+        //            var lowerStringEscaped = Regex.Escape(mt.ToString("G").ToLowerInvariant());
+        //            return new Regex($@"^(?:{lowerStringEscaped}|.*{lowerStringEscaped}\s*\d*)$", RegexOptions.Compiled);
+        //        })
+        //        .ToArray();
 
         public static MeasureType ParseMeasureType(string parameterDescriptorNameLowerInvariant, string parameterDescriptorGuid)
         {
@@ -69,18 +69,18 @@ namespace Vim.Format.ElementParameterInfo
 
             // Fall back to a string comparison to catch any localized parameter descriptor names which either start or end with the key followed by a space and digits,
             // for example: "Length of Beam" or "Pipe Length 1"
-            foreach (var kv in NameLowerInvariantToMeasureTypeMap)
-            {
-                var candidateMeasureType = kv.Value;
+            //foreach (var kv in NameLowerInvariantToMeasureTypeMap)
+            //{
+            //    var candidateMeasureType = kv.Value;
 
-                // Skip the unknown measure type.
-                if (candidateMeasureType == MeasureType.Unknown)
-                    continue;
+            //    // Skip the unknown measure type.
+            //    if (candidateMeasureType == MeasureType.Unknown)
+            //        continue;
 
-                var regex = MeasureTypeRegex[(int) candidateMeasureType];
-                if (regex.IsMatch(parameterDescriptorNameLowerInvariant))
-                    return candidateMeasureType;
-            }
+            //    var regex = MeasureTypeRegex[(int) candidateMeasureType];
+            //    if (regex.IsMatch(parameterDescriptorNameLowerInvariant))
+            //        return candidateMeasureType;
+            //}
 
             return MeasureType.Unknown;
         }
