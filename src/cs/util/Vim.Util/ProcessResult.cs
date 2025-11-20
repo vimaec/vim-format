@@ -2,11 +2,14 @@
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
+using System.Threading;
 
 namespace Vim.Util
 {
     public class ProcessResult
     {
+        public const string ProgressPrefix = "Progress:";
+
         public readonly Process Process;
         public readonly string StdOut;
         public readonly string StdErr;
@@ -37,7 +40,7 @@ StdErr: {StdErr}";
         /// <summary>
         /// Waits for the process to exit and returns a ProcessResult.
         /// </summary>
-        public static ProcessResult GetResult(this Process process)
+        public static ProcessResult GetResult(this Process process, IProgress<string> progress = null, CancellationToken? ct = null)
         {
             var redirectStdOut = process.StartInfo.RedirectStandardOutput;
             var redirectStdErr = process.StartInfo.RedirectStandardError;
@@ -45,11 +48,32 @@ StdErr: {StdErr}";
             var stdOutStringBuilder = new StringBuilder();
             var stdErrStringBuilder = new StringBuilder();
 
+            void HandleProgressMessage(string msg)
+            {
+                if (progress == null)
+                    return;
+
+                var prefixStart = msg.IndexOf(ProcessResult.ProgressPrefix, StringComparison.Ordinal);
+                if (prefixStart == -1)
+                    return;
+
+                var messageStart = prefixStart + ProcessResult.ProgressPrefix.Length;
+                var count = msg.Length - messageStart;
+                var progressMessage = msg.Substring(messageStart, count).Trim();
+
+                if (string.IsNullOrEmpty(progressMessage))
+                    return;
+
+                progress.Report(progressMessage);
+            }
+
             void HandleOutputDataReceived(object sender, DataReceivedEventArgs e)
             {
                 if (e.Data == null) return;
-                stdOutStringBuilder.AppendLine(e.Data);
-                Console.WriteLine($"[{process.ProcessName}:{process.Id}] {e.Data}");
+                var msg = e.Data;
+                stdOutStringBuilder.AppendLine(msg);
+                Console.WriteLine($"[{process.ProcessName}:{process.Id}] {msg}");
+                HandleProgressMessage(msg);
             }
 
             void HandleErrorDataReceived(object sender, DataReceivedEventArgs e)
@@ -73,7 +97,21 @@ StdErr: {StdErr}";
                     process.BeginErrorReadLine();
                 }
 
+                ct?.Register(() =>
+                {
+                    try
+                    {
+                        if (!process.HasExited)
+                            process.Kill();
+                    }
+                    catch
+                    {
+                        // do nothing
+                    }
+                });
+
                 process.WaitForExit();
+
                 return new ProcessResult(process, stdOutStringBuilder.ToString(), stdErrStringBuilder.ToString());
             }
             finally
