@@ -266,5 +266,25 @@ namespace Vim.Format.api_v2
 
             return false;
         }
+
+        public static VimEntityTableData Concat(
+            VimEntityTableData thisTable,
+            VimEntityTableData otherTable)
+        {
+            var concatenated = new VimEntityTableData
+            {
+                Name = thisTable.Name,
+                IndexColumns = VimEntityTableColumnActions.ConcatIntColumns(
+                    thisTable.IndexColumns, otherTable.IndexColumns),
+                StringColumns = VimEntityTableColumnActions.ConcatIntColumns(
+                    thisTable.StringColumns, otherTable.StringColumns),
+                DataColumns = VimEntityTableColumnActions.ConcatDataColumns(
+                    thisTable.DataColumns, otherTable.DataColumns),
+            };
+
+            concatenated.AssertColumnRowsAreAligned();
+
+            return concatenated;
+        }
     }
 }

@@ -12,15 +12,15 @@ namespace Vim.Format.api_v2
         public readonly Dictionary<string, int[]> IndexColumns = new Dictionary<string, int[]>();
         public readonly Dictionary<string, string[]> StringColumns = new Dictionary<string, string[]>();
 
-        public int NumRows { get; private set; }
+        public int RowCount { get; private set; }
 
         public VimEntityTableBuilder(string name)
             => Name = name;
 
         public VimEntityTableBuilder UpdateOrValidateRows(int n)
         {
-            if (NumRows == 0) NumRows = n;
-            else if (NumRows != n) throw new Exception($"Value count {n} does not match the expected number of rows {NumRows}");
+            if (RowCount == 0) RowCount = n;
+            else if (RowCount != n) throw new Exception($"Value count {n} does not match the expected number of rows {RowCount}");
             return this;
         }
 
@@ -99,7 +99,7 @@ namespace Vim.Format.api_v2
 
         public void Clear()
         {
-            NumRows = 0;
+            RowCount = 0;
             DataColumns.Clear();
             StringColumns.Clear();
             IndexColumns.Clear();

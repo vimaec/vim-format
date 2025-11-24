@@ -71,9 +71,9 @@ namespace Vim.Format.api_v2
         /// <summary>
         /// Writes the VIM file to the given stream.
         /// </summary>
-        public void Write(Stream vimStream)
+        public void Write(Stream vimStream, IReadOnlyList<VimEntityTableBuilder> tableBuilders = null)
         {
-            var tableBuilders = GetVimEntityTableBuilders(); // code-generated.
+            tableBuilders = tableBuilders ?? GetVimEntityTableBuilders(); // code-generated.
 
             var stringLookupInfo = new StringLookupInfo(tableBuilders);
 
@@ -137,7 +137,9 @@ namespace Vim.Format.api_v2
             { }
         }
 
-        private IEnumerable<VimEntityTableData> GetVimEntityTableData(List<VimEntityTableBuilder> tableBuilders, StringLookupInfo stringLookupInfo)
+        private IEnumerable<VimEntityTableData> GetVimEntityTableData(
+            IReadOnlyList<VimEntityTableBuilder> tableBuilders,
+            StringLookupInfo stringLookupInfo)
             => WithGeometryTable(tableBuilders)
                 .Select(tb =>
                     // Transfer each table builder's data

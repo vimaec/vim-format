@@ -121,7 +121,10 @@ namespace Vim.Format.api_v2
             columnComponents = null;
 
             if (string.IsNullOrEmpty(columnName))
+            {
+                Debug.Fail("Column components could not be parsed - column name is null");
                 return false;
+            }
 
             try
             {
