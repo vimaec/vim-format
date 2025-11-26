@@ -383,7 +383,7 @@ namespace Vim.Format.api_v2
 
             // Indices
             ValidateIndices(geometryData); // Validates the packed geometry.
-            foreach (var m in geometryData.GetMeshView()) { ValidateIndices(m.GetIndices(), m.VertexCount); } // Validates the individual meshes.
+            foreach (var m in geometryData.GetMeshViews()) { ValidateIndices(m.GetIndices(), m.VertexCount); } // Validates the individual meshes.
             if (!(indexCount % 3 == 0)) throw new VimValidationException($"Geometry data index count {indexCount} must be divisible by 3");
             if (!geometryData.Indices.All(i => i >= 0 && i < geometryData.VertexCount)) throw new VimValidationException($"Geometry data indices must all be between 0 and the vertex count {vertexCount}");
 

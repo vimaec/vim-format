@@ -267,6 +267,16 @@ namespace Vim.Format.api_v2
             return true;
         }
 
+        public static Vector3[] GetTransformedVertices(Vector3[] sourceVertices, Matrix4x4 transform)
+        {
+            var transformedVertices = new Vector3[sourceVertices.Length];
+            for (var i = 0; i < sourceVertices.Length; ++i)
+            {
+                transformedVertices[i] = sourceVertices[i].Transform(transform);
+            }
+            return transformedVertices;
+        }
+
         public bool TryGetTransformedMesh(int instanceIndex, int meshIndex, out VimMeshData vimMeshData)
         {
             vimMeshData = default;
@@ -277,17 +287,31 @@ namespace Vim.Format.api_v2
             var transform = InstanceTransforms.ElementAtOrDefault(instanceIndex, Matrix4x4.Identity);
 
             var sourceVertices = vimMeshView.GetVertices();
-            var transformedVertices = new Vector3[sourceVertices.Length];
-            for (var i = 0; i < sourceVertices.Length; ++i)
-            {
-                transformedVertices[i] = sourceVertices[i].Transform(transform);
-            }
+            var transformedVertices = GetTransformedVertices(sourceVertices, transform);
 
             vimMeshData = new VimMeshData(transformedVertices, vimMeshView.GetIndices());
             return true;
         }
 
-        public IEnumerable<VimMeshView> GetMeshView()
+        public AABox GetWorldSpaceBoundingBox()
+        {
+            // Iterate over each instance and get its mesh.
+            var result = AABox.Empty;
+            for (var i = 0; i < InstanceCount; ++i)
+            {
+                var instanceMeshIndex = InstanceMeshes[i];
+                if (!TryGetVimMeshView(instanceMeshIndex, out var vimMeshView))
+                    continue;
+
+                var instanceTransform = InstanceTransforms[i];
+                var worldSpaceVertices = GetTransformedVertices(vimMeshView.GetVertices(), instanceTransform);
+                var aabbInstance = AABox.Create(worldSpaceVertices);
+                result = result.Merge(aabbInstance);
+            }
+            return result;
+        }
+
+        public IEnumerable<VimMeshView> GetMeshViews()
         {
             for (var i = 0; i < MeshCount; ++i)
             {

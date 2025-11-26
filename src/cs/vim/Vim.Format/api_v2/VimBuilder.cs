@@ -35,7 +35,7 @@ namespace Vim.Format.api_v2
         /// <summary>
         /// The dictionary of all binary assets, keyed by buffer name.
         /// </summary>
-        public readonly Dictionary<string, byte[]> Assets = new Dictionary<string, byte[]>();
+        public readonly Dictionary<string, INamedBuffer> Assets = new Dictionary<string, INamedBuffer>();
 
         /// <summary>
         /// Constructor
@@ -57,14 +57,14 @@ namespace Vim.Format.api_v2
         /// <summary>
         /// Writes the VIM file to the given file path. Overwrites any existing file.
         /// </summary>
-        public void Write(string vimFilePath)
+        public void Write(string vimFilePath, IReadOnlyList<VimEntityTableBuilder> tableBuilders = null)
         {
             IO.Delete(vimFilePath);
             IO.CreateFileDirectory(vimFilePath);
 
             using (var fileStream = File.OpenWrite(vimFilePath))
             {
-                Write(fileStream);
+                Write(fileStream, tableBuilders);
             }
         }
 
@@ -82,7 +82,7 @@ namespace Vim.Format.api_v2
                 VimHeader,
                 stringLookupInfo.StringTable,
                 GetVimEntityTableData(tableBuilders, stringLookupInfo).ToList(),
-                Assets.Select(kv => kv.Value.ToNamedBuffer(kv.Key)).ToArray<INamedBuffer>()
+                Assets.Values.ToArray()
             );
 
             // For efficiency, we create a geometryWriter to avoid extra allocations in memory while writing.
@@ -205,6 +205,11 @@ namespace Vim.Format.api_v2
             tb.AddDataColumn("int:FaceCount", Meshes.Select(g => g.Indices.Count / 3));
 
             return tb;
+        }
+
+        public void AddAsset(INamedBuffer asset)
+        {
+            Assets[asset.Name] = asset;
         }
     }
 }
