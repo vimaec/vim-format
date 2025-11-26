@@ -9,7 +9,7 @@ using System.Threading;
 
 // TODO
 // - Port tests
-//  - MergeServiceTests.cs => re-implement merge service
+//  - MergeServiceTests.cs => test
 //  - (needs MergeService) RoomServiceTests.cs => re-implement room service
 //  - TransformServiceTests.cs => re-implement transform service
 //  - ...See if we can create a simple example to modify node render materials as well.
