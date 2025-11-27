@@ -10,6 +10,8 @@ using System.Threading;
 // TODO
 // - Port tests
 //  - MergeServiceTests.cs => test
+//    - (BUG) data columns don't look like they're being written properly (Flags is always 0, resulting in duplicate storage keys)
+//    - remove debugging comment in VimMegreService line 501 ("doot!")
 //  - (needs MergeService) RoomServiceTests.cs => re-implement room service
 //  - TransformServiceTests.cs => re-implement transform service
 //  - ...See if we can create a simple example to modify node render materials as well.

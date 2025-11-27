@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using Vim.BFast;
 
@@ -89,6 +88,22 @@ namespace Vim.Format.api_v2
                 return false;
 
             return TypePrefixToSerializedTypeMap.TryGetValue(typePrefix, out type);
+        }
+
+        public static T[] GetDataColumnAsTypedArray<T>(IBuffer buffer) where T: unmanaged
+        {
+            if (buffer == null)
+                return null;
+
+            var type = typeof(T);
+
+            if (type == typeof(short))
+                return buffer.AsArray<int>().Select(i => (short)i).ToArray() as T[];
+
+            if (type == typeof(bool))
+                return buffer.AsArray<byte>().Select(b => b != 0).ToArray() as T[];
+
+            return buffer.AsArray<T>();
         }
     }
 }

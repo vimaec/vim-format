@@ -445,7 +445,7 @@ namespace Vim.Format.api_v2
                     ////////////////////////////////////
 
                     // Merge all the categories by name and by built-in category.
-                    case TableNames.Category:
+                    case VimEntityTableNames.Category:
                         {
                             var hasNameCol = table.StringColumns.TryGetValue("string:Name", out var nameCol);
                             var hasBuiltInCol = table.StringColumns.TryGetValue("string:BuiltInCategory", out var builtInCol);
@@ -459,7 +459,7 @@ namespace Vim.Format.api_v2
                             break;
                         }
                     // Merge all the display units
-                    case TableNames.DisplayUnit:
+                    case VimEntityTableNames.DisplayUnit:
                         {
                             var hasSpecCol = table.StringColumns.TryGetValue("string:Spec", out var specCol);
                             var hasTypeCol = table.StringColumns.TryGetValue("string:Type", out var typeCol);
@@ -470,7 +470,62 @@ namespace Vim.Format.api_v2
                                 break;
                             }
 
-                            r = CreateRemapped(table, (i, _) => (specCol[i], typeCol[i], labelCol[i]));
+                            r = CreateRemapped(table, (i, _) => (specCol[i], typeCol[i], labelCol[i])); // same tuple values as DisplayUnit.GetStorageKey()
+                            break;
+                        }
+
+                    case VimEntityTableNames.ParameterDescriptor:
+                        {
+                            var nameArray = table.StringColumns.GetOrDefault("string:Name");
+                            var groupArray = table.StringColumns.GetOrDefault("string:Group");
+                            var isInstanceArray = VimEntityTableColumnTypeInfo.GetDataColumnAsTypedArray<bool>(table.DataColumns.GetOrDefault("byte:IsInstance"));
+                            var isSharedArray = VimEntityTableColumnTypeInfo.GetDataColumnAsTypedArray<bool>(table.DataColumns.GetOrDefault("byte:IsShared"));
+                            var isReadOnlyArray = VimEntityTableColumnTypeInfo.GetDataColumnAsTypedArray<bool>(table.DataColumns.GetOrDefault("byte:IsReadOnly"));
+                            var parameterTypeArray = table.StringColumns.GetOrDefault("string:ParameterType");
+                            var flagsArray = VimEntityTableColumnTypeInfo.GetDataColumnAsTypedArray<int>(table.DataColumns.GetOrDefault("int:Flags"));
+                            var guidArray = table.StringColumns.GetOrDefault("string:Guid");
+                            var storageTypeArray = VimEntityTableColumnTypeInfo.GetDataColumnAsTypedArray<int>(table.DataColumns.GetOrDefault("int:StorageType"));
+                            var displayUnitIndexArray = table.IndexColumns.GetOrDefault("index:Vim.DisplayUnit:DisplayUnit");
+
+                            r = CreateRemapped<object>(table, (i, _) => {
+                                var name = nameArray?.ElementAtOrDefault(i, "") ?? "";
+                                var group = groupArray?.ElementAtOrDefault(i, "") ?? "";
+                                var isInstance = isInstanceArray?.ElementAtOrDefault(i, false) ?? false;
+                                var isShared = isSharedArray?.ElementAtOrDefault(i, false) ?? false;
+                                var isReadOnly = isReadOnlyArray?.ElementAtOrDefault(i, false) ?? false;
+                                var parameterType = parameterTypeArray?.ElementAtOrDefault(i, "") ?? "";
+                                var flags = flagsArray?.ElementAtOrDefault(i, 0) ?? 0;
+                                var guid = guidArray?.ElementAtOrDefault(i, "") ?? "";
+                                var storageType = storageTypeArray?.ElementAtOrDefault(i, 0) ?? 0;
+                                var displayUnitIndex = displayUnitIndexArray?.ElementAtOrDefault(i, -1) ?? -1;
+                                // TODO: remove this; debugging
+                                // if (name == "Level" // &&
+                                //     // group == "Constraints" &&
+                                //     // isInstance == false &&
+                                //     // isShared == false &&
+                                //     // isReadOnly == false &&
+                                //     // parameterType == "Invalid" &&
+                                //     // flags == 0 &&
+                                //     // guid == "" &&
+                                //     // storageType == 0 &&
+                                //     // displayUnitIndex == 0
+                                //     )
+                                // {
+                                //     Console.WriteLine("doot!");
+                                // }
+                                return (
+                                    name,
+                                    group,
+                                    isInstance,
+                                    isShared,
+                                    isReadOnly,
+                                    parameterType,
+                                    flags,
+                                    guid,
+                                    storageType,
+                                    displayUnitIndex
+                                );
+                            }); // same value tuples as ParameterDescriptor.GetStorageKey()
                             break;
                         }
 

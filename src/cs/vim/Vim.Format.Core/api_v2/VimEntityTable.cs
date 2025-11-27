@@ -79,13 +79,7 @@ namespace Vim.Format.api_v2
             if (namedBuffer == null)
                 return null;
 
-            if (type == typeof(short))
-                return namedBuffer.AsArray<int>().Select(i => (short)i).ToArray() as T[];
-
-            if (type == typeof(bool))
-                return namedBuffer.AsArray<byte>().Select(b => b != 0).ToArray() as T[];
-
-            return namedBuffer.AsArray<T>();
+            return VimEntityTableColumnTypeInfo.GetDataColumnAsTypedArray<T>(namedBuffer);
         }
     }
 }
