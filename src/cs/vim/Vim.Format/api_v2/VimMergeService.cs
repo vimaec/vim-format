@@ -493,12 +493,11 @@ namespace Vim.Format.api_v2
         /// Returns a new collection of entity table builders by deduplicating specific entities which would be
         /// meaninglessly duplicated in the resulting VIM file.
         /// </summary>
-        public static IEnumerable<VimEntityTableBuilder> DeduplicateEntities(
+        public static VimEntityTableBuilder[] DeduplicateEntities(
             IReadOnlyList<VimEntityTableBuilder> entityTableBuilders, CancellationToken ct = default)
             => GetRemappedEntityTableBuilders(entityTableBuilders, ct)
-                .Select(r => r.EntityTableBuilder);
-
-        // TODO: **I AM HERE; PORT MergeService.cs**
+                .Select(r => r.EntityTableBuilder)
+                .ToArray();
     }
 
     public static class VimMergeService
@@ -565,7 +564,7 @@ namespace Vim.Format.api_v2
             {
                 progress?.Report("Deduplicating entities");
                 ct.ThrowIfCancellationRequested();
-                VimRemappedEntityTableBuilder.DeduplicateEntities(entityTableBuilders, ct);
+                entityTableBuilders = VimRemappedEntityTableBuilder.DeduplicateEntities(entityTableBuilders, ct);
             }
 
             // Merge the materials

@@ -6,6 +6,7 @@ using Vim.Format.ObjectModel;
 using Vim.Math3d;
 using Vim.Format.api_v2;
 using Vim.Util.Tests;
+using System.Collections.Generic;
 
 namespace Vim.Format.Tests.api_v2;
 
@@ -27,35 +28,32 @@ public static class VimRoomServiceTests
         var vim2 = Path.Combine(VimFormatRepoPaths.DataDir, "RoomTest.vim");
         var mergedFilePath = Path.Combine(dir, "merged.vim");
 
-        var mergeFiles = new MergeConfigFiles(new[]
+        var mergeFiles = new VimMergeConfigFiles(new[]
         {
             (vim1, Matrix4x4.Identity),
             (vim2, Matrix4x4.Identity)
         }, mergedFilePath);
 
-        var mergeOptions = new MergeConfigOptions()
+        var mergeOptions = new VimMergeConfigOptions()
         {
             GeneratorString = nameof(TestRoomService_ComputeElementsInRoom),
             VersionString = "0.0.0",
         };
 
-        MergeService.MergeVimFiles(mergeFiles, mergeOptions);
+        VimMergeService.MergeVimFiles(mergeFiles, mergeOptions);
 
-        var mergedVim = VimScene.LoadVim(mergedFilePath);
+        var mergedVim = VIM.Open(mergedFilePath);
         Assert.DoesNotThrow(() => mergedVim.Validate());
 
-        var dm = mergedVim.DocumentModel;
+        var mergedVimTableSet = mergedVim.GetEntityTableSet();
+        var elementKinds = mergedVimTableSet.GetElementKinds();
 
-        var elementInfos =
-            Enumerable.Range(0, mergedVim.DocumentModel.NumElement)
-                .AsParallel()
-                .Select(elementIndex => dm.GetElementInfo(elementIndex))
-                .ToArray();
-
-        var wolfordFamilyInstances = elementInfos
-            .Where(ei => ei.BimDocumentFileName.Contains("Wolford") && ei.IsFamilyInstance)
-            .ToArray();
-        var wolfordFamilyInstanceElementIndices = wolfordFamilyInstances.Select(ei => ei.ElementIndex).ToHashSet();
+        var wolfordFamilyInstanceElementIndices = new HashSet<int>();
+        for (var i = 0; i < elementKinds.Length; ++i)
+        {
+            if (elementKinds[i] == ElementKind.FamilyInstance)
+                wolfordFamilyInstanceElementIndices.Add(i);
+        }
 
         // Compute the element association in each room.
         var familyInstancesInRooms = VimRoomService.ComputeElementsInRoom(
