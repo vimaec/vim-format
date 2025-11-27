@@ -363,7 +363,7 @@ namespace Vim.Format.api_v2
             {
                 var colName = kv.Key;
                 var col = kv.Value;
-                if (VimEntityTableColumnName.TryParseColumnTypePrefix(colName, out var typePrefix))
+                if (!VimEntityTableColumnName.TryParseColumnTypePrefix(colName, out var typePrefix))
                     continue;
 
                 var newCol = VimEntityTableColumnActions.RemapOrSelfDataColumn(col, typePrefix, retainedIndices);
@@ -499,20 +499,20 @@ namespace Vim.Format.api_v2
                                 var storageType = storageTypeArray?.ElementAtOrDefault(i, 0) ?? 0;
                                 var displayUnitIndex = displayUnitIndexArray?.ElementAtOrDefault(i, -1) ?? -1;
                                 // TODO: remove this; debugging
-                                // if (name == "Level" // &&
-                                //     // group == "Constraints" &&
-                                //     // isInstance == false &&
-                                //     // isShared == false &&
-                                //     // isReadOnly == false &&
-                                //     // parameterType == "Invalid" &&
-                                //     // flags == 0 &&
-                                //     // guid == "" &&
-                                //     // storageType == 0 &&
-                                //     // displayUnitIndex == 0
-                                //     )
-                                // {
-                                //     Console.WriteLine("doot!");
-                                // }
+                                if (name == "Organization Name" &&
+                                    group == "Identity Data" &&
+                                    isInstance == false &&
+                                    isShared == false &&
+                                    isReadOnly == false &&
+                                    parameterType == "Text" &&
+                                    flags == 1 &&
+                                    guid == "" &&
+                                    storageType == 0 //&&
+                                    //displayUnitIndex == 0
+                                    )
+                                {
+                                    Console.WriteLine("doot!");
+                                }
                                 return (
                                     name,
                                     group,
@@ -522,8 +522,8 @@ namespace Vim.Format.api_v2
                                     parameterType,
                                     flags,
                                     guid,
-                                    storageType,
-                                    displayUnitIndex
+                                    storageType
+                                    //displayUnitIndex // TODO: actually requires the oldToNew index from DisplayUnit
                                 );
                             }); // same value tuples as ParameterDescriptor.GetStorageKey()
                             break;
