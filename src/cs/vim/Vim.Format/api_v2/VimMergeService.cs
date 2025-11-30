@@ -426,122 +426,122 @@ namespace Vim.Format.api_v2
             IReadOnlyList<VimEntityTableBuilder> entityTableBuilders,
             CancellationToken ct = default)
         {
-            var remappedEntityTableBuilders = new List<VimRemappedEntityTableBuilder>();
+            var result = new List<VimRemappedEntityTableBuilder>();
 
-            // Deduplicate the entities.
+            var specialTableNames = new HashSet<string>();
+
+            ////////////////////////////////////
+            // FUTURE MAINTENANCE NOTES:
+            // - if we ever remap materials, we must also propagate this remapping to the submeshMaterials in the geometry buffer.
+            // - if we ever remap assets, we must also propagate this remapping to the merged assets in the asset buffer.
+            ////////////////////////////////////
+
+            // Merge the same categories
+            var categoryTable = entityTableBuilders.FirstOrDefault(t => t.Name == VimEntityTableNames.Category);
+            VimRemappedEntityTableBuilder categoryTableRemapped = null;
+            if (categoryTable != null)
+            {
+                var table = categoryTable;
+                var nameCol = table.StringColumns.GetOrDefault("string:Name");
+                var builtInCol = table.StringColumns.GetOrDefault("string:BuiltInCategory");
+                categoryTableRemapped = CreateRemapped<object>(table, (i, _) => (
+                    nameCol?.ElementAtOrDefault(i, "") ?? "",
+                    builtInCol?.ElementAtOrDefault(i, "") ?? ""
+                ));
+                result.Add(categoryTableRemapped);
+                specialTableNames.Add(VimEntityTableNames.Category);
+            }
+
+            ct.ThrowIfCancellationRequested();
+
+            // Merge the same display units
+            var displayUnitTable = entityTableBuilders.FirstOrDefault(t => t.Name == VimEntityTableNames.DisplayUnit);
+            VimRemappedEntityTableBuilder displayUnitTableRemapped = null;
+            if (displayUnitTable != null)
+            {
+                var table = displayUnitTable;
+                var specCol = table.StringColumns.GetOrDefault("string:Spec");
+                var typeCol = table.StringColumns.GetOrDefault("string:Type");
+                var labelCol = table.StringColumns.GetOrDefault("string:Label");
+                displayUnitTableRemapped = CreateRemapped(table, (i, _) => (
+                    specCol?.ElementAtOrDefault(i, "") ?? "",
+                    typeCol?.ElementAtOrDefault(i, "") ?? "",
+                    labelCol?.ElementAtOrDefault(i, "") ?? ""
+                )); // same tuple values as DisplayUnit.GetStorageKey()
+                result.Add(displayUnitTableRemapped);
+                specialTableNames.Add(VimEntityTableNames.DisplayUnit);
+            }
+
+            ct.ThrowIfCancellationRequested();
+
+            // Merge the same parameter descriptors
+            var pdTable = entityTableBuilders.FirstOrDefault(t => t.Name == VimEntityTableNames.ParameterDescriptor);
+            VimRemappedEntityTableBuilder pdTableRemapped = null;
+            {
+                var table = pdTable;
+                var nameArray = table.StringColumns.GetOrDefault("string:Name");
+                var groupArray = table.StringColumns.GetOrDefault("string:Group");
+                var isInstanceArray = VimEntityTableColumnTypeInfo.GetDataColumnAsTypedArray<bool>(table.DataColumns.GetOrDefault("byte:IsInstance"));
+                var isSharedArray = VimEntityTableColumnTypeInfo.GetDataColumnAsTypedArray<bool>(table.DataColumns.GetOrDefault("byte:IsShared"));
+                var isReadOnlyArray = VimEntityTableColumnTypeInfo.GetDataColumnAsTypedArray<bool>(table.DataColumns.GetOrDefault("byte:IsReadOnly"));
+                var parameterTypeArray = table.StringColumns.GetOrDefault("string:ParameterType");
+                var flagsArray = VimEntityTableColumnTypeInfo.GetDataColumnAsTypedArray<int>(table.DataColumns.GetOrDefault("int:Flags"));
+                var guidArray = table.StringColumns.GetOrDefault("string:Guid");
+                var storageTypeArray = VimEntityTableColumnTypeInfo.GetDataColumnAsTypedArray<int>(table.DataColumns.GetOrDefault("int:StorageType"));
+                var displayUnitIndexArray = table.IndexColumns.GetOrDefault("index:Vim.DisplayUnit:DisplayUnit");
+
+                pdTableRemapped = CreateRemapped<object>(table, (i, _) => {
+                    var name = nameArray?.ElementAtOrDefault(i, "") ?? "";
+                    var group = groupArray?.ElementAtOrDefault(i, "") ?? "";
+                    var isInstance = isInstanceArray?.ElementAtOrDefault(i, false) ?? false;
+                    var isShared = isSharedArray?.ElementAtOrDefault(i, false) ?? false;
+                    var isReadOnly = isReadOnlyArray?.ElementAtOrDefault(i, false) ?? false;
+                    var parameterType = parameterTypeArray?.ElementAtOrDefault(i, "") ?? "";
+                    var flags = flagsArray?.ElementAtOrDefault(i, 0) ?? 0;
+                    var guid = guidArray?.ElementAtOrDefault(i, "") ?? "";
+                    var storageType = storageTypeArray?.ElementAtOrDefault(i, 0) ?? 0;
+                    var displayUnitIndex = displayUnitIndexArray?.ElementAtOrDefault(i, -1) ?? -1;
+
+                    var remappedDisplayUnitIndex = displayUnitIndex == -1
+                        ? -1
+                        : displayUnitTableRemapped?.OldToNewIndexMap.ElementAtOrDefault(displayUnitIndex, displayUnitIndex) ?? displayUnitIndex;
+
+                    return (
+                        name,
+                        group,
+                        isInstance,
+                        isShared,
+                        isReadOnly,
+                        parameterType,
+                        flags,
+                        guid,
+                        storageType,
+                        remappedDisplayUnitIndex
+                    );
+                }); // same value tuples as ParameterDescriptor.GetStorageKey()
+                result.Add(pdTableRemapped);
+                specialTableNames.Add(VimEntityTableNames.ParameterDescriptor);
+            }
+
+            ct.ThrowIfCancellationRequested();
+
+            // Process the remaining entity tables.
             foreach (var table in entityTableBuilders)
             {
                 ct.ThrowIfCancellationRequested();
 
                 var tableName = table.Name;
 
-                VimRemappedEntityTableBuilder r;
-                switch (tableName)
-                {
-                    ////////////////////////////////////
-                    // FUTURE MAINTENANCE NOTES:
-                    // - if we ever remap materials, we must also propagate this remapping to the submeshMaterials in the geometry buffer.
-                    // - if we ever remap assets, we must also propagate this remapping to the merged assets in the asset buffer.
-                    ////////////////////////////////////
+                if (specialTableNames.Contains(tableName))
+                    continue;
 
-                    // Merge all the categories by name and by built-in category.
-                    case VimEntityTableNames.Category:
-                        {
-                            var hasNameCol = table.StringColumns.TryGetValue("string:Name", out var nameCol);
-                            var hasBuiltInCol = table.StringColumns.TryGetValue("string:BuiltInCategory", out var builtInCol);
-                            if (!hasNameCol || !hasBuiltInCol)
-                            {
-                                r = CreateDefault(table);
-                                break;
-                            }
-
-                            r = CreateRemapped(table, (i, _) => (nameCol[i], builtInCol[i]));
-                            break;
-                        }
-                    // Merge all the display units
-                    case VimEntityTableNames.DisplayUnit:
-                        {
-                            var hasSpecCol = table.StringColumns.TryGetValue("string:Spec", out var specCol);
-                            var hasTypeCol = table.StringColumns.TryGetValue("string:Type", out var typeCol);
-                            var hasLabelCol = table.StringColumns.TryGetValue("string:Label", out var labelCol);
-                            if (!hasSpecCol || !hasTypeCol || !hasLabelCol)
-                            {
-                                r = CreateDefault(table);
-                                break;
-                            }
-
-                            r = CreateRemapped(table, (i, _) => (specCol[i], typeCol[i], labelCol[i])); // same tuple values as DisplayUnit.GetStorageKey()
-                            break;
-                        }
-
-                    case VimEntityTableNames.ParameterDescriptor:
-                        {
-                            var nameArray = table.StringColumns.GetOrDefault("string:Name");
-                            var groupArray = table.StringColumns.GetOrDefault("string:Group");
-                            var isInstanceArray = VimEntityTableColumnTypeInfo.GetDataColumnAsTypedArray<bool>(table.DataColumns.GetOrDefault("byte:IsInstance"));
-                            var isSharedArray = VimEntityTableColumnTypeInfo.GetDataColumnAsTypedArray<bool>(table.DataColumns.GetOrDefault("byte:IsShared"));
-                            var isReadOnlyArray = VimEntityTableColumnTypeInfo.GetDataColumnAsTypedArray<bool>(table.DataColumns.GetOrDefault("byte:IsReadOnly"));
-                            var parameterTypeArray = table.StringColumns.GetOrDefault("string:ParameterType");
-                            var flagsArray = VimEntityTableColumnTypeInfo.GetDataColumnAsTypedArray<int>(table.DataColumns.GetOrDefault("int:Flags"));
-                            var guidArray = table.StringColumns.GetOrDefault("string:Guid");
-                            var storageTypeArray = VimEntityTableColumnTypeInfo.GetDataColumnAsTypedArray<int>(table.DataColumns.GetOrDefault("int:StorageType"));
-                            var displayUnitIndexArray = table.IndexColumns.GetOrDefault("index:Vim.DisplayUnit:DisplayUnit");
-
-                            r = CreateRemapped<object>(table, (i, _) => {
-                                var name = nameArray?.ElementAtOrDefault(i, "") ?? "";
-                                var group = groupArray?.ElementAtOrDefault(i, "") ?? "";
-                                var isInstance = isInstanceArray?.ElementAtOrDefault(i, false) ?? false;
-                                var isShared = isSharedArray?.ElementAtOrDefault(i, false) ?? false;
-                                var isReadOnly = isReadOnlyArray?.ElementAtOrDefault(i, false) ?? false;
-                                var parameterType = parameterTypeArray?.ElementAtOrDefault(i, "") ?? "";
-                                var flags = flagsArray?.ElementAtOrDefault(i, 0) ?? 0;
-                                var guid = guidArray?.ElementAtOrDefault(i, "") ?? "";
-                                var storageType = storageTypeArray?.ElementAtOrDefault(i, 0) ?? 0;
-                                var displayUnitIndex = displayUnitIndexArray?.ElementAtOrDefault(i, -1) ?? -1;
-                                // TODO: remove this; debugging
-                                if (name == "Organization Name" &&
-                                    group == "Identity Data" &&
-                                    isInstance == false &&
-                                    isShared == false &&
-                                    isReadOnly == false &&
-                                    parameterType == "Text" &&
-                                    flags == 1 &&
-                                    guid == "" &&
-                                    storageType == 0 //&&
-                                    //displayUnitIndex == 0
-                                    )
-                                {
-                                    Console.WriteLine("doot!");
-                                }
-                                return (
-                                    name,
-                                    group,
-                                    isInstance,
-                                    isShared,
-                                    isReadOnly,
-                                    parameterType,
-                                    flags,
-                                    guid,
-                                    storageType
-                                    //displayUnitIndex // TODO: actually requires the oldToNew index from DisplayUnit
-                                );
-                            }); // same value tuples as ParameterDescriptor.GetStorageKey()
-                            break;
-                        }
-
-                    // Default case.
-                    default:
-                        r = CreateDefault(table);
-                        break;
-                }
-
-                remappedEntityTableBuilders.Add(r);
+                result.Add(CreateDefault(table));
             }
 
-            // Update the entity index relations.
-            UpdateEntityTableBuilderRelations(remappedEntityTableBuilders, ct);
+            // Update all the entity index relations.
+            UpdateEntityTableBuilderRelations(result, ct);
 
-            return remappedEntityTableBuilders;
+            return result;
         }
 
         /// <summary>

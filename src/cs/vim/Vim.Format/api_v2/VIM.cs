@@ -9,11 +9,6 @@ using System.Threading;
 
 // TODO
 // - Port tests
-//  - MergeServiceTests.cs => test
-//    - (BUG) "Duplicate storage key ((Organization Name, Identity Data, False, False, False, Text, 1, , 0, 0)) found for ParameterDescriptor"
-//        - The crux of the issue is that when the ParameterDescriptor.DisplayUnitIndex is remapped to 0, it creates a duplicate record in ParameterDescriptor.
-//          to fix this correctly, the tuple value in displayUnitIndex would actually need to be the remapped one, forcing a dependency execution.
-//        - remove debugging comment in VimMegreService line 501 ("doot!")
 //  - (needs MergeService) RoomServiceTests.cs => re-implement room service
 //  - TransformServiceTests.cs => re-implement transform service
 //  - ...See if we can create a simple example to modify node render materials as well.
