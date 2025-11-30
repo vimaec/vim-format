@@ -46,9 +46,9 @@ public static class VimElementHierarchyTests
         var dummyB = new VimElementGeometryInfo(1);
         var dummyC = new VimElementGeometryInfo(2);
         var dummyD = new VimElementGeometryInfo(3);
-        dummyD.NodeAndGeometryIndices.Add((33, 33));
+        dummyD.InstanceAndMeshIndices.Add((33, 33));
         var dummyE = new VimElementGeometryInfo(4);
-        dummyE.NodeAndGeometryIndices.Add((44, 44));
+        dummyE.InstanceAndMeshIndices.Add((44, 44));
 
         var dummyMap = new[]
         {

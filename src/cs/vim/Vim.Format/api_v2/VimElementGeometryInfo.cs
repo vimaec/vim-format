@@ -20,12 +20,12 @@ namespace Vim.Format.api_v2
 
         public AABox WorldSpaceBoundingBox { get; set; } = AABox.Empty;
 
-        public List<(int NodeIndex, int GeometryIndex)> NodeAndGeometryIndices { get; } = new List<(int NodeIndex, int GeometryIndex)>();
+        public List<(int InstanceIndex, int MeshIndex)> InstanceAndMeshIndices { get; } = new List<(int InstanceIndex, int MeshIndex)>();
 
         public int NodeCount
-            => NodeAndGeometryIndices.Count;
+            => InstanceAndMeshIndices.Count;
 
-        public bool HasGeometry
+        public bool HasMesh
             => FaceCount > 0;
 
         /// <summary>
@@ -41,14 +41,14 @@ namespace Vim.Format.api_v2
         /// </summary>
         public IEnumerable<VimMeshData> GetWorldSpaceMeshes(VimGeometryData geometryData)
         {
-            foreach (var tuple in NodeAndGeometryIndices)
+            foreach (var tuple in InstanceAndMeshIndices)
             {
-                var (nodeIndex, geometryIndex) = tuple;
+                var (nodeIndex, meshIndex) = tuple;
 
-                if (geometryIndex < 0)
+                if (meshIndex < 0)
                     continue;
 
-                if (!geometryData.TryGetTransformedMesh(nodeIndex, geometryIndex, out var vimMeshData))
+                if (!geometryData.TryGetTransformedMesh(nodeIndex, meshIndex, out var vimMeshData))
                     continue;
 
                 yield return vimMeshData;
@@ -114,10 +114,10 @@ namespace Vim.Format.api_v2
                     // INVARIANT: there is a 1:1 relationship between Node entities and instances in the VimGeometryData.
                     var instanceIndex = nodeIndex;
 
-                    if (!TryGetGeometryIndex(vimGeometryData, instanceIndex, out var geometryIndex))
+                    if (!TryGetMeshIndex(vimGeometryData, instanceIndex, out var meshIndex))
                         continue; // Skip nodes with no geometry.
 
-                    result[elementIndex].NodeAndGeometryIndices.Add((nodeIndex, geometryIndex));
+                    result[elementIndex].InstanceAndMeshIndices.Add((nodeIndex, meshIndex));
                 }
             }
 
@@ -126,13 +126,13 @@ namespace Vim.Format.api_v2
             Parallel.For(0, result.Length, elementIndex =>
             {
                 var item = result[elementIndex];
-                var list = item.NodeAndGeometryIndices;
+                var list = item.InstanceAndMeshIndices;
                 var vertexCount = 0;
                 var faceCount = 0;
                 var bb = new AABox(Vector3.MaxValue, Vector3.MinValue); // world space element bounding box
 
                 // Aggregate the geometry info
-                foreach (var (nodeIndex, geometryIndex) in list)
+                foreach (var (nodeIndex, meshIndex) in list)
                 {
                     // INVARIANT: there is a 1:1 relationship between Node entities and instances in the g3d buffer.
                     var instanceIndex = nodeIndex;
@@ -140,18 +140,18 @@ namespace Vim.Format.api_v2
                     if (!TryGetTransformedGeometryInfo(
                         vimGeometryData,
                         instanceIndex,
-                        geometryIndex,
-                        out var geometryVertexCount,
-                        out var geometryFaceCount,
-                        out var nodeBb))
+                        meshIndex,
+                        out var meshVertexCount,
+                        out var meshFaceCount,
+                        out var instanceBb))
                     {
                         continue;
                     }
 
                     // Aggregate the ElementGeometry data
-                    vertexCount += geometryVertexCount;
-                    faceCount += geometryFaceCount;
-                    bb = bb.Merge(nodeBb);
+                    vertexCount += meshVertexCount;
+                    faceCount += meshFaceCount;
+                    bb = bb.Merge(instanceBb);
                 }
 
                 item.VertexCount = vertexCount;
@@ -162,17 +162,16 @@ namespace Vim.Format.api_v2
             return result;
         }
 
-        private static bool TryGetGeometryIndex(VimGeometryData vimGeometryData, int instanceIndex, out int geometryIndex)
+        private static bool TryGetMeshIndex(VimGeometryData vimGeometryData, int instanceIndex, out int meshIndex)
         {
-            geometryIndex = -1;
-            geometryIndex = vimGeometryData.InstanceMeshes.ElementAtOrDefault(instanceIndex, -1);
-            return geometryIndex >= 0;
+            meshIndex = vimGeometryData.InstanceMeshes.ElementAtOrDefault(instanceIndex, -1);
+            return meshIndex >= 0;
         }
 
         private static bool TryGetTransformedGeometryInfo(
             VimGeometryData vimGeometryData,
             int instanceIndex,
-            int geometryIndex,
+            int meshIndex,
             out int vertexCount,
             out int faceCount,
             out AABox worldSpaceBb)
@@ -181,10 +180,10 @@ namespace Vim.Format.api_v2
             faceCount = 0;
             worldSpaceBb = AABox.Empty;
 
-            if (geometryIndex < 0)
+            if (meshIndex < 0)
                 return false;
 
-            if (!vimGeometryData.TryGetVimMeshView(geometryIndex, out var meshData))
+            if (!vimGeometryData.TryGetVimMeshView(meshIndex, out var meshData))
                 return false;
 
             vertexCount = meshData.VertexCount;

@@ -304,7 +304,7 @@ namespace Vim.Format.api_v2
 
                         var nodeAndGeometryIndices = elementGeometryMap
                             .ElementAtOrDefault(descendantElementIndex)
-                            ?.NodeAndGeometryIndices;
+                            ?.InstanceAndMeshIndices;
 
                         if ((nodeAndGeometryIndices?.Count ?? 0) > 0)
                         {

@@ -390,7 +390,7 @@ namespace Vim.Format.ElementParameterInfo
             // Note: Level.ProjectElevation is relative to the internal scene origin (0,0,0), and so is the vim scene's geometry.
             var elementGeometryInfo = elementGeometryMap.ElementAtOrDefault(elementIndex);
 
-            var hasGeometry = elementGeometryInfo?.HasGeometry ?? false;
+            var hasGeometry = elementGeometryInfo?.HasMesh ?? false;
             if (!hasGeometry)
                 return BuildingStoryGeometryContainment.NoGeometry;
 
