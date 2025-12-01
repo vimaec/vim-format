@@ -55,6 +55,22 @@ namespace Vim.Format.api_v2
         }
 
         /// <summary>
+        /// Returns a list of VimEntityTableBuilders based on the given VIM file's entity table data
+        /// </summary>
+        public static List<VimEntityTableBuilder> GetVimEntityTableBuilders(VIM vim)
+        {
+            var result = new List<VimEntityTableBuilder>();
+
+            foreach (var et in vim.EntityTableData)
+            {
+                var builder = new VimEntityTableBuilder(et, vim.StringTable);
+                result.Add(builder);
+            }
+
+            return result;
+        }
+
+        /// <summary>
         /// Writes the VIM file to the given file path. Overwrites any existing file.
         /// </summary>
         public void Write(string vimFilePath, IReadOnlyList<VimEntityTableBuilder> tableBuilders = null)

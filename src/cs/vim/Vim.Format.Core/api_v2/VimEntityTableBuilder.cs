@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Vim.BFast;
+using Vim.Util;
 
 namespace Vim.Format.api_v2
 {
@@ -16,6 +17,21 @@ namespace Vim.Format.api_v2
 
         public VimEntityTableBuilder(string name)
             => Name = name;
+
+        public VimEntityTableBuilder(VimEntityTableData tableData, string[] stringTable)
+        {
+            Name = tableData.Name;
+            RowCount = tableData.GetRowCount();
+
+            foreach (var column in tableData.IndexColumns)
+                IndexColumns[column.Name] = column.AsArray<int>();
+
+            foreach (var column in tableData.StringColumns)
+                StringColumns[column.Name] = column.AsArray<int>().Select(i => stringTable.ElementAtOrDefault(i, "")).ToArray();
+
+            foreach (var column in tableData.DataColumns)
+                DataColumns[column.Name] = column;
+        }
 
         public VimEntityTableBuilder UpdateOrValidateRows(int n)
         {

@@ -83,16 +83,15 @@ namespace Vim.Format.api_v2
             // Filter the elements and instances we want to keep
             var instanceSetToKeep = new HashSet<int>();
             var instancesToKeep = new List<int>();
-            var elementIndicesToKeep = new HashSet<int>();
+            var filteredElementIndices = new HashSet<int>();
             var meshesToKeep = new HashSet<int>();
             var oldInstanceIndexToNewInstanceIndex = new Dictionary<int, int>();
 
-            foreach (var egi in elementGeometryInfo)
+            foreach (var egi in elementGeometryInfo) // Reminder: ElementGeometryInfo is 1:1 aligned with the Element table.
             {
-                var elementIndex = egi.ElementIndex;
                 if (elementFilter?.Invoke(egi) ?? true)
                 {
-                    elementIndicesToKeep.Add(egi.ElementIndex);
+                    filteredElementIndices.Add(egi.ElementIndex);
 
                     foreach (var (oldInstanceIndex, oldMeshIndex) in egi.InstanceAndMeshIndices)
                     {
@@ -111,18 +110,9 @@ namespace Vim.Format.api_v2
                 }
             }
 
-            // for (var i = 0; i < elementGeometryInfo.Length; ++i)
-            // {
-                // var node = vimInstances[i];
-                // if (elementFilter?.Invoke(node) ?? true)
-                // {
-                //     var oldNodeIndex = i;
-                //     var newNodeIndex = instancesToKeep.Count;
-                //     instancesToKeep.Add(node);
-                //     oldInstanceIndexToNewInstanceIndex.Add(oldNodeIndex, newNodeIndex);
-                //     elementIndicesToKeep.Add(node.ElementIndex);
-                // }
-            // }
+            var filteredEntityTableBuilders = VimEntityTableBuilderRemapped.FilterElements(
+                VimBuilder.GetVimEntityTableBuilders(vim),
+                filteredElementIndices);
 
             // Filter the meshes we want to keep
             var meshesToKeep = new List<int>();
@@ -180,7 +170,7 @@ namespace Vim.Format.api_v2
                 instancesToKeep.Select(n => n.NodeIndex).ToList(),
                 oldInstanceIndexToNewInstanceIndex
             );
-            var entityRemaps = EntityRemap.GetEntityRemaps(vim, nodeEntityRemap, elementIndicesToKeep);
+            var entityRemaps = EntityRemap.GetEntityRemaps(vim, nodeEntityRemap, filteredElementIndices);
             StoreTransformedEntityTables(vim.Document, vb, entityRemaps);
 
             // Add the nodes

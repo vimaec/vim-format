@@ -9,10 +9,8 @@ using System.Threading;
 
 // TODO
 // - Port tests
-//  - possible big bug? Does VimMergeService > UpdateEntityTableBuilderRelations correctly modify the consuming index relations? ex: Parameter -> ParameterDescriptor
 //  - TransformServiceTests.cs => re-implement transform service
-//    - Just filter elements, indices, and meshes +
-//      re-use VIM remapped entity table mechanism from merge service
+//    - Port mesh and instance filtering
 //    - ...See if we can create a simple example to modify node render materials as well.
 // - Read/Write implementation guinea pig: gltf converter
 // - Adapt all test code to new API & fill in the gaps
