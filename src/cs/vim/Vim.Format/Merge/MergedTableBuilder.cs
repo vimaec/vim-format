@@ -46,15 +46,17 @@ namespace Vim.Format.Merge
             foreach (var colName in entityTable.DataColumns.Keys.ToEnumerable())
             {
                 var col = entityTable.DataColumns[colName];
+
                 if (!DataColumns.ContainsKey(colName))
                 {
-                    DataColumns[colName] = col;
+                    // back-fill the data column with default values.
+                    var typePrefix = colName.GetTypePrefix();
+                    var defaultBuffer = ColumnExtensions.CreateDefaultDataColumnBuffer(NumRows, typePrefix);
+                    DataColumns[colName] = defaultBuffer;
                 }
-                else
-                {
-                    var cur = DataColumns[colName];
-                    DataColumns[colName] = cur.ConcatDataColumnBuffers(col, colName.GetTypePrefix());
-                }
+                
+                var cur = DataColumns[colName];
+                DataColumns[colName] = cur.ConcatDataColumnBuffers(col, colName.GetTypePrefix());
             }
 
             // Add string columns from the entity table 
