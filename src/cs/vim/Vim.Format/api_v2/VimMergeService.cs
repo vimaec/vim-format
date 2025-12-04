@@ -182,18 +182,21 @@ namespace Vim.Format.api_v2
             }
 
             // Add data columns from the entity table 
-            foreach (var k in entityTable.DataColumnMap.Keys)
+            foreach (var colName in entityTable.DataColumnMap.Keys)
             {
-                var col = entityTable.DataColumnMap[k];
-                if (!DataColumns.ContainsKey(k))
+                var col = entityTable.DataColumnMap[colName];
+                if (!VimEntityTableColumnName.TryParseColumnTypePrefix(colName, out var typePrefix))
+                    continue;
+
+                if (!DataColumns.ContainsKey(colName))
                 {
-                    DataColumns[k] = col;
+                    // back-fill the data column with default values.
+                    var defaultBuffer = ColumnExtensions.CreateDefaultDataColumnBuffer(RowCount, typePrefix);
+                    DataColumns[colName] = defaultBuffer;
                 }
-                else
-                {
-                    var cur = DataColumns[k];
-                    DataColumns[k] = VimEntityTableColumnActions.ConcatDataColumnBuffers(cur, col, k.GetTypePrefix());
-                }
+
+                var cur = DataColumns[colName];
+                DataColumns[colName] = VimEntityTableColumnActions.ConcatDataColumnBuffers(cur, col, colName.GetTypePrefix());
             }
 
             var stringTable = parentSet.StringTable;

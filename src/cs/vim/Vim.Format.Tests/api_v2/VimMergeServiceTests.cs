@@ -159,6 +159,35 @@ namespace Vim.Format.Tests.api_v2
         }
 
         [Test]
+        public static void TestMergeShouldSucceedOnCompatibleObjectModelVersions()
+        {
+            var ctx = new CallerTestContext();
+            var dir = ctx.PrepareDirectory();
+
+            var vim1 = Path.Combine(VimFormatRepoPaths.DataDir, "RoomTest.vim");
+            var vim2 = Path.Combine(VimFormatRepoPaths.DataDir, "RoomTestModified.vim");
+
+            var mergedVimFilePath = Path.Combine(dir, "room_merge.vim");
+
+            var configFiles = new VimMergeConfigFiles(
+                new[]
+                {
+                    // First VIM is centered at the origin
+                    (vim1, Matrix4x4.Identity),
+                    // Second VIM is offset by 100 units along +X
+                    (vim2, Matrix4x4.CreateTranslation(Vector3.UnitX * 100))
+                }, mergedVimFilePath);
+
+            var configOptions = new VimMergeConfigOptions() { GeneratorString = ctx.TestName, VersionString = "0.0.0", };
+            VimMergeService.MergeVimFiles(configFiles, configOptions);
+
+            Assert.IsTrue(File.Exists(mergedVimFilePath));
+
+            var mergedVim = VIM.Open(mergedVimFilePath);
+            mergedVim.Validate();
+        }
+
+        [Test]
         public static void TestMergeFailsOnMismatchedObjectModelVersions()
         {
             var ctx = new CallerTestContext();
