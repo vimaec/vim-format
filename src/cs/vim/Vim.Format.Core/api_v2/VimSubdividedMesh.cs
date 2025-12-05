@@ -57,6 +57,15 @@ namespace Vim.Format.api_v2
             SubmeshMaterials = submeshMaterials;
         }
 
+        public VimSubdividedMesh(VimMeshView meshView) :
+            this(
+                meshView.GetIndices(),
+                meshView.GetVertices(),
+                meshView.GetSubmeshIndexOffsets(),
+                meshView.GetSubmeshMaterials()
+            )
+        { }
+
         public bool IsEquivalentTo(VimSubdividedMesh other)
             => Vertices.SequenceEqual(other.Vertices)
                 && Indices.SequenceEqual(other.Indices)

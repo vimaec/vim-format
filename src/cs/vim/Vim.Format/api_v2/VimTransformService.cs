@@ -50,9 +50,9 @@ namespace Vim.Format.api_v2
                 deduplicateMeshes);
 
         /// <summary>
-        /// Returns a new VIM builder in which the instance transforms have been multiplied by the given matrix.
+        /// Returns a new VIM builder in which the element transforms have been multiplied by the given matrix.
         /// </summary>
-        public VimBuilder TransformInstances(VIM vim, Matrix4x4 matrix, bool deduplicateMeshes = false)
+        public VimBuilder Transform(VIM vim, Matrix4x4 matrix, bool deduplicateMeshes = false)
             => Transform(
                 vim,
                 _ => true,
@@ -81,85 +81,84 @@ namespace Vim.Format.api_v2
             var elementGeometryInfo = vim.GetElementGeometryInfoList();
 
             // Filter the elements and instances we want to keep
-            var instanceSetToKeep = new HashSet<int>();
-            var instancesToKeep = new List<int>();
-            var filteredElementIndices = new HashSet<int>();
-            var meshesToKeep = new HashSet<int>();
             var oldInstanceIndexToNewInstanceIndex = new Dictionary<int, int>();
+            var instanceIndicesToKeep = new List<int>();
+            var elementIndicesToKeep = new HashSet<int>();
+            var oldMeshIndexToNewMeshIndex = new Dictionary<int, int>();
+            var meshIndicesToKeep = new List<int>();
 
             foreach (var egi in elementGeometryInfo) // Reminder: ElementGeometryInfo is 1:1 aligned with the Element table.
             {
-                if (elementFilter?.Invoke(egi) ?? true)
+                var keep = elementFilter?.Invoke(egi) ?? true;
+                if (!keep)
+                    continue;
+
+                elementIndicesToKeep.Add(egi.ElementIndex);
+
+                foreach (var (oldInstanceIndex, oldMeshIndex) in egi.InstanceAndMeshIndices)
                 {
-                    filteredElementIndices.Add(egi.ElementIndex);
-
-                    foreach (var (oldInstanceIndex, oldMeshIndex) in egi.InstanceAndMeshIndices)
+                    if (oldInstanceIndex != -1 && !oldInstanceIndexToNewInstanceIndex.ContainsKey(oldInstanceIndex))
                     {
-                        var newInstanceIndex = instancesToKeep.Count;
-                        instancesToKeep.Add(oldInstanceIndex);
+                        var newInstanceIndex = instanceIndicesToKeep.Count;
+                        instanceIndicesToKeep.Add(oldInstanceIndex);
                         oldInstanceIndexToNewInstanceIndex.Add(oldInstanceIndex, newInstanceIndex);
+                    }
 
-                        if (geometryData.TryGetVimMeshView(oldMeshIndex, out var meshView))
-                        {
-                            if (meshView.FaceCount != 0)
-                            {
-                                meshesToKeep.Add(oldMeshIndex);
-                            }
-                        }
+                    if (oldMeshIndex != -1 &&
+                        geometryData.TryGetVimMeshView(oldMeshIndex, out var meshView) &&
+                        meshView.FaceCount != 0 &&
+                        !oldMeshIndexToNewMeshIndex.ContainsKey(oldMeshIndex))
+                    {
+                        var newMeshIndex = meshIndicesToKeep.Count;
+                        meshIndicesToKeep.Add(oldMeshIndex);
+                        oldMeshIndexToNewMeshIndex.Add(oldMeshIndex, newMeshIndex);
                     }
                 }
             }
 
             var filteredEntityTableBuilders = VimEntityTableBuilderRemapped.FilterElements(
                 VimBuilder.GetVimEntityTableBuilders(vim),
-                filteredElementIndices);
+                elementIndicesToKeep);
 
-            // Filter the meshes we want to keep
-            var meshesToKeep = new List<int>();
-            foreach (var instanceIndex in instancesToKeep)
-            {
-                var mesh = instanceIndex.GetMesh();
-                if (mesh == null || mesh.NumFaces == 0)
-                    continue;
-
-                if (meshFilter?.Invoke(mesh) ?? true)
-                    meshesToKeep.Add(mesh);
-            }
-
-            var meshLookup = new Dictionary<IMesh, IMesh>();
-            var meshIndices = new IndexedSet<IMesh>();
-
+            var meshViewLookup = new Dictionary<int, VimMeshView>();
             if (deduplicateMeshes)
             {
-                // Group meshes according to a hash function
-                const float tolerance = 1f / 12f / 8f;
-                var groupedMeshes = meshesToKeep.GroupMeshesByHash(tolerance);
+                // Group the mesh views under a common mesh view
+                var groupedMeshes = geometryData.GroupMeshViews(meshIndicesToKeep);
 
-                // Create the lookup from old mesh to new mesh 
-                meshLookup = groupedMeshes
-                    .SelectMany(grp => grp.Value.Select(m => (m, grp.Key.Mesh)))
-                    .ToDictionaryIgnoreDuplicates(pair => pair.m, pair => pair.Mesh);
+                // Create the lookup from old mesh view index to common mesh view
+                foreach (var (meshComparer, meshViews) in groupedMeshes)
+                {
+                    foreach (var meshView in meshViews)
+                    {
+                        meshViewLookup[meshView.MeshIndex] = meshComparer.MeshView;
+                    }
+                }
             }
             else
             {
-                // Create a dummy mapping from mesh to mesh  
-                foreach (var m in meshesToKeep)
-                    meshLookup.AddIfNotPresent(m, m);
+                foreach (var meshIndex in meshIndicesToKeep)
+                {
+                    var meshView = geometryData.GetMeshView(meshIndex);
+                    if (meshView.HasValue)
+                    {
+                        meshViewLookup[meshIndex] = meshView.Value;
+                    }
+                }
             }
-
-            // Collect the mesh indices in an indexed set.
-            foreach (var m in meshLookup.Values)
-                meshIndices.Add(m);
 
             // Add the assets
             foreach (var asset in vim.Assets)
                 vb.AddAsset(asset);
 
-            // Add the transformed meshes.
-            var subdividedMeshes = meshIndices.OrderedKeys.Select(m => (meshTransform?.Invoke(m) ?? m).ToDocumentBuilderSubdividedMesh());
-            vb.AddMeshes(subdividedMeshes);
+            // Add the meshes.
+            foreach (var oldMeshIndex in meshViewLookup.Keys.OrderBy(i => i))
+            {
+                vb.Meshes.Add(new VimSubdividedMesh(meshViewLookup[oldMeshIndex]));
+            }
 
             // Add the materials.
+            // TODO: Remap the materials from the filtered entity table builders
             // TECH DEBT: this could be improved to remove duplicate materials, but this would require a remapping among the material entities as well.
             var materials = vim.Document.Geometry.Materials.Select(m => m.ToDocumentBuilderMaterial()).ToEnumerable();
             vb.AddMaterials(materials);
@@ -167,16 +166,16 @@ namespace Vim.Format.api_v2
             // Remove the associated FamilyInstances and remap the entities.
             var nodeEntityRemap = new EntityRemap(
                 TableNames.Node,
-                instancesToKeep.Select(n => n.NodeIndex).ToList(),
+                instanceIndicesToKeep.Select(n => n.NodeIndex).ToList(),
                 oldInstanceIndexToNewInstanceIndex
             );
-            var entityRemaps = EntityRemap.GetEntityRemaps(vim, nodeEntityRemap, filteredElementIndices);
+            var entityRemaps = EntityRemap.GetEntityRemaps(vim, nodeEntityRemap, elementIndicesToKeep);
             StoreTransformedEntityTables(vim.Document, vb, entityRemaps);
 
             // Add the nodes
-            foreach (var node in instancesToKeep)
+            foreach (var node in instanceIndicesToKeep)
             {
-                var g = meshLookup.GetOrDefaultAllowNulls(node.GetMesh());
+                var g = meshViewLookup.GetOrDefaultAllowNulls(node.GetMesh());
                 var meshIndex = meshIndices.GetOrDefaultAllowNulls(g, -1);
                 var transform = instanceTransform?.Invoke(node) ?? node.Transform;
                 var flags = node.InstanceFlags;

@@ -267,6 +267,23 @@ namespace Vim.Format.api_v2
             return true;
         }
 
+        public VimMeshView? GetMeshView(int meshIndex)
+        {
+            if (meshIndex < 0 || meshIndex >= MeshCount)
+                return null;
+
+            return new VimMeshView(this, meshIndex);
+        }
+
+        public Dictionary<VimMeshComparer, VimMeshView[]> GroupMeshViews(IReadOnlyList<int> meshIndices)
+            => meshIndices
+                .AsParallel()
+                .Select(i => GetMeshView(i))
+                .Where(vmv => vmv != null)
+                .Select(vmv => vmv.Value)
+                .GroupBy(vmv => new VimMeshComparer(vmv))
+                .ToDictionary(g => g.Key, g => g.ToArray());
+
         public static Vector3[] GetTransformedVertices(Vector3[] sourceVertices, Matrix4x4 transform)
         {
             var transformedVertices = new Vector3[sourceVertices.Length];

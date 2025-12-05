@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Vim.Math3d;
 using Vim.Util;
@@ -25,8 +26,6 @@ namespace Vim.Format.api_v2
         /// <summary>
         /// Constructor.
         /// </summary>
-        /// <param name="vertices"></param>
-        /// <param name="indices"></param>
         public VimMeshData(Vector3[] vertices, int[] indices)
         {
             Vertices = vertices;
@@ -134,6 +133,103 @@ namespace Vim.Format.api_v2
                 values[i] = source?.ElementAtOrDefault(sourceIndex, @default) ?? @default;
             }
             return values;
+        }
+    }
+
+    /// <summary>
+    /// Compares two meshes
+    /// </summary>
+    public class VimMeshComparer : IVimMesh
+    {
+        public VimMeshView MeshView { get; }
+        public int MeshIndex => MeshView.MeshIndex;
+        public Vector3[] Vertices { get; }
+        public int VertexCount => Vertices.Length;
+        public int[] Indices { get; }
+        public int FaceCount { get; }
+        public int TopologyHash { get; }
+        public Int3 BoxExtents { get; }
+        public Int3 BoxMin { get; }
+        public const float DefaultRoundingPrecision = 1f / 12f / 8f;
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public VimMeshComparer(VimMeshView vimMeshView, float roundingPrecision = DefaultRoundingPrecision)
+        {
+            MeshView = vimMeshView;
+            Vertices = vimMeshView.GetVertices();
+            Indices = vimMeshView.GetIndices();
+            FaceCount = vimMeshView.FaceCount;
+            TopologyHash = HashCodeStd2.Combine(vimMeshView.GetIndices());
+            var box = AABox.Create(Vertices);
+            BoxMin = RoundVector3(box.Min, roundingPrecision);
+            BoxExtents = RoundVector3(box.Extent, roundingPrecision);
+        }
+
+        public Vector3[] GetVertices()
+            => Vertices;
+
+        public int[] GetIndices()
+            => Indices;
+
+        private static Int3 RoundVector3(Vector3 v, float roundingPrecision)
+            => new Int3(
+                RoundFloat(v.X, roundingPrecision),
+                RoundFloat(v.Y, roundingPrecision),
+                RoundFloat(v.Z, roundingPrecision)
+            );
+
+        private static int RoundFloat(float f, float roundingPrecision)
+            => (int)(f / roundingPrecision);
+
+        public override bool Equals(object obj)
+            => obj is VimMeshComparer other && Equals(other);
+
+        public bool Equals(VimMeshComparer other)
+            => FaceCount == other.FaceCount
+            && VertexCount == other.VertexCount
+            && BoxMin.Equals(other.BoxMin)
+            && BoxExtents.Equals(other.BoxExtents)
+            && IsGeometryEqual(other);
+
+        public override int GetHashCode()
+            => HashCodeStd2.Combine(
+                FaceCount,
+                VertexCount,
+                TopologyHash,
+                BoxMin.GetHashCode(),
+                BoxExtents.GetHashCode()
+            );
+
+        private bool IsGeometryEqual(VimMeshComparer other, float tolerance = Constants.Tolerance)
+        {
+            if (FaceCount != other.FaceCount || Indices.Length != other.Indices.Length || VertexCount != other.VertexCount)
+                return false;
+
+            for (var i = 0; i < FaceCount; ++i)
+            {
+                var i0 = i * 3;
+                var i1 = i0 + 1;
+                var i2 = i0 + 2;
+
+                var a_p0 = Vertices[Indices[i0]];
+                var b_p0 = other.Vertices[other.Indices[i0]];
+                if (!a_p0.AlmostEquals(b_p0, tolerance))
+                    return false;
+
+                var a_p1 = Vertices[Indices[i1]];
+                var b_p1 = other.Vertices[other.Indices[i1]];
+                if (!a_p1.AlmostEquals(b_p1, tolerance))
+                    return false;
+
+                var a_p2 = Vertices[Indices[i2]];
+                var b_p2 = other.Vertices[other.Indices[i2]];
+                if (!a_p2.AlmostEquals(b_p2, tolerance))
+                    return false;
+            }
+
+            return true;
         }
     }
 }

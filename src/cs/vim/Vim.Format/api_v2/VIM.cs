@@ -10,7 +10,7 @@ using System.Threading;
 // TODO
 // - Port tests
 //  - TransformServiceTests.cs => re-implement transform service
-//    - Port mesh and instance filtering
+//    - generate old to new material mapping based on filtered list, then apply it to new submeshes, then write it to the renderable materials in the vim builder
 //    - ...See if we can create a simple example to modify node render materials as well.
 // - Read/Write implementation guinea pig: gltf converter
 // - Adapt all test code to new API & fill in the gaps
