@@ -157,12 +157,18 @@ namespace Vim.Format.api_v2
                 vb.Meshes.Add(new VimSubdividedMesh(meshViewLookup[oldMeshIndex]));
             }
 
-            // Add the materials.
-            // TODO: Remap the materials from the filtered entity table builders
-            // TECH DEBT: this could be improved to remove duplicate materials, but this would require a remapping among the material entities as well.
-            var materials = vim.Document.Geometry.Materials.Select(m => m.ToDocumentBuilderMaterial()).ToEnumerable();
-            vb.AddMaterials(materials);
-
+            // Add the materials (preserves the material indices)
+            // TECH DEBT: this could be improved to remove orphaned or duplicate materials, but this would require a remapping of both the entity table and the g3d buffers.
+            for (var i = 0; i < vim.GeometryData.MaterialCount; ++i)
+            {
+                vb.Materials.Add(new VimMaterial()
+                {
+                    Color = vim.GeometryData.MaterialColors.ElementAtOrDefault(i, default),
+                    Glossiness = vim.GeometryData.MaterialGlossiness.ElementAtOrDefault(i, default),
+                    Smoothness = vim.GeometryData.MaterialSmoothness.ElementAtOrDefault(i, default),
+                });
+            }
+            
             // Remove the associated FamilyInstances and remap the entities.
             var nodeEntityRemap = new EntityRemap(
                 TableNames.Node,
