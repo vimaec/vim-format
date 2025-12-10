@@ -10,7 +10,7 @@ using System.Threading;
 // TODO
 // - Port tests
 //  - TransformServiceTests.cs => re-implement transform service
-//    - (?) hmmm... Node table doesn't look like it's part of ElementKind and so likely needs its own special remapping based on the preserved indices.
+//    - test!!
 //    - ...See if we can create a simple example to modify node render materials as well.
 // - Read/Write implementation guinea pig: gltf converter
 // - Adapt all test code to new API & fill in the gaps

@@ -157,7 +157,7 @@ namespace Vim.Format.api_v2
             IReadOnlyList<VimEntityTableBuilder> tableBuilders,
             StringLookupInfo stringLookupInfo)
             => WithGeometryTable(tableBuilders)
-                .Select(tb =>
+                .Select((Func<VimEntityTableBuilder, VimEntityTableData>)(tb =>
                     // Transfer each table builder's data
                     new VimEntityTableData()
                     {
@@ -171,10 +171,10 @@ namespace Vim.Format.api_v2
                                 .ToArray()
                                 .ToNamedBuffer(kv.Key))
                             .ToList(),
-                        DataColumns = tb.DataColumns
-                            .Select(kv => kv.Value.ToNamedBuffer(kv.Key) as INamedBuffer)
+                        DataColumns = Enumerable.Select<KeyValuePair<string, IBuffer>, INamedBuffer>(tb.DataColumns
+, (Func<KeyValuePair<string, IBuffer>, INamedBuffer>)(kv => kv.Value.ToNamedBuffer(kv.Key) as INamedBuffer))
                             .ToList()
-                    }
+                    })
                 );
 
         private IEnumerable<VimEntityTableBuilder> WithGeometryTable(IEnumerable<VimEntityTableBuilder> tableBuilders)

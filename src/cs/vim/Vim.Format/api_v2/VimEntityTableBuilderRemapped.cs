@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using Vim.BFast;
@@ -34,8 +35,8 @@ namespace Vim.Format.api_v2
         /// Returns a VimTableBuilderRemapped whose contained VimEntityTableBuilder is duplicated based on the given keyFn.
         /// </summary>
         private static VimEntityTableBuilderRemapped CreateRemapped<T>(
-            VimEntityTableBuilder et,
-            Func<int, VimEntityTableBuilder, T> keyFn)
+            IReadOnlyVimEntityTableBuilder et,
+            Func<int, IReadOnlyVimEntityTableBuilder, T> keyFn)
         {
             // We maintain a mapping of the keys to their new indices in this dictionary.
             //
@@ -145,6 +146,13 @@ namespace Vim.Format.api_v2
                 }
             }
 
+            var remapped = Remap(et, retainedIndices);
+
+            return new VimEntityTableBuilderRemapped(remapped, oldToNewIndexMap);
+        }
+
+        private static VimEntityTableBuilder Remap(IReadOnlyVimEntityTableBuilder et, IReadOnlyList<int> retainedIndices)
+        {
             var remapped = new VimEntityTableBuilder(et.Name);
 
             // Remap Index columns directly/naively now. In a second pass, the indices are adjusted based OldToNewIndexMap.
@@ -177,10 +185,10 @@ namespace Vim.Format.api_v2
                 remapped.AddStringColumn(colName, newCol);
             }
 
-            return new VimEntityTableBuilderRemapped(remapped, oldToNewIndexMap);
+            return remapped;
         }
 
-        private static void UpdateEntityTableBuilderRelations(
+        private static void MutateEntityTableBuilderRelations(
             List<VimEntityTableBuilderRemapped> remappedEntityTableBuilders,
             CancellationToken ct = default)
         {
@@ -193,7 +201,7 @@ namespace Vim.Format.api_v2
             if (remappedTableIndices.Count == 0)
                 return; // nothing to do.
 
-            // Update the index relationships using the remapped entity table builders' indices.
+            // Mutate the index relationships using the remapped entity table builders' indices.
             foreach (var et in remappedEntityTableBuilders.Select(r => r.EntityTableBuilder))
             {
                 ct.ThrowIfCancellationRequested();
@@ -208,7 +216,7 @@ namespace Vim.Format.api_v2
                     if (!remappedTableIndices.TryGetValue(tableName, out var oldToNewIndexMap))
                         continue;
 
-                    // Update the indices
+                    // Mutate the indices
                     for (var i = 0; i < indexColumn.Length; ++i)
                     {
                         var oldIndex = indexColumn[i];
@@ -336,8 +344,8 @@ namespace Vim.Format.api_v2
                 result.Add(CreateDefault(table));
             }
 
-            // Update all the entity index relations.
-            UpdateEntityTableBuilderRelations(result, ct);
+            // Mutate all the entity index relations to adapt to the filtered entities.
+            MutateEntityTableBuilderRelations(result, ct);
 
             return result;
         }
@@ -355,7 +363,7 @@ namespace Vim.Format.api_v2
         /// <summary>
         /// Returns a filtered collection of entity tables.
         /// </summary>
-        public static VimEntityTableBuilder[] FilterEntities(
+        public static List<VimEntityTableBuilderRemapped> FilterEntities(
             IReadOnlyList<VimEntityTableBuilder> entityTableBuilders,
             Dictionary<string, EntityFilter> entityTableFilters,
             CancellationToken ct = default)
@@ -377,14 +385,15 @@ namespace Vim.Format.api_v2
             }
 
             // Update all the entity index relations.
-            UpdateEntityTableBuilderRelations(result, ct);
+            MutateEntityTableBuilderRelations(result, ct);
 
-            return result.Select(r => r.EntityTableBuilder).ToArray();
+            return result;
         }
 
         public static VimEntityTableBuilder[] FilterElements(
             IReadOnlyList<VimEntityTableBuilder> entityTableBuilders,
             HashSet<int> filteredElementIndices,
+            IReadOnlyList<int> nodesToKeep = null,
             CancellationToken ct = default)
         {
             // Go through each entity table corresponding to an element kind and remove those entities.
@@ -393,11 +402,11 @@ namespace Vim.Format.api_v2
                 { VimEntityTableNames.Element, (i, _) => filteredElementIndices.Contains(i) }, 
             };
 
-            foreach (var entityKindTableName in VimEntityTableSet.GetElementKindTableNames())
+            foreach (var elementKindTableName in VimEntityTableSet.GetElementKindTableNames())
             {
                 ct.ThrowIfCancellationRequested();
 
-                entityTableFilters[entityKindTableName] = (i, et) =>
+                entityTableFilters[elementKindTableName] = (i, et) =>
                 {
                     if (!et.IndexColumns.TryGetValue("index:Vim.Element:Element", out var elementIndexCol))
                         return true;
@@ -409,7 +418,21 @@ namespace Vim.Format.api_v2
                 };
             }
 
-            return FilterEntities(entityTableBuilders, entityTableFilters, ct);
+            var result = FilterEntities(entityTableBuilders, entityTableFilters, ct).Select(r => r.EntityTableBuilder).ToList();
+
+            // mutate the result's node table if the nodesToKeep is defined.
+            if (nodesToKeep != null)
+            {
+                var nodeTableIndex = result.FindIndex(t => t.Name == VimEntityTableNames.Node);
+                if (nodeTableIndex >= 0)
+                {
+                    var nodeTable = result[nodeTableIndex];
+                    var remappedNodeTable = Remap(nodeTable, nodesToKeep);
+                    result[nodeTableIndex] = remappedNodeTable;
+                } 
+            }
+
+            return result.ToArray();
         }
     }
 }

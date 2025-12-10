@@ -1,17 +1,42 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using Vim.BFast;
 using Vim.Util;
 
 namespace Vim.Format.api_v2
 {
-    public class VimEntityTableBuilder
+    public interface IReadOnlyVimEntityTableBuilder
+    {
+        string Name { get; }
+        int RowCount { get; }
+        IReadOnlyDictionary<string, IBuffer> DataColumns { get; }
+        IReadOnlyDictionary<string, IReadOnlyList<int>> IndexColumns { get; }
+        IReadOnlyDictionary<string, IReadOnlyList<string>> StringColumns { get; }
+    }
+
+    public class VimEntityTableBuilder : IReadOnlyVimEntityTableBuilder
     {
         public string Name { get; }
-        public readonly Dictionary<string, IBuffer> DataColumns = new Dictionary<string, IBuffer>();
-        public readonly Dictionary<string, int[]> IndexColumns = new Dictionary<string, int[]>();
-        public readonly Dictionary<string, string[]> StringColumns = new Dictionary<string, string[]>();
+        public Dictionary<string, IBuffer> DataColumns { get; } = new Dictionary<string, IBuffer>();
+        IReadOnlyDictionary<string, IBuffer> IReadOnlyVimEntityTableBuilder.DataColumns => DataColumns;
+
+        public Dictionary<string, int[]> IndexColumns { get; } = new Dictionary<string, int[]>();
+        IReadOnlyDictionary<string, IReadOnlyList<int>> IReadOnlyVimEntityTableBuilder.IndexColumns
+            => IndexColumns.ToDictionary(kv => kv.Key, kv => {
+                var result = kv.Value as IReadOnlyList<int>;
+                Debug.Assert(result != null, "Invalid readonly index column cast");
+                return result;
+            });
+
+        public Dictionary<string, string[]> StringColumns { get; } = new Dictionary<string, string[]>();
+        IReadOnlyDictionary<string, IReadOnlyList<string>>IReadOnlyVimEntityTableBuilder.StringColumns
+            => StringColumns.ToDictionary(kv => kv.Key, kv => {
+                var result = kv.Value as IReadOnlyList<string>;
+                Debug.Assert(result != null, "Invalid readonly string column cast");
+                return result;
+            });
 
         public int RowCount { get; private set; }
 

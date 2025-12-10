@@ -105,10 +105,22 @@ namespace Vim.Util
         public static V GetOrDefault<K, V>(this IDictionary<K, V> self, K key)
             => self.GetOrDefault(key, default);
 
+                    /// <summary>
+        /// Returns a value if found in the dictionary, or default if not present.
+        /// </summary>
+        public static V GetOrDefaultReadOnly<K, V>(this IReadOnlyDictionary<K, V> self, K key)
+            => self.GetOrDefaultReadOnly(key, default);
+
         /// <summary>
         /// Returns a value if found in the dictionary, or default if not present.
         /// </summary>
         public static V GetOrDefault<K, V>(this IDictionary<K, V> self, K key, V defaultValue)
+            => self.ContainsKey(key) ? self[key] : defaultValue;
+
+        /// <summary>
+        /// Returns a value if found in the dictionary, or default if not present.
+        /// </summary>
+        public static V GetOrDefaultReadOnly<K, V>(this IReadOnlyDictionary<K, V> self, K key, V defaultValue)
             => self.ContainsKey(key) ? self[key] : defaultValue;
 
         /// <summary>
@@ -130,11 +142,23 @@ namespace Vim.Util
         public static V GetOrDefaultAllowNulls<K, V>(this IDictionary<K, V> self, K key, V defaultValue) where K : class
             => key != null && self.ContainsKey(key) ? self[key] : defaultValue;
 
+                    /// <summary>
+        /// Returns a value if found in the dictionary, or default if not present.
+        /// </summary>
+        public static V GetOrDefaultReadOnlyAllowNulls<K, V>(this IReadOnlyDictionary<K, V> self, K key, V defaultValue) where K : class
+            => key != null && self.ContainsKey(key) ? self[key] : defaultValue;
+
         /// <summary>
         /// Returns a value if found in the dictionary, or default if not present.
         /// </summary>
         public static V GetOrDefaultAllowNulls<K, V>(this IDictionary<K, V> self, K key) where K : class
             => self.GetOrDefaultAllowNulls(key, default);
+
+        /// <summary>
+        /// Returns a value if found in the dictionary, or default if not present.
+        /// </summary>
+        public static V GetOrDefaultReadOnlyAllowNulls<K, V>(this IReadOnlyDictionary<K, V> self, K key) where K : class
+            => self.GetOrDefaultReadOnlyAllowNulls(key, default);
 
         public static IEnumerable<T> WhereNotNull<T>(this IEnumerable<T> self)
             => self.Where(x => x != null);

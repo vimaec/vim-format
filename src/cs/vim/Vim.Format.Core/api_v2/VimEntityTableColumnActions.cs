@@ -9,7 +9,7 @@ namespace Vim.Format.api_v2
     {
         public const string UnknownNamedBufferPrefix = "Unknown NamedBuffer prefix";
 
-        public static IBuffer RemapOrSelfDataColumn(IBuffer dataColumn, string typePrefix, List<int> remapping = null)
+        public static IBuffer RemapOrSelfDataColumn(IBuffer dataColumn, string typePrefix, IReadOnlyList<int> remapping = null)
         {
             switch (typePrefix)
             {
@@ -36,7 +36,7 @@ namespace Vim.Format.api_v2
             return new NamedBuffer(RemapOrSelfDataColumn(dataColumn, typePrefix, remapping), dataColumn.Name);
         }
 
-        public static T[] RemapOrSelf<T>(T[] source, List<int> remapping = null)
+        public static T[] RemapOrSelf<T>(T[] source, IReadOnlyList<int> remapping = null)
         {
             if (remapping == null)
                 return source;
