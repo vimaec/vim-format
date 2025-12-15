@@ -64,15 +64,20 @@ namespace Vim.Format
         /// Returns the index column based on the given column name.
         /// </summary>
         public int[] GetIndexColumnValues(string columnName)
-            => GetColumnOrDefault(IndexColumns, columnName)?.GetColumnValues<int>();
+            => GetColumnOrDefault(IndexColumns, columnName)?.GetColumnValues<int>() ?? Array.Empty<int>();
+
+        /// <summary>
+        /// Returns the integer string indices column based on the given column name.
+        /// </summary>
+        public int[] GetStringIndices(string columnName)
+            => GetColumnOrDefault(StringColumns, columnName)?.GetColumnValues<int>() ?? Array.Empty<int>();
 
         /// <summary>
         /// Returns the string column based on the given column name.
         /// </summary>
         public string[] GetStringColumnValues(string columnName)
         {
-            var stringIndices = GetColumnOrDefault(StringColumns, columnName)
-                 ?.GetColumnValues<int>() ?? Array.Empty<int>();
+            var stringIndices = GetStringIndices(columnName);
 
             var strings = new string[stringIndices.Length];
 
