@@ -998,6 +998,9 @@ namespace Vim
         float mLocation_Z;
         std::string mFamilyName;
         bool mIsPinned;
+        std::string mCreator;
+        std::string mLastChangedBy;
+        std::string mOwner;
         
         int mLevelIndex;
         Level* mLevel;
@@ -1051,6 +1054,9 @@ namespace Vim
             element->mLocation_Z = GetLocation_Z(elementIndex);
             element->mFamilyName = GetFamilyName(elementIndex);
             element->mIsPinned = GetIsPinned(elementIndex);
+            element->mCreator = GetCreator(elementIndex);
+            element->mLastChangedBy = GetLastChangedBy(elementIndex);
+            element->mOwner = GetOwner(elementIndex);
             element->mLevelIndex = GetLevelIndex(elementIndex);
             element->mPhaseCreatedIndex = GetPhaseCreatedIndex(elementIndex);
             element->mPhaseDemolishedIndex = GetPhaseDemolishedIndex(elementIndex);
@@ -1076,6 +1082,9 @@ namespace Vim
             bool existsLocation_Z = mEntityTable.column_exists("float:Location.Z");
             bool existsFamilyName = mEntityTable.column_exists("string:FamilyName");
             bool existsIsPinned = mEntityTable.column_exists("byte:IsPinned");
+            bool existsCreator = mEntityTable.column_exists("string:Creator");
+            bool existsLastChangedBy = mEntityTable.column_exists("string:LastChangedBy");
+            bool existsOwner = mEntityTable.column_exists("string:Owner");
             bool existsLevel = mEntityTable.column_exists("index:Vim.Level:Level");
             bool existsPhaseCreated = mEntityTable.column_exists("index:Vim.Phase:PhaseCreated");
             bool existsPhaseDemolished = mEntityTable.column_exists("index:Vim.Phase:PhaseDemolished");
@@ -1131,6 +1140,12 @@ namespace Vim
                 memcpy(isPinnedData, mEntityTable.mDataColumns["byte:IsPinned"].begin(), count * sizeof(bfast::byte));
             }
             
+            const std::vector<int>& creatorData = mEntityTable.column_exists("string:Creator") ? mEntityTable.mStringColumns["string:Creator"] : std::vector<int>();
+            
+            const std::vector<int>& lastChangedByData = mEntityTable.column_exists("string:LastChangedBy") ? mEntityTable.mStringColumns["string:LastChangedBy"] : std::vector<int>();
+            
+            const std::vector<int>& ownerData = mEntityTable.column_exists("string:Owner") ? mEntityTable.mStringColumns["string:Owner"] : std::vector<int>();
+            
             const std::vector<int>& levelData = mEntityTable.column_exists("index:Vim.Level:Level") ? mEntityTable.mIndexColumns["index:Vim.Level:Level"] : std::vector<int>();
             const std::vector<int>& phaseCreatedData = mEntityTable.column_exists("index:Vim.Phase:PhaseCreated") ? mEntityTable.mIndexColumns["index:Vim.Phase:PhaseCreated"] : std::vector<int>();
             const std::vector<int>& phaseDemolishedData = mEntityTable.column_exists("index:Vim.Phase:PhaseDemolished") ? mEntityTable.mIndexColumns["index:Vim.Phase:PhaseDemolished"] : std::vector<int>();
@@ -1165,6 +1180,12 @@ namespace Vim
                     entity.mFamilyName = std::string(reinterpret_cast<const char*>(mStrings[familyNameData[i]]));
                 if (existsIsPinned)
                     entity.mIsPinned = isPinnedData[i];
+                if (existsCreator)
+                    entity.mCreator = std::string(reinterpret_cast<const char*>(mStrings[creatorData[i]]));
+                if (existsLastChangedBy)
+                    entity.mLastChangedBy = std::string(reinterpret_cast<const char*>(mStrings[lastChangedByData[i]]));
+                if (existsOwner)
+                    entity.mOwner = std::string(reinterpret_cast<const char*>(mStrings[ownerData[i]]));
                 entity.mLevelIndex = existsLevel ? levelData[i] : -1;
                 entity.mPhaseCreatedIndex = existsPhaseCreated ? phaseCreatedData[i] : -1;
                 entity.mPhaseDemolishedIndex = existsPhaseDemolished ? phaseDemolishedData[i] : -1;
@@ -1449,6 +1470,93 @@ namespace Vim
             std::vector<bool>* result = new std::vector<bool>(isPinnedData, isPinnedData + count);
             
             delete[] isPinnedData;
+            
+            return result;
+        }
+        
+        std::string GetCreator(int elementIndex)
+        {
+            if (elementIndex < 0 || elementIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("string:Creator")) {
+                return std::string(reinterpret_cast<const char*>(mStrings[mEntityTable.mStringColumns["string:Creator"][elementIndex]]));
+            }
+            
+            return {};
+        }
+        
+        std::vector<std::string>* GetAllCreator()
+        {
+            const auto count = GetCount();
+            
+            const std::vector<int>& creatorData = mEntityTable.column_exists("string:Creator") ? mEntityTable.mStringColumns["string:Creator"] : std::vector<int>();
+            
+            std::vector<std::string>* result = new std::vector<std::string>();
+            result->reserve(count);
+            
+            for (int i = 0; i < count; ++i)
+            {
+                result->push_back(std::string(reinterpret_cast<const char*>(mStrings[creatorData[i]])));
+            }
+            
+            return result;
+        }
+        
+        std::string GetLastChangedBy(int elementIndex)
+        {
+            if (elementIndex < 0 || elementIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("string:LastChangedBy")) {
+                return std::string(reinterpret_cast<const char*>(mStrings[mEntityTable.mStringColumns["string:LastChangedBy"][elementIndex]]));
+            }
+            
+            return {};
+        }
+        
+        std::vector<std::string>* GetAllLastChangedBy()
+        {
+            const auto count = GetCount();
+            
+            const std::vector<int>& lastChangedByData = mEntityTable.column_exists("string:LastChangedBy") ? mEntityTable.mStringColumns["string:LastChangedBy"] : std::vector<int>();
+            
+            std::vector<std::string>* result = new std::vector<std::string>();
+            result->reserve(count);
+            
+            for (int i = 0; i < count; ++i)
+            {
+                result->push_back(std::string(reinterpret_cast<const char*>(mStrings[lastChangedByData[i]])));
+            }
+            
+            return result;
+        }
+        
+        std::string GetOwner(int elementIndex)
+        {
+            if (elementIndex < 0 || elementIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("string:Owner")) {
+                return std::string(reinterpret_cast<const char*>(mStrings[mEntityTable.mStringColumns["string:Owner"][elementIndex]]));
+            }
+            
+            return {};
+        }
+        
+        std::vector<std::string>* GetAllOwner()
+        {
+            const auto count = GetCount();
+            
+            const std::vector<int>& ownerData = mEntityTable.column_exists("string:Owner") ? mEntityTable.mStringColumns["string:Owner"] : std::vector<int>();
+            
+            std::vector<std::string>* result = new std::vector<std::string>();
+            result->reserve(count);
+            
+            for (int i = 0; i < count; ++i)
+            {
+                result->push_back(std::string(reinterpret_cast<const char*>(mStrings[ownerData[i]])));
+            }
             
             return result;
         }

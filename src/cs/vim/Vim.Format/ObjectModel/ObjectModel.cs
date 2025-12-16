@@ -15,6 +15,12 @@ namespace Vim.Format.ObjectModel
         public static class History
         {
             // Schema additions
+            //   Vim.Element__string:Creator
+            //   Vim.Element__string:LastChangedBy
+            //   Vim.Element__string:Owner
+            public const string v5_7_0 = "5.7.0";
+
+            // Schema additions
             //   Vim.BimDocument__long:FileLength
             public const string v5_6_0 = "5.6.0";
 
@@ -175,7 +181,8 @@ namespace Vim.Format.ObjectModel
         // ReSharper enable MemberHidesStaticFromOuterClass
 
         // [MAINTAIN] Add more object model SerializableVersions below and update the current one.
-        public static SerializableVersion Current => v5_6_0;
+        public static SerializableVersion Current => v5_7_0;
+        public static SerializableVersion v5_7_0 => SerializableVersion.Parse(History.v5_7_0);
         public static SerializableVersion v5_6_0 => SerializableVersion.Parse(History.v5_6_0);
         public static SerializableVersion v5_5_0 => SerializableVersion.Parse(History.v5_5_0);
         public static SerializableVersion v5_4_0 => SerializableVersion.Parse(History.v5_4_0);
@@ -718,6 +725,10 @@ namespace Vim.Format.ObjectModel
 
         public string FamilyName;
         public bool IsPinned;
+
+        public string Creator;
+        public string LastChangedBy;
+        public string Owner;
 
         public Relation<Level> _Level;
         public Relation<Phase> _PhaseCreated;

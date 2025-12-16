@@ -620,6 +620,9 @@ export interface IElement {
     location_Z?: number
     familyName?: string
     isPinned?: boolean
+    creator?: string
+    lastChangedBy?: string
+    owner?: string
     
     levelIndex?: number
     level?: ILevel
@@ -668,6 +671,12 @@ export interface IElementTable {
     getAllFamilyName(): Promise<string[] | undefined>
     getIsPinned(elementIndex: number): Promise<boolean | undefined>
     getAllIsPinned(): Promise<boolean[] | undefined>
+    getCreator(elementIndex: number): Promise<string | undefined>
+    getAllCreator(): Promise<string[] | undefined>
+    getLastChangedBy(elementIndex: number): Promise<string | undefined>
+    getAllLastChangedBy(): Promise<string[] | undefined>
+    getOwner(elementIndex: number): Promise<string | undefined>
+    getAllOwner(): Promise<string[] | undefined>
     
     getLevelIndex(elementIndex: number): Promise<number | undefined>
     getAllLevelIndex(): Promise<number[] | undefined>
@@ -715,6 +724,9 @@ export class Element implements IElement {
     location_Z?: number
     familyName?: string
     isPinned?: boolean
+    creator?: string
+    lastChangedBy?: string
+    owner?: string
     
     levelIndex?: number
     level?: ILevel
@@ -753,6 +765,9 @@ export class Element implements IElement {
             table.getLocation_Z(index).then(v => result.location_Z = v),
             table.getFamilyName(index).then(v => result.familyName = v),
             table.getIsPinned(index).then(v => result.isPinned = v),
+            table.getCreator(index).then(v => result.creator = v),
+            table.getLastChangedBy(index).then(v => result.lastChangedBy = v),
+            table.getOwner(index).then(v => result.owner = v),
             table.getLevelIndex(index).then(v => result.levelIndex = v),
             table.getPhaseCreatedIndex(index).then(v => result.phaseCreatedIndex = v),
             table.getPhaseDemolishedIndex(index).then(v => result.phaseDemolishedIndex = v),
@@ -808,6 +823,9 @@ export class ElementTable implements IElementTable {
         let location_Z: number[] | undefined
         let familyName: string[] | undefined
         let isPinned: boolean[] | undefined
+        let creator: string[] | undefined
+        let lastChangedBy: string[] | undefined
+        let owner: string[] | undefined
         let levelIndex: number[] | undefined
         let phaseCreatedIndex: number[] | undefined
         let phaseDemolishedIndex: number[] | undefined
@@ -830,6 +848,9 @@ export class ElementTable implements IElementTable {
             (async () => { location_Z = (await localTable.getNumberArray("float:Location.Z")) })(),
             (async () => { familyName = (await localTable.getStringArray("string:FamilyName")) })(),
             (async () => { isPinned = (await localTable.getBooleanArray("byte:IsPinned")) })(),
+            (async () => { creator = (await localTable.getStringArray("string:Creator")) })(),
+            (async () => { lastChangedBy = (await localTable.getStringArray("string:LastChangedBy")) })(),
+            (async () => { owner = (await localTable.getStringArray("string:Owner")) })(),
             (async () => { levelIndex = (await localTable.getNumberArray("index:Vim.Level:Level")) })(),
             (async () => { phaseCreatedIndex = (await localTable.getNumberArray("index:Vim.Phase:PhaseCreated")) })(),
             (async () => { phaseDemolishedIndex = (await localTable.getNumberArray("index:Vim.Phase:PhaseDemolished")) })(),
@@ -858,6 +879,9 @@ export class ElementTable implements IElementTable {
                 location_Z: location_Z ? location_Z[i] : undefined,
                 familyName: familyName ? familyName[i] : undefined,
                 isPinned: isPinned ? isPinned[i] : undefined,
+                creator: creator ? creator[i] : undefined,
+                lastChangedBy: lastChangedBy ? lastChangedBy[i] : undefined,
+                owner: owner ? owner[i] : undefined,
                 levelIndex: levelIndex ? levelIndex[i] : undefined,
                 phaseCreatedIndex: phaseCreatedIndex ? phaseCreatedIndex[i] : undefined,
                 phaseDemolishedIndex: phaseDemolishedIndex ? phaseDemolishedIndex[i] : undefined,
@@ -945,6 +969,30 @@ export class ElementTable implements IElementTable {
     
     async getAllIsPinned(): Promise<boolean[] | undefined> {
         return (await this.entityTable.getBooleanArray("byte:IsPinned"))
+    }
+    
+    async getCreator(elementIndex: number): Promise<string | undefined> {
+        return (await this.entityTable.getString(elementIndex, "string:Creator"))
+    }
+    
+    async getAllCreator(): Promise<string[] | undefined> {
+        return (await this.entityTable.getStringArray("string:Creator"))
+    }
+    
+    async getLastChangedBy(elementIndex: number): Promise<string | undefined> {
+        return (await this.entityTable.getString(elementIndex, "string:LastChangedBy"))
+    }
+    
+    async getAllLastChangedBy(): Promise<string[] | undefined> {
+        return (await this.entityTable.getStringArray("string:LastChangedBy"))
+    }
+    
+    async getOwner(elementIndex: number): Promise<string | undefined> {
+        return (await this.entityTable.getString(elementIndex, "string:Owner"))
+    }
+    
+    async getAllOwner(): Promise<string[] | undefined> {
+        return (await this.entityTable.getStringArray("string:Owner"))
     }
     
     async getLevelIndex(elementIndex: number): Promise<number | undefined> {
