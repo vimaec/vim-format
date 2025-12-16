@@ -1,6 +1,6 @@
 {
   "VimFormatVersion": "1.0.0",
-  "SchemaVersion": "5.6.0",
+  "SchemaVersion": "5.7.0",
   "Tables": {
     "Vim.Area": [
       "byte:IsGrossInterior",
@@ -147,8 +147,11 @@
       "index:Vim.View:OwnerView",
       "index:Vim.Workset:Workset",
       "long:Id",
+      "string:Creator",
       "string:FamilyName",
+      "string:LastChangedBy",
       "string:Name",
+      "string:Owner",
       "string:Type",
       "string:UniqueId"
     ],
