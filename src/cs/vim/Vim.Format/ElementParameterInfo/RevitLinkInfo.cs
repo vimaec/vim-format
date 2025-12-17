@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using Vim.Format.ObjectModel;
 using Vim.Util;
 
@@ -6,9 +8,9 @@ namespace Vim.Format.ElementParameterInfo
 {
     public class RevitLinkInfo
     {
-        public FamilyInstance RevitLinkInstance { get; set; }
+        public FamilyInstance RevitLinkFamilyInstance { get; set; }
 
-        public Element RevitLinkInstanceElement { get; set; }
+        public Element RevitLinkFamilyInstanceElement { get; set; }
 
         public BimDocument RevitLinkBimDocument { get; set; }
 
@@ -22,8 +24,6 @@ namespace Vim.Format.ElementParameterInfo
 
         public BasePoint ParentSurveyPoint { get; set; }
 
-        // TODO: add transform logic (including mirrored) to place the base point info in the parent coordinate system.
-
         public static List<RevitLinkInfo> GetRevitLinkInfoCollection(EntityTableSet tableSet)
         {
             var result = new List<RevitLinkInfo>();
@@ -34,26 +34,21 @@ namespace Vim.Format.ElementParameterInfo
             var elementTable = tableSet.ElementTable;
             var familyInstanceTable = tableSet.FamilyInstanceTable;
             var familyTypeTable = tableSet.FamilyTypeTable;
-            var parameterTable = tableSet.ParameterTable;
-            var parameterLookup = tableSet.ElementIndexMaps.ParameterIndicesFromElementIndex;
+            //var parameterTable = tableSet.ParameterTable;
+            //var parameterLookup = tableSet.ElementIndexMaps.ParameterIndicesFromElementIndex;
 
-            // Create a mapping of { BimDocument Element Name -> BimDocument } to look up linked BimDocuments by name (this name is stored in the Revit link instance's family type name)
-            var bimDocumentNameMap = new Dictionary<string, BimDocument>();
+            var bimDocumentLinkMap = new Dictionary<(int parentIndex, string titleNoExtension), BimDocument>();
             for (var i = 0; i < bimDocumentTable.RowCount; ++i)
             {
-                var elementIndex = bimDocumentTable.GetElementIndex(i);
-                if (elementIndex < 0)
+                var bd = bimDocumentTable.Get(i);
+                var titleNoExtension = Path.GetFileNameWithoutExtension(bd.Title); // remove the extension; it is not present in the link's family type name.
+                if (string.IsNullOrEmpty(titleNoExtension))
                     continue;
 
-                var name = elementTable.GetName(elementIndex);
-                if (string.IsNullOrEmpty(name))
-                    continue;
-
-                bimDocumentNameMap[name] = bimDocumentTable.Get(i);
+                var parentIndex = bd.ParentIndex;
+                var key = (parentIndex, titleNoExtension);
+                bimDocumentLinkMap[key] = bd;
             }
-
-            if (bimDocumentNameMap.Count == 0)
-                return result; // nothing to do.
 
             // Create a mapping of:
             //  - { BimDocument Index -> ProjectBasePoint }
@@ -88,23 +83,25 @@ namespace Vim.Format.ElementParameterInfo
                 if (builtInCategory != "OST_RvtLinks")
                     continue;
 
-                // The family type of the revit link instance contains the name of the linked bim document.
+                // The family type of the revit link instance contains the title of the linked bim document.
                 var familyTypeIndex = familyInstanceTable.GetFamilyTypeIndex(i);
                 if (familyTypeIndex < 0)
                     continue;
 
-                var familyTypeElementIndex = familyTypeTable.GetElementIndex(familyTypeIndex);
-                var linkedBimDocumentName = elementTable.GetName(familyTypeElementIndex);
-
-                if (!bimDocumentNameMap.TryGetValue(linkedBimDocumentName, out var linkedBimDocument) || linkedBimDocument == null)
+                var parentBimDocument = elementTable.GetBimDocument(elementIndex);
+                if (parentBimDocument == null)
                     continue;
 
-                var parentBimDocument = elementTable.GetBimDocument(elementIndex);
+                var familyTypeElementIndex = familyTypeTable.GetElementIndex(familyTypeIndex);
+                var bimDocumentTitleNoExtension = Path.GetFileNameWithoutExtension(elementTable.GetName(familyTypeElementIndex));
 
-                var revitLinkInfo = new RevitLinkInfo()
+                if (!bimDocumentLinkMap.TryGetValue((parentBimDocument.Index, bimDocumentTitleNoExtension), out var linkedBimDocument) || linkedBimDocument == null)
+                    continue;
+
+                var revitLinkInfo = new RevitLinkInfo
                 {
-                    RevitLinkInstance = familyInstanceTable.Get(i),
-                    RevitLinkInstanceElement = elementTable.Get(elementIndex),
+                    RevitLinkFamilyInstance = familyInstanceTable.Get(i),
+                    RevitLinkFamilyInstanceElement = elementTable.Get(elementIndex),
                     RevitLinkBimDocument = linkedBimDocument,
                     RevitLinkProjectBasePoint = bimDocumentProjectBasePointMap.GetOrDefault(linkedBimDocument.Index),
                     RevitLinkSurveyPoint = bimDocumentSurveyPointMap.GetOrDefault(linkedBimDocument.Index),
