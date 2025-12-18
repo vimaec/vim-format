@@ -69,8 +69,8 @@ namespace Vim.Math3d
         [MethodImpl(MethodImplOptions.AggressiveInlining)] public static double Distance(this double v1, double v2) => (v1 - v2).Abs();
         [MethodImpl(MethodImplOptions.AggressiveInlining)] public static bool IsInfinity(this double v) => double.IsInfinity(v);
         [MethodImpl(MethodImplOptions.AggressiveInlining)] public static bool IsNaN(this double v) => double.IsNaN(v);
-        [MethodImpl(MethodImplOptions.AggressiveInlining)] public static bool AlmostEquals(this double v1, double v2, float tolerance = Constants.Tolerance) => (v2 - v1).AlmostZero(tolerance);
-        [MethodImpl(MethodImplOptions.AggressiveInlining)] public static bool AlmostZero(this double v, float tolerance = Constants.Tolerance) => v.Abs() < tolerance;
+        [MethodImpl(MethodImplOptions.AggressiveInlining)] public static bool AlmostEquals(this double v1, double v2, double tolerance = Constants.Tolerance) => (v2 - v1).AlmostZero(tolerance);
+        [MethodImpl(MethodImplOptions.AggressiveInlining)] public static bool AlmostZero(this double v, double tolerance = Constants.Tolerance) => v.Abs() < tolerance;
         [MethodImpl(MethodImplOptions.AggressiveInlining)] public static double Smoothstep(this double v) => v * v * (3 - 2 * v);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)] public static int Add (this int v1, int v2) => v1 + v2;

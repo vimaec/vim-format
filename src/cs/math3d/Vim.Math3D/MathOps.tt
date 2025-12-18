@@ -62,8 +62,8 @@ foreach (var t in floatTypes) {
         [MethodImpl(MethodImplOptions.AggressiveInlining)] public static <#= t #> Distance(this <#= t #> v1, <#= t #> v2) => (v1 - v2).Abs();
         [MethodImpl(MethodImplOptions.AggressiveInlining)] public static bool IsInfinity(this <#= t #> v) => <#= t #>.IsInfinity(v);
         [MethodImpl(MethodImplOptions.AggressiveInlining)] public static bool IsNaN(this <#= t #> v) => <#= t #>.IsNaN(v);
-        [MethodImpl(MethodImplOptions.AggressiveInlining)] public static bool AlmostEquals(this <#= t #> v1, <#= t #> v2, float tolerance = Constants.Tolerance) => (v2 - v1).AlmostZero(tolerance);
-        [MethodImpl(MethodImplOptions.AggressiveInlining)] public static bool AlmostZero(this <#= t #> v, float tolerance = Constants.Tolerance) => v.Abs() < tolerance;
+        [MethodImpl(MethodImplOptions.AggressiveInlining)] public static bool AlmostEquals(this <#= t #> v1, <#= t #> v2, <#= t #> tolerance = Constants.Tolerance) => (v2 - v1).AlmostZero(tolerance);
+        [MethodImpl(MethodImplOptions.AggressiveInlining)] public static bool AlmostZero(this <#= t #> v, <#= t #> tolerance = Constants.Tolerance) => v.Abs() < tolerance;
         [MethodImpl(MethodImplOptions.AggressiveInlining)] public static <#= t #> Smoothstep(this <#= t #> v) => v * v * (3 - 2 * v);
 <# } #>
 
