@@ -13,7 +13,12 @@ namespace Vim.Format.api_v2
         {
             VimBuilder = vimBuilder;
             EntityTableBuilders = entityTableBuilders;
-        } 
+        }
+
+        public void Write(string vimFilePath)
+        {
+            VimBuilder.Write(vimFilePath, EntityTableBuilders);
+        }
     }
 
     public class VimTransformService
@@ -94,8 +99,7 @@ namespace Vim.Format.api_v2
             var oldInstanceIndexToNewInstanceIndex = new Dictionary<int, int>();
             var instanceIndicesToKeep = new List<int>();
             var elementIndicesToKeep = new HashSet<int>();
-            var oldMeshIndexToNewMeshIndex = new Dictionary<int, int>();
-            var meshIndicesToKeep = new List<int>();
+            var meshIndicesToKeep = new HashSet<int>();
 
             foreach (var egi in elementGeometryInfo) // Reminder: ElementGeometryInfo is 1:1 aligned with the Element table.
             {
@@ -116,12 +120,9 @@ namespace Vim.Format.api_v2
 
                     if (oldMeshIndex != -1 &&
                         geometryData.TryGetVimMeshView(oldMeshIndex, out var meshView) &&
-                        meshView.FaceCount != 0 &&
-                        !oldMeshIndexToNewMeshIndex.ContainsKey(oldMeshIndex))
+                        meshView.FaceCount != 0)
                     {
-                        var newMeshIndex = meshIndicesToKeep.Count;
                         meshIndicesToKeep.Add(oldMeshIndex);
-                        oldMeshIndexToNewMeshIndex.Add(oldMeshIndex, newMeshIndex);
                     }
                 }
             }
@@ -131,7 +132,13 @@ namespace Vim.Format.api_v2
                 elementIndicesToKeep,
                 instanceIndicesToKeep);
 
-            var meshViewLookup = new Dictionary<int, VimMeshView>();
+            var oldMeshIndexMap = new Dictionary<int, (VimMeshView meshView, int newMeshIndex)>();
+            void AddToOldMeshIndexMap(int oldMeshIndex, VimMeshView meshView)
+            {
+                var newMeshIndex = oldMeshIndexMap.Count;
+                oldMeshIndexMap[oldMeshIndex] = (meshView, newMeshIndex);
+            }
+
             if (deduplicateMeshes)
             {
                 // Group the mesh views under a common mesh view
@@ -142,26 +149,53 @@ namespace Vim.Format.api_v2
                 {
                     foreach (var meshView in meshViews)
                     {
-                        meshViewLookup[meshView.MeshIndex] = meshComparer.MeshView;
+                        var oldMeshIndex = meshView.MeshIndex;
+                        AddToOldMeshIndexMap(oldMeshIndex, meshView);
                     }
                 }
             }
             else
             {
-                foreach (var meshIndex in meshIndicesToKeep)
+                foreach (var oldMeshIndex in meshIndicesToKeep)
                 {
-                    var meshView = geometryData.GetMeshView(meshIndex);
+                    var meshView = geometryData.GetMeshView(oldMeshIndex);
                     if (meshView.HasValue)
                     {
-                        meshViewLookup[meshIndex] = meshView.Value;
+                        AddToOldMeshIndexMap(oldMeshIndex, meshView.Value);
                     }
                 }
             }
 
             // Add the meshes.
-            foreach (var oldMeshIndex in meshViewLookup.Keys.OrderBy(i => i))
+            foreach (var (meshView, _) in oldMeshIndexMap.Values.OrderBy(t => t.newMeshIndex))
             {
-                vb.Meshes.Add(new VimSubdividedMesh(meshViewLookup[oldMeshIndex]));
+                vb.Meshes.Add(new VimSubdividedMesh(meshView));
+            }
+
+            // Add the instances.
+            foreach (var oldInstanceIndex in instanceIndicesToKeep)
+            {
+                var oldMeshIndex = geometryData.InstanceMeshes[oldInstanceIndex];
+
+                var newMeshIndex = oldMeshIndex == -1
+                    ? oldMeshIndex
+                    : oldMeshIndexMap[oldMeshIndex].newMeshIndex;
+
+                var oldTransform = geometryData.InstanceTransforms[oldInstanceIndex];
+                var newTransform = instanceTransform?.Invoke(oldInstanceIndex, oldTransform) ?? oldTransform;
+
+                var oldParentIndex = geometryData.InstanceParents.ElementAtOrDefault(oldInstanceIndex, -1);
+                var newParentIndex = oldParentIndex == -1
+                    ? oldParentIndex
+                    : oldInstanceIndexToNewInstanceIndex.TryGetValue(oldParentIndex, out var p) ? p : -1;
+
+                vb.Instances.Add(new VimInstance()
+                {
+                    MeshIndex = newMeshIndex,
+                    Transform = newTransform,
+                    InstanceFlags = (InstanceFlags) geometryData.InstanceFlags[oldInstanceIndex],
+                    ParentIndex = newParentIndex,
+                });
             }
 
             // Add the materials (preserves the material indices)

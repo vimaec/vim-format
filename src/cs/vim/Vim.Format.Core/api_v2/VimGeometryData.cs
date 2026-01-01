@@ -275,7 +275,7 @@ namespace Vim.Format.api_v2
             return new VimMeshView(this, meshIndex);
         }
 
-        public Dictionary<VimMeshComparer, VimMeshView[]> GroupMeshViews(IReadOnlyList<int> meshIndices)
+        public Dictionary<VimMeshComparer, VimMeshView[]> GroupMeshViews(IEnumerable<int> meshIndices)
             => meshIndices
                 .AsParallel()
                 .Select(i => GetMeshView(i))

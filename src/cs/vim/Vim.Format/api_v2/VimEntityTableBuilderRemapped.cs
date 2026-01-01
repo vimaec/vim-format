@@ -402,11 +402,16 @@ namespace Vim.Format.api_v2
                 { VimEntityTableNames.Element, (i, _) => filteredElementIndices.Contains(i) }, 
             };
 
-            foreach (var elementKindTableName in VimEntityTableSet.GetElementKindTableNames())
+            foreach (var entityTableBuilder in entityTableBuilders)
             {
+                var tableName = entityTableBuilder.Name;
+
                 ct.ThrowIfCancellationRequested();
 
-                entityTableFilters[elementKindTableName] = (i, et) =>
+                if (tableName == VimEntityTableNames.Node && nodesToKeep != null)
+                    continue; // We explicitly remap the node table below.
+
+                entityTableFilters[tableName] = (i, et) =>
                 {
                     if (!et.IndexColumns.TryGetValue("index:Vim.Element:Element", out var elementIndexCol))
                         return true;
