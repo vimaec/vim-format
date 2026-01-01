@@ -10,7 +10,7 @@ using System.Threading;
 // TODO
 // - Port tests
 //  - TransformServiceTests.cs
-//    - problem: FilterElements does not remove Parameters or other related/orphaned entities because we are only filtering on ElementKindTableNames.
+//    - Restore tests
 //    - test!!
 //    - ...See if we can create a simple example to modify node render materials as well.
 // - Read/Write implementation guinea pig: gltf converter
