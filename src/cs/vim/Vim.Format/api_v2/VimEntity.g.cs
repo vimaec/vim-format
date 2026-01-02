@@ -211,6 +211,25 @@ namespace Vim.Format.api_v2
             VimEntityTableNames.Building,
             };
         
+        public static HashSet<string> GetJoiningTableNames()
+            => new HashSet<string>()
+            {
+            VimEntityTableNames.ElementInView,
+            VimEntityTableNames.ShapeInView,
+            VimEntityTableNames.AssetInView,
+            VimEntityTableNames.AssetInViewSheet,
+            VimEntityTableNames.LevelInView,
+            VimEntityTableNames.MaterialInElement,
+            VimEntityTableNames.ShapeInShapeCollection,
+            VimEntityTableNames.ElementInSystem,
+            VimEntityTableNames.ElementInWarning,
+            VimEntityTableNames.ScheduleColumn,
+            VimEntityTableNames.ScheduleCell,
+            VimEntityTableNames.ViewSheetInViewSheetSet,
+            VimEntityTableNames.ViewInViewSheetSet,
+            VimEntityTableNames.ViewInViewSheet,
+            };
+        
         // Returns an array defining a 1:1 association of Element to its ElementKind
         public ElementKind[] GetElementKinds()
         {

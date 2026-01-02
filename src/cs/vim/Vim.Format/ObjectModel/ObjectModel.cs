@@ -539,7 +539,6 @@ namespace Vim.Format.ObjectModel
     /// Represents a parameter associated to an Element. An Element can contain 0..* Parameters.
     /// </summary>
     [TableName(TableNames.Parameter)]
-    [CascadeElementRemap]
     public partial class Parameter : EntityWithElement
     {
         /// <summary>
@@ -715,7 +714,6 @@ namespace Vim.Format.ObjectModel
     }
 
     [TableName(TableNames.Group)]
-    [CascadeElementRemap] // Groups can be family instances
     [ElementKind(ElementKind.Group)]
     public partial class Group : EntityWithElement
     {
@@ -935,7 +933,6 @@ namespace Vim.Format.ObjectModel
     /// may have a length of 12 feet, whereas another FamilyInstance may have a different length of 8 feet.
     /// </summary>
     [TableName(TableNames.FamilyInstance)]
-    [CascadeElementRemap]
     [ElementKind(ElementKind.FamilyInstance)]
     public partial class FamilyInstance : EntityWithElement
     {
@@ -1092,7 +1089,7 @@ namespace Vim.Format.ObjectModel
     /// An associative table binding an Element to a View.
     /// </summary>
     [TableName(TableNames.ElementInView)]
-    [CascadeElementRemap]
+    [JoiningTable]
     public partial class ElementInView : EntityWithElement, IStorageKey
     {
         public Relation<View> _View;
@@ -1105,6 +1102,7 @@ namespace Vim.Format.ObjectModel
     /// An associative table binding a Shape to a View.
     /// </summary>
     [TableName(TableNames.ShapeInView)]
+    [JoiningTable]
     public partial class ShapeInView : Entity, IStorageKey
     {
         public Relation<Shape> _Shape;
@@ -1118,6 +1116,7 @@ namespace Vim.Format.ObjectModel
     /// An associative table binding an Asset to a View.
     /// </summary>
     [TableName(TableNames.AssetInView)]
+    [JoiningTable]
     public partial class AssetInView : Entity, IStorageKey
     {
         public Relation<Asset> _Asset;
@@ -1131,6 +1130,7 @@ namespace Vim.Format.ObjectModel
     /// An associative table binding an Asset to a ViewSheet.
     /// </summary>
     [TableName(TableNames.AssetInViewSheet)]
+    [JoiningTable]
     public partial class AssetInViewSheet : Entity, IStorageKey
     {
         public Relation<Asset> _Asset;
@@ -1144,6 +1144,7 @@ namespace Vim.Format.ObjectModel
     /// An associative table binding a Level to a View.
     /// </summary>
     [TableName(TableNames.LevelInView)]
+    [JoiningTable]
     public partial class LevelInView : Entity, IStorageKey
     {
         /// <summary>
@@ -1354,7 +1355,7 @@ namespace Vim.Format.ObjectModel
     /// An associative table binding a Material to an Element.
     /// </summary>
     [TableName(TableNames.MaterialInElement)]
-    [CascadeElementRemap]
+    [JoiningTable]
     public partial class MaterialInElement : EntityWithElement, IStorageKey
     {
         public double Area;
@@ -1488,6 +1489,7 @@ namespace Vim.Format.ObjectModel
     /// An associative table binding a Shape to a ShapeCollection.
     /// </summary>
     [TableName(TableNames.ShapeInShapeCollection)]
+    [JoiningTable]
     public partial class ShapeInShapeCollection : Entity, IStorageKey
     {
         public Relation<Shape> _Shape;
@@ -1564,7 +1566,7 @@ namespace Vim.Format.ObjectModel
     /// An associative table binding an Element to a System.
     /// </summary>
     [TableName(TableNames.ElementInSystem)]
-    [CascadeElementRemap]
+    [JoiningTable]
     public partial class ElementInSystem : EntityWithElement, IStorageKey
     {
         /// <summary>
@@ -1613,7 +1615,7 @@ namespace Vim.Format.ObjectModel
     /// An associative table binding an Element to a Warning.
     /// </summary>
     [TableName(TableNames.ElementInWarning)]
-    [CascadeElementRemap]
+    [JoiningTable]
     public partial class ElementInWarning : EntityWithElement, IStorageKey
     {
         public Relation<Warning> _Warning;
@@ -1860,6 +1862,7 @@ namespace Vim.Format.ObjectModel
     /// Represents a column in a Schedule.
     /// </summary>
     [TableName(TableNames.ScheduleColumn)]
+    [JoiningTable]
     public partial class ScheduleColumn : Entity
     {
         /// <summary>
@@ -1882,6 +1885,7 @@ namespace Vim.Format.ObjectModel
     /// Represents a cell in a ScheduleColumn.
     /// </summary>
     [TableName(TableNames.ScheduleCell)]
+    [JoiningTable]
     public partial class ScheduleCell : Entity
     {
         /// <summary>
@@ -1926,6 +1930,7 @@ namespace Vim.Format.ObjectModel
     /// An associative table binding a ViewSheet to a ViewSheetSet.
     /// </summary>
     [TableName(TableNames.ViewSheetInViewSheetSet)]
+    [JoiningTable]
     public partial class ViewSheetInViewSheetSet : Entity, IStorageKey
     {
         public Relation<ViewSheet> _ViewSheet;
@@ -1939,6 +1944,7 @@ namespace Vim.Format.ObjectModel
     /// An associative table binding a View to a ViewSheetSet.
     /// </summary>
     [TableName(TableNames.ViewInViewSheetSet)]
+    [JoiningTable]
     public partial class ViewInViewSheetSet : Entity, IStorageKey
     {
         public Relation<View> _View;
@@ -1952,6 +1958,7 @@ namespace Vim.Format.ObjectModel
     /// An associative table binding a View to a ViewSheet
     /// </summary>
     [TableName(TableNames.ViewInViewSheet)]
+    [JoiningTable]
     public partial class ViewInViewSheet : Entity, IStorageKey
     {
         public Relation<View> _View;

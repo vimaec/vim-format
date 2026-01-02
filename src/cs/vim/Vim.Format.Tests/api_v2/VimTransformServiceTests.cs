@@ -145,77 +145,77 @@ public static class VimTransformServiceTests
         Assert.AreEqual(vim.Assets.Length, mergedVim.Assets.Length);
     }
 
-    // [Test]
-    // public static void TestFilter()
-    // {
-    //     var ctx = new CallerTestContext();
-    //     var dir = ctx.PrepareDirectory();
+    [Test]
+    public static void TestFilter()
+    {
+        var ctx = new CallerTestContext();
+        var dir = ctx.PrepareDirectory();
 
-    //     var vimFilePath = Path.Combine(VimFormatRepoPaths.DataDir, "RoomTest.vim");
-    //     var vim = VimScene.LoadVim(vimFilePath);
+        var vimFilePath = Path.Combine(VimFormatRepoPaths.DataDir, "RoomTest.vim");
+        var vim = VIM.Open(vimFilePath);
 
-    //     // Just keep the even-numbered nodes.
-    //     var transformService = new TransformService(nameof(TestTransformService), "0.0.0");
-    //     var counter = 0;
-    //     var db = transformService.Filter(vim, n => n.GetMesh() != null && (counter++ % 2 == 0));
+        // Just keep the even-numbered nodes.
+        var transformService = new VimTransformService(nameof(TestFilter), "0.0.0");
+        var counter = 0;
+        var transformed = transformService.Filter(vim, e => !e.HasMesh || (counter++ % 2 == 0));
 
-    //     var filteredVimFilePath = Path.Combine(dir, "evens.vim");
-    //     db.Write(filteredVimFilePath);
+        var filteredVimFilePath = Path.Combine(dir, "evens.vim");
+        transformed.Write(filteredVimFilePath);
 
-    //     Assert.IsTrue(File.Exists(filteredVimFilePath));
+        Assert.IsTrue(File.Exists(filteredVimFilePath));
 
-    //     var filteredVim = VimScene.LoadVim(filteredVimFilePath);
-    //     filteredVim.Validate();
-    // }
+        var filteredVim = VIM.Open(filteredVimFilePath);
+        filteredVim.Validate();
+    }
 
-    // [Test]
-    // public static void TestMergeDedupAndFilter()
-    // {
-    //     var ctx = new CallerTestContext();
-    //     var dir = ctx.PrepareDirectory();
+    [Test]
+    public static void TestMergeDedupAndFilter()
+    {
+        var ctx = new CallerTestContext();
+        var dir = ctx.PrepareDirectory();
 
-    //     var vimFilePath = VimFormatRepoPaths.GetDataFilePath("Dwelling*.vim", true);
+        var vimFilePath = VimFormatRepoPaths.GetDataFilePath("Dwelling*.vim", true);
 
-    //     // Setup: Merge two identical VIM files as a grid.
-    //     var vim1 = VimScene.LoadVim(vimFilePath);
-    //     var vim2 = VimScene.LoadVim(vimFilePath);
+        // Setup: Merge two identical VIM files as a grid.
+        var vim1 = VIM.Open(vimFilePath);
+        var vim2 = VIM.Open(vimFilePath);
 
-    //     var generatorString = nameof(TestMergeDedupAndFilter);
-    //     var versionString = "0.0.0";
+        var generatorString = nameof(TestMergeDedupAndFilter);
+        var versionString = "0.0.0";
 
-    //     var mergedDb = MergeService.MergeVimScenes(
-    //         new MergeConfigVimScenes(new[] { vim1, vim2 }),
-    //         new MergeConfigOptions
-    //         {
-    //             MergeAsGrid = true,
-    //             GridPadding = 10f,
-    //             GeneratorString = generatorString,
-    //             VersionString = versionString
-    //         });
+        var mergedDb = VimMergeService.Merge(
+            new VimMergeConfig(new[] { vim1, vim2 }),
+            new VimMergeConfigOptions
+            {
+                MergeAsGrid = true,
+                GridPadding = 10f,
+                GeneratorString = generatorString,
+                VersionString = versionString
+            });
 
-    //     var mergedVimFilePath = Path.Combine(dir, "merged.vim");
-    //     mergedDb.Write(mergedVimFilePath);
-    //     var mergedVim = VimScene.LoadVim(mergedVimFilePath);
-    //     mergedVim.Validate();
+        var mergedVimFilePath = Path.Combine(dir, "merged.vim");
+        mergedDb.Write(mergedVimFilePath);
+        var mergedVim = VIM.Open(mergedVimFilePath);
+        mergedVim.Validate();
 
-    //     // Deduplicate identical meshes using the transform service.
+        // Deduplicate identical meshes using the transform service.
 
-    //     var transformService = new TransformService(generatorString, versionString);
+        var transformService = new VimTransformService(generatorString, versionString);
 
-    //     var dedupDb = transformService.DeduplicateGeometry(mergedVim);
-    //     var dedupVimFilePath = Path.Combine(dir, "dedup.vim");
-    //     dedupDb.Write(dedupVimFilePath);
-    //     var dedupVim = VimScene.LoadVim(dedupVimFilePath);
-    //     dedupVim.Validate();
+        var dedup = transformService.DeduplicateGeometry(mergedVim);
+        var dedupVimFilePath = Path.Combine(dir, "dedup.vim");
+        dedup.Write(dedupVimFilePath);
+        var dedupVim = VIM.Open(dedupVimFilePath);
+        dedupVim.Validate();
 
-    //     Assert.Less(dedupVim.Meshes.Count, mergedVim.Meshes.Count);
+        Assert.Less(dedupVim.GeometryData.MeshCount, mergedVim.GeometryData.MeshCount);
 
-    //     // Bonus: filter the deduplicated VIM and only keep the windows
+        // Bonus: filter the deduplicated VIM and only keep the windows
 
-    //     var filteredDb = transformService.Filter(dedupVim, n => n.CategoryName == "Casework");
-    //     var filteredVimFilePath = Path.Combine(dir, "filtered.vim");
-    //     filteredDb.Write(filteredVimFilePath);
-    //     var filteredVim = VimScene.LoadVim(filteredVimFilePath);
-    //     filteredVim.Validate();
-    // }
+        var filtered = transformService.Filter(dedupVim, e => !e.HasMesh || dedupVim.GetEntityTableSet().GetElement(e.ElementIndex).Category?.Name == "Casework");
+        var filteredVimFilePath = Path.Combine(dir, "filtered.vim");
+        filtered.Write(filteredVimFilePath);
+        var filteredVim = VIM.Open(filteredVimFilePath);
+        filteredVim.Validate();
+    }
 }

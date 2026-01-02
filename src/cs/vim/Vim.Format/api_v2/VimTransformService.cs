@@ -132,11 +132,15 @@ namespace Vim.Format.api_v2
                 elementIndicesToKeep,
                 instanceIndicesToKeep);
 
-            var oldMeshIndexMap = new Dictionary<int, (VimMeshView meshView, int newMeshIndex)>();
-            void AddToOldMeshIndexMap(int oldMeshIndex, VimMeshView meshView)
+            var meshViewsToKeep = new List<VimMeshView>();
+            var oldMeshIndexToNewMeshIndex = new Dictionary<int, int>();
+
+            int KeepMeshView(VimMeshView meshView)
             {
-                var newMeshIndex = oldMeshIndexMap.Count;
-                oldMeshIndexMap[oldMeshIndex] = (meshView, newMeshIndex);
+                var newMeshIndex = meshViewsToKeep.Count;
+                meshViewsToKeep.Add(meshView);
+                oldMeshIndexToNewMeshIndex[meshView.MeshIndex] = newMeshIndex;
+                return newMeshIndex;
             }
 
             if (deduplicateMeshes)
@@ -147,10 +151,11 @@ namespace Vim.Format.api_v2
                 // Create the lookup from old mesh view index to common mesh view
                 foreach (var (meshComparer, meshViews) in groupedMeshes)
                 {
+                    var newMeshIndex = KeepMeshView(meshComparer.MeshView);
+
                     foreach (var meshView in meshViews)
                     {
-                        var oldMeshIndex = meshView.MeshIndex;
-                        AddToOldMeshIndexMap(oldMeshIndex, meshView);
+                        oldMeshIndexToNewMeshIndex[meshView.MeshIndex] = newMeshIndex;
                     }
                 }
             }
@@ -161,13 +166,13 @@ namespace Vim.Format.api_v2
                     var meshView = geometryData.GetMeshView(oldMeshIndex);
                     if (meshView.HasValue)
                     {
-                        AddToOldMeshIndexMap(oldMeshIndex, meshView.Value);
+                        KeepMeshView(meshView.Value);
                     }
                 }
             }
 
             // Add the meshes.
-            foreach (var (meshView, _) in oldMeshIndexMap.Values.OrderBy(t => t.newMeshIndex))
+            foreach (var meshView in meshViewsToKeep)
             {
                 vb.Meshes.Add(new VimSubdividedMesh(meshView));
             }
@@ -179,7 +184,7 @@ namespace Vim.Format.api_v2
 
                 var newMeshIndex = oldMeshIndex == -1
                     ? oldMeshIndex
-                    : oldMeshIndexMap[oldMeshIndex].newMeshIndex;
+                    : oldMeshIndexToNewMeshIndex[oldMeshIndex];
 
                 var oldTransform = geometryData.InstanceTransforms[oldInstanceIndex];
                 var newTransform = instanceTransform?.Invoke(oldInstanceIndex, oldTransform) ?? oldTransform;

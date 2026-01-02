@@ -164,6 +164,20 @@ public static class VimEntityCodeGen
         }
         cb.AppendLine("    };");
 
+        var joiningTableTypes = entityTypes
+            .Select(t => (t, t.HasJoiningTable()))
+            .Where(tuple => tuple.Item2 != false)
+            .ToArray();
+        cb.AppendLine();
+        cb.AppendLine("public static HashSet<string> GetJoiningTableNames()");
+        cb.AppendLine("    => new HashSet<string>()");
+        cb.AppendLine("    {");
+        foreach (var (t, _) in joiningTableTypes)
+        {
+            cb.AppendLine(        $"VimEntityTableNames.{t.Name},");
+        }
+        cb.AppendLine("    };");
+
         cb.AppendLine();
         cb.AppendLine("// Returns an array defining a 1:1 association of Element to its ElementKind");
         cb.AppendLine("public ElementKind[] GetElementKinds()");

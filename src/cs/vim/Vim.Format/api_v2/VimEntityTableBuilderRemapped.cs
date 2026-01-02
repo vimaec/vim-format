@@ -4,14 +4,15 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using Vim.BFast;
+using Vim.Format.ObjectModel;
 using Vim.Util;
 
 namespace Vim.Format.api_v2
 {
     public class VimEntityTableBuilderRemapped
     {
-        public VimEntityTableBuilder EntityTableBuilder { get; }
-        public int[] OldToNewIndexMap { get; }
+        public VimEntityTableBuilder EntityTableBuilder { get; private set; }
+        public int[] OldToNewIndexMap { get; private set; }
         public bool IsRemapped => OldToNewIndexMap != null;
 
         /// <summary>
@@ -25,6 +26,12 @@ namespace Vim.Format.api_v2
             OldToNewIndexMap = oldToNewIndexMap;
         }
 
+        private void UpdateFrom(VimEntityTableBuilderRemapped other)
+        {
+            EntityTableBuilder = other.EntityTableBuilder;
+            OldToNewIndexMap = other.OldToNewIndexMap;
+        }
+
         /// <summary>
         /// Returns a default remapped entity table builder in which no remapping has occurred.
         /// </summary>
@@ -32,9 +39,9 @@ namespace Vim.Format.api_v2
             => new VimEntityTableBuilderRemapped(et, null);
 
         /// <summary>
-        /// Returns a VimTableBuilderRemapped whose contained VimEntityTableBuilder is duplicated based on the given keyFn.
+        /// Returns a VimTableBuilderRemapped whose contained VimEntityTableBuilder is deduplicated based on the given keyFn.
         /// </summary>
-        private static VimEntityTableBuilderRemapped CreateRemapped<T>(
+        private static VimEntityTableBuilderRemapped CreateDeduplicated<T>(
             IReadOnlyVimEntityTableBuilder et,
             Func<int, IReadOnlyVimEntityTableBuilder, T> keyFn)
         {
@@ -188,7 +195,16 @@ namespace Vim.Format.api_v2
             return remapped;
         }
 
-        private static void MutateEntityTableBuilderRelations(
+        private static void UpdateRelations(
+            List<VimEntityTableBuilderRemapped> remappedEntityTableBuilders,
+            CancellationToken ct = default)
+        {
+            MutateIndexRelations(remappedEntityTableBuilders, ct);
+
+            RemoveOrphanedJoiningTableEntities(remappedEntityTableBuilders, ct);
+        }
+
+        private static void MutateIndexRelations(
             List<VimEntityTableBuilderRemapped> remappedEntityTableBuilders,
             CancellationToken ct = default)
         {
@@ -220,12 +236,56 @@ namespace Vim.Format.api_v2
                     for (var i = 0; i < indexColumn.Length; ++i)
                     {
                         var oldIndex = indexColumn[i];
-                        indexColumn[i] = oldIndex == VimConstants.NoEntityRelation
-                            ? oldIndex
-                            : oldToNewIndexMap[oldIndex];
+                        if (oldIndex != VimConstants.NoEntityRelation)
+                        {
+                            indexColumn[i] = oldToNewIndexMap[oldIndex];
+                        }
                     }
                 }
             }
+        }
+
+        private static bool RemoveOrphanedJoiningTableEntities(
+            List<VimEntityTableBuilderRemapped> remappedEntityTableBuilders,
+            CancellationToken ct = default)
+        {
+            var orphansRemoved = false;
+            var joiningTableNames = VimEntityTableSet.GetJoiningTableNames();
+
+            foreach (var rtb in remappedEntityTableBuilders)
+            {
+                var tb = rtb.EntityTableBuilder;
+
+                if (!joiningTableNames.Contains(tb.Name))
+                    continue;
+
+                var orphanIndices = new HashSet<int>();
+
+                // Find the orphaned entities
+                foreach (var (tablName, indexColumn) in tb.IndexColumns)
+                {
+                    for (var i = 0; i < tb.RowCount; ++i)
+                    {
+                        if (indexColumn[i] == EntityRelation.None)
+                        {
+                            orphanIndices.Add(i);
+                        }
+                    }
+                }
+
+                if (orphanIndices.Count == 0)
+                    continue;
+
+                // Remove the orphans.
+                // NOTE: these orphans can be safely/naively removed because nobody else should be referencing them.
+                var swept = CreateFiltered(tb, (i, e) => !orphanIndices.Contains(i));
+
+                rtb.UpdateFrom(swept);
+
+                orphansRemoved = true;
+            }
+
+            return orphansRemoved;
         }
 
         private static List<VimEntityTableBuilderRemapped> DeduplicateEntityTableBuilders(
@@ -250,7 +310,7 @@ namespace Vim.Format.api_v2
                 var table = categoryTable;
                 var nameCol = table.StringColumns.GetOrDefault("string:Name");
                 var builtInCol = table.StringColumns.GetOrDefault("string:BuiltInCategory");
-                categoryTableRemapped = CreateRemapped<object>(table, (i, _) => (
+                categoryTableRemapped = CreateDeduplicated<object>(table, (i, _) => (
                     nameCol?.ElementAtOrDefault(i, "") ?? "",
                     builtInCol?.ElementAtOrDefault(i, "") ?? ""
                 ));
@@ -269,7 +329,7 @@ namespace Vim.Format.api_v2
                 var specCol = table.StringColumns.GetOrDefault("string:Spec");
                 var typeCol = table.StringColumns.GetOrDefault("string:Type");
                 var labelCol = table.StringColumns.GetOrDefault("string:Label");
-                displayUnitTableRemapped = CreateRemapped(table, (i, _) => (
+                displayUnitTableRemapped = CreateDeduplicated(table, (i, _) => (
                     specCol?.ElementAtOrDefault(i, "") ?? "",
                     typeCol?.ElementAtOrDefault(i, "") ?? "",
                     labelCol?.ElementAtOrDefault(i, "") ?? ""
@@ -296,7 +356,7 @@ namespace Vim.Format.api_v2
                 var storageTypeArray = VimEntityTableColumnTypeInfo.GetDataColumnAsTypedArray<int>(table.DataColumns.GetOrDefault("int:StorageType"));
                 var displayUnitIndexArray = table.IndexColumns.GetOrDefault("index:Vim.DisplayUnit:DisplayUnit");
 
-                pdTableRemapped = CreateRemapped<object>(table, (i, _) => {
+                pdTableRemapped = CreateDeduplicated<object>(table, (i, _) => {
                     var name = nameArray?.ElementAtOrDefault(i, "") ?? "";
                     var group = groupArray?.ElementAtOrDefault(i, "") ?? "";
                     var isInstance = isInstanceArray?.ElementAtOrDefault(i, false) ?? false;
@@ -345,7 +405,7 @@ namespace Vim.Format.api_v2
             }
 
             // Mutate all the entity index relations to adapt to the filtered entities.
-            MutateEntityTableBuilderRelations(result, ct);
+            UpdateRelations(result, ct);
 
             return result;
         }
@@ -385,7 +445,7 @@ namespace Vim.Format.api_v2
             }
 
             // Update all the entity index relations.
-            MutateEntityTableBuilderRelations(result, ct);
+            UpdateRelations(result, ct);
 
             return result;
         }

@@ -279,9 +279,9 @@ namespace Vim.Format.api_v2
             => meshIndices
                 .AsParallel()
                 .Select(i => GetMeshView(i))
-                .Where(vmv => vmv != null)
-                .Select(vmv => vmv.Value)
-                .GroupBy(vmv => new VimMeshComparer(vmv))
+                .Where(mv => mv != null)
+                .Select(mv => mv.Value)
+                .GroupBy(mv => new VimMeshComparer(mv))
                 .ToDictionary(g => g.Key, g => g.ToArray());
 
         public static Vector3[] GetTransformedVertices(Vector3[] sourceVertices, Matrix4x4 transform)

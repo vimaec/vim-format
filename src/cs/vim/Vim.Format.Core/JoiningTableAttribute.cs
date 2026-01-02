@@ -3,9 +3,9 @@
 namespace Vim.Format
 {
     [AttributeUsage(AttributeTargets.Class)]
-    public class CascadeElementRemapAttribute : Attribute
+    public class JoiningTableAttribute : Attribute
     {
-        public CascadeElementRemapAttribute()
+        public JoiningTableAttribute()
         { }
     }
 }
