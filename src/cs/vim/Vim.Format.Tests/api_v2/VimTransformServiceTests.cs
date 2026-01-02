@@ -183,7 +183,7 @@ public static class VimTransformServiceTests
         var generatorString = nameof(TestMergeDedupAndFilter);
         var versionString = "0.0.0";
 
-        var mergedDb = VimMergeService.Merge(
+        var merged = VimMergeService.Merge(
             new VimMergeConfig(new[] { vim1, vim2 }),
             new VimMergeConfigOptions
             {
@@ -194,7 +194,7 @@ public static class VimTransformServiceTests
             });
 
         var mergedVimFilePath = Path.Combine(dir, "merged.vim");
-        mergedDb.Write(mergedVimFilePath);
+        merged.Write(mergedVimFilePath);
         var mergedVim = VIM.Open(mergedVimFilePath);
         mergedVim.Validate();
 
