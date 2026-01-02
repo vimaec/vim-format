@@ -273,12 +273,29 @@ namespace Vim.Format.api_v2
         }
     }
 
+    public class VimMergeResult
+    {
+        public VimBuilder VimBuilder { get; }
+        public VimEntityTableBuilder[] VimEntityTableBuilders { get; }
+
+        public VimMergeResult(VimBuilder vimBuilder, VimEntityTableBuilder[] vimEntityTableBuilders)
+        {
+            VimBuilder = vimBuilder;
+            VimEntityTableBuilders = vimEntityTableBuilders;
+        }
+
+        public void Write(string vimFilePath)
+        {
+            VimBuilder.Write(vimFilePath, VimEntityTableBuilders);
+        }
+    }
+
     public static class VimMergeService
     {
         /// <summary>
         /// Merges the VIM files in the specified VimMergeConfigFiles object.
         /// </summary>
-        public static void MergeVimFiles(
+        public static void Merge(
             VimMergeConfigFiles fileConfig,
             VimMergeConfigOptions optionsConfig,
             IProgress<string> progress = null,
@@ -296,7 +313,7 @@ namespace Vim.Format.api_v2
 
             progress?.Report("Merging VIM files");
             cancellationToken.ThrowIfCancellationRequested();
-            var (vimBuilder, vimEntityTableBuilders) = MergeVims(
+            var mergeResult = Merge(
                 new VimMergeConfig(inputVimsAndTransforms),
                 optionsConfig,
                 progress,
@@ -305,7 +322,7 @@ namespace Vim.Format.api_v2
             progress?.Report("Writing merged VIM file");
             cancellationToken.ThrowIfCancellationRequested();
             var mergedVimFilePath = fileConfig.MergedVimFilePath;
-            vimBuilder.Write(mergedVimFilePath, vimEntityTableBuilders);
+            mergeResult.Write(mergedVimFilePath);
 
             progress?.Report("Completed VIM file merge");
         }
@@ -313,7 +330,7 @@ namespace Vim.Format.api_v2
         /// <summary>
         /// Merge the given VIM scenes into a VimBuilder
         /// </summary>
-        public static (VimBuilder, VimEntityTableBuilder[]) MergeVims(
+        public static VimMergeResult Merge(
             VimMergeConfig vimMergeConfig,
             VimMergeConfigOptions optionsConfig = null,
             IProgress<string> progress = null,
@@ -464,7 +481,7 @@ namespace Vim.Format.api_v2
             foreach (var asset in vims.SelectMany(vim => vim.Assets))
                 vimBuilder.AddAsset(asset);
 
-            return (vimBuilder, entityTableBuilders);
+            return new VimMergeResult(vimBuilder, entityTableBuilders);
         }
 
         private static int[] PartialSums(int[] self, int init = default)

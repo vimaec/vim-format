@@ -42,7 +42,7 @@ namespace Vim.Format.Tests.api_v2
                 KeepBimData = true,
             };
 
-            VimMergeService.MergeVimFiles(configFiles, configOptions);
+            VimMergeService.Merge(configFiles, configOptions);
 
             var baseVim = VIM.Open(vim);
             baseVim.Validate();
@@ -95,7 +95,7 @@ namespace Vim.Format.Tests.api_v2
                 MergeAsGrid = true,
             };
 
-            VimMergeService.MergeVimFiles(configFiles, configOptions);
+            VimMergeService.Merge(configFiles, configOptions);
 
             var vim1 = VIM.Open(vimFilePath1);
             vim1.Validate();
@@ -179,7 +179,7 @@ namespace Vim.Format.Tests.api_v2
                 }, mergedVimFilePath);
 
             var configOptions = new VimMergeConfigOptions() { GeneratorString = ctx.TestName, VersionString = "0.0.0", };
-            VimMergeService.MergeVimFiles(configFiles, configOptions);
+            VimMergeService.Merge(configFiles, configOptions);
 
             Assert.IsTrue(File.Exists(mergedVimFilePath));
 
@@ -216,7 +216,7 @@ namespace Vim.Format.Tests.api_v2
             // Validate that an exception is thrown due to mismatching object model major versions
             try
             {
-                VimMergeService.MergeVimFiles(configFiles, configOptions);
+                VimMergeService.Merge(configFiles, configOptions);
                 Assert.Fail($"Expected an exception to be thrown ({ErrorCode.VimMergeObjectModelMajorVersionMismatch:G})");
             }
             catch (HResultException e)

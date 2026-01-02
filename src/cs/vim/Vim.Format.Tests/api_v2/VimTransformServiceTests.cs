@@ -62,66 +62,88 @@ public static class VimTransformServiceTests
             IsFamilyInstanceWithCategoryOrTrue(fi.ElementIndex, transformedTableSet, transformedElementKinds)));
     }
 
-    // [Test]
-    // public static void TestSplitMerge()
-    // {
-    //     var ctx = new CallerTestContext();
-    //     var dir = ctx.PrepareDirectory();
+    [Test]
+    public static void TestSplitMerge()
+    {
+        var ctx = new CallerTestContext();
+        var dir = ctx.PrepareDirectory();
 
-    //     var vimFilePath = Path.Combine(VimFormatRepoPaths.DataDir, "RoomTest.vim");
-    //     var vim = VimScene.LoadVim(vimFilePath);
-    //     var transformService = new TransformService(nameof(TestTransformService), "0.0.0");
+        var vimFilePath = Path.Combine(VimFormatRepoPaths.DataDir, "RoomTest.vim");
+        var vim = VIM.Open(vimFilePath);
+        var transformService = new VimTransformService(nameof(TestSplitMerge), "0.0.0");
 
-    //     var box = vim.BoundingBox();
+        var gd = vim.GeometryData; 
+        var box = gd.GetWorldSpaceBoundingBox();
 
-    //     bool IsLeft(VimSceneNode n)
-    //         => n.TransformedMesh().Center().X < box.Center.X;
+        bool IsLeft(int instanceIndex, int meshIndex)
+        {
+            if (!vim.GeometryData.TryGetTransformedMesh(instanceIndex, meshIndex, out var vimMeshData))
+                return false;
 
-    //     // Get the left part of the VIM file
-    //     var leftVimFilePath = Path.Combine(dir, "left.vim");
-    //     {
-    //         var db = transformService.Filter(vim, n => n.GetMesh() != null && IsLeft(n));
-    //         db.Write(leftVimFilePath);
-    //         Assert.IsTrue(File.Exists(leftVimFilePath));
-    //     }
-    //     var leftVim = VimScene.LoadVim(leftVimFilePath);
-    //     leftVim.Validate();
+            var meshBb = vimMeshData.GetBoundingBox();
 
-    //     // Get the right part of the VIM file.
-    //     var rightVimFilePath = Path.Combine(dir, "right.vim");
-    //     {
-    //         var db = transformService.Filter(vim, n => n.GetMesh() != null && !IsLeft(n));
-    //         db.Write(rightVimFilePath);
-    //         Assert.IsTrue(File.Exists(rightVimFilePath));
-    //     }
-    //     var rightVim = VimScene.LoadVim(rightVimFilePath);
-    //     rightVim.Validate();
+            return meshBb.Center.X < box.Center.X;
+        }
 
+        // Get the left part of the VIM file
+        var leftVimFilePath = Path.Combine(dir, "left.vim");
+        {
+            var filterResult = transformService.Filter(vim, e =>
+            {
+                if (!e.HasMesh) return true;
+                return e.InstanceAndMeshIndices.Any(t => IsLeft(t.InstanceIndex, t.MeshIndex));
+            });
+            filterResult.Write(leftVimFilePath);
+            Assert.IsTrue(File.Exists(leftVimFilePath));
+        }
+        var leftVim = VIM.Open(leftVimFilePath);
+        leftVim.Validate();
 
-    //     bool HasGeometry(ISceneNode n) => n.GetMesh() != null;
-    //     Assert.AreEqual(vim.Nodes.Where(HasGeometry).Count(), leftVim.Nodes.Where(HasGeometry).Count() + rightVim.Nodes.Where(HasGeometry).Count());
+        // Get the right part of the VIM file.
+        var rightVimFilePath = Path.Combine(dir, "right.vim");
+        {
+            var filterResult = transformService.Filter(vim, e =>
+            {
+                if (!e.HasMesh) return true;
+                return e.InstanceAndMeshIndices.All(t => !IsLeft(t.InstanceIndex, t.MeshIndex));
+            });
+            filterResult.Write(rightVimFilePath);
+            Assert.IsTrue(File.Exists(rightVimFilePath));
+        }
+        var rightVim = VIM.Open(rightVimFilePath);
+        rightVim.Validate();
 
-    //     Assert.AreEqual(vim.Document.EntityTables.Keys.Count, leftVim.Document.EntityTables.Keys.Count);
-    //     Assert.AreEqual(vim.Document.EntityTables.Keys.Count, rightVim.Document.EntityTables.Keys.Count);
+        bool HasGeometry(VimElementGeometryInfo egi) => egi.HasMesh;
 
-    //     var mergedVimFilePath = Path.Combine(dir, "merged.vim");
-    //     var documentBuilder = MergeService.MergeVimScenes(new MergeConfigVimScenes(new[] { leftVim, rightVim }));
-    //     documentBuilder.Write(mergedVimFilePath);
-    //     Assert.IsTrue(File.Exists(mergedVimFilePath));
-    //     var mergedVim = VimScene.LoadVim(mergedVimFilePath);
-    //     mergedVim.Validate();
+        Assert.AreEqual(
+            vim.GetElementGeometryInfoList().Count(HasGeometry),
+            leftVim.GetElementGeometryInfoList().Count(HasGeometry) + rightVim.GetElementGeometryInfoList().Count(HasGeometry));
 
-    //     Assert.AreEqual(vim.Nodes.Where(HasGeometry).Count(), mergedVim.Nodes.Where(HasGeometry).Count());
+        Assert.AreEqual(vim.EntityTableData.Count, leftVim.EntityTableData.Count);
+        Assert.AreEqual(vim.EntityTableData.Count, rightVim.EntityTableData.Count);
 
-    //     Assert.AreEqual(vim.Document.EntityTables.Keys.Count, vim.Document.EntityTables.Keys.Count);
+        var mergedVimFilePath = Path.Combine(dir, "merged.vim");
+        var mergeResult = VimMergeService.Merge(
+            new VimMergeConfig(new[] { leftVim, rightVim }),
+            new VimMergeConfigOptions());
+        mergeResult.Write(mergedVimFilePath);
+        Assert.IsTrue(File.Exists(mergedVimFilePath));
+        var mergedVim = VIM.Open(mergedVimFilePath);
+        mergedVim.Validate();
 
-    //     var sourceStringSet = new HashSet<string>(vim.Document.StringTable.ToEnumerable());
-    //     var mergedStringSet = new HashSet<string>(mergedVim.Document.StringTable.ToEnumerable());
-    //     mergedStringSet.ExceptWith(sourceStringSet);
-    //     Assert.AreEqual(0, mergedStringSet.Count);
+        Assert.AreEqual(
+            vim.GetElementGeometryInfoList().Count(HasGeometry),
+            mergedVim.GetElementGeometryInfoList().Count(HasGeometry));
 
-    //     Assert.AreEqual(vim.Document.Assets.Keys.Count, mergedVim.Document.Assets.Keys.Count);
-    // }
+        Assert.AreEqual(vim.EntityTableData.Count, mergedVim.EntityTableData.Count);
+
+        var sourceStringSet = new HashSet<string>(vim.StringTable);
+        var mergedStringSet = new HashSet<string>(mergedVim.StringTable);
+        mergedStringSet.ExceptWith(sourceStringSet);
+        Assert.AreEqual(0, mergedStringSet.Count);
+
+        Assert.AreEqual(vim.Assets.Length, mergedVim.Assets.Length);
+    }
 
     // [Test]
     // public static void TestFilter()

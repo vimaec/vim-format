@@ -16,6 +16,14 @@ namespace Vim.Format.api_v2
         int FaceCount { get; }
     }
 
+    public static class VimMeshExtensions
+    {
+        public static AABox GetBoundingBox(this IVimMesh vimMesh)
+        {
+            return AABox.Create(vimMesh.GetVertices());
+        }
+    }
+
     public struct VimMeshData : IVimMesh
     {
         public readonly Vector3[] Vertices;

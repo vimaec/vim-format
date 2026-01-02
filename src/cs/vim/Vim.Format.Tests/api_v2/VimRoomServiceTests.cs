@@ -40,7 +40,7 @@ public static class VimRoomServiceTests
             VersionString = "0.0.0",
         };
 
-        VimMergeService.MergeVimFiles(mergeFiles, mergeOptions);
+        VimMergeService.Merge(mergeFiles, mergeOptions);
 
         var mergedVim = VIM.Open(mergedFilePath);
         Assert.DoesNotThrow(() => mergedVim.Validate());

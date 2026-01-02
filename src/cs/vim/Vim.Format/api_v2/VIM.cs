@@ -10,6 +10,8 @@ using System.Threading;
 // TODO
 // - Port tests
 //  - TransformServiceTests.cs
+//    - bug: ElementInSystem @ 171 has a null System (in TestSplitMerge)
+//      - Probable cause: a System has been deleted and the ElementInSystem record remains...
 //    - Restore tests
 //    - test!!
 //    - ...See if we can create a simple example to modify node render materials as well.
