@@ -10,14 +10,10 @@ using System.Threading;
 // TODO
 // - Port tests
 //  - TransformServiceTests.cs
-//    - bug: DeduplicateGeometry is failing because VimMeshComparer is likely not cooperating with the GroupBy call in GroupMeshViews.
 //    - ...See if we can create a simple example to modify node render materials as well.
-// - Read/Write implementation guinea pig: gltf converter
-// - Adapt all test code to new API & fill in the gaps
-// - Adapt the merge service
-// - Port ColumnExtensions.cs
-// - Port ColumnExtensions.Buffers.cs
-// - Port ColumnExtensions.Reflection.cs
+// - Gltf converter
+// - Visitor pattern on geometry deserialization to minimize memory footprint in 3dsMax importer.
+// - Remove unused/old code.
 // - Test beyond this repository (i.e. with Revit exporter) > check the buildup using VimMesh
 
 namespace Vim.Format.api_v2
