@@ -169,7 +169,7 @@ namespace Vim.Format.api_v2
             Vertices = vimMeshView.GetVertices();
             Indices = vimMeshView.GetIndices();
             FaceCount = vimMeshView.FaceCount;
-            TopologyHash = HashCodeStd2.GetSequenceHash(vimMeshView.GetIndices());
+            TopologyHash = HashCodeStd2.GetSequenceHash(Indices);
             var box = AABox.Create(Vertices);
             BoxMin = RoundVector3(box.Min, roundingPrecision);
             BoxExtents = RoundVector3(box.Extent, roundingPrecision);
