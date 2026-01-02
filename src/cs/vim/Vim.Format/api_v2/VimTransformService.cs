@@ -145,15 +145,15 @@ namespace Vim.Format.api_v2
 
             if (deduplicateMeshes)
             {
-                // Group the mesh views under a common mesh view
+                // Group the mesh views
                 var groupedMeshes = geometryData.GroupMeshViews(meshIndicesToKeep);
 
                 // Create the lookup from old mesh view index to common mesh view
-                foreach (var (meshComparer, meshViews) in groupedMeshes)
+                foreach (var g in groupedMeshes)
                 {
-                    var newMeshIndex = KeepMeshView(meshComparer.MeshView);
+                    var newMeshIndex = KeepMeshView(g.Key.MeshView);
 
-                    foreach (var meshView in meshViews)
+                    foreach (var meshView in g)
                     {
                         oldMeshIndexToNewMeshIndex[meshView.MeshIndex] = newMeshIndex;
                     }

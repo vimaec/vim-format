@@ -275,18 +275,15 @@ namespace Vim.Format.api_v2
             return new VimMeshView(this, meshIndex);
         }
 
-        public Dictionary<VimMeshComparer, VimMeshView[]> GroupMeshViews(IEnumerable<int> meshIndices)
+        public IEnumerable<IGrouping<VimMeshComparer, VimMeshView>> GroupMeshViews(IEnumerable<int> meshIndices)
         {
-            var meshComparers = meshIndices
+            return meshIndices
                 .AsParallel()
                 .Select(i => GetMeshView(i))
                 .Where(mv => mv != null)
-                .Select(mv => new VimMeshComparer(mv.Value))
-                .ToArray();
-
-            var groups = meshComparers.GroupBy(c => c);
-
-            return groups.ToDictionary(g => g.Key, g => g.Select(i => i.MeshView).ToArray());
+                .OfType<VimMeshView>()
+                .GroupBy(mv => new VimMeshComparer(mv))
+                .AsSequential();
         }
 
         public static Vector3[] GetTransformedVertices(Vector3[] sourceVertices, Matrix4x4 transform)
