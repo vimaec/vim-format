@@ -16,6 +16,7 @@ using System.Threading;
 // - Remove unused/old code.
 //   remove "api_v2"
 // - Test beyond this repository (i.e. with Revit exporter) > check the buildup using VimMesh
+//   - Material and VimMaterial must be inserted simultaneously
 
 namespace Vim.Format.api_v2
 {
