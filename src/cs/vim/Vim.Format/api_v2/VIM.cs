@@ -8,12 +8,13 @@ using Vim.Util;
 using System.Threading;
 
 // TODO
-// - Gltf converter
+// - Merge with mainline + integrate
 // - Port tests
 //  - TransformServiceTests.cs
 //    - ...See if we can create a simple example to modify node render materials as well.
 // - Visitor pattern on geometry deserialization to minimize memory footprint in 3dsMax importer.
 // - Remove unused/old code.
+//   remove "api_v2"
 // - Test beyond this repository (i.e. with Revit exporter) > check the buildup using VimMesh
 
 namespace Vim.Format.api_v2
