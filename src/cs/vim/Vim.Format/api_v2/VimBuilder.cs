@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using Vim.BFast;
@@ -18,7 +19,7 @@ namespace Vim.Format.api_v2
         /// <summary>
         /// The list of subdivided meshes which will be accumulated.
         /// </summary>
-        public List<VimSubdividedMesh> Meshes { get; } = new List<VimSubdividedMesh>();
+        public List<VimSubdividedMesh> Meshes { get; private set; } = new List<VimSubdividedMesh>();
 
         /// <summary>
         /// The list of instances which will be accumulated.
@@ -121,7 +122,7 @@ namespace Vim.Format.api_v2
             var bldr = new BFastBuilder();
             foreach (var et in entityTables)
             {
-                bldr.Add(et.Name, et.GetAllColumns());
+                bldr.Add(et.Name, et.GetColumns());
             }
             return bldr;
         }
@@ -226,6 +227,67 @@ namespace Vim.Format.api_v2
         public void AddAsset(INamedBuffer asset)
         {
             Assets[asset.Name] = asset;
+        }
+
+        /// <summary>
+        /// Mutates the Meshes and Instances to remove any meshes which are not referenced by at least one instance.
+        /// </summary>
+        public VimBuilder TrimOrphanMeshes()
+        {
+            // Example:
+            //
+            // old instance mesh indices:  [0,  2,  4,  2]
+            // ---
+            // old mesh indices:           [0,  1,  2,  3,  4]
+            // orphan mesh indices:        [    1,      3    ]
+            // next mesh indices:          [0, -1,  1, -1,  2]
+            // ---
+            // next instance mesh indices: [0,  1,  2,  1]
+
+            const int nullMeshIndex = -1;
+
+            // Initialize the mesh indices
+            var meshIsReferenced = new bool[Meshes.Count];
+            for (var i = 0; i < meshIsReferenced.Length; i++)
+                meshIsReferenced[i] = false;
+
+            // Mark the mesh indices which are referenced by an instance.
+            foreach (var instance in Instances)
+            {
+                if (instance.MeshIndex <= nullMeshIndex)
+                    continue;
+
+                meshIsReferenced[instance.MeshIndex] = true;
+            }
+
+            // Early exit if all meshes are referenced.
+            if (meshIsReferenced.All(isReferenced => isReferenced))
+                return this;
+
+            // Update the new mesh indices.
+            var nextMeshIndex = 0;
+            var nextMeshIndices = new int[meshIsReferenced.Length];
+            for (var i = 0; i < nextMeshIndices.Length; ++i)
+            {
+                nextMeshIndices[i] = meshIsReferenced[i]
+                    ? nextMeshIndex++
+                    : nullMeshIndex;
+            }
+
+            // Create a new mesh list which excludes the orphaned meshes.
+            Meshes = Meshes.Where((m, i) => nextMeshIndices[i] > nullMeshIndex).ToList();
+
+            // Mutate the instances to update their mesh index.
+            foreach (var instance in Instances)
+            {
+                if (instance.MeshIndex <= nullMeshIndex)
+                    continue;
+
+                instance.MeshIndex = nextMeshIndices[instance.MeshIndex];
+                Debug.Assert(instance.MeshIndex > nullMeshIndex, $"Invalid instance mesh index ({instance.MeshIndex})");
+            }
+
+            return this;
         }
     }
 }

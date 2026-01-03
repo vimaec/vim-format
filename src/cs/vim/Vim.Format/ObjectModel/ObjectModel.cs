@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using Vim.Format.api_v2;
 using Vim.Util;
 using Vim.Math3d;
 
@@ -192,11 +193,6 @@ namespace Vim.Format.ObjectModel
         public static SerializableVersion v4_0_0 => SerializableVersion.Parse(History.v4_0_0);
     }
 
-    public partial class DocumentModel
-    {
-        public readonly Document Document;
-    }
-
     public enum G3dAttributeReferenceMultiplicity {
         OneToOne,
         OneToMany,
@@ -251,7 +247,7 @@ namespace Vim.Format.ObjectModel
         // - Also create a new SQL vw_Element_v* view with new element kind mapping.
     }
 
-    public interface IElementKindTable : IEntityTable
+    public interface IElementKindTable : IVimEntityTable
     {
         int GetElementIndex(int entityIndex);
     }
@@ -298,7 +294,6 @@ namespace Vim.Format.ObjectModel
     public partial class Entity
     {
         public int Index;
-        public Document Document;
 
         public virtual bool FieldsAreEqual(object obj)
             => throw new NotImplementedException();
@@ -309,7 +304,7 @@ namespace Vim.Format.ObjectModel
     /// </summary>
     public static class EntityRelation
     {
-        public const int None = VimConstants.NoEntityRelation;
+        public const int None = VimEntityTableConstants.NoEntityRelation;
         public static int IndexOrDefault(this Entity entity)
             => entity?.Index ?? None;
 
@@ -358,7 +353,7 @@ namespace Vim.Format.ObjectModel
     /// <summary>
     /// Represents an Asset buffer in the VIM file.
     /// </summary>
-    [TableName(TableNames.Asset)]
+    [TableName(VimEntityTableNames.Asset)]
     public partial class Asset : Entity
     {
         /// <summary>
@@ -370,7 +365,7 @@ namespace Vim.Format.ObjectModel
     /// <summary>
     /// Defines the display units of a ParameterDefinition
     /// </summary>
-    [TableName(TableNames.DisplayUnit)]
+    [TableName(VimEntityTableNames.DisplayUnit)]
     public partial class DisplayUnit : Entity, IStorageKey
     {
         /// <summary>
@@ -426,7 +421,7 @@ namespace Vim.Format.ObjectModel
     /// <summary>
     /// Represents a parameter descriptor.
     /// </summary>
-    [TableName(TableNames.ParameterDescriptor)]
+    [TableName(VimEntityTableNames.ParameterDescriptor)]
     public partial class ParameterDescriptor : Entity, IStorageKey
     {
         /// <summary>
@@ -538,7 +533,7 @@ namespace Vim.Format.ObjectModel
     /// <summary>
     /// Represents a parameter associated to an Element. An Element can contain 0..* Parameters.
     /// </summary>
-    [TableName(TableNames.Parameter)]
+    [TableName(VimEntityTableNames.Parameter)]
     public partial class Parameter : EntityWithElement
     {
         /// <summary>
@@ -642,7 +637,7 @@ namespace Vim.Format.ObjectModel
     /// <summary>
     /// Represents an object which can be associated to a collection of Parameters.
     /// </summary>
-    [TableName(TableNames.Element)]
+    [TableName(VimEntityTableNames.Element)]
     public partial class Element : Entity
     {
         [EntityColumnLoader("int:Id", typeof(int), SchemaVersion.History.v4_6_0)]
@@ -685,7 +680,7 @@ namespace Vim.Format.ObjectModel
     /// <summary>
     /// Represents a named collection of Elements used for organizational purposes.
     /// </summary>
-    [TableName(TableNames.Workset)]
+    [TableName(VimEntityTableNames.Workset)]
     public partial class Workset : Entity
     {
         public int Id;
@@ -698,7 +693,7 @@ namespace Vim.Format.ObjectModel
         public Relation<BimDocument> _BimDocument;
     }
 
-    [TableName(TableNames.AssemblyInstance)]
+    [TableName(VimEntityTableNames.AssemblyInstance)]
     [ElementKind(ElementKind.AssemblyInstance)]
     public partial class AssemblyInstance : EntityWithElement
     {
@@ -713,7 +708,7 @@ namespace Vim.Format.ObjectModel
         }
     }
 
-    [TableName(TableNames.Group)]
+    [TableName(VimEntityTableNames.Group)]
     [ElementKind(ElementKind.Group)]
     public partial class Group : EntityWithElement
     {
@@ -728,7 +723,7 @@ namespace Vim.Format.ObjectModel
         }
     }
 
-    [TableName(TableNames.DesignOption)]
+    [TableName(VimEntityTableNames.DesignOption)]
     [ElementKind(ElementKind.DesignOption)]
     public partial class DesignOption : EntityWithElement
     {
@@ -738,7 +733,7 @@ namespace Vim.Format.ObjectModel
     /// <summary>
     /// Represents an XY plane at a specific Z coordinate in the model.
     /// </summary>
-    [TableName(TableNames.Level)]
+    [TableName(VimEntityTableNames.Level)]
     [ElementKind(ElementKind.Level)]
     public partial class Level : EntityWithElement
     {
@@ -770,7 +765,7 @@ namespace Vim.Format.ObjectModel
     /// <summary>
     /// Represents a phase of construction.
     /// </summary>
-    [TableName(TableNames.Phase)]
+    [TableName(VimEntityTableNames.Phase)]
     [ElementKind(ElementKind.Phase)]
     public partial class Phase : EntityWithElement
     { }
@@ -778,7 +773,7 @@ namespace Vim.Format.ObjectModel
     /// <summary>
     /// Represents a room in the model.
     /// </summary>
-    [TableName(TableNames.Room)]
+    [TableName(VimEntityTableNames.Room)]
     [ElementKind(ElementKind.Room)]
     public partial class Room : EntityWithElement
     {
@@ -795,7 +790,7 @@ namespace Vim.Format.ObjectModel
     /// <summary>
     /// Represents a source BIM document, for example: a Revit file, or an IFC file.
     /// </summary>
-    [TableName(TableNames.BimDocument)]
+    [TableName(VimEntityTableNames.BimDocument)]
     [ElementKind(ElementKind.BimDocument)]
     public partial class BimDocument : EntityWithElement
     {
@@ -843,7 +838,7 @@ namespace Vim.Format.ObjectModel
     /// <summary>
     /// An associative table used to list the DisplayUnits in a BimDocument.
     /// </summary>
-    [TableName(TableNames.DisplayUnitInBimDocument)]
+    [TableName(VimEntityTableNames.DisplayUnitInBimDocument)]
     public partial class DisplayUnitInBimDocument : Entity, IStorageKey
     {
         public Relation<DisplayUnit> _DisplayUnit;
@@ -856,7 +851,7 @@ namespace Vim.Format.ObjectModel
     /// <summary>
     /// An associative table used to order the Phases in a BimDocument.
     /// </summary>
-    [TableName(TableNames.PhaseOrderInBimDocument)]
+    [TableName(VimEntityTableNames.PhaseOrderInBimDocument)]
     public partial class PhaseOrderInBimDocument : Entity, IStorageKey
     {
         public int OrderIndex;
@@ -871,7 +866,7 @@ namespace Vim.Format.ObjectModel
     /// <summary>
     /// Represents the category to which an Element may belong (ex: Door, Floor, Ceiling, etc...).
     /// </summary>
-    [TableName(TableNames.Category)]
+    [TableName(VimEntityTableNames.Category)]
     public partial class Category : Entity
     {
         public string Name;
@@ -902,7 +897,7 @@ namespace Vim.Format.ObjectModel
     /// <summary>
     /// Represents a collection FamilyTypes, for example an 'I Beam' Family.
     /// </summary>
-    [TableName(TableNames.Family)]
+    [TableName(VimEntityTableNames.Family)]
     [ElementKind(ElementKind.Family)]
     public partial class Family : EntityWithElement
     {
@@ -918,7 +913,7 @@ namespace Vim.Format.ObjectModel
     /// For example, a FamilyType of 'W14x32' is defined within the 'I Beam' Family.
     /// In the Revit API, the FamilyType closely correlates to the FamilySymbol class.
     /// </summary>
-    [TableName(TableNames.FamilyType)]
+    [TableName(VimEntityTableNames.FamilyType)]
     [ElementKind(ElementKind.FamilyType)]
     public partial class FamilyType : EntityWithElement
     {
@@ -932,7 +927,7 @@ namespace Vim.Format.ObjectModel
     /// For example, a FamilyInstance of the FamilyType 'W14x32' (which itself is defined in the 'I Beam' Family)
     /// may have a length of 12 feet, whereas another FamilyInstance may have a different length of 8 feet.
     /// </summary>
-    [TableName(TableNames.FamilyInstance)]
+    [TableName(VimEntityTableNames.FamilyInstance)]
     [ElementKind(ElementKind.FamilyInstance)]
     public partial class FamilyInstance : EntityWithElement
     {
@@ -1008,7 +1003,7 @@ namespace Vim.Format.ObjectModel
     /// <summary>
     /// Represents a 3D or a 2D view.
     /// </summary>
-    [TableName(TableNames.View)]
+    [TableName(VimEntityTableNames.View)]
     [ElementKind(ElementKind.View)]
     public partial class View : EntityWithElement
     {
@@ -1088,7 +1083,7 @@ namespace Vim.Format.ObjectModel
     /// <summary>
     /// An associative table binding an Element to a View.
     /// </summary>
-    [TableName(TableNames.ElementInView)]
+    [TableName(VimEntityTableNames.ElementInView)]
     [JoiningTable]
     public partial class ElementInView : EntityWithElement, IStorageKey
     {
@@ -1101,7 +1096,7 @@ namespace Vim.Format.ObjectModel
     /// <summary>
     /// An associative table binding a Shape to a View.
     /// </summary>
-    [TableName(TableNames.ShapeInView)]
+    [TableName(VimEntityTableNames.ShapeInView)]
     [JoiningTable]
     public partial class ShapeInView : Entity, IStorageKey
     {
@@ -1115,7 +1110,7 @@ namespace Vim.Format.ObjectModel
     /// <summary>
     /// An associative table binding an Asset to a View.
     /// </summary>
-    [TableName(TableNames.AssetInView)]
+    [TableName(VimEntityTableNames.AssetInView)]
     [JoiningTable]
     public partial class AssetInView : Entity, IStorageKey
     {
@@ -1129,7 +1124,7 @@ namespace Vim.Format.ObjectModel
     /// <summary>
     /// An associative table binding an Asset to a ViewSheet.
     /// </summary>
-    [TableName(TableNames.AssetInViewSheet)]
+    [TableName(VimEntityTableNames.AssetInViewSheet)]
     [JoiningTable]
     public partial class AssetInViewSheet : Entity, IStorageKey
     {
@@ -1143,7 +1138,7 @@ namespace Vim.Format.ObjectModel
     /// <summary>
     /// An associative table binding a Level to a View.
     /// </summary>
-    [TableName(TableNames.LevelInView)]
+    [TableName(VimEntityTableNames.LevelInView)]
     [JoiningTable]
     public partial class LevelInView : Entity, IStorageKey
     {
@@ -1177,7 +1172,7 @@ namespace Vim.Format.ObjectModel
     /// <summary>
     /// Represents the orthographic or perspective camera of a 3D view.
     /// </summary>
-    [TableName(TableNames.Camera)]
+    [TableName(VimEntityTableNames.Camera)]
     public partial class Camera : Entity
     {
         public int Id;
@@ -1226,7 +1221,7 @@ namespace Vim.Format.ObjectModel
     /// <summary>
     /// Represents a colored and textured material.
     /// </summary>
-    [TableName(TableNames.Material)]
+    [TableName(VimEntityTableNames.Material)]
     [G3dAttributeReference("g3d:material:color:0:float32:4", G3dAttributeReferenceMultiplicity.OneToOne)]
     [G3dAttributeReference("g3d:material:color:0:float32:4", G3dAttributeReferenceMultiplicity.OneToOne)]
     [G3dAttributeReference("g3d:material:glossiness:0:float32:1", G3dAttributeReferenceMultiplicity.OneToOne)]
@@ -1357,7 +1352,7 @@ namespace Vim.Format.ObjectModel
     /// <summary>
     /// An associative table binding a Material to an Element.
     /// </summary>
-    [TableName(TableNames.MaterialInElement)]
+    [TableName(VimEntityTableNames.MaterialInElement)]
     [JoiningTable]
     public partial class MaterialInElement : EntityWithElement, IStorageKey
     {
@@ -1389,7 +1384,7 @@ namespace Vim.Format.ObjectModel
     /// <summary>
     /// Represents a material layer within a CompoundStructure.
     /// </summary>
-    [TableName(TableNames.CompoundStructureLayer)]
+    [TableName(VimEntityTableNames.CompoundStructureLayer)]
     public partial class CompoundStructureLayer : Entity
     {
         public int OrderIndex;
@@ -1403,7 +1398,7 @@ namespace Vim.Format.ObjectModel
     /// <summary>
     /// Represents the collection of material layers which compose walls, ceilings, floors, etc.
     /// </summary>
-    [TableName(TableNames.CompoundStructure)]
+    [TableName(VimEntityTableNames.CompoundStructure)]
     public partial class CompoundStructure : Entity
     {
         /// <summary>
@@ -1427,7 +1422,7 @@ namespace Vim.Format.ObjectModel
     /// The ordering and the number of Nodes matches the ordering and the number of instances in the G3D buffer.
     /// This serves to bridge the gap between the Element entities and their corresponding instance geometry.
     /// </summary>
-    [TableName(TableNames.Node)]
+    [TableName(VimEntityTableNames.Node)]
     [G3dAttributeReference("g3d:instance:transform:0:float32:16", G3dAttributeReferenceMultiplicity.OneToOne)]
     [G3dAttributeReference("g3d:instance:parent:0:int32:1", G3dAttributeReferenceMultiplicity.OneToOne)]
     [G3dAttributeReference("g3d:instance:mesh:0:int32:1", G3dAttributeReferenceMultiplicity.OneToOne)]
@@ -1439,7 +1434,7 @@ namespace Vim.Format.ObjectModel
     /// <summary>
     /// Represents a mesh in the G3D buffer of the VIM file.
     /// </summary>
-    [TableName(TableNames.Geometry)]
+    [TableName(VimEntityTableNames.Geometry)]
     [G3dAttributeReference("g3d:mesh:submeshoffset:0:int32:1", G3dAttributeReferenceMultiplicity.OneToOne)]
     public partial class Geometry : Entity
     {
@@ -1467,7 +1462,7 @@ namespace Vim.Format.ObjectModel
     /// Represents a sequence of Vector3 points in world space.
     /// The ordering and number of Shapes matches the ordering and number of shapes in the G3D buffer.
     /// </summary>
-    [TableName(TableNames.Shape)]
+    [TableName(VimEntityTableNames.Shape)]
     [G3dAttributeReference("g3d:shape:vertexoffset:0:int32:1", G3dAttributeReferenceMultiplicity.OneToOne, true)]
     [G3dAttributeReference("g3d:shape:color:0:float32:4", G3dAttributeReferenceMultiplicity.OneToOne, true)]
     [G3dAttributeReference("g3d:shape:width:0:float32:1", G3dAttributeReferenceMultiplicity.OneToOne, true)]
@@ -1480,7 +1475,7 @@ namespace Vim.Format.ObjectModel
     /// Currently, these define the shapes representing the curve loops on a face on an element;
     /// faces may have a number of curve loops which may designate the contour of the face and its holes.
     /// </summary>
-    [TableName(TableNames.ShapeCollection)]
+    [TableName(VimEntityTableNames.ShapeCollection)]
     [G3dAttributeReference("g3d:shape:vertexoffset:0:int32:1", G3dAttributeReferenceMultiplicity.OneToMany, true)]
     [G3dAttributeReference("g3d:shape:color:0:float32:4", G3dAttributeReferenceMultiplicity.OneToMany, true)]
     [G3dAttributeReference("g3d:shape:width:0:float32:1", G3dAttributeReferenceMultiplicity.OneToMany, true)]
@@ -1491,7 +1486,7 @@ namespace Vim.Format.ObjectModel
     /// <summary>
     /// An associative table binding a Shape to a ShapeCollection.
     /// </summary>
-    [TableName(TableNames.ShapeInShapeCollection)]
+    [TableName(VimEntityTableNames.ShapeInShapeCollection)]
     [JoiningTable]
     public partial class ShapeInShapeCollection : Entity, IStorageKey
     {
@@ -1524,7 +1519,7 @@ namespace Vim.Format.ObjectModel
     /// <summary>
     /// Represents a collection of Elements which compose a System. These may be mechanical systems, piping systems, electrical systems, curtain walls, stairs, etc.
     /// </summary>
-    [TableName(TableNames.System)]
+    [TableName(VimEntityTableNames.System)]
     [ElementKind(ElementKind.System)]
     public partial class System : EntityWithElement
     {
@@ -1568,7 +1563,7 @@ namespace Vim.Format.ObjectModel
     /// <summary>
     /// An associative table binding an Element to a System.
     /// </summary>
-    [TableName(TableNames.ElementInSystem)]
+    [TableName(VimEntityTableNames.ElementInSystem)]
     [JoiningTable]
     public partial class ElementInSystem : EntityWithElement, IStorageKey
     {
@@ -1605,7 +1600,7 @@ namespace Vim.Format.ObjectModel
     /// Represents a textual Warning in a BimDocument. Warnings designate whether there are any problematic
     /// authoring issues among Elements in a BimDocument.
     /// </summary>
-    [TableName(TableNames.Warning)]
+    [TableName(VimEntityTableNames.Warning)]
     public partial class Warning : Entity
     {
         public string Guid;
@@ -1617,7 +1612,7 @@ namespace Vim.Format.ObjectModel
     /// <summary>
     /// An associative table binding an Element to a Warning.
     /// </summary>
-    [TableName(TableNames.ElementInWarning)]
+    [TableName(VimEntityTableNames.ElementInWarning)]
     [JoiningTable]
     public partial class ElementInWarning : EntityWithElement, IStorageKey
     {
@@ -1631,7 +1626,7 @@ namespace Vim.Format.ObjectModel
     /// Represents the project base point or the document's current survey point if IsShared is set to true.
     /// BasePoints are only exported in Revit 2021+
     /// </summary>
-    [TableName(TableNames.BasePoint)]
+    [TableName(VimEntityTableNames.BasePoint)]
     [ElementKind(ElementKind.BasePoint)]
     public partial class BasePoint : EntityWithElement
     {
@@ -1692,7 +1687,7 @@ namespace Vim.Format.ObjectModel
     /// <summary>
     /// Represents a row in the Phase Filters view in Revit.
     /// </summary>
-    [TableName(TableNames.PhaseFilter)]
+    [TableName(VimEntityTableNames.PhaseFilter)]
     [ElementKind(ElementKind.PhaseFilter)]
     public partial class PhaseFilter : EntityWithElement
     {
@@ -1747,7 +1742,7 @@ namespace Vim.Format.ObjectModel
     /// <summary>
     /// Represents a vertical plane (or a vertical cylindrical segment when curved).
     /// </summary>
-    [TableName(TableNames.Grid)]
+    [TableName(VimEntityTableNames.Grid)]
     [ElementKind(ElementKind.Grid)]
     public partial class Grid : EntityWithElement
     {
@@ -1809,7 +1804,7 @@ namespace Vim.Format.ObjectModel
     /// <summary>
     /// Represents a planar region which can be used to represent places like parking spots.
     /// </summary>
-    [TableName(TableNames.Area)]
+    [TableName(VimEntityTableNames.Area)]
     [ElementKind(ElementKind.Area)]
     public partial class Area : EntityWithElement
     {
@@ -1842,7 +1837,7 @@ namespace Vim.Format.ObjectModel
     /// <summary>
     /// Represents an area categorization, for example to differentiate between parking areas and waste/dump areas.
     /// </summary>
-    [TableName(TableNames.AreaScheme)]
+    [TableName(VimEntityTableNames.AreaScheme)]
     [ElementKind(ElementKind.AreaScheme)]
     public partial class AreaScheme : EntityWithElement
     {
@@ -1855,7 +1850,7 @@ namespace Vim.Format.ObjectModel
     /// <summary>
     /// Represents tabular data composed of named columns and cells containing string values.
     /// </summary>
-    [TableName(TableNames.Schedule)]
+    [TableName(VimEntityTableNames.Schedule)]
     [ElementKind(ElementKind.Schedule)]
 
     public partial class Schedule : EntityWithElement
@@ -1864,7 +1859,7 @@ namespace Vim.Format.ObjectModel
     /// <summary>
     /// Represents a column in a Schedule.
     /// </summary>
-    [TableName(TableNames.ScheduleColumn)]
+    [TableName(VimEntityTableNames.ScheduleColumn)]
     [JoiningTable]
     public partial class ScheduleColumn : Entity
     {
@@ -1887,7 +1882,7 @@ namespace Vim.Format.ObjectModel
     /// <summary>
     /// Represents a cell in a ScheduleColumn.
     /// </summary>
-    [TableName(TableNames.ScheduleCell)]
+    [TableName(VimEntityTableNames.ScheduleCell)]
     [JoiningTable]
     public partial class ScheduleCell : Entity
     {
@@ -1910,7 +1905,7 @@ namespace Vim.Format.ObjectModel
     /// <summary>
     /// Represents a view sheet set, which is a collection of views and view sheets.
     /// </summary>
-    [TableName(TableNames.ViewSheetSet)]
+    [TableName(VimEntityTableNames.ViewSheetSet)]
     [ElementKind(ElementKind.ViewSheetSet)]
     public partial class ViewSheetSet : EntityWithElement
     {
@@ -1919,7 +1914,7 @@ namespace Vim.Format.ObjectModel
     /// <summary>
     /// Represents a view sheet, which can contain multiple views.
     /// </summary>
-    [TableName(TableNames.ViewSheet)]
+    [TableName(VimEntityTableNames.ViewSheet)]
     [ElementKind(ElementKind.ViewSheet)]
     public partial class ViewSheet : EntityWithElement
     {
@@ -1932,7 +1927,7 @@ namespace Vim.Format.ObjectModel
     /// <summary>
     /// An associative table binding a ViewSheet to a ViewSheetSet.
     /// </summary>
-    [TableName(TableNames.ViewSheetInViewSheetSet)]
+    [TableName(VimEntityTableNames.ViewSheetInViewSheetSet)]
     [JoiningTable]
     public partial class ViewSheetInViewSheetSet : Entity, IStorageKey
     {
@@ -1946,7 +1941,7 @@ namespace Vim.Format.ObjectModel
     /// <summary>
     /// An associative table binding a View to a ViewSheetSet.
     /// </summary>
-    [TableName(TableNames.ViewInViewSheetSet)]
+    [TableName(VimEntityTableNames.ViewInViewSheetSet)]
     [JoiningTable]
     public partial class ViewInViewSheetSet : Entity, IStorageKey
     {
@@ -1960,7 +1955,7 @@ namespace Vim.Format.ObjectModel
     /// <summary>
     /// An associative table binding a View to a ViewSheet
     /// </summary>
-    [TableName(TableNames.ViewInViewSheet)]
+    [TableName(VimEntityTableNames.ViewInViewSheet)]
     [JoiningTable]
     public partial class ViewInViewSheet : Entity, IStorageKey
     {
@@ -1971,7 +1966,7 @@ namespace Vim.Format.ObjectModel
             => _View.CombineAsStorageKey(_ViewSheet);
     }
 
-    [TableName(TableNames.Site)]
+    [TableName(VimEntityTableNames.Site)]
     [ElementKind(ElementKind.Site)]
     public partial class Site : EntityWithElement
     {
@@ -1982,7 +1977,7 @@ namespace Vim.Format.ObjectModel
         public string Number;
     }
 
-    [TableName(TableNames.Building)]
+    [TableName(VimEntityTableNames.Building)]
     [ElementKind(ElementKind.Building)]
     public partial class Building : EntityWithElement
     {
@@ -2041,33 +2036,5 @@ namespace Vim.Format.ObjectModel
 
         public static IEnumerable<Type> GetEntityTypes()
             => GetEntityTypes<Entity>().Where(IsEntityAndHasTableNameAttribute);
-
-        public static object GetPropertyValue(this DocumentModel documentModel, string propertyName)
-            => documentModel.GetType().GetProperty(propertyName)?.GetValue(documentModel, null);
-
-        public static VimSchema GetCurrentVimSchema()
-        {
-            var vimSchema = new VimSchema(VimFormatVersion.Current, SchemaVersion.Current);
-
-            foreach (var entityType in GetEntityTypes())
-            {
-                var entityTableSchema = vimSchema.AddEntityTableSchema(entityType.GetEntityTableName());
-
-                foreach (var fieldInfo in entityType.GetRelationFields())
-                {
-                    var (indexColumnName, _) = fieldInfo.GetIndexColumnInfo();
-                    entityTableSchema.AddColumn(indexColumnName);
-                }
-
-                foreach (var fieldInfo in entityType.GetEntityFields())
-                {
-                    var loadingInfos = fieldInfo.GetEntityColumnLoadingInfo();
-
-                    foreach (var li in loadingInfos)
-                        entityTableSchema.AddColumn(li.EntityColumnAttribute.SerializedValueColumnName);
-                }
-            }
-            return vimSchema;
-        }
     }
 }

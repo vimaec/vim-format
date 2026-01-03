@@ -74,10 +74,10 @@ namespace Vim.Format.api_v2
             TypePrefix = match.Groups[1].Value;
             switch (TypePrefix)
             {
-                case VimConstants.IndexColumnNameTypePrefix:
+                case IndexColumnNameTypePrefix:
                     ColumnType = VimEntityTableColumnType.IndexColumn;
                     break;
-                case VimConstants.StringColumnNameTypePrefix:
+                case StringColumnNameTypePrefix:
                     ColumnType = VimEntityTableColumnType.StringColumn;
                     break;
                 default:
@@ -179,7 +179,7 @@ namespace Vim.Format.api_v2
             => TryParseDataColumnNameTypePrefix(columnName, out _);
 
         public static string GetIndexColumnName(string relatedTableName, string localFieldName)
-            => VimConstants.IndexColumnNameTypePrefix + relatedTableName + ":" + localFieldName;
+            => VimEntityTableColumnName.IndexColumnNameTypePrefix + relatedTableName + ":" + localFieldName;
 
         public static string GetRelatedTableNameFromColumnName(string name)
             => ParseVimEntityTableColumnNameOrNull(name)?.RelatedTableName;

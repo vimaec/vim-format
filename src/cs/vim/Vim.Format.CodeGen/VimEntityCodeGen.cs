@@ -429,7 +429,7 @@ public static class VimEntityCodeGen
             cb.AppendLine("namespace Vim.Format.api_v2");
             cb.AppendLine("{");
 
-            // WriteEntityClasses(cb); // TODO: re-enable this once the other C# object model generator has been purged. 
+            WriteEntityClasses(cb);
 
             WriteVimEntityTableSet(cb);
 

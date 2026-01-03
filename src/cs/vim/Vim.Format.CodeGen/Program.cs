@@ -4,13 +4,11 @@
     {
         public static void Main(string[] args)
         {
-            var legacyObjectModelFilePath = args[0];
-            var v2ObjectModelFilePath = args[1];
-            var tsFilePath = args[2];
-            var hFilePath = args[3];
+            var vimEntityCodeGenFilePath = args[0];
+            var tsFilePath = args[1];
+            var hFilePath = args[2];
 
-            ObjectModelGenerator.WriteDocument(legacyObjectModelFilePath);
-            VimEntityCodeGen.WriteDocument(v2ObjectModelFilePath);
+            VimEntityCodeGen.WriteDocument(vimEntityCodeGenFilePath);
             ObjectModelTypeScriptGenerator.WriteDocument(tsFilePath);
             ObjectModelCppGenerator.WriteDocument(hFilePath);
         }

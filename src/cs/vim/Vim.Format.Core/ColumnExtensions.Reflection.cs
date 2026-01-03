@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Vim.Util;
+using Vim.Format.api_v2;
 
 namespace Vim.Format
 {
@@ -10,7 +11,7 @@ namespace Vim.Format
     {
         public static string GetDataColumnNameTypePrefix(this Type type)
         {
-            if (DataColumnTypeToPrefixMap.TryGetValue(type, out var typePrefix))
+            if (VimEntityTableColumnTypeInfo.DataColumnTypeToPrefixMap.TryGetValue(type, out var typePrefix))
                 return typePrefix;
 
             throw new Exception($"{nameof(GetDataColumnNameTypePrefix)} error: no matching data column name prefix for {type}");
@@ -20,7 +21,7 @@ namespace Vim.Format
             => type == typeof(string);
 
         public static bool CanSerializeAsDataColumn(this Type type)
-            => DataColumnTypes.Contains(type);
+            => VimEntityTableColumnTypeInfo.DataColumnTypes.Contains(type);
 
         public static ValueSerializationStrategy GetValueSerializationStrategy(this Type type)
         {
@@ -41,7 +42,7 @@ namespace Vim.Format
             switch (strategy)
             {
                 case ValueSerializationStrategy.SerializeAsStringColumn:
-                    typePrefix = VimConstants.StringColumnNameTypePrefix;
+                    typePrefix = VimEntityTableColumnName.StringColumnNameTypePrefix;
                     break;
                 case ValueSerializationStrategy.SerializeAsDataColumn:
                     typePrefix = type.GetDataColumnNameTypePrefix();
@@ -90,7 +91,7 @@ namespace Vim.Format
             if (string.IsNullOrEmpty(relatedTableName))
                 throw new Exception($"Could not find related table for type {relationTypeParameter}");
 
-            return (GetIndexColumnName(relatedTableName, localFieldName), localFieldName);
+            return (VimEntityTableColumnName.GetIndexColumnName(relatedTableName, localFieldName), localFieldName);
         }
 
         public static string GetSerializedIndexColumnName(this FieldInfo fieldInfo)
@@ -101,8 +102,7 @@ namespace Vim.Format
 
         public static IEnumerable<FieldInfo> GetEntityFields(this Type t, bool skipIndex = true, bool skipProperties = true)
             => t.GetFields().Where(fi =>
-                    !fi.FieldType.Equals(typeof(Document))
-                    && (skipIndex ? fi.Name != "Index" : true)
+                    (skipIndex ? fi.Name != "Index" : true)
                     && (skipProperties ? fi.Name != "Properties" : true)
                     && !fi.FieldType.IsRelationType()
                     && !fi.IsLiteral // do not include const fields

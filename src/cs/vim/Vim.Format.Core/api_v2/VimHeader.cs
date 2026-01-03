@@ -258,7 +258,7 @@ namespace Vim.Format.api_v2
         }
 
         public override bool Equals(object obj)
-            => obj is SerializableHeader other && ToString() == other.ToString();
+            => obj is VimHeader other && ToString() == other.ToString();
 
         public override int GetHashCode()
             => ToString().GetHashCode();

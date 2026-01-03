@@ -3,89 +3,49 @@ using System.Collections.Generic;
 using System.Data;
 using System.IO;
 using System.Linq;
-using Vim.Format.Geometry;
-using Vim.G3d;
+using Vim.Format.api_v2;
 using Vim.Util;
-using Vim.LinqArray;
-using Vim.Math3d;
 
 namespace Vim.Format.ObjectModel
 {
     public static class ObjectModelExtensions
     {
-        public static ElementInfo GetElementInfo(this DocumentModel documentModel, int elementIndex)
-            => new ElementInfo(documentModel, elementIndex);
-
-        public static ElementInfo GetElementInfo(this DocumentModel documentModel, Element element)
-            => documentModel.GetElementInfo(element.Index);
-
-        public static ElementInfo GetElementInfo(this DocumentModel documentModel, EntityWithElement entityWithElement)
-            => documentModel.GetElementInfo(entityWithElement._Element.Index);
-
-        public static string GetUrn(this ElementInfo elementInfo)
-            => Urn.GetElementUrn(Urn.VimNID, elementInfo.Element);
-
         public static string GetUrn(this BimDocument bd)
             => Urn.GetBimDocumentUrn(Urn.VimNID, bd);
 
         public static Element CreateSyntheticElement(string name, string type)
             => new Element
             {
-                Id = VimConstants.SyntheticElementId,
+                Id = VimEntityTableConstants.SyntheticElementId,
                 Name = name,
                 Type = type,
                 UniqueId = $"{name}_{type}" // NOTE: we need to assign a UniqueId for merging purposes.
             };
 
         public static Element CreateParameterHolderElement(string bimDocumentName)
-            => CreateSyntheticElement(bimDocumentName, VimConstants.BimDocumentParameterHolderElementType);
+            => CreateSyntheticElement(bimDocumentName, VimEntityTableConstants.BimDocumentParameterHolderElementType);
 
         public static Element CreateParameterHolderElement(this BimDocument bd)
             => CreateParameterHolderElement(bd.Name);
 
-        public static DictionaryOfLists<int, AssetInView> GetAssetsInViewOrderedByViewIndex(this DocumentModel dm)
-            => dm.AssetInViewList.GroupBy(aiv => aiv.View.Index).ToDictionaryOfLists();
+        public static DictionaryOfLists<int, AssetInView> GetAssetsInViewOrderedByViewIndex(this VIM vim)
+            => vim.GetEntityTableSet().AssetInViewTable.GroupBy(aiv => aiv.View.Index).ToDictionaryOfLists();
 
-        public static string GetBimDocumentFileName(this DocumentModel dm, int bimDocumentIndex)
-            => Path.GetFileName(dm.GetBimDocumentPathName(bimDocumentIndex));
+        public static string GetBimDocumentFileName(this VIM vim, int bimDocumentIndex)
+            => Path.GetFileName(vim.GetEntityTableSet().BimDocumentTable.GetPathName(bimDocumentIndex));
 
-        public static IArray<DisplayUnit> GetBimDocumentDisplayUnits(this DocumentModel dm, BimDocument bd)
-            => dm.DisplayUnitInBimDocumentList
+        public static IEnumerable<DisplayUnit> GetBimDocumentDisplayUnits(this VIM vim, BimDocument bd)
+            => vim.GetEntityTableSet().DisplayUnitInBimDocumentTable
                 .Where(item => item.BimDocument.Index == bd.Index)
-                .Select(item => item.DisplayUnit)
-                .ToIArray();
+                .Select(item => item.DisplayUnit);
 
-        public static IArray<Phase> GetBimDocumentPhases(this DocumentModel dm, BimDocument bd)
-            => dm.PhaseOrderInBimDocumentList
+        public static IEnumerable<Phase> GetBimDocumentPhases(this VIM vim, BimDocument bd)
+            => vim.GetEntityTableSet().PhaseOrderInBimDocumentTable
                 .Where(item => item.BimDocument.Index == bd.Index)
-                .Select(item => item.Phase)
-                .ToIArray();
+                .Select(item => item.Phase);
 
         public const string LengthSpecLegacyPrefix = "UT_Length";
         public const string LengthSpecPrefix = "autodesk.spec.aec:length";
-
-        public static DisplayUnit GetLengthDisplayUnit(this IArray<DisplayUnit> displayUnits)
-            => displayUnits.FirstOrDefault(du =>
-            {
-                var spec = du.Spec;
-                return spec.StartsWith(LengthSpecPrefix, StringComparison.InvariantCultureIgnoreCase) ||
-                       spec.StartsWith(LengthSpecLegacyPrefix, StringComparison.InvariantCultureIgnoreCase);
-            });
-
-        public static FamilyType GetFamilyType(this FamilyInstance fi)
-            => fi?.FamilyType;
-
-        public static string GetFamilyTypeName(this FamilyInstance fi)
-            => fi?.FamilyType?.Element?.Name ?? "";
-
-        public static Family GetFamily(this FamilyType ft)
-            => ft?.Family;
-
-        public static Family GetFamily(this FamilyInstance fi)
-            => fi?.GetFamilyType()?.GetFamily();
-
-        public static string GetFamilyName(this FamilyInstance fi)
-            => fi?.GetFamily()?.Element?.Name ?? "";
 
         /// <summary>
         /// Extension method using pre-allocated parser for improved performance.
@@ -114,25 +74,6 @@ namespace Vim.Format.ObjectModel
             }
         }
 
-        public static ElementInSystem[] GetElementsInSystem(this DocumentModel dm, System system)
-        {
-            if (system == null)
-                return Array.Empty<ElementInSystem>();
-
-            return dm.ElementInSystemList.Where(eis => eis._System.Index == system.Index)
-                .ToArray();
-        }
-
-        public static Element[] GetElementsInWarning(this DocumentModel dm, Warning warning)
-        {
-            if (warning == null)
-                return Array.Empty<Element>();
-
-            return dm.ElementInWarningList.Where(eiw => eiw._Warning.Index == warning.Index)
-                .Select(eiw => eiw.Element)
-                .ToArray();
-        }
-
         // A helper class which defines cell data to be stored in a DataTable.
         private class CellData
         {
@@ -148,13 +89,15 @@ namespace Vim.Format.ObjectModel
             }
         }
 
-        public static DataTable GetScheduleAsDataTable(this DocumentModel dm, int scheduleIndex)
+        public static DataTable GetScheduleAsDataTable(this VIM vim, int scheduleIndex)
         {
-            var ei = dm.ScheduleElementIndex[scheduleIndex];
+            var tableSet = vim.GetEntityTableSet();
 
-            var dataTable = new DataTable(dm.GetElementName(ei));
+            var ei = tableSet.ScheduleTable.GetElementIndex(scheduleIndex);
 
-            var columns = dm.ScheduleColumnList
+            var dataTable = new DataTable(tableSet.ElementTable.GetName(ei));
+
+            var columns = tableSet.ScheduleColumnTable
                 .Where(c => c._Schedule.Index == scheduleIndex)
                 .OrderBy(c => c.ColumnIndex)
                 .ToArray();
@@ -162,7 +105,7 @@ namespace Vim.Format.ObjectModel
 
             var columnSet = new HashSet<int>(columns.Select(c => c.Index));
 
-            var cellRecords = dm.ScheduleCellScheduleColumnIndex
+            var cellRecords = tableSet.ScheduleCellTable.Column_ScheduleColumnIndex
                 .IndicesWhere((colIndex, _) => columnSet.Contains(colIndex))
                 .Select(cellIndex => new CellData(
                     dm.GetScheduleCellValue(cellIndex),
@@ -181,7 +124,7 @@ namespace Vim.Format.ObjectModel
         /// <summary>
         /// Returns the list of parameter indices associated with the given element index.
         /// </summary>
-        public static List<int> GetParameterIndicesFromElementIndex(this ElementIndexMaps elementIndexMaps, int elementIndex)
+        public static List<int> GetParameterIndicesFromElementIndex(this VimElementIndexMaps elementIndexMaps, int elementIndex)
         {
             return elementIndexMaps.ParameterIndicesFromElementIndex.TryGetValue(elementIndex, out var parameterIndices)
                 ? parameterIndices

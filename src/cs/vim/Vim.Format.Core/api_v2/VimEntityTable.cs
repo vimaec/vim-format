@@ -6,7 +6,12 @@ using Vim.Util;
 
 namespace Vim.Format.api_v2
 {
-    public class VimEntityTable
+    public interface IVimEntityTable
+    {
+        int RowCount { get; }
+    }
+
+    public class VimEntityTable : IVimEntityTable
     {
         public VimEntityTableData TableData { get; }
         public string Name => TableData.Name;

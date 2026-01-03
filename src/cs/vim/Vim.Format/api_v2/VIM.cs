@@ -8,6 +8,12 @@ using Vim.Util;
 using System.Threading;
 
 // TODO
+// - VimEntity.g.cs contains all C# code generation
+//   - probably need to remove "api_v2" now because classes are code-generated in that namespace currently.
+// - delete unused code + reorg
+// - JsonDigest
+// - port ObjectModelStore > TrimOrphanedMeshes
+// - Clean up throw new Exception() -> turn them into actual VimExceptions
 // - Merge with mainline + integrate
 // - Port tests
 //  - TransformServiceTests.cs
@@ -34,31 +40,31 @@ namespace Vim.Format.api_v2
         /// The header of the VIM, which contains IDs used to distinguish different VIM files and information about the provenance of the VIM.
         /// </summary>
         public VimHeader Header { get; } = new VimHeader();
-        public const string HeaderBufferName = "header";
+        public const string HeaderBufferName = VimBufferNames.Header;
 
         /// <summary>
         /// The geometry of the building elements.
         /// </summary>
         public VimGeometryData GeometryData { get; } = new VimGeometryData();
-        public const string GeometryDataBufferName = "geometry";
+        public const string GeometryDataBufferName = VimBufferNames.Geometry;
 
         /// <summary>
         /// The string table for the entities defined among the entity tables. Strings are de-duplicated in this table and indexed using string columns to avoid repetition.
         /// </summary>
         public string[] StringTable { get; } = Array.Empty<string>();
-        public const string StringTableBufferName = "strings";
+        public const string StringTableBufferName = VimBufferNames.Strings;
 
         /// <summary>
         /// The entity tables which define the various entities in the building model.
         /// </summary>
         public List<VimEntityTableData> EntityTableData { get; } = new List<VimEntityTableData>();
-        public const string EntityTableDataBufferName = "entities";
+        public const string EntityTableDataBufferName = VimBufferNames.Entities;
 
         /// <summary>
         /// The binary assets contained in the building model, including renders, textures, etc.
         /// </summary>
         public INamedBuffer[] Assets { get; } = Array.Empty<INamedBuffer>();
-        public const string AssetsBufferName = "assets";
+        public const string AssetsBufferName = VimBufferNames.Assets;
 
         /// <summary>
         /// Serialization constructor
@@ -354,7 +360,7 @@ namespace Vim.Format.api_v2
             foreach (var assetBuffer in Assets)
             {
                 var assetBufferName = assetBuffer.Name;
-                var assetFilePath = assetBuffer.ExtractAsset(directoryInfo);
+                var assetFilePath = VimAssetInfo.ExtractAsset(assetBuffer, directoryInfo);
                 result.Add((assetBufferName, assetFilePath));
             }
             return result;

@@ -135,7 +135,7 @@ namespace Vim.Format.api_v2
         /// <summary>
         /// Returns all the columns as an array of named buffers.
         /// </summary>
-        public INamedBuffer[] GetAllColumns()
+        public INamedBuffer[] GetColumns()
             => DataColumns.Concat(IndexColumns).Concat(StringColumns).ToArray();
 
         /// <summary>
@@ -150,7 +150,7 @@ namespace Vim.Format.api_v2
         /// Causes an assertion error in debug mode if the number of rows is not consistent among the columns. 
         /// </summary>
         public INamedBuffer[] AssertColumnRowsAreAligned()
-            => AssertColumnRowsAreAligned(GetAllColumns());
+            => AssertColumnRowsAreAligned(GetColumns());
 
         /// <summary>
         /// Causes an assertion error in debug mode if the number of rows is not consistent among the columns. 
@@ -207,7 +207,7 @@ namespace Vim.Format.api_v2
         {
             vimStream.ThrowIfNotSeekable("Could not enumerate entity tables.");
 
-            var entitiesBufferReader = vimStream.GetBFastBufferReader(BufferNames.Entities);
+            var entitiesBufferReader = vimStream.GetBFastBufferReader(VimBufferNames.Entities);
             if (entitiesBufferReader == null)
                 yield break;
 
@@ -249,7 +249,7 @@ namespace Vim.Format.api_v2
             columnType = VimEntityTableColumnType.IndexColumn;
             typePrefix = null;
 
-            foreach (var column in GetAllColumns())
+            foreach (var column in GetColumns())
             {
                 if (!VimEntityTableColumnName.TryParseVimEntityTableColumnName(column.Name, out var components))
                     continue;

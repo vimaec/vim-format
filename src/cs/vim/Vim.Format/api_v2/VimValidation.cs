@@ -150,7 +150,7 @@ namespace Vim.Format.api_v2
                 if (validationOptions.BimDocumentElementNameMustMatchBimDocumentName && bdElement.Name != expectedName)
                     throw new VimValidationException($"{nameof(ObjectModel.BimDocument)} @{bd.Index} - Related {nameof(ObjectModel.Element)}.{nameof(ObjectModel.Element.Name)} @{bdElement.Index} does not match {nameof(ObjectModel.BimDocument)}.{nameof(ObjectModel.BimDocument.Name)} ({expectedName})");
 
-                var expectedElementType = VimConstants.BimDocumentParameterHolderElementType;
+                var expectedElementType = VimEntityTableConstants.BimDocumentParameterHolderElementType;
                 if (validationOptions.BimDocumentElementTypeMustBeParameterHolder && bdElement.Type != expectedElementType)
                     throw new VimValidationException($"{nameof(ObjectModel.BimDocument)} @{bd.Index} - Related {nameof(ObjectModel.Element)}.{nameof(ObjectModel.Element.Type)} @{bdElement.Index} is not '{expectedElementType}'.");
             }

@@ -67,7 +67,7 @@ namespace Vim.Format.api_v2
 
         public void ValidateHasDataColumnPrefix(string columnName)
         {
-            if (!ColumnExtensions.IsDataColumnName(columnName))
+            if (!VimEntityTableColumnName.IsDataColumnName(columnName))
                 throw new Exception($"{nameof(columnName)} {columnName} does not begin with a data column prefix");
         }
 
@@ -79,7 +79,7 @@ namespace Vim.Format.api_v2
 
         public VimEntityTableBuilder AddIndexColumn(string columnName, int[] indices)
         {
-            ValidateHasPrefix(columnName, VimConstants.IndexColumnNameTypePrefix);
+            ValidateHasPrefix(columnName, VimEntityTableColumnName.IndexColumnNameTypePrefix);
             UpdateOrValidateRows(indices.Length);
             IndexColumns.Add(columnName, indices);
             return this;
@@ -90,7 +90,7 @@ namespace Vim.Format.api_v2
 
         public VimEntityTableBuilder AddStringColumn(string columnName, string[] values)
         {
-            ValidateHasPrefix(columnName, VimConstants.StringColumnNameTypePrefix);
+            ValidateHasPrefix(columnName, VimEntityTableColumnName.StringColumnNameTypePrefix);
             UpdateOrValidateRows(values.Length);
             StringColumns.Add(columnName, values);
             return this;

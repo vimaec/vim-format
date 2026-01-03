@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Vim.Format.ObjectModel;
 using Vim.Util;
-using Vim.LinqArray;
 
-namespace Vim.Format
+namespace Vim.Format.api_v2
 {
     public class VimSchema
     {
@@ -12,12 +12,12 @@ namespace Vim.Format
 
         public readonly SerializableVersion VimFormatVersion;
         public readonly SerializableVersion SchemaVersion;
-        public readonly Dictionary<string, EntityTableSchema> EntityTableSchemas = new Dictionary<string, EntityTableSchema>();
+        public readonly Dictionary<string, VimEntityTableSchema> EntityTableSchemas = new Dictionary<string, VimEntityTableSchema>();
 
         public VimSchema(SerializableVersion vimFormatVersion, SerializableVersion schemaVersion)
             => (VimFormatVersion, SchemaVersion) = (vimFormatVersion, schemaVersion);
 
-        public VimSchema(SerializableHeader header)
+        public VimSchema(VimHeader header)
             : this(header.FileFormatVersion, header.Schema)
         { }
 
@@ -34,29 +34,60 @@ namespace Vim.Format
                 .Select(t => string.Join(TableNameSeparator, t.TableName, t.ColumnName))
                 .OrderBy(x => x);
 
-        public EntityTableSchema AddEntityTableSchema(string entityTableName)
+        public VimEntityTableSchema AddEntityTableSchema(string entityTableName)
         {
             if (EntityTableSchemas.ContainsKey(entityTableName))
                 throw new Exception($"Entity Table {entityTableName} already exists in the VIM schema");
 
-            var ets = new EntityTableSchema(entityTableName);
+            var ets = new VimEntityTableSchema(entityTableName);
             EntityTableSchemas.Add(entityTableName, ets);
             return ets;
         }
 
         public static VimSchema Create(string filePath)
-            => Create(Serializer.Deserialize(filePath).ToDocument());
+            => Create(VIM.Open(
+                filePath,
+                options: new VimOpenOptions() {
+                    IncludeAssets = false,
+                    IncludeGeometry = false,
+                    SchemaOnly = true
+                }));
 
-        public static VimSchema Create(Document doc)
+        public static VimSchema Create(VIM vim)
         {
-            var vimSchema = new VimSchema(doc.Header);
-            foreach (var entityTable in doc.EntityTables.Values.ToEnumerable())
+            var vimSchema = new VimSchema(vim.Header);
+            foreach (var entityTable in vim.EntityTableData)
             {
                 var ets = vimSchema.AddEntityTableSchema(entityTable.Name);
 
                 // Collect all the column names in the entity table and sort them alphabetically.
-                foreach (var columnName in entityTable.Columns.Select(nb => nb.Name).OrderBy(n => n))
+                foreach (var columnName in entityTable.GetColumns().Select(nb => nb.Name).OrderBy(n => n))
                     ets.AddColumn(columnName);
+            }
+            return vimSchema;
+        }
+
+        public static VimSchema GetCurrentVimSchema()
+        {
+            var vimSchema = new VimSchema(Format.VimFormatVersion.Current, ObjectModel.SchemaVersion.Current);
+
+            foreach (var entityType in ObjectModelReflection.GetEntityTypes())
+            {
+                var entityTableSchema = vimSchema.AddEntityTableSchema(entityType.GetEntityTableName());
+
+                foreach (var fieldInfo in entityType.GetRelationFields())
+                {
+                    var (indexColumnName, _) = fieldInfo.GetIndexColumnInfo();
+                    entityTableSchema.AddColumn(indexColumnName);
+                }
+
+                foreach (var fieldInfo in entityType.GetEntityFields())
+                {
+                    var loadingInfos = fieldInfo.GetEntityColumnLoadingInfo();
+
+                    foreach (var li in loadingInfos)
+                        entityTableSchema.AddColumn(li.EntityColumnAttribute.SerializedValueColumnName);
+                }
             }
             return vimSchema;
         }
@@ -110,12 +141,12 @@ namespace Vim.Format
         }
     }
 
-    public class EntityTableSchema
+    public class VimEntityTableSchema
     {
         public readonly string TableName;
         public readonly HashSet<string> ColumnNames = new HashSet<string>();
 
-        public EntityTableSchema(string tableName)
+        public VimEntityTableSchema(string tableName)
             => TableName = tableName;
 
         public void AddColumn(string columnName)
