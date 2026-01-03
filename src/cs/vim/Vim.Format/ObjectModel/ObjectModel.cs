@@ -1323,8 +1323,11 @@ namespace Vim.Format.ObjectModel
         /// <summary>The transparency, defined in the domain [0..1]</summary>
         public double Transparency;
 
-        public static api_v2.VimMaterial ConvertMaterialEntityToRenderableMaterial(Material m)
-            => ConvertMaterialEntityFieldsToRenderableMaterial(
+        public api_v2.VimMaterial ToVimMaterial()
+            => ToVimMaterial(this);
+
+        public static api_v2.VimMaterial ToVimMaterial(Material m)
+            => ToVimMaterial(
                 m.Color.X,
                 m.Color.Y,
                 m.Color.Z,
@@ -1332,7 +1335,7 @@ namespace Vim.Format.ObjectModel
                 m.Glossiness,
                 m.Smoothness);
 
-        public static api_v2.VimMaterial ConvertMaterialEntityFieldsToRenderableMaterial(
+        public static api_v2.VimMaterial ToVimMaterial(
             double colorX,
             double colorY,
             double colorZ,

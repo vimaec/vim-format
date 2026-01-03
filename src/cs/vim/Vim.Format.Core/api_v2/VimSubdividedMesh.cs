@@ -12,12 +12,16 @@ namespace Vim.Format.api_v2
         public IReadOnlyList<int> SubmeshesIndexOffset { get; }
         public IReadOnlyList<int> SubmeshMaterials { get; }
 
-        public VimSubdividedMesh(VimRevitMesh mesh)
+        public VimSubdividedMesh(
+            List<Vector3> vertices = null,
+            List<int> indices = null,
+            List<int> faceMaterials = null)
         {
-            if (mesh.Indices.Any(i => i < 0 && i >= mesh.Vertices.Count))
-                throw new Exception($"Invalid mesh. Indices out of vertex range.");
+            var vertexCount = vertices.Count;
+            if (indices.Any(i => i < 0 || i >= vertexCount))
+                throw new ArgumentException($"Indices out of vertex range.");
 
-            var facesByMats = mesh.FaceMaterials
+            var facesByMats = faceMaterials
                 .Select((face, index) => (face, index))
                 .GroupBy(pair => pair.face, pair => pair.index);
 
@@ -32,17 +36,21 @@ namespace Vim.Format.api_v2
                 foreach (var face in group)
                 {
                     var f = face * 3;
-                    indicesRemap.Add(mesh.Indices[f]);
-                    indicesRemap.Add(mesh.Indices[f + 1]);
-                    indicesRemap.Add(mesh.Indices[f + 2]);
+                    indicesRemap.Add(indices[f]);
+                    indicesRemap.Add(indices[f + 1]);
+                    indicesRemap.Add(indices[f + 2]);
                 }
             }
             Indices = indicesRemap;
             SubmeshMaterials = submeshMaterials;
             SubmeshesIndexOffset = submeshIndexOffset;
 
-            Vertices = mesh.Vertices;
+            Vertices = vertices;
         }
+
+        public VimSubdividedMesh(VimMeshWithFaceMaterials mesh)
+            : this(mesh.Vertices, mesh.Indices, mesh.FaceMaterials)
+        { }
 
         public VimSubdividedMesh(
             IReadOnlyList<int> indices,

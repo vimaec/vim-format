@@ -396,7 +396,7 @@ namespace Vim.Format.api_v2
 
                 for (var i = 0; i < materialTable.RowCount; ++i)
                 {
-                    vimBuilder.Materials.Add(ObjectModel.Material.ConvertMaterialEntityFieldsToRenderableMaterial(
+                    vimBuilder.Materials.Add(ObjectModel.Material.ToVimMaterial(
                         colorX: (float)colorXColumn.ElementAtOrDefault(i),
                         colorY: (float)colorYColumn.ElementAtOrDefault(i),
                         colorZ: (float)colorZColumn.ElementAtOrDefault(i),

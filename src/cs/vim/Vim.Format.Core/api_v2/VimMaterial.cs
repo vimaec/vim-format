@@ -8,5 +8,7 @@ namespace Vim.Format.api_v2
         public Vector4 Color;
         public float Glossiness;
         public float Smoothness;
+
+        public VimMaterial() {}
     }
 }

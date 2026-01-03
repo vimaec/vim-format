@@ -192,7 +192,5 @@ namespace Vim.Format.api_v2
 
             return result;
         }
-
-
     }
 }
