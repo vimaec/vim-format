@@ -3,10 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Vim.Format.Merge;
-using Vim.Format.ObjectModel;
-using Vim.Format;
-using Vim.LinqArray;
 using Vim.Math3d;
 using Vim.Util;
 using Vim.Util.Tests;
@@ -217,11 +213,11 @@ namespace Vim.Format.Tests
             try
             {
                 VimMergeService.Merge(configFiles, configOptions);
-                Assert.Fail($"Expected an exception to be thrown ({ErrorCode.VimMergeObjectModelMajorVersionMismatch:G})");
+                Assert.Fail($"Expected an exception to be thrown ({VimErrorCode.VimMergeObjectModelMajorVersionMismatch:G})");
             }
             catch (HResultException e)
             {
-                Assert.AreEqual((int) ErrorCode.VimMergeObjectModelMajorVersionMismatch, e.HResult);
+                Assert.AreEqual((int) VimErrorCode.VimMergeObjectModelMajorVersionMismatch, e.HResult);
             }
         }
     }

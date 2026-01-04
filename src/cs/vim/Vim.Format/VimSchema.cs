@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Vim.Format.ObjectModel;
 using Vim.Util;
 
 namespace Vim.Format
@@ -69,7 +68,7 @@ namespace Vim.Format
 
         public static VimSchema GetCurrentVimSchema()
         {
-            var vimSchema = new VimSchema(Format.VimFormatVersion.Current, SchemaVersion.Current);
+            var vimSchema = new VimSchema(Format.VimFormatVersion.Current, Format.SchemaVersion.Current);
 
             foreach (var entityType in ObjectModelReflection.GetEntityTypes())
             {

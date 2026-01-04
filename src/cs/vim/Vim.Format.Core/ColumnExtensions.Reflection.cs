@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Vim.Util;
-using Vim.Format;
 
 namespace Vim.Format
 {

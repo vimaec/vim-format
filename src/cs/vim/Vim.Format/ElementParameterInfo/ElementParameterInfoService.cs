@@ -2,10 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Vim.Format;
 using Vim.Util;
-
-using static Vim.Format.ObjectModelExtensions;
 
 namespace Vim.Format.ElementParameterInfo
 {
@@ -73,15 +70,15 @@ namespace Vim.Format.ElementParameterInfo
             {
                 StringTable = stringTable,
                 EntityTableNameFilter = n =>
-                    n is TableNames.Element ||
-                    n is TableNames.Family ||
-                    n is TableNames.FamilyInstance ||
-                    n is TableNames.FamilyType ||
-                    n is TableNames.Parameter ||
-                    n is TableNames.ParameterDescriptor ||
-                    n is TableNames.DisplayUnit ||
-                    n is TableNames.Level ||
-                    n is TableNames.BasePoint
+                    n is VimEntityTableNames.Element ||
+                    n is VimEntityTableNames.Family ||
+                    n is VimEntityTableNames.FamilyInstance ||
+                    n is VimEntityTableNames.FamilyType ||
+                    n is VimEntityTableNames.Parameter ||
+                    n is VimEntityTableNames.ParameterDescriptor ||
+                    n is VimEntityTableNames.DisplayUnit ||
+                    n is VimEntityTableNames.Level ||
+                    n is VimEntityTableNames.BasePoint
             });
 
             return GetElementParameterInfos(tableSet, elementGeometryMap);

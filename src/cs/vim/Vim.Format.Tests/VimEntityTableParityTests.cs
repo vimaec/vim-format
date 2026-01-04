@@ -2,8 +2,6 @@
 using System;
 using System.IO;
 using System.Linq;
-using Vim.Format;
-using Vim.Format.ObjectModel;
 using Vim.LinqArray;
 using Vim.Util.Tests;
 

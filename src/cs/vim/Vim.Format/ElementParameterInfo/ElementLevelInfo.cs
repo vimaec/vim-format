@@ -2,10 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using Vim.Format;
 using Vim.Util;
-
-using static Vim.Format.ObjectModelExtensions;
 
 // ReSharper disable InconsistentNaming
 

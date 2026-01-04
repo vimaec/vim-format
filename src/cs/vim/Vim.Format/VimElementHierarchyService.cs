@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Vim.Format.ObjectModel;
 using Vim.Util;
 
 namespace Vim.Format

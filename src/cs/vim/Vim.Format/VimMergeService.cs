@@ -53,20 +53,20 @@ namespace Vim.Format
         public void Validate()
         {
             if (string.IsNullOrWhiteSpace(MergedVimFilePath))
-                throw new HResultException((int) ErrorCode.VimMergeConfigFilePathIsEmpty, "Merged VIM file path is empty.");
+                throw new HResultException((int) VimErrorCode.VimMergeConfigFilePathIsEmpty, "Merged VIM file path is empty.");
 
             var emptyFilePaths = InputVimFilePathsAndTransforms.Where(t => string.IsNullOrWhiteSpace(t.VimFilePath)).ToArray();
             if (emptyFilePaths.Length > 0)
             {
                 var msg = string.Join(Environment.NewLine, emptyFilePaths.Select((t, i) => $"Input VIM file path at index {i} is empty."));
-                throw new HResultException((int)ErrorCode.VimMergeInputFileNotFound, msg);
+                throw new HResultException((int) VimErrorCode.VimMergeInputFileNotFound, msg);
             }
 
             var notFoundFilePaths = InputVimFilePathsAndTransforms.Where(t => !File.Exists(t.VimFilePath)).ToArray();
             if (notFoundFilePaths.Length > 0)
             {
                 var msg = string.Join(Environment.NewLine, notFoundFilePaths.Select(t => $"Input VIM file not found: {t.VimFilePath}"));
-                throw new HResultException((int)ErrorCode.VimMergeInputFileNotFound, msg);
+                throw new HResultException((int) VimErrorCode.VimMergeInputFileNotFound, msg);
             }
         }
     }
@@ -191,12 +191,12 @@ namespace Vim.Format
                 if (!DataColumns.ContainsKey(colName))
                 {
                     // back-fill the data column with default values.
-                    var defaultBuffer = ColumnExtensions.CreateDefaultDataColumnBuffer(RowCount, typePrefix);
+                    var defaultBuffer = VimEntityTableColumnActions.CreateDefaultDataColumnBuffer(RowCount, typePrefix);
                     DataColumns[colName] = defaultBuffer;
                 }
 
                 var cur = DataColumns[colName];
-                DataColumns[colName] = VimEntityTableColumnActions.ConcatDataColumnBuffers(cur, col, colName.GetTypePrefix());
+                DataColumns[colName] = VimEntityTableColumnActions.ConcatDataColumnBuffers(cur, col, typePrefix);
             }
 
             var stringTable = parentSet.StringTable;
@@ -365,7 +365,7 @@ namespace Vim.Format
             progress?.Report("Merging materials");
             ct.ThrowIfCancellationRequested();
 
-            var materialTable = entityTableBuilders.FirstOrDefault(et => et.Name == TableNames.Material);
+            var materialTable = entityTableBuilders.FirstOrDefault(et => et.Name == VimEntityTableNames.Material);
             if (materialTable != null)
             {
                 var mdcs = materialTable.DataColumns;
@@ -521,7 +521,7 @@ namespace Vim.Format
             sb.AppendLine();
             sb.AppendLine("Please ensure the VIM files have all been exported with matching schema major versions.");
 
-            throw new HResultException((int)ErrorCode.VimMergeObjectModelMajorVersionMismatch, sb.ToString());
+            throw new HResultException((int) VimErrorCode.VimMergeObjectModelMajorVersionMismatch, sb.ToString());
         }
 
         /// <summary>

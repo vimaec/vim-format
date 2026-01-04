@@ -1,10 +1,8 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using Vim.BFast;
-using Vim.Format.ObjectModel;
 using Vim.Util;
 
 namespace Vim.Format
@@ -236,7 +234,7 @@ namespace Vim.Format
                     for (var i = 0; i < indexColumn.Length; ++i)
                     {
                         var oldIndex = indexColumn[i];
-                        if (oldIndex != VimConstants.NoEntityRelation)
+                        if (oldIndex != VimEntityTableConstants.NoEntityRelation)
                         {
                             indexColumn[i] = oldToNewIndexMap[oldIndex];
                         }

@@ -1,10 +1,6 @@
 ﻿using NUnit.Framework;
 using System.IO;
-using System.Linq;
-using Vim.Format.Merge;
-using Vim.Format.ObjectModel;
 using Vim.Math3d;
-using Vim.Format;
 using Vim.Util.Tests;
 using System.Collections.Generic;
 

@@ -5,7 +5,6 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using Vim.Format;
-using Vim.Format.ObjectModel;
 using Vim.Math3d;
 using Vim.Util;
 

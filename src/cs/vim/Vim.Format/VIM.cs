@@ -8,11 +8,8 @@ using Vim.Util;
 using System.Threading;
 
 // TODO
-// - VimEntity.g.cs contains all C# code generation
-//   - probably need to remove "api_v2" now because classes are code-generated in that namespace currently.
 // - delete unused code + reorg
-// - JsonDigest
-// - port ObjectModelStore > TrimOrphanedMeshes
+// -   ObjectModelExtensions.cs > fix compilation issue (port IndicesWhere)
 // - Clean up throw new Exception() -> turn them into actual VimExceptions
 // - Merge with mainline + integrate
 // - Port tests
@@ -20,7 +17,6 @@ using System.Threading;
 //    - ...See if we can create a simple example to modify node render materials as well.
 // - Visitor pattern on geometry deserialization to minimize memory footprint in 3dsMax importer.
 // - Remove unused/old code.
-//   remove "api_v2"
 // - Test beyond this repository (i.e. with Revit exporter) > check the buildup using VimMesh
 //   - Material and VimMaterial must be inserted simultaneously
 

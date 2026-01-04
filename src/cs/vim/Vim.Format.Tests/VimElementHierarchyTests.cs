@@ -4,7 +4,6 @@ using System.Linq;
 using Vim.LinqArray;
 using Vim.Util;
 using Vim.Util.Tests;
-using Vim.Format;
 
 namespace Vim.Format.Tests;
 

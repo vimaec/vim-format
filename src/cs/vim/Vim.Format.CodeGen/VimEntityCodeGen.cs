@@ -1,7 +1,6 @@
 using System;
 using System.IO;
 using System.Linq;
-using Vim.Format;
 using Vim.Util;
 
 namespace Vim.Format.CodeGen;

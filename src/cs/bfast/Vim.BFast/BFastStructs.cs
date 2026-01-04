@@ -12,7 +12,6 @@
     is required for transmitting data to/from disk, between processes, or over a network. 
 */
 
-using System.Linq;
 using System.Runtime.InteropServices;
 
 namespace Vim.BFast
