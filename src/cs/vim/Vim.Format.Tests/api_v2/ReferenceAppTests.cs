@@ -5,7 +5,7 @@ using System.Linq;
 using NUnit.Framework;
 using Vim.Util.Tests;
 
-namespace Vim.Format.Tests.api_v2;
+namespace Vim.Format.Tests;
 
 [TestFixture]
 public static class ReferenceAppTests

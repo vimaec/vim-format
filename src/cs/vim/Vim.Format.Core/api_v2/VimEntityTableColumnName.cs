@@ -3,7 +3,7 @@ using System.Diagnostics;
 using System.Text.RegularExpressions;
 using Vim.BFast;
 
-namespace Vim.Format.api_v2
+namespace Vim.Format
 {
     /// <summary>
     /// Parses an entity table column name into its components.

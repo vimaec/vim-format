@@ -1,6 +1,6 @@
 ﻿using System.Linq;
 
-namespace Vim.Format.ObjectModel
+namespace Vim.Format
 {
     public static class Urn
     {

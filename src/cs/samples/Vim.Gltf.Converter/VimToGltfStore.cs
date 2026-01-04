@@ -3,7 +3,7 @@ using SharpGLTF.Validation;
 using System.Diagnostics;
 using System.Linq;
 using System.Numerics;
-using Vim.Format.api_v2;
+using Vim.Format;
 using Vim.BFast;
 using Vim.LinqArray;
 

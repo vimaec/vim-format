@@ -7,7 +7,7 @@ using Vim.Util;
 
 using ReadOnlyIndexMap = System.Collections.Generic.IReadOnlyDictionary<int, int>;
 
-namespace Vim.Format.api_v2
+namespace Vim.Format
 {
     /// <summary>
     /// A set of entity tables.
@@ -79,7 +79,7 @@ namespace Vim.Format.api_v2
         /// <summary>
         /// Returns an array aligned with the Element table which defines the kind of each element (ex: FamilyInstance, FamilyType, Family, Level, Room, Material, Phase, etc)
         /// </summary>
-        public static Vim.Format.ObjectModel.ElementKind[] GetElementKinds(FileInfo vimFileInfo)
+        public static Vim.Format.ElementKind[] GetElementKinds(FileInfo vimFileInfo)
         {
             vimFileInfo.ThrowIfNotExists("Could not get the element kinds.");
 
@@ -196,7 +196,7 @@ namespace Vim.Format.api_v2
         // Index properties
 
         private int GetRelatedIndex(int elementIndex, ReadOnlyIndexMap indexMap)
-            => indexMap.TryGetValue(elementIndex, out var value) ? value : Vim.Format.ObjectModel.EntityRelation.None;
+            => indexMap.TryGetValue(elementIndex, out var value) ? value : Vim.Format.EntityRelation.None;
 
         public int GetLevelElementIndex(int elementIndex)
             => ParentTableSet.LevelTable.GetElementIndex(GetLevelIndex(elementIndex));
@@ -259,28 +259,28 @@ namespace Vim.Format.api_v2
 
         // Object-generating properties
 
-        public Vim.Format.ObjectModel.FamilyInstance GetFamilyInstance(int elementIndex)
+        public Vim.Format.FamilyInstance GetFamilyInstance(int elementIndex)
             => ParentTableSet.FamilyInstanceTable.Get(GetFamilyInstanceIndex(elementIndex));
 
-        public Vim.Format.ObjectModel.Element GetFamilyInstanceElement(int elementIndex)
+        public Vim.Format.Element GetFamilyInstanceElement(int elementIndex)
             => Get(GetFamilyInstanceElementIndex(elementIndex));
 
-        public Vim.Format.ObjectModel.FamilyType GetFamilyType(int elementIndex)
+        public Vim.Format.FamilyType GetFamilyType(int elementIndex)
             => ParentTableSet.FamilyTypeTable.Get(GetFamilyTypeIndex(elementIndex));
 
-        public Vim.Format.ObjectModel.Element GetFamilyTypeElement(int elementIndex)
+        public Vim.Format.Element GetFamilyTypeElement(int elementIndex)
             => Get(GetFamilyTypeElementIndex(elementIndex));
 
-        public Vim.Format.ObjectModel.Family GetFamily(int elementIndex)
+        public Vim.Format.Family GetFamily(int elementIndex)
             => ParentTableSet.FamilyTable.Get(GetFamilyIndex(elementIndex));
 
-        public Vim.Format.ObjectModel.Element GetFamilyElement(int elementIndex)
+        public Vim.Format.Element GetFamilyElement(int elementIndex)
             => Get(GetFamilyElementIndex(elementIndex));
 
-        public Vim.Format.ObjectModel.System GetSystem(int elementIndex)
+        public Vim.Format.System GetSystem(int elementIndex)
             => ParentTableSet.SystemTable.Get(GetSystemIndex(elementIndex));
 
-        public Vim.Format.ObjectModel.Element GetSystemElement(int elementIndex)
+        public Vim.Format.Element GetSystemElement(int elementIndex)
             => Get(GetSystemElementIndex(elementIndex));
 
         // Parameters
@@ -299,14 +299,14 @@ namespace Vim.Format.api_v2
             => ParentTableSet.ElementIndexMaps.ParameterIndicesFromElementIndex
                 .TryGetValue(elementIndex, out var pIndices) ? pIndices : new List<int>();
 
-        public IEnumerable<Vim.Format.ObjectModel.Parameter> GetParameters(int elementIndex)
+        public IEnumerable<Vim.Format.Parameter> GetParameters(int elementIndex)
             => GetParameterIndices(elementIndex).Select(i => ParentTableSet.ParameterTable.Get(i));
 
-        public Dictionary<ParameterScope, IEnumerable<Vim.Format.ObjectModel.Parameter>> GetScopedParameters(
+        public Dictionary<ParameterScope, IEnumerable<Vim.Format.Parameter>> GetScopedParameters(
             int elementIndex,
             ParameterScope scope = ParameterScope.All)
         {
-            var result = new Dictionary<ParameterScope, IEnumerable<Vim.Format.ObjectModel.Parameter>>();
+            var result = new Dictionary<ParameterScope, IEnumerable<Vim.Format.Parameter>>();
 
             if (elementIndex < 0)
                 return result;
@@ -314,7 +314,7 @@ namespace Vim.Format.api_v2
             if ((scope & ParameterScope.FamilyInstance) == ParameterScope.FamilyInstance)
             {
                 var familyInstanceElementIndex = GetFamilyInstanceElementIndex(elementIndex);
-                if (familyInstanceElementIndex != Vim.Format.ObjectModel.EntityRelation.None)
+                if (familyInstanceElementIndex != Vim.Format.EntityRelation.None)
                 {
                     result[ParameterScope.FamilyInstance] = GetParameters(familyInstanceElementIndex);
                 }
@@ -323,7 +323,7 @@ namespace Vim.Format.api_v2
             if ((scope & ParameterScope.FamilyType) == ParameterScope.FamilyType)
             {
                 var familyTypeElementIndex = GetFamilyTypeElementIndex(elementIndex);
-                if (familyTypeElementIndex != Vim.Format.ObjectModel.EntityRelation.None)
+                if (familyTypeElementIndex != Vim.Format.EntityRelation.None)
                 {
                     result[ParameterScope.FamilyType] = GetParameters(familyTypeElementIndex);
                 }
@@ -332,7 +332,7 @@ namespace Vim.Format.api_v2
             if ((scope & ParameterScope.Family) == ParameterScope.Family)
             {
                 var familyElementIndex = GetFamilyElementIndex(elementIndex);
-                if (familyElementIndex != Vim.Format.ObjectModel.EntityRelation.None)
+                if (familyElementIndex != Vim.Format.EntityRelation.None)
                 {
                     result[ParameterScope.Family] = GetParameters(familyElementIndex);
                 }
@@ -370,7 +370,7 @@ namespace Vim.Format.api_v2
                     continue;
 
                 var elementIndex = elementInViewTable.GetElementIndex(i);
-                if (elementIndex == Vim.Format.ObjectModel.EntityRelation.None)
+                if (elementIndex == Vim.Format.EntityRelation.None)
                     continue;
 
                 elementVisibility[elementIndex] = true;
@@ -388,7 +388,7 @@ namespace Vim.Format.api_v2
         public int GetSuperComponentDistance(int familyInstanceIndex, int depth = 0)
         {
             var parentElementIndex = GetSuperComponentIndex(familyInstanceIndex);
-            if (parentElementIndex == Vim.Format.ObjectModel.EntityRelation.None)
+            if (parentElementIndex == Vim.Format.EntityRelation.None)
                 return depth;
 
             var hasParentFamilyInstanceIndex = ParentTableSet.ElementIndexMaps.FamilyInstanceIndexFromElementIndex
@@ -409,14 +409,14 @@ namespace Vim.Format.api_v2
         {
             // Initialize the result array which is aligned with the CompoundStructureTable records.
             var result = new int[RowCount];
-            for (var i = 0; i < result.Length; ++i) { result[i] = Vim.Format.ObjectModel.EntityRelation.None; }
+            for (var i = 0; i < result.Length; ++i) { result[i] = Vim.Format.EntityRelation.None; }
 
             // O(n) iteration over the family type records to populate the result.
             var familyTypeTable = ParentTableSet.FamilyTypeTable;
             for (var familyTypeIndex = 0; familyTypeIndex < familyTypeTable.RowCount; ++familyTypeIndex)
             {
                 var compoundStructureIndex = familyTypeTable.GetCompoundStructureIndex(familyTypeIndex);
-                if (compoundStructureIndex == Vim.Format.ObjectModel.EntityRelation.None)
+                if (compoundStructureIndex == Vim.Format.EntityRelation.None)
                     continue;
 
                 result[compoundStructureIndex] = familyTypeIndex;
@@ -438,7 +438,7 @@ namespace Vim.Format.api_v2
             for (var layerIndex = 0; layerIndex < layerTable.RowCount; ++layerIndex)
             {
                 var compoundStructureIndex = layerTable.GetCompoundStructureIndex(layerIndex);
-                if (compoundStructureIndex == Vim.Format.ObjectModel.EntityRelation.None)
+                if (compoundStructureIndex == Vim.Format.EntityRelation.None)
                     continue;
 
                 result[compoundStructureIndex] += 1;

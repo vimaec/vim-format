@@ -3,12 +3,12 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Vim.Format.api_v2;
+using Vim.Format;
 using Vim.Format.ObjectModel;
 using Vim.Math3d;
 using Vim.Util.Tests;
 
-namespace Vim.Format.Tests.api_v2;
+namespace Vim.Format.Tests;
 
 [TestFixture]
 public static class VimTransformServiceTests

@@ -6,7 +6,7 @@ using Vim.Util;
 using IndexMap = System.Collections.Generic.Dictionary<int, int>;
 using ReadOnlyIndexMap = System.Collections.Generic.IReadOnlyDictionary<int, int>;
 
-namespace Vim.Format.api_v2
+namespace Vim.Format
 {
     public class VimElementIndexMaps
     {

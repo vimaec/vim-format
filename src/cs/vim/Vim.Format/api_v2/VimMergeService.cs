@@ -10,7 +10,7 @@ using Vim.BFast;
 using Vim.Math3d;
 using Vim.Util;
 
-namespace Vim.Format.api_v2
+namespace Vim.Format
 {
     public class VimMergeConfigFiles
     {
@@ -165,7 +165,7 @@ namespace Vim.Format.api_v2
 
                 // back-fill the index column if it doesn't exist.
                 if (!IndexColumns.ContainsKey(indexColumnFullName))
-                    IndexColumns.Add(indexColumnFullName, Enumerable.Repeat(ObjectModel.EntityRelation.None, RowCount).ToList());
+                    IndexColumns.Add(indexColumnFullName, Enumerable.Repeat(EntityRelation.None, RowCount).ToList());
 
                 Debug.Assert(col.Array.Length == entityTable.RowCount);
 
@@ -342,7 +342,7 @@ namespace Vim.Format.api_v2
             var vims = vimMergeConfig.InputVims.ToArray();
             ValidateSameObjectModelSchemaMajorVersion(vims);
 
-            var vimBuilder = new VimBuilder(optionsConfig.GeneratorString, ObjectModel.SchemaVersion.Current, optionsConfig.VersionString);
+            var vimBuilder = new VimBuilder(optionsConfig.GeneratorString, SchemaVersion.Current, optionsConfig.VersionString);
 
             // Merge the entity data
             progress?.Report("Merging entities");
@@ -396,7 +396,7 @@ namespace Vim.Format.api_v2
 
                 for (var i = 0; i < materialTable.RowCount; ++i)
                 {
-                    vimBuilder.Materials.Add(ObjectModel.Material.ToVimMaterial(
+                    vimBuilder.Materials.Add(Material.ToVimMaterial(
                         colorX: (float)colorXColumn.ElementAtOrDefault(i),
                         colorY: (float)colorYColumn.ElementAtOrDefault(i),
                         colorZ: (float)colorZColumn.ElementAtOrDefault(i),

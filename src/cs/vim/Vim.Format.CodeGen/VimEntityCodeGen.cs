@@ -1,23 +1,23 @@
 using System;
 using System.IO;
 using System.Linq;
-using Vim.Format.ObjectModel;
+using Vim.Format;
 using Vim.Util;
 
 namespace Vim.Format.CodeGen;
 
 public static class VimEntityCodeGen
 {
-    public const string EntityNamespace = "Vim.Format.ObjectModel";
+    public const string EntityNamespace = "Vim.Format";
 
     public static string GetVimEntityTableGetterFunctionName(this ValueSerializationStrategy strategy, Type type)
     {
         return strategy switch
         {
             ValueSerializationStrategy.SerializeAsStringColumn
-                => nameof(api_v2.VimEntityTable.GetStringColumnValues),
+                => nameof(VimEntityTable.GetStringColumnValues),
             ValueSerializationStrategy.SerializeAsDataColumn
-                => $"{nameof(api_v2.VimEntityTable.GetDataColumnValues)}<{type.Name}>",
+                => $"{nameof(VimEntityTable.GetDataColumnValues)}<{type.Name}>",
             _ => throw new Exception($"{nameof(GetVimEntityTableGetterFunctionName)} error - unknown strategy {strategy:G}")
         };
     }
@@ -27,9 +27,9 @@ public static class VimEntityCodeGen
         return strategy switch
         {
             ValueSerializationStrategy.SerializeAsStringColumn
-                => nameof(api_v2.VimEntityTableBuilder.AddStringColumn),
+                => nameof(VimEntityTableBuilder.AddStringColumn),
             ValueSerializationStrategy.SerializeAsDataColumn
-                => $"{nameof(api_v2.VimEntityTableBuilder.AddDataColumn)}",
+                => $"{nameof(VimEntityTableBuilder.AddDataColumn)}",
             _ => throw new Exception($"{nameof(GetVimEntityTableBuilderAddFunctionName)} error - unknown strategy {strategy:G}")
         };
     }
@@ -166,8 +166,6 @@ public static class VimEntityCodeGen
         }
 
         cb.AppendLine("}");
-        cb.AppendLine();
-
         cb.AppendLine($"}} // class {t.Name}");
         cb.AppendLine();
     }
@@ -181,11 +179,8 @@ public static class VimEntityCodeGen
 
         cb.AppendLine($"public partial class {t.Name}Table : VimEntityTable, IEnumerable<{EntityNamespace}.{t.Name}>{(elementKind != ElementKind.Unknown ? ", IElementKindTable" : "")}");
         cb.AppendLine("{");
-        cb.AppendLine();
         cb.AppendLine($"public const string TableName = VimEntityTableNames.{t.Name};");
-        cb.AppendLine();
         cb.AppendLine("public VimEntityTableSet ParentTableSet { get; } // can be null");
-        cb.AppendLine();
         cb.AppendLine($"public {t.Name}Table(VimEntityTableData tableData, string[] stringTable, VimEntityTableSet parentTableSet = null) : base(tableData, stringTable)");
         cb.AppendLine("{");
         cb.AppendLine("ParentTableSet = parentTableSet;");
@@ -219,7 +214,6 @@ public static class VimEntityCodeGen
             cb.AppendLine($"Column_{localFieldName}Index = GetIndexColumnValues(\"{indexColumnName}\") ?? Array.Empty<int>();");
         }
         cb.AppendLine("}");
-        cb.AppendLine();
 
         foreach (var f in entityFields)
         {
@@ -242,7 +236,6 @@ public static class VimEntityCodeGen
             cb.AppendLine($"private {EntityNamespace}.{relType.Name} _GetReferenced{localFieldName}(int referencedIndex) => ParentTableSet.Get{relType.Name}(referencedIndex);");
         }
 
-        cb.AppendLine("// Object Getter");
         cb.AppendLine($"public {EntityNamespace}.{t.Name} Get(int index)");
         cb.AppendLine("{");
         cb.AppendLine("if (index < 0) return null;");
@@ -260,8 +253,6 @@ public static class VimEntityCodeGen
         }
         cb.AppendLine("return r;");
         cb.AppendLine("}");
-
-        cb.AppendLine("// Enumerator");
         cb.AppendLine("IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();");
         cb.AppendLine($"public IEnumerator<{EntityNamespace}.{t.Name}> GetEnumerator()");
         cb.AppendLine("{");
@@ -269,7 +260,7 @@ public static class VimEntityCodeGen
         cb.AppendLine("    yield return Get(i);");
         cb.AppendLine("}");
 
-        cb.AppendLine($"}} // class {t.Name}Table ");
+        cb.AppendLine($"}} // class {t.Name}Table");
         cb.AppendLine();
     }
 
@@ -377,7 +368,7 @@ public static class VimEntityCodeGen
 
             cb.AppendLine();
 
-            cb.AppendLine("namespace Vim.Format.api_v2");
+            cb.AppendLine("namespace Vim.Format");
             cb.AppendLine("{");
 
             WriteVimEntityTableSet(cb);

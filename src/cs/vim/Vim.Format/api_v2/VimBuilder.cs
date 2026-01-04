@@ -7,7 +7,7 @@ using Vim.BFast;
 using Vim.Math3d;
 using Vim.Util;
 
-namespace Vim.Format.api_v2
+namespace Vim.Format
 {
     public partial class VimBuilder
     {

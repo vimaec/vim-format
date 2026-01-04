@@ -4,11 +4,11 @@ using System.Linq;
 using Vim.Format.Merge;
 using Vim.Format.ObjectModel;
 using Vim.Math3d;
-using Vim.Format.api_v2;
+using Vim.Format;
 using Vim.Util.Tests;
 using System.Collections.Generic;
 
-namespace Vim.Format.Tests.api_v2;
+namespace Vim.Format.Tests;
 
 [TestFixture]
 public static class VimRoomServiceTests

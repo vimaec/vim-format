@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Vim.Format.api_v2;
+using Vim.Format;
 using Vim.Util;
 
-using static Vim.Format.ObjectModel.ObjectModelExtensions;
+using static Vim.Format.ObjectModelExtensions;
 
 namespace Vim.Format.ElementParameterInfo
 {
@@ -159,13 +159,13 @@ namespace Vim.Format.ElementParameterInfo
         /// Instantiates the level infos in parallel based on the given list of levels.
         /// </summary>
         private static LevelInfo[] CreateLevelInfos(
-            IReadOnlyList<ObjectModel.Level> levels,
+            IReadOnlyList<Level> levels,
             ElementTable elementTable,
             FamilyTypeTable familyTypeTable,
             ParameterTable parameterTable,
             VimElementIndexMaps elementIndexMaps,
-            IReadOnlyDictionary<int, Dictionary<long, ObjectModel.Level>> levelsByBimDocumentIndexAndElementId,
-            IReadOnlyDictionary<int, Dictionary<long, ObjectModel.BasePoint>> basePointsByBimDocumentIndexAndElementId)
+            IReadOnlyDictionary<int, Dictionary<long, Level>> levelsByBimDocumentIndexAndElementId,
+            IReadOnlyDictionary<int, Dictionary<long, BasePoint>> basePointsByBimDocumentIndexAndElementId)
             => levels
                 .AsParallel()
                 .Select(level =>
@@ -173,10 +173,10 @@ namespace Vim.Format.ElementParameterInfo
                     var bimDocumentIndex = elementTable.GetBimDocumentIndex(level.GetElementIndexOrNone());
 
                     if (!levelsByBimDocumentIndexAndElementId.TryGetValue(bimDocumentIndex, out var elementIdToLevelMap))
-                        elementIdToLevelMap = new Dictionary<long, ObjectModel.Level>();
+                        elementIdToLevelMap = new Dictionary<long, Level>();
 
                     if (!basePointsByBimDocumentIndexAndElementId.TryGetValue(bimDocumentIndex, out var elementIdToBasePointMap))
-                        elementIdToBasePointMap = new Dictionary<long, ObjectModel.BasePoint>();
+                        elementIdToBasePointMap = new Dictionary<long, BasePoint>();
 
                     return new LevelInfo(
                         level,

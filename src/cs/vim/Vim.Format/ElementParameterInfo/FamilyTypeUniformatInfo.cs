@@ -1,11 +1,11 @@
 ﻿using System;
-using Vim.Format.api_v2;
+using Vim.Format;
 
 namespace Vim.Format.ElementParameterInfo
 {
     public class FamilyTypeUniformatInfo
     {
-        public ObjectModel.FamilyType FamilyType { get; }
+        public FamilyType FamilyType { get; }
 
         /// <summary>
         /// The value of the "Assembly Code" parameter
@@ -13,7 +13,7 @@ namespace Vim.Format.ElementParameterInfo
         public string AssemblyCode { get; } = "";
         public const string AssemblyCodeParameterName = "Assembly Code";
         public const string AssemblyCodeBuiltInId = "-1002500";
-        public static bool DescriptorIsAssemblyCode(ObjectModel.ParameterDescriptor pd)
+        public static bool DescriptorIsAssemblyCode(ParameterDescriptor pd)
             => pd.Guid == AssemblyCodeBuiltInId ||
                pd.Name.Equals(AssemblyCodeParameterName, StringComparison.InvariantCultureIgnoreCase);
 
@@ -23,7 +23,7 @@ namespace Vim.Format.ElementParameterInfo
         public string AssemblyDescription { get; } = "";
         public const string AssemblyDescriptionParameterName = "Assembly Description";
         public const string AssemblyDescriptionBuiltInId = "-1002501";
-        public static bool DescriptorIsAssemblyDescription(ObjectModel.ParameterDescriptor pd)
+        public static bool DescriptorIsAssemblyDescription(ParameterDescriptor pd)
             => pd.Guid == AssemblyDescriptionBuiltInId ||
                pd.Name.Equals(AssemblyDescriptionParameterName, StringComparison.InvariantCultureIgnoreCase);
 
@@ -52,14 +52,14 @@ namespace Vim.Format.ElementParameterInfo
         /// Constructor
         /// </summary>
         public FamilyTypeUniformatInfo(
-            ObjectModel.FamilyType familyType,
+            FamilyType familyType,
             ParameterTable parameterTable,
             VimElementIndexMaps elementIndexMaps)
         {
             FamilyType = familyType;
 
             var elementIndex = FamilyType.GetElementIndexOrNone();
-            if (elementIndex == ObjectModel.EntityRelation.None)
+            if (elementIndex == EntityRelation.None)
                 return;
 
             var parameterIndices = elementIndexMaps.GetParameterIndicesFromElementIndex(elementIndex);

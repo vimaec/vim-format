@@ -4,7 +4,7 @@ using System.Diagnostics;
 using Vim.Util;
 using Vim.Format.ObjectModel;
 
-namespace Vim.Format.api_v2
+namespace Vim.Format
 {
     public class VimEntitySetBuilder<TEntity> where TEntity : Entity
     {

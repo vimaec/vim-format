@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Vim.BFast;
 
-namespace Vim.Format.api_v2
+namespace Vim.Format
 {
     public static class VimEntityTableColumnActions
     {

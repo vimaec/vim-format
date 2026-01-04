@@ -5,7 +5,7 @@ using System.Linq;
 using Vim.BFast;
 using Vim.Util;
 
-namespace Vim.Format.api_v2
+namespace Vim.Format
 {
     public class VimHeader
     {

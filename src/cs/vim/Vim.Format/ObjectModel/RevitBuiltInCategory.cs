@@ -1,7 +1,7 @@
 ﻿// FILE ORIGINALLY GENERATED FROM GenerateRevitBuiltInCategories.cs
 using System.Collections.Generic;
 
-namespace Vim.Format.ObjectModel
+namespace Vim.Format
 {
     public enum RevitBuiltInCategory : long
     {

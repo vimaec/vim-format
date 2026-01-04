@@ -1,6 +1,6 @@
 ﻿using NUnit.Framework;
 using System.IO;
-using Vim.Format.api_v2;
+using Vim.Format;
 using Vim.Util.Tests;
 
 namespace Vim.Gltf.Converter.Tests;

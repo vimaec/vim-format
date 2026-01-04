@@ -24,7 +24,7 @@ using System.Threading;
 // - Test beyond this repository (i.e. with Revit exporter) > check the buildup using VimMesh
 //   - Material and VimMaterial must be inserted simultaneously
 
-namespace Vim.Format.api_v2
+namespace Vim.Format
 {
     /// <summary>
     /// A VIM represents a building design (one or more BIM models). A VIM contains the building element geometry and its associated parameters.

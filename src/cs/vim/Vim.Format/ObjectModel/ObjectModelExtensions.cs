@@ -3,10 +3,9 @@ using System.Collections.Generic;
 using System.Data;
 using System.IO;
 using System.Linq;
-using Vim.Format.api_v2;
 using Vim.Util;
 
-namespace Vim.Format.ObjectModel
+namespace Vim.Format
 {
     public static class ObjectModelExtensions
     {
@@ -136,7 +135,7 @@ namespace Vim.Format.ObjectModel
         /// </summary>
         public static IEnumerable<IGrouping<int, T>> GroupByBimDocumentIndex<T>(
             this IEnumerable<T> entityWithElementCollection,
-            api_v2.ElementTable elementTable)
+            ElementTable elementTable)
             where T : IElementIndex
         {
             entityWithElementCollection = entityWithElementCollection ?? Array.Empty<T>();
@@ -155,7 +154,7 @@ namespace Vim.Format.ObjectModel
         /// </summary>
         public static Dictionary<int, Dictionary<long, T>> GroupByBimDocumentIndexAndElementId<T>(
             this IEnumerable<T> entityWithElementCollection,
-            api_v2.ElementTable elementTable)
+            ElementTable elementTable)
             where T : IElementIndex
         {
             entityWithElementCollection = entityWithElementCollection ?? Array.Empty<T>();

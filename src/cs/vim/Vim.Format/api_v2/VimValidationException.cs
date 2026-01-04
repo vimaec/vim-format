@@ -1,6 +1,6 @@
 using System;
 
-namespace Vim.Format.api_v2
+namespace Vim.Format
 {
     public class VimValidationException : Exception
     {

@@ -1,16 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Vim.Format.api_v2;
+using Vim.Format;
 using Vim.Util;
 
-using static Vim.Format.ObjectModel.ObjectModelExtensions;
+using static Vim.Format.ObjectModelExtensions;
 
 // ReSharper disable InconsistentNaming
 
 namespace Vim.Format.ElementParameterInfo
 {
-    public class LevelInfo : ObjectModel.IElementIndex
+    public class LevelInfo : IElementIndex
     {
         // SOME BACKGROUND INFORMATION ABOUT REVIT LEVELS
         //
@@ -26,7 +26,7 @@ namespace Vim.Format.ElementParameterInfo
         //
         //     b) the "survey point" of the bim document
         //
-        //     For more information on these values, check the Revit API documentation and see ObjectModel.cs > BasePoint.
+        //     For more information on these values, check the Revit API documentation and see cs > BasePoint.
         //
         // Additionally, a Level may be qualified as either a building story or not.
         //
@@ -40,7 +40,7 @@ namespace Vim.Format.ElementParameterInfo
         /// <summary>
         /// The Level.
         /// </summary>
-        public ObjectModel.Level Level { get; }
+        public Level Level { get; }
 
         /// <summary>
         /// The element index of the level.
@@ -136,7 +136,7 @@ namespace Vim.Format.ElementParameterInfo
         public bool? IsRelativeToProjectBasePoint { get; private set; }
         //public const string TypeId_ElevationBase = "autodesk.revit.parameter:levelRelativeBaseType";
         public const string BuiltInId_ElevationBase = "-1007109";
-        public static bool DescriptorIsProjectBasePoint(ObjectModel.ParameterDescriptor pd)
+        public static bool DescriptorIsProjectBasePoint(ParameterDescriptor pd)
             => pd.Guid == BuiltInId_ElevationBase;
 
         /// <summary>
@@ -145,7 +145,7 @@ namespace Vim.Format.ElementParameterInfo
         public bool IsStructural { get; private set; }
         //public const string TypeId_IsStructural = "autodesk.revit.parameter:levelIsStructural";
         public const string BuiltInId_IsStructural = "-1007112";
-        public static bool DescriptorIsStructural(ObjectModel.ParameterDescriptor pd)
+        public static bool DescriptorIsStructural(ParameterDescriptor pd)
             => pd.Guid == BuiltInId_IsStructural;
 
         /// <summary>
@@ -154,16 +154,16 @@ namespace Vim.Format.ElementParameterInfo
         public bool IsBuildingStory { get; private set; }
         //public const string TypeId_IsBuildingStory = "autodesk.revit.parameter:levelIsBuildingStory";
         public const string BuiltInId_IsBuildingStory = "-1007111";
-        public static bool DescriptorIsBuildingStory(ObjectModel.ParameterDescriptor pd)
+        public static bool DescriptorIsBuildingStory(ParameterDescriptor pd)
             => pd.Guid == BuiltInId_IsBuildingStory;
 
         /// <summary>
         /// The building story above this one. Can be null if this is set to "Default" in Revit or if the level is the topmost building story.
         /// </summary>
-        public ObjectModel.Level BuildingStoryAbove { get; set; }
+        public Level BuildingStoryAbove { get; set; }
         //public const string TypeId_BuildingStoryAbove = "autodesk.revit.parameter:levelUpToLevel";
         public const string BuiltInId_BuildingStoryAbove = "-1007110";
-        public static bool DescriptorIsBuildingStoryAbove(ObjectModel.ParameterDescriptor pd)
+        public static bool DescriptorIsBuildingStoryAbove(ParameterDescriptor pd)
             => pd.Guid == BuiltInId_BuildingStoryAbove;
 
         /// <summary>
@@ -206,12 +206,12 @@ namespace Vim.Format.ElementParameterInfo
         /// Constructor
         /// </summary>
         public LevelInfo(
-            ObjectModel.Level level,
+            Level level,
             FamilyTypeTable familyTypeTable,
             ParameterTable parameterTable,
             VimElementIndexMaps elementIndexMaps,
-            IReadOnlyDictionary<long, ObjectModel.Level> elementIdToLevelMap,
-            IReadOnlyDictionary<long, ObjectModel.BasePoint> elementIdToBasePointMap)
+            IReadOnlyDictionary<long, Level> elementIdToLevelMap,
+            IReadOnlyDictionary<long, BasePoint> elementIdToBasePointMap)
         {
             Level = level;
 
@@ -233,7 +233,7 @@ namespace Vim.Format.ElementParameterInfo
         private void ReadLevelParameters(
             ParameterTable parameterTable,
             VimElementIndexMaps elementIndexMaps,
-            IReadOnlyDictionary<long, ObjectModel.Level> elementIdToLevelMap)
+            IReadOnlyDictionary<long, Level> elementIdToLevelMap)
         {
             var levelElementParameterIndices = elementIndexMaps.GetParameterIndicesFromElementIndex(GetElementIndexOrNone());
 

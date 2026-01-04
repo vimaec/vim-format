@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Vim.Math3d;
 using Vim.Util;
 
-namespace Vim.Format.api_v2
+namespace Vim.Format
 {
     public static class VimValidation
     {
@@ -99,8 +99,8 @@ namespace Vim.Format.api_v2
             // All entities with element must have a valid element index.
 
             var entityWithElementTypes = new HashSet<Type>(
-                ObjectModel.ObjectModelReflection.GetEntityTypes<ObjectModel.EntityWithElement>()
-                .Where(t => t.GetCustomAttributes(typeof(ObjectModel.G3dAttributeReferenceAttribute), true).Count() == 0)
+                ObjectModelReflection.GetEntityTypes<EntityWithElement>()
+                .Where(t => t.GetCustomAttributes(typeof(G3dAttributeReferenceAttribute), true).Count() == 0)
             );
 
             var entityWithElementTypesAndTableNames = entityWithElementTypes
@@ -121,9 +121,9 @@ namespace Vim.Format.api_v2
                 {
                     var elementIndex = elementIndices[i];
                     if (elementIndex < 0)
-                        throw new VimValidationException($"{nameof(ObjectModel.EntityWithElement)} {tableName} @{i} has a negative element index: {elementIndex}.");
+                        throw new VimValidationException($"{nameof(EntityWithElement)} {tableName} @{i} has a negative element index: {elementIndex}.");
                     if (elementIndex >= elementCount)
-                        throw new VimValidationException($"{nameof(ObjectModel.EntityWithElement)} {tableName} @{i} has an invalid element index: {elementIndex}; element count: {elementCount}");
+                        throw new VimValidationException($"{nameof(EntityWithElement)} {tableName} @{i} has an invalid element index: {elementIndex}; element count: {elementCount}");
                 }
             });
         }
@@ -134,33 +134,33 @@ namespace Vim.Format.api_v2
 
             // There is at least one BimDocument in the document model.
             if (tableSet.BimDocumentTable.RowCount == 0 && validationOptions.BimDocumentMustExist)
-                throw new VimValidationException($"No {nameof(ObjectModel.BimDocument)} found.");
+                throw new VimValidationException($"No {nameof(BimDocument)} found.");
 
             foreach (var bd in tableSet.BimDocumentTable)
             {
                 var bdElement = bd.Element;
                 if (bdElement == null)
-                    throw new VimValidationException($"{nameof(ObjectModel.BimDocument)} @{bd.Index} has null {nameof(ObjectModel.Element)}.");
+                    throw new VimValidationException($"{nameof(BimDocument)} @{bd.Index} has null {nameof(Element)}.");
 
                 var expectedElementId = VimEntityTableConstants.SyntheticElementId;
                 if (validationOptions.BimDocumentElementMustBeSynthetic && bdElement.Id != expectedElementId)
-                    throw new VimValidationException($"{nameof(ObjectModel.BimDocument)} @{bd.Index} - Related {nameof(ObjectModel.Element)}.{nameof(ObjectModel.Element.Id)} @{bdElement.Index} is not {expectedElementId}");
+                    throw new VimValidationException($"{nameof(BimDocument)} @{bd.Index} - Related {nameof(Element)}.{nameof(Element.Id)} @{bdElement.Index} is not {expectedElementId}");
 
                 var expectedName = bd.Name;
                 if (validationOptions.BimDocumentElementNameMustMatchBimDocumentName && bdElement.Name != expectedName)
-                    throw new VimValidationException($"{nameof(ObjectModel.BimDocument)} @{bd.Index} - Related {nameof(ObjectModel.Element)}.{nameof(ObjectModel.Element.Name)} @{bdElement.Index} does not match {nameof(ObjectModel.BimDocument)}.{nameof(ObjectModel.BimDocument.Name)} ({expectedName})");
+                    throw new VimValidationException($"{nameof(BimDocument)} @{bd.Index} - Related {nameof(Element)}.{nameof(Element.Name)} @{bdElement.Index} does not match {nameof(BimDocument)}.{nameof(BimDocument.Name)} ({expectedName})");
 
                 var expectedElementType = VimEntityTableConstants.BimDocumentParameterHolderElementType;
                 if (validationOptions.BimDocumentElementTypeMustBeParameterHolder && bdElement.Type != expectedElementType)
-                    throw new VimValidationException($"{nameof(ObjectModel.BimDocument)} @{bd.Index} - Related {nameof(ObjectModel.Element)}.{nameof(ObjectModel.Element.Type)} @{bdElement.Index} is not '{expectedElementType}'.");
+                    throw new VimValidationException($"{nameof(BimDocument)} @{bd.Index} - Related {nameof(Element)}.{nameof(Element.Type)} @{bdElement.Index} is not '{expectedElementType}'.");
             }
         }
 
-        public static void ValidateCompoundStructureLayer(ObjectModel.CompoundStructureLayer layer)
+        public static void ValidateCompoundStructureLayer(CompoundStructureLayer layer)
         {
             // All CompoundLayers have a CompoundStructure
             if (layer.CompoundStructure == null)
-                throw new VimValidationException($"{nameof(ObjectModel.CompoundStructureLayer)} {layer.Index} has null {nameof(ObjectModel.CompoundStructure)}");
+                throw new VimValidationException($"{nameof(CompoundStructureLayer)} {layer.Index} has null {nameof(CompoundStructure)}");
         }
 
         public static void ValidateCompoundStructures(VIM vim)
@@ -181,17 +181,17 @@ namespace Vim.Format.api_v2
                 {
                     var orderIndex = ordered[i].OrderIndex;
                     if (orderIndex != i)
-                        throw new VimValidationException($"{nameof(ObjectModel.CompoundStructureLayer.OrderIndex)} {orderIndex} does not match expected value of {i}");
+                        throw new VimValidationException($"{nameof(CompoundStructureLayer.OrderIndex)} {orderIndex} does not match expected value of {i}");
                 }
 
                 var csIndex = cslCluster.Key;
-                var csStructuralLayerIndex = tableSet.CompoundStructureTable.Column_StructuralLayerIndex.ElementAtOrDefault(csIndex, ObjectModel.EntityRelation.None);
-                if (csStructuralLayerIndex != ObjectModel.EntityRelation.None)
+                var csStructuralLayerIndex = tableSet.CompoundStructureTable.Column_StructuralLayerIndex.ElementAtOrDefault(csIndex, EntityRelation.None);
+                if (csStructuralLayerIndex != EntityRelation.None)
                 {
                     // If the CompoundStructure.StructuralMaterial exists, it should be a valid relation to a CompoundStructureLayer
                     var maxIndex = cslArray.Length - 1;
                     if (csStructuralLayerIndex < 0 || csStructuralLayerIndex > maxIndex)
-                        throw new VimValidationException($"{nameof(ObjectModel.CompoundStructure)} {csIndex} has an invalid {nameof(ObjectModel.CompoundStructure.StructuralLayer)} relation index of {csStructuralLayerIndex}. Expected value between [0..{maxIndex}]");
+                        throw new VimValidationException($"{nameof(CompoundStructure)} {csIndex} has an invalid {nameof(CompoundStructure.StructuralLayer)} relation index of {csStructuralLayerIndex}. Expected value between [0..{maxIndex}]");
                 }
             }
 
@@ -204,16 +204,16 @@ namespace Vim.Format.api_v2
             {
                 // All compound structures are referenced by at least one compound structure layer
                 if (!cslRelationIndices.Contains(cs.Index))
-                    throw new VimValidationException($"{nameof(ObjectModel.CompoundStructure)} index: {cs.Index} does not have a corresponding {nameof(ObjectModel.CompoundStructureLayer)}");
+                    throw new VimValidationException($"{nameof(CompoundStructure)} index: {cs.Index} does not have a corresponding {nameof(CompoundStructureLayer)}");
 
                 // All compound structures are referenced by at least one family type.
                 if (!ftRelationIndices.Contains(cs.Index))
-                    throw new VimValidationException($"{nameof(ObjectModel.CompoundStructure)} index: {cs.Index} does not have a corresponding {nameof(ObjectModel.FamilyType)}");
+                    throw new VimValidationException($"{nameof(CompoundStructure)} index: {cs.Index} does not have a corresponding {nameof(FamilyType)}");
             }
 
             // A compound structure must be referenced by exactly one family type (no re-using compound structures).
             if (ftRelationIndices.Count != ftRelationIndices.Distinct().Count())
-                throw new VimValidationException($"A {nameof(ObjectModel.CompoundStructure)} must be referenced by exactly one {nameof(ObjectModel.FamilyType)}.");
+                throw new VimValidationException($"A {nameof(CompoundStructure)} must be referenced by exactly one {nameof(FamilyType)}.");
         }
 
         public static void ValidateAssets(VIM vim)
@@ -234,19 +234,19 @@ namespace Vim.Format.api_v2
             Parallel.ForEach(tableSet.ParameterTable, p =>
             {
                 // Each parameter must be associated to an element.
-                if (p._Element.Index == ObjectModel.EntityRelation.None)
-                    throw new VimValidationException($"{nameof(ObjectModel.Element)} not found for {nameof(ObjectModel.Parameter)} {p.Index}");
+                if (p._Element.Index == EntityRelation.None)
+                    throw new VimValidationException($"{nameof(Element)} not found for {nameof(Parameter)} {p.Index}");
 
                 // Each parameter must have a parameter descriptor.
                 if (p.ParameterDescriptor == null)
-                    throw new VimValidationException($"{nameof(ObjectModel.ParameterDescriptor)} is null for {nameof(ObjectModel.Parameter)} {p.Index}");
+                    throw new VimValidationException($"{nameof(ParameterDescriptor)} is null for {nameof(Parameter)} {p.Index}");
             });
 
             // Validate the parameter descriptors.
             foreach (var pd in tableSet.ParameterDescriptorTable)
             {
                 if (pd.DisplayUnit == null)
-                    throw new VimValidationException($"{nameof(ObjectModel.DisplayUnit)} is null for {nameof(ObjectModel.ParameterDescriptor)} {pd.Index}");
+                    throw new VimValidationException($"{nameof(DisplayUnit)} is null for {nameof(ParameterDescriptor)} {pd.Index}");
             }
         }
 
@@ -259,11 +259,11 @@ namespace Vim.Format.api_v2
             {
                 var bd = po.BimDocument;
                 if (bd == null)
-                    throw new VimValidationException($"{nameof(ObjectModel.BimDocument)} is null for {nameof(ObjectModel.PhaseOrderInBimDocument)} {po.Index}");
+                    throw new VimValidationException($"{nameof(BimDocument)} is null for {nameof(PhaseOrderInBimDocument)} {po.Index}");
 
                 var phase = po.Phase;
                 if (phase == null)
-                    throw new VimValidationException($"{nameof(ObjectModel.Phase)} is null for {nameof(ObjectModel.PhaseOrderInBimDocument)} {po.Index}");
+                    throw new VimValidationException($"{nameof(Phase)} is null for {nameof(PhaseOrderInBimDocument)} {po.Index}");
             }
 
             // Validate the order indices in the bim documents.
@@ -275,7 +275,7 @@ namespace Vim.Format.api_v2
                     var po = ordered[i];
                     var orderIndex = po.OrderIndex;
                     if (orderIndex != i)
-                        throw new VimValidationException($"Unexpected OrderIndex {orderIndex}; expected {i} in {nameof(ObjectModel.PhaseOrderInBimDocument)} {po.Index}");
+                        throw new VimValidationException($"Unexpected OrderIndex {orderIndex}; expected {i} in {nameof(PhaseOrderInBimDocument)} {po.Index}");
                 }
             }
 
@@ -283,7 +283,7 @@ namespace Vim.Format.api_v2
             var phaseIndexSet = new HashSet<int>(tableSet.PhaseTable.Select(p => p.Index));
             phaseIndexSet.ExceptWith(poArray.Select(po => po.Index));
             if (phaseIndexSet.Count != 0)
-                throw new VimValidationException($"{nameof(ObjectModel.Phase)} index coverage is incomplete among {nameof(ObjectModel.PhaseOrderInBimDocument)}");
+                throw new VimValidationException($"{nameof(Phase)} index coverage is incomplete among {nameof(PhaseOrderInBimDocument)}");
         }
 
         /// <summary>
@@ -292,7 +292,7 @@ namespace Vim.Format.api_v2
         public static void ValidateStorageKeys(VIM vim)
         {
             var tableSet = vim.GetEntityTableSet();
-            var storageKeyTables = tableSet.Tables.Values.OfType<IEnumerable<ObjectModel.IStorageKey>>();
+            var storageKeyTables = tableSet.Tables.Values.OfType<IEnumerable<IStorageKey>>();
             foreach (var storageKeyTable in storageKeyTables)
             {
                 ValidateStorageKeyTable(storageKeyTable);
@@ -302,7 +302,7 @@ namespace Vim.Format.api_v2
         /// <summary>
         /// Generic storage key check; ensures that the keys only appear once in the keySet.
         /// </summary>
-        public static void ValidateStorageKeyTable(IEnumerable<ObjectModel.IStorageKey> storageKeyEntities)
+        public static void ValidateStorageKeyTable(IEnumerable<IStorageKey> storageKeyEntities)
         {
             var keySet = new HashSet<object>();
             foreach (var entity in storageKeyEntities)
@@ -318,10 +318,10 @@ namespace Vim.Format.api_v2
             foreach (var eis in vim.GetEntityTableSet().ElementInSystemTable)
             {
                 if (eis.System == null)
-                    throw new VimValidationException($"{nameof(ObjectModel.ElementInSystem)} @ {eis.Index} has a null {nameof(ObjectModel.ElementInSystem.System)}");
+                    throw new VimValidationException($"{nameof(ElementInSystem)} @ {eis.Index} has a null {nameof(ElementInSystem.System)}");
 
                 if (eis.Element == null)
-                    throw new VimValidationException($"{nameof(ObjectModel.ElementInSystem)} @ {eis.Index} has a null {nameof(ObjectModel.ElementInSystem.Element)}");
+                    throw new VimValidationException($"{nameof(ElementInSystem)} @ {eis.Index} has a null {nameof(ElementInSystem.Element)}");
             }
         }
 
@@ -432,13 +432,13 @@ namespace Vim.Format.api_v2
             var geometry = vim.GeometryData;
             var errors = new List<string>();
 
-            var entityTypesWithGeometryReferences = new HashSet<(Type, string, ObjectModel.G3dAttributeReferenceAttribute[])>(
-                ObjectModel.ObjectModelReflection.GetEntityTypes<ObjectModel.Entity>()
+            var entityTypesWithGeometryReferences = new HashSet<(Type, string, G3dAttributeReferenceAttribute[])>(
+                ObjectModelReflection.GetEntityTypes<Entity>()
                 .Select(t => (
                     type: t,
                     tableName: t.GetCustomAttribute<TableNameAttribute>()?.Name,
-                    attrs: t.GetCustomAttributes(typeof(ObjectModel.G3dAttributeReferenceAttribute))
-                        .Select(a => a as ObjectModel.G3dAttributeReferenceAttribute)
+                    attrs: t.GetCustomAttributes(typeof(G3dAttributeReferenceAttribute))
+                        .Select(a => a as G3dAttributeReferenceAttribute)
                         .ToArray()))
                 .Where(tuple => tuple.attrs.Length != 0)
             );
@@ -468,7 +468,7 @@ namespace Vim.Format.api_v2
                     var mult = attr.AttributeReferenceMultiplicity;
 
                     // Validate one-to-one relationships
-                    if (mult == ObjectModel.G3dAttributeReferenceMultiplicity.OneToOne && numEntities != geometryItemCount)
+                    if (mult == G3dAttributeReferenceMultiplicity.OneToOne && numEntities != geometryItemCount)
                     {
                         errors.Add($"Multiplicity Error ({mult}); the number of entities of type \"{type.Name}\" ({numEntities}) is not equal to the number of elements in the geometry buffer \"{bufferName}\" ({geometryItemCount})");
                     }

@@ -6,7 +6,7 @@ using Vim.Util;
 using Vim.LinqArray;
 using System.Linq;
 
-namespace Vim.Format.api_v2
+namespace Vim.Format
 {
     public enum VimAssetType
     {

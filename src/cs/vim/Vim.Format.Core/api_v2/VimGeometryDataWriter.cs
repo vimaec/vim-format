@@ -5,7 +5,7 @@ using System.IO;
 using System.Linq;
 using Vim.BFast;
 
-namespace Vim.Format.api_v2
+namespace Vim.Format
 {
     /// <summary>
     /// A helper class which writes large collections of meshes and instances efficiently into a serializable stream.

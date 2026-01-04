@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using Vim.Format.api_v2;
+using Vim.Format;
 using Vim.Util;
 
-using static Vim.Format.ObjectModel.ObjectModelExtensions;
+using static Vim.Format.ObjectModelExtensions;
 
 // ReSharper disable InconsistentNaming
 
@@ -69,18 +69,18 @@ namespace Vim.Format.ElementParameterInfo
         NoGeometry = 7,             // The element does not have geometry.
     }
 
-    public class ElementLevelInfo : ObjectModel.IElementIndex
+    public class ElementLevelInfo : IElementIndex
     {
         /// <summary>
         /// The element.
         /// </summary>
-        public ObjectModel.Element Element { get; }
+        public Element Element { get; }
 
         /// <summary>
         /// Returns the element index.
         /// </summary>
         public int GetElementIndexOrNone()
-            => ObjectModel.EntityRelation.IndexOrDefault(Element);
+            => EntityRelation.IndexOrDefault(Element);
 
         /// <summary>
         /// The schedule level associated to the element parameters. Can be null.
@@ -224,7 +224,7 @@ namespace Vim.Format.ElementParameterInfo
         /// Constructor
         /// </summary>
         public ElementLevelInfo(
-            ObjectModel.Element element,
+            Element element,
             ElementTable elementTable,
             FamilyInstanceTable familyInstanceTable,
             LevelTable levelTable,
@@ -241,10 +241,10 @@ namespace Vim.Format.ElementParameterInfo
             var elementIndex = GetElementIndexOrNone();
 
             // The level index of the element
-            if (elementIndex != ObjectModel.EntityRelation.None)
+            if (elementIndex != EntityRelation.None)
             {
                 var elementLevelIndex = elementTable.GetLevelIndex(elementIndex);
-                if (elementLevelIndex != ObjectModel.EntityRelation.None &&
+                if (elementLevelIndex != EntityRelation.None &&
                     levelInfoMap.TryGetValue(elementLevelIndex, out var levelInfo))
                 {
                     LevelInfo = levelInfo;
@@ -305,7 +305,7 @@ namespace Vim.Format.ElementParameterInfo
         /// Returns the host level of the element.
         /// </summary>
         private static bool TryGetHostLevel(
-            ObjectModel.Element element,
+            Element element,
             ElementTable elementTable,
             FamilyInstanceTable familyInstanceTable,
             LevelTable levelTable,
@@ -319,7 +319,7 @@ namespace Vim.Format.ElementParameterInfo
                 return false;
 
             var hostElementIndex = familyInstanceTable.GetHostIndex(familyInstanceIndex);
-            if (hostElementIndex == ObjectModel.EntityRelation.None)
+            if (hostElementIndex == EntityRelation.None)
                 return false;
 
             var hostElementId = elementTable.GetId(hostElementIndex);
@@ -330,11 +330,11 @@ namespace Vim.Format.ElementParameterInfo
 
             // If the host element is just a regular instance, then return the host element's level.
             var hostElementLevelIndex = elementTable.GetLevelIndex(hostElementIndex);
-            if (hostElementLevelIndex == ObjectModel.EntityRelation.None)
+            if (hostElementLevelIndex == EntityRelation.None)
                 return false;
 
             var hostElementLevelElementIndex = levelTable.GetElementIndex(hostElementLevelIndex);
-            if (hostElementLevelElementIndex == ObjectModel.EntityRelation.None)
+            if (hostElementLevelElementIndex == EntityRelation.None)
                 return false;
 
             var hostElementLevelElementId = elementTable.GetId(hostElementLevelElementIndex);
@@ -358,7 +358,7 @@ namespace Vim.Format.ElementParameterInfo
 
             if (paramNameLowerInvariant.Equals(expectedParamNameLowerInvariant) || builtInIds.Contains(builtInId))
             {
-                return ObjectModel.Parameter.TryParseNativeValueAsElementId(nativeValue, out var levelElementId) &&
+                return Parameter.TryParseNativeValueAsElementId(nativeValue, out var levelElementId) &&
                        elementIdToLevelInfoMap.TryGetEntityFromElementId(levelElementId, out levelInfo);
             }
 

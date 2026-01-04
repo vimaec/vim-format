@@ -2,13 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using Vim.Format.api_v2;
 using Vim.Util;
 using Vim.Math3d;
 
 // ReSharper disable InconsistentNaming
 
-namespace Vim.Format.ObjectModel
+namespace Vim.Format
 {
     public static class SchemaVersion
     {
@@ -1318,10 +1317,10 @@ namespace Vim.Format.ObjectModel
         /// <summary>The transparency, defined in the domain [0..1]</summary>
         public double Transparency;
 
-        public api_v2.VimMaterial ToVimMaterial()
+        public VimMaterial ToVimMaterial()
             => ToVimMaterial(this);
 
-        public static api_v2.VimMaterial ToVimMaterial(Material m)
+        public static VimMaterial ToVimMaterial(Material m)
             => ToVimMaterial(
                 m.Color.X,
                 m.Color.Y,
@@ -1330,14 +1329,14 @@ namespace Vim.Format.ObjectModel
                 m.Glossiness,
                 m.Smoothness);
 
-        public static api_v2.VimMaterial ToVimMaterial(
+        public static VimMaterial ToVimMaterial(
             double colorX,
             double colorY,
             double colorZ,
             double transparency,
             double glossiness,
             double smoothness)
-            => new api_v2.VimMaterial()
+            => new VimMaterial()
             {
                 Color = new Vector4(
                     (float) colorX,

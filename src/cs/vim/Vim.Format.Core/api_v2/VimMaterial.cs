@@ -1,6 +1,6 @@
 using Vim.Math3d;
 
-namespace Vim.Format.api_v2
+namespace Vim.Format
 {
     public class VimMaterial
     {

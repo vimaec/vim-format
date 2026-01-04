@@ -4,7 +4,7 @@ using System.Linq;
 using Vim.Format.ObjectModel;
 using Vim.Util;
 
-namespace Vim.Format.api_v2
+namespace Vim.Format
 {
     public class VimSchema
     {
@@ -69,7 +69,7 @@ namespace Vim.Format.api_v2
 
         public static VimSchema GetCurrentVimSchema()
         {
-            var vimSchema = new VimSchema(Format.VimFormatVersion.Current, ObjectModel.SchemaVersion.Current);
+            var vimSchema = new VimSchema(Format.VimFormatVersion.Current, SchemaVersion.Current);
 
             foreach (var entityType in ObjectModelReflection.GetEntityTypes())
             {

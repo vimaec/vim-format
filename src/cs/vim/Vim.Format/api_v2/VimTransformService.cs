@@ -3,7 +3,7 @@ using System.Linq;
 using Vim.Math3d;
 using Vim.Util;
 
-namespace Vim.Format.api_v2
+namespace Vim.Format
 {
     public class VimTransformResult
     {
@@ -90,7 +90,7 @@ namespace Vim.Format.api_v2
             InstanceTransform instanceTransform = null,
             bool deduplicateMeshes = false)
         {
-            var vb = new VimBuilder(_generatorString, ObjectModel.SchemaVersion.Current, _versionString);
+            var vb = new VimBuilder(_generatorString, SchemaVersion.Current, _versionString);
 
             var geometryData = vim.GeometryData;
             var elementGeometryInfo = vim.GetElementGeometryInfoList();

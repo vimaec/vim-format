@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using Vim.Format.api_v2;
+using Vim.Format;
 using Vim.Format.ObjectModel;
 using Vim.Math3d;
 using Vim.Util;
@@ -270,7 +270,7 @@ namespace Vim.Gltf.Converter
 
             // Store the node associated to the geometric instance.
             // This ordered 1:1 relationship connects the entities with the geometric instances.
-            NodeBuilder.Add(new Vim.Format.ObjectModel.Node
+            NodeBuilder.Add(new Vim.Format.Node
             {
                 _Element = { Index = familyInstanceElement.Index },
             });
@@ -376,11 +376,11 @@ namespace Vim.Gltf.Converter
                 {
                     var maybeChannel = gltfMaterial.FindChannel("BaseColor") ?? gltfMaterial.FindChannel("Diffuse");
                     if (maybeChannel == null)
-                        return new Format.ObjectModel.Material { Color_X = 0.5d, Color_Y = 0.5d, Color_Z = 0.5d }; // default material
+                        return new Format.Material { Color_X = 0.5d, Color_Y = 0.5d, Color_Z = 0.5d }; // default material
 
                     var color = maybeChannel.Value.Color;
 
-                    return new Format.ObjectModel.Material { Color_X = color.X, Color_Y = color.Y, Color_Z = color.Z, Transparency = 1 - color.W };
+                    return new Format.Material { Color_X = color.X, Color_Y = color.Y, Color_Z = color.Z, Transparency = 1 - color.W };
                 });
 
             var material = getOrAddResult.Entity;
