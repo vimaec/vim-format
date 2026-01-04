@@ -192,5 +192,24 @@ namespace Vim.Util
 
             return r;
         }
+
+        public static IEnumerable<int> IndicesWhere<T>(this IReadOnlyList<T> list, Func<T, bool> filter)
+        {
+            for(var i = 0; i < list.Count; ++i)
+            {
+                if (filter(list[i]))
+                {
+                    yield return i;
+                }
+            }
+        }
+
+        public static IEnumerable<T> Reversed<T>(this IReadOnlyList<T> list)
+        {
+            for (var i = list.Count-1; i >= 0; --i)
+            {
+                yield return list[i];
+            }
+        }
     }
 }

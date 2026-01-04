@@ -1,7 +1,6 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
+using Vim.Util;
 using NUnit.Framework;
-using Vim.LinqArray;
 
 namespace Vim.Format.Tests
 {
@@ -52,7 +51,7 @@ namespace Vim.Format.Tests
             Assert.AreEqual(3, clockwiseStrip22[1]);
             Assert.AreEqual(1, clockwiseStrip22[2]);
             Assert.AreEqual(0, clockwiseStrip22[3]);
-            var reversed22 = clockwiseStrip22.ToIArray().Reverse();
+            var reversed22 = clockwiseStrip22.Reversed().ToArray();
             for (var i = 0; i < strip22.Count; ++i)
             {
                 Assert.AreEqual(strip22[i], reversed22[i]);

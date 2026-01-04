@@ -1,7 +1,6 @@
 ﻿using NUnit.Framework;
 using System.Collections.Generic;
 using System.Linq;
-using Vim.LinqArray;
 using Vim.Util;
 using Vim.Util.Tests;
 

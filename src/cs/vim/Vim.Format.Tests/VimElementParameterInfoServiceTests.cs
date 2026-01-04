@@ -25,8 +25,9 @@ public static class VimElementParameterInfoServiceTests
         using var _ = logger.LogDuration($"{nameof(TestElementParameterInfoService)}: {vimFilePath}");
 
         var vimFileInfo = new FileInfo(vimFilePath);
+        var vim = VIM.Open(vimFileInfo);
 
-        var stringTable = VIM.GetStringTable(vimFileInfo);
+        var stringTable = vim.StringTable;
 
         var infos = VimElementParameterInfoService.GetElementParameterInfos(vimFileInfo, stringTable);
         var levelInfos = infos.LevelInfos;
@@ -35,10 +36,7 @@ public static class VimElementParameterInfoServiceTests
         var elementIfcInfos = infos.ElementIfcInfos;
         var parameterMeasureTypes = infos.ParameterMeasureTypes;
 
-        var validationTableSet = new EntityTableSet(
-            vimFileInfo,
-            stringTable,
-            n => n is TableNames.Level or TableNames.Element or TableNames.FamilyInstance or TableNames.Parameter);
+        var validationTableSet = vim.GetEntityTableSet();
 
         Assert.AreEqual(validationTableSet.LevelTable.RowCount, levelInfos.Length);
 

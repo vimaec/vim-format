@@ -105,11 +105,11 @@ namespace Vim.Format
             var columnSet = new HashSet<int>(columns.Select(c => c.Index));
 
             var cellRecords = tableSet.ScheduleCellTable.Column_ScheduleColumnIndex
-                .IndicesWhere((colIndex, _) => columnSet.Contains(colIndex))
+                .IndicesWhere((colIndex) => columnSet.Contains(colIndex))
                 .Select(cellIndex => new CellData(
-                    dm.GetScheduleCellValue(cellIndex),
-                    dm.GetScheduleCellScheduleColumnIndex(cellIndex),
-                    dm.GetScheduleCellRowIndex(cellIndex)))
+                    tableSet.ScheduleCellTable.GetValue(cellIndex),
+                    tableSet.ScheduleCellTable.GetScheduleColumnIndex(cellIndex),
+                    tableSet.ScheduleCellTable.GetRowIndex(cellIndex)))
                 .GroupBy(c => c.RowIndex)
                 .OrderBy(g => g.Key)
                 .Select(g => g.OrderBy(t => t.ColIndex).Select(t => t.Value));
