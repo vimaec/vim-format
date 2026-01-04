@@ -1,4 +1,4 @@
-// AUTO-GENERATED FILE, DO NOT MODIFY.
+// AUTO-GENERATED FILE; see VimEntityCodeGen.cs
 // ReSharper disable All
 using System;
 using System.Collections;
@@ -10,1984 +10,6 @@ using Vim.Util;
 
 namespace Vim.Format.api_v2
 {
-    // AUTO-GENERATED
-    public partial class Asset
-    {
-        public Asset()
-        {
-        }
-        
-        public override bool FieldsAreEqual(object obj)
-        {
-            if ((obj is Asset other))
-            {
-                var fieldsAreEqual =
-                    (Index == other.Index) &&
-                    (BufferName == other.BufferName);
-                if (!fieldsAreEqual)
-                {
-                    return false;
-                }
-                
-                return true;
-            }
-            return false;
-        }
-        
-    } // end of class
-    
-    // AUTO-GENERATED
-    public partial class DisplayUnit
-    {
-        public DisplayUnit()
-        {
-        }
-        
-        public override bool FieldsAreEqual(object obj)
-        {
-            if ((obj is DisplayUnit other))
-            {
-                var fieldsAreEqual =
-                    (Index == other.Index) &&
-                    (Spec == other.Spec) &&
-                    (Type == other.Type) &&
-                    (Label == other.Label);
-                if (!fieldsAreEqual)
-                {
-                    return false;
-                }
-                
-                return true;
-            }
-            return false;
-        }
-        
-    } // end of class
-    
-    // AUTO-GENERATED
-    public partial class ParameterDescriptor
-    {
-        public Vim.Format.ObjectModel.DisplayUnit DisplayUnit => _DisplayUnit?.Value;
-        public int DisplayUnitIndex => _DisplayUnit?.Index ?? EntityRelation.None;
-        public ParameterDescriptor()
-        {
-            _DisplayUnit = new Relation<Vim.Format.ObjectModel.DisplayUnit>();
-        }
-        
-        public override bool FieldsAreEqual(object obj)
-        {
-            if ((obj is ParameterDescriptor other))
-            {
-                var fieldsAreEqual =
-                    (Index == other.Index) &&
-                    (Name == other.Name) &&
-                    (Group == other.Group) &&
-                    (ParameterType == other.ParameterType) &&
-                    (IsInstance == other.IsInstance) &&
-                    (IsShared == other.IsShared) &&
-                    (IsReadOnly == other.IsReadOnly) &&
-                    (Flags == other.Flags) &&
-                    (Guid == other.Guid) &&
-                    (StorageType == other.StorageType) &&
-                    (_DisplayUnit?.Index == other._DisplayUnit?.Index);
-                if (!fieldsAreEqual)
-                {
-                    return false;
-                }
-                
-                return true;
-            }
-            return false;
-        }
-        
-    } // end of class
-    
-    // AUTO-GENERATED
-    public partial class Parameter
-    {
-        public Vim.Format.ObjectModel.ParameterDescriptor ParameterDescriptor => _ParameterDescriptor?.Value;
-        public int ParameterDescriptorIndex => _ParameterDescriptor?.Index ?? EntityRelation.None;
-        public Vim.Format.ObjectModel.Element Element => _Element?.Value;
-        public int ElementIndex => _Element?.Index ?? EntityRelation.None;
-        public Parameter()
-        {
-            _ParameterDescriptor = new Relation<Vim.Format.ObjectModel.ParameterDescriptor>();
-            _Element = new Relation<Vim.Format.ObjectModel.Element>();
-        }
-        
-        public override bool FieldsAreEqual(object obj)
-        {
-            if ((obj is Parameter other))
-            {
-                var fieldsAreEqual =
-                    (Index == other.Index) &&
-                    (Value == other.Value) &&
-                    (_ParameterDescriptor?.Index == other._ParameterDescriptor?.Index) &&
-                    (_Element?.Index == other._Element?.Index);
-                if (!fieldsAreEqual)
-                {
-                    return false;
-                }
-                
-                return true;
-            }
-            return false;
-        }
-        
-    } // end of class
-    
-    // AUTO-GENERATED
-    public partial class Element
-    {
-        public Vim.Format.ObjectModel.Level Level => _Level?.Value;
-        public int LevelIndex => _Level?.Index ?? EntityRelation.None;
-        public Vim.Format.ObjectModel.Phase PhaseCreated => _PhaseCreated?.Value;
-        public int PhaseCreatedIndex => _PhaseCreated?.Index ?? EntityRelation.None;
-        public Vim.Format.ObjectModel.Phase PhaseDemolished => _PhaseDemolished?.Value;
-        public int PhaseDemolishedIndex => _PhaseDemolished?.Index ?? EntityRelation.None;
-        public Vim.Format.ObjectModel.Category Category => _Category?.Value;
-        public int CategoryIndex => _Category?.Index ?? EntityRelation.None;
-        public Vim.Format.ObjectModel.Workset Workset => _Workset?.Value;
-        public int WorksetIndex => _Workset?.Index ?? EntityRelation.None;
-        public Vim.Format.ObjectModel.DesignOption DesignOption => _DesignOption?.Value;
-        public int DesignOptionIndex => _DesignOption?.Index ?? EntityRelation.None;
-        public Vim.Format.ObjectModel.View OwnerView => _OwnerView?.Value;
-        public int OwnerViewIndex => _OwnerView?.Index ?? EntityRelation.None;
-        public Vim.Format.ObjectModel.Group Group => _Group?.Value;
-        public int GroupIndex => _Group?.Index ?? EntityRelation.None;
-        public Vim.Format.ObjectModel.AssemblyInstance AssemblyInstance => _AssemblyInstance?.Value;
-        public int AssemblyInstanceIndex => _AssemblyInstance?.Index ?? EntityRelation.None;
-        public Vim.Format.ObjectModel.BimDocument BimDocument => _BimDocument?.Value;
-        public int BimDocumentIndex => _BimDocument?.Index ?? EntityRelation.None;
-        public Vim.Format.ObjectModel.Room Room => _Room?.Value;
-        public int RoomIndex => _Room?.Index ?? EntityRelation.None;
-        public Element()
-        {
-            _Level = new Relation<Vim.Format.ObjectModel.Level>();
-            _PhaseCreated = new Relation<Vim.Format.ObjectModel.Phase>();
-            _PhaseDemolished = new Relation<Vim.Format.ObjectModel.Phase>();
-            _Category = new Relation<Vim.Format.ObjectModel.Category>();
-            _Workset = new Relation<Vim.Format.ObjectModel.Workset>();
-            _DesignOption = new Relation<Vim.Format.ObjectModel.DesignOption>();
-            _OwnerView = new Relation<Vim.Format.ObjectModel.View>();
-            _Group = new Relation<Vim.Format.ObjectModel.Group>();
-            _AssemblyInstance = new Relation<Vim.Format.ObjectModel.AssemblyInstance>();
-            _BimDocument = new Relation<Vim.Format.ObjectModel.BimDocument>();
-            _Room = new Relation<Vim.Format.ObjectModel.Room>();
-        }
-        
-        public override bool FieldsAreEqual(object obj)
-        {
-            if ((obj is Element other))
-            {
-                var fieldsAreEqual =
-                    (Index == other.Index) &&
-                    (Id == other.Id) &&
-                    (Type == other.Type) &&
-                    (Name == other.Name) &&
-                    (UniqueId == other.UniqueId) &&
-                    (Location_X == other.Location_X) &&
-                    (Location_Y == other.Location_Y) &&
-                    (Location_Z == other.Location_Z) &&
-                    (FamilyName == other.FamilyName) &&
-                    (IsPinned == other.IsPinned) &&
-                    (_Level?.Index == other._Level?.Index) &&
-                    (_PhaseCreated?.Index == other._PhaseCreated?.Index) &&
-                    (_PhaseDemolished?.Index == other._PhaseDemolished?.Index) &&
-                    (_Category?.Index == other._Category?.Index) &&
-                    (_Workset?.Index == other._Workset?.Index) &&
-                    (_DesignOption?.Index == other._DesignOption?.Index) &&
-                    (_OwnerView?.Index == other._OwnerView?.Index) &&
-                    (_Group?.Index == other._Group?.Index) &&
-                    (_AssemblyInstance?.Index == other._AssemblyInstance?.Index) &&
-                    (_BimDocument?.Index == other._BimDocument?.Index) &&
-                    (_Room?.Index == other._Room?.Index);
-                if (!fieldsAreEqual)
-                {
-                    return false;
-                }
-                
-                return true;
-            }
-            return false;
-        }
-        
-    } // end of class
-    
-    // AUTO-GENERATED
-    public partial class Workset
-    {
-        public Vim.Format.ObjectModel.BimDocument BimDocument => _BimDocument?.Value;
-        public int BimDocumentIndex => _BimDocument?.Index ?? EntityRelation.None;
-        public Workset()
-        {
-            _BimDocument = new Relation<Vim.Format.ObjectModel.BimDocument>();
-        }
-        
-        public override bool FieldsAreEqual(object obj)
-        {
-            if ((obj is Workset other))
-            {
-                var fieldsAreEqual =
-                    (Index == other.Index) &&
-                    (Id == other.Id) &&
-                    (Name == other.Name) &&
-                    (Kind == other.Kind) &&
-                    (IsOpen == other.IsOpen) &&
-                    (IsEditable == other.IsEditable) &&
-                    (Owner == other.Owner) &&
-                    (UniqueId == other.UniqueId) &&
-                    (_BimDocument?.Index == other._BimDocument?.Index);
-                if (!fieldsAreEqual)
-                {
-                    return false;
-                }
-                
-                return true;
-            }
-            return false;
-        }
-        
-    } // end of class
-    
-    // AUTO-GENERATED
-    public partial class AssemblyInstance
-    {
-        public Vim.Format.ObjectModel.Element Element => _Element?.Value;
-        public int ElementIndex => _Element?.Index ?? EntityRelation.None;
-        public AssemblyInstance()
-        {
-            _Element = new Relation<Vim.Format.ObjectModel.Element>();
-        }
-        
-        public override bool FieldsAreEqual(object obj)
-        {
-            if ((obj is AssemblyInstance other))
-            {
-                var fieldsAreEqual =
-                    (Index == other.Index) &&
-                    (AssemblyTypeName == other.AssemblyTypeName) &&
-                    (Position_X == other.Position_X) &&
-                    (Position_Y == other.Position_Y) &&
-                    (Position_Z == other.Position_Z) &&
-                    (_Element?.Index == other._Element?.Index);
-                if (!fieldsAreEqual)
-                {
-                    return false;
-                }
-                
-                return true;
-            }
-            return false;
-        }
-        
-    } // end of class
-    
-    // AUTO-GENERATED
-    public partial class Group
-    {
-        public Vim.Format.ObjectModel.Element Element => _Element?.Value;
-        public int ElementIndex => _Element?.Index ?? EntityRelation.None;
-        public Group()
-        {
-            _Element = new Relation<Vim.Format.ObjectModel.Element>();
-        }
-        
-        public override bool FieldsAreEqual(object obj)
-        {
-            if ((obj is Group other))
-            {
-                var fieldsAreEqual =
-                    (Index == other.Index) &&
-                    (GroupType == other.GroupType) &&
-                    (Position_X == other.Position_X) &&
-                    (Position_Y == other.Position_Y) &&
-                    (Position_Z == other.Position_Z) &&
-                    (_Element?.Index == other._Element?.Index);
-                if (!fieldsAreEqual)
-                {
-                    return false;
-                }
-                
-                return true;
-            }
-            return false;
-        }
-        
-    } // end of class
-    
-    // AUTO-GENERATED
-    public partial class DesignOption
-    {
-        public Vim.Format.ObjectModel.Element Element => _Element?.Value;
-        public int ElementIndex => _Element?.Index ?? EntityRelation.None;
-        public DesignOption()
-        {
-            _Element = new Relation<Vim.Format.ObjectModel.Element>();
-        }
-        
-        public override bool FieldsAreEqual(object obj)
-        {
-            if ((obj is DesignOption other))
-            {
-                var fieldsAreEqual =
-                    (Index == other.Index) &&
-                    (IsPrimary == other.IsPrimary) &&
-                    (_Element?.Index == other._Element?.Index);
-                if (!fieldsAreEqual)
-                {
-                    return false;
-                }
-                
-                return true;
-            }
-            return false;
-        }
-        
-    } // end of class
-    
-    // AUTO-GENERATED
-    public partial class Level
-    {
-        public Vim.Format.ObjectModel.FamilyType FamilyType => _FamilyType?.Value;
-        public int FamilyTypeIndex => _FamilyType?.Index ?? EntityRelation.None;
-        public Vim.Format.ObjectModel.Building Building => _Building?.Value;
-        public int BuildingIndex => _Building?.Index ?? EntityRelation.None;
-        public Vim.Format.ObjectModel.Element Element => _Element?.Value;
-        public int ElementIndex => _Element?.Index ?? EntityRelation.None;
-        public Level()
-        {
-            _FamilyType = new Relation<Vim.Format.ObjectModel.FamilyType>();
-            _Building = new Relation<Vim.Format.ObjectModel.Building>();
-            _Element = new Relation<Vim.Format.ObjectModel.Element>();
-        }
-        
-        public override bool FieldsAreEqual(object obj)
-        {
-            if ((obj is Level other))
-            {
-                var fieldsAreEqual =
-                    (Index == other.Index) &&
-                    (Elevation == other.Elevation) &&
-                    (ProjectElevation == other.ProjectElevation) &&
-                    (_FamilyType?.Index == other._FamilyType?.Index) &&
-                    (_Building?.Index == other._Building?.Index) &&
-                    (_Element?.Index == other._Element?.Index);
-                if (!fieldsAreEqual)
-                {
-                    return false;
-                }
-                
-                return true;
-            }
-            return false;
-        }
-        
-    } // end of class
-    
-    // AUTO-GENERATED
-    public partial class Phase
-    {
-        public Vim.Format.ObjectModel.Element Element => _Element?.Value;
-        public int ElementIndex => _Element?.Index ?? EntityRelation.None;
-        public Phase()
-        {
-            _Element = new Relation<Vim.Format.ObjectModel.Element>();
-        }
-        
-        public override bool FieldsAreEqual(object obj)
-        {
-            if ((obj is Phase other))
-            {
-                var fieldsAreEqual =
-                    (Index == other.Index) &&
-                    (_Element?.Index == other._Element?.Index);
-                if (!fieldsAreEqual)
-                {
-                    return false;
-                }
-                
-                return true;
-            }
-            return false;
-        }
-        
-    } // end of class
-    
-    // AUTO-GENERATED
-    public partial class Room
-    {
-        public Vim.Format.ObjectModel.Level UpperLimit => _UpperLimit?.Value;
-        public int UpperLimitIndex => _UpperLimit?.Index ?? EntityRelation.None;
-        public Vim.Format.ObjectModel.Element Element => _Element?.Value;
-        public int ElementIndex => _Element?.Index ?? EntityRelation.None;
-        public Room()
-        {
-            _UpperLimit = new Relation<Vim.Format.ObjectModel.Level>();
-            _Element = new Relation<Vim.Format.ObjectModel.Element>();
-        }
-        
-        public override bool FieldsAreEqual(object obj)
-        {
-            if ((obj is Room other))
-            {
-                var fieldsAreEqual =
-                    (Index == other.Index) &&
-                    (BaseOffset == other.BaseOffset) &&
-                    (LimitOffset == other.LimitOffset) &&
-                    (UnboundedHeight == other.UnboundedHeight) &&
-                    (Volume == other.Volume) &&
-                    (Perimeter == other.Perimeter) &&
-                    (Area == other.Area) &&
-                    (Number == other.Number) &&
-                    (_UpperLimit?.Index == other._UpperLimit?.Index) &&
-                    (_Element?.Index == other._Element?.Index);
-                if (!fieldsAreEqual)
-                {
-                    return false;
-                }
-                
-                return true;
-            }
-            return false;
-        }
-        
-    } // end of class
-    
-    // AUTO-GENERATED
-    public partial class BimDocument
-    {
-        public Vim.Format.ObjectModel.View ActiveView => _ActiveView?.Value;
-        public int ActiveViewIndex => _ActiveView?.Index ?? EntityRelation.None;
-        public Vim.Format.ObjectModel.Family OwnerFamily => _OwnerFamily?.Value;
-        public int OwnerFamilyIndex => _OwnerFamily?.Index ?? EntityRelation.None;
-        public Vim.Format.ObjectModel.BimDocument Parent => _Parent?.Value;
-        public int ParentIndex => _Parent?.Index ?? EntityRelation.None;
-        public Vim.Format.ObjectModel.Element Element => _Element?.Value;
-        public int ElementIndex => _Element?.Index ?? EntityRelation.None;
-        public BimDocument()
-        {
-            _ActiveView = new Relation<Vim.Format.ObjectModel.View>();
-            _OwnerFamily = new Relation<Vim.Format.ObjectModel.Family>();
-            _Parent = new Relation<Vim.Format.ObjectModel.BimDocument>();
-            _Element = new Relation<Vim.Format.ObjectModel.Element>();
-        }
-        
-        public override bool FieldsAreEqual(object obj)
-        {
-            if ((obj is BimDocument other))
-            {
-                var fieldsAreEqual =
-                    (Index == other.Index) &&
-                    (Title == other.Title) &&
-                    (IsMetric == other.IsMetric) &&
-                    (NumSaves == other.NumSaves) &&
-                    (IsLinked == other.IsLinked) &&
-                    (IsDetached == other.IsDetached) &&
-                    (IsWorkshared == other.IsWorkshared) &&
-                    (PathName == other.PathName) &&
-                    (Latitude == other.Latitude) &&
-                    (Longitude == other.Longitude) &&
-                    (TimeZone == other.TimeZone) &&
-                    (PlaceName == other.PlaceName) &&
-                    (WeatherStationName == other.WeatherStationName) &&
-                    (Elevation == other.Elevation) &&
-                    (ProjectLocation == other.ProjectLocation) &&
-                    (IssueDate == other.IssueDate) &&
-                    (Status == other.Status) &&
-                    (ClientName == other.ClientName) &&
-                    (Address == other.Address) &&
-                    (Name == other.Name) &&
-                    (Number == other.Number) &&
-                    (Author == other.Author) &&
-                    (BuildingName == other.BuildingName) &&
-                    (OrganizationName == other.OrganizationName) &&
-                    (OrganizationDescription == other.OrganizationDescription) &&
-                    (Product == other.Product) &&
-                    (Version == other.Version) &&
-                    (User == other.User) &&
-                    (FileLength == other.FileLength) &&
-                    (_ActiveView?.Index == other._ActiveView?.Index) &&
-                    (_OwnerFamily?.Index == other._OwnerFamily?.Index) &&
-                    (_Parent?.Index == other._Parent?.Index) &&
-                    (_Element?.Index == other._Element?.Index);
-                if (!fieldsAreEqual)
-                {
-                    return false;
-                }
-                
-                return true;
-            }
-            return false;
-        }
-        
-    } // end of class
-    
-    // AUTO-GENERATED
-    public partial class DisplayUnitInBimDocument
-    {
-        public Vim.Format.ObjectModel.DisplayUnit DisplayUnit => _DisplayUnit?.Value;
-        public int DisplayUnitIndex => _DisplayUnit?.Index ?? EntityRelation.None;
-        public Vim.Format.ObjectModel.BimDocument BimDocument => _BimDocument?.Value;
-        public int BimDocumentIndex => _BimDocument?.Index ?? EntityRelation.None;
-        public DisplayUnitInBimDocument()
-        {
-            _DisplayUnit = new Relation<Vim.Format.ObjectModel.DisplayUnit>();
-            _BimDocument = new Relation<Vim.Format.ObjectModel.BimDocument>();
-        }
-        
-        public override bool FieldsAreEqual(object obj)
-        {
-            if ((obj is DisplayUnitInBimDocument other))
-            {
-                var fieldsAreEqual =
-                    (Index == other.Index) &&
-                    (_DisplayUnit?.Index == other._DisplayUnit?.Index) &&
-                    (_BimDocument?.Index == other._BimDocument?.Index);
-                if (!fieldsAreEqual)
-                {
-                    return false;
-                }
-                
-                return true;
-            }
-            return false;
-        }
-        
-    } // end of class
-    
-    // AUTO-GENERATED
-    public partial class PhaseOrderInBimDocument
-    {
-        public Vim.Format.ObjectModel.Phase Phase => _Phase?.Value;
-        public int PhaseIndex => _Phase?.Index ?? EntityRelation.None;
-        public Vim.Format.ObjectModel.BimDocument BimDocument => _BimDocument?.Value;
-        public int BimDocumentIndex => _BimDocument?.Index ?? EntityRelation.None;
-        public PhaseOrderInBimDocument()
-        {
-            _Phase = new Relation<Vim.Format.ObjectModel.Phase>();
-            _BimDocument = new Relation<Vim.Format.ObjectModel.BimDocument>();
-        }
-        
-        public override bool FieldsAreEqual(object obj)
-        {
-            if ((obj is PhaseOrderInBimDocument other))
-            {
-                var fieldsAreEqual =
-                    (Index == other.Index) &&
-                    (OrderIndex == other.OrderIndex) &&
-                    (_Phase?.Index == other._Phase?.Index) &&
-                    (_BimDocument?.Index == other._BimDocument?.Index);
-                if (!fieldsAreEqual)
-                {
-                    return false;
-                }
-                
-                return true;
-            }
-            return false;
-        }
-        
-    } // end of class
-    
-    // AUTO-GENERATED
-    public partial class Category
-    {
-        public Vim.Format.ObjectModel.Category Parent => _Parent?.Value;
-        public int ParentIndex => _Parent?.Index ?? EntityRelation.None;
-        public Vim.Format.ObjectModel.Material Material => _Material?.Value;
-        public int MaterialIndex => _Material?.Index ?? EntityRelation.None;
-        public Category()
-        {
-            _Parent = new Relation<Vim.Format.ObjectModel.Category>();
-            _Material = new Relation<Vim.Format.ObjectModel.Material>();
-        }
-        
-        public override bool FieldsAreEqual(object obj)
-        {
-            if ((obj is Category other))
-            {
-                var fieldsAreEqual =
-                    (Index == other.Index) &&
-                    (Name == other.Name) &&
-                    (Id == other.Id) &&
-                    (CategoryType == other.CategoryType) &&
-                    (LineColor_X == other.LineColor_X) &&
-                    (LineColor_Y == other.LineColor_Y) &&
-                    (LineColor_Z == other.LineColor_Z) &&
-                    (BuiltInCategory == other.BuiltInCategory) &&
-                    (_Parent?.Index == other._Parent?.Index) &&
-                    (_Material?.Index == other._Material?.Index);
-                if (!fieldsAreEqual)
-                {
-                    return false;
-                }
-                
-                return true;
-            }
-            return false;
-        }
-        
-    } // end of class
-    
-    // AUTO-GENERATED
-    public partial class Family
-    {
-        public Vim.Format.ObjectModel.Category FamilyCategory => _FamilyCategory?.Value;
-        public int FamilyCategoryIndex => _FamilyCategory?.Index ?? EntityRelation.None;
-        public Vim.Format.ObjectModel.Element Element => _Element?.Value;
-        public int ElementIndex => _Element?.Index ?? EntityRelation.None;
-        public Family()
-        {
-            _FamilyCategory = new Relation<Vim.Format.ObjectModel.Category>();
-            _Element = new Relation<Vim.Format.ObjectModel.Element>();
-        }
-        
-        public override bool FieldsAreEqual(object obj)
-        {
-            if ((obj is Family other))
-            {
-                var fieldsAreEqual =
-                    (Index == other.Index) &&
-                    (StructuralMaterialType == other.StructuralMaterialType) &&
-                    (StructuralSectionShape == other.StructuralSectionShape) &&
-                    (IsSystemFamily == other.IsSystemFamily) &&
-                    (IsInPlace == other.IsInPlace) &&
-                    (_FamilyCategory?.Index == other._FamilyCategory?.Index) &&
-                    (_Element?.Index == other._Element?.Index);
-                if (!fieldsAreEqual)
-                {
-                    return false;
-                }
-                
-                return true;
-            }
-            return false;
-        }
-        
-    } // end of class
-    
-    // AUTO-GENERATED
-    public partial class FamilyType
-    {
-        public Vim.Format.ObjectModel.Family Family => _Family?.Value;
-        public int FamilyIndex => _Family?.Index ?? EntityRelation.None;
-        public Vim.Format.ObjectModel.CompoundStructure CompoundStructure => _CompoundStructure?.Value;
-        public int CompoundStructureIndex => _CompoundStructure?.Index ?? EntityRelation.None;
-        public Vim.Format.ObjectModel.Element Element => _Element?.Value;
-        public int ElementIndex => _Element?.Index ?? EntityRelation.None;
-        public FamilyType()
-        {
-            _Family = new Relation<Vim.Format.ObjectModel.Family>();
-            _CompoundStructure = new Relation<Vim.Format.ObjectModel.CompoundStructure>();
-            _Element = new Relation<Vim.Format.ObjectModel.Element>();
-        }
-        
-        public override bool FieldsAreEqual(object obj)
-        {
-            if ((obj is FamilyType other))
-            {
-                var fieldsAreEqual =
-                    (Index == other.Index) &&
-                    (IsSystemFamilyType == other.IsSystemFamilyType) &&
-                    (_Family?.Index == other._Family?.Index) &&
-                    (_CompoundStructure?.Index == other._CompoundStructure?.Index) &&
-                    (_Element?.Index == other._Element?.Index);
-                if (!fieldsAreEqual)
-                {
-                    return false;
-                }
-                
-                return true;
-            }
-            return false;
-        }
-        
-    } // end of class
-    
-    // AUTO-GENERATED
-    public partial class FamilyInstance
-    {
-        public Vim.Format.ObjectModel.FamilyType FamilyType => _FamilyType?.Value;
-        public int FamilyTypeIndex => _FamilyType?.Index ?? EntityRelation.None;
-        public Vim.Format.ObjectModel.Element Host => _Host?.Value;
-        public int HostIndex => _Host?.Index ?? EntityRelation.None;
-        public Vim.Format.ObjectModel.Room FromRoom => _FromRoom?.Value;
-        public int FromRoomIndex => _FromRoom?.Index ?? EntityRelation.None;
-        public Vim.Format.ObjectModel.Room ToRoom => _ToRoom?.Value;
-        public int ToRoomIndex => _ToRoom?.Index ?? EntityRelation.None;
-        public Vim.Format.ObjectModel.Element SuperComponent => _SuperComponent?.Value;
-        public int SuperComponentIndex => _SuperComponent?.Index ?? EntityRelation.None;
-        public Vim.Format.ObjectModel.Element Element => _Element?.Value;
-        public int ElementIndex => _Element?.Index ?? EntityRelation.None;
-        public FamilyInstance()
-        {
-            _FamilyType = new Relation<Vim.Format.ObjectModel.FamilyType>();
-            _Host = new Relation<Vim.Format.ObjectModel.Element>();
-            _FromRoom = new Relation<Vim.Format.ObjectModel.Room>();
-            _ToRoom = new Relation<Vim.Format.ObjectModel.Room>();
-            _SuperComponent = new Relation<Vim.Format.ObjectModel.Element>();
-            _Element = new Relation<Vim.Format.ObjectModel.Element>();
-        }
-        
-        public override bool FieldsAreEqual(object obj)
-        {
-            if ((obj is FamilyInstance other))
-            {
-                var fieldsAreEqual =
-                    (Index == other.Index) &&
-                    (FacingFlipped == other.FacingFlipped) &&
-                    (FacingOrientation_X == other.FacingOrientation_X) &&
-                    (FacingOrientation_Y == other.FacingOrientation_Y) &&
-                    (FacingOrientation_Z == other.FacingOrientation_Z) &&
-                    (HandFlipped == other.HandFlipped) &&
-                    (Mirrored == other.Mirrored) &&
-                    (HasModifiedGeometry == other.HasModifiedGeometry) &&
-                    (Scale == other.Scale) &&
-                    (BasisX_X == other.BasisX_X) &&
-                    (BasisX_Y == other.BasisX_Y) &&
-                    (BasisX_Z == other.BasisX_Z) &&
-                    (BasisY_X == other.BasisY_X) &&
-                    (BasisY_Y == other.BasisY_Y) &&
-                    (BasisY_Z == other.BasisY_Z) &&
-                    (BasisZ_X == other.BasisZ_X) &&
-                    (BasisZ_Y == other.BasisZ_Y) &&
-                    (BasisZ_Z == other.BasisZ_Z) &&
-                    (Translation_X == other.Translation_X) &&
-                    (Translation_Y == other.Translation_Y) &&
-                    (Translation_Z == other.Translation_Z) &&
-                    (HandOrientation_X == other.HandOrientation_X) &&
-                    (HandOrientation_Y == other.HandOrientation_Y) &&
-                    (HandOrientation_Z == other.HandOrientation_Z) &&
-                    (_FamilyType?.Index == other._FamilyType?.Index) &&
-                    (_Host?.Index == other._Host?.Index) &&
-                    (_FromRoom?.Index == other._FromRoom?.Index) &&
-                    (_ToRoom?.Index == other._ToRoom?.Index) &&
-                    (_SuperComponent?.Index == other._SuperComponent?.Index) &&
-                    (_Element?.Index == other._Element?.Index);
-                if (!fieldsAreEqual)
-                {
-                    return false;
-                }
-                
-                return true;
-            }
-            return false;
-        }
-        
-    } // end of class
-    
-    // AUTO-GENERATED
-    public partial class View
-    {
-        public Vim.Format.ObjectModel.Camera Camera => _Camera?.Value;
-        public int CameraIndex => _Camera?.Index ?? EntityRelation.None;
-        public Vim.Format.ObjectModel.FamilyType FamilyType => _FamilyType?.Value;
-        public int FamilyTypeIndex => _FamilyType?.Index ?? EntityRelation.None;
-        public Vim.Format.ObjectModel.Element Element => _Element?.Value;
-        public int ElementIndex => _Element?.Index ?? EntityRelation.None;
-        public View()
-        {
-            _Camera = new Relation<Vim.Format.ObjectModel.Camera>();
-            _FamilyType = new Relation<Vim.Format.ObjectModel.FamilyType>();
-            _Element = new Relation<Vim.Format.ObjectModel.Element>();
-        }
-        
-        public override bool FieldsAreEqual(object obj)
-        {
-            if ((obj is View other))
-            {
-                var fieldsAreEqual =
-                    (Index == other.Index) &&
-                    (Title == other.Title) &&
-                    (ViewType == other.ViewType) &&
-                    (Up_X == other.Up_X) &&
-                    (Up_Y == other.Up_Y) &&
-                    (Up_Z == other.Up_Z) &&
-                    (Right_X == other.Right_X) &&
-                    (Right_Y == other.Right_Y) &&
-                    (Right_Z == other.Right_Z) &&
-                    (Origin_X == other.Origin_X) &&
-                    (Origin_Y == other.Origin_Y) &&
-                    (Origin_Z == other.Origin_Z) &&
-                    (ViewDirection_X == other.ViewDirection_X) &&
-                    (ViewDirection_Y == other.ViewDirection_Y) &&
-                    (ViewDirection_Z == other.ViewDirection_Z) &&
-                    (ViewPosition_X == other.ViewPosition_X) &&
-                    (ViewPosition_Y == other.ViewPosition_Y) &&
-                    (ViewPosition_Z == other.ViewPosition_Z) &&
-                    (Scale == other.Scale) &&
-                    (Outline_Min_X == other.Outline_Min_X) &&
-                    (Outline_Min_Y == other.Outline_Min_Y) &&
-                    (Outline_Max_X == other.Outline_Max_X) &&
-                    (Outline_Max_Y == other.Outline_Max_Y) &&
-                    (DetailLevel == other.DetailLevel) &&
-                    (_Camera?.Index == other._Camera?.Index) &&
-                    (_FamilyType?.Index == other._FamilyType?.Index) &&
-                    (_Element?.Index == other._Element?.Index);
-                if (!fieldsAreEqual)
-                {
-                    return false;
-                }
-                
-                return true;
-            }
-            return false;
-        }
-        
-    } // end of class
-    
-    // AUTO-GENERATED
-    public partial class ElementInView
-    {
-        public Vim.Format.ObjectModel.View View => _View?.Value;
-        public int ViewIndex => _View?.Index ?? EntityRelation.None;
-        public Vim.Format.ObjectModel.Element Element => _Element?.Value;
-        public int ElementIndex => _Element?.Index ?? EntityRelation.None;
-        public ElementInView()
-        {
-            _View = new Relation<Vim.Format.ObjectModel.View>();
-            _Element = new Relation<Vim.Format.ObjectModel.Element>();
-        }
-        
-        public override bool FieldsAreEqual(object obj)
-        {
-            if ((obj is ElementInView other))
-            {
-                var fieldsAreEqual =
-                    (Index == other.Index) &&
-                    (_View?.Index == other._View?.Index) &&
-                    (_Element?.Index == other._Element?.Index);
-                if (!fieldsAreEqual)
-                {
-                    return false;
-                }
-                
-                return true;
-            }
-            return false;
-        }
-        
-    } // end of class
-    
-    // AUTO-GENERATED
-    public partial class ShapeInView
-    {
-        public Vim.Format.ObjectModel.Shape Shape => _Shape?.Value;
-        public int ShapeIndex => _Shape?.Index ?? EntityRelation.None;
-        public Vim.Format.ObjectModel.View View => _View?.Value;
-        public int ViewIndex => _View?.Index ?? EntityRelation.None;
-        public ShapeInView()
-        {
-            _Shape = new Relation<Vim.Format.ObjectModel.Shape>();
-            _View = new Relation<Vim.Format.ObjectModel.View>();
-        }
-        
-        public override bool FieldsAreEqual(object obj)
-        {
-            if ((obj is ShapeInView other))
-            {
-                var fieldsAreEqual =
-                    (Index == other.Index) &&
-                    (_Shape?.Index == other._Shape?.Index) &&
-                    (_View?.Index == other._View?.Index);
-                if (!fieldsAreEqual)
-                {
-                    return false;
-                }
-                
-                return true;
-            }
-            return false;
-        }
-        
-    } // end of class
-    
-    // AUTO-GENERATED
-    public partial class AssetInView
-    {
-        public Vim.Format.ObjectModel.Asset Asset => _Asset?.Value;
-        public int AssetIndex => _Asset?.Index ?? EntityRelation.None;
-        public Vim.Format.ObjectModel.View View => _View?.Value;
-        public int ViewIndex => _View?.Index ?? EntityRelation.None;
-        public AssetInView()
-        {
-            _Asset = new Relation<Vim.Format.ObjectModel.Asset>();
-            _View = new Relation<Vim.Format.ObjectModel.View>();
-        }
-        
-        public override bool FieldsAreEqual(object obj)
-        {
-            if ((obj is AssetInView other))
-            {
-                var fieldsAreEqual =
-                    (Index == other.Index) &&
-                    (_Asset?.Index == other._Asset?.Index) &&
-                    (_View?.Index == other._View?.Index);
-                if (!fieldsAreEqual)
-                {
-                    return false;
-                }
-                
-                return true;
-            }
-            return false;
-        }
-        
-    } // end of class
-    
-    // AUTO-GENERATED
-    public partial class AssetInViewSheet
-    {
-        public Vim.Format.ObjectModel.Asset Asset => _Asset?.Value;
-        public int AssetIndex => _Asset?.Index ?? EntityRelation.None;
-        public Vim.Format.ObjectModel.ViewSheet ViewSheet => _ViewSheet?.Value;
-        public int ViewSheetIndex => _ViewSheet?.Index ?? EntityRelation.None;
-        public AssetInViewSheet()
-        {
-            _Asset = new Relation<Vim.Format.ObjectModel.Asset>();
-            _ViewSheet = new Relation<Vim.Format.ObjectModel.ViewSheet>();
-        }
-        
-        public override bool FieldsAreEqual(object obj)
-        {
-            if ((obj is AssetInViewSheet other))
-            {
-                var fieldsAreEqual =
-                    (Index == other.Index) &&
-                    (_Asset?.Index == other._Asset?.Index) &&
-                    (_ViewSheet?.Index == other._ViewSheet?.Index);
-                if (!fieldsAreEqual)
-                {
-                    return false;
-                }
-                
-                return true;
-            }
-            return false;
-        }
-        
-    } // end of class
-    
-    // AUTO-GENERATED
-    public partial class LevelInView
-    {
-        public Vim.Format.ObjectModel.Level Level => _Level?.Value;
-        public int LevelIndex => _Level?.Index ?? EntityRelation.None;
-        public Vim.Format.ObjectModel.View View => _View?.Value;
-        public int ViewIndex => _View?.Index ?? EntityRelation.None;
-        public LevelInView()
-        {
-            _Level = new Relation<Vim.Format.ObjectModel.Level>();
-            _View = new Relation<Vim.Format.ObjectModel.View>();
-        }
-        
-        public override bool FieldsAreEqual(object obj)
-        {
-            if ((obj is LevelInView other))
-            {
-                var fieldsAreEqual =
-                    (Index == other.Index) &&
-                    (Extents_Min_X == other.Extents_Min_X) &&
-                    (Extents_Min_Y == other.Extents_Min_Y) &&
-                    (Extents_Min_Z == other.Extents_Min_Z) &&
-                    (Extents_Max_X == other.Extents_Max_X) &&
-                    (Extents_Max_Y == other.Extents_Max_Y) &&
-                    (Extents_Max_Z == other.Extents_Max_Z) &&
-                    (_Level?.Index == other._Level?.Index) &&
-                    (_View?.Index == other._View?.Index);
-                if (!fieldsAreEqual)
-                {
-                    return false;
-                }
-                
-                return true;
-            }
-            return false;
-        }
-        
-    } // end of class
-    
-    // AUTO-GENERATED
-    public partial class Camera
-    {
-        public Camera()
-        {
-        }
-        
-        public override bool FieldsAreEqual(object obj)
-        {
-            if ((obj is Camera other))
-            {
-                var fieldsAreEqual =
-                    (Index == other.Index) &&
-                    (Id == other.Id) &&
-                    (IsPerspective == other.IsPerspective) &&
-                    (VerticalExtent == other.VerticalExtent) &&
-                    (HorizontalExtent == other.HorizontalExtent) &&
-                    (FarDistance == other.FarDistance) &&
-                    (NearDistance == other.NearDistance) &&
-                    (TargetDistance == other.TargetDistance) &&
-                    (RightOffset == other.RightOffset) &&
-                    (UpOffset == other.UpOffset);
-                if (!fieldsAreEqual)
-                {
-                    return false;
-                }
-                
-                return true;
-            }
-            return false;
-        }
-        
-    } // end of class
-    
-    // AUTO-GENERATED
-    public partial class Material
-    {
-        public Vim.Format.ObjectModel.Asset ColorTextureFile => _ColorTextureFile?.Value;
-        public int ColorTextureFileIndex => _ColorTextureFile?.Index ?? EntityRelation.None;
-        public Vim.Format.ObjectModel.Asset NormalTextureFile => _NormalTextureFile?.Value;
-        public int NormalTextureFileIndex => _NormalTextureFile?.Index ?? EntityRelation.None;
-        public Vim.Format.ObjectModel.Element Element => _Element?.Value;
-        public int ElementIndex => _Element?.Index ?? EntityRelation.None;
-        public Material()
-        {
-            _ColorTextureFile = new Relation<Vim.Format.ObjectModel.Asset>();
-            _NormalTextureFile = new Relation<Vim.Format.ObjectModel.Asset>();
-            _Element = new Relation<Vim.Format.ObjectModel.Element>();
-        }
-        
-        public override bool FieldsAreEqual(object obj)
-        {
-            if ((obj is Material other))
-            {
-                var fieldsAreEqual =
-                    (Index == other.Index) &&
-                    (Name == other.Name) &&
-                    (MaterialCategory == other.MaterialCategory) &&
-                    (Color_X == other.Color_X) &&
-                    (Color_Y == other.Color_Y) &&
-                    (Color_Z == other.Color_Z) &&
-                    (ColorUvScaling_X == other.ColorUvScaling_X) &&
-                    (ColorUvScaling_Y == other.ColorUvScaling_Y) &&
-                    (ColorUvOffset_X == other.ColorUvOffset_X) &&
-                    (ColorUvOffset_Y == other.ColorUvOffset_Y) &&
-                    (NormalUvScaling_X == other.NormalUvScaling_X) &&
-                    (NormalUvScaling_Y == other.NormalUvScaling_Y) &&
-                    (NormalUvOffset_X == other.NormalUvOffset_X) &&
-                    (NormalUvOffset_Y == other.NormalUvOffset_Y) &&
-                    (NormalAmount == other.NormalAmount) &&
-                    (Glossiness == other.Glossiness) &&
-                    (Smoothness == other.Smoothness) &&
-                    (Transparency == other.Transparency) &&
-                    (_ColorTextureFile?.Index == other._ColorTextureFile?.Index) &&
-                    (_NormalTextureFile?.Index == other._NormalTextureFile?.Index) &&
-                    (_Element?.Index == other._Element?.Index);
-                if (!fieldsAreEqual)
-                {
-                    return false;
-                }
-                
-                return true;
-            }
-            return false;
-        }
-        
-    } // end of class
-    
-    // AUTO-GENERATED
-    public partial class MaterialInElement
-    {
-        public Vim.Format.ObjectModel.Material Material => _Material?.Value;
-        public int MaterialIndex => _Material?.Index ?? EntityRelation.None;
-        public Vim.Format.ObjectModel.Element Element => _Element?.Value;
-        public int ElementIndex => _Element?.Index ?? EntityRelation.None;
-        public MaterialInElement()
-        {
-            _Material = new Relation<Vim.Format.ObjectModel.Material>();
-            _Element = new Relation<Vim.Format.ObjectModel.Element>();
-        }
-        
-        public override bool FieldsAreEqual(object obj)
-        {
-            if ((obj is MaterialInElement other))
-            {
-                var fieldsAreEqual =
-                    (Index == other.Index) &&
-                    (Area == other.Area) &&
-                    (Volume == other.Volume) &&
-                    (IsPaint == other.IsPaint) &&
-                    (_Material?.Index == other._Material?.Index) &&
-                    (_Element?.Index == other._Element?.Index);
-                if (!fieldsAreEqual)
-                {
-                    return false;
-                }
-                
-                return true;
-            }
-            return false;
-        }
-        
-    } // end of class
-    
-    // AUTO-GENERATED
-    public partial class CompoundStructureLayer
-    {
-        public Vim.Format.ObjectModel.Material Material => _Material?.Value;
-        public int MaterialIndex => _Material?.Index ?? EntityRelation.None;
-        public Vim.Format.ObjectModel.CompoundStructure CompoundStructure => _CompoundStructure?.Value;
-        public int CompoundStructureIndex => _CompoundStructure?.Index ?? EntityRelation.None;
-        public CompoundStructureLayer()
-        {
-            _Material = new Relation<Vim.Format.ObjectModel.Material>();
-            _CompoundStructure = new Relation<Vim.Format.ObjectModel.CompoundStructure>();
-        }
-        
-        public override bool FieldsAreEqual(object obj)
-        {
-            if ((obj is CompoundStructureLayer other))
-            {
-                var fieldsAreEqual =
-                    (Index == other.Index) &&
-                    (OrderIndex == other.OrderIndex) &&
-                    (Width == other.Width) &&
-                    (MaterialFunctionAssignment == other.MaterialFunctionAssignment) &&
-                    (_Material?.Index == other._Material?.Index) &&
-                    (_CompoundStructure?.Index == other._CompoundStructure?.Index);
-                if (!fieldsAreEqual)
-                {
-                    return false;
-                }
-                
-                return true;
-            }
-            return false;
-        }
-        
-    } // end of class
-    
-    // AUTO-GENERATED
-    public partial class CompoundStructure
-    {
-        public Vim.Format.ObjectModel.CompoundStructureLayer StructuralLayer => _StructuralLayer?.Value;
-        public int StructuralLayerIndex => _StructuralLayer?.Index ?? EntityRelation.None;
-        public CompoundStructure()
-        {
-            _StructuralLayer = new Relation<Vim.Format.ObjectModel.CompoundStructureLayer>();
-        }
-        
-        public override bool FieldsAreEqual(object obj)
-        {
-            if ((obj is CompoundStructure other))
-            {
-                var fieldsAreEqual =
-                    (Index == other.Index) &&
-                    (Width == other.Width) &&
-                    (_StructuralLayer?.Index == other._StructuralLayer?.Index);
-                if (!fieldsAreEqual)
-                {
-                    return false;
-                }
-                
-                return true;
-            }
-            return false;
-        }
-        
-    } // end of class
-    
-    // AUTO-GENERATED
-    public partial class Node
-    {
-        public Vim.Format.ObjectModel.Element Element => _Element?.Value;
-        public int ElementIndex => _Element?.Index ?? EntityRelation.None;
-        public Node()
-        {
-            _Element = new Relation<Vim.Format.ObjectModel.Element>();
-        }
-        
-        public override bool FieldsAreEqual(object obj)
-        {
-            if ((obj is Node other))
-            {
-                var fieldsAreEqual =
-                    (Index == other.Index) &&
-                    (_Element?.Index == other._Element?.Index);
-                if (!fieldsAreEqual)
-                {
-                    return false;
-                }
-                
-                return true;
-            }
-            return false;
-        }
-        
-    } // end of class
-    
-    // AUTO-GENERATED
-    public partial class Geometry
-    {
-        public Geometry()
-        {
-        }
-        
-        public override bool FieldsAreEqual(object obj)
-        {
-            if ((obj is Geometry other))
-            {
-                var fieldsAreEqual =
-                    (Index == other.Index) &&
-                    (Box_Min_X == other.Box_Min_X) &&
-                    (Box_Min_Y == other.Box_Min_Y) &&
-                    (Box_Min_Z == other.Box_Min_Z) &&
-                    (Box_Max_X == other.Box_Max_X) &&
-                    (Box_Max_Y == other.Box_Max_Y) &&
-                    (Box_Max_Z == other.Box_Max_Z) &&
-                    (VertexCount == other.VertexCount) &&
-                    (FaceCount == other.FaceCount);
-                if (!fieldsAreEqual)
-                {
-                    return false;
-                }
-                
-                return true;
-            }
-            return false;
-        }
-        
-    } // end of class
-    
-    // AUTO-GENERATED
-    public partial class Shape
-    {
-        public Vim.Format.ObjectModel.Element Element => _Element?.Value;
-        public int ElementIndex => _Element?.Index ?? EntityRelation.None;
-        public Shape()
-        {
-            _Element = new Relation<Vim.Format.ObjectModel.Element>();
-        }
-        
-        public override bool FieldsAreEqual(object obj)
-        {
-            if ((obj is Shape other))
-            {
-                var fieldsAreEqual =
-                    (Index == other.Index) &&
-                    (_Element?.Index == other._Element?.Index);
-                if (!fieldsAreEqual)
-                {
-                    return false;
-                }
-                
-                return true;
-            }
-            return false;
-        }
-        
-    } // end of class
-    
-    // AUTO-GENERATED
-    public partial class ShapeCollection
-    {
-        public Vim.Format.ObjectModel.Element Element => _Element?.Value;
-        public int ElementIndex => _Element?.Index ?? EntityRelation.None;
-        public ShapeCollection()
-        {
-            _Element = new Relation<Vim.Format.ObjectModel.Element>();
-        }
-        
-        public override bool FieldsAreEqual(object obj)
-        {
-            if ((obj is ShapeCollection other))
-            {
-                var fieldsAreEqual =
-                    (Index == other.Index) &&
-                    (_Element?.Index == other._Element?.Index);
-                if (!fieldsAreEqual)
-                {
-                    return false;
-                }
-                
-                return true;
-            }
-            return false;
-        }
-        
-    } // end of class
-    
-    // AUTO-GENERATED
-    public partial class ShapeInShapeCollection
-    {
-        public Vim.Format.ObjectModel.Shape Shape => _Shape?.Value;
-        public int ShapeIndex => _Shape?.Index ?? EntityRelation.None;
-        public Vim.Format.ObjectModel.ShapeCollection ShapeCollection => _ShapeCollection?.Value;
-        public int ShapeCollectionIndex => _ShapeCollection?.Index ?? EntityRelation.None;
-        public ShapeInShapeCollection()
-        {
-            _Shape = new Relation<Vim.Format.ObjectModel.Shape>();
-            _ShapeCollection = new Relation<Vim.Format.ObjectModel.ShapeCollection>();
-        }
-        
-        public override bool FieldsAreEqual(object obj)
-        {
-            if ((obj is ShapeInShapeCollection other))
-            {
-                var fieldsAreEqual =
-                    (Index == other.Index) &&
-                    (_Shape?.Index == other._Shape?.Index) &&
-                    (_ShapeCollection?.Index == other._ShapeCollection?.Index);
-                if (!fieldsAreEqual)
-                {
-                    return false;
-                }
-                
-                return true;
-            }
-            return false;
-        }
-        
-    } // end of class
-    
-    // AUTO-GENERATED
-    public partial class System
-    {
-        public Vim.Format.ObjectModel.FamilyType FamilyType => _FamilyType?.Value;
-        public int FamilyTypeIndex => _FamilyType?.Index ?? EntityRelation.None;
-        public Vim.Format.ObjectModel.Element Element => _Element?.Value;
-        public int ElementIndex => _Element?.Index ?? EntityRelation.None;
-        public System()
-        {
-            _FamilyType = new Relation<Vim.Format.ObjectModel.FamilyType>();
-            _Element = new Relation<Vim.Format.ObjectModel.Element>();
-        }
-        
-        public override bool FieldsAreEqual(object obj)
-        {
-            if ((obj is System other))
-            {
-                var fieldsAreEqual =
-                    (Index == other.Index) &&
-                    (SystemType == other.SystemType) &&
-                    (_FamilyType?.Index == other._FamilyType?.Index) &&
-                    (_Element?.Index == other._Element?.Index);
-                if (!fieldsAreEqual)
-                {
-                    return false;
-                }
-                
-                return true;
-            }
-            return false;
-        }
-        
-    } // end of class
-    
-    // AUTO-GENERATED
-    public partial class ElementInSystem
-    {
-        public Vim.Format.ObjectModel.System System => _System?.Value;
-        public int SystemIndex => _System?.Index ?? EntityRelation.None;
-        public Vim.Format.ObjectModel.Element Element => _Element?.Value;
-        public int ElementIndex => _Element?.Index ?? EntityRelation.None;
-        public ElementInSystem()
-        {
-            _System = new Relation<Vim.Format.ObjectModel.System>();
-            _Element = new Relation<Vim.Format.ObjectModel.Element>();
-        }
-        
-        public override bool FieldsAreEqual(object obj)
-        {
-            if ((obj is ElementInSystem other))
-            {
-                var fieldsAreEqual =
-                    (Index == other.Index) &&
-                    (Roles == other.Roles) &&
-                    (_System?.Index == other._System?.Index) &&
-                    (_Element?.Index == other._Element?.Index);
-                if (!fieldsAreEqual)
-                {
-                    return false;
-                }
-                
-                return true;
-            }
-            return false;
-        }
-        
-    } // end of class
-    
-    // AUTO-GENERATED
-    public partial class Warning
-    {
-        public Vim.Format.ObjectModel.BimDocument BimDocument => _BimDocument?.Value;
-        public int BimDocumentIndex => _BimDocument?.Index ?? EntityRelation.None;
-        public Warning()
-        {
-            _BimDocument = new Relation<Vim.Format.ObjectModel.BimDocument>();
-        }
-        
-        public override bool FieldsAreEqual(object obj)
-        {
-            if ((obj is Warning other))
-            {
-                var fieldsAreEqual =
-                    (Index == other.Index) &&
-                    (Guid == other.Guid) &&
-                    (Severity == other.Severity) &&
-                    (Description == other.Description) &&
-                    (_BimDocument?.Index == other._BimDocument?.Index);
-                if (!fieldsAreEqual)
-                {
-                    return false;
-                }
-                
-                return true;
-            }
-            return false;
-        }
-        
-    } // end of class
-    
-    // AUTO-GENERATED
-    public partial class ElementInWarning
-    {
-        public Vim.Format.ObjectModel.Warning Warning => _Warning?.Value;
-        public int WarningIndex => _Warning?.Index ?? EntityRelation.None;
-        public Vim.Format.ObjectModel.Element Element => _Element?.Value;
-        public int ElementIndex => _Element?.Index ?? EntityRelation.None;
-        public ElementInWarning()
-        {
-            _Warning = new Relation<Vim.Format.ObjectModel.Warning>();
-            _Element = new Relation<Vim.Format.ObjectModel.Element>();
-        }
-        
-        public override bool FieldsAreEqual(object obj)
-        {
-            if ((obj is ElementInWarning other))
-            {
-                var fieldsAreEqual =
-                    (Index == other.Index) &&
-                    (_Warning?.Index == other._Warning?.Index) &&
-                    (_Element?.Index == other._Element?.Index);
-                if (!fieldsAreEqual)
-                {
-                    return false;
-                }
-                
-                return true;
-            }
-            return false;
-        }
-        
-    } // end of class
-    
-    // AUTO-GENERATED
-    public partial class BasePoint
-    {
-        public Vim.Format.ObjectModel.Element Element => _Element?.Value;
-        public int ElementIndex => _Element?.Index ?? EntityRelation.None;
-        public BasePoint()
-        {
-            _Element = new Relation<Vim.Format.ObjectModel.Element>();
-        }
-        
-        public override bool FieldsAreEqual(object obj)
-        {
-            if ((obj is BasePoint other))
-            {
-                var fieldsAreEqual =
-                    (Index == other.Index) &&
-                    (IsSurveyPoint == other.IsSurveyPoint) &&
-                    (Position_X == other.Position_X) &&
-                    (Position_Y == other.Position_Y) &&
-                    (Position_Z == other.Position_Z) &&
-                    (SharedPosition_X == other.SharedPosition_X) &&
-                    (SharedPosition_Y == other.SharedPosition_Y) &&
-                    (SharedPosition_Z == other.SharedPosition_Z) &&
-                    (_Element?.Index == other._Element?.Index);
-                if (!fieldsAreEqual)
-                {
-                    return false;
-                }
-                
-                return true;
-            }
-            return false;
-        }
-        
-    } // end of class
-    
-    // AUTO-GENERATED
-    public partial class PhaseFilter
-    {
-        public Vim.Format.ObjectModel.Element Element => _Element?.Value;
-        public int ElementIndex => _Element?.Index ?? EntityRelation.None;
-        public PhaseFilter()
-        {
-            _Element = new Relation<Vim.Format.ObjectModel.Element>();
-        }
-        
-        public override bool FieldsAreEqual(object obj)
-        {
-            if ((obj is PhaseFilter other))
-            {
-                var fieldsAreEqual =
-                    (Index == other.Index) &&
-                    (New == other.New) &&
-                    (Existing == other.Existing) &&
-                    (Demolished == other.Demolished) &&
-                    (Temporary == other.Temporary) &&
-                    (_Element?.Index == other._Element?.Index);
-                if (!fieldsAreEqual)
-                {
-                    return false;
-                }
-                
-                return true;
-            }
-            return false;
-        }
-        
-    } // end of class
-    
-    // AUTO-GENERATED
-    public partial class Grid
-    {
-        public Vim.Format.ObjectModel.FamilyType FamilyType => _FamilyType?.Value;
-        public int FamilyTypeIndex => _FamilyType?.Index ?? EntityRelation.None;
-        public Vim.Format.ObjectModel.Element Element => _Element?.Value;
-        public int ElementIndex => _Element?.Index ?? EntityRelation.None;
-        public Grid()
-        {
-            _FamilyType = new Relation<Vim.Format.ObjectModel.FamilyType>();
-            _Element = new Relation<Vim.Format.ObjectModel.Element>();
-        }
-        
-        public override bool FieldsAreEqual(object obj)
-        {
-            if ((obj is Grid other))
-            {
-                var fieldsAreEqual =
-                    (Index == other.Index) &&
-                    (StartPoint_X == other.StartPoint_X) &&
-                    (StartPoint_Y == other.StartPoint_Y) &&
-                    (StartPoint_Z == other.StartPoint_Z) &&
-                    (EndPoint_X == other.EndPoint_X) &&
-                    (EndPoint_Y == other.EndPoint_Y) &&
-                    (EndPoint_Z == other.EndPoint_Z) &&
-                    (IsCurved == other.IsCurved) &&
-                    (Extents_Min_X == other.Extents_Min_X) &&
-                    (Extents_Min_Y == other.Extents_Min_Y) &&
-                    (Extents_Min_Z == other.Extents_Min_Z) &&
-                    (Extents_Max_X == other.Extents_Max_X) &&
-                    (Extents_Max_Y == other.Extents_Max_Y) &&
-                    (Extents_Max_Z == other.Extents_Max_Z) &&
-                    (_FamilyType?.Index == other._FamilyType?.Index) &&
-                    (_Element?.Index == other._Element?.Index);
-                if (!fieldsAreEqual)
-                {
-                    return false;
-                }
-                
-                return true;
-            }
-            return false;
-        }
-        
-    } // end of class
-    
-    // AUTO-GENERATED
-    public partial class Area
-    {
-        public Vim.Format.ObjectModel.AreaScheme AreaScheme => _AreaScheme?.Value;
-        public int AreaSchemeIndex => _AreaScheme?.Index ?? EntityRelation.None;
-        public Vim.Format.ObjectModel.Element Element => _Element?.Value;
-        public int ElementIndex => _Element?.Index ?? EntityRelation.None;
-        public Area()
-        {
-            _AreaScheme = new Relation<Vim.Format.ObjectModel.AreaScheme>();
-            _Element = new Relation<Vim.Format.ObjectModel.Element>();
-        }
-        
-        public override bool FieldsAreEqual(object obj)
-        {
-            if ((obj is Area other))
-            {
-                var fieldsAreEqual =
-                    (Index == other.Index) &&
-                    (Value == other.Value) &&
-                    (Perimeter == other.Perimeter) &&
-                    (Number == other.Number) &&
-                    (IsGrossInterior == other.IsGrossInterior) &&
-                    (_AreaScheme?.Index == other._AreaScheme?.Index) &&
-                    (_Element?.Index == other._Element?.Index);
-                if (!fieldsAreEqual)
-                {
-                    return false;
-                }
-                
-                return true;
-            }
-            return false;
-        }
-        
-    } // end of class
-    
-    // AUTO-GENERATED
-    public partial class AreaScheme
-    {
-        public Vim.Format.ObjectModel.Element Element => _Element?.Value;
-        public int ElementIndex => _Element?.Index ?? EntityRelation.None;
-        public AreaScheme()
-        {
-            _Element = new Relation<Vim.Format.ObjectModel.Element>();
-        }
-        
-        public override bool FieldsAreEqual(object obj)
-        {
-            if ((obj is AreaScheme other))
-            {
-                var fieldsAreEqual =
-                    (Index == other.Index) &&
-                    (IsGrossBuildingArea == other.IsGrossBuildingArea) &&
-                    (_Element?.Index == other._Element?.Index);
-                if (!fieldsAreEqual)
-                {
-                    return false;
-                }
-                
-                return true;
-            }
-            return false;
-        }
-        
-    } // end of class
-    
-    // AUTO-GENERATED
-    public partial class Schedule
-    {
-        public Vim.Format.ObjectModel.Element Element => _Element?.Value;
-        public int ElementIndex => _Element?.Index ?? EntityRelation.None;
-        public Schedule()
-        {
-            _Element = new Relation<Vim.Format.ObjectModel.Element>();
-        }
-        
-        public override bool FieldsAreEqual(object obj)
-        {
-            if ((obj is Schedule other))
-            {
-                var fieldsAreEqual =
-                    (Index == other.Index) &&
-                    (_Element?.Index == other._Element?.Index);
-                if (!fieldsAreEqual)
-                {
-                    return false;
-                }
-                
-                return true;
-            }
-            return false;
-        }
-        
-    } // end of class
-    
-    // AUTO-GENERATED
-    public partial class ScheduleColumn
-    {
-        public Vim.Format.ObjectModel.Schedule Schedule => _Schedule?.Value;
-        public int ScheduleIndex => _Schedule?.Index ?? EntityRelation.None;
-        public ScheduleColumn()
-        {
-            _Schedule = new Relation<Vim.Format.ObjectModel.Schedule>();
-        }
-        
-        public override bool FieldsAreEqual(object obj)
-        {
-            if ((obj is ScheduleColumn other))
-            {
-                var fieldsAreEqual =
-                    (Index == other.Index) &&
-                    (Name == other.Name) &&
-                    (ColumnIndex == other.ColumnIndex) &&
-                    (_Schedule?.Index == other._Schedule?.Index);
-                if (!fieldsAreEqual)
-                {
-                    return false;
-                }
-                
-                return true;
-            }
-            return false;
-        }
-        
-    } // end of class
-    
-    // AUTO-GENERATED
-    public partial class ScheduleCell
-    {
-        public Vim.Format.ObjectModel.ScheduleColumn ScheduleColumn => _ScheduleColumn?.Value;
-        public int ScheduleColumnIndex => _ScheduleColumn?.Index ?? EntityRelation.None;
-        public ScheduleCell()
-        {
-            _ScheduleColumn = new Relation<Vim.Format.ObjectModel.ScheduleColumn>();
-        }
-        
-        public override bool FieldsAreEqual(object obj)
-        {
-            if ((obj is ScheduleCell other))
-            {
-                var fieldsAreEqual =
-                    (Index == other.Index) &&
-                    (Value == other.Value) &&
-                    (RowIndex == other.RowIndex) &&
-                    (_ScheduleColumn?.Index == other._ScheduleColumn?.Index);
-                if (!fieldsAreEqual)
-                {
-                    return false;
-                }
-                
-                return true;
-            }
-            return false;
-        }
-        
-    } // end of class
-    
-    // AUTO-GENERATED
-    public partial class ViewSheetSet
-    {
-        public Vim.Format.ObjectModel.Element Element => _Element?.Value;
-        public int ElementIndex => _Element?.Index ?? EntityRelation.None;
-        public ViewSheetSet()
-        {
-            _Element = new Relation<Vim.Format.ObjectModel.Element>();
-        }
-        
-        public override bool FieldsAreEqual(object obj)
-        {
-            if ((obj is ViewSheetSet other))
-            {
-                var fieldsAreEqual =
-                    (Index == other.Index) &&
-                    (_Element?.Index == other._Element?.Index);
-                if (!fieldsAreEqual)
-                {
-                    return false;
-                }
-                
-                return true;
-            }
-            return false;
-        }
-        
-    } // end of class
-    
-    // AUTO-GENERATED
-    public partial class ViewSheet
-    {
-        public Vim.Format.ObjectModel.FamilyType FamilyType => _FamilyType?.Value;
-        public int FamilyTypeIndex => _FamilyType?.Index ?? EntityRelation.None;
-        public Vim.Format.ObjectModel.Element Element => _Element?.Value;
-        public int ElementIndex => _Element?.Index ?? EntityRelation.None;
-        public ViewSheet()
-        {
-            _FamilyType = new Relation<Vim.Format.ObjectModel.FamilyType>();
-            _Element = new Relation<Vim.Format.ObjectModel.Element>();
-        }
-        
-        public override bool FieldsAreEqual(object obj)
-        {
-            if ((obj is ViewSheet other))
-            {
-                var fieldsAreEqual =
-                    (Index == other.Index) &&
-                    (_FamilyType?.Index == other._FamilyType?.Index) &&
-                    (_Element?.Index == other._Element?.Index);
-                if (!fieldsAreEqual)
-                {
-                    return false;
-                }
-                
-                return true;
-            }
-            return false;
-        }
-        
-    } // end of class
-    
-    // AUTO-GENERATED
-    public partial class ViewSheetInViewSheetSet
-    {
-        public Vim.Format.ObjectModel.ViewSheet ViewSheet => _ViewSheet?.Value;
-        public int ViewSheetIndex => _ViewSheet?.Index ?? EntityRelation.None;
-        public Vim.Format.ObjectModel.ViewSheetSet ViewSheetSet => _ViewSheetSet?.Value;
-        public int ViewSheetSetIndex => _ViewSheetSet?.Index ?? EntityRelation.None;
-        public ViewSheetInViewSheetSet()
-        {
-            _ViewSheet = new Relation<Vim.Format.ObjectModel.ViewSheet>();
-            _ViewSheetSet = new Relation<Vim.Format.ObjectModel.ViewSheetSet>();
-        }
-        
-        public override bool FieldsAreEqual(object obj)
-        {
-            if ((obj is ViewSheetInViewSheetSet other))
-            {
-                var fieldsAreEqual =
-                    (Index == other.Index) &&
-                    (_ViewSheet?.Index == other._ViewSheet?.Index) &&
-                    (_ViewSheetSet?.Index == other._ViewSheetSet?.Index);
-                if (!fieldsAreEqual)
-                {
-                    return false;
-                }
-                
-                return true;
-            }
-            return false;
-        }
-        
-    } // end of class
-    
-    // AUTO-GENERATED
-    public partial class ViewInViewSheetSet
-    {
-        public Vim.Format.ObjectModel.View View => _View?.Value;
-        public int ViewIndex => _View?.Index ?? EntityRelation.None;
-        public Vim.Format.ObjectModel.ViewSheetSet ViewSheetSet => _ViewSheetSet?.Value;
-        public int ViewSheetSetIndex => _ViewSheetSet?.Index ?? EntityRelation.None;
-        public ViewInViewSheetSet()
-        {
-            _View = new Relation<Vim.Format.ObjectModel.View>();
-            _ViewSheetSet = new Relation<Vim.Format.ObjectModel.ViewSheetSet>();
-        }
-        
-        public override bool FieldsAreEqual(object obj)
-        {
-            if ((obj is ViewInViewSheetSet other))
-            {
-                var fieldsAreEqual =
-                    (Index == other.Index) &&
-                    (_View?.Index == other._View?.Index) &&
-                    (_ViewSheetSet?.Index == other._ViewSheetSet?.Index);
-                if (!fieldsAreEqual)
-                {
-                    return false;
-                }
-                
-                return true;
-            }
-            return false;
-        }
-        
-    } // end of class
-    
-    // AUTO-GENERATED
-    public partial class ViewInViewSheet
-    {
-        public Vim.Format.ObjectModel.View View => _View?.Value;
-        public int ViewIndex => _View?.Index ?? EntityRelation.None;
-        public Vim.Format.ObjectModel.ViewSheet ViewSheet => _ViewSheet?.Value;
-        public int ViewSheetIndex => _ViewSheet?.Index ?? EntityRelation.None;
-        public ViewInViewSheet()
-        {
-            _View = new Relation<Vim.Format.ObjectModel.View>();
-            _ViewSheet = new Relation<Vim.Format.ObjectModel.ViewSheet>();
-        }
-        
-        public override bool FieldsAreEqual(object obj)
-        {
-            if ((obj is ViewInViewSheet other))
-            {
-                var fieldsAreEqual =
-                    (Index == other.Index) &&
-                    (_View?.Index == other._View?.Index) &&
-                    (_ViewSheet?.Index == other._ViewSheet?.Index);
-                if (!fieldsAreEqual)
-                {
-                    return false;
-                }
-                
-                return true;
-            }
-            return false;
-        }
-        
-    } // end of class
-    
-    // AUTO-GENERATED
-    public partial class Site
-    {
-        public Vim.Format.ObjectModel.Element Element => _Element?.Value;
-        public int ElementIndex => _Element?.Index ?? EntityRelation.None;
-        public Site()
-        {
-            _Element = new Relation<Vim.Format.ObjectModel.Element>();
-        }
-        
-        public override bool FieldsAreEqual(object obj)
-        {
-            if ((obj is Site other))
-            {
-                var fieldsAreEqual =
-                    (Index == other.Index) &&
-                    (Latitude == other.Latitude) &&
-                    (Longitude == other.Longitude) &&
-                    (Address == other.Address) &&
-                    (Elevation == other.Elevation) &&
-                    (Number == other.Number) &&
-                    (_Element?.Index == other._Element?.Index);
-                if (!fieldsAreEqual)
-                {
-                    return false;
-                }
-                
-                return true;
-            }
-            return false;
-        }
-        
-    } // end of class
-    
-    // AUTO-GENERATED
-    public partial class Building
-    {
-        public Vim.Format.ObjectModel.Site Site => _Site?.Value;
-        public int SiteIndex => _Site?.Index ?? EntityRelation.None;
-        public Vim.Format.ObjectModel.Element Element => _Element?.Value;
-        public int ElementIndex => _Element?.Index ?? EntityRelation.None;
-        public Building()
-        {
-            _Site = new Relation<Vim.Format.ObjectModel.Site>();
-            _Element = new Relation<Vim.Format.ObjectModel.Element>();
-        }
-        
-        public override bool FieldsAreEqual(object obj)
-        {
-            if ((obj is Building other))
-            {
-                var fieldsAreEqual =
-                    (Index == other.Index) &&
-                    (Elevation == other.Elevation) &&
-                    (TerrainElevation == other.TerrainElevation) &&
-                    (Address == other.Address) &&
-                    (_Site?.Index == other._Site?.Index) &&
-                    (_Element?.Index == other._Element?.Index);
-                if (!fieldsAreEqual)
-                {
-                    return false;
-                }
-                
-                return true;
-            }
-            return false;
-        }
-        
-    } // end of class
-    
     public partial class VimEntityTableSet
     {
         public void Initialize(bool inParallel = true)
@@ -2161,6 +183,25 @@ namespace Vim.Format.api_v2
         public BuildingTable BuildingTable { get; private set; } // can be null
         public Vim.Format.ObjectModel.Building GetBuilding(int index) => BuildingTable?.Get(index);
         
+        public static HashSet<string> GetJoiningTableNames()
+            => new HashSet<string>()
+            {
+            VimEntityTableNames.ElementInView,
+            VimEntityTableNames.ShapeInView,
+            VimEntityTableNames.AssetInView,
+            VimEntityTableNames.AssetInViewSheet,
+            VimEntityTableNames.LevelInView,
+            VimEntityTableNames.MaterialInElement,
+            VimEntityTableNames.ShapeInShapeCollection,
+            VimEntityTableNames.ElementInSystem,
+            VimEntityTableNames.ElementInWarning,
+            VimEntityTableNames.ScheduleColumn,
+            VimEntityTableNames.ScheduleCell,
+            VimEntityTableNames.ViewSheetInViewSheetSet,
+            VimEntityTableNames.ViewInViewSheetSet,
+            VimEntityTableNames.ViewInViewSheet,
+            };
+        
         public static HashSet<string> GetElementKindTableNames()
             => new HashSet<string>()
             {
@@ -2187,25 +228,6 @@ namespace Vim.Format.api_v2
             VimEntityTableNames.ViewSheet,
             VimEntityTableNames.Site,
             VimEntityTableNames.Building,
-            };
-        
-        public static HashSet<string> GetJoiningTableNames()
-            => new HashSet<string>()
-            {
-            VimEntityTableNames.ElementInView,
-            VimEntityTableNames.ShapeInView,
-            VimEntityTableNames.AssetInView,
-            VimEntityTableNames.AssetInViewSheet,
-            VimEntityTableNames.LevelInView,
-            VimEntityTableNames.MaterialInElement,
-            VimEntityTableNames.ShapeInShapeCollection,
-            VimEntityTableNames.ElementInSystem,
-            VimEntityTableNames.ElementInWarning,
-            VimEntityTableNames.ScheduleColumn,
-            VimEntityTableNames.ScheduleCell,
-            VimEntityTableNames.ViewSheetInViewSheetSet,
-            VimEntityTableNames.ViewInViewSheetSet,
-            VimEntityTableNames.ViewInViewSheet,
             };
         
         // Returns an array defining a 1:1 association of Element to its ElementKind
@@ -2545,6 +567,14 @@ namespace Vim.Format.api_v2
         } // GetElementKinds()
     } // end of partial class VimEntityTableSet
     
+    public partial class Asset
+    {
+        public Asset()
+        {
+        }
+        
+    } // class Asset
+    
     public partial class AssetTable : VimEntityTable, IEnumerable<Vim.Format.ObjectModel.Asset>
     {
         
@@ -2577,6 +607,14 @@ namespace Vim.Format.api_v2
                 yield return Get(i);
         }
     } // class AssetTable 
+    
+    public partial class DisplayUnit
+    {
+        public DisplayUnit()
+        {
+        }
+        
+    } // class DisplayUnit
     
     public partial class DisplayUnitTable : VimEntityTable, IEnumerable<Vim.Format.ObjectModel.DisplayUnit>
     {
@@ -2618,6 +656,17 @@ namespace Vim.Format.api_v2
                 yield return Get(i);
         }
     } // class DisplayUnitTable 
+    
+    public partial class ParameterDescriptor
+    {
+        public Vim.Format.ObjectModel.DisplayUnit DisplayUnit => _DisplayUnit?.Value;
+        public int DisplayUnitIndex => _DisplayUnit?.Index ?? EntityRelation.None;
+        public ParameterDescriptor()
+        {
+            _DisplayUnit = new Relation<Vim.Format.ObjectModel.DisplayUnit>();
+        }
+        
+    } // class ParameterDescriptor
     
     public partial class ParameterDescriptorTable : VimEntityTable, IEnumerable<Vim.Format.ObjectModel.ParameterDescriptor>
     {
@@ -2690,6 +739,20 @@ namespace Vim.Format.api_v2
         }
     } // class ParameterDescriptorTable 
     
+    public partial class Parameter
+    {
+        public Vim.Format.ObjectModel.ParameterDescriptor ParameterDescriptor => _ParameterDescriptor?.Value;
+        public int ParameterDescriptorIndex => _ParameterDescriptor?.Index ?? EntityRelation.None;
+        public Vim.Format.ObjectModel.Element Element => _Element?.Value;
+        public int ElementIndex => _Element?.Index ?? EntityRelation.None;
+        public Parameter()
+        {
+            _ParameterDescriptor = new Relation<Vim.Format.ObjectModel.ParameterDescriptor>();
+            _Element = new Relation<Vim.Format.ObjectModel.Element>();
+        }
+        
+    } // class Parameter
+    
     public partial class ParameterTable : VimEntityTable, IEnumerable<Vim.Format.ObjectModel.Parameter>
     {
         
@@ -2734,6 +797,47 @@ namespace Vim.Format.api_v2
                 yield return Get(i);
         }
     } // class ParameterTable 
+    
+    public partial class Element
+    {
+        public Vim.Format.ObjectModel.Level Level => _Level?.Value;
+        public int LevelIndex => _Level?.Index ?? EntityRelation.None;
+        public Vim.Format.ObjectModel.Phase PhaseCreated => _PhaseCreated?.Value;
+        public int PhaseCreatedIndex => _PhaseCreated?.Index ?? EntityRelation.None;
+        public Vim.Format.ObjectModel.Phase PhaseDemolished => _PhaseDemolished?.Value;
+        public int PhaseDemolishedIndex => _PhaseDemolished?.Index ?? EntityRelation.None;
+        public Vim.Format.ObjectModel.Category Category => _Category?.Value;
+        public int CategoryIndex => _Category?.Index ?? EntityRelation.None;
+        public Vim.Format.ObjectModel.Workset Workset => _Workset?.Value;
+        public int WorksetIndex => _Workset?.Index ?? EntityRelation.None;
+        public Vim.Format.ObjectModel.DesignOption DesignOption => _DesignOption?.Value;
+        public int DesignOptionIndex => _DesignOption?.Index ?? EntityRelation.None;
+        public Vim.Format.ObjectModel.View OwnerView => _OwnerView?.Value;
+        public int OwnerViewIndex => _OwnerView?.Index ?? EntityRelation.None;
+        public Vim.Format.ObjectModel.Group Group => _Group?.Value;
+        public int GroupIndex => _Group?.Index ?? EntityRelation.None;
+        public Vim.Format.ObjectModel.AssemblyInstance AssemblyInstance => _AssemblyInstance?.Value;
+        public int AssemblyInstanceIndex => _AssemblyInstance?.Index ?? EntityRelation.None;
+        public Vim.Format.ObjectModel.BimDocument BimDocument => _BimDocument?.Value;
+        public int BimDocumentIndex => _BimDocument?.Index ?? EntityRelation.None;
+        public Vim.Format.ObjectModel.Room Room => _Room?.Value;
+        public int RoomIndex => _Room?.Index ?? EntityRelation.None;
+        public Element()
+        {
+            _Level = new Relation<Vim.Format.ObjectModel.Level>();
+            _PhaseCreated = new Relation<Vim.Format.ObjectModel.Phase>();
+            _PhaseDemolished = new Relation<Vim.Format.ObjectModel.Phase>();
+            _Category = new Relation<Vim.Format.ObjectModel.Category>();
+            _Workset = new Relation<Vim.Format.ObjectModel.Workset>();
+            _DesignOption = new Relation<Vim.Format.ObjectModel.DesignOption>();
+            _OwnerView = new Relation<Vim.Format.ObjectModel.View>();
+            _Group = new Relation<Vim.Format.ObjectModel.Group>();
+            _AssemblyInstance = new Relation<Vim.Format.ObjectModel.AssemblyInstance>();
+            _BimDocument = new Relation<Vim.Format.ObjectModel.BimDocument>();
+            _Room = new Relation<Vim.Format.ObjectModel.Room>();
+        }
+        
+    } // class Element
     
     public partial class ElementTable : VimEntityTable, IEnumerable<Vim.Format.ObjectModel.Element>
     {
@@ -2866,6 +970,17 @@ namespace Vim.Format.api_v2
         }
     } // class ElementTable 
     
+    public partial class Workset
+    {
+        public Vim.Format.ObjectModel.BimDocument BimDocument => _BimDocument?.Value;
+        public int BimDocumentIndex => _BimDocument?.Index ?? EntityRelation.None;
+        public Workset()
+        {
+            _BimDocument = new Relation<Vim.Format.ObjectModel.BimDocument>();
+        }
+        
+    } // class Workset
+    
     public partial class WorksetTable : VimEntityTable, IEnumerable<Vim.Format.ObjectModel.Workset>
     {
         
@@ -2929,6 +1044,17 @@ namespace Vim.Format.api_v2
         }
     } // class WorksetTable 
     
+    public partial class AssemblyInstance
+    {
+        public Vim.Format.ObjectModel.Element Element => _Element?.Value;
+        public int ElementIndex => _Element?.Index ?? EntityRelation.None;
+        public AssemblyInstance()
+        {
+            _Element = new Relation<Vim.Format.ObjectModel.Element>();
+        }
+        
+    } // class AssemblyInstance
+    
     public partial class AssemblyInstanceTable : VimEntityTable, IEnumerable<Vim.Format.ObjectModel.AssemblyInstance>, IElementKindTable
     {
         
@@ -2979,6 +1105,17 @@ namespace Vim.Format.api_v2
                 yield return Get(i);
         }
     } // class AssemblyInstanceTable 
+    
+    public partial class Group
+    {
+        public Vim.Format.ObjectModel.Element Element => _Element?.Value;
+        public int ElementIndex => _Element?.Index ?? EntityRelation.None;
+        public Group()
+        {
+            _Element = new Relation<Vim.Format.ObjectModel.Element>();
+        }
+        
+    } // class Group
     
     public partial class GroupTable : VimEntityTable, IEnumerable<Vim.Format.ObjectModel.Group>, IElementKindTable
     {
@@ -3031,6 +1168,17 @@ namespace Vim.Format.api_v2
         }
     } // class GroupTable 
     
+    public partial class DesignOption
+    {
+        public Vim.Format.ObjectModel.Element Element => _Element?.Value;
+        public int ElementIndex => _Element?.Index ?? EntityRelation.None;
+        public DesignOption()
+        {
+            _Element = new Relation<Vim.Format.ObjectModel.Element>();
+        }
+        
+    } // class DesignOption
+    
     public partial class DesignOptionTable : VimEntityTable, IEnumerable<Vim.Format.ObjectModel.DesignOption>, IElementKindTable
     {
         
@@ -3069,6 +1217,23 @@ namespace Vim.Format.api_v2
                 yield return Get(i);
         }
     } // class DesignOptionTable 
+    
+    public partial class Level
+    {
+        public Vim.Format.ObjectModel.FamilyType FamilyType => _FamilyType?.Value;
+        public int FamilyTypeIndex => _FamilyType?.Index ?? EntityRelation.None;
+        public Vim.Format.ObjectModel.Building Building => _Building?.Value;
+        public int BuildingIndex => _Building?.Index ?? EntityRelation.None;
+        public Vim.Format.ObjectModel.Element Element => _Element?.Value;
+        public int ElementIndex => _Element?.Index ?? EntityRelation.None;
+        public Level()
+        {
+            _FamilyType = new Relation<Vim.Format.ObjectModel.FamilyType>();
+            _Building = new Relation<Vim.Format.ObjectModel.Building>();
+            _Element = new Relation<Vim.Format.ObjectModel.Element>();
+        }
+        
+    } // class Level
     
     public partial class LevelTable : VimEntityTable, IEnumerable<Vim.Format.ObjectModel.Level>, IElementKindTable
     {
@@ -3125,6 +1290,17 @@ namespace Vim.Format.api_v2
         }
     } // class LevelTable 
     
+    public partial class Phase
+    {
+        public Vim.Format.ObjectModel.Element Element => _Element?.Value;
+        public int ElementIndex => _Element?.Index ?? EntityRelation.None;
+        public Phase()
+        {
+            _Element = new Relation<Vim.Format.ObjectModel.Element>();
+        }
+        
+    } // class Phase
+    
     public partial class PhaseTable : VimEntityTable, IEnumerable<Vim.Format.ObjectModel.Phase>, IElementKindTable
     {
         
@@ -3159,6 +1335,20 @@ namespace Vim.Format.api_v2
                 yield return Get(i);
         }
     } // class PhaseTable 
+    
+    public partial class Room
+    {
+        public Vim.Format.ObjectModel.Level UpperLimit => _UpperLimit?.Value;
+        public int UpperLimitIndex => _UpperLimit?.Index ?? EntityRelation.None;
+        public Vim.Format.ObjectModel.Element Element => _Element?.Value;
+        public int ElementIndex => _Element?.Index ?? EntityRelation.None;
+        public Room()
+        {
+            _UpperLimit = new Relation<Vim.Format.ObjectModel.Level>();
+            _Element = new Relation<Vim.Format.ObjectModel.Element>();
+        }
+        
+    } // class Room
     
     public partial class RoomTable : VimEntityTable, IEnumerable<Vim.Format.ObjectModel.Room>, IElementKindTable
     {
@@ -3228,6 +1418,26 @@ namespace Vim.Format.api_v2
                 yield return Get(i);
         }
     } // class RoomTable 
+    
+    public partial class BimDocument
+    {
+        public Vim.Format.ObjectModel.View ActiveView => _ActiveView?.Value;
+        public int ActiveViewIndex => _ActiveView?.Index ?? EntityRelation.None;
+        public Vim.Format.ObjectModel.Family OwnerFamily => _OwnerFamily?.Value;
+        public int OwnerFamilyIndex => _OwnerFamily?.Index ?? EntityRelation.None;
+        public Vim.Format.ObjectModel.BimDocument Parent => _Parent?.Value;
+        public int ParentIndex => _Parent?.Index ?? EntityRelation.None;
+        public Vim.Format.ObjectModel.Element Element => _Element?.Value;
+        public int ElementIndex => _Element?.Index ?? EntityRelation.None;
+        public BimDocument()
+        {
+            _ActiveView = new Relation<Vim.Format.ObjectModel.View>();
+            _OwnerFamily = new Relation<Vim.Format.ObjectModel.Family>();
+            _Parent = new Relation<Vim.Format.ObjectModel.BimDocument>();
+            _Element = new Relation<Vim.Format.ObjectModel.Element>();
+        }
+        
+    } // class BimDocument
     
     public partial class BimDocumentTable : VimEntityTable, IEnumerable<Vim.Format.ObjectModel.BimDocument>, IElementKindTable
     {
@@ -3398,6 +1608,20 @@ namespace Vim.Format.api_v2
         }
     } // class BimDocumentTable 
     
+    public partial class DisplayUnitInBimDocument
+    {
+        public Vim.Format.ObjectModel.DisplayUnit DisplayUnit => _DisplayUnit?.Value;
+        public int DisplayUnitIndex => _DisplayUnit?.Index ?? EntityRelation.None;
+        public Vim.Format.ObjectModel.BimDocument BimDocument => _BimDocument?.Value;
+        public int BimDocumentIndex => _BimDocument?.Index ?? EntityRelation.None;
+        public DisplayUnitInBimDocument()
+        {
+            _DisplayUnit = new Relation<Vim.Format.ObjectModel.DisplayUnit>();
+            _BimDocument = new Relation<Vim.Format.ObjectModel.BimDocument>();
+        }
+        
+    } // class DisplayUnitInBimDocument
+    
     public partial class DisplayUnitInBimDocumentTable : VimEntityTable, IEnumerable<Vim.Format.ObjectModel.DisplayUnitInBimDocument>
     {
         
@@ -3438,6 +1662,20 @@ namespace Vim.Format.api_v2
                 yield return Get(i);
         }
     } // class DisplayUnitInBimDocumentTable 
+    
+    public partial class PhaseOrderInBimDocument
+    {
+        public Vim.Format.ObjectModel.Phase Phase => _Phase?.Value;
+        public int PhaseIndex => _Phase?.Index ?? EntityRelation.None;
+        public Vim.Format.ObjectModel.BimDocument BimDocument => _BimDocument?.Value;
+        public int BimDocumentIndex => _BimDocument?.Index ?? EntityRelation.None;
+        public PhaseOrderInBimDocument()
+        {
+            _Phase = new Relation<Vim.Format.ObjectModel.Phase>();
+            _BimDocument = new Relation<Vim.Format.ObjectModel.BimDocument>();
+        }
+        
+    } // class PhaseOrderInBimDocument
     
     public partial class PhaseOrderInBimDocumentTable : VimEntityTable, IEnumerable<Vim.Format.ObjectModel.PhaseOrderInBimDocument>
     {
@@ -3483,6 +1721,20 @@ namespace Vim.Format.api_v2
                 yield return Get(i);
         }
     } // class PhaseOrderInBimDocumentTable 
+    
+    public partial class Category
+    {
+        public Vim.Format.ObjectModel.Category Parent => _Parent?.Value;
+        public int ParentIndex => _Parent?.Index ?? EntityRelation.None;
+        public Vim.Format.ObjectModel.Material Material => _Material?.Value;
+        public int MaterialIndex => _Material?.Index ?? EntityRelation.None;
+        public Category()
+        {
+            _Parent = new Relation<Vim.Format.ObjectModel.Category>();
+            _Material = new Relation<Vim.Format.ObjectModel.Material>();
+        }
+        
+    } // class Category
     
     public partial class CategoryTable : VimEntityTable, IEnumerable<Vim.Format.ObjectModel.Category>
     {
@@ -3553,6 +1805,20 @@ namespace Vim.Format.api_v2
         }
     } // class CategoryTable 
     
+    public partial class Family
+    {
+        public Vim.Format.ObjectModel.Category FamilyCategory => _FamilyCategory?.Value;
+        public int FamilyCategoryIndex => _FamilyCategory?.Index ?? EntityRelation.None;
+        public Vim.Format.ObjectModel.Element Element => _Element?.Value;
+        public int ElementIndex => _Element?.Index ?? EntityRelation.None;
+        public Family()
+        {
+            _FamilyCategory = new Relation<Vim.Format.ObjectModel.Category>();
+            _Element = new Relation<Vim.Format.ObjectModel.Element>();
+        }
+        
+    } // class Family
+    
     public partial class FamilyTable : VimEntityTable, IEnumerable<Vim.Format.ObjectModel.Family>, IElementKindTable
     {
         
@@ -3610,6 +1876,23 @@ namespace Vim.Format.api_v2
         }
     } // class FamilyTable 
     
+    public partial class FamilyType
+    {
+        public Vim.Format.ObjectModel.Family Family => _Family?.Value;
+        public int FamilyIndex => _Family?.Index ?? EntityRelation.None;
+        public Vim.Format.ObjectModel.CompoundStructure CompoundStructure => _CompoundStructure?.Value;
+        public int CompoundStructureIndex => _CompoundStructure?.Index ?? EntityRelation.None;
+        public Vim.Format.ObjectModel.Element Element => _Element?.Value;
+        public int ElementIndex => _Element?.Index ?? EntityRelation.None;
+        public FamilyType()
+        {
+            _Family = new Relation<Vim.Format.ObjectModel.Family>();
+            _CompoundStructure = new Relation<Vim.Format.ObjectModel.CompoundStructure>();
+            _Element = new Relation<Vim.Format.ObjectModel.Element>();
+        }
+        
+    } // class FamilyType
+    
     public partial class FamilyTypeTable : VimEntityTable, IEnumerable<Vim.Format.ObjectModel.FamilyType>, IElementKindTable
     {
         
@@ -3660,6 +1943,32 @@ namespace Vim.Format.api_v2
                 yield return Get(i);
         }
     } // class FamilyTypeTable 
+    
+    public partial class FamilyInstance
+    {
+        public Vim.Format.ObjectModel.FamilyType FamilyType => _FamilyType?.Value;
+        public int FamilyTypeIndex => _FamilyType?.Index ?? EntityRelation.None;
+        public Vim.Format.ObjectModel.Element Host => _Host?.Value;
+        public int HostIndex => _Host?.Index ?? EntityRelation.None;
+        public Vim.Format.ObjectModel.Room FromRoom => _FromRoom?.Value;
+        public int FromRoomIndex => _FromRoom?.Index ?? EntityRelation.None;
+        public Vim.Format.ObjectModel.Room ToRoom => _ToRoom?.Value;
+        public int ToRoomIndex => _ToRoom?.Index ?? EntityRelation.None;
+        public Vim.Format.ObjectModel.Element SuperComponent => _SuperComponent?.Value;
+        public int SuperComponentIndex => _SuperComponent?.Index ?? EntityRelation.None;
+        public Vim.Format.ObjectModel.Element Element => _Element?.Value;
+        public int ElementIndex => _Element?.Index ?? EntityRelation.None;
+        public FamilyInstance()
+        {
+            _FamilyType = new Relation<Vim.Format.ObjectModel.FamilyType>();
+            _Host = new Relation<Vim.Format.ObjectModel.Element>();
+            _FromRoom = new Relation<Vim.Format.ObjectModel.Room>();
+            _ToRoom = new Relation<Vim.Format.ObjectModel.Room>();
+            _SuperComponent = new Relation<Vim.Format.ObjectModel.Element>();
+            _Element = new Relation<Vim.Format.ObjectModel.Element>();
+        }
+        
+    } // class FamilyInstance
     
     public partial class FamilyInstanceTable : VimEntityTable, IEnumerable<Vim.Format.ObjectModel.FamilyInstance>, IElementKindTable
     {
@@ -3818,6 +2127,23 @@ namespace Vim.Format.api_v2
         }
     } // class FamilyInstanceTable 
     
+    public partial class View
+    {
+        public Vim.Format.ObjectModel.Camera Camera => _Camera?.Value;
+        public int CameraIndex => _Camera?.Index ?? EntityRelation.None;
+        public Vim.Format.ObjectModel.FamilyType FamilyType => _FamilyType?.Value;
+        public int FamilyTypeIndex => _FamilyType?.Index ?? EntityRelation.None;
+        public Vim.Format.ObjectModel.Element Element => _Element?.Value;
+        public int ElementIndex => _Element?.Index ?? EntityRelation.None;
+        public View()
+        {
+            _Camera = new Relation<Vim.Format.ObjectModel.Camera>();
+            _FamilyType = new Relation<Vim.Format.ObjectModel.FamilyType>();
+            _Element = new Relation<Vim.Format.ObjectModel.Element>();
+        }
+        
+    } // class View
+    
     public partial class ViewTable : VimEntityTable, IEnumerable<Vim.Format.ObjectModel.View>, IElementKindTable
     {
         
@@ -3957,6 +2283,20 @@ namespace Vim.Format.api_v2
         }
     } // class ViewTable 
     
+    public partial class ElementInView
+    {
+        public Vim.Format.ObjectModel.View View => _View?.Value;
+        public int ViewIndex => _View?.Index ?? EntityRelation.None;
+        public Vim.Format.ObjectModel.Element Element => _Element?.Value;
+        public int ElementIndex => _Element?.Index ?? EntityRelation.None;
+        public ElementInView()
+        {
+            _View = new Relation<Vim.Format.ObjectModel.View>();
+            _Element = new Relation<Vim.Format.ObjectModel.Element>();
+        }
+        
+    } // class ElementInView
+    
     public partial class ElementInViewTable : VimEntityTable, IEnumerable<Vim.Format.ObjectModel.ElementInView>
     {
         
@@ -3997,6 +2337,20 @@ namespace Vim.Format.api_v2
                 yield return Get(i);
         }
     } // class ElementInViewTable 
+    
+    public partial class ShapeInView
+    {
+        public Vim.Format.ObjectModel.Shape Shape => _Shape?.Value;
+        public int ShapeIndex => _Shape?.Index ?? EntityRelation.None;
+        public Vim.Format.ObjectModel.View View => _View?.Value;
+        public int ViewIndex => _View?.Index ?? EntityRelation.None;
+        public ShapeInView()
+        {
+            _Shape = new Relation<Vim.Format.ObjectModel.Shape>();
+            _View = new Relation<Vim.Format.ObjectModel.View>();
+        }
+        
+    } // class ShapeInView
     
     public partial class ShapeInViewTable : VimEntityTable, IEnumerable<Vim.Format.ObjectModel.ShapeInView>
     {
@@ -4039,6 +2393,20 @@ namespace Vim.Format.api_v2
         }
     } // class ShapeInViewTable 
     
+    public partial class AssetInView
+    {
+        public Vim.Format.ObjectModel.Asset Asset => _Asset?.Value;
+        public int AssetIndex => _Asset?.Index ?? EntityRelation.None;
+        public Vim.Format.ObjectModel.View View => _View?.Value;
+        public int ViewIndex => _View?.Index ?? EntityRelation.None;
+        public AssetInView()
+        {
+            _Asset = new Relation<Vim.Format.ObjectModel.Asset>();
+            _View = new Relation<Vim.Format.ObjectModel.View>();
+        }
+        
+    } // class AssetInView
+    
     public partial class AssetInViewTable : VimEntityTable, IEnumerable<Vim.Format.ObjectModel.AssetInView>
     {
         
@@ -4080,6 +2448,20 @@ namespace Vim.Format.api_v2
         }
     } // class AssetInViewTable 
     
+    public partial class AssetInViewSheet
+    {
+        public Vim.Format.ObjectModel.Asset Asset => _Asset?.Value;
+        public int AssetIndex => _Asset?.Index ?? EntityRelation.None;
+        public Vim.Format.ObjectModel.ViewSheet ViewSheet => _ViewSheet?.Value;
+        public int ViewSheetIndex => _ViewSheet?.Index ?? EntityRelation.None;
+        public AssetInViewSheet()
+        {
+            _Asset = new Relation<Vim.Format.ObjectModel.Asset>();
+            _ViewSheet = new Relation<Vim.Format.ObjectModel.ViewSheet>();
+        }
+        
+    } // class AssetInViewSheet
+    
     public partial class AssetInViewSheetTable : VimEntityTable, IEnumerable<Vim.Format.ObjectModel.AssetInViewSheet>
     {
         
@@ -4120,6 +2502,20 @@ namespace Vim.Format.api_v2
                 yield return Get(i);
         }
     } // class AssetInViewSheetTable 
+    
+    public partial class LevelInView
+    {
+        public Vim.Format.ObjectModel.Level Level => _Level?.Value;
+        public int LevelIndex => _Level?.Index ?? EntityRelation.None;
+        public Vim.Format.ObjectModel.View View => _View?.Value;
+        public int ViewIndex => _View?.Index ?? EntityRelation.None;
+        public LevelInView()
+        {
+            _Level = new Relation<Vim.Format.ObjectModel.Level>();
+            _View = new Relation<Vim.Format.ObjectModel.View>();
+        }
+        
+    } // class LevelInView
     
     public partial class LevelInViewTable : VimEntityTable, IEnumerable<Vim.Format.ObjectModel.LevelInView>
     {
@@ -4186,6 +2582,14 @@ namespace Vim.Format.api_v2
         }
     } // class LevelInViewTable 
     
+    public partial class Camera
+    {
+        public Camera()
+        {
+        }
+        
+    } // class Camera
+    
     public partial class CameraTable : VimEntityTable, IEnumerable<Vim.Format.ObjectModel.Camera>
     {
         
@@ -4250,6 +2654,23 @@ namespace Vim.Format.api_v2
                 yield return Get(i);
         }
     } // class CameraTable 
+    
+    public partial class Material
+    {
+        public Vim.Format.ObjectModel.Asset ColorTextureFile => _ColorTextureFile?.Value;
+        public int ColorTextureFileIndex => _ColorTextureFile?.Index ?? EntityRelation.None;
+        public Vim.Format.ObjectModel.Asset NormalTextureFile => _NormalTextureFile?.Value;
+        public int NormalTextureFileIndex => _NormalTextureFile?.Index ?? EntityRelation.None;
+        public Vim.Format.ObjectModel.Element Element => _Element?.Value;
+        public int ElementIndex => _Element?.Index ?? EntityRelation.None;
+        public Material()
+        {
+            _ColorTextureFile = new Relation<Vim.Format.ObjectModel.Asset>();
+            _NormalTextureFile = new Relation<Vim.Format.ObjectModel.Asset>();
+            _Element = new Relation<Vim.Format.ObjectModel.Element>();
+        }
+        
+    } // class Material
     
     public partial class MaterialTable : VimEntityTable, IEnumerable<Vim.Format.ObjectModel.Material>, IElementKindTable
     {
@@ -4366,6 +2787,20 @@ namespace Vim.Format.api_v2
         }
     } // class MaterialTable 
     
+    public partial class MaterialInElement
+    {
+        public Vim.Format.ObjectModel.Material Material => _Material?.Value;
+        public int MaterialIndex => _Material?.Index ?? EntityRelation.None;
+        public Vim.Format.ObjectModel.Element Element => _Element?.Value;
+        public int ElementIndex => _Element?.Index ?? EntityRelation.None;
+        public MaterialInElement()
+        {
+            _Material = new Relation<Vim.Format.ObjectModel.Material>();
+            _Element = new Relation<Vim.Format.ObjectModel.Element>();
+        }
+        
+    } // class MaterialInElement
+    
     public partial class MaterialInElementTable : VimEntityTable, IEnumerable<Vim.Format.ObjectModel.MaterialInElement>
     {
         
@@ -4418,6 +2853,20 @@ namespace Vim.Format.api_v2
                 yield return Get(i);
         }
     } // class MaterialInElementTable 
+    
+    public partial class CompoundStructureLayer
+    {
+        public Vim.Format.ObjectModel.Material Material => _Material?.Value;
+        public int MaterialIndex => _Material?.Index ?? EntityRelation.None;
+        public Vim.Format.ObjectModel.CompoundStructure CompoundStructure => _CompoundStructure?.Value;
+        public int CompoundStructureIndex => _CompoundStructure?.Index ?? EntityRelation.None;
+        public CompoundStructureLayer()
+        {
+            _Material = new Relation<Vim.Format.ObjectModel.Material>();
+            _CompoundStructure = new Relation<Vim.Format.ObjectModel.CompoundStructure>();
+        }
+        
+    } // class CompoundStructureLayer
     
     public partial class CompoundStructureLayerTable : VimEntityTable, IEnumerable<Vim.Format.ObjectModel.CompoundStructureLayer>
     {
@@ -4472,6 +2921,17 @@ namespace Vim.Format.api_v2
         }
     } // class CompoundStructureLayerTable 
     
+    public partial class CompoundStructure
+    {
+        public Vim.Format.ObjectModel.CompoundStructureLayer StructuralLayer => _StructuralLayer?.Value;
+        public int StructuralLayerIndex => _StructuralLayer?.Index ?? EntityRelation.None;
+        public CompoundStructure()
+        {
+            _StructuralLayer = new Relation<Vim.Format.ObjectModel.CompoundStructureLayer>();
+        }
+        
+    } // class CompoundStructure
+    
     public partial class CompoundStructureTable : VimEntityTable, IEnumerable<Vim.Format.ObjectModel.CompoundStructure>
     {
         
@@ -4511,6 +2971,17 @@ namespace Vim.Format.api_v2
         }
     } // class CompoundStructureTable 
     
+    public partial class Node
+    {
+        public Vim.Format.ObjectModel.Element Element => _Element?.Value;
+        public int ElementIndex => _Element?.Index ?? EntityRelation.None;
+        public Node()
+        {
+            _Element = new Relation<Vim.Format.ObjectModel.Element>();
+        }
+        
+    } // class Node
+    
     public partial class NodeTable : VimEntityTable, IEnumerable<Vim.Format.ObjectModel.Node>
     {
         
@@ -4545,6 +3016,14 @@ namespace Vim.Format.api_v2
                 yield return Get(i);
         }
     } // class NodeTable 
+    
+    public partial class Geometry
+    {
+        public Geometry()
+        {
+        }
+        
+    } // class Geometry
     
     public partial class GeometryTable : VimEntityTable, IEnumerable<Vim.Format.ObjectModel.Geometry>
     {
@@ -4607,6 +3086,17 @@ namespace Vim.Format.api_v2
         }
     } // class GeometryTable 
     
+    public partial class Shape
+    {
+        public Vim.Format.ObjectModel.Element Element => _Element?.Value;
+        public int ElementIndex => _Element?.Index ?? EntityRelation.None;
+        public Shape()
+        {
+            _Element = new Relation<Vim.Format.ObjectModel.Element>();
+        }
+        
+    } // class Shape
+    
     public partial class ShapeTable : VimEntityTable, IEnumerable<Vim.Format.ObjectModel.Shape>
     {
         
@@ -4642,6 +3132,17 @@ namespace Vim.Format.api_v2
         }
     } // class ShapeTable 
     
+    public partial class ShapeCollection
+    {
+        public Vim.Format.ObjectModel.Element Element => _Element?.Value;
+        public int ElementIndex => _Element?.Index ?? EntityRelation.None;
+        public ShapeCollection()
+        {
+            _Element = new Relation<Vim.Format.ObjectModel.Element>();
+        }
+        
+    } // class ShapeCollection
+    
     public partial class ShapeCollectionTable : VimEntityTable, IEnumerable<Vim.Format.ObjectModel.ShapeCollection>
     {
         
@@ -4676,6 +3177,20 @@ namespace Vim.Format.api_v2
                 yield return Get(i);
         }
     } // class ShapeCollectionTable 
+    
+    public partial class ShapeInShapeCollection
+    {
+        public Vim.Format.ObjectModel.Shape Shape => _Shape?.Value;
+        public int ShapeIndex => _Shape?.Index ?? EntityRelation.None;
+        public Vim.Format.ObjectModel.ShapeCollection ShapeCollection => _ShapeCollection?.Value;
+        public int ShapeCollectionIndex => _ShapeCollection?.Index ?? EntityRelation.None;
+        public ShapeInShapeCollection()
+        {
+            _Shape = new Relation<Vim.Format.ObjectModel.Shape>();
+            _ShapeCollection = new Relation<Vim.Format.ObjectModel.ShapeCollection>();
+        }
+        
+    } // class ShapeInShapeCollection
     
     public partial class ShapeInShapeCollectionTable : VimEntityTable, IEnumerable<Vim.Format.ObjectModel.ShapeInShapeCollection>
     {
@@ -4717,6 +3232,20 @@ namespace Vim.Format.api_v2
                 yield return Get(i);
         }
     } // class ShapeInShapeCollectionTable 
+    
+    public partial class System
+    {
+        public Vim.Format.ObjectModel.FamilyType FamilyType => _FamilyType?.Value;
+        public int FamilyTypeIndex => _FamilyType?.Index ?? EntityRelation.None;
+        public Vim.Format.ObjectModel.Element Element => _Element?.Value;
+        public int ElementIndex => _Element?.Index ?? EntityRelation.None;
+        public System()
+        {
+            _FamilyType = new Relation<Vim.Format.ObjectModel.FamilyType>();
+            _Element = new Relation<Vim.Format.ObjectModel.Element>();
+        }
+        
+    } // class System
     
     public partial class SystemTable : VimEntityTable, IEnumerable<Vim.Format.ObjectModel.System>, IElementKindTable
     {
@@ -4763,6 +3292,20 @@ namespace Vim.Format.api_v2
         }
     } // class SystemTable 
     
+    public partial class ElementInSystem
+    {
+        public Vim.Format.ObjectModel.System System => _System?.Value;
+        public int SystemIndex => _System?.Index ?? EntityRelation.None;
+        public Vim.Format.ObjectModel.Element Element => _Element?.Value;
+        public int ElementIndex => _Element?.Index ?? EntityRelation.None;
+        public ElementInSystem()
+        {
+            _System = new Relation<Vim.Format.ObjectModel.System>();
+            _Element = new Relation<Vim.Format.ObjectModel.Element>();
+        }
+        
+    } // class ElementInSystem
+    
     public partial class ElementInSystemTable : VimEntityTable, IEnumerable<Vim.Format.ObjectModel.ElementInSystem>
     {
         
@@ -4807,6 +3350,17 @@ namespace Vim.Format.api_v2
                 yield return Get(i);
         }
     } // class ElementInSystemTable 
+    
+    public partial class Warning
+    {
+        public Vim.Format.ObjectModel.BimDocument BimDocument => _BimDocument?.Value;
+        public int BimDocumentIndex => _BimDocument?.Index ?? EntityRelation.None;
+        public Warning()
+        {
+            _BimDocument = new Relation<Vim.Format.ObjectModel.BimDocument>();
+        }
+        
+    } // class Warning
     
     public partial class WarningTable : VimEntityTable, IEnumerable<Vim.Format.ObjectModel.Warning>
     {
@@ -4855,6 +3409,20 @@ namespace Vim.Format.api_v2
         }
     } // class WarningTable 
     
+    public partial class ElementInWarning
+    {
+        public Vim.Format.ObjectModel.Warning Warning => _Warning?.Value;
+        public int WarningIndex => _Warning?.Index ?? EntityRelation.None;
+        public Vim.Format.ObjectModel.Element Element => _Element?.Value;
+        public int ElementIndex => _Element?.Index ?? EntityRelation.None;
+        public ElementInWarning()
+        {
+            _Warning = new Relation<Vim.Format.ObjectModel.Warning>();
+            _Element = new Relation<Vim.Format.ObjectModel.Element>();
+        }
+        
+    } // class ElementInWarning
+    
     public partial class ElementInWarningTable : VimEntityTable, IEnumerable<Vim.Format.ObjectModel.ElementInWarning>
     {
         
@@ -4895,6 +3463,17 @@ namespace Vim.Format.api_v2
                 yield return Get(i);
         }
     } // class ElementInWarningTable 
+    
+    public partial class BasePoint
+    {
+        public Vim.Format.ObjectModel.Element Element => _Element?.Value;
+        public int ElementIndex => _Element?.Index ?? EntityRelation.None;
+        public BasePoint()
+        {
+            _Element = new Relation<Vim.Format.ObjectModel.Element>();
+        }
+        
+    } // class BasePoint
     
     public partial class BasePointTable : VimEntityTable, IEnumerable<Vim.Format.ObjectModel.BasePoint>, IElementKindTable
     {
@@ -4959,6 +3538,17 @@ namespace Vim.Format.api_v2
         }
     } // class BasePointTable 
     
+    public partial class PhaseFilter
+    {
+        public Vim.Format.ObjectModel.Element Element => _Element?.Value;
+        public int ElementIndex => _Element?.Index ?? EntityRelation.None;
+        public PhaseFilter()
+        {
+            _Element = new Relation<Vim.Format.ObjectModel.Element>();
+        }
+        
+    } // class PhaseFilter
+    
     public partial class PhaseFilterTable : VimEntityTable, IEnumerable<Vim.Format.ObjectModel.PhaseFilter>, IElementKindTable
     {
         
@@ -5009,6 +3599,20 @@ namespace Vim.Format.api_v2
                 yield return Get(i);
         }
     } // class PhaseFilterTable 
+    
+    public partial class Grid
+    {
+        public Vim.Format.ObjectModel.FamilyType FamilyType => _FamilyType?.Value;
+        public int FamilyTypeIndex => _FamilyType?.Index ?? EntityRelation.None;
+        public Vim.Format.ObjectModel.Element Element => _Element?.Value;
+        public int ElementIndex => _Element?.Index ?? EntityRelation.None;
+        public Grid()
+        {
+            _FamilyType = new Relation<Vim.Format.ObjectModel.FamilyType>();
+            _Element = new Relation<Vim.Format.ObjectModel.Element>();
+        }
+        
+    } // class Grid
     
     public partial class GridTable : VimEntityTable, IEnumerable<Vim.Format.ObjectModel.Grid>, IElementKindTable
     {
@@ -5103,6 +3707,20 @@ namespace Vim.Format.api_v2
         }
     } // class GridTable 
     
+    public partial class Area
+    {
+        public Vim.Format.ObjectModel.AreaScheme AreaScheme => _AreaScheme?.Value;
+        public int AreaSchemeIndex => _AreaScheme?.Index ?? EntityRelation.None;
+        public Vim.Format.ObjectModel.Element Element => _Element?.Value;
+        public int ElementIndex => _Element?.Index ?? EntityRelation.None;
+        public Area()
+        {
+            _AreaScheme = new Relation<Vim.Format.ObjectModel.AreaScheme>();
+            _Element = new Relation<Vim.Format.ObjectModel.Element>();
+        }
+        
+    } // class Area
+    
     public partial class AreaTable : VimEntityTable, IEnumerable<Vim.Format.ObjectModel.Area>, IElementKindTable
     {
         
@@ -5160,6 +3778,17 @@ namespace Vim.Format.api_v2
         }
     } // class AreaTable 
     
+    public partial class AreaScheme
+    {
+        public Vim.Format.ObjectModel.Element Element => _Element?.Value;
+        public int ElementIndex => _Element?.Index ?? EntityRelation.None;
+        public AreaScheme()
+        {
+            _Element = new Relation<Vim.Format.ObjectModel.Element>();
+        }
+        
+    } // class AreaScheme
+    
     public partial class AreaSchemeTable : VimEntityTable, IEnumerable<Vim.Format.ObjectModel.AreaScheme>, IElementKindTable
     {
         
@@ -5199,6 +3828,17 @@ namespace Vim.Format.api_v2
         }
     } // class AreaSchemeTable 
     
+    public partial class Schedule
+    {
+        public Vim.Format.ObjectModel.Element Element => _Element?.Value;
+        public int ElementIndex => _Element?.Index ?? EntityRelation.None;
+        public Schedule()
+        {
+            _Element = new Relation<Vim.Format.ObjectModel.Element>();
+        }
+        
+    } // class Schedule
+    
     public partial class ScheduleTable : VimEntityTable, IEnumerable<Vim.Format.ObjectModel.Schedule>, IElementKindTable
     {
         
@@ -5233,6 +3873,17 @@ namespace Vim.Format.api_v2
                 yield return Get(i);
         }
     } // class ScheduleTable 
+    
+    public partial class ScheduleColumn
+    {
+        public Vim.Format.ObjectModel.Schedule Schedule => _Schedule?.Value;
+        public int ScheduleIndex => _Schedule?.Index ?? EntityRelation.None;
+        public ScheduleColumn()
+        {
+            _Schedule = new Relation<Vim.Format.ObjectModel.Schedule>();
+        }
+        
+    } // class ScheduleColumn
     
     public partial class ScheduleColumnTable : VimEntityTable, IEnumerable<Vim.Format.ObjectModel.ScheduleColumn>
     {
@@ -5277,6 +3928,17 @@ namespace Vim.Format.api_v2
         }
     } // class ScheduleColumnTable 
     
+    public partial class ScheduleCell
+    {
+        public Vim.Format.ObjectModel.ScheduleColumn ScheduleColumn => _ScheduleColumn?.Value;
+        public int ScheduleColumnIndex => _ScheduleColumn?.Index ?? EntityRelation.None;
+        public ScheduleCell()
+        {
+            _ScheduleColumn = new Relation<Vim.Format.ObjectModel.ScheduleColumn>();
+        }
+        
+    } // class ScheduleCell
+    
     public partial class ScheduleCellTable : VimEntityTable, IEnumerable<Vim.Format.ObjectModel.ScheduleCell>
     {
         
@@ -5320,6 +3982,17 @@ namespace Vim.Format.api_v2
         }
     } // class ScheduleCellTable 
     
+    public partial class ViewSheetSet
+    {
+        public Vim.Format.ObjectModel.Element Element => _Element?.Value;
+        public int ElementIndex => _Element?.Index ?? EntityRelation.None;
+        public ViewSheetSet()
+        {
+            _Element = new Relation<Vim.Format.ObjectModel.Element>();
+        }
+        
+    } // class ViewSheetSet
+    
     public partial class ViewSheetSetTable : VimEntityTable, IEnumerable<Vim.Format.ObjectModel.ViewSheetSet>, IElementKindTable
     {
         
@@ -5354,6 +4027,20 @@ namespace Vim.Format.api_v2
                 yield return Get(i);
         }
     } // class ViewSheetSetTable 
+    
+    public partial class ViewSheet
+    {
+        public Vim.Format.ObjectModel.FamilyType FamilyType => _FamilyType?.Value;
+        public int FamilyTypeIndex => _FamilyType?.Index ?? EntityRelation.None;
+        public Vim.Format.ObjectModel.Element Element => _Element?.Value;
+        public int ElementIndex => _Element?.Index ?? EntityRelation.None;
+        public ViewSheet()
+        {
+            _FamilyType = new Relation<Vim.Format.ObjectModel.FamilyType>();
+            _Element = new Relation<Vim.Format.ObjectModel.Element>();
+        }
+        
+    } // class ViewSheet
     
     public partial class ViewSheetTable : VimEntityTable, IEnumerable<Vim.Format.ObjectModel.ViewSheet>, IElementKindTable
     {
@@ -5396,6 +4083,20 @@ namespace Vim.Format.api_v2
         }
     } // class ViewSheetTable 
     
+    public partial class ViewSheetInViewSheetSet
+    {
+        public Vim.Format.ObjectModel.ViewSheet ViewSheet => _ViewSheet?.Value;
+        public int ViewSheetIndex => _ViewSheet?.Index ?? EntityRelation.None;
+        public Vim.Format.ObjectModel.ViewSheetSet ViewSheetSet => _ViewSheetSet?.Value;
+        public int ViewSheetSetIndex => _ViewSheetSet?.Index ?? EntityRelation.None;
+        public ViewSheetInViewSheetSet()
+        {
+            _ViewSheet = new Relation<Vim.Format.ObjectModel.ViewSheet>();
+            _ViewSheetSet = new Relation<Vim.Format.ObjectModel.ViewSheetSet>();
+        }
+        
+    } // class ViewSheetInViewSheetSet
+    
     public partial class ViewSheetInViewSheetSetTable : VimEntityTable, IEnumerable<Vim.Format.ObjectModel.ViewSheetInViewSheetSet>
     {
         
@@ -5436,6 +4137,20 @@ namespace Vim.Format.api_v2
                 yield return Get(i);
         }
     } // class ViewSheetInViewSheetSetTable 
+    
+    public partial class ViewInViewSheetSet
+    {
+        public Vim.Format.ObjectModel.View View => _View?.Value;
+        public int ViewIndex => _View?.Index ?? EntityRelation.None;
+        public Vim.Format.ObjectModel.ViewSheetSet ViewSheetSet => _ViewSheetSet?.Value;
+        public int ViewSheetSetIndex => _ViewSheetSet?.Index ?? EntityRelation.None;
+        public ViewInViewSheetSet()
+        {
+            _View = new Relation<Vim.Format.ObjectModel.View>();
+            _ViewSheetSet = new Relation<Vim.Format.ObjectModel.ViewSheetSet>();
+        }
+        
+    } // class ViewInViewSheetSet
     
     public partial class ViewInViewSheetSetTable : VimEntityTable, IEnumerable<Vim.Format.ObjectModel.ViewInViewSheetSet>
     {
@@ -5478,6 +4193,20 @@ namespace Vim.Format.api_v2
         }
     } // class ViewInViewSheetSetTable 
     
+    public partial class ViewInViewSheet
+    {
+        public Vim.Format.ObjectModel.View View => _View?.Value;
+        public int ViewIndex => _View?.Index ?? EntityRelation.None;
+        public Vim.Format.ObjectModel.ViewSheet ViewSheet => _ViewSheet?.Value;
+        public int ViewSheetIndex => _ViewSheet?.Index ?? EntityRelation.None;
+        public ViewInViewSheet()
+        {
+            _View = new Relation<Vim.Format.ObjectModel.View>();
+            _ViewSheet = new Relation<Vim.Format.ObjectModel.ViewSheet>();
+        }
+        
+    } // class ViewInViewSheet
+    
     public partial class ViewInViewSheetTable : VimEntityTable, IEnumerable<Vim.Format.ObjectModel.ViewInViewSheet>
     {
         
@@ -5518,6 +4247,17 @@ namespace Vim.Format.api_v2
                 yield return Get(i);
         }
     } // class ViewInViewSheetTable 
+    
+    public partial class Site
+    {
+        public Vim.Format.ObjectModel.Element Element => _Element?.Value;
+        public int ElementIndex => _Element?.Index ?? EntityRelation.None;
+        public Site()
+        {
+            _Element = new Relation<Vim.Format.ObjectModel.Element>();
+        }
+        
+    } // class Site
     
     public partial class SiteTable : VimEntityTable, IEnumerable<Vim.Format.ObjectModel.Site>, IElementKindTable
     {
@@ -5573,6 +4313,20 @@ namespace Vim.Format.api_v2
                 yield return Get(i);
         }
     } // class SiteTable 
+    
+    public partial class Building
+    {
+        public Vim.Format.ObjectModel.Site Site => _Site?.Value;
+        public int SiteIndex => _Site?.Index ?? EntityRelation.None;
+        public Vim.Format.ObjectModel.Element Element => _Element?.Value;
+        public int ElementIndex => _Element?.Index ?? EntityRelation.None;
+        public Building()
+        {
+            _Site = new Relation<Vim.Format.ObjectModel.Site>();
+            _Element = new Relation<Vim.Format.ObjectModel.Element>();
+        }
+        
+    } // class Building
     
     public partial class BuildingTable : VimEntityTable, IEnumerable<Vim.Format.ObjectModel.Building>, IElementKindTable
     {

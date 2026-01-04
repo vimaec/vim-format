@@ -1,8 +1,6 @@
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using Vim.Format.ObjectModel;
 using Vim.Util;
 
@@ -10,7 +8,6 @@ namespace Vim.Format.CodeGen;
 
 public static class VimEntityCodeGen
 {
-
     public const string EntityNamespace = "Vim.Format.ObjectModel";
 
     public static string GetVimEntityTableGetterFunctionName(this ValueSerializationStrategy strategy, Type type)
@@ -35,94 +32,6 @@ public static class VimEntityCodeGen
                 => $"{nameof(api_v2.VimEntityTableBuilder.AddDataColumn)}",
             _ => throw new Exception($"{nameof(GetVimEntityTableBuilderAddFunctionName)} error - unknown strategy {strategy:G}")
         };
-    }
-
-    private static CodeBuilder WriteEntityClasses(CodeBuilder cb)
-    {
-        var entityTypes = ObjectModelReflection.GetEntityTypes().ToArray();
-
-        foreach (var et in entityTypes)
-            WriteEntityClass(et, cb);
-
-        return cb;
-    }
-
-    private static CodeBuilder WriteEntityClass(Type t, CodeBuilder cb = null)
-    {
-        var relationFields = t.GetRelationFields().ToArray();
-
-        cb ??= new CodeBuilder();
-        cb.AppendLine("// AUTO-GENERATED");
-        cb.AppendLine($"public partial class {t.Name}").AppendLine("{");
-        foreach (var fieldInfo in relationFields)
-        {
-            var relationFieldName = fieldInfo.Name.Substring(1);
-            cb.AppendLine($"public {fieldInfo.FieldType.RelationTypeParameter()} {relationFieldName} => {fieldInfo.Name}?.Value;");
-            cb.AppendLine($"public int {relationFieldName}Index => {fieldInfo.Name}?.Index ?? EntityRelation.None;");
-        }
-
-        cb.AppendLine($"public {t.Name}()");
-        cb.AppendLine("{");
-        foreach (var fieldInfo in relationFields)
-        {
-            cb.AppendLine($"{fieldInfo.Name} = new Relation<{fieldInfo.FieldType.RelationTypeParameter()}>();");
-        }
-
-        cb.AppendLine("}");
-        cb.AppendLine();
-
-        cb.AppendLine("public override bool FieldsAreEqual(object obj)");
-        cb.AppendLine("{");
-
-        cb.WriteFieldsAreEqualsType(t);
-
-        cb.AppendLine("return false;");
-        cb.AppendLine("}");
-        cb.AppendLine();
-
-        cb.AppendLine("} // end of class");
-        cb.AppendLine();
-        return cb;
-    }
-
-    private static CodeBuilder WriteFieldsAreEqualsType(this CodeBuilder cb, Type t,
-        (string @namespace, string variable)? modifier = null)
-    {
-        var entityFields = t.GetEntityFields().ToArray();
-        var relationFields = t.GetRelationFields().ToArray();
-
-        var type = (modifier?.@namespace ?? string.Empty) + t.Name;
-        var variable = (modifier?.variable ?? string.Empty) + "other";
-
-        cb.AppendLine($"if ((obj is {type} {variable}))");
-        cb.AppendLine("{");
-        cb.AppendLine("var fieldsAreEqual =");
-
-        IEnumerable<FieldInfo> GetEquatableFields(FieldInfo[] fis)
-            => fis.Where(fi => !fi.GetCustomAttributes().Any(a => a is IgnoreInEquality));
-
-        var entityFieldComparisons = GetEquatableFields(entityFields).Select(f => $"({f.Name} == {variable}.{f.Name})")
-                                                                     .Prepend($"(Index == {variable}.Index)");
-        var relationFieldComparisons = GetEquatableFields(relationFields)
-           .Select(f => $"({f.Name}?.Index == {variable}.{f.Name}?.Index)");
-
-        var comparisons = entityFieldComparisons.Concat(relationFieldComparisons).ToArray();
-        for (var i = 0; i < comparisons.Length; ++i)
-        {
-            var comparison = comparisons[i];
-            cb.AppendLine($"    {comparison}{(i == comparisons.Length - 1 ? ";" : " &&")}");
-        }
-
-        cb.AppendLine("if (!fieldsAreEqual)");
-        cb.AppendLine("{");
-        cb.AppendLine("return false;");
-        cb.AppendLine("}");
-        cb.AppendLine();
-
-        cb.AppendLine("return true;");
-        cb.AppendLine("}");
-
-        return cb;
     }
 
     private static void WriteVimEntityTableSet(CodeBuilder cb)
@@ -150,20 +59,6 @@ public static class VimEntityCodeGen
             cb.AppendLine($"public {EntityNamespace}.{t.Name} Get{t.Name}(int index) => {t.Name}Table?.Get(index);");
         }
 
-        var elementKindEntityTypes = entityTypes
-            .Select(t => (t, t.GetElementKind()))
-            .Where(tuple => tuple.Item2 != ElementKind.Unknown)
-            .ToArray();
-        cb.AppendLine();
-        cb.AppendLine("public static HashSet<string> GetElementKindTableNames()");
-        cb.AppendLine("    => new HashSet<string>()");
-        cb.AppendLine("    {");
-        foreach (var (t, _) in elementKindEntityTypes)
-        {
-            cb.AppendLine(        $"VimEntityTableNames.{t.Name},");
-        }
-        cb.AppendLine("    };");
-
         var joiningTableTypes = entityTypes
             .Select(t => (t, t.HasJoiningTable()))
             .Where(tuple => tuple.Item2 != false)
@@ -174,7 +69,31 @@ public static class VimEntityCodeGen
         cb.AppendLine("    {");
         foreach (var (t, _) in joiningTableTypes)
         {
-            cb.AppendLine(        $"VimEntityTableNames.{t.Name},");
+            cb.AppendLine($"VimEntityTableNames.{t.Name},");
+        }
+        cb.AppendLine("    };");
+
+        WriteElementKinds(cb);
+
+        cb.AppendLine("} // end of partial class VimEntityTableSet");
+        cb.AppendLine();
+    }
+
+    private static void WriteElementKinds(CodeBuilder cb)
+    {
+        var entityTypes = ObjectModelReflection.GetEntityTypes().ToArray();
+
+        var elementKindEntityTypes = entityTypes
+            .Select(t => (t, t.GetElementKind()))
+            .Where(tuple => tuple.Item2 != ElementKind.Unknown)
+            .ToArray();
+        cb.AppendLine();
+        cb.AppendLine("public static HashSet<string> GetElementKindTableNames()");
+        cb.AppendLine("    => new HashSet<string>()");
+        cb.AppendLine("    {");
+        foreach (var (t, _) in elementKindEntityTypes)
+        {
+            cb.AppendLine($"VimEntityTableNames.{t.Name},");
         }
         cb.AppendLine("    };");
 
@@ -213,12 +132,44 @@ public static class VimEntityCodeGen
         }
         cb.AppendLine("return elementKinds;");
         cb.AppendLine("} // GetElementKinds()");
+    }
 
-        cb.AppendLine("} // end of partial class VimEntityTableSet");
-        cb.AppendLine();
+    private static void WriteEntityTypes(CodeBuilder cb)
+    {
+        var entityTypes = ObjectModelReflection.GetEntityTypes().ToArray();
 
         foreach (var t in entityTypes)
+        {
+            WriteEntityClass(cb, t);
+
             WriteVimEntityTable(cb, t);
+        }
+    }
+
+    private static void WriteEntityClass(CodeBuilder cb, Type t)
+    {
+        var relationFields = t.GetRelationFields().ToArray();
+
+        cb.AppendLine($"public partial class {t.Name}").AppendLine("{");
+        foreach (var fieldInfo in relationFields)
+        {
+            var relationFieldName = fieldInfo.Name.Substring(1);
+            cb.AppendLine($"public {fieldInfo.FieldType.RelationTypeParameter()} {relationFieldName} => {fieldInfo.Name}?.Value;");
+            cb.AppendLine($"public int {relationFieldName}Index => {fieldInfo.Name}?.Index ?? EntityRelation.None;");
+        }
+
+        cb.AppendLine($"public {t.Name}()");
+        cb.AppendLine("{");
+        foreach (var fieldInfo in relationFields)
+        {
+            cb.AppendLine($"{fieldInfo.Name} = new Relation<{fieldInfo.FieldType.RelationTypeParameter()}>();");
+        }
+
+        cb.AppendLine("}");
+        cb.AppendLine();
+
+        cb.AppendLine($"}} // class {t.Name}");
+        cb.AppendLine();
     }
 
     private static void WriteVimEntityTable(CodeBuilder cb, Type t)
@@ -414,7 +365,7 @@ public static class VimEntityCodeGen
         {
             var cb = new CodeBuilder();
 
-            cb.AppendLine("// AUTO-GENERATED FILE, DO NOT MODIFY.");
+            cb.AppendLine("// AUTO-GENERATED FILE; see VimEntityCodeGen.cs");
             cb.AppendLine("// ReSharper disable All");
             cb.AppendLine("using System;");
             cb.AppendLine("using System.Collections;");
@@ -429,9 +380,9 @@ public static class VimEntityCodeGen
             cb.AppendLine("namespace Vim.Format.api_v2");
             cb.AppendLine("{");
 
-            WriteEntityClasses(cb);
-
             WriteVimEntityTableSet(cb);
+
+            WriteEntityTypes(cb);
 
             WriteVimBuilder(cb);
 
