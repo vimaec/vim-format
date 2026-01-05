@@ -1,4 +1,5 @@
 # VIM v1.0.0
+
 The VIM format is a modern and efficient open 3D data interchange format designed for BIM and manufacturing data optimized for efficient loading and rendering on low-power devices.
 
 Characteristics of the VIM format:
@@ -21,10 +22,12 @@ This is the specification for version 1.0.0 of the VIM data format. It is divide
 5. FAQ
 
 # 1. VIM Format Binary Specification
+
 At the top level, a VIM document conforms to the [BFAST (Binary Format for Array Serialization and Transmission) binary data format](./bfast.md).
 A BFAST is conceptually similar to a ZIP or TAR archive without compression, just an array of named data buffers. Physically it is laid out as a header, an array of range structures (each containing offsets to the beginning and end of a buffer), and then the data section. The following structures assume 64-bit or smaller alignment.
 
 ## Header
+
 The first structure in the VIM file (or any BFAST) is a 32-byte header.
 
 ```
@@ -63,9 +66,11 @@ The range structs are expected to satisfy the following criteria:
 * There are no more than 64 bytes of padding between each buffer.
 
 ## Names Buffer
+
 The first data buffer in a VIM file contains the names of the others buffers as NUL character delimited UTF-8 encoded strings. The number of strings should always be equal to the number of data buffers specified in the header minus one.
 
 ## VIM Data Buffers
+
 There are five expected top-level buffers in the VIM file with the following names. Their order is not essential, and only the header is optional. Additional buffers are allowed for custom purposes but will not be parsed by most readers.
 * `header`
 * `assets`
@@ -74,6 +79,7 @@ There are five expected top-level buffers in the VIM file with the following nam
 * `geometry`
 
 ## Header Buffer
+
 The header section contains the VIM file version and additional meta data as a sequence of newline (`\n`) terminated sets of key/value pairs denoted by `<key>=<value>`.
 
 The following is an example:
@@ -99,31 +105,21 @@ The `generator` field contains the name of the program used to generate or edit 
 The `schema` field contains the version of the VIM Object Model.
 
 ## Assets Buffer
+
 The assets section of a BIM is also a BFAST container. It may contain any number of buffers with any names. Buffers prefixed with the name `texture/` are assumed to be texture files. By convention buffers prefixed with the name `render/` contain image files. The asset buffer `render/main.png` is used as the PNG thumbnail of the VIM file.
 
 ## Geometry Buffer
-The geometry section of a VIM contains the merged geometry and basic scene graph information for an entire VIM document using the [G3D format](./g3d.md).
+
+The geometry section of a VIM contains the merged geometry and basic scene graph information for an entire VIM document.
 
 ### About G3D
-The [G3D format](./g3d.md) is a binary format for 3D geometry that encodes data in an array of attribute buffers. 
+
+The G3D is a binary format for 3D geometry that encodes data in an array of attribute buffers. 
 
 G3D is based on the BFAST binary layout and uses a naming convention to identify the layout of each attribute buffer and how it is used.
 
-Each attribute buffer is associated with a component of a geometry:
-* vertex
-* corner
-* submesh
-* mesh
-* instance
-* shape
-
-G3D attributes have names to identify them (e.g., position or UV) and uses indices to distinguish when multiple attributes share the same name (e.g., uv:0 ... uv:8). 
-
-They can be of one of the following core data datatypes: float32, float64, int8, int16, int32, int64.
-
-More information on G3D is available on its [page](./g3d.md).
-
 ### VIM Geometry Attributes
+
 The geometry in a VIM contains the following attributes:
 
 * `g3d:vertex:position:0:float32:3`
@@ -254,8 +250,8 @@ rowCount(Vim.Shape) == itemCount(g3d:shape:color:0:float32:4)
 rowCount(Vim.Shape) == itemCount(g3d:shape:width:0:float32:1)
 ```
 
-
 ## Strings Buffer
+
 The strings buffer contains a sequence of strings of zero or more length, with no duplicates, delimited by the "NUL" character. There may or may not be a trailing "NUL" character. The zero-based index of each string is used by the string columns of entity tables.
 
 # 2. VIM Version
@@ -290,4 +286,4 @@ Additional tables and columns can be added as desired, and all software supporti
 
 # Copyright
 
-This documentation is [Copyright 2023 VIMaec LLC.](https://www.vimaec.com/copyright).
+This documentation is [Copyright 2026 VIMaec LLC.](https://www.vimaec.com/copyright).
