@@ -155,7 +155,6 @@ namespace Vim.Format
         }
     }
 
-    // TODO: restore
     public partial class CategoryTable
     {
         /// <summary>
@@ -196,7 +195,7 @@ namespace Vim.Format
         // Index properties
 
         private int GetRelatedIndex(int elementIndex, ReadOnlyIndexMap indexMap)
-            => indexMap.TryGetValue(elementIndex, out var value) ? value : Vim.Format.EntityRelation.None;
+            => indexMap.TryGetValue(elementIndex, out var value) ? value : EntityRelation.None;
 
         public int GetLevelElementIndex(int elementIndex)
             => ParentTableSet.LevelTable.GetElementIndex(GetLevelIndex(elementIndex));
@@ -259,93 +258,77 @@ namespace Vim.Format
 
         // Object-generating properties
 
-        public Vim.Format.FamilyInstance GetFamilyInstance(int elementIndex)
+        public FamilyInstance GetFamilyInstance(int elementIndex)
             => ParentTableSet.FamilyInstanceTable.Get(GetFamilyInstanceIndex(elementIndex));
 
-        public Vim.Format.Element GetFamilyInstanceElement(int elementIndex)
+        public Element GetFamilyInstanceElement(int elementIndex)
             => Get(GetFamilyInstanceElementIndex(elementIndex));
 
-        public Vim.Format.FamilyType GetFamilyType(int elementIndex)
+        public FamilyType GetFamilyType(int elementIndex)
             => ParentTableSet.FamilyTypeTable.Get(GetFamilyTypeIndex(elementIndex));
 
-        public Vim.Format.Element GetFamilyTypeElement(int elementIndex)
+        public Element GetFamilyTypeElement(int elementIndex)
             => Get(GetFamilyTypeElementIndex(elementIndex));
 
-        public Vim.Format.Family GetFamily(int elementIndex)
+        public Family GetFamily(int elementIndex)
             => ParentTableSet.FamilyTable.Get(GetFamilyIndex(elementIndex));
 
-        public Vim.Format.Element GetFamilyElement(int elementIndex)
+        public Element GetFamilyElement(int elementIndex)
             => Get(GetFamilyElementIndex(elementIndex));
 
-        public Vim.Format.System GetSystem(int elementIndex)
+        public System GetSystem(int elementIndex)
             => ParentTableSet.SystemTable.Get(GetSystemIndex(elementIndex));
 
-        public Vim.Format.Element GetSystemElement(int elementIndex)
+        public Element GetSystemElement(int elementIndex)
             => Get(GetSystemElementIndex(elementIndex));
 
         // Parameters
-
-        [Flags]
-        public enum ParameterScope
-        {
-            None = 0,
-            FamilyInstance = 1,
-            FamilyType = 1 << 1,
-            Family = 1 << 2,
-            All = FamilyInstance | FamilyType | Family,
-        }
 
         public List<int> GetParameterIndices(int elementIndex)
             => ParentTableSet.ElementIndexMaps.ParameterIndicesFromElementIndex
                 .TryGetValue(elementIndex, out var pIndices) ? pIndices : new List<int>();
 
-        public IEnumerable<Vim.Format.Parameter> GetParameters(int elementIndex)
-            => GetParameterIndices(elementIndex).Select(i => ParentTableSet.ParameterTable.Get(i));
-
-        public Dictionary<ParameterScope, IEnumerable<Vim.Format.Parameter>> GetScopedParameters(
-            int elementIndex,
-            ParameterScope scope = ParameterScope.All)
+        public List<int> GetFamilyInstanceParameterIndices(int elementIndex)
         {
-            var result = new Dictionary<ParameterScope, IEnumerable<Vim.Format.Parameter>>();
-
             if (elementIndex < 0)
-                return result;
+                return new List<int>();
 
-            if ((scope & ParameterScope.FamilyInstance) == ParameterScope.FamilyInstance)
-            {
-                var familyInstanceElementIndex = GetFamilyInstanceElementIndex(elementIndex);
-                if (familyInstanceElementIndex != Vim.Format.EntityRelation.None)
-                {
-                    result[ParameterScope.FamilyInstance] = GetParameters(familyInstanceElementIndex);
-                }
-            }
+            var familyInstanceElementIndex = GetFamilyInstanceElementIndex(elementIndex);
+            if (familyInstanceElementIndex == EntityRelation.None)
+                return new List<int>();
 
-            if ((scope & ParameterScope.FamilyType) == ParameterScope.FamilyType)
-            {
-                var familyTypeElementIndex = GetFamilyTypeElementIndex(elementIndex);
-                if (familyTypeElementIndex != Vim.Format.EntityRelation.None)
-                {
-                    result[ParameterScope.FamilyType] = GetParameters(familyTypeElementIndex);
-                }
-            }
+            return GetParameterIndices(familyInstanceElementIndex);
+        }
 
-            if ((scope & ParameterScope.Family) == ParameterScope.Family)
-            {
-                var familyElementIndex = GetFamilyElementIndex(elementIndex);
-                if (familyElementIndex != Vim.Format.EntityRelation.None)
-                {
-                    result[ParameterScope.Family] = GetParameters(familyElementIndex);
-                }
-            }
+        public List<int> GetFamilyTypeParameterIndices(int elementIndex)
+        {
+            if (elementIndex < 0)
+                return new List<int>();
 
-            return result;
+            var familyTypeElementIndex = GetFamilyTypeElementIndex(elementIndex);
+            if (familyTypeElementIndex == EntityRelation.None)
+                return new List<int>();
+
+            return GetParameterIndices(familyTypeElementIndex);
+        }
+
+        public List<int> GetFamilyParameterIndices(int elementIndex)
+        {
+            if (elementIndex < 0)
+                return new List<int>();
+
+            var familyElementIndex = GetFamilyElementIndex(elementIndex);
+            if (familyElementIndex == EntityRelation.None)
+                return new List<int>();
+
+            return GetParameterIndices(familyElementIndex);
         }
 
         /// <summary>
         /// Returns an array of booleans aligned 1:1 with the element table.
-        /// Items are true if the element is visible in at least one 3d view.
+        /// Items are true if the element is visible in at least one Revit 3d view.
         /// </summary>
-        public bool[] GetIsVisibleIn3dView()
+        public bool[] GetIsVisibleInRevit3dView()
         {
             // Result is 1:1 aligned with the elements.
             var elementVisibility = new bool[RowCount];
@@ -370,7 +353,7 @@ namespace Vim.Format
                     continue;
 
                 var elementIndex = elementInViewTable.GetElementIndex(i);
-                if (elementIndex == Vim.Format.EntityRelation.None)
+                if (elementIndex == EntityRelation.None)
                     continue;
 
                 elementVisibility[elementIndex] = true;
@@ -388,7 +371,7 @@ namespace Vim.Format
         public int GetSuperComponentDistance(int familyInstanceIndex, int depth = 0)
         {
             var parentElementIndex = GetSuperComponentIndex(familyInstanceIndex);
-            if (parentElementIndex == Vim.Format.EntityRelation.None)
+            if (parentElementIndex == EntityRelation.None)
                 return depth;
 
             var hasParentFamilyInstanceIndex = ParentTableSet.ElementIndexMaps.FamilyInstanceIndexFromElementIndex
@@ -409,14 +392,14 @@ namespace Vim.Format
         {
             // Initialize the result array which is aligned with the CompoundStructureTable records.
             var result = new int[RowCount];
-            for (var i = 0; i < result.Length; ++i) { result[i] = Vim.Format.EntityRelation.None; }
+            for (var i = 0; i < result.Length; ++i) { result[i] = EntityRelation.None; }
 
             // O(n) iteration over the family type records to populate the result.
             var familyTypeTable = ParentTableSet.FamilyTypeTable;
             for (var familyTypeIndex = 0; familyTypeIndex < familyTypeTable.RowCount; ++familyTypeIndex)
             {
                 var compoundStructureIndex = familyTypeTable.GetCompoundStructureIndex(familyTypeIndex);
-                if (compoundStructureIndex == Vim.Format.EntityRelation.None)
+                if (compoundStructureIndex == EntityRelation.None)
                     continue;
 
                 result[compoundStructureIndex] = familyTypeIndex;
@@ -438,7 +421,7 @@ namespace Vim.Format
             for (var layerIndex = 0; layerIndex < layerTable.RowCount; ++layerIndex)
             {
                 var compoundStructureIndex = layerTable.GetCompoundStructureIndex(layerIndex);
-                if (compoundStructureIndex == Vim.Format.EntityRelation.None)
+                if (compoundStructureIndex == EntityRelation.None)
                     continue;
 
                 result[compoundStructureIndex] += 1;
