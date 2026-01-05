@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System.Collections.Generic;
-using Vim.LinqArray;
+using System.Linq;
+using Vim.Format;
 
 namespace Vim.JsonDigest
 {
@@ -69,8 +70,8 @@ namespace Vim.JsonDigest
         /// Returns the collection of area digests for each area in the given VIM scene. Note that areas only
         /// exist in 2d views.
         /// </summary>
-        public static IEnumerable<AreaDigest> GetAreaDigestCollection(VimScene vimScene)
-            => vimScene.DocumentModel.AreaList.Select(a =>
+        public static IEnumerable<AreaDigest> GetAreaDigestCollection(VIM vim)
+            => vim.GetEntityTableSet().AreaTable.Select(a =>
             {
                 var areaElement = a.Element;
 
@@ -87,6 +88,6 @@ namespace Vim.JsonDigest
                     Perimeter = a.Perimeter,
                     IsGrossInterior = a.IsGrossInterior
                 };
-            }).ToEnumerable();
+            });
     }
 }

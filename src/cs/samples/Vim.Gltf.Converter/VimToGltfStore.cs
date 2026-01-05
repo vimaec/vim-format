@@ -5,7 +5,6 @@ using System.Linq;
 using System.Numerics;
 using Vim.Format;
 using Vim.BFast;
-using Vim.LinqArray;
 
 namespace Vim.Gltf.Converter
 {

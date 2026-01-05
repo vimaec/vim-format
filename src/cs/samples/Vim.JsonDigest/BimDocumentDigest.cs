@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
-using Vim.LinqArray;
+using System.Linq;
+using Vim.Format;
 
 namespace Vim.JsonDigest
 {
@@ -158,8 +159,8 @@ namespace Vim.JsonDigest
         /// <summary>
         /// Returns a collection of BIM document digests for each BIM document in the given VIM scene
         /// </summary>
-        public static IEnumerable<BimDocumentDigest> GetBimDocumentDigestCollection(VimScene vimScene)
-            => vimScene.DocumentModel.BimDocumentList.Select(b =>
+        public static IEnumerable<BimDocumentDigest> GetBimDocumentDigestCollection(VIM vim)
+            => vim.GetEntityTableSet().BimDocumentTable.Select(b =>
             {
                 var bimDocumentElement = b.Element;
 
@@ -196,6 +197,6 @@ namespace Vim.JsonDigest
                     User = b.User,
                     Ref_ElementDigest_VimIndex = bimDocumentElement.Index,
                 };
-            }).ToEnumerable();
+            });
     }
 }

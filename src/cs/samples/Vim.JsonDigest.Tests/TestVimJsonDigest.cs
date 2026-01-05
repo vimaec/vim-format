@@ -29,7 +29,7 @@ namespace Vim.JsonDigest.Tests
             }
 
             // Create a VIM json digest from the memory stream.
-            var vimJsonDigest = new VimJsonDigest(memoryStream);
+            var vimJsonDigest = new VimJsonDigest(memoryStream, "");
 
             // Assert the contained collections are not empty.
             Assert.IsNotEmpty(vimJsonDigest.BimDocumentDigestCollection, "BimDocument digest collection is empty.");

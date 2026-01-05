@@ -1,15 +1,15 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Text;
 using System.Linq;
+using System.Text;
+using System.Threading;
 using Vim.BFast;
 using Vim.Util;
-using System.Threading;
 
 // TODO
-// - delete unused code + reorg
-// -   ObjectModelExtensions.cs > fix compilation issue (port IndicesWhere)
+// - delete g3d and linqarray
+// - vim-format.slnx
 // - Clean up throw new Exception() -> turn them into actual VimExceptions
 // - Merge with mainline + integrate
 // - Port tests
