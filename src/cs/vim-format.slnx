@@ -1,0 +1,30 @@
+<Solution>
+  <Folder Name="/bfast/">
+    <Project Path="bfast/Vim.BFast.Tests/Vim.BFast.Tests.csproj" />
+    <Project Path="bfast/Vim.BFast/Vim.BFast.csproj" />
+  </Folder>
+  <Folder Name="/math3d/">
+    <Project Path="math3d/Vim.Math3D.Tests/Vim.Math3D.Tests.csproj" />
+    <Project Path="math3d/Vim.Math3D/Vim.Math3D.csproj" />
+  </Folder>
+  <Folder Name="/samples/">
+    <Project Path="samples/Vim.Gltf.Converter.Tests/Vim.Gltf.Converter.Tests.csproj" />
+    <Project Path="samples/Vim.Gltf.Converter/Vim.Gltf.Converter.csproj" />
+    <Project Path="samples/Vim.JsonDigest.AzureFunction/Vim.JsonDigest.AzureFunction.csproj" />
+    <Project Path="samples/Vim.JsonDigest.Tests/Vim.JsonDigest.Tests.csproj" />
+    <Project Path="samples/Vim.JsonDigest/Vim.JsonDigest.csproj" />
+  </Folder>
+  <Folder Name="/util/">
+    <Project Path="util/Vim.Util.Logging.Serilog/Vim.Util.Logging.Serilog.csproj" />
+    <Project Path="util/Vim.Util.Tests/Vim.Util.Tests.csproj" />
+    <Project Path="util/Vim.Util/Vim.Util.csproj" />
+  </Folder>
+  <Folder Name="/vim/">
+    <Project Path="vim/Vim.Format.CodeGen/Vim.Format.CodeGen.csproj" />
+    <Project Path="vim/Vim.Format.Core/Vim.Format.Core.csproj" />
+    <Project Path="vim/Vim.Format.ILMerge.Tests/Vim.Format.ILMerge.Tests.csproj" />
+    <Project Path="vim/Vim.Format.ILMerge/Vim.Format.ILMerge.csproj" />
+    <Project Path="vim/Vim.Format.Tests/Vim.Format.Tests.csproj" />
+    <Project Path="vim/Vim.Format/Vim.Format.csproj" />
+  </Folder>
+</Solution>

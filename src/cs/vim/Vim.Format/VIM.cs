@@ -8,17 +8,12 @@ using Vim.BFast;
 using Vim.Util;
 
 // TODO
-// - delete g3d and linqarray
-// - vim-format.slnx
 // - Clean up throw new Exception() -> turn them into actual VimExceptions
 // - Merge with mainline + integrate
-// - Port tests
-//  - TransformServiceTests.cs
-//    - ...See if we can create a simple example to modify node render materials as well.
-// - Visitor pattern on geometry deserialization to minimize memory footprint in 3dsMax importer.
-// - Remove unused/old code.
 // - Test beyond this repository (i.e. with Revit exporter) > check the buildup using VimMesh
-//   - Material and VimMaterial must be inserted simultaneously
+//   - (!) Material and VimMaterial must be inserted simultaneously
+// - See if we can create a simple example to modify node render materials as well.
+// - Visitor pattern on geometry deserialization to minimize memory footprint in 3dsMax importer.
 
 namespace Vim.Format
 {

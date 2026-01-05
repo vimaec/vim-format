@@ -47,7 +47,7 @@ jobs:
     uses: ./.github/workflows/merge-and-run.yaml
     with:
       run-codegen: true
-      run: dotnet build ./src/cs/vim-format.sln -c Release
+      run: dotnet build ./src/cs/vim-format.slnx -c Release
 
   test_cs_merged:
     if: ${{ success() }}
@@ -56,7 +56,7 @@ jobs:
     with:
       lfs: true
       run-codegen: true
-      run: dotnet test ./src/cs/vim-format.sln
+      run: dotnet test ./src/cs/vim-format.slnx
 
   ##############
   ##### TS #####
