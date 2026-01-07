@@ -15,6 +15,9 @@ namespace Vim.Format.ElementParameterInfo
         // Summary
         public bool ProjectBasePointsAreAligned { get; set; }
         public bool SurveyPointsAreAligned { get; set; }
+        public bool ProjectBasePointDataIsEqual { get; set; }
+        public bool SurveyPointDataIsEqual { get; set; }
+        public string Summary { get; set; }
 
         // Link
         public FamilyInstance LinkFamilyInstance { get; set; }
@@ -22,31 +25,13 @@ namespace Vim.Format.ElementParameterInfo
         public BimDocument LinkBimDocument { get; set; }
         public BasePoint LinkProjectBasePoint { get; set; }
         public DVector3 LinkProjectBasePointInParentSpace { get; set; }
-        // ...Always empty in links...
-        //public string LinkProjectBasePointNS { get; set; }
-        //public string LinkProjectBasePointEW { get; set; }
-        //public string LinkProjectBasePointElevation { get; set; }
-        //public string LinkProjectBasePointAngleToTrueNorth { get; set; }
         public BasePoint LinkSurveyPoint { get; set; }
         public DVector3 LinkSurveyPointInParentSpace { get; set; }
-        // ...Always empty in links...
-        //public string LinkSurveyPointNS { get; set; }
-        //public string LinkSurveyPointEW { get; set; }
-        //public string LinkSurveyPointElevation { get; set; }
-        //public string LinkSurveyPointAngleToTrueNorth { get; set; }
 
         // Parent
         public BimDocument ParentBimDocument { get; set; }
         public BasePoint ParentProjectBasePoint { get; set; }
-        //public string ParentProjectBasePointNS { get; set; }
-        //public string ParentProjectBasePointEW { get; set; }
-        //public string ParentProjectBasePointElevation { get; set; }
-        //public string ParentProjectBasePointAngleToTrueNorth { get; set; }
         public BasePoint ParentSurveyPoint { get; set; }
-        //public string ParentSurveyPointNS { get; set; }
-        //public string ParentSurveyPointEW { get; set; }
-        //public string ParentSurveyPointElevation { get; set; }
-        //public string ParentSurveyPointAngleToTrueNorth { get; set; }
 
         public static List<RevitLinkInfo> GetRevitLinkInfoList(EntityTableSet tableSet)
         {
@@ -149,142 +134,51 @@ namespace Vim.Format.ElementParameterInfo
                     spAligned = spParentSpacePosition.AlmostEquals(spParent.Position, alignmentTolerance);
                 }
 
-                // vvv always empty in links vvv
-                //var pbpLinkNS = "";
-                //var pbpLinkEW = "";
-                //var pbpLinkElev = "";
-                //var pbpLinkAngleToTrueNorth = "";
-                //if (pbpLink != null)
-                //{
-                //    GetBasePointParameters(pbpLink.ElementIndex, tableSet, out pbpLinkNS, out pbpLinkEW, out pbpLinkElev, out pbpLinkAngleToTrueNorth);
-                //}
-
-                //var spLinkNS = "";
-                //var spLinkEW = "";
-                //var spLinkElev = "";
-                //var spLinkAngleToTrueNorth = "";
-                //if (spLink != null)
-                //{
-                //    GetBasePointParameters(spLink.ElementIndex, tableSet, out spLinkNS, out spLinkEW, out spLinkElev, out spLinkAngleToTrueNorth);
-                //}
-
-                //var pbpParentNS = "";
-                //var pbpParentEW = "";
-                //var pbpParentElev = "";
-                //var pbpParentAngleToTrueNorth = "";
-                //if (pbpParent != null)
-                //{
-                //    GetBasePointParameters(pbpParent.ElementIndex, tableSet, out pbpParentNS, out pbpParentEW, out pbpParentElev, out pbpParentAngleToTrueNorth);
-                //}
-
-                //var spParentNS = "";
-                //var spParentEW = "";
-                //var spParentElev = "";
-                //var spParentAngleToTrueNorth = "";
-                //if (spParent != null)
-                //{
-                //    GetBasePointParameters(spParent.ElementIndex, tableSet, out spParentNS, out spParentEW, out spParentElev, out spParentAngleToTrueNorth);
-                //}
-
-                var revitLinkInfo = new RevitLinkInfo
+                var info = new RevitLinkInfo
                 {
                     LinkFamilyInstance = linkFi,
                     LinkFamilyInstanceElement = elementTable.Get(linkElementIndex),
                     LinkBimDocument = linkedBimDocument,
                     LinkProjectBasePoint = pbpLink,
                     LinkProjectBasePointInParentSpace = pbpParentSpacePosition,
-                    //LinkProjectBasePointNS = pbpLinkNS,
-                    //LinkProjectBasePointEW = pbpLinkEW,
-                    //LinkProjectBasePointElevation = pbpLinkElev,
-                    //LinkProjectBasePointAngleToTrueNorth = pbpLinkAngleToTrueNorth,
                     LinkSurveyPoint = spLink,
                     LinkSurveyPointInParentSpace = spParentSpacePosition,
-                    //LinkSurveyPointNS = spLinkNS,
-                    //LinkSurveyPointEW = spLinkEW,
-                    //LinkSurveyPointElevation = spLinkElev,
-                    //LinkSurveyPointAngleToTrueNorth = spLinkAngleToTrueNorth,
                     ParentBimDocument = parentBimDocument,
                     ParentProjectBasePoint = pbpParent,
-                    //ParentProjectBasePointNS = pbpParentNS,
-                    //ParentProjectBasePointEW = pbpParentEW,
-                    //ParentProjectBasePointElevation = pbpParentElev,
-                    //ParentProjectBasePointAngleToTrueNorth = pbpParentAngleToTrueNorth,
                     ParentSurveyPoint = spParent,
-                    //ParentSurveyPointNS = spParentNS,
-                    //ParentSurveyPointEW = spParentEW,
-                    //ParentSurveyPointElevation = spParentElev,
-                    //ParentSurveyPointAngleToTrueNorth = spParentAngleToTrueNorth,
                     ProjectBasePointsAreAligned = pbpAligned,
                     SurveyPointsAreAligned = spAligned,
                 };
 
-                result.Add(revitLinkInfo);
+                var pbpDelta = info.ParentProjectBasePoint.Position - info.LinkProjectBasePointInParentSpace;
+                var pbpDeltaStr = $"({pbpDelta.X:F5}, {pbpDelta.Y:F5}, {pbpDelta.Z:F5}) ft";
+                var spDelta = info.ParentSurveyPoint.Position - info.LinkSurveyPointInParentSpace;
+                var spDeltaStr = $"({spDelta.X:F5}, {spDelta.Y:F5}, {spDelta.Z:F5}) ft";
+
+                var pbpDataIsEqual =
+                    info.ParentProjectBasePoint.NorthSouth.Equals(info.LinkProjectBasePoint.NorthSouth)
+                    && info.ParentProjectBasePoint.EastWest.Equals(info.LinkProjectBasePoint.EastWest)
+                    && info.ParentProjectBasePoint.Elevation.Equals(info.LinkProjectBasePoint.Elevation)
+                    && info.ParentProjectBasePoint.AngleToTrueNorth.Equals(info.LinkProjectBasePoint.AngleToTrueNorth);
+
+                var spDataIsEqual =
+                    info.ParentSurveyPoint.NorthSouth.Equals(info.LinkSurveyPoint.NorthSouth)
+                    && info.ParentSurveyPoint.EastWest.Equals(info.LinkSurveyPoint.EastWest)
+                    && info.ParentSurveyPoint.Elevation.Equals(info.LinkSurveyPoint.Elevation)
+                    && info.ParentSurveyPoint.AngleToTrueNorth.Equals(info.LinkSurveyPoint.AngleToTrueNorth);
+
+                info.ProjectBasePointDataIsEqual= pbpDataIsEqual;
+                info.SurveyPointDataIsEqual = spDataIsEqual;
+                info.Summary =
+$@"{(pbpAligned ? "✅" : "❌")} Project Base Point markers {(pbpAligned ? "are" : "are not")} aligned.{(pbpAligned ? "" : $" 🔼 {pbpDeltaStr}")}
+{(pbpDataIsEqual ? "✅" : "❌")} Project Base Point data {(pbpDataIsEqual ? "is" : "is not")} equal.
+{(spAligned ? "✅" : "❌")} Survey Point markers {(spAligned ? "are" : "are not")} aligned.{(spAligned ? "" : $" 🔼 {spDeltaStr}")}
+{(spDataIsEqual? "✅" : "❌")} Survey Point data {(spDataIsEqual ? "is" : "is not")} equal.";
+
+                result.Add(info);
             }
 
             return result;
         }
-
-        // vvv keeping this code around in case it's ever useful later. Turns out that this parameter data remains empty for Revit links vvv
-
-        //// BASEPOINT_NORTHSOUTH_PARAM
-        //public const string paramNameNS = "N/S"; 
-        //public const string paramIdNS = "-1150191";
-
-        //// BASEPOINT_EASTWEST_PARAM
-        //public const string paramNameEW = "E/W";
-        //public const string paramIdEW = "-1150192";
-
-        //// BASEPOINT_ELEVATION_PARAM
-        //public const string paramNameElev = "Elev";
-        //public const string paramIdElev = "-1150193";
-
-        //// BASEPOINT_ELEVATION_PARAM
-        //public const string paramNameAngleToTrueNorth = "Angle to True North";
-        //public const string paramIdAngleToTrueNorth = "-1150194";
-
-        //public static void GetBasePointParameters(
-        //    int basePointElementIndex,
-        //    EntityTableSet tableSet,
-        //    out string ns,
-        //    out string ew,
-        //    out string elev,
-        //    out string angleToTrueNorth)
-        //{
-        //    ns = "";
-        //    ew = "";
-        //    elev = "";
-        //    angleToTrueNorth = "";
-
-        //    if (!tableSet.ElementIndexMaps.ParameterIndicesFromElementIndex.TryGetValue(basePointElementIndex, out var parameterIndices))
-        //        return;
-
-        //    var parameterTable = tableSet.ParameterTable;
-
-        //    foreach (var i in parameterIndices)
-        //    {
-        //        var parameter = parameterTable.Get(i);
-        //        var pd = parameter.ParameterDescriptor;
-
-        //        var id = pd.Guid;
-        //        var name = pd.Name;
-
-        //        if (string.IsNullOrEmpty(ns) && (id == paramIdNS || name == paramNameNS))
-        //        {
-        //            (_, ns) = parameter.Values;
-        //        }
-        //        else if (string.IsNullOrEmpty(ew) && (id == paramIdEW || name == paramNameEW))
-        //        {
-        //            (_, ew) = parameter.Values;
-        //        }
-        //        else if (string.IsNullOrEmpty(elev) && (id == paramIdElev || name == paramNameElev))
-        //        {
-        //            (_, elev) = parameter.Values;
-        //        }
-        //        else if (string.IsNullOrEmpty(angleToTrueNorth) && (id == paramIdAngleToTrueNorth || name == paramNameAngleToTrueNorth))
-        //        {
-        //            (_, angleToTrueNorth) = parameter.Values;
-        //        }
-        //    }
-        //}
     }
 }
