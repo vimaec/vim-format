@@ -18,7 +18,7 @@ namespace Vim.Format.ObjectModel
             //   Vim.Element__string:Creator
             //   Vim.Element__string:LastChangedBy
             //   Vim.Element__string:Owner
-            //   Vim.BasePoint__bool:IsClipped
+            //   Vim.BasePoint__byte:IsClipped
             //   Vim.BasePoint__double:NorthSouth
             //   Vim.BasePoint__double:EastWest
             //   Vim.BasePoint__double:Elevation

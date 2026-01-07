@@ -33,7 +33,12 @@
       "index:Vim.ViewSheet:ViewSheet"
     ],
     "Vim.BasePoint": [
+      "byte:IsClipped",
       "byte:IsSurveyPoint",
+      "double:AngleToTrueNorth",
+      "double:EastWest",
+      "double:Elevation",
+      "double:NorthSouth",
       "double:Position.X",
       "double:Position.Y",
       "double:Position.Z",
