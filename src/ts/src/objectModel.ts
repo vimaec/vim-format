@@ -8223,6 +8223,11 @@ export class ElementInWarningTable implements IElementInWarningTable {
 export interface IBasePoint {
     index: number
     isSurveyPoint?: boolean
+    isClipped?: boolean
+    northSouth?: number
+    eastWest?: number
+    elevation?: number
+    angleToTrueNorth?: number
     position_X?: number
     position_Y?: number
     position_Z?: number
@@ -8241,6 +8246,16 @@ export interface IBasePointTable {
     
     getIsSurveyPoint(basePointIndex: number): Promise<boolean | undefined>
     getAllIsSurveyPoint(): Promise<boolean[] | undefined>
+    getIsClipped(basePointIndex: number): Promise<boolean | undefined>
+    getAllIsClipped(): Promise<boolean[] | undefined>
+    getNorthSouth(basePointIndex: number): Promise<number | undefined>
+    getAllNorthSouth(): Promise<number[] | undefined>
+    getEastWest(basePointIndex: number): Promise<number | undefined>
+    getAllEastWest(): Promise<number[] | undefined>
+    getElevation(basePointIndex: number): Promise<number | undefined>
+    getAllElevation(): Promise<number[] | undefined>
+    getAngleToTrueNorth(basePointIndex: number): Promise<number | undefined>
+    getAllAngleToTrueNorth(): Promise<number[] | undefined>
     getPosition_X(basePointIndex: number): Promise<number | undefined>
     getAllPosition_X(): Promise<number[] | undefined>
     getPosition_Y(basePointIndex: number): Promise<number | undefined>
@@ -8262,6 +8277,11 @@ export interface IBasePointTable {
 export class BasePoint implements IBasePoint {
     index: number
     isSurveyPoint?: boolean
+    isClipped?: boolean
+    northSouth?: number
+    eastWest?: number
+    elevation?: number
+    angleToTrueNorth?: number
     position_X?: number
     position_Y?: number
     position_Z?: number
@@ -8278,6 +8298,11 @@ export class BasePoint implements IBasePoint {
         
         await Promise.all([
             table.getIsSurveyPoint(index).then(v => result.isSurveyPoint = v),
+            table.getIsClipped(index).then(v => result.isClipped = v),
+            table.getNorthSouth(index).then(v => result.northSouth = v),
+            table.getEastWest(index).then(v => result.eastWest = v),
+            table.getElevation(index).then(v => result.elevation = v),
+            table.getAngleToTrueNorth(index).then(v => result.angleToTrueNorth = v),
             table.getPosition_X(index).then(v => result.position_X = v),
             table.getPosition_Y(index).then(v => result.position_Y = v),
             table.getPosition_Z(index).then(v => result.position_Z = v),
@@ -8321,6 +8346,11 @@ export class BasePointTable implements IBasePointTable {
         const localTable = await this.entityTable.getLocal()
         
         let isSurveyPoint: boolean[] | undefined
+        let isClipped: boolean[] | undefined
+        let northSouth: number[] | undefined
+        let eastWest: number[] | undefined
+        let elevation: number[] | undefined
+        let angleToTrueNorth: number[] | undefined
         let position_X: number[] | undefined
         let position_Y: number[] | undefined
         let position_Z: number[] | undefined
@@ -8331,6 +8361,11 @@ export class BasePointTable implements IBasePointTable {
         
         await Promise.all([
             (async () => { isSurveyPoint = (await localTable.getBooleanArray("byte:IsSurveyPoint")) })(),
+            (async () => { isClipped = (await localTable.getBooleanArray("byte:IsClipped")) })(),
+            (async () => { northSouth = (await localTable.getNumberArray("double:NorthSouth")) })(),
+            (async () => { eastWest = (await localTable.getNumberArray("double:EastWest")) })(),
+            (async () => { elevation = (await localTable.getNumberArray("double:Elevation")) })(),
+            (async () => { angleToTrueNorth = (await localTable.getNumberArray("double:AngleToTrueNorth")) })(),
             (async () => { position_X = (await localTable.getNumberArray("double:Position.X")) })(),
             (async () => { position_Y = (await localTable.getNumberArray("double:Position.Y")) })(),
             (async () => { position_Z = (await localTable.getNumberArray("double:Position.Z")) })(),
@@ -8347,6 +8382,11 @@ export class BasePointTable implements IBasePointTable {
             basePoint.push({
                 index: i,
                 isSurveyPoint: isSurveyPoint ? isSurveyPoint[i] : undefined,
+                isClipped: isClipped ? isClipped[i] : undefined,
+                northSouth: northSouth ? northSouth[i] : undefined,
+                eastWest: eastWest ? eastWest[i] : undefined,
+                elevation: elevation ? elevation[i] : undefined,
+                angleToTrueNorth: angleToTrueNorth ? angleToTrueNorth[i] : undefined,
                 position_X: position_X ? position_X[i] : undefined,
                 position_Y: position_Y ? position_Y[i] : undefined,
                 position_Z: position_Z ? position_Z[i] : undefined,
@@ -8366,6 +8406,46 @@ export class BasePointTable implements IBasePointTable {
     
     async getAllIsSurveyPoint(): Promise<boolean[] | undefined> {
         return (await this.entityTable.getBooleanArray("byte:IsSurveyPoint"))
+    }
+    
+    async getIsClipped(basePointIndex: number): Promise<boolean | undefined> {
+        return (await this.entityTable.getBoolean(basePointIndex, "byte:IsClipped"))
+    }
+    
+    async getAllIsClipped(): Promise<boolean[] | undefined> {
+        return (await this.entityTable.getBooleanArray("byte:IsClipped"))
+    }
+    
+    async getNorthSouth(basePointIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(basePointIndex, "double:NorthSouth"))
+    }
+    
+    async getAllNorthSouth(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:NorthSouth"))
+    }
+    
+    async getEastWest(basePointIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(basePointIndex, "double:EastWest"))
+    }
+    
+    async getAllEastWest(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:EastWest"))
+    }
+    
+    async getElevation(basePointIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(basePointIndex, "double:Elevation"))
+    }
+    
+    async getAllElevation(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:Elevation"))
+    }
+    
+    async getAngleToTrueNorth(basePointIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(basePointIndex, "double:AngleToTrueNorth"))
+    }
+    
+    async getAllAngleToTrueNorth(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:AngleToTrueNorth"))
     }
     
     async getPosition_X(basePointIndex: number): Promise<number | undefined> {

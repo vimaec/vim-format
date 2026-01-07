@@ -18,6 +18,11 @@ namespace Vim.Format.ObjectModel
             //   Vim.Element__string:Creator
             //   Vim.Element__string:LastChangedBy
             //   Vim.Element__string:Owner
+            //   Vim.BasePoint__bool:IsClipped
+            //   Vim.BasePoint__double:NorthSouth
+            //   Vim.BasePoint__double:EastWest
+            //   Vim.BasePoint__double:Elevation
+            //   Vim.BasePoint__double:AngleToTrueNorth
             public const string v5_7_0 = "5.7.0";
 
             // Schema additions
@@ -1691,6 +1696,31 @@ namespace Vim.Format.ObjectModel
         /// Returns true if the BasePoint is the associated BimDocument's current survey point. The associated BimDocument is stored in the Element relation.
         /// </summary>
         public bool IsSurveyPoint;
+
+        /// <summary>
+        /// The clipped state of the survey point. This is only relevant if IsSurveyPoint is true, false otherwise.
+        /// </summary>
+        public bool IsClipped;
+
+        /// <summary>
+        /// The NorthSouth (N/S) value in Revit.
+        /// </summary>
+        public double NorthSouth;
+
+        /// <summary>
+        /// The EastWest (E/W) value in Revit.
+        /// </summary>
+        public double EastWest;
+
+        /// <summary>
+        /// The Elevation value in Revit.
+        /// </summary>
+        public double Elevation;
+
+        /// <summary>
+        /// The AngleToTrueNorth value in Revit, in radians.
+        /// </summary>
+        public double AngleToTrueNorth;
 
         /// <summary>
         /// The position of the BasePoint relative to the BimDocument's internal origin.

@@ -1504,6 +1504,11 @@ namespace Vim.Format.ObjectModel {
                 var fieldsAreEqual =
                     (Index == other.Index) &&
                     (IsSurveyPoint == other.IsSurveyPoint) &&
+                    (IsClipped == other.IsClipped) &&
+                    (NorthSouth == other.NorthSouth) &&
+                    (EastWest == other.EastWest) &&
+                    (Elevation == other.Elevation) &&
+                    (AngleToTrueNorth == other.AngleToTrueNorth) &&
                     (Position_X == other.Position_X) &&
                     (Position_Y == other.Position_Y) &&
                     (Position_Z == other.Position_Z) &&
@@ -3432,6 +3437,16 @@ namespace Vim.Format.ObjectModel {
         
         public IArray<Boolean> BasePointIsSurveyPoint { get; }
         public Boolean GetBasePointIsSurveyPoint(int index, Boolean defaultValue = default) => BasePointIsSurveyPoint?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Boolean> BasePointIsClipped { get; }
+        public Boolean GetBasePointIsClipped(int index, Boolean defaultValue = default) => BasePointIsClipped?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> BasePointNorthSouth { get; }
+        public Double GetBasePointNorthSouth(int index, Double defaultValue = default) => BasePointNorthSouth?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> BasePointEastWest { get; }
+        public Double GetBasePointEastWest(int index, Double defaultValue = default) => BasePointEastWest?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> BasePointElevation { get; }
+        public Double GetBasePointElevation(int index, Double defaultValue = default) => BasePointElevation?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> BasePointAngleToTrueNorth { get; }
+        public Double GetBasePointAngleToTrueNorth(int index, Double defaultValue = default) => BasePointAngleToTrueNorth?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
         public IArray<Double> BasePointPosition_X { get; }
         public Double GetBasePointPosition_X(int index, Double defaultValue = default) => BasePointPosition_X?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
         public IArray<Double> BasePointPosition_Y { get; }
@@ -3455,6 +3470,11 @@ namespace Vim.Format.ObjectModel {
             r.Document = Document;
             r.Index = n;
             r.IsSurveyPoint = BasePointIsSurveyPoint.ElementAtOrDefault(n);
+            r.IsClipped = BasePointIsClipped.ElementAtOrDefault(n);
+            r.NorthSouth = BasePointNorthSouth.ElementAtOrDefault(n);
+            r.EastWest = BasePointEastWest.ElementAtOrDefault(n);
+            r.Elevation = BasePointElevation.ElementAtOrDefault(n);
+            r.AngleToTrueNorth = BasePointAngleToTrueNorth.ElementAtOrDefault(n);
             r.Position_X = BasePointPosition_X.ElementAtOrDefault(n);
             r.Position_Y = BasePointPosition_Y.ElementAtOrDefault(n);
             r.Position_Z = BasePointPosition_Z.ElementAtOrDefault(n);
@@ -4222,6 +4242,11 @@ namespace Vim.Format.ObjectModel {
             WarningSeverity = WarningEntityTable?.GetStringColumnValues("string:Severity") ?? Array.Empty<String>().ToIArray();
             WarningDescription = WarningEntityTable?.GetStringColumnValues("string:Description") ?? Array.Empty<String>().ToIArray();
             BasePointIsSurveyPoint = BasePointEntityTable?.GetDataColumnValues<Boolean>("byte:IsSurveyPoint") ?? Array.Empty<Boolean>().ToIArray();
+            BasePointIsClipped = BasePointEntityTable?.GetDataColumnValues<Boolean>("byte:IsClipped") ?? Array.Empty<Boolean>().ToIArray();
+            BasePointNorthSouth = BasePointEntityTable?.GetDataColumnValues<Double>("double:NorthSouth") ?? Array.Empty<Double>().ToIArray();
+            BasePointEastWest = BasePointEntityTable?.GetDataColumnValues<Double>("double:EastWest") ?? Array.Empty<Double>().ToIArray();
+            BasePointElevation = BasePointEntityTable?.GetDataColumnValues<Double>("double:Elevation") ?? Array.Empty<Double>().ToIArray();
+            BasePointAngleToTrueNorth = BasePointEntityTable?.GetDataColumnValues<Double>("double:AngleToTrueNorth") ?? Array.Empty<Double>().ToIArray();
             BasePointPosition_X = BasePointEntityTable?.GetDataColumnValues<Double>("double:Position.X") ?? Array.Empty<Double>().ToIArray();
             BasePointPosition_Y = BasePointEntityTable?.GetDataColumnValues<Double>("double:Position.Y") ?? Array.Empty<Double>().ToIArray();
             BasePointPosition_Z = BasePointEntityTable?.GetDataColumnValues<Double>("double:Position.Z") ?? Array.Empty<Double>().ToIArray();
@@ -7355,6 +7380,11 @@ namespace Vim.Format.ObjectModel {
         {
             ParentTableSet = parentTableSet;
             Column_IsSurveyPoint = GetDataColumnValues<Boolean>("byte:IsSurveyPoint") ?? Array.Empty<Boolean>();
+            Column_IsClipped = GetDataColumnValues<Boolean>("byte:IsClipped") ?? Array.Empty<Boolean>();
+            Column_NorthSouth = GetDataColumnValues<Double>("double:NorthSouth") ?? Array.Empty<Double>();
+            Column_EastWest = GetDataColumnValues<Double>("double:EastWest") ?? Array.Empty<Double>();
+            Column_Elevation = GetDataColumnValues<Double>("double:Elevation") ?? Array.Empty<Double>();
+            Column_AngleToTrueNorth = GetDataColumnValues<Double>("double:AngleToTrueNorth") ?? Array.Empty<Double>();
             Column_Position_X = GetDataColumnValues<Double>("double:Position.X") ?? Array.Empty<Double>();
             Column_Position_Y = GetDataColumnValues<Double>("double:Position.Y") ?? Array.Empty<Double>();
             Column_Position_Z = GetDataColumnValues<Double>("double:Position.Z") ?? Array.Empty<Double>();
@@ -7366,6 +7396,16 @@ namespace Vim.Format.ObjectModel {
         
         public Boolean[] Column_IsSurveyPoint { get; }
         public Boolean GetIsSurveyPoint(int index, Boolean @default = default) => Column_IsSurveyPoint.ElementAtOrDefault(index, @default);
+        public Boolean[] Column_IsClipped { get; }
+        public Boolean GetIsClipped(int index, Boolean @default = default) => Column_IsClipped.ElementAtOrDefault(index, @default);
+        public Double[] Column_NorthSouth { get; }
+        public Double GetNorthSouth(int index, Double @default = default) => Column_NorthSouth.ElementAtOrDefault(index, @default);
+        public Double[] Column_EastWest { get; }
+        public Double GetEastWest(int index, Double @default = default) => Column_EastWest.ElementAtOrDefault(index, @default);
+        public Double[] Column_Elevation { get; }
+        public Double GetElevation(int index, Double @default = default) => Column_Elevation.ElementAtOrDefault(index, @default);
+        public Double[] Column_AngleToTrueNorth { get; }
+        public Double GetAngleToTrueNorth(int index, Double @default = default) => Column_AngleToTrueNorth.ElementAtOrDefault(index, @default);
         public Double[] Column_Position_X { get; }
         public Double GetPosition_X(int index, Double @default = default) => Column_Position_X.ElementAtOrDefault(index, @default);
         public Double[] Column_Position_Y { get; }
@@ -7389,6 +7429,11 @@ namespace Vim.Format.ObjectModel {
             var r = new BasePoint();
             r.Index = index;
             r.IsSurveyPoint = GetIsSurveyPoint(index);
+            r.IsClipped = GetIsClipped(index);
+            r.NorthSouth = GetNorthSouth(index);
+            r.EastWest = GetEastWest(index);
+            r.Elevation = GetElevation(index);
+            r.AngleToTrueNorth = GetAngleToTrueNorth(index);
             r.Position_X = GetPosition_X(index);
             r.Position_Y = GetPosition_Y(index);
             r.Position_Z = GetPosition_Z(index);
@@ -9704,6 +9749,31 @@ namespace Vim.Format.ObjectModel {
                 var columnData = new Boolean[entityCount];
                 for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].IsSurveyPoint; }
                 tb.AddDataColumn("byte:IsSurveyPoint", columnData);
+            }
+            {
+                var columnData = new Boolean[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].IsClipped; }
+                tb.AddDataColumn("byte:IsClipped", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].NorthSouth; }
+                tb.AddDataColumn("double:NorthSouth", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].EastWest; }
+                tb.AddDataColumn("double:EastWest", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Elevation; }
+                tb.AddDataColumn("double:Elevation", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].AngleToTrueNorth; }
+                tb.AddDataColumn("double:AngleToTrueNorth", columnData);
             }
             {
                 var columnData = new Double[entityCount];
