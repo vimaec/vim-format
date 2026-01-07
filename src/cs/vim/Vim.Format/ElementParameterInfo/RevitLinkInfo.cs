@@ -6,6 +6,10 @@ using Vim.Util;
 
 namespace Vim.Format.ElementParameterInfo
 {
+    /// <summary>
+    /// Deals with revit links and project base point and survey point alignment.
+    /// To get your head wrapped around this topic, see: https://www.youtube.com/watch?v=TjP40wpFF34
+    /// </summary>
     public class RevitLinkInfo
     {
         // Summary
