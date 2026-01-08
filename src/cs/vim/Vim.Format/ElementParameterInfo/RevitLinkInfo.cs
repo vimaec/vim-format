@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using System.Text;
 using Vim.Format.ObjectModel;
 using Vim.Math3d;
 using Vim.Util;
@@ -13,6 +14,8 @@ namespace Vim.Format.ElementParameterInfo
     public class RevitLinkInfo
     {
         // Summary
+        public DVector3 ProjectBasePointDelta { get; set; }
+        public DVector3 SurveyPointDelta { get; set; }
         public bool ProjectBasePointsAreAligned { get; set; }
         public bool SurveyPointsAreAligned { get; set; }
         public bool ProjectBasePointDataIsEqual { get; set; }
@@ -32,6 +35,11 @@ namespace Vim.Format.ElementParameterInfo
         public BimDocument ParentBimDocument { get; set; }
         public BasePoint ParentProjectBasePoint { get; set; }
         public BasePoint ParentSurveyPoint { get; set; }
+
+        private const float AlignmentTolerance = 1E-06f;
+        private const double AlignmentToleranceDouble = 1E-06d;
+        private const int StringDoubleDecimals = 6;
+        private static string ToStringRounded(double d) => d.ToString($"F{StringDoubleDecimals}");
 
         public static List<RevitLinkInfo> GetRevitLinkInfoList(EntityTableSet tableSet)
         {
@@ -120,18 +128,17 @@ namespace Vim.Format.ElementParameterInfo
                 DVector3 pbpParentSpacePosition = default;
                 var spAligned = false;
                 DVector3 spParentSpacePosition = default;
-                const float alignmentTolerance = 1E-06f;
 
                 if (pbpLink != null && pbpParent != null)
                 {
                     pbpParentSpacePosition = pbpLink.Position.Transform(linkTransform);
-                    pbpAligned = pbpParentSpacePosition.AlmostEquals(pbpParent.Position, alignmentTolerance);
+                    pbpAligned = pbpParentSpacePosition.AlmostEquals(pbpParent.Position, AlignmentTolerance);
                 }
 
                 if (spLink != null && spParent != null)
                 {
                     spParentSpacePosition = spLink.Position.Transform(linkTransform);
-                    spAligned = spParentSpacePosition.AlmostEquals(spParent.Position, alignmentTolerance);
+                    spAligned = spParentSpacePosition.AlmostEquals(spParent.Position, AlignmentTolerance);
                 }
 
                 var info = new RevitLinkInfo
@@ -150,35 +157,56 @@ namespace Vim.Format.ElementParameterInfo
                     SurveyPointsAreAligned = spAligned,
                 };
 
-                var pbpDelta = info.ParentProjectBasePoint.Position - info.LinkProjectBasePointInParentSpace;
-                var pbpDeltaStr = $"({pbpDelta.X:F5}, {pbpDelta.Y:F5}, {pbpDelta.Z:F5}) ft";
-                var spDelta = info.ParentSurveyPoint.Position - info.LinkSurveyPointInParentSpace;
-                var spDeltaStr = $"({spDelta.X:F5}, {spDelta.Y:F5}, {spDelta.Z:F5}) ft";
+                var pbpDelta = info.LinkProjectBasePointInParentSpace - info.ParentProjectBasePoint.Position; // the corrective offset to align the link project base point marker to the parent's.
+                var pbpDeltaStr = $"({ToStringRounded(pbpDelta.X)}, {ToStringRounded(pbpDelta.Y)}, {ToStringRounded(pbpDelta.Z)}) ft";
+                info.ProjectBasePointDelta = pbpDelta;
 
-                var pbpDataIsEqual =
-                    info.ParentProjectBasePoint.NorthSouth.Equals(info.LinkProjectBasePoint.NorthSouth)
-                    && info.ParentProjectBasePoint.EastWest.Equals(info.LinkProjectBasePoint.EastWest)
-                    && info.ParentProjectBasePoint.Elevation.Equals(info.LinkProjectBasePoint.Elevation)
-                    && info.ParentProjectBasePoint.AngleToTrueNorth.Equals(info.LinkProjectBasePoint.AngleToTrueNorth);
+                var spDelta = info.LinkSurveyPointInParentSpace - info.ParentSurveyPoint.Position; // the corrective offset to align the link survey point marker to the parent's.
+                var spDeltaStr = $"({ToStringRounded(spDelta.X)}, {ToStringRounded(spDelta.Y)}, {ToStringRounded(spDelta.Z)}) ft";
+                info.SurveyPointDelta = spDelta;
 
-                var spDataIsEqual =
-                    info.ParentSurveyPoint.NorthSouth.Equals(info.LinkSurveyPoint.NorthSouth)
-                    && info.ParentSurveyPoint.EastWest.Equals(info.LinkSurveyPoint.EastWest)
-                    && info.ParentSurveyPoint.Elevation.Equals(info.LinkSurveyPoint.Elevation)
-                    && info.ParentSurveyPoint.AngleToTrueNorth.Equals(info.LinkSurveyPoint.AngleToTrueNorth);
+                var pbpDataIsEqual = BasePointDataIsAlmostEqual(info.ParentProjectBasePoint, info.LinkProjectBasePoint, out var pbpDataSummary);
+                info.ProjectBasePointDataIsEqual = pbpDataIsEqual;
 
-                info.ProjectBasePointDataIsEqual= pbpDataIsEqual;
+                var spDataIsEqual = BasePointDataIsAlmostEqual(info.ParentSurveyPoint, info.LinkSurveyPoint, out var spDataSummary);
                 info.SurveyPointDataIsEqual = spDataIsEqual;
+
                 info.Summary =
 $@"{(pbpAligned ? "✅" : "❌")} Project Base Point markers {(pbpAligned ? "are" : "are not")} aligned.{(pbpAligned ? "" : $" 🔼 {pbpDeltaStr}")}
-{(pbpDataIsEqual ? "✅" : "❌")} Project Base Point data {(pbpDataIsEqual ? "is" : "is not")} equal.
+{(pbpDataIsEqual ? "✅" : "❌")} Project Base Point data {(pbpDataIsEqual ? "is" : "is not")} equal.{(pbpDataIsEqual ? "" : $"{System.Environment.NewLine}{pbpDataSummary}")}
 {(spAligned ? "✅" : "❌")} Survey Point markers {(spAligned ? "are" : "are not")} aligned.{(spAligned ? "" : $" 🔼 {spDeltaStr}")}
-{(spDataIsEqual? "✅" : "❌")} Survey Point data {(spDataIsEqual ? "is" : "is not")} equal.";
+{(spDataIsEqual? "✅" : "❌")} Survey Point data {(spDataIsEqual ? "is" : "is not")} equal.{(spDataIsEqual ? "" : $"{System.Environment.NewLine}{spDataSummary}")}";
 
                 result.Add(info);
             }
 
             return result;
+        }
+
+        private static bool BasePointDataIsAlmostEqual(BasePoint bp_parent, BasePoint bp_link, out string summary)
+        {
+            var summaryList = new List<string>();
+            const string tabPrefix = "  - ";
+
+            bool CompareBasePointDataValues(string property, double parentValue, double linkValue)
+            {
+                var almostEqual = parentValue.AlmostEquals(linkValue, AlignmentToleranceDouble);
+                if (!almostEqual)
+                    summaryList.Add($"{tabPrefix}[{property}] Parent: {ToStringRounded(parentValue)} <> Link: {ToStringRounded(linkValue)}");
+
+                return almostEqual;
+            }
+
+            var nsAlmostEqual = CompareBasePointDataValues("N/S", bp_parent.NorthSouth, bp_link.NorthSouth);
+            var ewAlmostEqual = CompareBasePointDataValues("E/W", bp_parent.EastWest, bp_link.EastWest);
+            var elevationAlmostEqual = CompareBasePointDataValues("Elevation", bp_parent.Elevation, bp_link.Elevation);
+            var angleToTrueNorthAlmostEqual = CompareBasePointDataValues("Angle to True North", bp_parent.AngleToTrueNorth, bp_link.AngleToTrueNorth);
+
+            var dataIsAlmostEqual = nsAlmostEqual && ewAlmostEqual && elevationAlmostEqual && angleToTrueNorthAlmostEqual;
+
+            summary = dataIsAlmostEqual ? "" : string.Join(System.Environment.NewLine, summaryList);
+
+            return dataIsAlmostEqual;
         }
     }
 }

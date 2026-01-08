@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using Vim.Format.ObjectModel;
@@ -8,13 +9,19 @@ namespace Vim.Format.ElementParameterInfo
 {
     public class ParameterSummary
     {
+        public string SummaryKey { get; set; }
+
         public int Descriptor { get; set; }
 
-        public ElementKind ElementKind { get; set; }
+        public ElementKind ElementKindEnum { get; set; }
+
+        public string ElementKind { get; set; }
 
         public string CategoryNameFull { get; set; }
 
         public string Name { get; set; } // Derived from Descriptor
+
+        public string NamePbiCaseSensitive { get; set; }
 
         public string Group { get; set; } // Derived from Descriptor
 
@@ -22,7 +29,7 @@ namespace Vim.Format.ElementParameterInfo
 
         public int CountFilled { get; set; }
 
-        public int CountSuspicious { get; set; }
+        public int CountNullish { get; set; }
 
         public int CountDistinct { get; set; }
 
@@ -36,34 +43,34 @@ namespace Vim.Format.ElementParameterInfo
             CategoryTable categoryTable)
         {
             return Enumerable.Range(0, parameterTable.RowCount)
-                .GroupBy(i =>
-                {
-                    var descriptorIndex = parameterTable.GetParameterDescriptorIndex(i);
-                    var elementIndex = parameterTable.GetElementIndex(i);
-                    var elementKind = elementKindArray.ElementAtOrDefault(elementIndex, ElementKind.Unknown);
-                    var elementCategoryIndex = elementTable.GetCategoryIndex(elementIndex);
-
-                    return (descriptorIndex, elementKind, elementCategoryIndex);
-                })
+                .GroupBy(i => new ParameterSummaryKey(i, parameterTable, elementTable, elementKindArray, categoryTable))
                 .AsParallel()
                 .Select(g =>
                 {
-                    var (descriptorIndex, elementKind, categoryIndex) = g.Key;
+                    var parameterSummaryKey = g.Key;
+                    var descriptorIndex = parameterSummaryKey.DescriptorIndex;
+                    var elementKind = parameterSummaryKey.ElementKind;
+                    var categoryIndex = parameterSummaryKey.CategoryIndex;
 
                     var displayValues = g.Select(i => Parameter.SplitValues(parameterTable.GetValue(i)).DisplayValue).ToList();
 
-                    SortAndGetCounts(displayValues, out var countTotal, out var countFilled, out var countSuspicious, out var countDistinct);
+                    SortAndGetCounts(displayValues, out var countTotal, out var countFilled, out var countNullish, out var countDistinct);
+
+                    var name = descriptorTable.GetName(descriptorIndex);
 
                     var ps = new ParameterSummary()
                     {
+                        SummaryKey = parameterSummaryKey.ToString(),
                         Descriptor = descriptorIndex,
-                        ElementKind = elementKind,
+                        ElementKindEnum = elementKind,
+                        ElementKind = elementKind.ToDisplayString(),
                         CategoryNameFull = categoryTable.GetNameFull(categoryIndex),
-                        Name = descriptorTable.GetName(descriptorIndex),
+                        Name = name,
+                        NamePbiCaseSensitive = name.ToPbiCaseSensitiveString(),
                         Group = descriptorTable.GetGroup(descriptorIndex),
                         CountTotal = countTotal,
                         CountFilled = countFilled,
-                        CountSuspicious = countSuspicious,
+                        CountNullish = countNullish,
                         CountDistinct = countDistinct
                     };
 
@@ -71,11 +78,11 @@ namespace Vim.Format.ElementParameterInfo
                 });
         }
 
-        public static void SortAndGetCounts(List<string> items, out int countTotal, out int countFilled, out int countSuspicious, out int countDistinct)
+        public static void SortAndGetCounts(List<string> items, out int countTotal, out int countFilled, out int countNullish, out int countDistinct)
         {
             countTotal = items.Count;
             countFilled = 0;
-            countSuspicious = 0;
+            countNullish = 0;
             countDistinct = 0;
 
             if (countTotal == 0)
@@ -89,14 +96,16 @@ namespace Vim.Format.ElementParameterInfo
             {
                 var item = items[i];
 
-                if (!string.IsNullOrEmpty(item))
+                var (hasValue, isNullish) = Parameter.GetValueInfo(item);
+
+                if (hasValue)
                 {
                     countFilled += 1;
+                }
 
-                    if (item == "-1" || item == "0")
-                    {
-                        countSuspicious += 1;
-                    }
+                if (isNullish)
+                {
+                    countNullish += 1;
                 }
 
                 // Compare current item with the previous one
@@ -113,5 +122,47 @@ namespace Vim.Format.ElementParameterInfo
                 }
             }
         }
+    }
+
+    public class ParameterSummaryKey : IEquatable<ParameterSummaryKey>
+    {
+        public int DescriptorIndex { get; }
+
+        public ElementKind ElementKind { get; }
+
+        public int CategoryIndex { get; }
+
+        /// <summary>
+        /// Constructor used for grouping
+        /// </summary>
+        public ParameterSummaryKey(
+            int parameterIndex,
+            ParameterTable parameterTable,
+            ElementTable elementTable,
+            ElementKind[] elementKindArray,
+            CategoryTable categoryTable)
+        {
+            DescriptorIndex = parameterTable.GetParameterDescriptorIndex(parameterIndex);
+            var elementIndex = parameterTable.GetElementIndex(parameterIndex);
+            ElementKind = elementKindArray.ElementAtOrDefault(elementIndex, ElementKind.Unknown);
+            CategoryIndex = elementTable.GetCategoryIndex(elementIndex);
+        }
+
+        public override bool Equals(object obj)
+            => obj is ParameterSummaryKey psk && Equals(psk);
+
+        public bool Equals(ParameterSummaryKey other)
+            => DescriptorIndex == other.DescriptorIndex
+            && ElementKind == other.ElementKind
+            && CategoryIndex == other.CategoryIndex;
+
+        public override int GetHashCode()
+            => HashCodeStd2.Combine(DescriptorIndex, ElementKind, CategoryIndex);
+
+        public override string ToString()
+            => GetStringKey(DescriptorIndex, ElementKind, CategoryIndex);
+
+        public static string GetStringKey(int descriptorIndex, ElementKind elementKind, int categoryIndex)
+            => $"{descriptorIndex}|{(int)elementKind}|{categoryIndex}";
     }
 }

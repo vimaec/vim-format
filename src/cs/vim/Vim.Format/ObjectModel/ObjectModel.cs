@@ -699,6 +699,16 @@ namespace Vim.Format.ObjectModel
 
         public bool TryParseNativeValueAsBoolean(ParameterDescriptor desc, out bool result)
             => TryParseNativeValueAsBoolean(Values.NativeValue, desc, out result);
+
+        public static (bool HasValue, bool IsNullish) GetValueInfo(string value)
+        {
+            var trimmed = (value ?? "").Trim();
+
+            var hasValue = !string.IsNullOrEmpty(trimmed);
+            var isNullish = hasValue && (trimmed == "-1" || trimmed == "0");
+
+            return (hasValue, isNullish);
+        }
     }
 
     /// <summary>
