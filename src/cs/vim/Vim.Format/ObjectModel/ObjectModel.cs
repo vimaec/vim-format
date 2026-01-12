@@ -594,6 +594,39 @@ namespace Vim.Format.ObjectModel
 
         public ParameterDescriptorStorageType GetParameterDescriptorStorageType()
             => (ParameterDescriptorStorageType) StorageType;
+
+        public static string GetParameterDescriptorFlagString(ParameterDescriptorFlag flag)
+        {
+            switch (flag)
+            {
+                case ParameterDescriptorFlag.IsBuiltIn:
+                    return "Built In";
+                case ParameterDescriptorFlag.IsProject:
+                    return "Project";
+                case ParameterDescriptorFlag.IsGlobal:
+                    return "Global";
+                default:
+                    return "Standard";
+            }
+        }
+
+        public static string GetParameterDescriptorStorageTypeString(ParameterDescriptorStorageType storageType)
+        {
+            switch (storageType)
+            {
+                case ParameterDescriptorStorageType.Integer:
+                    return "Integer";
+                case ParameterDescriptorStorageType.Double:
+                    return "Double";
+                case ParameterDescriptorStorageType.String:
+                    return "String";
+                case ParameterDescriptorStorageType.ElementId:
+                    return "ElementId";
+                case ParameterDescriptorStorageType.Unknown:
+                default:
+                    return "Unknown";
+            }
+        }
     }
 
     /// <summary>
@@ -700,14 +733,14 @@ namespace Vim.Format.ObjectModel
         public bool TryParseNativeValueAsBoolean(ParameterDescriptor desc, out bool result)
             => TryParseNativeValueAsBoolean(Values.NativeValue, desc, out result);
 
-        public static (bool HasValue, bool IsNullish) GetValueInfo(string value)
+        public static (bool HasValue, bool IsDubious) GetValueInfo(string value)
         {
             var trimmed = (value ?? "").Trim();
 
             var hasValue = !string.IsNullOrEmpty(trimmed);
-            var isNullish = hasValue && (trimmed == "-1" || trimmed == "0");
+            var isDubious = hasValue && (trimmed == "-1" || trimmed == "0");
 
-            return (hasValue, isNullish);
+            return (hasValue, isDubious);
         }
     }
 

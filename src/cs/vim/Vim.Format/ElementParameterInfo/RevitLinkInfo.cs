@@ -21,6 +21,7 @@ namespace Vim.Format.ElementParameterInfo
         public bool ProjectBasePointDataIsEqual { get; set; }
         public bool SurveyPointDataIsEqual { get; set; }
         public string Summary { get; set; }
+        public string SummaryMetric { get; set; }
 
         // Link
         public FamilyInstance LinkFamilyInstance { get; set; }
@@ -158,24 +159,19 @@ namespace Vim.Format.ElementParameterInfo
                 };
 
                 var pbpDelta = info.LinkProjectBasePointInParentSpace - info.ParentProjectBasePoint.Position; // the corrective offset to align the link project base point marker to the parent's.
-                var pbpDeltaStr = $"({ToStringRounded(pbpDelta.X)}, {ToStringRounded(pbpDelta.Y)}, {ToStringRounded(pbpDelta.Z)}) ft";
                 info.ProjectBasePointDelta = pbpDelta;
 
                 var spDelta = info.LinkSurveyPointInParentSpace - info.ParentSurveyPoint.Position; // the corrective offset to align the link survey point marker to the parent's.
-                var spDeltaStr = $"({ToStringRounded(spDelta.X)}, {ToStringRounded(spDelta.Y)}, {ToStringRounded(spDelta.Z)}) ft";
                 info.SurveyPointDelta = spDelta;
 
-                var pbpDataIsEqual = BasePointDataIsAlmostEqual(info.ParentProjectBasePoint, info.LinkProjectBasePoint, out var pbpDataSummary);
+                var pbpDataIsEqual = BasePointDataIsAlmostEqual(info.ParentProjectBasePoint, info.LinkProjectBasePoint, out var pbpDataSummary, out var pbpDataSummaryMetric);
                 info.ProjectBasePointDataIsEqual = pbpDataIsEqual;
 
-                var spDataIsEqual = BasePointDataIsAlmostEqual(info.ParentSurveyPoint, info.LinkSurveyPoint, out var spDataSummary);
+                var spDataIsEqual = BasePointDataIsAlmostEqual(info.ParentSurveyPoint, info.LinkSurveyPoint, out var spDataSummary, out var spDataSummaryMetric);
                 info.SurveyPointDataIsEqual = spDataIsEqual;
 
-                info.Summary =
-$@"{(pbpAligned ? "✅" : "❌")} Project Base Point markers {(pbpAligned ? "are" : "are not")} aligned.{(pbpAligned ? "" : $" 🔼 {pbpDeltaStr}")}
-{(pbpDataIsEqual ? "✅" : "❌")} Project Base Point data {(pbpDataIsEqual ? "is" : "is not")} equal.{(pbpDataIsEqual ? "" : $"{System.Environment.NewLine}{pbpDataSummary}")}
-{(spAligned ? "✅" : "❌")} Survey Point markers {(spAligned ? "are" : "are not")} aligned.{(spAligned ? "" : $" 🔼 {spDeltaStr}")}
-{(spDataIsEqual? "✅" : "❌")} Survey Point data {(spDataIsEqual ? "is" : "is not")} equal.{(spDataIsEqual ? "" : $"{System.Environment.NewLine}{spDataSummary}")}";
+                info.Summary = GetSummary(pbpAligned, pbpDelta, pbpDataIsEqual, pbpDataSummary, spAligned, spDelta, spDataIsEqual, spDataSummary, false);
+                info.SummaryMetric = GetSummary(pbpAligned, pbpDelta, pbpDataIsEqual, pbpDataSummaryMetric, spAligned, spDelta, spDataIsEqual, spDataSummaryMetric, true);
 
                 result.Add(info);
             }
@@ -183,28 +179,69 @@ $@"{(pbpAligned ? "✅" : "❌")} Project Base Point markers {(pbpAligned ? "are
             return result;
         }
 
-        private static bool BasePointDataIsAlmostEqual(BasePoint bp_parent, BasePoint bp_link, out string summary)
+        private static string GetSummary(
+            bool pbpAligned,
+            DVector3 pbpDelta,
+            bool pbpDataIsEqual,
+            string pbpDataSummary,
+            bool spAligned,
+            DVector3 spDelta,
+            bool spDataIsEqual,
+            string spDataSummary,
+            bool isMetric)
+        {
+            var pbpDeltaStr = DVector3ToStringRounded(pbpDelta, isMetric);
+            var spDeltaStr = DVector3ToStringRounded(spDelta, isMetric);
+
+            return
+$@"{(pbpAligned ? "✅" : "❌")} Project Base Point markers {(pbpAligned ? "are" : "are not")} aligned.{(pbpAligned ? "" : $" 🔼 {pbpDeltaStr}")}
+{(pbpDataIsEqual ? "✅" : "❌")} Project Base Point data {(pbpDataIsEqual ? "is" : "is not")} equal.{(pbpDataIsEqual ? "" : $"{System.Environment.NewLine}{pbpDataSummary}")}
+{(spAligned ? "✅" : "❌")} Survey Point markers {(spAligned ? "are" : "are not")} aligned.{(spAligned ? "" : $" 🔼 {spDeltaStr}")}
+{(spDataIsEqual ? "✅" : "❌")} Survey Point data {(spDataIsEqual ? "is" : "is not")} equal.{(spDataIsEqual ? "" : $"{System.Environment.NewLine}{spDataSummary}")}";
+        }
+
+        private static string DVector3ToStringRounded(DVector3 v, bool isMetric)
+        {
+            var unitSuffix = isMetric ? "m" : "ft";
+            var x = isMetric ? Units.FeetToMeters(v.X) ?? 0d : v.X;
+            var y = isMetric ? Units.FeetToMeters(v.Y) ?? 0d : v.Y;
+            var z = isMetric ? Units.FeetToMeters(v.Z) ?? 0d : v.Z;
+            return $"({ToStringRounded(x)}, {ToStringRounded(y)}, {ToStringRounded(z)}) {unitSuffix}";
+        }
+
+        private static bool BasePointDataIsAlmostEqual(BasePoint bp_parent, BasePoint bp_link, out string summary, out string summaryMetric)
         {
             var summaryList = new List<string>();
+            var summaryListMetric = new List<string>();
             const string tabPrefix = "  - ";
 
-            bool CompareBasePointDataValues(string property, double parentValue, double linkValue)
+            bool CompareBasePointDataValues(string property, double parentValue, double linkValue, bool canConvertFeetToMeters)
             {
                 var almostEqual = parentValue.AlmostEquals(linkValue, AlignmentToleranceDouble);
                 if (!almostEqual)
+                {
+                    // Imperial
                     summaryList.Add($"{tabPrefix}[{property}] Parent: {ToStringRounded(parentValue)} <> Link: {ToStringRounded(linkValue)}");
+
+                    // Metric
+                    var parentValueMetric = canConvertFeetToMeters ? Units.FeetToMeters(parentValue) ?? 0d : parentValue;
+                    var linkValueMetric = canConvertFeetToMeters ? Units.FeetToMeters(linkValue) ?? 0d : linkValue;
+                    var unitSuffix = canConvertFeetToMeters ? "m" : "";
+                    summaryListMetric.Add($"{tabPrefix}[{property}] Parent: {ToStringRounded(parentValueMetric)}{unitSuffix} <> Link: {ToStringRounded(linkValueMetric)}{unitSuffix}");
+                }
 
                 return almostEqual;
             }
 
-            var nsAlmostEqual = CompareBasePointDataValues("N/S", bp_parent.NorthSouth, bp_link.NorthSouth);
-            var ewAlmostEqual = CompareBasePointDataValues("E/W", bp_parent.EastWest, bp_link.EastWest);
-            var elevationAlmostEqual = CompareBasePointDataValues("Elevation", bp_parent.Elevation, bp_link.Elevation);
-            var angleToTrueNorthAlmostEqual = CompareBasePointDataValues("Angle to True North", bp_parent.AngleToTrueNorth, bp_link.AngleToTrueNorth);
+            var nsAlmostEqual = CompareBasePointDataValues("N/S", bp_parent.NorthSouth, bp_link.NorthSouth, true);
+            var ewAlmostEqual = CompareBasePointDataValues("E/W", bp_parent.EastWest, bp_link.EastWest, true);
+            var elevationAlmostEqual = CompareBasePointDataValues("Elevation", bp_parent.Elevation, bp_link.Elevation, true);
+            var angleToTrueNorthAlmostEqual = CompareBasePointDataValues("Angle to True North", bp_parent.AngleToTrueNorth, bp_link.AngleToTrueNorth, false);
 
             var dataIsAlmostEqual = nsAlmostEqual && ewAlmostEqual && elevationAlmostEqual && angleToTrueNorthAlmostEqual;
 
             summary = dataIsAlmostEqual ? "" : string.Join(System.Environment.NewLine, summaryList);
+            summaryMetric = dataIsAlmostEqual ? "" : string.Join(System.Environment.NewLine, summaryListMetric);
 
             return dataIsAlmostEqual;
         }
