@@ -376,6 +376,9 @@ class Element {
             table.getLocation_Z(index).then(v => result.location_Z = v),
             table.getFamilyName(index).then(v => result.familyName = v),
             table.getIsPinned(index).then(v => result.isPinned = v),
+            table.getCreator(index).then(v => result.creator = v),
+            table.getLastChangedBy(index).then(v => result.lastChangedBy = v),
+            table.getOwner(index).then(v => result.owner = v),
             table.getLevelIndex(index).then(v => result.levelIndex = v),
             table.getPhaseCreatedIndex(index).then(v => result.phaseCreatedIndex = v),
             table.getPhaseDemolishedIndex(index).then(v => result.phaseDemolishedIndex = v),
@@ -420,6 +423,9 @@ class ElementTable {
         let location_Z;
         let familyName;
         let isPinned;
+        let creator;
+        let lastChangedBy;
+        let owner;
         let levelIndex;
         let phaseCreatedIndex;
         let phaseDemolishedIndex;
@@ -441,6 +447,9 @@ class ElementTable {
             (async () => { location_Z = (await localTable.getNumberArray("float:Location.Z")); })(),
             (async () => { familyName = (await localTable.getStringArray("string:FamilyName")); })(),
             (async () => { isPinned = (await localTable.getBooleanArray("byte:IsPinned")); })(),
+            (async () => { creator = (await localTable.getStringArray("string:Creator")); })(),
+            (async () => { lastChangedBy = (await localTable.getStringArray("string:LastChangedBy")); })(),
+            (async () => { owner = (await localTable.getStringArray("string:Owner")); })(),
             (async () => { levelIndex = (await localTable.getNumberArray("index:Vim.Level:Level")); })(),
             (async () => { phaseCreatedIndex = (await localTable.getNumberArray("index:Vim.Phase:PhaseCreated")); })(),
             (async () => { phaseDemolishedIndex = (await localTable.getNumberArray("index:Vim.Phase:PhaseDemolished")); })(),
@@ -467,6 +476,9 @@ class ElementTable {
                 location_Z: location_Z ? location_Z[i] : undefined,
                 familyName: familyName ? familyName[i] : undefined,
                 isPinned: isPinned ? isPinned[i] : undefined,
+                creator: creator ? creator[i] : undefined,
+                lastChangedBy: lastChangedBy ? lastChangedBy[i] : undefined,
+                owner: owner ? owner[i] : undefined,
                 levelIndex: levelIndex ? levelIndex[i] : undefined,
                 phaseCreatedIndex: phaseCreatedIndex ? phaseCreatedIndex[i] : undefined,
                 phaseDemolishedIndex: phaseDemolishedIndex ? phaseDemolishedIndex[i] : undefined,
@@ -535,6 +547,24 @@ class ElementTable {
     }
     async getAllIsPinned() {
         return (await this.entityTable.getBooleanArray("byte:IsPinned"));
+    }
+    async getCreator(elementIndex) {
+        return (await this.entityTable.getString(elementIndex, "string:Creator"));
+    }
+    async getAllCreator() {
+        return (await this.entityTable.getStringArray("string:Creator"));
+    }
+    async getLastChangedBy(elementIndex) {
+        return (await this.entityTable.getString(elementIndex, "string:LastChangedBy"));
+    }
+    async getAllLastChangedBy() {
+        return (await this.entityTable.getStringArray("string:LastChangedBy"));
+    }
+    async getOwner(elementIndex) {
+        return (await this.entityTable.getString(elementIndex, "string:Owner"));
+    }
+    async getAllOwner() {
+        return (await this.entityTable.getStringArray("string:Owner"));
     }
     async getLevelIndex(elementIndex) {
         return await this.entityTable.getNumber(elementIndex, "index:Vim.Level:Level");
@@ -4851,6 +4881,11 @@ class BasePoint {
         result.index = index;
         await Promise.all([
             table.getIsSurveyPoint(index).then(v => result.isSurveyPoint = v),
+            table.getIsClipped(index).then(v => result.isClipped = v),
+            table.getNorthSouth(index).then(v => result.northSouth = v),
+            table.getEastWest(index).then(v => result.eastWest = v),
+            table.getElevation(index).then(v => result.elevation = v),
+            table.getAngleToTrueNorth(index).then(v => result.angleToTrueNorth = v),
             table.getPosition_X(index).then(v => result.position_X = v),
             table.getPosition_Y(index).then(v => result.position_Y = v),
             table.getPosition_Z(index).then(v => result.position_Z = v),
@@ -4883,6 +4918,11 @@ class BasePointTable {
     async getAll() {
         const localTable = await this.entityTable.getLocal();
         let isSurveyPoint;
+        let isClipped;
+        let northSouth;
+        let eastWest;
+        let elevation;
+        let angleToTrueNorth;
         let position_X;
         let position_Y;
         let position_Z;
@@ -4892,6 +4932,11 @@ class BasePointTable {
         let elementIndex;
         await Promise.all([
             (async () => { isSurveyPoint = (await localTable.getBooleanArray("byte:IsSurveyPoint")); })(),
+            (async () => { isClipped = (await localTable.getBooleanArray("byte:IsClipped")); })(),
+            (async () => { northSouth = (await localTable.getNumberArray("double:NorthSouth")); })(),
+            (async () => { eastWest = (await localTable.getNumberArray("double:EastWest")); })(),
+            (async () => { elevation = (await localTable.getNumberArray("double:Elevation")); })(),
+            (async () => { angleToTrueNorth = (await localTable.getNumberArray("double:AngleToTrueNorth")); })(),
             (async () => { position_X = (await localTable.getNumberArray("double:Position.X")); })(),
             (async () => { position_Y = (await localTable.getNumberArray("double:Position.Y")); })(),
             (async () => { position_Z = (await localTable.getNumberArray("double:Position.Z")); })(),
@@ -4906,6 +4951,11 @@ class BasePointTable {
             basePoint.push({
                 index: i,
                 isSurveyPoint: isSurveyPoint ? isSurveyPoint[i] : undefined,
+                isClipped: isClipped ? isClipped[i] : undefined,
+                northSouth: northSouth ? northSouth[i] : undefined,
+                eastWest: eastWest ? eastWest[i] : undefined,
+                elevation: elevation ? elevation[i] : undefined,
+                angleToTrueNorth: angleToTrueNorth ? angleToTrueNorth[i] : undefined,
                 position_X: position_X ? position_X[i] : undefined,
                 position_Y: position_Y ? position_Y[i] : undefined,
                 position_Z: position_Z ? position_Z[i] : undefined,
@@ -4922,6 +4972,36 @@ class BasePointTable {
     }
     async getAllIsSurveyPoint() {
         return (await this.entityTable.getBooleanArray("byte:IsSurveyPoint"));
+    }
+    async getIsClipped(basePointIndex) {
+        return (await this.entityTable.getBoolean(basePointIndex, "byte:IsClipped"));
+    }
+    async getAllIsClipped() {
+        return (await this.entityTable.getBooleanArray("byte:IsClipped"));
+    }
+    async getNorthSouth(basePointIndex) {
+        return (await this.entityTable.getNumber(basePointIndex, "double:NorthSouth"));
+    }
+    async getAllNorthSouth() {
+        return (await this.entityTable.getNumberArray("double:NorthSouth"));
+    }
+    async getEastWest(basePointIndex) {
+        return (await this.entityTable.getNumber(basePointIndex, "double:EastWest"));
+    }
+    async getAllEastWest() {
+        return (await this.entityTable.getNumberArray("double:EastWest"));
+    }
+    async getElevation(basePointIndex) {
+        return (await this.entityTable.getNumber(basePointIndex, "double:Elevation"));
+    }
+    async getAllElevation() {
+        return (await this.entityTable.getNumberArray("double:Elevation"));
+    }
+    async getAngleToTrueNorth(basePointIndex) {
+        return (await this.entityTable.getNumber(basePointIndex, "double:AngleToTrueNorth"));
+    }
+    async getAllAngleToTrueNorth() {
+        return (await this.entityTable.getNumberArray("double:AngleToTrueNorth"));
     }
     async getPosition_X(basePointIndex) {
         return (await this.entityTable.getNumber(basePointIndex, "double:Position.X"));
