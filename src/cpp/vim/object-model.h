@@ -998,6 +998,9 @@ namespace Vim
         float mLocation_Z;
         std::string mFamilyName;
         bool mIsPinned;
+        std::string mCreator;
+        std::string mLastChangedBy;
+        std::string mOwner;
         
         int mLevelIndex;
         Level* mLevel;
@@ -1051,6 +1054,9 @@ namespace Vim
             element->mLocation_Z = GetLocation_Z(elementIndex);
             element->mFamilyName = GetFamilyName(elementIndex);
             element->mIsPinned = GetIsPinned(elementIndex);
+            element->mCreator = GetCreator(elementIndex);
+            element->mLastChangedBy = GetLastChangedBy(elementIndex);
+            element->mOwner = GetOwner(elementIndex);
             element->mLevelIndex = GetLevelIndex(elementIndex);
             element->mPhaseCreatedIndex = GetPhaseCreatedIndex(elementIndex);
             element->mPhaseDemolishedIndex = GetPhaseDemolishedIndex(elementIndex);
@@ -1076,6 +1082,9 @@ namespace Vim
             bool existsLocation_Z = mEntityTable.column_exists("float:Location.Z");
             bool existsFamilyName = mEntityTable.column_exists("string:FamilyName");
             bool existsIsPinned = mEntityTable.column_exists("byte:IsPinned");
+            bool existsCreator = mEntityTable.column_exists("string:Creator");
+            bool existsLastChangedBy = mEntityTable.column_exists("string:LastChangedBy");
+            bool existsOwner = mEntityTable.column_exists("string:Owner");
             bool existsLevel = mEntityTable.column_exists("index:Vim.Level:Level");
             bool existsPhaseCreated = mEntityTable.column_exists("index:Vim.Phase:PhaseCreated");
             bool existsPhaseDemolished = mEntityTable.column_exists("index:Vim.Phase:PhaseDemolished");
@@ -1131,6 +1140,12 @@ namespace Vim
                 memcpy(isPinnedData, mEntityTable.mDataColumns["byte:IsPinned"].begin(), count * sizeof(bfast::byte));
             }
             
+            const std::vector<int>& creatorData = mEntityTable.column_exists("string:Creator") ? mEntityTable.mStringColumns["string:Creator"] : std::vector<int>();
+            
+            const std::vector<int>& lastChangedByData = mEntityTable.column_exists("string:LastChangedBy") ? mEntityTable.mStringColumns["string:LastChangedBy"] : std::vector<int>();
+            
+            const std::vector<int>& ownerData = mEntityTable.column_exists("string:Owner") ? mEntityTable.mStringColumns["string:Owner"] : std::vector<int>();
+            
             const std::vector<int>& levelData = mEntityTable.column_exists("index:Vim.Level:Level") ? mEntityTable.mIndexColumns["index:Vim.Level:Level"] : std::vector<int>();
             const std::vector<int>& phaseCreatedData = mEntityTable.column_exists("index:Vim.Phase:PhaseCreated") ? mEntityTable.mIndexColumns["index:Vim.Phase:PhaseCreated"] : std::vector<int>();
             const std::vector<int>& phaseDemolishedData = mEntityTable.column_exists("index:Vim.Phase:PhaseDemolished") ? mEntityTable.mIndexColumns["index:Vim.Phase:PhaseDemolished"] : std::vector<int>();
@@ -1165,6 +1180,12 @@ namespace Vim
                     entity.mFamilyName = std::string(reinterpret_cast<const char*>(mStrings[familyNameData[i]]));
                 if (existsIsPinned)
                     entity.mIsPinned = isPinnedData[i];
+                if (existsCreator)
+                    entity.mCreator = std::string(reinterpret_cast<const char*>(mStrings[creatorData[i]]));
+                if (existsLastChangedBy)
+                    entity.mLastChangedBy = std::string(reinterpret_cast<const char*>(mStrings[lastChangedByData[i]]));
+                if (existsOwner)
+                    entity.mOwner = std::string(reinterpret_cast<const char*>(mStrings[ownerData[i]]));
                 entity.mLevelIndex = existsLevel ? levelData[i] : -1;
                 entity.mPhaseCreatedIndex = existsPhaseCreated ? phaseCreatedData[i] : -1;
                 entity.mPhaseDemolishedIndex = existsPhaseDemolished ? phaseDemolishedData[i] : -1;
@@ -1449,6 +1470,93 @@ namespace Vim
             std::vector<bool>* result = new std::vector<bool>(isPinnedData, isPinnedData + count);
             
             delete[] isPinnedData;
+            
+            return result;
+        }
+        
+        std::string GetCreator(int elementIndex)
+        {
+            if (elementIndex < 0 || elementIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("string:Creator")) {
+                return std::string(reinterpret_cast<const char*>(mStrings[mEntityTable.mStringColumns["string:Creator"][elementIndex]]));
+            }
+            
+            return {};
+        }
+        
+        std::vector<std::string>* GetAllCreator()
+        {
+            const auto count = GetCount();
+            
+            const std::vector<int>& creatorData = mEntityTable.column_exists("string:Creator") ? mEntityTable.mStringColumns["string:Creator"] : std::vector<int>();
+            
+            std::vector<std::string>* result = new std::vector<std::string>();
+            result->reserve(count);
+            
+            for (int i = 0; i < count; ++i)
+            {
+                result->push_back(std::string(reinterpret_cast<const char*>(mStrings[creatorData[i]])));
+            }
+            
+            return result;
+        }
+        
+        std::string GetLastChangedBy(int elementIndex)
+        {
+            if (elementIndex < 0 || elementIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("string:LastChangedBy")) {
+                return std::string(reinterpret_cast<const char*>(mStrings[mEntityTable.mStringColumns["string:LastChangedBy"][elementIndex]]));
+            }
+            
+            return {};
+        }
+        
+        std::vector<std::string>* GetAllLastChangedBy()
+        {
+            const auto count = GetCount();
+            
+            const std::vector<int>& lastChangedByData = mEntityTable.column_exists("string:LastChangedBy") ? mEntityTable.mStringColumns["string:LastChangedBy"] : std::vector<int>();
+            
+            std::vector<std::string>* result = new std::vector<std::string>();
+            result->reserve(count);
+            
+            for (int i = 0; i < count; ++i)
+            {
+                result->push_back(std::string(reinterpret_cast<const char*>(mStrings[lastChangedByData[i]])));
+            }
+            
+            return result;
+        }
+        
+        std::string GetOwner(int elementIndex)
+        {
+            if (elementIndex < 0 || elementIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("string:Owner")) {
+                return std::string(reinterpret_cast<const char*>(mStrings[mEntityTable.mStringColumns["string:Owner"][elementIndex]]));
+            }
+            
+            return {};
+        }
+        
+        std::vector<std::string>* GetAllOwner()
+        {
+            const auto count = GetCount();
+            
+            const std::vector<int>& ownerData = mEntityTable.column_exists("string:Owner") ? mEntityTable.mStringColumns["string:Owner"] : std::vector<int>();
+            
+            std::vector<std::string>* result = new std::vector<std::string>();
+            result->reserve(count);
+            
+            for (int i = 0; i < count; ++i)
+            {
+                result->push_back(std::string(reinterpret_cast<const char*>(mStrings[ownerData[i]])));
+            }
             
             return result;
         }
@@ -11074,6 +11182,11 @@ namespace Vim
     public:
         int mIndex;
         bool mIsSurveyPoint;
+        bool mIsClipped;
+        double mNorthSouth;
+        double mEastWest;
+        double mElevation;
+        double mAngleToTrueNorth;
         double mPosition_X;
         double mPosition_Y;
         double mPosition_Z;
@@ -11105,6 +11218,11 @@ namespace Vim
             BasePoint* basePoint = new BasePoint();
             basePoint->mIndex = basePointIndex;
             basePoint->mIsSurveyPoint = GetIsSurveyPoint(basePointIndex);
+            basePoint->mIsClipped = GetIsClipped(basePointIndex);
+            basePoint->mNorthSouth = GetNorthSouth(basePointIndex);
+            basePoint->mEastWest = GetEastWest(basePointIndex);
+            basePoint->mElevation = GetElevation(basePointIndex);
+            basePoint->mAngleToTrueNorth = GetAngleToTrueNorth(basePointIndex);
             basePoint->mPosition_X = GetPosition_X(basePointIndex);
             basePoint->mPosition_Y = GetPosition_Y(basePointIndex);
             basePoint->mPosition_Z = GetPosition_Z(basePointIndex);
@@ -11118,6 +11236,11 @@ namespace Vim
         std::vector<BasePoint>* GetAll()
         {
             bool existsIsSurveyPoint = mEntityTable.column_exists("byte:IsSurveyPoint");
+            bool existsIsClipped = mEntityTable.column_exists("byte:IsClipped");
+            bool existsNorthSouth = mEntityTable.column_exists("double:NorthSouth");
+            bool existsEastWest = mEntityTable.column_exists("double:EastWest");
+            bool existsElevation = mEntityTable.column_exists("double:Elevation");
+            bool existsAngleToTrueNorth = mEntityTable.column_exists("double:AngleToTrueNorth");
             bool existsPosition_X = mEntityTable.column_exists("double:Position.X");
             bool existsPosition_Y = mEntityTable.column_exists("double:Position.Y");
             bool existsPosition_Z = mEntityTable.column_exists("double:Position.Z");
@@ -11134,6 +11257,31 @@ namespace Vim
             bfast::byte* isSurveyPointData = new bfast::byte[count];
             if (mEntityTable.column_exists("byte:IsSurveyPoint")) {
                 memcpy(isSurveyPointData, mEntityTable.mDataColumns["byte:IsSurveyPoint"].begin(), count * sizeof(bfast::byte));
+            }
+            
+            bfast::byte* isClippedData = new bfast::byte[count];
+            if (mEntityTable.column_exists("byte:IsClipped")) {
+                memcpy(isClippedData, mEntityTable.mDataColumns["byte:IsClipped"].begin(), count * sizeof(bfast::byte));
+            }
+            
+            double* northSouthData = new double[count];
+            if (mEntityTable.column_exists("double:NorthSouth")) {
+                memcpy(northSouthData, mEntityTable.mDataColumns["double:NorthSouth"].begin(), count * sizeof(double));
+            }
+            
+            double* eastWestData = new double[count];
+            if (mEntityTable.column_exists("double:EastWest")) {
+                memcpy(eastWestData, mEntityTable.mDataColumns["double:EastWest"].begin(), count * sizeof(double));
+            }
+            
+            double* elevationData = new double[count];
+            if (mEntityTable.column_exists("double:Elevation")) {
+                memcpy(elevationData, mEntityTable.mDataColumns["double:Elevation"].begin(), count * sizeof(double));
+            }
+            
+            double* angleToTrueNorthData = new double[count];
+            if (mEntityTable.column_exists("double:AngleToTrueNorth")) {
+                memcpy(angleToTrueNorthData, mEntityTable.mDataColumns["double:AngleToTrueNorth"].begin(), count * sizeof(double));
             }
             
             double* position_XData = new double[count];
@@ -11174,6 +11322,16 @@ namespace Vim
                 entity.mIndex = i;
                 if (existsIsSurveyPoint)
                     entity.mIsSurveyPoint = isSurveyPointData[i];
+                if (existsIsClipped)
+                    entity.mIsClipped = isClippedData[i];
+                if (existsNorthSouth)
+                    entity.mNorthSouth = northSouthData[i];
+                if (existsEastWest)
+                    entity.mEastWest = eastWestData[i];
+                if (existsElevation)
+                    entity.mElevation = elevationData[i];
+                if (existsAngleToTrueNorth)
+                    entity.mAngleToTrueNorth = angleToTrueNorthData[i];
                 if (existsPosition_X)
                     entity.mPosition_X = position_XData[i];
                 if (existsPosition_Y)
@@ -11191,6 +11349,11 @@ namespace Vim
             }
             
             delete[] isSurveyPointData;
+            delete[] isClippedData;
+            delete[] northSouthData;
+            delete[] eastWestData;
+            delete[] elevationData;
+            delete[] angleToTrueNorthData;
             delete[] position_XData;
             delete[] position_YData;
             delete[] position_ZData;
@@ -11225,6 +11388,146 @@ namespace Vim
             std::vector<bool>* result = new std::vector<bool>(isSurveyPointData, isSurveyPointData + count);
             
             delete[] isSurveyPointData;
+            
+            return result;
+        }
+        
+        bool GetIsClipped(int basePointIndex)
+        {
+            if (basePointIndex < 0 || basePointIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("byte:IsClipped")) {
+                return static_cast<bool>(*reinterpret_cast<bfast::byte*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["byte:IsClipped"].begin() + basePointIndex * sizeof(bfast::byte))));
+            }
+            
+            return {};
+        }
+        
+        std::vector<bool>* GetAllIsClipped()
+        {
+            const auto count = GetCount();
+            
+            bfast::byte* isClippedData = new bfast::byte[count];
+            if (mEntityTable.column_exists("byte:IsClipped")) {
+                memcpy(isClippedData, mEntityTable.mDataColumns["byte:IsClipped"].begin(), count * sizeof(bfast::byte));
+            }
+            
+            std::vector<bool>* result = new std::vector<bool>(isClippedData, isClippedData + count);
+            
+            delete[] isClippedData;
+            
+            return result;
+        }
+        
+        double GetNorthSouth(int basePointIndex)
+        {
+            if (basePointIndex < 0 || basePointIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("double:NorthSouth")) {
+                return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:NorthSouth"].begin() + basePointIndex * sizeof(double)));
+            }
+            
+            return {};
+        }
+        
+        std::vector<double>* GetAllNorthSouth()
+        {
+            const auto count = GetCount();
+            
+            double* northSouthData = new double[count];
+            if (mEntityTable.column_exists("double:NorthSouth")) {
+                memcpy(northSouthData, mEntityTable.mDataColumns["double:NorthSouth"].begin(), count * sizeof(double));
+            }
+            
+            std::vector<double>* result = new std::vector<double>(northSouthData, northSouthData + count);
+            
+            delete[] northSouthData;
+            
+            return result;
+        }
+        
+        double GetEastWest(int basePointIndex)
+        {
+            if (basePointIndex < 0 || basePointIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("double:EastWest")) {
+                return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:EastWest"].begin() + basePointIndex * sizeof(double)));
+            }
+            
+            return {};
+        }
+        
+        std::vector<double>* GetAllEastWest()
+        {
+            const auto count = GetCount();
+            
+            double* eastWestData = new double[count];
+            if (mEntityTable.column_exists("double:EastWest")) {
+                memcpy(eastWestData, mEntityTable.mDataColumns["double:EastWest"].begin(), count * sizeof(double));
+            }
+            
+            std::vector<double>* result = new std::vector<double>(eastWestData, eastWestData + count);
+            
+            delete[] eastWestData;
+            
+            return result;
+        }
+        
+        double GetElevation(int basePointIndex)
+        {
+            if (basePointIndex < 0 || basePointIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("double:Elevation")) {
+                return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:Elevation"].begin() + basePointIndex * sizeof(double)));
+            }
+            
+            return {};
+        }
+        
+        std::vector<double>* GetAllElevation()
+        {
+            const auto count = GetCount();
+            
+            double* elevationData = new double[count];
+            if (mEntityTable.column_exists("double:Elevation")) {
+                memcpy(elevationData, mEntityTable.mDataColumns["double:Elevation"].begin(), count * sizeof(double));
+            }
+            
+            std::vector<double>* result = new std::vector<double>(elevationData, elevationData + count);
+            
+            delete[] elevationData;
+            
+            return result;
+        }
+        
+        double GetAngleToTrueNorth(int basePointIndex)
+        {
+            if (basePointIndex < 0 || basePointIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("double:AngleToTrueNorth")) {
+                return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:AngleToTrueNorth"].begin() + basePointIndex * sizeof(double)));
+            }
+            
+            return {};
+        }
+        
+        std::vector<double>* GetAllAngleToTrueNorth()
+        {
+            const auto count = GetCount();
+            
+            double* angleToTrueNorthData = new double[count];
+            if (mEntityTable.column_exists("double:AngleToTrueNorth")) {
+                memcpy(angleToTrueNorthData, mEntityTable.mDataColumns["double:AngleToTrueNorth"].begin(), count * sizeof(double));
+            }
+            
+            std::vector<double>* result = new std::vector<double>(angleToTrueNorthData, angleToTrueNorthData + count);
+            
+            delete[] angleToTrueNorthData;
             
             return result;
         }

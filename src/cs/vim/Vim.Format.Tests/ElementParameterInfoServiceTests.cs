@@ -103,4 +103,33 @@ public static class ElementParameterInfoServiceTests
         Assert.AreEqual("B20", FamilyTypeUniformatInfo.GetUniformatLevel2(partial));
         Assert.AreEqual("", FamilyTypeUniformatInfo.GetUniformatLevel3(partial));
     }
+
+
+    public static IEnumerable<(List<string>, int, int, int, int)> TestSortAndGetCountCases = new[]
+    {
+        (new List<string> {  }, 0, 0, 0, 0),
+        (new List<string> { "a" }, 1, 1, 0, 1),
+        (new List<string> { "" }, 1, 0, 0, 1),
+        (new List<string> { "", "" }, 2, 0, 0, 1),
+        (new List<string> { "a", "" }, 2, 1, 0, 2),
+        (new List<string> { "-1" }, 1, 1, 1, 1),
+        (new List<string> { "-1", "" }, 2, 1, 1, 2),
+        (new List<string> { "-1", "0" }, 2, 2, 2, 2),
+        (new List<string> { "0", "0" }, 2, 2, 2, 1),
+        (new List<string> { "a", "b", "c", "d" }, 4, 4, 0, 4),
+        (new List<string> { "a", "a", "a", "a" }, 4, 4, 0, 1),
+        (new List<string> { "a", "b", "b", "a" }, 4, 4, 0, 2),
+        (new List<string> { "", "a", "0", "-1" }, 4, 3, 2, 4),
+    };
+
+    [TestCaseSource(nameof(TestSortAndGetCountCases))]
+    public static void TestSortAndGetCounts((List<string>, int, int, int, int) item)
+    {
+        ParameterSummary.SortAndGetCounts(item.Item1, out var countTotal, out var countFilled, out var countSuspicious, out var countDistinct);
+
+        Assert.AreEqual(item.Item2, countTotal);
+        Assert.AreEqual(item.Item3, countFilled);
+        Assert.AreEqual(item.Item4, countSuspicious);
+        Assert.AreEqual(item.Item5, countDistinct);
+    }
 }

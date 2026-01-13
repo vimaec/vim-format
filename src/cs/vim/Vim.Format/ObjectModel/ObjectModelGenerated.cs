@@ -191,6 +191,9 @@ namespace Vim.Format.ObjectModel {
                     (Location_Z == other.Location_Z) &&
                     (FamilyName == other.FamilyName) &&
                     (IsPinned == other.IsPinned) &&
+                    (Creator == other.Creator) &&
+                    (LastChangedBy == other.LastChangedBy) &&
+                    (Owner == other.Owner) &&
                     (_Level?.Index == other._Level?.Index) &&
                     (_PhaseCreated?.Index == other._PhaseCreated?.Index) &&
                     (_PhaseDemolished?.Index == other._PhaseDemolished?.Index) &&
@@ -1501,6 +1504,11 @@ namespace Vim.Format.ObjectModel {
                 var fieldsAreEqual =
                     (Index == other.Index) &&
                     (IsSurveyPoint == other.IsSurveyPoint) &&
+                    (IsClipped == other.IsClipped) &&
+                    (NorthSouth == other.NorthSouth) &&
+                    (EastWest == other.EastWest) &&
+                    (Elevation == other.Elevation) &&
+                    (AngleToTrueNorth == other.AngleToTrueNorth) &&
                     (Position_X == other.Position_X) &&
                     (Position_Y == other.Position_Y) &&
                     (Position_Z == other.Position_Z) &&
@@ -2129,6 +2137,12 @@ namespace Vim.Format.ObjectModel {
         public String GetElementFamilyName(int index, String defaultValue = "") => ElementFamilyName?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
         public IArray<Boolean> ElementIsPinned { get; }
         public Boolean GetElementIsPinned(int index, Boolean defaultValue = default) => ElementIsPinned?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<String> ElementCreator { get; }
+        public String GetElementCreator(int index, String defaultValue = "") => ElementCreator?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<String> ElementLastChangedBy { get; }
+        public String GetElementLastChangedBy(int index, String defaultValue = "") => ElementLastChangedBy?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<String> ElementOwner { get; }
+        public String GetElementOwner(int index, String defaultValue = "") => ElementOwner?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
         public IArray<int> ElementLevelIndex { get; }
         public int GetElementLevelIndex(int index) => ElementLevelIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
         public IArray<int> ElementPhaseCreatedIndex { get; }
@@ -2168,6 +2182,9 @@ namespace Vim.Format.ObjectModel {
             r.Location_Z = ElementLocation_Z.ElementAtOrDefault(n);
             r.FamilyName = ElementFamilyName.ElementAtOrDefault(n);
             r.IsPinned = ElementIsPinned.ElementAtOrDefault(n);
+            r.Creator = ElementCreator.ElementAtOrDefault(n);
+            r.LastChangedBy = ElementLastChangedBy.ElementAtOrDefault(n);
+            r.Owner = ElementOwner.ElementAtOrDefault(n);
             r._Level = new Relation<Vim.Format.ObjectModel.Level>(GetElementLevelIndex(n), GetLevel);
             r._PhaseCreated = new Relation<Vim.Format.ObjectModel.Phase>(GetElementPhaseCreatedIndex(n), GetPhase);
             r._PhaseDemolished = new Relation<Vim.Format.ObjectModel.Phase>(GetElementPhaseDemolishedIndex(n), GetPhase);
@@ -3420,6 +3437,16 @@ namespace Vim.Format.ObjectModel {
         
         public IArray<Boolean> BasePointIsSurveyPoint { get; }
         public Boolean GetBasePointIsSurveyPoint(int index, Boolean defaultValue = default) => BasePointIsSurveyPoint?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Boolean> BasePointIsClipped { get; }
+        public Boolean GetBasePointIsClipped(int index, Boolean defaultValue = default) => BasePointIsClipped?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> BasePointNorthSouth { get; }
+        public Double GetBasePointNorthSouth(int index, Double defaultValue = default) => BasePointNorthSouth?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> BasePointEastWest { get; }
+        public Double GetBasePointEastWest(int index, Double defaultValue = default) => BasePointEastWest?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> BasePointElevation { get; }
+        public Double GetBasePointElevation(int index, Double defaultValue = default) => BasePointElevation?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> BasePointAngleToTrueNorth { get; }
+        public Double GetBasePointAngleToTrueNorth(int index, Double defaultValue = default) => BasePointAngleToTrueNorth?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
         public IArray<Double> BasePointPosition_X { get; }
         public Double GetBasePointPosition_X(int index, Double defaultValue = default) => BasePointPosition_X?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
         public IArray<Double> BasePointPosition_Y { get; }
@@ -3443,6 +3470,11 @@ namespace Vim.Format.ObjectModel {
             r.Document = Document;
             r.Index = n;
             r.IsSurveyPoint = BasePointIsSurveyPoint.ElementAtOrDefault(n);
+            r.IsClipped = BasePointIsClipped.ElementAtOrDefault(n);
+            r.NorthSouth = BasePointNorthSouth.ElementAtOrDefault(n);
+            r.EastWest = BasePointEastWest.ElementAtOrDefault(n);
+            r.Elevation = BasePointElevation.ElementAtOrDefault(n);
+            r.AngleToTrueNorth = BasePointAngleToTrueNorth.ElementAtOrDefault(n);
             r.Position_X = BasePointPosition_X.ElementAtOrDefault(n);
             r.Position_Y = BasePointPosition_Y.ElementAtOrDefault(n);
             r.Position_Z = BasePointPosition_Z.ElementAtOrDefault(n);
@@ -4041,6 +4073,9 @@ namespace Vim.Format.ObjectModel {
             ElementLocation_Z = ElementEntityTable?.GetDataColumnValues<Single>("float:Location.Z") ?? Array.Empty<Single>().ToIArray();
             ElementFamilyName = ElementEntityTable?.GetStringColumnValues("string:FamilyName") ?? Array.Empty<String>().ToIArray();
             ElementIsPinned = ElementEntityTable?.GetDataColumnValues<Boolean>("byte:IsPinned") ?? Array.Empty<Boolean>().ToIArray();
+            ElementCreator = ElementEntityTable?.GetStringColumnValues("string:Creator") ?? Array.Empty<String>().ToIArray();
+            ElementLastChangedBy = ElementEntityTable?.GetStringColumnValues("string:LastChangedBy") ?? Array.Empty<String>().ToIArray();
+            ElementOwner = ElementEntityTable?.GetStringColumnValues("string:Owner") ?? Array.Empty<String>().ToIArray();
             WorksetId = WorksetEntityTable?.GetDataColumnValues<Int32>("int:Id") ?? Array.Empty<Int32>().ToIArray();
             WorksetName = WorksetEntityTable?.GetStringColumnValues("string:Name") ?? Array.Empty<String>().ToIArray();
             WorksetKind = WorksetEntityTable?.GetStringColumnValues("string:Kind") ?? Array.Empty<String>().ToIArray();
@@ -4207,6 +4242,11 @@ namespace Vim.Format.ObjectModel {
             WarningSeverity = WarningEntityTable?.GetStringColumnValues("string:Severity") ?? Array.Empty<String>().ToIArray();
             WarningDescription = WarningEntityTable?.GetStringColumnValues("string:Description") ?? Array.Empty<String>().ToIArray();
             BasePointIsSurveyPoint = BasePointEntityTable?.GetDataColumnValues<Boolean>("byte:IsSurveyPoint") ?? Array.Empty<Boolean>().ToIArray();
+            BasePointIsClipped = BasePointEntityTable?.GetDataColumnValues<Boolean>("byte:IsClipped") ?? Array.Empty<Boolean>().ToIArray();
+            BasePointNorthSouth = BasePointEntityTable?.GetDataColumnValues<Double>("double:NorthSouth") ?? Array.Empty<Double>().ToIArray();
+            BasePointEastWest = BasePointEntityTable?.GetDataColumnValues<Double>("double:EastWest") ?? Array.Empty<Double>().ToIArray();
+            BasePointElevation = BasePointEntityTable?.GetDataColumnValues<Double>("double:Elevation") ?? Array.Empty<Double>().ToIArray();
+            BasePointAngleToTrueNorth = BasePointEntityTable?.GetDataColumnValues<Double>("double:AngleToTrueNorth") ?? Array.Empty<Double>().ToIArray();
             BasePointPosition_X = BasePointEntityTable?.GetDataColumnValues<Double>("double:Position.X") ?? Array.Empty<Double>().ToIArray();
             BasePointPosition_Y = BasePointEntityTable?.GetDataColumnValues<Double>("double:Position.Y") ?? Array.Empty<Double>().ToIArray();
             BasePointPosition_Z = BasePointEntityTable?.GetDataColumnValues<Double>("double:Position.Z") ?? Array.Empty<Double>().ToIArray();
@@ -5175,6 +5215,9 @@ namespace Vim.Format.ObjectModel {
             Column_Location_Z = GetDataColumnValues<Single>("float:Location.Z") ?? Array.Empty<Single>();
             Column_FamilyName = GetStringColumnValues("string:FamilyName") ?? Array.Empty<String>();
             Column_IsPinned = GetDataColumnValues<Boolean>("byte:IsPinned") ?? Array.Empty<Boolean>();
+            Column_Creator = GetStringColumnValues("string:Creator") ?? Array.Empty<String>();
+            Column_LastChangedBy = GetStringColumnValues("string:LastChangedBy") ?? Array.Empty<String>();
+            Column_Owner = GetStringColumnValues("string:Owner") ?? Array.Empty<String>();
             Column_LevelIndex = GetIndexColumnValues("index:Vim.Level:Level") ?? Array.Empty<int>();
             Column_PhaseCreatedIndex = GetIndexColumnValues("index:Vim.Phase:PhaseCreated") ?? Array.Empty<int>();
             Column_PhaseDemolishedIndex = GetIndexColumnValues("index:Vim.Phase:PhaseDemolished") ?? Array.Empty<int>();
@@ -5206,6 +5249,12 @@ namespace Vim.Format.ObjectModel {
         public String GetFamilyName(int index, String @default = "") => Column_FamilyName.ElementAtOrDefault(index, @default);
         public Boolean[] Column_IsPinned { get; }
         public Boolean GetIsPinned(int index, Boolean @default = default) => Column_IsPinned.ElementAtOrDefault(index, @default);
+        public String[] Column_Creator { get; }
+        public String GetCreator(int index, String @default = "") => Column_Creator.ElementAtOrDefault(index, @default);
+        public String[] Column_LastChangedBy { get; }
+        public String GetLastChangedBy(int index, String @default = "") => Column_LastChangedBy.ElementAtOrDefault(index, @default);
+        public String[] Column_Owner { get; }
+        public String GetOwner(int index, String @default = "") => Column_Owner.ElementAtOrDefault(index, @default);
         public int[] Column_LevelIndex { get; }
         public int GetLevelIndex(int index) => Column_LevelIndex.ElementAtOrDefault(index, EntityRelation.None);
         public Level GetLevel(int index) => _GetReferencedLevel(GetLevelIndex(index));
@@ -5265,6 +5314,9 @@ namespace Vim.Format.ObjectModel {
             r.Location_Z = GetLocation_Z(index);
             r.FamilyName = GetFamilyName(index);
             r.IsPinned = GetIsPinned(index);
+            r.Creator = GetCreator(index);
+            r.LastChangedBy = GetLastChangedBy(index);
+            r.Owner = GetOwner(index);
             r._Level = new Relation<Vim.Format.ObjectModel.Level>(GetLevelIndex(index), _GetReferencedLevel);
             r._PhaseCreated = new Relation<Vim.Format.ObjectModel.Phase>(GetPhaseCreatedIndex(index), _GetReferencedPhaseCreated);
             r._PhaseDemolished = new Relation<Vim.Format.ObjectModel.Phase>(GetPhaseDemolishedIndex(index), _GetReferencedPhaseDemolished);
@@ -7328,6 +7380,11 @@ namespace Vim.Format.ObjectModel {
         {
             ParentTableSet = parentTableSet;
             Column_IsSurveyPoint = GetDataColumnValues<Boolean>("byte:IsSurveyPoint") ?? Array.Empty<Boolean>();
+            Column_IsClipped = GetDataColumnValues<Boolean>("byte:IsClipped") ?? Array.Empty<Boolean>();
+            Column_NorthSouth = GetDataColumnValues<Double>("double:NorthSouth") ?? Array.Empty<Double>();
+            Column_EastWest = GetDataColumnValues<Double>("double:EastWest") ?? Array.Empty<Double>();
+            Column_Elevation = GetDataColumnValues<Double>("double:Elevation") ?? Array.Empty<Double>();
+            Column_AngleToTrueNorth = GetDataColumnValues<Double>("double:AngleToTrueNorth") ?? Array.Empty<Double>();
             Column_Position_X = GetDataColumnValues<Double>("double:Position.X") ?? Array.Empty<Double>();
             Column_Position_Y = GetDataColumnValues<Double>("double:Position.Y") ?? Array.Empty<Double>();
             Column_Position_Z = GetDataColumnValues<Double>("double:Position.Z") ?? Array.Empty<Double>();
@@ -7339,6 +7396,16 @@ namespace Vim.Format.ObjectModel {
         
         public Boolean[] Column_IsSurveyPoint { get; }
         public Boolean GetIsSurveyPoint(int index, Boolean @default = default) => Column_IsSurveyPoint.ElementAtOrDefault(index, @default);
+        public Boolean[] Column_IsClipped { get; }
+        public Boolean GetIsClipped(int index, Boolean @default = default) => Column_IsClipped.ElementAtOrDefault(index, @default);
+        public Double[] Column_NorthSouth { get; }
+        public Double GetNorthSouth(int index, Double @default = default) => Column_NorthSouth.ElementAtOrDefault(index, @default);
+        public Double[] Column_EastWest { get; }
+        public Double GetEastWest(int index, Double @default = default) => Column_EastWest.ElementAtOrDefault(index, @default);
+        public Double[] Column_Elevation { get; }
+        public Double GetElevation(int index, Double @default = default) => Column_Elevation.ElementAtOrDefault(index, @default);
+        public Double[] Column_AngleToTrueNorth { get; }
+        public Double GetAngleToTrueNorth(int index, Double @default = default) => Column_AngleToTrueNorth.ElementAtOrDefault(index, @default);
         public Double[] Column_Position_X { get; }
         public Double GetPosition_X(int index, Double @default = default) => Column_Position_X.ElementAtOrDefault(index, @default);
         public Double[] Column_Position_Y { get; }
@@ -7362,6 +7429,11 @@ namespace Vim.Format.ObjectModel {
             var r = new BasePoint();
             r.Index = index;
             r.IsSurveyPoint = GetIsSurveyPoint(index);
+            r.IsClipped = GetIsClipped(index);
+            r.NorthSouth = GetNorthSouth(index);
+            r.EastWest = GetEastWest(index);
+            r.Elevation = GetElevation(index);
+            r.AngleToTrueNorth = GetAngleToTrueNorth(index);
             r.Position_X = GetPosition_X(index);
             r.Position_Y = GetPosition_Y(index);
             r.Position_Z = GetPosition_Z(index);
@@ -8212,6 +8284,21 @@ namespace Vim.Format.ObjectModel {
                 var columnData = new Boolean[entityCount];
                 for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].IsPinned; }
                 tb.AddDataColumn("byte:IsPinned", columnData);
+            }
+            {
+                var columnData = new String[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Creator; }
+                tb.AddStringColumn("string:Creator", columnData);
+            }
+            {
+                var columnData = new String[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].LastChangedBy; }
+                tb.AddStringColumn("string:LastChangedBy", columnData);
+            }
+            {
+                var columnData = new String[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Owner; }
+                tb.AddStringColumn("string:Owner", columnData);
             }
             {
                 var columnData = new int[entityCount];
@@ -9662,6 +9749,31 @@ namespace Vim.Format.ObjectModel {
                 var columnData = new Boolean[entityCount];
                 for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].IsSurveyPoint; }
                 tb.AddDataColumn("byte:IsSurveyPoint", columnData);
+            }
+            {
+                var columnData = new Boolean[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].IsClipped; }
+                tb.AddDataColumn("byte:IsClipped", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].NorthSouth; }
+                tb.AddDataColumn("double:NorthSouth", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].EastWest; }
+                tb.AddDataColumn("double:EastWest", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Elevation; }
+                tb.AddDataColumn("double:Elevation", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].AngleToTrueNorth; }
+                tb.AddDataColumn("double:AngleToTrueNorth", columnData);
             }
             {
                 var columnData = new Double[entityCount];
