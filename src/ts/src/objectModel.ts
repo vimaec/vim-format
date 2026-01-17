@@ -620,6 +620,9 @@ export interface IElement {
     location_Z?: number
     familyName?: string
     isPinned?: boolean
+    creator?: string
+    lastChangedBy?: string
+    owner?: string
     
     levelIndex?: number
     level?: ILevel
@@ -668,6 +671,12 @@ export interface IElementTable {
     getAllFamilyName(): Promise<string[] | undefined>
     getIsPinned(elementIndex: number): Promise<boolean | undefined>
     getAllIsPinned(): Promise<boolean[] | undefined>
+    getCreator(elementIndex: number): Promise<string | undefined>
+    getAllCreator(): Promise<string[] | undefined>
+    getLastChangedBy(elementIndex: number): Promise<string | undefined>
+    getAllLastChangedBy(): Promise<string[] | undefined>
+    getOwner(elementIndex: number): Promise<string | undefined>
+    getAllOwner(): Promise<string[] | undefined>
     
     getLevelIndex(elementIndex: number): Promise<number | undefined>
     getAllLevelIndex(): Promise<number[] | undefined>
@@ -715,6 +724,9 @@ export class Element implements IElement {
     location_Z?: number
     familyName?: string
     isPinned?: boolean
+    creator?: string
+    lastChangedBy?: string
+    owner?: string
     
     levelIndex?: number
     level?: ILevel
@@ -753,6 +765,9 @@ export class Element implements IElement {
             table.getLocation_Z(index).then(v => result.location_Z = v),
             table.getFamilyName(index).then(v => result.familyName = v),
             table.getIsPinned(index).then(v => result.isPinned = v),
+            table.getCreator(index).then(v => result.creator = v),
+            table.getLastChangedBy(index).then(v => result.lastChangedBy = v),
+            table.getOwner(index).then(v => result.owner = v),
             table.getLevelIndex(index).then(v => result.levelIndex = v),
             table.getPhaseCreatedIndex(index).then(v => result.phaseCreatedIndex = v),
             table.getPhaseDemolishedIndex(index).then(v => result.phaseDemolishedIndex = v),
@@ -808,6 +823,9 @@ export class ElementTable implements IElementTable {
         let location_Z: number[] | undefined
         let familyName: string[] | undefined
         let isPinned: boolean[] | undefined
+        let creator: string[] | undefined
+        let lastChangedBy: string[] | undefined
+        let owner: string[] | undefined
         let levelIndex: number[] | undefined
         let phaseCreatedIndex: number[] | undefined
         let phaseDemolishedIndex: number[] | undefined
@@ -830,6 +848,9 @@ export class ElementTable implements IElementTable {
             (async () => { location_Z = (await localTable.getNumberArray("float:Location.Z")) })(),
             (async () => { familyName = (await localTable.getStringArray("string:FamilyName")) })(),
             (async () => { isPinned = (await localTable.getBooleanArray("byte:IsPinned")) })(),
+            (async () => { creator = (await localTable.getStringArray("string:Creator")) })(),
+            (async () => { lastChangedBy = (await localTable.getStringArray("string:LastChangedBy")) })(),
+            (async () => { owner = (await localTable.getStringArray("string:Owner")) })(),
             (async () => { levelIndex = (await localTable.getNumberArray("index:Vim.Level:Level")) })(),
             (async () => { phaseCreatedIndex = (await localTable.getNumberArray("index:Vim.Phase:PhaseCreated")) })(),
             (async () => { phaseDemolishedIndex = (await localTable.getNumberArray("index:Vim.Phase:PhaseDemolished")) })(),
@@ -858,6 +879,9 @@ export class ElementTable implements IElementTable {
                 location_Z: location_Z ? location_Z[i] : undefined,
                 familyName: familyName ? familyName[i] : undefined,
                 isPinned: isPinned ? isPinned[i] : undefined,
+                creator: creator ? creator[i] : undefined,
+                lastChangedBy: lastChangedBy ? lastChangedBy[i] : undefined,
+                owner: owner ? owner[i] : undefined,
                 levelIndex: levelIndex ? levelIndex[i] : undefined,
                 phaseCreatedIndex: phaseCreatedIndex ? phaseCreatedIndex[i] : undefined,
                 phaseDemolishedIndex: phaseDemolishedIndex ? phaseDemolishedIndex[i] : undefined,
@@ -945,6 +969,30 @@ export class ElementTable implements IElementTable {
     
     async getAllIsPinned(): Promise<boolean[] | undefined> {
         return (await this.entityTable.getBooleanArray("byte:IsPinned"))
+    }
+    
+    async getCreator(elementIndex: number): Promise<string | undefined> {
+        return (await this.entityTable.getString(elementIndex, "string:Creator"))
+    }
+    
+    async getAllCreator(): Promise<string[] | undefined> {
+        return (await this.entityTable.getStringArray("string:Creator"))
+    }
+    
+    async getLastChangedBy(elementIndex: number): Promise<string | undefined> {
+        return (await this.entityTable.getString(elementIndex, "string:LastChangedBy"))
+    }
+    
+    async getAllLastChangedBy(): Promise<string[] | undefined> {
+        return (await this.entityTable.getStringArray("string:LastChangedBy"))
+    }
+    
+    async getOwner(elementIndex: number): Promise<string | undefined> {
+        return (await this.entityTable.getString(elementIndex, "string:Owner"))
+    }
+    
+    async getAllOwner(): Promise<string[] | undefined> {
+        return (await this.entityTable.getStringArray("string:Owner"))
     }
     
     async getLevelIndex(elementIndex: number): Promise<number | undefined> {
@@ -8175,6 +8223,11 @@ export class ElementInWarningTable implements IElementInWarningTable {
 export interface IBasePoint {
     index: number
     isSurveyPoint?: boolean
+    isClipped?: boolean
+    northSouth?: number
+    eastWest?: number
+    elevation?: number
+    angleToTrueNorth?: number
     position_X?: number
     position_Y?: number
     position_Z?: number
@@ -8193,6 +8246,16 @@ export interface IBasePointTable {
     
     getIsSurveyPoint(basePointIndex: number): Promise<boolean | undefined>
     getAllIsSurveyPoint(): Promise<boolean[] | undefined>
+    getIsClipped(basePointIndex: number): Promise<boolean | undefined>
+    getAllIsClipped(): Promise<boolean[] | undefined>
+    getNorthSouth(basePointIndex: number): Promise<number | undefined>
+    getAllNorthSouth(): Promise<number[] | undefined>
+    getEastWest(basePointIndex: number): Promise<number | undefined>
+    getAllEastWest(): Promise<number[] | undefined>
+    getElevation(basePointIndex: number): Promise<number | undefined>
+    getAllElevation(): Promise<number[] | undefined>
+    getAngleToTrueNorth(basePointIndex: number): Promise<number | undefined>
+    getAllAngleToTrueNorth(): Promise<number[] | undefined>
     getPosition_X(basePointIndex: number): Promise<number | undefined>
     getAllPosition_X(): Promise<number[] | undefined>
     getPosition_Y(basePointIndex: number): Promise<number | undefined>
@@ -8214,6 +8277,11 @@ export interface IBasePointTable {
 export class BasePoint implements IBasePoint {
     index: number
     isSurveyPoint?: boolean
+    isClipped?: boolean
+    northSouth?: number
+    eastWest?: number
+    elevation?: number
+    angleToTrueNorth?: number
     position_X?: number
     position_Y?: number
     position_Z?: number
@@ -8230,6 +8298,11 @@ export class BasePoint implements IBasePoint {
         
         await Promise.all([
             table.getIsSurveyPoint(index).then(v => result.isSurveyPoint = v),
+            table.getIsClipped(index).then(v => result.isClipped = v),
+            table.getNorthSouth(index).then(v => result.northSouth = v),
+            table.getEastWest(index).then(v => result.eastWest = v),
+            table.getElevation(index).then(v => result.elevation = v),
+            table.getAngleToTrueNorth(index).then(v => result.angleToTrueNorth = v),
             table.getPosition_X(index).then(v => result.position_X = v),
             table.getPosition_Y(index).then(v => result.position_Y = v),
             table.getPosition_Z(index).then(v => result.position_Z = v),
@@ -8273,6 +8346,11 @@ export class BasePointTable implements IBasePointTable {
         const localTable = await this.entityTable.getLocal()
         
         let isSurveyPoint: boolean[] | undefined
+        let isClipped: boolean[] | undefined
+        let northSouth: number[] | undefined
+        let eastWest: number[] | undefined
+        let elevation: number[] | undefined
+        let angleToTrueNorth: number[] | undefined
         let position_X: number[] | undefined
         let position_Y: number[] | undefined
         let position_Z: number[] | undefined
@@ -8283,6 +8361,11 @@ export class BasePointTable implements IBasePointTable {
         
         await Promise.all([
             (async () => { isSurveyPoint = (await localTable.getBooleanArray("byte:IsSurveyPoint")) })(),
+            (async () => { isClipped = (await localTable.getBooleanArray("byte:IsClipped")) })(),
+            (async () => { northSouth = (await localTable.getNumberArray("double:NorthSouth")) })(),
+            (async () => { eastWest = (await localTable.getNumberArray("double:EastWest")) })(),
+            (async () => { elevation = (await localTable.getNumberArray("double:Elevation")) })(),
+            (async () => { angleToTrueNorth = (await localTable.getNumberArray("double:AngleToTrueNorth")) })(),
             (async () => { position_X = (await localTable.getNumberArray("double:Position.X")) })(),
             (async () => { position_Y = (await localTable.getNumberArray("double:Position.Y")) })(),
             (async () => { position_Z = (await localTable.getNumberArray("double:Position.Z")) })(),
@@ -8299,6 +8382,11 @@ export class BasePointTable implements IBasePointTable {
             basePoint.push({
                 index: i,
                 isSurveyPoint: isSurveyPoint ? isSurveyPoint[i] : undefined,
+                isClipped: isClipped ? isClipped[i] : undefined,
+                northSouth: northSouth ? northSouth[i] : undefined,
+                eastWest: eastWest ? eastWest[i] : undefined,
+                elevation: elevation ? elevation[i] : undefined,
+                angleToTrueNorth: angleToTrueNorth ? angleToTrueNorth[i] : undefined,
                 position_X: position_X ? position_X[i] : undefined,
                 position_Y: position_Y ? position_Y[i] : undefined,
                 position_Z: position_Z ? position_Z[i] : undefined,
@@ -8318,6 +8406,46 @@ export class BasePointTable implements IBasePointTable {
     
     async getAllIsSurveyPoint(): Promise<boolean[] | undefined> {
         return (await this.entityTable.getBooleanArray("byte:IsSurveyPoint"))
+    }
+    
+    async getIsClipped(basePointIndex: number): Promise<boolean | undefined> {
+        return (await this.entityTable.getBoolean(basePointIndex, "byte:IsClipped"))
+    }
+    
+    async getAllIsClipped(): Promise<boolean[] | undefined> {
+        return (await this.entityTable.getBooleanArray("byte:IsClipped"))
+    }
+    
+    async getNorthSouth(basePointIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(basePointIndex, "double:NorthSouth"))
+    }
+    
+    async getAllNorthSouth(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:NorthSouth"))
+    }
+    
+    async getEastWest(basePointIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(basePointIndex, "double:EastWest"))
+    }
+    
+    async getAllEastWest(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:EastWest"))
+    }
+    
+    async getElevation(basePointIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(basePointIndex, "double:Elevation"))
+    }
+    
+    async getAllElevation(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:Elevation"))
+    }
+    
+    async getAngleToTrueNorth(basePointIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(basePointIndex, "double:AngleToTrueNorth"))
+    }
+    
+    async getAllAngleToTrueNorth(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:AngleToTrueNorth"))
     }
     
     async getPosition_X(basePointIndex: number): Promise<number | undefined> {

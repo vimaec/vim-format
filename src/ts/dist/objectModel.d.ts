@@ -205,6 +205,9 @@ export interface IElement {
     location_Z?: number;
     familyName?: string;
     isPinned?: boolean;
+    creator?: string;
+    lastChangedBy?: string;
+    owner?: string;
     levelIndex?: number;
     level?: ILevel;
     phaseCreatedIndex?: number;
@@ -250,6 +253,12 @@ export interface IElementTable {
     getAllFamilyName(): Promise<string[] | undefined>;
     getIsPinned(elementIndex: number): Promise<boolean | undefined>;
     getAllIsPinned(): Promise<boolean[] | undefined>;
+    getCreator(elementIndex: number): Promise<string | undefined>;
+    getAllCreator(): Promise<string[] | undefined>;
+    getLastChangedBy(elementIndex: number): Promise<string | undefined>;
+    getAllLastChangedBy(): Promise<string[] | undefined>;
+    getOwner(elementIndex: number): Promise<string | undefined>;
+    getAllOwner(): Promise<string[] | undefined>;
     getLevelIndex(elementIndex: number): Promise<number | undefined>;
     getAllLevelIndex(): Promise<number[] | undefined>;
     getLevel(elementIndex: number): Promise<ILevel | undefined>;
@@ -295,6 +304,9 @@ export declare class Element implements IElement {
     location_Z?: number;
     familyName?: string;
     isPinned?: boolean;
+    creator?: string;
+    lastChangedBy?: string;
+    owner?: string;
     levelIndex?: number;
     level?: ILevel;
     phaseCreatedIndex?: number;
@@ -344,6 +356,12 @@ export declare class ElementTable implements IElementTable {
     getAllFamilyName(): Promise<string[] | undefined>;
     getIsPinned(elementIndex: number): Promise<boolean | undefined>;
     getAllIsPinned(): Promise<boolean[] | undefined>;
+    getCreator(elementIndex: number): Promise<string | undefined>;
+    getAllCreator(): Promise<string[] | undefined>;
+    getLastChangedBy(elementIndex: number): Promise<string | undefined>;
+    getAllLastChangedBy(): Promise<string[] | undefined>;
+    getOwner(elementIndex: number): Promise<string | undefined>;
+    getAllOwner(): Promise<string[] | undefined>;
     getLevelIndex(elementIndex: number): Promise<number | undefined>;
     getAllLevelIndex(): Promise<number[] | undefined>;
     getLevel(elementIndex: number): Promise<ILevel | undefined>;
@@ -2689,6 +2707,11 @@ export declare class ElementInWarningTable implements IElementInWarningTable {
 export interface IBasePoint {
     index: number;
     isSurveyPoint?: boolean;
+    isClipped?: boolean;
+    northSouth?: number;
+    eastWest?: number;
+    elevation?: number;
+    angleToTrueNorth?: number;
     position_X?: number;
     position_Y?: number;
     position_Z?: number;
@@ -2704,6 +2727,16 @@ export interface IBasePointTable {
     getAll(): Promise<IBasePoint[]>;
     getIsSurveyPoint(basePointIndex: number): Promise<boolean | undefined>;
     getAllIsSurveyPoint(): Promise<boolean[] | undefined>;
+    getIsClipped(basePointIndex: number): Promise<boolean | undefined>;
+    getAllIsClipped(): Promise<boolean[] | undefined>;
+    getNorthSouth(basePointIndex: number): Promise<number | undefined>;
+    getAllNorthSouth(): Promise<number[] | undefined>;
+    getEastWest(basePointIndex: number): Promise<number | undefined>;
+    getAllEastWest(): Promise<number[] | undefined>;
+    getElevation(basePointIndex: number): Promise<number | undefined>;
+    getAllElevation(): Promise<number[] | undefined>;
+    getAngleToTrueNorth(basePointIndex: number): Promise<number | undefined>;
+    getAllAngleToTrueNorth(): Promise<number[] | undefined>;
     getPosition_X(basePointIndex: number): Promise<number | undefined>;
     getAllPosition_X(): Promise<number[] | undefined>;
     getPosition_Y(basePointIndex: number): Promise<number | undefined>;
@@ -2723,6 +2756,11 @@ export interface IBasePointTable {
 export declare class BasePoint implements IBasePoint {
     index: number;
     isSurveyPoint?: boolean;
+    isClipped?: boolean;
+    northSouth?: number;
+    eastWest?: number;
+    elevation?: number;
+    angleToTrueNorth?: number;
     position_X?: number;
     position_Y?: number;
     position_Z?: number;
@@ -2742,6 +2780,16 @@ export declare class BasePointTable implements IBasePointTable {
     getAll(): Promise<IBasePoint[]>;
     getIsSurveyPoint(basePointIndex: number): Promise<boolean | undefined>;
     getAllIsSurveyPoint(): Promise<boolean[] | undefined>;
+    getIsClipped(basePointIndex: number): Promise<boolean | undefined>;
+    getAllIsClipped(): Promise<boolean[] | undefined>;
+    getNorthSouth(basePointIndex: number): Promise<number | undefined>;
+    getAllNorthSouth(): Promise<number[] | undefined>;
+    getEastWest(basePointIndex: number): Promise<number | undefined>;
+    getAllEastWest(): Promise<number[] | undefined>;
+    getElevation(basePointIndex: number): Promise<number | undefined>;
+    getAllElevation(): Promise<number[] | undefined>;
+    getAngleToTrueNorth(basePointIndex: number): Promise<number | undefined>;
+    getAllAngleToTrueNorth(): Promise<number[] | undefined>;
     getPosition_X(basePointIndex: number): Promise<number | undefined>;
     getAllPosition_X(): Promise<number[] | undefined>;
     getPosition_Y(basePointIndex: number): Promise<number | undefined>;

@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 
 namespace Vim.Util
 {
@@ -32,6 +33,7 @@ namespace Vim.Util
         public static IEnumerable<T> Append<T>(this IEnumerable<T> xs, params T[] x)
             => xs.Concat(x);
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static T ElementAtOrDefault<T>(this IReadOnlyList<T> items, int index, T @default)
             => items == null || (index < 0 || index >= items.Count) ? @default : items[index];
 

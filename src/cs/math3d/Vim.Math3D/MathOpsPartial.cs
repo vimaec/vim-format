@@ -568,10 +568,24 @@ namespace Vim.Math3d
             => Matrix4x4.CreateRotation(self);
 
         /// <summary>
-        /// Returns a matri for translation and then rotation. 
+        /// Returns a matrix for translation and then rotation. 
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Matrix4x4 ToMatrix(this Transform self)
             => Matrix4x4.CreateTRS(self.Position, self.Orientation, Vector3.One);
+
+        /// <summary>
+        /// Casts the doubles in a DVector3 to create a Vector3
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static Vector3 ToVector3(this DVector3 self)
+            => new Vector3((float) self.X, (float) self.Y, (float) self.Z);
+
+        /// <summary>
+        /// Returns a DVector3 based on the given Vector3.
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static DVector3 ToDVector3(this Vector3 self)
+            => new DVector3(self.X, self.Y, self.Z);
     }
 }

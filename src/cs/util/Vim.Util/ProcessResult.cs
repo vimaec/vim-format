@@ -1,10 +1,15 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using System.Linq;
+using System.Text;
+using System.Threading;
 
 namespace Vim.Util
 {
     public class ProcessResult
     {
+        public const string ProgressPrefix = "Progress:";
+
         public readonly Process Process;
         public readonly string StdOut;
         public readonly string StdErr;
@@ -35,12 +40,85 @@ StdErr: {StdErr}";
         /// <summary>
         /// Waits for the process to exit and returns a ProcessResult.
         /// </summary>
-        public static ProcessResult GetResult(this Process process)
+        public static ProcessResult GetResult(this Process process, IProgress<string> progress = null, CancellationToken? ct = null)
         {
-            var stdOut = process.StartInfo.RedirectStandardOutput ? process.StandardOutput.ReadToEnd() : null;
-            var stdErr = process.StartInfo.RedirectStandardError ? process.StandardError.ReadToEnd() : null;
-            process.WaitForExit();
-            return new ProcessResult(process, stdOut, stdErr);
+            var redirectStdOut = process.StartInfo.RedirectStandardOutput;
+            var redirectStdErr = process.StartInfo.RedirectStandardError;
+
+            var stdOutStringBuilder = new StringBuilder();
+            var stdErrStringBuilder = new StringBuilder();
+
+            void HandleProgressMessage(string msg)
+            {
+                if (progress == null)
+                    return;
+
+                var prefixStart = msg.IndexOf(ProcessResult.ProgressPrefix, StringComparison.Ordinal);
+                if (prefixStart == -1)
+                    return;
+
+                var messageStart = prefixStart + ProcessResult.ProgressPrefix.Length;
+                var count = msg.Length - messageStart;
+                var progressMessage = msg.Substring(messageStart, count).Trim();
+
+                if (string.IsNullOrEmpty(progressMessage))
+                    return;
+
+                progress.Report(progressMessage);
+            }
+
+            void HandleOutputDataReceived(object sender, DataReceivedEventArgs e)
+            {
+                if (e.Data == null) return;
+                var msg = e.Data;
+                stdOutStringBuilder.AppendLine(msg);
+                Console.WriteLine($"[{process.ProcessName}:{process.Id}] {msg}");
+                HandleProgressMessage(msg);
+            }
+
+            void HandleErrorDataReceived(object sender, DataReceivedEventArgs e)
+            {
+                if (e.Data == null) return;
+                stdErrStringBuilder.AppendLine(e.Data);
+                Console.Error.WriteLine($"[{process.ProcessName}:{process.Id}] {e.Data}");
+            }
+
+            try
+            {
+                if (redirectStdOut)
+                {
+                    process.OutputDataReceived += HandleOutputDataReceived;
+                    process.BeginOutputReadLine();
+                }
+
+                if (redirectStdErr)
+                {
+                    process.ErrorDataReceived += HandleErrorDataReceived;
+                    process.BeginErrorReadLine();
+                }
+
+                ct?.Register(() =>
+                {
+                    try
+                    {
+                        if (!process.HasExited)
+                            process.Kill();
+                    }
+                    catch
+                    {
+                        // do nothing
+                    }
+                });
+
+                process.WaitForExit();
+
+                return new ProcessResult(process, stdOutStringBuilder.ToString(), stdErrStringBuilder.ToString());
+            }
+            finally
+            {
+                if (redirectStdOut) { process.OutputDataReceived -= HandleOutputDataReceived; }
+                if (redirectStdErr) { process.ErrorDataReceived -= HandleErrorDataReceived;  }
+            }
         }
 
         /// <summary>

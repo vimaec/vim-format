@@ -15,6 +15,17 @@ namespace Vim.Format
         public static class History
         {
             // Schema additions
+            //   Vim.Element__string:Creator
+            //   Vim.Element__string:LastChangedBy
+            //   Vim.Element__string:Owner
+            //   Vim.BasePoint__byte:IsClipped
+            //   Vim.BasePoint__double:NorthSouth
+            //   Vim.BasePoint__double:EastWest
+            //   Vim.BasePoint__double:Elevation
+            //   Vim.BasePoint__double:AngleToTrueNorth
+            public const string v5_7_0 = "5.7.0";
+
+            // Schema additions
             //   Vim.BimDocument__long:FileLength
             public const string v5_6_0 = "5.6.0";
 
@@ -175,7 +186,8 @@ namespace Vim.Format
         // ReSharper enable MemberHidesStaticFromOuterClass
 
         // [MAINTAIN] Add more object model SerializableVersions below and update the current one.
-        public static SerializableVersion Current => v5_6_0;
+        public static SerializableVersion Current => v5_7_0;
+        public static SerializableVersion v5_7_0 => SerializableVersion.Parse(History.v5_7_0);
         public static SerializableVersion v5_6_0 => SerializableVersion.Parse(History.v5_6_0);
         public static SerializableVersion v5_5_0 => SerializableVersion.Parse(History.v5_5_0);
         public static SerializableVersion v5_4_0 => SerializableVersion.Parse(History.v5_4_0);
@@ -243,7 +255,56 @@ namespace Vim.Format
         DesignOption = 23,
         // [MAINTAIN]
         // - Add more element kinds here if new element entities are added; do not re-order this enum!
+        // - Update the ToDisplayString extension function below.
         // - Also create a new SQL vw_Element_v* view with new element kind mapping.
+    }
+
+    public static class ElementKindExtensions
+    {
+        /// <summary>
+        /// Returns a display string representation of the element kind, allowing it to be ranked visually in user interfaces.
+        /// </summary>
+        public static string ToDisplayString(this ElementKind k)
+        {
+            string str;
+            switch (k)
+            {
+                case ElementKind.FamilyInstance:
+                    str = "Family Instance";
+                    break;
+                case ElementKind.FamilyType:
+                    str = "Family Type";
+                    break;
+                case ElementKind.AreaScheme:
+                    str = "Area Scheme";
+                    break;
+                case ElementKind.BasePoint:
+                    str = "Base Point";
+                    break;
+                case ElementKind.BimDocument:
+                    str = "BIM Document";
+                    break;
+                case ElementKind.PhaseFilter:
+                    str = "Phase Filter";
+                    break;
+                case ElementKind.ViewSheet:
+                    str = "View Sheet";
+                    break;
+                case ElementKind.ViewSheetSet:
+                    str = "View Sheet Set";
+                    break;
+                case ElementKind.AssemblyInstance:
+                    str = "Assembly Instance";
+                    break;
+                case ElementKind.DesignOption:
+                    str = "Design Option";
+                    break;
+                default:
+                    str = k.ToString("G");
+                    break;
+            }
+            return str;
+        }
     }
 
     public interface IElementKindTable : IVimEntityTable
@@ -527,6 +588,39 @@ namespace Vim.Format
 
         public ParameterDescriptorStorageType GetParameterDescriptorStorageType()
             => (ParameterDescriptorStorageType) StorageType;
+
+        public static string GetParameterDescriptorFlagString(ParameterDescriptorFlag flag)
+        {
+            switch (flag)
+            {
+                case ParameterDescriptorFlag.IsBuiltIn:
+                    return "Built In";
+                case ParameterDescriptorFlag.IsProject:
+                    return "Project";
+                case ParameterDescriptorFlag.IsGlobal:
+                    return "Global";
+                default:
+                    return "Standard";
+            }
+        }
+
+        public static string GetParameterDescriptorStorageTypeString(ParameterDescriptorStorageType storageType)
+        {
+            switch (storageType)
+            {
+                case ParameterDescriptorStorageType.Integer:
+                    return "Integer";
+                case ParameterDescriptorStorageType.Double:
+                    return "Double";
+                case ParameterDescriptorStorageType.String:
+                    return "String";
+                case ParameterDescriptorStorageType.ElementId:
+                    return "ElementId";
+                case ParameterDescriptorStorageType.Unknown:
+                default:
+                    return "Unknown";
+            }
+        }
     }
 
     /// <summary>
@@ -631,6 +725,16 @@ namespace Vim.Format
 
         public bool TryParseNativeValueAsBoolean(ParameterDescriptor desc, out bool result)
             => TryParseNativeValueAsBoolean(Values.NativeValue, desc, out result);
+
+        public static (bool HasValue, bool IsDubious) GetValueInfo(string value)
+        {
+            var trimmed = (value ?? "").Trim();
+
+            var hasValue = !string.IsNullOrEmpty(trimmed);
+            var isDubious = hasValue && (trimmed == "-1" || trimmed == "0");
+
+            return (hasValue, isDubious);
+        }
     }
 
     /// <summary>
@@ -662,6 +766,10 @@ namespace Vim.Format
 
         public string FamilyName;
         public bool IsPinned;
+
+        public string Creator;
+        public string LastChangedBy;
+        public string Owner;
 
         public Relation<Level> _Level;
         public Relation<Phase> _PhaseCreated;
@@ -1515,6 +1623,30 @@ namespace Vim.Format
         UnassignedPipe
     }
 
+    public static class SystemTypeExtensions
+    {
+        public static string ToDisplayString(this SystemType systemType)
+        {
+            switch (systemType)
+            {
+                case SystemType.StackedWall:
+                    return "Stacked Wall";
+                case SystemType.CurtainWall:
+                    return "Curtain Wall";
+                case SystemType.CurtainSystem:
+                    return "Curtain System";
+                case SystemType.UnassignedMechanical:
+                    return "Unassigned Mechanical";
+                case SystemType.UnassignedElectrical:
+                    return "Unassigned Electrical";
+                case SystemType.UnassignedPipe:
+                    return "Unassigned Pipe";
+                default:
+                    return systemType.ToString("G");
+            }
+        }
+    }
+
     /// <summary>
     /// Represents a collection of Elements which compose a System. These may be mechanical systems, piping systems, electrical systems, curtain walls, stairs, etc.
     /// </summary>
@@ -1633,6 +1765,31 @@ namespace Vim.Format
         /// Returns true if the BasePoint is the associated BimDocument's current survey point. The associated BimDocument is stored in the Element relation.
         /// </summary>
         public bool IsSurveyPoint;
+
+        /// <summary>
+        /// The clipped state of the survey point. This is only relevant if IsSurveyPoint is true, false otherwise.
+        /// </summary>
+        public bool IsClipped;
+
+        /// <summary>
+        /// The NorthSouth (N/S) value in Revit.
+        /// </summary>
+        public double NorthSouth;
+
+        /// <summary>
+        /// The EastWest (E/W) value in Revit.
+        /// </summary>
+        public double EastWest;
+
+        /// <summary>
+        /// The Elevation value in Revit.
+        /// </summary>
+        public double Elevation;
+
+        /// <summary>
+        /// The AngleToTrueNorth value in Revit, in radians.
+        /// </summary>
+        public double AngleToTrueNorth;
 
         /// <summary>
         /// The position of the BasePoint relative to the BimDocument's internal origin.

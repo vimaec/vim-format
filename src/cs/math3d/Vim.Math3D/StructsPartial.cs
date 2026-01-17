@@ -78,6 +78,13 @@ namespace Vim.Math3d
                 X * vector2.Y - Y * vector2.X);
 
         /// <summary>
+        /// Computes the cross product of two vectors.
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static Vector3 Cross(Vector3 v1, Vector3 v2)
+            => v1.Cross(v2);
+
+        /// <summary>
         /// Returns the mixed product
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

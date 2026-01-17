@@ -17,6 +17,8 @@ namespace Vim.Format
         /// </summary>
         public int Descendant { get; set; }
 
+        public bool IsSelf => Element == Descendant;
+
         /// <summary>
         /// The Descendant Element's Node index in the VIM file.
         /// Value is denormalized here to avoid unnecessary joins.
