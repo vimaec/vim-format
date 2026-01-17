@@ -8,12 +8,11 @@ using Vim.BFast;
 using Vim.Util;
 
 // TODO
+// - Visitor pattern on geometry deserialization to minimize memory footprint in 3dsMax importer.
 // - Clean up throw new Exception() -> turn them into actual VimExceptions
-// - Merge with mainline + integrate
 // - Test beyond this repository (i.e. with Revit exporter) > check the buildup using VimMesh
 //   - (!) Material and VimMaterial must be inserted simultaneously
 // - See if we can create a simple example to modify node render materials as well.
-// - Visitor pattern on geometry deserialization to minimize memory footprint in 3dsMax importer.
 
 namespace Vim.Format
 {

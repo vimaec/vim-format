@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using Vim.Util;
-using Vim.Format.ObjectModel;
 
 namespace Vim.Format
 {

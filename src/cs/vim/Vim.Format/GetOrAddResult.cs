@@ -1,4 +1,4 @@
-﻿namespace Vim.Format.ObjectModel
+﻿namespace Vim.Format
 {
     public readonly struct GetOrAddResult<TEntity> where TEntity : Entity
     {

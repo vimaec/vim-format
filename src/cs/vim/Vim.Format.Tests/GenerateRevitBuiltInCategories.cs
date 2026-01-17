@@ -54,7 +54,7 @@ internal static class GenerateRevitBuiltInCategories
         cb.AppendLine("using System.Collections.Generic;");
         cb.AppendLine();
 
-        cb.AppendLine($"namespace {nameof(Vim)}.{nameof(Format)}.{nameof(ObjectModel)}");
+        cb.AppendLine($"namespace {nameof(Vim)}.{nameof(Format)}");
         cb.AppendLine("{");
         {
             // enum RevitBuiltInCategory

@@ -6,7 +6,7 @@ using Vim.Util;
 
 namespace Vim.Format
 {
-    public static partial class ColumnExtensions
+    public static class TypeExtensions
     {
         public static string GetDataColumnNameTypePrefix(this Type type)
         {

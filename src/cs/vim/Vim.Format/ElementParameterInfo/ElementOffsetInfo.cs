@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Vim.Format.ObjectModel;
 using Vim.Util;
 
 namespace Vim.Format.ElementParameterInfo

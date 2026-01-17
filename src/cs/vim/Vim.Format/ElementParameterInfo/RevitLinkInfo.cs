@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Text;
-using Vim.Format.ObjectModel;
 using Vim.Math3d;
 using Vim.Util;
 
