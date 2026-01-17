@@ -51,6 +51,13 @@ namespace Vim.Format
             => GetColumnOrDefault(IndexColumnMap, columnName)?.AsArray<int>();
 
         /// <summary>
+        /// Returns the integer string indices column based on the given column name.
+        /// </summary>
+        public int[] GetStringIndices(string columnName)
+            => GetColumnOrDefault(StringColumnMap, columnName)?.AsArray<int>() ?? Array.Empty<int>();
+
+
+        /// <summary>
         /// Returns the string column based on the given column name.
         /// </summary>
         public string[] GetStringColumnValues(string columnName)
