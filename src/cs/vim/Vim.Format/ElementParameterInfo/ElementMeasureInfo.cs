@@ -1,4 +1,5 @@
-﻿using Vim.Util;
+﻿using System.Collections.Generic;
+using Vim.Util;
 
 namespace Vim.Format.ElementParameterInfo
 {

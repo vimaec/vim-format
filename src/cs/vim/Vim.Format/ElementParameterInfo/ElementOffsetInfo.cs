@@ -52,7 +52,7 @@ namespace Vim.Format.ElementParameterInfo
         /// <summary>
         /// Constructor
         /// </summary>
-        public ElementOffsetInfo(Element element, ParameterTable parameterTable, ElementIndexMaps elementIndexMaps)
+        public ElementOffsetInfo(Element element, ParameterTable parameterTable, VimElementIndexMaps elementIndexMaps)
         {
             Element = element;
 

@@ -284,7 +284,7 @@ namespace Vim.Format.ElementParameterInfo
         public static ElementOffsetInfo[] CreateElementOffsetInfos(
             ElementTable elementTable,
             ParameterTable parameterTable,
-            ElementIndexMaps elementIndexMaps)
+            VimElementIndexMaps elementIndexMaps)
             => elementTable
                 .AsParallel()
                 .Select(e => new ElementOffsetInfo(e, parameterTable, elementIndexMaps))
