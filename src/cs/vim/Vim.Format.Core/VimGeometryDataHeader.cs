@@ -87,12 +87,17 @@ namespace Vim.Format
             Validate();
         }
 
+        public static VimGeometryDataHeader Read(BFastBufferReader bufferReader)
+        {
+            var bufferSizeInBytes = bufferReader.Size;
+            var stream = bufferReader.Seek();
+            return Read(stream, bufferSizeInBytes);
+        }
+
         public static VimGeometryDataHeader Read(Stream stream, long size)
         {
             stream.ThrowIfNotSeekable("Failed to read VIM Geometry Header");
-
             var bytes  = stream.ReadArray<byte>((int)size);
-
             return new VimGeometryDataHeader(bytes);
         }
 

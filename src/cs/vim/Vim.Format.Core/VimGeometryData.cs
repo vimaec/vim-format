@@ -124,101 +124,175 @@ namespace Vim.Format
         { }
 
         /// <summary>
-        /// Reads the stream and returns a VimGeometry instance.
+        /// Reads the stream and returns a VimGeometryData instance.
         /// </summary>
         public VimGeometryData(Stream stream)
         {
             stream.ThrowIfNotSeekable("Could not read geometry");
 
+            BFastBufferReader indicesBufferReader = null;
+            long indexCount = 0;
+            long vertexCount = 0;
+
             foreach (var bufferReader in stream.GetBFastBufferReaders())
             {
                 var name = bufferReader.Name;
-                var bufferSizeInBytes = bufferReader.Size;
-                bufferReader.Seek();
 
                 switch (name)
                 {
                     case HeaderBufferName:
-                        Header = VimGeometryDataHeader.Read(stream, bufferSizeInBytes);
+                        Header = VimGeometryDataHeader.Read(bufferReader);
                         break;
                     case VerticesBufferName:
-                        Vertices = ReadDataItems<Vector3>(stream, bufferSizeInBytes, VerticesBufferDataItemSizeInBytes);
+                        Vertices = ReadBufferData<Vector3>(bufferReader, out vertexCount);
                         break;
                     case IndicesBufferName:
-                        Indices = ReadDataItems<int>(stream, bufferSizeInBytes, IndicesBufferDataItemSizeInBytes);
+                        indicesBufferReader = bufferReader;
+                        Indices = ReadBufferData<int>(bufferReader);
                         break;
                     case SubmeshIndexOffsetsBufferName:
-                        SubmeshIndexOffsets = ReadDataItems<int>(stream, bufferSizeInBytes, SubmeshIndexOffsetsDataItemSizeInBytes);
+                        SubmeshIndexOffsets = ReadBufferData<int>(bufferReader);
                         break;
                     case SubmeshMaterialsBufferName:
-                        SubmeshMaterials = ReadDataItems<int>(stream, bufferSizeInBytes, SubmeshMaterialsDataItemSizeInBytes);
+                        SubmeshMaterials = ReadBufferData<int>(bufferReader);
                         break;
                     case MeshSubmeshOffsetsBufferName:
-                        MeshSubmeshOffsets = ReadDataItems<int>(stream, bufferSizeInBytes, MeshSubmeshOffsetsDataItemSizeInBytes);
+                        MeshSubmeshOffsets = ReadBufferData<int>(bufferReader);
                         break;
                     case MaterialColorsBufferName:
-                        MaterialColors = ReadDataItems<Vector4>(stream, bufferSizeInBytes, MaterialColorsDataItemSizeInBytes);
+                        MaterialColors = ReadBufferData<Vector4>(bufferReader);
                         break;
                     case MaterialGlossinessBufferName:
-                        MaterialGlossiness = ReadDataItems<float>(stream, bufferSizeInBytes, MaterialGlossinessDataItemSizeInBytes);
+                        MaterialGlossiness = ReadBufferData<float>(bufferReader);
                         break;
                     case MaterialSmoothnessBufferName:
-                        MaterialSmoothness = ReadDataItems<float>(stream, bufferSizeInBytes, MaterialSmoothnessDataItemSizeInBytes);
+                        MaterialSmoothness = ReadBufferData<float>(bufferReader);
                         break;
                     case InstanceTransformsBufferName:
-                        InstanceTransforms = ReadDataItems<Matrix4x4>(stream, bufferSizeInBytes, InstanceTransformsDataItemSizeInBytes);
+                        InstanceTransforms = ReadBufferData<Matrix4x4>(bufferReader);
                         break;
                     case InstanceFlagsBufferName:
-                        InstanceFlags = ReadDataItems<ushort>(stream, bufferSizeInBytes, InstanceFlagsDataItemSizeInBytes);
+                        InstanceFlags = ReadBufferData<ushort>(bufferReader);
                         break;
                     case InstanceParentsBufferName:
-                        InstanceParents = ReadDataItems<int>(stream, bufferSizeInBytes, InstanceParentsDataItemSizeInBytes);
+                        InstanceParents = ReadBufferData<int>(bufferReader);
                         break;
                     case InstanceMeshesBufferName:
-                        InstanceMeshes = ReadDataItems<int>(stream, bufferSizeInBytes, InstanceMeshesDataItemSizeInBytes);
+                        InstanceMeshes = ReadBufferData<int>(bufferReader);
                         break;
                 }
             }
 
             // Synchronize the optional instance flags
+            InstanceFlags = EnsureInstanceFlags(InstanceCount, InstanceFlags);
 
-            if ((InstanceFlags?.Length ?? 0) == 0)
+            // Calculate offsets
+            CalculateOffsets(
+                indicesBufferReader,
+
+                );
+
+            //if (MeshCount > 0)
+            //{
+            //    if (MeshSubmeshOffsets != null)
+            //    {
+            //        MeshIndexOffsets = MeshSubmeshOffsets.Select(submesh => SubmeshIndexOffsets[submesh]).ToArray();
+            //        MeshSubmeshCount = GetSubArrayCounts(MeshSubmeshOffsets.Length, MeshSubmeshOffsets, SubmeshCount);
+            //    }
+
+            //    if (MeshIndexOffsets.Length != 0)
+            //    {
+            //        MeshIndexCounts = GetSubArrayCounts(MeshCount, MeshIndexOffsets, IndexCount);
+            //        MeshVertexOffsets = MeshIndexOffsets.Zip(MeshIndexCounts,
+            //            (start, count) => GetMinValue(Indices, start, count))
+            //            .ToArray();
+            //    }
+
+            //    if (MeshVertexOffsets.Length != 0)
+            //    {
+            //        MeshVertexCounts = GetSubArrayCounts(MeshCount, MeshVertexOffsets, VertexCount);
+            //    }
+            //}
+
+            //if (SubmeshIndexOffsets != null)
+            //{
+            //    SubmeshIndexCount = GetSubArrayCounts(SubmeshIndexOffsets.Length, SubmeshIndexOffsets, IndexCount);
+            //}
+        }
+
+        public static T[] ReadBufferData<T>(BFastBufferReader bufferReader, out long itemCount) where T : unmanaged
+        {
+            var stream = bufferReader.Seek();
+            itemCount = GetValidatedItemCount(bufferReader);
+            var data = stream.ReadArray<T>((int)itemCount);
+            return data;
+        }
+
+        public static ushort[] EnsureInstanceFlags(int instanceCount, ushort[] instanceFlagsCandidate)
+        {
+            if (instanceFlagsCandidate == null ||
+                instanceFlagsCandidate.Length != instanceCount)
             {
-                InstanceFlags = Enumerable.Repeat((ushort)0, InstanceCount).ToArray();
+                instanceFlagsCandidate = Enumerable.Repeat((ushort)0, instanceCount).ToArray();
             }
 
-            // Compute offsets
+            return instanceFlagsCandidate;
+        }
 
-            if (MeshCount > 0)
+        public static void CalculateOffsets(
+            BFastBufferReader indexReader,
+            int indexCount,
+            int vertexCount,
+            int meshCount,
+            int submeshCount,
+            int[] meshSubmeshOffsets,
+            int[] meshVertexOffsets,
+            int[] submeshIndexOffsets,
+            out int[] outMeshIndexOffsets,
+            out int[] outMeshSubmeshCount,
+            out int[] outMeshIndexCounts,
+            out int[] outMeshVertexCounts,
+            out int[] outSubmeshIndexCount)
+        {
+            outMeshIndexOffsets = Array.Empty<int>();
+            outMeshSubmeshCount = Array.Empty<int>();
+            outMeshIndexCounts = Array.Empty<int>();
+            outMeshVertexCounts = Array.Empty<int>();
+            outSubmeshIndexCount = Array.Empty<int>();
+
+            if (meshCount > 0)
             {
-                if (MeshSubmeshOffsets != null)
+                if (meshSubmeshOffsets != null)
                 {
-                    MeshIndexOffsets = MeshSubmeshOffsets.Select(submesh => SubmeshIndexOffsets[submesh]).ToArray();
-                    MeshSubmeshCount = GetSubArrayCounts(MeshSubmeshOffsets.Length, MeshSubmeshOffsets, SubmeshCount);
+                    outMeshIndexOffsets = meshSubmeshOffsets.Select(submesh => submeshIndexOffsets[submesh]).ToArray();
+                    outMeshSubmeshCount = GetSubArrayCounts(meshSubmeshOffsets.Length, meshSubmeshOffsets, submeshCount);
                 }
 
-                if (MeshIndexOffsets.Length != 0)
+                if (outMeshIndexOffsets.Length != 0)
                 {
-                    MeshIndexCounts = GetSubArrayCounts(MeshCount, MeshIndexOffsets, IndexCount);
-                    MeshVertexOffsets = MeshIndexOffsets.Zip(MeshIndexCounts,
-                        (start, count) => GetMinValue(Indices, start, count))
+                    outMeshIndexCounts = GetSubArrayCounts(meshCount, outMeshIndexOffsets, indexCount);
+                    meshVertexOffsets = outMeshIndexOffsets.Zip(outMeshIndexCounts,
+                        (start, count) => GetMinIntegerValue(indexReader, start, count))
                         .ToArray();
                 }
 
-                if (MeshVertexOffsets.Length != 0)
+                if (meshVertexOffsets.Length != 0)
                 {
-                    MeshVertexCounts = GetSubArrayCounts(MeshCount, MeshVertexOffsets, VertexCount);
+                    outMeshVertexCounts = GetSubArrayCounts(meshCount, meshVertexOffsets, vertexCount);
                 }
             }
 
-            if (SubmeshIndexOffsets != null)
+            if (submeshIndexOffsets != null)
             {
-                SubmeshIndexCount = GetSubArrayCounts(SubmeshIndexOffsets.Length, SubmeshIndexOffsets, IndexCount);
+                outSubmeshIndexCount = GetSubArrayCounts(submeshIndexOffsets.Length, submeshIndexOffsets, indexCount);
             }
         }
 
-        private static T[] ReadDataItems<T>(Stream stream, long bufferSizeInBytes, int dataItemSizeInBytes) where T : unmanaged
+        private static long GetValidatedItemCount(BFastBufferReader bufferReader)
         {
+            var bufferSizeInBytes = bufferReader.Size;
+            var dataItemSizeInBytes = GetDataItemSizeInBytesByBufferName(bufferReader.Name);
+
             if (bufferSizeInBytes % dataItemSizeInBytes != 0)
                 throw new Exception($"The number of bytes in the buffer {bufferSizeInBytes} does not divide by the item size in bytes {dataItemSizeInBytes}");
 
@@ -227,9 +301,32 @@ namespace Vim.Format
             if (itemCount > int.MaxValue)
                 throw new Exception($"Trying to read {itemCount} which is more than the maximum number of items in an array.");
 
-            var data = stream.ReadArray<T>((int)itemCount);
+            return itemCount;
+        }
 
-            return data;
+        private static int GetMinIntegerValue(BFastBufferReader bufferReader, int start, int count)
+        {
+            var stream = bufferReader.Seek();
+            stream.Seek(start * 4, SeekOrigin.Current);
+
+            var intBuffer = new byte[4]; // 4 bytes for an Int32
+            var min = int.MaxValue;
+
+            for (var i = 0; i < count; ++i)
+            {
+                // Read 4 bytes from the stream into the buffer
+                var bytesRead = stream.Read(intBuffer, 0, 4);
+                if (bytesRead < 4)
+                    throw new EndOfStreamException("Not enough data left in the stream.");
+
+                // Convert those 4 bytes to an integer
+                var value = BitConverter.ToInt32(intBuffer, 0);
+
+                if (value < min)
+                    min = value;
+            }
+
+            return min;
         }
 
         private static int GetMinValue(int[] array, int startIndex, int count)
@@ -243,7 +340,7 @@ namespace Vim.Format
             return min;
         }
 
-        private int[] GetSubArrayCounts(int numItems, int[] offsets, int totalCount)
+        private static int[] GetSubArrayCounts(int numItems, int[] offsets, int totalCount)
         {
             var counts = new int[numItems];
             for (var i = 0; i < numItems; ++i)
@@ -335,6 +432,51 @@ namespace Vim.Format
             for (var i = 0; i < MeshCount; ++i)
             {
                 yield return new VimMeshView(this, i);
+            }
+        }
+
+        public static long GetDataItemSizeInBytesByBufferName(string bufferName)
+        {
+            switch (bufferName)
+            {
+                case VerticesBufferName:
+                    return VerticesBufferDataItemSizeInBytes;
+
+                case IndicesBufferName:
+                    return IndicesBufferDataItemSizeInBytes;
+
+                case SubmeshIndexOffsetsBufferName:
+                    return SubmeshIndexOffsetsDataItemSizeInBytes;
+
+                case SubmeshMaterialsBufferName:
+                    return SubmeshMaterialsDataItemSizeInBytes;
+
+                case MeshSubmeshOffsetsBufferName:
+                    return MeshSubmeshOffsetsDataItemSizeInBytes;
+
+                case MaterialColorsBufferName:
+                    return MaterialColorsDataItemSizeInBytes;
+
+                case MaterialGlossinessBufferName:
+                    return MaterialGlossinessDataItemSizeInBytes;
+
+                case MaterialSmoothnessBufferName:
+                    return MaterialSmoothnessDataItemSizeInBytes;
+
+                case InstanceTransformsBufferName:
+                    return InstanceTransformsDataItemSizeInBytes;
+
+                case InstanceFlagsBufferName:
+                    return InstanceFlagsDataItemSizeInBytes;
+
+                case InstanceParentsBufferName:
+                    return InstanceParentsDataItemSizeInBytes;
+
+                case InstanceMeshesBufferName:
+                    return InstanceMeshesDataItemSizeInBytes;
+
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(bufferName), $"Unknown geometry buffer name: {bufferName}");
             }
         }
 

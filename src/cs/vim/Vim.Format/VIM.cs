@@ -9,6 +9,8 @@ using Vim.Util;
 
 // TODO
 // - Visitor pattern on geometry deserialization to minimize memory footprint in 3dsMax importer.
+//   - INSIGHT? VimGeometryData might be able to simply reference the VIM stream and maintain a bunch of BFastBufferReaders?
+//     - This would imply that VIM and VimGeometryData should implement IDisposable because they hold onto the FileStream
 // - Clean up throw new Exception() -> turn them into actual VimExceptions
 // - Test beyond this repository (i.e. with Revit exporter) > check the buildup using VimMesh
 //   - (!) Material and VimMaterial must be inserted simultaneously
@@ -223,14 +225,25 @@ namespace Vim.Format
         {
             vimStream.ThrowIfNotSeekable("Could not get VIM geometry");
 
-            var geometryBufferReader = vimStream.GetBFastBufferReader(GeometryDataBufferName);
-            if (geometryBufferReader == null)
-                return new VimGeometryData();
-
+            var geometryBufferReader = GetGeometryBufferReader(vimStream);
             geometryBufferReader.Seek(); // Seek to the correct position in the stream.
 
             // vim stream has been seeked to geometry buffer.
             return new VimGeometryData(vimStream);
+        }
+
+        /// <summary>
+        /// Returns the geometry buffer reader contained in the VIM in the given stream.
+        /// </summary>
+        public static BFastBufferReader GetGeometryBufferReader(Stream vimStream)
+        {
+            vimStream.ThrowIfNotSeekable("Could not get VIM geometry buffer reader");
+
+            var geometryBufferReader = vimStream.GetBFastBufferReader(GeometryDataBufferName);
+            if (geometryBufferReader == null)
+                throw new Exception($"Geometry buffer not found: {GeometryDataBufferName}");
+
+            return geometryBufferReader;
         }
 
         /// <summary>
