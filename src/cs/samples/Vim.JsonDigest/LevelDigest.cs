@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System.Collections.Generic;
-using Vim.LinqArray;
+using System.Linq;
+using Vim.Format;
 
 namespace Vim.JsonDigest
 {
@@ -55,8 +56,8 @@ namespace Vim.JsonDigest
         /// <summary>
         /// Returns a collection of level digests for each level in the given VIM scene.
         /// </summary>
-        public static IEnumerable<LevelDigest> GetLevelDigestCollection(VimScene vimScene)
-            => vimScene.DocumentModel.LevelList.Select(l =>
+        public static IEnumerable<LevelDigest> GetLevelDigestCollection(VIM vim)
+            => vim.GetEntityTableSet().LevelTable.Select(l =>
             {
                 var levelElement = l.Element;
 
@@ -71,6 +72,6 @@ namespace Vim.JsonDigest
                     Elevation = l.Elevation,
                     ProjectElevation = l.ProjectElevation,
                 };
-            }).ToEnumerable();
+            });
     }
 }

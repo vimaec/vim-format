@@ -1,9 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Text;
-using Vim.Format.ObjectModel;
 using Vim.Math3d;
 using Vim.Util;
+
+using Sys = System;
 
 namespace Vim.Format.ElementParameterInfo
 {
@@ -42,7 +43,7 @@ namespace Vim.Format.ElementParameterInfo
         private const int StringDoubleDecimals = 6;
         private static string ToStringRounded(double d) => d.ToString($"F{StringDoubleDecimals}");
 
-        public static List<RevitLinkInfo> GetRevitLinkInfoList(EntityTableSet tableSet)
+        public static List<RevitLinkInfo> GetRevitLinkInfoList(VimEntityTableSet tableSet)
         {
             var result = new List<RevitLinkInfo>();
 
@@ -195,9 +196,9 @@ namespace Vim.Format.ElementParameterInfo
 
             return
 $@"{(pbpAligned ? "✅" : "❌")} Project Base Point markers {(pbpAligned ? "are" : "are not")} aligned.{(pbpAligned ? "" : $" 🔼 {pbpDeltaStr}")}
-{(pbpDataIsEqual ? "✅" : "❌")} Project Base Point data {(pbpDataIsEqual ? "is" : "is not")} equal.{(pbpDataIsEqual ? "" : $"{System.Environment.NewLine}{pbpDataSummary}")}
+{(pbpDataIsEqual ? "✅" : "❌")} Project Base Point data {(pbpDataIsEqual ? "is" : "is not")} equal.{(pbpDataIsEqual ? "" : $"{Sys.Environment.NewLine}{pbpDataSummary}")}
 {(spAligned ? "✅" : "❌")} Survey Point markers {(spAligned ? "are" : "are not")} aligned.{(spAligned ? "" : $" 🔼 {spDeltaStr}")}
-{(spDataIsEqual ? "✅" : "❌")} Survey Point data {(spDataIsEqual ? "is" : "is not")} equal.{(spDataIsEqual ? "" : $"{System.Environment.NewLine}{spDataSummary}")}";
+{(spDataIsEqual ? "✅" : "❌")} Survey Point data {(spDataIsEqual ? "is" : "is not")} equal.{(spDataIsEqual ? "" : $"{Sys.Environment.NewLine}{spDataSummary}")}";
         }
 
         private static string DVector3ToStringRounded(DVector3 v, bool isMetric)
@@ -240,8 +241,8 @@ $@"{(pbpAligned ? "✅" : "❌")} Project Base Point markers {(pbpAligned ? "are
 
             var dataIsAlmostEqual = nsAlmostEqual && ewAlmostEqual && elevationAlmostEqual && angleToTrueNorthAlmostEqual;
 
-            summary = dataIsAlmostEqual ? "" : string.Join(System.Environment.NewLine, summaryList);
-            summaryMetric = dataIsAlmostEqual ? "" : string.Join(System.Environment.NewLine, summaryListMetric);
+            summary = dataIsAlmostEqual ? "" : string.Join(Sys.Environment.NewLine, summaryList);
+            summaryMetric = dataIsAlmostEqual ? "" : string.Join(Sys.Environment.NewLine, summaryListMetric);
 
             return dataIsAlmostEqual;
         }

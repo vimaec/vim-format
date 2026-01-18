@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Linq;
-using Vim.Format.ObjectModel;
+using Vim.Format;
 
 namespace Vim.JsonDigest
 {
@@ -114,53 +114,61 @@ namespace Vim.JsonDigest
         /// <summary>
         /// Returns a collection of element digests for each element in the given VIM scene.
         /// </summary>
-        public static IEnumerable<ElementDigest> GetElementDigestCollection(VimScene vimScene)
+        public static IEnumerable<ElementDigest> GetElementDigestCollection(VIM vim)
         {
             var result = new List<ElementDigest>();
 
-            for (var elementIndex = 0; elementIndex < vimScene.DocumentModel.NumElement; ++elementIndex)
+            var tableSet = vim.GetEntityTableSet();
+
+            var elementTable = tableSet.ElementTable;
+            var bimDocumentTable = tableSet.BimDocumentTable;
+            var categoryTable = tableSet.CategoryTable;
+
+            for (var elementIndex = 0; elementIndex < elementTable.RowCount; ++elementIndex)
             {
-                var elementInfo = vimScene.DocumentModel.GetElementInfo(elementIndex);
-                
+                var bimDocumentIndex = elementTable.GetBimDocumentIndex(elementIndex);
+                var categoryIndex = elementTable.GetCategoryIndex(elementIndex);
+
                 var elementDigest = new ElementDigest
                 {
-                    VimIndex = elementInfo.ElementIndex,
-                    ElementId = elementInfo.ElementId,
-                    ElementUniqueId = elementInfo.ElementUniqueId,
-                    Name = elementInfo.ElementName,
-                    BimDocumentName = elementInfo.BimDocument.Name,
-                    CategoryName = elementInfo.CategoryName,
-                    BuiltInCategoryName = elementInfo.CategoryBuiltInName,
-                    FamilyName = elementInfo.FamilyName,
-                    FamilyTypeName = elementInfo.FamilyTypeName,
-                    IsFamilyInstance = elementInfo.IsFamilyInstance,
-                    IsFamilyType = elementInfo.IsFamilyType,
-                    IsFamily = elementInfo.IsFamily,
-                    IsSystem = elementInfo.IsSystem,
-                    Ref_BimDocumentDigest_VimIndex = elementInfo.BimDocumentIndex,
-                    Ref_LevelDigest_VimIndex = elementInfo.LevelIndex,
-                    Ref_RoomDigest_VimIndex = elementInfo.RoomIndex,
+                    VimIndex = elementIndex,
+                    ElementId = elementTable.GetId(elementIndex),
+                    ElementUniqueId = elementTable.GetUniqueId(elementIndex),
+                    Name = elementTable.GetName(elementIndex),
+                    BimDocumentName = bimDocumentTable.GetName(bimDocumentIndex),
+                    CategoryName = categoryTable.GetName(categoryIndex),
+                    BuiltInCategoryName = categoryTable.GetBuiltInCategory(categoryIndex),
+                    FamilyName = elementTable.GetFamilyNameEx(elementIndex),
+                    FamilyTypeName = elementTable.GetFamilyTypeName(elementIndex),
+                    IsFamilyInstance = elementTable.IsFamilyInstance(elementIndex),
+                    IsFamilyType = elementTable.IsFamilyType(elementIndex),
+                    IsFamily = elementTable.IsFamily(elementIndex),
+                    IsSystem = elementTable.IsSystem(elementIndex),
+                    Ref_BimDocumentDigest_VimIndex = bimDocumentIndex,
+                    Ref_LevelDigest_VimIndex = elementTable.GetLevelIndex(elementIndex),
+                    Ref_RoomDigest_VimIndex = elementTable.GetRoomIndex(elementIndex),
                 };
 
                 // Add the parameters to the element. NOTE: this generates a lot of duplicated strings.
-                var parameters = elementInfo.GetScopedParameters();
 
-                if (parameters.TryGetValue(ElementInfo.ParameterScope.FamilyInstance, out var familyInstanceParameters))
+                var parameterTable = tableSet.ParameterTable;
+
+                var familyInstanceParameterIndices = elementTable.GetFamilyInstanceParameterIndices(elementIndex);
+                foreach (var pi  in familyInstanceParameterIndices)
                 {
-                    elementDigest.FamilyInstanceParameters.AddRange(
-                        familyInstanceParameters.Select(ParameterDigest.CreateFromParameter));
+                    elementDigest.FamilyInstanceParameters.Add(ParameterDigest.CreateFromParameter(parameterTable.Get(pi)));
                 }
 
-                if (parameters.TryGetValue(ElementInfo.ParameterScope.FamilyType, out var familyTypeParameters))
+                var familyTypeParameterIndices = elementTable.GetFamilyTypeParameterIndices(elementIndex);
+                foreach (var pi in familyTypeParameterIndices)
                 {
-                    elementDigest.FamilyTypeParameters.AddRange(
-                        familyTypeParameters.Select(ParameterDigest.CreateFromParameter));
+                    elementDigest.FamilyTypeParameters.Add(ParameterDigest.CreateFromParameter(parameterTable.Get(pi)));
                 }
 
-                if (parameters.TryGetValue(ElementInfo.ParameterScope.Family, out var familyParameters))
+                var familyParameterIndices = elementTable.GetFamilyParameterIndices(elementIndex);
+                foreach (var pi in familyParameterIndices)
                 {
-                    elementDigest.FamilyParameters.AddRange(
-                        familyParameters.Select(ParameterDigest.CreateFromParameter));
+                    elementDigest.FamilyParameters.Add(ParameterDigest.CreateFromParameter(parameterTable.Get(pi)));
                 }
 
                 result.Add(elementDigest);

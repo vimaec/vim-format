@@ -3,6 +3,7 @@ using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Vim.Format;
 
 namespace Vim.JsonDigest
 {
@@ -39,21 +40,21 @@ namespace Vim.JsonDigest
         /// <summary>
         /// VIM scene constructor used for serialization.
         /// </summary>
-        public VimJsonDigest(VimScene vimScene)
+        public VimJsonDigest(VIM vim)
         {
-            BimDocumentDigestCollection = BimDocumentDigest.GetBimDocumentDigestCollection(vimScene).ToList(); 
-            ElementDigestCollection = ElementDigest.GetElementDigestCollection(vimScene).ToList();
-            LevelDigestCollection = LevelDigest.GetLevelDigestCollection(vimScene).ToList();
-            RoomDigestCollection = RoomDigest.GetRoomDigestCollection(vimScene).ToList();
-            AreaDigestCollection = AreaDigest.GetAreaDigestCollection(vimScene).ToList();
-            MaterialDigestCollection = MaterialDigest.GetMaterialDigestCollection(vimScene).ToList();
+            BimDocumentDigestCollection = BimDocumentDigest.GetBimDocumentDigestCollection(vim).ToList(); 
+            ElementDigestCollection = ElementDigest.GetElementDigestCollection(vim).ToList();
+            LevelDigestCollection = LevelDigest.GetLevelDigestCollection(vim).ToList();
+            RoomDigestCollection = RoomDigest.GetRoomDigestCollection(vim).ToList();
+            AreaDigestCollection = AreaDigest.GetAreaDigestCollection(vim).ToList();
+            MaterialDigestCollection = MaterialDigest.GetMaterialDigestCollection(vim).ToList();
         }
 
         /// <summary>
         /// Stream constructor used for serialization. Note: this stream must be seekable.
         /// </summary>
-        public VimJsonDigest(Stream stream)
-            : this(VimScene.LoadVim(stream))
+        public VimJsonDigest(Stream stream, string vimFilePath)
+            : this(VIM.Open(stream, vimFilePath))
         { }
 
         public JObject ToJObject()

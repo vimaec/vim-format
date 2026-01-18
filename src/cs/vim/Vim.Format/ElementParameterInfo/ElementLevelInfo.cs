@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using Vim.Format.ObjectModel;
+using System.Linq;
 using Vim.Util;
 
 // ReSharper disable InconsistentNaming
@@ -143,7 +143,7 @@ namespace Vim.Format.ElementParameterInfo
         /// Returns the element index.
         /// </summary>
         public int GetElementIndexOrNone()
-            => Element.IndexOrDefault();
+            => EntityRelation.IndexOrDefault(Element);
 
         /// <summary>
         /// The schedule level associated to the element parameters. Can be null.
@@ -292,8 +292,8 @@ namespace Vim.Format.ElementParameterInfo
             FamilyInstanceTable familyInstanceTable,
             LevelTable levelTable,
             ParameterTable parameterTable,
-            ElementIndexMaps elementIndexMaps,
-            ElementGeometryMap elementGeometryMap,
+            VimElementIndexMaps elementIndexMaps,
+            VimElementGeometryInfo[] elementGeometryMap,
             IReadOnlyDictionary<int, LevelInfo> levelInfoMap,
             IReadOnlyList<LevelInfo> orderedLevelInfosByProjectElevation,
             IReadOnlyDictionary<long, LevelInfo> elementIdToLevelInfoMap,
@@ -313,7 +313,7 @@ namespace Vim.Format.ElementParameterInfo
                     LevelInfo = levelInfo;
                 }
             }
-            
+
             if (TryGetHostLevel(element, elementTable, familyInstanceTable, levelTable, elementIndexMaps, elementIdToLevelInfoMap, out var hostLevelInfo))
                 HostLevelInfo = hostLevelInfo;
 
@@ -372,7 +372,7 @@ namespace Vim.Format.ElementParameterInfo
             ElementTable elementTable,
             FamilyInstanceTable familyInstanceTable,
             LevelTable levelTable,
-            ElementIndexMaps elementIndexMaps,
+            VimElementIndexMaps elementIndexMaps,
             IReadOnlyDictionary<long, LevelInfo> elementIdToLevelInfoMap,
             out LevelInfo hostLevelInfo)
         {
@@ -435,9 +435,9 @@ namespace Vim.Format.ElementParameterInfo
             int elementIndex,
             double? primaryProjectElevation,
             IReadOnlyList<LevelInfo> orderedLevelInfosByProjectElevation,
-            ElementGeometryMap elementGeometryMap,
+            VimElementGeometryInfo[] elementGeometryMap,
             double geometryContainmentTolerance,
-            out LevelInfo maybeBuildingStoryAbove, 
+            out LevelInfo maybeBuildingStoryAbove,
             out LevelInfo maybeBuildingStoryCurrentOrBelow,
             out LevelInfo maybeBuildingStoryGeometryMin,
             out LevelInfo maybeBuildingStoryGeometryMax)
@@ -453,7 +453,7 @@ namespace Vim.Format.ElementParameterInfo
             // Note: Level.ProjectElevation is relative to the internal scene origin (0,0,0), and so is the vim scene's geometry.
             var elementGeometryInfo = elementGeometryMap.ElementAtOrDefault(elementIndex);
 
-            var hasGeometry = elementGeometryInfo?.HasGeometry ?? false;
+            var hasGeometry = elementGeometryInfo?.HasMesh ?? false;
             if (!hasGeometry)
                 return BuildingStoryGeometryContainment.NoGeometry;
 

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Vim.Format.ObjectModel;
 using Vim.Util;
 
 // ReSharper disable InconsistentNaming
@@ -24,7 +23,7 @@ namespace Vim.Format.ElementParameterInfo
         //
         //     b) the "survey point" of the bim document
         //
-        //     For more information on these values, check the Revit API documentation and see ObjectModel.cs > BasePoint.
+        //     For more information on these values, check the Revit API documentation and see cs > BasePoint.
         //
         // Additionally, a Level may be qualified as either a building story or not.
         //
@@ -45,7 +44,7 @@ namespace Vim.Format.ElementParameterInfo
         /// </summary>
         public int GetElementIndexOrNone()
             => Level.GetElementIndexOrNone();
-        
+
         /// <summary>
         /// The name of the Level.
         /// </summary>
@@ -85,7 +84,7 @@ namespace Vim.Format.ElementParameterInfo
         /// </summary>
         public double? ElevationRelativeToProjectBasePointDecimalFeet
             => ElevationRelativeToProjectBasePointDecimalFeetUnrounded == null
-                ? (double?) null
+                ? (double?)null
                 : Math.Round(ElevationRelativeToProjectBasePointDecimalFeetUnrounded.Value, RoundingDigits);
 
         /// <summary>
@@ -178,7 +177,7 @@ namespace Vim.Format.ElementParameterInfo
         /// </summary>
         public double? BuildingStoryAboveHeightFeetDecimal
             => BuildingStoryAboveHeightFeetDecimalUnrounded == null
-                ? (double?) null
+                ? (double?)null
                 : Math.Round(BuildingStoryAboveHeightFeetDecimalUnrounded.Value, RoundingDigits);
 
         /// <summary>
@@ -207,7 +206,7 @@ namespace Vim.Format.ElementParameterInfo
             Level level,
             FamilyTypeTable familyTypeTable,
             ParameterTable parameterTable,
-            ElementIndexMaps elementIndexMaps,
+            VimElementIndexMaps elementIndexMaps,
             IReadOnlyDictionary<long, Level> elementIdToLevelMap,
             IReadOnlyDictionary<long, BasePoint> elementIdToBasePointMap)
         {
@@ -215,12 +214,12 @@ namespace Vim.Format.ElementParameterInfo
 
             var projectBasePoint = elementIdToBasePointMap.Values.FirstOrDefault(bp => bp.IsSurveyPoint == false);
             ElevationRelativeToProjectBasePointDecimalFeetUnrounded = projectBasePoint == null
-                ? (double?) null
+                ? (double?)null
                 : Level.ProjectElevation - projectBasePoint.Position_Z;
-            
+
             var surveyPoint = elementIdToBasePointMap.Values.FirstOrDefault(bp => bp.IsSurveyPoint);
             ElevationRelativeToSurveyPointDecimalFeetUnrounded = surveyPoint == null
-                ? (double?) null
+                ? (double?)null
                 : Level.ProjectElevation - surveyPoint.Position_Z;
 
             ReadLevelParameters(parameterTable, elementIndexMaps, elementIdToLevelMap);
@@ -230,7 +229,7 @@ namespace Vim.Format.ElementParameterInfo
 
         private void ReadLevelParameters(
             ParameterTable parameterTable,
-            ElementIndexMaps elementIndexMaps,
+            VimElementIndexMaps elementIndexMaps,
             IReadOnlyDictionary<long, Level> elementIdToLevelMap)
         {
             var levelElementParameterIndices = elementIndexMaps.GetParameterIndicesFromElementIndex(GetElementIndexOrNone());
@@ -267,7 +266,7 @@ namespace Vim.Format.ElementParameterInfo
         private void ReadLevelTypeParameters(
             FamilyTypeTable familyTypeTable,
             ParameterTable parameterTable,
-            ElementIndexMaps elementIndexMaps)
+            VimElementIndexMaps elementIndexMaps)
         {
             var levelTypeElementIndex = familyTypeTable.GetElementIndex(Level.FamilyTypeIndex);
 

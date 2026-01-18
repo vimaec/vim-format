@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Linq;
-using Vim.LinqArray;
+using Vim.Format;
 
 namespace Vim.JsonDigest
 {
@@ -64,10 +64,12 @@ namespace Vim.JsonDigest
         /// <summary>
         /// Returns the collection of material digests for each material in the given VIM scene.
         /// </summary>
-        public static IEnumerable<MaterialDigest> GetMaterialDigestCollection(VimScene vimScene)
+        public static IEnumerable<MaterialDigest> GetMaterialDigestCollection(VIM vim)
         {
+            var tableSet = vim.GetEntityTableSet();
+
             // First, we initialize the collection of MaterialInfo instances based on each material in the VIM scene.
-            var materialDigests = vimScene.DocumentModel.MaterialList.Select(m =>
+            var materialDigests = tableSet.MaterialTable.Select(m =>
                 new MaterialDigest()
                 {
                     VimIndex = m.Index,
@@ -82,7 +84,7 @@ namespace Vim.JsonDigest
                 }).ToArray();
 
             // Next, we iterate over all the MaterialInElement associative objects and update the MaterialInfos we created above.
-            foreach (var materialInElement in vimScene.DocumentModel.MaterialInElementList.ToEnumerable())
+            foreach (var materialInElement in tableSet.MaterialInElementTable)
             {
                 var material = materialInElement.Material;
                 var element = materialInElement.Element;

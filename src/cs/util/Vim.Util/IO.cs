@@ -355,5 +355,17 @@ namespace Vim.Util
             Process.Start(new ProcessStartInfo(uri) { UseShellExecute = true });
             return true;
         }
+
+        public static void ThrowIfNotSeekable(this Stream stream, string errorPreamble)
+        {
+            if (!stream.CanSeek)
+                throw new InvalidOperationException($"{errorPreamble}. Stream must be seekable.");
+        }
+
+        public static void ThrowIfNotExists(this FileInfo fileInfo, string errorPreamble)
+        {
+            if (!fileInfo.Exists)
+                throw new FileNotFoundException(errorPreamble, fileInfo.FullName);
+        }
     }
 }

@@ -56,7 +56,7 @@ public class GetVimJsonDigest
             // Create a VIM json digest from the memory stream.
             _logger.LogTrace("Preparing to read VIM file");
 
-            var vimJsonDigest = new VimJsonDigest(memoryStream);
+            var vimJsonDigest = new VimJsonDigest(memoryStream, "");
 
             _logger.LogTrace("Created VIM json digest");
 

@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System.Collections.Generic;
-using Vim.LinqArray;
+using System.Linq;
+using Vim.Format;
 
 namespace Vim.JsonDigest
 {
@@ -68,8 +69,8 @@ namespace Vim.JsonDigest
         /// <summary>
         /// Returns a collection of room digests for each room in the given VIM scene.
         /// </summary>
-        public static IEnumerable<RoomDigest> GetRoomDigestCollection(VimScene vimScene)
-            => vimScene.DocumentModel.RoomList.Select(r =>
+        public static IEnumerable<RoomDigest> GetRoomDigestCollection(VIM vim)
+            => vim.GetEntityTableSet().RoomTable.Select(r =>
             {
                 var roomElement = r.Element;
 
@@ -87,6 +88,6 @@ namespace Vim.JsonDigest
                     Volume = r.Volume,
                     Perimeter = r.Perimeter
                 };
-            }).ToEnumerable();
+            });
     }
 }

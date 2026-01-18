@@ -377,5 +377,15 @@ namespace Vim.Util
             hash = MixFinal(hash);
             return (int)hash;
         }
+
+        public static int GetSequenceHash(int[] values)
+        {
+            var hashStruct = new HashCodeStd2();
+            foreach (var item in values)
+            {
+                hashStruct.Add(item);
+            }
+            return hashStruct.ToHashCode();
+        }
     }
 }

@@ -5,7 +5,6 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using Vim.Format;
-using Vim.Format.ObjectModel;
 using Vim.Math3d;
 using Vim.Util;
 
@@ -14,7 +13,7 @@ namespace Vim.Gltf.Converter
     /// <summary>
     /// A bare-bones example of converting a GLTF into a VIM file.
     /// </summary>
-    public class GltfToVimStore : ObjectModelStore
+    public class GltfToVimStore : VimBuilder
     {
         // ASSEMBLY VERSION INFO
         private static readonly Version AssemblyVersion = typeof(GltfToVimStore).Assembly.GetName().Version;
@@ -31,7 +30,7 @@ namespace Vim.Gltf.Converter
         {
             var store = new GltfToVimStore(gltfFilePath, scale);
             store.VisitGltf();
-            store.WriteVim(vimFilePath);
+            store.Write(vimFilePath);
         }
 
         private readonly float _scale;
@@ -44,6 +43,7 @@ namespace Vim.Gltf.Converter
         /// Private constructor. Please use the static function ConvertGltfToVim to convert a GLTF file into a VIM file.
         /// </summary>
         private GltfToVimStore(string gltfFilePath, float scale = MetersToFeet)
+            : base(nameof(GltfToVimStore), SchemaVersion.Current, "0.0.0")
         {
             _gltfFilePath = gltfFilePath;
             _scale = scale;
@@ -74,16 +74,16 @@ namespace Vim.Gltf.Converter
         /// Stores a default empty display unit entity.
         /// </summary>
         private DisplayUnit StoreDefaultDisplayUnit()
-            => ObjectModelBuilder.DisplayUnitBuilder.Add(DisplayUnit.Empty).Entity;
+            => DisplayUnitBuilder.Add(DisplayUnit.Empty).Entity;
 
         /// <summary>
         /// Since GLTF does not contain Category information, we will store a single default Category
         /// entity which will be applied to all elements.
         /// </summary>
         private Category StoreDefaultCategory()
-            => ObjectModelBuilder.CategoryBuilder.Add(new Category
+            => CategoryBuilder.Add(new Category
             {
-                Id = VimConstants.SyntheticCategoryId,
+                Id = VimEntityTableConstants.SyntheticCategoryId,
                 BuiltInCategory = "GLTF_CATEGORY",
                 Name = "GLTF Object",
                 CategoryType = "GLTF",
@@ -97,15 +97,15 @@ namespace Vim.Gltf.Converter
             BimDocument bimDocument,
             Category category)
         {
-            var familyElement = ObjectModelBuilder.ElementBuilder.Add(new Element
+            var familyElement = ElementBuilder.Add(new Element
             {
-                Id = VimConstants.SyntheticElementId,
+                Id = VimEntityTableConstants.SyntheticElementId,
                 Name = "GLTF Family",
                 _BimDocument = { Index = bimDocument.Index },
                 _Category = { Index = category.Index }
             }).Entity; 
 
-            return ObjectModelBuilder.FamilyBuilder.Add(new Family
+            return FamilyBuilder.Add(new Family
             {
                 _Element = { Index = familyElement.Index },
             }).Entity;
@@ -120,15 +120,15 @@ namespace Vim.Gltf.Converter
             Category category,
             Family family)
         {
-            var familyTypeElement = ObjectModelBuilder.ElementBuilder.Add(new Element
+            var familyTypeElement = ElementBuilder.Add(new Element
             {
-                Id = VimConstants.SyntheticElementId,
+                Id = VimEntityTableConstants.SyntheticElementId,
                 Name = "GLTF Family Type",
                 _BimDocument = { Index = bimDocument.Index },
                 _Category = { Index = category.Index }
             }).Entity;
 
-            return ObjectModelBuilder.FamilyTypeBuilder.Add(new FamilyType
+            return FamilyTypeBuilder.Add(new FamilyType
             {
                 _Element = { Index = familyTypeElement.Index },
                 _Family = { Index = family.Index }
@@ -141,7 +141,7 @@ namespace Vim.Gltf.Converter
         private BimDocument StoreGltfModel(string gltfFilePath, SharpGLTF.Schema2.ModelRoot gltfModel, Category category)
         {
             // Create a BIM document representing the GLTF model.
-            var bimDocument = ObjectModelBuilder.BimDocumentBuilder.Add(new BimDocument
+            var bimDocument = BimDocumentBuilder.Add(new BimDocument
             {
                 Title = Path.GetFileNameWithoutExtension(gltfFilePath),
                 Name = Path.GetFileName(gltfFilePath),
@@ -149,7 +149,7 @@ namespace Vim.Gltf.Converter
             }).Entity;
 
             // Create an element to hold the BIM document's parameters.
-            var elementEntity = ObjectModelBuilder.ElementBuilder.Add(bimDocument.CreateParameterHolderElement()).Entity;
+            var elementEntity = ElementBuilder.Add(bimDocument.CreateParameterHolderElement()).Entity;
             elementEntity._Category.Index = category.Index;
             elementEntity._BimDocument.Index = bimDocument.Index;
             bimDocument._Element.Index = elementEntity.Index;
@@ -168,14 +168,14 @@ namespace Vim.Gltf.Converter
         private void StoreParameter(Element elementEntity, string name, string value)
         {
             // Get (or add) the cached parameter descriptor associated with the name.
-            var parameterDescriptor = ObjectModelBuilder.ParameterDescriptorBuilder.GetOrAdd(name, _ => new ParameterDescriptor()
+            var parameterDescriptor = ParameterDescriptorBuilder.GetOrAdd(name, _ => new ParameterDescriptor()
             {
                 Name = name,
                 _DisplayUnit = { Index = _defaultDisplayUnit.Index },
             }).Entity;
 
             // Store the parameter value. We use AddUntracked because it doesn't waste time doing a cache lookup.
-            ObjectModelBuilder.ParameterBuilder.AddUntracked(new Parameter
+            ParameterBuilder.AddUntracked(new Parameter
             {
                 Values = (value, value),
                 _ParameterDescriptor = { Index = parameterDescriptor.Index },
@@ -192,7 +192,7 @@ namespace Vim.Gltf.Converter
             Category category)
         {
             // For illustrative purposes, we'll convert a GLTF scene into a Site entity.
-            var siteElement = ObjectModelBuilder.ElementBuilder.Add(new Element()
+            var siteElement = ElementBuilder.Add(new Element()
             {
                 Id = gltfScene.LogicalIndex,
                 Name = gltfScene.Name,
@@ -200,7 +200,7 @@ namespace Vim.Gltf.Converter
                 _Category = { Index = category.Index },
             }).Entity;
 
-            ObjectModelBuilder.SiteBuilder.Add(new Site
+            SiteBuilder.Add(new Site
             {
                 _Element = { Index = siteElement.Index }
             });
@@ -233,7 +233,7 @@ namespace Vim.Gltf.Converter
             FamilyType familyType)
         {
             // Create the element associated to the node.
-            var familyInstanceElement = ObjectModelBuilder.ElementBuilder.Add(new Element
+            var familyInstanceElement = ElementBuilder.Add(new Element
             {
                 Id = gltfNode.LogicalIndex,
                 Name = gltfNode.Name,
@@ -247,7 +247,7 @@ namespace Vim.Gltf.Converter
             StoreParameter(familyInstanceElement, nameof(gltfNode.IsTransformAnimated), gltfNode.IsTransformAnimated.ToString());
 
             // Create a family instance pointing to the element and family type.
-            ObjectModelBuilder.FamilyInstanceBuilder.Add(new FamilyInstance
+            FamilyInstanceBuilder.Add(new FamilyInstance
             {
                 _Element = { Index = familyInstanceElement.Index },
                 _FamilyType = { Index = familyType.Index }
@@ -260,7 +260,7 @@ namespace Vim.Gltf.Converter
                 : StoreGltfMesh(gltfNode.Mesh, bimDocument, category);
 
             // Store the GLTF node's transform as a VIM instance
-            var vimInstance = new DocumentBuilder.Instance
+            var vimInstance = new VimInstance
             {
                 Transform = ConvertToVimMatrix(gltfNode.WorldMatrix, _scale),
                 MeshIndex = vimMeshIndex,
@@ -269,7 +269,7 @@ namespace Vim.Gltf.Converter
 
             // Store the node associated to the geometric instance.
             // This ordered 1:1 relationship connects the entities with the geometric instances.
-            ObjectModelBuilder.NodeBuilder.Add(new Vim.Format.ObjectModel.Node
+            NodeBuilder.Add(new Vim.Format.Node
             {
                 _Element = { Index = familyInstanceElement.Index },
             });
@@ -351,7 +351,7 @@ namespace Vim.Gltf.Converter
             }
 
             var meshIndex = Meshes.Count;
-            var vimMesh = new DocumentBuilder.Mesh(
+            var vimMesh = new VimSubdividedMesh(
                 vertices,
                 indices,
                 faceMaterials
@@ -369,17 +369,17 @@ namespace Vim.Gltf.Converter
             BimDocument bimDocument,
             Category category)
         {
-            var getOrAddResult = ObjectModelBuilder.MaterialBuilder.GetOrAdd(
+            var getOrAddResult = MaterialBuilder.GetOrAdd(
                 gltfMaterial.LogicalIndex,
             () =>
                 {
                     var maybeChannel = gltfMaterial.FindChannel("BaseColor") ?? gltfMaterial.FindChannel("Diffuse");
                     if (maybeChannel == null)
-                        return new Format.ObjectModel.Material { Color_X = 0.5d, Color_Y = 0.5d, Color_Z = 0.5d }; // default material
+                        return new Format.Material { Color_X = 0.5d, Color_Y = 0.5d, Color_Z = 0.5d }; // default material
 
                     var color = maybeChannel.Value.Color;
 
-                    return new Format.ObjectModel.Material { Color_X = color.X, Color_Y = color.Y, Color_Z = color.Z, Transparency = 1 - color.W };
+                    return new Format.Material { Color_X = color.X, Color_Y = color.Y, Color_Z = color.Z, Transparency = 1 - color.W };
                 });
 
             var material = getOrAddResult.Entity;
@@ -389,9 +389,9 @@ namespace Vim.Gltf.Converter
                 return materialIndex; // If the GetOrAdd operation already contained the material, then return early.
 
             // The material entity was just added so apply an Element to it.
-            var materialElement = ObjectModelBuilder.ElementBuilder.Add(new Element()
+            var materialElement = ElementBuilder.Add(new Element()
             {
-                Id = VimConstants.SyntheticElementId,
+                Id = VimEntityTableConstants.SyntheticElementId,
                 Name = gltfMaterial.Name,
                 _BimDocument = { Index = bimDocument.Index },
                 _Category = { Index = category.Index },
@@ -407,13 +407,10 @@ namespace Vim.Gltf.Converter
             StoreParameter(materialElement, nameof(gltfMaterial.IndexOfRefraction), gltfMaterial.IndexOfRefraction.ToString(CultureInfo.InvariantCulture));
             StoreParameter(materialElement, nameof(gltfMaterial.Unlit), gltfMaterial.Unlit.ToString());
 
-            return materialIndex;
-        }
+            // Add the renderable VIM material.
+            Materials.Add(material.ToVimMaterial());
 
-        private void WriteVim(string vimFilePath)
-        {
-            var vimDocumentBuilder = ToDocumentBuilder(GeneratorString, VersionString);
-            vimDocumentBuilder.Write(vimFilePath);
+            return materialIndex;
         }
     }
 }

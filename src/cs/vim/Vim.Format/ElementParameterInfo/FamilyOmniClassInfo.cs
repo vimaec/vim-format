@@ -1,5 +1,4 @@
 ﻿using System;
-using Vim.Format.ObjectModel;
 
 namespace Vim.Format.ElementParameterInfo
 {
@@ -79,7 +78,7 @@ namespace Vim.Format.ElementParameterInfo
         public FamilyOmniClassInfo(
             Family family,
             ParameterTable parameterTable,
-            ElementIndexMaps elementIndexMaps)
+            VimElementIndexMaps elementIndexMaps)
         {
             Family = family;
 

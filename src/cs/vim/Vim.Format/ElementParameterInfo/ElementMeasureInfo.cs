@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using Vim.Format.ObjectModel;
 using Vim.Util;
 
 namespace Vim.Format.ElementParameterInfo
@@ -18,7 +17,7 @@ namespace Vim.Format.ElementParameterInfo
         /// Returns the element index.
         /// </summary>
         public int GetElementIndexOrNone()
-            => Element.IndexOrDefault();
+            => EntityRelation.IndexOrDefault(Element);
 
         public double? Angle { get; set; }
 

@@ -4,13 +4,13 @@
     {
         public static void Main(string[] args)
         {
-            var file = args[0];
-            var tsFile = args[1];
-            var hFile = args[2];
+            var vimEntityCodeGenFilePath = args[0];
+            var tsFilePath = args[1];
+            var hFilePath = args[2];
 
-            ObjectModelGenerator.WriteDocument(file);
-            ObjectModelTypeScriptGenerator.WriteDocument(tsFile);
-            ObjectModelCppGenerator.WriteDocument(hFile);
+            VimEntityCodeGen.WriteDocument(vimEntityCodeGenFilePath);
+            ObjectModelTypeScriptGenerator.WriteDocument(tsFilePath);
+            ObjectModelCppGenerator.WriteDocument(hFilePath);
         }
     }
 }

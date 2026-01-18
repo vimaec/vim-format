@@ -5,8 +5,6 @@
             <InputAssemblies Include="$(OutputPath)Vim.Format.dll" />
             <InputAssemblies Include="$(OutputPath)Vim.Format.Core.dll" />
             <InputAssemblies Include="$(OutputPath)Vim.BFast.dll" />
-            <InputAssemblies Include="$(OutputPath)Vim.G3d.dll" />
-            <InputAssemblies Include="$(OutputPath)Vim.LinqArray.dll" />
             <InputAssemblies Include="$(OutputPath)Vim.Math3D.dll" />
             <InputAssemblies Include="$(OutputPath)Vim.Util.dll" />
             <InputAssemblies Include="$(OutputPath)Vim.Util.Logging.Serilog.dll" />
@@ -27,8 +25,6 @@
       $(OutputPath)Vim.Format.dll ^
       $(OutputPath)Vim.Format.Core.dll ^
       $(OutputPath)Vim.BFast.dll ^
-      $(OutputPath)Vim.G3d.dll ^
-      $(OutputPath)Vim.LinqArray.dll ^
       $(OutputPath)Vim.Math3D.dll ^
       $(OutputPath)Vim.Util.dll ^
       $(OutputPath)Vim.Util.Logging.Serilog.dll ^

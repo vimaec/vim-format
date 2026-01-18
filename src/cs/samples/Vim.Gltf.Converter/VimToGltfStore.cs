@@ -3,9 +3,8 @@ using SharpGLTF.Validation;
 using System.Diagnostics;
 using System.Linq;
 using System.Numerics;
+using Vim.Format;
 using Vim.BFast;
-using Vim.G3d;
-using Vim.LinqArray;
 
 namespace Vim.Gltf.Converter
 {
@@ -14,20 +13,22 @@ namespace Vim.Gltf.Converter
     /// </summary>
     public class VimToGltfStore
     {
-        
-
         /// <summary>
         /// Converts the given VIM file into a GLTF (.glb) file.
         /// </summary>
         public static void Convert(string vimFilePath, string gltfFilePath, float scale = (float) Util.Units.FeetToMetersRatio, bool validateGltf = true)
         {
-            var vim = VimScene.LoadVim(vimFilePath);
+            var vim = VIM.Open(vimFilePath);
+            var gd = vim.GeometryData;
 
             var gltfModel = ModelRoot.CreateModel();
             var gltfScene = gltfModel.UseScene(0);
 
-            foreach (var vimMaterial in vim.Materials.ToEnumerable())
+            // foreach (var vimMaterial in vim.Materials.ToEnumerable())
+            for (var i = 0; i < vim.GeometryData.MaterialCount; ++i)
             {
+                var vimMaterialColor = gd.MaterialColors[i];
+
                 var gltfMaterial = gltfModel.CreateMaterial();
                 gltfMaterial.InitializePBRMetallicRoughness();
 
@@ -39,29 +40,27 @@ namespace Vim.Gltf.Converter
                 }
 
                 var colorChannel = maybeColorChannel.Value;
-                colorChannel.Color = new System.Numerics.Vector4(vimMaterial.Color.X, vimMaterial.Color.Y, vimMaterial.Color.Z, vimMaterial.Color.W);
+                colorChannel.Color = new System.Numerics.Vector4(vimMaterialColor.X, vimMaterialColor.Y, vimMaterialColor.Z, vimMaterialColor.W);
 
-                if (vimMaterial.Color.W < 1)
+                if (vimMaterialColor.W < 1)
                 {
                     gltfMaterial.Alpha = AlphaMode.BLEND;
                 }
             }
 
-            var g3d = vim._SerializableDocument.Geometry;
-
             // Initialize a flat vertex buffer.
-            var vimVertexBufferBytes = g3d.Vertices.ToArray().SelectMany(v => new [] { v.X, v.Y, v.Z }).ToArray().ToBytes();
+            var vimVertexBufferBytes = gd.Vertices.SelectMany(v => new [] { v.X, v.Y, v.Z }).ToArray().ToBytes();
             var gltfVertexBufferView = gltfModel.UseBufferView(vimVertexBufferBytes);
             var gltfVertexAccessor = gltfModel.CreateAccessor("VERTEX_ACCESSOR");
-            gltfVertexAccessor.SetVertexData(gltfVertexBufferView, 0, g3d.Vertices.Count);
+            gltfVertexAccessor.SetVertexData(gltfVertexBufferView, 0, gd.VertexCount);
 
             // Initialize a flat index buffer.
-            var vimIndexBufferBytes = g3d.Indices.ToEnumerable().Select(i => (uint)i).ToArray().ToBytes();
+            var vimIndexBufferBytes = gd.Indices.Select(i => (uint)i).ToArray().ToBytes();
             var gltfIndexBufferView = gltfModel.UseBufferView(vimIndexBufferBytes);
 
             // Create the meshes and their primitives (submeshes)
-            var meshSubmeshCounts = g3d.MeshSubmeshCount.ToArray();
-            var meshSubmeshOffsets = g3d.MeshSubmeshOffset.ToArray();
+            var meshSubmeshCounts = gd.MeshSubmeshCount;
+            var meshSubmeshOffsets = gd.MeshSubmeshOffsets;
             for (var meshIndex = 0; meshIndex < meshSubmeshCounts.Length; ++meshIndex)
             {
                 var meshSubmeshCount = meshSubmeshCounts[meshIndex];
@@ -74,9 +73,9 @@ namespace Vim.Gltf.Converter
                 
                 for (var submeshIndex = meshSubmeshOffset; submeshIndex < meshSubmeshOffset + meshSubmeshCount; ++submeshIndex)
                 {
-                    var submeshIndexOffset = g3d.SubmeshIndexOffsets[submeshIndex];
-                    var submeshIndexCount = g3d.SubmeshIndexCount[submeshIndex];
-                    var submeshMaterialIndex = g3d.SubmeshMaterials[submeshIndex];
+                    var submeshIndexOffset = gd.SubmeshIndexOffsets[submeshIndex];
+                    var submeshIndexCount = gd.SubmeshIndexCount[submeshIndex];
+                    var submeshMaterialIndex = gd.SubmeshMaterials[submeshIndex];
                     
                     var gltfPrimitive = gltfMesh.CreatePrimitive();
                     gltfPrimitive.SetVertexAccessor("POSITION", gltfVertexAccessor);
@@ -91,9 +90,9 @@ namespace Vim.Gltf.Converter
             }
 
             // Create the nodes and their transforms.
-            var instanceTransforms = g3d.InstanceTransforms.Select(t => ConvertToGltfMatrix(t, scale)).ToArray();
-            var instanceMeshIndices = g3d.InstanceMeshes.ToArray();
-            var instanceFlags = g3d.InstanceFlags.ToArray();
+            var instanceTransforms = gd.InstanceTransforms.Select(t => ConvertToGltfMatrix(t, scale)).ToArray();
+            var instanceMeshIndices = gd.InstanceMeshes;
+            var instanceFlags = gd.InstanceFlags;
 
             for (var i = 0; i < instanceTransforms.Length; ++i)
             {

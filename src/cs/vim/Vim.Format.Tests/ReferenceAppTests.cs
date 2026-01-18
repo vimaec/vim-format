@@ -5,6 +5,8 @@ using System.Linq;
 using NUnit.Framework;
 using Vim.Util.Tests;
 
+using Sys = System;
+
 namespace Vim.Format.Tests;
 
 [TestFixture]
@@ -88,7 +90,7 @@ public static class ReferenceAppTests
         Console.WriteLine($"Reading names, total byte count = {nameByteCount}");
         var nameBytes = reader.ReadBytes((int)nameByteCount);
 
-        var names = System.Text.Encoding.UTF8.GetString(nameBytes).Split((char)0, StringSplitOptions.RemoveEmptyEntries).ToArray();
+        var names = Sys.Text.Encoding.UTF8.GetString(nameBytes).Split((char)0, StringSplitOptions.RemoveEmptyEntries).ToArray();
         Console.WriteLine($"Found {names.Length} buffer names, expected {numArrays - 1}");
 
         if ((ulong) names.Length != numArrays - 1)
@@ -110,7 +112,7 @@ public static class ReferenceAppTests
         var headerByteCount = headerRange.End - headerRange.Begin;
         var headerBytes = reader.ReadBytes((int)headerByteCount);
 
-        var header = System.Text.Encoding.UTF8.GetString(headerBytes);
+        var header = Sys.Text.Encoding.UTF8.GetString(headerBytes);
         Console.WriteLine("---Begin Header Contents---");
         Console.WriteLine();
         Console.WriteLine(header);

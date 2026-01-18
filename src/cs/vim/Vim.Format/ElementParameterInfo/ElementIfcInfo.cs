@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Vim.Format.ObjectModel;
 
 // SOME BACKGROUND INFORMATION ABOUT ELEMENT IFC GUIDS
 //
@@ -22,7 +21,7 @@ namespace Vim.Format.ElementParameterInfo
         public Element Element { get; }
 
         public int GetElementIndexOrNone()
-            => Element.IndexOrDefault();
+            => EntityRelation.IndexOrDefault(Element);
 
         /// <summary>
         /// A 22 character IFC encoded GUID composed of case-sensitive characters.
@@ -52,7 +51,7 @@ namespace Vim.Format.ElementParameterInfo
         public ElementIfcInfo(
             Element element,
             ParameterTable parameterTable,
-            ElementIndexMaps elementIndexMaps)
+            VimElementIndexMaps elementIndexMaps)
         {
             Element = element;
 

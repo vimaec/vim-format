@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Vim.Format.ObjectModel;
 using Vim.Util;
 
 namespace Vim.Format.ElementParameterInfo
@@ -52,7 +51,7 @@ namespace Vim.Format.ElementParameterInfo
         /// <summary>
         /// Constructor
         /// </summary>
-        public ElementOffsetInfo(Element element, ParameterTable parameterTable, ElementIndexMaps elementIndexMaps)
+        public ElementOffsetInfo(Element element, ParameterTable parameterTable, VimElementIndexMaps elementIndexMaps)
         {
             Element = element;
 

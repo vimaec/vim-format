@@ -1,0 +1,293 @@
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
+using System.Linq;
+using Vim.BFast;
+using Vim.Math3d;
+using Vim.Util;
+
+namespace Vim.Format
+{
+    public partial class VimBuilder
+    {
+        /// <summary>
+        /// The underlying VIM file which will be serialized.
+        /// </summary>
+        private VimHeader VimHeader { get; }
+
+        /// <summary>
+        /// The list of subdivided meshes which will be accumulated.
+        /// </summary>
+        public List<VimSubdividedMesh> Meshes { get; private set; } = new List<VimSubdividedMesh>();
+
+        /// <summary>
+        /// The list of instances which will be accumulated.
+        /// </summary>
+        public List<VimInstance> Instances { get; } = new List<VimInstance>();
+
+        /// <summary>
+        /// The list of materials which will be accumulated.
+        /// </summary>
+        public List<VimMaterial> Materials { get; } = new List<VimMaterial>();
+
+        // NOTE: see other partial class definition for entity set builder definitions
+
+        /// <summary>
+        /// The dictionary of all binary assets, keyed by buffer name.
+        /// </summary>
+        public readonly Dictionary<string, INamedBuffer> Assets = new Dictionary<string, INamedBuffer>();
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public VimBuilder(
+            string generator,
+            SerializableVersion schema,
+            string versionString,
+            IReadOnlyDictionary<string, string> optionalHeaderValues = null)
+        {
+            VimHeader = new VimHeader(
+                generator,
+                schema,
+                versionString,
+                optionalHeaderValues
+            );
+        }
+
+        /// <summary>
+        /// Returns a list of VimEntityTableBuilders based on the given VIM file's entity table data
+        /// </summary>
+        public static List<VimEntityTableBuilder> GetVimEntityTableBuilders(VIM vim)
+        {
+            var result = new List<VimEntityTableBuilder>();
+
+            foreach (var et in vim.EntityTableData)
+            {
+                var builder = new VimEntityTableBuilder(et, vim.StringTable);
+                result.Add(builder);
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// Writes the VIM file to the given file path. Overwrites any existing file.
+        /// </summary>
+        public void Write(string vimFilePath, IReadOnlyList<VimEntityTableBuilder> tableBuilders = null)
+        {
+            IO.Delete(vimFilePath);
+            IO.CreateFileDirectory(vimFilePath);
+
+            using (var fileStream = File.OpenWrite(vimFilePath))
+            {
+                Write(fileStream, tableBuilders);
+            }
+        }
+
+        /// <summary>
+        /// Writes the VIM file to the given stream.
+        /// </summary>
+        public void Write(Stream vimStream, IReadOnlyList<VimEntityTableBuilder> tableBuilders = null)
+        {
+            tableBuilders = tableBuilders ?? GetVimEntityTableBuilders(); // code-generated.
+
+            var stringLookupInfo = new StringLookupInfo(tableBuilders);
+
+            // Instantiate a new VIM object and apply the header we created in the constructor.
+            var vim = new VIM(
+                VimHeader,
+                stringLookupInfo.StringTable,
+                GetVimEntityTableData(tableBuilders, stringLookupInfo).ToList(),
+                Assets.Values.ToArray()
+            );
+
+            // For efficiency, we create a geometryWriter to avoid extra allocations in memory while writing.
+            var geometryWriter = new VimGeometryDataWriter(Meshes, Instances, Materials);
+
+            // Write the VIM's buffers using a BFastBuilder.
+            var bfastBuilder = new BFastBuilder();
+
+            bfastBuilder.Add(VIM.HeaderBufferName, vim.Header.ToBuffer());
+            bfastBuilder.Add(VIM.AssetsBufferName, vim.Assets ?? Array.Empty<INamedBuffer>());
+            bfastBuilder.Add(VIM.EntityTableDataBufferName, GetBFastBuilder(vim.EntityTableData));
+            bfastBuilder.Add(VIM.StringTableBufferName, vim.StringTable.PackStrings().ToBuffer());
+            bfastBuilder.Add(VIM.GeometryDataBufferName, geometryWriter);
+
+            bfastBuilder.Write(vimStream);
+        }
+
+        private static BFastBuilder GetBFastBuilder(IEnumerable<VimEntityTableData> entityTables)
+        {
+            var bldr = new BFastBuilder();
+            foreach (var et in entityTables)
+            {
+                bldr.Add(et.Name, et.GetColumns());
+            }
+            return bldr;
+        }
+
+        /// <summary>
+        /// A helper class which collects all the strings from the entity tables to create the indexed string lookups.
+        /// </summary>
+        private class StringLookupInfo
+        {
+            public readonly IReadOnlyDictionary<string, int> StringLookup;
+            public readonly string[] StringTable;
+
+            public StringLookupInfo(IEnumerable<string> allStrings, int indexOffset = 0)
+            {
+                // NOTE: ensure the empty string is part of the string table.
+                var stringTable = allStrings.Prepend("").Distinct().ToList();
+
+                // By construction, the contents of stringTable should not have repeating items.
+                var stringLookup = new Dictionary<string, int>();
+                for (var i = 0; i < stringTable.Count; ++i)
+                    stringLookup[stringTable[i]] = i + indexOffset;
+
+                StringTable = stringTable.ToArray();
+                StringLookup = stringLookup;
+            }
+
+            public StringLookupInfo(IEnumerable<VimEntityTableBuilder> tableBuilders, int indexOffset = 0)
+                : this(tableBuilders.SelectMany(tb => tb.GetAllStrings()), indexOffset)
+            { }
+        }
+
+        private IEnumerable<VimEntityTableData> GetVimEntityTableData(
+            IReadOnlyList<VimEntityTableBuilder> tableBuilders,
+            StringLookupInfo stringLookupInfo)
+            => WithGeometryTable(tableBuilders)
+                .Select((Func<VimEntityTableBuilder, VimEntityTableData>)(tb =>
+                    // Transfer each table builder's data
+                    new VimEntityTableData()
+                    {
+                        Name = tb.Name,
+                        IndexColumns = tb.IndexColumns
+                            .Select(kv => kv.Value.ToNamedBuffer(kv.Key))
+                            .ToList(),
+                        StringColumns = tb.StringColumns
+                            .Select(kv => kv.Value
+                                .Select(s => stringLookupInfo.StringLookup[s ?? string.Empty])
+                                .ToArray()
+                                .ToNamedBuffer(kv.Key))
+                            .ToList(),
+                        DataColumns = Enumerable.Select<KeyValuePair<string, IBuffer>, INamedBuffer>(tb.DataColumns
+, (Func<KeyValuePair<string, IBuffer>, INamedBuffer>)(kv => kv.Value.ToNamedBuffer(kv.Key) as INamedBuffer))
+                            .ToList()
+                    })
+                );
+
+        private IEnumerable<VimEntityTableBuilder> WithGeometryTable(IEnumerable<VimEntityTableBuilder> tableBuilders)
+            => tableBuilders.Where(tb => tb.Name != VimEntityTableNames.Geometry)
+                .Append(CreateGeometryTable());
+
+        private VimEntityTableBuilder CreateGeometryTable()
+        {
+            // At the last moment, we generate the geometry table based on the mesh bounding boxes.
+
+            var tb = new VimEntityTableBuilder(VimEntityTableNames.Geometry);
+            tb.Clear();
+
+            // Populate the box
+            var boxMinX = new float[Meshes.Count];
+            var boxMinY = new float[Meshes.Count];
+            var boxMinZ = new float[Meshes.Count];
+
+            var boxMaxX = new float[Meshes.Count];
+            var boxMaxY = new float[Meshes.Count];
+            var boxMaxZ = new float[Meshes.Count];
+
+            for (var i = 0; i < Meshes.Count; ++i)
+            {
+                var b = AABox.Create(Meshes[i].Vertices);
+                boxMinX[i] = b.Min.X;
+                boxMinY[i] = b.Min.Y;
+                boxMinZ[i] = b.Min.Z;
+
+                boxMaxX[i] = b.Max.X;
+                boxMaxY[i] = b.Max.Y;
+                boxMaxZ[i] = b.Max.Z;
+            }
+
+            tb.AddDataColumn("float:Box.Min.X", boxMinX);
+            tb.AddDataColumn("float:Box.Min.Y", boxMinY);
+            tb.AddDataColumn("float:Box.Min.Z", boxMinZ);
+
+            tb.AddDataColumn("float:Box.Max.X", boxMaxX);
+            tb.AddDataColumn("float:Box.Max.Y", boxMaxY);
+            tb.AddDataColumn("float:Box.Max.Z", boxMaxZ);
+
+            tb.AddDataColumn("int:VertexCount", Meshes.Select(g => g.Vertices.Count));
+            tb.AddDataColumn("int:FaceCount", Meshes.Select(g => g.Indices.Count / 3));
+
+            return tb;
+        }
+
+        public void AddAsset(INamedBuffer asset)
+        {
+            Assets[asset.Name] = asset;
+        }
+
+        /// <summary>
+        /// Mutates the Meshes and Instances to remove any meshes which are not referenced by at least one instance.
+        /// </summary>
+        public VimBuilder TrimOrphanMeshes()
+        {
+            // Example:
+            //
+            // old instance mesh indices:  [0,  2,  4,  2]
+            // ---
+            // old mesh indices:           [0,  1,  2,  3,  4]
+            // orphan mesh indices:        [    1,      3    ]
+            // next mesh indices:          [0, -1,  1, -1,  2]
+            // ---
+            // next instance mesh indices: [0,  1,  2,  1]
+
+            const int nullMeshIndex = -1;
+
+            // Initialize the mesh indices
+            var meshIsReferenced = new bool[Meshes.Count];
+            for (var i = 0; i < meshIsReferenced.Length; i++)
+                meshIsReferenced[i] = false;
+
+            // Mark the mesh indices which are referenced by an instance.
+            foreach (var instance in Instances)
+            {
+                if (instance.MeshIndex <= nullMeshIndex)
+                    continue;
+
+                meshIsReferenced[instance.MeshIndex] = true;
+            }
+
+            // Early exit if all meshes are referenced.
+            if (meshIsReferenced.All(isReferenced => isReferenced))
+                return this;
+
+            // Update the new mesh indices.
+            var nextMeshIndex = 0;
+            var nextMeshIndices = new int[meshIsReferenced.Length];
+            for (var i = 0; i < nextMeshIndices.Length; ++i)
+            {
+                nextMeshIndices[i] = meshIsReferenced[i]
+                    ? nextMeshIndex++
+                    : nullMeshIndex;
+            }
+
+            // Create a new mesh list which excludes the orphaned meshes.
+            Meshes = Meshes.Where((m, i) => nextMeshIndices[i] > nullMeshIndex).ToList();
+
+            // Mutate the instances to update their mesh index.
+            foreach (var instance in Instances)
+            {
+                if (instance.MeshIndex <= nullMeshIndex)
+                    continue;
+
+                instance.MeshIndex = nextMeshIndices[instance.MeshIndex];
+                Debug.Assert(instance.MeshIndex > nullMeshIndex, $"Invalid instance mesh index ({instance.MeshIndex})");
+            }
+
+            return this;
+        }
+    }
+}
