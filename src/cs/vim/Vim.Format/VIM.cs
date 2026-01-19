@@ -9,8 +9,11 @@ using Vim.Util;
 
 // TODO
 // - Visitor pattern on geometry deserialization to minimize memory footprint in 3dsMax importer.
-//   - INSIGHT? VimGeometryData might be able to simply reference the VIM stream and maintain a bunch of BFastBufferReaders?
-//     - This would imply that VIM and VimGeometryData should implement IDisposable because they hold onto the FileStream
+//   - VimGeometryData updates:
+//      - it should maintain a list of all BufferReaders per buffer
+//   -  - .: should implement IDisposable (same as VIM)
+//      - Update VimMeshView to seek + return vertex & index sub-arrays
+//      - Port enumeration behavior of VimGeometryStreamer into VimGeometryData and remove VimGeometryStreamer.
 // - Clean up throw new Exception() -> turn them into actual VimExceptions
 // - Test beyond this repository (i.e. with Revit exporter) > check the buildup using VimMesh
 //   - (!) Material and VimMaterial must be inserted simultaneously
