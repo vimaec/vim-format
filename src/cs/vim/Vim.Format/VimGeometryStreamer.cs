@@ -94,6 +94,8 @@ namespace Vim.Format
             var instanceFlags = VimGeometryData.EnsureInstanceFlags(instanceCount, ReadInstanceFlags());
             var instancesMeshes = ReadInstanceMeshes();
 
+            throw new NotImplementedException("TODO");
+
             // Steps:
             // - Declare grouping strategy
             // - Bucket each VimGeometryInfo { elementIndex, instanceIndex, [meshIndices] } into the appropriate group
@@ -138,10 +140,7 @@ namespace Vim.Format
             if (bufferReader == null)
                 return Array.Empty<T>();
 
-            var bufferSizeInBytes = bufferReader.Size;
-            bufferReader.Seek();
-
-            return VimGeometryData.ReadBufferData<T>(bufferName, _stream, bufferSizeInBytes);
+            return VimGeometryData.ReadBufferData<T>(bufferReader, out _);
         }
     }
 
