@@ -49,11 +49,15 @@ namespace Vim.BFast
 
         /// <summary>
         /// Seeks to the start of the BFAST buffer and returns the stream.
+        /// Checks that the BFAST buffer is correctly aligned if no offset is supplied.
         /// </summary>
-        public Stream Seek()
+        public Stream Seek(long relativeOffset = 0)
         {
-            _stream.Seek(_startPosition, SeekOrigin.Begin);
-            BFast.CheckAlignment(_stream);
+            _stream.Seek(_startPosition + relativeOffset, SeekOrigin.Begin);
+
+            if (relativeOffset == 0)
+                BFast.CheckAlignment(_stream);
+
             return _stream;
         }
     }
