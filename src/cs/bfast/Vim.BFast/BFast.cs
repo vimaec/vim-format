@@ -77,8 +77,6 @@ namespace Vim.BFast
         {
             if (!stream.CanSeek)
                 return;
-            // TODO: Check with CD: Should we bail out here?  This means that any
-            // alignment checks for a currently-writing stream are effectively ignored.
             if (stream.Position == stream.Length)
                 return;
             if (!IsAligned(stream.Position))
