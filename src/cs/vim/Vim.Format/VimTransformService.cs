@@ -45,7 +45,7 @@ namespace Vim.Format
         }
 
         /// <summary>
-        /// Returns a new VIM builder in which the original meshes have been deduplicated.
+        /// Returns a transformed result in which the original meshes have been deduplicated.
         /// </summary>
         public VimTransformResult DeduplicateGeometry(VIM vim)
             => Transform(
@@ -55,7 +55,7 @@ namespace Vim.Format
                 true);
 
         /// <summary>
-        /// Returns a new VIM builder in which the elements and their geometry have been filtered.
+        /// Returns a transformed result in which the elements and their geometry have been filtered.
         /// </summary>
         public VimTransformResult Filter(VIM vim, ElementFilter elementFilter, bool deduplicateMeshes = false)
             => Transform(
@@ -65,7 +65,7 @@ namespace Vim.Format
                 deduplicateMeshes);
 
         /// <summary>
-        /// Returns a new VIM builder in which the element transforms have been multiplied by the given matrix.
+        /// Returns a transformed result in which the element transforms have been multiplied by the given matrix.
         /// </summary>
         public VimTransformResult Transform(VIM vim, Matrix4x4 matrix, bool deduplicateMeshes = false)
             => Transform(
@@ -78,7 +78,7 @@ namespace Vim.Format
         public delegate Matrix4x4 InstanceTransform(int instanceIndex, Matrix4x4 currentTransform);
 
         /// <summary>
-        /// Transforms the VIM into a new VIM builder based on the given filters and transformations.
+        /// Returns a transformed result based on the given filters and transformations.
         /// </summary>
         /// <param name="vim">The VIM to transform into a new VIM builder.</param>
         /// <param name="elementFilter">Returns true if the given element should be present in the new VIM builder.</param>
