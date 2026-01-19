@@ -131,8 +131,12 @@ namespace Vim.Format
             stream.ThrowIfNotSeekable("Could not read geometry");
 
             BFastBufferReader indicesBufferReader = null;
-            long indexCount = 0;
-            long vertexCount = 0;
+            var indexCount = 0;
+            var vertexCount = 0;
+            var submeshCount = 0;
+            var meshCount = 0;
+            var materialCount = 0;
+            var instanceCount = 0;
 
             foreach (var bufferReader in stream.GetBFastBufferReaders())
             {
@@ -148,40 +152,43 @@ namespace Vim.Format
                         break;
                     case IndicesBufferName:
                         indicesBufferReader = bufferReader;
-                        Indices = ReadBufferData<int>(bufferReader);
+                        Indices = ReadBufferData<int>(bufferReader, out indexCount);
                         break;
                     case SubmeshIndexOffsetsBufferName:
-                        SubmeshIndexOffsets = ReadBufferData<int>(bufferReader);
+                        SubmeshIndexOffsets = ReadBufferData<int>(bufferReader, out submeshCount);
                         break;
                     case SubmeshMaterialsBufferName:
-                        SubmeshMaterials = ReadBufferData<int>(bufferReader);
+                        SubmeshMaterials = ReadBufferData<int>(bufferReader, out _);
                         break;
                     case MeshSubmeshOffsetsBufferName:
-                        MeshSubmeshOffsets = ReadBufferData<int>(bufferReader);
+                        MeshSubmeshOffsets = ReadBufferData<int>(bufferReader, out meshCount);
                         break;
                     case MaterialColorsBufferName:
-                        MaterialColors = ReadBufferData<Vector4>(bufferReader);
+                        MaterialColors = ReadBufferData<Vector4>(bufferReader, out materialCount);
                         break;
                     case MaterialGlossinessBufferName:
-                        MaterialGlossiness = ReadBufferData<float>(bufferReader);
+                        MaterialGlossiness = ReadBufferData<float>(bufferReader, out _);
                         break;
                     case MaterialSmoothnessBufferName:
-                        MaterialSmoothness = ReadBufferData<float>(bufferReader);
+                        MaterialSmoothness = ReadBufferData<float>(bufferReader, out _);
                         break;
                     case InstanceTransformsBufferName:
-                        InstanceTransforms = ReadBufferData<Matrix4x4>(bufferReader);
+                        InstanceTransforms = ReadBufferData<Matrix4x4>(bufferReader, out instanceCount);
                         break;
                     case InstanceFlagsBufferName:
-                        InstanceFlags = ReadBufferData<ushort>(bufferReader);
+                        InstanceFlags = ReadBufferData<ushort>(bufferReader, out _);
                         break;
                     case InstanceParentsBufferName:
-                        InstanceParents = ReadBufferData<int>(bufferReader);
+                        InstanceParents = ReadBufferData<int>(bufferReader, out _);
                         break;
                     case InstanceMeshesBufferName:
-                        InstanceMeshes = ReadBufferData<int>(bufferReader);
+                        InstanceMeshes = ReadBufferData<int>(bufferReader, out _);
                         break;
                 }
             }
+
+            if (indicesBufferReader == null)
+                throw new Exception("VIM Geometry index buffer not found.");
 
             // Synchronize the optional instance flags
             InstanceFlags = EnsureInstanceFlags(InstanceCount, InstanceFlags);
@@ -189,42 +196,33 @@ namespace Vim.Format
             // Calculate offsets
             CalculateOffsets(
                 indicesBufferReader,
+                indexCount,
+                vertexCount,
+                meshCount,
+                submeshCount,
+                MeshSubmeshOffsets,
+                SubmeshIndexOffsets,
+                out var outMeshIndexOffsets,
+                out var outMeshIndexCounts,
+                out var outMeshVertexOffsets,
+                out var outMeshVertexCounts,
+                out var outMeshSubmeshCount,
+                out var outSubmeshIndexCount
+            );
 
-                );
-
-            //if (MeshCount > 0)
-            //{
-            //    if (MeshSubmeshOffsets != null)
-            //    {
-            //        MeshIndexOffsets = MeshSubmeshOffsets.Select(submesh => SubmeshIndexOffsets[submesh]).ToArray();
-            //        MeshSubmeshCount = GetSubArrayCounts(MeshSubmeshOffsets.Length, MeshSubmeshOffsets, SubmeshCount);
-            //    }
-
-            //    if (MeshIndexOffsets.Length != 0)
-            //    {
-            //        MeshIndexCounts = GetSubArrayCounts(MeshCount, MeshIndexOffsets, IndexCount);
-            //        MeshVertexOffsets = MeshIndexOffsets.Zip(MeshIndexCounts,
-            //            (start, count) => GetMinValue(Indices, start, count))
-            //            .ToArray();
-            //    }
-
-            //    if (MeshVertexOffsets.Length != 0)
-            //    {
-            //        MeshVertexCounts = GetSubArrayCounts(MeshCount, MeshVertexOffsets, VertexCount);
-            //    }
-            //}
-
-            //if (SubmeshIndexOffsets != null)
-            //{
-            //    SubmeshIndexCount = GetSubArrayCounts(SubmeshIndexOffsets.Length, SubmeshIndexOffsets, IndexCount);
-            //}
+            MeshIndexOffsets = outMeshIndexOffsets;
+            MeshIndexCounts = outMeshIndexCounts;
+            MeshVertexOffsets = outMeshVertexOffsets;
+            MeshVertexCounts = outMeshVertexCounts;
+            MeshSubmeshCount = outMeshSubmeshCount;
+            SubmeshIndexCount = outSubmeshIndexCount;
         }
 
-        public static T[] ReadBufferData<T>(BFastBufferReader bufferReader, out long itemCount) where T : unmanaged
+        public static T[] ReadBufferData<T>(BFastBufferReader bufferReader, out int itemCount) where T : unmanaged
         {
             var stream = bufferReader.Seek();
             itemCount = GetValidatedItemCount(bufferReader);
-            var data = stream.ReadArray<T>((int)itemCount);
+            var data = stream.ReadArray<T>(itemCount);
             return data;
         }
 
@@ -246,18 +244,19 @@ namespace Vim.Format
             int meshCount,
             int submeshCount,
             int[] meshSubmeshOffsets,
-            int[] meshVertexOffsets,
             int[] submeshIndexOffsets,
             out int[] outMeshIndexOffsets,
-            out int[] outMeshSubmeshCount,
             out int[] outMeshIndexCounts,
+            out int[] outMeshVertexOffsets,
             out int[] outMeshVertexCounts,
+            out int[] outMeshSubmeshCount,
             out int[] outSubmeshIndexCount)
         {
             outMeshIndexOffsets = Array.Empty<int>();
-            outMeshSubmeshCount = Array.Empty<int>();
             outMeshIndexCounts = Array.Empty<int>();
+            outMeshVertexOffsets = Array.Empty<int>();
             outMeshVertexCounts = Array.Empty<int>();
+            outMeshSubmeshCount = Array.Empty<int>();
             outSubmeshIndexCount = Array.Empty<int>();
 
             if (meshCount > 0)
@@ -271,14 +270,18 @@ namespace Vim.Format
                 if (outMeshIndexOffsets.Length != 0)
                 {
                     outMeshIndexCounts = GetSubArrayCounts(meshCount, outMeshIndexOffsets, indexCount);
-                    meshVertexOffsets = outMeshIndexOffsets.Zip(outMeshIndexCounts,
-                        (start, count) => GetMinIntegerValue(indexReader, start, count))
-                        .ToArray();
+                    outMeshVertexOffsets = new int[outMeshIndexCounts.Length];
+                    for (var i = 0; i < outMeshVertexOffsets.Length; ++i)
+                    {
+                        var startIndex = outMeshIndexOffsets[i];
+                        var count = outMeshIndexCounts[i];
+                        outMeshVertexOffsets[i] = GetMinIntegerValue(indexReader, startIndex, count);
+                    }
                 }
 
-                if (meshVertexOffsets.Length != 0)
+                if (outMeshVertexOffsets.Length != 0)
                 {
-                    outMeshVertexCounts = GetSubArrayCounts(meshCount, meshVertexOffsets, vertexCount);
+                    outMeshVertexCounts = GetSubArrayCounts(meshCount, outMeshVertexOffsets, vertexCount);
                 }
             }
 
@@ -288,7 +291,7 @@ namespace Vim.Format
             }
         }
 
-        private static long GetValidatedItemCount(BFastBufferReader bufferReader)
+        private static int GetValidatedItemCount(BFastBufferReader bufferReader)
         {
             var bufferSizeInBytes = bufferReader.Size;
             var dataItemSizeInBytes = GetDataItemSizeInBytesByBufferName(bufferReader.Name);
@@ -301,27 +304,29 @@ namespace Vim.Format
             if (itemCount > int.MaxValue)
                 throw new Exception($"Trying to read {itemCount} which is more than the maximum number of items in an array.");
 
-            return itemCount;
+            return (int) itemCount;
         }
 
-        private static int GetMinIntegerValue(BFastBufferReader bufferReader, int start, int count)
+        private static int GetMinIntegerValue(BFastBufferReader bufferReader, int startIndex, int count)
         {
-            var stream = bufferReader.Seek();
-            stream.Seek(start * 4, SeekOrigin.Current);
+            const int Int32SizeInBytes = 4;
 
-            var intBuffer = new byte[4]; // 4 bytes for an Int32
+            var stream = bufferReader.Seek(startIndex * Int32SizeInBytes); // Seek to the offset corresponding to the start index.
             var min = int.MaxValue;
+
+            var intBuffer = new byte[Int32SizeInBytes];
 
             for (var i = 0; i < count; ++i)
             {
-                // Read 4 bytes from the stream into the buffer
-                var bytesRead = stream.Read(intBuffer, 0, 4);
+                // Sequentially read 4 bytes from the stream into the buffer
+                var bytesRead = stream.Read(intBuffer, 0, Int32SizeInBytes);
                 if (bytesRead < 4)
                     throw new EndOfStreamException("Not enough data left in the stream.");
 
                 // Convert those 4 bytes to an integer
                 var value = BitConverter.ToInt32(intBuffer, 0);
 
+                // Compare the values
                 if (value < min)
                     min = value;
             }
@@ -329,16 +334,16 @@ namespace Vim.Format
             return min;
         }
 
-        private static int GetMinValue(int[] array, int startIndex, int count)
-        {
-            var min = int.MaxValue;
-            for (var i = startIndex; i < startIndex + count; ++i)
-            {
-                var value = array[i];
-                if (value < min) min = value;
-            }
-            return min;
-        }
+        // private static int GetMinValue(int[] array, int startIndex, int count)
+        // {
+        //     var min = int.MaxValue;
+        //     for (var i = startIndex; i < startIndex + count; ++i)
+        //     {
+        //         var value = array[i];
+        //         if (value < min) min = value;
+        //     }
+        //     return min;
+        // }
 
         private static int[] GetSubArrayCounts(int numItems, int[] offsets, int totalCount)
         {
