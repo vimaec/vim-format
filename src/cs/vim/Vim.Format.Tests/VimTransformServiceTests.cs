@@ -208,7 +208,7 @@ public static class VimTransformServiceTests
 
         Assert.Less(dedupVim.GeometryData.MeshCount, mergedVim.GeometryData.MeshCount);
 
-        // Bonus: filter the deduplicated VIM and only keep the windows
+        // Bonus: filter the deduplicated VIM and only keep the casework
 
         var filtered = transformService.Filter(dedupVim, e => !e.HasMesh || dedupVim.GetEntityTableSet().GetElement(e.ElementIndex).Category?.Name == "Casework");
         var filteredVimFilePath = Path.Combine(dir, "filtered.vim");
