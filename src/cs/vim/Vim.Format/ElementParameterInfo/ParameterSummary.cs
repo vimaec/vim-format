@@ -6,7 +6,7 @@ using Vim.Util;
 
 namespace Vim.Format.ElementParameterInfo
 {
-    public class ParameterSummary
+    public class ParameterSummary : IElementKindInfo
     {
         public string SummaryKey { get; set; }
 
@@ -15,6 +15,8 @@ namespace Vim.Format.ElementParameterInfo
         public ElementKind ElementKindEnum { get; set; }
 
         public string ElementKind { get; set; }
+
+        public bool ElementKindIsLeaf { get; set; }
 
         public string CategoryNameFull { get; set; }
 
@@ -198,7 +200,7 @@ namespace Vim.Format.ElementParameterInfo
                 {
                     var parameterSummaryKey = g.Key;
                     var descriptorIndex = parameterSummaryKey.DescriptorIndex;
-                    var elementKind = parameterSummaryKey.ElementKind;
+                    var elementKindValue = parameterSummaryKey.ElementKind;
                     var categoryIndex = parameterSummaryKey.CategoryIndex;
 
                     var displayValues = g.Select(i => Parameter.SplitValues(parameterTable.GetValue(i)).DisplayValue).ToList();
@@ -211,8 +213,6 @@ namespace Vim.Format.ElementParameterInfo
                     {
                         SummaryKey = parameterSummaryKey.ToString(),
                         Descriptor = descriptorIndex,
-                        ElementKindEnum = elementKind,
-                        ElementKind = elementKind.ToDisplayString(),
                         CategoryNameFull = categoryTable.GetNameFull(categoryIndex),
                         Name = name,
                         NamePbiCaseSensitive = name.ToPbiCaseSensitiveString(),
@@ -225,6 +225,8 @@ namespace Vim.Format.ElementParameterInfo
                         CountDubious = countDubious,
                         CountDistinct = countDistinct
                     };
+
+                    ps.SetElementKindInfo(elementKindValue);
 
                     return ps;
                 });
