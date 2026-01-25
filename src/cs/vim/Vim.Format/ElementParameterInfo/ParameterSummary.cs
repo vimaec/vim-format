@@ -12,7 +12,7 @@ namespace Vim.Format.ElementParameterInfo
 
         public int Descriptor { get; set; }
 
-        public ElementKind ElementKindEnum { get; set; }
+        public int ElementKindEnum { get; set; }
 
         public string ElementKind { get; set; }
 

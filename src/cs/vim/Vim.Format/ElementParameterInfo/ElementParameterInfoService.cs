@@ -55,10 +55,10 @@ namespace Vim.Format.ElementParameterInfo
         public FamilyTypeUniformatInfo[] FamilyTypeUniformatInfos { get; set; }
 
         /// <summary>
-        /// An array of MeasureType values representing the measure types of each Parameter.
+        /// An array of ParameterMeasureInfos representing the measure types of each Parameter.
         /// Items in this array are aligned to the Parameter table.
         /// </summary>
-        public MeasureType[] ParameterMeasureTypes { get; set; }
+        public ParameterMeasureInfo[] ParameterMeasureInfos { get; set; }
     }
 
     public static class ElementParameterInfoService
@@ -136,9 +136,9 @@ namespace Vim.Format.ElementParameterInfo
                 levelInfoMap,
                 levelInfoByBimDocumentIndex);
 
-            var parameterMeasureTypes = CreateParameterMeasureTypes(parameterTable, descriptorTable);
+            var parameterMeasureInfos = CreateParameterMeasureInfos(parameterTable, descriptorTable);
 
-            var elementMeasureInfos = CreateElementMeasureInfos(elementTable, parameterTable, parameterMeasureTypes);
+            var elementMeasureInfos = CreateElementMeasureInfos(elementTable, parameterTable, parameterMeasureInfos);
 
             var elementOffsetInfos = CreateElementOffsetInfos(elementTable, parameterTable, elementIndexMaps);
 
@@ -154,7 +154,7 @@ namespace Vim.Format.ElementParameterInfo
                 ElementLevelInfos = elementLevelInfos,
                 ElementMeasureInfos = elementMeasureInfos,
                 ElementOffsetInfos = elementOffsetInfos,
-                ParameterMeasureTypes = parameterMeasureTypes,
+                ParameterMeasureInfos = parameterMeasureInfos,
                 ElementIfcInfos = elementIfcInfos,
                 FamilyOmniClassInfos = familyOmniClassInfos,
                 FamilyTypeUniformatInfos = familyTypeUniformatInfos,
@@ -259,7 +259,7 @@ namespace Vim.Format.ElementParameterInfo
                 .ToArray();
         }
 
-        public static MeasureType[] CreateParameterMeasureTypes(
+        public static ParameterMeasureInfo[] CreateParameterMeasureInfos(
             ParameterTable parameterTable,
             ParameterDescriptorTable parameterDescriptorTable)
             => parameterTable.Column_ParameterDescriptorIndex
@@ -268,17 +268,17 @@ namespace Vim.Format.ElementParameterInfo
                 {
                     var parameterDescriptorNameLowerInvariant = parameterDescriptorTable.GetName(pdi).ToLowerInvariant();
                     var parameterDescriptorGuid = parameterDescriptorTable.GetGuid(pdi);
-                    return ParameterMeasureInfo.ParseMeasureType(parameterDescriptorNameLowerInvariant, parameterDescriptorGuid);
+                    return ParameterMeasureInfo.ParseMeasureInfo(parameterDescriptorNameLowerInvariant, parameterDescriptorGuid);
                 })
                 .ToArray();
 
         public static ElementMeasureInfo[] CreateElementMeasureInfos(
             ElementTable elementTable,
             ParameterTable parameterTable,
-            MeasureType[] parameterMeasureTypes)
+            ParameterMeasureInfo[] parameterMeasureInfos)
             => elementTable
                 .AsParallel()
-                .Select(e => new ElementMeasureInfo(e, elementTable, parameterTable, parameterMeasureTypes))
+                .Select(e => new ElementMeasureInfo(e, elementTable, parameterTable, parameterMeasureInfos))
                 .ToArray();
 
         public static ElementOffsetInfo[] CreateElementOffsetInfos(

@@ -5,7 +5,7 @@ namespace Vim.Format.ObjectModel
     public interface IElementKindInfo
     {
         string ElementKind { get; set; }
-        ElementKind ElementKindEnum { get; set; }
+        int ElementKindEnum { get; set; }
         bool ElementKindIsLeaf { get; set; }
     }
 
@@ -17,7 +17,7 @@ namespace Vim.Format.ObjectModel
         {
             if (info == null) return;
             info.ElementKind = elementKind.ToDisplayString();
-            info.ElementKindEnum = elementKind;
+            info.ElementKindEnum = (int) elementKind;
             info.ElementKindIsLeaf = elementKind.IsLeaf();
         }
 
