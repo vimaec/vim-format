@@ -10,6 +10,8 @@ namespace Vim.Format.ElementParameterInfo
     {
         public string SummaryKey { get; set; }
 
+        public string DescriptorKindKey { get; set; }
+
         public int Descriptor { get; set; }
 
         public int ElementKindEnum { get; set; }
@@ -194,7 +196,7 @@ namespace Vim.Format.ElementParameterInfo
             CategoryTable categoryTable)
         {
             return Enumerable.Range(0, parameterTable.RowCount)
-                .GroupBy(i => new ParameterSummaryKey(i, parameterTable, elementTable, elementKindArray, categoryTable))
+                .GroupBy(i => new ParameterSummaryKey(i, parameterTable, elementTable, elementKindArray))
                 .AsParallel()
                 .Select(g =>
                 {
@@ -212,6 +214,7 @@ namespace Vim.Format.ElementParameterInfo
                     var ps = new ParameterSummary()
                     {
                         SummaryKey = parameterSummaryKey.ToString(),
+                        DescriptorKindKey = parameterSummaryKey.ToDescriptorKindKey(),
                         Descriptor = descriptorIndex,
                         CategoryNameFull = categoryTable.GetNameFull(categoryIndex),
                         Name = name,
@@ -298,8 +301,7 @@ namespace Vim.Format.ElementParameterInfo
             int parameterIndex,
             ParameterTable parameterTable,
             ElementTable elementTable,
-            ElementKind[] elementKindArray,
-            CategoryTable categoryTable)
+            ElementKind[] elementKindArray)
         {
             DescriptorIndex = parameterTable.GetParameterDescriptorIndex(parameterIndex);
             var elementIndex = parameterTable.GetElementIndex(parameterIndex);
@@ -323,5 +325,11 @@ namespace Vim.Format.ElementParameterInfo
 
         public static string GetStringKey(int descriptorIndex, ElementKind elementKind, int categoryIndex)
             => $"{descriptorIndex}|{(int)elementKind}|{categoryIndex}";
+
+        public string ToDescriptorKindKey()
+            => GetDescriptorKindKey(DescriptorIndex, ElementKind);
+
+        public static string GetDescriptorKindKey(int descriptorIndex, ElementKind elementKind)
+            => $"{descriptorIndex}|{(int)elementKind}";
     }
 }
