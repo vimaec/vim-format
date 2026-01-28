@@ -51,12 +51,11 @@ namespace Vim.Format
             bool[] elementIsVisibleIn3dView)
         {
             var categoryDomains = CategoryDomain.GetCategoryDomainMap();
+
             var elementDomains = new ElementDomainEnum[elementTable.RowCount];
 
             for (var i = 0; i < elementDomains.Length; ++i)
-            {
                 elementDomains[i] = GetElementDomain(i, elementTable, categoryTable, elementKinds, elementIsVisibleIn3dView, categoryDomains);
-            }
 
             return elementDomains;
         }
@@ -78,34 +77,30 @@ namespace Vim.Format
             // Elements which are neither Family or FamilyType are labeled based on the category domain.
             var categoryIndex = elementTable.GetCategoryIndex(elementIndex);
             var builtInCategory = categoryTable.GetBuiltInCategory(categoryIndex);
-            var categoryDomain = categoryDomains.GetCategoryDomain(builtInCategory);
+            
+            var hasCategoryDomain = categoryDomains.TryGetValue(builtInCategory, out var categoryDomain);
+            if (!hasCategoryDomain)
+            {
+                // Special case: if the VIM file was sourced from IFC (or some source other than Revit),
+                // it probably won't have category domain. In this case, we use the ElementKind.FamilyInstance
+                // to determine whether the element domain is actually conceptual.
+                return elementKind is ElementKind.FamilyInstance
+                    ? GetPhysicalDomain(elementIndex, elementIsVisibleIn3dView)
+                    : ElementDomainEnum.Conceptual;
+            }
 
             switch (categoryDomain)
             {
                 case CategoryDomainEnum.Conceptual: return ElementDomainEnum.Conceptual;
                 case CategoryDomainEnum.Physical:
-                    {
-                        var isInstance = elementKind == ElementKind.FamilyInstance;
-                        if (isInstance)
-                        {
-                            var isVisibleIn3dView = elementIsVisibleIn3dView[elementIndex];
-                            return isVisibleIn3dView
-                                ? ElementDomainEnum.PhysicalVisible
-                                : ElementDomainEnum.PhysicalHidden;
-                        }
-                        return ElementDomainEnum.PhysicalNotInstanced;
-                    }
+                    return elementKind is ElementKind.FamilyInstance
+                        ? GetPhysicalDomain(elementIndex, elementIsVisibleIn3dView)
+                        : ElementDomainEnum.PhysicalNotInstanced;
                 case CategoryDomainEnum.Topography: return ElementDomainEnum.Topography;
                 case CategoryDomainEnum.Group: return ElementDomainEnum.Group;
                 case CategoryDomainEnum.Rooms: return ElementDomainEnum.Rooms;
                 case CategoryDomainEnum.System: return ElementDomainEnum.System;
-                case CategoryDomainEnum.Link:
-                    {
-                        var isVisibleIn3dView = elementIsVisibleIn3dView[elementIndex];
-                        return isVisibleIn3dView
-                            ? ElementDomainEnum.LinkVisible
-                            : ElementDomainEnum.LinkHidden;
-                    }
+                case CategoryDomainEnum.Link: return GetLinkDomain(elementIndex, elementIsVisibleIn3dView);
                 case CategoryDomainEnum.Annotation: return ElementDomainEnum.Annotation;
                 case CategoryDomainEnum.Symbol: return ElementDomainEnum.Symbol;
                 default:
@@ -113,5 +108,15 @@ namespace Vim.Format
                     return ElementDomainEnum.Conceptual;
             }
         }
+
+        public static ElementDomainEnum GetPhysicalDomain(int elementIndex, bool[] elementIsVisibleIn3dView)
+            => elementIsVisibleIn3dView[elementIndex]
+                ? ElementDomainEnum.PhysicalVisible
+                : ElementDomainEnum.PhysicalHidden;
+
+        public static ElementDomainEnum GetLinkDomain(int elementIndex, bool[] elementIsVisibleIn3dView)
+            => elementIsVisibleIn3dView[elementIndex]
+                ? ElementDomainEnum.LinkVisible
+                : ElementDomainEnum.LinkHidden;
     }
 }

@@ -17,13 +17,6 @@ namespace Vim.Format
 
     public static class CategoryDomainEnumExtensions
     {
-        public static CategoryDomainEnum GetCategoryDomain(
-            this Dictionary<string, CategoryDomainEnum> categoryDomainMap,
-            string builtInCategory)
-            => categoryDomainMap.TryGetValue(builtInCategory, out var result)
-                ? result
-                : CategoryDomainEnum.Conceptual; // fall back to conceptual.
-
         public static string ToDisplayString(this CategoryDomainEnum c)
             => c.ToString("G");
     }
