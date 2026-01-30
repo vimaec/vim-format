@@ -34,8 +34,17 @@ namespace Vim.Format.ElementParameterInfo
         //   - *DO NOT CHANGE THE ACTUAL ENUM VALUES*
     }
 
-    public static class ParameterMeasureInfo
+    public class ParameterMeasureInfo
     {
+        public MeasureType MeasureType { get; }
+        public bool IsRevitBuiltIn { get; }
+
+        public ParameterMeasureInfo(MeasureType measureType, bool isRevitBuiltIn)
+        {
+            MeasureType = measureType;
+            IsRevitBuiltIn = isRevitBuiltIn;
+        }
+
         /// <summary>
         /// Maps the lowercase parameter name to the MeasureType.
         /// </summary>
@@ -57,15 +66,15 @@ namespace Vim.Format.ElementParameterInfo
         //        })
         //        .ToArray();
 
-        public static MeasureType ParseMeasureType(string parameterDescriptorNameLowerInvariant, string parameterDescriptorGuid)
+        public static ParameterMeasureInfo ParseMeasureInfo(string parameterDescriptorNameLowerInvariant, string parameterDescriptorGuid)
         {
             // NOTE: parameterDescriptorGuid is either the Revit built-in ID (if the parameter is built-in), or a guid (if the parameter is shared).
-            if (BuiltInIdToMeasureTypeMap.TryGetValue(parameterDescriptorGuid, out var measureType))
-                return measureType;
+            if (RevitBuiltInIdToMeasureTypeMap.TryGetValue(parameterDescriptorGuid, out var measureType))
+                return new ParameterMeasureInfo(measureType, true);
 
             // Compare the input descriptor name to the known mapping
             if (NameLowerInvariantToMeasureTypeMap.TryGetValue(parameterDescriptorNameLowerInvariant, out measureType))
-                return measureType;
+                return new ParameterMeasureInfo(measureType, false);
 
             // Fall back to a string comparison to catch any localized parameter descriptor names which either start or end with the key followed by a space and digits,
             // for example: "Length of Beam" or "Pipe Length 1"
@@ -82,7 +91,7 @@ namespace Vim.Format.ElementParameterInfo
             //        return candidateMeasureType;
             //}
 
-            return MeasureType.Unknown;
+            return new ParameterMeasureInfo(MeasureType.Unknown, false);
         }
 
         public static void GetQuantityOrDisplayValue(
@@ -154,7 +163,7 @@ namespace Vim.Format.ElementParameterInfo
         /// <summary>
         /// Maps the built-in parameter Revit ID to the MeasureType
         /// </summary>
-        public static readonly Dictionary<string, MeasureType> BuiltInIdToMeasureTypeMap = new Dictionary<string, MeasureType>()
+        public static readonly Dictionary<string, MeasureType> RevitBuiltInIdToMeasureTypeMap = new Dictionary<string, MeasureType>()
         {
             { "-1001817", MeasureType.Angle }, // PROFILE_ANGLE, "Angle"
             { "-1001826", MeasureType.Angle }, // PROFILE1_ANGLE, "Angle"

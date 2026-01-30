@@ -21,22 +21,31 @@ namespace Vim.Format.ElementParameterInfo
             => Element.IndexOrDefault();
 
         public double? Angle { get; set; }
+        public bool AngleIsRevitBuiltIn { get; set; }
 
         public double? Slope { get; set; }
+        public bool SlopeIsRevitBuiltIn { get; set; }
 
         public double? Length { get; set; }
+        public bool LengthIsRevitBuiltIn { get; set; }
 
         public double? Width { get; set; }
+        public bool WidthIsRevitBuiltIn { get; set; }
 
         public double? Height { get; set; }
+        public bool HeightIsRevitBuiltIn { get; set; }
 
         public double? Area { get; set; }
+        public bool AreaIsRevitBuiltIn { get; set; }
 
         public double? Volume { get; set; }
+        public bool VolumeIsRevitBuiltIn { get; set; }
 
         public double? Depth { get; set; }
+        public bool DepthIsRevitBuiltIn { get; set; }
 
         public double? Diameter { get; set; }
+        public bool DiameterIsRevitBuiltIn { get; set; }
 
         /// <summary>
         /// Constructor
@@ -45,7 +54,7 @@ namespace Vim.Format.ElementParameterInfo
             Element element,
             ElementTable elementTable,
             ParameterTable parameterTable,
-            MeasureType[] parameterMeasureInfos)
+            ParameterMeasureInfo[] parameterMeasureInfos)
         {
             Element = element;
 
@@ -68,44 +77,54 @@ namespace Vim.Format.ElementParameterInfo
 
         private void ReadParameters(
             ParameterTable parameterTable,
-            MeasureType[] parameterMeasureInfos,
+            ParameterMeasureInfo[] parameterMeasureInfos,
             IReadOnlyList<int> parameterIndices)
         {
             foreach (var parameterIndex in parameterIndices)
             {
-                var mt = parameterMeasureInfos[parameterIndex];
+                var pmi = parameterMeasureInfos[parameterIndex];
+                var measureType = pmi.MeasureType;
 
                 var (nativeValue, _) = Parameter.SplitValues(parameterTable.Column_Value[parameterIndex]);
                 var parsed = Parameter.ParseNativeValueAsDouble(nativeValue);
 
-                switch (mt)
+                switch (measureType)
                 {
                     case MeasureType.Angle:
                         Angle = parsed;
+                        AngleIsRevitBuiltIn = pmi.IsRevitBuiltIn;
                         break;
                     case MeasureType.Slope:
                         Slope = parsed;
+                        SlopeIsRevitBuiltIn = pmi.IsRevitBuiltIn;
                         break;
                     case MeasureType.Length:
                         Length = parsed;
+                        LengthIsRevitBuiltIn = pmi.IsRevitBuiltIn;
                         break;
                     case MeasureType.Width:
                         Width = parsed;
+                        WidthIsRevitBuiltIn = pmi.IsRevitBuiltIn;
                         break;
                     case MeasureType.Height:
                         Height = parsed;
+                        HeightIsRevitBuiltIn = pmi.IsRevitBuiltIn;
                         break;
                     case MeasureType.Area:
                         Area = parsed;
+                        AreaIsRevitBuiltIn = pmi.IsRevitBuiltIn;
                         break;
                     case MeasureType.Volume:
                         Volume = parsed;
+                        VolumeIsRevitBuiltIn = pmi.IsRevitBuiltIn;
                         break;
                     case MeasureType.Depth:
                         Depth = parsed;
+                        DepthIsRevitBuiltIn = pmi.IsRevitBuiltIn;
                         break;
                     case MeasureType.Diameter:
                         Diameter = parsed;
+                        DiameterIsRevitBuiltIn = pmi.IsRevitBuiltIn;
                         break;
                     case MeasureType.Unknown:
                     default:

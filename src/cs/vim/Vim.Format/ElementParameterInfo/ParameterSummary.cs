@@ -6,15 +6,19 @@ using Vim.Util;
 
 namespace Vim.Format.ElementParameterInfo
 {
-    public class ParameterSummary
+    public class ParameterSummary : IElementKindInfo
     {
         public string SummaryKey { get; set; }
 
+        public string DescriptorKindKey { get; set; }
+
         public int Descriptor { get; set; }
 
-        public ElementKind ElementKindEnum { get; set; }
+        public int ElementKindEnum { get; set; }
 
         public string ElementKind { get; set; }
+
+        public bool ElementKindIsLeaf { get; set; }
 
         public string CategoryNameFull { get; set; }
 
@@ -192,13 +196,13 @@ namespace Vim.Format.ElementParameterInfo
             CategoryTable categoryTable)
         {
             return Enumerable.Range(0, parameterTable.RowCount)
-                .GroupBy(i => new ParameterSummaryKey(i, parameterTable, elementTable, elementKindArray, categoryTable))
+                .GroupBy(i => new ParameterSummaryKey(i, parameterTable, elementTable, elementKindArray))
                 .AsParallel()
                 .Select(g =>
                 {
                     var parameterSummaryKey = g.Key;
                     var descriptorIndex = parameterSummaryKey.DescriptorIndex;
-                    var elementKind = parameterSummaryKey.ElementKind;
+                    var elementKindValue = parameterSummaryKey.ElementKind;
                     var categoryIndex = parameterSummaryKey.CategoryIndex;
 
                     var displayValues = g.Select(i => Parameter.SplitValues(parameterTable.GetValue(i)).DisplayValue).ToList();
@@ -210,9 +214,8 @@ namespace Vim.Format.ElementParameterInfo
                     var ps = new ParameterSummary()
                     {
                         SummaryKey = parameterSummaryKey.ToString(),
+                        DescriptorKindKey = parameterSummaryKey.ToDescriptorKindKey(),
                         Descriptor = descriptorIndex,
-                        ElementKindEnum = elementKind,
-                        ElementKind = elementKind.ToDisplayString(),
                         CategoryNameFull = categoryTable.GetNameFull(categoryIndex),
                         Name = name,
                         NamePbiCaseSensitive = name.ToPbiCaseSensitiveString(),
@@ -225,6 +228,8 @@ namespace Vim.Format.ElementParameterInfo
                         CountDubious = countDubious,
                         CountDistinct = countDistinct
                     };
+
+                    ps.SetElementKindInfo(elementKindValue);
 
                     return ps;
                 });
@@ -296,8 +301,7 @@ namespace Vim.Format.ElementParameterInfo
             int parameterIndex,
             ParameterTable parameterTable,
             ElementTable elementTable,
-            ElementKind[] elementKindArray,
-            CategoryTable categoryTable)
+            ElementKind[] elementKindArray)
         {
             DescriptorIndex = parameterTable.GetParameterDescriptorIndex(parameterIndex);
             var elementIndex = parameterTable.GetElementIndex(parameterIndex);
@@ -321,5 +325,11 @@ namespace Vim.Format.ElementParameterInfo
 
         public static string GetStringKey(int descriptorIndex, ElementKind elementKind, int categoryIndex)
             => $"{descriptorIndex}|{(int)elementKind}|{categoryIndex}";
+
+        public string ToDescriptorKindKey()
+            => GetDescriptorKindKey(DescriptorIndex, ElementKind);
+
+        public static string GetDescriptorKindKey(int descriptorIndex, ElementKind elementKind)
+            => $"{descriptorIndex}|{(int)elementKind}";
     }
 }

@@ -34,7 +34,7 @@ public static class ElementParameterInfoServiceTests
         var elementLevelInfos = infos.ElementLevelInfos;
         var elementMeasureInfos = infos.ElementMeasureInfos;
         var elementIfcInfos = infos.ElementIfcInfos;
-        var parameterMeasureTypes = infos.ParameterMeasureTypes;
+        var parameterMeasureInfos = infos.ParameterMeasureInfos;
 
         var validationTableSet = new EntityTableSet(
             vimFileInfo,
@@ -49,7 +49,7 @@ public static class ElementParameterInfoServiceTests
         Assert.AreEqual(elementInstanceCount, elementIfcInfos.Length);
 
         var parameterCount = validationTableSet.ParameterTable.RowCount;
-        Assert.AreEqual(parameterCount, parameterMeasureTypes.Length);
+        Assert.AreEqual(parameterCount, parameterMeasureInfos.Length);
 
         var familyInstanceElementMap = validationTableSet.ElementIndexMaps.FamilyInstanceIndexFromElementIndex;
 

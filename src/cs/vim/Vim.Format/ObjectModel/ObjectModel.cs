@@ -267,7 +267,7 @@ namespace Vim.Format.ObjectModel
     public static class ElementKindExtensions
     {
         /// <summary>
-        /// Returns a display string representation of the element kind, allowing it to be ranked visually in user interfaces.
+        /// Returns a display string representation of the element kind.
         /// </summary>
         public static string ToDisplayString(this ElementKind k)
         {
@@ -309,6 +309,28 @@ namespace Vim.Format.ObjectModel
                     break;
             }
             return str;
+        }
+
+        /// <summary>
+        /// Returns true if the ElementKind is considered to be a terminal leaf in its hierarchy.
+        /// This is used to facilitate the removal of Family and FamilyType elements in
+        /// lists which may count elements by category.
+        /// 
+        /// For example, to accureately count elements with the "Door" category in a building,
+        /// you wouldn't want to include Family and FamilyType elements which also have the
+        /// "Door" category; this would lead to over-counting since Family and FamilyType elements
+        /// should not be considered countable "leaf" nodes (they are conceptual).
+        /// </summary>
+        public static bool IsLeaf(this ElementKind k)
+        {
+            switch (k)
+            {
+                case ElementKind.Family:
+                case ElementKind.FamilyType:
+                    return false;
+                default:
+                    return true;
+            }
         }
     }
 

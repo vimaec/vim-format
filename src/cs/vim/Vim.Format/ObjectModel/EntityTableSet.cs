@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-
+using Vim.Util;
 using static Vim.Format.Serializer;
 
 using ReadOnlyIndexMap = System.Collections.Generic.IReadOnlyDictionary<int, int>;
@@ -77,6 +77,9 @@ namespace Vim.Format.ObjectModel
 
             return ets.GetElementKinds();
         }
+
+        public FamilyDescendants GetFamilyDescendants()
+            => new FamilyDescendants(this);
     }
 
     public partial class CategoryTable
