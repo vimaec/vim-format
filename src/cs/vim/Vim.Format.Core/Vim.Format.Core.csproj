@@ -4,6 +4,20 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <RootNamespace>Vim.Format</RootNamespace>
+    <PackageProjectUrl>https://github.com/vimaec/vim-format</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/vimaec/vim-format</RepositoryUrl>
+    <RepositoryType>GitHub</RepositoryType>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <Version>1.8.3</Version>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(RepoNugetOutputDir)' != ''">
+    <PackageOutputPath>$(RepoNugetOutputDir)</PackageOutputPath>
   </PropertyGroup>
 
   <ItemGroup>

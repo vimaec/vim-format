@@ -10,6 +10,10 @@ It can be easily and efficiently deserialized and rendered in different language
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(RepoNugetOutputDir)' != ''">
+    <PackageOutputPath>$(RepoNugetOutputDir)</PackageOutputPath>
+  </PropertyGroup>
+
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU' OR '$(Configuration)|$(Platform)'=='LocalSrc_Release|AnyCPU'">
     <Optimize>true</Optimize>
   </PropertyGroup>

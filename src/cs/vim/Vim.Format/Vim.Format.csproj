@@ -17,6 +17,10 @@
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(RepoNugetOutputDir)' != ''">
+    <PackageOutputPath>$(RepoNugetOutputDir)</PackageOutputPath>
+  </PropertyGroup>
+
   <ItemGroup>
     <ProjectReference Include="..\..\bfast\Vim.BFast\Vim.BFast.csproj" />
     <ProjectReference Include="..\..\g3d\Vim.G3d\Vim.G3d.csproj" />
