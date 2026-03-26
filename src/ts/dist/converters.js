@@ -3,7 +3,9 @@
  * @module vim-ts
  */
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.convertArray = exports.convert = exports.Matrix4x4Converter = exports.AABox4DConverter = exports.AABoxConverter = exports.AABox2DConverter = exports.Vector4Converter = exports.Vector3Converter = exports.Vector2Converter = void 0;
+exports.Matrix4x4Converter = exports.AABox4DConverter = exports.AABoxConverter = exports.AABox2DConverter = exports.Vector4Converter = exports.Vector3Converter = exports.Vector2Converter = void 0;
+exports.convert = convert;
+exports.convertArray = convertArray;
 class Vector2Converter {
     get columns() {
         return [".X", ".Y"];
@@ -127,7 +129,6 @@ function convert(converter, array) {
     }
     return converter.convertFromArray(array.map(n => n));
 }
-exports.convert = convert;
 function convertArray(converter, arrays) {
     if (arrays.some(n => n === undefined)) {
         return undefined;
@@ -142,4 +143,3 @@ function convertArray(converter, arrays) {
     }
     return result;
 }
-exports.convertArray = convertArray;

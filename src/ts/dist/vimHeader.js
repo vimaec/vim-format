@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.requestHeader = void 0;
+exports.requestHeader = requestHeader;
 async function requestHeader(bfast) {
     const header = await bfast.getBuffer('header');
     const pairs = new TextDecoder('utf-8').decode(header).split('\n');
@@ -15,4 +15,3 @@ async function requestHeader(bfast) {
         schema: map.get('schema')
     };
 }
-exports.requestHeader = requestHeader;
