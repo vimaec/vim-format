@@ -174,6 +174,7 @@ namespace Vim.Format.ElementParameterInfo
             IReadOnlyDictionary<int, Dictionary<long, BasePoint>> basePointsByBimDocumentIndexAndElementId)
             => levels
                 .AsParallel()
+                .AsOrdered()
                 .Select(level =>
                 {
                     var bimDocumentIndex = elementTable.GetBimDocumentIndex(level.GetElementIndexOrNone());
@@ -234,6 +235,7 @@ namespace Vim.Format.ElementParameterInfo
 
             return elementTable
                 .AsParallel()
+                .AsOrdered()
                 .Select(e =>
                 {
                     var bimDocumentIndex = elementTable.GetBimDocumentIndex(e.Index);
@@ -264,6 +266,7 @@ namespace Vim.Format.ElementParameterInfo
             ParameterDescriptorTable parameterDescriptorTable)
             => parameterTable.Column_ParameterDescriptorIndex
                 .AsParallel()
+                .AsOrdered()
                 .Select(pdi =>
                 {
                     var parameterDescriptorNameLowerInvariant = parameterDescriptorTable.GetName(pdi).ToLowerInvariant();
@@ -278,6 +281,7 @@ namespace Vim.Format.ElementParameterInfo
             ParameterMeasureInfo[] parameterMeasureInfos)
             => elementTable
                 .AsParallel()
+                .AsOrdered()
                 .Select(e => new ElementMeasureInfo(e, elementTable, parameterTable, parameterMeasureInfos))
                 .ToArray();
 
@@ -287,6 +291,7 @@ namespace Vim.Format.ElementParameterInfo
             ElementIndexMaps elementIndexMaps)
             => elementTable
                 .AsParallel()
+                .AsOrdered()
                 .Select(e => new ElementOffsetInfo(e, parameterTable, elementIndexMaps))
                 .ToArray();
 
@@ -296,6 +301,7 @@ namespace Vim.Format.ElementParameterInfo
             ElementIndexMaps elementIndexMaps)
             => elementTable
                 .AsParallel()
+                .AsOrdered()
                 .Select(e => new ElementIfcInfo(e, parameterTable, elementIndexMaps))
                 .ToArray();
 
@@ -303,7 +309,9 @@ namespace Vim.Format.ElementParameterInfo
             FamilyTable familyTable,
             ParameterTable parameterTable,
             ElementIndexMaps elementIndexMaps)
-            => familyTable.AsParallel()
+            => familyTable
+                .AsParallel()
+                .AsOrdered()
                 .Select(f => new FamilyOmniClassInfo(f, parameterTable, elementIndexMaps))
                 .ToArray();
 
@@ -311,7 +319,9 @@ namespace Vim.Format.ElementParameterInfo
             FamilyTypeTable familyTypeTable,
             ParameterTable parameterTable,
             ElementIndexMaps elementIndexMaps)
-            => familyTypeTable.AsParallel()
+            => familyTypeTable
+                .AsParallel()
+                .AsOrdered()
                 .Select(ft => new FamilyTypeUniformatInfo(ft, parameterTable, elementIndexMaps))
                 .ToArray();
     }
