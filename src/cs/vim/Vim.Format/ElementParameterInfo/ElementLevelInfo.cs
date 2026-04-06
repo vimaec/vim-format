@@ -48,6 +48,8 @@ namespace Vim.Format.ElementParameterInfo
         HostLevel = 3,
         ReferenceLevel = 4,
         BaseLevel = 5,
+        RoomLevel = 6,
+        ParentLevel = 7,
     }
 
     public static class PrimaryLevelKindExtensions
@@ -64,6 +66,10 @@ namespace Vim.Format.ElementParameterInfo
                     return "Reference Level";
                 case PrimaryLevelKind.BaseLevel:
                     return "Base Level";
+                case PrimaryLevelKind.RoomLevel:
+                    return "Room Level";
+                case PrimaryLevelKind.ParentLevel:
+                    return "Parent Level";
                 default:
                     return p.ToString("G");
             }
@@ -200,6 +206,16 @@ namespace Vim.Format.ElementParameterInfo
         };
 
         /// <summary>
+        /// The level of the element's Room (Room element -> that element's level). Can be null.
+        /// </summary>
+        public LevelInfo RoomLevelInfo { get; }
+
+        /// <summary>
+        /// The level inherited from the nearest ancestor in the element hierarchy. Can be null.
+        /// </summary>
+        public LevelInfo ParentLevelInfo { get; private set; }
+
+        /// <summary>
         /// The primary level associated with the element. Can be null.
         /// </summary>
         public LevelInfo PrimaryLevelInfo
@@ -220,6 +236,12 @@ namespace Vim.Format.ElementParameterInfo
 
                 if (BaseLevelInfo != null)
                     return BaseLevelInfo;
+
+                if (RoomLevelInfo != null)
+                    return RoomLevelInfo;
+
+                if (ParentLevelInfo != null)
+                    return ParentLevelInfo;
 
                 return null;
             }
@@ -247,6 +269,12 @@ namespace Vim.Format.ElementParameterInfo
                 if (BaseLevelInfo != null)
                     return PrimaryLevelKind.BaseLevel;
 
+                if (RoomLevelInfo != null)
+                    return PrimaryLevelKind.RoomLevel;
+
+                if (ParentLevelInfo != null)
+                    return PrimaryLevelKind.ParentLevel;
+
                 return PrimaryLevelKind.Unknown;
             }
         }
@@ -255,28 +283,28 @@ namespace Vim.Format.ElementParameterInfo
         /// The building story above the primary level.
         /// Null if the primary level is null.
         /// </summary>
-        public LevelInfo BuildingStoryAbovePrimaryLevelInfo { get; }
+        public LevelInfo BuildingStoryAbovePrimaryLevelInfo { get; private set; }
 
         /// <summary>
         /// The building story below the primary level if the primary level is not a building story, or the primary level if it is a building story.
         /// Null if the primary level is null.
         /// </summary>
-        public LevelInfo BuildingStoryCurrentOrBelowPrimaryLevelInfo { get; }
+        public LevelInfo BuildingStoryCurrentOrBelowPrimaryLevelInfo { get; private set; }
 
         /// <summary>
         /// The containment type of the element's geometry relative to the BuildingStoryAbove and the BuildingStoryCurrentOrBelow.
         /// </summary>
-        public BuildingStoryGeometryContainment BuildingStoryGeometryContainment { get; }
+        public BuildingStoryGeometryContainment BuildingStoryGeometryContainment { get; private set; }
 
         /// <summary>
         /// The building story immediately below the element's geometry minimum z coordinate. Can be null.
         /// </summary>
-        public LevelInfo BuildingStoryGeometryMinLevelInfo { get; }
+        public LevelInfo BuildingStoryGeometryMinLevelInfo { get; private set; }
 
         /// <summary>
         /// The building story immediately below the element's geometry maximum z coordinate. Can be null.
         /// </summary>
-        public LevelInfo BuildingStoryGeometryMaxLevelInfo { get; }
+        public LevelInfo BuildingStoryGeometryMaxLevelInfo { get; private set; }
 
         /// <summary>
         /// The default tolerance value for the geometry level containment calculation.
@@ -291,6 +319,7 @@ namespace Vim.Format.ElementParameterInfo
             ElementTable elementTable,
             FamilyInstanceTable familyInstanceTable,
             LevelTable levelTable,
+            RoomTable roomTable,
             ParameterTable parameterTable,
             ElementIndexMaps elementIndexMaps,
             ElementGeometryMap elementGeometryMap,
@@ -316,6 +345,9 @@ namespace Vim.Format.ElementParameterInfo
             
             if (TryGetHostLevel(element, elementTable, familyInstanceTable, levelTable, elementIndexMaps, elementIdToLevelInfoMap, out var hostLevelInfo))
                 HostLevelInfo = hostLevelInfo;
+
+            if (TryGetRoomLevel(elementIndex, elementTable, roomTable, levelInfoMap, out var roomLevelInfo))
+                RoomLevelInfo = roomLevelInfo;
 
             var elementParameterIndices = elementIndexMaps.GetParameterIndicesFromElementIndex(elementIndex);
             foreach (var parameterIndex in elementParameterIndices)
@@ -347,21 +379,33 @@ namespace Vim.Format.ElementParameterInfo
                 }
             }
 
+            ComputeBuildingStoryContainment(elementIndex, orderedLevelInfosByProjectElevation, elementGeometryMap, geometryContainmentTolerance);
+        }
+
+        /// <summary>
+        /// Computes the building story brackets and geometry containment relative to the primary level.
+        /// </summary>
+        private void ComputeBuildingStoryContainment(
+            int elementIndex,
+            IReadOnlyList<LevelInfo> orderedLevelInfosByProjectElevation,
+            ElementGeometryMap elementGeometryMap,
+            double geometryContainmentTolerance)
+        {
             BuildingStoryGeometryContainment = GetBuildingStoryGeometryContainment(
                 elementIndex,
                 PrimaryLevelInfo?.Level?.ProjectElevation,
                 orderedLevelInfosByProjectElevation,
                 elementGeometryMap,
                 geometryContainmentTolerance,
-                out var maybeBuildingStoryAbove,
-                out var maybeBuildingStoryCurrentOrBelow,
-                out var maybeBuildingStoryGeometryMin,
-                out var maybeBuildingStoryGeometryMax);
+                out var storyAbove,
+                out var storyCurrentOrBelow,
+                out var geomMin,
+                out var geomMax);
 
-            BuildingStoryAbovePrimaryLevelInfo = maybeBuildingStoryAbove;
-            BuildingStoryCurrentOrBelowPrimaryLevelInfo = maybeBuildingStoryCurrentOrBelow;
-            BuildingStoryGeometryMinLevelInfo = maybeBuildingStoryGeometryMin;
-            BuildingStoryGeometryMaxLevelInfo = maybeBuildingStoryGeometryMax;
+            BuildingStoryAbovePrimaryLevelInfo = storyAbove;
+            BuildingStoryCurrentOrBelowPrimaryLevelInfo = storyCurrentOrBelow;
+            BuildingStoryGeometryMinLevelInfo = geomMin;
+            BuildingStoryGeometryMaxLevelInfo = geomMax;
         }
 
         /// <summary>
@@ -403,6 +447,36 @@ namespace Vim.Format.ElementParameterInfo
             var hostElementLevelElementId = elementTable.GetId(hostElementLevelElementIndex);
 
             return elementIdToLevelInfoMap.TryGetEntityFromElementId(hostElementLevelElementId, out hostLevelInfo);
+        }
+
+        /// <summary>
+        /// Returns the level of the element's Room (Room element -> that element's level).
+        /// </summary>
+        private static bool TryGetRoomLevel(
+            int elementIndex,
+            ElementTable elementTable,
+            RoomTable roomTable,
+            IReadOnlyDictionary<int, LevelInfo> levelInfoMap,
+            out LevelInfo roomLevelInfo)
+        {
+            roomLevelInfo = null;
+
+            if (roomTable == null || elementIndex == EntityRelation.None)
+                return false;
+
+            var roomIndex = elementTable.GetRoomIndex(elementIndex);
+            if (roomIndex == EntityRelation.None)
+                return false;
+
+            var roomElementIndex = roomTable.GetElementIndex(roomIndex);
+            if (roomElementIndex == EntityRelation.None)
+                return false;
+
+            var roomElementLevelIndex = elementTable.GetLevelIndex(roomElementIndex);
+            if (roomElementLevelIndex == EntityRelation.None)
+                return false;
+
+            return levelInfoMap.TryGetValue(roomElementLevelIndex, out roomLevelInfo);
         }
 
         /// <summary>
@@ -584,6 +658,102 @@ namespace Vim.Format.ElementParameterInfo
             Debug.Fail($"Unexpected geometry containment case. nudgedBbMin: {nudgedBbMin}, nudgedBbMax: {nudgedBbMax}, lvlLow: {lvlLow}, lvlHi: {lvlHi}");
 
             return BuildingStoryGeometryContainment.Unknown;
+        }
+
+        /// <summary>
+        /// For elements with no resolved primary level, inherits the primary level from the
+        /// nearest ancestor via a memoized walk up the element hierarchy (distance == 1 hops).
+        /// Mutates the affected entries in-place and recomputes their geometry containment.
+        /// </summary>
+        public static void PatchElementLevelInfosFromHierarchy(
+            ElementLevelInfo[] elementLevelInfos,
+            HashSet<ElementHierarchy> hierarchy,
+            ElementTable elementTable,
+            ElementGeometryMap elementGeometryMap,
+            IReadOnlyDictionary<int, LevelInfo[]> levelInfoByBimDocumentIndexOrdered)
+        {
+            // Build descendant -> parent map from distance==1 entries.
+            var parentMap = new Dictionary<int, int>();
+            foreach (var eh in hierarchy)
+            {
+                if (eh.Distance == 1 &&
+                    eh.Element >= 0 &&
+                    eh.Descendant >= 0)
+                {
+                    parentMap[eh.Descendant] = eh.Element;
+                }
+            }
+
+            // Memoized ancestor walk.
+            // Cache stores resolved LevelInfo (null = no ancestor has a level).
+            var cache = new Dictionary<int, LevelInfo>();
+
+            for (var i = 0; i < elementLevelInfos.Length; i++)
+            {
+                var eli = elementLevelInfos[i];
+                if (eli == null || eli.PrimaryLevelInfo != null)
+                    continue;
+
+                LevelInfo inheritedLevel = null;
+
+                if (cache.TryGetValue(i, out var cached))
+                {
+                    inheritedLevel = cached;
+                }
+                else
+                {
+                    var path = new List<int>();
+                    var visited = new HashSet<int>();
+                    var current = i;
+
+                    while (parentMap.TryGetValue(current, out var parentIdx))
+                    {
+                        current = parentIdx;
+
+                        // Cycle protection.
+                        if (!visited.Add(current))
+                            break;
+
+                        if (cache.TryGetValue(current, out var ancestorCached))
+                        {
+                            inheritedLevel = ancestorCached;
+                            break;
+                        }
+
+                        if (current >= 0 && current < elementLevelInfos.Length)
+                        {
+                            var parentEli = elementLevelInfos[current];
+                            if (parentEli?.PrimaryLevelInfo != null)
+                            {
+                                inheritedLevel = parentEli.PrimaryLevelInfo;
+                                break;
+                            }
+                        }
+
+                        path.Add(current);
+                    }
+
+                    // Cache for all intermediate nodes + self.
+                    foreach (var v in path)
+                        cache[v] = inheritedLevel;
+                    cache[i] = inheritedLevel;
+                }
+
+                if (inheritedLevel == null)
+                    continue;
+
+                eli.ParentLevelInfo = inheritedLevel;
+
+                // Recompute building story brackets and geometry containment
+                // against the newly inherited primary level.
+                var elementIndex = eli.GetElementIndexOrNone();
+                var bimDocIdx = elementTable.GetBimDocumentIndex(elementIndex);
+
+                if (!levelInfoByBimDocumentIndexOrdered.TryGetValue(bimDocIdx, out var orderedLevelInfos))
+                    orderedLevelInfos = Array.Empty<LevelInfo>();
+
+                eli.ComputeBuildingStoryContainment(elementIndex, orderedLevelInfos, elementGeometryMap, DefaultGeometryContainmentTolerance);
+            }
         }
 
         public string PropertiesToString()

@@ -69,7 +69,8 @@ namespace Vim.Format.ElementParameterInfo
         public static ElementParameterInfo GetElementParameterInfos(
             FileInfo vimFileInfo,
             string[] stringTable = null,
-            ElementGeometryMap elementGeometryMap = null)
+            ElementGeometryMap elementGeometryMap = null,
+            HashSet<ElementHierarchy> elementHierarchy = null)
         {
             elementGeometryMap = elementGeometryMap ?? new ElementGeometryMap(vimFileInfo);
 
@@ -85,9 +86,13 @@ namespace Vim.Format.ElementParameterInfo
                     n is TableNames.ParameterDescriptor ||
                     n is TableNames.DisplayUnit ||
                     n is TableNames.Level ||
-                    n is TableNames.BasePoint);
+                    n is TableNames.BasePoint ||
+                    n is TableNames.Room ||
+                    n is TableNames.Group ||
+                    n is TableNames.System ||
+                    n is TableNames.ElementInSystem);
 
-            return GetElementParameterInfos(tableSet, elementGeometryMap);
+            return GetElementParameterInfos(tableSet, elementGeometryMap, elementHierarchy);
         }
 
         /// <summary>
@@ -95,7 +100,8 @@ namespace Vim.Format.ElementParameterInfo
         /// </summary>
         public static ElementParameterInfo GetElementParameterInfos(
             EntityTableSet tableSet,
-            ElementGeometryMap elementGeometryMap)
+            ElementGeometryMap elementGeometryMap,
+            HashSet<ElementHierarchy> elementHierarchy = null)
         {
             var elementIndexMaps = tableSet.ElementIndexMaps;
             var elementTable = tableSet.ElementTable;
@@ -106,6 +112,7 @@ namespace Vim.Format.ElementParameterInfo
             var familyTable = tableSet.FamilyTable;
             var basePointTable = tableSet.BasePointTable;
             var levelTable = tableSet.LevelTable;
+            var roomTable = tableSet.RoomTable;
 
             var levels = levelTable.ToArray();
             var levelsByBimDocumentIndexAndElementId = levels.GroupByBimDocumentIndexAndElementId(elementTable);
@@ -126,15 +133,19 @@ namespace Vim.Format.ElementParameterInfo
 
             PatchBuildingStoryAbove(levelInfoByBimDocumentIndex);
 
+            var hierarchy = elementHierarchy ?? new ElementHierarchyService(tableSet, elementGeometryMap).GetElementHierarchy();
+
             var elementLevelInfos = CreateElementLevelInfos(
                 elementTable,
                 familyInstanceTable,
                 parameterTable,
                 levelTable,
+                roomTable,
                 elementIndexMaps,
                 elementGeometryMap,
                 levelInfoMap,
-                levelInfoByBimDocumentIndex);
+                levelInfoByBimDocumentIndex,
+                hierarchy);
 
             var parameterMeasureInfos = CreateParameterMeasureInfos(parameterTable, descriptorTable);
 
@@ -218,22 +229,28 @@ namespace Vim.Format.ElementParameterInfo
 
         /// <summary>
         /// Returns an array of element level infos based on the given list of elements.
+        /// Pass 1: creates ElementLevelInfo per element (parallel).
+        /// Pass 2: for elements with no resolved primary level, inherits from the nearest
+        /// ancestor via a memoized walk up the element hierarchy (sequential).
         /// </summary>
         private static ElementLevelInfo[] CreateElementLevelInfos(
             ElementTable elementTable,
             FamilyInstanceTable familyInstanceTable,
             ParameterTable parameterTable,
             LevelTable levelTable,
+            RoomTable roomTable,
             ElementIndexMaps elementIndexMaps,
             ElementGeometryMap elementGeometryMap,
             IReadOnlyDictionary<int, LevelInfo> levelInfoMap,
-            IReadOnlyDictionary<int, Dictionary<long, LevelInfo>> levelInfoByBimDocumentIndex)
+            IReadOnlyDictionary<int, Dictionary<long, LevelInfo>> levelInfoByBimDocumentIndex,
+            HashSet<ElementHierarchy> hierarchy)
         {
             var levelInfoByBimDocumentIndexOrdered = levelInfoByBimDocumentIndex.ToDictionary(
                 kv => kv.Key,
                 kv => kv.Value.Values.OrderBy(li => li.Level.ProjectElevation).ToArray());
 
-            return elementTable
+            // Pass 1: create ElementLevelInfo per element (parallel).
+            var result = elementTable
                 .AsParallel()
                 .AsOrdered()
                 .Select(e =>
@@ -251,6 +268,7 @@ namespace Vim.Format.ElementParameterInfo
                         elementTable,
                         familyInstanceTable,
                         levelTable,
+                        roomTable,
                         parameterTable,
                         elementIndexMaps,
                         elementGeometryMap,
@@ -259,6 +277,16 @@ namespace Vim.Format.ElementParameterInfo
                         elementIdToLevelInfoMap);
                 })
                 .ToArray();
+
+            // Pass 2: inherit primary level from nearest ancestor for unresolved elements.
+            ElementLevelInfo.PatchElementLevelInfosFromHierarchy(
+                result,
+                hierarchy,
+                elementTable,
+                elementGeometryMap,
+                levelInfoByBimDocumentIndexOrdered);
+
+            return result;
         }
 
         public static ParameterMeasureInfo[] CreateParameterMeasureInfos(
