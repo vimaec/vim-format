@@ -18,7 +18,13 @@
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(CommonAssemblyInfoVersion)' != ''">
+    <!-- version override when built from parent repo -->
+    <Version>$(CommonAssemblyInfoVersion)</Version>
+  </PropertyGroup>
+
   <PropertyGroup Condition="'$(RepoNugetOutputDir)' != ''">
+    <!-- output directory override when built from parent repo -->
     <PackageOutputPath>$(RepoNugetOutputDir)</PackageOutputPath>
   </PropertyGroup>
 
