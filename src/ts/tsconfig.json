@@ -3,8 +3,12 @@
         "target": "es2020",
         "module": "commonjs",
         "declaration": true,
+        "rootDir": "src",
         "outDir": "dist",
         "esModuleInterop": true,
+        "strictPropertyInitialization": false,
+        "strictNullChecks": false,
+        "noImplicitAny": false,
         "types": ["jest", "node"]
     },
     "exclude": [

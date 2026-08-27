@@ -3,7 +3,7 @@ import { BFast } from "./bfast";
  * Representation of VimHeader from the Vim format
  * See https://github.com/vimaec/vim#header-buffer
  */
-export declare type VimHeader = {
+export type VimHeader = {
     vim: string | undefined;
     vimx: string | undefined;
     id: string | undefined;
