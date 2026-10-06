@@ -11,6 +11,12 @@ namespace Vim.Format
     {
         Texture,
         Render,
+        /// <summary>
+        /// Light sources for rendering: "light/lights.json" (one record per light source - its element, world
+        /// position and axes, emitter shape, distribution, intensity, colour temperature) and the photometric
+        /// profiles it names, "light/&lt;file&gt;.ies" (IESNA LM-63 text, as Revit's lighting families carry them).
+        /// </summary>
+        Light,
     }
 
     /// <summary>
