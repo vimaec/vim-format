@@ -14,6 +14,60 @@ namespace Vim.Format.ObjectModel
         // ReSharper disable MemberHidesStaticFromOuterClass
         public static class History
         {
+            // Schema additions (light sources and the sun, previously written as "light/lights.json" and "light/sun.json" assets)
+            //   Vim.LightSource__byte:HasLightSourceTransform
+            //   Vim.LightSource__byte:IsOn
+            //   Vim.LightSource__double:BasisX.X
+            //   Vim.LightSource__double:BasisX.Y
+            //   Vim.LightSource__double:BasisX.Z
+            //   Vim.LightSource__double:BasisY.X
+            //   Vim.LightSource__double:BasisY.Y
+            //   Vim.LightSource__double:BasisY.Z
+            //   Vim.LightSource__double:BasisZ.X
+            //   Vim.LightSource__double:BasisZ.Y
+            //   Vim.LightSource__double:BasisZ.Z
+            //   Vim.LightSource__double:Origin.X
+            //   Vim.LightSource__double:Origin.Y
+            //   Vim.LightSource__double:Origin.Z
+            //   Vim.LightSource__index:Vim.Element:Element
+            //   Vim.LightSource__index:Vim.LightType:LightType
+            //   Vim.LightType__double:ColorFilter.X
+            //   Vim.LightType__double:ColorFilter.Y
+            //   Vim.LightType__double:ColorFilter.Z
+            //   Vim.LightType__double:Efficacy
+            //   Vim.LightType__double:EmitDiameter
+            //   Vim.LightType__double:EmitLength
+            //   Vim.LightType__double:EmitWidth
+            //   Vim.LightType__double:Flux
+            //   Vim.LightType__double:Illuminance
+            //   Vim.LightType__double:IlluminanceDistance
+            //   Vim.LightType__double:InitialColorTemperature
+            //   Vim.LightType__double:LossFactor
+            //   Vim.LightType__double:Luminosity
+            //   Vim.LightType__double:SpotBeamAngle
+            //   Vim.LightType__double:SpotFieldAngle
+            //   Vim.LightType__double:TiltAngle
+            //   Vim.LightType__double:Wattage
+            //   Vim.LightType__index:Vim.Asset:PhotometricWebFile
+            //   Vim.LightType__index:Vim.FamilyType:FamilyType
+            //   Vim.LightType__int:DimmingColor
+            //   Vim.LightType__int:InitialIntensityType
+            //   Vim.LightType__int:LightDistributionStyle
+            //   Vim.LightType__int:LightShapeStyle
+            //   Vim.LightType__string:PhotometricWebFileName
+            //   Vim.SunAndShadowSettings__byte:RelativeToView
+            //   Vim.SunAndShadowSettings__byte:UsesDST
+            //   Vim.SunAndShadowSettings__double:Altitude
+            //   Vim.SunAndShadowSettings__double:Azimuth
+            //   Vim.SunAndShadowSettings__index:Vim.View:View
+            //   Vim.SunAndShadowSettings__int:ActiveFrame
+            //   Vim.SunAndShadowSettings__int:NumberOfFrames
+            //   Vim.SunAndShadowSettings__string:ActiveFrameTime
+            //   Vim.SunAndShadowSettings__string:EndDateAndTime
+            //   Vim.SunAndShadowSettings__string:StartDateAndTime
+            //   Vim.SunAndShadowSettings__string:SunAndShadowType
+            public const string v5_8_0 = "5.8.0";
+
             // Schema additions
             //   Vim.Element__string:Creator
             //   Vim.Element__string:LastChangedBy
@@ -186,7 +240,8 @@ namespace Vim.Format.ObjectModel
         // ReSharper enable MemberHidesStaticFromOuterClass
 
         // [MAINTAIN] Add more object model SerializableVersions below and update the current one.
-        public static SerializableVersion Current => v5_7_0;
+        public static SerializableVersion Current => v5_8_0;
+        public static SerializableVersion v5_8_0 => SerializableVersion.Parse(History.v5_8_0);
         public static SerializableVersion v5_7_0 => SerializableVersion.Parse(History.v5_7_0);
         public static SerializableVersion v5_6_0 => SerializableVersion.Parse(History.v5_6_0);
         public static SerializableVersion v5_5_0 => SerializableVersion.Parse(History.v5_5_0);
@@ -2147,6 +2202,351 @@ namespace Vim.Format.ObjectModel
         public string Address;
 
         public Relation<Site> _Site;
+    }
+
+    /// <summary>
+    /// The shape of a light's emitter. Maps to Revit's LightShapeStyle (LightType.GetLightShape()).
+    /// </summary>
+    public enum LightShapeStyle
+    {
+        Unknown = 0,
+        Point = 1,
+        Line = 2,
+        Rectangle = 3,
+        Circle = 4,
+    }
+
+    /// <summary>
+    /// The distribution of a light. Maps to Revit's LightDistributionStyle (LightType.GetLightDistribution()).
+    /// </summary>
+    public enum LightDistributionStyle
+    {
+        Unknown = 0,
+        Spherical = 1,
+        Hemispherical = 2,
+        Spot = 3,
+        PhotometricWeb = 4,
+    }
+
+    /// <summary>
+    /// How the initial intensity of a light is defined. Maps to the subclass of Revit's InitialIntensity (LightType.GetInitialIntensity()).
+    /// </summary>
+    public enum InitialIntensityType
+    {
+        Unknown = 0,
+        /// <summary>InitialLuminousIntensity: LightType.Luminosity applies.</summary>
+        LuminousIntensity = 1,
+        /// <summary>InitialFluxIntensity: LightType.Flux applies.</summary>
+        Flux = 2,
+        /// <summary>InitialWattageIntensity: LightType.Wattage and LightType.Efficacy apply.</summary>
+        Wattage = 3,
+        /// <summary>InitialIlluminanceIntensity: LightType.Illuminance and LightType.IlluminanceDistance apply.</summary>
+        Illuminance = 4,
+        /// <summary>
+        /// The Revit Lighting API refused the family; the values were read from the family type's FBX_LIGHT_* built-in parameters.
+        /// Any of Luminosity, Flux, Wattage, Efficacy and Illuminance may be set (0 when the parameter is absent).
+        /// </summary>
+        TypeParameters = 5,
+    }
+
+    /// <summary>
+    /// The dimming behaviour of a light. Maps to Revit's LightDimmingColor (LightType.DimmingColor).
+    /// </summary>
+    public enum LightDimmingColor
+    {
+        Unknown = 0,
+        None = 1,
+        Incandescent = 2,
+    }
+
+    /// <summary>
+    /// Represents the photometric definition of a lighting FamilyType: its emitter shape, its distribution, its initial
+    /// intensity and its color. All the FamilyInstances of the FamilyType share it; each of them has a LightSource.<br/>
+    /// Revit: maps to Autodesk.Revit.DB.Lighting.LightType (LightType.GetLightTypeFromInstance).<br/>
+    /// Units: the Revit Lighting API returns SI values (cd, lm, W, lm/W, lx, K), with lengths in feet and angles in radians;
+    /// they are stored as they are. A value which does not apply to the shape, the distribution or the intensity type is 0.
+    /// </summary>
+    [TableName(TableNames.LightType)]
+    public partial class LightType : Entity
+    {
+        /// <summary>
+        /// The integer representation of the LightShapeStyle enum (LightType.GetLightShape()).
+        /// </summary>
+        public int LightShapeStyle;
+
+        public LightShapeStyle GetLightShapeStyle()
+            => (LightShapeStyle) LightShapeStyle;
+
+        /// <summary>
+        /// The emit length in feet, for a Line or a Rectangle shape (LineLightShape.EmitLength, RectangleLightShape.EmitLength).
+        /// </summary>
+        public double EmitLength;
+
+        /// <summary>
+        /// The emit width in feet, for a Rectangle shape (RectangleLightShape.EmitWidth).
+        /// </summary>
+        public double EmitWidth;
+
+        /// <summary>
+        /// The emit diameter in feet, for a Circle shape (CircleLightShape.EmitDiameter).
+        /// </summary>
+        public double EmitDiameter;
+
+        /// <summary>
+        /// The integer representation of the LightDistributionStyle enum (LightType.GetLightDistribution()).
+        /// </summary>
+        public int LightDistributionStyle;
+
+        public LightDistributionStyle GetLightDistributionStyle()
+            => (LightDistributionStyle) LightDistributionStyle;
+
+        /// <summary>
+        /// The spot beam angle in radians, for a Spot distribution (SpotLightDistribution.SpotBeamAngle).
+        /// </summary>
+        public double SpotBeamAngle;
+
+        /// <summary>
+        /// The spot field angle in radians, for a Spot distribution (SpotLightDistribution.SpotFieldAngle).
+        /// </summary>
+        public double SpotFieldAngle;
+
+        /// <summary>
+        /// The tilt angle in radians, for a Spot or a PhotometricWeb distribution (SpotLightDistribution.TiltAngle, PhotometricWebLightDistribution.TiltAngle).
+        /// Note: RevitAPI.xml says PhotometricWebLightDistribution.TiltAngle is in degrees; measured on Revit 2027, it returns radians.
+        /// </summary>
+        public double TiltAngle;
+
+        /// <summary>
+        /// The photometric web (IES) file name, as Revit names it (PhotometricWebLightDistribution.PhotometricWebFile, or the
+        /// FBX_LIGHT_PHOTOMETRIC_FILE parameter). Kept even when the file itself could not be found.
+        /// </summary>
+        public string PhotometricWebFileName;
+
+        /// <summary>
+        /// The asset holding the photometric web file's bytes as they are (IESNA LM-63 text), or none if the file could not be
+        /// found. Read from the family type's cache (the FBX_LIGHT_PHOTOMETRIC_FILE_CACHE parameter), else from the disk.
+        /// Light types which use the same file share the same asset.
+        /// </summary>
+        public Relation<Asset> _PhotometricWebFile;
+
+        /// <summary>
+        /// The integer representation of the InitialIntensityType enum (LightType.GetInitialIntensity()).
+        /// </summary>
+        public int InitialIntensityType;
+
+        public InitialIntensityType GetInitialIntensityType()
+            => (InitialIntensityType) InitialIntensityType;
+
+        /// <summary>
+        /// The luminous intensity in candelas (InitialLuminousIntensity.Luminosity).
+        /// </summary>
+        public double Luminosity;
+
+        /// <summary>
+        /// The luminous flux in lumens (InitialFluxIntensity.Flux).
+        /// </summary>
+        public double Flux;
+
+        /// <summary>
+        /// The wattage in watts (InitialWattageIntensity.Wattage).
+        /// </summary>
+        public double Wattage;
+
+        /// <summary>
+        /// The efficacy in lumens per watt (InitialWattageIntensity.Efficacy).
+        /// </summary>
+        public double Efficacy;
+
+        /// <summary>
+        /// The illuminance in lux (InitialIlluminanceIntensity.Illuminance).
+        /// </summary>
+        public double Illuminance;
+
+        /// <summary>
+        /// The distance in feet at which the Illuminance is measured (InitialIlluminanceIntensity.Distance).
+        /// </summary>
+        public double IlluminanceDistance;
+
+        /// <summary>
+        /// The initial color temperature in kelvins (LightType.GetInitialColor().TemperatureValue). 0 if unknown.
+        /// </summary>
+        public double InitialColorTemperature;
+
+        /// <summary>
+        /// The color filter, each component in [0..1] (LightType.ColorFilter, whose bytes are divided by 255). (0, 0, 0) if unknown.
+        /// </summary>
+        public double ColorFilter_X;
+        public double ColorFilter_Y;
+        public double ColorFilter_Z;
+        public DVector3 ColorFilter
+        {
+            get => new DVector3(ColorFilter_X, ColorFilter_Y, ColorFilter_Z);
+            set => (ColorFilter_X, ColorFilter_Y, ColorFilter_Z) = value;
+        }
+
+        /// <summary>
+        /// The total light loss factor, a ratio (LightType.GetLossFactor().LossFactorValue). 0 if unknown.
+        /// </summary>
+        public double LossFactor;
+
+        /// <summary>
+        /// The integer representation of the LightDimmingColor enum (LightType.DimmingColor).
+        /// </summary>
+        public int DimmingColor;
+
+        public LightDimmingColor GetDimmingColor()
+            => (LightDimmingColor) DimmingColor;
+
+        /// <summary>
+        /// The FamilyType which carries this light definition (in Revit, the FamilySymbol of the light fixtures).
+        /// </summary>
+        public Relation<FamilyType> _FamilyType;
+    }
+
+    /// <summary>
+    /// Represents the light source of a light fixture: where it is, how it is oriented, and whether it is on.
+    /// The Element relation is the fixture's Element (a FamilyInstance). Revit allows one light source per family
+    /// (LightFamily.GetLightSourceTransform), hence at most one LightSource per Element.
+    /// </summary>
+    [TableName(TableNames.LightSource)]
+    [CascadeElementRemap]
+    public partial class LightSource : EntityWithElement
+    {
+        /// <summary>
+        /// The origin of the light source, in the same world space and units (feet) as the geometry: the transform of the
+        /// document holding the fixture (identity, or the link's transform) x FamilyInstance.GetTotalTransform() x
+        /// LightFamily.GetLightSourceTransform() (read in the light's family document).
+        /// </summary>
+        public double Origin_X;
+        public double Origin_Y;
+        public double Origin_Z;
+        public DVector3 Origin
+        {
+            get => new DVector3(Origin_X, Origin_Y, Origin_Z);
+            set => (Origin_X, Origin_Y, Origin_Z) = value;
+        }
+
+        /// <summary>
+        /// The X axis of the light source frame, in world space, as a unit vector.
+        /// </summary>
+        public double BasisX_X;
+        public double BasisX_Y;
+        public double BasisX_Z;
+        public DVector3 BasisX
+        {
+            get => new DVector3(BasisX_X, BasisX_Y, BasisX_Z);
+            set => (BasisX_X, BasisX_Y, BasisX_Z) = value;
+        }
+
+        /// <summary>
+        /// The Y axis of the light source frame, in world space, as a unit vector.
+        /// </summary>
+        public double BasisY_X;
+        public double BasisY_Y;
+        public double BasisY_Z;
+        public DVector3 BasisY
+        {
+            get => new DVector3(BasisY_X, BasisY_Y, BasisY_Z);
+            set => (BasisY_X, BasisY_Y, BasisY_Z) = value;
+        }
+
+        /// <summary>
+        /// The Z axis of the light source frame, in world space, as a unit vector. The light points along -BasisZ (the
+        /// photometric nadir, as in IES files). A mirrored fixture gives a left-handed frame: do not assume BasisX x BasisY = BasisZ.
+        /// </summary>
+        public double BasisZ_X;
+        public double BasisZ_Y;
+        public double BasisZ_Z;
+        public DVector3 BasisZ
+        {
+            get => new DVector3(BasisZ_X, BasisZ_Y, BasisZ_Z);
+            set => (BasisZ_X, BasisZ_Y, BasisZ_Z) = value;
+        }
+
+        /// <summary>
+        /// True if the frame includes the family's light source transform (LightFamily.GetLightSourceTransform).
+        /// False if the family could not be read (in-place or non-editable family, or Revit refused to open it):
+        /// the frame is then the fixture's own frame.
+        /// </summary>
+        public bool HasLightSourceTransform;
+
+        /// <summary>
+        /// Whether the light is on in the exported 3D view's light groups (LightGroupManager.IsLightOn).
+        /// Lights in linked documents are always on.
+        /// </summary>
+        public bool IsOn;
+
+        /// <summary>
+        /// The photometric definition shared by the fixtures of the same FamilyType.
+        /// </summary>
+        public Relation<LightType> _LightType;
+    }
+
+    /// <summary>
+    /// Represents the sun of a 3D view. Revit: maps to the View's SunAndShadowSettings.<br/>
+    /// The place on Earth (latitude, longitude, time zone, elevation) is in the BimDocument, and the angle to true north in the BasePoint.
+    /// </summary>
+    [TableName(TableNames.SunAndShadowSettings)]
+    public partial class SunAndShadowSettings : Entity
+    {
+        /// <summary>
+        /// The name of Revit's SunAndShadowType: "StillImage", "OneDayStudy", "MultiDayStudy" or "Lighting".
+        /// "Lighting" is a fixed angle which is not tied to a place or a time.
+        /// </summary>
+        public string SunAndShadowType;
+
+        /// <summary>
+        /// Whether daylight saving time applies (SunAndShadowSettings.UsesDST).
+        /// </summary>
+        public bool UsesDST;
+
+        /// <summary>
+        /// The time of the active frame, on the project's clock, as "yyyy-MM-ddTHH:mm:ss" (SunAndShadowSettings.GetFrameTime(ActiveFrame)).
+        /// Empty for the Lighting type.
+        /// </summary>
+        public string ActiveFrameTime;
+
+        /// <summary>
+        /// The start of the study, on the project's clock, as "yyyy-MM-ddTHH:mm:ss" (SunAndShadowSettings.StartDateAndTime). Empty for the Lighting type.
+        /// </summary>
+        public string StartDateAndTime;
+
+        /// <summary>
+        /// The end of the study, on the project's clock, as "yyyy-MM-ddTHH:mm:ss" (SunAndShadowSettings.EndDateAndTime). Empty for the Lighting type.
+        /// </summary>
+        public string EndDateAndTime;
+
+        /// <summary>
+        /// The active frame of the study (SunAndShadowSettings.ActiveFrame). 0 for the Lighting type.
+        /// </summary>
+        public int ActiveFrame;
+
+        /// <summary>
+        /// The number of frames of the study (SunAndShadowSettings.NumberOfFrames). 0 for the Lighting type.
+        /// </summary>
+        public int NumberOfFrames;
+
+        /// <summary>
+        /// The altitude of the sun, in radians: the sun Revit computed for the active frame (SunAndShadowSettings.GetFrameAltitude),
+        /// or the fixed altitude for the Lighting type (SunAndShadowSettings.Altitude).
+        /// </summary>
+        public double Altitude;
+
+        /// <summary>
+        /// The azimuth of the sun, in radians: clockwise from true north for the sun Revit computed for the active frame
+        /// (SunAndShadowSettings.GetFrameAzimuth), or the fixed azimuth for the Lighting type (SunAndShadowSettings.Azimuth).
+        /// </summary>
+        public double Azimuth;
+
+        /// <summary>
+        /// For the Lighting type, whether the fixed angles are relative to the view rather than to the model (SunAndShadowSettings.RelativeToView).
+        /// </summary>
+        public bool RelativeToView;
+
+        /// <summary>
+        /// The 3D view which owns these settings.
+        /// </summary>
+        public Relation<View> _View;
     }
 
     /// <summary>
