@@ -1,6 +1,6 @@
 {
   "VimFormatVersion": "1.0.0",
-  "SchemaVersion": "5.7.0",
+  "SchemaVersion": "5.8.0",
   "Tables": {
     "Vim.Area": [
       "byte:IsGrossInterior",
@@ -269,6 +269,50 @@
       "index:Vim.Level:Level",
       "index:Vim.View:View"
     ],
+    "Vim.LightSource": [
+      "byte:HasLightSourceTransform",
+      "byte:IsOn",
+      "double:BasisX.X",
+      "double:BasisX.Y",
+      "double:BasisX.Z",
+      "double:BasisY.X",
+      "double:BasisY.Y",
+      "double:BasisY.Z",
+      "double:BasisZ.X",
+      "double:BasisZ.Y",
+      "double:BasisZ.Z",
+      "double:Origin.X",
+      "double:Origin.Y",
+      "double:Origin.Z",
+      "index:Vim.Element:Element",
+      "index:Vim.LightType:LightType"
+    ],
+    "Vim.LightType": [
+      "double:ColorFilter.X",
+      "double:ColorFilter.Y",
+      "double:ColorFilter.Z",
+      "double:Efficacy",
+      "double:EmitDiameter",
+      "double:EmitLength",
+      "double:EmitWidth",
+      "double:Flux",
+      "double:Illuminance",
+      "double:IlluminanceDistance",
+      "double:InitialColorTemperature",
+      "double:LossFactor",
+      "double:Luminosity",
+      "double:SpotBeamAngle",
+      "double:SpotFieldAngle",
+      "double:TiltAngle",
+      "double:Wattage",
+      "index:Vim.Asset:PhotometricWebFile",
+      "index:Vim.FamilyType:FamilyType",
+      "int:DimmingColor",
+      "int:InitialIntensityType",
+      "int:LightDistributionStyle",
+      "int:LightShapeStyle",
+      "string:PhotometricWebFileName"
+    ],
     "Vim.Material": [
       "double:Color.X",
       "double:Color.Y",
@@ -378,6 +422,19 @@
       "index:Vim.Element:Element",
       "string:Address",
       "string:Number"
+    ],
+    "Vim.SunAndShadowSettings": [
+      "byte:RelativeToView",
+      "byte:UsesDST",
+      "double:Altitude",
+      "double:Azimuth",
+      "index:Vim.View:View",
+      "int:ActiveFrame",
+      "int:NumberOfFrames",
+      "string:ActiveFrameTime",
+      "string:EndDateAndTime",
+      "string:StartDateAndTime",
+      "string:SunAndShadowType"
     ],
     "Vim.System": [
       "index:Vim.Element:Element",

@@ -12,9 +12,10 @@ namespace Vim.Format
         Texture,
         Render,
         /// <summary>
-        /// Light sources for rendering: "light/lights.json" (one record per light source - its element, world
-        /// position and axes, emitter shape, distribution, intensity, colour temperature) and the photometric
-        /// profiles it names, "light/&lt;file&gt;.ies" (IESNA LM-63 text, as Revit's lighting families carry them).
+        /// Photometric web files, "light/&lt;file&gt;.ies" (IESNA LM-63 text, as Revit's lighting families carry them),
+        /// referenced by LightType.PhotometricWebFile. Since object model 5.8.0 the light sources themselves are entities
+        /// (LightType, LightSource, SunAndShadowSettings). Files exported before 5.8.0 may carry "light/lights.json" and
+        /// "light/sun.json" instead.
         /// </summary>
         Light,
         /// <summary>
