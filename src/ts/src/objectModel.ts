@@ -12184,6 +12184,853 @@ export class ElementInExportRevisionTable implements IElementInExportRevisionTab
     
 }
 
+export interface IContributor {
+    index: number
+    name?: string
+    source?: number
+}
+
+export interface IContributorTable {
+    getCount(): Promise<number>
+    get(contributorIndex: number): Promise<IContributor>
+    getAll(): Promise<IContributor[]>
+    
+    getName(contributorIndex: number): Promise<string | undefined>
+    getAllName(): Promise<string[] | undefined>
+    getSource(contributorIndex: number): Promise<number | undefined>
+    getAllSource(): Promise<number[] | undefined>
+}
+
+export class Contributor implements IContributor {
+    index: number
+    name?: string
+    source?: number
+    
+    static async createFromTable(table: IContributorTable, index: number): Promise<IContributor> {
+        let result = new Contributor()
+        result.index = index
+        
+        await Promise.all([
+            table.getName(index).then(v => result.name = v),
+            table.getSource(index).then(v => result.source = v),
+        ])
+        
+        return result
+    }
+}
+
+export class ContributorTable implements IContributorTable {
+    private entityTable: EntityTable
+    
+    static async createFromDocument(document: VimDocument): Promise<IContributorTable | undefined> {
+        const entity = await document.entities.getBfast("Vim.Contributor")
+        
+        if (!entity) {
+            return undefined
+        }
+        
+        let table = new ContributorTable()
+        table.entityTable = new EntityTable(entity, document.strings)
+        
+        return table
+    }
+    
+    getCount(): Promise<number> {
+        return this.entityTable.getCount()
+    }
+    
+    async get(contributorIndex: number): Promise<IContributor> {
+        return await Contributor.createFromTable(this, contributorIndex)
+    }
+    
+    async getAll(): Promise<IContributor[]> {
+        const localTable = await this.entityTable.getLocal()
+        
+        let name: string[] | undefined
+        let source: number[] | undefined
+        
+        await Promise.all([
+            (async () => { name = (await localTable.getStringArray("string:Name")) })(),
+            (async () => { source = (await localTable.getNumberArray("int:Source")) })(),
+        ])
+        
+        let contributor: IContributor[] = []
+        
+        const rowCount = await this.getCount()
+        for (let i = 0; i < rowCount; i++) {
+            contributor.push({
+                index: i,
+                name: name ? name[i] : undefined,
+                source: source ? source[i] : undefined
+            })
+        }
+        
+        return contributor
+    }
+    
+    async getName(contributorIndex: number): Promise<string | undefined> {
+        return (await this.entityTable.getString(contributorIndex, "string:Name"))
+    }
+    
+    async getAllName(): Promise<string[] | undefined> {
+        return (await this.entityTable.getStringArray("string:Name"))
+    }
+    
+    async getSource(contributorIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(contributorIndex, "int:Source"))
+    }
+    
+    async getAllSource(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("int:Source"))
+    }
+    
+}
+
+export interface ISyncSession {
+    index: number
+    sessionGuid?: string
+    machineName?: string
+    revitVersion?: string
+    startedUtc?: string
+    endedUtc?: string
+    
+    contributorIndex?: number
+    contributor?: IContributor
+    bimDocumentIndex?: number
+    bimDocument?: IBimDocument
+}
+
+export interface ISyncSessionTable {
+    getCount(): Promise<number>
+    get(syncSessionIndex: number): Promise<ISyncSession>
+    getAll(): Promise<ISyncSession[]>
+    
+    getSessionGuid(syncSessionIndex: number): Promise<string | undefined>
+    getAllSessionGuid(): Promise<string[] | undefined>
+    getMachineName(syncSessionIndex: number): Promise<string | undefined>
+    getAllMachineName(): Promise<string[] | undefined>
+    getRevitVersion(syncSessionIndex: number): Promise<string | undefined>
+    getAllRevitVersion(): Promise<string[] | undefined>
+    getStartedUtc(syncSessionIndex: number): Promise<string | undefined>
+    getAllStartedUtc(): Promise<string[] | undefined>
+    getEndedUtc(syncSessionIndex: number): Promise<string | undefined>
+    getAllEndedUtc(): Promise<string[] | undefined>
+    
+    getContributorIndex(syncSessionIndex: number): Promise<number | undefined>
+    getAllContributorIndex(): Promise<number[] | undefined>
+    getContributor(syncSessionIndex: number): Promise<IContributor | undefined>
+    getBimDocumentIndex(syncSessionIndex: number): Promise<number | undefined>
+    getAllBimDocumentIndex(): Promise<number[] | undefined>
+    getBimDocument(syncSessionIndex: number): Promise<IBimDocument | undefined>
+}
+
+export class SyncSession implements ISyncSession {
+    index: number
+    sessionGuid?: string
+    machineName?: string
+    revitVersion?: string
+    startedUtc?: string
+    endedUtc?: string
+    
+    contributorIndex?: number
+    contributor?: IContributor
+    bimDocumentIndex?: number
+    bimDocument?: IBimDocument
+    
+    static async createFromTable(table: ISyncSessionTable, index: number): Promise<ISyncSession> {
+        let result = new SyncSession()
+        result.index = index
+        
+        await Promise.all([
+            table.getSessionGuid(index).then(v => result.sessionGuid = v),
+            table.getMachineName(index).then(v => result.machineName = v),
+            table.getRevitVersion(index).then(v => result.revitVersion = v),
+            table.getStartedUtc(index).then(v => result.startedUtc = v),
+            table.getEndedUtc(index).then(v => result.endedUtc = v),
+            table.getContributorIndex(index).then(v => result.contributorIndex = v),
+            table.getBimDocumentIndex(index).then(v => result.bimDocumentIndex = v),
+        ])
+        
+        return result
+    }
+}
+
+export class SyncSessionTable implements ISyncSessionTable {
+    private document: VimDocument
+    private entityTable: EntityTable
+    
+    static async createFromDocument(document: VimDocument): Promise<ISyncSessionTable | undefined> {
+        const entity = await document.entities.getBfast("Vim.SyncSession")
+        
+        if (!entity) {
+            return undefined
+        }
+        
+        let table = new SyncSessionTable()
+        table.document = document
+        table.entityTable = new EntityTable(entity, document.strings)
+        
+        return table
+    }
+    
+    getCount(): Promise<number> {
+        return this.entityTable.getCount()
+    }
+    
+    async get(syncSessionIndex: number): Promise<ISyncSession> {
+        return await SyncSession.createFromTable(this, syncSessionIndex)
+    }
+    
+    async getAll(): Promise<ISyncSession[]> {
+        const localTable = await this.entityTable.getLocal()
+        
+        let sessionGuid: string[] | undefined
+        let machineName: string[] | undefined
+        let revitVersion: string[] | undefined
+        let startedUtc: string[] | undefined
+        let endedUtc: string[] | undefined
+        let contributorIndex: number[] | undefined
+        let bimDocumentIndex: number[] | undefined
+        
+        await Promise.all([
+            (async () => { sessionGuid = (await localTable.getStringArray("string:SessionGuid")) })(),
+            (async () => { machineName = (await localTable.getStringArray("string:MachineName")) })(),
+            (async () => { revitVersion = (await localTable.getStringArray("string:RevitVersion")) })(),
+            (async () => { startedUtc = (await localTable.getStringArray("string:StartedUtc")) })(),
+            (async () => { endedUtc = (await localTable.getStringArray("string:EndedUtc")) })(),
+            (async () => { contributorIndex = (await localTable.getNumberArray("index:Vim.Contributor:Contributor")) })(),
+            (async () => { bimDocumentIndex = (await localTable.getNumberArray("index:Vim.BimDocument:BimDocument")) })(),
+        ])
+        
+        let syncSession: ISyncSession[] = []
+        
+        const rowCount = await this.getCount()
+        for (let i = 0; i < rowCount; i++) {
+            syncSession.push({
+                index: i,
+                sessionGuid: sessionGuid ? sessionGuid[i] : undefined,
+                machineName: machineName ? machineName[i] : undefined,
+                revitVersion: revitVersion ? revitVersion[i] : undefined,
+                startedUtc: startedUtc ? startedUtc[i] : undefined,
+                endedUtc: endedUtc ? endedUtc[i] : undefined,
+                contributorIndex: contributorIndex ? contributorIndex[i] : undefined,
+                bimDocumentIndex: bimDocumentIndex ? bimDocumentIndex[i] : undefined
+            })
+        }
+        
+        return syncSession
+    }
+    
+    async getSessionGuid(syncSessionIndex: number): Promise<string | undefined> {
+        return (await this.entityTable.getString(syncSessionIndex, "string:SessionGuid"))
+    }
+    
+    async getAllSessionGuid(): Promise<string[] | undefined> {
+        return (await this.entityTable.getStringArray("string:SessionGuid"))
+    }
+    
+    async getMachineName(syncSessionIndex: number): Promise<string | undefined> {
+        return (await this.entityTable.getString(syncSessionIndex, "string:MachineName"))
+    }
+    
+    async getAllMachineName(): Promise<string[] | undefined> {
+        return (await this.entityTable.getStringArray("string:MachineName"))
+    }
+    
+    async getRevitVersion(syncSessionIndex: number): Promise<string | undefined> {
+        return (await this.entityTable.getString(syncSessionIndex, "string:RevitVersion"))
+    }
+    
+    async getAllRevitVersion(): Promise<string[] | undefined> {
+        return (await this.entityTable.getStringArray("string:RevitVersion"))
+    }
+    
+    async getStartedUtc(syncSessionIndex: number): Promise<string | undefined> {
+        return (await this.entityTable.getString(syncSessionIndex, "string:StartedUtc"))
+    }
+    
+    async getAllStartedUtc(): Promise<string[] | undefined> {
+        return (await this.entityTable.getStringArray("string:StartedUtc"))
+    }
+    
+    async getEndedUtc(syncSessionIndex: number): Promise<string | undefined> {
+        return (await this.entityTable.getString(syncSessionIndex, "string:EndedUtc"))
+    }
+    
+    async getAllEndedUtc(): Promise<string[] | undefined> {
+        return (await this.entityTable.getStringArray("string:EndedUtc"))
+    }
+    
+    async getContributorIndex(syncSessionIndex: number): Promise<number | undefined> {
+        return await this.entityTable.getNumber(syncSessionIndex, "index:Vim.Contributor:Contributor")
+    }
+    
+    async getAllContributorIndex(): Promise<number[] | undefined> {
+        return await this.entityTable.getNumberArray("index:Vim.Contributor:Contributor")
+    }
+    
+    async getContributor(syncSessionIndex: number): Promise<IContributor | undefined> {
+        const index = await this.getContributorIndex(syncSessionIndex)
+        
+        if (index === undefined) {
+            return undefined
+        }
+        
+        return await this.document.contributor?.get(index)
+    }
+    
+    async getBimDocumentIndex(syncSessionIndex: number): Promise<number | undefined> {
+        return await this.entityTable.getNumber(syncSessionIndex, "index:Vim.BimDocument:BimDocument")
+    }
+    
+    async getAllBimDocumentIndex(): Promise<number[] | undefined> {
+        return await this.entityTable.getNumberArray("index:Vim.BimDocument:BimDocument")
+    }
+    
+    async getBimDocument(syncSessionIndex: number): Promise<IBimDocument | undefined> {
+        const index = await this.getBimDocumentIndex(syncSessionIndex)
+        
+        if (index === undefined) {
+            return undefined
+        }
+        
+        return await this.document.bimDocument?.get(index)
+    }
+    
+}
+
+export interface IElementChange {
+    index: number
+    changeKind?: number
+    confidence?: number
+    changedUtc?: string
+    uniqueId?: string
+    categoryName?: string
+    familyName?: string
+    typeName?: string
+    elementName?: string
+    levelName?: string
+    worksetName?: string
+    
+    exportRevisionIndex?: number
+    exportRevision?: IExportRevision
+    syncSessionIndex?: number
+    syncSession?: ISyncSession
+    contributorIndex?: number
+    contributor?: IContributor
+}
+
+export interface IElementChangeTable {
+    getCount(): Promise<number>
+    get(elementChangeIndex: number): Promise<IElementChange>
+    getAll(): Promise<IElementChange[]>
+    
+    getChangeKind(elementChangeIndex: number): Promise<number | undefined>
+    getAllChangeKind(): Promise<number[] | undefined>
+    getConfidence(elementChangeIndex: number): Promise<number | undefined>
+    getAllConfidence(): Promise<number[] | undefined>
+    getChangedUtc(elementChangeIndex: number): Promise<string | undefined>
+    getAllChangedUtc(): Promise<string[] | undefined>
+    getUniqueId(elementChangeIndex: number): Promise<string | undefined>
+    getAllUniqueId(): Promise<string[] | undefined>
+    getCategoryName(elementChangeIndex: number): Promise<string | undefined>
+    getAllCategoryName(): Promise<string[] | undefined>
+    getFamilyName(elementChangeIndex: number): Promise<string | undefined>
+    getAllFamilyName(): Promise<string[] | undefined>
+    getTypeName(elementChangeIndex: number): Promise<string | undefined>
+    getAllTypeName(): Promise<string[] | undefined>
+    getElementName(elementChangeIndex: number): Promise<string | undefined>
+    getAllElementName(): Promise<string[] | undefined>
+    getLevelName(elementChangeIndex: number): Promise<string | undefined>
+    getAllLevelName(): Promise<string[] | undefined>
+    getWorksetName(elementChangeIndex: number): Promise<string | undefined>
+    getAllWorksetName(): Promise<string[] | undefined>
+    
+    getExportRevisionIndex(elementChangeIndex: number): Promise<number | undefined>
+    getAllExportRevisionIndex(): Promise<number[] | undefined>
+    getExportRevision(elementChangeIndex: number): Promise<IExportRevision | undefined>
+    getSyncSessionIndex(elementChangeIndex: number): Promise<number | undefined>
+    getAllSyncSessionIndex(): Promise<number[] | undefined>
+    getSyncSession(elementChangeIndex: number): Promise<ISyncSession | undefined>
+    getContributorIndex(elementChangeIndex: number): Promise<number | undefined>
+    getAllContributorIndex(): Promise<number[] | undefined>
+    getContributor(elementChangeIndex: number): Promise<IContributor | undefined>
+}
+
+export class ElementChange implements IElementChange {
+    index: number
+    changeKind?: number
+    confidence?: number
+    changedUtc?: string
+    uniqueId?: string
+    categoryName?: string
+    familyName?: string
+    typeName?: string
+    elementName?: string
+    levelName?: string
+    worksetName?: string
+    
+    exportRevisionIndex?: number
+    exportRevision?: IExportRevision
+    syncSessionIndex?: number
+    syncSession?: ISyncSession
+    contributorIndex?: number
+    contributor?: IContributor
+    
+    static async createFromTable(table: IElementChangeTable, index: number): Promise<IElementChange> {
+        let result = new ElementChange()
+        result.index = index
+        
+        await Promise.all([
+            table.getChangeKind(index).then(v => result.changeKind = v),
+            table.getConfidence(index).then(v => result.confidence = v),
+            table.getChangedUtc(index).then(v => result.changedUtc = v),
+            table.getUniqueId(index).then(v => result.uniqueId = v),
+            table.getCategoryName(index).then(v => result.categoryName = v),
+            table.getFamilyName(index).then(v => result.familyName = v),
+            table.getTypeName(index).then(v => result.typeName = v),
+            table.getElementName(index).then(v => result.elementName = v),
+            table.getLevelName(index).then(v => result.levelName = v),
+            table.getWorksetName(index).then(v => result.worksetName = v),
+            table.getExportRevisionIndex(index).then(v => result.exportRevisionIndex = v),
+            table.getSyncSessionIndex(index).then(v => result.syncSessionIndex = v),
+            table.getContributorIndex(index).then(v => result.contributorIndex = v),
+        ])
+        
+        return result
+    }
+}
+
+export class ElementChangeTable implements IElementChangeTable {
+    private document: VimDocument
+    private entityTable: EntityTable
+    
+    static async createFromDocument(document: VimDocument): Promise<IElementChangeTable | undefined> {
+        const entity = await document.entities.getBfast("Vim.ElementChange")
+        
+        if (!entity) {
+            return undefined
+        }
+        
+        let table = new ElementChangeTable()
+        table.document = document
+        table.entityTable = new EntityTable(entity, document.strings)
+        
+        return table
+    }
+    
+    getCount(): Promise<number> {
+        return this.entityTable.getCount()
+    }
+    
+    async get(elementChangeIndex: number): Promise<IElementChange> {
+        return await ElementChange.createFromTable(this, elementChangeIndex)
+    }
+    
+    async getAll(): Promise<IElementChange[]> {
+        const localTable = await this.entityTable.getLocal()
+        
+        let changeKind: number[] | undefined
+        let confidence: number[] | undefined
+        let changedUtc: string[] | undefined
+        let uniqueId: string[] | undefined
+        let categoryName: string[] | undefined
+        let familyName: string[] | undefined
+        let typeName: string[] | undefined
+        let elementName: string[] | undefined
+        let levelName: string[] | undefined
+        let worksetName: string[] | undefined
+        let exportRevisionIndex: number[] | undefined
+        let syncSessionIndex: number[] | undefined
+        let contributorIndex: number[] | undefined
+        
+        await Promise.all([
+            (async () => { changeKind = (await localTable.getNumberArray("int:ChangeKind")) })(),
+            (async () => { confidence = (await localTable.getNumberArray("int:Confidence")) })(),
+            (async () => { changedUtc = (await localTable.getStringArray("string:ChangedUtc")) })(),
+            (async () => { uniqueId = (await localTable.getStringArray("string:UniqueId")) })(),
+            (async () => { categoryName = (await localTable.getStringArray("string:CategoryName")) })(),
+            (async () => { familyName = (await localTable.getStringArray("string:FamilyName")) })(),
+            (async () => { typeName = (await localTable.getStringArray("string:TypeName")) })(),
+            (async () => { elementName = (await localTable.getStringArray("string:ElementName")) })(),
+            (async () => { levelName = (await localTable.getStringArray("string:LevelName")) })(),
+            (async () => { worksetName = (await localTable.getStringArray("string:WorksetName")) })(),
+            (async () => { exportRevisionIndex = (await localTable.getNumberArray("index:Vim.ExportRevision:ExportRevision")) })(),
+            (async () => { syncSessionIndex = (await localTable.getNumberArray("index:Vim.SyncSession:SyncSession")) })(),
+            (async () => { contributorIndex = (await localTable.getNumberArray("index:Vim.Contributor:Contributor")) })(),
+        ])
+        
+        let elementChange: IElementChange[] = []
+        
+        const rowCount = await this.getCount()
+        for (let i = 0; i < rowCount; i++) {
+            elementChange.push({
+                index: i,
+                changeKind: changeKind ? changeKind[i] : undefined,
+                confidence: confidence ? confidence[i] : undefined,
+                changedUtc: changedUtc ? changedUtc[i] : undefined,
+                uniqueId: uniqueId ? uniqueId[i] : undefined,
+                categoryName: categoryName ? categoryName[i] : undefined,
+                familyName: familyName ? familyName[i] : undefined,
+                typeName: typeName ? typeName[i] : undefined,
+                elementName: elementName ? elementName[i] : undefined,
+                levelName: levelName ? levelName[i] : undefined,
+                worksetName: worksetName ? worksetName[i] : undefined,
+                exportRevisionIndex: exportRevisionIndex ? exportRevisionIndex[i] : undefined,
+                syncSessionIndex: syncSessionIndex ? syncSessionIndex[i] : undefined,
+                contributorIndex: contributorIndex ? contributorIndex[i] : undefined
+            })
+        }
+        
+        return elementChange
+    }
+    
+    async getChangeKind(elementChangeIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(elementChangeIndex, "int:ChangeKind"))
+    }
+    
+    async getAllChangeKind(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("int:ChangeKind"))
+    }
+    
+    async getConfidence(elementChangeIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(elementChangeIndex, "int:Confidence"))
+    }
+    
+    async getAllConfidence(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("int:Confidence"))
+    }
+    
+    async getChangedUtc(elementChangeIndex: number): Promise<string | undefined> {
+        return (await this.entityTable.getString(elementChangeIndex, "string:ChangedUtc"))
+    }
+    
+    async getAllChangedUtc(): Promise<string[] | undefined> {
+        return (await this.entityTable.getStringArray("string:ChangedUtc"))
+    }
+    
+    async getUniqueId(elementChangeIndex: number): Promise<string | undefined> {
+        return (await this.entityTable.getString(elementChangeIndex, "string:UniqueId"))
+    }
+    
+    async getAllUniqueId(): Promise<string[] | undefined> {
+        return (await this.entityTable.getStringArray("string:UniqueId"))
+    }
+    
+    async getCategoryName(elementChangeIndex: number): Promise<string | undefined> {
+        return (await this.entityTable.getString(elementChangeIndex, "string:CategoryName"))
+    }
+    
+    async getAllCategoryName(): Promise<string[] | undefined> {
+        return (await this.entityTable.getStringArray("string:CategoryName"))
+    }
+    
+    async getFamilyName(elementChangeIndex: number): Promise<string | undefined> {
+        return (await this.entityTable.getString(elementChangeIndex, "string:FamilyName"))
+    }
+    
+    async getAllFamilyName(): Promise<string[] | undefined> {
+        return (await this.entityTable.getStringArray("string:FamilyName"))
+    }
+    
+    async getTypeName(elementChangeIndex: number): Promise<string | undefined> {
+        return (await this.entityTable.getString(elementChangeIndex, "string:TypeName"))
+    }
+    
+    async getAllTypeName(): Promise<string[] | undefined> {
+        return (await this.entityTable.getStringArray("string:TypeName"))
+    }
+    
+    async getElementName(elementChangeIndex: number): Promise<string | undefined> {
+        return (await this.entityTable.getString(elementChangeIndex, "string:ElementName"))
+    }
+    
+    async getAllElementName(): Promise<string[] | undefined> {
+        return (await this.entityTable.getStringArray("string:ElementName"))
+    }
+    
+    async getLevelName(elementChangeIndex: number): Promise<string | undefined> {
+        return (await this.entityTable.getString(elementChangeIndex, "string:LevelName"))
+    }
+    
+    async getAllLevelName(): Promise<string[] | undefined> {
+        return (await this.entityTable.getStringArray("string:LevelName"))
+    }
+    
+    async getWorksetName(elementChangeIndex: number): Promise<string | undefined> {
+        return (await this.entityTable.getString(elementChangeIndex, "string:WorksetName"))
+    }
+    
+    async getAllWorksetName(): Promise<string[] | undefined> {
+        return (await this.entityTable.getStringArray("string:WorksetName"))
+    }
+    
+    async getExportRevisionIndex(elementChangeIndex: number): Promise<number | undefined> {
+        return await this.entityTable.getNumber(elementChangeIndex, "index:Vim.ExportRevision:ExportRevision")
+    }
+    
+    async getAllExportRevisionIndex(): Promise<number[] | undefined> {
+        return await this.entityTable.getNumberArray("index:Vim.ExportRevision:ExportRevision")
+    }
+    
+    async getExportRevision(elementChangeIndex: number): Promise<IExportRevision | undefined> {
+        const index = await this.getExportRevisionIndex(elementChangeIndex)
+        
+        if (index === undefined) {
+            return undefined
+        }
+        
+        return await this.document.exportRevision?.get(index)
+    }
+    
+    async getSyncSessionIndex(elementChangeIndex: number): Promise<number | undefined> {
+        return await this.entityTable.getNumber(elementChangeIndex, "index:Vim.SyncSession:SyncSession")
+    }
+    
+    async getAllSyncSessionIndex(): Promise<number[] | undefined> {
+        return await this.entityTable.getNumberArray("index:Vim.SyncSession:SyncSession")
+    }
+    
+    async getSyncSession(elementChangeIndex: number): Promise<ISyncSession | undefined> {
+        const index = await this.getSyncSessionIndex(elementChangeIndex)
+        
+        if (index === undefined) {
+            return undefined
+        }
+        
+        return await this.document.syncSession?.get(index)
+    }
+    
+    async getContributorIndex(elementChangeIndex: number): Promise<number | undefined> {
+        return await this.entityTable.getNumber(elementChangeIndex, "index:Vim.Contributor:Contributor")
+    }
+    
+    async getAllContributorIndex(): Promise<number[] | undefined> {
+        return await this.entityTable.getNumberArray("index:Vim.Contributor:Contributor")
+    }
+    
+    async getContributor(elementChangeIndex: number): Promise<IContributor | undefined> {
+        const index = await this.getContributorIndex(elementChangeIndex)
+        
+        if (index === undefined) {
+            return undefined
+        }
+        
+        return await this.document.contributor?.get(index)
+    }
+    
+}
+
+export interface IActivityMarker {
+    index: number
+    kind?: number
+    occurredUtc?: string
+    description?: string
+    
+    exportRevisionIndex?: number
+    exportRevision?: IExportRevision
+    syncSessionIndex?: number
+    syncSession?: ISyncSession
+    contributorIndex?: number
+    contributor?: IContributor
+}
+
+export interface IActivityMarkerTable {
+    getCount(): Promise<number>
+    get(activityMarkerIndex: number): Promise<IActivityMarker>
+    getAll(): Promise<IActivityMarker[]>
+    
+    getKind(activityMarkerIndex: number): Promise<number | undefined>
+    getAllKind(): Promise<number[] | undefined>
+    getOccurredUtc(activityMarkerIndex: number): Promise<string | undefined>
+    getAllOccurredUtc(): Promise<string[] | undefined>
+    getDescription(activityMarkerIndex: number): Promise<string | undefined>
+    getAllDescription(): Promise<string[] | undefined>
+    
+    getExportRevisionIndex(activityMarkerIndex: number): Promise<number | undefined>
+    getAllExportRevisionIndex(): Promise<number[] | undefined>
+    getExportRevision(activityMarkerIndex: number): Promise<IExportRevision | undefined>
+    getSyncSessionIndex(activityMarkerIndex: number): Promise<number | undefined>
+    getAllSyncSessionIndex(): Promise<number[] | undefined>
+    getSyncSession(activityMarkerIndex: number): Promise<ISyncSession | undefined>
+    getContributorIndex(activityMarkerIndex: number): Promise<number | undefined>
+    getAllContributorIndex(): Promise<number[] | undefined>
+    getContributor(activityMarkerIndex: number): Promise<IContributor | undefined>
+}
+
+export class ActivityMarker implements IActivityMarker {
+    index: number
+    kind?: number
+    occurredUtc?: string
+    description?: string
+    
+    exportRevisionIndex?: number
+    exportRevision?: IExportRevision
+    syncSessionIndex?: number
+    syncSession?: ISyncSession
+    contributorIndex?: number
+    contributor?: IContributor
+    
+    static async createFromTable(table: IActivityMarkerTable, index: number): Promise<IActivityMarker> {
+        let result = new ActivityMarker()
+        result.index = index
+        
+        await Promise.all([
+            table.getKind(index).then(v => result.kind = v),
+            table.getOccurredUtc(index).then(v => result.occurredUtc = v),
+            table.getDescription(index).then(v => result.description = v),
+            table.getExportRevisionIndex(index).then(v => result.exportRevisionIndex = v),
+            table.getSyncSessionIndex(index).then(v => result.syncSessionIndex = v),
+            table.getContributorIndex(index).then(v => result.contributorIndex = v),
+        ])
+        
+        return result
+    }
+}
+
+export class ActivityMarkerTable implements IActivityMarkerTable {
+    private document: VimDocument
+    private entityTable: EntityTable
+    
+    static async createFromDocument(document: VimDocument): Promise<IActivityMarkerTable | undefined> {
+        const entity = await document.entities.getBfast("Vim.ActivityMarker")
+        
+        if (!entity) {
+            return undefined
+        }
+        
+        let table = new ActivityMarkerTable()
+        table.document = document
+        table.entityTable = new EntityTable(entity, document.strings)
+        
+        return table
+    }
+    
+    getCount(): Promise<number> {
+        return this.entityTable.getCount()
+    }
+    
+    async get(activityMarkerIndex: number): Promise<IActivityMarker> {
+        return await ActivityMarker.createFromTable(this, activityMarkerIndex)
+    }
+    
+    async getAll(): Promise<IActivityMarker[]> {
+        const localTable = await this.entityTable.getLocal()
+        
+        let kind: number[] | undefined
+        let occurredUtc: string[] | undefined
+        let description: string[] | undefined
+        let exportRevisionIndex: number[] | undefined
+        let syncSessionIndex: number[] | undefined
+        let contributorIndex: number[] | undefined
+        
+        await Promise.all([
+            (async () => { kind = (await localTable.getNumberArray("int:Kind")) })(),
+            (async () => { occurredUtc = (await localTable.getStringArray("string:OccurredUtc")) })(),
+            (async () => { description = (await localTable.getStringArray("string:Description")) })(),
+            (async () => { exportRevisionIndex = (await localTable.getNumberArray("index:Vim.ExportRevision:ExportRevision")) })(),
+            (async () => { syncSessionIndex = (await localTable.getNumberArray("index:Vim.SyncSession:SyncSession")) })(),
+            (async () => { contributorIndex = (await localTable.getNumberArray("index:Vim.Contributor:Contributor")) })(),
+        ])
+        
+        let activityMarker: IActivityMarker[] = []
+        
+        const rowCount = await this.getCount()
+        for (let i = 0; i < rowCount; i++) {
+            activityMarker.push({
+                index: i,
+                kind: kind ? kind[i] : undefined,
+                occurredUtc: occurredUtc ? occurredUtc[i] : undefined,
+                description: description ? description[i] : undefined,
+                exportRevisionIndex: exportRevisionIndex ? exportRevisionIndex[i] : undefined,
+                syncSessionIndex: syncSessionIndex ? syncSessionIndex[i] : undefined,
+                contributorIndex: contributorIndex ? contributorIndex[i] : undefined
+            })
+        }
+        
+        return activityMarker
+    }
+    
+    async getKind(activityMarkerIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(activityMarkerIndex, "int:Kind"))
+    }
+    
+    async getAllKind(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("int:Kind"))
+    }
+    
+    async getOccurredUtc(activityMarkerIndex: number): Promise<string | undefined> {
+        return (await this.entityTable.getString(activityMarkerIndex, "string:OccurredUtc"))
+    }
+    
+    async getAllOccurredUtc(): Promise<string[] | undefined> {
+        return (await this.entityTable.getStringArray("string:OccurredUtc"))
+    }
+    
+    async getDescription(activityMarkerIndex: number): Promise<string | undefined> {
+        return (await this.entityTable.getString(activityMarkerIndex, "string:Description"))
+    }
+    
+    async getAllDescription(): Promise<string[] | undefined> {
+        return (await this.entityTable.getStringArray("string:Description"))
+    }
+    
+    async getExportRevisionIndex(activityMarkerIndex: number): Promise<number | undefined> {
+        return await this.entityTable.getNumber(activityMarkerIndex, "index:Vim.ExportRevision:ExportRevision")
+    }
+    
+    async getAllExportRevisionIndex(): Promise<number[] | undefined> {
+        return await this.entityTable.getNumberArray("index:Vim.ExportRevision:ExportRevision")
+    }
+    
+    async getExportRevision(activityMarkerIndex: number): Promise<IExportRevision | undefined> {
+        const index = await this.getExportRevisionIndex(activityMarkerIndex)
+        
+        if (index === undefined) {
+            return undefined
+        }
+        
+        return await this.document.exportRevision?.get(index)
+    }
+    
+    async getSyncSessionIndex(activityMarkerIndex: number): Promise<number | undefined> {
+        return await this.entityTable.getNumber(activityMarkerIndex, "index:Vim.SyncSession:SyncSession")
+    }
+    
+    async getAllSyncSessionIndex(): Promise<number[] | undefined> {
+        return await this.entityTable.getNumberArray("index:Vim.SyncSession:SyncSession")
+    }
+    
+    async getSyncSession(activityMarkerIndex: number): Promise<ISyncSession | undefined> {
+        const index = await this.getSyncSessionIndex(activityMarkerIndex)
+        
+        if (index === undefined) {
+            return undefined
+        }
+        
+        return await this.document.syncSession?.get(index)
+    }
+    
+    async getContributorIndex(activityMarkerIndex: number): Promise<number | undefined> {
+        return await this.entityTable.getNumber(activityMarkerIndex, "index:Vim.Contributor:Contributor")
+    }
+    
+    async getAllContributorIndex(): Promise<number[] | undefined> {
+        return await this.entityTable.getNumberArray("index:Vim.Contributor:Contributor")
+    }
+    
+    async getContributor(activityMarkerIndex: number): Promise<IContributor | undefined> {
+        const index = await this.getContributorIndex(activityMarkerIndex)
+        
+        if (index === undefined) {
+            return undefined
+        }
+        
+        return await this.document.contributor?.get(index)
+    }
+    
+}
+
 export class VimDocument {
     asset: IAssetTable | undefined
     displayUnit: IDisplayUnitTable | undefined
@@ -12244,6 +13091,10 @@ export class VimDocument {
     sunAndShadowSettings: ISunAndShadowSettingsTable | undefined
     exportRevision: IExportRevisionTable | undefined
     elementInExportRevision: IElementInExportRevisionTable | undefined
+    contributor: IContributorTable | undefined
+    syncSession: ISyncSessionTable | undefined
+    elementChange: IElementChangeTable | undefined
+    activityMarker: IActivityMarkerTable | undefined
     
     entities: BFast
     strings: string[] | undefined
@@ -12320,6 +13171,10 @@ export class VimDocument {
         doc.sunAndShadowSettings = await SunAndShadowSettingsTable.createFromDocument(doc)
         doc.exportRevision = await ExportRevisionTable.createFromDocument(doc)
         doc.elementInExportRevision = await ElementInExportRevisionTable.createFromDocument(doc)
+        doc.contributor = await ContributorTable.createFromDocument(doc)
+        doc.syncSession = await SyncSessionTable.createFromDocument(doc)
+        doc.elementChange = await ElementChangeTable.createFromDocument(doc)
+        doc.activityMarker = await ActivityMarkerTable.createFromDocument(doc)
         
         return doc
     }

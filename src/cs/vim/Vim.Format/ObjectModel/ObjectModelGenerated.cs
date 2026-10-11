@@ -2207,6 +2207,158 @@ namespace Vim.Format.ObjectModel {
         
     } // end of class
     
+    // AUTO-GENERATED
+    public partial class Contributor
+    {
+        public Contributor()
+        {
+        }
+        
+        public override bool FieldsAreEqual(object obj)
+        {
+            if ((obj is Contributor other))
+            {
+                var fieldsAreEqual =
+                    (Index == other.Index) &&
+                    (Name == other.Name) &&
+                    (Source == other.Source);
+                if (!fieldsAreEqual)
+                {
+                    return false;
+                }
+                
+                return true;
+            }
+            return false;
+        }
+        
+    } // end of class
+    
+    // AUTO-GENERATED
+    public partial class SyncSession
+    {
+        public Vim.Format.ObjectModel.Contributor Contributor => _Contributor?.Value;
+        public int ContributorIndex => _Contributor?.Index ?? EntityRelation.None;
+        public Vim.Format.ObjectModel.BimDocument BimDocument => _BimDocument?.Value;
+        public int BimDocumentIndex => _BimDocument?.Index ?? EntityRelation.None;
+        public SyncSession()
+        {
+            _Contributor = new Relation<Vim.Format.ObjectModel.Contributor>();
+            _BimDocument = new Relation<Vim.Format.ObjectModel.BimDocument>();
+        }
+        
+        public override bool FieldsAreEqual(object obj)
+        {
+            if ((obj is SyncSession other))
+            {
+                var fieldsAreEqual =
+                    (Index == other.Index) &&
+                    (SessionGuid == other.SessionGuid) &&
+                    (MachineName == other.MachineName) &&
+                    (RevitVersion == other.RevitVersion) &&
+                    (StartedUtc == other.StartedUtc) &&
+                    (EndedUtc == other.EndedUtc) &&
+                    (_Contributor?.Index == other._Contributor?.Index) &&
+                    (_BimDocument?.Index == other._BimDocument?.Index);
+                if (!fieldsAreEqual)
+                {
+                    return false;
+                }
+                
+                return true;
+            }
+            return false;
+        }
+        
+    } // end of class
+    
+    // AUTO-GENERATED
+    public partial class ElementChange
+    {
+        public Vim.Format.ObjectModel.ExportRevision ExportRevision => _ExportRevision?.Value;
+        public int ExportRevisionIndex => _ExportRevision?.Index ?? EntityRelation.None;
+        public Vim.Format.ObjectModel.SyncSession SyncSession => _SyncSession?.Value;
+        public int SyncSessionIndex => _SyncSession?.Index ?? EntityRelation.None;
+        public Vim.Format.ObjectModel.Contributor Contributor => _Contributor?.Value;
+        public int ContributorIndex => _Contributor?.Index ?? EntityRelation.None;
+        public ElementChange()
+        {
+            _ExportRevision = new Relation<Vim.Format.ObjectModel.ExportRevision>();
+            _SyncSession = new Relation<Vim.Format.ObjectModel.SyncSession>();
+            _Contributor = new Relation<Vim.Format.ObjectModel.Contributor>();
+        }
+        
+        public override bool FieldsAreEqual(object obj)
+        {
+            if ((obj is ElementChange other))
+            {
+                var fieldsAreEqual =
+                    (Index == other.Index) &&
+                    (ChangeKind == other.ChangeKind) &&
+                    (Confidence == other.Confidence) &&
+                    (ChangedUtc == other.ChangedUtc) &&
+                    (UniqueId == other.UniqueId) &&
+                    (CategoryName == other.CategoryName) &&
+                    (FamilyName == other.FamilyName) &&
+                    (TypeName == other.TypeName) &&
+                    (ElementName == other.ElementName) &&
+                    (LevelName == other.LevelName) &&
+                    (WorksetName == other.WorksetName) &&
+                    (_ExportRevision?.Index == other._ExportRevision?.Index) &&
+                    (_SyncSession?.Index == other._SyncSession?.Index) &&
+                    (_Contributor?.Index == other._Contributor?.Index);
+                if (!fieldsAreEqual)
+                {
+                    return false;
+                }
+                
+                return true;
+            }
+            return false;
+        }
+        
+    } // end of class
+    
+    // AUTO-GENERATED
+    public partial class ActivityMarker
+    {
+        public Vim.Format.ObjectModel.ExportRevision ExportRevision => _ExportRevision?.Value;
+        public int ExportRevisionIndex => _ExportRevision?.Index ?? EntityRelation.None;
+        public Vim.Format.ObjectModel.SyncSession SyncSession => _SyncSession?.Value;
+        public int SyncSessionIndex => _SyncSession?.Index ?? EntityRelation.None;
+        public Vim.Format.ObjectModel.Contributor Contributor => _Contributor?.Value;
+        public int ContributorIndex => _Contributor?.Index ?? EntityRelation.None;
+        public ActivityMarker()
+        {
+            _ExportRevision = new Relation<Vim.Format.ObjectModel.ExportRevision>();
+            _SyncSession = new Relation<Vim.Format.ObjectModel.SyncSession>();
+            _Contributor = new Relation<Vim.Format.ObjectModel.Contributor>();
+        }
+        
+        public override bool FieldsAreEqual(object obj)
+        {
+            if ((obj is ActivityMarker other))
+            {
+                var fieldsAreEqual =
+                    (Index == other.Index) &&
+                    (Kind == other.Kind) &&
+                    (OccurredUtc == other.OccurredUtc) &&
+                    (Description == other.Description) &&
+                    (_ExportRevision?.Index == other._ExportRevision?.Index) &&
+                    (_SyncSession?.Index == other._SyncSession?.Index) &&
+                    (_Contributor?.Index == other._Contributor?.Index);
+                if (!fieldsAreEqual)
+                {
+                    return false;
+                }
+                
+                return true;
+            }
+            return false;
+        }
+        
+    } // end of class
+    
     public partial class DocumentModel
     {
         public ElementIndexMaps ElementIndexMaps { get; }
@@ -4351,6 +4503,154 @@ namespace Vim.Format.ObjectModel {
             return r;
         }
         
+        
+        // Contributor
+        
+        public EntityTable ContributorEntityTable { get; }
+        
+        public IArray<String> ContributorName { get; }
+        public String GetContributorName(int index, String defaultValue = "") => ContributorName?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Int32> ContributorSource { get; }
+        public Int32 GetContributorSource(int index, Int32 defaultValue = default) => ContributorSource?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public int NumContributor => ContributorEntityTable?.NumRows ?? 0;
+        public IArray<Contributor> ContributorList { get; }
+        public Contributor GetContributor(int n)
+        {
+            if (n < 0) return null;
+            var r = new Contributor();
+            r.Document = Document;
+            r.Index = n;
+            r.Name = ContributorName.ElementAtOrDefault(n);
+            r.Source = ContributorSource.ElementAtOrDefault(n);
+            return r;
+        }
+        
+        
+        // SyncSession
+        
+        public EntityTable SyncSessionEntityTable { get; }
+        
+        public IArray<String> SyncSessionSessionGuid { get; }
+        public String GetSyncSessionSessionGuid(int index, String defaultValue = "") => SyncSessionSessionGuid?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<String> SyncSessionMachineName { get; }
+        public String GetSyncSessionMachineName(int index, String defaultValue = "") => SyncSessionMachineName?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<String> SyncSessionRevitVersion { get; }
+        public String GetSyncSessionRevitVersion(int index, String defaultValue = "") => SyncSessionRevitVersion?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<String> SyncSessionStartedUtc { get; }
+        public String GetSyncSessionStartedUtc(int index, String defaultValue = "") => SyncSessionStartedUtc?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<String> SyncSessionEndedUtc { get; }
+        public String GetSyncSessionEndedUtc(int index, String defaultValue = "") => SyncSessionEndedUtc?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<int> SyncSessionContributorIndex { get; }
+        public int GetSyncSessionContributorIndex(int index) => SyncSessionContributorIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
+        public IArray<int> SyncSessionBimDocumentIndex { get; }
+        public int GetSyncSessionBimDocumentIndex(int index) => SyncSessionBimDocumentIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
+        public int NumSyncSession => SyncSessionEntityTable?.NumRows ?? 0;
+        public IArray<SyncSession> SyncSessionList { get; }
+        public SyncSession GetSyncSession(int n)
+        {
+            if (n < 0) return null;
+            var r = new SyncSession();
+            r.Document = Document;
+            r.Index = n;
+            r.SessionGuid = SyncSessionSessionGuid.ElementAtOrDefault(n);
+            r.MachineName = SyncSessionMachineName.ElementAtOrDefault(n);
+            r.RevitVersion = SyncSessionRevitVersion.ElementAtOrDefault(n);
+            r.StartedUtc = SyncSessionStartedUtc.ElementAtOrDefault(n);
+            r.EndedUtc = SyncSessionEndedUtc.ElementAtOrDefault(n);
+            r._Contributor = new Relation<Vim.Format.ObjectModel.Contributor>(GetSyncSessionContributorIndex(n), GetContributor);
+            r._BimDocument = new Relation<Vim.Format.ObjectModel.BimDocument>(GetSyncSessionBimDocumentIndex(n), GetBimDocument);
+            return r;
+        }
+        
+        
+        // ElementChange
+        
+        public EntityTable ElementChangeEntityTable { get; }
+        
+        public IArray<Int32> ElementChangeChangeKind { get; }
+        public Int32 GetElementChangeChangeKind(int index, Int32 defaultValue = default) => ElementChangeChangeKind?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Int32> ElementChangeConfidence { get; }
+        public Int32 GetElementChangeConfidence(int index, Int32 defaultValue = default) => ElementChangeConfidence?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<String> ElementChangeChangedUtc { get; }
+        public String GetElementChangeChangedUtc(int index, String defaultValue = "") => ElementChangeChangedUtc?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<String> ElementChangeUniqueId { get; }
+        public String GetElementChangeUniqueId(int index, String defaultValue = "") => ElementChangeUniqueId?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<String> ElementChangeCategoryName { get; }
+        public String GetElementChangeCategoryName(int index, String defaultValue = "") => ElementChangeCategoryName?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<String> ElementChangeFamilyName { get; }
+        public String GetElementChangeFamilyName(int index, String defaultValue = "") => ElementChangeFamilyName?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<String> ElementChangeTypeName { get; }
+        public String GetElementChangeTypeName(int index, String defaultValue = "") => ElementChangeTypeName?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<String> ElementChangeElementName { get; }
+        public String GetElementChangeElementName(int index, String defaultValue = "") => ElementChangeElementName?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<String> ElementChangeLevelName { get; }
+        public String GetElementChangeLevelName(int index, String defaultValue = "") => ElementChangeLevelName?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<String> ElementChangeWorksetName { get; }
+        public String GetElementChangeWorksetName(int index, String defaultValue = "") => ElementChangeWorksetName?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<int> ElementChangeExportRevisionIndex { get; }
+        public int GetElementChangeExportRevisionIndex(int index) => ElementChangeExportRevisionIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
+        public IArray<int> ElementChangeSyncSessionIndex { get; }
+        public int GetElementChangeSyncSessionIndex(int index) => ElementChangeSyncSessionIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
+        public IArray<int> ElementChangeContributorIndex { get; }
+        public int GetElementChangeContributorIndex(int index) => ElementChangeContributorIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
+        public int NumElementChange => ElementChangeEntityTable?.NumRows ?? 0;
+        public IArray<ElementChange> ElementChangeList { get; }
+        public ElementChange GetElementChange(int n)
+        {
+            if (n < 0) return null;
+            var r = new ElementChange();
+            r.Document = Document;
+            r.Index = n;
+            r.ChangeKind = ElementChangeChangeKind.ElementAtOrDefault(n);
+            r.Confidence = ElementChangeConfidence.ElementAtOrDefault(n);
+            r.ChangedUtc = ElementChangeChangedUtc.ElementAtOrDefault(n);
+            r.UniqueId = ElementChangeUniqueId.ElementAtOrDefault(n);
+            r.CategoryName = ElementChangeCategoryName.ElementAtOrDefault(n);
+            r.FamilyName = ElementChangeFamilyName.ElementAtOrDefault(n);
+            r.TypeName = ElementChangeTypeName.ElementAtOrDefault(n);
+            r.ElementName = ElementChangeElementName.ElementAtOrDefault(n);
+            r.LevelName = ElementChangeLevelName.ElementAtOrDefault(n);
+            r.WorksetName = ElementChangeWorksetName.ElementAtOrDefault(n);
+            r._ExportRevision = new Relation<Vim.Format.ObjectModel.ExportRevision>(GetElementChangeExportRevisionIndex(n), GetExportRevision);
+            r._SyncSession = new Relation<Vim.Format.ObjectModel.SyncSession>(GetElementChangeSyncSessionIndex(n), GetSyncSession);
+            r._Contributor = new Relation<Vim.Format.ObjectModel.Contributor>(GetElementChangeContributorIndex(n), GetContributor);
+            return r;
+        }
+        
+        
+        // ActivityMarker
+        
+        public EntityTable ActivityMarkerEntityTable { get; }
+        
+        public IArray<Int32> ActivityMarkerKind { get; }
+        public Int32 GetActivityMarkerKind(int index, Int32 defaultValue = default) => ActivityMarkerKind?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<String> ActivityMarkerOccurredUtc { get; }
+        public String GetActivityMarkerOccurredUtc(int index, String defaultValue = "") => ActivityMarkerOccurredUtc?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<String> ActivityMarkerDescription { get; }
+        public String GetActivityMarkerDescription(int index, String defaultValue = "") => ActivityMarkerDescription?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<int> ActivityMarkerExportRevisionIndex { get; }
+        public int GetActivityMarkerExportRevisionIndex(int index) => ActivityMarkerExportRevisionIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
+        public IArray<int> ActivityMarkerSyncSessionIndex { get; }
+        public int GetActivityMarkerSyncSessionIndex(int index) => ActivityMarkerSyncSessionIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
+        public IArray<int> ActivityMarkerContributorIndex { get; }
+        public int GetActivityMarkerContributorIndex(int index) => ActivityMarkerContributorIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
+        public int NumActivityMarker => ActivityMarkerEntityTable?.NumRows ?? 0;
+        public IArray<ActivityMarker> ActivityMarkerList { get; }
+        public ActivityMarker GetActivityMarker(int n)
+        {
+            if (n < 0) return null;
+            var r = new ActivityMarker();
+            r.Document = Document;
+            r.Index = n;
+            r.Kind = ActivityMarkerKind.ElementAtOrDefault(n);
+            r.OccurredUtc = ActivityMarkerOccurredUtc.ElementAtOrDefault(n);
+            r.Description = ActivityMarkerDescription.ElementAtOrDefault(n);
+            r._ExportRevision = new Relation<Vim.Format.ObjectModel.ExportRevision>(GetActivityMarkerExportRevisionIndex(n), GetExportRevision);
+            r._SyncSession = new Relation<Vim.Format.ObjectModel.SyncSession>(GetActivityMarkerSyncSessionIndex(n), GetSyncSession);
+            r._Contributor = new Relation<Vim.Format.ObjectModel.Contributor>(GetActivityMarkerContributorIndex(n), GetContributor);
+            return r;
+        }
+        
         // All entity collections
         public Dictionary<string, IEnumerable<Entity>> AllEntities => new Dictionary<string, IEnumerable<Entity>>() {
             {"Vim.Asset", AssetList.ToEnumerable()},
@@ -4412,6 +4712,10 @@ namespace Vim.Format.ObjectModel {
             {"Vim.SunAndShadowSettings", SunAndShadowSettingsList.ToEnumerable()},
             {"Vim.ExportRevision", ExportRevisionList.ToEnumerable()},
             {"Vim.ElementInExportRevision", ElementInExportRevisionList.ToEnumerable()},
+            {"Vim.Contributor", ContributorList.ToEnumerable()},
+            {"Vim.SyncSession", SyncSessionList.ToEnumerable()},
+            {"Vim.ElementChange", ElementChangeList.ToEnumerable()},
+            {"Vim.ActivityMarker", ActivityMarkerList.ToEnumerable()},
         };
         
         // Entity types from table names
@@ -4475,6 +4779,10 @@ namespace Vim.Format.ObjectModel {
             {"Vim.SunAndShadowSettings", typeof(SunAndShadowSettings)},
             {"Vim.ExportRevision", typeof(ExportRevision)},
             {"Vim.ElementInExportRevision", typeof(ElementInExportRevision)},
+            {"Vim.Contributor", typeof(Contributor)},
+            {"Vim.SyncSession", typeof(SyncSession)},
+            {"Vim.ElementChange", typeof(ElementChange)},
+            {"Vim.ActivityMarker", typeof(ActivityMarker)},
         };
         public DocumentModel(Document d, bool inParallel = true)
         {
@@ -4540,6 +4848,10 @@ namespace Vim.Format.ObjectModel {
             SunAndShadowSettingsEntityTable = Document.GetTable("Vim.SunAndShadowSettings");
             ExportRevisionEntityTable = Document.GetTable("Vim.ExportRevision");
             ElementInExportRevisionEntityTable = Document.GetTable("Vim.ElementInExportRevision");
+            ContributorEntityTable = Document.GetTable("Vim.Contributor");
+            SyncSessionEntityTable = Document.GetTable("Vim.SyncSession");
+            ElementChangeEntityTable = Document.GetTable("Vim.ElementChange");
+            ActivityMarkerEntityTable = Document.GetTable("Vim.ActivityMarker");
             
             // Initialize entity arrays
             AssetBufferName = AssetEntityTable?.GetStringColumnValues("string:BufferName") ?? Array.Empty<String>().ToIArray();
@@ -4833,6 +5145,26 @@ namespace Vim.Format.ObjectModel {
             ExportRevisionCreatedUtc = ExportRevisionEntityTable?.GetStringColumnValues("string:CreatedUtc") ?? Array.Empty<String>().ToIArray();
             ExportRevisionDocumentNumSaves = ExportRevisionEntityTable?.GetDataColumnValues<Int32>("int:DocumentNumSaves") ?? Array.Empty<Int32>().ToIArray();
             ExportRevisionDocumentVersionGuid = ExportRevisionEntityTable?.GetStringColumnValues("string:DocumentVersionGuid") ?? Array.Empty<String>().ToIArray();
+            ContributorName = ContributorEntityTable?.GetStringColumnValues("string:Name") ?? Array.Empty<String>().ToIArray();
+            ContributorSource = ContributorEntityTable?.GetDataColumnValues<Int32>("int:Source") ?? Array.Empty<Int32>().ToIArray();
+            SyncSessionSessionGuid = SyncSessionEntityTable?.GetStringColumnValues("string:SessionGuid") ?? Array.Empty<String>().ToIArray();
+            SyncSessionMachineName = SyncSessionEntityTable?.GetStringColumnValues("string:MachineName") ?? Array.Empty<String>().ToIArray();
+            SyncSessionRevitVersion = SyncSessionEntityTable?.GetStringColumnValues("string:RevitVersion") ?? Array.Empty<String>().ToIArray();
+            SyncSessionStartedUtc = SyncSessionEntityTable?.GetStringColumnValues("string:StartedUtc") ?? Array.Empty<String>().ToIArray();
+            SyncSessionEndedUtc = SyncSessionEntityTable?.GetStringColumnValues("string:EndedUtc") ?? Array.Empty<String>().ToIArray();
+            ElementChangeChangeKind = ElementChangeEntityTable?.GetDataColumnValues<Int32>("int:ChangeKind") ?? Array.Empty<Int32>().ToIArray();
+            ElementChangeConfidence = ElementChangeEntityTable?.GetDataColumnValues<Int32>("int:Confidence") ?? Array.Empty<Int32>().ToIArray();
+            ElementChangeChangedUtc = ElementChangeEntityTable?.GetStringColumnValues("string:ChangedUtc") ?? Array.Empty<String>().ToIArray();
+            ElementChangeUniqueId = ElementChangeEntityTable?.GetStringColumnValues("string:UniqueId") ?? Array.Empty<String>().ToIArray();
+            ElementChangeCategoryName = ElementChangeEntityTable?.GetStringColumnValues("string:CategoryName") ?? Array.Empty<String>().ToIArray();
+            ElementChangeFamilyName = ElementChangeEntityTable?.GetStringColumnValues("string:FamilyName") ?? Array.Empty<String>().ToIArray();
+            ElementChangeTypeName = ElementChangeEntityTable?.GetStringColumnValues("string:TypeName") ?? Array.Empty<String>().ToIArray();
+            ElementChangeElementName = ElementChangeEntityTable?.GetStringColumnValues("string:ElementName") ?? Array.Empty<String>().ToIArray();
+            ElementChangeLevelName = ElementChangeEntityTable?.GetStringColumnValues("string:LevelName") ?? Array.Empty<String>().ToIArray();
+            ElementChangeWorksetName = ElementChangeEntityTable?.GetStringColumnValues("string:WorksetName") ?? Array.Empty<String>().ToIArray();
+            ActivityMarkerKind = ActivityMarkerEntityTable?.GetDataColumnValues<Int32>("int:Kind") ?? Array.Empty<Int32>().ToIArray();
+            ActivityMarkerOccurredUtc = ActivityMarkerEntityTable?.GetStringColumnValues("string:OccurredUtc") ?? Array.Empty<String>().ToIArray();
+            ActivityMarkerDescription = ActivityMarkerEntityTable?.GetStringColumnValues("string:Description") ?? Array.Empty<String>().ToIArray();
             
             // Initialize entity relational columns
             ParameterDescriptorDisplayUnitIndex = ParameterDescriptorEntityTable?.GetIndexColumnValues("index:Vim.DisplayUnit:DisplayUnit") ?? Array.Empty<int>().ToIArray();
@@ -4943,6 +5275,14 @@ namespace Vim.Format.ObjectModel {
             ExportRevisionBimDocumentIndex = ExportRevisionEntityTable?.GetIndexColumnValues("index:Vim.BimDocument:BimDocument") ?? Array.Empty<int>().ToIArray();
             ElementInExportRevisionExportRevisionIndex = ElementInExportRevisionEntityTable?.GetIndexColumnValues("index:Vim.ExportRevision:ExportRevision") ?? Array.Empty<int>().ToIArray();
             ElementInExportRevisionElementIndex = ElementInExportRevisionEntityTable?.GetIndexColumnValues("index:Vim.Element:Element") ?? Array.Empty<int>().ToIArray();
+            SyncSessionContributorIndex = SyncSessionEntityTable?.GetIndexColumnValues("index:Vim.Contributor:Contributor") ?? Array.Empty<int>().ToIArray();
+            SyncSessionBimDocumentIndex = SyncSessionEntityTable?.GetIndexColumnValues("index:Vim.BimDocument:BimDocument") ?? Array.Empty<int>().ToIArray();
+            ElementChangeExportRevisionIndex = ElementChangeEntityTable?.GetIndexColumnValues("index:Vim.ExportRevision:ExportRevision") ?? Array.Empty<int>().ToIArray();
+            ElementChangeSyncSessionIndex = ElementChangeEntityTable?.GetIndexColumnValues("index:Vim.SyncSession:SyncSession") ?? Array.Empty<int>().ToIArray();
+            ElementChangeContributorIndex = ElementChangeEntityTable?.GetIndexColumnValues("index:Vim.Contributor:Contributor") ?? Array.Empty<int>().ToIArray();
+            ActivityMarkerExportRevisionIndex = ActivityMarkerEntityTable?.GetIndexColumnValues("index:Vim.ExportRevision:ExportRevision") ?? Array.Empty<int>().ToIArray();
+            ActivityMarkerSyncSessionIndex = ActivityMarkerEntityTable?.GetIndexColumnValues("index:Vim.SyncSession:SyncSession") ?? Array.Empty<int>().ToIArray();
+            ActivityMarkerContributorIndex = ActivityMarkerEntityTable?.GetIndexColumnValues("index:Vim.Contributor:Contributor") ?? Array.Empty<int>().ToIArray();
             
             // Initialize entity collections
             AssetList = NumAsset.Select(i => GetAsset(i));
@@ -5004,6 +5344,10 @@ namespace Vim.Format.ObjectModel {
             SunAndShadowSettingsList = NumSunAndShadowSettings.Select(i => GetSunAndShadowSettings(i));
             ExportRevisionList = NumExportRevision.Select(i => GetExportRevision(i));
             ElementInExportRevisionList = NumElementInExportRevision.Select(i => GetElementInExportRevision(i));
+            ContributorList = NumContributor.Select(i => GetContributor(i));
+            SyncSessionList = NumSyncSession.Select(i => GetSyncSession(i));
+            ElementChangeList = NumElementChange.Select(i => GetElementChange(i));
+            ActivityMarkerList = NumActivityMarker.Select(i => GetActivityMarker(i));
             
             // Initialize element index maps
             ElementIndexMaps = new ElementIndexMaps(this, inParallel);
@@ -5090,6 +5434,10 @@ namespace Vim.Format.ObjectModel {
             Tables[TableNames.SunAndShadowSettings] = SunAndShadowSettingsTable = new SunAndShadowSettingsTable(GetSerializableTableOrEmpty(TableNames.SunAndShadowSettings), stringTable, this);
             Tables[TableNames.ExportRevision] = ExportRevisionTable = new ExportRevisionTable(GetSerializableTableOrEmpty(TableNames.ExportRevision), stringTable, this);
             Tables[TableNames.ElementInExportRevision] = ElementInExportRevisionTable = new ElementInExportRevisionTable(GetSerializableTableOrEmpty(TableNames.ElementInExportRevision), stringTable, this);
+            Tables[TableNames.Contributor] = ContributorTable = new ContributorTable(GetSerializableTableOrEmpty(TableNames.Contributor), stringTable, this);
+            Tables[TableNames.SyncSession] = SyncSessionTable = new SyncSessionTable(GetSerializableTableOrEmpty(TableNames.SyncSession), stringTable, this);
+            Tables[TableNames.ElementChange] = ElementChangeTable = new ElementChangeTable(GetSerializableTableOrEmpty(TableNames.ElementChange), stringTable, this);
+            Tables[TableNames.ActivityMarker] = ActivityMarkerTable = new ActivityMarkerTable(GetSerializableTableOrEmpty(TableNames.ActivityMarker), stringTable, this);
             
             // Initialize element index maps
             ElementIndexMaps = new ElementIndexMaps(this, inParallel);
@@ -5214,6 +5562,14 @@ namespace Vim.Format.ObjectModel {
         public ExportRevision GetExportRevision(int index) => ExportRevisionTable?.Get(index);
         public ElementInExportRevisionTable ElementInExportRevisionTable { get; } // can be null
         public ElementInExportRevision GetElementInExportRevision(int index) => ElementInExportRevisionTable?.Get(index);
+        public ContributorTable ContributorTable { get; } // can be null
+        public Contributor GetContributor(int index) => ContributorTable?.Get(index);
+        public SyncSessionTable SyncSessionTable { get; } // can be null
+        public SyncSession GetSyncSession(int index) => SyncSessionTable?.Get(index);
+        public ElementChangeTable ElementChangeTable { get; } // can be null
+        public ElementChange GetElementChange(int index) => ElementChangeTable?.Get(index);
+        public ActivityMarkerTable ActivityMarkerTable { get; } // can be null
+        public ActivityMarker GetActivityMarker(int index) => ActivityMarkerTable?.Get(index);
         
         public static HashSet<string> GetElementKindTableNames()
             => new HashSet<string>()
@@ -9103,6 +9459,250 @@ namespace Vim.Format.ObjectModel {
         }
     } // class ElementInExportRevisionTable 
     
+    public partial class ContributorTable : EntityTable_v2, IEnumerable<Contributor>
+    {
+        
+        public const string TableName = TableNames.Contributor;
+        
+        public EntityTableSet ParentTableSet { get; } // can be null
+        
+        public ContributorTable(SerializableEntityTable rawTable, string[] stringTable, EntityTableSet parentTableSet = null) : base(rawTable, stringTable)
+        {
+            ParentTableSet = parentTableSet;
+            Column_Name = GetStringColumnValues("string:Name") ?? Array.Empty<String>();
+            Column_Source = GetDataColumnValues<Int32>("int:Source") ?? Array.Empty<Int32>();
+        }
+        
+        public String[] Column_Name { get; }
+        public String GetName(int index, String @default = "") => Column_Name.ElementAtOrDefault(index, @default);
+        public Int32[] Column_Source { get; }
+        public Int32 GetSource(int index, Int32 @default = default) => Column_Source.ElementAtOrDefault(index, @default);
+        // Object Getter
+        public Contributor Get(int index)
+        {
+            if (index < 0) return null;
+            var r = new Contributor();
+            r.Index = index;
+            r.Name = GetName(index);
+            r.Source = GetSource(index);
+            return r;
+        }
+        // Enumerator
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+        public IEnumerator<Contributor> GetEnumerator()
+        {
+            for (var i = 0; i < RowCount; ++i)
+                yield return Get(i);
+        }
+    } // class ContributorTable 
+    
+    public partial class SyncSessionTable : EntityTable_v2, IEnumerable<SyncSession>
+    {
+        
+        public const string TableName = TableNames.SyncSession;
+        
+        public EntityTableSet ParentTableSet { get; } // can be null
+        
+        public SyncSessionTable(SerializableEntityTable rawTable, string[] stringTable, EntityTableSet parentTableSet = null) : base(rawTable, stringTable)
+        {
+            ParentTableSet = parentTableSet;
+            Column_SessionGuid = GetStringColumnValues("string:SessionGuid") ?? Array.Empty<String>();
+            Column_MachineName = GetStringColumnValues("string:MachineName") ?? Array.Empty<String>();
+            Column_RevitVersion = GetStringColumnValues("string:RevitVersion") ?? Array.Empty<String>();
+            Column_StartedUtc = GetStringColumnValues("string:StartedUtc") ?? Array.Empty<String>();
+            Column_EndedUtc = GetStringColumnValues("string:EndedUtc") ?? Array.Empty<String>();
+            Column_ContributorIndex = GetIndexColumnValues("index:Vim.Contributor:Contributor") ?? Array.Empty<int>();
+            Column_BimDocumentIndex = GetIndexColumnValues("index:Vim.BimDocument:BimDocument") ?? Array.Empty<int>();
+        }
+        
+        public String[] Column_SessionGuid { get; }
+        public String GetSessionGuid(int index, String @default = "") => Column_SessionGuid.ElementAtOrDefault(index, @default);
+        public String[] Column_MachineName { get; }
+        public String GetMachineName(int index, String @default = "") => Column_MachineName.ElementAtOrDefault(index, @default);
+        public String[] Column_RevitVersion { get; }
+        public String GetRevitVersion(int index, String @default = "") => Column_RevitVersion.ElementAtOrDefault(index, @default);
+        public String[] Column_StartedUtc { get; }
+        public String GetStartedUtc(int index, String @default = "") => Column_StartedUtc.ElementAtOrDefault(index, @default);
+        public String[] Column_EndedUtc { get; }
+        public String GetEndedUtc(int index, String @default = "") => Column_EndedUtc.ElementAtOrDefault(index, @default);
+        public int[] Column_ContributorIndex { get; }
+        public int GetContributorIndex(int index) => Column_ContributorIndex.ElementAtOrDefault(index, EntityRelation.None);
+        public Contributor GetContributor(int index) => _GetReferencedContributor(GetContributorIndex(index));
+        private Contributor _GetReferencedContributor(int referencedIndex) => ParentTableSet.GetContributor(referencedIndex);
+        public int[] Column_BimDocumentIndex { get; }
+        public int GetBimDocumentIndex(int index) => Column_BimDocumentIndex.ElementAtOrDefault(index, EntityRelation.None);
+        public BimDocument GetBimDocument(int index) => _GetReferencedBimDocument(GetBimDocumentIndex(index));
+        private BimDocument _GetReferencedBimDocument(int referencedIndex) => ParentTableSet.GetBimDocument(referencedIndex);
+        // Object Getter
+        public SyncSession Get(int index)
+        {
+            if (index < 0) return null;
+            var r = new SyncSession();
+            r.Index = index;
+            r.SessionGuid = GetSessionGuid(index);
+            r.MachineName = GetMachineName(index);
+            r.RevitVersion = GetRevitVersion(index);
+            r.StartedUtc = GetStartedUtc(index);
+            r.EndedUtc = GetEndedUtc(index);
+            r._Contributor = new Relation<Vim.Format.ObjectModel.Contributor>(GetContributorIndex(index), _GetReferencedContributor);
+            r._BimDocument = new Relation<Vim.Format.ObjectModel.BimDocument>(GetBimDocumentIndex(index), _GetReferencedBimDocument);
+            return r;
+        }
+        // Enumerator
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+        public IEnumerator<SyncSession> GetEnumerator()
+        {
+            for (var i = 0; i < RowCount; ++i)
+                yield return Get(i);
+        }
+    } // class SyncSessionTable 
+    
+    public partial class ElementChangeTable : EntityTable_v2, IEnumerable<ElementChange>
+    {
+        
+        public const string TableName = TableNames.ElementChange;
+        
+        public EntityTableSet ParentTableSet { get; } // can be null
+        
+        public ElementChangeTable(SerializableEntityTable rawTable, string[] stringTable, EntityTableSet parentTableSet = null) : base(rawTable, stringTable)
+        {
+            ParentTableSet = parentTableSet;
+            Column_ChangeKind = GetDataColumnValues<Int32>("int:ChangeKind") ?? Array.Empty<Int32>();
+            Column_Confidence = GetDataColumnValues<Int32>("int:Confidence") ?? Array.Empty<Int32>();
+            Column_ChangedUtc = GetStringColumnValues("string:ChangedUtc") ?? Array.Empty<String>();
+            Column_UniqueId = GetStringColumnValues("string:UniqueId") ?? Array.Empty<String>();
+            Column_CategoryName = GetStringColumnValues("string:CategoryName") ?? Array.Empty<String>();
+            Column_FamilyName = GetStringColumnValues("string:FamilyName") ?? Array.Empty<String>();
+            Column_TypeName = GetStringColumnValues("string:TypeName") ?? Array.Empty<String>();
+            Column_ElementName = GetStringColumnValues("string:ElementName") ?? Array.Empty<String>();
+            Column_LevelName = GetStringColumnValues("string:LevelName") ?? Array.Empty<String>();
+            Column_WorksetName = GetStringColumnValues("string:WorksetName") ?? Array.Empty<String>();
+            Column_ExportRevisionIndex = GetIndexColumnValues("index:Vim.ExportRevision:ExportRevision") ?? Array.Empty<int>();
+            Column_SyncSessionIndex = GetIndexColumnValues("index:Vim.SyncSession:SyncSession") ?? Array.Empty<int>();
+            Column_ContributorIndex = GetIndexColumnValues("index:Vim.Contributor:Contributor") ?? Array.Empty<int>();
+        }
+        
+        public Int32[] Column_ChangeKind { get; }
+        public Int32 GetChangeKind(int index, Int32 @default = default) => Column_ChangeKind.ElementAtOrDefault(index, @default);
+        public Int32[] Column_Confidence { get; }
+        public Int32 GetConfidence(int index, Int32 @default = default) => Column_Confidence.ElementAtOrDefault(index, @default);
+        public String[] Column_ChangedUtc { get; }
+        public String GetChangedUtc(int index, String @default = "") => Column_ChangedUtc.ElementAtOrDefault(index, @default);
+        public String[] Column_UniqueId { get; }
+        public String GetUniqueId(int index, String @default = "") => Column_UniqueId.ElementAtOrDefault(index, @default);
+        public String[] Column_CategoryName { get; }
+        public String GetCategoryName(int index, String @default = "") => Column_CategoryName.ElementAtOrDefault(index, @default);
+        public String[] Column_FamilyName { get; }
+        public String GetFamilyName(int index, String @default = "") => Column_FamilyName.ElementAtOrDefault(index, @default);
+        public String[] Column_TypeName { get; }
+        public String GetTypeName(int index, String @default = "") => Column_TypeName.ElementAtOrDefault(index, @default);
+        public String[] Column_ElementName { get; }
+        public String GetElementName(int index, String @default = "") => Column_ElementName.ElementAtOrDefault(index, @default);
+        public String[] Column_LevelName { get; }
+        public String GetLevelName(int index, String @default = "") => Column_LevelName.ElementAtOrDefault(index, @default);
+        public String[] Column_WorksetName { get; }
+        public String GetWorksetName(int index, String @default = "") => Column_WorksetName.ElementAtOrDefault(index, @default);
+        public int[] Column_ExportRevisionIndex { get; }
+        public int GetExportRevisionIndex(int index) => Column_ExportRevisionIndex.ElementAtOrDefault(index, EntityRelation.None);
+        public ExportRevision GetExportRevision(int index) => _GetReferencedExportRevision(GetExportRevisionIndex(index));
+        private ExportRevision _GetReferencedExportRevision(int referencedIndex) => ParentTableSet.GetExportRevision(referencedIndex);
+        public int[] Column_SyncSessionIndex { get; }
+        public int GetSyncSessionIndex(int index) => Column_SyncSessionIndex.ElementAtOrDefault(index, EntityRelation.None);
+        public SyncSession GetSyncSession(int index) => _GetReferencedSyncSession(GetSyncSessionIndex(index));
+        private SyncSession _GetReferencedSyncSession(int referencedIndex) => ParentTableSet.GetSyncSession(referencedIndex);
+        public int[] Column_ContributorIndex { get; }
+        public int GetContributorIndex(int index) => Column_ContributorIndex.ElementAtOrDefault(index, EntityRelation.None);
+        public Contributor GetContributor(int index) => _GetReferencedContributor(GetContributorIndex(index));
+        private Contributor _GetReferencedContributor(int referencedIndex) => ParentTableSet.GetContributor(referencedIndex);
+        // Object Getter
+        public ElementChange Get(int index)
+        {
+            if (index < 0) return null;
+            var r = new ElementChange();
+            r.Index = index;
+            r.ChangeKind = GetChangeKind(index);
+            r.Confidence = GetConfidence(index);
+            r.ChangedUtc = GetChangedUtc(index);
+            r.UniqueId = GetUniqueId(index);
+            r.CategoryName = GetCategoryName(index);
+            r.FamilyName = GetFamilyName(index);
+            r.TypeName = GetTypeName(index);
+            r.ElementName = GetElementName(index);
+            r.LevelName = GetLevelName(index);
+            r.WorksetName = GetWorksetName(index);
+            r._ExportRevision = new Relation<Vim.Format.ObjectModel.ExportRevision>(GetExportRevisionIndex(index), _GetReferencedExportRevision);
+            r._SyncSession = new Relation<Vim.Format.ObjectModel.SyncSession>(GetSyncSessionIndex(index), _GetReferencedSyncSession);
+            r._Contributor = new Relation<Vim.Format.ObjectModel.Contributor>(GetContributorIndex(index), _GetReferencedContributor);
+            return r;
+        }
+        // Enumerator
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+        public IEnumerator<ElementChange> GetEnumerator()
+        {
+            for (var i = 0; i < RowCount; ++i)
+                yield return Get(i);
+        }
+    } // class ElementChangeTable 
+    
+    public partial class ActivityMarkerTable : EntityTable_v2, IEnumerable<ActivityMarker>
+    {
+        
+        public const string TableName = TableNames.ActivityMarker;
+        
+        public EntityTableSet ParentTableSet { get; } // can be null
+        
+        public ActivityMarkerTable(SerializableEntityTable rawTable, string[] stringTable, EntityTableSet parentTableSet = null) : base(rawTable, stringTable)
+        {
+            ParentTableSet = parentTableSet;
+            Column_Kind = GetDataColumnValues<Int32>("int:Kind") ?? Array.Empty<Int32>();
+            Column_OccurredUtc = GetStringColumnValues("string:OccurredUtc") ?? Array.Empty<String>();
+            Column_Description = GetStringColumnValues("string:Description") ?? Array.Empty<String>();
+            Column_ExportRevisionIndex = GetIndexColumnValues("index:Vim.ExportRevision:ExportRevision") ?? Array.Empty<int>();
+            Column_SyncSessionIndex = GetIndexColumnValues("index:Vim.SyncSession:SyncSession") ?? Array.Empty<int>();
+            Column_ContributorIndex = GetIndexColumnValues("index:Vim.Contributor:Contributor") ?? Array.Empty<int>();
+        }
+        
+        public Int32[] Column_Kind { get; }
+        public Int32 GetKind(int index, Int32 @default = default) => Column_Kind.ElementAtOrDefault(index, @default);
+        public String[] Column_OccurredUtc { get; }
+        public String GetOccurredUtc(int index, String @default = "") => Column_OccurredUtc.ElementAtOrDefault(index, @default);
+        public String[] Column_Description { get; }
+        public String GetDescription(int index, String @default = "") => Column_Description.ElementAtOrDefault(index, @default);
+        public int[] Column_ExportRevisionIndex { get; }
+        public int GetExportRevisionIndex(int index) => Column_ExportRevisionIndex.ElementAtOrDefault(index, EntityRelation.None);
+        public ExportRevision GetExportRevision(int index) => _GetReferencedExportRevision(GetExportRevisionIndex(index));
+        private ExportRevision _GetReferencedExportRevision(int referencedIndex) => ParentTableSet.GetExportRevision(referencedIndex);
+        public int[] Column_SyncSessionIndex { get; }
+        public int GetSyncSessionIndex(int index) => Column_SyncSessionIndex.ElementAtOrDefault(index, EntityRelation.None);
+        public SyncSession GetSyncSession(int index) => _GetReferencedSyncSession(GetSyncSessionIndex(index));
+        private SyncSession _GetReferencedSyncSession(int referencedIndex) => ParentTableSet.GetSyncSession(referencedIndex);
+        public int[] Column_ContributorIndex { get; }
+        public int GetContributorIndex(int index) => Column_ContributorIndex.ElementAtOrDefault(index, EntityRelation.None);
+        public Contributor GetContributor(int index) => _GetReferencedContributor(GetContributorIndex(index));
+        private Contributor _GetReferencedContributor(int referencedIndex) => ParentTableSet.GetContributor(referencedIndex);
+        // Object Getter
+        public ActivityMarker Get(int index)
+        {
+            if (index < 0) return null;
+            var r = new ActivityMarker();
+            r.Index = index;
+            r.Kind = GetKind(index);
+            r.OccurredUtc = GetOccurredUtc(index);
+            r.Description = GetDescription(index);
+            r._ExportRevision = new Relation<Vim.Format.ObjectModel.ExportRevision>(GetExportRevisionIndex(index), _GetReferencedExportRevision);
+            r._SyncSession = new Relation<Vim.Format.ObjectModel.SyncSession>(GetSyncSessionIndex(index), _GetReferencedSyncSession);
+            r._Contributor = new Relation<Vim.Format.ObjectModel.Contributor>(GetContributorIndex(index), _GetReferencedContributor);
+            return r;
+        }
+        // Enumerator
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+        public IEnumerator<ActivityMarker> GetEnumerator()
+        {
+            for (var i = 0; i < RowCount; ++i)
+                yield return Get(i);
+        }
+    } // class ActivityMarkerTable 
+    
     public static class DocumentBuilderExtensions
     {
         public static EntityTableBuilder ToAssetTableBuilder(this EntitySetBuilder<Asset> entitySet)
@@ -11513,6 +12113,174 @@ namespace Vim.Format.ObjectModel {
             }
             return tb;
         }
+        public static EntityTableBuilder ToContributorTableBuilder(this EntitySetBuilder<Contributor> entitySet)
+        {
+            var tb = new EntityTableBuilder(TableNames.Contributor);
+            var entities = entitySet.Entities;
+            var entityCount = entities.Count;
+            {
+                var columnData = new String[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Name; }
+                tb.AddStringColumn("string:Name", columnData);
+            }
+            {
+                var columnData = new Int32[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Source; }
+                tb.AddDataColumn("int:Source", columnData);
+            }
+            return tb;
+        }
+        public static EntityTableBuilder ToSyncSessionTableBuilder(this EntitySetBuilder<SyncSession> entitySet)
+        {
+            var tb = new EntityTableBuilder(TableNames.SyncSession);
+            var entities = entitySet.Entities;
+            var entityCount = entities.Count;
+            {
+                var columnData = new String[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].SessionGuid; }
+                tb.AddStringColumn("string:SessionGuid", columnData);
+            }
+            {
+                var columnData = new String[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].MachineName; }
+                tb.AddStringColumn("string:MachineName", columnData);
+            }
+            {
+                var columnData = new String[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].RevitVersion; }
+                tb.AddStringColumn("string:RevitVersion", columnData);
+            }
+            {
+                var columnData = new String[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].StartedUtc; }
+                tb.AddStringColumn("string:StartedUtc", columnData);
+            }
+            {
+                var columnData = new String[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].EndedUtc; }
+                tb.AddStringColumn("string:EndedUtc", columnData);
+            }
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._Contributor?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.Contributor:Contributor", columnData);
+            }
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._BimDocument?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.BimDocument:BimDocument", columnData);
+            }
+            return tb;
+        }
+        public static EntityTableBuilder ToElementChangeTableBuilder(this EntitySetBuilder<ElementChange> entitySet)
+        {
+            var tb = new EntityTableBuilder(TableNames.ElementChange);
+            var entities = entitySet.Entities;
+            var entityCount = entities.Count;
+            {
+                var columnData = new Int32[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].ChangeKind; }
+                tb.AddDataColumn("int:ChangeKind", columnData);
+            }
+            {
+                var columnData = new Int32[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Confidence; }
+                tb.AddDataColumn("int:Confidence", columnData);
+            }
+            {
+                var columnData = new String[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].ChangedUtc; }
+                tb.AddStringColumn("string:ChangedUtc", columnData);
+            }
+            {
+                var columnData = new String[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].UniqueId; }
+                tb.AddStringColumn("string:UniqueId", columnData);
+            }
+            {
+                var columnData = new String[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].CategoryName; }
+                tb.AddStringColumn("string:CategoryName", columnData);
+            }
+            {
+                var columnData = new String[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].FamilyName; }
+                tb.AddStringColumn("string:FamilyName", columnData);
+            }
+            {
+                var columnData = new String[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].TypeName; }
+                tb.AddStringColumn("string:TypeName", columnData);
+            }
+            {
+                var columnData = new String[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].ElementName; }
+                tb.AddStringColumn("string:ElementName", columnData);
+            }
+            {
+                var columnData = new String[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].LevelName; }
+                tb.AddStringColumn("string:LevelName", columnData);
+            }
+            {
+                var columnData = new String[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].WorksetName; }
+                tb.AddStringColumn("string:WorksetName", columnData);
+            }
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._ExportRevision?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.ExportRevision:ExportRevision", columnData);
+            }
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._SyncSession?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.SyncSession:SyncSession", columnData);
+            }
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._Contributor?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.Contributor:Contributor", columnData);
+            }
+            return tb;
+        }
+        public static EntityTableBuilder ToActivityMarkerTableBuilder(this EntitySetBuilder<ActivityMarker> entitySet)
+        {
+            var tb = new EntityTableBuilder(TableNames.ActivityMarker);
+            var entities = entitySet.Entities;
+            var entityCount = entities.Count;
+            {
+                var columnData = new Int32[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Kind; }
+                tb.AddDataColumn("int:Kind", columnData);
+            }
+            {
+                var columnData = new String[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].OccurredUtc; }
+                tb.AddStringColumn("string:OccurredUtc", columnData);
+            }
+            {
+                var columnData = new String[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Description; }
+                tb.AddStringColumn("string:Description", columnData);
+            }
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._ExportRevision?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.ExportRevision:ExportRevision", columnData);
+            }
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._SyncSession?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.SyncSession:SyncSession", columnData);
+            }
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._Contributor?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.Contributor:Contributor", columnData);
+            }
+            return tb;
+        }
     } // DocumentBuilderExtensions
     
     public partial class ObjectModelBuilder
@@ -11576,6 +12344,10 @@ namespace Vim.Format.ObjectModel {
         public readonly EntitySetBuilder<SunAndShadowSettings> SunAndShadowSettingsBuilder = new EntitySetBuilder<SunAndShadowSettings>(TableNames.SunAndShadowSettings);
         public readonly EntitySetBuilder<ExportRevision> ExportRevisionBuilder = new EntitySetBuilder<ExportRevision>(TableNames.ExportRevision);
         public readonly EntitySetBuilder<ElementInExportRevision> ElementInExportRevisionBuilder = new EntitySetBuilder<ElementInExportRevision>(TableNames.ElementInExportRevision);
+        public readonly EntitySetBuilder<Contributor> ContributorBuilder = new EntitySetBuilder<Contributor>(TableNames.Contributor);
+        public readonly EntitySetBuilder<SyncSession> SyncSessionBuilder = new EntitySetBuilder<SyncSession>(TableNames.SyncSession);
+        public readonly EntitySetBuilder<ElementChange> ElementChangeBuilder = new EntitySetBuilder<ElementChange>(TableNames.ElementChange);
+        public readonly EntitySetBuilder<ActivityMarker> ActivityMarkerBuilder = new EntitySetBuilder<ActivityMarker>(TableNames.ActivityMarker);
         
         public DocumentBuilder AddEntityTableSets(DocumentBuilder db)
         {
@@ -11638,6 +12410,10 @@ namespace Vim.Format.ObjectModel {
             db.Tables.Add(SunAndShadowSettingsBuilder.EntityTableName, SunAndShadowSettingsBuilder.ToSunAndShadowSettingsTableBuilder());
             db.Tables.Add(ExportRevisionBuilder.EntityTableName, ExportRevisionBuilder.ToExportRevisionTableBuilder());
             db.Tables.Add(ElementInExportRevisionBuilder.EntityTableName, ElementInExportRevisionBuilder.ToElementInExportRevisionTableBuilder());
+            db.Tables.Add(ContributorBuilder.EntityTableName, ContributorBuilder.ToContributorTableBuilder());
+            db.Tables.Add(SyncSessionBuilder.EntityTableName, SyncSessionBuilder.ToSyncSessionTableBuilder());
+            db.Tables.Add(ElementChangeBuilder.EntityTableName, ElementChangeBuilder.ToElementChangeTableBuilder());
+            db.Tables.Add(ActivityMarkerBuilder.EntityTableName, ActivityMarkerBuilder.ToActivityMarkerTableBuilder());
             
             return db;
         } // AddEntityTableSets
@@ -11703,6 +12479,10 @@ namespace Vim.Format.ObjectModel {
             SunAndShadowSettingsBuilder.Clear();
             ExportRevisionBuilder.Clear();
             ElementInExportRevisionBuilder.Clear();
+            ContributorBuilder.Clear();
+            SyncSessionBuilder.Clear();
+            ElementChangeBuilder.Clear();
+            ActivityMarkerBuilder.Clear();
         } // Clear
     } // ObjectModelBuilder
 } // namespace

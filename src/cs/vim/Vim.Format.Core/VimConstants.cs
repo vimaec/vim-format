@@ -73,6 +73,10 @@ namespace Vim.Format
         public const string SunAndShadowSettings = "Vim.SunAndShadowSettings";
         public const string ExportRevision = "Vim.ExportRevision";
         public const string ElementInExportRevision = "Vim.ElementInExportRevision";
+        public const string Contributor = "Vim.Contributor";
+        public const string SyncSession = "Vim.SyncSession";
+        public const string ElementChange = "Vim.ElementChange";
+        public const string ActivityMarker = "Vim.ActivityMarker";
     }
 
     public static class VimConstants

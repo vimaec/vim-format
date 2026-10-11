@@ -202,6 +202,37 @@ namespace Vim.Format.Merge
             Tables[TableNames.ElementInExportRevision] = binding;
             _numRows.Remove(TableNames.ExportRevision);
             _numRows.Remove(TableNames.ElementInExportRevision);
+
+            // The exporter writes the activity log without knowing which ExportRevision row will stand for this
+            // export (there is none in the file it writes), so it leaves -1 = "the export that wrote this file".
+            // Now that the row exists, point those rows at it.
+            var rootDocument = RootBimDocument(nDocs);
+            ResolveActivityExportRevision(TableNames.ElementChange, rootDocument);
+            ResolveActivityExportRevision(TableNames.ActivityMarker, rootDocument);
+        }
+
+        /// <summary>The BimDocument row of the host document: the one with no parent, else the first.</summary>
+        private int RootBimDocument(int numDocuments)
+        {
+            var parents = Index(TableNames.BimDocument, "index:" + TableNames.BimDocument + ":Parent");
+            if (parents != null)
+                for (var i = 0; i < parents.Length; ++i)
+                    if (parents[i] < 0)
+                        return i;
+            return numDocuments > 0 ? 0 : -1;
+        }
+
+        private void ResolveActivityExportRevision(string table, int revisionIndex)
+        {
+            if (revisionIndex < 0)
+                return;
+            var column = GetTable(table)?.IndexColumns.FirstOrDefault(c => c.Name == "index:" + TableNames.ExportRevision + ":ExportRevision");
+            var values = column?.Array;
+            if (values == null)
+                return;
+            for (var i = 0; i < values.Length; ++i)
+                if (values[i] < 0)
+                    values[i] = revisionIndex;
         }
 
         /// <summary>The related table name of each index column of the table.</summary>

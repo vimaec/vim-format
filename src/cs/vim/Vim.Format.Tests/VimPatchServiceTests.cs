@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using NUnit.Framework;
+using Vim.Format.Activity;
 using Vim.Format.Merge;
 using Vim.Format.ObjectModel;
 using Vim.Format.SceneBuilder;
@@ -62,13 +63,39 @@ namespace Vim.Format.Tests
                 Omb.ShapeBuilder.AddUntracked(new Shape { _Element = { Index = element }, Kind = (int)kind });
             }
 
-            public string Write(string dir, string name)
+            public string Write(string dir, string name, ActivityLog activity = null)
             {
                 var path = Path.Combine(dir, name);
-                Store.ToDocumentBuilder(nameof(VimPatchServiceTests), "0.0.0").Write(path);
+                var db = Store.ToDocumentBuilder(nameof(VimPatchServiceTests), "0.0.0");
+                activity?.WriteInto(db, 0);
+                db.Write(path);
                 return path;
             }
         }
+
+        /// <summary>One watched change, as the Revit exporter records it.</summary>
+        private static ActivityChange Watched(string person, string session, string utc, ElementChangeKind kind, string uid, string category)
+            => new ActivityChange
+            {
+                ChangedUtc = utc,
+                SessionGuid = session,
+                Contributor = new ActivityContributor(person, ContributorSource.Session),
+                Kind = kind,
+                Confidence = ElementChangeConfidence.Observed,
+                UniqueId = uid,
+                CategoryName = category,
+            };
+
+        private static ActivitySession SessionOf(string person, string guid, string started, string ended)
+            => new ActivitySession
+            {
+                SessionGuid = guid,
+                MachineName = "DESK-1",
+                RevitVersion = "2027",
+                StartedUtc = started,
+                EndedUtc = ended,
+                Contributor = new ActivityContributor(person, ContributorSource.Session),
+            };
 
         [Test]
         public static void TestPatchReplacesAddsDeletesAndKeepsTheRest()
@@ -152,6 +179,133 @@ namespace Vim.Format.Tests
             Assert.AreEqual(ExportRevisionKind.PartialExport, revisionOf["wall"]);
             Assert.AreEqual(ExportRevisionKind.PartialExport, revisionOf["new"]);
             Assert.AreEqual(ExportRevisionKind.FullExport, revisionOf["door"]);
+        }
+
+        /// <summary>
+        /// The activity log is history: two syncs in a row add their rows to the ones already in the file, the open
+        /// session is one row with a moving end rather than one row per sync, and a change about an element that has
+        /// just been deleted survives - that row is the whole point of the feature.
+        /// </summary>
+        [Test]
+        public static void TestPatchAccumulatesTheActivityLog()
+        {
+            var ctx = new CallerTestContext();
+            var dir = ctx.PrepareDirectory();
+            const string s1 = "11111111-1111-1111-1111-111111111111";
+            const string s2 = "22222222-2222-2222-2222-222222222222";
+
+            // The base: a full export which already recorded two of Sam's changes.
+            var b = new Doc("view-all", "VIM-ALL");
+            b.AddBox(1, "wall", 0, "A");
+            b.AddBox(2, "door", 5, "D");
+            b.AddBox(3, "old", 9, "O");
+            var baseLog = new ActivityLog
+            {
+                Sessions = { SessionOf("s.arsenault", s1, "2026-10-12T08:00:00.0000000Z", "2026-10-12T09:00:00.0000000Z") },
+                Changes =
+                {
+                    Watched("s.arsenault", s1, "2026-10-12T08:10:00.0000000Z", ElementChangeKind.Added, "wall", "Walls"),
+                    Watched("s.arsenault", s1, "2026-10-12T08:20:00.0000000Z", ElementChangeKind.Added, "door", "Doors"),
+                },
+            };
+            var basePath = b.Write(dir, "base.vim", baseLog);
+
+            // The first sync: the same session, still open (a later end), one modified wall and one deleted element -
+            // the deleted one has no Element row to point at, in this file or any other.
+            var p = new Doc("temp-view", "_VIM_EXPORT_1234");
+            p.AddBox(1, "wall", 2, "B");
+            var delta1 = new ActivityLog
+            {
+                Sessions = { SessionOf("s.arsenault", s1, "2026-10-12T08:00:00.0000000Z", "2026-10-12T10:30:00.0000000Z") },
+                Changes =
+                {
+                    Watched("s.arsenault", s1, "2026-10-12T10:05:00.0000000Z", ElementChangeKind.Modified, "wall", "Walls"),
+                    Watched("s.arsenault", s1, "2026-10-12T10:20:00.0000000Z", ElementChangeKind.Deleted, "old", "Generic Models"),
+                },
+                Notes =
+                {
+                    new ActivityNote
+                    {
+                        OccurredUtc = "2026-10-12T10:30:00.0000000Z",
+                        Kind = ActivityMarkerKind.HistoryReset,
+                        Description = "This model looks like it was re-saved as a new central.",
+                    },
+                },
+            };
+            var once = Path.Combine(dir, "patched-1.vim");
+            VimPatchService.Patch(basePath, p.Write(dir, "partial-1.vim", delta1), once, new VimPatchOptions
+            {
+                ChangedUniqueIds = new HashSet<string> { "wall" },
+                DeletedUniqueIds = new HashSet<string> { "old" },
+                UniqueIdAliases = new Dictionary<string, string> { { "temp-view", "view-all" } },
+            });
+
+            var afterOne = ActivityReport.Read(once);
+            Assert.AreEqual(4, afterOne.Changes.Count, "the base's two rows plus this sync's two");
+            Assert.AreEqual(1, afterOne.Sessions.Count, "one session, not one per sync");
+            Assert.AreEqual("2026-10-12T10:30:00.0000000Z", afterOne.Sessions[0].EndedUtc, "the fresher reading of the session wins");
+            var deletedRow = afterOne.Changes.Single(c => c.Kind == ElementChangeKind.Deleted);
+            Assert.AreEqual("old", deletedRow.UniqueId);
+            Assert.AreEqual("Generic Models", deletedRow.Category, "a deletion still says what it was");
+            CollectionAssert.DoesNotContain(
+                Enumerable.Range(0, VimScene.LoadVim(once).DocumentModel.NumElement)
+                    .Select(i => VimScene.LoadVim(once).DocumentModel.GetElement(i).UniqueId).ToList(),
+                "old");
+            Assert.AreEqual(1, afterOne.Markers.Count);
+            Assert.AreEqual(ActivityMarkerKind.HistoryReset, afterOne.Markers[0].Kind);
+
+            // A second sync, by somebody else, in a second session.
+            var p2 = new Doc("temp-view-2", "_VIM_EXPORT_5678");
+            p2.AddBox(2, "door", 6, "D2");
+            var delta2 = new ActivityLog
+            {
+                Sessions = { SessionOf("j.tremblay", s2, "2026-10-12T11:00:00.0000000Z", "2026-10-12T11:40:00.0000000Z") },
+                Changes = { Watched("j.tremblay", s2, "2026-10-12T11:30:00.0000000Z", ElementChangeKind.Modified, "door", "Doors") },
+            };
+            var twice = Path.Combine(dir, "patched-2.vim");
+            VimPatchService.Patch(once, p2.Write(dir, "partial-2.vim", delta2), twice, new VimPatchOptions
+            {
+                ChangedUniqueIds = new HashSet<string> { "door" },
+                UniqueIdAliases = new Dictionary<string, string> { { "temp-view-2", "view-all" } },
+            });
+
+            VimScene.LoadVim(twice).Validate();
+            var afterTwo = ActivityReport.Read(twice);
+            Assert.AreEqual(5, afterTwo.Changes.Count);
+            Assert.AreEqual(2, afterTwo.Sessions.Count);
+            CollectionAssert.AreEquivalent(new[] { "s.arsenault", "j.tremblay" }, afterTwo.Sessions.Select(x => x.Person).ToList());
+            Assert.AreEqual(1, afterTwo.Markers.Count, "the marker written by the first sync is still there");
+            Assert.IsTrue(afterTwo.Changes.All(c => c.VimRevision.Length > 0), "every row names the export that wrote it");
+
+            // The billing summary: one row per person per day per category.
+            var summary = ActivityReport.Summarize(afterTwo);
+            Assert.AreEqual(1, summary.Count(r => r.Person == "j.tremblay"));
+            var sam = summary.Where(r => r.Person == "s.arsenault").ToList();
+            Assert.AreEqual(2, sam.Sum(r => r.Added));
+            Assert.AreEqual(1, sam.Sum(r => r.Changed));
+            Assert.AreEqual(1, sam.Sum(r => r.Deleted));
+            Assert.AreEqual(2.5, sam.First().HoursInModelOnThatDay, 0.01, "08:00 to 10:30");
+
+            // Retention, and "strip activity on export".
+            var trimmed = Path.Combine(dir, "patched-trimmed.vim");
+            var trimResult = VimPatchService.Patch(once, p2.Write(dir, "partial-3.vim", delta2), trimmed, new VimPatchOptions
+            {
+                ChangedUniqueIds = new HashSet<string> { "door" },
+                UniqueIdAliases = new Dictionary<string, string> { { "temp-view-2", "view-all" } },
+                ActivityOldestUtc = "2026-10-12T10:00:00.0000000Z",
+            });
+            Assert.AreEqual(2, trimResult.ActivityRowsTrimmed, "the two 08:xx rows are older than the cut-off");
+            Assert.AreEqual(3, ActivityReport.Read(trimmed).Changes.Count);
+
+            var stripped = Path.Combine(dir, "patched-stripped.vim");
+            VimPatchService.Patch(once, p2.Write(dir, "partial-4.vim", delta2), stripped, new VimPatchOptions
+            {
+                ChangedUniqueIds = new HashSet<string> { "door" },
+                UniqueIdAliases = new Dictionary<string, string> { { "temp-view-2", "view-all" } },
+                KeepActivityLog = false,
+            });
+            Assert.IsTrue(ActivityReport.Read(stripped).IsEmpty, "nothing of the log is left in a stripped file");
+            VimScene.LoadVim(stripped).Validate();
         }
     }
 }

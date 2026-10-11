@@ -130,6 +130,14 @@ namespace Vim
     class ExportRevisionTable;
     class ElementInExportRevision;
     class ElementInExportRevisionTable;
+    class Contributor;
+    class ContributorTable;
+    class SyncSession;
+    class SyncSessionTable;
+    class ElementChange;
+    class ElementChangeTable;
+    class ActivityMarker;
+    class ActivityMarkerTable;
     
     class DocumentModel
     {
@@ -193,6 +201,10 @@ namespace Vim
         SunAndShadowSettingsTable* mSunAndShadowSettings;
         ExportRevisionTable* mExportRevision;
         ElementInExportRevisionTable* mElementInExportRevision;
+        ContributorTable* mContributor;
+        SyncSessionTable* mSyncSession;
+        ElementChangeTable* mElementChange;
+        ActivityMarkerTable* mActivityMarker;
         
         DocumentModel(Scene& scene);
         ~DocumentModel();
@@ -16761,6 +16773,1115 @@ namespace Vim
         return new ElementInExportRevisionTable(scene.mEntityTables["Vim.ElementInExportRevision"], scene.mStrings);
     }
     
+    class Contributor
+    {
+    public:
+        int mIndex;
+        std::string mName;
+        int mSource;
+        
+        Contributor() {}
+    };
+    
+    class ContributorTable
+    {
+        EntityTable& mEntityTable;
+        std::vector<const bfast::byte*>& mStrings;
+    public:
+        ContributorTable(EntityTable& entityTable, std::vector<const bfast::byte*>& strings):
+            mEntityTable(entityTable), mStrings(strings) {}
+        
+        size_t GetCount()
+        {
+            return mEntityTable.get_count();
+        }
+        
+        Contributor* Get(int contributorIndex)
+        {
+            Contributor* contributor = new Contributor();
+            contributor->mIndex = contributorIndex;
+            contributor->mName = GetName(contributorIndex);
+            contributor->mSource = GetSource(contributorIndex);
+            return contributor;
+        }
+        
+        std::vector<Contributor>* GetAll()
+        {
+            bool existsName = mEntityTable.column_exists("string:Name");
+            bool existsSource = mEntityTable.column_exists("int:Source");
+            
+            const auto count = GetCount();
+            
+            std::vector<Contributor>* contributor = new std::vector<Contributor>();
+            contributor->reserve(count);
+            
+            const std::vector<int>& nameData = mEntityTable.column_exists("string:Name") ? mEntityTable.mStringColumns["string:Name"] : std::vector<int>();
+            
+            int* sourceData = new int[count];
+            if (mEntityTable.column_exists("int:Source")) {
+                memcpy(sourceData, mEntityTable.mDataColumns["int:Source"].begin(), count * sizeof(int));
+            }
+            
+            for (int i = 0; i < count; ++i)
+            {
+                Contributor entity;
+                entity.mIndex = i;
+                if (existsName)
+                    entity.mName = std::string(reinterpret_cast<const char*>(mStrings[nameData[i]]));
+                if (existsSource)
+                    entity.mSource = sourceData[i];
+                contributor->push_back(entity);
+            }
+            
+            delete[] sourceData;
+            
+            return contributor;
+        }
+        
+        std::string GetName(int contributorIndex)
+        {
+            if (contributorIndex < 0 || contributorIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("string:Name")) {
+                return std::string(reinterpret_cast<const char*>(mStrings[mEntityTable.mStringColumns["string:Name"][contributorIndex]]));
+            }
+            
+            return {};
+        }
+        
+        std::vector<std::string>* GetAllName()
+        {
+            const auto count = GetCount();
+            
+            const std::vector<int>& nameData = mEntityTable.column_exists("string:Name") ? mEntityTable.mStringColumns["string:Name"] : std::vector<int>();
+            
+            std::vector<std::string>* result = new std::vector<std::string>();
+            result->reserve(count);
+            
+            for (int i = 0; i < count; ++i)
+            {
+                result->push_back(std::string(reinterpret_cast<const char*>(mStrings[nameData[i]])));
+            }
+            
+            return result;
+        }
+        
+        int GetSource(int contributorIndex)
+        {
+            if (contributorIndex < 0 || contributorIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("int:Source")) {
+                return *reinterpret_cast<int*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["int:Source"].begin() + contributorIndex * sizeof(int)));
+            }
+            
+            return {};
+        }
+        
+        std::vector<int>* GetAllSource()
+        {
+            const auto count = GetCount();
+            
+            int* sourceData = new int[count];
+            if (mEntityTable.column_exists("int:Source")) {
+                memcpy(sourceData, mEntityTable.mDataColumns["int:Source"].begin(), count * sizeof(int));
+            }
+            
+            std::vector<int>* result = new std::vector<int>(sourceData, sourceData + count);
+            
+            delete[] sourceData;
+            
+            return result;
+        }
+        
+    };
+    
+    static ContributorTable* GetContributorTable(Scene& scene)
+    {
+        if (scene.mEntityTables.find("Vim.Contributor") == scene.mEntityTables.end())
+            return {};
+        
+        return new ContributorTable(scene.mEntityTables["Vim.Contributor"], scene.mStrings);
+    }
+    
+    class SyncSession
+    {
+    public:
+        int mIndex;
+        std::string mSessionGuid;
+        std::string mMachineName;
+        std::string mRevitVersion;
+        std::string mStartedUtc;
+        std::string mEndedUtc;
+        
+        int mContributorIndex;
+        Contributor* mContributor;
+        int mBimDocumentIndex;
+        BimDocument* mBimDocument;
+        
+        SyncSession() {}
+    };
+    
+    class SyncSessionTable
+    {
+        EntityTable& mEntityTable;
+        std::vector<const bfast::byte*>& mStrings;
+    public:
+        SyncSessionTable(EntityTable& entityTable, std::vector<const bfast::byte*>& strings):
+            mEntityTable(entityTable), mStrings(strings) {}
+        
+        size_t GetCount()
+        {
+            return mEntityTable.get_count();
+        }
+        
+        SyncSession* Get(int syncSessionIndex)
+        {
+            SyncSession* syncSession = new SyncSession();
+            syncSession->mIndex = syncSessionIndex;
+            syncSession->mSessionGuid = GetSessionGuid(syncSessionIndex);
+            syncSession->mMachineName = GetMachineName(syncSessionIndex);
+            syncSession->mRevitVersion = GetRevitVersion(syncSessionIndex);
+            syncSession->mStartedUtc = GetStartedUtc(syncSessionIndex);
+            syncSession->mEndedUtc = GetEndedUtc(syncSessionIndex);
+            syncSession->mContributorIndex = GetContributorIndex(syncSessionIndex);
+            syncSession->mBimDocumentIndex = GetBimDocumentIndex(syncSessionIndex);
+            return syncSession;
+        }
+        
+        std::vector<SyncSession>* GetAll()
+        {
+            bool existsSessionGuid = mEntityTable.column_exists("string:SessionGuid");
+            bool existsMachineName = mEntityTable.column_exists("string:MachineName");
+            bool existsRevitVersion = mEntityTable.column_exists("string:RevitVersion");
+            bool existsStartedUtc = mEntityTable.column_exists("string:StartedUtc");
+            bool existsEndedUtc = mEntityTable.column_exists("string:EndedUtc");
+            bool existsContributor = mEntityTable.column_exists("index:Vim.Contributor:Contributor");
+            bool existsBimDocument = mEntityTable.column_exists("index:Vim.BimDocument:BimDocument");
+            
+            const auto count = GetCount();
+            
+            std::vector<SyncSession>* syncSession = new std::vector<SyncSession>();
+            syncSession->reserve(count);
+            
+            const std::vector<int>& sessionGuidData = mEntityTable.column_exists("string:SessionGuid") ? mEntityTable.mStringColumns["string:SessionGuid"] : std::vector<int>();
+            
+            const std::vector<int>& machineNameData = mEntityTable.column_exists("string:MachineName") ? mEntityTable.mStringColumns["string:MachineName"] : std::vector<int>();
+            
+            const std::vector<int>& revitVersionData = mEntityTable.column_exists("string:RevitVersion") ? mEntityTable.mStringColumns["string:RevitVersion"] : std::vector<int>();
+            
+            const std::vector<int>& startedUtcData = mEntityTable.column_exists("string:StartedUtc") ? mEntityTable.mStringColumns["string:StartedUtc"] : std::vector<int>();
+            
+            const std::vector<int>& endedUtcData = mEntityTable.column_exists("string:EndedUtc") ? mEntityTable.mStringColumns["string:EndedUtc"] : std::vector<int>();
+            
+            const std::vector<int>& contributorData = mEntityTable.column_exists("index:Vim.Contributor:Contributor") ? mEntityTable.mIndexColumns["index:Vim.Contributor:Contributor"] : std::vector<int>();
+            const std::vector<int>& bimDocumentData = mEntityTable.column_exists("index:Vim.BimDocument:BimDocument") ? mEntityTable.mIndexColumns["index:Vim.BimDocument:BimDocument"] : std::vector<int>();
+            
+            for (int i = 0; i < count; ++i)
+            {
+                SyncSession entity;
+                entity.mIndex = i;
+                if (existsSessionGuid)
+                    entity.mSessionGuid = std::string(reinterpret_cast<const char*>(mStrings[sessionGuidData[i]]));
+                if (existsMachineName)
+                    entity.mMachineName = std::string(reinterpret_cast<const char*>(mStrings[machineNameData[i]]));
+                if (existsRevitVersion)
+                    entity.mRevitVersion = std::string(reinterpret_cast<const char*>(mStrings[revitVersionData[i]]));
+                if (existsStartedUtc)
+                    entity.mStartedUtc = std::string(reinterpret_cast<const char*>(mStrings[startedUtcData[i]]));
+                if (existsEndedUtc)
+                    entity.mEndedUtc = std::string(reinterpret_cast<const char*>(mStrings[endedUtcData[i]]));
+                entity.mContributorIndex = existsContributor ? contributorData[i] : -1;
+                entity.mBimDocumentIndex = existsBimDocument ? bimDocumentData[i] : -1;
+                syncSession->push_back(entity);
+            }
+            
+            return syncSession;
+        }
+        
+        std::string GetSessionGuid(int syncSessionIndex)
+        {
+            if (syncSessionIndex < 0 || syncSessionIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("string:SessionGuid")) {
+                return std::string(reinterpret_cast<const char*>(mStrings[mEntityTable.mStringColumns["string:SessionGuid"][syncSessionIndex]]));
+            }
+            
+            return {};
+        }
+        
+        std::vector<std::string>* GetAllSessionGuid()
+        {
+            const auto count = GetCount();
+            
+            const std::vector<int>& sessionGuidData = mEntityTable.column_exists("string:SessionGuid") ? mEntityTable.mStringColumns["string:SessionGuid"] : std::vector<int>();
+            
+            std::vector<std::string>* result = new std::vector<std::string>();
+            result->reserve(count);
+            
+            for (int i = 0; i < count; ++i)
+            {
+                result->push_back(std::string(reinterpret_cast<const char*>(mStrings[sessionGuidData[i]])));
+            }
+            
+            return result;
+        }
+        
+        std::string GetMachineName(int syncSessionIndex)
+        {
+            if (syncSessionIndex < 0 || syncSessionIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("string:MachineName")) {
+                return std::string(reinterpret_cast<const char*>(mStrings[mEntityTable.mStringColumns["string:MachineName"][syncSessionIndex]]));
+            }
+            
+            return {};
+        }
+        
+        std::vector<std::string>* GetAllMachineName()
+        {
+            const auto count = GetCount();
+            
+            const std::vector<int>& machineNameData = mEntityTable.column_exists("string:MachineName") ? mEntityTable.mStringColumns["string:MachineName"] : std::vector<int>();
+            
+            std::vector<std::string>* result = new std::vector<std::string>();
+            result->reserve(count);
+            
+            for (int i = 0; i < count; ++i)
+            {
+                result->push_back(std::string(reinterpret_cast<const char*>(mStrings[machineNameData[i]])));
+            }
+            
+            return result;
+        }
+        
+        std::string GetRevitVersion(int syncSessionIndex)
+        {
+            if (syncSessionIndex < 0 || syncSessionIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("string:RevitVersion")) {
+                return std::string(reinterpret_cast<const char*>(mStrings[mEntityTable.mStringColumns["string:RevitVersion"][syncSessionIndex]]));
+            }
+            
+            return {};
+        }
+        
+        std::vector<std::string>* GetAllRevitVersion()
+        {
+            const auto count = GetCount();
+            
+            const std::vector<int>& revitVersionData = mEntityTable.column_exists("string:RevitVersion") ? mEntityTable.mStringColumns["string:RevitVersion"] : std::vector<int>();
+            
+            std::vector<std::string>* result = new std::vector<std::string>();
+            result->reserve(count);
+            
+            for (int i = 0; i < count; ++i)
+            {
+                result->push_back(std::string(reinterpret_cast<const char*>(mStrings[revitVersionData[i]])));
+            }
+            
+            return result;
+        }
+        
+        std::string GetStartedUtc(int syncSessionIndex)
+        {
+            if (syncSessionIndex < 0 || syncSessionIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("string:StartedUtc")) {
+                return std::string(reinterpret_cast<const char*>(mStrings[mEntityTable.mStringColumns["string:StartedUtc"][syncSessionIndex]]));
+            }
+            
+            return {};
+        }
+        
+        std::vector<std::string>* GetAllStartedUtc()
+        {
+            const auto count = GetCount();
+            
+            const std::vector<int>& startedUtcData = mEntityTable.column_exists("string:StartedUtc") ? mEntityTable.mStringColumns["string:StartedUtc"] : std::vector<int>();
+            
+            std::vector<std::string>* result = new std::vector<std::string>();
+            result->reserve(count);
+            
+            for (int i = 0; i < count; ++i)
+            {
+                result->push_back(std::string(reinterpret_cast<const char*>(mStrings[startedUtcData[i]])));
+            }
+            
+            return result;
+        }
+        
+        std::string GetEndedUtc(int syncSessionIndex)
+        {
+            if (syncSessionIndex < 0 || syncSessionIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("string:EndedUtc")) {
+                return std::string(reinterpret_cast<const char*>(mStrings[mEntityTable.mStringColumns["string:EndedUtc"][syncSessionIndex]]));
+            }
+            
+            return {};
+        }
+        
+        std::vector<std::string>* GetAllEndedUtc()
+        {
+            const auto count = GetCount();
+            
+            const std::vector<int>& endedUtcData = mEntityTable.column_exists("string:EndedUtc") ? mEntityTable.mStringColumns["string:EndedUtc"] : std::vector<int>();
+            
+            std::vector<std::string>* result = new std::vector<std::string>();
+            result->reserve(count);
+            
+            for (int i = 0; i < count; ++i)
+            {
+                result->push_back(std::string(reinterpret_cast<const char*>(mStrings[endedUtcData[i]])));
+            }
+            
+            return result;
+        }
+        
+        int GetContributorIndex(int syncSessionIndex)
+        {
+            if (!mEntityTable.column_exists("index:Vim.Contributor:Contributor")) {
+                return -1;
+            }
+            
+            if (syncSessionIndex < 0 || syncSessionIndex >= GetCount())
+                return -1;
+            
+            return mEntityTable.mIndexColumns["index:Vim.Contributor:Contributor"][syncSessionIndex];
+        }
+        
+        int GetBimDocumentIndex(int syncSessionIndex)
+        {
+            if (!mEntityTable.column_exists("index:Vim.BimDocument:BimDocument")) {
+                return -1;
+            }
+            
+            if (syncSessionIndex < 0 || syncSessionIndex >= GetCount())
+                return -1;
+            
+            return mEntityTable.mIndexColumns["index:Vim.BimDocument:BimDocument"][syncSessionIndex];
+        }
+        
+    };
+    
+    static SyncSessionTable* GetSyncSessionTable(Scene& scene)
+    {
+        if (scene.mEntityTables.find("Vim.SyncSession") == scene.mEntityTables.end())
+            return {};
+        
+        return new SyncSessionTable(scene.mEntityTables["Vim.SyncSession"], scene.mStrings);
+    }
+    
+    class ElementChange
+    {
+    public:
+        int mIndex;
+        int mChangeKind;
+        int mConfidence;
+        std::string mChangedUtc;
+        std::string mUniqueId;
+        std::string mCategoryName;
+        std::string mFamilyName;
+        std::string mTypeName;
+        std::string mElementName;
+        std::string mLevelName;
+        std::string mWorksetName;
+        
+        int mExportRevisionIndex;
+        ExportRevision* mExportRevision;
+        int mSyncSessionIndex;
+        SyncSession* mSyncSession;
+        int mContributorIndex;
+        Contributor* mContributor;
+        
+        ElementChange() {}
+    };
+    
+    class ElementChangeTable
+    {
+        EntityTable& mEntityTable;
+        std::vector<const bfast::byte*>& mStrings;
+    public:
+        ElementChangeTable(EntityTable& entityTable, std::vector<const bfast::byte*>& strings):
+            mEntityTable(entityTable), mStrings(strings) {}
+        
+        size_t GetCount()
+        {
+            return mEntityTable.get_count();
+        }
+        
+        ElementChange* Get(int elementChangeIndex)
+        {
+            ElementChange* elementChange = new ElementChange();
+            elementChange->mIndex = elementChangeIndex;
+            elementChange->mChangeKind = GetChangeKind(elementChangeIndex);
+            elementChange->mConfidence = GetConfidence(elementChangeIndex);
+            elementChange->mChangedUtc = GetChangedUtc(elementChangeIndex);
+            elementChange->mUniqueId = GetUniqueId(elementChangeIndex);
+            elementChange->mCategoryName = GetCategoryName(elementChangeIndex);
+            elementChange->mFamilyName = GetFamilyName(elementChangeIndex);
+            elementChange->mTypeName = GetTypeName(elementChangeIndex);
+            elementChange->mElementName = GetElementName(elementChangeIndex);
+            elementChange->mLevelName = GetLevelName(elementChangeIndex);
+            elementChange->mWorksetName = GetWorksetName(elementChangeIndex);
+            elementChange->mExportRevisionIndex = GetExportRevisionIndex(elementChangeIndex);
+            elementChange->mSyncSessionIndex = GetSyncSessionIndex(elementChangeIndex);
+            elementChange->mContributorIndex = GetContributorIndex(elementChangeIndex);
+            return elementChange;
+        }
+        
+        std::vector<ElementChange>* GetAll()
+        {
+            bool existsChangeKind = mEntityTable.column_exists("int:ChangeKind");
+            bool existsConfidence = mEntityTable.column_exists("int:Confidence");
+            bool existsChangedUtc = mEntityTable.column_exists("string:ChangedUtc");
+            bool existsUniqueId = mEntityTable.column_exists("string:UniqueId");
+            bool existsCategoryName = mEntityTable.column_exists("string:CategoryName");
+            bool existsFamilyName = mEntityTable.column_exists("string:FamilyName");
+            bool existsTypeName = mEntityTable.column_exists("string:TypeName");
+            bool existsElementName = mEntityTable.column_exists("string:ElementName");
+            bool existsLevelName = mEntityTable.column_exists("string:LevelName");
+            bool existsWorksetName = mEntityTable.column_exists("string:WorksetName");
+            bool existsExportRevision = mEntityTable.column_exists("index:Vim.ExportRevision:ExportRevision");
+            bool existsSyncSession = mEntityTable.column_exists("index:Vim.SyncSession:SyncSession");
+            bool existsContributor = mEntityTable.column_exists("index:Vim.Contributor:Contributor");
+            
+            const auto count = GetCount();
+            
+            std::vector<ElementChange>* elementChange = new std::vector<ElementChange>();
+            elementChange->reserve(count);
+            
+            int* changeKindData = new int[count];
+            if (mEntityTable.column_exists("int:ChangeKind")) {
+                memcpy(changeKindData, mEntityTable.mDataColumns["int:ChangeKind"].begin(), count * sizeof(int));
+            }
+            
+            int* confidenceData = new int[count];
+            if (mEntityTable.column_exists("int:Confidence")) {
+                memcpy(confidenceData, mEntityTable.mDataColumns["int:Confidence"].begin(), count * sizeof(int));
+            }
+            
+            const std::vector<int>& changedUtcData = mEntityTable.column_exists("string:ChangedUtc") ? mEntityTable.mStringColumns["string:ChangedUtc"] : std::vector<int>();
+            
+            const std::vector<int>& uniqueIdData = mEntityTable.column_exists("string:UniqueId") ? mEntityTable.mStringColumns["string:UniqueId"] : std::vector<int>();
+            
+            const std::vector<int>& categoryNameData = mEntityTable.column_exists("string:CategoryName") ? mEntityTable.mStringColumns["string:CategoryName"] : std::vector<int>();
+            
+            const std::vector<int>& familyNameData = mEntityTable.column_exists("string:FamilyName") ? mEntityTable.mStringColumns["string:FamilyName"] : std::vector<int>();
+            
+            const std::vector<int>& typeNameData = mEntityTable.column_exists("string:TypeName") ? mEntityTable.mStringColumns["string:TypeName"] : std::vector<int>();
+            
+            const std::vector<int>& elementNameData = mEntityTable.column_exists("string:ElementName") ? mEntityTable.mStringColumns["string:ElementName"] : std::vector<int>();
+            
+            const std::vector<int>& levelNameData = mEntityTable.column_exists("string:LevelName") ? mEntityTable.mStringColumns["string:LevelName"] : std::vector<int>();
+            
+            const std::vector<int>& worksetNameData = mEntityTable.column_exists("string:WorksetName") ? mEntityTable.mStringColumns["string:WorksetName"] : std::vector<int>();
+            
+            const std::vector<int>& exportRevisionData = mEntityTable.column_exists("index:Vim.ExportRevision:ExportRevision") ? mEntityTable.mIndexColumns["index:Vim.ExportRevision:ExportRevision"] : std::vector<int>();
+            const std::vector<int>& syncSessionData = mEntityTable.column_exists("index:Vim.SyncSession:SyncSession") ? mEntityTable.mIndexColumns["index:Vim.SyncSession:SyncSession"] : std::vector<int>();
+            const std::vector<int>& contributorData = mEntityTable.column_exists("index:Vim.Contributor:Contributor") ? mEntityTable.mIndexColumns["index:Vim.Contributor:Contributor"] : std::vector<int>();
+            
+            for (int i = 0; i < count; ++i)
+            {
+                ElementChange entity;
+                entity.mIndex = i;
+                if (existsChangeKind)
+                    entity.mChangeKind = changeKindData[i];
+                if (existsConfidence)
+                    entity.mConfidence = confidenceData[i];
+                if (existsChangedUtc)
+                    entity.mChangedUtc = std::string(reinterpret_cast<const char*>(mStrings[changedUtcData[i]]));
+                if (existsUniqueId)
+                    entity.mUniqueId = std::string(reinterpret_cast<const char*>(mStrings[uniqueIdData[i]]));
+                if (existsCategoryName)
+                    entity.mCategoryName = std::string(reinterpret_cast<const char*>(mStrings[categoryNameData[i]]));
+                if (existsFamilyName)
+                    entity.mFamilyName = std::string(reinterpret_cast<const char*>(mStrings[familyNameData[i]]));
+                if (existsTypeName)
+                    entity.mTypeName = std::string(reinterpret_cast<const char*>(mStrings[typeNameData[i]]));
+                if (existsElementName)
+                    entity.mElementName = std::string(reinterpret_cast<const char*>(mStrings[elementNameData[i]]));
+                if (existsLevelName)
+                    entity.mLevelName = std::string(reinterpret_cast<const char*>(mStrings[levelNameData[i]]));
+                if (existsWorksetName)
+                    entity.mWorksetName = std::string(reinterpret_cast<const char*>(mStrings[worksetNameData[i]]));
+                entity.mExportRevisionIndex = existsExportRevision ? exportRevisionData[i] : -1;
+                entity.mSyncSessionIndex = existsSyncSession ? syncSessionData[i] : -1;
+                entity.mContributorIndex = existsContributor ? contributorData[i] : -1;
+                elementChange->push_back(entity);
+            }
+            
+            delete[] changeKindData;
+            delete[] confidenceData;
+            
+            return elementChange;
+        }
+        
+        int GetChangeKind(int elementChangeIndex)
+        {
+            if (elementChangeIndex < 0 || elementChangeIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("int:ChangeKind")) {
+                return *reinterpret_cast<int*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["int:ChangeKind"].begin() + elementChangeIndex * sizeof(int)));
+            }
+            
+            return {};
+        }
+        
+        std::vector<int>* GetAllChangeKind()
+        {
+            const auto count = GetCount();
+            
+            int* changeKindData = new int[count];
+            if (mEntityTable.column_exists("int:ChangeKind")) {
+                memcpy(changeKindData, mEntityTable.mDataColumns["int:ChangeKind"].begin(), count * sizeof(int));
+            }
+            
+            std::vector<int>* result = new std::vector<int>(changeKindData, changeKindData + count);
+            
+            delete[] changeKindData;
+            
+            return result;
+        }
+        
+        int GetConfidence(int elementChangeIndex)
+        {
+            if (elementChangeIndex < 0 || elementChangeIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("int:Confidence")) {
+                return *reinterpret_cast<int*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["int:Confidence"].begin() + elementChangeIndex * sizeof(int)));
+            }
+            
+            return {};
+        }
+        
+        std::vector<int>* GetAllConfidence()
+        {
+            const auto count = GetCount();
+            
+            int* confidenceData = new int[count];
+            if (mEntityTable.column_exists("int:Confidence")) {
+                memcpy(confidenceData, mEntityTable.mDataColumns["int:Confidence"].begin(), count * sizeof(int));
+            }
+            
+            std::vector<int>* result = new std::vector<int>(confidenceData, confidenceData + count);
+            
+            delete[] confidenceData;
+            
+            return result;
+        }
+        
+        std::string GetChangedUtc(int elementChangeIndex)
+        {
+            if (elementChangeIndex < 0 || elementChangeIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("string:ChangedUtc")) {
+                return std::string(reinterpret_cast<const char*>(mStrings[mEntityTable.mStringColumns["string:ChangedUtc"][elementChangeIndex]]));
+            }
+            
+            return {};
+        }
+        
+        std::vector<std::string>* GetAllChangedUtc()
+        {
+            const auto count = GetCount();
+            
+            const std::vector<int>& changedUtcData = mEntityTable.column_exists("string:ChangedUtc") ? mEntityTable.mStringColumns["string:ChangedUtc"] : std::vector<int>();
+            
+            std::vector<std::string>* result = new std::vector<std::string>();
+            result->reserve(count);
+            
+            for (int i = 0; i < count; ++i)
+            {
+                result->push_back(std::string(reinterpret_cast<const char*>(mStrings[changedUtcData[i]])));
+            }
+            
+            return result;
+        }
+        
+        std::string GetUniqueId(int elementChangeIndex)
+        {
+            if (elementChangeIndex < 0 || elementChangeIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("string:UniqueId")) {
+                return std::string(reinterpret_cast<const char*>(mStrings[mEntityTable.mStringColumns["string:UniqueId"][elementChangeIndex]]));
+            }
+            
+            return {};
+        }
+        
+        std::vector<std::string>* GetAllUniqueId()
+        {
+            const auto count = GetCount();
+            
+            const std::vector<int>& uniqueIdData = mEntityTable.column_exists("string:UniqueId") ? mEntityTable.mStringColumns["string:UniqueId"] : std::vector<int>();
+            
+            std::vector<std::string>* result = new std::vector<std::string>();
+            result->reserve(count);
+            
+            for (int i = 0; i < count; ++i)
+            {
+                result->push_back(std::string(reinterpret_cast<const char*>(mStrings[uniqueIdData[i]])));
+            }
+            
+            return result;
+        }
+        
+        std::string GetCategoryName(int elementChangeIndex)
+        {
+            if (elementChangeIndex < 0 || elementChangeIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("string:CategoryName")) {
+                return std::string(reinterpret_cast<const char*>(mStrings[mEntityTable.mStringColumns["string:CategoryName"][elementChangeIndex]]));
+            }
+            
+            return {};
+        }
+        
+        std::vector<std::string>* GetAllCategoryName()
+        {
+            const auto count = GetCount();
+            
+            const std::vector<int>& categoryNameData = mEntityTable.column_exists("string:CategoryName") ? mEntityTable.mStringColumns["string:CategoryName"] : std::vector<int>();
+            
+            std::vector<std::string>* result = new std::vector<std::string>();
+            result->reserve(count);
+            
+            for (int i = 0; i < count; ++i)
+            {
+                result->push_back(std::string(reinterpret_cast<const char*>(mStrings[categoryNameData[i]])));
+            }
+            
+            return result;
+        }
+        
+        std::string GetFamilyName(int elementChangeIndex)
+        {
+            if (elementChangeIndex < 0 || elementChangeIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("string:FamilyName")) {
+                return std::string(reinterpret_cast<const char*>(mStrings[mEntityTable.mStringColumns["string:FamilyName"][elementChangeIndex]]));
+            }
+            
+            return {};
+        }
+        
+        std::vector<std::string>* GetAllFamilyName()
+        {
+            const auto count = GetCount();
+            
+            const std::vector<int>& familyNameData = mEntityTable.column_exists("string:FamilyName") ? mEntityTable.mStringColumns["string:FamilyName"] : std::vector<int>();
+            
+            std::vector<std::string>* result = new std::vector<std::string>();
+            result->reserve(count);
+            
+            for (int i = 0; i < count; ++i)
+            {
+                result->push_back(std::string(reinterpret_cast<const char*>(mStrings[familyNameData[i]])));
+            }
+            
+            return result;
+        }
+        
+        std::string GetTypeName(int elementChangeIndex)
+        {
+            if (elementChangeIndex < 0 || elementChangeIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("string:TypeName")) {
+                return std::string(reinterpret_cast<const char*>(mStrings[mEntityTable.mStringColumns["string:TypeName"][elementChangeIndex]]));
+            }
+            
+            return {};
+        }
+        
+        std::vector<std::string>* GetAllTypeName()
+        {
+            const auto count = GetCount();
+            
+            const std::vector<int>& typeNameData = mEntityTable.column_exists("string:TypeName") ? mEntityTable.mStringColumns["string:TypeName"] : std::vector<int>();
+            
+            std::vector<std::string>* result = new std::vector<std::string>();
+            result->reserve(count);
+            
+            for (int i = 0; i < count; ++i)
+            {
+                result->push_back(std::string(reinterpret_cast<const char*>(mStrings[typeNameData[i]])));
+            }
+            
+            return result;
+        }
+        
+        std::string GetElementName(int elementChangeIndex)
+        {
+            if (elementChangeIndex < 0 || elementChangeIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("string:ElementName")) {
+                return std::string(reinterpret_cast<const char*>(mStrings[mEntityTable.mStringColumns["string:ElementName"][elementChangeIndex]]));
+            }
+            
+            return {};
+        }
+        
+        std::vector<std::string>* GetAllElementName()
+        {
+            const auto count = GetCount();
+            
+            const std::vector<int>& elementNameData = mEntityTable.column_exists("string:ElementName") ? mEntityTable.mStringColumns["string:ElementName"] : std::vector<int>();
+            
+            std::vector<std::string>* result = new std::vector<std::string>();
+            result->reserve(count);
+            
+            for (int i = 0; i < count; ++i)
+            {
+                result->push_back(std::string(reinterpret_cast<const char*>(mStrings[elementNameData[i]])));
+            }
+            
+            return result;
+        }
+        
+        std::string GetLevelName(int elementChangeIndex)
+        {
+            if (elementChangeIndex < 0 || elementChangeIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("string:LevelName")) {
+                return std::string(reinterpret_cast<const char*>(mStrings[mEntityTable.mStringColumns["string:LevelName"][elementChangeIndex]]));
+            }
+            
+            return {};
+        }
+        
+        std::vector<std::string>* GetAllLevelName()
+        {
+            const auto count = GetCount();
+            
+            const std::vector<int>& levelNameData = mEntityTable.column_exists("string:LevelName") ? mEntityTable.mStringColumns["string:LevelName"] : std::vector<int>();
+            
+            std::vector<std::string>* result = new std::vector<std::string>();
+            result->reserve(count);
+            
+            for (int i = 0; i < count; ++i)
+            {
+                result->push_back(std::string(reinterpret_cast<const char*>(mStrings[levelNameData[i]])));
+            }
+            
+            return result;
+        }
+        
+        std::string GetWorksetName(int elementChangeIndex)
+        {
+            if (elementChangeIndex < 0 || elementChangeIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("string:WorksetName")) {
+                return std::string(reinterpret_cast<const char*>(mStrings[mEntityTable.mStringColumns["string:WorksetName"][elementChangeIndex]]));
+            }
+            
+            return {};
+        }
+        
+        std::vector<std::string>* GetAllWorksetName()
+        {
+            const auto count = GetCount();
+            
+            const std::vector<int>& worksetNameData = mEntityTable.column_exists("string:WorksetName") ? mEntityTable.mStringColumns["string:WorksetName"] : std::vector<int>();
+            
+            std::vector<std::string>* result = new std::vector<std::string>();
+            result->reserve(count);
+            
+            for (int i = 0; i < count; ++i)
+            {
+                result->push_back(std::string(reinterpret_cast<const char*>(mStrings[worksetNameData[i]])));
+            }
+            
+            return result;
+        }
+        
+        int GetExportRevisionIndex(int elementChangeIndex)
+        {
+            if (!mEntityTable.column_exists("index:Vim.ExportRevision:ExportRevision")) {
+                return -1;
+            }
+            
+            if (elementChangeIndex < 0 || elementChangeIndex >= GetCount())
+                return -1;
+            
+            return mEntityTable.mIndexColumns["index:Vim.ExportRevision:ExportRevision"][elementChangeIndex];
+        }
+        
+        int GetSyncSessionIndex(int elementChangeIndex)
+        {
+            if (!mEntityTable.column_exists("index:Vim.SyncSession:SyncSession")) {
+                return -1;
+            }
+            
+            if (elementChangeIndex < 0 || elementChangeIndex >= GetCount())
+                return -1;
+            
+            return mEntityTable.mIndexColumns["index:Vim.SyncSession:SyncSession"][elementChangeIndex];
+        }
+        
+        int GetContributorIndex(int elementChangeIndex)
+        {
+            if (!mEntityTable.column_exists("index:Vim.Contributor:Contributor")) {
+                return -1;
+            }
+            
+            if (elementChangeIndex < 0 || elementChangeIndex >= GetCount())
+                return -1;
+            
+            return mEntityTable.mIndexColumns["index:Vim.Contributor:Contributor"][elementChangeIndex];
+        }
+        
+    };
+    
+    static ElementChangeTable* GetElementChangeTable(Scene& scene)
+    {
+        if (scene.mEntityTables.find("Vim.ElementChange") == scene.mEntityTables.end())
+            return {};
+        
+        return new ElementChangeTable(scene.mEntityTables["Vim.ElementChange"], scene.mStrings);
+    }
+    
+    class ActivityMarker
+    {
+    public:
+        int mIndex;
+        int mKind;
+        std::string mOccurredUtc;
+        std::string mDescription;
+        
+        int mExportRevisionIndex;
+        ExportRevision* mExportRevision;
+        int mSyncSessionIndex;
+        SyncSession* mSyncSession;
+        int mContributorIndex;
+        Contributor* mContributor;
+        
+        ActivityMarker() {}
+    };
+    
+    class ActivityMarkerTable
+    {
+        EntityTable& mEntityTable;
+        std::vector<const bfast::byte*>& mStrings;
+    public:
+        ActivityMarkerTable(EntityTable& entityTable, std::vector<const bfast::byte*>& strings):
+            mEntityTable(entityTable), mStrings(strings) {}
+        
+        size_t GetCount()
+        {
+            return mEntityTable.get_count();
+        }
+        
+        ActivityMarker* Get(int activityMarkerIndex)
+        {
+            ActivityMarker* activityMarker = new ActivityMarker();
+            activityMarker->mIndex = activityMarkerIndex;
+            activityMarker->mKind = GetKind(activityMarkerIndex);
+            activityMarker->mOccurredUtc = GetOccurredUtc(activityMarkerIndex);
+            activityMarker->mDescription = GetDescription(activityMarkerIndex);
+            activityMarker->mExportRevisionIndex = GetExportRevisionIndex(activityMarkerIndex);
+            activityMarker->mSyncSessionIndex = GetSyncSessionIndex(activityMarkerIndex);
+            activityMarker->mContributorIndex = GetContributorIndex(activityMarkerIndex);
+            return activityMarker;
+        }
+        
+        std::vector<ActivityMarker>* GetAll()
+        {
+            bool existsKind = mEntityTable.column_exists("int:Kind");
+            bool existsOccurredUtc = mEntityTable.column_exists("string:OccurredUtc");
+            bool existsDescription = mEntityTable.column_exists("string:Description");
+            bool existsExportRevision = mEntityTable.column_exists("index:Vim.ExportRevision:ExportRevision");
+            bool existsSyncSession = mEntityTable.column_exists("index:Vim.SyncSession:SyncSession");
+            bool existsContributor = mEntityTable.column_exists("index:Vim.Contributor:Contributor");
+            
+            const auto count = GetCount();
+            
+            std::vector<ActivityMarker>* activityMarker = new std::vector<ActivityMarker>();
+            activityMarker->reserve(count);
+            
+            int* kindData = new int[count];
+            if (mEntityTable.column_exists("int:Kind")) {
+                memcpy(kindData, mEntityTable.mDataColumns["int:Kind"].begin(), count * sizeof(int));
+            }
+            
+            const std::vector<int>& occurredUtcData = mEntityTable.column_exists("string:OccurredUtc") ? mEntityTable.mStringColumns["string:OccurredUtc"] : std::vector<int>();
+            
+            const std::vector<int>& descriptionData = mEntityTable.column_exists("string:Description") ? mEntityTable.mStringColumns["string:Description"] : std::vector<int>();
+            
+            const std::vector<int>& exportRevisionData = mEntityTable.column_exists("index:Vim.ExportRevision:ExportRevision") ? mEntityTable.mIndexColumns["index:Vim.ExportRevision:ExportRevision"] : std::vector<int>();
+            const std::vector<int>& syncSessionData = mEntityTable.column_exists("index:Vim.SyncSession:SyncSession") ? mEntityTable.mIndexColumns["index:Vim.SyncSession:SyncSession"] : std::vector<int>();
+            const std::vector<int>& contributorData = mEntityTable.column_exists("index:Vim.Contributor:Contributor") ? mEntityTable.mIndexColumns["index:Vim.Contributor:Contributor"] : std::vector<int>();
+            
+            for (int i = 0; i < count; ++i)
+            {
+                ActivityMarker entity;
+                entity.mIndex = i;
+                if (existsKind)
+                    entity.mKind = kindData[i];
+                if (existsOccurredUtc)
+                    entity.mOccurredUtc = std::string(reinterpret_cast<const char*>(mStrings[occurredUtcData[i]]));
+                if (existsDescription)
+                    entity.mDescription = std::string(reinterpret_cast<const char*>(mStrings[descriptionData[i]]));
+                entity.mExportRevisionIndex = existsExportRevision ? exportRevisionData[i] : -1;
+                entity.mSyncSessionIndex = existsSyncSession ? syncSessionData[i] : -1;
+                entity.mContributorIndex = existsContributor ? contributorData[i] : -1;
+                activityMarker->push_back(entity);
+            }
+            
+            delete[] kindData;
+            
+            return activityMarker;
+        }
+        
+        int GetKind(int activityMarkerIndex)
+        {
+            if (activityMarkerIndex < 0 || activityMarkerIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("int:Kind")) {
+                return *reinterpret_cast<int*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["int:Kind"].begin() + activityMarkerIndex * sizeof(int)));
+            }
+            
+            return {};
+        }
+        
+        std::vector<int>* GetAllKind()
+        {
+            const auto count = GetCount();
+            
+            int* kindData = new int[count];
+            if (mEntityTable.column_exists("int:Kind")) {
+                memcpy(kindData, mEntityTable.mDataColumns["int:Kind"].begin(), count * sizeof(int));
+            }
+            
+            std::vector<int>* result = new std::vector<int>(kindData, kindData + count);
+            
+            delete[] kindData;
+            
+            return result;
+        }
+        
+        std::string GetOccurredUtc(int activityMarkerIndex)
+        {
+            if (activityMarkerIndex < 0 || activityMarkerIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("string:OccurredUtc")) {
+                return std::string(reinterpret_cast<const char*>(mStrings[mEntityTable.mStringColumns["string:OccurredUtc"][activityMarkerIndex]]));
+            }
+            
+            return {};
+        }
+        
+        std::vector<std::string>* GetAllOccurredUtc()
+        {
+            const auto count = GetCount();
+            
+            const std::vector<int>& occurredUtcData = mEntityTable.column_exists("string:OccurredUtc") ? mEntityTable.mStringColumns["string:OccurredUtc"] : std::vector<int>();
+            
+            std::vector<std::string>* result = new std::vector<std::string>();
+            result->reserve(count);
+            
+            for (int i = 0; i < count; ++i)
+            {
+                result->push_back(std::string(reinterpret_cast<const char*>(mStrings[occurredUtcData[i]])));
+            }
+            
+            return result;
+        }
+        
+        std::string GetDescription(int activityMarkerIndex)
+        {
+            if (activityMarkerIndex < 0 || activityMarkerIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("string:Description")) {
+                return std::string(reinterpret_cast<const char*>(mStrings[mEntityTable.mStringColumns["string:Description"][activityMarkerIndex]]));
+            }
+            
+            return {};
+        }
+        
+        std::vector<std::string>* GetAllDescription()
+        {
+            const auto count = GetCount();
+            
+            const std::vector<int>& descriptionData = mEntityTable.column_exists("string:Description") ? mEntityTable.mStringColumns["string:Description"] : std::vector<int>();
+            
+            std::vector<std::string>* result = new std::vector<std::string>();
+            result->reserve(count);
+            
+            for (int i = 0; i < count; ++i)
+            {
+                result->push_back(std::string(reinterpret_cast<const char*>(mStrings[descriptionData[i]])));
+            }
+            
+            return result;
+        }
+        
+        int GetExportRevisionIndex(int activityMarkerIndex)
+        {
+            if (!mEntityTable.column_exists("index:Vim.ExportRevision:ExportRevision")) {
+                return -1;
+            }
+            
+            if (activityMarkerIndex < 0 || activityMarkerIndex >= GetCount())
+                return -1;
+            
+            return mEntityTable.mIndexColumns["index:Vim.ExportRevision:ExportRevision"][activityMarkerIndex];
+        }
+        
+        int GetSyncSessionIndex(int activityMarkerIndex)
+        {
+            if (!mEntityTable.column_exists("index:Vim.SyncSession:SyncSession")) {
+                return -1;
+            }
+            
+            if (activityMarkerIndex < 0 || activityMarkerIndex >= GetCount())
+                return -1;
+            
+            return mEntityTable.mIndexColumns["index:Vim.SyncSession:SyncSession"][activityMarkerIndex];
+        }
+        
+        int GetContributorIndex(int activityMarkerIndex)
+        {
+            if (!mEntityTable.column_exists("index:Vim.Contributor:Contributor")) {
+                return -1;
+            }
+            
+            if (activityMarkerIndex < 0 || activityMarkerIndex >= GetCount())
+                return -1;
+            
+            return mEntityTable.mIndexColumns["index:Vim.Contributor:Contributor"][activityMarkerIndex];
+        }
+        
+    };
+    
+    static ActivityMarkerTable* GetActivityMarkerTable(Scene& scene)
+    {
+        if (scene.mEntityTables.find("Vim.ActivityMarker") == scene.mEntityTables.end())
+            return {};
+        
+        return new ActivityMarkerTable(scene.mEntityTables["Vim.ActivityMarker"], scene.mStrings);
+    }
+    
     DocumentModel::DocumentModel(Scene& scene)
     {
         mAsset = GetAssetTable(scene);
@@ -16822,6 +17943,10 @@ namespace Vim
         mSunAndShadowSettings = GetSunAndShadowSettingsTable(scene);
         mExportRevision = GetExportRevisionTable(scene);
         mElementInExportRevision = GetElementInExportRevisionTable(scene);
+        mContributor = GetContributorTable(scene);
+        mSyncSession = GetSyncSessionTable(scene);
+        mElementChange = GetElementChangeTable(scene);
+        mActivityMarker = GetActivityMarkerTable(scene);
     }
     
     DocumentModel::~DocumentModel()
@@ -16885,6 +18010,10 @@ namespace Vim
         delete mSunAndShadowSettings;
         delete mExportRevision;
         delete mElementInExportRevision;
+        delete mContributor;
+        delete mSyncSession;
+        delete mElementChange;
+        delete mActivityMarker;
     }
 }
 

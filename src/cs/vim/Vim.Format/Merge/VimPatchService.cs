@@ -75,6 +75,22 @@ namespace Vim.Format.Merge
         /// </summary>
         public bool RecordExportRevisions { get; set; } = true;
 
+        /// <summary>
+        /// Keeps the activity log (object model 5.11.0: Contributor, SyncSession, ElementChange, ActivityMarker) of
+        /// both files. False drops every activity row from the output - "strip activity on export", for a file that
+        /// goes to a client, and the way to clear the log of a file.
+        /// </summary>
+        public bool KeepActivityLog { get; set; } = true;
+
+        /// <summary>
+        /// Drops the activity rows older than this (UTC, ISO 8601); null or empty keeps everything. The caller gives
+        /// the cut-off rather than a number of days so that a patch of the same two files always gives the same file.
+        /// </summary>
+        public string ActivityOldestUtc { get; set; }
+
+        /// <summary>Keeps at most this many element-change rows, the newest; 0 = no cap.</summary>
+        public int ActivityMaxChangeRows { get; set; }
+
         public string Generator { get; set; } = "Vim.Format.Patch";
     }
 
@@ -92,6 +108,8 @@ namespace Vim.Format.Merge
         public int PartialRowsWithoutElementDropped;
         /// <summary>Wall layer structures and cameras nothing points at any more, removed.</summary>
         public int OrphanRowsRemoved;
+        /// <summary>Activity rows dropped by the retention caps.</summary>
+        public int ActivityRowsTrimmed;
         public RowPlanWriteStats Geometry = new RowPlanWriteStats();
         public long LoadMs, PlanMs, BuildMs, WriteMs;
 
@@ -145,6 +163,25 @@ namespace Vim.Format.Merge
             TableNames.ScheduleColumn, TableNames.ScheduleCell, TableNames.CompoundStructureLayer,
         };
 
+        /// <summary>
+        /// The activity log tables (object model 5.11.0), in the order they are planned. They are history: a partial
+        /// export never replaces what the base already recorded, whichever elements changed. Contributor and
+        /// SyncSession rows are merged on the identity below (the partial's content wins: it is the fresher reading of
+        /// the same person or the same still-open session); ElementChange and ActivityMarker rows are appended, the
+        /// ones about elements that no longer exist included.
+        /// </summary>
+        private static readonly string[] ActivityTables =
+        {
+            TableNames.Contributor, TableNames.SyncSession, TableNames.ElementChange, TableNames.ActivityMarker,
+        };
+
+        /// <summary>What makes two activity rows the same row. A table absent from this map is append-only.</summary>
+        private static readonly Dictionary<string, string[]> ActivityIdentityColumns = new Dictionary<string, string[]>
+        {
+            { TableNames.Contributor, new[] { "string:Name", "int:Source" } },
+            { TableNames.SyncSession, new[] { "string:SessionGuid" } },
+        };
+
         /// <summary>Element-owned tables which can hold several rows per element, whatever a given file holds.</summary>
         private static readonly HashSet<string> ManyRowsPerElementTables = new HashSet<string>
         {
@@ -190,8 +227,10 @@ namespace Vim.Format.Merge
             }
 
             var sources = new[] { baseVim, partialVim };
+            var activityTables = new HashSet<string>(options.KeepActivityLog ? ActivityTables : Array.Empty<string>());
             var tableNames = baseVim.Tables.Keys.Concat(partialVim.Tables.Keys)
                 .Where(n => !VimConstants.ComputedTableNames.Contains(n))
+                .Where(n => options.KeepActivityLog || !ActivityTables.Contains(n)) // "strip activity on export"
                 .Distinct()
                 .OrderBy(n => n, StringComparer.Ordinal)
                 .ToArray();
@@ -414,10 +453,18 @@ namespace Vim.Format.Merge
             // ---------------------------------------------------------------------------------------------
             // 3. Other tables, referees before referrers.
             // ---------------------------------------------------------------------------------------------
-            var others = tableNames.Where(n => n != TableNames.Element && !elementOwned.Contains(n)).ToList();
+            var others = tableNames.Where(n => n != TableNames.Element && !elementOwned.Contains(n) && !activityTables.Contains(n)).ToList();
             var (order, cyclic) = TopologicalOrder(others, sources);
             foreach (var table in order)
                 PlanDictionaryTable(table, sources, plans, cyclic.Contains(table));
+
+            // ---------------------------------------------------------------------------------------------
+            // 3b. The activity log, before the pruning below: an ExportRevision the history still points at stays.
+            // ---------------------------------------------------------------------------------------------
+            foreach (var table in ActivityTables)
+                if (activityTables.Contains(table) && plans.ContainsKey(table))
+                    PlanActivityTable(table, sources, plans);
+            result.ActivityRowsTrimmed += TrimActivity(options, sources, plans);
 
             // Rows nothing points at any more (a replaced type's wall layers, a camera of an excluded view): removed, as
             // the format's validation requires every CompoundStructure to belong to a FamilyType.
@@ -433,6 +480,9 @@ namespace Vim.Format.Merge
                 });
             }
             result.OrphanRowsRemoved += PruneUnreferenced(TableNames.Camera, null, sources, plans);
+            // A session and a person nothing in the history mentions any more go with the rows that mentioned them.
+            result.OrphanRowsRemoved += PruneUnreferenced(TableNames.SyncSession, null, sources, plans);
+            result.OrphanRowsRemoved += PruneUnreferenced(TableNames.Contributor, null, sources, plans);
             result.OrphanRowsRemoved += PruneUnreferenced(TableNames.ExportRevision, null, sources, plans);
 
             result.PlanMs = sw.ElapsedMilliseconds;
@@ -544,6 +594,141 @@ namespace Vim.Format.Merge
                 }
             }
             return plan.RemoveWhere(i => !used[i]);
+        }
+
+        /// <summary>
+        /// An activity log table: the base's rows all stay (history is never rewritten), the partial's are appended,
+        /// and a partial row which is the same Contributor or the same SyncSession as a base row takes that row's
+        /// place instead of being added next to it - with the partial's content, which is the fresher reading.
+        /// </summary>
+        private static void PlanActivityTable(string table, VimTables[] sources, Dictionary<string, TablePlan> plans)
+        {
+            var plan = plans[table];
+            var nb = sources[0].NumRows(table);
+            var np = sources[1].NumRows(table);
+
+            if (!ActivityIdentityColumns.TryGetValue(table, out var identityColumns))
+            {
+                // Append-only: one row per change, per marker. Two identical rows are two facts, not one.
+                for (var r = 0; r < nb; ++r) plan.Add(0, r);
+                for (var r = 0; r < np; ++r) plan.Add(1, r);
+                return;
+            }
+
+            var key = ActivityKeyFunction(table, sources, identityColumns);
+            var firstPartialOfKey = new Dictionary<string, int>();
+            for (var r = np - 1; r >= 0; --r)
+                firstPartialOfKey[key(1, r)] = r;
+
+            for (var b = 0; b < nb; ++b)
+            {
+                var k = key(0, b);
+                if (firstPartialOfKey.TryGetValue(k, out var p) && plan.Map[1][p] < 0)
+                {
+                    var o = plan.Add(1, p);
+                    plan.Alias(0, b, o);
+                }
+                else
+                {
+                    plan.Add(0, b);
+                }
+            }
+
+            for (var r = 0; r < np; ++r)
+            {
+                if (plan.Map[1][r] >= 0) continue;
+                var first = firstPartialOfKey[key(1, r)];
+                if (first != r && plan.Map[1][first] >= 0)
+                    plan.Alias(1, r, plan.Map[1][first]); // the partial repeats itself
+                else
+                    plan.Add(1, r);
+            }
+        }
+
+        /// <summary>
+        /// Applies the retention caps to the planned activity rows: what is older than the cut-off goes, and past the
+        /// row cap the oldest changes go. Returns how many rows were dropped.
+        /// </summary>
+        private static int TrimActivity(VimPatchOptions options, VimTables[] sources, Dictionary<string, TablePlan> plans)
+        {
+            var hasCutoff = !string.IsNullOrEmpty(options.ActivityOldestUtc);
+            if (!hasCutoff && options.ActivityMaxChangeRows <= 0)
+                return 0;
+
+            var dropped = 0;
+            dropped += TrimActivityTable(TableNames.ElementChange, "string:ChangedUtc", options, sources, plans);
+            dropped += TrimActivityTable(TableNames.ActivityMarker, "string:OccurredUtc", options, sources, plans);
+            return dropped;
+        }
+
+        private static int TrimActivityTable(string table, string timeColumn, VimPatchOptions options,
+            VimTables[] sources, Dictionary<string, TablePlan> plans)
+        {
+            if (!plans.TryGetValue(table, out var plan) || plan.Count == 0)
+                return 0;
+            var times = sources.Select(s => s.Strs(table, timeColumn)).ToArray();
+            string TimeOf(int i)
+            {
+                var c = times[plan.Source[i]];
+                return c == null || plan.Row[i] >= c.Length ? "" : c[plan.Row[i]] ?? "";
+            }
+
+            var remove = new bool[plan.Count];
+            var kept = plan.Count;
+            if (!string.IsNullOrEmpty(options.ActivityOldestUtc))
+            {
+                for (var i = 0; i < plan.Count; ++i)
+                {
+                    var t = TimeOf(i);
+                    // An unreadable or empty time is kept: dropping a row because we cannot read its date would be
+                    // the one way to lose history silently.
+                    if (t.Length > 0 && string.CompareOrdinal(t, options.ActivityOldestUtc) < 0)
+                    {
+                        remove[i] = true;
+                        kept--;
+                    }
+                }
+            }
+
+            // The row cap applies to the changes only; the markers are few and each one says something.
+            if (table == TableNames.ElementChange && options.ActivityMaxChangeRows > 0 && kept > options.ActivityMaxChangeRows)
+            {
+                var oldestFirst = Enumerable.Range(0, plan.Count).Where(i => !remove[i])
+                    .OrderBy(TimeOf, StringComparer.Ordinal).Take(kept - options.ActivityMaxChangeRows);
+                foreach (var i in oldestFirst)
+                    remove[i] = true;
+            }
+
+            return plan.RemoveWhere(i => remove[i]);
+        }
+
+        /// <summary>The identity of an activity row, as the text of the given string and int columns.</summary>
+        private static Func<int, int, string> ActivityKeyFunction(string table, VimTables[] sources, string[] columns)
+        {
+            var values = new string[sources.Length][][];
+            for (var s = 0; s < sources.Length; ++s)
+            {
+                values[s] = new string[columns.Length][];
+                for (var c = 0; c < columns.Length; ++c)
+                {
+                    if (columns[c].StartsWith(VimConstants.StringColumnNameTypePrefix))
+                    {
+                        values[s][c] = sources[s].Strs(table, columns[c]);
+                    }
+                    else
+                    {
+                        var d = sources[s].Data<int>(table, columns[c]);
+                        values[s][c] = d?.Select(x => x.ToString(CultureInfo.InvariantCulture)).ToArray();
+                    }
+                }
+            }
+            return (s, r) =>
+            {
+                var sb = new StringBuilder();
+                foreach (var column in values[s])
+                    sb.Append(column == null || r >= column.Length ? "" : column[r] ?? "").Append('\u001f');
+                return sb.ToString();
+            };
         }
 
         private static bool IsOneRowPerElement(int[] owner)
