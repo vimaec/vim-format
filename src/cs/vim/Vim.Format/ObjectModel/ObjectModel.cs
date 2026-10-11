@@ -14,6 +14,12 @@ namespace Vim.Format.ObjectModel
         // ReSharper disable MemberHidesStaticFromOuterClass
         public static class History
         {
+            // Schema additions (something drawable for the elements that have no triangles: model lines, symbolic lines,
+            // void outlines and location curves as Shapes of a given kind, and where each element's Location comes from)
+            //   Vim.Element__int:LocationSource
+            //   Vim.Shape__int:Kind
+            public const string v5_9_0 = "5.9.0";
+
             // Schema additions (light sources and the sun, previously written as "light/lights.json" and "light/sun.json" assets)
             //   Vim.LightSource__byte:HasLightSourceTransform
             //   Vim.LightSource__byte:IsOn
@@ -240,7 +246,8 @@ namespace Vim.Format.ObjectModel
         // ReSharper enable MemberHidesStaticFromOuterClass
 
         // [MAINTAIN] Add more object model SerializableVersions below and update the current one.
-        public static SerializableVersion Current => v5_8_0;
+        public static SerializableVersion Current => v5_9_0;
+        public static SerializableVersion v5_9_0 => SerializableVersion.Parse(History.v5_9_0);
         public static SerializableVersion v5_8_0 => SerializableVersion.Parse(History.v5_8_0);
         public static SerializableVersion v5_7_0 => SerializableVersion.Parse(History.v5_7_0);
         public static SerializableVersion v5_6_0 => SerializableVersion.Parse(History.v5_6_0);
@@ -822,6 +829,25 @@ namespace Vim.Format.ObjectModel
     }
 
     /// <summary>
+    /// Where an Element's Location comes from (Element.LocationSource).
+    /// </summary>
+    public enum ElementLocationSource
+    {
+        /// <summary>Not recorded (files written before object model 5.9.0, or an exporter which does not fill it).</summary>
+        Unknown = 0,
+        /// <summary>The element has no placement (for example a type, a view, or an element without location or extent). Location is (0, 0, 0).</summary>
+        None = 1,
+        /// <summary>Revit: the element's LocationPoint.Point.</summary>
+        LocationPoint = 2,
+        /// <summary>Revit: the middle of the element's LocationCurve (Curve.Evaluate(0.5, normalized)).</summary>
+        LocationCurve = 3,
+        /// <summary>Revit: the origin of the family instance's total transform (FamilyInstance.GetTotalTransform().Origin), for an instance without a location.</summary>
+        InstanceOrigin = 4,
+        /// <summary>Revit: the centre of the element's model bounding box (Element.get_BoundingBox(null)), for an element with no other placement.</summary>
+        BoundingBoxCenter = 5,
+    }
+
+    /// <summary>
     /// Represents an object which can be associated to a collection of Parameters.
     /// </summary>
     [TableName(TableNames.Element)]
@@ -839,6 +865,11 @@ namespace Vim.Format.ObjectModel
         /// </summary>
         public string UniqueId;
 
+        /// <summary>
+        /// A point which places the element, in feet. LocationSource says where it comes from.<br/>
+        /// Since object model 5.9.0 (when LocationSource is set) the point is in the same world space as the geometry
+        /// (a linked document's transform is applied), so an element without triangles can still be found and zoomed to.
+        /// </summary>
         public float Location_X;
         public float Location_Y;
         public float Location_Z;
@@ -847,6 +878,15 @@ namespace Vim.Format.ObjectModel
             get => new Vector3(Location_X, Location_Y, Location_Z);
             set => (Location_X, Location_Y, Location_Z) = value;
         }
+
+        /// <summary>
+        /// The integer representation of the ElementLocationSource enum: where Location comes from.
+        /// 0 (Unknown) in files written before 5.9.0, where Location is (0, 0, 0) both for "at the origin" and for "no location".
+        /// </summary>
+        public int LocationSource;
+
+        public ElementLocationSource GetLocationSource()
+            => (ElementLocationSource) LocationSource;
 
         public string FamilyName;
         public bool IsPinned;
@@ -1618,8 +1658,32 @@ namespace Vim.Format.ObjectModel
     }
 
     /// <summary>
+    /// What a Shape draws (Shape.Kind). Kinds other than Unknown are lines of the model itself, in world space and in feet,
+    /// meant to be drawn in 3D as lines (never filled, never as a solid) and picked as their Element.
+    /// </summary>
+    public enum ShapeKind
+    {
+        /// <summary>Not recorded: files written before object model 5.9.0.</summary>
+        Unknown = 0,
+        /// <summary>A line of a 2D view's drawing (the linework of the exported view sheet sets) or a face outline; bound to its View by ShapeInView.</summary>
+        ViewLinework = 1,
+        /// <summary>A model curve: a model line element, or a curve inside a family instance's 3D geometry (Revit draws it in 3D).</summary>
+        ModelCurve = 2,
+        /// <summary>A symbolic line of a family (for example a door swing): Revit draws it only in plan views. Placed at the instance, in world space.</summary>
+        SymbolicCurve = 3,
+        /// <summary>An edge loop of a void: a family's void form (cutting geometry), or an opening element (wall, floor, roof or shaft opening). Never a solid.</summary>
+        VoidEdge = 4,
+        /// <summary>The location curve of an element (for example a beam's location line, or the curve of an element without triangles).</summary>
+        LocationCurve = 5,
+        /// <summary>A grid line (its full model curve).</summary>
+        Grid = 6,
+    }
+
+    /// <summary>
     /// Represents a sequence of Vector3 points in world space.
     /// The ordering and number of Shapes matches the ordering and number of shapes in the G3D buffer.
+    /// The points live in the G3D shape vertex buffer ("g3d:shapevertex:position:0:float32:3", feet), each Shape being the
+    /// range [vertexoffset[i], vertexoffset[i + 1]) of that buffer: an open polyline, or a closed one when its last point equals its first.
     /// </summary>
     [TableName(TableNames.Shape)]
     [G3dAttributeReference("g3d:shape:vertexoffset:0:int32:1", G3dAttributeReferenceMultiplicity.OneToOne, true)]
@@ -1627,6 +1691,13 @@ namespace Vim.Format.ObjectModel
     [G3dAttributeReference("g3d:shape:width:0:float32:1", G3dAttributeReferenceMultiplicity.OneToOne, true)]
     public partial class Shape : EntityWithElement
     {
+        /// <summary>
+        /// The integer representation of the ShapeKind enum: what the shape draws. 0 (Unknown) in files written before 5.9.0.
+        /// </summary>
+        public int Kind;
+
+        public ShapeKind GetKind()
+            => (ShapeKind) Kind;
     }
 
     /// <summary>
