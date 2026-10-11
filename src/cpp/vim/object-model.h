@@ -126,6 +126,10 @@ namespace Vim
     class LightSourceTable;
     class SunAndShadowSettings;
     class SunAndShadowSettingsTable;
+    class ExportRevision;
+    class ExportRevisionTable;
+    class ElementInExportRevision;
+    class ElementInExportRevisionTable;
     
     class DocumentModel
     {
@@ -187,6 +191,8 @@ namespace Vim
         LightTypeTable* mLightType;
         LightSourceTable* mLightSource;
         SunAndShadowSettingsTable* mSunAndShadowSettings;
+        ExportRevisionTable* mExportRevision;
+        ElementInExportRevisionTable* mElementInExportRevision;
         
         DocumentModel(Scene& scene);
         ~DocumentModel();
@@ -16362,6 +16368,399 @@ namespace Vim
         return new SunAndShadowSettingsTable(scene.mEntityTables["Vim.SunAndShadowSettings"], scene.mStrings);
     }
     
+    class ExportRevision
+    {
+    public:
+        int mIndex;
+        std::string mVimRevision;
+        int mKind;
+        std::string mGenerator;
+        std::string mCreatedUtc;
+        int mDocumentNumSaves;
+        std::string mDocumentVersionGuid;
+        
+        int mBimDocumentIndex;
+        BimDocument* mBimDocument;
+        
+        ExportRevision() {}
+    };
+    
+    class ExportRevisionTable
+    {
+        EntityTable& mEntityTable;
+        std::vector<const bfast::byte*>& mStrings;
+    public:
+        ExportRevisionTable(EntityTable& entityTable, std::vector<const bfast::byte*>& strings):
+            mEntityTable(entityTable), mStrings(strings) {}
+        
+        size_t GetCount()
+        {
+            return mEntityTable.get_count();
+        }
+        
+        ExportRevision* Get(int exportRevisionIndex)
+        {
+            ExportRevision* exportRevision = new ExportRevision();
+            exportRevision->mIndex = exportRevisionIndex;
+            exportRevision->mVimRevision = GetVimRevision(exportRevisionIndex);
+            exportRevision->mKind = GetKind(exportRevisionIndex);
+            exportRevision->mGenerator = GetGenerator(exportRevisionIndex);
+            exportRevision->mCreatedUtc = GetCreatedUtc(exportRevisionIndex);
+            exportRevision->mDocumentNumSaves = GetDocumentNumSaves(exportRevisionIndex);
+            exportRevision->mDocumentVersionGuid = GetDocumentVersionGuid(exportRevisionIndex);
+            exportRevision->mBimDocumentIndex = GetBimDocumentIndex(exportRevisionIndex);
+            return exportRevision;
+        }
+        
+        std::vector<ExportRevision>* GetAll()
+        {
+            bool existsVimRevision = mEntityTable.column_exists("string:VimRevision");
+            bool existsKind = mEntityTable.column_exists("int:Kind");
+            bool existsGenerator = mEntityTable.column_exists("string:Generator");
+            bool existsCreatedUtc = mEntityTable.column_exists("string:CreatedUtc");
+            bool existsDocumentNumSaves = mEntityTable.column_exists("int:DocumentNumSaves");
+            bool existsDocumentVersionGuid = mEntityTable.column_exists("string:DocumentVersionGuid");
+            bool existsBimDocument = mEntityTable.column_exists("index:Vim.BimDocument:BimDocument");
+            
+            const auto count = GetCount();
+            
+            std::vector<ExportRevision>* exportRevision = new std::vector<ExportRevision>();
+            exportRevision->reserve(count);
+            
+            const std::vector<int>& vimRevisionData = mEntityTable.column_exists("string:VimRevision") ? mEntityTable.mStringColumns["string:VimRevision"] : std::vector<int>();
+            
+            int* kindData = new int[count];
+            if (mEntityTable.column_exists("int:Kind")) {
+                memcpy(kindData, mEntityTable.mDataColumns["int:Kind"].begin(), count * sizeof(int));
+            }
+            
+            const std::vector<int>& generatorData = mEntityTable.column_exists("string:Generator") ? mEntityTable.mStringColumns["string:Generator"] : std::vector<int>();
+            
+            const std::vector<int>& createdUtcData = mEntityTable.column_exists("string:CreatedUtc") ? mEntityTable.mStringColumns["string:CreatedUtc"] : std::vector<int>();
+            
+            int* documentNumSavesData = new int[count];
+            if (mEntityTable.column_exists("int:DocumentNumSaves")) {
+                memcpy(documentNumSavesData, mEntityTable.mDataColumns["int:DocumentNumSaves"].begin(), count * sizeof(int));
+            }
+            
+            const std::vector<int>& documentVersionGuidData = mEntityTable.column_exists("string:DocumentVersionGuid") ? mEntityTable.mStringColumns["string:DocumentVersionGuid"] : std::vector<int>();
+            
+            const std::vector<int>& bimDocumentData = mEntityTable.column_exists("index:Vim.BimDocument:BimDocument") ? mEntityTable.mIndexColumns["index:Vim.BimDocument:BimDocument"] : std::vector<int>();
+            
+            for (int i = 0; i < count; ++i)
+            {
+                ExportRevision entity;
+                entity.mIndex = i;
+                if (existsVimRevision)
+                    entity.mVimRevision = std::string(reinterpret_cast<const char*>(mStrings[vimRevisionData[i]]));
+                if (existsKind)
+                    entity.mKind = kindData[i];
+                if (existsGenerator)
+                    entity.mGenerator = std::string(reinterpret_cast<const char*>(mStrings[generatorData[i]]));
+                if (existsCreatedUtc)
+                    entity.mCreatedUtc = std::string(reinterpret_cast<const char*>(mStrings[createdUtcData[i]]));
+                if (existsDocumentNumSaves)
+                    entity.mDocumentNumSaves = documentNumSavesData[i];
+                if (existsDocumentVersionGuid)
+                    entity.mDocumentVersionGuid = std::string(reinterpret_cast<const char*>(mStrings[documentVersionGuidData[i]]));
+                entity.mBimDocumentIndex = existsBimDocument ? bimDocumentData[i] : -1;
+                exportRevision->push_back(entity);
+            }
+            
+            delete[] kindData;
+            delete[] documentNumSavesData;
+            
+            return exportRevision;
+        }
+        
+        std::string GetVimRevision(int exportRevisionIndex)
+        {
+            if (exportRevisionIndex < 0 || exportRevisionIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("string:VimRevision")) {
+                return std::string(reinterpret_cast<const char*>(mStrings[mEntityTable.mStringColumns["string:VimRevision"][exportRevisionIndex]]));
+            }
+            
+            return {};
+        }
+        
+        std::vector<std::string>* GetAllVimRevision()
+        {
+            const auto count = GetCount();
+            
+            const std::vector<int>& vimRevisionData = mEntityTable.column_exists("string:VimRevision") ? mEntityTable.mStringColumns["string:VimRevision"] : std::vector<int>();
+            
+            std::vector<std::string>* result = new std::vector<std::string>();
+            result->reserve(count);
+            
+            for (int i = 0; i < count; ++i)
+            {
+                result->push_back(std::string(reinterpret_cast<const char*>(mStrings[vimRevisionData[i]])));
+            }
+            
+            return result;
+        }
+        
+        int GetKind(int exportRevisionIndex)
+        {
+            if (exportRevisionIndex < 0 || exportRevisionIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("int:Kind")) {
+                return *reinterpret_cast<int*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["int:Kind"].begin() + exportRevisionIndex * sizeof(int)));
+            }
+            
+            return {};
+        }
+        
+        std::vector<int>* GetAllKind()
+        {
+            const auto count = GetCount();
+            
+            int* kindData = new int[count];
+            if (mEntityTable.column_exists("int:Kind")) {
+                memcpy(kindData, mEntityTable.mDataColumns["int:Kind"].begin(), count * sizeof(int));
+            }
+            
+            std::vector<int>* result = new std::vector<int>(kindData, kindData + count);
+            
+            delete[] kindData;
+            
+            return result;
+        }
+        
+        std::string GetGenerator(int exportRevisionIndex)
+        {
+            if (exportRevisionIndex < 0 || exportRevisionIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("string:Generator")) {
+                return std::string(reinterpret_cast<const char*>(mStrings[mEntityTable.mStringColumns["string:Generator"][exportRevisionIndex]]));
+            }
+            
+            return {};
+        }
+        
+        std::vector<std::string>* GetAllGenerator()
+        {
+            const auto count = GetCount();
+            
+            const std::vector<int>& generatorData = mEntityTable.column_exists("string:Generator") ? mEntityTable.mStringColumns["string:Generator"] : std::vector<int>();
+            
+            std::vector<std::string>* result = new std::vector<std::string>();
+            result->reserve(count);
+            
+            for (int i = 0; i < count; ++i)
+            {
+                result->push_back(std::string(reinterpret_cast<const char*>(mStrings[generatorData[i]])));
+            }
+            
+            return result;
+        }
+        
+        std::string GetCreatedUtc(int exportRevisionIndex)
+        {
+            if (exportRevisionIndex < 0 || exportRevisionIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("string:CreatedUtc")) {
+                return std::string(reinterpret_cast<const char*>(mStrings[mEntityTable.mStringColumns["string:CreatedUtc"][exportRevisionIndex]]));
+            }
+            
+            return {};
+        }
+        
+        std::vector<std::string>* GetAllCreatedUtc()
+        {
+            const auto count = GetCount();
+            
+            const std::vector<int>& createdUtcData = mEntityTable.column_exists("string:CreatedUtc") ? mEntityTable.mStringColumns["string:CreatedUtc"] : std::vector<int>();
+            
+            std::vector<std::string>* result = new std::vector<std::string>();
+            result->reserve(count);
+            
+            for (int i = 0; i < count; ++i)
+            {
+                result->push_back(std::string(reinterpret_cast<const char*>(mStrings[createdUtcData[i]])));
+            }
+            
+            return result;
+        }
+        
+        int GetDocumentNumSaves(int exportRevisionIndex)
+        {
+            if (exportRevisionIndex < 0 || exportRevisionIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("int:DocumentNumSaves")) {
+                return *reinterpret_cast<int*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["int:DocumentNumSaves"].begin() + exportRevisionIndex * sizeof(int)));
+            }
+            
+            return {};
+        }
+        
+        std::vector<int>* GetAllDocumentNumSaves()
+        {
+            const auto count = GetCount();
+            
+            int* documentNumSavesData = new int[count];
+            if (mEntityTable.column_exists("int:DocumentNumSaves")) {
+                memcpy(documentNumSavesData, mEntityTable.mDataColumns["int:DocumentNumSaves"].begin(), count * sizeof(int));
+            }
+            
+            std::vector<int>* result = new std::vector<int>(documentNumSavesData, documentNumSavesData + count);
+            
+            delete[] documentNumSavesData;
+            
+            return result;
+        }
+        
+        std::string GetDocumentVersionGuid(int exportRevisionIndex)
+        {
+            if (exportRevisionIndex < 0 || exportRevisionIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("string:DocumentVersionGuid")) {
+                return std::string(reinterpret_cast<const char*>(mStrings[mEntityTable.mStringColumns["string:DocumentVersionGuid"][exportRevisionIndex]]));
+            }
+            
+            return {};
+        }
+        
+        std::vector<std::string>* GetAllDocumentVersionGuid()
+        {
+            const auto count = GetCount();
+            
+            const std::vector<int>& documentVersionGuidData = mEntityTable.column_exists("string:DocumentVersionGuid") ? mEntityTable.mStringColumns["string:DocumentVersionGuid"] : std::vector<int>();
+            
+            std::vector<std::string>* result = new std::vector<std::string>();
+            result->reserve(count);
+            
+            for (int i = 0; i < count; ++i)
+            {
+                result->push_back(std::string(reinterpret_cast<const char*>(mStrings[documentVersionGuidData[i]])));
+            }
+            
+            return result;
+        }
+        
+        int GetBimDocumentIndex(int exportRevisionIndex)
+        {
+            if (!mEntityTable.column_exists("index:Vim.BimDocument:BimDocument")) {
+                return -1;
+            }
+            
+            if (exportRevisionIndex < 0 || exportRevisionIndex >= GetCount())
+                return -1;
+            
+            return mEntityTable.mIndexColumns["index:Vim.BimDocument:BimDocument"][exportRevisionIndex];
+        }
+        
+    };
+    
+    static ExportRevisionTable* GetExportRevisionTable(Scene& scene)
+    {
+        if (scene.mEntityTables.find("Vim.ExportRevision") == scene.mEntityTables.end())
+            return {};
+        
+        return new ExportRevisionTable(scene.mEntityTables["Vim.ExportRevision"], scene.mStrings);
+    }
+    
+    class ElementInExportRevision
+    {
+    public:
+        int mIndex;
+        
+        int mExportRevisionIndex;
+        ExportRevision* mExportRevision;
+        int mElementIndex;
+        Element* mElement;
+        
+        ElementInExportRevision() {}
+    };
+    
+    class ElementInExportRevisionTable
+    {
+        EntityTable& mEntityTable;
+        std::vector<const bfast::byte*>& mStrings;
+    public:
+        ElementInExportRevisionTable(EntityTable& entityTable, std::vector<const bfast::byte*>& strings):
+            mEntityTable(entityTable), mStrings(strings) {}
+        
+        size_t GetCount()
+        {
+            return mEntityTable.get_count();
+        }
+        
+        ElementInExportRevision* Get(int elementInExportRevisionIndex)
+        {
+            ElementInExportRevision* elementInExportRevision = new ElementInExportRevision();
+            elementInExportRevision->mIndex = elementInExportRevisionIndex;
+            elementInExportRevision->mExportRevisionIndex = GetExportRevisionIndex(elementInExportRevisionIndex);
+            elementInExportRevision->mElementIndex = GetElementIndex(elementInExportRevisionIndex);
+            return elementInExportRevision;
+        }
+        
+        std::vector<ElementInExportRevision>* GetAll()
+        {
+            bool existsExportRevision = mEntityTable.column_exists("index:Vim.ExportRevision:ExportRevision");
+            bool existsElement = mEntityTable.column_exists("index:Vim.Element:Element");
+            
+            const auto count = GetCount();
+            
+            std::vector<ElementInExportRevision>* elementInExportRevision = new std::vector<ElementInExportRevision>();
+            elementInExportRevision->reserve(count);
+            
+            const std::vector<int>& exportRevisionData = mEntityTable.column_exists("index:Vim.ExportRevision:ExportRevision") ? mEntityTable.mIndexColumns["index:Vim.ExportRevision:ExportRevision"] : std::vector<int>();
+            const std::vector<int>& elementData = mEntityTable.column_exists("index:Vim.Element:Element") ? mEntityTable.mIndexColumns["index:Vim.Element:Element"] : std::vector<int>();
+            
+            for (int i = 0; i < count; ++i)
+            {
+                ElementInExportRevision entity;
+                entity.mIndex = i;
+                entity.mExportRevisionIndex = existsExportRevision ? exportRevisionData[i] : -1;
+                entity.mElementIndex = existsElement ? elementData[i] : -1;
+                elementInExportRevision->push_back(entity);
+            }
+            
+            return elementInExportRevision;
+        }
+        
+        int GetExportRevisionIndex(int elementInExportRevisionIndex)
+        {
+            if (!mEntityTable.column_exists("index:Vim.ExportRevision:ExportRevision")) {
+                return -1;
+            }
+            
+            if (elementInExportRevisionIndex < 0 || elementInExportRevisionIndex >= GetCount())
+                return -1;
+            
+            return mEntityTable.mIndexColumns["index:Vim.ExportRevision:ExportRevision"][elementInExportRevisionIndex];
+        }
+        
+        int GetElementIndex(int elementInExportRevisionIndex)
+        {
+            if (!mEntityTable.column_exists("index:Vim.Element:Element")) {
+                return -1;
+            }
+            
+            if (elementInExportRevisionIndex < 0 || elementInExportRevisionIndex >= GetCount())
+                return -1;
+            
+            return mEntityTable.mIndexColumns["index:Vim.Element:Element"][elementInExportRevisionIndex];
+        }
+        
+    };
+    
+    static ElementInExportRevisionTable* GetElementInExportRevisionTable(Scene& scene)
+    {
+        if (scene.mEntityTables.find("Vim.ElementInExportRevision") == scene.mEntityTables.end())
+            return {};
+        
+        return new ElementInExportRevisionTable(scene.mEntityTables["Vim.ElementInExportRevision"], scene.mStrings);
+    }
+    
     DocumentModel::DocumentModel(Scene& scene)
     {
         mAsset = GetAssetTable(scene);
@@ -16421,6 +16820,8 @@ namespace Vim
         mLightType = GetLightTypeTable(scene);
         mLightSource = GetLightSourceTable(scene);
         mSunAndShadowSettings = GetSunAndShadowSettingsTable(scene);
+        mExportRevision = GetExportRevisionTable(scene);
+        mElementInExportRevision = GetElementInExportRevisionTable(scene);
     }
     
     DocumentModel::~DocumentModel()
@@ -16482,6 +16883,8 @@ namespace Vim
         delete mLightType;
         delete mLightSource;
         delete mSunAndShadowSettings;
+        delete mExportRevision;
+        delete mElementInExportRevision;
     }
 }
 

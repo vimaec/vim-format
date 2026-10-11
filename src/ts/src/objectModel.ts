@@ -11852,6 +11852,338 @@ export class SunAndShadowSettingsTable implements ISunAndShadowSettingsTable {
     
 }
 
+export interface IExportRevision {
+    index: number
+    vimRevision?: string
+    kind?: number
+    generator?: string
+    createdUtc?: string
+    documentNumSaves?: number
+    documentVersionGuid?: string
+    
+    bimDocumentIndex?: number
+    bimDocument?: IBimDocument
+}
+
+export interface IExportRevisionTable {
+    getCount(): Promise<number>
+    get(exportRevisionIndex: number): Promise<IExportRevision>
+    getAll(): Promise<IExportRevision[]>
+    
+    getVimRevision(exportRevisionIndex: number): Promise<string | undefined>
+    getAllVimRevision(): Promise<string[] | undefined>
+    getKind(exportRevisionIndex: number): Promise<number | undefined>
+    getAllKind(): Promise<number[] | undefined>
+    getGenerator(exportRevisionIndex: number): Promise<string | undefined>
+    getAllGenerator(): Promise<string[] | undefined>
+    getCreatedUtc(exportRevisionIndex: number): Promise<string | undefined>
+    getAllCreatedUtc(): Promise<string[] | undefined>
+    getDocumentNumSaves(exportRevisionIndex: number): Promise<number | undefined>
+    getAllDocumentNumSaves(): Promise<number[] | undefined>
+    getDocumentVersionGuid(exportRevisionIndex: number): Promise<string | undefined>
+    getAllDocumentVersionGuid(): Promise<string[] | undefined>
+    
+    getBimDocumentIndex(exportRevisionIndex: number): Promise<number | undefined>
+    getAllBimDocumentIndex(): Promise<number[] | undefined>
+    getBimDocument(exportRevisionIndex: number): Promise<IBimDocument | undefined>
+}
+
+export class ExportRevision implements IExportRevision {
+    index: number
+    vimRevision?: string
+    kind?: number
+    generator?: string
+    createdUtc?: string
+    documentNumSaves?: number
+    documentVersionGuid?: string
+    
+    bimDocumentIndex?: number
+    bimDocument?: IBimDocument
+    
+    static async createFromTable(table: IExportRevisionTable, index: number): Promise<IExportRevision> {
+        let result = new ExportRevision()
+        result.index = index
+        
+        await Promise.all([
+            table.getVimRevision(index).then(v => result.vimRevision = v),
+            table.getKind(index).then(v => result.kind = v),
+            table.getGenerator(index).then(v => result.generator = v),
+            table.getCreatedUtc(index).then(v => result.createdUtc = v),
+            table.getDocumentNumSaves(index).then(v => result.documentNumSaves = v),
+            table.getDocumentVersionGuid(index).then(v => result.documentVersionGuid = v),
+            table.getBimDocumentIndex(index).then(v => result.bimDocumentIndex = v),
+        ])
+        
+        return result
+    }
+}
+
+export class ExportRevisionTable implements IExportRevisionTable {
+    private document: VimDocument
+    private entityTable: EntityTable
+    
+    static async createFromDocument(document: VimDocument): Promise<IExportRevisionTable | undefined> {
+        const entity = await document.entities.getBfast("Vim.ExportRevision")
+        
+        if (!entity) {
+            return undefined
+        }
+        
+        let table = new ExportRevisionTable()
+        table.document = document
+        table.entityTable = new EntityTable(entity, document.strings)
+        
+        return table
+    }
+    
+    getCount(): Promise<number> {
+        return this.entityTable.getCount()
+    }
+    
+    async get(exportRevisionIndex: number): Promise<IExportRevision> {
+        return await ExportRevision.createFromTable(this, exportRevisionIndex)
+    }
+    
+    async getAll(): Promise<IExportRevision[]> {
+        const localTable = await this.entityTable.getLocal()
+        
+        let vimRevision: string[] | undefined
+        let kind: number[] | undefined
+        let generator: string[] | undefined
+        let createdUtc: string[] | undefined
+        let documentNumSaves: number[] | undefined
+        let documentVersionGuid: string[] | undefined
+        let bimDocumentIndex: number[] | undefined
+        
+        await Promise.all([
+            (async () => { vimRevision = (await localTable.getStringArray("string:VimRevision")) })(),
+            (async () => { kind = (await localTable.getNumberArray("int:Kind")) })(),
+            (async () => { generator = (await localTable.getStringArray("string:Generator")) })(),
+            (async () => { createdUtc = (await localTable.getStringArray("string:CreatedUtc")) })(),
+            (async () => { documentNumSaves = (await localTable.getNumberArray("int:DocumentNumSaves")) })(),
+            (async () => { documentVersionGuid = (await localTable.getStringArray("string:DocumentVersionGuid")) })(),
+            (async () => { bimDocumentIndex = (await localTable.getNumberArray("index:Vim.BimDocument:BimDocument")) })(),
+        ])
+        
+        let exportRevision: IExportRevision[] = []
+        
+        const rowCount = await this.getCount()
+        for (let i = 0; i < rowCount; i++) {
+            exportRevision.push({
+                index: i,
+                vimRevision: vimRevision ? vimRevision[i] : undefined,
+                kind: kind ? kind[i] : undefined,
+                generator: generator ? generator[i] : undefined,
+                createdUtc: createdUtc ? createdUtc[i] : undefined,
+                documentNumSaves: documentNumSaves ? documentNumSaves[i] : undefined,
+                documentVersionGuid: documentVersionGuid ? documentVersionGuid[i] : undefined,
+                bimDocumentIndex: bimDocumentIndex ? bimDocumentIndex[i] : undefined
+            })
+        }
+        
+        return exportRevision
+    }
+    
+    async getVimRevision(exportRevisionIndex: number): Promise<string | undefined> {
+        return (await this.entityTable.getString(exportRevisionIndex, "string:VimRevision"))
+    }
+    
+    async getAllVimRevision(): Promise<string[] | undefined> {
+        return (await this.entityTable.getStringArray("string:VimRevision"))
+    }
+    
+    async getKind(exportRevisionIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(exportRevisionIndex, "int:Kind"))
+    }
+    
+    async getAllKind(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("int:Kind"))
+    }
+    
+    async getGenerator(exportRevisionIndex: number): Promise<string | undefined> {
+        return (await this.entityTable.getString(exportRevisionIndex, "string:Generator"))
+    }
+    
+    async getAllGenerator(): Promise<string[] | undefined> {
+        return (await this.entityTable.getStringArray("string:Generator"))
+    }
+    
+    async getCreatedUtc(exportRevisionIndex: number): Promise<string | undefined> {
+        return (await this.entityTable.getString(exportRevisionIndex, "string:CreatedUtc"))
+    }
+    
+    async getAllCreatedUtc(): Promise<string[] | undefined> {
+        return (await this.entityTable.getStringArray("string:CreatedUtc"))
+    }
+    
+    async getDocumentNumSaves(exportRevisionIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(exportRevisionIndex, "int:DocumentNumSaves"))
+    }
+    
+    async getAllDocumentNumSaves(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("int:DocumentNumSaves"))
+    }
+    
+    async getDocumentVersionGuid(exportRevisionIndex: number): Promise<string | undefined> {
+        return (await this.entityTable.getString(exportRevisionIndex, "string:DocumentVersionGuid"))
+    }
+    
+    async getAllDocumentVersionGuid(): Promise<string[] | undefined> {
+        return (await this.entityTable.getStringArray("string:DocumentVersionGuid"))
+    }
+    
+    async getBimDocumentIndex(exportRevisionIndex: number): Promise<number | undefined> {
+        return await this.entityTable.getNumber(exportRevisionIndex, "index:Vim.BimDocument:BimDocument")
+    }
+    
+    async getAllBimDocumentIndex(): Promise<number[] | undefined> {
+        return await this.entityTable.getNumberArray("index:Vim.BimDocument:BimDocument")
+    }
+    
+    async getBimDocument(exportRevisionIndex: number): Promise<IBimDocument | undefined> {
+        const index = await this.getBimDocumentIndex(exportRevisionIndex)
+        
+        if (index === undefined) {
+            return undefined
+        }
+        
+        return await this.document.bimDocument?.get(index)
+    }
+    
+}
+
+export interface IElementInExportRevision {
+    index: number
+    
+    exportRevisionIndex?: number
+    exportRevision?: IExportRevision
+    elementIndex?: number
+    element?: IElement
+}
+
+export interface IElementInExportRevisionTable {
+    getCount(): Promise<number>
+    get(elementInExportRevisionIndex: number): Promise<IElementInExportRevision>
+    getAll(): Promise<IElementInExportRevision[]>
+    
+    getExportRevisionIndex(elementInExportRevisionIndex: number): Promise<number | undefined>
+    getAllExportRevisionIndex(): Promise<number[] | undefined>
+    getExportRevision(elementInExportRevisionIndex: number): Promise<IExportRevision | undefined>
+    getElementIndex(elementInExportRevisionIndex: number): Promise<number | undefined>
+    getAllElementIndex(): Promise<number[] | undefined>
+    getElement(elementInExportRevisionIndex: number): Promise<IElement | undefined>
+}
+
+export class ElementInExportRevision implements IElementInExportRevision {
+    index: number
+    
+    exportRevisionIndex?: number
+    exportRevision?: IExportRevision
+    elementIndex?: number
+    element?: IElement
+    
+    static async createFromTable(table: IElementInExportRevisionTable, index: number): Promise<IElementInExportRevision> {
+        let result = new ElementInExportRevision()
+        result.index = index
+        
+        await Promise.all([
+            table.getExportRevisionIndex(index).then(v => result.exportRevisionIndex = v),
+            table.getElementIndex(index).then(v => result.elementIndex = v),
+        ])
+        
+        return result
+    }
+}
+
+export class ElementInExportRevisionTable implements IElementInExportRevisionTable {
+    private document: VimDocument
+    private entityTable: EntityTable
+    
+    static async createFromDocument(document: VimDocument): Promise<IElementInExportRevisionTable | undefined> {
+        const entity = await document.entities.getBfast("Vim.ElementInExportRevision")
+        
+        if (!entity) {
+            return undefined
+        }
+        
+        let table = new ElementInExportRevisionTable()
+        table.document = document
+        table.entityTable = new EntityTable(entity, document.strings)
+        
+        return table
+    }
+    
+    getCount(): Promise<number> {
+        return this.entityTable.getCount()
+    }
+    
+    async get(elementInExportRevisionIndex: number): Promise<IElementInExportRevision> {
+        return await ElementInExportRevision.createFromTable(this, elementInExportRevisionIndex)
+    }
+    
+    async getAll(): Promise<IElementInExportRevision[]> {
+        const localTable = await this.entityTable.getLocal()
+        
+        let exportRevisionIndex: number[] | undefined
+        let elementIndex: number[] | undefined
+        
+        await Promise.all([
+            (async () => { exportRevisionIndex = (await localTable.getNumberArray("index:Vim.ExportRevision:ExportRevision")) })(),
+            (async () => { elementIndex = (await localTable.getNumberArray("index:Vim.Element:Element")) })(),
+        ])
+        
+        let elementInExportRevision: IElementInExportRevision[] = []
+        
+        const rowCount = await this.getCount()
+        for (let i = 0; i < rowCount; i++) {
+            elementInExportRevision.push({
+                index: i,
+                exportRevisionIndex: exportRevisionIndex ? exportRevisionIndex[i] : undefined,
+                elementIndex: elementIndex ? elementIndex[i] : undefined
+            })
+        }
+        
+        return elementInExportRevision
+    }
+    
+    async getExportRevisionIndex(elementInExportRevisionIndex: number): Promise<number | undefined> {
+        return await this.entityTable.getNumber(elementInExportRevisionIndex, "index:Vim.ExportRevision:ExportRevision")
+    }
+    
+    async getAllExportRevisionIndex(): Promise<number[] | undefined> {
+        return await this.entityTable.getNumberArray("index:Vim.ExportRevision:ExportRevision")
+    }
+    
+    async getExportRevision(elementInExportRevisionIndex: number): Promise<IExportRevision | undefined> {
+        const index = await this.getExportRevisionIndex(elementInExportRevisionIndex)
+        
+        if (index === undefined) {
+            return undefined
+        }
+        
+        return await this.document.exportRevision?.get(index)
+    }
+    
+    async getElementIndex(elementInExportRevisionIndex: number): Promise<number | undefined> {
+        return await this.entityTable.getNumber(elementInExportRevisionIndex, "index:Vim.Element:Element")
+    }
+    
+    async getAllElementIndex(): Promise<number[] | undefined> {
+        return await this.entityTable.getNumberArray("index:Vim.Element:Element")
+    }
+    
+    async getElement(elementInExportRevisionIndex: number): Promise<IElement | undefined> {
+        const index = await this.getElementIndex(elementInExportRevisionIndex)
+        
+        if (index === undefined) {
+            return undefined
+        }
+        
+        return await this.document.element?.get(index)
+    }
+    
+}
+
 export class VimDocument {
     asset: IAssetTable | undefined
     displayUnit: IDisplayUnitTable | undefined
@@ -11910,6 +12242,8 @@ export class VimDocument {
     lightType: ILightTypeTable | undefined
     lightSource: ILightSourceTable | undefined
     sunAndShadowSettings: ISunAndShadowSettingsTable | undefined
+    exportRevision: IExportRevisionTable | undefined
+    elementInExportRevision: IElementInExportRevisionTable | undefined
     
     entities: BFast
     strings: string[] | undefined
@@ -11984,6 +12318,8 @@ export class VimDocument {
         doc.lightType = await LightTypeTable.createFromDocument(doc)
         doc.lightSource = await LightSourceTable.createFromDocument(doc)
         doc.sunAndShadowSettings = await SunAndShadowSettingsTable.createFromDocument(doc)
+        doc.exportRevision = await ExportRevisionTable.createFromDocument(doc)
+        doc.elementInExportRevision = await ElementInExportRevisionTable.createFromDocument(doc)
         
         return doc
     }

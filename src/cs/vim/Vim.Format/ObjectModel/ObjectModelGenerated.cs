@@ -2139,6 +2139,74 @@ namespace Vim.Format.ObjectModel {
         
     } // end of class
     
+    // AUTO-GENERATED
+    public partial class ExportRevision
+    {
+        public Vim.Format.ObjectModel.BimDocument BimDocument => _BimDocument?.Value;
+        public int BimDocumentIndex => _BimDocument?.Index ?? EntityRelation.None;
+        public ExportRevision()
+        {
+            _BimDocument = new Relation<Vim.Format.ObjectModel.BimDocument>();
+        }
+        
+        public override bool FieldsAreEqual(object obj)
+        {
+            if ((obj is ExportRevision other))
+            {
+                var fieldsAreEqual =
+                    (Index == other.Index) &&
+                    (VimRevision == other.VimRevision) &&
+                    (Kind == other.Kind) &&
+                    (Generator == other.Generator) &&
+                    (CreatedUtc == other.CreatedUtc) &&
+                    (DocumentNumSaves == other.DocumentNumSaves) &&
+                    (DocumentVersionGuid == other.DocumentVersionGuid) &&
+                    (_BimDocument?.Index == other._BimDocument?.Index);
+                if (!fieldsAreEqual)
+                {
+                    return false;
+                }
+                
+                return true;
+            }
+            return false;
+        }
+        
+    } // end of class
+    
+    // AUTO-GENERATED
+    public partial class ElementInExportRevision
+    {
+        public Vim.Format.ObjectModel.ExportRevision ExportRevision => _ExportRevision?.Value;
+        public int ExportRevisionIndex => _ExportRevision?.Index ?? EntityRelation.None;
+        public Vim.Format.ObjectModel.Element Element => _Element?.Value;
+        public int ElementIndex => _Element?.Index ?? EntityRelation.None;
+        public ElementInExportRevision()
+        {
+            _ExportRevision = new Relation<Vim.Format.ObjectModel.ExportRevision>();
+            _Element = new Relation<Vim.Format.ObjectModel.Element>();
+        }
+        
+        public override bool FieldsAreEqual(object obj)
+        {
+            if ((obj is ElementInExportRevision other))
+            {
+                var fieldsAreEqual =
+                    (Index == other.Index) &&
+                    (_ExportRevision?.Index == other._ExportRevision?.Index) &&
+                    (_Element?.Index == other._Element?.Index);
+                if (!fieldsAreEqual)
+                {
+                    return false;
+                }
+                
+                return true;
+            }
+            return false;
+        }
+        
+    } // end of class
+    
     public partial class DocumentModel
     {
         public ElementIndexMaps ElementIndexMaps { get; }
@@ -4224,6 +4292,65 @@ namespace Vim.Format.ObjectModel {
             return r;
         }
         
+        
+        // ExportRevision
+        
+        public EntityTable ExportRevisionEntityTable { get; }
+        
+        public IArray<String> ExportRevisionVimRevision { get; }
+        public String GetExportRevisionVimRevision(int index, String defaultValue = "") => ExportRevisionVimRevision?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Int32> ExportRevisionKind { get; }
+        public Int32 GetExportRevisionKind(int index, Int32 defaultValue = default) => ExportRevisionKind?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<String> ExportRevisionGenerator { get; }
+        public String GetExportRevisionGenerator(int index, String defaultValue = "") => ExportRevisionGenerator?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<String> ExportRevisionCreatedUtc { get; }
+        public String GetExportRevisionCreatedUtc(int index, String defaultValue = "") => ExportRevisionCreatedUtc?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Int32> ExportRevisionDocumentNumSaves { get; }
+        public Int32 GetExportRevisionDocumentNumSaves(int index, Int32 defaultValue = default) => ExportRevisionDocumentNumSaves?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<String> ExportRevisionDocumentVersionGuid { get; }
+        public String GetExportRevisionDocumentVersionGuid(int index, String defaultValue = "") => ExportRevisionDocumentVersionGuid?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<int> ExportRevisionBimDocumentIndex { get; }
+        public int GetExportRevisionBimDocumentIndex(int index) => ExportRevisionBimDocumentIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
+        public int NumExportRevision => ExportRevisionEntityTable?.NumRows ?? 0;
+        public IArray<ExportRevision> ExportRevisionList { get; }
+        public ExportRevision GetExportRevision(int n)
+        {
+            if (n < 0) return null;
+            var r = new ExportRevision();
+            r.Document = Document;
+            r.Index = n;
+            r.VimRevision = ExportRevisionVimRevision.ElementAtOrDefault(n);
+            r.Kind = ExportRevisionKind.ElementAtOrDefault(n);
+            r.Generator = ExportRevisionGenerator.ElementAtOrDefault(n);
+            r.CreatedUtc = ExportRevisionCreatedUtc.ElementAtOrDefault(n);
+            r.DocumentNumSaves = ExportRevisionDocumentNumSaves.ElementAtOrDefault(n);
+            r.DocumentVersionGuid = ExportRevisionDocumentVersionGuid.ElementAtOrDefault(n);
+            r._BimDocument = new Relation<Vim.Format.ObjectModel.BimDocument>(GetExportRevisionBimDocumentIndex(n), GetBimDocument);
+            return r;
+        }
+        
+        
+        // ElementInExportRevision
+        
+        public EntityTable ElementInExportRevisionEntityTable { get; }
+        
+        public IArray<int> ElementInExportRevisionExportRevisionIndex { get; }
+        public int GetElementInExportRevisionExportRevisionIndex(int index) => ElementInExportRevisionExportRevisionIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
+        public IArray<int> ElementInExportRevisionElementIndex { get; }
+        public int GetElementInExportRevisionElementIndex(int index) => ElementInExportRevisionElementIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
+        public int NumElementInExportRevision => ElementInExportRevisionEntityTable?.NumRows ?? 0;
+        public IArray<ElementInExportRevision> ElementInExportRevisionList { get; }
+        public ElementInExportRevision GetElementInExportRevision(int n)
+        {
+            if (n < 0) return null;
+            var r = new ElementInExportRevision();
+            r.Document = Document;
+            r.Index = n;
+            r._ExportRevision = new Relation<Vim.Format.ObjectModel.ExportRevision>(GetElementInExportRevisionExportRevisionIndex(n), GetExportRevision);
+            r._Element = new Relation<Vim.Format.ObjectModel.Element>(GetElementInExportRevisionElementIndex(n), GetElement);
+            return r;
+        }
+        
         // All entity collections
         public Dictionary<string, IEnumerable<Entity>> AllEntities => new Dictionary<string, IEnumerable<Entity>>() {
             {"Vim.Asset", AssetList.ToEnumerable()},
@@ -4283,6 +4410,8 @@ namespace Vim.Format.ObjectModel {
             {"Vim.LightType", LightTypeList.ToEnumerable()},
             {"Vim.LightSource", LightSourceList.ToEnumerable()},
             {"Vim.SunAndShadowSettings", SunAndShadowSettingsList.ToEnumerable()},
+            {"Vim.ExportRevision", ExportRevisionList.ToEnumerable()},
+            {"Vim.ElementInExportRevision", ElementInExportRevisionList.ToEnumerable()},
         };
         
         // Entity types from table names
@@ -4344,6 +4473,8 @@ namespace Vim.Format.ObjectModel {
             {"Vim.LightType", typeof(LightType)},
             {"Vim.LightSource", typeof(LightSource)},
             {"Vim.SunAndShadowSettings", typeof(SunAndShadowSettings)},
+            {"Vim.ExportRevision", typeof(ExportRevision)},
+            {"Vim.ElementInExportRevision", typeof(ElementInExportRevision)},
         };
         public DocumentModel(Document d, bool inParallel = true)
         {
@@ -4407,6 +4538,8 @@ namespace Vim.Format.ObjectModel {
             LightTypeEntityTable = Document.GetTable("Vim.LightType");
             LightSourceEntityTable = Document.GetTable("Vim.LightSource");
             SunAndShadowSettingsEntityTable = Document.GetTable("Vim.SunAndShadowSettings");
+            ExportRevisionEntityTable = Document.GetTable("Vim.ExportRevision");
+            ElementInExportRevisionEntityTable = Document.GetTable("Vim.ElementInExportRevision");
             
             // Initialize entity arrays
             AssetBufferName = AssetEntityTable?.GetStringColumnValues("string:BufferName") ?? Array.Empty<String>().ToIArray();
@@ -4694,6 +4827,12 @@ namespace Vim.Format.ObjectModel {
             SunAndShadowSettingsAltitude = SunAndShadowSettingsEntityTable?.GetDataColumnValues<Double>("double:Altitude") ?? Array.Empty<Double>().ToIArray();
             SunAndShadowSettingsAzimuth = SunAndShadowSettingsEntityTable?.GetDataColumnValues<Double>("double:Azimuth") ?? Array.Empty<Double>().ToIArray();
             SunAndShadowSettingsRelativeToView = SunAndShadowSettingsEntityTable?.GetDataColumnValues<Boolean>("byte:RelativeToView") ?? Array.Empty<Boolean>().ToIArray();
+            ExportRevisionVimRevision = ExportRevisionEntityTable?.GetStringColumnValues("string:VimRevision") ?? Array.Empty<String>().ToIArray();
+            ExportRevisionKind = ExportRevisionEntityTable?.GetDataColumnValues<Int32>("int:Kind") ?? Array.Empty<Int32>().ToIArray();
+            ExportRevisionGenerator = ExportRevisionEntityTable?.GetStringColumnValues("string:Generator") ?? Array.Empty<String>().ToIArray();
+            ExportRevisionCreatedUtc = ExportRevisionEntityTable?.GetStringColumnValues("string:CreatedUtc") ?? Array.Empty<String>().ToIArray();
+            ExportRevisionDocumentNumSaves = ExportRevisionEntityTable?.GetDataColumnValues<Int32>("int:DocumentNumSaves") ?? Array.Empty<Int32>().ToIArray();
+            ExportRevisionDocumentVersionGuid = ExportRevisionEntityTable?.GetStringColumnValues("string:DocumentVersionGuid") ?? Array.Empty<String>().ToIArray();
             
             // Initialize entity relational columns
             ParameterDescriptorDisplayUnitIndex = ParameterDescriptorEntityTable?.GetIndexColumnValues("index:Vim.DisplayUnit:DisplayUnit") ?? Array.Empty<int>().ToIArray();
@@ -4801,6 +4940,9 @@ namespace Vim.Format.ObjectModel {
             LightSourceLightTypeIndex = LightSourceEntityTable?.GetIndexColumnValues("index:Vim.LightType:LightType") ?? Array.Empty<int>().ToIArray();
             LightSourceElementIndex = LightSourceEntityTable?.GetIndexColumnValues("index:Vim.Element:Element") ?? Array.Empty<int>().ToIArray();
             SunAndShadowSettingsViewIndex = SunAndShadowSettingsEntityTable?.GetIndexColumnValues("index:Vim.View:View") ?? Array.Empty<int>().ToIArray();
+            ExportRevisionBimDocumentIndex = ExportRevisionEntityTable?.GetIndexColumnValues("index:Vim.BimDocument:BimDocument") ?? Array.Empty<int>().ToIArray();
+            ElementInExportRevisionExportRevisionIndex = ElementInExportRevisionEntityTable?.GetIndexColumnValues("index:Vim.ExportRevision:ExportRevision") ?? Array.Empty<int>().ToIArray();
+            ElementInExportRevisionElementIndex = ElementInExportRevisionEntityTable?.GetIndexColumnValues("index:Vim.Element:Element") ?? Array.Empty<int>().ToIArray();
             
             // Initialize entity collections
             AssetList = NumAsset.Select(i => GetAsset(i));
@@ -4860,6 +5002,8 @@ namespace Vim.Format.ObjectModel {
             LightTypeList = NumLightType.Select(i => GetLightType(i));
             LightSourceList = NumLightSource.Select(i => GetLightSource(i));
             SunAndShadowSettingsList = NumSunAndShadowSettings.Select(i => GetSunAndShadowSettings(i));
+            ExportRevisionList = NumExportRevision.Select(i => GetExportRevision(i));
+            ElementInExportRevisionList = NumElementInExportRevision.Select(i => GetElementInExportRevision(i));
             
             // Initialize element index maps
             ElementIndexMaps = new ElementIndexMaps(this, inParallel);
@@ -4944,6 +5088,8 @@ namespace Vim.Format.ObjectModel {
             Tables[TableNames.LightType] = LightTypeTable = new LightTypeTable(GetSerializableTableOrEmpty(TableNames.LightType), stringTable, this);
             Tables[TableNames.LightSource] = LightSourceTable = new LightSourceTable(GetSerializableTableOrEmpty(TableNames.LightSource), stringTable, this);
             Tables[TableNames.SunAndShadowSettings] = SunAndShadowSettingsTable = new SunAndShadowSettingsTable(GetSerializableTableOrEmpty(TableNames.SunAndShadowSettings), stringTable, this);
+            Tables[TableNames.ExportRevision] = ExportRevisionTable = new ExportRevisionTable(GetSerializableTableOrEmpty(TableNames.ExportRevision), stringTable, this);
+            Tables[TableNames.ElementInExportRevision] = ElementInExportRevisionTable = new ElementInExportRevisionTable(GetSerializableTableOrEmpty(TableNames.ElementInExportRevision), stringTable, this);
             
             // Initialize element index maps
             ElementIndexMaps = new ElementIndexMaps(this, inParallel);
@@ -5064,6 +5210,10 @@ namespace Vim.Format.ObjectModel {
         public LightSource GetLightSource(int index) => LightSourceTable?.Get(index);
         public SunAndShadowSettingsTable SunAndShadowSettingsTable { get; } // can be null
         public SunAndShadowSettings GetSunAndShadowSettings(int index) => SunAndShadowSettingsTable?.Get(index);
+        public ExportRevisionTable ExportRevisionTable { get; } // can be null
+        public ExportRevision GetExportRevision(int index) => ExportRevisionTable?.Get(index);
+        public ElementInExportRevisionTable ElementInExportRevisionTable { get; } // can be null
+        public ElementInExportRevision GetElementInExportRevision(int index) => ElementInExportRevisionTable?.Get(index);
         
         public static HashSet<string> GetElementKindTableNames()
             => new HashSet<string>()
@@ -8853,6 +9003,106 @@ namespace Vim.Format.ObjectModel {
         }
     } // class SunAndShadowSettingsTable 
     
+    public partial class ExportRevisionTable : EntityTable_v2, IEnumerable<ExportRevision>
+    {
+        
+        public const string TableName = TableNames.ExportRevision;
+        
+        public EntityTableSet ParentTableSet { get; } // can be null
+        
+        public ExportRevisionTable(SerializableEntityTable rawTable, string[] stringTable, EntityTableSet parentTableSet = null) : base(rawTable, stringTable)
+        {
+            ParentTableSet = parentTableSet;
+            Column_VimRevision = GetStringColumnValues("string:VimRevision") ?? Array.Empty<String>();
+            Column_Kind = GetDataColumnValues<Int32>("int:Kind") ?? Array.Empty<Int32>();
+            Column_Generator = GetStringColumnValues("string:Generator") ?? Array.Empty<String>();
+            Column_CreatedUtc = GetStringColumnValues("string:CreatedUtc") ?? Array.Empty<String>();
+            Column_DocumentNumSaves = GetDataColumnValues<Int32>("int:DocumentNumSaves") ?? Array.Empty<Int32>();
+            Column_DocumentVersionGuid = GetStringColumnValues("string:DocumentVersionGuid") ?? Array.Empty<String>();
+            Column_BimDocumentIndex = GetIndexColumnValues("index:Vim.BimDocument:BimDocument") ?? Array.Empty<int>();
+        }
+        
+        public String[] Column_VimRevision { get; }
+        public String GetVimRevision(int index, String @default = "") => Column_VimRevision.ElementAtOrDefault(index, @default);
+        public Int32[] Column_Kind { get; }
+        public Int32 GetKind(int index, Int32 @default = default) => Column_Kind.ElementAtOrDefault(index, @default);
+        public String[] Column_Generator { get; }
+        public String GetGenerator(int index, String @default = "") => Column_Generator.ElementAtOrDefault(index, @default);
+        public String[] Column_CreatedUtc { get; }
+        public String GetCreatedUtc(int index, String @default = "") => Column_CreatedUtc.ElementAtOrDefault(index, @default);
+        public Int32[] Column_DocumentNumSaves { get; }
+        public Int32 GetDocumentNumSaves(int index, Int32 @default = default) => Column_DocumentNumSaves.ElementAtOrDefault(index, @default);
+        public String[] Column_DocumentVersionGuid { get; }
+        public String GetDocumentVersionGuid(int index, String @default = "") => Column_DocumentVersionGuid.ElementAtOrDefault(index, @default);
+        public int[] Column_BimDocumentIndex { get; }
+        public int GetBimDocumentIndex(int index) => Column_BimDocumentIndex.ElementAtOrDefault(index, EntityRelation.None);
+        public BimDocument GetBimDocument(int index) => _GetReferencedBimDocument(GetBimDocumentIndex(index));
+        private BimDocument _GetReferencedBimDocument(int referencedIndex) => ParentTableSet.GetBimDocument(referencedIndex);
+        // Object Getter
+        public ExportRevision Get(int index)
+        {
+            if (index < 0) return null;
+            var r = new ExportRevision();
+            r.Index = index;
+            r.VimRevision = GetVimRevision(index);
+            r.Kind = GetKind(index);
+            r.Generator = GetGenerator(index);
+            r.CreatedUtc = GetCreatedUtc(index);
+            r.DocumentNumSaves = GetDocumentNumSaves(index);
+            r.DocumentVersionGuid = GetDocumentVersionGuid(index);
+            r._BimDocument = new Relation<Vim.Format.ObjectModel.BimDocument>(GetBimDocumentIndex(index), _GetReferencedBimDocument);
+            return r;
+        }
+        // Enumerator
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+        public IEnumerator<ExportRevision> GetEnumerator()
+        {
+            for (var i = 0; i < RowCount; ++i)
+                yield return Get(i);
+        }
+    } // class ExportRevisionTable 
+    
+    public partial class ElementInExportRevisionTable : EntityTable_v2, IEnumerable<ElementInExportRevision>
+    {
+        
+        public const string TableName = TableNames.ElementInExportRevision;
+        
+        public EntityTableSet ParentTableSet { get; } // can be null
+        
+        public ElementInExportRevisionTable(SerializableEntityTable rawTable, string[] stringTable, EntityTableSet parentTableSet = null) : base(rawTable, stringTable)
+        {
+            ParentTableSet = parentTableSet;
+            Column_ExportRevisionIndex = GetIndexColumnValues("index:Vim.ExportRevision:ExportRevision") ?? Array.Empty<int>();
+            Column_ElementIndex = GetIndexColumnValues("index:Vim.Element:Element") ?? Array.Empty<int>();
+        }
+        
+        public int[] Column_ExportRevisionIndex { get; }
+        public int GetExportRevisionIndex(int index) => Column_ExportRevisionIndex.ElementAtOrDefault(index, EntityRelation.None);
+        public ExportRevision GetExportRevision(int index) => _GetReferencedExportRevision(GetExportRevisionIndex(index));
+        private ExportRevision _GetReferencedExportRevision(int referencedIndex) => ParentTableSet.GetExportRevision(referencedIndex);
+        public int[] Column_ElementIndex { get; }
+        public int GetElementIndex(int index) => Column_ElementIndex.ElementAtOrDefault(index, EntityRelation.None);
+        public Element GetElement(int index) => _GetReferencedElement(GetElementIndex(index));
+        private Element _GetReferencedElement(int referencedIndex) => ParentTableSet.GetElement(referencedIndex);
+        // Object Getter
+        public ElementInExportRevision Get(int index)
+        {
+            if (index < 0) return null;
+            var r = new ElementInExportRevision();
+            r.Index = index;
+            r._ExportRevision = new Relation<Vim.Format.ObjectModel.ExportRevision>(GetExportRevisionIndex(index), _GetReferencedExportRevision);
+            r._Element = new Relation<Vim.Format.ObjectModel.Element>(GetElementIndex(index), _GetReferencedElement);
+            return r;
+        }
+        // Enumerator
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+        public IEnumerator<ElementInExportRevision> GetEnumerator()
+        {
+            for (var i = 0; i < RowCount; ++i)
+                yield return Get(i);
+        }
+    } // class ElementInExportRevisionTable 
+    
     public static class DocumentBuilderExtensions
     {
         public static EntityTableBuilder ToAssetTableBuilder(this EntitySetBuilder<Asset> entitySet)
@@ -11204,6 +11454,65 @@ namespace Vim.Format.ObjectModel {
             }
             return tb;
         }
+        public static EntityTableBuilder ToExportRevisionTableBuilder(this EntitySetBuilder<ExportRevision> entitySet)
+        {
+            var tb = new EntityTableBuilder(TableNames.ExportRevision);
+            var entities = entitySet.Entities;
+            var entityCount = entities.Count;
+            {
+                var columnData = new String[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].VimRevision; }
+                tb.AddStringColumn("string:VimRevision", columnData);
+            }
+            {
+                var columnData = new Int32[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Kind; }
+                tb.AddDataColumn("int:Kind", columnData);
+            }
+            {
+                var columnData = new String[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Generator; }
+                tb.AddStringColumn("string:Generator", columnData);
+            }
+            {
+                var columnData = new String[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].CreatedUtc; }
+                tb.AddStringColumn("string:CreatedUtc", columnData);
+            }
+            {
+                var columnData = new Int32[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].DocumentNumSaves; }
+                tb.AddDataColumn("int:DocumentNumSaves", columnData);
+            }
+            {
+                var columnData = new String[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].DocumentVersionGuid; }
+                tb.AddStringColumn("string:DocumentVersionGuid", columnData);
+            }
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._BimDocument?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.BimDocument:BimDocument", columnData);
+            }
+            return tb;
+        }
+        public static EntityTableBuilder ToElementInExportRevisionTableBuilder(this EntitySetBuilder<ElementInExportRevision> entitySet)
+        {
+            var tb = new EntityTableBuilder(TableNames.ElementInExportRevision);
+            var entities = entitySet.Entities;
+            var entityCount = entities.Count;
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._ExportRevision?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.ExportRevision:ExportRevision", columnData);
+            }
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._Element?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.Element:Element", columnData);
+            }
+            return tb;
+        }
     } // DocumentBuilderExtensions
     
     public partial class ObjectModelBuilder
@@ -11265,6 +11574,8 @@ namespace Vim.Format.ObjectModel {
         public readonly EntitySetBuilder<LightType> LightTypeBuilder = new EntitySetBuilder<LightType>(TableNames.LightType);
         public readonly EntitySetBuilder<LightSource> LightSourceBuilder = new EntitySetBuilder<LightSource>(TableNames.LightSource);
         public readonly EntitySetBuilder<SunAndShadowSettings> SunAndShadowSettingsBuilder = new EntitySetBuilder<SunAndShadowSettings>(TableNames.SunAndShadowSettings);
+        public readonly EntitySetBuilder<ExportRevision> ExportRevisionBuilder = new EntitySetBuilder<ExportRevision>(TableNames.ExportRevision);
+        public readonly EntitySetBuilder<ElementInExportRevision> ElementInExportRevisionBuilder = new EntitySetBuilder<ElementInExportRevision>(TableNames.ElementInExportRevision);
         
         public DocumentBuilder AddEntityTableSets(DocumentBuilder db)
         {
@@ -11325,6 +11636,8 @@ namespace Vim.Format.ObjectModel {
             db.Tables.Add(LightTypeBuilder.EntityTableName, LightTypeBuilder.ToLightTypeTableBuilder());
             db.Tables.Add(LightSourceBuilder.EntityTableName, LightSourceBuilder.ToLightSourceTableBuilder());
             db.Tables.Add(SunAndShadowSettingsBuilder.EntityTableName, SunAndShadowSettingsBuilder.ToSunAndShadowSettingsTableBuilder());
+            db.Tables.Add(ExportRevisionBuilder.EntityTableName, ExportRevisionBuilder.ToExportRevisionTableBuilder());
+            db.Tables.Add(ElementInExportRevisionBuilder.EntityTableName, ElementInExportRevisionBuilder.ToElementInExportRevisionTableBuilder());
             
             return db;
         } // AddEntityTableSets
@@ -11388,6 +11701,8 @@ namespace Vim.Format.ObjectModel {
             LightTypeBuilder.Clear();
             LightSourceBuilder.Clear();
             SunAndShadowSettingsBuilder.Clear();
+            ExportRevisionBuilder.Clear();
+            ElementInExportRevisionBuilder.Clear();
         } // Clear
     } // ObjectModelBuilder
 } // namespace

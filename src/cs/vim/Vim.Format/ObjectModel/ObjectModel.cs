@@ -14,6 +14,18 @@ namespace Vim.Format.ObjectModel
         // ReSharper disable MemberHidesStaticFromOuterClass
         public static class History
         {
+            // Schema additions (where each element's data comes from through incremental exports and patches)
+            //   Vim.ExportRevision__string:VimRevision
+            //   Vim.ExportRevision__int:Kind
+            //   Vim.ExportRevision__string:Generator
+            //   Vim.ExportRevision__string:CreatedUtc
+            //   Vim.ExportRevision__int:DocumentNumSaves
+            //   Vim.ExportRevision__string:DocumentVersionGuid
+            //   Vim.ExportRevision__index:Vim.BimDocument:BimDocument
+            //   Vim.ElementInExportRevision__index:Vim.ExportRevision:ExportRevision
+            //   Vim.ElementInExportRevision__index:Vim.Element:Element
+            public const string v5_10_0 = "5.10.0";
+
             // Schema additions (something drawable for the elements that have no triangles: model lines, symbolic lines,
             // void outlines and location curves as Shapes of a given kind, and where each element's Location comes from)
             //   Vim.Element__int:LocationSource
@@ -246,7 +258,8 @@ namespace Vim.Format.ObjectModel
         // ReSharper enable MemberHidesStaticFromOuterClass
 
         // [MAINTAIN] Add more object model SerializableVersions below and update the current one.
-        public static SerializableVersion Current => v5_9_0;
+        public static SerializableVersion Current => v5_10_0;
+        public static SerializableVersion v5_10_0 => SerializableVersion.Parse(History.v5_10_0);
         public static SerializableVersion v5_9_0 => SerializableVersion.Parse(History.v5_9_0);
         public static SerializableVersion v5_8_0 => SerializableVersion.Parse(History.v5_8_0);
         public static SerializableVersion v5_7_0 => SerializableVersion.Parse(History.v5_7_0);
@@ -2618,6 +2631,65 @@ namespace Vim.Format.ObjectModel
         /// The 3D view which owns these settings.
         /// </summary>
         public Relation<View> _View;
+    }
+
+    /// <summary>
+    /// What wrote an ExportRevision (ExportRevision.Kind).
+    /// </summary>
+    public enum ExportRevisionKind
+    {
+        /// <summary>Not recorded.</summary>
+        Unknown = 0,
+        /// <summary>A full export of the document.</summary>
+        FullExport = 1,
+        /// <summary>A partial (incremental) export: only the changed elements of the document.</summary>
+        PartialExport = 2,
+    }
+
+    /// <summary>
+    /// One export of one source document (BimDocument) which wrote element data now in this file. A file written by one
+    /// export has one row per document; a file patched or merged since keeps the rows of every export whose data is still
+    /// in it, and ElementInExportRevision says which export each element's data comes from.
+    /// </summary>
+    [TableName(TableNames.ExportRevision)]
+    public partial class ExportRevision : Entity
+    {
+        /// <summary>The persisting id (header "id::revision") of the VIM file the export wrote.</summary>
+        public string VimRevision;
+
+        /// <summary>The integer representation of the ExportRevisionKind enum.</summary>
+        public int Kind;
+
+        /// <summary>The generator of that VIM file (header "generator"), for example "Vim.Revit.Exporter".</summary>
+        public string Generator;
+
+        /// <summary>When that VIM file was written (UTC, ISO 8601).</summary>
+        public string CreatedUtc;
+
+        /// <summary>The document's number of saves at export time (Revit: DocumentVersion.NumberOfSaves).</summary>
+        public int DocumentNumSaves;
+
+        /// <summary>The document's version id at export time (Revit: DocumentVersion.VersionGUID, new after any change).</summary>
+        public string DocumentVersionGuid;
+
+        /// <summary>The source document.</summary>
+        public Relation<BimDocument> _BimDocument;
+
+        public ExportRevisionKind GetKind()
+            => (ExportRevisionKind) Kind;
+    }
+
+    /// <summary>
+    /// Binds an Element to the ExportRevision which wrote its current data (at most one per Element).
+    /// </summary>
+    [TableName(TableNames.ElementInExportRevision)]
+    [CascadeElementRemap]
+    public partial class ElementInExportRevision : EntityWithElement, IStorageKey
+    {
+        public Relation<ExportRevision> _ExportRevision;
+
+        public object GetStorageKey()
+            => _Element.CombineAsStorageKey(_ExportRevision);
     }
 
     /// <summary>

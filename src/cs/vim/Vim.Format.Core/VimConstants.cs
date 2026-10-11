@@ -71,6 +71,8 @@ namespace Vim.Format
         public const string LightType = "Vim.LightType";
         public const string LightSource = "Vim.LightSource";
         public const string SunAndShadowSettings = "Vim.SunAndShadowSettings";
+        public const string ExportRevision = "Vim.ExportRevision";
+        public const string ElementInExportRevision = "Vim.ElementInExportRevision";
     }
 
     public static class VimConstants
