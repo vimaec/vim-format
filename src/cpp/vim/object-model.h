@@ -1005,6 +1005,7 @@ namespace Vim
         float mLocation_X;
         float mLocation_Y;
         float mLocation_Z;
+        int mLocationSource;
         std::string mFamilyName;
         bool mIsPinned;
         std::string mCreator;
@@ -1061,6 +1062,7 @@ namespace Vim
             element->mLocation_X = GetLocation_X(elementIndex);
             element->mLocation_Y = GetLocation_Y(elementIndex);
             element->mLocation_Z = GetLocation_Z(elementIndex);
+            element->mLocationSource = GetLocationSource(elementIndex);
             element->mFamilyName = GetFamilyName(elementIndex);
             element->mIsPinned = GetIsPinned(elementIndex);
             element->mCreator = GetCreator(elementIndex);
@@ -1089,6 +1091,7 @@ namespace Vim
             bool existsLocation_X = mEntityTable.column_exists("float:Location.X");
             bool existsLocation_Y = mEntityTable.column_exists("float:Location.Y");
             bool existsLocation_Z = mEntityTable.column_exists("float:Location.Z");
+            bool existsLocationSource = mEntityTable.column_exists("int:LocationSource");
             bool existsFamilyName = mEntityTable.column_exists("string:FamilyName");
             bool existsIsPinned = mEntityTable.column_exists("byte:IsPinned");
             bool existsCreator = mEntityTable.column_exists("string:Creator");
@@ -1142,6 +1145,11 @@ namespace Vim
                 memcpy(location_ZData, mEntityTable.mDataColumns["float:Location.Z"].begin(), count * sizeof(float));
             }
             
+            int* locationSourceData = new int[count];
+            if (mEntityTable.column_exists("int:LocationSource")) {
+                memcpy(locationSourceData, mEntityTable.mDataColumns["int:LocationSource"].begin(), count * sizeof(int));
+            }
+            
             const std::vector<int>& familyNameData = mEntityTable.column_exists("string:FamilyName") ? mEntityTable.mStringColumns["string:FamilyName"] : std::vector<int>();
             
             bfast::byte* isPinnedData = new bfast::byte[count];
@@ -1185,6 +1193,8 @@ namespace Vim
                     entity.mLocation_Y = location_YData[i];
                 if (existsLocation_Z)
                     entity.mLocation_Z = location_ZData[i];
+                if (existsLocationSource)
+                    entity.mLocationSource = locationSourceData[i];
                 if (existsFamilyName)
                     entity.mFamilyName = std::string(reinterpret_cast<const char*>(mStrings[familyNameData[i]]));
                 if (existsIsPinned)
@@ -1213,6 +1223,7 @@ namespace Vim
             delete[] location_XData;
             delete[] location_YData;
             delete[] location_ZData;
+            delete[] locationSourceData;
             delete[] isPinnedData;
             
             return element;
@@ -1422,6 +1433,34 @@ namespace Vim
             std::vector<float>* result = new std::vector<float>(location_ZData, location_ZData + count);
             
             delete[] location_ZData;
+            
+            return result;
+        }
+        
+        int GetLocationSource(int elementIndex)
+        {
+            if (elementIndex < 0 || elementIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("int:LocationSource")) {
+                return *reinterpret_cast<int*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["int:LocationSource"].begin() + elementIndex * sizeof(int)));
+            }
+            
+            return {};
+        }
+        
+        std::vector<int>* GetAllLocationSource()
+        {
+            const auto count = GetCount();
+            
+            int* locationSourceData = new int[count];
+            if (mEntityTable.column_exists("int:LocationSource")) {
+                memcpy(locationSourceData, mEntityTable.mDataColumns["int:LocationSource"].begin(), count * sizeof(int));
+            }
+            
+            std::vector<int>* result = new std::vector<int>(locationSourceData, locationSourceData + count);
+            
+            delete[] locationSourceData;
             
             return result;
         }
@@ -10398,6 +10437,7 @@ namespace Vim
     {
     public:
         int mIndex;
+        int mKind;
         
         int mElementIndex;
         Element* mElement;
@@ -10422,12 +10462,14 @@ namespace Vim
         {
             Shape* shape = new Shape();
             shape->mIndex = shapeIndex;
+            shape->mKind = GetKind(shapeIndex);
             shape->mElementIndex = GetElementIndex(shapeIndex);
             return shape;
         }
         
         std::vector<Shape>* GetAll()
         {
+            bool existsKind = mEntityTable.column_exists("int:Kind");
             bool existsElement = mEntityTable.column_exists("index:Vim.Element:Element");
             
             const auto count = GetCount();
@@ -10435,17 +10477,54 @@ namespace Vim
             std::vector<Shape>* shape = new std::vector<Shape>();
             shape->reserve(count);
             
+            int* kindData = new int[count];
+            if (mEntityTable.column_exists("int:Kind")) {
+                memcpy(kindData, mEntityTable.mDataColumns["int:Kind"].begin(), count * sizeof(int));
+            }
+            
             const std::vector<int>& elementData = mEntityTable.column_exists("index:Vim.Element:Element") ? mEntityTable.mIndexColumns["index:Vim.Element:Element"] : std::vector<int>();
             
             for (int i = 0; i < count; ++i)
             {
                 Shape entity;
                 entity.mIndex = i;
+                if (existsKind)
+                    entity.mKind = kindData[i];
                 entity.mElementIndex = existsElement ? elementData[i] : -1;
                 shape->push_back(entity);
             }
             
+            delete[] kindData;
+            
             return shape;
+        }
+        
+        int GetKind(int shapeIndex)
+        {
+            if (shapeIndex < 0 || shapeIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("int:Kind")) {
+                return *reinterpret_cast<int*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["int:Kind"].begin() + shapeIndex * sizeof(int)));
+            }
+            
+            return {};
+        }
+        
+        std::vector<int>* GetAllKind()
+        {
+            const auto count = GetCount();
+            
+            int* kindData = new int[count];
+            if (mEntityTable.column_exists("int:Kind")) {
+                memcpy(kindData, mEntityTable.mDataColumns["int:Kind"].begin(), count * sizeof(int));
+            }
+            
+            std::vector<int>* result = new std::vector<int>(kindData, kindData + count);
+            
+            delete[] kindData;
+            
+            return result;
         }
         
         int GetElementIndex(int shapeIndex)

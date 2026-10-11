@@ -618,6 +618,7 @@ export interface IElement {
     location_X?: number
     location_Y?: number
     location_Z?: number
+    locationSource?: number
     familyName?: string
     isPinned?: boolean
     creator?: string
@@ -667,6 +668,8 @@ export interface IElementTable {
     getAllLocation_Y(): Promise<number[] | undefined>
     getLocation_Z(elementIndex: number): Promise<number | undefined>
     getAllLocation_Z(): Promise<number[] | undefined>
+    getLocationSource(elementIndex: number): Promise<number | undefined>
+    getAllLocationSource(): Promise<number[] | undefined>
     getFamilyName(elementIndex: number): Promise<string | undefined>
     getAllFamilyName(): Promise<string[] | undefined>
     getIsPinned(elementIndex: number): Promise<boolean | undefined>
@@ -722,6 +725,7 @@ export class Element implements IElement {
     location_X?: number
     location_Y?: number
     location_Z?: number
+    locationSource?: number
     familyName?: string
     isPinned?: boolean
     creator?: string
@@ -763,6 +767,7 @@ export class Element implements IElement {
             table.getLocation_X(index).then(v => result.location_X = v),
             table.getLocation_Y(index).then(v => result.location_Y = v),
             table.getLocation_Z(index).then(v => result.location_Z = v),
+            table.getLocationSource(index).then(v => result.locationSource = v),
             table.getFamilyName(index).then(v => result.familyName = v),
             table.getIsPinned(index).then(v => result.isPinned = v),
             table.getCreator(index).then(v => result.creator = v),
@@ -821,6 +826,7 @@ export class ElementTable implements IElementTable {
         let location_X: number[] | undefined
         let location_Y: number[] | undefined
         let location_Z: number[] | undefined
+        let locationSource: number[] | undefined
         let familyName: string[] | undefined
         let isPinned: boolean[] | undefined
         let creator: string[] | undefined
@@ -846,6 +852,7 @@ export class ElementTable implements IElementTable {
             (async () => { location_X = (await localTable.getNumberArray("float:Location.X")) })(),
             (async () => { location_Y = (await localTable.getNumberArray("float:Location.Y")) })(),
             (async () => { location_Z = (await localTable.getNumberArray("float:Location.Z")) })(),
+            (async () => { locationSource = (await localTable.getNumberArray("int:LocationSource")) })(),
             (async () => { familyName = (await localTable.getStringArray("string:FamilyName")) })(),
             (async () => { isPinned = (await localTable.getBooleanArray("byte:IsPinned")) })(),
             (async () => { creator = (await localTable.getStringArray("string:Creator")) })(),
@@ -877,6 +884,7 @@ export class ElementTable implements IElementTable {
                 location_X: location_X ? location_X[i] : undefined,
                 location_Y: location_Y ? location_Y[i] : undefined,
                 location_Z: location_Z ? location_Z[i] : undefined,
+                locationSource: locationSource ? locationSource[i] : undefined,
                 familyName: familyName ? familyName[i] : undefined,
                 isPinned: isPinned ? isPinned[i] : undefined,
                 creator: creator ? creator[i] : undefined,
@@ -953,6 +961,14 @@ export class ElementTable implements IElementTable {
     
     async getAllLocation_Z(): Promise<number[] | undefined> {
         return (await this.entityTable.getNumberArray("float:Location.Z"))
+    }
+    
+    async getLocationSource(elementIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(elementIndex, "int:LocationSource"))
+    }
+    
+    async getAllLocationSource(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("int:LocationSource"))
     }
     
     async getFamilyName(elementIndex: number): Promise<string | undefined> {
@@ -7302,6 +7318,7 @@ export class GeometryTable implements IGeometryTable {
 
 export interface IShape {
     index: number
+    kind?: number
     
     elementIndex?: number
     element?: IElement
@@ -7312,6 +7329,9 @@ export interface IShapeTable {
     get(shapeIndex: number): Promise<IShape>
     getAll(): Promise<IShape[]>
     
+    getKind(shapeIndex: number): Promise<number | undefined>
+    getAllKind(): Promise<number[] | undefined>
+    
     getElementIndex(shapeIndex: number): Promise<number | undefined>
     getAllElementIndex(): Promise<number[] | undefined>
     getElement(shapeIndex: number): Promise<IElement | undefined>
@@ -7319,6 +7339,7 @@ export interface IShapeTable {
 
 export class Shape implements IShape {
     index: number
+    kind?: number
     
     elementIndex?: number
     element?: IElement
@@ -7328,6 +7349,7 @@ export class Shape implements IShape {
         result.index = index
         
         await Promise.all([
+            table.getKind(index).then(v => result.kind = v),
             table.getElementIndex(index).then(v => result.elementIndex = v),
         ])
         
@@ -7364,9 +7386,11 @@ export class ShapeTable implements IShapeTable {
     async getAll(): Promise<IShape[]> {
         const localTable = await this.entityTable.getLocal()
         
+        let kind: number[] | undefined
         let elementIndex: number[] | undefined
         
         await Promise.all([
+            (async () => { kind = (await localTable.getNumberArray("int:Kind")) })(),
             (async () => { elementIndex = (await localTable.getNumberArray("index:Vim.Element:Element")) })(),
         ])
         
@@ -7376,11 +7400,20 @@ export class ShapeTable implements IShapeTable {
         for (let i = 0; i < rowCount; i++) {
             shape.push({
                 index: i,
+                kind: kind ? kind[i] : undefined,
                 elementIndex: elementIndex ? elementIndex[i] : undefined
             })
         }
         
         return shape
+    }
+    
+    async getKind(shapeIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(shapeIndex, "int:Kind"))
+    }
+    
+    async getAllKind(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("int:Kind"))
     }
     
     async getElementIndex(shapeIndex: number): Promise<number | undefined> {

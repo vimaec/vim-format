@@ -1,6 +1,6 @@
 {
   "VimFormatVersion": "1.0.0",
-  "SchemaVersion": "5.8.0",
+  "SchemaVersion": "5.9.0",
   "Tables": {
     "Vim.Area": [
       "byte:IsGrossInterior",
@@ -151,6 +151,7 @@
       "index:Vim.Room:Room",
       "index:Vim.View:OwnerView",
       "index:Vim.Workset:Workset",
+      "int:LocationSource",
       "long:Id",
       "string:Creator",
       "string:FamilyName",
@@ -402,7 +403,8 @@
       "string:Name"
     ],
     "Vim.Shape": [
-      "index:Vim.Element:Element"
+      "index:Vim.Element:Element",
+      "int:Kind"
     ],
     "Vim.ShapeCollection": [
       "index:Vim.Element:Element"

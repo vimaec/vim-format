@@ -189,6 +189,7 @@ namespace Vim.Format.ObjectModel {
                     (Location_X == other.Location_X) &&
                     (Location_Y == other.Location_Y) &&
                     (Location_Z == other.Location_Z) &&
+                    (LocationSource == other.LocationSource) &&
                     (FamilyName == other.FamilyName) &&
                     (IsPinned == other.IsPinned) &&
                     (Creator == other.Creator) &&
@@ -1279,6 +1280,7 @@ namespace Vim.Format.ObjectModel {
             {
                 var fieldsAreEqual =
                     (Index == other.Index) &&
+                    (Kind == other.Kind) &&
                     (_Element?.Index == other._Element?.Index);
                 if (!fieldsAreEqual)
                 {
@@ -2274,6 +2276,8 @@ namespace Vim.Format.ObjectModel {
         public Single GetElementLocation_Y(int index, Single defaultValue = default) => ElementLocation_Y?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
         public IArray<Single> ElementLocation_Z { get; }
         public Single GetElementLocation_Z(int index, Single defaultValue = default) => ElementLocation_Z?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Int32> ElementLocationSource { get; }
+        public Int32 GetElementLocationSource(int index, Int32 defaultValue = default) => ElementLocationSource?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
         public IArray<String> ElementFamilyName { get; }
         public String GetElementFamilyName(int index, String defaultValue = "") => ElementFamilyName?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
         public IArray<Boolean> ElementIsPinned { get; }
@@ -2321,6 +2325,7 @@ namespace Vim.Format.ObjectModel {
             r.Location_X = ElementLocation_X.ElementAtOrDefault(n);
             r.Location_Y = ElementLocation_Y.ElementAtOrDefault(n);
             r.Location_Z = ElementLocation_Z.ElementAtOrDefault(n);
+            r.LocationSource = ElementLocationSource.ElementAtOrDefault(n);
             r.FamilyName = ElementFamilyName.ElementAtOrDefault(n);
             r.IsPinned = ElementIsPinned.ElementAtOrDefault(n);
             r.Creator = ElementCreator.ElementAtOrDefault(n);
@@ -3416,6 +3421,8 @@ namespace Vim.Format.ObjectModel {
         
         public EntityTable ShapeEntityTable { get; }
         
+        public IArray<Int32> ShapeKind { get; }
+        public Int32 GetShapeKind(int index, Int32 defaultValue = default) => ShapeKind?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
         public IArray<int> ShapeElementIndex { get; }
         public int GetShapeElementIndex(int index) => ShapeElementIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
         public int NumShape => ShapeEntityTable?.NumRows ?? 0;
@@ -3426,6 +3433,7 @@ namespace Vim.Format.ObjectModel {
             var r = new Shape();
             r.Document = Document;
             r.Index = n;
+            r.Kind = ShapeKind.ElementAtOrDefault(n);
             r._Element = new Relation<Vim.Format.ObjectModel.Element>(GetShapeElementIndex(n), GetElement);
             return r;
         }
@@ -4422,6 +4430,7 @@ namespace Vim.Format.ObjectModel {
             ElementLocation_X = ElementEntityTable?.GetDataColumnValues<Single>("float:Location.X") ?? Array.Empty<Single>().ToIArray();
             ElementLocation_Y = ElementEntityTable?.GetDataColumnValues<Single>("float:Location.Y") ?? Array.Empty<Single>().ToIArray();
             ElementLocation_Z = ElementEntityTable?.GetDataColumnValues<Single>("float:Location.Z") ?? Array.Empty<Single>().ToIArray();
+            ElementLocationSource = ElementEntityTable?.GetDataColumnValues<Int32>("int:LocationSource") ?? Array.Empty<Int32>().ToIArray();
             ElementFamilyName = ElementEntityTable?.GetStringColumnValues("string:FamilyName") ?? Array.Empty<String>().ToIArray();
             ElementIsPinned = ElementEntityTable?.GetDataColumnValues<Boolean>("byte:IsPinned") ?? Array.Empty<Boolean>().ToIArray();
             ElementCreator = ElementEntityTable?.GetStringColumnValues("string:Creator") ?? Array.Empty<String>().ToIArray();
@@ -4587,6 +4596,7 @@ namespace Vim.Format.ObjectModel {
             GeometryBox_Max_Z = GeometryEntityTable?.GetDataColumnValues<Single>("float:Box.Max.Z") ?? Array.Empty<Single>().ToIArray();
             GeometryVertexCount = GeometryEntityTable?.GetDataColumnValues<Int32>("int:VertexCount") ?? Array.Empty<Int32>().ToIArray();
             GeometryFaceCount = GeometryEntityTable?.GetDataColumnValues<Int32>("int:FaceCount") ?? Array.Empty<Int32>().ToIArray();
+            ShapeKind = ShapeEntityTable?.GetDataColumnValues<Int32>("int:Kind") ?? Array.Empty<Int32>().ToIArray();
             SystemSystemType = SystemEntityTable?.GetDataColumnValues<Int32>("int:SystemType") ?? Array.Empty<Int32>().ToIArray();
             ElementInSystemRoles = ElementInSystemEntityTable?.GetDataColumnValues<Int32>("int:Roles") ?? Array.Empty<Int32>().ToIArray();
             WarningGuid = WarningEntityTable?.GetStringColumnValues("string:Guid") ?? Array.Empty<String>().ToIArray();
@@ -5627,6 +5637,7 @@ namespace Vim.Format.ObjectModel {
             Column_Location_X = GetDataColumnValues<Single>("float:Location.X") ?? Array.Empty<Single>();
             Column_Location_Y = GetDataColumnValues<Single>("float:Location.Y") ?? Array.Empty<Single>();
             Column_Location_Z = GetDataColumnValues<Single>("float:Location.Z") ?? Array.Empty<Single>();
+            Column_LocationSource = GetDataColumnValues<Int32>("int:LocationSource") ?? Array.Empty<Int32>();
             Column_FamilyName = GetStringColumnValues("string:FamilyName") ?? Array.Empty<String>();
             Column_IsPinned = GetDataColumnValues<Boolean>("byte:IsPinned") ?? Array.Empty<Boolean>();
             Column_Creator = GetStringColumnValues("string:Creator") ?? Array.Empty<String>();
@@ -5659,6 +5670,8 @@ namespace Vim.Format.ObjectModel {
         public Single GetLocation_Y(int index, Single @default = default) => Column_Location_Y.ElementAtOrDefault(index, @default);
         public Single[] Column_Location_Z { get; }
         public Single GetLocation_Z(int index, Single @default = default) => Column_Location_Z.ElementAtOrDefault(index, @default);
+        public Int32[] Column_LocationSource { get; }
+        public Int32 GetLocationSource(int index, Int32 @default = default) => Column_LocationSource.ElementAtOrDefault(index, @default);
         public String[] Column_FamilyName { get; }
         public String GetFamilyName(int index, String @default = "") => Column_FamilyName.ElementAtOrDefault(index, @default);
         public Boolean[] Column_IsPinned { get; }
@@ -5726,6 +5739,7 @@ namespace Vim.Format.ObjectModel {
             r.Location_X = GetLocation_X(index);
             r.Location_Y = GetLocation_Y(index);
             r.Location_Z = GetLocation_Z(index);
+            r.LocationSource = GetLocationSource(index);
             r.FamilyName = GetFamilyName(index);
             r.IsPinned = GetIsPinned(index);
             r.Creator = GetCreator(index);
@@ -7504,9 +7518,12 @@ namespace Vim.Format.ObjectModel {
         public ShapeTable(SerializableEntityTable rawTable, string[] stringTable, EntityTableSet parentTableSet = null) : base(rawTable, stringTable)
         {
             ParentTableSet = parentTableSet;
+            Column_Kind = GetDataColumnValues<Int32>("int:Kind") ?? Array.Empty<Int32>();
             Column_ElementIndex = GetIndexColumnValues("index:Vim.Element:Element") ?? Array.Empty<int>();
         }
         
+        public Int32[] Column_Kind { get; }
+        public Int32 GetKind(int index, Int32 @default = default) => Column_Kind.ElementAtOrDefault(index, @default);
         public int[] Column_ElementIndex { get; }
         public int GetElementIndex(int index) => Column_ElementIndex.ElementAtOrDefault(index, EntityRelation.None);
         public Element GetElement(int index) => _GetReferencedElement(GetElementIndex(index));
@@ -7517,6 +7534,7 @@ namespace Vim.Format.ObjectModel {
             if (index < 0) return null;
             var r = new Shape();
             r.Index = index;
+            r.Kind = GetKind(index);
             r._Element = new Relation<Vim.Format.ObjectModel.Element>(GetElementIndex(index), _GetReferencedElement);
             return r;
         }
@@ -8991,6 +9009,11 @@ namespace Vim.Format.ObjectModel {
                 tb.AddDataColumn("float:Location.Z", columnData);
             }
             {
+                var columnData = new Int32[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].LocationSource; }
+                tb.AddDataColumn("int:LocationSource", columnData);
+            }
+            {
                 var columnData = new String[entityCount];
                 for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].FamilyName; }
                 tb.AddStringColumn("string:FamilyName", columnData);
@@ -10331,6 +10354,11 @@ namespace Vim.Format.ObjectModel {
             var tb = new EntityTableBuilder(TableNames.Shape);
             var entities = entitySet.Entities;
             var entityCount = entities.Count;
+            {
+                var columnData = new Int32[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Kind; }
+                tb.AddDataColumn("int:Kind", columnData);
+            }
             {
                 var columnData = new int[entityCount];
                 for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._Element?.Index ?? EntityRelation.None; }

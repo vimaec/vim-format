@@ -232,5 +232,11 @@
       "Vim.SunAndShadowSettings__string:StartDateAndTime",
       "Vim.SunAndShadowSettings__string:SunAndShadowType"
     ]
+  },
+  "5.8.0 to 5.9.0": {
+    "Added": [
+      "Vim.Element__int:LocationSource",
+      "Vim.Shape__int:Kind"
+    ]
   }
 }
