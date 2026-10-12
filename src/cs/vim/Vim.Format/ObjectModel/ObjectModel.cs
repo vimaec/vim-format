@@ -2875,6 +2875,8 @@ namespace Vim.Format.ObjectModel
         LoggingGap = 3,
         /// <summary>Older activity was dropped to keep the file within the retention cap.</summary>
         ActivityTrimmed = 4,
+        /// <summary>Somebody holds a whole user workset (Sam 2026-10-12: taking a whole workset is a practice to detect).</summary>
+        WorksetHeld = 5,
     }
 
     /// <summary>
