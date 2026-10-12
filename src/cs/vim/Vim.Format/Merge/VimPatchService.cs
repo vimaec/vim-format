@@ -17,6 +17,14 @@ namespace Vim.Format.Merge
         TitleAndPath = 0,
         /// <summary>Title + ordinal: for a file whose path differs between the two exports (another local copy).</summary>
         Title = 1,
+        /// <summary>
+        /// Every document that is not a link (BimDocument.IsLinked = 0) is the host, whatever its title, path or version:
+        /// one identity for all of them. Linked documents are matched by Title + ordinal. For "Sync to VIM": the same
+        /// central model is worked on through several local files (V4-GOOD.rvt, V4-CENTRAL_sam.rvt...), each with its
+        /// own Title and PathName, and a sync from any of them must replace the rows the others wrote, not add a second
+        /// copy of every element next to them (measured 2026-10-12).
+        /// </summary>
+        HostAndLinkTitles = 2,
     }
 
     public class VimPatchOptions
@@ -519,8 +527,14 @@ namespace Vim.Format.Merge
             var titles = t.Strs(TableNames.BimDocument, "string:Title") ?? new string[n];
             var seen = new Dictionary<string, int>();
             var docKeys = new string[n];
+            var hostKeys = match == PatchDocumentMatch.HostAndLinkTitles ? t.HostBimDocuments() : null;
             for (var i = 0; i < n; ++i)
             {
+                if (hostKeys != null && hostKeys[i])
+                {
+                    docKeys[i] = "\u0001host";
+                    continue;
+                }
                 seen.TryGetValue(titles[i] ?? "", out var ordinal);
                 seen[titles[i] ?? ""] = ordinal + 1;
                 docKeys[i] = (titles[i] ?? "") + "|" + ordinal;

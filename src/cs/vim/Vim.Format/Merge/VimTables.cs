@@ -150,6 +150,22 @@ namespace Vim.Format.Merge
             return r;
         }
 
+        /// <summary>
+        /// For each BimDocument row: true when it is the host model rather than a linked one (IsLinked = 0; without that
+        /// column, a row with no parent document). A file can hold several host rows: one per local file of the same
+        /// model a sync was run from, and the exporter's own second row when a document's version moved mid-export.
+        /// </summary>
+        public bool[] HostBimDocuments()
+        {
+            var n = NumRows(TableNames.BimDocument);
+            var linked = Data<byte>(TableNames.BimDocument, "byte:IsLinked");
+            var parents = Index(TableNames.BimDocument, "index:" + TableNames.BimDocument + ":Parent");
+            var r = new bool[n];
+            for (var i = 0; i < n; ++i)
+                r[i] = linked != null && i < linked.Length ? linked[i] == 0 : parents == null || i >= parents.Length || parents[i] < 0;
+            return r;
+        }
+
         /// <summary>The BimDocument title of each Element row ("" when none).</summary>
         public string[] ElementDocumentTitles()
         {

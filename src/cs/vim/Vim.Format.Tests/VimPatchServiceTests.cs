@@ -27,9 +27,10 @@ namespace Vim.Format.Tests
             public int View;
             public ParameterDescriptor Mark;
 
-            public Doc(string viewUid, string viewName)
+            public Doc(string viewUid, string viewName, string title = "Patch", string pathName = "C:\\patch.rvt")
             {
-                var bimDocument = new BimDocument { Name = "Patch", Title = "Patch", PathName = "C:\\patch.rvt" };
+                // Name is the project name (the same in every local file of a model); Title and PathName are the file's.
+                var bimDocument = new BimDocument { Name = "Patch", Title = title, PathName = pathName };
                 var holder = Omb.ElementBuilder.Add(bimDocument.CreateParameterHolderElement()).Entity;
                 bimDocument._Element.Index = holder.Index;
                 Omb.BimDocumentBuilder.Add(bimDocument);
@@ -179,6 +180,55 @@ namespace Vim.Format.Tests
             Assert.AreEqual(ExportRevisionKind.PartialExport, revisionOf["wall"]);
             Assert.AreEqual(ExportRevisionKind.PartialExport, revisionOf["new"]);
             Assert.AreEqual(ExportRevisionKind.FullExport, revisionOf["door"]);
+        }
+
+        /// <summary>
+        /// A sync from another local file of the same central: its host document has another Title and PathName.
+        /// Matched by title and path, every element of the partial was a new element next to the old one, which stayed
+        /// stale (Sync to VIM, 2026-10-12); with <see cref="PatchDocumentMatch.HostAndLinkTitles"/> the host is the host.
+        /// </summary>
+        [Test]
+        public static void TestPatchFromAnotherLocalReplacesTheHostRows()
+        {
+            var ctx = new CallerTestContext();
+            var dir = ctx.PrepareDirectory();
+
+            var b = new Doc("view-all", "VIM-ALL", "Model", "C:\\locals\\Model_sam.rvt");
+            b.AddBox(1, "wall", 0, "A");
+            b.AddBox(2, "door", 5, "D");
+            var basePath = b.Write(dir, "base.vim");
+
+            var p = new Doc("temp-view", "_VIM_EXPORT_1234", "Model_jo", "C:\\locals\\Model_jo.rvt");
+            p.AddBox(1, "wall", 2, "B");
+            var partialPath = p.Write(dir, "partial.vim");
+
+            VimPatchOptions Options(PatchDocumentMatch match) => new VimPatchOptions
+            {
+                ChangedUniqueIds = new HashSet<string> { "wall" },
+                UniqueIdAliases = new Dictionary<string, string> { { "temp-view", "view-all" } },
+                DocumentMatch = match,
+            };
+
+            // The old matching: the wall is "added" and the base's wall reported as not re-exported.
+            var old = VimPatchService.Patch(basePath, partialPath, Path.Combine(dir, "patched-old.vim"), Options(PatchDocumentMatch.TitleAndPath));
+            Assert.AreEqual(1, old.ChangedButNotInPartial.Count);
+
+            var outPath = Path.Combine(dir, "patched.vim");
+            var result = VimPatchService.Patch(basePath, partialPath, outPath, Options(PatchDocumentMatch.HostAndLinkTitles));
+            Assert.AreEqual(1, result.Changed);
+            Assert.AreEqual(0, result.Added);
+            Assert.AreEqual(0, result.ChangedButNotInPartial.Count);
+
+            var vim = VimScene.LoadVim(outPath);
+            vim.Validate();
+            var dm = vim.DocumentModel;
+            Assert.AreEqual(1, dm.NumBimDocument, "one host document");
+            Assert.AreEqual("Model", dm.GetBimDocument(0).Title, "the base's document row is kept");
+            var uids = Enumerable.Range(0, dm.NumElement).Select(i => dm.GetElement(i).UniqueId).ToList();
+            Assert.AreEqual(1, uids.Count(u => u == "wall"));
+            var marks = Enumerable.Range(0, dm.NumParameter).Select(i => dm.GetParameter(i)).ToDictionary(x => x.Element.UniqueId, x => x.Value);
+            Assert.AreEqual("B", marks["wall"]);
+            Assert.AreEqual("D", marks["door"]);
         }
 
         /// <summary>
