@@ -14,6 +14,49 @@ namespace Vim.Format.ObjectModel
         // ReSharper disable MemberHidesStaticFromOuterClass
         public static class History
         {
+            // Schema additions (the activity log: who changed what, written at the moment the change happens)
+            //   Vim.Contributor__string:Name
+            //   Vim.Contributor__int:Source
+            //   Vim.SyncSession__string:SessionGuid
+            //   Vim.SyncSession__string:MachineName
+            //   Vim.SyncSession__string:RevitVersion
+            //   Vim.SyncSession__string:StartedUtc
+            //   Vim.SyncSession__string:EndedUtc
+            //   Vim.SyncSession__index:Vim.Contributor:Contributor
+            //   Vim.SyncSession__index:Vim.BimDocument:BimDocument
+            //   Vim.ElementChange__string:ChangedUtc
+            //   Vim.ElementChange__string:UniqueId
+            //   Vim.ElementChange__string:CategoryName
+            //   Vim.ElementChange__string:FamilyName
+            //   Vim.ElementChange__string:TypeName
+            //   Vim.ElementChange__string:ElementName
+            //   Vim.ElementChange__string:LevelName
+            //   Vim.ElementChange__string:WorksetName
+            //   Vim.ElementChange__int:ChangeKind
+            //   Vim.ElementChange__int:Confidence
+            //   Vim.ElementChange__index:Vim.ExportRevision:ExportRevision
+            //   Vim.ElementChange__index:Vim.SyncSession:SyncSession
+            //   Vim.ElementChange__index:Vim.Contributor:Contributor
+            //   Vim.ActivityMarker__string:OccurredUtc
+            //   Vim.ActivityMarker__string:Description
+            //   Vim.ActivityMarker__int:Kind
+            //   Vim.ActivityMarker__index:Vim.ExportRevision:ExportRevision
+            //   Vim.ActivityMarker__index:Vim.SyncSession:SyncSession
+            //   Vim.ActivityMarker__index:Vim.Contributor:Contributor
+            public const string v5_11_0 = "5.11.0";
+
+            // Schema additions (where each element's data comes from through incremental exports and patches)
+            //   Vim.ExportRevision__string:VimRevision
+            //   Vim.ExportRevision__int:Kind
+            //   Vim.ExportRevision__string:Generator
+            //   Vim.ExportRevision__string:CreatedUtc
+            //   Vim.ExportRevision__int:DocumentNumSaves
+            //   Vim.ExportRevision__string:DocumentVersionGuid
+            //   Vim.ExportRevision__index:Vim.BimDocument:BimDocument
+            //   Vim.ElementInExportRevision__index:Vim.ExportRevision:ExportRevision
+            //   Vim.ElementInExportRevision__index:Vim.Element:Element
+            public const string v5_10_0 = "5.10.0";
+
             // Schema additions (something drawable for the elements that have no triangles: model lines, symbolic lines,
             // void outlines and location curves as Shapes of a given kind, and where each element's Location comes from)
             //   Vim.Element__int:LocationSource
@@ -246,7 +289,9 @@ namespace Vim.Format.ObjectModel
         // ReSharper enable MemberHidesStaticFromOuterClass
 
         // [MAINTAIN] Add more object model SerializableVersions below and update the current one.
-        public static SerializableVersion Current => v5_9_0;
+        public static SerializableVersion Current => v5_11_0;
+        public static SerializableVersion v5_11_0 => SerializableVersion.Parse(History.v5_11_0);
+        public static SerializableVersion v5_10_0 => SerializableVersion.Parse(History.v5_10_0);
         public static SerializableVersion v5_9_0 => SerializableVersion.Parse(History.v5_9_0);
         public static SerializableVersion v5_8_0 => SerializableVersion.Parse(History.v5_8_0);
         public static SerializableVersion v5_7_0 => SerializableVersion.Parse(History.v5_7_0);
@@ -2618,6 +2663,246 @@ namespace Vim.Format.ObjectModel
         /// The 3D view which owns these settings.
         /// </summary>
         public Relation<View> _View;
+    }
+
+    /// <summary>
+    /// What wrote an ExportRevision (ExportRevision.Kind).
+    /// </summary>
+    public enum ExportRevisionKind
+    {
+        /// <summary>Not recorded.</summary>
+        Unknown = 0,
+        /// <summary>A full export of the document.</summary>
+        FullExport = 1,
+        /// <summary>A partial (incremental) export: only the changed elements of the document.</summary>
+        PartialExport = 2,
+    }
+
+    /// <summary>
+    /// One export of one source document (BimDocument) which wrote element data now in this file. A file written by one
+    /// export has one row per document; a file patched or merged since keeps the rows of every export whose data is still
+    /// in it, and ElementInExportRevision says which export each element's data comes from.
+    /// </summary>
+    [TableName(TableNames.ExportRevision)]
+    public partial class ExportRevision : Entity
+    {
+        /// <summary>The persisting id (header "id::revision") of the VIM file the export wrote.</summary>
+        public string VimRevision;
+
+        /// <summary>The integer representation of the ExportRevisionKind enum.</summary>
+        public int Kind;
+
+        /// <summary>The generator of that VIM file (header "generator"), for example "Vim.Revit.Exporter".</summary>
+        public string Generator;
+
+        /// <summary>When that VIM file was written (UTC, ISO 8601).</summary>
+        public string CreatedUtc;
+
+        /// <summary>The document's number of saves at export time (Revit: DocumentVersion.NumberOfSaves).</summary>
+        public int DocumentNumSaves;
+
+        /// <summary>The document's version id at export time (Revit: DocumentVersion.VersionGUID, new after any change).</summary>
+        public string DocumentVersionGuid;
+
+        /// <summary>The source document.</summary>
+        public Relation<BimDocument> _BimDocument;
+
+        public ExportRevisionKind GetKind()
+            => (ExportRevisionKind) Kind;
+    }
+
+    /// <summary>
+    /// Binds an Element to the ExportRevision which wrote its current data (at most one per Element).
+    /// </summary>
+    [TableName(TableNames.ElementInExportRevision)]
+    [CascadeElementRemap]
+    public partial class ElementInExportRevision : EntityWithElement, IStorageKey
+    {
+        public Relation<ExportRevision> _ExportRevision;
+
+        public object GetStorageKey()
+            => _Element.CombineAsStorageKey(_ExportRevision);
+    }
+
+    // ---------------------------------------------------------------------------------------------------------------
+    // The activity log ("who changed what"): Contributor, SyncSession, ElementChange, ActivityMarker.
+    //
+    // These rows are VIM's own record, written at the moment a change happens and keyed on the element's Revit
+    // UniqueId, because Revit's own record cannot be relied on: it says nothing at all about a deleted element, and
+    // re-saving a model as a new central resets "Created by" / "Last changed by" for every element to one person.
+    // See C:\VimFlexLocal\work\exporter\LIVE-SYNC-UX.md and Vim.Revit/Core/INCREMENTAL-EXPORT.md.
+    // ---------------------------------------------------------------------------------------------------------------
+
+    /// <summary>Where a Contributor's name was read (Contributor.Source).</summary>
+    public enum ContributorSource
+    {
+        /// <summary>Nobody can say: Revit records no author for a deletion made in somebody else's local.</summary>
+        Unknown = 0,
+        /// <summary>A Revit session VIM watched: Application.Username at the moment of the change.</summary>
+        Session = 1,
+        /// <summary>Revit's worksharing "last changed by", read once when the change arrived from the central model.</summary>
+        Central = 2,
+        /// <summary>A linked model: VIM saw the link reload, not the person who changed it.</summary>
+        Link = 3,
+    }
+
+    /// <summary>
+    /// One person the activity log names, per source. The same person can hold two rows - one Session, one Central -
+    /// on purpose: a name VIM watched is a different quality of fact from a name Revit handed over.
+    /// </summary>
+    [TableName(TableNames.Contributor)]
+    public partial class Contributor : Entity
+    {
+        /// <summary>Revit's Application.Username (self-declared off ACC), or the worksharing LastChangedBy.</summary>
+        public string Name;
+
+        /// <summary>The integer representation of the ContributorSource enum.</summary>
+        public int Source;
+
+        public ContributorSource GetSource()
+            => (ContributorSource) Source;
+    }
+
+    /// <summary>
+    /// One Revit session VIM watched, in one document. A session usually spans several syncs: its row is written again
+    /// at each of them, with a later EndedUtc, and a patch merges the two on SessionGuid.
+    /// </summary>
+    [TableName(TableNames.SyncSession)]
+    public partial class SyncSession : Entity
+    {
+        /// <summary>Identifies the session across the syncs it wrote (a GUID made when VIM first saw the document change).</summary>
+        public string SessionGuid;
+
+        public string MachineName;
+
+        /// <summary>The Revit version the session ran in, for example "2027".</summary>
+        public string RevitVersion;
+
+        /// <summary>When VIM first saw this session touch the document (UTC, ISO 8601).</summary>
+        public string StartedUtc;
+
+        /// <summary>When the session last wrote into this file (UTC, ISO 8601); it may still be open.</summary>
+        public string EndedUtc;
+
+        public Relation<Contributor> _Contributor;
+
+        public Relation<BimDocument> _BimDocument;
+    }
+
+    /// <summary>What happened to the element (ElementChange.ChangeKind).</summary>
+    public enum ElementChangeKind
+    {
+        Unknown = 0,
+        Added = 1,
+        Modified = 2,
+        Deleted = 3,
+    }
+
+    /// <summary>How much the name on an ElementChange row is worth (ElementChange.Confidence).</summary>
+    public enum ElementChangeConfidence
+    {
+        /// <summary>It vanished between two syncs and nobody can say who did it.</summary>
+        Unknown = 0,
+        /// <summary>VIM watched this person do it. Survives anything, including a re-save as a new central.</summary>
+        Observed = 1,
+        /// <summary>
+        /// It arrived at a sync and the name is Revit's worksharing "last changed by", read once at that moment:
+        /// second-hand, possibly stale, and re-writable in bulk and retroactively by a re-save as a new central.
+        /// </summary>
+        FromCentral = 2,
+    }
+
+    /// <summary>
+    /// One element changed once, as one sync recorded it. The row carries the element's names itself instead of
+    /// pointing at an Element row: a deleted element has no Element row, and this table has to outlive its elements.
+    /// Join on UniqueId to reach the element while it still exists.
+    /// </summary>
+    [TableName(TableNames.ElementChange)]
+    public partial class ElementChange : Entity
+    {
+        /// <summary>
+        /// The export which wrote this row into this file - not the export the change happened in: when it happened
+        /// is <see cref="ChangedUtc"/>. A full export rewrites the file, so it rewrites its history under one revision.
+        /// </summary>
+        public Relation<ExportRevision> _ExportRevision;
+
+        /// <summary>The session which made the change; none when the change arrived from the central model.</summary>
+        public Relation<SyncSession> _SyncSession;
+
+        /// <summary>Who the log names for this change (see Confidence for what that name is worth).</summary>
+        public Relation<Contributor> _Contributor;
+
+        /// <summary>The integer representation of the ElementChangeKind enum.</summary>
+        public int ChangeKind;
+
+        /// <summary>The integer representation of the ElementChangeConfidence enum.</summary>
+        public int Confidence;
+
+        /// <summary>When the change happened for an observed row, when it arrived for a row from central (UTC, ISO 8601).</summary>
+        public string ChangedUtc;
+
+        /// <summary>The Revit UniqueId of the element. The only key that survives the element's deletion.</summary>
+        public string UniqueId;
+
+        // The names Revit showed for the element at the moment of the change, so a deletion still reads
+        // "Doors / M_Single-Flush / 0915x2134 on Level 4". Empty when VIM never met the element.
+        public string CategoryName;
+        public string FamilyName;
+        public string TypeName;
+        public string ElementName;
+        public string LevelName;
+        public string WorksetName;
+
+        public ElementChangeKind GetChangeKind()
+            => (ElementChangeKind) ChangeKind;
+
+        public ElementChangeConfidence GetConfidence()
+            => (ElementChangeConfidence) Confidence;
+    }
+
+    /// <summary>What an ActivityMarker records (ActivityMarker.Kind).</summary>
+    public enum ActivityMarkerKind
+    {
+        Unknown = 0,
+        /// <summary>
+        /// This model was re-saved as a new central: Revit's own "created by" / "last changed by" was reset to one
+        /// person at this point, so every FromCentral row written after it is unreliable. VIM's own rows are not.
+        /// </summary>
+        HistoryReset = 1,
+        /// <summary>A linked model reloaded: its elements were re-exported whole, and VIM cannot name who changed them.</summary>
+        LinkReloaded = 2,
+        /// <summary>Activity recording was off for a while, so there is a hole in the log.</summary>
+        LoggingGap = 3,
+        /// <summary>Older activity was dropped to keep the file within the retention cap.</summary>
+        ActivityTrimmed = 4,
+        /// <summary>Somebody holds a whole user workset (Sam 2026-10-12: taking a whole workset is a practice to detect).</summary>
+        WorksetHeld = 5,
+    }
+
+    /// <summary>
+    /// Something that happened to the log itself rather than to an element: shown as a banner above the activity view
+    /// so nobody reads a wiped history, or a hole in the log, as somebody's work.
+    /// </summary>
+    [TableName(TableNames.ActivityMarker)]
+    public partial class ActivityMarker : Entity
+    {
+        public Relation<ExportRevision> _ExportRevision;
+
+        public Relation<SyncSession> _SyncSession;
+
+        /// <summary>Who did it, when VIM can say (the person who re-saved the central, for example).</summary>
+        public Relation<Contributor> _Contributor;
+
+        /// <summary>The integer representation of the ActivityMarkerKind enum.</summary>
+        public int Kind;
+
+        public string OccurredUtc;
+
+        /// <summary>One plain sentence, ready to show.</summary>
+        public string Description;
+
+        public ActivityMarkerKind GetKind()
+            => (ActivityMarkerKind) Kind;
     }
 
     /// <summary>
