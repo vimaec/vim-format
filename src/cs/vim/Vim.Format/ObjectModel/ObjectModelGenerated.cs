@@ -851,6 +851,7 @@ namespace Vim.Format.ObjectModel {
                     (FilterCount == other.FilterCount) &&
                     (ElementOverrideCount == other.ElementOverrideCount) &&
                     (HiddenElementCount == other.HiddenElementCount) &&
+                    (TemplateControlledSettings == other.TemplateControlledSettings) &&
                     (_Camera?.Index == other._Camera?.Index) &&
                     (_FamilyType?.Index == other._FamilyType?.Index) &&
                     (_ViewTemplate?.Index == other._ViewTemplate?.Index) &&
@@ -3334,6 +3335,8 @@ namespace Vim.Format.ObjectModel {
         public Int32 GetViewElementOverrideCount(int index, Int32 defaultValue = default) => ViewElementOverrideCount?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
         public IArray<Int32> ViewHiddenElementCount { get; }
         public Int32 GetViewHiddenElementCount(int index, Int32 defaultValue = default) => ViewHiddenElementCount?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<String> ViewTemplateControlledSettings { get; }
+        public String GetViewTemplateControlledSettings(int index, String defaultValue = "") => ViewTemplateControlledSettings?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
         public IArray<int> ViewCameraIndex { get; }
         public int GetViewCameraIndex(int index) => ViewCameraIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
         public IArray<int> ViewFamilyTypeIndex { get; }
@@ -3391,6 +3394,7 @@ namespace Vim.Format.ObjectModel {
             r.FilterCount = ViewFilterCount.ElementAtOrDefault(n);
             r.ElementOverrideCount = ViewElementOverrideCount.ElementAtOrDefault(n);
             r.HiddenElementCount = ViewHiddenElementCount.ElementAtOrDefault(n);
+            r.TemplateControlledSettings = ViewTemplateControlledSettings.ElementAtOrDefault(n);
             r._Camera = new Relation<Vim.Format.ObjectModel.Camera>(GetViewCameraIndex(n), GetCamera);
             r._FamilyType = new Relation<Vim.Format.ObjectModel.FamilyType>(GetViewFamilyTypeIndex(n), GetFamilyType);
             r._ViewTemplate = new Relation<Vim.Format.ObjectModel.Element>(GetViewViewTemplateIndex(n), GetElement);
@@ -5255,6 +5259,7 @@ namespace Vim.Format.ObjectModel {
             ViewFilterCount = ViewEntityTable?.GetDataColumnValues<Int32>("int:FilterCount") ?? Array.Empty<Int32>().ToIArray();
             ViewElementOverrideCount = ViewEntityTable?.GetDataColumnValues<Int32>("int:ElementOverrideCount") ?? Array.Empty<Int32>().ToIArray();
             ViewHiddenElementCount = ViewEntityTable?.GetDataColumnValues<Int32>("int:HiddenElementCount") ?? Array.Empty<Int32>().ToIArray();
+            ViewTemplateControlledSettings = ViewEntityTable?.GetStringColumnValues("string:TemplateControlledSettings") ?? Array.Empty<String>().ToIArray();
             FilterInViewName = FilterInViewEntityTable?.GetStringColumnValues("string:Name") ?? Array.Empty<String>().ToIArray();
             FilterInViewKind = FilterInViewEntityTable?.GetStringColumnValues("string:Kind") ?? Array.Empty<String>().ToIArray();
             FilterInViewFilterUniqueId = FilterInViewEntityTable?.GetStringColumnValues("string:FilterUniqueId") ?? Array.Empty<String>().ToIArray();
@@ -7561,6 +7566,7 @@ namespace Vim.Format.ObjectModel {
             Column_FilterCount = GetDataColumnValues<Int32>("int:FilterCount") ?? Array.Empty<Int32>();
             Column_ElementOverrideCount = GetDataColumnValues<Int32>("int:ElementOverrideCount") ?? Array.Empty<Int32>();
             Column_HiddenElementCount = GetDataColumnValues<Int32>("int:HiddenElementCount") ?? Array.Empty<Int32>();
+            Column_TemplateControlledSettings = GetStringColumnValues("string:TemplateControlledSettings") ?? Array.Empty<String>();
             Column_CameraIndex = GetIndexColumnValues("index:Vim.Camera:Camera") ?? Array.Empty<int>();
             Column_FamilyTypeIndex = GetIndexColumnValues("index:Vim.FamilyType:FamilyType") ?? Array.Empty<int>();
             Column_ViewTemplateIndex = GetIndexColumnValues("index:Vim.Element:ViewTemplate") ?? Array.Empty<int>();
@@ -7637,6 +7643,8 @@ namespace Vim.Format.ObjectModel {
         public Int32 GetElementOverrideCount(int index, Int32 @default = default) => Column_ElementOverrideCount.ElementAtOrDefault(index, @default);
         public Int32[] Column_HiddenElementCount { get; }
         public Int32 GetHiddenElementCount(int index, Int32 @default = default) => Column_HiddenElementCount.ElementAtOrDefault(index, @default);
+        public String[] Column_TemplateControlledSettings { get; }
+        public String GetTemplateControlledSettings(int index, String @default = "") => Column_TemplateControlledSettings.ElementAtOrDefault(index, @default);
         public int[] Column_CameraIndex { get; }
         public int GetCameraIndex(int index) => Column_CameraIndex.ElementAtOrDefault(index, EntityRelation.None);
         public Camera GetCamera(int index) => _GetReferencedCamera(GetCameraIndex(index));
@@ -7708,6 +7716,7 @@ namespace Vim.Format.ObjectModel {
             r.FilterCount = GetFilterCount(index);
             r.ElementOverrideCount = GetElementOverrideCount(index);
             r.HiddenElementCount = GetHiddenElementCount(index);
+            r.TemplateControlledSettings = GetTemplateControlledSettings(index);
             r._Camera = new Relation<Vim.Format.ObjectModel.Camera>(GetCameraIndex(index), _GetReferencedCamera);
             r._FamilyType = new Relation<Vim.Format.ObjectModel.FamilyType>(GetFamilyTypeIndex(index), _GetReferencedFamilyType);
             r._ViewTemplate = new Relation<Vim.Format.ObjectModel.Element>(GetViewTemplateIndex(index), _GetReferencedViewTemplate);
@@ -11322,6 +11331,11 @@ namespace Vim.Format.ObjectModel {
                 var columnData = new Int32[entityCount];
                 for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].HiddenElementCount; }
                 tb.AddDataColumn("int:HiddenElementCount", columnData);
+            }
+            {
+                var columnData = new String[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].TemplateControlledSettings; }
+                tb.AddStringColumn("string:TemplateControlledSettings", columnData);
             }
             {
                 var columnData = new int[entityCount];

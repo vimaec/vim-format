@@ -6625,6 +6625,7 @@ namespace Vim
         int mFilterCount;
         int mElementOverrideCount;
         int mHiddenElementCount;
+        std::string mTemplateControlledSettings;
         
         int mCameraIndex;
         Camera* mCamera;
@@ -6696,6 +6697,7 @@ namespace Vim
             view->mFilterCount = GetFilterCount(viewIndex);
             view->mElementOverrideCount = GetElementOverrideCount(viewIndex);
             view->mHiddenElementCount = GetHiddenElementCount(viewIndex);
+            view->mTemplateControlledSettings = GetTemplateControlledSettings(viewIndex);
             view->mCameraIndex = GetCameraIndex(viewIndex);
             view->mFamilyTypeIndex = GetFamilyTypeIndex(viewIndex);
             view->mViewTemplateIndex = GetViewTemplateIndex(viewIndex);
@@ -6742,6 +6744,7 @@ namespace Vim
             bool existsFilterCount = mEntityTable.column_exists("int:FilterCount");
             bool existsElementOverrideCount = mEntityTable.column_exists("int:ElementOverrideCount");
             bool existsHiddenElementCount = mEntityTable.column_exists("int:HiddenElementCount");
+            bool existsTemplateControlledSettings = mEntityTable.column_exists("string:TemplateControlledSettings");
             bool existsCamera = mEntityTable.column_exists("index:Vim.Camera:Camera");
             bool existsFamilyType = mEntityTable.column_exists("index:Vim.FamilyType:FamilyType");
             bool existsViewTemplate = mEntityTable.column_exists("index:Vim.Element:ViewTemplate");
@@ -6909,6 +6912,8 @@ namespace Vim
                 memcpy(hiddenElementCountData, mEntityTable.mDataColumns["int:HiddenElementCount"].begin(), count * sizeof(int));
             }
             
+            const std::vector<int>& templateControlledSettingsData = mEntityTable.column_exists("string:TemplateControlledSettings") ? mEntityTable.mStringColumns["string:TemplateControlledSettings"] : std::vector<int>();
+            
             const std::vector<int>& cameraData = mEntityTable.column_exists("index:Vim.Camera:Camera") ? mEntityTable.mIndexColumns["index:Vim.Camera:Camera"] : std::vector<int>();
             const std::vector<int>& familyTypeData = mEntityTable.column_exists("index:Vim.FamilyType:FamilyType") ? mEntityTable.mIndexColumns["index:Vim.FamilyType:FamilyType"] : std::vector<int>();
             const std::vector<int>& viewTemplateData = mEntityTable.column_exists("index:Vim.Element:ViewTemplate") ? mEntityTable.mIndexColumns["index:Vim.Element:ViewTemplate"] : std::vector<int>();
@@ -6988,6 +6993,8 @@ namespace Vim
                     entity.mElementOverrideCount = elementOverrideCountData[i];
                 if (existsHiddenElementCount)
                     entity.mHiddenElementCount = hiddenElementCountData[i];
+                if (existsTemplateControlledSettings)
+                    entity.mTemplateControlledSettings = std::string(reinterpret_cast<const char*>(mStrings[templateControlledSettingsData[i]]));
                 entity.mCameraIndex = existsCamera ? cameraData[i] : -1;
                 entity.mFamilyTypeIndex = existsFamilyType ? familyTypeData[i] : -1;
                 entity.mViewTemplateIndex = existsViewTemplate ? viewTemplateData[i] : -1;
@@ -7956,6 +7963,35 @@ namespace Vim
             std::vector<int>* result = new std::vector<int>(hiddenElementCountData, hiddenElementCountData + count);
             
             delete[] hiddenElementCountData;
+            
+            return result;
+        }
+        
+        std::string GetTemplateControlledSettings(int viewIndex)
+        {
+            if (viewIndex < 0 || viewIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("string:TemplateControlledSettings")) {
+                return std::string(reinterpret_cast<const char*>(mStrings[mEntityTable.mStringColumns["string:TemplateControlledSettings"][viewIndex]]));
+            }
+            
+            return {};
+        }
+        
+        std::vector<std::string>* GetAllTemplateControlledSettings()
+        {
+            const auto count = GetCount();
+            
+            const std::vector<int>& templateControlledSettingsData = mEntityTable.column_exists("string:TemplateControlledSettings") ? mEntityTable.mStringColumns["string:TemplateControlledSettings"] : std::vector<int>();
+            
+            std::vector<std::string>* result = new std::vector<std::string>();
+            result->reserve(count);
+            
+            for (int i = 0; i < count; ++i)
+            {
+                result->push_back(std::string(reinterpret_cast<const char*>(mStrings[templateControlledSettingsData[i]])));
+            }
             
             return result;
         }

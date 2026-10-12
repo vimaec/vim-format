@@ -4633,6 +4633,7 @@ export interface IView {
     filterCount?: number
     elementOverrideCount?: number
     hiddenElementCount?: number
+    templateControlledSettings?: string
     
     cameraIndex?: number
     camera?: ICamera
@@ -4723,6 +4724,8 @@ export interface IViewTable {
     getAllElementOverrideCount(): Promise<number[] | undefined>
     getHiddenElementCount(viewIndex: number): Promise<number | undefined>
     getAllHiddenElementCount(): Promise<number[] | undefined>
+    getTemplateControlledSettings(viewIndex: number): Promise<string | undefined>
+    getAllTemplateControlledSettings(): Promise<string[] | undefined>
     
     getCameraIndex(viewIndex: number): Promise<number | undefined>
     getAllCameraIndex(): Promise<number[] | undefined>
@@ -4785,6 +4788,7 @@ export class View implements IView {
     filterCount?: number
     elementOverrideCount?: number
     hiddenElementCount?: number
+    templateControlledSettings?: string
     
     cameraIndex?: number
     camera?: ICamera
@@ -4841,6 +4845,7 @@ export class View implements IView {
             table.getFilterCount(index).then(v => result.filterCount = v),
             table.getElementOverrideCount(index).then(v => result.elementOverrideCount = v),
             table.getHiddenElementCount(index).then(v => result.hiddenElementCount = v),
+            table.getTemplateControlledSettings(index).then(v => result.templateControlledSettings = v),
             table.getCameraIndex(index).then(v => result.cameraIndex = v),
             table.getFamilyTypeIndex(index).then(v => result.familyTypeIndex = v),
             table.getViewTemplateIndex(index).then(v => result.viewTemplateIndex = v),
@@ -4917,6 +4922,7 @@ export class ViewTable implements IViewTable {
         let filterCount: number[] | undefined
         let elementOverrideCount: number[] | undefined
         let hiddenElementCount: number[] | undefined
+        let templateControlledSettings: string[] | undefined
         let cameraIndex: number[] | undefined
         let familyTypeIndex: number[] | undefined
         let viewTemplateIndex: number[] | undefined
@@ -4960,6 +4966,7 @@ export class ViewTable implements IViewTable {
             (async () => { filterCount = (await localTable.getNumberArray("int:FilterCount")) })(),
             (async () => { elementOverrideCount = (await localTable.getNumberArray("int:ElementOverrideCount")) })(),
             (async () => { hiddenElementCount = (await localTable.getNumberArray("int:HiddenElementCount")) })(),
+            (async () => { templateControlledSettings = (await localTable.getStringArray("string:TemplateControlledSettings")) })(),
             (async () => { cameraIndex = (await localTable.getNumberArray("index:Vim.Camera:Camera")) })(),
             (async () => { familyTypeIndex = (await localTable.getNumberArray("index:Vim.FamilyType:FamilyType")) })(),
             (async () => { viewTemplateIndex = (await localTable.getNumberArray("index:Vim.Element:ViewTemplate")) })(),
@@ -5009,6 +5016,7 @@ export class ViewTable implements IViewTable {
                 filterCount: filterCount ? filterCount[i] : undefined,
                 elementOverrideCount: elementOverrideCount ? elementOverrideCount[i] : undefined,
                 hiddenElementCount: hiddenElementCount ? hiddenElementCount[i] : undefined,
+                templateControlledSettings: templateControlledSettings ? templateControlledSettings[i] : undefined,
                 cameraIndex: cameraIndex ? cameraIndex[i] : undefined,
                 familyTypeIndex: familyTypeIndex ? familyTypeIndex[i] : undefined,
                 viewTemplateIndex: viewTemplateIndex ? viewTemplateIndex[i] : undefined,
@@ -5285,6 +5293,14 @@ export class ViewTable implements IViewTable {
     
     async getAllHiddenElementCount(): Promise<number[] | undefined> {
         return (await this.entityTable.getNumberArray("int:HiddenElementCount"))
+    }
+    
+    async getTemplateControlledSettings(viewIndex: number): Promise<string | undefined> {
+        return (await this.entityTable.getString(viewIndex, "string:TemplateControlledSettings"))
+    }
+    
+    async getAllTemplateControlledSettings(): Promise<string[] | undefined> {
+        return (await this.entityTable.getStringArray("string:TemplateControlledSettings"))
     }
     
     async getCameraIndex(viewIndex: number): Promise<number | undefined> {

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -31,6 +31,7 @@ namespace Vim.Format.ObjectModel
             //   Vim.View__int:FilterCount
             //   Vim.View__int:ElementOverrideCount
             //   Vim.View__int:HiddenElementCount
+            //   Vim.View__string:TemplateControlledSettings
             //   Vim.FilterInView__string:Name
             //   Vim.FilterInView__string:Kind
             //   Vim.FilterInView__string:FilterUniqueId
@@ -1441,11 +1442,20 @@ namespace Vim.Format.ObjectModel
         /// <summary>View filters applied to the view (see FilterInView). -1 when not read.</summary>
         public int FilterCount = -1;
 
-        /// <summary>Elements with a graphic override of their own in the view (Override Graphics in View > By Element). -1 when not read.</summary>
+        /// <summary>Elements with a graphic override of their own in the view (Override Graphics in View > By Element); an element a rule
+        /// of the view already hides is not counted. -1 when not read (an optional, slow count).</summary>
         public int ElementOverrideCount = -1;
 
-        /// <summary>Elements hidden one by one in the view (Hide in View > Elements), a permanent setting. -1 when not read.</summary>
+        /// <summary>Elements hidden one by one in the view (Hide in View > Elements), a permanent setting; an element a rule of the view
+        /// already hides (category off, workset hidden, hiding filter) is not counted. -1 when not read (an optional, slow count).</summary>
         public int HiddenElementCount = -1;
+
+        /// <summary>
+        /// The settings the view template locks in this view, as Revit names them in the template's properties, separated by
+        /// " | " (e.g. "V/G Overrides Model | Phase Filter | Detail Level"); empty without a template. Where the template
+        /// controls a setting, the audit fields above hold the template's value: that is what Revit draws.
+        /// </summary>
+        public string TemplateControlledSettings;
     }
 
     /// <summary>
