@@ -788,12 +788,27 @@ namespace Vim.Format.ObjectModel {
         public int CameraIndex => _Camera?.Index ?? EntityRelation.None;
         public Vim.Format.ObjectModel.FamilyType FamilyType => _FamilyType?.Value;
         public int FamilyTypeIndex => _FamilyType?.Index ?? EntityRelation.None;
+        public Vim.Format.ObjectModel.Element ViewTemplate => _ViewTemplate?.Value;
+        public int ViewTemplateIndex => _ViewTemplate?.Index ?? EntityRelation.None;
+        public Vim.Format.ObjectModel.View PrimaryView => _PrimaryView?.Value;
+        public int PrimaryViewIndex => _PrimaryView?.Index ?? EntityRelation.None;
+        public Vim.Format.ObjectModel.Phase Phase => _Phase?.Value;
+        public int PhaseIndex => _Phase?.Index ?? EntityRelation.None;
+        public Vim.Format.ObjectModel.PhaseFilter PhaseFilter => _PhaseFilter?.Value;
+        public int PhaseFilterIndex => _PhaseFilter?.Index ?? EntityRelation.None;
+        public Vim.Format.ObjectModel.Element ScopeBox => _ScopeBox?.Value;
+        public int ScopeBoxIndex => _ScopeBox?.Index ?? EntityRelation.None;
         public Vim.Format.ObjectModel.Element Element => _Element?.Value;
         public int ElementIndex => _Element?.Index ?? EntityRelation.None;
         public View()
         {
             _Camera = new Relation<Vim.Format.ObjectModel.Camera>();
             _FamilyType = new Relation<Vim.Format.ObjectModel.FamilyType>();
+            _ViewTemplate = new Relation<Vim.Format.ObjectModel.Element>();
+            _PrimaryView = new Relation<Vim.Format.ObjectModel.View>();
+            _Phase = new Relation<Vim.Format.ObjectModel.Phase>();
+            _PhaseFilter = new Relation<Vim.Format.ObjectModel.PhaseFilter>();
+            _ScopeBox = new Relation<Vim.Format.ObjectModel.Element>();
             _Element = new Relation<Vim.Format.ObjectModel.Element>();
         }
         
@@ -826,9 +841,95 @@ namespace Vim.Format.ObjectModel {
                     (Outline_Max_X == other.Outline_Max_X) &&
                     (Outline_Max_Y == other.Outline_Max_Y) &&
                     (DetailLevel == other.DetailLevel) &&
+                    (IsAudited == other.IsAudited) &&
+                    (Discipline == other.Discipline) &&
+                    (ProjectBrowserPath == other.ProjectBrowserPath) &&
+                    (IsCropBoxActive == other.IsCropBoxActive) &&
+                    (IsTemporaryHideIsolateActive == other.IsTemporaryHideIsolateActive) &&
+                    (CategoryOverrideCount == other.CategoryOverrideCount) &&
+                    (HiddenCategoryCount == other.HiddenCategoryCount) &&
+                    (FilterCount == other.FilterCount) &&
+                    (ElementOverrideCount == other.ElementOverrideCount) &&
+                    (HiddenElementCount == other.HiddenElementCount) &&
                     (_Camera?.Index == other._Camera?.Index) &&
                     (_FamilyType?.Index == other._FamilyType?.Index) &&
+                    (_ViewTemplate?.Index == other._ViewTemplate?.Index) &&
+                    (_PrimaryView?.Index == other._PrimaryView?.Index) &&
+                    (_Phase?.Index == other._Phase?.Index) &&
+                    (_PhaseFilter?.Index == other._PhaseFilter?.Index) &&
+                    (_ScopeBox?.Index == other._ScopeBox?.Index) &&
                     (_Element?.Index == other._Element?.Index);
+                if (!fieldsAreEqual)
+                {
+                    return false;
+                }
+                
+                return true;
+            }
+            return false;
+        }
+        
+    } // end of class
+    
+    // AUTO-GENERATED
+    public partial class FilterInView
+    {
+        public Vim.Format.ObjectModel.View View => _View?.Value;
+        public int ViewIndex => _View?.Index ?? EntityRelation.None;
+        public FilterInView()
+        {
+            _View = new Relation<Vim.Format.ObjectModel.View>();
+        }
+        
+        public override bool FieldsAreEqual(object obj)
+        {
+            if ((obj is FilterInView other))
+            {
+                var fieldsAreEqual =
+                    (Index == other.Index) &&
+                    (Name == other.Name) &&
+                    (Kind == other.Kind) &&
+                    (FilterUniqueId == other.FilterUniqueId) &&
+                    (OrderIndex == other.OrderIndex) &&
+                    (IsEnabled == other.IsEnabled) &&
+                    (IsVisible == other.IsVisible) &&
+                    (HasOverrides == other.HasOverrides) &&
+                    (_View?.Index == other._View?.Index);
+                if (!fieldsAreEqual)
+                {
+                    return false;
+                }
+                
+                return true;
+            }
+            return false;
+        }
+        
+    } // end of class
+    
+    // AUTO-GENERATED
+    public partial class GridInView
+    {
+        public Vim.Format.ObjectModel.Grid Grid => _Grid?.Value;
+        public int GridIndex => _Grid?.Index ?? EntityRelation.None;
+        public Vim.Format.ObjectModel.View View => _View?.Value;
+        public int ViewIndex => _View?.Index ?? EntityRelation.None;
+        public GridInView()
+        {
+            _Grid = new Relation<Vim.Format.ObjectModel.Grid>();
+            _View = new Relation<Vim.Format.ObjectModel.View>();
+        }
+        
+        public override bool FieldsAreEqual(object obj)
+        {
+            if ((obj is GridInView other))
+            {
+                var fieldsAreEqual =
+                    (Index == other.Index) &&
+                    (BubbleAtEnd0 == other.BubbleAtEnd0) &&
+                    (BubbleAtEnd1 == other.BubbleAtEnd1) &&
+                    (_Grid?.Index == other._Grid?.Index) &&
+                    (_View?.Index == other._View?.Index);
                 if (!fieldsAreEqual)
                 {
                     return false;
@@ -1443,6 +1544,8 @@ namespace Vim.Format.ObjectModel {
                     (Guid == other.Guid) &&
                     (Severity == other.Severity) &&
                     (Description == other.Description) &&
+                    (Key == other.Key) &&
+                    (FailingElementCount == other.FailingElementCount) &&
                     (_BimDocument?.Index == other._BimDocument?.Index);
                 if (!fieldsAreEqual)
                 {
@@ -1568,11 +1671,14 @@ namespace Vim.Format.ObjectModel {
     {
         public Vim.Format.ObjectModel.FamilyType FamilyType => _FamilyType?.Value;
         public int FamilyTypeIndex => _FamilyType?.Index ?? EntityRelation.None;
+        public Vim.Format.ObjectModel.View BubbleView => _BubbleView?.Value;
+        public int BubbleViewIndex => _BubbleView?.Index ?? EntityRelation.None;
         public Vim.Format.ObjectModel.Element Element => _Element?.Value;
         public int ElementIndex => _Element?.Index ?? EntityRelation.None;
         public Grid()
         {
             _FamilyType = new Relation<Vim.Format.ObjectModel.FamilyType>();
+            _BubbleView = new Relation<Vim.Format.ObjectModel.View>();
             _Element = new Relation<Vim.Format.ObjectModel.Element>();
         }
         
@@ -1595,7 +1701,12 @@ namespace Vim.Format.ObjectModel {
                     (Extents_Max_X == other.Extents_Max_X) &&
                     (Extents_Max_Y == other.Extents_Max_Y) &&
                     (Extents_Max_Z == other.Extents_Max_Z) &&
+                    (TypeBubbleAtEnd0 == other.TypeBubbleAtEnd0) &&
+                    (TypeBubbleAtEnd1 == other.TypeBubbleAtEnd1) &&
+                    (BubbleAtEnd0 == other.BubbleAtEnd0) &&
+                    (BubbleAtEnd1 == other.BubbleAtEnd1) &&
                     (_FamilyType?.Index == other._FamilyType?.Index) &&
+                    (_BubbleView?.Index == other._BubbleView?.Index) &&
                     (_Element?.Index == other._Element?.Index);
                 if (!fieldsAreEqual)
                 {
@@ -3203,10 +3314,40 @@ namespace Vim.Format.ObjectModel {
         public Double GetViewOutline_Max_Y(int index, Double defaultValue = default) => ViewOutline_Max_Y?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
         public IArray<Int32> ViewDetailLevel { get; }
         public Int32 GetViewDetailLevel(int index, Int32 defaultValue = default) => ViewDetailLevel?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Boolean> ViewIsAudited { get; }
+        public Boolean GetViewIsAudited(int index, Boolean defaultValue = default) => ViewIsAudited?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<String> ViewDiscipline { get; }
+        public String GetViewDiscipline(int index, String defaultValue = "") => ViewDiscipline?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<String> ViewProjectBrowserPath { get; }
+        public String GetViewProjectBrowserPath(int index, String defaultValue = "") => ViewProjectBrowserPath?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Boolean> ViewIsCropBoxActive { get; }
+        public Boolean GetViewIsCropBoxActive(int index, Boolean defaultValue = default) => ViewIsCropBoxActive?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Boolean> ViewIsTemporaryHideIsolateActive { get; }
+        public Boolean GetViewIsTemporaryHideIsolateActive(int index, Boolean defaultValue = default) => ViewIsTemporaryHideIsolateActive?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Int32> ViewCategoryOverrideCount { get; }
+        public Int32 GetViewCategoryOverrideCount(int index, Int32 defaultValue = default) => ViewCategoryOverrideCount?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Int32> ViewHiddenCategoryCount { get; }
+        public Int32 GetViewHiddenCategoryCount(int index, Int32 defaultValue = default) => ViewHiddenCategoryCount?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Int32> ViewFilterCount { get; }
+        public Int32 GetViewFilterCount(int index, Int32 defaultValue = default) => ViewFilterCount?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Int32> ViewElementOverrideCount { get; }
+        public Int32 GetViewElementOverrideCount(int index, Int32 defaultValue = default) => ViewElementOverrideCount?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Int32> ViewHiddenElementCount { get; }
+        public Int32 GetViewHiddenElementCount(int index, Int32 defaultValue = default) => ViewHiddenElementCount?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
         public IArray<int> ViewCameraIndex { get; }
         public int GetViewCameraIndex(int index) => ViewCameraIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
         public IArray<int> ViewFamilyTypeIndex { get; }
         public int GetViewFamilyTypeIndex(int index) => ViewFamilyTypeIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
+        public IArray<int> ViewViewTemplateIndex { get; }
+        public int GetViewViewTemplateIndex(int index) => ViewViewTemplateIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
+        public IArray<int> ViewPrimaryViewIndex { get; }
+        public int GetViewPrimaryViewIndex(int index) => ViewPrimaryViewIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
+        public IArray<int> ViewPhaseIndex { get; }
+        public int GetViewPhaseIndex(int index) => ViewPhaseIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
+        public IArray<int> ViewPhaseFilterIndex { get; }
+        public int GetViewPhaseFilterIndex(int index) => ViewPhaseFilterIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
+        public IArray<int> ViewScopeBoxIndex { get; }
+        public int GetViewScopeBoxIndex(int index) => ViewScopeBoxIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
         public IArray<int> ViewElementIndex { get; }
         public int GetViewElementIndex(int index) => ViewElementIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
         public int NumView => ViewEntityTable?.NumRows ?? 0;
@@ -3240,9 +3381,92 @@ namespace Vim.Format.ObjectModel {
             r.Outline_Max_X = ViewOutline_Max_X.ElementAtOrDefault(n);
             r.Outline_Max_Y = ViewOutline_Max_Y.ElementAtOrDefault(n);
             r.DetailLevel = ViewDetailLevel.ElementAtOrDefault(n);
+            r.IsAudited = ViewIsAudited.ElementAtOrDefault(n);
+            r.Discipline = ViewDiscipline.ElementAtOrDefault(n);
+            r.ProjectBrowserPath = ViewProjectBrowserPath.ElementAtOrDefault(n);
+            r.IsCropBoxActive = ViewIsCropBoxActive.ElementAtOrDefault(n);
+            r.IsTemporaryHideIsolateActive = ViewIsTemporaryHideIsolateActive.ElementAtOrDefault(n);
+            r.CategoryOverrideCount = ViewCategoryOverrideCount.ElementAtOrDefault(n);
+            r.HiddenCategoryCount = ViewHiddenCategoryCount.ElementAtOrDefault(n);
+            r.FilterCount = ViewFilterCount.ElementAtOrDefault(n);
+            r.ElementOverrideCount = ViewElementOverrideCount.ElementAtOrDefault(n);
+            r.HiddenElementCount = ViewHiddenElementCount.ElementAtOrDefault(n);
             r._Camera = new Relation<Vim.Format.ObjectModel.Camera>(GetViewCameraIndex(n), GetCamera);
             r._FamilyType = new Relation<Vim.Format.ObjectModel.FamilyType>(GetViewFamilyTypeIndex(n), GetFamilyType);
+            r._ViewTemplate = new Relation<Vim.Format.ObjectModel.Element>(GetViewViewTemplateIndex(n), GetElement);
+            r._PrimaryView = new Relation<Vim.Format.ObjectModel.View>(GetViewPrimaryViewIndex(n), GetView);
+            r._Phase = new Relation<Vim.Format.ObjectModel.Phase>(GetViewPhaseIndex(n), GetPhase);
+            r._PhaseFilter = new Relation<Vim.Format.ObjectModel.PhaseFilter>(GetViewPhaseFilterIndex(n), GetPhaseFilter);
+            r._ScopeBox = new Relation<Vim.Format.ObjectModel.Element>(GetViewScopeBoxIndex(n), GetElement);
             r._Element = new Relation<Vim.Format.ObjectModel.Element>(GetViewElementIndex(n), GetElement);
+            return r;
+        }
+        
+        
+        // FilterInView
+        
+        public EntityTable FilterInViewEntityTable { get; }
+        
+        public IArray<String> FilterInViewName { get; }
+        public String GetFilterInViewName(int index, String defaultValue = "") => FilterInViewName?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<String> FilterInViewKind { get; }
+        public String GetFilterInViewKind(int index, String defaultValue = "") => FilterInViewKind?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<String> FilterInViewFilterUniqueId { get; }
+        public String GetFilterInViewFilterUniqueId(int index, String defaultValue = "") => FilterInViewFilterUniqueId?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Int32> FilterInViewOrderIndex { get; }
+        public Int32 GetFilterInViewOrderIndex(int index, Int32 defaultValue = default) => FilterInViewOrderIndex?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Boolean> FilterInViewIsEnabled { get; }
+        public Boolean GetFilterInViewIsEnabled(int index, Boolean defaultValue = default) => FilterInViewIsEnabled?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Boolean> FilterInViewIsVisible { get; }
+        public Boolean GetFilterInViewIsVisible(int index, Boolean defaultValue = default) => FilterInViewIsVisible?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Boolean> FilterInViewHasOverrides { get; }
+        public Boolean GetFilterInViewHasOverrides(int index, Boolean defaultValue = default) => FilterInViewHasOverrides?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<int> FilterInViewViewIndex { get; }
+        public int GetFilterInViewViewIndex(int index) => FilterInViewViewIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
+        public int NumFilterInView => FilterInViewEntityTable?.NumRows ?? 0;
+        public IArray<FilterInView> FilterInViewList { get; }
+        public FilterInView GetFilterInView(int n)
+        {
+            if (n < 0) return null;
+            var r = new FilterInView();
+            r.Document = Document;
+            r.Index = n;
+            r.Name = FilterInViewName.ElementAtOrDefault(n);
+            r.Kind = FilterInViewKind.ElementAtOrDefault(n);
+            r.FilterUniqueId = FilterInViewFilterUniqueId.ElementAtOrDefault(n);
+            r.OrderIndex = FilterInViewOrderIndex.ElementAtOrDefault(n);
+            r.IsEnabled = FilterInViewIsEnabled.ElementAtOrDefault(n);
+            r.IsVisible = FilterInViewIsVisible.ElementAtOrDefault(n);
+            r.HasOverrides = FilterInViewHasOverrides.ElementAtOrDefault(n);
+            r._View = new Relation<Vim.Format.ObjectModel.View>(GetFilterInViewViewIndex(n), GetView);
+            return r;
+        }
+        
+        
+        // GridInView
+        
+        public EntityTable GridInViewEntityTable { get; }
+        
+        public IArray<Boolean> GridInViewBubbleAtEnd0 { get; }
+        public Boolean GetGridInViewBubbleAtEnd0(int index, Boolean defaultValue = default) => GridInViewBubbleAtEnd0?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Boolean> GridInViewBubbleAtEnd1 { get; }
+        public Boolean GetGridInViewBubbleAtEnd1(int index, Boolean defaultValue = default) => GridInViewBubbleAtEnd1?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<int> GridInViewGridIndex { get; }
+        public int GetGridInViewGridIndex(int index) => GridInViewGridIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
+        public IArray<int> GridInViewViewIndex { get; }
+        public int GetGridInViewViewIndex(int index) => GridInViewViewIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
+        public int NumGridInView => GridInViewEntityTable?.NumRows ?? 0;
+        public IArray<GridInView> GridInViewList { get; }
+        public GridInView GetGridInView(int n)
+        {
+            if (n < 0) return null;
+            var r = new GridInView();
+            r.Document = Document;
+            r.Index = n;
+            r.BubbleAtEnd0 = GridInViewBubbleAtEnd0.ElementAtOrDefault(n);
+            r.BubbleAtEnd1 = GridInViewBubbleAtEnd1.ElementAtOrDefault(n);
+            r._Grid = new Relation<Vim.Format.ObjectModel.Grid>(GetGridInViewGridIndex(n), GetGrid);
+            r._View = new Relation<Vim.Format.ObjectModel.View>(GetGridInViewViewIndex(n), GetView);
             return r;
         }
         
@@ -3760,6 +3984,10 @@ namespace Vim.Format.ObjectModel {
         public String GetWarningSeverity(int index, String defaultValue = "") => WarningSeverity?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
         public IArray<String> WarningDescription { get; }
         public String GetWarningDescription(int index, String defaultValue = "") => WarningDescription?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<String> WarningKey { get; }
+        public String GetWarningKey(int index, String defaultValue = "") => WarningKey?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Int32> WarningFailingElementCount { get; }
+        public Int32 GetWarningFailingElementCount(int index, Int32 defaultValue = default) => WarningFailingElementCount?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
         public IArray<int> WarningBimDocumentIndex { get; }
         public int GetWarningBimDocumentIndex(int index) => WarningBimDocumentIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
         public int NumWarning => WarningEntityTable?.NumRows ?? 0;
@@ -3773,6 +4001,8 @@ namespace Vim.Format.ObjectModel {
             r.Guid = WarningGuid.ElementAtOrDefault(n);
             r.Severity = WarningSeverity.ElementAtOrDefault(n);
             r.Description = WarningDescription.ElementAtOrDefault(n);
+            r.Key = WarningKey.ElementAtOrDefault(n);
+            r.FailingElementCount = WarningFailingElementCount.ElementAtOrDefault(n);
             r._BimDocument = new Relation<Vim.Format.ObjectModel.BimDocument>(GetWarningBimDocumentIndex(n), GetBimDocument);
             return r;
         }
@@ -3916,8 +4146,18 @@ namespace Vim.Format.ObjectModel {
         public Double GetGridExtents_Max_Y(int index, Double defaultValue = default) => GridExtents_Max_Y?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
         public IArray<Double> GridExtents_Max_Z { get; }
         public Double GetGridExtents_Max_Z(int index, Double defaultValue = default) => GridExtents_Max_Z?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Boolean> GridTypeBubbleAtEnd0 { get; }
+        public Boolean GetGridTypeBubbleAtEnd0(int index, Boolean defaultValue = default) => GridTypeBubbleAtEnd0?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Boolean> GridTypeBubbleAtEnd1 { get; }
+        public Boolean GetGridTypeBubbleAtEnd1(int index, Boolean defaultValue = default) => GridTypeBubbleAtEnd1?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Boolean> GridBubbleAtEnd0 { get; }
+        public Boolean GetGridBubbleAtEnd0(int index, Boolean defaultValue = default) => GridBubbleAtEnd0?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Boolean> GridBubbleAtEnd1 { get; }
+        public Boolean GetGridBubbleAtEnd1(int index, Boolean defaultValue = default) => GridBubbleAtEnd1?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
         public IArray<int> GridFamilyTypeIndex { get; }
         public int GetGridFamilyTypeIndex(int index) => GridFamilyTypeIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
+        public IArray<int> GridBubbleViewIndex { get; }
+        public int GetGridBubbleViewIndex(int index) => GridBubbleViewIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
         public IArray<int> GridElementIndex { get; }
         public int GetGridElementIndex(int index) => GridElementIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
         public int NumGrid => GridEntityTable?.NumRows ?? 0;
@@ -3941,7 +4181,12 @@ namespace Vim.Format.ObjectModel {
             r.Extents_Max_X = GridExtents_Max_X.ElementAtOrDefault(n);
             r.Extents_Max_Y = GridExtents_Max_Y.ElementAtOrDefault(n);
             r.Extents_Max_Z = GridExtents_Max_Z.ElementAtOrDefault(n);
+            r.TypeBubbleAtEnd0 = GridTypeBubbleAtEnd0.ElementAtOrDefault(n);
+            r.TypeBubbleAtEnd1 = GridTypeBubbleAtEnd1.ElementAtOrDefault(n);
+            r.BubbleAtEnd0 = GridBubbleAtEnd0.ElementAtOrDefault(n);
+            r.BubbleAtEnd1 = GridBubbleAtEnd1.ElementAtOrDefault(n);
             r._FamilyType = new Relation<Vim.Format.ObjectModel.FamilyType>(GetGridFamilyTypeIndex(n), GetFamilyType);
+            r._BubbleView = new Relation<Vim.Format.ObjectModel.View>(GetGridBubbleViewIndex(n), GetView);
             r._Element = new Relation<Vim.Format.ObjectModel.Element>(GetGridElementIndex(n), GetElement);
             return r;
         }
@@ -4673,6 +4918,8 @@ namespace Vim.Format.ObjectModel {
             {"Vim.FamilyType", FamilyTypeList.ToEnumerable()},
             {"Vim.FamilyInstance", FamilyInstanceList.ToEnumerable()},
             {"Vim.View", ViewList.ToEnumerable()},
+            {"Vim.FilterInView", FilterInViewList.ToEnumerable()},
+            {"Vim.GridInView", GridInViewList.ToEnumerable()},
             {"Vim.ElementInView", ElementInViewList.ToEnumerable()},
             {"Vim.ShapeInView", ShapeInViewList.ToEnumerable()},
             {"Vim.AssetInView", AssetInViewList.ToEnumerable()},
@@ -4740,6 +4987,8 @@ namespace Vim.Format.ObjectModel {
             {"Vim.FamilyType", typeof(FamilyType)},
             {"Vim.FamilyInstance", typeof(FamilyInstance)},
             {"Vim.View", typeof(View)},
+            {"Vim.FilterInView", typeof(FilterInView)},
+            {"Vim.GridInView", typeof(GridInView)},
             {"Vim.ElementInView", typeof(ElementInView)},
             {"Vim.ShapeInView", typeof(ShapeInView)},
             {"Vim.AssetInView", typeof(AssetInView)},
@@ -4809,6 +5058,8 @@ namespace Vim.Format.ObjectModel {
             FamilyTypeEntityTable = Document.GetTable("Vim.FamilyType");
             FamilyInstanceEntityTable = Document.GetTable("Vim.FamilyInstance");
             ViewEntityTable = Document.GetTable("Vim.View");
+            FilterInViewEntityTable = Document.GetTable("Vim.FilterInView");
+            GridInViewEntityTable = Document.GetTable("Vim.GridInView");
             ElementInViewEntityTable = Document.GetTable("Vim.ElementInView");
             ShapeInViewEntityTable = Document.GetTable("Vim.ShapeInView");
             AssetInViewEntityTable = Document.GetTable("Vim.AssetInView");
@@ -4994,6 +5245,25 @@ namespace Vim.Format.ObjectModel {
             ViewOutline_Max_X = ViewEntityTable?.GetDataColumnValues<Double>("double:Outline.Max.X") ?? Array.Empty<Double>().ToIArray();
             ViewOutline_Max_Y = ViewEntityTable?.GetDataColumnValues<Double>("double:Outline.Max.Y") ?? Array.Empty<Double>().ToIArray();
             ViewDetailLevel = ViewEntityTable?.GetDataColumnValues<Int32>("int:DetailLevel") ?? Array.Empty<Int32>().ToIArray();
+            ViewIsAudited = ViewEntityTable?.GetDataColumnValues<Boolean>("byte:IsAudited") ?? Array.Empty<Boolean>().ToIArray();
+            ViewDiscipline = ViewEntityTable?.GetStringColumnValues("string:Discipline") ?? Array.Empty<String>().ToIArray();
+            ViewProjectBrowserPath = ViewEntityTable?.GetStringColumnValues("string:ProjectBrowserPath") ?? Array.Empty<String>().ToIArray();
+            ViewIsCropBoxActive = ViewEntityTable?.GetDataColumnValues<Boolean>("byte:IsCropBoxActive") ?? Array.Empty<Boolean>().ToIArray();
+            ViewIsTemporaryHideIsolateActive = ViewEntityTable?.GetDataColumnValues<Boolean>("byte:IsTemporaryHideIsolateActive") ?? Array.Empty<Boolean>().ToIArray();
+            ViewCategoryOverrideCount = ViewEntityTable?.GetDataColumnValues<Int32>("int:CategoryOverrideCount") ?? Array.Empty<Int32>().ToIArray();
+            ViewHiddenCategoryCount = ViewEntityTable?.GetDataColumnValues<Int32>("int:HiddenCategoryCount") ?? Array.Empty<Int32>().ToIArray();
+            ViewFilterCount = ViewEntityTable?.GetDataColumnValues<Int32>("int:FilterCount") ?? Array.Empty<Int32>().ToIArray();
+            ViewElementOverrideCount = ViewEntityTable?.GetDataColumnValues<Int32>("int:ElementOverrideCount") ?? Array.Empty<Int32>().ToIArray();
+            ViewHiddenElementCount = ViewEntityTable?.GetDataColumnValues<Int32>("int:HiddenElementCount") ?? Array.Empty<Int32>().ToIArray();
+            FilterInViewName = FilterInViewEntityTable?.GetStringColumnValues("string:Name") ?? Array.Empty<String>().ToIArray();
+            FilterInViewKind = FilterInViewEntityTable?.GetStringColumnValues("string:Kind") ?? Array.Empty<String>().ToIArray();
+            FilterInViewFilterUniqueId = FilterInViewEntityTable?.GetStringColumnValues("string:FilterUniqueId") ?? Array.Empty<String>().ToIArray();
+            FilterInViewOrderIndex = FilterInViewEntityTable?.GetDataColumnValues<Int32>("int:OrderIndex") ?? Array.Empty<Int32>().ToIArray();
+            FilterInViewIsEnabled = FilterInViewEntityTable?.GetDataColumnValues<Boolean>("byte:IsEnabled") ?? Array.Empty<Boolean>().ToIArray();
+            FilterInViewIsVisible = FilterInViewEntityTable?.GetDataColumnValues<Boolean>("byte:IsVisible") ?? Array.Empty<Boolean>().ToIArray();
+            FilterInViewHasOverrides = FilterInViewEntityTable?.GetDataColumnValues<Boolean>("byte:HasOverrides") ?? Array.Empty<Boolean>().ToIArray();
+            GridInViewBubbleAtEnd0 = GridInViewEntityTable?.GetDataColumnValues<Boolean>("byte:BubbleAtEnd0") ?? Array.Empty<Boolean>().ToIArray();
+            GridInViewBubbleAtEnd1 = GridInViewEntityTable?.GetDataColumnValues<Boolean>("byte:BubbleAtEnd1") ?? Array.Empty<Boolean>().ToIArray();
             LevelInViewExtents_Min_X = LevelInViewEntityTable?.GetDataColumnValues<Double>("double:Extents.Min.X") ?? Array.Empty<Double>().ToIArray();
             LevelInViewExtents_Min_Y = LevelInViewEntityTable?.GetDataColumnValues<Double>("double:Extents.Min.Y") ?? Array.Empty<Double>().ToIArray();
             LevelInViewExtents_Min_Z = LevelInViewEntityTable?.GetDataColumnValues<Double>("double:Extents.Min.Z") ?? Array.Empty<Double>().ToIArray();
@@ -5047,6 +5317,8 @@ namespace Vim.Format.ObjectModel {
             WarningGuid = WarningEntityTable?.GetStringColumnValues("string:Guid") ?? Array.Empty<String>().ToIArray();
             WarningSeverity = WarningEntityTable?.GetStringColumnValues("string:Severity") ?? Array.Empty<String>().ToIArray();
             WarningDescription = WarningEntityTable?.GetStringColumnValues("string:Description") ?? Array.Empty<String>().ToIArray();
+            WarningKey = WarningEntityTable?.GetStringColumnValues("string:Key") ?? Array.Empty<String>().ToIArray();
+            WarningFailingElementCount = WarningEntityTable?.GetDataColumnValues<Int32>("int:FailingElementCount") ?? Array.Empty<Int32>().ToIArray();
             BasePointIsSurveyPoint = BasePointEntityTable?.GetDataColumnValues<Boolean>("byte:IsSurveyPoint") ?? Array.Empty<Boolean>().ToIArray();
             BasePointIsClipped = BasePointEntityTable?.GetDataColumnValues<Boolean>("byte:IsClipped") ?? Array.Empty<Boolean>().ToIArray();
             BasePointNorthSouth = BasePointEntityTable?.GetDataColumnValues<Double>("double:NorthSouth") ?? Array.Empty<Double>().ToIArray();
@@ -5076,6 +5348,10 @@ namespace Vim.Format.ObjectModel {
             GridExtents_Max_X = GridEntityTable?.GetDataColumnValues<Double>("double:Extents.Max.X") ?? Array.Empty<Double>().ToIArray();
             GridExtents_Max_Y = GridEntityTable?.GetDataColumnValues<Double>("double:Extents.Max.Y") ?? Array.Empty<Double>().ToIArray();
             GridExtents_Max_Z = GridEntityTable?.GetDataColumnValues<Double>("double:Extents.Max.Z") ?? Array.Empty<Double>().ToIArray();
+            GridTypeBubbleAtEnd0 = GridEntityTable?.GetDataColumnValues<Boolean>("byte:TypeBubbleAtEnd0") ?? Array.Empty<Boolean>().ToIArray();
+            GridTypeBubbleAtEnd1 = GridEntityTable?.GetDataColumnValues<Boolean>("byte:TypeBubbleAtEnd1") ?? Array.Empty<Boolean>().ToIArray();
+            GridBubbleAtEnd0 = GridEntityTable?.GetDataColumnValues<Boolean>("byte:BubbleAtEnd0") ?? Array.Empty<Boolean>().ToIArray();
+            GridBubbleAtEnd1 = GridEntityTable?.GetDataColumnValues<Boolean>("byte:BubbleAtEnd1") ?? Array.Empty<Boolean>().ToIArray();
             AreaValue = AreaEntityTable?.GetDataColumnValues<Double>("double:Value") ?? Array.Empty<Double>().ToIArray();
             AreaPerimeter = AreaEntityTable?.GetDataColumnValues<Double>("double:Perimeter") ?? Array.Empty<Double>().ToIArray();
             AreaNumber = AreaEntityTable?.GetStringColumnValues("string:Number") ?? Array.Empty<String>().ToIArray();
@@ -5214,7 +5490,15 @@ namespace Vim.Format.ObjectModel {
             FamilyInstanceElementIndex = FamilyInstanceEntityTable?.GetIndexColumnValues("index:Vim.Element:Element") ?? Array.Empty<int>().ToIArray();
             ViewCameraIndex = ViewEntityTable?.GetIndexColumnValues("index:Vim.Camera:Camera") ?? Array.Empty<int>().ToIArray();
             ViewFamilyTypeIndex = ViewEntityTable?.GetIndexColumnValues("index:Vim.FamilyType:FamilyType") ?? Array.Empty<int>().ToIArray();
+            ViewViewTemplateIndex = ViewEntityTable?.GetIndexColumnValues("index:Vim.Element:ViewTemplate") ?? Array.Empty<int>().ToIArray();
+            ViewPrimaryViewIndex = ViewEntityTable?.GetIndexColumnValues("index:Vim.View:PrimaryView") ?? Array.Empty<int>().ToIArray();
+            ViewPhaseIndex = ViewEntityTable?.GetIndexColumnValues("index:Vim.Phase:Phase") ?? Array.Empty<int>().ToIArray();
+            ViewPhaseFilterIndex = ViewEntityTable?.GetIndexColumnValues("index:Vim.PhaseFilter:PhaseFilter") ?? Array.Empty<int>().ToIArray();
+            ViewScopeBoxIndex = ViewEntityTable?.GetIndexColumnValues("index:Vim.Element:ScopeBox") ?? Array.Empty<int>().ToIArray();
             ViewElementIndex = ViewEntityTable?.GetIndexColumnValues("index:Vim.Element:Element") ?? Array.Empty<int>().ToIArray();
+            FilterInViewViewIndex = FilterInViewEntityTable?.GetIndexColumnValues("index:Vim.View:View") ?? Array.Empty<int>().ToIArray();
+            GridInViewGridIndex = GridInViewEntityTable?.GetIndexColumnValues("index:Vim.Grid:Grid") ?? Array.Empty<int>().ToIArray();
+            GridInViewViewIndex = GridInViewEntityTable?.GetIndexColumnValues("index:Vim.View:View") ?? Array.Empty<int>().ToIArray();
             ElementInViewViewIndex = ElementInViewEntityTable?.GetIndexColumnValues("index:Vim.View:View") ?? Array.Empty<int>().ToIArray();
             ElementInViewElementIndex = ElementInViewEntityTable?.GetIndexColumnValues("index:Vim.Element:Element") ?? Array.Empty<int>().ToIArray();
             ShapeInViewShapeIndex = ShapeInViewEntityTable?.GetIndexColumnValues("index:Vim.Shape:Shape") ?? Array.Empty<int>().ToIArray();
@@ -5248,6 +5532,7 @@ namespace Vim.Format.ObjectModel {
             BasePointElementIndex = BasePointEntityTable?.GetIndexColumnValues("index:Vim.Element:Element") ?? Array.Empty<int>().ToIArray();
             PhaseFilterElementIndex = PhaseFilterEntityTable?.GetIndexColumnValues("index:Vim.Element:Element") ?? Array.Empty<int>().ToIArray();
             GridFamilyTypeIndex = GridEntityTable?.GetIndexColumnValues("index:Vim.FamilyType:FamilyType") ?? Array.Empty<int>().ToIArray();
+            GridBubbleViewIndex = GridEntityTable?.GetIndexColumnValues("index:Vim.View:BubbleView") ?? Array.Empty<int>().ToIArray();
             GridElementIndex = GridEntityTable?.GetIndexColumnValues("index:Vim.Element:Element") ?? Array.Empty<int>().ToIArray();
             AreaAreaSchemeIndex = AreaEntityTable?.GetIndexColumnValues("index:Vim.AreaScheme:AreaScheme") ?? Array.Empty<int>().ToIArray();
             AreaElementIndex = AreaEntityTable?.GetIndexColumnValues("index:Vim.Element:Element") ?? Array.Empty<int>().ToIArray();
@@ -5305,6 +5590,8 @@ namespace Vim.Format.ObjectModel {
             FamilyTypeList = NumFamilyType.Select(i => GetFamilyType(i));
             FamilyInstanceList = NumFamilyInstance.Select(i => GetFamilyInstance(i));
             ViewList = NumView.Select(i => GetView(i));
+            FilterInViewList = NumFilterInView.Select(i => GetFilterInView(i));
+            GridInViewList = NumGridInView.Select(i => GetGridInView(i));
             ElementInViewList = NumElementInView.Select(i => GetElementInView(i));
             ShapeInViewList = NumShapeInView.Select(i => GetShapeInView(i));
             AssetInViewList = NumAssetInView.Select(i => GetAssetInView(i));
@@ -5395,6 +5682,8 @@ namespace Vim.Format.ObjectModel {
             Tables[TableNames.FamilyType] = FamilyTypeTable = new FamilyTypeTable(GetSerializableTableOrEmpty(TableNames.FamilyType), stringTable, this);
             Tables[TableNames.FamilyInstance] = FamilyInstanceTable = new FamilyInstanceTable(GetSerializableTableOrEmpty(TableNames.FamilyInstance), stringTable, this);
             Tables[TableNames.View] = ViewTable = new ViewTable(GetSerializableTableOrEmpty(TableNames.View), stringTable, this);
+            Tables[TableNames.FilterInView] = FilterInViewTable = new FilterInViewTable(GetSerializableTableOrEmpty(TableNames.FilterInView), stringTable, this);
+            Tables[TableNames.GridInView] = GridInViewTable = new GridInViewTable(GetSerializableTableOrEmpty(TableNames.GridInView), stringTable, this);
             Tables[TableNames.ElementInView] = ElementInViewTable = new ElementInViewTable(GetSerializableTableOrEmpty(TableNames.ElementInView), stringTable, this);
             Tables[TableNames.ShapeInView] = ShapeInViewTable = new ShapeInViewTable(GetSerializableTableOrEmpty(TableNames.ShapeInView), stringTable, this);
             Tables[TableNames.AssetInView] = AssetInViewTable = new AssetInViewTable(GetSerializableTableOrEmpty(TableNames.AssetInView), stringTable, this);
@@ -5484,6 +5773,10 @@ namespace Vim.Format.ObjectModel {
         public FamilyInstance GetFamilyInstance(int index) => FamilyInstanceTable?.Get(index);
         public ViewTable ViewTable { get; } // can be null
         public View GetView(int index) => ViewTable?.Get(index);
+        public FilterInViewTable FilterInViewTable { get; } // can be null
+        public FilterInView GetFilterInView(int index) => FilterInViewTable?.Get(index);
+        public GridInViewTable GridInViewTable { get; } // can be null
+        public GridInView GetGridInView(int index) => GridInViewTable?.Get(index);
         public ElementInViewTable ElementInViewTable { get; } // can be null
         public ElementInView GetElementInView(int index) => ElementInViewTable?.Get(index);
         public ShapeInViewTable ShapeInViewTable { get; } // can be null
@@ -7258,8 +7551,23 @@ namespace Vim.Format.ObjectModel {
             Column_Outline_Max_X = GetDataColumnValues<Double>("double:Outline.Max.X") ?? Array.Empty<Double>();
             Column_Outline_Max_Y = GetDataColumnValues<Double>("double:Outline.Max.Y") ?? Array.Empty<Double>();
             Column_DetailLevel = GetDataColumnValues<Int32>("int:DetailLevel") ?? Array.Empty<Int32>();
+            Column_IsAudited = GetDataColumnValues<Boolean>("byte:IsAudited") ?? Array.Empty<Boolean>();
+            Column_Discipline = GetStringColumnValues("string:Discipline") ?? Array.Empty<String>();
+            Column_ProjectBrowserPath = GetStringColumnValues("string:ProjectBrowserPath") ?? Array.Empty<String>();
+            Column_IsCropBoxActive = GetDataColumnValues<Boolean>("byte:IsCropBoxActive") ?? Array.Empty<Boolean>();
+            Column_IsTemporaryHideIsolateActive = GetDataColumnValues<Boolean>("byte:IsTemporaryHideIsolateActive") ?? Array.Empty<Boolean>();
+            Column_CategoryOverrideCount = GetDataColumnValues<Int32>("int:CategoryOverrideCount") ?? Array.Empty<Int32>();
+            Column_HiddenCategoryCount = GetDataColumnValues<Int32>("int:HiddenCategoryCount") ?? Array.Empty<Int32>();
+            Column_FilterCount = GetDataColumnValues<Int32>("int:FilterCount") ?? Array.Empty<Int32>();
+            Column_ElementOverrideCount = GetDataColumnValues<Int32>("int:ElementOverrideCount") ?? Array.Empty<Int32>();
+            Column_HiddenElementCount = GetDataColumnValues<Int32>("int:HiddenElementCount") ?? Array.Empty<Int32>();
             Column_CameraIndex = GetIndexColumnValues("index:Vim.Camera:Camera") ?? Array.Empty<int>();
             Column_FamilyTypeIndex = GetIndexColumnValues("index:Vim.FamilyType:FamilyType") ?? Array.Empty<int>();
+            Column_ViewTemplateIndex = GetIndexColumnValues("index:Vim.Element:ViewTemplate") ?? Array.Empty<int>();
+            Column_PrimaryViewIndex = GetIndexColumnValues("index:Vim.View:PrimaryView") ?? Array.Empty<int>();
+            Column_PhaseIndex = GetIndexColumnValues("index:Vim.Phase:Phase") ?? Array.Empty<int>();
+            Column_PhaseFilterIndex = GetIndexColumnValues("index:Vim.PhaseFilter:PhaseFilter") ?? Array.Empty<int>();
+            Column_ScopeBoxIndex = GetIndexColumnValues("index:Vim.Element:ScopeBox") ?? Array.Empty<int>();
             Column_ElementIndex = GetIndexColumnValues("index:Vim.Element:Element") ?? Array.Empty<int>();
         }
         
@@ -7309,6 +7617,26 @@ namespace Vim.Format.ObjectModel {
         public Double GetOutline_Max_Y(int index, Double @default = default) => Column_Outline_Max_Y.ElementAtOrDefault(index, @default);
         public Int32[] Column_DetailLevel { get; }
         public Int32 GetDetailLevel(int index, Int32 @default = default) => Column_DetailLevel.ElementAtOrDefault(index, @default);
+        public Boolean[] Column_IsAudited { get; }
+        public Boolean GetIsAudited(int index, Boolean @default = default) => Column_IsAudited.ElementAtOrDefault(index, @default);
+        public String[] Column_Discipline { get; }
+        public String GetDiscipline(int index, String @default = "") => Column_Discipline.ElementAtOrDefault(index, @default);
+        public String[] Column_ProjectBrowserPath { get; }
+        public String GetProjectBrowserPath(int index, String @default = "") => Column_ProjectBrowserPath.ElementAtOrDefault(index, @default);
+        public Boolean[] Column_IsCropBoxActive { get; }
+        public Boolean GetIsCropBoxActive(int index, Boolean @default = default) => Column_IsCropBoxActive.ElementAtOrDefault(index, @default);
+        public Boolean[] Column_IsTemporaryHideIsolateActive { get; }
+        public Boolean GetIsTemporaryHideIsolateActive(int index, Boolean @default = default) => Column_IsTemporaryHideIsolateActive.ElementAtOrDefault(index, @default);
+        public Int32[] Column_CategoryOverrideCount { get; }
+        public Int32 GetCategoryOverrideCount(int index, Int32 @default = default) => Column_CategoryOverrideCount.ElementAtOrDefault(index, @default);
+        public Int32[] Column_HiddenCategoryCount { get; }
+        public Int32 GetHiddenCategoryCount(int index, Int32 @default = default) => Column_HiddenCategoryCount.ElementAtOrDefault(index, @default);
+        public Int32[] Column_FilterCount { get; }
+        public Int32 GetFilterCount(int index, Int32 @default = default) => Column_FilterCount.ElementAtOrDefault(index, @default);
+        public Int32[] Column_ElementOverrideCount { get; }
+        public Int32 GetElementOverrideCount(int index, Int32 @default = default) => Column_ElementOverrideCount.ElementAtOrDefault(index, @default);
+        public Int32[] Column_HiddenElementCount { get; }
+        public Int32 GetHiddenElementCount(int index, Int32 @default = default) => Column_HiddenElementCount.ElementAtOrDefault(index, @default);
         public int[] Column_CameraIndex { get; }
         public int GetCameraIndex(int index) => Column_CameraIndex.ElementAtOrDefault(index, EntityRelation.None);
         public Camera GetCamera(int index) => _GetReferencedCamera(GetCameraIndex(index));
@@ -7317,6 +7645,26 @@ namespace Vim.Format.ObjectModel {
         public int GetFamilyTypeIndex(int index) => Column_FamilyTypeIndex.ElementAtOrDefault(index, EntityRelation.None);
         public FamilyType GetFamilyType(int index) => _GetReferencedFamilyType(GetFamilyTypeIndex(index));
         private FamilyType _GetReferencedFamilyType(int referencedIndex) => ParentTableSet.GetFamilyType(referencedIndex);
+        public int[] Column_ViewTemplateIndex { get; }
+        public int GetViewTemplateIndex(int index) => Column_ViewTemplateIndex.ElementAtOrDefault(index, EntityRelation.None);
+        public Element GetViewTemplate(int index) => _GetReferencedViewTemplate(GetViewTemplateIndex(index));
+        private Element _GetReferencedViewTemplate(int referencedIndex) => ParentTableSet.GetElement(referencedIndex);
+        public int[] Column_PrimaryViewIndex { get; }
+        public int GetPrimaryViewIndex(int index) => Column_PrimaryViewIndex.ElementAtOrDefault(index, EntityRelation.None);
+        public View GetPrimaryView(int index) => _GetReferencedPrimaryView(GetPrimaryViewIndex(index));
+        private View _GetReferencedPrimaryView(int referencedIndex) => ParentTableSet.GetView(referencedIndex);
+        public int[] Column_PhaseIndex { get; }
+        public int GetPhaseIndex(int index) => Column_PhaseIndex.ElementAtOrDefault(index, EntityRelation.None);
+        public Phase GetPhase(int index) => _GetReferencedPhase(GetPhaseIndex(index));
+        private Phase _GetReferencedPhase(int referencedIndex) => ParentTableSet.GetPhase(referencedIndex);
+        public int[] Column_PhaseFilterIndex { get; }
+        public int GetPhaseFilterIndex(int index) => Column_PhaseFilterIndex.ElementAtOrDefault(index, EntityRelation.None);
+        public PhaseFilter GetPhaseFilter(int index) => _GetReferencedPhaseFilter(GetPhaseFilterIndex(index));
+        private PhaseFilter _GetReferencedPhaseFilter(int referencedIndex) => ParentTableSet.GetPhaseFilter(referencedIndex);
+        public int[] Column_ScopeBoxIndex { get; }
+        public int GetScopeBoxIndex(int index) => Column_ScopeBoxIndex.ElementAtOrDefault(index, EntityRelation.None);
+        public Element GetScopeBox(int index) => _GetReferencedScopeBox(GetScopeBoxIndex(index));
+        private Element _GetReferencedScopeBox(int referencedIndex) => ParentTableSet.GetElement(referencedIndex);
         public int[] Column_ElementIndex { get; }
         public int GetElementIndex(int index) => Column_ElementIndex.ElementAtOrDefault(index, EntityRelation.None);
         public Element GetElement(int index) => _GetReferencedElement(GetElementIndex(index));
@@ -7350,8 +7698,23 @@ namespace Vim.Format.ObjectModel {
             r.Outline_Max_X = GetOutline_Max_X(index);
             r.Outline_Max_Y = GetOutline_Max_Y(index);
             r.DetailLevel = GetDetailLevel(index);
+            r.IsAudited = GetIsAudited(index);
+            r.Discipline = GetDiscipline(index);
+            r.ProjectBrowserPath = GetProjectBrowserPath(index);
+            r.IsCropBoxActive = GetIsCropBoxActive(index);
+            r.IsTemporaryHideIsolateActive = GetIsTemporaryHideIsolateActive(index);
+            r.CategoryOverrideCount = GetCategoryOverrideCount(index);
+            r.HiddenCategoryCount = GetHiddenCategoryCount(index);
+            r.FilterCount = GetFilterCount(index);
+            r.ElementOverrideCount = GetElementOverrideCount(index);
+            r.HiddenElementCount = GetHiddenElementCount(index);
             r._Camera = new Relation<Vim.Format.ObjectModel.Camera>(GetCameraIndex(index), _GetReferencedCamera);
             r._FamilyType = new Relation<Vim.Format.ObjectModel.FamilyType>(GetFamilyTypeIndex(index), _GetReferencedFamilyType);
+            r._ViewTemplate = new Relation<Vim.Format.ObjectModel.Element>(GetViewTemplateIndex(index), _GetReferencedViewTemplate);
+            r._PrimaryView = new Relation<Vim.Format.ObjectModel.View>(GetPrimaryViewIndex(index), _GetReferencedPrimaryView);
+            r._Phase = new Relation<Vim.Format.ObjectModel.Phase>(GetPhaseIndex(index), _GetReferencedPhase);
+            r._PhaseFilter = new Relation<Vim.Format.ObjectModel.PhaseFilter>(GetPhaseFilterIndex(index), _GetReferencedPhaseFilter);
+            r._ScopeBox = new Relation<Vim.Format.ObjectModel.Element>(GetScopeBoxIndex(index), _GetReferencedScopeBox);
             r._Element = new Relation<Vim.Format.ObjectModel.Element>(GetElementIndex(index), _GetReferencedElement);
             return r;
         }
@@ -7363,6 +7726,118 @@ namespace Vim.Format.ObjectModel {
                 yield return Get(i);
         }
     } // class ViewTable 
+    
+    public partial class FilterInViewTable : EntityTable_v2, IEnumerable<FilterInView>
+    {
+        
+        public const string TableName = TableNames.FilterInView;
+        
+        public EntityTableSet ParentTableSet { get; } // can be null
+        
+        public FilterInViewTable(SerializableEntityTable rawTable, string[] stringTable, EntityTableSet parentTableSet = null) : base(rawTable, stringTable)
+        {
+            ParentTableSet = parentTableSet;
+            Column_Name = GetStringColumnValues("string:Name") ?? Array.Empty<String>();
+            Column_Kind = GetStringColumnValues("string:Kind") ?? Array.Empty<String>();
+            Column_FilterUniqueId = GetStringColumnValues("string:FilterUniqueId") ?? Array.Empty<String>();
+            Column_OrderIndex = GetDataColumnValues<Int32>("int:OrderIndex") ?? Array.Empty<Int32>();
+            Column_IsEnabled = GetDataColumnValues<Boolean>("byte:IsEnabled") ?? Array.Empty<Boolean>();
+            Column_IsVisible = GetDataColumnValues<Boolean>("byte:IsVisible") ?? Array.Empty<Boolean>();
+            Column_HasOverrides = GetDataColumnValues<Boolean>("byte:HasOverrides") ?? Array.Empty<Boolean>();
+            Column_ViewIndex = GetIndexColumnValues("index:Vim.View:View") ?? Array.Empty<int>();
+        }
+        
+        public String[] Column_Name { get; }
+        public String GetName(int index, String @default = "") => Column_Name.ElementAtOrDefault(index, @default);
+        public String[] Column_Kind { get; }
+        public String GetKind(int index, String @default = "") => Column_Kind.ElementAtOrDefault(index, @default);
+        public String[] Column_FilterUniqueId { get; }
+        public String GetFilterUniqueId(int index, String @default = "") => Column_FilterUniqueId.ElementAtOrDefault(index, @default);
+        public Int32[] Column_OrderIndex { get; }
+        public Int32 GetOrderIndex(int index, Int32 @default = default) => Column_OrderIndex.ElementAtOrDefault(index, @default);
+        public Boolean[] Column_IsEnabled { get; }
+        public Boolean GetIsEnabled(int index, Boolean @default = default) => Column_IsEnabled.ElementAtOrDefault(index, @default);
+        public Boolean[] Column_IsVisible { get; }
+        public Boolean GetIsVisible(int index, Boolean @default = default) => Column_IsVisible.ElementAtOrDefault(index, @default);
+        public Boolean[] Column_HasOverrides { get; }
+        public Boolean GetHasOverrides(int index, Boolean @default = default) => Column_HasOverrides.ElementAtOrDefault(index, @default);
+        public int[] Column_ViewIndex { get; }
+        public int GetViewIndex(int index) => Column_ViewIndex.ElementAtOrDefault(index, EntityRelation.None);
+        public View GetView(int index) => _GetReferencedView(GetViewIndex(index));
+        private View _GetReferencedView(int referencedIndex) => ParentTableSet.GetView(referencedIndex);
+        // Object Getter
+        public FilterInView Get(int index)
+        {
+            if (index < 0) return null;
+            var r = new FilterInView();
+            r.Index = index;
+            r.Name = GetName(index);
+            r.Kind = GetKind(index);
+            r.FilterUniqueId = GetFilterUniqueId(index);
+            r.OrderIndex = GetOrderIndex(index);
+            r.IsEnabled = GetIsEnabled(index);
+            r.IsVisible = GetIsVisible(index);
+            r.HasOverrides = GetHasOverrides(index);
+            r._View = new Relation<Vim.Format.ObjectModel.View>(GetViewIndex(index), _GetReferencedView);
+            return r;
+        }
+        // Enumerator
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+        public IEnumerator<FilterInView> GetEnumerator()
+        {
+            for (var i = 0; i < RowCount; ++i)
+                yield return Get(i);
+        }
+    } // class FilterInViewTable 
+    
+    public partial class GridInViewTable : EntityTable_v2, IEnumerable<GridInView>
+    {
+        
+        public const string TableName = TableNames.GridInView;
+        
+        public EntityTableSet ParentTableSet { get; } // can be null
+        
+        public GridInViewTable(SerializableEntityTable rawTable, string[] stringTable, EntityTableSet parentTableSet = null) : base(rawTable, stringTable)
+        {
+            ParentTableSet = parentTableSet;
+            Column_BubbleAtEnd0 = GetDataColumnValues<Boolean>("byte:BubbleAtEnd0") ?? Array.Empty<Boolean>();
+            Column_BubbleAtEnd1 = GetDataColumnValues<Boolean>("byte:BubbleAtEnd1") ?? Array.Empty<Boolean>();
+            Column_GridIndex = GetIndexColumnValues("index:Vim.Grid:Grid") ?? Array.Empty<int>();
+            Column_ViewIndex = GetIndexColumnValues("index:Vim.View:View") ?? Array.Empty<int>();
+        }
+        
+        public Boolean[] Column_BubbleAtEnd0 { get; }
+        public Boolean GetBubbleAtEnd0(int index, Boolean @default = default) => Column_BubbleAtEnd0.ElementAtOrDefault(index, @default);
+        public Boolean[] Column_BubbleAtEnd1 { get; }
+        public Boolean GetBubbleAtEnd1(int index, Boolean @default = default) => Column_BubbleAtEnd1.ElementAtOrDefault(index, @default);
+        public int[] Column_GridIndex { get; }
+        public int GetGridIndex(int index) => Column_GridIndex.ElementAtOrDefault(index, EntityRelation.None);
+        public Grid GetGrid(int index) => _GetReferencedGrid(GetGridIndex(index));
+        private Grid _GetReferencedGrid(int referencedIndex) => ParentTableSet.GetGrid(referencedIndex);
+        public int[] Column_ViewIndex { get; }
+        public int GetViewIndex(int index) => Column_ViewIndex.ElementAtOrDefault(index, EntityRelation.None);
+        public View GetView(int index) => _GetReferencedView(GetViewIndex(index));
+        private View _GetReferencedView(int referencedIndex) => ParentTableSet.GetView(referencedIndex);
+        // Object Getter
+        public GridInView Get(int index)
+        {
+            if (index < 0) return null;
+            var r = new GridInView();
+            r.Index = index;
+            r.BubbleAtEnd0 = GetBubbleAtEnd0(index);
+            r.BubbleAtEnd1 = GetBubbleAtEnd1(index);
+            r._Grid = new Relation<Vim.Format.ObjectModel.Grid>(GetGridIndex(index), _GetReferencedGrid);
+            r._View = new Relation<Vim.Format.ObjectModel.View>(GetViewIndex(index), _GetReferencedView);
+            return r;
+        }
+        // Enumerator
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+        public IEnumerator<GridInView> GetEnumerator()
+        {
+            for (var i = 0; i < RowCount; ++i)
+                yield return Get(i);
+        }
+    } // class GridInViewTable 
     
     public partial class ElementInViewTable : EntityTable_v2, IEnumerable<ElementInView>
     {
@@ -8232,6 +8707,8 @@ namespace Vim.Format.ObjectModel {
             Column_Guid = GetStringColumnValues("string:Guid") ?? Array.Empty<String>();
             Column_Severity = GetStringColumnValues("string:Severity") ?? Array.Empty<String>();
             Column_Description = GetStringColumnValues("string:Description") ?? Array.Empty<String>();
+            Column_Key = GetStringColumnValues("string:Key") ?? Array.Empty<String>();
+            Column_FailingElementCount = GetDataColumnValues<Int32>("int:FailingElementCount") ?? Array.Empty<Int32>();
             Column_BimDocumentIndex = GetIndexColumnValues("index:Vim.BimDocument:BimDocument") ?? Array.Empty<int>();
         }
         
@@ -8241,6 +8718,10 @@ namespace Vim.Format.ObjectModel {
         public String GetSeverity(int index, String @default = "") => Column_Severity.ElementAtOrDefault(index, @default);
         public String[] Column_Description { get; }
         public String GetDescription(int index, String @default = "") => Column_Description.ElementAtOrDefault(index, @default);
+        public String[] Column_Key { get; }
+        public String GetKey(int index, String @default = "") => Column_Key.ElementAtOrDefault(index, @default);
+        public Int32[] Column_FailingElementCount { get; }
+        public Int32 GetFailingElementCount(int index, Int32 @default = default) => Column_FailingElementCount.ElementAtOrDefault(index, @default);
         public int[] Column_BimDocumentIndex { get; }
         public int GetBimDocumentIndex(int index) => Column_BimDocumentIndex.ElementAtOrDefault(index, EntityRelation.None);
         public BimDocument GetBimDocument(int index) => _GetReferencedBimDocument(GetBimDocumentIndex(index));
@@ -8254,6 +8735,8 @@ namespace Vim.Format.ObjectModel {
             r.Guid = GetGuid(index);
             r.Severity = GetSeverity(index);
             r.Description = GetDescription(index);
+            r.Key = GetKey(index);
+            r.FailingElementCount = GetFailingElementCount(index);
             r._BimDocument = new Relation<Vim.Format.ObjectModel.BimDocument>(GetBimDocumentIndex(index), _GetReferencedBimDocument);
             return r;
         }
@@ -8464,7 +8947,12 @@ namespace Vim.Format.ObjectModel {
             Column_Extents_Max_X = GetDataColumnValues<Double>("double:Extents.Max.X") ?? Array.Empty<Double>();
             Column_Extents_Max_Y = GetDataColumnValues<Double>("double:Extents.Max.Y") ?? Array.Empty<Double>();
             Column_Extents_Max_Z = GetDataColumnValues<Double>("double:Extents.Max.Z") ?? Array.Empty<Double>();
+            Column_TypeBubbleAtEnd0 = GetDataColumnValues<Boolean>("byte:TypeBubbleAtEnd0") ?? Array.Empty<Boolean>();
+            Column_TypeBubbleAtEnd1 = GetDataColumnValues<Boolean>("byte:TypeBubbleAtEnd1") ?? Array.Empty<Boolean>();
+            Column_BubbleAtEnd0 = GetDataColumnValues<Boolean>("byte:BubbleAtEnd0") ?? Array.Empty<Boolean>();
+            Column_BubbleAtEnd1 = GetDataColumnValues<Boolean>("byte:BubbleAtEnd1") ?? Array.Empty<Boolean>();
             Column_FamilyTypeIndex = GetIndexColumnValues("index:Vim.FamilyType:FamilyType") ?? Array.Empty<int>();
+            Column_BubbleViewIndex = GetIndexColumnValues("index:Vim.View:BubbleView") ?? Array.Empty<int>();
             Column_ElementIndex = GetIndexColumnValues("index:Vim.Element:Element") ?? Array.Empty<int>();
         }
         
@@ -8494,10 +8982,22 @@ namespace Vim.Format.ObjectModel {
         public Double GetExtents_Max_Y(int index, Double @default = default) => Column_Extents_Max_Y.ElementAtOrDefault(index, @default);
         public Double[] Column_Extents_Max_Z { get; }
         public Double GetExtents_Max_Z(int index, Double @default = default) => Column_Extents_Max_Z.ElementAtOrDefault(index, @default);
+        public Boolean[] Column_TypeBubbleAtEnd0 { get; }
+        public Boolean GetTypeBubbleAtEnd0(int index, Boolean @default = default) => Column_TypeBubbleAtEnd0.ElementAtOrDefault(index, @default);
+        public Boolean[] Column_TypeBubbleAtEnd1 { get; }
+        public Boolean GetTypeBubbleAtEnd1(int index, Boolean @default = default) => Column_TypeBubbleAtEnd1.ElementAtOrDefault(index, @default);
+        public Boolean[] Column_BubbleAtEnd0 { get; }
+        public Boolean GetBubbleAtEnd0(int index, Boolean @default = default) => Column_BubbleAtEnd0.ElementAtOrDefault(index, @default);
+        public Boolean[] Column_BubbleAtEnd1 { get; }
+        public Boolean GetBubbleAtEnd1(int index, Boolean @default = default) => Column_BubbleAtEnd1.ElementAtOrDefault(index, @default);
         public int[] Column_FamilyTypeIndex { get; }
         public int GetFamilyTypeIndex(int index) => Column_FamilyTypeIndex.ElementAtOrDefault(index, EntityRelation.None);
         public FamilyType GetFamilyType(int index) => _GetReferencedFamilyType(GetFamilyTypeIndex(index));
         private FamilyType _GetReferencedFamilyType(int referencedIndex) => ParentTableSet.GetFamilyType(referencedIndex);
+        public int[] Column_BubbleViewIndex { get; }
+        public int GetBubbleViewIndex(int index) => Column_BubbleViewIndex.ElementAtOrDefault(index, EntityRelation.None);
+        public View GetBubbleView(int index) => _GetReferencedBubbleView(GetBubbleViewIndex(index));
+        private View _GetReferencedBubbleView(int referencedIndex) => ParentTableSet.GetView(referencedIndex);
         public int[] Column_ElementIndex { get; }
         public int GetElementIndex(int index) => Column_ElementIndex.ElementAtOrDefault(index, EntityRelation.None);
         public Element GetElement(int index) => _GetReferencedElement(GetElementIndex(index));
@@ -8521,7 +9021,12 @@ namespace Vim.Format.ObjectModel {
             r.Extents_Max_X = GetExtents_Max_X(index);
             r.Extents_Max_Y = GetExtents_Max_Y(index);
             r.Extents_Max_Z = GetExtents_Max_Z(index);
+            r.TypeBubbleAtEnd0 = GetTypeBubbleAtEnd0(index);
+            r.TypeBubbleAtEnd1 = GetTypeBubbleAtEnd1(index);
+            r.BubbleAtEnd0 = GetBubbleAtEnd0(index);
+            r.BubbleAtEnd1 = GetBubbleAtEnd1(index);
             r._FamilyType = new Relation<Vim.Format.ObjectModel.FamilyType>(GetFamilyTypeIndex(index), _GetReferencedFamilyType);
+            r._BubbleView = new Relation<Vim.Format.ObjectModel.View>(GetBubbleViewIndex(index), _GetReferencedBubbleView);
             r._Element = new Relation<Vim.Format.ObjectModel.Element>(GetElementIndex(index), _GetReferencedElement);
             return r;
         }
@@ -10769,6 +11274,56 @@ namespace Vim.Format.ObjectModel {
                 tb.AddDataColumn("int:DetailLevel", columnData);
             }
             {
+                var columnData = new Boolean[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].IsAudited; }
+                tb.AddDataColumn("byte:IsAudited", columnData);
+            }
+            {
+                var columnData = new String[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Discipline; }
+                tb.AddStringColumn("string:Discipline", columnData);
+            }
+            {
+                var columnData = new String[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].ProjectBrowserPath; }
+                tb.AddStringColumn("string:ProjectBrowserPath", columnData);
+            }
+            {
+                var columnData = new Boolean[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].IsCropBoxActive; }
+                tb.AddDataColumn("byte:IsCropBoxActive", columnData);
+            }
+            {
+                var columnData = new Boolean[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].IsTemporaryHideIsolateActive; }
+                tb.AddDataColumn("byte:IsTemporaryHideIsolateActive", columnData);
+            }
+            {
+                var columnData = new Int32[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].CategoryOverrideCount; }
+                tb.AddDataColumn("int:CategoryOverrideCount", columnData);
+            }
+            {
+                var columnData = new Int32[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].HiddenCategoryCount; }
+                tb.AddDataColumn("int:HiddenCategoryCount", columnData);
+            }
+            {
+                var columnData = new Int32[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].FilterCount; }
+                tb.AddDataColumn("int:FilterCount", columnData);
+            }
+            {
+                var columnData = new Int32[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].ElementOverrideCount; }
+                tb.AddDataColumn("int:ElementOverrideCount", columnData);
+            }
+            {
+                var columnData = new Int32[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].HiddenElementCount; }
+                tb.AddDataColumn("int:HiddenElementCount", columnData);
+            }
+            {
                 var columnData = new int[entityCount];
                 for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._Camera?.Index ?? EntityRelation.None; }
                 tb.AddIndexColumn("index:Vim.Camera:Camera", columnData);
@@ -10780,8 +11335,107 @@ namespace Vim.Format.ObjectModel {
             }
             {
                 var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._ViewTemplate?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.Element:ViewTemplate", columnData);
+            }
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._PrimaryView?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.View:PrimaryView", columnData);
+            }
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._Phase?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.Phase:Phase", columnData);
+            }
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._PhaseFilter?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.PhaseFilter:PhaseFilter", columnData);
+            }
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._ScopeBox?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.Element:ScopeBox", columnData);
+            }
+            {
+                var columnData = new int[entityCount];
                 for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._Element?.Index ?? EntityRelation.None; }
                 tb.AddIndexColumn("index:Vim.Element:Element", columnData);
+            }
+            return tb;
+        }
+        public static EntityTableBuilder ToFilterInViewTableBuilder(this EntitySetBuilder<FilterInView> entitySet)
+        {
+            var tb = new EntityTableBuilder(TableNames.FilterInView);
+            var entities = entitySet.Entities;
+            var entityCount = entities.Count;
+            {
+                var columnData = new String[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Name; }
+                tb.AddStringColumn("string:Name", columnData);
+            }
+            {
+                var columnData = new String[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Kind; }
+                tb.AddStringColumn("string:Kind", columnData);
+            }
+            {
+                var columnData = new String[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].FilterUniqueId; }
+                tb.AddStringColumn("string:FilterUniqueId", columnData);
+            }
+            {
+                var columnData = new Int32[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].OrderIndex; }
+                tb.AddDataColumn("int:OrderIndex", columnData);
+            }
+            {
+                var columnData = new Boolean[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].IsEnabled; }
+                tb.AddDataColumn("byte:IsEnabled", columnData);
+            }
+            {
+                var columnData = new Boolean[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].IsVisible; }
+                tb.AddDataColumn("byte:IsVisible", columnData);
+            }
+            {
+                var columnData = new Boolean[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].HasOverrides; }
+                tb.AddDataColumn("byte:HasOverrides", columnData);
+            }
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._View?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.View:View", columnData);
+            }
+            return tb;
+        }
+        public static EntityTableBuilder ToGridInViewTableBuilder(this EntitySetBuilder<GridInView> entitySet)
+        {
+            var tb = new EntityTableBuilder(TableNames.GridInView);
+            var entities = entitySet.Entities;
+            var entityCount = entities.Count;
+            {
+                var columnData = new Boolean[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].BubbleAtEnd0; }
+                tb.AddDataColumn("byte:BubbleAtEnd0", columnData);
+            }
+            {
+                var columnData = new Boolean[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].BubbleAtEnd1; }
+                tb.AddDataColumn("byte:BubbleAtEnd1", columnData);
+            }
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._Grid?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.Grid:Grid", columnData);
+            }
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._View?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.View:View", columnData);
             }
             return tb;
         }
@@ -11310,6 +11964,16 @@ namespace Vim.Format.ObjectModel {
                 tb.AddStringColumn("string:Description", columnData);
             }
             {
+                var columnData = new String[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Key; }
+                tb.AddStringColumn("string:Key", columnData);
+            }
+            {
+                var columnData = new Int32[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].FailingElementCount; }
+                tb.AddDataColumn("int:FailingElementCount", columnData);
+            }
+            {
                 var columnData = new int[entityCount];
                 for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._BimDocument?.Index ?? EntityRelation.None; }
                 tb.AddIndexColumn("index:Vim.BimDocument:BimDocument", columnData);
@@ -11508,9 +12172,34 @@ namespace Vim.Format.ObjectModel {
                 tb.AddDataColumn("double:Extents.Max.Z", columnData);
             }
             {
+                var columnData = new Boolean[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].TypeBubbleAtEnd0; }
+                tb.AddDataColumn("byte:TypeBubbleAtEnd0", columnData);
+            }
+            {
+                var columnData = new Boolean[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].TypeBubbleAtEnd1; }
+                tb.AddDataColumn("byte:TypeBubbleAtEnd1", columnData);
+            }
+            {
+                var columnData = new Boolean[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].BubbleAtEnd0; }
+                tb.AddDataColumn("byte:BubbleAtEnd0", columnData);
+            }
+            {
+                var columnData = new Boolean[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].BubbleAtEnd1; }
+                tb.AddDataColumn("byte:BubbleAtEnd1", columnData);
+            }
+            {
                 var columnData = new int[entityCount];
                 for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._FamilyType?.Index ?? EntityRelation.None; }
                 tb.AddIndexColumn("index:Vim.FamilyType:FamilyType", columnData);
+            }
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._BubbleView?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.View:BubbleView", columnData);
             }
             {
                 var columnData = new int[entityCount];
@@ -12305,6 +12994,8 @@ namespace Vim.Format.ObjectModel {
         public readonly EntitySetBuilder<FamilyType> FamilyTypeBuilder = new EntitySetBuilder<FamilyType>(TableNames.FamilyType);
         public readonly EntitySetBuilder<FamilyInstance> FamilyInstanceBuilder = new EntitySetBuilder<FamilyInstance>(TableNames.FamilyInstance);
         public readonly EntitySetBuilder<View> ViewBuilder = new EntitySetBuilder<View>(TableNames.View);
+        public readonly EntitySetBuilder<FilterInView> FilterInViewBuilder = new EntitySetBuilder<FilterInView>(TableNames.FilterInView);
+        public readonly EntitySetBuilder<GridInView> GridInViewBuilder = new EntitySetBuilder<GridInView>(TableNames.GridInView);
         public readonly EntitySetBuilder<ElementInView> ElementInViewBuilder = new EntitySetBuilder<ElementInView>(TableNames.ElementInView);
         public readonly EntitySetBuilder<ShapeInView> ShapeInViewBuilder = new EntitySetBuilder<ShapeInView>(TableNames.ShapeInView);
         public readonly EntitySetBuilder<AssetInView> AssetInViewBuilder = new EntitySetBuilder<AssetInView>(TableNames.AssetInView);
@@ -12371,6 +13062,8 @@ namespace Vim.Format.ObjectModel {
             db.Tables.Add(FamilyTypeBuilder.EntityTableName, FamilyTypeBuilder.ToFamilyTypeTableBuilder());
             db.Tables.Add(FamilyInstanceBuilder.EntityTableName, FamilyInstanceBuilder.ToFamilyInstanceTableBuilder());
             db.Tables.Add(ViewBuilder.EntityTableName, ViewBuilder.ToViewTableBuilder());
+            db.Tables.Add(FilterInViewBuilder.EntityTableName, FilterInViewBuilder.ToFilterInViewTableBuilder());
+            db.Tables.Add(GridInViewBuilder.EntityTableName, GridInViewBuilder.ToGridInViewTableBuilder());
             db.Tables.Add(ElementInViewBuilder.EntityTableName, ElementInViewBuilder.ToElementInViewTableBuilder());
             db.Tables.Add(ShapeInViewBuilder.EntityTableName, ShapeInViewBuilder.ToShapeInViewTableBuilder());
             db.Tables.Add(AssetInViewBuilder.EntityTableName, AssetInViewBuilder.ToAssetInViewTableBuilder());
@@ -12440,6 +13133,8 @@ namespace Vim.Format.ObjectModel {
             FamilyTypeBuilder.Clear();
             FamilyInstanceBuilder.Clear();
             ViewBuilder.Clear();
+            FilterInViewBuilder.Clear();
+            GridInViewBuilder.Clear();
             ElementInViewBuilder.Clear();
             ShapeInViewBuilder.Clear();
             AssetInViewBuilder.Clear();

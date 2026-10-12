@@ -14,6 +14,44 @@ namespace Vim.Format.ObjectModel
         // ReSharper disable MemberHidesStaticFromOuterClass
         public static class History
         {
+            // Schema additions (the view audit: what each view does to the model - template, overrides, filters, hidden
+            // elements, placement; the grid bubble ends; a stable key per warning to follow it across versions)
+            //   Vim.View__index:Vim.Element:ViewTemplate
+            //   Vim.View__index:Vim.View:PrimaryView
+            //   Vim.View__index:Vim.Phase:Phase
+            //   Vim.View__index:Vim.PhaseFilter:PhaseFilter
+            //   Vim.View__index:Vim.Element:ScopeBox
+            //   Vim.View__string:Discipline
+            //   Vim.View__string:ProjectBrowserPath
+            //   Vim.View__byte:IsAudited
+            //   Vim.View__byte:IsCropBoxActive
+            //   Vim.View__byte:IsTemporaryHideIsolateActive
+            //   Vim.View__int:CategoryOverrideCount
+            //   Vim.View__int:HiddenCategoryCount
+            //   Vim.View__int:FilterCount
+            //   Vim.View__int:ElementOverrideCount
+            //   Vim.View__int:HiddenElementCount
+            //   Vim.FilterInView__string:Name
+            //   Vim.FilterInView__string:Kind
+            //   Vim.FilterInView__string:FilterUniqueId
+            //   Vim.FilterInView__int:OrderIndex
+            //   Vim.FilterInView__byte:IsEnabled
+            //   Vim.FilterInView__byte:IsVisible
+            //   Vim.FilterInView__byte:HasOverrides
+            //   Vim.FilterInView__index:Vim.View:View
+            //   Vim.Grid__byte:TypeBubbleAtEnd0
+            //   Vim.Grid__byte:TypeBubbleAtEnd1
+            //   Vim.Grid__byte:BubbleAtEnd0
+            //   Vim.Grid__byte:BubbleAtEnd1
+            //   Vim.Grid__index:Vim.View:BubbleView
+            //   Vim.GridInView__byte:BubbleAtEnd0
+            //   Vim.GridInView__byte:BubbleAtEnd1
+            //   Vim.GridInView__index:Vim.Grid:Grid
+            //   Vim.GridInView__index:Vim.View:View
+            //   Vim.Warning__string:Key
+            //   Vim.Warning__int:FailingElementCount
+            public const string v5_12_0 = "5.12.0";
+
             // Schema additions (the activity log: who changed what, written at the moment the change happens)
             //   Vim.Contributor__string:Name
             //   Vim.Contributor__int:Source
@@ -289,7 +327,8 @@ namespace Vim.Format.ObjectModel
         // ReSharper enable MemberHidesStaticFromOuterClass
 
         // [MAINTAIN] Add more object model SerializableVersions below and update the current one.
-        public static SerializableVersion Current => v5_11_0;
+        public static SerializableVersion Current => v5_12_0;
+        public static SerializableVersion v5_12_0 => SerializableVersion.Parse(History.v5_12_0);
         public static SerializableVersion v5_11_0 => SerializableVersion.Parse(History.v5_11_0);
         public static SerializableVersion v5_10_0 => SerializableVersion.Parse(History.v5_10_0);
         public static SerializableVersion v5_9_0 => SerializableVersion.Parse(History.v5_9_0);
@@ -1356,6 +1395,107 @@ namespace Vim.Format.ObjectModel
         /// The View's associated FamilyType. In Revit, this maps to its ViewFamilyType
         /// </summary>
         public Relation<FamilyType> _FamilyType;
+
+        // ---------------------------------------------------------------------------------------------------------------
+        // View audit (5.12.0). Written for every view (sheets included) when the exporter's "All View Info" is on; then
+        // IsAudited is true. A count which could not be read is -1, never 0. Where the view sits on sheets is in
+        // ViewInViewSheet, which filters it applies in FilterInView, who last changed it in its Element row.
+        // ---------------------------------------------------------------------------------------------------------------
+
+        /// <summary>True when the view audit fields below were read from the authoring tool.</summary>
+        public bool IsAudited;
+
+        /// <summary>The view template applied to the view (the template's Element row), or none.</summary>
+        public Relation<Element> _ViewTemplate;
+
+        /// <summary>For a dependent view, its primary (parent) view.</summary>
+        public Relation<View> _PrimaryView;
+
+        /// <summary>The phase the view shows.</summary>
+        public Relation<Phase> _Phase;
+
+        /// <summary>The phase filter applied to the view.</summary>
+        public Relation<PhaseFilter> _PhaseFilter;
+
+        /// <summary>The scope box which sets the view's crop, or none.</summary>
+        public Relation<Element> _ScopeBox;
+
+        /// <summary>The view discipline (Architectural, Structural, Mechanical, Electrical, Plumbing, Coordination), or empty when the view has none.</summary>
+        public string Discipline;
+
+        /// <summary>The folders of the project browser in which the view is listed, outermost first, separated by " / ".</summary>
+        public string ProjectBrowserPath;
+
+        /// <summary>Whether the view is cropped.</summary>
+        public bool IsCropBoxActive;
+
+        /// <summary>Whether a temporary hide / isolate is active in the view (not saved as a permanent setting).</summary>
+        public bool IsTemporaryHideIsolateActive;
+
+        /// <summary>Categories and subcategories with a graphic override in the view (Visibility/Graphics). -1 when not read.</summary>
+        public int CategoryOverrideCount = -1;
+
+        /// <summary>Categories and subcategories switched off in the view (Visibility/Graphics). -1 when not read.</summary>
+        public int HiddenCategoryCount = -1;
+
+        /// <summary>View filters applied to the view (see FilterInView). -1 when not read.</summary>
+        public int FilterCount = -1;
+
+        /// <summary>Elements with a graphic override of their own in the view (Override Graphics in View > By Element). -1 when not read.</summary>
+        public int ElementOverrideCount = -1;
+
+        /// <summary>Elements hidden one by one in the view (Hide in View > Elements), a permanent setting. -1 when not read.</summary>
+        public int HiddenElementCount = -1;
+    }
+
+    /// <summary>
+    /// A view filter applied to a View, in the order the view applies them.
+    /// </summary>
+    [TableName(TableNames.FilterInView)]
+    public partial class FilterInView : Entity, IStorageKey
+    {
+        /// <summary>The filter's name.</summary>
+        public string Name;
+
+        /// <summary>"Rule" for a rule-based filter, "Selection" for a selection filter.</summary>
+        public string Kind;
+
+        /// <summary>The filter's UniqueId in the authoring tool.</summary>
+        public string FilterUniqueId;
+
+        /// <summary>The filter's position in the view's list (0 = first).</summary>
+        public int OrderIndex;
+
+        /// <summary>Whether the filter is enabled in the view (always true before Revit 2021, which cannot disable a filter).</summary>
+        public bool IsEnabled;
+
+        /// <summary>Whether the elements the filter matches are visible in the view (false = the filter hides them).</summary>
+        public bool IsVisible;
+
+        /// <summary>Whether the filter changes how its elements look (colour, line weight, pattern, halftone, transparency...).</summary>
+        public bool HasOverrides;
+
+        public Relation<View> _View;
+
+        public object GetStorageKey()
+            => $"{_View?.Index ?? -1}|{FilterUniqueId}";
+    }
+
+    /// <summary>
+    /// A Grid which can show in a View (in its range, not hidden there), with the ends at which the view draws its bubbles.
+    /// End 0 is the start point of the grid line, end 1 its end point.
+    /// </summary>
+    [TableName(TableNames.GridInView)]
+    public partial class GridInView : Entity, IStorageKey
+    {
+        public bool BubbleAtEnd0;
+        public bool BubbleAtEnd1;
+
+        public Relation<Grid> _Grid;
+        public Relation<View> _View;
+
+        public object GetStorageKey()
+            => _Grid.CombineAsStorageKey(_View);
     }
 
     /// <summary>
@@ -1905,6 +2045,17 @@ namespace Vim.Format.ObjectModel
         public string Severity;
         public string Description;
         public Relation<BimDocument> _BimDocument;
+
+        /// <summary>
+        /// The same warning carries the same key in every export of the model (5.12.0): the kind of warning (Guid) and a
+        /// hash of the sorted UniqueIds of ALL the elements it names, whether or not they are in the file. Two exports of
+        /// one model list a warning under one key as long as it names the same elements, so a warning can be followed
+        /// across versions (appeared, still there, gone).
+        /// </summary>
+        public string Key;
+
+        /// <summary>How many elements the warning names in the authoring tool (some may not be in the file).</summary>
+        public int FailingElementCount;
     }
 
     /// <summary>
@@ -2122,6 +2273,21 @@ namespace Vim.Format.ObjectModel
         /// The associated FamilyType of the Grid. In Revit, this maps to the Grid's GridType.
         /// </summary>
         public Relation<FamilyType> _FamilyType;
+
+        /// <summary>
+        /// The grid type's default bubbles in plan views (5.12.0): at the start point of the grid line (end 0) and at its
+        /// end point (end 1). In Revit, the type's "Plan View Symbols End 1" and "End 2".
+        /// </summary>
+        public bool TypeBubbleAtEnd0;
+        public bool TypeBubbleAtEnd1;
+
+        /// <summary>
+        /// The bubbles as drawn in BubbleView, the lowest floor plan which shows the grid (5.12.0). Not read when
+        /// BubbleView is none. The bubbles of every view which shows the grid are in GridInView.
+        /// </summary>
+        public bool BubbleAtEnd0;
+        public bool BubbleAtEnd1;
+        public Relation<View> _BubbleView;
     }
 
     /// <summary>

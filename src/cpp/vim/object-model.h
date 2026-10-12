@@ -52,6 +52,10 @@ namespace Vim
     class FamilyInstanceTable;
     class View;
     class ViewTable;
+    class FilterInView;
+    class FilterInViewTable;
+    class GridInView;
+    class GridInViewTable;
     class ElementInView;
     class ElementInViewTable;
     class ShapeInView;
@@ -162,6 +166,8 @@ namespace Vim
         FamilyTypeTable* mFamilyType;
         FamilyInstanceTable* mFamilyInstance;
         ViewTable* mView;
+        FilterInViewTable* mFilterInView;
+        GridInViewTable* mGridInView;
         ElementInViewTable* mElementInView;
         ShapeInViewTable* mShapeInView;
         AssetInViewTable* mAssetInView;
@@ -6609,11 +6615,31 @@ namespace Vim
         double mOutline_Max_X;
         double mOutline_Max_Y;
         int mDetailLevel;
+        bool mIsAudited;
+        std::string mDiscipline;
+        std::string mProjectBrowserPath;
+        bool mIsCropBoxActive;
+        bool mIsTemporaryHideIsolateActive;
+        int mCategoryOverrideCount;
+        int mHiddenCategoryCount;
+        int mFilterCount;
+        int mElementOverrideCount;
+        int mHiddenElementCount;
         
         int mCameraIndex;
         Camera* mCamera;
         int mFamilyTypeIndex;
         FamilyType* mFamilyType;
+        int mViewTemplateIndex;
+        Element* mViewTemplate;
+        int mPrimaryViewIndex;
+        View* mPrimaryView;
+        int mPhaseIndex;
+        Phase* mPhase;
+        int mPhaseFilterIndex;
+        PhaseFilter* mPhaseFilter;
+        int mScopeBoxIndex;
+        Element* mScopeBox;
         int mElementIndex;
         Element* mElement;
         
@@ -6660,8 +6686,23 @@ namespace Vim
             view->mOutline_Max_X = GetOutline_Max_X(viewIndex);
             view->mOutline_Max_Y = GetOutline_Max_Y(viewIndex);
             view->mDetailLevel = GetDetailLevel(viewIndex);
+            view->mIsAudited = GetIsAudited(viewIndex);
+            view->mDiscipline = GetDiscipline(viewIndex);
+            view->mProjectBrowserPath = GetProjectBrowserPath(viewIndex);
+            view->mIsCropBoxActive = GetIsCropBoxActive(viewIndex);
+            view->mIsTemporaryHideIsolateActive = GetIsTemporaryHideIsolateActive(viewIndex);
+            view->mCategoryOverrideCount = GetCategoryOverrideCount(viewIndex);
+            view->mHiddenCategoryCount = GetHiddenCategoryCount(viewIndex);
+            view->mFilterCount = GetFilterCount(viewIndex);
+            view->mElementOverrideCount = GetElementOverrideCount(viewIndex);
+            view->mHiddenElementCount = GetHiddenElementCount(viewIndex);
             view->mCameraIndex = GetCameraIndex(viewIndex);
             view->mFamilyTypeIndex = GetFamilyTypeIndex(viewIndex);
+            view->mViewTemplateIndex = GetViewTemplateIndex(viewIndex);
+            view->mPrimaryViewIndex = GetPrimaryViewIndex(viewIndex);
+            view->mPhaseIndex = GetPhaseIndex(viewIndex);
+            view->mPhaseFilterIndex = GetPhaseFilterIndex(viewIndex);
+            view->mScopeBoxIndex = GetScopeBoxIndex(viewIndex);
             view->mElementIndex = GetElementIndex(viewIndex);
             return view;
         }
@@ -6691,8 +6732,23 @@ namespace Vim
             bool existsOutline_Max_X = mEntityTable.column_exists("double:Outline.Max.X");
             bool existsOutline_Max_Y = mEntityTable.column_exists("double:Outline.Max.Y");
             bool existsDetailLevel = mEntityTable.column_exists("int:DetailLevel");
+            bool existsIsAudited = mEntityTable.column_exists("byte:IsAudited");
+            bool existsDiscipline = mEntityTable.column_exists("string:Discipline");
+            bool existsProjectBrowserPath = mEntityTable.column_exists("string:ProjectBrowserPath");
+            bool existsIsCropBoxActive = mEntityTable.column_exists("byte:IsCropBoxActive");
+            bool existsIsTemporaryHideIsolateActive = mEntityTable.column_exists("byte:IsTemporaryHideIsolateActive");
+            bool existsCategoryOverrideCount = mEntityTable.column_exists("int:CategoryOverrideCount");
+            bool existsHiddenCategoryCount = mEntityTable.column_exists("int:HiddenCategoryCount");
+            bool existsFilterCount = mEntityTable.column_exists("int:FilterCount");
+            bool existsElementOverrideCount = mEntityTable.column_exists("int:ElementOverrideCount");
+            bool existsHiddenElementCount = mEntityTable.column_exists("int:HiddenElementCount");
             bool existsCamera = mEntityTable.column_exists("index:Vim.Camera:Camera");
             bool existsFamilyType = mEntityTable.column_exists("index:Vim.FamilyType:FamilyType");
+            bool existsViewTemplate = mEntityTable.column_exists("index:Vim.Element:ViewTemplate");
+            bool existsPrimaryView = mEntityTable.column_exists("index:Vim.View:PrimaryView");
+            bool existsPhase = mEntityTable.column_exists("index:Vim.Phase:Phase");
+            bool existsPhaseFilter = mEntityTable.column_exists("index:Vim.PhaseFilter:PhaseFilter");
+            bool existsScopeBox = mEntityTable.column_exists("index:Vim.Element:ScopeBox");
             bool existsElement = mEntityTable.column_exists("index:Vim.Element:Element");
             
             const auto count = GetCount();
@@ -6809,8 +6865,57 @@ namespace Vim
                 memcpy(detailLevelData, mEntityTable.mDataColumns["int:DetailLevel"].begin(), count * sizeof(int));
             }
             
+            bfast::byte* isAuditedData = new bfast::byte[count];
+            if (mEntityTable.column_exists("byte:IsAudited")) {
+                memcpy(isAuditedData, mEntityTable.mDataColumns["byte:IsAudited"].begin(), count * sizeof(bfast::byte));
+            }
+            
+            const std::vector<int>& disciplineData = mEntityTable.column_exists("string:Discipline") ? mEntityTable.mStringColumns["string:Discipline"] : std::vector<int>();
+            
+            const std::vector<int>& projectBrowserPathData = mEntityTable.column_exists("string:ProjectBrowserPath") ? mEntityTable.mStringColumns["string:ProjectBrowserPath"] : std::vector<int>();
+            
+            bfast::byte* isCropBoxActiveData = new bfast::byte[count];
+            if (mEntityTable.column_exists("byte:IsCropBoxActive")) {
+                memcpy(isCropBoxActiveData, mEntityTable.mDataColumns["byte:IsCropBoxActive"].begin(), count * sizeof(bfast::byte));
+            }
+            
+            bfast::byte* isTemporaryHideIsolateActiveData = new bfast::byte[count];
+            if (mEntityTable.column_exists("byte:IsTemporaryHideIsolateActive")) {
+                memcpy(isTemporaryHideIsolateActiveData, mEntityTable.mDataColumns["byte:IsTemporaryHideIsolateActive"].begin(), count * sizeof(bfast::byte));
+            }
+            
+            int* categoryOverrideCountData = new int[count];
+            if (mEntityTable.column_exists("int:CategoryOverrideCount")) {
+                memcpy(categoryOverrideCountData, mEntityTable.mDataColumns["int:CategoryOverrideCount"].begin(), count * sizeof(int));
+            }
+            
+            int* hiddenCategoryCountData = new int[count];
+            if (mEntityTable.column_exists("int:HiddenCategoryCount")) {
+                memcpy(hiddenCategoryCountData, mEntityTable.mDataColumns["int:HiddenCategoryCount"].begin(), count * sizeof(int));
+            }
+            
+            int* filterCountData = new int[count];
+            if (mEntityTable.column_exists("int:FilterCount")) {
+                memcpy(filterCountData, mEntityTable.mDataColumns["int:FilterCount"].begin(), count * sizeof(int));
+            }
+            
+            int* elementOverrideCountData = new int[count];
+            if (mEntityTable.column_exists("int:ElementOverrideCount")) {
+                memcpy(elementOverrideCountData, mEntityTable.mDataColumns["int:ElementOverrideCount"].begin(), count * sizeof(int));
+            }
+            
+            int* hiddenElementCountData = new int[count];
+            if (mEntityTable.column_exists("int:HiddenElementCount")) {
+                memcpy(hiddenElementCountData, mEntityTable.mDataColumns["int:HiddenElementCount"].begin(), count * sizeof(int));
+            }
+            
             const std::vector<int>& cameraData = mEntityTable.column_exists("index:Vim.Camera:Camera") ? mEntityTable.mIndexColumns["index:Vim.Camera:Camera"] : std::vector<int>();
             const std::vector<int>& familyTypeData = mEntityTable.column_exists("index:Vim.FamilyType:FamilyType") ? mEntityTable.mIndexColumns["index:Vim.FamilyType:FamilyType"] : std::vector<int>();
+            const std::vector<int>& viewTemplateData = mEntityTable.column_exists("index:Vim.Element:ViewTemplate") ? mEntityTable.mIndexColumns["index:Vim.Element:ViewTemplate"] : std::vector<int>();
+            const std::vector<int>& primaryViewData = mEntityTable.column_exists("index:Vim.View:PrimaryView") ? mEntityTable.mIndexColumns["index:Vim.View:PrimaryView"] : std::vector<int>();
+            const std::vector<int>& phaseData = mEntityTable.column_exists("index:Vim.Phase:Phase") ? mEntityTable.mIndexColumns["index:Vim.Phase:Phase"] : std::vector<int>();
+            const std::vector<int>& phaseFilterData = mEntityTable.column_exists("index:Vim.PhaseFilter:PhaseFilter") ? mEntityTable.mIndexColumns["index:Vim.PhaseFilter:PhaseFilter"] : std::vector<int>();
+            const std::vector<int>& scopeBoxData = mEntityTable.column_exists("index:Vim.Element:ScopeBox") ? mEntityTable.mIndexColumns["index:Vim.Element:ScopeBox"] : std::vector<int>();
             const std::vector<int>& elementData = mEntityTable.column_exists("index:Vim.Element:Element") ? mEntityTable.mIndexColumns["index:Vim.Element:Element"] : std::vector<int>();
             
             for (int i = 0; i < count; ++i)
@@ -6863,8 +6968,33 @@ namespace Vim
                     entity.mOutline_Max_Y = outline_Max_YData[i];
                 if (existsDetailLevel)
                     entity.mDetailLevel = detailLevelData[i];
+                if (existsIsAudited)
+                    entity.mIsAudited = isAuditedData[i];
+                if (existsDiscipline)
+                    entity.mDiscipline = std::string(reinterpret_cast<const char*>(mStrings[disciplineData[i]]));
+                if (existsProjectBrowserPath)
+                    entity.mProjectBrowserPath = std::string(reinterpret_cast<const char*>(mStrings[projectBrowserPathData[i]]));
+                if (existsIsCropBoxActive)
+                    entity.mIsCropBoxActive = isCropBoxActiveData[i];
+                if (existsIsTemporaryHideIsolateActive)
+                    entity.mIsTemporaryHideIsolateActive = isTemporaryHideIsolateActiveData[i];
+                if (existsCategoryOverrideCount)
+                    entity.mCategoryOverrideCount = categoryOverrideCountData[i];
+                if (existsHiddenCategoryCount)
+                    entity.mHiddenCategoryCount = hiddenCategoryCountData[i];
+                if (existsFilterCount)
+                    entity.mFilterCount = filterCountData[i];
+                if (existsElementOverrideCount)
+                    entity.mElementOverrideCount = elementOverrideCountData[i];
+                if (existsHiddenElementCount)
+                    entity.mHiddenElementCount = hiddenElementCountData[i];
                 entity.mCameraIndex = existsCamera ? cameraData[i] : -1;
                 entity.mFamilyTypeIndex = existsFamilyType ? familyTypeData[i] : -1;
+                entity.mViewTemplateIndex = existsViewTemplate ? viewTemplateData[i] : -1;
+                entity.mPrimaryViewIndex = existsPrimaryView ? primaryViewData[i] : -1;
+                entity.mPhaseIndex = existsPhase ? phaseData[i] : -1;
+                entity.mPhaseFilterIndex = existsPhaseFilter ? phaseFilterData[i] : -1;
+                entity.mScopeBoxIndex = existsScopeBox ? scopeBoxData[i] : -1;
                 entity.mElementIndex = existsElement ? elementData[i] : -1;
                 view->push_back(entity);
             }
@@ -6890,6 +7020,14 @@ namespace Vim
             delete[] outline_Max_XData;
             delete[] outline_Max_YData;
             delete[] detailLevelData;
+            delete[] isAuditedData;
+            delete[] isCropBoxActiveData;
+            delete[] isTemporaryHideIsolateActiveData;
+            delete[] categoryOverrideCountData;
+            delete[] hiddenCategoryCountData;
+            delete[] filterCountData;
+            delete[] elementOverrideCountData;
+            delete[] hiddenElementCountData;
             
             return view;
         }
@@ -7540,6 +7678,288 @@ namespace Vim
             return result;
         }
         
+        bool GetIsAudited(int viewIndex)
+        {
+            if (viewIndex < 0 || viewIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("byte:IsAudited")) {
+                return static_cast<bool>(*reinterpret_cast<bfast::byte*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["byte:IsAudited"].begin() + viewIndex * sizeof(bfast::byte))));
+            }
+            
+            return {};
+        }
+        
+        std::vector<bool>* GetAllIsAudited()
+        {
+            const auto count = GetCount();
+            
+            bfast::byte* isAuditedData = new bfast::byte[count];
+            if (mEntityTable.column_exists("byte:IsAudited")) {
+                memcpy(isAuditedData, mEntityTable.mDataColumns["byte:IsAudited"].begin(), count * sizeof(bfast::byte));
+            }
+            
+            std::vector<bool>* result = new std::vector<bool>(isAuditedData, isAuditedData + count);
+            
+            delete[] isAuditedData;
+            
+            return result;
+        }
+        
+        std::string GetDiscipline(int viewIndex)
+        {
+            if (viewIndex < 0 || viewIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("string:Discipline")) {
+                return std::string(reinterpret_cast<const char*>(mStrings[mEntityTable.mStringColumns["string:Discipline"][viewIndex]]));
+            }
+            
+            return {};
+        }
+        
+        std::vector<std::string>* GetAllDiscipline()
+        {
+            const auto count = GetCount();
+            
+            const std::vector<int>& disciplineData = mEntityTable.column_exists("string:Discipline") ? mEntityTable.mStringColumns["string:Discipline"] : std::vector<int>();
+            
+            std::vector<std::string>* result = new std::vector<std::string>();
+            result->reserve(count);
+            
+            for (int i = 0; i < count; ++i)
+            {
+                result->push_back(std::string(reinterpret_cast<const char*>(mStrings[disciplineData[i]])));
+            }
+            
+            return result;
+        }
+        
+        std::string GetProjectBrowserPath(int viewIndex)
+        {
+            if (viewIndex < 0 || viewIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("string:ProjectBrowserPath")) {
+                return std::string(reinterpret_cast<const char*>(mStrings[mEntityTable.mStringColumns["string:ProjectBrowserPath"][viewIndex]]));
+            }
+            
+            return {};
+        }
+        
+        std::vector<std::string>* GetAllProjectBrowserPath()
+        {
+            const auto count = GetCount();
+            
+            const std::vector<int>& projectBrowserPathData = mEntityTable.column_exists("string:ProjectBrowserPath") ? mEntityTable.mStringColumns["string:ProjectBrowserPath"] : std::vector<int>();
+            
+            std::vector<std::string>* result = new std::vector<std::string>();
+            result->reserve(count);
+            
+            for (int i = 0; i < count; ++i)
+            {
+                result->push_back(std::string(reinterpret_cast<const char*>(mStrings[projectBrowserPathData[i]])));
+            }
+            
+            return result;
+        }
+        
+        bool GetIsCropBoxActive(int viewIndex)
+        {
+            if (viewIndex < 0 || viewIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("byte:IsCropBoxActive")) {
+                return static_cast<bool>(*reinterpret_cast<bfast::byte*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["byte:IsCropBoxActive"].begin() + viewIndex * sizeof(bfast::byte))));
+            }
+            
+            return {};
+        }
+        
+        std::vector<bool>* GetAllIsCropBoxActive()
+        {
+            const auto count = GetCount();
+            
+            bfast::byte* isCropBoxActiveData = new bfast::byte[count];
+            if (mEntityTable.column_exists("byte:IsCropBoxActive")) {
+                memcpy(isCropBoxActiveData, mEntityTable.mDataColumns["byte:IsCropBoxActive"].begin(), count * sizeof(bfast::byte));
+            }
+            
+            std::vector<bool>* result = new std::vector<bool>(isCropBoxActiveData, isCropBoxActiveData + count);
+            
+            delete[] isCropBoxActiveData;
+            
+            return result;
+        }
+        
+        bool GetIsTemporaryHideIsolateActive(int viewIndex)
+        {
+            if (viewIndex < 0 || viewIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("byte:IsTemporaryHideIsolateActive")) {
+                return static_cast<bool>(*reinterpret_cast<bfast::byte*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["byte:IsTemporaryHideIsolateActive"].begin() + viewIndex * sizeof(bfast::byte))));
+            }
+            
+            return {};
+        }
+        
+        std::vector<bool>* GetAllIsTemporaryHideIsolateActive()
+        {
+            const auto count = GetCount();
+            
+            bfast::byte* isTemporaryHideIsolateActiveData = new bfast::byte[count];
+            if (mEntityTable.column_exists("byte:IsTemporaryHideIsolateActive")) {
+                memcpy(isTemporaryHideIsolateActiveData, mEntityTable.mDataColumns["byte:IsTemporaryHideIsolateActive"].begin(), count * sizeof(bfast::byte));
+            }
+            
+            std::vector<bool>* result = new std::vector<bool>(isTemporaryHideIsolateActiveData, isTemporaryHideIsolateActiveData + count);
+            
+            delete[] isTemporaryHideIsolateActiveData;
+            
+            return result;
+        }
+        
+        int GetCategoryOverrideCount(int viewIndex)
+        {
+            if (viewIndex < 0 || viewIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("int:CategoryOverrideCount")) {
+                return *reinterpret_cast<int*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["int:CategoryOverrideCount"].begin() + viewIndex * sizeof(int)));
+            }
+            
+            return {};
+        }
+        
+        std::vector<int>* GetAllCategoryOverrideCount()
+        {
+            const auto count = GetCount();
+            
+            int* categoryOverrideCountData = new int[count];
+            if (mEntityTable.column_exists("int:CategoryOverrideCount")) {
+                memcpy(categoryOverrideCountData, mEntityTable.mDataColumns["int:CategoryOverrideCount"].begin(), count * sizeof(int));
+            }
+            
+            std::vector<int>* result = new std::vector<int>(categoryOverrideCountData, categoryOverrideCountData + count);
+            
+            delete[] categoryOverrideCountData;
+            
+            return result;
+        }
+        
+        int GetHiddenCategoryCount(int viewIndex)
+        {
+            if (viewIndex < 0 || viewIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("int:HiddenCategoryCount")) {
+                return *reinterpret_cast<int*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["int:HiddenCategoryCount"].begin() + viewIndex * sizeof(int)));
+            }
+            
+            return {};
+        }
+        
+        std::vector<int>* GetAllHiddenCategoryCount()
+        {
+            const auto count = GetCount();
+            
+            int* hiddenCategoryCountData = new int[count];
+            if (mEntityTable.column_exists("int:HiddenCategoryCount")) {
+                memcpy(hiddenCategoryCountData, mEntityTable.mDataColumns["int:HiddenCategoryCount"].begin(), count * sizeof(int));
+            }
+            
+            std::vector<int>* result = new std::vector<int>(hiddenCategoryCountData, hiddenCategoryCountData + count);
+            
+            delete[] hiddenCategoryCountData;
+            
+            return result;
+        }
+        
+        int GetFilterCount(int viewIndex)
+        {
+            if (viewIndex < 0 || viewIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("int:FilterCount")) {
+                return *reinterpret_cast<int*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["int:FilterCount"].begin() + viewIndex * sizeof(int)));
+            }
+            
+            return {};
+        }
+        
+        std::vector<int>* GetAllFilterCount()
+        {
+            const auto count = GetCount();
+            
+            int* filterCountData = new int[count];
+            if (mEntityTable.column_exists("int:FilterCount")) {
+                memcpy(filterCountData, mEntityTable.mDataColumns["int:FilterCount"].begin(), count * sizeof(int));
+            }
+            
+            std::vector<int>* result = new std::vector<int>(filterCountData, filterCountData + count);
+            
+            delete[] filterCountData;
+            
+            return result;
+        }
+        
+        int GetElementOverrideCount(int viewIndex)
+        {
+            if (viewIndex < 0 || viewIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("int:ElementOverrideCount")) {
+                return *reinterpret_cast<int*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["int:ElementOverrideCount"].begin() + viewIndex * sizeof(int)));
+            }
+            
+            return {};
+        }
+        
+        std::vector<int>* GetAllElementOverrideCount()
+        {
+            const auto count = GetCount();
+            
+            int* elementOverrideCountData = new int[count];
+            if (mEntityTable.column_exists("int:ElementOverrideCount")) {
+                memcpy(elementOverrideCountData, mEntityTable.mDataColumns["int:ElementOverrideCount"].begin(), count * sizeof(int));
+            }
+            
+            std::vector<int>* result = new std::vector<int>(elementOverrideCountData, elementOverrideCountData + count);
+            
+            delete[] elementOverrideCountData;
+            
+            return result;
+        }
+        
+        int GetHiddenElementCount(int viewIndex)
+        {
+            if (viewIndex < 0 || viewIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("int:HiddenElementCount")) {
+                return *reinterpret_cast<int*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["int:HiddenElementCount"].begin() + viewIndex * sizeof(int)));
+            }
+            
+            return {};
+        }
+        
+        std::vector<int>* GetAllHiddenElementCount()
+        {
+            const auto count = GetCount();
+            
+            int* hiddenElementCountData = new int[count];
+            if (mEntityTable.column_exists("int:HiddenElementCount")) {
+                memcpy(hiddenElementCountData, mEntityTable.mDataColumns["int:HiddenElementCount"].begin(), count * sizeof(int));
+            }
+            
+            std::vector<int>* result = new std::vector<int>(hiddenElementCountData, hiddenElementCountData + count);
+            
+            delete[] hiddenElementCountData;
+            
+            return result;
+        }
+        
         int GetCameraIndex(int viewIndex)
         {
             if (!mEntityTable.column_exists("index:Vim.Camera:Camera")) {
@@ -7564,6 +7984,66 @@ namespace Vim
             return mEntityTable.mIndexColumns["index:Vim.FamilyType:FamilyType"][viewIndex];
         }
         
+        int GetViewTemplateIndex(int viewIndex)
+        {
+            if (!mEntityTable.column_exists("index:Vim.Element:ViewTemplate")) {
+                return -1;
+            }
+            
+            if (viewIndex < 0 || viewIndex >= GetCount())
+                return -1;
+            
+            return mEntityTable.mIndexColumns["index:Vim.Element:ViewTemplate"][viewIndex];
+        }
+        
+        int GetPrimaryViewIndex(int viewIndex)
+        {
+            if (!mEntityTable.column_exists("index:Vim.View:PrimaryView")) {
+                return -1;
+            }
+            
+            if (viewIndex < 0 || viewIndex >= GetCount())
+                return -1;
+            
+            return mEntityTable.mIndexColumns["index:Vim.View:PrimaryView"][viewIndex];
+        }
+        
+        int GetPhaseIndex(int viewIndex)
+        {
+            if (!mEntityTable.column_exists("index:Vim.Phase:Phase")) {
+                return -1;
+            }
+            
+            if (viewIndex < 0 || viewIndex >= GetCount())
+                return -1;
+            
+            return mEntityTable.mIndexColumns["index:Vim.Phase:Phase"][viewIndex];
+        }
+        
+        int GetPhaseFilterIndex(int viewIndex)
+        {
+            if (!mEntityTable.column_exists("index:Vim.PhaseFilter:PhaseFilter")) {
+                return -1;
+            }
+            
+            if (viewIndex < 0 || viewIndex >= GetCount())
+                return -1;
+            
+            return mEntityTable.mIndexColumns["index:Vim.PhaseFilter:PhaseFilter"][viewIndex];
+        }
+        
+        int GetScopeBoxIndex(int viewIndex)
+        {
+            if (!mEntityTable.column_exists("index:Vim.Element:ScopeBox")) {
+                return -1;
+            }
+            
+            if (viewIndex < 0 || viewIndex >= GetCount())
+                return -1;
+            
+            return mEntityTable.mIndexColumns["index:Vim.Element:ScopeBox"][viewIndex];
+        }
+        
         int GetElementIndex(int viewIndex)
         {
             if (!mEntityTable.column_exists("index:Vim.Element:Element")) {
@@ -7584,6 +8064,520 @@ namespace Vim
             return {};
         
         return new ViewTable(scene.mEntityTables["Vim.View"], scene.mStrings);
+    }
+    
+    class FilterInView
+    {
+    public:
+        int mIndex;
+        std::string mName;
+        std::string mKind;
+        std::string mFilterUniqueId;
+        int mOrderIndex;
+        bool mIsEnabled;
+        bool mIsVisible;
+        bool mHasOverrides;
+        
+        int mViewIndex;
+        View* mView;
+        
+        FilterInView() {}
+    };
+    
+    class FilterInViewTable
+    {
+        EntityTable& mEntityTable;
+        std::vector<const bfast::byte*>& mStrings;
+    public:
+        FilterInViewTable(EntityTable& entityTable, std::vector<const bfast::byte*>& strings):
+            mEntityTable(entityTable), mStrings(strings) {}
+        
+        size_t GetCount()
+        {
+            return mEntityTable.get_count();
+        }
+        
+        FilterInView* Get(int filterInViewIndex)
+        {
+            FilterInView* filterInView = new FilterInView();
+            filterInView->mIndex = filterInViewIndex;
+            filterInView->mName = GetName(filterInViewIndex);
+            filterInView->mKind = GetKind(filterInViewIndex);
+            filterInView->mFilterUniqueId = GetFilterUniqueId(filterInViewIndex);
+            filterInView->mOrderIndex = GetOrderIndex(filterInViewIndex);
+            filterInView->mIsEnabled = GetIsEnabled(filterInViewIndex);
+            filterInView->mIsVisible = GetIsVisible(filterInViewIndex);
+            filterInView->mHasOverrides = GetHasOverrides(filterInViewIndex);
+            filterInView->mViewIndex = GetViewIndex(filterInViewIndex);
+            return filterInView;
+        }
+        
+        std::vector<FilterInView>* GetAll()
+        {
+            bool existsName = mEntityTable.column_exists("string:Name");
+            bool existsKind = mEntityTable.column_exists("string:Kind");
+            bool existsFilterUniqueId = mEntityTable.column_exists("string:FilterUniqueId");
+            bool existsOrderIndex = mEntityTable.column_exists("int:OrderIndex");
+            bool existsIsEnabled = mEntityTable.column_exists("byte:IsEnabled");
+            bool existsIsVisible = mEntityTable.column_exists("byte:IsVisible");
+            bool existsHasOverrides = mEntityTable.column_exists("byte:HasOverrides");
+            bool existsView = mEntityTable.column_exists("index:Vim.View:View");
+            
+            const auto count = GetCount();
+            
+            std::vector<FilterInView>* filterInView = new std::vector<FilterInView>();
+            filterInView->reserve(count);
+            
+            const std::vector<int>& nameData = mEntityTable.column_exists("string:Name") ? mEntityTable.mStringColumns["string:Name"] : std::vector<int>();
+            
+            const std::vector<int>& kindData = mEntityTable.column_exists("string:Kind") ? mEntityTable.mStringColumns["string:Kind"] : std::vector<int>();
+            
+            const std::vector<int>& filterUniqueIdData = mEntityTable.column_exists("string:FilterUniqueId") ? mEntityTable.mStringColumns["string:FilterUniqueId"] : std::vector<int>();
+            
+            int* orderIndexData = new int[count];
+            if (mEntityTable.column_exists("int:OrderIndex")) {
+                memcpy(orderIndexData, mEntityTable.mDataColumns["int:OrderIndex"].begin(), count * sizeof(int));
+            }
+            
+            bfast::byte* isEnabledData = new bfast::byte[count];
+            if (mEntityTable.column_exists("byte:IsEnabled")) {
+                memcpy(isEnabledData, mEntityTable.mDataColumns["byte:IsEnabled"].begin(), count * sizeof(bfast::byte));
+            }
+            
+            bfast::byte* isVisibleData = new bfast::byte[count];
+            if (mEntityTable.column_exists("byte:IsVisible")) {
+                memcpy(isVisibleData, mEntityTable.mDataColumns["byte:IsVisible"].begin(), count * sizeof(bfast::byte));
+            }
+            
+            bfast::byte* hasOverridesData = new bfast::byte[count];
+            if (mEntityTable.column_exists("byte:HasOverrides")) {
+                memcpy(hasOverridesData, mEntityTable.mDataColumns["byte:HasOverrides"].begin(), count * sizeof(bfast::byte));
+            }
+            
+            const std::vector<int>& viewData = mEntityTable.column_exists("index:Vim.View:View") ? mEntityTable.mIndexColumns["index:Vim.View:View"] : std::vector<int>();
+            
+            for (int i = 0; i < count; ++i)
+            {
+                FilterInView entity;
+                entity.mIndex = i;
+                if (existsName)
+                    entity.mName = std::string(reinterpret_cast<const char*>(mStrings[nameData[i]]));
+                if (existsKind)
+                    entity.mKind = std::string(reinterpret_cast<const char*>(mStrings[kindData[i]]));
+                if (existsFilterUniqueId)
+                    entity.mFilterUniqueId = std::string(reinterpret_cast<const char*>(mStrings[filterUniqueIdData[i]]));
+                if (existsOrderIndex)
+                    entity.mOrderIndex = orderIndexData[i];
+                if (existsIsEnabled)
+                    entity.mIsEnabled = isEnabledData[i];
+                if (existsIsVisible)
+                    entity.mIsVisible = isVisibleData[i];
+                if (existsHasOverrides)
+                    entity.mHasOverrides = hasOverridesData[i];
+                entity.mViewIndex = existsView ? viewData[i] : -1;
+                filterInView->push_back(entity);
+            }
+            
+            delete[] orderIndexData;
+            delete[] isEnabledData;
+            delete[] isVisibleData;
+            delete[] hasOverridesData;
+            
+            return filterInView;
+        }
+        
+        std::string GetName(int filterInViewIndex)
+        {
+            if (filterInViewIndex < 0 || filterInViewIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("string:Name")) {
+                return std::string(reinterpret_cast<const char*>(mStrings[mEntityTable.mStringColumns["string:Name"][filterInViewIndex]]));
+            }
+            
+            return {};
+        }
+        
+        std::vector<std::string>* GetAllName()
+        {
+            const auto count = GetCount();
+            
+            const std::vector<int>& nameData = mEntityTable.column_exists("string:Name") ? mEntityTable.mStringColumns["string:Name"] : std::vector<int>();
+            
+            std::vector<std::string>* result = new std::vector<std::string>();
+            result->reserve(count);
+            
+            for (int i = 0; i < count; ++i)
+            {
+                result->push_back(std::string(reinterpret_cast<const char*>(mStrings[nameData[i]])));
+            }
+            
+            return result;
+        }
+        
+        std::string GetKind(int filterInViewIndex)
+        {
+            if (filterInViewIndex < 0 || filterInViewIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("string:Kind")) {
+                return std::string(reinterpret_cast<const char*>(mStrings[mEntityTable.mStringColumns["string:Kind"][filterInViewIndex]]));
+            }
+            
+            return {};
+        }
+        
+        std::vector<std::string>* GetAllKind()
+        {
+            const auto count = GetCount();
+            
+            const std::vector<int>& kindData = mEntityTable.column_exists("string:Kind") ? mEntityTable.mStringColumns["string:Kind"] : std::vector<int>();
+            
+            std::vector<std::string>* result = new std::vector<std::string>();
+            result->reserve(count);
+            
+            for (int i = 0; i < count; ++i)
+            {
+                result->push_back(std::string(reinterpret_cast<const char*>(mStrings[kindData[i]])));
+            }
+            
+            return result;
+        }
+        
+        std::string GetFilterUniqueId(int filterInViewIndex)
+        {
+            if (filterInViewIndex < 0 || filterInViewIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("string:FilterUniqueId")) {
+                return std::string(reinterpret_cast<const char*>(mStrings[mEntityTable.mStringColumns["string:FilterUniqueId"][filterInViewIndex]]));
+            }
+            
+            return {};
+        }
+        
+        std::vector<std::string>* GetAllFilterUniqueId()
+        {
+            const auto count = GetCount();
+            
+            const std::vector<int>& filterUniqueIdData = mEntityTable.column_exists("string:FilterUniqueId") ? mEntityTable.mStringColumns["string:FilterUniqueId"] : std::vector<int>();
+            
+            std::vector<std::string>* result = new std::vector<std::string>();
+            result->reserve(count);
+            
+            for (int i = 0; i < count; ++i)
+            {
+                result->push_back(std::string(reinterpret_cast<const char*>(mStrings[filterUniqueIdData[i]])));
+            }
+            
+            return result;
+        }
+        
+        int GetOrderIndex(int filterInViewIndex)
+        {
+            if (filterInViewIndex < 0 || filterInViewIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("int:OrderIndex")) {
+                return *reinterpret_cast<int*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["int:OrderIndex"].begin() + filterInViewIndex * sizeof(int)));
+            }
+            
+            return {};
+        }
+        
+        std::vector<int>* GetAllOrderIndex()
+        {
+            const auto count = GetCount();
+            
+            int* orderIndexData = new int[count];
+            if (mEntityTable.column_exists("int:OrderIndex")) {
+                memcpy(orderIndexData, mEntityTable.mDataColumns["int:OrderIndex"].begin(), count * sizeof(int));
+            }
+            
+            std::vector<int>* result = new std::vector<int>(orderIndexData, orderIndexData + count);
+            
+            delete[] orderIndexData;
+            
+            return result;
+        }
+        
+        bool GetIsEnabled(int filterInViewIndex)
+        {
+            if (filterInViewIndex < 0 || filterInViewIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("byte:IsEnabled")) {
+                return static_cast<bool>(*reinterpret_cast<bfast::byte*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["byte:IsEnabled"].begin() + filterInViewIndex * sizeof(bfast::byte))));
+            }
+            
+            return {};
+        }
+        
+        std::vector<bool>* GetAllIsEnabled()
+        {
+            const auto count = GetCount();
+            
+            bfast::byte* isEnabledData = new bfast::byte[count];
+            if (mEntityTable.column_exists("byte:IsEnabled")) {
+                memcpy(isEnabledData, mEntityTable.mDataColumns["byte:IsEnabled"].begin(), count * sizeof(bfast::byte));
+            }
+            
+            std::vector<bool>* result = new std::vector<bool>(isEnabledData, isEnabledData + count);
+            
+            delete[] isEnabledData;
+            
+            return result;
+        }
+        
+        bool GetIsVisible(int filterInViewIndex)
+        {
+            if (filterInViewIndex < 0 || filterInViewIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("byte:IsVisible")) {
+                return static_cast<bool>(*reinterpret_cast<bfast::byte*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["byte:IsVisible"].begin() + filterInViewIndex * sizeof(bfast::byte))));
+            }
+            
+            return {};
+        }
+        
+        std::vector<bool>* GetAllIsVisible()
+        {
+            const auto count = GetCount();
+            
+            bfast::byte* isVisibleData = new bfast::byte[count];
+            if (mEntityTable.column_exists("byte:IsVisible")) {
+                memcpy(isVisibleData, mEntityTable.mDataColumns["byte:IsVisible"].begin(), count * sizeof(bfast::byte));
+            }
+            
+            std::vector<bool>* result = new std::vector<bool>(isVisibleData, isVisibleData + count);
+            
+            delete[] isVisibleData;
+            
+            return result;
+        }
+        
+        bool GetHasOverrides(int filterInViewIndex)
+        {
+            if (filterInViewIndex < 0 || filterInViewIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("byte:HasOverrides")) {
+                return static_cast<bool>(*reinterpret_cast<bfast::byte*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["byte:HasOverrides"].begin() + filterInViewIndex * sizeof(bfast::byte))));
+            }
+            
+            return {};
+        }
+        
+        std::vector<bool>* GetAllHasOverrides()
+        {
+            const auto count = GetCount();
+            
+            bfast::byte* hasOverridesData = new bfast::byte[count];
+            if (mEntityTable.column_exists("byte:HasOverrides")) {
+                memcpy(hasOverridesData, mEntityTable.mDataColumns["byte:HasOverrides"].begin(), count * sizeof(bfast::byte));
+            }
+            
+            std::vector<bool>* result = new std::vector<bool>(hasOverridesData, hasOverridesData + count);
+            
+            delete[] hasOverridesData;
+            
+            return result;
+        }
+        
+        int GetViewIndex(int filterInViewIndex)
+        {
+            if (!mEntityTable.column_exists("index:Vim.View:View")) {
+                return -1;
+            }
+            
+            if (filterInViewIndex < 0 || filterInViewIndex >= GetCount())
+                return -1;
+            
+            return mEntityTable.mIndexColumns["index:Vim.View:View"][filterInViewIndex];
+        }
+        
+    };
+    
+    static FilterInViewTable* GetFilterInViewTable(Scene& scene)
+    {
+        if (scene.mEntityTables.find("Vim.FilterInView") == scene.mEntityTables.end())
+            return {};
+        
+        return new FilterInViewTable(scene.mEntityTables["Vim.FilterInView"], scene.mStrings);
+    }
+    
+    class GridInView
+    {
+    public:
+        int mIndex;
+        bool mBubbleAtEnd0;
+        bool mBubbleAtEnd1;
+        
+        int mGridIndex;
+        Grid* mGrid;
+        int mViewIndex;
+        View* mView;
+        
+        GridInView() {}
+    };
+    
+    class GridInViewTable
+    {
+        EntityTable& mEntityTable;
+        std::vector<const bfast::byte*>& mStrings;
+    public:
+        GridInViewTable(EntityTable& entityTable, std::vector<const bfast::byte*>& strings):
+            mEntityTable(entityTable), mStrings(strings) {}
+        
+        size_t GetCount()
+        {
+            return mEntityTable.get_count();
+        }
+        
+        GridInView* Get(int gridInViewIndex)
+        {
+            GridInView* gridInView = new GridInView();
+            gridInView->mIndex = gridInViewIndex;
+            gridInView->mBubbleAtEnd0 = GetBubbleAtEnd0(gridInViewIndex);
+            gridInView->mBubbleAtEnd1 = GetBubbleAtEnd1(gridInViewIndex);
+            gridInView->mGridIndex = GetGridIndex(gridInViewIndex);
+            gridInView->mViewIndex = GetViewIndex(gridInViewIndex);
+            return gridInView;
+        }
+        
+        std::vector<GridInView>* GetAll()
+        {
+            bool existsBubbleAtEnd0 = mEntityTable.column_exists("byte:BubbleAtEnd0");
+            bool existsBubbleAtEnd1 = mEntityTable.column_exists("byte:BubbleAtEnd1");
+            bool existsGrid = mEntityTable.column_exists("index:Vim.Grid:Grid");
+            bool existsView = mEntityTable.column_exists("index:Vim.View:View");
+            
+            const auto count = GetCount();
+            
+            std::vector<GridInView>* gridInView = new std::vector<GridInView>();
+            gridInView->reserve(count);
+            
+            bfast::byte* bubbleAtEnd0Data = new bfast::byte[count];
+            if (mEntityTable.column_exists("byte:BubbleAtEnd0")) {
+                memcpy(bubbleAtEnd0Data, mEntityTable.mDataColumns["byte:BubbleAtEnd0"].begin(), count * sizeof(bfast::byte));
+            }
+            
+            bfast::byte* bubbleAtEnd1Data = new bfast::byte[count];
+            if (mEntityTable.column_exists("byte:BubbleAtEnd1")) {
+                memcpy(bubbleAtEnd1Data, mEntityTable.mDataColumns["byte:BubbleAtEnd1"].begin(), count * sizeof(bfast::byte));
+            }
+            
+            const std::vector<int>& gridData = mEntityTable.column_exists("index:Vim.Grid:Grid") ? mEntityTable.mIndexColumns["index:Vim.Grid:Grid"] : std::vector<int>();
+            const std::vector<int>& viewData = mEntityTable.column_exists("index:Vim.View:View") ? mEntityTable.mIndexColumns["index:Vim.View:View"] : std::vector<int>();
+            
+            for (int i = 0; i < count; ++i)
+            {
+                GridInView entity;
+                entity.mIndex = i;
+                if (existsBubbleAtEnd0)
+                    entity.mBubbleAtEnd0 = bubbleAtEnd0Data[i];
+                if (existsBubbleAtEnd1)
+                    entity.mBubbleAtEnd1 = bubbleAtEnd1Data[i];
+                entity.mGridIndex = existsGrid ? gridData[i] : -1;
+                entity.mViewIndex = existsView ? viewData[i] : -1;
+                gridInView->push_back(entity);
+            }
+            
+            delete[] bubbleAtEnd0Data;
+            delete[] bubbleAtEnd1Data;
+            
+            return gridInView;
+        }
+        
+        bool GetBubbleAtEnd0(int gridInViewIndex)
+        {
+            if (gridInViewIndex < 0 || gridInViewIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("byte:BubbleAtEnd0")) {
+                return static_cast<bool>(*reinterpret_cast<bfast::byte*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["byte:BubbleAtEnd0"].begin() + gridInViewIndex * sizeof(bfast::byte))));
+            }
+            
+            return {};
+        }
+        
+        std::vector<bool>* GetAllBubbleAtEnd0()
+        {
+            const auto count = GetCount();
+            
+            bfast::byte* bubbleAtEnd0Data = new bfast::byte[count];
+            if (mEntityTable.column_exists("byte:BubbleAtEnd0")) {
+                memcpy(bubbleAtEnd0Data, mEntityTable.mDataColumns["byte:BubbleAtEnd0"].begin(), count * sizeof(bfast::byte));
+            }
+            
+            std::vector<bool>* result = new std::vector<bool>(bubbleAtEnd0Data, bubbleAtEnd0Data + count);
+            
+            delete[] bubbleAtEnd0Data;
+            
+            return result;
+        }
+        
+        bool GetBubbleAtEnd1(int gridInViewIndex)
+        {
+            if (gridInViewIndex < 0 || gridInViewIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("byte:BubbleAtEnd1")) {
+                return static_cast<bool>(*reinterpret_cast<bfast::byte*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["byte:BubbleAtEnd1"].begin() + gridInViewIndex * sizeof(bfast::byte))));
+            }
+            
+            return {};
+        }
+        
+        std::vector<bool>* GetAllBubbleAtEnd1()
+        {
+            const auto count = GetCount();
+            
+            bfast::byte* bubbleAtEnd1Data = new bfast::byte[count];
+            if (mEntityTable.column_exists("byte:BubbleAtEnd1")) {
+                memcpy(bubbleAtEnd1Data, mEntityTable.mDataColumns["byte:BubbleAtEnd1"].begin(), count * sizeof(bfast::byte));
+            }
+            
+            std::vector<bool>* result = new std::vector<bool>(bubbleAtEnd1Data, bubbleAtEnd1Data + count);
+            
+            delete[] bubbleAtEnd1Data;
+            
+            return result;
+        }
+        
+        int GetGridIndex(int gridInViewIndex)
+        {
+            if (!mEntityTable.column_exists("index:Vim.Grid:Grid")) {
+                return -1;
+            }
+            
+            if (gridInViewIndex < 0 || gridInViewIndex >= GetCount())
+                return -1;
+            
+            return mEntityTable.mIndexColumns["index:Vim.Grid:Grid"][gridInViewIndex];
+        }
+        
+        int GetViewIndex(int gridInViewIndex)
+        {
+            if (!mEntityTable.column_exists("index:Vim.View:View")) {
+                return -1;
+            }
+            
+            if (gridInViewIndex < 0 || gridInViewIndex >= GetCount())
+                return -1;
+            
+            return mEntityTable.mIndexColumns["index:Vim.View:View"][gridInViewIndex];
+        }
+        
+    };
+    
+    static GridInViewTable* GetGridInViewTable(Scene& scene)
+    {
+        if (scene.mEntityTables.find("Vim.GridInView") == scene.mEntityTables.end())
+            return {};
+        
+        return new GridInViewTable(scene.mEntityTables["Vim.GridInView"], scene.mStrings);
     }
     
     class ElementInView
@@ -11012,6 +12006,8 @@ namespace Vim
         std::string mGuid;
         std::string mSeverity;
         std::string mDescription;
+        std::string mKey;
+        int mFailingElementCount;
         
         int mBimDocumentIndex;
         BimDocument* mBimDocument;
@@ -11039,6 +12035,8 @@ namespace Vim
             warning->mGuid = GetGuid(warningIndex);
             warning->mSeverity = GetSeverity(warningIndex);
             warning->mDescription = GetDescription(warningIndex);
+            warning->mKey = GetKey(warningIndex);
+            warning->mFailingElementCount = GetFailingElementCount(warningIndex);
             warning->mBimDocumentIndex = GetBimDocumentIndex(warningIndex);
             return warning;
         }
@@ -11048,6 +12046,8 @@ namespace Vim
             bool existsGuid = mEntityTable.column_exists("string:Guid");
             bool existsSeverity = mEntityTable.column_exists("string:Severity");
             bool existsDescription = mEntityTable.column_exists("string:Description");
+            bool existsKey = mEntityTable.column_exists("string:Key");
+            bool existsFailingElementCount = mEntityTable.column_exists("int:FailingElementCount");
             bool existsBimDocument = mEntityTable.column_exists("index:Vim.BimDocument:BimDocument");
             
             const auto count = GetCount();
@@ -11061,6 +12061,13 @@ namespace Vim
             
             const std::vector<int>& descriptionData = mEntityTable.column_exists("string:Description") ? mEntityTable.mStringColumns["string:Description"] : std::vector<int>();
             
+            const std::vector<int>& keyData = mEntityTable.column_exists("string:Key") ? mEntityTable.mStringColumns["string:Key"] : std::vector<int>();
+            
+            int* failingElementCountData = new int[count];
+            if (mEntityTable.column_exists("int:FailingElementCount")) {
+                memcpy(failingElementCountData, mEntityTable.mDataColumns["int:FailingElementCount"].begin(), count * sizeof(int));
+            }
+            
             const std::vector<int>& bimDocumentData = mEntityTable.column_exists("index:Vim.BimDocument:BimDocument") ? mEntityTable.mIndexColumns["index:Vim.BimDocument:BimDocument"] : std::vector<int>();
             
             for (int i = 0; i < count; ++i)
@@ -11073,9 +12080,15 @@ namespace Vim
                     entity.mSeverity = std::string(reinterpret_cast<const char*>(mStrings[severityData[i]]));
                 if (existsDescription)
                     entity.mDescription = std::string(reinterpret_cast<const char*>(mStrings[descriptionData[i]]));
+                if (existsKey)
+                    entity.mKey = std::string(reinterpret_cast<const char*>(mStrings[keyData[i]]));
+                if (existsFailingElementCount)
+                    entity.mFailingElementCount = failingElementCountData[i];
                 entity.mBimDocumentIndex = existsBimDocument ? bimDocumentData[i] : -1;
                 warning->push_back(entity);
             }
+            
+            delete[] failingElementCountData;
             
             return warning;
         }
@@ -11163,6 +12176,63 @@ namespace Vim
             {
                 result->push_back(std::string(reinterpret_cast<const char*>(mStrings[descriptionData[i]])));
             }
+            
+            return result;
+        }
+        
+        std::string GetKey(int warningIndex)
+        {
+            if (warningIndex < 0 || warningIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("string:Key")) {
+                return std::string(reinterpret_cast<const char*>(mStrings[mEntityTable.mStringColumns["string:Key"][warningIndex]]));
+            }
+            
+            return {};
+        }
+        
+        std::vector<std::string>* GetAllKey()
+        {
+            const auto count = GetCount();
+            
+            const std::vector<int>& keyData = mEntityTable.column_exists("string:Key") ? mEntityTable.mStringColumns["string:Key"] : std::vector<int>();
+            
+            std::vector<std::string>* result = new std::vector<std::string>();
+            result->reserve(count);
+            
+            for (int i = 0; i < count; ++i)
+            {
+                result->push_back(std::string(reinterpret_cast<const char*>(mStrings[keyData[i]])));
+            }
+            
+            return result;
+        }
+        
+        int GetFailingElementCount(int warningIndex)
+        {
+            if (warningIndex < 0 || warningIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("int:FailingElementCount")) {
+                return *reinterpret_cast<int*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["int:FailingElementCount"].begin() + warningIndex * sizeof(int)));
+            }
+            
+            return {};
+        }
+        
+        std::vector<int>* GetAllFailingElementCount()
+        {
+            const auto count = GetCount();
+            
+            int* failingElementCountData = new int[count];
+            if (mEntityTable.column_exists("int:FailingElementCount")) {
+                memcpy(failingElementCountData, mEntityTable.mDataColumns["int:FailingElementCount"].begin(), count * sizeof(int));
+            }
+            
+            std::vector<int>* result = new std::vector<int>(failingElementCountData, failingElementCountData + count);
+            
+            delete[] failingElementCountData;
             
             return result;
         }
@@ -12078,9 +13148,15 @@ namespace Vim
         double mExtents_Max_X;
         double mExtents_Max_Y;
         double mExtents_Max_Z;
+        bool mTypeBubbleAtEnd0;
+        bool mTypeBubbleAtEnd1;
+        bool mBubbleAtEnd0;
+        bool mBubbleAtEnd1;
         
         int mFamilyTypeIndex;
         FamilyType* mFamilyType;
+        int mBubbleViewIndex;
+        View* mBubbleView;
         int mElementIndex;
         Element* mElement;
         
@@ -12117,7 +13193,12 @@ namespace Vim
             grid->mExtents_Max_X = GetExtents_Max_X(gridIndex);
             grid->mExtents_Max_Y = GetExtents_Max_Y(gridIndex);
             grid->mExtents_Max_Z = GetExtents_Max_Z(gridIndex);
+            grid->mTypeBubbleAtEnd0 = GetTypeBubbleAtEnd0(gridIndex);
+            grid->mTypeBubbleAtEnd1 = GetTypeBubbleAtEnd1(gridIndex);
+            grid->mBubbleAtEnd0 = GetBubbleAtEnd0(gridIndex);
+            grid->mBubbleAtEnd1 = GetBubbleAtEnd1(gridIndex);
             grid->mFamilyTypeIndex = GetFamilyTypeIndex(gridIndex);
+            grid->mBubbleViewIndex = GetBubbleViewIndex(gridIndex);
             grid->mElementIndex = GetElementIndex(gridIndex);
             return grid;
         }
@@ -12137,7 +13218,12 @@ namespace Vim
             bool existsExtents_Max_X = mEntityTable.column_exists("double:Extents.Max.X");
             bool existsExtents_Max_Y = mEntityTable.column_exists("double:Extents.Max.Y");
             bool existsExtents_Max_Z = mEntityTable.column_exists("double:Extents.Max.Z");
+            bool existsTypeBubbleAtEnd0 = mEntityTable.column_exists("byte:TypeBubbleAtEnd0");
+            bool existsTypeBubbleAtEnd1 = mEntityTable.column_exists("byte:TypeBubbleAtEnd1");
+            bool existsBubbleAtEnd0 = mEntityTable.column_exists("byte:BubbleAtEnd0");
+            bool existsBubbleAtEnd1 = mEntityTable.column_exists("byte:BubbleAtEnd1");
             bool existsFamilyType = mEntityTable.column_exists("index:Vim.FamilyType:FamilyType");
+            bool existsBubbleView = mEntityTable.column_exists("index:Vim.View:BubbleView");
             bool existsElement = mEntityTable.column_exists("index:Vim.Element:Element");
             
             const auto count = GetCount();
@@ -12210,7 +13296,28 @@ namespace Vim
                 memcpy(extents_Max_ZData, mEntityTable.mDataColumns["double:Extents.Max.Z"].begin(), count * sizeof(double));
             }
             
+            bfast::byte* typeBubbleAtEnd0Data = new bfast::byte[count];
+            if (mEntityTable.column_exists("byte:TypeBubbleAtEnd0")) {
+                memcpy(typeBubbleAtEnd0Data, mEntityTable.mDataColumns["byte:TypeBubbleAtEnd0"].begin(), count * sizeof(bfast::byte));
+            }
+            
+            bfast::byte* typeBubbleAtEnd1Data = new bfast::byte[count];
+            if (mEntityTable.column_exists("byte:TypeBubbleAtEnd1")) {
+                memcpy(typeBubbleAtEnd1Data, mEntityTable.mDataColumns["byte:TypeBubbleAtEnd1"].begin(), count * sizeof(bfast::byte));
+            }
+            
+            bfast::byte* bubbleAtEnd0Data = new bfast::byte[count];
+            if (mEntityTable.column_exists("byte:BubbleAtEnd0")) {
+                memcpy(bubbleAtEnd0Data, mEntityTable.mDataColumns["byte:BubbleAtEnd0"].begin(), count * sizeof(bfast::byte));
+            }
+            
+            bfast::byte* bubbleAtEnd1Data = new bfast::byte[count];
+            if (mEntityTable.column_exists("byte:BubbleAtEnd1")) {
+                memcpy(bubbleAtEnd1Data, mEntityTable.mDataColumns["byte:BubbleAtEnd1"].begin(), count * sizeof(bfast::byte));
+            }
+            
             const std::vector<int>& familyTypeData = mEntityTable.column_exists("index:Vim.FamilyType:FamilyType") ? mEntityTable.mIndexColumns["index:Vim.FamilyType:FamilyType"] : std::vector<int>();
+            const std::vector<int>& bubbleViewData = mEntityTable.column_exists("index:Vim.View:BubbleView") ? mEntityTable.mIndexColumns["index:Vim.View:BubbleView"] : std::vector<int>();
             const std::vector<int>& elementData = mEntityTable.column_exists("index:Vim.Element:Element") ? mEntityTable.mIndexColumns["index:Vim.Element:Element"] : std::vector<int>();
             
             for (int i = 0; i < count; ++i)
@@ -12243,7 +13350,16 @@ namespace Vim
                     entity.mExtents_Max_Y = extents_Max_YData[i];
                 if (existsExtents_Max_Z)
                     entity.mExtents_Max_Z = extents_Max_ZData[i];
+                if (existsTypeBubbleAtEnd0)
+                    entity.mTypeBubbleAtEnd0 = typeBubbleAtEnd0Data[i];
+                if (existsTypeBubbleAtEnd1)
+                    entity.mTypeBubbleAtEnd1 = typeBubbleAtEnd1Data[i];
+                if (existsBubbleAtEnd0)
+                    entity.mBubbleAtEnd0 = bubbleAtEnd0Data[i];
+                if (existsBubbleAtEnd1)
+                    entity.mBubbleAtEnd1 = bubbleAtEnd1Data[i];
                 entity.mFamilyTypeIndex = existsFamilyType ? familyTypeData[i] : -1;
+                entity.mBubbleViewIndex = existsBubbleView ? bubbleViewData[i] : -1;
                 entity.mElementIndex = existsElement ? elementData[i] : -1;
                 grid->push_back(entity);
             }
@@ -12261,6 +13377,10 @@ namespace Vim
             delete[] extents_Max_XData;
             delete[] extents_Max_YData;
             delete[] extents_Max_ZData;
+            delete[] typeBubbleAtEnd0Data;
+            delete[] typeBubbleAtEnd1Data;
+            delete[] bubbleAtEnd0Data;
+            delete[] bubbleAtEnd1Data;
             
             return grid;
         }
@@ -12629,6 +13749,118 @@ namespace Vim
             return result;
         }
         
+        bool GetTypeBubbleAtEnd0(int gridIndex)
+        {
+            if (gridIndex < 0 || gridIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("byte:TypeBubbleAtEnd0")) {
+                return static_cast<bool>(*reinterpret_cast<bfast::byte*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["byte:TypeBubbleAtEnd0"].begin() + gridIndex * sizeof(bfast::byte))));
+            }
+            
+            return {};
+        }
+        
+        std::vector<bool>* GetAllTypeBubbleAtEnd0()
+        {
+            const auto count = GetCount();
+            
+            bfast::byte* typeBubbleAtEnd0Data = new bfast::byte[count];
+            if (mEntityTable.column_exists("byte:TypeBubbleAtEnd0")) {
+                memcpy(typeBubbleAtEnd0Data, mEntityTable.mDataColumns["byte:TypeBubbleAtEnd0"].begin(), count * sizeof(bfast::byte));
+            }
+            
+            std::vector<bool>* result = new std::vector<bool>(typeBubbleAtEnd0Data, typeBubbleAtEnd0Data + count);
+            
+            delete[] typeBubbleAtEnd0Data;
+            
+            return result;
+        }
+        
+        bool GetTypeBubbleAtEnd1(int gridIndex)
+        {
+            if (gridIndex < 0 || gridIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("byte:TypeBubbleAtEnd1")) {
+                return static_cast<bool>(*reinterpret_cast<bfast::byte*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["byte:TypeBubbleAtEnd1"].begin() + gridIndex * sizeof(bfast::byte))));
+            }
+            
+            return {};
+        }
+        
+        std::vector<bool>* GetAllTypeBubbleAtEnd1()
+        {
+            const auto count = GetCount();
+            
+            bfast::byte* typeBubbleAtEnd1Data = new bfast::byte[count];
+            if (mEntityTable.column_exists("byte:TypeBubbleAtEnd1")) {
+                memcpy(typeBubbleAtEnd1Data, mEntityTable.mDataColumns["byte:TypeBubbleAtEnd1"].begin(), count * sizeof(bfast::byte));
+            }
+            
+            std::vector<bool>* result = new std::vector<bool>(typeBubbleAtEnd1Data, typeBubbleAtEnd1Data + count);
+            
+            delete[] typeBubbleAtEnd1Data;
+            
+            return result;
+        }
+        
+        bool GetBubbleAtEnd0(int gridIndex)
+        {
+            if (gridIndex < 0 || gridIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("byte:BubbleAtEnd0")) {
+                return static_cast<bool>(*reinterpret_cast<bfast::byte*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["byte:BubbleAtEnd0"].begin() + gridIndex * sizeof(bfast::byte))));
+            }
+            
+            return {};
+        }
+        
+        std::vector<bool>* GetAllBubbleAtEnd0()
+        {
+            const auto count = GetCount();
+            
+            bfast::byte* bubbleAtEnd0Data = new bfast::byte[count];
+            if (mEntityTable.column_exists("byte:BubbleAtEnd0")) {
+                memcpy(bubbleAtEnd0Data, mEntityTable.mDataColumns["byte:BubbleAtEnd0"].begin(), count * sizeof(bfast::byte));
+            }
+            
+            std::vector<bool>* result = new std::vector<bool>(bubbleAtEnd0Data, bubbleAtEnd0Data + count);
+            
+            delete[] bubbleAtEnd0Data;
+            
+            return result;
+        }
+        
+        bool GetBubbleAtEnd1(int gridIndex)
+        {
+            if (gridIndex < 0 || gridIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("byte:BubbleAtEnd1")) {
+                return static_cast<bool>(*reinterpret_cast<bfast::byte*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["byte:BubbleAtEnd1"].begin() + gridIndex * sizeof(bfast::byte))));
+            }
+            
+            return {};
+        }
+        
+        std::vector<bool>* GetAllBubbleAtEnd1()
+        {
+            const auto count = GetCount();
+            
+            bfast::byte* bubbleAtEnd1Data = new bfast::byte[count];
+            if (mEntityTable.column_exists("byte:BubbleAtEnd1")) {
+                memcpy(bubbleAtEnd1Data, mEntityTable.mDataColumns["byte:BubbleAtEnd1"].begin(), count * sizeof(bfast::byte));
+            }
+            
+            std::vector<bool>* result = new std::vector<bool>(bubbleAtEnd1Data, bubbleAtEnd1Data + count);
+            
+            delete[] bubbleAtEnd1Data;
+            
+            return result;
+        }
+        
         int GetFamilyTypeIndex(int gridIndex)
         {
             if (!mEntityTable.column_exists("index:Vim.FamilyType:FamilyType")) {
@@ -12639,6 +13871,18 @@ namespace Vim
                 return -1;
             
             return mEntityTable.mIndexColumns["index:Vim.FamilyType:FamilyType"][gridIndex];
+        }
+        
+        int GetBubbleViewIndex(int gridIndex)
+        {
+            if (!mEntityTable.column_exists("index:Vim.View:BubbleView")) {
+                return -1;
+            }
+            
+            if (gridIndex < 0 || gridIndex >= GetCount())
+                return -1;
+            
+            return mEntityTable.mIndexColumns["index:Vim.View:BubbleView"][gridIndex];
         }
         
         int GetElementIndex(int gridIndex)
@@ -17904,6 +19148,8 @@ namespace Vim
         mFamilyType = GetFamilyTypeTable(scene);
         mFamilyInstance = GetFamilyInstanceTable(scene);
         mView = GetViewTable(scene);
+        mFilterInView = GetFilterInViewTable(scene);
+        mGridInView = GetGridInViewTable(scene);
         mElementInView = GetElementInViewTable(scene);
         mShapeInView = GetShapeInViewTable(scene);
         mAssetInView = GetAssetInViewTable(scene);
@@ -17971,6 +19217,8 @@ namespace Vim
         delete mFamilyType;
         delete mFamilyInstance;
         delete mView;
+        delete mFilterInView;
+        delete mGridInView;
         delete mElementInView;
         delete mShapeInView;
         delete mAssetInView;
