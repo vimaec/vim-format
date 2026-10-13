@@ -392,6 +392,7 @@ namespace Vim.Format.Merge
             var ordered = elementOwned.Where(n => n != TableNames.ElementInView).ToList();
             if (elementOwned.Contains(TableNames.ElementInView)) ordered.Add(TableNames.ElementInView);
 
+            var warningScope = options.ReplaceHostWarnings ? WarningScope(sources, options, replacedDocs) : null;
             var shapeKinds = new HashSet<int>(options.ReplacedShapeKinds ?? Array.Empty<int>());
             HashSet<int> scopeViews = null;
 
@@ -501,7 +502,11 @@ namespace Vim.Format.Merge
                         var e = partialOwner[r];
                         if (e < 0) { result.PartialRowsWithoutElementDropped++; continue; }
                         var role = partialRole[e];
-                        if (role == Role.New || (role == Role.Changed && inScope(1, r)))
+                        // With the whole warning list in the partial, a context element's ElementInWarning rows are the
+                        // ones Revit lists now (a new warning naming only untouched elements); duplicates of the base's
+                        // rows are merged by ReconcileElementsInWarning.
+                        var warningContext = table == TableNames.ElementInWarning && role == Role.Context && warningScope != null;
+                        if (role == Role.New || (role == Role.Changed && inScope(1, r)) || warningContext)
                         {
                             if (table == TableNames.ElementInView && !inScope(1, r) && role == Role.New)
                             {
@@ -521,7 +526,6 @@ namespace Vim.Format.Merge
             // ---------------------------------------------------------------------------------------------
             var others = tableNames.Where(n => n != TableNames.Element && !elementOwned.Contains(n) && !activityTables.Contains(n)).ToList();
             var (order, cyclic) = TopologicalOrder(others, sources);
-            var warningScope = options.ReplaceHostWarnings ? WarningScope(sources, options, replacedDocs) : null;
             foreach (var table in order)
             {
                 if (table == TableNames.Warning && warningScope != null)
@@ -1151,18 +1155,7 @@ namespace Vim.Format.Merge
             }
 
             var keyOf = KeyFunction(table, sources, plans, relations);
-            // A parameter descriptor is one per parameter definition, but its IsReadOnly is read from whichever parameter
-            // of that definition the export met first (RevitToVimStore.StoreParameterDescriptor) - and Revit's
-            // Parameter.IsReadOnly is per element ("Elevation from Level" is read-only on one piece of furniture and not on
-            // the next). A partial export meets them in another order, so the same definition came back with the other
-            // IsReadOnly, was appended as a second descriptor, and every re-exported parameter of it pointed there (Diff
-            // series: 19 descriptors, 4,948 STRUCTURE elements in version 1; "Elevation from Level" on all 63 elements of
-            // version 3). So: the base row with the same content if there is one, else the base row that differs only by
-            // IsReadOnly (a full export can hold both for one name: then the exact one wins).
-            var looseKeyOf = table == TableNames.ParameterDescriptor
-                ? KeyFunction(table, sources, plans, relations, new HashSet<string> { "byte:IsReadOnly" })
-                : null;
-            Dictionary<string, int> baseIndex = null, baseLooseIndex = null;
+            Dictionary<string, int> baseIndex = null;
             var partialIndex = new Dictionary<string, int>();
             for (var r = 0; r < np; ++r)
             {
@@ -1171,20 +1164,13 @@ namespace Vim.Format.Merge
                 if (baseIndex == null)
                 {
                     baseIndex = new Dictionary<string, int>();
-                    baseLooseIndex = new Dictionary<string, int>();
                     for (var i = 0; i < plan.Count; ++i)
                     {
                         var bk = keyOf(0, plan.Row[i]);
                         if (!baseIndex.ContainsKey(bk)) baseIndex[bk] = i;
-                        if (looseKeyOf != null)
-                        {
-                            var lk = looseKeyOf(0, plan.Row[i]);
-                            if (!baseLooseIndex.ContainsKey(lk)) baseLooseIndex[lk] = i;
-                        }
                     }
                 }
-                if (baseIndex.TryGetValue(k, out var o) || partialIndex.TryGetValue(k, out o)
-                    || (looseKeyOf != null && baseLooseIndex.TryGetValue(looseKeyOf(1, r), out o)))
+                if (baseIndex.TryGetValue(k, out var o) || partialIndex.TryGetValue(k, out o))
                 {
                     plan.Alias(1, r, o);
                     continue;
@@ -1192,9 +1178,8 @@ namespace Vim.Format.Merge
                 partialIndex[k] = plan.Add(1, r);
             }
         }
-
         private static Func<int, int, string> KeyFunction(string table, VimTables[] sources, Dictionary<string, TablePlan> plans,
-            List<(string Column, string Related)> relations, HashSet<string> ignoredDataCols = null)
+            List<(string Column, string Related)> relations)
         {
             string[] keyStringColumns = null;
             switch (table)
@@ -1206,9 +1191,7 @@ namespace Vim.Format.Merge
 
             var stringCols = keyStringColumns ?? sources.SelectMany(s => s.GetTable(table)?.StringColumns.Select(c => c.Name) ?? Enumerable.Empty<string>())
                 .Distinct().OrderBy(x => x, StringComparer.Ordinal).ToArray();
-            ignoredDataCols = ignoredDataCols ?? new HashSet<string>();
             var dataCols = keyStringColumns != null ? Array.Empty<string>() : sources.SelectMany(s => s.GetTable(table)?.DataColumns.Select(c => c.Name) ?? Enumerable.Empty<string>())
-                .Where(c => !ignoredDataCols.Contains(c))
                 .Distinct().OrderBy(x => x, StringComparer.Ordinal).ToArray();
             var indexCols = keyStringColumns != null ? new List<(string Column, string Related)>() : relations.Where(r => r.Related != table).ToList();
 

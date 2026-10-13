@@ -183,7 +183,9 @@ namespace Vim.Format.Tests
                 }
                 var linkType = d.AddElement(60, "link-type", link, "WallType");
                 d.Omb.FamilyTypeBuilder.AddUntracked(new FamilyType { _Family = { Index = family }, _Element = { Index = linkType } });
-                d.AddBox(70, "link-wall", link, 3, partial ? "L2" : "L", markReadOnly: partial);
+                // The link's "Mark" descriptor is read-only, the host's is not: two descriptors differing only by IsReadOnly,
+                // as a full export writes them (one per document). The partial writes it as the file has it.
+                d.AddBox(70, "link-wall", link, 3, partial ? "L2" : "L", markReadOnly: true);
                 var buildingHolder = d.AddElement(-1, "USF STRUCT (Building)_Building Parameter Holder", link, VimConstants.BuildingParameterHolderElementType);
                 var building = d.Omb.BuildingBuilder.AddUntracked(new Building { _Element = { Index = buildingHolder } }).Index;
                 var level = d.AddElement(80, "link-level", link, "Level");
@@ -191,7 +193,14 @@ namespace Vim.Format.Tests
                 return d;
             }
 
-            var basePath = Model(false).Write(dir, "base.vim");
+            var baseDoc = Model(false);
+            var basePath = baseDoc.Write(dir, "base.vim");
+
+            // What the sync hands the partial export: the IsReadOnly of each document's descriptors.
+            var known = DescriptorReadOnly.FromFile(VimTables.Load(basePath));
+            Assert.IsFalse(known[DescriptorReadOnly.Key(DescriptorReadOnly.HostDocumentKey, "Mark", "Data", null, 0, false, false, 0, null)]);
+            Assert.IsTrue(known[DescriptorReadOnly.Key("Struct", "Mark", "Data", null, 0, false, false, 0, null)]);
+
             var partialPath = Model(true).Write(dir, "partial.vim");
             var outPath = Path.Combine(dir, "patched.vim");
             VimPatchService.Patch(basePath, partialPath, outPath, new VimPatchOptions
@@ -212,10 +221,11 @@ namespace Vim.Format.Tests
             var linkType = Enumerable.Range(0, dm.NumFamilyType).Select(dm.GetFamilyType).Single(t => t.Element.UniqueId == "link-type");
             Assert.AreEqual(system, dm.GetFamily(linkType._Family.Index)._Element.Index);
 
-            Assert.AreEqual(2, dm.NumParameterDescriptor, "Project Name + Mark: the partial's read-only twin is not added");
-            var linkWallMark = Enumerable.Range(0, dm.NumParameter).Select(dm.GetParameter).Single(x => x.Element.UniqueId == "link-wall");
-            Assert.AreEqual("L2", linkWallMark.Value, "the value is the partial's");
-            Assert.IsFalse(linkWallMark.ParameterDescriptor.IsReadOnly, "the descriptor is the base's");
+            Assert.AreEqual(3, dm.NumParameterDescriptor, "Project Name, Mark, read-only Mark: the base's rows, none added");
+            var marks = Enumerable.Range(0, dm.NumParameter).Select(dm.GetParameter).Where(x => x.ParameterDescriptor.Name == "Mark").ToDictionary(x => x.Element.UniqueId);
+            Assert.AreEqual("L2", marks["link-wall"].Value, "the value is the partial's");
+            Assert.IsTrue(marks["link-wall"].ParameterDescriptor.IsReadOnly, "the link's value stays on the link's descriptor");
+            Assert.IsFalse(marks["host-wall"].ParameterDescriptor.IsReadOnly, "the host's on the host's");
 
             var level = Enumerable.Range(0, dm.NumLevel).Select(dm.GetLevel).Single();
             Assert.GreaterOrEqual(level._Building.Index, 0, "the link's level keeps its building");
@@ -247,7 +257,9 @@ namespace Vim.Format.Tests
             var pHost = p.AddDocument("Tower", "Skanska Tower 2027");
             p.AddView("temp-view", "_VIM_EXPORT_1", pHost);
             var pWall = p.AddBox(1, "wall", pHost, 2, "B");
-            p.AddWarning(pHost, "k1", "overlap", 2, pWall);           // still listed; the door is not in the partial
+            var pDoor = p.AddBox(2, "door", pHost, 5, "D");          // context: written only because warning k5 names it
+            p.AddWarning(pHost, "k1", "overlap", 2, pWall);           // still listed (its door row comes from the base)
+            p.AddWarning(pHost, "k5", "new, names only an untouched element", 1, pDoor);
             p.AddWarning(pHost, "k3", "new one", 1, pWall);
             p.AddWarning(pHost, "k4", "room tag outside its room", 1); // names nothing exported
             var partialPath = p.Write(dir, "partial.vim");
@@ -265,10 +277,10 @@ namespace Vim.Format.Tests
             var dm = VimScene.LoadVim(replaced).DocumentModel;
             VimScene.LoadVim(replaced).Validate();
             var keys = Enumerable.Range(0, dm.NumWarning).Select(i => dm.GetWarning(i).Key).ToList();
-            CollectionAssert.AreEquivalent(new[] { "k1", "k3" }, keys);
+            CollectionAssert.AreEquivalent(new[] { "k1", "k3", "k5" }, keys);
             var named = Enumerable.Range(0, dm.NumElementInWarning).Select(dm.GetElementInWarning)
                 .Select(x => (x.Warning.Key, x.Element.UniqueId)).ToList();
-            CollectionAssert.AreEquivalent(new[] { ("k1", "wall"), ("k1", "door"), ("k3", "wall") }, named);
+            CollectionAssert.AreEquivalent(new[] { ("k1", "wall"), ("k1", "door"), ("k3", "wall"), ("k5", "door") }, named);
 
             // The old rule, with the document fix: k1 is not doubled (k2 stays, k4 is added as before - the old rule
             // never removes anything; the exporter passes ReplaceHostWarnings).
