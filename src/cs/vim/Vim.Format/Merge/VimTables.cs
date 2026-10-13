@@ -129,7 +129,12 @@ namespace Vim.Format.Merge
             var uids = Strs(TableNames.Element, "string:UniqueId") ?? new string[n];
             var seen = new Dictionary<string, int>();
             var r = new string[n];
-            for (var i = 0; i < n; ++i)
+            // An aliased row (standing for another element) takes the plain key before the element itself: see
+            // VimPatchService.ElementKeys.
+            var order = Enumerable.Range(0, n);
+            if (uniqueIdAlias != null)
+                order = order.OrderBy(i => string.Equals(uniqueIdAlias(uids[i] ?? "") ?? uids[i] ?? "", uids[i] ?? "", StringComparison.Ordinal) ? 1 : 0).ThenBy(i => i);
+            foreach (var i in order)
             {
                 var d = docs != null && docs[i] >= 0 && docs[i] < docKeys.Length ? docKeys[docs[i]] : "";
                 var u = uids[i] ?? "";

@@ -73,6 +73,23 @@ namespace Vim.Format.Merge
 
         public PatchDocumentMatch DocumentMatch { get; set; } = PatchDocumentMatch.TitleAndPath;
 
+        /// <summary>
+        /// Linked model title in the partial file -> its title in the base file, for a linked model renamed between the
+        /// two exports (the caller knows it is the same model by its stable identity: CreationGUID, plus the cloud model
+        /// guid). Used by <see cref="PatchDocumentMatch.Title"/> and <see cref="PatchDocumentMatch.HostAndLinkTitles"/>.
+        /// </summary>
+        public IDictionary<string, string> DocumentTitleAliases { get; set; } = new Dictionary<string, string>();
+
+        /// <summary>
+        /// The partial file holds every warning Revit lists for the host model (the rows naming no element of the
+        /// partial included): the host's Warning rows are replaced by the partial's, matched by Warning.Key, and a base
+        /// ElementInWarning row follows its warning to the partial's row of the same key. A base warning Revit no longer
+        /// lists goes, and so does every warning no element of the file names any more (a full export writes none).
+        /// The linked models of <see cref="ReplacedDocumentTitles"/> are treated the same way. False = the old rule (a
+        /// partial warning is added unless an identical row is in the base; nothing is ever removed).
+        /// </summary>
+        public bool ReplaceHostWarnings { get; set; }
+
         /// <summary>A partial mesh equal to one the base already has is not written twice.</summary>
         public bool DeduplicateMeshes { get; set; } = true;
 
@@ -118,6 +135,10 @@ namespace Vim.Format.Merge
         public int OrphanRowsRemoved;
         /// <summary>Activity rows dropped by the retention caps.</summary>
         public int ActivityRowsTrimmed;
+        /// <summary>Document parameter holders (and site / building holders) of the partial matched to the base's, whatever their name-made UniqueId.</summary>
+        public int HoldersMatched;
+        /// <summary>Warnings of the base dropped because Revit no longer lists them or no element names them any more.</summary>
+        public int WarningsRemoved;
         public RowPlanWriteStats Geometry = new RowPlanWriteStats();
         public long LoadMs, PlanMs, BuildMs, WriteMs;
 
@@ -128,6 +149,8 @@ namespace Vim.Format.Merge
             sb.AppendLine($"  kept {Kept}, changed {Changed}, added {Added}, deleted {Deleted}, context {Context}, excluded {Excluded}");
             if (ChangedButNotInPartial.Count > 0) sb.AppendLine($"  changed but not in the partial (base kept): {ChangedButNotInPartial.Count}");
             if (DeletedButNotInBase.Count > 0) sb.AppendLine($"  deleted but not in the base: {DeletedButNotInBase.Count}");
+            if (HoldersMatched > 0) sb.AppendLine($"  document / site / building holders matched by document: {HoldersMatched}");
+            if (WarningsRemoved > 0) sb.AppendLine($"  warnings removed (no longer listed by Revit, or naming no element): {WarningsRemoved}");
             sb.AppendLine($"Geometry: meshes from base {Geometry.MeshesFromSource0}, from partial {Geometry.MeshesFromOtherSources}, reused {Geometry.MeshesReused}; instances {Geometry.Instances}, shapes {Geometry.Shapes}, materials {Geometry.Materials}");
             sb.AppendLine($"Timings (ms): load {LoadMs}, plan {PlanMs}, build {BuildMs}, write {WriteMs}");
             foreach (var kv in TableRows.OrderBy(k => k.Key, StringComparer.Ordinal))
@@ -250,7 +273,10 @@ namespace Vim.Format.Merge
             var aliases = options.UniqueIdAliases ?? new Dictionary<string, string>();
             Func<string, string> alias = u => u != null && aliases.TryGetValue(u, out var a) ? a : u;
             var baseKeys = ElementKeys(baseVim, null, options.DocumentMatch);
-            var partialKeys = ElementKeys(partialVim, alias, options.DocumentMatch);
+            var partialKeys = ElementKeys(partialVim, alias, options.DocumentMatch, options.DocumentTitleAliases);
+            var forceChanged = new bool[baseKeys.Length];
+            if (options.DocumentMatch != PatchDocumentMatch.TitleAndPath)
+                result.HoldersMatched = MatchHolders(baseVim, partialVim, baseKeys, partialKeys, options, forceChanged);
             var baseUids = baseVim.Strs(TableNames.Element, "string:UniqueId") ?? new string[baseKeys.Length];
             var partialUids = partialVim.Strs(TableNames.Element, "string:UniqueId") ?? new string[partialKeys.Length];
             var baseDocTitles = baseVim.ElementDocumentTitles();
@@ -293,7 +319,7 @@ namespace Vim.Format.Merge
                 }
                 var isAliasTarget = aliasTargets.Contains(uid) && aliases.ContainsKey(partialUids[p] ?? "") ;
                 var changed = !isAliasTarget && !excludedSet.Contains(partialUids[p] ?? "")
-                    && (changedSet == null || changedSet.Contains(uid) || inReplacedDoc);
+                    && (changedSet == null || changedSet.Contains(uid) || inReplacedDoc || forceChanged[b]);
                 if (changed)
                 {
                     seenChanged.Add(uid);
@@ -312,10 +338,30 @@ namespace Vim.Format.Merge
                     result.Kept++;
                 }
             }
+            var baseOutByKey = new Lazy<Dictionary<string, int>>(() =>
+            {
+                var d = new Dictionary<string, int>();
+                for (var b = 0; b < baseKeys.Length; ++b)
+                {
+                    var o = elementPlan.Lookup(0, b);
+                    if (o >= 0) d[baseKeys[b]] = o;
+                }
+                return d;
+            });
             for (var p = 0; p < partialKeys.Length; ++p)
             {
                 if (partialRole[p] != Role.None) continue;
                 var uid = partialUids[p] ?? "";
+                if (aliasTargets.Contains(uid) && partialKeys[p].Contains("#")
+                    && baseOutByKey.Value.TryGetValue(partialKeys[p].Substring(0, partialKeys[p].LastIndexOf('#')), out var twin))
+                {
+                    // The element an alias stands for, held by the partial as well (the export view, next to the temporary
+                    // view aliased onto it): the same element, as context.
+                    partialRole[p] = Role.Context;
+                    elementPlan.Alias(1, p, twin);
+                    result.Context++;
+                    continue;
+                }
                 if (excludedSet.Contains(uid) || aliases.ContainsKey(uid))
                 {
                     // An alias without its target in the base, or an excluded element: not written.
@@ -417,6 +463,16 @@ namespace Vim.Format.Merge
                             plan.Add(0, r);
                         }
                     }
+                    // Output element -> its row of this table so far: two partial elements standing for one output element
+                    // (the export view and the temporary view aliased onto it) share that row.
+                    var rowOfOutElement = new Dictionary<int, int>();
+                    for (var i = 0; i < plan.Count; ++i)
+                    {
+                        var src = plan.Source[i];
+                        var e = (src == 0 ? baseOwner : partialOwner)[plan.Row[i]];
+                        var oe = e < 0 ? -1 : elementPlan.Lookup(src, e);
+                        if (oe >= 0 && !rowOfOutElement.ContainsKey(oe)) rowOfOutElement[oe] = i;
+                    }
                     for (var r = 0; r < partialOwner.Length; ++r)
                     {
                         if (plan.Map[1][r] >= 0) continue;
@@ -424,8 +480,10 @@ namespace Vim.Format.Merge
                         if (e < 0) { plan.Add(1, r); continue; }
                         var role = partialRole[e];
                         if (role == Role.Excluded || role == Role.None) continue;
-                        if (elementPlan.Lookup(1, e) < 0) continue;
-                        plan.Add(1, r);
+                        var oe = elementPlan.Lookup(1, e);
+                        if (oe < 0) continue;
+                        if (rowOfOutElement.TryGetValue(oe, out var existing)) { plan.Alias(1, r, existing); continue; }
+                        rowOfOutElement[oe] = plan.Add(1, r);
                     }
                 }
                 else
@@ -463,8 +521,16 @@ namespace Vim.Format.Merge
             // ---------------------------------------------------------------------------------------------
             var others = tableNames.Where(n => n != TableNames.Element && !elementOwned.Contains(n) && !activityTables.Contains(n)).ToList();
             var (order, cyclic) = TopologicalOrder(others, sources);
+            var warningScope = options.ReplaceHostWarnings ? WarningScope(sources, options, replacedDocs) : null;
             foreach (var table in order)
-                PlanDictionaryTable(table, sources, plans, cyclic.Contains(table));
+            {
+                if (table == TableNames.Warning && warningScope != null)
+                    result.WarningsRemoved += PlanWarnings(sources, plans, warningScope);
+                else
+                    PlanDictionaryTable(table, sources, plans, cyclic.Contains(table));
+            }
+            if (warningScope != null)
+                result.WarningsRemoved += ReconcileElementsInWarning(sources, plans, warningScope);
 
             // ---------------------------------------------------------------------------------------------
             // 3b. The activity log, before the pruning below: an ExportRevision the history still points at stays.
@@ -516,13 +582,27 @@ namespace Vim.Format.Merge
             return (db, result);
         }
 
-        internal static string[] ElementKeys(VimTables t, Func<string, string> alias, PatchDocumentMatch match)
+        /// <summary>
+        /// The exporter's own rows that stand for something Revit has no element for and that it writes ONCE per export
+        /// whatever the document (StoreSyntheticSystemFamily keys them by name alone: "FAMILY:Basic Wall"): system families,
+        /// system family types, unassigned systems. Their row is filed under the first document that needed it - the host in
+        /// a full export, a linked model in a partial export that does not re-export the host's walls. Their UniqueId
+        /// ("Basic Wall_System Family") is their only key, and it is stable; the document they are filed under is not.
+        /// </summary>
+        private static readonly HashSet<string> SharedSyntheticTypes = new HashSet<string>(StringComparer.Ordinal)
         {
-            var keys = t.ElementKeys(alias);
-            if (match == PatchDocumentMatch.TitleAndPath)
-                return keys;
+            VimConstants.SystemFamilyElementType, VimConstants.SystemFamilyTypeElementType, VimConstants.UnassignedSystem,
+        };
 
-            // Title only: rebuild the document part of the key without the path.
+        /// <summary>The rows the exporter writes for a document as a whole; their UniqueId is made from the project name.</summary>
+        private static readonly HashSet<string> HolderTypes = new HashSet<string>(StringComparer.Ordinal)
+        {
+            VimConstants.BimDocumentParameterHolderElementType, VimConstants.SiteParameterHolderElementType, VimConstants.BuildingParameterHolderElementType,
+        };
+
+        /// <summary>The document part of the element keys, per BimDocument row (Title / HostAndLinkTitles modes).</summary>
+        internal static string[] DocumentKeys(VimTables t, PatchDocumentMatch match, IDictionary<string, string> titleAliases = null)
+        {
             var n = t.NumRows(TableNames.BimDocument);
             var titles = t.Strs(TableNames.BimDocument, "string:Title") ?? new string[n];
             var seen = new Dictionary<string, int>();
@@ -535,23 +615,140 @@ namespace Vim.Format.Merge
                     docKeys[i] = "\u0001host";
                     continue;
                 }
-                seen.TryGetValue(titles[i] ?? "", out var ordinal);
-                seen[titles[i] ?? ""] = ordinal + 1;
-                docKeys[i] = (titles[i] ?? "") + "|" + ordinal;
+                var title = titles[i] ?? "";
+                if (titleAliases != null && titleAliases.TryGetValue(title, out var baseTitle) && baseTitle != null)
+                    title = baseTitle;
+                seen.TryGetValue(title, out var ordinal);
+                seen[title] = ordinal + 1;
+                docKeys[i] = title + "|" + ordinal;
             }
+            return docKeys;
+        }
+
+        internal static string[] ElementKeys(VimTables t, Func<string, string> alias, PatchDocumentMatch match, IDictionary<string, string> titleAliases = null)
+        {
+            if (match == PatchDocumentMatch.TitleAndPath)
+                return t.ElementKeys(alias);
+
+            // Title only: rebuild the document part of the key without the path.
+            var n = t.NumRows(TableNames.BimDocument);
+            var docKeys = DocumentKeys(t, match, titleAliases);
+            var count = t.NumRows(TableNames.Element);
+            var keys = new string[count];
             var docs = t.Index(TableNames.Element, "index:" + TableNames.BimDocument + ":BimDocument");
-            var uids = t.Strs(TableNames.Element, "string:UniqueId") ?? new string[keys.Length];
+            var uids = t.Strs(TableNames.Element, "string:UniqueId") ?? new string[count];
+            var ids = t.Data<long>(TableNames.Element, "long:Id");
+            var types = t.Strs(TableNames.Element, "string:Type");
             var dup = new Dictionary<string, int>();
-            for (var i = 0; i < keys.Length; ++i)
+            // Two passes: a row given another element's UniqueId by an alias (the temporary view of an incremental export,
+            // standing for the export view) takes the plain key; the element itself, when the partial holds it too (an
+            // incremental export writes every view), takes the "#1". The other way round, the temporary view was the
+            // duplicate and was dropped, and with it every row an incremental export files under the export view
+            // (ElementInView of a new element, ShapeInView of every re-exported shape - Diff series 2026-10-13).
+            for (var pass = 0; pass < 2; ++pass)
             {
-                var d = docs != null && docs[i] >= 0 && docs[i] < n ? docKeys[docs[i]] : "";
-                var u = uids[i] ?? "";
-                if (alias != null) u = alias(u) ?? u;
-                var k = d + "\u001f" + u;
-                if (dup.TryGetValue(k, out var c)) { dup[k] = c + 1; k = k + "#" + c; } else dup[k] = 1;
-                keys[i] = k;
+                for (var i = 0; i < count; ++i)
+                {
+                    var raw = uids[i] ?? "";
+                    var u = alias == null ? raw : alias(raw) ?? raw;
+                    var aliased = !string.Equals(u, raw, StringComparison.Ordinal);
+                    if ((pass == 0) != aliased) continue;
+                    var d = docs != null && docs[i] >= 0 && docs[i] < n ? docKeys[docs[i]] : "";
+                    if (ids != null && types != null && ids[i] == VimConstants.SyntheticElementId && SharedSyntheticTypes.Contains(types[i] ?? ""))
+                        d = "\u0002shared";
+                    var k = d + "\u001f" + u;
+                    if (dup.TryGetValue(k, out var c)) { dup[k] = c + 1; k = k + "#" + c; } else dup[k] = 1;
+                    keys[i] = k;
+                }
             }
             return keys;
+        }
+
+        /// <summary>
+        /// The rows the exporter writes for a whole document - its parameter holder (the Element of BimDocument, which
+        /// carries Project Information) and its site and building holders - take a UniqueId made from the project name
+        /// ("[Project Name]_BimDocument Parameter Holder"). Renaming Project Information therefore gave the partial a
+        /// holder no base row matched: it was appended with a second BimDocument row, and every re-exported element went
+        /// to that second document (Diff series version 5). The project name is data, not identity: a partial holder is
+        /// the base holder of the same type in the same document (same host, or same linked model), whatever its name,
+        /// and it is always written as changed - so the BimDocument row and the holder's cells (name, number, client,
+        /// saves...) are updated in place, and the row keeps its index.
+        /// A site or building holder with no counterpart in the same document but the same UniqueId elsewhere in the base
+        /// (two models with the same project name share one: the exporter keys them by name) is that row.
+        /// Returns how many holders were matched; rewrites partialKeys and marks forceChanged (base rows).
+        /// </summary>
+        private static int MatchHolders(VimTables baseVim, VimTables partialVim, string[] baseKeys, string[] partialKeys,
+            VimPatchOptions options, bool[] forceChanged)
+        {
+            var bIds = baseVim.Data<long>(TableNames.Element, "long:Id");
+            var pIds = partialVim.Data<long>(TableNames.Element, "long:Id");
+            var bTypes = baseVim.Strs(TableNames.Element, "string:Type");
+            var pTypes = partialVim.Strs(TableNames.Element, "string:Type");
+            var bUids = baseVim.Strs(TableNames.Element, "string:UniqueId");
+            var pUids = partialVim.Strs(TableNames.Element, "string:UniqueId");
+            var bDocs = baseVim.Index(TableNames.Element, "index:" + TableNames.BimDocument + ":BimDocument");
+            var pDocs = partialVim.Index(TableNames.Element, "index:" + TableNames.BimDocument + ":BimDocument");
+            if (bIds == null || pIds == null || bTypes == null || pTypes == null || bDocs == null || pDocs == null)
+                return 0;
+            var bDocKeys = DocumentKeys(baseVim, options.DocumentMatch);
+            var pDocKeys = DocumentKeys(partialVim, options.DocumentMatch, options.DocumentTitleAliases);
+            string DocOf(string[] dk, int[] docs, int e) => docs[e] >= 0 && docs[e] < dk.Length ? dk[docs[e]] : "";
+            bool IsHolder(long[] ids, string[] types, int e) => ids[e] == VimConstants.SyntheticElementId && HolderTypes.Contains(types[e] ?? "");
+
+            var baseByKey = new Dictionary<string, int>();
+            for (var b = 0; b < baseKeys.Length; ++b) baseByKey[baseKeys[b]] = b;
+
+            // Base holders by (document, type), in row order; the ones a partial holder already matches by key are taken.
+            var claimed = new HashSet<int>();
+            var exact = new List<(int P, int B)>();
+            var pending = new List<int>();
+            for (var p = 0; p < partialKeys.Length; ++p)
+            {
+                if (!IsHolder(pIds, pTypes, p)) continue;
+                if (baseByKey.TryGetValue(partialKeys[p], out var b)) { claimed.Add(b); exact.Add((p, b)); }
+                else pending.Add(p);
+            }
+            var baseHolders = new Dictionary<string, List<int>>();
+            var baseHoldersByUid = new Dictionary<string, int>();
+            for (var b = 0; b < baseKeys.Length; ++b)
+            {
+                if (!IsHolder(bIds, bTypes, b)) continue;
+                var k = DocOf(bDocKeys, bDocs, b) + "\u001f" + bTypes[b];
+                if (!baseHolders.TryGetValue(k, out var l)) baseHolders[k] = l = new List<int>();
+                l.Add(b);
+                if (!baseHoldersByUid.ContainsKey(bUids[b] ?? "")) baseHoldersByUid[bUids[b] ?? ""] = b;
+            }
+
+            var matched = 0;
+            foreach (var (_, b) in exact)
+            {
+                forceChanged[b] = true;
+                matched++;
+            }
+            foreach (var p in pending)
+            {
+                var k = DocOf(pDocKeys, pDocs, p) + "\u001f" + pTypes[p];
+                var b = -1;
+                if (baseHolders.TryGetValue(k, out var l))
+                    foreach (var x in l)
+                        if (!claimed.Contains(x)) { b = x; break; }
+                if (b >= 0)
+                {
+                    claimed.Add(b);
+                    partialKeys[p] = baseKeys[b];
+                    forceChanged[b] = true;
+                    matched++;
+                    continue;
+                }
+                // Site / building holder shared with another document of the same project name: the base row is it.
+                if (pTypes[p] != VimConstants.BimDocumentParameterHolderElementType
+                    && baseHoldersByUid.TryGetValue(pUids[p] ?? "", out var shared) && !claimed.Contains(shared))
+                {
+                    partialKeys[p] = baseKeys[shared];
+                    matched++;
+                }
+            }
+            return matched;
         }
 
         private static HashSet<int> ComputeScopeViews(VimPatchOptions options, VimTables baseVim, VimTables partialVim,
@@ -584,6 +781,137 @@ namespace Vim.Format.Merge
                 if (ov >= 0) scope.Add(ov);
             }
             return scope;
+        }
+
+        /// <summary>
+        /// Per source, the document key of each Warning row whose warnings the partial replaces (the host's, and those
+        /// of the linked models re-exported whole), null for the others. Null when a file has no Warning.Key (written
+        /// before the key existed): the old rule applies then.
+        /// </summary>
+        private static string[][] WarningScope(VimTables[] sources, VimPatchOptions options, HashSet<string> replacedDocs)
+        {
+            var scope = new string[sources.Length][];
+            for (var s = 0; s < sources.Length; ++s)
+            {
+                var t = sources[s];
+                var n = t.NumRows(TableNames.Warning);
+                if (n > 0 && t.Strs(TableNames.Warning, "string:Key") == null)
+                    return null;
+                var docs = t.Index(TableNames.Warning, "index:" + TableNames.BimDocument + ":BimDocument");
+                var host = t.HostBimDocuments();
+                var titles = t.Strs(TableNames.BimDocument, "string:Title") ?? new string[host.Length];
+                var aliases = s == 1 ? options.DocumentTitleAliases : null;
+                scope[s] = new string[n];
+                for (var r = 0; r < n; ++r)
+                {
+                    var d = docs == null ? -1 : docs[r];
+                    if (d < 0 || d >= host.Length) continue;
+                    if (host[d]) { scope[s][r] = "\u0001host"; continue; }
+                    var title = titles[d] ?? "";
+                    if (aliases != null && aliases.TryGetValue(title, out var bt) && bt != null) title = bt;
+                    if (replacedDocs.Contains(title)) scope[s][r] = title;
+                }
+            }
+            // A partial that carries no warning of the host while the base has some did not carry Revit's list (an
+            // exporter that predates it, or an export that skipped warnings): replacing would empty the host's
+            // warnings, so the old rule applies.
+            if (scope[1].All(x => x != "\u0001host") && scope[0].Any(x => x == "\u0001host"))
+                return null;
+            return scope;
+        }
+
+        /// <summary>
+        /// Warning rows when the partial carries Revit's whole warning list for the documents in scope: those documents'
+        /// rows are the partial's (one per Warning.Key), and a base row is aliased to the partial row of the same key -
+        /// its ElementInWarning rows follow - or dropped when Revit no longer lists it. Other documents: the old rule.
+        /// Returns how many base warnings were dropped.
+        /// </summary>
+        private static int PlanWarnings(VimTables[] sources, Dictionary<string, TablePlan> plans, string[][] scope)
+        {
+            const string table = TableNames.Warning;
+            var plan = plans[table];
+            var keys = sources.Select(s => s.Strs(table, "string:Key") ?? new string[s.NumRows(table)]).ToArray();
+            var nb = sources[0].NumRows(table);
+            var np = sources[1].NumRows(table);
+
+            // Out of scope: the rule of every dictionary table (base rows stay, a partial row equal to one is that row).
+            var relations = sources.SelectMany(s => s.IndexRelations(table)).Distinct().OrderBy(r => r.Column, StringComparer.Ordinal).ToList();
+            var keyOf = KeyFunction(table, sources, plans, relations);
+            var baseIndex = new Dictionary<string, int>();
+            for (var r = 0; r < nb; ++r)
+            {
+                if (scope[0][r] != null) continue;
+                var o = plan.Add(0, r);
+                var k = keyOf(0, r);
+                if (!baseIndex.ContainsKey(k)) baseIndex[k] = o;
+            }
+
+            var inScope = new Dictionary<string, int>();
+            for (var r = 0; r < np; ++r)
+            {
+                if (scope[1][r] == null)
+                {
+                    var k = keyOf(1, r);
+                    if (baseIndex.TryGetValue(k, out var o)) plan.Alias(1, r, o);
+                    else baseIndex[k] = plan.Add(1, r);
+                    continue;
+                }
+                var sk = scope[1][r] + "\u001f" + (keys[1][r] ?? "");
+                if (inScope.TryGetValue(sk, out var same)) plan.Alias(1, r, same); // Revit lists the same warning twice
+                else inScope[sk] = plan.Add(1, r);
+            }
+
+            var dropped = 0;
+            for (var r = 0; r < nb; ++r)
+            {
+                if (scope[0][r] == null) continue;
+                var sk = scope[0][r] + "\u001f" + (keys[0][r] ?? "");
+                if (inScope.TryGetValue(sk, out var o)) plan.Alias(0, r, o);
+                else dropped++;
+            }
+            return dropped;
+        }
+
+        /// <summary>
+        /// After <see cref="PlanWarnings"/>: an ElementInWarning row whose warning is gone goes too, two rows naming the
+        /// same element in the same warning become one, and a warning of the documents in scope that no element of the
+        /// file names any more goes - a full export writes a warning only when it names an exported element.
+        /// Returns how many warnings were removed that way.
+        /// </summary>
+        private static int ReconcileElementsInWarning(VimTables[] sources, Dictionary<string, TablePlan> plans, string[][] scope)
+        {
+            if (!plans.TryGetValue(TableNames.ElementInWarning, out var eiw) || !plans.TryGetValue(TableNames.Warning, out var warnings))
+                return 0;
+            var elements = plans[TableNames.Element];
+            var wCol = sources.Select(s => s.Index(TableNames.ElementInWarning, "index:" + TableNames.Warning + ":Warning")).ToArray();
+            var eCol = sources.Select(s => s.Index(TableNames.ElementInWarning, VimTables.ElementColumn)).ToArray();
+            int OutWarning(int i) { var c = wCol[eiw.Source[i]]; var v = c == null ? -1 : c[eiw.Row[i]]; return warnings.Lookup(eiw.Source[i], v); }
+            int OutElement(int i) { var c = eCol[eiw.Source[i]]; var v = c == null ? -1 : c[eiw.Row[i]]; return elements.Lookup(eiw.Source[i], v); }
+
+            var seen = new HashSet<(int, int)>();
+            eiw.RemoveWhere(i =>
+            {
+                var w = OutWarning(i);
+                if (w < 0) return true;
+                return !seen.Add((OutElement(i), w));
+            });
+
+            var named = new bool[warnings.Count];
+            for (var i = 0; i < eiw.Count; ++i)
+            {
+                var w = OutWarning(i);
+                if (w >= 0) named[w] = true;
+            }
+            // The partial's rows naming nothing exported (room tags, separation lines...) are dropped as a full export
+            // never writes them; only base rows are counted as removed.
+            var removedFromBase = 0;
+            warnings.RemoveWhere(i =>
+            {
+                var gone = !named[i] && scope[warnings.Source[i]][warnings.Row[i]] != null;
+                if (gone && warnings.Source[i] == 0) removedFromBase++;
+                return gone;
+            });
+            return removedFromBase;
         }
 
         /// <summary>Removes the rows of a table which no written row of another table (except ignoredReferrer) points at.</summary>
@@ -823,7 +1151,18 @@ namespace Vim.Format.Merge
             }
 
             var keyOf = KeyFunction(table, sources, plans, relations);
-            Dictionary<string, int> baseIndex = null;
+            // A parameter descriptor is one per parameter definition, but its IsReadOnly is read from whichever parameter
+            // of that definition the export met first (RevitToVimStore.StoreParameterDescriptor) - and Revit's
+            // Parameter.IsReadOnly is per element ("Elevation from Level" is read-only on one piece of furniture and not on
+            // the next). A partial export meets them in another order, so the same definition came back with the other
+            // IsReadOnly, was appended as a second descriptor, and every re-exported parameter of it pointed there (Diff
+            // series: 19 descriptors, 4,948 STRUCTURE elements in version 1; "Elevation from Level" on all 63 elements of
+            // version 3). So: the base row with the same content if there is one, else the base row that differs only by
+            // IsReadOnly (a full export can hold both for one name: then the exact one wins).
+            var looseKeyOf = table == TableNames.ParameterDescriptor
+                ? KeyFunction(table, sources, plans, relations, new HashSet<string> { "byte:IsReadOnly" })
+                : null;
+            Dictionary<string, int> baseIndex = null, baseLooseIndex = null;
             var partialIndex = new Dictionary<string, int>();
             for (var r = 0; r < np; ++r)
             {
@@ -832,13 +1171,20 @@ namespace Vim.Format.Merge
                 if (baseIndex == null)
                 {
                     baseIndex = new Dictionary<string, int>();
+                    baseLooseIndex = new Dictionary<string, int>();
                     for (var i = 0; i < plan.Count; ++i)
                     {
                         var bk = keyOf(0, plan.Row[i]);
                         if (!baseIndex.ContainsKey(bk)) baseIndex[bk] = i;
+                        if (looseKeyOf != null)
+                        {
+                            var lk = looseKeyOf(0, plan.Row[i]);
+                            if (!baseLooseIndex.ContainsKey(lk)) baseLooseIndex[lk] = i;
+                        }
                     }
                 }
-                if (baseIndex.TryGetValue(k, out var o) || partialIndex.TryGetValue(k, out o))
+                if (baseIndex.TryGetValue(k, out var o) || partialIndex.TryGetValue(k, out o)
+                    || (looseKeyOf != null && baseLooseIndex.TryGetValue(looseKeyOf(1, r), out o)))
                 {
                     plan.Alias(1, r, o);
                     continue;
@@ -848,7 +1194,7 @@ namespace Vim.Format.Merge
         }
 
         private static Func<int, int, string> KeyFunction(string table, VimTables[] sources, Dictionary<string, TablePlan> plans,
-            List<(string Column, string Related)> relations)
+            List<(string Column, string Related)> relations, HashSet<string> ignoredDataCols = null)
         {
             string[] keyStringColumns = null;
             switch (table)
@@ -860,7 +1206,9 @@ namespace Vim.Format.Merge
 
             var stringCols = keyStringColumns ?? sources.SelectMany(s => s.GetTable(table)?.StringColumns.Select(c => c.Name) ?? Enumerable.Empty<string>())
                 .Distinct().OrderBy(x => x, StringComparer.Ordinal).ToArray();
+            ignoredDataCols = ignoredDataCols ?? new HashSet<string>();
             var dataCols = keyStringColumns != null ? Array.Empty<string>() : sources.SelectMany(s => s.GetTable(table)?.DataColumns.Select(c => c.Name) ?? Enumerable.Empty<string>())
+                .Where(c => !ignoredDataCols.Contains(c))
                 .Distinct().OrderBy(x => x, StringComparer.Ordinal).ToArray();
             var indexCols = keyStringColumns != null ? new List<(string Column, string Related)>() : relations.Where(r => r.Related != table).ToList();
 

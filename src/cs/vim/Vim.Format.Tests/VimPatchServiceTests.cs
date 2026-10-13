@@ -215,7 +215,9 @@ namespace Vim.Format.Tests
 
             var outPath = Path.Combine(dir, "patched.vim");
             var result = VimPatchService.Patch(basePath, partialPath, outPath, Options(PatchDocumentMatch.HostAndLinkTitles));
-            Assert.AreEqual(1, result.Changed);
+            // The wall, and the document's parameter holder: a sync always refreshes the document's own cells.
+            Assert.AreEqual(2, result.Changed);
+            Assert.AreEqual(1, result.HoldersMatched);
             Assert.AreEqual(0, result.Added);
             Assert.AreEqual(0, result.ChangedButNotInPartial.Count);
 
@@ -223,7 +225,7 @@ namespace Vim.Format.Tests
             vim.Validate();
             var dm = vim.DocumentModel;
             Assert.AreEqual(1, dm.NumBimDocument, "one host document");
-            Assert.AreEqual("Model", dm.GetBimDocument(0).Title, "the base's document row is kept");
+            Assert.AreEqual("Model_jo", dm.GetBimDocument(0).Title, "the one document row, its cells from the latest sync");
             var uids = Enumerable.Range(0, dm.NumElement).Select(i => dm.GetElement(i).UniqueId).ToList();
             Assert.AreEqual(1, uids.Count(u => u == "wall"));
             var marks = Enumerable.Range(0, dm.NumParameter).Select(i => dm.GetParameter(i)).ToDictionary(x => x.Element.UniqueId, x => x.Value);
