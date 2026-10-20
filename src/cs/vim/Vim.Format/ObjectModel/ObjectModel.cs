@@ -15,6 +15,11 @@ namespace Vim.Format.ObjectModel
         public static class History
         {
             // Schema additions
+            //   Vim.Element__string:ChangeToken
+            //   Vim.BimDocument__string:Identity
+            public const string v5_8_0 = "5.8.0";
+
+            // Schema additions
             //   Vim.Element__string:Creator
             //   Vim.Element__string:LastChangedBy
             //   Vim.Element__string:Owner
@@ -186,7 +191,8 @@ namespace Vim.Format.ObjectModel
         // ReSharper enable MemberHidesStaticFromOuterClass
 
         // [MAINTAIN] Add more object model SerializableVersions below and update the current one.
-        public static SerializableVersion Current => v5_7_0;
+        public static SerializableVersion Current => v5_8_0;
+        public static SerializableVersion v5_8_0 => SerializableVersion.Parse(History.v5_8_0);
         public static SerializableVersion v5_7_0 => SerializableVersion.Parse(History.v5_7_0);
         public static SerializableVersion v5_6_0 => SerializableVersion.Parse(History.v5_6_0);
         public static SerializableVersion v5_5_0 => SerializableVersion.Parse(History.v5_5_0);
@@ -800,6 +806,14 @@ namespace Vim.Format.ObjectModel
         public string LastChangedBy;
         public string Owner;
 
+        /// <summary>
+        /// An opaque token which changes whenever the element changes in its source document; empty when unknown.
+        /// A differential update compares it with the source to find what changed since this file was written.
+        /// Revit: Element.VersionGuid (2021+); a linked model's RevitLinkInstance or RevitLinkType, which Revit
+        /// re-versions every time it reloads the link, holds a hash of its parameters and placement instead.
+        /// </summary>
+        public string ChangeToken;
+
         public Relation<Level> _Level;
         public Relation<Phase> _PhaseCreated;
         public Relation<Phase> _PhaseDemolished;
@@ -939,6 +953,14 @@ namespace Vim.Format.ObjectModel
         public string Guid;
 
         public int NumSaves;
+
+        /// <summary>
+        /// Identifies the document across saves, Save As of a local copy and reopenings, unlike Guid (its version).
+        /// Never derived from the project name. Revit: Document.CreationGUID (2024+; before that, the UniqueId of the
+        /// ProjectInformation element), followed by "|cloud:" and the cloud model GUID for a cloud model.
+        /// </summary>
+        public string Identity;
+
         public bool IsLinked;
         public bool IsDetached;
         public bool IsWorkshared;

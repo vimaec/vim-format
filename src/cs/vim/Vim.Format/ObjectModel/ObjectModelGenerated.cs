@@ -194,6 +194,7 @@ namespace Vim.Format.ObjectModel {
                     (Creator == other.Creator) &&
                     (LastChangedBy == other.LastChangedBy) &&
                     (Owner == other.Owner) &&
+                    (ChangeToken == other.ChangeToken) &&
                     (_Level?.Index == other._Level?.Index) &&
                     (_PhaseCreated?.Index == other._PhaseCreated?.Index) &&
                     (_PhaseDemolished?.Index == other._PhaseDemolished?.Index) &&
@@ -485,6 +486,7 @@ namespace Vim.Format.ObjectModel {
                     (Title == other.Title) &&
                     (IsMetric == other.IsMetric) &&
                     (NumSaves == other.NumSaves) &&
+                    (Identity == other.Identity) &&
                     (IsLinked == other.IsLinked) &&
                     (IsDetached == other.IsDetached) &&
                     (IsWorkshared == other.IsWorkshared) &&
@@ -2143,6 +2145,8 @@ namespace Vim.Format.ObjectModel {
         public String GetElementLastChangedBy(int index, String defaultValue = "") => ElementLastChangedBy?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
         public IArray<String> ElementOwner { get; }
         public String GetElementOwner(int index, String defaultValue = "") => ElementOwner?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<String> ElementChangeToken { get; }
+        public String GetElementChangeToken(int index, String defaultValue = "") => ElementChangeToken?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
         public IArray<int> ElementLevelIndex { get; }
         public int GetElementLevelIndex(int index) => ElementLevelIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
         public IArray<int> ElementPhaseCreatedIndex { get; }
@@ -2185,6 +2189,7 @@ namespace Vim.Format.ObjectModel {
             r.Creator = ElementCreator.ElementAtOrDefault(n);
             r.LastChangedBy = ElementLastChangedBy.ElementAtOrDefault(n);
             r.Owner = ElementOwner.ElementAtOrDefault(n);
+            r.ChangeToken = ElementChangeToken.ElementAtOrDefault(n);
             r._Level = new Relation<Vim.Format.ObjectModel.Level>(GetElementLevelIndex(n), GetLevel);
             r._PhaseCreated = new Relation<Vim.Format.ObjectModel.Phase>(GetElementPhaseCreatedIndex(n), GetPhase);
             r._PhaseDemolished = new Relation<Vim.Format.ObjectModel.Phase>(GetElementPhaseDemolishedIndex(n), GetPhase);
@@ -2429,6 +2434,8 @@ namespace Vim.Format.ObjectModel {
         public String GetBimDocumentGuid(int index, String defaultValue = "") => BimDocumentGuid?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
         public IArray<Int32> BimDocumentNumSaves { get; }
         public Int32 GetBimDocumentNumSaves(int index, Int32 defaultValue = default) => BimDocumentNumSaves?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<String> BimDocumentIdentity { get; }
+        public String GetBimDocumentIdentity(int index, String defaultValue = "") => BimDocumentIdentity?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
         public IArray<Boolean> BimDocumentIsLinked { get; }
         public Boolean GetBimDocumentIsLinked(int index, Boolean defaultValue = default) => BimDocumentIsLinked?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
         public IArray<Boolean> BimDocumentIsDetached { get; }
@@ -2499,6 +2506,7 @@ namespace Vim.Format.ObjectModel {
             r.IsMetric = BimDocumentIsMetric.ElementAtOrDefault(n);
             r.Guid = BimDocumentGuid.ElementAtOrDefault(n);
             r.NumSaves = BimDocumentNumSaves.ElementAtOrDefault(n);
+            r.Identity = BimDocumentIdentity.ElementAtOrDefault(n);
             r.IsLinked = BimDocumentIsLinked.ElementAtOrDefault(n);
             r.IsDetached = BimDocumentIsDetached.ElementAtOrDefault(n);
             r.IsWorkshared = BimDocumentIsWorkshared.ElementAtOrDefault(n);
@@ -4076,6 +4084,7 @@ namespace Vim.Format.ObjectModel {
             ElementCreator = ElementEntityTable?.GetStringColumnValues("string:Creator") ?? Array.Empty<String>().ToIArray();
             ElementLastChangedBy = ElementEntityTable?.GetStringColumnValues("string:LastChangedBy") ?? Array.Empty<String>().ToIArray();
             ElementOwner = ElementEntityTable?.GetStringColumnValues("string:Owner") ?? Array.Empty<String>().ToIArray();
+            ElementChangeToken = ElementEntityTable?.GetStringColumnValues("string:ChangeToken") ?? Array.Empty<String>().ToIArray();
             WorksetId = WorksetEntityTable?.GetDataColumnValues<Int32>("int:Id") ?? Array.Empty<Int32>().ToIArray();
             WorksetName = WorksetEntityTable?.GetStringColumnValues("string:Name") ?? Array.Empty<String>().ToIArray();
             WorksetKind = WorksetEntityTable?.GetStringColumnValues("string:Kind") ?? Array.Empty<String>().ToIArray();
@@ -4105,6 +4114,7 @@ namespace Vim.Format.ObjectModel {
             BimDocumentIsMetric = BimDocumentEntityTable?.GetDataColumnValues<Boolean>("byte:IsMetric") ?? Array.Empty<Boolean>().ToIArray();
             BimDocumentGuid = BimDocumentEntityTable?.GetStringColumnValues("string:Guid") ?? Array.Empty<String>().ToIArray();
             BimDocumentNumSaves = BimDocumentEntityTable?.GetDataColumnValues<Int32>("int:NumSaves") ?? Array.Empty<Int32>().ToIArray();
+            BimDocumentIdentity = BimDocumentEntityTable?.GetStringColumnValues("string:Identity") ?? Array.Empty<String>().ToIArray();
             BimDocumentIsLinked = BimDocumentEntityTable?.GetDataColumnValues<Boolean>("byte:IsLinked") ?? Array.Empty<Boolean>().ToIArray();
             BimDocumentIsDetached = BimDocumentEntityTable?.GetDataColumnValues<Boolean>("byte:IsDetached") ?? Array.Empty<Boolean>().ToIArray();
             BimDocumentIsWorkshared = BimDocumentEntityTable?.GetDataColumnValues<Boolean>("byte:IsWorkshared") ?? Array.Empty<Boolean>().ToIArray();
@@ -5218,6 +5228,7 @@ namespace Vim.Format.ObjectModel {
             Column_Creator = GetStringColumnValues("string:Creator") ?? Array.Empty<String>();
             Column_LastChangedBy = GetStringColumnValues("string:LastChangedBy") ?? Array.Empty<String>();
             Column_Owner = GetStringColumnValues("string:Owner") ?? Array.Empty<String>();
+            Column_ChangeToken = GetStringColumnValues("string:ChangeToken") ?? Array.Empty<String>();
             Column_LevelIndex = GetIndexColumnValues("index:Vim.Level:Level") ?? Array.Empty<int>();
             Column_PhaseCreatedIndex = GetIndexColumnValues("index:Vim.Phase:PhaseCreated") ?? Array.Empty<int>();
             Column_PhaseDemolishedIndex = GetIndexColumnValues("index:Vim.Phase:PhaseDemolished") ?? Array.Empty<int>();
@@ -5255,6 +5266,8 @@ namespace Vim.Format.ObjectModel {
         public String GetLastChangedBy(int index, String @default = "") => Column_LastChangedBy.ElementAtOrDefault(index, @default);
         public String[] Column_Owner { get; }
         public String GetOwner(int index, String @default = "") => Column_Owner.ElementAtOrDefault(index, @default);
+        public String[] Column_ChangeToken { get; }
+        public String GetChangeToken(int index, String @default = "") => Column_ChangeToken.ElementAtOrDefault(index, @default);
         public int[] Column_LevelIndex { get; }
         public int GetLevelIndex(int index) => Column_LevelIndex.ElementAtOrDefault(index, EntityRelation.None);
         public Level GetLevel(int index) => _GetReferencedLevel(GetLevelIndex(index));
@@ -5317,6 +5330,7 @@ namespace Vim.Format.ObjectModel {
             r.Creator = GetCreator(index);
             r.LastChangedBy = GetLastChangedBy(index);
             r.Owner = GetOwner(index);
+            r.ChangeToken = GetChangeToken(index);
             r._Level = new Relation<Vim.Format.ObjectModel.Level>(GetLevelIndex(index), _GetReferencedLevel);
             r._PhaseCreated = new Relation<Vim.Format.ObjectModel.Phase>(GetPhaseCreatedIndex(index), _GetReferencedPhaseCreated);
             r._PhaseDemolished = new Relation<Vim.Format.ObjectModel.Phase>(GetPhaseDemolishedIndex(index), _GetReferencedPhaseDemolished);
@@ -5716,6 +5730,7 @@ namespace Vim.Format.ObjectModel {
             Column_IsMetric = GetDataColumnValues<Boolean>("byte:IsMetric") ?? Array.Empty<Boolean>();
             Column_Guid = GetStringColumnValues("string:Guid") ?? Array.Empty<String>();
             Column_NumSaves = GetDataColumnValues<Int32>("int:NumSaves") ?? Array.Empty<Int32>();
+            Column_Identity = GetStringColumnValues("string:Identity") ?? Array.Empty<String>();
             Column_IsLinked = GetDataColumnValues<Boolean>("byte:IsLinked") ?? Array.Empty<Boolean>();
             Column_IsDetached = GetDataColumnValues<Boolean>("byte:IsDetached") ?? Array.Empty<Boolean>();
             Column_IsWorkshared = GetDataColumnValues<Boolean>("byte:IsWorkshared") ?? Array.Empty<Boolean>();
@@ -5755,6 +5770,8 @@ namespace Vim.Format.ObjectModel {
         public String GetGuid(int index, String @default = "") => Column_Guid.ElementAtOrDefault(index, @default);
         public Int32[] Column_NumSaves { get; }
         public Int32 GetNumSaves(int index, Int32 @default = default) => Column_NumSaves.ElementAtOrDefault(index, @default);
+        public String[] Column_Identity { get; }
+        public String GetIdentity(int index, String @default = "") => Column_Identity.ElementAtOrDefault(index, @default);
         public Boolean[] Column_IsLinked { get; }
         public Boolean GetIsLinked(int index, Boolean @default = default) => Column_IsLinked.ElementAtOrDefault(index, @default);
         public Boolean[] Column_IsDetached { get; }
@@ -5831,6 +5848,7 @@ namespace Vim.Format.ObjectModel {
             r.IsMetric = GetIsMetric(index);
             r.Guid = GetGuid(index);
             r.NumSaves = GetNumSaves(index);
+            r.Identity = GetIdentity(index);
             r.IsLinked = GetIsLinked(index);
             r.IsDetached = GetIsDetached(index);
             r.IsWorkshared = GetIsWorkshared(index);
@@ -8301,6 +8319,11 @@ namespace Vim.Format.ObjectModel {
                 tb.AddStringColumn("string:Owner", columnData);
             }
             {
+                var columnData = new String[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].ChangeToken; }
+                tb.AddStringColumn("string:ChangeToken", columnData);
+            }
+            {
                 var columnData = new int[entityCount];
                 for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._Level?.Index ?? EntityRelation.None; }
                 tb.AddIndexColumn("index:Vim.Level:Level", columnData);
@@ -8605,6 +8628,11 @@ namespace Vim.Format.ObjectModel {
                 var columnData = new Int32[entityCount];
                 for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].NumSaves; }
                 tb.AddDataColumn("int:NumSaves", columnData);
+            }
+            {
+                var columnData = new String[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Identity; }
+                tb.AddStringColumn("string:Identity", columnData);
             }
             {
                 var columnData = new Boolean[entityCount];
