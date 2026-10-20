@@ -3370,11 +3370,18 @@ export interface ICategory {
     lineColor_Y?: number
     lineColor_Z?: number
     builtInCategory?: string
+    projectionLineWeight?: number
+    cutLineWeight?: number
+    isCuttable?: boolean
     
     parentIndex?: number
     parent?: ICategory
     materialIndex?: number
     material?: IMaterial
+    projectionLinePatternIndex?: number
+    projectionLinePattern?: ILinePattern
+    cutLinePatternIndex?: number
+    cutLinePattern?: ILinePattern
 }
 
 export interface ICategoryTable {
@@ -3396,6 +3403,12 @@ export interface ICategoryTable {
     getAllLineColor_Z(): Promise<number[] | undefined>
     getBuiltInCategory(categoryIndex: number): Promise<string | undefined>
     getAllBuiltInCategory(): Promise<string[] | undefined>
+    getProjectionLineWeight(categoryIndex: number): Promise<number | undefined>
+    getAllProjectionLineWeight(): Promise<number[] | undefined>
+    getCutLineWeight(categoryIndex: number): Promise<number | undefined>
+    getAllCutLineWeight(): Promise<number[] | undefined>
+    getIsCuttable(categoryIndex: number): Promise<boolean | undefined>
+    getAllIsCuttable(): Promise<boolean[] | undefined>
     
     getParentIndex(categoryIndex: number): Promise<number | undefined>
     getAllParentIndex(): Promise<number[] | undefined>
@@ -3403,6 +3416,12 @@ export interface ICategoryTable {
     getMaterialIndex(categoryIndex: number): Promise<number | undefined>
     getAllMaterialIndex(): Promise<number[] | undefined>
     getMaterial(categoryIndex: number): Promise<IMaterial | undefined>
+    getProjectionLinePatternIndex(categoryIndex: number): Promise<number | undefined>
+    getAllProjectionLinePatternIndex(): Promise<number[] | undefined>
+    getProjectionLinePattern(categoryIndex: number): Promise<ILinePattern | undefined>
+    getCutLinePatternIndex(categoryIndex: number): Promise<number | undefined>
+    getAllCutLinePatternIndex(): Promise<number[] | undefined>
+    getCutLinePattern(categoryIndex: number): Promise<ILinePattern | undefined>
 }
 
 export class Category implements ICategory {
@@ -3414,11 +3433,18 @@ export class Category implements ICategory {
     lineColor_Y?: number
     lineColor_Z?: number
     builtInCategory?: string
+    projectionLineWeight?: number
+    cutLineWeight?: number
+    isCuttable?: boolean
     
     parentIndex?: number
     parent?: ICategory
     materialIndex?: number
     material?: IMaterial
+    projectionLinePatternIndex?: number
+    projectionLinePattern?: ILinePattern
+    cutLinePatternIndex?: number
+    cutLinePattern?: ILinePattern
     
     static async createFromTable(table: ICategoryTable, index: number): Promise<ICategory> {
         let result = new Category()
@@ -3432,8 +3458,13 @@ export class Category implements ICategory {
             table.getLineColor_Y(index).then(v => result.lineColor_Y = v),
             table.getLineColor_Z(index).then(v => result.lineColor_Z = v),
             table.getBuiltInCategory(index).then(v => result.builtInCategory = v),
+            table.getProjectionLineWeight(index).then(v => result.projectionLineWeight = v),
+            table.getCutLineWeight(index).then(v => result.cutLineWeight = v),
+            table.getIsCuttable(index).then(v => result.isCuttable = v),
             table.getParentIndex(index).then(v => result.parentIndex = v),
             table.getMaterialIndex(index).then(v => result.materialIndex = v),
+            table.getProjectionLinePatternIndex(index).then(v => result.projectionLinePatternIndex = v),
+            table.getCutLinePatternIndex(index).then(v => result.cutLinePatternIndex = v),
         ])
         
         return result
@@ -3476,8 +3507,13 @@ export class CategoryTable implements ICategoryTable {
         let lineColor_Y: number[] | undefined
         let lineColor_Z: number[] | undefined
         let builtInCategory: string[] | undefined
+        let projectionLineWeight: number[] | undefined
+        let cutLineWeight: number[] | undefined
+        let isCuttable: boolean[] | undefined
         let parentIndex: number[] | undefined
         let materialIndex: number[] | undefined
+        let projectionLinePatternIndex: number[] | undefined
+        let cutLinePatternIndex: number[] | undefined
         
         await Promise.all([
             (async () => { name = (await localTable.getStringArray("string:Name")) })(),
@@ -3487,8 +3523,13 @@ export class CategoryTable implements ICategoryTable {
             (async () => { lineColor_Y = (await localTable.getNumberArray("double:LineColor.Y")) })(),
             (async () => { lineColor_Z = (await localTable.getNumberArray("double:LineColor.Z")) })(),
             (async () => { builtInCategory = (await localTable.getStringArray("string:BuiltInCategory")) })(),
+            (async () => { projectionLineWeight = (await localTable.getNumberArray("int:ProjectionLineWeight")) })(),
+            (async () => { cutLineWeight = (await localTable.getNumberArray("int:CutLineWeight")) })(),
+            (async () => { isCuttable = (await localTable.getBooleanArray("byte:IsCuttable")) })(),
             (async () => { parentIndex = (await localTable.getNumberArray("index:Vim.Category:Parent")) })(),
             (async () => { materialIndex = (await localTable.getNumberArray("index:Vim.Material:Material")) })(),
+            (async () => { projectionLinePatternIndex = (await localTable.getNumberArray("index:Vim.LinePattern:ProjectionLinePattern")) })(),
+            (async () => { cutLinePatternIndex = (await localTable.getNumberArray("index:Vim.LinePattern:CutLinePattern")) })(),
         ])
         
         let category: ICategory[] = []
@@ -3504,8 +3545,13 @@ export class CategoryTable implements ICategoryTable {
                 lineColor_Y: lineColor_Y ? lineColor_Y[i] : undefined,
                 lineColor_Z: lineColor_Z ? lineColor_Z[i] : undefined,
                 builtInCategory: builtInCategory ? builtInCategory[i] : undefined,
+                projectionLineWeight: projectionLineWeight ? projectionLineWeight[i] : undefined,
+                cutLineWeight: cutLineWeight ? cutLineWeight[i] : undefined,
+                isCuttable: isCuttable ? isCuttable[i] : undefined,
                 parentIndex: parentIndex ? parentIndex[i] : undefined,
-                materialIndex: materialIndex ? materialIndex[i] : undefined
+                materialIndex: materialIndex ? materialIndex[i] : undefined,
+                projectionLinePatternIndex: projectionLinePatternIndex ? projectionLinePatternIndex[i] : undefined,
+                cutLinePatternIndex: cutLinePatternIndex ? cutLinePatternIndex[i] : undefined
             })
         }
         
@@ -3568,6 +3614,30 @@ export class CategoryTable implements ICategoryTable {
         return (await this.entityTable.getStringArray("string:BuiltInCategory"))
     }
     
+    async getProjectionLineWeight(categoryIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(categoryIndex, "int:ProjectionLineWeight"))
+    }
+    
+    async getAllProjectionLineWeight(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("int:ProjectionLineWeight"))
+    }
+    
+    async getCutLineWeight(categoryIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(categoryIndex, "int:CutLineWeight"))
+    }
+    
+    async getAllCutLineWeight(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("int:CutLineWeight"))
+    }
+    
+    async getIsCuttable(categoryIndex: number): Promise<boolean | undefined> {
+        return (await this.entityTable.getBoolean(categoryIndex, "byte:IsCuttable"))
+    }
+    
+    async getAllIsCuttable(): Promise<boolean[] | undefined> {
+        return (await this.entityTable.getBooleanArray("byte:IsCuttable"))
+    }
+    
     async getParentIndex(categoryIndex: number): Promise<number | undefined> {
         return await this.entityTable.getNumber(categoryIndex, "index:Vim.Category:Parent")
     }
@@ -3602,6 +3672,42 @@ export class CategoryTable implements ICategoryTable {
         }
         
         return await this.document.material?.get(index)
+    }
+    
+    async getProjectionLinePatternIndex(categoryIndex: number): Promise<number | undefined> {
+        return await this.entityTable.getNumber(categoryIndex, "index:Vim.LinePattern:ProjectionLinePattern")
+    }
+    
+    async getAllProjectionLinePatternIndex(): Promise<number[] | undefined> {
+        return await this.entityTable.getNumberArray("index:Vim.LinePattern:ProjectionLinePattern")
+    }
+    
+    async getProjectionLinePattern(categoryIndex: number): Promise<ILinePattern | undefined> {
+        const index = await this.getProjectionLinePatternIndex(categoryIndex)
+        
+        if (index === undefined) {
+            return undefined
+        }
+        
+        return await this.document.linePattern?.get(index)
+    }
+    
+    async getCutLinePatternIndex(categoryIndex: number): Promise<number | undefined> {
+        return await this.entityTable.getNumber(categoryIndex, "index:Vim.LinePattern:CutLinePattern")
+    }
+    
+    async getAllCutLinePatternIndex(): Promise<number[] | undefined> {
+        return await this.entityTable.getNumberArray("index:Vim.LinePattern:CutLinePattern")
+    }
+    
+    async getCutLinePattern(categoryIndex: number): Promise<ILinePattern | undefined> {
+        const index = await this.getCutLinePatternIndex(categoryIndex)
+        
+        if (index === undefined) {
+            return undefined
+        }
+        
+        return await this.document.linePattern?.get(index)
     }
     
 }
@@ -4634,6 +4740,7 @@ export interface IView {
     elementOverrideCount?: number
     hiddenElementCount?: number
     templateControlledSettings?: string
+    graphicsRead?: boolean
     
     cameraIndex?: number
     camera?: ICamera
@@ -4726,6 +4833,8 @@ export interface IViewTable {
     getAllHiddenElementCount(): Promise<number[] | undefined>
     getTemplateControlledSettings(viewIndex: number): Promise<string | undefined>
     getAllTemplateControlledSettings(): Promise<string[] | undefined>
+    getGraphicsRead(viewIndex: number): Promise<boolean | undefined>
+    getAllGraphicsRead(): Promise<boolean[] | undefined>
     
     getCameraIndex(viewIndex: number): Promise<number | undefined>
     getAllCameraIndex(): Promise<number[] | undefined>
@@ -4789,6 +4898,7 @@ export class View implements IView {
     elementOverrideCount?: number
     hiddenElementCount?: number
     templateControlledSettings?: string
+    graphicsRead?: boolean
     
     cameraIndex?: number
     camera?: ICamera
@@ -4846,6 +4956,7 @@ export class View implements IView {
             table.getElementOverrideCount(index).then(v => result.elementOverrideCount = v),
             table.getHiddenElementCount(index).then(v => result.hiddenElementCount = v),
             table.getTemplateControlledSettings(index).then(v => result.templateControlledSettings = v),
+            table.getGraphicsRead(index).then(v => result.graphicsRead = v),
             table.getCameraIndex(index).then(v => result.cameraIndex = v),
             table.getFamilyTypeIndex(index).then(v => result.familyTypeIndex = v),
             table.getViewTemplateIndex(index).then(v => result.viewTemplateIndex = v),
@@ -4923,6 +5034,7 @@ export class ViewTable implements IViewTable {
         let elementOverrideCount: number[] | undefined
         let hiddenElementCount: number[] | undefined
         let templateControlledSettings: string[] | undefined
+        let graphicsRead: boolean[] | undefined
         let cameraIndex: number[] | undefined
         let familyTypeIndex: number[] | undefined
         let viewTemplateIndex: number[] | undefined
@@ -4967,6 +5079,7 @@ export class ViewTable implements IViewTable {
             (async () => { elementOverrideCount = (await localTable.getNumberArray("int:ElementOverrideCount")) })(),
             (async () => { hiddenElementCount = (await localTable.getNumberArray("int:HiddenElementCount")) })(),
             (async () => { templateControlledSettings = (await localTable.getStringArray("string:TemplateControlledSettings")) })(),
+            (async () => { graphicsRead = (await localTable.getBooleanArray("byte:GraphicsRead")) })(),
             (async () => { cameraIndex = (await localTable.getNumberArray("index:Vim.Camera:Camera")) })(),
             (async () => { familyTypeIndex = (await localTable.getNumberArray("index:Vim.FamilyType:FamilyType")) })(),
             (async () => { viewTemplateIndex = (await localTable.getNumberArray("index:Vim.Element:ViewTemplate")) })(),
@@ -5017,6 +5130,7 @@ export class ViewTable implements IViewTable {
                 elementOverrideCount: elementOverrideCount ? elementOverrideCount[i] : undefined,
                 hiddenElementCount: hiddenElementCount ? hiddenElementCount[i] : undefined,
                 templateControlledSettings: templateControlledSettings ? templateControlledSettings[i] : undefined,
+                graphicsRead: graphicsRead ? graphicsRead[i] : undefined,
                 cameraIndex: cameraIndex ? cameraIndex[i] : undefined,
                 familyTypeIndex: familyTypeIndex ? familyTypeIndex[i] : undefined,
                 viewTemplateIndex: viewTemplateIndex ? viewTemplateIndex[i] : undefined,
@@ -5303,6 +5417,14 @@ export class ViewTable implements IViewTable {
         return (await this.entityTable.getStringArray("string:TemplateControlledSettings"))
     }
     
+    async getGraphicsRead(viewIndex: number): Promise<boolean | undefined> {
+        return (await this.entityTable.getBoolean(viewIndex, "byte:GraphicsRead"))
+    }
+    
+    async getAllGraphicsRead(): Promise<boolean[] | undefined> {
+        return (await this.entityTable.getBooleanArray("byte:GraphicsRead"))
+    }
+    
     async getCameraIndex(viewIndex: number): Promise<number | undefined> {
         return await this.entityTable.getNumber(viewIndex, "index:Vim.Camera:Camera")
     }
@@ -5461,6 +5583,8 @@ export interface IFilterInView {
     
     viewIndex?: number
     view?: IView
+    graphicOverrideIndex?: number
+    graphicOverride?: IGraphicOverride
 }
 
 export interface IFilterInViewTable {
@@ -5486,6 +5610,9 @@ export interface IFilterInViewTable {
     getViewIndex(filterInViewIndex: number): Promise<number | undefined>
     getAllViewIndex(): Promise<number[] | undefined>
     getView(filterInViewIndex: number): Promise<IView | undefined>
+    getGraphicOverrideIndex(filterInViewIndex: number): Promise<number | undefined>
+    getAllGraphicOverrideIndex(): Promise<number[] | undefined>
+    getGraphicOverride(filterInViewIndex: number): Promise<IGraphicOverride | undefined>
 }
 
 export class FilterInView implements IFilterInView {
@@ -5500,6 +5627,8 @@ export class FilterInView implements IFilterInView {
     
     viewIndex?: number
     view?: IView
+    graphicOverrideIndex?: number
+    graphicOverride?: IGraphicOverride
     
     static async createFromTable(table: IFilterInViewTable, index: number): Promise<IFilterInView> {
         let result = new FilterInView()
@@ -5514,6 +5643,7 @@ export class FilterInView implements IFilterInView {
             table.getIsVisible(index).then(v => result.isVisible = v),
             table.getHasOverrides(index).then(v => result.hasOverrides = v),
             table.getViewIndex(index).then(v => result.viewIndex = v),
+            table.getGraphicOverrideIndex(index).then(v => result.graphicOverrideIndex = v),
         ])
         
         return result
@@ -5557,6 +5687,7 @@ export class FilterInViewTable implements IFilterInViewTable {
         let isVisible: boolean[] | undefined
         let hasOverrides: boolean[] | undefined
         let viewIndex: number[] | undefined
+        let graphicOverrideIndex: number[] | undefined
         
         await Promise.all([
             (async () => { name = (await localTable.getStringArray("string:Name")) })(),
@@ -5567,6 +5698,7 @@ export class FilterInViewTable implements IFilterInViewTable {
             (async () => { isVisible = (await localTable.getBooleanArray("byte:IsVisible")) })(),
             (async () => { hasOverrides = (await localTable.getBooleanArray("byte:HasOverrides")) })(),
             (async () => { viewIndex = (await localTable.getNumberArray("index:Vim.View:View")) })(),
+            (async () => { graphicOverrideIndex = (await localTable.getNumberArray("index:Vim.GraphicOverride:GraphicOverride")) })(),
         ])
         
         let filterInView: IFilterInView[] = []
@@ -5582,7 +5714,8 @@ export class FilterInViewTable implements IFilterInViewTable {
                 isEnabled: isEnabled ? isEnabled[i] : undefined,
                 isVisible: isVisible ? isVisible[i] : undefined,
                 hasOverrides: hasOverrides ? hasOverrides[i] : undefined,
-                viewIndex: viewIndex ? viewIndex[i] : undefined
+                viewIndex: viewIndex ? viewIndex[i] : undefined,
+                graphicOverrideIndex: graphicOverrideIndex ? graphicOverrideIndex[i] : undefined
             })
         }
         
@@ -5661,6 +5794,24 @@ export class FilterInViewTable implements IFilterInViewTable {
         }
         
         return await this.document.view?.get(index)
+    }
+    
+    async getGraphicOverrideIndex(filterInViewIndex: number): Promise<number | undefined> {
+        return await this.entityTable.getNumber(filterInViewIndex, "index:Vim.GraphicOverride:GraphicOverride")
+    }
+    
+    async getAllGraphicOverrideIndex(): Promise<number[] | undefined> {
+        return await this.entityTable.getNumberArray("index:Vim.GraphicOverride:GraphicOverride")
+    }
+    
+    async getGraphicOverride(filterInViewIndex: number): Promise<IGraphicOverride | undefined> {
+        const index = await this.getGraphicOverrideIndex(filterInViewIndex)
+        
+        if (index === undefined) {
+            return undefined
+        }
+        
+        return await this.document.graphicOverride?.get(index)
     }
     
 }
@@ -5826,6 +5977,2325 @@ export class GridInViewTable implements IGridInViewTable {
         }
         
         return await this.document.view?.get(index)
+    }
+    
+}
+
+export interface ILinePattern {
+    index: number
+    name?: string
+    elementId?: bigint
+    uniqueId?: string
+    isSolid?: boolean
+    segments?: string
+    
+    bimDocumentIndex?: number
+    bimDocument?: IBimDocument
+}
+
+export interface ILinePatternTable {
+    getCount(): Promise<number>
+    get(linePatternIndex: number): Promise<ILinePattern>
+    getAll(): Promise<ILinePattern[]>
+    
+    getName(linePatternIndex: number): Promise<string | undefined>
+    getAllName(): Promise<string[] | undefined>
+    getElementId(linePatternIndex: number): Promise<bigint | undefined>
+    getAllElementId(): Promise<BigInt64Array | undefined>
+    getUniqueId(linePatternIndex: number): Promise<string | undefined>
+    getAllUniqueId(): Promise<string[] | undefined>
+    getIsSolid(linePatternIndex: number): Promise<boolean | undefined>
+    getAllIsSolid(): Promise<boolean[] | undefined>
+    getSegments(linePatternIndex: number): Promise<string | undefined>
+    getAllSegments(): Promise<string[] | undefined>
+    
+    getBimDocumentIndex(linePatternIndex: number): Promise<number | undefined>
+    getAllBimDocumentIndex(): Promise<number[] | undefined>
+    getBimDocument(linePatternIndex: number): Promise<IBimDocument | undefined>
+}
+
+export class LinePattern implements ILinePattern {
+    index: number
+    name?: string
+    elementId?: bigint
+    uniqueId?: string
+    isSolid?: boolean
+    segments?: string
+    
+    bimDocumentIndex?: number
+    bimDocument?: IBimDocument
+    
+    static async createFromTable(table: ILinePatternTable, index: number): Promise<ILinePattern> {
+        let result = new LinePattern()
+        result.index = index
+        
+        await Promise.all([
+            table.getName(index).then(v => result.name = v),
+            table.getElementId(index).then(v => result.elementId = v),
+            table.getUniqueId(index).then(v => result.uniqueId = v),
+            table.getIsSolid(index).then(v => result.isSolid = v),
+            table.getSegments(index).then(v => result.segments = v),
+            table.getBimDocumentIndex(index).then(v => result.bimDocumentIndex = v),
+        ])
+        
+        return result
+    }
+}
+
+export class LinePatternTable implements ILinePatternTable {
+    private document: VimDocument
+    private entityTable: EntityTable
+    
+    static async createFromDocument(document: VimDocument): Promise<ILinePatternTable | undefined> {
+        const entity = await document.entities.getBfast("Vim.LinePattern")
+        
+        if (!entity) {
+            return undefined
+        }
+        
+        let table = new LinePatternTable()
+        table.document = document
+        table.entityTable = new EntityTable(entity, document.strings)
+        
+        return table
+    }
+    
+    getCount(): Promise<number> {
+        return this.entityTable.getCount()
+    }
+    
+    async get(linePatternIndex: number): Promise<ILinePattern> {
+        return await LinePattern.createFromTable(this, linePatternIndex)
+    }
+    
+    async getAll(): Promise<ILinePattern[]> {
+        const localTable = await this.entityTable.getLocal()
+        
+        let name: string[] | undefined
+        let elementId: BigInt64Array | undefined
+        let uniqueId: string[] | undefined
+        let isSolid: boolean[] | undefined
+        let segments: string[] | undefined
+        let bimDocumentIndex: number[] | undefined
+        
+        await Promise.all([
+            (async () => { name = (await localTable.getStringArray("string:Name")) })(),
+            (async () => { elementId = (await localTable.getBigIntArray("long:ElementId")) })(),
+            (async () => { uniqueId = (await localTable.getStringArray("string:UniqueId")) })(),
+            (async () => { isSolid = (await localTable.getBooleanArray("byte:IsSolid")) })(),
+            (async () => { segments = (await localTable.getStringArray("string:Segments")) })(),
+            (async () => { bimDocumentIndex = (await localTable.getNumberArray("index:Vim.BimDocument:BimDocument")) })(),
+        ])
+        
+        let linePattern: ILinePattern[] = []
+        
+        const rowCount = await this.getCount()
+        for (let i = 0; i < rowCount; i++) {
+            linePattern.push({
+                index: i,
+                name: name ? name[i] : undefined,
+                elementId: elementId ? elementId[i] : undefined,
+                uniqueId: uniqueId ? uniqueId[i] : undefined,
+                isSolid: isSolid ? isSolid[i] : undefined,
+                segments: segments ? segments[i] : undefined,
+                bimDocumentIndex: bimDocumentIndex ? bimDocumentIndex[i] : undefined
+            })
+        }
+        
+        return linePattern
+    }
+    
+    async getName(linePatternIndex: number): Promise<string | undefined> {
+        return (await this.entityTable.getString(linePatternIndex, "string:Name"))
+    }
+    
+    async getAllName(): Promise<string[] | undefined> {
+        return (await this.entityTable.getStringArray("string:Name"))
+    }
+    
+    async getElementId(linePatternIndex: number): Promise<bigint | undefined> {
+        return (await this.entityTable.getBigInt(linePatternIndex, "long:ElementId"))
+    }
+    
+    async getAllElementId(): Promise<BigInt64Array | undefined> {
+        return (await this.entityTable.getBigIntArray("long:ElementId"))
+    }
+    
+    async getUniqueId(linePatternIndex: number): Promise<string | undefined> {
+        return (await this.entityTable.getString(linePatternIndex, "string:UniqueId"))
+    }
+    
+    async getAllUniqueId(): Promise<string[] | undefined> {
+        return (await this.entityTable.getStringArray("string:UniqueId"))
+    }
+    
+    async getIsSolid(linePatternIndex: number): Promise<boolean | undefined> {
+        return (await this.entityTable.getBoolean(linePatternIndex, "byte:IsSolid"))
+    }
+    
+    async getAllIsSolid(): Promise<boolean[] | undefined> {
+        return (await this.entityTable.getBooleanArray("byte:IsSolid"))
+    }
+    
+    async getSegments(linePatternIndex: number): Promise<string | undefined> {
+        return (await this.entityTable.getString(linePatternIndex, "string:Segments"))
+    }
+    
+    async getAllSegments(): Promise<string[] | undefined> {
+        return (await this.entityTable.getStringArray("string:Segments"))
+    }
+    
+    async getBimDocumentIndex(linePatternIndex: number): Promise<number | undefined> {
+        return await this.entityTable.getNumber(linePatternIndex, "index:Vim.BimDocument:BimDocument")
+    }
+    
+    async getAllBimDocumentIndex(): Promise<number[] | undefined> {
+        return await this.entityTable.getNumberArray("index:Vim.BimDocument:BimDocument")
+    }
+    
+    async getBimDocument(linePatternIndex: number): Promise<IBimDocument | undefined> {
+        const index = await this.getBimDocumentIndex(linePatternIndex)
+        
+        if (index === undefined) {
+            return undefined
+        }
+        
+        return await this.document.bimDocument?.get(index)
+    }
+    
+}
+
+export interface IFillPattern {
+    index: number
+    name?: string
+    elementId?: bigint
+    uniqueId?: string
+    target?: string
+    isSolidFill?: boolean
+    hostOrientation?: string
+    gridCount?: number
+    
+    bimDocumentIndex?: number
+    bimDocument?: IBimDocument
+}
+
+export interface IFillPatternTable {
+    getCount(): Promise<number>
+    get(fillPatternIndex: number): Promise<IFillPattern>
+    getAll(): Promise<IFillPattern[]>
+    
+    getName(fillPatternIndex: number): Promise<string | undefined>
+    getAllName(): Promise<string[] | undefined>
+    getElementId(fillPatternIndex: number): Promise<bigint | undefined>
+    getAllElementId(): Promise<BigInt64Array | undefined>
+    getUniqueId(fillPatternIndex: number): Promise<string | undefined>
+    getAllUniqueId(): Promise<string[] | undefined>
+    getTarget(fillPatternIndex: number): Promise<string | undefined>
+    getAllTarget(): Promise<string[] | undefined>
+    getIsSolidFill(fillPatternIndex: number): Promise<boolean | undefined>
+    getAllIsSolidFill(): Promise<boolean[] | undefined>
+    getHostOrientation(fillPatternIndex: number): Promise<string | undefined>
+    getAllHostOrientation(): Promise<string[] | undefined>
+    getGridCount(fillPatternIndex: number): Promise<number | undefined>
+    getAllGridCount(): Promise<number[] | undefined>
+    
+    getBimDocumentIndex(fillPatternIndex: number): Promise<number | undefined>
+    getAllBimDocumentIndex(): Promise<number[] | undefined>
+    getBimDocument(fillPatternIndex: number): Promise<IBimDocument | undefined>
+}
+
+export class FillPattern implements IFillPattern {
+    index: number
+    name?: string
+    elementId?: bigint
+    uniqueId?: string
+    target?: string
+    isSolidFill?: boolean
+    hostOrientation?: string
+    gridCount?: number
+    
+    bimDocumentIndex?: number
+    bimDocument?: IBimDocument
+    
+    static async createFromTable(table: IFillPatternTable, index: number): Promise<IFillPattern> {
+        let result = new FillPattern()
+        result.index = index
+        
+        await Promise.all([
+            table.getName(index).then(v => result.name = v),
+            table.getElementId(index).then(v => result.elementId = v),
+            table.getUniqueId(index).then(v => result.uniqueId = v),
+            table.getTarget(index).then(v => result.target = v),
+            table.getIsSolidFill(index).then(v => result.isSolidFill = v),
+            table.getHostOrientation(index).then(v => result.hostOrientation = v),
+            table.getGridCount(index).then(v => result.gridCount = v),
+            table.getBimDocumentIndex(index).then(v => result.bimDocumentIndex = v),
+        ])
+        
+        return result
+    }
+}
+
+export class FillPatternTable implements IFillPatternTable {
+    private document: VimDocument
+    private entityTable: EntityTable
+    
+    static async createFromDocument(document: VimDocument): Promise<IFillPatternTable | undefined> {
+        const entity = await document.entities.getBfast("Vim.FillPattern")
+        
+        if (!entity) {
+            return undefined
+        }
+        
+        let table = new FillPatternTable()
+        table.document = document
+        table.entityTable = new EntityTable(entity, document.strings)
+        
+        return table
+    }
+    
+    getCount(): Promise<number> {
+        return this.entityTable.getCount()
+    }
+    
+    async get(fillPatternIndex: number): Promise<IFillPattern> {
+        return await FillPattern.createFromTable(this, fillPatternIndex)
+    }
+    
+    async getAll(): Promise<IFillPattern[]> {
+        const localTable = await this.entityTable.getLocal()
+        
+        let name: string[] | undefined
+        let elementId: BigInt64Array | undefined
+        let uniqueId: string[] | undefined
+        let target: string[] | undefined
+        let isSolidFill: boolean[] | undefined
+        let hostOrientation: string[] | undefined
+        let gridCount: number[] | undefined
+        let bimDocumentIndex: number[] | undefined
+        
+        await Promise.all([
+            (async () => { name = (await localTable.getStringArray("string:Name")) })(),
+            (async () => { elementId = (await localTable.getBigIntArray("long:ElementId")) })(),
+            (async () => { uniqueId = (await localTable.getStringArray("string:UniqueId")) })(),
+            (async () => { target = (await localTable.getStringArray("string:Target")) })(),
+            (async () => { isSolidFill = (await localTable.getBooleanArray("byte:IsSolidFill")) })(),
+            (async () => { hostOrientation = (await localTable.getStringArray("string:HostOrientation")) })(),
+            (async () => { gridCount = (await localTable.getNumberArray("int:GridCount")) })(),
+            (async () => { bimDocumentIndex = (await localTable.getNumberArray("index:Vim.BimDocument:BimDocument")) })(),
+        ])
+        
+        let fillPattern: IFillPattern[] = []
+        
+        const rowCount = await this.getCount()
+        for (let i = 0; i < rowCount; i++) {
+            fillPattern.push({
+                index: i,
+                name: name ? name[i] : undefined,
+                elementId: elementId ? elementId[i] : undefined,
+                uniqueId: uniqueId ? uniqueId[i] : undefined,
+                target: target ? target[i] : undefined,
+                isSolidFill: isSolidFill ? isSolidFill[i] : undefined,
+                hostOrientation: hostOrientation ? hostOrientation[i] : undefined,
+                gridCount: gridCount ? gridCount[i] : undefined,
+                bimDocumentIndex: bimDocumentIndex ? bimDocumentIndex[i] : undefined
+            })
+        }
+        
+        return fillPattern
+    }
+    
+    async getName(fillPatternIndex: number): Promise<string | undefined> {
+        return (await this.entityTable.getString(fillPatternIndex, "string:Name"))
+    }
+    
+    async getAllName(): Promise<string[] | undefined> {
+        return (await this.entityTable.getStringArray("string:Name"))
+    }
+    
+    async getElementId(fillPatternIndex: number): Promise<bigint | undefined> {
+        return (await this.entityTable.getBigInt(fillPatternIndex, "long:ElementId"))
+    }
+    
+    async getAllElementId(): Promise<BigInt64Array | undefined> {
+        return (await this.entityTable.getBigIntArray("long:ElementId"))
+    }
+    
+    async getUniqueId(fillPatternIndex: number): Promise<string | undefined> {
+        return (await this.entityTable.getString(fillPatternIndex, "string:UniqueId"))
+    }
+    
+    async getAllUniqueId(): Promise<string[] | undefined> {
+        return (await this.entityTable.getStringArray("string:UniqueId"))
+    }
+    
+    async getTarget(fillPatternIndex: number): Promise<string | undefined> {
+        return (await this.entityTable.getString(fillPatternIndex, "string:Target"))
+    }
+    
+    async getAllTarget(): Promise<string[] | undefined> {
+        return (await this.entityTable.getStringArray("string:Target"))
+    }
+    
+    async getIsSolidFill(fillPatternIndex: number): Promise<boolean | undefined> {
+        return (await this.entityTable.getBoolean(fillPatternIndex, "byte:IsSolidFill"))
+    }
+    
+    async getAllIsSolidFill(): Promise<boolean[] | undefined> {
+        return (await this.entityTable.getBooleanArray("byte:IsSolidFill"))
+    }
+    
+    async getHostOrientation(fillPatternIndex: number): Promise<string | undefined> {
+        return (await this.entityTable.getString(fillPatternIndex, "string:HostOrientation"))
+    }
+    
+    async getAllHostOrientation(): Promise<string[] | undefined> {
+        return (await this.entityTable.getStringArray("string:HostOrientation"))
+    }
+    
+    async getGridCount(fillPatternIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(fillPatternIndex, "int:GridCount"))
+    }
+    
+    async getAllGridCount(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("int:GridCount"))
+    }
+    
+    async getBimDocumentIndex(fillPatternIndex: number): Promise<number | undefined> {
+        return await this.entityTable.getNumber(fillPatternIndex, "index:Vim.BimDocument:BimDocument")
+    }
+    
+    async getAllBimDocumentIndex(): Promise<number[] | undefined> {
+        return await this.entityTable.getNumberArray("index:Vim.BimDocument:BimDocument")
+    }
+    
+    async getBimDocument(fillPatternIndex: number): Promise<IBimDocument | undefined> {
+        const index = await this.getBimDocumentIndex(fillPatternIndex)
+        
+        if (index === undefined) {
+            return undefined
+        }
+        
+        return await this.document.bimDocument?.get(index)
+    }
+    
+}
+
+export interface IFillGrid {
+    index: number
+    orderIndex?: number
+    angle?: number
+    origin_X?: number
+    origin_Y?: number
+    offset?: number
+    shift?: number
+    segments?: string
+    
+    fillPatternIndex?: number
+    fillPattern?: IFillPattern
+}
+
+export interface IFillGridTable {
+    getCount(): Promise<number>
+    get(fillGridIndex: number): Promise<IFillGrid>
+    getAll(): Promise<IFillGrid[]>
+    
+    getOrderIndex(fillGridIndex: number): Promise<number | undefined>
+    getAllOrderIndex(): Promise<number[] | undefined>
+    getAngle(fillGridIndex: number): Promise<number | undefined>
+    getAllAngle(): Promise<number[] | undefined>
+    getOrigin_X(fillGridIndex: number): Promise<number | undefined>
+    getAllOrigin_X(): Promise<number[] | undefined>
+    getOrigin_Y(fillGridIndex: number): Promise<number | undefined>
+    getAllOrigin_Y(): Promise<number[] | undefined>
+    getOffset(fillGridIndex: number): Promise<number | undefined>
+    getAllOffset(): Promise<number[] | undefined>
+    getShift(fillGridIndex: number): Promise<number | undefined>
+    getAllShift(): Promise<number[] | undefined>
+    getSegments(fillGridIndex: number): Promise<string | undefined>
+    getAllSegments(): Promise<string[] | undefined>
+    
+    getFillPatternIndex(fillGridIndex: number): Promise<number | undefined>
+    getAllFillPatternIndex(): Promise<number[] | undefined>
+    getFillPattern(fillGridIndex: number): Promise<IFillPattern | undefined>
+}
+
+export class FillGrid implements IFillGrid {
+    index: number
+    orderIndex?: number
+    angle?: number
+    origin_X?: number
+    origin_Y?: number
+    offset?: number
+    shift?: number
+    segments?: string
+    
+    fillPatternIndex?: number
+    fillPattern?: IFillPattern
+    
+    static async createFromTable(table: IFillGridTable, index: number): Promise<IFillGrid> {
+        let result = new FillGrid()
+        result.index = index
+        
+        await Promise.all([
+            table.getOrderIndex(index).then(v => result.orderIndex = v),
+            table.getAngle(index).then(v => result.angle = v),
+            table.getOrigin_X(index).then(v => result.origin_X = v),
+            table.getOrigin_Y(index).then(v => result.origin_Y = v),
+            table.getOffset(index).then(v => result.offset = v),
+            table.getShift(index).then(v => result.shift = v),
+            table.getSegments(index).then(v => result.segments = v),
+            table.getFillPatternIndex(index).then(v => result.fillPatternIndex = v),
+        ])
+        
+        return result
+    }
+}
+
+export class FillGridTable implements IFillGridTable {
+    private document: VimDocument
+    private entityTable: EntityTable
+    
+    static async createFromDocument(document: VimDocument): Promise<IFillGridTable | undefined> {
+        const entity = await document.entities.getBfast("Vim.FillGrid")
+        
+        if (!entity) {
+            return undefined
+        }
+        
+        let table = new FillGridTable()
+        table.document = document
+        table.entityTable = new EntityTable(entity, document.strings)
+        
+        return table
+    }
+    
+    getCount(): Promise<number> {
+        return this.entityTable.getCount()
+    }
+    
+    async get(fillGridIndex: number): Promise<IFillGrid> {
+        return await FillGrid.createFromTable(this, fillGridIndex)
+    }
+    
+    async getAll(): Promise<IFillGrid[]> {
+        const localTable = await this.entityTable.getLocal()
+        
+        let orderIndex: number[] | undefined
+        let angle: number[] | undefined
+        let origin_X: number[] | undefined
+        let origin_Y: number[] | undefined
+        let offset: number[] | undefined
+        let shift: number[] | undefined
+        let segments: string[] | undefined
+        let fillPatternIndex: number[] | undefined
+        
+        await Promise.all([
+            (async () => { orderIndex = (await localTable.getNumberArray("int:OrderIndex")) })(),
+            (async () => { angle = (await localTable.getNumberArray("double:Angle")) })(),
+            (async () => { origin_X = (await localTable.getNumberArray("double:Origin.X")) })(),
+            (async () => { origin_Y = (await localTable.getNumberArray("double:Origin.Y")) })(),
+            (async () => { offset = (await localTable.getNumberArray("double:Offset")) })(),
+            (async () => { shift = (await localTable.getNumberArray("double:Shift")) })(),
+            (async () => { segments = (await localTable.getStringArray("string:Segments")) })(),
+            (async () => { fillPatternIndex = (await localTable.getNumberArray("index:Vim.FillPattern:FillPattern")) })(),
+        ])
+        
+        let fillGrid: IFillGrid[] = []
+        
+        const rowCount = await this.getCount()
+        for (let i = 0; i < rowCount; i++) {
+            fillGrid.push({
+                index: i,
+                orderIndex: orderIndex ? orderIndex[i] : undefined,
+                angle: angle ? angle[i] : undefined,
+                origin_X: origin_X ? origin_X[i] : undefined,
+                origin_Y: origin_Y ? origin_Y[i] : undefined,
+                offset: offset ? offset[i] : undefined,
+                shift: shift ? shift[i] : undefined,
+                segments: segments ? segments[i] : undefined,
+                fillPatternIndex: fillPatternIndex ? fillPatternIndex[i] : undefined
+            })
+        }
+        
+        return fillGrid
+    }
+    
+    async getOrderIndex(fillGridIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(fillGridIndex, "int:OrderIndex"))
+    }
+    
+    async getAllOrderIndex(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("int:OrderIndex"))
+    }
+    
+    async getAngle(fillGridIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(fillGridIndex, "double:Angle"))
+    }
+    
+    async getAllAngle(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:Angle"))
+    }
+    
+    async getOrigin_X(fillGridIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(fillGridIndex, "double:Origin.X"))
+    }
+    
+    async getAllOrigin_X(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:Origin.X"))
+    }
+    
+    async getOrigin_Y(fillGridIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(fillGridIndex, "double:Origin.Y"))
+    }
+    
+    async getAllOrigin_Y(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:Origin.Y"))
+    }
+    
+    async getOffset(fillGridIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(fillGridIndex, "double:Offset"))
+    }
+    
+    async getAllOffset(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:Offset"))
+    }
+    
+    async getShift(fillGridIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(fillGridIndex, "double:Shift"))
+    }
+    
+    async getAllShift(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:Shift"))
+    }
+    
+    async getSegments(fillGridIndex: number): Promise<string | undefined> {
+        return (await this.entityTable.getString(fillGridIndex, "string:Segments"))
+    }
+    
+    async getAllSegments(): Promise<string[] | undefined> {
+        return (await this.entityTable.getStringArray("string:Segments"))
+    }
+    
+    async getFillPatternIndex(fillGridIndex: number): Promise<number | undefined> {
+        return await this.entityTable.getNumber(fillGridIndex, "index:Vim.FillPattern:FillPattern")
+    }
+    
+    async getAllFillPatternIndex(): Promise<number[] | undefined> {
+        return await this.entityTable.getNumberArray("index:Vim.FillPattern:FillPattern")
+    }
+    
+    async getFillPattern(fillGridIndex: number): Promise<IFillPattern | undefined> {
+        const index = await this.getFillPatternIndex(fillGridIndex)
+        
+        if (index === undefined) {
+            return undefined
+        }
+        
+        return await this.document.fillPattern?.get(index)
+    }
+    
+}
+
+export interface ILineWeight {
+    index: number
+    table?: string
+    scale?: number
+    number?: number
+    width?: number
+    
+    bimDocumentIndex?: number
+    bimDocument?: IBimDocument
+}
+
+export interface ILineWeightTable {
+    getCount(): Promise<number>
+    get(lineWeightIndex: number): Promise<ILineWeight>
+    getAll(): Promise<ILineWeight[]>
+    
+    getTable(lineWeightIndex: number): Promise<string | undefined>
+    getAllTable(): Promise<string[] | undefined>
+    getScale(lineWeightIndex: number): Promise<number | undefined>
+    getAllScale(): Promise<number[] | undefined>
+    getNumber(lineWeightIndex: number): Promise<number | undefined>
+    getAllNumber(): Promise<number[] | undefined>
+    getWidth(lineWeightIndex: number): Promise<number | undefined>
+    getAllWidth(): Promise<number[] | undefined>
+    
+    getBimDocumentIndex(lineWeightIndex: number): Promise<number | undefined>
+    getAllBimDocumentIndex(): Promise<number[] | undefined>
+    getBimDocument(lineWeightIndex: number): Promise<IBimDocument | undefined>
+}
+
+export class LineWeight implements ILineWeight {
+    index: number
+    table?: string
+    scale?: number
+    number?: number
+    width?: number
+    
+    bimDocumentIndex?: number
+    bimDocument?: IBimDocument
+    
+    static async createFromTable(table: ILineWeightTable, index: number): Promise<ILineWeight> {
+        let result = new LineWeight()
+        result.index = index
+        
+        await Promise.all([
+            table.getTable(index).then(v => result.table = v),
+            table.getScale(index).then(v => result.scale = v),
+            table.getNumber(index).then(v => result.number = v),
+            table.getWidth(index).then(v => result.width = v),
+            table.getBimDocumentIndex(index).then(v => result.bimDocumentIndex = v),
+        ])
+        
+        return result
+    }
+}
+
+export class LineWeightTable implements ILineWeightTable {
+    private document: VimDocument
+    private entityTable: EntityTable
+    
+    static async createFromDocument(document: VimDocument): Promise<ILineWeightTable | undefined> {
+        const entity = await document.entities.getBfast("Vim.LineWeight")
+        
+        if (!entity) {
+            return undefined
+        }
+        
+        let table = new LineWeightTable()
+        table.document = document
+        table.entityTable = new EntityTable(entity, document.strings)
+        
+        return table
+    }
+    
+    getCount(): Promise<number> {
+        return this.entityTable.getCount()
+    }
+    
+    async get(lineWeightIndex: number): Promise<ILineWeight> {
+        return await LineWeight.createFromTable(this, lineWeightIndex)
+    }
+    
+    async getAll(): Promise<ILineWeight[]> {
+        const localTable = await this.entityTable.getLocal()
+        
+        let table: string[] | undefined
+        let scale: number[] | undefined
+        let number: number[] | undefined
+        let width: number[] | undefined
+        let bimDocumentIndex: number[] | undefined
+        
+        await Promise.all([
+            (async () => { table = (await localTable.getStringArray("string:Table")) })(),
+            (async () => { scale = (await localTable.getNumberArray("int:Scale")) })(),
+            (async () => { number = (await localTable.getNumberArray("int:Number")) })(),
+            (async () => { width = (await localTable.getNumberArray("double:Width")) })(),
+            (async () => { bimDocumentIndex = (await localTable.getNumberArray("index:Vim.BimDocument:BimDocument")) })(),
+        ])
+        
+        let lineWeight: ILineWeight[] = []
+        
+        const rowCount = await this.getCount()
+        for (let i = 0; i < rowCount; i++) {
+            lineWeight.push({
+                index: i,
+                table: table ? table[i] : undefined,
+                scale: scale ? scale[i] : undefined,
+                number: number ? number[i] : undefined,
+                width: width ? width[i] : undefined,
+                bimDocumentIndex: bimDocumentIndex ? bimDocumentIndex[i] : undefined
+            })
+        }
+        
+        return lineWeight
+    }
+    
+    async getTable(lineWeightIndex: number): Promise<string | undefined> {
+        return (await this.entityTable.getString(lineWeightIndex, "string:Table"))
+    }
+    
+    async getAllTable(): Promise<string[] | undefined> {
+        return (await this.entityTable.getStringArray("string:Table"))
+    }
+    
+    async getScale(lineWeightIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(lineWeightIndex, "int:Scale"))
+    }
+    
+    async getAllScale(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("int:Scale"))
+    }
+    
+    async getNumber(lineWeightIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(lineWeightIndex, "int:Number"))
+    }
+    
+    async getAllNumber(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("int:Number"))
+    }
+    
+    async getWidth(lineWeightIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(lineWeightIndex, "double:Width"))
+    }
+    
+    async getAllWidth(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:Width"))
+    }
+    
+    async getBimDocumentIndex(lineWeightIndex: number): Promise<number | undefined> {
+        return await this.entityTable.getNumber(lineWeightIndex, "index:Vim.BimDocument:BimDocument")
+    }
+    
+    async getAllBimDocumentIndex(): Promise<number[] | undefined> {
+        return await this.entityTable.getNumberArray("index:Vim.BimDocument:BimDocument")
+    }
+    
+    async getBimDocument(lineWeightIndex: number): Promise<IBimDocument | undefined> {
+        const index = await this.getBimDocumentIndex(lineWeightIndex)
+        
+        if (index === undefined) {
+            return undefined
+        }
+        
+        return await this.document.bimDocument?.get(index)
+    }
+    
+}
+
+export interface IGraphicOverride {
+    index: number
+    projectionLineWeight?: number
+    hasProjectionLineColor?: boolean
+    projectionLineColor_X?: number
+    projectionLineColor_Y?: number
+    projectionLineColor_Z?: number
+    cutLineWeight?: number
+    hasCutLineColor?: boolean
+    cutLineColor_X?: number
+    cutLineColor_Y?: number
+    cutLineColor_Z?: number
+    surfaceForegroundPatternVisible?: boolean
+    hasSurfaceForegroundPatternColor?: boolean
+    surfaceForegroundPatternColor_X?: number
+    surfaceForegroundPatternColor_Y?: number
+    surfaceForegroundPatternColor_Z?: number
+    surfaceBackgroundPatternVisible?: boolean
+    hasSurfaceBackgroundPatternColor?: boolean
+    surfaceBackgroundPatternColor_X?: number
+    surfaceBackgroundPatternColor_Y?: number
+    surfaceBackgroundPatternColor_Z?: number
+    cutForegroundPatternVisible?: boolean
+    hasCutForegroundPatternColor?: boolean
+    cutForegroundPatternColor_X?: number
+    cutForegroundPatternColor_Y?: number
+    cutForegroundPatternColor_Z?: number
+    cutBackgroundPatternVisible?: boolean
+    hasCutBackgroundPatternColor?: boolean
+    cutBackgroundPatternColor_X?: number
+    cutBackgroundPatternColor_Y?: number
+    cutBackgroundPatternColor_Z?: number
+    transparency?: number
+    halftone?: boolean
+    detailLevel?: number
+    key?: string
+    
+    projectionLinePatternIndex?: number
+    projectionLinePattern?: ILinePattern
+    cutLinePatternIndex?: number
+    cutLinePattern?: ILinePattern
+    surfaceForegroundPatternIndex?: number
+    surfaceForegroundPattern?: IFillPattern
+    surfaceBackgroundPatternIndex?: number
+    surfaceBackgroundPattern?: IFillPattern
+    cutForegroundPatternIndex?: number
+    cutForegroundPattern?: IFillPattern
+    cutBackgroundPatternIndex?: number
+    cutBackgroundPattern?: IFillPattern
+}
+
+export interface IGraphicOverrideTable {
+    getCount(): Promise<number>
+    get(graphicOverrideIndex: number): Promise<IGraphicOverride>
+    getAll(): Promise<IGraphicOverride[]>
+    
+    getProjectionLineWeight(graphicOverrideIndex: number): Promise<number | undefined>
+    getAllProjectionLineWeight(): Promise<number[] | undefined>
+    getHasProjectionLineColor(graphicOverrideIndex: number): Promise<boolean | undefined>
+    getAllHasProjectionLineColor(): Promise<boolean[] | undefined>
+    getProjectionLineColor_X(graphicOverrideIndex: number): Promise<number | undefined>
+    getAllProjectionLineColor_X(): Promise<number[] | undefined>
+    getProjectionLineColor_Y(graphicOverrideIndex: number): Promise<number | undefined>
+    getAllProjectionLineColor_Y(): Promise<number[] | undefined>
+    getProjectionLineColor_Z(graphicOverrideIndex: number): Promise<number | undefined>
+    getAllProjectionLineColor_Z(): Promise<number[] | undefined>
+    getCutLineWeight(graphicOverrideIndex: number): Promise<number | undefined>
+    getAllCutLineWeight(): Promise<number[] | undefined>
+    getHasCutLineColor(graphicOverrideIndex: number): Promise<boolean | undefined>
+    getAllHasCutLineColor(): Promise<boolean[] | undefined>
+    getCutLineColor_X(graphicOverrideIndex: number): Promise<number | undefined>
+    getAllCutLineColor_X(): Promise<number[] | undefined>
+    getCutLineColor_Y(graphicOverrideIndex: number): Promise<number | undefined>
+    getAllCutLineColor_Y(): Promise<number[] | undefined>
+    getCutLineColor_Z(graphicOverrideIndex: number): Promise<number | undefined>
+    getAllCutLineColor_Z(): Promise<number[] | undefined>
+    getSurfaceForegroundPatternVisible(graphicOverrideIndex: number): Promise<boolean | undefined>
+    getAllSurfaceForegroundPatternVisible(): Promise<boolean[] | undefined>
+    getHasSurfaceForegroundPatternColor(graphicOverrideIndex: number): Promise<boolean | undefined>
+    getAllHasSurfaceForegroundPatternColor(): Promise<boolean[] | undefined>
+    getSurfaceForegroundPatternColor_X(graphicOverrideIndex: number): Promise<number | undefined>
+    getAllSurfaceForegroundPatternColor_X(): Promise<number[] | undefined>
+    getSurfaceForegroundPatternColor_Y(graphicOverrideIndex: number): Promise<number | undefined>
+    getAllSurfaceForegroundPatternColor_Y(): Promise<number[] | undefined>
+    getSurfaceForegroundPatternColor_Z(graphicOverrideIndex: number): Promise<number | undefined>
+    getAllSurfaceForegroundPatternColor_Z(): Promise<number[] | undefined>
+    getSurfaceBackgroundPatternVisible(graphicOverrideIndex: number): Promise<boolean | undefined>
+    getAllSurfaceBackgroundPatternVisible(): Promise<boolean[] | undefined>
+    getHasSurfaceBackgroundPatternColor(graphicOverrideIndex: number): Promise<boolean | undefined>
+    getAllHasSurfaceBackgroundPatternColor(): Promise<boolean[] | undefined>
+    getSurfaceBackgroundPatternColor_X(graphicOverrideIndex: number): Promise<number | undefined>
+    getAllSurfaceBackgroundPatternColor_X(): Promise<number[] | undefined>
+    getSurfaceBackgroundPatternColor_Y(graphicOverrideIndex: number): Promise<number | undefined>
+    getAllSurfaceBackgroundPatternColor_Y(): Promise<number[] | undefined>
+    getSurfaceBackgroundPatternColor_Z(graphicOverrideIndex: number): Promise<number | undefined>
+    getAllSurfaceBackgroundPatternColor_Z(): Promise<number[] | undefined>
+    getCutForegroundPatternVisible(graphicOverrideIndex: number): Promise<boolean | undefined>
+    getAllCutForegroundPatternVisible(): Promise<boolean[] | undefined>
+    getHasCutForegroundPatternColor(graphicOverrideIndex: number): Promise<boolean | undefined>
+    getAllHasCutForegroundPatternColor(): Promise<boolean[] | undefined>
+    getCutForegroundPatternColor_X(graphicOverrideIndex: number): Promise<number | undefined>
+    getAllCutForegroundPatternColor_X(): Promise<number[] | undefined>
+    getCutForegroundPatternColor_Y(graphicOverrideIndex: number): Promise<number | undefined>
+    getAllCutForegroundPatternColor_Y(): Promise<number[] | undefined>
+    getCutForegroundPatternColor_Z(graphicOverrideIndex: number): Promise<number | undefined>
+    getAllCutForegroundPatternColor_Z(): Promise<number[] | undefined>
+    getCutBackgroundPatternVisible(graphicOverrideIndex: number): Promise<boolean | undefined>
+    getAllCutBackgroundPatternVisible(): Promise<boolean[] | undefined>
+    getHasCutBackgroundPatternColor(graphicOverrideIndex: number): Promise<boolean | undefined>
+    getAllHasCutBackgroundPatternColor(): Promise<boolean[] | undefined>
+    getCutBackgroundPatternColor_X(graphicOverrideIndex: number): Promise<number | undefined>
+    getAllCutBackgroundPatternColor_X(): Promise<number[] | undefined>
+    getCutBackgroundPatternColor_Y(graphicOverrideIndex: number): Promise<number | undefined>
+    getAllCutBackgroundPatternColor_Y(): Promise<number[] | undefined>
+    getCutBackgroundPatternColor_Z(graphicOverrideIndex: number): Promise<number | undefined>
+    getAllCutBackgroundPatternColor_Z(): Promise<number[] | undefined>
+    getTransparency(graphicOverrideIndex: number): Promise<number | undefined>
+    getAllTransparency(): Promise<number[] | undefined>
+    getHalftone(graphicOverrideIndex: number): Promise<boolean | undefined>
+    getAllHalftone(): Promise<boolean[] | undefined>
+    getDetailLevel(graphicOverrideIndex: number): Promise<number | undefined>
+    getAllDetailLevel(): Promise<number[] | undefined>
+    getKey(graphicOverrideIndex: number): Promise<string | undefined>
+    getAllKey(): Promise<string[] | undefined>
+    
+    getProjectionLinePatternIndex(graphicOverrideIndex: number): Promise<number | undefined>
+    getAllProjectionLinePatternIndex(): Promise<number[] | undefined>
+    getProjectionLinePattern(graphicOverrideIndex: number): Promise<ILinePattern | undefined>
+    getCutLinePatternIndex(graphicOverrideIndex: number): Promise<number | undefined>
+    getAllCutLinePatternIndex(): Promise<number[] | undefined>
+    getCutLinePattern(graphicOverrideIndex: number): Promise<ILinePattern | undefined>
+    getSurfaceForegroundPatternIndex(graphicOverrideIndex: number): Promise<number | undefined>
+    getAllSurfaceForegroundPatternIndex(): Promise<number[] | undefined>
+    getSurfaceForegroundPattern(graphicOverrideIndex: number): Promise<IFillPattern | undefined>
+    getSurfaceBackgroundPatternIndex(graphicOverrideIndex: number): Promise<number | undefined>
+    getAllSurfaceBackgroundPatternIndex(): Promise<number[] | undefined>
+    getSurfaceBackgroundPattern(graphicOverrideIndex: number): Promise<IFillPattern | undefined>
+    getCutForegroundPatternIndex(graphicOverrideIndex: number): Promise<number | undefined>
+    getAllCutForegroundPatternIndex(): Promise<number[] | undefined>
+    getCutForegroundPattern(graphicOverrideIndex: number): Promise<IFillPattern | undefined>
+    getCutBackgroundPatternIndex(graphicOverrideIndex: number): Promise<number | undefined>
+    getAllCutBackgroundPatternIndex(): Promise<number[] | undefined>
+    getCutBackgroundPattern(graphicOverrideIndex: number): Promise<IFillPattern | undefined>
+}
+
+export class GraphicOverride implements IGraphicOverride {
+    index: number
+    projectionLineWeight?: number
+    hasProjectionLineColor?: boolean
+    projectionLineColor_X?: number
+    projectionLineColor_Y?: number
+    projectionLineColor_Z?: number
+    cutLineWeight?: number
+    hasCutLineColor?: boolean
+    cutLineColor_X?: number
+    cutLineColor_Y?: number
+    cutLineColor_Z?: number
+    surfaceForegroundPatternVisible?: boolean
+    hasSurfaceForegroundPatternColor?: boolean
+    surfaceForegroundPatternColor_X?: number
+    surfaceForegroundPatternColor_Y?: number
+    surfaceForegroundPatternColor_Z?: number
+    surfaceBackgroundPatternVisible?: boolean
+    hasSurfaceBackgroundPatternColor?: boolean
+    surfaceBackgroundPatternColor_X?: number
+    surfaceBackgroundPatternColor_Y?: number
+    surfaceBackgroundPatternColor_Z?: number
+    cutForegroundPatternVisible?: boolean
+    hasCutForegroundPatternColor?: boolean
+    cutForegroundPatternColor_X?: number
+    cutForegroundPatternColor_Y?: number
+    cutForegroundPatternColor_Z?: number
+    cutBackgroundPatternVisible?: boolean
+    hasCutBackgroundPatternColor?: boolean
+    cutBackgroundPatternColor_X?: number
+    cutBackgroundPatternColor_Y?: number
+    cutBackgroundPatternColor_Z?: number
+    transparency?: number
+    halftone?: boolean
+    detailLevel?: number
+    key?: string
+    
+    projectionLinePatternIndex?: number
+    projectionLinePattern?: ILinePattern
+    cutLinePatternIndex?: number
+    cutLinePattern?: ILinePattern
+    surfaceForegroundPatternIndex?: number
+    surfaceForegroundPattern?: IFillPattern
+    surfaceBackgroundPatternIndex?: number
+    surfaceBackgroundPattern?: IFillPattern
+    cutForegroundPatternIndex?: number
+    cutForegroundPattern?: IFillPattern
+    cutBackgroundPatternIndex?: number
+    cutBackgroundPattern?: IFillPattern
+    
+    static async createFromTable(table: IGraphicOverrideTable, index: number): Promise<IGraphicOverride> {
+        let result = new GraphicOverride()
+        result.index = index
+        
+        await Promise.all([
+            table.getProjectionLineWeight(index).then(v => result.projectionLineWeight = v),
+            table.getHasProjectionLineColor(index).then(v => result.hasProjectionLineColor = v),
+            table.getProjectionLineColor_X(index).then(v => result.projectionLineColor_X = v),
+            table.getProjectionLineColor_Y(index).then(v => result.projectionLineColor_Y = v),
+            table.getProjectionLineColor_Z(index).then(v => result.projectionLineColor_Z = v),
+            table.getCutLineWeight(index).then(v => result.cutLineWeight = v),
+            table.getHasCutLineColor(index).then(v => result.hasCutLineColor = v),
+            table.getCutLineColor_X(index).then(v => result.cutLineColor_X = v),
+            table.getCutLineColor_Y(index).then(v => result.cutLineColor_Y = v),
+            table.getCutLineColor_Z(index).then(v => result.cutLineColor_Z = v),
+            table.getSurfaceForegroundPatternVisible(index).then(v => result.surfaceForegroundPatternVisible = v),
+            table.getHasSurfaceForegroundPatternColor(index).then(v => result.hasSurfaceForegroundPatternColor = v),
+            table.getSurfaceForegroundPatternColor_X(index).then(v => result.surfaceForegroundPatternColor_X = v),
+            table.getSurfaceForegroundPatternColor_Y(index).then(v => result.surfaceForegroundPatternColor_Y = v),
+            table.getSurfaceForegroundPatternColor_Z(index).then(v => result.surfaceForegroundPatternColor_Z = v),
+            table.getSurfaceBackgroundPatternVisible(index).then(v => result.surfaceBackgroundPatternVisible = v),
+            table.getHasSurfaceBackgroundPatternColor(index).then(v => result.hasSurfaceBackgroundPatternColor = v),
+            table.getSurfaceBackgroundPatternColor_X(index).then(v => result.surfaceBackgroundPatternColor_X = v),
+            table.getSurfaceBackgroundPatternColor_Y(index).then(v => result.surfaceBackgroundPatternColor_Y = v),
+            table.getSurfaceBackgroundPatternColor_Z(index).then(v => result.surfaceBackgroundPatternColor_Z = v),
+            table.getCutForegroundPatternVisible(index).then(v => result.cutForegroundPatternVisible = v),
+            table.getHasCutForegroundPatternColor(index).then(v => result.hasCutForegroundPatternColor = v),
+            table.getCutForegroundPatternColor_X(index).then(v => result.cutForegroundPatternColor_X = v),
+            table.getCutForegroundPatternColor_Y(index).then(v => result.cutForegroundPatternColor_Y = v),
+            table.getCutForegroundPatternColor_Z(index).then(v => result.cutForegroundPatternColor_Z = v),
+            table.getCutBackgroundPatternVisible(index).then(v => result.cutBackgroundPatternVisible = v),
+            table.getHasCutBackgroundPatternColor(index).then(v => result.hasCutBackgroundPatternColor = v),
+            table.getCutBackgroundPatternColor_X(index).then(v => result.cutBackgroundPatternColor_X = v),
+            table.getCutBackgroundPatternColor_Y(index).then(v => result.cutBackgroundPatternColor_Y = v),
+            table.getCutBackgroundPatternColor_Z(index).then(v => result.cutBackgroundPatternColor_Z = v),
+            table.getTransparency(index).then(v => result.transparency = v),
+            table.getHalftone(index).then(v => result.halftone = v),
+            table.getDetailLevel(index).then(v => result.detailLevel = v),
+            table.getKey(index).then(v => result.key = v),
+            table.getProjectionLinePatternIndex(index).then(v => result.projectionLinePatternIndex = v),
+            table.getCutLinePatternIndex(index).then(v => result.cutLinePatternIndex = v),
+            table.getSurfaceForegroundPatternIndex(index).then(v => result.surfaceForegroundPatternIndex = v),
+            table.getSurfaceBackgroundPatternIndex(index).then(v => result.surfaceBackgroundPatternIndex = v),
+            table.getCutForegroundPatternIndex(index).then(v => result.cutForegroundPatternIndex = v),
+            table.getCutBackgroundPatternIndex(index).then(v => result.cutBackgroundPatternIndex = v),
+        ])
+        
+        return result
+    }
+}
+
+export class GraphicOverrideTable implements IGraphicOverrideTable {
+    private document: VimDocument
+    private entityTable: EntityTable
+    
+    static async createFromDocument(document: VimDocument): Promise<IGraphicOverrideTable | undefined> {
+        const entity = await document.entities.getBfast("Vim.GraphicOverride")
+        
+        if (!entity) {
+            return undefined
+        }
+        
+        let table = new GraphicOverrideTable()
+        table.document = document
+        table.entityTable = new EntityTable(entity, document.strings)
+        
+        return table
+    }
+    
+    getCount(): Promise<number> {
+        return this.entityTable.getCount()
+    }
+    
+    async get(graphicOverrideIndex: number): Promise<IGraphicOverride> {
+        return await GraphicOverride.createFromTable(this, graphicOverrideIndex)
+    }
+    
+    async getAll(): Promise<IGraphicOverride[]> {
+        const localTable = await this.entityTable.getLocal()
+        
+        let projectionLineWeight: number[] | undefined
+        let hasProjectionLineColor: boolean[] | undefined
+        let projectionLineColor_X: number[] | undefined
+        let projectionLineColor_Y: number[] | undefined
+        let projectionLineColor_Z: number[] | undefined
+        let cutLineWeight: number[] | undefined
+        let hasCutLineColor: boolean[] | undefined
+        let cutLineColor_X: number[] | undefined
+        let cutLineColor_Y: number[] | undefined
+        let cutLineColor_Z: number[] | undefined
+        let surfaceForegroundPatternVisible: boolean[] | undefined
+        let hasSurfaceForegroundPatternColor: boolean[] | undefined
+        let surfaceForegroundPatternColor_X: number[] | undefined
+        let surfaceForegroundPatternColor_Y: number[] | undefined
+        let surfaceForegroundPatternColor_Z: number[] | undefined
+        let surfaceBackgroundPatternVisible: boolean[] | undefined
+        let hasSurfaceBackgroundPatternColor: boolean[] | undefined
+        let surfaceBackgroundPatternColor_X: number[] | undefined
+        let surfaceBackgroundPatternColor_Y: number[] | undefined
+        let surfaceBackgroundPatternColor_Z: number[] | undefined
+        let cutForegroundPatternVisible: boolean[] | undefined
+        let hasCutForegroundPatternColor: boolean[] | undefined
+        let cutForegroundPatternColor_X: number[] | undefined
+        let cutForegroundPatternColor_Y: number[] | undefined
+        let cutForegroundPatternColor_Z: number[] | undefined
+        let cutBackgroundPatternVisible: boolean[] | undefined
+        let hasCutBackgroundPatternColor: boolean[] | undefined
+        let cutBackgroundPatternColor_X: number[] | undefined
+        let cutBackgroundPatternColor_Y: number[] | undefined
+        let cutBackgroundPatternColor_Z: number[] | undefined
+        let transparency: number[] | undefined
+        let halftone: boolean[] | undefined
+        let detailLevel: number[] | undefined
+        let key: string[] | undefined
+        let projectionLinePatternIndex: number[] | undefined
+        let cutLinePatternIndex: number[] | undefined
+        let surfaceForegroundPatternIndex: number[] | undefined
+        let surfaceBackgroundPatternIndex: number[] | undefined
+        let cutForegroundPatternIndex: number[] | undefined
+        let cutBackgroundPatternIndex: number[] | undefined
+        
+        await Promise.all([
+            (async () => { projectionLineWeight = (await localTable.getNumberArray("int:ProjectionLineWeight")) })(),
+            (async () => { hasProjectionLineColor = (await localTable.getBooleanArray("byte:HasProjectionLineColor")) })(),
+            (async () => { projectionLineColor_X = (await localTable.getNumberArray("double:ProjectionLineColor.X")) })(),
+            (async () => { projectionLineColor_Y = (await localTable.getNumberArray("double:ProjectionLineColor.Y")) })(),
+            (async () => { projectionLineColor_Z = (await localTable.getNumberArray("double:ProjectionLineColor.Z")) })(),
+            (async () => { cutLineWeight = (await localTable.getNumberArray("int:CutLineWeight")) })(),
+            (async () => { hasCutLineColor = (await localTable.getBooleanArray("byte:HasCutLineColor")) })(),
+            (async () => { cutLineColor_X = (await localTable.getNumberArray("double:CutLineColor.X")) })(),
+            (async () => { cutLineColor_Y = (await localTable.getNumberArray("double:CutLineColor.Y")) })(),
+            (async () => { cutLineColor_Z = (await localTable.getNumberArray("double:CutLineColor.Z")) })(),
+            (async () => { surfaceForegroundPatternVisible = (await localTable.getBooleanArray("byte:SurfaceForegroundPatternVisible")) })(),
+            (async () => { hasSurfaceForegroundPatternColor = (await localTable.getBooleanArray("byte:HasSurfaceForegroundPatternColor")) })(),
+            (async () => { surfaceForegroundPatternColor_X = (await localTable.getNumberArray("double:SurfaceForegroundPatternColor.X")) })(),
+            (async () => { surfaceForegroundPatternColor_Y = (await localTable.getNumberArray("double:SurfaceForegroundPatternColor.Y")) })(),
+            (async () => { surfaceForegroundPatternColor_Z = (await localTable.getNumberArray("double:SurfaceForegroundPatternColor.Z")) })(),
+            (async () => { surfaceBackgroundPatternVisible = (await localTable.getBooleanArray("byte:SurfaceBackgroundPatternVisible")) })(),
+            (async () => { hasSurfaceBackgroundPatternColor = (await localTable.getBooleanArray("byte:HasSurfaceBackgroundPatternColor")) })(),
+            (async () => { surfaceBackgroundPatternColor_X = (await localTable.getNumberArray("double:SurfaceBackgroundPatternColor.X")) })(),
+            (async () => { surfaceBackgroundPatternColor_Y = (await localTable.getNumberArray("double:SurfaceBackgroundPatternColor.Y")) })(),
+            (async () => { surfaceBackgroundPatternColor_Z = (await localTable.getNumberArray("double:SurfaceBackgroundPatternColor.Z")) })(),
+            (async () => { cutForegroundPatternVisible = (await localTable.getBooleanArray("byte:CutForegroundPatternVisible")) })(),
+            (async () => { hasCutForegroundPatternColor = (await localTable.getBooleanArray("byte:HasCutForegroundPatternColor")) })(),
+            (async () => { cutForegroundPatternColor_X = (await localTable.getNumberArray("double:CutForegroundPatternColor.X")) })(),
+            (async () => { cutForegroundPatternColor_Y = (await localTable.getNumberArray("double:CutForegroundPatternColor.Y")) })(),
+            (async () => { cutForegroundPatternColor_Z = (await localTable.getNumberArray("double:CutForegroundPatternColor.Z")) })(),
+            (async () => { cutBackgroundPatternVisible = (await localTable.getBooleanArray("byte:CutBackgroundPatternVisible")) })(),
+            (async () => { hasCutBackgroundPatternColor = (await localTable.getBooleanArray("byte:HasCutBackgroundPatternColor")) })(),
+            (async () => { cutBackgroundPatternColor_X = (await localTable.getNumberArray("double:CutBackgroundPatternColor.X")) })(),
+            (async () => { cutBackgroundPatternColor_Y = (await localTable.getNumberArray("double:CutBackgroundPatternColor.Y")) })(),
+            (async () => { cutBackgroundPatternColor_Z = (await localTable.getNumberArray("double:CutBackgroundPatternColor.Z")) })(),
+            (async () => { transparency = (await localTable.getNumberArray("int:Transparency")) })(),
+            (async () => { halftone = (await localTable.getBooleanArray("byte:Halftone")) })(),
+            (async () => { detailLevel = (await localTable.getNumberArray("int:DetailLevel")) })(),
+            (async () => { key = (await localTable.getStringArray("string:Key")) })(),
+            (async () => { projectionLinePatternIndex = (await localTable.getNumberArray("index:Vim.LinePattern:ProjectionLinePattern")) })(),
+            (async () => { cutLinePatternIndex = (await localTable.getNumberArray("index:Vim.LinePattern:CutLinePattern")) })(),
+            (async () => { surfaceForegroundPatternIndex = (await localTable.getNumberArray("index:Vim.FillPattern:SurfaceForegroundPattern")) })(),
+            (async () => { surfaceBackgroundPatternIndex = (await localTable.getNumberArray("index:Vim.FillPattern:SurfaceBackgroundPattern")) })(),
+            (async () => { cutForegroundPatternIndex = (await localTable.getNumberArray("index:Vim.FillPattern:CutForegroundPattern")) })(),
+            (async () => { cutBackgroundPatternIndex = (await localTable.getNumberArray("index:Vim.FillPattern:CutBackgroundPattern")) })(),
+        ])
+        
+        let graphicOverride: IGraphicOverride[] = []
+        
+        const rowCount = await this.getCount()
+        for (let i = 0; i < rowCount; i++) {
+            graphicOverride.push({
+                index: i,
+                projectionLineWeight: projectionLineWeight ? projectionLineWeight[i] : undefined,
+                hasProjectionLineColor: hasProjectionLineColor ? hasProjectionLineColor[i] : undefined,
+                projectionLineColor_X: projectionLineColor_X ? projectionLineColor_X[i] : undefined,
+                projectionLineColor_Y: projectionLineColor_Y ? projectionLineColor_Y[i] : undefined,
+                projectionLineColor_Z: projectionLineColor_Z ? projectionLineColor_Z[i] : undefined,
+                cutLineWeight: cutLineWeight ? cutLineWeight[i] : undefined,
+                hasCutLineColor: hasCutLineColor ? hasCutLineColor[i] : undefined,
+                cutLineColor_X: cutLineColor_X ? cutLineColor_X[i] : undefined,
+                cutLineColor_Y: cutLineColor_Y ? cutLineColor_Y[i] : undefined,
+                cutLineColor_Z: cutLineColor_Z ? cutLineColor_Z[i] : undefined,
+                surfaceForegroundPatternVisible: surfaceForegroundPatternVisible ? surfaceForegroundPatternVisible[i] : undefined,
+                hasSurfaceForegroundPatternColor: hasSurfaceForegroundPatternColor ? hasSurfaceForegroundPatternColor[i] : undefined,
+                surfaceForegroundPatternColor_X: surfaceForegroundPatternColor_X ? surfaceForegroundPatternColor_X[i] : undefined,
+                surfaceForegroundPatternColor_Y: surfaceForegroundPatternColor_Y ? surfaceForegroundPatternColor_Y[i] : undefined,
+                surfaceForegroundPatternColor_Z: surfaceForegroundPatternColor_Z ? surfaceForegroundPatternColor_Z[i] : undefined,
+                surfaceBackgroundPatternVisible: surfaceBackgroundPatternVisible ? surfaceBackgroundPatternVisible[i] : undefined,
+                hasSurfaceBackgroundPatternColor: hasSurfaceBackgroundPatternColor ? hasSurfaceBackgroundPatternColor[i] : undefined,
+                surfaceBackgroundPatternColor_X: surfaceBackgroundPatternColor_X ? surfaceBackgroundPatternColor_X[i] : undefined,
+                surfaceBackgroundPatternColor_Y: surfaceBackgroundPatternColor_Y ? surfaceBackgroundPatternColor_Y[i] : undefined,
+                surfaceBackgroundPatternColor_Z: surfaceBackgroundPatternColor_Z ? surfaceBackgroundPatternColor_Z[i] : undefined,
+                cutForegroundPatternVisible: cutForegroundPatternVisible ? cutForegroundPatternVisible[i] : undefined,
+                hasCutForegroundPatternColor: hasCutForegroundPatternColor ? hasCutForegroundPatternColor[i] : undefined,
+                cutForegroundPatternColor_X: cutForegroundPatternColor_X ? cutForegroundPatternColor_X[i] : undefined,
+                cutForegroundPatternColor_Y: cutForegroundPatternColor_Y ? cutForegroundPatternColor_Y[i] : undefined,
+                cutForegroundPatternColor_Z: cutForegroundPatternColor_Z ? cutForegroundPatternColor_Z[i] : undefined,
+                cutBackgroundPatternVisible: cutBackgroundPatternVisible ? cutBackgroundPatternVisible[i] : undefined,
+                hasCutBackgroundPatternColor: hasCutBackgroundPatternColor ? hasCutBackgroundPatternColor[i] : undefined,
+                cutBackgroundPatternColor_X: cutBackgroundPatternColor_X ? cutBackgroundPatternColor_X[i] : undefined,
+                cutBackgroundPatternColor_Y: cutBackgroundPatternColor_Y ? cutBackgroundPatternColor_Y[i] : undefined,
+                cutBackgroundPatternColor_Z: cutBackgroundPatternColor_Z ? cutBackgroundPatternColor_Z[i] : undefined,
+                transparency: transparency ? transparency[i] : undefined,
+                halftone: halftone ? halftone[i] : undefined,
+                detailLevel: detailLevel ? detailLevel[i] : undefined,
+                key: key ? key[i] : undefined,
+                projectionLinePatternIndex: projectionLinePatternIndex ? projectionLinePatternIndex[i] : undefined,
+                cutLinePatternIndex: cutLinePatternIndex ? cutLinePatternIndex[i] : undefined,
+                surfaceForegroundPatternIndex: surfaceForegroundPatternIndex ? surfaceForegroundPatternIndex[i] : undefined,
+                surfaceBackgroundPatternIndex: surfaceBackgroundPatternIndex ? surfaceBackgroundPatternIndex[i] : undefined,
+                cutForegroundPatternIndex: cutForegroundPatternIndex ? cutForegroundPatternIndex[i] : undefined,
+                cutBackgroundPatternIndex: cutBackgroundPatternIndex ? cutBackgroundPatternIndex[i] : undefined
+            })
+        }
+        
+        return graphicOverride
+    }
+    
+    async getProjectionLineWeight(graphicOverrideIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(graphicOverrideIndex, "int:ProjectionLineWeight"))
+    }
+    
+    async getAllProjectionLineWeight(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("int:ProjectionLineWeight"))
+    }
+    
+    async getHasProjectionLineColor(graphicOverrideIndex: number): Promise<boolean | undefined> {
+        return (await this.entityTable.getBoolean(graphicOverrideIndex, "byte:HasProjectionLineColor"))
+    }
+    
+    async getAllHasProjectionLineColor(): Promise<boolean[] | undefined> {
+        return (await this.entityTable.getBooleanArray("byte:HasProjectionLineColor"))
+    }
+    
+    async getProjectionLineColor_X(graphicOverrideIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(graphicOverrideIndex, "double:ProjectionLineColor.X"))
+    }
+    
+    async getAllProjectionLineColor_X(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:ProjectionLineColor.X"))
+    }
+    
+    async getProjectionLineColor_Y(graphicOverrideIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(graphicOverrideIndex, "double:ProjectionLineColor.Y"))
+    }
+    
+    async getAllProjectionLineColor_Y(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:ProjectionLineColor.Y"))
+    }
+    
+    async getProjectionLineColor_Z(graphicOverrideIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(graphicOverrideIndex, "double:ProjectionLineColor.Z"))
+    }
+    
+    async getAllProjectionLineColor_Z(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:ProjectionLineColor.Z"))
+    }
+    
+    async getCutLineWeight(graphicOverrideIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(graphicOverrideIndex, "int:CutLineWeight"))
+    }
+    
+    async getAllCutLineWeight(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("int:CutLineWeight"))
+    }
+    
+    async getHasCutLineColor(graphicOverrideIndex: number): Promise<boolean | undefined> {
+        return (await this.entityTable.getBoolean(graphicOverrideIndex, "byte:HasCutLineColor"))
+    }
+    
+    async getAllHasCutLineColor(): Promise<boolean[] | undefined> {
+        return (await this.entityTable.getBooleanArray("byte:HasCutLineColor"))
+    }
+    
+    async getCutLineColor_X(graphicOverrideIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(graphicOverrideIndex, "double:CutLineColor.X"))
+    }
+    
+    async getAllCutLineColor_X(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:CutLineColor.X"))
+    }
+    
+    async getCutLineColor_Y(graphicOverrideIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(graphicOverrideIndex, "double:CutLineColor.Y"))
+    }
+    
+    async getAllCutLineColor_Y(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:CutLineColor.Y"))
+    }
+    
+    async getCutLineColor_Z(graphicOverrideIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(graphicOverrideIndex, "double:CutLineColor.Z"))
+    }
+    
+    async getAllCutLineColor_Z(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:CutLineColor.Z"))
+    }
+    
+    async getSurfaceForegroundPatternVisible(graphicOverrideIndex: number): Promise<boolean | undefined> {
+        return (await this.entityTable.getBoolean(graphicOverrideIndex, "byte:SurfaceForegroundPatternVisible"))
+    }
+    
+    async getAllSurfaceForegroundPatternVisible(): Promise<boolean[] | undefined> {
+        return (await this.entityTable.getBooleanArray("byte:SurfaceForegroundPatternVisible"))
+    }
+    
+    async getHasSurfaceForegroundPatternColor(graphicOverrideIndex: number): Promise<boolean | undefined> {
+        return (await this.entityTable.getBoolean(graphicOverrideIndex, "byte:HasSurfaceForegroundPatternColor"))
+    }
+    
+    async getAllHasSurfaceForegroundPatternColor(): Promise<boolean[] | undefined> {
+        return (await this.entityTable.getBooleanArray("byte:HasSurfaceForegroundPatternColor"))
+    }
+    
+    async getSurfaceForegroundPatternColor_X(graphicOverrideIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(graphicOverrideIndex, "double:SurfaceForegroundPatternColor.X"))
+    }
+    
+    async getAllSurfaceForegroundPatternColor_X(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:SurfaceForegroundPatternColor.X"))
+    }
+    
+    async getSurfaceForegroundPatternColor_Y(graphicOverrideIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(graphicOverrideIndex, "double:SurfaceForegroundPatternColor.Y"))
+    }
+    
+    async getAllSurfaceForegroundPatternColor_Y(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:SurfaceForegroundPatternColor.Y"))
+    }
+    
+    async getSurfaceForegroundPatternColor_Z(graphicOverrideIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(graphicOverrideIndex, "double:SurfaceForegroundPatternColor.Z"))
+    }
+    
+    async getAllSurfaceForegroundPatternColor_Z(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:SurfaceForegroundPatternColor.Z"))
+    }
+    
+    async getSurfaceBackgroundPatternVisible(graphicOverrideIndex: number): Promise<boolean | undefined> {
+        return (await this.entityTable.getBoolean(graphicOverrideIndex, "byte:SurfaceBackgroundPatternVisible"))
+    }
+    
+    async getAllSurfaceBackgroundPatternVisible(): Promise<boolean[] | undefined> {
+        return (await this.entityTable.getBooleanArray("byte:SurfaceBackgroundPatternVisible"))
+    }
+    
+    async getHasSurfaceBackgroundPatternColor(graphicOverrideIndex: number): Promise<boolean | undefined> {
+        return (await this.entityTable.getBoolean(graphicOverrideIndex, "byte:HasSurfaceBackgroundPatternColor"))
+    }
+    
+    async getAllHasSurfaceBackgroundPatternColor(): Promise<boolean[] | undefined> {
+        return (await this.entityTable.getBooleanArray("byte:HasSurfaceBackgroundPatternColor"))
+    }
+    
+    async getSurfaceBackgroundPatternColor_X(graphicOverrideIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(graphicOverrideIndex, "double:SurfaceBackgroundPatternColor.X"))
+    }
+    
+    async getAllSurfaceBackgroundPatternColor_X(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:SurfaceBackgroundPatternColor.X"))
+    }
+    
+    async getSurfaceBackgroundPatternColor_Y(graphicOverrideIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(graphicOverrideIndex, "double:SurfaceBackgroundPatternColor.Y"))
+    }
+    
+    async getAllSurfaceBackgroundPatternColor_Y(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:SurfaceBackgroundPatternColor.Y"))
+    }
+    
+    async getSurfaceBackgroundPatternColor_Z(graphicOverrideIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(graphicOverrideIndex, "double:SurfaceBackgroundPatternColor.Z"))
+    }
+    
+    async getAllSurfaceBackgroundPatternColor_Z(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:SurfaceBackgroundPatternColor.Z"))
+    }
+    
+    async getCutForegroundPatternVisible(graphicOverrideIndex: number): Promise<boolean | undefined> {
+        return (await this.entityTable.getBoolean(graphicOverrideIndex, "byte:CutForegroundPatternVisible"))
+    }
+    
+    async getAllCutForegroundPatternVisible(): Promise<boolean[] | undefined> {
+        return (await this.entityTable.getBooleanArray("byte:CutForegroundPatternVisible"))
+    }
+    
+    async getHasCutForegroundPatternColor(graphicOverrideIndex: number): Promise<boolean | undefined> {
+        return (await this.entityTable.getBoolean(graphicOverrideIndex, "byte:HasCutForegroundPatternColor"))
+    }
+    
+    async getAllHasCutForegroundPatternColor(): Promise<boolean[] | undefined> {
+        return (await this.entityTable.getBooleanArray("byte:HasCutForegroundPatternColor"))
+    }
+    
+    async getCutForegroundPatternColor_X(graphicOverrideIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(graphicOverrideIndex, "double:CutForegroundPatternColor.X"))
+    }
+    
+    async getAllCutForegroundPatternColor_X(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:CutForegroundPatternColor.X"))
+    }
+    
+    async getCutForegroundPatternColor_Y(graphicOverrideIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(graphicOverrideIndex, "double:CutForegroundPatternColor.Y"))
+    }
+    
+    async getAllCutForegroundPatternColor_Y(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:CutForegroundPatternColor.Y"))
+    }
+    
+    async getCutForegroundPatternColor_Z(graphicOverrideIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(graphicOverrideIndex, "double:CutForegroundPatternColor.Z"))
+    }
+    
+    async getAllCutForegroundPatternColor_Z(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:CutForegroundPatternColor.Z"))
+    }
+    
+    async getCutBackgroundPatternVisible(graphicOverrideIndex: number): Promise<boolean | undefined> {
+        return (await this.entityTable.getBoolean(graphicOverrideIndex, "byte:CutBackgroundPatternVisible"))
+    }
+    
+    async getAllCutBackgroundPatternVisible(): Promise<boolean[] | undefined> {
+        return (await this.entityTable.getBooleanArray("byte:CutBackgroundPatternVisible"))
+    }
+    
+    async getHasCutBackgroundPatternColor(graphicOverrideIndex: number): Promise<boolean | undefined> {
+        return (await this.entityTable.getBoolean(graphicOverrideIndex, "byte:HasCutBackgroundPatternColor"))
+    }
+    
+    async getAllHasCutBackgroundPatternColor(): Promise<boolean[] | undefined> {
+        return (await this.entityTable.getBooleanArray("byte:HasCutBackgroundPatternColor"))
+    }
+    
+    async getCutBackgroundPatternColor_X(graphicOverrideIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(graphicOverrideIndex, "double:CutBackgroundPatternColor.X"))
+    }
+    
+    async getAllCutBackgroundPatternColor_X(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:CutBackgroundPatternColor.X"))
+    }
+    
+    async getCutBackgroundPatternColor_Y(graphicOverrideIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(graphicOverrideIndex, "double:CutBackgroundPatternColor.Y"))
+    }
+    
+    async getAllCutBackgroundPatternColor_Y(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:CutBackgroundPatternColor.Y"))
+    }
+    
+    async getCutBackgroundPatternColor_Z(graphicOverrideIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(graphicOverrideIndex, "double:CutBackgroundPatternColor.Z"))
+    }
+    
+    async getAllCutBackgroundPatternColor_Z(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:CutBackgroundPatternColor.Z"))
+    }
+    
+    async getTransparency(graphicOverrideIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(graphicOverrideIndex, "int:Transparency"))
+    }
+    
+    async getAllTransparency(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("int:Transparency"))
+    }
+    
+    async getHalftone(graphicOverrideIndex: number): Promise<boolean | undefined> {
+        return (await this.entityTable.getBoolean(graphicOverrideIndex, "byte:Halftone"))
+    }
+    
+    async getAllHalftone(): Promise<boolean[] | undefined> {
+        return (await this.entityTable.getBooleanArray("byte:Halftone"))
+    }
+    
+    async getDetailLevel(graphicOverrideIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(graphicOverrideIndex, "int:DetailLevel"))
+    }
+    
+    async getAllDetailLevel(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("int:DetailLevel"))
+    }
+    
+    async getKey(graphicOverrideIndex: number): Promise<string | undefined> {
+        return (await this.entityTable.getString(graphicOverrideIndex, "string:Key"))
+    }
+    
+    async getAllKey(): Promise<string[] | undefined> {
+        return (await this.entityTable.getStringArray("string:Key"))
+    }
+    
+    async getProjectionLinePatternIndex(graphicOverrideIndex: number): Promise<number | undefined> {
+        return await this.entityTable.getNumber(graphicOverrideIndex, "index:Vim.LinePattern:ProjectionLinePattern")
+    }
+    
+    async getAllProjectionLinePatternIndex(): Promise<number[] | undefined> {
+        return await this.entityTable.getNumberArray("index:Vim.LinePattern:ProjectionLinePattern")
+    }
+    
+    async getProjectionLinePattern(graphicOverrideIndex: number): Promise<ILinePattern | undefined> {
+        const index = await this.getProjectionLinePatternIndex(graphicOverrideIndex)
+        
+        if (index === undefined) {
+            return undefined
+        }
+        
+        return await this.document.linePattern?.get(index)
+    }
+    
+    async getCutLinePatternIndex(graphicOverrideIndex: number): Promise<number | undefined> {
+        return await this.entityTable.getNumber(graphicOverrideIndex, "index:Vim.LinePattern:CutLinePattern")
+    }
+    
+    async getAllCutLinePatternIndex(): Promise<number[] | undefined> {
+        return await this.entityTable.getNumberArray("index:Vim.LinePattern:CutLinePattern")
+    }
+    
+    async getCutLinePattern(graphicOverrideIndex: number): Promise<ILinePattern | undefined> {
+        const index = await this.getCutLinePatternIndex(graphicOverrideIndex)
+        
+        if (index === undefined) {
+            return undefined
+        }
+        
+        return await this.document.linePattern?.get(index)
+    }
+    
+    async getSurfaceForegroundPatternIndex(graphicOverrideIndex: number): Promise<number | undefined> {
+        return await this.entityTable.getNumber(graphicOverrideIndex, "index:Vim.FillPattern:SurfaceForegroundPattern")
+    }
+    
+    async getAllSurfaceForegroundPatternIndex(): Promise<number[] | undefined> {
+        return await this.entityTable.getNumberArray("index:Vim.FillPattern:SurfaceForegroundPattern")
+    }
+    
+    async getSurfaceForegroundPattern(graphicOverrideIndex: number): Promise<IFillPattern | undefined> {
+        const index = await this.getSurfaceForegroundPatternIndex(graphicOverrideIndex)
+        
+        if (index === undefined) {
+            return undefined
+        }
+        
+        return await this.document.fillPattern?.get(index)
+    }
+    
+    async getSurfaceBackgroundPatternIndex(graphicOverrideIndex: number): Promise<number | undefined> {
+        return await this.entityTable.getNumber(graphicOverrideIndex, "index:Vim.FillPattern:SurfaceBackgroundPattern")
+    }
+    
+    async getAllSurfaceBackgroundPatternIndex(): Promise<number[] | undefined> {
+        return await this.entityTable.getNumberArray("index:Vim.FillPattern:SurfaceBackgroundPattern")
+    }
+    
+    async getSurfaceBackgroundPattern(graphicOverrideIndex: number): Promise<IFillPattern | undefined> {
+        const index = await this.getSurfaceBackgroundPatternIndex(graphicOverrideIndex)
+        
+        if (index === undefined) {
+            return undefined
+        }
+        
+        return await this.document.fillPattern?.get(index)
+    }
+    
+    async getCutForegroundPatternIndex(graphicOverrideIndex: number): Promise<number | undefined> {
+        return await this.entityTable.getNumber(graphicOverrideIndex, "index:Vim.FillPattern:CutForegroundPattern")
+    }
+    
+    async getAllCutForegroundPatternIndex(): Promise<number[] | undefined> {
+        return await this.entityTable.getNumberArray("index:Vim.FillPattern:CutForegroundPattern")
+    }
+    
+    async getCutForegroundPattern(graphicOverrideIndex: number): Promise<IFillPattern | undefined> {
+        const index = await this.getCutForegroundPatternIndex(graphicOverrideIndex)
+        
+        if (index === undefined) {
+            return undefined
+        }
+        
+        return await this.document.fillPattern?.get(index)
+    }
+    
+    async getCutBackgroundPatternIndex(graphicOverrideIndex: number): Promise<number | undefined> {
+        return await this.entityTable.getNumber(graphicOverrideIndex, "index:Vim.FillPattern:CutBackgroundPattern")
+    }
+    
+    async getAllCutBackgroundPatternIndex(): Promise<number[] | undefined> {
+        return await this.entityTable.getNumberArray("index:Vim.FillPattern:CutBackgroundPattern")
+    }
+    
+    async getCutBackgroundPattern(graphicOverrideIndex: number): Promise<IFillPattern | undefined> {
+        const index = await this.getCutBackgroundPatternIndex(graphicOverrideIndex)
+        
+        if (index === undefined) {
+            return undefined
+        }
+        
+        return await this.document.fillPattern?.get(index)
+    }
+    
+}
+
+export interface ICategoryInView {
+    index: number
+    isHidden?: boolean
+    
+    viewIndex?: number
+    view?: IView
+    categoryIndex?: number
+    category?: ICategory
+    graphicOverrideIndex?: number
+    graphicOverride?: IGraphicOverride
+}
+
+export interface ICategoryInViewTable {
+    getCount(): Promise<number>
+    get(categoryInViewIndex: number): Promise<ICategoryInView>
+    getAll(): Promise<ICategoryInView[]>
+    
+    getIsHidden(categoryInViewIndex: number): Promise<boolean | undefined>
+    getAllIsHidden(): Promise<boolean[] | undefined>
+    
+    getViewIndex(categoryInViewIndex: number): Promise<number | undefined>
+    getAllViewIndex(): Promise<number[] | undefined>
+    getView(categoryInViewIndex: number): Promise<IView | undefined>
+    getCategoryIndex(categoryInViewIndex: number): Promise<number | undefined>
+    getAllCategoryIndex(): Promise<number[] | undefined>
+    getCategory(categoryInViewIndex: number): Promise<ICategory | undefined>
+    getGraphicOverrideIndex(categoryInViewIndex: number): Promise<number | undefined>
+    getAllGraphicOverrideIndex(): Promise<number[] | undefined>
+    getGraphicOverride(categoryInViewIndex: number): Promise<IGraphicOverride | undefined>
+}
+
+export class CategoryInView implements ICategoryInView {
+    index: number
+    isHidden?: boolean
+    
+    viewIndex?: number
+    view?: IView
+    categoryIndex?: number
+    category?: ICategory
+    graphicOverrideIndex?: number
+    graphicOverride?: IGraphicOverride
+    
+    static async createFromTable(table: ICategoryInViewTable, index: number): Promise<ICategoryInView> {
+        let result = new CategoryInView()
+        result.index = index
+        
+        await Promise.all([
+            table.getIsHidden(index).then(v => result.isHidden = v),
+            table.getViewIndex(index).then(v => result.viewIndex = v),
+            table.getCategoryIndex(index).then(v => result.categoryIndex = v),
+            table.getGraphicOverrideIndex(index).then(v => result.graphicOverrideIndex = v),
+        ])
+        
+        return result
+    }
+}
+
+export class CategoryInViewTable implements ICategoryInViewTable {
+    private document: VimDocument
+    private entityTable: EntityTable
+    
+    static async createFromDocument(document: VimDocument): Promise<ICategoryInViewTable | undefined> {
+        const entity = await document.entities.getBfast("Vim.CategoryInView")
+        
+        if (!entity) {
+            return undefined
+        }
+        
+        let table = new CategoryInViewTable()
+        table.document = document
+        table.entityTable = new EntityTable(entity, document.strings)
+        
+        return table
+    }
+    
+    getCount(): Promise<number> {
+        return this.entityTable.getCount()
+    }
+    
+    async get(categoryInViewIndex: number): Promise<ICategoryInView> {
+        return await CategoryInView.createFromTable(this, categoryInViewIndex)
+    }
+    
+    async getAll(): Promise<ICategoryInView[]> {
+        const localTable = await this.entityTable.getLocal()
+        
+        let isHidden: boolean[] | undefined
+        let viewIndex: number[] | undefined
+        let categoryIndex: number[] | undefined
+        let graphicOverrideIndex: number[] | undefined
+        
+        await Promise.all([
+            (async () => { isHidden = (await localTable.getBooleanArray("byte:IsHidden")) })(),
+            (async () => { viewIndex = (await localTable.getNumberArray("index:Vim.View:View")) })(),
+            (async () => { categoryIndex = (await localTable.getNumberArray("index:Vim.Category:Category")) })(),
+            (async () => { graphicOverrideIndex = (await localTable.getNumberArray("index:Vim.GraphicOverride:GraphicOverride")) })(),
+        ])
+        
+        let categoryInView: ICategoryInView[] = []
+        
+        const rowCount = await this.getCount()
+        for (let i = 0; i < rowCount; i++) {
+            categoryInView.push({
+                index: i,
+                isHidden: isHidden ? isHidden[i] : undefined,
+                viewIndex: viewIndex ? viewIndex[i] : undefined,
+                categoryIndex: categoryIndex ? categoryIndex[i] : undefined,
+                graphicOverrideIndex: graphicOverrideIndex ? graphicOverrideIndex[i] : undefined
+            })
+        }
+        
+        return categoryInView
+    }
+    
+    async getIsHidden(categoryInViewIndex: number): Promise<boolean | undefined> {
+        return (await this.entityTable.getBoolean(categoryInViewIndex, "byte:IsHidden"))
+    }
+    
+    async getAllIsHidden(): Promise<boolean[] | undefined> {
+        return (await this.entityTable.getBooleanArray("byte:IsHidden"))
+    }
+    
+    async getViewIndex(categoryInViewIndex: number): Promise<number | undefined> {
+        return await this.entityTable.getNumber(categoryInViewIndex, "index:Vim.View:View")
+    }
+    
+    async getAllViewIndex(): Promise<number[] | undefined> {
+        return await this.entityTable.getNumberArray("index:Vim.View:View")
+    }
+    
+    async getView(categoryInViewIndex: number): Promise<IView | undefined> {
+        const index = await this.getViewIndex(categoryInViewIndex)
+        
+        if (index === undefined) {
+            return undefined
+        }
+        
+        return await this.document.view?.get(index)
+    }
+    
+    async getCategoryIndex(categoryInViewIndex: number): Promise<number | undefined> {
+        return await this.entityTable.getNumber(categoryInViewIndex, "index:Vim.Category:Category")
+    }
+    
+    async getAllCategoryIndex(): Promise<number[] | undefined> {
+        return await this.entityTable.getNumberArray("index:Vim.Category:Category")
+    }
+    
+    async getCategory(categoryInViewIndex: number): Promise<ICategory | undefined> {
+        const index = await this.getCategoryIndex(categoryInViewIndex)
+        
+        if (index === undefined) {
+            return undefined
+        }
+        
+        return await this.document.category?.get(index)
+    }
+    
+    async getGraphicOverrideIndex(categoryInViewIndex: number): Promise<number | undefined> {
+        return await this.entityTable.getNumber(categoryInViewIndex, "index:Vim.GraphicOverride:GraphicOverride")
+    }
+    
+    async getAllGraphicOverrideIndex(): Promise<number[] | undefined> {
+        return await this.entityTable.getNumberArray("index:Vim.GraphicOverride:GraphicOverride")
+    }
+    
+    async getGraphicOverride(categoryInViewIndex: number): Promise<IGraphicOverride | undefined> {
+        const index = await this.getGraphicOverrideIndex(categoryInViewIndex)
+        
+        if (index === undefined) {
+            return undefined
+        }
+        
+        return await this.document.graphicOverride?.get(index)
+    }
+    
+}
+
+export interface IElementOverrideInView {
+    index: number
+    isHidden?: boolean
+    
+    viewIndex?: number
+    view?: IView
+    graphicOverrideIndex?: number
+    graphicOverride?: IGraphicOverride
+    elementIndex?: number
+    element?: IElement
+}
+
+export interface IElementOverrideInViewTable {
+    getCount(): Promise<number>
+    get(elementOverrideInViewIndex: number): Promise<IElementOverrideInView>
+    getAll(): Promise<IElementOverrideInView[]>
+    
+    getIsHidden(elementOverrideInViewIndex: number): Promise<boolean | undefined>
+    getAllIsHidden(): Promise<boolean[] | undefined>
+    
+    getViewIndex(elementOverrideInViewIndex: number): Promise<number | undefined>
+    getAllViewIndex(): Promise<number[] | undefined>
+    getView(elementOverrideInViewIndex: number): Promise<IView | undefined>
+    getGraphicOverrideIndex(elementOverrideInViewIndex: number): Promise<number | undefined>
+    getAllGraphicOverrideIndex(): Promise<number[] | undefined>
+    getGraphicOverride(elementOverrideInViewIndex: number): Promise<IGraphicOverride | undefined>
+    getElementIndex(elementOverrideInViewIndex: number): Promise<number | undefined>
+    getAllElementIndex(): Promise<number[] | undefined>
+    getElement(elementOverrideInViewIndex: number): Promise<IElement | undefined>
+}
+
+export class ElementOverrideInView implements IElementOverrideInView {
+    index: number
+    isHidden?: boolean
+    
+    viewIndex?: number
+    view?: IView
+    graphicOverrideIndex?: number
+    graphicOverride?: IGraphicOverride
+    elementIndex?: number
+    element?: IElement
+    
+    static async createFromTable(table: IElementOverrideInViewTable, index: number): Promise<IElementOverrideInView> {
+        let result = new ElementOverrideInView()
+        result.index = index
+        
+        await Promise.all([
+            table.getIsHidden(index).then(v => result.isHidden = v),
+            table.getViewIndex(index).then(v => result.viewIndex = v),
+            table.getGraphicOverrideIndex(index).then(v => result.graphicOverrideIndex = v),
+            table.getElementIndex(index).then(v => result.elementIndex = v),
+        ])
+        
+        return result
+    }
+}
+
+export class ElementOverrideInViewTable implements IElementOverrideInViewTable {
+    private document: VimDocument
+    private entityTable: EntityTable
+    
+    static async createFromDocument(document: VimDocument): Promise<IElementOverrideInViewTable | undefined> {
+        const entity = await document.entities.getBfast("Vim.ElementOverrideInView")
+        
+        if (!entity) {
+            return undefined
+        }
+        
+        let table = new ElementOverrideInViewTable()
+        table.document = document
+        table.entityTable = new EntityTable(entity, document.strings)
+        
+        return table
+    }
+    
+    getCount(): Promise<number> {
+        return this.entityTable.getCount()
+    }
+    
+    async get(elementOverrideInViewIndex: number): Promise<IElementOverrideInView> {
+        return await ElementOverrideInView.createFromTable(this, elementOverrideInViewIndex)
+    }
+    
+    async getAll(): Promise<IElementOverrideInView[]> {
+        const localTable = await this.entityTable.getLocal()
+        
+        let isHidden: boolean[] | undefined
+        let viewIndex: number[] | undefined
+        let graphicOverrideIndex: number[] | undefined
+        let elementIndex: number[] | undefined
+        
+        await Promise.all([
+            (async () => { isHidden = (await localTable.getBooleanArray("byte:IsHidden")) })(),
+            (async () => { viewIndex = (await localTable.getNumberArray("index:Vim.View:View")) })(),
+            (async () => { graphicOverrideIndex = (await localTable.getNumberArray("index:Vim.GraphicOverride:GraphicOverride")) })(),
+            (async () => { elementIndex = (await localTable.getNumberArray("index:Vim.Element:Element")) })(),
+        ])
+        
+        let elementOverrideInView: IElementOverrideInView[] = []
+        
+        const rowCount = await this.getCount()
+        for (let i = 0; i < rowCount; i++) {
+            elementOverrideInView.push({
+                index: i,
+                isHidden: isHidden ? isHidden[i] : undefined,
+                viewIndex: viewIndex ? viewIndex[i] : undefined,
+                graphicOverrideIndex: graphicOverrideIndex ? graphicOverrideIndex[i] : undefined,
+                elementIndex: elementIndex ? elementIndex[i] : undefined
+            })
+        }
+        
+        return elementOverrideInView
+    }
+    
+    async getIsHidden(elementOverrideInViewIndex: number): Promise<boolean | undefined> {
+        return (await this.entityTable.getBoolean(elementOverrideInViewIndex, "byte:IsHidden"))
+    }
+    
+    async getAllIsHidden(): Promise<boolean[] | undefined> {
+        return (await this.entityTable.getBooleanArray("byte:IsHidden"))
+    }
+    
+    async getViewIndex(elementOverrideInViewIndex: number): Promise<number | undefined> {
+        return await this.entityTable.getNumber(elementOverrideInViewIndex, "index:Vim.View:View")
+    }
+    
+    async getAllViewIndex(): Promise<number[] | undefined> {
+        return await this.entityTable.getNumberArray("index:Vim.View:View")
+    }
+    
+    async getView(elementOverrideInViewIndex: number): Promise<IView | undefined> {
+        const index = await this.getViewIndex(elementOverrideInViewIndex)
+        
+        if (index === undefined) {
+            return undefined
+        }
+        
+        return await this.document.view?.get(index)
+    }
+    
+    async getGraphicOverrideIndex(elementOverrideInViewIndex: number): Promise<number | undefined> {
+        return await this.entityTable.getNumber(elementOverrideInViewIndex, "index:Vim.GraphicOverride:GraphicOverride")
+    }
+    
+    async getAllGraphicOverrideIndex(): Promise<number[] | undefined> {
+        return await this.entityTable.getNumberArray("index:Vim.GraphicOverride:GraphicOverride")
+    }
+    
+    async getGraphicOverride(elementOverrideInViewIndex: number): Promise<IGraphicOverride | undefined> {
+        const index = await this.getGraphicOverrideIndex(elementOverrideInViewIndex)
+        
+        if (index === undefined) {
+            return undefined
+        }
+        
+        return await this.document.graphicOverride?.get(index)
+    }
+    
+    async getElementIndex(elementOverrideInViewIndex: number): Promise<number | undefined> {
+        return await this.entityTable.getNumber(elementOverrideInViewIndex, "index:Vim.Element:Element")
+    }
+    
+    async getAllElementIndex(): Promise<number[] | undefined> {
+        return await this.entityTable.getNumberArray("index:Vim.Element:Element")
+    }
+    
+    async getElement(elementOverrideInViewIndex: number): Promise<IElement | undefined> {
+        const index = await this.getElementIndex(elementOverrideInViewIndex)
+        
+        if (index === undefined) {
+            return undefined
+        }
+        
+        return await this.document.element?.get(index)
+    }
+    
+}
+
+export interface IPhaseGraphicOverride {
+    index: number
+    status?: string
+    scale?: number
+    hasProjectionLine?: boolean
+    projectionLineColor_X?: number
+    projectionLineColor_Y?: number
+    projectionLineColor_Z?: number
+    projectionLineWidth?: number
+    projectionLineWeight?: number
+    hasCutLine?: boolean
+    cutLineColor_X?: number
+    cutLineColor_Y?: number
+    cutLineColor_Z?: number
+    cutLineWidth?: number
+    cutLineWeight?: number
+    
+    projectionLinePatternIndex?: number
+    projectionLinePattern?: ILinePattern
+    cutLinePatternIndex?: number
+    cutLinePattern?: ILinePattern
+    bimDocumentIndex?: number
+    bimDocument?: IBimDocument
+}
+
+export interface IPhaseGraphicOverrideTable {
+    getCount(): Promise<number>
+    get(phaseGraphicOverrideIndex: number): Promise<IPhaseGraphicOverride>
+    getAll(): Promise<IPhaseGraphicOverride[]>
+    
+    getStatus(phaseGraphicOverrideIndex: number): Promise<string | undefined>
+    getAllStatus(): Promise<string[] | undefined>
+    getScale(phaseGraphicOverrideIndex: number): Promise<number | undefined>
+    getAllScale(): Promise<number[] | undefined>
+    getHasProjectionLine(phaseGraphicOverrideIndex: number): Promise<boolean | undefined>
+    getAllHasProjectionLine(): Promise<boolean[] | undefined>
+    getProjectionLineColor_X(phaseGraphicOverrideIndex: number): Promise<number | undefined>
+    getAllProjectionLineColor_X(): Promise<number[] | undefined>
+    getProjectionLineColor_Y(phaseGraphicOverrideIndex: number): Promise<number | undefined>
+    getAllProjectionLineColor_Y(): Promise<number[] | undefined>
+    getProjectionLineColor_Z(phaseGraphicOverrideIndex: number): Promise<number | undefined>
+    getAllProjectionLineColor_Z(): Promise<number[] | undefined>
+    getProjectionLineWidth(phaseGraphicOverrideIndex: number): Promise<number | undefined>
+    getAllProjectionLineWidth(): Promise<number[] | undefined>
+    getProjectionLineWeight(phaseGraphicOverrideIndex: number): Promise<number | undefined>
+    getAllProjectionLineWeight(): Promise<number[] | undefined>
+    getHasCutLine(phaseGraphicOverrideIndex: number): Promise<boolean | undefined>
+    getAllHasCutLine(): Promise<boolean[] | undefined>
+    getCutLineColor_X(phaseGraphicOverrideIndex: number): Promise<number | undefined>
+    getAllCutLineColor_X(): Promise<number[] | undefined>
+    getCutLineColor_Y(phaseGraphicOverrideIndex: number): Promise<number | undefined>
+    getAllCutLineColor_Y(): Promise<number[] | undefined>
+    getCutLineColor_Z(phaseGraphicOverrideIndex: number): Promise<number | undefined>
+    getAllCutLineColor_Z(): Promise<number[] | undefined>
+    getCutLineWidth(phaseGraphicOverrideIndex: number): Promise<number | undefined>
+    getAllCutLineWidth(): Promise<number[] | undefined>
+    getCutLineWeight(phaseGraphicOverrideIndex: number): Promise<number | undefined>
+    getAllCutLineWeight(): Promise<number[] | undefined>
+    
+    getProjectionLinePatternIndex(phaseGraphicOverrideIndex: number): Promise<number | undefined>
+    getAllProjectionLinePatternIndex(): Promise<number[] | undefined>
+    getProjectionLinePattern(phaseGraphicOverrideIndex: number): Promise<ILinePattern | undefined>
+    getCutLinePatternIndex(phaseGraphicOverrideIndex: number): Promise<number | undefined>
+    getAllCutLinePatternIndex(): Promise<number[] | undefined>
+    getCutLinePattern(phaseGraphicOverrideIndex: number): Promise<ILinePattern | undefined>
+    getBimDocumentIndex(phaseGraphicOverrideIndex: number): Promise<number | undefined>
+    getAllBimDocumentIndex(): Promise<number[] | undefined>
+    getBimDocument(phaseGraphicOverrideIndex: number): Promise<IBimDocument | undefined>
+}
+
+export class PhaseGraphicOverride implements IPhaseGraphicOverride {
+    index: number
+    status?: string
+    scale?: number
+    hasProjectionLine?: boolean
+    projectionLineColor_X?: number
+    projectionLineColor_Y?: number
+    projectionLineColor_Z?: number
+    projectionLineWidth?: number
+    projectionLineWeight?: number
+    hasCutLine?: boolean
+    cutLineColor_X?: number
+    cutLineColor_Y?: number
+    cutLineColor_Z?: number
+    cutLineWidth?: number
+    cutLineWeight?: number
+    
+    projectionLinePatternIndex?: number
+    projectionLinePattern?: ILinePattern
+    cutLinePatternIndex?: number
+    cutLinePattern?: ILinePattern
+    bimDocumentIndex?: number
+    bimDocument?: IBimDocument
+    
+    static async createFromTable(table: IPhaseGraphicOverrideTable, index: number): Promise<IPhaseGraphicOverride> {
+        let result = new PhaseGraphicOverride()
+        result.index = index
+        
+        await Promise.all([
+            table.getStatus(index).then(v => result.status = v),
+            table.getScale(index).then(v => result.scale = v),
+            table.getHasProjectionLine(index).then(v => result.hasProjectionLine = v),
+            table.getProjectionLineColor_X(index).then(v => result.projectionLineColor_X = v),
+            table.getProjectionLineColor_Y(index).then(v => result.projectionLineColor_Y = v),
+            table.getProjectionLineColor_Z(index).then(v => result.projectionLineColor_Z = v),
+            table.getProjectionLineWidth(index).then(v => result.projectionLineWidth = v),
+            table.getProjectionLineWeight(index).then(v => result.projectionLineWeight = v),
+            table.getHasCutLine(index).then(v => result.hasCutLine = v),
+            table.getCutLineColor_X(index).then(v => result.cutLineColor_X = v),
+            table.getCutLineColor_Y(index).then(v => result.cutLineColor_Y = v),
+            table.getCutLineColor_Z(index).then(v => result.cutLineColor_Z = v),
+            table.getCutLineWidth(index).then(v => result.cutLineWidth = v),
+            table.getCutLineWeight(index).then(v => result.cutLineWeight = v),
+            table.getProjectionLinePatternIndex(index).then(v => result.projectionLinePatternIndex = v),
+            table.getCutLinePatternIndex(index).then(v => result.cutLinePatternIndex = v),
+            table.getBimDocumentIndex(index).then(v => result.bimDocumentIndex = v),
+        ])
+        
+        return result
+    }
+}
+
+export class PhaseGraphicOverrideTable implements IPhaseGraphicOverrideTable {
+    private document: VimDocument
+    private entityTable: EntityTable
+    
+    static async createFromDocument(document: VimDocument): Promise<IPhaseGraphicOverrideTable | undefined> {
+        const entity = await document.entities.getBfast("Vim.PhaseGraphicOverride")
+        
+        if (!entity) {
+            return undefined
+        }
+        
+        let table = new PhaseGraphicOverrideTable()
+        table.document = document
+        table.entityTable = new EntityTable(entity, document.strings)
+        
+        return table
+    }
+    
+    getCount(): Promise<number> {
+        return this.entityTable.getCount()
+    }
+    
+    async get(phaseGraphicOverrideIndex: number): Promise<IPhaseGraphicOverride> {
+        return await PhaseGraphicOverride.createFromTable(this, phaseGraphicOverrideIndex)
+    }
+    
+    async getAll(): Promise<IPhaseGraphicOverride[]> {
+        const localTable = await this.entityTable.getLocal()
+        
+        let status: string[] | undefined
+        let scale: number[] | undefined
+        let hasProjectionLine: boolean[] | undefined
+        let projectionLineColor_X: number[] | undefined
+        let projectionLineColor_Y: number[] | undefined
+        let projectionLineColor_Z: number[] | undefined
+        let projectionLineWidth: number[] | undefined
+        let projectionLineWeight: number[] | undefined
+        let hasCutLine: boolean[] | undefined
+        let cutLineColor_X: number[] | undefined
+        let cutLineColor_Y: number[] | undefined
+        let cutLineColor_Z: number[] | undefined
+        let cutLineWidth: number[] | undefined
+        let cutLineWeight: number[] | undefined
+        let projectionLinePatternIndex: number[] | undefined
+        let cutLinePatternIndex: number[] | undefined
+        let bimDocumentIndex: number[] | undefined
+        
+        await Promise.all([
+            (async () => { status = (await localTable.getStringArray("string:Status")) })(),
+            (async () => { scale = (await localTable.getNumberArray("int:Scale")) })(),
+            (async () => { hasProjectionLine = (await localTable.getBooleanArray("byte:HasProjectionLine")) })(),
+            (async () => { projectionLineColor_X = (await localTable.getNumberArray("double:ProjectionLineColor.X")) })(),
+            (async () => { projectionLineColor_Y = (await localTable.getNumberArray("double:ProjectionLineColor.Y")) })(),
+            (async () => { projectionLineColor_Z = (await localTable.getNumberArray("double:ProjectionLineColor.Z")) })(),
+            (async () => { projectionLineWidth = (await localTable.getNumberArray("double:ProjectionLineWidth")) })(),
+            (async () => { projectionLineWeight = (await localTable.getNumberArray("int:ProjectionLineWeight")) })(),
+            (async () => { hasCutLine = (await localTable.getBooleanArray("byte:HasCutLine")) })(),
+            (async () => { cutLineColor_X = (await localTable.getNumberArray("double:CutLineColor.X")) })(),
+            (async () => { cutLineColor_Y = (await localTable.getNumberArray("double:CutLineColor.Y")) })(),
+            (async () => { cutLineColor_Z = (await localTable.getNumberArray("double:CutLineColor.Z")) })(),
+            (async () => { cutLineWidth = (await localTable.getNumberArray("double:CutLineWidth")) })(),
+            (async () => { cutLineWeight = (await localTable.getNumberArray("int:CutLineWeight")) })(),
+            (async () => { projectionLinePatternIndex = (await localTable.getNumberArray("index:Vim.LinePattern:ProjectionLinePattern")) })(),
+            (async () => { cutLinePatternIndex = (await localTable.getNumberArray("index:Vim.LinePattern:CutLinePattern")) })(),
+            (async () => { bimDocumentIndex = (await localTable.getNumberArray("index:Vim.BimDocument:BimDocument")) })(),
+        ])
+        
+        let phaseGraphicOverride: IPhaseGraphicOverride[] = []
+        
+        const rowCount = await this.getCount()
+        for (let i = 0; i < rowCount; i++) {
+            phaseGraphicOverride.push({
+                index: i,
+                status: status ? status[i] : undefined,
+                scale: scale ? scale[i] : undefined,
+                hasProjectionLine: hasProjectionLine ? hasProjectionLine[i] : undefined,
+                projectionLineColor_X: projectionLineColor_X ? projectionLineColor_X[i] : undefined,
+                projectionLineColor_Y: projectionLineColor_Y ? projectionLineColor_Y[i] : undefined,
+                projectionLineColor_Z: projectionLineColor_Z ? projectionLineColor_Z[i] : undefined,
+                projectionLineWidth: projectionLineWidth ? projectionLineWidth[i] : undefined,
+                projectionLineWeight: projectionLineWeight ? projectionLineWeight[i] : undefined,
+                hasCutLine: hasCutLine ? hasCutLine[i] : undefined,
+                cutLineColor_X: cutLineColor_X ? cutLineColor_X[i] : undefined,
+                cutLineColor_Y: cutLineColor_Y ? cutLineColor_Y[i] : undefined,
+                cutLineColor_Z: cutLineColor_Z ? cutLineColor_Z[i] : undefined,
+                cutLineWidth: cutLineWidth ? cutLineWidth[i] : undefined,
+                cutLineWeight: cutLineWeight ? cutLineWeight[i] : undefined,
+                projectionLinePatternIndex: projectionLinePatternIndex ? projectionLinePatternIndex[i] : undefined,
+                cutLinePatternIndex: cutLinePatternIndex ? cutLinePatternIndex[i] : undefined,
+                bimDocumentIndex: bimDocumentIndex ? bimDocumentIndex[i] : undefined
+            })
+        }
+        
+        return phaseGraphicOverride
+    }
+    
+    async getStatus(phaseGraphicOverrideIndex: number): Promise<string | undefined> {
+        return (await this.entityTable.getString(phaseGraphicOverrideIndex, "string:Status"))
+    }
+    
+    async getAllStatus(): Promise<string[] | undefined> {
+        return (await this.entityTable.getStringArray("string:Status"))
+    }
+    
+    async getScale(phaseGraphicOverrideIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(phaseGraphicOverrideIndex, "int:Scale"))
+    }
+    
+    async getAllScale(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("int:Scale"))
+    }
+    
+    async getHasProjectionLine(phaseGraphicOverrideIndex: number): Promise<boolean | undefined> {
+        return (await this.entityTable.getBoolean(phaseGraphicOverrideIndex, "byte:HasProjectionLine"))
+    }
+    
+    async getAllHasProjectionLine(): Promise<boolean[] | undefined> {
+        return (await this.entityTable.getBooleanArray("byte:HasProjectionLine"))
+    }
+    
+    async getProjectionLineColor_X(phaseGraphicOverrideIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(phaseGraphicOverrideIndex, "double:ProjectionLineColor.X"))
+    }
+    
+    async getAllProjectionLineColor_X(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:ProjectionLineColor.X"))
+    }
+    
+    async getProjectionLineColor_Y(phaseGraphicOverrideIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(phaseGraphicOverrideIndex, "double:ProjectionLineColor.Y"))
+    }
+    
+    async getAllProjectionLineColor_Y(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:ProjectionLineColor.Y"))
+    }
+    
+    async getProjectionLineColor_Z(phaseGraphicOverrideIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(phaseGraphicOverrideIndex, "double:ProjectionLineColor.Z"))
+    }
+    
+    async getAllProjectionLineColor_Z(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:ProjectionLineColor.Z"))
+    }
+    
+    async getProjectionLineWidth(phaseGraphicOverrideIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(phaseGraphicOverrideIndex, "double:ProjectionLineWidth"))
+    }
+    
+    async getAllProjectionLineWidth(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:ProjectionLineWidth"))
+    }
+    
+    async getProjectionLineWeight(phaseGraphicOverrideIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(phaseGraphicOverrideIndex, "int:ProjectionLineWeight"))
+    }
+    
+    async getAllProjectionLineWeight(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("int:ProjectionLineWeight"))
+    }
+    
+    async getHasCutLine(phaseGraphicOverrideIndex: number): Promise<boolean | undefined> {
+        return (await this.entityTable.getBoolean(phaseGraphicOverrideIndex, "byte:HasCutLine"))
+    }
+    
+    async getAllHasCutLine(): Promise<boolean[] | undefined> {
+        return (await this.entityTable.getBooleanArray("byte:HasCutLine"))
+    }
+    
+    async getCutLineColor_X(phaseGraphicOverrideIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(phaseGraphicOverrideIndex, "double:CutLineColor.X"))
+    }
+    
+    async getAllCutLineColor_X(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:CutLineColor.X"))
+    }
+    
+    async getCutLineColor_Y(phaseGraphicOverrideIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(phaseGraphicOverrideIndex, "double:CutLineColor.Y"))
+    }
+    
+    async getAllCutLineColor_Y(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:CutLineColor.Y"))
+    }
+    
+    async getCutLineColor_Z(phaseGraphicOverrideIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(phaseGraphicOverrideIndex, "double:CutLineColor.Z"))
+    }
+    
+    async getAllCutLineColor_Z(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:CutLineColor.Z"))
+    }
+    
+    async getCutLineWidth(phaseGraphicOverrideIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(phaseGraphicOverrideIndex, "double:CutLineWidth"))
+    }
+    
+    async getAllCutLineWidth(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:CutLineWidth"))
+    }
+    
+    async getCutLineWeight(phaseGraphicOverrideIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(phaseGraphicOverrideIndex, "int:CutLineWeight"))
+    }
+    
+    async getAllCutLineWeight(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("int:CutLineWeight"))
+    }
+    
+    async getProjectionLinePatternIndex(phaseGraphicOverrideIndex: number): Promise<number | undefined> {
+        return await this.entityTable.getNumber(phaseGraphicOverrideIndex, "index:Vim.LinePattern:ProjectionLinePattern")
+    }
+    
+    async getAllProjectionLinePatternIndex(): Promise<number[] | undefined> {
+        return await this.entityTable.getNumberArray("index:Vim.LinePattern:ProjectionLinePattern")
+    }
+    
+    async getProjectionLinePattern(phaseGraphicOverrideIndex: number): Promise<ILinePattern | undefined> {
+        const index = await this.getProjectionLinePatternIndex(phaseGraphicOverrideIndex)
+        
+        if (index === undefined) {
+            return undefined
+        }
+        
+        return await this.document.linePattern?.get(index)
+    }
+    
+    async getCutLinePatternIndex(phaseGraphicOverrideIndex: number): Promise<number | undefined> {
+        return await this.entityTable.getNumber(phaseGraphicOverrideIndex, "index:Vim.LinePattern:CutLinePattern")
+    }
+    
+    async getAllCutLinePatternIndex(): Promise<number[] | undefined> {
+        return await this.entityTable.getNumberArray("index:Vim.LinePattern:CutLinePattern")
+    }
+    
+    async getCutLinePattern(phaseGraphicOverrideIndex: number): Promise<ILinePattern | undefined> {
+        const index = await this.getCutLinePatternIndex(phaseGraphicOverrideIndex)
+        
+        if (index === undefined) {
+            return undefined
+        }
+        
+        return await this.document.linePattern?.get(index)
+    }
+    
+    async getBimDocumentIndex(phaseGraphicOverrideIndex: number): Promise<number | undefined> {
+        return await this.entityTable.getNumber(phaseGraphicOverrideIndex, "index:Vim.BimDocument:BimDocument")
+    }
+    
+    async getAllBimDocumentIndex(): Promise<number[] | undefined> {
+        return await this.entityTable.getNumberArray("index:Vim.BimDocument:BimDocument")
+    }
+    
+    async getBimDocument(phaseGraphicOverrideIndex: number): Promise<IBimDocument | undefined> {
+        const index = await this.getBimDocumentIndex(phaseGraphicOverrideIndex)
+        
+        if (index === undefined) {
+            return undefined
+        }
+        
+        return await this.document.bimDocument?.get(index)
     }
     
 }
@@ -6820,11 +9290,36 @@ export interface IMaterial {
     glossiness?: number
     smoothness?: number
     transparency?: number
+    graphicsRead?: boolean
+    shadingColor_X?: number
+    shadingColor_Y?: number
+    shadingColor_Z?: number
+    useRenderAppearanceForShading?: boolean
+    surfaceForegroundPatternColor_X?: number
+    surfaceForegroundPatternColor_Y?: number
+    surfaceForegroundPatternColor_Z?: number
+    surfaceBackgroundPatternColor_X?: number
+    surfaceBackgroundPatternColor_Y?: number
+    surfaceBackgroundPatternColor_Z?: number
+    cutForegroundPatternColor_X?: number
+    cutForegroundPatternColor_Y?: number
+    cutForegroundPatternColor_Z?: number
+    cutBackgroundPatternColor_X?: number
+    cutBackgroundPatternColor_Y?: number
+    cutBackgroundPatternColor_Z?: number
     
     colorTextureFileIndex?: number
     colorTextureFile?: IAsset
     normalTextureFileIndex?: number
     normalTextureFile?: IAsset
+    surfaceForegroundPatternIndex?: number
+    surfaceForegroundPattern?: IFillPattern
+    surfaceBackgroundPatternIndex?: number
+    surfaceBackgroundPattern?: IFillPattern
+    cutForegroundPatternIndex?: number
+    cutForegroundPattern?: IFillPattern
+    cutBackgroundPatternIndex?: number
+    cutBackgroundPattern?: IFillPattern
     elementIndex?: number
     element?: IElement
 }
@@ -6868,6 +9363,40 @@ export interface IMaterialTable {
     getAllSmoothness(): Promise<number[] | undefined>
     getTransparency(materialIndex: number): Promise<number | undefined>
     getAllTransparency(): Promise<number[] | undefined>
+    getGraphicsRead(materialIndex: number): Promise<boolean | undefined>
+    getAllGraphicsRead(): Promise<boolean[] | undefined>
+    getShadingColor_X(materialIndex: number): Promise<number | undefined>
+    getAllShadingColor_X(): Promise<number[] | undefined>
+    getShadingColor_Y(materialIndex: number): Promise<number | undefined>
+    getAllShadingColor_Y(): Promise<number[] | undefined>
+    getShadingColor_Z(materialIndex: number): Promise<number | undefined>
+    getAllShadingColor_Z(): Promise<number[] | undefined>
+    getUseRenderAppearanceForShading(materialIndex: number): Promise<boolean | undefined>
+    getAllUseRenderAppearanceForShading(): Promise<boolean[] | undefined>
+    getSurfaceForegroundPatternColor_X(materialIndex: number): Promise<number | undefined>
+    getAllSurfaceForegroundPatternColor_X(): Promise<number[] | undefined>
+    getSurfaceForegroundPatternColor_Y(materialIndex: number): Promise<number | undefined>
+    getAllSurfaceForegroundPatternColor_Y(): Promise<number[] | undefined>
+    getSurfaceForegroundPatternColor_Z(materialIndex: number): Promise<number | undefined>
+    getAllSurfaceForegroundPatternColor_Z(): Promise<number[] | undefined>
+    getSurfaceBackgroundPatternColor_X(materialIndex: number): Promise<number | undefined>
+    getAllSurfaceBackgroundPatternColor_X(): Promise<number[] | undefined>
+    getSurfaceBackgroundPatternColor_Y(materialIndex: number): Promise<number | undefined>
+    getAllSurfaceBackgroundPatternColor_Y(): Promise<number[] | undefined>
+    getSurfaceBackgroundPatternColor_Z(materialIndex: number): Promise<number | undefined>
+    getAllSurfaceBackgroundPatternColor_Z(): Promise<number[] | undefined>
+    getCutForegroundPatternColor_X(materialIndex: number): Promise<number | undefined>
+    getAllCutForegroundPatternColor_X(): Promise<number[] | undefined>
+    getCutForegroundPatternColor_Y(materialIndex: number): Promise<number | undefined>
+    getAllCutForegroundPatternColor_Y(): Promise<number[] | undefined>
+    getCutForegroundPatternColor_Z(materialIndex: number): Promise<number | undefined>
+    getAllCutForegroundPatternColor_Z(): Promise<number[] | undefined>
+    getCutBackgroundPatternColor_X(materialIndex: number): Promise<number | undefined>
+    getAllCutBackgroundPatternColor_X(): Promise<number[] | undefined>
+    getCutBackgroundPatternColor_Y(materialIndex: number): Promise<number | undefined>
+    getAllCutBackgroundPatternColor_Y(): Promise<number[] | undefined>
+    getCutBackgroundPatternColor_Z(materialIndex: number): Promise<number | undefined>
+    getAllCutBackgroundPatternColor_Z(): Promise<number[] | undefined>
     
     getColorTextureFileIndex(materialIndex: number): Promise<number | undefined>
     getAllColorTextureFileIndex(): Promise<number[] | undefined>
@@ -6875,6 +9404,18 @@ export interface IMaterialTable {
     getNormalTextureFileIndex(materialIndex: number): Promise<number | undefined>
     getAllNormalTextureFileIndex(): Promise<number[] | undefined>
     getNormalTextureFile(materialIndex: number): Promise<IAsset | undefined>
+    getSurfaceForegroundPatternIndex(materialIndex: number): Promise<number | undefined>
+    getAllSurfaceForegroundPatternIndex(): Promise<number[] | undefined>
+    getSurfaceForegroundPattern(materialIndex: number): Promise<IFillPattern | undefined>
+    getSurfaceBackgroundPatternIndex(materialIndex: number): Promise<number | undefined>
+    getAllSurfaceBackgroundPatternIndex(): Promise<number[] | undefined>
+    getSurfaceBackgroundPattern(materialIndex: number): Promise<IFillPattern | undefined>
+    getCutForegroundPatternIndex(materialIndex: number): Promise<number | undefined>
+    getAllCutForegroundPatternIndex(): Promise<number[] | undefined>
+    getCutForegroundPattern(materialIndex: number): Promise<IFillPattern | undefined>
+    getCutBackgroundPatternIndex(materialIndex: number): Promise<number | undefined>
+    getAllCutBackgroundPatternIndex(): Promise<number[] | undefined>
+    getCutBackgroundPattern(materialIndex: number): Promise<IFillPattern | undefined>
     getElementIndex(materialIndex: number): Promise<number | undefined>
     getAllElementIndex(): Promise<number[] | undefined>
     getElement(materialIndex: number): Promise<IElement | undefined>
@@ -6899,11 +9440,36 @@ export class Material implements IMaterial {
     glossiness?: number
     smoothness?: number
     transparency?: number
+    graphicsRead?: boolean
+    shadingColor_X?: number
+    shadingColor_Y?: number
+    shadingColor_Z?: number
+    useRenderAppearanceForShading?: boolean
+    surfaceForegroundPatternColor_X?: number
+    surfaceForegroundPatternColor_Y?: number
+    surfaceForegroundPatternColor_Z?: number
+    surfaceBackgroundPatternColor_X?: number
+    surfaceBackgroundPatternColor_Y?: number
+    surfaceBackgroundPatternColor_Z?: number
+    cutForegroundPatternColor_X?: number
+    cutForegroundPatternColor_Y?: number
+    cutForegroundPatternColor_Z?: number
+    cutBackgroundPatternColor_X?: number
+    cutBackgroundPatternColor_Y?: number
+    cutBackgroundPatternColor_Z?: number
     
     colorTextureFileIndex?: number
     colorTextureFile?: IAsset
     normalTextureFileIndex?: number
     normalTextureFile?: IAsset
+    surfaceForegroundPatternIndex?: number
+    surfaceForegroundPattern?: IFillPattern
+    surfaceBackgroundPatternIndex?: number
+    surfaceBackgroundPattern?: IFillPattern
+    cutForegroundPatternIndex?: number
+    cutForegroundPattern?: IFillPattern
+    cutBackgroundPatternIndex?: number
+    cutBackgroundPattern?: IFillPattern
     elementIndex?: number
     element?: IElement
     
@@ -6929,8 +9495,29 @@ export class Material implements IMaterial {
             table.getGlossiness(index).then(v => result.glossiness = v),
             table.getSmoothness(index).then(v => result.smoothness = v),
             table.getTransparency(index).then(v => result.transparency = v),
+            table.getGraphicsRead(index).then(v => result.graphicsRead = v),
+            table.getShadingColor_X(index).then(v => result.shadingColor_X = v),
+            table.getShadingColor_Y(index).then(v => result.shadingColor_Y = v),
+            table.getShadingColor_Z(index).then(v => result.shadingColor_Z = v),
+            table.getUseRenderAppearanceForShading(index).then(v => result.useRenderAppearanceForShading = v),
+            table.getSurfaceForegroundPatternColor_X(index).then(v => result.surfaceForegroundPatternColor_X = v),
+            table.getSurfaceForegroundPatternColor_Y(index).then(v => result.surfaceForegroundPatternColor_Y = v),
+            table.getSurfaceForegroundPatternColor_Z(index).then(v => result.surfaceForegroundPatternColor_Z = v),
+            table.getSurfaceBackgroundPatternColor_X(index).then(v => result.surfaceBackgroundPatternColor_X = v),
+            table.getSurfaceBackgroundPatternColor_Y(index).then(v => result.surfaceBackgroundPatternColor_Y = v),
+            table.getSurfaceBackgroundPatternColor_Z(index).then(v => result.surfaceBackgroundPatternColor_Z = v),
+            table.getCutForegroundPatternColor_X(index).then(v => result.cutForegroundPatternColor_X = v),
+            table.getCutForegroundPatternColor_Y(index).then(v => result.cutForegroundPatternColor_Y = v),
+            table.getCutForegroundPatternColor_Z(index).then(v => result.cutForegroundPatternColor_Z = v),
+            table.getCutBackgroundPatternColor_X(index).then(v => result.cutBackgroundPatternColor_X = v),
+            table.getCutBackgroundPatternColor_Y(index).then(v => result.cutBackgroundPatternColor_Y = v),
+            table.getCutBackgroundPatternColor_Z(index).then(v => result.cutBackgroundPatternColor_Z = v),
             table.getColorTextureFileIndex(index).then(v => result.colorTextureFileIndex = v),
             table.getNormalTextureFileIndex(index).then(v => result.normalTextureFileIndex = v),
+            table.getSurfaceForegroundPatternIndex(index).then(v => result.surfaceForegroundPatternIndex = v),
+            table.getSurfaceBackgroundPatternIndex(index).then(v => result.surfaceBackgroundPatternIndex = v),
+            table.getCutForegroundPatternIndex(index).then(v => result.cutForegroundPatternIndex = v),
+            table.getCutBackgroundPatternIndex(index).then(v => result.cutBackgroundPatternIndex = v),
             table.getElementIndex(index).then(v => result.elementIndex = v),
         ])
         
@@ -6984,8 +9571,29 @@ export class MaterialTable implements IMaterialTable {
         let glossiness: number[] | undefined
         let smoothness: number[] | undefined
         let transparency: number[] | undefined
+        let graphicsRead: boolean[] | undefined
+        let shadingColor_X: number[] | undefined
+        let shadingColor_Y: number[] | undefined
+        let shadingColor_Z: number[] | undefined
+        let useRenderAppearanceForShading: boolean[] | undefined
+        let surfaceForegroundPatternColor_X: number[] | undefined
+        let surfaceForegroundPatternColor_Y: number[] | undefined
+        let surfaceForegroundPatternColor_Z: number[] | undefined
+        let surfaceBackgroundPatternColor_X: number[] | undefined
+        let surfaceBackgroundPatternColor_Y: number[] | undefined
+        let surfaceBackgroundPatternColor_Z: number[] | undefined
+        let cutForegroundPatternColor_X: number[] | undefined
+        let cutForegroundPatternColor_Y: number[] | undefined
+        let cutForegroundPatternColor_Z: number[] | undefined
+        let cutBackgroundPatternColor_X: number[] | undefined
+        let cutBackgroundPatternColor_Y: number[] | undefined
+        let cutBackgroundPatternColor_Z: number[] | undefined
         let colorTextureFileIndex: number[] | undefined
         let normalTextureFileIndex: number[] | undefined
+        let surfaceForegroundPatternIndex: number[] | undefined
+        let surfaceBackgroundPatternIndex: number[] | undefined
+        let cutForegroundPatternIndex: number[] | undefined
+        let cutBackgroundPatternIndex: number[] | undefined
         let elementIndex: number[] | undefined
         
         await Promise.all([
@@ -7006,8 +9614,29 @@ export class MaterialTable implements IMaterialTable {
             (async () => { glossiness = (await localTable.getNumberArray("double:Glossiness")) })(),
             (async () => { smoothness = (await localTable.getNumberArray("double:Smoothness")) })(),
             (async () => { transparency = (await localTable.getNumberArray("double:Transparency")) })(),
+            (async () => { graphicsRead = (await localTable.getBooleanArray("byte:GraphicsRead")) })(),
+            (async () => { shadingColor_X = (await localTable.getNumberArray("double:ShadingColor.X")) })(),
+            (async () => { shadingColor_Y = (await localTable.getNumberArray("double:ShadingColor.Y")) })(),
+            (async () => { shadingColor_Z = (await localTable.getNumberArray("double:ShadingColor.Z")) })(),
+            (async () => { useRenderAppearanceForShading = (await localTable.getBooleanArray("byte:UseRenderAppearanceForShading")) })(),
+            (async () => { surfaceForegroundPatternColor_X = (await localTable.getNumberArray("double:SurfaceForegroundPatternColor.X")) })(),
+            (async () => { surfaceForegroundPatternColor_Y = (await localTable.getNumberArray("double:SurfaceForegroundPatternColor.Y")) })(),
+            (async () => { surfaceForegroundPatternColor_Z = (await localTable.getNumberArray("double:SurfaceForegroundPatternColor.Z")) })(),
+            (async () => { surfaceBackgroundPatternColor_X = (await localTable.getNumberArray("double:SurfaceBackgroundPatternColor.X")) })(),
+            (async () => { surfaceBackgroundPatternColor_Y = (await localTable.getNumberArray("double:SurfaceBackgroundPatternColor.Y")) })(),
+            (async () => { surfaceBackgroundPatternColor_Z = (await localTable.getNumberArray("double:SurfaceBackgroundPatternColor.Z")) })(),
+            (async () => { cutForegroundPatternColor_X = (await localTable.getNumberArray("double:CutForegroundPatternColor.X")) })(),
+            (async () => { cutForegroundPatternColor_Y = (await localTable.getNumberArray("double:CutForegroundPatternColor.Y")) })(),
+            (async () => { cutForegroundPatternColor_Z = (await localTable.getNumberArray("double:CutForegroundPatternColor.Z")) })(),
+            (async () => { cutBackgroundPatternColor_X = (await localTable.getNumberArray("double:CutBackgroundPatternColor.X")) })(),
+            (async () => { cutBackgroundPatternColor_Y = (await localTable.getNumberArray("double:CutBackgroundPatternColor.Y")) })(),
+            (async () => { cutBackgroundPatternColor_Z = (await localTable.getNumberArray("double:CutBackgroundPatternColor.Z")) })(),
             (async () => { colorTextureFileIndex = (await localTable.getNumberArray("index:Vim.Asset:ColorTextureFile")) })(),
             (async () => { normalTextureFileIndex = (await localTable.getNumberArray("index:Vim.Asset:NormalTextureFile")) })(),
+            (async () => { surfaceForegroundPatternIndex = (await localTable.getNumberArray("index:Vim.FillPattern:SurfaceForegroundPattern")) })(),
+            (async () => { surfaceBackgroundPatternIndex = (await localTable.getNumberArray("index:Vim.FillPattern:SurfaceBackgroundPattern")) })(),
+            (async () => { cutForegroundPatternIndex = (await localTable.getNumberArray("index:Vim.FillPattern:CutForegroundPattern")) })(),
+            (async () => { cutBackgroundPatternIndex = (await localTable.getNumberArray("index:Vim.FillPattern:CutBackgroundPattern")) })(),
             (async () => { elementIndex = (await localTable.getNumberArray("index:Vim.Element:Element")) })(),
         ])
         
@@ -7034,8 +9663,29 @@ export class MaterialTable implements IMaterialTable {
                 glossiness: glossiness ? glossiness[i] : undefined,
                 smoothness: smoothness ? smoothness[i] : undefined,
                 transparency: transparency ? transparency[i] : undefined,
+                graphicsRead: graphicsRead ? graphicsRead[i] : undefined,
+                shadingColor_X: shadingColor_X ? shadingColor_X[i] : undefined,
+                shadingColor_Y: shadingColor_Y ? shadingColor_Y[i] : undefined,
+                shadingColor_Z: shadingColor_Z ? shadingColor_Z[i] : undefined,
+                useRenderAppearanceForShading: useRenderAppearanceForShading ? useRenderAppearanceForShading[i] : undefined,
+                surfaceForegroundPatternColor_X: surfaceForegroundPatternColor_X ? surfaceForegroundPatternColor_X[i] : undefined,
+                surfaceForegroundPatternColor_Y: surfaceForegroundPatternColor_Y ? surfaceForegroundPatternColor_Y[i] : undefined,
+                surfaceForegroundPatternColor_Z: surfaceForegroundPatternColor_Z ? surfaceForegroundPatternColor_Z[i] : undefined,
+                surfaceBackgroundPatternColor_X: surfaceBackgroundPatternColor_X ? surfaceBackgroundPatternColor_X[i] : undefined,
+                surfaceBackgroundPatternColor_Y: surfaceBackgroundPatternColor_Y ? surfaceBackgroundPatternColor_Y[i] : undefined,
+                surfaceBackgroundPatternColor_Z: surfaceBackgroundPatternColor_Z ? surfaceBackgroundPatternColor_Z[i] : undefined,
+                cutForegroundPatternColor_X: cutForegroundPatternColor_X ? cutForegroundPatternColor_X[i] : undefined,
+                cutForegroundPatternColor_Y: cutForegroundPatternColor_Y ? cutForegroundPatternColor_Y[i] : undefined,
+                cutForegroundPatternColor_Z: cutForegroundPatternColor_Z ? cutForegroundPatternColor_Z[i] : undefined,
+                cutBackgroundPatternColor_X: cutBackgroundPatternColor_X ? cutBackgroundPatternColor_X[i] : undefined,
+                cutBackgroundPatternColor_Y: cutBackgroundPatternColor_Y ? cutBackgroundPatternColor_Y[i] : undefined,
+                cutBackgroundPatternColor_Z: cutBackgroundPatternColor_Z ? cutBackgroundPatternColor_Z[i] : undefined,
                 colorTextureFileIndex: colorTextureFileIndex ? colorTextureFileIndex[i] : undefined,
                 normalTextureFileIndex: normalTextureFileIndex ? normalTextureFileIndex[i] : undefined,
+                surfaceForegroundPatternIndex: surfaceForegroundPatternIndex ? surfaceForegroundPatternIndex[i] : undefined,
+                surfaceBackgroundPatternIndex: surfaceBackgroundPatternIndex ? surfaceBackgroundPatternIndex[i] : undefined,
+                cutForegroundPatternIndex: cutForegroundPatternIndex ? cutForegroundPatternIndex[i] : undefined,
+                cutBackgroundPatternIndex: cutBackgroundPatternIndex ? cutBackgroundPatternIndex[i] : undefined,
                 elementIndex: elementIndex ? elementIndex[i] : undefined
             })
         }
@@ -7179,6 +9829,142 @@ export class MaterialTable implements IMaterialTable {
         return (await this.entityTable.getNumberArray("double:Transparency"))
     }
     
+    async getGraphicsRead(materialIndex: number): Promise<boolean | undefined> {
+        return (await this.entityTable.getBoolean(materialIndex, "byte:GraphicsRead"))
+    }
+    
+    async getAllGraphicsRead(): Promise<boolean[] | undefined> {
+        return (await this.entityTable.getBooleanArray("byte:GraphicsRead"))
+    }
+    
+    async getShadingColor_X(materialIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(materialIndex, "double:ShadingColor.X"))
+    }
+    
+    async getAllShadingColor_X(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:ShadingColor.X"))
+    }
+    
+    async getShadingColor_Y(materialIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(materialIndex, "double:ShadingColor.Y"))
+    }
+    
+    async getAllShadingColor_Y(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:ShadingColor.Y"))
+    }
+    
+    async getShadingColor_Z(materialIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(materialIndex, "double:ShadingColor.Z"))
+    }
+    
+    async getAllShadingColor_Z(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:ShadingColor.Z"))
+    }
+    
+    async getUseRenderAppearanceForShading(materialIndex: number): Promise<boolean | undefined> {
+        return (await this.entityTable.getBoolean(materialIndex, "byte:UseRenderAppearanceForShading"))
+    }
+    
+    async getAllUseRenderAppearanceForShading(): Promise<boolean[] | undefined> {
+        return (await this.entityTable.getBooleanArray("byte:UseRenderAppearanceForShading"))
+    }
+    
+    async getSurfaceForegroundPatternColor_X(materialIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(materialIndex, "double:SurfaceForegroundPatternColor.X"))
+    }
+    
+    async getAllSurfaceForegroundPatternColor_X(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:SurfaceForegroundPatternColor.X"))
+    }
+    
+    async getSurfaceForegroundPatternColor_Y(materialIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(materialIndex, "double:SurfaceForegroundPatternColor.Y"))
+    }
+    
+    async getAllSurfaceForegroundPatternColor_Y(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:SurfaceForegroundPatternColor.Y"))
+    }
+    
+    async getSurfaceForegroundPatternColor_Z(materialIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(materialIndex, "double:SurfaceForegroundPatternColor.Z"))
+    }
+    
+    async getAllSurfaceForegroundPatternColor_Z(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:SurfaceForegroundPatternColor.Z"))
+    }
+    
+    async getSurfaceBackgroundPatternColor_X(materialIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(materialIndex, "double:SurfaceBackgroundPatternColor.X"))
+    }
+    
+    async getAllSurfaceBackgroundPatternColor_X(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:SurfaceBackgroundPatternColor.X"))
+    }
+    
+    async getSurfaceBackgroundPatternColor_Y(materialIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(materialIndex, "double:SurfaceBackgroundPatternColor.Y"))
+    }
+    
+    async getAllSurfaceBackgroundPatternColor_Y(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:SurfaceBackgroundPatternColor.Y"))
+    }
+    
+    async getSurfaceBackgroundPatternColor_Z(materialIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(materialIndex, "double:SurfaceBackgroundPatternColor.Z"))
+    }
+    
+    async getAllSurfaceBackgroundPatternColor_Z(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:SurfaceBackgroundPatternColor.Z"))
+    }
+    
+    async getCutForegroundPatternColor_X(materialIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(materialIndex, "double:CutForegroundPatternColor.X"))
+    }
+    
+    async getAllCutForegroundPatternColor_X(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:CutForegroundPatternColor.X"))
+    }
+    
+    async getCutForegroundPatternColor_Y(materialIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(materialIndex, "double:CutForegroundPatternColor.Y"))
+    }
+    
+    async getAllCutForegroundPatternColor_Y(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:CutForegroundPatternColor.Y"))
+    }
+    
+    async getCutForegroundPatternColor_Z(materialIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(materialIndex, "double:CutForegroundPatternColor.Z"))
+    }
+    
+    async getAllCutForegroundPatternColor_Z(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:CutForegroundPatternColor.Z"))
+    }
+    
+    async getCutBackgroundPatternColor_X(materialIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(materialIndex, "double:CutBackgroundPatternColor.X"))
+    }
+    
+    async getAllCutBackgroundPatternColor_X(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:CutBackgroundPatternColor.X"))
+    }
+    
+    async getCutBackgroundPatternColor_Y(materialIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(materialIndex, "double:CutBackgroundPatternColor.Y"))
+    }
+    
+    async getAllCutBackgroundPatternColor_Y(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:CutBackgroundPatternColor.Y"))
+    }
+    
+    async getCutBackgroundPatternColor_Z(materialIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(materialIndex, "double:CutBackgroundPatternColor.Z"))
+    }
+    
+    async getAllCutBackgroundPatternColor_Z(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:CutBackgroundPatternColor.Z"))
+    }
+    
     async getColorTextureFileIndex(materialIndex: number): Promise<number | undefined> {
         return await this.entityTable.getNumber(materialIndex, "index:Vim.Asset:ColorTextureFile")
     }
@@ -7213,6 +9999,78 @@ export class MaterialTable implements IMaterialTable {
         }
         
         return await this.document.asset?.get(index)
+    }
+    
+    async getSurfaceForegroundPatternIndex(materialIndex: number): Promise<number | undefined> {
+        return await this.entityTable.getNumber(materialIndex, "index:Vim.FillPattern:SurfaceForegroundPattern")
+    }
+    
+    async getAllSurfaceForegroundPatternIndex(): Promise<number[] | undefined> {
+        return await this.entityTable.getNumberArray("index:Vim.FillPattern:SurfaceForegroundPattern")
+    }
+    
+    async getSurfaceForegroundPattern(materialIndex: number): Promise<IFillPattern | undefined> {
+        const index = await this.getSurfaceForegroundPatternIndex(materialIndex)
+        
+        if (index === undefined) {
+            return undefined
+        }
+        
+        return await this.document.fillPattern?.get(index)
+    }
+    
+    async getSurfaceBackgroundPatternIndex(materialIndex: number): Promise<number | undefined> {
+        return await this.entityTable.getNumber(materialIndex, "index:Vim.FillPattern:SurfaceBackgroundPattern")
+    }
+    
+    async getAllSurfaceBackgroundPatternIndex(): Promise<number[] | undefined> {
+        return await this.entityTable.getNumberArray("index:Vim.FillPattern:SurfaceBackgroundPattern")
+    }
+    
+    async getSurfaceBackgroundPattern(materialIndex: number): Promise<IFillPattern | undefined> {
+        const index = await this.getSurfaceBackgroundPatternIndex(materialIndex)
+        
+        if (index === undefined) {
+            return undefined
+        }
+        
+        return await this.document.fillPattern?.get(index)
+    }
+    
+    async getCutForegroundPatternIndex(materialIndex: number): Promise<number | undefined> {
+        return await this.entityTable.getNumber(materialIndex, "index:Vim.FillPattern:CutForegroundPattern")
+    }
+    
+    async getAllCutForegroundPatternIndex(): Promise<number[] | undefined> {
+        return await this.entityTable.getNumberArray("index:Vim.FillPattern:CutForegroundPattern")
+    }
+    
+    async getCutForegroundPattern(materialIndex: number): Promise<IFillPattern | undefined> {
+        const index = await this.getCutForegroundPatternIndex(materialIndex)
+        
+        if (index === undefined) {
+            return undefined
+        }
+        
+        return await this.document.fillPattern?.get(index)
+    }
+    
+    async getCutBackgroundPatternIndex(materialIndex: number): Promise<number | undefined> {
+        return await this.entityTable.getNumber(materialIndex, "index:Vim.FillPattern:CutBackgroundPattern")
+    }
+    
+    async getAllCutBackgroundPatternIndex(): Promise<number[] | undefined> {
+        return await this.entityTable.getNumberArray("index:Vim.FillPattern:CutBackgroundPattern")
+    }
+    
+    async getCutBackgroundPattern(materialIndex: number): Promise<IFillPattern | undefined> {
+        const index = await this.getCutBackgroundPatternIndex(materialIndex)
+        
+        if (index === undefined) {
+            return undefined
+        }
+        
+        return await this.document.fillPattern?.get(index)
     }
     
     async getElementIndex(materialIndex: number): Promise<number | undefined> {
@@ -7810,6 +10668,242 @@ export class NodeTable implements INodeTable {
     
     async getElement(nodeIndex: number): Promise<IElement | undefined> {
         const index = await this.getElementIndex(nodeIndex)
+        
+        if (index === undefined) {
+            return undefined
+        }
+        
+        return await this.document.element?.get(index)
+    }
+    
+}
+
+export interface IGeometryPiece {
+    index: number
+    submeshIndex?: number
+    
+    nodeIndex?: number
+    node?: INode
+    materialIndex?: number
+    material?: IMaterial
+    subcategoryIndex?: number
+    subcategory?: ICategory
+    compoundStructureLayerIndex?: number
+    compoundStructureLayer?: ICompoundStructureLayer
+    elementIndex?: number
+    element?: IElement
+}
+
+export interface IGeometryPieceTable {
+    getCount(): Promise<number>
+    get(geometryPieceIndex: number): Promise<IGeometryPiece>
+    getAll(): Promise<IGeometryPiece[]>
+    
+    getSubmeshIndex(geometryPieceIndex: number): Promise<number | undefined>
+    getAllSubmeshIndex(): Promise<number[] | undefined>
+    
+    getNodeIndex(geometryPieceIndex: number): Promise<number | undefined>
+    getAllNodeIndex(): Promise<number[] | undefined>
+    getNode(geometryPieceIndex: number): Promise<INode | undefined>
+    getMaterialIndex(geometryPieceIndex: number): Promise<number | undefined>
+    getAllMaterialIndex(): Promise<number[] | undefined>
+    getMaterial(geometryPieceIndex: number): Promise<IMaterial | undefined>
+    getSubcategoryIndex(geometryPieceIndex: number): Promise<number | undefined>
+    getAllSubcategoryIndex(): Promise<number[] | undefined>
+    getSubcategory(geometryPieceIndex: number): Promise<ICategory | undefined>
+    getCompoundStructureLayerIndex(geometryPieceIndex: number): Promise<number | undefined>
+    getAllCompoundStructureLayerIndex(): Promise<number[] | undefined>
+    getCompoundStructureLayer(geometryPieceIndex: number): Promise<ICompoundStructureLayer | undefined>
+    getElementIndex(geometryPieceIndex: number): Promise<number | undefined>
+    getAllElementIndex(): Promise<number[] | undefined>
+    getElement(geometryPieceIndex: number): Promise<IElement | undefined>
+}
+
+export class GeometryPiece implements IGeometryPiece {
+    index: number
+    submeshIndex?: number
+    
+    nodeIndex?: number
+    node?: INode
+    materialIndex?: number
+    material?: IMaterial
+    subcategoryIndex?: number
+    subcategory?: ICategory
+    compoundStructureLayerIndex?: number
+    compoundStructureLayer?: ICompoundStructureLayer
+    elementIndex?: number
+    element?: IElement
+    
+    static async createFromTable(table: IGeometryPieceTable, index: number): Promise<IGeometryPiece> {
+        let result = new GeometryPiece()
+        result.index = index
+        
+        await Promise.all([
+            table.getSubmeshIndex(index).then(v => result.submeshIndex = v),
+            table.getNodeIndex(index).then(v => result.nodeIndex = v),
+            table.getMaterialIndex(index).then(v => result.materialIndex = v),
+            table.getSubcategoryIndex(index).then(v => result.subcategoryIndex = v),
+            table.getCompoundStructureLayerIndex(index).then(v => result.compoundStructureLayerIndex = v),
+            table.getElementIndex(index).then(v => result.elementIndex = v),
+        ])
+        
+        return result
+    }
+}
+
+export class GeometryPieceTable implements IGeometryPieceTable {
+    private document: VimDocument
+    private entityTable: EntityTable
+    
+    static async createFromDocument(document: VimDocument): Promise<IGeometryPieceTable | undefined> {
+        const entity = await document.entities.getBfast("Vim.GeometryPiece")
+        
+        if (!entity) {
+            return undefined
+        }
+        
+        let table = new GeometryPieceTable()
+        table.document = document
+        table.entityTable = new EntityTable(entity, document.strings)
+        
+        return table
+    }
+    
+    getCount(): Promise<number> {
+        return this.entityTable.getCount()
+    }
+    
+    async get(geometryPieceIndex: number): Promise<IGeometryPiece> {
+        return await GeometryPiece.createFromTable(this, geometryPieceIndex)
+    }
+    
+    async getAll(): Promise<IGeometryPiece[]> {
+        const localTable = await this.entityTable.getLocal()
+        
+        let submeshIndex: number[] | undefined
+        let nodeIndex: number[] | undefined
+        let materialIndex: number[] | undefined
+        let subcategoryIndex: number[] | undefined
+        let compoundStructureLayerIndex: number[] | undefined
+        let elementIndex: number[] | undefined
+        
+        await Promise.all([
+            (async () => { submeshIndex = (await localTable.getNumberArray("int:SubmeshIndex")) })(),
+            (async () => { nodeIndex = (await localTable.getNumberArray("index:Vim.Node:Node")) })(),
+            (async () => { materialIndex = (await localTable.getNumberArray("index:Vim.Material:Material")) })(),
+            (async () => { subcategoryIndex = (await localTable.getNumberArray("index:Vim.Category:Subcategory")) })(),
+            (async () => { compoundStructureLayerIndex = (await localTable.getNumberArray("index:Vim.CompoundStructureLayer:CompoundStructureLayer")) })(),
+            (async () => { elementIndex = (await localTable.getNumberArray("index:Vim.Element:Element")) })(),
+        ])
+        
+        let geometryPiece: IGeometryPiece[] = []
+        
+        const rowCount = await this.getCount()
+        for (let i = 0; i < rowCount; i++) {
+            geometryPiece.push({
+                index: i,
+                submeshIndex: submeshIndex ? submeshIndex[i] : undefined,
+                nodeIndex: nodeIndex ? nodeIndex[i] : undefined,
+                materialIndex: materialIndex ? materialIndex[i] : undefined,
+                subcategoryIndex: subcategoryIndex ? subcategoryIndex[i] : undefined,
+                compoundStructureLayerIndex: compoundStructureLayerIndex ? compoundStructureLayerIndex[i] : undefined,
+                elementIndex: elementIndex ? elementIndex[i] : undefined
+            })
+        }
+        
+        return geometryPiece
+    }
+    
+    async getSubmeshIndex(geometryPieceIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(geometryPieceIndex, "int:SubmeshIndex"))
+    }
+    
+    async getAllSubmeshIndex(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("int:SubmeshIndex"))
+    }
+    
+    async getNodeIndex(geometryPieceIndex: number): Promise<number | undefined> {
+        return await this.entityTable.getNumber(geometryPieceIndex, "index:Vim.Node:Node")
+    }
+    
+    async getAllNodeIndex(): Promise<number[] | undefined> {
+        return await this.entityTable.getNumberArray("index:Vim.Node:Node")
+    }
+    
+    async getNode(geometryPieceIndex: number): Promise<INode | undefined> {
+        const index = await this.getNodeIndex(geometryPieceIndex)
+        
+        if (index === undefined) {
+            return undefined
+        }
+        
+        return await this.document.node?.get(index)
+    }
+    
+    async getMaterialIndex(geometryPieceIndex: number): Promise<number | undefined> {
+        return await this.entityTable.getNumber(geometryPieceIndex, "index:Vim.Material:Material")
+    }
+    
+    async getAllMaterialIndex(): Promise<number[] | undefined> {
+        return await this.entityTable.getNumberArray("index:Vim.Material:Material")
+    }
+    
+    async getMaterial(geometryPieceIndex: number): Promise<IMaterial | undefined> {
+        const index = await this.getMaterialIndex(geometryPieceIndex)
+        
+        if (index === undefined) {
+            return undefined
+        }
+        
+        return await this.document.material?.get(index)
+    }
+    
+    async getSubcategoryIndex(geometryPieceIndex: number): Promise<number | undefined> {
+        return await this.entityTable.getNumber(geometryPieceIndex, "index:Vim.Category:Subcategory")
+    }
+    
+    async getAllSubcategoryIndex(): Promise<number[] | undefined> {
+        return await this.entityTable.getNumberArray("index:Vim.Category:Subcategory")
+    }
+    
+    async getSubcategory(geometryPieceIndex: number): Promise<ICategory | undefined> {
+        const index = await this.getSubcategoryIndex(geometryPieceIndex)
+        
+        if (index === undefined) {
+            return undefined
+        }
+        
+        return await this.document.category?.get(index)
+    }
+    
+    async getCompoundStructureLayerIndex(geometryPieceIndex: number): Promise<number | undefined> {
+        return await this.entityTable.getNumber(geometryPieceIndex, "index:Vim.CompoundStructureLayer:CompoundStructureLayer")
+    }
+    
+    async getAllCompoundStructureLayerIndex(): Promise<number[] | undefined> {
+        return await this.entityTable.getNumberArray("index:Vim.CompoundStructureLayer:CompoundStructureLayer")
+    }
+    
+    async getCompoundStructureLayer(geometryPieceIndex: number): Promise<ICompoundStructureLayer | undefined> {
+        const index = await this.getCompoundStructureLayerIndex(geometryPieceIndex)
+        
+        if (index === undefined) {
+            return undefined
+        }
+        
+        return await this.document.compoundStructureLayer?.get(index)
+    }
+    
+    async getElementIndex(geometryPieceIndex: number): Promise<number | undefined> {
+        return await this.entityTable.getNumber(geometryPieceIndex, "index:Vim.Element:Element")
+    }
+    
+    async getAllElementIndex(): Promise<number[] | undefined> {
+        return await this.entityTable.getNumberArray("index:Vim.Element:Element")
+    }
+    
+    async getElement(geometryPieceIndex: number): Promise<IElement | undefined> {
+        const index = await this.getElementIndex(geometryPieceIndex)
         
         if (index === undefined) {
             return undefined
@@ -13881,6 +16975,14 @@ export class VimDocument {
     view: IViewTable | undefined
     filterInView: IFilterInViewTable | undefined
     gridInView: IGridInViewTable | undefined
+    linePattern: ILinePatternTable | undefined
+    fillPattern: IFillPatternTable | undefined
+    fillGrid: IFillGridTable | undefined
+    lineWeight: ILineWeightTable | undefined
+    graphicOverride: IGraphicOverrideTable | undefined
+    categoryInView: ICategoryInViewTable | undefined
+    elementOverrideInView: IElementOverrideInViewTable | undefined
+    phaseGraphicOverride: IPhaseGraphicOverrideTable | undefined
     elementInView: IElementInViewTable | undefined
     shapeInView: IShapeInViewTable | undefined
     assetInView: IAssetInViewTable | undefined
@@ -13892,6 +16994,7 @@ export class VimDocument {
     compoundStructureLayer: ICompoundStructureLayerTable | undefined
     compoundStructure: ICompoundStructureTable | undefined
     node: INodeTable | undefined
+    geometryPiece: IGeometryPieceTable | undefined
     geometry: IGeometryTable | undefined
     shape: IShapeTable | undefined
     shapeCollection: IShapeCollectionTable | undefined
@@ -13963,6 +17066,14 @@ export class VimDocument {
         doc.view = await ViewTable.createFromDocument(doc)
         doc.filterInView = await FilterInViewTable.createFromDocument(doc)
         doc.gridInView = await GridInViewTable.createFromDocument(doc)
+        doc.linePattern = await LinePatternTable.createFromDocument(doc)
+        doc.fillPattern = await FillPatternTable.createFromDocument(doc)
+        doc.fillGrid = await FillGridTable.createFromDocument(doc)
+        doc.lineWeight = await LineWeightTable.createFromDocument(doc)
+        doc.graphicOverride = await GraphicOverrideTable.createFromDocument(doc)
+        doc.categoryInView = await CategoryInViewTable.createFromDocument(doc)
+        doc.elementOverrideInView = await ElementOverrideInViewTable.createFromDocument(doc)
+        doc.phaseGraphicOverride = await PhaseGraphicOverrideTable.createFromDocument(doc)
         doc.elementInView = await ElementInViewTable.createFromDocument(doc)
         doc.shapeInView = await ShapeInViewTable.createFromDocument(doc)
         doc.assetInView = await AssetInViewTable.createFromDocument(doc)
@@ -13974,6 +17085,7 @@ export class VimDocument {
         doc.compoundStructureLayer = await CompoundStructureLayerTable.createFromDocument(doc)
         doc.compoundStructure = await CompoundStructureTable.createFromDocument(doc)
         doc.node = await NodeTable.createFromDocument(doc)
+        doc.geometryPiece = await GeometryPieceTable.createFromDocument(doc)
         doc.geometry = await GeometryTable.createFromDocument(doc)
         doc.shape = await ShapeTable.createFromDocument(doc)
         doc.shapeCollection = await ShapeCollectionTable.createFromDocument(doc)

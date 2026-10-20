@@ -601,10 +601,16 @@ namespace Vim.Format.ObjectModel {
         public int ParentIndex => _Parent?.Index ?? EntityRelation.None;
         public Vim.Format.ObjectModel.Material Material => _Material?.Value;
         public int MaterialIndex => _Material?.Index ?? EntityRelation.None;
+        public Vim.Format.ObjectModel.LinePattern ProjectionLinePattern => _ProjectionLinePattern?.Value;
+        public int ProjectionLinePatternIndex => _ProjectionLinePattern?.Index ?? EntityRelation.None;
+        public Vim.Format.ObjectModel.LinePattern CutLinePattern => _CutLinePattern?.Value;
+        public int CutLinePatternIndex => _CutLinePattern?.Index ?? EntityRelation.None;
         public Category()
         {
             _Parent = new Relation<Vim.Format.ObjectModel.Category>();
             _Material = new Relation<Vim.Format.ObjectModel.Material>();
+            _ProjectionLinePattern = new Relation<Vim.Format.ObjectModel.LinePattern>();
+            _CutLinePattern = new Relation<Vim.Format.ObjectModel.LinePattern>();
         }
         
         public override bool FieldsAreEqual(object obj)
@@ -620,8 +626,13 @@ namespace Vim.Format.ObjectModel {
                     (LineColor_Y == other.LineColor_Y) &&
                     (LineColor_Z == other.LineColor_Z) &&
                     (BuiltInCategory == other.BuiltInCategory) &&
+                    (ProjectionLineWeight == other.ProjectionLineWeight) &&
+                    (CutLineWeight == other.CutLineWeight) &&
+                    (IsCuttable == other.IsCuttable) &&
                     (_Parent?.Index == other._Parent?.Index) &&
-                    (_Material?.Index == other._Material?.Index);
+                    (_Material?.Index == other._Material?.Index) &&
+                    (_ProjectionLinePattern?.Index == other._ProjectionLinePattern?.Index) &&
+                    (_CutLinePattern?.Index == other._CutLinePattern?.Index);
                 if (!fieldsAreEqual)
                 {
                     return false;
@@ -852,6 +863,7 @@ namespace Vim.Format.ObjectModel {
                     (ElementOverrideCount == other.ElementOverrideCount) &&
                     (HiddenElementCount == other.HiddenElementCount) &&
                     (TemplateControlledSettings == other.TemplateControlledSettings) &&
+                    (GraphicsRead == other.GraphicsRead) &&
                     (_Camera?.Index == other._Camera?.Index) &&
                     (_FamilyType?.Index == other._FamilyType?.Index) &&
                     (_ViewTemplate?.Index == other._ViewTemplate?.Index) &&
@@ -877,9 +889,12 @@ namespace Vim.Format.ObjectModel {
     {
         public Vim.Format.ObjectModel.View View => _View?.Value;
         public int ViewIndex => _View?.Index ?? EntityRelation.None;
+        public Vim.Format.ObjectModel.GraphicOverride GraphicOverride => _GraphicOverride?.Value;
+        public int GraphicOverrideIndex => _GraphicOverride?.Index ?? EntityRelation.None;
         public FilterInView()
         {
             _View = new Relation<Vim.Format.ObjectModel.View>();
+            _GraphicOverride = new Relation<Vim.Format.ObjectModel.GraphicOverride>();
         }
         
         public override bool FieldsAreEqual(object obj)
@@ -895,7 +910,8 @@ namespace Vim.Format.ObjectModel {
                     (IsEnabled == other.IsEnabled) &&
                     (IsVisible == other.IsVisible) &&
                     (HasOverrides == other.HasOverrides) &&
-                    (_View?.Index == other._View?.Index);
+                    (_View?.Index == other._View?.Index) &&
+                    (_GraphicOverride?.Index == other._GraphicOverride?.Index);
                 if (!fieldsAreEqual)
                 {
                     return false;
@@ -931,6 +947,355 @@ namespace Vim.Format.ObjectModel {
                     (BubbleAtEnd1 == other.BubbleAtEnd1) &&
                     (_Grid?.Index == other._Grid?.Index) &&
                     (_View?.Index == other._View?.Index);
+                if (!fieldsAreEqual)
+                {
+                    return false;
+                }
+                
+                return true;
+            }
+            return false;
+        }
+        
+    } // end of class
+    
+    // AUTO-GENERATED
+    public partial class LinePattern
+    {
+        public Vim.Format.ObjectModel.BimDocument BimDocument => _BimDocument?.Value;
+        public int BimDocumentIndex => _BimDocument?.Index ?? EntityRelation.None;
+        public LinePattern()
+        {
+            _BimDocument = new Relation<Vim.Format.ObjectModel.BimDocument>();
+        }
+        
+        public override bool FieldsAreEqual(object obj)
+        {
+            if ((obj is LinePattern other))
+            {
+                var fieldsAreEqual =
+                    (Index == other.Index) &&
+                    (Name == other.Name) &&
+                    (ElementId == other.ElementId) &&
+                    (UniqueId == other.UniqueId) &&
+                    (IsSolid == other.IsSolid) &&
+                    (Segments == other.Segments) &&
+                    (_BimDocument?.Index == other._BimDocument?.Index);
+                if (!fieldsAreEqual)
+                {
+                    return false;
+                }
+                
+                return true;
+            }
+            return false;
+        }
+        
+    } // end of class
+    
+    // AUTO-GENERATED
+    public partial class FillPattern
+    {
+        public Vim.Format.ObjectModel.BimDocument BimDocument => _BimDocument?.Value;
+        public int BimDocumentIndex => _BimDocument?.Index ?? EntityRelation.None;
+        public FillPattern()
+        {
+            _BimDocument = new Relation<Vim.Format.ObjectModel.BimDocument>();
+        }
+        
+        public override bool FieldsAreEqual(object obj)
+        {
+            if ((obj is FillPattern other))
+            {
+                var fieldsAreEqual =
+                    (Index == other.Index) &&
+                    (Name == other.Name) &&
+                    (ElementId == other.ElementId) &&
+                    (UniqueId == other.UniqueId) &&
+                    (Target == other.Target) &&
+                    (IsSolidFill == other.IsSolidFill) &&
+                    (HostOrientation == other.HostOrientation) &&
+                    (GridCount == other.GridCount) &&
+                    (_BimDocument?.Index == other._BimDocument?.Index);
+                if (!fieldsAreEqual)
+                {
+                    return false;
+                }
+                
+                return true;
+            }
+            return false;
+        }
+        
+    } // end of class
+    
+    // AUTO-GENERATED
+    public partial class FillGrid
+    {
+        public Vim.Format.ObjectModel.FillPattern FillPattern => _FillPattern?.Value;
+        public int FillPatternIndex => _FillPattern?.Index ?? EntityRelation.None;
+        public FillGrid()
+        {
+            _FillPattern = new Relation<Vim.Format.ObjectModel.FillPattern>();
+        }
+        
+        public override bool FieldsAreEqual(object obj)
+        {
+            if ((obj is FillGrid other))
+            {
+                var fieldsAreEqual =
+                    (Index == other.Index) &&
+                    (OrderIndex == other.OrderIndex) &&
+                    (Angle == other.Angle) &&
+                    (Origin_X == other.Origin_X) &&
+                    (Origin_Y == other.Origin_Y) &&
+                    (Offset == other.Offset) &&
+                    (Shift == other.Shift) &&
+                    (Segments == other.Segments) &&
+                    (_FillPattern?.Index == other._FillPattern?.Index);
+                if (!fieldsAreEqual)
+                {
+                    return false;
+                }
+                
+                return true;
+            }
+            return false;
+        }
+        
+    } // end of class
+    
+    // AUTO-GENERATED
+    public partial class LineWeight
+    {
+        public Vim.Format.ObjectModel.BimDocument BimDocument => _BimDocument?.Value;
+        public int BimDocumentIndex => _BimDocument?.Index ?? EntityRelation.None;
+        public LineWeight()
+        {
+            _BimDocument = new Relation<Vim.Format.ObjectModel.BimDocument>();
+        }
+        
+        public override bool FieldsAreEqual(object obj)
+        {
+            if ((obj is LineWeight other))
+            {
+                var fieldsAreEqual =
+                    (Index == other.Index) &&
+                    (Table == other.Table) &&
+                    (Scale == other.Scale) &&
+                    (Number == other.Number) &&
+                    (Width == other.Width) &&
+                    (_BimDocument?.Index == other._BimDocument?.Index);
+                if (!fieldsAreEqual)
+                {
+                    return false;
+                }
+                
+                return true;
+            }
+            return false;
+        }
+        
+    } // end of class
+    
+    // AUTO-GENERATED
+    public partial class GraphicOverride
+    {
+        public Vim.Format.ObjectModel.LinePattern ProjectionLinePattern => _ProjectionLinePattern?.Value;
+        public int ProjectionLinePatternIndex => _ProjectionLinePattern?.Index ?? EntityRelation.None;
+        public Vim.Format.ObjectModel.LinePattern CutLinePattern => _CutLinePattern?.Value;
+        public int CutLinePatternIndex => _CutLinePattern?.Index ?? EntityRelation.None;
+        public Vim.Format.ObjectModel.FillPattern SurfaceForegroundPattern => _SurfaceForegroundPattern?.Value;
+        public int SurfaceForegroundPatternIndex => _SurfaceForegroundPattern?.Index ?? EntityRelation.None;
+        public Vim.Format.ObjectModel.FillPattern SurfaceBackgroundPattern => _SurfaceBackgroundPattern?.Value;
+        public int SurfaceBackgroundPatternIndex => _SurfaceBackgroundPattern?.Index ?? EntityRelation.None;
+        public Vim.Format.ObjectModel.FillPattern CutForegroundPattern => _CutForegroundPattern?.Value;
+        public int CutForegroundPatternIndex => _CutForegroundPattern?.Index ?? EntityRelation.None;
+        public Vim.Format.ObjectModel.FillPattern CutBackgroundPattern => _CutBackgroundPattern?.Value;
+        public int CutBackgroundPatternIndex => _CutBackgroundPattern?.Index ?? EntityRelation.None;
+        public GraphicOverride()
+        {
+            _ProjectionLinePattern = new Relation<Vim.Format.ObjectModel.LinePattern>();
+            _CutLinePattern = new Relation<Vim.Format.ObjectModel.LinePattern>();
+            _SurfaceForegroundPattern = new Relation<Vim.Format.ObjectModel.FillPattern>();
+            _SurfaceBackgroundPattern = new Relation<Vim.Format.ObjectModel.FillPattern>();
+            _CutForegroundPattern = new Relation<Vim.Format.ObjectModel.FillPattern>();
+            _CutBackgroundPattern = new Relation<Vim.Format.ObjectModel.FillPattern>();
+        }
+        
+        public override bool FieldsAreEqual(object obj)
+        {
+            if ((obj is GraphicOverride other))
+            {
+                var fieldsAreEqual =
+                    (Index == other.Index) &&
+                    (ProjectionLineWeight == other.ProjectionLineWeight) &&
+                    (HasProjectionLineColor == other.HasProjectionLineColor) &&
+                    (ProjectionLineColor_X == other.ProjectionLineColor_X) &&
+                    (ProjectionLineColor_Y == other.ProjectionLineColor_Y) &&
+                    (ProjectionLineColor_Z == other.ProjectionLineColor_Z) &&
+                    (CutLineWeight == other.CutLineWeight) &&
+                    (HasCutLineColor == other.HasCutLineColor) &&
+                    (CutLineColor_X == other.CutLineColor_X) &&
+                    (CutLineColor_Y == other.CutLineColor_Y) &&
+                    (CutLineColor_Z == other.CutLineColor_Z) &&
+                    (SurfaceForegroundPatternVisible == other.SurfaceForegroundPatternVisible) &&
+                    (HasSurfaceForegroundPatternColor == other.HasSurfaceForegroundPatternColor) &&
+                    (SurfaceForegroundPatternColor_X == other.SurfaceForegroundPatternColor_X) &&
+                    (SurfaceForegroundPatternColor_Y == other.SurfaceForegroundPatternColor_Y) &&
+                    (SurfaceForegroundPatternColor_Z == other.SurfaceForegroundPatternColor_Z) &&
+                    (SurfaceBackgroundPatternVisible == other.SurfaceBackgroundPatternVisible) &&
+                    (HasSurfaceBackgroundPatternColor == other.HasSurfaceBackgroundPatternColor) &&
+                    (SurfaceBackgroundPatternColor_X == other.SurfaceBackgroundPatternColor_X) &&
+                    (SurfaceBackgroundPatternColor_Y == other.SurfaceBackgroundPatternColor_Y) &&
+                    (SurfaceBackgroundPatternColor_Z == other.SurfaceBackgroundPatternColor_Z) &&
+                    (CutForegroundPatternVisible == other.CutForegroundPatternVisible) &&
+                    (HasCutForegroundPatternColor == other.HasCutForegroundPatternColor) &&
+                    (CutForegroundPatternColor_X == other.CutForegroundPatternColor_X) &&
+                    (CutForegroundPatternColor_Y == other.CutForegroundPatternColor_Y) &&
+                    (CutForegroundPatternColor_Z == other.CutForegroundPatternColor_Z) &&
+                    (CutBackgroundPatternVisible == other.CutBackgroundPatternVisible) &&
+                    (HasCutBackgroundPatternColor == other.HasCutBackgroundPatternColor) &&
+                    (CutBackgroundPatternColor_X == other.CutBackgroundPatternColor_X) &&
+                    (CutBackgroundPatternColor_Y == other.CutBackgroundPatternColor_Y) &&
+                    (CutBackgroundPatternColor_Z == other.CutBackgroundPatternColor_Z) &&
+                    (Transparency == other.Transparency) &&
+                    (Halftone == other.Halftone) &&
+                    (DetailLevel == other.DetailLevel) &&
+                    (Key == other.Key) &&
+                    (_ProjectionLinePattern?.Index == other._ProjectionLinePattern?.Index) &&
+                    (_CutLinePattern?.Index == other._CutLinePattern?.Index) &&
+                    (_SurfaceForegroundPattern?.Index == other._SurfaceForegroundPattern?.Index) &&
+                    (_SurfaceBackgroundPattern?.Index == other._SurfaceBackgroundPattern?.Index) &&
+                    (_CutForegroundPattern?.Index == other._CutForegroundPattern?.Index) &&
+                    (_CutBackgroundPattern?.Index == other._CutBackgroundPattern?.Index);
+                if (!fieldsAreEqual)
+                {
+                    return false;
+                }
+                
+                return true;
+            }
+            return false;
+        }
+        
+    } // end of class
+    
+    // AUTO-GENERATED
+    public partial class CategoryInView
+    {
+        public Vim.Format.ObjectModel.View View => _View?.Value;
+        public int ViewIndex => _View?.Index ?? EntityRelation.None;
+        public Vim.Format.ObjectModel.Category Category => _Category?.Value;
+        public int CategoryIndex => _Category?.Index ?? EntityRelation.None;
+        public Vim.Format.ObjectModel.GraphicOverride GraphicOverride => _GraphicOverride?.Value;
+        public int GraphicOverrideIndex => _GraphicOverride?.Index ?? EntityRelation.None;
+        public CategoryInView()
+        {
+            _View = new Relation<Vim.Format.ObjectModel.View>();
+            _Category = new Relation<Vim.Format.ObjectModel.Category>();
+            _GraphicOverride = new Relation<Vim.Format.ObjectModel.GraphicOverride>();
+        }
+        
+        public override bool FieldsAreEqual(object obj)
+        {
+            if ((obj is CategoryInView other))
+            {
+                var fieldsAreEqual =
+                    (Index == other.Index) &&
+                    (IsHidden == other.IsHidden) &&
+                    (_View?.Index == other._View?.Index) &&
+                    (_Category?.Index == other._Category?.Index) &&
+                    (_GraphicOverride?.Index == other._GraphicOverride?.Index);
+                if (!fieldsAreEqual)
+                {
+                    return false;
+                }
+                
+                return true;
+            }
+            return false;
+        }
+        
+    } // end of class
+    
+    // AUTO-GENERATED
+    public partial class ElementOverrideInView
+    {
+        public Vim.Format.ObjectModel.View View => _View?.Value;
+        public int ViewIndex => _View?.Index ?? EntityRelation.None;
+        public Vim.Format.ObjectModel.GraphicOverride GraphicOverride => _GraphicOverride?.Value;
+        public int GraphicOverrideIndex => _GraphicOverride?.Index ?? EntityRelation.None;
+        public Vim.Format.ObjectModel.Element Element => _Element?.Value;
+        public int ElementIndex => _Element?.Index ?? EntityRelation.None;
+        public ElementOverrideInView()
+        {
+            _View = new Relation<Vim.Format.ObjectModel.View>();
+            _GraphicOverride = new Relation<Vim.Format.ObjectModel.GraphicOverride>();
+            _Element = new Relation<Vim.Format.ObjectModel.Element>();
+        }
+        
+        public override bool FieldsAreEqual(object obj)
+        {
+            if ((obj is ElementOverrideInView other))
+            {
+                var fieldsAreEqual =
+                    (Index == other.Index) &&
+                    (IsHidden == other.IsHidden) &&
+                    (_View?.Index == other._View?.Index) &&
+                    (_GraphicOverride?.Index == other._GraphicOverride?.Index) &&
+                    (_Element?.Index == other._Element?.Index);
+                if (!fieldsAreEqual)
+                {
+                    return false;
+                }
+                
+                return true;
+            }
+            return false;
+        }
+        
+    } // end of class
+    
+    // AUTO-GENERATED
+    public partial class PhaseGraphicOverride
+    {
+        public Vim.Format.ObjectModel.LinePattern ProjectionLinePattern => _ProjectionLinePattern?.Value;
+        public int ProjectionLinePatternIndex => _ProjectionLinePattern?.Index ?? EntityRelation.None;
+        public Vim.Format.ObjectModel.LinePattern CutLinePattern => _CutLinePattern?.Value;
+        public int CutLinePatternIndex => _CutLinePattern?.Index ?? EntityRelation.None;
+        public Vim.Format.ObjectModel.BimDocument BimDocument => _BimDocument?.Value;
+        public int BimDocumentIndex => _BimDocument?.Index ?? EntityRelation.None;
+        public PhaseGraphicOverride()
+        {
+            _ProjectionLinePattern = new Relation<Vim.Format.ObjectModel.LinePattern>();
+            _CutLinePattern = new Relation<Vim.Format.ObjectModel.LinePattern>();
+            _BimDocument = new Relation<Vim.Format.ObjectModel.BimDocument>();
+        }
+        
+        public override bool FieldsAreEqual(object obj)
+        {
+            if ((obj is PhaseGraphicOverride other))
+            {
+                var fieldsAreEqual =
+                    (Index == other.Index) &&
+                    (Status == other.Status) &&
+                    (Scale == other.Scale) &&
+                    (HasProjectionLine == other.HasProjectionLine) &&
+                    (ProjectionLineColor_X == other.ProjectionLineColor_X) &&
+                    (ProjectionLineColor_Y == other.ProjectionLineColor_Y) &&
+                    (ProjectionLineColor_Z == other.ProjectionLineColor_Z) &&
+                    (ProjectionLineWidth == other.ProjectionLineWidth) &&
+                    (ProjectionLineWeight == other.ProjectionLineWeight) &&
+                    (HasCutLine == other.HasCutLine) &&
+                    (CutLineColor_X == other.CutLineColor_X) &&
+                    (CutLineColor_Y == other.CutLineColor_Y) &&
+                    (CutLineColor_Z == other.CutLineColor_Z) &&
+                    (CutLineWidth == other.CutLineWidth) &&
+                    (CutLineWeight == other.CutLineWeight) &&
+                    (_ProjectionLinePattern?.Index == other._ProjectionLinePattern?.Index) &&
+                    (_CutLinePattern?.Index == other._CutLinePattern?.Index) &&
+                    (_BimDocument?.Index == other._BimDocument?.Index);
                 if (!fieldsAreEqual)
                 {
                     return false;
@@ -1155,12 +1520,24 @@ namespace Vim.Format.ObjectModel {
         public int ColorTextureFileIndex => _ColorTextureFile?.Index ?? EntityRelation.None;
         public Vim.Format.ObjectModel.Asset NormalTextureFile => _NormalTextureFile?.Value;
         public int NormalTextureFileIndex => _NormalTextureFile?.Index ?? EntityRelation.None;
+        public Vim.Format.ObjectModel.FillPattern SurfaceForegroundPattern => _SurfaceForegroundPattern?.Value;
+        public int SurfaceForegroundPatternIndex => _SurfaceForegroundPattern?.Index ?? EntityRelation.None;
+        public Vim.Format.ObjectModel.FillPattern SurfaceBackgroundPattern => _SurfaceBackgroundPattern?.Value;
+        public int SurfaceBackgroundPatternIndex => _SurfaceBackgroundPattern?.Index ?? EntityRelation.None;
+        public Vim.Format.ObjectModel.FillPattern CutForegroundPattern => _CutForegroundPattern?.Value;
+        public int CutForegroundPatternIndex => _CutForegroundPattern?.Index ?? EntityRelation.None;
+        public Vim.Format.ObjectModel.FillPattern CutBackgroundPattern => _CutBackgroundPattern?.Value;
+        public int CutBackgroundPatternIndex => _CutBackgroundPattern?.Index ?? EntityRelation.None;
         public Vim.Format.ObjectModel.Element Element => _Element?.Value;
         public int ElementIndex => _Element?.Index ?? EntityRelation.None;
         public Material()
         {
             _ColorTextureFile = new Relation<Vim.Format.ObjectModel.Asset>();
             _NormalTextureFile = new Relation<Vim.Format.ObjectModel.Asset>();
+            _SurfaceForegroundPattern = new Relation<Vim.Format.ObjectModel.FillPattern>();
+            _SurfaceBackgroundPattern = new Relation<Vim.Format.ObjectModel.FillPattern>();
+            _CutForegroundPattern = new Relation<Vim.Format.ObjectModel.FillPattern>();
+            _CutBackgroundPattern = new Relation<Vim.Format.ObjectModel.FillPattern>();
             _Element = new Relation<Vim.Format.ObjectModel.Element>();
         }
         
@@ -1187,8 +1564,29 @@ namespace Vim.Format.ObjectModel {
                     (Glossiness == other.Glossiness) &&
                     (Smoothness == other.Smoothness) &&
                     (Transparency == other.Transparency) &&
+                    (GraphicsRead == other.GraphicsRead) &&
+                    (ShadingColor_X == other.ShadingColor_X) &&
+                    (ShadingColor_Y == other.ShadingColor_Y) &&
+                    (ShadingColor_Z == other.ShadingColor_Z) &&
+                    (UseRenderAppearanceForShading == other.UseRenderAppearanceForShading) &&
+                    (SurfaceForegroundPatternColor_X == other.SurfaceForegroundPatternColor_X) &&
+                    (SurfaceForegroundPatternColor_Y == other.SurfaceForegroundPatternColor_Y) &&
+                    (SurfaceForegroundPatternColor_Z == other.SurfaceForegroundPatternColor_Z) &&
+                    (SurfaceBackgroundPatternColor_X == other.SurfaceBackgroundPatternColor_X) &&
+                    (SurfaceBackgroundPatternColor_Y == other.SurfaceBackgroundPatternColor_Y) &&
+                    (SurfaceBackgroundPatternColor_Z == other.SurfaceBackgroundPatternColor_Z) &&
+                    (CutForegroundPatternColor_X == other.CutForegroundPatternColor_X) &&
+                    (CutForegroundPatternColor_Y == other.CutForegroundPatternColor_Y) &&
+                    (CutForegroundPatternColor_Z == other.CutForegroundPatternColor_Z) &&
+                    (CutBackgroundPatternColor_X == other.CutBackgroundPatternColor_X) &&
+                    (CutBackgroundPatternColor_Y == other.CutBackgroundPatternColor_Y) &&
+                    (CutBackgroundPatternColor_Z == other.CutBackgroundPatternColor_Z) &&
                     (_ColorTextureFile?.Index == other._ColorTextureFile?.Index) &&
                     (_NormalTextureFile?.Index == other._NormalTextureFile?.Index) &&
+                    (_SurfaceForegroundPattern?.Index == other._SurfaceForegroundPattern?.Index) &&
+                    (_SurfaceBackgroundPattern?.Index == other._SurfaceBackgroundPattern?.Index) &&
+                    (_CutForegroundPattern?.Index == other._CutForegroundPattern?.Index) &&
+                    (_CutBackgroundPattern?.Index == other._CutBackgroundPattern?.Index) &&
                     (_Element?.Index == other._Element?.Index);
                 if (!fieldsAreEqual)
                 {
@@ -1320,6 +1718,52 @@ namespace Vim.Format.ObjectModel {
             {
                 var fieldsAreEqual =
                     (Index == other.Index) &&
+                    (_Element?.Index == other._Element?.Index);
+                if (!fieldsAreEqual)
+                {
+                    return false;
+                }
+                
+                return true;
+            }
+            return false;
+        }
+        
+    } // end of class
+    
+    // AUTO-GENERATED
+    public partial class GeometryPiece
+    {
+        public Vim.Format.ObjectModel.Node Node => _Node?.Value;
+        public int NodeIndex => _Node?.Index ?? EntityRelation.None;
+        public Vim.Format.ObjectModel.Material Material => _Material?.Value;
+        public int MaterialIndex => _Material?.Index ?? EntityRelation.None;
+        public Vim.Format.ObjectModel.Category Subcategory => _Subcategory?.Value;
+        public int SubcategoryIndex => _Subcategory?.Index ?? EntityRelation.None;
+        public Vim.Format.ObjectModel.CompoundStructureLayer CompoundStructureLayer => _CompoundStructureLayer?.Value;
+        public int CompoundStructureLayerIndex => _CompoundStructureLayer?.Index ?? EntityRelation.None;
+        public Vim.Format.ObjectModel.Element Element => _Element?.Value;
+        public int ElementIndex => _Element?.Index ?? EntityRelation.None;
+        public GeometryPiece()
+        {
+            _Node = new Relation<Vim.Format.ObjectModel.Node>();
+            _Material = new Relation<Vim.Format.ObjectModel.Material>();
+            _Subcategory = new Relation<Vim.Format.ObjectModel.Category>();
+            _CompoundStructureLayer = new Relation<Vim.Format.ObjectModel.CompoundStructureLayer>();
+            _Element = new Relation<Vim.Format.ObjectModel.Element>();
+        }
+        
+        public override bool FieldsAreEqual(object obj)
+        {
+            if ((obj is GeometryPiece other))
+            {
+                var fieldsAreEqual =
+                    (Index == other.Index) &&
+                    (SubmeshIndex == other.SubmeshIndex) &&
+                    (_Node?.Index == other._Node?.Index) &&
+                    (_Material?.Index == other._Material?.Index) &&
+                    (_Subcategory?.Index == other._Subcategory?.Index) &&
+                    (_CompoundStructureLayer?.Index == other._CompoundStructureLayer?.Index) &&
                     (_Element?.Index == other._Element?.Index);
                 if (!fieldsAreEqual)
                 {
@@ -3075,10 +3519,20 @@ namespace Vim.Format.ObjectModel {
         public Double GetCategoryLineColor_Z(int index, Double defaultValue = default) => CategoryLineColor_Z?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
         public IArray<String> CategoryBuiltInCategory { get; }
         public String GetCategoryBuiltInCategory(int index, String defaultValue = "") => CategoryBuiltInCategory?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Int32> CategoryProjectionLineWeight { get; }
+        public Int32 GetCategoryProjectionLineWeight(int index, Int32 defaultValue = default) => CategoryProjectionLineWeight?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Int32> CategoryCutLineWeight { get; }
+        public Int32 GetCategoryCutLineWeight(int index, Int32 defaultValue = default) => CategoryCutLineWeight?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Boolean> CategoryIsCuttable { get; }
+        public Boolean GetCategoryIsCuttable(int index, Boolean defaultValue = default) => CategoryIsCuttable?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
         public IArray<int> CategoryParentIndex { get; }
         public int GetCategoryParentIndex(int index) => CategoryParentIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
         public IArray<int> CategoryMaterialIndex { get; }
         public int GetCategoryMaterialIndex(int index) => CategoryMaterialIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
+        public IArray<int> CategoryProjectionLinePatternIndex { get; }
+        public int GetCategoryProjectionLinePatternIndex(int index) => CategoryProjectionLinePatternIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
+        public IArray<int> CategoryCutLinePatternIndex { get; }
+        public int GetCategoryCutLinePatternIndex(int index) => CategoryCutLinePatternIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
         public int NumCategory => CategoryEntityTable?.NumRows ?? 0;
         public IArray<Category> CategoryList { get; }
         public Category GetCategory(int n)
@@ -3094,8 +3548,13 @@ namespace Vim.Format.ObjectModel {
             r.LineColor_Y = CategoryLineColor_Y.ElementAtOrDefault(n);
             r.LineColor_Z = CategoryLineColor_Z.ElementAtOrDefault(n);
             r.BuiltInCategory = CategoryBuiltInCategory.ElementAtOrDefault(n);
+            r.ProjectionLineWeight = CategoryProjectionLineWeight.ElementAtOrDefault(n);
+            r.CutLineWeight = CategoryCutLineWeight.ElementAtOrDefault(n);
+            r.IsCuttable = CategoryIsCuttable.ElementAtOrDefault(n);
             r._Parent = new Relation<Vim.Format.ObjectModel.Category>(GetCategoryParentIndex(n), GetCategory);
             r._Material = new Relation<Vim.Format.ObjectModel.Material>(GetCategoryMaterialIndex(n), GetMaterial);
+            r._ProjectionLinePattern = new Relation<Vim.Format.ObjectModel.LinePattern>(GetCategoryProjectionLinePatternIndex(n), GetLinePattern);
+            r._CutLinePattern = new Relation<Vim.Format.ObjectModel.LinePattern>(GetCategoryCutLinePatternIndex(n), GetLinePattern);
             return r;
         }
         
@@ -3337,6 +3796,8 @@ namespace Vim.Format.ObjectModel {
         public Int32 GetViewHiddenElementCount(int index, Int32 defaultValue = default) => ViewHiddenElementCount?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
         public IArray<String> ViewTemplateControlledSettings { get; }
         public String GetViewTemplateControlledSettings(int index, String defaultValue = "") => ViewTemplateControlledSettings?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Boolean> ViewGraphicsRead { get; }
+        public Boolean GetViewGraphicsRead(int index, Boolean defaultValue = default) => ViewGraphicsRead?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
         public IArray<int> ViewCameraIndex { get; }
         public int GetViewCameraIndex(int index) => ViewCameraIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
         public IArray<int> ViewFamilyTypeIndex { get; }
@@ -3395,6 +3856,7 @@ namespace Vim.Format.ObjectModel {
             r.ElementOverrideCount = ViewElementOverrideCount.ElementAtOrDefault(n);
             r.HiddenElementCount = ViewHiddenElementCount.ElementAtOrDefault(n);
             r.TemplateControlledSettings = ViewTemplateControlledSettings.ElementAtOrDefault(n);
+            r.GraphicsRead = ViewGraphicsRead.ElementAtOrDefault(n);
             r._Camera = new Relation<Vim.Format.ObjectModel.Camera>(GetViewCameraIndex(n), GetCamera);
             r._FamilyType = new Relation<Vim.Format.ObjectModel.FamilyType>(GetViewFamilyTypeIndex(n), GetFamilyType);
             r._ViewTemplate = new Relation<Vim.Format.ObjectModel.Element>(GetViewViewTemplateIndex(n), GetElement);
@@ -3427,6 +3889,8 @@ namespace Vim.Format.ObjectModel {
         public Boolean GetFilterInViewHasOverrides(int index, Boolean defaultValue = default) => FilterInViewHasOverrides?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
         public IArray<int> FilterInViewViewIndex { get; }
         public int GetFilterInViewViewIndex(int index) => FilterInViewViewIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
+        public IArray<int> FilterInViewGraphicOverrideIndex { get; }
+        public int GetFilterInViewGraphicOverrideIndex(int index) => FilterInViewGraphicOverrideIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
         public int NumFilterInView => FilterInViewEntityTable?.NumRows ?? 0;
         public IArray<FilterInView> FilterInViewList { get; }
         public FilterInView GetFilterInView(int n)
@@ -3443,6 +3907,7 @@ namespace Vim.Format.ObjectModel {
             r.IsVisible = FilterInViewIsVisible.ElementAtOrDefault(n);
             r.HasOverrides = FilterInViewHasOverrides.ElementAtOrDefault(n);
             r._View = new Relation<Vim.Format.ObjectModel.View>(GetFilterInViewViewIndex(n), GetView);
+            r._GraphicOverride = new Relation<Vim.Format.ObjectModel.GraphicOverride>(GetFilterInViewGraphicOverrideIndex(n), GetGraphicOverride);
             return r;
         }
         
@@ -3471,6 +3936,410 @@ namespace Vim.Format.ObjectModel {
             r.BubbleAtEnd1 = GridInViewBubbleAtEnd1.ElementAtOrDefault(n);
             r._Grid = new Relation<Vim.Format.ObjectModel.Grid>(GetGridInViewGridIndex(n), GetGrid);
             r._View = new Relation<Vim.Format.ObjectModel.View>(GetGridInViewViewIndex(n), GetView);
+            return r;
+        }
+        
+        
+        // LinePattern
+        
+        public EntityTable LinePatternEntityTable { get; }
+        
+        public IArray<String> LinePatternName { get; }
+        public String GetLinePatternName(int index, String defaultValue = "") => LinePatternName?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Int64> LinePatternElementId { get; }
+        public Int64 GetLinePatternElementId(int index, Int64 defaultValue = default) => LinePatternElementId?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<String> LinePatternUniqueId { get; }
+        public String GetLinePatternUniqueId(int index, String defaultValue = "") => LinePatternUniqueId?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Boolean> LinePatternIsSolid { get; }
+        public Boolean GetLinePatternIsSolid(int index, Boolean defaultValue = default) => LinePatternIsSolid?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<String> LinePatternSegments { get; }
+        public String GetLinePatternSegments(int index, String defaultValue = "") => LinePatternSegments?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<int> LinePatternBimDocumentIndex { get; }
+        public int GetLinePatternBimDocumentIndex(int index) => LinePatternBimDocumentIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
+        public int NumLinePattern => LinePatternEntityTable?.NumRows ?? 0;
+        public IArray<LinePattern> LinePatternList { get; }
+        public LinePattern GetLinePattern(int n)
+        {
+            if (n < 0) return null;
+            var r = new LinePattern();
+            r.Document = Document;
+            r.Index = n;
+            r.Name = LinePatternName.ElementAtOrDefault(n);
+            r.ElementId = LinePatternElementId.ElementAtOrDefault(n);
+            r.UniqueId = LinePatternUniqueId.ElementAtOrDefault(n);
+            r.IsSolid = LinePatternIsSolid.ElementAtOrDefault(n);
+            r.Segments = LinePatternSegments.ElementAtOrDefault(n);
+            r._BimDocument = new Relation<Vim.Format.ObjectModel.BimDocument>(GetLinePatternBimDocumentIndex(n), GetBimDocument);
+            return r;
+        }
+        
+        
+        // FillPattern
+        
+        public EntityTable FillPatternEntityTable { get; }
+        
+        public IArray<String> FillPatternName { get; }
+        public String GetFillPatternName(int index, String defaultValue = "") => FillPatternName?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Int64> FillPatternElementId { get; }
+        public Int64 GetFillPatternElementId(int index, Int64 defaultValue = default) => FillPatternElementId?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<String> FillPatternUniqueId { get; }
+        public String GetFillPatternUniqueId(int index, String defaultValue = "") => FillPatternUniqueId?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<String> FillPatternTarget { get; }
+        public String GetFillPatternTarget(int index, String defaultValue = "") => FillPatternTarget?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Boolean> FillPatternIsSolidFill { get; }
+        public Boolean GetFillPatternIsSolidFill(int index, Boolean defaultValue = default) => FillPatternIsSolidFill?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<String> FillPatternHostOrientation { get; }
+        public String GetFillPatternHostOrientation(int index, String defaultValue = "") => FillPatternHostOrientation?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Int32> FillPatternGridCount { get; }
+        public Int32 GetFillPatternGridCount(int index, Int32 defaultValue = default) => FillPatternGridCount?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<int> FillPatternBimDocumentIndex { get; }
+        public int GetFillPatternBimDocumentIndex(int index) => FillPatternBimDocumentIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
+        public int NumFillPattern => FillPatternEntityTable?.NumRows ?? 0;
+        public IArray<FillPattern> FillPatternList { get; }
+        public FillPattern GetFillPattern(int n)
+        {
+            if (n < 0) return null;
+            var r = new FillPattern();
+            r.Document = Document;
+            r.Index = n;
+            r.Name = FillPatternName.ElementAtOrDefault(n);
+            r.ElementId = FillPatternElementId.ElementAtOrDefault(n);
+            r.UniqueId = FillPatternUniqueId.ElementAtOrDefault(n);
+            r.Target = FillPatternTarget.ElementAtOrDefault(n);
+            r.IsSolidFill = FillPatternIsSolidFill.ElementAtOrDefault(n);
+            r.HostOrientation = FillPatternHostOrientation.ElementAtOrDefault(n);
+            r.GridCount = FillPatternGridCount.ElementAtOrDefault(n);
+            r._BimDocument = new Relation<Vim.Format.ObjectModel.BimDocument>(GetFillPatternBimDocumentIndex(n), GetBimDocument);
+            return r;
+        }
+        
+        
+        // FillGrid
+        
+        public EntityTable FillGridEntityTable { get; }
+        
+        public IArray<Int32> FillGridOrderIndex { get; }
+        public Int32 GetFillGridOrderIndex(int index, Int32 defaultValue = default) => FillGridOrderIndex?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> FillGridAngle { get; }
+        public Double GetFillGridAngle(int index, Double defaultValue = default) => FillGridAngle?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> FillGridOrigin_X { get; }
+        public Double GetFillGridOrigin_X(int index, Double defaultValue = default) => FillGridOrigin_X?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> FillGridOrigin_Y { get; }
+        public Double GetFillGridOrigin_Y(int index, Double defaultValue = default) => FillGridOrigin_Y?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> FillGridOffset { get; }
+        public Double GetFillGridOffset(int index, Double defaultValue = default) => FillGridOffset?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> FillGridShift { get; }
+        public Double GetFillGridShift(int index, Double defaultValue = default) => FillGridShift?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<String> FillGridSegments { get; }
+        public String GetFillGridSegments(int index, String defaultValue = "") => FillGridSegments?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<int> FillGridFillPatternIndex { get; }
+        public int GetFillGridFillPatternIndex(int index) => FillGridFillPatternIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
+        public int NumFillGrid => FillGridEntityTable?.NumRows ?? 0;
+        public IArray<FillGrid> FillGridList { get; }
+        public FillGrid GetFillGrid(int n)
+        {
+            if (n < 0) return null;
+            var r = new FillGrid();
+            r.Document = Document;
+            r.Index = n;
+            r.OrderIndex = FillGridOrderIndex.ElementAtOrDefault(n);
+            r.Angle = FillGridAngle.ElementAtOrDefault(n);
+            r.Origin_X = FillGridOrigin_X.ElementAtOrDefault(n);
+            r.Origin_Y = FillGridOrigin_Y.ElementAtOrDefault(n);
+            r.Offset = FillGridOffset.ElementAtOrDefault(n);
+            r.Shift = FillGridShift.ElementAtOrDefault(n);
+            r.Segments = FillGridSegments.ElementAtOrDefault(n);
+            r._FillPattern = new Relation<Vim.Format.ObjectModel.FillPattern>(GetFillGridFillPatternIndex(n), GetFillPattern);
+            return r;
+        }
+        
+        
+        // LineWeight
+        
+        public EntityTable LineWeightEntityTable { get; }
+        
+        public IArray<String> LineWeightTable { get; }
+        public String GetLineWeightTable(int index, String defaultValue = "") => LineWeightTable?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Int32> LineWeightScale { get; }
+        public Int32 GetLineWeightScale(int index, Int32 defaultValue = default) => LineWeightScale?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Int32> LineWeightNumber { get; }
+        public Int32 GetLineWeightNumber(int index, Int32 defaultValue = default) => LineWeightNumber?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> LineWeightWidth { get; }
+        public Double GetLineWeightWidth(int index, Double defaultValue = default) => LineWeightWidth?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<int> LineWeightBimDocumentIndex { get; }
+        public int GetLineWeightBimDocumentIndex(int index) => LineWeightBimDocumentIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
+        public int NumLineWeight => LineWeightEntityTable?.NumRows ?? 0;
+        public IArray<LineWeight> LineWeightList { get; }
+        public LineWeight GetLineWeight(int n)
+        {
+            if (n < 0) return null;
+            var r = new LineWeight();
+            r.Document = Document;
+            r.Index = n;
+            r.Table = LineWeightTable.ElementAtOrDefault(n);
+            r.Scale = LineWeightScale.ElementAtOrDefault(n);
+            r.Number = LineWeightNumber.ElementAtOrDefault(n);
+            r.Width = LineWeightWidth.ElementAtOrDefault(n);
+            r._BimDocument = new Relation<Vim.Format.ObjectModel.BimDocument>(GetLineWeightBimDocumentIndex(n), GetBimDocument);
+            return r;
+        }
+        
+        
+        // GraphicOverride
+        
+        public EntityTable GraphicOverrideEntityTable { get; }
+        
+        public IArray<Int32> GraphicOverrideProjectionLineWeight { get; }
+        public Int32 GetGraphicOverrideProjectionLineWeight(int index, Int32 defaultValue = default) => GraphicOverrideProjectionLineWeight?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Boolean> GraphicOverrideHasProjectionLineColor { get; }
+        public Boolean GetGraphicOverrideHasProjectionLineColor(int index, Boolean defaultValue = default) => GraphicOverrideHasProjectionLineColor?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> GraphicOverrideProjectionLineColor_X { get; }
+        public Double GetGraphicOverrideProjectionLineColor_X(int index, Double defaultValue = default) => GraphicOverrideProjectionLineColor_X?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> GraphicOverrideProjectionLineColor_Y { get; }
+        public Double GetGraphicOverrideProjectionLineColor_Y(int index, Double defaultValue = default) => GraphicOverrideProjectionLineColor_Y?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> GraphicOverrideProjectionLineColor_Z { get; }
+        public Double GetGraphicOverrideProjectionLineColor_Z(int index, Double defaultValue = default) => GraphicOverrideProjectionLineColor_Z?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Int32> GraphicOverrideCutLineWeight { get; }
+        public Int32 GetGraphicOverrideCutLineWeight(int index, Int32 defaultValue = default) => GraphicOverrideCutLineWeight?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Boolean> GraphicOverrideHasCutLineColor { get; }
+        public Boolean GetGraphicOverrideHasCutLineColor(int index, Boolean defaultValue = default) => GraphicOverrideHasCutLineColor?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> GraphicOverrideCutLineColor_X { get; }
+        public Double GetGraphicOverrideCutLineColor_X(int index, Double defaultValue = default) => GraphicOverrideCutLineColor_X?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> GraphicOverrideCutLineColor_Y { get; }
+        public Double GetGraphicOverrideCutLineColor_Y(int index, Double defaultValue = default) => GraphicOverrideCutLineColor_Y?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> GraphicOverrideCutLineColor_Z { get; }
+        public Double GetGraphicOverrideCutLineColor_Z(int index, Double defaultValue = default) => GraphicOverrideCutLineColor_Z?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Boolean> GraphicOverrideSurfaceForegroundPatternVisible { get; }
+        public Boolean GetGraphicOverrideSurfaceForegroundPatternVisible(int index, Boolean defaultValue = default) => GraphicOverrideSurfaceForegroundPatternVisible?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Boolean> GraphicOverrideHasSurfaceForegroundPatternColor { get; }
+        public Boolean GetGraphicOverrideHasSurfaceForegroundPatternColor(int index, Boolean defaultValue = default) => GraphicOverrideHasSurfaceForegroundPatternColor?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> GraphicOverrideSurfaceForegroundPatternColor_X { get; }
+        public Double GetGraphicOverrideSurfaceForegroundPatternColor_X(int index, Double defaultValue = default) => GraphicOverrideSurfaceForegroundPatternColor_X?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> GraphicOverrideSurfaceForegroundPatternColor_Y { get; }
+        public Double GetGraphicOverrideSurfaceForegroundPatternColor_Y(int index, Double defaultValue = default) => GraphicOverrideSurfaceForegroundPatternColor_Y?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> GraphicOverrideSurfaceForegroundPatternColor_Z { get; }
+        public Double GetGraphicOverrideSurfaceForegroundPatternColor_Z(int index, Double defaultValue = default) => GraphicOverrideSurfaceForegroundPatternColor_Z?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Boolean> GraphicOverrideSurfaceBackgroundPatternVisible { get; }
+        public Boolean GetGraphicOverrideSurfaceBackgroundPatternVisible(int index, Boolean defaultValue = default) => GraphicOverrideSurfaceBackgroundPatternVisible?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Boolean> GraphicOverrideHasSurfaceBackgroundPatternColor { get; }
+        public Boolean GetGraphicOverrideHasSurfaceBackgroundPatternColor(int index, Boolean defaultValue = default) => GraphicOverrideHasSurfaceBackgroundPatternColor?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> GraphicOverrideSurfaceBackgroundPatternColor_X { get; }
+        public Double GetGraphicOverrideSurfaceBackgroundPatternColor_X(int index, Double defaultValue = default) => GraphicOverrideSurfaceBackgroundPatternColor_X?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> GraphicOverrideSurfaceBackgroundPatternColor_Y { get; }
+        public Double GetGraphicOverrideSurfaceBackgroundPatternColor_Y(int index, Double defaultValue = default) => GraphicOverrideSurfaceBackgroundPatternColor_Y?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> GraphicOverrideSurfaceBackgroundPatternColor_Z { get; }
+        public Double GetGraphicOverrideSurfaceBackgroundPatternColor_Z(int index, Double defaultValue = default) => GraphicOverrideSurfaceBackgroundPatternColor_Z?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Boolean> GraphicOverrideCutForegroundPatternVisible { get; }
+        public Boolean GetGraphicOverrideCutForegroundPatternVisible(int index, Boolean defaultValue = default) => GraphicOverrideCutForegroundPatternVisible?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Boolean> GraphicOverrideHasCutForegroundPatternColor { get; }
+        public Boolean GetGraphicOverrideHasCutForegroundPatternColor(int index, Boolean defaultValue = default) => GraphicOverrideHasCutForegroundPatternColor?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> GraphicOverrideCutForegroundPatternColor_X { get; }
+        public Double GetGraphicOverrideCutForegroundPatternColor_X(int index, Double defaultValue = default) => GraphicOverrideCutForegroundPatternColor_X?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> GraphicOverrideCutForegroundPatternColor_Y { get; }
+        public Double GetGraphicOverrideCutForegroundPatternColor_Y(int index, Double defaultValue = default) => GraphicOverrideCutForegroundPatternColor_Y?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> GraphicOverrideCutForegroundPatternColor_Z { get; }
+        public Double GetGraphicOverrideCutForegroundPatternColor_Z(int index, Double defaultValue = default) => GraphicOverrideCutForegroundPatternColor_Z?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Boolean> GraphicOverrideCutBackgroundPatternVisible { get; }
+        public Boolean GetGraphicOverrideCutBackgroundPatternVisible(int index, Boolean defaultValue = default) => GraphicOverrideCutBackgroundPatternVisible?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Boolean> GraphicOverrideHasCutBackgroundPatternColor { get; }
+        public Boolean GetGraphicOverrideHasCutBackgroundPatternColor(int index, Boolean defaultValue = default) => GraphicOverrideHasCutBackgroundPatternColor?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> GraphicOverrideCutBackgroundPatternColor_X { get; }
+        public Double GetGraphicOverrideCutBackgroundPatternColor_X(int index, Double defaultValue = default) => GraphicOverrideCutBackgroundPatternColor_X?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> GraphicOverrideCutBackgroundPatternColor_Y { get; }
+        public Double GetGraphicOverrideCutBackgroundPatternColor_Y(int index, Double defaultValue = default) => GraphicOverrideCutBackgroundPatternColor_Y?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> GraphicOverrideCutBackgroundPatternColor_Z { get; }
+        public Double GetGraphicOverrideCutBackgroundPatternColor_Z(int index, Double defaultValue = default) => GraphicOverrideCutBackgroundPatternColor_Z?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Int32> GraphicOverrideTransparency { get; }
+        public Int32 GetGraphicOverrideTransparency(int index, Int32 defaultValue = default) => GraphicOverrideTransparency?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Boolean> GraphicOverrideHalftone { get; }
+        public Boolean GetGraphicOverrideHalftone(int index, Boolean defaultValue = default) => GraphicOverrideHalftone?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Int32> GraphicOverrideDetailLevel { get; }
+        public Int32 GetGraphicOverrideDetailLevel(int index, Int32 defaultValue = default) => GraphicOverrideDetailLevel?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<String> GraphicOverrideKey { get; }
+        public String GetGraphicOverrideKey(int index, String defaultValue = "") => GraphicOverrideKey?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<int> GraphicOverrideProjectionLinePatternIndex { get; }
+        public int GetGraphicOverrideProjectionLinePatternIndex(int index) => GraphicOverrideProjectionLinePatternIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
+        public IArray<int> GraphicOverrideCutLinePatternIndex { get; }
+        public int GetGraphicOverrideCutLinePatternIndex(int index) => GraphicOverrideCutLinePatternIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
+        public IArray<int> GraphicOverrideSurfaceForegroundPatternIndex { get; }
+        public int GetGraphicOverrideSurfaceForegroundPatternIndex(int index) => GraphicOverrideSurfaceForegroundPatternIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
+        public IArray<int> GraphicOverrideSurfaceBackgroundPatternIndex { get; }
+        public int GetGraphicOverrideSurfaceBackgroundPatternIndex(int index) => GraphicOverrideSurfaceBackgroundPatternIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
+        public IArray<int> GraphicOverrideCutForegroundPatternIndex { get; }
+        public int GetGraphicOverrideCutForegroundPatternIndex(int index) => GraphicOverrideCutForegroundPatternIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
+        public IArray<int> GraphicOverrideCutBackgroundPatternIndex { get; }
+        public int GetGraphicOverrideCutBackgroundPatternIndex(int index) => GraphicOverrideCutBackgroundPatternIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
+        public int NumGraphicOverride => GraphicOverrideEntityTable?.NumRows ?? 0;
+        public IArray<GraphicOverride> GraphicOverrideList { get; }
+        public GraphicOverride GetGraphicOverride(int n)
+        {
+            if (n < 0) return null;
+            var r = new GraphicOverride();
+            r.Document = Document;
+            r.Index = n;
+            r.ProjectionLineWeight = GraphicOverrideProjectionLineWeight.ElementAtOrDefault(n);
+            r.HasProjectionLineColor = GraphicOverrideHasProjectionLineColor.ElementAtOrDefault(n);
+            r.ProjectionLineColor_X = GraphicOverrideProjectionLineColor_X.ElementAtOrDefault(n);
+            r.ProjectionLineColor_Y = GraphicOverrideProjectionLineColor_Y.ElementAtOrDefault(n);
+            r.ProjectionLineColor_Z = GraphicOverrideProjectionLineColor_Z.ElementAtOrDefault(n);
+            r.CutLineWeight = GraphicOverrideCutLineWeight.ElementAtOrDefault(n);
+            r.HasCutLineColor = GraphicOverrideHasCutLineColor.ElementAtOrDefault(n);
+            r.CutLineColor_X = GraphicOverrideCutLineColor_X.ElementAtOrDefault(n);
+            r.CutLineColor_Y = GraphicOverrideCutLineColor_Y.ElementAtOrDefault(n);
+            r.CutLineColor_Z = GraphicOverrideCutLineColor_Z.ElementAtOrDefault(n);
+            r.SurfaceForegroundPatternVisible = GraphicOverrideSurfaceForegroundPatternVisible.ElementAtOrDefault(n);
+            r.HasSurfaceForegroundPatternColor = GraphicOverrideHasSurfaceForegroundPatternColor.ElementAtOrDefault(n);
+            r.SurfaceForegroundPatternColor_X = GraphicOverrideSurfaceForegroundPatternColor_X.ElementAtOrDefault(n);
+            r.SurfaceForegroundPatternColor_Y = GraphicOverrideSurfaceForegroundPatternColor_Y.ElementAtOrDefault(n);
+            r.SurfaceForegroundPatternColor_Z = GraphicOverrideSurfaceForegroundPatternColor_Z.ElementAtOrDefault(n);
+            r.SurfaceBackgroundPatternVisible = GraphicOverrideSurfaceBackgroundPatternVisible.ElementAtOrDefault(n);
+            r.HasSurfaceBackgroundPatternColor = GraphicOverrideHasSurfaceBackgroundPatternColor.ElementAtOrDefault(n);
+            r.SurfaceBackgroundPatternColor_X = GraphicOverrideSurfaceBackgroundPatternColor_X.ElementAtOrDefault(n);
+            r.SurfaceBackgroundPatternColor_Y = GraphicOverrideSurfaceBackgroundPatternColor_Y.ElementAtOrDefault(n);
+            r.SurfaceBackgroundPatternColor_Z = GraphicOverrideSurfaceBackgroundPatternColor_Z.ElementAtOrDefault(n);
+            r.CutForegroundPatternVisible = GraphicOverrideCutForegroundPatternVisible.ElementAtOrDefault(n);
+            r.HasCutForegroundPatternColor = GraphicOverrideHasCutForegroundPatternColor.ElementAtOrDefault(n);
+            r.CutForegroundPatternColor_X = GraphicOverrideCutForegroundPatternColor_X.ElementAtOrDefault(n);
+            r.CutForegroundPatternColor_Y = GraphicOverrideCutForegroundPatternColor_Y.ElementAtOrDefault(n);
+            r.CutForegroundPatternColor_Z = GraphicOverrideCutForegroundPatternColor_Z.ElementAtOrDefault(n);
+            r.CutBackgroundPatternVisible = GraphicOverrideCutBackgroundPatternVisible.ElementAtOrDefault(n);
+            r.HasCutBackgroundPatternColor = GraphicOverrideHasCutBackgroundPatternColor.ElementAtOrDefault(n);
+            r.CutBackgroundPatternColor_X = GraphicOverrideCutBackgroundPatternColor_X.ElementAtOrDefault(n);
+            r.CutBackgroundPatternColor_Y = GraphicOverrideCutBackgroundPatternColor_Y.ElementAtOrDefault(n);
+            r.CutBackgroundPatternColor_Z = GraphicOverrideCutBackgroundPatternColor_Z.ElementAtOrDefault(n);
+            r.Transparency = GraphicOverrideTransparency.ElementAtOrDefault(n);
+            r.Halftone = GraphicOverrideHalftone.ElementAtOrDefault(n);
+            r.DetailLevel = GraphicOverrideDetailLevel.ElementAtOrDefault(n);
+            r.Key = GraphicOverrideKey.ElementAtOrDefault(n);
+            r._ProjectionLinePattern = new Relation<Vim.Format.ObjectModel.LinePattern>(GetGraphicOverrideProjectionLinePatternIndex(n), GetLinePattern);
+            r._CutLinePattern = new Relation<Vim.Format.ObjectModel.LinePattern>(GetGraphicOverrideCutLinePatternIndex(n), GetLinePattern);
+            r._SurfaceForegroundPattern = new Relation<Vim.Format.ObjectModel.FillPattern>(GetGraphicOverrideSurfaceForegroundPatternIndex(n), GetFillPattern);
+            r._SurfaceBackgroundPattern = new Relation<Vim.Format.ObjectModel.FillPattern>(GetGraphicOverrideSurfaceBackgroundPatternIndex(n), GetFillPattern);
+            r._CutForegroundPattern = new Relation<Vim.Format.ObjectModel.FillPattern>(GetGraphicOverrideCutForegroundPatternIndex(n), GetFillPattern);
+            r._CutBackgroundPattern = new Relation<Vim.Format.ObjectModel.FillPattern>(GetGraphicOverrideCutBackgroundPatternIndex(n), GetFillPattern);
+            return r;
+        }
+        
+        
+        // CategoryInView
+        
+        public EntityTable CategoryInViewEntityTable { get; }
+        
+        public IArray<Boolean> CategoryInViewIsHidden { get; }
+        public Boolean GetCategoryInViewIsHidden(int index, Boolean defaultValue = default) => CategoryInViewIsHidden?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<int> CategoryInViewViewIndex { get; }
+        public int GetCategoryInViewViewIndex(int index) => CategoryInViewViewIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
+        public IArray<int> CategoryInViewCategoryIndex { get; }
+        public int GetCategoryInViewCategoryIndex(int index) => CategoryInViewCategoryIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
+        public IArray<int> CategoryInViewGraphicOverrideIndex { get; }
+        public int GetCategoryInViewGraphicOverrideIndex(int index) => CategoryInViewGraphicOverrideIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
+        public int NumCategoryInView => CategoryInViewEntityTable?.NumRows ?? 0;
+        public IArray<CategoryInView> CategoryInViewList { get; }
+        public CategoryInView GetCategoryInView(int n)
+        {
+            if (n < 0) return null;
+            var r = new CategoryInView();
+            r.Document = Document;
+            r.Index = n;
+            r.IsHidden = CategoryInViewIsHidden.ElementAtOrDefault(n);
+            r._View = new Relation<Vim.Format.ObjectModel.View>(GetCategoryInViewViewIndex(n), GetView);
+            r._Category = new Relation<Vim.Format.ObjectModel.Category>(GetCategoryInViewCategoryIndex(n), GetCategory);
+            r._GraphicOverride = new Relation<Vim.Format.ObjectModel.GraphicOverride>(GetCategoryInViewGraphicOverrideIndex(n), GetGraphicOverride);
+            return r;
+        }
+        
+        
+        // ElementOverrideInView
+        
+        public EntityTable ElementOverrideInViewEntityTable { get; }
+        
+        public IArray<Boolean> ElementOverrideInViewIsHidden { get; }
+        public Boolean GetElementOverrideInViewIsHidden(int index, Boolean defaultValue = default) => ElementOverrideInViewIsHidden?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<int> ElementOverrideInViewViewIndex { get; }
+        public int GetElementOverrideInViewViewIndex(int index) => ElementOverrideInViewViewIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
+        public IArray<int> ElementOverrideInViewGraphicOverrideIndex { get; }
+        public int GetElementOverrideInViewGraphicOverrideIndex(int index) => ElementOverrideInViewGraphicOverrideIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
+        public IArray<int> ElementOverrideInViewElementIndex { get; }
+        public int GetElementOverrideInViewElementIndex(int index) => ElementOverrideInViewElementIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
+        public int NumElementOverrideInView => ElementOverrideInViewEntityTable?.NumRows ?? 0;
+        public IArray<ElementOverrideInView> ElementOverrideInViewList { get; }
+        public ElementOverrideInView GetElementOverrideInView(int n)
+        {
+            if (n < 0) return null;
+            var r = new ElementOverrideInView();
+            r.Document = Document;
+            r.Index = n;
+            r.IsHidden = ElementOverrideInViewIsHidden.ElementAtOrDefault(n);
+            r._View = new Relation<Vim.Format.ObjectModel.View>(GetElementOverrideInViewViewIndex(n), GetView);
+            r._GraphicOverride = new Relation<Vim.Format.ObjectModel.GraphicOverride>(GetElementOverrideInViewGraphicOverrideIndex(n), GetGraphicOverride);
+            r._Element = new Relation<Vim.Format.ObjectModel.Element>(GetElementOverrideInViewElementIndex(n), GetElement);
+            return r;
+        }
+        
+        
+        // PhaseGraphicOverride
+        
+        public EntityTable PhaseGraphicOverrideEntityTable { get; }
+        
+        public IArray<String> PhaseGraphicOverrideStatus { get; }
+        public String GetPhaseGraphicOverrideStatus(int index, String defaultValue = "") => PhaseGraphicOverrideStatus?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Int32> PhaseGraphicOverrideScale { get; }
+        public Int32 GetPhaseGraphicOverrideScale(int index, Int32 defaultValue = default) => PhaseGraphicOverrideScale?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Boolean> PhaseGraphicOverrideHasProjectionLine { get; }
+        public Boolean GetPhaseGraphicOverrideHasProjectionLine(int index, Boolean defaultValue = default) => PhaseGraphicOverrideHasProjectionLine?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> PhaseGraphicOverrideProjectionLineColor_X { get; }
+        public Double GetPhaseGraphicOverrideProjectionLineColor_X(int index, Double defaultValue = default) => PhaseGraphicOverrideProjectionLineColor_X?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> PhaseGraphicOverrideProjectionLineColor_Y { get; }
+        public Double GetPhaseGraphicOverrideProjectionLineColor_Y(int index, Double defaultValue = default) => PhaseGraphicOverrideProjectionLineColor_Y?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> PhaseGraphicOverrideProjectionLineColor_Z { get; }
+        public Double GetPhaseGraphicOverrideProjectionLineColor_Z(int index, Double defaultValue = default) => PhaseGraphicOverrideProjectionLineColor_Z?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> PhaseGraphicOverrideProjectionLineWidth { get; }
+        public Double GetPhaseGraphicOverrideProjectionLineWidth(int index, Double defaultValue = default) => PhaseGraphicOverrideProjectionLineWidth?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Int32> PhaseGraphicOverrideProjectionLineWeight { get; }
+        public Int32 GetPhaseGraphicOverrideProjectionLineWeight(int index, Int32 defaultValue = default) => PhaseGraphicOverrideProjectionLineWeight?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Boolean> PhaseGraphicOverrideHasCutLine { get; }
+        public Boolean GetPhaseGraphicOverrideHasCutLine(int index, Boolean defaultValue = default) => PhaseGraphicOverrideHasCutLine?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> PhaseGraphicOverrideCutLineColor_X { get; }
+        public Double GetPhaseGraphicOverrideCutLineColor_X(int index, Double defaultValue = default) => PhaseGraphicOverrideCutLineColor_X?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> PhaseGraphicOverrideCutLineColor_Y { get; }
+        public Double GetPhaseGraphicOverrideCutLineColor_Y(int index, Double defaultValue = default) => PhaseGraphicOverrideCutLineColor_Y?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> PhaseGraphicOverrideCutLineColor_Z { get; }
+        public Double GetPhaseGraphicOverrideCutLineColor_Z(int index, Double defaultValue = default) => PhaseGraphicOverrideCutLineColor_Z?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> PhaseGraphicOverrideCutLineWidth { get; }
+        public Double GetPhaseGraphicOverrideCutLineWidth(int index, Double defaultValue = default) => PhaseGraphicOverrideCutLineWidth?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Int32> PhaseGraphicOverrideCutLineWeight { get; }
+        public Int32 GetPhaseGraphicOverrideCutLineWeight(int index, Int32 defaultValue = default) => PhaseGraphicOverrideCutLineWeight?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<int> PhaseGraphicOverrideProjectionLinePatternIndex { get; }
+        public int GetPhaseGraphicOverrideProjectionLinePatternIndex(int index) => PhaseGraphicOverrideProjectionLinePatternIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
+        public IArray<int> PhaseGraphicOverrideCutLinePatternIndex { get; }
+        public int GetPhaseGraphicOverrideCutLinePatternIndex(int index) => PhaseGraphicOverrideCutLinePatternIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
+        public IArray<int> PhaseGraphicOverrideBimDocumentIndex { get; }
+        public int GetPhaseGraphicOverrideBimDocumentIndex(int index) => PhaseGraphicOverrideBimDocumentIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
+        public int NumPhaseGraphicOverride => PhaseGraphicOverrideEntityTable?.NumRows ?? 0;
+        public IArray<PhaseGraphicOverride> PhaseGraphicOverrideList { get; }
+        public PhaseGraphicOverride GetPhaseGraphicOverride(int n)
+        {
+            if (n < 0) return null;
+            var r = new PhaseGraphicOverride();
+            r.Document = Document;
+            r.Index = n;
+            r.Status = PhaseGraphicOverrideStatus.ElementAtOrDefault(n);
+            r.Scale = PhaseGraphicOverrideScale.ElementAtOrDefault(n);
+            r.HasProjectionLine = PhaseGraphicOverrideHasProjectionLine.ElementAtOrDefault(n);
+            r.ProjectionLineColor_X = PhaseGraphicOverrideProjectionLineColor_X.ElementAtOrDefault(n);
+            r.ProjectionLineColor_Y = PhaseGraphicOverrideProjectionLineColor_Y.ElementAtOrDefault(n);
+            r.ProjectionLineColor_Z = PhaseGraphicOverrideProjectionLineColor_Z.ElementAtOrDefault(n);
+            r.ProjectionLineWidth = PhaseGraphicOverrideProjectionLineWidth.ElementAtOrDefault(n);
+            r.ProjectionLineWeight = PhaseGraphicOverrideProjectionLineWeight.ElementAtOrDefault(n);
+            r.HasCutLine = PhaseGraphicOverrideHasCutLine.ElementAtOrDefault(n);
+            r.CutLineColor_X = PhaseGraphicOverrideCutLineColor_X.ElementAtOrDefault(n);
+            r.CutLineColor_Y = PhaseGraphicOverrideCutLineColor_Y.ElementAtOrDefault(n);
+            r.CutLineColor_Z = PhaseGraphicOverrideCutLineColor_Z.ElementAtOrDefault(n);
+            r.CutLineWidth = PhaseGraphicOverrideCutLineWidth.ElementAtOrDefault(n);
+            r.CutLineWeight = PhaseGraphicOverrideCutLineWeight.ElementAtOrDefault(n);
+            r._ProjectionLinePattern = new Relation<Vim.Format.ObjectModel.LinePattern>(GetPhaseGraphicOverrideProjectionLinePatternIndex(n), GetLinePattern);
+            r._CutLinePattern = new Relation<Vim.Format.ObjectModel.LinePattern>(GetPhaseGraphicOverrideCutLinePatternIndex(n), GetLinePattern);
+            r._BimDocument = new Relation<Vim.Format.ObjectModel.BimDocument>(GetPhaseGraphicOverrideBimDocumentIndex(n), GetBimDocument);
             return r;
         }
         
@@ -3684,10 +4553,52 @@ namespace Vim.Format.ObjectModel {
         public Double GetMaterialSmoothness(int index, Double defaultValue = default) => MaterialSmoothness?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
         public IArray<Double> MaterialTransparency { get; }
         public Double GetMaterialTransparency(int index, Double defaultValue = default) => MaterialTransparency?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Boolean> MaterialGraphicsRead { get; }
+        public Boolean GetMaterialGraphicsRead(int index, Boolean defaultValue = default) => MaterialGraphicsRead?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> MaterialShadingColor_X { get; }
+        public Double GetMaterialShadingColor_X(int index, Double defaultValue = default) => MaterialShadingColor_X?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> MaterialShadingColor_Y { get; }
+        public Double GetMaterialShadingColor_Y(int index, Double defaultValue = default) => MaterialShadingColor_Y?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> MaterialShadingColor_Z { get; }
+        public Double GetMaterialShadingColor_Z(int index, Double defaultValue = default) => MaterialShadingColor_Z?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Boolean> MaterialUseRenderAppearanceForShading { get; }
+        public Boolean GetMaterialUseRenderAppearanceForShading(int index, Boolean defaultValue = default) => MaterialUseRenderAppearanceForShading?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> MaterialSurfaceForegroundPatternColor_X { get; }
+        public Double GetMaterialSurfaceForegroundPatternColor_X(int index, Double defaultValue = default) => MaterialSurfaceForegroundPatternColor_X?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> MaterialSurfaceForegroundPatternColor_Y { get; }
+        public Double GetMaterialSurfaceForegroundPatternColor_Y(int index, Double defaultValue = default) => MaterialSurfaceForegroundPatternColor_Y?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> MaterialSurfaceForegroundPatternColor_Z { get; }
+        public Double GetMaterialSurfaceForegroundPatternColor_Z(int index, Double defaultValue = default) => MaterialSurfaceForegroundPatternColor_Z?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> MaterialSurfaceBackgroundPatternColor_X { get; }
+        public Double GetMaterialSurfaceBackgroundPatternColor_X(int index, Double defaultValue = default) => MaterialSurfaceBackgroundPatternColor_X?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> MaterialSurfaceBackgroundPatternColor_Y { get; }
+        public Double GetMaterialSurfaceBackgroundPatternColor_Y(int index, Double defaultValue = default) => MaterialSurfaceBackgroundPatternColor_Y?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> MaterialSurfaceBackgroundPatternColor_Z { get; }
+        public Double GetMaterialSurfaceBackgroundPatternColor_Z(int index, Double defaultValue = default) => MaterialSurfaceBackgroundPatternColor_Z?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> MaterialCutForegroundPatternColor_X { get; }
+        public Double GetMaterialCutForegroundPatternColor_X(int index, Double defaultValue = default) => MaterialCutForegroundPatternColor_X?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> MaterialCutForegroundPatternColor_Y { get; }
+        public Double GetMaterialCutForegroundPatternColor_Y(int index, Double defaultValue = default) => MaterialCutForegroundPatternColor_Y?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> MaterialCutForegroundPatternColor_Z { get; }
+        public Double GetMaterialCutForegroundPatternColor_Z(int index, Double defaultValue = default) => MaterialCutForegroundPatternColor_Z?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> MaterialCutBackgroundPatternColor_X { get; }
+        public Double GetMaterialCutBackgroundPatternColor_X(int index, Double defaultValue = default) => MaterialCutBackgroundPatternColor_X?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> MaterialCutBackgroundPatternColor_Y { get; }
+        public Double GetMaterialCutBackgroundPatternColor_Y(int index, Double defaultValue = default) => MaterialCutBackgroundPatternColor_Y?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> MaterialCutBackgroundPatternColor_Z { get; }
+        public Double GetMaterialCutBackgroundPatternColor_Z(int index, Double defaultValue = default) => MaterialCutBackgroundPatternColor_Z?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
         public IArray<int> MaterialColorTextureFileIndex { get; }
         public int GetMaterialColorTextureFileIndex(int index) => MaterialColorTextureFileIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
         public IArray<int> MaterialNormalTextureFileIndex { get; }
         public int GetMaterialNormalTextureFileIndex(int index) => MaterialNormalTextureFileIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
+        public IArray<int> MaterialSurfaceForegroundPatternIndex { get; }
+        public int GetMaterialSurfaceForegroundPatternIndex(int index) => MaterialSurfaceForegroundPatternIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
+        public IArray<int> MaterialSurfaceBackgroundPatternIndex { get; }
+        public int GetMaterialSurfaceBackgroundPatternIndex(int index) => MaterialSurfaceBackgroundPatternIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
+        public IArray<int> MaterialCutForegroundPatternIndex { get; }
+        public int GetMaterialCutForegroundPatternIndex(int index) => MaterialCutForegroundPatternIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
+        public IArray<int> MaterialCutBackgroundPatternIndex { get; }
+        public int GetMaterialCutBackgroundPatternIndex(int index) => MaterialCutBackgroundPatternIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
         public IArray<int> MaterialElementIndex { get; }
         public int GetMaterialElementIndex(int index) => MaterialElementIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
         public int NumMaterial => MaterialEntityTable?.NumRows ?? 0;
@@ -3715,8 +4626,29 @@ namespace Vim.Format.ObjectModel {
             r.Glossiness = MaterialGlossiness.ElementAtOrDefault(n);
             r.Smoothness = MaterialSmoothness.ElementAtOrDefault(n);
             r.Transparency = MaterialTransparency.ElementAtOrDefault(n);
+            r.GraphicsRead = MaterialGraphicsRead.ElementAtOrDefault(n);
+            r.ShadingColor_X = MaterialShadingColor_X.ElementAtOrDefault(n);
+            r.ShadingColor_Y = MaterialShadingColor_Y.ElementAtOrDefault(n);
+            r.ShadingColor_Z = MaterialShadingColor_Z.ElementAtOrDefault(n);
+            r.UseRenderAppearanceForShading = MaterialUseRenderAppearanceForShading.ElementAtOrDefault(n);
+            r.SurfaceForegroundPatternColor_X = MaterialSurfaceForegroundPatternColor_X.ElementAtOrDefault(n);
+            r.SurfaceForegroundPatternColor_Y = MaterialSurfaceForegroundPatternColor_Y.ElementAtOrDefault(n);
+            r.SurfaceForegroundPatternColor_Z = MaterialSurfaceForegroundPatternColor_Z.ElementAtOrDefault(n);
+            r.SurfaceBackgroundPatternColor_X = MaterialSurfaceBackgroundPatternColor_X.ElementAtOrDefault(n);
+            r.SurfaceBackgroundPatternColor_Y = MaterialSurfaceBackgroundPatternColor_Y.ElementAtOrDefault(n);
+            r.SurfaceBackgroundPatternColor_Z = MaterialSurfaceBackgroundPatternColor_Z.ElementAtOrDefault(n);
+            r.CutForegroundPatternColor_X = MaterialCutForegroundPatternColor_X.ElementAtOrDefault(n);
+            r.CutForegroundPatternColor_Y = MaterialCutForegroundPatternColor_Y.ElementAtOrDefault(n);
+            r.CutForegroundPatternColor_Z = MaterialCutForegroundPatternColor_Z.ElementAtOrDefault(n);
+            r.CutBackgroundPatternColor_X = MaterialCutBackgroundPatternColor_X.ElementAtOrDefault(n);
+            r.CutBackgroundPatternColor_Y = MaterialCutBackgroundPatternColor_Y.ElementAtOrDefault(n);
+            r.CutBackgroundPatternColor_Z = MaterialCutBackgroundPatternColor_Z.ElementAtOrDefault(n);
             r._ColorTextureFile = new Relation<Vim.Format.ObjectModel.Asset>(GetMaterialColorTextureFileIndex(n), GetAsset);
             r._NormalTextureFile = new Relation<Vim.Format.ObjectModel.Asset>(GetMaterialNormalTextureFileIndex(n), GetAsset);
+            r._SurfaceForegroundPattern = new Relation<Vim.Format.ObjectModel.FillPattern>(GetMaterialSurfaceForegroundPatternIndex(n), GetFillPattern);
+            r._SurfaceBackgroundPattern = new Relation<Vim.Format.ObjectModel.FillPattern>(GetMaterialSurfaceBackgroundPatternIndex(n), GetFillPattern);
+            r._CutForegroundPattern = new Relation<Vim.Format.ObjectModel.FillPattern>(GetMaterialCutForegroundPatternIndex(n), GetFillPattern);
+            r._CutBackgroundPattern = new Relation<Vim.Format.ObjectModel.FillPattern>(GetMaterialCutBackgroundPatternIndex(n), GetFillPattern);
             r._Element = new Relation<Vim.Format.ObjectModel.Element>(GetMaterialElementIndex(n), GetElement);
             return r;
         }
@@ -3821,6 +4753,40 @@ namespace Vim.Format.ObjectModel {
             r.Document = Document;
             r.Index = n;
             r._Element = new Relation<Vim.Format.ObjectModel.Element>(GetNodeElementIndex(n), GetElement);
+            return r;
+        }
+        
+        
+        // GeometryPiece
+        
+        public EntityTable GeometryPieceEntityTable { get; }
+        
+        public IArray<Int32> GeometryPieceSubmeshIndex { get; }
+        public Int32 GetGeometryPieceSubmeshIndex(int index, Int32 defaultValue = default) => GeometryPieceSubmeshIndex?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<int> GeometryPieceNodeIndex { get; }
+        public int GetGeometryPieceNodeIndex(int index) => GeometryPieceNodeIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
+        public IArray<int> GeometryPieceMaterialIndex { get; }
+        public int GetGeometryPieceMaterialIndex(int index) => GeometryPieceMaterialIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
+        public IArray<int> GeometryPieceSubcategoryIndex { get; }
+        public int GetGeometryPieceSubcategoryIndex(int index) => GeometryPieceSubcategoryIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
+        public IArray<int> GeometryPieceCompoundStructureLayerIndex { get; }
+        public int GetGeometryPieceCompoundStructureLayerIndex(int index) => GeometryPieceCompoundStructureLayerIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
+        public IArray<int> GeometryPieceElementIndex { get; }
+        public int GetGeometryPieceElementIndex(int index) => GeometryPieceElementIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
+        public int NumGeometryPiece => GeometryPieceEntityTable?.NumRows ?? 0;
+        public IArray<GeometryPiece> GeometryPieceList { get; }
+        public GeometryPiece GetGeometryPiece(int n)
+        {
+            if (n < 0) return null;
+            var r = new GeometryPiece();
+            r.Document = Document;
+            r.Index = n;
+            r.SubmeshIndex = GeometryPieceSubmeshIndex.ElementAtOrDefault(n);
+            r._Node = new Relation<Vim.Format.ObjectModel.Node>(GetGeometryPieceNodeIndex(n), GetNode);
+            r._Material = new Relation<Vim.Format.ObjectModel.Material>(GetGeometryPieceMaterialIndex(n), GetMaterial);
+            r._Subcategory = new Relation<Vim.Format.ObjectModel.Category>(GetGeometryPieceSubcategoryIndex(n), GetCategory);
+            r._CompoundStructureLayer = new Relation<Vim.Format.ObjectModel.CompoundStructureLayer>(GetGeometryPieceCompoundStructureLayerIndex(n), GetCompoundStructureLayer);
+            r._Element = new Relation<Vim.Format.ObjectModel.Element>(GetGeometryPieceElementIndex(n), GetElement);
             return r;
         }
         
@@ -4924,6 +5890,14 @@ namespace Vim.Format.ObjectModel {
             {"Vim.View", ViewList.ToEnumerable()},
             {"Vim.FilterInView", FilterInViewList.ToEnumerable()},
             {"Vim.GridInView", GridInViewList.ToEnumerable()},
+            {"Vim.LinePattern", LinePatternList.ToEnumerable()},
+            {"Vim.FillPattern", FillPatternList.ToEnumerable()},
+            {"Vim.FillGrid", FillGridList.ToEnumerable()},
+            {"Vim.LineWeight", LineWeightList.ToEnumerable()},
+            {"Vim.GraphicOverride", GraphicOverrideList.ToEnumerable()},
+            {"Vim.CategoryInView", CategoryInViewList.ToEnumerable()},
+            {"Vim.ElementOverrideInView", ElementOverrideInViewList.ToEnumerable()},
+            {"Vim.PhaseGraphicOverride", PhaseGraphicOverrideList.ToEnumerable()},
             {"Vim.ElementInView", ElementInViewList.ToEnumerable()},
             {"Vim.ShapeInView", ShapeInViewList.ToEnumerable()},
             {"Vim.AssetInView", AssetInViewList.ToEnumerable()},
@@ -4935,6 +5909,7 @@ namespace Vim.Format.ObjectModel {
             {"Vim.CompoundStructureLayer", CompoundStructureLayerList.ToEnumerable()},
             {"Vim.CompoundStructure", CompoundStructureList.ToEnumerable()},
             {"Vim.Node", NodeList.ToEnumerable()},
+            {"Vim.GeometryPiece", GeometryPieceList.ToEnumerable()},
             {"Vim.Geometry", GeometryList.ToEnumerable()},
             {"Vim.Shape", ShapeList.ToEnumerable()},
             {"Vim.ShapeCollection", ShapeCollectionList.ToEnumerable()},
@@ -4993,6 +5968,14 @@ namespace Vim.Format.ObjectModel {
             {"Vim.View", typeof(View)},
             {"Vim.FilterInView", typeof(FilterInView)},
             {"Vim.GridInView", typeof(GridInView)},
+            {"Vim.LinePattern", typeof(LinePattern)},
+            {"Vim.FillPattern", typeof(FillPattern)},
+            {"Vim.FillGrid", typeof(FillGrid)},
+            {"Vim.LineWeight", typeof(LineWeight)},
+            {"Vim.GraphicOverride", typeof(GraphicOverride)},
+            {"Vim.CategoryInView", typeof(CategoryInView)},
+            {"Vim.ElementOverrideInView", typeof(ElementOverrideInView)},
+            {"Vim.PhaseGraphicOverride", typeof(PhaseGraphicOverride)},
             {"Vim.ElementInView", typeof(ElementInView)},
             {"Vim.ShapeInView", typeof(ShapeInView)},
             {"Vim.AssetInView", typeof(AssetInView)},
@@ -5004,6 +5987,7 @@ namespace Vim.Format.ObjectModel {
             {"Vim.CompoundStructureLayer", typeof(CompoundStructureLayer)},
             {"Vim.CompoundStructure", typeof(CompoundStructure)},
             {"Vim.Node", typeof(Node)},
+            {"Vim.GeometryPiece", typeof(GeometryPiece)},
             {"Vim.Geometry", typeof(Geometry)},
             {"Vim.Shape", typeof(Shape)},
             {"Vim.ShapeCollection", typeof(ShapeCollection)},
@@ -5064,6 +6048,14 @@ namespace Vim.Format.ObjectModel {
             ViewEntityTable = Document.GetTable("Vim.View");
             FilterInViewEntityTable = Document.GetTable("Vim.FilterInView");
             GridInViewEntityTable = Document.GetTable("Vim.GridInView");
+            LinePatternEntityTable = Document.GetTable("Vim.LinePattern");
+            FillPatternEntityTable = Document.GetTable("Vim.FillPattern");
+            FillGridEntityTable = Document.GetTable("Vim.FillGrid");
+            LineWeightEntityTable = Document.GetTable("Vim.LineWeight");
+            GraphicOverrideEntityTable = Document.GetTable("Vim.GraphicOverride");
+            CategoryInViewEntityTable = Document.GetTable("Vim.CategoryInView");
+            ElementOverrideInViewEntityTable = Document.GetTable("Vim.ElementOverrideInView");
+            PhaseGraphicOverrideEntityTable = Document.GetTable("Vim.PhaseGraphicOverride");
             ElementInViewEntityTable = Document.GetTable("Vim.ElementInView");
             ShapeInViewEntityTable = Document.GetTable("Vim.ShapeInView");
             AssetInViewEntityTable = Document.GetTable("Vim.AssetInView");
@@ -5075,6 +6067,7 @@ namespace Vim.Format.ObjectModel {
             CompoundStructureLayerEntityTable = Document.GetTable("Vim.CompoundStructureLayer");
             CompoundStructureEntityTable = Document.GetTable("Vim.CompoundStructure");
             NodeEntityTable = Document.GetTable("Vim.Node");
+            GeometryPieceEntityTable = Document.GetTable("Vim.GeometryPiece");
             GeometryEntityTable = Document.GetTable("Vim.Geometry");
             ShapeEntityTable = Document.GetTable("Vim.Shape");
             ShapeCollectionEntityTable = Document.GetTable("Vim.ShapeCollection");
@@ -5198,6 +6191,9 @@ namespace Vim.Format.ObjectModel {
             CategoryLineColor_Y = CategoryEntityTable?.GetDataColumnValues<Double>("double:LineColor.Y") ?? Array.Empty<Double>().ToIArray();
             CategoryLineColor_Z = CategoryEntityTable?.GetDataColumnValues<Double>("double:LineColor.Z") ?? Array.Empty<Double>().ToIArray();
             CategoryBuiltInCategory = CategoryEntityTable?.GetStringColumnValues("string:BuiltInCategory") ?? Array.Empty<String>().ToIArray();
+            CategoryProjectionLineWeight = CategoryEntityTable?.GetDataColumnValues<Int32>("int:ProjectionLineWeight") ?? Array.Empty<Int32>().ToIArray();
+            CategoryCutLineWeight = CategoryEntityTable?.GetDataColumnValues<Int32>("int:CutLineWeight") ?? Array.Empty<Int32>().ToIArray();
+            CategoryIsCuttable = CategoryEntityTable?.GetDataColumnValues<Boolean>("byte:IsCuttable") ?? Array.Empty<Boolean>().ToIArray();
             FamilyStructuralMaterialType = FamilyEntityTable?.GetStringColumnValues("string:StructuralMaterialType") ?? Array.Empty<String>().ToIArray();
             FamilyStructuralSectionShape = FamilyEntityTable?.GetStringColumnValues("string:StructuralSectionShape") ?? Array.Empty<String>().ToIArray();
             FamilyIsSystemFamily = FamilyEntityTable?.GetDataColumnValues<Boolean>("byte:IsSystemFamily") ?? Array.Empty<Boolean>().ToIArray();
@@ -5260,6 +6256,7 @@ namespace Vim.Format.ObjectModel {
             ViewElementOverrideCount = ViewEntityTable?.GetDataColumnValues<Int32>("int:ElementOverrideCount") ?? Array.Empty<Int32>().ToIArray();
             ViewHiddenElementCount = ViewEntityTable?.GetDataColumnValues<Int32>("int:HiddenElementCount") ?? Array.Empty<Int32>().ToIArray();
             ViewTemplateControlledSettings = ViewEntityTable?.GetStringColumnValues("string:TemplateControlledSettings") ?? Array.Empty<String>().ToIArray();
+            ViewGraphicsRead = ViewEntityTable?.GetDataColumnValues<Boolean>("byte:GraphicsRead") ?? Array.Empty<Boolean>().ToIArray();
             FilterInViewName = FilterInViewEntityTable?.GetStringColumnValues("string:Name") ?? Array.Empty<String>().ToIArray();
             FilterInViewKind = FilterInViewEntityTable?.GetStringColumnValues("string:Kind") ?? Array.Empty<String>().ToIArray();
             FilterInViewFilterUniqueId = FilterInViewEntityTable?.GetStringColumnValues("string:FilterUniqueId") ?? Array.Empty<String>().ToIArray();
@@ -5269,6 +6266,79 @@ namespace Vim.Format.ObjectModel {
             FilterInViewHasOverrides = FilterInViewEntityTable?.GetDataColumnValues<Boolean>("byte:HasOverrides") ?? Array.Empty<Boolean>().ToIArray();
             GridInViewBubbleAtEnd0 = GridInViewEntityTable?.GetDataColumnValues<Boolean>("byte:BubbleAtEnd0") ?? Array.Empty<Boolean>().ToIArray();
             GridInViewBubbleAtEnd1 = GridInViewEntityTable?.GetDataColumnValues<Boolean>("byte:BubbleAtEnd1") ?? Array.Empty<Boolean>().ToIArray();
+            LinePatternName = LinePatternEntityTable?.GetStringColumnValues("string:Name") ?? Array.Empty<String>().ToIArray();
+            LinePatternElementId = LinePatternEntityTable?.GetDataColumnValues<Int64>("long:ElementId") ?? Array.Empty<Int64>().ToIArray();
+            LinePatternUniqueId = LinePatternEntityTable?.GetStringColumnValues("string:UniqueId") ?? Array.Empty<String>().ToIArray();
+            LinePatternIsSolid = LinePatternEntityTable?.GetDataColumnValues<Boolean>("byte:IsSolid") ?? Array.Empty<Boolean>().ToIArray();
+            LinePatternSegments = LinePatternEntityTable?.GetStringColumnValues("string:Segments") ?? Array.Empty<String>().ToIArray();
+            FillPatternName = FillPatternEntityTable?.GetStringColumnValues("string:Name") ?? Array.Empty<String>().ToIArray();
+            FillPatternElementId = FillPatternEntityTable?.GetDataColumnValues<Int64>("long:ElementId") ?? Array.Empty<Int64>().ToIArray();
+            FillPatternUniqueId = FillPatternEntityTable?.GetStringColumnValues("string:UniqueId") ?? Array.Empty<String>().ToIArray();
+            FillPatternTarget = FillPatternEntityTable?.GetStringColumnValues("string:Target") ?? Array.Empty<String>().ToIArray();
+            FillPatternIsSolidFill = FillPatternEntityTable?.GetDataColumnValues<Boolean>("byte:IsSolidFill") ?? Array.Empty<Boolean>().ToIArray();
+            FillPatternHostOrientation = FillPatternEntityTable?.GetStringColumnValues("string:HostOrientation") ?? Array.Empty<String>().ToIArray();
+            FillPatternGridCount = FillPatternEntityTable?.GetDataColumnValues<Int32>("int:GridCount") ?? Array.Empty<Int32>().ToIArray();
+            FillGridOrderIndex = FillGridEntityTable?.GetDataColumnValues<Int32>("int:OrderIndex") ?? Array.Empty<Int32>().ToIArray();
+            FillGridAngle = FillGridEntityTable?.GetDataColumnValues<Double>("double:Angle") ?? Array.Empty<Double>().ToIArray();
+            FillGridOrigin_X = FillGridEntityTable?.GetDataColumnValues<Double>("double:Origin.X") ?? Array.Empty<Double>().ToIArray();
+            FillGridOrigin_Y = FillGridEntityTable?.GetDataColumnValues<Double>("double:Origin.Y") ?? Array.Empty<Double>().ToIArray();
+            FillGridOffset = FillGridEntityTable?.GetDataColumnValues<Double>("double:Offset") ?? Array.Empty<Double>().ToIArray();
+            FillGridShift = FillGridEntityTable?.GetDataColumnValues<Double>("double:Shift") ?? Array.Empty<Double>().ToIArray();
+            FillGridSegments = FillGridEntityTable?.GetStringColumnValues("string:Segments") ?? Array.Empty<String>().ToIArray();
+            LineWeightTable = LineWeightEntityTable?.GetStringColumnValues("string:Table") ?? Array.Empty<String>().ToIArray();
+            LineWeightScale = LineWeightEntityTable?.GetDataColumnValues<Int32>("int:Scale") ?? Array.Empty<Int32>().ToIArray();
+            LineWeightNumber = LineWeightEntityTable?.GetDataColumnValues<Int32>("int:Number") ?? Array.Empty<Int32>().ToIArray();
+            LineWeightWidth = LineWeightEntityTable?.GetDataColumnValues<Double>("double:Width") ?? Array.Empty<Double>().ToIArray();
+            GraphicOverrideProjectionLineWeight = GraphicOverrideEntityTable?.GetDataColumnValues<Int32>("int:ProjectionLineWeight") ?? Array.Empty<Int32>().ToIArray();
+            GraphicOverrideHasProjectionLineColor = GraphicOverrideEntityTable?.GetDataColumnValues<Boolean>("byte:HasProjectionLineColor") ?? Array.Empty<Boolean>().ToIArray();
+            GraphicOverrideProjectionLineColor_X = GraphicOverrideEntityTable?.GetDataColumnValues<Double>("double:ProjectionLineColor.X") ?? Array.Empty<Double>().ToIArray();
+            GraphicOverrideProjectionLineColor_Y = GraphicOverrideEntityTable?.GetDataColumnValues<Double>("double:ProjectionLineColor.Y") ?? Array.Empty<Double>().ToIArray();
+            GraphicOverrideProjectionLineColor_Z = GraphicOverrideEntityTable?.GetDataColumnValues<Double>("double:ProjectionLineColor.Z") ?? Array.Empty<Double>().ToIArray();
+            GraphicOverrideCutLineWeight = GraphicOverrideEntityTable?.GetDataColumnValues<Int32>("int:CutLineWeight") ?? Array.Empty<Int32>().ToIArray();
+            GraphicOverrideHasCutLineColor = GraphicOverrideEntityTable?.GetDataColumnValues<Boolean>("byte:HasCutLineColor") ?? Array.Empty<Boolean>().ToIArray();
+            GraphicOverrideCutLineColor_X = GraphicOverrideEntityTable?.GetDataColumnValues<Double>("double:CutLineColor.X") ?? Array.Empty<Double>().ToIArray();
+            GraphicOverrideCutLineColor_Y = GraphicOverrideEntityTable?.GetDataColumnValues<Double>("double:CutLineColor.Y") ?? Array.Empty<Double>().ToIArray();
+            GraphicOverrideCutLineColor_Z = GraphicOverrideEntityTable?.GetDataColumnValues<Double>("double:CutLineColor.Z") ?? Array.Empty<Double>().ToIArray();
+            GraphicOverrideSurfaceForegroundPatternVisible = GraphicOverrideEntityTable?.GetDataColumnValues<Boolean>("byte:SurfaceForegroundPatternVisible") ?? Array.Empty<Boolean>().ToIArray();
+            GraphicOverrideHasSurfaceForegroundPatternColor = GraphicOverrideEntityTable?.GetDataColumnValues<Boolean>("byte:HasSurfaceForegroundPatternColor") ?? Array.Empty<Boolean>().ToIArray();
+            GraphicOverrideSurfaceForegroundPatternColor_X = GraphicOverrideEntityTable?.GetDataColumnValues<Double>("double:SurfaceForegroundPatternColor.X") ?? Array.Empty<Double>().ToIArray();
+            GraphicOverrideSurfaceForegroundPatternColor_Y = GraphicOverrideEntityTable?.GetDataColumnValues<Double>("double:SurfaceForegroundPatternColor.Y") ?? Array.Empty<Double>().ToIArray();
+            GraphicOverrideSurfaceForegroundPatternColor_Z = GraphicOverrideEntityTable?.GetDataColumnValues<Double>("double:SurfaceForegroundPatternColor.Z") ?? Array.Empty<Double>().ToIArray();
+            GraphicOverrideSurfaceBackgroundPatternVisible = GraphicOverrideEntityTable?.GetDataColumnValues<Boolean>("byte:SurfaceBackgroundPatternVisible") ?? Array.Empty<Boolean>().ToIArray();
+            GraphicOverrideHasSurfaceBackgroundPatternColor = GraphicOverrideEntityTable?.GetDataColumnValues<Boolean>("byte:HasSurfaceBackgroundPatternColor") ?? Array.Empty<Boolean>().ToIArray();
+            GraphicOverrideSurfaceBackgroundPatternColor_X = GraphicOverrideEntityTable?.GetDataColumnValues<Double>("double:SurfaceBackgroundPatternColor.X") ?? Array.Empty<Double>().ToIArray();
+            GraphicOverrideSurfaceBackgroundPatternColor_Y = GraphicOverrideEntityTable?.GetDataColumnValues<Double>("double:SurfaceBackgroundPatternColor.Y") ?? Array.Empty<Double>().ToIArray();
+            GraphicOverrideSurfaceBackgroundPatternColor_Z = GraphicOverrideEntityTable?.GetDataColumnValues<Double>("double:SurfaceBackgroundPatternColor.Z") ?? Array.Empty<Double>().ToIArray();
+            GraphicOverrideCutForegroundPatternVisible = GraphicOverrideEntityTable?.GetDataColumnValues<Boolean>("byte:CutForegroundPatternVisible") ?? Array.Empty<Boolean>().ToIArray();
+            GraphicOverrideHasCutForegroundPatternColor = GraphicOverrideEntityTable?.GetDataColumnValues<Boolean>("byte:HasCutForegroundPatternColor") ?? Array.Empty<Boolean>().ToIArray();
+            GraphicOverrideCutForegroundPatternColor_X = GraphicOverrideEntityTable?.GetDataColumnValues<Double>("double:CutForegroundPatternColor.X") ?? Array.Empty<Double>().ToIArray();
+            GraphicOverrideCutForegroundPatternColor_Y = GraphicOverrideEntityTable?.GetDataColumnValues<Double>("double:CutForegroundPatternColor.Y") ?? Array.Empty<Double>().ToIArray();
+            GraphicOverrideCutForegroundPatternColor_Z = GraphicOverrideEntityTable?.GetDataColumnValues<Double>("double:CutForegroundPatternColor.Z") ?? Array.Empty<Double>().ToIArray();
+            GraphicOverrideCutBackgroundPatternVisible = GraphicOverrideEntityTable?.GetDataColumnValues<Boolean>("byte:CutBackgroundPatternVisible") ?? Array.Empty<Boolean>().ToIArray();
+            GraphicOverrideHasCutBackgroundPatternColor = GraphicOverrideEntityTable?.GetDataColumnValues<Boolean>("byte:HasCutBackgroundPatternColor") ?? Array.Empty<Boolean>().ToIArray();
+            GraphicOverrideCutBackgroundPatternColor_X = GraphicOverrideEntityTable?.GetDataColumnValues<Double>("double:CutBackgroundPatternColor.X") ?? Array.Empty<Double>().ToIArray();
+            GraphicOverrideCutBackgroundPatternColor_Y = GraphicOverrideEntityTable?.GetDataColumnValues<Double>("double:CutBackgroundPatternColor.Y") ?? Array.Empty<Double>().ToIArray();
+            GraphicOverrideCutBackgroundPatternColor_Z = GraphicOverrideEntityTable?.GetDataColumnValues<Double>("double:CutBackgroundPatternColor.Z") ?? Array.Empty<Double>().ToIArray();
+            GraphicOverrideTransparency = GraphicOverrideEntityTable?.GetDataColumnValues<Int32>("int:Transparency") ?? Array.Empty<Int32>().ToIArray();
+            GraphicOverrideHalftone = GraphicOverrideEntityTable?.GetDataColumnValues<Boolean>("byte:Halftone") ?? Array.Empty<Boolean>().ToIArray();
+            GraphicOverrideDetailLevel = GraphicOverrideEntityTable?.GetDataColumnValues<Int32>("int:DetailLevel") ?? Array.Empty<Int32>().ToIArray();
+            GraphicOverrideKey = GraphicOverrideEntityTable?.GetStringColumnValues("string:Key") ?? Array.Empty<String>().ToIArray();
+            CategoryInViewIsHidden = CategoryInViewEntityTable?.GetDataColumnValues<Boolean>("byte:IsHidden") ?? Array.Empty<Boolean>().ToIArray();
+            ElementOverrideInViewIsHidden = ElementOverrideInViewEntityTable?.GetDataColumnValues<Boolean>("byte:IsHidden") ?? Array.Empty<Boolean>().ToIArray();
+            PhaseGraphicOverrideStatus = PhaseGraphicOverrideEntityTable?.GetStringColumnValues("string:Status") ?? Array.Empty<String>().ToIArray();
+            PhaseGraphicOverrideScale = PhaseGraphicOverrideEntityTable?.GetDataColumnValues<Int32>("int:Scale") ?? Array.Empty<Int32>().ToIArray();
+            PhaseGraphicOverrideHasProjectionLine = PhaseGraphicOverrideEntityTable?.GetDataColumnValues<Boolean>("byte:HasProjectionLine") ?? Array.Empty<Boolean>().ToIArray();
+            PhaseGraphicOverrideProjectionLineColor_X = PhaseGraphicOverrideEntityTable?.GetDataColumnValues<Double>("double:ProjectionLineColor.X") ?? Array.Empty<Double>().ToIArray();
+            PhaseGraphicOverrideProjectionLineColor_Y = PhaseGraphicOverrideEntityTable?.GetDataColumnValues<Double>("double:ProjectionLineColor.Y") ?? Array.Empty<Double>().ToIArray();
+            PhaseGraphicOverrideProjectionLineColor_Z = PhaseGraphicOverrideEntityTable?.GetDataColumnValues<Double>("double:ProjectionLineColor.Z") ?? Array.Empty<Double>().ToIArray();
+            PhaseGraphicOverrideProjectionLineWidth = PhaseGraphicOverrideEntityTable?.GetDataColumnValues<Double>("double:ProjectionLineWidth") ?? Array.Empty<Double>().ToIArray();
+            PhaseGraphicOverrideProjectionLineWeight = PhaseGraphicOverrideEntityTable?.GetDataColumnValues<Int32>("int:ProjectionLineWeight") ?? Array.Empty<Int32>().ToIArray();
+            PhaseGraphicOverrideHasCutLine = PhaseGraphicOverrideEntityTable?.GetDataColumnValues<Boolean>("byte:HasCutLine") ?? Array.Empty<Boolean>().ToIArray();
+            PhaseGraphicOverrideCutLineColor_X = PhaseGraphicOverrideEntityTable?.GetDataColumnValues<Double>("double:CutLineColor.X") ?? Array.Empty<Double>().ToIArray();
+            PhaseGraphicOverrideCutLineColor_Y = PhaseGraphicOverrideEntityTable?.GetDataColumnValues<Double>("double:CutLineColor.Y") ?? Array.Empty<Double>().ToIArray();
+            PhaseGraphicOverrideCutLineColor_Z = PhaseGraphicOverrideEntityTable?.GetDataColumnValues<Double>("double:CutLineColor.Z") ?? Array.Empty<Double>().ToIArray();
+            PhaseGraphicOverrideCutLineWidth = PhaseGraphicOverrideEntityTable?.GetDataColumnValues<Double>("double:CutLineWidth") ?? Array.Empty<Double>().ToIArray();
+            PhaseGraphicOverrideCutLineWeight = PhaseGraphicOverrideEntityTable?.GetDataColumnValues<Int32>("int:CutLineWeight") ?? Array.Empty<Int32>().ToIArray();
             LevelInViewExtents_Min_X = LevelInViewEntityTable?.GetDataColumnValues<Double>("double:Extents.Min.X") ?? Array.Empty<Double>().ToIArray();
             LevelInViewExtents_Min_Y = LevelInViewEntityTable?.GetDataColumnValues<Double>("double:Extents.Min.Y") ?? Array.Empty<Double>().ToIArray();
             LevelInViewExtents_Min_Z = LevelInViewEntityTable?.GetDataColumnValues<Double>("double:Extents.Min.Z") ?? Array.Empty<Double>().ToIArray();
@@ -5301,6 +6371,23 @@ namespace Vim.Format.ObjectModel {
             MaterialGlossiness = MaterialEntityTable?.GetDataColumnValues<Double>("double:Glossiness") ?? Array.Empty<Double>().ToIArray();
             MaterialSmoothness = MaterialEntityTable?.GetDataColumnValues<Double>("double:Smoothness") ?? Array.Empty<Double>().ToIArray();
             MaterialTransparency = MaterialEntityTable?.GetDataColumnValues<Double>("double:Transparency") ?? Array.Empty<Double>().ToIArray();
+            MaterialGraphicsRead = MaterialEntityTable?.GetDataColumnValues<Boolean>("byte:GraphicsRead") ?? Array.Empty<Boolean>().ToIArray();
+            MaterialShadingColor_X = MaterialEntityTable?.GetDataColumnValues<Double>("double:ShadingColor.X") ?? Array.Empty<Double>().ToIArray();
+            MaterialShadingColor_Y = MaterialEntityTable?.GetDataColumnValues<Double>("double:ShadingColor.Y") ?? Array.Empty<Double>().ToIArray();
+            MaterialShadingColor_Z = MaterialEntityTable?.GetDataColumnValues<Double>("double:ShadingColor.Z") ?? Array.Empty<Double>().ToIArray();
+            MaterialUseRenderAppearanceForShading = MaterialEntityTable?.GetDataColumnValues<Boolean>("byte:UseRenderAppearanceForShading") ?? Array.Empty<Boolean>().ToIArray();
+            MaterialSurfaceForegroundPatternColor_X = MaterialEntityTable?.GetDataColumnValues<Double>("double:SurfaceForegroundPatternColor.X") ?? Array.Empty<Double>().ToIArray();
+            MaterialSurfaceForegroundPatternColor_Y = MaterialEntityTable?.GetDataColumnValues<Double>("double:SurfaceForegroundPatternColor.Y") ?? Array.Empty<Double>().ToIArray();
+            MaterialSurfaceForegroundPatternColor_Z = MaterialEntityTable?.GetDataColumnValues<Double>("double:SurfaceForegroundPatternColor.Z") ?? Array.Empty<Double>().ToIArray();
+            MaterialSurfaceBackgroundPatternColor_X = MaterialEntityTable?.GetDataColumnValues<Double>("double:SurfaceBackgroundPatternColor.X") ?? Array.Empty<Double>().ToIArray();
+            MaterialSurfaceBackgroundPatternColor_Y = MaterialEntityTable?.GetDataColumnValues<Double>("double:SurfaceBackgroundPatternColor.Y") ?? Array.Empty<Double>().ToIArray();
+            MaterialSurfaceBackgroundPatternColor_Z = MaterialEntityTable?.GetDataColumnValues<Double>("double:SurfaceBackgroundPatternColor.Z") ?? Array.Empty<Double>().ToIArray();
+            MaterialCutForegroundPatternColor_X = MaterialEntityTable?.GetDataColumnValues<Double>("double:CutForegroundPatternColor.X") ?? Array.Empty<Double>().ToIArray();
+            MaterialCutForegroundPatternColor_Y = MaterialEntityTable?.GetDataColumnValues<Double>("double:CutForegroundPatternColor.Y") ?? Array.Empty<Double>().ToIArray();
+            MaterialCutForegroundPatternColor_Z = MaterialEntityTable?.GetDataColumnValues<Double>("double:CutForegroundPatternColor.Z") ?? Array.Empty<Double>().ToIArray();
+            MaterialCutBackgroundPatternColor_X = MaterialEntityTable?.GetDataColumnValues<Double>("double:CutBackgroundPatternColor.X") ?? Array.Empty<Double>().ToIArray();
+            MaterialCutBackgroundPatternColor_Y = MaterialEntityTable?.GetDataColumnValues<Double>("double:CutBackgroundPatternColor.Y") ?? Array.Empty<Double>().ToIArray();
+            MaterialCutBackgroundPatternColor_Z = MaterialEntityTable?.GetDataColumnValues<Double>("double:CutBackgroundPatternColor.Z") ?? Array.Empty<Double>().ToIArray();
             MaterialInElementArea = MaterialInElementEntityTable?.GetDataColumnValues<Double>("double:Area") ?? Array.Empty<Double>().ToIArray();
             MaterialInElementVolume = MaterialInElementEntityTable?.GetDataColumnValues<Double>("double:Volume") ?? Array.Empty<Double>().ToIArray();
             MaterialInElementIsPaint = MaterialInElementEntityTable?.GetDataColumnValues<Boolean>("byte:IsPaint") ?? Array.Empty<Boolean>().ToIArray();
@@ -5308,6 +6395,7 @@ namespace Vim.Format.ObjectModel {
             CompoundStructureLayerWidth = CompoundStructureLayerEntityTable?.GetDataColumnValues<Double>("double:Width") ?? Array.Empty<Double>().ToIArray();
             CompoundStructureLayerMaterialFunctionAssignment = CompoundStructureLayerEntityTable?.GetStringColumnValues("string:MaterialFunctionAssignment") ?? Array.Empty<String>().ToIArray();
             CompoundStructureWidth = CompoundStructureEntityTable?.GetDataColumnValues<Double>("double:Width") ?? Array.Empty<Double>().ToIArray();
+            GeometryPieceSubmeshIndex = GeometryPieceEntityTable?.GetDataColumnValues<Int32>("int:SubmeshIndex") ?? Array.Empty<Int32>().ToIArray();
             GeometryBox_Min_X = GeometryEntityTable?.GetDataColumnValues<Single>("float:Box.Min.X") ?? Array.Empty<Single>().ToIArray();
             GeometryBox_Min_Y = GeometryEntityTable?.GetDataColumnValues<Single>("float:Box.Min.Y") ?? Array.Empty<Single>().ToIArray();
             GeometryBox_Min_Z = GeometryEntityTable?.GetDataColumnValues<Single>("float:Box.Min.Z") ?? Array.Empty<Single>().ToIArray();
@@ -5482,6 +6570,8 @@ namespace Vim.Format.ObjectModel {
             PhaseOrderInBimDocumentBimDocumentIndex = PhaseOrderInBimDocumentEntityTable?.GetIndexColumnValues("index:Vim.BimDocument:BimDocument") ?? Array.Empty<int>().ToIArray();
             CategoryParentIndex = CategoryEntityTable?.GetIndexColumnValues("index:Vim.Category:Parent") ?? Array.Empty<int>().ToIArray();
             CategoryMaterialIndex = CategoryEntityTable?.GetIndexColumnValues("index:Vim.Material:Material") ?? Array.Empty<int>().ToIArray();
+            CategoryProjectionLinePatternIndex = CategoryEntityTable?.GetIndexColumnValues("index:Vim.LinePattern:ProjectionLinePattern") ?? Array.Empty<int>().ToIArray();
+            CategoryCutLinePatternIndex = CategoryEntityTable?.GetIndexColumnValues("index:Vim.LinePattern:CutLinePattern") ?? Array.Empty<int>().ToIArray();
             FamilyFamilyCategoryIndex = FamilyEntityTable?.GetIndexColumnValues("index:Vim.Category:FamilyCategory") ?? Array.Empty<int>().ToIArray();
             FamilyElementIndex = FamilyEntityTable?.GetIndexColumnValues("index:Vim.Element:Element") ?? Array.Empty<int>().ToIArray();
             FamilyTypeFamilyIndex = FamilyTypeEntityTable?.GetIndexColumnValues("index:Vim.Family:Family") ?? Array.Empty<int>().ToIArray();
@@ -5502,8 +6592,28 @@ namespace Vim.Format.ObjectModel {
             ViewScopeBoxIndex = ViewEntityTable?.GetIndexColumnValues("index:Vim.Element:ScopeBox") ?? Array.Empty<int>().ToIArray();
             ViewElementIndex = ViewEntityTable?.GetIndexColumnValues("index:Vim.Element:Element") ?? Array.Empty<int>().ToIArray();
             FilterInViewViewIndex = FilterInViewEntityTable?.GetIndexColumnValues("index:Vim.View:View") ?? Array.Empty<int>().ToIArray();
+            FilterInViewGraphicOverrideIndex = FilterInViewEntityTable?.GetIndexColumnValues("index:Vim.GraphicOverride:GraphicOverride") ?? Array.Empty<int>().ToIArray();
             GridInViewGridIndex = GridInViewEntityTable?.GetIndexColumnValues("index:Vim.Grid:Grid") ?? Array.Empty<int>().ToIArray();
             GridInViewViewIndex = GridInViewEntityTable?.GetIndexColumnValues("index:Vim.View:View") ?? Array.Empty<int>().ToIArray();
+            LinePatternBimDocumentIndex = LinePatternEntityTable?.GetIndexColumnValues("index:Vim.BimDocument:BimDocument") ?? Array.Empty<int>().ToIArray();
+            FillPatternBimDocumentIndex = FillPatternEntityTable?.GetIndexColumnValues("index:Vim.BimDocument:BimDocument") ?? Array.Empty<int>().ToIArray();
+            FillGridFillPatternIndex = FillGridEntityTable?.GetIndexColumnValues("index:Vim.FillPattern:FillPattern") ?? Array.Empty<int>().ToIArray();
+            LineWeightBimDocumentIndex = LineWeightEntityTable?.GetIndexColumnValues("index:Vim.BimDocument:BimDocument") ?? Array.Empty<int>().ToIArray();
+            GraphicOverrideProjectionLinePatternIndex = GraphicOverrideEntityTable?.GetIndexColumnValues("index:Vim.LinePattern:ProjectionLinePattern") ?? Array.Empty<int>().ToIArray();
+            GraphicOverrideCutLinePatternIndex = GraphicOverrideEntityTable?.GetIndexColumnValues("index:Vim.LinePattern:CutLinePattern") ?? Array.Empty<int>().ToIArray();
+            GraphicOverrideSurfaceForegroundPatternIndex = GraphicOverrideEntityTable?.GetIndexColumnValues("index:Vim.FillPattern:SurfaceForegroundPattern") ?? Array.Empty<int>().ToIArray();
+            GraphicOverrideSurfaceBackgroundPatternIndex = GraphicOverrideEntityTable?.GetIndexColumnValues("index:Vim.FillPattern:SurfaceBackgroundPattern") ?? Array.Empty<int>().ToIArray();
+            GraphicOverrideCutForegroundPatternIndex = GraphicOverrideEntityTable?.GetIndexColumnValues("index:Vim.FillPattern:CutForegroundPattern") ?? Array.Empty<int>().ToIArray();
+            GraphicOverrideCutBackgroundPatternIndex = GraphicOverrideEntityTable?.GetIndexColumnValues("index:Vim.FillPattern:CutBackgroundPattern") ?? Array.Empty<int>().ToIArray();
+            CategoryInViewViewIndex = CategoryInViewEntityTable?.GetIndexColumnValues("index:Vim.View:View") ?? Array.Empty<int>().ToIArray();
+            CategoryInViewCategoryIndex = CategoryInViewEntityTable?.GetIndexColumnValues("index:Vim.Category:Category") ?? Array.Empty<int>().ToIArray();
+            CategoryInViewGraphicOverrideIndex = CategoryInViewEntityTable?.GetIndexColumnValues("index:Vim.GraphicOverride:GraphicOverride") ?? Array.Empty<int>().ToIArray();
+            ElementOverrideInViewViewIndex = ElementOverrideInViewEntityTable?.GetIndexColumnValues("index:Vim.View:View") ?? Array.Empty<int>().ToIArray();
+            ElementOverrideInViewGraphicOverrideIndex = ElementOverrideInViewEntityTable?.GetIndexColumnValues("index:Vim.GraphicOverride:GraphicOverride") ?? Array.Empty<int>().ToIArray();
+            ElementOverrideInViewElementIndex = ElementOverrideInViewEntityTable?.GetIndexColumnValues("index:Vim.Element:Element") ?? Array.Empty<int>().ToIArray();
+            PhaseGraphicOverrideProjectionLinePatternIndex = PhaseGraphicOverrideEntityTable?.GetIndexColumnValues("index:Vim.LinePattern:ProjectionLinePattern") ?? Array.Empty<int>().ToIArray();
+            PhaseGraphicOverrideCutLinePatternIndex = PhaseGraphicOverrideEntityTable?.GetIndexColumnValues("index:Vim.LinePattern:CutLinePattern") ?? Array.Empty<int>().ToIArray();
+            PhaseGraphicOverrideBimDocumentIndex = PhaseGraphicOverrideEntityTable?.GetIndexColumnValues("index:Vim.BimDocument:BimDocument") ?? Array.Empty<int>().ToIArray();
             ElementInViewViewIndex = ElementInViewEntityTable?.GetIndexColumnValues("index:Vim.View:View") ?? Array.Empty<int>().ToIArray();
             ElementInViewElementIndex = ElementInViewEntityTable?.GetIndexColumnValues("index:Vim.Element:Element") ?? Array.Empty<int>().ToIArray();
             ShapeInViewShapeIndex = ShapeInViewEntityTable?.GetIndexColumnValues("index:Vim.Shape:Shape") ?? Array.Empty<int>().ToIArray();
@@ -5516,6 +6626,10 @@ namespace Vim.Format.ObjectModel {
             LevelInViewViewIndex = LevelInViewEntityTable?.GetIndexColumnValues("index:Vim.View:View") ?? Array.Empty<int>().ToIArray();
             MaterialColorTextureFileIndex = MaterialEntityTable?.GetIndexColumnValues("index:Vim.Asset:ColorTextureFile") ?? Array.Empty<int>().ToIArray();
             MaterialNormalTextureFileIndex = MaterialEntityTable?.GetIndexColumnValues("index:Vim.Asset:NormalTextureFile") ?? Array.Empty<int>().ToIArray();
+            MaterialSurfaceForegroundPatternIndex = MaterialEntityTable?.GetIndexColumnValues("index:Vim.FillPattern:SurfaceForegroundPattern") ?? Array.Empty<int>().ToIArray();
+            MaterialSurfaceBackgroundPatternIndex = MaterialEntityTable?.GetIndexColumnValues("index:Vim.FillPattern:SurfaceBackgroundPattern") ?? Array.Empty<int>().ToIArray();
+            MaterialCutForegroundPatternIndex = MaterialEntityTable?.GetIndexColumnValues("index:Vim.FillPattern:CutForegroundPattern") ?? Array.Empty<int>().ToIArray();
+            MaterialCutBackgroundPatternIndex = MaterialEntityTable?.GetIndexColumnValues("index:Vim.FillPattern:CutBackgroundPattern") ?? Array.Empty<int>().ToIArray();
             MaterialElementIndex = MaterialEntityTable?.GetIndexColumnValues("index:Vim.Element:Element") ?? Array.Empty<int>().ToIArray();
             MaterialInElementMaterialIndex = MaterialInElementEntityTable?.GetIndexColumnValues("index:Vim.Material:Material") ?? Array.Empty<int>().ToIArray();
             MaterialInElementElementIndex = MaterialInElementEntityTable?.GetIndexColumnValues("index:Vim.Element:Element") ?? Array.Empty<int>().ToIArray();
@@ -5523,6 +6637,11 @@ namespace Vim.Format.ObjectModel {
             CompoundStructureLayerCompoundStructureIndex = CompoundStructureLayerEntityTable?.GetIndexColumnValues("index:Vim.CompoundStructure:CompoundStructure") ?? Array.Empty<int>().ToIArray();
             CompoundStructureStructuralLayerIndex = CompoundStructureEntityTable?.GetIndexColumnValues("index:Vim.CompoundStructureLayer:StructuralLayer") ?? Array.Empty<int>().ToIArray();
             NodeElementIndex = NodeEntityTable?.GetIndexColumnValues("index:Vim.Element:Element") ?? Array.Empty<int>().ToIArray();
+            GeometryPieceNodeIndex = GeometryPieceEntityTable?.GetIndexColumnValues("index:Vim.Node:Node") ?? Array.Empty<int>().ToIArray();
+            GeometryPieceMaterialIndex = GeometryPieceEntityTable?.GetIndexColumnValues("index:Vim.Material:Material") ?? Array.Empty<int>().ToIArray();
+            GeometryPieceSubcategoryIndex = GeometryPieceEntityTable?.GetIndexColumnValues("index:Vim.Category:Subcategory") ?? Array.Empty<int>().ToIArray();
+            GeometryPieceCompoundStructureLayerIndex = GeometryPieceEntityTable?.GetIndexColumnValues("index:Vim.CompoundStructureLayer:CompoundStructureLayer") ?? Array.Empty<int>().ToIArray();
+            GeometryPieceElementIndex = GeometryPieceEntityTable?.GetIndexColumnValues("index:Vim.Element:Element") ?? Array.Empty<int>().ToIArray();
             ShapeElementIndex = ShapeEntityTable?.GetIndexColumnValues("index:Vim.Element:Element") ?? Array.Empty<int>().ToIArray();
             ShapeCollectionElementIndex = ShapeCollectionEntityTable?.GetIndexColumnValues("index:Vim.Element:Element") ?? Array.Empty<int>().ToIArray();
             ShapeInShapeCollectionShapeIndex = ShapeInShapeCollectionEntityTable?.GetIndexColumnValues("index:Vim.Shape:Shape") ?? Array.Empty<int>().ToIArray();
@@ -5597,6 +6716,14 @@ namespace Vim.Format.ObjectModel {
             ViewList = NumView.Select(i => GetView(i));
             FilterInViewList = NumFilterInView.Select(i => GetFilterInView(i));
             GridInViewList = NumGridInView.Select(i => GetGridInView(i));
+            LinePatternList = NumLinePattern.Select(i => GetLinePattern(i));
+            FillPatternList = NumFillPattern.Select(i => GetFillPattern(i));
+            FillGridList = NumFillGrid.Select(i => GetFillGrid(i));
+            LineWeightList = NumLineWeight.Select(i => GetLineWeight(i));
+            GraphicOverrideList = NumGraphicOverride.Select(i => GetGraphicOverride(i));
+            CategoryInViewList = NumCategoryInView.Select(i => GetCategoryInView(i));
+            ElementOverrideInViewList = NumElementOverrideInView.Select(i => GetElementOverrideInView(i));
+            PhaseGraphicOverrideList = NumPhaseGraphicOverride.Select(i => GetPhaseGraphicOverride(i));
             ElementInViewList = NumElementInView.Select(i => GetElementInView(i));
             ShapeInViewList = NumShapeInView.Select(i => GetShapeInView(i));
             AssetInViewList = NumAssetInView.Select(i => GetAssetInView(i));
@@ -5608,6 +6735,7 @@ namespace Vim.Format.ObjectModel {
             CompoundStructureLayerList = NumCompoundStructureLayer.Select(i => GetCompoundStructureLayer(i));
             CompoundStructureList = NumCompoundStructure.Select(i => GetCompoundStructure(i));
             NodeList = NumNode.Select(i => GetNode(i));
+            GeometryPieceList = NumGeometryPiece.Select(i => GetGeometryPiece(i));
             GeometryList = NumGeometry.Select(i => GetGeometry(i));
             ShapeList = NumShape.Select(i => GetShape(i));
             ShapeCollectionList = NumShapeCollection.Select(i => GetShapeCollection(i));
@@ -5689,6 +6817,14 @@ namespace Vim.Format.ObjectModel {
             Tables[TableNames.View] = ViewTable = new ViewTable(GetSerializableTableOrEmpty(TableNames.View), stringTable, this);
             Tables[TableNames.FilterInView] = FilterInViewTable = new FilterInViewTable(GetSerializableTableOrEmpty(TableNames.FilterInView), stringTable, this);
             Tables[TableNames.GridInView] = GridInViewTable = new GridInViewTable(GetSerializableTableOrEmpty(TableNames.GridInView), stringTable, this);
+            Tables[TableNames.LinePattern] = LinePatternTable = new LinePatternTable(GetSerializableTableOrEmpty(TableNames.LinePattern), stringTable, this);
+            Tables[TableNames.FillPattern] = FillPatternTable = new FillPatternTable(GetSerializableTableOrEmpty(TableNames.FillPattern), stringTable, this);
+            Tables[TableNames.FillGrid] = FillGridTable = new FillGridTable(GetSerializableTableOrEmpty(TableNames.FillGrid), stringTable, this);
+            Tables[TableNames.LineWeight] = LineWeightTable = new LineWeightTable(GetSerializableTableOrEmpty(TableNames.LineWeight), stringTable, this);
+            Tables[TableNames.GraphicOverride] = GraphicOverrideTable = new GraphicOverrideTable(GetSerializableTableOrEmpty(TableNames.GraphicOverride), stringTable, this);
+            Tables[TableNames.CategoryInView] = CategoryInViewTable = new CategoryInViewTable(GetSerializableTableOrEmpty(TableNames.CategoryInView), stringTable, this);
+            Tables[TableNames.ElementOverrideInView] = ElementOverrideInViewTable = new ElementOverrideInViewTable(GetSerializableTableOrEmpty(TableNames.ElementOverrideInView), stringTable, this);
+            Tables[TableNames.PhaseGraphicOverride] = PhaseGraphicOverrideTable = new PhaseGraphicOverrideTable(GetSerializableTableOrEmpty(TableNames.PhaseGraphicOverride), stringTable, this);
             Tables[TableNames.ElementInView] = ElementInViewTable = new ElementInViewTable(GetSerializableTableOrEmpty(TableNames.ElementInView), stringTable, this);
             Tables[TableNames.ShapeInView] = ShapeInViewTable = new ShapeInViewTable(GetSerializableTableOrEmpty(TableNames.ShapeInView), stringTable, this);
             Tables[TableNames.AssetInView] = AssetInViewTable = new AssetInViewTable(GetSerializableTableOrEmpty(TableNames.AssetInView), stringTable, this);
@@ -5700,6 +6836,7 @@ namespace Vim.Format.ObjectModel {
             Tables[TableNames.CompoundStructureLayer] = CompoundStructureLayerTable = new CompoundStructureLayerTable(GetSerializableTableOrEmpty(TableNames.CompoundStructureLayer), stringTable, this);
             Tables[TableNames.CompoundStructure] = CompoundStructureTable = new CompoundStructureTable(GetSerializableTableOrEmpty(TableNames.CompoundStructure), stringTable, this);
             Tables[TableNames.Node] = NodeTable = new NodeTable(GetSerializableTableOrEmpty(TableNames.Node), stringTable, this);
+            Tables[TableNames.GeometryPiece] = GeometryPieceTable = new GeometryPieceTable(GetSerializableTableOrEmpty(TableNames.GeometryPiece), stringTable, this);
             Tables[TableNames.Geometry] = GeometryTable = new GeometryTable(GetSerializableTableOrEmpty(TableNames.Geometry), stringTable, this);
             Tables[TableNames.Shape] = ShapeTable = new ShapeTable(GetSerializableTableOrEmpty(TableNames.Shape), stringTable, this);
             Tables[TableNames.ShapeCollection] = ShapeCollectionTable = new ShapeCollectionTable(GetSerializableTableOrEmpty(TableNames.ShapeCollection), stringTable, this);
@@ -5782,6 +6919,22 @@ namespace Vim.Format.ObjectModel {
         public FilterInView GetFilterInView(int index) => FilterInViewTable?.Get(index);
         public GridInViewTable GridInViewTable { get; } // can be null
         public GridInView GetGridInView(int index) => GridInViewTable?.Get(index);
+        public LinePatternTable LinePatternTable { get; } // can be null
+        public LinePattern GetLinePattern(int index) => LinePatternTable?.Get(index);
+        public FillPatternTable FillPatternTable { get; } // can be null
+        public FillPattern GetFillPattern(int index) => FillPatternTable?.Get(index);
+        public FillGridTable FillGridTable { get; } // can be null
+        public FillGrid GetFillGrid(int index) => FillGridTable?.Get(index);
+        public LineWeightTable LineWeightTable { get; } // can be null
+        public LineWeight GetLineWeight(int index) => LineWeightTable?.Get(index);
+        public GraphicOverrideTable GraphicOverrideTable { get; } // can be null
+        public GraphicOverride GetGraphicOverride(int index) => GraphicOverrideTable?.Get(index);
+        public CategoryInViewTable CategoryInViewTable { get; } // can be null
+        public CategoryInView GetCategoryInView(int index) => CategoryInViewTable?.Get(index);
+        public ElementOverrideInViewTable ElementOverrideInViewTable { get; } // can be null
+        public ElementOverrideInView GetElementOverrideInView(int index) => ElementOverrideInViewTable?.Get(index);
+        public PhaseGraphicOverrideTable PhaseGraphicOverrideTable { get; } // can be null
+        public PhaseGraphicOverride GetPhaseGraphicOverride(int index) => PhaseGraphicOverrideTable?.Get(index);
         public ElementInViewTable ElementInViewTable { get; } // can be null
         public ElementInView GetElementInView(int index) => ElementInViewTable?.Get(index);
         public ShapeInViewTable ShapeInViewTable { get; } // can be null
@@ -5804,6 +6957,8 @@ namespace Vim.Format.ObjectModel {
         public CompoundStructure GetCompoundStructure(int index) => CompoundStructureTable?.Get(index);
         public NodeTable NodeTable { get; } // can be null
         public Node GetNode(int index) => NodeTable?.Get(index);
+        public GeometryPieceTable GeometryPieceTable { get; } // can be null
+        public GeometryPiece GetGeometryPiece(int index) => GeometryPieceTable?.Get(index);
         public GeometryTable GeometryTable { get; } // can be null
         public Geometry GetGeometry(int index) => GeometryTable?.Get(index);
         public ShapeTable ShapeTable { get; } // can be null
@@ -7206,8 +8361,13 @@ namespace Vim.Format.ObjectModel {
             Column_LineColor_Y = GetDataColumnValues<Double>("double:LineColor.Y") ?? Array.Empty<Double>();
             Column_LineColor_Z = GetDataColumnValues<Double>("double:LineColor.Z") ?? Array.Empty<Double>();
             Column_BuiltInCategory = GetStringColumnValues("string:BuiltInCategory") ?? Array.Empty<String>();
+            Column_ProjectionLineWeight = GetDataColumnValues<Int32>("int:ProjectionLineWeight") ?? Array.Empty<Int32>();
+            Column_CutLineWeight = GetDataColumnValues<Int32>("int:CutLineWeight") ?? Array.Empty<Int32>();
+            Column_IsCuttable = GetDataColumnValues<Boolean>("byte:IsCuttable") ?? Array.Empty<Boolean>();
             Column_ParentIndex = GetIndexColumnValues("index:Vim.Category:Parent") ?? Array.Empty<int>();
             Column_MaterialIndex = GetIndexColumnValues("index:Vim.Material:Material") ?? Array.Empty<int>();
+            Column_ProjectionLinePatternIndex = GetIndexColumnValues("index:Vim.LinePattern:ProjectionLinePattern") ?? Array.Empty<int>();
+            Column_CutLinePatternIndex = GetIndexColumnValues("index:Vim.LinePattern:CutLinePattern") ?? Array.Empty<int>();
         }
         
         public String[] Column_Name { get; }
@@ -7224,6 +8384,12 @@ namespace Vim.Format.ObjectModel {
         public Double GetLineColor_Z(int index, Double @default = default) => Column_LineColor_Z.ElementAtOrDefault(index, @default);
         public String[] Column_BuiltInCategory { get; }
         public String GetBuiltInCategory(int index, String @default = "") => Column_BuiltInCategory.ElementAtOrDefault(index, @default);
+        public Int32[] Column_ProjectionLineWeight { get; }
+        public Int32 GetProjectionLineWeight(int index, Int32 @default = default) => Column_ProjectionLineWeight.ElementAtOrDefault(index, @default);
+        public Int32[] Column_CutLineWeight { get; }
+        public Int32 GetCutLineWeight(int index, Int32 @default = default) => Column_CutLineWeight.ElementAtOrDefault(index, @default);
+        public Boolean[] Column_IsCuttable { get; }
+        public Boolean GetIsCuttable(int index, Boolean @default = default) => Column_IsCuttable.ElementAtOrDefault(index, @default);
         public int[] Column_ParentIndex { get; }
         public int GetParentIndex(int index) => Column_ParentIndex.ElementAtOrDefault(index, EntityRelation.None);
         public Category GetParent(int index) => _GetReferencedParent(GetParentIndex(index));
@@ -7232,6 +8398,14 @@ namespace Vim.Format.ObjectModel {
         public int GetMaterialIndex(int index) => Column_MaterialIndex.ElementAtOrDefault(index, EntityRelation.None);
         public Material GetMaterial(int index) => _GetReferencedMaterial(GetMaterialIndex(index));
         private Material _GetReferencedMaterial(int referencedIndex) => ParentTableSet.GetMaterial(referencedIndex);
+        public int[] Column_ProjectionLinePatternIndex { get; }
+        public int GetProjectionLinePatternIndex(int index) => Column_ProjectionLinePatternIndex.ElementAtOrDefault(index, EntityRelation.None);
+        public LinePattern GetProjectionLinePattern(int index) => _GetReferencedProjectionLinePattern(GetProjectionLinePatternIndex(index));
+        private LinePattern _GetReferencedProjectionLinePattern(int referencedIndex) => ParentTableSet.GetLinePattern(referencedIndex);
+        public int[] Column_CutLinePatternIndex { get; }
+        public int GetCutLinePatternIndex(int index) => Column_CutLinePatternIndex.ElementAtOrDefault(index, EntityRelation.None);
+        public LinePattern GetCutLinePattern(int index) => _GetReferencedCutLinePattern(GetCutLinePatternIndex(index));
+        private LinePattern _GetReferencedCutLinePattern(int referencedIndex) => ParentTableSet.GetLinePattern(referencedIndex);
         // Object Getter
         public Category Get(int index)
         {
@@ -7245,8 +8419,13 @@ namespace Vim.Format.ObjectModel {
             r.LineColor_Y = GetLineColor_Y(index);
             r.LineColor_Z = GetLineColor_Z(index);
             r.BuiltInCategory = GetBuiltInCategory(index);
+            r.ProjectionLineWeight = GetProjectionLineWeight(index);
+            r.CutLineWeight = GetCutLineWeight(index);
+            r.IsCuttable = GetIsCuttable(index);
             r._Parent = new Relation<Vim.Format.ObjectModel.Category>(GetParentIndex(index), _GetReferencedParent);
             r._Material = new Relation<Vim.Format.ObjectModel.Material>(GetMaterialIndex(index), _GetReferencedMaterial);
+            r._ProjectionLinePattern = new Relation<Vim.Format.ObjectModel.LinePattern>(GetProjectionLinePatternIndex(index), _GetReferencedProjectionLinePattern);
+            r._CutLinePattern = new Relation<Vim.Format.ObjectModel.LinePattern>(GetCutLinePatternIndex(index), _GetReferencedCutLinePattern);
             return r;
         }
         // Enumerator
@@ -7567,6 +8746,7 @@ namespace Vim.Format.ObjectModel {
             Column_ElementOverrideCount = GetDataColumnValues<Int32>("int:ElementOverrideCount") ?? Array.Empty<Int32>();
             Column_HiddenElementCount = GetDataColumnValues<Int32>("int:HiddenElementCount") ?? Array.Empty<Int32>();
             Column_TemplateControlledSettings = GetStringColumnValues("string:TemplateControlledSettings") ?? Array.Empty<String>();
+            Column_GraphicsRead = GetDataColumnValues<Boolean>("byte:GraphicsRead") ?? Array.Empty<Boolean>();
             Column_CameraIndex = GetIndexColumnValues("index:Vim.Camera:Camera") ?? Array.Empty<int>();
             Column_FamilyTypeIndex = GetIndexColumnValues("index:Vim.FamilyType:FamilyType") ?? Array.Empty<int>();
             Column_ViewTemplateIndex = GetIndexColumnValues("index:Vim.Element:ViewTemplate") ?? Array.Empty<int>();
@@ -7645,6 +8825,8 @@ namespace Vim.Format.ObjectModel {
         public Int32 GetHiddenElementCount(int index, Int32 @default = default) => Column_HiddenElementCount.ElementAtOrDefault(index, @default);
         public String[] Column_TemplateControlledSettings { get; }
         public String GetTemplateControlledSettings(int index, String @default = "") => Column_TemplateControlledSettings.ElementAtOrDefault(index, @default);
+        public Boolean[] Column_GraphicsRead { get; }
+        public Boolean GetGraphicsRead(int index, Boolean @default = default) => Column_GraphicsRead.ElementAtOrDefault(index, @default);
         public int[] Column_CameraIndex { get; }
         public int GetCameraIndex(int index) => Column_CameraIndex.ElementAtOrDefault(index, EntityRelation.None);
         public Camera GetCamera(int index) => _GetReferencedCamera(GetCameraIndex(index));
@@ -7717,6 +8899,7 @@ namespace Vim.Format.ObjectModel {
             r.ElementOverrideCount = GetElementOverrideCount(index);
             r.HiddenElementCount = GetHiddenElementCount(index);
             r.TemplateControlledSettings = GetTemplateControlledSettings(index);
+            r.GraphicsRead = GetGraphicsRead(index);
             r._Camera = new Relation<Vim.Format.ObjectModel.Camera>(GetCameraIndex(index), _GetReferencedCamera);
             r._FamilyType = new Relation<Vim.Format.ObjectModel.FamilyType>(GetFamilyTypeIndex(index), _GetReferencedFamilyType);
             r._ViewTemplate = new Relation<Vim.Format.ObjectModel.Element>(GetViewTemplateIndex(index), _GetReferencedViewTemplate);
@@ -7754,6 +8937,7 @@ namespace Vim.Format.ObjectModel {
             Column_IsVisible = GetDataColumnValues<Boolean>("byte:IsVisible") ?? Array.Empty<Boolean>();
             Column_HasOverrides = GetDataColumnValues<Boolean>("byte:HasOverrides") ?? Array.Empty<Boolean>();
             Column_ViewIndex = GetIndexColumnValues("index:Vim.View:View") ?? Array.Empty<int>();
+            Column_GraphicOverrideIndex = GetIndexColumnValues("index:Vim.GraphicOverride:GraphicOverride") ?? Array.Empty<int>();
         }
         
         public String[] Column_Name { get; }
@@ -7774,6 +8958,10 @@ namespace Vim.Format.ObjectModel {
         public int GetViewIndex(int index) => Column_ViewIndex.ElementAtOrDefault(index, EntityRelation.None);
         public View GetView(int index) => _GetReferencedView(GetViewIndex(index));
         private View _GetReferencedView(int referencedIndex) => ParentTableSet.GetView(referencedIndex);
+        public int[] Column_GraphicOverrideIndex { get; }
+        public int GetGraphicOverrideIndex(int index) => Column_GraphicOverrideIndex.ElementAtOrDefault(index, EntityRelation.None);
+        public GraphicOverride GetGraphicOverride(int index) => _GetReferencedGraphicOverride(GetGraphicOverrideIndex(index));
+        private GraphicOverride _GetReferencedGraphicOverride(int referencedIndex) => ParentTableSet.GetGraphicOverride(referencedIndex);
         // Object Getter
         public FilterInView Get(int index)
         {
@@ -7788,6 +8976,7 @@ namespace Vim.Format.ObjectModel {
             r.IsVisible = GetIsVisible(index);
             r.HasOverrides = GetHasOverrides(index);
             r._View = new Relation<Vim.Format.ObjectModel.View>(GetViewIndex(index), _GetReferencedView);
+            r._GraphicOverride = new Relation<Vim.Format.ObjectModel.GraphicOverride>(GetGraphicOverrideIndex(index), _GetReferencedGraphicOverride);
             return r;
         }
         // Enumerator
@@ -7847,6 +9036,644 @@ namespace Vim.Format.ObjectModel {
                 yield return Get(i);
         }
     } // class GridInViewTable 
+    
+    public partial class LinePatternTable : EntityTable_v2, IEnumerable<LinePattern>
+    {
+        
+        public const string TableName = TableNames.LinePattern;
+        
+        public EntityTableSet ParentTableSet { get; } // can be null
+        
+        public LinePatternTable(SerializableEntityTable rawTable, string[] stringTable, EntityTableSet parentTableSet = null) : base(rawTable, stringTable)
+        {
+            ParentTableSet = parentTableSet;
+            Column_Name = GetStringColumnValues("string:Name") ?? Array.Empty<String>();
+            Column_ElementId = GetDataColumnValues<Int64>("long:ElementId") ?? Array.Empty<Int64>();
+            Column_UniqueId = GetStringColumnValues("string:UniqueId") ?? Array.Empty<String>();
+            Column_IsSolid = GetDataColumnValues<Boolean>("byte:IsSolid") ?? Array.Empty<Boolean>();
+            Column_Segments = GetStringColumnValues("string:Segments") ?? Array.Empty<String>();
+            Column_BimDocumentIndex = GetIndexColumnValues("index:Vim.BimDocument:BimDocument") ?? Array.Empty<int>();
+        }
+        
+        public String[] Column_Name { get; }
+        public String GetName(int index, String @default = "") => Column_Name.ElementAtOrDefault(index, @default);
+        public Int64[] Column_ElementId { get; }
+        public Int64 GetElementId(int index, Int64 @default = default) => Column_ElementId.ElementAtOrDefault(index, @default);
+        public String[] Column_UniqueId { get; }
+        public String GetUniqueId(int index, String @default = "") => Column_UniqueId.ElementAtOrDefault(index, @default);
+        public Boolean[] Column_IsSolid { get; }
+        public Boolean GetIsSolid(int index, Boolean @default = default) => Column_IsSolid.ElementAtOrDefault(index, @default);
+        public String[] Column_Segments { get; }
+        public String GetSegments(int index, String @default = "") => Column_Segments.ElementAtOrDefault(index, @default);
+        public int[] Column_BimDocumentIndex { get; }
+        public int GetBimDocumentIndex(int index) => Column_BimDocumentIndex.ElementAtOrDefault(index, EntityRelation.None);
+        public BimDocument GetBimDocument(int index) => _GetReferencedBimDocument(GetBimDocumentIndex(index));
+        private BimDocument _GetReferencedBimDocument(int referencedIndex) => ParentTableSet.GetBimDocument(referencedIndex);
+        // Object Getter
+        public LinePattern Get(int index)
+        {
+            if (index < 0) return null;
+            var r = new LinePattern();
+            r.Index = index;
+            r.Name = GetName(index);
+            r.ElementId = GetElementId(index);
+            r.UniqueId = GetUniqueId(index);
+            r.IsSolid = GetIsSolid(index);
+            r.Segments = GetSegments(index);
+            r._BimDocument = new Relation<Vim.Format.ObjectModel.BimDocument>(GetBimDocumentIndex(index), _GetReferencedBimDocument);
+            return r;
+        }
+        // Enumerator
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+        public IEnumerator<LinePattern> GetEnumerator()
+        {
+            for (var i = 0; i < RowCount; ++i)
+                yield return Get(i);
+        }
+    } // class LinePatternTable 
+    
+    public partial class FillPatternTable : EntityTable_v2, IEnumerable<FillPattern>
+    {
+        
+        public const string TableName = TableNames.FillPattern;
+        
+        public EntityTableSet ParentTableSet { get; } // can be null
+        
+        public FillPatternTable(SerializableEntityTable rawTable, string[] stringTable, EntityTableSet parentTableSet = null) : base(rawTable, stringTable)
+        {
+            ParentTableSet = parentTableSet;
+            Column_Name = GetStringColumnValues("string:Name") ?? Array.Empty<String>();
+            Column_ElementId = GetDataColumnValues<Int64>("long:ElementId") ?? Array.Empty<Int64>();
+            Column_UniqueId = GetStringColumnValues("string:UniqueId") ?? Array.Empty<String>();
+            Column_Target = GetStringColumnValues("string:Target") ?? Array.Empty<String>();
+            Column_IsSolidFill = GetDataColumnValues<Boolean>("byte:IsSolidFill") ?? Array.Empty<Boolean>();
+            Column_HostOrientation = GetStringColumnValues("string:HostOrientation") ?? Array.Empty<String>();
+            Column_GridCount = GetDataColumnValues<Int32>("int:GridCount") ?? Array.Empty<Int32>();
+            Column_BimDocumentIndex = GetIndexColumnValues("index:Vim.BimDocument:BimDocument") ?? Array.Empty<int>();
+        }
+        
+        public String[] Column_Name { get; }
+        public String GetName(int index, String @default = "") => Column_Name.ElementAtOrDefault(index, @default);
+        public Int64[] Column_ElementId { get; }
+        public Int64 GetElementId(int index, Int64 @default = default) => Column_ElementId.ElementAtOrDefault(index, @default);
+        public String[] Column_UniqueId { get; }
+        public String GetUniqueId(int index, String @default = "") => Column_UniqueId.ElementAtOrDefault(index, @default);
+        public String[] Column_Target { get; }
+        public String GetTarget(int index, String @default = "") => Column_Target.ElementAtOrDefault(index, @default);
+        public Boolean[] Column_IsSolidFill { get; }
+        public Boolean GetIsSolidFill(int index, Boolean @default = default) => Column_IsSolidFill.ElementAtOrDefault(index, @default);
+        public String[] Column_HostOrientation { get; }
+        public String GetHostOrientation(int index, String @default = "") => Column_HostOrientation.ElementAtOrDefault(index, @default);
+        public Int32[] Column_GridCount { get; }
+        public Int32 GetGridCount(int index, Int32 @default = default) => Column_GridCount.ElementAtOrDefault(index, @default);
+        public int[] Column_BimDocumentIndex { get; }
+        public int GetBimDocumentIndex(int index) => Column_BimDocumentIndex.ElementAtOrDefault(index, EntityRelation.None);
+        public BimDocument GetBimDocument(int index) => _GetReferencedBimDocument(GetBimDocumentIndex(index));
+        private BimDocument _GetReferencedBimDocument(int referencedIndex) => ParentTableSet.GetBimDocument(referencedIndex);
+        // Object Getter
+        public FillPattern Get(int index)
+        {
+            if (index < 0) return null;
+            var r = new FillPattern();
+            r.Index = index;
+            r.Name = GetName(index);
+            r.ElementId = GetElementId(index);
+            r.UniqueId = GetUniqueId(index);
+            r.Target = GetTarget(index);
+            r.IsSolidFill = GetIsSolidFill(index);
+            r.HostOrientation = GetHostOrientation(index);
+            r.GridCount = GetGridCount(index);
+            r._BimDocument = new Relation<Vim.Format.ObjectModel.BimDocument>(GetBimDocumentIndex(index), _GetReferencedBimDocument);
+            return r;
+        }
+        // Enumerator
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+        public IEnumerator<FillPattern> GetEnumerator()
+        {
+            for (var i = 0; i < RowCount; ++i)
+                yield return Get(i);
+        }
+    } // class FillPatternTable 
+    
+    public partial class FillGridTable : EntityTable_v2, IEnumerable<FillGrid>
+    {
+        
+        public const string TableName = TableNames.FillGrid;
+        
+        public EntityTableSet ParentTableSet { get; } // can be null
+        
+        public FillGridTable(SerializableEntityTable rawTable, string[] stringTable, EntityTableSet parentTableSet = null) : base(rawTable, stringTable)
+        {
+            ParentTableSet = parentTableSet;
+            Column_OrderIndex = GetDataColumnValues<Int32>("int:OrderIndex") ?? Array.Empty<Int32>();
+            Column_Angle = GetDataColumnValues<Double>("double:Angle") ?? Array.Empty<Double>();
+            Column_Origin_X = GetDataColumnValues<Double>("double:Origin.X") ?? Array.Empty<Double>();
+            Column_Origin_Y = GetDataColumnValues<Double>("double:Origin.Y") ?? Array.Empty<Double>();
+            Column_Offset = GetDataColumnValues<Double>("double:Offset") ?? Array.Empty<Double>();
+            Column_Shift = GetDataColumnValues<Double>("double:Shift") ?? Array.Empty<Double>();
+            Column_Segments = GetStringColumnValues("string:Segments") ?? Array.Empty<String>();
+            Column_FillPatternIndex = GetIndexColumnValues("index:Vim.FillPattern:FillPattern") ?? Array.Empty<int>();
+        }
+        
+        public Int32[] Column_OrderIndex { get; }
+        public Int32 GetOrderIndex(int index, Int32 @default = default) => Column_OrderIndex.ElementAtOrDefault(index, @default);
+        public Double[] Column_Angle { get; }
+        public Double GetAngle(int index, Double @default = default) => Column_Angle.ElementAtOrDefault(index, @default);
+        public Double[] Column_Origin_X { get; }
+        public Double GetOrigin_X(int index, Double @default = default) => Column_Origin_X.ElementAtOrDefault(index, @default);
+        public Double[] Column_Origin_Y { get; }
+        public Double GetOrigin_Y(int index, Double @default = default) => Column_Origin_Y.ElementAtOrDefault(index, @default);
+        public Double[] Column_Offset { get; }
+        public Double GetOffset(int index, Double @default = default) => Column_Offset.ElementAtOrDefault(index, @default);
+        public Double[] Column_Shift { get; }
+        public Double GetShift(int index, Double @default = default) => Column_Shift.ElementAtOrDefault(index, @default);
+        public String[] Column_Segments { get; }
+        public String GetSegments(int index, String @default = "") => Column_Segments.ElementAtOrDefault(index, @default);
+        public int[] Column_FillPatternIndex { get; }
+        public int GetFillPatternIndex(int index) => Column_FillPatternIndex.ElementAtOrDefault(index, EntityRelation.None);
+        public FillPattern GetFillPattern(int index) => _GetReferencedFillPattern(GetFillPatternIndex(index));
+        private FillPattern _GetReferencedFillPattern(int referencedIndex) => ParentTableSet.GetFillPattern(referencedIndex);
+        // Object Getter
+        public FillGrid Get(int index)
+        {
+            if (index < 0) return null;
+            var r = new FillGrid();
+            r.Index = index;
+            r.OrderIndex = GetOrderIndex(index);
+            r.Angle = GetAngle(index);
+            r.Origin_X = GetOrigin_X(index);
+            r.Origin_Y = GetOrigin_Y(index);
+            r.Offset = GetOffset(index);
+            r.Shift = GetShift(index);
+            r.Segments = GetSegments(index);
+            r._FillPattern = new Relation<Vim.Format.ObjectModel.FillPattern>(GetFillPatternIndex(index), _GetReferencedFillPattern);
+            return r;
+        }
+        // Enumerator
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+        public IEnumerator<FillGrid> GetEnumerator()
+        {
+            for (var i = 0; i < RowCount; ++i)
+                yield return Get(i);
+        }
+    } // class FillGridTable 
+    
+    public partial class LineWeightTable : EntityTable_v2, IEnumerable<LineWeight>
+    {
+        
+        public const string TableName = TableNames.LineWeight;
+        
+        public EntityTableSet ParentTableSet { get; } // can be null
+        
+        public LineWeightTable(SerializableEntityTable rawTable, string[] stringTable, EntityTableSet parentTableSet = null) : base(rawTable, stringTable)
+        {
+            ParentTableSet = parentTableSet;
+            Column_Table = GetStringColumnValues("string:Table") ?? Array.Empty<String>();
+            Column_Scale = GetDataColumnValues<Int32>("int:Scale") ?? Array.Empty<Int32>();
+            Column_Number = GetDataColumnValues<Int32>("int:Number") ?? Array.Empty<Int32>();
+            Column_Width = GetDataColumnValues<Double>("double:Width") ?? Array.Empty<Double>();
+            Column_BimDocumentIndex = GetIndexColumnValues("index:Vim.BimDocument:BimDocument") ?? Array.Empty<int>();
+        }
+        
+        public String[] Column_Table { get; }
+        public String GetTable(int index, String @default = "") => Column_Table.ElementAtOrDefault(index, @default);
+        public Int32[] Column_Scale { get; }
+        public Int32 GetScale(int index, Int32 @default = default) => Column_Scale.ElementAtOrDefault(index, @default);
+        public Int32[] Column_Number { get; }
+        public Int32 GetNumber(int index, Int32 @default = default) => Column_Number.ElementAtOrDefault(index, @default);
+        public Double[] Column_Width { get; }
+        public Double GetWidth(int index, Double @default = default) => Column_Width.ElementAtOrDefault(index, @default);
+        public int[] Column_BimDocumentIndex { get; }
+        public int GetBimDocumentIndex(int index) => Column_BimDocumentIndex.ElementAtOrDefault(index, EntityRelation.None);
+        public BimDocument GetBimDocument(int index) => _GetReferencedBimDocument(GetBimDocumentIndex(index));
+        private BimDocument _GetReferencedBimDocument(int referencedIndex) => ParentTableSet.GetBimDocument(referencedIndex);
+        // Object Getter
+        public LineWeight Get(int index)
+        {
+            if (index < 0) return null;
+            var r = new LineWeight();
+            r.Index = index;
+            r.Table = GetTable(index);
+            r.Scale = GetScale(index);
+            r.Number = GetNumber(index);
+            r.Width = GetWidth(index);
+            r._BimDocument = new Relation<Vim.Format.ObjectModel.BimDocument>(GetBimDocumentIndex(index), _GetReferencedBimDocument);
+            return r;
+        }
+        // Enumerator
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+        public IEnumerator<LineWeight> GetEnumerator()
+        {
+            for (var i = 0; i < RowCount; ++i)
+                yield return Get(i);
+        }
+    } // class LineWeightTable 
+    
+    public partial class GraphicOverrideTable : EntityTable_v2, IEnumerable<GraphicOverride>
+    {
+        
+        public const string TableName = TableNames.GraphicOverride;
+        
+        public EntityTableSet ParentTableSet { get; } // can be null
+        
+        public GraphicOverrideTable(SerializableEntityTable rawTable, string[] stringTable, EntityTableSet parentTableSet = null) : base(rawTable, stringTable)
+        {
+            ParentTableSet = parentTableSet;
+            Column_ProjectionLineWeight = GetDataColumnValues<Int32>("int:ProjectionLineWeight") ?? Array.Empty<Int32>();
+            Column_HasProjectionLineColor = GetDataColumnValues<Boolean>("byte:HasProjectionLineColor") ?? Array.Empty<Boolean>();
+            Column_ProjectionLineColor_X = GetDataColumnValues<Double>("double:ProjectionLineColor.X") ?? Array.Empty<Double>();
+            Column_ProjectionLineColor_Y = GetDataColumnValues<Double>("double:ProjectionLineColor.Y") ?? Array.Empty<Double>();
+            Column_ProjectionLineColor_Z = GetDataColumnValues<Double>("double:ProjectionLineColor.Z") ?? Array.Empty<Double>();
+            Column_CutLineWeight = GetDataColumnValues<Int32>("int:CutLineWeight") ?? Array.Empty<Int32>();
+            Column_HasCutLineColor = GetDataColumnValues<Boolean>("byte:HasCutLineColor") ?? Array.Empty<Boolean>();
+            Column_CutLineColor_X = GetDataColumnValues<Double>("double:CutLineColor.X") ?? Array.Empty<Double>();
+            Column_CutLineColor_Y = GetDataColumnValues<Double>("double:CutLineColor.Y") ?? Array.Empty<Double>();
+            Column_CutLineColor_Z = GetDataColumnValues<Double>("double:CutLineColor.Z") ?? Array.Empty<Double>();
+            Column_SurfaceForegroundPatternVisible = GetDataColumnValues<Boolean>("byte:SurfaceForegroundPatternVisible") ?? Array.Empty<Boolean>();
+            Column_HasSurfaceForegroundPatternColor = GetDataColumnValues<Boolean>("byte:HasSurfaceForegroundPatternColor") ?? Array.Empty<Boolean>();
+            Column_SurfaceForegroundPatternColor_X = GetDataColumnValues<Double>("double:SurfaceForegroundPatternColor.X") ?? Array.Empty<Double>();
+            Column_SurfaceForegroundPatternColor_Y = GetDataColumnValues<Double>("double:SurfaceForegroundPatternColor.Y") ?? Array.Empty<Double>();
+            Column_SurfaceForegroundPatternColor_Z = GetDataColumnValues<Double>("double:SurfaceForegroundPatternColor.Z") ?? Array.Empty<Double>();
+            Column_SurfaceBackgroundPatternVisible = GetDataColumnValues<Boolean>("byte:SurfaceBackgroundPatternVisible") ?? Array.Empty<Boolean>();
+            Column_HasSurfaceBackgroundPatternColor = GetDataColumnValues<Boolean>("byte:HasSurfaceBackgroundPatternColor") ?? Array.Empty<Boolean>();
+            Column_SurfaceBackgroundPatternColor_X = GetDataColumnValues<Double>("double:SurfaceBackgroundPatternColor.X") ?? Array.Empty<Double>();
+            Column_SurfaceBackgroundPatternColor_Y = GetDataColumnValues<Double>("double:SurfaceBackgroundPatternColor.Y") ?? Array.Empty<Double>();
+            Column_SurfaceBackgroundPatternColor_Z = GetDataColumnValues<Double>("double:SurfaceBackgroundPatternColor.Z") ?? Array.Empty<Double>();
+            Column_CutForegroundPatternVisible = GetDataColumnValues<Boolean>("byte:CutForegroundPatternVisible") ?? Array.Empty<Boolean>();
+            Column_HasCutForegroundPatternColor = GetDataColumnValues<Boolean>("byte:HasCutForegroundPatternColor") ?? Array.Empty<Boolean>();
+            Column_CutForegroundPatternColor_X = GetDataColumnValues<Double>("double:CutForegroundPatternColor.X") ?? Array.Empty<Double>();
+            Column_CutForegroundPatternColor_Y = GetDataColumnValues<Double>("double:CutForegroundPatternColor.Y") ?? Array.Empty<Double>();
+            Column_CutForegroundPatternColor_Z = GetDataColumnValues<Double>("double:CutForegroundPatternColor.Z") ?? Array.Empty<Double>();
+            Column_CutBackgroundPatternVisible = GetDataColumnValues<Boolean>("byte:CutBackgroundPatternVisible") ?? Array.Empty<Boolean>();
+            Column_HasCutBackgroundPatternColor = GetDataColumnValues<Boolean>("byte:HasCutBackgroundPatternColor") ?? Array.Empty<Boolean>();
+            Column_CutBackgroundPatternColor_X = GetDataColumnValues<Double>("double:CutBackgroundPatternColor.X") ?? Array.Empty<Double>();
+            Column_CutBackgroundPatternColor_Y = GetDataColumnValues<Double>("double:CutBackgroundPatternColor.Y") ?? Array.Empty<Double>();
+            Column_CutBackgroundPatternColor_Z = GetDataColumnValues<Double>("double:CutBackgroundPatternColor.Z") ?? Array.Empty<Double>();
+            Column_Transparency = GetDataColumnValues<Int32>("int:Transparency") ?? Array.Empty<Int32>();
+            Column_Halftone = GetDataColumnValues<Boolean>("byte:Halftone") ?? Array.Empty<Boolean>();
+            Column_DetailLevel = GetDataColumnValues<Int32>("int:DetailLevel") ?? Array.Empty<Int32>();
+            Column_Key = GetStringColumnValues("string:Key") ?? Array.Empty<String>();
+            Column_ProjectionLinePatternIndex = GetIndexColumnValues("index:Vim.LinePattern:ProjectionLinePattern") ?? Array.Empty<int>();
+            Column_CutLinePatternIndex = GetIndexColumnValues("index:Vim.LinePattern:CutLinePattern") ?? Array.Empty<int>();
+            Column_SurfaceForegroundPatternIndex = GetIndexColumnValues("index:Vim.FillPattern:SurfaceForegroundPattern") ?? Array.Empty<int>();
+            Column_SurfaceBackgroundPatternIndex = GetIndexColumnValues("index:Vim.FillPattern:SurfaceBackgroundPattern") ?? Array.Empty<int>();
+            Column_CutForegroundPatternIndex = GetIndexColumnValues("index:Vim.FillPattern:CutForegroundPattern") ?? Array.Empty<int>();
+            Column_CutBackgroundPatternIndex = GetIndexColumnValues("index:Vim.FillPattern:CutBackgroundPattern") ?? Array.Empty<int>();
+        }
+        
+        public Int32[] Column_ProjectionLineWeight { get; }
+        public Int32 GetProjectionLineWeight(int index, Int32 @default = default) => Column_ProjectionLineWeight.ElementAtOrDefault(index, @default);
+        public Boolean[] Column_HasProjectionLineColor { get; }
+        public Boolean GetHasProjectionLineColor(int index, Boolean @default = default) => Column_HasProjectionLineColor.ElementAtOrDefault(index, @default);
+        public Double[] Column_ProjectionLineColor_X { get; }
+        public Double GetProjectionLineColor_X(int index, Double @default = default) => Column_ProjectionLineColor_X.ElementAtOrDefault(index, @default);
+        public Double[] Column_ProjectionLineColor_Y { get; }
+        public Double GetProjectionLineColor_Y(int index, Double @default = default) => Column_ProjectionLineColor_Y.ElementAtOrDefault(index, @default);
+        public Double[] Column_ProjectionLineColor_Z { get; }
+        public Double GetProjectionLineColor_Z(int index, Double @default = default) => Column_ProjectionLineColor_Z.ElementAtOrDefault(index, @default);
+        public Int32[] Column_CutLineWeight { get; }
+        public Int32 GetCutLineWeight(int index, Int32 @default = default) => Column_CutLineWeight.ElementAtOrDefault(index, @default);
+        public Boolean[] Column_HasCutLineColor { get; }
+        public Boolean GetHasCutLineColor(int index, Boolean @default = default) => Column_HasCutLineColor.ElementAtOrDefault(index, @default);
+        public Double[] Column_CutLineColor_X { get; }
+        public Double GetCutLineColor_X(int index, Double @default = default) => Column_CutLineColor_X.ElementAtOrDefault(index, @default);
+        public Double[] Column_CutLineColor_Y { get; }
+        public Double GetCutLineColor_Y(int index, Double @default = default) => Column_CutLineColor_Y.ElementAtOrDefault(index, @default);
+        public Double[] Column_CutLineColor_Z { get; }
+        public Double GetCutLineColor_Z(int index, Double @default = default) => Column_CutLineColor_Z.ElementAtOrDefault(index, @default);
+        public Boolean[] Column_SurfaceForegroundPatternVisible { get; }
+        public Boolean GetSurfaceForegroundPatternVisible(int index, Boolean @default = default) => Column_SurfaceForegroundPatternVisible.ElementAtOrDefault(index, @default);
+        public Boolean[] Column_HasSurfaceForegroundPatternColor { get; }
+        public Boolean GetHasSurfaceForegroundPatternColor(int index, Boolean @default = default) => Column_HasSurfaceForegroundPatternColor.ElementAtOrDefault(index, @default);
+        public Double[] Column_SurfaceForegroundPatternColor_X { get; }
+        public Double GetSurfaceForegroundPatternColor_X(int index, Double @default = default) => Column_SurfaceForegroundPatternColor_X.ElementAtOrDefault(index, @default);
+        public Double[] Column_SurfaceForegroundPatternColor_Y { get; }
+        public Double GetSurfaceForegroundPatternColor_Y(int index, Double @default = default) => Column_SurfaceForegroundPatternColor_Y.ElementAtOrDefault(index, @default);
+        public Double[] Column_SurfaceForegroundPatternColor_Z { get; }
+        public Double GetSurfaceForegroundPatternColor_Z(int index, Double @default = default) => Column_SurfaceForegroundPatternColor_Z.ElementAtOrDefault(index, @default);
+        public Boolean[] Column_SurfaceBackgroundPatternVisible { get; }
+        public Boolean GetSurfaceBackgroundPatternVisible(int index, Boolean @default = default) => Column_SurfaceBackgroundPatternVisible.ElementAtOrDefault(index, @default);
+        public Boolean[] Column_HasSurfaceBackgroundPatternColor { get; }
+        public Boolean GetHasSurfaceBackgroundPatternColor(int index, Boolean @default = default) => Column_HasSurfaceBackgroundPatternColor.ElementAtOrDefault(index, @default);
+        public Double[] Column_SurfaceBackgroundPatternColor_X { get; }
+        public Double GetSurfaceBackgroundPatternColor_X(int index, Double @default = default) => Column_SurfaceBackgroundPatternColor_X.ElementAtOrDefault(index, @default);
+        public Double[] Column_SurfaceBackgroundPatternColor_Y { get; }
+        public Double GetSurfaceBackgroundPatternColor_Y(int index, Double @default = default) => Column_SurfaceBackgroundPatternColor_Y.ElementAtOrDefault(index, @default);
+        public Double[] Column_SurfaceBackgroundPatternColor_Z { get; }
+        public Double GetSurfaceBackgroundPatternColor_Z(int index, Double @default = default) => Column_SurfaceBackgroundPatternColor_Z.ElementAtOrDefault(index, @default);
+        public Boolean[] Column_CutForegroundPatternVisible { get; }
+        public Boolean GetCutForegroundPatternVisible(int index, Boolean @default = default) => Column_CutForegroundPatternVisible.ElementAtOrDefault(index, @default);
+        public Boolean[] Column_HasCutForegroundPatternColor { get; }
+        public Boolean GetHasCutForegroundPatternColor(int index, Boolean @default = default) => Column_HasCutForegroundPatternColor.ElementAtOrDefault(index, @default);
+        public Double[] Column_CutForegroundPatternColor_X { get; }
+        public Double GetCutForegroundPatternColor_X(int index, Double @default = default) => Column_CutForegroundPatternColor_X.ElementAtOrDefault(index, @default);
+        public Double[] Column_CutForegroundPatternColor_Y { get; }
+        public Double GetCutForegroundPatternColor_Y(int index, Double @default = default) => Column_CutForegroundPatternColor_Y.ElementAtOrDefault(index, @default);
+        public Double[] Column_CutForegroundPatternColor_Z { get; }
+        public Double GetCutForegroundPatternColor_Z(int index, Double @default = default) => Column_CutForegroundPatternColor_Z.ElementAtOrDefault(index, @default);
+        public Boolean[] Column_CutBackgroundPatternVisible { get; }
+        public Boolean GetCutBackgroundPatternVisible(int index, Boolean @default = default) => Column_CutBackgroundPatternVisible.ElementAtOrDefault(index, @default);
+        public Boolean[] Column_HasCutBackgroundPatternColor { get; }
+        public Boolean GetHasCutBackgroundPatternColor(int index, Boolean @default = default) => Column_HasCutBackgroundPatternColor.ElementAtOrDefault(index, @default);
+        public Double[] Column_CutBackgroundPatternColor_X { get; }
+        public Double GetCutBackgroundPatternColor_X(int index, Double @default = default) => Column_CutBackgroundPatternColor_X.ElementAtOrDefault(index, @default);
+        public Double[] Column_CutBackgroundPatternColor_Y { get; }
+        public Double GetCutBackgroundPatternColor_Y(int index, Double @default = default) => Column_CutBackgroundPatternColor_Y.ElementAtOrDefault(index, @default);
+        public Double[] Column_CutBackgroundPatternColor_Z { get; }
+        public Double GetCutBackgroundPatternColor_Z(int index, Double @default = default) => Column_CutBackgroundPatternColor_Z.ElementAtOrDefault(index, @default);
+        public Int32[] Column_Transparency { get; }
+        public Int32 GetTransparency(int index, Int32 @default = default) => Column_Transparency.ElementAtOrDefault(index, @default);
+        public Boolean[] Column_Halftone { get; }
+        public Boolean GetHalftone(int index, Boolean @default = default) => Column_Halftone.ElementAtOrDefault(index, @default);
+        public Int32[] Column_DetailLevel { get; }
+        public Int32 GetDetailLevel(int index, Int32 @default = default) => Column_DetailLevel.ElementAtOrDefault(index, @default);
+        public String[] Column_Key { get; }
+        public String GetKey(int index, String @default = "") => Column_Key.ElementAtOrDefault(index, @default);
+        public int[] Column_ProjectionLinePatternIndex { get; }
+        public int GetProjectionLinePatternIndex(int index) => Column_ProjectionLinePatternIndex.ElementAtOrDefault(index, EntityRelation.None);
+        public LinePattern GetProjectionLinePattern(int index) => _GetReferencedProjectionLinePattern(GetProjectionLinePatternIndex(index));
+        private LinePattern _GetReferencedProjectionLinePattern(int referencedIndex) => ParentTableSet.GetLinePattern(referencedIndex);
+        public int[] Column_CutLinePatternIndex { get; }
+        public int GetCutLinePatternIndex(int index) => Column_CutLinePatternIndex.ElementAtOrDefault(index, EntityRelation.None);
+        public LinePattern GetCutLinePattern(int index) => _GetReferencedCutLinePattern(GetCutLinePatternIndex(index));
+        private LinePattern _GetReferencedCutLinePattern(int referencedIndex) => ParentTableSet.GetLinePattern(referencedIndex);
+        public int[] Column_SurfaceForegroundPatternIndex { get; }
+        public int GetSurfaceForegroundPatternIndex(int index) => Column_SurfaceForegroundPatternIndex.ElementAtOrDefault(index, EntityRelation.None);
+        public FillPattern GetSurfaceForegroundPattern(int index) => _GetReferencedSurfaceForegroundPattern(GetSurfaceForegroundPatternIndex(index));
+        private FillPattern _GetReferencedSurfaceForegroundPattern(int referencedIndex) => ParentTableSet.GetFillPattern(referencedIndex);
+        public int[] Column_SurfaceBackgroundPatternIndex { get; }
+        public int GetSurfaceBackgroundPatternIndex(int index) => Column_SurfaceBackgroundPatternIndex.ElementAtOrDefault(index, EntityRelation.None);
+        public FillPattern GetSurfaceBackgroundPattern(int index) => _GetReferencedSurfaceBackgroundPattern(GetSurfaceBackgroundPatternIndex(index));
+        private FillPattern _GetReferencedSurfaceBackgroundPattern(int referencedIndex) => ParentTableSet.GetFillPattern(referencedIndex);
+        public int[] Column_CutForegroundPatternIndex { get; }
+        public int GetCutForegroundPatternIndex(int index) => Column_CutForegroundPatternIndex.ElementAtOrDefault(index, EntityRelation.None);
+        public FillPattern GetCutForegroundPattern(int index) => _GetReferencedCutForegroundPattern(GetCutForegroundPatternIndex(index));
+        private FillPattern _GetReferencedCutForegroundPattern(int referencedIndex) => ParentTableSet.GetFillPattern(referencedIndex);
+        public int[] Column_CutBackgroundPatternIndex { get; }
+        public int GetCutBackgroundPatternIndex(int index) => Column_CutBackgroundPatternIndex.ElementAtOrDefault(index, EntityRelation.None);
+        public FillPattern GetCutBackgroundPattern(int index) => _GetReferencedCutBackgroundPattern(GetCutBackgroundPatternIndex(index));
+        private FillPattern _GetReferencedCutBackgroundPattern(int referencedIndex) => ParentTableSet.GetFillPattern(referencedIndex);
+        // Object Getter
+        public GraphicOverride Get(int index)
+        {
+            if (index < 0) return null;
+            var r = new GraphicOverride();
+            r.Index = index;
+            r.ProjectionLineWeight = GetProjectionLineWeight(index);
+            r.HasProjectionLineColor = GetHasProjectionLineColor(index);
+            r.ProjectionLineColor_X = GetProjectionLineColor_X(index);
+            r.ProjectionLineColor_Y = GetProjectionLineColor_Y(index);
+            r.ProjectionLineColor_Z = GetProjectionLineColor_Z(index);
+            r.CutLineWeight = GetCutLineWeight(index);
+            r.HasCutLineColor = GetHasCutLineColor(index);
+            r.CutLineColor_X = GetCutLineColor_X(index);
+            r.CutLineColor_Y = GetCutLineColor_Y(index);
+            r.CutLineColor_Z = GetCutLineColor_Z(index);
+            r.SurfaceForegroundPatternVisible = GetSurfaceForegroundPatternVisible(index);
+            r.HasSurfaceForegroundPatternColor = GetHasSurfaceForegroundPatternColor(index);
+            r.SurfaceForegroundPatternColor_X = GetSurfaceForegroundPatternColor_X(index);
+            r.SurfaceForegroundPatternColor_Y = GetSurfaceForegroundPatternColor_Y(index);
+            r.SurfaceForegroundPatternColor_Z = GetSurfaceForegroundPatternColor_Z(index);
+            r.SurfaceBackgroundPatternVisible = GetSurfaceBackgroundPatternVisible(index);
+            r.HasSurfaceBackgroundPatternColor = GetHasSurfaceBackgroundPatternColor(index);
+            r.SurfaceBackgroundPatternColor_X = GetSurfaceBackgroundPatternColor_X(index);
+            r.SurfaceBackgroundPatternColor_Y = GetSurfaceBackgroundPatternColor_Y(index);
+            r.SurfaceBackgroundPatternColor_Z = GetSurfaceBackgroundPatternColor_Z(index);
+            r.CutForegroundPatternVisible = GetCutForegroundPatternVisible(index);
+            r.HasCutForegroundPatternColor = GetHasCutForegroundPatternColor(index);
+            r.CutForegroundPatternColor_X = GetCutForegroundPatternColor_X(index);
+            r.CutForegroundPatternColor_Y = GetCutForegroundPatternColor_Y(index);
+            r.CutForegroundPatternColor_Z = GetCutForegroundPatternColor_Z(index);
+            r.CutBackgroundPatternVisible = GetCutBackgroundPatternVisible(index);
+            r.HasCutBackgroundPatternColor = GetHasCutBackgroundPatternColor(index);
+            r.CutBackgroundPatternColor_X = GetCutBackgroundPatternColor_X(index);
+            r.CutBackgroundPatternColor_Y = GetCutBackgroundPatternColor_Y(index);
+            r.CutBackgroundPatternColor_Z = GetCutBackgroundPatternColor_Z(index);
+            r.Transparency = GetTransparency(index);
+            r.Halftone = GetHalftone(index);
+            r.DetailLevel = GetDetailLevel(index);
+            r.Key = GetKey(index);
+            r._ProjectionLinePattern = new Relation<Vim.Format.ObjectModel.LinePattern>(GetProjectionLinePatternIndex(index), _GetReferencedProjectionLinePattern);
+            r._CutLinePattern = new Relation<Vim.Format.ObjectModel.LinePattern>(GetCutLinePatternIndex(index), _GetReferencedCutLinePattern);
+            r._SurfaceForegroundPattern = new Relation<Vim.Format.ObjectModel.FillPattern>(GetSurfaceForegroundPatternIndex(index), _GetReferencedSurfaceForegroundPattern);
+            r._SurfaceBackgroundPattern = new Relation<Vim.Format.ObjectModel.FillPattern>(GetSurfaceBackgroundPatternIndex(index), _GetReferencedSurfaceBackgroundPattern);
+            r._CutForegroundPattern = new Relation<Vim.Format.ObjectModel.FillPattern>(GetCutForegroundPatternIndex(index), _GetReferencedCutForegroundPattern);
+            r._CutBackgroundPattern = new Relation<Vim.Format.ObjectModel.FillPattern>(GetCutBackgroundPatternIndex(index), _GetReferencedCutBackgroundPattern);
+            return r;
+        }
+        // Enumerator
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+        public IEnumerator<GraphicOverride> GetEnumerator()
+        {
+            for (var i = 0; i < RowCount; ++i)
+                yield return Get(i);
+        }
+    } // class GraphicOverrideTable 
+    
+    public partial class CategoryInViewTable : EntityTable_v2, IEnumerable<CategoryInView>
+    {
+        
+        public const string TableName = TableNames.CategoryInView;
+        
+        public EntityTableSet ParentTableSet { get; } // can be null
+        
+        public CategoryInViewTable(SerializableEntityTable rawTable, string[] stringTable, EntityTableSet parentTableSet = null) : base(rawTable, stringTable)
+        {
+            ParentTableSet = parentTableSet;
+            Column_IsHidden = GetDataColumnValues<Boolean>("byte:IsHidden") ?? Array.Empty<Boolean>();
+            Column_ViewIndex = GetIndexColumnValues("index:Vim.View:View") ?? Array.Empty<int>();
+            Column_CategoryIndex = GetIndexColumnValues("index:Vim.Category:Category") ?? Array.Empty<int>();
+            Column_GraphicOverrideIndex = GetIndexColumnValues("index:Vim.GraphicOverride:GraphicOverride") ?? Array.Empty<int>();
+        }
+        
+        public Boolean[] Column_IsHidden { get; }
+        public Boolean GetIsHidden(int index, Boolean @default = default) => Column_IsHidden.ElementAtOrDefault(index, @default);
+        public int[] Column_ViewIndex { get; }
+        public int GetViewIndex(int index) => Column_ViewIndex.ElementAtOrDefault(index, EntityRelation.None);
+        public View GetView(int index) => _GetReferencedView(GetViewIndex(index));
+        private View _GetReferencedView(int referencedIndex) => ParentTableSet.GetView(referencedIndex);
+        public int[] Column_CategoryIndex { get; }
+        public int GetCategoryIndex(int index) => Column_CategoryIndex.ElementAtOrDefault(index, EntityRelation.None);
+        public Category GetCategory(int index) => _GetReferencedCategory(GetCategoryIndex(index));
+        private Category _GetReferencedCategory(int referencedIndex) => ParentTableSet.GetCategory(referencedIndex);
+        public int[] Column_GraphicOverrideIndex { get; }
+        public int GetGraphicOverrideIndex(int index) => Column_GraphicOverrideIndex.ElementAtOrDefault(index, EntityRelation.None);
+        public GraphicOverride GetGraphicOverride(int index) => _GetReferencedGraphicOverride(GetGraphicOverrideIndex(index));
+        private GraphicOverride _GetReferencedGraphicOverride(int referencedIndex) => ParentTableSet.GetGraphicOverride(referencedIndex);
+        // Object Getter
+        public CategoryInView Get(int index)
+        {
+            if (index < 0) return null;
+            var r = new CategoryInView();
+            r.Index = index;
+            r.IsHidden = GetIsHidden(index);
+            r._View = new Relation<Vim.Format.ObjectModel.View>(GetViewIndex(index), _GetReferencedView);
+            r._Category = new Relation<Vim.Format.ObjectModel.Category>(GetCategoryIndex(index), _GetReferencedCategory);
+            r._GraphicOverride = new Relation<Vim.Format.ObjectModel.GraphicOverride>(GetGraphicOverrideIndex(index), _GetReferencedGraphicOverride);
+            return r;
+        }
+        // Enumerator
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+        public IEnumerator<CategoryInView> GetEnumerator()
+        {
+            for (var i = 0; i < RowCount; ++i)
+                yield return Get(i);
+        }
+    } // class CategoryInViewTable 
+    
+    public partial class ElementOverrideInViewTable : EntityTable_v2, IEnumerable<ElementOverrideInView>
+    {
+        
+        public const string TableName = TableNames.ElementOverrideInView;
+        
+        public EntityTableSet ParentTableSet { get; } // can be null
+        
+        public ElementOverrideInViewTable(SerializableEntityTable rawTable, string[] stringTable, EntityTableSet parentTableSet = null) : base(rawTable, stringTable)
+        {
+            ParentTableSet = parentTableSet;
+            Column_IsHidden = GetDataColumnValues<Boolean>("byte:IsHidden") ?? Array.Empty<Boolean>();
+            Column_ViewIndex = GetIndexColumnValues("index:Vim.View:View") ?? Array.Empty<int>();
+            Column_GraphicOverrideIndex = GetIndexColumnValues("index:Vim.GraphicOverride:GraphicOverride") ?? Array.Empty<int>();
+            Column_ElementIndex = GetIndexColumnValues("index:Vim.Element:Element") ?? Array.Empty<int>();
+        }
+        
+        public Boolean[] Column_IsHidden { get; }
+        public Boolean GetIsHidden(int index, Boolean @default = default) => Column_IsHidden.ElementAtOrDefault(index, @default);
+        public int[] Column_ViewIndex { get; }
+        public int GetViewIndex(int index) => Column_ViewIndex.ElementAtOrDefault(index, EntityRelation.None);
+        public View GetView(int index) => _GetReferencedView(GetViewIndex(index));
+        private View _GetReferencedView(int referencedIndex) => ParentTableSet.GetView(referencedIndex);
+        public int[] Column_GraphicOverrideIndex { get; }
+        public int GetGraphicOverrideIndex(int index) => Column_GraphicOverrideIndex.ElementAtOrDefault(index, EntityRelation.None);
+        public GraphicOverride GetGraphicOverride(int index) => _GetReferencedGraphicOverride(GetGraphicOverrideIndex(index));
+        private GraphicOverride _GetReferencedGraphicOverride(int referencedIndex) => ParentTableSet.GetGraphicOverride(referencedIndex);
+        public int[] Column_ElementIndex { get; }
+        public int GetElementIndex(int index) => Column_ElementIndex.ElementAtOrDefault(index, EntityRelation.None);
+        public Element GetElement(int index) => _GetReferencedElement(GetElementIndex(index));
+        private Element _GetReferencedElement(int referencedIndex) => ParentTableSet.GetElement(referencedIndex);
+        // Object Getter
+        public ElementOverrideInView Get(int index)
+        {
+            if (index < 0) return null;
+            var r = new ElementOverrideInView();
+            r.Index = index;
+            r.IsHidden = GetIsHidden(index);
+            r._View = new Relation<Vim.Format.ObjectModel.View>(GetViewIndex(index), _GetReferencedView);
+            r._GraphicOverride = new Relation<Vim.Format.ObjectModel.GraphicOverride>(GetGraphicOverrideIndex(index), _GetReferencedGraphicOverride);
+            r._Element = new Relation<Vim.Format.ObjectModel.Element>(GetElementIndex(index), _GetReferencedElement);
+            return r;
+        }
+        // Enumerator
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+        public IEnumerator<ElementOverrideInView> GetEnumerator()
+        {
+            for (var i = 0; i < RowCount; ++i)
+                yield return Get(i);
+        }
+    } // class ElementOverrideInViewTable 
+    
+    public partial class PhaseGraphicOverrideTable : EntityTable_v2, IEnumerable<PhaseGraphicOverride>
+    {
+        
+        public const string TableName = TableNames.PhaseGraphicOverride;
+        
+        public EntityTableSet ParentTableSet { get; } // can be null
+        
+        public PhaseGraphicOverrideTable(SerializableEntityTable rawTable, string[] stringTable, EntityTableSet parentTableSet = null) : base(rawTable, stringTable)
+        {
+            ParentTableSet = parentTableSet;
+            Column_Status = GetStringColumnValues("string:Status") ?? Array.Empty<String>();
+            Column_Scale = GetDataColumnValues<Int32>("int:Scale") ?? Array.Empty<Int32>();
+            Column_HasProjectionLine = GetDataColumnValues<Boolean>("byte:HasProjectionLine") ?? Array.Empty<Boolean>();
+            Column_ProjectionLineColor_X = GetDataColumnValues<Double>("double:ProjectionLineColor.X") ?? Array.Empty<Double>();
+            Column_ProjectionLineColor_Y = GetDataColumnValues<Double>("double:ProjectionLineColor.Y") ?? Array.Empty<Double>();
+            Column_ProjectionLineColor_Z = GetDataColumnValues<Double>("double:ProjectionLineColor.Z") ?? Array.Empty<Double>();
+            Column_ProjectionLineWidth = GetDataColumnValues<Double>("double:ProjectionLineWidth") ?? Array.Empty<Double>();
+            Column_ProjectionLineWeight = GetDataColumnValues<Int32>("int:ProjectionLineWeight") ?? Array.Empty<Int32>();
+            Column_HasCutLine = GetDataColumnValues<Boolean>("byte:HasCutLine") ?? Array.Empty<Boolean>();
+            Column_CutLineColor_X = GetDataColumnValues<Double>("double:CutLineColor.X") ?? Array.Empty<Double>();
+            Column_CutLineColor_Y = GetDataColumnValues<Double>("double:CutLineColor.Y") ?? Array.Empty<Double>();
+            Column_CutLineColor_Z = GetDataColumnValues<Double>("double:CutLineColor.Z") ?? Array.Empty<Double>();
+            Column_CutLineWidth = GetDataColumnValues<Double>("double:CutLineWidth") ?? Array.Empty<Double>();
+            Column_CutLineWeight = GetDataColumnValues<Int32>("int:CutLineWeight") ?? Array.Empty<Int32>();
+            Column_ProjectionLinePatternIndex = GetIndexColumnValues("index:Vim.LinePattern:ProjectionLinePattern") ?? Array.Empty<int>();
+            Column_CutLinePatternIndex = GetIndexColumnValues("index:Vim.LinePattern:CutLinePattern") ?? Array.Empty<int>();
+            Column_BimDocumentIndex = GetIndexColumnValues("index:Vim.BimDocument:BimDocument") ?? Array.Empty<int>();
+        }
+        
+        public String[] Column_Status { get; }
+        public String GetStatus(int index, String @default = "") => Column_Status.ElementAtOrDefault(index, @default);
+        public Int32[] Column_Scale { get; }
+        public Int32 GetScale(int index, Int32 @default = default) => Column_Scale.ElementAtOrDefault(index, @default);
+        public Boolean[] Column_HasProjectionLine { get; }
+        public Boolean GetHasProjectionLine(int index, Boolean @default = default) => Column_HasProjectionLine.ElementAtOrDefault(index, @default);
+        public Double[] Column_ProjectionLineColor_X { get; }
+        public Double GetProjectionLineColor_X(int index, Double @default = default) => Column_ProjectionLineColor_X.ElementAtOrDefault(index, @default);
+        public Double[] Column_ProjectionLineColor_Y { get; }
+        public Double GetProjectionLineColor_Y(int index, Double @default = default) => Column_ProjectionLineColor_Y.ElementAtOrDefault(index, @default);
+        public Double[] Column_ProjectionLineColor_Z { get; }
+        public Double GetProjectionLineColor_Z(int index, Double @default = default) => Column_ProjectionLineColor_Z.ElementAtOrDefault(index, @default);
+        public Double[] Column_ProjectionLineWidth { get; }
+        public Double GetProjectionLineWidth(int index, Double @default = default) => Column_ProjectionLineWidth.ElementAtOrDefault(index, @default);
+        public Int32[] Column_ProjectionLineWeight { get; }
+        public Int32 GetProjectionLineWeight(int index, Int32 @default = default) => Column_ProjectionLineWeight.ElementAtOrDefault(index, @default);
+        public Boolean[] Column_HasCutLine { get; }
+        public Boolean GetHasCutLine(int index, Boolean @default = default) => Column_HasCutLine.ElementAtOrDefault(index, @default);
+        public Double[] Column_CutLineColor_X { get; }
+        public Double GetCutLineColor_X(int index, Double @default = default) => Column_CutLineColor_X.ElementAtOrDefault(index, @default);
+        public Double[] Column_CutLineColor_Y { get; }
+        public Double GetCutLineColor_Y(int index, Double @default = default) => Column_CutLineColor_Y.ElementAtOrDefault(index, @default);
+        public Double[] Column_CutLineColor_Z { get; }
+        public Double GetCutLineColor_Z(int index, Double @default = default) => Column_CutLineColor_Z.ElementAtOrDefault(index, @default);
+        public Double[] Column_CutLineWidth { get; }
+        public Double GetCutLineWidth(int index, Double @default = default) => Column_CutLineWidth.ElementAtOrDefault(index, @default);
+        public Int32[] Column_CutLineWeight { get; }
+        public Int32 GetCutLineWeight(int index, Int32 @default = default) => Column_CutLineWeight.ElementAtOrDefault(index, @default);
+        public int[] Column_ProjectionLinePatternIndex { get; }
+        public int GetProjectionLinePatternIndex(int index) => Column_ProjectionLinePatternIndex.ElementAtOrDefault(index, EntityRelation.None);
+        public LinePattern GetProjectionLinePattern(int index) => _GetReferencedProjectionLinePattern(GetProjectionLinePatternIndex(index));
+        private LinePattern _GetReferencedProjectionLinePattern(int referencedIndex) => ParentTableSet.GetLinePattern(referencedIndex);
+        public int[] Column_CutLinePatternIndex { get; }
+        public int GetCutLinePatternIndex(int index) => Column_CutLinePatternIndex.ElementAtOrDefault(index, EntityRelation.None);
+        public LinePattern GetCutLinePattern(int index) => _GetReferencedCutLinePattern(GetCutLinePatternIndex(index));
+        private LinePattern _GetReferencedCutLinePattern(int referencedIndex) => ParentTableSet.GetLinePattern(referencedIndex);
+        public int[] Column_BimDocumentIndex { get; }
+        public int GetBimDocumentIndex(int index) => Column_BimDocumentIndex.ElementAtOrDefault(index, EntityRelation.None);
+        public BimDocument GetBimDocument(int index) => _GetReferencedBimDocument(GetBimDocumentIndex(index));
+        private BimDocument _GetReferencedBimDocument(int referencedIndex) => ParentTableSet.GetBimDocument(referencedIndex);
+        // Object Getter
+        public PhaseGraphicOverride Get(int index)
+        {
+            if (index < 0) return null;
+            var r = new PhaseGraphicOverride();
+            r.Index = index;
+            r.Status = GetStatus(index);
+            r.Scale = GetScale(index);
+            r.HasProjectionLine = GetHasProjectionLine(index);
+            r.ProjectionLineColor_X = GetProjectionLineColor_X(index);
+            r.ProjectionLineColor_Y = GetProjectionLineColor_Y(index);
+            r.ProjectionLineColor_Z = GetProjectionLineColor_Z(index);
+            r.ProjectionLineWidth = GetProjectionLineWidth(index);
+            r.ProjectionLineWeight = GetProjectionLineWeight(index);
+            r.HasCutLine = GetHasCutLine(index);
+            r.CutLineColor_X = GetCutLineColor_X(index);
+            r.CutLineColor_Y = GetCutLineColor_Y(index);
+            r.CutLineColor_Z = GetCutLineColor_Z(index);
+            r.CutLineWidth = GetCutLineWidth(index);
+            r.CutLineWeight = GetCutLineWeight(index);
+            r._ProjectionLinePattern = new Relation<Vim.Format.ObjectModel.LinePattern>(GetProjectionLinePatternIndex(index), _GetReferencedProjectionLinePattern);
+            r._CutLinePattern = new Relation<Vim.Format.ObjectModel.LinePattern>(GetCutLinePatternIndex(index), _GetReferencedCutLinePattern);
+            r._BimDocument = new Relation<Vim.Format.ObjectModel.BimDocument>(GetBimDocumentIndex(index), _GetReferencedBimDocument);
+            return r;
+        }
+        // Enumerator
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+        public IEnumerator<PhaseGraphicOverride> GetEnumerator()
+        {
+            for (var i = 0; i < RowCount; ++i)
+                yield return Get(i);
+        }
+    } // class PhaseGraphicOverrideTable 
     
     public partial class ElementInViewTable : EntityTable_v2, IEnumerable<ElementInView>
     {
@@ -8169,8 +9996,29 @@ namespace Vim.Format.ObjectModel {
             Column_Glossiness = GetDataColumnValues<Double>("double:Glossiness") ?? Array.Empty<Double>();
             Column_Smoothness = GetDataColumnValues<Double>("double:Smoothness") ?? Array.Empty<Double>();
             Column_Transparency = GetDataColumnValues<Double>("double:Transparency") ?? Array.Empty<Double>();
+            Column_GraphicsRead = GetDataColumnValues<Boolean>("byte:GraphicsRead") ?? Array.Empty<Boolean>();
+            Column_ShadingColor_X = GetDataColumnValues<Double>("double:ShadingColor.X") ?? Array.Empty<Double>();
+            Column_ShadingColor_Y = GetDataColumnValues<Double>("double:ShadingColor.Y") ?? Array.Empty<Double>();
+            Column_ShadingColor_Z = GetDataColumnValues<Double>("double:ShadingColor.Z") ?? Array.Empty<Double>();
+            Column_UseRenderAppearanceForShading = GetDataColumnValues<Boolean>("byte:UseRenderAppearanceForShading") ?? Array.Empty<Boolean>();
+            Column_SurfaceForegroundPatternColor_X = GetDataColumnValues<Double>("double:SurfaceForegroundPatternColor.X") ?? Array.Empty<Double>();
+            Column_SurfaceForegroundPatternColor_Y = GetDataColumnValues<Double>("double:SurfaceForegroundPatternColor.Y") ?? Array.Empty<Double>();
+            Column_SurfaceForegroundPatternColor_Z = GetDataColumnValues<Double>("double:SurfaceForegroundPatternColor.Z") ?? Array.Empty<Double>();
+            Column_SurfaceBackgroundPatternColor_X = GetDataColumnValues<Double>("double:SurfaceBackgroundPatternColor.X") ?? Array.Empty<Double>();
+            Column_SurfaceBackgroundPatternColor_Y = GetDataColumnValues<Double>("double:SurfaceBackgroundPatternColor.Y") ?? Array.Empty<Double>();
+            Column_SurfaceBackgroundPatternColor_Z = GetDataColumnValues<Double>("double:SurfaceBackgroundPatternColor.Z") ?? Array.Empty<Double>();
+            Column_CutForegroundPatternColor_X = GetDataColumnValues<Double>("double:CutForegroundPatternColor.X") ?? Array.Empty<Double>();
+            Column_CutForegroundPatternColor_Y = GetDataColumnValues<Double>("double:CutForegroundPatternColor.Y") ?? Array.Empty<Double>();
+            Column_CutForegroundPatternColor_Z = GetDataColumnValues<Double>("double:CutForegroundPatternColor.Z") ?? Array.Empty<Double>();
+            Column_CutBackgroundPatternColor_X = GetDataColumnValues<Double>("double:CutBackgroundPatternColor.X") ?? Array.Empty<Double>();
+            Column_CutBackgroundPatternColor_Y = GetDataColumnValues<Double>("double:CutBackgroundPatternColor.Y") ?? Array.Empty<Double>();
+            Column_CutBackgroundPatternColor_Z = GetDataColumnValues<Double>("double:CutBackgroundPatternColor.Z") ?? Array.Empty<Double>();
             Column_ColorTextureFileIndex = GetIndexColumnValues("index:Vim.Asset:ColorTextureFile") ?? Array.Empty<int>();
             Column_NormalTextureFileIndex = GetIndexColumnValues("index:Vim.Asset:NormalTextureFile") ?? Array.Empty<int>();
+            Column_SurfaceForegroundPatternIndex = GetIndexColumnValues("index:Vim.FillPattern:SurfaceForegroundPattern") ?? Array.Empty<int>();
+            Column_SurfaceBackgroundPatternIndex = GetIndexColumnValues("index:Vim.FillPattern:SurfaceBackgroundPattern") ?? Array.Empty<int>();
+            Column_CutForegroundPatternIndex = GetIndexColumnValues("index:Vim.FillPattern:CutForegroundPattern") ?? Array.Empty<int>();
+            Column_CutBackgroundPatternIndex = GetIndexColumnValues("index:Vim.FillPattern:CutBackgroundPattern") ?? Array.Empty<int>();
             Column_ElementIndex = GetIndexColumnValues("index:Vim.Element:Element") ?? Array.Empty<int>();
         }
         
@@ -8208,6 +10056,40 @@ namespace Vim.Format.ObjectModel {
         public Double GetSmoothness(int index, Double @default = default) => Column_Smoothness.ElementAtOrDefault(index, @default);
         public Double[] Column_Transparency { get; }
         public Double GetTransparency(int index, Double @default = default) => Column_Transparency.ElementAtOrDefault(index, @default);
+        public Boolean[] Column_GraphicsRead { get; }
+        public Boolean GetGraphicsRead(int index, Boolean @default = default) => Column_GraphicsRead.ElementAtOrDefault(index, @default);
+        public Double[] Column_ShadingColor_X { get; }
+        public Double GetShadingColor_X(int index, Double @default = default) => Column_ShadingColor_X.ElementAtOrDefault(index, @default);
+        public Double[] Column_ShadingColor_Y { get; }
+        public Double GetShadingColor_Y(int index, Double @default = default) => Column_ShadingColor_Y.ElementAtOrDefault(index, @default);
+        public Double[] Column_ShadingColor_Z { get; }
+        public Double GetShadingColor_Z(int index, Double @default = default) => Column_ShadingColor_Z.ElementAtOrDefault(index, @default);
+        public Boolean[] Column_UseRenderAppearanceForShading { get; }
+        public Boolean GetUseRenderAppearanceForShading(int index, Boolean @default = default) => Column_UseRenderAppearanceForShading.ElementAtOrDefault(index, @default);
+        public Double[] Column_SurfaceForegroundPatternColor_X { get; }
+        public Double GetSurfaceForegroundPatternColor_X(int index, Double @default = default) => Column_SurfaceForegroundPatternColor_X.ElementAtOrDefault(index, @default);
+        public Double[] Column_SurfaceForegroundPatternColor_Y { get; }
+        public Double GetSurfaceForegroundPatternColor_Y(int index, Double @default = default) => Column_SurfaceForegroundPatternColor_Y.ElementAtOrDefault(index, @default);
+        public Double[] Column_SurfaceForegroundPatternColor_Z { get; }
+        public Double GetSurfaceForegroundPatternColor_Z(int index, Double @default = default) => Column_SurfaceForegroundPatternColor_Z.ElementAtOrDefault(index, @default);
+        public Double[] Column_SurfaceBackgroundPatternColor_X { get; }
+        public Double GetSurfaceBackgroundPatternColor_X(int index, Double @default = default) => Column_SurfaceBackgroundPatternColor_X.ElementAtOrDefault(index, @default);
+        public Double[] Column_SurfaceBackgroundPatternColor_Y { get; }
+        public Double GetSurfaceBackgroundPatternColor_Y(int index, Double @default = default) => Column_SurfaceBackgroundPatternColor_Y.ElementAtOrDefault(index, @default);
+        public Double[] Column_SurfaceBackgroundPatternColor_Z { get; }
+        public Double GetSurfaceBackgroundPatternColor_Z(int index, Double @default = default) => Column_SurfaceBackgroundPatternColor_Z.ElementAtOrDefault(index, @default);
+        public Double[] Column_CutForegroundPatternColor_X { get; }
+        public Double GetCutForegroundPatternColor_X(int index, Double @default = default) => Column_CutForegroundPatternColor_X.ElementAtOrDefault(index, @default);
+        public Double[] Column_CutForegroundPatternColor_Y { get; }
+        public Double GetCutForegroundPatternColor_Y(int index, Double @default = default) => Column_CutForegroundPatternColor_Y.ElementAtOrDefault(index, @default);
+        public Double[] Column_CutForegroundPatternColor_Z { get; }
+        public Double GetCutForegroundPatternColor_Z(int index, Double @default = default) => Column_CutForegroundPatternColor_Z.ElementAtOrDefault(index, @default);
+        public Double[] Column_CutBackgroundPatternColor_X { get; }
+        public Double GetCutBackgroundPatternColor_X(int index, Double @default = default) => Column_CutBackgroundPatternColor_X.ElementAtOrDefault(index, @default);
+        public Double[] Column_CutBackgroundPatternColor_Y { get; }
+        public Double GetCutBackgroundPatternColor_Y(int index, Double @default = default) => Column_CutBackgroundPatternColor_Y.ElementAtOrDefault(index, @default);
+        public Double[] Column_CutBackgroundPatternColor_Z { get; }
+        public Double GetCutBackgroundPatternColor_Z(int index, Double @default = default) => Column_CutBackgroundPatternColor_Z.ElementAtOrDefault(index, @default);
         public int[] Column_ColorTextureFileIndex { get; }
         public int GetColorTextureFileIndex(int index) => Column_ColorTextureFileIndex.ElementAtOrDefault(index, EntityRelation.None);
         public Asset GetColorTextureFile(int index) => _GetReferencedColorTextureFile(GetColorTextureFileIndex(index));
@@ -8216,6 +10098,22 @@ namespace Vim.Format.ObjectModel {
         public int GetNormalTextureFileIndex(int index) => Column_NormalTextureFileIndex.ElementAtOrDefault(index, EntityRelation.None);
         public Asset GetNormalTextureFile(int index) => _GetReferencedNormalTextureFile(GetNormalTextureFileIndex(index));
         private Asset _GetReferencedNormalTextureFile(int referencedIndex) => ParentTableSet.GetAsset(referencedIndex);
+        public int[] Column_SurfaceForegroundPatternIndex { get; }
+        public int GetSurfaceForegroundPatternIndex(int index) => Column_SurfaceForegroundPatternIndex.ElementAtOrDefault(index, EntityRelation.None);
+        public FillPattern GetSurfaceForegroundPattern(int index) => _GetReferencedSurfaceForegroundPattern(GetSurfaceForegroundPatternIndex(index));
+        private FillPattern _GetReferencedSurfaceForegroundPattern(int referencedIndex) => ParentTableSet.GetFillPattern(referencedIndex);
+        public int[] Column_SurfaceBackgroundPatternIndex { get; }
+        public int GetSurfaceBackgroundPatternIndex(int index) => Column_SurfaceBackgroundPatternIndex.ElementAtOrDefault(index, EntityRelation.None);
+        public FillPattern GetSurfaceBackgroundPattern(int index) => _GetReferencedSurfaceBackgroundPattern(GetSurfaceBackgroundPatternIndex(index));
+        private FillPattern _GetReferencedSurfaceBackgroundPattern(int referencedIndex) => ParentTableSet.GetFillPattern(referencedIndex);
+        public int[] Column_CutForegroundPatternIndex { get; }
+        public int GetCutForegroundPatternIndex(int index) => Column_CutForegroundPatternIndex.ElementAtOrDefault(index, EntityRelation.None);
+        public FillPattern GetCutForegroundPattern(int index) => _GetReferencedCutForegroundPattern(GetCutForegroundPatternIndex(index));
+        private FillPattern _GetReferencedCutForegroundPattern(int referencedIndex) => ParentTableSet.GetFillPattern(referencedIndex);
+        public int[] Column_CutBackgroundPatternIndex { get; }
+        public int GetCutBackgroundPatternIndex(int index) => Column_CutBackgroundPatternIndex.ElementAtOrDefault(index, EntityRelation.None);
+        public FillPattern GetCutBackgroundPattern(int index) => _GetReferencedCutBackgroundPattern(GetCutBackgroundPatternIndex(index));
+        private FillPattern _GetReferencedCutBackgroundPattern(int referencedIndex) => ParentTableSet.GetFillPattern(referencedIndex);
         public int[] Column_ElementIndex { get; }
         public int GetElementIndex(int index) => Column_ElementIndex.ElementAtOrDefault(index, EntityRelation.None);
         public Element GetElement(int index) => _GetReferencedElement(GetElementIndex(index));
@@ -8243,8 +10141,29 @@ namespace Vim.Format.ObjectModel {
             r.Glossiness = GetGlossiness(index);
             r.Smoothness = GetSmoothness(index);
             r.Transparency = GetTransparency(index);
+            r.GraphicsRead = GetGraphicsRead(index);
+            r.ShadingColor_X = GetShadingColor_X(index);
+            r.ShadingColor_Y = GetShadingColor_Y(index);
+            r.ShadingColor_Z = GetShadingColor_Z(index);
+            r.UseRenderAppearanceForShading = GetUseRenderAppearanceForShading(index);
+            r.SurfaceForegroundPatternColor_X = GetSurfaceForegroundPatternColor_X(index);
+            r.SurfaceForegroundPatternColor_Y = GetSurfaceForegroundPatternColor_Y(index);
+            r.SurfaceForegroundPatternColor_Z = GetSurfaceForegroundPatternColor_Z(index);
+            r.SurfaceBackgroundPatternColor_X = GetSurfaceBackgroundPatternColor_X(index);
+            r.SurfaceBackgroundPatternColor_Y = GetSurfaceBackgroundPatternColor_Y(index);
+            r.SurfaceBackgroundPatternColor_Z = GetSurfaceBackgroundPatternColor_Z(index);
+            r.CutForegroundPatternColor_X = GetCutForegroundPatternColor_X(index);
+            r.CutForegroundPatternColor_Y = GetCutForegroundPatternColor_Y(index);
+            r.CutForegroundPatternColor_Z = GetCutForegroundPatternColor_Z(index);
+            r.CutBackgroundPatternColor_X = GetCutBackgroundPatternColor_X(index);
+            r.CutBackgroundPatternColor_Y = GetCutBackgroundPatternColor_Y(index);
+            r.CutBackgroundPatternColor_Z = GetCutBackgroundPatternColor_Z(index);
             r._ColorTextureFile = new Relation<Vim.Format.ObjectModel.Asset>(GetColorTextureFileIndex(index), _GetReferencedColorTextureFile);
             r._NormalTextureFile = new Relation<Vim.Format.ObjectModel.Asset>(GetNormalTextureFileIndex(index), _GetReferencedNormalTextureFile);
+            r._SurfaceForegroundPattern = new Relation<Vim.Format.ObjectModel.FillPattern>(GetSurfaceForegroundPatternIndex(index), _GetReferencedSurfaceForegroundPattern);
+            r._SurfaceBackgroundPattern = new Relation<Vim.Format.ObjectModel.FillPattern>(GetSurfaceBackgroundPatternIndex(index), _GetReferencedSurfaceBackgroundPattern);
+            r._CutForegroundPattern = new Relation<Vim.Format.ObjectModel.FillPattern>(GetCutForegroundPatternIndex(index), _GetReferencedCutForegroundPattern);
+            r._CutBackgroundPattern = new Relation<Vim.Format.ObjectModel.FillPattern>(GetCutBackgroundPatternIndex(index), _GetReferencedCutBackgroundPattern);
             r._Element = new Relation<Vim.Format.ObjectModel.Element>(GetElementIndex(index), _GetReferencedElement);
             return r;
         }
@@ -8436,6 +10355,69 @@ namespace Vim.Format.ObjectModel {
                 yield return Get(i);
         }
     } // class NodeTable 
+    
+    public partial class GeometryPieceTable : EntityTable_v2, IEnumerable<GeometryPiece>
+    {
+        
+        public const string TableName = TableNames.GeometryPiece;
+        
+        public EntityTableSet ParentTableSet { get; } // can be null
+        
+        public GeometryPieceTable(SerializableEntityTable rawTable, string[] stringTable, EntityTableSet parentTableSet = null) : base(rawTable, stringTable)
+        {
+            ParentTableSet = parentTableSet;
+            Column_SubmeshIndex = GetDataColumnValues<Int32>("int:SubmeshIndex") ?? Array.Empty<Int32>();
+            Column_NodeIndex = GetIndexColumnValues("index:Vim.Node:Node") ?? Array.Empty<int>();
+            Column_MaterialIndex = GetIndexColumnValues("index:Vim.Material:Material") ?? Array.Empty<int>();
+            Column_SubcategoryIndex = GetIndexColumnValues("index:Vim.Category:Subcategory") ?? Array.Empty<int>();
+            Column_CompoundStructureLayerIndex = GetIndexColumnValues("index:Vim.CompoundStructureLayer:CompoundStructureLayer") ?? Array.Empty<int>();
+            Column_ElementIndex = GetIndexColumnValues("index:Vim.Element:Element") ?? Array.Empty<int>();
+        }
+        
+        public Int32[] Column_SubmeshIndex { get; }
+        public Int32 GetSubmeshIndex(int index, Int32 @default = default) => Column_SubmeshIndex.ElementAtOrDefault(index, @default);
+        public int[] Column_NodeIndex { get; }
+        public int GetNodeIndex(int index) => Column_NodeIndex.ElementAtOrDefault(index, EntityRelation.None);
+        public Node GetNode(int index) => _GetReferencedNode(GetNodeIndex(index));
+        private Node _GetReferencedNode(int referencedIndex) => ParentTableSet.GetNode(referencedIndex);
+        public int[] Column_MaterialIndex { get; }
+        public int GetMaterialIndex(int index) => Column_MaterialIndex.ElementAtOrDefault(index, EntityRelation.None);
+        public Material GetMaterial(int index) => _GetReferencedMaterial(GetMaterialIndex(index));
+        private Material _GetReferencedMaterial(int referencedIndex) => ParentTableSet.GetMaterial(referencedIndex);
+        public int[] Column_SubcategoryIndex { get; }
+        public int GetSubcategoryIndex(int index) => Column_SubcategoryIndex.ElementAtOrDefault(index, EntityRelation.None);
+        public Category GetSubcategory(int index) => _GetReferencedSubcategory(GetSubcategoryIndex(index));
+        private Category _GetReferencedSubcategory(int referencedIndex) => ParentTableSet.GetCategory(referencedIndex);
+        public int[] Column_CompoundStructureLayerIndex { get; }
+        public int GetCompoundStructureLayerIndex(int index) => Column_CompoundStructureLayerIndex.ElementAtOrDefault(index, EntityRelation.None);
+        public CompoundStructureLayer GetCompoundStructureLayer(int index) => _GetReferencedCompoundStructureLayer(GetCompoundStructureLayerIndex(index));
+        private CompoundStructureLayer _GetReferencedCompoundStructureLayer(int referencedIndex) => ParentTableSet.GetCompoundStructureLayer(referencedIndex);
+        public int[] Column_ElementIndex { get; }
+        public int GetElementIndex(int index) => Column_ElementIndex.ElementAtOrDefault(index, EntityRelation.None);
+        public Element GetElement(int index) => _GetReferencedElement(GetElementIndex(index));
+        private Element _GetReferencedElement(int referencedIndex) => ParentTableSet.GetElement(referencedIndex);
+        // Object Getter
+        public GeometryPiece Get(int index)
+        {
+            if (index < 0) return null;
+            var r = new GeometryPiece();
+            r.Index = index;
+            r.SubmeshIndex = GetSubmeshIndex(index);
+            r._Node = new Relation<Vim.Format.ObjectModel.Node>(GetNodeIndex(index), _GetReferencedNode);
+            r._Material = new Relation<Vim.Format.ObjectModel.Material>(GetMaterialIndex(index), _GetReferencedMaterial);
+            r._Subcategory = new Relation<Vim.Format.ObjectModel.Category>(GetSubcategoryIndex(index), _GetReferencedSubcategory);
+            r._CompoundStructureLayer = new Relation<Vim.Format.ObjectModel.CompoundStructureLayer>(GetCompoundStructureLayerIndex(index), _GetReferencedCompoundStructureLayer);
+            r._Element = new Relation<Vim.Format.ObjectModel.Element>(GetElementIndex(index), _GetReferencedElement);
+            return r;
+        }
+        // Enumerator
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+        public IEnumerator<GeometryPiece> GetEnumerator()
+        {
+            for (var i = 0; i < RowCount; ++i)
+                yield return Get(i);
+        }
+    } // class GeometryPieceTable 
     
     public partial class GeometryTable : EntityTable_v2, IEnumerable<Geometry>
     {
@@ -10935,6 +12917,21 @@ namespace Vim.Format.ObjectModel {
                 tb.AddStringColumn("string:BuiltInCategory", columnData);
             }
             {
+                var columnData = new Int32[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].ProjectionLineWeight; }
+                tb.AddDataColumn("int:ProjectionLineWeight", columnData);
+            }
+            {
+                var columnData = new Int32[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].CutLineWeight; }
+                tb.AddDataColumn("int:CutLineWeight", columnData);
+            }
+            {
+                var columnData = new Boolean[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].IsCuttable; }
+                tb.AddDataColumn("byte:IsCuttable", columnData);
+            }
+            {
                 var columnData = new int[entityCount];
                 for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._Parent?.Index ?? EntityRelation.None; }
                 tb.AddIndexColumn("index:Vim.Category:Parent", columnData);
@@ -10943,6 +12940,16 @@ namespace Vim.Format.ObjectModel {
                 var columnData = new int[entityCount];
                 for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._Material?.Index ?? EntityRelation.None; }
                 tb.AddIndexColumn("index:Vim.Material:Material", columnData);
+            }
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._ProjectionLinePattern?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.LinePattern:ProjectionLinePattern", columnData);
+            }
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._CutLinePattern?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.LinePattern:CutLinePattern", columnData);
             }
             return tb;
         }
@@ -11338,6 +13345,11 @@ namespace Vim.Format.ObjectModel {
                 tb.AddStringColumn("string:TemplateControlledSettings", columnData);
             }
             {
+                var columnData = new Boolean[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].GraphicsRead; }
+                tb.AddDataColumn("byte:GraphicsRead", columnData);
+            }
+            {
                 var columnData = new int[entityCount];
                 for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._Camera?.Index ?? EntityRelation.None; }
                 tb.AddIndexColumn("index:Vim.Camera:Camera", columnData);
@@ -11424,6 +13436,11 @@ namespace Vim.Format.ObjectModel {
                 for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._View?.Index ?? EntityRelation.None; }
                 tb.AddIndexColumn("index:Vim.View:View", columnData);
             }
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._GraphicOverride?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.GraphicOverride:GraphicOverride", columnData);
+            }
             return tb;
         }
         public static EntityTableBuilder ToGridInViewTableBuilder(this EntitySetBuilder<GridInView> entitySet)
@@ -11450,6 +13467,522 @@ namespace Vim.Format.ObjectModel {
                 var columnData = new int[entityCount];
                 for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._View?.Index ?? EntityRelation.None; }
                 tb.AddIndexColumn("index:Vim.View:View", columnData);
+            }
+            return tb;
+        }
+        public static EntityTableBuilder ToLinePatternTableBuilder(this EntitySetBuilder<LinePattern> entitySet)
+        {
+            var tb = new EntityTableBuilder(TableNames.LinePattern);
+            var entities = entitySet.Entities;
+            var entityCount = entities.Count;
+            {
+                var columnData = new String[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Name; }
+                tb.AddStringColumn("string:Name", columnData);
+            }
+            {
+                var columnData = new Int64[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].ElementId; }
+                tb.AddDataColumn("long:ElementId", columnData);
+            }
+            {
+                var columnData = new String[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].UniqueId; }
+                tb.AddStringColumn("string:UniqueId", columnData);
+            }
+            {
+                var columnData = new Boolean[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].IsSolid; }
+                tb.AddDataColumn("byte:IsSolid", columnData);
+            }
+            {
+                var columnData = new String[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Segments; }
+                tb.AddStringColumn("string:Segments", columnData);
+            }
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._BimDocument?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.BimDocument:BimDocument", columnData);
+            }
+            return tb;
+        }
+        public static EntityTableBuilder ToFillPatternTableBuilder(this EntitySetBuilder<FillPattern> entitySet)
+        {
+            var tb = new EntityTableBuilder(TableNames.FillPattern);
+            var entities = entitySet.Entities;
+            var entityCount = entities.Count;
+            {
+                var columnData = new String[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Name; }
+                tb.AddStringColumn("string:Name", columnData);
+            }
+            {
+                var columnData = new Int64[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].ElementId; }
+                tb.AddDataColumn("long:ElementId", columnData);
+            }
+            {
+                var columnData = new String[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].UniqueId; }
+                tb.AddStringColumn("string:UniqueId", columnData);
+            }
+            {
+                var columnData = new String[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Target; }
+                tb.AddStringColumn("string:Target", columnData);
+            }
+            {
+                var columnData = new Boolean[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].IsSolidFill; }
+                tb.AddDataColumn("byte:IsSolidFill", columnData);
+            }
+            {
+                var columnData = new String[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].HostOrientation; }
+                tb.AddStringColumn("string:HostOrientation", columnData);
+            }
+            {
+                var columnData = new Int32[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].GridCount; }
+                tb.AddDataColumn("int:GridCount", columnData);
+            }
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._BimDocument?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.BimDocument:BimDocument", columnData);
+            }
+            return tb;
+        }
+        public static EntityTableBuilder ToFillGridTableBuilder(this EntitySetBuilder<FillGrid> entitySet)
+        {
+            var tb = new EntityTableBuilder(TableNames.FillGrid);
+            var entities = entitySet.Entities;
+            var entityCount = entities.Count;
+            {
+                var columnData = new Int32[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].OrderIndex; }
+                tb.AddDataColumn("int:OrderIndex", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Angle; }
+                tb.AddDataColumn("double:Angle", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Origin_X; }
+                tb.AddDataColumn("double:Origin.X", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Origin_Y; }
+                tb.AddDataColumn("double:Origin.Y", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Offset; }
+                tb.AddDataColumn("double:Offset", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Shift; }
+                tb.AddDataColumn("double:Shift", columnData);
+            }
+            {
+                var columnData = new String[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Segments; }
+                tb.AddStringColumn("string:Segments", columnData);
+            }
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._FillPattern?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.FillPattern:FillPattern", columnData);
+            }
+            return tb;
+        }
+        public static EntityTableBuilder ToLineWeightTableBuilder(this EntitySetBuilder<LineWeight> entitySet)
+        {
+            var tb = new EntityTableBuilder(TableNames.LineWeight);
+            var entities = entitySet.Entities;
+            var entityCount = entities.Count;
+            {
+                var columnData = new String[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Table; }
+                tb.AddStringColumn("string:Table", columnData);
+            }
+            {
+                var columnData = new Int32[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Scale; }
+                tb.AddDataColumn("int:Scale", columnData);
+            }
+            {
+                var columnData = new Int32[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Number; }
+                tb.AddDataColumn("int:Number", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Width; }
+                tb.AddDataColumn("double:Width", columnData);
+            }
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._BimDocument?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.BimDocument:BimDocument", columnData);
+            }
+            return tb;
+        }
+        public static EntityTableBuilder ToGraphicOverrideTableBuilder(this EntitySetBuilder<GraphicOverride> entitySet)
+        {
+            var tb = new EntityTableBuilder(TableNames.GraphicOverride);
+            var entities = entitySet.Entities;
+            var entityCount = entities.Count;
+            {
+                var columnData = new Int32[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].ProjectionLineWeight; }
+                tb.AddDataColumn("int:ProjectionLineWeight", columnData);
+            }
+            {
+                var columnData = new Boolean[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].HasProjectionLineColor; }
+                tb.AddDataColumn("byte:HasProjectionLineColor", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].ProjectionLineColor_X; }
+                tb.AddDataColumn("double:ProjectionLineColor.X", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].ProjectionLineColor_Y; }
+                tb.AddDataColumn("double:ProjectionLineColor.Y", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].ProjectionLineColor_Z; }
+                tb.AddDataColumn("double:ProjectionLineColor.Z", columnData);
+            }
+            {
+                var columnData = new Int32[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].CutLineWeight; }
+                tb.AddDataColumn("int:CutLineWeight", columnData);
+            }
+            {
+                var columnData = new Boolean[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].HasCutLineColor; }
+                tb.AddDataColumn("byte:HasCutLineColor", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].CutLineColor_X; }
+                tb.AddDataColumn("double:CutLineColor.X", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].CutLineColor_Y; }
+                tb.AddDataColumn("double:CutLineColor.Y", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].CutLineColor_Z; }
+                tb.AddDataColumn("double:CutLineColor.Z", columnData);
+            }
+            {
+                var columnData = new Boolean[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].SurfaceForegroundPatternVisible; }
+                tb.AddDataColumn("byte:SurfaceForegroundPatternVisible", columnData);
+            }
+            {
+                var columnData = new Boolean[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].HasSurfaceForegroundPatternColor; }
+                tb.AddDataColumn("byte:HasSurfaceForegroundPatternColor", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].SurfaceForegroundPatternColor_X; }
+                tb.AddDataColumn("double:SurfaceForegroundPatternColor.X", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].SurfaceForegroundPatternColor_Y; }
+                tb.AddDataColumn("double:SurfaceForegroundPatternColor.Y", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].SurfaceForegroundPatternColor_Z; }
+                tb.AddDataColumn("double:SurfaceForegroundPatternColor.Z", columnData);
+            }
+            {
+                var columnData = new Boolean[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].SurfaceBackgroundPatternVisible; }
+                tb.AddDataColumn("byte:SurfaceBackgroundPatternVisible", columnData);
+            }
+            {
+                var columnData = new Boolean[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].HasSurfaceBackgroundPatternColor; }
+                tb.AddDataColumn("byte:HasSurfaceBackgroundPatternColor", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].SurfaceBackgroundPatternColor_X; }
+                tb.AddDataColumn("double:SurfaceBackgroundPatternColor.X", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].SurfaceBackgroundPatternColor_Y; }
+                tb.AddDataColumn("double:SurfaceBackgroundPatternColor.Y", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].SurfaceBackgroundPatternColor_Z; }
+                tb.AddDataColumn("double:SurfaceBackgroundPatternColor.Z", columnData);
+            }
+            {
+                var columnData = new Boolean[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].CutForegroundPatternVisible; }
+                tb.AddDataColumn("byte:CutForegroundPatternVisible", columnData);
+            }
+            {
+                var columnData = new Boolean[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].HasCutForegroundPatternColor; }
+                tb.AddDataColumn("byte:HasCutForegroundPatternColor", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].CutForegroundPatternColor_X; }
+                tb.AddDataColumn("double:CutForegroundPatternColor.X", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].CutForegroundPatternColor_Y; }
+                tb.AddDataColumn("double:CutForegroundPatternColor.Y", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].CutForegroundPatternColor_Z; }
+                tb.AddDataColumn("double:CutForegroundPatternColor.Z", columnData);
+            }
+            {
+                var columnData = new Boolean[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].CutBackgroundPatternVisible; }
+                tb.AddDataColumn("byte:CutBackgroundPatternVisible", columnData);
+            }
+            {
+                var columnData = new Boolean[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].HasCutBackgroundPatternColor; }
+                tb.AddDataColumn("byte:HasCutBackgroundPatternColor", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].CutBackgroundPatternColor_X; }
+                tb.AddDataColumn("double:CutBackgroundPatternColor.X", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].CutBackgroundPatternColor_Y; }
+                tb.AddDataColumn("double:CutBackgroundPatternColor.Y", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].CutBackgroundPatternColor_Z; }
+                tb.AddDataColumn("double:CutBackgroundPatternColor.Z", columnData);
+            }
+            {
+                var columnData = new Int32[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Transparency; }
+                tb.AddDataColumn("int:Transparency", columnData);
+            }
+            {
+                var columnData = new Boolean[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Halftone; }
+                tb.AddDataColumn("byte:Halftone", columnData);
+            }
+            {
+                var columnData = new Int32[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].DetailLevel; }
+                tb.AddDataColumn("int:DetailLevel", columnData);
+            }
+            {
+                var columnData = new String[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Key; }
+                tb.AddStringColumn("string:Key", columnData);
+            }
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._ProjectionLinePattern?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.LinePattern:ProjectionLinePattern", columnData);
+            }
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._CutLinePattern?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.LinePattern:CutLinePattern", columnData);
+            }
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._SurfaceForegroundPattern?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.FillPattern:SurfaceForegroundPattern", columnData);
+            }
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._SurfaceBackgroundPattern?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.FillPattern:SurfaceBackgroundPattern", columnData);
+            }
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._CutForegroundPattern?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.FillPattern:CutForegroundPattern", columnData);
+            }
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._CutBackgroundPattern?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.FillPattern:CutBackgroundPattern", columnData);
+            }
+            return tb;
+        }
+        public static EntityTableBuilder ToCategoryInViewTableBuilder(this EntitySetBuilder<CategoryInView> entitySet)
+        {
+            var tb = new EntityTableBuilder(TableNames.CategoryInView);
+            var entities = entitySet.Entities;
+            var entityCount = entities.Count;
+            {
+                var columnData = new Boolean[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].IsHidden; }
+                tb.AddDataColumn("byte:IsHidden", columnData);
+            }
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._View?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.View:View", columnData);
+            }
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._Category?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.Category:Category", columnData);
+            }
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._GraphicOverride?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.GraphicOverride:GraphicOverride", columnData);
+            }
+            return tb;
+        }
+        public static EntityTableBuilder ToElementOverrideInViewTableBuilder(this EntitySetBuilder<ElementOverrideInView> entitySet)
+        {
+            var tb = new EntityTableBuilder(TableNames.ElementOverrideInView);
+            var entities = entitySet.Entities;
+            var entityCount = entities.Count;
+            {
+                var columnData = new Boolean[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].IsHidden; }
+                tb.AddDataColumn("byte:IsHidden", columnData);
+            }
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._View?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.View:View", columnData);
+            }
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._GraphicOverride?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.GraphicOverride:GraphicOverride", columnData);
+            }
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._Element?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.Element:Element", columnData);
+            }
+            return tb;
+        }
+        public static EntityTableBuilder ToPhaseGraphicOverrideTableBuilder(this EntitySetBuilder<PhaseGraphicOverride> entitySet)
+        {
+            var tb = new EntityTableBuilder(TableNames.PhaseGraphicOverride);
+            var entities = entitySet.Entities;
+            var entityCount = entities.Count;
+            {
+                var columnData = new String[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Status; }
+                tb.AddStringColumn("string:Status", columnData);
+            }
+            {
+                var columnData = new Int32[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Scale; }
+                tb.AddDataColumn("int:Scale", columnData);
+            }
+            {
+                var columnData = new Boolean[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].HasProjectionLine; }
+                tb.AddDataColumn("byte:HasProjectionLine", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].ProjectionLineColor_X; }
+                tb.AddDataColumn("double:ProjectionLineColor.X", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].ProjectionLineColor_Y; }
+                tb.AddDataColumn("double:ProjectionLineColor.Y", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].ProjectionLineColor_Z; }
+                tb.AddDataColumn("double:ProjectionLineColor.Z", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].ProjectionLineWidth; }
+                tb.AddDataColumn("double:ProjectionLineWidth", columnData);
+            }
+            {
+                var columnData = new Int32[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].ProjectionLineWeight; }
+                tb.AddDataColumn("int:ProjectionLineWeight", columnData);
+            }
+            {
+                var columnData = new Boolean[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].HasCutLine; }
+                tb.AddDataColumn("byte:HasCutLine", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].CutLineColor_X; }
+                tb.AddDataColumn("double:CutLineColor.X", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].CutLineColor_Y; }
+                tb.AddDataColumn("double:CutLineColor.Y", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].CutLineColor_Z; }
+                tb.AddDataColumn("double:CutLineColor.Z", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].CutLineWidth; }
+                tb.AddDataColumn("double:CutLineWidth", columnData);
+            }
+            {
+                var columnData = new Int32[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].CutLineWeight; }
+                tb.AddDataColumn("int:CutLineWeight", columnData);
+            }
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._ProjectionLinePattern?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.LinePattern:ProjectionLinePattern", columnData);
+            }
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._CutLinePattern?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.LinePattern:CutLinePattern", columnData);
+            }
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._BimDocument?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.BimDocument:BimDocument", columnData);
             }
             return tb;
         }
@@ -11711,6 +14244,91 @@ namespace Vim.Format.ObjectModel {
                 tb.AddDataColumn("double:Transparency", columnData);
             }
             {
+                var columnData = new Boolean[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].GraphicsRead; }
+                tb.AddDataColumn("byte:GraphicsRead", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].ShadingColor_X; }
+                tb.AddDataColumn("double:ShadingColor.X", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].ShadingColor_Y; }
+                tb.AddDataColumn("double:ShadingColor.Y", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].ShadingColor_Z; }
+                tb.AddDataColumn("double:ShadingColor.Z", columnData);
+            }
+            {
+                var columnData = new Boolean[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].UseRenderAppearanceForShading; }
+                tb.AddDataColumn("byte:UseRenderAppearanceForShading", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].SurfaceForegroundPatternColor_X; }
+                tb.AddDataColumn("double:SurfaceForegroundPatternColor.X", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].SurfaceForegroundPatternColor_Y; }
+                tb.AddDataColumn("double:SurfaceForegroundPatternColor.Y", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].SurfaceForegroundPatternColor_Z; }
+                tb.AddDataColumn("double:SurfaceForegroundPatternColor.Z", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].SurfaceBackgroundPatternColor_X; }
+                tb.AddDataColumn("double:SurfaceBackgroundPatternColor.X", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].SurfaceBackgroundPatternColor_Y; }
+                tb.AddDataColumn("double:SurfaceBackgroundPatternColor.Y", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].SurfaceBackgroundPatternColor_Z; }
+                tb.AddDataColumn("double:SurfaceBackgroundPatternColor.Z", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].CutForegroundPatternColor_X; }
+                tb.AddDataColumn("double:CutForegroundPatternColor.X", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].CutForegroundPatternColor_Y; }
+                tb.AddDataColumn("double:CutForegroundPatternColor.Y", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].CutForegroundPatternColor_Z; }
+                tb.AddDataColumn("double:CutForegroundPatternColor.Z", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].CutBackgroundPatternColor_X; }
+                tb.AddDataColumn("double:CutBackgroundPatternColor.X", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].CutBackgroundPatternColor_Y; }
+                tb.AddDataColumn("double:CutBackgroundPatternColor.Y", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].CutBackgroundPatternColor_Z; }
+                tb.AddDataColumn("double:CutBackgroundPatternColor.Z", columnData);
+            }
+            {
                 var columnData = new int[entityCount];
                 for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._ColorTextureFile?.Index ?? EntityRelation.None; }
                 tb.AddIndexColumn("index:Vim.Asset:ColorTextureFile", columnData);
@@ -11719,6 +14337,26 @@ namespace Vim.Format.ObjectModel {
                 var columnData = new int[entityCount];
                 for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._NormalTextureFile?.Index ?? EntityRelation.None; }
                 tb.AddIndexColumn("index:Vim.Asset:NormalTextureFile", columnData);
+            }
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._SurfaceForegroundPattern?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.FillPattern:SurfaceForegroundPattern", columnData);
+            }
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._SurfaceBackgroundPattern?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.FillPattern:SurfaceBackgroundPattern", columnData);
+            }
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._CutForegroundPattern?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.FillPattern:CutForegroundPattern", columnData);
+            }
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._CutBackgroundPattern?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.FillPattern:CutBackgroundPattern", columnData);
             }
             {
                 var columnData = new int[entityCount];
@@ -11813,6 +14451,43 @@ namespace Vim.Format.ObjectModel {
             var tb = new EntityTableBuilder(TableNames.Node);
             var entities = entitySet.Entities;
             var entityCount = entities.Count;
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._Element?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.Element:Element", columnData);
+            }
+            return tb;
+        }
+        public static EntityTableBuilder ToGeometryPieceTableBuilder(this EntitySetBuilder<GeometryPiece> entitySet)
+        {
+            var tb = new EntityTableBuilder(TableNames.GeometryPiece);
+            var entities = entitySet.Entities;
+            var entityCount = entities.Count;
+            {
+                var columnData = new Int32[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].SubmeshIndex; }
+                tb.AddDataColumn("int:SubmeshIndex", columnData);
+            }
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._Node?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.Node:Node", columnData);
+            }
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._Material?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.Material:Material", columnData);
+            }
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._Subcategory?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.Category:Subcategory", columnData);
+            }
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._CompoundStructureLayer?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.CompoundStructureLayer:CompoundStructureLayer", columnData);
+            }
             {
                 var columnData = new int[entityCount];
                 for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._Element?.Index ?? EntityRelation.None; }
@@ -13010,6 +15685,14 @@ namespace Vim.Format.ObjectModel {
         public readonly EntitySetBuilder<View> ViewBuilder = new EntitySetBuilder<View>(TableNames.View);
         public readonly EntitySetBuilder<FilterInView> FilterInViewBuilder = new EntitySetBuilder<FilterInView>(TableNames.FilterInView);
         public readonly EntitySetBuilder<GridInView> GridInViewBuilder = new EntitySetBuilder<GridInView>(TableNames.GridInView);
+        public readonly EntitySetBuilder<LinePattern> LinePatternBuilder = new EntitySetBuilder<LinePattern>(TableNames.LinePattern);
+        public readonly EntitySetBuilder<FillPattern> FillPatternBuilder = new EntitySetBuilder<FillPattern>(TableNames.FillPattern);
+        public readonly EntitySetBuilder<FillGrid> FillGridBuilder = new EntitySetBuilder<FillGrid>(TableNames.FillGrid);
+        public readonly EntitySetBuilder<LineWeight> LineWeightBuilder = new EntitySetBuilder<LineWeight>(TableNames.LineWeight);
+        public readonly EntitySetBuilder<GraphicOverride> GraphicOverrideBuilder = new EntitySetBuilder<GraphicOverride>(TableNames.GraphicOverride);
+        public readonly EntitySetBuilder<CategoryInView> CategoryInViewBuilder = new EntitySetBuilder<CategoryInView>(TableNames.CategoryInView);
+        public readonly EntitySetBuilder<ElementOverrideInView> ElementOverrideInViewBuilder = new EntitySetBuilder<ElementOverrideInView>(TableNames.ElementOverrideInView);
+        public readonly EntitySetBuilder<PhaseGraphicOverride> PhaseGraphicOverrideBuilder = new EntitySetBuilder<PhaseGraphicOverride>(TableNames.PhaseGraphicOverride);
         public readonly EntitySetBuilder<ElementInView> ElementInViewBuilder = new EntitySetBuilder<ElementInView>(TableNames.ElementInView);
         public readonly EntitySetBuilder<ShapeInView> ShapeInViewBuilder = new EntitySetBuilder<ShapeInView>(TableNames.ShapeInView);
         public readonly EntitySetBuilder<AssetInView> AssetInViewBuilder = new EntitySetBuilder<AssetInView>(TableNames.AssetInView);
@@ -13021,6 +15704,7 @@ namespace Vim.Format.ObjectModel {
         public readonly EntitySetBuilder<CompoundStructureLayer> CompoundStructureLayerBuilder = new EntitySetBuilder<CompoundStructureLayer>(TableNames.CompoundStructureLayer);
         public readonly EntitySetBuilder<CompoundStructure> CompoundStructureBuilder = new EntitySetBuilder<CompoundStructure>(TableNames.CompoundStructure);
         public readonly EntitySetBuilder<Node> NodeBuilder = new EntitySetBuilder<Node>(TableNames.Node);
+        public readonly EntitySetBuilder<GeometryPiece> GeometryPieceBuilder = new EntitySetBuilder<GeometryPiece>(TableNames.GeometryPiece);
         public readonly EntitySetBuilder<Geometry> GeometryBuilder = new EntitySetBuilder<Geometry>(TableNames.Geometry);
         public readonly EntitySetBuilder<Shape> ShapeBuilder = new EntitySetBuilder<Shape>(TableNames.Shape);
         public readonly EntitySetBuilder<ShapeCollection> ShapeCollectionBuilder = new EntitySetBuilder<ShapeCollection>(TableNames.ShapeCollection);
@@ -13078,6 +15762,14 @@ namespace Vim.Format.ObjectModel {
             db.Tables.Add(ViewBuilder.EntityTableName, ViewBuilder.ToViewTableBuilder());
             db.Tables.Add(FilterInViewBuilder.EntityTableName, FilterInViewBuilder.ToFilterInViewTableBuilder());
             db.Tables.Add(GridInViewBuilder.EntityTableName, GridInViewBuilder.ToGridInViewTableBuilder());
+            db.Tables.Add(LinePatternBuilder.EntityTableName, LinePatternBuilder.ToLinePatternTableBuilder());
+            db.Tables.Add(FillPatternBuilder.EntityTableName, FillPatternBuilder.ToFillPatternTableBuilder());
+            db.Tables.Add(FillGridBuilder.EntityTableName, FillGridBuilder.ToFillGridTableBuilder());
+            db.Tables.Add(LineWeightBuilder.EntityTableName, LineWeightBuilder.ToLineWeightTableBuilder());
+            db.Tables.Add(GraphicOverrideBuilder.EntityTableName, GraphicOverrideBuilder.ToGraphicOverrideTableBuilder());
+            db.Tables.Add(CategoryInViewBuilder.EntityTableName, CategoryInViewBuilder.ToCategoryInViewTableBuilder());
+            db.Tables.Add(ElementOverrideInViewBuilder.EntityTableName, ElementOverrideInViewBuilder.ToElementOverrideInViewTableBuilder());
+            db.Tables.Add(PhaseGraphicOverrideBuilder.EntityTableName, PhaseGraphicOverrideBuilder.ToPhaseGraphicOverrideTableBuilder());
             db.Tables.Add(ElementInViewBuilder.EntityTableName, ElementInViewBuilder.ToElementInViewTableBuilder());
             db.Tables.Add(ShapeInViewBuilder.EntityTableName, ShapeInViewBuilder.ToShapeInViewTableBuilder());
             db.Tables.Add(AssetInViewBuilder.EntityTableName, AssetInViewBuilder.ToAssetInViewTableBuilder());
@@ -13089,6 +15781,7 @@ namespace Vim.Format.ObjectModel {
             db.Tables.Add(CompoundStructureLayerBuilder.EntityTableName, CompoundStructureLayerBuilder.ToCompoundStructureLayerTableBuilder());
             db.Tables.Add(CompoundStructureBuilder.EntityTableName, CompoundStructureBuilder.ToCompoundStructureTableBuilder());
             db.Tables.Add(NodeBuilder.EntityTableName, NodeBuilder.ToNodeTableBuilder());
+            db.Tables.Add(GeometryPieceBuilder.EntityTableName, GeometryPieceBuilder.ToGeometryPieceTableBuilder());
             db.Tables.Add(GeometryBuilder.EntityTableName, GeometryBuilder.ToGeometryTableBuilder());
             db.Tables.Add(ShapeBuilder.EntityTableName, ShapeBuilder.ToShapeTableBuilder());
             db.Tables.Add(ShapeCollectionBuilder.EntityTableName, ShapeCollectionBuilder.ToShapeCollectionTableBuilder());
@@ -13149,6 +15842,14 @@ namespace Vim.Format.ObjectModel {
             ViewBuilder.Clear();
             FilterInViewBuilder.Clear();
             GridInViewBuilder.Clear();
+            LinePatternBuilder.Clear();
+            FillPatternBuilder.Clear();
+            FillGridBuilder.Clear();
+            LineWeightBuilder.Clear();
+            GraphicOverrideBuilder.Clear();
+            CategoryInViewBuilder.Clear();
+            ElementOverrideInViewBuilder.Clear();
+            PhaseGraphicOverrideBuilder.Clear();
             ElementInViewBuilder.Clear();
             ShapeInViewBuilder.Clear();
             AssetInViewBuilder.Clear();
@@ -13160,6 +15861,7 @@ namespace Vim.Format.ObjectModel {
             CompoundStructureLayerBuilder.Clear();
             CompoundStructureBuilder.Clear();
             NodeBuilder.Clear();
+            GeometryPieceBuilder.Clear();
             GeometryBuilder.Clear();
             ShapeBuilder.Clear();
             ShapeCollectionBuilder.Clear();

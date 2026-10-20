@@ -19,10 +19,23 @@ namespace Vim.Format.ObjectModel
         public List<DocumentBuilder.Instance> Instances { get; } = new List<DocumentBuilder.Instance>();
         public List<DocumentBuilder.Shape> Shapes { get; } = new List<DocumentBuilder.Shape>();
 
+        private List<DocumentBuilder.SubdividedMesh> _subdivided;
+
+        /// <summary>
+        /// The meshes split into submeshes, computed once (call after TrimOrphanMeshes; the meshes must not change afterwards).
+        /// Lets the exporter write one row per submesh (Vim.GeometryPiece) before the document builder is made.
+        /// </summary>
+        public IReadOnlyList<DocumentBuilder.SubdividedMesh> SubdivideMeshes()
+        {
+            if (_subdivided == null || _subdivided.Count != Meshes.Count)
+                _subdivided = Meshes.Select(g => g.Subdivide()).ToList();
+            return _subdivided;
+        }
+
         public DocumentBuilder ToDocumentBuilder(string generator, string versionString)
         {
             return ObjectModelBuilder.ToDocumentBuilder(generator, versionString)
-                .AddMeshes(Meshes.Select(g => g.Subdivide()))
+                .AddMeshes(_subdivided != null && _subdivided.Count == Meshes.Count ? (IEnumerable<DocumentBuilder.SubdividedMesh>)_subdivided : Meshes.Select(g => g.Subdivide()))
                 .AddInstances(Instances)
                 .AddShapes(Shapes)
                 .AddMaterials(CreateMaterialBuilders());
@@ -105,6 +118,7 @@ namespace Vim.Format.ObjectModel
 
             // Create a new mesh list which excludes the orphaned meshes.
             Meshes = Meshes.Where((m, i) => nextMeshIndices[i] > nullMeshIndex).ToList();
+            _subdivided = null;
 
             // Mutate the instances to update their mesh index.
             foreach (var instance in Instances)

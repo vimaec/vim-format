@@ -14,6 +14,43 @@ namespace Vim.Format.ObjectModel
         // ReSharper disable MemberHidesStaticFromOuterClass
         public static class History
         {
+            // Schema additions (geometry pieces: each placed geometry split by material, Revit subcategory and compound
+            // structure layer, one row per g3d submesh; written by the exporter's experimental "geometry pieces" option)
+            //   Vim.GeometryPiece__index:Vim.Element:Element
+            //   Vim.GeometryPiece__index:Vim.Node:Node
+            //   Vim.GeometryPiece__int:SubmeshIndex
+            //   Vim.GeometryPiece__index:Vim.Material:Material
+            //   Vim.GeometryPiece__index:Vim.Category:Subcategory
+            //   Vim.GeometryPiece__index:Vim.CompoundStructureLayer:CompoundStructureLayer
+            public const string v5_14_0 = "5.14.0";
+
+            // Schema additions (section graphics: what Revit uses to draw a plan or a section - Object Styles, the Line
+            // Weights table, line and fill patterns, material graphics, each view's Visibility/Graphics overrides and the
+            // phase graphic overrides)
+            //   Vim.Category__int:ProjectionLineWeight
+            //   Vim.Category__int:CutLineWeight
+            //   Vim.Category__byte:IsCuttable
+            //   Vim.Category__index:Vim.LinePattern:ProjectionLinePattern
+            //   Vim.Category__index:Vim.LinePattern:CutLinePattern
+            //   Vim.Material__byte:GraphicsRead
+            //   Vim.Material__double:ShadingColor.X / .Y / .Z
+            //   Vim.Material__byte:UseRenderAppearanceForShading
+            //   Vim.Material__index:Vim.FillPattern:SurfaceForegroundPattern (+ SurfaceForegroundPatternColor.X/Y/Z)
+            //   Vim.Material__index:Vim.FillPattern:SurfaceBackgroundPattern (+ SurfaceBackgroundPatternColor.X/Y/Z)
+            //   Vim.Material__index:Vim.FillPattern:CutForegroundPattern (+ CutForegroundPatternColor.X/Y/Z)
+            //   Vim.Material__index:Vim.FillPattern:CutBackgroundPattern (+ CutBackgroundPatternColor.X/Y/Z)
+            //   Vim.View__byte:GraphicsRead
+            //   Vim.FilterInView__index:Vim.GraphicOverride:GraphicOverride
+            //   Vim.LinePattern (Name, ElementId, UniqueId, IsSolid, Segments, BimDocument)
+            //   Vim.FillPattern (Name, ElementId, UniqueId, Target, IsSolidFill, HostOrientation, GridCount, BimDocument)
+            //   Vim.FillGrid (FillPattern, OrderIndex, Angle, Origin.X/Y, Offset, Shift, Segments)
+            //   Vim.LineWeight (Table, Scale, Number, Width, BimDocument)
+            //   Vim.GraphicOverride (projection / cut lines, surface / cut patterns, transparency, halftone, detail level)
+            //   Vim.CategoryInView (View, Category, IsHidden, GraphicOverride)
+            //   Vim.ElementOverrideInView (Element, View, IsHidden, GraphicOverride)
+            //   Vim.PhaseGraphicOverride (Status, projection / cut line colour, width, weight, pattern, Scale, BimDocument)
+            public const string v5_13_0 = "5.13.0";
+
             // Schema additions (the view audit: what each view does to the model - template, overrides, filters, hidden
             // elements, placement; the grid bubble ends; a stable key per warning to follow it across versions)
             //   Vim.View__index:Vim.Element:ViewTemplate
@@ -328,7 +365,9 @@ namespace Vim.Format.ObjectModel
         // ReSharper enable MemberHidesStaticFromOuterClass
 
         // [MAINTAIN] Add more object model SerializableVersions below and update the current one.
-        public static SerializableVersion Current => v5_12_0;
+        public static SerializableVersion Current => v5_14_0;
+        public static SerializableVersion v5_14_0 => SerializableVersion.Parse(History.v5_14_0);
+        public static SerializableVersion v5_13_0 => SerializableVersion.Parse(History.v5_13_0);
         public static SerializableVersion v5_12_0 => SerializableVersion.Parse(History.v5_12_0);
         public static SerializableVersion v5_11_0 => SerializableVersion.Parse(History.v5_11_0);
         public static SerializableVersion v5_10_0 => SerializableVersion.Parse(History.v5_10_0);
@@ -1209,6 +1248,34 @@ namespace Vim.Format.ObjectModel
 
         public Relation<Category> _Parent;
         public Relation<Material> _Material;
+
+        // ---------------------------------------------------------------------------------------------------------------
+        // Object Styles (5.13.0): how the category or subcategory draws when no view overrides it (Manage > Object Styles).
+        // LineColor above is the Object Styles line colour; Material above is the Object Styles material. Object Styles
+        // has no fill pattern column: a cut or surface fill comes from the element's material (Material.CutForegroundPattern
+        // ...) or from a view override (GraphicOverride).
+        // ---------------------------------------------------------------------------------------------------------------
+
+        /// <summary>
+        /// Object Styles "Line Weight - Projection": a line weight number 1-16, turned into a width on paper by the Line
+        /// Weights table (LineWeight). -1 when not read.
+        /// </summary>
+        public int ProjectionLineWeight = -1;
+
+        /// <summary>
+        /// Object Styles "Line Weight - Cut": a line weight number 1-16. 0 when the category has no cut line weight (it is
+        /// not cut by a plan or section, e.g. Furniture), -1 when not read.
+        /// </summary>
+        public int CutLineWeight = -1;
+
+        /// <summary>Whether the category can be cut by a plan or section view (Revit's Category.IsCuttable).</summary>
+        public bool IsCuttable;
+
+        /// <summary>Object Styles "Line Pattern" (projection lines). None when not read.</summary>
+        public Relation<LinePattern> _ProjectionLinePattern;
+
+        /// <summary>The line pattern of the cut lines (Revit keeps one per graphics style; Object Styles shows the projection one).</summary>
+        public Relation<LinePattern> _CutLinePattern;
     }
 
     /// <summary>
@@ -1456,6 +1523,13 @@ namespace Vim.Format.ObjectModel
         /// controls a setting, the audit fields above hold the template's value: that is what Revit draws.
         /// </summary>
         public string TemplateControlledSettings;
+
+        /// <summary>
+        /// True when the view's Visibility/Graphics overrides were read (5.13.0): then a category, filter or element of the
+        /// view without a CategoryInView / FilterInView override / ElementOverrideInView row has none, and draws by Object
+        /// Styles. Where the view template controls Visibility/Graphics or filters, the template's settings were read.
+        /// </summary>
+        public bool GraphicsRead;
     }
 
     /// <summary>
@@ -1487,6 +1561,9 @@ namespace Vim.Format.ObjectModel
 
         public Relation<View> _View;
 
+        /// <summary>What the filter overrides in the view (5.13.0); none when HasOverrides is false.</summary>
+        public Relation<GraphicOverride> _GraphicOverride;
+
         public object GetStorageKey()
             => $"{_View?.Index ?? -1}|{FilterUniqueId}";
     }
@@ -1506,6 +1583,336 @@ namespace Vim.Format.ObjectModel
 
         public object GetStorageKey()
             => _Grid.CombineAsStorageKey(_View);
+    }
+
+    // -------------------------------------------------------------------------------------------------------------------
+    // Section graphics (5.13.0). What Revit uses to draw a plan or a section: the Line Weights table, line and fill
+    // patterns, the view overrides. Resolution order for a line or a fill of an element in a view (what Revit draws):
+    // ElementOverrideInView, then the view's filters (FilterInView, in OrderIndex order, first one that sets a field wins),
+    // then CategoryInView (subcategory before its parent category), then Object Styles (Category), then the material
+    // (Material graphics) for fills. A line weight number becomes a width with LineWeight (Table "Model", the view's Scale).
+    // -------------------------------------------------------------------------------------------------------------------
+
+    /// <summary>
+    /// A line pattern (Manage > Additional Settings > Line Patterns), or Revit's built-in "Solid".
+    /// </summary>
+    [TableName(TableNames.LinePattern)]
+    public partial class LinePattern : Entity, IStorageKey
+    {
+        /// <summary>The pattern's name ("Solid" for the built-in solid pattern).</summary>
+        public string Name;
+
+        /// <summary>The pattern's element id in its document (Revit's solid pattern id for "Solid").</summary>
+        public long ElementId;
+
+        /// <summary>The pattern's UniqueId in its document; "solid" for the built-in solid pattern.</summary>
+        public string UniqueId;
+
+        /// <summary>True for the built-in solid pattern (a continuous line, Segments empty).</summary>
+        public bool IsSolid;
+
+        /// <summary>
+        /// The repeating segments, in order, separated by ";": "Dash 0.0104167", "Space 0.0052083", "Dot". Lengths are in
+        /// feet ON PAPER (multiply by 304.8 for millimetres on paper; Revit draws them the same length at every view scale).
+        /// </summary>
+        public string Segments;
+
+        public Relation<BimDocument> _BimDocument;
+
+        public object GetStorageKey()
+            => $"{_BimDocument?.Index ?? -1}|{UniqueId}";
+    }
+
+    /// <summary>
+    /// A fill pattern (Manage > Additional Settings > Fill Patterns): Drafting (fixed on paper) or Model (fixed on the model).
+    /// Its hatch lines are in FillGrid.
+    /// </summary>
+    [TableName(TableNames.FillPattern)]
+    public partial class FillPattern : Entity, IStorageKey
+    {
+        public string Name;
+
+        /// <summary>The pattern's element id in its document.</summary>
+        public long ElementId;
+
+        /// <summary>The pattern's UniqueId in its document.</summary>
+        public string UniqueId;
+
+        /// <summary>"Drafting" (lengths on paper, same look at every scale) or "Model" (lengths on the model, scale with the view).</summary>
+        public string Target;
+
+        /// <summary>True for a solid fill ("Solid fill": no FillGrid rows, the area is filled with the colour).</summary>
+        public bool IsSolidFill;
+
+        /// <summary>Revit's FillPatternHostOrientation: "ToView", "AlignWithElement" or "KeepReadable" (drafting patterns).</summary>
+        public string HostOrientation;
+
+        /// <summary>How many FillGrid rows (hatch line families) the pattern has.</summary>
+        public int GridCount;
+
+        public Relation<BimDocument> _BimDocument;
+
+        public object GetStorageKey()
+            => $"{_BimDocument?.Index ?? -1}|{UniqueId}";
+    }
+
+    /// <summary>
+    /// One family of parallel hatch lines of a FillPattern (Revit's FillGrid). Lengths are in feet: on paper for a Drafting
+    /// pattern, on the model for a Model pattern. Angle in radians, counter-clockwise from the pattern's X axis.
+    /// </summary>
+    [TableName(TableNames.FillGrid)]
+    public partial class FillGrid : Entity, IStorageKey
+    {
+        /// <summary>The grid's position in the pattern (0 = first).</summary>
+        public int OrderIndex;
+
+        /// <summary>The direction of the hatch lines, radians.</summary>
+        public double Angle;
+
+        /// <summary>A point every line of the family passes through (lines repeat from it every Offset).</summary>
+        public double Origin_X;
+        public double Origin_Y;
+        public DVector2 Origin
+        {
+            get => new DVector2(Origin_X, Origin_Y);
+            set => (Origin_X, Origin_Y) = value;
+        }
+
+        /// <summary>The distance between two neighbouring lines of the family.</summary>
+        public double Offset;
+
+        /// <summary>How far each next line's dash pattern slides along the line.</summary>
+        public double Shift;
+
+        /// <summary>The dash / space lengths along a line, separated by " " (dash, space, dash, space...); empty = continuous.</summary>
+        public string Segments;
+
+        public Relation<FillPattern> _FillPattern;
+
+        public object GetStorageKey()
+            => $"{_FillPattern?.Index ?? -1}|{OrderIndex}";
+    }
+
+    /// <summary>
+    /// The Line Weights table (Manage > Additional Settings > Line Weights): the width on paper of each line weight
+    /// number 1-16. The Model table has one column per view scale; the Annotation and Perspective tables have none (Scale 0).
+    /// The Revit API cannot read this table: the exporter measures it by drawing one line per number in throw-away views
+    /// at each scale and reading back the width Revit's own 2D export gives (then undoes everything). Revit uses the column
+    /// of the view's scale; the export measures the exported views' own scales plus Revit's usual metric and imperial ones.
+    /// </summary>
+    [TableName(TableNames.LineWeight)]
+    public partial class LineWeight : Entity, IStorageKey
+    {
+        /// <summary>"Model", "Annotation" or "Perspective".</summary>
+        public string Table;
+
+        /// <summary>The view scale this width applies to: 100 means 1:100 (1" = 8'-0" is 96). 0 for the Annotation and Perspective tables.</summary>
+        public int Scale;
+
+        /// <summary>The line weight number, 1-16 (Object Styles and overrides hold this number).</summary>
+        public int Number;
+
+        /// <summary>The width on paper, in millimetres.</summary>
+        public double Width;
+
+        public Relation<BimDocument> _BimDocument;
+
+        public object GetStorageKey()
+            => $"{_BimDocument?.Index ?? -1}|{Table}|{Scale}|{Number}";
+    }
+
+    /// <summary>
+    /// A set of graphic overrides (Revit's OverrideGraphicSettings) as set in Visibility/Graphics, by a view filter or by
+    /// Override Graphics in View > By Element. Rows are shared: identical overrides are one row.
+    /// A line weight of -1, a pattern of none or a "Has...Color" of false means the field is not overridden (the next rule
+    /// applies). A pattern colour or line colour is in the domain [0..1].
+    /// </summary>
+    [TableName(TableNames.GraphicOverride)]
+    public partial class GraphicOverride : Entity, IStorageKey
+    {
+        /// <summary>Projection/Surface > Lines > Weight (1-16), -1 = not overridden.</summary>
+        public int ProjectionLineWeight = -1;
+        public bool HasProjectionLineColor;
+        public double ProjectionLineColor_X;
+        public double ProjectionLineColor_Y;
+        public double ProjectionLineColor_Z;
+        public DVector3 ProjectionLineColor
+        {
+            get => new DVector3(ProjectionLineColor_X, ProjectionLineColor_Y, ProjectionLineColor_Z);
+            set => (ProjectionLineColor_X, ProjectionLineColor_Y, ProjectionLineColor_Z) = value;
+        }
+        public Relation<LinePattern> _ProjectionLinePattern;
+
+        /// <summary>Cut > Lines > Weight (1-16), -1 = not overridden.</summary>
+        public int CutLineWeight = -1;
+        public bool HasCutLineColor;
+        public double CutLineColor_X;
+        public double CutLineColor_Y;
+        public double CutLineColor_Z;
+        public DVector3 CutLineColor
+        {
+            get => new DVector3(CutLineColor_X, CutLineColor_Y, CutLineColor_Z);
+            set => (CutLineColor_X, CutLineColor_Y, CutLineColor_Z) = value;
+        }
+        public Relation<LinePattern> _CutLinePattern;
+
+        /// <summary>Projection/Surface > Patterns > Foreground: visible (false = switched off), pattern, colour.</summary>
+        public bool SurfaceForegroundPatternVisible = true;
+        public Relation<FillPattern> _SurfaceForegroundPattern;
+        public bool HasSurfaceForegroundPatternColor;
+        public double SurfaceForegroundPatternColor_X;
+        public double SurfaceForegroundPatternColor_Y;
+        public double SurfaceForegroundPatternColor_Z;
+        public DVector3 SurfaceForegroundPatternColor
+        {
+            get => new DVector3(SurfaceForegroundPatternColor_X, SurfaceForegroundPatternColor_Y, SurfaceForegroundPatternColor_Z);
+            set => (SurfaceForegroundPatternColor_X, SurfaceForegroundPatternColor_Y, SurfaceForegroundPatternColor_Z) = value;
+        }
+
+        /// <summary>Projection/Surface > Patterns > Background.</summary>
+        public bool SurfaceBackgroundPatternVisible = true;
+        public Relation<FillPattern> _SurfaceBackgroundPattern;
+        public bool HasSurfaceBackgroundPatternColor;
+        public double SurfaceBackgroundPatternColor_X;
+        public double SurfaceBackgroundPatternColor_Y;
+        public double SurfaceBackgroundPatternColor_Z;
+        public DVector3 SurfaceBackgroundPatternColor
+        {
+            get => new DVector3(SurfaceBackgroundPatternColor_X, SurfaceBackgroundPatternColor_Y, SurfaceBackgroundPatternColor_Z);
+            set => (SurfaceBackgroundPatternColor_X, SurfaceBackgroundPatternColor_Y, SurfaceBackgroundPatternColor_Z) = value;
+        }
+
+        /// <summary>Cut > Patterns > Foreground.</summary>
+        public bool CutForegroundPatternVisible = true;
+        public Relation<FillPattern> _CutForegroundPattern;
+        public bool HasCutForegroundPatternColor;
+        public double CutForegroundPatternColor_X;
+        public double CutForegroundPatternColor_Y;
+        public double CutForegroundPatternColor_Z;
+        public DVector3 CutForegroundPatternColor
+        {
+            get => new DVector3(CutForegroundPatternColor_X, CutForegroundPatternColor_Y, CutForegroundPatternColor_Z);
+            set => (CutForegroundPatternColor_X, CutForegroundPatternColor_Y, CutForegroundPatternColor_Z) = value;
+        }
+
+        /// <summary>Cut > Patterns > Background.</summary>
+        public bool CutBackgroundPatternVisible = true;
+        public Relation<FillPattern> _CutBackgroundPattern;
+        public bool HasCutBackgroundPatternColor;
+        public double CutBackgroundPatternColor_X;
+        public double CutBackgroundPatternColor_Y;
+        public double CutBackgroundPatternColor_Z;
+        public DVector3 CutBackgroundPatternColor
+        {
+            get => new DVector3(CutBackgroundPatternColor_X, CutBackgroundPatternColor_Y, CutBackgroundPatternColor_Z);
+            set => (CutBackgroundPatternColor_X, CutBackgroundPatternColor_Y, CutBackgroundPatternColor_Z) = value;
+        }
+
+        /// <summary>Surface Transparency, 0-100 (0 = opaque / not overridden).</summary>
+        public int Transparency;
+
+        /// <summary>Halftone.</summary>
+        public bool Halftone;
+
+        /// <summary>Detail Level: 0 = By View (not overridden), 1 = Coarse, 2 = Medium, 3 = Fine.</summary>
+        public int DetailLevel;
+
+        /// <summary>A text key of every value above (identical overrides share one row).</summary>
+        public string Key;
+
+        public object GetStorageKey()
+            => Key;
+    }
+
+    /// <summary>
+    /// A category or subcategory a View switches off or overrides (Visibility/Graphics, Model and Annotation tabs). Only
+    /// categories with a change have a row; the others draw by Object Styles. When the view template controls
+    /// Visibility/Graphics, the template's settings are written (that is what Revit draws).
+    /// </summary>
+    [TableName(TableNames.CategoryInView)]
+    public partial class CategoryInView : Entity, IStorageKey
+    {
+        /// <summary>The Visibility checkbox is off: the category (and its subcategories) does not draw in the view.</summary>
+        public bool IsHidden;
+
+        public Relation<View> _View;
+        public Relation<Category> _Category;
+
+        /// <summary>The overrides; none when the category is only switched off.</summary>
+        public Relation<GraphicOverride> _GraphicOverride;
+
+        public object GetStorageKey()
+            => _View.CombineAsStorageKey(_Category);
+    }
+
+    /// <summary>
+    /// An element overridden (Override Graphics in View > By Element) or hidden (Hide in View > Elements) one by one in a
+    /// View. Read for the exported views.
+    /// </summary>
+    [TableName(TableNames.ElementOverrideInView)]
+    [CascadeElementRemap]
+    public partial class ElementOverrideInView : EntityWithElement, IStorageKey
+    {
+        /// <summary>Hidden in the view one by one (a permanent Hide in View, not a temporary hide).</summary>
+        public bool IsHidden;
+
+        public Relation<View> _View;
+
+        /// <summary>The overrides; none when the element is only hidden.</summary>
+        public Relation<GraphicOverride> _GraphicOverride;
+
+        public object GetStorageKey()
+            => _Element.CombineAsStorageKey(_View);
+    }
+
+    /// <summary>
+    /// Phasing > Graphic Overrides: how an element of each phase status draws where the phase filter says "Overridden".
+    /// The Revit API cannot read this tab: the exporter measures it with four throw-away walls (one per status) drawn
+    /// in a throw-away plan (cut lines) and a throw-away section in front of them (projection lines), then undoes
+    /// everything. Width is millimetres on paper at Scale; the line weight number is the one whose width at that scale is
+    /// the measured width (-1 when none matches). The fill patterns of this tab are not measured.
+    /// </summary>
+    [TableName(TableNames.PhaseGraphicOverride)]
+    public partial class PhaseGraphicOverride : Entity, IStorageKey
+    {
+        /// <summary>"New", "Existing", "Demolished" or "Temporary".</summary>
+        public string Status;
+
+        /// <summary>The view scale the lines were measured at.</summary>
+        public int Scale;
+
+        /// <summary>Whether projection lines were measured (the throw-away section drew the walls).</summary>
+        public bool HasProjectionLine;
+        public double ProjectionLineColor_X;
+        public double ProjectionLineColor_Y;
+        public double ProjectionLineColor_Z;
+        public DVector3 ProjectionLineColor
+        {
+            get => new DVector3(ProjectionLineColor_X, ProjectionLineColor_Y, ProjectionLineColor_Z);
+            set => (ProjectionLineColor_X, ProjectionLineColor_Y, ProjectionLineColor_Z) = value;
+        }
+        public double ProjectionLineWidth;
+        public int ProjectionLineWeight = -1;
+        public Relation<LinePattern> _ProjectionLinePattern;
+
+        /// <summary>Whether cut lines were measured (the throw-away plan cut the walls).</summary>
+        public bool HasCutLine;
+        public double CutLineColor_X;
+        public double CutLineColor_Y;
+        public double CutLineColor_Z;
+        public DVector3 CutLineColor
+        {
+            get => new DVector3(CutLineColor_X, CutLineColor_Y, CutLineColor_Z);
+            set => (CutLineColor_X, CutLineColor_Y, CutLineColor_Z) = value;
+        }
+        public double CutLineWidth;
+        public int CutLineWeight = -1;
+        public Relation<LinePattern> _CutLinePattern;
+
+        public Relation<BimDocument> _BimDocument;
+
+        public object GetStorageKey()
+            => $"{_BimDocument?.Index ?? -1}|{Status}";
     }
 
     /// <summary>
@@ -1741,6 +2148,71 @@ namespace Vim.Format.ObjectModel
 
         /// <summary>The transparency, defined in the domain [0..1]</summary>
         public double Transparency;
+
+        // ---------------------------------------------------------------------------------------------------------------
+        // Material graphics (5.13.0): Revit's Material Browser > Graphics tab - Shading, Surface Patterns and Cut Patterns.
+        // A pattern colour is in the domain [0..1] like Color. A pattern of none means the material draws no such pattern.
+        // ---------------------------------------------------------------------------------------------------------------
+
+        /// <summary>True when the graphics fields below were read from the authoring tool.</summary>
+        public bool GraphicsRead;
+
+        /// <summary>Graphics > Shading > Color (Revit's Material.Color). Color above may hold the render appearance's colour instead.</summary>
+        public double ShadingColor_X;
+        public double ShadingColor_Y;
+        public double ShadingColor_Z;
+        public DVector3 ShadingColor
+        {
+            get => new DVector3(ShadingColor_X, ShadingColor_Y, ShadingColor_Z);
+            set => (ShadingColor_X, ShadingColor_Y, ShadingColor_Z) = value;
+        }
+
+        /// <summary>Graphics > Shading > Use Render Appearance.</summary>
+        public bool UseRenderAppearanceForShading;
+
+        /// <summary>Graphics > Surface Patterns > Foreground: pattern and colour.</summary>
+        public Relation<FillPattern> _SurfaceForegroundPattern;
+        public double SurfaceForegroundPatternColor_X;
+        public double SurfaceForegroundPatternColor_Y;
+        public double SurfaceForegroundPatternColor_Z;
+        public DVector3 SurfaceForegroundPatternColor
+        {
+            get => new DVector3(SurfaceForegroundPatternColor_X, SurfaceForegroundPatternColor_Y, SurfaceForegroundPatternColor_Z);
+            set => (SurfaceForegroundPatternColor_X, SurfaceForegroundPatternColor_Y, SurfaceForegroundPatternColor_Z) = value;
+        }
+
+        /// <summary>Graphics > Surface Patterns > Background: pattern and colour.</summary>
+        public Relation<FillPattern> _SurfaceBackgroundPattern;
+        public double SurfaceBackgroundPatternColor_X;
+        public double SurfaceBackgroundPatternColor_Y;
+        public double SurfaceBackgroundPatternColor_Z;
+        public DVector3 SurfaceBackgroundPatternColor
+        {
+            get => new DVector3(SurfaceBackgroundPatternColor_X, SurfaceBackgroundPatternColor_Y, SurfaceBackgroundPatternColor_Z);
+            set => (SurfaceBackgroundPatternColor_X, SurfaceBackgroundPatternColor_Y, SurfaceBackgroundPatternColor_Z) = value;
+        }
+
+        /// <summary>Graphics > Cut Patterns > Foreground: pattern and colour (the cut fill of a plan or section).</summary>
+        public Relation<FillPattern> _CutForegroundPattern;
+        public double CutForegroundPatternColor_X;
+        public double CutForegroundPatternColor_Y;
+        public double CutForegroundPatternColor_Z;
+        public DVector3 CutForegroundPatternColor
+        {
+            get => new DVector3(CutForegroundPatternColor_X, CutForegroundPatternColor_Y, CutForegroundPatternColor_Z);
+            set => (CutForegroundPatternColor_X, CutForegroundPatternColor_Y, CutForegroundPatternColor_Z) = value;
+        }
+
+        /// <summary>Graphics > Cut Patterns > Background: pattern and colour (drawn under the foreground).</summary>
+        public Relation<FillPattern> _CutBackgroundPattern;
+        public double CutBackgroundPatternColor_X;
+        public double CutBackgroundPatternColor_Y;
+        public double CutBackgroundPatternColor_Z;
+        public DVector3 CutBackgroundPatternColor
+        {
+            get => new DVector3(CutBackgroundPatternColor_X, CutBackgroundPatternColor_Y, CutBackgroundPatternColor_Z);
+            set => (CutBackgroundPatternColor_X, CutBackgroundPatternColor_Y, CutBackgroundPatternColor_Z) = value;
+        }
     }
 
     /// <summary>
@@ -1823,6 +2295,39 @@ namespace Vim.Format.ObjectModel
     [G3dAttributeReference("g3d:instance:flags:0:uint16:1", G3dAttributeReferenceMultiplicity.OneToOne, true)]
     public partial class Node : EntityWithElement
     {
+    }
+
+    /// <summary>
+    /// A geometry piece (5.14.0): one submesh of one placed geometry, i.e. the triangles of a Node's mesh that share one material,
+    /// one Revit subcategory and, for walls, floors, roofs and ceilings, one compound structure layer. Written only by the
+    /// exporter's experimental "geometry pieces" option (otherwise the table is empty).
+    /// <para>
+    /// The g3d submesh is <c>g3d:mesh:submeshoffset[g3d:instance:mesh[Node]] + SubmeshIndex</c>. SubmeshIndex is local to the
+    /// node's mesh, so it stays valid when files are merged.
+    /// </para>
+    /// <para>
+    /// A layer piece of a split host is a closed solid of that one layer, as Revit computes it after the joins (wrapping,
+    /// openings): its section cap is the layer's cut shape, filled with the Material's cut pattern.
+    /// </para>
+    /// </summary>
+    [TableName(TableNames.GeometryPiece)]
+    [CascadeElementRemap]
+    public partial class GeometryPiece : EntityWithElement
+    {
+        /// <summary>The submesh of the node's mesh, counted from the mesh's first submesh (0-based).</summary>
+        public int SubmeshIndex;
+
+        /// <summary>The placed geometry (same index as the g3d instance) whose mesh holds the piece.</summary>
+        public Relation<Node> _Node;
+
+        /// <summary>The material of the piece (the same as g3d:submesh:material).</summary>
+        public Relation<Material> _Material;
+
+        /// <summary>The Revit subcategory of the piece's faces (from the faces' GraphicsStyle). None: the element's own category.</summary>
+        public Relation<Category> _Subcategory;
+
+        /// <summary>The compound structure layer of a wall, floor, roof or ceiling (OrderIndex, Width, MaterialFunctionAssignment). None: not a layer.</summary>
+        public Relation<CompoundStructureLayer> _CompoundStructureLayer;
     }
 
     /// <summary>

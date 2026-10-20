@@ -42,6 +42,31 @@ namespace Vim.Format
             public List<Vector4> Colors { get; set; }
             public List<Vector2> UVs { get; set; }
 
+            /// <summary>
+            /// Optional (exporter "geometry pieces" option): the Vim.Category (usually a Revit subcategory) of each face, parallel to
+            /// FaceMaterials; -1 = the element's own category. Null when not captured. Faces appended without one are padded with -1.
+            /// </summary>
+            public List<int> FaceCategories { get; set; }
+
+            /// <summary>
+            /// Optional (exporter "geometry pieces" option): the Vim.CompoundStructureLayer of each face, parallel to FaceMaterials;
+            /// -1 = none. Null when not captured.
+            /// </summary>
+            public List<int> FaceLayers { get; set; }
+
+            /// <summary>
+            /// Appends the given tag to every face added since faceCountBefore, padding earlier faces with -1. Creates the list.
+            /// </summary>
+            public static List<int> TagFaces(List<int> tags, int faceCountBefore, int faceCountNow, int tag)
+            {
+                tags = tags ?? new List<int>();
+                while (tags.Count < faceCountBefore)
+                    tags.Add(-1);
+                while (tags.Count < faceCountNow)
+                    tags.Add(tag);
+                return tags;
+            }
+
             public Mesh(
                 List<Vector3> vertices = null,
                 List<int> indices = null,
@@ -110,23 +135,39 @@ namespace Vim.Format
             public IReadOnlyList<int> SubmeshesIndexOffset { get; }
             public IReadOnlyList<int> SubmeshMaterials { get; }
 
+            /// <summary>Optional, in memory only (not a g3d buffer): the Vim.Category of each submesh; null when the mesh carries none.</summary>
+            public IReadOnlyList<int> SubmeshCategories { get; }
+
+            /// <summary>Optional, in memory only (not a g3d buffer): the Vim.CompoundStructureLayer of each submesh; null when the mesh carries none.</summary>
+            public IReadOnlyList<int> SubmeshLayers { get; }
+
             public SubdividedMesh(Mesh mesh)
             {
                 if (mesh.Indices.Any(i => i < 0 && i >= mesh.Vertices.Count))
                     throw new Exception($"Invalid mesh. Indices out of vertex range.");
 
+                // Faces are grouped by material (as always) and, when the mesh carries them, by category and layer too:
+                // one submesh per (material, category, layer), in order of first appearance.
+                var categories = mesh.FaceCategories != null && mesh.FaceCategories.Count > 0 ? mesh.FaceCategories : null;
+                var layers = mesh.FaceLayers != null && mesh.FaceLayers.Count > 0 ? mesh.FaceLayers : null;
+                int Tag(List<int> tags, int index) => tags != null && index < tags.Count ? tags[index] : -1;
+
                 var facesByMats = mesh.FaceMaterials
                     .Select((face, index) => (face, index))
-                    .GroupBy(pair => pair.face, pair => pair.index);
+                    .GroupBy(pair => (material: pair.face, category: Tag(categories, pair.index), layer: Tag(layers, pair.index)), pair => pair.index);
 
                 var submeshIndexOffset = new List<int>();
                 var submeshMaterials = new List<int>();
+                var submeshCategories = categories != null || layers != null ? new List<int>() : null;
+                var submeshLayers = categories != null || layers != null ? new List<int>() : null;
                 var indicesRemap = new List<int>();
 
                 foreach (var group in facesByMats)
                 {
                     submeshIndexOffset.Add(indicesRemap.Count);
-                    submeshMaterials.Add(group.Key);
+                    submeshMaterials.Add(group.Key.material);
+                    submeshCategories?.Add(group.Key.category);
+                    submeshLayers?.Add(group.Key.layer);
                     foreach (var face in group)
                     {
                         var f = face * 3;
@@ -137,6 +178,8 @@ namespace Vim.Format
                 }
                 Indices = indicesRemap;
                 SubmeshMaterials = submeshMaterials;
+                SubmeshCategories = submeshCategories;
+                SubmeshLayers = submeshLayers;
                 SubmeshesIndexOffset = submeshIndexOffset;
 
                 Vertices = mesh.Vertices;

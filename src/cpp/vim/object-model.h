@@ -56,6 +56,22 @@ namespace Vim
     class FilterInViewTable;
     class GridInView;
     class GridInViewTable;
+    class LinePattern;
+    class LinePatternTable;
+    class FillPattern;
+    class FillPatternTable;
+    class FillGrid;
+    class FillGridTable;
+    class LineWeight;
+    class LineWeightTable;
+    class GraphicOverride;
+    class GraphicOverrideTable;
+    class CategoryInView;
+    class CategoryInViewTable;
+    class ElementOverrideInView;
+    class ElementOverrideInViewTable;
+    class PhaseGraphicOverride;
+    class PhaseGraphicOverrideTable;
     class ElementInView;
     class ElementInViewTable;
     class ShapeInView;
@@ -78,6 +94,8 @@ namespace Vim
     class CompoundStructureTable;
     class Node;
     class NodeTable;
+    class GeometryPiece;
+    class GeometryPieceTable;
     class Geometry;
     class GeometryTable;
     class Shape;
@@ -168,6 +186,14 @@ namespace Vim
         ViewTable* mView;
         FilterInViewTable* mFilterInView;
         GridInViewTable* mGridInView;
+        LinePatternTable* mLinePattern;
+        FillPatternTable* mFillPattern;
+        FillGridTable* mFillGrid;
+        LineWeightTable* mLineWeight;
+        GraphicOverrideTable* mGraphicOverride;
+        CategoryInViewTable* mCategoryInView;
+        ElementOverrideInViewTable* mElementOverrideInView;
+        PhaseGraphicOverrideTable* mPhaseGraphicOverride;
         ElementInViewTable* mElementInView;
         ShapeInViewTable* mShapeInView;
         AssetInViewTable* mAssetInView;
@@ -179,6 +205,7 @@ namespace Vim
         CompoundStructureLayerTable* mCompoundStructureLayer;
         CompoundStructureTable* mCompoundStructure;
         NodeTable* mNode;
+        GeometryPieceTable* mGeometryPiece;
         GeometryTable* mGeometry;
         ShapeTable* mShape;
         ShapeCollectionTable* mShapeCollection;
@@ -4765,11 +4792,18 @@ namespace Vim
         double mLineColor_Y;
         double mLineColor_Z;
         std::string mBuiltInCategory;
+        int mProjectionLineWeight;
+        int mCutLineWeight;
+        bool mIsCuttable;
         
         int mParentIndex;
         Category* mParent;
         int mMaterialIndex;
         Material* mMaterial;
+        int mProjectionLinePatternIndex;
+        LinePattern* mProjectionLinePattern;
+        int mCutLinePatternIndex;
+        LinePattern* mCutLinePattern;
         
         Category() {}
     };
@@ -4798,8 +4832,13 @@ namespace Vim
             category->mLineColor_Y = GetLineColor_Y(categoryIndex);
             category->mLineColor_Z = GetLineColor_Z(categoryIndex);
             category->mBuiltInCategory = GetBuiltInCategory(categoryIndex);
+            category->mProjectionLineWeight = GetProjectionLineWeight(categoryIndex);
+            category->mCutLineWeight = GetCutLineWeight(categoryIndex);
+            category->mIsCuttable = GetIsCuttable(categoryIndex);
             category->mParentIndex = GetParentIndex(categoryIndex);
             category->mMaterialIndex = GetMaterialIndex(categoryIndex);
+            category->mProjectionLinePatternIndex = GetProjectionLinePatternIndex(categoryIndex);
+            category->mCutLinePatternIndex = GetCutLinePatternIndex(categoryIndex);
             return category;
         }
         
@@ -4812,8 +4851,13 @@ namespace Vim
             bool existsLineColor_Y = mEntityTable.column_exists("double:LineColor.Y");
             bool existsLineColor_Z = mEntityTable.column_exists("double:LineColor.Z");
             bool existsBuiltInCategory = mEntityTable.column_exists("string:BuiltInCategory");
+            bool existsProjectionLineWeight = mEntityTable.column_exists("int:ProjectionLineWeight");
+            bool existsCutLineWeight = mEntityTable.column_exists("int:CutLineWeight");
+            bool existsIsCuttable = mEntityTable.column_exists("byte:IsCuttable");
             bool existsParent = mEntityTable.column_exists("index:Vim.Category:Parent");
             bool existsMaterial = mEntityTable.column_exists("index:Vim.Material:Material");
+            bool existsProjectionLinePattern = mEntityTable.column_exists("index:Vim.LinePattern:ProjectionLinePattern");
+            bool existsCutLinePattern = mEntityTable.column_exists("index:Vim.LinePattern:CutLinePattern");
             
             const auto count = GetCount();
             
@@ -4851,8 +4895,25 @@ namespace Vim
             
             const std::vector<int>& builtInCategoryData = mEntityTable.column_exists("string:BuiltInCategory") ? mEntityTable.mStringColumns["string:BuiltInCategory"] : std::vector<int>();
             
+            int* projectionLineWeightData = new int[count];
+            if (mEntityTable.column_exists("int:ProjectionLineWeight")) {
+                memcpy(projectionLineWeightData, mEntityTable.mDataColumns["int:ProjectionLineWeight"].begin(), count * sizeof(int));
+            }
+            
+            int* cutLineWeightData = new int[count];
+            if (mEntityTable.column_exists("int:CutLineWeight")) {
+                memcpy(cutLineWeightData, mEntityTable.mDataColumns["int:CutLineWeight"].begin(), count * sizeof(int));
+            }
+            
+            bfast::byte* isCuttableData = new bfast::byte[count];
+            if (mEntityTable.column_exists("byte:IsCuttable")) {
+                memcpy(isCuttableData, mEntityTable.mDataColumns["byte:IsCuttable"].begin(), count * sizeof(bfast::byte));
+            }
+            
             const std::vector<int>& parentData = mEntityTable.column_exists("index:Vim.Category:Parent") ? mEntityTable.mIndexColumns["index:Vim.Category:Parent"] : std::vector<int>();
             const std::vector<int>& materialData = mEntityTable.column_exists("index:Vim.Material:Material") ? mEntityTable.mIndexColumns["index:Vim.Material:Material"] : std::vector<int>();
+            const std::vector<int>& projectionLinePatternData = mEntityTable.column_exists("index:Vim.LinePattern:ProjectionLinePattern") ? mEntityTable.mIndexColumns["index:Vim.LinePattern:ProjectionLinePattern"] : std::vector<int>();
+            const std::vector<int>& cutLinePatternData = mEntityTable.column_exists("index:Vim.LinePattern:CutLinePattern") ? mEntityTable.mIndexColumns["index:Vim.LinePattern:CutLinePattern"] : std::vector<int>();
             
             for (int i = 0; i < count; ++i)
             {
@@ -4872,8 +4933,16 @@ namespace Vim
                     entity.mLineColor_Z = lineColor_ZData[i];
                 if (existsBuiltInCategory)
                     entity.mBuiltInCategory = std::string(reinterpret_cast<const char*>(mStrings[builtInCategoryData[i]]));
+                if (existsProjectionLineWeight)
+                    entity.mProjectionLineWeight = projectionLineWeightData[i];
+                if (existsCutLineWeight)
+                    entity.mCutLineWeight = cutLineWeightData[i];
+                if (existsIsCuttable)
+                    entity.mIsCuttable = isCuttableData[i];
                 entity.mParentIndex = existsParent ? parentData[i] : -1;
                 entity.mMaterialIndex = existsMaterial ? materialData[i] : -1;
+                entity.mProjectionLinePatternIndex = existsProjectionLinePattern ? projectionLinePatternData[i] : -1;
+                entity.mCutLinePatternIndex = existsCutLinePattern ? cutLinePatternData[i] : -1;
                 category->push_back(entity);
             }
             
@@ -4881,6 +4950,9 @@ namespace Vim
             delete[] lineColor_XData;
             delete[] lineColor_YData;
             delete[] lineColor_ZData;
+            delete[] projectionLineWeightData;
+            delete[] cutLineWeightData;
+            delete[] isCuttableData;
             
             return category;
         }
@@ -5093,6 +5165,90 @@ namespace Vim
             return result;
         }
         
+        int GetProjectionLineWeight(int categoryIndex)
+        {
+            if (categoryIndex < 0 || categoryIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("int:ProjectionLineWeight")) {
+                return *reinterpret_cast<int*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["int:ProjectionLineWeight"].begin() + categoryIndex * sizeof(int)));
+            }
+            
+            return {};
+        }
+        
+        std::vector<int>* GetAllProjectionLineWeight()
+        {
+            const auto count = GetCount();
+            
+            int* projectionLineWeightData = new int[count];
+            if (mEntityTable.column_exists("int:ProjectionLineWeight")) {
+                memcpy(projectionLineWeightData, mEntityTable.mDataColumns["int:ProjectionLineWeight"].begin(), count * sizeof(int));
+            }
+            
+            std::vector<int>* result = new std::vector<int>(projectionLineWeightData, projectionLineWeightData + count);
+            
+            delete[] projectionLineWeightData;
+            
+            return result;
+        }
+        
+        int GetCutLineWeight(int categoryIndex)
+        {
+            if (categoryIndex < 0 || categoryIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("int:CutLineWeight")) {
+                return *reinterpret_cast<int*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["int:CutLineWeight"].begin() + categoryIndex * sizeof(int)));
+            }
+            
+            return {};
+        }
+        
+        std::vector<int>* GetAllCutLineWeight()
+        {
+            const auto count = GetCount();
+            
+            int* cutLineWeightData = new int[count];
+            if (mEntityTable.column_exists("int:CutLineWeight")) {
+                memcpy(cutLineWeightData, mEntityTable.mDataColumns["int:CutLineWeight"].begin(), count * sizeof(int));
+            }
+            
+            std::vector<int>* result = new std::vector<int>(cutLineWeightData, cutLineWeightData + count);
+            
+            delete[] cutLineWeightData;
+            
+            return result;
+        }
+        
+        bool GetIsCuttable(int categoryIndex)
+        {
+            if (categoryIndex < 0 || categoryIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("byte:IsCuttable")) {
+                return static_cast<bool>(*reinterpret_cast<bfast::byte*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["byte:IsCuttable"].begin() + categoryIndex * sizeof(bfast::byte))));
+            }
+            
+            return {};
+        }
+        
+        std::vector<bool>* GetAllIsCuttable()
+        {
+            const auto count = GetCount();
+            
+            bfast::byte* isCuttableData = new bfast::byte[count];
+            if (mEntityTable.column_exists("byte:IsCuttable")) {
+                memcpy(isCuttableData, mEntityTable.mDataColumns["byte:IsCuttable"].begin(), count * sizeof(bfast::byte));
+            }
+            
+            std::vector<bool>* result = new std::vector<bool>(isCuttableData, isCuttableData + count);
+            
+            delete[] isCuttableData;
+            
+            return result;
+        }
+        
         int GetParentIndex(int categoryIndex)
         {
             if (!mEntityTable.column_exists("index:Vim.Category:Parent")) {
@@ -5115,6 +5271,30 @@ namespace Vim
                 return -1;
             
             return mEntityTable.mIndexColumns["index:Vim.Material:Material"][categoryIndex];
+        }
+        
+        int GetProjectionLinePatternIndex(int categoryIndex)
+        {
+            if (!mEntityTable.column_exists("index:Vim.LinePattern:ProjectionLinePattern")) {
+                return -1;
+            }
+            
+            if (categoryIndex < 0 || categoryIndex >= GetCount())
+                return -1;
+            
+            return mEntityTable.mIndexColumns["index:Vim.LinePattern:ProjectionLinePattern"][categoryIndex];
+        }
+        
+        int GetCutLinePatternIndex(int categoryIndex)
+        {
+            if (!mEntityTable.column_exists("index:Vim.LinePattern:CutLinePattern")) {
+                return -1;
+            }
+            
+            if (categoryIndex < 0 || categoryIndex >= GetCount())
+                return -1;
+            
+            return mEntityTable.mIndexColumns["index:Vim.LinePattern:CutLinePattern"][categoryIndex];
         }
         
     };
@@ -6626,6 +6806,7 @@ namespace Vim
         int mElementOverrideCount;
         int mHiddenElementCount;
         std::string mTemplateControlledSettings;
+        bool mGraphicsRead;
         
         int mCameraIndex;
         Camera* mCamera;
@@ -6698,6 +6879,7 @@ namespace Vim
             view->mElementOverrideCount = GetElementOverrideCount(viewIndex);
             view->mHiddenElementCount = GetHiddenElementCount(viewIndex);
             view->mTemplateControlledSettings = GetTemplateControlledSettings(viewIndex);
+            view->mGraphicsRead = GetGraphicsRead(viewIndex);
             view->mCameraIndex = GetCameraIndex(viewIndex);
             view->mFamilyTypeIndex = GetFamilyTypeIndex(viewIndex);
             view->mViewTemplateIndex = GetViewTemplateIndex(viewIndex);
@@ -6745,6 +6927,7 @@ namespace Vim
             bool existsElementOverrideCount = mEntityTable.column_exists("int:ElementOverrideCount");
             bool existsHiddenElementCount = mEntityTable.column_exists("int:HiddenElementCount");
             bool existsTemplateControlledSettings = mEntityTable.column_exists("string:TemplateControlledSettings");
+            bool existsGraphicsRead = mEntityTable.column_exists("byte:GraphicsRead");
             bool existsCamera = mEntityTable.column_exists("index:Vim.Camera:Camera");
             bool existsFamilyType = mEntityTable.column_exists("index:Vim.FamilyType:FamilyType");
             bool existsViewTemplate = mEntityTable.column_exists("index:Vim.Element:ViewTemplate");
@@ -6914,6 +7097,11 @@ namespace Vim
             
             const std::vector<int>& templateControlledSettingsData = mEntityTable.column_exists("string:TemplateControlledSettings") ? mEntityTable.mStringColumns["string:TemplateControlledSettings"] : std::vector<int>();
             
+            bfast::byte* graphicsReadData = new bfast::byte[count];
+            if (mEntityTable.column_exists("byte:GraphicsRead")) {
+                memcpy(graphicsReadData, mEntityTable.mDataColumns["byte:GraphicsRead"].begin(), count * sizeof(bfast::byte));
+            }
+            
             const std::vector<int>& cameraData = mEntityTable.column_exists("index:Vim.Camera:Camera") ? mEntityTable.mIndexColumns["index:Vim.Camera:Camera"] : std::vector<int>();
             const std::vector<int>& familyTypeData = mEntityTable.column_exists("index:Vim.FamilyType:FamilyType") ? mEntityTable.mIndexColumns["index:Vim.FamilyType:FamilyType"] : std::vector<int>();
             const std::vector<int>& viewTemplateData = mEntityTable.column_exists("index:Vim.Element:ViewTemplate") ? mEntityTable.mIndexColumns["index:Vim.Element:ViewTemplate"] : std::vector<int>();
@@ -6995,6 +7183,8 @@ namespace Vim
                     entity.mHiddenElementCount = hiddenElementCountData[i];
                 if (existsTemplateControlledSettings)
                     entity.mTemplateControlledSettings = std::string(reinterpret_cast<const char*>(mStrings[templateControlledSettingsData[i]]));
+                if (existsGraphicsRead)
+                    entity.mGraphicsRead = graphicsReadData[i];
                 entity.mCameraIndex = existsCamera ? cameraData[i] : -1;
                 entity.mFamilyTypeIndex = existsFamilyType ? familyTypeData[i] : -1;
                 entity.mViewTemplateIndex = existsViewTemplate ? viewTemplateData[i] : -1;
@@ -7035,6 +7225,7 @@ namespace Vim
             delete[] filterCountData;
             delete[] elementOverrideCountData;
             delete[] hiddenElementCountData;
+            delete[] graphicsReadData;
             
             return view;
         }
@@ -7996,6 +8187,34 @@ namespace Vim
             return result;
         }
         
+        bool GetGraphicsRead(int viewIndex)
+        {
+            if (viewIndex < 0 || viewIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("byte:GraphicsRead")) {
+                return static_cast<bool>(*reinterpret_cast<bfast::byte*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["byte:GraphicsRead"].begin() + viewIndex * sizeof(bfast::byte))));
+            }
+            
+            return {};
+        }
+        
+        std::vector<bool>* GetAllGraphicsRead()
+        {
+            const auto count = GetCount();
+            
+            bfast::byte* graphicsReadData = new bfast::byte[count];
+            if (mEntityTable.column_exists("byte:GraphicsRead")) {
+                memcpy(graphicsReadData, mEntityTable.mDataColumns["byte:GraphicsRead"].begin(), count * sizeof(bfast::byte));
+            }
+            
+            std::vector<bool>* result = new std::vector<bool>(graphicsReadData, graphicsReadData + count);
+            
+            delete[] graphicsReadData;
+            
+            return result;
+        }
+        
         int GetCameraIndex(int viewIndex)
         {
             if (!mEntityTable.column_exists("index:Vim.Camera:Camera")) {
@@ -8116,6 +8335,8 @@ namespace Vim
         
         int mViewIndex;
         View* mView;
+        int mGraphicOverrideIndex;
+        GraphicOverride* mGraphicOverride;
         
         FilterInView() {}
     };
@@ -8145,6 +8366,7 @@ namespace Vim
             filterInView->mIsVisible = GetIsVisible(filterInViewIndex);
             filterInView->mHasOverrides = GetHasOverrides(filterInViewIndex);
             filterInView->mViewIndex = GetViewIndex(filterInViewIndex);
+            filterInView->mGraphicOverrideIndex = GetGraphicOverrideIndex(filterInViewIndex);
             return filterInView;
         }
         
@@ -8158,6 +8380,7 @@ namespace Vim
             bool existsIsVisible = mEntityTable.column_exists("byte:IsVisible");
             bool existsHasOverrides = mEntityTable.column_exists("byte:HasOverrides");
             bool existsView = mEntityTable.column_exists("index:Vim.View:View");
+            bool existsGraphicOverride = mEntityTable.column_exists("index:Vim.GraphicOverride:GraphicOverride");
             
             const auto count = GetCount();
             
@@ -8191,6 +8414,7 @@ namespace Vim
             }
             
             const std::vector<int>& viewData = mEntityTable.column_exists("index:Vim.View:View") ? mEntityTable.mIndexColumns["index:Vim.View:View"] : std::vector<int>();
+            const std::vector<int>& graphicOverrideData = mEntityTable.column_exists("index:Vim.GraphicOverride:GraphicOverride") ? mEntityTable.mIndexColumns["index:Vim.GraphicOverride:GraphicOverride"] : std::vector<int>();
             
             for (int i = 0; i < count; ++i)
             {
@@ -8211,6 +8435,7 @@ namespace Vim
                 if (existsHasOverrides)
                     entity.mHasOverrides = hasOverridesData[i];
                 entity.mViewIndex = existsView ? viewData[i] : -1;
+                entity.mGraphicOverrideIndex = existsGraphicOverride ? graphicOverrideData[i] : -1;
                 filterInView->push_back(entity);
             }
             
@@ -8433,6 +8658,18 @@ namespace Vim
             return mEntityTable.mIndexColumns["index:Vim.View:View"][filterInViewIndex];
         }
         
+        int GetGraphicOverrideIndex(int filterInViewIndex)
+        {
+            if (!mEntityTable.column_exists("index:Vim.GraphicOverride:GraphicOverride")) {
+                return -1;
+            }
+            
+            if (filterInViewIndex < 0 || filterInViewIndex >= GetCount())
+                return -1;
+            
+            return mEntityTable.mIndexColumns["index:Vim.GraphicOverride:GraphicOverride"][filterInViewIndex];
+        }
+        
     };
     
     static FilterInViewTable* GetFilterInViewTable(Scene& scene)
@@ -8614,6 +8851,3634 @@ namespace Vim
             return {};
         
         return new GridInViewTable(scene.mEntityTables["Vim.GridInView"], scene.mStrings);
+    }
+    
+    class LinePattern
+    {
+    public:
+        int mIndex;
+        std::string mName;
+        long long mElementId;
+        std::string mUniqueId;
+        bool mIsSolid;
+        std::string mSegments;
+        
+        int mBimDocumentIndex;
+        BimDocument* mBimDocument;
+        
+        LinePattern() {}
+    };
+    
+    class LinePatternTable
+    {
+        EntityTable& mEntityTable;
+        std::vector<const bfast::byte*>& mStrings;
+    public:
+        LinePatternTable(EntityTable& entityTable, std::vector<const bfast::byte*>& strings):
+            mEntityTable(entityTable), mStrings(strings) {}
+        
+        size_t GetCount()
+        {
+            return mEntityTable.get_count();
+        }
+        
+        LinePattern* Get(int linePatternIndex)
+        {
+            LinePattern* linePattern = new LinePattern();
+            linePattern->mIndex = linePatternIndex;
+            linePattern->mName = GetName(linePatternIndex);
+            linePattern->mElementId = GetElementId(linePatternIndex);
+            linePattern->mUniqueId = GetUniqueId(linePatternIndex);
+            linePattern->mIsSolid = GetIsSolid(linePatternIndex);
+            linePattern->mSegments = GetSegments(linePatternIndex);
+            linePattern->mBimDocumentIndex = GetBimDocumentIndex(linePatternIndex);
+            return linePattern;
+        }
+        
+        std::vector<LinePattern>* GetAll()
+        {
+            bool existsName = mEntityTable.column_exists("string:Name");
+            bool existsElementId = mEntityTable.column_exists("long:ElementId");
+            bool existsUniqueId = mEntityTable.column_exists("string:UniqueId");
+            bool existsIsSolid = mEntityTable.column_exists("byte:IsSolid");
+            bool existsSegments = mEntityTable.column_exists("string:Segments");
+            bool existsBimDocument = mEntityTable.column_exists("index:Vim.BimDocument:BimDocument");
+            
+            const auto count = GetCount();
+            
+            std::vector<LinePattern>* linePattern = new std::vector<LinePattern>();
+            linePattern->reserve(count);
+            
+            const std::vector<int>& nameData = mEntityTable.column_exists("string:Name") ? mEntityTable.mStringColumns["string:Name"] : std::vector<int>();
+            
+            long long* elementIdData = new long long[count];
+            if (mEntityTable.column_exists("long:ElementId")) {
+                memcpy(elementIdData, mEntityTable.mDataColumns["long:ElementId"].begin(), count * sizeof(long long));
+            }
+            
+            const std::vector<int>& uniqueIdData = mEntityTable.column_exists("string:UniqueId") ? mEntityTable.mStringColumns["string:UniqueId"] : std::vector<int>();
+            
+            bfast::byte* isSolidData = new bfast::byte[count];
+            if (mEntityTable.column_exists("byte:IsSolid")) {
+                memcpy(isSolidData, mEntityTable.mDataColumns["byte:IsSolid"].begin(), count * sizeof(bfast::byte));
+            }
+            
+            const std::vector<int>& segmentsData = mEntityTable.column_exists("string:Segments") ? mEntityTable.mStringColumns["string:Segments"] : std::vector<int>();
+            
+            const std::vector<int>& bimDocumentData = mEntityTable.column_exists("index:Vim.BimDocument:BimDocument") ? mEntityTable.mIndexColumns["index:Vim.BimDocument:BimDocument"] : std::vector<int>();
+            
+            for (int i = 0; i < count; ++i)
+            {
+                LinePattern entity;
+                entity.mIndex = i;
+                if (existsName)
+                    entity.mName = std::string(reinterpret_cast<const char*>(mStrings[nameData[i]]));
+                if (existsElementId)
+                    entity.mElementId = elementIdData[i];
+                if (existsUniqueId)
+                    entity.mUniqueId = std::string(reinterpret_cast<const char*>(mStrings[uniqueIdData[i]]));
+                if (existsIsSolid)
+                    entity.mIsSolid = isSolidData[i];
+                if (existsSegments)
+                    entity.mSegments = std::string(reinterpret_cast<const char*>(mStrings[segmentsData[i]]));
+                entity.mBimDocumentIndex = existsBimDocument ? bimDocumentData[i] : -1;
+                linePattern->push_back(entity);
+            }
+            
+            delete[] elementIdData;
+            delete[] isSolidData;
+            
+            return linePattern;
+        }
+        
+        std::string GetName(int linePatternIndex)
+        {
+            if (linePatternIndex < 0 || linePatternIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("string:Name")) {
+                return std::string(reinterpret_cast<const char*>(mStrings[mEntityTable.mStringColumns["string:Name"][linePatternIndex]]));
+            }
+            
+            return {};
+        }
+        
+        std::vector<std::string>* GetAllName()
+        {
+            const auto count = GetCount();
+            
+            const std::vector<int>& nameData = mEntityTable.column_exists("string:Name") ? mEntityTable.mStringColumns["string:Name"] : std::vector<int>();
+            
+            std::vector<std::string>* result = new std::vector<std::string>();
+            result->reserve(count);
+            
+            for (int i = 0; i < count; ++i)
+            {
+                result->push_back(std::string(reinterpret_cast<const char*>(mStrings[nameData[i]])));
+            }
+            
+            return result;
+        }
+        
+        long long GetElementId(int linePatternIndex)
+        {
+            if (linePatternIndex < 0 || linePatternIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("long:ElementId")) {
+                return *reinterpret_cast<long long*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["long:ElementId"].begin() + linePatternIndex * sizeof(long long)));
+            }
+            
+            return {};
+        }
+        
+        std::vector<long long>* GetAllElementId()
+        {
+            const auto count = GetCount();
+            
+            long long* elementIdData = new long long[count];
+            if (mEntityTable.column_exists("long:ElementId")) {
+                memcpy(elementIdData, mEntityTable.mDataColumns["long:ElementId"].begin(), count * sizeof(long long));
+            }
+            
+            std::vector<long long>* result = new std::vector<long long>(elementIdData, elementIdData + count);
+            
+            delete[] elementIdData;
+            
+            return result;
+        }
+        
+        std::string GetUniqueId(int linePatternIndex)
+        {
+            if (linePatternIndex < 0 || linePatternIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("string:UniqueId")) {
+                return std::string(reinterpret_cast<const char*>(mStrings[mEntityTable.mStringColumns["string:UniqueId"][linePatternIndex]]));
+            }
+            
+            return {};
+        }
+        
+        std::vector<std::string>* GetAllUniqueId()
+        {
+            const auto count = GetCount();
+            
+            const std::vector<int>& uniqueIdData = mEntityTable.column_exists("string:UniqueId") ? mEntityTable.mStringColumns["string:UniqueId"] : std::vector<int>();
+            
+            std::vector<std::string>* result = new std::vector<std::string>();
+            result->reserve(count);
+            
+            for (int i = 0; i < count; ++i)
+            {
+                result->push_back(std::string(reinterpret_cast<const char*>(mStrings[uniqueIdData[i]])));
+            }
+            
+            return result;
+        }
+        
+        bool GetIsSolid(int linePatternIndex)
+        {
+            if (linePatternIndex < 0 || linePatternIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("byte:IsSolid")) {
+                return static_cast<bool>(*reinterpret_cast<bfast::byte*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["byte:IsSolid"].begin() + linePatternIndex * sizeof(bfast::byte))));
+            }
+            
+            return {};
+        }
+        
+        std::vector<bool>* GetAllIsSolid()
+        {
+            const auto count = GetCount();
+            
+            bfast::byte* isSolidData = new bfast::byte[count];
+            if (mEntityTable.column_exists("byte:IsSolid")) {
+                memcpy(isSolidData, mEntityTable.mDataColumns["byte:IsSolid"].begin(), count * sizeof(bfast::byte));
+            }
+            
+            std::vector<bool>* result = new std::vector<bool>(isSolidData, isSolidData + count);
+            
+            delete[] isSolidData;
+            
+            return result;
+        }
+        
+        std::string GetSegments(int linePatternIndex)
+        {
+            if (linePatternIndex < 0 || linePatternIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("string:Segments")) {
+                return std::string(reinterpret_cast<const char*>(mStrings[mEntityTable.mStringColumns["string:Segments"][linePatternIndex]]));
+            }
+            
+            return {};
+        }
+        
+        std::vector<std::string>* GetAllSegments()
+        {
+            const auto count = GetCount();
+            
+            const std::vector<int>& segmentsData = mEntityTable.column_exists("string:Segments") ? mEntityTable.mStringColumns["string:Segments"] : std::vector<int>();
+            
+            std::vector<std::string>* result = new std::vector<std::string>();
+            result->reserve(count);
+            
+            for (int i = 0; i < count; ++i)
+            {
+                result->push_back(std::string(reinterpret_cast<const char*>(mStrings[segmentsData[i]])));
+            }
+            
+            return result;
+        }
+        
+        int GetBimDocumentIndex(int linePatternIndex)
+        {
+            if (!mEntityTable.column_exists("index:Vim.BimDocument:BimDocument")) {
+                return -1;
+            }
+            
+            if (linePatternIndex < 0 || linePatternIndex >= GetCount())
+                return -1;
+            
+            return mEntityTable.mIndexColumns["index:Vim.BimDocument:BimDocument"][linePatternIndex];
+        }
+        
+    };
+    
+    static LinePatternTable* GetLinePatternTable(Scene& scene)
+    {
+        if (scene.mEntityTables.find("Vim.LinePattern") == scene.mEntityTables.end())
+            return {};
+        
+        return new LinePatternTable(scene.mEntityTables["Vim.LinePattern"], scene.mStrings);
+    }
+    
+    class FillPattern
+    {
+    public:
+        int mIndex;
+        std::string mName;
+        long long mElementId;
+        std::string mUniqueId;
+        std::string mTarget;
+        bool mIsSolidFill;
+        std::string mHostOrientation;
+        int mGridCount;
+        
+        int mBimDocumentIndex;
+        BimDocument* mBimDocument;
+        
+        FillPattern() {}
+    };
+    
+    class FillPatternTable
+    {
+        EntityTable& mEntityTable;
+        std::vector<const bfast::byte*>& mStrings;
+    public:
+        FillPatternTable(EntityTable& entityTable, std::vector<const bfast::byte*>& strings):
+            mEntityTable(entityTable), mStrings(strings) {}
+        
+        size_t GetCount()
+        {
+            return mEntityTable.get_count();
+        }
+        
+        FillPattern* Get(int fillPatternIndex)
+        {
+            FillPattern* fillPattern = new FillPattern();
+            fillPattern->mIndex = fillPatternIndex;
+            fillPattern->mName = GetName(fillPatternIndex);
+            fillPattern->mElementId = GetElementId(fillPatternIndex);
+            fillPattern->mUniqueId = GetUniqueId(fillPatternIndex);
+            fillPattern->mTarget = GetTarget(fillPatternIndex);
+            fillPattern->mIsSolidFill = GetIsSolidFill(fillPatternIndex);
+            fillPattern->mHostOrientation = GetHostOrientation(fillPatternIndex);
+            fillPattern->mGridCount = GetGridCount(fillPatternIndex);
+            fillPattern->mBimDocumentIndex = GetBimDocumentIndex(fillPatternIndex);
+            return fillPattern;
+        }
+        
+        std::vector<FillPattern>* GetAll()
+        {
+            bool existsName = mEntityTable.column_exists("string:Name");
+            bool existsElementId = mEntityTable.column_exists("long:ElementId");
+            bool existsUniqueId = mEntityTable.column_exists("string:UniqueId");
+            bool existsTarget = mEntityTable.column_exists("string:Target");
+            bool existsIsSolidFill = mEntityTable.column_exists("byte:IsSolidFill");
+            bool existsHostOrientation = mEntityTable.column_exists("string:HostOrientation");
+            bool existsGridCount = mEntityTable.column_exists("int:GridCount");
+            bool existsBimDocument = mEntityTable.column_exists("index:Vim.BimDocument:BimDocument");
+            
+            const auto count = GetCount();
+            
+            std::vector<FillPattern>* fillPattern = new std::vector<FillPattern>();
+            fillPattern->reserve(count);
+            
+            const std::vector<int>& nameData = mEntityTable.column_exists("string:Name") ? mEntityTable.mStringColumns["string:Name"] : std::vector<int>();
+            
+            long long* elementIdData = new long long[count];
+            if (mEntityTable.column_exists("long:ElementId")) {
+                memcpy(elementIdData, mEntityTable.mDataColumns["long:ElementId"].begin(), count * sizeof(long long));
+            }
+            
+            const std::vector<int>& uniqueIdData = mEntityTable.column_exists("string:UniqueId") ? mEntityTable.mStringColumns["string:UniqueId"] : std::vector<int>();
+            
+            const std::vector<int>& targetData = mEntityTable.column_exists("string:Target") ? mEntityTable.mStringColumns["string:Target"] : std::vector<int>();
+            
+            bfast::byte* isSolidFillData = new bfast::byte[count];
+            if (mEntityTable.column_exists("byte:IsSolidFill")) {
+                memcpy(isSolidFillData, mEntityTable.mDataColumns["byte:IsSolidFill"].begin(), count * sizeof(bfast::byte));
+            }
+            
+            const std::vector<int>& hostOrientationData = mEntityTable.column_exists("string:HostOrientation") ? mEntityTable.mStringColumns["string:HostOrientation"] : std::vector<int>();
+            
+            int* gridCountData = new int[count];
+            if (mEntityTable.column_exists("int:GridCount")) {
+                memcpy(gridCountData, mEntityTable.mDataColumns["int:GridCount"].begin(), count * sizeof(int));
+            }
+            
+            const std::vector<int>& bimDocumentData = mEntityTable.column_exists("index:Vim.BimDocument:BimDocument") ? mEntityTable.mIndexColumns["index:Vim.BimDocument:BimDocument"] : std::vector<int>();
+            
+            for (int i = 0; i < count; ++i)
+            {
+                FillPattern entity;
+                entity.mIndex = i;
+                if (existsName)
+                    entity.mName = std::string(reinterpret_cast<const char*>(mStrings[nameData[i]]));
+                if (existsElementId)
+                    entity.mElementId = elementIdData[i];
+                if (existsUniqueId)
+                    entity.mUniqueId = std::string(reinterpret_cast<const char*>(mStrings[uniqueIdData[i]]));
+                if (existsTarget)
+                    entity.mTarget = std::string(reinterpret_cast<const char*>(mStrings[targetData[i]]));
+                if (existsIsSolidFill)
+                    entity.mIsSolidFill = isSolidFillData[i];
+                if (existsHostOrientation)
+                    entity.mHostOrientation = std::string(reinterpret_cast<const char*>(mStrings[hostOrientationData[i]]));
+                if (existsGridCount)
+                    entity.mGridCount = gridCountData[i];
+                entity.mBimDocumentIndex = existsBimDocument ? bimDocumentData[i] : -1;
+                fillPattern->push_back(entity);
+            }
+            
+            delete[] elementIdData;
+            delete[] isSolidFillData;
+            delete[] gridCountData;
+            
+            return fillPattern;
+        }
+        
+        std::string GetName(int fillPatternIndex)
+        {
+            if (fillPatternIndex < 0 || fillPatternIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("string:Name")) {
+                return std::string(reinterpret_cast<const char*>(mStrings[mEntityTable.mStringColumns["string:Name"][fillPatternIndex]]));
+            }
+            
+            return {};
+        }
+        
+        std::vector<std::string>* GetAllName()
+        {
+            const auto count = GetCount();
+            
+            const std::vector<int>& nameData = mEntityTable.column_exists("string:Name") ? mEntityTable.mStringColumns["string:Name"] : std::vector<int>();
+            
+            std::vector<std::string>* result = new std::vector<std::string>();
+            result->reserve(count);
+            
+            for (int i = 0; i < count; ++i)
+            {
+                result->push_back(std::string(reinterpret_cast<const char*>(mStrings[nameData[i]])));
+            }
+            
+            return result;
+        }
+        
+        long long GetElementId(int fillPatternIndex)
+        {
+            if (fillPatternIndex < 0 || fillPatternIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("long:ElementId")) {
+                return *reinterpret_cast<long long*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["long:ElementId"].begin() + fillPatternIndex * sizeof(long long)));
+            }
+            
+            return {};
+        }
+        
+        std::vector<long long>* GetAllElementId()
+        {
+            const auto count = GetCount();
+            
+            long long* elementIdData = new long long[count];
+            if (mEntityTable.column_exists("long:ElementId")) {
+                memcpy(elementIdData, mEntityTable.mDataColumns["long:ElementId"].begin(), count * sizeof(long long));
+            }
+            
+            std::vector<long long>* result = new std::vector<long long>(elementIdData, elementIdData + count);
+            
+            delete[] elementIdData;
+            
+            return result;
+        }
+        
+        std::string GetUniqueId(int fillPatternIndex)
+        {
+            if (fillPatternIndex < 0 || fillPatternIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("string:UniqueId")) {
+                return std::string(reinterpret_cast<const char*>(mStrings[mEntityTable.mStringColumns["string:UniqueId"][fillPatternIndex]]));
+            }
+            
+            return {};
+        }
+        
+        std::vector<std::string>* GetAllUniqueId()
+        {
+            const auto count = GetCount();
+            
+            const std::vector<int>& uniqueIdData = mEntityTable.column_exists("string:UniqueId") ? mEntityTable.mStringColumns["string:UniqueId"] : std::vector<int>();
+            
+            std::vector<std::string>* result = new std::vector<std::string>();
+            result->reserve(count);
+            
+            for (int i = 0; i < count; ++i)
+            {
+                result->push_back(std::string(reinterpret_cast<const char*>(mStrings[uniqueIdData[i]])));
+            }
+            
+            return result;
+        }
+        
+        std::string GetTarget(int fillPatternIndex)
+        {
+            if (fillPatternIndex < 0 || fillPatternIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("string:Target")) {
+                return std::string(reinterpret_cast<const char*>(mStrings[mEntityTable.mStringColumns["string:Target"][fillPatternIndex]]));
+            }
+            
+            return {};
+        }
+        
+        std::vector<std::string>* GetAllTarget()
+        {
+            const auto count = GetCount();
+            
+            const std::vector<int>& targetData = mEntityTable.column_exists("string:Target") ? mEntityTable.mStringColumns["string:Target"] : std::vector<int>();
+            
+            std::vector<std::string>* result = new std::vector<std::string>();
+            result->reserve(count);
+            
+            for (int i = 0; i < count; ++i)
+            {
+                result->push_back(std::string(reinterpret_cast<const char*>(mStrings[targetData[i]])));
+            }
+            
+            return result;
+        }
+        
+        bool GetIsSolidFill(int fillPatternIndex)
+        {
+            if (fillPatternIndex < 0 || fillPatternIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("byte:IsSolidFill")) {
+                return static_cast<bool>(*reinterpret_cast<bfast::byte*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["byte:IsSolidFill"].begin() + fillPatternIndex * sizeof(bfast::byte))));
+            }
+            
+            return {};
+        }
+        
+        std::vector<bool>* GetAllIsSolidFill()
+        {
+            const auto count = GetCount();
+            
+            bfast::byte* isSolidFillData = new bfast::byte[count];
+            if (mEntityTable.column_exists("byte:IsSolidFill")) {
+                memcpy(isSolidFillData, mEntityTable.mDataColumns["byte:IsSolidFill"].begin(), count * sizeof(bfast::byte));
+            }
+            
+            std::vector<bool>* result = new std::vector<bool>(isSolidFillData, isSolidFillData + count);
+            
+            delete[] isSolidFillData;
+            
+            return result;
+        }
+        
+        std::string GetHostOrientation(int fillPatternIndex)
+        {
+            if (fillPatternIndex < 0 || fillPatternIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("string:HostOrientation")) {
+                return std::string(reinterpret_cast<const char*>(mStrings[mEntityTable.mStringColumns["string:HostOrientation"][fillPatternIndex]]));
+            }
+            
+            return {};
+        }
+        
+        std::vector<std::string>* GetAllHostOrientation()
+        {
+            const auto count = GetCount();
+            
+            const std::vector<int>& hostOrientationData = mEntityTable.column_exists("string:HostOrientation") ? mEntityTable.mStringColumns["string:HostOrientation"] : std::vector<int>();
+            
+            std::vector<std::string>* result = new std::vector<std::string>();
+            result->reserve(count);
+            
+            for (int i = 0; i < count; ++i)
+            {
+                result->push_back(std::string(reinterpret_cast<const char*>(mStrings[hostOrientationData[i]])));
+            }
+            
+            return result;
+        }
+        
+        int GetGridCount(int fillPatternIndex)
+        {
+            if (fillPatternIndex < 0 || fillPatternIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("int:GridCount")) {
+                return *reinterpret_cast<int*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["int:GridCount"].begin() + fillPatternIndex * sizeof(int)));
+            }
+            
+            return {};
+        }
+        
+        std::vector<int>* GetAllGridCount()
+        {
+            const auto count = GetCount();
+            
+            int* gridCountData = new int[count];
+            if (mEntityTable.column_exists("int:GridCount")) {
+                memcpy(gridCountData, mEntityTable.mDataColumns["int:GridCount"].begin(), count * sizeof(int));
+            }
+            
+            std::vector<int>* result = new std::vector<int>(gridCountData, gridCountData + count);
+            
+            delete[] gridCountData;
+            
+            return result;
+        }
+        
+        int GetBimDocumentIndex(int fillPatternIndex)
+        {
+            if (!mEntityTable.column_exists("index:Vim.BimDocument:BimDocument")) {
+                return -1;
+            }
+            
+            if (fillPatternIndex < 0 || fillPatternIndex >= GetCount())
+                return -1;
+            
+            return mEntityTable.mIndexColumns["index:Vim.BimDocument:BimDocument"][fillPatternIndex];
+        }
+        
+    };
+    
+    static FillPatternTable* GetFillPatternTable(Scene& scene)
+    {
+        if (scene.mEntityTables.find("Vim.FillPattern") == scene.mEntityTables.end())
+            return {};
+        
+        return new FillPatternTable(scene.mEntityTables["Vim.FillPattern"], scene.mStrings);
+    }
+    
+    class FillGrid
+    {
+    public:
+        int mIndex;
+        int mOrderIndex;
+        double mAngle;
+        double mOrigin_X;
+        double mOrigin_Y;
+        double mOffset;
+        double mShift;
+        std::string mSegments;
+        
+        int mFillPatternIndex;
+        FillPattern* mFillPattern;
+        
+        FillGrid() {}
+    };
+    
+    class FillGridTable
+    {
+        EntityTable& mEntityTable;
+        std::vector<const bfast::byte*>& mStrings;
+    public:
+        FillGridTable(EntityTable& entityTable, std::vector<const bfast::byte*>& strings):
+            mEntityTable(entityTable), mStrings(strings) {}
+        
+        size_t GetCount()
+        {
+            return mEntityTable.get_count();
+        }
+        
+        FillGrid* Get(int fillGridIndex)
+        {
+            FillGrid* fillGrid = new FillGrid();
+            fillGrid->mIndex = fillGridIndex;
+            fillGrid->mOrderIndex = GetOrderIndex(fillGridIndex);
+            fillGrid->mAngle = GetAngle(fillGridIndex);
+            fillGrid->mOrigin_X = GetOrigin_X(fillGridIndex);
+            fillGrid->mOrigin_Y = GetOrigin_Y(fillGridIndex);
+            fillGrid->mOffset = GetOffset(fillGridIndex);
+            fillGrid->mShift = GetShift(fillGridIndex);
+            fillGrid->mSegments = GetSegments(fillGridIndex);
+            fillGrid->mFillPatternIndex = GetFillPatternIndex(fillGridIndex);
+            return fillGrid;
+        }
+        
+        std::vector<FillGrid>* GetAll()
+        {
+            bool existsOrderIndex = mEntityTable.column_exists("int:OrderIndex");
+            bool existsAngle = mEntityTable.column_exists("double:Angle");
+            bool existsOrigin_X = mEntityTable.column_exists("double:Origin.X");
+            bool existsOrigin_Y = mEntityTable.column_exists("double:Origin.Y");
+            bool existsOffset = mEntityTable.column_exists("double:Offset");
+            bool existsShift = mEntityTable.column_exists("double:Shift");
+            bool existsSegments = mEntityTable.column_exists("string:Segments");
+            bool existsFillPattern = mEntityTable.column_exists("index:Vim.FillPattern:FillPattern");
+            
+            const auto count = GetCount();
+            
+            std::vector<FillGrid>* fillGrid = new std::vector<FillGrid>();
+            fillGrid->reserve(count);
+            
+            int* orderIndexData = new int[count];
+            if (mEntityTable.column_exists("int:OrderIndex")) {
+                memcpy(orderIndexData, mEntityTable.mDataColumns["int:OrderIndex"].begin(), count * sizeof(int));
+            }
+            
+            double* angleData = new double[count];
+            if (mEntityTable.column_exists("double:Angle")) {
+                memcpy(angleData, mEntityTable.mDataColumns["double:Angle"].begin(), count * sizeof(double));
+            }
+            
+            double* origin_XData = new double[count];
+            if (mEntityTable.column_exists("double:Origin.X")) {
+                memcpy(origin_XData, mEntityTable.mDataColumns["double:Origin.X"].begin(), count * sizeof(double));
+            }
+            
+            double* origin_YData = new double[count];
+            if (mEntityTable.column_exists("double:Origin.Y")) {
+                memcpy(origin_YData, mEntityTable.mDataColumns["double:Origin.Y"].begin(), count * sizeof(double));
+            }
+            
+            double* offsetData = new double[count];
+            if (mEntityTable.column_exists("double:Offset")) {
+                memcpy(offsetData, mEntityTable.mDataColumns["double:Offset"].begin(), count * sizeof(double));
+            }
+            
+            double* shiftData = new double[count];
+            if (mEntityTable.column_exists("double:Shift")) {
+                memcpy(shiftData, mEntityTable.mDataColumns["double:Shift"].begin(), count * sizeof(double));
+            }
+            
+            const std::vector<int>& segmentsData = mEntityTable.column_exists("string:Segments") ? mEntityTable.mStringColumns["string:Segments"] : std::vector<int>();
+            
+            const std::vector<int>& fillPatternData = mEntityTable.column_exists("index:Vim.FillPattern:FillPattern") ? mEntityTable.mIndexColumns["index:Vim.FillPattern:FillPattern"] : std::vector<int>();
+            
+            for (int i = 0; i < count; ++i)
+            {
+                FillGrid entity;
+                entity.mIndex = i;
+                if (existsOrderIndex)
+                    entity.mOrderIndex = orderIndexData[i];
+                if (existsAngle)
+                    entity.mAngle = angleData[i];
+                if (existsOrigin_X)
+                    entity.mOrigin_X = origin_XData[i];
+                if (existsOrigin_Y)
+                    entity.mOrigin_Y = origin_YData[i];
+                if (existsOffset)
+                    entity.mOffset = offsetData[i];
+                if (existsShift)
+                    entity.mShift = shiftData[i];
+                if (existsSegments)
+                    entity.mSegments = std::string(reinterpret_cast<const char*>(mStrings[segmentsData[i]]));
+                entity.mFillPatternIndex = existsFillPattern ? fillPatternData[i] : -1;
+                fillGrid->push_back(entity);
+            }
+            
+            delete[] orderIndexData;
+            delete[] angleData;
+            delete[] origin_XData;
+            delete[] origin_YData;
+            delete[] offsetData;
+            delete[] shiftData;
+            
+            return fillGrid;
+        }
+        
+        int GetOrderIndex(int fillGridIndex)
+        {
+            if (fillGridIndex < 0 || fillGridIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("int:OrderIndex")) {
+                return *reinterpret_cast<int*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["int:OrderIndex"].begin() + fillGridIndex * sizeof(int)));
+            }
+            
+            return {};
+        }
+        
+        std::vector<int>* GetAllOrderIndex()
+        {
+            const auto count = GetCount();
+            
+            int* orderIndexData = new int[count];
+            if (mEntityTable.column_exists("int:OrderIndex")) {
+                memcpy(orderIndexData, mEntityTable.mDataColumns["int:OrderIndex"].begin(), count * sizeof(int));
+            }
+            
+            std::vector<int>* result = new std::vector<int>(orderIndexData, orderIndexData + count);
+            
+            delete[] orderIndexData;
+            
+            return result;
+        }
+        
+        double GetAngle(int fillGridIndex)
+        {
+            if (fillGridIndex < 0 || fillGridIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("double:Angle")) {
+                return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:Angle"].begin() + fillGridIndex * sizeof(double)));
+            }
+            
+            return {};
+        }
+        
+        std::vector<double>* GetAllAngle()
+        {
+            const auto count = GetCount();
+            
+            double* angleData = new double[count];
+            if (mEntityTable.column_exists("double:Angle")) {
+                memcpy(angleData, mEntityTable.mDataColumns["double:Angle"].begin(), count * sizeof(double));
+            }
+            
+            std::vector<double>* result = new std::vector<double>(angleData, angleData + count);
+            
+            delete[] angleData;
+            
+            return result;
+        }
+        
+        double GetOrigin_X(int fillGridIndex)
+        {
+            if (fillGridIndex < 0 || fillGridIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("double:Origin.X")) {
+                return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:Origin.X"].begin() + fillGridIndex * sizeof(double)));
+            }
+            
+            return {};
+        }
+        
+        std::vector<double>* GetAllOrigin_X()
+        {
+            const auto count = GetCount();
+            
+            double* origin_XData = new double[count];
+            if (mEntityTable.column_exists("double:Origin.X")) {
+                memcpy(origin_XData, mEntityTable.mDataColumns["double:Origin.X"].begin(), count * sizeof(double));
+            }
+            
+            std::vector<double>* result = new std::vector<double>(origin_XData, origin_XData + count);
+            
+            delete[] origin_XData;
+            
+            return result;
+        }
+        
+        double GetOrigin_Y(int fillGridIndex)
+        {
+            if (fillGridIndex < 0 || fillGridIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("double:Origin.Y")) {
+                return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:Origin.Y"].begin() + fillGridIndex * sizeof(double)));
+            }
+            
+            return {};
+        }
+        
+        std::vector<double>* GetAllOrigin_Y()
+        {
+            const auto count = GetCount();
+            
+            double* origin_YData = new double[count];
+            if (mEntityTable.column_exists("double:Origin.Y")) {
+                memcpy(origin_YData, mEntityTable.mDataColumns["double:Origin.Y"].begin(), count * sizeof(double));
+            }
+            
+            std::vector<double>* result = new std::vector<double>(origin_YData, origin_YData + count);
+            
+            delete[] origin_YData;
+            
+            return result;
+        }
+        
+        double GetOffset(int fillGridIndex)
+        {
+            if (fillGridIndex < 0 || fillGridIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("double:Offset")) {
+                return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:Offset"].begin() + fillGridIndex * sizeof(double)));
+            }
+            
+            return {};
+        }
+        
+        std::vector<double>* GetAllOffset()
+        {
+            const auto count = GetCount();
+            
+            double* offsetData = new double[count];
+            if (mEntityTable.column_exists("double:Offset")) {
+                memcpy(offsetData, mEntityTable.mDataColumns["double:Offset"].begin(), count * sizeof(double));
+            }
+            
+            std::vector<double>* result = new std::vector<double>(offsetData, offsetData + count);
+            
+            delete[] offsetData;
+            
+            return result;
+        }
+        
+        double GetShift(int fillGridIndex)
+        {
+            if (fillGridIndex < 0 || fillGridIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("double:Shift")) {
+                return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:Shift"].begin() + fillGridIndex * sizeof(double)));
+            }
+            
+            return {};
+        }
+        
+        std::vector<double>* GetAllShift()
+        {
+            const auto count = GetCount();
+            
+            double* shiftData = new double[count];
+            if (mEntityTable.column_exists("double:Shift")) {
+                memcpy(shiftData, mEntityTable.mDataColumns["double:Shift"].begin(), count * sizeof(double));
+            }
+            
+            std::vector<double>* result = new std::vector<double>(shiftData, shiftData + count);
+            
+            delete[] shiftData;
+            
+            return result;
+        }
+        
+        std::string GetSegments(int fillGridIndex)
+        {
+            if (fillGridIndex < 0 || fillGridIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("string:Segments")) {
+                return std::string(reinterpret_cast<const char*>(mStrings[mEntityTable.mStringColumns["string:Segments"][fillGridIndex]]));
+            }
+            
+            return {};
+        }
+        
+        std::vector<std::string>* GetAllSegments()
+        {
+            const auto count = GetCount();
+            
+            const std::vector<int>& segmentsData = mEntityTable.column_exists("string:Segments") ? mEntityTable.mStringColumns["string:Segments"] : std::vector<int>();
+            
+            std::vector<std::string>* result = new std::vector<std::string>();
+            result->reserve(count);
+            
+            for (int i = 0; i < count; ++i)
+            {
+                result->push_back(std::string(reinterpret_cast<const char*>(mStrings[segmentsData[i]])));
+            }
+            
+            return result;
+        }
+        
+        int GetFillPatternIndex(int fillGridIndex)
+        {
+            if (!mEntityTable.column_exists("index:Vim.FillPattern:FillPattern")) {
+                return -1;
+            }
+            
+            if (fillGridIndex < 0 || fillGridIndex >= GetCount())
+                return -1;
+            
+            return mEntityTable.mIndexColumns["index:Vim.FillPattern:FillPattern"][fillGridIndex];
+        }
+        
+    };
+    
+    static FillGridTable* GetFillGridTable(Scene& scene)
+    {
+        if (scene.mEntityTables.find("Vim.FillGrid") == scene.mEntityTables.end())
+            return {};
+        
+        return new FillGridTable(scene.mEntityTables["Vim.FillGrid"], scene.mStrings);
+    }
+    
+    class LineWeight
+    {
+    public:
+        int mIndex;
+        std::string mTable;
+        int mScale;
+        int mNumber;
+        double mWidth;
+        
+        int mBimDocumentIndex;
+        BimDocument* mBimDocument;
+        
+        LineWeight() {}
+    };
+    
+    class LineWeightTable
+    {
+        EntityTable& mEntityTable;
+        std::vector<const bfast::byte*>& mStrings;
+    public:
+        LineWeightTable(EntityTable& entityTable, std::vector<const bfast::byte*>& strings):
+            mEntityTable(entityTable), mStrings(strings) {}
+        
+        size_t GetCount()
+        {
+            return mEntityTable.get_count();
+        }
+        
+        LineWeight* Get(int lineWeightIndex)
+        {
+            LineWeight* lineWeight = new LineWeight();
+            lineWeight->mIndex = lineWeightIndex;
+            lineWeight->mTable = GetTable(lineWeightIndex);
+            lineWeight->mScale = GetScale(lineWeightIndex);
+            lineWeight->mNumber = GetNumber(lineWeightIndex);
+            lineWeight->mWidth = GetWidth(lineWeightIndex);
+            lineWeight->mBimDocumentIndex = GetBimDocumentIndex(lineWeightIndex);
+            return lineWeight;
+        }
+        
+        std::vector<LineWeight>* GetAll()
+        {
+            bool existsTable = mEntityTable.column_exists("string:Table");
+            bool existsScale = mEntityTable.column_exists("int:Scale");
+            bool existsNumber = mEntityTable.column_exists("int:Number");
+            bool existsWidth = mEntityTable.column_exists("double:Width");
+            bool existsBimDocument = mEntityTable.column_exists("index:Vim.BimDocument:BimDocument");
+            
+            const auto count = GetCount();
+            
+            std::vector<LineWeight>* lineWeight = new std::vector<LineWeight>();
+            lineWeight->reserve(count);
+            
+            const std::vector<int>& tableData = mEntityTable.column_exists("string:Table") ? mEntityTable.mStringColumns["string:Table"] : std::vector<int>();
+            
+            int* scaleData = new int[count];
+            if (mEntityTable.column_exists("int:Scale")) {
+                memcpy(scaleData, mEntityTable.mDataColumns["int:Scale"].begin(), count * sizeof(int));
+            }
+            
+            int* numberData = new int[count];
+            if (mEntityTable.column_exists("int:Number")) {
+                memcpy(numberData, mEntityTable.mDataColumns["int:Number"].begin(), count * sizeof(int));
+            }
+            
+            double* widthData = new double[count];
+            if (mEntityTable.column_exists("double:Width")) {
+                memcpy(widthData, mEntityTable.mDataColumns["double:Width"].begin(), count * sizeof(double));
+            }
+            
+            const std::vector<int>& bimDocumentData = mEntityTable.column_exists("index:Vim.BimDocument:BimDocument") ? mEntityTable.mIndexColumns["index:Vim.BimDocument:BimDocument"] : std::vector<int>();
+            
+            for (int i = 0; i < count; ++i)
+            {
+                LineWeight entity;
+                entity.mIndex = i;
+                if (existsTable)
+                    entity.mTable = std::string(reinterpret_cast<const char*>(mStrings[tableData[i]]));
+                if (existsScale)
+                    entity.mScale = scaleData[i];
+                if (existsNumber)
+                    entity.mNumber = numberData[i];
+                if (existsWidth)
+                    entity.mWidth = widthData[i];
+                entity.mBimDocumentIndex = existsBimDocument ? bimDocumentData[i] : -1;
+                lineWeight->push_back(entity);
+            }
+            
+            delete[] scaleData;
+            delete[] numberData;
+            delete[] widthData;
+            
+            return lineWeight;
+        }
+        
+        std::string GetTable(int lineWeightIndex)
+        {
+            if (lineWeightIndex < 0 || lineWeightIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("string:Table")) {
+                return std::string(reinterpret_cast<const char*>(mStrings[mEntityTable.mStringColumns["string:Table"][lineWeightIndex]]));
+            }
+            
+            return {};
+        }
+        
+        std::vector<std::string>* GetAllTable()
+        {
+            const auto count = GetCount();
+            
+            const std::vector<int>& tableData = mEntityTable.column_exists("string:Table") ? mEntityTable.mStringColumns["string:Table"] : std::vector<int>();
+            
+            std::vector<std::string>* result = new std::vector<std::string>();
+            result->reserve(count);
+            
+            for (int i = 0; i < count; ++i)
+            {
+                result->push_back(std::string(reinterpret_cast<const char*>(mStrings[tableData[i]])));
+            }
+            
+            return result;
+        }
+        
+        int GetScale(int lineWeightIndex)
+        {
+            if (lineWeightIndex < 0 || lineWeightIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("int:Scale")) {
+                return *reinterpret_cast<int*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["int:Scale"].begin() + lineWeightIndex * sizeof(int)));
+            }
+            
+            return {};
+        }
+        
+        std::vector<int>* GetAllScale()
+        {
+            const auto count = GetCount();
+            
+            int* scaleData = new int[count];
+            if (mEntityTable.column_exists("int:Scale")) {
+                memcpy(scaleData, mEntityTable.mDataColumns["int:Scale"].begin(), count * sizeof(int));
+            }
+            
+            std::vector<int>* result = new std::vector<int>(scaleData, scaleData + count);
+            
+            delete[] scaleData;
+            
+            return result;
+        }
+        
+        int GetNumber(int lineWeightIndex)
+        {
+            if (lineWeightIndex < 0 || lineWeightIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("int:Number")) {
+                return *reinterpret_cast<int*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["int:Number"].begin() + lineWeightIndex * sizeof(int)));
+            }
+            
+            return {};
+        }
+        
+        std::vector<int>* GetAllNumber()
+        {
+            const auto count = GetCount();
+            
+            int* numberData = new int[count];
+            if (mEntityTable.column_exists("int:Number")) {
+                memcpy(numberData, mEntityTable.mDataColumns["int:Number"].begin(), count * sizeof(int));
+            }
+            
+            std::vector<int>* result = new std::vector<int>(numberData, numberData + count);
+            
+            delete[] numberData;
+            
+            return result;
+        }
+        
+        double GetWidth(int lineWeightIndex)
+        {
+            if (lineWeightIndex < 0 || lineWeightIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("double:Width")) {
+                return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:Width"].begin() + lineWeightIndex * sizeof(double)));
+            }
+            
+            return {};
+        }
+        
+        std::vector<double>* GetAllWidth()
+        {
+            const auto count = GetCount();
+            
+            double* widthData = new double[count];
+            if (mEntityTable.column_exists("double:Width")) {
+                memcpy(widthData, mEntityTable.mDataColumns["double:Width"].begin(), count * sizeof(double));
+            }
+            
+            std::vector<double>* result = new std::vector<double>(widthData, widthData + count);
+            
+            delete[] widthData;
+            
+            return result;
+        }
+        
+        int GetBimDocumentIndex(int lineWeightIndex)
+        {
+            if (!mEntityTable.column_exists("index:Vim.BimDocument:BimDocument")) {
+                return -1;
+            }
+            
+            if (lineWeightIndex < 0 || lineWeightIndex >= GetCount())
+                return -1;
+            
+            return mEntityTable.mIndexColumns["index:Vim.BimDocument:BimDocument"][lineWeightIndex];
+        }
+        
+    };
+    
+    static LineWeightTable* GetLineWeightTable(Scene& scene)
+    {
+        if (scene.mEntityTables.find("Vim.LineWeight") == scene.mEntityTables.end())
+            return {};
+        
+        return new LineWeightTable(scene.mEntityTables["Vim.LineWeight"], scene.mStrings);
+    }
+    
+    class GraphicOverride
+    {
+    public:
+        int mIndex;
+        int mProjectionLineWeight;
+        bool mHasProjectionLineColor;
+        double mProjectionLineColor_X;
+        double mProjectionLineColor_Y;
+        double mProjectionLineColor_Z;
+        int mCutLineWeight;
+        bool mHasCutLineColor;
+        double mCutLineColor_X;
+        double mCutLineColor_Y;
+        double mCutLineColor_Z;
+        bool mSurfaceForegroundPatternVisible;
+        bool mHasSurfaceForegroundPatternColor;
+        double mSurfaceForegroundPatternColor_X;
+        double mSurfaceForegroundPatternColor_Y;
+        double mSurfaceForegroundPatternColor_Z;
+        bool mSurfaceBackgroundPatternVisible;
+        bool mHasSurfaceBackgroundPatternColor;
+        double mSurfaceBackgroundPatternColor_X;
+        double mSurfaceBackgroundPatternColor_Y;
+        double mSurfaceBackgroundPatternColor_Z;
+        bool mCutForegroundPatternVisible;
+        bool mHasCutForegroundPatternColor;
+        double mCutForegroundPatternColor_X;
+        double mCutForegroundPatternColor_Y;
+        double mCutForegroundPatternColor_Z;
+        bool mCutBackgroundPatternVisible;
+        bool mHasCutBackgroundPatternColor;
+        double mCutBackgroundPatternColor_X;
+        double mCutBackgroundPatternColor_Y;
+        double mCutBackgroundPatternColor_Z;
+        int mTransparency;
+        bool mHalftone;
+        int mDetailLevel;
+        std::string mKey;
+        
+        int mProjectionLinePatternIndex;
+        LinePattern* mProjectionLinePattern;
+        int mCutLinePatternIndex;
+        LinePattern* mCutLinePattern;
+        int mSurfaceForegroundPatternIndex;
+        FillPattern* mSurfaceForegroundPattern;
+        int mSurfaceBackgroundPatternIndex;
+        FillPattern* mSurfaceBackgroundPattern;
+        int mCutForegroundPatternIndex;
+        FillPattern* mCutForegroundPattern;
+        int mCutBackgroundPatternIndex;
+        FillPattern* mCutBackgroundPattern;
+        
+        GraphicOverride() {}
+    };
+    
+    class GraphicOverrideTable
+    {
+        EntityTable& mEntityTable;
+        std::vector<const bfast::byte*>& mStrings;
+    public:
+        GraphicOverrideTable(EntityTable& entityTable, std::vector<const bfast::byte*>& strings):
+            mEntityTable(entityTable), mStrings(strings) {}
+        
+        size_t GetCount()
+        {
+            return mEntityTable.get_count();
+        }
+        
+        GraphicOverride* Get(int graphicOverrideIndex)
+        {
+            GraphicOverride* graphicOverride = new GraphicOverride();
+            graphicOverride->mIndex = graphicOverrideIndex;
+            graphicOverride->mProjectionLineWeight = GetProjectionLineWeight(graphicOverrideIndex);
+            graphicOverride->mHasProjectionLineColor = GetHasProjectionLineColor(graphicOverrideIndex);
+            graphicOverride->mProjectionLineColor_X = GetProjectionLineColor_X(graphicOverrideIndex);
+            graphicOverride->mProjectionLineColor_Y = GetProjectionLineColor_Y(graphicOverrideIndex);
+            graphicOverride->mProjectionLineColor_Z = GetProjectionLineColor_Z(graphicOverrideIndex);
+            graphicOverride->mCutLineWeight = GetCutLineWeight(graphicOverrideIndex);
+            graphicOverride->mHasCutLineColor = GetHasCutLineColor(graphicOverrideIndex);
+            graphicOverride->mCutLineColor_X = GetCutLineColor_X(graphicOverrideIndex);
+            graphicOverride->mCutLineColor_Y = GetCutLineColor_Y(graphicOverrideIndex);
+            graphicOverride->mCutLineColor_Z = GetCutLineColor_Z(graphicOverrideIndex);
+            graphicOverride->mSurfaceForegroundPatternVisible = GetSurfaceForegroundPatternVisible(graphicOverrideIndex);
+            graphicOverride->mHasSurfaceForegroundPatternColor = GetHasSurfaceForegroundPatternColor(graphicOverrideIndex);
+            graphicOverride->mSurfaceForegroundPatternColor_X = GetSurfaceForegroundPatternColor_X(graphicOverrideIndex);
+            graphicOverride->mSurfaceForegroundPatternColor_Y = GetSurfaceForegroundPatternColor_Y(graphicOverrideIndex);
+            graphicOverride->mSurfaceForegroundPatternColor_Z = GetSurfaceForegroundPatternColor_Z(graphicOverrideIndex);
+            graphicOverride->mSurfaceBackgroundPatternVisible = GetSurfaceBackgroundPatternVisible(graphicOverrideIndex);
+            graphicOverride->mHasSurfaceBackgroundPatternColor = GetHasSurfaceBackgroundPatternColor(graphicOverrideIndex);
+            graphicOverride->mSurfaceBackgroundPatternColor_X = GetSurfaceBackgroundPatternColor_X(graphicOverrideIndex);
+            graphicOverride->mSurfaceBackgroundPatternColor_Y = GetSurfaceBackgroundPatternColor_Y(graphicOverrideIndex);
+            graphicOverride->mSurfaceBackgroundPatternColor_Z = GetSurfaceBackgroundPatternColor_Z(graphicOverrideIndex);
+            graphicOverride->mCutForegroundPatternVisible = GetCutForegroundPatternVisible(graphicOverrideIndex);
+            graphicOverride->mHasCutForegroundPatternColor = GetHasCutForegroundPatternColor(graphicOverrideIndex);
+            graphicOverride->mCutForegroundPatternColor_X = GetCutForegroundPatternColor_X(graphicOverrideIndex);
+            graphicOverride->mCutForegroundPatternColor_Y = GetCutForegroundPatternColor_Y(graphicOverrideIndex);
+            graphicOverride->mCutForegroundPatternColor_Z = GetCutForegroundPatternColor_Z(graphicOverrideIndex);
+            graphicOverride->mCutBackgroundPatternVisible = GetCutBackgroundPatternVisible(graphicOverrideIndex);
+            graphicOverride->mHasCutBackgroundPatternColor = GetHasCutBackgroundPatternColor(graphicOverrideIndex);
+            graphicOverride->mCutBackgroundPatternColor_X = GetCutBackgroundPatternColor_X(graphicOverrideIndex);
+            graphicOverride->mCutBackgroundPatternColor_Y = GetCutBackgroundPatternColor_Y(graphicOverrideIndex);
+            graphicOverride->mCutBackgroundPatternColor_Z = GetCutBackgroundPatternColor_Z(graphicOverrideIndex);
+            graphicOverride->mTransparency = GetTransparency(graphicOverrideIndex);
+            graphicOverride->mHalftone = GetHalftone(graphicOverrideIndex);
+            graphicOverride->mDetailLevel = GetDetailLevel(graphicOverrideIndex);
+            graphicOverride->mKey = GetKey(graphicOverrideIndex);
+            graphicOverride->mProjectionLinePatternIndex = GetProjectionLinePatternIndex(graphicOverrideIndex);
+            graphicOverride->mCutLinePatternIndex = GetCutLinePatternIndex(graphicOverrideIndex);
+            graphicOverride->mSurfaceForegroundPatternIndex = GetSurfaceForegroundPatternIndex(graphicOverrideIndex);
+            graphicOverride->mSurfaceBackgroundPatternIndex = GetSurfaceBackgroundPatternIndex(graphicOverrideIndex);
+            graphicOverride->mCutForegroundPatternIndex = GetCutForegroundPatternIndex(graphicOverrideIndex);
+            graphicOverride->mCutBackgroundPatternIndex = GetCutBackgroundPatternIndex(graphicOverrideIndex);
+            return graphicOverride;
+        }
+        
+        std::vector<GraphicOverride>* GetAll()
+        {
+            bool existsProjectionLineWeight = mEntityTable.column_exists("int:ProjectionLineWeight");
+            bool existsHasProjectionLineColor = mEntityTable.column_exists("byte:HasProjectionLineColor");
+            bool existsProjectionLineColor_X = mEntityTable.column_exists("double:ProjectionLineColor.X");
+            bool existsProjectionLineColor_Y = mEntityTable.column_exists("double:ProjectionLineColor.Y");
+            bool existsProjectionLineColor_Z = mEntityTable.column_exists("double:ProjectionLineColor.Z");
+            bool existsCutLineWeight = mEntityTable.column_exists("int:CutLineWeight");
+            bool existsHasCutLineColor = mEntityTable.column_exists("byte:HasCutLineColor");
+            bool existsCutLineColor_X = mEntityTable.column_exists("double:CutLineColor.X");
+            bool existsCutLineColor_Y = mEntityTable.column_exists("double:CutLineColor.Y");
+            bool existsCutLineColor_Z = mEntityTable.column_exists("double:CutLineColor.Z");
+            bool existsSurfaceForegroundPatternVisible = mEntityTable.column_exists("byte:SurfaceForegroundPatternVisible");
+            bool existsHasSurfaceForegroundPatternColor = mEntityTable.column_exists("byte:HasSurfaceForegroundPatternColor");
+            bool existsSurfaceForegroundPatternColor_X = mEntityTable.column_exists("double:SurfaceForegroundPatternColor.X");
+            bool existsSurfaceForegroundPatternColor_Y = mEntityTable.column_exists("double:SurfaceForegroundPatternColor.Y");
+            bool existsSurfaceForegroundPatternColor_Z = mEntityTable.column_exists("double:SurfaceForegroundPatternColor.Z");
+            bool existsSurfaceBackgroundPatternVisible = mEntityTable.column_exists("byte:SurfaceBackgroundPatternVisible");
+            bool existsHasSurfaceBackgroundPatternColor = mEntityTable.column_exists("byte:HasSurfaceBackgroundPatternColor");
+            bool existsSurfaceBackgroundPatternColor_X = mEntityTable.column_exists("double:SurfaceBackgroundPatternColor.X");
+            bool existsSurfaceBackgroundPatternColor_Y = mEntityTable.column_exists("double:SurfaceBackgroundPatternColor.Y");
+            bool existsSurfaceBackgroundPatternColor_Z = mEntityTable.column_exists("double:SurfaceBackgroundPatternColor.Z");
+            bool existsCutForegroundPatternVisible = mEntityTable.column_exists("byte:CutForegroundPatternVisible");
+            bool existsHasCutForegroundPatternColor = mEntityTable.column_exists("byte:HasCutForegroundPatternColor");
+            bool existsCutForegroundPatternColor_X = mEntityTable.column_exists("double:CutForegroundPatternColor.X");
+            bool existsCutForegroundPatternColor_Y = mEntityTable.column_exists("double:CutForegroundPatternColor.Y");
+            bool existsCutForegroundPatternColor_Z = mEntityTable.column_exists("double:CutForegroundPatternColor.Z");
+            bool existsCutBackgroundPatternVisible = mEntityTable.column_exists("byte:CutBackgroundPatternVisible");
+            bool existsHasCutBackgroundPatternColor = mEntityTable.column_exists("byte:HasCutBackgroundPatternColor");
+            bool existsCutBackgroundPatternColor_X = mEntityTable.column_exists("double:CutBackgroundPatternColor.X");
+            bool existsCutBackgroundPatternColor_Y = mEntityTable.column_exists("double:CutBackgroundPatternColor.Y");
+            bool existsCutBackgroundPatternColor_Z = mEntityTable.column_exists("double:CutBackgroundPatternColor.Z");
+            bool existsTransparency = mEntityTable.column_exists("int:Transparency");
+            bool existsHalftone = mEntityTable.column_exists("byte:Halftone");
+            bool existsDetailLevel = mEntityTable.column_exists("int:DetailLevel");
+            bool existsKey = mEntityTable.column_exists("string:Key");
+            bool existsProjectionLinePattern = mEntityTable.column_exists("index:Vim.LinePattern:ProjectionLinePattern");
+            bool existsCutLinePattern = mEntityTable.column_exists("index:Vim.LinePattern:CutLinePattern");
+            bool existsSurfaceForegroundPattern = mEntityTable.column_exists("index:Vim.FillPattern:SurfaceForegroundPattern");
+            bool existsSurfaceBackgroundPattern = mEntityTable.column_exists("index:Vim.FillPattern:SurfaceBackgroundPattern");
+            bool existsCutForegroundPattern = mEntityTable.column_exists("index:Vim.FillPattern:CutForegroundPattern");
+            bool existsCutBackgroundPattern = mEntityTable.column_exists("index:Vim.FillPattern:CutBackgroundPattern");
+            
+            const auto count = GetCount();
+            
+            std::vector<GraphicOverride>* graphicOverride = new std::vector<GraphicOverride>();
+            graphicOverride->reserve(count);
+            
+            int* projectionLineWeightData = new int[count];
+            if (mEntityTable.column_exists("int:ProjectionLineWeight")) {
+                memcpy(projectionLineWeightData, mEntityTable.mDataColumns["int:ProjectionLineWeight"].begin(), count * sizeof(int));
+            }
+            
+            bfast::byte* hasProjectionLineColorData = new bfast::byte[count];
+            if (mEntityTable.column_exists("byte:HasProjectionLineColor")) {
+                memcpy(hasProjectionLineColorData, mEntityTable.mDataColumns["byte:HasProjectionLineColor"].begin(), count * sizeof(bfast::byte));
+            }
+            
+            double* projectionLineColor_XData = new double[count];
+            if (mEntityTable.column_exists("double:ProjectionLineColor.X")) {
+                memcpy(projectionLineColor_XData, mEntityTable.mDataColumns["double:ProjectionLineColor.X"].begin(), count * sizeof(double));
+            }
+            
+            double* projectionLineColor_YData = new double[count];
+            if (mEntityTable.column_exists("double:ProjectionLineColor.Y")) {
+                memcpy(projectionLineColor_YData, mEntityTable.mDataColumns["double:ProjectionLineColor.Y"].begin(), count * sizeof(double));
+            }
+            
+            double* projectionLineColor_ZData = new double[count];
+            if (mEntityTable.column_exists("double:ProjectionLineColor.Z")) {
+                memcpy(projectionLineColor_ZData, mEntityTable.mDataColumns["double:ProjectionLineColor.Z"].begin(), count * sizeof(double));
+            }
+            
+            int* cutLineWeightData = new int[count];
+            if (mEntityTable.column_exists("int:CutLineWeight")) {
+                memcpy(cutLineWeightData, mEntityTable.mDataColumns["int:CutLineWeight"].begin(), count * sizeof(int));
+            }
+            
+            bfast::byte* hasCutLineColorData = new bfast::byte[count];
+            if (mEntityTable.column_exists("byte:HasCutLineColor")) {
+                memcpy(hasCutLineColorData, mEntityTable.mDataColumns["byte:HasCutLineColor"].begin(), count * sizeof(bfast::byte));
+            }
+            
+            double* cutLineColor_XData = new double[count];
+            if (mEntityTable.column_exists("double:CutLineColor.X")) {
+                memcpy(cutLineColor_XData, mEntityTable.mDataColumns["double:CutLineColor.X"].begin(), count * sizeof(double));
+            }
+            
+            double* cutLineColor_YData = new double[count];
+            if (mEntityTable.column_exists("double:CutLineColor.Y")) {
+                memcpy(cutLineColor_YData, mEntityTable.mDataColumns["double:CutLineColor.Y"].begin(), count * sizeof(double));
+            }
+            
+            double* cutLineColor_ZData = new double[count];
+            if (mEntityTable.column_exists("double:CutLineColor.Z")) {
+                memcpy(cutLineColor_ZData, mEntityTable.mDataColumns["double:CutLineColor.Z"].begin(), count * sizeof(double));
+            }
+            
+            bfast::byte* surfaceForegroundPatternVisibleData = new bfast::byte[count];
+            if (mEntityTable.column_exists("byte:SurfaceForegroundPatternVisible")) {
+                memcpy(surfaceForegroundPatternVisibleData, mEntityTable.mDataColumns["byte:SurfaceForegroundPatternVisible"].begin(), count * sizeof(bfast::byte));
+            }
+            
+            bfast::byte* hasSurfaceForegroundPatternColorData = new bfast::byte[count];
+            if (mEntityTable.column_exists("byte:HasSurfaceForegroundPatternColor")) {
+                memcpy(hasSurfaceForegroundPatternColorData, mEntityTable.mDataColumns["byte:HasSurfaceForegroundPatternColor"].begin(), count * sizeof(bfast::byte));
+            }
+            
+            double* surfaceForegroundPatternColor_XData = new double[count];
+            if (mEntityTable.column_exists("double:SurfaceForegroundPatternColor.X")) {
+                memcpy(surfaceForegroundPatternColor_XData, mEntityTable.mDataColumns["double:SurfaceForegroundPatternColor.X"].begin(), count * sizeof(double));
+            }
+            
+            double* surfaceForegroundPatternColor_YData = new double[count];
+            if (mEntityTable.column_exists("double:SurfaceForegroundPatternColor.Y")) {
+                memcpy(surfaceForegroundPatternColor_YData, mEntityTable.mDataColumns["double:SurfaceForegroundPatternColor.Y"].begin(), count * sizeof(double));
+            }
+            
+            double* surfaceForegroundPatternColor_ZData = new double[count];
+            if (mEntityTable.column_exists("double:SurfaceForegroundPatternColor.Z")) {
+                memcpy(surfaceForegroundPatternColor_ZData, mEntityTable.mDataColumns["double:SurfaceForegroundPatternColor.Z"].begin(), count * sizeof(double));
+            }
+            
+            bfast::byte* surfaceBackgroundPatternVisibleData = new bfast::byte[count];
+            if (mEntityTable.column_exists("byte:SurfaceBackgroundPatternVisible")) {
+                memcpy(surfaceBackgroundPatternVisibleData, mEntityTable.mDataColumns["byte:SurfaceBackgroundPatternVisible"].begin(), count * sizeof(bfast::byte));
+            }
+            
+            bfast::byte* hasSurfaceBackgroundPatternColorData = new bfast::byte[count];
+            if (mEntityTable.column_exists("byte:HasSurfaceBackgroundPatternColor")) {
+                memcpy(hasSurfaceBackgroundPatternColorData, mEntityTable.mDataColumns["byte:HasSurfaceBackgroundPatternColor"].begin(), count * sizeof(bfast::byte));
+            }
+            
+            double* surfaceBackgroundPatternColor_XData = new double[count];
+            if (mEntityTable.column_exists("double:SurfaceBackgroundPatternColor.X")) {
+                memcpy(surfaceBackgroundPatternColor_XData, mEntityTable.mDataColumns["double:SurfaceBackgroundPatternColor.X"].begin(), count * sizeof(double));
+            }
+            
+            double* surfaceBackgroundPatternColor_YData = new double[count];
+            if (mEntityTable.column_exists("double:SurfaceBackgroundPatternColor.Y")) {
+                memcpy(surfaceBackgroundPatternColor_YData, mEntityTable.mDataColumns["double:SurfaceBackgroundPatternColor.Y"].begin(), count * sizeof(double));
+            }
+            
+            double* surfaceBackgroundPatternColor_ZData = new double[count];
+            if (mEntityTable.column_exists("double:SurfaceBackgroundPatternColor.Z")) {
+                memcpy(surfaceBackgroundPatternColor_ZData, mEntityTable.mDataColumns["double:SurfaceBackgroundPatternColor.Z"].begin(), count * sizeof(double));
+            }
+            
+            bfast::byte* cutForegroundPatternVisibleData = new bfast::byte[count];
+            if (mEntityTable.column_exists("byte:CutForegroundPatternVisible")) {
+                memcpy(cutForegroundPatternVisibleData, mEntityTable.mDataColumns["byte:CutForegroundPatternVisible"].begin(), count * sizeof(bfast::byte));
+            }
+            
+            bfast::byte* hasCutForegroundPatternColorData = new bfast::byte[count];
+            if (mEntityTable.column_exists("byte:HasCutForegroundPatternColor")) {
+                memcpy(hasCutForegroundPatternColorData, mEntityTable.mDataColumns["byte:HasCutForegroundPatternColor"].begin(), count * sizeof(bfast::byte));
+            }
+            
+            double* cutForegroundPatternColor_XData = new double[count];
+            if (mEntityTable.column_exists("double:CutForegroundPatternColor.X")) {
+                memcpy(cutForegroundPatternColor_XData, mEntityTable.mDataColumns["double:CutForegroundPatternColor.X"].begin(), count * sizeof(double));
+            }
+            
+            double* cutForegroundPatternColor_YData = new double[count];
+            if (mEntityTable.column_exists("double:CutForegroundPatternColor.Y")) {
+                memcpy(cutForegroundPatternColor_YData, mEntityTable.mDataColumns["double:CutForegroundPatternColor.Y"].begin(), count * sizeof(double));
+            }
+            
+            double* cutForegroundPatternColor_ZData = new double[count];
+            if (mEntityTable.column_exists("double:CutForegroundPatternColor.Z")) {
+                memcpy(cutForegroundPatternColor_ZData, mEntityTable.mDataColumns["double:CutForegroundPatternColor.Z"].begin(), count * sizeof(double));
+            }
+            
+            bfast::byte* cutBackgroundPatternVisibleData = new bfast::byte[count];
+            if (mEntityTable.column_exists("byte:CutBackgroundPatternVisible")) {
+                memcpy(cutBackgroundPatternVisibleData, mEntityTable.mDataColumns["byte:CutBackgroundPatternVisible"].begin(), count * sizeof(bfast::byte));
+            }
+            
+            bfast::byte* hasCutBackgroundPatternColorData = new bfast::byte[count];
+            if (mEntityTable.column_exists("byte:HasCutBackgroundPatternColor")) {
+                memcpy(hasCutBackgroundPatternColorData, mEntityTable.mDataColumns["byte:HasCutBackgroundPatternColor"].begin(), count * sizeof(bfast::byte));
+            }
+            
+            double* cutBackgroundPatternColor_XData = new double[count];
+            if (mEntityTable.column_exists("double:CutBackgroundPatternColor.X")) {
+                memcpy(cutBackgroundPatternColor_XData, mEntityTable.mDataColumns["double:CutBackgroundPatternColor.X"].begin(), count * sizeof(double));
+            }
+            
+            double* cutBackgroundPatternColor_YData = new double[count];
+            if (mEntityTable.column_exists("double:CutBackgroundPatternColor.Y")) {
+                memcpy(cutBackgroundPatternColor_YData, mEntityTable.mDataColumns["double:CutBackgroundPatternColor.Y"].begin(), count * sizeof(double));
+            }
+            
+            double* cutBackgroundPatternColor_ZData = new double[count];
+            if (mEntityTable.column_exists("double:CutBackgroundPatternColor.Z")) {
+                memcpy(cutBackgroundPatternColor_ZData, mEntityTable.mDataColumns["double:CutBackgroundPatternColor.Z"].begin(), count * sizeof(double));
+            }
+            
+            int* transparencyData = new int[count];
+            if (mEntityTable.column_exists("int:Transparency")) {
+                memcpy(transparencyData, mEntityTable.mDataColumns["int:Transparency"].begin(), count * sizeof(int));
+            }
+            
+            bfast::byte* halftoneData = new bfast::byte[count];
+            if (mEntityTable.column_exists("byte:Halftone")) {
+                memcpy(halftoneData, mEntityTable.mDataColumns["byte:Halftone"].begin(), count * sizeof(bfast::byte));
+            }
+            
+            int* detailLevelData = new int[count];
+            if (mEntityTable.column_exists("int:DetailLevel")) {
+                memcpy(detailLevelData, mEntityTable.mDataColumns["int:DetailLevel"].begin(), count * sizeof(int));
+            }
+            
+            const std::vector<int>& keyData = mEntityTable.column_exists("string:Key") ? mEntityTable.mStringColumns["string:Key"] : std::vector<int>();
+            
+            const std::vector<int>& projectionLinePatternData = mEntityTable.column_exists("index:Vim.LinePattern:ProjectionLinePattern") ? mEntityTable.mIndexColumns["index:Vim.LinePattern:ProjectionLinePattern"] : std::vector<int>();
+            const std::vector<int>& cutLinePatternData = mEntityTable.column_exists("index:Vim.LinePattern:CutLinePattern") ? mEntityTable.mIndexColumns["index:Vim.LinePattern:CutLinePattern"] : std::vector<int>();
+            const std::vector<int>& surfaceForegroundPatternData = mEntityTable.column_exists("index:Vim.FillPattern:SurfaceForegroundPattern") ? mEntityTable.mIndexColumns["index:Vim.FillPattern:SurfaceForegroundPattern"] : std::vector<int>();
+            const std::vector<int>& surfaceBackgroundPatternData = mEntityTable.column_exists("index:Vim.FillPattern:SurfaceBackgroundPattern") ? mEntityTable.mIndexColumns["index:Vim.FillPattern:SurfaceBackgroundPattern"] : std::vector<int>();
+            const std::vector<int>& cutForegroundPatternData = mEntityTable.column_exists("index:Vim.FillPattern:CutForegroundPattern") ? mEntityTable.mIndexColumns["index:Vim.FillPattern:CutForegroundPattern"] : std::vector<int>();
+            const std::vector<int>& cutBackgroundPatternData = mEntityTable.column_exists("index:Vim.FillPattern:CutBackgroundPattern") ? mEntityTable.mIndexColumns["index:Vim.FillPattern:CutBackgroundPattern"] : std::vector<int>();
+            
+            for (int i = 0; i < count; ++i)
+            {
+                GraphicOverride entity;
+                entity.mIndex = i;
+                if (existsProjectionLineWeight)
+                    entity.mProjectionLineWeight = projectionLineWeightData[i];
+                if (existsHasProjectionLineColor)
+                    entity.mHasProjectionLineColor = hasProjectionLineColorData[i];
+                if (existsProjectionLineColor_X)
+                    entity.mProjectionLineColor_X = projectionLineColor_XData[i];
+                if (existsProjectionLineColor_Y)
+                    entity.mProjectionLineColor_Y = projectionLineColor_YData[i];
+                if (existsProjectionLineColor_Z)
+                    entity.mProjectionLineColor_Z = projectionLineColor_ZData[i];
+                if (existsCutLineWeight)
+                    entity.mCutLineWeight = cutLineWeightData[i];
+                if (existsHasCutLineColor)
+                    entity.mHasCutLineColor = hasCutLineColorData[i];
+                if (existsCutLineColor_X)
+                    entity.mCutLineColor_X = cutLineColor_XData[i];
+                if (existsCutLineColor_Y)
+                    entity.mCutLineColor_Y = cutLineColor_YData[i];
+                if (existsCutLineColor_Z)
+                    entity.mCutLineColor_Z = cutLineColor_ZData[i];
+                if (existsSurfaceForegroundPatternVisible)
+                    entity.mSurfaceForegroundPatternVisible = surfaceForegroundPatternVisibleData[i];
+                if (existsHasSurfaceForegroundPatternColor)
+                    entity.mHasSurfaceForegroundPatternColor = hasSurfaceForegroundPatternColorData[i];
+                if (existsSurfaceForegroundPatternColor_X)
+                    entity.mSurfaceForegroundPatternColor_X = surfaceForegroundPatternColor_XData[i];
+                if (existsSurfaceForegroundPatternColor_Y)
+                    entity.mSurfaceForegroundPatternColor_Y = surfaceForegroundPatternColor_YData[i];
+                if (existsSurfaceForegroundPatternColor_Z)
+                    entity.mSurfaceForegroundPatternColor_Z = surfaceForegroundPatternColor_ZData[i];
+                if (existsSurfaceBackgroundPatternVisible)
+                    entity.mSurfaceBackgroundPatternVisible = surfaceBackgroundPatternVisibleData[i];
+                if (existsHasSurfaceBackgroundPatternColor)
+                    entity.mHasSurfaceBackgroundPatternColor = hasSurfaceBackgroundPatternColorData[i];
+                if (existsSurfaceBackgroundPatternColor_X)
+                    entity.mSurfaceBackgroundPatternColor_X = surfaceBackgroundPatternColor_XData[i];
+                if (existsSurfaceBackgroundPatternColor_Y)
+                    entity.mSurfaceBackgroundPatternColor_Y = surfaceBackgroundPatternColor_YData[i];
+                if (existsSurfaceBackgroundPatternColor_Z)
+                    entity.mSurfaceBackgroundPatternColor_Z = surfaceBackgroundPatternColor_ZData[i];
+                if (existsCutForegroundPatternVisible)
+                    entity.mCutForegroundPatternVisible = cutForegroundPatternVisibleData[i];
+                if (existsHasCutForegroundPatternColor)
+                    entity.mHasCutForegroundPatternColor = hasCutForegroundPatternColorData[i];
+                if (existsCutForegroundPatternColor_X)
+                    entity.mCutForegroundPatternColor_X = cutForegroundPatternColor_XData[i];
+                if (existsCutForegroundPatternColor_Y)
+                    entity.mCutForegroundPatternColor_Y = cutForegroundPatternColor_YData[i];
+                if (existsCutForegroundPatternColor_Z)
+                    entity.mCutForegroundPatternColor_Z = cutForegroundPatternColor_ZData[i];
+                if (existsCutBackgroundPatternVisible)
+                    entity.mCutBackgroundPatternVisible = cutBackgroundPatternVisibleData[i];
+                if (existsHasCutBackgroundPatternColor)
+                    entity.mHasCutBackgroundPatternColor = hasCutBackgroundPatternColorData[i];
+                if (existsCutBackgroundPatternColor_X)
+                    entity.mCutBackgroundPatternColor_X = cutBackgroundPatternColor_XData[i];
+                if (existsCutBackgroundPatternColor_Y)
+                    entity.mCutBackgroundPatternColor_Y = cutBackgroundPatternColor_YData[i];
+                if (existsCutBackgroundPatternColor_Z)
+                    entity.mCutBackgroundPatternColor_Z = cutBackgroundPatternColor_ZData[i];
+                if (existsTransparency)
+                    entity.mTransparency = transparencyData[i];
+                if (existsHalftone)
+                    entity.mHalftone = halftoneData[i];
+                if (existsDetailLevel)
+                    entity.mDetailLevel = detailLevelData[i];
+                if (existsKey)
+                    entity.mKey = std::string(reinterpret_cast<const char*>(mStrings[keyData[i]]));
+                entity.mProjectionLinePatternIndex = existsProjectionLinePattern ? projectionLinePatternData[i] : -1;
+                entity.mCutLinePatternIndex = existsCutLinePattern ? cutLinePatternData[i] : -1;
+                entity.mSurfaceForegroundPatternIndex = existsSurfaceForegroundPattern ? surfaceForegroundPatternData[i] : -1;
+                entity.mSurfaceBackgroundPatternIndex = existsSurfaceBackgroundPattern ? surfaceBackgroundPatternData[i] : -1;
+                entity.mCutForegroundPatternIndex = existsCutForegroundPattern ? cutForegroundPatternData[i] : -1;
+                entity.mCutBackgroundPatternIndex = existsCutBackgroundPattern ? cutBackgroundPatternData[i] : -1;
+                graphicOverride->push_back(entity);
+            }
+            
+            delete[] projectionLineWeightData;
+            delete[] hasProjectionLineColorData;
+            delete[] projectionLineColor_XData;
+            delete[] projectionLineColor_YData;
+            delete[] projectionLineColor_ZData;
+            delete[] cutLineWeightData;
+            delete[] hasCutLineColorData;
+            delete[] cutLineColor_XData;
+            delete[] cutLineColor_YData;
+            delete[] cutLineColor_ZData;
+            delete[] surfaceForegroundPatternVisibleData;
+            delete[] hasSurfaceForegroundPatternColorData;
+            delete[] surfaceForegroundPatternColor_XData;
+            delete[] surfaceForegroundPatternColor_YData;
+            delete[] surfaceForegroundPatternColor_ZData;
+            delete[] surfaceBackgroundPatternVisibleData;
+            delete[] hasSurfaceBackgroundPatternColorData;
+            delete[] surfaceBackgroundPatternColor_XData;
+            delete[] surfaceBackgroundPatternColor_YData;
+            delete[] surfaceBackgroundPatternColor_ZData;
+            delete[] cutForegroundPatternVisibleData;
+            delete[] hasCutForegroundPatternColorData;
+            delete[] cutForegroundPatternColor_XData;
+            delete[] cutForegroundPatternColor_YData;
+            delete[] cutForegroundPatternColor_ZData;
+            delete[] cutBackgroundPatternVisibleData;
+            delete[] hasCutBackgroundPatternColorData;
+            delete[] cutBackgroundPatternColor_XData;
+            delete[] cutBackgroundPatternColor_YData;
+            delete[] cutBackgroundPatternColor_ZData;
+            delete[] transparencyData;
+            delete[] halftoneData;
+            delete[] detailLevelData;
+            
+            return graphicOverride;
+        }
+        
+        int GetProjectionLineWeight(int graphicOverrideIndex)
+        {
+            if (graphicOverrideIndex < 0 || graphicOverrideIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("int:ProjectionLineWeight")) {
+                return *reinterpret_cast<int*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["int:ProjectionLineWeight"].begin() + graphicOverrideIndex * sizeof(int)));
+            }
+            
+            return {};
+        }
+        
+        std::vector<int>* GetAllProjectionLineWeight()
+        {
+            const auto count = GetCount();
+            
+            int* projectionLineWeightData = new int[count];
+            if (mEntityTable.column_exists("int:ProjectionLineWeight")) {
+                memcpy(projectionLineWeightData, mEntityTable.mDataColumns["int:ProjectionLineWeight"].begin(), count * sizeof(int));
+            }
+            
+            std::vector<int>* result = new std::vector<int>(projectionLineWeightData, projectionLineWeightData + count);
+            
+            delete[] projectionLineWeightData;
+            
+            return result;
+        }
+        
+        bool GetHasProjectionLineColor(int graphicOverrideIndex)
+        {
+            if (graphicOverrideIndex < 0 || graphicOverrideIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("byte:HasProjectionLineColor")) {
+                return static_cast<bool>(*reinterpret_cast<bfast::byte*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["byte:HasProjectionLineColor"].begin() + graphicOverrideIndex * sizeof(bfast::byte))));
+            }
+            
+            return {};
+        }
+        
+        std::vector<bool>* GetAllHasProjectionLineColor()
+        {
+            const auto count = GetCount();
+            
+            bfast::byte* hasProjectionLineColorData = new bfast::byte[count];
+            if (mEntityTable.column_exists("byte:HasProjectionLineColor")) {
+                memcpy(hasProjectionLineColorData, mEntityTable.mDataColumns["byte:HasProjectionLineColor"].begin(), count * sizeof(bfast::byte));
+            }
+            
+            std::vector<bool>* result = new std::vector<bool>(hasProjectionLineColorData, hasProjectionLineColorData + count);
+            
+            delete[] hasProjectionLineColorData;
+            
+            return result;
+        }
+        
+        double GetProjectionLineColor_X(int graphicOverrideIndex)
+        {
+            if (graphicOverrideIndex < 0 || graphicOverrideIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("double:ProjectionLineColor.X")) {
+                return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:ProjectionLineColor.X"].begin() + graphicOverrideIndex * sizeof(double)));
+            }
+            
+            return {};
+        }
+        
+        std::vector<double>* GetAllProjectionLineColor_X()
+        {
+            const auto count = GetCount();
+            
+            double* projectionLineColor_XData = new double[count];
+            if (mEntityTable.column_exists("double:ProjectionLineColor.X")) {
+                memcpy(projectionLineColor_XData, mEntityTable.mDataColumns["double:ProjectionLineColor.X"].begin(), count * sizeof(double));
+            }
+            
+            std::vector<double>* result = new std::vector<double>(projectionLineColor_XData, projectionLineColor_XData + count);
+            
+            delete[] projectionLineColor_XData;
+            
+            return result;
+        }
+        
+        double GetProjectionLineColor_Y(int graphicOverrideIndex)
+        {
+            if (graphicOverrideIndex < 0 || graphicOverrideIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("double:ProjectionLineColor.Y")) {
+                return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:ProjectionLineColor.Y"].begin() + graphicOverrideIndex * sizeof(double)));
+            }
+            
+            return {};
+        }
+        
+        std::vector<double>* GetAllProjectionLineColor_Y()
+        {
+            const auto count = GetCount();
+            
+            double* projectionLineColor_YData = new double[count];
+            if (mEntityTable.column_exists("double:ProjectionLineColor.Y")) {
+                memcpy(projectionLineColor_YData, mEntityTable.mDataColumns["double:ProjectionLineColor.Y"].begin(), count * sizeof(double));
+            }
+            
+            std::vector<double>* result = new std::vector<double>(projectionLineColor_YData, projectionLineColor_YData + count);
+            
+            delete[] projectionLineColor_YData;
+            
+            return result;
+        }
+        
+        double GetProjectionLineColor_Z(int graphicOverrideIndex)
+        {
+            if (graphicOverrideIndex < 0 || graphicOverrideIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("double:ProjectionLineColor.Z")) {
+                return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:ProjectionLineColor.Z"].begin() + graphicOverrideIndex * sizeof(double)));
+            }
+            
+            return {};
+        }
+        
+        std::vector<double>* GetAllProjectionLineColor_Z()
+        {
+            const auto count = GetCount();
+            
+            double* projectionLineColor_ZData = new double[count];
+            if (mEntityTable.column_exists("double:ProjectionLineColor.Z")) {
+                memcpy(projectionLineColor_ZData, mEntityTable.mDataColumns["double:ProjectionLineColor.Z"].begin(), count * sizeof(double));
+            }
+            
+            std::vector<double>* result = new std::vector<double>(projectionLineColor_ZData, projectionLineColor_ZData + count);
+            
+            delete[] projectionLineColor_ZData;
+            
+            return result;
+        }
+        
+        int GetCutLineWeight(int graphicOverrideIndex)
+        {
+            if (graphicOverrideIndex < 0 || graphicOverrideIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("int:CutLineWeight")) {
+                return *reinterpret_cast<int*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["int:CutLineWeight"].begin() + graphicOverrideIndex * sizeof(int)));
+            }
+            
+            return {};
+        }
+        
+        std::vector<int>* GetAllCutLineWeight()
+        {
+            const auto count = GetCount();
+            
+            int* cutLineWeightData = new int[count];
+            if (mEntityTable.column_exists("int:CutLineWeight")) {
+                memcpy(cutLineWeightData, mEntityTable.mDataColumns["int:CutLineWeight"].begin(), count * sizeof(int));
+            }
+            
+            std::vector<int>* result = new std::vector<int>(cutLineWeightData, cutLineWeightData + count);
+            
+            delete[] cutLineWeightData;
+            
+            return result;
+        }
+        
+        bool GetHasCutLineColor(int graphicOverrideIndex)
+        {
+            if (graphicOverrideIndex < 0 || graphicOverrideIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("byte:HasCutLineColor")) {
+                return static_cast<bool>(*reinterpret_cast<bfast::byte*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["byte:HasCutLineColor"].begin() + graphicOverrideIndex * sizeof(bfast::byte))));
+            }
+            
+            return {};
+        }
+        
+        std::vector<bool>* GetAllHasCutLineColor()
+        {
+            const auto count = GetCount();
+            
+            bfast::byte* hasCutLineColorData = new bfast::byte[count];
+            if (mEntityTable.column_exists("byte:HasCutLineColor")) {
+                memcpy(hasCutLineColorData, mEntityTable.mDataColumns["byte:HasCutLineColor"].begin(), count * sizeof(bfast::byte));
+            }
+            
+            std::vector<bool>* result = new std::vector<bool>(hasCutLineColorData, hasCutLineColorData + count);
+            
+            delete[] hasCutLineColorData;
+            
+            return result;
+        }
+        
+        double GetCutLineColor_X(int graphicOverrideIndex)
+        {
+            if (graphicOverrideIndex < 0 || graphicOverrideIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("double:CutLineColor.X")) {
+                return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:CutLineColor.X"].begin() + graphicOverrideIndex * sizeof(double)));
+            }
+            
+            return {};
+        }
+        
+        std::vector<double>* GetAllCutLineColor_X()
+        {
+            const auto count = GetCount();
+            
+            double* cutLineColor_XData = new double[count];
+            if (mEntityTable.column_exists("double:CutLineColor.X")) {
+                memcpy(cutLineColor_XData, mEntityTable.mDataColumns["double:CutLineColor.X"].begin(), count * sizeof(double));
+            }
+            
+            std::vector<double>* result = new std::vector<double>(cutLineColor_XData, cutLineColor_XData + count);
+            
+            delete[] cutLineColor_XData;
+            
+            return result;
+        }
+        
+        double GetCutLineColor_Y(int graphicOverrideIndex)
+        {
+            if (graphicOverrideIndex < 0 || graphicOverrideIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("double:CutLineColor.Y")) {
+                return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:CutLineColor.Y"].begin() + graphicOverrideIndex * sizeof(double)));
+            }
+            
+            return {};
+        }
+        
+        std::vector<double>* GetAllCutLineColor_Y()
+        {
+            const auto count = GetCount();
+            
+            double* cutLineColor_YData = new double[count];
+            if (mEntityTable.column_exists("double:CutLineColor.Y")) {
+                memcpy(cutLineColor_YData, mEntityTable.mDataColumns["double:CutLineColor.Y"].begin(), count * sizeof(double));
+            }
+            
+            std::vector<double>* result = new std::vector<double>(cutLineColor_YData, cutLineColor_YData + count);
+            
+            delete[] cutLineColor_YData;
+            
+            return result;
+        }
+        
+        double GetCutLineColor_Z(int graphicOverrideIndex)
+        {
+            if (graphicOverrideIndex < 0 || graphicOverrideIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("double:CutLineColor.Z")) {
+                return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:CutLineColor.Z"].begin() + graphicOverrideIndex * sizeof(double)));
+            }
+            
+            return {};
+        }
+        
+        std::vector<double>* GetAllCutLineColor_Z()
+        {
+            const auto count = GetCount();
+            
+            double* cutLineColor_ZData = new double[count];
+            if (mEntityTable.column_exists("double:CutLineColor.Z")) {
+                memcpy(cutLineColor_ZData, mEntityTable.mDataColumns["double:CutLineColor.Z"].begin(), count * sizeof(double));
+            }
+            
+            std::vector<double>* result = new std::vector<double>(cutLineColor_ZData, cutLineColor_ZData + count);
+            
+            delete[] cutLineColor_ZData;
+            
+            return result;
+        }
+        
+        bool GetSurfaceForegroundPatternVisible(int graphicOverrideIndex)
+        {
+            if (graphicOverrideIndex < 0 || graphicOverrideIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("byte:SurfaceForegroundPatternVisible")) {
+                return static_cast<bool>(*reinterpret_cast<bfast::byte*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["byte:SurfaceForegroundPatternVisible"].begin() + graphicOverrideIndex * sizeof(bfast::byte))));
+            }
+            
+            return {};
+        }
+        
+        std::vector<bool>* GetAllSurfaceForegroundPatternVisible()
+        {
+            const auto count = GetCount();
+            
+            bfast::byte* surfaceForegroundPatternVisibleData = new bfast::byte[count];
+            if (mEntityTable.column_exists("byte:SurfaceForegroundPatternVisible")) {
+                memcpy(surfaceForegroundPatternVisibleData, mEntityTable.mDataColumns["byte:SurfaceForegroundPatternVisible"].begin(), count * sizeof(bfast::byte));
+            }
+            
+            std::vector<bool>* result = new std::vector<bool>(surfaceForegroundPatternVisibleData, surfaceForegroundPatternVisibleData + count);
+            
+            delete[] surfaceForegroundPatternVisibleData;
+            
+            return result;
+        }
+        
+        bool GetHasSurfaceForegroundPatternColor(int graphicOverrideIndex)
+        {
+            if (graphicOverrideIndex < 0 || graphicOverrideIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("byte:HasSurfaceForegroundPatternColor")) {
+                return static_cast<bool>(*reinterpret_cast<bfast::byte*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["byte:HasSurfaceForegroundPatternColor"].begin() + graphicOverrideIndex * sizeof(bfast::byte))));
+            }
+            
+            return {};
+        }
+        
+        std::vector<bool>* GetAllHasSurfaceForegroundPatternColor()
+        {
+            const auto count = GetCount();
+            
+            bfast::byte* hasSurfaceForegroundPatternColorData = new bfast::byte[count];
+            if (mEntityTable.column_exists("byte:HasSurfaceForegroundPatternColor")) {
+                memcpy(hasSurfaceForegroundPatternColorData, mEntityTable.mDataColumns["byte:HasSurfaceForegroundPatternColor"].begin(), count * sizeof(bfast::byte));
+            }
+            
+            std::vector<bool>* result = new std::vector<bool>(hasSurfaceForegroundPatternColorData, hasSurfaceForegroundPatternColorData + count);
+            
+            delete[] hasSurfaceForegroundPatternColorData;
+            
+            return result;
+        }
+        
+        double GetSurfaceForegroundPatternColor_X(int graphicOverrideIndex)
+        {
+            if (graphicOverrideIndex < 0 || graphicOverrideIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("double:SurfaceForegroundPatternColor.X")) {
+                return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:SurfaceForegroundPatternColor.X"].begin() + graphicOverrideIndex * sizeof(double)));
+            }
+            
+            return {};
+        }
+        
+        std::vector<double>* GetAllSurfaceForegroundPatternColor_X()
+        {
+            const auto count = GetCount();
+            
+            double* surfaceForegroundPatternColor_XData = new double[count];
+            if (mEntityTable.column_exists("double:SurfaceForegroundPatternColor.X")) {
+                memcpy(surfaceForegroundPatternColor_XData, mEntityTable.mDataColumns["double:SurfaceForegroundPatternColor.X"].begin(), count * sizeof(double));
+            }
+            
+            std::vector<double>* result = new std::vector<double>(surfaceForegroundPatternColor_XData, surfaceForegroundPatternColor_XData + count);
+            
+            delete[] surfaceForegroundPatternColor_XData;
+            
+            return result;
+        }
+        
+        double GetSurfaceForegroundPatternColor_Y(int graphicOverrideIndex)
+        {
+            if (graphicOverrideIndex < 0 || graphicOverrideIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("double:SurfaceForegroundPatternColor.Y")) {
+                return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:SurfaceForegroundPatternColor.Y"].begin() + graphicOverrideIndex * sizeof(double)));
+            }
+            
+            return {};
+        }
+        
+        std::vector<double>* GetAllSurfaceForegroundPatternColor_Y()
+        {
+            const auto count = GetCount();
+            
+            double* surfaceForegroundPatternColor_YData = new double[count];
+            if (mEntityTable.column_exists("double:SurfaceForegroundPatternColor.Y")) {
+                memcpy(surfaceForegroundPatternColor_YData, mEntityTable.mDataColumns["double:SurfaceForegroundPatternColor.Y"].begin(), count * sizeof(double));
+            }
+            
+            std::vector<double>* result = new std::vector<double>(surfaceForegroundPatternColor_YData, surfaceForegroundPatternColor_YData + count);
+            
+            delete[] surfaceForegroundPatternColor_YData;
+            
+            return result;
+        }
+        
+        double GetSurfaceForegroundPatternColor_Z(int graphicOverrideIndex)
+        {
+            if (graphicOverrideIndex < 0 || graphicOverrideIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("double:SurfaceForegroundPatternColor.Z")) {
+                return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:SurfaceForegroundPatternColor.Z"].begin() + graphicOverrideIndex * sizeof(double)));
+            }
+            
+            return {};
+        }
+        
+        std::vector<double>* GetAllSurfaceForegroundPatternColor_Z()
+        {
+            const auto count = GetCount();
+            
+            double* surfaceForegroundPatternColor_ZData = new double[count];
+            if (mEntityTable.column_exists("double:SurfaceForegroundPatternColor.Z")) {
+                memcpy(surfaceForegroundPatternColor_ZData, mEntityTable.mDataColumns["double:SurfaceForegroundPatternColor.Z"].begin(), count * sizeof(double));
+            }
+            
+            std::vector<double>* result = new std::vector<double>(surfaceForegroundPatternColor_ZData, surfaceForegroundPatternColor_ZData + count);
+            
+            delete[] surfaceForegroundPatternColor_ZData;
+            
+            return result;
+        }
+        
+        bool GetSurfaceBackgroundPatternVisible(int graphicOverrideIndex)
+        {
+            if (graphicOverrideIndex < 0 || graphicOverrideIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("byte:SurfaceBackgroundPatternVisible")) {
+                return static_cast<bool>(*reinterpret_cast<bfast::byte*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["byte:SurfaceBackgroundPatternVisible"].begin() + graphicOverrideIndex * sizeof(bfast::byte))));
+            }
+            
+            return {};
+        }
+        
+        std::vector<bool>* GetAllSurfaceBackgroundPatternVisible()
+        {
+            const auto count = GetCount();
+            
+            bfast::byte* surfaceBackgroundPatternVisibleData = new bfast::byte[count];
+            if (mEntityTable.column_exists("byte:SurfaceBackgroundPatternVisible")) {
+                memcpy(surfaceBackgroundPatternVisibleData, mEntityTable.mDataColumns["byte:SurfaceBackgroundPatternVisible"].begin(), count * sizeof(bfast::byte));
+            }
+            
+            std::vector<bool>* result = new std::vector<bool>(surfaceBackgroundPatternVisibleData, surfaceBackgroundPatternVisibleData + count);
+            
+            delete[] surfaceBackgroundPatternVisibleData;
+            
+            return result;
+        }
+        
+        bool GetHasSurfaceBackgroundPatternColor(int graphicOverrideIndex)
+        {
+            if (graphicOverrideIndex < 0 || graphicOverrideIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("byte:HasSurfaceBackgroundPatternColor")) {
+                return static_cast<bool>(*reinterpret_cast<bfast::byte*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["byte:HasSurfaceBackgroundPatternColor"].begin() + graphicOverrideIndex * sizeof(bfast::byte))));
+            }
+            
+            return {};
+        }
+        
+        std::vector<bool>* GetAllHasSurfaceBackgroundPatternColor()
+        {
+            const auto count = GetCount();
+            
+            bfast::byte* hasSurfaceBackgroundPatternColorData = new bfast::byte[count];
+            if (mEntityTable.column_exists("byte:HasSurfaceBackgroundPatternColor")) {
+                memcpy(hasSurfaceBackgroundPatternColorData, mEntityTable.mDataColumns["byte:HasSurfaceBackgroundPatternColor"].begin(), count * sizeof(bfast::byte));
+            }
+            
+            std::vector<bool>* result = new std::vector<bool>(hasSurfaceBackgroundPatternColorData, hasSurfaceBackgroundPatternColorData + count);
+            
+            delete[] hasSurfaceBackgroundPatternColorData;
+            
+            return result;
+        }
+        
+        double GetSurfaceBackgroundPatternColor_X(int graphicOverrideIndex)
+        {
+            if (graphicOverrideIndex < 0 || graphicOverrideIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("double:SurfaceBackgroundPatternColor.X")) {
+                return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:SurfaceBackgroundPatternColor.X"].begin() + graphicOverrideIndex * sizeof(double)));
+            }
+            
+            return {};
+        }
+        
+        std::vector<double>* GetAllSurfaceBackgroundPatternColor_X()
+        {
+            const auto count = GetCount();
+            
+            double* surfaceBackgroundPatternColor_XData = new double[count];
+            if (mEntityTable.column_exists("double:SurfaceBackgroundPatternColor.X")) {
+                memcpy(surfaceBackgroundPatternColor_XData, mEntityTable.mDataColumns["double:SurfaceBackgroundPatternColor.X"].begin(), count * sizeof(double));
+            }
+            
+            std::vector<double>* result = new std::vector<double>(surfaceBackgroundPatternColor_XData, surfaceBackgroundPatternColor_XData + count);
+            
+            delete[] surfaceBackgroundPatternColor_XData;
+            
+            return result;
+        }
+        
+        double GetSurfaceBackgroundPatternColor_Y(int graphicOverrideIndex)
+        {
+            if (graphicOverrideIndex < 0 || graphicOverrideIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("double:SurfaceBackgroundPatternColor.Y")) {
+                return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:SurfaceBackgroundPatternColor.Y"].begin() + graphicOverrideIndex * sizeof(double)));
+            }
+            
+            return {};
+        }
+        
+        std::vector<double>* GetAllSurfaceBackgroundPatternColor_Y()
+        {
+            const auto count = GetCount();
+            
+            double* surfaceBackgroundPatternColor_YData = new double[count];
+            if (mEntityTable.column_exists("double:SurfaceBackgroundPatternColor.Y")) {
+                memcpy(surfaceBackgroundPatternColor_YData, mEntityTable.mDataColumns["double:SurfaceBackgroundPatternColor.Y"].begin(), count * sizeof(double));
+            }
+            
+            std::vector<double>* result = new std::vector<double>(surfaceBackgroundPatternColor_YData, surfaceBackgroundPatternColor_YData + count);
+            
+            delete[] surfaceBackgroundPatternColor_YData;
+            
+            return result;
+        }
+        
+        double GetSurfaceBackgroundPatternColor_Z(int graphicOverrideIndex)
+        {
+            if (graphicOverrideIndex < 0 || graphicOverrideIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("double:SurfaceBackgroundPatternColor.Z")) {
+                return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:SurfaceBackgroundPatternColor.Z"].begin() + graphicOverrideIndex * sizeof(double)));
+            }
+            
+            return {};
+        }
+        
+        std::vector<double>* GetAllSurfaceBackgroundPatternColor_Z()
+        {
+            const auto count = GetCount();
+            
+            double* surfaceBackgroundPatternColor_ZData = new double[count];
+            if (mEntityTable.column_exists("double:SurfaceBackgroundPatternColor.Z")) {
+                memcpy(surfaceBackgroundPatternColor_ZData, mEntityTable.mDataColumns["double:SurfaceBackgroundPatternColor.Z"].begin(), count * sizeof(double));
+            }
+            
+            std::vector<double>* result = new std::vector<double>(surfaceBackgroundPatternColor_ZData, surfaceBackgroundPatternColor_ZData + count);
+            
+            delete[] surfaceBackgroundPatternColor_ZData;
+            
+            return result;
+        }
+        
+        bool GetCutForegroundPatternVisible(int graphicOverrideIndex)
+        {
+            if (graphicOverrideIndex < 0 || graphicOverrideIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("byte:CutForegroundPatternVisible")) {
+                return static_cast<bool>(*reinterpret_cast<bfast::byte*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["byte:CutForegroundPatternVisible"].begin() + graphicOverrideIndex * sizeof(bfast::byte))));
+            }
+            
+            return {};
+        }
+        
+        std::vector<bool>* GetAllCutForegroundPatternVisible()
+        {
+            const auto count = GetCount();
+            
+            bfast::byte* cutForegroundPatternVisibleData = new bfast::byte[count];
+            if (mEntityTable.column_exists("byte:CutForegroundPatternVisible")) {
+                memcpy(cutForegroundPatternVisibleData, mEntityTable.mDataColumns["byte:CutForegroundPatternVisible"].begin(), count * sizeof(bfast::byte));
+            }
+            
+            std::vector<bool>* result = new std::vector<bool>(cutForegroundPatternVisibleData, cutForegroundPatternVisibleData + count);
+            
+            delete[] cutForegroundPatternVisibleData;
+            
+            return result;
+        }
+        
+        bool GetHasCutForegroundPatternColor(int graphicOverrideIndex)
+        {
+            if (graphicOverrideIndex < 0 || graphicOverrideIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("byte:HasCutForegroundPatternColor")) {
+                return static_cast<bool>(*reinterpret_cast<bfast::byte*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["byte:HasCutForegroundPatternColor"].begin() + graphicOverrideIndex * sizeof(bfast::byte))));
+            }
+            
+            return {};
+        }
+        
+        std::vector<bool>* GetAllHasCutForegroundPatternColor()
+        {
+            const auto count = GetCount();
+            
+            bfast::byte* hasCutForegroundPatternColorData = new bfast::byte[count];
+            if (mEntityTable.column_exists("byte:HasCutForegroundPatternColor")) {
+                memcpy(hasCutForegroundPatternColorData, mEntityTable.mDataColumns["byte:HasCutForegroundPatternColor"].begin(), count * sizeof(bfast::byte));
+            }
+            
+            std::vector<bool>* result = new std::vector<bool>(hasCutForegroundPatternColorData, hasCutForegroundPatternColorData + count);
+            
+            delete[] hasCutForegroundPatternColorData;
+            
+            return result;
+        }
+        
+        double GetCutForegroundPatternColor_X(int graphicOverrideIndex)
+        {
+            if (graphicOverrideIndex < 0 || graphicOverrideIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("double:CutForegroundPatternColor.X")) {
+                return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:CutForegroundPatternColor.X"].begin() + graphicOverrideIndex * sizeof(double)));
+            }
+            
+            return {};
+        }
+        
+        std::vector<double>* GetAllCutForegroundPatternColor_X()
+        {
+            const auto count = GetCount();
+            
+            double* cutForegroundPatternColor_XData = new double[count];
+            if (mEntityTable.column_exists("double:CutForegroundPatternColor.X")) {
+                memcpy(cutForegroundPatternColor_XData, mEntityTable.mDataColumns["double:CutForegroundPatternColor.X"].begin(), count * sizeof(double));
+            }
+            
+            std::vector<double>* result = new std::vector<double>(cutForegroundPatternColor_XData, cutForegroundPatternColor_XData + count);
+            
+            delete[] cutForegroundPatternColor_XData;
+            
+            return result;
+        }
+        
+        double GetCutForegroundPatternColor_Y(int graphicOverrideIndex)
+        {
+            if (graphicOverrideIndex < 0 || graphicOverrideIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("double:CutForegroundPatternColor.Y")) {
+                return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:CutForegroundPatternColor.Y"].begin() + graphicOverrideIndex * sizeof(double)));
+            }
+            
+            return {};
+        }
+        
+        std::vector<double>* GetAllCutForegroundPatternColor_Y()
+        {
+            const auto count = GetCount();
+            
+            double* cutForegroundPatternColor_YData = new double[count];
+            if (mEntityTable.column_exists("double:CutForegroundPatternColor.Y")) {
+                memcpy(cutForegroundPatternColor_YData, mEntityTable.mDataColumns["double:CutForegroundPatternColor.Y"].begin(), count * sizeof(double));
+            }
+            
+            std::vector<double>* result = new std::vector<double>(cutForegroundPatternColor_YData, cutForegroundPatternColor_YData + count);
+            
+            delete[] cutForegroundPatternColor_YData;
+            
+            return result;
+        }
+        
+        double GetCutForegroundPatternColor_Z(int graphicOverrideIndex)
+        {
+            if (graphicOverrideIndex < 0 || graphicOverrideIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("double:CutForegroundPatternColor.Z")) {
+                return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:CutForegroundPatternColor.Z"].begin() + graphicOverrideIndex * sizeof(double)));
+            }
+            
+            return {};
+        }
+        
+        std::vector<double>* GetAllCutForegroundPatternColor_Z()
+        {
+            const auto count = GetCount();
+            
+            double* cutForegroundPatternColor_ZData = new double[count];
+            if (mEntityTable.column_exists("double:CutForegroundPatternColor.Z")) {
+                memcpy(cutForegroundPatternColor_ZData, mEntityTable.mDataColumns["double:CutForegroundPatternColor.Z"].begin(), count * sizeof(double));
+            }
+            
+            std::vector<double>* result = new std::vector<double>(cutForegroundPatternColor_ZData, cutForegroundPatternColor_ZData + count);
+            
+            delete[] cutForegroundPatternColor_ZData;
+            
+            return result;
+        }
+        
+        bool GetCutBackgroundPatternVisible(int graphicOverrideIndex)
+        {
+            if (graphicOverrideIndex < 0 || graphicOverrideIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("byte:CutBackgroundPatternVisible")) {
+                return static_cast<bool>(*reinterpret_cast<bfast::byte*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["byte:CutBackgroundPatternVisible"].begin() + graphicOverrideIndex * sizeof(bfast::byte))));
+            }
+            
+            return {};
+        }
+        
+        std::vector<bool>* GetAllCutBackgroundPatternVisible()
+        {
+            const auto count = GetCount();
+            
+            bfast::byte* cutBackgroundPatternVisibleData = new bfast::byte[count];
+            if (mEntityTable.column_exists("byte:CutBackgroundPatternVisible")) {
+                memcpy(cutBackgroundPatternVisibleData, mEntityTable.mDataColumns["byte:CutBackgroundPatternVisible"].begin(), count * sizeof(bfast::byte));
+            }
+            
+            std::vector<bool>* result = new std::vector<bool>(cutBackgroundPatternVisibleData, cutBackgroundPatternVisibleData + count);
+            
+            delete[] cutBackgroundPatternVisibleData;
+            
+            return result;
+        }
+        
+        bool GetHasCutBackgroundPatternColor(int graphicOverrideIndex)
+        {
+            if (graphicOverrideIndex < 0 || graphicOverrideIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("byte:HasCutBackgroundPatternColor")) {
+                return static_cast<bool>(*reinterpret_cast<bfast::byte*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["byte:HasCutBackgroundPatternColor"].begin() + graphicOverrideIndex * sizeof(bfast::byte))));
+            }
+            
+            return {};
+        }
+        
+        std::vector<bool>* GetAllHasCutBackgroundPatternColor()
+        {
+            const auto count = GetCount();
+            
+            bfast::byte* hasCutBackgroundPatternColorData = new bfast::byte[count];
+            if (mEntityTable.column_exists("byte:HasCutBackgroundPatternColor")) {
+                memcpy(hasCutBackgroundPatternColorData, mEntityTable.mDataColumns["byte:HasCutBackgroundPatternColor"].begin(), count * sizeof(bfast::byte));
+            }
+            
+            std::vector<bool>* result = new std::vector<bool>(hasCutBackgroundPatternColorData, hasCutBackgroundPatternColorData + count);
+            
+            delete[] hasCutBackgroundPatternColorData;
+            
+            return result;
+        }
+        
+        double GetCutBackgroundPatternColor_X(int graphicOverrideIndex)
+        {
+            if (graphicOverrideIndex < 0 || graphicOverrideIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("double:CutBackgroundPatternColor.X")) {
+                return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:CutBackgroundPatternColor.X"].begin() + graphicOverrideIndex * sizeof(double)));
+            }
+            
+            return {};
+        }
+        
+        std::vector<double>* GetAllCutBackgroundPatternColor_X()
+        {
+            const auto count = GetCount();
+            
+            double* cutBackgroundPatternColor_XData = new double[count];
+            if (mEntityTable.column_exists("double:CutBackgroundPatternColor.X")) {
+                memcpy(cutBackgroundPatternColor_XData, mEntityTable.mDataColumns["double:CutBackgroundPatternColor.X"].begin(), count * sizeof(double));
+            }
+            
+            std::vector<double>* result = new std::vector<double>(cutBackgroundPatternColor_XData, cutBackgroundPatternColor_XData + count);
+            
+            delete[] cutBackgroundPatternColor_XData;
+            
+            return result;
+        }
+        
+        double GetCutBackgroundPatternColor_Y(int graphicOverrideIndex)
+        {
+            if (graphicOverrideIndex < 0 || graphicOverrideIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("double:CutBackgroundPatternColor.Y")) {
+                return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:CutBackgroundPatternColor.Y"].begin() + graphicOverrideIndex * sizeof(double)));
+            }
+            
+            return {};
+        }
+        
+        std::vector<double>* GetAllCutBackgroundPatternColor_Y()
+        {
+            const auto count = GetCount();
+            
+            double* cutBackgroundPatternColor_YData = new double[count];
+            if (mEntityTable.column_exists("double:CutBackgroundPatternColor.Y")) {
+                memcpy(cutBackgroundPatternColor_YData, mEntityTable.mDataColumns["double:CutBackgroundPatternColor.Y"].begin(), count * sizeof(double));
+            }
+            
+            std::vector<double>* result = new std::vector<double>(cutBackgroundPatternColor_YData, cutBackgroundPatternColor_YData + count);
+            
+            delete[] cutBackgroundPatternColor_YData;
+            
+            return result;
+        }
+        
+        double GetCutBackgroundPatternColor_Z(int graphicOverrideIndex)
+        {
+            if (graphicOverrideIndex < 0 || graphicOverrideIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("double:CutBackgroundPatternColor.Z")) {
+                return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:CutBackgroundPatternColor.Z"].begin() + graphicOverrideIndex * sizeof(double)));
+            }
+            
+            return {};
+        }
+        
+        std::vector<double>* GetAllCutBackgroundPatternColor_Z()
+        {
+            const auto count = GetCount();
+            
+            double* cutBackgroundPatternColor_ZData = new double[count];
+            if (mEntityTable.column_exists("double:CutBackgroundPatternColor.Z")) {
+                memcpy(cutBackgroundPatternColor_ZData, mEntityTable.mDataColumns["double:CutBackgroundPatternColor.Z"].begin(), count * sizeof(double));
+            }
+            
+            std::vector<double>* result = new std::vector<double>(cutBackgroundPatternColor_ZData, cutBackgroundPatternColor_ZData + count);
+            
+            delete[] cutBackgroundPatternColor_ZData;
+            
+            return result;
+        }
+        
+        int GetTransparency(int graphicOverrideIndex)
+        {
+            if (graphicOverrideIndex < 0 || graphicOverrideIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("int:Transparency")) {
+                return *reinterpret_cast<int*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["int:Transparency"].begin() + graphicOverrideIndex * sizeof(int)));
+            }
+            
+            return {};
+        }
+        
+        std::vector<int>* GetAllTransparency()
+        {
+            const auto count = GetCount();
+            
+            int* transparencyData = new int[count];
+            if (mEntityTable.column_exists("int:Transparency")) {
+                memcpy(transparencyData, mEntityTable.mDataColumns["int:Transparency"].begin(), count * sizeof(int));
+            }
+            
+            std::vector<int>* result = new std::vector<int>(transparencyData, transparencyData + count);
+            
+            delete[] transparencyData;
+            
+            return result;
+        }
+        
+        bool GetHalftone(int graphicOverrideIndex)
+        {
+            if (graphicOverrideIndex < 0 || graphicOverrideIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("byte:Halftone")) {
+                return static_cast<bool>(*reinterpret_cast<bfast::byte*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["byte:Halftone"].begin() + graphicOverrideIndex * sizeof(bfast::byte))));
+            }
+            
+            return {};
+        }
+        
+        std::vector<bool>* GetAllHalftone()
+        {
+            const auto count = GetCount();
+            
+            bfast::byte* halftoneData = new bfast::byte[count];
+            if (mEntityTable.column_exists("byte:Halftone")) {
+                memcpy(halftoneData, mEntityTable.mDataColumns["byte:Halftone"].begin(), count * sizeof(bfast::byte));
+            }
+            
+            std::vector<bool>* result = new std::vector<bool>(halftoneData, halftoneData + count);
+            
+            delete[] halftoneData;
+            
+            return result;
+        }
+        
+        int GetDetailLevel(int graphicOverrideIndex)
+        {
+            if (graphicOverrideIndex < 0 || graphicOverrideIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("int:DetailLevel")) {
+                return *reinterpret_cast<int*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["int:DetailLevel"].begin() + graphicOverrideIndex * sizeof(int)));
+            }
+            
+            return {};
+        }
+        
+        std::vector<int>* GetAllDetailLevel()
+        {
+            const auto count = GetCount();
+            
+            int* detailLevelData = new int[count];
+            if (mEntityTable.column_exists("int:DetailLevel")) {
+                memcpy(detailLevelData, mEntityTable.mDataColumns["int:DetailLevel"].begin(), count * sizeof(int));
+            }
+            
+            std::vector<int>* result = new std::vector<int>(detailLevelData, detailLevelData + count);
+            
+            delete[] detailLevelData;
+            
+            return result;
+        }
+        
+        std::string GetKey(int graphicOverrideIndex)
+        {
+            if (graphicOverrideIndex < 0 || graphicOverrideIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("string:Key")) {
+                return std::string(reinterpret_cast<const char*>(mStrings[mEntityTable.mStringColumns["string:Key"][graphicOverrideIndex]]));
+            }
+            
+            return {};
+        }
+        
+        std::vector<std::string>* GetAllKey()
+        {
+            const auto count = GetCount();
+            
+            const std::vector<int>& keyData = mEntityTable.column_exists("string:Key") ? mEntityTable.mStringColumns["string:Key"] : std::vector<int>();
+            
+            std::vector<std::string>* result = new std::vector<std::string>();
+            result->reserve(count);
+            
+            for (int i = 0; i < count; ++i)
+            {
+                result->push_back(std::string(reinterpret_cast<const char*>(mStrings[keyData[i]])));
+            }
+            
+            return result;
+        }
+        
+        int GetProjectionLinePatternIndex(int graphicOverrideIndex)
+        {
+            if (!mEntityTable.column_exists("index:Vim.LinePattern:ProjectionLinePattern")) {
+                return -1;
+            }
+            
+            if (graphicOverrideIndex < 0 || graphicOverrideIndex >= GetCount())
+                return -1;
+            
+            return mEntityTable.mIndexColumns["index:Vim.LinePattern:ProjectionLinePattern"][graphicOverrideIndex];
+        }
+        
+        int GetCutLinePatternIndex(int graphicOverrideIndex)
+        {
+            if (!mEntityTable.column_exists("index:Vim.LinePattern:CutLinePattern")) {
+                return -1;
+            }
+            
+            if (graphicOverrideIndex < 0 || graphicOverrideIndex >= GetCount())
+                return -1;
+            
+            return mEntityTable.mIndexColumns["index:Vim.LinePattern:CutLinePattern"][graphicOverrideIndex];
+        }
+        
+        int GetSurfaceForegroundPatternIndex(int graphicOverrideIndex)
+        {
+            if (!mEntityTable.column_exists("index:Vim.FillPattern:SurfaceForegroundPattern")) {
+                return -1;
+            }
+            
+            if (graphicOverrideIndex < 0 || graphicOverrideIndex >= GetCount())
+                return -1;
+            
+            return mEntityTable.mIndexColumns["index:Vim.FillPattern:SurfaceForegroundPattern"][graphicOverrideIndex];
+        }
+        
+        int GetSurfaceBackgroundPatternIndex(int graphicOverrideIndex)
+        {
+            if (!mEntityTable.column_exists("index:Vim.FillPattern:SurfaceBackgroundPattern")) {
+                return -1;
+            }
+            
+            if (graphicOverrideIndex < 0 || graphicOverrideIndex >= GetCount())
+                return -1;
+            
+            return mEntityTable.mIndexColumns["index:Vim.FillPattern:SurfaceBackgroundPattern"][graphicOverrideIndex];
+        }
+        
+        int GetCutForegroundPatternIndex(int graphicOverrideIndex)
+        {
+            if (!mEntityTable.column_exists("index:Vim.FillPattern:CutForegroundPattern")) {
+                return -1;
+            }
+            
+            if (graphicOverrideIndex < 0 || graphicOverrideIndex >= GetCount())
+                return -1;
+            
+            return mEntityTable.mIndexColumns["index:Vim.FillPattern:CutForegroundPattern"][graphicOverrideIndex];
+        }
+        
+        int GetCutBackgroundPatternIndex(int graphicOverrideIndex)
+        {
+            if (!mEntityTable.column_exists("index:Vim.FillPattern:CutBackgroundPattern")) {
+                return -1;
+            }
+            
+            if (graphicOverrideIndex < 0 || graphicOverrideIndex >= GetCount())
+                return -1;
+            
+            return mEntityTable.mIndexColumns["index:Vim.FillPattern:CutBackgroundPattern"][graphicOverrideIndex];
+        }
+        
+    };
+    
+    static GraphicOverrideTable* GetGraphicOverrideTable(Scene& scene)
+    {
+        if (scene.mEntityTables.find("Vim.GraphicOverride") == scene.mEntityTables.end())
+            return {};
+        
+        return new GraphicOverrideTable(scene.mEntityTables["Vim.GraphicOverride"], scene.mStrings);
+    }
+    
+    class CategoryInView
+    {
+    public:
+        int mIndex;
+        bool mIsHidden;
+        
+        int mViewIndex;
+        View* mView;
+        int mCategoryIndex;
+        Category* mCategory;
+        int mGraphicOverrideIndex;
+        GraphicOverride* mGraphicOverride;
+        
+        CategoryInView() {}
+    };
+    
+    class CategoryInViewTable
+    {
+        EntityTable& mEntityTable;
+        std::vector<const bfast::byte*>& mStrings;
+    public:
+        CategoryInViewTable(EntityTable& entityTable, std::vector<const bfast::byte*>& strings):
+            mEntityTable(entityTable), mStrings(strings) {}
+        
+        size_t GetCount()
+        {
+            return mEntityTable.get_count();
+        }
+        
+        CategoryInView* Get(int categoryInViewIndex)
+        {
+            CategoryInView* categoryInView = new CategoryInView();
+            categoryInView->mIndex = categoryInViewIndex;
+            categoryInView->mIsHidden = GetIsHidden(categoryInViewIndex);
+            categoryInView->mViewIndex = GetViewIndex(categoryInViewIndex);
+            categoryInView->mCategoryIndex = GetCategoryIndex(categoryInViewIndex);
+            categoryInView->mGraphicOverrideIndex = GetGraphicOverrideIndex(categoryInViewIndex);
+            return categoryInView;
+        }
+        
+        std::vector<CategoryInView>* GetAll()
+        {
+            bool existsIsHidden = mEntityTable.column_exists("byte:IsHidden");
+            bool existsView = mEntityTable.column_exists("index:Vim.View:View");
+            bool existsCategory = mEntityTable.column_exists("index:Vim.Category:Category");
+            bool existsGraphicOverride = mEntityTable.column_exists("index:Vim.GraphicOverride:GraphicOverride");
+            
+            const auto count = GetCount();
+            
+            std::vector<CategoryInView>* categoryInView = new std::vector<CategoryInView>();
+            categoryInView->reserve(count);
+            
+            bfast::byte* isHiddenData = new bfast::byte[count];
+            if (mEntityTable.column_exists("byte:IsHidden")) {
+                memcpy(isHiddenData, mEntityTable.mDataColumns["byte:IsHidden"].begin(), count * sizeof(bfast::byte));
+            }
+            
+            const std::vector<int>& viewData = mEntityTable.column_exists("index:Vim.View:View") ? mEntityTable.mIndexColumns["index:Vim.View:View"] : std::vector<int>();
+            const std::vector<int>& categoryData = mEntityTable.column_exists("index:Vim.Category:Category") ? mEntityTable.mIndexColumns["index:Vim.Category:Category"] : std::vector<int>();
+            const std::vector<int>& graphicOverrideData = mEntityTable.column_exists("index:Vim.GraphicOverride:GraphicOverride") ? mEntityTable.mIndexColumns["index:Vim.GraphicOverride:GraphicOverride"] : std::vector<int>();
+            
+            for (int i = 0; i < count; ++i)
+            {
+                CategoryInView entity;
+                entity.mIndex = i;
+                if (existsIsHidden)
+                    entity.mIsHidden = isHiddenData[i];
+                entity.mViewIndex = existsView ? viewData[i] : -1;
+                entity.mCategoryIndex = existsCategory ? categoryData[i] : -1;
+                entity.mGraphicOverrideIndex = existsGraphicOverride ? graphicOverrideData[i] : -1;
+                categoryInView->push_back(entity);
+            }
+            
+            delete[] isHiddenData;
+            
+            return categoryInView;
+        }
+        
+        bool GetIsHidden(int categoryInViewIndex)
+        {
+            if (categoryInViewIndex < 0 || categoryInViewIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("byte:IsHidden")) {
+                return static_cast<bool>(*reinterpret_cast<bfast::byte*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["byte:IsHidden"].begin() + categoryInViewIndex * sizeof(bfast::byte))));
+            }
+            
+            return {};
+        }
+        
+        std::vector<bool>* GetAllIsHidden()
+        {
+            const auto count = GetCount();
+            
+            bfast::byte* isHiddenData = new bfast::byte[count];
+            if (mEntityTable.column_exists("byte:IsHidden")) {
+                memcpy(isHiddenData, mEntityTable.mDataColumns["byte:IsHidden"].begin(), count * sizeof(bfast::byte));
+            }
+            
+            std::vector<bool>* result = new std::vector<bool>(isHiddenData, isHiddenData + count);
+            
+            delete[] isHiddenData;
+            
+            return result;
+        }
+        
+        int GetViewIndex(int categoryInViewIndex)
+        {
+            if (!mEntityTable.column_exists("index:Vim.View:View")) {
+                return -1;
+            }
+            
+            if (categoryInViewIndex < 0 || categoryInViewIndex >= GetCount())
+                return -1;
+            
+            return mEntityTable.mIndexColumns["index:Vim.View:View"][categoryInViewIndex];
+        }
+        
+        int GetCategoryIndex(int categoryInViewIndex)
+        {
+            if (!mEntityTable.column_exists("index:Vim.Category:Category")) {
+                return -1;
+            }
+            
+            if (categoryInViewIndex < 0 || categoryInViewIndex >= GetCount())
+                return -1;
+            
+            return mEntityTable.mIndexColumns["index:Vim.Category:Category"][categoryInViewIndex];
+        }
+        
+        int GetGraphicOverrideIndex(int categoryInViewIndex)
+        {
+            if (!mEntityTable.column_exists("index:Vim.GraphicOverride:GraphicOverride")) {
+                return -1;
+            }
+            
+            if (categoryInViewIndex < 0 || categoryInViewIndex >= GetCount())
+                return -1;
+            
+            return mEntityTable.mIndexColumns["index:Vim.GraphicOverride:GraphicOverride"][categoryInViewIndex];
+        }
+        
+    };
+    
+    static CategoryInViewTable* GetCategoryInViewTable(Scene& scene)
+    {
+        if (scene.mEntityTables.find("Vim.CategoryInView") == scene.mEntityTables.end())
+            return {};
+        
+        return new CategoryInViewTable(scene.mEntityTables["Vim.CategoryInView"], scene.mStrings);
+    }
+    
+    class ElementOverrideInView
+    {
+    public:
+        int mIndex;
+        bool mIsHidden;
+        
+        int mViewIndex;
+        View* mView;
+        int mGraphicOverrideIndex;
+        GraphicOverride* mGraphicOverride;
+        int mElementIndex;
+        Element* mElement;
+        
+        ElementOverrideInView() {}
+    };
+    
+    class ElementOverrideInViewTable
+    {
+        EntityTable& mEntityTable;
+        std::vector<const bfast::byte*>& mStrings;
+    public:
+        ElementOverrideInViewTable(EntityTable& entityTable, std::vector<const bfast::byte*>& strings):
+            mEntityTable(entityTable), mStrings(strings) {}
+        
+        size_t GetCount()
+        {
+            return mEntityTable.get_count();
+        }
+        
+        ElementOverrideInView* Get(int elementOverrideInViewIndex)
+        {
+            ElementOverrideInView* elementOverrideInView = new ElementOverrideInView();
+            elementOverrideInView->mIndex = elementOverrideInViewIndex;
+            elementOverrideInView->mIsHidden = GetIsHidden(elementOverrideInViewIndex);
+            elementOverrideInView->mViewIndex = GetViewIndex(elementOverrideInViewIndex);
+            elementOverrideInView->mGraphicOverrideIndex = GetGraphicOverrideIndex(elementOverrideInViewIndex);
+            elementOverrideInView->mElementIndex = GetElementIndex(elementOverrideInViewIndex);
+            return elementOverrideInView;
+        }
+        
+        std::vector<ElementOverrideInView>* GetAll()
+        {
+            bool existsIsHidden = mEntityTable.column_exists("byte:IsHidden");
+            bool existsView = mEntityTable.column_exists("index:Vim.View:View");
+            bool existsGraphicOverride = mEntityTable.column_exists("index:Vim.GraphicOverride:GraphicOverride");
+            bool existsElement = mEntityTable.column_exists("index:Vim.Element:Element");
+            
+            const auto count = GetCount();
+            
+            std::vector<ElementOverrideInView>* elementOverrideInView = new std::vector<ElementOverrideInView>();
+            elementOverrideInView->reserve(count);
+            
+            bfast::byte* isHiddenData = new bfast::byte[count];
+            if (mEntityTable.column_exists("byte:IsHidden")) {
+                memcpy(isHiddenData, mEntityTable.mDataColumns["byte:IsHidden"].begin(), count * sizeof(bfast::byte));
+            }
+            
+            const std::vector<int>& viewData = mEntityTable.column_exists("index:Vim.View:View") ? mEntityTable.mIndexColumns["index:Vim.View:View"] : std::vector<int>();
+            const std::vector<int>& graphicOverrideData = mEntityTable.column_exists("index:Vim.GraphicOverride:GraphicOverride") ? mEntityTable.mIndexColumns["index:Vim.GraphicOverride:GraphicOverride"] : std::vector<int>();
+            const std::vector<int>& elementData = mEntityTable.column_exists("index:Vim.Element:Element") ? mEntityTable.mIndexColumns["index:Vim.Element:Element"] : std::vector<int>();
+            
+            for (int i = 0; i < count; ++i)
+            {
+                ElementOverrideInView entity;
+                entity.mIndex = i;
+                if (existsIsHidden)
+                    entity.mIsHidden = isHiddenData[i];
+                entity.mViewIndex = existsView ? viewData[i] : -1;
+                entity.mGraphicOverrideIndex = existsGraphicOverride ? graphicOverrideData[i] : -1;
+                entity.mElementIndex = existsElement ? elementData[i] : -1;
+                elementOverrideInView->push_back(entity);
+            }
+            
+            delete[] isHiddenData;
+            
+            return elementOverrideInView;
+        }
+        
+        bool GetIsHidden(int elementOverrideInViewIndex)
+        {
+            if (elementOverrideInViewIndex < 0 || elementOverrideInViewIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("byte:IsHidden")) {
+                return static_cast<bool>(*reinterpret_cast<bfast::byte*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["byte:IsHidden"].begin() + elementOverrideInViewIndex * sizeof(bfast::byte))));
+            }
+            
+            return {};
+        }
+        
+        std::vector<bool>* GetAllIsHidden()
+        {
+            const auto count = GetCount();
+            
+            bfast::byte* isHiddenData = new bfast::byte[count];
+            if (mEntityTable.column_exists("byte:IsHidden")) {
+                memcpy(isHiddenData, mEntityTable.mDataColumns["byte:IsHidden"].begin(), count * sizeof(bfast::byte));
+            }
+            
+            std::vector<bool>* result = new std::vector<bool>(isHiddenData, isHiddenData + count);
+            
+            delete[] isHiddenData;
+            
+            return result;
+        }
+        
+        int GetViewIndex(int elementOverrideInViewIndex)
+        {
+            if (!mEntityTable.column_exists("index:Vim.View:View")) {
+                return -1;
+            }
+            
+            if (elementOverrideInViewIndex < 0 || elementOverrideInViewIndex >= GetCount())
+                return -1;
+            
+            return mEntityTable.mIndexColumns["index:Vim.View:View"][elementOverrideInViewIndex];
+        }
+        
+        int GetGraphicOverrideIndex(int elementOverrideInViewIndex)
+        {
+            if (!mEntityTable.column_exists("index:Vim.GraphicOverride:GraphicOverride")) {
+                return -1;
+            }
+            
+            if (elementOverrideInViewIndex < 0 || elementOverrideInViewIndex >= GetCount())
+                return -1;
+            
+            return mEntityTable.mIndexColumns["index:Vim.GraphicOverride:GraphicOverride"][elementOverrideInViewIndex];
+        }
+        
+        int GetElementIndex(int elementOverrideInViewIndex)
+        {
+            if (!mEntityTable.column_exists("index:Vim.Element:Element")) {
+                return -1;
+            }
+            
+            if (elementOverrideInViewIndex < 0 || elementOverrideInViewIndex >= GetCount())
+                return -1;
+            
+            return mEntityTable.mIndexColumns["index:Vim.Element:Element"][elementOverrideInViewIndex];
+        }
+        
+    };
+    
+    static ElementOverrideInViewTable* GetElementOverrideInViewTable(Scene& scene)
+    {
+        if (scene.mEntityTables.find("Vim.ElementOverrideInView") == scene.mEntityTables.end())
+            return {};
+        
+        return new ElementOverrideInViewTable(scene.mEntityTables["Vim.ElementOverrideInView"], scene.mStrings);
+    }
+    
+    class PhaseGraphicOverride
+    {
+    public:
+        int mIndex;
+        std::string mStatus;
+        int mScale;
+        bool mHasProjectionLine;
+        double mProjectionLineColor_X;
+        double mProjectionLineColor_Y;
+        double mProjectionLineColor_Z;
+        double mProjectionLineWidth;
+        int mProjectionLineWeight;
+        bool mHasCutLine;
+        double mCutLineColor_X;
+        double mCutLineColor_Y;
+        double mCutLineColor_Z;
+        double mCutLineWidth;
+        int mCutLineWeight;
+        
+        int mProjectionLinePatternIndex;
+        LinePattern* mProjectionLinePattern;
+        int mCutLinePatternIndex;
+        LinePattern* mCutLinePattern;
+        int mBimDocumentIndex;
+        BimDocument* mBimDocument;
+        
+        PhaseGraphicOverride() {}
+    };
+    
+    class PhaseGraphicOverrideTable
+    {
+        EntityTable& mEntityTable;
+        std::vector<const bfast::byte*>& mStrings;
+    public:
+        PhaseGraphicOverrideTable(EntityTable& entityTable, std::vector<const bfast::byte*>& strings):
+            mEntityTable(entityTable), mStrings(strings) {}
+        
+        size_t GetCount()
+        {
+            return mEntityTable.get_count();
+        }
+        
+        PhaseGraphicOverride* Get(int phaseGraphicOverrideIndex)
+        {
+            PhaseGraphicOverride* phaseGraphicOverride = new PhaseGraphicOverride();
+            phaseGraphicOverride->mIndex = phaseGraphicOverrideIndex;
+            phaseGraphicOverride->mStatus = GetStatus(phaseGraphicOverrideIndex);
+            phaseGraphicOverride->mScale = GetScale(phaseGraphicOverrideIndex);
+            phaseGraphicOverride->mHasProjectionLine = GetHasProjectionLine(phaseGraphicOverrideIndex);
+            phaseGraphicOverride->mProjectionLineColor_X = GetProjectionLineColor_X(phaseGraphicOverrideIndex);
+            phaseGraphicOverride->mProjectionLineColor_Y = GetProjectionLineColor_Y(phaseGraphicOverrideIndex);
+            phaseGraphicOverride->mProjectionLineColor_Z = GetProjectionLineColor_Z(phaseGraphicOverrideIndex);
+            phaseGraphicOverride->mProjectionLineWidth = GetProjectionLineWidth(phaseGraphicOverrideIndex);
+            phaseGraphicOverride->mProjectionLineWeight = GetProjectionLineWeight(phaseGraphicOverrideIndex);
+            phaseGraphicOverride->mHasCutLine = GetHasCutLine(phaseGraphicOverrideIndex);
+            phaseGraphicOverride->mCutLineColor_X = GetCutLineColor_X(phaseGraphicOverrideIndex);
+            phaseGraphicOverride->mCutLineColor_Y = GetCutLineColor_Y(phaseGraphicOverrideIndex);
+            phaseGraphicOverride->mCutLineColor_Z = GetCutLineColor_Z(phaseGraphicOverrideIndex);
+            phaseGraphicOverride->mCutLineWidth = GetCutLineWidth(phaseGraphicOverrideIndex);
+            phaseGraphicOverride->mCutLineWeight = GetCutLineWeight(phaseGraphicOverrideIndex);
+            phaseGraphicOverride->mProjectionLinePatternIndex = GetProjectionLinePatternIndex(phaseGraphicOverrideIndex);
+            phaseGraphicOverride->mCutLinePatternIndex = GetCutLinePatternIndex(phaseGraphicOverrideIndex);
+            phaseGraphicOverride->mBimDocumentIndex = GetBimDocumentIndex(phaseGraphicOverrideIndex);
+            return phaseGraphicOverride;
+        }
+        
+        std::vector<PhaseGraphicOverride>* GetAll()
+        {
+            bool existsStatus = mEntityTable.column_exists("string:Status");
+            bool existsScale = mEntityTable.column_exists("int:Scale");
+            bool existsHasProjectionLine = mEntityTable.column_exists("byte:HasProjectionLine");
+            bool existsProjectionLineColor_X = mEntityTable.column_exists("double:ProjectionLineColor.X");
+            bool existsProjectionLineColor_Y = mEntityTable.column_exists("double:ProjectionLineColor.Y");
+            bool existsProjectionLineColor_Z = mEntityTable.column_exists("double:ProjectionLineColor.Z");
+            bool existsProjectionLineWidth = mEntityTable.column_exists("double:ProjectionLineWidth");
+            bool existsProjectionLineWeight = mEntityTable.column_exists("int:ProjectionLineWeight");
+            bool existsHasCutLine = mEntityTable.column_exists("byte:HasCutLine");
+            bool existsCutLineColor_X = mEntityTable.column_exists("double:CutLineColor.X");
+            bool existsCutLineColor_Y = mEntityTable.column_exists("double:CutLineColor.Y");
+            bool existsCutLineColor_Z = mEntityTable.column_exists("double:CutLineColor.Z");
+            bool existsCutLineWidth = mEntityTable.column_exists("double:CutLineWidth");
+            bool existsCutLineWeight = mEntityTable.column_exists("int:CutLineWeight");
+            bool existsProjectionLinePattern = mEntityTable.column_exists("index:Vim.LinePattern:ProjectionLinePattern");
+            bool existsCutLinePattern = mEntityTable.column_exists("index:Vim.LinePattern:CutLinePattern");
+            bool existsBimDocument = mEntityTable.column_exists("index:Vim.BimDocument:BimDocument");
+            
+            const auto count = GetCount();
+            
+            std::vector<PhaseGraphicOverride>* phaseGraphicOverride = new std::vector<PhaseGraphicOverride>();
+            phaseGraphicOverride->reserve(count);
+            
+            const std::vector<int>& statusData = mEntityTable.column_exists("string:Status") ? mEntityTable.mStringColumns["string:Status"] : std::vector<int>();
+            
+            int* scaleData = new int[count];
+            if (mEntityTable.column_exists("int:Scale")) {
+                memcpy(scaleData, mEntityTable.mDataColumns["int:Scale"].begin(), count * sizeof(int));
+            }
+            
+            bfast::byte* hasProjectionLineData = new bfast::byte[count];
+            if (mEntityTable.column_exists("byte:HasProjectionLine")) {
+                memcpy(hasProjectionLineData, mEntityTable.mDataColumns["byte:HasProjectionLine"].begin(), count * sizeof(bfast::byte));
+            }
+            
+            double* projectionLineColor_XData = new double[count];
+            if (mEntityTable.column_exists("double:ProjectionLineColor.X")) {
+                memcpy(projectionLineColor_XData, mEntityTable.mDataColumns["double:ProjectionLineColor.X"].begin(), count * sizeof(double));
+            }
+            
+            double* projectionLineColor_YData = new double[count];
+            if (mEntityTable.column_exists("double:ProjectionLineColor.Y")) {
+                memcpy(projectionLineColor_YData, mEntityTable.mDataColumns["double:ProjectionLineColor.Y"].begin(), count * sizeof(double));
+            }
+            
+            double* projectionLineColor_ZData = new double[count];
+            if (mEntityTable.column_exists("double:ProjectionLineColor.Z")) {
+                memcpy(projectionLineColor_ZData, mEntityTable.mDataColumns["double:ProjectionLineColor.Z"].begin(), count * sizeof(double));
+            }
+            
+            double* projectionLineWidthData = new double[count];
+            if (mEntityTable.column_exists("double:ProjectionLineWidth")) {
+                memcpy(projectionLineWidthData, mEntityTable.mDataColumns["double:ProjectionLineWidth"].begin(), count * sizeof(double));
+            }
+            
+            int* projectionLineWeightData = new int[count];
+            if (mEntityTable.column_exists("int:ProjectionLineWeight")) {
+                memcpy(projectionLineWeightData, mEntityTable.mDataColumns["int:ProjectionLineWeight"].begin(), count * sizeof(int));
+            }
+            
+            bfast::byte* hasCutLineData = new bfast::byte[count];
+            if (mEntityTable.column_exists("byte:HasCutLine")) {
+                memcpy(hasCutLineData, mEntityTable.mDataColumns["byte:HasCutLine"].begin(), count * sizeof(bfast::byte));
+            }
+            
+            double* cutLineColor_XData = new double[count];
+            if (mEntityTable.column_exists("double:CutLineColor.X")) {
+                memcpy(cutLineColor_XData, mEntityTable.mDataColumns["double:CutLineColor.X"].begin(), count * sizeof(double));
+            }
+            
+            double* cutLineColor_YData = new double[count];
+            if (mEntityTable.column_exists("double:CutLineColor.Y")) {
+                memcpy(cutLineColor_YData, mEntityTable.mDataColumns["double:CutLineColor.Y"].begin(), count * sizeof(double));
+            }
+            
+            double* cutLineColor_ZData = new double[count];
+            if (mEntityTable.column_exists("double:CutLineColor.Z")) {
+                memcpy(cutLineColor_ZData, mEntityTable.mDataColumns["double:CutLineColor.Z"].begin(), count * sizeof(double));
+            }
+            
+            double* cutLineWidthData = new double[count];
+            if (mEntityTable.column_exists("double:CutLineWidth")) {
+                memcpy(cutLineWidthData, mEntityTable.mDataColumns["double:CutLineWidth"].begin(), count * sizeof(double));
+            }
+            
+            int* cutLineWeightData = new int[count];
+            if (mEntityTable.column_exists("int:CutLineWeight")) {
+                memcpy(cutLineWeightData, mEntityTable.mDataColumns["int:CutLineWeight"].begin(), count * sizeof(int));
+            }
+            
+            const std::vector<int>& projectionLinePatternData = mEntityTable.column_exists("index:Vim.LinePattern:ProjectionLinePattern") ? mEntityTable.mIndexColumns["index:Vim.LinePattern:ProjectionLinePattern"] : std::vector<int>();
+            const std::vector<int>& cutLinePatternData = mEntityTable.column_exists("index:Vim.LinePattern:CutLinePattern") ? mEntityTable.mIndexColumns["index:Vim.LinePattern:CutLinePattern"] : std::vector<int>();
+            const std::vector<int>& bimDocumentData = mEntityTable.column_exists("index:Vim.BimDocument:BimDocument") ? mEntityTable.mIndexColumns["index:Vim.BimDocument:BimDocument"] : std::vector<int>();
+            
+            for (int i = 0; i < count; ++i)
+            {
+                PhaseGraphicOverride entity;
+                entity.mIndex = i;
+                if (existsStatus)
+                    entity.mStatus = std::string(reinterpret_cast<const char*>(mStrings[statusData[i]]));
+                if (existsScale)
+                    entity.mScale = scaleData[i];
+                if (existsHasProjectionLine)
+                    entity.mHasProjectionLine = hasProjectionLineData[i];
+                if (existsProjectionLineColor_X)
+                    entity.mProjectionLineColor_X = projectionLineColor_XData[i];
+                if (existsProjectionLineColor_Y)
+                    entity.mProjectionLineColor_Y = projectionLineColor_YData[i];
+                if (existsProjectionLineColor_Z)
+                    entity.mProjectionLineColor_Z = projectionLineColor_ZData[i];
+                if (existsProjectionLineWidth)
+                    entity.mProjectionLineWidth = projectionLineWidthData[i];
+                if (existsProjectionLineWeight)
+                    entity.mProjectionLineWeight = projectionLineWeightData[i];
+                if (existsHasCutLine)
+                    entity.mHasCutLine = hasCutLineData[i];
+                if (existsCutLineColor_X)
+                    entity.mCutLineColor_X = cutLineColor_XData[i];
+                if (existsCutLineColor_Y)
+                    entity.mCutLineColor_Y = cutLineColor_YData[i];
+                if (existsCutLineColor_Z)
+                    entity.mCutLineColor_Z = cutLineColor_ZData[i];
+                if (existsCutLineWidth)
+                    entity.mCutLineWidth = cutLineWidthData[i];
+                if (existsCutLineWeight)
+                    entity.mCutLineWeight = cutLineWeightData[i];
+                entity.mProjectionLinePatternIndex = existsProjectionLinePattern ? projectionLinePatternData[i] : -1;
+                entity.mCutLinePatternIndex = existsCutLinePattern ? cutLinePatternData[i] : -1;
+                entity.mBimDocumentIndex = existsBimDocument ? bimDocumentData[i] : -1;
+                phaseGraphicOverride->push_back(entity);
+            }
+            
+            delete[] scaleData;
+            delete[] hasProjectionLineData;
+            delete[] projectionLineColor_XData;
+            delete[] projectionLineColor_YData;
+            delete[] projectionLineColor_ZData;
+            delete[] projectionLineWidthData;
+            delete[] projectionLineWeightData;
+            delete[] hasCutLineData;
+            delete[] cutLineColor_XData;
+            delete[] cutLineColor_YData;
+            delete[] cutLineColor_ZData;
+            delete[] cutLineWidthData;
+            delete[] cutLineWeightData;
+            
+            return phaseGraphicOverride;
+        }
+        
+        std::string GetStatus(int phaseGraphicOverrideIndex)
+        {
+            if (phaseGraphicOverrideIndex < 0 || phaseGraphicOverrideIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("string:Status")) {
+                return std::string(reinterpret_cast<const char*>(mStrings[mEntityTable.mStringColumns["string:Status"][phaseGraphicOverrideIndex]]));
+            }
+            
+            return {};
+        }
+        
+        std::vector<std::string>* GetAllStatus()
+        {
+            const auto count = GetCount();
+            
+            const std::vector<int>& statusData = mEntityTable.column_exists("string:Status") ? mEntityTable.mStringColumns["string:Status"] : std::vector<int>();
+            
+            std::vector<std::string>* result = new std::vector<std::string>();
+            result->reserve(count);
+            
+            for (int i = 0; i < count; ++i)
+            {
+                result->push_back(std::string(reinterpret_cast<const char*>(mStrings[statusData[i]])));
+            }
+            
+            return result;
+        }
+        
+        int GetScale(int phaseGraphicOverrideIndex)
+        {
+            if (phaseGraphicOverrideIndex < 0 || phaseGraphicOverrideIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("int:Scale")) {
+                return *reinterpret_cast<int*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["int:Scale"].begin() + phaseGraphicOverrideIndex * sizeof(int)));
+            }
+            
+            return {};
+        }
+        
+        std::vector<int>* GetAllScale()
+        {
+            const auto count = GetCount();
+            
+            int* scaleData = new int[count];
+            if (mEntityTable.column_exists("int:Scale")) {
+                memcpy(scaleData, mEntityTable.mDataColumns["int:Scale"].begin(), count * sizeof(int));
+            }
+            
+            std::vector<int>* result = new std::vector<int>(scaleData, scaleData + count);
+            
+            delete[] scaleData;
+            
+            return result;
+        }
+        
+        bool GetHasProjectionLine(int phaseGraphicOverrideIndex)
+        {
+            if (phaseGraphicOverrideIndex < 0 || phaseGraphicOverrideIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("byte:HasProjectionLine")) {
+                return static_cast<bool>(*reinterpret_cast<bfast::byte*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["byte:HasProjectionLine"].begin() + phaseGraphicOverrideIndex * sizeof(bfast::byte))));
+            }
+            
+            return {};
+        }
+        
+        std::vector<bool>* GetAllHasProjectionLine()
+        {
+            const auto count = GetCount();
+            
+            bfast::byte* hasProjectionLineData = new bfast::byte[count];
+            if (mEntityTable.column_exists("byte:HasProjectionLine")) {
+                memcpy(hasProjectionLineData, mEntityTable.mDataColumns["byte:HasProjectionLine"].begin(), count * sizeof(bfast::byte));
+            }
+            
+            std::vector<bool>* result = new std::vector<bool>(hasProjectionLineData, hasProjectionLineData + count);
+            
+            delete[] hasProjectionLineData;
+            
+            return result;
+        }
+        
+        double GetProjectionLineColor_X(int phaseGraphicOverrideIndex)
+        {
+            if (phaseGraphicOverrideIndex < 0 || phaseGraphicOverrideIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("double:ProjectionLineColor.X")) {
+                return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:ProjectionLineColor.X"].begin() + phaseGraphicOverrideIndex * sizeof(double)));
+            }
+            
+            return {};
+        }
+        
+        std::vector<double>* GetAllProjectionLineColor_X()
+        {
+            const auto count = GetCount();
+            
+            double* projectionLineColor_XData = new double[count];
+            if (mEntityTable.column_exists("double:ProjectionLineColor.X")) {
+                memcpy(projectionLineColor_XData, mEntityTable.mDataColumns["double:ProjectionLineColor.X"].begin(), count * sizeof(double));
+            }
+            
+            std::vector<double>* result = new std::vector<double>(projectionLineColor_XData, projectionLineColor_XData + count);
+            
+            delete[] projectionLineColor_XData;
+            
+            return result;
+        }
+        
+        double GetProjectionLineColor_Y(int phaseGraphicOverrideIndex)
+        {
+            if (phaseGraphicOverrideIndex < 0 || phaseGraphicOverrideIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("double:ProjectionLineColor.Y")) {
+                return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:ProjectionLineColor.Y"].begin() + phaseGraphicOverrideIndex * sizeof(double)));
+            }
+            
+            return {};
+        }
+        
+        std::vector<double>* GetAllProjectionLineColor_Y()
+        {
+            const auto count = GetCount();
+            
+            double* projectionLineColor_YData = new double[count];
+            if (mEntityTable.column_exists("double:ProjectionLineColor.Y")) {
+                memcpy(projectionLineColor_YData, mEntityTable.mDataColumns["double:ProjectionLineColor.Y"].begin(), count * sizeof(double));
+            }
+            
+            std::vector<double>* result = new std::vector<double>(projectionLineColor_YData, projectionLineColor_YData + count);
+            
+            delete[] projectionLineColor_YData;
+            
+            return result;
+        }
+        
+        double GetProjectionLineColor_Z(int phaseGraphicOverrideIndex)
+        {
+            if (phaseGraphicOverrideIndex < 0 || phaseGraphicOverrideIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("double:ProjectionLineColor.Z")) {
+                return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:ProjectionLineColor.Z"].begin() + phaseGraphicOverrideIndex * sizeof(double)));
+            }
+            
+            return {};
+        }
+        
+        std::vector<double>* GetAllProjectionLineColor_Z()
+        {
+            const auto count = GetCount();
+            
+            double* projectionLineColor_ZData = new double[count];
+            if (mEntityTable.column_exists("double:ProjectionLineColor.Z")) {
+                memcpy(projectionLineColor_ZData, mEntityTable.mDataColumns["double:ProjectionLineColor.Z"].begin(), count * sizeof(double));
+            }
+            
+            std::vector<double>* result = new std::vector<double>(projectionLineColor_ZData, projectionLineColor_ZData + count);
+            
+            delete[] projectionLineColor_ZData;
+            
+            return result;
+        }
+        
+        double GetProjectionLineWidth(int phaseGraphicOverrideIndex)
+        {
+            if (phaseGraphicOverrideIndex < 0 || phaseGraphicOverrideIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("double:ProjectionLineWidth")) {
+                return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:ProjectionLineWidth"].begin() + phaseGraphicOverrideIndex * sizeof(double)));
+            }
+            
+            return {};
+        }
+        
+        std::vector<double>* GetAllProjectionLineWidth()
+        {
+            const auto count = GetCount();
+            
+            double* projectionLineWidthData = new double[count];
+            if (mEntityTable.column_exists("double:ProjectionLineWidth")) {
+                memcpy(projectionLineWidthData, mEntityTable.mDataColumns["double:ProjectionLineWidth"].begin(), count * sizeof(double));
+            }
+            
+            std::vector<double>* result = new std::vector<double>(projectionLineWidthData, projectionLineWidthData + count);
+            
+            delete[] projectionLineWidthData;
+            
+            return result;
+        }
+        
+        int GetProjectionLineWeight(int phaseGraphicOverrideIndex)
+        {
+            if (phaseGraphicOverrideIndex < 0 || phaseGraphicOverrideIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("int:ProjectionLineWeight")) {
+                return *reinterpret_cast<int*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["int:ProjectionLineWeight"].begin() + phaseGraphicOverrideIndex * sizeof(int)));
+            }
+            
+            return {};
+        }
+        
+        std::vector<int>* GetAllProjectionLineWeight()
+        {
+            const auto count = GetCount();
+            
+            int* projectionLineWeightData = new int[count];
+            if (mEntityTable.column_exists("int:ProjectionLineWeight")) {
+                memcpy(projectionLineWeightData, mEntityTable.mDataColumns["int:ProjectionLineWeight"].begin(), count * sizeof(int));
+            }
+            
+            std::vector<int>* result = new std::vector<int>(projectionLineWeightData, projectionLineWeightData + count);
+            
+            delete[] projectionLineWeightData;
+            
+            return result;
+        }
+        
+        bool GetHasCutLine(int phaseGraphicOverrideIndex)
+        {
+            if (phaseGraphicOverrideIndex < 0 || phaseGraphicOverrideIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("byte:HasCutLine")) {
+                return static_cast<bool>(*reinterpret_cast<bfast::byte*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["byte:HasCutLine"].begin() + phaseGraphicOverrideIndex * sizeof(bfast::byte))));
+            }
+            
+            return {};
+        }
+        
+        std::vector<bool>* GetAllHasCutLine()
+        {
+            const auto count = GetCount();
+            
+            bfast::byte* hasCutLineData = new bfast::byte[count];
+            if (mEntityTable.column_exists("byte:HasCutLine")) {
+                memcpy(hasCutLineData, mEntityTable.mDataColumns["byte:HasCutLine"].begin(), count * sizeof(bfast::byte));
+            }
+            
+            std::vector<bool>* result = new std::vector<bool>(hasCutLineData, hasCutLineData + count);
+            
+            delete[] hasCutLineData;
+            
+            return result;
+        }
+        
+        double GetCutLineColor_X(int phaseGraphicOverrideIndex)
+        {
+            if (phaseGraphicOverrideIndex < 0 || phaseGraphicOverrideIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("double:CutLineColor.X")) {
+                return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:CutLineColor.X"].begin() + phaseGraphicOverrideIndex * sizeof(double)));
+            }
+            
+            return {};
+        }
+        
+        std::vector<double>* GetAllCutLineColor_X()
+        {
+            const auto count = GetCount();
+            
+            double* cutLineColor_XData = new double[count];
+            if (mEntityTable.column_exists("double:CutLineColor.X")) {
+                memcpy(cutLineColor_XData, mEntityTable.mDataColumns["double:CutLineColor.X"].begin(), count * sizeof(double));
+            }
+            
+            std::vector<double>* result = new std::vector<double>(cutLineColor_XData, cutLineColor_XData + count);
+            
+            delete[] cutLineColor_XData;
+            
+            return result;
+        }
+        
+        double GetCutLineColor_Y(int phaseGraphicOverrideIndex)
+        {
+            if (phaseGraphicOverrideIndex < 0 || phaseGraphicOverrideIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("double:CutLineColor.Y")) {
+                return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:CutLineColor.Y"].begin() + phaseGraphicOverrideIndex * sizeof(double)));
+            }
+            
+            return {};
+        }
+        
+        std::vector<double>* GetAllCutLineColor_Y()
+        {
+            const auto count = GetCount();
+            
+            double* cutLineColor_YData = new double[count];
+            if (mEntityTable.column_exists("double:CutLineColor.Y")) {
+                memcpy(cutLineColor_YData, mEntityTable.mDataColumns["double:CutLineColor.Y"].begin(), count * sizeof(double));
+            }
+            
+            std::vector<double>* result = new std::vector<double>(cutLineColor_YData, cutLineColor_YData + count);
+            
+            delete[] cutLineColor_YData;
+            
+            return result;
+        }
+        
+        double GetCutLineColor_Z(int phaseGraphicOverrideIndex)
+        {
+            if (phaseGraphicOverrideIndex < 0 || phaseGraphicOverrideIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("double:CutLineColor.Z")) {
+                return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:CutLineColor.Z"].begin() + phaseGraphicOverrideIndex * sizeof(double)));
+            }
+            
+            return {};
+        }
+        
+        std::vector<double>* GetAllCutLineColor_Z()
+        {
+            const auto count = GetCount();
+            
+            double* cutLineColor_ZData = new double[count];
+            if (mEntityTable.column_exists("double:CutLineColor.Z")) {
+                memcpy(cutLineColor_ZData, mEntityTable.mDataColumns["double:CutLineColor.Z"].begin(), count * sizeof(double));
+            }
+            
+            std::vector<double>* result = new std::vector<double>(cutLineColor_ZData, cutLineColor_ZData + count);
+            
+            delete[] cutLineColor_ZData;
+            
+            return result;
+        }
+        
+        double GetCutLineWidth(int phaseGraphicOverrideIndex)
+        {
+            if (phaseGraphicOverrideIndex < 0 || phaseGraphicOverrideIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("double:CutLineWidth")) {
+                return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:CutLineWidth"].begin() + phaseGraphicOverrideIndex * sizeof(double)));
+            }
+            
+            return {};
+        }
+        
+        std::vector<double>* GetAllCutLineWidth()
+        {
+            const auto count = GetCount();
+            
+            double* cutLineWidthData = new double[count];
+            if (mEntityTable.column_exists("double:CutLineWidth")) {
+                memcpy(cutLineWidthData, mEntityTable.mDataColumns["double:CutLineWidth"].begin(), count * sizeof(double));
+            }
+            
+            std::vector<double>* result = new std::vector<double>(cutLineWidthData, cutLineWidthData + count);
+            
+            delete[] cutLineWidthData;
+            
+            return result;
+        }
+        
+        int GetCutLineWeight(int phaseGraphicOverrideIndex)
+        {
+            if (phaseGraphicOverrideIndex < 0 || phaseGraphicOverrideIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("int:CutLineWeight")) {
+                return *reinterpret_cast<int*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["int:CutLineWeight"].begin() + phaseGraphicOverrideIndex * sizeof(int)));
+            }
+            
+            return {};
+        }
+        
+        std::vector<int>* GetAllCutLineWeight()
+        {
+            const auto count = GetCount();
+            
+            int* cutLineWeightData = new int[count];
+            if (mEntityTable.column_exists("int:CutLineWeight")) {
+                memcpy(cutLineWeightData, mEntityTable.mDataColumns["int:CutLineWeight"].begin(), count * sizeof(int));
+            }
+            
+            std::vector<int>* result = new std::vector<int>(cutLineWeightData, cutLineWeightData + count);
+            
+            delete[] cutLineWeightData;
+            
+            return result;
+        }
+        
+        int GetProjectionLinePatternIndex(int phaseGraphicOverrideIndex)
+        {
+            if (!mEntityTable.column_exists("index:Vim.LinePattern:ProjectionLinePattern")) {
+                return -1;
+            }
+            
+            if (phaseGraphicOverrideIndex < 0 || phaseGraphicOverrideIndex >= GetCount())
+                return -1;
+            
+            return mEntityTable.mIndexColumns["index:Vim.LinePattern:ProjectionLinePattern"][phaseGraphicOverrideIndex];
+        }
+        
+        int GetCutLinePatternIndex(int phaseGraphicOverrideIndex)
+        {
+            if (!mEntityTable.column_exists("index:Vim.LinePattern:CutLinePattern")) {
+                return -1;
+            }
+            
+            if (phaseGraphicOverrideIndex < 0 || phaseGraphicOverrideIndex >= GetCount())
+                return -1;
+            
+            return mEntityTable.mIndexColumns["index:Vim.LinePattern:CutLinePattern"][phaseGraphicOverrideIndex];
+        }
+        
+        int GetBimDocumentIndex(int phaseGraphicOverrideIndex)
+        {
+            if (!mEntityTable.column_exists("index:Vim.BimDocument:BimDocument")) {
+                return -1;
+            }
+            
+            if (phaseGraphicOverrideIndex < 0 || phaseGraphicOverrideIndex >= GetCount())
+                return -1;
+            
+            return mEntityTable.mIndexColumns["index:Vim.BimDocument:BimDocument"][phaseGraphicOverrideIndex];
+        }
+        
+    };
+    
+    static PhaseGraphicOverrideTable* GetPhaseGraphicOverrideTable(Scene& scene)
+    {
+        if (scene.mEntityTables.find("Vim.PhaseGraphicOverride") == scene.mEntityTables.end())
+            return {};
+        
+        return new PhaseGraphicOverrideTable(scene.mEntityTables["Vim.PhaseGraphicOverride"], scene.mStrings);
     }
     
     class ElementInView
@@ -9750,11 +13615,36 @@ namespace Vim
         double mGlossiness;
         double mSmoothness;
         double mTransparency;
+        bool mGraphicsRead;
+        double mShadingColor_X;
+        double mShadingColor_Y;
+        double mShadingColor_Z;
+        bool mUseRenderAppearanceForShading;
+        double mSurfaceForegroundPatternColor_X;
+        double mSurfaceForegroundPatternColor_Y;
+        double mSurfaceForegroundPatternColor_Z;
+        double mSurfaceBackgroundPatternColor_X;
+        double mSurfaceBackgroundPatternColor_Y;
+        double mSurfaceBackgroundPatternColor_Z;
+        double mCutForegroundPatternColor_X;
+        double mCutForegroundPatternColor_Y;
+        double mCutForegroundPatternColor_Z;
+        double mCutBackgroundPatternColor_X;
+        double mCutBackgroundPatternColor_Y;
+        double mCutBackgroundPatternColor_Z;
         
         int mColorTextureFileIndex;
         Asset* mColorTextureFile;
         int mNormalTextureFileIndex;
         Asset* mNormalTextureFile;
+        int mSurfaceForegroundPatternIndex;
+        FillPattern* mSurfaceForegroundPattern;
+        int mSurfaceBackgroundPatternIndex;
+        FillPattern* mSurfaceBackgroundPattern;
+        int mCutForegroundPatternIndex;
+        FillPattern* mCutForegroundPattern;
+        int mCutBackgroundPatternIndex;
+        FillPattern* mCutBackgroundPattern;
         int mElementIndex;
         Element* mElement;
         
@@ -9795,8 +13685,29 @@ namespace Vim
             material->mGlossiness = GetGlossiness(materialIndex);
             material->mSmoothness = GetSmoothness(materialIndex);
             material->mTransparency = GetTransparency(materialIndex);
+            material->mGraphicsRead = GetGraphicsRead(materialIndex);
+            material->mShadingColor_X = GetShadingColor_X(materialIndex);
+            material->mShadingColor_Y = GetShadingColor_Y(materialIndex);
+            material->mShadingColor_Z = GetShadingColor_Z(materialIndex);
+            material->mUseRenderAppearanceForShading = GetUseRenderAppearanceForShading(materialIndex);
+            material->mSurfaceForegroundPatternColor_X = GetSurfaceForegroundPatternColor_X(materialIndex);
+            material->mSurfaceForegroundPatternColor_Y = GetSurfaceForegroundPatternColor_Y(materialIndex);
+            material->mSurfaceForegroundPatternColor_Z = GetSurfaceForegroundPatternColor_Z(materialIndex);
+            material->mSurfaceBackgroundPatternColor_X = GetSurfaceBackgroundPatternColor_X(materialIndex);
+            material->mSurfaceBackgroundPatternColor_Y = GetSurfaceBackgroundPatternColor_Y(materialIndex);
+            material->mSurfaceBackgroundPatternColor_Z = GetSurfaceBackgroundPatternColor_Z(materialIndex);
+            material->mCutForegroundPatternColor_X = GetCutForegroundPatternColor_X(materialIndex);
+            material->mCutForegroundPatternColor_Y = GetCutForegroundPatternColor_Y(materialIndex);
+            material->mCutForegroundPatternColor_Z = GetCutForegroundPatternColor_Z(materialIndex);
+            material->mCutBackgroundPatternColor_X = GetCutBackgroundPatternColor_X(materialIndex);
+            material->mCutBackgroundPatternColor_Y = GetCutBackgroundPatternColor_Y(materialIndex);
+            material->mCutBackgroundPatternColor_Z = GetCutBackgroundPatternColor_Z(materialIndex);
             material->mColorTextureFileIndex = GetColorTextureFileIndex(materialIndex);
             material->mNormalTextureFileIndex = GetNormalTextureFileIndex(materialIndex);
+            material->mSurfaceForegroundPatternIndex = GetSurfaceForegroundPatternIndex(materialIndex);
+            material->mSurfaceBackgroundPatternIndex = GetSurfaceBackgroundPatternIndex(materialIndex);
+            material->mCutForegroundPatternIndex = GetCutForegroundPatternIndex(materialIndex);
+            material->mCutBackgroundPatternIndex = GetCutBackgroundPatternIndex(materialIndex);
             material->mElementIndex = GetElementIndex(materialIndex);
             return material;
         }
@@ -9820,8 +13731,29 @@ namespace Vim
             bool existsGlossiness = mEntityTable.column_exists("double:Glossiness");
             bool existsSmoothness = mEntityTable.column_exists("double:Smoothness");
             bool existsTransparency = mEntityTable.column_exists("double:Transparency");
+            bool existsGraphicsRead = mEntityTable.column_exists("byte:GraphicsRead");
+            bool existsShadingColor_X = mEntityTable.column_exists("double:ShadingColor.X");
+            bool existsShadingColor_Y = mEntityTable.column_exists("double:ShadingColor.Y");
+            bool existsShadingColor_Z = mEntityTable.column_exists("double:ShadingColor.Z");
+            bool existsUseRenderAppearanceForShading = mEntityTable.column_exists("byte:UseRenderAppearanceForShading");
+            bool existsSurfaceForegroundPatternColor_X = mEntityTable.column_exists("double:SurfaceForegroundPatternColor.X");
+            bool existsSurfaceForegroundPatternColor_Y = mEntityTable.column_exists("double:SurfaceForegroundPatternColor.Y");
+            bool existsSurfaceForegroundPatternColor_Z = mEntityTable.column_exists("double:SurfaceForegroundPatternColor.Z");
+            bool existsSurfaceBackgroundPatternColor_X = mEntityTable.column_exists("double:SurfaceBackgroundPatternColor.X");
+            bool existsSurfaceBackgroundPatternColor_Y = mEntityTable.column_exists("double:SurfaceBackgroundPatternColor.Y");
+            bool existsSurfaceBackgroundPatternColor_Z = mEntityTable.column_exists("double:SurfaceBackgroundPatternColor.Z");
+            bool existsCutForegroundPatternColor_X = mEntityTable.column_exists("double:CutForegroundPatternColor.X");
+            bool existsCutForegroundPatternColor_Y = mEntityTable.column_exists("double:CutForegroundPatternColor.Y");
+            bool existsCutForegroundPatternColor_Z = mEntityTable.column_exists("double:CutForegroundPatternColor.Z");
+            bool existsCutBackgroundPatternColor_X = mEntityTable.column_exists("double:CutBackgroundPatternColor.X");
+            bool existsCutBackgroundPatternColor_Y = mEntityTable.column_exists("double:CutBackgroundPatternColor.Y");
+            bool existsCutBackgroundPatternColor_Z = mEntityTable.column_exists("double:CutBackgroundPatternColor.Z");
             bool existsColorTextureFile = mEntityTable.column_exists("index:Vim.Asset:ColorTextureFile");
             bool existsNormalTextureFile = mEntityTable.column_exists("index:Vim.Asset:NormalTextureFile");
+            bool existsSurfaceForegroundPattern = mEntityTable.column_exists("index:Vim.FillPattern:SurfaceForegroundPattern");
+            bool existsSurfaceBackgroundPattern = mEntityTable.column_exists("index:Vim.FillPattern:SurfaceBackgroundPattern");
+            bool existsCutForegroundPattern = mEntityTable.column_exists("index:Vim.FillPattern:CutForegroundPattern");
+            bool existsCutBackgroundPattern = mEntityTable.column_exists("index:Vim.FillPattern:CutBackgroundPattern");
             bool existsElement = mEntityTable.column_exists("index:Vim.Element:Element");
             
             const auto count = GetCount();
@@ -9908,8 +13840,97 @@ namespace Vim
                 memcpy(transparencyData, mEntityTable.mDataColumns["double:Transparency"].begin(), count * sizeof(double));
             }
             
+            bfast::byte* graphicsReadData = new bfast::byte[count];
+            if (mEntityTable.column_exists("byte:GraphicsRead")) {
+                memcpy(graphicsReadData, mEntityTable.mDataColumns["byte:GraphicsRead"].begin(), count * sizeof(bfast::byte));
+            }
+            
+            double* shadingColor_XData = new double[count];
+            if (mEntityTable.column_exists("double:ShadingColor.X")) {
+                memcpy(shadingColor_XData, mEntityTable.mDataColumns["double:ShadingColor.X"].begin(), count * sizeof(double));
+            }
+            
+            double* shadingColor_YData = new double[count];
+            if (mEntityTable.column_exists("double:ShadingColor.Y")) {
+                memcpy(shadingColor_YData, mEntityTable.mDataColumns["double:ShadingColor.Y"].begin(), count * sizeof(double));
+            }
+            
+            double* shadingColor_ZData = new double[count];
+            if (mEntityTable.column_exists("double:ShadingColor.Z")) {
+                memcpy(shadingColor_ZData, mEntityTable.mDataColumns["double:ShadingColor.Z"].begin(), count * sizeof(double));
+            }
+            
+            bfast::byte* useRenderAppearanceForShadingData = new bfast::byte[count];
+            if (mEntityTable.column_exists("byte:UseRenderAppearanceForShading")) {
+                memcpy(useRenderAppearanceForShadingData, mEntityTable.mDataColumns["byte:UseRenderAppearanceForShading"].begin(), count * sizeof(bfast::byte));
+            }
+            
+            double* surfaceForegroundPatternColor_XData = new double[count];
+            if (mEntityTable.column_exists("double:SurfaceForegroundPatternColor.X")) {
+                memcpy(surfaceForegroundPatternColor_XData, mEntityTable.mDataColumns["double:SurfaceForegroundPatternColor.X"].begin(), count * sizeof(double));
+            }
+            
+            double* surfaceForegroundPatternColor_YData = new double[count];
+            if (mEntityTable.column_exists("double:SurfaceForegroundPatternColor.Y")) {
+                memcpy(surfaceForegroundPatternColor_YData, mEntityTable.mDataColumns["double:SurfaceForegroundPatternColor.Y"].begin(), count * sizeof(double));
+            }
+            
+            double* surfaceForegroundPatternColor_ZData = new double[count];
+            if (mEntityTable.column_exists("double:SurfaceForegroundPatternColor.Z")) {
+                memcpy(surfaceForegroundPatternColor_ZData, mEntityTable.mDataColumns["double:SurfaceForegroundPatternColor.Z"].begin(), count * sizeof(double));
+            }
+            
+            double* surfaceBackgroundPatternColor_XData = new double[count];
+            if (mEntityTable.column_exists("double:SurfaceBackgroundPatternColor.X")) {
+                memcpy(surfaceBackgroundPatternColor_XData, mEntityTable.mDataColumns["double:SurfaceBackgroundPatternColor.X"].begin(), count * sizeof(double));
+            }
+            
+            double* surfaceBackgroundPatternColor_YData = new double[count];
+            if (mEntityTable.column_exists("double:SurfaceBackgroundPatternColor.Y")) {
+                memcpy(surfaceBackgroundPatternColor_YData, mEntityTable.mDataColumns["double:SurfaceBackgroundPatternColor.Y"].begin(), count * sizeof(double));
+            }
+            
+            double* surfaceBackgroundPatternColor_ZData = new double[count];
+            if (mEntityTable.column_exists("double:SurfaceBackgroundPatternColor.Z")) {
+                memcpy(surfaceBackgroundPatternColor_ZData, mEntityTable.mDataColumns["double:SurfaceBackgroundPatternColor.Z"].begin(), count * sizeof(double));
+            }
+            
+            double* cutForegroundPatternColor_XData = new double[count];
+            if (mEntityTable.column_exists("double:CutForegroundPatternColor.X")) {
+                memcpy(cutForegroundPatternColor_XData, mEntityTable.mDataColumns["double:CutForegroundPatternColor.X"].begin(), count * sizeof(double));
+            }
+            
+            double* cutForegroundPatternColor_YData = new double[count];
+            if (mEntityTable.column_exists("double:CutForegroundPatternColor.Y")) {
+                memcpy(cutForegroundPatternColor_YData, mEntityTable.mDataColumns["double:CutForegroundPatternColor.Y"].begin(), count * sizeof(double));
+            }
+            
+            double* cutForegroundPatternColor_ZData = new double[count];
+            if (mEntityTable.column_exists("double:CutForegroundPatternColor.Z")) {
+                memcpy(cutForegroundPatternColor_ZData, mEntityTable.mDataColumns["double:CutForegroundPatternColor.Z"].begin(), count * sizeof(double));
+            }
+            
+            double* cutBackgroundPatternColor_XData = new double[count];
+            if (mEntityTable.column_exists("double:CutBackgroundPatternColor.X")) {
+                memcpy(cutBackgroundPatternColor_XData, mEntityTable.mDataColumns["double:CutBackgroundPatternColor.X"].begin(), count * sizeof(double));
+            }
+            
+            double* cutBackgroundPatternColor_YData = new double[count];
+            if (mEntityTable.column_exists("double:CutBackgroundPatternColor.Y")) {
+                memcpy(cutBackgroundPatternColor_YData, mEntityTable.mDataColumns["double:CutBackgroundPatternColor.Y"].begin(), count * sizeof(double));
+            }
+            
+            double* cutBackgroundPatternColor_ZData = new double[count];
+            if (mEntityTable.column_exists("double:CutBackgroundPatternColor.Z")) {
+                memcpy(cutBackgroundPatternColor_ZData, mEntityTable.mDataColumns["double:CutBackgroundPatternColor.Z"].begin(), count * sizeof(double));
+            }
+            
             const std::vector<int>& colorTextureFileData = mEntityTable.column_exists("index:Vim.Asset:ColorTextureFile") ? mEntityTable.mIndexColumns["index:Vim.Asset:ColorTextureFile"] : std::vector<int>();
             const std::vector<int>& normalTextureFileData = mEntityTable.column_exists("index:Vim.Asset:NormalTextureFile") ? mEntityTable.mIndexColumns["index:Vim.Asset:NormalTextureFile"] : std::vector<int>();
+            const std::vector<int>& surfaceForegroundPatternData = mEntityTable.column_exists("index:Vim.FillPattern:SurfaceForegroundPattern") ? mEntityTable.mIndexColumns["index:Vim.FillPattern:SurfaceForegroundPattern"] : std::vector<int>();
+            const std::vector<int>& surfaceBackgroundPatternData = mEntityTable.column_exists("index:Vim.FillPattern:SurfaceBackgroundPattern") ? mEntityTable.mIndexColumns["index:Vim.FillPattern:SurfaceBackgroundPattern"] : std::vector<int>();
+            const std::vector<int>& cutForegroundPatternData = mEntityTable.column_exists("index:Vim.FillPattern:CutForegroundPattern") ? mEntityTable.mIndexColumns["index:Vim.FillPattern:CutForegroundPattern"] : std::vector<int>();
+            const std::vector<int>& cutBackgroundPatternData = mEntityTable.column_exists("index:Vim.FillPattern:CutBackgroundPattern") ? mEntityTable.mIndexColumns["index:Vim.FillPattern:CutBackgroundPattern"] : std::vector<int>();
             const std::vector<int>& elementData = mEntityTable.column_exists("index:Vim.Element:Element") ? mEntityTable.mIndexColumns["index:Vim.Element:Element"] : std::vector<int>();
             
             for (int i = 0; i < count; ++i)
@@ -9950,8 +13971,46 @@ namespace Vim
                     entity.mSmoothness = smoothnessData[i];
                 if (existsTransparency)
                     entity.mTransparency = transparencyData[i];
+                if (existsGraphicsRead)
+                    entity.mGraphicsRead = graphicsReadData[i];
+                if (existsShadingColor_X)
+                    entity.mShadingColor_X = shadingColor_XData[i];
+                if (existsShadingColor_Y)
+                    entity.mShadingColor_Y = shadingColor_YData[i];
+                if (existsShadingColor_Z)
+                    entity.mShadingColor_Z = shadingColor_ZData[i];
+                if (existsUseRenderAppearanceForShading)
+                    entity.mUseRenderAppearanceForShading = useRenderAppearanceForShadingData[i];
+                if (existsSurfaceForegroundPatternColor_X)
+                    entity.mSurfaceForegroundPatternColor_X = surfaceForegroundPatternColor_XData[i];
+                if (existsSurfaceForegroundPatternColor_Y)
+                    entity.mSurfaceForegroundPatternColor_Y = surfaceForegroundPatternColor_YData[i];
+                if (existsSurfaceForegroundPatternColor_Z)
+                    entity.mSurfaceForegroundPatternColor_Z = surfaceForegroundPatternColor_ZData[i];
+                if (existsSurfaceBackgroundPatternColor_X)
+                    entity.mSurfaceBackgroundPatternColor_X = surfaceBackgroundPatternColor_XData[i];
+                if (existsSurfaceBackgroundPatternColor_Y)
+                    entity.mSurfaceBackgroundPatternColor_Y = surfaceBackgroundPatternColor_YData[i];
+                if (existsSurfaceBackgroundPatternColor_Z)
+                    entity.mSurfaceBackgroundPatternColor_Z = surfaceBackgroundPatternColor_ZData[i];
+                if (existsCutForegroundPatternColor_X)
+                    entity.mCutForegroundPatternColor_X = cutForegroundPatternColor_XData[i];
+                if (existsCutForegroundPatternColor_Y)
+                    entity.mCutForegroundPatternColor_Y = cutForegroundPatternColor_YData[i];
+                if (existsCutForegroundPatternColor_Z)
+                    entity.mCutForegroundPatternColor_Z = cutForegroundPatternColor_ZData[i];
+                if (existsCutBackgroundPatternColor_X)
+                    entity.mCutBackgroundPatternColor_X = cutBackgroundPatternColor_XData[i];
+                if (existsCutBackgroundPatternColor_Y)
+                    entity.mCutBackgroundPatternColor_Y = cutBackgroundPatternColor_YData[i];
+                if (existsCutBackgroundPatternColor_Z)
+                    entity.mCutBackgroundPatternColor_Z = cutBackgroundPatternColor_ZData[i];
                 entity.mColorTextureFileIndex = existsColorTextureFile ? colorTextureFileData[i] : -1;
                 entity.mNormalTextureFileIndex = existsNormalTextureFile ? normalTextureFileData[i] : -1;
+                entity.mSurfaceForegroundPatternIndex = existsSurfaceForegroundPattern ? surfaceForegroundPatternData[i] : -1;
+                entity.mSurfaceBackgroundPatternIndex = existsSurfaceBackgroundPattern ? surfaceBackgroundPatternData[i] : -1;
+                entity.mCutForegroundPatternIndex = existsCutForegroundPattern ? cutForegroundPatternData[i] : -1;
+                entity.mCutBackgroundPatternIndex = existsCutBackgroundPattern ? cutBackgroundPatternData[i] : -1;
                 entity.mElementIndex = existsElement ? elementData[i] : -1;
                 material->push_back(entity);
             }
@@ -9971,6 +14030,23 @@ namespace Vim
             delete[] glossinessData;
             delete[] smoothnessData;
             delete[] transparencyData;
+            delete[] graphicsReadData;
+            delete[] shadingColor_XData;
+            delete[] shadingColor_YData;
+            delete[] shadingColor_ZData;
+            delete[] useRenderAppearanceForShadingData;
+            delete[] surfaceForegroundPatternColor_XData;
+            delete[] surfaceForegroundPatternColor_YData;
+            delete[] surfaceForegroundPatternColor_ZData;
+            delete[] surfaceBackgroundPatternColor_XData;
+            delete[] surfaceBackgroundPatternColor_YData;
+            delete[] surfaceBackgroundPatternColor_ZData;
+            delete[] cutForegroundPatternColor_XData;
+            delete[] cutForegroundPatternColor_YData;
+            delete[] cutForegroundPatternColor_ZData;
+            delete[] cutBackgroundPatternColor_XData;
+            delete[] cutBackgroundPatternColor_YData;
+            delete[] cutBackgroundPatternColor_ZData;
             
             return material;
         }
@@ -10453,6 +14529,482 @@ namespace Vim
             return result;
         }
         
+        bool GetGraphicsRead(int materialIndex)
+        {
+            if (materialIndex < 0 || materialIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("byte:GraphicsRead")) {
+                return static_cast<bool>(*reinterpret_cast<bfast::byte*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["byte:GraphicsRead"].begin() + materialIndex * sizeof(bfast::byte))));
+            }
+            
+            return {};
+        }
+        
+        std::vector<bool>* GetAllGraphicsRead()
+        {
+            const auto count = GetCount();
+            
+            bfast::byte* graphicsReadData = new bfast::byte[count];
+            if (mEntityTable.column_exists("byte:GraphicsRead")) {
+                memcpy(graphicsReadData, mEntityTable.mDataColumns["byte:GraphicsRead"].begin(), count * sizeof(bfast::byte));
+            }
+            
+            std::vector<bool>* result = new std::vector<bool>(graphicsReadData, graphicsReadData + count);
+            
+            delete[] graphicsReadData;
+            
+            return result;
+        }
+        
+        double GetShadingColor_X(int materialIndex)
+        {
+            if (materialIndex < 0 || materialIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("double:ShadingColor.X")) {
+                return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:ShadingColor.X"].begin() + materialIndex * sizeof(double)));
+            }
+            
+            return {};
+        }
+        
+        std::vector<double>* GetAllShadingColor_X()
+        {
+            const auto count = GetCount();
+            
+            double* shadingColor_XData = new double[count];
+            if (mEntityTable.column_exists("double:ShadingColor.X")) {
+                memcpy(shadingColor_XData, mEntityTable.mDataColumns["double:ShadingColor.X"].begin(), count * sizeof(double));
+            }
+            
+            std::vector<double>* result = new std::vector<double>(shadingColor_XData, shadingColor_XData + count);
+            
+            delete[] shadingColor_XData;
+            
+            return result;
+        }
+        
+        double GetShadingColor_Y(int materialIndex)
+        {
+            if (materialIndex < 0 || materialIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("double:ShadingColor.Y")) {
+                return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:ShadingColor.Y"].begin() + materialIndex * sizeof(double)));
+            }
+            
+            return {};
+        }
+        
+        std::vector<double>* GetAllShadingColor_Y()
+        {
+            const auto count = GetCount();
+            
+            double* shadingColor_YData = new double[count];
+            if (mEntityTable.column_exists("double:ShadingColor.Y")) {
+                memcpy(shadingColor_YData, mEntityTable.mDataColumns["double:ShadingColor.Y"].begin(), count * sizeof(double));
+            }
+            
+            std::vector<double>* result = new std::vector<double>(shadingColor_YData, shadingColor_YData + count);
+            
+            delete[] shadingColor_YData;
+            
+            return result;
+        }
+        
+        double GetShadingColor_Z(int materialIndex)
+        {
+            if (materialIndex < 0 || materialIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("double:ShadingColor.Z")) {
+                return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:ShadingColor.Z"].begin() + materialIndex * sizeof(double)));
+            }
+            
+            return {};
+        }
+        
+        std::vector<double>* GetAllShadingColor_Z()
+        {
+            const auto count = GetCount();
+            
+            double* shadingColor_ZData = new double[count];
+            if (mEntityTable.column_exists("double:ShadingColor.Z")) {
+                memcpy(shadingColor_ZData, mEntityTable.mDataColumns["double:ShadingColor.Z"].begin(), count * sizeof(double));
+            }
+            
+            std::vector<double>* result = new std::vector<double>(shadingColor_ZData, shadingColor_ZData + count);
+            
+            delete[] shadingColor_ZData;
+            
+            return result;
+        }
+        
+        bool GetUseRenderAppearanceForShading(int materialIndex)
+        {
+            if (materialIndex < 0 || materialIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("byte:UseRenderAppearanceForShading")) {
+                return static_cast<bool>(*reinterpret_cast<bfast::byte*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["byte:UseRenderAppearanceForShading"].begin() + materialIndex * sizeof(bfast::byte))));
+            }
+            
+            return {};
+        }
+        
+        std::vector<bool>* GetAllUseRenderAppearanceForShading()
+        {
+            const auto count = GetCount();
+            
+            bfast::byte* useRenderAppearanceForShadingData = new bfast::byte[count];
+            if (mEntityTable.column_exists("byte:UseRenderAppearanceForShading")) {
+                memcpy(useRenderAppearanceForShadingData, mEntityTable.mDataColumns["byte:UseRenderAppearanceForShading"].begin(), count * sizeof(bfast::byte));
+            }
+            
+            std::vector<bool>* result = new std::vector<bool>(useRenderAppearanceForShadingData, useRenderAppearanceForShadingData + count);
+            
+            delete[] useRenderAppearanceForShadingData;
+            
+            return result;
+        }
+        
+        double GetSurfaceForegroundPatternColor_X(int materialIndex)
+        {
+            if (materialIndex < 0 || materialIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("double:SurfaceForegroundPatternColor.X")) {
+                return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:SurfaceForegroundPatternColor.X"].begin() + materialIndex * sizeof(double)));
+            }
+            
+            return {};
+        }
+        
+        std::vector<double>* GetAllSurfaceForegroundPatternColor_X()
+        {
+            const auto count = GetCount();
+            
+            double* surfaceForegroundPatternColor_XData = new double[count];
+            if (mEntityTable.column_exists("double:SurfaceForegroundPatternColor.X")) {
+                memcpy(surfaceForegroundPatternColor_XData, mEntityTable.mDataColumns["double:SurfaceForegroundPatternColor.X"].begin(), count * sizeof(double));
+            }
+            
+            std::vector<double>* result = new std::vector<double>(surfaceForegroundPatternColor_XData, surfaceForegroundPatternColor_XData + count);
+            
+            delete[] surfaceForegroundPatternColor_XData;
+            
+            return result;
+        }
+        
+        double GetSurfaceForegroundPatternColor_Y(int materialIndex)
+        {
+            if (materialIndex < 0 || materialIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("double:SurfaceForegroundPatternColor.Y")) {
+                return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:SurfaceForegroundPatternColor.Y"].begin() + materialIndex * sizeof(double)));
+            }
+            
+            return {};
+        }
+        
+        std::vector<double>* GetAllSurfaceForegroundPatternColor_Y()
+        {
+            const auto count = GetCount();
+            
+            double* surfaceForegroundPatternColor_YData = new double[count];
+            if (mEntityTable.column_exists("double:SurfaceForegroundPatternColor.Y")) {
+                memcpy(surfaceForegroundPatternColor_YData, mEntityTable.mDataColumns["double:SurfaceForegroundPatternColor.Y"].begin(), count * sizeof(double));
+            }
+            
+            std::vector<double>* result = new std::vector<double>(surfaceForegroundPatternColor_YData, surfaceForegroundPatternColor_YData + count);
+            
+            delete[] surfaceForegroundPatternColor_YData;
+            
+            return result;
+        }
+        
+        double GetSurfaceForegroundPatternColor_Z(int materialIndex)
+        {
+            if (materialIndex < 0 || materialIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("double:SurfaceForegroundPatternColor.Z")) {
+                return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:SurfaceForegroundPatternColor.Z"].begin() + materialIndex * sizeof(double)));
+            }
+            
+            return {};
+        }
+        
+        std::vector<double>* GetAllSurfaceForegroundPatternColor_Z()
+        {
+            const auto count = GetCount();
+            
+            double* surfaceForegroundPatternColor_ZData = new double[count];
+            if (mEntityTable.column_exists("double:SurfaceForegroundPatternColor.Z")) {
+                memcpy(surfaceForegroundPatternColor_ZData, mEntityTable.mDataColumns["double:SurfaceForegroundPatternColor.Z"].begin(), count * sizeof(double));
+            }
+            
+            std::vector<double>* result = new std::vector<double>(surfaceForegroundPatternColor_ZData, surfaceForegroundPatternColor_ZData + count);
+            
+            delete[] surfaceForegroundPatternColor_ZData;
+            
+            return result;
+        }
+        
+        double GetSurfaceBackgroundPatternColor_X(int materialIndex)
+        {
+            if (materialIndex < 0 || materialIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("double:SurfaceBackgroundPatternColor.X")) {
+                return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:SurfaceBackgroundPatternColor.X"].begin() + materialIndex * sizeof(double)));
+            }
+            
+            return {};
+        }
+        
+        std::vector<double>* GetAllSurfaceBackgroundPatternColor_X()
+        {
+            const auto count = GetCount();
+            
+            double* surfaceBackgroundPatternColor_XData = new double[count];
+            if (mEntityTable.column_exists("double:SurfaceBackgroundPatternColor.X")) {
+                memcpy(surfaceBackgroundPatternColor_XData, mEntityTable.mDataColumns["double:SurfaceBackgroundPatternColor.X"].begin(), count * sizeof(double));
+            }
+            
+            std::vector<double>* result = new std::vector<double>(surfaceBackgroundPatternColor_XData, surfaceBackgroundPatternColor_XData + count);
+            
+            delete[] surfaceBackgroundPatternColor_XData;
+            
+            return result;
+        }
+        
+        double GetSurfaceBackgroundPatternColor_Y(int materialIndex)
+        {
+            if (materialIndex < 0 || materialIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("double:SurfaceBackgroundPatternColor.Y")) {
+                return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:SurfaceBackgroundPatternColor.Y"].begin() + materialIndex * sizeof(double)));
+            }
+            
+            return {};
+        }
+        
+        std::vector<double>* GetAllSurfaceBackgroundPatternColor_Y()
+        {
+            const auto count = GetCount();
+            
+            double* surfaceBackgroundPatternColor_YData = new double[count];
+            if (mEntityTable.column_exists("double:SurfaceBackgroundPatternColor.Y")) {
+                memcpy(surfaceBackgroundPatternColor_YData, mEntityTable.mDataColumns["double:SurfaceBackgroundPatternColor.Y"].begin(), count * sizeof(double));
+            }
+            
+            std::vector<double>* result = new std::vector<double>(surfaceBackgroundPatternColor_YData, surfaceBackgroundPatternColor_YData + count);
+            
+            delete[] surfaceBackgroundPatternColor_YData;
+            
+            return result;
+        }
+        
+        double GetSurfaceBackgroundPatternColor_Z(int materialIndex)
+        {
+            if (materialIndex < 0 || materialIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("double:SurfaceBackgroundPatternColor.Z")) {
+                return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:SurfaceBackgroundPatternColor.Z"].begin() + materialIndex * sizeof(double)));
+            }
+            
+            return {};
+        }
+        
+        std::vector<double>* GetAllSurfaceBackgroundPatternColor_Z()
+        {
+            const auto count = GetCount();
+            
+            double* surfaceBackgroundPatternColor_ZData = new double[count];
+            if (mEntityTable.column_exists("double:SurfaceBackgroundPatternColor.Z")) {
+                memcpy(surfaceBackgroundPatternColor_ZData, mEntityTable.mDataColumns["double:SurfaceBackgroundPatternColor.Z"].begin(), count * sizeof(double));
+            }
+            
+            std::vector<double>* result = new std::vector<double>(surfaceBackgroundPatternColor_ZData, surfaceBackgroundPatternColor_ZData + count);
+            
+            delete[] surfaceBackgroundPatternColor_ZData;
+            
+            return result;
+        }
+        
+        double GetCutForegroundPatternColor_X(int materialIndex)
+        {
+            if (materialIndex < 0 || materialIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("double:CutForegroundPatternColor.X")) {
+                return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:CutForegroundPatternColor.X"].begin() + materialIndex * sizeof(double)));
+            }
+            
+            return {};
+        }
+        
+        std::vector<double>* GetAllCutForegroundPatternColor_X()
+        {
+            const auto count = GetCount();
+            
+            double* cutForegroundPatternColor_XData = new double[count];
+            if (mEntityTable.column_exists("double:CutForegroundPatternColor.X")) {
+                memcpy(cutForegroundPatternColor_XData, mEntityTable.mDataColumns["double:CutForegroundPatternColor.X"].begin(), count * sizeof(double));
+            }
+            
+            std::vector<double>* result = new std::vector<double>(cutForegroundPatternColor_XData, cutForegroundPatternColor_XData + count);
+            
+            delete[] cutForegroundPatternColor_XData;
+            
+            return result;
+        }
+        
+        double GetCutForegroundPatternColor_Y(int materialIndex)
+        {
+            if (materialIndex < 0 || materialIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("double:CutForegroundPatternColor.Y")) {
+                return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:CutForegroundPatternColor.Y"].begin() + materialIndex * sizeof(double)));
+            }
+            
+            return {};
+        }
+        
+        std::vector<double>* GetAllCutForegroundPatternColor_Y()
+        {
+            const auto count = GetCount();
+            
+            double* cutForegroundPatternColor_YData = new double[count];
+            if (mEntityTable.column_exists("double:CutForegroundPatternColor.Y")) {
+                memcpy(cutForegroundPatternColor_YData, mEntityTable.mDataColumns["double:CutForegroundPatternColor.Y"].begin(), count * sizeof(double));
+            }
+            
+            std::vector<double>* result = new std::vector<double>(cutForegroundPatternColor_YData, cutForegroundPatternColor_YData + count);
+            
+            delete[] cutForegroundPatternColor_YData;
+            
+            return result;
+        }
+        
+        double GetCutForegroundPatternColor_Z(int materialIndex)
+        {
+            if (materialIndex < 0 || materialIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("double:CutForegroundPatternColor.Z")) {
+                return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:CutForegroundPatternColor.Z"].begin() + materialIndex * sizeof(double)));
+            }
+            
+            return {};
+        }
+        
+        std::vector<double>* GetAllCutForegroundPatternColor_Z()
+        {
+            const auto count = GetCount();
+            
+            double* cutForegroundPatternColor_ZData = new double[count];
+            if (mEntityTable.column_exists("double:CutForegroundPatternColor.Z")) {
+                memcpy(cutForegroundPatternColor_ZData, mEntityTable.mDataColumns["double:CutForegroundPatternColor.Z"].begin(), count * sizeof(double));
+            }
+            
+            std::vector<double>* result = new std::vector<double>(cutForegroundPatternColor_ZData, cutForegroundPatternColor_ZData + count);
+            
+            delete[] cutForegroundPatternColor_ZData;
+            
+            return result;
+        }
+        
+        double GetCutBackgroundPatternColor_X(int materialIndex)
+        {
+            if (materialIndex < 0 || materialIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("double:CutBackgroundPatternColor.X")) {
+                return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:CutBackgroundPatternColor.X"].begin() + materialIndex * sizeof(double)));
+            }
+            
+            return {};
+        }
+        
+        std::vector<double>* GetAllCutBackgroundPatternColor_X()
+        {
+            const auto count = GetCount();
+            
+            double* cutBackgroundPatternColor_XData = new double[count];
+            if (mEntityTable.column_exists("double:CutBackgroundPatternColor.X")) {
+                memcpy(cutBackgroundPatternColor_XData, mEntityTable.mDataColumns["double:CutBackgroundPatternColor.X"].begin(), count * sizeof(double));
+            }
+            
+            std::vector<double>* result = new std::vector<double>(cutBackgroundPatternColor_XData, cutBackgroundPatternColor_XData + count);
+            
+            delete[] cutBackgroundPatternColor_XData;
+            
+            return result;
+        }
+        
+        double GetCutBackgroundPatternColor_Y(int materialIndex)
+        {
+            if (materialIndex < 0 || materialIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("double:CutBackgroundPatternColor.Y")) {
+                return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:CutBackgroundPatternColor.Y"].begin() + materialIndex * sizeof(double)));
+            }
+            
+            return {};
+        }
+        
+        std::vector<double>* GetAllCutBackgroundPatternColor_Y()
+        {
+            const auto count = GetCount();
+            
+            double* cutBackgroundPatternColor_YData = new double[count];
+            if (mEntityTable.column_exists("double:CutBackgroundPatternColor.Y")) {
+                memcpy(cutBackgroundPatternColor_YData, mEntityTable.mDataColumns["double:CutBackgroundPatternColor.Y"].begin(), count * sizeof(double));
+            }
+            
+            std::vector<double>* result = new std::vector<double>(cutBackgroundPatternColor_YData, cutBackgroundPatternColor_YData + count);
+            
+            delete[] cutBackgroundPatternColor_YData;
+            
+            return result;
+        }
+        
+        double GetCutBackgroundPatternColor_Z(int materialIndex)
+        {
+            if (materialIndex < 0 || materialIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("double:CutBackgroundPatternColor.Z")) {
+                return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:CutBackgroundPatternColor.Z"].begin() + materialIndex * sizeof(double)));
+            }
+            
+            return {};
+        }
+        
+        std::vector<double>* GetAllCutBackgroundPatternColor_Z()
+        {
+            const auto count = GetCount();
+            
+            double* cutBackgroundPatternColor_ZData = new double[count];
+            if (mEntityTable.column_exists("double:CutBackgroundPatternColor.Z")) {
+                memcpy(cutBackgroundPatternColor_ZData, mEntityTable.mDataColumns["double:CutBackgroundPatternColor.Z"].begin(), count * sizeof(double));
+            }
+            
+            std::vector<double>* result = new std::vector<double>(cutBackgroundPatternColor_ZData, cutBackgroundPatternColor_ZData + count);
+            
+            delete[] cutBackgroundPatternColor_ZData;
+            
+            return result;
+        }
+        
         int GetColorTextureFileIndex(int materialIndex)
         {
             if (!mEntityTable.column_exists("index:Vim.Asset:ColorTextureFile")) {
@@ -10475,6 +15027,54 @@ namespace Vim
                 return -1;
             
             return mEntityTable.mIndexColumns["index:Vim.Asset:NormalTextureFile"][materialIndex];
+        }
+        
+        int GetSurfaceForegroundPatternIndex(int materialIndex)
+        {
+            if (!mEntityTable.column_exists("index:Vim.FillPattern:SurfaceForegroundPattern")) {
+                return -1;
+            }
+            
+            if (materialIndex < 0 || materialIndex >= GetCount())
+                return -1;
+            
+            return mEntityTable.mIndexColumns["index:Vim.FillPattern:SurfaceForegroundPattern"][materialIndex];
+        }
+        
+        int GetSurfaceBackgroundPatternIndex(int materialIndex)
+        {
+            if (!mEntityTable.column_exists("index:Vim.FillPattern:SurfaceBackgroundPattern")) {
+                return -1;
+            }
+            
+            if (materialIndex < 0 || materialIndex >= GetCount())
+                return -1;
+            
+            return mEntityTable.mIndexColumns["index:Vim.FillPattern:SurfaceBackgroundPattern"][materialIndex];
+        }
+        
+        int GetCutForegroundPatternIndex(int materialIndex)
+        {
+            if (!mEntityTable.column_exists("index:Vim.FillPattern:CutForegroundPattern")) {
+                return -1;
+            }
+            
+            if (materialIndex < 0 || materialIndex >= GetCount())
+                return -1;
+            
+            return mEntityTable.mIndexColumns["index:Vim.FillPattern:CutForegroundPattern"][materialIndex];
+        }
+        
+        int GetCutBackgroundPatternIndex(int materialIndex)
+        {
+            if (!mEntityTable.column_exists("index:Vim.FillPattern:CutBackgroundPattern")) {
+                return -1;
+            }
+            
+            if (materialIndex < 0 || materialIndex >= GetCount())
+                return -1;
+            
+            return mEntityTable.mIndexColumns["index:Vim.FillPattern:CutBackgroundPattern"][materialIndex];
         }
         
         int GetElementIndex(int materialIndex)
@@ -11110,6 +15710,194 @@ namespace Vim
             return {};
         
         return new NodeTable(scene.mEntityTables["Vim.Node"], scene.mStrings);
+    }
+    
+    class GeometryPiece
+    {
+    public:
+        int mIndex;
+        int mSubmeshIndex;
+        
+        int mNodeIndex;
+        Node* mNode;
+        int mMaterialIndex;
+        Material* mMaterial;
+        int mSubcategoryIndex;
+        Category* mSubcategory;
+        int mCompoundStructureLayerIndex;
+        CompoundStructureLayer* mCompoundStructureLayer;
+        int mElementIndex;
+        Element* mElement;
+        
+        GeometryPiece() {}
+    };
+    
+    class GeometryPieceTable
+    {
+        EntityTable& mEntityTable;
+        std::vector<const bfast::byte*>& mStrings;
+    public:
+        GeometryPieceTable(EntityTable& entityTable, std::vector<const bfast::byte*>& strings):
+            mEntityTable(entityTable), mStrings(strings) {}
+        
+        size_t GetCount()
+        {
+            return mEntityTable.get_count();
+        }
+        
+        GeometryPiece* Get(int geometryPieceIndex)
+        {
+            GeometryPiece* geometryPiece = new GeometryPiece();
+            geometryPiece->mIndex = geometryPieceIndex;
+            geometryPiece->mSubmeshIndex = GetSubmeshIndex(geometryPieceIndex);
+            geometryPiece->mNodeIndex = GetNodeIndex(geometryPieceIndex);
+            geometryPiece->mMaterialIndex = GetMaterialIndex(geometryPieceIndex);
+            geometryPiece->mSubcategoryIndex = GetSubcategoryIndex(geometryPieceIndex);
+            geometryPiece->mCompoundStructureLayerIndex = GetCompoundStructureLayerIndex(geometryPieceIndex);
+            geometryPiece->mElementIndex = GetElementIndex(geometryPieceIndex);
+            return geometryPiece;
+        }
+        
+        std::vector<GeometryPiece>* GetAll()
+        {
+            bool existsSubmeshIndex = mEntityTable.column_exists("int:SubmeshIndex");
+            bool existsNode = mEntityTable.column_exists("index:Vim.Node:Node");
+            bool existsMaterial = mEntityTable.column_exists("index:Vim.Material:Material");
+            bool existsSubcategory = mEntityTable.column_exists("index:Vim.Category:Subcategory");
+            bool existsCompoundStructureLayer = mEntityTable.column_exists("index:Vim.CompoundStructureLayer:CompoundStructureLayer");
+            bool existsElement = mEntityTable.column_exists("index:Vim.Element:Element");
+            
+            const auto count = GetCount();
+            
+            std::vector<GeometryPiece>* geometryPiece = new std::vector<GeometryPiece>();
+            geometryPiece->reserve(count);
+            
+            int* submeshIndexData = new int[count];
+            if (mEntityTable.column_exists("int:SubmeshIndex")) {
+                memcpy(submeshIndexData, mEntityTable.mDataColumns["int:SubmeshIndex"].begin(), count * sizeof(int));
+            }
+            
+            const std::vector<int>& nodeData = mEntityTable.column_exists("index:Vim.Node:Node") ? mEntityTable.mIndexColumns["index:Vim.Node:Node"] : std::vector<int>();
+            const std::vector<int>& materialData = mEntityTable.column_exists("index:Vim.Material:Material") ? mEntityTable.mIndexColumns["index:Vim.Material:Material"] : std::vector<int>();
+            const std::vector<int>& subcategoryData = mEntityTable.column_exists("index:Vim.Category:Subcategory") ? mEntityTable.mIndexColumns["index:Vim.Category:Subcategory"] : std::vector<int>();
+            const std::vector<int>& compoundStructureLayerData = mEntityTable.column_exists("index:Vim.CompoundStructureLayer:CompoundStructureLayer") ? mEntityTable.mIndexColumns["index:Vim.CompoundStructureLayer:CompoundStructureLayer"] : std::vector<int>();
+            const std::vector<int>& elementData = mEntityTable.column_exists("index:Vim.Element:Element") ? mEntityTable.mIndexColumns["index:Vim.Element:Element"] : std::vector<int>();
+            
+            for (int i = 0; i < count; ++i)
+            {
+                GeometryPiece entity;
+                entity.mIndex = i;
+                if (existsSubmeshIndex)
+                    entity.mSubmeshIndex = submeshIndexData[i];
+                entity.mNodeIndex = existsNode ? nodeData[i] : -1;
+                entity.mMaterialIndex = existsMaterial ? materialData[i] : -1;
+                entity.mSubcategoryIndex = existsSubcategory ? subcategoryData[i] : -1;
+                entity.mCompoundStructureLayerIndex = existsCompoundStructureLayer ? compoundStructureLayerData[i] : -1;
+                entity.mElementIndex = existsElement ? elementData[i] : -1;
+                geometryPiece->push_back(entity);
+            }
+            
+            delete[] submeshIndexData;
+            
+            return geometryPiece;
+        }
+        
+        int GetSubmeshIndex(int geometryPieceIndex)
+        {
+            if (geometryPieceIndex < 0 || geometryPieceIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("int:SubmeshIndex")) {
+                return *reinterpret_cast<int*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["int:SubmeshIndex"].begin() + geometryPieceIndex * sizeof(int)));
+            }
+            
+            return {};
+        }
+        
+        std::vector<int>* GetAllSubmeshIndex()
+        {
+            const auto count = GetCount();
+            
+            int* submeshIndexData = new int[count];
+            if (mEntityTable.column_exists("int:SubmeshIndex")) {
+                memcpy(submeshIndexData, mEntityTable.mDataColumns["int:SubmeshIndex"].begin(), count * sizeof(int));
+            }
+            
+            std::vector<int>* result = new std::vector<int>(submeshIndexData, submeshIndexData + count);
+            
+            delete[] submeshIndexData;
+            
+            return result;
+        }
+        
+        int GetNodeIndex(int geometryPieceIndex)
+        {
+            if (!mEntityTable.column_exists("index:Vim.Node:Node")) {
+                return -1;
+            }
+            
+            if (geometryPieceIndex < 0 || geometryPieceIndex >= GetCount())
+                return -1;
+            
+            return mEntityTable.mIndexColumns["index:Vim.Node:Node"][geometryPieceIndex];
+        }
+        
+        int GetMaterialIndex(int geometryPieceIndex)
+        {
+            if (!mEntityTable.column_exists("index:Vim.Material:Material")) {
+                return -1;
+            }
+            
+            if (geometryPieceIndex < 0 || geometryPieceIndex >= GetCount())
+                return -1;
+            
+            return mEntityTable.mIndexColumns["index:Vim.Material:Material"][geometryPieceIndex];
+        }
+        
+        int GetSubcategoryIndex(int geometryPieceIndex)
+        {
+            if (!mEntityTable.column_exists("index:Vim.Category:Subcategory")) {
+                return -1;
+            }
+            
+            if (geometryPieceIndex < 0 || geometryPieceIndex >= GetCount())
+                return -1;
+            
+            return mEntityTable.mIndexColumns["index:Vim.Category:Subcategory"][geometryPieceIndex];
+        }
+        
+        int GetCompoundStructureLayerIndex(int geometryPieceIndex)
+        {
+            if (!mEntityTable.column_exists("index:Vim.CompoundStructureLayer:CompoundStructureLayer")) {
+                return -1;
+            }
+            
+            if (geometryPieceIndex < 0 || geometryPieceIndex >= GetCount())
+                return -1;
+            
+            return mEntityTable.mIndexColumns["index:Vim.CompoundStructureLayer:CompoundStructureLayer"][geometryPieceIndex];
+        }
+        
+        int GetElementIndex(int geometryPieceIndex)
+        {
+            if (!mEntityTable.column_exists("index:Vim.Element:Element")) {
+                return -1;
+            }
+            
+            if (geometryPieceIndex < 0 || geometryPieceIndex >= GetCount())
+                return -1;
+            
+            return mEntityTable.mIndexColumns["index:Vim.Element:Element"][geometryPieceIndex];
+        }
+        
+    };
+    
+    static GeometryPieceTable* GetGeometryPieceTable(Scene& scene)
+    {
+        if (scene.mEntityTables.find("Vim.GeometryPiece") == scene.mEntityTables.end())
+            return {};
+        
+        return new GeometryPieceTable(scene.mEntityTables["Vim.GeometryPiece"], scene.mStrings);
     }
     
     class Geometry
@@ -19186,6 +23974,14 @@ namespace Vim
         mView = GetViewTable(scene);
         mFilterInView = GetFilterInViewTable(scene);
         mGridInView = GetGridInViewTable(scene);
+        mLinePattern = GetLinePatternTable(scene);
+        mFillPattern = GetFillPatternTable(scene);
+        mFillGrid = GetFillGridTable(scene);
+        mLineWeight = GetLineWeightTable(scene);
+        mGraphicOverride = GetGraphicOverrideTable(scene);
+        mCategoryInView = GetCategoryInViewTable(scene);
+        mElementOverrideInView = GetElementOverrideInViewTable(scene);
+        mPhaseGraphicOverride = GetPhaseGraphicOverrideTable(scene);
         mElementInView = GetElementInViewTable(scene);
         mShapeInView = GetShapeInViewTable(scene);
         mAssetInView = GetAssetInViewTable(scene);
@@ -19197,6 +23993,7 @@ namespace Vim
         mCompoundStructureLayer = GetCompoundStructureLayerTable(scene);
         mCompoundStructure = GetCompoundStructureTable(scene);
         mNode = GetNodeTable(scene);
+        mGeometryPiece = GetGeometryPieceTable(scene);
         mGeometry = GetGeometryTable(scene);
         mShape = GetShapeTable(scene);
         mShapeCollection = GetShapeCollectionTable(scene);
@@ -19255,6 +24052,14 @@ namespace Vim
         delete mView;
         delete mFilterInView;
         delete mGridInView;
+        delete mLinePattern;
+        delete mFillPattern;
+        delete mFillGrid;
+        delete mLineWeight;
+        delete mGraphicOverride;
+        delete mCategoryInView;
+        delete mElementOverrideInView;
+        delete mPhaseGraphicOverride;
         delete mElementInView;
         delete mShapeInView;
         delete mAssetInView;
@@ -19266,6 +24071,7 @@ namespace Vim
         delete mCompoundStructureLayer;
         delete mCompoundStructure;
         delete mNode;
+        delete mGeometryPiece;
         delete mGeometry;
         delete mShape;
         delete mShapeCollection;

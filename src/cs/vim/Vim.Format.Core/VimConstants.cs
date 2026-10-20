@@ -38,6 +38,15 @@ namespace Vim.Format
         public const string LevelInView = "Vim.LevelInView";
         public const string FilterInView = "Vim.FilterInView";
         public const string GridInView = "Vim.GridInView";
+        public const string LinePattern = "Vim.LinePattern";
+        public const string FillPattern = "Vim.FillPattern";
+        public const string FillGrid = "Vim.FillGrid";
+        public const string LineWeight = "Vim.LineWeight";
+        public const string GraphicOverride = "Vim.GraphicOverride";
+        public const string CategoryInView = "Vim.CategoryInView";
+        public const string ElementOverrideInView = "Vim.ElementOverrideInView";
+        public const string PhaseGraphicOverride = "Vim.PhaseGraphicOverride";
+        public const string GeometryPiece = "Vim.GeometryPiece";
         public const string Camera = "Vim.Camera";
         public const string Workset = "Vim.Workset";
         public const string DesignOption = "Vim.DesignOption";
