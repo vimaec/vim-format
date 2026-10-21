@@ -14,6 +14,14 @@ namespace Vim.Format.ObjectModel
         // ReSharper disable MemberHidesStaticFromOuterClass
         public static class History
         {
+            // Schema additions (editing data: wall paths and their inserts, family recipes - parameters, type values,
+            // reference planes, forms with their sketches, dimensions with their references - and the FLEXIBLE / STATIC
+            // reading per family; written by the exporter's experimental "editing data" option, otherwise empty)
+            //   Vim.HostPath, Vim.HostedInsert
+            //   Vim.FamilyRecipe, Vim.FamilyRecipeParameter, Vim.FamilyTypeValue, Vim.FamilyReferencePlane, Vim.FamilyForm,
+            //   Vim.FamilySketchCurve, Vim.FamilyConstraint, Vim.FamilyConstraintReference, Vim.FamilyFormDriver
+            public const string v5_15_0 = "5.15.0";
+
             // Schema additions (geometry pieces: each placed geometry split by material, Revit subcategory and compound
             // structure layer, one row per g3d submesh; written by the exporter's experimental "geometry pieces" option)
             //   Vim.GeometryPiece__index:Vim.Element:Element
@@ -365,7 +373,8 @@ namespace Vim.Format.ObjectModel
         // ReSharper enable MemberHidesStaticFromOuterClass
 
         // [MAINTAIN] Add more object model SerializableVersions below and update the current one.
-        public static SerializableVersion Current => v5_14_0;
+        public static SerializableVersion Current => v5_15_0;
+        public static SerializableVersion v5_15_0 => SerializableVersion.Parse(History.v5_15_0);
         public static SerializableVersion v5_14_0 => SerializableVersion.Parse(History.v5_14_0);
         public static SerializableVersion v5_13_0 => SerializableVersion.Parse(History.v5_13_0);
         public static SerializableVersion v5_12_0 => SerializableVersion.Parse(History.v5_12_0);
@@ -2328,6 +2337,465 @@ namespace Vim.Format.ObjectModel
 
         /// <summary>The compound structure layer of a wall, floor, roof or ceiling (OrderIndex, Width, MaterialFunctionAssignment). None: not a layer.</summary>
         public Relation<CompoundStructureLayer> _CompoundStructureLayer;
+    }
+
+    // Editing data (5.15.0). Written only by the exporter's experimental "editing data" option (otherwise every table below
+    // is empty); main document, full exports only. Lengths in feet, angles in radians. HostPath / HostedInsert are in world
+    // space (the space of the g3d geometry); the Family* tables are in the family document's own coordinates, and their
+    // *ElementId columns are ids in that family document (join on Family + id). Contract: EDIT-CONTRACT.md (parametric work).
+
+    /// <summary>
+    /// The full location path of a wall (5.15.0) with its height, offsets and layers: what a wall is rebuilt from.
+    /// </summary>
+    [TableName(TableNames.HostPath)]
+    [CascadeElementRemap]
+    public partial class HostPath : EntityWithElement
+    {
+        /// <summary>0 line, 1 arc, 2 other (P0, P1 and Mid only).</summary>
+        public int CurveKind;
+
+        public double P0_X;
+        public double P0_Y;
+        public double P0_Z;
+        public DVector3 P0
+        {
+            get => new DVector3(P0_X, P0_Y, P0_Z);
+            set => (P0_X, P0_Y, P0_Z) = value;
+        }
+
+        public double P1_X;
+        public double P1_Y;
+        public double P1_Z;
+        public DVector3 P1
+        {
+            get => new DVector3(P1_X, P1_Y, P1_Z);
+            set => (P1_X, P1_Y, P1_Z) = value;
+        }
+
+        /// <summary>The point at the middle of the path (with P0 and P1 it defines an arc).</summary>
+        public double Mid_X;
+        public double Mid_Y;
+        public double Mid_Z;
+        public DVector3 Mid
+        {
+            get => new DVector3(Mid_X, Mid_Y, Mid_Z);
+            set => (Mid_X, Mid_Y, Mid_Z) = value;
+        }
+
+        /// <summary>Arc only.</summary>
+        public double Center_X;
+        public double Center_Y;
+        public double Center_Z;
+        public DVector3 Center
+        {
+            get => new DVector3(Center_X, Center_Y, Center_Z);
+            set => (Center_X, Center_Y, Center_Z) = value;
+        }
+
+        /// <summary>Arc only.</summary>
+        public double Radius;
+
+        /// <summary>Arc only (0, 0, 1 otherwise).</summary>
+        public double Normal_X;
+        public double Normal_Y;
+        public double Normal_Z;
+        public DVector3 Normal
+        {
+            get => new DVector3(Normal_X, Normal_Y, Normal_Z);
+            set => (Normal_X, Normal_Y, Normal_Z) = value;
+        }
+
+        public double Length;
+
+        /// <summary>The wall's total thickness (Wall.Width).</summary>
+        public double Width;
+
+        /// <summary>The exterior side at the start of the path (Wall.Orientation; Flipped already applied).</summary>
+        public double Orientation_X;
+        public double Orientation_Y;
+        public double Orientation_Z;
+        public DVector3 Orientation
+        {
+            get => new DVector3(Orientation_X, Orientation_Y, Orientation_Z);
+            set => (Orientation_X, Orientation_Y, Orientation_Z) = value;
+        }
+
+        public bool Flipped;
+
+        /// <summary>
+        /// WALL_KEY_REF_PARAM: 0 wall centreline, 1 core centreline, 2 finish face exterior, 3 finish face interior, 4 core face
+        /// exterior, 5 core face interior. The path lies on this line.
+        /// </summary>
+        public int LocationLine;
+
+        /// <summary>The signed offset of the path from the wall's centreline, positive toward Orientation.</summary>
+        public double LocationLineOffset;
+
+        /// <summary>The distance from the exterior finish face to the exterior face of the core.</summary>
+        public double CoreOffsetExterior;
+
+        public Relation<Level> _BaseLevel;
+        public double BaseOffset;
+
+        /// <summary>The world Z of the wall's base (base level elevation + base offset).</summary>
+        public double BaseElevation;
+
+        /// <summary>None: unconnected height.</summary>
+        public Relation<Level> _TopLevel;
+        public double TopOffset;
+
+        /// <summary>WALL_USER_HEIGHT_PARAM (the actual height when the top is constrained).</summary>
+        public double Height;
+
+        /// <summary>The wall has an edited elevation profile (Wall.SketchId).</summary>
+        public bool HasEditedProfile;
+
+        public int TopAttachedCount;
+        public int BaseAttachedCount;
+        public bool IsStacked;
+        public bool IsCurtain;
+
+        /// <summary>The wall type's layers.</summary>
+        public Relation<CompoundStructure> _CompoundStructure;
+    }
+
+    /// <summary>
+    /// A door, window or wall opening cutting a wall (5.15.0), with its position along the wall's path.
+    /// </summary>
+    [TableName(TableNames.HostedInsert)]
+    [CascadeElementRemap]
+    public partial class HostedInsert : EntityWithElement
+    {
+        /// <summary>The wall.</summary>
+        public Relation<Element> _Host;
+
+        public Relation<HostPath> _HostPath;
+
+        /// <summary>0 family instance, 1 wall opening, 2 other.</summary>
+        public int Kind;
+
+        /// <summary>The arc length from HostPath.P0 to the insert's origin projected on the path.</summary>
+        public double DistanceAlongPath;
+
+        /// <summary>The same, 0..1 along the path.</summary>
+        public double NormalizedParameter;
+
+        /// <summary>The signed distance of the origin from the path, positive toward HostPath.Orientation.</summary>
+        public double OffsetFromPath;
+
+        /// <summary>The origin's Z minus HostPath.BaseElevation.</summary>
+        public double Elevation;
+
+        public double SillHeight;
+        public double HeadHeight;
+        public bool FacingFlipped;
+        public bool HandFlipped;
+
+        public double Origin_X;
+        public double Origin_Y;
+        public double Origin_Z;
+        public DVector3 Origin
+        {
+            get => new DVector3(Origin_X, Origin_Y, Origin_Z);
+            set => (Origin_X, Origin_Y, Origin_Z) = value;
+        }
+
+        /// <summary>Wall openings (Kind 1) only: Opening.BoundaryRect, world space.</summary>
+        public double OpeningMin_X;
+        public double OpeningMin_Y;
+        public double OpeningMin_Z;
+        public DVector3 OpeningMin
+        {
+            get => new DVector3(OpeningMin_X, OpeningMin_Y, OpeningMin_Z);
+            set => (OpeningMin_X, OpeningMin_Y, OpeningMin_Z) = value;
+        }
+
+        public double OpeningMax_X;
+        public double OpeningMax_Y;
+        public double OpeningMax_Z;
+        public DVector3 OpeningMax
+        {
+            get => new DVector3(OpeningMax_X, OpeningMax_Y, OpeningMax_Z);
+            set => (OpeningMax_X, OpeningMax_Y, OpeningMax_Z) = value;
+        }
+    }
+
+    /// <summary>
+    /// How a loadable family is built and whether it flexes (5.15.0): one row per family with an instance in the export.
+    /// Flexibility is read from the family's data (labelled dimensions and the locks they reach, associated Yes/No, material
+    /// and family-type parameters), never by flexing it.
+    /// </summary>
+    [TableName(TableNames.FamilyRecipe)]
+    public partial class FamilyRecipe : Entity
+    {
+        public Relation<Family> _Family;
+
+        /// <summary>0 read, 1 in-place, 2 not editable, 3 refused, 4 not tried (cancelled).</summary>
+        public int ReadStatus;
+        public string Refusal;
+
+        /// <summary>Bits, 0 = STATIC: 1 dimensional, 2 material, 4 visibility, 8 family type, 16 formula.</summary>
+        public int Flexibility;
+
+        /// <summary>The same in words, e.g. "FLEXIBLE: dimensional" or "STATIC".</summary>
+        public string Reading;
+
+        public string PlacementType;
+        public bool IsParametric;
+
+        /// <summary>The family document's current type when read: the sketches and planes are at its values.</summary>
+        public string CurrentTypeName;
+
+        public int LabelledDimensionCount;
+        public int DrivingDimensionCount;
+        public int LockCount;
+        public int FormCount;
+        public int OpeningCount;
+        public int NestedInstanceCount;
+
+        /// <summary>0 no opening, 1 the opening sketch follows a driving dimension, 2 the opening sketch is not tied to one.</summary>
+        public int OpeningTied;
+
+        public int ReadMs;
+    }
+
+    /// <summary>A parameter of a family, as the family document defines it (5.15.0).</summary>
+    [TableName(TableNames.FamilyRecipeParameter)]
+    public partial class FamilyRecipeParameter : Entity
+    {
+        public Relation<Family> _Family;
+        public string Name;
+        public long FamilyElementId;
+        public string Guid;
+        public string DataType;
+        public string StorageType;
+        public bool IsInstance;
+        public bool IsReporting;
+        public bool IsShared;
+        public bool IsDeterminedByFormula;
+        public string Formula;
+
+        /// <summary>The FamilyRecipe.Flexibility bits this parameter contributes (0: drives nothing).</summary>
+        public int Drives;
+    }
+
+    /// <summary>The value of a family parameter in one type of the family document (5.15.0).</summary>
+    [TableName(TableNames.FamilyTypeValue)]
+    public partial class FamilyTypeValue : Entity
+    {
+        public Relation<FamilyRecipeParameter> _FamilyParameter;
+
+        /// <summary>The project's type of the same name; none when that type is not in the export.</summary>
+        public Relation<FamilyType> _FamilyType;
+
+        public string TypeName;
+        public string Value;
+        public double DoubleValue;
+        public int IntegerValue;
+        public long ElementIdValue;
+    }
+
+    /// <summary>A reference plane of a family document (5.15.0).</summary>
+    [TableName(TableNames.FamilyReferencePlane)]
+    public partial class FamilyReferencePlane : Entity
+    {
+        public Relation<Family> _Family;
+        public long FamilyElementId;
+        public string Name;
+
+        public double Origin_X;
+        public double Origin_Y;
+        public double Origin_Z;
+        public DVector3 Origin
+        {
+            get => new DVector3(Origin_X, Origin_Y, Origin_Z);
+            set => (Origin_X, Origin_Y, Origin_Z) = value;
+        }
+
+        public double Normal_X;
+        public double Normal_Y;
+        public double Normal_Z;
+        public DVector3 Normal
+        {
+            get => new DVector3(Normal_X, Normal_Y, Normal_Z);
+            set => (Normal_X, Normal_Y, Normal_Z) = value;
+        }
+
+        public string IsReference;
+        public bool DefinesOrigin;
+
+        /// <summary>Moved by a labelled dimension (directly, or through locked / EQ plane-to-plane dimensions).</summary>
+        public bool IsDriven;
+    }
+
+    /// <summary>A solid or void form, or the wall opening, of a family document (5.15.0).</summary>
+    [TableName(TableNames.FamilyForm)]
+    public partial class FamilyForm : Entity
+    {
+        public Relation<Family> _Family;
+        public long FamilyElementId;
+
+        /// <summary>Extrusion, Blend, Revolution, Sweep, SweptBlend, FreeFormElement, Form or Opening.</summary>
+        public string Kind;
+
+        public bool IsSolid;
+        public bool IsVisible;
+        public string Subcategory;
+        public string Material;
+
+        public double PlaneOrigin_X;
+        public double PlaneOrigin_Y;
+        public double PlaneOrigin_Z;
+        public DVector3 PlaneOrigin
+        {
+            get => new DVector3(PlaneOrigin_X, PlaneOrigin_Y, PlaneOrigin_Z);
+            set => (PlaneOrigin_X, PlaneOrigin_Y, PlaneOrigin_Z) = value;
+        }
+
+        public double PlaneNormal_X;
+        public double PlaneNormal_Y;
+        public double PlaneNormal_Z;
+        public DVector3 PlaneNormal
+        {
+            get => new DVector3(PlaneNormal_X, PlaneNormal_Y, PlaneNormal_Z);
+            set => (PlaneNormal_X, PlaneNormal_Y, PlaneNormal_Z) = value;
+        }
+
+        public double PlaneXDir_X;
+        public double PlaneXDir_Y;
+        public double PlaneXDir_Z;
+        public DVector3 PlaneXDir
+        {
+            get => new DVector3(PlaneXDir_X, PlaneXDir_Y, PlaneXDir_Z);
+            set => (PlaneXDir_X, PlaneXDir_Y, PlaneXDir_Z) = value;
+        }
+
+        /// <summary>Extrusion: StartOffset / EndOffset. Blend: BottomOffset / TopOffset.</summary>
+        public double StartOffset;
+        public double EndOffset;
+
+        /// <summary>Revolution only.</summary>
+        public double StartAngle;
+        public double EndAngle;
+
+        /// <summary>Some parameter moves or changes it (it has a FamilyFormDriver row).</summary>
+        public bool IsDriven;
+
+        /// <summary>An extrusion or an opening whose sketch has only lines and arcs.</summary>
+        public bool IsRebuildable;
+    }
+
+    /// <summary>One curve of a form's or opening's sketch (5.15.0).</summary>
+    [TableName(TableNames.FamilySketchCurve)]
+    public partial class FamilySketchCurve : Entity
+    {
+        public Relation<FamilyForm> _FamilyForm;
+
+        /// <summary>0 profile, 1 bottom (blend), 2 top (blend), 3 path (sweep), 4 sweep profile, 5 revolution axis.</summary>
+        public int Role;
+        public int Loop;
+        public int Order;
+
+        /// <summary>The sketch's curve element (family document id), the key of FamilyConstraintReference.RefElementId; -1 if not matched.</summary>
+        public long CurveElementId;
+
+        /// <summary>0 line, 1 arc, 2 other.</summary>
+        public int CurveKind;
+
+        public double Start_X;
+        public double Start_Y;
+        public double Start_Z;
+        public DVector3 Start
+        {
+            get => new DVector3(Start_X, Start_Y, Start_Z);
+            set => (Start_X, Start_Y, Start_Z) = value;
+        }
+
+        public double End_X;
+        public double End_Y;
+        public double End_Z;
+        public DVector3 End
+        {
+            get => new DVector3(End_X, End_Y, End_Z);
+            set => (End_X, End_Y, End_Z) = value;
+        }
+
+        public double Mid_X;
+        public double Mid_Y;
+        public double Mid_Z;
+        public DVector3 Mid
+        {
+            get => new DVector3(Mid_X, Mid_Y, Mid_Z);
+            set => (Mid_X, Mid_Y, Mid_Z) = value;
+        }
+
+        public double Center_X;
+        public double Center_Y;
+        public double Center_Z;
+        public DVector3 Center
+        {
+            get => new DVector3(Center_X, Center_Y, Center_Z);
+            set => (Center_X, Center_Y, Center_Z) = value;
+        }
+
+        public double Radius;
+
+        /// <summary>The locks and labelled dimensions holding this curve (0: free, Revit leaves it where it is).</summary>
+        public int LockCount;
+    }
+
+    /// <summary>A dimension of a family document (5.15.0): a labelled dimension, a lock (padlock), an EQ, or a reporting number.</summary>
+    [TableName(TableNames.FamilyConstraint)]
+    public partial class FamilyConstraint : Entity
+    {
+        public Relation<Family> _Family;
+        public long FamilyElementId;
+
+        /// <summary>0 label, 1 lock, 2 equality, 3 reporting (drives nothing).</summary>
+        public int Kind;
+
+        /// <summary>The label; none when unlabelled.</summary>
+        public Relation<FamilyRecipeParameter> _FamilyParameter;
+
+        public bool IsLocked;
+        public bool HasView;
+
+        /// <summary>NaN when multi-segment or when Revit has no value.</summary>
+        public double Value;
+
+        public int SegmentCount;
+
+        /// <summary>A label or EQ whose chain reaches a form or the opening.</summary>
+        public bool ReachesGeometry;
+
+        public int ReferenceCount;
+    }
+
+    /// <summary>One reference of a family dimension, in order (5.15.0).</summary>
+    [TableName(TableNames.FamilyConstraintReference)]
+    public partial class FamilyConstraintReference : Entity
+    {
+        public Relation<FamilyConstraint> _FamilyConstraint;
+        public int Order;
+
+        /// <summary>0 reference plane, 1 level, 2 sketch curve, 3 form face, 4 host (template wall / floor / ceiling), 5 other.</summary>
+        public int RefKind;
+
+        public long RefElementId;
+        public string RefName;
+        public string ReferenceType;
+        public string Stable;
+    }
+
+    /// <summary>A parameter that moves or changes a form (5.15.0).</summary>
+    [TableName(TableNames.FamilyFormDriver)]
+    public partial class FamilyFormDriver : Entity
+    {
+        public Relation<FamilyForm> _FamilyForm;
+        public Relation<FamilyRecipeParameter> _FamilyParameter;
+
+        /// <summary>0 lock chain, 1 label on the form's face or sketch curve, 2 associated form parameter, 3 visibility, 4 material.</summary>
+        public int Via;
     }
 
     /// <summary>

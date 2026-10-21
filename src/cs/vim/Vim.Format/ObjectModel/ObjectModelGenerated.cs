@@ -1778,6 +1778,507 @@ namespace Vim.Format.ObjectModel {
     } // end of class
     
     // AUTO-GENERATED
+    public partial class HostPath
+    {
+        public Vim.Format.ObjectModel.Level BaseLevel => _BaseLevel?.Value;
+        public int BaseLevelIndex => _BaseLevel?.Index ?? EntityRelation.None;
+        public Vim.Format.ObjectModel.Level TopLevel => _TopLevel?.Value;
+        public int TopLevelIndex => _TopLevel?.Index ?? EntityRelation.None;
+        public Vim.Format.ObjectModel.CompoundStructure CompoundStructure => _CompoundStructure?.Value;
+        public int CompoundStructureIndex => _CompoundStructure?.Index ?? EntityRelation.None;
+        public Vim.Format.ObjectModel.Element Element => _Element?.Value;
+        public int ElementIndex => _Element?.Index ?? EntityRelation.None;
+        public HostPath()
+        {
+            _BaseLevel = new Relation<Vim.Format.ObjectModel.Level>();
+            _TopLevel = new Relation<Vim.Format.ObjectModel.Level>();
+            _CompoundStructure = new Relation<Vim.Format.ObjectModel.CompoundStructure>();
+            _Element = new Relation<Vim.Format.ObjectModel.Element>();
+        }
+        
+        public override bool FieldsAreEqual(object obj)
+        {
+            if ((obj is HostPath other))
+            {
+                var fieldsAreEqual =
+                    (Index == other.Index) &&
+                    (CurveKind == other.CurveKind) &&
+                    (P0_X == other.P0_X) &&
+                    (P0_Y == other.P0_Y) &&
+                    (P0_Z == other.P0_Z) &&
+                    (P1_X == other.P1_X) &&
+                    (P1_Y == other.P1_Y) &&
+                    (P1_Z == other.P1_Z) &&
+                    (Mid_X == other.Mid_X) &&
+                    (Mid_Y == other.Mid_Y) &&
+                    (Mid_Z == other.Mid_Z) &&
+                    (Center_X == other.Center_X) &&
+                    (Center_Y == other.Center_Y) &&
+                    (Center_Z == other.Center_Z) &&
+                    (Radius == other.Radius) &&
+                    (Normal_X == other.Normal_X) &&
+                    (Normal_Y == other.Normal_Y) &&
+                    (Normal_Z == other.Normal_Z) &&
+                    (Length == other.Length) &&
+                    (Width == other.Width) &&
+                    (Orientation_X == other.Orientation_X) &&
+                    (Orientation_Y == other.Orientation_Y) &&
+                    (Orientation_Z == other.Orientation_Z) &&
+                    (Flipped == other.Flipped) &&
+                    (LocationLine == other.LocationLine) &&
+                    (LocationLineOffset == other.LocationLineOffset) &&
+                    (CoreOffsetExterior == other.CoreOffsetExterior) &&
+                    (BaseOffset == other.BaseOffset) &&
+                    (BaseElevation == other.BaseElevation) &&
+                    (TopOffset == other.TopOffset) &&
+                    (Height == other.Height) &&
+                    (HasEditedProfile == other.HasEditedProfile) &&
+                    (TopAttachedCount == other.TopAttachedCount) &&
+                    (BaseAttachedCount == other.BaseAttachedCount) &&
+                    (IsStacked == other.IsStacked) &&
+                    (IsCurtain == other.IsCurtain) &&
+                    (_BaseLevel?.Index == other._BaseLevel?.Index) &&
+                    (_TopLevel?.Index == other._TopLevel?.Index) &&
+                    (_CompoundStructure?.Index == other._CompoundStructure?.Index) &&
+                    (_Element?.Index == other._Element?.Index);
+                if (!fieldsAreEqual)
+                {
+                    return false;
+                }
+                
+                return true;
+            }
+            return false;
+        }
+        
+    } // end of class
+    
+    // AUTO-GENERATED
+    public partial class HostedInsert
+    {
+        public Vim.Format.ObjectModel.Element Host => _Host?.Value;
+        public int HostIndex => _Host?.Index ?? EntityRelation.None;
+        public Vim.Format.ObjectModel.HostPath HostPath => _HostPath?.Value;
+        public int HostPathIndex => _HostPath?.Index ?? EntityRelation.None;
+        public Vim.Format.ObjectModel.Element Element => _Element?.Value;
+        public int ElementIndex => _Element?.Index ?? EntityRelation.None;
+        public HostedInsert()
+        {
+            _Host = new Relation<Vim.Format.ObjectModel.Element>();
+            _HostPath = new Relation<Vim.Format.ObjectModel.HostPath>();
+            _Element = new Relation<Vim.Format.ObjectModel.Element>();
+        }
+        
+        public override bool FieldsAreEqual(object obj)
+        {
+            if ((obj is HostedInsert other))
+            {
+                var fieldsAreEqual =
+                    (Index == other.Index) &&
+                    (Kind == other.Kind) &&
+                    (DistanceAlongPath == other.DistanceAlongPath) &&
+                    (NormalizedParameter == other.NormalizedParameter) &&
+                    (OffsetFromPath == other.OffsetFromPath) &&
+                    (Elevation == other.Elevation) &&
+                    (SillHeight == other.SillHeight) &&
+                    (HeadHeight == other.HeadHeight) &&
+                    (FacingFlipped == other.FacingFlipped) &&
+                    (HandFlipped == other.HandFlipped) &&
+                    (Origin_X == other.Origin_X) &&
+                    (Origin_Y == other.Origin_Y) &&
+                    (Origin_Z == other.Origin_Z) &&
+                    (OpeningMin_X == other.OpeningMin_X) &&
+                    (OpeningMin_Y == other.OpeningMin_Y) &&
+                    (OpeningMin_Z == other.OpeningMin_Z) &&
+                    (OpeningMax_X == other.OpeningMax_X) &&
+                    (OpeningMax_Y == other.OpeningMax_Y) &&
+                    (OpeningMax_Z == other.OpeningMax_Z) &&
+                    (_Host?.Index == other._Host?.Index) &&
+                    (_HostPath?.Index == other._HostPath?.Index) &&
+                    (_Element?.Index == other._Element?.Index);
+                if (!fieldsAreEqual)
+                {
+                    return false;
+                }
+                
+                return true;
+            }
+            return false;
+        }
+        
+    } // end of class
+    
+    // AUTO-GENERATED
+    public partial class FamilyRecipe
+    {
+        public Vim.Format.ObjectModel.Family Family => _Family?.Value;
+        public int FamilyIndex => _Family?.Index ?? EntityRelation.None;
+        public FamilyRecipe()
+        {
+            _Family = new Relation<Vim.Format.ObjectModel.Family>();
+        }
+        
+        public override bool FieldsAreEqual(object obj)
+        {
+            if ((obj is FamilyRecipe other))
+            {
+                var fieldsAreEqual =
+                    (Index == other.Index) &&
+                    (ReadStatus == other.ReadStatus) &&
+                    (Refusal == other.Refusal) &&
+                    (Flexibility == other.Flexibility) &&
+                    (Reading == other.Reading) &&
+                    (PlacementType == other.PlacementType) &&
+                    (IsParametric == other.IsParametric) &&
+                    (CurrentTypeName == other.CurrentTypeName) &&
+                    (LabelledDimensionCount == other.LabelledDimensionCount) &&
+                    (DrivingDimensionCount == other.DrivingDimensionCount) &&
+                    (LockCount == other.LockCount) &&
+                    (FormCount == other.FormCount) &&
+                    (OpeningCount == other.OpeningCount) &&
+                    (NestedInstanceCount == other.NestedInstanceCount) &&
+                    (OpeningTied == other.OpeningTied) &&
+                    (ReadMs == other.ReadMs) &&
+                    (_Family?.Index == other._Family?.Index);
+                if (!fieldsAreEqual)
+                {
+                    return false;
+                }
+                
+                return true;
+            }
+            return false;
+        }
+        
+    } // end of class
+    
+    // AUTO-GENERATED
+    public partial class FamilyRecipeParameter
+    {
+        public Vim.Format.ObjectModel.Family Family => _Family?.Value;
+        public int FamilyIndex => _Family?.Index ?? EntityRelation.None;
+        public FamilyRecipeParameter()
+        {
+            _Family = new Relation<Vim.Format.ObjectModel.Family>();
+        }
+        
+        public override bool FieldsAreEqual(object obj)
+        {
+            if ((obj is FamilyRecipeParameter other))
+            {
+                var fieldsAreEqual =
+                    (Index == other.Index) &&
+                    (Name == other.Name) &&
+                    (FamilyElementId == other.FamilyElementId) &&
+                    (Guid == other.Guid) &&
+                    (DataType == other.DataType) &&
+                    (StorageType == other.StorageType) &&
+                    (IsInstance == other.IsInstance) &&
+                    (IsReporting == other.IsReporting) &&
+                    (IsShared == other.IsShared) &&
+                    (IsDeterminedByFormula == other.IsDeterminedByFormula) &&
+                    (Formula == other.Formula) &&
+                    (Drives == other.Drives) &&
+                    (_Family?.Index == other._Family?.Index);
+                if (!fieldsAreEqual)
+                {
+                    return false;
+                }
+                
+                return true;
+            }
+            return false;
+        }
+        
+    } // end of class
+    
+    // AUTO-GENERATED
+    public partial class FamilyTypeValue
+    {
+        public Vim.Format.ObjectModel.FamilyRecipeParameter FamilyParameter => _FamilyParameter?.Value;
+        public int FamilyParameterIndex => _FamilyParameter?.Index ?? EntityRelation.None;
+        public Vim.Format.ObjectModel.FamilyType FamilyType => _FamilyType?.Value;
+        public int FamilyTypeIndex => _FamilyType?.Index ?? EntityRelation.None;
+        public FamilyTypeValue()
+        {
+            _FamilyParameter = new Relation<Vim.Format.ObjectModel.FamilyRecipeParameter>();
+            _FamilyType = new Relation<Vim.Format.ObjectModel.FamilyType>();
+        }
+        
+        public override bool FieldsAreEqual(object obj)
+        {
+            if ((obj is FamilyTypeValue other))
+            {
+                var fieldsAreEqual =
+                    (Index == other.Index) &&
+                    (TypeName == other.TypeName) &&
+                    (Value == other.Value) &&
+                    (DoubleValue == other.DoubleValue) &&
+                    (IntegerValue == other.IntegerValue) &&
+                    (ElementIdValue == other.ElementIdValue) &&
+                    (_FamilyParameter?.Index == other._FamilyParameter?.Index) &&
+                    (_FamilyType?.Index == other._FamilyType?.Index);
+                if (!fieldsAreEqual)
+                {
+                    return false;
+                }
+                
+                return true;
+            }
+            return false;
+        }
+        
+    } // end of class
+    
+    // AUTO-GENERATED
+    public partial class FamilyReferencePlane
+    {
+        public Vim.Format.ObjectModel.Family Family => _Family?.Value;
+        public int FamilyIndex => _Family?.Index ?? EntityRelation.None;
+        public FamilyReferencePlane()
+        {
+            _Family = new Relation<Vim.Format.ObjectModel.Family>();
+        }
+        
+        public override bool FieldsAreEqual(object obj)
+        {
+            if ((obj is FamilyReferencePlane other))
+            {
+                var fieldsAreEqual =
+                    (Index == other.Index) &&
+                    (FamilyElementId == other.FamilyElementId) &&
+                    (Name == other.Name) &&
+                    (Origin_X == other.Origin_X) &&
+                    (Origin_Y == other.Origin_Y) &&
+                    (Origin_Z == other.Origin_Z) &&
+                    (Normal_X == other.Normal_X) &&
+                    (Normal_Y == other.Normal_Y) &&
+                    (Normal_Z == other.Normal_Z) &&
+                    (IsReference == other.IsReference) &&
+                    (DefinesOrigin == other.DefinesOrigin) &&
+                    (IsDriven == other.IsDriven) &&
+                    (_Family?.Index == other._Family?.Index);
+                if (!fieldsAreEqual)
+                {
+                    return false;
+                }
+                
+                return true;
+            }
+            return false;
+        }
+        
+    } // end of class
+    
+    // AUTO-GENERATED
+    public partial class FamilyForm
+    {
+        public Vim.Format.ObjectModel.Family Family => _Family?.Value;
+        public int FamilyIndex => _Family?.Index ?? EntityRelation.None;
+        public FamilyForm()
+        {
+            _Family = new Relation<Vim.Format.ObjectModel.Family>();
+        }
+        
+        public override bool FieldsAreEqual(object obj)
+        {
+            if ((obj is FamilyForm other))
+            {
+                var fieldsAreEqual =
+                    (Index == other.Index) &&
+                    (FamilyElementId == other.FamilyElementId) &&
+                    (Kind == other.Kind) &&
+                    (IsSolid == other.IsSolid) &&
+                    (IsVisible == other.IsVisible) &&
+                    (Subcategory == other.Subcategory) &&
+                    (Material == other.Material) &&
+                    (PlaneOrigin_X == other.PlaneOrigin_X) &&
+                    (PlaneOrigin_Y == other.PlaneOrigin_Y) &&
+                    (PlaneOrigin_Z == other.PlaneOrigin_Z) &&
+                    (PlaneNormal_X == other.PlaneNormal_X) &&
+                    (PlaneNormal_Y == other.PlaneNormal_Y) &&
+                    (PlaneNormal_Z == other.PlaneNormal_Z) &&
+                    (PlaneXDir_X == other.PlaneXDir_X) &&
+                    (PlaneXDir_Y == other.PlaneXDir_Y) &&
+                    (PlaneXDir_Z == other.PlaneXDir_Z) &&
+                    (StartOffset == other.StartOffset) &&
+                    (EndOffset == other.EndOffset) &&
+                    (StartAngle == other.StartAngle) &&
+                    (EndAngle == other.EndAngle) &&
+                    (IsDriven == other.IsDriven) &&
+                    (IsRebuildable == other.IsRebuildable) &&
+                    (_Family?.Index == other._Family?.Index);
+                if (!fieldsAreEqual)
+                {
+                    return false;
+                }
+                
+                return true;
+            }
+            return false;
+        }
+        
+    } // end of class
+    
+    // AUTO-GENERATED
+    public partial class FamilySketchCurve
+    {
+        public Vim.Format.ObjectModel.FamilyForm FamilyForm => _FamilyForm?.Value;
+        public int FamilyFormIndex => _FamilyForm?.Index ?? EntityRelation.None;
+        public FamilySketchCurve()
+        {
+            _FamilyForm = new Relation<Vim.Format.ObjectModel.FamilyForm>();
+        }
+        
+        public override bool FieldsAreEqual(object obj)
+        {
+            if ((obj is FamilySketchCurve other))
+            {
+                var fieldsAreEqual =
+                    (Index == other.Index) &&
+                    (Role == other.Role) &&
+                    (Loop == other.Loop) &&
+                    (Order == other.Order) &&
+                    (CurveElementId == other.CurveElementId) &&
+                    (CurveKind == other.CurveKind) &&
+                    (Start_X == other.Start_X) &&
+                    (Start_Y == other.Start_Y) &&
+                    (Start_Z == other.Start_Z) &&
+                    (End_X == other.End_X) &&
+                    (End_Y == other.End_Y) &&
+                    (End_Z == other.End_Z) &&
+                    (Mid_X == other.Mid_X) &&
+                    (Mid_Y == other.Mid_Y) &&
+                    (Mid_Z == other.Mid_Z) &&
+                    (Center_X == other.Center_X) &&
+                    (Center_Y == other.Center_Y) &&
+                    (Center_Z == other.Center_Z) &&
+                    (Radius == other.Radius) &&
+                    (LockCount == other.LockCount) &&
+                    (_FamilyForm?.Index == other._FamilyForm?.Index);
+                if (!fieldsAreEqual)
+                {
+                    return false;
+                }
+                
+                return true;
+            }
+            return false;
+        }
+        
+    } // end of class
+    
+    // AUTO-GENERATED
+    public partial class FamilyConstraint
+    {
+        public Vim.Format.ObjectModel.Family Family => _Family?.Value;
+        public int FamilyIndex => _Family?.Index ?? EntityRelation.None;
+        public Vim.Format.ObjectModel.FamilyRecipeParameter FamilyParameter => _FamilyParameter?.Value;
+        public int FamilyParameterIndex => _FamilyParameter?.Index ?? EntityRelation.None;
+        public FamilyConstraint()
+        {
+            _Family = new Relation<Vim.Format.ObjectModel.Family>();
+            _FamilyParameter = new Relation<Vim.Format.ObjectModel.FamilyRecipeParameter>();
+        }
+        
+        public override bool FieldsAreEqual(object obj)
+        {
+            if ((obj is FamilyConstraint other))
+            {
+                var fieldsAreEqual =
+                    (Index == other.Index) &&
+                    (FamilyElementId == other.FamilyElementId) &&
+                    (Kind == other.Kind) &&
+                    (IsLocked == other.IsLocked) &&
+                    (HasView == other.HasView) &&
+                    (Value == other.Value) &&
+                    (SegmentCount == other.SegmentCount) &&
+                    (ReachesGeometry == other.ReachesGeometry) &&
+                    (ReferenceCount == other.ReferenceCount) &&
+                    (_Family?.Index == other._Family?.Index) &&
+                    (_FamilyParameter?.Index == other._FamilyParameter?.Index);
+                if (!fieldsAreEqual)
+                {
+                    return false;
+                }
+                
+                return true;
+            }
+            return false;
+        }
+        
+    } // end of class
+    
+    // AUTO-GENERATED
+    public partial class FamilyConstraintReference
+    {
+        public Vim.Format.ObjectModel.FamilyConstraint FamilyConstraint => _FamilyConstraint?.Value;
+        public int FamilyConstraintIndex => _FamilyConstraint?.Index ?? EntityRelation.None;
+        public FamilyConstraintReference()
+        {
+            _FamilyConstraint = new Relation<Vim.Format.ObjectModel.FamilyConstraint>();
+        }
+        
+        public override bool FieldsAreEqual(object obj)
+        {
+            if ((obj is FamilyConstraintReference other))
+            {
+                var fieldsAreEqual =
+                    (Index == other.Index) &&
+                    (Order == other.Order) &&
+                    (RefKind == other.RefKind) &&
+                    (RefElementId == other.RefElementId) &&
+                    (RefName == other.RefName) &&
+                    (ReferenceType == other.ReferenceType) &&
+                    (Stable == other.Stable) &&
+                    (_FamilyConstraint?.Index == other._FamilyConstraint?.Index);
+                if (!fieldsAreEqual)
+                {
+                    return false;
+                }
+                
+                return true;
+            }
+            return false;
+        }
+        
+    } // end of class
+    
+    // AUTO-GENERATED
+    public partial class FamilyFormDriver
+    {
+        public Vim.Format.ObjectModel.FamilyForm FamilyForm => _FamilyForm?.Value;
+        public int FamilyFormIndex => _FamilyForm?.Index ?? EntityRelation.None;
+        public Vim.Format.ObjectModel.FamilyRecipeParameter FamilyParameter => _FamilyParameter?.Value;
+        public int FamilyParameterIndex => _FamilyParameter?.Index ?? EntityRelation.None;
+        public FamilyFormDriver()
+        {
+            _FamilyForm = new Relation<Vim.Format.ObjectModel.FamilyForm>();
+            _FamilyParameter = new Relation<Vim.Format.ObjectModel.FamilyRecipeParameter>();
+        }
+        
+        public override bool FieldsAreEqual(object obj)
+        {
+            if ((obj is FamilyFormDriver other))
+            {
+                var fieldsAreEqual =
+                    (Index == other.Index) &&
+                    (Via == other.Via) &&
+                    (_FamilyForm?.Index == other._FamilyForm?.Index) &&
+                    (_FamilyParameter?.Index == other._FamilyParameter?.Index);
+                if (!fieldsAreEqual)
+                {
+                    return false;
+                }
+                
+                return true;
+            }
+            return false;
+        }
+        
+    } // end of class
+    
+    // AUTO-GENERATED
     public partial class Geometry
     {
         public Geometry()
@@ -4791,6 +5292,689 @@ namespace Vim.Format.ObjectModel {
         }
         
         
+        // HostPath
+        
+        public EntityTable HostPathEntityTable { get; }
+        
+        public IArray<Int32> HostPathCurveKind { get; }
+        public Int32 GetHostPathCurveKind(int index, Int32 defaultValue = default) => HostPathCurveKind?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> HostPathP0_X { get; }
+        public Double GetHostPathP0_X(int index, Double defaultValue = default) => HostPathP0_X?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> HostPathP0_Y { get; }
+        public Double GetHostPathP0_Y(int index, Double defaultValue = default) => HostPathP0_Y?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> HostPathP0_Z { get; }
+        public Double GetHostPathP0_Z(int index, Double defaultValue = default) => HostPathP0_Z?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> HostPathP1_X { get; }
+        public Double GetHostPathP1_X(int index, Double defaultValue = default) => HostPathP1_X?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> HostPathP1_Y { get; }
+        public Double GetHostPathP1_Y(int index, Double defaultValue = default) => HostPathP1_Y?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> HostPathP1_Z { get; }
+        public Double GetHostPathP1_Z(int index, Double defaultValue = default) => HostPathP1_Z?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> HostPathMid_X { get; }
+        public Double GetHostPathMid_X(int index, Double defaultValue = default) => HostPathMid_X?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> HostPathMid_Y { get; }
+        public Double GetHostPathMid_Y(int index, Double defaultValue = default) => HostPathMid_Y?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> HostPathMid_Z { get; }
+        public Double GetHostPathMid_Z(int index, Double defaultValue = default) => HostPathMid_Z?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> HostPathCenter_X { get; }
+        public Double GetHostPathCenter_X(int index, Double defaultValue = default) => HostPathCenter_X?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> HostPathCenter_Y { get; }
+        public Double GetHostPathCenter_Y(int index, Double defaultValue = default) => HostPathCenter_Y?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> HostPathCenter_Z { get; }
+        public Double GetHostPathCenter_Z(int index, Double defaultValue = default) => HostPathCenter_Z?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> HostPathRadius { get; }
+        public Double GetHostPathRadius(int index, Double defaultValue = default) => HostPathRadius?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> HostPathNormal_X { get; }
+        public Double GetHostPathNormal_X(int index, Double defaultValue = default) => HostPathNormal_X?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> HostPathNormal_Y { get; }
+        public Double GetHostPathNormal_Y(int index, Double defaultValue = default) => HostPathNormal_Y?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> HostPathNormal_Z { get; }
+        public Double GetHostPathNormal_Z(int index, Double defaultValue = default) => HostPathNormal_Z?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> HostPathLength { get; }
+        public Double GetHostPathLength(int index, Double defaultValue = default) => HostPathLength?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> HostPathWidth { get; }
+        public Double GetHostPathWidth(int index, Double defaultValue = default) => HostPathWidth?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> HostPathOrientation_X { get; }
+        public Double GetHostPathOrientation_X(int index, Double defaultValue = default) => HostPathOrientation_X?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> HostPathOrientation_Y { get; }
+        public Double GetHostPathOrientation_Y(int index, Double defaultValue = default) => HostPathOrientation_Y?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> HostPathOrientation_Z { get; }
+        public Double GetHostPathOrientation_Z(int index, Double defaultValue = default) => HostPathOrientation_Z?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Boolean> HostPathFlipped { get; }
+        public Boolean GetHostPathFlipped(int index, Boolean defaultValue = default) => HostPathFlipped?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Int32> HostPathLocationLine { get; }
+        public Int32 GetHostPathLocationLine(int index, Int32 defaultValue = default) => HostPathLocationLine?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> HostPathLocationLineOffset { get; }
+        public Double GetHostPathLocationLineOffset(int index, Double defaultValue = default) => HostPathLocationLineOffset?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> HostPathCoreOffsetExterior { get; }
+        public Double GetHostPathCoreOffsetExterior(int index, Double defaultValue = default) => HostPathCoreOffsetExterior?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> HostPathBaseOffset { get; }
+        public Double GetHostPathBaseOffset(int index, Double defaultValue = default) => HostPathBaseOffset?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> HostPathBaseElevation { get; }
+        public Double GetHostPathBaseElevation(int index, Double defaultValue = default) => HostPathBaseElevation?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> HostPathTopOffset { get; }
+        public Double GetHostPathTopOffset(int index, Double defaultValue = default) => HostPathTopOffset?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> HostPathHeight { get; }
+        public Double GetHostPathHeight(int index, Double defaultValue = default) => HostPathHeight?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Boolean> HostPathHasEditedProfile { get; }
+        public Boolean GetHostPathHasEditedProfile(int index, Boolean defaultValue = default) => HostPathHasEditedProfile?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Int32> HostPathTopAttachedCount { get; }
+        public Int32 GetHostPathTopAttachedCount(int index, Int32 defaultValue = default) => HostPathTopAttachedCount?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Int32> HostPathBaseAttachedCount { get; }
+        public Int32 GetHostPathBaseAttachedCount(int index, Int32 defaultValue = default) => HostPathBaseAttachedCount?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Boolean> HostPathIsStacked { get; }
+        public Boolean GetHostPathIsStacked(int index, Boolean defaultValue = default) => HostPathIsStacked?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Boolean> HostPathIsCurtain { get; }
+        public Boolean GetHostPathIsCurtain(int index, Boolean defaultValue = default) => HostPathIsCurtain?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<int> HostPathBaseLevelIndex { get; }
+        public int GetHostPathBaseLevelIndex(int index) => HostPathBaseLevelIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
+        public IArray<int> HostPathTopLevelIndex { get; }
+        public int GetHostPathTopLevelIndex(int index) => HostPathTopLevelIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
+        public IArray<int> HostPathCompoundStructureIndex { get; }
+        public int GetHostPathCompoundStructureIndex(int index) => HostPathCompoundStructureIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
+        public IArray<int> HostPathElementIndex { get; }
+        public int GetHostPathElementIndex(int index) => HostPathElementIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
+        public int NumHostPath => HostPathEntityTable?.NumRows ?? 0;
+        public IArray<HostPath> HostPathList { get; }
+        public HostPath GetHostPath(int n)
+        {
+            if (n < 0) return null;
+            var r = new HostPath();
+            r.Document = Document;
+            r.Index = n;
+            r.CurveKind = HostPathCurveKind.ElementAtOrDefault(n);
+            r.P0_X = HostPathP0_X.ElementAtOrDefault(n);
+            r.P0_Y = HostPathP0_Y.ElementAtOrDefault(n);
+            r.P0_Z = HostPathP0_Z.ElementAtOrDefault(n);
+            r.P1_X = HostPathP1_X.ElementAtOrDefault(n);
+            r.P1_Y = HostPathP1_Y.ElementAtOrDefault(n);
+            r.P1_Z = HostPathP1_Z.ElementAtOrDefault(n);
+            r.Mid_X = HostPathMid_X.ElementAtOrDefault(n);
+            r.Mid_Y = HostPathMid_Y.ElementAtOrDefault(n);
+            r.Mid_Z = HostPathMid_Z.ElementAtOrDefault(n);
+            r.Center_X = HostPathCenter_X.ElementAtOrDefault(n);
+            r.Center_Y = HostPathCenter_Y.ElementAtOrDefault(n);
+            r.Center_Z = HostPathCenter_Z.ElementAtOrDefault(n);
+            r.Radius = HostPathRadius.ElementAtOrDefault(n);
+            r.Normal_X = HostPathNormal_X.ElementAtOrDefault(n);
+            r.Normal_Y = HostPathNormal_Y.ElementAtOrDefault(n);
+            r.Normal_Z = HostPathNormal_Z.ElementAtOrDefault(n);
+            r.Length = HostPathLength.ElementAtOrDefault(n);
+            r.Width = HostPathWidth.ElementAtOrDefault(n);
+            r.Orientation_X = HostPathOrientation_X.ElementAtOrDefault(n);
+            r.Orientation_Y = HostPathOrientation_Y.ElementAtOrDefault(n);
+            r.Orientation_Z = HostPathOrientation_Z.ElementAtOrDefault(n);
+            r.Flipped = HostPathFlipped.ElementAtOrDefault(n);
+            r.LocationLine = HostPathLocationLine.ElementAtOrDefault(n);
+            r.LocationLineOffset = HostPathLocationLineOffset.ElementAtOrDefault(n);
+            r.CoreOffsetExterior = HostPathCoreOffsetExterior.ElementAtOrDefault(n);
+            r.BaseOffset = HostPathBaseOffset.ElementAtOrDefault(n);
+            r.BaseElevation = HostPathBaseElevation.ElementAtOrDefault(n);
+            r.TopOffset = HostPathTopOffset.ElementAtOrDefault(n);
+            r.Height = HostPathHeight.ElementAtOrDefault(n);
+            r.HasEditedProfile = HostPathHasEditedProfile.ElementAtOrDefault(n);
+            r.TopAttachedCount = HostPathTopAttachedCount.ElementAtOrDefault(n);
+            r.BaseAttachedCount = HostPathBaseAttachedCount.ElementAtOrDefault(n);
+            r.IsStacked = HostPathIsStacked.ElementAtOrDefault(n);
+            r.IsCurtain = HostPathIsCurtain.ElementAtOrDefault(n);
+            r._BaseLevel = new Relation<Vim.Format.ObjectModel.Level>(GetHostPathBaseLevelIndex(n), GetLevel);
+            r._TopLevel = new Relation<Vim.Format.ObjectModel.Level>(GetHostPathTopLevelIndex(n), GetLevel);
+            r._CompoundStructure = new Relation<Vim.Format.ObjectModel.CompoundStructure>(GetHostPathCompoundStructureIndex(n), GetCompoundStructure);
+            r._Element = new Relation<Vim.Format.ObjectModel.Element>(GetHostPathElementIndex(n), GetElement);
+            return r;
+        }
+        
+        
+        // HostedInsert
+        
+        public EntityTable HostedInsertEntityTable { get; }
+        
+        public IArray<Int32> HostedInsertKind { get; }
+        public Int32 GetHostedInsertKind(int index, Int32 defaultValue = default) => HostedInsertKind?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> HostedInsertDistanceAlongPath { get; }
+        public Double GetHostedInsertDistanceAlongPath(int index, Double defaultValue = default) => HostedInsertDistanceAlongPath?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> HostedInsertNormalizedParameter { get; }
+        public Double GetHostedInsertNormalizedParameter(int index, Double defaultValue = default) => HostedInsertNormalizedParameter?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> HostedInsertOffsetFromPath { get; }
+        public Double GetHostedInsertOffsetFromPath(int index, Double defaultValue = default) => HostedInsertOffsetFromPath?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> HostedInsertElevation { get; }
+        public Double GetHostedInsertElevation(int index, Double defaultValue = default) => HostedInsertElevation?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> HostedInsertSillHeight { get; }
+        public Double GetHostedInsertSillHeight(int index, Double defaultValue = default) => HostedInsertSillHeight?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> HostedInsertHeadHeight { get; }
+        public Double GetHostedInsertHeadHeight(int index, Double defaultValue = default) => HostedInsertHeadHeight?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Boolean> HostedInsertFacingFlipped { get; }
+        public Boolean GetHostedInsertFacingFlipped(int index, Boolean defaultValue = default) => HostedInsertFacingFlipped?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Boolean> HostedInsertHandFlipped { get; }
+        public Boolean GetHostedInsertHandFlipped(int index, Boolean defaultValue = default) => HostedInsertHandFlipped?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> HostedInsertOrigin_X { get; }
+        public Double GetHostedInsertOrigin_X(int index, Double defaultValue = default) => HostedInsertOrigin_X?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> HostedInsertOrigin_Y { get; }
+        public Double GetHostedInsertOrigin_Y(int index, Double defaultValue = default) => HostedInsertOrigin_Y?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> HostedInsertOrigin_Z { get; }
+        public Double GetHostedInsertOrigin_Z(int index, Double defaultValue = default) => HostedInsertOrigin_Z?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> HostedInsertOpeningMin_X { get; }
+        public Double GetHostedInsertOpeningMin_X(int index, Double defaultValue = default) => HostedInsertOpeningMin_X?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> HostedInsertOpeningMin_Y { get; }
+        public Double GetHostedInsertOpeningMin_Y(int index, Double defaultValue = default) => HostedInsertOpeningMin_Y?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> HostedInsertOpeningMin_Z { get; }
+        public Double GetHostedInsertOpeningMin_Z(int index, Double defaultValue = default) => HostedInsertOpeningMin_Z?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> HostedInsertOpeningMax_X { get; }
+        public Double GetHostedInsertOpeningMax_X(int index, Double defaultValue = default) => HostedInsertOpeningMax_X?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> HostedInsertOpeningMax_Y { get; }
+        public Double GetHostedInsertOpeningMax_Y(int index, Double defaultValue = default) => HostedInsertOpeningMax_Y?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> HostedInsertOpeningMax_Z { get; }
+        public Double GetHostedInsertOpeningMax_Z(int index, Double defaultValue = default) => HostedInsertOpeningMax_Z?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<int> HostedInsertHostIndex { get; }
+        public int GetHostedInsertHostIndex(int index) => HostedInsertHostIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
+        public IArray<int> HostedInsertHostPathIndex { get; }
+        public int GetHostedInsertHostPathIndex(int index) => HostedInsertHostPathIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
+        public IArray<int> HostedInsertElementIndex { get; }
+        public int GetHostedInsertElementIndex(int index) => HostedInsertElementIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
+        public int NumHostedInsert => HostedInsertEntityTable?.NumRows ?? 0;
+        public IArray<HostedInsert> HostedInsertList { get; }
+        public HostedInsert GetHostedInsert(int n)
+        {
+            if (n < 0) return null;
+            var r = new HostedInsert();
+            r.Document = Document;
+            r.Index = n;
+            r.Kind = HostedInsertKind.ElementAtOrDefault(n);
+            r.DistanceAlongPath = HostedInsertDistanceAlongPath.ElementAtOrDefault(n);
+            r.NormalizedParameter = HostedInsertNormalizedParameter.ElementAtOrDefault(n);
+            r.OffsetFromPath = HostedInsertOffsetFromPath.ElementAtOrDefault(n);
+            r.Elevation = HostedInsertElevation.ElementAtOrDefault(n);
+            r.SillHeight = HostedInsertSillHeight.ElementAtOrDefault(n);
+            r.HeadHeight = HostedInsertHeadHeight.ElementAtOrDefault(n);
+            r.FacingFlipped = HostedInsertFacingFlipped.ElementAtOrDefault(n);
+            r.HandFlipped = HostedInsertHandFlipped.ElementAtOrDefault(n);
+            r.Origin_X = HostedInsertOrigin_X.ElementAtOrDefault(n);
+            r.Origin_Y = HostedInsertOrigin_Y.ElementAtOrDefault(n);
+            r.Origin_Z = HostedInsertOrigin_Z.ElementAtOrDefault(n);
+            r.OpeningMin_X = HostedInsertOpeningMin_X.ElementAtOrDefault(n);
+            r.OpeningMin_Y = HostedInsertOpeningMin_Y.ElementAtOrDefault(n);
+            r.OpeningMin_Z = HostedInsertOpeningMin_Z.ElementAtOrDefault(n);
+            r.OpeningMax_X = HostedInsertOpeningMax_X.ElementAtOrDefault(n);
+            r.OpeningMax_Y = HostedInsertOpeningMax_Y.ElementAtOrDefault(n);
+            r.OpeningMax_Z = HostedInsertOpeningMax_Z.ElementAtOrDefault(n);
+            r._Host = new Relation<Vim.Format.ObjectModel.Element>(GetHostedInsertHostIndex(n), GetElement);
+            r._HostPath = new Relation<Vim.Format.ObjectModel.HostPath>(GetHostedInsertHostPathIndex(n), GetHostPath);
+            r._Element = new Relation<Vim.Format.ObjectModel.Element>(GetHostedInsertElementIndex(n), GetElement);
+            return r;
+        }
+        
+        
+        // FamilyRecipe
+        
+        public EntityTable FamilyRecipeEntityTable { get; }
+        
+        public IArray<Int32> FamilyRecipeReadStatus { get; }
+        public Int32 GetFamilyRecipeReadStatus(int index, Int32 defaultValue = default) => FamilyRecipeReadStatus?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<String> FamilyRecipeRefusal { get; }
+        public String GetFamilyRecipeRefusal(int index, String defaultValue = "") => FamilyRecipeRefusal?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Int32> FamilyRecipeFlexibility { get; }
+        public Int32 GetFamilyRecipeFlexibility(int index, Int32 defaultValue = default) => FamilyRecipeFlexibility?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<String> FamilyRecipeReading { get; }
+        public String GetFamilyRecipeReading(int index, String defaultValue = "") => FamilyRecipeReading?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<String> FamilyRecipePlacementType { get; }
+        public String GetFamilyRecipePlacementType(int index, String defaultValue = "") => FamilyRecipePlacementType?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Boolean> FamilyRecipeIsParametric { get; }
+        public Boolean GetFamilyRecipeIsParametric(int index, Boolean defaultValue = default) => FamilyRecipeIsParametric?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<String> FamilyRecipeCurrentTypeName { get; }
+        public String GetFamilyRecipeCurrentTypeName(int index, String defaultValue = "") => FamilyRecipeCurrentTypeName?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Int32> FamilyRecipeLabelledDimensionCount { get; }
+        public Int32 GetFamilyRecipeLabelledDimensionCount(int index, Int32 defaultValue = default) => FamilyRecipeLabelledDimensionCount?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Int32> FamilyRecipeDrivingDimensionCount { get; }
+        public Int32 GetFamilyRecipeDrivingDimensionCount(int index, Int32 defaultValue = default) => FamilyRecipeDrivingDimensionCount?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Int32> FamilyRecipeLockCount { get; }
+        public Int32 GetFamilyRecipeLockCount(int index, Int32 defaultValue = default) => FamilyRecipeLockCount?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Int32> FamilyRecipeFormCount { get; }
+        public Int32 GetFamilyRecipeFormCount(int index, Int32 defaultValue = default) => FamilyRecipeFormCount?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Int32> FamilyRecipeOpeningCount { get; }
+        public Int32 GetFamilyRecipeOpeningCount(int index, Int32 defaultValue = default) => FamilyRecipeOpeningCount?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Int32> FamilyRecipeNestedInstanceCount { get; }
+        public Int32 GetFamilyRecipeNestedInstanceCount(int index, Int32 defaultValue = default) => FamilyRecipeNestedInstanceCount?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Int32> FamilyRecipeOpeningTied { get; }
+        public Int32 GetFamilyRecipeOpeningTied(int index, Int32 defaultValue = default) => FamilyRecipeOpeningTied?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Int32> FamilyRecipeReadMs { get; }
+        public Int32 GetFamilyRecipeReadMs(int index, Int32 defaultValue = default) => FamilyRecipeReadMs?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<int> FamilyRecipeFamilyIndex { get; }
+        public int GetFamilyRecipeFamilyIndex(int index) => FamilyRecipeFamilyIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
+        public int NumFamilyRecipe => FamilyRecipeEntityTable?.NumRows ?? 0;
+        public IArray<FamilyRecipe> FamilyRecipeList { get; }
+        public FamilyRecipe GetFamilyRecipe(int n)
+        {
+            if (n < 0) return null;
+            var r = new FamilyRecipe();
+            r.Document = Document;
+            r.Index = n;
+            r.ReadStatus = FamilyRecipeReadStatus.ElementAtOrDefault(n);
+            r.Refusal = FamilyRecipeRefusal.ElementAtOrDefault(n);
+            r.Flexibility = FamilyRecipeFlexibility.ElementAtOrDefault(n);
+            r.Reading = FamilyRecipeReading.ElementAtOrDefault(n);
+            r.PlacementType = FamilyRecipePlacementType.ElementAtOrDefault(n);
+            r.IsParametric = FamilyRecipeIsParametric.ElementAtOrDefault(n);
+            r.CurrentTypeName = FamilyRecipeCurrentTypeName.ElementAtOrDefault(n);
+            r.LabelledDimensionCount = FamilyRecipeLabelledDimensionCount.ElementAtOrDefault(n);
+            r.DrivingDimensionCount = FamilyRecipeDrivingDimensionCount.ElementAtOrDefault(n);
+            r.LockCount = FamilyRecipeLockCount.ElementAtOrDefault(n);
+            r.FormCount = FamilyRecipeFormCount.ElementAtOrDefault(n);
+            r.OpeningCount = FamilyRecipeOpeningCount.ElementAtOrDefault(n);
+            r.NestedInstanceCount = FamilyRecipeNestedInstanceCount.ElementAtOrDefault(n);
+            r.OpeningTied = FamilyRecipeOpeningTied.ElementAtOrDefault(n);
+            r.ReadMs = FamilyRecipeReadMs.ElementAtOrDefault(n);
+            r._Family = new Relation<Vim.Format.ObjectModel.Family>(GetFamilyRecipeFamilyIndex(n), GetFamily);
+            return r;
+        }
+        
+        
+        // FamilyRecipeParameter
+        
+        public EntityTable FamilyRecipeParameterEntityTable { get; }
+        
+        public IArray<String> FamilyRecipeParameterName { get; }
+        public String GetFamilyRecipeParameterName(int index, String defaultValue = "") => FamilyRecipeParameterName?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Int64> FamilyRecipeParameterFamilyElementId { get; }
+        public Int64 GetFamilyRecipeParameterFamilyElementId(int index, Int64 defaultValue = default) => FamilyRecipeParameterFamilyElementId?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<String> FamilyRecipeParameterGuid { get; }
+        public String GetFamilyRecipeParameterGuid(int index, String defaultValue = "") => FamilyRecipeParameterGuid?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<String> FamilyRecipeParameterDataType { get; }
+        public String GetFamilyRecipeParameterDataType(int index, String defaultValue = "") => FamilyRecipeParameterDataType?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<String> FamilyRecipeParameterStorageType { get; }
+        public String GetFamilyRecipeParameterStorageType(int index, String defaultValue = "") => FamilyRecipeParameterStorageType?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Boolean> FamilyRecipeParameterIsInstance { get; }
+        public Boolean GetFamilyRecipeParameterIsInstance(int index, Boolean defaultValue = default) => FamilyRecipeParameterIsInstance?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Boolean> FamilyRecipeParameterIsReporting { get; }
+        public Boolean GetFamilyRecipeParameterIsReporting(int index, Boolean defaultValue = default) => FamilyRecipeParameterIsReporting?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Boolean> FamilyRecipeParameterIsShared { get; }
+        public Boolean GetFamilyRecipeParameterIsShared(int index, Boolean defaultValue = default) => FamilyRecipeParameterIsShared?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Boolean> FamilyRecipeParameterIsDeterminedByFormula { get; }
+        public Boolean GetFamilyRecipeParameterIsDeterminedByFormula(int index, Boolean defaultValue = default) => FamilyRecipeParameterIsDeterminedByFormula?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<String> FamilyRecipeParameterFormula { get; }
+        public String GetFamilyRecipeParameterFormula(int index, String defaultValue = "") => FamilyRecipeParameterFormula?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Int32> FamilyRecipeParameterDrives { get; }
+        public Int32 GetFamilyRecipeParameterDrives(int index, Int32 defaultValue = default) => FamilyRecipeParameterDrives?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<int> FamilyRecipeParameterFamilyIndex { get; }
+        public int GetFamilyRecipeParameterFamilyIndex(int index) => FamilyRecipeParameterFamilyIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
+        public int NumFamilyRecipeParameter => FamilyRecipeParameterEntityTable?.NumRows ?? 0;
+        public IArray<FamilyRecipeParameter> FamilyRecipeParameterList { get; }
+        public FamilyRecipeParameter GetFamilyRecipeParameter(int n)
+        {
+            if (n < 0) return null;
+            var r = new FamilyRecipeParameter();
+            r.Document = Document;
+            r.Index = n;
+            r.Name = FamilyRecipeParameterName.ElementAtOrDefault(n);
+            r.FamilyElementId = FamilyRecipeParameterFamilyElementId.ElementAtOrDefault(n);
+            r.Guid = FamilyRecipeParameterGuid.ElementAtOrDefault(n);
+            r.DataType = FamilyRecipeParameterDataType.ElementAtOrDefault(n);
+            r.StorageType = FamilyRecipeParameterStorageType.ElementAtOrDefault(n);
+            r.IsInstance = FamilyRecipeParameterIsInstance.ElementAtOrDefault(n);
+            r.IsReporting = FamilyRecipeParameterIsReporting.ElementAtOrDefault(n);
+            r.IsShared = FamilyRecipeParameterIsShared.ElementAtOrDefault(n);
+            r.IsDeterminedByFormula = FamilyRecipeParameterIsDeterminedByFormula.ElementAtOrDefault(n);
+            r.Formula = FamilyRecipeParameterFormula.ElementAtOrDefault(n);
+            r.Drives = FamilyRecipeParameterDrives.ElementAtOrDefault(n);
+            r._Family = new Relation<Vim.Format.ObjectModel.Family>(GetFamilyRecipeParameterFamilyIndex(n), GetFamily);
+            return r;
+        }
+        
+        
+        // FamilyTypeValue
+        
+        public EntityTable FamilyTypeValueEntityTable { get; }
+        
+        public IArray<String> FamilyTypeValueTypeName { get; }
+        public String GetFamilyTypeValueTypeName(int index, String defaultValue = "") => FamilyTypeValueTypeName?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<String> FamilyTypeValueValue { get; }
+        public String GetFamilyTypeValueValue(int index, String defaultValue = "") => FamilyTypeValueValue?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> FamilyTypeValueDoubleValue { get; }
+        public Double GetFamilyTypeValueDoubleValue(int index, Double defaultValue = default) => FamilyTypeValueDoubleValue?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Int32> FamilyTypeValueIntegerValue { get; }
+        public Int32 GetFamilyTypeValueIntegerValue(int index, Int32 defaultValue = default) => FamilyTypeValueIntegerValue?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Int64> FamilyTypeValueElementIdValue { get; }
+        public Int64 GetFamilyTypeValueElementIdValue(int index, Int64 defaultValue = default) => FamilyTypeValueElementIdValue?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<int> FamilyTypeValueFamilyParameterIndex { get; }
+        public int GetFamilyTypeValueFamilyParameterIndex(int index) => FamilyTypeValueFamilyParameterIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
+        public IArray<int> FamilyTypeValueFamilyTypeIndex { get; }
+        public int GetFamilyTypeValueFamilyTypeIndex(int index) => FamilyTypeValueFamilyTypeIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
+        public int NumFamilyTypeValue => FamilyTypeValueEntityTable?.NumRows ?? 0;
+        public IArray<FamilyTypeValue> FamilyTypeValueList { get; }
+        public FamilyTypeValue GetFamilyTypeValue(int n)
+        {
+            if (n < 0) return null;
+            var r = new FamilyTypeValue();
+            r.Document = Document;
+            r.Index = n;
+            r.TypeName = FamilyTypeValueTypeName.ElementAtOrDefault(n);
+            r.Value = FamilyTypeValueValue.ElementAtOrDefault(n);
+            r.DoubleValue = FamilyTypeValueDoubleValue.ElementAtOrDefault(n);
+            r.IntegerValue = FamilyTypeValueIntegerValue.ElementAtOrDefault(n);
+            r.ElementIdValue = FamilyTypeValueElementIdValue.ElementAtOrDefault(n);
+            r._FamilyParameter = new Relation<Vim.Format.ObjectModel.FamilyRecipeParameter>(GetFamilyTypeValueFamilyParameterIndex(n), GetFamilyRecipeParameter);
+            r._FamilyType = new Relation<Vim.Format.ObjectModel.FamilyType>(GetFamilyTypeValueFamilyTypeIndex(n), GetFamilyType);
+            return r;
+        }
+        
+        
+        // FamilyReferencePlane
+        
+        public EntityTable FamilyReferencePlaneEntityTable { get; }
+        
+        public IArray<Int64> FamilyReferencePlaneFamilyElementId { get; }
+        public Int64 GetFamilyReferencePlaneFamilyElementId(int index, Int64 defaultValue = default) => FamilyReferencePlaneFamilyElementId?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<String> FamilyReferencePlaneName { get; }
+        public String GetFamilyReferencePlaneName(int index, String defaultValue = "") => FamilyReferencePlaneName?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> FamilyReferencePlaneOrigin_X { get; }
+        public Double GetFamilyReferencePlaneOrigin_X(int index, Double defaultValue = default) => FamilyReferencePlaneOrigin_X?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> FamilyReferencePlaneOrigin_Y { get; }
+        public Double GetFamilyReferencePlaneOrigin_Y(int index, Double defaultValue = default) => FamilyReferencePlaneOrigin_Y?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> FamilyReferencePlaneOrigin_Z { get; }
+        public Double GetFamilyReferencePlaneOrigin_Z(int index, Double defaultValue = default) => FamilyReferencePlaneOrigin_Z?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> FamilyReferencePlaneNormal_X { get; }
+        public Double GetFamilyReferencePlaneNormal_X(int index, Double defaultValue = default) => FamilyReferencePlaneNormal_X?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> FamilyReferencePlaneNormal_Y { get; }
+        public Double GetFamilyReferencePlaneNormal_Y(int index, Double defaultValue = default) => FamilyReferencePlaneNormal_Y?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> FamilyReferencePlaneNormal_Z { get; }
+        public Double GetFamilyReferencePlaneNormal_Z(int index, Double defaultValue = default) => FamilyReferencePlaneNormal_Z?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<String> FamilyReferencePlaneIsReference { get; }
+        public String GetFamilyReferencePlaneIsReference(int index, String defaultValue = "") => FamilyReferencePlaneIsReference?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Boolean> FamilyReferencePlaneDefinesOrigin { get; }
+        public Boolean GetFamilyReferencePlaneDefinesOrigin(int index, Boolean defaultValue = default) => FamilyReferencePlaneDefinesOrigin?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Boolean> FamilyReferencePlaneIsDriven { get; }
+        public Boolean GetFamilyReferencePlaneIsDriven(int index, Boolean defaultValue = default) => FamilyReferencePlaneIsDriven?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<int> FamilyReferencePlaneFamilyIndex { get; }
+        public int GetFamilyReferencePlaneFamilyIndex(int index) => FamilyReferencePlaneFamilyIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
+        public int NumFamilyReferencePlane => FamilyReferencePlaneEntityTable?.NumRows ?? 0;
+        public IArray<FamilyReferencePlane> FamilyReferencePlaneList { get; }
+        public FamilyReferencePlane GetFamilyReferencePlane(int n)
+        {
+            if (n < 0) return null;
+            var r = new FamilyReferencePlane();
+            r.Document = Document;
+            r.Index = n;
+            r.FamilyElementId = FamilyReferencePlaneFamilyElementId.ElementAtOrDefault(n);
+            r.Name = FamilyReferencePlaneName.ElementAtOrDefault(n);
+            r.Origin_X = FamilyReferencePlaneOrigin_X.ElementAtOrDefault(n);
+            r.Origin_Y = FamilyReferencePlaneOrigin_Y.ElementAtOrDefault(n);
+            r.Origin_Z = FamilyReferencePlaneOrigin_Z.ElementAtOrDefault(n);
+            r.Normal_X = FamilyReferencePlaneNormal_X.ElementAtOrDefault(n);
+            r.Normal_Y = FamilyReferencePlaneNormal_Y.ElementAtOrDefault(n);
+            r.Normal_Z = FamilyReferencePlaneNormal_Z.ElementAtOrDefault(n);
+            r.IsReference = FamilyReferencePlaneIsReference.ElementAtOrDefault(n);
+            r.DefinesOrigin = FamilyReferencePlaneDefinesOrigin.ElementAtOrDefault(n);
+            r.IsDriven = FamilyReferencePlaneIsDriven.ElementAtOrDefault(n);
+            r._Family = new Relation<Vim.Format.ObjectModel.Family>(GetFamilyReferencePlaneFamilyIndex(n), GetFamily);
+            return r;
+        }
+        
+        
+        // FamilyForm
+        
+        public EntityTable FamilyFormEntityTable { get; }
+        
+        public IArray<Int64> FamilyFormFamilyElementId { get; }
+        public Int64 GetFamilyFormFamilyElementId(int index, Int64 defaultValue = default) => FamilyFormFamilyElementId?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<String> FamilyFormKind { get; }
+        public String GetFamilyFormKind(int index, String defaultValue = "") => FamilyFormKind?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Boolean> FamilyFormIsSolid { get; }
+        public Boolean GetFamilyFormIsSolid(int index, Boolean defaultValue = default) => FamilyFormIsSolid?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Boolean> FamilyFormIsVisible { get; }
+        public Boolean GetFamilyFormIsVisible(int index, Boolean defaultValue = default) => FamilyFormIsVisible?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<String> FamilyFormSubcategory { get; }
+        public String GetFamilyFormSubcategory(int index, String defaultValue = "") => FamilyFormSubcategory?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<String> FamilyFormMaterial { get; }
+        public String GetFamilyFormMaterial(int index, String defaultValue = "") => FamilyFormMaterial?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> FamilyFormPlaneOrigin_X { get; }
+        public Double GetFamilyFormPlaneOrigin_X(int index, Double defaultValue = default) => FamilyFormPlaneOrigin_X?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> FamilyFormPlaneOrigin_Y { get; }
+        public Double GetFamilyFormPlaneOrigin_Y(int index, Double defaultValue = default) => FamilyFormPlaneOrigin_Y?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> FamilyFormPlaneOrigin_Z { get; }
+        public Double GetFamilyFormPlaneOrigin_Z(int index, Double defaultValue = default) => FamilyFormPlaneOrigin_Z?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> FamilyFormPlaneNormal_X { get; }
+        public Double GetFamilyFormPlaneNormal_X(int index, Double defaultValue = default) => FamilyFormPlaneNormal_X?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> FamilyFormPlaneNormal_Y { get; }
+        public Double GetFamilyFormPlaneNormal_Y(int index, Double defaultValue = default) => FamilyFormPlaneNormal_Y?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> FamilyFormPlaneNormal_Z { get; }
+        public Double GetFamilyFormPlaneNormal_Z(int index, Double defaultValue = default) => FamilyFormPlaneNormal_Z?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> FamilyFormPlaneXDir_X { get; }
+        public Double GetFamilyFormPlaneXDir_X(int index, Double defaultValue = default) => FamilyFormPlaneXDir_X?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> FamilyFormPlaneXDir_Y { get; }
+        public Double GetFamilyFormPlaneXDir_Y(int index, Double defaultValue = default) => FamilyFormPlaneXDir_Y?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> FamilyFormPlaneXDir_Z { get; }
+        public Double GetFamilyFormPlaneXDir_Z(int index, Double defaultValue = default) => FamilyFormPlaneXDir_Z?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> FamilyFormStartOffset { get; }
+        public Double GetFamilyFormStartOffset(int index, Double defaultValue = default) => FamilyFormStartOffset?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> FamilyFormEndOffset { get; }
+        public Double GetFamilyFormEndOffset(int index, Double defaultValue = default) => FamilyFormEndOffset?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> FamilyFormStartAngle { get; }
+        public Double GetFamilyFormStartAngle(int index, Double defaultValue = default) => FamilyFormStartAngle?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> FamilyFormEndAngle { get; }
+        public Double GetFamilyFormEndAngle(int index, Double defaultValue = default) => FamilyFormEndAngle?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Boolean> FamilyFormIsDriven { get; }
+        public Boolean GetFamilyFormIsDriven(int index, Boolean defaultValue = default) => FamilyFormIsDriven?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Boolean> FamilyFormIsRebuildable { get; }
+        public Boolean GetFamilyFormIsRebuildable(int index, Boolean defaultValue = default) => FamilyFormIsRebuildable?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<int> FamilyFormFamilyIndex { get; }
+        public int GetFamilyFormFamilyIndex(int index) => FamilyFormFamilyIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
+        public int NumFamilyForm => FamilyFormEntityTable?.NumRows ?? 0;
+        public IArray<FamilyForm> FamilyFormList { get; }
+        public FamilyForm GetFamilyForm(int n)
+        {
+            if (n < 0) return null;
+            var r = new FamilyForm();
+            r.Document = Document;
+            r.Index = n;
+            r.FamilyElementId = FamilyFormFamilyElementId.ElementAtOrDefault(n);
+            r.Kind = FamilyFormKind.ElementAtOrDefault(n);
+            r.IsSolid = FamilyFormIsSolid.ElementAtOrDefault(n);
+            r.IsVisible = FamilyFormIsVisible.ElementAtOrDefault(n);
+            r.Subcategory = FamilyFormSubcategory.ElementAtOrDefault(n);
+            r.Material = FamilyFormMaterial.ElementAtOrDefault(n);
+            r.PlaneOrigin_X = FamilyFormPlaneOrigin_X.ElementAtOrDefault(n);
+            r.PlaneOrigin_Y = FamilyFormPlaneOrigin_Y.ElementAtOrDefault(n);
+            r.PlaneOrigin_Z = FamilyFormPlaneOrigin_Z.ElementAtOrDefault(n);
+            r.PlaneNormal_X = FamilyFormPlaneNormal_X.ElementAtOrDefault(n);
+            r.PlaneNormal_Y = FamilyFormPlaneNormal_Y.ElementAtOrDefault(n);
+            r.PlaneNormal_Z = FamilyFormPlaneNormal_Z.ElementAtOrDefault(n);
+            r.PlaneXDir_X = FamilyFormPlaneXDir_X.ElementAtOrDefault(n);
+            r.PlaneXDir_Y = FamilyFormPlaneXDir_Y.ElementAtOrDefault(n);
+            r.PlaneXDir_Z = FamilyFormPlaneXDir_Z.ElementAtOrDefault(n);
+            r.StartOffset = FamilyFormStartOffset.ElementAtOrDefault(n);
+            r.EndOffset = FamilyFormEndOffset.ElementAtOrDefault(n);
+            r.StartAngle = FamilyFormStartAngle.ElementAtOrDefault(n);
+            r.EndAngle = FamilyFormEndAngle.ElementAtOrDefault(n);
+            r.IsDriven = FamilyFormIsDriven.ElementAtOrDefault(n);
+            r.IsRebuildable = FamilyFormIsRebuildable.ElementAtOrDefault(n);
+            r._Family = new Relation<Vim.Format.ObjectModel.Family>(GetFamilyFormFamilyIndex(n), GetFamily);
+            return r;
+        }
+        
+        
+        // FamilySketchCurve
+        
+        public EntityTable FamilySketchCurveEntityTable { get; }
+        
+        public IArray<Int32> FamilySketchCurveRole { get; }
+        public Int32 GetFamilySketchCurveRole(int index, Int32 defaultValue = default) => FamilySketchCurveRole?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Int32> FamilySketchCurveLoop { get; }
+        public Int32 GetFamilySketchCurveLoop(int index, Int32 defaultValue = default) => FamilySketchCurveLoop?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Int32> FamilySketchCurveOrder { get; }
+        public Int32 GetFamilySketchCurveOrder(int index, Int32 defaultValue = default) => FamilySketchCurveOrder?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Int64> FamilySketchCurveCurveElementId { get; }
+        public Int64 GetFamilySketchCurveCurveElementId(int index, Int64 defaultValue = default) => FamilySketchCurveCurveElementId?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Int32> FamilySketchCurveCurveKind { get; }
+        public Int32 GetFamilySketchCurveCurveKind(int index, Int32 defaultValue = default) => FamilySketchCurveCurveKind?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> FamilySketchCurveStart_X { get; }
+        public Double GetFamilySketchCurveStart_X(int index, Double defaultValue = default) => FamilySketchCurveStart_X?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> FamilySketchCurveStart_Y { get; }
+        public Double GetFamilySketchCurveStart_Y(int index, Double defaultValue = default) => FamilySketchCurveStart_Y?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> FamilySketchCurveStart_Z { get; }
+        public Double GetFamilySketchCurveStart_Z(int index, Double defaultValue = default) => FamilySketchCurveStart_Z?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> FamilySketchCurveEnd_X { get; }
+        public Double GetFamilySketchCurveEnd_X(int index, Double defaultValue = default) => FamilySketchCurveEnd_X?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> FamilySketchCurveEnd_Y { get; }
+        public Double GetFamilySketchCurveEnd_Y(int index, Double defaultValue = default) => FamilySketchCurveEnd_Y?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> FamilySketchCurveEnd_Z { get; }
+        public Double GetFamilySketchCurveEnd_Z(int index, Double defaultValue = default) => FamilySketchCurveEnd_Z?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> FamilySketchCurveMid_X { get; }
+        public Double GetFamilySketchCurveMid_X(int index, Double defaultValue = default) => FamilySketchCurveMid_X?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> FamilySketchCurveMid_Y { get; }
+        public Double GetFamilySketchCurveMid_Y(int index, Double defaultValue = default) => FamilySketchCurveMid_Y?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> FamilySketchCurveMid_Z { get; }
+        public Double GetFamilySketchCurveMid_Z(int index, Double defaultValue = default) => FamilySketchCurveMid_Z?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> FamilySketchCurveCenter_X { get; }
+        public Double GetFamilySketchCurveCenter_X(int index, Double defaultValue = default) => FamilySketchCurveCenter_X?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> FamilySketchCurveCenter_Y { get; }
+        public Double GetFamilySketchCurveCenter_Y(int index, Double defaultValue = default) => FamilySketchCurveCenter_Y?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> FamilySketchCurveCenter_Z { get; }
+        public Double GetFamilySketchCurveCenter_Z(int index, Double defaultValue = default) => FamilySketchCurveCenter_Z?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> FamilySketchCurveRadius { get; }
+        public Double GetFamilySketchCurveRadius(int index, Double defaultValue = default) => FamilySketchCurveRadius?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Int32> FamilySketchCurveLockCount { get; }
+        public Int32 GetFamilySketchCurveLockCount(int index, Int32 defaultValue = default) => FamilySketchCurveLockCount?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<int> FamilySketchCurveFamilyFormIndex { get; }
+        public int GetFamilySketchCurveFamilyFormIndex(int index) => FamilySketchCurveFamilyFormIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
+        public int NumFamilySketchCurve => FamilySketchCurveEntityTable?.NumRows ?? 0;
+        public IArray<FamilySketchCurve> FamilySketchCurveList { get; }
+        public FamilySketchCurve GetFamilySketchCurve(int n)
+        {
+            if (n < 0) return null;
+            var r = new FamilySketchCurve();
+            r.Document = Document;
+            r.Index = n;
+            r.Role = FamilySketchCurveRole.ElementAtOrDefault(n);
+            r.Loop = FamilySketchCurveLoop.ElementAtOrDefault(n);
+            r.Order = FamilySketchCurveOrder.ElementAtOrDefault(n);
+            r.CurveElementId = FamilySketchCurveCurveElementId.ElementAtOrDefault(n);
+            r.CurveKind = FamilySketchCurveCurveKind.ElementAtOrDefault(n);
+            r.Start_X = FamilySketchCurveStart_X.ElementAtOrDefault(n);
+            r.Start_Y = FamilySketchCurveStart_Y.ElementAtOrDefault(n);
+            r.Start_Z = FamilySketchCurveStart_Z.ElementAtOrDefault(n);
+            r.End_X = FamilySketchCurveEnd_X.ElementAtOrDefault(n);
+            r.End_Y = FamilySketchCurveEnd_Y.ElementAtOrDefault(n);
+            r.End_Z = FamilySketchCurveEnd_Z.ElementAtOrDefault(n);
+            r.Mid_X = FamilySketchCurveMid_X.ElementAtOrDefault(n);
+            r.Mid_Y = FamilySketchCurveMid_Y.ElementAtOrDefault(n);
+            r.Mid_Z = FamilySketchCurveMid_Z.ElementAtOrDefault(n);
+            r.Center_X = FamilySketchCurveCenter_X.ElementAtOrDefault(n);
+            r.Center_Y = FamilySketchCurveCenter_Y.ElementAtOrDefault(n);
+            r.Center_Z = FamilySketchCurveCenter_Z.ElementAtOrDefault(n);
+            r.Radius = FamilySketchCurveRadius.ElementAtOrDefault(n);
+            r.LockCount = FamilySketchCurveLockCount.ElementAtOrDefault(n);
+            r._FamilyForm = new Relation<Vim.Format.ObjectModel.FamilyForm>(GetFamilySketchCurveFamilyFormIndex(n), GetFamilyForm);
+            return r;
+        }
+        
+        
+        // FamilyConstraint
+        
+        public EntityTable FamilyConstraintEntityTable { get; }
+        
+        public IArray<Int64> FamilyConstraintFamilyElementId { get; }
+        public Int64 GetFamilyConstraintFamilyElementId(int index, Int64 defaultValue = default) => FamilyConstraintFamilyElementId?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Int32> FamilyConstraintKind { get; }
+        public Int32 GetFamilyConstraintKind(int index, Int32 defaultValue = default) => FamilyConstraintKind?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Boolean> FamilyConstraintIsLocked { get; }
+        public Boolean GetFamilyConstraintIsLocked(int index, Boolean defaultValue = default) => FamilyConstraintIsLocked?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Boolean> FamilyConstraintHasView { get; }
+        public Boolean GetFamilyConstraintHasView(int index, Boolean defaultValue = default) => FamilyConstraintHasView?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> FamilyConstraintValue { get; }
+        public Double GetFamilyConstraintValue(int index, Double defaultValue = default) => FamilyConstraintValue?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Int32> FamilyConstraintSegmentCount { get; }
+        public Int32 GetFamilyConstraintSegmentCount(int index, Int32 defaultValue = default) => FamilyConstraintSegmentCount?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Boolean> FamilyConstraintReachesGeometry { get; }
+        public Boolean GetFamilyConstraintReachesGeometry(int index, Boolean defaultValue = default) => FamilyConstraintReachesGeometry?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Int32> FamilyConstraintReferenceCount { get; }
+        public Int32 GetFamilyConstraintReferenceCount(int index, Int32 defaultValue = default) => FamilyConstraintReferenceCount?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<int> FamilyConstraintFamilyIndex { get; }
+        public int GetFamilyConstraintFamilyIndex(int index) => FamilyConstraintFamilyIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
+        public IArray<int> FamilyConstraintFamilyParameterIndex { get; }
+        public int GetFamilyConstraintFamilyParameterIndex(int index) => FamilyConstraintFamilyParameterIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
+        public int NumFamilyConstraint => FamilyConstraintEntityTable?.NumRows ?? 0;
+        public IArray<FamilyConstraint> FamilyConstraintList { get; }
+        public FamilyConstraint GetFamilyConstraint(int n)
+        {
+            if (n < 0) return null;
+            var r = new FamilyConstraint();
+            r.Document = Document;
+            r.Index = n;
+            r.FamilyElementId = FamilyConstraintFamilyElementId.ElementAtOrDefault(n);
+            r.Kind = FamilyConstraintKind.ElementAtOrDefault(n);
+            r.IsLocked = FamilyConstraintIsLocked.ElementAtOrDefault(n);
+            r.HasView = FamilyConstraintHasView.ElementAtOrDefault(n);
+            r.Value = FamilyConstraintValue.ElementAtOrDefault(n);
+            r.SegmentCount = FamilyConstraintSegmentCount.ElementAtOrDefault(n);
+            r.ReachesGeometry = FamilyConstraintReachesGeometry.ElementAtOrDefault(n);
+            r.ReferenceCount = FamilyConstraintReferenceCount.ElementAtOrDefault(n);
+            r._Family = new Relation<Vim.Format.ObjectModel.Family>(GetFamilyConstraintFamilyIndex(n), GetFamily);
+            r._FamilyParameter = new Relation<Vim.Format.ObjectModel.FamilyRecipeParameter>(GetFamilyConstraintFamilyParameterIndex(n), GetFamilyRecipeParameter);
+            return r;
+        }
+        
+        
+        // FamilyConstraintReference
+        
+        public EntityTable FamilyConstraintReferenceEntityTable { get; }
+        
+        public IArray<Int32> FamilyConstraintReferenceOrder { get; }
+        public Int32 GetFamilyConstraintReferenceOrder(int index, Int32 defaultValue = default) => FamilyConstraintReferenceOrder?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Int32> FamilyConstraintReferenceRefKind { get; }
+        public Int32 GetFamilyConstraintReferenceRefKind(int index, Int32 defaultValue = default) => FamilyConstraintReferenceRefKind?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Int64> FamilyConstraintReferenceRefElementId { get; }
+        public Int64 GetFamilyConstraintReferenceRefElementId(int index, Int64 defaultValue = default) => FamilyConstraintReferenceRefElementId?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<String> FamilyConstraintReferenceRefName { get; }
+        public String GetFamilyConstraintReferenceRefName(int index, String defaultValue = "") => FamilyConstraintReferenceRefName?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<String> FamilyConstraintReferenceReferenceType { get; }
+        public String GetFamilyConstraintReferenceReferenceType(int index, String defaultValue = "") => FamilyConstraintReferenceReferenceType?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<String> FamilyConstraintReferenceStable { get; }
+        public String GetFamilyConstraintReferenceStable(int index, String defaultValue = "") => FamilyConstraintReferenceStable?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<int> FamilyConstraintReferenceFamilyConstraintIndex { get; }
+        public int GetFamilyConstraintReferenceFamilyConstraintIndex(int index) => FamilyConstraintReferenceFamilyConstraintIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
+        public int NumFamilyConstraintReference => FamilyConstraintReferenceEntityTable?.NumRows ?? 0;
+        public IArray<FamilyConstraintReference> FamilyConstraintReferenceList { get; }
+        public FamilyConstraintReference GetFamilyConstraintReference(int n)
+        {
+            if (n < 0) return null;
+            var r = new FamilyConstraintReference();
+            r.Document = Document;
+            r.Index = n;
+            r.Order = FamilyConstraintReferenceOrder.ElementAtOrDefault(n);
+            r.RefKind = FamilyConstraintReferenceRefKind.ElementAtOrDefault(n);
+            r.RefElementId = FamilyConstraintReferenceRefElementId.ElementAtOrDefault(n);
+            r.RefName = FamilyConstraintReferenceRefName.ElementAtOrDefault(n);
+            r.ReferenceType = FamilyConstraintReferenceReferenceType.ElementAtOrDefault(n);
+            r.Stable = FamilyConstraintReferenceStable.ElementAtOrDefault(n);
+            r._FamilyConstraint = new Relation<Vim.Format.ObjectModel.FamilyConstraint>(GetFamilyConstraintReferenceFamilyConstraintIndex(n), GetFamilyConstraint);
+            return r;
+        }
+        
+        
+        // FamilyFormDriver
+        
+        public EntityTable FamilyFormDriverEntityTable { get; }
+        
+        public IArray<Int32> FamilyFormDriverVia { get; }
+        public Int32 GetFamilyFormDriverVia(int index, Int32 defaultValue = default) => FamilyFormDriverVia?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<int> FamilyFormDriverFamilyFormIndex { get; }
+        public int GetFamilyFormDriverFamilyFormIndex(int index) => FamilyFormDriverFamilyFormIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
+        public IArray<int> FamilyFormDriverFamilyParameterIndex { get; }
+        public int GetFamilyFormDriverFamilyParameterIndex(int index) => FamilyFormDriverFamilyParameterIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
+        public int NumFamilyFormDriver => FamilyFormDriverEntityTable?.NumRows ?? 0;
+        public IArray<FamilyFormDriver> FamilyFormDriverList { get; }
+        public FamilyFormDriver GetFamilyFormDriver(int n)
+        {
+            if (n < 0) return null;
+            var r = new FamilyFormDriver();
+            r.Document = Document;
+            r.Index = n;
+            r.Via = FamilyFormDriverVia.ElementAtOrDefault(n);
+            r._FamilyForm = new Relation<Vim.Format.ObjectModel.FamilyForm>(GetFamilyFormDriverFamilyFormIndex(n), GetFamilyForm);
+            r._FamilyParameter = new Relation<Vim.Format.ObjectModel.FamilyRecipeParameter>(GetFamilyFormDriverFamilyParameterIndex(n), GetFamilyRecipeParameter);
+            return r;
+        }
+        
+        
         // Geometry
         
         public EntityTable GeometryEntityTable { get; }
@@ -5910,6 +7094,17 @@ namespace Vim.Format.ObjectModel {
             {"Vim.CompoundStructure", CompoundStructureList.ToEnumerable()},
             {"Vim.Node", NodeList.ToEnumerable()},
             {"Vim.GeometryPiece", GeometryPieceList.ToEnumerable()},
+            {"Vim.HostPath", HostPathList.ToEnumerable()},
+            {"Vim.HostedInsert", HostedInsertList.ToEnumerable()},
+            {"Vim.FamilyRecipe", FamilyRecipeList.ToEnumerable()},
+            {"Vim.FamilyRecipeParameter", FamilyRecipeParameterList.ToEnumerable()},
+            {"Vim.FamilyTypeValue", FamilyTypeValueList.ToEnumerable()},
+            {"Vim.FamilyReferencePlane", FamilyReferencePlaneList.ToEnumerable()},
+            {"Vim.FamilyForm", FamilyFormList.ToEnumerable()},
+            {"Vim.FamilySketchCurve", FamilySketchCurveList.ToEnumerable()},
+            {"Vim.FamilyConstraint", FamilyConstraintList.ToEnumerable()},
+            {"Vim.FamilyConstraintReference", FamilyConstraintReferenceList.ToEnumerable()},
+            {"Vim.FamilyFormDriver", FamilyFormDriverList.ToEnumerable()},
             {"Vim.Geometry", GeometryList.ToEnumerable()},
             {"Vim.Shape", ShapeList.ToEnumerable()},
             {"Vim.ShapeCollection", ShapeCollectionList.ToEnumerable()},
@@ -5988,6 +7183,17 @@ namespace Vim.Format.ObjectModel {
             {"Vim.CompoundStructure", typeof(CompoundStructure)},
             {"Vim.Node", typeof(Node)},
             {"Vim.GeometryPiece", typeof(GeometryPiece)},
+            {"Vim.HostPath", typeof(HostPath)},
+            {"Vim.HostedInsert", typeof(HostedInsert)},
+            {"Vim.FamilyRecipe", typeof(FamilyRecipe)},
+            {"Vim.FamilyRecipeParameter", typeof(FamilyRecipeParameter)},
+            {"Vim.FamilyTypeValue", typeof(FamilyTypeValue)},
+            {"Vim.FamilyReferencePlane", typeof(FamilyReferencePlane)},
+            {"Vim.FamilyForm", typeof(FamilyForm)},
+            {"Vim.FamilySketchCurve", typeof(FamilySketchCurve)},
+            {"Vim.FamilyConstraint", typeof(FamilyConstraint)},
+            {"Vim.FamilyConstraintReference", typeof(FamilyConstraintReference)},
+            {"Vim.FamilyFormDriver", typeof(FamilyFormDriver)},
             {"Vim.Geometry", typeof(Geometry)},
             {"Vim.Shape", typeof(Shape)},
             {"Vim.ShapeCollection", typeof(ShapeCollection)},
@@ -6068,6 +7274,17 @@ namespace Vim.Format.ObjectModel {
             CompoundStructureEntityTable = Document.GetTable("Vim.CompoundStructure");
             NodeEntityTable = Document.GetTable("Vim.Node");
             GeometryPieceEntityTable = Document.GetTable("Vim.GeometryPiece");
+            HostPathEntityTable = Document.GetTable("Vim.HostPath");
+            HostedInsertEntityTable = Document.GetTable("Vim.HostedInsert");
+            FamilyRecipeEntityTable = Document.GetTable("Vim.FamilyRecipe");
+            FamilyRecipeParameterEntityTable = Document.GetTable("Vim.FamilyRecipeParameter");
+            FamilyTypeValueEntityTable = Document.GetTable("Vim.FamilyTypeValue");
+            FamilyReferencePlaneEntityTable = Document.GetTable("Vim.FamilyReferencePlane");
+            FamilyFormEntityTable = Document.GetTable("Vim.FamilyForm");
+            FamilySketchCurveEntityTable = Document.GetTable("Vim.FamilySketchCurve");
+            FamilyConstraintEntityTable = Document.GetTable("Vim.FamilyConstraint");
+            FamilyConstraintReferenceEntityTable = Document.GetTable("Vim.FamilyConstraintReference");
+            FamilyFormDriverEntityTable = Document.GetTable("Vim.FamilyFormDriver");
             GeometryEntityTable = Document.GetTable("Vim.Geometry");
             ShapeEntityTable = Document.GetTable("Vim.Shape");
             ShapeCollectionEntityTable = Document.GetTable("Vim.ShapeCollection");
@@ -6396,6 +7613,156 @@ namespace Vim.Format.ObjectModel {
             CompoundStructureLayerMaterialFunctionAssignment = CompoundStructureLayerEntityTable?.GetStringColumnValues("string:MaterialFunctionAssignment") ?? Array.Empty<String>().ToIArray();
             CompoundStructureWidth = CompoundStructureEntityTable?.GetDataColumnValues<Double>("double:Width") ?? Array.Empty<Double>().ToIArray();
             GeometryPieceSubmeshIndex = GeometryPieceEntityTable?.GetDataColumnValues<Int32>("int:SubmeshIndex") ?? Array.Empty<Int32>().ToIArray();
+            HostPathCurveKind = HostPathEntityTable?.GetDataColumnValues<Int32>("int:CurveKind") ?? Array.Empty<Int32>().ToIArray();
+            HostPathP0_X = HostPathEntityTable?.GetDataColumnValues<Double>("double:P0.X") ?? Array.Empty<Double>().ToIArray();
+            HostPathP0_Y = HostPathEntityTable?.GetDataColumnValues<Double>("double:P0.Y") ?? Array.Empty<Double>().ToIArray();
+            HostPathP0_Z = HostPathEntityTable?.GetDataColumnValues<Double>("double:P0.Z") ?? Array.Empty<Double>().ToIArray();
+            HostPathP1_X = HostPathEntityTable?.GetDataColumnValues<Double>("double:P1.X") ?? Array.Empty<Double>().ToIArray();
+            HostPathP1_Y = HostPathEntityTable?.GetDataColumnValues<Double>("double:P1.Y") ?? Array.Empty<Double>().ToIArray();
+            HostPathP1_Z = HostPathEntityTable?.GetDataColumnValues<Double>("double:P1.Z") ?? Array.Empty<Double>().ToIArray();
+            HostPathMid_X = HostPathEntityTable?.GetDataColumnValues<Double>("double:Mid.X") ?? Array.Empty<Double>().ToIArray();
+            HostPathMid_Y = HostPathEntityTable?.GetDataColumnValues<Double>("double:Mid.Y") ?? Array.Empty<Double>().ToIArray();
+            HostPathMid_Z = HostPathEntityTable?.GetDataColumnValues<Double>("double:Mid.Z") ?? Array.Empty<Double>().ToIArray();
+            HostPathCenter_X = HostPathEntityTable?.GetDataColumnValues<Double>("double:Center.X") ?? Array.Empty<Double>().ToIArray();
+            HostPathCenter_Y = HostPathEntityTable?.GetDataColumnValues<Double>("double:Center.Y") ?? Array.Empty<Double>().ToIArray();
+            HostPathCenter_Z = HostPathEntityTable?.GetDataColumnValues<Double>("double:Center.Z") ?? Array.Empty<Double>().ToIArray();
+            HostPathRadius = HostPathEntityTable?.GetDataColumnValues<Double>("double:Radius") ?? Array.Empty<Double>().ToIArray();
+            HostPathNormal_X = HostPathEntityTable?.GetDataColumnValues<Double>("double:Normal.X") ?? Array.Empty<Double>().ToIArray();
+            HostPathNormal_Y = HostPathEntityTable?.GetDataColumnValues<Double>("double:Normal.Y") ?? Array.Empty<Double>().ToIArray();
+            HostPathNormal_Z = HostPathEntityTable?.GetDataColumnValues<Double>("double:Normal.Z") ?? Array.Empty<Double>().ToIArray();
+            HostPathLength = HostPathEntityTable?.GetDataColumnValues<Double>("double:Length") ?? Array.Empty<Double>().ToIArray();
+            HostPathWidth = HostPathEntityTable?.GetDataColumnValues<Double>("double:Width") ?? Array.Empty<Double>().ToIArray();
+            HostPathOrientation_X = HostPathEntityTable?.GetDataColumnValues<Double>("double:Orientation.X") ?? Array.Empty<Double>().ToIArray();
+            HostPathOrientation_Y = HostPathEntityTable?.GetDataColumnValues<Double>("double:Orientation.Y") ?? Array.Empty<Double>().ToIArray();
+            HostPathOrientation_Z = HostPathEntityTable?.GetDataColumnValues<Double>("double:Orientation.Z") ?? Array.Empty<Double>().ToIArray();
+            HostPathFlipped = HostPathEntityTable?.GetDataColumnValues<Boolean>("byte:Flipped") ?? Array.Empty<Boolean>().ToIArray();
+            HostPathLocationLine = HostPathEntityTable?.GetDataColumnValues<Int32>("int:LocationLine") ?? Array.Empty<Int32>().ToIArray();
+            HostPathLocationLineOffset = HostPathEntityTable?.GetDataColumnValues<Double>("double:LocationLineOffset") ?? Array.Empty<Double>().ToIArray();
+            HostPathCoreOffsetExterior = HostPathEntityTable?.GetDataColumnValues<Double>("double:CoreOffsetExterior") ?? Array.Empty<Double>().ToIArray();
+            HostPathBaseOffset = HostPathEntityTable?.GetDataColumnValues<Double>("double:BaseOffset") ?? Array.Empty<Double>().ToIArray();
+            HostPathBaseElevation = HostPathEntityTable?.GetDataColumnValues<Double>("double:BaseElevation") ?? Array.Empty<Double>().ToIArray();
+            HostPathTopOffset = HostPathEntityTable?.GetDataColumnValues<Double>("double:TopOffset") ?? Array.Empty<Double>().ToIArray();
+            HostPathHeight = HostPathEntityTable?.GetDataColumnValues<Double>("double:Height") ?? Array.Empty<Double>().ToIArray();
+            HostPathHasEditedProfile = HostPathEntityTable?.GetDataColumnValues<Boolean>("byte:HasEditedProfile") ?? Array.Empty<Boolean>().ToIArray();
+            HostPathTopAttachedCount = HostPathEntityTable?.GetDataColumnValues<Int32>("int:TopAttachedCount") ?? Array.Empty<Int32>().ToIArray();
+            HostPathBaseAttachedCount = HostPathEntityTable?.GetDataColumnValues<Int32>("int:BaseAttachedCount") ?? Array.Empty<Int32>().ToIArray();
+            HostPathIsStacked = HostPathEntityTable?.GetDataColumnValues<Boolean>("byte:IsStacked") ?? Array.Empty<Boolean>().ToIArray();
+            HostPathIsCurtain = HostPathEntityTable?.GetDataColumnValues<Boolean>("byte:IsCurtain") ?? Array.Empty<Boolean>().ToIArray();
+            HostedInsertKind = HostedInsertEntityTable?.GetDataColumnValues<Int32>("int:Kind") ?? Array.Empty<Int32>().ToIArray();
+            HostedInsertDistanceAlongPath = HostedInsertEntityTable?.GetDataColumnValues<Double>("double:DistanceAlongPath") ?? Array.Empty<Double>().ToIArray();
+            HostedInsertNormalizedParameter = HostedInsertEntityTable?.GetDataColumnValues<Double>("double:NormalizedParameter") ?? Array.Empty<Double>().ToIArray();
+            HostedInsertOffsetFromPath = HostedInsertEntityTable?.GetDataColumnValues<Double>("double:OffsetFromPath") ?? Array.Empty<Double>().ToIArray();
+            HostedInsertElevation = HostedInsertEntityTable?.GetDataColumnValues<Double>("double:Elevation") ?? Array.Empty<Double>().ToIArray();
+            HostedInsertSillHeight = HostedInsertEntityTable?.GetDataColumnValues<Double>("double:SillHeight") ?? Array.Empty<Double>().ToIArray();
+            HostedInsertHeadHeight = HostedInsertEntityTable?.GetDataColumnValues<Double>("double:HeadHeight") ?? Array.Empty<Double>().ToIArray();
+            HostedInsertFacingFlipped = HostedInsertEntityTable?.GetDataColumnValues<Boolean>("byte:FacingFlipped") ?? Array.Empty<Boolean>().ToIArray();
+            HostedInsertHandFlipped = HostedInsertEntityTable?.GetDataColumnValues<Boolean>("byte:HandFlipped") ?? Array.Empty<Boolean>().ToIArray();
+            HostedInsertOrigin_X = HostedInsertEntityTable?.GetDataColumnValues<Double>("double:Origin.X") ?? Array.Empty<Double>().ToIArray();
+            HostedInsertOrigin_Y = HostedInsertEntityTable?.GetDataColumnValues<Double>("double:Origin.Y") ?? Array.Empty<Double>().ToIArray();
+            HostedInsertOrigin_Z = HostedInsertEntityTable?.GetDataColumnValues<Double>("double:Origin.Z") ?? Array.Empty<Double>().ToIArray();
+            HostedInsertOpeningMin_X = HostedInsertEntityTable?.GetDataColumnValues<Double>("double:OpeningMin.X") ?? Array.Empty<Double>().ToIArray();
+            HostedInsertOpeningMin_Y = HostedInsertEntityTable?.GetDataColumnValues<Double>("double:OpeningMin.Y") ?? Array.Empty<Double>().ToIArray();
+            HostedInsertOpeningMin_Z = HostedInsertEntityTable?.GetDataColumnValues<Double>("double:OpeningMin.Z") ?? Array.Empty<Double>().ToIArray();
+            HostedInsertOpeningMax_X = HostedInsertEntityTable?.GetDataColumnValues<Double>("double:OpeningMax.X") ?? Array.Empty<Double>().ToIArray();
+            HostedInsertOpeningMax_Y = HostedInsertEntityTable?.GetDataColumnValues<Double>("double:OpeningMax.Y") ?? Array.Empty<Double>().ToIArray();
+            HostedInsertOpeningMax_Z = HostedInsertEntityTable?.GetDataColumnValues<Double>("double:OpeningMax.Z") ?? Array.Empty<Double>().ToIArray();
+            FamilyRecipeReadStatus = FamilyRecipeEntityTable?.GetDataColumnValues<Int32>("int:ReadStatus") ?? Array.Empty<Int32>().ToIArray();
+            FamilyRecipeRefusal = FamilyRecipeEntityTable?.GetStringColumnValues("string:Refusal") ?? Array.Empty<String>().ToIArray();
+            FamilyRecipeFlexibility = FamilyRecipeEntityTable?.GetDataColumnValues<Int32>("int:Flexibility") ?? Array.Empty<Int32>().ToIArray();
+            FamilyRecipeReading = FamilyRecipeEntityTable?.GetStringColumnValues("string:Reading") ?? Array.Empty<String>().ToIArray();
+            FamilyRecipePlacementType = FamilyRecipeEntityTable?.GetStringColumnValues("string:PlacementType") ?? Array.Empty<String>().ToIArray();
+            FamilyRecipeIsParametric = FamilyRecipeEntityTable?.GetDataColumnValues<Boolean>("byte:IsParametric") ?? Array.Empty<Boolean>().ToIArray();
+            FamilyRecipeCurrentTypeName = FamilyRecipeEntityTable?.GetStringColumnValues("string:CurrentTypeName") ?? Array.Empty<String>().ToIArray();
+            FamilyRecipeLabelledDimensionCount = FamilyRecipeEntityTable?.GetDataColumnValues<Int32>("int:LabelledDimensionCount") ?? Array.Empty<Int32>().ToIArray();
+            FamilyRecipeDrivingDimensionCount = FamilyRecipeEntityTable?.GetDataColumnValues<Int32>("int:DrivingDimensionCount") ?? Array.Empty<Int32>().ToIArray();
+            FamilyRecipeLockCount = FamilyRecipeEntityTable?.GetDataColumnValues<Int32>("int:LockCount") ?? Array.Empty<Int32>().ToIArray();
+            FamilyRecipeFormCount = FamilyRecipeEntityTable?.GetDataColumnValues<Int32>("int:FormCount") ?? Array.Empty<Int32>().ToIArray();
+            FamilyRecipeOpeningCount = FamilyRecipeEntityTable?.GetDataColumnValues<Int32>("int:OpeningCount") ?? Array.Empty<Int32>().ToIArray();
+            FamilyRecipeNestedInstanceCount = FamilyRecipeEntityTable?.GetDataColumnValues<Int32>("int:NestedInstanceCount") ?? Array.Empty<Int32>().ToIArray();
+            FamilyRecipeOpeningTied = FamilyRecipeEntityTable?.GetDataColumnValues<Int32>("int:OpeningTied") ?? Array.Empty<Int32>().ToIArray();
+            FamilyRecipeReadMs = FamilyRecipeEntityTable?.GetDataColumnValues<Int32>("int:ReadMs") ?? Array.Empty<Int32>().ToIArray();
+            FamilyRecipeParameterName = FamilyRecipeParameterEntityTable?.GetStringColumnValues("string:Name") ?? Array.Empty<String>().ToIArray();
+            FamilyRecipeParameterFamilyElementId = FamilyRecipeParameterEntityTable?.GetDataColumnValues<Int64>("long:FamilyElementId") ?? Array.Empty<Int64>().ToIArray();
+            FamilyRecipeParameterGuid = FamilyRecipeParameterEntityTable?.GetStringColumnValues("string:Guid") ?? Array.Empty<String>().ToIArray();
+            FamilyRecipeParameterDataType = FamilyRecipeParameterEntityTable?.GetStringColumnValues("string:DataType") ?? Array.Empty<String>().ToIArray();
+            FamilyRecipeParameterStorageType = FamilyRecipeParameterEntityTable?.GetStringColumnValues("string:StorageType") ?? Array.Empty<String>().ToIArray();
+            FamilyRecipeParameterIsInstance = FamilyRecipeParameterEntityTable?.GetDataColumnValues<Boolean>("byte:IsInstance") ?? Array.Empty<Boolean>().ToIArray();
+            FamilyRecipeParameterIsReporting = FamilyRecipeParameterEntityTable?.GetDataColumnValues<Boolean>("byte:IsReporting") ?? Array.Empty<Boolean>().ToIArray();
+            FamilyRecipeParameterIsShared = FamilyRecipeParameterEntityTable?.GetDataColumnValues<Boolean>("byte:IsShared") ?? Array.Empty<Boolean>().ToIArray();
+            FamilyRecipeParameterIsDeterminedByFormula = FamilyRecipeParameterEntityTable?.GetDataColumnValues<Boolean>("byte:IsDeterminedByFormula") ?? Array.Empty<Boolean>().ToIArray();
+            FamilyRecipeParameterFormula = FamilyRecipeParameterEntityTable?.GetStringColumnValues("string:Formula") ?? Array.Empty<String>().ToIArray();
+            FamilyRecipeParameterDrives = FamilyRecipeParameterEntityTable?.GetDataColumnValues<Int32>("int:Drives") ?? Array.Empty<Int32>().ToIArray();
+            FamilyTypeValueTypeName = FamilyTypeValueEntityTable?.GetStringColumnValues("string:TypeName") ?? Array.Empty<String>().ToIArray();
+            FamilyTypeValueValue = FamilyTypeValueEntityTable?.GetStringColumnValues("string:Value") ?? Array.Empty<String>().ToIArray();
+            FamilyTypeValueDoubleValue = FamilyTypeValueEntityTable?.GetDataColumnValues<Double>("double:DoubleValue") ?? Array.Empty<Double>().ToIArray();
+            FamilyTypeValueIntegerValue = FamilyTypeValueEntityTable?.GetDataColumnValues<Int32>("int:IntegerValue") ?? Array.Empty<Int32>().ToIArray();
+            FamilyTypeValueElementIdValue = FamilyTypeValueEntityTable?.GetDataColumnValues<Int64>("long:ElementIdValue") ?? Array.Empty<Int64>().ToIArray();
+            FamilyReferencePlaneFamilyElementId = FamilyReferencePlaneEntityTable?.GetDataColumnValues<Int64>("long:FamilyElementId") ?? Array.Empty<Int64>().ToIArray();
+            FamilyReferencePlaneName = FamilyReferencePlaneEntityTable?.GetStringColumnValues("string:Name") ?? Array.Empty<String>().ToIArray();
+            FamilyReferencePlaneOrigin_X = FamilyReferencePlaneEntityTable?.GetDataColumnValues<Double>("double:Origin.X") ?? Array.Empty<Double>().ToIArray();
+            FamilyReferencePlaneOrigin_Y = FamilyReferencePlaneEntityTable?.GetDataColumnValues<Double>("double:Origin.Y") ?? Array.Empty<Double>().ToIArray();
+            FamilyReferencePlaneOrigin_Z = FamilyReferencePlaneEntityTable?.GetDataColumnValues<Double>("double:Origin.Z") ?? Array.Empty<Double>().ToIArray();
+            FamilyReferencePlaneNormal_X = FamilyReferencePlaneEntityTable?.GetDataColumnValues<Double>("double:Normal.X") ?? Array.Empty<Double>().ToIArray();
+            FamilyReferencePlaneNormal_Y = FamilyReferencePlaneEntityTable?.GetDataColumnValues<Double>("double:Normal.Y") ?? Array.Empty<Double>().ToIArray();
+            FamilyReferencePlaneNormal_Z = FamilyReferencePlaneEntityTable?.GetDataColumnValues<Double>("double:Normal.Z") ?? Array.Empty<Double>().ToIArray();
+            FamilyReferencePlaneIsReference = FamilyReferencePlaneEntityTable?.GetStringColumnValues("string:IsReference") ?? Array.Empty<String>().ToIArray();
+            FamilyReferencePlaneDefinesOrigin = FamilyReferencePlaneEntityTable?.GetDataColumnValues<Boolean>("byte:DefinesOrigin") ?? Array.Empty<Boolean>().ToIArray();
+            FamilyReferencePlaneIsDriven = FamilyReferencePlaneEntityTable?.GetDataColumnValues<Boolean>("byte:IsDriven") ?? Array.Empty<Boolean>().ToIArray();
+            FamilyFormFamilyElementId = FamilyFormEntityTable?.GetDataColumnValues<Int64>("long:FamilyElementId") ?? Array.Empty<Int64>().ToIArray();
+            FamilyFormKind = FamilyFormEntityTable?.GetStringColumnValues("string:Kind") ?? Array.Empty<String>().ToIArray();
+            FamilyFormIsSolid = FamilyFormEntityTable?.GetDataColumnValues<Boolean>("byte:IsSolid") ?? Array.Empty<Boolean>().ToIArray();
+            FamilyFormIsVisible = FamilyFormEntityTable?.GetDataColumnValues<Boolean>("byte:IsVisible") ?? Array.Empty<Boolean>().ToIArray();
+            FamilyFormSubcategory = FamilyFormEntityTable?.GetStringColumnValues("string:Subcategory") ?? Array.Empty<String>().ToIArray();
+            FamilyFormMaterial = FamilyFormEntityTable?.GetStringColumnValues("string:Material") ?? Array.Empty<String>().ToIArray();
+            FamilyFormPlaneOrigin_X = FamilyFormEntityTable?.GetDataColumnValues<Double>("double:PlaneOrigin.X") ?? Array.Empty<Double>().ToIArray();
+            FamilyFormPlaneOrigin_Y = FamilyFormEntityTable?.GetDataColumnValues<Double>("double:PlaneOrigin.Y") ?? Array.Empty<Double>().ToIArray();
+            FamilyFormPlaneOrigin_Z = FamilyFormEntityTable?.GetDataColumnValues<Double>("double:PlaneOrigin.Z") ?? Array.Empty<Double>().ToIArray();
+            FamilyFormPlaneNormal_X = FamilyFormEntityTable?.GetDataColumnValues<Double>("double:PlaneNormal.X") ?? Array.Empty<Double>().ToIArray();
+            FamilyFormPlaneNormal_Y = FamilyFormEntityTable?.GetDataColumnValues<Double>("double:PlaneNormal.Y") ?? Array.Empty<Double>().ToIArray();
+            FamilyFormPlaneNormal_Z = FamilyFormEntityTable?.GetDataColumnValues<Double>("double:PlaneNormal.Z") ?? Array.Empty<Double>().ToIArray();
+            FamilyFormPlaneXDir_X = FamilyFormEntityTable?.GetDataColumnValues<Double>("double:PlaneXDir.X") ?? Array.Empty<Double>().ToIArray();
+            FamilyFormPlaneXDir_Y = FamilyFormEntityTable?.GetDataColumnValues<Double>("double:PlaneXDir.Y") ?? Array.Empty<Double>().ToIArray();
+            FamilyFormPlaneXDir_Z = FamilyFormEntityTable?.GetDataColumnValues<Double>("double:PlaneXDir.Z") ?? Array.Empty<Double>().ToIArray();
+            FamilyFormStartOffset = FamilyFormEntityTable?.GetDataColumnValues<Double>("double:StartOffset") ?? Array.Empty<Double>().ToIArray();
+            FamilyFormEndOffset = FamilyFormEntityTable?.GetDataColumnValues<Double>("double:EndOffset") ?? Array.Empty<Double>().ToIArray();
+            FamilyFormStartAngle = FamilyFormEntityTable?.GetDataColumnValues<Double>("double:StartAngle") ?? Array.Empty<Double>().ToIArray();
+            FamilyFormEndAngle = FamilyFormEntityTable?.GetDataColumnValues<Double>("double:EndAngle") ?? Array.Empty<Double>().ToIArray();
+            FamilyFormIsDriven = FamilyFormEntityTable?.GetDataColumnValues<Boolean>("byte:IsDriven") ?? Array.Empty<Boolean>().ToIArray();
+            FamilyFormIsRebuildable = FamilyFormEntityTable?.GetDataColumnValues<Boolean>("byte:IsRebuildable") ?? Array.Empty<Boolean>().ToIArray();
+            FamilySketchCurveRole = FamilySketchCurveEntityTable?.GetDataColumnValues<Int32>("int:Role") ?? Array.Empty<Int32>().ToIArray();
+            FamilySketchCurveLoop = FamilySketchCurveEntityTable?.GetDataColumnValues<Int32>("int:Loop") ?? Array.Empty<Int32>().ToIArray();
+            FamilySketchCurveOrder = FamilySketchCurveEntityTable?.GetDataColumnValues<Int32>("int:Order") ?? Array.Empty<Int32>().ToIArray();
+            FamilySketchCurveCurveElementId = FamilySketchCurveEntityTable?.GetDataColumnValues<Int64>("long:CurveElementId") ?? Array.Empty<Int64>().ToIArray();
+            FamilySketchCurveCurveKind = FamilySketchCurveEntityTable?.GetDataColumnValues<Int32>("int:CurveKind") ?? Array.Empty<Int32>().ToIArray();
+            FamilySketchCurveStart_X = FamilySketchCurveEntityTable?.GetDataColumnValues<Double>("double:Start.X") ?? Array.Empty<Double>().ToIArray();
+            FamilySketchCurveStart_Y = FamilySketchCurveEntityTable?.GetDataColumnValues<Double>("double:Start.Y") ?? Array.Empty<Double>().ToIArray();
+            FamilySketchCurveStart_Z = FamilySketchCurveEntityTable?.GetDataColumnValues<Double>("double:Start.Z") ?? Array.Empty<Double>().ToIArray();
+            FamilySketchCurveEnd_X = FamilySketchCurveEntityTable?.GetDataColumnValues<Double>("double:End.X") ?? Array.Empty<Double>().ToIArray();
+            FamilySketchCurveEnd_Y = FamilySketchCurveEntityTable?.GetDataColumnValues<Double>("double:End.Y") ?? Array.Empty<Double>().ToIArray();
+            FamilySketchCurveEnd_Z = FamilySketchCurveEntityTable?.GetDataColumnValues<Double>("double:End.Z") ?? Array.Empty<Double>().ToIArray();
+            FamilySketchCurveMid_X = FamilySketchCurveEntityTable?.GetDataColumnValues<Double>("double:Mid.X") ?? Array.Empty<Double>().ToIArray();
+            FamilySketchCurveMid_Y = FamilySketchCurveEntityTable?.GetDataColumnValues<Double>("double:Mid.Y") ?? Array.Empty<Double>().ToIArray();
+            FamilySketchCurveMid_Z = FamilySketchCurveEntityTable?.GetDataColumnValues<Double>("double:Mid.Z") ?? Array.Empty<Double>().ToIArray();
+            FamilySketchCurveCenter_X = FamilySketchCurveEntityTable?.GetDataColumnValues<Double>("double:Center.X") ?? Array.Empty<Double>().ToIArray();
+            FamilySketchCurveCenter_Y = FamilySketchCurveEntityTable?.GetDataColumnValues<Double>("double:Center.Y") ?? Array.Empty<Double>().ToIArray();
+            FamilySketchCurveCenter_Z = FamilySketchCurveEntityTable?.GetDataColumnValues<Double>("double:Center.Z") ?? Array.Empty<Double>().ToIArray();
+            FamilySketchCurveRadius = FamilySketchCurveEntityTable?.GetDataColumnValues<Double>("double:Radius") ?? Array.Empty<Double>().ToIArray();
+            FamilySketchCurveLockCount = FamilySketchCurveEntityTable?.GetDataColumnValues<Int32>("int:LockCount") ?? Array.Empty<Int32>().ToIArray();
+            FamilyConstraintFamilyElementId = FamilyConstraintEntityTable?.GetDataColumnValues<Int64>("long:FamilyElementId") ?? Array.Empty<Int64>().ToIArray();
+            FamilyConstraintKind = FamilyConstraintEntityTable?.GetDataColumnValues<Int32>("int:Kind") ?? Array.Empty<Int32>().ToIArray();
+            FamilyConstraintIsLocked = FamilyConstraintEntityTable?.GetDataColumnValues<Boolean>("byte:IsLocked") ?? Array.Empty<Boolean>().ToIArray();
+            FamilyConstraintHasView = FamilyConstraintEntityTable?.GetDataColumnValues<Boolean>("byte:HasView") ?? Array.Empty<Boolean>().ToIArray();
+            FamilyConstraintValue = FamilyConstraintEntityTable?.GetDataColumnValues<Double>("double:Value") ?? Array.Empty<Double>().ToIArray();
+            FamilyConstraintSegmentCount = FamilyConstraintEntityTable?.GetDataColumnValues<Int32>("int:SegmentCount") ?? Array.Empty<Int32>().ToIArray();
+            FamilyConstraintReachesGeometry = FamilyConstraintEntityTable?.GetDataColumnValues<Boolean>("byte:ReachesGeometry") ?? Array.Empty<Boolean>().ToIArray();
+            FamilyConstraintReferenceCount = FamilyConstraintEntityTable?.GetDataColumnValues<Int32>("int:ReferenceCount") ?? Array.Empty<Int32>().ToIArray();
+            FamilyConstraintReferenceOrder = FamilyConstraintReferenceEntityTable?.GetDataColumnValues<Int32>("int:Order") ?? Array.Empty<Int32>().ToIArray();
+            FamilyConstraintReferenceRefKind = FamilyConstraintReferenceEntityTable?.GetDataColumnValues<Int32>("int:RefKind") ?? Array.Empty<Int32>().ToIArray();
+            FamilyConstraintReferenceRefElementId = FamilyConstraintReferenceEntityTable?.GetDataColumnValues<Int64>("long:RefElementId") ?? Array.Empty<Int64>().ToIArray();
+            FamilyConstraintReferenceRefName = FamilyConstraintReferenceEntityTable?.GetStringColumnValues("string:RefName") ?? Array.Empty<String>().ToIArray();
+            FamilyConstraintReferenceReferenceType = FamilyConstraintReferenceEntityTable?.GetStringColumnValues("string:ReferenceType") ?? Array.Empty<String>().ToIArray();
+            FamilyConstraintReferenceStable = FamilyConstraintReferenceEntityTable?.GetStringColumnValues("string:Stable") ?? Array.Empty<String>().ToIArray();
+            FamilyFormDriverVia = FamilyFormDriverEntityTable?.GetDataColumnValues<Int32>("int:Via") ?? Array.Empty<Int32>().ToIArray();
             GeometryBox_Min_X = GeometryEntityTable?.GetDataColumnValues<Single>("float:Box.Min.X") ?? Array.Empty<Single>().ToIArray();
             GeometryBox_Min_Y = GeometryEntityTable?.GetDataColumnValues<Single>("float:Box.Min.Y") ?? Array.Empty<Single>().ToIArray();
             GeometryBox_Min_Z = GeometryEntityTable?.GetDataColumnValues<Single>("float:Box.Min.Z") ?? Array.Empty<Single>().ToIArray();
@@ -6642,6 +8009,25 @@ namespace Vim.Format.ObjectModel {
             GeometryPieceSubcategoryIndex = GeometryPieceEntityTable?.GetIndexColumnValues("index:Vim.Category:Subcategory") ?? Array.Empty<int>().ToIArray();
             GeometryPieceCompoundStructureLayerIndex = GeometryPieceEntityTable?.GetIndexColumnValues("index:Vim.CompoundStructureLayer:CompoundStructureLayer") ?? Array.Empty<int>().ToIArray();
             GeometryPieceElementIndex = GeometryPieceEntityTable?.GetIndexColumnValues("index:Vim.Element:Element") ?? Array.Empty<int>().ToIArray();
+            HostPathBaseLevelIndex = HostPathEntityTable?.GetIndexColumnValues("index:Vim.Level:BaseLevel") ?? Array.Empty<int>().ToIArray();
+            HostPathTopLevelIndex = HostPathEntityTable?.GetIndexColumnValues("index:Vim.Level:TopLevel") ?? Array.Empty<int>().ToIArray();
+            HostPathCompoundStructureIndex = HostPathEntityTable?.GetIndexColumnValues("index:Vim.CompoundStructure:CompoundStructure") ?? Array.Empty<int>().ToIArray();
+            HostPathElementIndex = HostPathEntityTable?.GetIndexColumnValues("index:Vim.Element:Element") ?? Array.Empty<int>().ToIArray();
+            HostedInsertHostIndex = HostedInsertEntityTable?.GetIndexColumnValues("index:Vim.Element:Host") ?? Array.Empty<int>().ToIArray();
+            HostedInsertHostPathIndex = HostedInsertEntityTable?.GetIndexColumnValues("index:Vim.HostPath:HostPath") ?? Array.Empty<int>().ToIArray();
+            HostedInsertElementIndex = HostedInsertEntityTable?.GetIndexColumnValues("index:Vim.Element:Element") ?? Array.Empty<int>().ToIArray();
+            FamilyRecipeFamilyIndex = FamilyRecipeEntityTable?.GetIndexColumnValues("index:Vim.Family:Family") ?? Array.Empty<int>().ToIArray();
+            FamilyRecipeParameterFamilyIndex = FamilyRecipeParameterEntityTable?.GetIndexColumnValues("index:Vim.Family:Family") ?? Array.Empty<int>().ToIArray();
+            FamilyTypeValueFamilyParameterIndex = FamilyTypeValueEntityTable?.GetIndexColumnValues("index:Vim.FamilyRecipeParameter:FamilyParameter") ?? Array.Empty<int>().ToIArray();
+            FamilyTypeValueFamilyTypeIndex = FamilyTypeValueEntityTable?.GetIndexColumnValues("index:Vim.FamilyType:FamilyType") ?? Array.Empty<int>().ToIArray();
+            FamilyReferencePlaneFamilyIndex = FamilyReferencePlaneEntityTable?.GetIndexColumnValues("index:Vim.Family:Family") ?? Array.Empty<int>().ToIArray();
+            FamilyFormFamilyIndex = FamilyFormEntityTable?.GetIndexColumnValues("index:Vim.Family:Family") ?? Array.Empty<int>().ToIArray();
+            FamilySketchCurveFamilyFormIndex = FamilySketchCurveEntityTable?.GetIndexColumnValues("index:Vim.FamilyForm:FamilyForm") ?? Array.Empty<int>().ToIArray();
+            FamilyConstraintFamilyIndex = FamilyConstraintEntityTable?.GetIndexColumnValues("index:Vim.Family:Family") ?? Array.Empty<int>().ToIArray();
+            FamilyConstraintFamilyParameterIndex = FamilyConstraintEntityTable?.GetIndexColumnValues("index:Vim.FamilyRecipeParameter:FamilyParameter") ?? Array.Empty<int>().ToIArray();
+            FamilyConstraintReferenceFamilyConstraintIndex = FamilyConstraintReferenceEntityTable?.GetIndexColumnValues("index:Vim.FamilyConstraint:FamilyConstraint") ?? Array.Empty<int>().ToIArray();
+            FamilyFormDriverFamilyFormIndex = FamilyFormDriverEntityTable?.GetIndexColumnValues("index:Vim.FamilyForm:FamilyForm") ?? Array.Empty<int>().ToIArray();
+            FamilyFormDriverFamilyParameterIndex = FamilyFormDriverEntityTable?.GetIndexColumnValues("index:Vim.FamilyRecipeParameter:FamilyParameter") ?? Array.Empty<int>().ToIArray();
             ShapeElementIndex = ShapeEntityTable?.GetIndexColumnValues("index:Vim.Element:Element") ?? Array.Empty<int>().ToIArray();
             ShapeCollectionElementIndex = ShapeCollectionEntityTable?.GetIndexColumnValues("index:Vim.Element:Element") ?? Array.Empty<int>().ToIArray();
             ShapeInShapeCollectionShapeIndex = ShapeInShapeCollectionEntityTable?.GetIndexColumnValues("index:Vim.Shape:Shape") ?? Array.Empty<int>().ToIArray();
@@ -6736,6 +8122,17 @@ namespace Vim.Format.ObjectModel {
             CompoundStructureList = NumCompoundStructure.Select(i => GetCompoundStructure(i));
             NodeList = NumNode.Select(i => GetNode(i));
             GeometryPieceList = NumGeometryPiece.Select(i => GetGeometryPiece(i));
+            HostPathList = NumHostPath.Select(i => GetHostPath(i));
+            HostedInsertList = NumHostedInsert.Select(i => GetHostedInsert(i));
+            FamilyRecipeList = NumFamilyRecipe.Select(i => GetFamilyRecipe(i));
+            FamilyRecipeParameterList = NumFamilyRecipeParameter.Select(i => GetFamilyRecipeParameter(i));
+            FamilyTypeValueList = NumFamilyTypeValue.Select(i => GetFamilyTypeValue(i));
+            FamilyReferencePlaneList = NumFamilyReferencePlane.Select(i => GetFamilyReferencePlane(i));
+            FamilyFormList = NumFamilyForm.Select(i => GetFamilyForm(i));
+            FamilySketchCurveList = NumFamilySketchCurve.Select(i => GetFamilySketchCurve(i));
+            FamilyConstraintList = NumFamilyConstraint.Select(i => GetFamilyConstraint(i));
+            FamilyConstraintReferenceList = NumFamilyConstraintReference.Select(i => GetFamilyConstraintReference(i));
+            FamilyFormDriverList = NumFamilyFormDriver.Select(i => GetFamilyFormDriver(i));
             GeometryList = NumGeometry.Select(i => GetGeometry(i));
             ShapeList = NumShape.Select(i => GetShape(i));
             ShapeCollectionList = NumShapeCollection.Select(i => GetShapeCollection(i));
@@ -6837,6 +8234,17 @@ namespace Vim.Format.ObjectModel {
             Tables[TableNames.CompoundStructure] = CompoundStructureTable = new CompoundStructureTable(GetSerializableTableOrEmpty(TableNames.CompoundStructure), stringTable, this);
             Tables[TableNames.Node] = NodeTable = new NodeTable(GetSerializableTableOrEmpty(TableNames.Node), stringTable, this);
             Tables[TableNames.GeometryPiece] = GeometryPieceTable = new GeometryPieceTable(GetSerializableTableOrEmpty(TableNames.GeometryPiece), stringTable, this);
+            Tables[TableNames.HostPath] = HostPathTable = new HostPathTable(GetSerializableTableOrEmpty(TableNames.HostPath), stringTable, this);
+            Tables[TableNames.HostedInsert] = HostedInsertTable = new HostedInsertTable(GetSerializableTableOrEmpty(TableNames.HostedInsert), stringTable, this);
+            Tables[TableNames.FamilyRecipe] = FamilyRecipeTable = new FamilyRecipeTable(GetSerializableTableOrEmpty(TableNames.FamilyRecipe), stringTable, this);
+            Tables[TableNames.FamilyRecipeParameter] = FamilyRecipeParameterTable = new FamilyRecipeParameterTable(GetSerializableTableOrEmpty(TableNames.FamilyRecipeParameter), stringTable, this);
+            Tables[TableNames.FamilyTypeValue] = FamilyTypeValueTable = new FamilyTypeValueTable(GetSerializableTableOrEmpty(TableNames.FamilyTypeValue), stringTable, this);
+            Tables[TableNames.FamilyReferencePlane] = FamilyReferencePlaneTable = new FamilyReferencePlaneTable(GetSerializableTableOrEmpty(TableNames.FamilyReferencePlane), stringTable, this);
+            Tables[TableNames.FamilyForm] = FamilyFormTable = new FamilyFormTable(GetSerializableTableOrEmpty(TableNames.FamilyForm), stringTable, this);
+            Tables[TableNames.FamilySketchCurve] = FamilySketchCurveTable = new FamilySketchCurveTable(GetSerializableTableOrEmpty(TableNames.FamilySketchCurve), stringTable, this);
+            Tables[TableNames.FamilyConstraint] = FamilyConstraintTable = new FamilyConstraintTable(GetSerializableTableOrEmpty(TableNames.FamilyConstraint), stringTable, this);
+            Tables[TableNames.FamilyConstraintReference] = FamilyConstraintReferenceTable = new FamilyConstraintReferenceTable(GetSerializableTableOrEmpty(TableNames.FamilyConstraintReference), stringTable, this);
+            Tables[TableNames.FamilyFormDriver] = FamilyFormDriverTable = new FamilyFormDriverTable(GetSerializableTableOrEmpty(TableNames.FamilyFormDriver), stringTable, this);
             Tables[TableNames.Geometry] = GeometryTable = new GeometryTable(GetSerializableTableOrEmpty(TableNames.Geometry), stringTable, this);
             Tables[TableNames.Shape] = ShapeTable = new ShapeTable(GetSerializableTableOrEmpty(TableNames.Shape), stringTable, this);
             Tables[TableNames.ShapeCollection] = ShapeCollectionTable = new ShapeCollectionTable(GetSerializableTableOrEmpty(TableNames.ShapeCollection), stringTable, this);
@@ -6959,6 +8367,28 @@ namespace Vim.Format.ObjectModel {
         public Node GetNode(int index) => NodeTable?.Get(index);
         public GeometryPieceTable GeometryPieceTable { get; } // can be null
         public GeometryPiece GetGeometryPiece(int index) => GeometryPieceTable?.Get(index);
+        public HostPathTable HostPathTable { get; } // can be null
+        public HostPath GetHostPath(int index) => HostPathTable?.Get(index);
+        public HostedInsertTable HostedInsertTable { get; } // can be null
+        public HostedInsert GetHostedInsert(int index) => HostedInsertTable?.Get(index);
+        public FamilyRecipeTable FamilyRecipeTable { get; } // can be null
+        public FamilyRecipe GetFamilyRecipe(int index) => FamilyRecipeTable?.Get(index);
+        public FamilyRecipeParameterTable FamilyRecipeParameterTable { get; } // can be null
+        public FamilyRecipeParameter GetFamilyRecipeParameter(int index) => FamilyRecipeParameterTable?.Get(index);
+        public FamilyTypeValueTable FamilyTypeValueTable { get; } // can be null
+        public FamilyTypeValue GetFamilyTypeValue(int index) => FamilyTypeValueTable?.Get(index);
+        public FamilyReferencePlaneTable FamilyReferencePlaneTable { get; } // can be null
+        public FamilyReferencePlane GetFamilyReferencePlane(int index) => FamilyReferencePlaneTable?.Get(index);
+        public FamilyFormTable FamilyFormTable { get; } // can be null
+        public FamilyForm GetFamilyForm(int index) => FamilyFormTable?.Get(index);
+        public FamilySketchCurveTable FamilySketchCurveTable { get; } // can be null
+        public FamilySketchCurve GetFamilySketchCurve(int index) => FamilySketchCurveTable?.Get(index);
+        public FamilyConstraintTable FamilyConstraintTable { get; } // can be null
+        public FamilyConstraint GetFamilyConstraint(int index) => FamilyConstraintTable?.Get(index);
+        public FamilyConstraintReferenceTable FamilyConstraintReferenceTable { get; } // can be null
+        public FamilyConstraintReference GetFamilyConstraintReference(int index) => FamilyConstraintReferenceTable?.Get(index);
+        public FamilyFormDriverTable FamilyFormDriverTable { get; } // can be null
+        public FamilyFormDriver GetFamilyFormDriver(int index) => FamilyFormDriverTable?.Get(index);
         public GeometryTable GeometryTable { get; } // can be null
         public Geometry GetGeometry(int index) => GeometryTable?.Get(index);
         public ShapeTable ShapeTable { get; } // can be null
@@ -10418,6 +11848,1039 @@ namespace Vim.Format.ObjectModel {
                 yield return Get(i);
         }
     } // class GeometryPieceTable 
+    
+    public partial class HostPathTable : EntityTable_v2, IEnumerable<HostPath>
+    {
+        
+        public const string TableName = TableNames.HostPath;
+        
+        public EntityTableSet ParentTableSet { get; } // can be null
+        
+        public HostPathTable(SerializableEntityTable rawTable, string[] stringTable, EntityTableSet parentTableSet = null) : base(rawTable, stringTable)
+        {
+            ParentTableSet = parentTableSet;
+            Column_CurveKind = GetDataColumnValues<Int32>("int:CurveKind") ?? Array.Empty<Int32>();
+            Column_P0_X = GetDataColumnValues<Double>("double:P0.X") ?? Array.Empty<Double>();
+            Column_P0_Y = GetDataColumnValues<Double>("double:P0.Y") ?? Array.Empty<Double>();
+            Column_P0_Z = GetDataColumnValues<Double>("double:P0.Z") ?? Array.Empty<Double>();
+            Column_P1_X = GetDataColumnValues<Double>("double:P1.X") ?? Array.Empty<Double>();
+            Column_P1_Y = GetDataColumnValues<Double>("double:P1.Y") ?? Array.Empty<Double>();
+            Column_P1_Z = GetDataColumnValues<Double>("double:P1.Z") ?? Array.Empty<Double>();
+            Column_Mid_X = GetDataColumnValues<Double>("double:Mid.X") ?? Array.Empty<Double>();
+            Column_Mid_Y = GetDataColumnValues<Double>("double:Mid.Y") ?? Array.Empty<Double>();
+            Column_Mid_Z = GetDataColumnValues<Double>("double:Mid.Z") ?? Array.Empty<Double>();
+            Column_Center_X = GetDataColumnValues<Double>("double:Center.X") ?? Array.Empty<Double>();
+            Column_Center_Y = GetDataColumnValues<Double>("double:Center.Y") ?? Array.Empty<Double>();
+            Column_Center_Z = GetDataColumnValues<Double>("double:Center.Z") ?? Array.Empty<Double>();
+            Column_Radius = GetDataColumnValues<Double>("double:Radius") ?? Array.Empty<Double>();
+            Column_Normal_X = GetDataColumnValues<Double>("double:Normal.X") ?? Array.Empty<Double>();
+            Column_Normal_Y = GetDataColumnValues<Double>("double:Normal.Y") ?? Array.Empty<Double>();
+            Column_Normal_Z = GetDataColumnValues<Double>("double:Normal.Z") ?? Array.Empty<Double>();
+            Column_Length = GetDataColumnValues<Double>("double:Length") ?? Array.Empty<Double>();
+            Column_Width = GetDataColumnValues<Double>("double:Width") ?? Array.Empty<Double>();
+            Column_Orientation_X = GetDataColumnValues<Double>("double:Orientation.X") ?? Array.Empty<Double>();
+            Column_Orientation_Y = GetDataColumnValues<Double>("double:Orientation.Y") ?? Array.Empty<Double>();
+            Column_Orientation_Z = GetDataColumnValues<Double>("double:Orientation.Z") ?? Array.Empty<Double>();
+            Column_Flipped = GetDataColumnValues<Boolean>("byte:Flipped") ?? Array.Empty<Boolean>();
+            Column_LocationLine = GetDataColumnValues<Int32>("int:LocationLine") ?? Array.Empty<Int32>();
+            Column_LocationLineOffset = GetDataColumnValues<Double>("double:LocationLineOffset") ?? Array.Empty<Double>();
+            Column_CoreOffsetExterior = GetDataColumnValues<Double>("double:CoreOffsetExterior") ?? Array.Empty<Double>();
+            Column_BaseOffset = GetDataColumnValues<Double>("double:BaseOffset") ?? Array.Empty<Double>();
+            Column_BaseElevation = GetDataColumnValues<Double>("double:BaseElevation") ?? Array.Empty<Double>();
+            Column_TopOffset = GetDataColumnValues<Double>("double:TopOffset") ?? Array.Empty<Double>();
+            Column_Height = GetDataColumnValues<Double>("double:Height") ?? Array.Empty<Double>();
+            Column_HasEditedProfile = GetDataColumnValues<Boolean>("byte:HasEditedProfile") ?? Array.Empty<Boolean>();
+            Column_TopAttachedCount = GetDataColumnValues<Int32>("int:TopAttachedCount") ?? Array.Empty<Int32>();
+            Column_BaseAttachedCount = GetDataColumnValues<Int32>("int:BaseAttachedCount") ?? Array.Empty<Int32>();
+            Column_IsStacked = GetDataColumnValues<Boolean>("byte:IsStacked") ?? Array.Empty<Boolean>();
+            Column_IsCurtain = GetDataColumnValues<Boolean>("byte:IsCurtain") ?? Array.Empty<Boolean>();
+            Column_BaseLevelIndex = GetIndexColumnValues("index:Vim.Level:BaseLevel") ?? Array.Empty<int>();
+            Column_TopLevelIndex = GetIndexColumnValues("index:Vim.Level:TopLevel") ?? Array.Empty<int>();
+            Column_CompoundStructureIndex = GetIndexColumnValues("index:Vim.CompoundStructure:CompoundStructure") ?? Array.Empty<int>();
+            Column_ElementIndex = GetIndexColumnValues("index:Vim.Element:Element") ?? Array.Empty<int>();
+        }
+        
+        public Int32[] Column_CurveKind { get; }
+        public Int32 GetCurveKind(int index, Int32 @default = default) => Column_CurveKind.ElementAtOrDefault(index, @default);
+        public Double[] Column_P0_X { get; }
+        public Double GetP0_X(int index, Double @default = default) => Column_P0_X.ElementAtOrDefault(index, @default);
+        public Double[] Column_P0_Y { get; }
+        public Double GetP0_Y(int index, Double @default = default) => Column_P0_Y.ElementAtOrDefault(index, @default);
+        public Double[] Column_P0_Z { get; }
+        public Double GetP0_Z(int index, Double @default = default) => Column_P0_Z.ElementAtOrDefault(index, @default);
+        public Double[] Column_P1_X { get; }
+        public Double GetP1_X(int index, Double @default = default) => Column_P1_X.ElementAtOrDefault(index, @default);
+        public Double[] Column_P1_Y { get; }
+        public Double GetP1_Y(int index, Double @default = default) => Column_P1_Y.ElementAtOrDefault(index, @default);
+        public Double[] Column_P1_Z { get; }
+        public Double GetP1_Z(int index, Double @default = default) => Column_P1_Z.ElementAtOrDefault(index, @default);
+        public Double[] Column_Mid_X { get; }
+        public Double GetMid_X(int index, Double @default = default) => Column_Mid_X.ElementAtOrDefault(index, @default);
+        public Double[] Column_Mid_Y { get; }
+        public Double GetMid_Y(int index, Double @default = default) => Column_Mid_Y.ElementAtOrDefault(index, @default);
+        public Double[] Column_Mid_Z { get; }
+        public Double GetMid_Z(int index, Double @default = default) => Column_Mid_Z.ElementAtOrDefault(index, @default);
+        public Double[] Column_Center_X { get; }
+        public Double GetCenter_X(int index, Double @default = default) => Column_Center_X.ElementAtOrDefault(index, @default);
+        public Double[] Column_Center_Y { get; }
+        public Double GetCenter_Y(int index, Double @default = default) => Column_Center_Y.ElementAtOrDefault(index, @default);
+        public Double[] Column_Center_Z { get; }
+        public Double GetCenter_Z(int index, Double @default = default) => Column_Center_Z.ElementAtOrDefault(index, @default);
+        public Double[] Column_Radius { get; }
+        public Double GetRadius(int index, Double @default = default) => Column_Radius.ElementAtOrDefault(index, @default);
+        public Double[] Column_Normal_X { get; }
+        public Double GetNormal_X(int index, Double @default = default) => Column_Normal_X.ElementAtOrDefault(index, @default);
+        public Double[] Column_Normal_Y { get; }
+        public Double GetNormal_Y(int index, Double @default = default) => Column_Normal_Y.ElementAtOrDefault(index, @default);
+        public Double[] Column_Normal_Z { get; }
+        public Double GetNormal_Z(int index, Double @default = default) => Column_Normal_Z.ElementAtOrDefault(index, @default);
+        public Double[] Column_Length { get; }
+        public Double GetLength(int index, Double @default = default) => Column_Length.ElementAtOrDefault(index, @default);
+        public Double[] Column_Width { get; }
+        public Double GetWidth(int index, Double @default = default) => Column_Width.ElementAtOrDefault(index, @default);
+        public Double[] Column_Orientation_X { get; }
+        public Double GetOrientation_X(int index, Double @default = default) => Column_Orientation_X.ElementAtOrDefault(index, @default);
+        public Double[] Column_Orientation_Y { get; }
+        public Double GetOrientation_Y(int index, Double @default = default) => Column_Orientation_Y.ElementAtOrDefault(index, @default);
+        public Double[] Column_Orientation_Z { get; }
+        public Double GetOrientation_Z(int index, Double @default = default) => Column_Orientation_Z.ElementAtOrDefault(index, @default);
+        public Boolean[] Column_Flipped { get; }
+        public Boolean GetFlipped(int index, Boolean @default = default) => Column_Flipped.ElementAtOrDefault(index, @default);
+        public Int32[] Column_LocationLine { get; }
+        public Int32 GetLocationLine(int index, Int32 @default = default) => Column_LocationLine.ElementAtOrDefault(index, @default);
+        public Double[] Column_LocationLineOffset { get; }
+        public Double GetLocationLineOffset(int index, Double @default = default) => Column_LocationLineOffset.ElementAtOrDefault(index, @default);
+        public Double[] Column_CoreOffsetExterior { get; }
+        public Double GetCoreOffsetExterior(int index, Double @default = default) => Column_CoreOffsetExterior.ElementAtOrDefault(index, @default);
+        public Double[] Column_BaseOffset { get; }
+        public Double GetBaseOffset(int index, Double @default = default) => Column_BaseOffset.ElementAtOrDefault(index, @default);
+        public Double[] Column_BaseElevation { get; }
+        public Double GetBaseElevation(int index, Double @default = default) => Column_BaseElevation.ElementAtOrDefault(index, @default);
+        public Double[] Column_TopOffset { get; }
+        public Double GetTopOffset(int index, Double @default = default) => Column_TopOffset.ElementAtOrDefault(index, @default);
+        public Double[] Column_Height { get; }
+        public Double GetHeight(int index, Double @default = default) => Column_Height.ElementAtOrDefault(index, @default);
+        public Boolean[] Column_HasEditedProfile { get; }
+        public Boolean GetHasEditedProfile(int index, Boolean @default = default) => Column_HasEditedProfile.ElementAtOrDefault(index, @default);
+        public Int32[] Column_TopAttachedCount { get; }
+        public Int32 GetTopAttachedCount(int index, Int32 @default = default) => Column_TopAttachedCount.ElementAtOrDefault(index, @default);
+        public Int32[] Column_BaseAttachedCount { get; }
+        public Int32 GetBaseAttachedCount(int index, Int32 @default = default) => Column_BaseAttachedCount.ElementAtOrDefault(index, @default);
+        public Boolean[] Column_IsStacked { get; }
+        public Boolean GetIsStacked(int index, Boolean @default = default) => Column_IsStacked.ElementAtOrDefault(index, @default);
+        public Boolean[] Column_IsCurtain { get; }
+        public Boolean GetIsCurtain(int index, Boolean @default = default) => Column_IsCurtain.ElementAtOrDefault(index, @default);
+        public int[] Column_BaseLevelIndex { get; }
+        public int GetBaseLevelIndex(int index) => Column_BaseLevelIndex.ElementAtOrDefault(index, EntityRelation.None);
+        public Level GetBaseLevel(int index) => _GetReferencedBaseLevel(GetBaseLevelIndex(index));
+        private Level _GetReferencedBaseLevel(int referencedIndex) => ParentTableSet.GetLevel(referencedIndex);
+        public int[] Column_TopLevelIndex { get; }
+        public int GetTopLevelIndex(int index) => Column_TopLevelIndex.ElementAtOrDefault(index, EntityRelation.None);
+        public Level GetTopLevel(int index) => _GetReferencedTopLevel(GetTopLevelIndex(index));
+        private Level _GetReferencedTopLevel(int referencedIndex) => ParentTableSet.GetLevel(referencedIndex);
+        public int[] Column_CompoundStructureIndex { get; }
+        public int GetCompoundStructureIndex(int index) => Column_CompoundStructureIndex.ElementAtOrDefault(index, EntityRelation.None);
+        public CompoundStructure GetCompoundStructure(int index) => _GetReferencedCompoundStructure(GetCompoundStructureIndex(index));
+        private CompoundStructure _GetReferencedCompoundStructure(int referencedIndex) => ParentTableSet.GetCompoundStructure(referencedIndex);
+        public int[] Column_ElementIndex { get; }
+        public int GetElementIndex(int index) => Column_ElementIndex.ElementAtOrDefault(index, EntityRelation.None);
+        public Element GetElement(int index) => _GetReferencedElement(GetElementIndex(index));
+        private Element _GetReferencedElement(int referencedIndex) => ParentTableSet.GetElement(referencedIndex);
+        // Object Getter
+        public HostPath Get(int index)
+        {
+            if (index < 0) return null;
+            var r = new HostPath();
+            r.Index = index;
+            r.CurveKind = GetCurveKind(index);
+            r.P0_X = GetP0_X(index);
+            r.P0_Y = GetP0_Y(index);
+            r.P0_Z = GetP0_Z(index);
+            r.P1_X = GetP1_X(index);
+            r.P1_Y = GetP1_Y(index);
+            r.P1_Z = GetP1_Z(index);
+            r.Mid_X = GetMid_X(index);
+            r.Mid_Y = GetMid_Y(index);
+            r.Mid_Z = GetMid_Z(index);
+            r.Center_X = GetCenter_X(index);
+            r.Center_Y = GetCenter_Y(index);
+            r.Center_Z = GetCenter_Z(index);
+            r.Radius = GetRadius(index);
+            r.Normal_X = GetNormal_X(index);
+            r.Normal_Y = GetNormal_Y(index);
+            r.Normal_Z = GetNormal_Z(index);
+            r.Length = GetLength(index);
+            r.Width = GetWidth(index);
+            r.Orientation_X = GetOrientation_X(index);
+            r.Orientation_Y = GetOrientation_Y(index);
+            r.Orientation_Z = GetOrientation_Z(index);
+            r.Flipped = GetFlipped(index);
+            r.LocationLine = GetLocationLine(index);
+            r.LocationLineOffset = GetLocationLineOffset(index);
+            r.CoreOffsetExterior = GetCoreOffsetExterior(index);
+            r.BaseOffset = GetBaseOffset(index);
+            r.BaseElevation = GetBaseElevation(index);
+            r.TopOffset = GetTopOffset(index);
+            r.Height = GetHeight(index);
+            r.HasEditedProfile = GetHasEditedProfile(index);
+            r.TopAttachedCount = GetTopAttachedCount(index);
+            r.BaseAttachedCount = GetBaseAttachedCount(index);
+            r.IsStacked = GetIsStacked(index);
+            r.IsCurtain = GetIsCurtain(index);
+            r._BaseLevel = new Relation<Vim.Format.ObjectModel.Level>(GetBaseLevelIndex(index), _GetReferencedBaseLevel);
+            r._TopLevel = new Relation<Vim.Format.ObjectModel.Level>(GetTopLevelIndex(index), _GetReferencedTopLevel);
+            r._CompoundStructure = new Relation<Vim.Format.ObjectModel.CompoundStructure>(GetCompoundStructureIndex(index), _GetReferencedCompoundStructure);
+            r._Element = new Relation<Vim.Format.ObjectModel.Element>(GetElementIndex(index), _GetReferencedElement);
+            return r;
+        }
+        // Enumerator
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+        public IEnumerator<HostPath> GetEnumerator()
+        {
+            for (var i = 0; i < RowCount; ++i)
+                yield return Get(i);
+        }
+    } // class HostPathTable 
+    
+    public partial class HostedInsertTable : EntityTable_v2, IEnumerable<HostedInsert>
+    {
+        
+        public const string TableName = TableNames.HostedInsert;
+        
+        public EntityTableSet ParentTableSet { get; } // can be null
+        
+        public HostedInsertTable(SerializableEntityTable rawTable, string[] stringTable, EntityTableSet parentTableSet = null) : base(rawTable, stringTable)
+        {
+            ParentTableSet = parentTableSet;
+            Column_Kind = GetDataColumnValues<Int32>("int:Kind") ?? Array.Empty<Int32>();
+            Column_DistanceAlongPath = GetDataColumnValues<Double>("double:DistanceAlongPath") ?? Array.Empty<Double>();
+            Column_NormalizedParameter = GetDataColumnValues<Double>("double:NormalizedParameter") ?? Array.Empty<Double>();
+            Column_OffsetFromPath = GetDataColumnValues<Double>("double:OffsetFromPath") ?? Array.Empty<Double>();
+            Column_Elevation = GetDataColumnValues<Double>("double:Elevation") ?? Array.Empty<Double>();
+            Column_SillHeight = GetDataColumnValues<Double>("double:SillHeight") ?? Array.Empty<Double>();
+            Column_HeadHeight = GetDataColumnValues<Double>("double:HeadHeight") ?? Array.Empty<Double>();
+            Column_FacingFlipped = GetDataColumnValues<Boolean>("byte:FacingFlipped") ?? Array.Empty<Boolean>();
+            Column_HandFlipped = GetDataColumnValues<Boolean>("byte:HandFlipped") ?? Array.Empty<Boolean>();
+            Column_Origin_X = GetDataColumnValues<Double>("double:Origin.X") ?? Array.Empty<Double>();
+            Column_Origin_Y = GetDataColumnValues<Double>("double:Origin.Y") ?? Array.Empty<Double>();
+            Column_Origin_Z = GetDataColumnValues<Double>("double:Origin.Z") ?? Array.Empty<Double>();
+            Column_OpeningMin_X = GetDataColumnValues<Double>("double:OpeningMin.X") ?? Array.Empty<Double>();
+            Column_OpeningMin_Y = GetDataColumnValues<Double>("double:OpeningMin.Y") ?? Array.Empty<Double>();
+            Column_OpeningMin_Z = GetDataColumnValues<Double>("double:OpeningMin.Z") ?? Array.Empty<Double>();
+            Column_OpeningMax_X = GetDataColumnValues<Double>("double:OpeningMax.X") ?? Array.Empty<Double>();
+            Column_OpeningMax_Y = GetDataColumnValues<Double>("double:OpeningMax.Y") ?? Array.Empty<Double>();
+            Column_OpeningMax_Z = GetDataColumnValues<Double>("double:OpeningMax.Z") ?? Array.Empty<Double>();
+            Column_HostIndex = GetIndexColumnValues("index:Vim.Element:Host") ?? Array.Empty<int>();
+            Column_HostPathIndex = GetIndexColumnValues("index:Vim.HostPath:HostPath") ?? Array.Empty<int>();
+            Column_ElementIndex = GetIndexColumnValues("index:Vim.Element:Element") ?? Array.Empty<int>();
+        }
+        
+        public Int32[] Column_Kind { get; }
+        public Int32 GetKind(int index, Int32 @default = default) => Column_Kind.ElementAtOrDefault(index, @default);
+        public Double[] Column_DistanceAlongPath { get; }
+        public Double GetDistanceAlongPath(int index, Double @default = default) => Column_DistanceAlongPath.ElementAtOrDefault(index, @default);
+        public Double[] Column_NormalizedParameter { get; }
+        public Double GetNormalizedParameter(int index, Double @default = default) => Column_NormalizedParameter.ElementAtOrDefault(index, @default);
+        public Double[] Column_OffsetFromPath { get; }
+        public Double GetOffsetFromPath(int index, Double @default = default) => Column_OffsetFromPath.ElementAtOrDefault(index, @default);
+        public Double[] Column_Elevation { get; }
+        public Double GetElevation(int index, Double @default = default) => Column_Elevation.ElementAtOrDefault(index, @default);
+        public Double[] Column_SillHeight { get; }
+        public Double GetSillHeight(int index, Double @default = default) => Column_SillHeight.ElementAtOrDefault(index, @default);
+        public Double[] Column_HeadHeight { get; }
+        public Double GetHeadHeight(int index, Double @default = default) => Column_HeadHeight.ElementAtOrDefault(index, @default);
+        public Boolean[] Column_FacingFlipped { get; }
+        public Boolean GetFacingFlipped(int index, Boolean @default = default) => Column_FacingFlipped.ElementAtOrDefault(index, @default);
+        public Boolean[] Column_HandFlipped { get; }
+        public Boolean GetHandFlipped(int index, Boolean @default = default) => Column_HandFlipped.ElementAtOrDefault(index, @default);
+        public Double[] Column_Origin_X { get; }
+        public Double GetOrigin_X(int index, Double @default = default) => Column_Origin_X.ElementAtOrDefault(index, @default);
+        public Double[] Column_Origin_Y { get; }
+        public Double GetOrigin_Y(int index, Double @default = default) => Column_Origin_Y.ElementAtOrDefault(index, @default);
+        public Double[] Column_Origin_Z { get; }
+        public Double GetOrigin_Z(int index, Double @default = default) => Column_Origin_Z.ElementAtOrDefault(index, @default);
+        public Double[] Column_OpeningMin_X { get; }
+        public Double GetOpeningMin_X(int index, Double @default = default) => Column_OpeningMin_X.ElementAtOrDefault(index, @default);
+        public Double[] Column_OpeningMin_Y { get; }
+        public Double GetOpeningMin_Y(int index, Double @default = default) => Column_OpeningMin_Y.ElementAtOrDefault(index, @default);
+        public Double[] Column_OpeningMin_Z { get; }
+        public Double GetOpeningMin_Z(int index, Double @default = default) => Column_OpeningMin_Z.ElementAtOrDefault(index, @default);
+        public Double[] Column_OpeningMax_X { get; }
+        public Double GetOpeningMax_X(int index, Double @default = default) => Column_OpeningMax_X.ElementAtOrDefault(index, @default);
+        public Double[] Column_OpeningMax_Y { get; }
+        public Double GetOpeningMax_Y(int index, Double @default = default) => Column_OpeningMax_Y.ElementAtOrDefault(index, @default);
+        public Double[] Column_OpeningMax_Z { get; }
+        public Double GetOpeningMax_Z(int index, Double @default = default) => Column_OpeningMax_Z.ElementAtOrDefault(index, @default);
+        public int[] Column_HostIndex { get; }
+        public int GetHostIndex(int index) => Column_HostIndex.ElementAtOrDefault(index, EntityRelation.None);
+        public Element GetHost(int index) => _GetReferencedHost(GetHostIndex(index));
+        private Element _GetReferencedHost(int referencedIndex) => ParentTableSet.GetElement(referencedIndex);
+        public int[] Column_HostPathIndex { get; }
+        public int GetHostPathIndex(int index) => Column_HostPathIndex.ElementAtOrDefault(index, EntityRelation.None);
+        public HostPath GetHostPath(int index) => _GetReferencedHostPath(GetHostPathIndex(index));
+        private HostPath _GetReferencedHostPath(int referencedIndex) => ParentTableSet.GetHostPath(referencedIndex);
+        public int[] Column_ElementIndex { get; }
+        public int GetElementIndex(int index) => Column_ElementIndex.ElementAtOrDefault(index, EntityRelation.None);
+        public Element GetElement(int index) => _GetReferencedElement(GetElementIndex(index));
+        private Element _GetReferencedElement(int referencedIndex) => ParentTableSet.GetElement(referencedIndex);
+        // Object Getter
+        public HostedInsert Get(int index)
+        {
+            if (index < 0) return null;
+            var r = new HostedInsert();
+            r.Index = index;
+            r.Kind = GetKind(index);
+            r.DistanceAlongPath = GetDistanceAlongPath(index);
+            r.NormalizedParameter = GetNormalizedParameter(index);
+            r.OffsetFromPath = GetOffsetFromPath(index);
+            r.Elevation = GetElevation(index);
+            r.SillHeight = GetSillHeight(index);
+            r.HeadHeight = GetHeadHeight(index);
+            r.FacingFlipped = GetFacingFlipped(index);
+            r.HandFlipped = GetHandFlipped(index);
+            r.Origin_X = GetOrigin_X(index);
+            r.Origin_Y = GetOrigin_Y(index);
+            r.Origin_Z = GetOrigin_Z(index);
+            r.OpeningMin_X = GetOpeningMin_X(index);
+            r.OpeningMin_Y = GetOpeningMin_Y(index);
+            r.OpeningMin_Z = GetOpeningMin_Z(index);
+            r.OpeningMax_X = GetOpeningMax_X(index);
+            r.OpeningMax_Y = GetOpeningMax_Y(index);
+            r.OpeningMax_Z = GetOpeningMax_Z(index);
+            r._Host = new Relation<Vim.Format.ObjectModel.Element>(GetHostIndex(index), _GetReferencedHost);
+            r._HostPath = new Relation<Vim.Format.ObjectModel.HostPath>(GetHostPathIndex(index), _GetReferencedHostPath);
+            r._Element = new Relation<Vim.Format.ObjectModel.Element>(GetElementIndex(index), _GetReferencedElement);
+            return r;
+        }
+        // Enumerator
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+        public IEnumerator<HostedInsert> GetEnumerator()
+        {
+            for (var i = 0; i < RowCount; ++i)
+                yield return Get(i);
+        }
+    } // class HostedInsertTable 
+    
+    public partial class FamilyRecipeTable : EntityTable_v2, IEnumerable<FamilyRecipe>
+    {
+        
+        public const string TableName = TableNames.FamilyRecipe;
+        
+        public EntityTableSet ParentTableSet { get; } // can be null
+        
+        public FamilyRecipeTable(SerializableEntityTable rawTable, string[] stringTable, EntityTableSet parentTableSet = null) : base(rawTable, stringTable)
+        {
+            ParentTableSet = parentTableSet;
+            Column_ReadStatus = GetDataColumnValues<Int32>("int:ReadStatus") ?? Array.Empty<Int32>();
+            Column_Refusal = GetStringColumnValues("string:Refusal") ?? Array.Empty<String>();
+            Column_Flexibility = GetDataColumnValues<Int32>("int:Flexibility") ?? Array.Empty<Int32>();
+            Column_Reading = GetStringColumnValues("string:Reading") ?? Array.Empty<String>();
+            Column_PlacementType = GetStringColumnValues("string:PlacementType") ?? Array.Empty<String>();
+            Column_IsParametric = GetDataColumnValues<Boolean>("byte:IsParametric") ?? Array.Empty<Boolean>();
+            Column_CurrentTypeName = GetStringColumnValues("string:CurrentTypeName") ?? Array.Empty<String>();
+            Column_LabelledDimensionCount = GetDataColumnValues<Int32>("int:LabelledDimensionCount") ?? Array.Empty<Int32>();
+            Column_DrivingDimensionCount = GetDataColumnValues<Int32>("int:DrivingDimensionCount") ?? Array.Empty<Int32>();
+            Column_LockCount = GetDataColumnValues<Int32>("int:LockCount") ?? Array.Empty<Int32>();
+            Column_FormCount = GetDataColumnValues<Int32>("int:FormCount") ?? Array.Empty<Int32>();
+            Column_OpeningCount = GetDataColumnValues<Int32>("int:OpeningCount") ?? Array.Empty<Int32>();
+            Column_NestedInstanceCount = GetDataColumnValues<Int32>("int:NestedInstanceCount") ?? Array.Empty<Int32>();
+            Column_OpeningTied = GetDataColumnValues<Int32>("int:OpeningTied") ?? Array.Empty<Int32>();
+            Column_ReadMs = GetDataColumnValues<Int32>("int:ReadMs") ?? Array.Empty<Int32>();
+            Column_FamilyIndex = GetIndexColumnValues("index:Vim.Family:Family") ?? Array.Empty<int>();
+        }
+        
+        public Int32[] Column_ReadStatus { get; }
+        public Int32 GetReadStatus(int index, Int32 @default = default) => Column_ReadStatus.ElementAtOrDefault(index, @default);
+        public String[] Column_Refusal { get; }
+        public String GetRefusal(int index, String @default = "") => Column_Refusal.ElementAtOrDefault(index, @default);
+        public Int32[] Column_Flexibility { get; }
+        public Int32 GetFlexibility(int index, Int32 @default = default) => Column_Flexibility.ElementAtOrDefault(index, @default);
+        public String[] Column_Reading { get; }
+        public String GetReading(int index, String @default = "") => Column_Reading.ElementAtOrDefault(index, @default);
+        public String[] Column_PlacementType { get; }
+        public String GetPlacementType(int index, String @default = "") => Column_PlacementType.ElementAtOrDefault(index, @default);
+        public Boolean[] Column_IsParametric { get; }
+        public Boolean GetIsParametric(int index, Boolean @default = default) => Column_IsParametric.ElementAtOrDefault(index, @default);
+        public String[] Column_CurrentTypeName { get; }
+        public String GetCurrentTypeName(int index, String @default = "") => Column_CurrentTypeName.ElementAtOrDefault(index, @default);
+        public Int32[] Column_LabelledDimensionCount { get; }
+        public Int32 GetLabelledDimensionCount(int index, Int32 @default = default) => Column_LabelledDimensionCount.ElementAtOrDefault(index, @default);
+        public Int32[] Column_DrivingDimensionCount { get; }
+        public Int32 GetDrivingDimensionCount(int index, Int32 @default = default) => Column_DrivingDimensionCount.ElementAtOrDefault(index, @default);
+        public Int32[] Column_LockCount { get; }
+        public Int32 GetLockCount(int index, Int32 @default = default) => Column_LockCount.ElementAtOrDefault(index, @default);
+        public Int32[] Column_FormCount { get; }
+        public Int32 GetFormCount(int index, Int32 @default = default) => Column_FormCount.ElementAtOrDefault(index, @default);
+        public Int32[] Column_OpeningCount { get; }
+        public Int32 GetOpeningCount(int index, Int32 @default = default) => Column_OpeningCount.ElementAtOrDefault(index, @default);
+        public Int32[] Column_NestedInstanceCount { get; }
+        public Int32 GetNestedInstanceCount(int index, Int32 @default = default) => Column_NestedInstanceCount.ElementAtOrDefault(index, @default);
+        public Int32[] Column_OpeningTied { get; }
+        public Int32 GetOpeningTied(int index, Int32 @default = default) => Column_OpeningTied.ElementAtOrDefault(index, @default);
+        public Int32[] Column_ReadMs { get; }
+        public Int32 GetReadMs(int index, Int32 @default = default) => Column_ReadMs.ElementAtOrDefault(index, @default);
+        public int[] Column_FamilyIndex { get; }
+        public int GetFamilyIndex(int index) => Column_FamilyIndex.ElementAtOrDefault(index, EntityRelation.None);
+        public Family GetFamily(int index) => _GetReferencedFamily(GetFamilyIndex(index));
+        private Family _GetReferencedFamily(int referencedIndex) => ParentTableSet.GetFamily(referencedIndex);
+        // Object Getter
+        public FamilyRecipe Get(int index)
+        {
+            if (index < 0) return null;
+            var r = new FamilyRecipe();
+            r.Index = index;
+            r.ReadStatus = GetReadStatus(index);
+            r.Refusal = GetRefusal(index);
+            r.Flexibility = GetFlexibility(index);
+            r.Reading = GetReading(index);
+            r.PlacementType = GetPlacementType(index);
+            r.IsParametric = GetIsParametric(index);
+            r.CurrentTypeName = GetCurrentTypeName(index);
+            r.LabelledDimensionCount = GetLabelledDimensionCount(index);
+            r.DrivingDimensionCount = GetDrivingDimensionCount(index);
+            r.LockCount = GetLockCount(index);
+            r.FormCount = GetFormCount(index);
+            r.OpeningCount = GetOpeningCount(index);
+            r.NestedInstanceCount = GetNestedInstanceCount(index);
+            r.OpeningTied = GetOpeningTied(index);
+            r.ReadMs = GetReadMs(index);
+            r._Family = new Relation<Vim.Format.ObjectModel.Family>(GetFamilyIndex(index), _GetReferencedFamily);
+            return r;
+        }
+        // Enumerator
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+        public IEnumerator<FamilyRecipe> GetEnumerator()
+        {
+            for (var i = 0; i < RowCount; ++i)
+                yield return Get(i);
+        }
+    } // class FamilyRecipeTable 
+    
+    public partial class FamilyRecipeParameterTable : EntityTable_v2, IEnumerable<FamilyRecipeParameter>
+    {
+        
+        public const string TableName = TableNames.FamilyRecipeParameter;
+        
+        public EntityTableSet ParentTableSet { get; } // can be null
+        
+        public FamilyRecipeParameterTable(SerializableEntityTable rawTable, string[] stringTable, EntityTableSet parentTableSet = null) : base(rawTable, stringTable)
+        {
+            ParentTableSet = parentTableSet;
+            Column_Name = GetStringColumnValues("string:Name") ?? Array.Empty<String>();
+            Column_FamilyElementId = GetDataColumnValues<Int64>("long:FamilyElementId") ?? Array.Empty<Int64>();
+            Column_Guid = GetStringColumnValues("string:Guid") ?? Array.Empty<String>();
+            Column_DataType = GetStringColumnValues("string:DataType") ?? Array.Empty<String>();
+            Column_StorageType = GetStringColumnValues("string:StorageType") ?? Array.Empty<String>();
+            Column_IsInstance = GetDataColumnValues<Boolean>("byte:IsInstance") ?? Array.Empty<Boolean>();
+            Column_IsReporting = GetDataColumnValues<Boolean>("byte:IsReporting") ?? Array.Empty<Boolean>();
+            Column_IsShared = GetDataColumnValues<Boolean>("byte:IsShared") ?? Array.Empty<Boolean>();
+            Column_IsDeterminedByFormula = GetDataColumnValues<Boolean>("byte:IsDeterminedByFormula") ?? Array.Empty<Boolean>();
+            Column_Formula = GetStringColumnValues("string:Formula") ?? Array.Empty<String>();
+            Column_Drives = GetDataColumnValues<Int32>("int:Drives") ?? Array.Empty<Int32>();
+            Column_FamilyIndex = GetIndexColumnValues("index:Vim.Family:Family") ?? Array.Empty<int>();
+        }
+        
+        public String[] Column_Name { get; }
+        public String GetName(int index, String @default = "") => Column_Name.ElementAtOrDefault(index, @default);
+        public Int64[] Column_FamilyElementId { get; }
+        public Int64 GetFamilyElementId(int index, Int64 @default = default) => Column_FamilyElementId.ElementAtOrDefault(index, @default);
+        public String[] Column_Guid { get; }
+        public String GetGuid(int index, String @default = "") => Column_Guid.ElementAtOrDefault(index, @default);
+        public String[] Column_DataType { get; }
+        public String GetDataType(int index, String @default = "") => Column_DataType.ElementAtOrDefault(index, @default);
+        public String[] Column_StorageType { get; }
+        public String GetStorageType(int index, String @default = "") => Column_StorageType.ElementAtOrDefault(index, @default);
+        public Boolean[] Column_IsInstance { get; }
+        public Boolean GetIsInstance(int index, Boolean @default = default) => Column_IsInstance.ElementAtOrDefault(index, @default);
+        public Boolean[] Column_IsReporting { get; }
+        public Boolean GetIsReporting(int index, Boolean @default = default) => Column_IsReporting.ElementAtOrDefault(index, @default);
+        public Boolean[] Column_IsShared { get; }
+        public Boolean GetIsShared(int index, Boolean @default = default) => Column_IsShared.ElementAtOrDefault(index, @default);
+        public Boolean[] Column_IsDeterminedByFormula { get; }
+        public Boolean GetIsDeterminedByFormula(int index, Boolean @default = default) => Column_IsDeterminedByFormula.ElementAtOrDefault(index, @default);
+        public String[] Column_Formula { get; }
+        public String GetFormula(int index, String @default = "") => Column_Formula.ElementAtOrDefault(index, @default);
+        public Int32[] Column_Drives { get; }
+        public Int32 GetDrives(int index, Int32 @default = default) => Column_Drives.ElementAtOrDefault(index, @default);
+        public int[] Column_FamilyIndex { get; }
+        public int GetFamilyIndex(int index) => Column_FamilyIndex.ElementAtOrDefault(index, EntityRelation.None);
+        public Family GetFamily(int index) => _GetReferencedFamily(GetFamilyIndex(index));
+        private Family _GetReferencedFamily(int referencedIndex) => ParentTableSet.GetFamily(referencedIndex);
+        // Object Getter
+        public FamilyRecipeParameter Get(int index)
+        {
+            if (index < 0) return null;
+            var r = new FamilyRecipeParameter();
+            r.Index = index;
+            r.Name = GetName(index);
+            r.FamilyElementId = GetFamilyElementId(index);
+            r.Guid = GetGuid(index);
+            r.DataType = GetDataType(index);
+            r.StorageType = GetStorageType(index);
+            r.IsInstance = GetIsInstance(index);
+            r.IsReporting = GetIsReporting(index);
+            r.IsShared = GetIsShared(index);
+            r.IsDeterminedByFormula = GetIsDeterminedByFormula(index);
+            r.Formula = GetFormula(index);
+            r.Drives = GetDrives(index);
+            r._Family = new Relation<Vim.Format.ObjectModel.Family>(GetFamilyIndex(index), _GetReferencedFamily);
+            return r;
+        }
+        // Enumerator
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+        public IEnumerator<FamilyRecipeParameter> GetEnumerator()
+        {
+            for (var i = 0; i < RowCount; ++i)
+                yield return Get(i);
+        }
+    } // class FamilyRecipeParameterTable 
+    
+    public partial class FamilyTypeValueTable : EntityTable_v2, IEnumerable<FamilyTypeValue>
+    {
+        
+        public const string TableName = TableNames.FamilyTypeValue;
+        
+        public EntityTableSet ParentTableSet { get; } // can be null
+        
+        public FamilyTypeValueTable(SerializableEntityTable rawTable, string[] stringTable, EntityTableSet parentTableSet = null) : base(rawTable, stringTable)
+        {
+            ParentTableSet = parentTableSet;
+            Column_TypeName = GetStringColumnValues("string:TypeName") ?? Array.Empty<String>();
+            Column_Value = GetStringColumnValues("string:Value") ?? Array.Empty<String>();
+            Column_DoubleValue = GetDataColumnValues<Double>("double:DoubleValue") ?? Array.Empty<Double>();
+            Column_IntegerValue = GetDataColumnValues<Int32>("int:IntegerValue") ?? Array.Empty<Int32>();
+            Column_ElementIdValue = GetDataColumnValues<Int64>("long:ElementIdValue") ?? Array.Empty<Int64>();
+            Column_FamilyParameterIndex = GetIndexColumnValues("index:Vim.FamilyRecipeParameter:FamilyParameter") ?? Array.Empty<int>();
+            Column_FamilyTypeIndex = GetIndexColumnValues("index:Vim.FamilyType:FamilyType") ?? Array.Empty<int>();
+        }
+        
+        public String[] Column_TypeName { get; }
+        public String GetTypeName(int index, String @default = "") => Column_TypeName.ElementAtOrDefault(index, @default);
+        public String[] Column_Value { get; }
+        public String GetValue(int index, String @default = "") => Column_Value.ElementAtOrDefault(index, @default);
+        public Double[] Column_DoubleValue { get; }
+        public Double GetDoubleValue(int index, Double @default = default) => Column_DoubleValue.ElementAtOrDefault(index, @default);
+        public Int32[] Column_IntegerValue { get; }
+        public Int32 GetIntegerValue(int index, Int32 @default = default) => Column_IntegerValue.ElementAtOrDefault(index, @default);
+        public Int64[] Column_ElementIdValue { get; }
+        public Int64 GetElementIdValue(int index, Int64 @default = default) => Column_ElementIdValue.ElementAtOrDefault(index, @default);
+        public int[] Column_FamilyParameterIndex { get; }
+        public int GetFamilyParameterIndex(int index) => Column_FamilyParameterIndex.ElementAtOrDefault(index, EntityRelation.None);
+        public FamilyRecipeParameter GetFamilyParameter(int index) => _GetReferencedFamilyParameter(GetFamilyParameterIndex(index));
+        private FamilyRecipeParameter _GetReferencedFamilyParameter(int referencedIndex) => ParentTableSet.GetFamilyRecipeParameter(referencedIndex);
+        public int[] Column_FamilyTypeIndex { get; }
+        public int GetFamilyTypeIndex(int index) => Column_FamilyTypeIndex.ElementAtOrDefault(index, EntityRelation.None);
+        public FamilyType GetFamilyType(int index) => _GetReferencedFamilyType(GetFamilyTypeIndex(index));
+        private FamilyType _GetReferencedFamilyType(int referencedIndex) => ParentTableSet.GetFamilyType(referencedIndex);
+        // Object Getter
+        public FamilyTypeValue Get(int index)
+        {
+            if (index < 0) return null;
+            var r = new FamilyTypeValue();
+            r.Index = index;
+            r.TypeName = GetTypeName(index);
+            r.Value = GetValue(index);
+            r.DoubleValue = GetDoubleValue(index);
+            r.IntegerValue = GetIntegerValue(index);
+            r.ElementIdValue = GetElementIdValue(index);
+            r._FamilyParameter = new Relation<Vim.Format.ObjectModel.FamilyRecipeParameter>(GetFamilyParameterIndex(index), _GetReferencedFamilyParameter);
+            r._FamilyType = new Relation<Vim.Format.ObjectModel.FamilyType>(GetFamilyTypeIndex(index), _GetReferencedFamilyType);
+            return r;
+        }
+        // Enumerator
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+        public IEnumerator<FamilyTypeValue> GetEnumerator()
+        {
+            for (var i = 0; i < RowCount; ++i)
+                yield return Get(i);
+        }
+    } // class FamilyTypeValueTable 
+    
+    public partial class FamilyReferencePlaneTable : EntityTable_v2, IEnumerable<FamilyReferencePlane>
+    {
+        
+        public const string TableName = TableNames.FamilyReferencePlane;
+        
+        public EntityTableSet ParentTableSet { get; } // can be null
+        
+        public FamilyReferencePlaneTable(SerializableEntityTable rawTable, string[] stringTable, EntityTableSet parentTableSet = null) : base(rawTable, stringTable)
+        {
+            ParentTableSet = parentTableSet;
+            Column_FamilyElementId = GetDataColumnValues<Int64>("long:FamilyElementId") ?? Array.Empty<Int64>();
+            Column_Name = GetStringColumnValues("string:Name") ?? Array.Empty<String>();
+            Column_Origin_X = GetDataColumnValues<Double>("double:Origin.X") ?? Array.Empty<Double>();
+            Column_Origin_Y = GetDataColumnValues<Double>("double:Origin.Y") ?? Array.Empty<Double>();
+            Column_Origin_Z = GetDataColumnValues<Double>("double:Origin.Z") ?? Array.Empty<Double>();
+            Column_Normal_X = GetDataColumnValues<Double>("double:Normal.X") ?? Array.Empty<Double>();
+            Column_Normal_Y = GetDataColumnValues<Double>("double:Normal.Y") ?? Array.Empty<Double>();
+            Column_Normal_Z = GetDataColumnValues<Double>("double:Normal.Z") ?? Array.Empty<Double>();
+            Column_IsReference = GetStringColumnValues("string:IsReference") ?? Array.Empty<String>();
+            Column_DefinesOrigin = GetDataColumnValues<Boolean>("byte:DefinesOrigin") ?? Array.Empty<Boolean>();
+            Column_IsDriven = GetDataColumnValues<Boolean>("byte:IsDriven") ?? Array.Empty<Boolean>();
+            Column_FamilyIndex = GetIndexColumnValues("index:Vim.Family:Family") ?? Array.Empty<int>();
+        }
+        
+        public Int64[] Column_FamilyElementId { get; }
+        public Int64 GetFamilyElementId(int index, Int64 @default = default) => Column_FamilyElementId.ElementAtOrDefault(index, @default);
+        public String[] Column_Name { get; }
+        public String GetName(int index, String @default = "") => Column_Name.ElementAtOrDefault(index, @default);
+        public Double[] Column_Origin_X { get; }
+        public Double GetOrigin_X(int index, Double @default = default) => Column_Origin_X.ElementAtOrDefault(index, @default);
+        public Double[] Column_Origin_Y { get; }
+        public Double GetOrigin_Y(int index, Double @default = default) => Column_Origin_Y.ElementAtOrDefault(index, @default);
+        public Double[] Column_Origin_Z { get; }
+        public Double GetOrigin_Z(int index, Double @default = default) => Column_Origin_Z.ElementAtOrDefault(index, @default);
+        public Double[] Column_Normal_X { get; }
+        public Double GetNormal_X(int index, Double @default = default) => Column_Normal_X.ElementAtOrDefault(index, @default);
+        public Double[] Column_Normal_Y { get; }
+        public Double GetNormal_Y(int index, Double @default = default) => Column_Normal_Y.ElementAtOrDefault(index, @default);
+        public Double[] Column_Normal_Z { get; }
+        public Double GetNormal_Z(int index, Double @default = default) => Column_Normal_Z.ElementAtOrDefault(index, @default);
+        public String[] Column_IsReference { get; }
+        public String GetIsReference(int index, String @default = "") => Column_IsReference.ElementAtOrDefault(index, @default);
+        public Boolean[] Column_DefinesOrigin { get; }
+        public Boolean GetDefinesOrigin(int index, Boolean @default = default) => Column_DefinesOrigin.ElementAtOrDefault(index, @default);
+        public Boolean[] Column_IsDriven { get; }
+        public Boolean GetIsDriven(int index, Boolean @default = default) => Column_IsDriven.ElementAtOrDefault(index, @default);
+        public int[] Column_FamilyIndex { get; }
+        public int GetFamilyIndex(int index) => Column_FamilyIndex.ElementAtOrDefault(index, EntityRelation.None);
+        public Family GetFamily(int index) => _GetReferencedFamily(GetFamilyIndex(index));
+        private Family _GetReferencedFamily(int referencedIndex) => ParentTableSet.GetFamily(referencedIndex);
+        // Object Getter
+        public FamilyReferencePlane Get(int index)
+        {
+            if (index < 0) return null;
+            var r = new FamilyReferencePlane();
+            r.Index = index;
+            r.FamilyElementId = GetFamilyElementId(index);
+            r.Name = GetName(index);
+            r.Origin_X = GetOrigin_X(index);
+            r.Origin_Y = GetOrigin_Y(index);
+            r.Origin_Z = GetOrigin_Z(index);
+            r.Normal_X = GetNormal_X(index);
+            r.Normal_Y = GetNormal_Y(index);
+            r.Normal_Z = GetNormal_Z(index);
+            r.IsReference = GetIsReference(index);
+            r.DefinesOrigin = GetDefinesOrigin(index);
+            r.IsDriven = GetIsDriven(index);
+            r._Family = new Relation<Vim.Format.ObjectModel.Family>(GetFamilyIndex(index), _GetReferencedFamily);
+            return r;
+        }
+        // Enumerator
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+        public IEnumerator<FamilyReferencePlane> GetEnumerator()
+        {
+            for (var i = 0; i < RowCount; ++i)
+                yield return Get(i);
+        }
+    } // class FamilyReferencePlaneTable 
+    
+    public partial class FamilyFormTable : EntityTable_v2, IEnumerable<FamilyForm>
+    {
+        
+        public const string TableName = TableNames.FamilyForm;
+        
+        public EntityTableSet ParentTableSet { get; } // can be null
+        
+        public FamilyFormTable(SerializableEntityTable rawTable, string[] stringTable, EntityTableSet parentTableSet = null) : base(rawTable, stringTable)
+        {
+            ParentTableSet = parentTableSet;
+            Column_FamilyElementId = GetDataColumnValues<Int64>("long:FamilyElementId") ?? Array.Empty<Int64>();
+            Column_Kind = GetStringColumnValues("string:Kind") ?? Array.Empty<String>();
+            Column_IsSolid = GetDataColumnValues<Boolean>("byte:IsSolid") ?? Array.Empty<Boolean>();
+            Column_IsVisible = GetDataColumnValues<Boolean>("byte:IsVisible") ?? Array.Empty<Boolean>();
+            Column_Subcategory = GetStringColumnValues("string:Subcategory") ?? Array.Empty<String>();
+            Column_Material = GetStringColumnValues("string:Material") ?? Array.Empty<String>();
+            Column_PlaneOrigin_X = GetDataColumnValues<Double>("double:PlaneOrigin.X") ?? Array.Empty<Double>();
+            Column_PlaneOrigin_Y = GetDataColumnValues<Double>("double:PlaneOrigin.Y") ?? Array.Empty<Double>();
+            Column_PlaneOrigin_Z = GetDataColumnValues<Double>("double:PlaneOrigin.Z") ?? Array.Empty<Double>();
+            Column_PlaneNormal_X = GetDataColumnValues<Double>("double:PlaneNormal.X") ?? Array.Empty<Double>();
+            Column_PlaneNormal_Y = GetDataColumnValues<Double>("double:PlaneNormal.Y") ?? Array.Empty<Double>();
+            Column_PlaneNormal_Z = GetDataColumnValues<Double>("double:PlaneNormal.Z") ?? Array.Empty<Double>();
+            Column_PlaneXDir_X = GetDataColumnValues<Double>("double:PlaneXDir.X") ?? Array.Empty<Double>();
+            Column_PlaneXDir_Y = GetDataColumnValues<Double>("double:PlaneXDir.Y") ?? Array.Empty<Double>();
+            Column_PlaneXDir_Z = GetDataColumnValues<Double>("double:PlaneXDir.Z") ?? Array.Empty<Double>();
+            Column_StartOffset = GetDataColumnValues<Double>("double:StartOffset") ?? Array.Empty<Double>();
+            Column_EndOffset = GetDataColumnValues<Double>("double:EndOffset") ?? Array.Empty<Double>();
+            Column_StartAngle = GetDataColumnValues<Double>("double:StartAngle") ?? Array.Empty<Double>();
+            Column_EndAngle = GetDataColumnValues<Double>("double:EndAngle") ?? Array.Empty<Double>();
+            Column_IsDriven = GetDataColumnValues<Boolean>("byte:IsDriven") ?? Array.Empty<Boolean>();
+            Column_IsRebuildable = GetDataColumnValues<Boolean>("byte:IsRebuildable") ?? Array.Empty<Boolean>();
+            Column_FamilyIndex = GetIndexColumnValues("index:Vim.Family:Family") ?? Array.Empty<int>();
+        }
+        
+        public Int64[] Column_FamilyElementId { get; }
+        public Int64 GetFamilyElementId(int index, Int64 @default = default) => Column_FamilyElementId.ElementAtOrDefault(index, @default);
+        public String[] Column_Kind { get; }
+        public String GetKind(int index, String @default = "") => Column_Kind.ElementAtOrDefault(index, @default);
+        public Boolean[] Column_IsSolid { get; }
+        public Boolean GetIsSolid(int index, Boolean @default = default) => Column_IsSolid.ElementAtOrDefault(index, @default);
+        public Boolean[] Column_IsVisible { get; }
+        public Boolean GetIsVisible(int index, Boolean @default = default) => Column_IsVisible.ElementAtOrDefault(index, @default);
+        public String[] Column_Subcategory { get; }
+        public String GetSubcategory(int index, String @default = "") => Column_Subcategory.ElementAtOrDefault(index, @default);
+        public String[] Column_Material { get; }
+        public String GetMaterial(int index, String @default = "") => Column_Material.ElementAtOrDefault(index, @default);
+        public Double[] Column_PlaneOrigin_X { get; }
+        public Double GetPlaneOrigin_X(int index, Double @default = default) => Column_PlaneOrigin_X.ElementAtOrDefault(index, @default);
+        public Double[] Column_PlaneOrigin_Y { get; }
+        public Double GetPlaneOrigin_Y(int index, Double @default = default) => Column_PlaneOrigin_Y.ElementAtOrDefault(index, @default);
+        public Double[] Column_PlaneOrigin_Z { get; }
+        public Double GetPlaneOrigin_Z(int index, Double @default = default) => Column_PlaneOrigin_Z.ElementAtOrDefault(index, @default);
+        public Double[] Column_PlaneNormal_X { get; }
+        public Double GetPlaneNormal_X(int index, Double @default = default) => Column_PlaneNormal_X.ElementAtOrDefault(index, @default);
+        public Double[] Column_PlaneNormal_Y { get; }
+        public Double GetPlaneNormal_Y(int index, Double @default = default) => Column_PlaneNormal_Y.ElementAtOrDefault(index, @default);
+        public Double[] Column_PlaneNormal_Z { get; }
+        public Double GetPlaneNormal_Z(int index, Double @default = default) => Column_PlaneNormal_Z.ElementAtOrDefault(index, @default);
+        public Double[] Column_PlaneXDir_X { get; }
+        public Double GetPlaneXDir_X(int index, Double @default = default) => Column_PlaneXDir_X.ElementAtOrDefault(index, @default);
+        public Double[] Column_PlaneXDir_Y { get; }
+        public Double GetPlaneXDir_Y(int index, Double @default = default) => Column_PlaneXDir_Y.ElementAtOrDefault(index, @default);
+        public Double[] Column_PlaneXDir_Z { get; }
+        public Double GetPlaneXDir_Z(int index, Double @default = default) => Column_PlaneXDir_Z.ElementAtOrDefault(index, @default);
+        public Double[] Column_StartOffset { get; }
+        public Double GetStartOffset(int index, Double @default = default) => Column_StartOffset.ElementAtOrDefault(index, @default);
+        public Double[] Column_EndOffset { get; }
+        public Double GetEndOffset(int index, Double @default = default) => Column_EndOffset.ElementAtOrDefault(index, @default);
+        public Double[] Column_StartAngle { get; }
+        public Double GetStartAngle(int index, Double @default = default) => Column_StartAngle.ElementAtOrDefault(index, @default);
+        public Double[] Column_EndAngle { get; }
+        public Double GetEndAngle(int index, Double @default = default) => Column_EndAngle.ElementAtOrDefault(index, @default);
+        public Boolean[] Column_IsDriven { get; }
+        public Boolean GetIsDriven(int index, Boolean @default = default) => Column_IsDriven.ElementAtOrDefault(index, @default);
+        public Boolean[] Column_IsRebuildable { get; }
+        public Boolean GetIsRebuildable(int index, Boolean @default = default) => Column_IsRebuildable.ElementAtOrDefault(index, @default);
+        public int[] Column_FamilyIndex { get; }
+        public int GetFamilyIndex(int index) => Column_FamilyIndex.ElementAtOrDefault(index, EntityRelation.None);
+        public Family GetFamily(int index) => _GetReferencedFamily(GetFamilyIndex(index));
+        private Family _GetReferencedFamily(int referencedIndex) => ParentTableSet.GetFamily(referencedIndex);
+        // Object Getter
+        public FamilyForm Get(int index)
+        {
+            if (index < 0) return null;
+            var r = new FamilyForm();
+            r.Index = index;
+            r.FamilyElementId = GetFamilyElementId(index);
+            r.Kind = GetKind(index);
+            r.IsSolid = GetIsSolid(index);
+            r.IsVisible = GetIsVisible(index);
+            r.Subcategory = GetSubcategory(index);
+            r.Material = GetMaterial(index);
+            r.PlaneOrigin_X = GetPlaneOrigin_X(index);
+            r.PlaneOrigin_Y = GetPlaneOrigin_Y(index);
+            r.PlaneOrigin_Z = GetPlaneOrigin_Z(index);
+            r.PlaneNormal_X = GetPlaneNormal_X(index);
+            r.PlaneNormal_Y = GetPlaneNormal_Y(index);
+            r.PlaneNormal_Z = GetPlaneNormal_Z(index);
+            r.PlaneXDir_X = GetPlaneXDir_X(index);
+            r.PlaneXDir_Y = GetPlaneXDir_Y(index);
+            r.PlaneXDir_Z = GetPlaneXDir_Z(index);
+            r.StartOffset = GetStartOffset(index);
+            r.EndOffset = GetEndOffset(index);
+            r.StartAngle = GetStartAngle(index);
+            r.EndAngle = GetEndAngle(index);
+            r.IsDriven = GetIsDriven(index);
+            r.IsRebuildable = GetIsRebuildable(index);
+            r._Family = new Relation<Vim.Format.ObjectModel.Family>(GetFamilyIndex(index), _GetReferencedFamily);
+            return r;
+        }
+        // Enumerator
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+        public IEnumerator<FamilyForm> GetEnumerator()
+        {
+            for (var i = 0; i < RowCount; ++i)
+                yield return Get(i);
+        }
+    } // class FamilyFormTable 
+    
+    public partial class FamilySketchCurveTable : EntityTable_v2, IEnumerable<FamilySketchCurve>
+    {
+        
+        public const string TableName = TableNames.FamilySketchCurve;
+        
+        public EntityTableSet ParentTableSet { get; } // can be null
+        
+        public FamilySketchCurveTable(SerializableEntityTable rawTable, string[] stringTable, EntityTableSet parentTableSet = null) : base(rawTable, stringTable)
+        {
+            ParentTableSet = parentTableSet;
+            Column_Role = GetDataColumnValues<Int32>("int:Role") ?? Array.Empty<Int32>();
+            Column_Loop = GetDataColumnValues<Int32>("int:Loop") ?? Array.Empty<Int32>();
+            Column_Order = GetDataColumnValues<Int32>("int:Order") ?? Array.Empty<Int32>();
+            Column_CurveElementId = GetDataColumnValues<Int64>("long:CurveElementId") ?? Array.Empty<Int64>();
+            Column_CurveKind = GetDataColumnValues<Int32>("int:CurveKind") ?? Array.Empty<Int32>();
+            Column_Start_X = GetDataColumnValues<Double>("double:Start.X") ?? Array.Empty<Double>();
+            Column_Start_Y = GetDataColumnValues<Double>("double:Start.Y") ?? Array.Empty<Double>();
+            Column_Start_Z = GetDataColumnValues<Double>("double:Start.Z") ?? Array.Empty<Double>();
+            Column_End_X = GetDataColumnValues<Double>("double:End.X") ?? Array.Empty<Double>();
+            Column_End_Y = GetDataColumnValues<Double>("double:End.Y") ?? Array.Empty<Double>();
+            Column_End_Z = GetDataColumnValues<Double>("double:End.Z") ?? Array.Empty<Double>();
+            Column_Mid_X = GetDataColumnValues<Double>("double:Mid.X") ?? Array.Empty<Double>();
+            Column_Mid_Y = GetDataColumnValues<Double>("double:Mid.Y") ?? Array.Empty<Double>();
+            Column_Mid_Z = GetDataColumnValues<Double>("double:Mid.Z") ?? Array.Empty<Double>();
+            Column_Center_X = GetDataColumnValues<Double>("double:Center.X") ?? Array.Empty<Double>();
+            Column_Center_Y = GetDataColumnValues<Double>("double:Center.Y") ?? Array.Empty<Double>();
+            Column_Center_Z = GetDataColumnValues<Double>("double:Center.Z") ?? Array.Empty<Double>();
+            Column_Radius = GetDataColumnValues<Double>("double:Radius") ?? Array.Empty<Double>();
+            Column_LockCount = GetDataColumnValues<Int32>("int:LockCount") ?? Array.Empty<Int32>();
+            Column_FamilyFormIndex = GetIndexColumnValues("index:Vim.FamilyForm:FamilyForm") ?? Array.Empty<int>();
+        }
+        
+        public Int32[] Column_Role { get; }
+        public Int32 GetRole(int index, Int32 @default = default) => Column_Role.ElementAtOrDefault(index, @default);
+        public Int32[] Column_Loop { get; }
+        public Int32 GetLoop(int index, Int32 @default = default) => Column_Loop.ElementAtOrDefault(index, @default);
+        public Int32[] Column_Order { get; }
+        public Int32 GetOrder(int index, Int32 @default = default) => Column_Order.ElementAtOrDefault(index, @default);
+        public Int64[] Column_CurveElementId { get; }
+        public Int64 GetCurveElementId(int index, Int64 @default = default) => Column_CurveElementId.ElementAtOrDefault(index, @default);
+        public Int32[] Column_CurveKind { get; }
+        public Int32 GetCurveKind(int index, Int32 @default = default) => Column_CurveKind.ElementAtOrDefault(index, @default);
+        public Double[] Column_Start_X { get; }
+        public Double GetStart_X(int index, Double @default = default) => Column_Start_X.ElementAtOrDefault(index, @default);
+        public Double[] Column_Start_Y { get; }
+        public Double GetStart_Y(int index, Double @default = default) => Column_Start_Y.ElementAtOrDefault(index, @default);
+        public Double[] Column_Start_Z { get; }
+        public Double GetStart_Z(int index, Double @default = default) => Column_Start_Z.ElementAtOrDefault(index, @default);
+        public Double[] Column_End_X { get; }
+        public Double GetEnd_X(int index, Double @default = default) => Column_End_X.ElementAtOrDefault(index, @default);
+        public Double[] Column_End_Y { get; }
+        public Double GetEnd_Y(int index, Double @default = default) => Column_End_Y.ElementAtOrDefault(index, @default);
+        public Double[] Column_End_Z { get; }
+        public Double GetEnd_Z(int index, Double @default = default) => Column_End_Z.ElementAtOrDefault(index, @default);
+        public Double[] Column_Mid_X { get; }
+        public Double GetMid_X(int index, Double @default = default) => Column_Mid_X.ElementAtOrDefault(index, @default);
+        public Double[] Column_Mid_Y { get; }
+        public Double GetMid_Y(int index, Double @default = default) => Column_Mid_Y.ElementAtOrDefault(index, @default);
+        public Double[] Column_Mid_Z { get; }
+        public Double GetMid_Z(int index, Double @default = default) => Column_Mid_Z.ElementAtOrDefault(index, @default);
+        public Double[] Column_Center_X { get; }
+        public Double GetCenter_X(int index, Double @default = default) => Column_Center_X.ElementAtOrDefault(index, @default);
+        public Double[] Column_Center_Y { get; }
+        public Double GetCenter_Y(int index, Double @default = default) => Column_Center_Y.ElementAtOrDefault(index, @default);
+        public Double[] Column_Center_Z { get; }
+        public Double GetCenter_Z(int index, Double @default = default) => Column_Center_Z.ElementAtOrDefault(index, @default);
+        public Double[] Column_Radius { get; }
+        public Double GetRadius(int index, Double @default = default) => Column_Radius.ElementAtOrDefault(index, @default);
+        public Int32[] Column_LockCount { get; }
+        public Int32 GetLockCount(int index, Int32 @default = default) => Column_LockCount.ElementAtOrDefault(index, @default);
+        public int[] Column_FamilyFormIndex { get; }
+        public int GetFamilyFormIndex(int index) => Column_FamilyFormIndex.ElementAtOrDefault(index, EntityRelation.None);
+        public FamilyForm GetFamilyForm(int index) => _GetReferencedFamilyForm(GetFamilyFormIndex(index));
+        private FamilyForm _GetReferencedFamilyForm(int referencedIndex) => ParentTableSet.GetFamilyForm(referencedIndex);
+        // Object Getter
+        public FamilySketchCurve Get(int index)
+        {
+            if (index < 0) return null;
+            var r = new FamilySketchCurve();
+            r.Index = index;
+            r.Role = GetRole(index);
+            r.Loop = GetLoop(index);
+            r.Order = GetOrder(index);
+            r.CurveElementId = GetCurveElementId(index);
+            r.CurveKind = GetCurveKind(index);
+            r.Start_X = GetStart_X(index);
+            r.Start_Y = GetStart_Y(index);
+            r.Start_Z = GetStart_Z(index);
+            r.End_X = GetEnd_X(index);
+            r.End_Y = GetEnd_Y(index);
+            r.End_Z = GetEnd_Z(index);
+            r.Mid_X = GetMid_X(index);
+            r.Mid_Y = GetMid_Y(index);
+            r.Mid_Z = GetMid_Z(index);
+            r.Center_X = GetCenter_X(index);
+            r.Center_Y = GetCenter_Y(index);
+            r.Center_Z = GetCenter_Z(index);
+            r.Radius = GetRadius(index);
+            r.LockCount = GetLockCount(index);
+            r._FamilyForm = new Relation<Vim.Format.ObjectModel.FamilyForm>(GetFamilyFormIndex(index), _GetReferencedFamilyForm);
+            return r;
+        }
+        // Enumerator
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+        public IEnumerator<FamilySketchCurve> GetEnumerator()
+        {
+            for (var i = 0; i < RowCount; ++i)
+                yield return Get(i);
+        }
+    } // class FamilySketchCurveTable 
+    
+    public partial class FamilyConstraintTable : EntityTable_v2, IEnumerable<FamilyConstraint>
+    {
+        
+        public const string TableName = TableNames.FamilyConstraint;
+        
+        public EntityTableSet ParentTableSet { get; } // can be null
+        
+        public FamilyConstraintTable(SerializableEntityTable rawTable, string[] stringTable, EntityTableSet parentTableSet = null) : base(rawTable, stringTable)
+        {
+            ParentTableSet = parentTableSet;
+            Column_FamilyElementId = GetDataColumnValues<Int64>("long:FamilyElementId") ?? Array.Empty<Int64>();
+            Column_Kind = GetDataColumnValues<Int32>("int:Kind") ?? Array.Empty<Int32>();
+            Column_IsLocked = GetDataColumnValues<Boolean>("byte:IsLocked") ?? Array.Empty<Boolean>();
+            Column_HasView = GetDataColumnValues<Boolean>("byte:HasView") ?? Array.Empty<Boolean>();
+            Column_Value = GetDataColumnValues<Double>("double:Value") ?? Array.Empty<Double>();
+            Column_SegmentCount = GetDataColumnValues<Int32>("int:SegmentCount") ?? Array.Empty<Int32>();
+            Column_ReachesGeometry = GetDataColumnValues<Boolean>("byte:ReachesGeometry") ?? Array.Empty<Boolean>();
+            Column_ReferenceCount = GetDataColumnValues<Int32>("int:ReferenceCount") ?? Array.Empty<Int32>();
+            Column_FamilyIndex = GetIndexColumnValues("index:Vim.Family:Family") ?? Array.Empty<int>();
+            Column_FamilyParameterIndex = GetIndexColumnValues("index:Vim.FamilyRecipeParameter:FamilyParameter") ?? Array.Empty<int>();
+        }
+        
+        public Int64[] Column_FamilyElementId { get; }
+        public Int64 GetFamilyElementId(int index, Int64 @default = default) => Column_FamilyElementId.ElementAtOrDefault(index, @default);
+        public Int32[] Column_Kind { get; }
+        public Int32 GetKind(int index, Int32 @default = default) => Column_Kind.ElementAtOrDefault(index, @default);
+        public Boolean[] Column_IsLocked { get; }
+        public Boolean GetIsLocked(int index, Boolean @default = default) => Column_IsLocked.ElementAtOrDefault(index, @default);
+        public Boolean[] Column_HasView { get; }
+        public Boolean GetHasView(int index, Boolean @default = default) => Column_HasView.ElementAtOrDefault(index, @default);
+        public Double[] Column_Value { get; }
+        public Double GetValue(int index, Double @default = default) => Column_Value.ElementAtOrDefault(index, @default);
+        public Int32[] Column_SegmentCount { get; }
+        public Int32 GetSegmentCount(int index, Int32 @default = default) => Column_SegmentCount.ElementAtOrDefault(index, @default);
+        public Boolean[] Column_ReachesGeometry { get; }
+        public Boolean GetReachesGeometry(int index, Boolean @default = default) => Column_ReachesGeometry.ElementAtOrDefault(index, @default);
+        public Int32[] Column_ReferenceCount { get; }
+        public Int32 GetReferenceCount(int index, Int32 @default = default) => Column_ReferenceCount.ElementAtOrDefault(index, @default);
+        public int[] Column_FamilyIndex { get; }
+        public int GetFamilyIndex(int index) => Column_FamilyIndex.ElementAtOrDefault(index, EntityRelation.None);
+        public Family GetFamily(int index) => _GetReferencedFamily(GetFamilyIndex(index));
+        private Family _GetReferencedFamily(int referencedIndex) => ParentTableSet.GetFamily(referencedIndex);
+        public int[] Column_FamilyParameterIndex { get; }
+        public int GetFamilyParameterIndex(int index) => Column_FamilyParameterIndex.ElementAtOrDefault(index, EntityRelation.None);
+        public FamilyRecipeParameter GetFamilyParameter(int index) => _GetReferencedFamilyParameter(GetFamilyParameterIndex(index));
+        private FamilyRecipeParameter _GetReferencedFamilyParameter(int referencedIndex) => ParentTableSet.GetFamilyRecipeParameter(referencedIndex);
+        // Object Getter
+        public FamilyConstraint Get(int index)
+        {
+            if (index < 0) return null;
+            var r = new FamilyConstraint();
+            r.Index = index;
+            r.FamilyElementId = GetFamilyElementId(index);
+            r.Kind = GetKind(index);
+            r.IsLocked = GetIsLocked(index);
+            r.HasView = GetHasView(index);
+            r.Value = GetValue(index);
+            r.SegmentCount = GetSegmentCount(index);
+            r.ReachesGeometry = GetReachesGeometry(index);
+            r.ReferenceCount = GetReferenceCount(index);
+            r._Family = new Relation<Vim.Format.ObjectModel.Family>(GetFamilyIndex(index), _GetReferencedFamily);
+            r._FamilyParameter = new Relation<Vim.Format.ObjectModel.FamilyRecipeParameter>(GetFamilyParameterIndex(index), _GetReferencedFamilyParameter);
+            return r;
+        }
+        // Enumerator
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+        public IEnumerator<FamilyConstraint> GetEnumerator()
+        {
+            for (var i = 0; i < RowCount; ++i)
+                yield return Get(i);
+        }
+    } // class FamilyConstraintTable 
+    
+    public partial class FamilyConstraintReferenceTable : EntityTable_v2, IEnumerable<FamilyConstraintReference>
+    {
+        
+        public const string TableName = TableNames.FamilyConstraintReference;
+        
+        public EntityTableSet ParentTableSet { get; } // can be null
+        
+        public FamilyConstraintReferenceTable(SerializableEntityTable rawTable, string[] stringTable, EntityTableSet parentTableSet = null) : base(rawTable, stringTable)
+        {
+            ParentTableSet = parentTableSet;
+            Column_Order = GetDataColumnValues<Int32>("int:Order") ?? Array.Empty<Int32>();
+            Column_RefKind = GetDataColumnValues<Int32>("int:RefKind") ?? Array.Empty<Int32>();
+            Column_RefElementId = GetDataColumnValues<Int64>("long:RefElementId") ?? Array.Empty<Int64>();
+            Column_RefName = GetStringColumnValues("string:RefName") ?? Array.Empty<String>();
+            Column_ReferenceType = GetStringColumnValues("string:ReferenceType") ?? Array.Empty<String>();
+            Column_Stable = GetStringColumnValues("string:Stable") ?? Array.Empty<String>();
+            Column_FamilyConstraintIndex = GetIndexColumnValues("index:Vim.FamilyConstraint:FamilyConstraint") ?? Array.Empty<int>();
+        }
+        
+        public Int32[] Column_Order { get; }
+        public Int32 GetOrder(int index, Int32 @default = default) => Column_Order.ElementAtOrDefault(index, @default);
+        public Int32[] Column_RefKind { get; }
+        public Int32 GetRefKind(int index, Int32 @default = default) => Column_RefKind.ElementAtOrDefault(index, @default);
+        public Int64[] Column_RefElementId { get; }
+        public Int64 GetRefElementId(int index, Int64 @default = default) => Column_RefElementId.ElementAtOrDefault(index, @default);
+        public String[] Column_RefName { get; }
+        public String GetRefName(int index, String @default = "") => Column_RefName.ElementAtOrDefault(index, @default);
+        public String[] Column_ReferenceType { get; }
+        public String GetReferenceType(int index, String @default = "") => Column_ReferenceType.ElementAtOrDefault(index, @default);
+        public String[] Column_Stable { get; }
+        public String GetStable(int index, String @default = "") => Column_Stable.ElementAtOrDefault(index, @default);
+        public int[] Column_FamilyConstraintIndex { get; }
+        public int GetFamilyConstraintIndex(int index) => Column_FamilyConstraintIndex.ElementAtOrDefault(index, EntityRelation.None);
+        public FamilyConstraint GetFamilyConstraint(int index) => _GetReferencedFamilyConstraint(GetFamilyConstraintIndex(index));
+        private FamilyConstraint _GetReferencedFamilyConstraint(int referencedIndex) => ParentTableSet.GetFamilyConstraint(referencedIndex);
+        // Object Getter
+        public FamilyConstraintReference Get(int index)
+        {
+            if (index < 0) return null;
+            var r = new FamilyConstraintReference();
+            r.Index = index;
+            r.Order = GetOrder(index);
+            r.RefKind = GetRefKind(index);
+            r.RefElementId = GetRefElementId(index);
+            r.RefName = GetRefName(index);
+            r.ReferenceType = GetReferenceType(index);
+            r.Stable = GetStable(index);
+            r._FamilyConstraint = new Relation<Vim.Format.ObjectModel.FamilyConstraint>(GetFamilyConstraintIndex(index), _GetReferencedFamilyConstraint);
+            return r;
+        }
+        // Enumerator
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+        public IEnumerator<FamilyConstraintReference> GetEnumerator()
+        {
+            for (var i = 0; i < RowCount; ++i)
+                yield return Get(i);
+        }
+    } // class FamilyConstraintReferenceTable 
+    
+    public partial class FamilyFormDriverTable : EntityTable_v2, IEnumerable<FamilyFormDriver>
+    {
+        
+        public const string TableName = TableNames.FamilyFormDriver;
+        
+        public EntityTableSet ParentTableSet { get; } // can be null
+        
+        public FamilyFormDriverTable(SerializableEntityTable rawTable, string[] stringTable, EntityTableSet parentTableSet = null) : base(rawTable, stringTable)
+        {
+            ParentTableSet = parentTableSet;
+            Column_Via = GetDataColumnValues<Int32>("int:Via") ?? Array.Empty<Int32>();
+            Column_FamilyFormIndex = GetIndexColumnValues("index:Vim.FamilyForm:FamilyForm") ?? Array.Empty<int>();
+            Column_FamilyParameterIndex = GetIndexColumnValues("index:Vim.FamilyRecipeParameter:FamilyParameter") ?? Array.Empty<int>();
+        }
+        
+        public Int32[] Column_Via { get; }
+        public Int32 GetVia(int index, Int32 @default = default) => Column_Via.ElementAtOrDefault(index, @default);
+        public int[] Column_FamilyFormIndex { get; }
+        public int GetFamilyFormIndex(int index) => Column_FamilyFormIndex.ElementAtOrDefault(index, EntityRelation.None);
+        public FamilyForm GetFamilyForm(int index) => _GetReferencedFamilyForm(GetFamilyFormIndex(index));
+        private FamilyForm _GetReferencedFamilyForm(int referencedIndex) => ParentTableSet.GetFamilyForm(referencedIndex);
+        public int[] Column_FamilyParameterIndex { get; }
+        public int GetFamilyParameterIndex(int index) => Column_FamilyParameterIndex.ElementAtOrDefault(index, EntityRelation.None);
+        public FamilyRecipeParameter GetFamilyParameter(int index) => _GetReferencedFamilyParameter(GetFamilyParameterIndex(index));
+        private FamilyRecipeParameter _GetReferencedFamilyParameter(int referencedIndex) => ParentTableSet.GetFamilyRecipeParameter(referencedIndex);
+        // Object Getter
+        public FamilyFormDriver Get(int index)
+        {
+            if (index < 0) return null;
+            var r = new FamilyFormDriver();
+            r.Index = index;
+            r.Via = GetVia(index);
+            r._FamilyForm = new Relation<Vim.Format.ObjectModel.FamilyForm>(GetFamilyFormIndex(index), _GetReferencedFamilyForm);
+            r._FamilyParameter = new Relation<Vim.Format.ObjectModel.FamilyRecipeParameter>(GetFamilyParameterIndex(index), _GetReferencedFamilyParameter);
+            return r;
+        }
+        // Enumerator
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+        public IEnumerator<FamilyFormDriver> GetEnumerator()
+        {
+            for (var i = 0; i < RowCount; ++i)
+                yield return Get(i);
+        }
+    } // class FamilyFormDriverTable 
     
     public partial class GeometryTable : EntityTable_v2, IEnumerable<Geometry>
     {
@@ -14495,6 +16958,928 @@ namespace Vim.Format.ObjectModel {
             }
             return tb;
         }
+        public static EntityTableBuilder ToHostPathTableBuilder(this EntitySetBuilder<HostPath> entitySet)
+        {
+            var tb = new EntityTableBuilder(TableNames.HostPath);
+            var entities = entitySet.Entities;
+            var entityCount = entities.Count;
+            {
+                var columnData = new Int32[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].CurveKind; }
+                tb.AddDataColumn("int:CurveKind", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].P0_X; }
+                tb.AddDataColumn("double:P0.X", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].P0_Y; }
+                tb.AddDataColumn("double:P0.Y", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].P0_Z; }
+                tb.AddDataColumn("double:P0.Z", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].P1_X; }
+                tb.AddDataColumn("double:P1.X", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].P1_Y; }
+                tb.AddDataColumn("double:P1.Y", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].P1_Z; }
+                tb.AddDataColumn("double:P1.Z", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Mid_X; }
+                tb.AddDataColumn("double:Mid.X", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Mid_Y; }
+                tb.AddDataColumn("double:Mid.Y", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Mid_Z; }
+                tb.AddDataColumn("double:Mid.Z", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Center_X; }
+                tb.AddDataColumn("double:Center.X", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Center_Y; }
+                tb.AddDataColumn("double:Center.Y", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Center_Z; }
+                tb.AddDataColumn("double:Center.Z", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Radius; }
+                tb.AddDataColumn("double:Radius", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Normal_X; }
+                tb.AddDataColumn("double:Normal.X", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Normal_Y; }
+                tb.AddDataColumn("double:Normal.Y", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Normal_Z; }
+                tb.AddDataColumn("double:Normal.Z", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Length; }
+                tb.AddDataColumn("double:Length", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Width; }
+                tb.AddDataColumn("double:Width", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Orientation_X; }
+                tb.AddDataColumn("double:Orientation.X", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Orientation_Y; }
+                tb.AddDataColumn("double:Orientation.Y", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Orientation_Z; }
+                tb.AddDataColumn("double:Orientation.Z", columnData);
+            }
+            {
+                var columnData = new Boolean[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Flipped; }
+                tb.AddDataColumn("byte:Flipped", columnData);
+            }
+            {
+                var columnData = new Int32[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].LocationLine; }
+                tb.AddDataColumn("int:LocationLine", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].LocationLineOffset; }
+                tb.AddDataColumn("double:LocationLineOffset", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].CoreOffsetExterior; }
+                tb.AddDataColumn("double:CoreOffsetExterior", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].BaseOffset; }
+                tb.AddDataColumn("double:BaseOffset", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].BaseElevation; }
+                tb.AddDataColumn("double:BaseElevation", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].TopOffset; }
+                tb.AddDataColumn("double:TopOffset", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Height; }
+                tb.AddDataColumn("double:Height", columnData);
+            }
+            {
+                var columnData = new Boolean[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].HasEditedProfile; }
+                tb.AddDataColumn("byte:HasEditedProfile", columnData);
+            }
+            {
+                var columnData = new Int32[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].TopAttachedCount; }
+                tb.AddDataColumn("int:TopAttachedCount", columnData);
+            }
+            {
+                var columnData = new Int32[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].BaseAttachedCount; }
+                tb.AddDataColumn("int:BaseAttachedCount", columnData);
+            }
+            {
+                var columnData = new Boolean[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].IsStacked; }
+                tb.AddDataColumn("byte:IsStacked", columnData);
+            }
+            {
+                var columnData = new Boolean[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].IsCurtain; }
+                tb.AddDataColumn("byte:IsCurtain", columnData);
+            }
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._BaseLevel?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.Level:BaseLevel", columnData);
+            }
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._TopLevel?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.Level:TopLevel", columnData);
+            }
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._CompoundStructure?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.CompoundStructure:CompoundStructure", columnData);
+            }
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._Element?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.Element:Element", columnData);
+            }
+            return tb;
+        }
+        public static EntityTableBuilder ToHostedInsertTableBuilder(this EntitySetBuilder<HostedInsert> entitySet)
+        {
+            var tb = new EntityTableBuilder(TableNames.HostedInsert);
+            var entities = entitySet.Entities;
+            var entityCount = entities.Count;
+            {
+                var columnData = new Int32[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Kind; }
+                tb.AddDataColumn("int:Kind", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].DistanceAlongPath; }
+                tb.AddDataColumn("double:DistanceAlongPath", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].NormalizedParameter; }
+                tb.AddDataColumn("double:NormalizedParameter", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].OffsetFromPath; }
+                tb.AddDataColumn("double:OffsetFromPath", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Elevation; }
+                tb.AddDataColumn("double:Elevation", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].SillHeight; }
+                tb.AddDataColumn("double:SillHeight", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].HeadHeight; }
+                tb.AddDataColumn("double:HeadHeight", columnData);
+            }
+            {
+                var columnData = new Boolean[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].FacingFlipped; }
+                tb.AddDataColumn("byte:FacingFlipped", columnData);
+            }
+            {
+                var columnData = new Boolean[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].HandFlipped; }
+                tb.AddDataColumn("byte:HandFlipped", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Origin_X; }
+                tb.AddDataColumn("double:Origin.X", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Origin_Y; }
+                tb.AddDataColumn("double:Origin.Y", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Origin_Z; }
+                tb.AddDataColumn("double:Origin.Z", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].OpeningMin_X; }
+                tb.AddDataColumn("double:OpeningMin.X", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].OpeningMin_Y; }
+                tb.AddDataColumn("double:OpeningMin.Y", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].OpeningMin_Z; }
+                tb.AddDataColumn("double:OpeningMin.Z", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].OpeningMax_X; }
+                tb.AddDataColumn("double:OpeningMax.X", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].OpeningMax_Y; }
+                tb.AddDataColumn("double:OpeningMax.Y", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].OpeningMax_Z; }
+                tb.AddDataColumn("double:OpeningMax.Z", columnData);
+            }
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._Host?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.Element:Host", columnData);
+            }
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._HostPath?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.HostPath:HostPath", columnData);
+            }
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._Element?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.Element:Element", columnData);
+            }
+            return tb;
+        }
+        public static EntityTableBuilder ToFamilyRecipeTableBuilder(this EntitySetBuilder<FamilyRecipe> entitySet)
+        {
+            var tb = new EntityTableBuilder(TableNames.FamilyRecipe);
+            var entities = entitySet.Entities;
+            var entityCount = entities.Count;
+            {
+                var columnData = new Int32[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].ReadStatus; }
+                tb.AddDataColumn("int:ReadStatus", columnData);
+            }
+            {
+                var columnData = new String[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Refusal; }
+                tb.AddStringColumn("string:Refusal", columnData);
+            }
+            {
+                var columnData = new Int32[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Flexibility; }
+                tb.AddDataColumn("int:Flexibility", columnData);
+            }
+            {
+                var columnData = new String[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Reading; }
+                tb.AddStringColumn("string:Reading", columnData);
+            }
+            {
+                var columnData = new String[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].PlacementType; }
+                tb.AddStringColumn("string:PlacementType", columnData);
+            }
+            {
+                var columnData = new Boolean[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].IsParametric; }
+                tb.AddDataColumn("byte:IsParametric", columnData);
+            }
+            {
+                var columnData = new String[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].CurrentTypeName; }
+                tb.AddStringColumn("string:CurrentTypeName", columnData);
+            }
+            {
+                var columnData = new Int32[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].LabelledDimensionCount; }
+                tb.AddDataColumn("int:LabelledDimensionCount", columnData);
+            }
+            {
+                var columnData = new Int32[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].DrivingDimensionCount; }
+                tb.AddDataColumn("int:DrivingDimensionCount", columnData);
+            }
+            {
+                var columnData = new Int32[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].LockCount; }
+                tb.AddDataColumn("int:LockCount", columnData);
+            }
+            {
+                var columnData = new Int32[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].FormCount; }
+                tb.AddDataColumn("int:FormCount", columnData);
+            }
+            {
+                var columnData = new Int32[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].OpeningCount; }
+                tb.AddDataColumn("int:OpeningCount", columnData);
+            }
+            {
+                var columnData = new Int32[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].NestedInstanceCount; }
+                tb.AddDataColumn("int:NestedInstanceCount", columnData);
+            }
+            {
+                var columnData = new Int32[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].OpeningTied; }
+                tb.AddDataColumn("int:OpeningTied", columnData);
+            }
+            {
+                var columnData = new Int32[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].ReadMs; }
+                tb.AddDataColumn("int:ReadMs", columnData);
+            }
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._Family?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.Family:Family", columnData);
+            }
+            return tb;
+        }
+        public static EntityTableBuilder ToFamilyRecipeParameterTableBuilder(this EntitySetBuilder<FamilyRecipeParameter> entitySet)
+        {
+            var tb = new EntityTableBuilder(TableNames.FamilyRecipeParameter);
+            var entities = entitySet.Entities;
+            var entityCount = entities.Count;
+            {
+                var columnData = new String[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Name; }
+                tb.AddStringColumn("string:Name", columnData);
+            }
+            {
+                var columnData = new Int64[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].FamilyElementId; }
+                tb.AddDataColumn("long:FamilyElementId", columnData);
+            }
+            {
+                var columnData = new String[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Guid; }
+                tb.AddStringColumn("string:Guid", columnData);
+            }
+            {
+                var columnData = new String[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].DataType; }
+                tb.AddStringColumn("string:DataType", columnData);
+            }
+            {
+                var columnData = new String[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].StorageType; }
+                tb.AddStringColumn("string:StorageType", columnData);
+            }
+            {
+                var columnData = new Boolean[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].IsInstance; }
+                tb.AddDataColumn("byte:IsInstance", columnData);
+            }
+            {
+                var columnData = new Boolean[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].IsReporting; }
+                tb.AddDataColumn("byte:IsReporting", columnData);
+            }
+            {
+                var columnData = new Boolean[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].IsShared; }
+                tb.AddDataColumn("byte:IsShared", columnData);
+            }
+            {
+                var columnData = new Boolean[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].IsDeterminedByFormula; }
+                tb.AddDataColumn("byte:IsDeterminedByFormula", columnData);
+            }
+            {
+                var columnData = new String[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Formula; }
+                tb.AddStringColumn("string:Formula", columnData);
+            }
+            {
+                var columnData = new Int32[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Drives; }
+                tb.AddDataColumn("int:Drives", columnData);
+            }
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._Family?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.Family:Family", columnData);
+            }
+            return tb;
+        }
+        public static EntityTableBuilder ToFamilyTypeValueTableBuilder(this EntitySetBuilder<FamilyTypeValue> entitySet)
+        {
+            var tb = new EntityTableBuilder(TableNames.FamilyTypeValue);
+            var entities = entitySet.Entities;
+            var entityCount = entities.Count;
+            {
+                var columnData = new String[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].TypeName; }
+                tb.AddStringColumn("string:TypeName", columnData);
+            }
+            {
+                var columnData = new String[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Value; }
+                tb.AddStringColumn("string:Value", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].DoubleValue; }
+                tb.AddDataColumn("double:DoubleValue", columnData);
+            }
+            {
+                var columnData = new Int32[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].IntegerValue; }
+                tb.AddDataColumn("int:IntegerValue", columnData);
+            }
+            {
+                var columnData = new Int64[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].ElementIdValue; }
+                tb.AddDataColumn("long:ElementIdValue", columnData);
+            }
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._FamilyParameter?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.FamilyRecipeParameter:FamilyParameter", columnData);
+            }
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._FamilyType?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.FamilyType:FamilyType", columnData);
+            }
+            return tb;
+        }
+        public static EntityTableBuilder ToFamilyReferencePlaneTableBuilder(this EntitySetBuilder<FamilyReferencePlane> entitySet)
+        {
+            var tb = new EntityTableBuilder(TableNames.FamilyReferencePlane);
+            var entities = entitySet.Entities;
+            var entityCount = entities.Count;
+            {
+                var columnData = new Int64[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].FamilyElementId; }
+                tb.AddDataColumn("long:FamilyElementId", columnData);
+            }
+            {
+                var columnData = new String[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Name; }
+                tb.AddStringColumn("string:Name", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Origin_X; }
+                tb.AddDataColumn("double:Origin.X", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Origin_Y; }
+                tb.AddDataColumn("double:Origin.Y", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Origin_Z; }
+                tb.AddDataColumn("double:Origin.Z", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Normal_X; }
+                tb.AddDataColumn("double:Normal.X", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Normal_Y; }
+                tb.AddDataColumn("double:Normal.Y", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Normal_Z; }
+                tb.AddDataColumn("double:Normal.Z", columnData);
+            }
+            {
+                var columnData = new String[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].IsReference; }
+                tb.AddStringColumn("string:IsReference", columnData);
+            }
+            {
+                var columnData = new Boolean[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].DefinesOrigin; }
+                tb.AddDataColumn("byte:DefinesOrigin", columnData);
+            }
+            {
+                var columnData = new Boolean[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].IsDriven; }
+                tb.AddDataColumn("byte:IsDriven", columnData);
+            }
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._Family?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.Family:Family", columnData);
+            }
+            return tb;
+        }
+        public static EntityTableBuilder ToFamilyFormTableBuilder(this EntitySetBuilder<FamilyForm> entitySet)
+        {
+            var tb = new EntityTableBuilder(TableNames.FamilyForm);
+            var entities = entitySet.Entities;
+            var entityCount = entities.Count;
+            {
+                var columnData = new Int64[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].FamilyElementId; }
+                tb.AddDataColumn("long:FamilyElementId", columnData);
+            }
+            {
+                var columnData = new String[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Kind; }
+                tb.AddStringColumn("string:Kind", columnData);
+            }
+            {
+                var columnData = new Boolean[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].IsSolid; }
+                tb.AddDataColumn("byte:IsSolid", columnData);
+            }
+            {
+                var columnData = new Boolean[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].IsVisible; }
+                tb.AddDataColumn("byte:IsVisible", columnData);
+            }
+            {
+                var columnData = new String[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Subcategory; }
+                tb.AddStringColumn("string:Subcategory", columnData);
+            }
+            {
+                var columnData = new String[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Material; }
+                tb.AddStringColumn("string:Material", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].PlaneOrigin_X; }
+                tb.AddDataColumn("double:PlaneOrigin.X", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].PlaneOrigin_Y; }
+                tb.AddDataColumn("double:PlaneOrigin.Y", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].PlaneOrigin_Z; }
+                tb.AddDataColumn("double:PlaneOrigin.Z", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].PlaneNormal_X; }
+                tb.AddDataColumn("double:PlaneNormal.X", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].PlaneNormal_Y; }
+                tb.AddDataColumn("double:PlaneNormal.Y", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].PlaneNormal_Z; }
+                tb.AddDataColumn("double:PlaneNormal.Z", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].PlaneXDir_X; }
+                tb.AddDataColumn("double:PlaneXDir.X", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].PlaneXDir_Y; }
+                tb.AddDataColumn("double:PlaneXDir.Y", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].PlaneXDir_Z; }
+                tb.AddDataColumn("double:PlaneXDir.Z", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].StartOffset; }
+                tb.AddDataColumn("double:StartOffset", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].EndOffset; }
+                tb.AddDataColumn("double:EndOffset", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].StartAngle; }
+                tb.AddDataColumn("double:StartAngle", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].EndAngle; }
+                tb.AddDataColumn("double:EndAngle", columnData);
+            }
+            {
+                var columnData = new Boolean[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].IsDriven; }
+                tb.AddDataColumn("byte:IsDriven", columnData);
+            }
+            {
+                var columnData = new Boolean[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].IsRebuildable; }
+                tb.AddDataColumn("byte:IsRebuildable", columnData);
+            }
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._Family?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.Family:Family", columnData);
+            }
+            return tb;
+        }
+        public static EntityTableBuilder ToFamilySketchCurveTableBuilder(this EntitySetBuilder<FamilySketchCurve> entitySet)
+        {
+            var tb = new EntityTableBuilder(TableNames.FamilySketchCurve);
+            var entities = entitySet.Entities;
+            var entityCount = entities.Count;
+            {
+                var columnData = new Int32[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Role; }
+                tb.AddDataColumn("int:Role", columnData);
+            }
+            {
+                var columnData = new Int32[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Loop; }
+                tb.AddDataColumn("int:Loop", columnData);
+            }
+            {
+                var columnData = new Int32[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Order; }
+                tb.AddDataColumn("int:Order", columnData);
+            }
+            {
+                var columnData = new Int64[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].CurveElementId; }
+                tb.AddDataColumn("long:CurveElementId", columnData);
+            }
+            {
+                var columnData = new Int32[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].CurveKind; }
+                tb.AddDataColumn("int:CurveKind", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Start_X; }
+                tb.AddDataColumn("double:Start.X", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Start_Y; }
+                tb.AddDataColumn("double:Start.Y", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Start_Z; }
+                tb.AddDataColumn("double:Start.Z", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].End_X; }
+                tb.AddDataColumn("double:End.X", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].End_Y; }
+                tb.AddDataColumn("double:End.Y", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].End_Z; }
+                tb.AddDataColumn("double:End.Z", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Mid_X; }
+                tb.AddDataColumn("double:Mid.X", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Mid_Y; }
+                tb.AddDataColumn("double:Mid.Y", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Mid_Z; }
+                tb.AddDataColumn("double:Mid.Z", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Center_X; }
+                tb.AddDataColumn("double:Center.X", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Center_Y; }
+                tb.AddDataColumn("double:Center.Y", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Center_Z; }
+                tb.AddDataColumn("double:Center.Z", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Radius; }
+                tb.AddDataColumn("double:Radius", columnData);
+            }
+            {
+                var columnData = new Int32[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].LockCount; }
+                tb.AddDataColumn("int:LockCount", columnData);
+            }
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._FamilyForm?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.FamilyForm:FamilyForm", columnData);
+            }
+            return tb;
+        }
+        public static EntityTableBuilder ToFamilyConstraintTableBuilder(this EntitySetBuilder<FamilyConstraint> entitySet)
+        {
+            var tb = new EntityTableBuilder(TableNames.FamilyConstraint);
+            var entities = entitySet.Entities;
+            var entityCount = entities.Count;
+            {
+                var columnData = new Int64[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].FamilyElementId; }
+                tb.AddDataColumn("long:FamilyElementId", columnData);
+            }
+            {
+                var columnData = new Int32[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Kind; }
+                tb.AddDataColumn("int:Kind", columnData);
+            }
+            {
+                var columnData = new Boolean[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].IsLocked; }
+                tb.AddDataColumn("byte:IsLocked", columnData);
+            }
+            {
+                var columnData = new Boolean[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].HasView; }
+                tb.AddDataColumn("byte:HasView", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Value; }
+                tb.AddDataColumn("double:Value", columnData);
+            }
+            {
+                var columnData = new Int32[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].SegmentCount; }
+                tb.AddDataColumn("int:SegmentCount", columnData);
+            }
+            {
+                var columnData = new Boolean[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].ReachesGeometry; }
+                tb.AddDataColumn("byte:ReachesGeometry", columnData);
+            }
+            {
+                var columnData = new Int32[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].ReferenceCount; }
+                tb.AddDataColumn("int:ReferenceCount", columnData);
+            }
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._Family?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.Family:Family", columnData);
+            }
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._FamilyParameter?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.FamilyRecipeParameter:FamilyParameter", columnData);
+            }
+            return tb;
+        }
+        public static EntityTableBuilder ToFamilyConstraintReferenceTableBuilder(this EntitySetBuilder<FamilyConstraintReference> entitySet)
+        {
+            var tb = new EntityTableBuilder(TableNames.FamilyConstraintReference);
+            var entities = entitySet.Entities;
+            var entityCount = entities.Count;
+            {
+                var columnData = new Int32[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Order; }
+                tb.AddDataColumn("int:Order", columnData);
+            }
+            {
+                var columnData = new Int32[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].RefKind; }
+                tb.AddDataColumn("int:RefKind", columnData);
+            }
+            {
+                var columnData = new Int64[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].RefElementId; }
+                tb.AddDataColumn("long:RefElementId", columnData);
+            }
+            {
+                var columnData = new String[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].RefName; }
+                tb.AddStringColumn("string:RefName", columnData);
+            }
+            {
+                var columnData = new String[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].ReferenceType; }
+                tb.AddStringColumn("string:ReferenceType", columnData);
+            }
+            {
+                var columnData = new String[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Stable; }
+                tb.AddStringColumn("string:Stable", columnData);
+            }
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._FamilyConstraint?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.FamilyConstraint:FamilyConstraint", columnData);
+            }
+            return tb;
+        }
+        public static EntityTableBuilder ToFamilyFormDriverTableBuilder(this EntitySetBuilder<FamilyFormDriver> entitySet)
+        {
+            var tb = new EntityTableBuilder(TableNames.FamilyFormDriver);
+            var entities = entitySet.Entities;
+            var entityCount = entities.Count;
+            {
+                var columnData = new Int32[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Via; }
+                tb.AddDataColumn("int:Via", columnData);
+            }
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._FamilyForm?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.FamilyForm:FamilyForm", columnData);
+            }
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._FamilyParameter?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.FamilyRecipeParameter:FamilyParameter", columnData);
+            }
+            return tb;
+        }
         public static EntityTableBuilder ToGeometryTableBuilder(this EntitySetBuilder<Geometry> entitySet)
         {
             var tb = new EntityTableBuilder(TableNames.Geometry);
@@ -15705,6 +19090,17 @@ namespace Vim.Format.ObjectModel {
         public readonly EntitySetBuilder<CompoundStructure> CompoundStructureBuilder = new EntitySetBuilder<CompoundStructure>(TableNames.CompoundStructure);
         public readonly EntitySetBuilder<Node> NodeBuilder = new EntitySetBuilder<Node>(TableNames.Node);
         public readonly EntitySetBuilder<GeometryPiece> GeometryPieceBuilder = new EntitySetBuilder<GeometryPiece>(TableNames.GeometryPiece);
+        public readonly EntitySetBuilder<HostPath> HostPathBuilder = new EntitySetBuilder<HostPath>(TableNames.HostPath);
+        public readonly EntitySetBuilder<HostedInsert> HostedInsertBuilder = new EntitySetBuilder<HostedInsert>(TableNames.HostedInsert);
+        public readonly EntitySetBuilder<FamilyRecipe> FamilyRecipeBuilder = new EntitySetBuilder<FamilyRecipe>(TableNames.FamilyRecipe);
+        public readonly EntitySetBuilder<FamilyRecipeParameter> FamilyRecipeParameterBuilder = new EntitySetBuilder<FamilyRecipeParameter>(TableNames.FamilyRecipeParameter);
+        public readonly EntitySetBuilder<FamilyTypeValue> FamilyTypeValueBuilder = new EntitySetBuilder<FamilyTypeValue>(TableNames.FamilyTypeValue);
+        public readonly EntitySetBuilder<FamilyReferencePlane> FamilyReferencePlaneBuilder = new EntitySetBuilder<FamilyReferencePlane>(TableNames.FamilyReferencePlane);
+        public readonly EntitySetBuilder<FamilyForm> FamilyFormBuilder = new EntitySetBuilder<FamilyForm>(TableNames.FamilyForm);
+        public readonly EntitySetBuilder<FamilySketchCurve> FamilySketchCurveBuilder = new EntitySetBuilder<FamilySketchCurve>(TableNames.FamilySketchCurve);
+        public readonly EntitySetBuilder<FamilyConstraint> FamilyConstraintBuilder = new EntitySetBuilder<FamilyConstraint>(TableNames.FamilyConstraint);
+        public readonly EntitySetBuilder<FamilyConstraintReference> FamilyConstraintReferenceBuilder = new EntitySetBuilder<FamilyConstraintReference>(TableNames.FamilyConstraintReference);
+        public readonly EntitySetBuilder<FamilyFormDriver> FamilyFormDriverBuilder = new EntitySetBuilder<FamilyFormDriver>(TableNames.FamilyFormDriver);
         public readonly EntitySetBuilder<Geometry> GeometryBuilder = new EntitySetBuilder<Geometry>(TableNames.Geometry);
         public readonly EntitySetBuilder<Shape> ShapeBuilder = new EntitySetBuilder<Shape>(TableNames.Shape);
         public readonly EntitySetBuilder<ShapeCollection> ShapeCollectionBuilder = new EntitySetBuilder<ShapeCollection>(TableNames.ShapeCollection);
@@ -15782,6 +19178,17 @@ namespace Vim.Format.ObjectModel {
             db.Tables.Add(CompoundStructureBuilder.EntityTableName, CompoundStructureBuilder.ToCompoundStructureTableBuilder());
             db.Tables.Add(NodeBuilder.EntityTableName, NodeBuilder.ToNodeTableBuilder());
             db.Tables.Add(GeometryPieceBuilder.EntityTableName, GeometryPieceBuilder.ToGeometryPieceTableBuilder());
+            db.Tables.Add(HostPathBuilder.EntityTableName, HostPathBuilder.ToHostPathTableBuilder());
+            db.Tables.Add(HostedInsertBuilder.EntityTableName, HostedInsertBuilder.ToHostedInsertTableBuilder());
+            db.Tables.Add(FamilyRecipeBuilder.EntityTableName, FamilyRecipeBuilder.ToFamilyRecipeTableBuilder());
+            db.Tables.Add(FamilyRecipeParameterBuilder.EntityTableName, FamilyRecipeParameterBuilder.ToFamilyRecipeParameterTableBuilder());
+            db.Tables.Add(FamilyTypeValueBuilder.EntityTableName, FamilyTypeValueBuilder.ToFamilyTypeValueTableBuilder());
+            db.Tables.Add(FamilyReferencePlaneBuilder.EntityTableName, FamilyReferencePlaneBuilder.ToFamilyReferencePlaneTableBuilder());
+            db.Tables.Add(FamilyFormBuilder.EntityTableName, FamilyFormBuilder.ToFamilyFormTableBuilder());
+            db.Tables.Add(FamilySketchCurveBuilder.EntityTableName, FamilySketchCurveBuilder.ToFamilySketchCurveTableBuilder());
+            db.Tables.Add(FamilyConstraintBuilder.EntityTableName, FamilyConstraintBuilder.ToFamilyConstraintTableBuilder());
+            db.Tables.Add(FamilyConstraintReferenceBuilder.EntityTableName, FamilyConstraintReferenceBuilder.ToFamilyConstraintReferenceTableBuilder());
+            db.Tables.Add(FamilyFormDriverBuilder.EntityTableName, FamilyFormDriverBuilder.ToFamilyFormDriverTableBuilder());
             db.Tables.Add(GeometryBuilder.EntityTableName, GeometryBuilder.ToGeometryTableBuilder());
             db.Tables.Add(ShapeBuilder.EntityTableName, ShapeBuilder.ToShapeTableBuilder());
             db.Tables.Add(ShapeCollectionBuilder.EntityTableName, ShapeCollectionBuilder.ToShapeCollectionTableBuilder());
@@ -15862,6 +19269,17 @@ namespace Vim.Format.ObjectModel {
             CompoundStructureBuilder.Clear();
             NodeBuilder.Clear();
             GeometryPieceBuilder.Clear();
+            HostPathBuilder.Clear();
+            HostedInsertBuilder.Clear();
+            FamilyRecipeBuilder.Clear();
+            FamilyRecipeParameterBuilder.Clear();
+            FamilyTypeValueBuilder.Clear();
+            FamilyReferencePlaneBuilder.Clear();
+            FamilyFormBuilder.Clear();
+            FamilySketchCurveBuilder.Clear();
+            FamilyConstraintBuilder.Clear();
+            FamilyConstraintReferenceBuilder.Clear();
+            FamilyFormDriverBuilder.Clear();
             GeometryBuilder.Clear();
             ShapeBuilder.Clear();
             ShapeCollectionBuilder.Clear();

@@ -10914,6 +10914,3782 @@ export class GeometryPieceTable implements IGeometryPieceTable {
     
 }
 
+export interface IHostPath {
+    index: number
+    curveKind?: number
+    p0_X?: number
+    p0_Y?: number
+    p0_Z?: number
+    p1_X?: number
+    p1_Y?: number
+    p1_Z?: number
+    mid_X?: number
+    mid_Y?: number
+    mid_Z?: number
+    center_X?: number
+    center_Y?: number
+    center_Z?: number
+    radius?: number
+    normal_X?: number
+    normal_Y?: number
+    normal_Z?: number
+    length?: number
+    width?: number
+    orientation_X?: number
+    orientation_Y?: number
+    orientation_Z?: number
+    flipped?: boolean
+    locationLine?: number
+    locationLineOffset?: number
+    coreOffsetExterior?: number
+    baseOffset?: number
+    baseElevation?: number
+    topOffset?: number
+    height?: number
+    hasEditedProfile?: boolean
+    topAttachedCount?: number
+    baseAttachedCount?: number
+    isStacked?: boolean
+    isCurtain?: boolean
+    
+    baseLevelIndex?: number
+    baseLevel?: ILevel
+    topLevelIndex?: number
+    topLevel?: ILevel
+    compoundStructureIndex?: number
+    compoundStructure?: ICompoundStructure
+    elementIndex?: number
+    element?: IElement
+}
+
+export interface IHostPathTable {
+    getCount(): Promise<number>
+    get(hostPathIndex: number): Promise<IHostPath>
+    getAll(): Promise<IHostPath[]>
+    
+    getCurveKind(hostPathIndex: number): Promise<number | undefined>
+    getAllCurveKind(): Promise<number[] | undefined>
+    getP0_X(hostPathIndex: number): Promise<number | undefined>
+    getAllP0_X(): Promise<number[] | undefined>
+    getP0_Y(hostPathIndex: number): Promise<number | undefined>
+    getAllP0_Y(): Promise<number[] | undefined>
+    getP0_Z(hostPathIndex: number): Promise<number | undefined>
+    getAllP0_Z(): Promise<number[] | undefined>
+    getP1_X(hostPathIndex: number): Promise<number | undefined>
+    getAllP1_X(): Promise<number[] | undefined>
+    getP1_Y(hostPathIndex: number): Promise<number | undefined>
+    getAllP1_Y(): Promise<number[] | undefined>
+    getP1_Z(hostPathIndex: number): Promise<number | undefined>
+    getAllP1_Z(): Promise<number[] | undefined>
+    getMid_X(hostPathIndex: number): Promise<number | undefined>
+    getAllMid_X(): Promise<number[] | undefined>
+    getMid_Y(hostPathIndex: number): Promise<number | undefined>
+    getAllMid_Y(): Promise<number[] | undefined>
+    getMid_Z(hostPathIndex: number): Promise<number | undefined>
+    getAllMid_Z(): Promise<number[] | undefined>
+    getCenter_X(hostPathIndex: number): Promise<number | undefined>
+    getAllCenter_X(): Promise<number[] | undefined>
+    getCenter_Y(hostPathIndex: number): Promise<number | undefined>
+    getAllCenter_Y(): Promise<number[] | undefined>
+    getCenter_Z(hostPathIndex: number): Promise<number | undefined>
+    getAllCenter_Z(): Promise<number[] | undefined>
+    getRadius(hostPathIndex: number): Promise<number | undefined>
+    getAllRadius(): Promise<number[] | undefined>
+    getNormal_X(hostPathIndex: number): Promise<number | undefined>
+    getAllNormal_X(): Promise<number[] | undefined>
+    getNormal_Y(hostPathIndex: number): Promise<number | undefined>
+    getAllNormal_Y(): Promise<number[] | undefined>
+    getNormal_Z(hostPathIndex: number): Promise<number | undefined>
+    getAllNormal_Z(): Promise<number[] | undefined>
+    getLength(hostPathIndex: number): Promise<number | undefined>
+    getAllLength(): Promise<number[] | undefined>
+    getWidth(hostPathIndex: number): Promise<number | undefined>
+    getAllWidth(): Promise<number[] | undefined>
+    getOrientation_X(hostPathIndex: number): Promise<number | undefined>
+    getAllOrientation_X(): Promise<number[] | undefined>
+    getOrientation_Y(hostPathIndex: number): Promise<number | undefined>
+    getAllOrientation_Y(): Promise<number[] | undefined>
+    getOrientation_Z(hostPathIndex: number): Promise<number | undefined>
+    getAllOrientation_Z(): Promise<number[] | undefined>
+    getFlipped(hostPathIndex: number): Promise<boolean | undefined>
+    getAllFlipped(): Promise<boolean[] | undefined>
+    getLocationLine(hostPathIndex: number): Promise<number | undefined>
+    getAllLocationLine(): Promise<number[] | undefined>
+    getLocationLineOffset(hostPathIndex: number): Promise<number | undefined>
+    getAllLocationLineOffset(): Promise<number[] | undefined>
+    getCoreOffsetExterior(hostPathIndex: number): Promise<number | undefined>
+    getAllCoreOffsetExterior(): Promise<number[] | undefined>
+    getBaseOffset(hostPathIndex: number): Promise<number | undefined>
+    getAllBaseOffset(): Promise<number[] | undefined>
+    getBaseElevation(hostPathIndex: number): Promise<number | undefined>
+    getAllBaseElevation(): Promise<number[] | undefined>
+    getTopOffset(hostPathIndex: number): Promise<number | undefined>
+    getAllTopOffset(): Promise<number[] | undefined>
+    getHeight(hostPathIndex: number): Promise<number | undefined>
+    getAllHeight(): Promise<number[] | undefined>
+    getHasEditedProfile(hostPathIndex: number): Promise<boolean | undefined>
+    getAllHasEditedProfile(): Promise<boolean[] | undefined>
+    getTopAttachedCount(hostPathIndex: number): Promise<number | undefined>
+    getAllTopAttachedCount(): Promise<number[] | undefined>
+    getBaseAttachedCount(hostPathIndex: number): Promise<number | undefined>
+    getAllBaseAttachedCount(): Promise<number[] | undefined>
+    getIsStacked(hostPathIndex: number): Promise<boolean | undefined>
+    getAllIsStacked(): Promise<boolean[] | undefined>
+    getIsCurtain(hostPathIndex: number): Promise<boolean | undefined>
+    getAllIsCurtain(): Promise<boolean[] | undefined>
+    
+    getBaseLevelIndex(hostPathIndex: number): Promise<number | undefined>
+    getAllBaseLevelIndex(): Promise<number[] | undefined>
+    getBaseLevel(hostPathIndex: number): Promise<ILevel | undefined>
+    getTopLevelIndex(hostPathIndex: number): Promise<number | undefined>
+    getAllTopLevelIndex(): Promise<number[] | undefined>
+    getTopLevel(hostPathIndex: number): Promise<ILevel | undefined>
+    getCompoundStructureIndex(hostPathIndex: number): Promise<number | undefined>
+    getAllCompoundStructureIndex(): Promise<number[] | undefined>
+    getCompoundStructure(hostPathIndex: number): Promise<ICompoundStructure | undefined>
+    getElementIndex(hostPathIndex: number): Promise<number | undefined>
+    getAllElementIndex(): Promise<number[] | undefined>
+    getElement(hostPathIndex: number): Promise<IElement | undefined>
+}
+
+export class HostPath implements IHostPath {
+    index: number
+    curveKind?: number
+    p0_X?: number
+    p0_Y?: number
+    p0_Z?: number
+    p1_X?: number
+    p1_Y?: number
+    p1_Z?: number
+    mid_X?: number
+    mid_Y?: number
+    mid_Z?: number
+    center_X?: number
+    center_Y?: number
+    center_Z?: number
+    radius?: number
+    normal_X?: number
+    normal_Y?: number
+    normal_Z?: number
+    length?: number
+    width?: number
+    orientation_X?: number
+    orientation_Y?: number
+    orientation_Z?: number
+    flipped?: boolean
+    locationLine?: number
+    locationLineOffset?: number
+    coreOffsetExterior?: number
+    baseOffset?: number
+    baseElevation?: number
+    topOffset?: number
+    height?: number
+    hasEditedProfile?: boolean
+    topAttachedCount?: number
+    baseAttachedCount?: number
+    isStacked?: boolean
+    isCurtain?: boolean
+    
+    baseLevelIndex?: number
+    baseLevel?: ILevel
+    topLevelIndex?: number
+    topLevel?: ILevel
+    compoundStructureIndex?: number
+    compoundStructure?: ICompoundStructure
+    elementIndex?: number
+    element?: IElement
+    
+    static async createFromTable(table: IHostPathTable, index: number): Promise<IHostPath> {
+        let result = new HostPath()
+        result.index = index
+        
+        await Promise.all([
+            table.getCurveKind(index).then(v => result.curveKind = v),
+            table.getP0_X(index).then(v => result.p0_X = v),
+            table.getP0_Y(index).then(v => result.p0_Y = v),
+            table.getP0_Z(index).then(v => result.p0_Z = v),
+            table.getP1_X(index).then(v => result.p1_X = v),
+            table.getP1_Y(index).then(v => result.p1_Y = v),
+            table.getP1_Z(index).then(v => result.p1_Z = v),
+            table.getMid_X(index).then(v => result.mid_X = v),
+            table.getMid_Y(index).then(v => result.mid_Y = v),
+            table.getMid_Z(index).then(v => result.mid_Z = v),
+            table.getCenter_X(index).then(v => result.center_X = v),
+            table.getCenter_Y(index).then(v => result.center_Y = v),
+            table.getCenter_Z(index).then(v => result.center_Z = v),
+            table.getRadius(index).then(v => result.radius = v),
+            table.getNormal_X(index).then(v => result.normal_X = v),
+            table.getNormal_Y(index).then(v => result.normal_Y = v),
+            table.getNormal_Z(index).then(v => result.normal_Z = v),
+            table.getLength(index).then(v => result.length = v),
+            table.getWidth(index).then(v => result.width = v),
+            table.getOrientation_X(index).then(v => result.orientation_X = v),
+            table.getOrientation_Y(index).then(v => result.orientation_Y = v),
+            table.getOrientation_Z(index).then(v => result.orientation_Z = v),
+            table.getFlipped(index).then(v => result.flipped = v),
+            table.getLocationLine(index).then(v => result.locationLine = v),
+            table.getLocationLineOffset(index).then(v => result.locationLineOffset = v),
+            table.getCoreOffsetExterior(index).then(v => result.coreOffsetExterior = v),
+            table.getBaseOffset(index).then(v => result.baseOffset = v),
+            table.getBaseElevation(index).then(v => result.baseElevation = v),
+            table.getTopOffset(index).then(v => result.topOffset = v),
+            table.getHeight(index).then(v => result.height = v),
+            table.getHasEditedProfile(index).then(v => result.hasEditedProfile = v),
+            table.getTopAttachedCount(index).then(v => result.topAttachedCount = v),
+            table.getBaseAttachedCount(index).then(v => result.baseAttachedCount = v),
+            table.getIsStacked(index).then(v => result.isStacked = v),
+            table.getIsCurtain(index).then(v => result.isCurtain = v),
+            table.getBaseLevelIndex(index).then(v => result.baseLevelIndex = v),
+            table.getTopLevelIndex(index).then(v => result.topLevelIndex = v),
+            table.getCompoundStructureIndex(index).then(v => result.compoundStructureIndex = v),
+            table.getElementIndex(index).then(v => result.elementIndex = v),
+        ])
+        
+        return result
+    }
+}
+
+export class HostPathTable implements IHostPathTable {
+    private document: VimDocument
+    private entityTable: EntityTable
+    
+    static async createFromDocument(document: VimDocument): Promise<IHostPathTable | undefined> {
+        const entity = await document.entities.getBfast("Vim.HostPath")
+        
+        if (!entity) {
+            return undefined
+        }
+        
+        let table = new HostPathTable()
+        table.document = document
+        table.entityTable = new EntityTable(entity, document.strings)
+        
+        return table
+    }
+    
+    getCount(): Promise<number> {
+        return this.entityTable.getCount()
+    }
+    
+    async get(hostPathIndex: number): Promise<IHostPath> {
+        return await HostPath.createFromTable(this, hostPathIndex)
+    }
+    
+    async getAll(): Promise<IHostPath[]> {
+        const localTable = await this.entityTable.getLocal()
+        
+        let curveKind: number[] | undefined
+        let p0_X: number[] | undefined
+        let p0_Y: number[] | undefined
+        let p0_Z: number[] | undefined
+        let p1_X: number[] | undefined
+        let p1_Y: number[] | undefined
+        let p1_Z: number[] | undefined
+        let mid_X: number[] | undefined
+        let mid_Y: number[] | undefined
+        let mid_Z: number[] | undefined
+        let center_X: number[] | undefined
+        let center_Y: number[] | undefined
+        let center_Z: number[] | undefined
+        let radius: number[] | undefined
+        let normal_X: number[] | undefined
+        let normal_Y: number[] | undefined
+        let normal_Z: number[] | undefined
+        let length: number[] | undefined
+        let width: number[] | undefined
+        let orientation_X: number[] | undefined
+        let orientation_Y: number[] | undefined
+        let orientation_Z: number[] | undefined
+        let flipped: boolean[] | undefined
+        let locationLine: number[] | undefined
+        let locationLineOffset: number[] | undefined
+        let coreOffsetExterior: number[] | undefined
+        let baseOffset: number[] | undefined
+        let baseElevation: number[] | undefined
+        let topOffset: number[] | undefined
+        let height: number[] | undefined
+        let hasEditedProfile: boolean[] | undefined
+        let topAttachedCount: number[] | undefined
+        let baseAttachedCount: number[] | undefined
+        let isStacked: boolean[] | undefined
+        let isCurtain: boolean[] | undefined
+        let baseLevelIndex: number[] | undefined
+        let topLevelIndex: number[] | undefined
+        let compoundStructureIndex: number[] | undefined
+        let elementIndex: number[] | undefined
+        
+        await Promise.all([
+            (async () => { curveKind = (await localTable.getNumberArray("int:CurveKind")) })(),
+            (async () => { p0_X = (await localTable.getNumberArray("double:P0.X")) })(),
+            (async () => { p0_Y = (await localTable.getNumberArray("double:P0.Y")) })(),
+            (async () => { p0_Z = (await localTable.getNumberArray("double:P0.Z")) })(),
+            (async () => { p1_X = (await localTable.getNumberArray("double:P1.X")) })(),
+            (async () => { p1_Y = (await localTable.getNumberArray("double:P1.Y")) })(),
+            (async () => { p1_Z = (await localTable.getNumberArray("double:P1.Z")) })(),
+            (async () => { mid_X = (await localTable.getNumberArray("double:Mid.X")) })(),
+            (async () => { mid_Y = (await localTable.getNumberArray("double:Mid.Y")) })(),
+            (async () => { mid_Z = (await localTable.getNumberArray("double:Mid.Z")) })(),
+            (async () => { center_X = (await localTable.getNumberArray("double:Center.X")) })(),
+            (async () => { center_Y = (await localTable.getNumberArray("double:Center.Y")) })(),
+            (async () => { center_Z = (await localTable.getNumberArray("double:Center.Z")) })(),
+            (async () => { radius = (await localTable.getNumberArray("double:Radius")) })(),
+            (async () => { normal_X = (await localTable.getNumberArray("double:Normal.X")) })(),
+            (async () => { normal_Y = (await localTable.getNumberArray("double:Normal.Y")) })(),
+            (async () => { normal_Z = (await localTable.getNumberArray("double:Normal.Z")) })(),
+            (async () => { length = (await localTable.getNumberArray("double:Length")) })(),
+            (async () => { width = (await localTable.getNumberArray("double:Width")) })(),
+            (async () => { orientation_X = (await localTable.getNumberArray("double:Orientation.X")) })(),
+            (async () => { orientation_Y = (await localTable.getNumberArray("double:Orientation.Y")) })(),
+            (async () => { orientation_Z = (await localTable.getNumberArray("double:Orientation.Z")) })(),
+            (async () => { flipped = (await localTable.getBooleanArray("byte:Flipped")) })(),
+            (async () => { locationLine = (await localTable.getNumberArray("int:LocationLine")) })(),
+            (async () => { locationLineOffset = (await localTable.getNumberArray("double:LocationLineOffset")) })(),
+            (async () => { coreOffsetExterior = (await localTable.getNumberArray("double:CoreOffsetExterior")) })(),
+            (async () => { baseOffset = (await localTable.getNumberArray("double:BaseOffset")) })(),
+            (async () => { baseElevation = (await localTable.getNumberArray("double:BaseElevation")) })(),
+            (async () => { topOffset = (await localTable.getNumberArray("double:TopOffset")) })(),
+            (async () => { height = (await localTable.getNumberArray("double:Height")) })(),
+            (async () => { hasEditedProfile = (await localTable.getBooleanArray("byte:HasEditedProfile")) })(),
+            (async () => { topAttachedCount = (await localTable.getNumberArray("int:TopAttachedCount")) })(),
+            (async () => { baseAttachedCount = (await localTable.getNumberArray("int:BaseAttachedCount")) })(),
+            (async () => { isStacked = (await localTable.getBooleanArray("byte:IsStacked")) })(),
+            (async () => { isCurtain = (await localTable.getBooleanArray("byte:IsCurtain")) })(),
+            (async () => { baseLevelIndex = (await localTable.getNumberArray("index:Vim.Level:BaseLevel")) })(),
+            (async () => { topLevelIndex = (await localTable.getNumberArray("index:Vim.Level:TopLevel")) })(),
+            (async () => { compoundStructureIndex = (await localTable.getNumberArray("index:Vim.CompoundStructure:CompoundStructure")) })(),
+            (async () => { elementIndex = (await localTable.getNumberArray("index:Vim.Element:Element")) })(),
+        ])
+        
+        let hostPath: IHostPath[] = []
+        
+        const rowCount = await this.getCount()
+        for (let i = 0; i < rowCount; i++) {
+            hostPath.push({
+                index: i,
+                curveKind: curveKind ? curveKind[i] : undefined,
+                p0_X: p0_X ? p0_X[i] : undefined,
+                p0_Y: p0_Y ? p0_Y[i] : undefined,
+                p0_Z: p0_Z ? p0_Z[i] : undefined,
+                p1_X: p1_X ? p1_X[i] : undefined,
+                p1_Y: p1_Y ? p1_Y[i] : undefined,
+                p1_Z: p1_Z ? p1_Z[i] : undefined,
+                mid_X: mid_X ? mid_X[i] : undefined,
+                mid_Y: mid_Y ? mid_Y[i] : undefined,
+                mid_Z: mid_Z ? mid_Z[i] : undefined,
+                center_X: center_X ? center_X[i] : undefined,
+                center_Y: center_Y ? center_Y[i] : undefined,
+                center_Z: center_Z ? center_Z[i] : undefined,
+                radius: radius ? radius[i] : undefined,
+                normal_X: normal_X ? normal_X[i] : undefined,
+                normal_Y: normal_Y ? normal_Y[i] : undefined,
+                normal_Z: normal_Z ? normal_Z[i] : undefined,
+                length: length ? length[i] : undefined,
+                width: width ? width[i] : undefined,
+                orientation_X: orientation_X ? orientation_X[i] : undefined,
+                orientation_Y: orientation_Y ? orientation_Y[i] : undefined,
+                orientation_Z: orientation_Z ? orientation_Z[i] : undefined,
+                flipped: flipped ? flipped[i] : undefined,
+                locationLine: locationLine ? locationLine[i] : undefined,
+                locationLineOffset: locationLineOffset ? locationLineOffset[i] : undefined,
+                coreOffsetExterior: coreOffsetExterior ? coreOffsetExterior[i] : undefined,
+                baseOffset: baseOffset ? baseOffset[i] : undefined,
+                baseElevation: baseElevation ? baseElevation[i] : undefined,
+                topOffset: topOffset ? topOffset[i] : undefined,
+                height: height ? height[i] : undefined,
+                hasEditedProfile: hasEditedProfile ? hasEditedProfile[i] : undefined,
+                topAttachedCount: topAttachedCount ? topAttachedCount[i] : undefined,
+                baseAttachedCount: baseAttachedCount ? baseAttachedCount[i] : undefined,
+                isStacked: isStacked ? isStacked[i] : undefined,
+                isCurtain: isCurtain ? isCurtain[i] : undefined,
+                baseLevelIndex: baseLevelIndex ? baseLevelIndex[i] : undefined,
+                topLevelIndex: topLevelIndex ? topLevelIndex[i] : undefined,
+                compoundStructureIndex: compoundStructureIndex ? compoundStructureIndex[i] : undefined,
+                elementIndex: elementIndex ? elementIndex[i] : undefined
+            })
+        }
+        
+        return hostPath
+    }
+    
+    async getCurveKind(hostPathIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(hostPathIndex, "int:CurveKind"))
+    }
+    
+    async getAllCurveKind(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("int:CurveKind"))
+    }
+    
+    async getP0_X(hostPathIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(hostPathIndex, "double:P0.X"))
+    }
+    
+    async getAllP0_X(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:P0.X"))
+    }
+    
+    async getP0_Y(hostPathIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(hostPathIndex, "double:P0.Y"))
+    }
+    
+    async getAllP0_Y(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:P0.Y"))
+    }
+    
+    async getP0_Z(hostPathIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(hostPathIndex, "double:P0.Z"))
+    }
+    
+    async getAllP0_Z(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:P0.Z"))
+    }
+    
+    async getP1_X(hostPathIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(hostPathIndex, "double:P1.X"))
+    }
+    
+    async getAllP1_X(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:P1.X"))
+    }
+    
+    async getP1_Y(hostPathIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(hostPathIndex, "double:P1.Y"))
+    }
+    
+    async getAllP1_Y(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:P1.Y"))
+    }
+    
+    async getP1_Z(hostPathIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(hostPathIndex, "double:P1.Z"))
+    }
+    
+    async getAllP1_Z(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:P1.Z"))
+    }
+    
+    async getMid_X(hostPathIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(hostPathIndex, "double:Mid.X"))
+    }
+    
+    async getAllMid_X(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:Mid.X"))
+    }
+    
+    async getMid_Y(hostPathIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(hostPathIndex, "double:Mid.Y"))
+    }
+    
+    async getAllMid_Y(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:Mid.Y"))
+    }
+    
+    async getMid_Z(hostPathIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(hostPathIndex, "double:Mid.Z"))
+    }
+    
+    async getAllMid_Z(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:Mid.Z"))
+    }
+    
+    async getCenter_X(hostPathIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(hostPathIndex, "double:Center.X"))
+    }
+    
+    async getAllCenter_X(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:Center.X"))
+    }
+    
+    async getCenter_Y(hostPathIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(hostPathIndex, "double:Center.Y"))
+    }
+    
+    async getAllCenter_Y(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:Center.Y"))
+    }
+    
+    async getCenter_Z(hostPathIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(hostPathIndex, "double:Center.Z"))
+    }
+    
+    async getAllCenter_Z(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:Center.Z"))
+    }
+    
+    async getRadius(hostPathIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(hostPathIndex, "double:Radius"))
+    }
+    
+    async getAllRadius(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:Radius"))
+    }
+    
+    async getNormal_X(hostPathIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(hostPathIndex, "double:Normal.X"))
+    }
+    
+    async getAllNormal_X(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:Normal.X"))
+    }
+    
+    async getNormal_Y(hostPathIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(hostPathIndex, "double:Normal.Y"))
+    }
+    
+    async getAllNormal_Y(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:Normal.Y"))
+    }
+    
+    async getNormal_Z(hostPathIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(hostPathIndex, "double:Normal.Z"))
+    }
+    
+    async getAllNormal_Z(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:Normal.Z"))
+    }
+    
+    async getLength(hostPathIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(hostPathIndex, "double:Length"))
+    }
+    
+    async getAllLength(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:Length"))
+    }
+    
+    async getWidth(hostPathIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(hostPathIndex, "double:Width"))
+    }
+    
+    async getAllWidth(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:Width"))
+    }
+    
+    async getOrientation_X(hostPathIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(hostPathIndex, "double:Orientation.X"))
+    }
+    
+    async getAllOrientation_X(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:Orientation.X"))
+    }
+    
+    async getOrientation_Y(hostPathIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(hostPathIndex, "double:Orientation.Y"))
+    }
+    
+    async getAllOrientation_Y(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:Orientation.Y"))
+    }
+    
+    async getOrientation_Z(hostPathIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(hostPathIndex, "double:Orientation.Z"))
+    }
+    
+    async getAllOrientation_Z(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:Orientation.Z"))
+    }
+    
+    async getFlipped(hostPathIndex: number): Promise<boolean | undefined> {
+        return (await this.entityTable.getBoolean(hostPathIndex, "byte:Flipped"))
+    }
+    
+    async getAllFlipped(): Promise<boolean[] | undefined> {
+        return (await this.entityTable.getBooleanArray("byte:Flipped"))
+    }
+    
+    async getLocationLine(hostPathIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(hostPathIndex, "int:LocationLine"))
+    }
+    
+    async getAllLocationLine(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("int:LocationLine"))
+    }
+    
+    async getLocationLineOffset(hostPathIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(hostPathIndex, "double:LocationLineOffset"))
+    }
+    
+    async getAllLocationLineOffset(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:LocationLineOffset"))
+    }
+    
+    async getCoreOffsetExterior(hostPathIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(hostPathIndex, "double:CoreOffsetExterior"))
+    }
+    
+    async getAllCoreOffsetExterior(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:CoreOffsetExterior"))
+    }
+    
+    async getBaseOffset(hostPathIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(hostPathIndex, "double:BaseOffset"))
+    }
+    
+    async getAllBaseOffset(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:BaseOffset"))
+    }
+    
+    async getBaseElevation(hostPathIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(hostPathIndex, "double:BaseElevation"))
+    }
+    
+    async getAllBaseElevation(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:BaseElevation"))
+    }
+    
+    async getTopOffset(hostPathIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(hostPathIndex, "double:TopOffset"))
+    }
+    
+    async getAllTopOffset(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:TopOffset"))
+    }
+    
+    async getHeight(hostPathIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(hostPathIndex, "double:Height"))
+    }
+    
+    async getAllHeight(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:Height"))
+    }
+    
+    async getHasEditedProfile(hostPathIndex: number): Promise<boolean | undefined> {
+        return (await this.entityTable.getBoolean(hostPathIndex, "byte:HasEditedProfile"))
+    }
+    
+    async getAllHasEditedProfile(): Promise<boolean[] | undefined> {
+        return (await this.entityTable.getBooleanArray("byte:HasEditedProfile"))
+    }
+    
+    async getTopAttachedCount(hostPathIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(hostPathIndex, "int:TopAttachedCount"))
+    }
+    
+    async getAllTopAttachedCount(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("int:TopAttachedCount"))
+    }
+    
+    async getBaseAttachedCount(hostPathIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(hostPathIndex, "int:BaseAttachedCount"))
+    }
+    
+    async getAllBaseAttachedCount(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("int:BaseAttachedCount"))
+    }
+    
+    async getIsStacked(hostPathIndex: number): Promise<boolean | undefined> {
+        return (await this.entityTable.getBoolean(hostPathIndex, "byte:IsStacked"))
+    }
+    
+    async getAllIsStacked(): Promise<boolean[] | undefined> {
+        return (await this.entityTable.getBooleanArray("byte:IsStacked"))
+    }
+    
+    async getIsCurtain(hostPathIndex: number): Promise<boolean | undefined> {
+        return (await this.entityTable.getBoolean(hostPathIndex, "byte:IsCurtain"))
+    }
+    
+    async getAllIsCurtain(): Promise<boolean[] | undefined> {
+        return (await this.entityTable.getBooleanArray("byte:IsCurtain"))
+    }
+    
+    async getBaseLevelIndex(hostPathIndex: number): Promise<number | undefined> {
+        return await this.entityTable.getNumber(hostPathIndex, "index:Vim.Level:BaseLevel")
+    }
+    
+    async getAllBaseLevelIndex(): Promise<number[] | undefined> {
+        return await this.entityTable.getNumberArray("index:Vim.Level:BaseLevel")
+    }
+    
+    async getBaseLevel(hostPathIndex: number): Promise<ILevel | undefined> {
+        const index = await this.getBaseLevelIndex(hostPathIndex)
+        
+        if (index === undefined) {
+            return undefined
+        }
+        
+        return await this.document.level?.get(index)
+    }
+    
+    async getTopLevelIndex(hostPathIndex: number): Promise<number | undefined> {
+        return await this.entityTable.getNumber(hostPathIndex, "index:Vim.Level:TopLevel")
+    }
+    
+    async getAllTopLevelIndex(): Promise<number[] | undefined> {
+        return await this.entityTable.getNumberArray("index:Vim.Level:TopLevel")
+    }
+    
+    async getTopLevel(hostPathIndex: number): Promise<ILevel | undefined> {
+        const index = await this.getTopLevelIndex(hostPathIndex)
+        
+        if (index === undefined) {
+            return undefined
+        }
+        
+        return await this.document.level?.get(index)
+    }
+    
+    async getCompoundStructureIndex(hostPathIndex: number): Promise<number | undefined> {
+        return await this.entityTable.getNumber(hostPathIndex, "index:Vim.CompoundStructure:CompoundStructure")
+    }
+    
+    async getAllCompoundStructureIndex(): Promise<number[] | undefined> {
+        return await this.entityTable.getNumberArray("index:Vim.CompoundStructure:CompoundStructure")
+    }
+    
+    async getCompoundStructure(hostPathIndex: number): Promise<ICompoundStructure | undefined> {
+        const index = await this.getCompoundStructureIndex(hostPathIndex)
+        
+        if (index === undefined) {
+            return undefined
+        }
+        
+        return await this.document.compoundStructure?.get(index)
+    }
+    
+    async getElementIndex(hostPathIndex: number): Promise<number | undefined> {
+        return await this.entityTable.getNumber(hostPathIndex, "index:Vim.Element:Element")
+    }
+    
+    async getAllElementIndex(): Promise<number[] | undefined> {
+        return await this.entityTable.getNumberArray("index:Vim.Element:Element")
+    }
+    
+    async getElement(hostPathIndex: number): Promise<IElement | undefined> {
+        const index = await this.getElementIndex(hostPathIndex)
+        
+        if (index === undefined) {
+            return undefined
+        }
+        
+        return await this.document.element?.get(index)
+    }
+    
+}
+
+export interface IHostedInsert {
+    index: number
+    kind?: number
+    distanceAlongPath?: number
+    normalizedParameter?: number
+    offsetFromPath?: number
+    elevation?: number
+    sillHeight?: number
+    headHeight?: number
+    facingFlipped?: boolean
+    handFlipped?: boolean
+    origin_X?: number
+    origin_Y?: number
+    origin_Z?: number
+    openingMin_X?: number
+    openingMin_Y?: number
+    openingMin_Z?: number
+    openingMax_X?: number
+    openingMax_Y?: number
+    openingMax_Z?: number
+    
+    hostIndex?: number
+    host?: IElement
+    hostPathIndex?: number
+    hostPath?: IHostPath
+    elementIndex?: number
+    element?: IElement
+}
+
+export interface IHostedInsertTable {
+    getCount(): Promise<number>
+    get(hostedInsertIndex: number): Promise<IHostedInsert>
+    getAll(): Promise<IHostedInsert[]>
+    
+    getKind(hostedInsertIndex: number): Promise<number | undefined>
+    getAllKind(): Promise<number[] | undefined>
+    getDistanceAlongPath(hostedInsertIndex: number): Promise<number | undefined>
+    getAllDistanceAlongPath(): Promise<number[] | undefined>
+    getNormalizedParameter(hostedInsertIndex: number): Promise<number | undefined>
+    getAllNormalizedParameter(): Promise<number[] | undefined>
+    getOffsetFromPath(hostedInsertIndex: number): Promise<number | undefined>
+    getAllOffsetFromPath(): Promise<number[] | undefined>
+    getElevation(hostedInsertIndex: number): Promise<number | undefined>
+    getAllElevation(): Promise<number[] | undefined>
+    getSillHeight(hostedInsertIndex: number): Promise<number | undefined>
+    getAllSillHeight(): Promise<number[] | undefined>
+    getHeadHeight(hostedInsertIndex: number): Promise<number | undefined>
+    getAllHeadHeight(): Promise<number[] | undefined>
+    getFacingFlipped(hostedInsertIndex: number): Promise<boolean | undefined>
+    getAllFacingFlipped(): Promise<boolean[] | undefined>
+    getHandFlipped(hostedInsertIndex: number): Promise<boolean | undefined>
+    getAllHandFlipped(): Promise<boolean[] | undefined>
+    getOrigin_X(hostedInsertIndex: number): Promise<number | undefined>
+    getAllOrigin_X(): Promise<number[] | undefined>
+    getOrigin_Y(hostedInsertIndex: number): Promise<number | undefined>
+    getAllOrigin_Y(): Promise<number[] | undefined>
+    getOrigin_Z(hostedInsertIndex: number): Promise<number | undefined>
+    getAllOrigin_Z(): Promise<number[] | undefined>
+    getOpeningMin_X(hostedInsertIndex: number): Promise<number | undefined>
+    getAllOpeningMin_X(): Promise<number[] | undefined>
+    getOpeningMin_Y(hostedInsertIndex: number): Promise<number | undefined>
+    getAllOpeningMin_Y(): Promise<number[] | undefined>
+    getOpeningMin_Z(hostedInsertIndex: number): Promise<number | undefined>
+    getAllOpeningMin_Z(): Promise<number[] | undefined>
+    getOpeningMax_X(hostedInsertIndex: number): Promise<number | undefined>
+    getAllOpeningMax_X(): Promise<number[] | undefined>
+    getOpeningMax_Y(hostedInsertIndex: number): Promise<number | undefined>
+    getAllOpeningMax_Y(): Promise<number[] | undefined>
+    getOpeningMax_Z(hostedInsertIndex: number): Promise<number | undefined>
+    getAllOpeningMax_Z(): Promise<number[] | undefined>
+    
+    getHostIndex(hostedInsertIndex: number): Promise<number | undefined>
+    getAllHostIndex(): Promise<number[] | undefined>
+    getHost(hostedInsertIndex: number): Promise<IElement | undefined>
+    getHostPathIndex(hostedInsertIndex: number): Promise<number | undefined>
+    getAllHostPathIndex(): Promise<number[] | undefined>
+    getHostPath(hostedInsertIndex: number): Promise<IHostPath | undefined>
+    getElementIndex(hostedInsertIndex: number): Promise<number | undefined>
+    getAllElementIndex(): Promise<number[] | undefined>
+    getElement(hostedInsertIndex: number): Promise<IElement | undefined>
+}
+
+export class HostedInsert implements IHostedInsert {
+    index: number
+    kind?: number
+    distanceAlongPath?: number
+    normalizedParameter?: number
+    offsetFromPath?: number
+    elevation?: number
+    sillHeight?: number
+    headHeight?: number
+    facingFlipped?: boolean
+    handFlipped?: boolean
+    origin_X?: number
+    origin_Y?: number
+    origin_Z?: number
+    openingMin_X?: number
+    openingMin_Y?: number
+    openingMin_Z?: number
+    openingMax_X?: number
+    openingMax_Y?: number
+    openingMax_Z?: number
+    
+    hostIndex?: number
+    host?: IElement
+    hostPathIndex?: number
+    hostPath?: IHostPath
+    elementIndex?: number
+    element?: IElement
+    
+    static async createFromTable(table: IHostedInsertTable, index: number): Promise<IHostedInsert> {
+        let result = new HostedInsert()
+        result.index = index
+        
+        await Promise.all([
+            table.getKind(index).then(v => result.kind = v),
+            table.getDistanceAlongPath(index).then(v => result.distanceAlongPath = v),
+            table.getNormalizedParameter(index).then(v => result.normalizedParameter = v),
+            table.getOffsetFromPath(index).then(v => result.offsetFromPath = v),
+            table.getElevation(index).then(v => result.elevation = v),
+            table.getSillHeight(index).then(v => result.sillHeight = v),
+            table.getHeadHeight(index).then(v => result.headHeight = v),
+            table.getFacingFlipped(index).then(v => result.facingFlipped = v),
+            table.getHandFlipped(index).then(v => result.handFlipped = v),
+            table.getOrigin_X(index).then(v => result.origin_X = v),
+            table.getOrigin_Y(index).then(v => result.origin_Y = v),
+            table.getOrigin_Z(index).then(v => result.origin_Z = v),
+            table.getOpeningMin_X(index).then(v => result.openingMin_X = v),
+            table.getOpeningMin_Y(index).then(v => result.openingMin_Y = v),
+            table.getOpeningMin_Z(index).then(v => result.openingMin_Z = v),
+            table.getOpeningMax_X(index).then(v => result.openingMax_X = v),
+            table.getOpeningMax_Y(index).then(v => result.openingMax_Y = v),
+            table.getOpeningMax_Z(index).then(v => result.openingMax_Z = v),
+            table.getHostIndex(index).then(v => result.hostIndex = v),
+            table.getHostPathIndex(index).then(v => result.hostPathIndex = v),
+            table.getElementIndex(index).then(v => result.elementIndex = v),
+        ])
+        
+        return result
+    }
+}
+
+export class HostedInsertTable implements IHostedInsertTable {
+    private document: VimDocument
+    private entityTable: EntityTable
+    
+    static async createFromDocument(document: VimDocument): Promise<IHostedInsertTable | undefined> {
+        const entity = await document.entities.getBfast("Vim.HostedInsert")
+        
+        if (!entity) {
+            return undefined
+        }
+        
+        let table = new HostedInsertTable()
+        table.document = document
+        table.entityTable = new EntityTable(entity, document.strings)
+        
+        return table
+    }
+    
+    getCount(): Promise<number> {
+        return this.entityTable.getCount()
+    }
+    
+    async get(hostedInsertIndex: number): Promise<IHostedInsert> {
+        return await HostedInsert.createFromTable(this, hostedInsertIndex)
+    }
+    
+    async getAll(): Promise<IHostedInsert[]> {
+        const localTable = await this.entityTable.getLocal()
+        
+        let kind: number[] | undefined
+        let distanceAlongPath: number[] | undefined
+        let normalizedParameter: number[] | undefined
+        let offsetFromPath: number[] | undefined
+        let elevation: number[] | undefined
+        let sillHeight: number[] | undefined
+        let headHeight: number[] | undefined
+        let facingFlipped: boolean[] | undefined
+        let handFlipped: boolean[] | undefined
+        let origin_X: number[] | undefined
+        let origin_Y: number[] | undefined
+        let origin_Z: number[] | undefined
+        let openingMin_X: number[] | undefined
+        let openingMin_Y: number[] | undefined
+        let openingMin_Z: number[] | undefined
+        let openingMax_X: number[] | undefined
+        let openingMax_Y: number[] | undefined
+        let openingMax_Z: number[] | undefined
+        let hostIndex: number[] | undefined
+        let hostPathIndex: number[] | undefined
+        let elementIndex: number[] | undefined
+        
+        await Promise.all([
+            (async () => { kind = (await localTable.getNumberArray("int:Kind")) })(),
+            (async () => { distanceAlongPath = (await localTable.getNumberArray("double:DistanceAlongPath")) })(),
+            (async () => { normalizedParameter = (await localTable.getNumberArray("double:NormalizedParameter")) })(),
+            (async () => { offsetFromPath = (await localTable.getNumberArray("double:OffsetFromPath")) })(),
+            (async () => { elevation = (await localTable.getNumberArray("double:Elevation")) })(),
+            (async () => { sillHeight = (await localTable.getNumberArray("double:SillHeight")) })(),
+            (async () => { headHeight = (await localTable.getNumberArray("double:HeadHeight")) })(),
+            (async () => { facingFlipped = (await localTable.getBooleanArray("byte:FacingFlipped")) })(),
+            (async () => { handFlipped = (await localTable.getBooleanArray("byte:HandFlipped")) })(),
+            (async () => { origin_X = (await localTable.getNumberArray("double:Origin.X")) })(),
+            (async () => { origin_Y = (await localTable.getNumberArray("double:Origin.Y")) })(),
+            (async () => { origin_Z = (await localTable.getNumberArray("double:Origin.Z")) })(),
+            (async () => { openingMin_X = (await localTable.getNumberArray("double:OpeningMin.X")) })(),
+            (async () => { openingMin_Y = (await localTable.getNumberArray("double:OpeningMin.Y")) })(),
+            (async () => { openingMin_Z = (await localTable.getNumberArray("double:OpeningMin.Z")) })(),
+            (async () => { openingMax_X = (await localTable.getNumberArray("double:OpeningMax.X")) })(),
+            (async () => { openingMax_Y = (await localTable.getNumberArray("double:OpeningMax.Y")) })(),
+            (async () => { openingMax_Z = (await localTable.getNumberArray("double:OpeningMax.Z")) })(),
+            (async () => { hostIndex = (await localTable.getNumberArray("index:Vim.Element:Host")) })(),
+            (async () => { hostPathIndex = (await localTable.getNumberArray("index:Vim.HostPath:HostPath")) })(),
+            (async () => { elementIndex = (await localTable.getNumberArray("index:Vim.Element:Element")) })(),
+        ])
+        
+        let hostedInsert: IHostedInsert[] = []
+        
+        const rowCount = await this.getCount()
+        for (let i = 0; i < rowCount; i++) {
+            hostedInsert.push({
+                index: i,
+                kind: kind ? kind[i] : undefined,
+                distanceAlongPath: distanceAlongPath ? distanceAlongPath[i] : undefined,
+                normalizedParameter: normalizedParameter ? normalizedParameter[i] : undefined,
+                offsetFromPath: offsetFromPath ? offsetFromPath[i] : undefined,
+                elevation: elevation ? elevation[i] : undefined,
+                sillHeight: sillHeight ? sillHeight[i] : undefined,
+                headHeight: headHeight ? headHeight[i] : undefined,
+                facingFlipped: facingFlipped ? facingFlipped[i] : undefined,
+                handFlipped: handFlipped ? handFlipped[i] : undefined,
+                origin_X: origin_X ? origin_X[i] : undefined,
+                origin_Y: origin_Y ? origin_Y[i] : undefined,
+                origin_Z: origin_Z ? origin_Z[i] : undefined,
+                openingMin_X: openingMin_X ? openingMin_X[i] : undefined,
+                openingMin_Y: openingMin_Y ? openingMin_Y[i] : undefined,
+                openingMin_Z: openingMin_Z ? openingMin_Z[i] : undefined,
+                openingMax_X: openingMax_X ? openingMax_X[i] : undefined,
+                openingMax_Y: openingMax_Y ? openingMax_Y[i] : undefined,
+                openingMax_Z: openingMax_Z ? openingMax_Z[i] : undefined,
+                hostIndex: hostIndex ? hostIndex[i] : undefined,
+                hostPathIndex: hostPathIndex ? hostPathIndex[i] : undefined,
+                elementIndex: elementIndex ? elementIndex[i] : undefined
+            })
+        }
+        
+        return hostedInsert
+    }
+    
+    async getKind(hostedInsertIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(hostedInsertIndex, "int:Kind"))
+    }
+    
+    async getAllKind(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("int:Kind"))
+    }
+    
+    async getDistanceAlongPath(hostedInsertIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(hostedInsertIndex, "double:DistanceAlongPath"))
+    }
+    
+    async getAllDistanceAlongPath(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:DistanceAlongPath"))
+    }
+    
+    async getNormalizedParameter(hostedInsertIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(hostedInsertIndex, "double:NormalizedParameter"))
+    }
+    
+    async getAllNormalizedParameter(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:NormalizedParameter"))
+    }
+    
+    async getOffsetFromPath(hostedInsertIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(hostedInsertIndex, "double:OffsetFromPath"))
+    }
+    
+    async getAllOffsetFromPath(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:OffsetFromPath"))
+    }
+    
+    async getElevation(hostedInsertIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(hostedInsertIndex, "double:Elevation"))
+    }
+    
+    async getAllElevation(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:Elevation"))
+    }
+    
+    async getSillHeight(hostedInsertIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(hostedInsertIndex, "double:SillHeight"))
+    }
+    
+    async getAllSillHeight(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:SillHeight"))
+    }
+    
+    async getHeadHeight(hostedInsertIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(hostedInsertIndex, "double:HeadHeight"))
+    }
+    
+    async getAllHeadHeight(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:HeadHeight"))
+    }
+    
+    async getFacingFlipped(hostedInsertIndex: number): Promise<boolean | undefined> {
+        return (await this.entityTable.getBoolean(hostedInsertIndex, "byte:FacingFlipped"))
+    }
+    
+    async getAllFacingFlipped(): Promise<boolean[] | undefined> {
+        return (await this.entityTable.getBooleanArray("byte:FacingFlipped"))
+    }
+    
+    async getHandFlipped(hostedInsertIndex: number): Promise<boolean | undefined> {
+        return (await this.entityTable.getBoolean(hostedInsertIndex, "byte:HandFlipped"))
+    }
+    
+    async getAllHandFlipped(): Promise<boolean[] | undefined> {
+        return (await this.entityTable.getBooleanArray("byte:HandFlipped"))
+    }
+    
+    async getOrigin_X(hostedInsertIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(hostedInsertIndex, "double:Origin.X"))
+    }
+    
+    async getAllOrigin_X(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:Origin.X"))
+    }
+    
+    async getOrigin_Y(hostedInsertIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(hostedInsertIndex, "double:Origin.Y"))
+    }
+    
+    async getAllOrigin_Y(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:Origin.Y"))
+    }
+    
+    async getOrigin_Z(hostedInsertIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(hostedInsertIndex, "double:Origin.Z"))
+    }
+    
+    async getAllOrigin_Z(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:Origin.Z"))
+    }
+    
+    async getOpeningMin_X(hostedInsertIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(hostedInsertIndex, "double:OpeningMin.X"))
+    }
+    
+    async getAllOpeningMin_X(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:OpeningMin.X"))
+    }
+    
+    async getOpeningMin_Y(hostedInsertIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(hostedInsertIndex, "double:OpeningMin.Y"))
+    }
+    
+    async getAllOpeningMin_Y(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:OpeningMin.Y"))
+    }
+    
+    async getOpeningMin_Z(hostedInsertIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(hostedInsertIndex, "double:OpeningMin.Z"))
+    }
+    
+    async getAllOpeningMin_Z(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:OpeningMin.Z"))
+    }
+    
+    async getOpeningMax_X(hostedInsertIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(hostedInsertIndex, "double:OpeningMax.X"))
+    }
+    
+    async getAllOpeningMax_X(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:OpeningMax.X"))
+    }
+    
+    async getOpeningMax_Y(hostedInsertIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(hostedInsertIndex, "double:OpeningMax.Y"))
+    }
+    
+    async getAllOpeningMax_Y(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:OpeningMax.Y"))
+    }
+    
+    async getOpeningMax_Z(hostedInsertIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(hostedInsertIndex, "double:OpeningMax.Z"))
+    }
+    
+    async getAllOpeningMax_Z(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:OpeningMax.Z"))
+    }
+    
+    async getHostIndex(hostedInsertIndex: number): Promise<number | undefined> {
+        return await this.entityTable.getNumber(hostedInsertIndex, "index:Vim.Element:Host")
+    }
+    
+    async getAllHostIndex(): Promise<number[] | undefined> {
+        return await this.entityTable.getNumberArray("index:Vim.Element:Host")
+    }
+    
+    async getHost(hostedInsertIndex: number): Promise<IElement | undefined> {
+        const index = await this.getHostIndex(hostedInsertIndex)
+        
+        if (index === undefined) {
+            return undefined
+        }
+        
+        return await this.document.element?.get(index)
+    }
+    
+    async getHostPathIndex(hostedInsertIndex: number): Promise<number | undefined> {
+        return await this.entityTable.getNumber(hostedInsertIndex, "index:Vim.HostPath:HostPath")
+    }
+    
+    async getAllHostPathIndex(): Promise<number[] | undefined> {
+        return await this.entityTable.getNumberArray("index:Vim.HostPath:HostPath")
+    }
+    
+    async getHostPath(hostedInsertIndex: number): Promise<IHostPath | undefined> {
+        const index = await this.getHostPathIndex(hostedInsertIndex)
+        
+        if (index === undefined) {
+            return undefined
+        }
+        
+        return await this.document.hostPath?.get(index)
+    }
+    
+    async getElementIndex(hostedInsertIndex: number): Promise<number | undefined> {
+        return await this.entityTable.getNumber(hostedInsertIndex, "index:Vim.Element:Element")
+    }
+    
+    async getAllElementIndex(): Promise<number[] | undefined> {
+        return await this.entityTable.getNumberArray("index:Vim.Element:Element")
+    }
+    
+    async getElement(hostedInsertIndex: number): Promise<IElement | undefined> {
+        const index = await this.getElementIndex(hostedInsertIndex)
+        
+        if (index === undefined) {
+            return undefined
+        }
+        
+        return await this.document.element?.get(index)
+    }
+    
+}
+
+export interface IFamilyRecipe {
+    index: number
+    readStatus?: number
+    refusal?: string
+    flexibility?: number
+    reading?: string
+    placementType?: string
+    isParametric?: boolean
+    currentTypeName?: string
+    labelledDimensionCount?: number
+    drivingDimensionCount?: number
+    lockCount?: number
+    formCount?: number
+    openingCount?: number
+    nestedInstanceCount?: number
+    openingTied?: number
+    readMs?: number
+    
+    familyIndex?: number
+    family?: IFamily
+}
+
+export interface IFamilyRecipeTable {
+    getCount(): Promise<number>
+    get(familyRecipeIndex: number): Promise<IFamilyRecipe>
+    getAll(): Promise<IFamilyRecipe[]>
+    
+    getReadStatus(familyRecipeIndex: number): Promise<number | undefined>
+    getAllReadStatus(): Promise<number[] | undefined>
+    getRefusal(familyRecipeIndex: number): Promise<string | undefined>
+    getAllRefusal(): Promise<string[] | undefined>
+    getFlexibility(familyRecipeIndex: number): Promise<number | undefined>
+    getAllFlexibility(): Promise<number[] | undefined>
+    getReading(familyRecipeIndex: number): Promise<string | undefined>
+    getAllReading(): Promise<string[] | undefined>
+    getPlacementType(familyRecipeIndex: number): Promise<string | undefined>
+    getAllPlacementType(): Promise<string[] | undefined>
+    getIsParametric(familyRecipeIndex: number): Promise<boolean | undefined>
+    getAllIsParametric(): Promise<boolean[] | undefined>
+    getCurrentTypeName(familyRecipeIndex: number): Promise<string | undefined>
+    getAllCurrentTypeName(): Promise<string[] | undefined>
+    getLabelledDimensionCount(familyRecipeIndex: number): Promise<number | undefined>
+    getAllLabelledDimensionCount(): Promise<number[] | undefined>
+    getDrivingDimensionCount(familyRecipeIndex: number): Promise<number | undefined>
+    getAllDrivingDimensionCount(): Promise<number[] | undefined>
+    getLockCount(familyRecipeIndex: number): Promise<number | undefined>
+    getAllLockCount(): Promise<number[] | undefined>
+    getFormCount(familyRecipeIndex: number): Promise<number | undefined>
+    getAllFormCount(): Promise<number[] | undefined>
+    getOpeningCount(familyRecipeIndex: number): Promise<number | undefined>
+    getAllOpeningCount(): Promise<number[] | undefined>
+    getNestedInstanceCount(familyRecipeIndex: number): Promise<number | undefined>
+    getAllNestedInstanceCount(): Promise<number[] | undefined>
+    getOpeningTied(familyRecipeIndex: number): Promise<number | undefined>
+    getAllOpeningTied(): Promise<number[] | undefined>
+    getReadMs(familyRecipeIndex: number): Promise<number | undefined>
+    getAllReadMs(): Promise<number[] | undefined>
+    
+    getFamilyIndex(familyRecipeIndex: number): Promise<number | undefined>
+    getAllFamilyIndex(): Promise<number[] | undefined>
+    getFamily(familyRecipeIndex: number): Promise<IFamily | undefined>
+}
+
+export class FamilyRecipe implements IFamilyRecipe {
+    index: number
+    readStatus?: number
+    refusal?: string
+    flexibility?: number
+    reading?: string
+    placementType?: string
+    isParametric?: boolean
+    currentTypeName?: string
+    labelledDimensionCount?: number
+    drivingDimensionCount?: number
+    lockCount?: number
+    formCount?: number
+    openingCount?: number
+    nestedInstanceCount?: number
+    openingTied?: number
+    readMs?: number
+    
+    familyIndex?: number
+    family?: IFamily
+    
+    static async createFromTable(table: IFamilyRecipeTable, index: number): Promise<IFamilyRecipe> {
+        let result = new FamilyRecipe()
+        result.index = index
+        
+        await Promise.all([
+            table.getReadStatus(index).then(v => result.readStatus = v),
+            table.getRefusal(index).then(v => result.refusal = v),
+            table.getFlexibility(index).then(v => result.flexibility = v),
+            table.getReading(index).then(v => result.reading = v),
+            table.getPlacementType(index).then(v => result.placementType = v),
+            table.getIsParametric(index).then(v => result.isParametric = v),
+            table.getCurrentTypeName(index).then(v => result.currentTypeName = v),
+            table.getLabelledDimensionCount(index).then(v => result.labelledDimensionCount = v),
+            table.getDrivingDimensionCount(index).then(v => result.drivingDimensionCount = v),
+            table.getLockCount(index).then(v => result.lockCount = v),
+            table.getFormCount(index).then(v => result.formCount = v),
+            table.getOpeningCount(index).then(v => result.openingCount = v),
+            table.getNestedInstanceCount(index).then(v => result.nestedInstanceCount = v),
+            table.getOpeningTied(index).then(v => result.openingTied = v),
+            table.getReadMs(index).then(v => result.readMs = v),
+            table.getFamilyIndex(index).then(v => result.familyIndex = v),
+        ])
+        
+        return result
+    }
+}
+
+export class FamilyRecipeTable implements IFamilyRecipeTable {
+    private document: VimDocument
+    private entityTable: EntityTable
+    
+    static async createFromDocument(document: VimDocument): Promise<IFamilyRecipeTable | undefined> {
+        const entity = await document.entities.getBfast("Vim.FamilyRecipe")
+        
+        if (!entity) {
+            return undefined
+        }
+        
+        let table = new FamilyRecipeTable()
+        table.document = document
+        table.entityTable = new EntityTable(entity, document.strings)
+        
+        return table
+    }
+    
+    getCount(): Promise<number> {
+        return this.entityTable.getCount()
+    }
+    
+    async get(familyRecipeIndex: number): Promise<IFamilyRecipe> {
+        return await FamilyRecipe.createFromTable(this, familyRecipeIndex)
+    }
+    
+    async getAll(): Promise<IFamilyRecipe[]> {
+        const localTable = await this.entityTable.getLocal()
+        
+        let readStatus: number[] | undefined
+        let refusal: string[] | undefined
+        let flexibility: number[] | undefined
+        let reading: string[] | undefined
+        let placementType: string[] | undefined
+        let isParametric: boolean[] | undefined
+        let currentTypeName: string[] | undefined
+        let labelledDimensionCount: number[] | undefined
+        let drivingDimensionCount: number[] | undefined
+        let lockCount: number[] | undefined
+        let formCount: number[] | undefined
+        let openingCount: number[] | undefined
+        let nestedInstanceCount: number[] | undefined
+        let openingTied: number[] | undefined
+        let readMs: number[] | undefined
+        let familyIndex: number[] | undefined
+        
+        await Promise.all([
+            (async () => { readStatus = (await localTable.getNumberArray("int:ReadStatus")) })(),
+            (async () => { refusal = (await localTable.getStringArray("string:Refusal")) })(),
+            (async () => { flexibility = (await localTable.getNumberArray("int:Flexibility")) })(),
+            (async () => { reading = (await localTable.getStringArray("string:Reading")) })(),
+            (async () => { placementType = (await localTable.getStringArray("string:PlacementType")) })(),
+            (async () => { isParametric = (await localTable.getBooleanArray("byte:IsParametric")) })(),
+            (async () => { currentTypeName = (await localTable.getStringArray("string:CurrentTypeName")) })(),
+            (async () => { labelledDimensionCount = (await localTable.getNumberArray("int:LabelledDimensionCount")) })(),
+            (async () => { drivingDimensionCount = (await localTable.getNumberArray("int:DrivingDimensionCount")) })(),
+            (async () => { lockCount = (await localTable.getNumberArray("int:LockCount")) })(),
+            (async () => { formCount = (await localTable.getNumberArray("int:FormCount")) })(),
+            (async () => { openingCount = (await localTable.getNumberArray("int:OpeningCount")) })(),
+            (async () => { nestedInstanceCount = (await localTable.getNumberArray("int:NestedInstanceCount")) })(),
+            (async () => { openingTied = (await localTable.getNumberArray("int:OpeningTied")) })(),
+            (async () => { readMs = (await localTable.getNumberArray("int:ReadMs")) })(),
+            (async () => { familyIndex = (await localTable.getNumberArray("index:Vim.Family:Family")) })(),
+        ])
+        
+        let familyRecipe: IFamilyRecipe[] = []
+        
+        const rowCount = await this.getCount()
+        for (let i = 0; i < rowCount; i++) {
+            familyRecipe.push({
+                index: i,
+                readStatus: readStatus ? readStatus[i] : undefined,
+                refusal: refusal ? refusal[i] : undefined,
+                flexibility: flexibility ? flexibility[i] : undefined,
+                reading: reading ? reading[i] : undefined,
+                placementType: placementType ? placementType[i] : undefined,
+                isParametric: isParametric ? isParametric[i] : undefined,
+                currentTypeName: currentTypeName ? currentTypeName[i] : undefined,
+                labelledDimensionCount: labelledDimensionCount ? labelledDimensionCount[i] : undefined,
+                drivingDimensionCount: drivingDimensionCount ? drivingDimensionCount[i] : undefined,
+                lockCount: lockCount ? lockCount[i] : undefined,
+                formCount: formCount ? formCount[i] : undefined,
+                openingCount: openingCount ? openingCount[i] : undefined,
+                nestedInstanceCount: nestedInstanceCount ? nestedInstanceCount[i] : undefined,
+                openingTied: openingTied ? openingTied[i] : undefined,
+                readMs: readMs ? readMs[i] : undefined,
+                familyIndex: familyIndex ? familyIndex[i] : undefined
+            })
+        }
+        
+        return familyRecipe
+    }
+    
+    async getReadStatus(familyRecipeIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(familyRecipeIndex, "int:ReadStatus"))
+    }
+    
+    async getAllReadStatus(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("int:ReadStatus"))
+    }
+    
+    async getRefusal(familyRecipeIndex: number): Promise<string | undefined> {
+        return (await this.entityTable.getString(familyRecipeIndex, "string:Refusal"))
+    }
+    
+    async getAllRefusal(): Promise<string[] | undefined> {
+        return (await this.entityTable.getStringArray("string:Refusal"))
+    }
+    
+    async getFlexibility(familyRecipeIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(familyRecipeIndex, "int:Flexibility"))
+    }
+    
+    async getAllFlexibility(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("int:Flexibility"))
+    }
+    
+    async getReading(familyRecipeIndex: number): Promise<string | undefined> {
+        return (await this.entityTable.getString(familyRecipeIndex, "string:Reading"))
+    }
+    
+    async getAllReading(): Promise<string[] | undefined> {
+        return (await this.entityTable.getStringArray("string:Reading"))
+    }
+    
+    async getPlacementType(familyRecipeIndex: number): Promise<string | undefined> {
+        return (await this.entityTable.getString(familyRecipeIndex, "string:PlacementType"))
+    }
+    
+    async getAllPlacementType(): Promise<string[] | undefined> {
+        return (await this.entityTable.getStringArray("string:PlacementType"))
+    }
+    
+    async getIsParametric(familyRecipeIndex: number): Promise<boolean | undefined> {
+        return (await this.entityTable.getBoolean(familyRecipeIndex, "byte:IsParametric"))
+    }
+    
+    async getAllIsParametric(): Promise<boolean[] | undefined> {
+        return (await this.entityTable.getBooleanArray("byte:IsParametric"))
+    }
+    
+    async getCurrentTypeName(familyRecipeIndex: number): Promise<string | undefined> {
+        return (await this.entityTable.getString(familyRecipeIndex, "string:CurrentTypeName"))
+    }
+    
+    async getAllCurrentTypeName(): Promise<string[] | undefined> {
+        return (await this.entityTable.getStringArray("string:CurrentTypeName"))
+    }
+    
+    async getLabelledDimensionCount(familyRecipeIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(familyRecipeIndex, "int:LabelledDimensionCount"))
+    }
+    
+    async getAllLabelledDimensionCount(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("int:LabelledDimensionCount"))
+    }
+    
+    async getDrivingDimensionCount(familyRecipeIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(familyRecipeIndex, "int:DrivingDimensionCount"))
+    }
+    
+    async getAllDrivingDimensionCount(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("int:DrivingDimensionCount"))
+    }
+    
+    async getLockCount(familyRecipeIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(familyRecipeIndex, "int:LockCount"))
+    }
+    
+    async getAllLockCount(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("int:LockCount"))
+    }
+    
+    async getFormCount(familyRecipeIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(familyRecipeIndex, "int:FormCount"))
+    }
+    
+    async getAllFormCount(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("int:FormCount"))
+    }
+    
+    async getOpeningCount(familyRecipeIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(familyRecipeIndex, "int:OpeningCount"))
+    }
+    
+    async getAllOpeningCount(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("int:OpeningCount"))
+    }
+    
+    async getNestedInstanceCount(familyRecipeIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(familyRecipeIndex, "int:NestedInstanceCount"))
+    }
+    
+    async getAllNestedInstanceCount(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("int:NestedInstanceCount"))
+    }
+    
+    async getOpeningTied(familyRecipeIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(familyRecipeIndex, "int:OpeningTied"))
+    }
+    
+    async getAllOpeningTied(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("int:OpeningTied"))
+    }
+    
+    async getReadMs(familyRecipeIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(familyRecipeIndex, "int:ReadMs"))
+    }
+    
+    async getAllReadMs(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("int:ReadMs"))
+    }
+    
+    async getFamilyIndex(familyRecipeIndex: number): Promise<number | undefined> {
+        return await this.entityTable.getNumber(familyRecipeIndex, "index:Vim.Family:Family")
+    }
+    
+    async getAllFamilyIndex(): Promise<number[] | undefined> {
+        return await this.entityTable.getNumberArray("index:Vim.Family:Family")
+    }
+    
+    async getFamily(familyRecipeIndex: number): Promise<IFamily | undefined> {
+        const index = await this.getFamilyIndex(familyRecipeIndex)
+        
+        if (index === undefined) {
+            return undefined
+        }
+        
+        return await this.document.family?.get(index)
+    }
+    
+}
+
+export interface IFamilyRecipeParameter {
+    index: number
+    name?: string
+    familyElementId?: bigint
+    guid?: string
+    dataType?: string
+    storageType?: string
+    isInstance?: boolean
+    isReporting?: boolean
+    isShared?: boolean
+    isDeterminedByFormula?: boolean
+    formula?: string
+    drives?: number
+    
+    familyIndex?: number
+    family?: IFamily
+}
+
+export interface IFamilyRecipeParameterTable {
+    getCount(): Promise<number>
+    get(familyRecipeParameterIndex: number): Promise<IFamilyRecipeParameter>
+    getAll(): Promise<IFamilyRecipeParameter[]>
+    
+    getName(familyRecipeParameterIndex: number): Promise<string | undefined>
+    getAllName(): Promise<string[] | undefined>
+    getFamilyElementId(familyRecipeParameterIndex: number): Promise<bigint | undefined>
+    getAllFamilyElementId(): Promise<BigInt64Array | undefined>
+    getGuid(familyRecipeParameterIndex: number): Promise<string | undefined>
+    getAllGuid(): Promise<string[] | undefined>
+    getDataType(familyRecipeParameterIndex: number): Promise<string | undefined>
+    getAllDataType(): Promise<string[] | undefined>
+    getStorageType(familyRecipeParameterIndex: number): Promise<string | undefined>
+    getAllStorageType(): Promise<string[] | undefined>
+    getIsInstance(familyRecipeParameterIndex: number): Promise<boolean | undefined>
+    getAllIsInstance(): Promise<boolean[] | undefined>
+    getIsReporting(familyRecipeParameterIndex: number): Promise<boolean | undefined>
+    getAllIsReporting(): Promise<boolean[] | undefined>
+    getIsShared(familyRecipeParameterIndex: number): Promise<boolean | undefined>
+    getAllIsShared(): Promise<boolean[] | undefined>
+    getIsDeterminedByFormula(familyRecipeParameterIndex: number): Promise<boolean | undefined>
+    getAllIsDeterminedByFormula(): Promise<boolean[] | undefined>
+    getFormula(familyRecipeParameterIndex: number): Promise<string | undefined>
+    getAllFormula(): Promise<string[] | undefined>
+    getDrives(familyRecipeParameterIndex: number): Promise<number | undefined>
+    getAllDrives(): Promise<number[] | undefined>
+    
+    getFamilyIndex(familyRecipeParameterIndex: number): Promise<number | undefined>
+    getAllFamilyIndex(): Promise<number[] | undefined>
+    getFamily(familyRecipeParameterIndex: number): Promise<IFamily | undefined>
+}
+
+export class FamilyRecipeParameter implements IFamilyRecipeParameter {
+    index: number
+    name?: string
+    familyElementId?: bigint
+    guid?: string
+    dataType?: string
+    storageType?: string
+    isInstance?: boolean
+    isReporting?: boolean
+    isShared?: boolean
+    isDeterminedByFormula?: boolean
+    formula?: string
+    drives?: number
+    
+    familyIndex?: number
+    family?: IFamily
+    
+    static async createFromTable(table: IFamilyRecipeParameterTable, index: number): Promise<IFamilyRecipeParameter> {
+        let result = new FamilyRecipeParameter()
+        result.index = index
+        
+        await Promise.all([
+            table.getName(index).then(v => result.name = v),
+            table.getFamilyElementId(index).then(v => result.familyElementId = v),
+            table.getGuid(index).then(v => result.guid = v),
+            table.getDataType(index).then(v => result.dataType = v),
+            table.getStorageType(index).then(v => result.storageType = v),
+            table.getIsInstance(index).then(v => result.isInstance = v),
+            table.getIsReporting(index).then(v => result.isReporting = v),
+            table.getIsShared(index).then(v => result.isShared = v),
+            table.getIsDeterminedByFormula(index).then(v => result.isDeterminedByFormula = v),
+            table.getFormula(index).then(v => result.formula = v),
+            table.getDrives(index).then(v => result.drives = v),
+            table.getFamilyIndex(index).then(v => result.familyIndex = v),
+        ])
+        
+        return result
+    }
+}
+
+export class FamilyRecipeParameterTable implements IFamilyRecipeParameterTable {
+    private document: VimDocument
+    private entityTable: EntityTable
+    
+    static async createFromDocument(document: VimDocument): Promise<IFamilyRecipeParameterTable | undefined> {
+        const entity = await document.entities.getBfast("Vim.FamilyRecipeParameter")
+        
+        if (!entity) {
+            return undefined
+        }
+        
+        let table = new FamilyRecipeParameterTable()
+        table.document = document
+        table.entityTable = new EntityTable(entity, document.strings)
+        
+        return table
+    }
+    
+    getCount(): Promise<number> {
+        return this.entityTable.getCount()
+    }
+    
+    async get(familyRecipeParameterIndex: number): Promise<IFamilyRecipeParameter> {
+        return await FamilyRecipeParameter.createFromTable(this, familyRecipeParameterIndex)
+    }
+    
+    async getAll(): Promise<IFamilyRecipeParameter[]> {
+        const localTable = await this.entityTable.getLocal()
+        
+        let name: string[] | undefined
+        let familyElementId: BigInt64Array | undefined
+        let guid: string[] | undefined
+        let dataType: string[] | undefined
+        let storageType: string[] | undefined
+        let isInstance: boolean[] | undefined
+        let isReporting: boolean[] | undefined
+        let isShared: boolean[] | undefined
+        let isDeterminedByFormula: boolean[] | undefined
+        let formula: string[] | undefined
+        let drives: number[] | undefined
+        let familyIndex: number[] | undefined
+        
+        await Promise.all([
+            (async () => { name = (await localTable.getStringArray("string:Name")) })(),
+            (async () => { familyElementId = (await localTable.getBigIntArray("long:FamilyElementId")) })(),
+            (async () => { guid = (await localTable.getStringArray("string:Guid")) })(),
+            (async () => { dataType = (await localTable.getStringArray("string:DataType")) })(),
+            (async () => { storageType = (await localTable.getStringArray("string:StorageType")) })(),
+            (async () => { isInstance = (await localTable.getBooleanArray("byte:IsInstance")) })(),
+            (async () => { isReporting = (await localTable.getBooleanArray("byte:IsReporting")) })(),
+            (async () => { isShared = (await localTable.getBooleanArray("byte:IsShared")) })(),
+            (async () => { isDeterminedByFormula = (await localTable.getBooleanArray("byte:IsDeterminedByFormula")) })(),
+            (async () => { formula = (await localTable.getStringArray("string:Formula")) })(),
+            (async () => { drives = (await localTable.getNumberArray("int:Drives")) })(),
+            (async () => { familyIndex = (await localTable.getNumberArray("index:Vim.Family:Family")) })(),
+        ])
+        
+        let familyRecipeParameter: IFamilyRecipeParameter[] = []
+        
+        const rowCount = await this.getCount()
+        for (let i = 0; i < rowCount; i++) {
+            familyRecipeParameter.push({
+                index: i,
+                name: name ? name[i] : undefined,
+                familyElementId: familyElementId ? familyElementId[i] : undefined,
+                guid: guid ? guid[i] : undefined,
+                dataType: dataType ? dataType[i] : undefined,
+                storageType: storageType ? storageType[i] : undefined,
+                isInstance: isInstance ? isInstance[i] : undefined,
+                isReporting: isReporting ? isReporting[i] : undefined,
+                isShared: isShared ? isShared[i] : undefined,
+                isDeterminedByFormula: isDeterminedByFormula ? isDeterminedByFormula[i] : undefined,
+                formula: formula ? formula[i] : undefined,
+                drives: drives ? drives[i] : undefined,
+                familyIndex: familyIndex ? familyIndex[i] : undefined
+            })
+        }
+        
+        return familyRecipeParameter
+    }
+    
+    async getName(familyRecipeParameterIndex: number): Promise<string | undefined> {
+        return (await this.entityTable.getString(familyRecipeParameterIndex, "string:Name"))
+    }
+    
+    async getAllName(): Promise<string[] | undefined> {
+        return (await this.entityTable.getStringArray("string:Name"))
+    }
+    
+    async getFamilyElementId(familyRecipeParameterIndex: number): Promise<bigint | undefined> {
+        return (await this.entityTable.getBigInt(familyRecipeParameterIndex, "long:FamilyElementId"))
+    }
+    
+    async getAllFamilyElementId(): Promise<BigInt64Array | undefined> {
+        return (await this.entityTable.getBigIntArray("long:FamilyElementId"))
+    }
+    
+    async getGuid(familyRecipeParameterIndex: number): Promise<string | undefined> {
+        return (await this.entityTable.getString(familyRecipeParameterIndex, "string:Guid"))
+    }
+    
+    async getAllGuid(): Promise<string[] | undefined> {
+        return (await this.entityTable.getStringArray("string:Guid"))
+    }
+    
+    async getDataType(familyRecipeParameterIndex: number): Promise<string | undefined> {
+        return (await this.entityTable.getString(familyRecipeParameterIndex, "string:DataType"))
+    }
+    
+    async getAllDataType(): Promise<string[] | undefined> {
+        return (await this.entityTable.getStringArray("string:DataType"))
+    }
+    
+    async getStorageType(familyRecipeParameterIndex: number): Promise<string | undefined> {
+        return (await this.entityTable.getString(familyRecipeParameterIndex, "string:StorageType"))
+    }
+    
+    async getAllStorageType(): Promise<string[] | undefined> {
+        return (await this.entityTable.getStringArray("string:StorageType"))
+    }
+    
+    async getIsInstance(familyRecipeParameterIndex: number): Promise<boolean | undefined> {
+        return (await this.entityTable.getBoolean(familyRecipeParameterIndex, "byte:IsInstance"))
+    }
+    
+    async getAllIsInstance(): Promise<boolean[] | undefined> {
+        return (await this.entityTable.getBooleanArray("byte:IsInstance"))
+    }
+    
+    async getIsReporting(familyRecipeParameterIndex: number): Promise<boolean | undefined> {
+        return (await this.entityTable.getBoolean(familyRecipeParameterIndex, "byte:IsReporting"))
+    }
+    
+    async getAllIsReporting(): Promise<boolean[] | undefined> {
+        return (await this.entityTable.getBooleanArray("byte:IsReporting"))
+    }
+    
+    async getIsShared(familyRecipeParameterIndex: number): Promise<boolean | undefined> {
+        return (await this.entityTable.getBoolean(familyRecipeParameterIndex, "byte:IsShared"))
+    }
+    
+    async getAllIsShared(): Promise<boolean[] | undefined> {
+        return (await this.entityTable.getBooleanArray("byte:IsShared"))
+    }
+    
+    async getIsDeterminedByFormula(familyRecipeParameterIndex: number): Promise<boolean | undefined> {
+        return (await this.entityTable.getBoolean(familyRecipeParameterIndex, "byte:IsDeterminedByFormula"))
+    }
+    
+    async getAllIsDeterminedByFormula(): Promise<boolean[] | undefined> {
+        return (await this.entityTable.getBooleanArray("byte:IsDeterminedByFormula"))
+    }
+    
+    async getFormula(familyRecipeParameterIndex: number): Promise<string | undefined> {
+        return (await this.entityTable.getString(familyRecipeParameterIndex, "string:Formula"))
+    }
+    
+    async getAllFormula(): Promise<string[] | undefined> {
+        return (await this.entityTable.getStringArray("string:Formula"))
+    }
+    
+    async getDrives(familyRecipeParameterIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(familyRecipeParameterIndex, "int:Drives"))
+    }
+    
+    async getAllDrives(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("int:Drives"))
+    }
+    
+    async getFamilyIndex(familyRecipeParameterIndex: number): Promise<number | undefined> {
+        return await this.entityTable.getNumber(familyRecipeParameterIndex, "index:Vim.Family:Family")
+    }
+    
+    async getAllFamilyIndex(): Promise<number[] | undefined> {
+        return await this.entityTable.getNumberArray("index:Vim.Family:Family")
+    }
+    
+    async getFamily(familyRecipeParameterIndex: number): Promise<IFamily | undefined> {
+        const index = await this.getFamilyIndex(familyRecipeParameterIndex)
+        
+        if (index === undefined) {
+            return undefined
+        }
+        
+        return await this.document.family?.get(index)
+    }
+    
+}
+
+export interface IFamilyTypeValue {
+    index: number
+    typeName?: string
+    value?: string
+    doubleValue?: number
+    integerValue?: number
+    elementIdValue?: bigint
+    
+    familyParameterIndex?: number
+    familyParameter?: IFamilyRecipeParameter
+    familyTypeIndex?: number
+    familyType?: IFamilyType
+}
+
+export interface IFamilyTypeValueTable {
+    getCount(): Promise<number>
+    get(familyTypeValueIndex: number): Promise<IFamilyTypeValue>
+    getAll(): Promise<IFamilyTypeValue[]>
+    
+    getTypeName(familyTypeValueIndex: number): Promise<string | undefined>
+    getAllTypeName(): Promise<string[] | undefined>
+    getValue(familyTypeValueIndex: number): Promise<string | undefined>
+    getAllValue(): Promise<string[] | undefined>
+    getDoubleValue(familyTypeValueIndex: number): Promise<number | undefined>
+    getAllDoubleValue(): Promise<number[] | undefined>
+    getIntegerValue(familyTypeValueIndex: number): Promise<number | undefined>
+    getAllIntegerValue(): Promise<number[] | undefined>
+    getElementIdValue(familyTypeValueIndex: number): Promise<bigint | undefined>
+    getAllElementIdValue(): Promise<BigInt64Array | undefined>
+    
+    getFamilyParameterIndex(familyTypeValueIndex: number): Promise<number | undefined>
+    getAllFamilyParameterIndex(): Promise<number[] | undefined>
+    getFamilyParameter(familyTypeValueIndex: number): Promise<IFamilyRecipeParameter | undefined>
+    getFamilyTypeIndex(familyTypeValueIndex: number): Promise<number | undefined>
+    getAllFamilyTypeIndex(): Promise<number[] | undefined>
+    getFamilyType(familyTypeValueIndex: number): Promise<IFamilyType | undefined>
+}
+
+export class FamilyTypeValue implements IFamilyTypeValue {
+    index: number
+    typeName?: string
+    value?: string
+    doubleValue?: number
+    integerValue?: number
+    elementIdValue?: bigint
+    
+    familyParameterIndex?: number
+    familyParameter?: IFamilyRecipeParameter
+    familyTypeIndex?: number
+    familyType?: IFamilyType
+    
+    static async createFromTable(table: IFamilyTypeValueTable, index: number): Promise<IFamilyTypeValue> {
+        let result = new FamilyTypeValue()
+        result.index = index
+        
+        await Promise.all([
+            table.getTypeName(index).then(v => result.typeName = v),
+            table.getValue(index).then(v => result.value = v),
+            table.getDoubleValue(index).then(v => result.doubleValue = v),
+            table.getIntegerValue(index).then(v => result.integerValue = v),
+            table.getElementIdValue(index).then(v => result.elementIdValue = v),
+            table.getFamilyParameterIndex(index).then(v => result.familyParameterIndex = v),
+            table.getFamilyTypeIndex(index).then(v => result.familyTypeIndex = v),
+        ])
+        
+        return result
+    }
+}
+
+export class FamilyTypeValueTable implements IFamilyTypeValueTable {
+    private document: VimDocument
+    private entityTable: EntityTable
+    
+    static async createFromDocument(document: VimDocument): Promise<IFamilyTypeValueTable | undefined> {
+        const entity = await document.entities.getBfast("Vim.FamilyTypeValue")
+        
+        if (!entity) {
+            return undefined
+        }
+        
+        let table = new FamilyTypeValueTable()
+        table.document = document
+        table.entityTable = new EntityTable(entity, document.strings)
+        
+        return table
+    }
+    
+    getCount(): Promise<number> {
+        return this.entityTable.getCount()
+    }
+    
+    async get(familyTypeValueIndex: number): Promise<IFamilyTypeValue> {
+        return await FamilyTypeValue.createFromTable(this, familyTypeValueIndex)
+    }
+    
+    async getAll(): Promise<IFamilyTypeValue[]> {
+        const localTable = await this.entityTable.getLocal()
+        
+        let typeName: string[] | undefined
+        let value: string[] | undefined
+        let doubleValue: number[] | undefined
+        let integerValue: number[] | undefined
+        let elementIdValue: BigInt64Array | undefined
+        let familyParameterIndex: number[] | undefined
+        let familyTypeIndex: number[] | undefined
+        
+        await Promise.all([
+            (async () => { typeName = (await localTable.getStringArray("string:TypeName")) })(),
+            (async () => { value = (await localTable.getStringArray("string:Value")) })(),
+            (async () => { doubleValue = (await localTable.getNumberArray("double:DoubleValue")) })(),
+            (async () => { integerValue = (await localTable.getNumberArray("int:IntegerValue")) })(),
+            (async () => { elementIdValue = (await localTable.getBigIntArray("long:ElementIdValue")) })(),
+            (async () => { familyParameterIndex = (await localTable.getNumberArray("index:Vim.FamilyRecipeParameter:FamilyParameter")) })(),
+            (async () => { familyTypeIndex = (await localTable.getNumberArray("index:Vim.FamilyType:FamilyType")) })(),
+        ])
+        
+        let familyTypeValue: IFamilyTypeValue[] = []
+        
+        const rowCount = await this.getCount()
+        for (let i = 0; i < rowCount; i++) {
+            familyTypeValue.push({
+                index: i,
+                typeName: typeName ? typeName[i] : undefined,
+                value: value ? value[i] : undefined,
+                doubleValue: doubleValue ? doubleValue[i] : undefined,
+                integerValue: integerValue ? integerValue[i] : undefined,
+                elementIdValue: elementIdValue ? elementIdValue[i] : undefined,
+                familyParameterIndex: familyParameterIndex ? familyParameterIndex[i] : undefined,
+                familyTypeIndex: familyTypeIndex ? familyTypeIndex[i] : undefined
+            })
+        }
+        
+        return familyTypeValue
+    }
+    
+    async getTypeName(familyTypeValueIndex: number): Promise<string | undefined> {
+        return (await this.entityTable.getString(familyTypeValueIndex, "string:TypeName"))
+    }
+    
+    async getAllTypeName(): Promise<string[] | undefined> {
+        return (await this.entityTable.getStringArray("string:TypeName"))
+    }
+    
+    async getValue(familyTypeValueIndex: number): Promise<string | undefined> {
+        return (await this.entityTable.getString(familyTypeValueIndex, "string:Value"))
+    }
+    
+    async getAllValue(): Promise<string[] | undefined> {
+        return (await this.entityTable.getStringArray("string:Value"))
+    }
+    
+    async getDoubleValue(familyTypeValueIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(familyTypeValueIndex, "double:DoubleValue"))
+    }
+    
+    async getAllDoubleValue(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:DoubleValue"))
+    }
+    
+    async getIntegerValue(familyTypeValueIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(familyTypeValueIndex, "int:IntegerValue"))
+    }
+    
+    async getAllIntegerValue(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("int:IntegerValue"))
+    }
+    
+    async getElementIdValue(familyTypeValueIndex: number): Promise<bigint | undefined> {
+        return (await this.entityTable.getBigInt(familyTypeValueIndex, "long:ElementIdValue"))
+    }
+    
+    async getAllElementIdValue(): Promise<BigInt64Array | undefined> {
+        return (await this.entityTable.getBigIntArray("long:ElementIdValue"))
+    }
+    
+    async getFamilyParameterIndex(familyTypeValueIndex: number): Promise<number | undefined> {
+        return await this.entityTable.getNumber(familyTypeValueIndex, "index:Vim.FamilyRecipeParameter:FamilyParameter")
+    }
+    
+    async getAllFamilyParameterIndex(): Promise<number[] | undefined> {
+        return await this.entityTable.getNumberArray("index:Vim.FamilyRecipeParameter:FamilyParameter")
+    }
+    
+    async getFamilyParameter(familyTypeValueIndex: number): Promise<IFamilyRecipeParameter | undefined> {
+        const index = await this.getFamilyParameterIndex(familyTypeValueIndex)
+        
+        if (index === undefined) {
+            return undefined
+        }
+        
+        return await this.document.familyRecipeParameter?.get(index)
+    }
+    
+    async getFamilyTypeIndex(familyTypeValueIndex: number): Promise<number | undefined> {
+        return await this.entityTable.getNumber(familyTypeValueIndex, "index:Vim.FamilyType:FamilyType")
+    }
+    
+    async getAllFamilyTypeIndex(): Promise<number[] | undefined> {
+        return await this.entityTable.getNumberArray("index:Vim.FamilyType:FamilyType")
+    }
+    
+    async getFamilyType(familyTypeValueIndex: number): Promise<IFamilyType | undefined> {
+        const index = await this.getFamilyTypeIndex(familyTypeValueIndex)
+        
+        if (index === undefined) {
+            return undefined
+        }
+        
+        return await this.document.familyType?.get(index)
+    }
+    
+}
+
+export interface IFamilyReferencePlane {
+    index: number
+    familyElementId?: bigint
+    name?: string
+    origin_X?: number
+    origin_Y?: number
+    origin_Z?: number
+    normal_X?: number
+    normal_Y?: number
+    normal_Z?: number
+    isReference?: string
+    definesOrigin?: boolean
+    isDriven?: boolean
+    
+    familyIndex?: number
+    family?: IFamily
+}
+
+export interface IFamilyReferencePlaneTable {
+    getCount(): Promise<number>
+    get(familyReferencePlaneIndex: number): Promise<IFamilyReferencePlane>
+    getAll(): Promise<IFamilyReferencePlane[]>
+    
+    getFamilyElementId(familyReferencePlaneIndex: number): Promise<bigint | undefined>
+    getAllFamilyElementId(): Promise<BigInt64Array | undefined>
+    getName(familyReferencePlaneIndex: number): Promise<string | undefined>
+    getAllName(): Promise<string[] | undefined>
+    getOrigin_X(familyReferencePlaneIndex: number): Promise<number | undefined>
+    getAllOrigin_X(): Promise<number[] | undefined>
+    getOrigin_Y(familyReferencePlaneIndex: number): Promise<number | undefined>
+    getAllOrigin_Y(): Promise<number[] | undefined>
+    getOrigin_Z(familyReferencePlaneIndex: number): Promise<number | undefined>
+    getAllOrigin_Z(): Promise<number[] | undefined>
+    getNormal_X(familyReferencePlaneIndex: number): Promise<number | undefined>
+    getAllNormal_X(): Promise<number[] | undefined>
+    getNormal_Y(familyReferencePlaneIndex: number): Promise<number | undefined>
+    getAllNormal_Y(): Promise<number[] | undefined>
+    getNormal_Z(familyReferencePlaneIndex: number): Promise<number | undefined>
+    getAllNormal_Z(): Promise<number[] | undefined>
+    getIsReference(familyReferencePlaneIndex: number): Promise<string | undefined>
+    getAllIsReference(): Promise<string[] | undefined>
+    getDefinesOrigin(familyReferencePlaneIndex: number): Promise<boolean | undefined>
+    getAllDefinesOrigin(): Promise<boolean[] | undefined>
+    getIsDriven(familyReferencePlaneIndex: number): Promise<boolean | undefined>
+    getAllIsDriven(): Promise<boolean[] | undefined>
+    
+    getFamilyIndex(familyReferencePlaneIndex: number): Promise<number | undefined>
+    getAllFamilyIndex(): Promise<number[] | undefined>
+    getFamily(familyReferencePlaneIndex: number): Promise<IFamily | undefined>
+}
+
+export class FamilyReferencePlane implements IFamilyReferencePlane {
+    index: number
+    familyElementId?: bigint
+    name?: string
+    origin_X?: number
+    origin_Y?: number
+    origin_Z?: number
+    normal_X?: number
+    normal_Y?: number
+    normal_Z?: number
+    isReference?: string
+    definesOrigin?: boolean
+    isDriven?: boolean
+    
+    familyIndex?: number
+    family?: IFamily
+    
+    static async createFromTable(table: IFamilyReferencePlaneTable, index: number): Promise<IFamilyReferencePlane> {
+        let result = new FamilyReferencePlane()
+        result.index = index
+        
+        await Promise.all([
+            table.getFamilyElementId(index).then(v => result.familyElementId = v),
+            table.getName(index).then(v => result.name = v),
+            table.getOrigin_X(index).then(v => result.origin_X = v),
+            table.getOrigin_Y(index).then(v => result.origin_Y = v),
+            table.getOrigin_Z(index).then(v => result.origin_Z = v),
+            table.getNormal_X(index).then(v => result.normal_X = v),
+            table.getNormal_Y(index).then(v => result.normal_Y = v),
+            table.getNormal_Z(index).then(v => result.normal_Z = v),
+            table.getIsReference(index).then(v => result.isReference = v),
+            table.getDefinesOrigin(index).then(v => result.definesOrigin = v),
+            table.getIsDriven(index).then(v => result.isDriven = v),
+            table.getFamilyIndex(index).then(v => result.familyIndex = v),
+        ])
+        
+        return result
+    }
+}
+
+export class FamilyReferencePlaneTable implements IFamilyReferencePlaneTable {
+    private document: VimDocument
+    private entityTable: EntityTable
+    
+    static async createFromDocument(document: VimDocument): Promise<IFamilyReferencePlaneTable | undefined> {
+        const entity = await document.entities.getBfast("Vim.FamilyReferencePlane")
+        
+        if (!entity) {
+            return undefined
+        }
+        
+        let table = new FamilyReferencePlaneTable()
+        table.document = document
+        table.entityTable = new EntityTable(entity, document.strings)
+        
+        return table
+    }
+    
+    getCount(): Promise<number> {
+        return this.entityTable.getCount()
+    }
+    
+    async get(familyReferencePlaneIndex: number): Promise<IFamilyReferencePlane> {
+        return await FamilyReferencePlane.createFromTable(this, familyReferencePlaneIndex)
+    }
+    
+    async getAll(): Promise<IFamilyReferencePlane[]> {
+        const localTable = await this.entityTable.getLocal()
+        
+        let familyElementId: BigInt64Array | undefined
+        let name: string[] | undefined
+        let origin_X: number[] | undefined
+        let origin_Y: number[] | undefined
+        let origin_Z: number[] | undefined
+        let normal_X: number[] | undefined
+        let normal_Y: number[] | undefined
+        let normal_Z: number[] | undefined
+        let isReference: string[] | undefined
+        let definesOrigin: boolean[] | undefined
+        let isDriven: boolean[] | undefined
+        let familyIndex: number[] | undefined
+        
+        await Promise.all([
+            (async () => { familyElementId = (await localTable.getBigIntArray("long:FamilyElementId")) })(),
+            (async () => { name = (await localTable.getStringArray("string:Name")) })(),
+            (async () => { origin_X = (await localTable.getNumberArray("double:Origin.X")) })(),
+            (async () => { origin_Y = (await localTable.getNumberArray("double:Origin.Y")) })(),
+            (async () => { origin_Z = (await localTable.getNumberArray("double:Origin.Z")) })(),
+            (async () => { normal_X = (await localTable.getNumberArray("double:Normal.X")) })(),
+            (async () => { normal_Y = (await localTable.getNumberArray("double:Normal.Y")) })(),
+            (async () => { normal_Z = (await localTable.getNumberArray("double:Normal.Z")) })(),
+            (async () => { isReference = (await localTable.getStringArray("string:IsReference")) })(),
+            (async () => { definesOrigin = (await localTable.getBooleanArray("byte:DefinesOrigin")) })(),
+            (async () => { isDriven = (await localTable.getBooleanArray("byte:IsDriven")) })(),
+            (async () => { familyIndex = (await localTable.getNumberArray("index:Vim.Family:Family")) })(),
+        ])
+        
+        let familyReferencePlane: IFamilyReferencePlane[] = []
+        
+        const rowCount = await this.getCount()
+        for (let i = 0; i < rowCount; i++) {
+            familyReferencePlane.push({
+                index: i,
+                familyElementId: familyElementId ? familyElementId[i] : undefined,
+                name: name ? name[i] : undefined,
+                origin_X: origin_X ? origin_X[i] : undefined,
+                origin_Y: origin_Y ? origin_Y[i] : undefined,
+                origin_Z: origin_Z ? origin_Z[i] : undefined,
+                normal_X: normal_X ? normal_X[i] : undefined,
+                normal_Y: normal_Y ? normal_Y[i] : undefined,
+                normal_Z: normal_Z ? normal_Z[i] : undefined,
+                isReference: isReference ? isReference[i] : undefined,
+                definesOrigin: definesOrigin ? definesOrigin[i] : undefined,
+                isDriven: isDriven ? isDriven[i] : undefined,
+                familyIndex: familyIndex ? familyIndex[i] : undefined
+            })
+        }
+        
+        return familyReferencePlane
+    }
+    
+    async getFamilyElementId(familyReferencePlaneIndex: number): Promise<bigint | undefined> {
+        return (await this.entityTable.getBigInt(familyReferencePlaneIndex, "long:FamilyElementId"))
+    }
+    
+    async getAllFamilyElementId(): Promise<BigInt64Array | undefined> {
+        return (await this.entityTable.getBigIntArray("long:FamilyElementId"))
+    }
+    
+    async getName(familyReferencePlaneIndex: number): Promise<string | undefined> {
+        return (await this.entityTable.getString(familyReferencePlaneIndex, "string:Name"))
+    }
+    
+    async getAllName(): Promise<string[] | undefined> {
+        return (await this.entityTable.getStringArray("string:Name"))
+    }
+    
+    async getOrigin_X(familyReferencePlaneIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(familyReferencePlaneIndex, "double:Origin.X"))
+    }
+    
+    async getAllOrigin_X(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:Origin.X"))
+    }
+    
+    async getOrigin_Y(familyReferencePlaneIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(familyReferencePlaneIndex, "double:Origin.Y"))
+    }
+    
+    async getAllOrigin_Y(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:Origin.Y"))
+    }
+    
+    async getOrigin_Z(familyReferencePlaneIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(familyReferencePlaneIndex, "double:Origin.Z"))
+    }
+    
+    async getAllOrigin_Z(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:Origin.Z"))
+    }
+    
+    async getNormal_X(familyReferencePlaneIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(familyReferencePlaneIndex, "double:Normal.X"))
+    }
+    
+    async getAllNormal_X(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:Normal.X"))
+    }
+    
+    async getNormal_Y(familyReferencePlaneIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(familyReferencePlaneIndex, "double:Normal.Y"))
+    }
+    
+    async getAllNormal_Y(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:Normal.Y"))
+    }
+    
+    async getNormal_Z(familyReferencePlaneIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(familyReferencePlaneIndex, "double:Normal.Z"))
+    }
+    
+    async getAllNormal_Z(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:Normal.Z"))
+    }
+    
+    async getIsReference(familyReferencePlaneIndex: number): Promise<string | undefined> {
+        return (await this.entityTable.getString(familyReferencePlaneIndex, "string:IsReference"))
+    }
+    
+    async getAllIsReference(): Promise<string[] | undefined> {
+        return (await this.entityTable.getStringArray("string:IsReference"))
+    }
+    
+    async getDefinesOrigin(familyReferencePlaneIndex: number): Promise<boolean | undefined> {
+        return (await this.entityTable.getBoolean(familyReferencePlaneIndex, "byte:DefinesOrigin"))
+    }
+    
+    async getAllDefinesOrigin(): Promise<boolean[] | undefined> {
+        return (await this.entityTable.getBooleanArray("byte:DefinesOrigin"))
+    }
+    
+    async getIsDriven(familyReferencePlaneIndex: number): Promise<boolean | undefined> {
+        return (await this.entityTable.getBoolean(familyReferencePlaneIndex, "byte:IsDriven"))
+    }
+    
+    async getAllIsDriven(): Promise<boolean[] | undefined> {
+        return (await this.entityTable.getBooleanArray("byte:IsDriven"))
+    }
+    
+    async getFamilyIndex(familyReferencePlaneIndex: number): Promise<number | undefined> {
+        return await this.entityTable.getNumber(familyReferencePlaneIndex, "index:Vim.Family:Family")
+    }
+    
+    async getAllFamilyIndex(): Promise<number[] | undefined> {
+        return await this.entityTable.getNumberArray("index:Vim.Family:Family")
+    }
+    
+    async getFamily(familyReferencePlaneIndex: number): Promise<IFamily | undefined> {
+        const index = await this.getFamilyIndex(familyReferencePlaneIndex)
+        
+        if (index === undefined) {
+            return undefined
+        }
+        
+        return await this.document.family?.get(index)
+    }
+    
+}
+
+export interface IFamilyForm {
+    index: number
+    familyElementId?: bigint
+    kind?: string
+    isSolid?: boolean
+    isVisible?: boolean
+    subcategory?: string
+    material?: string
+    planeOrigin_X?: number
+    planeOrigin_Y?: number
+    planeOrigin_Z?: number
+    planeNormal_X?: number
+    planeNormal_Y?: number
+    planeNormal_Z?: number
+    planeXDir_X?: number
+    planeXDir_Y?: number
+    planeXDir_Z?: number
+    startOffset?: number
+    endOffset?: number
+    startAngle?: number
+    endAngle?: number
+    isDriven?: boolean
+    isRebuildable?: boolean
+    
+    familyIndex?: number
+    family?: IFamily
+}
+
+export interface IFamilyFormTable {
+    getCount(): Promise<number>
+    get(familyFormIndex: number): Promise<IFamilyForm>
+    getAll(): Promise<IFamilyForm[]>
+    
+    getFamilyElementId(familyFormIndex: number): Promise<bigint | undefined>
+    getAllFamilyElementId(): Promise<BigInt64Array | undefined>
+    getKind(familyFormIndex: number): Promise<string | undefined>
+    getAllKind(): Promise<string[] | undefined>
+    getIsSolid(familyFormIndex: number): Promise<boolean | undefined>
+    getAllIsSolid(): Promise<boolean[] | undefined>
+    getIsVisible(familyFormIndex: number): Promise<boolean | undefined>
+    getAllIsVisible(): Promise<boolean[] | undefined>
+    getSubcategory(familyFormIndex: number): Promise<string | undefined>
+    getAllSubcategory(): Promise<string[] | undefined>
+    getMaterial(familyFormIndex: number): Promise<string | undefined>
+    getAllMaterial(): Promise<string[] | undefined>
+    getPlaneOrigin_X(familyFormIndex: number): Promise<number | undefined>
+    getAllPlaneOrigin_X(): Promise<number[] | undefined>
+    getPlaneOrigin_Y(familyFormIndex: number): Promise<number | undefined>
+    getAllPlaneOrigin_Y(): Promise<number[] | undefined>
+    getPlaneOrigin_Z(familyFormIndex: number): Promise<number | undefined>
+    getAllPlaneOrigin_Z(): Promise<number[] | undefined>
+    getPlaneNormal_X(familyFormIndex: number): Promise<number | undefined>
+    getAllPlaneNormal_X(): Promise<number[] | undefined>
+    getPlaneNormal_Y(familyFormIndex: number): Promise<number | undefined>
+    getAllPlaneNormal_Y(): Promise<number[] | undefined>
+    getPlaneNormal_Z(familyFormIndex: number): Promise<number | undefined>
+    getAllPlaneNormal_Z(): Promise<number[] | undefined>
+    getPlaneXDir_X(familyFormIndex: number): Promise<number | undefined>
+    getAllPlaneXDir_X(): Promise<number[] | undefined>
+    getPlaneXDir_Y(familyFormIndex: number): Promise<number | undefined>
+    getAllPlaneXDir_Y(): Promise<number[] | undefined>
+    getPlaneXDir_Z(familyFormIndex: number): Promise<number | undefined>
+    getAllPlaneXDir_Z(): Promise<number[] | undefined>
+    getStartOffset(familyFormIndex: number): Promise<number | undefined>
+    getAllStartOffset(): Promise<number[] | undefined>
+    getEndOffset(familyFormIndex: number): Promise<number | undefined>
+    getAllEndOffset(): Promise<number[] | undefined>
+    getStartAngle(familyFormIndex: number): Promise<number | undefined>
+    getAllStartAngle(): Promise<number[] | undefined>
+    getEndAngle(familyFormIndex: number): Promise<number | undefined>
+    getAllEndAngle(): Promise<number[] | undefined>
+    getIsDriven(familyFormIndex: number): Promise<boolean | undefined>
+    getAllIsDriven(): Promise<boolean[] | undefined>
+    getIsRebuildable(familyFormIndex: number): Promise<boolean | undefined>
+    getAllIsRebuildable(): Promise<boolean[] | undefined>
+    
+    getFamilyIndex(familyFormIndex: number): Promise<number | undefined>
+    getAllFamilyIndex(): Promise<number[] | undefined>
+    getFamily(familyFormIndex: number): Promise<IFamily | undefined>
+}
+
+export class FamilyForm implements IFamilyForm {
+    index: number
+    familyElementId?: bigint
+    kind?: string
+    isSolid?: boolean
+    isVisible?: boolean
+    subcategory?: string
+    material?: string
+    planeOrigin_X?: number
+    planeOrigin_Y?: number
+    planeOrigin_Z?: number
+    planeNormal_X?: number
+    planeNormal_Y?: number
+    planeNormal_Z?: number
+    planeXDir_X?: number
+    planeXDir_Y?: number
+    planeXDir_Z?: number
+    startOffset?: number
+    endOffset?: number
+    startAngle?: number
+    endAngle?: number
+    isDriven?: boolean
+    isRebuildable?: boolean
+    
+    familyIndex?: number
+    family?: IFamily
+    
+    static async createFromTable(table: IFamilyFormTable, index: number): Promise<IFamilyForm> {
+        let result = new FamilyForm()
+        result.index = index
+        
+        await Promise.all([
+            table.getFamilyElementId(index).then(v => result.familyElementId = v),
+            table.getKind(index).then(v => result.kind = v),
+            table.getIsSolid(index).then(v => result.isSolid = v),
+            table.getIsVisible(index).then(v => result.isVisible = v),
+            table.getSubcategory(index).then(v => result.subcategory = v),
+            table.getMaterial(index).then(v => result.material = v),
+            table.getPlaneOrigin_X(index).then(v => result.planeOrigin_X = v),
+            table.getPlaneOrigin_Y(index).then(v => result.planeOrigin_Y = v),
+            table.getPlaneOrigin_Z(index).then(v => result.planeOrigin_Z = v),
+            table.getPlaneNormal_X(index).then(v => result.planeNormal_X = v),
+            table.getPlaneNormal_Y(index).then(v => result.planeNormal_Y = v),
+            table.getPlaneNormal_Z(index).then(v => result.planeNormal_Z = v),
+            table.getPlaneXDir_X(index).then(v => result.planeXDir_X = v),
+            table.getPlaneXDir_Y(index).then(v => result.planeXDir_Y = v),
+            table.getPlaneXDir_Z(index).then(v => result.planeXDir_Z = v),
+            table.getStartOffset(index).then(v => result.startOffset = v),
+            table.getEndOffset(index).then(v => result.endOffset = v),
+            table.getStartAngle(index).then(v => result.startAngle = v),
+            table.getEndAngle(index).then(v => result.endAngle = v),
+            table.getIsDriven(index).then(v => result.isDriven = v),
+            table.getIsRebuildable(index).then(v => result.isRebuildable = v),
+            table.getFamilyIndex(index).then(v => result.familyIndex = v),
+        ])
+        
+        return result
+    }
+}
+
+export class FamilyFormTable implements IFamilyFormTable {
+    private document: VimDocument
+    private entityTable: EntityTable
+    
+    static async createFromDocument(document: VimDocument): Promise<IFamilyFormTable | undefined> {
+        const entity = await document.entities.getBfast("Vim.FamilyForm")
+        
+        if (!entity) {
+            return undefined
+        }
+        
+        let table = new FamilyFormTable()
+        table.document = document
+        table.entityTable = new EntityTable(entity, document.strings)
+        
+        return table
+    }
+    
+    getCount(): Promise<number> {
+        return this.entityTable.getCount()
+    }
+    
+    async get(familyFormIndex: number): Promise<IFamilyForm> {
+        return await FamilyForm.createFromTable(this, familyFormIndex)
+    }
+    
+    async getAll(): Promise<IFamilyForm[]> {
+        const localTable = await this.entityTable.getLocal()
+        
+        let familyElementId: BigInt64Array | undefined
+        let kind: string[] | undefined
+        let isSolid: boolean[] | undefined
+        let isVisible: boolean[] | undefined
+        let subcategory: string[] | undefined
+        let material: string[] | undefined
+        let planeOrigin_X: number[] | undefined
+        let planeOrigin_Y: number[] | undefined
+        let planeOrigin_Z: number[] | undefined
+        let planeNormal_X: number[] | undefined
+        let planeNormal_Y: number[] | undefined
+        let planeNormal_Z: number[] | undefined
+        let planeXDir_X: number[] | undefined
+        let planeXDir_Y: number[] | undefined
+        let planeXDir_Z: number[] | undefined
+        let startOffset: number[] | undefined
+        let endOffset: number[] | undefined
+        let startAngle: number[] | undefined
+        let endAngle: number[] | undefined
+        let isDriven: boolean[] | undefined
+        let isRebuildable: boolean[] | undefined
+        let familyIndex: number[] | undefined
+        
+        await Promise.all([
+            (async () => { familyElementId = (await localTable.getBigIntArray("long:FamilyElementId")) })(),
+            (async () => { kind = (await localTable.getStringArray("string:Kind")) })(),
+            (async () => { isSolid = (await localTable.getBooleanArray("byte:IsSolid")) })(),
+            (async () => { isVisible = (await localTable.getBooleanArray("byte:IsVisible")) })(),
+            (async () => { subcategory = (await localTable.getStringArray("string:Subcategory")) })(),
+            (async () => { material = (await localTable.getStringArray("string:Material")) })(),
+            (async () => { planeOrigin_X = (await localTable.getNumberArray("double:PlaneOrigin.X")) })(),
+            (async () => { planeOrigin_Y = (await localTable.getNumberArray("double:PlaneOrigin.Y")) })(),
+            (async () => { planeOrigin_Z = (await localTable.getNumberArray("double:PlaneOrigin.Z")) })(),
+            (async () => { planeNormal_X = (await localTable.getNumberArray("double:PlaneNormal.X")) })(),
+            (async () => { planeNormal_Y = (await localTable.getNumberArray("double:PlaneNormal.Y")) })(),
+            (async () => { planeNormal_Z = (await localTable.getNumberArray("double:PlaneNormal.Z")) })(),
+            (async () => { planeXDir_X = (await localTable.getNumberArray("double:PlaneXDir.X")) })(),
+            (async () => { planeXDir_Y = (await localTable.getNumberArray("double:PlaneXDir.Y")) })(),
+            (async () => { planeXDir_Z = (await localTable.getNumberArray("double:PlaneXDir.Z")) })(),
+            (async () => { startOffset = (await localTable.getNumberArray("double:StartOffset")) })(),
+            (async () => { endOffset = (await localTable.getNumberArray("double:EndOffset")) })(),
+            (async () => { startAngle = (await localTable.getNumberArray("double:StartAngle")) })(),
+            (async () => { endAngle = (await localTable.getNumberArray("double:EndAngle")) })(),
+            (async () => { isDriven = (await localTable.getBooleanArray("byte:IsDriven")) })(),
+            (async () => { isRebuildable = (await localTable.getBooleanArray("byte:IsRebuildable")) })(),
+            (async () => { familyIndex = (await localTable.getNumberArray("index:Vim.Family:Family")) })(),
+        ])
+        
+        let familyForm: IFamilyForm[] = []
+        
+        const rowCount = await this.getCount()
+        for (let i = 0; i < rowCount; i++) {
+            familyForm.push({
+                index: i,
+                familyElementId: familyElementId ? familyElementId[i] : undefined,
+                kind: kind ? kind[i] : undefined,
+                isSolid: isSolid ? isSolid[i] : undefined,
+                isVisible: isVisible ? isVisible[i] : undefined,
+                subcategory: subcategory ? subcategory[i] : undefined,
+                material: material ? material[i] : undefined,
+                planeOrigin_X: planeOrigin_X ? planeOrigin_X[i] : undefined,
+                planeOrigin_Y: planeOrigin_Y ? planeOrigin_Y[i] : undefined,
+                planeOrigin_Z: planeOrigin_Z ? planeOrigin_Z[i] : undefined,
+                planeNormal_X: planeNormal_X ? planeNormal_X[i] : undefined,
+                planeNormal_Y: planeNormal_Y ? planeNormal_Y[i] : undefined,
+                planeNormal_Z: planeNormal_Z ? planeNormal_Z[i] : undefined,
+                planeXDir_X: planeXDir_X ? planeXDir_X[i] : undefined,
+                planeXDir_Y: planeXDir_Y ? planeXDir_Y[i] : undefined,
+                planeXDir_Z: planeXDir_Z ? planeXDir_Z[i] : undefined,
+                startOffset: startOffset ? startOffset[i] : undefined,
+                endOffset: endOffset ? endOffset[i] : undefined,
+                startAngle: startAngle ? startAngle[i] : undefined,
+                endAngle: endAngle ? endAngle[i] : undefined,
+                isDriven: isDriven ? isDriven[i] : undefined,
+                isRebuildable: isRebuildable ? isRebuildable[i] : undefined,
+                familyIndex: familyIndex ? familyIndex[i] : undefined
+            })
+        }
+        
+        return familyForm
+    }
+    
+    async getFamilyElementId(familyFormIndex: number): Promise<bigint | undefined> {
+        return (await this.entityTable.getBigInt(familyFormIndex, "long:FamilyElementId"))
+    }
+    
+    async getAllFamilyElementId(): Promise<BigInt64Array | undefined> {
+        return (await this.entityTable.getBigIntArray("long:FamilyElementId"))
+    }
+    
+    async getKind(familyFormIndex: number): Promise<string | undefined> {
+        return (await this.entityTable.getString(familyFormIndex, "string:Kind"))
+    }
+    
+    async getAllKind(): Promise<string[] | undefined> {
+        return (await this.entityTable.getStringArray("string:Kind"))
+    }
+    
+    async getIsSolid(familyFormIndex: number): Promise<boolean | undefined> {
+        return (await this.entityTable.getBoolean(familyFormIndex, "byte:IsSolid"))
+    }
+    
+    async getAllIsSolid(): Promise<boolean[] | undefined> {
+        return (await this.entityTable.getBooleanArray("byte:IsSolid"))
+    }
+    
+    async getIsVisible(familyFormIndex: number): Promise<boolean | undefined> {
+        return (await this.entityTable.getBoolean(familyFormIndex, "byte:IsVisible"))
+    }
+    
+    async getAllIsVisible(): Promise<boolean[] | undefined> {
+        return (await this.entityTable.getBooleanArray("byte:IsVisible"))
+    }
+    
+    async getSubcategory(familyFormIndex: number): Promise<string | undefined> {
+        return (await this.entityTable.getString(familyFormIndex, "string:Subcategory"))
+    }
+    
+    async getAllSubcategory(): Promise<string[] | undefined> {
+        return (await this.entityTable.getStringArray("string:Subcategory"))
+    }
+    
+    async getMaterial(familyFormIndex: number): Promise<string | undefined> {
+        return (await this.entityTable.getString(familyFormIndex, "string:Material"))
+    }
+    
+    async getAllMaterial(): Promise<string[] | undefined> {
+        return (await this.entityTable.getStringArray("string:Material"))
+    }
+    
+    async getPlaneOrigin_X(familyFormIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(familyFormIndex, "double:PlaneOrigin.X"))
+    }
+    
+    async getAllPlaneOrigin_X(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:PlaneOrigin.X"))
+    }
+    
+    async getPlaneOrigin_Y(familyFormIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(familyFormIndex, "double:PlaneOrigin.Y"))
+    }
+    
+    async getAllPlaneOrigin_Y(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:PlaneOrigin.Y"))
+    }
+    
+    async getPlaneOrigin_Z(familyFormIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(familyFormIndex, "double:PlaneOrigin.Z"))
+    }
+    
+    async getAllPlaneOrigin_Z(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:PlaneOrigin.Z"))
+    }
+    
+    async getPlaneNormal_X(familyFormIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(familyFormIndex, "double:PlaneNormal.X"))
+    }
+    
+    async getAllPlaneNormal_X(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:PlaneNormal.X"))
+    }
+    
+    async getPlaneNormal_Y(familyFormIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(familyFormIndex, "double:PlaneNormal.Y"))
+    }
+    
+    async getAllPlaneNormal_Y(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:PlaneNormal.Y"))
+    }
+    
+    async getPlaneNormal_Z(familyFormIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(familyFormIndex, "double:PlaneNormal.Z"))
+    }
+    
+    async getAllPlaneNormal_Z(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:PlaneNormal.Z"))
+    }
+    
+    async getPlaneXDir_X(familyFormIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(familyFormIndex, "double:PlaneXDir.X"))
+    }
+    
+    async getAllPlaneXDir_X(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:PlaneXDir.X"))
+    }
+    
+    async getPlaneXDir_Y(familyFormIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(familyFormIndex, "double:PlaneXDir.Y"))
+    }
+    
+    async getAllPlaneXDir_Y(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:PlaneXDir.Y"))
+    }
+    
+    async getPlaneXDir_Z(familyFormIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(familyFormIndex, "double:PlaneXDir.Z"))
+    }
+    
+    async getAllPlaneXDir_Z(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:PlaneXDir.Z"))
+    }
+    
+    async getStartOffset(familyFormIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(familyFormIndex, "double:StartOffset"))
+    }
+    
+    async getAllStartOffset(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:StartOffset"))
+    }
+    
+    async getEndOffset(familyFormIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(familyFormIndex, "double:EndOffset"))
+    }
+    
+    async getAllEndOffset(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:EndOffset"))
+    }
+    
+    async getStartAngle(familyFormIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(familyFormIndex, "double:StartAngle"))
+    }
+    
+    async getAllStartAngle(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:StartAngle"))
+    }
+    
+    async getEndAngle(familyFormIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(familyFormIndex, "double:EndAngle"))
+    }
+    
+    async getAllEndAngle(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:EndAngle"))
+    }
+    
+    async getIsDriven(familyFormIndex: number): Promise<boolean | undefined> {
+        return (await this.entityTable.getBoolean(familyFormIndex, "byte:IsDriven"))
+    }
+    
+    async getAllIsDriven(): Promise<boolean[] | undefined> {
+        return (await this.entityTable.getBooleanArray("byte:IsDriven"))
+    }
+    
+    async getIsRebuildable(familyFormIndex: number): Promise<boolean | undefined> {
+        return (await this.entityTable.getBoolean(familyFormIndex, "byte:IsRebuildable"))
+    }
+    
+    async getAllIsRebuildable(): Promise<boolean[] | undefined> {
+        return (await this.entityTable.getBooleanArray("byte:IsRebuildable"))
+    }
+    
+    async getFamilyIndex(familyFormIndex: number): Promise<number | undefined> {
+        return await this.entityTable.getNumber(familyFormIndex, "index:Vim.Family:Family")
+    }
+    
+    async getAllFamilyIndex(): Promise<number[] | undefined> {
+        return await this.entityTable.getNumberArray("index:Vim.Family:Family")
+    }
+    
+    async getFamily(familyFormIndex: number): Promise<IFamily | undefined> {
+        const index = await this.getFamilyIndex(familyFormIndex)
+        
+        if (index === undefined) {
+            return undefined
+        }
+        
+        return await this.document.family?.get(index)
+    }
+    
+}
+
+export interface IFamilySketchCurve {
+    index: number
+    role?: number
+    loop?: number
+    order?: number
+    curveElementId?: bigint
+    curveKind?: number
+    start_X?: number
+    start_Y?: number
+    start_Z?: number
+    end_X?: number
+    end_Y?: number
+    end_Z?: number
+    mid_X?: number
+    mid_Y?: number
+    mid_Z?: number
+    center_X?: number
+    center_Y?: number
+    center_Z?: number
+    radius?: number
+    lockCount?: number
+    
+    familyFormIndex?: number
+    familyForm?: IFamilyForm
+}
+
+export interface IFamilySketchCurveTable {
+    getCount(): Promise<number>
+    get(familySketchCurveIndex: number): Promise<IFamilySketchCurve>
+    getAll(): Promise<IFamilySketchCurve[]>
+    
+    getRole(familySketchCurveIndex: number): Promise<number | undefined>
+    getAllRole(): Promise<number[] | undefined>
+    getLoop(familySketchCurveIndex: number): Promise<number | undefined>
+    getAllLoop(): Promise<number[] | undefined>
+    getOrder(familySketchCurveIndex: number): Promise<number | undefined>
+    getAllOrder(): Promise<number[] | undefined>
+    getCurveElementId(familySketchCurveIndex: number): Promise<bigint | undefined>
+    getAllCurveElementId(): Promise<BigInt64Array | undefined>
+    getCurveKind(familySketchCurveIndex: number): Promise<number | undefined>
+    getAllCurveKind(): Promise<number[] | undefined>
+    getStart_X(familySketchCurveIndex: number): Promise<number | undefined>
+    getAllStart_X(): Promise<number[] | undefined>
+    getStart_Y(familySketchCurveIndex: number): Promise<number | undefined>
+    getAllStart_Y(): Promise<number[] | undefined>
+    getStart_Z(familySketchCurveIndex: number): Promise<number | undefined>
+    getAllStart_Z(): Promise<number[] | undefined>
+    getEnd_X(familySketchCurveIndex: number): Promise<number | undefined>
+    getAllEnd_X(): Promise<number[] | undefined>
+    getEnd_Y(familySketchCurveIndex: number): Promise<number | undefined>
+    getAllEnd_Y(): Promise<number[] | undefined>
+    getEnd_Z(familySketchCurveIndex: number): Promise<number | undefined>
+    getAllEnd_Z(): Promise<number[] | undefined>
+    getMid_X(familySketchCurveIndex: number): Promise<number | undefined>
+    getAllMid_X(): Promise<number[] | undefined>
+    getMid_Y(familySketchCurveIndex: number): Promise<number | undefined>
+    getAllMid_Y(): Promise<number[] | undefined>
+    getMid_Z(familySketchCurveIndex: number): Promise<number | undefined>
+    getAllMid_Z(): Promise<number[] | undefined>
+    getCenter_X(familySketchCurveIndex: number): Promise<number | undefined>
+    getAllCenter_X(): Promise<number[] | undefined>
+    getCenter_Y(familySketchCurveIndex: number): Promise<number | undefined>
+    getAllCenter_Y(): Promise<number[] | undefined>
+    getCenter_Z(familySketchCurveIndex: number): Promise<number | undefined>
+    getAllCenter_Z(): Promise<number[] | undefined>
+    getRadius(familySketchCurveIndex: number): Promise<number | undefined>
+    getAllRadius(): Promise<number[] | undefined>
+    getLockCount(familySketchCurveIndex: number): Promise<number | undefined>
+    getAllLockCount(): Promise<number[] | undefined>
+    
+    getFamilyFormIndex(familySketchCurveIndex: number): Promise<number | undefined>
+    getAllFamilyFormIndex(): Promise<number[] | undefined>
+    getFamilyForm(familySketchCurveIndex: number): Promise<IFamilyForm | undefined>
+}
+
+export class FamilySketchCurve implements IFamilySketchCurve {
+    index: number
+    role?: number
+    loop?: number
+    order?: number
+    curveElementId?: bigint
+    curveKind?: number
+    start_X?: number
+    start_Y?: number
+    start_Z?: number
+    end_X?: number
+    end_Y?: number
+    end_Z?: number
+    mid_X?: number
+    mid_Y?: number
+    mid_Z?: number
+    center_X?: number
+    center_Y?: number
+    center_Z?: number
+    radius?: number
+    lockCount?: number
+    
+    familyFormIndex?: number
+    familyForm?: IFamilyForm
+    
+    static async createFromTable(table: IFamilySketchCurveTable, index: number): Promise<IFamilySketchCurve> {
+        let result = new FamilySketchCurve()
+        result.index = index
+        
+        await Promise.all([
+            table.getRole(index).then(v => result.role = v),
+            table.getLoop(index).then(v => result.loop = v),
+            table.getOrder(index).then(v => result.order = v),
+            table.getCurveElementId(index).then(v => result.curveElementId = v),
+            table.getCurveKind(index).then(v => result.curveKind = v),
+            table.getStart_X(index).then(v => result.start_X = v),
+            table.getStart_Y(index).then(v => result.start_Y = v),
+            table.getStart_Z(index).then(v => result.start_Z = v),
+            table.getEnd_X(index).then(v => result.end_X = v),
+            table.getEnd_Y(index).then(v => result.end_Y = v),
+            table.getEnd_Z(index).then(v => result.end_Z = v),
+            table.getMid_X(index).then(v => result.mid_X = v),
+            table.getMid_Y(index).then(v => result.mid_Y = v),
+            table.getMid_Z(index).then(v => result.mid_Z = v),
+            table.getCenter_X(index).then(v => result.center_X = v),
+            table.getCenter_Y(index).then(v => result.center_Y = v),
+            table.getCenter_Z(index).then(v => result.center_Z = v),
+            table.getRadius(index).then(v => result.radius = v),
+            table.getLockCount(index).then(v => result.lockCount = v),
+            table.getFamilyFormIndex(index).then(v => result.familyFormIndex = v),
+        ])
+        
+        return result
+    }
+}
+
+export class FamilySketchCurveTable implements IFamilySketchCurveTable {
+    private document: VimDocument
+    private entityTable: EntityTable
+    
+    static async createFromDocument(document: VimDocument): Promise<IFamilySketchCurveTable | undefined> {
+        const entity = await document.entities.getBfast("Vim.FamilySketchCurve")
+        
+        if (!entity) {
+            return undefined
+        }
+        
+        let table = new FamilySketchCurveTable()
+        table.document = document
+        table.entityTable = new EntityTable(entity, document.strings)
+        
+        return table
+    }
+    
+    getCount(): Promise<number> {
+        return this.entityTable.getCount()
+    }
+    
+    async get(familySketchCurveIndex: number): Promise<IFamilySketchCurve> {
+        return await FamilySketchCurve.createFromTable(this, familySketchCurveIndex)
+    }
+    
+    async getAll(): Promise<IFamilySketchCurve[]> {
+        const localTable = await this.entityTable.getLocal()
+        
+        let role: number[] | undefined
+        let loop: number[] | undefined
+        let order: number[] | undefined
+        let curveElementId: BigInt64Array | undefined
+        let curveKind: number[] | undefined
+        let start_X: number[] | undefined
+        let start_Y: number[] | undefined
+        let start_Z: number[] | undefined
+        let end_X: number[] | undefined
+        let end_Y: number[] | undefined
+        let end_Z: number[] | undefined
+        let mid_X: number[] | undefined
+        let mid_Y: number[] | undefined
+        let mid_Z: number[] | undefined
+        let center_X: number[] | undefined
+        let center_Y: number[] | undefined
+        let center_Z: number[] | undefined
+        let radius: number[] | undefined
+        let lockCount: number[] | undefined
+        let familyFormIndex: number[] | undefined
+        
+        await Promise.all([
+            (async () => { role = (await localTable.getNumberArray("int:Role")) })(),
+            (async () => { loop = (await localTable.getNumberArray("int:Loop")) })(),
+            (async () => { order = (await localTable.getNumberArray("int:Order")) })(),
+            (async () => { curveElementId = (await localTable.getBigIntArray("long:CurveElementId")) })(),
+            (async () => { curveKind = (await localTable.getNumberArray("int:CurveKind")) })(),
+            (async () => { start_X = (await localTable.getNumberArray("double:Start.X")) })(),
+            (async () => { start_Y = (await localTable.getNumberArray("double:Start.Y")) })(),
+            (async () => { start_Z = (await localTable.getNumberArray("double:Start.Z")) })(),
+            (async () => { end_X = (await localTable.getNumberArray("double:End.X")) })(),
+            (async () => { end_Y = (await localTable.getNumberArray("double:End.Y")) })(),
+            (async () => { end_Z = (await localTable.getNumberArray("double:End.Z")) })(),
+            (async () => { mid_X = (await localTable.getNumberArray("double:Mid.X")) })(),
+            (async () => { mid_Y = (await localTable.getNumberArray("double:Mid.Y")) })(),
+            (async () => { mid_Z = (await localTable.getNumberArray("double:Mid.Z")) })(),
+            (async () => { center_X = (await localTable.getNumberArray("double:Center.X")) })(),
+            (async () => { center_Y = (await localTable.getNumberArray("double:Center.Y")) })(),
+            (async () => { center_Z = (await localTable.getNumberArray("double:Center.Z")) })(),
+            (async () => { radius = (await localTable.getNumberArray("double:Radius")) })(),
+            (async () => { lockCount = (await localTable.getNumberArray("int:LockCount")) })(),
+            (async () => { familyFormIndex = (await localTable.getNumberArray("index:Vim.FamilyForm:FamilyForm")) })(),
+        ])
+        
+        let familySketchCurve: IFamilySketchCurve[] = []
+        
+        const rowCount = await this.getCount()
+        for (let i = 0; i < rowCount; i++) {
+            familySketchCurve.push({
+                index: i,
+                role: role ? role[i] : undefined,
+                loop: loop ? loop[i] : undefined,
+                order: order ? order[i] : undefined,
+                curveElementId: curveElementId ? curveElementId[i] : undefined,
+                curveKind: curveKind ? curveKind[i] : undefined,
+                start_X: start_X ? start_X[i] : undefined,
+                start_Y: start_Y ? start_Y[i] : undefined,
+                start_Z: start_Z ? start_Z[i] : undefined,
+                end_X: end_X ? end_X[i] : undefined,
+                end_Y: end_Y ? end_Y[i] : undefined,
+                end_Z: end_Z ? end_Z[i] : undefined,
+                mid_X: mid_X ? mid_X[i] : undefined,
+                mid_Y: mid_Y ? mid_Y[i] : undefined,
+                mid_Z: mid_Z ? mid_Z[i] : undefined,
+                center_X: center_X ? center_X[i] : undefined,
+                center_Y: center_Y ? center_Y[i] : undefined,
+                center_Z: center_Z ? center_Z[i] : undefined,
+                radius: radius ? radius[i] : undefined,
+                lockCount: lockCount ? lockCount[i] : undefined,
+                familyFormIndex: familyFormIndex ? familyFormIndex[i] : undefined
+            })
+        }
+        
+        return familySketchCurve
+    }
+    
+    async getRole(familySketchCurveIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(familySketchCurveIndex, "int:Role"))
+    }
+    
+    async getAllRole(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("int:Role"))
+    }
+    
+    async getLoop(familySketchCurveIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(familySketchCurveIndex, "int:Loop"))
+    }
+    
+    async getAllLoop(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("int:Loop"))
+    }
+    
+    async getOrder(familySketchCurveIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(familySketchCurveIndex, "int:Order"))
+    }
+    
+    async getAllOrder(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("int:Order"))
+    }
+    
+    async getCurveElementId(familySketchCurveIndex: number): Promise<bigint | undefined> {
+        return (await this.entityTable.getBigInt(familySketchCurveIndex, "long:CurveElementId"))
+    }
+    
+    async getAllCurveElementId(): Promise<BigInt64Array | undefined> {
+        return (await this.entityTable.getBigIntArray("long:CurveElementId"))
+    }
+    
+    async getCurveKind(familySketchCurveIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(familySketchCurveIndex, "int:CurveKind"))
+    }
+    
+    async getAllCurveKind(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("int:CurveKind"))
+    }
+    
+    async getStart_X(familySketchCurveIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(familySketchCurveIndex, "double:Start.X"))
+    }
+    
+    async getAllStart_X(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:Start.X"))
+    }
+    
+    async getStart_Y(familySketchCurveIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(familySketchCurveIndex, "double:Start.Y"))
+    }
+    
+    async getAllStart_Y(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:Start.Y"))
+    }
+    
+    async getStart_Z(familySketchCurveIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(familySketchCurveIndex, "double:Start.Z"))
+    }
+    
+    async getAllStart_Z(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:Start.Z"))
+    }
+    
+    async getEnd_X(familySketchCurveIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(familySketchCurveIndex, "double:End.X"))
+    }
+    
+    async getAllEnd_X(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:End.X"))
+    }
+    
+    async getEnd_Y(familySketchCurveIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(familySketchCurveIndex, "double:End.Y"))
+    }
+    
+    async getAllEnd_Y(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:End.Y"))
+    }
+    
+    async getEnd_Z(familySketchCurveIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(familySketchCurveIndex, "double:End.Z"))
+    }
+    
+    async getAllEnd_Z(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:End.Z"))
+    }
+    
+    async getMid_X(familySketchCurveIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(familySketchCurveIndex, "double:Mid.X"))
+    }
+    
+    async getAllMid_X(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:Mid.X"))
+    }
+    
+    async getMid_Y(familySketchCurveIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(familySketchCurveIndex, "double:Mid.Y"))
+    }
+    
+    async getAllMid_Y(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:Mid.Y"))
+    }
+    
+    async getMid_Z(familySketchCurveIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(familySketchCurveIndex, "double:Mid.Z"))
+    }
+    
+    async getAllMid_Z(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:Mid.Z"))
+    }
+    
+    async getCenter_X(familySketchCurveIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(familySketchCurveIndex, "double:Center.X"))
+    }
+    
+    async getAllCenter_X(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:Center.X"))
+    }
+    
+    async getCenter_Y(familySketchCurveIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(familySketchCurveIndex, "double:Center.Y"))
+    }
+    
+    async getAllCenter_Y(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:Center.Y"))
+    }
+    
+    async getCenter_Z(familySketchCurveIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(familySketchCurveIndex, "double:Center.Z"))
+    }
+    
+    async getAllCenter_Z(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:Center.Z"))
+    }
+    
+    async getRadius(familySketchCurveIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(familySketchCurveIndex, "double:Radius"))
+    }
+    
+    async getAllRadius(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:Radius"))
+    }
+    
+    async getLockCount(familySketchCurveIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(familySketchCurveIndex, "int:LockCount"))
+    }
+    
+    async getAllLockCount(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("int:LockCount"))
+    }
+    
+    async getFamilyFormIndex(familySketchCurveIndex: number): Promise<number | undefined> {
+        return await this.entityTable.getNumber(familySketchCurveIndex, "index:Vim.FamilyForm:FamilyForm")
+    }
+    
+    async getAllFamilyFormIndex(): Promise<number[] | undefined> {
+        return await this.entityTable.getNumberArray("index:Vim.FamilyForm:FamilyForm")
+    }
+    
+    async getFamilyForm(familySketchCurveIndex: number): Promise<IFamilyForm | undefined> {
+        const index = await this.getFamilyFormIndex(familySketchCurveIndex)
+        
+        if (index === undefined) {
+            return undefined
+        }
+        
+        return await this.document.familyForm?.get(index)
+    }
+    
+}
+
+export interface IFamilyConstraint {
+    index: number
+    familyElementId?: bigint
+    kind?: number
+    isLocked?: boolean
+    hasView?: boolean
+    value?: number
+    segmentCount?: number
+    reachesGeometry?: boolean
+    referenceCount?: number
+    
+    familyIndex?: number
+    family?: IFamily
+    familyParameterIndex?: number
+    familyParameter?: IFamilyRecipeParameter
+}
+
+export interface IFamilyConstraintTable {
+    getCount(): Promise<number>
+    get(familyConstraintIndex: number): Promise<IFamilyConstraint>
+    getAll(): Promise<IFamilyConstraint[]>
+    
+    getFamilyElementId(familyConstraintIndex: number): Promise<bigint | undefined>
+    getAllFamilyElementId(): Promise<BigInt64Array | undefined>
+    getKind(familyConstraintIndex: number): Promise<number | undefined>
+    getAllKind(): Promise<number[] | undefined>
+    getIsLocked(familyConstraintIndex: number): Promise<boolean | undefined>
+    getAllIsLocked(): Promise<boolean[] | undefined>
+    getHasView(familyConstraintIndex: number): Promise<boolean | undefined>
+    getAllHasView(): Promise<boolean[] | undefined>
+    getValue(familyConstraintIndex: number): Promise<number | undefined>
+    getAllValue(): Promise<number[] | undefined>
+    getSegmentCount(familyConstraintIndex: number): Promise<number | undefined>
+    getAllSegmentCount(): Promise<number[] | undefined>
+    getReachesGeometry(familyConstraintIndex: number): Promise<boolean | undefined>
+    getAllReachesGeometry(): Promise<boolean[] | undefined>
+    getReferenceCount(familyConstraintIndex: number): Promise<number | undefined>
+    getAllReferenceCount(): Promise<number[] | undefined>
+    
+    getFamilyIndex(familyConstraintIndex: number): Promise<number | undefined>
+    getAllFamilyIndex(): Promise<number[] | undefined>
+    getFamily(familyConstraintIndex: number): Promise<IFamily | undefined>
+    getFamilyParameterIndex(familyConstraintIndex: number): Promise<number | undefined>
+    getAllFamilyParameterIndex(): Promise<number[] | undefined>
+    getFamilyParameter(familyConstraintIndex: number): Promise<IFamilyRecipeParameter | undefined>
+}
+
+export class FamilyConstraint implements IFamilyConstraint {
+    index: number
+    familyElementId?: bigint
+    kind?: number
+    isLocked?: boolean
+    hasView?: boolean
+    value?: number
+    segmentCount?: number
+    reachesGeometry?: boolean
+    referenceCount?: number
+    
+    familyIndex?: number
+    family?: IFamily
+    familyParameterIndex?: number
+    familyParameter?: IFamilyRecipeParameter
+    
+    static async createFromTable(table: IFamilyConstraintTable, index: number): Promise<IFamilyConstraint> {
+        let result = new FamilyConstraint()
+        result.index = index
+        
+        await Promise.all([
+            table.getFamilyElementId(index).then(v => result.familyElementId = v),
+            table.getKind(index).then(v => result.kind = v),
+            table.getIsLocked(index).then(v => result.isLocked = v),
+            table.getHasView(index).then(v => result.hasView = v),
+            table.getValue(index).then(v => result.value = v),
+            table.getSegmentCount(index).then(v => result.segmentCount = v),
+            table.getReachesGeometry(index).then(v => result.reachesGeometry = v),
+            table.getReferenceCount(index).then(v => result.referenceCount = v),
+            table.getFamilyIndex(index).then(v => result.familyIndex = v),
+            table.getFamilyParameterIndex(index).then(v => result.familyParameterIndex = v),
+        ])
+        
+        return result
+    }
+}
+
+export class FamilyConstraintTable implements IFamilyConstraintTable {
+    private document: VimDocument
+    private entityTable: EntityTable
+    
+    static async createFromDocument(document: VimDocument): Promise<IFamilyConstraintTable | undefined> {
+        const entity = await document.entities.getBfast("Vim.FamilyConstraint")
+        
+        if (!entity) {
+            return undefined
+        }
+        
+        let table = new FamilyConstraintTable()
+        table.document = document
+        table.entityTable = new EntityTable(entity, document.strings)
+        
+        return table
+    }
+    
+    getCount(): Promise<number> {
+        return this.entityTable.getCount()
+    }
+    
+    async get(familyConstraintIndex: number): Promise<IFamilyConstraint> {
+        return await FamilyConstraint.createFromTable(this, familyConstraintIndex)
+    }
+    
+    async getAll(): Promise<IFamilyConstraint[]> {
+        const localTable = await this.entityTable.getLocal()
+        
+        let familyElementId: BigInt64Array | undefined
+        let kind: number[] | undefined
+        let isLocked: boolean[] | undefined
+        let hasView: boolean[] | undefined
+        let value: number[] | undefined
+        let segmentCount: number[] | undefined
+        let reachesGeometry: boolean[] | undefined
+        let referenceCount: number[] | undefined
+        let familyIndex: number[] | undefined
+        let familyParameterIndex: number[] | undefined
+        
+        await Promise.all([
+            (async () => { familyElementId = (await localTable.getBigIntArray("long:FamilyElementId")) })(),
+            (async () => { kind = (await localTable.getNumberArray("int:Kind")) })(),
+            (async () => { isLocked = (await localTable.getBooleanArray("byte:IsLocked")) })(),
+            (async () => { hasView = (await localTable.getBooleanArray("byte:HasView")) })(),
+            (async () => { value = (await localTable.getNumberArray("double:Value")) })(),
+            (async () => { segmentCount = (await localTable.getNumberArray("int:SegmentCount")) })(),
+            (async () => { reachesGeometry = (await localTable.getBooleanArray("byte:ReachesGeometry")) })(),
+            (async () => { referenceCount = (await localTable.getNumberArray("int:ReferenceCount")) })(),
+            (async () => { familyIndex = (await localTable.getNumberArray("index:Vim.Family:Family")) })(),
+            (async () => { familyParameterIndex = (await localTable.getNumberArray("index:Vim.FamilyRecipeParameter:FamilyParameter")) })(),
+        ])
+        
+        let familyConstraint: IFamilyConstraint[] = []
+        
+        const rowCount = await this.getCount()
+        for (let i = 0; i < rowCount; i++) {
+            familyConstraint.push({
+                index: i,
+                familyElementId: familyElementId ? familyElementId[i] : undefined,
+                kind: kind ? kind[i] : undefined,
+                isLocked: isLocked ? isLocked[i] : undefined,
+                hasView: hasView ? hasView[i] : undefined,
+                value: value ? value[i] : undefined,
+                segmentCount: segmentCount ? segmentCount[i] : undefined,
+                reachesGeometry: reachesGeometry ? reachesGeometry[i] : undefined,
+                referenceCount: referenceCount ? referenceCount[i] : undefined,
+                familyIndex: familyIndex ? familyIndex[i] : undefined,
+                familyParameterIndex: familyParameterIndex ? familyParameterIndex[i] : undefined
+            })
+        }
+        
+        return familyConstraint
+    }
+    
+    async getFamilyElementId(familyConstraintIndex: number): Promise<bigint | undefined> {
+        return (await this.entityTable.getBigInt(familyConstraintIndex, "long:FamilyElementId"))
+    }
+    
+    async getAllFamilyElementId(): Promise<BigInt64Array | undefined> {
+        return (await this.entityTable.getBigIntArray("long:FamilyElementId"))
+    }
+    
+    async getKind(familyConstraintIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(familyConstraintIndex, "int:Kind"))
+    }
+    
+    async getAllKind(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("int:Kind"))
+    }
+    
+    async getIsLocked(familyConstraintIndex: number): Promise<boolean | undefined> {
+        return (await this.entityTable.getBoolean(familyConstraintIndex, "byte:IsLocked"))
+    }
+    
+    async getAllIsLocked(): Promise<boolean[] | undefined> {
+        return (await this.entityTable.getBooleanArray("byte:IsLocked"))
+    }
+    
+    async getHasView(familyConstraintIndex: number): Promise<boolean | undefined> {
+        return (await this.entityTable.getBoolean(familyConstraintIndex, "byte:HasView"))
+    }
+    
+    async getAllHasView(): Promise<boolean[] | undefined> {
+        return (await this.entityTable.getBooleanArray("byte:HasView"))
+    }
+    
+    async getValue(familyConstraintIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(familyConstraintIndex, "double:Value"))
+    }
+    
+    async getAllValue(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:Value"))
+    }
+    
+    async getSegmentCount(familyConstraintIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(familyConstraintIndex, "int:SegmentCount"))
+    }
+    
+    async getAllSegmentCount(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("int:SegmentCount"))
+    }
+    
+    async getReachesGeometry(familyConstraintIndex: number): Promise<boolean | undefined> {
+        return (await this.entityTable.getBoolean(familyConstraintIndex, "byte:ReachesGeometry"))
+    }
+    
+    async getAllReachesGeometry(): Promise<boolean[] | undefined> {
+        return (await this.entityTable.getBooleanArray("byte:ReachesGeometry"))
+    }
+    
+    async getReferenceCount(familyConstraintIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(familyConstraintIndex, "int:ReferenceCount"))
+    }
+    
+    async getAllReferenceCount(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("int:ReferenceCount"))
+    }
+    
+    async getFamilyIndex(familyConstraintIndex: number): Promise<number | undefined> {
+        return await this.entityTable.getNumber(familyConstraintIndex, "index:Vim.Family:Family")
+    }
+    
+    async getAllFamilyIndex(): Promise<number[] | undefined> {
+        return await this.entityTable.getNumberArray("index:Vim.Family:Family")
+    }
+    
+    async getFamily(familyConstraintIndex: number): Promise<IFamily | undefined> {
+        const index = await this.getFamilyIndex(familyConstraintIndex)
+        
+        if (index === undefined) {
+            return undefined
+        }
+        
+        return await this.document.family?.get(index)
+    }
+    
+    async getFamilyParameterIndex(familyConstraintIndex: number): Promise<number | undefined> {
+        return await this.entityTable.getNumber(familyConstraintIndex, "index:Vim.FamilyRecipeParameter:FamilyParameter")
+    }
+    
+    async getAllFamilyParameterIndex(): Promise<number[] | undefined> {
+        return await this.entityTable.getNumberArray("index:Vim.FamilyRecipeParameter:FamilyParameter")
+    }
+    
+    async getFamilyParameter(familyConstraintIndex: number): Promise<IFamilyRecipeParameter | undefined> {
+        const index = await this.getFamilyParameterIndex(familyConstraintIndex)
+        
+        if (index === undefined) {
+            return undefined
+        }
+        
+        return await this.document.familyRecipeParameter?.get(index)
+    }
+    
+}
+
+export interface IFamilyConstraintReference {
+    index: number
+    order?: number
+    refKind?: number
+    refElementId?: bigint
+    refName?: string
+    referenceType?: string
+    stable?: string
+    
+    familyConstraintIndex?: number
+    familyConstraint?: IFamilyConstraint
+}
+
+export interface IFamilyConstraintReferenceTable {
+    getCount(): Promise<number>
+    get(familyConstraintReferenceIndex: number): Promise<IFamilyConstraintReference>
+    getAll(): Promise<IFamilyConstraintReference[]>
+    
+    getOrder(familyConstraintReferenceIndex: number): Promise<number | undefined>
+    getAllOrder(): Promise<number[] | undefined>
+    getRefKind(familyConstraintReferenceIndex: number): Promise<number | undefined>
+    getAllRefKind(): Promise<number[] | undefined>
+    getRefElementId(familyConstraintReferenceIndex: number): Promise<bigint | undefined>
+    getAllRefElementId(): Promise<BigInt64Array | undefined>
+    getRefName(familyConstraintReferenceIndex: number): Promise<string | undefined>
+    getAllRefName(): Promise<string[] | undefined>
+    getReferenceType(familyConstraintReferenceIndex: number): Promise<string | undefined>
+    getAllReferenceType(): Promise<string[] | undefined>
+    getStable(familyConstraintReferenceIndex: number): Promise<string | undefined>
+    getAllStable(): Promise<string[] | undefined>
+    
+    getFamilyConstraintIndex(familyConstraintReferenceIndex: number): Promise<number | undefined>
+    getAllFamilyConstraintIndex(): Promise<number[] | undefined>
+    getFamilyConstraint(familyConstraintReferenceIndex: number): Promise<IFamilyConstraint | undefined>
+}
+
+export class FamilyConstraintReference implements IFamilyConstraintReference {
+    index: number
+    order?: number
+    refKind?: number
+    refElementId?: bigint
+    refName?: string
+    referenceType?: string
+    stable?: string
+    
+    familyConstraintIndex?: number
+    familyConstraint?: IFamilyConstraint
+    
+    static async createFromTable(table: IFamilyConstraintReferenceTable, index: number): Promise<IFamilyConstraintReference> {
+        let result = new FamilyConstraintReference()
+        result.index = index
+        
+        await Promise.all([
+            table.getOrder(index).then(v => result.order = v),
+            table.getRefKind(index).then(v => result.refKind = v),
+            table.getRefElementId(index).then(v => result.refElementId = v),
+            table.getRefName(index).then(v => result.refName = v),
+            table.getReferenceType(index).then(v => result.referenceType = v),
+            table.getStable(index).then(v => result.stable = v),
+            table.getFamilyConstraintIndex(index).then(v => result.familyConstraintIndex = v),
+        ])
+        
+        return result
+    }
+}
+
+export class FamilyConstraintReferenceTable implements IFamilyConstraintReferenceTable {
+    private document: VimDocument
+    private entityTable: EntityTable
+    
+    static async createFromDocument(document: VimDocument): Promise<IFamilyConstraintReferenceTable | undefined> {
+        const entity = await document.entities.getBfast("Vim.FamilyConstraintReference")
+        
+        if (!entity) {
+            return undefined
+        }
+        
+        let table = new FamilyConstraintReferenceTable()
+        table.document = document
+        table.entityTable = new EntityTable(entity, document.strings)
+        
+        return table
+    }
+    
+    getCount(): Promise<number> {
+        return this.entityTable.getCount()
+    }
+    
+    async get(familyConstraintReferenceIndex: number): Promise<IFamilyConstraintReference> {
+        return await FamilyConstraintReference.createFromTable(this, familyConstraintReferenceIndex)
+    }
+    
+    async getAll(): Promise<IFamilyConstraintReference[]> {
+        const localTable = await this.entityTable.getLocal()
+        
+        let order: number[] | undefined
+        let refKind: number[] | undefined
+        let refElementId: BigInt64Array | undefined
+        let refName: string[] | undefined
+        let referenceType: string[] | undefined
+        let stable: string[] | undefined
+        let familyConstraintIndex: number[] | undefined
+        
+        await Promise.all([
+            (async () => { order = (await localTable.getNumberArray("int:Order")) })(),
+            (async () => { refKind = (await localTable.getNumberArray("int:RefKind")) })(),
+            (async () => { refElementId = (await localTable.getBigIntArray("long:RefElementId")) })(),
+            (async () => { refName = (await localTable.getStringArray("string:RefName")) })(),
+            (async () => { referenceType = (await localTable.getStringArray("string:ReferenceType")) })(),
+            (async () => { stable = (await localTable.getStringArray("string:Stable")) })(),
+            (async () => { familyConstraintIndex = (await localTable.getNumberArray("index:Vim.FamilyConstraint:FamilyConstraint")) })(),
+        ])
+        
+        let familyConstraintReference: IFamilyConstraintReference[] = []
+        
+        const rowCount = await this.getCount()
+        for (let i = 0; i < rowCount; i++) {
+            familyConstraintReference.push({
+                index: i,
+                order: order ? order[i] : undefined,
+                refKind: refKind ? refKind[i] : undefined,
+                refElementId: refElementId ? refElementId[i] : undefined,
+                refName: refName ? refName[i] : undefined,
+                referenceType: referenceType ? referenceType[i] : undefined,
+                stable: stable ? stable[i] : undefined,
+                familyConstraintIndex: familyConstraintIndex ? familyConstraintIndex[i] : undefined
+            })
+        }
+        
+        return familyConstraintReference
+    }
+    
+    async getOrder(familyConstraintReferenceIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(familyConstraintReferenceIndex, "int:Order"))
+    }
+    
+    async getAllOrder(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("int:Order"))
+    }
+    
+    async getRefKind(familyConstraintReferenceIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(familyConstraintReferenceIndex, "int:RefKind"))
+    }
+    
+    async getAllRefKind(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("int:RefKind"))
+    }
+    
+    async getRefElementId(familyConstraintReferenceIndex: number): Promise<bigint | undefined> {
+        return (await this.entityTable.getBigInt(familyConstraintReferenceIndex, "long:RefElementId"))
+    }
+    
+    async getAllRefElementId(): Promise<BigInt64Array | undefined> {
+        return (await this.entityTable.getBigIntArray("long:RefElementId"))
+    }
+    
+    async getRefName(familyConstraintReferenceIndex: number): Promise<string | undefined> {
+        return (await this.entityTable.getString(familyConstraintReferenceIndex, "string:RefName"))
+    }
+    
+    async getAllRefName(): Promise<string[] | undefined> {
+        return (await this.entityTable.getStringArray("string:RefName"))
+    }
+    
+    async getReferenceType(familyConstraintReferenceIndex: number): Promise<string | undefined> {
+        return (await this.entityTable.getString(familyConstraintReferenceIndex, "string:ReferenceType"))
+    }
+    
+    async getAllReferenceType(): Promise<string[] | undefined> {
+        return (await this.entityTable.getStringArray("string:ReferenceType"))
+    }
+    
+    async getStable(familyConstraintReferenceIndex: number): Promise<string | undefined> {
+        return (await this.entityTable.getString(familyConstraintReferenceIndex, "string:Stable"))
+    }
+    
+    async getAllStable(): Promise<string[] | undefined> {
+        return (await this.entityTable.getStringArray("string:Stable"))
+    }
+    
+    async getFamilyConstraintIndex(familyConstraintReferenceIndex: number): Promise<number | undefined> {
+        return await this.entityTable.getNumber(familyConstraintReferenceIndex, "index:Vim.FamilyConstraint:FamilyConstraint")
+    }
+    
+    async getAllFamilyConstraintIndex(): Promise<number[] | undefined> {
+        return await this.entityTable.getNumberArray("index:Vim.FamilyConstraint:FamilyConstraint")
+    }
+    
+    async getFamilyConstraint(familyConstraintReferenceIndex: number): Promise<IFamilyConstraint | undefined> {
+        const index = await this.getFamilyConstraintIndex(familyConstraintReferenceIndex)
+        
+        if (index === undefined) {
+            return undefined
+        }
+        
+        return await this.document.familyConstraint?.get(index)
+    }
+    
+}
+
+export interface IFamilyFormDriver {
+    index: number
+    via?: number
+    
+    familyFormIndex?: number
+    familyForm?: IFamilyForm
+    familyParameterIndex?: number
+    familyParameter?: IFamilyRecipeParameter
+}
+
+export interface IFamilyFormDriverTable {
+    getCount(): Promise<number>
+    get(familyFormDriverIndex: number): Promise<IFamilyFormDriver>
+    getAll(): Promise<IFamilyFormDriver[]>
+    
+    getVia(familyFormDriverIndex: number): Promise<number | undefined>
+    getAllVia(): Promise<number[] | undefined>
+    
+    getFamilyFormIndex(familyFormDriverIndex: number): Promise<number | undefined>
+    getAllFamilyFormIndex(): Promise<number[] | undefined>
+    getFamilyForm(familyFormDriverIndex: number): Promise<IFamilyForm | undefined>
+    getFamilyParameterIndex(familyFormDriverIndex: number): Promise<number | undefined>
+    getAllFamilyParameterIndex(): Promise<number[] | undefined>
+    getFamilyParameter(familyFormDriverIndex: number): Promise<IFamilyRecipeParameter | undefined>
+}
+
+export class FamilyFormDriver implements IFamilyFormDriver {
+    index: number
+    via?: number
+    
+    familyFormIndex?: number
+    familyForm?: IFamilyForm
+    familyParameterIndex?: number
+    familyParameter?: IFamilyRecipeParameter
+    
+    static async createFromTable(table: IFamilyFormDriverTable, index: number): Promise<IFamilyFormDriver> {
+        let result = new FamilyFormDriver()
+        result.index = index
+        
+        await Promise.all([
+            table.getVia(index).then(v => result.via = v),
+            table.getFamilyFormIndex(index).then(v => result.familyFormIndex = v),
+            table.getFamilyParameterIndex(index).then(v => result.familyParameterIndex = v),
+        ])
+        
+        return result
+    }
+}
+
+export class FamilyFormDriverTable implements IFamilyFormDriverTable {
+    private document: VimDocument
+    private entityTable: EntityTable
+    
+    static async createFromDocument(document: VimDocument): Promise<IFamilyFormDriverTable | undefined> {
+        const entity = await document.entities.getBfast("Vim.FamilyFormDriver")
+        
+        if (!entity) {
+            return undefined
+        }
+        
+        let table = new FamilyFormDriverTable()
+        table.document = document
+        table.entityTable = new EntityTable(entity, document.strings)
+        
+        return table
+    }
+    
+    getCount(): Promise<number> {
+        return this.entityTable.getCount()
+    }
+    
+    async get(familyFormDriverIndex: number): Promise<IFamilyFormDriver> {
+        return await FamilyFormDriver.createFromTable(this, familyFormDriverIndex)
+    }
+    
+    async getAll(): Promise<IFamilyFormDriver[]> {
+        const localTable = await this.entityTable.getLocal()
+        
+        let via: number[] | undefined
+        let familyFormIndex: number[] | undefined
+        let familyParameterIndex: number[] | undefined
+        
+        await Promise.all([
+            (async () => { via = (await localTable.getNumberArray("int:Via")) })(),
+            (async () => { familyFormIndex = (await localTable.getNumberArray("index:Vim.FamilyForm:FamilyForm")) })(),
+            (async () => { familyParameterIndex = (await localTable.getNumberArray("index:Vim.FamilyRecipeParameter:FamilyParameter")) })(),
+        ])
+        
+        let familyFormDriver: IFamilyFormDriver[] = []
+        
+        const rowCount = await this.getCount()
+        for (let i = 0; i < rowCount; i++) {
+            familyFormDriver.push({
+                index: i,
+                via: via ? via[i] : undefined,
+                familyFormIndex: familyFormIndex ? familyFormIndex[i] : undefined,
+                familyParameterIndex: familyParameterIndex ? familyParameterIndex[i] : undefined
+            })
+        }
+        
+        return familyFormDriver
+    }
+    
+    async getVia(familyFormDriverIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(familyFormDriverIndex, "int:Via"))
+    }
+    
+    async getAllVia(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("int:Via"))
+    }
+    
+    async getFamilyFormIndex(familyFormDriverIndex: number): Promise<number | undefined> {
+        return await this.entityTable.getNumber(familyFormDriverIndex, "index:Vim.FamilyForm:FamilyForm")
+    }
+    
+    async getAllFamilyFormIndex(): Promise<number[] | undefined> {
+        return await this.entityTable.getNumberArray("index:Vim.FamilyForm:FamilyForm")
+    }
+    
+    async getFamilyForm(familyFormDriverIndex: number): Promise<IFamilyForm | undefined> {
+        const index = await this.getFamilyFormIndex(familyFormDriverIndex)
+        
+        if (index === undefined) {
+            return undefined
+        }
+        
+        return await this.document.familyForm?.get(index)
+    }
+    
+    async getFamilyParameterIndex(familyFormDriverIndex: number): Promise<number | undefined> {
+        return await this.entityTable.getNumber(familyFormDriverIndex, "index:Vim.FamilyRecipeParameter:FamilyParameter")
+    }
+    
+    async getAllFamilyParameterIndex(): Promise<number[] | undefined> {
+        return await this.entityTable.getNumberArray("index:Vim.FamilyRecipeParameter:FamilyParameter")
+    }
+    
+    async getFamilyParameter(familyFormDriverIndex: number): Promise<IFamilyRecipeParameter | undefined> {
+        const index = await this.getFamilyParameterIndex(familyFormDriverIndex)
+        
+        if (index === undefined) {
+            return undefined
+        }
+        
+        return await this.document.familyRecipeParameter?.get(index)
+    }
+    
+}
+
 export interface IGeometry {
     index: number
     box_Min_X?: number
@@ -16995,6 +20771,17 @@ export class VimDocument {
     compoundStructure: ICompoundStructureTable | undefined
     node: INodeTable | undefined
     geometryPiece: IGeometryPieceTable | undefined
+    hostPath: IHostPathTable | undefined
+    hostedInsert: IHostedInsertTable | undefined
+    familyRecipe: IFamilyRecipeTable | undefined
+    familyRecipeParameter: IFamilyRecipeParameterTable | undefined
+    familyTypeValue: IFamilyTypeValueTable | undefined
+    familyReferencePlane: IFamilyReferencePlaneTable | undefined
+    familyForm: IFamilyFormTable | undefined
+    familySketchCurve: IFamilySketchCurveTable | undefined
+    familyConstraint: IFamilyConstraintTable | undefined
+    familyConstraintReference: IFamilyConstraintReferenceTable | undefined
+    familyFormDriver: IFamilyFormDriverTable | undefined
     geometry: IGeometryTable | undefined
     shape: IShapeTable | undefined
     shapeCollection: IShapeCollectionTable | undefined
@@ -17086,6 +20873,17 @@ export class VimDocument {
         doc.compoundStructure = await CompoundStructureTable.createFromDocument(doc)
         doc.node = await NodeTable.createFromDocument(doc)
         doc.geometryPiece = await GeometryPieceTable.createFromDocument(doc)
+        doc.hostPath = await HostPathTable.createFromDocument(doc)
+        doc.hostedInsert = await HostedInsertTable.createFromDocument(doc)
+        doc.familyRecipe = await FamilyRecipeTable.createFromDocument(doc)
+        doc.familyRecipeParameter = await FamilyRecipeParameterTable.createFromDocument(doc)
+        doc.familyTypeValue = await FamilyTypeValueTable.createFromDocument(doc)
+        doc.familyReferencePlane = await FamilyReferencePlaneTable.createFromDocument(doc)
+        doc.familyForm = await FamilyFormTable.createFromDocument(doc)
+        doc.familySketchCurve = await FamilySketchCurveTable.createFromDocument(doc)
+        doc.familyConstraint = await FamilyConstraintTable.createFromDocument(doc)
+        doc.familyConstraintReference = await FamilyConstraintReferenceTable.createFromDocument(doc)
+        doc.familyFormDriver = await FamilyFormDriverTable.createFromDocument(doc)
         doc.geometry = await GeometryTable.createFromDocument(doc)
         doc.shape = await ShapeTable.createFromDocument(doc)
         doc.shapeCollection = await ShapeCollectionTable.createFromDocument(doc)

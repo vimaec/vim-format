@@ -47,6 +47,17 @@ namespace Vim.Format
         public const string ElementOverrideInView = "Vim.ElementOverrideInView";
         public const string PhaseGraphicOverride = "Vim.PhaseGraphicOverride";
         public const string GeometryPiece = "Vim.GeometryPiece";
+        public const string HostPath = "Vim.HostPath";
+        public const string HostedInsert = "Vim.HostedInsert";
+        public const string FamilyRecipe = "Vim.FamilyRecipe";
+        public const string FamilyRecipeParameter = "Vim.FamilyRecipeParameter";
+        public const string FamilyTypeValue = "Vim.FamilyTypeValue";
+        public const string FamilyReferencePlane = "Vim.FamilyReferencePlane";
+        public const string FamilyForm = "Vim.FamilyForm";
+        public const string FamilySketchCurve = "Vim.FamilySketchCurve";
+        public const string FamilyConstraint = "Vim.FamilyConstraint";
+        public const string FamilyConstraintReference = "Vim.FamilyConstraintReference";
+        public const string FamilyFormDriver = "Vim.FamilyFormDriver";
         public const string Camera = "Vim.Camera";
         public const string Workset = "Vim.Workset";
         public const string DesignOption = "Vim.DesignOption";
