@@ -1,6 +1,6 @@
 {
   "VimFormatVersion": "1.0.0",
-  "SchemaVersion": "5.8.0",
+  "SchemaVersion": "5.9.0",
   "Tables": {
     "Vim.Area": [
       "byte:IsGrossInterior",
@@ -294,6 +294,14 @@
       "index:Vim.View:View"
     ],
     "Vim.Material": [
+      "double:AppearanceColor.X",
+      "double:AppearanceColor.Y",
+      "double:AppearanceColor.Z",
+      "double:AppearanceImageFade",
+      "double:AppearanceTint.X",
+      "double:AppearanceTint.Y",
+      "double:AppearanceTint.Z",
+      "double:AppearanceTransparency",
       "double:Color.X",
       "double:Color.Y",
       "double:Color.Z",
@@ -301,19 +309,33 @@
       "double:ColorUvOffset.Y",
       "double:ColorUvScaling.X",
       "double:ColorUvScaling.Y",
+      "double:EmissionColor.X",
+      "double:EmissionColor.Y",
+      "double:EmissionColor.Z",
+      "double:EmissionLuminance",
       "double:Glossiness",
+      "double:GraphicsColor.X",
+      "double:GraphicsColor.Y",
+      "double:GraphicsColor.Z",
+      "double:Metalness",
       "double:NormalAmount",
       "double:NormalUvOffset.X",
       "double:NormalUvOffset.Y",
       "double:NormalUvScaling.X",
       "double:NormalUvScaling.Y",
+      "double:Reflectivity",
+      "double:RefractionIndex",
+      "double:Roughness",
       "double:Smoothness",
       "double:Transparency",
       "index:Vim.Asset:ColorTextureFile",
       "index:Vim.Asset:NormalTextureFile",
       "index:Vim.Element:Element",
+      "string:AppearanceKind",
+      "string:ColorTextureKind",
       "string:MaterialCategory",
-      "string:Name"
+      "string:Name",
+      "string:NormalTextureKind"
     ],
     "Vim.MaterialInElement": [
       "byte:IsPaint",

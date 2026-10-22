@@ -178,7 +178,7 @@
       "Vim.Element__string:Owner"
     ]
   },
-  "5.7.0 to 5.8.0": {
+  "5.7.0 to 5.9.0": {
     "Added": [
       "Vim.FilterInView__byte:HasOverrides",
       "Vim.FilterInView__byte:IsEnabled",
@@ -196,6 +196,28 @@
       "Vim.HiddenElementInView__string:Reason",
       "Vim.HiddenWorksetInView__index:Vim.View:View",
       "Vim.HiddenWorksetInView__index:Vim.Workset:Workset",
+      "Vim.Material__double:AppearanceColor.X",
+      "Vim.Material__double:AppearanceColor.Y",
+      "Vim.Material__double:AppearanceColor.Z",
+      "Vim.Material__double:AppearanceImageFade",
+      "Vim.Material__double:AppearanceTint.X",
+      "Vim.Material__double:AppearanceTint.Y",
+      "Vim.Material__double:AppearanceTint.Z",
+      "Vim.Material__double:AppearanceTransparency",
+      "Vim.Material__double:EmissionColor.X",
+      "Vim.Material__double:EmissionColor.Y",
+      "Vim.Material__double:EmissionColor.Z",
+      "Vim.Material__double:EmissionLuminance",
+      "Vim.Material__double:GraphicsColor.X",
+      "Vim.Material__double:GraphicsColor.Y",
+      "Vim.Material__double:GraphicsColor.Z",
+      "Vim.Material__double:Metalness",
+      "Vim.Material__double:Reflectivity",
+      "Vim.Material__double:RefractionIndex",
+      "Vim.Material__double:Roughness",
+      "Vim.Material__string:AppearanceKind",
+      "Vim.Material__string:ColorTextureKind",
+      "Vim.Material__string:NormalTextureKind",
       "Vim.View__byte:IsCropBoxActive",
       "Vim.View__byte:IsLocked",
       "Vim.View__byte:IsSectionBoxActive",

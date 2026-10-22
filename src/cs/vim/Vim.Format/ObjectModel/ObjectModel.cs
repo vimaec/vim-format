@@ -14,6 +14,24 @@ namespace Vim.Format.ObjectModel
         // ReSharper disable MemberHidesStaticFromOuterClass
         public static class History
         {
+            // Schema 5.9.0 = both experimental exporter feature sets together (combined test build):
+            // per-view cameras + visibility, and realistic material appearance.
+            // Schema additions (camera pose, crop box and section box of every 3D view)
+            //   Vim.View__byte:IsLocked
+            //   Vim.View__byte:IsCropBoxActive
+            //   Vim.View__double:CropBox.Min.X (.Y .Z) / CropBox.Max.X (.Y .Z)
+            //   Vim.View__byte:IsSectionBoxActive
+            //   Vim.View__double:SectionBox.Min.X (.Y .Z) / SectionBox.Max.X (.Y .Z)
+            //   Vim.View__double:SectionBoxOrigin.X (.Y .Z)
+            //   Vim.View__double:SectionBoxBasisX.X (.Y .Z)
+            //   Vim.View__double:SectionBoxBasisY.X (.Y .Z)
+            //   Vim.View__double:SectionBoxBasisZ.X (.Y .Z)
+            //   Vim.View__string:DisplayStyle
+            // Schema additions (what each 3D view hides, so a viewer shows the view as Revit draws it)
+            //   Vim.HiddenCategoryInView (index:Vim.View:View, index:Vim.Category:Category)
+            //   Vim.HiddenWorksetInView (index:Vim.View:View, index:Vim.Workset:Workset)
+            //   Vim.FilterInView (string:Name, string:Kind, string:FilterUniqueId, int:OrderIndex, byte:IsEnabled, byte:IsVisible, byte:HasOverrides, index:Vim.View:View)
+            //   Vim.HiddenElementInView (string:Reason, index:Vim.View:View, index:Vim.Element:Element, index:Vim.FilterInView:FilterInView)
             // Schema additions (realistic material appearance; filled only by exports with the experimental
             // "Realistic materials" option, otherwise left at their defaults with AppearanceKind empty)
             //   Vim.Material__string:AppearanceKind
@@ -38,7 +56,7 @@ namespace Vim.Format.ObjectModel
             //   Vim.Material__double:EmissionLuminance
             //   Vim.Material__string:ColorTextureKind
             //   Vim.Material__string:NormalTextureKind
-            public const string v5_8_0 = "5.8.0";
+            public const string v5_9_0 = "5.9.0";
 
             // Schema additions
             //   Vim.Element__string:Creator
@@ -50,24 +68,6 @@ namespace Vim.Format.ObjectModel
             //   Vim.BasePoint__double:Elevation
             //   Vim.BasePoint__double:AngleToTrueNorth
             public const string v5_7_0 = "5.7.0";
-
-            // Schema additions (camera pose, crop box and section box of every 3D view)
-            //   Vim.View__byte:IsLocked
-            //   Vim.View__byte:IsCropBoxActive
-            //   Vim.View__double:CropBox.Min.X (.Y .Z) / CropBox.Max.X (.Y .Z)
-            //   Vim.View__byte:IsSectionBoxActive
-            //   Vim.View__double:SectionBox.Min.X (.Y .Z) / SectionBox.Max.X (.Y .Z)
-            //   Vim.View__double:SectionBoxOrigin.X (.Y .Z)
-            //   Vim.View__double:SectionBoxBasisX.X (.Y .Z)
-            //   Vim.View__double:SectionBoxBasisY.X (.Y .Z)
-            //   Vim.View__double:SectionBoxBasisZ.X (.Y .Z)
-            //   Vim.View__string:DisplayStyle
-            // Schema additions (what each 3D view hides, so a viewer shows the view as Revit draws it)
-            //   Vim.HiddenCategoryInView (index:Vim.View:View, index:Vim.Category:Category)
-            //   Vim.HiddenWorksetInView (index:Vim.View:View, index:Vim.Workset:Workset)
-            //   Vim.FilterInView (string:Name, string:Kind, string:FilterUniqueId, int:OrderIndex, byte:IsEnabled, byte:IsVisible, byte:HasOverrides, index:Vim.View:View)
-            //   Vim.HiddenElementInView (string:Reason, index:Vim.View:View, index:Vim.Element:Element, index:Vim.FilterInView:FilterInView)
-            public const string v5_8_0 = "5.8.0";
 
             // Schema additions
             //   Vim.BimDocument__long:FileLength
@@ -230,8 +230,8 @@ namespace Vim.Format.ObjectModel
         // ReSharper enable MemberHidesStaticFromOuterClass
 
         // [MAINTAIN] Add more object model SerializableVersions below and update the current one.
-        public static SerializableVersion Current => v5_8_0;
-        public static SerializableVersion v5_8_0 => SerializableVersion.Parse(History.v5_8_0);
+        public static SerializableVersion Current => v5_9_0;
+        public static SerializableVersion v5_9_0 => SerializableVersion.Parse(History.v5_9_0);
         public static SerializableVersion v5_7_0 => SerializableVersion.Parse(History.v5_7_0);
         public static SerializableVersion v5_6_0 => SerializableVersion.Parse(History.v5_6_0);
         public static SerializableVersion v5_5_0 => SerializableVersion.Parse(History.v5_5_0);
@@ -1665,7 +1665,7 @@ namespace Vim.Format.ObjectModel
         /// <summary>The transparency, defined in the domain [0..1]</summary>
         public double Transparency;
 
-        // Realistic appearance (schema 5.8.0). Revit has two looks per material: the Graphics shading colour (what
+        // Realistic appearance (schema 5.9.0). Revit has two looks per material: the Graphics shading colour (what
         // Shaded / Consistent Colors views show) and the Appearance asset (what Realistic views and renders show).
         // The fields below carry the appearance; they are filled only when the export option asks for it.
         // AppearanceKind is empty when they were not exported.
