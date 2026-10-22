@@ -15,7 +15,7 @@ namespace Vim.Format.ObjectModel
         public static class History
         {
             // Schema 5.9.0 = both experimental exporter feature sets together (combined test build):
-            // per-view cameras + visibility, and realistic material appearance.
+            // per-view cameras + visibility (with linked models per view), and realistic material appearance.
             // Schema additions (camera pose, crop box and section box of every 3D view)
             //   Vim.View__byte:IsLocked
             //   Vim.View__byte:IsCropBoxActive
@@ -56,6 +56,15 @@ namespace Vim.Format.ObjectModel
             //   Vim.Material__double:EmissionLuminance
             //   Vim.Material__string:ColorTextureKind
             //   Vim.Material__string:NormalTextureKind
+            // Schema additions (linked models in each view: the link's display setting, and what it hides of the link)
+            //   Vim.LinkInView (string:Display, string:SettingsFrom, byte:IsHidden, string:HiddenBy, byte:IsHalftone, string:LinkedViewName,
+            //     string:ViewFilters, string:ObjectStyles, string:NestedLinks, string:Phase, string:PhaseFilter, string:DetailLevel,
+            //     string:Discipline, string:LinkedWorksets, byte:IsMeasured, int:MeasuredVisibleCount, string:NotReadable,
+            //     index:Vim.View:View, index:Vim.Element:Element, index:Vim.BimDocument:LinkedDocument, index:Vim.View:LinkedView)
+            //   Vim.HiddenCategoryInView__index:Vim.LinkInView:LinkInView
+            //   Vim.HiddenWorksetInView__index:Vim.LinkInView:LinkInView
+            //   Vim.FilterInView__index:Vim.LinkInView:LinkInView
+            //   Vim.HiddenElementInView__index:Vim.LinkInView:LinkInView
             public const string v5_9_0 = "5.9.0";
 
             // Schema additions
@@ -1446,8 +1455,11 @@ namespace Vim.Format.ObjectModel
         public Relation<View> _View;
         public Relation<Category> _Category;
 
+        /// <summary>None (-1): the host view's own setting. Set: the row applies only to that linked model in this view.</summary>
+        public Relation<LinkInView> _LinkInView;
+
         public object GetStorageKey()
-            => _Category.CombineAsStorageKey(_View);
+            => (_Category.CombineAsStorageKey(_View), _LinkInView?.Index ?? EntityRelation.None);
     }
 
     /// <summary>
@@ -1460,8 +1472,11 @@ namespace Vim.Format.ObjectModel
         public Relation<View> _View;
         public Relation<Workset> _Workset;
 
+        /// <summary>None (-1): a host workset off in the host view. Set: a workset of that linked model, off for it in this view.</summary>
+        public Relation<LinkInView> _LinkInView;
+
         public object GetStorageKey()
-            => _Workset.CombineAsStorageKey(_View);
+            => (_Workset.CombineAsStorageKey(_View), _LinkInView?.Index ?? EntityRelation.None);
     }
 
     /// <summary>
@@ -1493,8 +1508,11 @@ namespace Vim.Format.ObjectModel
 
         public Relation<View> _View;
 
+        /// <summary>None (-1): a filter of the host view. Set: a filter of the linked view this linked model is drawn by.</summary>
+        public Relation<LinkInView> _LinkInView;
+
         public object GetStorageKey()
-            => $"{_View?.Index ?? -1}|{FilterUniqueId}";
+            => $"{_View?.Index ?? -1}|{_LinkInView?.Index ?? -1}|{FilterUniqueId}";
     }
 
     /// <summary>
@@ -1511,6 +1529,77 @@ namespace Vim.Format.ObjectModel
 
         public Relation<View> _View;
         public Relation<FilterInView> _FilterInView;
+
+        /// <summary>None (-1): a host element. Set: an element of that linked model, hidden for it in this view.</summary>
+        public Relation<LinkInView> _LinkInView;
+
+        public object GetStorageKey()
+            => (_Element.CombineAsStorageKey(_View), _LinkInView?.Index ?? EntityRelation.None);
+    }
+
+    /// <summary>
+    /// A Revit link instance (a linked model) in a View: whether the view draws it, and how (Visibility/Graphics > Revit Links >
+    /// Display Settings). The Element is the link instance in the host model. What the link hides in this view is written to
+    /// HiddenCategoryInView / HiddenWorksetInView / FilterInView / HiddenElementInView with this row as their LinkInView.
+    /// </summary>
+    [TableName(TableNames.LinkInView)]
+    [CascadeElementRemap]
+    public partial class LinkInView : EntityWithElement, IStorageKey
+    {
+        /// <summary>"By host view", "By linked view" or "Custom" (empty when the authoring tool cannot say, e.g. Revit before 2024).</summary>
+        public string Display;
+
+        /// <summary>Where the display setting was read: "Instance", "Type" (no instance override), "Template ..." when the view's template controls links.</summary>
+        public string SettingsFrom;
+
+        /// <summary>True when the view does not draw this link at all.</summary>
+        public bool IsHidden;
+
+        /// <summary>Why the link is not drawn, "; "-separated: "Hidden in view", "Link type hidden in view", "Category RVT Links off", "Workset off".</summary>
+        public string HiddenBy;
+
+        /// <summary>The link is drawn halftone in this view (Visibility/Graphics > Revit Links > Halftone).</summary>
+        public bool IsHalftone;
+
+        /// <summary>The name of the linked model's view the link is drawn by ("By linked view", or a custom setting based on a linked view).</summary>
+        public string LinkedViewName;
+
+        /// <summary>Custom sub-setting: "By host view", "By linked view", "Custom" or "Custom: value".</summary>
+        public string ViewFilters;
+
+        /// <summary>Custom sub-setting: "By host view", "By linked view", "Custom" or "Custom: value".</summary>
+        public string ObjectStyles;
+
+        /// <summary>Custom sub-setting: "By host view" or "By linked view".</summary>
+        public string NestedLinks;
+
+        /// <summary>Custom sub-setting: "By host view", "By linked view", "Custom: phase name".</summary>
+        public string Phase;
+
+        /// <summary>Custom sub-setting: "By host view", "By linked view", "Custom: phase filter name".</summary>
+        public string PhaseFilter;
+
+        /// <summary>Custom sub-setting: "By host view", "By linked view", "Custom: detail level".</summary>
+        public string DetailLevel;
+
+        /// <summary>Custom sub-setting: "By host view", "By linked view", "Custom: discipline".</summary>
+        public string Discipline;
+
+        /// <summary>Where the hidden worksets of the linked model come from: "Linked view", "Linked model defaults", "Measured", "Not workshared".</summary>
+        public string LinkedWorksets;
+
+        /// <summary>True when what the link hides was measured from what Revit draws (Revit lists the link's elements it draws in the view).</summary>
+        public bool IsMeasured;
+
+        /// <summary>When measured: how many of the link's elements the view draws.</summary>
+        public int MeasuredVisibleCount;
+
+        /// <summary>The settings of this link in this view the authoring tool's API does not expose ("; "-separated).</summary>
+        public string NotReadable;
+
+        public Relation<View> _View;
+        public Relation<BimDocument> _LinkedDocument;
+        public Relation<View> _LinkedView;
 
         public object GetStorageKey()
             => _Element.CombineAsStorageKey(_View);

@@ -6324,6 +6324,8 @@ export interface IHiddenCategoryInView {
     view?: IView
     categoryIndex?: number
     category?: ICategory
+    linkInViewIndex?: number
+    linkInView?: ILinkInView
 }
 
 export interface IHiddenCategoryInViewTable {
@@ -6337,6 +6339,9 @@ export interface IHiddenCategoryInViewTable {
     getCategoryIndex(hiddenCategoryInViewIndex: number): Promise<number | undefined>
     getAllCategoryIndex(): Promise<number[] | undefined>
     getCategory(hiddenCategoryInViewIndex: number): Promise<ICategory | undefined>
+    getLinkInViewIndex(hiddenCategoryInViewIndex: number): Promise<number | undefined>
+    getAllLinkInViewIndex(): Promise<number[] | undefined>
+    getLinkInView(hiddenCategoryInViewIndex: number): Promise<ILinkInView | undefined>
 }
 
 export class HiddenCategoryInView implements IHiddenCategoryInView {
@@ -6346,6 +6351,8 @@ export class HiddenCategoryInView implements IHiddenCategoryInView {
     view?: IView
     categoryIndex?: number
     category?: ICategory
+    linkInViewIndex?: number
+    linkInView?: ILinkInView
     
     static async createFromTable(table: IHiddenCategoryInViewTable, index: number): Promise<IHiddenCategoryInView> {
         let result = new HiddenCategoryInView()
@@ -6354,6 +6361,7 @@ export class HiddenCategoryInView implements IHiddenCategoryInView {
         await Promise.all([
             table.getViewIndex(index).then(v => result.viewIndex = v),
             table.getCategoryIndex(index).then(v => result.categoryIndex = v),
+            table.getLinkInViewIndex(index).then(v => result.linkInViewIndex = v),
         ])
         
         return result
@@ -6391,10 +6399,12 @@ export class HiddenCategoryInViewTable implements IHiddenCategoryInViewTable {
         
         let viewIndex: number[] | undefined
         let categoryIndex: number[] | undefined
+        let linkInViewIndex: number[] | undefined
         
         await Promise.all([
             (async () => { viewIndex = (await localTable.getNumberArray("index:Vim.View:View")) })(),
             (async () => { categoryIndex = (await localTable.getNumberArray("index:Vim.Category:Category")) })(),
+            (async () => { linkInViewIndex = (await localTable.getNumberArray("index:Vim.LinkInView:LinkInView")) })(),
         ])
         
         let hiddenCategoryInView: IHiddenCategoryInView[] = []
@@ -6404,7 +6414,8 @@ export class HiddenCategoryInViewTable implements IHiddenCategoryInViewTable {
             hiddenCategoryInView.push({
                 index: i,
                 viewIndex: viewIndex ? viewIndex[i] : undefined,
-                categoryIndex: categoryIndex ? categoryIndex[i] : undefined
+                categoryIndex: categoryIndex ? categoryIndex[i] : undefined,
+                linkInViewIndex: linkInViewIndex ? linkInViewIndex[i] : undefined
             })
         }
         
@@ -6447,6 +6458,24 @@ export class HiddenCategoryInViewTable implements IHiddenCategoryInViewTable {
         return await this.document.category?.get(index)
     }
     
+    async getLinkInViewIndex(hiddenCategoryInViewIndex: number): Promise<number | undefined> {
+        return await this.entityTable.getNumber(hiddenCategoryInViewIndex, "index:Vim.LinkInView:LinkInView")
+    }
+    
+    async getAllLinkInViewIndex(): Promise<number[] | undefined> {
+        return await this.entityTable.getNumberArray("index:Vim.LinkInView:LinkInView")
+    }
+    
+    async getLinkInView(hiddenCategoryInViewIndex: number): Promise<ILinkInView | undefined> {
+        const index = await this.getLinkInViewIndex(hiddenCategoryInViewIndex)
+        
+        if (index === undefined) {
+            return undefined
+        }
+        
+        return await this.document.linkInView?.get(index)
+    }
+    
 }
 
 export interface IHiddenWorksetInView {
@@ -6456,6 +6485,8 @@ export interface IHiddenWorksetInView {
     view?: IView
     worksetIndex?: number
     workset?: IWorkset
+    linkInViewIndex?: number
+    linkInView?: ILinkInView
 }
 
 export interface IHiddenWorksetInViewTable {
@@ -6469,6 +6500,9 @@ export interface IHiddenWorksetInViewTable {
     getWorksetIndex(hiddenWorksetInViewIndex: number): Promise<number | undefined>
     getAllWorksetIndex(): Promise<number[] | undefined>
     getWorkset(hiddenWorksetInViewIndex: number): Promise<IWorkset | undefined>
+    getLinkInViewIndex(hiddenWorksetInViewIndex: number): Promise<number | undefined>
+    getAllLinkInViewIndex(): Promise<number[] | undefined>
+    getLinkInView(hiddenWorksetInViewIndex: number): Promise<ILinkInView | undefined>
 }
 
 export class HiddenWorksetInView implements IHiddenWorksetInView {
@@ -6478,6 +6512,8 @@ export class HiddenWorksetInView implements IHiddenWorksetInView {
     view?: IView
     worksetIndex?: number
     workset?: IWorkset
+    linkInViewIndex?: number
+    linkInView?: ILinkInView
     
     static async createFromTable(table: IHiddenWorksetInViewTable, index: number): Promise<IHiddenWorksetInView> {
         let result = new HiddenWorksetInView()
@@ -6486,6 +6522,7 @@ export class HiddenWorksetInView implements IHiddenWorksetInView {
         await Promise.all([
             table.getViewIndex(index).then(v => result.viewIndex = v),
             table.getWorksetIndex(index).then(v => result.worksetIndex = v),
+            table.getLinkInViewIndex(index).then(v => result.linkInViewIndex = v),
         ])
         
         return result
@@ -6523,10 +6560,12 @@ export class HiddenWorksetInViewTable implements IHiddenWorksetInViewTable {
         
         let viewIndex: number[] | undefined
         let worksetIndex: number[] | undefined
+        let linkInViewIndex: number[] | undefined
         
         await Promise.all([
             (async () => { viewIndex = (await localTable.getNumberArray("index:Vim.View:View")) })(),
             (async () => { worksetIndex = (await localTable.getNumberArray("index:Vim.Workset:Workset")) })(),
+            (async () => { linkInViewIndex = (await localTable.getNumberArray("index:Vim.LinkInView:LinkInView")) })(),
         ])
         
         let hiddenWorksetInView: IHiddenWorksetInView[] = []
@@ -6536,7 +6575,8 @@ export class HiddenWorksetInViewTable implements IHiddenWorksetInViewTable {
             hiddenWorksetInView.push({
                 index: i,
                 viewIndex: viewIndex ? viewIndex[i] : undefined,
-                worksetIndex: worksetIndex ? worksetIndex[i] : undefined
+                worksetIndex: worksetIndex ? worksetIndex[i] : undefined,
+                linkInViewIndex: linkInViewIndex ? linkInViewIndex[i] : undefined
             })
         }
         
@@ -6579,6 +6619,24 @@ export class HiddenWorksetInViewTable implements IHiddenWorksetInViewTable {
         return await this.document.workset?.get(index)
     }
     
+    async getLinkInViewIndex(hiddenWorksetInViewIndex: number): Promise<number | undefined> {
+        return await this.entityTable.getNumber(hiddenWorksetInViewIndex, "index:Vim.LinkInView:LinkInView")
+    }
+    
+    async getAllLinkInViewIndex(): Promise<number[] | undefined> {
+        return await this.entityTable.getNumberArray("index:Vim.LinkInView:LinkInView")
+    }
+    
+    async getLinkInView(hiddenWorksetInViewIndex: number): Promise<ILinkInView | undefined> {
+        const index = await this.getLinkInViewIndex(hiddenWorksetInViewIndex)
+        
+        if (index === undefined) {
+            return undefined
+        }
+        
+        return await this.document.linkInView?.get(index)
+    }
+    
 }
 
 export interface IFilterInView {
@@ -6593,6 +6651,8 @@ export interface IFilterInView {
     
     viewIndex?: number
     view?: IView
+    linkInViewIndex?: number
+    linkInView?: ILinkInView
 }
 
 export interface IFilterInViewTable {
@@ -6618,6 +6678,9 @@ export interface IFilterInViewTable {
     getViewIndex(filterInViewIndex: number): Promise<number | undefined>
     getAllViewIndex(): Promise<number[] | undefined>
     getView(filterInViewIndex: number): Promise<IView | undefined>
+    getLinkInViewIndex(filterInViewIndex: number): Promise<number | undefined>
+    getAllLinkInViewIndex(): Promise<number[] | undefined>
+    getLinkInView(filterInViewIndex: number): Promise<ILinkInView | undefined>
 }
 
 export class FilterInView implements IFilterInView {
@@ -6632,6 +6695,8 @@ export class FilterInView implements IFilterInView {
     
     viewIndex?: number
     view?: IView
+    linkInViewIndex?: number
+    linkInView?: ILinkInView
     
     static async createFromTable(table: IFilterInViewTable, index: number): Promise<IFilterInView> {
         let result = new FilterInView()
@@ -6646,6 +6711,7 @@ export class FilterInView implements IFilterInView {
             table.getIsVisible(index).then(v => result.isVisible = v),
             table.getHasOverrides(index).then(v => result.hasOverrides = v),
             table.getViewIndex(index).then(v => result.viewIndex = v),
+            table.getLinkInViewIndex(index).then(v => result.linkInViewIndex = v),
         ])
         
         return result
@@ -6689,6 +6755,7 @@ export class FilterInViewTable implements IFilterInViewTable {
         let isVisible: boolean[] | undefined
         let hasOverrides: boolean[] | undefined
         let viewIndex: number[] | undefined
+        let linkInViewIndex: number[] | undefined
         
         await Promise.all([
             (async () => { name = (await localTable.getStringArray("string:Name")) })(),
@@ -6699,6 +6766,7 @@ export class FilterInViewTable implements IFilterInViewTable {
             (async () => { isVisible = (await localTable.getBooleanArray("byte:IsVisible")) })(),
             (async () => { hasOverrides = (await localTable.getBooleanArray("byte:HasOverrides")) })(),
             (async () => { viewIndex = (await localTable.getNumberArray("index:Vim.View:View")) })(),
+            (async () => { linkInViewIndex = (await localTable.getNumberArray("index:Vim.LinkInView:LinkInView")) })(),
         ])
         
         let filterInView: IFilterInView[] = []
@@ -6714,7 +6782,8 @@ export class FilterInViewTable implements IFilterInViewTable {
                 isEnabled: isEnabled ? isEnabled[i] : undefined,
                 isVisible: isVisible ? isVisible[i] : undefined,
                 hasOverrides: hasOverrides ? hasOverrides[i] : undefined,
-                viewIndex: viewIndex ? viewIndex[i] : undefined
+                viewIndex: viewIndex ? viewIndex[i] : undefined,
+                linkInViewIndex: linkInViewIndex ? linkInViewIndex[i] : undefined
             })
         }
         
@@ -6795,6 +6864,24 @@ export class FilterInViewTable implements IFilterInViewTable {
         return await this.document.view?.get(index)
     }
     
+    async getLinkInViewIndex(filterInViewIndex: number): Promise<number | undefined> {
+        return await this.entityTable.getNumber(filterInViewIndex, "index:Vim.LinkInView:LinkInView")
+    }
+    
+    async getAllLinkInViewIndex(): Promise<number[] | undefined> {
+        return await this.entityTable.getNumberArray("index:Vim.LinkInView:LinkInView")
+    }
+    
+    async getLinkInView(filterInViewIndex: number): Promise<ILinkInView | undefined> {
+        const index = await this.getLinkInViewIndex(filterInViewIndex)
+        
+        if (index === undefined) {
+            return undefined
+        }
+        
+        return await this.document.linkInView?.get(index)
+    }
+    
 }
 
 export interface IHiddenElementInView {
@@ -6805,6 +6892,8 @@ export interface IHiddenElementInView {
     view?: IView
     filterInViewIndex?: number
     filterInView?: IFilterInView
+    linkInViewIndex?: number
+    linkInView?: ILinkInView
     elementIndex?: number
     element?: IElement
 }
@@ -6823,6 +6912,9 @@ export interface IHiddenElementInViewTable {
     getFilterInViewIndex(hiddenElementInViewIndex: number): Promise<number | undefined>
     getAllFilterInViewIndex(): Promise<number[] | undefined>
     getFilterInView(hiddenElementInViewIndex: number): Promise<IFilterInView | undefined>
+    getLinkInViewIndex(hiddenElementInViewIndex: number): Promise<number | undefined>
+    getAllLinkInViewIndex(): Promise<number[] | undefined>
+    getLinkInView(hiddenElementInViewIndex: number): Promise<ILinkInView | undefined>
     getElementIndex(hiddenElementInViewIndex: number): Promise<number | undefined>
     getAllElementIndex(): Promise<number[] | undefined>
     getElement(hiddenElementInViewIndex: number): Promise<IElement | undefined>
@@ -6836,6 +6928,8 @@ export class HiddenElementInView implements IHiddenElementInView {
     view?: IView
     filterInViewIndex?: number
     filterInView?: IFilterInView
+    linkInViewIndex?: number
+    linkInView?: ILinkInView
     elementIndex?: number
     element?: IElement
     
@@ -6847,6 +6941,7 @@ export class HiddenElementInView implements IHiddenElementInView {
             table.getReason(index).then(v => result.reason = v),
             table.getViewIndex(index).then(v => result.viewIndex = v),
             table.getFilterInViewIndex(index).then(v => result.filterInViewIndex = v),
+            table.getLinkInViewIndex(index).then(v => result.linkInViewIndex = v),
             table.getElementIndex(index).then(v => result.elementIndex = v),
         ])
         
@@ -6886,12 +6981,14 @@ export class HiddenElementInViewTable implements IHiddenElementInViewTable {
         let reason: string[] | undefined
         let viewIndex: number[] | undefined
         let filterInViewIndex: number[] | undefined
+        let linkInViewIndex: number[] | undefined
         let elementIndex: number[] | undefined
         
         await Promise.all([
             (async () => { reason = (await localTable.getStringArray("string:Reason")) })(),
             (async () => { viewIndex = (await localTable.getNumberArray("index:Vim.View:View")) })(),
             (async () => { filterInViewIndex = (await localTable.getNumberArray("index:Vim.FilterInView:FilterInView")) })(),
+            (async () => { linkInViewIndex = (await localTable.getNumberArray("index:Vim.LinkInView:LinkInView")) })(),
             (async () => { elementIndex = (await localTable.getNumberArray("index:Vim.Element:Element")) })(),
         ])
         
@@ -6904,6 +7001,7 @@ export class HiddenElementInViewTable implements IHiddenElementInViewTable {
                 reason: reason ? reason[i] : undefined,
                 viewIndex: viewIndex ? viewIndex[i] : undefined,
                 filterInViewIndex: filterInViewIndex ? filterInViewIndex[i] : undefined,
+                linkInViewIndex: linkInViewIndex ? linkInViewIndex[i] : undefined,
                 elementIndex: elementIndex ? elementIndex[i] : undefined
             })
         }
@@ -6955,6 +7053,24 @@ export class HiddenElementInViewTable implements IHiddenElementInViewTable {
         return await this.document.filterInView?.get(index)
     }
     
+    async getLinkInViewIndex(hiddenElementInViewIndex: number): Promise<number | undefined> {
+        return await this.entityTable.getNumber(hiddenElementInViewIndex, "index:Vim.LinkInView:LinkInView")
+    }
+    
+    async getAllLinkInViewIndex(): Promise<number[] | undefined> {
+        return await this.entityTable.getNumberArray("index:Vim.LinkInView:LinkInView")
+    }
+    
+    async getLinkInView(hiddenElementInViewIndex: number): Promise<ILinkInView | undefined> {
+        const index = await this.getLinkInViewIndex(hiddenElementInViewIndex)
+        
+        if (index === undefined) {
+            return undefined
+        }
+        
+        return await this.document.linkInView?.get(index)
+    }
+    
     async getElementIndex(hiddenElementInViewIndex: number): Promise<number | undefined> {
         return await this.entityTable.getNumber(hiddenElementInViewIndex, "index:Vim.Element:Element")
     }
@@ -6965,6 +7081,469 @@ export class HiddenElementInViewTable implements IHiddenElementInViewTable {
     
     async getElement(hiddenElementInViewIndex: number): Promise<IElement | undefined> {
         const index = await this.getElementIndex(hiddenElementInViewIndex)
+        
+        if (index === undefined) {
+            return undefined
+        }
+        
+        return await this.document.element?.get(index)
+    }
+    
+}
+
+export interface ILinkInView {
+    index: number
+    display?: string
+    settingsFrom?: string
+    isHidden?: boolean
+    hiddenBy?: string
+    isHalftone?: boolean
+    linkedViewName?: string
+    viewFilters?: string
+    objectStyles?: string
+    nestedLinks?: string
+    phase?: string
+    phaseFilter?: string
+    detailLevel?: string
+    discipline?: string
+    linkedWorksets?: string
+    isMeasured?: boolean
+    measuredVisibleCount?: number
+    notReadable?: string
+    
+    viewIndex?: number
+    view?: IView
+    linkedDocumentIndex?: number
+    linkedDocument?: IBimDocument
+    linkedViewIndex?: number
+    linkedView?: IView
+    elementIndex?: number
+    element?: IElement
+}
+
+export interface ILinkInViewTable {
+    getCount(): Promise<number>
+    get(linkInViewIndex: number): Promise<ILinkInView>
+    getAll(): Promise<ILinkInView[]>
+    
+    getDisplay(linkInViewIndex: number): Promise<string | undefined>
+    getAllDisplay(): Promise<string[] | undefined>
+    getSettingsFrom(linkInViewIndex: number): Promise<string | undefined>
+    getAllSettingsFrom(): Promise<string[] | undefined>
+    getIsHidden(linkInViewIndex: number): Promise<boolean | undefined>
+    getAllIsHidden(): Promise<boolean[] | undefined>
+    getHiddenBy(linkInViewIndex: number): Promise<string | undefined>
+    getAllHiddenBy(): Promise<string[] | undefined>
+    getIsHalftone(linkInViewIndex: number): Promise<boolean | undefined>
+    getAllIsHalftone(): Promise<boolean[] | undefined>
+    getLinkedViewName(linkInViewIndex: number): Promise<string | undefined>
+    getAllLinkedViewName(): Promise<string[] | undefined>
+    getViewFilters(linkInViewIndex: number): Promise<string | undefined>
+    getAllViewFilters(): Promise<string[] | undefined>
+    getObjectStyles(linkInViewIndex: number): Promise<string | undefined>
+    getAllObjectStyles(): Promise<string[] | undefined>
+    getNestedLinks(linkInViewIndex: number): Promise<string | undefined>
+    getAllNestedLinks(): Promise<string[] | undefined>
+    getPhase(linkInViewIndex: number): Promise<string | undefined>
+    getAllPhase(): Promise<string[] | undefined>
+    getPhaseFilter(linkInViewIndex: number): Promise<string | undefined>
+    getAllPhaseFilter(): Promise<string[] | undefined>
+    getDetailLevel(linkInViewIndex: number): Promise<string | undefined>
+    getAllDetailLevel(): Promise<string[] | undefined>
+    getDiscipline(linkInViewIndex: number): Promise<string | undefined>
+    getAllDiscipline(): Promise<string[] | undefined>
+    getLinkedWorksets(linkInViewIndex: number): Promise<string | undefined>
+    getAllLinkedWorksets(): Promise<string[] | undefined>
+    getIsMeasured(linkInViewIndex: number): Promise<boolean | undefined>
+    getAllIsMeasured(): Promise<boolean[] | undefined>
+    getMeasuredVisibleCount(linkInViewIndex: number): Promise<number | undefined>
+    getAllMeasuredVisibleCount(): Promise<number[] | undefined>
+    getNotReadable(linkInViewIndex: number): Promise<string | undefined>
+    getAllNotReadable(): Promise<string[] | undefined>
+    
+    getViewIndex(linkInViewIndex: number): Promise<number | undefined>
+    getAllViewIndex(): Promise<number[] | undefined>
+    getView(linkInViewIndex: number): Promise<IView | undefined>
+    getLinkedDocumentIndex(linkInViewIndex: number): Promise<number | undefined>
+    getAllLinkedDocumentIndex(): Promise<number[] | undefined>
+    getLinkedDocument(linkInViewIndex: number): Promise<IBimDocument | undefined>
+    getLinkedViewIndex(linkInViewIndex: number): Promise<number | undefined>
+    getAllLinkedViewIndex(): Promise<number[] | undefined>
+    getLinkedView(linkInViewIndex: number): Promise<IView | undefined>
+    getElementIndex(linkInViewIndex: number): Promise<number | undefined>
+    getAllElementIndex(): Promise<number[] | undefined>
+    getElement(linkInViewIndex: number): Promise<IElement | undefined>
+}
+
+export class LinkInView implements ILinkInView {
+    index: number
+    display?: string
+    settingsFrom?: string
+    isHidden?: boolean
+    hiddenBy?: string
+    isHalftone?: boolean
+    linkedViewName?: string
+    viewFilters?: string
+    objectStyles?: string
+    nestedLinks?: string
+    phase?: string
+    phaseFilter?: string
+    detailLevel?: string
+    discipline?: string
+    linkedWorksets?: string
+    isMeasured?: boolean
+    measuredVisibleCount?: number
+    notReadable?: string
+    
+    viewIndex?: number
+    view?: IView
+    linkedDocumentIndex?: number
+    linkedDocument?: IBimDocument
+    linkedViewIndex?: number
+    linkedView?: IView
+    elementIndex?: number
+    element?: IElement
+    
+    static async createFromTable(table: ILinkInViewTable, index: number): Promise<ILinkInView> {
+        let result = new LinkInView()
+        result.index = index
+        
+        await Promise.all([
+            table.getDisplay(index).then(v => result.display = v),
+            table.getSettingsFrom(index).then(v => result.settingsFrom = v),
+            table.getIsHidden(index).then(v => result.isHidden = v),
+            table.getHiddenBy(index).then(v => result.hiddenBy = v),
+            table.getIsHalftone(index).then(v => result.isHalftone = v),
+            table.getLinkedViewName(index).then(v => result.linkedViewName = v),
+            table.getViewFilters(index).then(v => result.viewFilters = v),
+            table.getObjectStyles(index).then(v => result.objectStyles = v),
+            table.getNestedLinks(index).then(v => result.nestedLinks = v),
+            table.getPhase(index).then(v => result.phase = v),
+            table.getPhaseFilter(index).then(v => result.phaseFilter = v),
+            table.getDetailLevel(index).then(v => result.detailLevel = v),
+            table.getDiscipline(index).then(v => result.discipline = v),
+            table.getLinkedWorksets(index).then(v => result.linkedWorksets = v),
+            table.getIsMeasured(index).then(v => result.isMeasured = v),
+            table.getMeasuredVisibleCount(index).then(v => result.measuredVisibleCount = v),
+            table.getNotReadable(index).then(v => result.notReadable = v),
+            table.getViewIndex(index).then(v => result.viewIndex = v),
+            table.getLinkedDocumentIndex(index).then(v => result.linkedDocumentIndex = v),
+            table.getLinkedViewIndex(index).then(v => result.linkedViewIndex = v),
+            table.getElementIndex(index).then(v => result.elementIndex = v),
+        ])
+        
+        return result
+    }
+}
+
+export class LinkInViewTable implements ILinkInViewTable {
+    private document: VimDocument
+    private entityTable: EntityTable
+    
+    static async createFromDocument(document: VimDocument): Promise<ILinkInViewTable | undefined> {
+        const entity = await document.entities.getBfast("Vim.LinkInView")
+        
+        if (!entity) {
+            return undefined
+        }
+        
+        let table = new LinkInViewTable()
+        table.document = document
+        table.entityTable = new EntityTable(entity, document.strings)
+        
+        return table
+    }
+    
+    getCount(): Promise<number> {
+        return this.entityTable.getCount()
+    }
+    
+    async get(linkInViewIndex: number): Promise<ILinkInView> {
+        return await LinkInView.createFromTable(this, linkInViewIndex)
+    }
+    
+    async getAll(): Promise<ILinkInView[]> {
+        const localTable = await this.entityTable.getLocal()
+        
+        let display: string[] | undefined
+        let settingsFrom: string[] | undefined
+        let isHidden: boolean[] | undefined
+        let hiddenBy: string[] | undefined
+        let isHalftone: boolean[] | undefined
+        let linkedViewName: string[] | undefined
+        let viewFilters: string[] | undefined
+        let objectStyles: string[] | undefined
+        let nestedLinks: string[] | undefined
+        let phase: string[] | undefined
+        let phaseFilter: string[] | undefined
+        let detailLevel: string[] | undefined
+        let discipline: string[] | undefined
+        let linkedWorksets: string[] | undefined
+        let isMeasured: boolean[] | undefined
+        let measuredVisibleCount: number[] | undefined
+        let notReadable: string[] | undefined
+        let viewIndex: number[] | undefined
+        let linkedDocumentIndex: number[] | undefined
+        let linkedViewIndex: number[] | undefined
+        let elementIndex: number[] | undefined
+        
+        await Promise.all([
+            (async () => { display = (await localTable.getStringArray("string:Display")) })(),
+            (async () => { settingsFrom = (await localTable.getStringArray("string:SettingsFrom")) })(),
+            (async () => { isHidden = (await localTable.getBooleanArray("byte:IsHidden")) })(),
+            (async () => { hiddenBy = (await localTable.getStringArray("string:HiddenBy")) })(),
+            (async () => { isHalftone = (await localTable.getBooleanArray("byte:IsHalftone")) })(),
+            (async () => { linkedViewName = (await localTable.getStringArray("string:LinkedViewName")) })(),
+            (async () => { viewFilters = (await localTable.getStringArray("string:ViewFilters")) })(),
+            (async () => { objectStyles = (await localTable.getStringArray("string:ObjectStyles")) })(),
+            (async () => { nestedLinks = (await localTable.getStringArray("string:NestedLinks")) })(),
+            (async () => { phase = (await localTable.getStringArray("string:Phase")) })(),
+            (async () => { phaseFilter = (await localTable.getStringArray("string:PhaseFilter")) })(),
+            (async () => { detailLevel = (await localTable.getStringArray("string:DetailLevel")) })(),
+            (async () => { discipline = (await localTable.getStringArray("string:Discipline")) })(),
+            (async () => { linkedWorksets = (await localTable.getStringArray("string:LinkedWorksets")) })(),
+            (async () => { isMeasured = (await localTable.getBooleanArray("byte:IsMeasured")) })(),
+            (async () => { measuredVisibleCount = (await localTable.getNumberArray("int:MeasuredVisibleCount")) })(),
+            (async () => { notReadable = (await localTable.getStringArray("string:NotReadable")) })(),
+            (async () => { viewIndex = (await localTable.getNumberArray("index:Vim.View:View")) })(),
+            (async () => { linkedDocumentIndex = (await localTable.getNumberArray("index:Vim.BimDocument:LinkedDocument")) })(),
+            (async () => { linkedViewIndex = (await localTable.getNumberArray("index:Vim.View:LinkedView")) })(),
+            (async () => { elementIndex = (await localTable.getNumberArray("index:Vim.Element:Element")) })(),
+        ])
+        
+        let linkInView: ILinkInView[] = []
+        
+        const rowCount = await this.getCount()
+        for (let i = 0; i < rowCount; i++) {
+            linkInView.push({
+                index: i,
+                display: display ? display[i] : undefined,
+                settingsFrom: settingsFrom ? settingsFrom[i] : undefined,
+                isHidden: isHidden ? isHidden[i] : undefined,
+                hiddenBy: hiddenBy ? hiddenBy[i] : undefined,
+                isHalftone: isHalftone ? isHalftone[i] : undefined,
+                linkedViewName: linkedViewName ? linkedViewName[i] : undefined,
+                viewFilters: viewFilters ? viewFilters[i] : undefined,
+                objectStyles: objectStyles ? objectStyles[i] : undefined,
+                nestedLinks: nestedLinks ? nestedLinks[i] : undefined,
+                phase: phase ? phase[i] : undefined,
+                phaseFilter: phaseFilter ? phaseFilter[i] : undefined,
+                detailLevel: detailLevel ? detailLevel[i] : undefined,
+                discipline: discipline ? discipline[i] : undefined,
+                linkedWorksets: linkedWorksets ? linkedWorksets[i] : undefined,
+                isMeasured: isMeasured ? isMeasured[i] : undefined,
+                measuredVisibleCount: measuredVisibleCount ? measuredVisibleCount[i] : undefined,
+                notReadable: notReadable ? notReadable[i] : undefined,
+                viewIndex: viewIndex ? viewIndex[i] : undefined,
+                linkedDocumentIndex: linkedDocumentIndex ? linkedDocumentIndex[i] : undefined,
+                linkedViewIndex: linkedViewIndex ? linkedViewIndex[i] : undefined,
+                elementIndex: elementIndex ? elementIndex[i] : undefined
+            })
+        }
+        
+        return linkInView
+    }
+    
+    async getDisplay(linkInViewIndex: number): Promise<string | undefined> {
+        return (await this.entityTable.getString(linkInViewIndex, "string:Display"))
+    }
+    
+    async getAllDisplay(): Promise<string[] | undefined> {
+        return (await this.entityTable.getStringArray("string:Display"))
+    }
+    
+    async getSettingsFrom(linkInViewIndex: number): Promise<string | undefined> {
+        return (await this.entityTable.getString(linkInViewIndex, "string:SettingsFrom"))
+    }
+    
+    async getAllSettingsFrom(): Promise<string[] | undefined> {
+        return (await this.entityTable.getStringArray("string:SettingsFrom"))
+    }
+    
+    async getIsHidden(linkInViewIndex: number): Promise<boolean | undefined> {
+        return (await this.entityTable.getBoolean(linkInViewIndex, "byte:IsHidden"))
+    }
+    
+    async getAllIsHidden(): Promise<boolean[] | undefined> {
+        return (await this.entityTable.getBooleanArray("byte:IsHidden"))
+    }
+    
+    async getHiddenBy(linkInViewIndex: number): Promise<string | undefined> {
+        return (await this.entityTable.getString(linkInViewIndex, "string:HiddenBy"))
+    }
+    
+    async getAllHiddenBy(): Promise<string[] | undefined> {
+        return (await this.entityTable.getStringArray("string:HiddenBy"))
+    }
+    
+    async getIsHalftone(linkInViewIndex: number): Promise<boolean | undefined> {
+        return (await this.entityTable.getBoolean(linkInViewIndex, "byte:IsHalftone"))
+    }
+    
+    async getAllIsHalftone(): Promise<boolean[] | undefined> {
+        return (await this.entityTable.getBooleanArray("byte:IsHalftone"))
+    }
+    
+    async getLinkedViewName(linkInViewIndex: number): Promise<string | undefined> {
+        return (await this.entityTable.getString(linkInViewIndex, "string:LinkedViewName"))
+    }
+    
+    async getAllLinkedViewName(): Promise<string[] | undefined> {
+        return (await this.entityTable.getStringArray("string:LinkedViewName"))
+    }
+    
+    async getViewFilters(linkInViewIndex: number): Promise<string | undefined> {
+        return (await this.entityTable.getString(linkInViewIndex, "string:ViewFilters"))
+    }
+    
+    async getAllViewFilters(): Promise<string[] | undefined> {
+        return (await this.entityTable.getStringArray("string:ViewFilters"))
+    }
+    
+    async getObjectStyles(linkInViewIndex: number): Promise<string | undefined> {
+        return (await this.entityTable.getString(linkInViewIndex, "string:ObjectStyles"))
+    }
+    
+    async getAllObjectStyles(): Promise<string[] | undefined> {
+        return (await this.entityTable.getStringArray("string:ObjectStyles"))
+    }
+    
+    async getNestedLinks(linkInViewIndex: number): Promise<string | undefined> {
+        return (await this.entityTable.getString(linkInViewIndex, "string:NestedLinks"))
+    }
+    
+    async getAllNestedLinks(): Promise<string[] | undefined> {
+        return (await this.entityTable.getStringArray("string:NestedLinks"))
+    }
+    
+    async getPhase(linkInViewIndex: number): Promise<string | undefined> {
+        return (await this.entityTable.getString(linkInViewIndex, "string:Phase"))
+    }
+    
+    async getAllPhase(): Promise<string[] | undefined> {
+        return (await this.entityTable.getStringArray("string:Phase"))
+    }
+    
+    async getPhaseFilter(linkInViewIndex: number): Promise<string | undefined> {
+        return (await this.entityTable.getString(linkInViewIndex, "string:PhaseFilter"))
+    }
+    
+    async getAllPhaseFilter(): Promise<string[] | undefined> {
+        return (await this.entityTable.getStringArray("string:PhaseFilter"))
+    }
+    
+    async getDetailLevel(linkInViewIndex: number): Promise<string | undefined> {
+        return (await this.entityTable.getString(linkInViewIndex, "string:DetailLevel"))
+    }
+    
+    async getAllDetailLevel(): Promise<string[] | undefined> {
+        return (await this.entityTable.getStringArray("string:DetailLevel"))
+    }
+    
+    async getDiscipline(linkInViewIndex: number): Promise<string | undefined> {
+        return (await this.entityTable.getString(linkInViewIndex, "string:Discipline"))
+    }
+    
+    async getAllDiscipline(): Promise<string[] | undefined> {
+        return (await this.entityTable.getStringArray("string:Discipline"))
+    }
+    
+    async getLinkedWorksets(linkInViewIndex: number): Promise<string | undefined> {
+        return (await this.entityTable.getString(linkInViewIndex, "string:LinkedWorksets"))
+    }
+    
+    async getAllLinkedWorksets(): Promise<string[] | undefined> {
+        return (await this.entityTable.getStringArray("string:LinkedWorksets"))
+    }
+    
+    async getIsMeasured(linkInViewIndex: number): Promise<boolean | undefined> {
+        return (await this.entityTable.getBoolean(linkInViewIndex, "byte:IsMeasured"))
+    }
+    
+    async getAllIsMeasured(): Promise<boolean[] | undefined> {
+        return (await this.entityTable.getBooleanArray("byte:IsMeasured"))
+    }
+    
+    async getMeasuredVisibleCount(linkInViewIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(linkInViewIndex, "int:MeasuredVisibleCount"))
+    }
+    
+    async getAllMeasuredVisibleCount(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("int:MeasuredVisibleCount"))
+    }
+    
+    async getNotReadable(linkInViewIndex: number): Promise<string | undefined> {
+        return (await this.entityTable.getString(linkInViewIndex, "string:NotReadable"))
+    }
+    
+    async getAllNotReadable(): Promise<string[] | undefined> {
+        return (await this.entityTable.getStringArray("string:NotReadable"))
+    }
+    
+    async getViewIndex(linkInViewIndex: number): Promise<number | undefined> {
+        return await this.entityTable.getNumber(linkInViewIndex, "index:Vim.View:View")
+    }
+    
+    async getAllViewIndex(): Promise<number[] | undefined> {
+        return await this.entityTable.getNumberArray("index:Vim.View:View")
+    }
+    
+    async getView(linkInViewIndex: number): Promise<IView | undefined> {
+        const index = await this.getViewIndex(linkInViewIndex)
+        
+        if (index === undefined) {
+            return undefined
+        }
+        
+        return await this.document.view?.get(index)
+    }
+    
+    async getLinkedDocumentIndex(linkInViewIndex: number): Promise<number | undefined> {
+        return await this.entityTable.getNumber(linkInViewIndex, "index:Vim.BimDocument:LinkedDocument")
+    }
+    
+    async getAllLinkedDocumentIndex(): Promise<number[] | undefined> {
+        return await this.entityTable.getNumberArray("index:Vim.BimDocument:LinkedDocument")
+    }
+    
+    async getLinkedDocument(linkInViewIndex: number): Promise<IBimDocument | undefined> {
+        const index = await this.getLinkedDocumentIndex(linkInViewIndex)
+        
+        if (index === undefined) {
+            return undefined
+        }
+        
+        return await this.document.bimDocument?.get(index)
+    }
+    
+    async getLinkedViewIndex(linkInViewIndex: number): Promise<number | undefined> {
+        return await this.entityTable.getNumber(linkInViewIndex, "index:Vim.View:LinkedView")
+    }
+    
+    async getAllLinkedViewIndex(): Promise<number[] | undefined> {
+        return await this.entityTable.getNumberArray("index:Vim.View:LinkedView")
+    }
+    
+    async getLinkedView(linkInViewIndex: number): Promise<IView | undefined> {
+        const index = await this.getLinkedViewIndex(linkInViewIndex)
+        
+        if (index === undefined) {
+            return undefined
+        }
+        
+        return await this.document.view?.get(index)
+    }
+    
+    async getElementIndex(linkInViewIndex: number): Promise<number | undefined> {
+        return await this.entityTable.getNumber(linkInViewIndex, "index:Vim.Element:Element")
+    }
+    
+    async getAllElementIndex(): Promise<number[] | undefined> {
+        return await this.entityTable.getNumberArray("index:Vim.Element:Element")
+    }
+    
+    async getElement(linkInViewIndex: number): Promise<IElement | undefined> {
+        const index = await this.getElementIndex(linkInViewIndex)
         
         if (index === undefined) {
             return undefined
@@ -12201,6 +12780,7 @@ export class VimDocument {
     hiddenWorksetInView: IHiddenWorksetInViewTable | undefined
     filterInView: IFilterInViewTable | undefined
     hiddenElementInView: IHiddenElementInViewTable | undefined
+    linkInView: ILinkInViewTable | undefined
     camera: ICameraTable | undefined
     material: IMaterialTable | undefined
     materialInElement: IMaterialInElementTable | undefined
@@ -12276,6 +12856,7 @@ export class VimDocument {
         doc.hiddenWorksetInView = await HiddenWorksetInViewTable.createFromDocument(doc)
         doc.filterInView = await FilterInViewTable.createFromDocument(doc)
         doc.hiddenElementInView = await HiddenElementInViewTable.createFromDocument(doc)
+        doc.linkInView = await LinkInViewTable.createFromDocument(doc)
         doc.camera = await CameraTable.createFromDocument(doc)
         doc.material = await MaterialTable.createFromDocument(doc)
         doc.materialInElement = await MaterialInElementTable.createFromDocument(doc)
