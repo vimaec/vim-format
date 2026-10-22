@@ -40,6 +40,7 @@ namespace Vim.Format
         public const string HiddenWorksetInView = "Vim.HiddenWorksetInView";
         public const string FilterInView = "Vim.FilterInView";
         public const string HiddenElementInView = "Vim.HiddenElementInView";
+        public const string LinkInView = "Vim.LinkInView";
         public const string Camera = "Vim.Camera";
         public const string Workset = "Vim.Workset";
         public const string DesignOption = "Vim.DesignOption";

@@ -70,6 +70,8 @@ namespace Vim
     class FilterInViewTable;
     class HiddenElementInView;
     class HiddenElementInViewTable;
+    class LinkInView;
+    class LinkInViewTable;
     class Camera;
     class CameraTable;
     class Material;
@@ -161,6 +163,7 @@ namespace Vim
         HiddenWorksetInViewTable* mHiddenWorksetInView;
         FilterInViewTable* mFilterInView;
         HiddenElementInViewTable* mHiddenElementInView;
+        LinkInViewTable* mLinkInView;
         CameraTable* mCamera;
         MaterialTable* mMaterial;
         MaterialInElementTable* mMaterialInElement;
@@ -9335,6 +9338,8 @@ namespace Vim
         View* mView;
         int mCategoryIndex;
         Category* mCategory;
+        int mLinkInViewIndex;
+        LinkInView* mLinkInView;
         
         HiddenCategoryInView() {}
     };
@@ -9358,6 +9363,7 @@ namespace Vim
             hiddenCategoryInView->mIndex = hiddenCategoryInViewIndex;
             hiddenCategoryInView->mViewIndex = GetViewIndex(hiddenCategoryInViewIndex);
             hiddenCategoryInView->mCategoryIndex = GetCategoryIndex(hiddenCategoryInViewIndex);
+            hiddenCategoryInView->mLinkInViewIndex = GetLinkInViewIndex(hiddenCategoryInViewIndex);
             return hiddenCategoryInView;
         }
         
@@ -9365,6 +9371,7 @@ namespace Vim
         {
             bool existsView = mEntityTable.column_exists("index:Vim.View:View");
             bool existsCategory = mEntityTable.column_exists("index:Vim.Category:Category");
+            bool existsLinkInView = mEntityTable.column_exists("index:Vim.LinkInView:LinkInView");
             
             const auto count = GetCount();
             
@@ -9373,6 +9380,7 @@ namespace Vim
             
             const std::vector<int>& viewData = mEntityTable.column_exists("index:Vim.View:View") ? mEntityTable.mIndexColumns["index:Vim.View:View"] : std::vector<int>();
             const std::vector<int>& categoryData = mEntityTable.column_exists("index:Vim.Category:Category") ? mEntityTable.mIndexColumns["index:Vim.Category:Category"] : std::vector<int>();
+            const std::vector<int>& linkInViewData = mEntityTable.column_exists("index:Vim.LinkInView:LinkInView") ? mEntityTable.mIndexColumns["index:Vim.LinkInView:LinkInView"] : std::vector<int>();
             
             for (int i = 0; i < count; ++i)
             {
@@ -9380,6 +9388,7 @@ namespace Vim
                 entity.mIndex = i;
                 entity.mViewIndex = existsView ? viewData[i] : -1;
                 entity.mCategoryIndex = existsCategory ? categoryData[i] : -1;
+                entity.mLinkInViewIndex = existsLinkInView ? linkInViewData[i] : -1;
                 hiddenCategoryInView->push_back(entity);
             }
             
@@ -9410,6 +9419,18 @@ namespace Vim
             return mEntityTable.mIndexColumns["index:Vim.Category:Category"][hiddenCategoryInViewIndex];
         }
         
+        int GetLinkInViewIndex(int hiddenCategoryInViewIndex)
+        {
+            if (!mEntityTable.column_exists("index:Vim.LinkInView:LinkInView")) {
+                return -1;
+            }
+            
+            if (hiddenCategoryInViewIndex < 0 || hiddenCategoryInViewIndex >= GetCount())
+                return -1;
+            
+            return mEntityTable.mIndexColumns["index:Vim.LinkInView:LinkInView"][hiddenCategoryInViewIndex];
+        }
+        
     };
     
     static HiddenCategoryInViewTable* GetHiddenCategoryInViewTable(Scene& scene)
@@ -9429,6 +9450,8 @@ namespace Vim
         View* mView;
         int mWorksetIndex;
         Workset* mWorkset;
+        int mLinkInViewIndex;
+        LinkInView* mLinkInView;
         
         HiddenWorksetInView() {}
     };
@@ -9452,6 +9475,7 @@ namespace Vim
             hiddenWorksetInView->mIndex = hiddenWorksetInViewIndex;
             hiddenWorksetInView->mViewIndex = GetViewIndex(hiddenWorksetInViewIndex);
             hiddenWorksetInView->mWorksetIndex = GetWorksetIndex(hiddenWorksetInViewIndex);
+            hiddenWorksetInView->mLinkInViewIndex = GetLinkInViewIndex(hiddenWorksetInViewIndex);
             return hiddenWorksetInView;
         }
         
@@ -9459,6 +9483,7 @@ namespace Vim
         {
             bool existsView = mEntityTable.column_exists("index:Vim.View:View");
             bool existsWorkset = mEntityTable.column_exists("index:Vim.Workset:Workset");
+            bool existsLinkInView = mEntityTable.column_exists("index:Vim.LinkInView:LinkInView");
             
             const auto count = GetCount();
             
@@ -9467,6 +9492,7 @@ namespace Vim
             
             const std::vector<int>& viewData = mEntityTable.column_exists("index:Vim.View:View") ? mEntityTable.mIndexColumns["index:Vim.View:View"] : std::vector<int>();
             const std::vector<int>& worksetData = mEntityTable.column_exists("index:Vim.Workset:Workset") ? mEntityTable.mIndexColumns["index:Vim.Workset:Workset"] : std::vector<int>();
+            const std::vector<int>& linkInViewData = mEntityTable.column_exists("index:Vim.LinkInView:LinkInView") ? mEntityTable.mIndexColumns["index:Vim.LinkInView:LinkInView"] : std::vector<int>();
             
             for (int i = 0; i < count; ++i)
             {
@@ -9474,6 +9500,7 @@ namespace Vim
                 entity.mIndex = i;
                 entity.mViewIndex = existsView ? viewData[i] : -1;
                 entity.mWorksetIndex = existsWorkset ? worksetData[i] : -1;
+                entity.mLinkInViewIndex = existsLinkInView ? linkInViewData[i] : -1;
                 hiddenWorksetInView->push_back(entity);
             }
             
@@ -9504,6 +9531,18 @@ namespace Vim
             return mEntityTable.mIndexColumns["index:Vim.Workset:Workset"][hiddenWorksetInViewIndex];
         }
         
+        int GetLinkInViewIndex(int hiddenWorksetInViewIndex)
+        {
+            if (!mEntityTable.column_exists("index:Vim.LinkInView:LinkInView")) {
+                return -1;
+            }
+            
+            if (hiddenWorksetInViewIndex < 0 || hiddenWorksetInViewIndex >= GetCount())
+                return -1;
+            
+            return mEntityTable.mIndexColumns["index:Vim.LinkInView:LinkInView"][hiddenWorksetInViewIndex];
+        }
+        
     };
     
     static HiddenWorksetInViewTable* GetHiddenWorksetInViewTable(Scene& scene)
@@ -9528,6 +9567,8 @@ namespace Vim
         
         int mViewIndex;
         View* mView;
+        int mLinkInViewIndex;
+        LinkInView* mLinkInView;
         
         FilterInView() {}
     };
@@ -9557,6 +9598,7 @@ namespace Vim
             filterInView->mIsVisible = GetIsVisible(filterInViewIndex);
             filterInView->mHasOverrides = GetHasOverrides(filterInViewIndex);
             filterInView->mViewIndex = GetViewIndex(filterInViewIndex);
+            filterInView->mLinkInViewIndex = GetLinkInViewIndex(filterInViewIndex);
             return filterInView;
         }
         
@@ -9570,6 +9612,7 @@ namespace Vim
             bool existsIsVisible = mEntityTable.column_exists("byte:IsVisible");
             bool existsHasOverrides = mEntityTable.column_exists("byte:HasOverrides");
             bool existsView = mEntityTable.column_exists("index:Vim.View:View");
+            bool existsLinkInView = mEntityTable.column_exists("index:Vim.LinkInView:LinkInView");
             
             const auto count = GetCount();
             
@@ -9603,6 +9646,7 @@ namespace Vim
             }
             
             const std::vector<int>& viewData = mEntityTable.column_exists("index:Vim.View:View") ? mEntityTable.mIndexColumns["index:Vim.View:View"] : std::vector<int>();
+            const std::vector<int>& linkInViewData = mEntityTable.column_exists("index:Vim.LinkInView:LinkInView") ? mEntityTable.mIndexColumns["index:Vim.LinkInView:LinkInView"] : std::vector<int>();
             
             for (int i = 0; i < count; ++i)
             {
@@ -9623,6 +9667,7 @@ namespace Vim
                 if (existsHasOverrides)
                     entity.mHasOverrides = hasOverridesData[i];
                 entity.mViewIndex = existsView ? viewData[i] : -1;
+                entity.mLinkInViewIndex = existsLinkInView ? linkInViewData[i] : -1;
                 filterInView->push_back(entity);
             }
             
@@ -9845,6 +9890,18 @@ namespace Vim
             return mEntityTable.mIndexColumns["index:Vim.View:View"][filterInViewIndex];
         }
         
+        int GetLinkInViewIndex(int filterInViewIndex)
+        {
+            if (!mEntityTable.column_exists("index:Vim.LinkInView:LinkInView")) {
+                return -1;
+            }
+            
+            if (filterInViewIndex < 0 || filterInViewIndex >= GetCount())
+                return -1;
+            
+            return mEntityTable.mIndexColumns["index:Vim.LinkInView:LinkInView"][filterInViewIndex];
+        }
+        
     };
     
     static FilterInViewTable* GetFilterInViewTable(Scene& scene)
@@ -9865,6 +9922,8 @@ namespace Vim
         View* mView;
         int mFilterInViewIndex;
         FilterInView* mFilterInView;
+        int mLinkInViewIndex;
+        LinkInView* mLinkInView;
         int mElementIndex;
         Element* mElement;
         
@@ -9891,6 +9950,7 @@ namespace Vim
             hiddenElementInView->mReason = GetReason(hiddenElementInViewIndex);
             hiddenElementInView->mViewIndex = GetViewIndex(hiddenElementInViewIndex);
             hiddenElementInView->mFilterInViewIndex = GetFilterInViewIndex(hiddenElementInViewIndex);
+            hiddenElementInView->mLinkInViewIndex = GetLinkInViewIndex(hiddenElementInViewIndex);
             hiddenElementInView->mElementIndex = GetElementIndex(hiddenElementInViewIndex);
             return hiddenElementInView;
         }
@@ -9900,6 +9960,7 @@ namespace Vim
             bool existsReason = mEntityTable.column_exists("string:Reason");
             bool existsView = mEntityTable.column_exists("index:Vim.View:View");
             bool existsFilterInView = mEntityTable.column_exists("index:Vim.FilterInView:FilterInView");
+            bool existsLinkInView = mEntityTable.column_exists("index:Vim.LinkInView:LinkInView");
             bool existsElement = mEntityTable.column_exists("index:Vim.Element:Element");
             
             const auto count = GetCount();
@@ -9911,6 +9972,7 @@ namespace Vim
             
             const std::vector<int>& viewData = mEntityTable.column_exists("index:Vim.View:View") ? mEntityTable.mIndexColumns["index:Vim.View:View"] : std::vector<int>();
             const std::vector<int>& filterInViewData = mEntityTable.column_exists("index:Vim.FilterInView:FilterInView") ? mEntityTable.mIndexColumns["index:Vim.FilterInView:FilterInView"] : std::vector<int>();
+            const std::vector<int>& linkInViewData = mEntityTable.column_exists("index:Vim.LinkInView:LinkInView") ? mEntityTable.mIndexColumns["index:Vim.LinkInView:LinkInView"] : std::vector<int>();
             const std::vector<int>& elementData = mEntityTable.column_exists("index:Vim.Element:Element") ? mEntityTable.mIndexColumns["index:Vim.Element:Element"] : std::vector<int>();
             
             for (int i = 0; i < count; ++i)
@@ -9921,6 +9983,7 @@ namespace Vim
                     entity.mReason = std::string(reinterpret_cast<const char*>(mStrings[reasonData[i]]));
                 entity.mViewIndex = existsView ? viewData[i] : -1;
                 entity.mFilterInViewIndex = existsFilterInView ? filterInViewData[i] : -1;
+                entity.mLinkInViewIndex = existsLinkInView ? linkInViewData[i] : -1;
                 entity.mElementIndex = existsElement ? elementData[i] : -1;
                 hiddenElementInView->push_back(entity);
             }
@@ -9981,6 +10044,18 @@ namespace Vim
             return mEntityTable.mIndexColumns["index:Vim.FilterInView:FilterInView"][hiddenElementInViewIndex];
         }
         
+        int GetLinkInViewIndex(int hiddenElementInViewIndex)
+        {
+            if (!mEntityTable.column_exists("index:Vim.LinkInView:LinkInView")) {
+                return -1;
+            }
+            
+            if (hiddenElementInViewIndex < 0 || hiddenElementInViewIndex >= GetCount())
+                return -1;
+            
+            return mEntityTable.mIndexColumns["index:Vim.LinkInView:LinkInView"][hiddenElementInViewIndex];
+        }
+        
         int GetElementIndex(int hiddenElementInViewIndex)
         {
             if (!mEntityTable.column_exists("index:Vim.Element:Element")) {
@@ -10001,6 +10076,761 @@ namespace Vim
             return {};
         
         return new HiddenElementInViewTable(scene.mEntityTables["Vim.HiddenElementInView"], scene.mStrings);
+    }
+    
+    class LinkInView
+    {
+    public:
+        int mIndex;
+        std::string mDisplay;
+        std::string mSettingsFrom;
+        bool mIsHidden;
+        std::string mHiddenBy;
+        bool mIsHalftone;
+        std::string mLinkedViewName;
+        std::string mViewFilters;
+        std::string mObjectStyles;
+        std::string mNestedLinks;
+        std::string mPhase;
+        std::string mPhaseFilter;
+        std::string mDetailLevel;
+        std::string mDiscipline;
+        std::string mLinkedWorksets;
+        bool mIsMeasured;
+        int mMeasuredVisibleCount;
+        std::string mNotReadable;
+        
+        int mViewIndex;
+        View* mView;
+        int mLinkedDocumentIndex;
+        BimDocument* mLinkedDocument;
+        int mLinkedViewIndex;
+        View* mLinkedView;
+        int mElementIndex;
+        Element* mElement;
+        
+        LinkInView() {}
+    };
+    
+    class LinkInViewTable
+    {
+        EntityTable& mEntityTable;
+        std::vector<const bfast::byte*>& mStrings;
+    public:
+        LinkInViewTable(EntityTable& entityTable, std::vector<const bfast::byte*>& strings):
+            mEntityTable(entityTable), mStrings(strings) {}
+        
+        size_t GetCount()
+        {
+            return mEntityTable.get_count();
+        }
+        
+        LinkInView* Get(int linkInViewIndex)
+        {
+            LinkInView* linkInView = new LinkInView();
+            linkInView->mIndex = linkInViewIndex;
+            linkInView->mDisplay = GetDisplay(linkInViewIndex);
+            linkInView->mSettingsFrom = GetSettingsFrom(linkInViewIndex);
+            linkInView->mIsHidden = GetIsHidden(linkInViewIndex);
+            linkInView->mHiddenBy = GetHiddenBy(linkInViewIndex);
+            linkInView->mIsHalftone = GetIsHalftone(linkInViewIndex);
+            linkInView->mLinkedViewName = GetLinkedViewName(linkInViewIndex);
+            linkInView->mViewFilters = GetViewFilters(linkInViewIndex);
+            linkInView->mObjectStyles = GetObjectStyles(linkInViewIndex);
+            linkInView->mNestedLinks = GetNestedLinks(linkInViewIndex);
+            linkInView->mPhase = GetPhase(linkInViewIndex);
+            linkInView->mPhaseFilter = GetPhaseFilter(linkInViewIndex);
+            linkInView->mDetailLevel = GetDetailLevel(linkInViewIndex);
+            linkInView->mDiscipline = GetDiscipline(linkInViewIndex);
+            linkInView->mLinkedWorksets = GetLinkedWorksets(linkInViewIndex);
+            linkInView->mIsMeasured = GetIsMeasured(linkInViewIndex);
+            linkInView->mMeasuredVisibleCount = GetMeasuredVisibleCount(linkInViewIndex);
+            linkInView->mNotReadable = GetNotReadable(linkInViewIndex);
+            linkInView->mViewIndex = GetViewIndex(linkInViewIndex);
+            linkInView->mLinkedDocumentIndex = GetLinkedDocumentIndex(linkInViewIndex);
+            linkInView->mLinkedViewIndex = GetLinkedViewIndex(linkInViewIndex);
+            linkInView->mElementIndex = GetElementIndex(linkInViewIndex);
+            return linkInView;
+        }
+        
+        std::vector<LinkInView>* GetAll()
+        {
+            bool existsDisplay = mEntityTable.column_exists("string:Display");
+            bool existsSettingsFrom = mEntityTable.column_exists("string:SettingsFrom");
+            bool existsIsHidden = mEntityTable.column_exists("byte:IsHidden");
+            bool existsHiddenBy = mEntityTable.column_exists("string:HiddenBy");
+            bool existsIsHalftone = mEntityTable.column_exists("byte:IsHalftone");
+            bool existsLinkedViewName = mEntityTable.column_exists("string:LinkedViewName");
+            bool existsViewFilters = mEntityTable.column_exists("string:ViewFilters");
+            bool existsObjectStyles = mEntityTable.column_exists("string:ObjectStyles");
+            bool existsNestedLinks = mEntityTable.column_exists("string:NestedLinks");
+            bool existsPhase = mEntityTable.column_exists("string:Phase");
+            bool existsPhaseFilter = mEntityTable.column_exists("string:PhaseFilter");
+            bool existsDetailLevel = mEntityTable.column_exists("string:DetailLevel");
+            bool existsDiscipline = mEntityTable.column_exists("string:Discipline");
+            bool existsLinkedWorksets = mEntityTable.column_exists("string:LinkedWorksets");
+            bool existsIsMeasured = mEntityTable.column_exists("byte:IsMeasured");
+            bool existsMeasuredVisibleCount = mEntityTable.column_exists("int:MeasuredVisibleCount");
+            bool existsNotReadable = mEntityTable.column_exists("string:NotReadable");
+            bool existsView = mEntityTable.column_exists("index:Vim.View:View");
+            bool existsLinkedDocument = mEntityTable.column_exists("index:Vim.BimDocument:LinkedDocument");
+            bool existsLinkedView = mEntityTable.column_exists("index:Vim.View:LinkedView");
+            bool existsElement = mEntityTable.column_exists("index:Vim.Element:Element");
+            
+            const auto count = GetCount();
+            
+            std::vector<LinkInView>* linkInView = new std::vector<LinkInView>();
+            linkInView->reserve(count);
+            
+            const std::vector<int>& displayData = mEntityTable.column_exists("string:Display") ? mEntityTable.mStringColumns["string:Display"] : std::vector<int>();
+            
+            const std::vector<int>& settingsFromData = mEntityTable.column_exists("string:SettingsFrom") ? mEntityTable.mStringColumns["string:SettingsFrom"] : std::vector<int>();
+            
+            bfast::byte* isHiddenData = new bfast::byte[count];
+            if (mEntityTable.column_exists("byte:IsHidden")) {
+                memcpy(isHiddenData, mEntityTable.mDataColumns["byte:IsHidden"].begin(), count * sizeof(bfast::byte));
+            }
+            
+            const std::vector<int>& hiddenByData = mEntityTable.column_exists("string:HiddenBy") ? mEntityTable.mStringColumns["string:HiddenBy"] : std::vector<int>();
+            
+            bfast::byte* isHalftoneData = new bfast::byte[count];
+            if (mEntityTable.column_exists("byte:IsHalftone")) {
+                memcpy(isHalftoneData, mEntityTable.mDataColumns["byte:IsHalftone"].begin(), count * sizeof(bfast::byte));
+            }
+            
+            const std::vector<int>& linkedViewNameData = mEntityTable.column_exists("string:LinkedViewName") ? mEntityTable.mStringColumns["string:LinkedViewName"] : std::vector<int>();
+            
+            const std::vector<int>& viewFiltersData = mEntityTable.column_exists("string:ViewFilters") ? mEntityTable.mStringColumns["string:ViewFilters"] : std::vector<int>();
+            
+            const std::vector<int>& objectStylesData = mEntityTable.column_exists("string:ObjectStyles") ? mEntityTable.mStringColumns["string:ObjectStyles"] : std::vector<int>();
+            
+            const std::vector<int>& nestedLinksData = mEntityTable.column_exists("string:NestedLinks") ? mEntityTable.mStringColumns["string:NestedLinks"] : std::vector<int>();
+            
+            const std::vector<int>& phaseData = mEntityTable.column_exists("string:Phase") ? mEntityTable.mStringColumns["string:Phase"] : std::vector<int>();
+            
+            const std::vector<int>& phaseFilterData = mEntityTable.column_exists("string:PhaseFilter") ? mEntityTable.mStringColumns["string:PhaseFilter"] : std::vector<int>();
+            
+            const std::vector<int>& detailLevelData = mEntityTable.column_exists("string:DetailLevel") ? mEntityTable.mStringColumns["string:DetailLevel"] : std::vector<int>();
+            
+            const std::vector<int>& disciplineData = mEntityTable.column_exists("string:Discipline") ? mEntityTable.mStringColumns["string:Discipline"] : std::vector<int>();
+            
+            const std::vector<int>& linkedWorksetsData = mEntityTable.column_exists("string:LinkedWorksets") ? mEntityTable.mStringColumns["string:LinkedWorksets"] : std::vector<int>();
+            
+            bfast::byte* isMeasuredData = new bfast::byte[count];
+            if (mEntityTable.column_exists("byte:IsMeasured")) {
+                memcpy(isMeasuredData, mEntityTable.mDataColumns["byte:IsMeasured"].begin(), count * sizeof(bfast::byte));
+            }
+            
+            int* measuredVisibleCountData = new int[count];
+            if (mEntityTable.column_exists("int:MeasuredVisibleCount")) {
+                memcpy(measuredVisibleCountData, mEntityTable.mDataColumns["int:MeasuredVisibleCount"].begin(), count * sizeof(int));
+            }
+            
+            const std::vector<int>& notReadableData = mEntityTable.column_exists("string:NotReadable") ? mEntityTable.mStringColumns["string:NotReadable"] : std::vector<int>();
+            
+            const std::vector<int>& viewData = mEntityTable.column_exists("index:Vim.View:View") ? mEntityTable.mIndexColumns["index:Vim.View:View"] : std::vector<int>();
+            const std::vector<int>& linkedDocumentData = mEntityTable.column_exists("index:Vim.BimDocument:LinkedDocument") ? mEntityTable.mIndexColumns["index:Vim.BimDocument:LinkedDocument"] : std::vector<int>();
+            const std::vector<int>& linkedViewData = mEntityTable.column_exists("index:Vim.View:LinkedView") ? mEntityTable.mIndexColumns["index:Vim.View:LinkedView"] : std::vector<int>();
+            const std::vector<int>& elementData = mEntityTable.column_exists("index:Vim.Element:Element") ? mEntityTable.mIndexColumns["index:Vim.Element:Element"] : std::vector<int>();
+            
+            for (int i = 0; i < count; ++i)
+            {
+                LinkInView entity;
+                entity.mIndex = i;
+                if (existsDisplay)
+                    entity.mDisplay = std::string(reinterpret_cast<const char*>(mStrings[displayData[i]]));
+                if (existsSettingsFrom)
+                    entity.mSettingsFrom = std::string(reinterpret_cast<const char*>(mStrings[settingsFromData[i]]));
+                if (existsIsHidden)
+                    entity.mIsHidden = isHiddenData[i];
+                if (existsHiddenBy)
+                    entity.mHiddenBy = std::string(reinterpret_cast<const char*>(mStrings[hiddenByData[i]]));
+                if (existsIsHalftone)
+                    entity.mIsHalftone = isHalftoneData[i];
+                if (existsLinkedViewName)
+                    entity.mLinkedViewName = std::string(reinterpret_cast<const char*>(mStrings[linkedViewNameData[i]]));
+                if (existsViewFilters)
+                    entity.mViewFilters = std::string(reinterpret_cast<const char*>(mStrings[viewFiltersData[i]]));
+                if (existsObjectStyles)
+                    entity.mObjectStyles = std::string(reinterpret_cast<const char*>(mStrings[objectStylesData[i]]));
+                if (existsNestedLinks)
+                    entity.mNestedLinks = std::string(reinterpret_cast<const char*>(mStrings[nestedLinksData[i]]));
+                if (existsPhase)
+                    entity.mPhase = std::string(reinterpret_cast<const char*>(mStrings[phaseData[i]]));
+                if (existsPhaseFilter)
+                    entity.mPhaseFilter = std::string(reinterpret_cast<const char*>(mStrings[phaseFilterData[i]]));
+                if (existsDetailLevel)
+                    entity.mDetailLevel = std::string(reinterpret_cast<const char*>(mStrings[detailLevelData[i]]));
+                if (existsDiscipline)
+                    entity.mDiscipline = std::string(reinterpret_cast<const char*>(mStrings[disciplineData[i]]));
+                if (existsLinkedWorksets)
+                    entity.mLinkedWorksets = std::string(reinterpret_cast<const char*>(mStrings[linkedWorksetsData[i]]));
+                if (existsIsMeasured)
+                    entity.mIsMeasured = isMeasuredData[i];
+                if (existsMeasuredVisibleCount)
+                    entity.mMeasuredVisibleCount = measuredVisibleCountData[i];
+                if (existsNotReadable)
+                    entity.mNotReadable = std::string(reinterpret_cast<const char*>(mStrings[notReadableData[i]]));
+                entity.mViewIndex = existsView ? viewData[i] : -1;
+                entity.mLinkedDocumentIndex = existsLinkedDocument ? linkedDocumentData[i] : -1;
+                entity.mLinkedViewIndex = existsLinkedView ? linkedViewData[i] : -1;
+                entity.mElementIndex = existsElement ? elementData[i] : -1;
+                linkInView->push_back(entity);
+            }
+            
+            delete[] isHiddenData;
+            delete[] isHalftoneData;
+            delete[] isMeasuredData;
+            delete[] measuredVisibleCountData;
+            
+            return linkInView;
+        }
+        
+        std::string GetDisplay(int linkInViewIndex)
+        {
+            if (linkInViewIndex < 0 || linkInViewIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("string:Display")) {
+                return std::string(reinterpret_cast<const char*>(mStrings[mEntityTable.mStringColumns["string:Display"][linkInViewIndex]]));
+            }
+            
+            return {};
+        }
+        
+        std::vector<std::string>* GetAllDisplay()
+        {
+            const auto count = GetCount();
+            
+            const std::vector<int>& displayData = mEntityTable.column_exists("string:Display") ? mEntityTable.mStringColumns["string:Display"] : std::vector<int>();
+            
+            std::vector<std::string>* result = new std::vector<std::string>();
+            result->reserve(count);
+            
+            for (int i = 0; i < count; ++i)
+            {
+                result->push_back(std::string(reinterpret_cast<const char*>(mStrings[displayData[i]])));
+            }
+            
+            return result;
+        }
+        
+        std::string GetSettingsFrom(int linkInViewIndex)
+        {
+            if (linkInViewIndex < 0 || linkInViewIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("string:SettingsFrom")) {
+                return std::string(reinterpret_cast<const char*>(mStrings[mEntityTable.mStringColumns["string:SettingsFrom"][linkInViewIndex]]));
+            }
+            
+            return {};
+        }
+        
+        std::vector<std::string>* GetAllSettingsFrom()
+        {
+            const auto count = GetCount();
+            
+            const std::vector<int>& settingsFromData = mEntityTable.column_exists("string:SettingsFrom") ? mEntityTable.mStringColumns["string:SettingsFrom"] : std::vector<int>();
+            
+            std::vector<std::string>* result = new std::vector<std::string>();
+            result->reserve(count);
+            
+            for (int i = 0; i < count; ++i)
+            {
+                result->push_back(std::string(reinterpret_cast<const char*>(mStrings[settingsFromData[i]])));
+            }
+            
+            return result;
+        }
+        
+        bool GetIsHidden(int linkInViewIndex)
+        {
+            if (linkInViewIndex < 0 || linkInViewIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("byte:IsHidden")) {
+                return static_cast<bool>(*reinterpret_cast<bfast::byte*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["byte:IsHidden"].begin() + linkInViewIndex * sizeof(bfast::byte))));
+            }
+            
+            return {};
+        }
+        
+        std::vector<bool>* GetAllIsHidden()
+        {
+            const auto count = GetCount();
+            
+            bfast::byte* isHiddenData = new bfast::byte[count];
+            if (mEntityTable.column_exists("byte:IsHidden")) {
+                memcpy(isHiddenData, mEntityTable.mDataColumns["byte:IsHidden"].begin(), count * sizeof(bfast::byte));
+            }
+            
+            std::vector<bool>* result = new std::vector<bool>(isHiddenData, isHiddenData + count);
+            
+            delete[] isHiddenData;
+            
+            return result;
+        }
+        
+        std::string GetHiddenBy(int linkInViewIndex)
+        {
+            if (linkInViewIndex < 0 || linkInViewIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("string:HiddenBy")) {
+                return std::string(reinterpret_cast<const char*>(mStrings[mEntityTable.mStringColumns["string:HiddenBy"][linkInViewIndex]]));
+            }
+            
+            return {};
+        }
+        
+        std::vector<std::string>* GetAllHiddenBy()
+        {
+            const auto count = GetCount();
+            
+            const std::vector<int>& hiddenByData = mEntityTable.column_exists("string:HiddenBy") ? mEntityTable.mStringColumns["string:HiddenBy"] : std::vector<int>();
+            
+            std::vector<std::string>* result = new std::vector<std::string>();
+            result->reserve(count);
+            
+            for (int i = 0; i < count; ++i)
+            {
+                result->push_back(std::string(reinterpret_cast<const char*>(mStrings[hiddenByData[i]])));
+            }
+            
+            return result;
+        }
+        
+        bool GetIsHalftone(int linkInViewIndex)
+        {
+            if (linkInViewIndex < 0 || linkInViewIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("byte:IsHalftone")) {
+                return static_cast<bool>(*reinterpret_cast<bfast::byte*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["byte:IsHalftone"].begin() + linkInViewIndex * sizeof(bfast::byte))));
+            }
+            
+            return {};
+        }
+        
+        std::vector<bool>* GetAllIsHalftone()
+        {
+            const auto count = GetCount();
+            
+            bfast::byte* isHalftoneData = new bfast::byte[count];
+            if (mEntityTable.column_exists("byte:IsHalftone")) {
+                memcpy(isHalftoneData, mEntityTable.mDataColumns["byte:IsHalftone"].begin(), count * sizeof(bfast::byte));
+            }
+            
+            std::vector<bool>* result = new std::vector<bool>(isHalftoneData, isHalftoneData + count);
+            
+            delete[] isHalftoneData;
+            
+            return result;
+        }
+        
+        std::string GetLinkedViewName(int linkInViewIndex)
+        {
+            if (linkInViewIndex < 0 || linkInViewIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("string:LinkedViewName")) {
+                return std::string(reinterpret_cast<const char*>(mStrings[mEntityTable.mStringColumns["string:LinkedViewName"][linkInViewIndex]]));
+            }
+            
+            return {};
+        }
+        
+        std::vector<std::string>* GetAllLinkedViewName()
+        {
+            const auto count = GetCount();
+            
+            const std::vector<int>& linkedViewNameData = mEntityTable.column_exists("string:LinkedViewName") ? mEntityTable.mStringColumns["string:LinkedViewName"] : std::vector<int>();
+            
+            std::vector<std::string>* result = new std::vector<std::string>();
+            result->reserve(count);
+            
+            for (int i = 0; i < count; ++i)
+            {
+                result->push_back(std::string(reinterpret_cast<const char*>(mStrings[linkedViewNameData[i]])));
+            }
+            
+            return result;
+        }
+        
+        std::string GetViewFilters(int linkInViewIndex)
+        {
+            if (linkInViewIndex < 0 || linkInViewIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("string:ViewFilters")) {
+                return std::string(reinterpret_cast<const char*>(mStrings[mEntityTable.mStringColumns["string:ViewFilters"][linkInViewIndex]]));
+            }
+            
+            return {};
+        }
+        
+        std::vector<std::string>* GetAllViewFilters()
+        {
+            const auto count = GetCount();
+            
+            const std::vector<int>& viewFiltersData = mEntityTable.column_exists("string:ViewFilters") ? mEntityTable.mStringColumns["string:ViewFilters"] : std::vector<int>();
+            
+            std::vector<std::string>* result = new std::vector<std::string>();
+            result->reserve(count);
+            
+            for (int i = 0; i < count; ++i)
+            {
+                result->push_back(std::string(reinterpret_cast<const char*>(mStrings[viewFiltersData[i]])));
+            }
+            
+            return result;
+        }
+        
+        std::string GetObjectStyles(int linkInViewIndex)
+        {
+            if (linkInViewIndex < 0 || linkInViewIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("string:ObjectStyles")) {
+                return std::string(reinterpret_cast<const char*>(mStrings[mEntityTable.mStringColumns["string:ObjectStyles"][linkInViewIndex]]));
+            }
+            
+            return {};
+        }
+        
+        std::vector<std::string>* GetAllObjectStyles()
+        {
+            const auto count = GetCount();
+            
+            const std::vector<int>& objectStylesData = mEntityTable.column_exists("string:ObjectStyles") ? mEntityTable.mStringColumns["string:ObjectStyles"] : std::vector<int>();
+            
+            std::vector<std::string>* result = new std::vector<std::string>();
+            result->reserve(count);
+            
+            for (int i = 0; i < count; ++i)
+            {
+                result->push_back(std::string(reinterpret_cast<const char*>(mStrings[objectStylesData[i]])));
+            }
+            
+            return result;
+        }
+        
+        std::string GetNestedLinks(int linkInViewIndex)
+        {
+            if (linkInViewIndex < 0 || linkInViewIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("string:NestedLinks")) {
+                return std::string(reinterpret_cast<const char*>(mStrings[mEntityTable.mStringColumns["string:NestedLinks"][linkInViewIndex]]));
+            }
+            
+            return {};
+        }
+        
+        std::vector<std::string>* GetAllNestedLinks()
+        {
+            const auto count = GetCount();
+            
+            const std::vector<int>& nestedLinksData = mEntityTable.column_exists("string:NestedLinks") ? mEntityTable.mStringColumns["string:NestedLinks"] : std::vector<int>();
+            
+            std::vector<std::string>* result = new std::vector<std::string>();
+            result->reserve(count);
+            
+            for (int i = 0; i < count; ++i)
+            {
+                result->push_back(std::string(reinterpret_cast<const char*>(mStrings[nestedLinksData[i]])));
+            }
+            
+            return result;
+        }
+        
+        std::string GetPhase(int linkInViewIndex)
+        {
+            if (linkInViewIndex < 0 || linkInViewIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("string:Phase")) {
+                return std::string(reinterpret_cast<const char*>(mStrings[mEntityTable.mStringColumns["string:Phase"][linkInViewIndex]]));
+            }
+            
+            return {};
+        }
+        
+        std::vector<std::string>* GetAllPhase()
+        {
+            const auto count = GetCount();
+            
+            const std::vector<int>& phaseData = mEntityTable.column_exists("string:Phase") ? mEntityTable.mStringColumns["string:Phase"] : std::vector<int>();
+            
+            std::vector<std::string>* result = new std::vector<std::string>();
+            result->reserve(count);
+            
+            for (int i = 0; i < count; ++i)
+            {
+                result->push_back(std::string(reinterpret_cast<const char*>(mStrings[phaseData[i]])));
+            }
+            
+            return result;
+        }
+        
+        std::string GetPhaseFilter(int linkInViewIndex)
+        {
+            if (linkInViewIndex < 0 || linkInViewIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("string:PhaseFilter")) {
+                return std::string(reinterpret_cast<const char*>(mStrings[mEntityTable.mStringColumns["string:PhaseFilter"][linkInViewIndex]]));
+            }
+            
+            return {};
+        }
+        
+        std::vector<std::string>* GetAllPhaseFilter()
+        {
+            const auto count = GetCount();
+            
+            const std::vector<int>& phaseFilterData = mEntityTable.column_exists("string:PhaseFilter") ? mEntityTable.mStringColumns["string:PhaseFilter"] : std::vector<int>();
+            
+            std::vector<std::string>* result = new std::vector<std::string>();
+            result->reserve(count);
+            
+            for (int i = 0; i < count; ++i)
+            {
+                result->push_back(std::string(reinterpret_cast<const char*>(mStrings[phaseFilterData[i]])));
+            }
+            
+            return result;
+        }
+        
+        std::string GetDetailLevel(int linkInViewIndex)
+        {
+            if (linkInViewIndex < 0 || linkInViewIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("string:DetailLevel")) {
+                return std::string(reinterpret_cast<const char*>(mStrings[mEntityTable.mStringColumns["string:DetailLevel"][linkInViewIndex]]));
+            }
+            
+            return {};
+        }
+        
+        std::vector<std::string>* GetAllDetailLevel()
+        {
+            const auto count = GetCount();
+            
+            const std::vector<int>& detailLevelData = mEntityTable.column_exists("string:DetailLevel") ? mEntityTable.mStringColumns["string:DetailLevel"] : std::vector<int>();
+            
+            std::vector<std::string>* result = new std::vector<std::string>();
+            result->reserve(count);
+            
+            for (int i = 0; i < count; ++i)
+            {
+                result->push_back(std::string(reinterpret_cast<const char*>(mStrings[detailLevelData[i]])));
+            }
+            
+            return result;
+        }
+        
+        std::string GetDiscipline(int linkInViewIndex)
+        {
+            if (linkInViewIndex < 0 || linkInViewIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("string:Discipline")) {
+                return std::string(reinterpret_cast<const char*>(mStrings[mEntityTable.mStringColumns["string:Discipline"][linkInViewIndex]]));
+            }
+            
+            return {};
+        }
+        
+        std::vector<std::string>* GetAllDiscipline()
+        {
+            const auto count = GetCount();
+            
+            const std::vector<int>& disciplineData = mEntityTable.column_exists("string:Discipline") ? mEntityTable.mStringColumns["string:Discipline"] : std::vector<int>();
+            
+            std::vector<std::string>* result = new std::vector<std::string>();
+            result->reserve(count);
+            
+            for (int i = 0; i < count; ++i)
+            {
+                result->push_back(std::string(reinterpret_cast<const char*>(mStrings[disciplineData[i]])));
+            }
+            
+            return result;
+        }
+        
+        std::string GetLinkedWorksets(int linkInViewIndex)
+        {
+            if (linkInViewIndex < 0 || linkInViewIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("string:LinkedWorksets")) {
+                return std::string(reinterpret_cast<const char*>(mStrings[mEntityTable.mStringColumns["string:LinkedWorksets"][linkInViewIndex]]));
+            }
+            
+            return {};
+        }
+        
+        std::vector<std::string>* GetAllLinkedWorksets()
+        {
+            const auto count = GetCount();
+            
+            const std::vector<int>& linkedWorksetsData = mEntityTable.column_exists("string:LinkedWorksets") ? mEntityTable.mStringColumns["string:LinkedWorksets"] : std::vector<int>();
+            
+            std::vector<std::string>* result = new std::vector<std::string>();
+            result->reserve(count);
+            
+            for (int i = 0; i < count; ++i)
+            {
+                result->push_back(std::string(reinterpret_cast<const char*>(mStrings[linkedWorksetsData[i]])));
+            }
+            
+            return result;
+        }
+        
+        bool GetIsMeasured(int linkInViewIndex)
+        {
+            if (linkInViewIndex < 0 || linkInViewIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("byte:IsMeasured")) {
+                return static_cast<bool>(*reinterpret_cast<bfast::byte*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["byte:IsMeasured"].begin() + linkInViewIndex * sizeof(bfast::byte))));
+            }
+            
+            return {};
+        }
+        
+        std::vector<bool>* GetAllIsMeasured()
+        {
+            const auto count = GetCount();
+            
+            bfast::byte* isMeasuredData = new bfast::byte[count];
+            if (mEntityTable.column_exists("byte:IsMeasured")) {
+                memcpy(isMeasuredData, mEntityTable.mDataColumns["byte:IsMeasured"].begin(), count * sizeof(bfast::byte));
+            }
+            
+            std::vector<bool>* result = new std::vector<bool>(isMeasuredData, isMeasuredData + count);
+            
+            delete[] isMeasuredData;
+            
+            return result;
+        }
+        
+        int GetMeasuredVisibleCount(int linkInViewIndex)
+        {
+            if (linkInViewIndex < 0 || linkInViewIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("int:MeasuredVisibleCount")) {
+                return *reinterpret_cast<int*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["int:MeasuredVisibleCount"].begin() + linkInViewIndex * sizeof(int)));
+            }
+            
+            return {};
+        }
+        
+        std::vector<int>* GetAllMeasuredVisibleCount()
+        {
+            const auto count = GetCount();
+            
+            int* measuredVisibleCountData = new int[count];
+            if (mEntityTable.column_exists("int:MeasuredVisibleCount")) {
+                memcpy(measuredVisibleCountData, mEntityTable.mDataColumns["int:MeasuredVisibleCount"].begin(), count * sizeof(int));
+            }
+            
+            std::vector<int>* result = new std::vector<int>(measuredVisibleCountData, measuredVisibleCountData + count);
+            
+            delete[] measuredVisibleCountData;
+            
+            return result;
+        }
+        
+        std::string GetNotReadable(int linkInViewIndex)
+        {
+            if (linkInViewIndex < 0 || linkInViewIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("string:NotReadable")) {
+                return std::string(reinterpret_cast<const char*>(mStrings[mEntityTable.mStringColumns["string:NotReadable"][linkInViewIndex]]));
+            }
+            
+            return {};
+        }
+        
+        std::vector<std::string>* GetAllNotReadable()
+        {
+            const auto count = GetCount();
+            
+            const std::vector<int>& notReadableData = mEntityTable.column_exists("string:NotReadable") ? mEntityTable.mStringColumns["string:NotReadable"] : std::vector<int>();
+            
+            std::vector<std::string>* result = new std::vector<std::string>();
+            result->reserve(count);
+            
+            for (int i = 0; i < count; ++i)
+            {
+                result->push_back(std::string(reinterpret_cast<const char*>(mStrings[notReadableData[i]])));
+            }
+            
+            return result;
+        }
+        
+        int GetViewIndex(int linkInViewIndex)
+        {
+            if (!mEntityTable.column_exists("index:Vim.View:View")) {
+                return -1;
+            }
+            
+            if (linkInViewIndex < 0 || linkInViewIndex >= GetCount())
+                return -1;
+            
+            return mEntityTable.mIndexColumns["index:Vim.View:View"][linkInViewIndex];
+        }
+        
+        int GetLinkedDocumentIndex(int linkInViewIndex)
+        {
+            if (!mEntityTable.column_exists("index:Vim.BimDocument:LinkedDocument")) {
+                return -1;
+            }
+            
+            if (linkInViewIndex < 0 || linkInViewIndex >= GetCount())
+                return -1;
+            
+            return mEntityTable.mIndexColumns["index:Vim.BimDocument:LinkedDocument"][linkInViewIndex];
+        }
+        
+        int GetLinkedViewIndex(int linkInViewIndex)
+        {
+            if (!mEntityTable.column_exists("index:Vim.View:LinkedView")) {
+                return -1;
+            }
+            
+            if (linkInViewIndex < 0 || linkInViewIndex >= GetCount())
+                return -1;
+            
+            return mEntityTable.mIndexColumns["index:Vim.View:LinkedView"][linkInViewIndex];
+        }
+        
+        int GetElementIndex(int linkInViewIndex)
+        {
+            if (!mEntityTable.column_exists("index:Vim.Element:Element")) {
+                return -1;
+            }
+            
+            if (linkInViewIndex < 0 || linkInViewIndex >= GetCount())
+                return -1;
+            
+            return mEntityTable.mIndexColumns["index:Vim.Element:Element"][linkInViewIndex];
+        }
+        
+    };
+    
+    static LinkInViewTable* GetLinkInViewTable(Scene& scene)
+    {
+        if (scene.mEntityTables.find("Vim.LinkInView") == scene.mEntityTables.end())
+            return {};
+        
+        return new LinkInViewTable(scene.mEntityTables["Vim.LinkInView"], scene.mStrings);
     }
     
     class Camera
@@ -16037,6 +16867,7 @@ namespace Vim
         mHiddenWorksetInView = GetHiddenWorksetInViewTable(scene);
         mFilterInView = GetFilterInViewTable(scene);
         mHiddenElementInView = GetHiddenElementInViewTable(scene);
+        mLinkInView = GetLinkInViewTable(scene);
         mCamera = GetCameraTable(scene);
         mMaterial = GetMaterialTable(scene);
         mMaterialInElement = GetMaterialInElementTable(scene);
@@ -16099,6 +16930,7 @@ namespace Vim
         delete mHiddenWorksetInView;
         delete mFilterInView;
         delete mHiddenElementInView;
+        delete mLinkInView;
         delete mCamera;
         delete mMaterial;
         delete mMaterialInElement;
