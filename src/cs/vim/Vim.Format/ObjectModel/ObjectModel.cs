@@ -14,6 +14,32 @@ namespace Vim.Format.ObjectModel
         // ReSharper disable MemberHidesStaticFromOuterClass
         public static class History
         {
+            // Schema additions (realistic material appearance; filled only by exports with the experimental
+            // "Realistic materials" option, otherwise left at their defaults with AppearanceKind empty)
+            //   Vim.Material__string:AppearanceKind
+            //   Vim.Material__double:GraphicsColor.X
+            //   Vim.Material__double:GraphicsColor.Y
+            //   Vim.Material__double:GraphicsColor.Z
+            //   Vim.Material__double:AppearanceColor.X
+            //   Vim.Material__double:AppearanceColor.Y
+            //   Vim.Material__double:AppearanceColor.Z
+            //   Vim.Material__double:AppearanceTint.X
+            //   Vim.Material__double:AppearanceTint.Y
+            //   Vim.Material__double:AppearanceTint.Z
+            //   Vim.Material__double:AppearanceImageFade
+            //   Vim.Material__double:AppearanceTransparency
+            //   Vim.Material__double:Roughness
+            //   Vim.Material__double:Metalness
+            //   Vim.Material__double:Reflectivity
+            //   Vim.Material__double:RefractionIndex
+            //   Vim.Material__double:EmissionColor.X
+            //   Vim.Material__double:EmissionColor.Y
+            //   Vim.Material__double:EmissionColor.Z
+            //   Vim.Material__double:EmissionLuminance
+            //   Vim.Material__string:ColorTextureKind
+            //   Vim.Material__string:NormalTextureKind
+            public const string v5_8_0 = "5.8.0";
+
             // Schema additions
             //   Vim.Element__string:Creator
             //   Vim.Element__string:LastChangedBy
@@ -186,7 +212,8 @@ namespace Vim.Format.ObjectModel
         // ReSharper enable MemberHidesStaticFromOuterClass
 
         // [MAINTAIN] Add more object model SerializableVersions below and update the current one.
-        public static SerializableVersion Current => v5_7_0;
+        public static SerializableVersion Current => v5_8_0;
+        public static SerializableVersion v5_8_0 => SerializableVersion.Parse(History.v5_8_0);
         public static SerializableVersion v5_7_0 => SerializableVersion.Parse(History.v5_7_0);
         public static SerializableVersion v5_6_0 => SerializableVersion.Parse(History.v5_6_0);
         public static SerializableVersion v5_5_0 => SerializableVersion.Parse(History.v5_5_0);
@@ -1451,6 +1478,81 @@ namespace Vim.Format.ObjectModel
 
         /// <summary>The transparency, defined in the domain [0..1]</summary>
         public double Transparency;
+
+        // Realistic appearance (schema 5.8.0). Revit has two looks per material: the Graphics shading colour (what
+        // Shaded / Consistent Colors views show) and the Appearance asset (what Realistic views and renders show).
+        // The fields below carry the appearance; they are filled only when the export option asks for it.
+        // AppearanceKind is empty when they were not exported.
+
+        /// <summary>The appearance class the values were read from, e.g. "Generic", "Masonry", "PrismOpaque". Empty when not exported.</summary>
+        public string AppearanceKind;
+
+        /// <summary>The Graphics shading colour (Revit: Graphics > Shading > Color), in [0..1].</summary>
+        public double GraphicsColor_X;
+        public double GraphicsColor_Y;
+        public double GraphicsColor_Z;
+        public DVector3 GraphicsColor
+        {
+            get => new DVector3(GraphicsColor_X, GraphicsColor_Y, GraphicsColor_Z);
+            set => (GraphicsColor_X, GraphicsColor_Y, GraphicsColor_Z) = value;
+        }
+
+        /// <summary>The appearance base colour without its texture (Revit: Generic > Color, or the class colour), in [0..1].</summary>
+        public double AppearanceColor_X;
+        public double AppearanceColor_Y;
+        public double AppearanceColor_Z;
+        public DVector3 AppearanceColor
+        {
+            get => new DVector3(AppearanceColor_X, AppearanceColor_Y, AppearanceColor_Z);
+            set => (AppearanceColor_X, AppearanceColor_Y, AppearanceColor_Z) = value;
+        }
+
+        /// <summary>The tint multiplied over the colour and its texture (Revit: Tint), (1, 1, 1) when there is no tint.</summary>
+        public double AppearanceTint_X = 1;
+        public double AppearanceTint_Y = 1;
+        public double AppearanceTint_Z = 1;
+        public DVector3 AppearanceTint
+        {
+            get => new DVector3(AppearanceTint_X, AppearanceTint_Y, AppearanceTint_Z);
+            set => (AppearanceTint_X, AppearanceTint_Y, AppearanceTint_Z) = value;
+        }
+
+        /// <summary>How much the colour texture covers the base colour, in [0..1] (Revit: Image Fade; 1 = the image only).</summary>
+        public double AppearanceImageFade = 1;
+
+        /// <summary>The appearance transparency, in [0..1] (Revit: Transparency > Amount).</summary>
+        public double AppearanceTransparency;
+
+        /// <summary>The surface roughness, in [0..1] (0 = mirror-smooth; Revit: 1 - Glossiness, or Roughness).</summary>
+        public double Roughness;
+
+        /// <summary>The metalness, in [0..1] (Revit: Highlights = Metallic, or a Metal class).</summary>
+        public double Metalness;
+
+        /// <summary>The reflectivity facing the viewer, in [0..1] (Revit: Reflectivity > Direct, or F0).</summary>
+        public double Reflectivity;
+
+        /// <summary>The index of refraction (1 = none; glass is about 1.5).</summary>
+        public double RefractionIndex = 1;
+
+        /// <summary>The self-illumination colour, in [0..1] (Revit: Self Illumination > Filter Color).</summary>
+        public double EmissionColor_X;
+        public double EmissionColor_Y;
+        public double EmissionColor_Z;
+        public DVector3 EmissionColor
+        {
+            get => new DVector3(EmissionColor_X, EmissionColor_Y, EmissionColor_Z);
+            set => (EmissionColor_X, EmissionColor_Y, EmissionColor_Z) = value;
+        }
+
+        /// <summary>The self-illumination luminance in candelas per square metre (0 = none).</summary>
+        public double EmissionLuminance;
+
+        /// <summary>Where the colour texture came from: "Bitmap", or "Baked Tile" / "Baked Checker" / ... for a Revit procedural texture baked to an image. Empty when none.</summary>
+        public string ColorTextureKind;
+
+        /// <summary>What the normal texture holds: "Height" (a grey bump map) or "Normal" (a normal map). Empty when none.</summary>
+        public string NormalTextureKind;
     }
 
     /// <summary>

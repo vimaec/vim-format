@@ -6102,6 +6102,28 @@ export interface IMaterial {
     glossiness?: number
     smoothness?: number
     transparency?: number
+    appearanceKind?: string
+    graphicsColor_X?: number
+    graphicsColor_Y?: number
+    graphicsColor_Z?: number
+    appearanceColor_X?: number
+    appearanceColor_Y?: number
+    appearanceColor_Z?: number
+    appearanceTint_X?: number
+    appearanceTint_Y?: number
+    appearanceTint_Z?: number
+    appearanceImageFade?: number
+    appearanceTransparency?: number
+    roughness?: number
+    metalness?: number
+    reflectivity?: number
+    refractionIndex?: number
+    emissionColor_X?: number
+    emissionColor_Y?: number
+    emissionColor_Z?: number
+    emissionLuminance?: number
+    colorTextureKind?: string
+    normalTextureKind?: string
     
     colorTextureFileIndex?: number
     colorTextureFile?: IAsset
@@ -6150,6 +6172,50 @@ export interface IMaterialTable {
     getAllSmoothness(): Promise<number[] | undefined>
     getTransparency(materialIndex: number): Promise<number | undefined>
     getAllTransparency(): Promise<number[] | undefined>
+    getAppearanceKind(materialIndex: number): Promise<string | undefined>
+    getAllAppearanceKind(): Promise<string[] | undefined>
+    getGraphicsColor_X(materialIndex: number): Promise<number | undefined>
+    getAllGraphicsColor_X(): Promise<number[] | undefined>
+    getGraphicsColor_Y(materialIndex: number): Promise<number | undefined>
+    getAllGraphicsColor_Y(): Promise<number[] | undefined>
+    getGraphicsColor_Z(materialIndex: number): Promise<number | undefined>
+    getAllGraphicsColor_Z(): Promise<number[] | undefined>
+    getAppearanceColor_X(materialIndex: number): Promise<number | undefined>
+    getAllAppearanceColor_X(): Promise<number[] | undefined>
+    getAppearanceColor_Y(materialIndex: number): Promise<number | undefined>
+    getAllAppearanceColor_Y(): Promise<number[] | undefined>
+    getAppearanceColor_Z(materialIndex: number): Promise<number | undefined>
+    getAllAppearanceColor_Z(): Promise<number[] | undefined>
+    getAppearanceTint_X(materialIndex: number): Promise<number | undefined>
+    getAllAppearanceTint_X(): Promise<number[] | undefined>
+    getAppearanceTint_Y(materialIndex: number): Promise<number | undefined>
+    getAllAppearanceTint_Y(): Promise<number[] | undefined>
+    getAppearanceTint_Z(materialIndex: number): Promise<number | undefined>
+    getAllAppearanceTint_Z(): Promise<number[] | undefined>
+    getAppearanceImageFade(materialIndex: number): Promise<number | undefined>
+    getAllAppearanceImageFade(): Promise<number[] | undefined>
+    getAppearanceTransparency(materialIndex: number): Promise<number | undefined>
+    getAllAppearanceTransparency(): Promise<number[] | undefined>
+    getRoughness(materialIndex: number): Promise<number | undefined>
+    getAllRoughness(): Promise<number[] | undefined>
+    getMetalness(materialIndex: number): Promise<number | undefined>
+    getAllMetalness(): Promise<number[] | undefined>
+    getReflectivity(materialIndex: number): Promise<number | undefined>
+    getAllReflectivity(): Promise<number[] | undefined>
+    getRefractionIndex(materialIndex: number): Promise<number | undefined>
+    getAllRefractionIndex(): Promise<number[] | undefined>
+    getEmissionColor_X(materialIndex: number): Promise<number | undefined>
+    getAllEmissionColor_X(): Promise<number[] | undefined>
+    getEmissionColor_Y(materialIndex: number): Promise<number | undefined>
+    getAllEmissionColor_Y(): Promise<number[] | undefined>
+    getEmissionColor_Z(materialIndex: number): Promise<number | undefined>
+    getAllEmissionColor_Z(): Promise<number[] | undefined>
+    getEmissionLuminance(materialIndex: number): Promise<number | undefined>
+    getAllEmissionLuminance(): Promise<number[] | undefined>
+    getColorTextureKind(materialIndex: number): Promise<string | undefined>
+    getAllColorTextureKind(): Promise<string[] | undefined>
+    getNormalTextureKind(materialIndex: number): Promise<string | undefined>
+    getAllNormalTextureKind(): Promise<string[] | undefined>
     
     getColorTextureFileIndex(materialIndex: number): Promise<number | undefined>
     getAllColorTextureFileIndex(): Promise<number[] | undefined>
@@ -6181,6 +6247,28 @@ export class Material implements IMaterial {
     glossiness?: number
     smoothness?: number
     transparency?: number
+    appearanceKind?: string
+    graphicsColor_X?: number
+    graphicsColor_Y?: number
+    graphicsColor_Z?: number
+    appearanceColor_X?: number
+    appearanceColor_Y?: number
+    appearanceColor_Z?: number
+    appearanceTint_X?: number
+    appearanceTint_Y?: number
+    appearanceTint_Z?: number
+    appearanceImageFade?: number
+    appearanceTransparency?: number
+    roughness?: number
+    metalness?: number
+    reflectivity?: number
+    refractionIndex?: number
+    emissionColor_X?: number
+    emissionColor_Y?: number
+    emissionColor_Z?: number
+    emissionLuminance?: number
+    colorTextureKind?: string
+    normalTextureKind?: string
     
     colorTextureFileIndex?: number
     colorTextureFile?: IAsset
@@ -6211,6 +6299,28 @@ export class Material implements IMaterial {
             table.getGlossiness(index).then(v => result.glossiness = v),
             table.getSmoothness(index).then(v => result.smoothness = v),
             table.getTransparency(index).then(v => result.transparency = v),
+            table.getAppearanceKind(index).then(v => result.appearanceKind = v),
+            table.getGraphicsColor_X(index).then(v => result.graphicsColor_X = v),
+            table.getGraphicsColor_Y(index).then(v => result.graphicsColor_Y = v),
+            table.getGraphicsColor_Z(index).then(v => result.graphicsColor_Z = v),
+            table.getAppearanceColor_X(index).then(v => result.appearanceColor_X = v),
+            table.getAppearanceColor_Y(index).then(v => result.appearanceColor_Y = v),
+            table.getAppearanceColor_Z(index).then(v => result.appearanceColor_Z = v),
+            table.getAppearanceTint_X(index).then(v => result.appearanceTint_X = v),
+            table.getAppearanceTint_Y(index).then(v => result.appearanceTint_Y = v),
+            table.getAppearanceTint_Z(index).then(v => result.appearanceTint_Z = v),
+            table.getAppearanceImageFade(index).then(v => result.appearanceImageFade = v),
+            table.getAppearanceTransparency(index).then(v => result.appearanceTransparency = v),
+            table.getRoughness(index).then(v => result.roughness = v),
+            table.getMetalness(index).then(v => result.metalness = v),
+            table.getReflectivity(index).then(v => result.reflectivity = v),
+            table.getRefractionIndex(index).then(v => result.refractionIndex = v),
+            table.getEmissionColor_X(index).then(v => result.emissionColor_X = v),
+            table.getEmissionColor_Y(index).then(v => result.emissionColor_Y = v),
+            table.getEmissionColor_Z(index).then(v => result.emissionColor_Z = v),
+            table.getEmissionLuminance(index).then(v => result.emissionLuminance = v),
+            table.getColorTextureKind(index).then(v => result.colorTextureKind = v),
+            table.getNormalTextureKind(index).then(v => result.normalTextureKind = v),
             table.getColorTextureFileIndex(index).then(v => result.colorTextureFileIndex = v),
             table.getNormalTextureFileIndex(index).then(v => result.normalTextureFileIndex = v),
             table.getElementIndex(index).then(v => result.elementIndex = v),
@@ -6266,6 +6376,28 @@ export class MaterialTable implements IMaterialTable {
         let glossiness: number[] | undefined
         let smoothness: number[] | undefined
         let transparency: number[] | undefined
+        let appearanceKind: string[] | undefined
+        let graphicsColor_X: number[] | undefined
+        let graphicsColor_Y: number[] | undefined
+        let graphicsColor_Z: number[] | undefined
+        let appearanceColor_X: number[] | undefined
+        let appearanceColor_Y: number[] | undefined
+        let appearanceColor_Z: number[] | undefined
+        let appearanceTint_X: number[] | undefined
+        let appearanceTint_Y: number[] | undefined
+        let appearanceTint_Z: number[] | undefined
+        let appearanceImageFade: number[] | undefined
+        let appearanceTransparency: number[] | undefined
+        let roughness: number[] | undefined
+        let metalness: number[] | undefined
+        let reflectivity: number[] | undefined
+        let refractionIndex: number[] | undefined
+        let emissionColor_X: number[] | undefined
+        let emissionColor_Y: number[] | undefined
+        let emissionColor_Z: number[] | undefined
+        let emissionLuminance: number[] | undefined
+        let colorTextureKind: string[] | undefined
+        let normalTextureKind: string[] | undefined
         let colorTextureFileIndex: number[] | undefined
         let normalTextureFileIndex: number[] | undefined
         let elementIndex: number[] | undefined
@@ -6288,6 +6420,28 @@ export class MaterialTable implements IMaterialTable {
             (async () => { glossiness = (await localTable.getNumberArray("double:Glossiness")) })(),
             (async () => { smoothness = (await localTable.getNumberArray("double:Smoothness")) })(),
             (async () => { transparency = (await localTable.getNumberArray("double:Transparency")) })(),
+            (async () => { appearanceKind = (await localTable.getStringArray("string:AppearanceKind")) })(),
+            (async () => { graphicsColor_X = (await localTable.getNumberArray("double:GraphicsColor.X")) })(),
+            (async () => { graphicsColor_Y = (await localTable.getNumberArray("double:GraphicsColor.Y")) })(),
+            (async () => { graphicsColor_Z = (await localTable.getNumberArray("double:GraphicsColor.Z")) })(),
+            (async () => { appearanceColor_X = (await localTable.getNumberArray("double:AppearanceColor.X")) })(),
+            (async () => { appearanceColor_Y = (await localTable.getNumberArray("double:AppearanceColor.Y")) })(),
+            (async () => { appearanceColor_Z = (await localTable.getNumberArray("double:AppearanceColor.Z")) })(),
+            (async () => { appearanceTint_X = (await localTable.getNumberArray("double:AppearanceTint.X")) })(),
+            (async () => { appearanceTint_Y = (await localTable.getNumberArray("double:AppearanceTint.Y")) })(),
+            (async () => { appearanceTint_Z = (await localTable.getNumberArray("double:AppearanceTint.Z")) })(),
+            (async () => { appearanceImageFade = (await localTable.getNumberArray("double:AppearanceImageFade")) })(),
+            (async () => { appearanceTransparency = (await localTable.getNumberArray("double:AppearanceTransparency")) })(),
+            (async () => { roughness = (await localTable.getNumberArray("double:Roughness")) })(),
+            (async () => { metalness = (await localTable.getNumberArray("double:Metalness")) })(),
+            (async () => { reflectivity = (await localTable.getNumberArray("double:Reflectivity")) })(),
+            (async () => { refractionIndex = (await localTable.getNumberArray("double:RefractionIndex")) })(),
+            (async () => { emissionColor_X = (await localTable.getNumberArray("double:EmissionColor.X")) })(),
+            (async () => { emissionColor_Y = (await localTable.getNumberArray("double:EmissionColor.Y")) })(),
+            (async () => { emissionColor_Z = (await localTable.getNumberArray("double:EmissionColor.Z")) })(),
+            (async () => { emissionLuminance = (await localTable.getNumberArray("double:EmissionLuminance")) })(),
+            (async () => { colorTextureKind = (await localTable.getStringArray("string:ColorTextureKind")) })(),
+            (async () => { normalTextureKind = (await localTable.getStringArray("string:NormalTextureKind")) })(),
             (async () => { colorTextureFileIndex = (await localTable.getNumberArray("index:Vim.Asset:ColorTextureFile")) })(),
             (async () => { normalTextureFileIndex = (await localTable.getNumberArray("index:Vim.Asset:NormalTextureFile")) })(),
             (async () => { elementIndex = (await localTable.getNumberArray("index:Vim.Element:Element")) })(),
@@ -6316,6 +6470,28 @@ export class MaterialTable implements IMaterialTable {
                 glossiness: glossiness ? glossiness[i] : undefined,
                 smoothness: smoothness ? smoothness[i] : undefined,
                 transparency: transparency ? transparency[i] : undefined,
+                appearanceKind: appearanceKind ? appearanceKind[i] : undefined,
+                graphicsColor_X: graphicsColor_X ? graphicsColor_X[i] : undefined,
+                graphicsColor_Y: graphicsColor_Y ? graphicsColor_Y[i] : undefined,
+                graphicsColor_Z: graphicsColor_Z ? graphicsColor_Z[i] : undefined,
+                appearanceColor_X: appearanceColor_X ? appearanceColor_X[i] : undefined,
+                appearanceColor_Y: appearanceColor_Y ? appearanceColor_Y[i] : undefined,
+                appearanceColor_Z: appearanceColor_Z ? appearanceColor_Z[i] : undefined,
+                appearanceTint_X: appearanceTint_X ? appearanceTint_X[i] : undefined,
+                appearanceTint_Y: appearanceTint_Y ? appearanceTint_Y[i] : undefined,
+                appearanceTint_Z: appearanceTint_Z ? appearanceTint_Z[i] : undefined,
+                appearanceImageFade: appearanceImageFade ? appearanceImageFade[i] : undefined,
+                appearanceTransparency: appearanceTransparency ? appearanceTransparency[i] : undefined,
+                roughness: roughness ? roughness[i] : undefined,
+                metalness: metalness ? metalness[i] : undefined,
+                reflectivity: reflectivity ? reflectivity[i] : undefined,
+                refractionIndex: refractionIndex ? refractionIndex[i] : undefined,
+                emissionColor_X: emissionColor_X ? emissionColor_X[i] : undefined,
+                emissionColor_Y: emissionColor_Y ? emissionColor_Y[i] : undefined,
+                emissionColor_Z: emissionColor_Z ? emissionColor_Z[i] : undefined,
+                emissionLuminance: emissionLuminance ? emissionLuminance[i] : undefined,
+                colorTextureKind: colorTextureKind ? colorTextureKind[i] : undefined,
+                normalTextureKind: normalTextureKind ? normalTextureKind[i] : undefined,
                 colorTextureFileIndex: colorTextureFileIndex ? colorTextureFileIndex[i] : undefined,
                 normalTextureFileIndex: normalTextureFileIndex ? normalTextureFileIndex[i] : undefined,
                 elementIndex: elementIndex ? elementIndex[i] : undefined
@@ -6459,6 +6635,182 @@ export class MaterialTable implements IMaterialTable {
     
     async getAllTransparency(): Promise<number[] | undefined> {
         return (await this.entityTable.getNumberArray("double:Transparency"))
+    }
+    
+    async getAppearanceKind(materialIndex: number): Promise<string | undefined> {
+        return (await this.entityTable.getString(materialIndex, "string:AppearanceKind"))
+    }
+    
+    async getAllAppearanceKind(): Promise<string[] | undefined> {
+        return (await this.entityTable.getStringArray("string:AppearanceKind"))
+    }
+    
+    async getGraphicsColor_X(materialIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(materialIndex, "double:GraphicsColor.X"))
+    }
+    
+    async getAllGraphicsColor_X(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:GraphicsColor.X"))
+    }
+    
+    async getGraphicsColor_Y(materialIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(materialIndex, "double:GraphicsColor.Y"))
+    }
+    
+    async getAllGraphicsColor_Y(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:GraphicsColor.Y"))
+    }
+    
+    async getGraphicsColor_Z(materialIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(materialIndex, "double:GraphicsColor.Z"))
+    }
+    
+    async getAllGraphicsColor_Z(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:GraphicsColor.Z"))
+    }
+    
+    async getAppearanceColor_X(materialIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(materialIndex, "double:AppearanceColor.X"))
+    }
+    
+    async getAllAppearanceColor_X(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:AppearanceColor.X"))
+    }
+    
+    async getAppearanceColor_Y(materialIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(materialIndex, "double:AppearanceColor.Y"))
+    }
+    
+    async getAllAppearanceColor_Y(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:AppearanceColor.Y"))
+    }
+    
+    async getAppearanceColor_Z(materialIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(materialIndex, "double:AppearanceColor.Z"))
+    }
+    
+    async getAllAppearanceColor_Z(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:AppearanceColor.Z"))
+    }
+    
+    async getAppearanceTint_X(materialIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(materialIndex, "double:AppearanceTint.X"))
+    }
+    
+    async getAllAppearanceTint_X(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:AppearanceTint.X"))
+    }
+    
+    async getAppearanceTint_Y(materialIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(materialIndex, "double:AppearanceTint.Y"))
+    }
+    
+    async getAllAppearanceTint_Y(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:AppearanceTint.Y"))
+    }
+    
+    async getAppearanceTint_Z(materialIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(materialIndex, "double:AppearanceTint.Z"))
+    }
+    
+    async getAllAppearanceTint_Z(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:AppearanceTint.Z"))
+    }
+    
+    async getAppearanceImageFade(materialIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(materialIndex, "double:AppearanceImageFade"))
+    }
+    
+    async getAllAppearanceImageFade(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:AppearanceImageFade"))
+    }
+    
+    async getAppearanceTransparency(materialIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(materialIndex, "double:AppearanceTransparency"))
+    }
+    
+    async getAllAppearanceTransparency(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:AppearanceTransparency"))
+    }
+    
+    async getRoughness(materialIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(materialIndex, "double:Roughness"))
+    }
+    
+    async getAllRoughness(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:Roughness"))
+    }
+    
+    async getMetalness(materialIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(materialIndex, "double:Metalness"))
+    }
+    
+    async getAllMetalness(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:Metalness"))
+    }
+    
+    async getReflectivity(materialIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(materialIndex, "double:Reflectivity"))
+    }
+    
+    async getAllReflectivity(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:Reflectivity"))
+    }
+    
+    async getRefractionIndex(materialIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(materialIndex, "double:RefractionIndex"))
+    }
+    
+    async getAllRefractionIndex(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:RefractionIndex"))
+    }
+    
+    async getEmissionColor_X(materialIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(materialIndex, "double:EmissionColor.X"))
+    }
+    
+    async getAllEmissionColor_X(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:EmissionColor.X"))
+    }
+    
+    async getEmissionColor_Y(materialIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(materialIndex, "double:EmissionColor.Y"))
+    }
+    
+    async getAllEmissionColor_Y(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:EmissionColor.Y"))
+    }
+    
+    async getEmissionColor_Z(materialIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(materialIndex, "double:EmissionColor.Z"))
+    }
+    
+    async getAllEmissionColor_Z(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:EmissionColor.Z"))
+    }
+    
+    async getEmissionLuminance(materialIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(materialIndex, "double:EmissionLuminance"))
+    }
+    
+    async getAllEmissionLuminance(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:EmissionLuminance"))
+    }
+    
+    async getColorTextureKind(materialIndex: number): Promise<string | undefined> {
+        return (await this.entityTable.getString(materialIndex, "string:ColorTextureKind"))
+    }
+    
+    async getAllColorTextureKind(): Promise<string[] | undefined> {
+        return (await this.entityTable.getStringArray("string:ColorTextureKind"))
+    }
+    
+    async getNormalTextureKind(materialIndex: number): Promise<string | undefined> {
+        return (await this.entityTable.getString(materialIndex, "string:NormalTextureKind"))
+    }
+    
+    async getAllNormalTextureKind(): Promise<string[] | undefined> {
+        return (await this.entityTable.getStringArray("string:NormalTextureKind"))
     }
     
     async getColorTextureFileIndex(materialIndex: number): Promise<number | undefined> {
