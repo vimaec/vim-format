@@ -36,6 +36,11 @@ namespace Vim.Format.ObjectModel
             //   Vim.View__double:SectionBoxBasisY.X (.Y .Z)
             //   Vim.View__double:SectionBoxBasisZ.X (.Y .Z)
             //   Vim.View__string:DisplayStyle
+            // Schema additions (what each 3D view hides, so a viewer shows the view as Revit draws it)
+            //   Vim.HiddenCategoryInView (index:Vim.View:View, index:Vim.Category:Category)
+            //   Vim.HiddenWorksetInView (index:Vim.View:View, index:Vim.Workset:Workset)
+            //   Vim.FilterInView (string:Name, string:Kind, string:FilterUniqueId, int:OrderIndex, byte:IsEnabled, byte:IsVisible, byte:HasOverrides, index:Vim.View:View)
+            //   Vim.HiddenElementInView (string:Reason, index:Vim.View:View, index:Vim.Element:Element, index:Vim.FilterInView:FilterInView)
             public const string v5_8_0 = "5.8.0";
 
             // Schema additions
@@ -1402,6 +1407,87 @@ namespace Vim.Format.ObjectModel
 
         public object GetStorageKey()
             => _Level.CombineAsStorageKey(_View);
+    }
+
+    /// <summary>
+    /// A Category (or subcategory) switched off in a View (Visibility/Graphics), as Revit draws the view: read from the
+    /// view's template when the template controls the model categories. A category class switched off (all model
+    /// categories) is written as one row per top-level model category. 3D views only.
+    /// </summary>
+    [TableName(TableNames.HiddenCategoryInView)]
+    public partial class HiddenCategoryInView : Entity, IStorageKey
+    {
+        public Relation<View> _View;
+        public Relation<Category> _Category;
+
+        public object GetStorageKey()
+            => _Category.CombineAsStorageKey(_View);
+    }
+
+    /// <summary>
+    /// A Workset switched off in a View (Visibility/Graphics > Worksets), read from the view's template when the template
+    /// controls worksets. 3D views only.
+    /// </summary>
+    [TableName(TableNames.HiddenWorksetInView)]
+    public partial class HiddenWorksetInView : Entity, IStorageKey
+    {
+        public Relation<View> _View;
+        public Relation<Workset> _Workset;
+
+        public object GetStorageKey()
+            => _Workset.CombineAsStorageKey(_View);
+    }
+
+    /// <summary>
+    /// A view filter applied to a View, in the order the view applies them.
+    /// </summary>
+    [TableName(TableNames.FilterInView)]
+    public partial class FilterInView : Entity, IStorageKey
+    {
+        /// <summary>The filter's name.</summary>
+        public string Name;
+
+        /// <summary>"Rule" for a rule-based filter, "Selection" for a selection filter.</summary>
+        public string Kind;
+
+        /// <summary>The filter's UniqueId in the authoring tool.</summary>
+        public string FilterUniqueId;
+
+        /// <summary>The filter's position in the view's list (0 = first).</summary>
+        public int OrderIndex;
+
+        /// <summary>Whether the filter is enabled in the view (always true before Revit 2021, which cannot disable a filter).</summary>
+        public bool IsEnabled;
+
+        /// <summary>Whether the elements the filter matches are visible in the view (false = the filter hides them).</summary>
+        public bool IsVisible;
+
+        /// <summary>Whether the filter changes how its elements look (colour, line weight, pattern, halftone, transparency...).</summary>
+        public bool HasOverrides;
+
+        public Relation<View> _View;
+
+        public object GetStorageKey()
+            => $"{_View?.Index ?? -1}|{FilterUniqueId}";
+    }
+
+    /// <summary>
+    /// An Element a View does not draw although its category and workset are shown: hidden by hand in the view
+    /// (Hide in View > Elements; Reason "Hidden in view") or by an enabled view filter switched off (Reason "Filter",
+    /// with that FilterInView). Temporary hide/isolate is not included. 3D views only.
+    /// </summary>
+    [TableName(TableNames.HiddenElementInView)]
+    [CascadeElementRemap]
+    public partial class HiddenElementInView : EntityWithElement, IStorageKey
+    {
+        /// <summary>"Hidden in view" or "Filter".</summary>
+        public string Reason;
+
+        public Relation<View> _View;
+        public Relation<FilterInView> _FilterInView;
+
+        public object GetStorageKey()
+            => _Element.CombineAsStorageKey(_View);
     }
 
     /// <summary>

@@ -6317,6 +6317,664 @@ export class LevelInViewTable implements ILevelInViewTable {
     
 }
 
+export interface IHiddenCategoryInView {
+    index: number
+    
+    viewIndex?: number
+    view?: IView
+    categoryIndex?: number
+    category?: ICategory
+}
+
+export interface IHiddenCategoryInViewTable {
+    getCount(): Promise<number>
+    get(hiddenCategoryInViewIndex: number): Promise<IHiddenCategoryInView>
+    getAll(): Promise<IHiddenCategoryInView[]>
+    
+    getViewIndex(hiddenCategoryInViewIndex: number): Promise<number | undefined>
+    getAllViewIndex(): Promise<number[] | undefined>
+    getView(hiddenCategoryInViewIndex: number): Promise<IView | undefined>
+    getCategoryIndex(hiddenCategoryInViewIndex: number): Promise<number | undefined>
+    getAllCategoryIndex(): Promise<number[] | undefined>
+    getCategory(hiddenCategoryInViewIndex: number): Promise<ICategory | undefined>
+}
+
+export class HiddenCategoryInView implements IHiddenCategoryInView {
+    index: number
+    
+    viewIndex?: number
+    view?: IView
+    categoryIndex?: number
+    category?: ICategory
+    
+    static async createFromTable(table: IHiddenCategoryInViewTable, index: number): Promise<IHiddenCategoryInView> {
+        let result = new HiddenCategoryInView()
+        result.index = index
+        
+        await Promise.all([
+            table.getViewIndex(index).then(v => result.viewIndex = v),
+            table.getCategoryIndex(index).then(v => result.categoryIndex = v),
+        ])
+        
+        return result
+    }
+}
+
+export class HiddenCategoryInViewTable implements IHiddenCategoryInViewTable {
+    private document: VimDocument
+    private entityTable: EntityTable
+    
+    static async createFromDocument(document: VimDocument): Promise<IHiddenCategoryInViewTable | undefined> {
+        const entity = await document.entities.getBfast("Vim.HiddenCategoryInView")
+        
+        if (!entity) {
+            return undefined
+        }
+        
+        let table = new HiddenCategoryInViewTable()
+        table.document = document
+        table.entityTable = new EntityTable(entity, document.strings)
+        
+        return table
+    }
+    
+    getCount(): Promise<number> {
+        return this.entityTable.getCount()
+    }
+    
+    async get(hiddenCategoryInViewIndex: number): Promise<IHiddenCategoryInView> {
+        return await HiddenCategoryInView.createFromTable(this, hiddenCategoryInViewIndex)
+    }
+    
+    async getAll(): Promise<IHiddenCategoryInView[]> {
+        const localTable = await this.entityTable.getLocal()
+        
+        let viewIndex: number[] | undefined
+        let categoryIndex: number[] | undefined
+        
+        await Promise.all([
+            (async () => { viewIndex = (await localTable.getNumberArray("index:Vim.View:View")) })(),
+            (async () => { categoryIndex = (await localTable.getNumberArray("index:Vim.Category:Category")) })(),
+        ])
+        
+        let hiddenCategoryInView: IHiddenCategoryInView[] = []
+        
+        const rowCount = await this.getCount()
+        for (let i = 0; i < rowCount; i++) {
+            hiddenCategoryInView.push({
+                index: i,
+                viewIndex: viewIndex ? viewIndex[i] : undefined,
+                categoryIndex: categoryIndex ? categoryIndex[i] : undefined
+            })
+        }
+        
+        return hiddenCategoryInView
+    }
+    
+    async getViewIndex(hiddenCategoryInViewIndex: number): Promise<number | undefined> {
+        return await this.entityTable.getNumber(hiddenCategoryInViewIndex, "index:Vim.View:View")
+    }
+    
+    async getAllViewIndex(): Promise<number[] | undefined> {
+        return await this.entityTable.getNumberArray("index:Vim.View:View")
+    }
+    
+    async getView(hiddenCategoryInViewIndex: number): Promise<IView | undefined> {
+        const index = await this.getViewIndex(hiddenCategoryInViewIndex)
+        
+        if (index === undefined) {
+            return undefined
+        }
+        
+        return await this.document.view?.get(index)
+    }
+    
+    async getCategoryIndex(hiddenCategoryInViewIndex: number): Promise<number | undefined> {
+        return await this.entityTable.getNumber(hiddenCategoryInViewIndex, "index:Vim.Category:Category")
+    }
+    
+    async getAllCategoryIndex(): Promise<number[] | undefined> {
+        return await this.entityTable.getNumberArray("index:Vim.Category:Category")
+    }
+    
+    async getCategory(hiddenCategoryInViewIndex: number): Promise<ICategory | undefined> {
+        const index = await this.getCategoryIndex(hiddenCategoryInViewIndex)
+        
+        if (index === undefined) {
+            return undefined
+        }
+        
+        return await this.document.category?.get(index)
+    }
+    
+}
+
+export interface IHiddenWorksetInView {
+    index: number
+    
+    viewIndex?: number
+    view?: IView
+    worksetIndex?: number
+    workset?: IWorkset
+}
+
+export interface IHiddenWorksetInViewTable {
+    getCount(): Promise<number>
+    get(hiddenWorksetInViewIndex: number): Promise<IHiddenWorksetInView>
+    getAll(): Promise<IHiddenWorksetInView[]>
+    
+    getViewIndex(hiddenWorksetInViewIndex: number): Promise<number | undefined>
+    getAllViewIndex(): Promise<number[] | undefined>
+    getView(hiddenWorksetInViewIndex: number): Promise<IView | undefined>
+    getWorksetIndex(hiddenWorksetInViewIndex: number): Promise<number | undefined>
+    getAllWorksetIndex(): Promise<number[] | undefined>
+    getWorkset(hiddenWorksetInViewIndex: number): Promise<IWorkset | undefined>
+}
+
+export class HiddenWorksetInView implements IHiddenWorksetInView {
+    index: number
+    
+    viewIndex?: number
+    view?: IView
+    worksetIndex?: number
+    workset?: IWorkset
+    
+    static async createFromTable(table: IHiddenWorksetInViewTable, index: number): Promise<IHiddenWorksetInView> {
+        let result = new HiddenWorksetInView()
+        result.index = index
+        
+        await Promise.all([
+            table.getViewIndex(index).then(v => result.viewIndex = v),
+            table.getWorksetIndex(index).then(v => result.worksetIndex = v),
+        ])
+        
+        return result
+    }
+}
+
+export class HiddenWorksetInViewTable implements IHiddenWorksetInViewTable {
+    private document: VimDocument
+    private entityTable: EntityTable
+    
+    static async createFromDocument(document: VimDocument): Promise<IHiddenWorksetInViewTable | undefined> {
+        const entity = await document.entities.getBfast("Vim.HiddenWorksetInView")
+        
+        if (!entity) {
+            return undefined
+        }
+        
+        let table = new HiddenWorksetInViewTable()
+        table.document = document
+        table.entityTable = new EntityTable(entity, document.strings)
+        
+        return table
+    }
+    
+    getCount(): Promise<number> {
+        return this.entityTable.getCount()
+    }
+    
+    async get(hiddenWorksetInViewIndex: number): Promise<IHiddenWorksetInView> {
+        return await HiddenWorksetInView.createFromTable(this, hiddenWorksetInViewIndex)
+    }
+    
+    async getAll(): Promise<IHiddenWorksetInView[]> {
+        const localTable = await this.entityTable.getLocal()
+        
+        let viewIndex: number[] | undefined
+        let worksetIndex: number[] | undefined
+        
+        await Promise.all([
+            (async () => { viewIndex = (await localTable.getNumberArray("index:Vim.View:View")) })(),
+            (async () => { worksetIndex = (await localTable.getNumberArray("index:Vim.Workset:Workset")) })(),
+        ])
+        
+        let hiddenWorksetInView: IHiddenWorksetInView[] = []
+        
+        const rowCount = await this.getCount()
+        for (let i = 0; i < rowCount; i++) {
+            hiddenWorksetInView.push({
+                index: i,
+                viewIndex: viewIndex ? viewIndex[i] : undefined,
+                worksetIndex: worksetIndex ? worksetIndex[i] : undefined
+            })
+        }
+        
+        return hiddenWorksetInView
+    }
+    
+    async getViewIndex(hiddenWorksetInViewIndex: number): Promise<number | undefined> {
+        return await this.entityTable.getNumber(hiddenWorksetInViewIndex, "index:Vim.View:View")
+    }
+    
+    async getAllViewIndex(): Promise<number[] | undefined> {
+        return await this.entityTable.getNumberArray("index:Vim.View:View")
+    }
+    
+    async getView(hiddenWorksetInViewIndex: number): Promise<IView | undefined> {
+        const index = await this.getViewIndex(hiddenWorksetInViewIndex)
+        
+        if (index === undefined) {
+            return undefined
+        }
+        
+        return await this.document.view?.get(index)
+    }
+    
+    async getWorksetIndex(hiddenWorksetInViewIndex: number): Promise<number | undefined> {
+        return await this.entityTable.getNumber(hiddenWorksetInViewIndex, "index:Vim.Workset:Workset")
+    }
+    
+    async getAllWorksetIndex(): Promise<number[] | undefined> {
+        return await this.entityTable.getNumberArray("index:Vim.Workset:Workset")
+    }
+    
+    async getWorkset(hiddenWorksetInViewIndex: number): Promise<IWorkset | undefined> {
+        const index = await this.getWorksetIndex(hiddenWorksetInViewIndex)
+        
+        if (index === undefined) {
+            return undefined
+        }
+        
+        return await this.document.workset?.get(index)
+    }
+    
+}
+
+export interface IFilterInView {
+    index: number
+    name?: string
+    kind?: string
+    filterUniqueId?: string
+    orderIndex?: number
+    isEnabled?: boolean
+    isVisible?: boolean
+    hasOverrides?: boolean
+    
+    viewIndex?: number
+    view?: IView
+}
+
+export interface IFilterInViewTable {
+    getCount(): Promise<number>
+    get(filterInViewIndex: number): Promise<IFilterInView>
+    getAll(): Promise<IFilterInView[]>
+    
+    getName(filterInViewIndex: number): Promise<string | undefined>
+    getAllName(): Promise<string[] | undefined>
+    getKind(filterInViewIndex: number): Promise<string | undefined>
+    getAllKind(): Promise<string[] | undefined>
+    getFilterUniqueId(filterInViewIndex: number): Promise<string | undefined>
+    getAllFilterUniqueId(): Promise<string[] | undefined>
+    getOrderIndex(filterInViewIndex: number): Promise<number | undefined>
+    getAllOrderIndex(): Promise<number[] | undefined>
+    getIsEnabled(filterInViewIndex: number): Promise<boolean | undefined>
+    getAllIsEnabled(): Promise<boolean[] | undefined>
+    getIsVisible(filterInViewIndex: number): Promise<boolean | undefined>
+    getAllIsVisible(): Promise<boolean[] | undefined>
+    getHasOverrides(filterInViewIndex: number): Promise<boolean | undefined>
+    getAllHasOverrides(): Promise<boolean[] | undefined>
+    
+    getViewIndex(filterInViewIndex: number): Promise<number | undefined>
+    getAllViewIndex(): Promise<number[] | undefined>
+    getView(filterInViewIndex: number): Promise<IView | undefined>
+}
+
+export class FilterInView implements IFilterInView {
+    index: number
+    name?: string
+    kind?: string
+    filterUniqueId?: string
+    orderIndex?: number
+    isEnabled?: boolean
+    isVisible?: boolean
+    hasOverrides?: boolean
+    
+    viewIndex?: number
+    view?: IView
+    
+    static async createFromTable(table: IFilterInViewTable, index: number): Promise<IFilterInView> {
+        let result = new FilterInView()
+        result.index = index
+        
+        await Promise.all([
+            table.getName(index).then(v => result.name = v),
+            table.getKind(index).then(v => result.kind = v),
+            table.getFilterUniqueId(index).then(v => result.filterUniqueId = v),
+            table.getOrderIndex(index).then(v => result.orderIndex = v),
+            table.getIsEnabled(index).then(v => result.isEnabled = v),
+            table.getIsVisible(index).then(v => result.isVisible = v),
+            table.getHasOverrides(index).then(v => result.hasOverrides = v),
+            table.getViewIndex(index).then(v => result.viewIndex = v),
+        ])
+        
+        return result
+    }
+}
+
+export class FilterInViewTable implements IFilterInViewTable {
+    private document: VimDocument
+    private entityTable: EntityTable
+    
+    static async createFromDocument(document: VimDocument): Promise<IFilterInViewTable | undefined> {
+        const entity = await document.entities.getBfast("Vim.FilterInView")
+        
+        if (!entity) {
+            return undefined
+        }
+        
+        let table = new FilterInViewTable()
+        table.document = document
+        table.entityTable = new EntityTable(entity, document.strings)
+        
+        return table
+    }
+    
+    getCount(): Promise<number> {
+        return this.entityTable.getCount()
+    }
+    
+    async get(filterInViewIndex: number): Promise<IFilterInView> {
+        return await FilterInView.createFromTable(this, filterInViewIndex)
+    }
+    
+    async getAll(): Promise<IFilterInView[]> {
+        const localTable = await this.entityTable.getLocal()
+        
+        let name: string[] | undefined
+        let kind: string[] | undefined
+        let filterUniqueId: string[] | undefined
+        let orderIndex: number[] | undefined
+        let isEnabled: boolean[] | undefined
+        let isVisible: boolean[] | undefined
+        let hasOverrides: boolean[] | undefined
+        let viewIndex: number[] | undefined
+        
+        await Promise.all([
+            (async () => { name = (await localTable.getStringArray("string:Name")) })(),
+            (async () => { kind = (await localTable.getStringArray("string:Kind")) })(),
+            (async () => { filterUniqueId = (await localTable.getStringArray("string:FilterUniqueId")) })(),
+            (async () => { orderIndex = (await localTable.getNumberArray("int:OrderIndex")) })(),
+            (async () => { isEnabled = (await localTable.getBooleanArray("byte:IsEnabled")) })(),
+            (async () => { isVisible = (await localTable.getBooleanArray("byte:IsVisible")) })(),
+            (async () => { hasOverrides = (await localTable.getBooleanArray("byte:HasOverrides")) })(),
+            (async () => { viewIndex = (await localTable.getNumberArray("index:Vim.View:View")) })(),
+        ])
+        
+        let filterInView: IFilterInView[] = []
+        
+        const rowCount = await this.getCount()
+        for (let i = 0; i < rowCount; i++) {
+            filterInView.push({
+                index: i,
+                name: name ? name[i] : undefined,
+                kind: kind ? kind[i] : undefined,
+                filterUniqueId: filterUniqueId ? filterUniqueId[i] : undefined,
+                orderIndex: orderIndex ? orderIndex[i] : undefined,
+                isEnabled: isEnabled ? isEnabled[i] : undefined,
+                isVisible: isVisible ? isVisible[i] : undefined,
+                hasOverrides: hasOverrides ? hasOverrides[i] : undefined,
+                viewIndex: viewIndex ? viewIndex[i] : undefined
+            })
+        }
+        
+        return filterInView
+    }
+    
+    async getName(filterInViewIndex: number): Promise<string | undefined> {
+        return (await this.entityTable.getString(filterInViewIndex, "string:Name"))
+    }
+    
+    async getAllName(): Promise<string[] | undefined> {
+        return (await this.entityTable.getStringArray("string:Name"))
+    }
+    
+    async getKind(filterInViewIndex: number): Promise<string | undefined> {
+        return (await this.entityTable.getString(filterInViewIndex, "string:Kind"))
+    }
+    
+    async getAllKind(): Promise<string[] | undefined> {
+        return (await this.entityTable.getStringArray("string:Kind"))
+    }
+    
+    async getFilterUniqueId(filterInViewIndex: number): Promise<string | undefined> {
+        return (await this.entityTable.getString(filterInViewIndex, "string:FilterUniqueId"))
+    }
+    
+    async getAllFilterUniqueId(): Promise<string[] | undefined> {
+        return (await this.entityTable.getStringArray("string:FilterUniqueId"))
+    }
+    
+    async getOrderIndex(filterInViewIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(filterInViewIndex, "int:OrderIndex"))
+    }
+    
+    async getAllOrderIndex(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("int:OrderIndex"))
+    }
+    
+    async getIsEnabled(filterInViewIndex: number): Promise<boolean | undefined> {
+        return (await this.entityTable.getBoolean(filterInViewIndex, "byte:IsEnabled"))
+    }
+    
+    async getAllIsEnabled(): Promise<boolean[] | undefined> {
+        return (await this.entityTable.getBooleanArray("byte:IsEnabled"))
+    }
+    
+    async getIsVisible(filterInViewIndex: number): Promise<boolean | undefined> {
+        return (await this.entityTable.getBoolean(filterInViewIndex, "byte:IsVisible"))
+    }
+    
+    async getAllIsVisible(): Promise<boolean[] | undefined> {
+        return (await this.entityTable.getBooleanArray("byte:IsVisible"))
+    }
+    
+    async getHasOverrides(filterInViewIndex: number): Promise<boolean | undefined> {
+        return (await this.entityTable.getBoolean(filterInViewIndex, "byte:HasOverrides"))
+    }
+    
+    async getAllHasOverrides(): Promise<boolean[] | undefined> {
+        return (await this.entityTable.getBooleanArray("byte:HasOverrides"))
+    }
+    
+    async getViewIndex(filterInViewIndex: number): Promise<number | undefined> {
+        return await this.entityTable.getNumber(filterInViewIndex, "index:Vim.View:View")
+    }
+    
+    async getAllViewIndex(): Promise<number[] | undefined> {
+        return await this.entityTable.getNumberArray("index:Vim.View:View")
+    }
+    
+    async getView(filterInViewIndex: number): Promise<IView | undefined> {
+        const index = await this.getViewIndex(filterInViewIndex)
+        
+        if (index === undefined) {
+            return undefined
+        }
+        
+        return await this.document.view?.get(index)
+    }
+    
+}
+
+export interface IHiddenElementInView {
+    index: number
+    reason?: string
+    
+    viewIndex?: number
+    view?: IView
+    filterInViewIndex?: number
+    filterInView?: IFilterInView
+    elementIndex?: number
+    element?: IElement
+}
+
+export interface IHiddenElementInViewTable {
+    getCount(): Promise<number>
+    get(hiddenElementInViewIndex: number): Promise<IHiddenElementInView>
+    getAll(): Promise<IHiddenElementInView[]>
+    
+    getReason(hiddenElementInViewIndex: number): Promise<string | undefined>
+    getAllReason(): Promise<string[] | undefined>
+    
+    getViewIndex(hiddenElementInViewIndex: number): Promise<number | undefined>
+    getAllViewIndex(): Promise<number[] | undefined>
+    getView(hiddenElementInViewIndex: number): Promise<IView | undefined>
+    getFilterInViewIndex(hiddenElementInViewIndex: number): Promise<number | undefined>
+    getAllFilterInViewIndex(): Promise<number[] | undefined>
+    getFilterInView(hiddenElementInViewIndex: number): Promise<IFilterInView | undefined>
+    getElementIndex(hiddenElementInViewIndex: number): Promise<number | undefined>
+    getAllElementIndex(): Promise<number[] | undefined>
+    getElement(hiddenElementInViewIndex: number): Promise<IElement | undefined>
+}
+
+export class HiddenElementInView implements IHiddenElementInView {
+    index: number
+    reason?: string
+    
+    viewIndex?: number
+    view?: IView
+    filterInViewIndex?: number
+    filterInView?: IFilterInView
+    elementIndex?: number
+    element?: IElement
+    
+    static async createFromTable(table: IHiddenElementInViewTable, index: number): Promise<IHiddenElementInView> {
+        let result = new HiddenElementInView()
+        result.index = index
+        
+        await Promise.all([
+            table.getReason(index).then(v => result.reason = v),
+            table.getViewIndex(index).then(v => result.viewIndex = v),
+            table.getFilterInViewIndex(index).then(v => result.filterInViewIndex = v),
+            table.getElementIndex(index).then(v => result.elementIndex = v),
+        ])
+        
+        return result
+    }
+}
+
+export class HiddenElementInViewTable implements IHiddenElementInViewTable {
+    private document: VimDocument
+    private entityTable: EntityTable
+    
+    static async createFromDocument(document: VimDocument): Promise<IHiddenElementInViewTable | undefined> {
+        const entity = await document.entities.getBfast("Vim.HiddenElementInView")
+        
+        if (!entity) {
+            return undefined
+        }
+        
+        let table = new HiddenElementInViewTable()
+        table.document = document
+        table.entityTable = new EntityTable(entity, document.strings)
+        
+        return table
+    }
+    
+    getCount(): Promise<number> {
+        return this.entityTable.getCount()
+    }
+    
+    async get(hiddenElementInViewIndex: number): Promise<IHiddenElementInView> {
+        return await HiddenElementInView.createFromTable(this, hiddenElementInViewIndex)
+    }
+    
+    async getAll(): Promise<IHiddenElementInView[]> {
+        const localTable = await this.entityTable.getLocal()
+        
+        let reason: string[] | undefined
+        let viewIndex: number[] | undefined
+        let filterInViewIndex: number[] | undefined
+        let elementIndex: number[] | undefined
+        
+        await Promise.all([
+            (async () => { reason = (await localTable.getStringArray("string:Reason")) })(),
+            (async () => { viewIndex = (await localTable.getNumberArray("index:Vim.View:View")) })(),
+            (async () => { filterInViewIndex = (await localTable.getNumberArray("index:Vim.FilterInView:FilterInView")) })(),
+            (async () => { elementIndex = (await localTable.getNumberArray("index:Vim.Element:Element")) })(),
+        ])
+        
+        let hiddenElementInView: IHiddenElementInView[] = []
+        
+        const rowCount = await this.getCount()
+        for (let i = 0; i < rowCount; i++) {
+            hiddenElementInView.push({
+                index: i,
+                reason: reason ? reason[i] : undefined,
+                viewIndex: viewIndex ? viewIndex[i] : undefined,
+                filterInViewIndex: filterInViewIndex ? filterInViewIndex[i] : undefined,
+                elementIndex: elementIndex ? elementIndex[i] : undefined
+            })
+        }
+        
+        return hiddenElementInView
+    }
+    
+    async getReason(hiddenElementInViewIndex: number): Promise<string | undefined> {
+        return (await this.entityTable.getString(hiddenElementInViewIndex, "string:Reason"))
+    }
+    
+    async getAllReason(): Promise<string[] | undefined> {
+        return (await this.entityTable.getStringArray("string:Reason"))
+    }
+    
+    async getViewIndex(hiddenElementInViewIndex: number): Promise<number | undefined> {
+        return await this.entityTable.getNumber(hiddenElementInViewIndex, "index:Vim.View:View")
+    }
+    
+    async getAllViewIndex(): Promise<number[] | undefined> {
+        return await this.entityTable.getNumberArray("index:Vim.View:View")
+    }
+    
+    async getView(hiddenElementInViewIndex: number): Promise<IView | undefined> {
+        const index = await this.getViewIndex(hiddenElementInViewIndex)
+        
+        if (index === undefined) {
+            return undefined
+        }
+        
+        return await this.document.view?.get(index)
+    }
+    
+    async getFilterInViewIndex(hiddenElementInViewIndex: number): Promise<number | undefined> {
+        return await this.entityTable.getNumber(hiddenElementInViewIndex, "index:Vim.FilterInView:FilterInView")
+    }
+    
+    async getAllFilterInViewIndex(): Promise<number[] | undefined> {
+        return await this.entityTable.getNumberArray("index:Vim.FilterInView:FilterInView")
+    }
+    
+    async getFilterInView(hiddenElementInViewIndex: number): Promise<IFilterInView | undefined> {
+        const index = await this.getFilterInViewIndex(hiddenElementInViewIndex)
+        
+        if (index === undefined) {
+            return undefined
+        }
+        
+        return await this.document.filterInView?.get(index)
+    }
+    
+    async getElementIndex(hiddenElementInViewIndex: number): Promise<number | undefined> {
+        return await this.entityTable.getNumber(hiddenElementInViewIndex, "index:Vim.Element:Element")
+    }
+    
+    async getAllElementIndex(): Promise<number[] | undefined> {
+        return await this.entityTable.getNumberArray("index:Vim.Element:Element")
+    }
+    
+    async getElement(hiddenElementInViewIndex: number): Promise<IElement | undefined> {
+        const index = await this.getElementIndex(hiddenElementInViewIndex)
+        
+        if (index === undefined) {
+            return undefined
+        }
+        
+        return await this.document.element?.get(index)
+    }
+    
+}
+
 export interface ICamera {
     index: number
     id?: number
@@ -11187,6 +11845,10 @@ export class VimDocument {
     assetInView: IAssetInViewTable | undefined
     assetInViewSheet: IAssetInViewSheetTable | undefined
     levelInView: ILevelInViewTable | undefined
+    hiddenCategoryInView: IHiddenCategoryInViewTable | undefined
+    hiddenWorksetInView: IHiddenWorksetInViewTable | undefined
+    filterInView: IFilterInViewTable | undefined
+    hiddenElementInView: IHiddenElementInViewTable | undefined
     camera: ICameraTable | undefined
     material: IMaterialTable | undefined
     materialInElement: IMaterialInElementTable | undefined
@@ -11258,6 +11920,10 @@ export class VimDocument {
         doc.assetInView = await AssetInViewTable.createFromDocument(doc)
         doc.assetInViewSheet = await AssetInViewSheetTable.createFromDocument(doc)
         doc.levelInView = await LevelInViewTable.createFromDocument(doc)
+        doc.hiddenCategoryInView = await HiddenCategoryInViewTable.createFromDocument(doc)
+        doc.hiddenWorksetInView = await HiddenWorksetInViewTable.createFromDocument(doc)
+        doc.filterInView = await FilterInViewTable.createFromDocument(doc)
+        doc.hiddenElementInView = await HiddenElementInViewTable.createFromDocument(doc)
         doc.camera = await CameraTable.createFromDocument(doc)
         doc.material = await MaterialTable.createFromDocument(doc)
         doc.materialInElement = await MaterialInElementTable.createFromDocument(doc)

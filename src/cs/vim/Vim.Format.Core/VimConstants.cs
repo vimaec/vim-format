@@ -36,6 +36,10 @@ namespace Vim.Format
         public const string AssetInView = "Vim.AssetInView";
         public const string AssetInViewSheet = "Vim.AssetInViewSheet";
         public const string LevelInView = "Vim.LevelInView";
+        public const string HiddenCategoryInView = "Vim.HiddenCategoryInView";
+        public const string HiddenWorksetInView = "Vim.HiddenWorksetInView";
+        public const string FilterInView = "Vim.FilterInView";
+        public const string HiddenElementInView = "Vim.HiddenElementInView";
         public const string Camera = "Vim.Camera";
         public const string Workset = "Vim.Workset";
         public const string DesignOption = "Vim.DesignOption";

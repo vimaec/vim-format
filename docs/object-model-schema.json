@@ -218,6 +218,16 @@
       "index:Vim.Element:Element",
       "index:Vim.Family:Family"
     ],
+    "Vim.FilterInView": [
+      "byte:HasOverrides",
+      "byte:IsEnabled",
+      "byte:IsVisible",
+      "index:Vim.View:View",
+      "int:OrderIndex",
+      "string:FilterUniqueId",
+      "string:Kind",
+      "string:Name"
+    ],
     "Vim.Geometry": [
       "float:Box.Max.X",
       "float:Box.Max.Y",
@@ -251,6 +261,20 @@
       "float:Position.Z",
       "index:Vim.Element:Element",
       "string:GroupType"
+    ],
+    "Vim.HiddenCategoryInView": [
+      "index:Vim.Category:Category",
+      "index:Vim.View:View"
+    ],
+    "Vim.HiddenElementInView": [
+      "index:Vim.Element:Element",
+      "index:Vim.FilterInView:FilterInView",
+      "index:Vim.View:View",
+      "string:Reason"
+    ],
+    "Vim.HiddenWorksetInView": [
+      "index:Vim.View:View",
+      "index:Vim.Workset:Workset"
     ],
     "Vim.Level": [
       "double:Elevation",
