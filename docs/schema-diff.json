@@ -177,5 +177,37 @@
       "Vim.Element__string:LastChangedBy",
       "Vim.Element__string:Owner"
     ]
+  },
+  "5.7.0 to 5.8.0": {
+    "Added": [
+      "Vim.View__byte:IsCropBoxActive",
+      "Vim.View__byte:IsLocked",
+      "Vim.View__byte:IsSectionBoxActive",
+      "Vim.View__double:CropBox.Max.X",
+      "Vim.View__double:CropBox.Max.Y",
+      "Vim.View__double:CropBox.Max.Z",
+      "Vim.View__double:CropBox.Min.X",
+      "Vim.View__double:CropBox.Min.Y",
+      "Vim.View__double:CropBox.Min.Z",
+      "Vim.View__double:SectionBox.Max.X",
+      "Vim.View__double:SectionBox.Max.Y",
+      "Vim.View__double:SectionBox.Max.Z",
+      "Vim.View__double:SectionBox.Min.X",
+      "Vim.View__double:SectionBox.Min.Y",
+      "Vim.View__double:SectionBox.Min.Z",
+      "Vim.View__double:SectionBoxBasisX.X",
+      "Vim.View__double:SectionBoxBasisX.Y",
+      "Vim.View__double:SectionBoxBasisX.Z",
+      "Vim.View__double:SectionBoxBasisY.X",
+      "Vim.View__double:SectionBoxBasisY.Y",
+      "Vim.View__double:SectionBoxBasisY.Z",
+      "Vim.View__double:SectionBoxBasisZ.X",
+      "Vim.View__double:SectionBoxBasisZ.Y",
+      "Vim.View__double:SectionBoxBasisZ.Z",
+      "Vim.View__double:SectionBoxOrigin.X",
+      "Vim.View__double:SectionBoxOrigin.Y",
+      "Vim.View__double:SectionBoxOrigin.Z",
+      "Vim.View__string:DisplayStyle"
+    ]
   }
 }

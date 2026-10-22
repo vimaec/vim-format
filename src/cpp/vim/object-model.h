@@ -6543,6 +6543,34 @@ namespace Vim
         double mOutline_Max_X;
         double mOutline_Max_Y;
         int mDetailLevel;
+        bool mIsLocked;
+        bool mIsCropBoxActive;
+        double mCropBox_Min_X;
+        double mCropBox_Min_Y;
+        double mCropBox_Min_Z;
+        double mCropBox_Max_X;
+        double mCropBox_Max_Y;
+        double mCropBox_Max_Z;
+        bool mIsSectionBoxActive;
+        double mSectionBox_Min_X;
+        double mSectionBox_Min_Y;
+        double mSectionBox_Min_Z;
+        double mSectionBox_Max_X;
+        double mSectionBox_Max_Y;
+        double mSectionBox_Max_Z;
+        double mSectionBoxOrigin_X;
+        double mSectionBoxOrigin_Y;
+        double mSectionBoxOrigin_Z;
+        double mSectionBoxBasisX_X;
+        double mSectionBoxBasisX_Y;
+        double mSectionBoxBasisX_Z;
+        double mSectionBoxBasisY_X;
+        double mSectionBoxBasisY_Y;
+        double mSectionBoxBasisY_Z;
+        double mSectionBoxBasisZ_X;
+        double mSectionBoxBasisZ_Y;
+        double mSectionBoxBasisZ_Z;
+        std::string mDisplayStyle;
         
         int mCameraIndex;
         Camera* mCamera;
@@ -6594,6 +6622,34 @@ namespace Vim
             view->mOutline_Max_X = GetOutline_Max_X(viewIndex);
             view->mOutline_Max_Y = GetOutline_Max_Y(viewIndex);
             view->mDetailLevel = GetDetailLevel(viewIndex);
+            view->mIsLocked = GetIsLocked(viewIndex);
+            view->mIsCropBoxActive = GetIsCropBoxActive(viewIndex);
+            view->mCropBox_Min_X = GetCropBox_Min_X(viewIndex);
+            view->mCropBox_Min_Y = GetCropBox_Min_Y(viewIndex);
+            view->mCropBox_Min_Z = GetCropBox_Min_Z(viewIndex);
+            view->mCropBox_Max_X = GetCropBox_Max_X(viewIndex);
+            view->mCropBox_Max_Y = GetCropBox_Max_Y(viewIndex);
+            view->mCropBox_Max_Z = GetCropBox_Max_Z(viewIndex);
+            view->mIsSectionBoxActive = GetIsSectionBoxActive(viewIndex);
+            view->mSectionBox_Min_X = GetSectionBox_Min_X(viewIndex);
+            view->mSectionBox_Min_Y = GetSectionBox_Min_Y(viewIndex);
+            view->mSectionBox_Min_Z = GetSectionBox_Min_Z(viewIndex);
+            view->mSectionBox_Max_X = GetSectionBox_Max_X(viewIndex);
+            view->mSectionBox_Max_Y = GetSectionBox_Max_Y(viewIndex);
+            view->mSectionBox_Max_Z = GetSectionBox_Max_Z(viewIndex);
+            view->mSectionBoxOrigin_X = GetSectionBoxOrigin_X(viewIndex);
+            view->mSectionBoxOrigin_Y = GetSectionBoxOrigin_Y(viewIndex);
+            view->mSectionBoxOrigin_Z = GetSectionBoxOrigin_Z(viewIndex);
+            view->mSectionBoxBasisX_X = GetSectionBoxBasisX_X(viewIndex);
+            view->mSectionBoxBasisX_Y = GetSectionBoxBasisX_Y(viewIndex);
+            view->mSectionBoxBasisX_Z = GetSectionBoxBasisX_Z(viewIndex);
+            view->mSectionBoxBasisY_X = GetSectionBoxBasisY_X(viewIndex);
+            view->mSectionBoxBasisY_Y = GetSectionBoxBasisY_Y(viewIndex);
+            view->mSectionBoxBasisY_Z = GetSectionBoxBasisY_Z(viewIndex);
+            view->mSectionBoxBasisZ_X = GetSectionBoxBasisZ_X(viewIndex);
+            view->mSectionBoxBasisZ_Y = GetSectionBoxBasisZ_Y(viewIndex);
+            view->mSectionBoxBasisZ_Z = GetSectionBoxBasisZ_Z(viewIndex);
+            view->mDisplayStyle = GetDisplayStyle(viewIndex);
             view->mCameraIndex = GetCameraIndex(viewIndex);
             view->mFamilyTypeIndex = GetFamilyTypeIndex(viewIndex);
             view->mElementIndex = GetElementIndex(viewIndex);
@@ -6625,6 +6681,34 @@ namespace Vim
             bool existsOutline_Max_X = mEntityTable.column_exists("double:Outline.Max.X");
             bool existsOutline_Max_Y = mEntityTable.column_exists("double:Outline.Max.Y");
             bool existsDetailLevel = mEntityTable.column_exists("int:DetailLevel");
+            bool existsIsLocked = mEntityTable.column_exists("byte:IsLocked");
+            bool existsIsCropBoxActive = mEntityTable.column_exists("byte:IsCropBoxActive");
+            bool existsCropBox_Min_X = mEntityTable.column_exists("double:CropBox.Min.X");
+            bool existsCropBox_Min_Y = mEntityTable.column_exists("double:CropBox.Min.Y");
+            bool existsCropBox_Min_Z = mEntityTable.column_exists("double:CropBox.Min.Z");
+            bool existsCropBox_Max_X = mEntityTable.column_exists("double:CropBox.Max.X");
+            bool existsCropBox_Max_Y = mEntityTable.column_exists("double:CropBox.Max.Y");
+            bool existsCropBox_Max_Z = mEntityTable.column_exists("double:CropBox.Max.Z");
+            bool existsIsSectionBoxActive = mEntityTable.column_exists("byte:IsSectionBoxActive");
+            bool existsSectionBox_Min_X = mEntityTable.column_exists("double:SectionBox.Min.X");
+            bool existsSectionBox_Min_Y = mEntityTable.column_exists("double:SectionBox.Min.Y");
+            bool existsSectionBox_Min_Z = mEntityTable.column_exists("double:SectionBox.Min.Z");
+            bool existsSectionBox_Max_X = mEntityTable.column_exists("double:SectionBox.Max.X");
+            bool existsSectionBox_Max_Y = mEntityTable.column_exists("double:SectionBox.Max.Y");
+            bool existsSectionBox_Max_Z = mEntityTable.column_exists("double:SectionBox.Max.Z");
+            bool existsSectionBoxOrigin_X = mEntityTable.column_exists("double:SectionBoxOrigin.X");
+            bool existsSectionBoxOrigin_Y = mEntityTable.column_exists("double:SectionBoxOrigin.Y");
+            bool existsSectionBoxOrigin_Z = mEntityTable.column_exists("double:SectionBoxOrigin.Z");
+            bool existsSectionBoxBasisX_X = mEntityTable.column_exists("double:SectionBoxBasisX.X");
+            bool existsSectionBoxBasisX_Y = mEntityTable.column_exists("double:SectionBoxBasisX.Y");
+            bool existsSectionBoxBasisX_Z = mEntityTable.column_exists("double:SectionBoxBasisX.Z");
+            bool existsSectionBoxBasisY_X = mEntityTable.column_exists("double:SectionBoxBasisY.X");
+            bool existsSectionBoxBasisY_Y = mEntityTable.column_exists("double:SectionBoxBasisY.Y");
+            bool existsSectionBoxBasisY_Z = mEntityTable.column_exists("double:SectionBoxBasisY.Z");
+            bool existsSectionBoxBasisZ_X = mEntityTable.column_exists("double:SectionBoxBasisZ.X");
+            bool existsSectionBoxBasisZ_Y = mEntityTable.column_exists("double:SectionBoxBasisZ.Y");
+            bool existsSectionBoxBasisZ_Z = mEntityTable.column_exists("double:SectionBoxBasisZ.Z");
+            bool existsDisplayStyle = mEntityTable.column_exists("string:DisplayStyle");
             bool existsCamera = mEntityTable.column_exists("index:Vim.Camera:Camera");
             bool existsFamilyType = mEntityTable.column_exists("index:Vim.FamilyType:FamilyType");
             bool existsElement = mEntityTable.column_exists("index:Vim.Element:Element");
@@ -6743,6 +6827,143 @@ namespace Vim
                 memcpy(detailLevelData, mEntityTable.mDataColumns["int:DetailLevel"].begin(), count * sizeof(int));
             }
             
+            bfast::byte* isLockedData = new bfast::byte[count];
+            if (mEntityTable.column_exists("byte:IsLocked")) {
+                memcpy(isLockedData, mEntityTable.mDataColumns["byte:IsLocked"].begin(), count * sizeof(bfast::byte));
+            }
+            
+            bfast::byte* isCropBoxActiveData = new bfast::byte[count];
+            if (mEntityTable.column_exists("byte:IsCropBoxActive")) {
+                memcpy(isCropBoxActiveData, mEntityTable.mDataColumns["byte:IsCropBoxActive"].begin(), count * sizeof(bfast::byte));
+            }
+            
+            double* cropBox_Min_XData = new double[count];
+            if (mEntityTable.column_exists("double:CropBox.Min.X")) {
+                memcpy(cropBox_Min_XData, mEntityTable.mDataColumns["double:CropBox.Min.X"].begin(), count * sizeof(double));
+            }
+            
+            double* cropBox_Min_YData = new double[count];
+            if (mEntityTable.column_exists("double:CropBox.Min.Y")) {
+                memcpy(cropBox_Min_YData, mEntityTable.mDataColumns["double:CropBox.Min.Y"].begin(), count * sizeof(double));
+            }
+            
+            double* cropBox_Min_ZData = new double[count];
+            if (mEntityTable.column_exists("double:CropBox.Min.Z")) {
+                memcpy(cropBox_Min_ZData, mEntityTable.mDataColumns["double:CropBox.Min.Z"].begin(), count * sizeof(double));
+            }
+            
+            double* cropBox_Max_XData = new double[count];
+            if (mEntityTable.column_exists("double:CropBox.Max.X")) {
+                memcpy(cropBox_Max_XData, mEntityTable.mDataColumns["double:CropBox.Max.X"].begin(), count * sizeof(double));
+            }
+            
+            double* cropBox_Max_YData = new double[count];
+            if (mEntityTable.column_exists("double:CropBox.Max.Y")) {
+                memcpy(cropBox_Max_YData, mEntityTable.mDataColumns["double:CropBox.Max.Y"].begin(), count * sizeof(double));
+            }
+            
+            double* cropBox_Max_ZData = new double[count];
+            if (mEntityTable.column_exists("double:CropBox.Max.Z")) {
+                memcpy(cropBox_Max_ZData, mEntityTable.mDataColumns["double:CropBox.Max.Z"].begin(), count * sizeof(double));
+            }
+            
+            bfast::byte* isSectionBoxActiveData = new bfast::byte[count];
+            if (mEntityTable.column_exists("byte:IsSectionBoxActive")) {
+                memcpy(isSectionBoxActiveData, mEntityTable.mDataColumns["byte:IsSectionBoxActive"].begin(), count * sizeof(bfast::byte));
+            }
+            
+            double* sectionBox_Min_XData = new double[count];
+            if (mEntityTable.column_exists("double:SectionBox.Min.X")) {
+                memcpy(sectionBox_Min_XData, mEntityTable.mDataColumns["double:SectionBox.Min.X"].begin(), count * sizeof(double));
+            }
+            
+            double* sectionBox_Min_YData = new double[count];
+            if (mEntityTable.column_exists("double:SectionBox.Min.Y")) {
+                memcpy(sectionBox_Min_YData, mEntityTable.mDataColumns["double:SectionBox.Min.Y"].begin(), count * sizeof(double));
+            }
+            
+            double* sectionBox_Min_ZData = new double[count];
+            if (mEntityTable.column_exists("double:SectionBox.Min.Z")) {
+                memcpy(sectionBox_Min_ZData, mEntityTable.mDataColumns["double:SectionBox.Min.Z"].begin(), count * sizeof(double));
+            }
+            
+            double* sectionBox_Max_XData = new double[count];
+            if (mEntityTable.column_exists("double:SectionBox.Max.X")) {
+                memcpy(sectionBox_Max_XData, mEntityTable.mDataColumns["double:SectionBox.Max.X"].begin(), count * sizeof(double));
+            }
+            
+            double* sectionBox_Max_YData = new double[count];
+            if (mEntityTable.column_exists("double:SectionBox.Max.Y")) {
+                memcpy(sectionBox_Max_YData, mEntityTable.mDataColumns["double:SectionBox.Max.Y"].begin(), count * sizeof(double));
+            }
+            
+            double* sectionBox_Max_ZData = new double[count];
+            if (mEntityTable.column_exists("double:SectionBox.Max.Z")) {
+                memcpy(sectionBox_Max_ZData, mEntityTable.mDataColumns["double:SectionBox.Max.Z"].begin(), count * sizeof(double));
+            }
+            
+            double* sectionBoxOrigin_XData = new double[count];
+            if (mEntityTable.column_exists("double:SectionBoxOrigin.X")) {
+                memcpy(sectionBoxOrigin_XData, mEntityTable.mDataColumns["double:SectionBoxOrigin.X"].begin(), count * sizeof(double));
+            }
+            
+            double* sectionBoxOrigin_YData = new double[count];
+            if (mEntityTable.column_exists("double:SectionBoxOrigin.Y")) {
+                memcpy(sectionBoxOrigin_YData, mEntityTable.mDataColumns["double:SectionBoxOrigin.Y"].begin(), count * sizeof(double));
+            }
+            
+            double* sectionBoxOrigin_ZData = new double[count];
+            if (mEntityTable.column_exists("double:SectionBoxOrigin.Z")) {
+                memcpy(sectionBoxOrigin_ZData, mEntityTable.mDataColumns["double:SectionBoxOrigin.Z"].begin(), count * sizeof(double));
+            }
+            
+            double* sectionBoxBasisX_XData = new double[count];
+            if (mEntityTable.column_exists("double:SectionBoxBasisX.X")) {
+                memcpy(sectionBoxBasisX_XData, mEntityTable.mDataColumns["double:SectionBoxBasisX.X"].begin(), count * sizeof(double));
+            }
+            
+            double* sectionBoxBasisX_YData = new double[count];
+            if (mEntityTable.column_exists("double:SectionBoxBasisX.Y")) {
+                memcpy(sectionBoxBasisX_YData, mEntityTable.mDataColumns["double:SectionBoxBasisX.Y"].begin(), count * sizeof(double));
+            }
+            
+            double* sectionBoxBasisX_ZData = new double[count];
+            if (mEntityTable.column_exists("double:SectionBoxBasisX.Z")) {
+                memcpy(sectionBoxBasisX_ZData, mEntityTable.mDataColumns["double:SectionBoxBasisX.Z"].begin(), count * sizeof(double));
+            }
+            
+            double* sectionBoxBasisY_XData = new double[count];
+            if (mEntityTable.column_exists("double:SectionBoxBasisY.X")) {
+                memcpy(sectionBoxBasisY_XData, mEntityTable.mDataColumns["double:SectionBoxBasisY.X"].begin(), count * sizeof(double));
+            }
+            
+            double* sectionBoxBasisY_YData = new double[count];
+            if (mEntityTable.column_exists("double:SectionBoxBasisY.Y")) {
+                memcpy(sectionBoxBasisY_YData, mEntityTable.mDataColumns["double:SectionBoxBasisY.Y"].begin(), count * sizeof(double));
+            }
+            
+            double* sectionBoxBasisY_ZData = new double[count];
+            if (mEntityTable.column_exists("double:SectionBoxBasisY.Z")) {
+                memcpy(sectionBoxBasisY_ZData, mEntityTable.mDataColumns["double:SectionBoxBasisY.Z"].begin(), count * sizeof(double));
+            }
+            
+            double* sectionBoxBasisZ_XData = new double[count];
+            if (mEntityTable.column_exists("double:SectionBoxBasisZ.X")) {
+                memcpy(sectionBoxBasisZ_XData, mEntityTable.mDataColumns["double:SectionBoxBasisZ.X"].begin(), count * sizeof(double));
+            }
+            
+            double* sectionBoxBasisZ_YData = new double[count];
+            if (mEntityTable.column_exists("double:SectionBoxBasisZ.Y")) {
+                memcpy(sectionBoxBasisZ_YData, mEntityTable.mDataColumns["double:SectionBoxBasisZ.Y"].begin(), count * sizeof(double));
+            }
+            
+            double* sectionBoxBasisZ_ZData = new double[count];
+            if (mEntityTable.column_exists("double:SectionBoxBasisZ.Z")) {
+                memcpy(sectionBoxBasisZ_ZData, mEntityTable.mDataColumns["double:SectionBoxBasisZ.Z"].begin(), count * sizeof(double));
+            }
+            
+            const std::vector<int>& displayStyleData = mEntityTable.column_exists("string:DisplayStyle") ? mEntityTable.mStringColumns["string:DisplayStyle"] : std::vector<int>();
+            
             const std::vector<int>& cameraData = mEntityTable.column_exists("index:Vim.Camera:Camera") ? mEntityTable.mIndexColumns["index:Vim.Camera:Camera"] : std::vector<int>();
             const std::vector<int>& familyTypeData = mEntityTable.column_exists("index:Vim.FamilyType:FamilyType") ? mEntityTable.mIndexColumns["index:Vim.FamilyType:FamilyType"] : std::vector<int>();
             const std::vector<int>& elementData = mEntityTable.column_exists("index:Vim.Element:Element") ? mEntityTable.mIndexColumns["index:Vim.Element:Element"] : std::vector<int>();
@@ -6797,6 +7018,62 @@ namespace Vim
                     entity.mOutline_Max_Y = outline_Max_YData[i];
                 if (existsDetailLevel)
                     entity.mDetailLevel = detailLevelData[i];
+                if (existsIsLocked)
+                    entity.mIsLocked = isLockedData[i];
+                if (existsIsCropBoxActive)
+                    entity.mIsCropBoxActive = isCropBoxActiveData[i];
+                if (existsCropBox_Min_X)
+                    entity.mCropBox_Min_X = cropBox_Min_XData[i];
+                if (existsCropBox_Min_Y)
+                    entity.mCropBox_Min_Y = cropBox_Min_YData[i];
+                if (existsCropBox_Min_Z)
+                    entity.mCropBox_Min_Z = cropBox_Min_ZData[i];
+                if (existsCropBox_Max_X)
+                    entity.mCropBox_Max_X = cropBox_Max_XData[i];
+                if (existsCropBox_Max_Y)
+                    entity.mCropBox_Max_Y = cropBox_Max_YData[i];
+                if (existsCropBox_Max_Z)
+                    entity.mCropBox_Max_Z = cropBox_Max_ZData[i];
+                if (existsIsSectionBoxActive)
+                    entity.mIsSectionBoxActive = isSectionBoxActiveData[i];
+                if (existsSectionBox_Min_X)
+                    entity.mSectionBox_Min_X = sectionBox_Min_XData[i];
+                if (existsSectionBox_Min_Y)
+                    entity.mSectionBox_Min_Y = sectionBox_Min_YData[i];
+                if (existsSectionBox_Min_Z)
+                    entity.mSectionBox_Min_Z = sectionBox_Min_ZData[i];
+                if (existsSectionBox_Max_X)
+                    entity.mSectionBox_Max_X = sectionBox_Max_XData[i];
+                if (existsSectionBox_Max_Y)
+                    entity.mSectionBox_Max_Y = sectionBox_Max_YData[i];
+                if (existsSectionBox_Max_Z)
+                    entity.mSectionBox_Max_Z = sectionBox_Max_ZData[i];
+                if (existsSectionBoxOrigin_X)
+                    entity.mSectionBoxOrigin_X = sectionBoxOrigin_XData[i];
+                if (existsSectionBoxOrigin_Y)
+                    entity.mSectionBoxOrigin_Y = sectionBoxOrigin_YData[i];
+                if (existsSectionBoxOrigin_Z)
+                    entity.mSectionBoxOrigin_Z = sectionBoxOrigin_ZData[i];
+                if (existsSectionBoxBasisX_X)
+                    entity.mSectionBoxBasisX_X = sectionBoxBasisX_XData[i];
+                if (existsSectionBoxBasisX_Y)
+                    entity.mSectionBoxBasisX_Y = sectionBoxBasisX_YData[i];
+                if (existsSectionBoxBasisX_Z)
+                    entity.mSectionBoxBasisX_Z = sectionBoxBasisX_ZData[i];
+                if (existsSectionBoxBasisY_X)
+                    entity.mSectionBoxBasisY_X = sectionBoxBasisY_XData[i];
+                if (existsSectionBoxBasisY_Y)
+                    entity.mSectionBoxBasisY_Y = sectionBoxBasisY_YData[i];
+                if (existsSectionBoxBasisY_Z)
+                    entity.mSectionBoxBasisY_Z = sectionBoxBasisY_ZData[i];
+                if (existsSectionBoxBasisZ_X)
+                    entity.mSectionBoxBasisZ_X = sectionBoxBasisZ_XData[i];
+                if (existsSectionBoxBasisZ_Y)
+                    entity.mSectionBoxBasisZ_Y = sectionBoxBasisZ_YData[i];
+                if (existsSectionBoxBasisZ_Z)
+                    entity.mSectionBoxBasisZ_Z = sectionBoxBasisZ_ZData[i];
+                if (existsDisplayStyle)
+                    entity.mDisplayStyle = std::string(reinterpret_cast<const char*>(mStrings[displayStyleData[i]]));
                 entity.mCameraIndex = existsCamera ? cameraData[i] : -1;
                 entity.mFamilyTypeIndex = existsFamilyType ? familyTypeData[i] : -1;
                 entity.mElementIndex = existsElement ? elementData[i] : -1;
@@ -6824,6 +7101,33 @@ namespace Vim
             delete[] outline_Max_XData;
             delete[] outline_Max_YData;
             delete[] detailLevelData;
+            delete[] isLockedData;
+            delete[] isCropBoxActiveData;
+            delete[] cropBox_Min_XData;
+            delete[] cropBox_Min_YData;
+            delete[] cropBox_Min_ZData;
+            delete[] cropBox_Max_XData;
+            delete[] cropBox_Max_YData;
+            delete[] cropBox_Max_ZData;
+            delete[] isSectionBoxActiveData;
+            delete[] sectionBox_Min_XData;
+            delete[] sectionBox_Min_YData;
+            delete[] sectionBox_Min_ZData;
+            delete[] sectionBox_Max_XData;
+            delete[] sectionBox_Max_YData;
+            delete[] sectionBox_Max_ZData;
+            delete[] sectionBoxOrigin_XData;
+            delete[] sectionBoxOrigin_YData;
+            delete[] sectionBoxOrigin_ZData;
+            delete[] sectionBoxBasisX_XData;
+            delete[] sectionBoxBasisX_YData;
+            delete[] sectionBoxBasisX_ZData;
+            delete[] sectionBoxBasisY_XData;
+            delete[] sectionBoxBasisY_YData;
+            delete[] sectionBoxBasisY_ZData;
+            delete[] sectionBoxBasisZ_XData;
+            delete[] sectionBoxBasisZ_YData;
+            delete[] sectionBoxBasisZ_ZData;
             
             return view;
         }
@@ -7470,6 +7774,791 @@ namespace Vim
             std::vector<int>* result = new std::vector<int>(detailLevelData, detailLevelData + count);
             
             delete[] detailLevelData;
+            
+            return result;
+        }
+        
+        bool GetIsLocked(int viewIndex)
+        {
+            if (viewIndex < 0 || viewIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("byte:IsLocked")) {
+                return static_cast<bool>(*reinterpret_cast<bfast::byte*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["byte:IsLocked"].begin() + viewIndex * sizeof(bfast::byte))));
+            }
+            
+            return {};
+        }
+        
+        std::vector<bool>* GetAllIsLocked()
+        {
+            const auto count = GetCount();
+            
+            bfast::byte* isLockedData = new bfast::byte[count];
+            if (mEntityTable.column_exists("byte:IsLocked")) {
+                memcpy(isLockedData, mEntityTable.mDataColumns["byte:IsLocked"].begin(), count * sizeof(bfast::byte));
+            }
+            
+            std::vector<bool>* result = new std::vector<bool>(isLockedData, isLockedData + count);
+            
+            delete[] isLockedData;
+            
+            return result;
+        }
+        
+        bool GetIsCropBoxActive(int viewIndex)
+        {
+            if (viewIndex < 0 || viewIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("byte:IsCropBoxActive")) {
+                return static_cast<bool>(*reinterpret_cast<bfast::byte*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["byte:IsCropBoxActive"].begin() + viewIndex * sizeof(bfast::byte))));
+            }
+            
+            return {};
+        }
+        
+        std::vector<bool>* GetAllIsCropBoxActive()
+        {
+            const auto count = GetCount();
+            
+            bfast::byte* isCropBoxActiveData = new bfast::byte[count];
+            if (mEntityTable.column_exists("byte:IsCropBoxActive")) {
+                memcpy(isCropBoxActiveData, mEntityTable.mDataColumns["byte:IsCropBoxActive"].begin(), count * sizeof(bfast::byte));
+            }
+            
+            std::vector<bool>* result = new std::vector<bool>(isCropBoxActiveData, isCropBoxActiveData + count);
+            
+            delete[] isCropBoxActiveData;
+            
+            return result;
+        }
+        
+        double GetCropBox_Min_X(int viewIndex)
+        {
+            if (viewIndex < 0 || viewIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("double:CropBox.Min.X")) {
+                return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:CropBox.Min.X"].begin() + viewIndex * sizeof(double)));
+            }
+            
+            return {};
+        }
+        
+        std::vector<double>* GetAllCropBox_Min_X()
+        {
+            const auto count = GetCount();
+            
+            double* cropBox_Min_XData = new double[count];
+            if (mEntityTable.column_exists("double:CropBox.Min.X")) {
+                memcpy(cropBox_Min_XData, mEntityTable.mDataColumns["double:CropBox.Min.X"].begin(), count * sizeof(double));
+            }
+            
+            std::vector<double>* result = new std::vector<double>(cropBox_Min_XData, cropBox_Min_XData + count);
+            
+            delete[] cropBox_Min_XData;
+            
+            return result;
+        }
+        
+        double GetCropBox_Min_Y(int viewIndex)
+        {
+            if (viewIndex < 0 || viewIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("double:CropBox.Min.Y")) {
+                return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:CropBox.Min.Y"].begin() + viewIndex * sizeof(double)));
+            }
+            
+            return {};
+        }
+        
+        std::vector<double>* GetAllCropBox_Min_Y()
+        {
+            const auto count = GetCount();
+            
+            double* cropBox_Min_YData = new double[count];
+            if (mEntityTable.column_exists("double:CropBox.Min.Y")) {
+                memcpy(cropBox_Min_YData, mEntityTable.mDataColumns["double:CropBox.Min.Y"].begin(), count * sizeof(double));
+            }
+            
+            std::vector<double>* result = new std::vector<double>(cropBox_Min_YData, cropBox_Min_YData + count);
+            
+            delete[] cropBox_Min_YData;
+            
+            return result;
+        }
+        
+        double GetCropBox_Min_Z(int viewIndex)
+        {
+            if (viewIndex < 0 || viewIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("double:CropBox.Min.Z")) {
+                return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:CropBox.Min.Z"].begin() + viewIndex * sizeof(double)));
+            }
+            
+            return {};
+        }
+        
+        std::vector<double>* GetAllCropBox_Min_Z()
+        {
+            const auto count = GetCount();
+            
+            double* cropBox_Min_ZData = new double[count];
+            if (mEntityTable.column_exists("double:CropBox.Min.Z")) {
+                memcpy(cropBox_Min_ZData, mEntityTable.mDataColumns["double:CropBox.Min.Z"].begin(), count * sizeof(double));
+            }
+            
+            std::vector<double>* result = new std::vector<double>(cropBox_Min_ZData, cropBox_Min_ZData + count);
+            
+            delete[] cropBox_Min_ZData;
+            
+            return result;
+        }
+        
+        double GetCropBox_Max_X(int viewIndex)
+        {
+            if (viewIndex < 0 || viewIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("double:CropBox.Max.X")) {
+                return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:CropBox.Max.X"].begin() + viewIndex * sizeof(double)));
+            }
+            
+            return {};
+        }
+        
+        std::vector<double>* GetAllCropBox_Max_X()
+        {
+            const auto count = GetCount();
+            
+            double* cropBox_Max_XData = new double[count];
+            if (mEntityTable.column_exists("double:CropBox.Max.X")) {
+                memcpy(cropBox_Max_XData, mEntityTable.mDataColumns["double:CropBox.Max.X"].begin(), count * sizeof(double));
+            }
+            
+            std::vector<double>* result = new std::vector<double>(cropBox_Max_XData, cropBox_Max_XData + count);
+            
+            delete[] cropBox_Max_XData;
+            
+            return result;
+        }
+        
+        double GetCropBox_Max_Y(int viewIndex)
+        {
+            if (viewIndex < 0 || viewIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("double:CropBox.Max.Y")) {
+                return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:CropBox.Max.Y"].begin() + viewIndex * sizeof(double)));
+            }
+            
+            return {};
+        }
+        
+        std::vector<double>* GetAllCropBox_Max_Y()
+        {
+            const auto count = GetCount();
+            
+            double* cropBox_Max_YData = new double[count];
+            if (mEntityTable.column_exists("double:CropBox.Max.Y")) {
+                memcpy(cropBox_Max_YData, mEntityTable.mDataColumns["double:CropBox.Max.Y"].begin(), count * sizeof(double));
+            }
+            
+            std::vector<double>* result = new std::vector<double>(cropBox_Max_YData, cropBox_Max_YData + count);
+            
+            delete[] cropBox_Max_YData;
+            
+            return result;
+        }
+        
+        double GetCropBox_Max_Z(int viewIndex)
+        {
+            if (viewIndex < 0 || viewIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("double:CropBox.Max.Z")) {
+                return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:CropBox.Max.Z"].begin() + viewIndex * sizeof(double)));
+            }
+            
+            return {};
+        }
+        
+        std::vector<double>* GetAllCropBox_Max_Z()
+        {
+            const auto count = GetCount();
+            
+            double* cropBox_Max_ZData = new double[count];
+            if (mEntityTable.column_exists("double:CropBox.Max.Z")) {
+                memcpy(cropBox_Max_ZData, mEntityTable.mDataColumns["double:CropBox.Max.Z"].begin(), count * sizeof(double));
+            }
+            
+            std::vector<double>* result = new std::vector<double>(cropBox_Max_ZData, cropBox_Max_ZData + count);
+            
+            delete[] cropBox_Max_ZData;
+            
+            return result;
+        }
+        
+        bool GetIsSectionBoxActive(int viewIndex)
+        {
+            if (viewIndex < 0 || viewIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("byte:IsSectionBoxActive")) {
+                return static_cast<bool>(*reinterpret_cast<bfast::byte*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["byte:IsSectionBoxActive"].begin() + viewIndex * sizeof(bfast::byte))));
+            }
+            
+            return {};
+        }
+        
+        std::vector<bool>* GetAllIsSectionBoxActive()
+        {
+            const auto count = GetCount();
+            
+            bfast::byte* isSectionBoxActiveData = new bfast::byte[count];
+            if (mEntityTable.column_exists("byte:IsSectionBoxActive")) {
+                memcpy(isSectionBoxActiveData, mEntityTable.mDataColumns["byte:IsSectionBoxActive"].begin(), count * sizeof(bfast::byte));
+            }
+            
+            std::vector<bool>* result = new std::vector<bool>(isSectionBoxActiveData, isSectionBoxActiveData + count);
+            
+            delete[] isSectionBoxActiveData;
+            
+            return result;
+        }
+        
+        double GetSectionBox_Min_X(int viewIndex)
+        {
+            if (viewIndex < 0 || viewIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("double:SectionBox.Min.X")) {
+                return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:SectionBox.Min.X"].begin() + viewIndex * sizeof(double)));
+            }
+            
+            return {};
+        }
+        
+        std::vector<double>* GetAllSectionBox_Min_X()
+        {
+            const auto count = GetCount();
+            
+            double* sectionBox_Min_XData = new double[count];
+            if (mEntityTable.column_exists("double:SectionBox.Min.X")) {
+                memcpy(sectionBox_Min_XData, mEntityTable.mDataColumns["double:SectionBox.Min.X"].begin(), count * sizeof(double));
+            }
+            
+            std::vector<double>* result = new std::vector<double>(sectionBox_Min_XData, sectionBox_Min_XData + count);
+            
+            delete[] sectionBox_Min_XData;
+            
+            return result;
+        }
+        
+        double GetSectionBox_Min_Y(int viewIndex)
+        {
+            if (viewIndex < 0 || viewIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("double:SectionBox.Min.Y")) {
+                return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:SectionBox.Min.Y"].begin() + viewIndex * sizeof(double)));
+            }
+            
+            return {};
+        }
+        
+        std::vector<double>* GetAllSectionBox_Min_Y()
+        {
+            const auto count = GetCount();
+            
+            double* sectionBox_Min_YData = new double[count];
+            if (mEntityTable.column_exists("double:SectionBox.Min.Y")) {
+                memcpy(sectionBox_Min_YData, mEntityTable.mDataColumns["double:SectionBox.Min.Y"].begin(), count * sizeof(double));
+            }
+            
+            std::vector<double>* result = new std::vector<double>(sectionBox_Min_YData, sectionBox_Min_YData + count);
+            
+            delete[] sectionBox_Min_YData;
+            
+            return result;
+        }
+        
+        double GetSectionBox_Min_Z(int viewIndex)
+        {
+            if (viewIndex < 0 || viewIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("double:SectionBox.Min.Z")) {
+                return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:SectionBox.Min.Z"].begin() + viewIndex * sizeof(double)));
+            }
+            
+            return {};
+        }
+        
+        std::vector<double>* GetAllSectionBox_Min_Z()
+        {
+            const auto count = GetCount();
+            
+            double* sectionBox_Min_ZData = new double[count];
+            if (mEntityTable.column_exists("double:SectionBox.Min.Z")) {
+                memcpy(sectionBox_Min_ZData, mEntityTable.mDataColumns["double:SectionBox.Min.Z"].begin(), count * sizeof(double));
+            }
+            
+            std::vector<double>* result = new std::vector<double>(sectionBox_Min_ZData, sectionBox_Min_ZData + count);
+            
+            delete[] sectionBox_Min_ZData;
+            
+            return result;
+        }
+        
+        double GetSectionBox_Max_X(int viewIndex)
+        {
+            if (viewIndex < 0 || viewIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("double:SectionBox.Max.X")) {
+                return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:SectionBox.Max.X"].begin() + viewIndex * sizeof(double)));
+            }
+            
+            return {};
+        }
+        
+        std::vector<double>* GetAllSectionBox_Max_X()
+        {
+            const auto count = GetCount();
+            
+            double* sectionBox_Max_XData = new double[count];
+            if (mEntityTable.column_exists("double:SectionBox.Max.X")) {
+                memcpy(sectionBox_Max_XData, mEntityTable.mDataColumns["double:SectionBox.Max.X"].begin(), count * sizeof(double));
+            }
+            
+            std::vector<double>* result = new std::vector<double>(sectionBox_Max_XData, sectionBox_Max_XData + count);
+            
+            delete[] sectionBox_Max_XData;
+            
+            return result;
+        }
+        
+        double GetSectionBox_Max_Y(int viewIndex)
+        {
+            if (viewIndex < 0 || viewIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("double:SectionBox.Max.Y")) {
+                return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:SectionBox.Max.Y"].begin() + viewIndex * sizeof(double)));
+            }
+            
+            return {};
+        }
+        
+        std::vector<double>* GetAllSectionBox_Max_Y()
+        {
+            const auto count = GetCount();
+            
+            double* sectionBox_Max_YData = new double[count];
+            if (mEntityTable.column_exists("double:SectionBox.Max.Y")) {
+                memcpy(sectionBox_Max_YData, mEntityTable.mDataColumns["double:SectionBox.Max.Y"].begin(), count * sizeof(double));
+            }
+            
+            std::vector<double>* result = new std::vector<double>(sectionBox_Max_YData, sectionBox_Max_YData + count);
+            
+            delete[] sectionBox_Max_YData;
+            
+            return result;
+        }
+        
+        double GetSectionBox_Max_Z(int viewIndex)
+        {
+            if (viewIndex < 0 || viewIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("double:SectionBox.Max.Z")) {
+                return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:SectionBox.Max.Z"].begin() + viewIndex * sizeof(double)));
+            }
+            
+            return {};
+        }
+        
+        std::vector<double>* GetAllSectionBox_Max_Z()
+        {
+            const auto count = GetCount();
+            
+            double* sectionBox_Max_ZData = new double[count];
+            if (mEntityTable.column_exists("double:SectionBox.Max.Z")) {
+                memcpy(sectionBox_Max_ZData, mEntityTable.mDataColumns["double:SectionBox.Max.Z"].begin(), count * sizeof(double));
+            }
+            
+            std::vector<double>* result = new std::vector<double>(sectionBox_Max_ZData, sectionBox_Max_ZData + count);
+            
+            delete[] sectionBox_Max_ZData;
+            
+            return result;
+        }
+        
+        double GetSectionBoxOrigin_X(int viewIndex)
+        {
+            if (viewIndex < 0 || viewIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("double:SectionBoxOrigin.X")) {
+                return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:SectionBoxOrigin.X"].begin() + viewIndex * sizeof(double)));
+            }
+            
+            return {};
+        }
+        
+        std::vector<double>* GetAllSectionBoxOrigin_X()
+        {
+            const auto count = GetCount();
+            
+            double* sectionBoxOrigin_XData = new double[count];
+            if (mEntityTable.column_exists("double:SectionBoxOrigin.X")) {
+                memcpy(sectionBoxOrigin_XData, mEntityTable.mDataColumns["double:SectionBoxOrigin.X"].begin(), count * sizeof(double));
+            }
+            
+            std::vector<double>* result = new std::vector<double>(sectionBoxOrigin_XData, sectionBoxOrigin_XData + count);
+            
+            delete[] sectionBoxOrigin_XData;
+            
+            return result;
+        }
+        
+        double GetSectionBoxOrigin_Y(int viewIndex)
+        {
+            if (viewIndex < 0 || viewIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("double:SectionBoxOrigin.Y")) {
+                return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:SectionBoxOrigin.Y"].begin() + viewIndex * sizeof(double)));
+            }
+            
+            return {};
+        }
+        
+        std::vector<double>* GetAllSectionBoxOrigin_Y()
+        {
+            const auto count = GetCount();
+            
+            double* sectionBoxOrigin_YData = new double[count];
+            if (mEntityTable.column_exists("double:SectionBoxOrigin.Y")) {
+                memcpy(sectionBoxOrigin_YData, mEntityTable.mDataColumns["double:SectionBoxOrigin.Y"].begin(), count * sizeof(double));
+            }
+            
+            std::vector<double>* result = new std::vector<double>(sectionBoxOrigin_YData, sectionBoxOrigin_YData + count);
+            
+            delete[] sectionBoxOrigin_YData;
+            
+            return result;
+        }
+        
+        double GetSectionBoxOrigin_Z(int viewIndex)
+        {
+            if (viewIndex < 0 || viewIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("double:SectionBoxOrigin.Z")) {
+                return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:SectionBoxOrigin.Z"].begin() + viewIndex * sizeof(double)));
+            }
+            
+            return {};
+        }
+        
+        std::vector<double>* GetAllSectionBoxOrigin_Z()
+        {
+            const auto count = GetCount();
+            
+            double* sectionBoxOrigin_ZData = new double[count];
+            if (mEntityTable.column_exists("double:SectionBoxOrigin.Z")) {
+                memcpy(sectionBoxOrigin_ZData, mEntityTable.mDataColumns["double:SectionBoxOrigin.Z"].begin(), count * sizeof(double));
+            }
+            
+            std::vector<double>* result = new std::vector<double>(sectionBoxOrigin_ZData, sectionBoxOrigin_ZData + count);
+            
+            delete[] sectionBoxOrigin_ZData;
+            
+            return result;
+        }
+        
+        double GetSectionBoxBasisX_X(int viewIndex)
+        {
+            if (viewIndex < 0 || viewIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("double:SectionBoxBasisX.X")) {
+                return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:SectionBoxBasisX.X"].begin() + viewIndex * sizeof(double)));
+            }
+            
+            return {};
+        }
+        
+        std::vector<double>* GetAllSectionBoxBasisX_X()
+        {
+            const auto count = GetCount();
+            
+            double* sectionBoxBasisX_XData = new double[count];
+            if (mEntityTable.column_exists("double:SectionBoxBasisX.X")) {
+                memcpy(sectionBoxBasisX_XData, mEntityTable.mDataColumns["double:SectionBoxBasisX.X"].begin(), count * sizeof(double));
+            }
+            
+            std::vector<double>* result = new std::vector<double>(sectionBoxBasisX_XData, sectionBoxBasisX_XData + count);
+            
+            delete[] sectionBoxBasisX_XData;
+            
+            return result;
+        }
+        
+        double GetSectionBoxBasisX_Y(int viewIndex)
+        {
+            if (viewIndex < 0 || viewIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("double:SectionBoxBasisX.Y")) {
+                return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:SectionBoxBasisX.Y"].begin() + viewIndex * sizeof(double)));
+            }
+            
+            return {};
+        }
+        
+        std::vector<double>* GetAllSectionBoxBasisX_Y()
+        {
+            const auto count = GetCount();
+            
+            double* sectionBoxBasisX_YData = new double[count];
+            if (mEntityTable.column_exists("double:SectionBoxBasisX.Y")) {
+                memcpy(sectionBoxBasisX_YData, mEntityTable.mDataColumns["double:SectionBoxBasisX.Y"].begin(), count * sizeof(double));
+            }
+            
+            std::vector<double>* result = new std::vector<double>(sectionBoxBasisX_YData, sectionBoxBasisX_YData + count);
+            
+            delete[] sectionBoxBasisX_YData;
+            
+            return result;
+        }
+        
+        double GetSectionBoxBasisX_Z(int viewIndex)
+        {
+            if (viewIndex < 0 || viewIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("double:SectionBoxBasisX.Z")) {
+                return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:SectionBoxBasisX.Z"].begin() + viewIndex * sizeof(double)));
+            }
+            
+            return {};
+        }
+        
+        std::vector<double>* GetAllSectionBoxBasisX_Z()
+        {
+            const auto count = GetCount();
+            
+            double* sectionBoxBasisX_ZData = new double[count];
+            if (mEntityTable.column_exists("double:SectionBoxBasisX.Z")) {
+                memcpy(sectionBoxBasisX_ZData, mEntityTable.mDataColumns["double:SectionBoxBasisX.Z"].begin(), count * sizeof(double));
+            }
+            
+            std::vector<double>* result = new std::vector<double>(sectionBoxBasisX_ZData, sectionBoxBasisX_ZData + count);
+            
+            delete[] sectionBoxBasisX_ZData;
+            
+            return result;
+        }
+        
+        double GetSectionBoxBasisY_X(int viewIndex)
+        {
+            if (viewIndex < 0 || viewIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("double:SectionBoxBasisY.X")) {
+                return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:SectionBoxBasisY.X"].begin() + viewIndex * sizeof(double)));
+            }
+            
+            return {};
+        }
+        
+        std::vector<double>* GetAllSectionBoxBasisY_X()
+        {
+            const auto count = GetCount();
+            
+            double* sectionBoxBasisY_XData = new double[count];
+            if (mEntityTable.column_exists("double:SectionBoxBasisY.X")) {
+                memcpy(sectionBoxBasisY_XData, mEntityTable.mDataColumns["double:SectionBoxBasisY.X"].begin(), count * sizeof(double));
+            }
+            
+            std::vector<double>* result = new std::vector<double>(sectionBoxBasisY_XData, sectionBoxBasisY_XData + count);
+            
+            delete[] sectionBoxBasisY_XData;
+            
+            return result;
+        }
+        
+        double GetSectionBoxBasisY_Y(int viewIndex)
+        {
+            if (viewIndex < 0 || viewIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("double:SectionBoxBasisY.Y")) {
+                return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:SectionBoxBasisY.Y"].begin() + viewIndex * sizeof(double)));
+            }
+            
+            return {};
+        }
+        
+        std::vector<double>* GetAllSectionBoxBasisY_Y()
+        {
+            const auto count = GetCount();
+            
+            double* sectionBoxBasisY_YData = new double[count];
+            if (mEntityTable.column_exists("double:SectionBoxBasisY.Y")) {
+                memcpy(sectionBoxBasisY_YData, mEntityTable.mDataColumns["double:SectionBoxBasisY.Y"].begin(), count * sizeof(double));
+            }
+            
+            std::vector<double>* result = new std::vector<double>(sectionBoxBasisY_YData, sectionBoxBasisY_YData + count);
+            
+            delete[] sectionBoxBasisY_YData;
+            
+            return result;
+        }
+        
+        double GetSectionBoxBasisY_Z(int viewIndex)
+        {
+            if (viewIndex < 0 || viewIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("double:SectionBoxBasisY.Z")) {
+                return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:SectionBoxBasisY.Z"].begin() + viewIndex * sizeof(double)));
+            }
+            
+            return {};
+        }
+        
+        std::vector<double>* GetAllSectionBoxBasisY_Z()
+        {
+            const auto count = GetCount();
+            
+            double* sectionBoxBasisY_ZData = new double[count];
+            if (mEntityTable.column_exists("double:SectionBoxBasisY.Z")) {
+                memcpy(sectionBoxBasisY_ZData, mEntityTable.mDataColumns["double:SectionBoxBasisY.Z"].begin(), count * sizeof(double));
+            }
+            
+            std::vector<double>* result = new std::vector<double>(sectionBoxBasisY_ZData, sectionBoxBasisY_ZData + count);
+            
+            delete[] sectionBoxBasisY_ZData;
+            
+            return result;
+        }
+        
+        double GetSectionBoxBasisZ_X(int viewIndex)
+        {
+            if (viewIndex < 0 || viewIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("double:SectionBoxBasisZ.X")) {
+                return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:SectionBoxBasisZ.X"].begin() + viewIndex * sizeof(double)));
+            }
+            
+            return {};
+        }
+        
+        std::vector<double>* GetAllSectionBoxBasisZ_X()
+        {
+            const auto count = GetCount();
+            
+            double* sectionBoxBasisZ_XData = new double[count];
+            if (mEntityTable.column_exists("double:SectionBoxBasisZ.X")) {
+                memcpy(sectionBoxBasisZ_XData, mEntityTable.mDataColumns["double:SectionBoxBasisZ.X"].begin(), count * sizeof(double));
+            }
+            
+            std::vector<double>* result = new std::vector<double>(sectionBoxBasisZ_XData, sectionBoxBasisZ_XData + count);
+            
+            delete[] sectionBoxBasisZ_XData;
+            
+            return result;
+        }
+        
+        double GetSectionBoxBasisZ_Y(int viewIndex)
+        {
+            if (viewIndex < 0 || viewIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("double:SectionBoxBasisZ.Y")) {
+                return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:SectionBoxBasisZ.Y"].begin() + viewIndex * sizeof(double)));
+            }
+            
+            return {};
+        }
+        
+        std::vector<double>* GetAllSectionBoxBasisZ_Y()
+        {
+            const auto count = GetCount();
+            
+            double* sectionBoxBasisZ_YData = new double[count];
+            if (mEntityTable.column_exists("double:SectionBoxBasisZ.Y")) {
+                memcpy(sectionBoxBasisZ_YData, mEntityTable.mDataColumns["double:SectionBoxBasisZ.Y"].begin(), count * sizeof(double));
+            }
+            
+            std::vector<double>* result = new std::vector<double>(sectionBoxBasisZ_YData, sectionBoxBasisZ_YData + count);
+            
+            delete[] sectionBoxBasisZ_YData;
+            
+            return result;
+        }
+        
+        double GetSectionBoxBasisZ_Z(int viewIndex)
+        {
+            if (viewIndex < 0 || viewIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("double:SectionBoxBasisZ.Z")) {
+                return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:SectionBoxBasisZ.Z"].begin() + viewIndex * sizeof(double)));
+            }
+            
+            return {};
+        }
+        
+        std::vector<double>* GetAllSectionBoxBasisZ_Z()
+        {
+            const auto count = GetCount();
+            
+            double* sectionBoxBasisZ_ZData = new double[count];
+            if (mEntityTable.column_exists("double:SectionBoxBasisZ.Z")) {
+                memcpy(sectionBoxBasisZ_ZData, mEntityTable.mDataColumns["double:SectionBoxBasisZ.Z"].begin(), count * sizeof(double));
+            }
+            
+            std::vector<double>* result = new std::vector<double>(sectionBoxBasisZ_ZData, sectionBoxBasisZ_ZData + count);
+            
+            delete[] sectionBoxBasisZ_ZData;
+            
+            return result;
+        }
+        
+        std::string GetDisplayStyle(int viewIndex)
+        {
+            if (viewIndex < 0 || viewIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("string:DisplayStyle")) {
+                return std::string(reinterpret_cast<const char*>(mStrings[mEntityTable.mStringColumns["string:DisplayStyle"][viewIndex]]));
+            }
+            
+            return {};
+        }
+        
+        std::vector<std::string>* GetAllDisplayStyle()
+        {
+            const auto count = GetCount();
+            
+            const std::vector<int>& displayStyleData = mEntityTable.column_exists("string:DisplayStyle") ? mEntityTable.mStringColumns["string:DisplayStyle"] : std::vector<int>();
+            
+            std::vector<std::string>* result = new std::vector<std::string>();
+            result->reserve(count);
+            
+            for (int i = 0; i < count; ++i)
+            {
+                result->push_back(std::string(reinterpret_cast<const char*>(mStrings[displayStyleData[i]])));
+            }
             
             return result;
         }

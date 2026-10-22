@@ -25,6 +25,19 @@ namespace Vim.Format.ObjectModel
             //   Vim.BasePoint__double:AngleToTrueNorth
             public const string v5_7_0 = "5.7.0";
 
+            // Schema additions (camera pose, crop box and section box of every 3D view)
+            //   Vim.View__byte:IsLocked
+            //   Vim.View__byte:IsCropBoxActive
+            //   Vim.View__double:CropBox.Min.X (.Y .Z) / CropBox.Max.X (.Y .Z)
+            //   Vim.View__byte:IsSectionBoxActive
+            //   Vim.View__double:SectionBox.Min.X (.Y .Z) / SectionBox.Max.X (.Y .Z)
+            //   Vim.View__double:SectionBoxOrigin.X (.Y .Z)
+            //   Vim.View__double:SectionBoxBasisX.X (.Y .Z)
+            //   Vim.View__double:SectionBoxBasisY.X (.Y .Z)
+            //   Vim.View__double:SectionBoxBasisZ.X (.Y .Z)
+            //   Vim.View__string:DisplayStyle
+            public const string v5_8_0 = "5.8.0";
+
             // Schema additions
             //   Vim.BimDocument__long:FileLength
             public const string v5_6_0 = "5.6.0";
@@ -186,7 +199,8 @@ namespace Vim.Format.ObjectModel
         // ReSharper enable MemberHidesStaticFromOuterClass
 
         // [MAINTAIN] Add more object model SerializableVersions below and update the current one.
-        public static SerializableVersion Current => v5_7_0;
+        public static SerializableVersion Current => v5_8_0;
+        public static SerializableVersion v5_8_0 => SerializableVersion.Parse(History.v5_8_0);
         public static SerializableVersion v5_7_0 => SerializableVersion.Parse(History.v5_7_0);
         public static SerializableVersion v5_6_0 => SerializableVersion.Parse(History.v5_6_0);
         public static SerializableVersion v5_5_0 => SerializableVersion.Parse(History.v5_5_0);
@@ -1210,6 +1224,93 @@ namespace Vim.Format.ObjectModel
         }
 
         public int DetailLevel; // 0 = Undefined, 1 = Coarse, 2 = Medium, 3 = Fine
+
+        /// <summary>3D views: true when the view's orientation is locked in Revit (View3D.IsLocked).</summary>
+        public bool IsLocked;
+
+        /// <summary>3D views: true when the crop region is active (View.CropBoxActive).</summary>
+        public bool IsCropBoxActive;
+
+        /// <summary>3D views: the view's crop box (View.CropBox) Min / Max, in the view's own coordinates (X = Right, Y = Up, Z = towards the viewer), in feet.</summary>
+        public double CropBox_Min_X;
+        public double CropBox_Min_Y;
+        public double CropBox_Min_Z;
+        public double CropBox_Max_X;
+        public double CropBox_Max_Y;
+        public double CropBox_Max_Z;
+        public DAABox CropBox
+        {
+            get => new DAABox(new DVector3(CropBox_Min_X, CropBox_Min_Y, CropBox_Min_Z), new DVector3(CropBox_Max_X, CropBox_Max_Y, CropBox_Max_Z));
+            set
+            {
+                (CropBox_Min_X, CropBox_Min_Y, CropBox_Min_Z) = value.Min;
+                (CropBox_Max_X, CropBox_Max_Y, CropBox_Max_Z) = value.Max;
+            }
+        }
+
+        /// <summary>3D views: true when the section box is active (View3D.IsSectionBoxActive).</summary>
+        public bool IsSectionBoxActive;
+
+        /// <summary>3D views: the section box (View3D.GetSectionBox) Min / Max in the box's own coordinates (see SectionBoxOrigin / SectionBoxBasis*), in feet. Written whether or not the box is active.</summary>
+        public double SectionBox_Min_X;
+        public double SectionBox_Min_Y;
+        public double SectionBox_Min_Z;
+        public double SectionBox_Max_X;
+        public double SectionBox_Max_Y;
+        public double SectionBox_Max_Z;
+        public DAABox SectionBox
+        {
+            get => new DAABox(new DVector3(SectionBox_Min_X, SectionBox_Min_Y, SectionBox_Min_Z), new DVector3(SectionBox_Max_X, SectionBox_Max_Y, SectionBox_Max_Z));
+            set
+            {
+                (SectionBox_Min_X, SectionBox_Min_Y, SectionBox_Min_Z) = value.Min;
+                (SectionBox_Max_X, SectionBox_Max_Y, SectionBox_Max_Z) = value.Max;
+            }
+        }
+
+        /// <summary>3D views: origin of the section box transform, in model coordinates (feet).</summary>
+        public double SectionBoxOrigin_X;
+        public double SectionBoxOrigin_Y;
+        public double SectionBoxOrigin_Z;
+        public DVector3 SectionBoxOrigin
+        {
+            get => new DVector3(SectionBoxOrigin_X, SectionBoxOrigin_Y, SectionBoxOrigin_Z);
+            set => (SectionBoxOrigin_X, SectionBoxOrigin_Y, SectionBoxOrigin_Z) = value;
+        }
+
+        /// <summary>3D views: X axis of the section box transform, in model coordinates.</summary>
+        public double SectionBoxBasisX_X;
+        public double SectionBoxBasisX_Y;
+        public double SectionBoxBasisX_Z;
+        public DVector3 SectionBoxBasisX
+        {
+            get => new DVector3(SectionBoxBasisX_X, SectionBoxBasisX_Y, SectionBoxBasisX_Z);
+            set => (SectionBoxBasisX_X, SectionBoxBasisX_Y, SectionBoxBasisX_Z) = value;
+        }
+
+        /// <summary>3D views: Y axis of the section box transform, in model coordinates.</summary>
+        public double SectionBoxBasisY_X;
+        public double SectionBoxBasisY_Y;
+        public double SectionBoxBasisY_Z;
+        public DVector3 SectionBoxBasisY
+        {
+            get => new DVector3(SectionBoxBasisY_X, SectionBoxBasisY_Y, SectionBoxBasisY_Z);
+            set => (SectionBoxBasisY_X, SectionBoxBasisY_Y, SectionBoxBasisY_Z) = value;
+        }
+
+        /// <summary>3D views: Z axis of the section box transform, in model coordinates.</summary>
+        public double SectionBoxBasisZ_X;
+        public double SectionBoxBasisZ_Y;
+        public double SectionBoxBasisZ_Z;
+        public DVector3 SectionBoxBasisZ
+        {
+            get => new DVector3(SectionBoxBasisZ_X, SectionBoxBasisZ_Y, SectionBoxBasisZ_Z);
+            set => (SectionBoxBasisZ_X, SectionBoxBasisZ_Y, SectionBoxBasisZ_Z) = value;
+        }
+
+        /// <summary>The view's visual style, Revit's DisplayStyle name (View.DisplayStyle), e.g. "Shading", "HLR", "Realistic".</summary>
+        public string DisplayStyle;
+
         public Relation<Camera> _Camera;
 
         /// <summary>

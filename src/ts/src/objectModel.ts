@@ -4607,6 +4607,34 @@ export interface IView {
     outline_Max_X?: number
     outline_Max_Y?: number
     detailLevel?: number
+    isLocked?: boolean
+    isCropBoxActive?: boolean
+    cropBox_Min_X?: number
+    cropBox_Min_Y?: number
+    cropBox_Min_Z?: number
+    cropBox_Max_X?: number
+    cropBox_Max_Y?: number
+    cropBox_Max_Z?: number
+    isSectionBoxActive?: boolean
+    sectionBox_Min_X?: number
+    sectionBox_Min_Y?: number
+    sectionBox_Min_Z?: number
+    sectionBox_Max_X?: number
+    sectionBox_Max_Y?: number
+    sectionBox_Max_Z?: number
+    sectionBoxOrigin_X?: number
+    sectionBoxOrigin_Y?: number
+    sectionBoxOrigin_Z?: number
+    sectionBoxBasisX_X?: number
+    sectionBoxBasisX_Y?: number
+    sectionBoxBasisX_Z?: number
+    sectionBoxBasisY_X?: number
+    sectionBoxBasisY_Y?: number
+    sectionBoxBasisY_Z?: number
+    sectionBoxBasisZ_X?: number
+    sectionBoxBasisZ_Y?: number
+    sectionBoxBasisZ_Z?: number
+    displayStyle?: string
     
     cameraIndex?: number
     camera?: ICamera
@@ -4667,6 +4695,62 @@ export interface IViewTable {
     getAllOutline_Max_Y(): Promise<number[] | undefined>
     getDetailLevel(viewIndex: number): Promise<number | undefined>
     getAllDetailLevel(): Promise<number[] | undefined>
+    getIsLocked(viewIndex: number): Promise<boolean | undefined>
+    getAllIsLocked(): Promise<boolean[] | undefined>
+    getIsCropBoxActive(viewIndex: number): Promise<boolean | undefined>
+    getAllIsCropBoxActive(): Promise<boolean[] | undefined>
+    getCropBox_Min_X(viewIndex: number): Promise<number | undefined>
+    getAllCropBox_Min_X(): Promise<number[] | undefined>
+    getCropBox_Min_Y(viewIndex: number): Promise<number | undefined>
+    getAllCropBox_Min_Y(): Promise<number[] | undefined>
+    getCropBox_Min_Z(viewIndex: number): Promise<number | undefined>
+    getAllCropBox_Min_Z(): Promise<number[] | undefined>
+    getCropBox_Max_X(viewIndex: number): Promise<number | undefined>
+    getAllCropBox_Max_X(): Promise<number[] | undefined>
+    getCropBox_Max_Y(viewIndex: number): Promise<number | undefined>
+    getAllCropBox_Max_Y(): Promise<number[] | undefined>
+    getCropBox_Max_Z(viewIndex: number): Promise<number | undefined>
+    getAllCropBox_Max_Z(): Promise<number[] | undefined>
+    getIsSectionBoxActive(viewIndex: number): Promise<boolean | undefined>
+    getAllIsSectionBoxActive(): Promise<boolean[] | undefined>
+    getSectionBox_Min_X(viewIndex: number): Promise<number | undefined>
+    getAllSectionBox_Min_X(): Promise<number[] | undefined>
+    getSectionBox_Min_Y(viewIndex: number): Promise<number | undefined>
+    getAllSectionBox_Min_Y(): Promise<number[] | undefined>
+    getSectionBox_Min_Z(viewIndex: number): Promise<number | undefined>
+    getAllSectionBox_Min_Z(): Promise<number[] | undefined>
+    getSectionBox_Max_X(viewIndex: number): Promise<number | undefined>
+    getAllSectionBox_Max_X(): Promise<number[] | undefined>
+    getSectionBox_Max_Y(viewIndex: number): Promise<number | undefined>
+    getAllSectionBox_Max_Y(): Promise<number[] | undefined>
+    getSectionBox_Max_Z(viewIndex: number): Promise<number | undefined>
+    getAllSectionBox_Max_Z(): Promise<number[] | undefined>
+    getSectionBoxOrigin_X(viewIndex: number): Promise<number | undefined>
+    getAllSectionBoxOrigin_X(): Promise<number[] | undefined>
+    getSectionBoxOrigin_Y(viewIndex: number): Promise<number | undefined>
+    getAllSectionBoxOrigin_Y(): Promise<number[] | undefined>
+    getSectionBoxOrigin_Z(viewIndex: number): Promise<number | undefined>
+    getAllSectionBoxOrigin_Z(): Promise<number[] | undefined>
+    getSectionBoxBasisX_X(viewIndex: number): Promise<number | undefined>
+    getAllSectionBoxBasisX_X(): Promise<number[] | undefined>
+    getSectionBoxBasisX_Y(viewIndex: number): Promise<number | undefined>
+    getAllSectionBoxBasisX_Y(): Promise<number[] | undefined>
+    getSectionBoxBasisX_Z(viewIndex: number): Promise<number | undefined>
+    getAllSectionBoxBasisX_Z(): Promise<number[] | undefined>
+    getSectionBoxBasisY_X(viewIndex: number): Promise<number | undefined>
+    getAllSectionBoxBasisY_X(): Promise<number[] | undefined>
+    getSectionBoxBasisY_Y(viewIndex: number): Promise<number | undefined>
+    getAllSectionBoxBasisY_Y(): Promise<number[] | undefined>
+    getSectionBoxBasisY_Z(viewIndex: number): Promise<number | undefined>
+    getAllSectionBoxBasisY_Z(): Promise<number[] | undefined>
+    getSectionBoxBasisZ_X(viewIndex: number): Promise<number | undefined>
+    getAllSectionBoxBasisZ_X(): Promise<number[] | undefined>
+    getSectionBoxBasisZ_Y(viewIndex: number): Promise<number | undefined>
+    getAllSectionBoxBasisZ_Y(): Promise<number[] | undefined>
+    getSectionBoxBasisZ_Z(viewIndex: number): Promise<number | undefined>
+    getAllSectionBoxBasisZ_Z(): Promise<number[] | undefined>
+    getDisplayStyle(viewIndex: number): Promise<string | undefined>
+    getAllDisplayStyle(): Promise<string[] | undefined>
     
     getCameraIndex(viewIndex: number): Promise<number | undefined>
     getAllCameraIndex(): Promise<number[] | undefined>
@@ -4704,6 +4788,34 @@ export class View implements IView {
     outline_Max_X?: number
     outline_Max_Y?: number
     detailLevel?: number
+    isLocked?: boolean
+    isCropBoxActive?: boolean
+    cropBox_Min_X?: number
+    cropBox_Min_Y?: number
+    cropBox_Min_Z?: number
+    cropBox_Max_X?: number
+    cropBox_Max_Y?: number
+    cropBox_Max_Z?: number
+    isSectionBoxActive?: boolean
+    sectionBox_Min_X?: number
+    sectionBox_Min_Y?: number
+    sectionBox_Min_Z?: number
+    sectionBox_Max_X?: number
+    sectionBox_Max_Y?: number
+    sectionBox_Max_Z?: number
+    sectionBoxOrigin_X?: number
+    sectionBoxOrigin_Y?: number
+    sectionBoxOrigin_Z?: number
+    sectionBoxBasisX_X?: number
+    sectionBoxBasisX_Y?: number
+    sectionBoxBasisX_Z?: number
+    sectionBoxBasisY_X?: number
+    sectionBoxBasisY_Y?: number
+    sectionBoxBasisY_Z?: number
+    sectionBoxBasisZ_X?: number
+    sectionBoxBasisZ_Y?: number
+    sectionBoxBasisZ_Z?: number
+    displayStyle?: string
     
     cameraIndex?: number
     camera?: ICamera
@@ -4740,6 +4852,34 @@ export class View implements IView {
             table.getOutline_Max_X(index).then(v => result.outline_Max_X = v),
             table.getOutline_Max_Y(index).then(v => result.outline_Max_Y = v),
             table.getDetailLevel(index).then(v => result.detailLevel = v),
+            table.getIsLocked(index).then(v => result.isLocked = v),
+            table.getIsCropBoxActive(index).then(v => result.isCropBoxActive = v),
+            table.getCropBox_Min_X(index).then(v => result.cropBox_Min_X = v),
+            table.getCropBox_Min_Y(index).then(v => result.cropBox_Min_Y = v),
+            table.getCropBox_Min_Z(index).then(v => result.cropBox_Min_Z = v),
+            table.getCropBox_Max_X(index).then(v => result.cropBox_Max_X = v),
+            table.getCropBox_Max_Y(index).then(v => result.cropBox_Max_Y = v),
+            table.getCropBox_Max_Z(index).then(v => result.cropBox_Max_Z = v),
+            table.getIsSectionBoxActive(index).then(v => result.isSectionBoxActive = v),
+            table.getSectionBox_Min_X(index).then(v => result.sectionBox_Min_X = v),
+            table.getSectionBox_Min_Y(index).then(v => result.sectionBox_Min_Y = v),
+            table.getSectionBox_Min_Z(index).then(v => result.sectionBox_Min_Z = v),
+            table.getSectionBox_Max_X(index).then(v => result.sectionBox_Max_X = v),
+            table.getSectionBox_Max_Y(index).then(v => result.sectionBox_Max_Y = v),
+            table.getSectionBox_Max_Z(index).then(v => result.sectionBox_Max_Z = v),
+            table.getSectionBoxOrigin_X(index).then(v => result.sectionBoxOrigin_X = v),
+            table.getSectionBoxOrigin_Y(index).then(v => result.sectionBoxOrigin_Y = v),
+            table.getSectionBoxOrigin_Z(index).then(v => result.sectionBoxOrigin_Z = v),
+            table.getSectionBoxBasisX_X(index).then(v => result.sectionBoxBasisX_X = v),
+            table.getSectionBoxBasisX_Y(index).then(v => result.sectionBoxBasisX_Y = v),
+            table.getSectionBoxBasisX_Z(index).then(v => result.sectionBoxBasisX_Z = v),
+            table.getSectionBoxBasisY_X(index).then(v => result.sectionBoxBasisY_X = v),
+            table.getSectionBoxBasisY_Y(index).then(v => result.sectionBoxBasisY_Y = v),
+            table.getSectionBoxBasisY_Z(index).then(v => result.sectionBoxBasisY_Z = v),
+            table.getSectionBoxBasisZ_X(index).then(v => result.sectionBoxBasisZ_X = v),
+            table.getSectionBoxBasisZ_Y(index).then(v => result.sectionBoxBasisZ_Y = v),
+            table.getSectionBoxBasisZ_Z(index).then(v => result.sectionBoxBasisZ_Z = v),
+            table.getDisplayStyle(index).then(v => result.displayStyle = v),
             table.getCameraIndex(index).then(v => result.cameraIndex = v),
             table.getFamilyTypeIndex(index).then(v => result.familyTypeIndex = v),
             table.getElementIndex(index).then(v => result.elementIndex = v),
@@ -4801,6 +4941,34 @@ export class ViewTable implements IViewTable {
         let outline_Max_X: number[] | undefined
         let outline_Max_Y: number[] | undefined
         let detailLevel: number[] | undefined
+        let isLocked: boolean[] | undefined
+        let isCropBoxActive: boolean[] | undefined
+        let cropBox_Min_X: number[] | undefined
+        let cropBox_Min_Y: number[] | undefined
+        let cropBox_Min_Z: number[] | undefined
+        let cropBox_Max_X: number[] | undefined
+        let cropBox_Max_Y: number[] | undefined
+        let cropBox_Max_Z: number[] | undefined
+        let isSectionBoxActive: boolean[] | undefined
+        let sectionBox_Min_X: number[] | undefined
+        let sectionBox_Min_Y: number[] | undefined
+        let sectionBox_Min_Z: number[] | undefined
+        let sectionBox_Max_X: number[] | undefined
+        let sectionBox_Max_Y: number[] | undefined
+        let sectionBox_Max_Z: number[] | undefined
+        let sectionBoxOrigin_X: number[] | undefined
+        let sectionBoxOrigin_Y: number[] | undefined
+        let sectionBoxOrigin_Z: number[] | undefined
+        let sectionBoxBasisX_X: number[] | undefined
+        let sectionBoxBasisX_Y: number[] | undefined
+        let sectionBoxBasisX_Z: number[] | undefined
+        let sectionBoxBasisY_X: number[] | undefined
+        let sectionBoxBasisY_Y: number[] | undefined
+        let sectionBoxBasisY_Z: number[] | undefined
+        let sectionBoxBasisZ_X: number[] | undefined
+        let sectionBoxBasisZ_Y: number[] | undefined
+        let sectionBoxBasisZ_Z: number[] | undefined
+        let displayStyle: string[] | undefined
         let cameraIndex: number[] | undefined
         let familyTypeIndex: number[] | undefined
         let elementIndex: number[] | undefined
@@ -4829,6 +4997,34 @@ export class ViewTable implements IViewTable {
             (async () => { outline_Max_X = (await localTable.getNumberArray("double:Outline.Max.X")) })(),
             (async () => { outline_Max_Y = (await localTable.getNumberArray("double:Outline.Max.Y")) })(),
             (async () => { detailLevel = (await localTable.getNumberArray("int:DetailLevel")) })(),
+            (async () => { isLocked = (await localTable.getBooleanArray("byte:IsLocked")) })(),
+            (async () => { isCropBoxActive = (await localTable.getBooleanArray("byte:IsCropBoxActive")) })(),
+            (async () => { cropBox_Min_X = (await localTable.getNumberArray("double:CropBox.Min.X")) })(),
+            (async () => { cropBox_Min_Y = (await localTable.getNumberArray("double:CropBox.Min.Y")) })(),
+            (async () => { cropBox_Min_Z = (await localTable.getNumberArray("double:CropBox.Min.Z")) })(),
+            (async () => { cropBox_Max_X = (await localTable.getNumberArray("double:CropBox.Max.X")) })(),
+            (async () => { cropBox_Max_Y = (await localTable.getNumberArray("double:CropBox.Max.Y")) })(),
+            (async () => { cropBox_Max_Z = (await localTable.getNumberArray("double:CropBox.Max.Z")) })(),
+            (async () => { isSectionBoxActive = (await localTable.getBooleanArray("byte:IsSectionBoxActive")) })(),
+            (async () => { sectionBox_Min_X = (await localTable.getNumberArray("double:SectionBox.Min.X")) })(),
+            (async () => { sectionBox_Min_Y = (await localTable.getNumberArray("double:SectionBox.Min.Y")) })(),
+            (async () => { sectionBox_Min_Z = (await localTable.getNumberArray("double:SectionBox.Min.Z")) })(),
+            (async () => { sectionBox_Max_X = (await localTable.getNumberArray("double:SectionBox.Max.X")) })(),
+            (async () => { sectionBox_Max_Y = (await localTable.getNumberArray("double:SectionBox.Max.Y")) })(),
+            (async () => { sectionBox_Max_Z = (await localTable.getNumberArray("double:SectionBox.Max.Z")) })(),
+            (async () => { sectionBoxOrigin_X = (await localTable.getNumberArray("double:SectionBoxOrigin.X")) })(),
+            (async () => { sectionBoxOrigin_Y = (await localTable.getNumberArray("double:SectionBoxOrigin.Y")) })(),
+            (async () => { sectionBoxOrigin_Z = (await localTable.getNumberArray("double:SectionBoxOrigin.Z")) })(),
+            (async () => { sectionBoxBasisX_X = (await localTable.getNumberArray("double:SectionBoxBasisX.X")) })(),
+            (async () => { sectionBoxBasisX_Y = (await localTable.getNumberArray("double:SectionBoxBasisX.Y")) })(),
+            (async () => { sectionBoxBasisX_Z = (await localTable.getNumberArray("double:SectionBoxBasisX.Z")) })(),
+            (async () => { sectionBoxBasisY_X = (await localTable.getNumberArray("double:SectionBoxBasisY.X")) })(),
+            (async () => { sectionBoxBasisY_Y = (await localTable.getNumberArray("double:SectionBoxBasisY.Y")) })(),
+            (async () => { sectionBoxBasisY_Z = (await localTable.getNumberArray("double:SectionBoxBasisY.Z")) })(),
+            (async () => { sectionBoxBasisZ_X = (await localTable.getNumberArray("double:SectionBoxBasisZ.X")) })(),
+            (async () => { sectionBoxBasisZ_Y = (await localTable.getNumberArray("double:SectionBoxBasisZ.Y")) })(),
+            (async () => { sectionBoxBasisZ_Z = (await localTable.getNumberArray("double:SectionBoxBasisZ.Z")) })(),
+            (async () => { displayStyle = (await localTable.getStringArray("string:DisplayStyle")) })(),
             (async () => { cameraIndex = (await localTable.getNumberArray("index:Vim.Camera:Camera")) })(),
             (async () => { familyTypeIndex = (await localTable.getNumberArray("index:Vim.FamilyType:FamilyType")) })(),
             (async () => { elementIndex = (await localTable.getNumberArray("index:Vim.Element:Element")) })(),
@@ -4863,6 +5059,34 @@ export class ViewTable implements IViewTable {
                 outline_Max_X: outline_Max_X ? outline_Max_X[i] : undefined,
                 outline_Max_Y: outline_Max_Y ? outline_Max_Y[i] : undefined,
                 detailLevel: detailLevel ? detailLevel[i] : undefined,
+                isLocked: isLocked ? isLocked[i] : undefined,
+                isCropBoxActive: isCropBoxActive ? isCropBoxActive[i] : undefined,
+                cropBox_Min_X: cropBox_Min_X ? cropBox_Min_X[i] : undefined,
+                cropBox_Min_Y: cropBox_Min_Y ? cropBox_Min_Y[i] : undefined,
+                cropBox_Min_Z: cropBox_Min_Z ? cropBox_Min_Z[i] : undefined,
+                cropBox_Max_X: cropBox_Max_X ? cropBox_Max_X[i] : undefined,
+                cropBox_Max_Y: cropBox_Max_Y ? cropBox_Max_Y[i] : undefined,
+                cropBox_Max_Z: cropBox_Max_Z ? cropBox_Max_Z[i] : undefined,
+                isSectionBoxActive: isSectionBoxActive ? isSectionBoxActive[i] : undefined,
+                sectionBox_Min_X: sectionBox_Min_X ? sectionBox_Min_X[i] : undefined,
+                sectionBox_Min_Y: sectionBox_Min_Y ? sectionBox_Min_Y[i] : undefined,
+                sectionBox_Min_Z: sectionBox_Min_Z ? sectionBox_Min_Z[i] : undefined,
+                sectionBox_Max_X: sectionBox_Max_X ? sectionBox_Max_X[i] : undefined,
+                sectionBox_Max_Y: sectionBox_Max_Y ? sectionBox_Max_Y[i] : undefined,
+                sectionBox_Max_Z: sectionBox_Max_Z ? sectionBox_Max_Z[i] : undefined,
+                sectionBoxOrigin_X: sectionBoxOrigin_X ? sectionBoxOrigin_X[i] : undefined,
+                sectionBoxOrigin_Y: sectionBoxOrigin_Y ? sectionBoxOrigin_Y[i] : undefined,
+                sectionBoxOrigin_Z: sectionBoxOrigin_Z ? sectionBoxOrigin_Z[i] : undefined,
+                sectionBoxBasisX_X: sectionBoxBasisX_X ? sectionBoxBasisX_X[i] : undefined,
+                sectionBoxBasisX_Y: sectionBoxBasisX_Y ? sectionBoxBasisX_Y[i] : undefined,
+                sectionBoxBasisX_Z: sectionBoxBasisX_Z ? sectionBoxBasisX_Z[i] : undefined,
+                sectionBoxBasisY_X: sectionBoxBasisY_X ? sectionBoxBasisY_X[i] : undefined,
+                sectionBoxBasisY_Y: sectionBoxBasisY_Y ? sectionBoxBasisY_Y[i] : undefined,
+                sectionBoxBasisY_Z: sectionBoxBasisY_Z ? sectionBoxBasisY_Z[i] : undefined,
+                sectionBoxBasisZ_X: sectionBoxBasisZ_X ? sectionBoxBasisZ_X[i] : undefined,
+                sectionBoxBasisZ_Y: sectionBoxBasisZ_Y ? sectionBoxBasisZ_Y[i] : undefined,
+                sectionBoxBasisZ_Z: sectionBoxBasisZ_Z ? sectionBoxBasisZ_Z[i] : undefined,
+                displayStyle: displayStyle ? displayStyle[i] : undefined,
                 cameraIndex: cameraIndex ? cameraIndex[i] : undefined,
                 familyTypeIndex: familyTypeIndex ? familyTypeIndex[i] : undefined,
                 elementIndex: elementIndex ? elementIndex[i] : undefined
@@ -5054,6 +5278,230 @@ export class ViewTable implements IViewTable {
     
     async getAllDetailLevel(): Promise<number[] | undefined> {
         return (await this.entityTable.getNumberArray("int:DetailLevel"))
+    }
+    
+    async getIsLocked(viewIndex: number): Promise<boolean | undefined> {
+        return (await this.entityTable.getBoolean(viewIndex, "byte:IsLocked"))
+    }
+    
+    async getAllIsLocked(): Promise<boolean[] | undefined> {
+        return (await this.entityTable.getBooleanArray("byte:IsLocked"))
+    }
+    
+    async getIsCropBoxActive(viewIndex: number): Promise<boolean | undefined> {
+        return (await this.entityTable.getBoolean(viewIndex, "byte:IsCropBoxActive"))
+    }
+    
+    async getAllIsCropBoxActive(): Promise<boolean[] | undefined> {
+        return (await this.entityTable.getBooleanArray("byte:IsCropBoxActive"))
+    }
+    
+    async getCropBox_Min_X(viewIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(viewIndex, "double:CropBox.Min.X"))
+    }
+    
+    async getAllCropBox_Min_X(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:CropBox.Min.X"))
+    }
+    
+    async getCropBox_Min_Y(viewIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(viewIndex, "double:CropBox.Min.Y"))
+    }
+    
+    async getAllCropBox_Min_Y(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:CropBox.Min.Y"))
+    }
+    
+    async getCropBox_Min_Z(viewIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(viewIndex, "double:CropBox.Min.Z"))
+    }
+    
+    async getAllCropBox_Min_Z(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:CropBox.Min.Z"))
+    }
+    
+    async getCropBox_Max_X(viewIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(viewIndex, "double:CropBox.Max.X"))
+    }
+    
+    async getAllCropBox_Max_X(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:CropBox.Max.X"))
+    }
+    
+    async getCropBox_Max_Y(viewIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(viewIndex, "double:CropBox.Max.Y"))
+    }
+    
+    async getAllCropBox_Max_Y(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:CropBox.Max.Y"))
+    }
+    
+    async getCropBox_Max_Z(viewIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(viewIndex, "double:CropBox.Max.Z"))
+    }
+    
+    async getAllCropBox_Max_Z(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:CropBox.Max.Z"))
+    }
+    
+    async getIsSectionBoxActive(viewIndex: number): Promise<boolean | undefined> {
+        return (await this.entityTable.getBoolean(viewIndex, "byte:IsSectionBoxActive"))
+    }
+    
+    async getAllIsSectionBoxActive(): Promise<boolean[] | undefined> {
+        return (await this.entityTable.getBooleanArray("byte:IsSectionBoxActive"))
+    }
+    
+    async getSectionBox_Min_X(viewIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(viewIndex, "double:SectionBox.Min.X"))
+    }
+    
+    async getAllSectionBox_Min_X(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:SectionBox.Min.X"))
+    }
+    
+    async getSectionBox_Min_Y(viewIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(viewIndex, "double:SectionBox.Min.Y"))
+    }
+    
+    async getAllSectionBox_Min_Y(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:SectionBox.Min.Y"))
+    }
+    
+    async getSectionBox_Min_Z(viewIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(viewIndex, "double:SectionBox.Min.Z"))
+    }
+    
+    async getAllSectionBox_Min_Z(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:SectionBox.Min.Z"))
+    }
+    
+    async getSectionBox_Max_X(viewIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(viewIndex, "double:SectionBox.Max.X"))
+    }
+    
+    async getAllSectionBox_Max_X(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:SectionBox.Max.X"))
+    }
+    
+    async getSectionBox_Max_Y(viewIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(viewIndex, "double:SectionBox.Max.Y"))
+    }
+    
+    async getAllSectionBox_Max_Y(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:SectionBox.Max.Y"))
+    }
+    
+    async getSectionBox_Max_Z(viewIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(viewIndex, "double:SectionBox.Max.Z"))
+    }
+    
+    async getAllSectionBox_Max_Z(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:SectionBox.Max.Z"))
+    }
+    
+    async getSectionBoxOrigin_X(viewIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(viewIndex, "double:SectionBoxOrigin.X"))
+    }
+    
+    async getAllSectionBoxOrigin_X(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:SectionBoxOrigin.X"))
+    }
+    
+    async getSectionBoxOrigin_Y(viewIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(viewIndex, "double:SectionBoxOrigin.Y"))
+    }
+    
+    async getAllSectionBoxOrigin_Y(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:SectionBoxOrigin.Y"))
+    }
+    
+    async getSectionBoxOrigin_Z(viewIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(viewIndex, "double:SectionBoxOrigin.Z"))
+    }
+    
+    async getAllSectionBoxOrigin_Z(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:SectionBoxOrigin.Z"))
+    }
+    
+    async getSectionBoxBasisX_X(viewIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(viewIndex, "double:SectionBoxBasisX.X"))
+    }
+    
+    async getAllSectionBoxBasisX_X(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:SectionBoxBasisX.X"))
+    }
+    
+    async getSectionBoxBasisX_Y(viewIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(viewIndex, "double:SectionBoxBasisX.Y"))
+    }
+    
+    async getAllSectionBoxBasisX_Y(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:SectionBoxBasisX.Y"))
+    }
+    
+    async getSectionBoxBasisX_Z(viewIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(viewIndex, "double:SectionBoxBasisX.Z"))
+    }
+    
+    async getAllSectionBoxBasisX_Z(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:SectionBoxBasisX.Z"))
+    }
+    
+    async getSectionBoxBasisY_X(viewIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(viewIndex, "double:SectionBoxBasisY.X"))
+    }
+    
+    async getAllSectionBoxBasisY_X(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:SectionBoxBasisY.X"))
+    }
+    
+    async getSectionBoxBasisY_Y(viewIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(viewIndex, "double:SectionBoxBasisY.Y"))
+    }
+    
+    async getAllSectionBoxBasisY_Y(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:SectionBoxBasisY.Y"))
+    }
+    
+    async getSectionBoxBasisY_Z(viewIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(viewIndex, "double:SectionBoxBasisY.Z"))
+    }
+    
+    async getAllSectionBoxBasisY_Z(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:SectionBoxBasisY.Z"))
+    }
+    
+    async getSectionBoxBasisZ_X(viewIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(viewIndex, "double:SectionBoxBasisZ.X"))
+    }
+    
+    async getAllSectionBoxBasisZ_X(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:SectionBoxBasisZ.X"))
+    }
+    
+    async getSectionBoxBasisZ_Y(viewIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(viewIndex, "double:SectionBoxBasisZ.Y"))
+    }
+    
+    async getAllSectionBoxBasisZ_Y(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:SectionBoxBasisZ.Y"))
+    }
+    
+    async getSectionBoxBasisZ_Z(viewIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(viewIndex, "double:SectionBoxBasisZ.Z"))
+    }
+    
+    async getAllSectionBoxBasisZ_Z(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:SectionBoxBasisZ.Z"))
+    }
+    
+    async getDisplayStyle(viewIndex: number): Promise<string | undefined> {
+        return (await this.entityTable.getString(viewIndex, "string:DisplayStyle"))
+    }
+    
+    async getAllDisplayStyle(): Promise<string[] | undefined> {
+        return (await this.entityTable.getStringArray("string:DisplayStyle"))
     }
     
     async getCameraIndex(viewIndex: number): Promise<number | undefined> {

@@ -825,6 +825,34 @@ namespace Vim.Format.ObjectModel {
                     (Outline_Max_X == other.Outline_Max_X) &&
                     (Outline_Max_Y == other.Outline_Max_Y) &&
                     (DetailLevel == other.DetailLevel) &&
+                    (IsLocked == other.IsLocked) &&
+                    (IsCropBoxActive == other.IsCropBoxActive) &&
+                    (CropBox_Min_X == other.CropBox_Min_X) &&
+                    (CropBox_Min_Y == other.CropBox_Min_Y) &&
+                    (CropBox_Min_Z == other.CropBox_Min_Z) &&
+                    (CropBox_Max_X == other.CropBox_Max_X) &&
+                    (CropBox_Max_Y == other.CropBox_Max_Y) &&
+                    (CropBox_Max_Z == other.CropBox_Max_Z) &&
+                    (IsSectionBoxActive == other.IsSectionBoxActive) &&
+                    (SectionBox_Min_X == other.SectionBox_Min_X) &&
+                    (SectionBox_Min_Y == other.SectionBox_Min_Y) &&
+                    (SectionBox_Min_Z == other.SectionBox_Min_Z) &&
+                    (SectionBox_Max_X == other.SectionBox_Max_X) &&
+                    (SectionBox_Max_Y == other.SectionBox_Max_Y) &&
+                    (SectionBox_Max_Z == other.SectionBox_Max_Z) &&
+                    (SectionBoxOrigin_X == other.SectionBoxOrigin_X) &&
+                    (SectionBoxOrigin_Y == other.SectionBoxOrigin_Y) &&
+                    (SectionBoxOrigin_Z == other.SectionBoxOrigin_Z) &&
+                    (SectionBoxBasisX_X == other.SectionBoxBasisX_X) &&
+                    (SectionBoxBasisX_Y == other.SectionBoxBasisX_Y) &&
+                    (SectionBoxBasisX_Z == other.SectionBoxBasisX_Z) &&
+                    (SectionBoxBasisY_X == other.SectionBoxBasisY_X) &&
+                    (SectionBoxBasisY_Y == other.SectionBoxBasisY_Y) &&
+                    (SectionBoxBasisY_Z == other.SectionBoxBasisY_Z) &&
+                    (SectionBoxBasisZ_X == other.SectionBoxBasisZ_X) &&
+                    (SectionBoxBasisZ_Y == other.SectionBoxBasisZ_Y) &&
+                    (SectionBoxBasisZ_Z == other.SectionBoxBasisZ_Z) &&
+                    (DisplayStyle == other.DisplayStyle) &&
                     (_Camera?.Index == other._Camera?.Index) &&
                     (_FamilyType?.Index == other._FamilyType?.Index) &&
                     (_Element?.Index == other._Element?.Index);
@@ -2837,6 +2865,62 @@ namespace Vim.Format.ObjectModel {
         public Double GetViewOutline_Max_Y(int index, Double defaultValue = default) => ViewOutline_Max_Y?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
         public IArray<Int32> ViewDetailLevel { get; }
         public Int32 GetViewDetailLevel(int index, Int32 defaultValue = default) => ViewDetailLevel?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Boolean> ViewIsLocked { get; }
+        public Boolean GetViewIsLocked(int index, Boolean defaultValue = default) => ViewIsLocked?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Boolean> ViewIsCropBoxActive { get; }
+        public Boolean GetViewIsCropBoxActive(int index, Boolean defaultValue = default) => ViewIsCropBoxActive?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> ViewCropBox_Min_X { get; }
+        public Double GetViewCropBox_Min_X(int index, Double defaultValue = default) => ViewCropBox_Min_X?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> ViewCropBox_Min_Y { get; }
+        public Double GetViewCropBox_Min_Y(int index, Double defaultValue = default) => ViewCropBox_Min_Y?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> ViewCropBox_Min_Z { get; }
+        public Double GetViewCropBox_Min_Z(int index, Double defaultValue = default) => ViewCropBox_Min_Z?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> ViewCropBox_Max_X { get; }
+        public Double GetViewCropBox_Max_X(int index, Double defaultValue = default) => ViewCropBox_Max_X?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> ViewCropBox_Max_Y { get; }
+        public Double GetViewCropBox_Max_Y(int index, Double defaultValue = default) => ViewCropBox_Max_Y?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> ViewCropBox_Max_Z { get; }
+        public Double GetViewCropBox_Max_Z(int index, Double defaultValue = default) => ViewCropBox_Max_Z?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Boolean> ViewIsSectionBoxActive { get; }
+        public Boolean GetViewIsSectionBoxActive(int index, Boolean defaultValue = default) => ViewIsSectionBoxActive?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> ViewSectionBox_Min_X { get; }
+        public Double GetViewSectionBox_Min_X(int index, Double defaultValue = default) => ViewSectionBox_Min_X?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> ViewSectionBox_Min_Y { get; }
+        public Double GetViewSectionBox_Min_Y(int index, Double defaultValue = default) => ViewSectionBox_Min_Y?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> ViewSectionBox_Min_Z { get; }
+        public Double GetViewSectionBox_Min_Z(int index, Double defaultValue = default) => ViewSectionBox_Min_Z?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> ViewSectionBox_Max_X { get; }
+        public Double GetViewSectionBox_Max_X(int index, Double defaultValue = default) => ViewSectionBox_Max_X?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> ViewSectionBox_Max_Y { get; }
+        public Double GetViewSectionBox_Max_Y(int index, Double defaultValue = default) => ViewSectionBox_Max_Y?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> ViewSectionBox_Max_Z { get; }
+        public Double GetViewSectionBox_Max_Z(int index, Double defaultValue = default) => ViewSectionBox_Max_Z?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> ViewSectionBoxOrigin_X { get; }
+        public Double GetViewSectionBoxOrigin_X(int index, Double defaultValue = default) => ViewSectionBoxOrigin_X?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> ViewSectionBoxOrigin_Y { get; }
+        public Double GetViewSectionBoxOrigin_Y(int index, Double defaultValue = default) => ViewSectionBoxOrigin_Y?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> ViewSectionBoxOrigin_Z { get; }
+        public Double GetViewSectionBoxOrigin_Z(int index, Double defaultValue = default) => ViewSectionBoxOrigin_Z?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> ViewSectionBoxBasisX_X { get; }
+        public Double GetViewSectionBoxBasisX_X(int index, Double defaultValue = default) => ViewSectionBoxBasisX_X?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> ViewSectionBoxBasisX_Y { get; }
+        public Double GetViewSectionBoxBasisX_Y(int index, Double defaultValue = default) => ViewSectionBoxBasisX_Y?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> ViewSectionBoxBasisX_Z { get; }
+        public Double GetViewSectionBoxBasisX_Z(int index, Double defaultValue = default) => ViewSectionBoxBasisX_Z?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> ViewSectionBoxBasisY_X { get; }
+        public Double GetViewSectionBoxBasisY_X(int index, Double defaultValue = default) => ViewSectionBoxBasisY_X?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> ViewSectionBoxBasisY_Y { get; }
+        public Double GetViewSectionBoxBasisY_Y(int index, Double defaultValue = default) => ViewSectionBoxBasisY_Y?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> ViewSectionBoxBasisY_Z { get; }
+        public Double GetViewSectionBoxBasisY_Z(int index, Double defaultValue = default) => ViewSectionBoxBasisY_Z?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> ViewSectionBoxBasisZ_X { get; }
+        public Double GetViewSectionBoxBasisZ_X(int index, Double defaultValue = default) => ViewSectionBoxBasisZ_X?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> ViewSectionBoxBasisZ_Y { get; }
+        public Double GetViewSectionBoxBasisZ_Y(int index, Double defaultValue = default) => ViewSectionBoxBasisZ_Y?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> ViewSectionBoxBasisZ_Z { get; }
+        public Double GetViewSectionBoxBasisZ_Z(int index, Double defaultValue = default) => ViewSectionBoxBasisZ_Z?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<String> ViewDisplayStyle { get; }
+        public String GetViewDisplayStyle(int index, String defaultValue = "") => ViewDisplayStyle?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
         public IArray<int> ViewCameraIndex { get; }
         public int GetViewCameraIndex(int index) => ViewCameraIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
         public IArray<int> ViewFamilyTypeIndex { get; }
@@ -2874,6 +2958,34 @@ namespace Vim.Format.ObjectModel {
             r.Outline_Max_X = ViewOutline_Max_X.ElementAtOrDefault(n);
             r.Outline_Max_Y = ViewOutline_Max_Y.ElementAtOrDefault(n);
             r.DetailLevel = ViewDetailLevel.ElementAtOrDefault(n);
+            r.IsLocked = ViewIsLocked.ElementAtOrDefault(n);
+            r.IsCropBoxActive = ViewIsCropBoxActive.ElementAtOrDefault(n);
+            r.CropBox_Min_X = ViewCropBox_Min_X.ElementAtOrDefault(n);
+            r.CropBox_Min_Y = ViewCropBox_Min_Y.ElementAtOrDefault(n);
+            r.CropBox_Min_Z = ViewCropBox_Min_Z.ElementAtOrDefault(n);
+            r.CropBox_Max_X = ViewCropBox_Max_X.ElementAtOrDefault(n);
+            r.CropBox_Max_Y = ViewCropBox_Max_Y.ElementAtOrDefault(n);
+            r.CropBox_Max_Z = ViewCropBox_Max_Z.ElementAtOrDefault(n);
+            r.IsSectionBoxActive = ViewIsSectionBoxActive.ElementAtOrDefault(n);
+            r.SectionBox_Min_X = ViewSectionBox_Min_X.ElementAtOrDefault(n);
+            r.SectionBox_Min_Y = ViewSectionBox_Min_Y.ElementAtOrDefault(n);
+            r.SectionBox_Min_Z = ViewSectionBox_Min_Z.ElementAtOrDefault(n);
+            r.SectionBox_Max_X = ViewSectionBox_Max_X.ElementAtOrDefault(n);
+            r.SectionBox_Max_Y = ViewSectionBox_Max_Y.ElementAtOrDefault(n);
+            r.SectionBox_Max_Z = ViewSectionBox_Max_Z.ElementAtOrDefault(n);
+            r.SectionBoxOrigin_X = ViewSectionBoxOrigin_X.ElementAtOrDefault(n);
+            r.SectionBoxOrigin_Y = ViewSectionBoxOrigin_Y.ElementAtOrDefault(n);
+            r.SectionBoxOrigin_Z = ViewSectionBoxOrigin_Z.ElementAtOrDefault(n);
+            r.SectionBoxBasisX_X = ViewSectionBoxBasisX_X.ElementAtOrDefault(n);
+            r.SectionBoxBasisX_Y = ViewSectionBoxBasisX_Y.ElementAtOrDefault(n);
+            r.SectionBoxBasisX_Z = ViewSectionBoxBasisX_Z.ElementAtOrDefault(n);
+            r.SectionBoxBasisY_X = ViewSectionBoxBasisY_X.ElementAtOrDefault(n);
+            r.SectionBoxBasisY_Y = ViewSectionBoxBasisY_Y.ElementAtOrDefault(n);
+            r.SectionBoxBasisY_Z = ViewSectionBoxBasisY_Z.ElementAtOrDefault(n);
+            r.SectionBoxBasisZ_X = ViewSectionBoxBasisZ_X.ElementAtOrDefault(n);
+            r.SectionBoxBasisZ_Y = ViewSectionBoxBasisZ_Y.ElementAtOrDefault(n);
+            r.SectionBoxBasisZ_Z = ViewSectionBoxBasisZ_Z.ElementAtOrDefault(n);
+            r.DisplayStyle = ViewDisplayStyle.ElementAtOrDefault(n);
             r._Camera = new Relation<Vim.Format.ObjectModel.Camera>(GetViewCameraIndex(n), GetCamera);
             r._FamilyType = new Relation<Vim.Format.ObjectModel.FamilyType>(GetViewFamilyTypeIndex(n), GetFamilyType);
             r._Element = new Relation<Vim.Format.ObjectModel.Element>(GetViewElementIndex(n), GetElement);
@@ -4189,6 +4301,34 @@ namespace Vim.Format.ObjectModel {
             ViewOutline_Max_X = ViewEntityTable?.GetDataColumnValues<Double>("double:Outline.Max.X") ?? Array.Empty<Double>().ToIArray();
             ViewOutline_Max_Y = ViewEntityTable?.GetDataColumnValues<Double>("double:Outline.Max.Y") ?? Array.Empty<Double>().ToIArray();
             ViewDetailLevel = ViewEntityTable?.GetDataColumnValues<Int32>("int:DetailLevel") ?? Array.Empty<Int32>().ToIArray();
+            ViewIsLocked = ViewEntityTable?.GetDataColumnValues<Boolean>("byte:IsLocked") ?? Array.Empty<Boolean>().ToIArray();
+            ViewIsCropBoxActive = ViewEntityTable?.GetDataColumnValues<Boolean>("byte:IsCropBoxActive") ?? Array.Empty<Boolean>().ToIArray();
+            ViewCropBox_Min_X = ViewEntityTable?.GetDataColumnValues<Double>("double:CropBox.Min.X") ?? Array.Empty<Double>().ToIArray();
+            ViewCropBox_Min_Y = ViewEntityTable?.GetDataColumnValues<Double>("double:CropBox.Min.Y") ?? Array.Empty<Double>().ToIArray();
+            ViewCropBox_Min_Z = ViewEntityTable?.GetDataColumnValues<Double>("double:CropBox.Min.Z") ?? Array.Empty<Double>().ToIArray();
+            ViewCropBox_Max_X = ViewEntityTable?.GetDataColumnValues<Double>("double:CropBox.Max.X") ?? Array.Empty<Double>().ToIArray();
+            ViewCropBox_Max_Y = ViewEntityTable?.GetDataColumnValues<Double>("double:CropBox.Max.Y") ?? Array.Empty<Double>().ToIArray();
+            ViewCropBox_Max_Z = ViewEntityTable?.GetDataColumnValues<Double>("double:CropBox.Max.Z") ?? Array.Empty<Double>().ToIArray();
+            ViewIsSectionBoxActive = ViewEntityTable?.GetDataColumnValues<Boolean>("byte:IsSectionBoxActive") ?? Array.Empty<Boolean>().ToIArray();
+            ViewSectionBox_Min_X = ViewEntityTable?.GetDataColumnValues<Double>("double:SectionBox.Min.X") ?? Array.Empty<Double>().ToIArray();
+            ViewSectionBox_Min_Y = ViewEntityTable?.GetDataColumnValues<Double>("double:SectionBox.Min.Y") ?? Array.Empty<Double>().ToIArray();
+            ViewSectionBox_Min_Z = ViewEntityTable?.GetDataColumnValues<Double>("double:SectionBox.Min.Z") ?? Array.Empty<Double>().ToIArray();
+            ViewSectionBox_Max_X = ViewEntityTable?.GetDataColumnValues<Double>("double:SectionBox.Max.X") ?? Array.Empty<Double>().ToIArray();
+            ViewSectionBox_Max_Y = ViewEntityTable?.GetDataColumnValues<Double>("double:SectionBox.Max.Y") ?? Array.Empty<Double>().ToIArray();
+            ViewSectionBox_Max_Z = ViewEntityTable?.GetDataColumnValues<Double>("double:SectionBox.Max.Z") ?? Array.Empty<Double>().ToIArray();
+            ViewSectionBoxOrigin_X = ViewEntityTable?.GetDataColumnValues<Double>("double:SectionBoxOrigin.X") ?? Array.Empty<Double>().ToIArray();
+            ViewSectionBoxOrigin_Y = ViewEntityTable?.GetDataColumnValues<Double>("double:SectionBoxOrigin.Y") ?? Array.Empty<Double>().ToIArray();
+            ViewSectionBoxOrigin_Z = ViewEntityTable?.GetDataColumnValues<Double>("double:SectionBoxOrigin.Z") ?? Array.Empty<Double>().ToIArray();
+            ViewSectionBoxBasisX_X = ViewEntityTable?.GetDataColumnValues<Double>("double:SectionBoxBasisX.X") ?? Array.Empty<Double>().ToIArray();
+            ViewSectionBoxBasisX_Y = ViewEntityTable?.GetDataColumnValues<Double>("double:SectionBoxBasisX.Y") ?? Array.Empty<Double>().ToIArray();
+            ViewSectionBoxBasisX_Z = ViewEntityTable?.GetDataColumnValues<Double>("double:SectionBoxBasisX.Z") ?? Array.Empty<Double>().ToIArray();
+            ViewSectionBoxBasisY_X = ViewEntityTable?.GetDataColumnValues<Double>("double:SectionBoxBasisY.X") ?? Array.Empty<Double>().ToIArray();
+            ViewSectionBoxBasisY_Y = ViewEntityTable?.GetDataColumnValues<Double>("double:SectionBoxBasisY.Y") ?? Array.Empty<Double>().ToIArray();
+            ViewSectionBoxBasisY_Z = ViewEntityTable?.GetDataColumnValues<Double>("double:SectionBoxBasisY.Z") ?? Array.Empty<Double>().ToIArray();
+            ViewSectionBoxBasisZ_X = ViewEntityTable?.GetDataColumnValues<Double>("double:SectionBoxBasisZ.X") ?? Array.Empty<Double>().ToIArray();
+            ViewSectionBoxBasisZ_Y = ViewEntityTable?.GetDataColumnValues<Double>("double:SectionBoxBasisZ.Y") ?? Array.Empty<Double>().ToIArray();
+            ViewSectionBoxBasisZ_Z = ViewEntityTable?.GetDataColumnValues<Double>("double:SectionBoxBasisZ.Z") ?? Array.Empty<Double>().ToIArray();
+            ViewDisplayStyle = ViewEntityTable?.GetStringColumnValues("string:DisplayStyle") ?? Array.Empty<String>().ToIArray();
             LevelInViewExtents_Min_X = LevelInViewEntityTable?.GetDataColumnValues<Double>("double:Extents.Min.X") ?? Array.Empty<Double>().ToIArray();
             LevelInViewExtents_Min_Y = LevelInViewEntityTable?.GetDataColumnValues<Double>("double:Extents.Min.Y") ?? Array.Empty<Double>().ToIArray();
             LevelInViewExtents_Min_Z = LevelInViewEntityTable?.GetDataColumnValues<Double>("double:Extents.Min.Z") ?? Array.Empty<Double>().ToIArray();
@@ -6324,6 +6464,34 @@ namespace Vim.Format.ObjectModel {
             Column_Outline_Max_X = GetDataColumnValues<Double>("double:Outline.Max.X") ?? Array.Empty<Double>();
             Column_Outline_Max_Y = GetDataColumnValues<Double>("double:Outline.Max.Y") ?? Array.Empty<Double>();
             Column_DetailLevel = GetDataColumnValues<Int32>("int:DetailLevel") ?? Array.Empty<Int32>();
+            Column_IsLocked = GetDataColumnValues<Boolean>("byte:IsLocked") ?? Array.Empty<Boolean>();
+            Column_IsCropBoxActive = GetDataColumnValues<Boolean>("byte:IsCropBoxActive") ?? Array.Empty<Boolean>();
+            Column_CropBox_Min_X = GetDataColumnValues<Double>("double:CropBox.Min.X") ?? Array.Empty<Double>();
+            Column_CropBox_Min_Y = GetDataColumnValues<Double>("double:CropBox.Min.Y") ?? Array.Empty<Double>();
+            Column_CropBox_Min_Z = GetDataColumnValues<Double>("double:CropBox.Min.Z") ?? Array.Empty<Double>();
+            Column_CropBox_Max_X = GetDataColumnValues<Double>("double:CropBox.Max.X") ?? Array.Empty<Double>();
+            Column_CropBox_Max_Y = GetDataColumnValues<Double>("double:CropBox.Max.Y") ?? Array.Empty<Double>();
+            Column_CropBox_Max_Z = GetDataColumnValues<Double>("double:CropBox.Max.Z") ?? Array.Empty<Double>();
+            Column_IsSectionBoxActive = GetDataColumnValues<Boolean>("byte:IsSectionBoxActive") ?? Array.Empty<Boolean>();
+            Column_SectionBox_Min_X = GetDataColumnValues<Double>("double:SectionBox.Min.X") ?? Array.Empty<Double>();
+            Column_SectionBox_Min_Y = GetDataColumnValues<Double>("double:SectionBox.Min.Y") ?? Array.Empty<Double>();
+            Column_SectionBox_Min_Z = GetDataColumnValues<Double>("double:SectionBox.Min.Z") ?? Array.Empty<Double>();
+            Column_SectionBox_Max_X = GetDataColumnValues<Double>("double:SectionBox.Max.X") ?? Array.Empty<Double>();
+            Column_SectionBox_Max_Y = GetDataColumnValues<Double>("double:SectionBox.Max.Y") ?? Array.Empty<Double>();
+            Column_SectionBox_Max_Z = GetDataColumnValues<Double>("double:SectionBox.Max.Z") ?? Array.Empty<Double>();
+            Column_SectionBoxOrigin_X = GetDataColumnValues<Double>("double:SectionBoxOrigin.X") ?? Array.Empty<Double>();
+            Column_SectionBoxOrigin_Y = GetDataColumnValues<Double>("double:SectionBoxOrigin.Y") ?? Array.Empty<Double>();
+            Column_SectionBoxOrigin_Z = GetDataColumnValues<Double>("double:SectionBoxOrigin.Z") ?? Array.Empty<Double>();
+            Column_SectionBoxBasisX_X = GetDataColumnValues<Double>("double:SectionBoxBasisX.X") ?? Array.Empty<Double>();
+            Column_SectionBoxBasisX_Y = GetDataColumnValues<Double>("double:SectionBoxBasisX.Y") ?? Array.Empty<Double>();
+            Column_SectionBoxBasisX_Z = GetDataColumnValues<Double>("double:SectionBoxBasisX.Z") ?? Array.Empty<Double>();
+            Column_SectionBoxBasisY_X = GetDataColumnValues<Double>("double:SectionBoxBasisY.X") ?? Array.Empty<Double>();
+            Column_SectionBoxBasisY_Y = GetDataColumnValues<Double>("double:SectionBoxBasisY.Y") ?? Array.Empty<Double>();
+            Column_SectionBoxBasisY_Z = GetDataColumnValues<Double>("double:SectionBoxBasisY.Z") ?? Array.Empty<Double>();
+            Column_SectionBoxBasisZ_X = GetDataColumnValues<Double>("double:SectionBoxBasisZ.X") ?? Array.Empty<Double>();
+            Column_SectionBoxBasisZ_Y = GetDataColumnValues<Double>("double:SectionBoxBasisZ.Y") ?? Array.Empty<Double>();
+            Column_SectionBoxBasisZ_Z = GetDataColumnValues<Double>("double:SectionBoxBasisZ.Z") ?? Array.Empty<Double>();
+            Column_DisplayStyle = GetStringColumnValues("string:DisplayStyle") ?? Array.Empty<String>();
             Column_CameraIndex = GetIndexColumnValues("index:Vim.Camera:Camera") ?? Array.Empty<int>();
             Column_FamilyTypeIndex = GetIndexColumnValues("index:Vim.FamilyType:FamilyType") ?? Array.Empty<int>();
             Column_ElementIndex = GetIndexColumnValues("index:Vim.Element:Element") ?? Array.Empty<int>();
@@ -6375,6 +6543,62 @@ namespace Vim.Format.ObjectModel {
         public Double GetOutline_Max_Y(int index, Double @default = default) => Column_Outline_Max_Y.ElementAtOrDefault(index, @default);
         public Int32[] Column_DetailLevel { get; }
         public Int32 GetDetailLevel(int index, Int32 @default = default) => Column_DetailLevel.ElementAtOrDefault(index, @default);
+        public Boolean[] Column_IsLocked { get; }
+        public Boolean GetIsLocked(int index, Boolean @default = default) => Column_IsLocked.ElementAtOrDefault(index, @default);
+        public Boolean[] Column_IsCropBoxActive { get; }
+        public Boolean GetIsCropBoxActive(int index, Boolean @default = default) => Column_IsCropBoxActive.ElementAtOrDefault(index, @default);
+        public Double[] Column_CropBox_Min_X { get; }
+        public Double GetCropBox_Min_X(int index, Double @default = default) => Column_CropBox_Min_X.ElementAtOrDefault(index, @default);
+        public Double[] Column_CropBox_Min_Y { get; }
+        public Double GetCropBox_Min_Y(int index, Double @default = default) => Column_CropBox_Min_Y.ElementAtOrDefault(index, @default);
+        public Double[] Column_CropBox_Min_Z { get; }
+        public Double GetCropBox_Min_Z(int index, Double @default = default) => Column_CropBox_Min_Z.ElementAtOrDefault(index, @default);
+        public Double[] Column_CropBox_Max_X { get; }
+        public Double GetCropBox_Max_X(int index, Double @default = default) => Column_CropBox_Max_X.ElementAtOrDefault(index, @default);
+        public Double[] Column_CropBox_Max_Y { get; }
+        public Double GetCropBox_Max_Y(int index, Double @default = default) => Column_CropBox_Max_Y.ElementAtOrDefault(index, @default);
+        public Double[] Column_CropBox_Max_Z { get; }
+        public Double GetCropBox_Max_Z(int index, Double @default = default) => Column_CropBox_Max_Z.ElementAtOrDefault(index, @default);
+        public Boolean[] Column_IsSectionBoxActive { get; }
+        public Boolean GetIsSectionBoxActive(int index, Boolean @default = default) => Column_IsSectionBoxActive.ElementAtOrDefault(index, @default);
+        public Double[] Column_SectionBox_Min_X { get; }
+        public Double GetSectionBox_Min_X(int index, Double @default = default) => Column_SectionBox_Min_X.ElementAtOrDefault(index, @default);
+        public Double[] Column_SectionBox_Min_Y { get; }
+        public Double GetSectionBox_Min_Y(int index, Double @default = default) => Column_SectionBox_Min_Y.ElementAtOrDefault(index, @default);
+        public Double[] Column_SectionBox_Min_Z { get; }
+        public Double GetSectionBox_Min_Z(int index, Double @default = default) => Column_SectionBox_Min_Z.ElementAtOrDefault(index, @default);
+        public Double[] Column_SectionBox_Max_X { get; }
+        public Double GetSectionBox_Max_X(int index, Double @default = default) => Column_SectionBox_Max_X.ElementAtOrDefault(index, @default);
+        public Double[] Column_SectionBox_Max_Y { get; }
+        public Double GetSectionBox_Max_Y(int index, Double @default = default) => Column_SectionBox_Max_Y.ElementAtOrDefault(index, @default);
+        public Double[] Column_SectionBox_Max_Z { get; }
+        public Double GetSectionBox_Max_Z(int index, Double @default = default) => Column_SectionBox_Max_Z.ElementAtOrDefault(index, @default);
+        public Double[] Column_SectionBoxOrigin_X { get; }
+        public Double GetSectionBoxOrigin_X(int index, Double @default = default) => Column_SectionBoxOrigin_X.ElementAtOrDefault(index, @default);
+        public Double[] Column_SectionBoxOrigin_Y { get; }
+        public Double GetSectionBoxOrigin_Y(int index, Double @default = default) => Column_SectionBoxOrigin_Y.ElementAtOrDefault(index, @default);
+        public Double[] Column_SectionBoxOrigin_Z { get; }
+        public Double GetSectionBoxOrigin_Z(int index, Double @default = default) => Column_SectionBoxOrigin_Z.ElementAtOrDefault(index, @default);
+        public Double[] Column_SectionBoxBasisX_X { get; }
+        public Double GetSectionBoxBasisX_X(int index, Double @default = default) => Column_SectionBoxBasisX_X.ElementAtOrDefault(index, @default);
+        public Double[] Column_SectionBoxBasisX_Y { get; }
+        public Double GetSectionBoxBasisX_Y(int index, Double @default = default) => Column_SectionBoxBasisX_Y.ElementAtOrDefault(index, @default);
+        public Double[] Column_SectionBoxBasisX_Z { get; }
+        public Double GetSectionBoxBasisX_Z(int index, Double @default = default) => Column_SectionBoxBasisX_Z.ElementAtOrDefault(index, @default);
+        public Double[] Column_SectionBoxBasisY_X { get; }
+        public Double GetSectionBoxBasisY_X(int index, Double @default = default) => Column_SectionBoxBasisY_X.ElementAtOrDefault(index, @default);
+        public Double[] Column_SectionBoxBasisY_Y { get; }
+        public Double GetSectionBoxBasisY_Y(int index, Double @default = default) => Column_SectionBoxBasisY_Y.ElementAtOrDefault(index, @default);
+        public Double[] Column_SectionBoxBasisY_Z { get; }
+        public Double GetSectionBoxBasisY_Z(int index, Double @default = default) => Column_SectionBoxBasisY_Z.ElementAtOrDefault(index, @default);
+        public Double[] Column_SectionBoxBasisZ_X { get; }
+        public Double GetSectionBoxBasisZ_X(int index, Double @default = default) => Column_SectionBoxBasisZ_X.ElementAtOrDefault(index, @default);
+        public Double[] Column_SectionBoxBasisZ_Y { get; }
+        public Double GetSectionBoxBasisZ_Y(int index, Double @default = default) => Column_SectionBoxBasisZ_Y.ElementAtOrDefault(index, @default);
+        public Double[] Column_SectionBoxBasisZ_Z { get; }
+        public Double GetSectionBoxBasisZ_Z(int index, Double @default = default) => Column_SectionBoxBasisZ_Z.ElementAtOrDefault(index, @default);
+        public String[] Column_DisplayStyle { get; }
+        public String GetDisplayStyle(int index, String @default = "") => Column_DisplayStyle.ElementAtOrDefault(index, @default);
         public int[] Column_CameraIndex { get; }
         public int GetCameraIndex(int index) => Column_CameraIndex.ElementAtOrDefault(index, EntityRelation.None);
         public Camera GetCamera(int index) => _GetReferencedCamera(GetCameraIndex(index));
@@ -6416,6 +6640,34 @@ namespace Vim.Format.ObjectModel {
             r.Outline_Max_X = GetOutline_Max_X(index);
             r.Outline_Max_Y = GetOutline_Max_Y(index);
             r.DetailLevel = GetDetailLevel(index);
+            r.IsLocked = GetIsLocked(index);
+            r.IsCropBoxActive = GetIsCropBoxActive(index);
+            r.CropBox_Min_X = GetCropBox_Min_X(index);
+            r.CropBox_Min_Y = GetCropBox_Min_Y(index);
+            r.CropBox_Min_Z = GetCropBox_Min_Z(index);
+            r.CropBox_Max_X = GetCropBox_Max_X(index);
+            r.CropBox_Max_Y = GetCropBox_Max_Y(index);
+            r.CropBox_Max_Z = GetCropBox_Max_Z(index);
+            r.IsSectionBoxActive = GetIsSectionBoxActive(index);
+            r.SectionBox_Min_X = GetSectionBox_Min_X(index);
+            r.SectionBox_Min_Y = GetSectionBox_Min_Y(index);
+            r.SectionBox_Min_Z = GetSectionBox_Min_Z(index);
+            r.SectionBox_Max_X = GetSectionBox_Max_X(index);
+            r.SectionBox_Max_Y = GetSectionBox_Max_Y(index);
+            r.SectionBox_Max_Z = GetSectionBox_Max_Z(index);
+            r.SectionBoxOrigin_X = GetSectionBoxOrigin_X(index);
+            r.SectionBoxOrigin_Y = GetSectionBoxOrigin_Y(index);
+            r.SectionBoxOrigin_Z = GetSectionBoxOrigin_Z(index);
+            r.SectionBoxBasisX_X = GetSectionBoxBasisX_X(index);
+            r.SectionBoxBasisX_Y = GetSectionBoxBasisX_Y(index);
+            r.SectionBoxBasisX_Z = GetSectionBoxBasisX_Z(index);
+            r.SectionBoxBasisY_X = GetSectionBoxBasisY_X(index);
+            r.SectionBoxBasisY_Y = GetSectionBoxBasisY_Y(index);
+            r.SectionBoxBasisY_Z = GetSectionBoxBasisY_Z(index);
+            r.SectionBoxBasisZ_X = GetSectionBoxBasisZ_X(index);
+            r.SectionBoxBasisZ_Y = GetSectionBoxBasisZ_Y(index);
+            r.SectionBoxBasisZ_Z = GetSectionBoxBasisZ_Z(index);
+            r.DisplayStyle = GetDisplayStyle(index);
             r._Camera = new Relation<Vim.Format.ObjectModel.Camera>(GetCameraIndex(index), _GetReferencedCamera);
             r._FamilyType = new Relation<Vim.Format.ObjectModel.FamilyType>(GetFamilyTypeIndex(index), _GetReferencedFamilyType);
             r._Element = new Relation<Vim.Format.ObjectModel.Element>(GetElementIndex(index), _GetReferencedElement);
@@ -9179,6 +9431,146 @@ namespace Vim.Format.ObjectModel {
                 var columnData = new Int32[entityCount];
                 for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].DetailLevel; }
                 tb.AddDataColumn("int:DetailLevel", columnData);
+            }
+            {
+                var columnData = new Boolean[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].IsLocked; }
+                tb.AddDataColumn("byte:IsLocked", columnData);
+            }
+            {
+                var columnData = new Boolean[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].IsCropBoxActive; }
+                tb.AddDataColumn("byte:IsCropBoxActive", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].CropBox_Min_X; }
+                tb.AddDataColumn("double:CropBox.Min.X", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].CropBox_Min_Y; }
+                tb.AddDataColumn("double:CropBox.Min.Y", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].CropBox_Min_Z; }
+                tb.AddDataColumn("double:CropBox.Min.Z", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].CropBox_Max_X; }
+                tb.AddDataColumn("double:CropBox.Max.X", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].CropBox_Max_Y; }
+                tb.AddDataColumn("double:CropBox.Max.Y", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].CropBox_Max_Z; }
+                tb.AddDataColumn("double:CropBox.Max.Z", columnData);
+            }
+            {
+                var columnData = new Boolean[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].IsSectionBoxActive; }
+                tb.AddDataColumn("byte:IsSectionBoxActive", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].SectionBox_Min_X; }
+                tb.AddDataColumn("double:SectionBox.Min.X", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].SectionBox_Min_Y; }
+                tb.AddDataColumn("double:SectionBox.Min.Y", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].SectionBox_Min_Z; }
+                tb.AddDataColumn("double:SectionBox.Min.Z", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].SectionBox_Max_X; }
+                tb.AddDataColumn("double:SectionBox.Max.X", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].SectionBox_Max_Y; }
+                tb.AddDataColumn("double:SectionBox.Max.Y", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].SectionBox_Max_Z; }
+                tb.AddDataColumn("double:SectionBox.Max.Z", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].SectionBoxOrigin_X; }
+                tb.AddDataColumn("double:SectionBoxOrigin.X", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].SectionBoxOrigin_Y; }
+                tb.AddDataColumn("double:SectionBoxOrigin.Y", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].SectionBoxOrigin_Z; }
+                tb.AddDataColumn("double:SectionBoxOrigin.Z", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].SectionBoxBasisX_X; }
+                tb.AddDataColumn("double:SectionBoxBasisX.X", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].SectionBoxBasisX_Y; }
+                tb.AddDataColumn("double:SectionBoxBasisX.Y", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].SectionBoxBasisX_Z; }
+                tb.AddDataColumn("double:SectionBoxBasisX.Z", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].SectionBoxBasisY_X; }
+                tb.AddDataColumn("double:SectionBoxBasisY.X", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].SectionBoxBasisY_Y; }
+                tb.AddDataColumn("double:SectionBoxBasisY.Y", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].SectionBoxBasisY_Z; }
+                tb.AddDataColumn("double:SectionBoxBasisY.Z", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].SectionBoxBasisZ_X; }
+                tb.AddDataColumn("double:SectionBoxBasisZ.X", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].SectionBoxBasisZ_Y; }
+                tb.AddDataColumn("double:SectionBoxBasisZ.Y", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].SectionBoxBasisZ_Z; }
+                tb.AddDataColumn("double:SectionBoxBasisZ.Z", columnData);
+            }
+            {
+                var columnData = new String[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].DisplayStyle; }
+                tb.AddStringColumn("string:DisplayStyle", columnData);
             }
             {
                 var columnData = new int[entityCount];
