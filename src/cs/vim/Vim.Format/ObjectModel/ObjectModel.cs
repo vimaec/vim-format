@@ -51,6 +51,24 @@ namespace Vim.Format.ObjectModel
             //   Vim.BasePoint__double:AngleToTrueNorth
             public const string v5_7_0 = "5.7.0";
 
+            // Schema additions (camera pose, crop box and section box of every 3D view)
+            //   Vim.View__byte:IsLocked
+            //   Vim.View__byte:IsCropBoxActive
+            //   Vim.View__double:CropBox.Min.X (.Y .Z) / CropBox.Max.X (.Y .Z)
+            //   Vim.View__byte:IsSectionBoxActive
+            //   Vim.View__double:SectionBox.Min.X (.Y .Z) / SectionBox.Max.X (.Y .Z)
+            //   Vim.View__double:SectionBoxOrigin.X (.Y .Z)
+            //   Vim.View__double:SectionBoxBasisX.X (.Y .Z)
+            //   Vim.View__double:SectionBoxBasisY.X (.Y .Z)
+            //   Vim.View__double:SectionBoxBasisZ.X (.Y .Z)
+            //   Vim.View__string:DisplayStyle
+            // Schema additions (what each 3D view hides, so a viewer shows the view as Revit draws it)
+            //   Vim.HiddenCategoryInView (index:Vim.View:View, index:Vim.Category:Category)
+            //   Vim.HiddenWorksetInView (index:Vim.View:View, index:Vim.Workset:Workset)
+            //   Vim.FilterInView (string:Name, string:Kind, string:FilterUniqueId, int:OrderIndex, byte:IsEnabled, byte:IsVisible, byte:HasOverrides, index:Vim.View:View)
+            //   Vim.HiddenElementInView (string:Reason, index:Vim.View:View, index:Vim.Element:Element, index:Vim.FilterInView:FilterInView)
+            public const string v5_8_0 = "5.8.0";
+
             // Schema additions
             //   Vim.BimDocument__long:FileLength
             public const string v5_6_0 = "5.6.0";
@@ -1237,6 +1255,93 @@ namespace Vim.Format.ObjectModel
         }
 
         public int DetailLevel; // 0 = Undefined, 1 = Coarse, 2 = Medium, 3 = Fine
+
+        /// <summary>3D views: true when the view's orientation is locked in Revit (View3D.IsLocked).</summary>
+        public bool IsLocked;
+
+        /// <summary>3D views: true when the crop region is active (View.CropBoxActive).</summary>
+        public bool IsCropBoxActive;
+
+        /// <summary>3D views: the view's crop box (View.CropBox) Min / Max, in the view's own coordinates (X = Right, Y = Up, Z = towards the viewer), in feet.</summary>
+        public double CropBox_Min_X;
+        public double CropBox_Min_Y;
+        public double CropBox_Min_Z;
+        public double CropBox_Max_X;
+        public double CropBox_Max_Y;
+        public double CropBox_Max_Z;
+        public DAABox CropBox
+        {
+            get => new DAABox(new DVector3(CropBox_Min_X, CropBox_Min_Y, CropBox_Min_Z), new DVector3(CropBox_Max_X, CropBox_Max_Y, CropBox_Max_Z));
+            set
+            {
+                (CropBox_Min_X, CropBox_Min_Y, CropBox_Min_Z) = value.Min;
+                (CropBox_Max_X, CropBox_Max_Y, CropBox_Max_Z) = value.Max;
+            }
+        }
+
+        /// <summary>3D views: true when the section box is active (View3D.IsSectionBoxActive).</summary>
+        public bool IsSectionBoxActive;
+
+        /// <summary>3D views: the section box (View3D.GetSectionBox) Min / Max in the box's own coordinates (see SectionBoxOrigin / SectionBoxBasis*), in feet. Written whether or not the box is active.</summary>
+        public double SectionBox_Min_X;
+        public double SectionBox_Min_Y;
+        public double SectionBox_Min_Z;
+        public double SectionBox_Max_X;
+        public double SectionBox_Max_Y;
+        public double SectionBox_Max_Z;
+        public DAABox SectionBox
+        {
+            get => new DAABox(new DVector3(SectionBox_Min_X, SectionBox_Min_Y, SectionBox_Min_Z), new DVector3(SectionBox_Max_X, SectionBox_Max_Y, SectionBox_Max_Z));
+            set
+            {
+                (SectionBox_Min_X, SectionBox_Min_Y, SectionBox_Min_Z) = value.Min;
+                (SectionBox_Max_X, SectionBox_Max_Y, SectionBox_Max_Z) = value.Max;
+            }
+        }
+
+        /// <summary>3D views: origin of the section box transform, in model coordinates (feet).</summary>
+        public double SectionBoxOrigin_X;
+        public double SectionBoxOrigin_Y;
+        public double SectionBoxOrigin_Z;
+        public DVector3 SectionBoxOrigin
+        {
+            get => new DVector3(SectionBoxOrigin_X, SectionBoxOrigin_Y, SectionBoxOrigin_Z);
+            set => (SectionBoxOrigin_X, SectionBoxOrigin_Y, SectionBoxOrigin_Z) = value;
+        }
+
+        /// <summary>3D views: X axis of the section box transform, in model coordinates.</summary>
+        public double SectionBoxBasisX_X;
+        public double SectionBoxBasisX_Y;
+        public double SectionBoxBasisX_Z;
+        public DVector3 SectionBoxBasisX
+        {
+            get => new DVector3(SectionBoxBasisX_X, SectionBoxBasisX_Y, SectionBoxBasisX_Z);
+            set => (SectionBoxBasisX_X, SectionBoxBasisX_Y, SectionBoxBasisX_Z) = value;
+        }
+
+        /// <summary>3D views: Y axis of the section box transform, in model coordinates.</summary>
+        public double SectionBoxBasisY_X;
+        public double SectionBoxBasisY_Y;
+        public double SectionBoxBasisY_Z;
+        public DVector3 SectionBoxBasisY
+        {
+            get => new DVector3(SectionBoxBasisY_X, SectionBoxBasisY_Y, SectionBoxBasisY_Z);
+            set => (SectionBoxBasisY_X, SectionBoxBasisY_Y, SectionBoxBasisY_Z) = value;
+        }
+
+        /// <summary>3D views: Z axis of the section box transform, in model coordinates.</summary>
+        public double SectionBoxBasisZ_X;
+        public double SectionBoxBasisZ_Y;
+        public double SectionBoxBasisZ_Z;
+        public DVector3 SectionBoxBasisZ
+        {
+            get => new DVector3(SectionBoxBasisZ_X, SectionBoxBasisZ_Y, SectionBoxBasisZ_Z);
+            set => (SectionBoxBasisZ_X, SectionBoxBasisZ_Y, SectionBoxBasisZ_Z) = value;
+        }
+
+        /// <summary>The view's visual style, Revit's DisplayStyle name (View.DisplayStyle), e.g. "Shading", "HLR", "Realistic".</summary>
+        public string DisplayStyle;
+
         public Relation<Camera> _Camera;
 
         /// <summary>
@@ -1328,6 +1433,87 @@ namespace Vim.Format.ObjectModel
 
         public object GetStorageKey()
             => _Level.CombineAsStorageKey(_View);
+    }
+
+    /// <summary>
+    /// A Category (or subcategory) switched off in a View (Visibility/Graphics), as Revit draws the view: read from the
+    /// view's template when the template controls the model categories. A category class switched off (all model
+    /// categories) is written as one row per top-level model category. 3D views only.
+    /// </summary>
+    [TableName(TableNames.HiddenCategoryInView)]
+    public partial class HiddenCategoryInView : Entity, IStorageKey
+    {
+        public Relation<View> _View;
+        public Relation<Category> _Category;
+
+        public object GetStorageKey()
+            => _Category.CombineAsStorageKey(_View);
+    }
+
+    /// <summary>
+    /// A Workset switched off in a View (Visibility/Graphics > Worksets), read from the view's template when the template
+    /// controls worksets. 3D views only.
+    /// </summary>
+    [TableName(TableNames.HiddenWorksetInView)]
+    public partial class HiddenWorksetInView : Entity, IStorageKey
+    {
+        public Relation<View> _View;
+        public Relation<Workset> _Workset;
+
+        public object GetStorageKey()
+            => _Workset.CombineAsStorageKey(_View);
+    }
+
+    /// <summary>
+    /// A view filter applied to a View, in the order the view applies them.
+    /// </summary>
+    [TableName(TableNames.FilterInView)]
+    public partial class FilterInView : Entity, IStorageKey
+    {
+        /// <summary>The filter's name.</summary>
+        public string Name;
+
+        /// <summary>"Rule" for a rule-based filter, "Selection" for a selection filter.</summary>
+        public string Kind;
+
+        /// <summary>The filter's UniqueId in the authoring tool.</summary>
+        public string FilterUniqueId;
+
+        /// <summary>The filter's position in the view's list (0 = first).</summary>
+        public int OrderIndex;
+
+        /// <summary>Whether the filter is enabled in the view (always true before Revit 2021, which cannot disable a filter).</summary>
+        public bool IsEnabled;
+
+        /// <summary>Whether the elements the filter matches are visible in the view (false = the filter hides them).</summary>
+        public bool IsVisible;
+
+        /// <summary>Whether the filter changes how its elements look (colour, line weight, pattern, halftone, transparency...).</summary>
+        public bool HasOverrides;
+
+        public Relation<View> _View;
+
+        public object GetStorageKey()
+            => $"{_View?.Index ?? -1}|{FilterUniqueId}";
+    }
+
+    /// <summary>
+    /// An Element a View does not draw although its category and workset are shown: hidden by hand in the view
+    /// (Hide in View > Elements; Reason "Hidden in view") or by an enabled view filter switched off (Reason "Filter",
+    /// with that FilterInView). Temporary hide/isolate is not included. 3D views only.
+    /// </summary>
+    [TableName(TableNames.HiddenElementInView)]
+    [CascadeElementRemap]
+    public partial class HiddenElementInView : EntityWithElement, IStorageKey
+    {
+        /// <summary>"Hidden in view" or "Filter".</summary>
+        public string Reason;
+
+        public Relation<View> _View;
+        public Relation<FilterInView> _FilterInView;
+
+        public object GetStorageKey()
+            => _Element.CombineAsStorageKey(_View);
     }
 
     /// <summary>

@@ -1,6 +1,6 @@
 {
   "VimFormatVersion": "1.0.0",
-  "SchemaVersion": "5.7.0",
+  "SchemaVersion": "5.8.0",
   "Tables": {
     "Vim.Area": [
       "byte:IsGrossInterior",
@@ -218,6 +218,16 @@
       "index:Vim.Element:Element",
       "index:Vim.Family:Family"
     ],
+    "Vim.FilterInView": [
+      "byte:HasOverrides",
+      "byte:IsEnabled",
+      "byte:IsVisible",
+      "index:Vim.View:View",
+      "int:OrderIndex",
+      "string:FilterUniqueId",
+      "string:Kind",
+      "string:Name"
+    ],
     "Vim.Geometry": [
       "float:Box.Max.X",
       "float:Box.Max.Y",
@@ -251,6 +261,20 @@
       "float:Position.Z",
       "index:Vim.Element:Element",
       "string:GroupType"
+    ],
+    "Vim.HiddenCategoryInView": [
+      "index:Vim.Category:Category",
+      "index:Vim.View:View"
+    ],
+    "Vim.HiddenElementInView": [
+      "index:Vim.Element:Element",
+      "index:Vim.FilterInView:FilterInView",
+      "index:Vim.View:View",
+      "string:Reason"
+    ],
+    "Vim.HiddenWorksetInView": [
+      "index:Vim.View:View",
+      "index:Vim.Workset:Workset"
     ],
     "Vim.Level": [
       "double:Elevation",
@@ -385,6 +409,15 @@
       "int:SystemType"
     ],
     "Vim.View": [
+      "byte:IsCropBoxActive",
+      "byte:IsLocked",
+      "byte:IsSectionBoxActive",
+      "double:CropBox.Max.X",
+      "double:CropBox.Max.Y",
+      "double:CropBox.Max.Z",
+      "double:CropBox.Min.X",
+      "double:CropBox.Min.Y",
+      "double:CropBox.Min.Z",
       "double:Origin.X",
       "double:Origin.Y",
       "double:Origin.Z",
@@ -396,6 +429,24 @@
       "double:Right.Y",
       "double:Right.Z",
       "double:Scale",
+      "double:SectionBox.Max.X",
+      "double:SectionBox.Max.Y",
+      "double:SectionBox.Max.Z",
+      "double:SectionBox.Min.X",
+      "double:SectionBox.Min.Y",
+      "double:SectionBox.Min.Z",
+      "double:SectionBoxBasisX.X",
+      "double:SectionBoxBasisX.Y",
+      "double:SectionBoxBasisX.Z",
+      "double:SectionBoxBasisY.X",
+      "double:SectionBoxBasisY.Y",
+      "double:SectionBoxBasisY.Z",
+      "double:SectionBoxBasisZ.X",
+      "double:SectionBoxBasisZ.Y",
+      "double:SectionBoxBasisZ.Z",
+      "double:SectionBoxOrigin.X",
+      "double:SectionBoxOrigin.Y",
+      "double:SectionBoxOrigin.Z",
       "double:Up.X",
       "double:Up.Y",
       "double:Up.Z",
@@ -409,6 +460,7 @@
       "index:Vim.Element:Element",
       "index:Vim.FamilyType:FamilyType",
       "int:DetailLevel",
+      "string:DisplayStyle",
       "string:Title",
       "string:ViewType"
     ],
