@@ -11,6 +11,11 @@ namespace Vim.Format
     {
         Texture,
         Render,
+        /// <summary>
+        /// Photometric web files, "light/&lt;file&gt;.ies" (IESNA LM-63 text, as Revit's lighting families carry them),
+        /// referenced by LightType.PhotometricWebFile (schema 5.10.0 here; 5.8.0 on the integration branch).
+        /// </summary>
+        Light,
     }
 
     /// <summary>

@@ -2260,6 +2260,192 @@ namespace Vim.Format.ObjectModel {
         
     } // end of class
     
+    // AUTO-GENERATED
+    public partial class LightType
+    {
+        public Vim.Format.ObjectModel.Asset PhotometricWebFile => _PhotometricWebFile?.Value;
+        public int PhotometricWebFileIndex => _PhotometricWebFile?.Index ?? EntityRelation.None;
+        public Vim.Format.ObjectModel.FamilyType FamilyType => _FamilyType?.Value;
+        public int FamilyTypeIndex => _FamilyType?.Index ?? EntityRelation.None;
+        public LightType()
+        {
+            _PhotometricWebFile = new Relation<Vim.Format.ObjectModel.Asset>();
+            _FamilyType = new Relation<Vim.Format.ObjectModel.FamilyType>();
+        }
+        
+        public override bool FieldsAreEqual(object obj)
+        {
+            if ((obj is LightType other))
+            {
+                var fieldsAreEqual =
+                    (Index == other.Index) &&
+                    (LightShapeStyle == other.LightShapeStyle) &&
+                    (EmitLength == other.EmitLength) &&
+                    (EmitWidth == other.EmitWidth) &&
+                    (EmitDiameter == other.EmitDiameter) &&
+                    (LightDistributionStyle == other.LightDistributionStyle) &&
+                    (SpotBeamAngle == other.SpotBeamAngle) &&
+                    (SpotFieldAngle == other.SpotFieldAngle) &&
+                    (TiltAngle == other.TiltAngle) &&
+                    (PhotometricWebFileName == other.PhotometricWebFileName) &&
+                    (InitialIntensityType == other.InitialIntensityType) &&
+                    (Luminosity == other.Luminosity) &&
+                    (Flux == other.Flux) &&
+                    (Wattage == other.Wattage) &&
+                    (Efficacy == other.Efficacy) &&
+                    (Illuminance == other.Illuminance) &&
+                    (IlluminanceDistance == other.IlluminanceDistance) &&
+                    (InitialColorTemperature == other.InitialColorTemperature) &&
+                    (ColorFilter_X == other.ColorFilter_X) &&
+                    (ColorFilter_Y == other.ColorFilter_Y) &&
+                    (ColorFilter_Z == other.ColorFilter_Z) &&
+                    (LossFactor == other.LossFactor) &&
+                    (DimmingColor == other.DimmingColor) &&
+                    (_PhotometricWebFile?.Index == other._PhotometricWebFile?.Index) &&
+                    (_FamilyType?.Index == other._FamilyType?.Index);
+                if (!fieldsAreEqual)
+                {
+                    return false;
+                }
+                
+                return true;
+            }
+            return false;
+        }
+        
+    } // end of class
+    
+    // AUTO-GENERATED
+    public partial class LightSource
+    {
+        public Vim.Format.ObjectModel.LightType LightType => _LightType?.Value;
+        public int LightTypeIndex => _LightType?.Index ?? EntityRelation.None;
+        public Vim.Format.ObjectModel.Element Element => _Element?.Value;
+        public int ElementIndex => _Element?.Index ?? EntityRelation.None;
+        public LightSource()
+        {
+            _LightType = new Relation<Vim.Format.ObjectModel.LightType>();
+            _Element = new Relation<Vim.Format.ObjectModel.Element>();
+        }
+        
+        public override bool FieldsAreEqual(object obj)
+        {
+            if ((obj is LightSource other))
+            {
+                var fieldsAreEqual =
+                    (Index == other.Index) &&
+                    (Origin_X == other.Origin_X) &&
+                    (Origin_Y == other.Origin_Y) &&
+                    (Origin_Z == other.Origin_Z) &&
+                    (BasisX_X == other.BasisX_X) &&
+                    (BasisX_Y == other.BasisX_Y) &&
+                    (BasisX_Z == other.BasisX_Z) &&
+                    (BasisY_X == other.BasisY_X) &&
+                    (BasisY_Y == other.BasisY_Y) &&
+                    (BasisY_Z == other.BasisY_Z) &&
+                    (BasisZ_X == other.BasisZ_X) &&
+                    (BasisZ_Y == other.BasisZ_Y) &&
+                    (BasisZ_Z == other.BasisZ_Z) &&
+                    (HasLightSourceTransform == other.HasLightSourceTransform) &&
+                    (IsOn == other.IsOn) &&
+                    (_LightType?.Index == other._LightType?.Index) &&
+                    (_Element?.Index == other._Element?.Index);
+                if (!fieldsAreEqual)
+                {
+                    return false;
+                }
+                
+                return true;
+            }
+            return false;
+        }
+        
+    } // end of class
+    
+    // AUTO-GENERATED
+    public partial class SunAndShadowSettings
+    {
+        public Vim.Format.ObjectModel.View View => _View?.Value;
+        public int ViewIndex => _View?.Index ?? EntityRelation.None;
+        public SunAndShadowSettings()
+        {
+            _View = new Relation<Vim.Format.ObjectModel.View>();
+        }
+        
+        public override bool FieldsAreEqual(object obj)
+        {
+            if ((obj is SunAndShadowSettings other))
+            {
+                var fieldsAreEqual =
+                    (Index == other.Index) &&
+                    (SunAndShadowType == other.SunAndShadowType) &&
+                    (UsesDST == other.UsesDST) &&
+                    (ActiveFrameTime == other.ActiveFrameTime) &&
+                    (StartDateAndTime == other.StartDateAndTime) &&
+                    (EndDateAndTime == other.EndDateAndTime) &&
+                    (ActiveFrame == other.ActiveFrame) &&
+                    (NumberOfFrames == other.NumberOfFrames) &&
+                    (Altitude == other.Altitude) &&
+                    (Azimuth == other.Azimuth) &&
+                    (RelativeToView == other.RelativeToView) &&
+                    (_View?.Index == other._View?.Index);
+                if (!fieldsAreEqual)
+                {
+                    return false;
+                }
+                
+                return true;
+            }
+            return false;
+        }
+        
+    } // end of class
+    
+    // AUTO-GENERATED
+    public partial class QuestElement
+    {
+        public Vim.Format.ObjectModel.Level StreamLevel => _StreamLevel?.Value;
+        public int StreamLevelIndex => _StreamLevel?.Index ?? EntityRelation.None;
+        public Vim.Format.ObjectModel.Level StreamTopLevel => _StreamTopLevel?.Value;
+        public int StreamTopLevelIndex => _StreamTopLevel?.Index ?? EntityRelation.None;
+        public Vim.Format.ObjectModel.Element Element => _Element?.Value;
+        public int ElementIndex => _Element?.Index ?? EntityRelation.None;
+        public QuestElement()
+        {
+            _StreamLevel = new Relation<Vim.Format.ObjectModel.Level>();
+            _StreamTopLevel = new Relation<Vim.Format.ObjectModel.Level>();
+            _Element = new Relation<Vim.Format.ObjectModel.Element>();
+        }
+        
+        public override bool FieldsAreEqual(object obj)
+        {
+            if ((obj is QuestElement other))
+            {
+                var fieldsAreEqual =
+                    (Index == other.Index) &&
+                    (CollisionClass == other.CollisionClass) &&
+                    (CollisionCategory == other.CollisionCategory) &&
+                    (BoundsMin_X == other.BoundsMin_X) &&
+                    (BoundsMin_Y == other.BoundsMin_Y) &&
+                    (BoundsMin_Z == other.BoundsMin_Z) &&
+                    (BoundsMax_X == other.BoundsMax_X) &&
+                    (BoundsMax_Y == other.BoundsMax_Y) &&
+                    (BoundsMax_Z == other.BoundsMax_Z) &&
+                    (_StreamLevel?.Index == other._StreamLevel?.Index) &&
+                    (_StreamTopLevel?.Index == other._StreamTopLevel?.Index) &&
+                    (_Element?.Index == other._Element?.Index);
+                if (!fieldsAreEqual)
+                {
+                    return false;
+                }
+                
+                return true;
+            }
+            return false;
+        }
+        
+    } // end of class
+    
     public partial class DocumentModel
     {
         public ElementIndexMaps ElementIndexMaps { get; }
@@ -4491,6 +4677,256 @@ namespace Vim.Format.ObjectModel {
             return r;
         }
         
+        
+        // LightType
+        
+        public EntityTable LightTypeEntityTable { get; }
+        
+        public IArray<Int32> LightTypeLightShapeStyle { get; }
+        public Int32 GetLightTypeLightShapeStyle(int index, Int32 defaultValue = default) => LightTypeLightShapeStyle?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> LightTypeEmitLength { get; }
+        public Double GetLightTypeEmitLength(int index, Double defaultValue = default) => LightTypeEmitLength?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> LightTypeEmitWidth { get; }
+        public Double GetLightTypeEmitWidth(int index, Double defaultValue = default) => LightTypeEmitWidth?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> LightTypeEmitDiameter { get; }
+        public Double GetLightTypeEmitDiameter(int index, Double defaultValue = default) => LightTypeEmitDiameter?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Int32> LightTypeLightDistributionStyle { get; }
+        public Int32 GetLightTypeLightDistributionStyle(int index, Int32 defaultValue = default) => LightTypeLightDistributionStyle?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> LightTypeSpotBeamAngle { get; }
+        public Double GetLightTypeSpotBeamAngle(int index, Double defaultValue = default) => LightTypeSpotBeamAngle?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> LightTypeSpotFieldAngle { get; }
+        public Double GetLightTypeSpotFieldAngle(int index, Double defaultValue = default) => LightTypeSpotFieldAngle?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> LightTypeTiltAngle { get; }
+        public Double GetLightTypeTiltAngle(int index, Double defaultValue = default) => LightTypeTiltAngle?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<String> LightTypePhotometricWebFileName { get; }
+        public String GetLightTypePhotometricWebFileName(int index, String defaultValue = "") => LightTypePhotometricWebFileName?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Int32> LightTypeInitialIntensityType { get; }
+        public Int32 GetLightTypeInitialIntensityType(int index, Int32 defaultValue = default) => LightTypeInitialIntensityType?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> LightTypeLuminosity { get; }
+        public Double GetLightTypeLuminosity(int index, Double defaultValue = default) => LightTypeLuminosity?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> LightTypeFlux { get; }
+        public Double GetLightTypeFlux(int index, Double defaultValue = default) => LightTypeFlux?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> LightTypeWattage { get; }
+        public Double GetLightTypeWattage(int index, Double defaultValue = default) => LightTypeWattage?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> LightTypeEfficacy { get; }
+        public Double GetLightTypeEfficacy(int index, Double defaultValue = default) => LightTypeEfficacy?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> LightTypeIlluminance { get; }
+        public Double GetLightTypeIlluminance(int index, Double defaultValue = default) => LightTypeIlluminance?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> LightTypeIlluminanceDistance { get; }
+        public Double GetLightTypeIlluminanceDistance(int index, Double defaultValue = default) => LightTypeIlluminanceDistance?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> LightTypeInitialColorTemperature { get; }
+        public Double GetLightTypeInitialColorTemperature(int index, Double defaultValue = default) => LightTypeInitialColorTemperature?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> LightTypeColorFilter_X { get; }
+        public Double GetLightTypeColorFilter_X(int index, Double defaultValue = default) => LightTypeColorFilter_X?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> LightTypeColorFilter_Y { get; }
+        public Double GetLightTypeColorFilter_Y(int index, Double defaultValue = default) => LightTypeColorFilter_Y?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> LightTypeColorFilter_Z { get; }
+        public Double GetLightTypeColorFilter_Z(int index, Double defaultValue = default) => LightTypeColorFilter_Z?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> LightTypeLossFactor { get; }
+        public Double GetLightTypeLossFactor(int index, Double defaultValue = default) => LightTypeLossFactor?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Int32> LightTypeDimmingColor { get; }
+        public Int32 GetLightTypeDimmingColor(int index, Int32 defaultValue = default) => LightTypeDimmingColor?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<int> LightTypePhotometricWebFileIndex { get; }
+        public int GetLightTypePhotometricWebFileIndex(int index) => LightTypePhotometricWebFileIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
+        public IArray<int> LightTypeFamilyTypeIndex { get; }
+        public int GetLightTypeFamilyTypeIndex(int index) => LightTypeFamilyTypeIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
+        public int NumLightType => LightTypeEntityTable?.NumRows ?? 0;
+        public IArray<LightType> LightTypeList { get; }
+        public LightType GetLightType(int n)
+        {
+            if (n < 0) return null;
+            var r = new LightType();
+            r.Document = Document;
+            r.Index = n;
+            r.LightShapeStyle = LightTypeLightShapeStyle.ElementAtOrDefault(n);
+            r.EmitLength = LightTypeEmitLength.ElementAtOrDefault(n);
+            r.EmitWidth = LightTypeEmitWidth.ElementAtOrDefault(n);
+            r.EmitDiameter = LightTypeEmitDiameter.ElementAtOrDefault(n);
+            r.LightDistributionStyle = LightTypeLightDistributionStyle.ElementAtOrDefault(n);
+            r.SpotBeamAngle = LightTypeSpotBeamAngle.ElementAtOrDefault(n);
+            r.SpotFieldAngle = LightTypeSpotFieldAngle.ElementAtOrDefault(n);
+            r.TiltAngle = LightTypeTiltAngle.ElementAtOrDefault(n);
+            r.PhotometricWebFileName = LightTypePhotometricWebFileName.ElementAtOrDefault(n);
+            r.InitialIntensityType = LightTypeInitialIntensityType.ElementAtOrDefault(n);
+            r.Luminosity = LightTypeLuminosity.ElementAtOrDefault(n);
+            r.Flux = LightTypeFlux.ElementAtOrDefault(n);
+            r.Wattage = LightTypeWattage.ElementAtOrDefault(n);
+            r.Efficacy = LightTypeEfficacy.ElementAtOrDefault(n);
+            r.Illuminance = LightTypeIlluminance.ElementAtOrDefault(n);
+            r.IlluminanceDistance = LightTypeIlluminanceDistance.ElementAtOrDefault(n);
+            r.InitialColorTemperature = LightTypeInitialColorTemperature.ElementAtOrDefault(n);
+            r.ColorFilter_X = LightTypeColorFilter_X.ElementAtOrDefault(n);
+            r.ColorFilter_Y = LightTypeColorFilter_Y.ElementAtOrDefault(n);
+            r.ColorFilter_Z = LightTypeColorFilter_Z.ElementAtOrDefault(n);
+            r.LossFactor = LightTypeLossFactor.ElementAtOrDefault(n);
+            r.DimmingColor = LightTypeDimmingColor.ElementAtOrDefault(n);
+            r._PhotometricWebFile = new Relation<Vim.Format.ObjectModel.Asset>(GetLightTypePhotometricWebFileIndex(n), GetAsset);
+            r._FamilyType = new Relation<Vim.Format.ObjectModel.FamilyType>(GetLightTypeFamilyTypeIndex(n), GetFamilyType);
+            return r;
+        }
+        
+        
+        // LightSource
+        
+        public EntityTable LightSourceEntityTable { get; }
+        
+        public IArray<Double> LightSourceOrigin_X { get; }
+        public Double GetLightSourceOrigin_X(int index, Double defaultValue = default) => LightSourceOrigin_X?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> LightSourceOrigin_Y { get; }
+        public Double GetLightSourceOrigin_Y(int index, Double defaultValue = default) => LightSourceOrigin_Y?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> LightSourceOrigin_Z { get; }
+        public Double GetLightSourceOrigin_Z(int index, Double defaultValue = default) => LightSourceOrigin_Z?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> LightSourceBasisX_X { get; }
+        public Double GetLightSourceBasisX_X(int index, Double defaultValue = default) => LightSourceBasisX_X?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> LightSourceBasisX_Y { get; }
+        public Double GetLightSourceBasisX_Y(int index, Double defaultValue = default) => LightSourceBasisX_Y?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> LightSourceBasisX_Z { get; }
+        public Double GetLightSourceBasisX_Z(int index, Double defaultValue = default) => LightSourceBasisX_Z?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> LightSourceBasisY_X { get; }
+        public Double GetLightSourceBasisY_X(int index, Double defaultValue = default) => LightSourceBasisY_X?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> LightSourceBasisY_Y { get; }
+        public Double GetLightSourceBasisY_Y(int index, Double defaultValue = default) => LightSourceBasisY_Y?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> LightSourceBasisY_Z { get; }
+        public Double GetLightSourceBasisY_Z(int index, Double defaultValue = default) => LightSourceBasisY_Z?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> LightSourceBasisZ_X { get; }
+        public Double GetLightSourceBasisZ_X(int index, Double defaultValue = default) => LightSourceBasisZ_X?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> LightSourceBasisZ_Y { get; }
+        public Double GetLightSourceBasisZ_Y(int index, Double defaultValue = default) => LightSourceBasisZ_Y?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> LightSourceBasisZ_Z { get; }
+        public Double GetLightSourceBasisZ_Z(int index, Double defaultValue = default) => LightSourceBasisZ_Z?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Boolean> LightSourceHasLightSourceTransform { get; }
+        public Boolean GetLightSourceHasLightSourceTransform(int index, Boolean defaultValue = default) => LightSourceHasLightSourceTransform?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Boolean> LightSourceIsOn { get; }
+        public Boolean GetLightSourceIsOn(int index, Boolean defaultValue = default) => LightSourceIsOn?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<int> LightSourceLightTypeIndex { get; }
+        public int GetLightSourceLightTypeIndex(int index) => LightSourceLightTypeIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
+        public IArray<int> LightSourceElementIndex { get; }
+        public int GetLightSourceElementIndex(int index) => LightSourceElementIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
+        public int NumLightSource => LightSourceEntityTable?.NumRows ?? 0;
+        public IArray<LightSource> LightSourceList { get; }
+        public LightSource GetLightSource(int n)
+        {
+            if (n < 0) return null;
+            var r = new LightSource();
+            r.Document = Document;
+            r.Index = n;
+            r.Origin_X = LightSourceOrigin_X.ElementAtOrDefault(n);
+            r.Origin_Y = LightSourceOrigin_Y.ElementAtOrDefault(n);
+            r.Origin_Z = LightSourceOrigin_Z.ElementAtOrDefault(n);
+            r.BasisX_X = LightSourceBasisX_X.ElementAtOrDefault(n);
+            r.BasisX_Y = LightSourceBasisX_Y.ElementAtOrDefault(n);
+            r.BasisX_Z = LightSourceBasisX_Z.ElementAtOrDefault(n);
+            r.BasisY_X = LightSourceBasisY_X.ElementAtOrDefault(n);
+            r.BasisY_Y = LightSourceBasisY_Y.ElementAtOrDefault(n);
+            r.BasisY_Z = LightSourceBasisY_Z.ElementAtOrDefault(n);
+            r.BasisZ_X = LightSourceBasisZ_X.ElementAtOrDefault(n);
+            r.BasisZ_Y = LightSourceBasisZ_Y.ElementAtOrDefault(n);
+            r.BasisZ_Z = LightSourceBasisZ_Z.ElementAtOrDefault(n);
+            r.HasLightSourceTransform = LightSourceHasLightSourceTransform.ElementAtOrDefault(n);
+            r.IsOn = LightSourceIsOn.ElementAtOrDefault(n);
+            r._LightType = new Relation<Vim.Format.ObjectModel.LightType>(GetLightSourceLightTypeIndex(n), GetLightType);
+            r._Element = new Relation<Vim.Format.ObjectModel.Element>(GetLightSourceElementIndex(n), GetElement);
+            return r;
+        }
+        
+        
+        // SunAndShadowSettings
+        
+        public EntityTable SunAndShadowSettingsEntityTable { get; }
+        
+        public IArray<String> SunAndShadowSettingsSunAndShadowType { get; }
+        public String GetSunAndShadowSettingsSunAndShadowType(int index, String defaultValue = "") => SunAndShadowSettingsSunAndShadowType?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Boolean> SunAndShadowSettingsUsesDST { get; }
+        public Boolean GetSunAndShadowSettingsUsesDST(int index, Boolean defaultValue = default) => SunAndShadowSettingsUsesDST?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<String> SunAndShadowSettingsActiveFrameTime { get; }
+        public String GetSunAndShadowSettingsActiveFrameTime(int index, String defaultValue = "") => SunAndShadowSettingsActiveFrameTime?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<String> SunAndShadowSettingsStartDateAndTime { get; }
+        public String GetSunAndShadowSettingsStartDateAndTime(int index, String defaultValue = "") => SunAndShadowSettingsStartDateAndTime?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<String> SunAndShadowSettingsEndDateAndTime { get; }
+        public String GetSunAndShadowSettingsEndDateAndTime(int index, String defaultValue = "") => SunAndShadowSettingsEndDateAndTime?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Int32> SunAndShadowSettingsActiveFrame { get; }
+        public Int32 GetSunAndShadowSettingsActiveFrame(int index, Int32 defaultValue = default) => SunAndShadowSettingsActiveFrame?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Int32> SunAndShadowSettingsNumberOfFrames { get; }
+        public Int32 GetSunAndShadowSettingsNumberOfFrames(int index, Int32 defaultValue = default) => SunAndShadowSettingsNumberOfFrames?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> SunAndShadowSettingsAltitude { get; }
+        public Double GetSunAndShadowSettingsAltitude(int index, Double defaultValue = default) => SunAndShadowSettingsAltitude?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> SunAndShadowSettingsAzimuth { get; }
+        public Double GetSunAndShadowSettingsAzimuth(int index, Double defaultValue = default) => SunAndShadowSettingsAzimuth?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Boolean> SunAndShadowSettingsRelativeToView { get; }
+        public Boolean GetSunAndShadowSettingsRelativeToView(int index, Boolean defaultValue = default) => SunAndShadowSettingsRelativeToView?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<int> SunAndShadowSettingsViewIndex { get; }
+        public int GetSunAndShadowSettingsViewIndex(int index) => SunAndShadowSettingsViewIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
+        public int NumSunAndShadowSettings => SunAndShadowSettingsEntityTable?.NumRows ?? 0;
+        public IArray<SunAndShadowSettings> SunAndShadowSettingsList { get; }
+        public SunAndShadowSettings GetSunAndShadowSettings(int n)
+        {
+            if (n < 0) return null;
+            var r = new SunAndShadowSettings();
+            r.Document = Document;
+            r.Index = n;
+            r.SunAndShadowType = SunAndShadowSettingsSunAndShadowType.ElementAtOrDefault(n);
+            r.UsesDST = SunAndShadowSettingsUsesDST.ElementAtOrDefault(n);
+            r.ActiveFrameTime = SunAndShadowSettingsActiveFrameTime.ElementAtOrDefault(n);
+            r.StartDateAndTime = SunAndShadowSettingsStartDateAndTime.ElementAtOrDefault(n);
+            r.EndDateAndTime = SunAndShadowSettingsEndDateAndTime.ElementAtOrDefault(n);
+            r.ActiveFrame = SunAndShadowSettingsActiveFrame.ElementAtOrDefault(n);
+            r.NumberOfFrames = SunAndShadowSettingsNumberOfFrames.ElementAtOrDefault(n);
+            r.Altitude = SunAndShadowSettingsAltitude.ElementAtOrDefault(n);
+            r.Azimuth = SunAndShadowSettingsAzimuth.ElementAtOrDefault(n);
+            r.RelativeToView = SunAndShadowSettingsRelativeToView.ElementAtOrDefault(n);
+            r._View = new Relation<Vim.Format.ObjectModel.View>(GetSunAndShadowSettingsViewIndex(n), GetView);
+            return r;
+        }
+        
+        
+        // QuestElement
+        
+        public EntityTable QuestElementEntityTable { get; }
+        
+        public IArray<String> QuestElementCollisionClass { get; }
+        public String GetQuestElementCollisionClass(int index, String defaultValue = "") => QuestElementCollisionClass?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<String> QuestElementCollisionCategory { get; }
+        public String GetQuestElementCollisionCategory(int index, String defaultValue = "") => QuestElementCollisionCategory?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> QuestElementBoundsMin_X { get; }
+        public Double GetQuestElementBoundsMin_X(int index, Double defaultValue = default) => QuestElementBoundsMin_X?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> QuestElementBoundsMin_Y { get; }
+        public Double GetQuestElementBoundsMin_Y(int index, Double defaultValue = default) => QuestElementBoundsMin_Y?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> QuestElementBoundsMin_Z { get; }
+        public Double GetQuestElementBoundsMin_Z(int index, Double defaultValue = default) => QuestElementBoundsMin_Z?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> QuestElementBoundsMax_X { get; }
+        public Double GetQuestElementBoundsMax_X(int index, Double defaultValue = default) => QuestElementBoundsMax_X?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> QuestElementBoundsMax_Y { get; }
+        public Double GetQuestElementBoundsMax_Y(int index, Double defaultValue = default) => QuestElementBoundsMax_Y?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> QuestElementBoundsMax_Z { get; }
+        public Double GetQuestElementBoundsMax_Z(int index, Double defaultValue = default) => QuestElementBoundsMax_Z?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<int> QuestElementStreamLevelIndex { get; }
+        public int GetQuestElementStreamLevelIndex(int index) => QuestElementStreamLevelIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
+        public IArray<int> QuestElementStreamTopLevelIndex { get; }
+        public int GetQuestElementStreamTopLevelIndex(int index) => QuestElementStreamTopLevelIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
+        public IArray<int> QuestElementElementIndex { get; }
+        public int GetQuestElementElementIndex(int index) => QuestElementElementIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
+        public int NumQuestElement => QuestElementEntityTable?.NumRows ?? 0;
+        public IArray<QuestElement> QuestElementList { get; }
+        public QuestElement GetQuestElement(int n)
+        {
+            if (n < 0) return null;
+            var r = new QuestElement();
+            r.Document = Document;
+            r.Index = n;
+            r.CollisionClass = QuestElementCollisionClass.ElementAtOrDefault(n);
+            r.CollisionCategory = QuestElementCollisionCategory.ElementAtOrDefault(n);
+            r.BoundsMin_X = QuestElementBoundsMin_X.ElementAtOrDefault(n);
+            r.BoundsMin_Y = QuestElementBoundsMin_Y.ElementAtOrDefault(n);
+            r.BoundsMin_Z = QuestElementBoundsMin_Z.ElementAtOrDefault(n);
+            r.BoundsMax_X = QuestElementBoundsMax_X.ElementAtOrDefault(n);
+            r.BoundsMax_Y = QuestElementBoundsMax_Y.ElementAtOrDefault(n);
+            r.BoundsMax_Z = QuestElementBoundsMax_Z.ElementAtOrDefault(n);
+            r._StreamLevel = new Relation<Vim.Format.ObjectModel.Level>(GetQuestElementStreamLevelIndex(n), GetLevel);
+            r._StreamTopLevel = new Relation<Vim.Format.ObjectModel.Level>(GetQuestElementStreamTopLevelIndex(n), GetLevel);
+            r._Element = new Relation<Vim.Format.ObjectModel.Element>(GetQuestElementElementIndex(n), GetElement);
+            return r;
+        }
+        
         // All entity collections
         public Dictionary<string, IEnumerable<Entity>> AllEntities => new Dictionary<string, IEnumerable<Entity>>() {
             {"Vim.Asset", AssetList.ToEnumerable()},
@@ -4552,6 +4988,10 @@ namespace Vim.Format.ObjectModel {
             {"Vim.ViewInViewSheet", ViewInViewSheetList.ToEnumerable()},
             {"Vim.Site", SiteList.ToEnumerable()},
             {"Vim.Building", BuildingList.ToEnumerable()},
+            {"Vim.LightType", LightTypeList.ToEnumerable()},
+            {"Vim.LightSource", LightSourceList.ToEnumerable()},
+            {"Vim.SunAndShadowSettings", SunAndShadowSettingsList.ToEnumerable()},
+            {"Vim.QuestElement", QuestElementList.ToEnumerable()},
         };
         
         // Entity types from table names
@@ -4615,6 +5055,10 @@ namespace Vim.Format.ObjectModel {
             {"Vim.ViewInViewSheet", typeof(ViewInViewSheet)},
             {"Vim.Site", typeof(Site)},
             {"Vim.Building", typeof(Building)},
+            {"Vim.LightType", typeof(LightType)},
+            {"Vim.LightSource", typeof(LightSource)},
+            {"Vim.SunAndShadowSettings", typeof(SunAndShadowSettings)},
+            {"Vim.QuestElement", typeof(QuestElement)},
         };
         public DocumentModel(Document d, bool inParallel = true)
         {
@@ -4680,6 +5124,10 @@ namespace Vim.Format.ObjectModel {
             ViewInViewSheetEntityTable = Document.GetTable("Vim.ViewInViewSheet");
             SiteEntityTable = Document.GetTable("Vim.Site");
             BuildingEntityTable = Document.GetTable("Vim.Building");
+            LightTypeEntityTable = Document.GetTable("Vim.LightType");
+            LightSourceEntityTable = Document.GetTable("Vim.LightSource");
+            SunAndShadowSettingsEntityTable = Document.GetTable("Vim.SunAndShadowSettings");
+            QuestElementEntityTable = Document.GetTable("Vim.QuestElement");
             
             // Initialize entity arrays
             AssetBufferName = AssetEntityTable?.GetStringColumnValues("string:BufferName") ?? Array.Empty<String>().ToIArray();
@@ -4994,6 +5442,60 @@ namespace Vim.Format.ObjectModel {
             BuildingElevation = BuildingEntityTable?.GetDataColumnValues<Double>("double:Elevation") ?? Array.Empty<Double>().ToIArray();
             BuildingTerrainElevation = BuildingEntityTable?.GetDataColumnValues<Double>("double:TerrainElevation") ?? Array.Empty<Double>().ToIArray();
             BuildingAddress = BuildingEntityTable?.GetStringColumnValues("string:Address") ?? Array.Empty<String>().ToIArray();
+            LightTypeLightShapeStyle = LightTypeEntityTable?.GetDataColumnValues<Int32>("int:LightShapeStyle") ?? Array.Empty<Int32>().ToIArray();
+            LightTypeEmitLength = LightTypeEntityTable?.GetDataColumnValues<Double>("double:EmitLength") ?? Array.Empty<Double>().ToIArray();
+            LightTypeEmitWidth = LightTypeEntityTable?.GetDataColumnValues<Double>("double:EmitWidth") ?? Array.Empty<Double>().ToIArray();
+            LightTypeEmitDiameter = LightTypeEntityTable?.GetDataColumnValues<Double>("double:EmitDiameter") ?? Array.Empty<Double>().ToIArray();
+            LightTypeLightDistributionStyle = LightTypeEntityTable?.GetDataColumnValues<Int32>("int:LightDistributionStyle") ?? Array.Empty<Int32>().ToIArray();
+            LightTypeSpotBeamAngle = LightTypeEntityTable?.GetDataColumnValues<Double>("double:SpotBeamAngle") ?? Array.Empty<Double>().ToIArray();
+            LightTypeSpotFieldAngle = LightTypeEntityTable?.GetDataColumnValues<Double>("double:SpotFieldAngle") ?? Array.Empty<Double>().ToIArray();
+            LightTypeTiltAngle = LightTypeEntityTable?.GetDataColumnValues<Double>("double:TiltAngle") ?? Array.Empty<Double>().ToIArray();
+            LightTypePhotometricWebFileName = LightTypeEntityTable?.GetStringColumnValues("string:PhotometricWebFileName") ?? Array.Empty<String>().ToIArray();
+            LightTypeInitialIntensityType = LightTypeEntityTable?.GetDataColumnValues<Int32>("int:InitialIntensityType") ?? Array.Empty<Int32>().ToIArray();
+            LightTypeLuminosity = LightTypeEntityTable?.GetDataColumnValues<Double>("double:Luminosity") ?? Array.Empty<Double>().ToIArray();
+            LightTypeFlux = LightTypeEntityTable?.GetDataColumnValues<Double>("double:Flux") ?? Array.Empty<Double>().ToIArray();
+            LightTypeWattage = LightTypeEntityTable?.GetDataColumnValues<Double>("double:Wattage") ?? Array.Empty<Double>().ToIArray();
+            LightTypeEfficacy = LightTypeEntityTable?.GetDataColumnValues<Double>("double:Efficacy") ?? Array.Empty<Double>().ToIArray();
+            LightTypeIlluminance = LightTypeEntityTable?.GetDataColumnValues<Double>("double:Illuminance") ?? Array.Empty<Double>().ToIArray();
+            LightTypeIlluminanceDistance = LightTypeEntityTable?.GetDataColumnValues<Double>("double:IlluminanceDistance") ?? Array.Empty<Double>().ToIArray();
+            LightTypeInitialColorTemperature = LightTypeEntityTable?.GetDataColumnValues<Double>("double:InitialColorTemperature") ?? Array.Empty<Double>().ToIArray();
+            LightTypeColorFilter_X = LightTypeEntityTable?.GetDataColumnValues<Double>("double:ColorFilter.X") ?? Array.Empty<Double>().ToIArray();
+            LightTypeColorFilter_Y = LightTypeEntityTable?.GetDataColumnValues<Double>("double:ColorFilter.Y") ?? Array.Empty<Double>().ToIArray();
+            LightTypeColorFilter_Z = LightTypeEntityTable?.GetDataColumnValues<Double>("double:ColorFilter.Z") ?? Array.Empty<Double>().ToIArray();
+            LightTypeLossFactor = LightTypeEntityTable?.GetDataColumnValues<Double>("double:LossFactor") ?? Array.Empty<Double>().ToIArray();
+            LightTypeDimmingColor = LightTypeEntityTable?.GetDataColumnValues<Int32>("int:DimmingColor") ?? Array.Empty<Int32>().ToIArray();
+            LightSourceOrigin_X = LightSourceEntityTable?.GetDataColumnValues<Double>("double:Origin.X") ?? Array.Empty<Double>().ToIArray();
+            LightSourceOrigin_Y = LightSourceEntityTable?.GetDataColumnValues<Double>("double:Origin.Y") ?? Array.Empty<Double>().ToIArray();
+            LightSourceOrigin_Z = LightSourceEntityTable?.GetDataColumnValues<Double>("double:Origin.Z") ?? Array.Empty<Double>().ToIArray();
+            LightSourceBasisX_X = LightSourceEntityTable?.GetDataColumnValues<Double>("double:BasisX.X") ?? Array.Empty<Double>().ToIArray();
+            LightSourceBasisX_Y = LightSourceEntityTable?.GetDataColumnValues<Double>("double:BasisX.Y") ?? Array.Empty<Double>().ToIArray();
+            LightSourceBasisX_Z = LightSourceEntityTable?.GetDataColumnValues<Double>("double:BasisX.Z") ?? Array.Empty<Double>().ToIArray();
+            LightSourceBasisY_X = LightSourceEntityTable?.GetDataColumnValues<Double>("double:BasisY.X") ?? Array.Empty<Double>().ToIArray();
+            LightSourceBasisY_Y = LightSourceEntityTable?.GetDataColumnValues<Double>("double:BasisY.Y") ?? Array.Empty<Double>().ToIArray();
+            LightSourceBasisY_Z = LightSourceEntityTable?.GetDataColumnValues<Double>("double:BasisY.Z") ?? Array.Empty<Double>().ToIArray();
+            LightSourceBasisZ_X = LightSourceEntityTable?.GetDataColumnValues<Double>("double:BasisZ.X") ?? Array.Empty<Double>().ToIArray();
+            LightSourceBasisZ_Y = LightSourceEntityTable?.GetDataColumnValues<Double>("double:BasisZ.Y") ?? Array.Empty<Double>().ToIArray();
+            LightSourceBasisZ_Z = LightSourceEntityTable?.GetDataColumnValues<Double>("double:BasisZ.Z") ?? Array.Empty<Double>().ToIArray();
+            LightSourceHasLightSourceTransform = LightSourceEntityTable?.GetDataColumnValues<Boolean>("byte:HasLightSourceTransform") ?? Array.Empty<Boolean>().ToIArray();
+            LightSourceIsOn = LightSourceEntityTable?.GetDataColumnValues<Boolean>("byte:IsOn") ?? Array.Empty<Boolean>().ToIArray();
+            SunAndShadowSettingsSunAndShadowType = SunAndShadowSettingsEntityTable?.GetStringColumnValues("string:SunAndShadowType") ?? Array.Empty<String>().ToIArray();
+            SunAndShadowSettingsUsesDST = SunAndShadowSettingsEntityTable?.GetDataColumnValues<Boolean>("byte:UsesDST") ?? Array.Empty<Boolean>().ToIArray();
+            SunAndShadowSettingsActiveFrameTime = SunAndShadowSettingsEntityTable?.GetStringColumnValues("string:ActiveFrameTime") ?? Array.Empty<String>().ToIArray();
+            SunAndShadowSettingsStartDateAndTime = SunAndShadowSettingsEntityTable?.GetStringColumnValues("string:StartDateAndTime") ?? Array.Empty<String>().ToIArray();
+            SunAndShadowSettingsEndDateAndTime = SunAndShadowSettingsEntityTable?.GetStringColumnValues("string:EndDateAndTime") ?? Array.Empty<String>().ToIArray();
+            SunAndShadowSettingsActiveFrame = SunAndShadowSettingsEntityTable?.GetDataColumnValues<Int32>("int:ActiveFrame") ?? Array.Empty<Int32>().ToIArray();
+            SunAndShadowSettingsNumberOfFrames = SunAndShadowSettingsEntityTable?.GetDataColumnValues<Int32>("int:NumberOfFrames") ?? Array.Empty<Int32>().ToIArray();
+            SunAndShadowSettingsAltitude = SunAndShadowSettingsEntityTable?.GetDataColumnValues<Double>("double:Altitude") ?? Array.Empty<Double>().ToIArray();
+            SunAndShadowSettingsAzimuth = SunAndShadowSettingsEntityTable?.GetDataColumnValues<Double>("double:Azimuth") ?? Array.Empty<Double>().ToIArray();
+            SunAndShadowSettingsRelativeToView = SunAndShadowSettingsEntityTable?.GetDataColumnValues<Boolean>("byte:RelativeToView") ?? Array.Empty<Boolean>().ToIArray();
+            QuestElementCollisionClass = QuestElementEntityTable?.GetStringColumnValues("string:CollisionClass") ?? Array.Empty<String>().ToIArray();
+            QuestElementCollisionCategory = QuestElementEntityTable?.GetStringColumnValues("string:CollisionCategory") ?? Array.Empty<String>().ToIArray();
+            QuestElementBoundsMin_X = QuestElementEntityTable?.GetDataColumnValues<Double>("double:BoundsMin.X") ?? Array.Empty<Double>().ToIArray();
+            QuestElementBoundsMin_Y = QuestElementEntityTable?.GetDataColumnValues<Double>("double:BoundsMin.Y") ?? Array.Empty<Double>().ToIArray();
+            QuestElementBoundsMin_Z = QuestElementEntityTable?.GetDataColumnValues<Double>("double:BoundsMin.Z") ?? Array.Empty<Double>().ToIArray();
+            QuestElementBoundsMax_X = QuestElementEntityTable?.GetDataColumnValues<Double>("double:BoundsMax.X") ?? Array.Empty<Double>().ToIArray();
+            QuestElementBoundsMax_Y = QuestElementEntityTable?.GetDataColumnValues<Double>("double:BoundsMax.Y") ?? Array.Empty<Double>().ToIArray();
+            QuestElementBoundsMax_Z = QuestElementEntityTable?.GetDataColumnValues<Double>("double:BoundsMax.Z") ?? Array.Empty<Double>().ToIArray();
             
             // Initialize entity relational columns
             ParameterDescriptorDisplayUnitIndex = ParameterDescriptorEntityTable?.GetIndexColumnValues("index:Vim.DisplayUnit:DisplayUnit") ?? Array.Empty<int>().ToIArray();
@@ -5112,6 +5614,14 @@ namespace Vim.Format.ObjectModel {
             SiteElementIndex = SiteEntityTable?.GetIndexColumnValues("index:Vim.Element:Element") ?? Array.Empty<int>().ToIArray();
             BuildingSiteIndex = BuildingEntityTable?.GetIndexColumnValues("index:Vim.Site:Site") ?? Array.Empty<int>().ToIArray();
             BuildingElementIndex = BuildingEntityTable?.GetIndexColumnValues("index:Vim.Element:Element") ?? Array.Empty<int>().ToIArray();
+            LightTypePhotometricWebFileIndex = LightTypeEntityTable?.GetIndexColumnValues("index:Vim.Asset:PhotometricWebFile") ?? Array.Empty<int>().ToIArray();
+            LightTypeFamilyTypeIndex = LightTypeEntityTable?.GetIndexColumnValues("index:Vim.FamilyType:FamilyType") ?? Array.Empty<int>().ToIArray();
+            LightSourceLightTypeIndex = LightSourceEntityTable?.GetIndexColumnValues("index:Vim.LightType:LightType") ?? Array.Empty<int>().ToIArray();
+            LightSourceElementIndex = LightSourceEntityTable?.GetIndexColumnValues("index:Vim.Element:Element") ?? Array.Empty<int>().ToIArray();
+            SunAndShadowSettingsViewIndex = SunAndShadowSettingsEntityTable?.GetIndexColumnValues("index:Vim.View:View") ?? Array.Empty<int>().ToIArray();
+            QuestElementStreamLevelIndex = QuestElementEntityTable?.GetIndexColumnValues("index:Vim.Level:StreamLevel") ?? Array.Empty<int>().ToIArray();
+            QuestElementStreamTopLevelIndex = QuestElementEntityTable?.GetIndexColumnValues("index:Vim.Level:StreamTopLevel") ?? Array.Empty<int>().ToIArray();
+            QuestElementElementIndex = QuestElementEntityTable?.GetIndexColumnValues("index:Vim.Element:Element") ?? Array.Empty<int>().ToIArray();
             
             // Initialize entity collections
             AssetList = NumAsset.Select(i => GetAsset(i));
@@ -5173,6 +5683,10 @@ namespace Vim.Format.ObjectModel {
             ViewInViewSheetList = NumViewInViewSheet.Select(i => GetViewInViewSheet(i));
             SiteList = NumSite.Select(i => GetSite(i));
             BuildingList = NumBuilding.Select(i => GetBuilding(i));
+            LightTypeList = NumLightType.Select(i => GetLightType(i));
+            LightSourceList = NumLightSource.Select(i => GetLightSource(i));
+            SunAndShadowSettingsList = NumSunAndShadowSettings.Select(i => GetSunAndShadowSettings(i));
+            QuestElementList = NumQuestElement.Select(i => GetQuestElement(i));
             
             // Initialize element index maps
             ElementIndexMaps = new ElementIndexMaps(this, inParallel);
@@ -5259,6 +5773,10 @@ namespace Vim.Format.ObjectModel {
             Tables[TableNames.ViewInViewSheet] = ViewInViewSheetTable = new ViewInViewSheetTable(GetSerializableTableOrEmpty(TableNames.ViewInViewSheet), stringTable, this);
             Tables[TableNames.Site] = SiteTable = new SiteTable(GetSerializableTableOrEmpty(TableNames.Site), stringTable, this);
             Tables[TableNames.Building] = BuildingTable = new BuildingTable(GetSerializableTableOrEmpty(TableNames.Building), stringTable, this);
+            Tables[TableNames.LightType] = LightTypeTable = new LightTypeTable(GetSerializableTableOrEmpty(TableNames.LightType), stringTable, this);
+            Tables[TableNames.LightSource] = LightSourceTable = new LightSourceTable(GetSerializableTableOrEmpty(TableNames.LightSource), stringTable, this);
+            Tables[TableNames.SunAndShadowSettings] = SunAndShadowSettingsTable = new SunAndShadowSettingsTable(GetSerializableTableOrEmpty(TableNames.SunAndShadowSettings), stringTable, this);
+            Tables[TableNames.QuestElement] = QuestElementTable = new QuestElementTable(GetSerializableTableOrEmpty(TableNames.QuestElement), stringTable, this);
             
             // Initialize element index maps
             ElementIndexMaps = new ElementIndexMaps(this, inParallel);
@@ -5383,6 +5901,14 @@ namespace Vim.Format.ObjectModel {
         public Site GetSite(int index) => SiteTable?.Get(index);
         public BuildingTable BuildingTable { get; } // can be null
         public Building GetBuilding(int index) => BuildingTable?.Get(index);
+        public LightTypeTable LightTypeTable { get; } // can be null
+        public LightType GetLightType(int index) => LightTypeTable?.Get(index);
+        public LightSourceTable LightSourceTable { get; } // can be null
+        public LightSource GetLightSource(int index) => LightSourceTable?.Get(index);
+        public SunAndShadowSettingsTable SunAndShadowSettingsTable { get; } // can be null
+        public SunAndShadowSettings GetSunAndShadowSettings(int index) => SunAndShadowSettingsTable?.Get(index);
+        public QuestElementTable QuestElementTable { get; } // can be null
+        public QuestElement GetQuestElement(int index) => QuestElementTable?.Get(index);
         
         public static HashSet<string> GetElementKindTableNames()
             => new HashSet<string>()
@@ -9404,6 +9930,386 @@ namespace Vim.Format.ObjectModel {
         }
     } // class BuildingTable 
     
+    public partial class LightTypeTable : EntityTable_v2, IEnumerable<LightType>
+    {
+        
+        public const string TableName = TableNames.LightType;
+        
+        public EntityTableSet ParentTableSet { get; } // can be null
+        
+        public LightTypeTable(SerializableEntityTable rawTable, string[] stringTable, EntityTableSet parentTableSet = null) : base(rawTable, stringTable)
+        {
+            ParentTableSet = parentTableSet;
+            Column_LightShapeStyle = GetDataColumnValues<Int32>("int:LightShapeStyle") ?? Array.Empty<Int32>();
+            Column_EmitLength = GetDataColumnValues<Double>("double:EmitLength") ?? Array.Empty<Double>();
+            Column_EmitWidth = GetDataColumnValues<Double>("double:EmitWidth") ?? Array.Empty<Double>();
+            Column_EmitDiameter = GetDataColumnValues<Double>("double:EmitDiameter") ?? Array.Empty<Double>();
+            Column_LightDistributionStyle = GetDataColumnValues<Int32>("int:LightDistributionStyle") ?? Array.Empty<Int32>();
+            Column_SpotBeamAngle = GetDataColumnValues<Double>("double:SpotBeamAngle") ?? Array.Empty<Double>();
+            Column_SpotFieldAngle = GetDataColumnValues<Double>("double:SpotFieldAngle") ?? Array.Empty<Double>();
+            Column_TiltAngle = GetDataColumnValues<Double>("double:TiltAngle") ?? Array.Empty<Double>();
+            Column_PhotometricWebFileName = GetStringColumnValues("string:PhotometricWebFileName") ?? Array.Empty<String>();
+            Column_InitialIntensityType = GetDataColumnValues<Int32>("int:InitialIntensityType") ?? Array.Empty<Int32>();
+            Column_Luminosity = GetDataColumnValues<Double>("double:Luminosity") ?? Array.Empty<Double>();
+            Column_Flux = GetDataColumnValues<Double>("double:Flux") ?? Array.Empty<Double>();
+            Column_Wattage = GetDataColumnValues<Double>("double:Wattage") ?? Array.Empty<Double>();
+            Column_Efficacy = GetDataColumnValues<Double>("double:Efficacy") ?? Array.Empty<Double>();
+            Column_Illuminance = GetDataColumnValues<Double>("double:Illuminance") ?? Array.Empty<Double>();
+            Column_IlluminanceDistance = GetDataColumnValues<Double>("double:IlluminanceDistance") ?? Array.Empty<Double>();
+            Column_InitialColorTemperature = GetDataColumnValues<Double>("double:InitialColorTemperature") ?? Array.Empty<Double>();
+            Column_ColorFilter_X = GetDataColumnValues<Double>("double:ColorFilter.X") ?? Array.Empty<Double>();
+            Column_ColorFilter_Y = GetDataColumnValues<Double>("double:ColorFilter.Y") ?? Array.Empty<Double>();
+            Column_ColorFilter_Z = GetDataColumnValues<Double>("double:ColorFilter.Z") ?? Array.Empty<Double>();
+            Column_LossFactor = GetDataColumnValues<Double>("double:LossFactor") ?? Array.Empty<Double>();
+            Column_DimmingColor = GetDataColumnValues<Int32>("int:DimmingColor") ?? Array.Empty<Int32>();
+            Column_PhotometricWebFileIndex = GetIndexColumnValues("index:Vim.Asset:PhotometricWebFile") ?? Array.Empty<int>();
+            Column_FamilyTypeIndex = GetIndexColumnValues("index:Vim.FamilyType:FamilyType") ?? Array.Empty<int>();
+        }
+        
+        public Int32[] Column_LightShapeStyle { get; }
+        public Int32 GetLightShapeStyle(int index, Int32 @default = default) => Column_LightShapeStyle.ElementAtOrDefault(index, @default);
+        public Double[] Column_EmitLength { get; }
+        public Double GetEmitLength(int index, Double @default = default) => Column_EmitLength.ElementAtOrDefault(index, @default);
+        public Double[] Column_EmitWidth { get; }
+        public Double GetEmitWidth(int index, Double @default = default) => Column_EmitWidth.ElementAtOrDefault(index, @default);
+        public Double[] Column_EmitDiameter { get; }
+        public Double GetEmitDiameter(int index, Double @default = default) => Column_EmitDiameter.ElementAtOrDefault(index, @default);
+        public Int32[] Column_LightDistributionStyle { get; }
+        public Int32 GetLightDistributionStyle(int index, Int32 @default = default) => Column_LightDistributionStyle.ElementAtOrDefault(index, @default);
+        public Double[] Column_SpotBeamAngle { get; }
+        public Double GetSpotBeamAngle(int index, Double @default = default) => Column_SpotBeamAngle.ElementAtOrDefault(index, @default);
+        public Double[] Column_SpotFieldAngle { get; }
+        public Double GetSpotFieldAngle(int index, Double @default = default) => Column_SpotFieldAngle.ElementAtOrDefault(index, @default);
+        public Double[] Column_TiltAngle { get; }
+        public Double GetTiltAngle(int index, Double @default = default) => Column_TiltAngle.ElementAtOrDefault(index, @default);
+        public String[] Column_PhotometricWebFileName { get; }
+        public String GetPhotometricWebFileName(int index, String @default = "") => Column_PhotometricWebFileName.ElementAtOrDefault(index, @default);
+        public Int32[] Column_InitialIntensityType { get; }
+        public Int32 GetInitialIntensityType(int index, Int32 @default = default) => Column_InitialIntensityType.ElementAtOrDefault(index, @default);
+        public Double[] Column_Luminosity { get; }
+        public Double GetLuminosity(int index, Double @default = default) => Column_Luminosity.ElementAtOrDefault(index, @default);
+        public Double[] Column_Flux { get; }
+        public Double GetFlux(int index, Double @default = default) => Column_Flux.ElementAtOrDefault(index, @default);
+        public Double[] Column_Wattage { get; }
+        public Double GetWattage(int index, Double @default = default) => Column_Wattage.ElementAtOrDefault(index, @default);
+        public Double[] Column_Efficacy { get; }
+        public Double GetEfficacy(int index, Double @default = default) => Column_Efficacy.ElementAtOrDefault(index, @default);
+        public Double[] Column_Illuminance { get; }
+        public Double GetIlluminance(int index, Double @default = default) => Column_Illuminance.ElementAtOrDefault(index, @default);
+        public Double[] Column_IlluminanceDistance { get; }
+        public Double GetIlluminanceDistance(int index, Double @default = default) => Column_IlluminanceDistance.ElementAtOrDefault(index, @default);
+        public Double[] Column_InitialColorTemperature { get; }
+        public Double GetInitialColorTemperature(int index, Double @default = default) => Column_InitialColorTemperature.ElementAtOrDefault(index, @default);
+        public Double[] Column_ColorFilter_X { get; }
+        public Double GetColorFilter_X(int index, Double @default = default) => Column_ColorFilter_X.ElementAtOrDefault(index, @default);
+        public Double[] Column_ColorFilter_Y { get; }
+        public Double GetColorFilter_Y(int index, Double @default = default) => Column_ColorFilter_Y.ElementAtOrDefault(index, @default);
+        public Double[] Column_ColorFilter_Z { get; }
+        public Double GetColorFilter_Z(int index, Double @default = default) => Column_ColorFilter_Z.ElementAtOrDefault(index, @default);
+        public Double[] Column_LossFactor { get; }
+        public Double GetLossFactor(int index, Double @default = default) => Column_LossFactor.ElementAtOrDefault(index, @default);
+        public Int32[] Column_DimmingColor { get; }
+        public Int32 GetDimmingColor(int index, Int32 @default = default) => Column_DimmingColor.ElementAtOrDefault(index, @default);
+        public int[] Column_PhotometricWebFileIndex { get; }
+        public int GetPhotometricWebFileIndex(int index) => Column_PhotometricWebFileIndex.ElementAtOrDefault(index, EntityRelation.None);
+        public Asset GetPhotometricWebFile(int index) => _GetReferencedPhotometricWebFile(GetPhotometricWebFileIndex(index));
+        private Asset _GetReferencedPhotometricWebFile(int referencedIndex) => ParentTableSet.GetAsset(referencedIndex);
+        public int[] Column_FamilyTypeIndex { get; }
+        public int GetFamilyTypeIndex(int index) => Column_FamilyTypeIndex.ElementAtOrDefault(index, EntityRelation.None);
+        public FamilyType GetFamilyType(int index) => _GetReferencedFamilyType(GetFamilyTypeIndex(index));
+        private FamilyType _GetReferencedFamilyType(int referencedIndex) => ParentTableSet.GetFamilyType(referencedIndex);
+        // Object Getter
+        public LightType Get(int index)
+        {
+            if (index < 0) return null;
+            var r = new LightType();
+            r.Index = index;
+            r.LightShapeStyle = GetLightShapeStyle(index);
+            r.EmitLength = GetEmitLength(index);
+            r.EmitWidth = GetEmitWidth(index);
+            r.EmitDiameter = GetEmitDiameter(index);
+            r.LightDistributionStyle = GetLightDistributionStyle(index);
+            r.SpotBeamAngle = GetSpotBeamAngle(index);
+            r.SpotFieldAngle = GetSpotFieldAngle(index);
+            r.TiltAngle = GetTiltAngle(index);
+            r.PhotometricWebFileName = GetPhotometricWebFileName(index);
+            r.InitialIntensityType = GetInitialIntensityType(index);
+            r.Luminosity = GetLuminosity(index);
+            r.Flux = GetFlux(index);
+            r.Wattage = GetWattage(index);
+            r.Efficacy = GetEfficacy(index);
+            r.Illuminance = GetIlluminance(index);
+            r.IlluminanceDistance = GetIlluminanceDistance(index);
+            r.InitialColorTemperature = GetInitialColorTemperature(index);
+            r.ColorFilter_X = GetColorFilter_X(index);
+            r.ColorFilter_Y = GetColorFilter_Y(index);
+            r.ColorFilter_Z = GetColorFilter_Z(index);
+            r.LossFactor = GetLossFactor(index);
+            r.DimmingColor = GetDimmingColor(index);
+            r._PhotometricWebFile = new Relation<Vim.Format.ObjectModel.Asset>(GetPhotometricWebFileIndex(index), _GetReferencedPhotometricWebFile);
+            r._FamilyType = new Relation<Vim.Format.ObjectModel.FamilyType>(GetFamilyTypeIndex(index), _GetReferencedFamilyType);
+            return r;
+        }
+        // Enumerator
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+        public IEnumerator<LightType> GetEnumerator()
+        {
+            for (var i = 0; i < RowCount; ++i)
+                yield return Get(i);
+        }
+    } // class LightTypeTable 
+    
+    public partial class LightSourceTable : EntityTable_v2, IEnumerable<LightSource>
+    {
+        
+        public const string TableName = TableNames.LightSource;
+        
+        public EntityTableSet ParentTableSet { get; } // can be null
+        
+        public LightSourceTable(SerializableEntityTable rawTable, string[] stringTable, EntityTableSet parentTableSet = null) : base(rawTable, stringTable)
+        {
+            ParentTableSet = parentTableSet;
+            Column_Origin_X = GetDataColumnValues<Double>("double:Origin.X") ?? Array.Empty<Double>();
+            Column_Origin_Y = GetDataColumnValues<Double>("double:Origin.Y") ?? Array.Empty<Double>();
+            Column_Origin_Z = GetDataColumnValues<Double>("double:Origin.Z") ?? Array.Empty<Double>();
+            Column_BasisX_X = GetDataColumnValues<Double>("double:BasisX.X") ?? Array.Empty<Double>();
+            Column_BasisX_Y = GetDataColumnValues<Double>("double:BasisX.Y") ?? Array.Empty<Double>();
+            Column_BasisX_Z = GetDataColumnValues<Double>("double:BasisX.Z") ?? Array.Empty<Double>();
+            Column_BasisY_X = GetDataColumnValues<Double>("double:BasisY.X") ?? Array.Empty<Double>();
+            Column_BasisY_Y = GetDataColumnValues<Double>("double:BasisY.Y") ?? Array.Empty<Double>();
+            Column_BasisY_Z = GetDataColumnValues<Double>("double:BasisY.Z") ?? Array.Empty<Double>();
+            Column_BasisZ_X = GetDataColumnValues<Double>("double:BasisZ.X") ?? Array.Empty<Double>();
+            Column_BasisZ_Y = GetDataColumnValues<Double>("double:BasisZ.Y") ?? Array.Empty<Double>();
+            Column_BasisZ_Z = GetDataColumnValues<Double>("double:BasisZ.Z") ?? Array.Empty<Double>();
+            Column_HasLightSourceTransform = GetDataColumnValues<Boolean>("byte:HasLightSourceTransform") ?? Array.Empty<Boolean>();
+            Column_IsOn = GetDataColumnValues<Boolean>("byte:IsOn") ?? Array.Empty<Boolean>();
+            Column_LightTypeIndex = GetIndexColumnValues("index:Vim.LightType:LightType") ?? Array.Empty<int>();
+            Column_ElementIndex = GetIndexColumnValues("index:Vim.Element:Element") ?? Array.Empty<int>();
+        }
+        
+        public Double[] Column_Origin_X { get; }
+        public Double GetOrigin_X(int index, Double @default = default) => Column_Origin_X.ElementAtOrDefault(index, @default);
+        public Double[] Column_Origin_Y { get; }
+        public Double GetOrigin_Y(int index, Double @default = default) => Column_Origin_Y.ElementAtOrDefault(index, @default);
+        public Double[] Column_Origin_Z { get; }
+        public Double GetOrigin_Z(int index, Double @default = default) => Column_Origin_Z.ElementAtOrDefault(index, @default);
+        public Double[] Column_BasisX_X { get; }
+        public Double GetBasisX_X(int index, Double @default = default) => Column_BasisX_X.ElementAtOrDefault(index, @default);
+        public Double[] Column_BasisX_Y { get; }
+        public Double GetBasisX_Y(int index, Double @default = default) => Column_BasisX_Y.ElementAtOrDefault(index, @default);
+        public Double[] Column_BasisX_Z { get; }
+        public Double GetBasisX_Z(int index, Double @default = default) => Column_BasisX_Z.ElementAtOrDefault(index, @default);
+        public Double[] Column_BasisY_X { get; }
+        public Double GetBasisY_X(int index, Double @default = default) => Column_BasisY_X.ElementAtOrDefault(index, @default);
+        public Double[] Column_BasisY_Y { get; }
+        public Double GetBasisY_Y(int index, Double @default = default) => Column_BasisY_Y.ElementAtOrDefault(index, @default);
+        public Double[] Column_BasisY_Z { get; }
+        public Double GetBasisY_Z(int index, Double @default = default) => Column_BasisY_Z.ElementAtOrDefault(index, @default);
+        public Double[] Column_BasisZ_X { get; }
+        public Double GetBasisZ_X(int index, Double @default = default) => Column_BasisZ_X.ElementAtOrDefault(index, @default);
+        public Double[] Column_BasisZ_Y { get; }
+        public Double GetBasisZ_Y(int index, Double @default = default) => Column_BasisZ_Y.ElementAtOrDefault(index, @default);
+        public Double[] Column_BasisZ_Z { get; }
+        public Double GetBasisZ_Z(int index, Double @default = default) => Column_BasisZ_Z.ElementAtOrDefault(index, @default);
+        public Boolean[] Column_HasLightSourceTransform { get; }
+        public Boolean GetHasLightSourceTransform(int index, Boolean @default = default) => Column_HasLightSourceTransform.ElementAtOrDefault(index, @default);
+        public Boolean[] Column_IsOn { get; }
+        public Boolean GetIsOn(int index, Boolean @default = default) => Column_IsOn.ElementAtOrDefault(index, @default);
+        public int[] Column_LightTypeIndex { get; }
+        public int GetLightTypeIndex(int index) => Column_LightTypeIndex.ElementAtOrDefault(index, EntityRelation.None);
+        public LightType GetLightType(int index) => _GetReferencedLightType(GetLightTypeIndex(index));
+        private LightType _GetReferencedLightType(int referencedIndex) => ParentTableSet.GetLightType(referencedIndex);
+        public int[] Column_ElementIndex { get; }
+        public int GetElementIndex(int index) => Column_ElementIndex.ElementAtOrDefault(index, EntityRelation.None);
+        public Element GetElement(int index) => _GetReferencedElement(GetElementIndex(index));
+        private Element _GetReferencedElement(int referencedIndex) => ParentTableSet.GetElement(referencedIndex);
+        // Object Getter
+        public LightSource Get(int index)
+        {
+            if (index < 0) return null;
+            var r = new LightSource();
+            r.Index = index;
+            r.Origin_X = GetOrigin_X(index);
+            r.Origin_Y = GetOrigin_Y(index);
+            r.Origin_Z = GetOrigin_Z(index);
+            r.BasisX_X = GetBasisX_X(index);
+            r.BasisX_Y = GetBasisX_Y(index);
+            r.BasisX_Z = GetBasisX_Z(index);
+            r.BasisY_X = GetBasisY_X(index);
+            r.BasisY_Y = GetBasisY_Y(index);
+            r.BasisY_Z = GetBasisY_Z(index);
+            r.BasisZ_X = GetBasisZ_X(index);
+            r.BasisZ_Y = GetBasisZ_Y(index);
+            r.BasisZ_Z = GetBasisZ_Z(index);
+            r.HasLightSourceTransform = GetHasLightSourceTransform(index);
+            r.IsOn = GetIsOn(index);
+            r._LightType = new Relation<Vim.Format.ObjectModel.LightType>(GetLightTypeIndex(index), _GetReferencedLightType);
+            r._Element = new Relation<Vim.Format.ObjectModel.Element>(GetElementIndex(index), _GetReferencedElement);
+            return r;
+        }
+        // Enumerator
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+        public IEnumerator<LightSource> GetEnumerator()
+        {
+            for (var i = 0; i < RowCount; ++i)
+                yield return Get(i);
+        }
+    } // class LightSourceTable 
+    
+    public partial class SunAndShadowSettingsTable : EntityTable_v2, IEnumerable<SunAndShadowSettings>
+    {
+        
+        public const string TableName = TableNames.SunAndShadowSettings;
+        
+        public EntityTableSet ParentTableSet { get; } // can be null
+        
+        public SunAndShadowSettingsTable(SerializableEntityTable rawTable, string[] stringTable, EntityTableSet parentTableSet = null) : base(rawTable, stringTable)
+        {
+            ParentTableSet = parentTableSet;
+            Column_SunAndShadowType = GetStringColumnValues("string:SunAndShadowType") ?? Array.Empty<String>();
+            Column_UsesDST = GetDataColumnValues<Boolean>("byte:UsesDST") ?? Array.Empty<Boolean>();
+            Column_ActiveFrameTime = GetStringColumnValues("string:ActiveFrameTime") ?? Array.Empty<String>();
+            Column_StartDateAndTime = GetStringColumnValues("string:StartDateAndTime") ?? Array.Empty<String>();
+            Column_EndDateAndTime = GetStringColumnValues("string:EndDateAndTime") ?? Array.Empty<String>();
+            Column_ActiveFrame = GetDataColumnValues<Int32>("int:ActiveFrame") ?? Array.Empty<Int32>();
+            Column_NumberOfFrames = GetDataColumnValues<Int32>("int:NumberOfFrames") ?? Array.Empty<Int32>();
+            Column_Altitude = GetDataColumnValues<Double>("double:Altitude") ?? Array.Empty<Double>();
+            Column_Azimuth = GetDataColumnValues<Double>("double:Azimuth") ?? Array.Empty<Double>();
+            Column_RelativeToView = GetDataColumnValues<Boolean>("byte:RelativeToView") ?? Array.Empty<Boolean>();
+            Column_ViewIndex = GetIndexColumnValues("index:Vim.View:View") ?? Array.Empty<int>();
+        }
+        
+        public String[] Column_SunAndShadowType { get; }
+        public String GetSunAndShadowType(int index, String @default = "") => Column_SunAndShadowType.ElementAtOrDefault(index, @default);
+        public Boolean[] Column_UsesDST { get; }
+        public Boolean GetUsesDST(int index, Boolean @default = default) => Column_UsesDST.ElementAtOrDefault(index, @default);
+        public String[] Column_ActiveFrameTime { get; }
+        public String GetActiveFrameTime(int index, String @default = "") => Column_ActiveFrameTime.ElementAtOrDefault(index, @default);
+        public String[] Column_StartDateAndTime { get; }
+        public String GetStartDateAndTime(int index, String @default = "") => Column_StartDateAndTime.ElementAtOrDefault(index, @default);
+        public String[] Column_EndDateAndTime { get; }
+        public String GetEndDateAndTime(int index, String @default = "") => Column_EndDateAndTime.ElementAtOrDefault(index, @default);
+        public Int32[] Column_ActiveFrame { get; }
+        public Int32 GetActiveFrame(int index, Int32 @default = default) => Column_ActiveFrame.ElementAtOrDefault(index, @default);
+        public Int32[] Column_NumberOfFrames { get; }
+        public Int32 GetNumberOfFrames(int index, Int32 @default = default) => Column_NumberOfFrames.ElementAtOrDefault(index, @default);
+        public Double[] Column_Altitude { get; }
+        public Double GetAltitude(int index, Double @default = default) => Column_Altitude.ElementAtOrDefault(index, @default);
+        public Double[] Column_Azimuth { get; }
+        public Double GetAzimuth(int index, Double @default = default) => Column_Azimuth.ElementAtOrDefault(index, @default);
+        public Boolean[] Column_RelativeToView { get; }
+        public Boolean GetRelativeToView(int index, Boolean @default = default) => Column_RelativeToView.ElementAtOrDefault(index, @default);
+        public int[] Column_ViewIndex { get; }
+        public int GetViewIndex(int index) => Column_ViewIndex.ElementAtOrDefault(index, EntityRelation.None);
+        public View GetView(int index) => _GetReferencedView(GetViewIndex(index));
+        private View _GetReferencedView(int referencedIndex) => ParentTableSet.GetView(referencedIndex);
+        // Object Getter
+        public SunAndShadowSettings Get(int index)
+        {
+            if (index < 0) return null;
+            var r = new SunAndShadowSettings();
+            r.Index = index;
+            r.SunAndShadowType = GetSunAndShadowType(index);
+            r.UsesDST = GetUsesDST(index);
+            r.ActiveFrameTime = GetActiveFrameTime(index);
+            r.StartDateAndTime = GetStartDateAndTime(index);
+            r.EndDateAndTime = GetEndDateAndTime(index);
+            r.ActiveFrame = GetActiveFrame(index);
+            r.NumberOfFrames = GetNumberOfFrames(index);
+            r.Altitude = GetAltitude(index);
+            r.Azimuth = GetAzimuth(index);
+            r.RelativeToView = GetRelativeToView(index);
+            r._View = new Relation<Vim.Format.ObjectModel.View>(GetViewIndex(index), _GetReferencedView);
+            return r;
+        }
+        // Enumerator
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+        public IEnumerator<SunAndShadowSettings> GetEnumerator()
+        {
+            for (var i = 0; i < RowCount; ++i)
+                yield return Get(i);
+        }
+    } // class SunAndShadowSettingsTable 
+    
+    public partial class QuestElementTable : EntityTable_v2, IEnumerable<QuestElement>
+    {
+        
+        public const string TableName = TableNames.QuestElement;
+        
+        public EntityTableSet ParentTableSet { get; } // can be null
+        
+        public QuestElementTable(SerializableEntityTable rawTable, string[] stringTable, EntityTableSet parentTableSet = null) : base(rawTable, stringTable)
+        {
+            ParentTableSet = parentTableSet;
+            Column_CollisionClass = GetStringColumnValues("string:CollisionClass") ?? Array.Empty<String>();
+            Column_CollisionCategory = GetStringColumnValues("string:CollisionCategory") ?? Array.Empty<String>();
+            Column_BoundsMin_X = GetDataColumnValues<Double>("double:BoundsMin.X") ?? Array.Empty<Double>();
+            Column_BoundsMin_Y = GetDataColumnValues<Double>("double:BoundsMin.Y") ?? Array.Empty<Double>();
+            Column_BoundsMin_Z = GetDataColumnValues<Double>("double:BoundsMin.Z") ?? Array.Empty<Double>();
+            Column_BoundsMax_X = GetDataColumnValues<Double>("double:BoundsMax.X") ?? Array.Empty<Double>();
+            Column_BoundsMax_Y = GetDataColumnValues<Double>("double:BoundsMax.Y") ?? Array.Empty<Double>();
+            Column_BoundsMax_Z = GetDataColumnValues<Double>("double:BoundsMax.Z") ?? Array.Empty<Double>();
+            Column_StreamLevelIndex = GetIndexColumnValues("index:Vim.Level:StreamLevel") ?? Array.Empty<int>();
+            Column_StreamTopLevelIndex = GetIndexColumnValues("index:Vim.Level:StreamTopLevel") ?? Array.Empty<int>();
+            Column_ElementIndex = GetIndexColumnValues("index:Vim.Element:Element") ?? Array.Empty<int>();
+        }
+        
+        public String[] Column_CollisionClass { get; }
+        public String GetCollisionClass(int index, String @default = "") => Column_CollisionClass.ElementAtOrDefault(index, @default);
+        public String[] Column_CollisionCategory { get; }
+        public String GetCollisionCategory(int index, String @default = "") => Column_CollisionCategory.ElementAtOrDefault(index, @default);
+        public Double[] Column_BoundsMin_X { get; }
+        public Double GetBoundsMin_X(int index, Double @default = default) => Column_BoundsMin_X.ElementAtOrDefault(index, @default);
+        public Double[] Column_BoundsMin_Y { get; }
+        public Double GetBoundsMin_Y(int index, Double @default = default) => Column_BoundsMin_Y.ElementAtOrDefault(index, @default);
+        public Double[] Column_BoundsMin_Z { get; }
+        public Double GetBoundsMin_Z(int index, Double @default = default) => Column_BoundsMin_Z.ElementAtOrDefault(index, @default);
+        public Double[] Column_BoundsMax_X { get; }
+        public Double GetBoundsMax_X(int index, Double @default = default) => Column_BoundsMax_X.ElementAtOrDefault(index, @default);
+        public Double[] Column_BoundsMax_Y { get; }
+        public Double GetBoundsMax_Y(int index, Double @default = default) => Column_BoundsMax_Y.ElementAtOrDefault(index, @default);
+        public Double[] Column_BoundsMax_Z { get; }
+        public Double GetBoundsMax_Z(int index, Double @default = default) => Column_BoundsMax_Z.ElementAtOrDefault(index, @default);
+        public int[] Column_StreamLevelIndex { get; }
+        public int GetStreamLevelIndex(int index) => Column_StreamLevelIndex.ElementAtOrDefault(index, EntityRelation.None);
+        public Level GetStreamLevel(int index) => _GetReferencedStreamLevel(GetStreamLevelIndex(index));
+        private Level _GetReferencedStreamLevel(int referencedIndex) => ParentTableSet.GetLevel(referencedIndex);
+        public int[] Column_StreamTopLevelIndex { get; }
+        public int GetStreamTopLevelIndex(int index) => Column_StreamTopLevelIndex.ElementAtOrDefault(index, EntityRelation.None);
+        public Level GetStreamTopLevel(int index) => _GetReferencedStreamTopLevel(GetStreamTopLevelIndex(index));
+        private Level _GetReferencedStreamTopLevel(int referencedIndex) => ParentTableSet.GetLevel(referencedIndex);
+        public int[] Column_ElementIndex { get; }
+        public int GetElementIndex(int index) => Column_ElementIndex.ElementAtOrDefault(index, EntityRelation.None);
+        public Element GetElement(int index) => _GetReferencedElement(GetElementIndex(index));
+        private Element _GetReferencedElement(int referencedIndex) => ParentTableSet.GetElement(referencedIndex);
+        // Object Getter
+        public QuestElement Get(int index)
+        {
+            if (index < 0) return null;
+            var r = new QuestElement();
+            r.Index = index;
+            r.CollisionClass = GetCollisionClass(index);
+            r.CollisionCategory = GetCollisionCategory(index);
+            r.BoundsMin_X = GetBoundsMin_X(index);
+            r.BoundsMin_Y = GetBoundsMin_Y(index);
+            r.BoundsMin_Z = GetBoundsMin_Z(index);
+            r.BoundsMax_X = GetBoundsMax_X(index);
+            r.BoundsMax_Y = GetBoundsMax_Y(index);
+            r.BoundsMax_Z = GetBoundsMax_Z(index);
+            r._StreamLevel = new Relation<Vim.Format.ObjectModel.Level>(GetStreamLevelIndex(index), _GetReferencedStreamLevel);
+            r._StreamTopLevel = new Relation<Vim.Format.ObjectModel.Level>(GetStreamTopLevelIndex(index), _GetReferencedStreamTopLevel);
+            r._Element = new Relation<Vim.Format.ObjectModel.Element>(GetElementIndex(index), _GetReferencedElement);
+            return r;
+        }
+        // Enumerator
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+        public IEnumerator<QuestElement> GetEnumerator()
+        {
+            for (var i = 0; i < RowCount; ++i)
+                yield return Get(i);
+        }
+    } // class QuestElementTable 
+    
     public static class DocumentBuilderExtensions
     {
         public static EntityTableBuilder ToAssetTableBuilder(this EntitySetBuilder<Asset> entitySet)
@@ -11959,6 +12865,344 @@ namespace Vim.Format.ObjectModel {
             }
             return tb;
         }
+        public static EntityTableBuilder ToLightTypeTableBuilder(this EntitySetBuilder<LightType> entitySet)
+        {
+            var tb = new EntityTableBuilder(TableNames.LightType);
+            var entities = entitySet.Entities;
+            var entityCount = entities.Count;
+            {
+                var columnData = new Int32[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].LightShapeStyle; }
+                tb.AddDataColumn("int:LightShapeStyle", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].EmitLength; }
+                tb.AddDataColumn("double:EmitLength", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].EmitWidth; }
+                tb.AddDataColumn("double:EmitWidth", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].EmitDiameter; }
+                tb.AddDataColumn("double:EmitDiameter", columnData);
+            }
+            {
+                var columnData = new Int32[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].LightDistributionStyle; }
+                tb.AddDataColumn("int:LightDistributionStyle", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].SpotBeamAngle; }
+                tb.AddDataColumn("double:SpotBeamAngle", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].SpotFieldAngle; }
+                tb.AddDataColumn("double:SpotFieldAngle", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].TiltAngle; }
+                tb.AddDataColumn("double:TiltAngle", columnData);
+            }
+            {
+                var columnData = new String[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].PhotometricWebFileName; }
+                tb.AddStringColumn("string:PhotometricWebFileName", columnData);
+            }
+            {
+                var columnData = new Int32[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].InitialIntensityType; }
+                tb.AddDataColumn("int:InitialIntensityType", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Luminosity; }
+                tb.AddDataColumn("double:Luminosity", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Flux; }
+                tb.AddDataColumn("double:Flux", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Wattage; }
+                tb.AddDataColumn("double:Wattage", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Efficacy; }
+                tb.AddDataColumn("double:Efficacy", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Illuminance; }
+                tb.AddDataColumn("double:Illuminance", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].IlluminanceDistance; }
+                tb.AddDataColumn("double:IlluminanceDistance", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].InitialColorTemperature; }
+                tb.AddDataColumn("double:InitialColorTemperature", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].ColorFilter_X; }
+                tb.AddDataColumn("double:ColorFilter.X", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].ColorFilter_Y; }
+                tb.AddDataColumn("double:ColorFilter.Y", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].ColorFilter_Z; }
+                tb.AddDataColumn("double:ColorFilter.Z", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].LossFactor; }
+                tb.AddDataColumn("double:LossFactor", columnData);
+            }
+            {
+                var columnData = new Int32[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].DimmingColor; }
+                tb.AddDataColumn("int:DimmingColor", columnData);
+            }
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._PhotometricWebFile?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.Asset:PhotometricWebFile", columnData);
+            }
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._FamilyType?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.FamilyType:FamilyType", columnData);
+            }
+            return tb;
+        }
+        public static EntityTableBuilder ToLightSourceTableBuilder(this EntitySetBuilder<LightSource> entitySet)
+        {
+            var tb = new EntityTableBuilder(TableNames.LightSource);
+            var entities = entitySet.Entities;
+            var entityCount = entities.Count;
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Origin_X; }
+                tb.AddDataColumn("double:Origin.X", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Origin_Y; }
+                tb.AddDataColumn("double:Origin.Y", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Origin_Z; }
+                tb.AddDataColumn("double:Origin.Z", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].BasisX_X; }
+                tb.AddDataColumn("double:BasisX.X", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].BasisX_Y; }
+                tb.AddDataColumn("double:BasisX.Y", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].BasisX_Z; }
+                tb.AddDataColumn("double:BasisX.Z", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].BasisY_X; }
+                tb.AddDataColumn("double:BasisY.X", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].BasisY_Y; }
+                tb.AddDataColumn("double:BasisY.Y", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].BasisY_Z; }
+                tb.AddDataColumn("double:BasisY.Z", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].BasisZ_X; }
+                tb.AddDataColumn("double:BasisZ.X", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].BasisZ_Y; }
+                tb.AddDataColumn("double:BasisZ.Y", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].BasisZ_Z; }
+                tb.AddDataColumn("double:BasisZ.Z", columnData);
+            }
+            {
+                var columnData = new Boolean[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].HasLightSourceTransform; }
+                tb.AddDataColumn("byte:HasLightSourceTransform", columnData);
+            }
+            {
+                var columnData = new Boolean[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].IsOn; }
+                tb.AddDataColumn("byte:IsOn", columnData);
+            }
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._LightType?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.LightType:LightType", columnData);
+            }
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._Element?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.Element:Element", columnData);
+            }
+            return tb;
+        }
+        public static EntityTableBuilder ToSunAndShadowSettingsTableBuilder(this EntitySetBuilder<SunAndShadowSettings> entitySet)
+        {
+            var tb = new EntityTableBuilder(TableNames.SunAndShadowSettings);
+            var entities = entitySet.Entities;
+            var entityCount = entities.Count;
+            {
+                var columnData = new String[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].SunAndShadowType; }
+                tb.AddStringColumn("string:SunAndShadowType", columnData);
+            }
+            {
+                var columnData = new Boolean[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].UsesDST; }
+                tb.AddDataColumn("byte:UsesDST", columnData);
+            }
+            {
+                var columnData = new String[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].ActiveFrameTime; }
+                tb.AddStringColumn("string:ActiveFrameTime", columnData);
+            }
+            {
+                var columnData = new String[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].StartDateAndTime; }
+                tb.AddStringColumn("string:StartDateAndTime", columnData);
+            }
+            {
+                var columnData = new String[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].EndDateAndTime; }
+                tb.AddStringColumn("string:EndDateAndTime", columnData);
+            }
+            {
+                var columnData = new Int32[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].ActiveFrame; }
+                tb.AddDataColumn("int:ActiveFrame", columnData);
+            }
+            {
+                var columnData = new Int32[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].NumberOfFrames; }
+                tb.AddDataColumn("int:NumberOfFrames", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Altitude; }
+                tb.AddDataColumn("double:Altitude", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Azimuth; }
+                tb.AddDataColumn("double:Azimuth", columnData);
+            }
+            {
+                var columnData = new Boolean[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].RelativeToView; }
+                tb.AddDataColumn("byte:RelativeToView", columnData);
+            }
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._View?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.View:View", columnData);
+            }
+            return tb;
+        }
+        public static EntityTableBuilder ToQuestElementTableBuilder(this EntitySetBuilder<QuestElement> entitySet)
+        {
+            var tb = new EntityTableBuilder(TableNames.QuestElement);
+            var entities = entitySet.Entities;
+            var entityCount = entities.Count;
+            {
+                var columnData = new String[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].CollisionClass; }
+                tb.AddStringColumn("string:CollisionClass", columnData);
+            }
+            {
+                var columnData = new String[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].CollisionCategory; }
+                tb.AddStringColumn("string:CollisionCategory", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].BoundsMin_X; }
+                tb.AddDataColumn("double:BoundsMin.X", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].BoundsMin_Y; }
+                tb.AddDataColumn("double:BoundsMin.Y", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].BoundsMin_Z; }
+                tb.AddDataColumn("double:BoundsMin.Z", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].BoundsMax_X; }
+                tb.AddDataColumn("double:BoundsMax.X", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].BoundsMax_Y; }
+                tb.AddDataColumn("double:BoundsMax.Y", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].BoundsMax_Z; }
+                tb.AddDataColumn("double:BoundsMax.Z", columnData);
+            }
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._StreamLevel?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.Level:StreamLevel", columnData);
+            }
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._StreamTopLevel?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.Level:StreamTopLevel", columnData);
+            }
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._Element?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.Element:Element", columnData);
+            }
+            return tb;
+        }
     } // DocumentBuilderExtensions
     
     public partial class ObjectModelBuilder
@@ -12022,6 +13266,10 @@ namespace Vim.Format.ObjectModel {
         public readonly EntitySetBuilder<ViewInViewSheet> ViewInViewSheetBuilder = new EntitySetBuilder<ViewInViewSheet>(TableNames.ViewInViewSheet);
         public readonly EntitySetBuilder<Site> SiteBuilder = new EntitySetBuilder<Site>(TableNames.Site);
         public readonly EntitySetBuilder<Building> BuildingBuilder = new EntitySetBuilder<Building>(TableNames.Building);
+        public readonly EntitySetBuilder<LightType> LightTypeBuilder = new EntitySetBuilder<LightType>(TableNames.LightType);
+        public readonly EntitySetBuilder<LightSource> LightSourceBuilder = new EntitySetBuilder<LightSource>(TableNames.LightSource);
+        public readonly EntitySetBuilder<SunAndShadowSettings> SunAndShadowSettingsBuilder = new EntitySetBuilder<SunAndShadowSettings>(TableNames.SunAndShadowSettings);
+        public readonly EntitySetBuilder<QuestElement> QuestElementBuilder = new EntitySetBuilder<QuestElement>(TableNames.QuestElement);
         
         public DocumentBuilder AddEntityTableSets(DocumentBuilder db)
         {
@@ -12084,6 +13332,10 @@ namespace Vim.Format.ObjectModel {
             db.Tables.Add(ViewInViewSheetBuilder.EntityTableName, ViewInViewSheetBuilder.ToViewInViewSheetTableBuilder());
             db.Tables.Add(SiteBuilder.EntityTableName, SiteBuilder.ToSiteTableBuilder());
             db.Tables.Add(BuildingBuilder.EntityTableName, BuildingBuilder.ToBuildingTableBuilder());
+            db.Tables.Add(LightTypeBuilder.EntityTableName, LightTypeBuilder.ToLightTypeTableBuilder());
+            db.Tables.Add(LightSourceBuilder.EntityTableName, LightSourceBuilder.ToLightSourceTableBuilder());
+            db.Tables.Add(SunAndShadowSettingsBuilder.EntityTableName, SunAndShadowSettingsBuilder.ToSunAndShadowSettingsTableBuilder());
+            db.Tables.Add(QuestElementBuilder.EntityTableName, QuestElementBuilder.ToQuestElementTableBuilder());
             
             return db;
         } // AddEntityTableSets
@@ -12149,6 +13401,10 @@ namespace Vim.Format.ObjectModel {
             ViewInViewSheetBuilder.Clear();
             SiteBuilder.Clear();
             BuildingBuilder.Clear();
+            LightTypeBuilder.Clear();
+            LightSourceBuilder.Clear();
+            SunAndShadowSettingsBuilder.Clear();
+            QuestElementBuilder.Clear();
         } // Clear
     } // ObjectModelBuilder
 } // namespace

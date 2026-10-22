@@ -12750,6 +12750,1402 @@ export class BuildingTable implements IBuildingTable {
     
 }
 
+export interface ILightType {
+    index: number
+    lightShapeStyle?: number
+    emitLength?: number
+    emitWidth?: number
+    emitDiameter?: number
+    lightDistributionStyle?: number
+    spotBeamAngle?: number
+    spotFieldAngle?: number
+    tiltAngle?: number
+    photometricWebFileName?: string
+    initialIntensityType?: number
+    luminosity?: number
+    flux?: number
+    wattage?: number
+    efficacy?: number
+    illuminance?: number
+    illuminanceDistance?: number
+    initialColorTemperature?: number
+    colorFilter_X?: number
+    colorFilter_Y?: number
+    colorFilter_Z?: number
+    lossFactor?: number
+    dimmingColor?: number
+    
+    photometricWebFileIndex?: number
+    photometricWebFile?: IAsset
+    familyTypeIndex?: number
+    familyType?: IFamilyType
+}
+
+export interface ILightTypeTable {
+    getCount(): Promise<number>
+    get(lightTypeIndex: number): Promise<ILightType>
+    getAll(): Promise<ILightType[]>
+    
+    getLightShapeStyle(lightTypeIndex: number): Promise<number | undefined>
+    getAllLightShapeStyle(): Promise<number[] | undefined>
+    getEmitLength(lightTypeIndex: number): Promise<number | undefined>
+    getAllEmitLength(): Promise<number[] | undefined>
+    getEmitWidth(lightTypeIndex: number): Promise<number | undefined>
+    getAllEmitWidth(): Promise<number[] | undefined>
+    getEmitDiameter(lightTypeIndex: number): Promise<number | undefined>
+    getAllEmitDiameter(): Promise<number[] | undefined>
+    getLightDistributionStyle(lightTypeIndex: number): Promise<number | undefined>
+    getAllLightDistributionStyle(): Promise<number[] | undefined>
+    getSpotBeamAngle(lightTypeIndex: number): Promise<number | undefined>
+    getAllSpotBeamAngle(): Promise<number[] | undefined>
+    getSpotFieldAngle(lightTypeIndex: number): Promise<number | undefined>
+    getAllSpotFieldAngle(): Promise<number[] | undefined>
+    getTiltAngle(lightTypeIndex: number): Promise<number | undefined>
+    getAllTiltAngle(): Promise<number[] | undefined>
+    getPhotometricWebFileName(lightTypeIndex: number): Promise<string | undefined>
+    getAllPhotometricWebFileName(): Promise<string[] | undefined>
+    getInitialIntensityType(lightTypeIndex: number): Promise<number | undefined>
+    getAllInitialIntensityType(): Promise<number[] | undefined>
+    getLuminosity(lightTypeIndex: number): Promise<number | undefined>
+    getAllLuminosity(): Promise<number[] | undefined>
+    getFlux(lightTypeIndex: number): Promise<number | undefined>
+    getAllFlux(): Promise<number[] | undefined>
+    getWattage(lightTypeIndex: number): Promise<number | undefined>
+    getAllWattage(): Promise<number[] | undefined>
+    getEfficacy(lightTypeIndex: number): Promise<number | undefined>
+    getAllEfficacy(): Promise<number[] | undefined>
+    getIlluminance(lightTypeIndex: number): Promise<number | undefined>
+    getAllIlluminance(): Promise<number[] | undefined>
+    getIlluminanceDistance(lightTypeIndex: number): Promise<number | undefined>
+    getAllIlluminanceDistance(): Promise<number[] | undefined>
+    getInitialColorTemperature(lightTypeIndex: number): Promise<number | undefined>
+    getAllInitialColorTemperature(): Promise<number[] | undefined>
+    getColorFilter_X(lightTypeIndex: number): Promise<number | undefined>
+    getAllColorFilter_X(): Promise<number[] | undefined>
+    getColorFilter_Y(lightTypeIndex: number): Promise<number | undefined>
+    getAllColorFilter_Y(): Promise<number[] | undefined>
+    getColorFilter_Z(lightTypeIndex: number): Promise<number | undefined>
+    getAllColorFilter_Z(): Promise<number[] | undefined>
+    getLossFactor(lightTypeIndex: number): Promise<number | undefined>
+    getAllLossFactor(): Promise<number[] | undefined>
+    getDimmingColor(lightTypeIndex: number): Promise<number | undefined>
+    getAllDimmingColor(): Promise<number[] | undefined>
+    
+    getPhotometricWebFileIndex(lightTypeIndex: number): Promise<number | undefined>
+    getAllPhotometricWebFileIndex(): Promise<number[] | undefined>
+    getPhotometricWebFile(lightTypeIndex: number): Promise<IAsset | undefined>
+    getFamilyTypeIndex(lightTypeIndex: number): Promise<number | undefined>
+    getAllFamilyTypeIndex(): Promise<number[] | undefined>
+    getFamilyType(lightTypeIndex: number): Promise<IFamilyType | undefined>
+}
+
+export class LightType implements ILightType {
+    index: number
+    lightShapeStyle?: number
+    emitLength?: number
+    emitWidth?: number
+    emitDiameter?: number
+    lightDistributionStyle?: number
+    spotBeamAngle?: number
+    spotFieldAngle?: number
+    tiltAngle?: number
+    photometricWebFileName?: string
+    initialIntensityType?: number
+    luminosity?: number
+    flux?: number
+    wattage?: number
+    efficacy?: number
+    illuminance?: number
+    illuminanceDistance?: number
+    initialColorTemperature?: number
+    colorFilter_X?: number
+    colorFilter_Y?: number
+    colorFilter_Z?: number
+    lossFactor?: number
+    dimmingColor?: number
+    
+    photometricWebFileIndex?: number
+    photometricWebFile?: IAsset
+    familyTypeIndex?: number
+    familyType?: IFamilyType
+    
+    static async createFromTable(table: ILightTypeTable, index: number): Promise<ILightType> {
+        let result = new LightType()
+        result.index = index
+        
+        await Promise.all([
+            table.getLightShapeStyle(index).then(v => result.lightShapeStyle = v),
+            table.getEmitLength(index).then(v => result.emitLength = v),
+            table.getEmitWidth(index).then(v => result.emitWidth = v),
+            table.getEmitDiameter(index).then(v => result.emitDiameter = v),
+            table.getLightDistributionStyle(index).then(v => result.lightDistributionStyle = v),
+            table.getSpotBeamAngle(index).then(v => result.spotBeamAngle = v),
+            table.getSpotFieldAngle(index).then(v => result.spotFieldAngle = v),
+            table.getTiltAngle(index).then(v => result.tiltAngle = v),
+            table.getPhotometricWebFileName(index).then(v => result.photometricWebFileName = v),
+            table.getInitialIntensityType(index).then(v => result.initialIntensityType = v),
+            table.getLuminosity(index).then(v => result.luminosity = v),
+            table.getFlux(index).then(v => result.flux = v),
+            table.getWattage(index).then(v => result.wattage = v),
+            table.getEfficacy(index).then(v => result.efficacy = v),
+            table.getIlluminance(index).then(v => result.illuminance = v),
+            table.getIlluminanceDistance(index).then(v => result.illuminanceDistance = v),
+            table.getInitialColorTemperature(index).then(v => result.initialColorTemperature = v),
+            table.getColorFilter_X(index).then(v => result.colorFilter_X = v),
+            table.getColorFilter_Y(index).then(v => result.colorFilter_Y = v),
+            table.getColorFilter_Z(index).then(v => result.colorFilter_Z = v),
+            table.getLossFactor(index).then(v => result.lossFactor = v),
+            table.getDimmingColor(index).then(v => result.dimmingColor = v),
+            table.getPhotometricWebFileIndex(index).then(v => result.photometricWebFileIndex = v),
+            table.getFamilyTypeIndex(index).then(v => result.familyTypeIndex = v),
+        ])
+        
+        return result
+    }
+}
+
+export class LightTypeTable implements ILightTypeTable {
+    private document: VimDocument
+    private entityTable: EntityTable
+    
+    static async createFromDocument(document: VimDocument): Promise<ILightTypeTable | undefined> {
+        const entity = await document.entities.getBfast("Vim.LightType")
+        
+        if (!entity) {
+            return undefined
+        }
+        
+        let table = new LightTypeTable()
+        table.document = document
+        table.entityTable = new EntityTable(entity, document.strings)
+        
+        return table
+    }
+    
+    getCount(): Promise<number> {
+        return this.entityTable.getCount()
+    }
+    
+    async get(lightTypeIndex: number): Promise<ILightType> {
+        return await LightType.createFromTable(this, lightTypeIndex)
+    }
+    
+    async getAll(): Promise<ILightType[]> {
+        const localTable = await this.entityTable.getLocal()
+        
+        let lightShapeStyle: number[] | undefined
+        let emitLength: number[] | undefined
+        let emitWidth: number[] | undefined
+        let emitDiameter: number[] | undefined
+        let lightDistributionStyle: number[] | undefined
+        let spotBeamAngle: number[] | undefined
+        let spotFieldAngle: number[] | undefined
+        let tiltAngle: number[] | undefined
+        let photometricWebFileName: string[] | undefined
+        let initialIntensityType: number[] | undefined
+        let luminosity: number[] | undefined
+        let flux: number[] | undefined
+        let wattage: number[] | undefined
+        let efficacy: number[] | undefined
+        let illuminance: number[] | undefined
+        let illuminanceDistance: number[] | undefined
+        let initialColorTemperature: number[] | undefined
+        let colorFilter_X: number[] | undefined
+        let colorFilter_Y: number[] | undefined
+        let colorFilter_Z: number[] | undefined
+        let lossFactor: number[] | undefined
+        let dimmingColor: number[] | undefined
+        let photometricWebFileIndex: number[] | undefined
+        let familyTypeIndex: number[] | undefined
+        
+        await Promise.all([
+            (async () => { lightShapeStyle = (await localTable.getNumberArray("int:LightShapeStyle")) })(),
+            (async () => { emitLength = (await localTable.getNumberArray("double:EmitLength")) })(),
+            (async () => { emitWidth = (await localTable.getNumberArray("double:EmitWidth")) })(),
+            (async () => { emitDiameter = (await localTable.getNumberArray("double:EmitDiameter")) })(),
+            (async () => { lightDistributionStyle = (await localTable.getNumberArray("int:LightDistributionStyle")) })(),
+            (async () => { spotBeamAngle = (await localTable.getNumberArray("double:SpotBeamAngle")) })(),
+            (async () => { spotFieldAngle = (await localTable.getNumberArray("double:SpotFieldAngle")) })(),
+            (async () => { tiltAngle = (await localTable.getNumberArray("double:TiltAngle")) })(),
+            (async () => { photometricWebFileName = (await localTable.getStringArray("string:PhotometricWebFileName")) })(),
+            (async () => { initialIntensityType = (await localTable.getNumberArray("int:InitialIntensityType")) })(),
+            (async () => { luminosity = (await localTable.getNumberArray("double:Luminosity")) })(),
+            (async () => { flux = (await localTable.getNumberArray("double:Flux")) })(),
+            (async () => { wattage = (await localTable.getNumberArray("double:Wattage")) })(),
+            (async () => { efficacy = (await localTable.getNumberArray("double:Efficacy")) })(),
+            (async () => { illuminance = (await localTable.getNumberArray("double:Illuminance")) })(),
+            (async () => { illuminanceDistance = (await localTable.getNumberArray("double:IlluminanceDistance")) })(),
+            (async () => { initialColorTemperature = (await localTable.getNumberArray("double:InitialColorTemperature")) })(),
+            (async () => { colorFilter_X = (await localTable.getNumberArray("double:ColorFilter.X")) })(),
+            (async () => { colorFilter_Y = (await localTable.getNumberArray("double:ColorFilter.Y")) })(),
+            (async () => { colorFilter_Z = (await localTable.getNumberArray("double:ColorFilter.Z")) })(),
+            (async () => { lossFactor = (await localTable.getNumberArray("double:LossFactor")) })(),
+            (async () => { dimmingColor = (await localTable.getNumberArray("int:DimmingColor")) })(),
+            (async () => { photometricWebFileIndex = (await localTable.getNumberArray("index:Vim.Asset:PhotometricWebFile")) })(),
+            (async () => { familyTypeIndex = (await localTable.getNumberArray("index:Vim.FamilyType:FamilyType")) })(),
+        ])
+        
+        let lightType: ILightType[] = []
+        
+        const rowCount = await this.getCount()
+        for (let i = 0; i < rowCount; i++) {
+            lightType.push({
+                index: i,
+                lightShapeStyle: lightShapeStyle ? lightShapeStyle[i] : undefined,
+                emitLength: emitLength ? emitLength[i] : undefined,
+                emitWidth: emitWidth ? emitWidth[i] : undefined,
+                emitDiameter: emitDiameter ? emitDiameter[i] : undefined,
+                lightDistributionStyle: lightDistributionStyle ? lightDistributionStyle[i] : undefined,
+                spotBeamAngle: spotBeamAngle ? spotBeamAngle[i] : undefined,
+                spotFieldAngle: spotFieldAngle ? spotFieldAngle[i] : undefined,
+                tiltAngle: tiltAngle ? tiltAngle[i] : undefined,
+                photometricWebFileName: photometricWebFileName ? photometricWebFileName[i] : undefined,
+                initialIntensityType: initialIntensityType ? initialIntensityType[i] : undefined,
+                luminosity: luminosity ? luminosity[i] : undefined,
+                flux: flux ? flux[i] : undefined,
+                wattage: wattage ? wattage[i] : undefined,
+                efficacy: efficacy ? efficacy[i] : undefined,
+                illuminance: illuminance ? illuminance[i] : undefined,
+                illuminanceDistance: illuminanceDistance ? illuminanceDistance[i] : undefined,
+                initialColorTemperature: initialColorTemperature ? initialColorTemperature[i] : undefined,
+                colorFilter_X: colorFilter_X ? colorFilter_X[i] : undefined,
+                colorFilter_Y: colorFilter_Y ? colorFilter_Y[i] : undefined,
+                colorFilter_Z: colorFilter_Z ? colorFilter_Z[i] : undefined,
+                lossFactor: lossFactor ? lossFactor[i] : undefined,
+                dimmingColor: dimmingColor ? dimmingColor[i] : undefined,
+                photometricWebFileIndex: photometricWebFileIndex ? photometricWebFileIndex[i] : undefined,
+                familyTypeIndex: familyTypeIndex ? familyTypeIndex[i] : undefined
+            })
+        }
+        
+        return lightType
+    }
+    
+    async getLightShapeStyle(lightTypeIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(lightTypeIndex, "int:LightShapeStyle"))
+    }
+    
+    async getAllLightShapeStyle(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("int:LightShapeStyle"))
+    }
+    
+    async getEmitLength(lightTypeIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(lightTypeIndex, "double:EmitLength"))
+    }
+    
+    async getAllEmitLength(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:EmitLength"))
+    }
+    
+    async getEmitWidth(lightTypeIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(lightTypeIndex, "double:EmitWidth"))
+    }
+    
+    async getAllEmitWidth(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:EmitWidth"))
+    }
+    
+    async getEmitDiameter(lightTypeIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(lightTypeIndex, "double:EmitDiameter"))
+    }
+    
+    async getAllEmitDiameter(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:EmitDiameter"))
+    }
+    
+    async getLightDistributionStyle(lightTypeIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(lightTypeIndex, "int:LightDistributionStyle"))
+    }
+    
+    async getAllLightDistributionStyle(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("int:LightDistributionStyle"))
+    }
+    
+    async getSpotBeamAngle(lightTypeIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(lightTypeIndex, "double:SpotBeamAngle"))
+    }
+    
+    async getAllSpotBeamAngle(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:SpotBeamAngle"))
+    }
+    
+    async getSpotFieldAngle(lightTypeIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(lightTypeIndex, "double:SpotFieldAngle"))
+    }
+    
+    async getAllSpotFieldAngle(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:SpotFieldAngle"))
+    }
+    
+    async getTiltAngle(lightTypeIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(lightTypeIndex, "double:TiltAngle"))
+    }
+    
+    async getAllTiltAngle(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:TiltAngle"))
+    }
+    
+    async getPhotometricWebFileName(lightTypeIndex: number): Promise<string | undefined> {
+        return (await this.entityTable.getString(lightTypeIndex, "string:PhotometricWebFileName"))
+    }
+    
+    async getAllPhotometricWebFileName(): Promise<string[] | undefined> {
+        return (await this.entityTable.getStringArray("string:PhotometricWebFileName"))
+    }
+    
+    async getInitialIntensityType(lightTypeIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(lightTypeIndex, "int:InitialIntensityType"))
+    }
+    
+    async getAllInitialIntensityType(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("int:InitialIntensityType"))
+    }
+    
+    async getLuminosity(lightTypeIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(lightTypeIndex, "double:Luminosity"))
+    }
+    
+    async getAllLuminosity(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:Luminosity"))
+    }
+    
+    async getFlux(lightTypeIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(lightTypeIndex, "double:Flux"))
+    }
+    
+    async getAllFlux(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:Flux"))
+    }
+    
+    async getWattage(lightTypeIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(lightTypeIndex, "double:Wattage"))
+    }
+    
+    async getAllWattage(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:Wattage"))
+    }
+    
+    async getEfficacy(lightTypeIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(lightTypeIndex, "double:Efficacy"))
+    }
+    
+    async getAllEfficacy(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:Efficacy"))
+    }
+    
+    async getIlluminance(lightTypeIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(lightTypeIndex, "double:Illuminance"))
+    }
+    
+    async getAllIlluminance(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:Illuminance"))
+    }
+    
+    async getIlluminanceDistance(lightTypeIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(lightTypeIndex, "double:IlluminanceDistance"))
+    }
+    
+    async getAllIlluminanceDistance(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:IlluminanceDistance"))
+    }
+    
+    async getInitialColorTemperature(lightTypeIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(lightTypeIndex, "double:InitialColorTemperature"))
+    }
+    
+    async getAllInitialColorTemperature(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:InitialColorTemperature"))
+    }
+    
+    async getColorFilter_X(lightTypeIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(lightTypeIndex, "double:ColorFilter.X"))
+    }
+    
+    async getAllColorFilter_X(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:ColorFilter.X"))
+    }
+    
+    async getColorFilter_Y(lightTypeIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(lightTypeIndex, "double:ColorFilter.Y"))
+    }
+    
+    async getAllColorFilter_Y(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:ColorFilter.Y"))
+    }
+    
+    async getColorFilter_Z(lightTypeIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(lightTypeIndex, "double:ColorFilter.Z"))
+    }
+    
+    async getAllColorFilter_Z(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:ColorFilter.Z"))
+    }
+    
+    async getLossFactor(lightTypeIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(lightTypeIndex, "double:LossFactor"))
+    }
+    
+    async getAllLossFactor(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:LossFactor"))
+    }
+    
+    async getDimmingColor(lightTypeIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(lightTypeIndex, "int:DimmingColor"))
+    }
+    
+    async getAllDimmingColor(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("int:DimmingColor"))
+    }
+    
+    async getPhotometricWebFileIndex(lightTypeIndex: number): Promise<number | undefined> {
+        return await this.entityTable.getNumber(lightTypeIndex, "index:Vim.Asset:PhotometricWebFile")
+    }
+    
+    async getAllPhotometricWebFileIndex(): Promise<number[] | undefined> {
+        return await this.entityTable.getNumberArray("index:Vim.Asset:PhotometricWebFile")
+    }
+    
+    async getPhotometricWebFile(lightTypeIndex: number): Promise<IAsset | undefined> {
+        const index = await this.getPhotometricWebFileIndex(lightTypeIndex)
+        
+        if (index === undefined) {
+            return undefined
+        }
+        
+        return await this.document.asset?.get(index)
+    }
+    
+    async getFamilyTypeIndex(lightTypeIndex: number): Promise<number | undefined> {
+        return await this.entityTable.getNumber(lightTypeIndex, "index:Vim.FamilyType:FamilyType")
+    }
+    
+    async getAllFamilyTypeIndex(): Promise<number[] | undefined> {
+        return await this.entityTable.getNumberArray("index:Vim.FamilyType:FamilyType")
+    }
+    
+    async getFamilyType(lightTypeIndex: number): Promise<IFamilyType | undefined> {
+        const index = await this.getFamilyTypeIndex(lightTypeIndex)
+        
+        if (index === undefined) {
+            return undefined
+        }
+        
+        return await this.document.familyType?.get(index)
+    }
+    
+}
+
+export interface ILightSource {
+    index: number
+    origin_X?: number
+    origin_Y?: number
+    origin_Z?: number
+    basisX_X?: number
+    basisX_Y?: number
+    basisX_Z?: number
+    basisY_X?: number
+    basisY_Y?: number
+    basisY_Z?: number
+    basisZ_X?: number
+    basisZ_Y?: number
+    basisZ_Z?: number
+    hasLightSourceTransform?: boolean
+    isOn?: boolean
+    
+    lightTypeIndex?: number
+    lightType?: ILightType
+    elementIndex?: number
+    element?: IElement
+}
+
+export interface ILightSourceTable {
+    getCount(): Promise<number>
+    get(lightSourceIndex: number): Promise<ILightSource>
+    getAll(): Promise<ILightSource[]>
+    
+    getOrigin_X(lightSourceIndex: number): Promise<number | undefined>
+    getAllOrigin_X(): Promise<number[] | undefined>
+    getOrigin_Y(lightSourceIndex: number): Promise<number | undefined>
+    getAllOrigin_Y(): Promise<number[] | undefined>
+    getOrigin_Z(lightSourceIndex: number): Promise<number | undefined>
+    getAllOrigin_Z(): Promise<number[] | undefined>
+    getBasisX_X(lightSourceIndex: number): Promise<number | undefined>
+    getAllBasisX_X(): Promise<number[] | undefined>
+    getBasisX_Y(lightSourceIndex: number): Promise<number | undefined>
+    getAllBasisX_Y(): Promise<number[] | undefined>
+    getBasisX_Z(lightSourceIndex: number): Promise<number | undefined>
+    getAllBasisX_Z(): Promise<number[] | undefined>
+    getBasisY_X(lightSourceIndex: number): Promise<number | undefined>
+    getAllBasisY_X(): Promise<number[] | undefined>
+    getBasisY_Y(lightSourceIndex: number): Promise<number | undefined>
+    getAllBasisY_Y(): Promise<number[] | undefined>
+    getBasisY_Z(lightSourceIndex: number): Promise<number | undefined>
+    getAllBasisY_Z(): Promise<number[] | undefined>
+    getBasisZ_X(lightSourceIndex: number): Promise<number | undefined>
+    getAllBasisZ_X(): Promise<number[] | undefined>
+    getBasisZ_Y(lightSourceIndex: number): Promise<number | undefined>
+    getAllBasisZ_Y(): Promise<number[] | undefined>
+    getBasisZ_Z(lightSourceIndex: number): Promise<number | undefined>
+    getAllBasisZ_Z(): Promise<number[] | undefined>
+    getHasLightSourceTransform(lightSourceIndex: number): Promise<boolean | undefined>
+    getAllHasLightSourceTransform(): Promise<boolean[] | undefined>
+    getIsOn(lightSourceIndex: number): Promise<boolean | undefined>
+    getAllIsOn(): Promise<boolean[] | undefined>
+    
+    getLightTypeIndex(lightSourceIndex: number): Promise<number | undefined>
+    getAllLightTypeIndex(): Promise<number[] | undefined>
+    getLightType(lightSourceIndex: number): Promise<ILightType | undefined>
+    getElementIndex(lightSourceIndex: number): Promise<number | undefined>
+    getAllElementIndex(): Promise<number[] | undefined>
+    getElement(lightSourceIndex: number): Promise<IElement | undefined>
+}
+
+export class LightSource implements ILightSource {
+    index: number
+    origin_X?: number
+    origin_Y?: number
+    origin_Z?: number
+    basisX_X?: number
+    basisX_Y?: number
+    basisX_Z?: number
+    basisY_X?: number
+    basisY_Y?: number
+    basisY_Z?: number
+    basisZ_X?: number
+    basisZ_Y?: number
+    basisZ_Z?: number
+    hasLightSourceTransform?: boolean
+    isOn?: boolean
+    
+    lightTypeIndex?: number
+    lightType?: ILightType
+    elementIndex?: number
+    element?: IElement
+    
+    static async createFromTable(table: ILightSourceTable, index: number): Promise<ILightSource> {
+        let result = new LightSource()
+        result.index = index
+        
+        await Promise.all([
+            table.getOrigin_X(index).then(v => result.origin_X = v),
+            table.getOrigin_Y(index).then(v => result.origin_Y = v),
+            table.getOrigin_Z(index).then(v => result.origin_Z = v),
+            table.getBasisX_X(index).then(v => result.basisX_X = v),
+            table.getBasisX_Y(index).then(v => result.basisX_Y = v),
+            table.getBasisX_Z(index).then(v => result.basisX_Z = v),
+            table.getBasisY_X(index).then(v => result.basisY_X = v),
+            table.getBasisY_Y(index).then(v => result.basisY_Y = v),
+            table.getBasisY_Z(index).then(v => result.basisY_Z = v),
+            table.getBasisZ_X(index).then(v => result.basisZ_X = v),
+            table.getBasisZ_Y(index).then(v => result.basisZ_Y = v),
+            table.getBasisZ_Z(index).then(v => result.basisZ_Z = v),
+            table.getHasLightSourceTransform(index).then(v => result.hasLightSourceTransform = v),
+            table.getIsOn(index).then(v => result.isOn = v),
+            table.getLightTypeIndex(index).then(v => result.lightTypeIndex = v),
+            table.getElementIndex(index).then(v => result.elementIndex = v),
+        ])
+        
+        return result
+    }
+}
+
+export class LightSourceTable implements ILightSourceTable {
+    private document: VimDocument
+    private entityTable: EntityTable
+    
+    static async createFromDocument(document: VimDocument): Promise<ILightSourceTable | undefined> {
+        const entity = await document.entities.getBfast("Vim.LightSource")
+        
+        if (!entity) {
+            return undefined
+        }
+        
+        let table = new LightSourceTable()
+        table.document = document
+        table.entityTable = new EntityTable(entity, document.strings)
+        
+        return table
+    }
+    
+    getCount(): Promise<number> {
+        return this.entityTable.getCount()
+    }
+    
+    async get(lightSourceIndex: number): Promise<ILightSource> {
+        return await LightSource.createFromTable(this, lightSourceIndex)
+    }
+    
+    async getAll(): Promise<ILightSource[]> {
+        const localTable = await this.entityTable.getLocal()
+        
+        let origin_X: number[] | undefined
+        let origin_Y: number[] | undefined
+        let origin_Z: number[] | undefined
+        let basisX_X: number[] | undefined
+        let basisX_Y: number[] | undefined
+        let basisX_Z: number[] | undefined
+        let basisY_X: number[] | undefined
+        let basisY_Y: number[] | undefined
+        let basisY_Z: number[] | undefined
+        let basisZ_X: number[] | undefined
+        let basisZ_Y: number[] | undefined
+        let basisZ_Z: number[] | undefined
+        let hasLightSourceTransform: boolean[] | undefined
+        let isOn: boolean[] | undefined
+        let lightTypeIndex: number[] | undefined
+        let elementIndex: number[] | undefined
+        
+        await Promise.all([
+            (async () => { origin_X = (await localTable.getNumberArray("double:Origin.X")) })(),
+            (async () => { origin_Y = (await localTable.getNumberArray("double:Origin.Y")) })(),
+            (async () => { origin_Z = (await localTable.getNumberArray("double:Origin.Z")) })(),
+            (async () => { basisX_X = (await localTable.getNumberArray("double:BasisX.X")) })(),
+            (async () => { basisX_Y = (await localTable.getNumberArray("double:BasisX.Y")) })(),
+            (async () => { basisX_Z = (await localTable.getNumberArray("double:BasisX.Z")) })(),
+            (async () => { basisY_X = (await localTable.getNumberArray("double:BasisY.X")) })(),
+            (async () => { basisY_Y = (await localTable.getNumberArray("double:BasisY.Y")) })(),
+            (async () => { basisY_Z = (await localTable.getNumberArray("double:BasisY.Z")) })(),
+            (async () => { basisZ_X = (await localTable.getNumberArray("double:BasisZ.X")) })(),
+            (async () => { basisZ_Y = (await localTable.getNumberArray("double:BasisZ.Y")) })(),
+            (async () => { basisZ_Z = (await localTable.getNumberArray("double:BasisZ.Z")) })(),
+            (async () => { hasLightSourceTransform = (await localTable.getBooleanArray("byte:HasLightSourceTransform")) })(),
+            (async () => { isOn = (await localTable.getBooleanArray("byte:IsOn")) })(),
+            (async () => { lightTypeIndex = (await localTable.getNumberArray("index:Vim.LightType:LightType")) })(),
+            (async () => { elementIndex = (await localTable.getNumberArray("index:Vim.Element:Element")) })(),
+        ])
+        
+        let lightSource: ILightSource[] = []
+        
+        const rowCount = await this.getCount()
+        for (let i = 0; i < rowCount; i++) {
+            lightSource.push({
+                index: i,
+                origin_X: origin_X ? origin_X[i] : undefined,
+                origin_Y: origin_Y ? origin_Y[i] : undefined,
+                origin_Z: origin_Z ? origin_Z[i] : undefined,
+                basisX_X: basisX_X ? basisX_X[i] : undefined,
+                basisX_Y: basisX_Y ? basisX_Y[i] : undefined,
+                basisX_Z: basisX_Z ? basisX_Z[i] : undefined,
+                basisY_X: basisY_X ? basisY_X[i] : undefined,
+                basisY_Y: basisY_Y ? basisY_Y[i] : undefined,
+                basisY_Z: basisY_Z ? basisY_Z[i] : undefined,
+                basisZ_X: basisZ_X ? basisZ_X[i] : undefined,
+                basisZ_Y: basisZ_Y ? basisZ_Y[i] : undefined,
+                basisZ_Z: basisZ_Z ? basisZ_Z[i] : undefined,
+                hasLightSourceTransform: hasLightSourceTransform ? hasLightSourceTransform[i] : undefined,
+                isOn: isOn ? isOn[i] : undefined,
+                lightTypeIndex: lightTypeIndex ? lightTypeIndex[i] : undefined,
+                elementIndex: elementIndex ? elementIndex[i] : undefined
+            })
+        }
+        
+        return lightSource
+    }
+    
+    async getOrigin_X(lightSourceIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(lightSourceIndex, "double:Origin.X"))
+    }
+    
+    async getAllOrigin_X(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:Origin.X"))
+    }
+    
+    async getOrigin_Y(lightSourceIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(lightSourceIndex, "double:Origin.Y"))
+    }
+    
+    async getAllOrigin_Y(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:Origin.Y"))
+    }
+    
+    async getOrigin_Z(lightSourceIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(lightSourceIndex, "double:Origin.Z"))
+    }
+    
+    async getAllOrigin_Z(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:Origin.Z"))
+    }
+    
+    async getBasisX_X(lightSourceIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(lightSourceIndex, "double:BasisX.X"))
+    }
+    
+    async getAllBasisX_X(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:BasisX.X"))
+    }
+    
+    async getBasisX_Y(lightSourceIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(lightSourceIndex, "double:BasisX.Y"))
+    }
+    
+    async getAllBasisX_Y(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:BasisX.Y"))
+    }
+    
+    async getBasisX_Z(lightSourceIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(lightSourceIndex, "double:BasisX.Z"))
+    }
+    
+    async getAllBasisX_Z(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:BasisX.Z"))
+    }
+    
+    async getBasisY_X(lightSourceIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(lightSourceIndex, "double:BasisY.X"))
+    }
+    
+    async getAllBasisY_X(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:BasisY.X"))
+    }
+    
+    async getBasisY_Y(lightSourceIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(lightSourceIndex, "double:BasisY.Y"))
+    }
+    
+    async getAllBasisY_Y(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:BasisY.Y"))
+    }
+    
+    async getBasisY_Z(lightSourceIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(lightSourceIndex, "double:BasisY.Z"))
+    }
+    
+    async getAllBasisY_Z(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:BasisY.Z"))
+    }
+    
+    async getBasisZ_X(lightSourceIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(lightSourceIndex, "double:BasisZ.X"))
+    }
+    
+    async getAllBasisZ_X(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:BasisZ.X"))
+    }
+    
+    async getBasisZ_Y(lightSourceIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(lightSourceIndex, "double:BasisZ.Y"))
+    }
+    
+    async getAllBasisZ_Y(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:BasisZ.Y"))
+    }
+    
+    async getBasisZ_Z(lightSourceIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(lightSourceIndex, "double:BasisZ.Z"))
+    }
+    
+    async getAllBasisZ_Z(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:BasisZ.Z"))
+    }
+    
+    async getHasLightSourceTransform(lightSourceIndex: number): Promise<boolean | undefined> {
+        return (await this.entityTable.getBoolean(lightSourceIndex, "byte:HasLightSourceTransform"))
+    }
+    
+    async getAllHasLightSourceTransform(): Promise<boolean[] | undefined> {
+        return (await this.entityTable.getBooleanArray("byte:HasLightSourceTransform"))
+    }
+    
+    async getIsOn(lightSourceIndex: number): Promise<boolean | undefined> {
+        return (await this.entityTable.getBoolean(lightSourceIndex, "byte:IsOn"))
+    }
+    
+    async getAllIsOn(): Promise<boolean[] | undefined> {
+        return (await this.entityTable.getBooleanArray("byte:IsOn"))
+    }
+    
+    async getLightTypeIndex(lightSourceIndex: number): Promise<number | undefined> {
+        return await this.entityTable.getNumber(lightSourceIndex, "index:Vim.LightType:LightType")
+    }
+    
+    async getAllLightTypeIndex(): Promise<number[] | undefined> {
+        return await this.entityTable.getNumberArray("index:Vim.LightType:LightType")
+    }
+    
+    async getLightType(lightSourceIndex: number): Promise<ILightType | undefined> {
+        const index = await this.getLightTypeIndex(lightSourceIndex)
+        
+        if (index === undefined) {
+            return undefined
+        }
+        
+        return await this.document.lightType?.get(index)
+    }
+    
+    async getElementIndex(lightSourceIndex: number): Promise<number | undefined> {
+        return await this.entityTable.getNumber(lightSourceIndex, "index:Vim.Element:Element")
+    }
+    
+    async getAllElementIndex(): Promise<number[] | undefined> {
+        return await this.entityTable.getNumberArray("index:Vim.Element:Element")
+    }
+    
+    async getElement(lightSourceIndex: number): Promise<IElement | undefined> {
+        const index = await this.getElementIndex(lightSourceIndex)
+        
+        if (index === undefined) {
+            return undefined
+        }
+        
+        return await this.document.element?.get(index)
+    }
+    
+}
+
+export interface ISunAndShadowSettings {
+    index: number
+    sunAndShadowType?: string
+    usesDST?: boolean
+    activeFrameTime?: string
+    startDateAndTime?: string
+    endDateAndTime?: string
+    activeFrame?: number
+    numberOfFrames?: number
+    altitude?: number
+    azimuth?: number
+    relativeToView?: boolean
+    
+    viewIndex?: number
+    view?: IView
+}
+
+export interface ISunAndShadowSettingsTable {
+    getCount(): Promise<number>
+    get(sunAndShadowSettingsIndex: number): Promise<ISunAndShadowSettings>
+    getAll(): Promise<ISunAndShadowSettings[]>
+    
+    getSunAndShadowType(sunAndShadowSettingsIndex: number): Promise<string | undefined>
+    getAllSunAndShadowType(): Promise<string[] | undefined>
+    getUsesDST(sunAndShadowSettingsIndex: number): Promise<boolean | undefined>
+    getAllUsesDST(): Promise<boolean[] | undefined>
+    getActiveFrameTime(sunAndShadowSettingsIndex: number): Promise<string | undefined>
+    getAllActiveFrameTime(): Promise<string[] | undefined>
+    getStartDateAndTime(sunAndShadowSettingsIndex: number): Promise<string | undefined>
+    getAllStartDateAndTime(): Promise<string[] | undefined>
+    getEndDateAndTime(sunAndShadowSettingsIndex: number): Promise<string | undefined>
+    getAllEndDateAndTime(): Promise<string[] | undefined>
+    getActiveFrame(sunAndShadowSettingsIndex: number): Promise<number | undefined>
+    getAllActiveFrame(): Promise<number[] | undefined>
+    getNumberOfFrames(sunAndShadowSettingsIndex: number): Promise<number | undefined>
+    getAllNumberOfFrames(): Promise<number[] | undefined>
+    getAltitude(sunAndShadowSettingsIndex: number): Promise<number | undefined>
+    getAllAltitude(): Promise<number[] | undefined>
+    getAzimuth(sunAndShadowSettingsIndex: number): Promise<number | undefined>
+    getAllAzimuth(): Promise<number[] | undefined>
+    getRelativeToView(sunAndShadowSettingsIndex: number): Promise<boolean | undefined>
+    getAllRelativeToView(): Promise<boolean[] | undefined>
+    
+    getViewIndex(sunAndShadowSettingsIndex: number): Promise<number | undefined>
+    getAllViewIndex(): Promise<number[] | undefined>
+    getView(sunAndShadowSettingsIndex: number): Promise<IView | undefined>
+}
+
+export class SunAndShadowSettings implements ISunAndShadowSettings {
+    index: number
+    sunAndShadowType?: string
+    usesDST?: boolean
+    activeFrameTime?: string
+    startDateAndTime?: string
+    endDateAndTime?: string
+    activeFrame?: number
+    numberOfFrames?: number
+    altitude?: number
+    azimuth?: number
+    relativeToView?: boolean
+    
+    viewIndex?: number
+    view?: IView
+    
+    static async createFromTable(table: ISunAndShadowSettingsTable, index: number): Promise<ISunAndShadowSettings> {
+        let result = new SunAndShadowSettings()
+        result.index = index
+        
+        await Promise.all([
+            table.getSunAndShadowType(index).then(v => result.sunAndShadowType = v),
+            table.getUsesDST(index).then(v => result.usesDST = v),
+            table.getActiveFrameTime(index).then(v => result.activeFrameTime = v),
+            table.getStartDateAndTime(index).then(v => result.startDateAndTime = v),
+            table.getEndDateAndTime(index).then(v => result.endDateAndTime = v),
+            table.getActiveFrame(index).then(v => result.activeFrame = v),
+            table.getNumberOfFrames(index).then(v => result.numberOfFrames = v),
+            table.getAltitude(index).then(v => result.altitude = v),
+            table.getAzimuth(index).then(v => result.azimuth = v),
+            table.getRelativeToView(index).then(v => result.relativeToView = v),
+            table.getViewIndex(index).then(v => result.viewIndex = v),
+        ])
+        
+        return result
+    }
+}
+
+export class SunAndShadowSettingsTable implements ISunAndShadowSettingsTable {
+    private document: VimDocument
+    private entityTable: EntityTable
+    
+    static async createFromDocument(document: VimDocument): Promise<ISunAndShadowSettingsTable | undefined> {
+        const entity = await document.entities.getBfast("Vim.SunAndShadowSettings")
+        
+        if (!entity) {
+            return undefined
+        }
+        
+        let table = new SunAndShadowSettingsTable()
+        table.document = document
+        table.entityTable = new EntityTable(entity, document.strings)
+        
+        return table
+    }
+    
+    getCount(): Promise<number> {
+        return this.entityTable.getCount()
+    }
+    
+    async get(sunAndShadowSettingsIndex: number): Promise<ISunAndShadowSettings> {
+        return await SunAndShadowSettings.createFromTable(this, sunAndShadowSettingsIndex)
+    }
+    
+    async getAll(): Promise<ISunAndShadowSettings[]> {
+        const localTable = await this.entityTable.getLocal()
+        
+        let sunAndShadowType: string[] | undefined
+        let usesDST: boolean[] | undefined
+        let activeFrameTime: string[] | undefined
+        let startDateAndTime: string[] | undefined
+        let endDateAndTime: string[] | undefined
+        let activeFrame: number[] | undefined
+        let numberOfFrames: number[] | undefined
+        let altitude: number[] | undefined
+        let azimuth: number[] | undefined
+        let relativeToView: boolean[] | undefined
+        let viewIndex: number[] | undefined
+        
+        await Promise.all([
+            (async () => { sunAndShadowType = (await localTable.getStringArray("string:SunAndShadowType")) })(),
+            (async () => { usesDST = (await localTable.getBooleanArray("byte:UsesDST")) })(),
+            (async () => { activeFrameTime = (await localTable.getStringArray("string:ActiveFrameTime")) })(),
+            (async () => { startDateAndTime = (await localTable.getStringArray("string:StartDateAndTime")) })(),
+            (async () => { endDateAndTime = (await localTable.getStringArray("string:EndDateAndTime")) })(),
+            (async () => { activeFrame = (await localTable.getNumberArray("int:ActiveFrame")) })(),
+            (async () => { numberOfFrames = (await localTable.getNumberArray("int:NumberOfFrames")) })(),
+            (async () => { altitude = (await localTable.getNumberArray("double:Altitude")) })(),
+            (async () => { azimuth = (await localTable.getNumberArray("double:Azimuth")) })(),
+            (async () => { relativeToView = (await localTable.getBooleanArray("byte:RelativeToView")) })(),
+            (async () => { viewIndex = (await localTable.getNumberArray("index:Vim.View:View")) })(),
+        ])
+        
+        let sunAndShadowSettings: ISunAndShadowSettings[] = []
+        
+        const rowCount = await this.getCount()
+        for (let i = 0; i < rowCount; i++) {
+            sunAndShadowSettings.push({
+                index: i,
+                sunAndShadowType: sunAndShadowType ? sunAndShadowType[i] : undefined,
+                usesDST: usesDST ? usesDST[i] : undefined,
+                activeFrameTime: activeFrameTime ? activeFrameTime[i] : undefined,
+                startDateAndTime: startDateAndTime ? startDateAndTime[i] : undefined,
+                endDateAndTime: endDateAndTime ? endDateAndTime[i] : undefined,
+                activeFrame: activeFrame ? activeFrame[i] : undefined,
+                numberOfFrames: numberOfFrames ? numberOfFrames[i] : undefined,
+                altitude: altitude ? altitude[i] : undefined,
+                azimuth: azimuth ? azimuth[i] : undefined,
+                relativeToView: relativeToView ? relativeToView[i] : undefined,
+                viewIndex: viewIndex ? viewIndex[i] : undefined
+            })
+        }
+        
+        return sunAndShadowSettings
+    }
+    
+    async getSunAndShadowType(sunAndShadowSettingsIndex: number): Promise<string | undefined> {
+        return (await this.entityTable.getString(sunAndShadowSettingsIndex, "string:SunAndShadowType"))
+    }
+    
+    async getAllSunAndShadowType(): Promise<string[] | undefined> {
+        return (await this.entityTable.getStringArray("string:SunAndShadowType"))
+    }
+    
+    async getUsesDST(sunAndShadowSettingsIndex: number): Promise<boolean | undefined> {
+        return (await this.entityTable.getBoolean(sunAndShadowSettingsIndex, "byte:UsesDST"))
+    }
+    
+    async getAllUsesDST(): Promise<boolean[] | undefined> {
+        return (await this.entityTable.getBooleanArray("byte:UsesDST"))
+    }
+    
+    async getActiveFrameTime(sunAndShadowSettingsIndex: number): Promise<string | undefined> {
+        return (await this.entityTable.getString(sunAndShadowSettingsIndex, "string:ActiveFrameTime"))
+    }
+    
+    async getAllActiveFrameTime(): Promise<string[] | undefined> {
+        return (await this.entityTable.getStringArray("string:ActiveFrameTime"))
+    }
+    
+    async getStartDateAndTime(sunAndShadowSettingsIndex: number): Promise<string | undefined> {
+        return (await this.entityTable.getString(sunAndShadowSettingsIndex, "string:StartDateAndTime"))
+    }
+    
+    async getAllStartDateAndTime(): Promise<string[] | undefined> {
+        return (await this.entityTable.getStringArray("string:StartDateAndTime"))
+    }
+    
+    async getEndDateAndTime(sunAndShadowSettingsIndex: number): Promise<string | undefined> {
+        return (await this.entityTable.getString(sunAndShadowSettingsIndex, "string:EndDateAndTime"))
+    }
+    
+    async getAllEndDateAndTime(): Promise<string[] | undefined> {
+        return (await this.entityTable.getStringArray("string:EndDateAndTime"))
+    }
+    
+    async getActiveFrame(sunAndShadowSettingsIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(sunAndShadowSettingsIndex, "int:ActiveFrame"))
+    }
+    
+    async getAllActiveFrame(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("int:ActiveFrame"))
+    }
+    
+    async getNumberOfFrames(sunAndShadowSettingsIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(sunAndShadowSettingsIndex, "int:NumberOfFrames"))
+    }
+    
+    async getAllNumberOfFrames(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("int:NumberOfFrames"))
+    }
+    
+    async getAltitude(sunAndShadowSettingsIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(sunAndShadowSettingsIndex, "double:Altitude"))
+    }
+    
+    async getAllAltitude(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:Altitude"))
+    }
+    
+    async getAzimuth(sunAndShadowSettingsIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(sunAndShadowSettingsIndex, "double:Azimuth"))
+    }
+    
+    async getAllAzimuth(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:Azimuth"))
+    }
+    
+    async getRelativeToView(sunAndShadowSettingsIndex: number): Promise<boolean | undefined> {
+        return (await this.entityTable.getBoolean(sunAndShadowSettingsIndex, "byte:RelativeToView"))
+    }
+    
+    async getAllRelativeToView(): Promise<boolean[] | undefined> {
+        return (await this.entityTable.getBooleanArray("byte:RelativeToView"))
+    }
+    
+    async getViewIndex(sunAndShadowSettingsIndex: number): Promise<number | undefined> {
+        return await this.entityTable.getNumber(sunAndShadowSettingsIndex, "index:Vim.View:View")
+    }
+    
+    async getAllViewIndex(): Promise<number[] | undefined> {
+        return await this.entityTable.getNumberArray("index:Vim.View:View")
+    }
+    
+    async getView(sunAndShadowSettingsIndex: number): Promise<IView | undefined> {
+        const index = await this.getViewIndex(sunAndShadowSettingsIndex)
+        
+        if (index === undefined) {
+            return undefined
+        }
+        
+        return await this.document.view?.get(index)
+    }
+    
+}
+
+export interface IQuestElement {
+    index: number
+    collisionClass?: string
+    collisionCategory?: string
+    boundsMin_X?: number
+    boundsMin_Y?: number
+    boundsMin_Z?: number
+    boundsMax_X?: number
+    boundsMax_Y?: number
+    boundsMax_Z?: number
+    
+    streamLevelIndex?: number
+    streamLevel?: ILevel
+    streamTopLevelIndex?: number
+    streamTopLevel?: ILevel
+    elementIndex?: number
+    element?: IElement
+}
+
+export interface IQuestElementTable {
+    getCount(): Promise<number>
+    get(questElementIndex: number): Promise<IQuestElement>
+    getAll(): Promise<IQuestElement[]>
+    
+    getCollisionClass(questElementIndex: number): Promise<string | undefined>
+    getAllCollisionClass(): Promise<string[] | undefined>
+    getCollisionCategory(questElementIndex: number): Promise<string | undefined>
+    getAllCollisionCategory(): Promise<string[] | undefined>
+    getBoundsMin_X(questElementIndex: number): Promise<number | undefined>
+    getAllBoundsMin_X(): Promise<number[] | undefined>
+    getBoundsMin_Y(questElementIndex: number): Promise<number | undefined>
+    getAllBoundsMin_Y(): Promise<number[] | undefined>
+    getBoundsMin_Z(questElementIndex: number): Promise<number | undefined>
+    getAllBoundsMin_Z(): Promise<number[] | undefined>
+    getBoundsMax_X(questElementIndex: number): Promise<number | undefined>
+    getAllBoundsMax_X(): Promise<number[] | undefined>
+    getBoundsMax_Y(questElementIndex: number): Promise<number | undefined>
+    getAllBoundsMax_Y(): Promise<number[] | undefined>
+    getBoundsMax_Z(questElementIndex: number): Promise<number | undefined>
+    getAllBoundsMax_Z(): Promise<number[] | undefined>
+    
+    getStreamLevelIndex(questElementIndex: number): Promise<number | undefined>
+    getAllStreamLevelIndex(): Promise<number[] | undefined>
+    getStreamLevel(questElementIndex: number): Promise<ILevel | undefined>
+    getStreamTopLevelIndex(questElementIndex: number): Promise<number | undefined>
+    getAllStreamTopLevelIndex(): Promise<number[] | undefined>
+    getStreamTopLevel(questElementIndex: number): Promise<ILevel | undefined>
+    getElementIndex(questElementIndex: number): Promise<number | undefined>
+    getAllElementIndex(): Promise<number[] | undefined>
+    getElement(questElementIndex: number): Promise<IElement | undefined>
+}
+
+export class QuestElement implements IQuestElement {
+    index: number
+    collisionClass?: string
+    collisionCategory?: string
+    boundsMin_X?: number
+    boundsMin_Y?: number
+    boundsMin_Z?: number
+    boundsMax_X?: number
+    boundsMax_Y?: number
+    boundsMax_Z?: number
+    
+    streamLevelIndex?: number
+    streamLevel?: ILevel
+    streamTopLevelIndex?: number
+    streamTopLevel?: ILevel
+    elementIndex?: number
+    element?: IElement
+    
+    static async createFromTable(table: IQuestElementTable, index: number): Promise<IQuestElement> {
+        let result = new QuestElement()
+        result.index = index
+        
+        await Promise.all([
+            table.getCollisionClass(index).then(v => result.collisionClass = v),
+            table.getCollisionCategory(index).then(v => result.collisionCategory = v),
+            table.getBoundsMin_X(index).then(v => result.boundsMin_X = v),
+            table.getBoundsMin_Y(index).then(v => result.boundsMin_Y = v),
+            table.getBoundsMin_Z(index).then(v => result.boundsMin_Z = v),
+            table.getBoundsMax_X(index).then(v => result.boundsMax_X = v),
+            table.getBoundsMax_Y(index).then(v => result.boundsMax_Y = v),
+            table.getBoundsMax_Z(index).then(v => result.boundsMax_Z = v),
+            table.getStreamLevelIndex(index).then(v => result.streamLevelIndex = v),
+            table.getStreamTopLevelIndex(index).then(v => result.streamTopLevelIndex = v),
+            table.getElementIndex(index).then(v => result.elementIndex = v),
+        ])
+        
+        return result
+    }
+}
+
+export class QuestElementTable implements IQuestElementTable {
+    private document: VimDocument
+    private entityTable: EntityTable
+    
+    static async createFromDocument(document: VimDocument): Promise<IQuestElementTable | undefined> {
+        const entity = await document.entities.getBfast("Vim.QuestElement")
+        
+        if (!entity) {
+            return undefined
+        }
+        
+        let table = new QuestElementTable()
+        table.document = document
+        table.entityTable = new EntityTable(entity, document.strings)
+        
+        return table
+    }
+    
+    getCount(): Promise<number> {
+        return this.entityTable.getCount()
+    }
+    
+    async get(questElementIndex: number): Promise<IQuestElement> {
+        return await QuestElement.createFromTable(this, questElementIndex)
+    }
+    
+    async getAll(): Promise<IQuestElement[]> {
+        const localTable = await this.entityTable.getLocal()
+        
+        let collisionClass: string[] | undefined
+        let collisionCategory: string[] | undefined
+        let boundsMin_X: number[] | undefined
+        let boundsMin_Y: number[] | undefined
+        let boundsMin_Z: number[] | undefined
+        let boundsMax_X: number[] | undefined
+        let boundsMax_Y: number[] | undefined
+        let boundsMax_Z: number[] | undefined
+        let streamLevelIndex: number[] | undefined
+        let streamTopLevelIndex: number[] | undefined
+        let elementIndex: number[] | undefined
+        
+        await Promise.all([
+            (async () => { collisionClass = (await localTable.getStringArray("string:CollisionClass")) })(),
+            (async () => { collisionCategory = (await localTable.getStringArray("string:CollisionCategory")) })(),
+            (async () => { boundsMin_X = (await localTable.getNumberArray("double:BoundsMin.X")) })(),
+            (async () => { boundsMin_Y = (await localTable.getNumberArray("double:BoundsMin.Y")) })(),
+            (async () => { boundsMin_Z = (await localTable.getNumberArray("double:BoundsMin.Z")) })(),
+            (async () => { boundsMax_X = (await localTable.getNumberArray("double:BoundsMax.X")) })(),
+            (async () => { boundsMax_Y = (await localTable.getNumberArray("double:BoundsMax.Y")) })(),
+            (async () => { boundsMax_Z = (await localTable.getNumberArray("double:BoundsMax.Z")) })(),
+            (async () => { streamLevelIndex = (await localTable.getNumberArray("index:Vim.Level:StreamLevel")) })(),
+            (async () => { streamTopLevelIndex = (await localTable.getNumberArray("index:Vim.Level:StreamTopLevel")) })(),
+            (async () => { elementIndex = (await localTable.getNumberArray("index:Vim.Element:Element")) })(),
+        ])
+        
+        let questElement: IQuestElement[] = []
+        
+        const rowCount = await this.getCount()
+        for (let i = 0; i < rowCount; i++) {
+            questElement.push({
+                index: i,
+                collisionClass: collisionClass ? collisionClass[i] : undefined,
+                collisionCategory: collisionCategory ? collisionCategory[i] : undefined,
+                boundsMin_X: boundsMin_X ? boundsMin_X[i] : undefined,
+                boundsMin_Y: boundsMin_Y ? boundsMin_Y[i] : undefined,
+                boundsMin_Z: boundsMin_Z ? boundsMin_Z[i] : undefined,
+                boundsMax_X: boundsMax_X ? boundsMax_X[i] : undefined,
+                boundsMax_Y: boundsMax_Y ? boundsMax_Y[i] : undefined,
+                boundsMax_Z: boundsMax_Z ? boundsMax_Z[i] : undefined,
+                streamLevelIndex: streamLevelIndex ? streamLevelIndex[i] : undefined,
+                streamTopLevelIndex: streamTopLevelIndex ? streamTopLevelIndex[i] : undefined,
+                elementIndex: elementIndex ? elementIndex[i] : undefined
+            })
+        }
+        
+        return questElement
+    }
+    
+    async getCollisionClass(questElementIndex: number): Promise<string | undefined> {
+        return (await this.entityTable.getString(questElementIndex, "string:CollisionClass"))
+    }
+    
+    async getAllCollisionClass(): Promise<string[] | undefined> {
+        return (await this.entityTable.getStringArray("string:CollisionClass"))
+    }
+    
+    async getCollisionCategory(questElementIndex: number): Promise<string | undefined> {
+        return (await this.entityTable.getString(questElementIndex, "string:CollisionCategory"))
+    }
+    
+    async getAllCollisionCategory(): Promise<string[] | undefined> {
+        return (await this.entityTable.getStringArray("string:CollisionCategory"))
+    }
+    
+    async getBoundsMin_X(questElementIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(questElementIndex, "double:BoundsMin.X"))
+    }
+    
+    async getAllBoundsMin_X(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:BoundsMin.X"))
+    }
+    
+    async getBoundsMin_Y(questElementIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(questElementIndex, "double:BoundsMin.Y"))
+    }
+    
+    async getAllBoundsMin_Y(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:BoundsMin.Y"))
+    }
+    
+    async getBoundsMin_Z(questElementIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(questElementIndex, "double:BoundsMin.Z"))
+    }
+    
+    async getAllBoundsMin_Z(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:BoundsMin.Z"))
+    }
+    
+    async getBoundsMax_X(questElementIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(questElementIndex, "double:BoundsMax.X"))
+    }
+    
+    async getAllBoundsMax_X(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:BoundsMax.X"))
+    }
+    
+    async getBoundsMax_Y(questElementIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(questElementIndex, "double:BoundsMax.Y"))
+    }
+    
+    async getAllBoundsMax_Y(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:BoundsMax.Y"))
+    }
+    
+    async getBoundsMax_Z(questElementIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(questElementIndex, "double:BoundsMax.Z"))
+    }
+    
+    async getAllBoundsMax_Z(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:BoundsMax.Z"))
+    }
+    
+    async getStreamLevelIndex(questElementIndex: number): Promise<number | undefined> {
+        return await this.entityTable.getNumber(questElementIndex, "index:Vim.Level:StreamLevel")
+    }
+    
+    async getAllStreamLevelIndex(): Promise<number[] | undefined> {
+        return await this.entityTable.getNumberArray("index:Vim.Level:StreamLevel")
+    }
+    
+    async getStreamLevel(questElementIndex: number): Promise<ILevel | undefined> {
+        const index = await this.getStreamLevelIndex(questElementIndex)
+        
+        if (index === undefined) {
+            return undefined
+        }
+        
+        return await this.document.level?.get(index)
+    }
+    
+    async getStreamTopLevelIndex(questElementIndex: number): Promise<number | undefined> {
+        return await this.entityTable.getNumber(questElementIndex, "index:Vim.Level:StreamTopLevel")
+    }
+    
+    async getAllStreamTopLevelIndex(): Promise<number[] | undefined> {
+        return await this.entityTable.getNumberArray("index:Vim.Level:StreamTopLevel")
+    }
+    
+    async getStreamTopLevel(questElementIndex: number): Promise<ILevel | undefined> {
+        const index = await this.getStreamTopLevelIndex(questElementIndex)
+        
+        if (index === undefined) {
+            return undefined
+        }
+        
+        return await this.document.level?.get(index)
+    }
+    
+    async getElementIndex(questElementIndex: number): Promise<number | undefined> {
+        return await this.entityTable.getNumber(questElementIndex, "index:Vim.Element:Element")
+    }
+    
+    async getAllElementIndex(): Promise<number[] | undefined> {
+        return await this.entityTable.getNumberArray("index:Vim.Element:Element")
+    }
+    
+    async getElement(questElementIndex: number): Promise<IElement | undefined> {
+        const index = await this.getElementIndex(questElementIndex)
+        
+        if (index === undefined) {
+            return undefined
+        }
+        
+        return await this.document.element?.get(index)
+    }
+    
+}
+
 export class VimDocument {
     asset: IAssetTable | undefined
     displayUnit: IDisplayUnitTable | undefined
@@ -12810,6 +14206,10 @@ export class VimDocument {
     viewInViewSheet: IViewInViewSheetTable | undefined
     site: ISiteTable | undefined
     building: IBuildingTable | undefined
+    lightType: ILightTypeTable | undefined
+    lightSource: ILightSourceTable | undefined
+    sunAndShadowSettings: ISunAndShadowSettingsTable | undefined
+    questElement: IQuestElementTable | undefined
     
     entities: BFast
     strings: string[] | undefined
@@ -12886,6 +14286,10 @@ export class VimDocument {
         doc.viewInViewSheet = await ViewInViewSheetTable.createFromDocument(doc)
         doc.site = await SiteTable.createFromDocument(doc)
         doc.building = await BuildingTable.createFromDocument(doc)
+        doc.lightType = await LightTypeTable.createFromDocument(doc)
+        doc.lightSource = await LightSourceTable.createFromDocument(doc)
+        doc.sunAndShadowSettings = await SunAndShadowSettingsTable.createFromDocument(doc)
+        doc.questElement = await QuestElementTable.createFromDocument(doc)
         
         return doc
     }
