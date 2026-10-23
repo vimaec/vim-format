@@ -623,6 +623,7 @@ export interface IElement {
     creator?: string
     lastChangedBy?: string
     owner?: string
+    changeToken?: string
     
     levelIndex?: number
     level?: ILevel
@@ -677,6 +678,8 @@ export interface IElementTable {
     getAllLastChangedBy(): Promise<string[] | undefined>
     getOwner(elementIndex: number): Promise<string | undefined>
     getAllOwner(): Promise<string[] | undefined>
+    getChangeToken(elementIndex: number): Promise<string | undefined>
+    getAllChangeToken(): Promise<string[] | undefined>
     
     getLevelIndex(elementIndex: number): Promise<number | undefined>
     getAllLevelIndex(): Promise<number[] | undefined>
@@ -727,6 +730,7 @@ export class Element implements IElement {
     creator?: string
     lastChangedBy?: string
     owner?: string
+    changeToken?: string
     
     levelIndex?: number
     level?: ILevel
@@ -768,6 +772,7 @@ export class Element implements IElement {
             table.getCreator(index).then(v => result.creator = v),
             table.getLastChangedBy(index).then(v => result.lastChangedBy = v),
             table.getOwner(index).then(v => result.owner = v),
+            table.getChangeToken(index).then(v => result.changeToken = v),
             table.getLevelIndex(index).then(v => result.levelIndex = v),
             table.getPhaseCreatedIndex(index).then(v => result.phaseCreatedIndex = v),
             table.getPhaseDemolishedIndex(index).then(v => result.phaseDemolishedIndex = v),
@@ -826,6 +831,7 @@ export class ElementTable implements IElementTable {
         let creator: string[] | undefined
         let lastChangedBy: string[] | undefined
         let owner: string[] | undefined
+        let changeToken: string[] | undefined
         let levelIndex: number[] | undefined
         let phaseCreatedIndex: number[] | undefined
         let phaseDemolishedIndex: number[] | undefined
@@ -851,6 +857,7 @@ export class ElementTable implements IElementTable {
             (async () => { creator = (await localTable.getStringArray("string:Creator")) })(),
             (async () => { lastChangedBy = (await localTable.getStringArray("string:LastChangedBy")) })(),
             (async () => { owner = (await localTable.getStringArray("string:Owner")) })(),
+            (async () => { changeToken = (await localTable.getStringArray("string:ChangeToken")) })(),
             (async () => { levelIndex = (await localTable.getNumberArray("index:Vim.Level:Level")) })(),
             (async () => { phaseCreatedIndex = (await localTable.getNumberArray("index:Vim.Phase:PhaseCreated")) })(),
             (async () => { phaseDemolishedIndex = (await localTable.getNumberArray("index:Vim.Phase:PhaseDemolished")) })(),
@@ -882,6 +889,7 @@ export class ElementTable implements IElementTable {
                 creator: creator ? creator[i] : undefined,
                 lastChangedBy: lastChangedBy ? lastChangedBy[i] : undefined,
                 owner: owner ? owner[i] : undefined,
+                changeToken: changeToken ? changeToken[i] : undefined,
                 levelIndex: levelIndex ? levelIndex[i] : undefined,
                 phaseCreatedIndex: phaseCreatedIndex ? phaseCreatedIndex[i] : undefined,
                 phaseDemolishedIndex: phaseDemolishedIndex ? phaseDemolishedIndex[i] : undefined,
@@ -993,6 +1001,14 @@ export class ElementTable implements IElementTable {
     
     async getAllOwner(): Promise<string[] | undefined> {
         return (await this.entityTable.getStringArray("string:Owner"))
+    }
+    
+    async getChangeToken(elementIndex: number): Promise<string | undefined> {
+        return (await this.entityTable.getString(elementIndex, "string:ChangeToken"))
+    }
+    
+    async getAllChangeToken(): Promise<string[] | undefined> {
+        return (await this.entityTable.getStringArray("string:ChangeToken"))
     }
     
     async getLevelIndex(elementIndex: number): Promise<number | undefined> {
@@ -2415,6 +2431,7 @@ export interface IBimDocument {
     isMetric?: boolean
     guid?: string
     numSaves?: number
+    identity?: string
     isLinked?: boolean
     isDetached?: boolean
     isWorkshared?: boolean
@@ -2464,6 +2481,8 @@ export interface IBimDocumentTable {
     getAllGuid(): Promise<string[] | undefined>
     getNumSaves(bimDocumentIndex: number): Promise<number | undefined>
     getAllNumSaves(): Promise<number[] | undefined>
+    getIdentity(bimDocumentIndex: number): Promise<string | undefined>
+    getAllIdentity(): Promise<string[] | undefined>
     getIsLinked(bimDocumentIndex: number): Promise<boolean | undefined>
     getAllIsLinked(): Promise<boolean[] | undefined>
     getIsDetached(bimDocumentIndex: number): Promise<boolean | undefined>
@@ -2535,6 +2554,7 @@ export class BimDocument implements IBimDocument {
     isMetric?: boolean
     guid?: string
     numSaves?: number
+    identity?: string
     isLinked?: boolean
     isDetached?: boolean
     isWorkshared?: boolean
@@ -2579,6 +2599,7 @@ export class BimDocument implements IBimDocument {
             table.getIsMetric(index).then(v => result.isMetric = v),
             table.getGuid(index).then(v => result.guid = v),
             table.getNumSaves(index).then(v => result.numSaves = v),
+            table.getIdentity(index).then(v => result.identity = v),
             table.getIsLinked(index).then(v => result.isLinked = v),
             table.getIsDetached(index).then(v => result.isDetached = v),
             table.getIsWorkshared(index).then(v => result.isWorkshared = v),
@@ -2647,6 +2668,7 @@ export class BimDocumentTable implements IBimDocumentTable {
         let isMetric: boolean[] | undefined
         let guid: string[] | undefined
         let numSaves: number[] | undefined
+        let identity: string[] | undefined
         let isLinked: boolean[] | undefined
         let isDetached: boolean[] | undefined
         let isWorkshared: boolean[] | undefined
@@ -2682,6 +2704,7 @@ export class BimDocumentTable implements IBimDocumentTable {
             (async () => { isMetric = (await localTable.getBooleanArray("byte:IsMetric")) })(),
             (async () => { guid = (await localTable.getStringArray("string:Guid")) })(),
             (async () => { numSaves = (await localTable.getNumberArray("int:NumSaves")) })(),
+            (async () => { identity = (await localTable.getStringArray("string:Identity")) })(),
             (async () => { isLinked = (await localTable.getBooleanArray("byte:IsLinked")) })(),
             (async () => { isDetached = (await localTable.getBooleanArray("byte:IsDetached")) })(),
             (async () => { isWorkshared = (await localTable.getBooleanArray("byte:IsWorkshared")) })(),
@@ -2723,6 +2746,7 @@ export class BimDocumentTable implements IBimDocumentTable {
                 isMetric: isMetric ? isMetric[i] : undefined,
                 guid: guid ? guid[i] : undefined,
                 numSaves: numSaves ? numSaves[i] : undefined,
+                identity: identity ? identity[i] : undefined,
                 isLinked: isLinked ? isLinked[i] : undefined,
                 isDetached: isDetached ? isDetached[i] : undefined,
                 isWorkshared: isWorkshared ? isWorkshared[i] : undefined,
@@ -2788,6 +2812,14 @@ export class BimDocumentTable implements IBimDocumentTable {
     
     async getAllNumSaves(): Promise<number[] | undefined> {
         return (await this.entityTable.getNumberArray("int:NumSaves"))
+    }
+    
+    async getIdentity(bimDocumentIndex: number): Promise<string | undefined> {
+        return (await this.entityTable.getString(bimDocumentIndex, "string:Identity"))
+    }
+    
+    async getAllIdentity(): Promise<string[] | undefined> {
+        return (await this.entityTable.getStringArray("string:Identity"))
     }
     
     async getIsLinked(bimDocumentIndex: number): Promise<boolean | undefined> {

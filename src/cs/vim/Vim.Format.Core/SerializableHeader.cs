@@ -94,6 +94,32 @@ namespace Vim.Format
         { }
 
         /// <summary>
+        /// The header of a new revision of an existing VIM file (for example a file patched by a differential update):
+        /// the Id is kept, the Revision and the creation date are new (see <see cref="PersistingId"/>). The optional
+        /// values of the prior header are kept; <paramref name="values"/> are added or replace them.
+        /// </summary>
+        public static SerializableHeader CreateRevisionOf(
+            SerializableHeader prior,
+            string generator,
+            SerializableVersion schema,
+            IReadOnlyDictionary<string, string> values = null)
+        {
+            var d = prior.Values?.ToDictionary(kv => kv.Key, kv => kv.Value) ?? new Dictionary<string, string>();
+            if (values != null)
+                foreach (var kv in values)
+                    d[kv.Key] = kv.Value;
+
+            return new SerializableHeader(
+                CurrentVimFormatVersion,
+                prior.Id == Guid.Empty ? Guid.NewGuid() : prior.Id,
+                Guid.NewGuid(),
+                generator,
+                DateTime.UtcNow,
+                schema ?? prior.Schema,
+                d);
+        }
+
+        /// <summary>
         /// Parses the input. Throws exceptions if the input does not define a correctly formatted header.
         /// </summary>
         /// <exception cref="VimHeaderTokenizationException"></exception>
