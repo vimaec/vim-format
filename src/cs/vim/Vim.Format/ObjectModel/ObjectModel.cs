@@ -14,6 +14,107 @@ namespace Vim.Format.ObjectModel
         // ReSharper disable MemberHidesStaticFromOuterClass
         public static class History
         {
+            // Schema 5.18.0 = the combined test build's additions (on that branch they were numbered 5.8.0 / 5.9.0 / 5.10.0),
+            // each filled only by its experimental exporter option, otherwise empty or at its default.
+            // Schema additions (view cameras: crop box, section box and visual style of every 3D view; the crop box flag is
+            // the 5.12.0 Vim.View__byte:IsCropBoxActive)
+            //   Vim.View__byte:IsLocked
+            //   Vim.View__double:CropBox.Min.X (.Y .Z) / CropBox.Max.X (.Y .Z)
+            //   Vim.View__byte:IsSectionBoxActive
+            //   Vim.View__double:SectionBox.Min.X (.Y .Z) / SectionBox.Max.X (.Y .Z)
+            //   Vim.View__double:SectionBoxOrigin.X (.Y .Z)
+            //   Vim.View__double:SectionBoxBasisX.X (.Y .Z)
+            //   Vim.View__double:SectionBoxBasisY.X (.Y .Z)
+            //   Vim.View__double:SectionBoxBasisZ.X (.Y .Z)
+            //   Vim.View__string:DisplayStyle
+            // Schema additions (view visibility: what each 3D view hides, so a viewer shows the view as Revit draws it, and
+            // the linked models in each view; Vim.FilterInView itself is the 5.12.0 table)
+            //   Vim.HiddenCategoryInView (index:Vim.View:View, index:Vim.Category:Category, index:Vim.LinkInView:LinkInView)
+            //   Vim.HiddenWorksetInView (index:Vim.View:View, index:Vim.Workset:Workset, index:Vim.LinkInView:LinkInView)
+            //   Vim.HiddenElementInView (string:Reason, index:Vim.View:View, index:Vim.Element:Element, index:Vim.FilterInView:FilterInView,
+            //     index:Vim.LinkInView:LinkInView)
+            //   Vim.LinkInView (string:Display, string:SettingsFrom, byte:IsHidden, string:HiddenBy, byte:IsHalftone, string:LinkedViewName,
+            //     string:ViewFilters, string:ObjectStyles, string:NestedLinks, string:Phase, string:PhaseFilter, string:DetailLevel,
+            //     string:Discipline, string:LinkedWorksets, byte:IsMeasured, int:MeasuredVisibleCount, string:NotReadable,
+            //     index:Vim.View:View, index:Vim.Element:Element, index:Vim.BimDocument:LinkedDocument, index:Vim.View:LinkedView)
+            //   Vim.FilterInView__index:Vim.LinkInView:LinkInView
+            // Schema additions (realistic material appearance; AppearanceKind is empty when not exported; the Graphics shading
+            // colour is the 5.13.0 Vim.Material__double:ShadingColor)
+            //   Vim.Material__string:AppearanceKind
+            //   Vim.Material__double:AppearanceColor.X / .Y / .Z
+            //   Vim.Material__double:AppearanceTint.X / .Y / .Z
+            //   Vim.Material__double:AppearanceImageFade
+            //   Vim.Material__double:AppearanceTransparency
+            //   Vim.Material__double:Roughness
+            //   Vim.Material__double:Metalness
+            //   Vim.Material__double:Reflectivity
+            //   Vim.Material__double:RefractionIndex
+            //   Vim.Material__double:EmissionColor.X / .Y / .Z
+            //   Vim.Material__double:EmissionLuminance
+            //   Vim.Material__string:ColorTextureKind
+            //   Vim.Material__string:NormalTextureKind
+            // Schema additions (Prepare for Quest: how a VR walk collides with each element, its streaming levels, its world bounds)
+            //   Vim.QuestElement__string:CollisionClass
+            //   Vim.QuestElement__string:CollisionCategory
+            //   Vim.QuestElement__index:Vim.Element:Element
+            //   Vim.QuestElement__index:Vim.Level:StreamLevel
+            //   Vim.QuestElement__index:Vim.Level:StreamTopLevel
+            //   Vim.QuestElement__double:BoundsMin.X (.Y .Z) / BoundsMax.X (.Y .Z)
+            // G3d additions (written only when a mesh carries them; readers which do not know them ignore them):
+            //   g3d:vertex:uv:0:float32:2 (texture coordinates, exporter option "Textures")
+            //   g3d:submesh:category:0:int32:1 (the Vim.Category of each submesh, exporter options "subcategory per part" and
+            //     "geometry pieces")
+            public const string v5_18_0 = "5.18.0";
+
+            // Schema additions (differential updates: what changed in an element since the file was written, and which
+            // document a file was exported from across saves; written by the exporter's "Update only what changed" line,
+            // otherwise empty)
+            //   Vim.Element__string:ChangeToken
+            //   Vim.BimDocument__string:Identity
+            public const string v5_17_0 = "5.17.0";
+
+            // Schema additions (model health: CAD drawings imported or linked into the model and the exploded ones, families
+            // and types loaded but not placed and what Revit's Purge Unused would remove, and where each model's file size
+            // comes from; the CAD / purge tables and columns are written by the exporter's experimental "CAD files and
+            // unused types" option, otherwise empty or at their "not checked" defaults)
+            //   Vim.BimDocument__int:FileLengthSource
+            //   Vim.BimDocument__string:FileLengthPath
+            //   Vim.BimDocument__byte:IsCloudModel
+            //   Vim.BimDocument__string:CloudProjectGuid
+            //   Vim.BimDocument__string:CloudModelGuid
+            //   Vim.BimDocument__int:PurgeableElementCount
+            //   Vim.Family__int:InstanceCount
+            //   Vim.Family__int:PurgeState
+            //   Vim.FamilyType__int:InstanceCount
+            //   Vim.FamilyType__int:PurgeState
+            //   Vim.CadFile__string:FileName
+            //   Vim.CadFile__string:Extension
+            //   Vim.CadFile__byte:IsLinked
+            //   Vim.CadFile__string:SavedPath
+            //   Vim.CadFile__string:AbsolutePath
+            //   Vim.CadFile__string:PathType
+            //   Vim.CadFile__string:LinkStatus
+            //   Vim.CadFile__int:InstanceCount
+            //   Vim.CadFile__int:ViewSpecificInstanceCount
+            //   Vim.CadFile__int:PurgeState
+            //   Vim.CadFile__byte:IsExploded
+            //   Vim.CadFile__int:ExplodedPieceCount
+            //   Vim.CadFile__int:ExplodedModelPieceCount
+            //   Vim.CadFile__int:ExplodedViewCount
+            //   Vim.CadFile__int:ExplodedModelViewCount
+            //   Vim.CadFile__int:ExplodedSeverity
+            //   Vim.CadFile__index:Vim.FamilyType:FamilyType
+            //   Vim.CadFile__index:Vim.Category:Category
+            //   Vim.CadFile__index:Vim.Element:Element
+            //   Vim.CadInstance__string:FileName
+            //   Vim.CadInstance__byte:IsLinked
+            //   Vim.CadInstance__byte:IsViewSpecific
+            //   Vim.CadInstance__byte:IsExplodedPiece
+            //   Vim.CadInstance__index:Vim.CadFile:CadFile
+            //   Vim.CadInstance__index:Vim.View:OwnerView
+            //   Vim.CadInstance__index:Vim.Element:Element
+            public const string v5_16_0 = "5.16.0";
+
             // Schema additions (editing data: wall paths and their inserts, family recipes - parameters, type values,
             // reference planes, forms with their sketches, dimensions with their references - and the FLEXIBLE / STATIC
             // reading per family; written by the exporter's experimental "editing data" option, otherwise empty)
@@ -373,7 +474,10 @@ namespace Vim.Format.ObjectModel
         // ReSharper enable MemberHidesStaticFromOuterClass
 
         // [MAINTAIN] Add more object model SerializableVersions below and update the current one.
-        public static SerializableVersion Current => v5_15_0;
+        public static SerializableVersion Current => v5_18_0;
+        public static SerializableVersion v5_18_0 => SerializableVersion.Parse(History.v5_18_0);
+        public static SerializableVersion v5_17_0 => SerializableVersion.Parse(History.v5_17_0);
+        public static SerializableVersion v5_16_0 => SerializableVersion.Parse(History.v5_16_0);
         public static SerializableVersion v5_15_0 => SerializableVersion.Parse(History.v5_15_0);
         public static SerializableVersion v5_14_0 => SerializableVersion.Parse(History.v5_14_0);
         public static SerializableVersion v5_13_0 => SerializableVersion.Parse(History.v5_13_0);
@@ -1028,6 +1132,14 @@ namespace Vim.Format.ObjectModel
         public string LastChangedBy;
         public string Owner;
 
+        /// <summary>
+        /// An opaque token which changes whenever the element changes in its source document; empty when unknown (5.17.0).
+        /// A differential update compares it with the source to find what changed since this file was written.
+        /// Revit: Element.VersionGuid (2021+); a linked model's RevitLinkInstance or RevitLinkType, which Revit
+        /// re-versions every time it reloads the link, holds a hash of its parameters and placement instead.
+        /// </summary>
+        public string ChangeToken;
+
         public Relation<Level> _Level;
         public Relation<Phase> _PhaseCreated;
         public Relation<Phase> _PhaseDemolished;
@@ -1153,6 +1265,68 @@ namespace Vim.Format.ObjectModel
     }
 
     /// <summary>
+    /// Where BimDocument.FileLength comes from (BimDocument.FileLengthSource, 5.16.0).
+    /// </summary>
+    public enum BimDocumentFileLengthSource
+    {
+        /// <summary>Not recorded (files written before object model 5.16.0, or an exporter which does not fill it).</summary>
+        Unknown = 0,
+        /// <summary>The document's own file on disk (BimDocument.PathName).</summary>
+        LocalFile = 1,
+        /// <summary>A cloud model: Revit's cached copy of the central model ("...\CollaborationCache\[user]\[project]\CentralCache\[model].rvt").
+        /// It is the cloud model as of the last time this computer synchronized with it.</summary>
+        CloudCentralCache = 2,
+        /// <summary>A cloud model: the local copy Revit opened ("...\CollaborationCache\[user]\[project]\[model].rvt"); it includes changes not yet
+        /// synchronized to the cloud.</summary>
+        CloudLocalCopy = 3,
+        /// <summary>A cloud model opened as a link: Revit's cached link copy ("...\CollaborationCache\[user]\[project]\LinkedModels\[model].rvt").</summary>
+        CloudLinkCache = 4,
+        /// <summary>Given by the caller of the export (for example the size of the file the ACC/Forge exporter downloaded).</summary>
+        Provided = 5,
+        /// <summary>The exporter looked and found no file to measure (detached model, cloud model with no cached copy...). FileLength is 0.</summary>
+        NotFound = 6,
+    }
+
+    /// <summary>
+    /// Whether a family, a type or a CAD file is something Revit's "Purge Unused" would remove (PurgeState fields, 5.16.0).
+    /// </summary>
+    public enum ElementPurgeState
+    {
+        /// <summary>Not checked: a file written before object model 5.16.0, an incremental (partial) export, or a document the exporter did not scan.
+        /// Do not read InstanceCount then.</summary>
+        NotChecked = 0,
+        /// <summary>Revit's purge keeps it (Revit 2024+ Document.GetUnusedElements does not list it). It can still have InstanceCount 0: it is used
+        /// another way (a type parameter of another family, a nested family, the last type of a system family...).</summary>
+        InUse = 1,
+        /// <summary>Revit's Purge Unused lists it (first pass). Safe to purge as far as Revit is concerned.</summary>
+        Purgeable = 2,
+        /// <summary>Revit gave no purge list (Revit 2023 or earlier, whose API has none, or the call failed: see the export log).
+        /// InstanceCount was counted: 0 = nothing placed, which is "probably purgeable".</summary>
+        NoRevitVerdict = 3,
+    }
+
+    /// <summary>
+    /// How bad an exploded CAD drawing is, by where its pieces sit (CadFile.ExplodedSeverity, 5.16.0). Worst = highest.
+    /// Exploding an imported drawing leaves its blocks as many separate imports ("Import Symbol" types), which slows the
+    /// model; pieces that show with the model (3D, plans, sections) cost more than pieces kept in one drafting view.
+    /// </summary>
+    public enum CadExplodedSeverity
+    {
+        /// <summary>Not exploded (or not checked: a file written before this field).</summary>
+        NotExploded = 0,
+        /// <summary>All pieces in one isolated view (drafting view, legend, sheet, schedule). Least bad, still flagged.</summary>
+        OneIsolatedView = 1,
+        /// <summary>All pieces in isolated views, more than one of them.</summary>
+        SeveralIsolatedViews = 2,
+        /// <summary>Pieces in one view that shows the model (plan, ceiling plan, section, elevation, detail, 3D view...).</summary>
+        OneModelView = 3,
+        /// <summary>Pieces in several views that show the model.</summary>
+        SeveralModelViews = 4,
+        /// <summary>Pieces placed in the model itself (not view-specific): they show in 3D and in every view that sees them.</summary>
+        InModel = 5,
+    }
+
+    /// <summary>
     /// Represents a source BIM document, for example: a Revit file, or an IFC file.
     /// </summary>
     [TableName(TableNames.BimDocument)]
@@ -1167,6 +1341,14 @@ namespace Vim.Format.ObjectModel
         public string Guid;
 
         public int NumSaves;
+
+        /// <summary>
+        /// Identifies the document across saves, Save As of a local copy and reopenings, unlike Guid (its version), 5.17.0.
+        /// Never derived from the project name. Revit: Document.CreationGUID (2024+; before that, the UniqueId of the
+        /// ProjectInformation element), followed by "|cloud:" and the cloud model GUID for a cloud model.
+        /// </summary>
+        public string Identity;
+
         public bool IsLinked;
         public bool IsDetached;
         public bool IsWorkshared;
@@ -1192,9 +1374,50 @@ namespace Vim.Format.ObjectModel
         public string Version;
         public string User;
         /// <summary>
-        /// File length in bytes
+        /// The size of the source file (.rvt, .ifc...), in BYTES (not kilobytes): 1 MB = 1,048,576. The Revit exporter writes
+        /// System.IO.FileInfo.Length (the test TestObjectModel_v5_6_0 asserts FileLength == FileInfo.Length).<br/>
+        /// 0 means "not measured" (read FileLengthSource since 5.16.0): before 5.16.0 every cloud model (PathName
+        /// "Cloud Models://...", "BIM 360://...", "Autodesk Docs://...") was written with 0 because it has no file path.
         /// </summary>
         public long FileLength;
+
+        /// <summary>
+        /// Where FileLength comes from: the integer representation of the BimDocumentFileLengthSource enum (5.16.0).
+        /// 0 (Unknown) in files written before 5.16.0.
+        /// </summary>
+        public int FileLengthSource;
+
+        /// <summary>
+        /// The file which was measured for FileLength (5.16.0): the local .rvt, or for a cloud model the copy which Revit
+        /// keeps in its collaboration cache (%LOCALAPPDATA%\Autodesk\Revit\Autodesk Revit [year]\CollaborationCache\...).
+        /// Empty when nothing was measured.
+        /// </summary>
+        public string FileLengthPath;
+
+        /// <summary>
+        /// True when the document is a cloud model (Autodesk Docs / BIM 360 / ACC; Revit Document.IsModelInCloud), 5.16.0.
+        /// </summary>
+        public bool IsCloudModel;
+
+        /// <summary>
+        /// The cloud project and model GUIDs of a cloud model (Revit Document.GetCloudModelPath(): GetProjectGUID(),
+        /// GetModelGUID()), 5.16.0. Empty for a local file or before Revit 2020.
+        /// </summary>
+        public string CloudProjectGuid;
+        public string CloudModelGuid;
+
+        /// <summary>
+        /// How many elements Revit's "Purge Unused" lists for this document (Revit 2024+ Document.GetUnusedElements, all
+        /// categories, first pass only: purging frees more, e.g. the nested families of a purged family), 5.16.0.
+        /// This counts everything the purge dialog shows (families, types, materials, line and fill patterns...), not only
+        /// families and types. -1 when not checked (Revit 2023 and earlier, a partial or linked-only export); 0 in files
+        /// written before 5.16.0, which is NOT a measurement.
+        /// </summary>
+        public int PurgeableElementCount = -1;
+
+        public BimDocumentFileLengthSource GetFileLengthSource()
+            => (BimDocumentFileLengthSource) FileLengthSource;
+
         public Relation<View> _ActiveView;
         public Relation<Family> _OwnerFamily;
         public Relation<BimDocument> _Parent;
@@ -1298,6 +1521,24 @@ namespace Vim.Format.ObjectModel
         public string StructuralSectionShape;
         public bool IsSystemFamily;
         public bool IsInPlace;
+
+        /// <summary>
+        /// How many elements of this family's types are placed in its document (all types summed; elements in groups, design
+        /// options and nested shared families included), 5.16.0. -1 when not counted. Since 5.16.0 the Revit exporter (option
+        /// "CAD files and unused types") writes every loaded family, placed or not, so InstanceCount = 0 finds the families
+        /// nobody placed. Read it only where PurgeState is not 0 (NotChecked): files before 5.16.0 read 0 here without having counted.
+        /// </summary>
+        public int InstanceCount = -1;
+
+        /// <summary>
+        /// The integer representation of the ElementPurgeState enum (5.16.0): 2 (Purgeable) = Revit's Purge Unused would remove
+        /// this family. 0 = not checked.
+        /// </summary>
+        public int PurgeState;
+
+        public ElementPurgeState GetPurgeState()
+            => (ElementPurgeState) PurgeState;
+
         public Relation<Category> _FamilyCategory;
     }
 
@@ -1311,6 +1552,25 @@ namespace Vim.Format.ObjectModel
     public partial class FamilyType : EntityWithElement
     {
         public bool IsSystemFamilyType;
+
+        /// <summary>
+        /// How many elements of this type are placed in its document (Revit: elements whose GetTypeId() is this type; elements
+        /// in groups, design options and nested shared families included), 5.16.0. -1 when not counted. Since 5.16.0 the Revit
+        /// exporter (option "CAD files and unused types") writes every loaded family type (and every wall, floor, roof, ceiling,
+        /// duct, pipe... type), placed or not, so InstanceCount = 0 finds the types nobody placed. Read it only where PurgeState
+        /// is not 0 (NotChecked).
+        /// </summary>
+        public int InstanceCount = -1;
+
+        /// <summary>
+        /// The integer representation of the ElementPurgeState enum (5.16.0): 2 (Purgeable) = Revit's Purge Unused would remove
+        /// this type. 0 = not checked.
+        /// </summary>
+        public int PurgeState;
+
+        public ElementPurgeState GetPurgeState()
+            => (ElementPurgeState) PurgeState;
+
         public Relation<Family> _Family;
         public Relation<CompoundStructure> _CompoundStructure;
     }
@@ -1539,6 +1799,94 @@ namespace Vim.Format.ObjectModel
         /// Styles. Where the view template controls Visibility/Graphics or filters, the template's settings were read.
         /// </summary>
         public bool GraphicsRead;
+
+        // ---------------------------------------------------------------------------------------------------------------
+        // View camera (5.18.0): written by the exporter's experimental "view cameras" option, otherwise at their defaults.
+        // The crop box flag itself is IsCropBoxActive above (5.12.0).
+        // ---------------------------------------------------------------------------------------------------------------
+
+        /// <summary>3D views: true when the view's orientation is locked in Revit (View3D.IsLocked).</summary>
+        public bool IsLocked;
+
+        /// <summary>3D views: the view's crop box (View.CropBox) Min / Max, in the view's own coordinates (X = Right, Y = Up, Z = towards the viewer), in feet.</summary>
+        public double CropBox_Min_X;
+        public double CropBox_Min_Y;
+        public double CropBox_Min_Z;
+        public double CropBox_Max_X;
+        public double CropBox_Max_Y;
+        public double CropBox_Max_Z;
+        public DAABox CropBox
+        {
+            get => new DAABox(new DVector3(CropBox_Min_X, CropBox_Min_Y, CropBox_Min_Z), new DVector3(CropBox_Max_X, CropBox_Max_Y, CropBox_Max_Z));
+            set
+            {
+                (CropBox_Min_X, CropBox_Min_Y, CropBox_Min_Z) = value.Min;
+                (CropBox_Max_X, CropBox_Max_Y, CropBox_Max_Z) = value.Max;
+            }
+        }
+
+        /// <summary>3D views: true when the section box is active (View3D.IsSectionBoxActive).</summary>
+        public bool IsSectionBoxActive;
+
+        /// <summary>3D views: the section box (View3D.GetSectionBox) Min / Max in the box's own coordinates (see SectionBoxOrigin / SectionBoxBasis*), in feet. Written whether or not the box is active.</summary>
+        public double SectionBox_Min_X;
+        public double SectionBox_Min_Y;
+        public double SectionBox_Min_Z;
+        public double SectionBox_Max_X;
+        public double SectionBox_Max_Y;
+        public double SectionBox_Max_Z;
+        public DAABox SectionBox
+        {
+            get => new DAABox(new DVector3(SectionBox_Min_X, SectionBox_Min_Y, SectionBox_Min_Z), new DVector3(SectionBox_Max_X, SectionBox_Max_Y, SectionBox_Max_Z));
+            set
+            {
+                (SectionBox_Min_X, SectionBox_Min_Y, SectionBox_Min_Z) = value.Min;
+                (SectionBox_Max_X, SectionBox_Max_Y, SectionBox_Max_Z) = value.Max;
+            }
+        }
+
+        /// <summary>3D views: origin of the section box transform, in model coordinates (feet).</summary>
+        public double SectionBoxOrigin_X;
+        public double SectionBoxOrigin_Y;
+        public double SectionBoxOrigin_Z;
+        public DVector3 SectionBoxOrigin
+        {
+            get => new DVector3(SectionBoxOrigin_X, SectionBoxOrigin_Y, SectionBoxOrigin_Z);
+            set => (SectionBoxOrigin_X, SectionBoxOrigin_Y, SectionBoxOrigin_Z) = value;
+        }
+
+        /// <summary>3D views: X axis of the section box transform, in model coordinates.</summary>
+        public double SectionBoxBasisX_X;
+        public double SectionBoxBasisX_Y;
+        public double SectionBoxBasisX_Z;
+        public DVector3 SectionBoxBasisX
+        {
+            get => new DVector3(SectionBoxBasisX_X, SectionBoxBasisX_Y, SectionBoxBasisX_Z);
+            set => (SectionBoxBasisX_X, SectionBoxBasisX_Y, SectionBoxBasisX_Z) = value;
+        }
+
+        /// <summary>3D views: Y axis of the section box transform, in model coordinates.</summary>
+        public double SectionBoxBasisY_X;
+        public double SectionBoxBasisY_Y;
+        public double SectionBoxBasisY_Z;
+        public DVector3 SectionBoxBasisY
+        {
+            get => new DVector3(SectionBoxBasisY_X, SectionBoxBasisY_Y, SectionBoxBasisY_Z);
+            set => (SectionBoxBasisY_X, SectionBoxBasisY_Y, SectionBoxBasisY_Z) = value;
+        }
+
+        /// <summary>3D views: Z axis of the section box transform, in model coordinates.</summary>
+        public double SectionBoxBasisZ_X;
+        public double SectionBoxBasisZ_Y;
+        public double SectionBoxBasisZ_Z;
+        public DVector3 SectionBoxBasisZ
+        {
+            get => new DVector3(SectionBoxBasisZ_X, SectionBoxBasisZ_Y, SectionBoxBasisZ_Z);
+            set => (SectionBoxBasisZ_X, SectionBoxBasisZ_Y, SectionBoxBasisZ_Z) = value;
+        }
+
+        /// <summary>The view's visual style, Revit's DisplayStyle name (View.DisplayStyle), e.g. "Shading", "HLR", "Realistic".</summary>
+        public string DisplayStyle;
     }
 
     /// <summary>
@@ -1573,8 +1921,138 @@ namespace Vim.Format.ObjectModel
         /// <summary>What the filter overrides in the view (5.13.0); none when HasOverrides is false.</summary>
         public Relation<GraphicOverride> _GraphicOverride;
 
+        /// <summary>None (-1): a filter of the host view. Set (5.18.0): a filter of the linked view this linked model is drawn by.</summary>
+        public Relation<LinkInView> _LinkInView;
+
         public object GetStorageKey()
-            => $"{_View?.Index ?? -1}|{FilterUniqueId}";
+            => $"{_View?.Index ?? -1}|{_LinkInView?.Index ?? -1}|{FilterUniqueId}";
+    }
+
+    /// <summary>
+    /// A Category (or subcategory) switched off in a View (Visibility/Graphics), as Revit draws the view: read from the
+    /// view's template when the template controls the model categories. A category class switched off (all model
+    /// categories) is written as one row per top-level model category. 3D views only (5.18.0, the exporter's experimental
+    /// "view visibility" option; see also CategoryInView.IsHidden, 5.13.0, written by "section graphics").
+    /// </summary>
+    [TableName(TableNames.HiddenCategoryInView)]
+    public partial class HiddenCategoryInView : Entity, IStorageKey
+    {
+        public Relation<View> _View;
+        public Relation<Category> _Category;
+
+        /// <summary>None (-1): the host view's own setting. Set: the row applies only to that linked model in this view.</summary>
+        public Relation<LinkInView> _LinkInView;
+
+        public object GetStorageKey()
+            => (_Category.CombineAsStorageKey(_View), _LinkInView?.Index ?? EntityRelation.None);
+    }
+
+    /// <summary>
+    /// A Workset switched off in a View (Visibility/Graphics > Worksets), read from the view's template when the template
+    /// controls worksets. 3D views only (5.18.0).
+    /// </summary>
+    [TableName(TableNames.HiddenWorksetInView)]
+    public partial class HiddenWorksetInView : Entity, IStorageKey
+    {
+        public Relation<View> _View;
+        public Relation<Workset> _Workset;
+
+        /// <summary>None (-1): a host workset off in the host view. Set: a workset of that linked model, off for it in this view.</summary>
+        public Relation<LinkInView> _LinkInView;
+
+        public object GetStorageKey()
+            => (_Workset.CombineAsStorageKey(_View), _LinkInView?.Index ?? EntityRelation.None);
+    }
+
+    /// <summary>
+    /// An Element a View does not draw although its category and workset are shown: hidden by hand in the view
+    /// (Hide in View > Elements; Reason "Hidden in view") or by an enabled view filter switched off (Reason "Filter",
+    /// with that FilterInView). Temporary hide/isolate is not included. 3D views only (5.18.0; see also
+    /// ElementOverrideInView.IsHidden, 5.13.0).
+    /// </summary>
+    [TableName(TableNames.HiddenElementInView)]
+    [CascadeElementRemap]
+    public partial class HiddenElementInView : EntityWithElement, IStorageKey
+    {
+        /// <summary>"Hidden in view" or "Filter".</summary>
+        public string Reason;
+
+        public Relation<View> _View;
+        public Relation<FilterInView> _FilterInView;
+
+        /// <summary>None (-1): a host element. Set: an element of that linked model, hidden for it in this view.</summary>
+        public Relation<LinkInView> _LinkInView;
+
+        public object GetStorageKey()
+            => (_Element.CombineAsStorageKey(_View), _LinkInView?.Index ?? EntityRelation.None);
+    }
+
+    /// <summary>
+    /// A Revit link instance (a linked model) in a View: whether the view draws it, and how (Visibility/Graphics > Revit Links >
+    /// Display Settings). The Element is the link instance in the host model. What the link hides in this view is written to
+    /// HiddenCategoryInView / HiddenWorksetInView / FilterInView / HiddenElementInView with this row as their LinkInView (5.18.0).
+    /// </summary>
+    [TableName(TableNames.LinkInView)]
+    [CascadeElementRemap]
+    public partial class LinkInView : EntityWithElement, IStorageKey
+    {
+        /// <summary>"By host view", "By linked view" or "Custom" (empty when the authoring tool cannot say, e.g. Revit before 2024).</summary>
+        public string Display;
+
+        /// <summary>Where the display setting was read: "Instance", "Type" (no instance override), "Template ..." when the view's template controls links.</summary>
+        public string SettingsFrom;
+
+        /// <summary>True when the view does not draw this link at all.</summary>
+        public bool IsHidden;
+
+        /// <summary>Why the link is not drawn, "; "-separated: "Hidden in view", "Link type hidden in view", "Category RVT Links off", "Workset off".</summary>
+        public string HiddenBy;
+
+        /// <summary>The link is drawn halftone in this view (Visibility/Graphics > Revit Links > Halftone).</summary>
+        public bool IsHalftone;
+
+        /// <summary>The name of the linked model's view the link is drawn by ("By linked view", or a custom setting based on a linked view).</summary>
+        public string LinkedViewName;
+
+        /// <summary>Custom sub-setting: "By host view", "By linked view", "Custom" or "Custom: value".</summary>
+        public string ViewFilters;
+
+        /// <summary>Custom sub-setting: "By host view", "By linked view", "Custom" or "Custom: value".</summary>
+        public string ObjectStyles;
+
+        /// <summary>Custom sub-setting: "By host view" or "By linked view".</summary>
+        public string NestedLinks;
+
+        /// <summary>Custom sub-setting: "By host view", "By linked view", "Custom: phase name".</summary>
+        public string Phase;
+
+        /// <summary>Custom sub-setting: "By host view", "By linked view", "Custom: phase filter name".</summary>
+        public string PhaseFilter;
+
+        /// <summary>Custom sub-setting: "By host view", "By linked view", "Custom: detail level".</summary>
+        public string DetailLevel;
+
+        /// <summary>Custom sub-setting: "By host view", "By linked view", "Custom: discipline".</summary>
+        public string Discipline;
+
+        /// <summary>Where the hidden worksets of the linked model come from: "Linked view", "Linked model defaults", "Measured", "Not workshared".</summary>
+        public string LinkedWorksets;
+
+        /// <summary>True when what the link hides was measured from what Revit draws (Revit lists the link's elements it draws in the view).</summary>
+        public bool IsMeasured;
+
+        /// <summary>When measured: how many of the link's elements the view draws.</summary>
+        public int MeasuredVisibleCount;
+
+        /// <summary>The settings of this link in this view the authoring tool's API does not expose ("; "-separated).</summary>
+        public string NotReadable;
+
+        public Relation<View> _View;
+        public Relation<BimDocument> _LinkedDocument;
+        public Relation<View> _LinkedView;
+
+        public object GetStorageKey()
+            => _Element.CombineAsStorageKey(_View);
     }
 
     /// <summary>
@@ -2222,6 +2700,73 @@ namespace Vim.Format.ObjectModel
             get => new DVector3(CutBackgroundPatternColor_X, CutBackgroundPatternColor_Y, CutBackgroundPatternColor_Z);
             set => (CutBackgroundPatternColor_X, CutBackgroundPatternColor_Y, CutBackgroundPatternColor_Z) = value;
         }
+
+        // ---------------------------------------------------------------------------------------------------------------
+        // Realistic appearance (5.18.0). Revit has two looks per material: the Graphics shading colour (ShadingColor above,
+        // what Shaded / Consistent Colors views show) and the Appearance asset (what Realistic views and renders show).
+        // The fields below carry the appearance; they are filled only when the exporter's experimental "Realistic
+        // materials" option asks for it. AppearanceKind is empty when they were not exported.
+        // ---------------------------------------------------------------------------------------------------------------
+
+        /// <summary>The appearance class the values were read from, e.g. "Generic", "Masonry", "PrismOpaque". Empty when not exported.</summary>
+        public string AppearanceKind;
+
+        /// <summary>The appearance base colour without its texture (Revit: Generic > Color, or the class colour), in [0..1].</summary>
+        public double AppearanceColor_X;
+        public double AppearanceColor_Y;
+        public double AppearanceColor_Z;
+        public DVector3 AppearanceColor
+        {
+            get => new DVector3(AppearanceColor_X, AppearanceColor_Y, AppearanceColor_Z);
+            set => (AppearanceColor_X, AppearanceColor_Y, AppearanceColor_Z) = value;
+        }
+
+        /// <summary>The tint multiplied over the colour and its texture (Revit: Tint), (1, 1, 1) when there is no tint.</summary>
+        public double AppearanceTint_X = 1;
+        public double AppearanceTint_Y = 1;
+        public double AppearanceTint_Z = 1;
+        public DVector3 AppearanceTint
+        {
+            get => new DVector3(AppearanceTint_X, AppearanceTint_Y, AppearanceTint_Z);
+            set => (AppearanceTint_X, AppearanceTint_Y, AppearanceTint_Z) = value;
+        }
+
+        /// <summary>How much the colour texture covers the base colour, in [0..1] (Revit: Image Fade; 1 = the image only).</summary>
+        public double AppearanceImageFade = 1;
+
+        /// <summary>The appearance transparency, in [0..1] (Revit: Transparency > Amount).</summary>
+        public double AppearanceTransparency;
+
+        /// <summary>The surface roughness, in [0..1] (0 = mirror-smooth; Revit: 1 - Glossiness, or Roughness).</summary>
+        public double Roughness;
+
+        /// <summary>The metalness, in [0..1] (Revit: Highlights = Metallic, or a Metal class).</summary>
+        public double Metalness;
+
+        /// <summary>The reflectivity facing the viewer, in [0..1] (Revit: Reflectivity > Direct, or F0).</summary>
+        public double Reflectivity;
+
+        /// <summary>The index of refraction (1 = none; glass is about 1.5).</summary>
+        public double RefractionIndex = 1;
+
+        /// <summary>The self-illumination colour, in [0..1] (Revit: Self Illumination > Filter Color).</summary>
+        public double EmissionColor_X;
+        public double EmissionColor_Y;
+        public double EmissionColor_Z;
+        public DVector3 EmissionColor
+        {
+            get => new DVector3(EmissionColor_X, EmissionColor_Y, EmissionColor_Z);
+            set => (EmissionColor_X, EmissionColor_Y, EmissionColor_Z) = value;
+        }
+
+        /// <summary>The self-illumination luminance in candelas per square metre (0 = none).</summary>
+        public double EmissionLuminance;
+
+        /// <summary>Where the colour texture came from: "Bitmap", or "Baked Tile" / "Baked Checker" / ... for a Revit procedural texture baked to an image. Empty when none.</summary>
+        public string ColorTextureKind;
+
+        /// <summary>What the normal texture holds: "Height" (a grey bump map) or "Normal" (a normal map). Empty when none.</summary>
+        public string NormalTextureKind;
     }
 
     /// <summary>
@@ -4052,6 +4597,178 @@ namespace Vim.Format.ObjectModel
 
         public ActivityMarkerKind GetKind()
             => (ActivityMarkerKind) Kind;
+    }
+
+    /// <summary>
+    /// A CAD file (DWG, DXF, DGN, SKP, SAT, 3DM...) brought into a model, IMPORTED or LINKED (5.16.0). One row per file per
+    /// document; its placements are the CadInstance rows. Written by the exporter's experimental "CAD files and unused
+    /// types" option, otherwise empty.
+    /// <para>
+    /// Revit: a CADLinkType. Revit uses that one class for both kinds: a LINKED file stays connected to the file on disk
+    /// (Element.IsExternalFileReference() = true, Manage Links lists it); an IMPORTED file is copied into the model and keeps
+    /// no connection (IsLinked = false). Imported CAD is the bad practice (it bloats the model and cannot be updated); linked
+    /// CAD is fine.
+    /// </para>
+    /// <para>
+    /// Revit also creates a top-level Category named after the file ("PLAN.dwg", BuiltInCategory "INVALID") with the file's
+    /// layers as its subcategories: that category exists as long as the file is in the model, even when nothing of it is in
+    /// the exported 3D view. Count CAD files here, not by category names.
+    /// </para>
+    /// The Element relation is the CADLinkType element (which also has a FamilyType row, so it can carry parameters).
+    /// </summary>
+    [TableName(TableNames.CadFile)]
+    public partial class CadFile : EntityWithElement
+    {
+        /// <summary>The file name as Revit shows it, extension included ("OVERHEAD CARRIER TYPE 2.dwg").</summary>
+        public string FileName;
+
+        /// <summary>The file extension in lower case, without the dot ("dwg").</summary>
+        public string Extension;
+
+        /// <summary>True = linked (connected to the file on disk). False = imported (copied into the model).</summary>
+        public bool IsLinked;
+
+        /// <summary>A linked file: the path saved in the model (may be relative). Empty for an imported file.</summary>
+        public string SavedPath;
+
+        /// <summary>A linked file: the absolute path Revit resolves it to. Empty for an imported file.</summary>
+        public string AbsolutePath;
+
+        /// <summary>A linked file: "Absolute", "Relative" or "Server". Empty for an imported file.</summary>
+        public string PathType;
+
+        /// <summary>A linked file: Revit's LinkedFileStatus ("Loaded", "NotFound", "Unloaded", "LocallyUnloaded"...). Empty for an imported file.</summary>
+        public string LinkStatus;
+
+        /// <summary>How many placements (CadInstance rows) of this file the document has; -1 when not counted.</summary>
+        public int InstanceCount = -1;
+
+        /// <summary>How many of those placements are view-specific (placed in one 2D view only, "Current view only"); -1 when not counted.</summary>
+        public int ViewSpecificInstanceCount = -1;
+
+        /// <summary>The integer representation of the ElementPurgeState enum: 2 (Purgeable) = Revit's Purge Unused would remove this file.</summary>
+        public int PurgeState;
+
+        public ElementPurgeState GetPurgeState()
+            => (ElementPurgeState) PurgeState;
+
+        /// <summary>
+        /// True when the drawing was exploded: the model holds pieces of it, each a separate import of one of its blocks
+        /// (Revit: an ImportInstance whose type is not the CADLinkType but an "Import Symbol" type named
+        /// "[file name].[block name]", in the file's import category). The pieces are CadInstance rows with IsExplodedPiece;
+        /// they are not counted in InstanceCount.
+        /// </summary>
+        public bool IsExploded;
+
+        /// <summary>How many exploded pieces of this drawing the document has (0 when not exploded). Line work the explode
+        /// turned into Revit lines and text is not counted.</summary>
+        public int ExplodedPieceCount;
+
+        /// <summary>How many of those pieces are placed in the model (not view-specific): they show in 3D.</summary>
+        public int ExplodedModelPieceCount;
+
+        /// <summary>How many views hold view-specific pieces of this drawing.</summary>
+        public int ExplodedViewCount;
+
+        /// <summary>How many of those views show the model (not a drafting view, legend, sheet or schedule).</summary>
+        public int ExplodedModelViewCount;
+
+        /// <summary>The integer representation of the CadExplodedSeverity enum: where the pieces sit, worst = highest.</summary>
+        public int ExplodedSeverity;
+
+        public CadExplodedSeverity GetExplodedSeverity()
+            => (CadExplodedSeverity) ExplodedSeverity;
+
+        /// <summary>The FamilyType row of the same CADLinkType element.</summary>
+        public Relation<FamilyType> _FamilyType;
+
+        /// <summary>The top-level category Revit created for the file (named after it).</summary>
+        public Relation<Category> _Category;
+    }
+
+    /// <summary>
+    /// One placement of a CadFile in a model (5.16.0). Revit: an ImportInstance. Every placement is written, including the
+    /// view-specific ones placed in a single plan or section, which have no 3D geometry (IsViewSpecific, OwnerView).
+    /// The Element relation is the ImportInstance element: its Workset, IsPinned, Level and Category are on the Element row.
+    /// A placement which shows in the exported 3D view also has geometry like any other element.
+    /// </summary>
+    [TableName(TableNames.CadInstance)]
+    [CascadeElementRemap]
+    public partial class CadInstance : EntityWithElement
+    {
+        /// <summary>The file name, extension included (the same as the CadFile's FileName).</summary>
+        public string FileName;
+
+        /// <summary>True = a placement of a linked file. False = of an imported file (Revit ImportInstance.IsLinked).</summary>
+        public bool IsLinked;
+
+        /// <summary>True when the placement belongs to one view only ("Current view only"; Revit Element.ViewSpecific). OwnerView is that view.</summary>
+        public bool IsViewSpecific;
+
+        /// <summary>True when this is not a placement of the drawing but a piece left by exploding it (its CadFile has
+        /// IsExploded). Not counted in CadFile.InstanceCount; not a drawing of its own.</summary>
+        public bool IsExplodedPiece;
+
+        public Relation<CadFile> _CadFile;
+
+        /// <summary>The view which owns a view-specific placement (Revit Element.OwnerViewId); none otherwise.</summary>
+        public Relation<View> _OwnerView;
+    }
+
+    /// <summary>
+    /// How a VR walk (Prepare for Quest) collides with an element. Stored as text in QuestElement.CollisionClass (5.18.0).
+    /// </summary>
+    public static class QuestCollisionClass
+    {
+        /// <summary>Solid: the walker stands on it and cannot pass through it (floors, stairs, walls, roofs, railings, structure).</summary>
+        public const string Full = "Full";
+        /// <summary>Furniture and equipment standing on the floor: blocks the walker with a rough shell that never goes beyond the shape (shell not written yet).</summary>
+        public const string Furniture = "Furniture";
+        /// <summary>Walk through it (doors, windows).</summary>
+        public const string Pass = "Pass";
+        /// <summary>No collision (MEP, light fixtures, devices, rooms, masses, generic models).</summary>
+        public const string None = "None";
+    }
+
+    /// <summary>
+    /// One row per stored model element of an export with the "Prepare for Quest" option: how a VR walk collides with it,
+    /// which levels it streams with, and its world bounding box. Written only when the option is on (5.18.0).
+    /// </summary>
+    [TableName(TableNames.QuestElement)]
+    [CascadeElementRemap]
+    public partial class QuestElement : EntityWithElement, IStorageKey
+    {
+        /// <summary>"Full", "Furniture", "Pass" or "None" (see QuestCollisionClass), decided by the element's built-in category.</summary>
+        public string CollisionClass;
+
+        /// <summary>The built-in category which decided the class (for example "OST_Walls"). A category outside the rule is Full, and is still named here.</summary>
+        public string CollisionCategory;
+
+        /// <summary>The bottom level the element streams with: the level of its own document with the greatest project elevation at or below the element's bottom (+1 ft). Floors and roofs use their top.</summary>
+        public Relation<Level> _StreamLevel;
+
+        /// <summary>The top level the element streams with (same rule on the element's top - 1 ft); differs from StreamLevel for walls and risers spanning floors.</summary>
+        public Relation<Level> _StreamTopLevel;
+
+        /// <summary>The element's bounding box in world coordinates (the same frame and units, feet, as the geometry).</summary>
+        public double BoundsMin_X;
+        public double BoundsMin_Y;
+        public double BoundsMin_Z;
+        public double BoundsMax_X;
+        public double BoundsMax_Y;
+        public double BoundsMax_Z;
+        public DAABox Bounds
+        {
+            get => new DAABox(new DVector3(BoundsMin_X, BoundsMin_Y, BoundsMin_Z), new DVector3(BoundsMax_X, BoundsMax_Y, BoundsMax_Z));
+            set
+            {
+                (BoundsMin_X, BoundsMin_Y, BoundsMin_Z) = value.Min;
+                (BoundsMax_X, BoundsMax_Y, BoundsMax_Z) = value.Max;
+            }
+        }
+
+        public object GetStorageKey()
+            => _Element?.Index ?? EntityRelation.None;
     }
 
     /// <summary>

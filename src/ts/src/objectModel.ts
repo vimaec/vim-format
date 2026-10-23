@@ -624,6 +624,7 @@ export interface IElement {
     creator?: string
     lastChangedBy?: string
     owner?: string
+    changeToken?: string
     
     levelIndex?: number
     level?: ILevel
@@ -680,6 +681,8 @@ export interface IElementTable {
     getAllLastChangedBy(): Promise<string[] | undefined>
     getOwner(elementIndex: number): Promise<string | undefined>
     getAllOwner(): Promise<string[] | undefined>
+    getChangeToken(elementIndex: number): Promise<string | undefined>
+    getAllChangeToken(): Promise<string[] | undefined>
     
     getLevelIndex(elementIndex: number): Promise<number | undefined>
     getAllLevelIndex(): Promise<number[] | undefined>
@@ -731,6 +734,7 @@ export class Element implements IElement {
     creator?: string
     lastChangedBy?: string
     owner?: string
+    changeToken?: string
     
     levelIndex?: number
     level?: ILevel
@@ -773,6 +777,7 @@ export class Element implements IElement {
             table.getCreator(index).then(v => result.creator = v),
             table.getLastChangedBy(index).then(v => result.lastChangedBy = v),
             table.getOwner(index).then(v => result.owner = v),
+            table.getChangeToken(index).then(v => result.changeToken = v),
             table.getLevelIndex(index).then(v => result.levelIndex = v),
             table.getPhaseCreatedIndex(index).then(v => result.phaseCreatedIndex = v),
             table.getPhaseDemolishedIndex(index).then(v => result.phaseDemolishedIndex = v),
@@ -832,6 +837,7 @@ export class ElementTable implements IElementTable {
         let creator: string[] | undefined
         let lastChangedBy: string[] | undefined
         let owner: string[] | undefined
+        let changeToken: string[] | undefined
         let levelIndex: number[] | undefined
         let phaseCreatedIndex: number[] | undefined
         let phaseDemolishedIndex: number[] | undefined
@@ -858,6 +864,7 @@ export class ElementTable implements IElementTable {
             (async () => { creator = (await localTable.getStringArray("string:Creator")) })(),
             (async () => { lastChangedBy = (await localTable.getStringArray("string:LastChangedBy")) })(),
             (async () => { owner = (await localTable.getStringArray("string:Owner")) })(),
+            (async () => { changeToken = (await localTable.getStringArray("string:ChangeToken")) })(),
             (async () => { levelIndex = (await localTable.getNumberArray("index:Vim.Level:Level")) })(),
             (async () => { phaseCreatedIndex = (await localTable.getNumberArray("index:Vim.Phase:PhaseCreated")) })(),
             (async () => { phaseDemolishedIndex = (await localTable.getNumberArray("index:Vim.Phase:PhaseDemolished")) })(),
@@ -890,6 +897,7 @@ export class ElementTable implements IElementTable {
                 creator: creator ? creator[i] : undefined,
                 lastChangedBy: lastChangedBy ? lastChangedBy[i] : undefined,
                 owner: owner ? owner[i] : undefined,
+                changeToken: changeToken ? changeToken[i] : undefined,
                 levelIndex: levelIndex ? levelIndex[i] : undefined,
                 phaseCreatedIndex: phaseCreatedIndex ? phaseCreatedIndex[i] : undefined,
                 phaseDemolishedIndex: phaseDemolishedIndex ? phaseDemolishedIndex[i] : undefined,
@@ -1009,6 +1017,14 @@ export class ElementTable implements IElementTable {
     
     async getAllOwner(): Promise<string[] | undefined> {
         return (await this.entityTable.getStringArray("string:Owner"))
+    }
+    
+    async getChangeToken(elementIndex: number): Promise<string | undefined> {
+        return (await this.entityTable.getString(elementIndex, "string:ChangeToken"))
+    }
+    
+    async getAllChangeToken(): Promise<string[] | undefined> {
+        return (await this.entityTable.getStringArray("string:ChangeToken"))
     }
     
     async getLevelIndex(elementIndex: number): Promise<number | undefined> {
@@ -2431,6 +2447,7 @@ export interface IBimDocument {
     isMetric?: boolean
     guid?: string
     numSaves?: number
+    identity?: string
     isLinked?: boolean
     isDetached?: boolean
     isWorkshared?: boolean
@@ -2456,6 +2473,12 @@ export interface IBimDocument {
     version?: string
     user?: string
     fileLength?: bigint
+    fileLengthSource?: number
+    fileLengthPath?: string
+    isCloudModel?: boolean
+    cloudProjectGuid?: string
+    cloudModelGuid?: string
+    purgeableElementCount?: number
     
     activeViewIndex?: number
     activeView?: IView
@@ -2480,6 +2503,8 @@ export interface IBimDocumentTable {
     getAllGuid(): Promise<string[] | undefined>
     getNumSaves(bimDocumentIndex: number): Promise<number | undefined>
     getAllNumSaves(): Promise<number[] | undefined>
+    getIdentity(bimDocumentIndex: number): Promise<string | undefined>
+    getAllIdentity(): Promise<string[] | undefined>
     getIsLinked(bimDocumentIndex: number): Promise<boolean | undefined>
     getAllIsLinked(): Promise<boolean[] | undefined>
     getIsDetached(bimDocumentIndex: number): Promise<boolean | undefined>
@@ -2530,6 +2555,18 @@ export interface IBimDocumentTable {
     getAllUser(): Promise<string[] | undefined>
     getFileLength(bimDocumentIndex: number): Promise<bigint | undefined>
     getAllFileLength(): Promise<BigInt64Array | undefined>
+    getFileLengthSource(bimDocumentIndex: number): Promise<number | undefined>
+    getAllFileLengthSource(): Promise<number[] | undefined>
+    getFileLengthPath(bimDocumentIndex: number): Promise<string | undefined>
+    getAllFileLengthPath(): Promise<string[] | undefined>
+    getIsCloudModel(bimDocumentIndex: number): Promise<boolean | undefined>
+    getAllIsCloudModel(): Promise<boolean[] | undefined>
+    getCloudProjectGuid(bimDocumentIndex: number): Promise<string | undefined>
+    getAllCloudProjectGuid(): Promise<string[] | undefined>
+    getCloudModelGuid(bimDocumentIndex: number): Promise<string | undefined>
+    getAllCloudModelGuid(): Promise<string[] | undefined>
+    getPurgeableElementCount(bimDocumentIndex: number): Promise<number | undefined>
+    getAllPurgeableElementCount(): Promise<number[] | undefined>
     
     getActiveViewIndex(bimDocumentIndex: number): Promise<number | undefined>
     getAllActiveViewIndex(): Promise<number[] | undefined>
@@ -2551,6 +2588,7 @@ export class BimDocument implements IBimDocument {
     isMetric?: boolean
     guid?: string
     numSaves?: number
+    identity?: string
     isLinked?: boolean
     isDetached?: boolean
     isWorkshared?: boolean
@@ -2576,6 +2614,12 @@ export class BimDocument implements IBimDocument {
     version?: string
     user?: string
     fileLength?: bigint
+    fileLengthSource?: number
+    fileLengthPath?: string
+    isCloudModel?: boolean
+    cloudProjectGuid?: string
+    cloudModelGuid?: string
+    purgeableElementCount?: number
     
     activeViewIndex?: number
     activeView?: IView
@@ -2595,6 +2639,7 @@ export class BimDocument implements IBimDocument {
             table.getIsMetric(index).then(v => result.isMetric = v),
             table.getGuid(index).then(v => result.guid = v),
             table.getNumSaves(index).then(v => result.numSaves = v),
+            table.getIdentity(index).then(v => result.identity = v),
             table.getIsLinked(index).then(v => result.isLinked = v),
             table.getIsDetached(index).then(v => result.isDetached = v),
             table.getIsWorkshared(index).then(v => result.isWorkshared = v),
@@ -2620,6 +2665,12 @@ export class BimDocument implements IBimDocument {
             table.getVersion(index).then(v => result.version = v),
             table.getUser(index).then(v => result.user = v),
             table.getFileLength(index).then(v => result.fileLength = v),
+            table.getFileLengthSource(index).then(v => result.fileLengthSource = v),
+            table.getFileLengthPath(index).then(v => result.fileLengthPath = v),
+            table.getIsCloudModel(index).then(v => result.isCloudModel = v),
+            table.getCloudProjectGuid(index).then(v => result.cloudProjectGuid = v),
+            table.getCloudModelGuid(index).then(v => result.cloudModelGuid = v),
+            table.getPurgeableElementCount(index).then(v => result.purgeableElementCount = v),
             table.getActiveViewIndex(index).then(v => result.activeViewIndex = v),
             table.getOwnerFamilyIndex(index).then(v => result.ownerFamilyIndex = v),
             table.getParentIndex(index).then(v => result.parentIndex = v),
@@ -2663,6 +2714,7 @@ export class BimDocumentTable implements IBimDocumentTable {
         let isMetric: boolean[] | undefined
         let guid: string[] | undefined
         let numSaves: number[] | undefined
+        let identity: string[] | undefined
         let isLinked: boolean[] | undefined
         let isDetached: boolean[] | undefined
         let isWorkshared: boolean[] | undefined
@@ -2688,6 +2740,12 @@ export class BimDocumentTable implements IBimDocumentTable {
         let version: string[] | undefined
         let user: string[] | undefined
         let fileLength: BigInt64Array | undefined
+        let fileLengthSource: number[] | undefined
+        let fileLengthPath: string[] | undefined
+        let isCloudModel: boolean[] | undefined
+        let cloudProjectGuid: string[] | undefined
+        let cloudModelGuid: string[] | undefined
+        let purgeableElementCount: number[] | undefined
         let activeViewIndex: number[] | undefined
         let ownerFamilyIndex: number[] | undefined
         let parentIndex: number[] | undefined
@@ -2698,6 +2756,7 @@ export class BimDocumentTable implements IBimDocumentTable {
             (async () => { isMetric = (await localTable.getBooleanArray("byte:IsMetric")) })(),
             (async () => { guid = (await localTable.getStringArray("string:Guid")) })(),
             (async () => { numSaves = (await localTable.getNumberArray("int:NumSaves")) })(),
+            (async () => { identity = (await localTable.getStringArray("string:Identity")) })(),
             (async () => { isLinked = (await localTable.getBooleanArray("byte:IsLinked")) })(),
             (async () => { isDetached = (await localTable.getBooleanArray("byte:IsDetached")) })(),
             (async () => { isWorkshared = (await localTable.getBooleanArray("byte:IsWorkshared")) })(),
@@ -2723,6 +2782,12 @@ export class BimDocumentTable implements IBimDocumentTable {
             (async () => { version = (await localTable.getStringArray("string:Version")) })(),
             (async () => { user = (await localTable.getStringArray("string:User")) })(),
             (async () => { fileLength = (await localTable.getBigIntArray("long:FileLength")) })(),
+            (async () => { fileLengthSource = (await localTable.getNumberArray("int:FileLengthSource")) })(),
+            (async () => { fileLengthPath = (await localTable.getStringArray("string:FileLengthPath")) })(),
+            (async () => { isCloudModel = (await localTable.getBooleanArray("byte:IsCloudModel")) })(),
+            (async () => { cloudProjectGuid = (await localTable.getStringArray("string:CloudProjectGuid")) })(),
+            (async () => { cloudModelGuid = (await localTable.getStringArray("string:CloudModelGuid")) })(),
+            (async () => { purgeableElementCount = (await localTable.getNumberArray("int:PurgeableElementCount")) })(),
             (async () => { activeViewIndex = (await localTable.getNumberArray("index:Vim.View:ActiveView")) })(),
             (async () => { ownerFamilyIndex = (await localTable.getNumberArray("index:Vim.Family:OwnerFamily")) })(),
             (async () => { parentIndex = (await localTable.getNumberArray("index:Vim.BimDocument:Parent")) })(),
@@ -2739,6 +2804,7 @@ export class BimDocumentTable implements IBimDocumentTable {
                 isMetric: isMetric ? isMetric[i] : undefined,
                 guid: guid ? guid[i] : undefined,
                 numSaves: numSaves ? numSaves[i] : undefined,
+                identity: identity ? identity[i] : undefined,
                 isLinked: isLinked ? isLinked[i] : undefined,
                 isDetached: isDetached ? isDetached[i] : undefined,
                 isWorkshared: isWorkshared ? isWorkshared[i] : undefined,
@@ -2764,6 +2830,12 @@ export class BimDocumentTable implements IBimDocumentTable {
                 version: version ? version[i] : undefined,
                 user: user ? user[i] : undefined,
                 fileLength: fileLength ? fileLength[i] : undefined,
+                fileLengthSource: fileLengthSource ? fileLengthSource[i] : undefined,
+                fileLengthPath: fileLengthPath ? fileLengthPath[i] : undefined,
+                isCloudModel: isCloudModel ? isCloudModel[i] : undefined,
+                cloudProjectGuid: cloudProjectGuid ? cloudProjectGuid[i] : undefined,
+                cloudModelGuid: cloudModelGuid ? cloudModelGuid[i] : undefined,
+                purgeableElementCount: purgeableElementCount ? purgeableElementCount[i] : undefined,
                 activeViewIndex: activeViewIndex ? activeViewIndex[i] : undefined,
                 ownerFamilyIndex: ownerFamilyIndex ? ownerFamilyIndex[i] : undefined,
                 parentIndex: parentIndex ? parentIndex[i] : undefined,
@@ -2804,6 +2876,14 @@ export class BimDocumentTable implements IBimDocumentTable {
     
     async getAllNumSaves(): Promise<number[] | undefined> {
         return (await this.entityTable.getNumberArray("int:NumSaves"))
+    }
+    
+    async getIdentity(bimDocumentIndex: number): Promise<string | undefined> {
+        return (await this.entityTable.getString(bimDocumentIndex, "string:Identity"))
+    }
+    
+    async getAllIdentity(): Promise<string[] | undefined> {
+        return (await this.entityTable.getStringArray("string:Identity"))
     }
     
     async getIsLinked(bimDocumentIndex: number): Promise<boolean | undefined> {
@@ -3004,6 +3084,54 @@ export class BimDocumentTable implements IBimDocumentTable {
     
     async getAllFileLength(): Promise<BigInt64Array | undefined> {
         return (await this.entityTable.getBigIntArray("long:FileLength"))
+    }
+    
+    async getFileLengthSource(bimDocumentIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(bimDocumentIndex, "int:FileLengthSource"))
+    }
+    
+    async getAllFileLengthSource(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("int:FileLengthSource"))
+    }
+    
+    async getFileLengthPath(bimDocumentIndex: number): Promise<string | undefined> {
+        return (await this.entityTable.getString(bimDocumentIndex, "string:FileLengthPath"))
+    }
+    
+    async getAllFileLengthPath(): Promise<string[] | undefined> {
+        return (await this.entityTable.getStringArray("string:FileLengthPath"))
+    }
+    
+    async getIsCloudModel(bimDocumentIndex: number): Promise<boolean | undefined> {
+        return (await this.entityTable.getBoolean(bimDocumentIndex, "byte:IsCloudModel"))
+    }
+    
+    async getAllIsCloudModel(): Promise<boolean[] | undefined> {
+        return (await this.entityTable.getBooleanArray("byte:IsCloudModel"))
+    }
+    
+    async getCloudProjectGuid(bimDocumentIndex: number): Promise<string | undefined> {
+        return (await this.entityTable.getString(bimDocumentIndex, "string:CloudProjectGuid"))
+    }
+    
+    async getAllCloudProjectGuid(): Promise<string[] | undefined> {
+        return (await this.entityTable.getStringArray("string:CloudProjectGuid"))
+    }
+    
+    async getCloudModelGuid(bimDocumentIndex: number): Promise<string | undefined> {
+        return (await this.entityTable.getString(bimDocumentIndex, "string:CloudModelGuid"))
+    }
+    
+    async getAllCloudModelGuid(): Promise<string[] | undefined> {
+        return (await this.entityTable.getStringArray("string:CloudModelGuid"))
+    }
+    
+    async getPurgeableElementCount(bimDocumentIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(bimDocumentIndex, "int:PurgeableElementCount"))
+    }
+    
+    async getAllPurgeableElementCount(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("int:PurgeableElementCount"))
     }
     
     async getActiveViewIndex(bimDocumentIndex: number): Promise<number | undefined> {
@@ -3718,6 +3846,8 @@ export interface IFamily {
     structuralSectionShape?: string
     isSystemFamily?: boolean
     isInPlace?: boolean
+    instanceCount?: number
+    purgeState?: number
     
     familyCategoryIndex?: number
     familyCategory?: ICategory
@@ -3738,6 +3868,10 @@ export interface IFamilyTable {
     getAllIsSystemFamily(): Promise<boolean[] | undefined>
     getIsInPlace(familyIndex: number): Promise<boolean | undefined>
     getAllIsInPlace(): Promise<boolean[] | undefined>
+    getInstanceCount(familyIndex: number): Promise<number | undefined>
+    getAllInstanceCount(): Promise<number[] | undefined>
+    getPurgeState(familyIndex: number): Promise<number | undefined>
+    getAllPurgeState(): Promise<number[] | undefined>
     
     getFamilyCategoryIndex(familyIndex: number): Promise<number | undefined>
     getAllFamilyCategoryIndex(): Promise<number[] | undefined>
@@ -3753,6 +3887,8 @@ export class Family implements IFamily {
     structuralSectionShape?: string
     isSystemFamily?: boolean
     isInPlace?: boolean
+    instanceCount?: number
+    purgeState?: number
     
     familyCategoryIndex?: number
     familyCategory?: ICategory
@@ -3768,6 +3904,8 @@ export class Family implements IFamily {
             table.getStructuralSectionShape(index).then(v => result.structuralSectionShape = v),
             table.getIsSystemFamily(index).then(v => result.isSystemFamily = v),
             table.getIsInPlace(index).then(v => result.isInPlace = v),
+            table.getInstanceCount(index).then(v => result.instanceCount = v),
+            table.getPurgeState(index).then(v => result.purgeState = v),
             table.getFamilyCategoryIndex(index).then(v => result.familyCategoryIndex = v),
             table.getElementIndex(index).then(v => result.elementIndex = v),
         ])
@@ -3809,6 +3947,8 @@ export class FamilyTable implements IFamilyTable {
         let structuralSectionShape: string[] | undefined
         let isSystemFamily: boolean[] | undefined
         let isInPlace: boolean[] | undefined
+        let instanceCount: number[] | undefined
+        let purgeState: number[] | undefined
         let familyCategoryIndex: number[] | undefined
         let elementIndex: number[] | undefined
         
@@ -3817,6 +3957,8 @@ export class FamilyTable implements IFamilyTable {
             (async () => { structuralSectionShape = (await localTable.getStringArray("string:StructuralSectionShape")) })(),
             (async () => { isSystemFamily = (await localTable.getBooleanArray("byte:IsSystemFamily")) })(),
             (async () => { isInPlace = (await localTable.getBooleanArray("byte:IsInPlace")) })(),
+            (async () => { instanceCount = (await localTable.getNumberArray("int:InstanceCount")) })(),
+            (async () => { purgeState = (await localTable.getNumberArray("int:PurgeState")) })(),
             (async () => { familyCategoryIndex = (await localTable.getNumberArray("index:Vim.Category:FamilyCategory")) })(),
             (async () => { elementIndex = (await localTable.getNumberArray("index:Vim.Element:Element")) })(),
         ])
@@ -3831,6 +3973,8 @@ export class FamilyTable implements IFamilyTable {
                 structuralSectionShape: structuralSectionShape ? structuralSectionShape[i] : undefined,
                 isSystemFamily: isSystemFamily ? isSystemFamily[i] : undefined,
                 isInPlace: isInPlace ? isInPlace[i] : undefined,
+                instanceCount: instanceCount ? instanceCount[i] : undefined,
+                purgeState: purgeState ? purgeState[i] : undefined,
                 familyCategoryIndex: familyCategoryIndex ? familyCategoryIndex[i] : undefined,
                 elementIndex: elementIndex ? elementIndex[i] : undefined
             })
@@ -3869,6 +4013,22 @@ export class FamilyTable implements IFamilyTable {
     
     async getAllIsInPlace(): Promise<boolean[] | undefined> {
         return (await this.entityTable.getBooleanArray("byte:IsInPlace"))
+    }
+    
+    async getInstanceCount(familyIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(familyIndex, "int:InstanceCount"))
+    }
+    
+    async getAllInstanceCount(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("int:InstanceCount"))
+    }
+    
+    async getPurgeState(familyIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(familyIndex, "int:PurgeState"))
+    }
+    
+    async getAllPurgeState(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("int:PurgeState"))
     }
     
     async getFamilyCategoryIndex(familyIndex: number): Promise<number | undefined> {
@@ -3912,6 +4072,8 @@ export class FamilyTable implements IFamilyTable {
 export interface IFamilyType {
     index: number
     isSystemFamilyType?: boolean
+    instanceCount?: number
+    purgeState?: number
     
     familyIndex?: number
     family?: IFamily
@@ -3928,6 +4090,10 @@ export interface IFamilyTypeTable {
     
     getIsSystemFamilyType(familyTypeIndex: number): Promise<boolean | undefined>
     getAllIsSystemFamilyType(): Promise<boolean[] | undefined>
+    getInstanceCount(familyTypeIndex: number): Promise<number | undefined>
+    getAllInstanceCount(): Promise<number[] | undefined>
+    getPurgeState(familyTypeIndex: number): Promise<number | undefined>
+    getAllPurgeState(): Promise<number[] | undefined>
     
     getFamilyIndex(familyTypeIndex: number): Promise<number | undefined>
     getAllFamilyIndex(): Promise<number[] | undefined>
@@ -3943,6 +4109,8 @@ export interface IFamilyTypeTable {
 export class FamilyType implements IFamilyType {
     index: number
     isSystemFamilyType?: boolean
+    instanceCount?: number
+    purgeState?: number
     
     familyIndex?: number
     family?: IFamily
@@ -3957,6 +4125,8 @@ export class FamilyType implements IFamilyType {
         
         await Promise.all([
             table.getIsSystemFamilyType(index).then(v => result.isSystemFamilyType = v),
+            table.getInstanceCount(index).then(v => result.instanceCount = v),
+            table.getPurgeState(index).then(v => result.purgeState = v),
             table.getFamilyIndex(index).then(v => result.familyIndex = v),
             table.getCompoundStructureIndex(index).then(v => result.compoundStructureIndex = v),
             table.getElementIndex(index).then(v => result.elementIndex = v),
@@ -3996,12 +4166,16 @@ export class FamilyTypeTable implements IFamilyTypeTable {
         const localTable = await this.entityTable.getLocal()
         
         let isSystemFamilyType: boolean[] | undefined
+        let instanceCount: number[] | undefined
+        let purgeState: number[] | undefined
         let familyIndex: number[] | undefined
         let compoundStructureIndex: number[] | undefined
         let elementIndex: number[] | undefined
         
         await Promise.all([
             (async () => { isSystemFamilyType = (await localTable.getBooleanArray("byte:IsSystemFamilyType")) })(),
+            (async () => { instanceCount = (await localTable.getNumberArray("int:InstanceCount")) })(),
+            (async () => { purgeState = (await localTable.getNumberArray("int:PurgeState")) })(),
             (async () => { familyIndex = (await localTable.getNumberArray("index:Vim.Family:Family")) })(),
             (async () => { compoundStructureIndex = (await localTable.getNumberArray("index:Vim.CompoundStructure:CompoundStructure")) })(),
             (async () => { elementIndex = (await localTable.getNumberArray("index:Vim.Element:Element")) })(),
@@ -4014,6 +4188,8 @@ export class FamilyTypeTable implements IFamilyTypeTable {
             familyType.push({
                 index: i,
                 isSystemFamilyType: isSystemFamilyType ? isSystemFamilyType[i] : undefined,
+                instanceCount: instanceCount ? instanceCount[i] : undefined,
+                purgeState: purgeState ? purgeState[i] : undefined,
                 familyIndex: familyIndex ? familyIndex[i] : undefined,
                 compoundStructureIndex: compoundStructureIndex ? compoundStructureIndex[i] : undefined,
                 elementIndex: elementIndex ? elementIndex[i] : undefined
@@ -4029,6 +4205,22 @@ export class FamilyTypeTable implements IFamilyTypeTable {
     
     async getAllIsSystemFamilyType(): Promise<boolean[] | undefined> {
         return (await this.entityTable.getBooleanArray("byte:IsSystemFamilyType"))
+    }
+    
+    async getInstanceCount(familyTypeIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(familyTypeIndex, "int:InstanceCount"))
+    }
+    
+    async getAllInstanceCount(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("int:InstanceCount"))
+    }
+    
+    async getPurgeState(familyTypeIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(familyTypeIndex, "int:PurgeState"))
+    }
+    
+    async getAllPurgeState(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("int:PurgeState"))
     }
     
     async getFamilyIndex(familyTypeIndex: number): Promise<number | undefined> {
@@ -4741,6 +4933,33 @@ export interface IView {
     hiddenElementCount?: number
     templateControlledSettings?: string
     graphicsRead?: boolean
+    isLocked?: boolean
+    cropBox_Min_X?: number
+    cropBox_Min_Y?: number
+    cropBox_Min_Z?: number
+    cropBox_Max_X?: number
+    cropBox_Max_Y?: number
+    cropBox_Max_Z?: number
+    isSectionBoxActive?: boolean
+    sectionBox_Min_X?: number
+    sectionBox_Min_Y?: number
+    sectionBox_Min_Z?: number
+    sectionBox_Max_X?: number
+    sectionBox_Max_Y?: number
+    sectionBox_Max_Z?: number
+    sectionBoxOrigin_X?: number
+    sectionBoxOrigin_Y?: number
+    sectionBoxOrigin_Z?: number
+    sectionBoxBasisX_X?: number
+    sectionBoxBasisX_Y?: number
+    sectionBoxBasisX_Z?: number
+    sectionBoxBasisY_X?: number
+    sectionBoxBasisY_Y?: number
+    sectionBoxBasisY_Z?: number
+    sectionBoxBasisZ_X?: number
+    sectionBoxBasisZ_Y?: number
+    sectionBoxBasisZ_Z?: number
+    displayStyle?: string
     
     cameraIndex?: number
     camera?: ICamera
@@ -4835,6 +5054,60 @@ export interface IViewTable {
     getAllTemplateControlledSettings(): Promise<string[] | undefined>
     getGraphicsRead(viewIndex: number): Promise<boolean | undefined>
     getAllGraphicsRead(): Promise<boolean[] | undefined>
+    getIsLocked(viewIndex: number): Promise<boolean | undefined>
+    getAllIsLocked(): Promise<boolean[] | undefined>
+    getCropBox_Min_X(viewIndex: number): Promise<number | undefined>
+    getAllCropBox_Min_X(): Promise<number[] | undefined>
+    getCropBox_Min_Y(viewIndex: number): Promise<number | undefined>
+    getAllCropBox_Min_Y(): Promise<number[] | undefined>
+    getCropBox_Min_Z(viewIndex: number): Promise<number | undefined>
+    getAllCropBox_Min_Z(): Promise<number[] | undefined>
+    getCropBox_Max_X(viewIndex: number): Promise<number | undefined>
+    getAllCropBox_Max_X(): Promise<number[] | undefined>
+    getCropBox_Max_Y(viewIndex: number): Promise<number | undefined>
+    getAllCropBox_Max_Y(): Promise<number[] | undefined>
+    getCropBox_Max_Z(viewIndex: number): Promise<number | undefined>
+    getAllCropBox_Max_Z(): Promise<number[] | undefined>
+    getIsSectionBoxActive(viewIndex: number): Promise<boolean | undefined>
+    getAllIsSectionBoxActive(): Promise<boolean[] | undefined>
+    getSectionBox_Min_X(viewIndex: number): Promise<number | undefined>
+    getAllSectionBox_Min_X(): Promise<number[] | undefined>
+    getSectionBox_Min_Y(viewIndex: number): Promise<number | undefined>
+    getAllSectionBox_Min_Y(): Promise<number[] | undefined>
+    getSectionBox_Min_Z(viewIndex: number): Promise<number | undefined>
+    getAllSectionBox_Min_Z(): Promise<number[] | undefined>
+    getSectionBox_Max_X(viewIndex: number): Promise<number | undefined>
+    getAllSectionBox_Max_X(): Promise<number[] | undefined>
+    getSectionBox_Max_Y(viewIndex: number): Promise<number | undefined>
+    getAllSectionBox_Max_Y(): Promise<number[] | undefined>
+    getSectionBox_Max_Z(viewIndex: number): Promise<number | undefined>
+    getAllSectionBox_Max_Z(): Promise<number[] | undefined>
+    getSectionBoxOrigin_X(viewIndex: number): Promise<number | undefined>
+    getAllSectionBoxOrigin_X(): Promise<number[] | undefined>
+    getSectionBoxOrigin_Y(viewIndex: number): Promise<number | undefined>
+    getAllSectionBoxOrigin_Y(): Promise<number[] | undefined>
+    getSectionBoxOrigin_Z(viewIndex: number): Promise<number | undefined>
+    getAllSectionBoxOrigin_Z(): Promise<number[] | undefined>
+    getSectionBoxBasisX_X(viewIndex: number): Promise<number | undefined>
+    getAllSectionBoxBasisX_X(): Promise<number[] | undefined>
+    getSectionBoxBasisX_Y(viewIndex: number): Promise<number | undefined>
+    getAllSectionBoxBasisX_Y(): Promise<number[] | undefined>
+    getSectionBoxBasisX_Z(viewIndex: number): Promise<number | undefined>
+    getAllSectionBoxBasisX_Z(): Promise<number[] | undefined>
+    getSectionBoxBasisY_X(viewIndex: number): Promise<number | undefined>
+    getAllSectionBoxBasisY_X(): Promise<number[] | undefined>
+    getSectionBoxBasisY_Y(viewIndex: number): Promise<number | undefined>
+    getAllSectionBoxBasisY_Y(): Promise<number[] | undefined>
+    getSectionBoxBasisY_Z(viewIndex: number): Promise<number | undefined>
+    getAllSectionBoxBasisY_Z(): Promise<number[] | undefined>
+    getSectionBoxBasisZ_X(viewIndex: number): Promise<number | undefined>
+    getAllSectionBoxBasisZ_X(): Promise<number[] | undefined>
+    getSectionBoxBasisZ_Y(viewIndex: number): Promise<number | undefined>
+    getAllSectionBoxBasisZ_Y(): Promise<number[] | undefined>
+    getSectionBoxBasisZ_Z(viewIndex: number): Promise<number | undefined>
+    getAllSectionBoxBasisZ_Z(): Promise<number[] | undefined>
+    getDisplayStyle(viewIndex: number): Promise<string | undefined>
+    getAllDisplayStyle(): Promise<string[] | undefined>
     
     getCameraIndex(viewIndex: number): Promise<number | undefined>
     getAllCameraIndex(): Promise<number[] | undefined>
@@ -4899,6 +5172,33 @@ export class View implements IView {
     hiddenElementCount?: number
     templateControlledSettings?: string
     graphicsRead?: boolean
+    isLocked?: boolean
+    cropBox_Min_X?: number
+    cropBox_Min_Y?: number
+    cropBox_Min_Z?: number
+    cropBox_Max_X?: number
+    cropBox_Max_Y?: number
+    cropBox_Max_Z?: number
+    isSectionBoxActive?: boolean
+    sectionBox_Min_X?: number
+    sectionBox_Min_Y?: number
+    sectionBox_Min_Z?: number
+    sectionBox_Max_X?: number
+    sectionBox_Max_Y?: number
+    sectionBox_Max_Z?: number
+    sectionBoxOrigin_X?: number
+    sectionBoxOrigin_Y?: number
+    sectionBoxOrigin_Z?: number
+    sectionBoxBasisX_X?: number
+    sectionBoxBasisX_Y?: number
+    sectionBoxBasisX_Z?: number
+    sectionBoxBasisY_X?: number
+    sectionBoxBasisY_Y?: number
+    sectionBoxBasisY_Z?: number
+    sectionBoxBasisZ_X?: number
+    sectionBoxBasisZ_Y?: number
+    sectionBoxBasisZ_Z?: number
+    displayStyle?: string
     
     cameraIndex?: number
     camera?: ICamera
@@ -4957,6 +5257,33 @@ export class View implements IView {
             table.getHiddenElementCount(index).then(v => result.hiddenElementCount = v),
             table.getTemplateControlledSettings(index).then(v => result.templateControlledSettings = v),
             table.getGraphicsRead(index).then(v => result.graphicsRead = v),
+            table.getIsLocked(index).then(v => result.isLocked = v),
+            table.getCropBox_Min_X(index).then(v => result.cropBox_Min_X = v),
+            table.getCropBox_Min_Y(index).then(v => result.cropBox_Min_Y = v),
+            table.getCropBox_Min_Z(index).then(v => result.cropBox_Min_Z = v),
+            table.getCropBox_Max_X(index).then(v => result.cropBox_Max_X = v),
+            table.getCropBox_Max_Y(index).then(v => result.cropBox_Max_Y = v),
+            table.getCropBox_Max_Z(index).then(v => result.cropBox_Max_Z = v),
+            table.getIsSectionBoxActive(index).then(v => result.isSectionBoxActive = v),
+            table.getSectionBox_Min_X(index).then(v => result.sectionBox_Min_X = v),
+            table.getSectionBox_Min_Y(index).then(v => result.sectionBox_Min_Y = v),
+            table.getSectionBox_Min_Z(index).then(v => result.sectionBox_Min_Z = v),
+            table.getSectionBox_Max_X(index).then(v => result.sectionBox_Max_X = v),
+            table.getSectionBox_Max_Y(index).then(v => result.sectionBox_Max_Y = v),
+            table.getSectionBox_Max_Z(index).then(v => result.sectionBox_Max_Z = v),
+            table.getSectionBoxOrigin_X(index).then(v => result.sectionBoxOrigin_X = v),
+            table.getSectionBoxOrigin_Y(index).then(v => result.sectionBoxOrigin_Y = v),
+            table.getSectionBoxOrigin_Z(index).then(v => result.sectionBoxOrigin_Z = v),
+            table.getSectionBoxBasisX_X(index).then(v => result.sectionBoxBasisX_X = v),
+            table.getSectionBoxBasisX_Y(index).then(v => result.sectionBoxBasisX_Y = v),
+            table.getSectionBoxBasisX_Z(index).then(v => result.sectionBoxBasisX_Z = v),
+            table.getSectionBoxBasisY_X(index).then(v => result.sectionBoxBasisY_X = v),
+            table.getSectionBoxBasisY_Y(index).then(v => result.sectionBoxBasisY_Y = v),
+            table.getSectionBoxBasisY_Z(index).then(v => result.sectionBoxBasisY_Z = v),
+            table.getSectionBoxBasisZ_X(index).then(v => result.sectionBoxBasisZ_X = v),
+            table.getSectionBoxBasisZ_Y(index).then(v => result.sectionBoxBasisZ_Y = v),
+            table.getSectionBoxBasisZ_Z(index).then(v => result.sectionBoxBasisZ_Z = v),
+            table.getDisplayStyle(index).then(v => result.displayStyle = v),
             table.getCameraIndex(index).then(v => result.cameraIndex = v),
             table.getFamilyTypeIndex(index).then(v => result.familyTypeIndex = v),
             table.getViewTemplateIndex(index).then(v => result.viewTemplateIndex = v),
@@ -5035,6 +5362,33 @@ export class ViewTable implements IViewTable {
         let hiddenElementCount: number[] | undefined
         let templateControlledSettings: string[] | undefined
         let graphicsRead: boolean[] | undefined
+        let isLocked: boolean[] | undefined
+        let cropBox_Min_X: number[] | undefined
+        let cropBox_Min_Y: number[] | undefined
+        let cropBox_Min_Z: number[] | undefined
+        let cropBox_Max_X: number[] | undefined
+        let cropBox_Max_Y: number[] | undefined
+        let cropBox_Max_Z: number[] | undefined
+        let isSectionBoxActive: boolean[] | undefined
+        let sectionBox_Min_X: number[] | undefined
+        let sectionBox_Min_Y: number[] | undefined
+        let sectionBox_Min_Z: number[] | undefined
+        let sectionBox_Max_X: number[] | undefined
+        let sectionBox_Max_Y: number[] | undefined
+        let sectionBox_Max_Z: number[] | undefined
+        let sectionBoxOrigin_X: number[] | undefined
+        let sectionBoxOrigin_Y: number[] | undefined
+        let sectionBoxOrigin_Z: number[] | undefined
+        let sectionBoxBasisX_X: number[] | undefined
+        let sectionBoxBasisX_Y: number[] | undefined
+        let sectionBoxBasisX_Z: number[] | undefined
+        let sectionBoxBasisY_X: number[] | undefined
+        let sectionBoxBasisY_Y: number[] | undefined
+        let sectionBoxBasisY_Z: number[] | undefined
+        let sectionBoxBasisZ_X: number[] | undefined
+        let sectionBoxBasisZ_Y: number[] | undefined
+        let sectionBoxBasisZ_Z: number[] | undefined
+        let displayStyle: string[] | undefined
         let cameraIndex: number[] | undefined
         let familyTypeIndex: number[] | undefined
         let viewTemplateIndex: number[] | undefined
@@ -5080,6 +5434,33 @@ export class ViewTable implements IViewTable {
             (async () => { hiddenElementCount = (await localTable.getNumberArray("int:HiddenElementCount")) })(),
             (async () => { templateControlledSettings = (await localTable.getStringArray("string:TemplateControlledSettings")) })(),
             (async () => { graphicsRead = (await localTable.getBooleanArray("byte:GraphicsRead")) })(),
+            (async () => { isLocked = (await localTable.getBooleanArray("byte:IsLocked")) })(),
+            (async () => { cropBox_Min_X = (await localTable.getNumberArray("double:CropBox.Min.X")) })(),
+            (async () => { cropBox_Min_Y = (await localTable.getNumberArray("double:CropBox.Min.Y")) })(),
+            (async () => { cropBox_Min_Z = (await localTable.getNumberArray("double:CropBox.Min.Z")) })(),
+            (async () => { cropBox_Max_X = (await localTable.getNumberArray("double:CropBox.Max.X")) })(),
+            (async () => { cropBox_Max_Y = (await localTable.getNumberArray("double:CropBox.Max.Y")) })(),
+            (async () => { cropBox_Max_Z = (await localTable.getNumberArray("double:CropBox.Max.Z")) })(),
+            (async () => { isSectionBoxActive = (await localTable.getBooleanArray("byte:IsSectionBoxActive")) })(),
+            (async () => { sectionBox_Min_X = (await localTable.getNumberArray("double:SectionBox.Min.X")) })(),
+            (async () => { sectionBox_Min_Y = (await localTable.getNumberArray("double:SectionBox.Min.Y")) })(),
+            (async () => { sectionBox_Min_Z = (await localTable.getNumberArray("double:SectionBox.Min.Z")) })(),
+            (async () => { sectionBox_Max_X = (await localTable.getNumberArray("double:SectionBox.Max.X")) })(),
+            (async () => { sectionBox_Max_Y = (await localTable.getNumberArray("double:SectionBox.Max.Y")) })(),
+            (async () => { sectionBox_Max_Z = (await localTable.getNumberArray("double:SectionBox.Max.Z")) })(),
+            (async () => { sectionBoxOrigin_X = (await localTable.getNumberArray("double:SectionBoxOrigin.X")) })(),
+            (async () => { sectionBoxOrigin_Y = (await localTable.getNumberArray("double:SectionBoxOrigin.Y")) })(),
+            (async () => { sectionBoxOrigin_Z = (await localTable.getNumberArray("double:SectionBoxOrigin.Z")) })(),
+            (async () => { sectionBoxBasisX_X = (await localTable.getNumberArray("double:SectionBoxBasisX.X")) })(),
+            (async () => { sectionBoxBasisX_Y = (await localTable.getNumberArray("double:SectionBoxBasisX.Y")) })(),
+            (async () => { sectionBoxBasisX_Z = (await localTable.getNumberArray("double:SectionBoxBasisX.Z")) })(),
+            (async () => { sectionBoxBasisY_X = (await localTable.getNumberArray("double:SectionBoxBasisY.X")) })(),
+            (async () => { sectionBoxBasisY_Y = (await localTable.getNumberArray("double:SectionBoxBasisY.Y")) })(),
+            (async () => { sectionBoxBasisY_Z = (await localTable.getNumberArray("double:SectionBoxBasisY.Z")) })(),
+            (async () => { sectionBoxBasisZ_X = (await localTable.getNumberArray("double:SectionBoxBasisZ.X")) })(),
+            (async () => { sectionBoxBasisZ_Y = (await localTable.getNumberArray("double:SectionBoxBasisZ.Y")) })(),
+            (async () => { sectionBoxBasisZ_Z = (await localTable.getNumberArray("double:SectionBoxBasisZ.Z")) })(),
+            (async () => { displayStyle = (await localTable.getStringArray("string:DisplayStyle")) })(),
             (async () => { cameraIndex = (await localTable.getNumberArray("index:Vim.Camera:Camera")) })(),
             (async () => { familyTypeIndex = (await localTable.getNumberArray("index:Vim.FamilyType:FamilyType")) })(),
             (async () => { viewTemplateIndex = (await localTable.getNumberArray("index:Vim.Element:ViewTemplate")) })(),
@@ -5131,6 +5512,33 @@ export class ViewTable implements IViewTable {
                 hiddenElementCount: hiddenElementCount ? hiddenElementCount[i] : undefined,
                 templateControlledSettings: templateControlledSettings ? templateControlledSettings[i] : undefined,
                 graphicsRead: graphicsRead ? graphicsRead[i] : undefined,
+                isLocked: isLocked ? isLocked[i] : undefined,
+                cropBox_Min_X: cropBox_Min_X ? cropBox_Min_X[i] : undefined,
+                cropBox_Min_Y: cropBox_Min_Y ? cropBox_Min_Y[i] : undefined,
+                cropBox_Min_Z: cropBox_Min_Z ? cropBox_Min_Z[i] : undefined,
+                cropBox_Max_X: cropBox_Max_X ? cropBox_Max_X[i] : undefined,
+                cropBox_Max_Y: cropBox_Max_Y ? cropBox_Max_Y[i] : undefined,
+                cropBox_Max_Z: cropBox_Max_Z ? cropBox_Max_Z[i] : undefined,
+                isSectionBoxActive: isSectionBoxActive ? isSectionBoxActive[i] : undefined,
+                sectionBox_Min_X: sectionBox_Min_X ? sectionBox_Min_X[i] : undefined,
+                sectionBox_Min_Y: sectionBox_Min_Y ? sectionBox_Min_Y[i] : undefined,
+                sectionBox_Min_Z: sectionBox_Min_Z ? sectionBox_Min_Z[i] : undefined,
+                sectionBox_Max_X: sectionBox_Max_X ? sectionBox_Max_X[i] : undefined,
+                sectionBox_Max_Y: sectionBox_Max_Y ? sectionBox_Max_Y[i] : undefined,
+                sectionBox_Max_Z: sectionBox_Max_Z ? sectionBox_Max_Z[i] : undefined,
+                sectionBoxOrigin_X: sectionBoxOrigin_X ? sectionBoxOrigin_X[i] : undefined,
+                sectionBoxOrigin_Y: sectionBoxOrigin_Y ? sectionBoxOrigin_Y[i] : undefined,
+                sectionBoxOrigin_Z: sectionBoxOrigin_Z ? sectionBoxOrigin_Z[i] : undefined,
+                sectionBoxBasisX_X: sectionBoxBasisX_X ? sectionBoxBasisX_X[i] : undefined,
+                sectionBoxBasisX_Y: sectionBoxBasisX_Y ? sectionBoxBasisX_Y[i] : undefined,
+                sectionBoxBasisX_Z: sectionBoxBasisX_Z ? sectionBoxBasisX_Z[i] : undefined,
+                sectionBoxBasisY_X: sectionBoxBasisY_X ? sectionBoxBasisY_X[i] : undefined,
+                sectionBoxBasisY_Y: sectionBoxBasisY_Y ? sectionBoxBasisY_Y[i] : undefined,
+                sectionBoxBasisY_Z: sectionBoxBasisY_Z ? sectionBoxBasisY_Z[i] : undefined,
+                sectionBoxBasisZ_X: sectionBoxBasisZ_X ? sectionBoxBasisZ_X[i] : undefined,
+                sectionBoxBasisZ_Y: sectionBoxBasisZ_Y ? sectionBoxBasisZ_Y[i] : undefined,
+                sectionBoxBasisZ_Z: sectionBoxBasisZ_Z ? sectionBoxBasisZ_Z[i] : undefined,
+                displayStyle: displayStyle ? displayStyle[i] : undefined,
                 cameraIndex: cameraIndex ? cameraIndex[i] : undefined,
                 familyTypeIndex: familyTypeIndex ? familyTypeIndex[i] : undefined,
                 viewTemplateIndex: viewTemplateIndex ? viewTemplateIndex[i] : undefined,
@@ -5425,6 +5833,222 @@ export class ViewTable implements IViewTable {
         return (await this.entityTable.getBooleanArray("byte:GraphicsRead"))
     }
     
+    async getIsLocked(viewIndex: number): Promise<boolean | undefined> {
+        return (await this.entityTable.getBoolean(viewIndex, "byte:IsLocked"))
+    }
+    
+    async getAllIsLocked(): Promise<boolean[] | undefined> {
+        return (await this.entityTable.getBooleanArray("byte:IsLocked"))
+    }
+    
+    async getCropBox_Min_X(viewIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(viewIndex, "double:CropBox.Min.X"))
+    }
+    
+    async getAllCropBox_Min_X(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:CropBox.Min.X"))
+    }
+    
+    async getCropBox_Min_Y(viewIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(viewIndex, "double:CropBox.Min.Y"))
+    }
+    
+    async getAllCropBox_Min_Y(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:CropBox.Min.Y"))
+    }
+    
+    async getCropBox_Min_Z(viewIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(viewIndex, "double:CropBox.Min.Z"))
+    }
+    
+    async getAllCropBox_Min_Z(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:CropBox.Min.Z"))
+    }
+    
+    async getCropBox_Max_X(viewIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(viewIndex, "double:CropBox.Max.X"))
+    }
+    
+    async getAllCropBox_Max_X(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:CropBox.Max.X"))
+    }
+    
+    async getCropBox_Max_Y(viewIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(viewIndex, "double:CropBox.Max.Y"))
+    }
+    
+    async getAllCropBox_Max_Y(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:CropBox.Max.Y"))
+    }
+    
+    async getCropBox_Max_Z(viewIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(viewIndex, "double:CropBox.Max.Z"))
+    }
+    
+    async getAllCropBox_Max_Z(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:CropBox.Max.Z"))
+    }
+    
+    async getIsSectionBoxActive(viewIndex: number): Promise<boolean | undefined> {
+        return (await this.entityTable.getBoolean(viewIndex, "byte:IsSectionBoxActive"))
+    }
+    
+    async getAllIsSectionBoxActive(): Promise<boolean[] | undefined> {
+        return (await this.entityTable.getBooleanArray("byte:IsSectionBoxActive"))
+    }
+    
+    async getSectionBox_Min_X(viewIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(viewIndex, "double:SectionBox.Min.X"))
+    }
+    
+    async getAllSectionBox_Min_X(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:SectionBox.Min.X"))
+    }
+    
+    async getSectionBox_Min_Y(viewIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(viewIndex, "double:SectionBox.Min.Y"))
+    }
+    
+    async getAllSectionBox_Min_Y(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:SectionBox.Min.Y"))
+    }
+    
+    async getSectionBox_Min_Z(viewIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(viewIndex, "double:SectionBox.Min.Z"))
+    }
+    
+    async getAllSectionBox_Min_Z(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:SectionBox.Min.Z"))
+    }
+    
+    async getSectionBox_Max_X(viewIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(viewIndex, "double:SectionBox.Max.X"))
+    }
+    
+    async getAllSectionBox_Max_X(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:SectionBox.Max.X"))
+    }
+    
+    async getSectionBox_Max_Y(viewIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(viewIndex, "double:SectionBox.Max.Y"))
+    }
+    
+    async getAllSectionBox_Max_Y(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:SectionBox.Max.Y"))
+    }
+    
+    async getSectionBox_Max_Z(viewIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(viewIndex, "double:SectionBox.Max.Z"))
+    }
+    
+    async getAllSectionBox_Max_Z(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:SectionBox.Max.Z"))
+    }
+    
+    async getSectionBoxOrigin_X(viewIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(viewIndex, "double:SectionBoxOrigin.X"))
+    }
+    
+    async getAllSectionBoxOrigin_X(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:SectionBoxOrigin.X"))
+    }
+    
+    async getSectionBoxOrigin_Y(viewIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(viewIndex, "double:SectionBoxOrigin.Y"))
+    }
+    
+    async getAllSectionBoxOrigin_Y(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:SectionBoxOrigin.Y"))
+    }
+    
+    async getSectionBoxOrigin_Z(viewIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(viewIndex, "double:SectionBoxOrigin.Z"))
+    }
+    
+    async getAllSectionBoxOrigin_Z(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:SectionBoxOrigin.Z"))
+    }
+    
+    async getSectionBoxBasisX_X(viewIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(viewIndex, "double:SectionBoxBasisX.X"))
+    }
+    
+    async getAllSectionBoxBasisX_X(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:SectionBoxBasisX.X"))
+    }
+    
+    async getSectionBoxBasisX_Y(viewIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(viewIndex, "double:SectionBoxBasisX.Y"))
+    }
+    
+    async getAllSectionBoxBasisX_Y(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:SectionBoxBasisX.Y"))
+    }
+    
+    async getSectionBoxBasisX_Z(viewIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(viewIndex, "double:SectionBoxBasisX.Z"))
+    }
+    
+    async getAllSectionBoxBasisX_Z(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:SectionBoxBasisX.Z"))
+    }
+    
+    async getSectionBoxBasisY_X(viewIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(viewIndex, "double:SectionBoxBasisY.X"))
+    }
+    
+    async getAllSectionBoxBasisY_X(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:SectionBoxBasisY.X"))
+    }
+    
+    async getSectionBoxBasisY_Y(viewIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(viewIndex, "double:SectionBoxBasisY.Y"))
+    }
+    
+    async getAllSectionBoxBasisY_Y(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:SectionBoxBasisY.Y"))
+    }
+    
+    async getSectionBoxBasisY_Z(viewIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(viewIndex, "double:SectionBoxBasisY.Z"))
+    }
+    
+    async getAllSectionBoxBasisY_Z(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:SectionBoxBasisY.Z"))
+    }
+    
+    async getSectionBoxBasisZ_X(viewIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(viewIndex, "double:SectionBoxBasisZ.X"))
+    }
+    
+    async getAllSectionBoxBasisZ_X(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:SectionBoxBasisZ.X"))
+    }
+    
+    async getSectionBoxBasisZ_Y(viewIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(viewIndex, "double:SectionBoxBasisZ.Y"))
+    }
+    
+    async getAllSectionBoxBasisZ_Y(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:SectionBoxBasisZ.Y"))
+    }
+    
+    async getSectionBoxBasisZ_Z(viewIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(viewIndex, "double:SectionBoxBasisZ.Z"))
+    }
+    
+    async getAllSectionBoxBasisZ_Z(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:SectionBoxBasisZ.Z"))
+    }
+    
+    async getDisplayStyle(viewIndex: number): Promise<string | undefined> {
+        return (await this.entityTable.getString(viewIndex, "string:DisplayStyle"))
+    }
+    
+    async getAllDisplayStyle(): Promise<string[] | undefined> {
+        return (await this.entityTable.getStringArray("string:DisplayStyle"))
+    }
+    
     async getCameraIndex(viewIndex: number): Promise<number | undefined> {
         return await this.entityTable.getNumber(viewIndex, "index:Vim.Camera:Camera")
     }
@@ -5585,6 +6209,8 @@ export interface IFilterInView {
     view?: IView
     graphicOverrideIndex?: number
     graphicOverride?: IGraphicOverride
+    linkInViewIndex?: number
+    linkInView?: ILinkInView
 }
 
 export interface IFilterInViewTable {
@@ -5613,6 +6239,9 @@ export interface IFilterInViewTable {
     getGraphicOverrideIndex(filterInViewIndex: number): Promise<number | undefined>
     getAllGraphicOverrideIndex(): Promise<number[] | undefined>
     getGraphicOverride(filterInViewIndex: number): Promise<IGraphicOverride | undefined>
+    getLinkInViewIndex(filterInViewIndex: number): Promise<number | undefined>
+    getAllLinkInViewIndex(): Promise<number[] | undefined>
+    getLinkInView(filterInViewIndex: number): Promise<ILinkInView | undefined>
 }
 
 export class FilterInView implements IFilterInView {
@@ -5629,6 +6258,8 @@ export class FilterInView implements IFilterInView {
     view?: IView
     graphicOverrideIndex?: number
     graphicOverride?: IGraphicOverride
+    linkInViewIndex?: number
+    linkInView?: ILinkInView
     
     static async createFromTable(table: IFilterInViewTable, index: number): Promise<IFilterInView> {
         let result = new FilterInView()
@@ -5644,6 +6275,7 @@ export class FilterInView implements IFilterInView {
             table.getHasOverrides(index).then(v => result.hasOverrides = v),
             table.getViewIndex(index).then(v => result.viewIndex = v),
             table.getGraphicOverrideIndex(index).then(v => result.graphicOverrideIndex = v),
+            table.getLinkInViewIndex(index).then(v => result.linkInViewIndex = v),
         ])
         
         return result
@@ -5688,6 +6320,7 @@ export class FilterInViewTable implements IFilterInViewTable {
         let hasOverrides: boolean[] | undefined
         let viewIndex: number[] | undefined
         let graphicOverrideIndex: number[] | undefined
+        let linkInViewIndex: number[] | undefined
         
         await Promise.all([
             (async () => { name = (await localTable.getStringArray("string:Name")) })(),
@@ -5699,6 +6332,7 @@ export class FilterInViewTable implements IFilterInViewTable {
             (async () => { hasOverrides = (await localTable.getBooleanArray("byte:HasOverrides")) })(),
             (async () => { viewIndex = (await localTable.getNumberArray("index:Vim.View:View")) })(),
             (async () => { graphicOverrideIndex = (await localTable.getNumberArray("index:Vim.GraphicOverride:GraphicOverride")) })(),
+            (async () => { linkInViewIndex = (await localTable.getNumberArray("index:Vim.LinkInView:LinkInView")) })(),
         ])
         
         let filterInView: IFilterInView[] = []
@@ -5715,7 +6349,8 @@ export class FilterInViewTable implements IFilterInViewTable {
                 isVisible: isVisible ? isVisible[i] : undefined,
                 hasOverrides: hasOverrides ? hasOverrides[i] : undefined,
                 viewIndex: viewIndex ? viewIndex[i] : undefined,
-                graphicOverrideIndex: graphicOverrideIndex ? graphicOverrideIndex[i] : undefined
+                graphicOverrideIndex: graphicOverrideIndex ? graphicOverrideIndex[i] : undefined,
+                linkInViewIndex: linkInViewIndex ? linkInViewIndex[i] : undefined
             })
         }
         
@@ -5812,6 +6447,1016 @@ export class FilterInViewTable implements IFilterInViewTable {
         }
         
         return await this.document.graphicOverride?.get(index)
+    }
+    
+    async getLinkInViewIndex(filterInViewIndex: number): Promise<number | undefined> {
+        return await this.entityTable.getNumber(filterInViewIndex, "index:Vim.LinkInView:LinkInView")
+    }
+    
+    async getAllLinkInViewIndex(): Promise<number[] | undefined> {
+        return await this.entityTable.getNumberArray("index:Vim.LinkInView:LinkInView")
+    }
+    
+    async getLinkInView(filterInViewIndex: number): Promise<ILinkInView | undefined> {
+        const index = await this.getLinkInViewIndex(filterInViewIndex)
+        
+        if (index === undefined) {
+            return undefined
+        }
+        
+        return await this.document.linkInView?.get(index)
+    }
+    
+}
+
+export interface IHiddenCategoryInView {
+    index: number
+    
+    viewIndex?: number
+    view?: IView
+    categoryIndex?: number
+    category?: ICategory
+    linkInViewIndex?: number
+    linkInView?: ILinkInView
+}
+
+export interface IHiddenCategoryInViewTable {
+    getCount(): Promise<number>
+    get(hiddenCategoryInViewIndex: number): Promise<IHiddenCategoryInView>
+    getAll(): Promise<IHiddenCategoryInView[]>
+    
+    getViewIndex(hiddenCategoryInViewIndex: number): Promise<number | undefined>
+    getAllViewIndex(): Promise<number[] | undefined>
+    getView(hiddenCategoryInViewIndex: number): Promise<IView | undefined>
+    getCategoryIndex(hiddenCategoryInViewIndex: number): Promise<number | undefined>
+    getAllCategoryIndex(): Promise<number[] | undefined>
+    getCategory(hiddenCategoryInViewIndex: number): Promise<ICategory | undefined>
+    getLinkInViewIndex(hiddenCategoryInViewIndex: number): Promise<number | undefined>
+    getAllLinkInViewIndex(): Promise<number[] | undefined>
+    getLinkInView(hiddenCategoryInViewIndex: number): Promise<ILinkInView | undefined>
+}
+
+export class HiddenCategoryInView implements IHiddenCategoryInView {
+    index: number
+    
+    viewIndex?: number
+    view?: IView
+    categoryIndex?: number
+    category?: ICategory
+    linkInViewIndex?: number
+    linkInView?: ILinkInView
+    
+    static async createFromTable(table: IHiddenCategoryInViewTable, index: number): Promise<IHiddenCategoryInView> {
+        let result = new HiddenCategoryInView()
+        result.index = index
+        
+        await Promise.all([
+            table.getViewIndex(index).then(v => result.viewIndex = v),
+            table.getCategoryIndex(index).then(v => result.categoryIndex = v),
+            table.getLinkInViewIndex(index).then(v => result.linkInViewIndex = v),
+        ])
+        
+        return result
+    }
+}
+
+export class HiddenCategoryInViewTable implements IHiddenCategoryInViewTable {
+    private document: VimDocument
+    private entityTable: EntityTable
+    
+    static async createFromDocument(document: VimDocument): Promise<IHiddenCategoryInViewTable | undefined> {
+        const entity = await document.entities.getBfast("Vim.HiddenCategoryInView")
+        
+        if (!entity) {
+            return undefined
+        }
+        
+        let table = new HiddenCategoryInViewTable()
+        table.document = document
+        table.entityTable = new EntityTable(entity, document.strings)
+        
+        return table
+    }
+    
+    getCount(): Promise<number> {
+        return this.entityTable.getCount()
+    }
+    
+    async get(hiddenCategoryInViewIndex: number): Promise<IHiddenCategoryInView> {
+        return await HiddenCategoryInView.createFromTable(this, hiddenCategoryInViewIndex)
+    }
+    
+    async getAll(): Promise<IHiddenCategoryInView[]> {
+        const localTable = await this.entityTable.getLocal()
+        
+        let viewIndex: number[] | undefined
+        let categoryIndex: number[] | undefined
+        let linkInViewIndex: number[] | undefined
+        
+        await Promise.all([
+            (async () => { viewIndex = (await localTable.getNumberArray("index:Vim.View:View")) })(),
+            (async () => { categoryIndex = (await localTable.getNumberArray("index:Vim.Category:Category")) })(),
+            (async () => { linkInViewIndex = (await localTable.getNumberArray("index:Vim.LinkInView:LinkInView")) })(),
+        ])
+        
+        let hiddenCategoryInView: IHiddenCategoryInView[] = []
+        
+        const rowCount = await this.getCount()
+        for (let i = 0; i < rowCount; i++) {
+            hiddenCategoryInView.push({
+                index: i,
+                viewIndex: viewIndex ? viewIndex[i] : undefined,
+                categoryIndex: categoryIndex ? categoryIndex[i] : undefined,
+                linkInViewIndex: linkInViewIndex ? linkInViewIndex[i] : undefined
+            })
+        }
+        
+        return hiddenCategoryInView
+    }
+    
+    async getViewIndex(hiddenCategoryInViewIndex: number): Promise<number | undefined> {
+        return await this.entityTable.getNumber(hiddenCategoryInViewIndex, "index:Vim.View:View")
+    }
+    
+    async getAllViewIndex(): Promise<number[] | undefined> {
+        return await this.entityTable.getNumberArray("index:Vim.View:View")
+    }
+    
+    async getView(hiddenCategoryInViewIndex: number): Promise<IView | undefined> {
+        const index = await this.getViewIndex(hiddenCategoryInViewIndex)
+        
+        if (index === undefined) {
+            return undefined
+        }
+        
+        return await this.document.view?.get(index)
+    }
+    
+    async getCategoryIndex(hiddenCategoryInViewIndex: number): Promise<number | undefined> {
+        return await this.entityTable.getNumber(hiddenCategoryInViewIndex, "index:Vim.Category:Category")
+    }
+    
+    async getAllCategoryIndex(): Promise<number[] | undefined> {
+        return await this.entityTable.getNumberArray("index:Vim.Category:Category")
+    }
+    
+    async getCategory(hiddenCategoryInViewIndex: number): Promise<ICategory | undefined> {
+        const index = await this.getCategoryIndex(hiddenCategoryInViewIndex)
+        
+        if (index === undefined) {
+            return undefined
+        }
+        
+        return await this.document.category?.get(index)
+    }
+    
+    async getLinkInViewIndex(hiddenCategoryInViewIndex: number): Promise<number | undefined> {
+        return await this.entityTable.getNumber(hiddenCategoryInViewIndex, "index:Vim.LinkInView:LinkInView")
+    }
+    
+    async getAllLinkInViewIndex(): Promise<number[] | undefined> {
+        return await this.entityTable.getNumberArray("index:Vim.LinkInView:LinkInView")
+    }
+    
+    async getLinkInView(hiddenCategoryInViewIndex: number): Promise<ILinkInView | undefined> {
+        const index = await this.getLinkInViewIndex(hiddenCategoryInViewIndex)
+        
+        if (index === undefined) {
+            return undefined
+        }
+        
+        return await this.document.linkInView?.get(index)
+    }
+    
+}
+
+export interface IHiddenWorksetInView {
+    index: number
+    
+    viewIndex?: number
+    view?: IView
+    worksetIndex?: number
+    workset?: IWorkset
+    linkInViewIndex?: number
+    linkInView?: ILinkInView
+}
+
+export interface IHiddenWorksetInViewTable {
+    getCount(): Promise<number>
+    get(hiddenWorksetInViewIndex: number): Promise<IHiddenWorksetInView>
+    getAll(): Promise<IHiddenWorksetInView[]>
+    
+    getViewIndex(hiddenWorksetInViewIndex: number): Promise<number | undefined>
+    getAllViewIndex(): Promise<number[] | undefined>
+    getView(hiddenWorksetInViewIndex: number): Promise<IView | undefined>
+    getWorksetIndex(hiddenWorksetInViewIndex: number): Promise<number | undefined>
+    getAllWorksetIndex(): Promise<number[] | undefined>
+    getWorkset(hiddenWorksetInViewIndex: number): Promise<IWorkset | undefined>
+    getLinkInViewIndex(hiddenWorksetInViewIndex: number): Promise<number | undefined>
+    getAllLinkInViewIndex(): Promise<number[] | undefined>
+    getLinkInView(hiddenWorksetInViewIndex: number): Promise<ILinkInView | undefined>
+}
+
+export class HiddenWorksetInView implements IHiddenWorksetInView {
+    index: number
+    
+    viewIndex?: number
+    view?: IView
+    worksetIndex?: number
+    workset?: IWorkset
+    linkInViewIndex?: number
+    linkInView?: ILinkInView
+    
+    static async createFromTable(table: IHiddenWorksetInViewTable, index: number): Promise<IHiddenWorksetInView> {
+        let result = new HiddenWorksetInView()
+        result.index = index
+        
+        await Promise.all([
+            table.getViewIndex(index).then(v => result.viewIndex = v),
+            table.getWorksetIndex(index).then(v => result.worksetIndex = v),
+            table.getLinkInViewIndex(index).then(v => result.linkInViewIndex = v),
+        ])
+        
+        return result
+    }
+}
+
+export class HiddenWorksetInViewTable implements IHiddenWorksetInViewTable {
+    private document: VimDocument
+    private entityTable: EntityTable
+    
+    static async createFromDocument(document: VimDocument): Promise<IHiddenWorksetInViewTable | undefined> {
+        const entity = await document.entities.getBfast("Vim.HiddenWorksetInView")
+        
+        if (!entity) {
+            return undefined
+        }
+        
+        let table = new HiddenWorksetInViewTable()
+        table.document = document
+        table.entityTable = new EntityTable(entity, document.strings)
+        
+        return table
+    }
+    
+    getCount(): Promise<number> {
+        return this.entityTable.getCount()
+    }
+    
+    async get(hiddenWorksetInViewIndex: number): Promise<IHiddenWorksetInView> {
+        return await HiddenWorksetInView.createFromTable(this, hiddenWorksetInViewIndex)
+    }
+    
+    async getAll(): Promise<IHiddenWorksetInView[]> {
+        const localTable = await this.entityTable.getLocal()
+        
+        let viewIndex: number[] | undefined
+        let worksetIndex: number[] | undefined
+        let linkInViewIndex: number[] | undefined
+        
+        await Promise.all([
+            (async () => { viewIndex = (await localTable.getNumberArray("index:Vim.View:View")) })(),
+            (async () => { worksetIndex = (await localTable.getNumberArray("index:Vim.Workset:Workset")) })(),
+            (async () => { linkInViewIndex = (await localTable.getNumberArray("index:Vim.LinkInView:LinkInView")) })(),
+        ])
+        
+        let hiddenWorksetInView: IHiddenWorksetInView[] = []
+        
+        const rowCount = await this.getCount()
+        for (let i = 0; i < rowCount; i++) {
+            hiddenWorksetInView.push({
+                index: i,
+                viewIndex: viewIndex ? viewIndex[i] : undefined,
+                worksetIndex: worksetIndex ? worksetIndex[i] : undefined,
+                linkInViewIndex: linkInViewIndex ? linkInViewIndex[i] : undefined
+            })
+        }
+        
+        return hiddenWorksetInView
+    }
+    
+    async getViewIndex(hiddenWorksetInViewIndex: number): Promise<number | undefined> {
+        return await this.entityTable.getNumber(hiddenWorksetInViewIndex, "index:Vim.View:View")
+    }
+    
+    async getAllViewIndex(): Promise<number[] | undefined> {
+        return await this.entityTable.getNumberArray("index:Vim.View:View")
+    }
+    
+    async getView(hiddenWorksetInViewIndex: number): Promise<IView | undefined> {
+        const index = await this.getViewIndex(hiddenWorksetInViewIndex)
+        
+        if (index === undefined) {
+            return undefined
+        }
+        
+        return await this.document.view?.get(index)
+    }
+    
+    async getWorksetIndex(hiddenWorksetInViewIndex: number): Promise<number | undefined> {
+        return await this.entityTable.getNumber(hiddenWorksetInViewIndex, "index:Vim.Workset:Workset")
+    }
+    
+    async getAllWorksetIndex(): Promise<number[] | undefined> {
+        return await this.entityTable.getNumberArray("index:Vim.Workset:Workset")
+    }
+    
+    async getWorkset(hiddenWorksetInViewIndex: number): Promise<IWorkset | undefined> {
+        const index = await this.getWorksetIndex(hiddenWorksetInViewIndex)
+        
+        if (index === undefined) {
+            return undefined
+        }
+        
+        return await this.document.workset?.get(index)
+    }
+    
+    async getLinkInViewIndex(hiddenWorksetInViewIndex: number): Promise<number | undefined> {
+        return await this.entityTable.getNumber(hiddenWorksetInViewIndex, "index:Vim.LinkInView:LinkInView")
+    }
+    
+    async getAllLinkInViewIndex(): Promise<number[] | undefined> {
+        return await this.entityTable.getNumberArray("index:Vim.LinkInView:LinkInView")
+    }
+    
+    async getLinkInView(hiddenWorksetInViewIndex: number): Promise<ILinkInView | undefined> {
+        const index = await this.getLinkInViewIndex(hiddenWorksetInViewIndex)
+        
+        if (index === undefined) {
+            return undefined
+        }
+        
+        return await this.document.linkInView?.get(index)
+    }
+    
+}
+
+export interface IHiddenElementInView {
+    index: number
+    reason?: string
+    
+    viewIndex?: number
+    view?: IView
+    filterInViewIndex?: number
+    filterInView?: IFilterInView
+    linkInViewIndex?: number
+    linkInView?: ILinkInView
+    elementIndex?: number
+    element?: IElement
+}
+
+export interface IHiddenElementInViewTable {
+    getCount(): Promise<number>
+    get(hiddenElementInViewIndex: number): Promise<IHiddenElementInView>
+    getAll(): Promise<IHiddenElementInView[]>
+    
+    getReason(hiddenElementInViewIndex: number): Promise<string | undefined>
+    getAllReason(): Promise<string[] | undefined>
+    
+    getViewIndex(hiddenElementInViewIndex: number): Promise<number | undefined>
+    getAllViewIndex(): Promise<number[] | undefined>
+    getView(hiddenElementInViewIndex: number): Promise<IView | undefined>
+    getFilterInViewIndex(hiddenElementInViewIndex: number): Promise<number | undefined>
+    getAllFilterInViewIndex(): Promise<number[] | undefined>
+    getFilterInView(hiddenElementInViewIndex: number): Promise<IFilterInView | undefined>
+    getLinkInViewIndex(hiddenElementInViewIndex: number): Promise<number | undefined>
+    getAllLinkInViewIndex(): Promise<number[] | undefined>
+    getLinkInView(hiddenElementInViewIndex: number): Promise<ILinkInView | undefined>
+    getElementIndex(hiddenElementInViewIndex: number): Promise<number | undefined>
+    getAllElementIndex(): Promise<number[] | undefined>
+    getElement(hiddenElementInViewIndex: number): Promise<IElement | undefined>
+}
+
+export class HiddenElementInView implements IHiddenElementInView {
+    index: number
+    reason?: string
+    
+    viewIndex?: number
+    view?: IView
+    filterInViewIndex?: number
+    filterInView?: IFilterInView
+    linkInViewIndex?: number
+    linkInView?: ILinkInView
+    elementIndex?: number
+    element?: IElement
+    
+    static async createFromTable(table: IHiddenElementInViewTable, index: number): Promise<IHiddenElementInView> {
+        let result = new HiddenElementInView()
+        result.index = index
+        
+        await Promise.all([
+            table.getReason(index).then(v => result.reason = v),
+            table.getViewIndex(index).then(v => result.viewIndex = v),
+            table.getFilterInViewIndex(index).then(v => result.filterInViewIndex = v),
+            table.getLinkInViewIndex(index).then(v => result.linkInViewIndex = v),
+            table.getElementIndex(index).then(v => result.elementIndex = v),
+        ])
+        
+        return result
+    }
+}
+
+export class HiddenElementInViewTable implements IHiddenElementInViewTable {
+    private document: VimDocument
+    private entityTable: EntityTable
+    
+    static async createFromDocument(document: VimDocument): Promise<IHiddenElementInViewTable | undefined> {
+        const entity = await document.entities.getBfast("Vim.HiddenElementInView")
+        
+        if (!entity) {
+            return undefined
+        }
+        
+        let table = new HiddenElementInViewTable()
+        table.document = document
+        table.entityTable = new EntityTable(entity, document.strings)
+        
+        return table
+    }
+    
+    getCount(): Promise<number> {
+        return this.entityTable.getCount()
+    }
+    
+    async get(hiddenElementInViewIndex: number): Promise<IHiddenElementInView> {
+        return await HiddenElementInView.createFromTable(this, hiddenElementInViewIndex)
+    }
+    
+    async getAll(): Promise<IHiddenElementInView[]> {
+        const localTable = await this.entityTable.getLocal()
+        
+        let reason: string[] | undefined
+        let viewIndex: number[] | undefined
+        let filterInViewIndex: number[] | undefined
+        let linkInViewIndex: number[] | undefined
+        let elementIndex: number[] | undefined
+        
+        await Promise.all([
+            (async () => { reason = (await localTable.getStringArray("string:Reason")) })(),
+            (async () => { viewIndex = (await localTable.getNumberArray("index:Vim.View:View")) })(),
+            (async () => { filterInViewIndex = (await localTable.getNumberArray("index:Vim.FilterInView:FilterInView")) })(),
+            (async () => { linkInViewIndex = (await localTable.getNumberArray("index:Vim.LinkInView:LinkInView")) })(),
+            (async () => { elementIndex = (await localTable.getNumberArray("index:Vim.Element:Element")) })(),
+        ])
+        
+        let hiddenElementInView: IHiddenElementInView[] = []
+        
+        const rowCount = await this.getCount()
+        for (let i = 0; i < rowCount; i++) {
+            hiddenElementInView.push({
+                index: i,
+                reason: reason ? reason[i] : undefined,
+                viewIndex: viewIndex ? viewIndex[i] : undefined,
+                filterInViewIndex: filterInViewIndex ? filterInViewIndex[i] : undefined,
+                linkInViewIndex: linkInViewIndex ? linkInViewIndex[i] : undefined,
+                elementIndex: elementIndex ? elementIndex[i] : undefined
+            })
+        }
+        
+        return hiddenElementInView
+    }
+    
+    async getReason(hiddenElementInViewIndex: number): Promise<string | undefined> {
+        return (await this.entityTable.getString(hiddenElementInViewIndex, "string:Reason"))
+    }
+    
+    async getAllReason(): Promise<string[] | undefined> {
+        return (await this.entityTable.getStringArray("string:Reason"))
+    }
+    
+    async getViewIndex(hiddenElementInViewIndex: number): Promise<number | undefined> {
+        return await this.entityTable.getNumber(hiddenElementInViewIndex, "index:Vim.View:View")
+    }
+    
+    async getAllViewIndex(): Promise<number[] | undefined> {
+        return await this.entityTable.getNumberArray("index:Vim.View:View")
+    }
+    
+    async getView(hiddenElementInViewIndex: number): Promise<IView | undefined> {
+        const index = await this.getViewIndex(hiddenElementInViewIndex)
+        
+        if (index === undefined) {
+            return undefined
+        }
+        
+        return await this.document.view?.get(index)
+    }
+    
+    async getFilterInViewIndex(hiddenElementInViewIndex: number): Promise<number | undefined> {
+        return await this.entityTable.getNumber(hiddenElementInViewIndex, "index:Vim.FilterInView:FilterInView")
+    }
+    
+    async getAllFilterInViewIndex(): Promise<number[] | undefined> {
+        return await this.entityTable.getNumberArray("index:Vim.FilterInView:FilterInView")
+    }
+    
+    async getFilterInView(hiddenElementInViewIndex: number): Promise<IFilterInView | undefined> {
+        const index = await this.getFilterInViewIndex(hiddenElementInViewIndex)
+        
+        if (index === undefined) {
+            return undefined
+        }
+        
+        return await this.document.filterInView?.get(index)
+    }
+    
+    async getLinkInViewIndex(hiddenElementInViewIndex: number): Promise<number | undefined> {
+        return await this.entityTable.getNumber(hiddenElementInViewIndex, "index:Vim.LinkInView:LinkInView")
+    }
+    
+    async getAllLinkInViewIndex(): Promise<number[] | undefined> {
+        return await this.entityTable.getNumberArray("index:Vim.LinkInView:LinkInView")
+    }
+    
+    async getLinkInView(hiddenElementInViewIndex: number): Promise<ILinkInView | undefined> {
+        const index = await this.getLinkInViewIndex(hiddenElementInViewIndex)
+        
+        if (index === undefined) {
+            return undefined
+        }
+        
+        return await this.document.linkInView?.get(index)
+    }
+    
+    async getElementIndex(hiddenElementInViewIndex: number): Promise<number | undefined> {
+        return await this.entityTable.getNumber(hiddenElementInViewIndex, "index:Vim.Element:Element")
+    }
+    
+    async getAllElementIndex(): Promise<number[] | undefined> {
+        return await this.entityTable.getNumberArray("index:Vim.Element:Element")
+    }
+    
+    async getElement(hiddenElementInViewIndex: number): Promise<IElement | undefined> {
+        const index = await this.getElementIndex(hiddenElementInViewIndex)
+        
+        if (index === undefined) {
+            return undefined
+        }
+        
+        return await this.document.element?.get(index)
+    }
+    
+}
+
+export interface ILinkInView {
+    index: number
+    display?: string
+    settingsFrom?: string
+    isHidden?: boolean
+    hiddenBy?: string
+    isHalftone?: boolean
+    linkedViewName?: string
+    viewFilters?: string
+    objectStyles?: string
+    nestedLinks?: string
+    phase?: string
+    phaseFilter?: string
+    detailLevel?: string
+    discipline?: string
+    linkedWorksets?: string
+    isMeasured?: boolean
+    measuredVisibleCount?: number
+    notReadable?: string
+    
+    viewIndex?: number
+    view?: IView
+    linkedDocumentIndex?: number
+    linkedDocument?: IBimDocument
+    linkedViewIndex?: number
+    linkedView?: IView
+    elementIndex?: number
+    element?: IElement
+}
+
+export interface ILinkInViewTable {
+    getCount(): Promise<number>
+    get(linkInViewIndex: number): Promise<ILinkInView>
+    getAll(): Promise<ILinkInView[]>
+    
+    getDisplay(linkInViewIndex: number): Promise<string | undefined>
+    getAllDisplay(): Promise<string[] | undefined>
+    getSettingsFrom(linkInViewIndex: number): Promise<string | undefined>
+    getAllSettingsFrom(): Promise<string[] | undefined>
+    getIsHidden(linkInViewIndex: number): Promise<boolean | undefined>
+    getAllIsHidden(): Promise<boolean[] | undefined>
+    getHiddenBy(linkInViewIndex: number): Promise<string | undefined>
+    getAllHiddenBy(): Promise<string[] | undefined>
+    getIsHalftone(linkInViewIndex: number): Promise<boolean | undefined>
+    getAllIsHalftone(): Promise<boolean[] | undefined>
+    getLinkedViewName(linkInViewIndex: number): Promise<string | undefined>
+    getAllLinkedViewName(): Promise<string[] | undefined>
+    getViewFilters(linkInViewIndex: number): Promise<string | undefined>
+    getAllViewFilters(): Promise<string[] | undefined>
+    getObjectStyles(linkInViewIndex: number): Promise<string | undefined>
+    getAllObjectStyles(): Promise<string[] | undefined>
+    getNestedLinks(linkInViewIndex: number): Promise<string | undefined>
+    getAllNestedLinks(): Promise<string[] | undefined>
+    getPhase(linkInViewIndex: number): Promise<string | undefined>
+    getAllPhase(): Promise<string[] | undefined>
+    getPhaseFilter(linkInViewIndex: number): Promise<string | undefined>
+    getAllPhaseFilter(): Promise<string[] | undefined>
+    getDetailLevel(linkInViewIndex: number): Promise<string | undefined>
+    getAllDetailLevel(): Promise<string[] | undefined>
+    getDiscipline(linkInViewIndex: number): Promise<string | undefined>
+    getAllDiscipline(): Promise<string[] | undefined>
+    getLinkedWorksets(linkInViewIndex: number): Promise<string | undefined>
+    getAllLinkedWorksets(): Promise<string[] | undefined>
+    getIsMeasured(linkInViewIndex: number): Promise<boolean | undefined>
+    getAllIsMeasured(): Promise<boolean[] | undefined>
+    getMeasuredVisibleCount(linkInViewIndex: number): Promise<number | undefined>
+    getAllMeasuredVisibleCount(): Promise<number[] | undefined>
+    getNotReadable(linkInViewIndex: number): Promise<string | undefined>
+    getAllNotReadable(): Promise<string[] | undefined>
+    
+    getViewIndex(linkInViewIndex: number): Promise<number | undefined>
+    getAllViewIndex(): Promise<number[] | undefined>
+    getView(linkInViewIndex: number): Promise<IView | undefined>
+    getLinkedDocumentIndex(linkInViewIndex: number): Promise<number | undefined>
+    getAllLinkedDocumentIndex(): Promise<number[] | undefined>
+    getLinkedDocument(linkInViewIndex: number): Promise<IBimDocument | undefined>
+    getLinkedViewIndex(linkInViewIndex: number): Promise<number | undefined>
+    getAllLinkedViewIndex(): Promise<number[] | undefined>
+    getLinkedView(linkInViewIndex: number): Promise<IView | undefined>
+    getElementIndex(linkInViewIndex: number): Promise<number | undefined>
+    getAllElementIndex(): Promise<number[] | undefined>
+    getElement(linkInViewIndex: number): Promise<IElement | undefined>
+}
+
+export class LinkInView implements ILinkInView {
+    index: number
+    display?: string
+    settingsFrom?: string
+    isHidden?: boolean
+    hiddenBy?: string
+    isHalftone?: boolean
+    linkedViewName?: string
+    viewFilters?: string
+    objectStyles?: string
+    nestedLinks?: string
+    phase?: string
+    phaseFilter?: string
+    detailLevel?: string
+    discipline?: string
+    linkedWorksets?: string
+    isMeasured?: boolean
+    measuredVisibleCount?: number
+    notReadable?: string
+    
+    viewIndex?: number
+    view?: IView
+    linkedDocumentIndex?: number
+    linkedDocument?: IBimDocument
+    linkedViewIndex?: number
+    linkedView?: IView
+    elementIndex?: number
+    element?: IElement
+    
+    static async createFromTable(table: ILinkInViewTable, index: number): Promise<ILinkInView> {
+        let result = new LinkInView()
+        result.index = index
+        
+        await Promise.all([
+            table.getDisplay(index).then(v => result.display = v),
+            table.getSettingsFrom(index).then(v => result.settingsFrom = v),
+            table.getIsHidden(index).then(v => result.isHidden = v),
+            table.getHiddenBy(index).then(v => result.hiddenBy = v),
+            table.getIsHalftone(index).then(v => result.isHalftone = v),
+            table.getLinkedViewName(index).then(v => result.linkedViewName = v),
+            table.getViewFilters(index).then(v => result.viewFilters = v),
+            table.getObjectStyles(index).then(v => result.objectStyles = v),
+            table.getNestedLinks(index).then(v => result.nestedLinks = v),
+            table.getPhase(index).then(v => result.phase = v),
+            table.getPhaseFilter(index).then(v => result.phaseFilter = v),
+            table.getDetailLevel(index).then(v => result.detailLevel = v),
+            table.getDiscipline(index).then(v => result.discipline = v),
+            table.getLinkedWorksets(index).then(v => result.linkedWorksets = v),
+            table.getIsMeasured(index).then(v => result.isMeasured = v),
+            table.getMeasuredVisibleCount(index).then(v => result.measuredVisibleCount = v),
+            table.getNotReadable(index).then(v => result.notReadable = v),
+            table.getViewIndex(index).then(v => result.viewIndex = v),
+            table.getLinkedDocumentIndex(index).then(v => result.linkedDocumentIndex = v),
+            table.getLinkedViewIndex(index).then(v => result.linkedViewIndex = v),
+            table.getElementIndex(index).then(v => result.elementIndex = v),
+        ])
+        
+        return result
+    }
+}
+
+export class LinkInViewTable implements ILinkInViewTable {
+    private document: VimDocument
+    private entityTable: EntityTable
+    
+    static async createFromDocument(document: VimDocument): Promise<ILinkInViewTable | undefined> {
+        const entity = await document.entities.getBfast("Vim.LinkInView")
+        
+        if (!entity) {
+            return undefined
+        }
+        
+        let table = new LinkInViewTable()
+        table.document = document
+        table.entityTable = new EntityTable(entity, document.strings)
+        
+        return table
+    }
+    
+    getCount(): Promise<number> {
+        return this.entityTable.getCount()
+    }
+    
+    async get(linkInViewIndex: number): Promise<ILinkInView> {
+        return await LinkInView.createFromTable(this, linkInViewIndex)
+    }
+    
+    async getAll(): Promise<ILinkInView[]> {
+        const localTable = await this.entityTable.getLocal()
+        
+        let display: string[] | undefined
+        let settingsFrom: string[] | undefined
+        let isHidden: boolean[] | undefined
+        let hiddenBy: string[] | undefined
+        let isHalftone: boolean[] | undefined
+        let linkedViewName: string[] | undefined
+        let viewFilters: string[] | undefined
+        let objectStyles: string[] | undefined
+        let nestedLinks: string[] | undefined
+        let phase: string[] | undefined
+        let phaseFilter: string[] | undefined
+        let detailLevel: string[] | undefined
+        let discipline: string[] | undefined
+        let linkedWorksets: string[] | undefined
+        let isMeasured: boolean[] | undefined
+        let measuredVisibleCount: number[] | undefined
+        let notReadable: string[] | undefined
+        let viewIndex: number[] | undefined
+        let linkedDocumentIndex: number[] | undefined
+        let linkedViewIndex: number[] | undefined
+        let elementIndex: number[] | undefined
+        
+        await Promise.all([
+            (async () => { display = (await localTable.getStringArray("string:Display")) })(),
+            (async () => { settingsFrom = (await localTable.getStringArray("string:SettingsFrom")) })(),
+            (async () => { isHidden = (await localTable.getBooleanArray("byte:IsHidden")) })(),
+            (async () => { hiddenBy = (await localTable.getStringArray("string:HiddenBy")) })(),
+            (async () => { isHalftone = (await localTable.getBooleanArray("byte:IsHalftone")) })(),
+            (async () => { linkedViewName = (await localTable.getStringArray("string:LinkedViewName")) })(),
+            (async () => { viewFilters = (await localTable.getStringArray("string:ViewFilters")) })(),
+            (async () => { objectStyles = (await localTable.getStringArray("string:ObjectStyles")) })(),
+            (async () => { nestedLinks = (await localTable.getStringArray("string:NestedLinks")) })(),
+            (async () => { phase = (await localTable.getStringArray("string:Phase")) })(),
+            (async () => { phaseFilter = (await localTable.getStringArray("string:PhaseFilter")) })(),
+            (async () => { detailLevel = (await localTable.getStringArray("string:DetailLevel")) })(),
+            (async () => { discipline = (await localTable.getStringArray("string:Discipline")) })(),
+            (async () => { linkedWorksets = (await localTable.getStringArray("string:LinkedWorksets")) })(),
+            (async () => { isMeasured = (await localTable.getBooleanArray("byte:IsMeasured")) })(),
+            (async () => { measuredVisibleCount = (await localTable.getNumberArray("int:MeasuredVisibleCount")) })(),
+            (async () => { notReadable = (await localTable.getStringArray("string:NotReadable")) })(),
+            (async () => { viewIndex = (await localTable.getNumberArray("index:Vim.View:View")) })(),
+            (async () => { linkedDocumentIndex = (await localTable.getNumberArray("index:Vim.BimDocument:LinkedDocument")) })(),
+            (async () => { linkedViewIndex = (await localTable.getNumberArray("index:Vim.View:LinkedView")) })(),
+            (async () => { elementIndex = (await localTable.getNumberArray("index:Vim.Element:Element")) })(),
+        ])
+        
+        let linkInView: ILinkInView[] = []
+        
+        const rowCount = await this.getCount()
+        for (let i = 0; i < rowCount; i++) {
+            linkInView.push({
+                index: i,
+                display: display ? display[i] : undefined,
+                settingsFrom: settingsFrom ? settingsFrom[i] : undefined,
+                isHidden: isHidden ? isHidden[i] : undefined,
+                hiddenBy: hiddenBy ? hiddenBy[i] : undefined,
+                isHalftone: isHalftone ? isHalftone[i] : undefined,
+                linkedViewName: linkedViewName ? linkedViewName[i] : undefined,
+                viewFilters: viewFilters ? viewFilters[i] : undefined,
+                objectStyles: objectStyles ? objectStyles[i] : undefined,
+                nestedLinks: nestedLinks ? nestedLinks[i] : undefined,
+                phase: phase ? phase[i] : undefined,
+                phaseFilter: phaseFilter ? phaseFilter[i] : undefined,
+                detailLevel: detailLevel ? detailLevel[i] : undefined,
+                discipline: discipline ? discipline[i] : undefined,
+                linkedWorksets: linkedWorksets ? linkedWorksets[i] : undefined,
+                isMeasured: isMeasured ? isMeasured[i] : undefined,
+                measuredVisibleCount: measuredVisibleCount ? measuredVisibleCount[i] : undefined,
+                notReadable: notReadable ? notReadable[i] : undefined,
+                viewIndex: viewIndex ? viewIndex[i] : undefined,
+                linkedDocumentIndex: linkedDocumentIndex ? linkedDocumentIndex[i] : undefined,
+                linkedViewIndex: linkedViewIndex ? linkedViewIndex[i] : undefined,
+                elementIndex: elementIndex ? elementIndex[i] : undefined
+            })
+        }
+        
+        return linkInView
+    }
+    
+    async getDisplay(linkInViewIndex: number): Promise<string | undefined> {
+        return (await this.entityTable.getString(linkInViewIndex, "string:Display"))
+    }
+    
+    async getAllDisplay(): Promise<string[] | undefined> {
+        return (await this.entityTable.getStringArray("string:Display"))
+    }
+    
+    async getSettingsFrom(linkInViewIndex: number): Promise<string | undefined> {
+        return (await this.entityTable.getString(linkInViewIndex, "string:SettingsFrom"))
+    }
+    
+    async getAllSettingsFrom(): Promise<string[] | undefined> {
+        return (await this.entityTable.getStringArray("string:SettingsFrom"))
+    }
+    
+    async getIsHidden(linkInViewIndex: number): Promise<boolean | undefined> {
+        return (await this.entityTable.getBoolean(linkInViewIndex, "byte:IsHidden"))
+    }
+    
+    async getAllIsHidden(): Promise<boolean[] | undefined> {
+        return (await this.entityTable.getBooleanArray("byte:IsHidden"))
+    }
+    
+    async getHiddenBy(linkInViewIndex: number): Promise<string | undefined> {
+        return (await this.entityTable.getString(linkInViewIndex, "string:HiddenBy"))
+    }
+    
+    async getAllHiddenBy(): Promise<string[] | undefined> {
+        return (await this.entityTable.getStringArray("string:HiddenBy"))
+    }
+    
+    async getIsHalftone(linkInViewIndex: number): Promise<boolean | undefined> {
+        return (await this.entityTable.getBoolean(linkInViewIndex, "byte:IsHalftone"))
+    }
+    
+    async getAllIsHalftone(): Promise<boolean[] | undefined> {
+        return (await this.entityTable.getBooleanArray("byte:IsHalftone"))
+    }
+    
+    async getLinkedViewName(linkInViewIndex: number): Promise<string | undefined> {
+        return (await this.entityTable.getString(linkInViewIndex, "string:LinkedViewName"))
+    }
+    
+    async getAllLinkedViewName(): Promise<string[] | undefined> {
+        return (await this.entityTable.getStringArray("string:LinkedViewName"))
+    }
+    
+    async getViewFilters(linkInViewIndex: number): Promise<string | undefined> {
+        return (await this.entityTable.getString(linkInViewIndex, "string:ViewFilters"))
+    }
+    
+    async getAllViewFilters(): Promise<string[] | undefined> {
+        return (await this.entityTable.getStringArray("string:ViewFilters"))
+    }
+    
+    async getObjectStyles(linkInViewIndex: number): Promise<string | undefined> {
+        return (await this.entityTable.getString(linkInViewIndex, "string:ObjectStyles"))
+    }
+    
+    async getAllObjectStyles(): Promise<string[] | undefined> {
+        return (await this.entityTable.getStringArray("string:ObjectStyles"))
+    }
+    
+    async getNestedLinks(linkInViewIndex: number): Promise<string | undefined> {
+        return (await this.entityTable.getString(linkInViewIndex, "string:NestedLinks"))
+    }
+    
+    async getAllNestedLinks(): Promise<string[] | undefined> {
+        return (await this.entityTable.getStringArray("string:NestedLinks"))
+    }
+    
+    async getPhase(linkInViewIndex: number): Promise<string | undefined> {
+        return (await this.entityTable.getString(linkInViewIndex, "string:Phase"))
+    }
+    
+    async getAllPhase(): Promise<string[] | undefined> {
+        return (await this.entityTable.getStringArray("string:Phase"))
+    }
+    
+    async getPhaseFilter(linkInViewIndex: number): Promise<string | undefined> {
+        return (await this.entityTable.getString(linkInViewIndex, "string:PhaseFilter"))
+    }
+    
+    async getAllPhaseFilter(): Promise<string[] | undefined> {
+        return (await this.entityTable.getStringArray("string:PhaseFilter"))
+    }
+    
+    async getDetailLevel(linkInViewIndex: number): Promise<string | undefined> {
+        return (await this.entityTable.getString(linkInViewIndex, "string:DetailLevel"))
+    }
+    
+    async getAllDetailLevel(): Promise<string[] | undefined> {
+        return (await this.entityTable.getStringArray("string:DetailLevel"))
+    }
+    
+    async getDiscipline(linkInViewIndex: number): Promise<string | undefined> {
+        return (await this.entityTable.getString(linkInViewIndex, "string:Discipline"))
+    }
+    
+    async getAllDiscipline(): Promise<string[] | undefined> {
+        return (await this.entityTable.getStringArray("string:Discipline"))
+    }
+    
+    async getLinkedWorksets(linkInViewIndex: number): Promise<string | undefined> {
+        return (await this.entityTable.getString(linkInViewIndex, "string:LinkedWorksets"))
+    }
+    
+    async getAllLinkedWorksets(): Promise<string[] | undefined> {
+        return (await this.entityTable.getStringArray("string:LinkedWorksets"))
+    }
+    
+    async getIsMeasured(linkInViewIndex: number): Promise<boolean | undefined> {
+        return (await this.entityTable.getBoolean(linkInViewIndex, "byte:IsMeasured"))
+    }
+    
+    async getAllIsMeasured(): Promise<boolean[] | undefined> {
+        return (await this.entityTable.getBooleanArray("byte:IsMeasured"))
+    }
+    
+    async getMeasuredVisibleCount(linkInViewIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(linkInViewIndex, "int:MeasuredVisibleCount"))
+    }
+    
+    async getAllMeasuredVisibleCount(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("int:MeasuredVisibleCount"))
+    }
+    
+    async getNotReadable(linkInViewIndex: number): Promise<string | undefined> {
+        return (await this.entityTable.getString(linkInViewIndex, "string:NotReadable"))
+    }
+    
+    async getAllNotReadable(): Promise<string[] | undefined> {
+        return (await this.entityTable.getStringArray("string:NotReadable"))
+    }
+    
+    async getViewIndex(linkInViewIndex: number): Promise<number | undefined> {
+        return await this.entityTable.getNumber(linkInViewIndex, "index:Vim.View:View")
+    }
+    
+    async getAllViewIndex(): Promise<number[] | undefined> {
+        return await this.entityTable.getNumberArray("index:Vim.View:View")
+    }
+    
+    async getView(linkInViewIndex: number): Promise<IView | undefined> {
+        const index = await this.getViewIndex(linkInViewIndex)
+        
+        if (index === undefined) {
+            return undefined
+        }
+        
+        return await this.document.view?.get(index)
+    }
+    
+    async getLinkedDocumentIndex(linkInViewIndex: number): Promise<number | undefined> {
+        return await this.entityTable.getNumber(linkInViewIndex, "index:Vim.BimDocument:LinkedDocument")
+    }
+    
+    async getAllLinkedDocumentIndex(): Promise<number[] | undefined> {
+        return await this.entityTable.getNumberArray("index:Vim.BimDocument:LinkedDocument")
+    }
+    
+    async getLinkedDocument(linkInViewIndex: number): Promise<IBimDocument | undefined> {
+        const index = await this.getLinkedDocumentIndex(linkInViewIndex)
+        
+        if (index === undefined) {
+            return undefined
+        }
+        
+        return await this.document.bimDocument?.get(index)
+    }
+    
+    async getLinkedViewIndex(linkInViewIndex: number): Promise<number | undefined> {
+        return await this.entityTable.getNumber(linkInViewIndex, "index:Vim.View:LinkedView")
+    }
+    
+    async getAllLinkedViewIndex(): Promise<number[] | undefined> {
+        return await this.entityTable.getNumberArray("index:Vim.View:LinkedView")
+    }
+    
+    async getLinkedView(linkInViewIndex: number): Promise<IView | undefined> {
+        const index = await this.getLinkedViewIndex(linkInViewIndex)
+        
+        if (index === undefined) {
+            return undefined
+        }
+        
+        return await this.document.view?.get(index)
+    }
+    
+    async getElementIndex(linkInViewIndex: number): Promise<number | undefined> {
+        return await this.entityTable.getNumber(linkInViewIndex, "index:Vim.Element:Element")
+    }
+    
+    async getAllElementIndex(): Promise<number[] | undefined> {
+        return await this.entityTable.getNumberArray("index:Vim.Element:Element")
+    }
+    
+    async getElement(linkInViewIndex: number): Promise<IElement | undefined> {
+        const index = await this.getElementIndex(linkInViewIndex)
+        
+        if (index === undefined) {
+            return undefined
+        }
+        
+        return await this.document.element?.get(index)
     }
     
 }
@@ -9307,6 +10952,25 @@ export interface IMaterial {
     cutBackgroundPatternColor_X?: number
     cutBackgroundPatternColor_Y?: number
     cutBackgroundPatternColor_Z?: number
+    appearanceKind?: string
+    appearanceColor_X?: number
+    appearanceColor_Y?: number
+    appearanceColor_Z?: number
+    appearanceTint_X?: number
+    appearanceTint_Y?: number
+    appearanceTint_Z?: number
+    appearanceImageFade?: number
+    appearanceTransparency?: number
+    roughness?: number
+    metalness?: number
+    reflectivity?: number
+    refractionIndex?: number
+    emissionColor_X?: number
+    emissionColor_Y?: number
+    emissionColor_Z?: number
+    emissionLuminance?: number
+    colorTextureKind?: string
+    normalTextureKind?: string
     
     colorTextureFileIndex?: number
     colorTextureFile?: IAsset
@@ -9397,6 +11061,44 @@ export interface IMaterialTable {
     getAllCutBackgroundPatternColor_Y(): Promise<number[] | undefined>
     getCutBackgroundPatternColor_Z(materialIndex: number): Promise<number | undefined>
     getAllCutBackgroundPatternColor_Z(): Promise<number[] | undefined>
+    getAppearanceKind(materialIndex: number): Promise<string | undefined>
+    getAllAppearanceKind(): Promise<string[] | undefined>
+    getAppearanceColor_X(materialIndex: number): Promise<number | undefined>
+    getAllAppearanceColor_X(): Promise<number[] | undefined>
+    getAppearanceColor_Y(materialIndex: number): Promise<number | undefined>
+    getAllAppearanceColor_Y(): Promise<number[] | undefined>
+    getAppearanceColor_Z(materialIndex: number): Promise<number | undefined>
+    getAllAppearanceColor_Z(): Promise<number[] | undefined>
+    getAppearanceTint_X(materialIndex: number): Promise<number | undefined>
+    getAllAppearanceTint_X(): Promise<number[] | undefined>
+    getAppearanceTint_Y(materialIndex: number): Promise<number | undefined>
+    getAllAppearanceTint_Y(): Promise<number[] | undefined>
+    getAppearanceTint_Z(materialIndex: number): Promise<number | undefined>
+    getAllAppearanceTint_Z(): Promise<number[] | undefined>
+    getAppearanceImageFade(materialIndex: number): Promise<number | undefined>
+    getAllAppearanceImageFade(): Promise<number[] | undefined>
+    getAppearanceTransparency(materialIndex: number): Promise<number | undefined>
+    getAllAppearanceTransparency(): Promise<number[] | undefined>
+    getRoughness(materialIndex: number): Promise<number | undefined>
+    getAllRoughness(): Promise<number[] | undefined>
+    getMetalness(materialIndex: number): Promise<number | undefined>
+    getAllMetalness(): Promise<number[] | undefined>
+    getReflectivity(materialIndex: number): Promise<number | undefined>
+    getAllReflectivity(): Promise<number[] | undefined>
+    getRefractionIndex(materialIndex: number): Promise<number | undefined>
+    getAllRefractionIndex(): Promise<number[] | undefined>
+    getEmissionColor_X(materialIndex: number): Promise<number | undefined>
+    getAllEmissionColor_X(): Promise<number[] | undefined>
+    getEmissionColor_Y(materialIndex: number): Promise<number | undefined>
+    getAllEmissionColor_Y(): Promise<number[] | undefined>
+    getEmissionColor_Z(materialIndex: number): Promise<number | undefined>
+    getAllEmissionColor_Z(): Promise<number[] | undefined>
+    getEmissionLuminance(materialIndex: number): Promise<number | undefined>
+    getAllEmissionLuminance(): Promise<number[] | undefined>
+    getColorTextureKind(materialIndex: number): Promise<string | undefined>
+    getAllColorTextureKind(): Promise<string[] | undefined>
+    getNormalTextureKind(materialIndex: number): Promise<string | undefined>
+    getAllNormalTextureKind(): Promise<string[] | undefined>
     
     getColorTextureFileIndex(materialIndex: number): Promise<number | undefined>
     getAllColorTextureFileIndex(): Promise<number[] | undefined>
@@ -9457,6 +11159,25 @@ export class Material implements IMaterial {
     cutBackgroundPatternColor_X?: number
     cutBackgroundPatternColor_Y?: number
     cutBackgroundPatternColor_Z?: number
+    appearanceKind?: string
+    appearanceColor_X?: number
+    appearanceColor_Y?: number
+    appearanceColor_Z?: number
+    appearanceTint_X?: number
+    appearanceTint_Y?: number
+    appearanceTint_Z?: number
+    appearanceImageFade?: number
+    appearanceTransparency?: number
+    roughness?: number
+    metalness?: number
+    reflectivity?: number
+    refractionIndex?: number
+    emissionColor_X?: number
+    emissionColor_Y?: number
+    emissionColor_Z?: number
+    emissionLuminance?: number
+    colorTextureKind?: string
+    normalTextureKind?: string
     
     colorTextureFileIndex?: number
     colorTextureFile?: IAsset
@@ -9512,6 +11233,25 @@ export class Material implements IMaterial {
             table.getCutBackgroundPatternColor_X(index).then(v => result.cutBackgroundPatternColor_X = v),
             table.getCutBackgroundPatternColor_Y(index).then(v => result.cutBackgroundPatternColor_Y = v),
             table.getCutBackgroundPatternColor_Z(index).then(v => result.cutBackgroundPatternColor_Z = v),
+            table.getAppearanceKind(index).then(v => result.appearanceKind = v),
+            table.getAppearanceColor_X(index).then(v => result.appearanceColor_X = v),
+            table.getAppearanceColor_Y(index).then(v => result.appearanceColor_Y = v),
+            table.getAppearanceColor_Z(index).then(v => result.appearanceColor_Z = v),
+            table.getAppearanceTint_X(index).then(v => result.appearanceTint_X = v),
+            table.getAppearanceTint_Y(index).then(v => result.appearanceTint_Y = v),
+            table.getAppearanceTint_Z(index).then(v => result.appearanceTint_Z = v),
+            table.getAppearanceImageFade(index).then(v => result.appearanceImageFade = v),
+            table.getAppearanceTransparency(index).then(v => result.appearanceTransparency = v),
+            table.getRoughness(index).then(v => result.roughness = v),
+            table.getMetalness(index).then(v => result.metalness = v),
+            table.getReflectivity(index).then(v => result.reflectivity = v),
+            table.getRefractionIndex(index).then(v => result.refractionIndex = v),
+            table.getEmissionColor_X(index).then(v => result.emissionColor_X = v),
+            table.getEmissionColor_Y(index).then(v => result.emissionColor_Y = v),
+            table.getEmissionColor_Z(index).then(v => result.emissionColor_Z = v),
+            table.getEmissionLuminance(index).then(v => result.emissionLuminance = v),
+            table.getColorTextureKind(index).then(v => result.colorTextureKind = v),
+            table.getNormalTextureKind(index).then(v => result.normalTextureKind = v),
             table.getColorTextureFileIndex(index).then(v => result.colorTextureFileIndex = v),
             table.getNormalTextureFileIndex(index).then(v => result.normalTextureFileIndex = v),
             table.getSurfaceForegroundPatternIndex(index).then(v => result.surfaceForegroundPatternIndex = v),
@@ -9588,6 +11328,25 @@ export class MaterialTable implements IMaterialTable {
         let cutBackgroundPatternColor_X: number[] | undefined
         let cutBackgroundPatternColor_Y: number[] | undefined
         let cutBackgroundPatternColor_Z: number[] | undefined
+        let appearanceKind: string[] | undefined
+        let appearanceColor_X: number[] | undefined
+        let appearanceColor_Y: number[] | undefined
+        let appearanceColor_Z: number[] | undefined
+        let appearanceTint_X: number[] | undefined
+        let appearanceTint_Y: number[] | undefined
+        let appearanceTint_Z: number[] | undefined
+        let appearanceImageFade: number[] | undefined
+        let appearanceTransparency: number[] | undefined
+        let roughness: number[] | undefined
+        let metalness: number[] | undefined
+        let reflectivity: number[] | undefined
+        let refractionIndex: number[] | undefined
+        let emissionColor_X: number[] | undefined
+        let emissionColor_Y: number[] | undefined
+        let emissionColor_Z: number[] | undefined
+        let emissionLuminance: number[] | undefined
+        let colorTextureKind: string[] | undefined
+        let normalTextureKind: string[] | undefined
         let colorTextureFileIndex: number[] | undefined
         let normalTextureFileIndex: number[] | undefined
         let surfaceForegroundPatternIndex: number[] | undefined
@@ -9631,6 +11390,25 @@ export class MaterialTable implements IMaterialTable {
             (async () => { cutBackgroundPatternColor_X = (await localTable.getNumberArray("double:CutBackgroundPatternColor.X")) })(),
             (async () => { cutBackgroundPatternColor_Y = (await localTable.getNumberArray("double:CutBackgroundPatternColor.Y")) })(),
             (async () => { cutBackgroundPatternColor_Z = (await localTable.getNumberArray("double:CutBackgroundPatternColor.Z")) })(),
+            (async () => { appearanceKind = (await localTable.getStringArray("string:AppearanceKind")) })(),
+            (async () => { appearanceColor_X = (await localTable.getNumberArray("double:AppearanceColor.X")) })(),
+            (async () => { appearanceColor_Y = (await localTable.getNumberArray("double:AppearanceColor.Y")) })(),
+            (async () => { appearanceColor_Z = (await localTable.getNumberArray("double:AppearanceColor.Z")) })(),
+            (async () => { appearanceTint_X = (await localTable.getNumberArray("double:AppearanceTint.X")) })(),
+            (async () => { appearanceTint_Y = (await localTable.getNumberArray("double:AppearanceTint.Y")) })(),
+            (async () => { appearanceTint_Z = (await localTable.getNumberArray("double:AppearanceTint.Z")) })(),
+            (async () => { appearanceImageFade = (await localTable.getNumberArray("double:AppearanceImageFade")) })(),
+            (async () => { appearanceTransparency = (await localTable.getNumberArray("double:AppearanceTransparency")) })(),
+            (async () => { roughness = (await localTable.getNumberArray("double:Roughness")) })(),
+            (async () => { metalness = (await localTable.getNumberArray("double:Metalness")) })(),
+            (async () => { reflectivity = (await localTable.getNumberArray("double:Reflectivity")) })(),
+            (async () => { refractionIndex = (await localTable.getNumberArray("double:RefractionIndex")) })(),
+            (async () => { emissionColor_X = (await localTable.getNumberArray("double:EmissionColor.X")) })(),
+            (async () => { emissionColor_Y = (await localTable.getNumberArray("double:EmissionColor.Y")) })(),
+            (async () => { emissionColor_Z = (await localTable.getNumberArray("double:EmissionColor.Z")) })(),
+            (async () => { emissionLuminance = (await localTable.getNumberArray("double:EmissionLuminance")) })(),
+            (async () => { colorTextureKind = (await localTable.getStringArray("string:ColorTextureKind")) })(),
+            (async () => { normalTextureKind = (await localTable.getStringArray("string:NormalTextureKind")) })(),
             (async () => { colorTextureFileIndex = (await localTable.getNumberArray("index:Vim.Asset:ColorTextureFile")) })(),
             (async () => { normalTextureFileIndex = (await localTable.getNumberArray("index:Vim.Asset:NormalTextureFile")) })(),
             (async () => { surfaceForegroundPatternIndex = (await localTable.getNumberArray("index:Vim.FillPattern:SurfaceForegroundPattern")) })(),
@@ -9680,6 +11458,25 @@ export class MaterialTable implements IMaterialTable {
                 cutBackgroundPatternColor_X: cutBackgroundPatternColor_X ? cutBackgroundPatternColor_X[i] : undefined,
                 cutBackgroundPatternColor_Y: cutBackgroundPatternColor_Y ? cutBackgroundPatternColor_Y[i] : undefined,
                 cutBackgroundPatternColor_Z: cutBackgroundPatternColor_Z ? cutBackgroundPatternColor_Z[i] : undefined,
+                appearanceKind: appearanceKind ? appearanceKind[i] : undefined,
+                appearanceColor_X: appearanceColor_X ? appearanceColor_X[i] : undefined,
+                appearanceColor_Y: appearanceColor_Y ? appearanceColor_Y[i] : undefined,
+                appearanceColor_Z: appearanceColor_Z ? appearanceColor_Z[i] : undefined,
+                appearanceTint_X: appearanceTint_X ? appearanceTint_X[i] : undefined,
+                appearanceTint_Y: appearanceTint_Y ? appearanceTint_Y[i] : undefined,
+                appearanceTint_Z: appearanceTint_Z ? appearanceTint_Z[i] : undefined,
+                appearanceImageFade: appearanceImageFade ? appearanceImageFade[i] : undefined,
+                appearanceTransparency: appearanceTransparency ? appearanceTransparency[i] : undefined,
+                roughness: roughness ? roughness[i] : undefined,
+                metalness: metalness ? metalness[i] : undefined,
+                reflectivity: reflectivity ? reflectivity[i] : undefined,
+                refractionIndex: refractionIndex ? refractionIndex[i] : undefined,
+                emissionColor_X: emissionColor_X ? emissionColor_X[i] : undefined,
+                emissionColor_Y: emissionColor_Y ? emissionColor_Y[i] : undefined,
+                emissionColor_Z: emissionColor_Z ? emissionColor_Z[i] : undefined,
+                emissionLuminance: emissionLuminance ? emissionLuminance[i] : undefined,
+                colorTextureKind: colorTextureKind ? colorTextureKind[i] : undefined,
+                normalTextureKind: normalTextureKind ? normalTextureKind[i] : undefined,
                 colorTextureFileIndex: colorTextureFileIndex ? colorTextureFileIndex[i] : undefined,
                 normalTextureFileIndex: normalTextureFileIndex ? normalTextureFileIndex[i] : undefined,
                 surfaceForegroundPatternIndex: surfaceForegroundPatternIndex ? surfaceForegroundPatternIndex[i] : undefined,
@@ -9963,6 +11760,158 @@ export class MaterialTable implements IMaterialTable {
     
     async getAllCutBackgroundPatternColor_Z(): Promise<number[] | undefined> {
         return (await this.entityTable.getNumberArray("double:CutBackgroundPatternColor.Z"))
+    }
+    
+    async getAppearanceKind(materialIndex: number): Promise<string | undefined> {
+        return (await this.entityTable.getString(materialIndex, "string:AppearanceKind"))
+    }
+    
+    async getAllAppearanceKind(): Promise<string[] | undefined> {
+        return (await this.entityTable.getStringArray("string:AppearanceKind"))
+    }
+    
+    async getAppearanceColor_X(materialIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(materialIndex, "double:AppearanceColor.X"))
+    }
+    
+    async getAllAppearanceColor_X(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:AppearanceColor.X"))
+    }
+    
+    async getAppearanceColor_Y(materialIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(materialIndex, "double:AppearanceColor.Y"))
+    }
+    
+    async getAllAppearanceColor_Y(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:AppearanceColor.Y"))
+    }
+    
+    async getAppearanceColor_Z(materialIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(materialIndex, "double:AppearanceColor.Z"))
+    }
+    
+    async getAllAppearanceColor_Z(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:AppearanceColor.Z"))
+    }
+    
+    async getAppearanceTint_X(materialIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(materialIndex, "double:AppearanceTint.X"))
+    }
+    
+    async getAllAppearanceTint_X(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:AppearanceTint.X"))
+    }
+    
+    async getAppearanceTint_Y(materialIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(materialIndex, "double:AppearanceTint.Y"))
+    }
+    
+    async getAllAppearanceTint_Y(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:AppearanceTint.Y"))
+    }
+    
+    async getAppearanceTint_Z(materialIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(materialIndex, "double:AppearanceTint.Z"))
+    }
+    
+    async getAllAppearanceTint_Z(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:AppearanceTint.Z"))
+    }
+    
+    async getAppearanceImageFade(materialIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(materialIndex, "double:AppearanceImageFade"))
+    }
+    
+    async getAllAppearanceImageFade(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:AppearanceImageFade"))
+    }
+    
+    async getAppearanceTransparency(materialIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(materialIndex, "double:AppearanceTransparency"))
+    }
+    
+    async getAllAppearanceTransparency(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:AppearanceTransparency"))
+    }
+    
+    async getRoughness(materialIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(materialIndex, "double:Roughness"))
+    }
+    
+    async getAllRoughness(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:Roughness"))
+    }
+    
+    async getMetalness(materialIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(materialIndex, "double:Metalness"))
+    }
+    
+    async getAllMetalness(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:Metalness"))
+    }
+    
+    async getReflectivity(materialIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(materialIndex, "double:Reflectivity"))
+    }
+    
+    async getAllReflectivity(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:Reflectivity"))
+    }
+    
+    async getRefractionIndex(materialIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(materialIndex, "double:RefractionIndex"))
+    }
+    
+    async getAllRefractionIndex(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:RefractionIndex"))
+    }
+    
+    async getEmissionColor_X(materialIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(materialIndex, "double:EmissionColor.X"))
+    }
+    
+    async getAllEmissionColor_X(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:EmissionColor.X"))
+    }
+    
+    async getEmissionColor_Y(materialIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(materialIndex, "double:EmissionColor.Y"))
+    }
+    
+    async getAllEmissionColor_Y(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:EmissionColor.Y"))
+    }
+    
+    async getEmissionColor_Z(materialIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(materialIndex, "double:EmissionColor.Z"))
+    }
+    
+    async getAllEmissionColor_Z(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:EmissionColor.Z"))
+    }
+    
+    async getEmissionLuminance(materialIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(materialIndex, "double:EmissionLuminance"))
+    }
+    
+    async getAllEmissionLuminance(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:EmissionLuminance"))
+    }
+    
+    async getColorTextureKind(materialIndex: number): Promise<string | undefined> {
+        return (await this.entityTable.getString(materialIndex, "string:ColorTextureKind"))
+    }
+    
+    async getAllColorTextureKind(): Promise<string[] | undefined> {
+        return (await this.entityTable.getStringArray("string:ColorTextureKind"))
+    }
+    
+    async getNormalTextureKind(materialIndex: number): Promise<string | undefined> {
+        return (await this.entityTable.getString(materialIndex, "string:NormalTextureKind"))
+    }
+    
+    async getAllNormalTextureKind(): Promise<string[] | undefined> {
+        return (await this.entityTable.getStringArray("string:NormalTextureKind"))
     }
     
     async getColorTextureFileIndex(materialIndex: number): Promise<number | undefined> {
@@ -20728,6 +22677,940 @@ export class ActivityMarkerTable implements IActivityMarkerTable {
     
 }
 
+export interface ICadFile {
+    index: number
+    fileName?: string
+    extension?: string
+    isLinked?: boolean
+    savedPath?: string
+    absolutePath?: string
+    pathType?: string
+    linkStatus?: string
+    instanceCount?: number
+    viewSpecificInstanceCount?: number
+    purgeState?: number
+    isExploded?: boolean
+    explodedPieceCount?: number
+    explodedModelPieceCount?: number
+    explodedViewCount?: number
+    explodedModelViewCount?: number
+    explodedSeverity?: number
+    
+    familyTypeIndex?: number
+    familyType?: IFamilyType
+    categoryIndex?: number
+    category?: ICategory
+    elementIndex?: number
+    element?: IElement
+}
+
+export interface ICadFileTable {
+    getCount(): Promise<number>
+    get(cadFileIndex: number): Promise<ICadFile>
+    getAll(): Promise<ICadFile[]>
+    
+    getFileName(cadFileIndex: number): Promise<string | undefined>
+    getAllFileName(): Promise<string[] | undefined>
+    getExtension(cadFileIndex: number): Promise<string | undefined>
+    getAllExtension(): Promise<string[] | undefined>
+    getIsLinked(cadFileIndex: number): Promise<boolean | undefined>
+    getAllIsLinked(): Promise<boolean[] | undefined>
+    getSavedPath(cadFileIndex: number): Promise<string | undefined>
+    getAllSavedPath(): Promise<string[] | undefined>
+    getAbsolutePath(cadFileIndex: number): Promise<string | undefined>
+    getAllAbsolutePath(): Promise<string[] | undefined>
+    getPathType(cadFileIndex: number): Promise<string | undefined>
+    getAllPathType(): Promise<string[] | undefined>
+    getLinkStatus(cadFileIndex: number): Promise<string | undefined>
+    getAllLinkStatus(): Promise<string[] | undefined>
+    getInstanceCount(cadFileIndex: number): Promise<number | undefined>
+    getAllInstanceCount(): Promise<number[] | undefined>
+    getViewSpecificInstanceCount(cadFileIndex: number): Promise<number | undefined>
+    getAllViewSpecificInstanceCount(): Promise<number[] | undefined>
+    getPurgeState(cadFileIndex: number): Promise<number | undefined>
+    getAllPurgeState(): Promise<number[] | undefined>
+    getIsExploded(cadFileIndex: number): Promise<boolean | undefined>
+    getAllIsExploded(): Promise<boolean[] | undefined>
+    getExplodedPieceCount(cadFileIndex: number): Promise<number | undefined>
+    getAllExplodedPieceCount(): Promise<number[] | undefined>
+    getExplodedModelPieceCount(cadFileIndex: number): Promise<number | undefined>
+    getAllExplodedModelPieceCount(): Promise<number[] | undefined>
+    getExplodedViewCount(cadFileIndex: number): Promise<number | undefined>
+    getAllExplodedViewCount(): Promise<number[] | undefined>
+    getExplodedModelViewCount(cadFileIndex: number): Promise<number | undefined>
+    getAllExplodedModelViewCount(): Promise<number[] | undefined>
+    getExplodedSeverity(cadFileIndex: number): Promise<number | undefined>
+    getAllExplodedSeverity(): Promise<number[] | undefined>
+    
+    getFamilyTypeIndex(cadFileIndex: number): Promise<number | undefined>
+    getAllFamilyTypeIndex(): Promise<number[] | undefined>
+    getFamilyType(cadFileIndex: number): Promise<IFamilyType | undefined>
+    getCategoryIndex(cadFileIndex: number): Promise<number | undefined>
+    getAllCategoryIndex(): Promise<number[] | undefined>
+    getCategory(cadFileIndex: number): Promise<ICategory | undefined>
+    getElementIndex(cadFileIndex: number): Promise<number | undefined>
+    getAllElementIndex(): Promise<number[] | undefined>
+    getElement(cadFileIndex: number): Promise<IElement | undefined>
+}
+
+export class CadFile implements ICadFile {
+    index: number
+    fileName?: string
+    extension?: string
+    isLinked?: boolean
+    savedPath?: string
+    absolutePath?: string
+    pathType?: string
+    linkStatus?: string
+    instanceCount?: number
+    viewSpecificInstanceCount?: number
+    purgeState?: number
+    isExploded?: boolean
+    explodedPieceCount?: number
+    explodedModelPieceCount?: number
+    explodedViewCount?: number
+    explodedModelViewCount?: number
+    explodedSeverity?: number
+    
+    familyTypeIndex?: number
+    familyType?: IFamilyType
+    categoryIndex?: number
+    category?: ICategory
+    elementIndex?: number
+    element?: IElement
+    
+    static async createFromTable(table: ICadFileTable, index: number): Promise<ICadFile> {
+        let result = new CadFile()
+        result.index = index
+        
+        await Promise.all([
+            table.getFileName(index).then(v => result.fileName = v),
+            table.getExtension(index).then(v => result.extension = v),
+            table.getIsLinked(index).then(v => result.isLinked = v),
+            table.getSavedPath(index).then(v => result.savedPath = v),
+            table.getAbsolutePath(index).then(v => result.absolutePath = v),
+            table.getPathType(index).then(v => result.pathType = v),
+            table.getLinkStatus(index).then(v => result.linkStatus = v),
+            table.getInstanceCount(index).then(v => result.instanceCount = v),
+            table.getViewSpecificInstanceCount(index).then(v => result.viewSpecificInstanceCount = v),
+            table.getPurgeState(index).then(v => result.purgeState = v),
+            table.getIsExploded(index).then(v => result.isExploded = v),
+            table.getExplodedPieceCount(index).then(v => result.explodedPieceCount = v),
+            table.getExplodedModelPieceCount(index).then(v => result.explodedModelPieceCount = v),
+            table.getExplodedViewCount(index).then(v => result.explodedViewCount = v),
+            table.getExplodedModelViewCount(index).then(v => result.explodedModelViewCount = v),
+            table.getExplodedSeverity(index).then(v => result.explodedSeverity = v),
+            table.getFamilyTypeIndex(index).then(v => result.familyTypeIndex = v),
+            table.getCategoryIndex(index).then(v => result.categoryIndex = v),
+            table.getElementIndex(index).then(v => result.elementIndex = v),
+        ])
+        
+        return result
+    }
+}
+
+export class CadFileTable implements ICadFileTable {
+    private document: VimDocument
+    private entityTable: EntityTable
+    
+    static async createFromDocument(document: VimDocument): Promise<ICadFileTable | undefined> {
+        const entity = await document.entities.getBfast("Vim.CadFile")
+        
+        if (!entity) {
+            return undefined
+        }
+        
+        let table = new CadFileTable()
+        table.document = document
+        table.entityTable = new EntityTable(entity, document.strings)
+        
+        return table
+    }
+    
+    getCount(): Promise<number> {
+        return this.entityTable.getCount()
+    }
+    
+    async get(cadFileIndex: number): Promise<ICadFile> {
+        return await CadFile.createFromTable(this, cadFileIndex)
+    }
+    
+    async getAll(): Promise<ICadFile[]> {
+        const localTable = await this.entityTable.getLocal()
+        
+        let fileName: string[] | undefined
+        let extension: string[] | undefined
+        let isLinked: boolean[] | undefined
+        let savedPath: string[] | undefined
+        let absolutePath: string[] | undefined
+        let pathType: string[] | undefined
+        let linkStatus: string[] | undefined
+        let instanceCount: number[] | undefined
+        let viewSpecificInstanceCount: number[] | undefined
+        let purgeState: number[] | undefined
+        let isExploded: boolean[] | undefined
+        let explodedPieceCount: number[] | undefined
+        let explodedModelPieceCount: number[] | undefined
+        let explodedViewCount: number[] | undefined
+        let explodedModelViewCount: number[] | undefined
+        let explodedSeverity: number[] | undefined
+        let familyTypeIndex: number[] | undefined
+        let categoryIndex: number[] | undefined
+        let elementIndex: number[] | undefined
+        
+        await Promise.all([
+            (async () => { fileName = (await localTable.getStringArray("string:FileName")) })(),
+            (async () => { extension = (await localTable.getStringArray("string:Extension")) })(),
+            (async () => { isLinked = (await localTable.getBooleanArray("byte:IsLinked")) })(),
+            (async () => { savedPath = (await localTable.getStringArray("string:SavedPath")) })(),
+            (async () => { absolutePath = (await localTable.getStringArray("string:AbsolutePath")) })(),
+            (async () => { pathType = (await localTable.getStringArray("string:PathType")) })(),
+            (async () => { linkStatus = (await localTable.getStringArray("string:LinkStatus")) })(),
+            (async () => { instanceCount = (await localTable.getNumberArray("int:InstanceCount")) })(),
+            (async () => { viewSpecificInstanceCount = (await localTable.getNumberArray("int:ViewSpecificInstanceCount")) })(),
+            (async () => { purgeState = (await localTable.getNumberArray("int:PurgeState")) })(),
+            (async () => { isExploded = (await localTable.getBooleanArray("byte:IsExploded")) })(),
+            (async () => { explodedPieceCount = (await localTable.getNumberArray("int:ExplodedPieceCount")) })(),
+            (async () => { explodedModelPieceCount = (await localTable.getNumberArray("int:ExplodedModelPieceCount")) })(),
+            (async () => { explodedViewCount = (await localTable.getNumberArray("int:ExplodedViewCount")) })(),
+            (async () => { explodedModelViewCount = (await localTable.getNumberArray("int:ExplodedModelViewCount")) })(),
+            (async () => { explodedSeverity = (await localTable.getNumberArray("int:ExplodedSeverity")) })(),
+            (async () => { familyTypeIndex = (await localTable.getNumberArray("index:Vim.FamilyType:FamilyType")) })(),
+            (async () => { categoryIndex = (await localTable.getNumberArray("index:Vim.Category:Category")) })(),
+            (async () => { elementIndex = (await localTable.getNumberArray("index:Vim.Element:Element")) })(),
+        ])
+        
+        let cadFile: ICadFile[] = []
+        
+        const rowCount = await this.getCount()
+        for (let i = 0; i < rowCount; i++) {
+            cadFile.push({
+                index: i,
+                fileName: fileName ? fileName[i] : undefined,
+                extension: extension ? extension[i] : undefined,
+                isLinked: isLinked ? isLinked[i] : undefined,
+                savedPath: savedPath ? savedPath[i] : undefined,
+                absolutePath: absolutePath ? absolutePath[i] : undefined,
+                pathType: pathType ? pathType[i] : undefined,
+                linkStatus: linkStatus ? linkStatus[i] : undefined,
+                instanceCount: instanceCount ? instanceCount[i] : undefined,
+                viewSpecificInstanceCount: viewSpecificInstanceCount ? viewSpecificInstanceCount[i] : undefined,
+                purgeState: purgeState ? purgeState[i] : undefined,
+                isExploded: isExploded ? isExploded[i] : undefined,
+                explodedPieceCount: explodedPieceCount ? explodedPieceCount[i] : undefined,
+                explodedModelPieceCount: explodedModelPieceCount ? explodedModelPieceCount[i] : undefined,
+                explodedViewCount: explodedViewCount ? explodedViewCount[i] : undefined,
+                explodedModelViewCount: explodedModelViewCount ? explodedModelViewCount[i] : undefined,
+                explodedSeverity: explodedSeverity ? explodedSeverity[i] : undefined,
+                familyTypeIndex: familyTypeIndex ? familyTypeIndex[i] : undefined,
+                categoryIndex: categoryIndex ? categoryIndex[i] : undefined,
+                elementIndex: elementIndex ? elementIndex[i] : undefined
+            })
+        }
+        
+        return cadFile
+    }
+    
+    async getFileName(cadFileIndex: number): Promise<string | undefined> {
+        return (await this.entityTable.getString(cadFileIndex, "string:FileName"))
+    }
+    
+    async getAllFileName(): Promise<string[] | undefined> {
+        return (await this.entityTable.getStringArray("string:FileName"))
+    }
+    
+    async getExtension(cadFileIndex: number): Promise<string | undefined> {
+        return (await this.entityTable.getString(cadFileIndex, "string:Extension"))
+    }
+    
+    async getAllExtension(): Promise<string[] | undefined> {
+        return (await this.entityTable.getStringArray("string:Extension"))
+    }
+    
+    async getIsLinked(cadFileIndex: number): Promise<boolean | undefined> {
+        return (await this.entityTable.getBoolean(cadFileIndex, "byte:IsLinked"))
+    }
+    
+    async getAllIsLinked(): Promise<boolean[] | undefined> {
+        return (await this.entityTable.getBooleanArray("byte:IsLinked"))
+    }
+    
+    async getSavedPath(cadFileIndex: number): Promise<string | undefined> {
+        return (await this.entityTable.getString(cadFileIndex, "string:SavedPath"))
+    }
+    
+    async getAllSavedPath(): Promise<string[] | undefined> {
+        return (await this.entityTable.getStringArray("string:SavedPath"))
+    }
+    
+    async getAbsolutePath(cadFileIndex: number): Promise<string | undefined> {
+        return (await this.entityTable.getString(cadFileIndex, "string:AbsolutePath"))
+    }
+    
+    async getAllAbsolutePath(): Promise<string[] | undefined> {
+        return (await this.entityTable.getStringArray("string:AbsolutePath"))
+    }
+    
+    async getPathType(cadFileIndex: number): Promise<string | undefined> {
+        return (await this.entityTable.getString(cadFileIndex, "string:PathType"))
+    }
+    
+    async getAllPathType(): Promise<string[] | undefined> {
+        return (await this.entityTable.getStringArray("string:PathType"))
+    }
+    
+    async getLinkStatus(cadFileIndex: number): Promise<string | undefined> {
+        return (await this.entityTable.getString(cadFileIndex, "string:LinkStatus"))
+    }
+    
+    async getAllLinkStatus(): Promise<string[] | undefined> {
+        return (await this.entityTable.getStringArray("string:LinkStatus"))
+    }
+    
+    async getInstanceCount(cadFileIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(cadFileIndex, "int:InstanceCount"))
+    }
+    
+    async getAllInstanceCount(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("int:InstanceCount"))
+    }
+    
+    async getViewSpecificInstanceCount(cadFileIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(cadFileIndex, "int:ViewSpecificInstanceCount"))
+    }
+    
+    async getAllViewSpecificInstanceCount(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("int:ViewSpecificInstanceCount"))
+    }
+    
+    async getPurgeState(cadFileIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(cadFileIndex, "int:PurgeState"))
+    }
+    
+    async getAllPurgeState(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("int:PurgeState"))
+    }
+    
+    async getIsExploded(cadFileIndex: number): Promise<boolean | undefined> {
+        return (await this.entityTable.getBoolean(cadFileIndex, "byte:IsExploded"))
+    }
+    
+    async getAllIsExploded(): Promise<boolean[] | undefined> {
+        return (await this.entityTable.getBooleanArray("byte:IsExploded"))
+    }
+    
+    async getExplodedPieceCount(cadFileIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(cadFileIndex, "int:ExplodedPieceCount"))
+    }
+    
+    async getAllExplodedPieceCount(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("int:ExplodedPieceCount"))
+    }
+    
+    async getExplodedModelPieceCount(cadFileIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(cadFileIndex, "int:ExplodedModelPieceCount"))
+    }
+    
+    async getAllExplodedModelPieceCount(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("int:ExplodedModelPieceCount"))
+    }
+    
+    async getExplodedViewCount(cadFileIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(cadFileIndex, "int:ExplodedViewCount"))
+    }
+    
+    async getAllExplodedViewCount(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("int:ExplodedViewCount"))
+    }
+    
+    async getExplodedModelViewCount(cadFileIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(cadFileIndex, "int:ExplodedModelViewCount"))
+    }
+    
+    async getAllExplodedModelViewCount(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("int:ExplodedModelViewCount"))
+    }
+    
+    async getExplodedSeverity(cadFileIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(cadFileIndex, "int:ExplodedSeverity"))
+    }
+    
+    async getAllExplodedSeverity(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("int:ExplodedSeverity"))
+    }
+    
+    async getFamilyTypeIndex(cadFileIndex: number): Promise<number | undefined> {
+        return await this.entityTable.getNumber(cadFileIndex, "index:Vim.FamilyType:FamilyType")
+    }
+    
+    async getAllFamilyTypeIndex(): Promise<number[] | undefined> {
+        return await this.entityTable.getNumberArray("index:Vim.FamilyType:FamilyType")
+    }
+    
+    async getFamilyType(cadFileIndex: number): Promise<IFamilyType | undefined> {
+        const index = await this.getFamilyTypeIndex(cadFileIndex)
+        
+        if (index === undefined) {
+            return undefined
+        }
+        
+        return await this.document.familyType?.get(index)
+    }
+    
+    async getCategoryIndex(cadFileIndex: number): Promise<number | undefined> {
+        return await this.entityTable.getNumber(cadFileIndex, "index:Vim.Category:Category")
+    }
+    
+    async getAllCategoryIndex(): Promise<number[] | undefined> {
+        return await this.entityTable.getNumberArray("index:Vim.Category:Category")
+    }
+    
+    async getCategory(cadFileIndex: number): Promise<ICategory | undefined> {
+        const index = await this.getCategoryIndex(cadFileIndex)
+        
+        if (index === undefined) {
+            return undefined
+        }
+        
+        return await this.document.category?.get(index)
+    }
+    
+    async getElementIndex(cadFileIndex: number): Promise<number | undefined> {
+        return await this.entityTable.getNumber(cadFileIndex, "index:Vim.Element:Element")
+    }
+    
+    async getAllElementIndex(): Promise<number[] | undefined> {
+        return await this.entityTable.getNumberArray("index:Vim.Element:Element")
+    }
+    
+    async getElement(cadFileIndex: number): Promise<IElement | undefined> {
+        const index = await this.getElementIndex(cadFileIndex)
+        
+        if (index === undefined) {
+            return undefined
+        }
+        
+        return await this.document.element?.get(index)
+    }
+    
+}
+
+export interface ICadInstance {
+    index: number
+    fileName?: string
+    isLinked?: boolean
+    isViewSpecific?: boolean
+    isExplodedPiece?: boolean
+    
+    cadFileIndex?: number
+    cadFile?: ICadFile
+    ownerViewIndex?: number
+    ownerView?: IView
+    elementIndex?: number
+    element?: IElement
+}
+
+export interface ICadInstanceTable {
+    getCount(): Promise<number>
+    get(cadInstanceIndex: number): Promise<ICadInstance>
+    getAll(): Promise<ICadInstance[]>
+    
+    getFileName(cadInstanceIndex: number): Promise<string | undefined>
+    getAllFileName(): Promise<string[] | undefined>
+    getIsLinked(cadInstanceIndex: number): Promise<boolean | undefined>
+    getAllIsLinked(): Promise<boolean[] | undefined>
+    getIsViewSpecific(cadInstanceIndex: number): Promise<boolean | undefined>
+    getAllIsViewSpecific(): Promise<boolean[] | undefined>
+    getIsExplodedPiece(cadInstanceIndex: number): Promise<boolean | undefined>
+    getAllIsExplodedPiece(): Promise<boolean[] | undefined>
+    
+    getCadFileIndex(cadInstanceIndex: number): Promise<number | undefined>
+    getAllCadFileIndex(): Promise<number[] | undefined>
+    getCadFile(cadInstanceIndex: number): Promise<ICadFile | undefined>
+    getOwnerViewIndex(cadInstanceIndex: number): Promise<number | undefined>
+    getAllOwnerViewIndex(): Promise<number[] | undefined>
+    getOwnerView(cadInstanceIndex: number): Promise<IView | undefined>
+    getElementIndex(cadInstanceIndex: number): Promise<number | undefined>
+    getAllElementIndex(): Promise<number[] | undefined>
+    getElement(cadInstanceIndex: number): Promise<IElement | undefined>
+}
+
+export class CadInstance implements ICadInstance {
+    index: number
+    fileName?: string
+    isLinked?: boolean
+    isViewSpecific?: boolean
+    isExplodedPiece?: boolean
+    
+    cadFileIndex?: number
+    cadFile?: ICadFile
+    ownerViewIndex?: number
+    ownerView?: IView
+    elementIndex?: number
+    element?: IElement
+    
+    static async createFromTable(table: ICadInstanceTable, index: number): Promise<ICadInstance> {
+        let result = new CadInstance()
+        result.index = index
+        
+        await Promise.all([
+            table.getFileName(index).then(v => result.fileName = v),
+            table.getIsLinked(index).then(v => result.isLinked = v),
+            table.getIsViewSpecific(index).then(v => result.isViewSpecific = v),
+            table.getIsExplodedPiece(index).then(v => result.isExplodedPiece = v),
+            table.getCadFileIndex(index).then(v => result.cadFileIndex = v),
+            table.getOwnerViewIndex(index).then(v => result.ownerViewIndex = v),
+            table.getElementIndex(index).then(v => result.elementIndex = v),
+        ])
+        
+        return result
+    }
+}
+
+export class CadInstanceTable implements ICadInstanceTable {
+    private document: VimDocument
+    private entityTable: EntityTable
+    
+    static async createFromDocument(document: VimDocument): Promise<ICadInstanceTable | undefined> {
+        const entity = await document.entities.getBfast("Vim.CadInstance")
+        
+        if (!entity) {
+            return undefined
+        }
+        
+        let table = new CadInstanceTable()
+        table.document = document
+        table.entityTable = new EntityTable(entity, document.strings)
+        
+        return table
+    }
+    
+    getCount(): Promise<number> {
+        return this.entityTable.getCount()
+    }
+    
+    async get(cadInstanceIndex: number): Promise<ICadInstance> {
+        return await CadInstance.createFromTable(this, cadInstanceIndex)
+    }
+    
+    async getAll(): Promise<ICadInstance[]> {
+        const localTable = await this.entityTable.getLocal()
+        
+        let fileName: string[] | undefined
+        let isLinked: boolean[] | undefined
+        let isViewSpecific: boolean[] | undefined
+        let isExplodedPiece: boolean[] | undefined
+        let cadFileIndex: number[] | undefined
+        let ownerViewIndex: number[] | undefined
+        let elementIndex: number[] | undefined
+        
+        await Promise.all([
+            (async () => { fileName = (await localTable.getStringArray("string:FileName")) })(),
+            (async () => { isLinked = (await localTable.getBooleanArray("byte:IsLinked")) })(),
+            (async () => { isViewSpecific = (await localTable.getBooleanArray("byte:IsViewSpecific")) })(),
+            (async () => { isExplodedPiece = (await localTable.getBooleanArray("byte:IsExplodedPiece")) })(),
+            (async () => { cadFileIndex = (await localTable.getNumberArray("index:Vim.CadFile:CadFile")) })(),
+            (async () => { ownerViewIndex = (await localTable.getNumberArray("index:Vim.View:OwnerView")) })(),
+            (async () => { elementIndex = (await localTable.getNumberArray("index:Vim.Element:Element")) })(),
+        ])
+        
+        let cadInstance: ICadInstance[] = []
+        
+        const rowCount = await this.getCount()
+        for (let i = 0; i < rowCount; i++) {
+            cadInstance.push({
+                index: i,
+                fileName: fileName ? fileName[i] : undefined,
+                isLinked: isLinked ? isLinked[i] : undefined,
+                isViewSpecific: isViewSpecific ? isViewSpecific[i] : undefined,
+                isExplodedPiece: isExplodedPiece ? isExplodedPiece[i] : undefined,
+                cadFileIndex: cadFileIndex ? cadFileIndex[i] : undefined,
+                ownerViewIndex: ownerViewIndex ? ownerViewIndex[i] : undefined,
+                elementIndex: elementIndex ? elementIndex[i] : undefined
+            })
+        }
+        
+        return cadInstance
+    }
+    
+    async getFileName(cadInstanceIndex: number): Promise<string | undefined> {
+        return (await this.entityTable.getString(cadInstanceIndex, "string:FileName"))
+    }
+    
+    async getAllFileName(): Promise<string[] | undefined> {
+        return (await this.entityTable.getStringArray("string:FileName"))
+    }
+    
+    async getIsLinked(cadInstanceIndex: number): Promise<boolean | undefined> {
+        return (await this.entityTable.getBoolean(cadInstanceIndex, "byte:IsLinked"))
+    }
+    
+    async getAllIsLinked(): Promise<boolean[] | undefined> {
+        return (await this.entityTable.getBooleanArray("byte:IsLinked"))
+    }
+    
+    async getIsViewSpecific(cadInstanceIndex: number): Promise<boolean | undefined> {
+        return (await this.entityTable.getBoolean(cadInstanceIndex, "byte:IsViewSpecific"))
+    }
+    
+    async getAllIsViewSpecific(): Promise<boolean[] | undefined> {
+        return (await this.entityTable.getBooleanArray("byte:IsViewSpecific"))
+    }
+    
+    async getIsExplodedPiece(cadInstanceIndex: number): Promise<boolean | undefined> {
+        return (await this.entityTable.getBoolean(cadInstanceIndex, "byte:IsExplodedPiece"))
+    }
+    
+    async getAllIsExplodedPiece(): Promise<boolean[] | undefined> {
+        return (await this.entityTable.getBooleanArray("byte:IsExplodedPiece"))
+    }
+    
+    async getCadFileIndex(cadInstanceIndex: number): Promise<number | undefined> {
+        return await this.entityTable.getNumber(cadInstanceIndex, "index:Vim.CadFile:CadFile")
+    }
+    
+    async getAllCadFileIndex(): Promise<number[] | undefined> {
+        return await this.entityTable.getNumberArray("index:Vim.CadFile:CadFile")
+    }
+    
+    async getCadFile(cadInstanceIndex: number): Promise<ICadFile | undefined> {
+        const index = await this.getCadFileIndex(cadInstanceIndex)
+        
+        if (index === undefined) {
+            return undefined
+        }
+        
+        return await this.document.cadFile?.get(index)
+    }
+    
+    async getOwnerViewIndex(cadInstanceIndex: number): Promise<number | undefined> {
+        return await this.entityTable.getNumber(cadInstanceIndex, "index:Vim.View:OwnerView")
+    }
+    
+    async getAllOwnerViewIndex(): Promise<number[] | undefined> {
+        return await this.entityTable.getNumberArray("index:Vim.View:OwnerView")
+    }
+    
+    async getOwnerView(cadInstanceIndex: number): Promise<IView | undefined> {
+        const index = await this.getOwnerViewIndex(cadInstanceIndex)
+        
+        if (index === undefined) {
+            return undefined
+        }
+        
+        return await this.document.view?.get(index)
+    }
+    
+    async getElementIndex(cadInstanceIndex: number): Promise<number | undefined> {
+        return await this.entityTable.getNumber(cadInstanceIndex, "index:Vim.Element:Element")
+    }
+    
+    async getAllElementIndex(): Promise<number[] | undefined> {
+        return await this.entityTable.getNumberArray("index:Vim.Element:Element")
+    }
+    
+    async getElement(cadInstanceIndex: number): Promise<IElement | undefined> {
+        const index = await this.getElementIndex(cadInstanceIndex)
+        
+        if (index === undefined) {
+            return undefined
+        }
+        
+        return await this.document.element?.get(index)
+    }
+    
+}
+
+export interface IQuestElement {
+    index: number
+    collisionClass?: string
+    collisionCategory?: string
+    boundsMin_X?: number
+    boundsMin_Y?: number
+    boundsMin_Z?: number
+    boundsMax_X?: number
+    boundsMax_Y?: number
+    boundsMax_Z?: number
+    
+    streamLevelIndex?: number
+    streamLevel?: ILevel
+    streamTopLevelIndex?: number
+    streamTopLevel?: ILevel
+    elementIndex?: number
+    element?: IElement
+}
+
+export interface IQuestElementTable {
+    getCount(): Promise<number>
+    get(questElementIndex: number): Promise<IQuestElement>
+    getAll(): Promise<IQuestElement[]>
+    
+    getCollisionClass(questElementIndex: number): Promise<string | undefined>
+    getAllCollisionClass(): Promise<string[] | undefined>
+    getCollisionCategory(questElementIndex: number): Promise<string | undefined>
+    getAllCollisionCategory(): Promise<string[] | undefined>
+    getBoundsMin_X(questElementIndex: number): Promise<number | undefined>
+    getAllBoundsMin_X(): Promise<number[] | undefined>
+    getBoundsMin_Y(questElementIndex: number): Promise<number | undefined>
+    getAllBoundsMin_Y(): Promise<number[] | undefined>
+    getBoundsMin_Z(questElementIndex: number): Promise<number | undefined>
+    getAllBoundsMin_Z(): Promise<number[] | undefined>
+    getBoundsMax_X(questElementIndex: number): Promise<number | undefined>
+    getAllBoundsMax_X(): Promise<number[] | undefined>
+    getBoundsMax_Y(questElementIndex: number): Promise<number | undefined>
+    getAllBoundsMax_Y(): Promise<number[] | undefined>
+    getBoundsMax_Z(questElementIndex: number): Promise<number | undefined>
+    getAllBoundsMax_Z(): Promise<number[] | undefined>
+    
+    getStreamLevelIndex(questElementIndex: number): Promise<number | undefined>
+    getAllStreamLevelIndex(): Promise<number[] | undefined>
+    getStreamLevel(questElementIndex: number): Promise<ILevel | undefined>
+    getStreamTopLevelIndex(questElementIndex: number): Promise<number | undefined>
+    getAllStreamTopLevelIndex(): Promise<number[] | undefined>
+    getStreamTopLevel(questElementIndex: number): Promise<ILevel | undefined>
+    getElementIndex(questElementIndex: number): Promise<number | undefined>
+    getAllElementIndex(): Promise<number[] | undefined>
+    getElement(questElementIndex: number): Promise<IElement | undefined>
+}
+
+export class QuestElement implements IQuestElement {
+    index: number
+    collisionClass?: string
+    collisionCategory?: string
+    boundsMin_X?: number
+    boundsMin_Y?: number
+    boundsMin_Z?: number
+    boundsMax_X?: number
+    boundsMax_Y?: number
+    boundsMax_Z?: number
+    
+    streamLevelIndex?: number
+    streamLevel?: ILevel
+    streamTopLevelIndex?: number
+    streamTopLevel?: ILevel
+    elementIndex?: number
+    element?: IElement
+    
+    static async createFromTable(table: IQuestElementTable, index: number): Promise<IQuestElement> {
+        let result = new QuestElement()
+        result.index = index
+        
+        await Promise.all([
+            table.getCollisionClass(index).then(v => result.collisionClass = v),
+            table.getCollisionCategory(index).then(v => result.collisionCategory = v),
+            table.getBoundsMin_X(index).then(v => result.boundsMin_X = v),
+            table.getBoundsMin_Y(index).then(v => result.boundsMin_Y = v),
+            table.getBoundsMin_Z(index).then(v => result.boundsMin_Z = v),
+            table.getBoundsMax_X(index).then(v => result.boundsMax_X = v),
+            table.getBoundsMax_Y(index).then(v => result.boundsMax_Y = v),
+            table.getBoundsMax_Z(index).then(v => result.boundsMax_Z = v),
+            table.getStreamLevelIndex(index).then(v => result.streamLevelIndex = v),
+            table.getStreamTopLevelIndex(index).then(v => result.streamTopLevelIndex = v),
+            table.getElementIndex(index).then(v => result.elementIndex = v),
+        ])
+        
+        return result
+    }
+}
+
+export class QuestElementTable implements IQuestElementTable {
+    private document: VimDocument
+    private entityTable: EntityTable
+    
+    static async createFromDocument(document: VimDocument): Promise<IQuestElementTable | undefined> {
+        const entity = await document.entities.getBfast("Vim.QuestElement")
+        
+        if (!entity) {
+            return undefined
+        }
+        
+        let table = new QuestElementTable()
+        table.document = document
+        table.entityTable = new EntityTable(entity, document.strings)
+        
+        return table
+    }
+    
+    getCount(): Promise<number> {
+        return this.entityTable.getCount()
+    }
+    
+    async get(questElementIndex: number): Promise<IQuestElement> {
+        return await QuestElement.createFromTable(this, questElementIndex)
+    }
+    
+    async getAll(): Promise<IQuestElement[]> {
+        const localTable = await this.entityTable.getLocal()
+        
+        let collisionClass: string[] | undefined
+        let collisionCategory: string[] | undefined
+        let boundsMin_X: number[] | undefined
+        let boundsMin_Y: number[] | undefined
+        let boundsMin_Z: number[] | undefined
+        let boundsMax_X: number[] | undefined
+        let boundsMax_Y: number[] | undefined
+        let boundsMax_Z: number[] | undefined
+        let streamLevelIndex: number[] | undefined
+        let streamTopLevelIndex: number[] | undefined
+        let elementIndex: number[] | undefined
+        
+        await Promise.all([
+            (async () => { collisionClass = (await localTable.getStringArray("string:CollisionClass")) })(),
+            (async () => { collisionCategory = (await localTable.getStringArray("string:CollisionCategory")) })(),
+            (async () => { boundsMin_X = (await localTable.getNumberArray("double:BoundsMin.X")) })(),
+            (async () => { boundsMin_Y = (await localTable.getNumberArray("double:BoundsMin.Y")) })(),
+            (async () => { boundsMin_Z = (await localTable.getNumberArray("double:BoundsMin.Z")) })(),
+            (async () => { boundsMax_X = (await localTable.getNumberArray("double:BoundsMax.X")) })(),
+            (async () => { boundsMax_Y = (await localTable.getNumberArray("double:BoundsMax.Y")) })(),
+            (async () => { boundsMax_Z = (await localTable.getNumberArray("double:BoundsMax.Z")) })(),
+            (async () => { streamLevelIndex = (await localTable.getNumberArray("index:Vim.Level:StreamLevel")) })(),
+            (async () => { streamTopLevelIndex = (await localTable.getNumberArray("index:Vim.Level:StreamTopLevel")) })(),
+            (async () => { elementIndex = (await localTable.getNumberArray("index:Vim.Element:Element")) })(),
+        ])
+        
+        let questElement: IQuestElement[] = []
+        
+        const rowCount = await this.getCount()
+        for (let i = 0; i < rowCount; i++) {
+            questElement.push({
+                index: i,
+                collisionClass: collisionClass ? collisionClass[i] : undefined,
+                collisionCategory: collisionCategory ? collisionCategory[i] : undefined,
+                boundsMin_X: boundsMin_X ? boundsMin_X[i] : undefined,
+                boundsMin_Y: boundsMin_Y ? boundsMin_Y[i] : undefined,
+                boundsMin_Z: boundsMin_Z ? boundsMin_Z[i] : undefined,
+                boundsMax_X: boundsMax_X ? boundsMax_X[i] : undefined,
+                boundsMax_Y: boundsMax_Y ? boundsMax_Y[i] : undefined,
+                boundsMax_Z: boundsMax_Z ? boundsMax_Z[i] : undefined,
+                streamLevelIndex: streamLevelIndex ? streamLevelIndex[i] : undefined,
+                streamTopLevelIndex: streamTopLevelIndex ? streamTopLevelIndex[i] : undefined,
+                elementIndex: elementIndex ? elementIndex[i] : undefined
+            })
+        }
+        
+        return questElement
+    }
+    
+    async getCollisionClass(questElementIndex: number): Promise<string | undefined> {
+        return (await this.entityTable.getString(questElementIndex, "string:CollisionClass"))
+    }
+    
+    async getAllCollisionClass(): Promise<string[] | undefined> {
+        return (await this.entityTable.getStringArray("string:CollisionClass"))
+    }
+    
+    async getCollisionCategory(questElementIndex: number): Promise<string | undefined> {
+        return (await this.entityTable.getString(questElementIndex, "string:CollisionCategory"))
+    }
+    
+    async getAllCollisionCategory(): Promise<string[] | undefined> {
+        return (await this.entityTable.getStringArray("string:CollisionCategory"))
+    }
+    
+    async getBoundsMin_X(questElementIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(questElementIndex, "double:BoundsMin.X"))
+    }
+    
+    async getAllBoundsMin_X(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:BoundsMin.X"))
+    }
+    
+    async getBoundsMin_Y(questElementIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(questElementIndex, "double:BoundsMin.Y"))
+    }
+    
+    async getAllBoundsMin_Y(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:BoundsMin.Y"))
+    }
+    
+    async getBoundsMin_Z(questElementIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(questElementIndex, "double:BoundsMin.Z"))
+    }
+    
+    async getAllBoundsMin_Z(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:BoundsMin.Z"))
+    }
+    
+    async getBoundsMax_X(questElementIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(questElementIndex, "double:BoundsMax.X"))
+    }
+    
+    async getAllBoundsMax_X(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:BoundsMax.X"))
+    }
+    
+    async getBoundsMax_Y(questElementIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(questElementIndex, "double:BoundsMax.Y"))
+    }
+    
+    async getAllBoundsMax_Y(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:BoundsMax.Y"))
+    }
+    
+    async getBoundsMax_Z(questElementIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(questElementIndex, "double:BoundsMax.Z"))
+    }
+    
+    async getAllBoundsMax_Z(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:BoundsMax.Z"))
+    }
+    
+    async getStreamLevelIndex(questElementIndex: number): Promise<number | undefined> {
+        return await this.entityTable.getNumber(questElementIndex, "index:Vim.Level:StreamLevel")
+    }
+    
+    async getAllStreamLevelIndex(): Promise<number[] | undefined> {
+        return await this.entityTable.getNumberArray("index:Vim.Level:StreamLevel")
+    }
+    
+    async getStreamLevel(questElementIndex: number): Promise<ILevel | undefined> {
+        const index = await this.getStreamLevelIndex(questElementIndex)
+        
+        if (index === undefined) {
+            return undefined
+        }
+        
+        return await this.document.level?.get(index)
+    }
+    
+    async getStreamTopLevelIndex(questElementIndex: number): Promise<number | undefined> {
+        return await this.entityTable.getNumber(questElementIndex, "index:Vim.Level:StreamTopLevel")
+    }
+    
+    async getAllStreamTopLevelIndex(): Promise<number[] | undefined> {
+        return await this.entityTable.getNumberArray("index:Vim.Level:StreamTopLevel")
+    }
+    
+    async getStreamTopLevel(questElementIndex: number): Promise<ILevel | undefined> {
+        const index = await this.getStreamTopLevelIndex(questElementIndex)
+        
+        if (index === undefined) {
+            return undefined
+        }
+        
+        return await this.document.level?.get(index)
+    }
+    
+    async getElementIndex(questElementIndex: number): Promise<number | undefined> {
+        return await this.entityTable.getNumber(questElementIndex, "index:Vim.Element:Element")
+    }
+    
+    async getAllElementIndex(): Promise<number[] | undefined> {
+        return await this.entityTable.getNumberArray("index:Vim.Element:Element")
+    }
+    
+    async getElement(questElementIndex: number): Promise<IElement | undefined> {
+        const index = await this.getElementIndex(questElementIndex)
+        
+        if (index === undefined) {
+            return undefined
+        }
+        
+        return await this.document.element?.get(index)
+    }
+    
+}
+
 export class VimDocument {
     asset: IAssetTable | undefined
     displayUnit: IDisplayUnitTable | undefined
@@ -20750,6 +23633,10 @@ export class VimDocument {
     familyInstance: IFamilyInstanceTable | undefined
     view: IViewTable | undefined
     filterInView: IFilterInViewTable | undefined
+    hiddenCategoryInView: IHiddenCategoryInViewTable | undefined
+    hiddenWorksetInView: IHiddenWorksetInViewTable | undefined
+    hiddenElementInView: IHiddenElementInViewTable | undefined
+    linkInView: ILinkInViewTable | undefined
     gridInView: IGridInViewTable | undefined
     linePattern: ILinePatternTable | undefined
     fillPattern: IFillPatternTable | undefined
@@ -20814,6 +23701,9 @@ export class VimDocument {
     syncSession: ISyncSessionTable | undefined
     elementChange: IElementChangeTable | undefined
     activityMarker: IActivityMarkerTable | undefined
+    cadFile: ICadFileTable | undefined
+    cadInstance: ICadInstanceTable | undefined
+    questElement: IQuestElementTable | undefined
     
     entities: BFast
     strings: string[] | undefined
@@ -20852,6 +23742,10 @@ export class VimDocument {
         doc.familyInstance = await FamilyInstanceTable.createFromDocument(doc)
         doc.view = await ViewTable.createFromDocument(doc)
         doc.filterInView = await FilterInViewTable.createFromDocument(doc)
+        doc.hiddenCategoryInView = await HiddenCategoryInViewTable.createFromDocument(doc)
+        doc.hiddenWorksetInView = await HiddenWorksetInViewTable.createFromDocument(doc)
+        doc.hiddenElementInView = await HiddenElementInViewTable.createFromDocument(doc)
+        doc.linkInView = await LinkInViewTable.createFromDocument(doc)
         doc.gridInView = await GridInViewTable.createFromDocument(doc)
         doc.linePattern = await LinePatternTable.createFromDocument(doc)
         doc.fillPattern = await FillPatternTable.createFromDocument(doc)
@@ -20916,6 +23810,9 @@ export class VimDocument {
         doc.syncSession = await SyncSessionTable.createFromDocument(doc)
         doc.elementChange = await ElementChangeTable.createFromDocument(doc)
         doc.activityMarker = await ActivityMarkerTable.createFromDocument(doc)
+        doc.cadFile = await CadFileTable.createFromDocument(doc)
+        doc.cadInstance = await CadInstanceTable.createFromDocument(doc)
+        doc.questElement = await QuestElementTable.createFromDocument(doc)
         
         return doc
     }

@@ -8,7 +8,7 @@
     /// </summary>
     public partial class ObjectModelBuilder
     {
-        public DocumentBuilder ToDocumentBuilder(string generator, string versionString)
-            => AddEntityTableSets(new DocumentBuilder(generator, SchemaVersion.Current, versionString));
+        public DocumentBuilder ToDocumentBuilder(string generator, string versionString, global::System.Collections.Generic.IReadOnlyDictionary<string, string> optionalHeaderValues = null)
+            => AddEntityTableSets(new DocumentBuilder(generator, SchemaVersion.Current, versionString, optionalHeaderValues));
     }
 }

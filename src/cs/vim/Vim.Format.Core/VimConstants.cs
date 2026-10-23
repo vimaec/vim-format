@@ -99,6 +99,13 @@ namespace Vim.Format
         public const string SyncSession = "Vim.SyncSession";
         public const string ElementChange = "Vim.ElementChange";
         public const string ActivityMarker = "Vim.ActivityMarker";
+        public const string CadFile = "Vim.CadFile";
+        public const string CadInstance = "Vim.CadInstance";
+        public const string HiddenCategoryInView = "Vim.HiddenCategoryInView";
+        public const string HiddenWorksetInView = "Vim.HiddenWorksetInView";
+        public const string HiddenElementInView = "Vim.HiddenElementInView";
+        public const string LinkInView = "Vim.LinkInView";
+        public const string QuestElement = "Vim.QuestElement";
     }
 
     public static class VimConstants

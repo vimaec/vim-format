@@ -135,11 +135,22 @@ namespace Vim.Format
             public IReadOnlyList<int> SubmeshesIndexOffset { get; }
             public IReadOnlyList<int> SubmeshMaterials { get; }
 
-            /// <summary>Optional, in memory only (not a g3d buffer): the Vim.Category of each submesh; null when the mesh carries none.</summary>
+            /// <summary>
+            /// Optional: the Vim.Category of each submesh; null when the mesh carries none. Written to the g3d as
+            /// g3d:submesh:category (BigG3dWriter.SubmeshCategoryAttribute) when at least one mesh carries it (exporter options
+            /// "subcategory per part" or "geometry pieces"); -1 = the element's own category.
+            /// </summary>
             public IReadOnlyList<int> SubmeshCategories { get; }
 
             /// <summary>Optional, in memory only (not a g3d buffer): the Vim.CompoundStructureLayer of each submesh; null when the mesh carries none.</summary>
             public IReadOnlyList<int> SubmeshLayers { get; }
+
+            /// <summary>
+            /// The per-vertex texture coordinates, or null when the mesh has none.
+            /// When present, UVs.Count == Vertices.Count (a mesh whose UV count does not match its vertex count gets none).
+            /// Written to the g3d as g3d:vertex:uv when at least one mesh carries them (exporter option "Textures").
+            /// </summary>
+            public IReadOnlyList<Vector2> UVs { get; }
 
             public SubdividedMesh(Mesh mesh)
             {
@@ -183,26 +194,36 @@ namespace Vim.Format
                 SubmeshesIndexOffset = submeshIndexOffset;
 
                 Vertices = mesh.Vertices;
+                UVs = mesh.UVs != null && mesh.UVs.Count > 0 && mesh.UVs.Count == mesh.Vertices.Count
+                    ? mesh.UVs
+                    : null;
             }
 
             public SubdividedMesh(
                 IReadOnlyList<int> indices,
                 IReadOnlyList<Vector3> vertices,
                 IReadOnlyList<int> submeshesIndexOffset,
-                IReadOnlyList<int> submeshMaterials
+                IReadOnlyList<int> submeshMaterials,
+                IReadOnlyList<int> submeshCategories = null,
+                IReadOnlyList<Vector2> uvs = null
             )
             {
                 Indices = indices;
                 Vertices = vertices;
                 SubmeshesIndexOffset = submeshesIndexOffset;
                 SubmeshMaterials = submeshMaterials;
+                SubmeshCategories = submeshCategories;
+                UVs = uvs != null && uvs.Count > 0 && uvs.Count == vertices.Count ? uvs : null;
             }
 
             public bool IsEquivalentTo(SubdividedMesh other)
                 => Vertices.SequenceEqual(other.Vertices)
                    && Indices.SequenceEqual(other.Indices)
                     && SubmeshesIndexOffset.SequenceEqual(other.SubmeshesIndexOffset)
-                    && SubmeshMaterials.SequenceEqual(other.SubmeshMaterials);
+                    && SubmeshMaterials.SequenceEqual(other.SubmeshMaterials)
+                    // Categories are compared only when both sides carry them (a reader without category support sees none).
+                    && (SubmeshCategories == null || other.SubmeshCategories == null || SubmeshCategories.SequenceEqual(other.SubmeshCategories))
+                    && (UVs == null ? other.UVs == null : other.UVs != null && UVs.SequenceEqual(other.UVs));
 
             public static SubdividedMesh CreateFromWorldSpaceBox(IReadOnlyList<Vector3> points, int materialIndex)
             {

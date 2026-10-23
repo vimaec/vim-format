@@ -22,12 +22,23 @@ namespace Vim.Format
         public List<Shape> Shapes { get; }
         public List<Material> Materials { get; }
 
+        /// <summary>
+        /// The Vim.Category (usually a Revit subcategory) of each submesh, parallel to g3d:submesh:material. Written only when
+        /// at least one mesh carries categories (exporter options StoreSubcategoryPerPart or geometry pieces). -1 = unknown /
+        /// the element's own category. Readers that do not know this attribute ignore it. Not in the generated
+        /// CommonAttributes list (CommonAttributes.tt) yet.
+        /// </summary>
+        public const string SubmeshCategoryAttribute = "g3d:submesh:category:0:int32:1";
+
+        public bool WriteSubmeshCategories { get; }
+
         // Computed fields
         public int[] MeshVertexOffsets { get; }
         public int[] MeshIndexOffsets { get; }
         public int[] MeshSubmeshOffset { get; }
         public int[] SubmeshIndexOffsets { get; }
         public int[] ShapeVertexOffsets { get; }
+        public bool HasVertexUvs { get; }
 
         public BigG3dWriter(List<SubdividedMesh> meshes, List<Instance> instances, List<Shape> shapes, List<Material> materials, G3dHeader? header = null, bool useColors = false)
         {
@@ -108,9 +119,21 @@ namespace Vim.Format
                 AttributeSizeAndName(CommonAttributes.MaterialSmoothness, materials.Count),
             };
 
+            WriteSubmeshCategories = meshes.Any(m => m.SubmeshCategories != null);
+            if (WriteSubmeshCategories)
+                writers.Add(AttributeSizeAndName(SubmeshCategoryAttribute, submeshCount));
+
             if (useColors)
             {
                 writers.Add(AttributeSizeAndName(CommonAttributes.VertexColor, totalVertices));
+            }
+
+            // Texture coordinates: written only when at least one mesh carries them (the exporter's experimental
+            // "Textures" option). The buffer always spans every vertex; meshes without UVs get (0, 0).
+            HasVertexUvs = meshes.Any(m => m.UVs != null);
+            if (HasVertexUvs)
+            {
+                writers.Add(AttributeSizeAndName(CommonAttributes.VertexUv, totalVertices));
             }
 
             Names = writers.Select(w => w.attribute).ToArray();
@@ -137,6 +160,13 @@ namespace Vim.Format
                     // Vertices
                     case CommonAttributes.Position:
                         Meshes.ForEach(g => stream.Write(g.Vertices.ToArray()));
+                        break;
+
+                    // Texture coordinates (one per vertex, zeros for meshes without UVs)
+                    case CommonAttributes.VertexUv:
+                        Meshes.ForEach(g => stream.Write(g.UVs != null
+                            ? g.UVs.ToArray()
+                            : new Math3d.Vector2[g.Vertices.Count]));
                         break;
 
                     // Indices
@@ -199,6 +229,9 @@ namespace Vim.Format
                         break;
                     case CommonAttributes.SubmeshMaterial:
                         stream.Write(Meshes.SelectMany(s => s.SubmeshMaterials).ToArray());
+                        break;
+                    case SubmeshCategoryAttribute:
+                        stream.Write(Meshes.SelectMany(s => s.SubmeshCategories ?? Enumerable.Repeat(-1, s.SubmeshMaterials.Count)).ToArray());
                         break;
                     default:
                         throw new Exception($"Not a recognized geometry buffer: {name}");

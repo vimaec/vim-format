@@ -261,6 +261,11 @@ namespace Vim.Format.ObjectModel
                 ValidateDomain(nameof(material.Smoothness), material.Smoothness, 0d, 1d, index);
                 ValidateDomain(nameof(material.Transparency), material.Transparency, 0d, 1d, index);
                 ValidateDomain(nameof(material.NormalAmount), material.NormalAmount, 0d, 1d, index);
+                ValidateDomain(nameof(material.AppearanceImageFade), material.AppearanceImageFade, 0d, 1d, index);
+                ValidateDomain(nameof(material.AppearanceTransparency), material.AppearanceTransparency, 0d, 1d, index);
+                ValidateDomain(nameof(material.Roughness), material.Roughness, 0d, 1d, index);
+                ValidateDomain(nameof(material.Metalness), material.Metalness, 0d, 1d, index);
+                ValidateDomain(nameof(material.Reflectivity), material.Reflectivity, 0d, 1d, index);
             }
         }
 

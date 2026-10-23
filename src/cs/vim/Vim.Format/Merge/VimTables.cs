@@ -16,6 +16,7 @@ namespace Vim.Format.Merge
     public sealed class VimTables
     {
         public const string ElementColumn = "index:" + TableNames.Element + ":Element";
+        public const string BimDocumentColumn = "index:" + TableNames.BimDocument + ":BimDocument";
 
         public SerializableDocument Document { get; }
         public string[] Strings { get; private set; }
@@ -169,6 +170,36 @@ namespace Vim.Format.Merge
             for (var i = 0; i < n; ++i)
                 r[i] = linked != null && i < linked.Length ? linked[i] == 0 : parents == null || i >= parents.Length || parents[i] < 0;
             return r;
+        }
+
+        /// <summary>For each Element row: true when its BimDocument is a host model (see <see cref="HostBimDocuments"/>).</summary>
+        public bool[] HostElements()
+        {
+            var host = HostBimDocuments();
+            var docs = Index(TableNames.Element, BimDocumentColumn);
+            var r = new bool[NumRows(TableNames.Element)];
+            for (var i = 0; i < r.Length; ++i)
+            {
+                var d = docs == null ? -1 : docs[i];
+                r[i] = d >= 0 && d < host.Length && host[d];
+            }
+            return r;
+        }
+
+        /// <summary>
+        /// The host model's elements held more than once (same UniqueId). A full export holds none; a file in which some
+        /// are must not be patched (the differential update's check, before and after a patch).
+        /// </summary>
+        public int HostElementsHeldTwice()
+        {
+            var host = HostElements();
+            var uids = Strs(TableNames.Element, "string:UniqueId") ?? Array.Empty<string>();
+            var seen = new HashSet<string>(StringComparer.Ordinal);
+            var twice = 0;
+            for (var i = 0; i < uids.Length; ++i)
+                if (host[i] && !string.IsNullOrEmpty(uids[i]) && !seen.Add(uids[i]))
+                    twice++;
+            return twice;
         }
 
         /// <summary>The BimDocument title of each Element row ("" when none).</summary>

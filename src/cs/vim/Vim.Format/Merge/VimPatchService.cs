@@ -116,6 +116,10 @@ namespace Vim.Format.Merge
         /// <summary>Keeps at most this many element-change rows, the newest; 0 = no cap.</summary>
         public int ActivityMaxChangeRows { get; set; }
 
+        /// <summary>Header values written in the patched file (added to, or replacing, the base header's), for example
+        /// the export fingerprint a later differential update checks. Null for none.</summary>
+        public IReadOnlyDictionary<string, string> HeaderValues { get; set; }
+
         public string Generator { get; set; } = "Vim.Format.Patch";
     }
 
@@ -572,12 +576,15 @@ namespace Vim.Format.Merge
             var schema = baseVim.Header?.Schema;
             if (schema == null || (partialVim.Header?.Schema != null && partialVim.Header.Schema.Minor > schema.Minor && partialVim.Header.Schema.Major == schema.Major))
                 schema = partialVim.Header?.Schema ?? SchemaVersion.Current;
+            var headerValues = new Dictionary<string, string>
+            {
+                { "patched", DateTime.UtcNow.ToString("o", CultureInfo.InvariantCulture) },
+            };
+            foreach (var kv in options.HeaderValues ?? new Dictionary<string, string>())
+                headerValues[kv.Key] = kv.Value;
             var header = baseVim.Header != null
-                ? SerializableHeader.CreateRevisionOf(baseVim.Header, options.Generator, schema, new Dictionary<string, string>
-                {
-                    { "patched", DateTime.UtcNow.ToString("o", CultureInfo.InvariantCulture) },
-                })
-                : new SerializableHeader(options.Generator, schema, "");
+                ? SerializableHeader.CreateRevisionOf(baseVim.Header, options.Generator, schema, headerValues)
+                : new SerializableHeader(options.Generator, schema, "", headerValues);
 
             var db = RowPlanWriter.Write(sources, plans, header, options.DeduplicateMeshes, result.Geometry);
             foreach (var kv in plans)

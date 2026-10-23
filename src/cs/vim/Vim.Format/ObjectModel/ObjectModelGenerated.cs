@@ -195,6 +195,7 @@ namespace Vim.Format.ObjectModel {
                     (Creator == other.Creator) &&
                     (LastChangedBy == other.LastChangedBy) &&
                     (Owner == other.Owner) &&
+                    (ChangeToken == other.ChangeToken) &&
                     (_Level?.Index == other._Level?.Index) &&
                     (_PhaseCreated?.Index == other._PhaseCreated?.Index) &&
                     (_PhaseDemolished?.Index == other._PhaseDemolished?.Index) &&
@@ -486,6 +487,7 @@ namespace Vim.Format.ObjectModel {
                     (Title == other.Title) &&
                     (IsMetric == other.IsMetric) &&
                     (NumSaves == other.NumSaves) &&
+                    (Identity == other.Identity) &&
                     (IsLinked == other.IsLinked) &&
                     (IsDetached == other.IsDetached) &&
                     (IsWorkshared == other.IsWorkshared) &&
@@ -511,6 +513,12 @@ namespace Vim.Format.ObjectModel {
                     (Version == other.Version) &&
                     (User == other.User) &&
                     (FileLength == other.FileLength) &&
+                    (FileLengthSource == other.FileLengthSource) &&
+                    (FileLengthPath == other.FileLengthPath) &&
+                    (IsCloudModel == other.IsCloudModel) &&
+                    (CloudProjectGuid == other.CloudProjectGuid) &&
+                    (CloudModelGuid == other.CloudModelGuid) &&
+                    (PurgeableElementCount == other.PurgeableElementCount) &&
                     (_ActiveView?.Index == other._ActiveView?.Index) &&
                     (_OwnerFamily?.Index == other._OwnerFamily?.Index) &&
                     (_Parent?.Index == other._Parent?.Index) &&
@@ -668,6 +676,8 @@ namespace Vim.Format.ObjectModel {
                     (StructuralSectionShape == other.StructuralSectionShape) &&
                     (IsSystemFamily == other.IsSystemFamily) &&
                     (IsInPlace == other.IsInPlace) &&
+                    (InstanceCount == other.InstanceCount) &&
+                    (PurgeState == other.PurgeState) &&
                     (_FamilyCategory?.Index == other._FamilyCategory?.Index) &&
                     (_Element?.Index == other._Element?.Index);
                 if (!fieldsAreEqual)
@@ -705,6 +715,8 @@ namespace Vim.Format.ObjectModel {
                 var fieldsAreEqual =
                     (Index == other.Index) &&
                     (IsSystemFamilyType == other.IsSystemFamilyType) &&
+                    (InstanceCount == other.InstanceCount) &&
+                    (PurgeState == other.PurgeState) &&
                     (_Family?.Index == other._Family?.Index) &&
                     (_CompoundStructure?.Index == other._CompoundStructure?.Index) &&
                     (_Element?.Index == other._Element?.Index);
@@ -864,6 +876,33 @@ namespace Vim.Format.ObjectModel {
                     (HiddenElementCount == other.HiddenElementCount) &&
                     (TemplateControlledSettings == other.TemplateControlledSettings) &&
                     (GraphicsRead == other.GraphicsRead) &&
+                    (IsLocked == other.IsLocked) &&
+                    (CropBox_Min_X == other.CropBox_Min_X) &&
+                    (CropBox_Min_Y == other.CropBox_Min_Y) &&
+                    (CropBox_Min_Z == other.CropBox_Min_Z) &&
+                    (CropBox_Max_X == other.CropBox_Max_X) &&
+                    (CropBox_Max_Y == other.CropBox_Max_Y) &&
+                    (CropBox_Max_Z == other.CropBox_Max_Z) &&
+                    (IsSectionBoxActive == other.IsSectionBoxActive) &&
+                    (SectionBox_Min_X == other.SectionBox_Min_X) &&
+                    (SectionBox_Min_Y == other.SectionBox_Min_Y) &&
+                    (SectionBox_Min_Z == other.SectionBox_Min_Z) &&
+                    (SectionBox_Max_X == other.SectionBox_Max_X) &&
+                    (SectionBox_Max_Y == other.SectionBox_Max_Y) &&
+                    (SectionBox_Max_Z == other.SectionBox_Max_Z) &&
+                    (SectionBoxOrigin_X == other.SectionBoxOrigin_X) &&
+                    (SectionBoxOrigin_Y == other.SectionBoxOrigin_Y) &&
+                    (SectionBoxOrigin_Z == other.SectionBoxOrigin_Z) &&
+                    (SectionBoxBasisX_X == other.SectionBoxBasisX_X) &&
+                    (SectionBoxBasisX_Y == other.SectionBoxBasisX_Y) &&
+                    (SectionBoxBasisX_Z == other.SectionBoxBasisX_Z) &&
+                    (SectionBoxBasisY_X == other.SectionBoxBasisY_X) &&
+                    (SectionBoxBasisY_Y == other.SectionBoxBasisY_Y) &&
+                    (SectionBoxBasisY_Z == other.SectionBoxBasisY_Z) &&
+                    (SectionBoxBasisZ_X == other.SectionBoxBasisZ_X) &&
+                    (SectionBoxBasisZ_Y == other.SectionBoxBasisZ_Y) &&
+                    (SectionBoxBasisZ_Z == other.SectionBoxBasisZ_Z) &&
+                    (DisplayStyle == other.DisplayStyle) &&
                     (_Camera?.Index == other._Camera?.Index) &&
                     (_FamilyType?.Index == other._FamilyType?.Index) &&
                     (_ViewTemplate?.Index == other._ViewTemplate?.Index) &&
@@ -891,10 +930,13 @@ namespace Vim.Format.ObjectModel {
         public int ViewIndex => _View?.Index ?? EntityRelation.None;
         public Vim.Format.ObjectModel.GraphicOverride GraphicOverride => _GraphicOverride?.Value;
         public int GraphicOverrideIndex => _GraphicOverride?.Index ?? EntityRelation.None;
+        public Vim.Format.ObjectModel.LinkInView LinkInView => _LinkInView?.Value;
+        public int LinkInViewIndex => _LinkInView?.Index ?? EntityRelation.None;
         public FilterInView()
         {
             _View = new Relation<Vim.Format.ObjectModel.View>();
             _GraphicOverride = new Relation<Vim.Format.ObjectModel.GraphicOverride>();
+            _LinkInView = new Relation<Vim.Format.ObjectModel.LinkInView>();
         }
         
         public override bool FieldsAreEqual(object obj)
@@ -911,7 +953,182 @@ namespace Vim.Format.ObjectModel {
                     (IsVisible == other.IsVisible) &&
                     (HasOverrides == other.HasOverrides) &&
                     (_View?.Index == other._View?.Index) &&
-                    (_GraphicOverride?.Index == other._GraphicOverride?.Index);
+                    (_GraphicOverride?.Index == other._GraphicOverride?.Index) &&
+                    (_LinkInView?.Index == other._LinkInView?.Index);
+                if (!fieldsAreEqual)
+                {
+                    return false;
+                }
+                
+                return true;
+            }
+            return false;
+        }
+        
+    } // end of class
+    
+    // AUTO-GENERATED
+    public partial class HiddenCategoryInView
+    {
+        public Vim.Format.ObjectModel.View View => _View?.Value;
+        public int ViewIndex => _View?.Index ?? EntityRelation.None;
+        public Vim.Format.ObjectModel.Category Category => _Category?.Value;
+        public int CategoryIndex => _Category?.Index ?? EntityRelation.None;
+        public Vim.Format.ObjectModel.LinkInView LinkInView => _LinkInView?.Value;
+        public int LinkInViewIndex => _LinkInView?.Index ?? EntityRelation.None;
+        public HiddenCategoryInView()
+        {
+            _View = new Relation<Vim.Format.ObjectModel.View>();
+            _Category = new Relation<Vim.Format.ObjectModel.Category>();
+            _LinkInView = new Relation<Vim.Format.ObjectModel.LinkInView>();
+        }
+        
+        public override bool FieldsAreEqual(object obj)
+        {
+            if ((obj is HiddenCategoryInView other))
+            {
+                var fieldsAreEqual =
+                    (Index == other.Index) &&
+                    (_View?.Index == other._View?.Index) &&
+                    (_Category?.Index == other._Category?.Index) &&
+                    (_LinkInView?.Index == other._LinkInView?.Index);
+                if (!fieldsAreEqual)
+                {
+                    return false;
+                }
+                
+                return true;
+            }
+            return false;
+        }
+        
+    } // end of class
+    
+    // AUTO-GENERATED
+    public partial class HiddenWorksetInView
+    {
+        public Vim.Format.ObjectModel.View View => _View?.Value;
+        public int ViewIndex => _View?.Index ?? EntityRelation.None;
+        public Vim.Format.ObjectModel.Workset Workset => _Workset?.Value;
+        public int WorksetIndex => _Workset?.Index ?? EntityRelation.None;
+        public Vim.Format.ObjectModel.LinkInView LinkInView => _LinkInView?.Value;
+        public int LinkInViewIndex => _LinkInView?.Index ?? EntityRelation.None;
+        public HiddenWorksetInView()
+        {
+            _View = new Relation<Vim.Format.ObjectModel.View>();
+            _Workset = new Relation<Vim.Format.ObjectModel.Workset>();
+            _LinkInView = new Relation<Vim.Format.ObjectModel.LinkInView>();
+        }
+        
+        public override bool FieldsAreEqual(object obj)
+        {
+            if ((obj is HiddenWorksetInView other))
+            {
+                var fieldsAreEqual =
+                    (Index == other.Index) &&
+                    (_View?.Index == other._View?.Index) &&
+                    (_Workset?.Index == other._Workset?.Index) &&
+                    (_LinkInView?.Index == other._LinkInView?.Index);
+                if (!fieldsAreEqual)
+                {
+                    return false;
+                }
+                
+                return true;
+            }
+            return false;
+        }
+        
+    } // end of class
+    
+    // AUTO-GENERATED
+    public partial class HiddenElementInView
+    {
+        public Vim.Format.ObjectModel.View View => _View?.Value;
+        public int ViewIndex => _View?.Index ?? EntityRelation.None;
+        public Vim.Format.ObjectModel.FilterInView FilterInView => _FilterInView?.Value;
+        public int FilterInViewIndex => _FilterInView?.Index ?? EntityRelation.None;
+        public Vim.Format.ObjectModel.LinkInView LinkInView => _LinkInView?.Value;
+        public int LinkInViewIndex => _LinkInView?.Index ?? EntityRelation.None;
+        public Vim.Format.ObjectModel.Element Element => _Element?.Value;
+        public int ElementIndex => _Element?.Index ?? EntityRelation.None;
+        public HiddenElementInView()
+        {
+            _View = new Relation<Vim.Format.ObjectModel.View>();
+            _FilterInView = new Relation<Vim.Format.ObjectModel.FilterInView>();
+            _LinkInView = new Relation<Vim.Format.ObjectModel.LinkInView>();
+            _Element = new Relation<Vim.Format.ObjectModel.Element>();
+        }
+        
+        public override bool FieldsAreEqual(object obj)
+        {
+            if ((obj is HiddenElementInView other))
+            {
+                var fieldsAreEqual =
+                    (Index == other.Index) &&
+                    (Reason == other.Reason) &&
+                    (_View?.Index == other._View?.Index) &&
+                    (_FilterInView?.Index == other._FilterInView?.Index) &&
+                    (_LinkInView?.Index == other._LinkInView?.Index) &&
+                    (_Element?.Index == other._Element?.Index);
+                if (!fieldsAreEqual)
+                {
+                    return false;
+                }
+                
+                return true;
+            }
+            return false;
+        }
+        
+    } // end of class
+    
+    // AUTO-GENERATED
+    public partial class LinkInView
+    {
+        public Vim.Format.ObjectModel.View View => _View?.Value;
+        public int ViewIndex => _View?.Index ?? EntityRelation.None;
+        public Vim.Format.ObjectModel.BimDocument LinkedDocument => _LinkedDocument?.Value;
+        public int LinkedDocumentIndex => _LinkedDocument?.Index ?? EntityRelation.None;
+        public Vim.Format.ObjectModel.View LinkedView => _LinkedView?.Value;
+        public int LinkedViewIndex => _LinkedView?.Index ?? EntityRelation.None;
+        public Vim.Format.ObjectModel.Element Element => _Element?.Value;
+        public int ElementIndex => _Element?.Index ?? EntityRelation.None;
+        public LinkInView()
+        {
+            _View = new Relation<Vim.Format.ObjectModel.View>();
+            _LinkedDocument = new Relation<Vim.Format.ObjectModel.BimDocument>();
+            _LinkedView = new Relation<Vim.Format.ObjectModel.View>();
+            _Element = new Relation<Vim.Format.ObjectModel.Element>();
+        }
+        
+        public override bool FieldsAreEqual(object obj)
+        {
+            if ((obj is LinkInView other))
+            {
+                var fieldsAreEqual =
+                    (Index == other.Index) &&
+                    (Display == other.Display) &&
+                    (SettingsFrom == other.SettingsFrom) &&
+                    (IsHidden == other.IsHidden) &&
+                    (HiddenBy == other.HiddenBy) &&
+                    (IsHalftone == other.IsHalftone) &&
+                    (LinkedViewName == other.LinkedViewName) &&
+                    (ViewFilters == other.ViewFilters) &&
+                    (ObjectStyles == other.ObjectStyles) &&
+                    (NestedLinks == other.NestedLinks) &&
+                    (Phase == other.Phase) &&
+                    (PhaseFilter == other.PhaseFilter) &&
+                    (DetailLevel == other.DetailLevel) &&
+                    (Discipline == other.Discipline) &&
+                    (LinkedWorksets == other.LinkedWorksets) &&
+                    (IsMeasured == other.IsMeasured) &&
+                    (MeasuredVisibleCount == other.MeasuredVisibleCount) &&
+                    (NotReadable == other.NotReadable) &&
+                    (_View?.Index == other._View?.Index) &&
+                    (_LinkedDocument?.Index == other._LinkedDocument?.Index) &&
+                    (_LinkedView?.Index == other._LinkedView?.Index) &&
+                    (_Element?.Index == other._Element?.Index);
                 if (!fieldsAreEqual)
                 {
                     return false;
@@ -1581,6 +1798,25 @@ namespace Vim.Format.ObjectModel {
                     (CutBackgroundPatternColor_X == other.CutBackgroundPatternColor_X) &&
                     (CutBackgroundPatternColor_Y == other.CutBackgroundPatternColor_Y) &&
                     (CutBackgroundPatternColor_Z == other.CutBackgroundPatternColor_Z) &&
+                    (AppearanceKind == other.AppearanceKind) &&
+                    (AppearanceColor_X == other.AppearanceColor_X) &&
+                    (AppearanceColor_Y == other.AppearanceColor_Y) &&
+                    (AppearanceColor_Z == other.AppearanceColor_Z) &&
+                    (AppearanceTint_X == other.AppearanceTint_X) &&
+                    (AppearanceTint_Y == other.AppearanceTint_Y) &&
+                    (AppearanceTint_Z == other.AppearanceTint_Z) &&
+                    (AppearanceImageFade == other.AppearanceImageFade) &&
+                    (AppearanceTransparency == other.AppearanceTransparency) &&
+                    (Roughness == other.Roughness) &&
+                    (Metalness == other.Metalness) &&
+                    (Reflectivity == other.Reflectivity) &&
+                    (RefractionIndex == other.RefractionIndex) &&
+                    (EmissionColor_X == other.EmissionColor_X) &&
+                    (EmissionColor_Y == other.EmissionColor_Y) &&
+                    (EmissionColor_Z == other.EmissionColor_Z) &&
+                    (EmissionLuminance == other.EmissionLuminance) &&
+                    (ColorTextureKind == other.ColorTextureKind) &&
+                    (NormalTextureKind == other.NormalTextureKind) &&
                     (_ColorTextureFile?.Index == other._ColorTextureFile?.Index) &&
                     (_NormalTextureFile?.Index == other._NormalTextureFile?.Index) &&
                     (_SurfaceForegroundPattern?.Index == other._SurfaceForegroundPattern?.Index) &&
@@ -3416,6 +3652,145 @@ namespace Vim.Format.ObjectModel {
         
     } // end of class
     
+    // AUTO-GENERATED
+    public partial class CadFile
+    {
+        public Vim.Format.ObjectModel.FamilyType FamilyType => _FamilyType?.Value;
+        public int FamilyTypeIndex => _FamilyType?.Index ?? EntityRelation.None;
+        public Vim.Format.ObjectModel.Category Category => _Category?.Value;
+        public int CategoryIndex => _Category?.Index ?? EntityRelation.None;
+        public Vim.Format.ObjectModel.Element Element => _Element?.Value;
+        public int ElementIndex => _Element?.Index ?? EntityRelation.None;
+        public CadFile()
+        {
+            _FamilyType = new Relation<Vim.Format.ObjectModel.FamilyType>();
+            _Category = new Relation<Vim.Format.ObjectModel.Category>();
+            _Element = new Relation<Vim.Format.ObjectModel.Element>();
+        }
+        
+        public override bool FieldsAreEqual(object obj)
+        {
+            if ((obj is CadFile other))
+            {
+                var fieldsAreEqual =
+                    (Index == other.Index) &&
+                    (FileName == other.FileName) &&
+                    (Extension == other.Extension) &&
+                    (IsLinked == other.IsLinked) &&
+                    (SavedPath == other.SavedPath) &&
+                    (AbsolutePath == other.AbsolutePath) &&
+                    (PathType == other.PathType) &&
+                    (LinkStatus == other.LinkStatus) &&
+                    (InstanceCount == other.InstanceCount) &&
+                    (ViewSpecificInstanceCount == other.ViewSpecificInstanceCount) &&
+                    (PurgeState == other.PurgeState) &&
+                    (IsExploded == other.IsExploded) &&
+                    (ExplodedPieceCount == other.ExplodedPieceCount) &&
+                    (ExplodedModelPieceCount == other.ExplodedModelPieceCount) &&
+                    (ExplodedViewCount == other.ExplodedViewCount) &&
+                    (ExplodedModelViewCount == other.ExplodedModelViewCount) &&
+                    (ExplodedSeverity == other.ExplodedSeverity) &&
+                    (_FamilyType?.Index == other._FamilyType?.Index) &&
+                    (_Category?.Index == other._Category?.Index) &&
+                    (_Element?.Index == other._Element?.Index);
+                if (!fieldsAreEqual)
+                {
+                    return false;
+                }
+                
+                return true;
+            }
+            return false;
+        }
+        
+    } // end of class
+    
+    // AUTO-GENERATED
+    public partial class CadInstance
+    {
+        public Vim.Format.ObjectModel.CadFile CadFile => _CadFile?.Value;
+        public int CadFileIndex => _CadFile?.Index ?? EntityRelation.None;
+        public Vim.Format.ObjectModel.View OwnerView => _OwnerView?.Value;
+        public int OwnerViewIndex => _OwnerView?.Index ?? EntityRelation.None;
+        public Vim.Format.ObjectModel.Element Element => _Element?.Value;
+        public int ElementIndex => _Element?.Index ?? EntityRelation.None;
+        public CadInstance()
+        {
+            _CadFile = new Relation<Vim.Format.ObjectModel.CadFile>();
+            _OwnerView = new Relation<Vim.Format.ObjectModel.View>();
+            _Element = new Relation<Vim.Format.ObjectModel.Element>();
+        }
+        
+        public override bool FieldsAreEqual(object obj)
+        {
+            if ((obj is CadInstance other))
+            {
+                var fieldsAreEqual =
+                    (Index == other.Index) &&
+                    (FileName == other.FileName) &&
+                    (IsLinked == other.IsLinked) &&
+                    (IsViewSpecific == other.IsViewSpecific) &&
+                    (IsExplodedPiece == other.IsExplodedPiece) &&
+                    (_CadFile?.Index == other._CadFile?.Index) &&
+                    (_OwnerView?.Index == other._OwnerView?.Index) &&
+                    (_Element?.Index == other._Element?.Index);
+                if (!fieldsAreEqual)
+                {
+                    return false;
+                }
+                
+                return true;
+            }
+            return false;
+        }
+        
+    } // end of class
+    
+    // AUTO-GENERATED
+    public partial class QuestElement
+    {
+        public Vim.Format.ObjectModel.Level StreamLevel => _StreamLevel?.Value;
+        public int StreamLevelIndex => _StreamLevel?.Index ?? EntityRelation.None;
+        public Vim.Format.ObjectModel.Level StreamTopLevel => _StreamTopLevel?.Value;
+        public int StreamTopLevelIndex => _StreamTopLevel?.Index ?? EntityRelation.None;
+        public Vim.Format.ObjectModel.Element Element => _Element?.Value;
+        public int ElementIndex => _Element?.Index ?? EntityRelation.None;
+        public QuestElement()
+        {
+            _StreamLevel = new Relation<Vim.Format.ObjectModel.Level>();
+            _StreamTopLevel = new Relation<Vim.Format.ObjectModel.Level>();
+            _Element = new Relation<Vim.Format.ObjectModel.Element>();
+        }
+        
+        public override bool FieldsAreEqual(object obj)
+        {
+            if ((obj is QuestElement other))
+            {
+                var fieldsAreEqual =
+                    (Index == other.Index) &&
+                    (CollisionClass == other.CollisionClass) &&
+                    (CollisionCategory == other.CollisionCategory) &&
+                    (BoundsMin_X == other.BoundsMin_X) &&
+                    (BoundsMin_Y == other.BoundsMin_Y) &&
+                    (BoundsMin_Z == other.BoundsMin_Z) &&
+                    (BoundsMax_X == other.BoundsMax_X) &&
+                    (BoundsMax_Y == other.BoundsMax_Y) &&
+                    (BoundsMax_Z == other.BoundsMax_Z) &&
+                    (_StreamLevel?.Index == other._StreamLevel?.Index) &&
+                    (_StreamTopLevel?.Index == other._StreamTopLevel?.Index) &&
+                    (_Element?.Index == other._Element?.Index);
+                if (!fieldsAreEqual)
+                {
+                    return false;
+                }
+                
+                return true;
+            }
+            return false;
+        }
+        
+    } // end of class
+    
     public partial class DocumentModel
     {
         public ElementIndexMaps ElementIndexMaps { get; }
@@ -3565,6 +3940,8 @@ namespace Vim.Format.ObjectModel {
         public String GetElementLastChangedBy(int index, String defaultValue = "") => ElementLastChangedBy?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
         public IArray<String> ElementOwner { get; }
         public String GetElementOwner(int index, String defaultValue = "") => ElementOwner?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<String> ElementChangeToken { get; }
+        public String GetElementChangeToken(int index, String defaultValue = "") => ElementChangeToken?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
         public IArray<int> ElementLevelIndex { get; }
         public int GetElementLevelIndex(int index) => ElementLevelIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
         public IArray<int> ElementPhaseCreatedIndex { get; }
@@ -3608,6 +3985,7 @@ namespace Vim.Format.ObjectModel {
             r.Creator = ElementCreator.ElementAtOrDefault(n);
             r.LastChangedBy = ElementLastChangedBy.ElementAtOrDefault(n);
             r.Owner = ElementOwner.ElementAtOrDefault(n);
+            r.ChangeToken = ElementChangeToken.ElementAtOrDefault(n);
             r._Level = new Relation<Vim.Format.ObjectModel.Level>(GetElementLevelIndex(n), GetLevel);
             r._PhaseCreated = new Relation<Vim.Format.ObjectModel.Phase>(GetElementPhaseCreatedIndex(n), GetPhase);
             r._PhaseDemolished = new Relation<Vim.Format.ObjectModel.Phase>(GetElementPhaseDemolishedIndex(n), GetPhase);
@@ -3852,6 +4230,8 @@ namespace Vim.Format.ObjectModel {
         public String GetBimDocumentGuid(int index, String defaultValue = "") => BimDocumentGuid?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
         public IArray<Int32> BimDocumentNumSaves { get; }
         public Int32 GetBimDocumentNumSaves(int index, Int32 defaultValue = default) => BimDocumentNumSaves?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<String> BimDocumentIdentity { get; }
+        public String GetBimDocumentIdentity(int index, String defaultValue = "") => BimDocumentIdentity?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
         public IArray<Boolean> BimDocumentIsLinked { get; }
         public Boolean GetBimDocumentIsLinked(int index, Boolean defaultValue = default) => BimDocumentIsLinked?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
         public IArray<Boolean> BimDocumentIsDetached { get; }
@@ -3902,6 +4282,18 @@ namespace Vim.Format.ObjectModel {
         public String GetBimDocumentUser(int index, String defaultValue = "") => BimDocumentUser?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
         public IArray<Int64> BimDocumentFileLength { get; }
         public Int64 GetBimDocumentFileLength(int index, Int64 defaultValue = default) => BimDocumentFileLength?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Int32> BimDocumentFileLengthSource { get; }
+        public Int32 GetBimDocumentFileLengthSource(int index, Int32 defaultValue = default) => BimDocumentFileLengthSource?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<String> BimDocumentFileLengthPath { get; }
+        public String GetBimDocumentFileLengthPath(int index, String defaultValue = "") => BimDocumentFileLengthPath?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Boolean> BimDocumentIsCloudModel { get; }
+        public Boolean GetBimDocumentIsCloudModel(int index, Boolean defaultValue = default) => BimDocumentIsCloudModel?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<String> BimDocumentCloudProjectGuid { get; }
+        public String GetBimDocumentCloudProjectGuid(int index, String defaultValue = "") => BimDocumentCloudProjectGuid?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<String> BimDocumentCloudModelGuid { get; }
+        public String GetBimDocumentCloudModelGuid(int index, String defaultValue = "") => BimDocumentCloudModelGuid?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Int32> BimDocumentPurgeableElementCount { get; }
+        public Int32 GetBimDocumentPurgeableElementCount(int index, Int32 defaultValue = default) => BimDocumentPurgeableElementCount?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
         public IArray<int> BimDocumentActiveViewIndex { get; }
         public int GetBimDocumentActiveViewIndex(int index) => BimDocumentActiveViewIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
         public IArray<int> BimDocumentOwnerFamilyIndex { get; }
@@ -3922,6 +4314,7 @@ namespace Vim.Format.ObjectModel {
             r.IsMetric = BimDocumentIsMetric.ElementAtOrDefault(n);
             r.Guid = BimDocumentGuid.ElementAtOrDefault(n);
             r.NumSaves = BimDocumentNumSaves.ElementAtOrDefault(n);
+            r.Identity = BimDocumentIdentity.ElementAtOrDefault(n);
             r.IsLinked = BimDocumentIsLinked.ElementAtOrDefault(n);
             r.IsDetached = BimDocumentIsDetached.ElementAtOrDefault(n);
             r.IsWorkshared = BimDocumentIsWorkshared.ElementAtOrDefault(n);
@@ -3947,6 +4340,12 @@ namespace Vim.Format.ObjectModel {
             r.Version = BimDocumentVersion.ElementAtOrDefault(n);
             r.User = BimDocumentUser.ElementAtOrDefault(n);
             r.FileLength = BimDocumentFileLength.ElementAtOrDefault(n);
+            r.FileLengthSource = BimDocumentFileLengthSource.ElementAtOrDefault(n);
+            r.FileLengthPath = BimDocumentFileLengthPath.ElementAtOrDefault(n);
+            r.IsCloudModel = BimDocumentIsCloudModel.ElementAtOrDefault(n);
+            r.CloudProjectGuid = BimDocumentCloudProjectGuid.ElementAtOrDefault(n);
+            r.CloudModelGuid = BimDocumentCloudModelGuid.ElementAtOrDefault(n);
+            r.PurgeableElementCount = BimDocumentPurgeableElementCount.ElementAtOrDefault(n);
             r._ActiveView = new Relation<Vim.Format.ObjectModel.View>(GetBimDocumentActiveViewIndex(n), GetView);
             r._OwnerFamily = new Relation<Vim.Format.ObjectModel.Family>(GetBimDocumentOwnerFamilyIndex(n), GetFamily);
             r._Parent = new Relation<Vim.Format.ObjectModel.BimDocument>(GetBimDocumentParentIndex(n), GetBimDocument);
@@ -4072,6 +4471,10 @@ namespace Vim.Format.ObjectModel {
         public Boolean GetFamilyIsSystemFamily(int index, Boolean defaultValue = default) => FamilyIsSystemFamily?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
         public IArray<Boolean> FamilyIsInPlace { get; }
         public Boolean GetFamilyIsInPlace(int index, Boolean defaultValue = default) => FamilyIsInPlace?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Int32> FamilyInstanceCount { get; }
+        public Int32 GetFamilyInstanceCount(int index, Int32 defaultValue = default) => FamilyInstanceCount?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Int32> FamilyPurgeState { get; }
+        public Int32 GetFamilyPurgeState(int index, Int32 defaultValue = default) => FamilyPurgeState?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
         public IArray<int> FamilyFamilyCategoryIndex { get; }
         public int GetFamilyFamilyCategoryIndex(int index) => FamilyFamilyCategoryIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
         public IArray<int> FamilyElementIndex { get; }
@@ -4088,6 +4491,8 @@ namespace Vim.Format.ObjectModel {
             r.StructuralSectionShape = FamilyStructuralSectionShape.ElementAtOrDefault(n);
             r.IsSystemFamily = FamilyIsSystemFamily.ElementAtOrDefault(n);
             r.IsInPlace = FamilyIsInPlace.ElementAtOrDefault(n);
+            r.InstanceCount = FamilyInstanceCount.ElementAtOrDefault(n);
+            r.PurgeState = FamilyPurgeState.ElementAtOrDefault(n);
             r._FamilyCategory = new Relation<Vim.Format.ObjectModel.Category>(GetFamilyFamilyCategoryIndex(n), GetCategory);
             r._Element = new Relation<Vim.Format.ObjectModel.Element>(GetFamilyElementIndex(n), GetElement);
             return r;
@@ -4100,6 +4505,10 @@ namespace Vim.Format.ObjectModel {
         
         public IArray<Boolean> FamilyTypeIsSystemFamilyType { get; }
         public Boolean GetFamilyTypeIsSystemFamilyType(int index, Boolean defaultValue = default) => FamilyTypeIsSystemFamilyType?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Int32> FamilyTypeInstanceCount { get; }
+        public Int32 GetFamilyTypeInstanceCount(int index, Int32 defaultValue = default) => FamilyTypeInstanceCount?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Int32> FamilyTypePurgeState { get; }
+        public Int32 GetFamilyTypePurgeState(int index, Int32 defaultValue = default) => FamilyTypePurgeState?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
         public IArray<int> FamilyTypeFamilyIndex { get; }
         public int GetFamilyTypeFamilyIndex(int index) => FamilyTypeFamilyIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
         public IArray<int> FamilyTypeCompoundStructureIndex { get; }
@@ -4115,6 +4524,8 @@ namespace Vim.Format.ObjectModel {
             r.Document = Document;
             r.Index = n;
             r.IsSystemFamilyType = FamilyTypeIsSystemFamilyType.ElementAtOrDefault(n);
+            r.InstanceCount = FamilyTypeInstanceCount.ElementAtOrDefault(n);
+            r.PurgeState = FamilyTypePurgeState.ElementAtOrDefault(n);
             r._Family = new Relation<Vim.Format.ObjectModel.Family>(GetFamilyTypeFamilyIndex(n), GetFamily);
             r._CompoundStructure = new Relation<Vim.Format.ObjectModel.CompoundStructure>(GetFamilyTypeCompoundStructureIndex(n), GetCompoundStructure);
             r._Element = new Relation<Vim.Format.ObjectModel.Element>(GetFamilyTypeElementIndex(n), GetElement);
@@ -4299,6 +4710,60 @@ namespace Vim.Format.ObjectModel {
         public String GetViewTemplateControlledSettings(int index, String defaultValue = "") => ViewTemplateControlledSettings?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
         public IArray<Boolean> ViewGraphicsRead { get; }
         public Boolean GetViewGraphicsRead(int index, Boolean defaultValue = default) => ViewGraphicsRead?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Boolean> ViewIsLocked { get; }
+        public Boolean GetViewIsLocked(int index, Boolean defaultValue = default) => ViewIsLocked?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> ViewCropBox_Min_X { get; }
+        public Double GetViewCropBox_Min_X(int index, Double defaultValue = default) => ViewCropBox_Min_X?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> ViewCropBox_Min_Y { get; }
+        public Double GetViewCropBox_Min_Y(int index, Double defaultValue = default) => ViewCropBox_Min_Y?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> ViewCropBox_Min_Z { get; }
+        public Double GetViewCropBox_Min_Z(int index, Double defaultValue = default) => ViewCropBox_Min_Z?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> ViewCropBox_Max_X { get; }
+        public Double GetViewCropBox_Max_X(int index, Double defaultValue = default) => ViewCropBox_Max_X?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> ViewCropBox_Max_Y { get; }
+        public Double GetViewCropBox_Max_Y(int index, Double defaultValue = default) => ViewCropBox_Max_Y?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> ViewCropBox_Max_Z { get; }
+        public Double GetViewCropBox_Max_Z(int index, Double defaultValue = default) => ViewCropBox_Max_Z?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Boolean> ViewIsSectionBoxActive { get; }
+        public Boolean GetViewIsSectionBoxActive(int index, Boolean defaultValue = default) => ViewIsSectionBoxActive?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> ViewSectionBox_Min_X { get; }
+        public Double GetViewSectionBox_Min_X(int index, Double defaultValue = default) => ViewSectionBox_Min_X?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> ViewSectionBox_Min_Y { get; }
+        public Double GetViewSectionBox_Min_Y(int index, Double defaultValue = default) => ViewSectionBox_Min_Y?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> ViewSectionBox_Min_Z { get; }
+        public Double GetViewSectionBox_Min_Z(int index, Double defaultValue = default) => ViewSectionBox_Min_Z?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> ViewSectionBox_Max_X { get; }
+        public Double GetViewSectionBox_Max_X(int index, Double defaultValue = default) => ViewSectionBox_Max_X?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> ViewSectionBox_Max_Y { get; }
+        public Double GetViewSectionBox_Max_Y(int index, Double defaultValue = default) => ViewSectionBox_Max_Y?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> ViewSectionBox_Max_Z { get; }
+        public Double GetViewSectionBox_Max_Z(int index, Double defaultValue = default) => ViewSectionBox_Max_Z?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> ViewSectionBoxOrigin_X { get; }
+        public Double GetViewSectionBoxOrigin_X(int index, Double defaultValue = default) => ViewSectionBoxOrigin_X?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> ViewSectionBoxOrigin_Y { get; }
+        public Double GetViewSectionBoxOrigin_Y(int index, Double defaultValue = default) => ViewSectionBoxOrigin_Y?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> ViewSectionBoxOrigin_Z { get; }
+        public Double GetViewSectionBoxOrigin_Z(int index, Double defaultValue = default) => ViewSectionBoxOrigin_Z?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> ViewSectionBoxBasisX_X { get; }
+        public Double GetViewSectionBoxBasisX_X(int index, Double defaultValue = default) => ViewSectionBoxBasisX_X?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> ViewSectionBoxBasisX_Y { get; }
+        public Double GetViewSectionBoxBasisX_Y(int index, Double defaultValue = default) => ViewSectionBoxBasisX_Y?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> ViewSectionBoxBasisX_Z { get; }
+        public Double GetViewSectionBoxBasisX_Z(int index, Double defaultValue = default) => ViewSectionBoxBasisX_Z?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> ViewSectionBoxBasisY_X { get; }
+        public Double GetViewSectionBoxBasisY_X(int index, Double defaultValue = default) => ViewSectionBoxBasisY_X?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> ViewSectionBoxBasisY_Y { get; }
+        public Double GetViewSectionBoxBasisY_Y(int index, Double defaultValue = default) => ViewSectionBoxBasisY_Y?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> ViewSectionBoxBasisY_Z { get; }
+        public Double GetViewSectionBoxBasisY_Z(int index, Double defaultValue = default) => ViewSectionBoxBasisY_Z?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> ViewSectionBoxBasisZ_X { get; }
+        public Double GetViewSectionBoxBasisZ_X(int index, Double defaultValue = default) => ViewSectionBoxBasisZ_X?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> ViewSectionBoxBasisZ_Y { get; }
+        public Double GetViewSectionBoxBasisZ_Y(int index, Double defaultValue = default) => ViewSectionBoxBasisZ_Y?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> ViewSectionBoxBasisZ_Z { get; }
+        public Double GetViewSectionBoxBasisZ_Z(int index, Double defaultValue = default) => ViewSectionBoxBasisZ_Z?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<String> ViewDisplayStyle { get; }
+        public String GetViewDisplayStyle(int index, String defaultValue = "") => ViewDisplayStyle?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
         public IArray<int> ViewCameraIndex { get; }
         public int GetViewCameraIndex(int index) => ViewCameraIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
         public IArray<int> ViewFamilyTypeIndex { get; }
@@ -4358,6 +4823,33 @@ namespace Vim.Format.ObjectModel {
             r.HiddenElementCount = ViewHiddenElementCount.ElementAtOrDefault(n);
             r.TemplateControlledSettings = ViewTemplateControlledSettings.ElementAtOrDefault(n);
             r.GraphicsRead = ViewGraphicsRead.ElementAtOrDefault(n);
+            r.IsLocked = ViewIsLocked.ElementAtOrDefault(n);
+            r.CropBox_Min_X = ViewCropBox_Min_X.ElementAtOrDefault(n);
+            r.CropBox_Min_Y = ViewCropBox_Min_Y.ElementAtOrDefault(n);
+            r.CropBox_Min_Z = ViewCropBox_Min_Z.ElementAtOrDefault(n);
+            r.CropBox_Max_X = ViewCropBox_Max_X.ElementAtOrDefault(n);
+            r.CropBox_Max_Y = ViewCropBox_Max_Y.ElementAtOrDefault(n);
+            r.CropBox_Max_Z = ViewCropBox_Max_Z.ElementAtOrDefault(n);
+            r.IsSectionBoxActive = ViewIsSectionBoxActive.ElementAtOrDefault(n);
+            r.SectionBox_Min_X = ViewSectionBox_Min_X.ElementAtOrDefault(n);
+            r.SectionBox_Min_Y = ViewSectionBox_Min_Y.ElementAtOrDefault(n);
+            r.SectionBox_Min_Z = ViewSectionBox_Min_Z.ElementAtOrDefault(n);
+            r.SectionBox_Max_X = ViewSectionBox_Max_X.ElementAtOrDefault(n);
+            r.SectionBox_Max_Y = ViewSectionBox_Max_Y.ElementAtOrDefault(n);
+            r.SectionBox_Max_Z = ViewSectionBox_Max_Z.ElementAtOrDefault(n);
+            r.SectionBoxOrigin_X = ViewSectionBoxOrigin_X.ElementAtOrDefault(n);
+            r.SectionBoxOrigin_Y = ViewSectionBoxOrigin_Y.ElementAtOrDefault(n);
+            r.SectionBoxOrigin_Z = ViewSectionBoxOrigin_Z.ElementAtOrDefault(n);
+            r.SectionBoxBasisX_X = ViewSectionBoxBasisX_X.ElementAtOrDefault(n);
+            r.SectionBoxBasisX_Y = ViewSectionBoxBasisX_Y.ElementAtOrDefault(n);
+            r.SectionBoxBasisX_Z = ViewSectionBoxBasisX_Z.ElementAtOrDefault(n);
+            r.SectionBoxBasisY_X = ViewSectionBoxBasisY_X.ElementAtOrDefault(n);
+            r.SectionBoxBasisY_Y = ViewSectionBoxBasisY_Y.ElementAtOrDefault(n);
+            r.SectionBoxBasisY_Z = ViewSectionBoxBasisY_Z.ElementAtOrDefault(n);
+            r.SectionBoxBasisZ_X = ViewSectionBoxBasisZ_X.ElementAtOrDefault(n);
+            r.SectionBoxBasisZ_Y = ViewSectionBoxBasisZ_Y.ElementAtOrDefault(n);
+            r.SectionBoxBasisZ_Z = ViewSectionBoxBasisZ_Z.ElementAtOrDefault(n);
+            r.DisplayStyle = ViewDisplayStyle.ElementAtOrDefault(n);
             r._Camera = new Relation<Vim.Format.ObjectModel.Camera>(GetViewCameraIndex(n), GetCamera);
             r._FamilyType = new Relation<Vim.Format.ObjectModel.FamilyType>(GetViewFamilyTypeIndex(n), GetFamilyType);
             r._ViewTemplate = new Relation<Vim.Format.ObjectModel.Element>(GetViewViewTemplateIndex(n), GetElement);
@@ -4392,6 +4884,8 @@ namespace Vim.Format.ObjectModel {
         public int GetFilterInViewViewIndex(int index) => FilterInViewViewIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
         public IArray<int> FilterInViewGraphicOverrideIndex { get; }
         public int GetFilterInViewGraphicOverrideIndex(int index) => FilterInViewGraphicOverrideIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
+        public IArray<int> FilterInViewLinkInViewIndex { get; }
+        public int GetFilterInViewLinkInViewIndex(int index) => FilterInViewLinkInViewIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
         public int NumFilterInView => FilterInViewEntityTable?.NumRows ?? 0;
         public IArray<FilterInView> FilterInViewList { get; }
         public FilterInView GetFilterInView(int n)
@@ -4409,6 +4903,167 @@ namespace Vim.Format.ObjectModel {
             r.HasOverrides = FilterInViewHasOverrides.ElementAtOrDefault(n);
             r._View = new Relation<Vim.Format.ObjectModel.View>(GetFilterInViewViewIndex(n), GetView);
             r._GraphicOverride = new Relation<Vim.Format.ObjectModel.GraphicOverride>(GetFilterInViewGraphicOverrideIndex(n), GetGraphicOverride);
+            r._LinkInView = new Relation<Vim.Format.ObjectModel.LinkInView>(GetFilterInViewLinkInViewIndex(n), GetLinkInView);
+            return r;
+        }
+        
+        
+        // HiddenCategoryInView
+        
+        public EntityTable HiddenCategoryInViewEntityTable { get; }
+        
+        public IArray<int> HiddenCategoryInViewViewIndex { get; }
+        public int GetHiddenCategoryInViewViewIndex(int index) => HiddenCategoryInViewViewIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
+        public IArray<int> HiddenCategoryInViewCategoryIndex { get; }
+        public int GetHiddenCategoryInViewCategoryIndex(int index) => HiddenCategoryInViewCategoryIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
+        public IArray<int> HiddenCategoryInViewLinkInViewIndex { get; }
+        public int GetHiddenCategoryInViewLinkInViewIndex(int index) => HiddenCategoryInViewLinkInViewIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
+        public int NumHiddenCategoryInView => HiddenCategoryInViewEntityTable?.NumRows ?? 0;
+        public IArray<HiddenCategoryInView> HiddenCategoryInViewList { get; }
+        public HiddenCategoryInView GetHiddenCategoryInView(int n)
+        {
+            if (n < 0) return null;
+            var r = new HiddenCategoryInView();
+            r.Document = Document;
+            r.Index = n;
+            r._View = new Relation<Vim.Format.ObjectModel.View>(GetHiddenCategoryInViewViewIndex(n), GetView);
+            r._Category = new Relation<Vim.Format.ObjectModel.Category>(GetHiddenCategoryInViewCategoryIndex(n), GetCategory);
+            r._LinkInView = new Relation<Vim.Format.ObjectModel.LinkInView>(GetHiddenCategoryInViewLinkInViewIndex(n), GetLinkInView);
+            return r;
+        }
+        
+        
+        // HiddenWorksetInView
+        
+        public EntityTable HiddenWorksetInViewEntityTable { get; }
+        
+        public IArray<int> HiddenWorksetInViewViewIndex { get; }
+        public int GetHiddenWorksetInViewViewIndex(int index) => HiddenWorksetInViewViewIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
+        public IArray<int> HiddenWorksetInViewWorksetIndex { get; }
+        public int GetHiddenWorksetInViewWorksetIndex(int index) => HiddenWorksetInViewWorksetIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
+        public IArray<int> HiddenWorksetInViewLinkInViewIndex { get; }
+        public int GetHiddenWorksetInViewLinkInViewIndex(int index) => HiddenWorksetInViewLinkInViewIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
+        public int NumHiddenWorksetInView => HiddenWorksetInViewEntityTable?.NumRows ?? 0;
+        public IArray<HiddenWorksetInView> HiddenWorksetInViewList { get; }
+        public HiddenWorksetInView GetHiddenWorksetInView(int n)
+        {
+            if (n < 0) return null;
+            var r = new HiddenWorksetInView();
+            r.Document = Document;
+            r.Index = n;
+            r._View = new Relation<Vim.Format.ObjectModel.View>(GetHiddenWorksetInViewViewIndex(n), GetView);
+            r._Workset = new Relation<Vim.Format.ObjectModel.Workset>(GetHiddenWorksetInViewWorksetIndex(n), GetWorkset);
+            r._LinkInView = new Relation<Vim.Format.ObjectModel.LinkInView>(GetHiddenWorksetInViewLinkInViewIndex(n), GetLinkInView);
+            return r;
+        }
+        
+        
+        // HiddenElementInView
+        
+        public EntityTable HiddenElementInViewEntityTable { get; }
+        
+        public IArray<String> HiddenElementInViewReason { get; }
+        public String GetHiddenElementInViewReason(int index, String defaultValue = "") => HiddenElementInViewReason?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<int> HiddenElementInViewViewIndex { get; }
+        public int GetHiddenElementInViewViewIndex(int index) => HiddenElementInViewViewIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
+        public IArray<int> HiddenElementInViewFilterInViewIndex { get; }
+        public int GetHiddenElementInViewFilterInViewIndex(int index) => HiddenElementInViewFilterInViewIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
+        public IArray<int> HiddenElementInViewLinkInViewIndex { get; }
+        public int GetHiddenElementInViewLinkInViewIndex(int index) => HiddenElementInViewLinkInViewIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
+        public IArray<int> HiddenElementInViewElementIndex { get; }
+        public int GetHiddenElementInViewElementIndex(int index) => HiddenElementInViewElementIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
+        public int NumHiddenElementInView => HiddenElementInViewEntityTable?.NumRows ?? 0;
+        public IArray<HiddenElementInView> HiddenElementInViewList { get; }
+        public HiddenElementInView GetHiddenElementInView(int n)
+        {
+            if (n < 0) return null;
+            var r = new HiddenElementInView();
+            r.Document = Document;
+            r.Index = n;
+            r.Reason = HiddenElementInViewReason.ElementAtOrDefault(n);
+            r._View = new Relation<Vim.Format.ObjectModel.View>(GetHiddenElementInViewViewIndex(n), GetView);
+            r._FilterInView = new Relation<Vim.Format.ObjectModel.FilterInView>(GetHiddenElementInViewFilterInViewIndex(n), GetFilterInView);
+            r._LinkInView = new Relation<Vim.Format.ObjectModel.LinkInView>(GetHiddenElementInViewLinkInViewIndex(n), GetLinkInView);
+            r._Element = new Relation<Vim.Format.ObjectModel.Element>(GetHiddenElementInViewElementIndex(n), GetElement);
+            return r;
+        }
+        
+        
+        // LinkInView
+        
+        public EntityTable LinkInViewEntityTable { get; }
+        
+        public IArray<String> LinkInViewDisplay { get; }
+        public String GetLinkInViewDisplay(int index, String defaultValue = "") => LinkInViewDisplay?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<String> LinkInViewSettingsFrom { get; }
+        public String GetLinkInViewSettingsFrom(int index, String defaultValue = "") => LinkInViewSettingsFrom?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Boolean> LinkInViewIsHidden { get; }
+        public Boolean GetLinkInViewIsHidden(int index, Boolean defaultValue = default) => LinkInViewIsHidden?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<String> LinkInViewHiddenBy { get; }
+        public String GetLinkInViewHiddenBy(int index, String defaultValue = "") => LinkInViewHiddenBy?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Boolean> LinkInViewIsHalftone { get; }
+        public Boolean GetLinkInViewIsHalftone(int index, Boolean defaultValue = default) => LinkInViewIsHalftone?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<String> LinkInViewLinkedViewName { get; }
+        public String GetLinkInViewLinkedViewName(int index, String defaultValue = "") => LinkInViewLinkedViewName?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<String> LinkInViewViewFilters { get; }
+        public String GetLinkInViewViewFilters(int index, String defaultValue = "") => LinkInViewViewFilters?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<String> LinkInViewObjectStyles { get; }
+        public String GetLinkInViewObjectStyles(int index, String defaultValue = "") => LinkInViewObjectStyles?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<String> LinkInViewNestedLinks { get; }
+        public String GetLinkInViewNestedLinks(int index, String defaultValue = "") => LinkInViewNestedLinks?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<String> LinkInViewPhase { get; }
+        public String GetLinkInViewPhase(int index, String defaultValue = "") => LinkInViewPhase?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<String> LinkInViewPhaseFilter { get; }
+        public String GetLinkInViewPhaseFilter(int index, String defaultValue = "") => LinkInViewPhaseFilter?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<String> LinkInViewDetailLevel { get; }
+        public String GetLinkInViewDetailLevel(int index, String defaultValue = "") => LinkInViewDetailLevel?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<String> LinkInViewDiscipline { get; }
+        public String GetLinkInViewDiscipline(int index, String defaultValue = "") => LinkInViewDiscipline?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<String> LinkInViewLinkedWorksets { get; }
+        public String GetLinkInViewLinkedWorksets(int index, String defaultValue = "") => LinkInViewLinkedWorksets?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Boolean> LinkInViewIsMeasured { get; }
+        public Boolean GetLinkInViewIsMeasured(int index, Boolean defaultValue = default) => LinkInViewIsMeasured?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Int32> LinkInViewMeasuredVisibleCount { get; }
+        public Int32 GetLinkInViewMeasuredVisibleCount(int index, Int32 defaultValue = default) => LinkInViewMeasuredVisibleCount?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<String> LinkInViewNotReadable { get; }
+        public String GetLinkInViewNotReadable(int index, String defaultValue = "") => LinkInViewNotReadable?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<int> LinkInViewViewIndex { get; }
+        public int GetLinkInViewViewIndex(int index) => LinkInViewViewIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
+        public IArray<int> LinkInViewLinkedDocumentIndex { get; }
+        public int GetLinkInViewLinkedDocumentIndex(int index) => LinkInViewLinkedDocumentIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
+        public IArray<int> LinkInViewLinkedViewIndex { get; }
+        public int GetLinkInViewLinkedViewIndex(int index) => LinkInViewLinkedViewIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
+        public IArray<int> LinkInViewElementIndex { get; }
+        public int GetLinkInViewElementIndex(int index) => LinkInViewElementIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
+        public int NumLinkInView => LinkInViewEntityTable?.NumRows ?? 0;
+        public IArray<LinkInView> LinkInViewList { get; }
+        public LinkInView GetLinkInView(int n)
+        {
+            if (n < 0) return null;
+            var r = new LinkInView();
+            r.Document = Document;
+            r.Index = n;
+            r.Display = LinkInViewDisplay.ElementAtOrDefault(n);
+            r.SettingsFrom = LinkInViewSettingsFrom.ElementAtOrDefault(n);
+            r.IsHidden = LinkInViewIsHidden.ElementAtOrDefault(n);
+            r.HiddenBy = LinkInViewHiddenBy.ElementAtOrDefault(n);
+            r.IsHalftone = LinkInViewIsHalftone.ElementAtOrDefault(n);
+            r.LinkedViewName = LinkInViewLinkedViewName.ElementAtOrDefault(n);
+            r.ViewFilters = LinkInViewViewFilters.ElementAtOrDefault(n);
+            r.ObjectStyles = LinkInViewObjectStyles.ElementAtOrDefault(n);
+            r.NestedLinks = LinkInViewNestedLinks.ElementAtOrDefault(n);
+            r.Phase = LinkInViewPhase.ElementAtOrDefault(n);
+            r.PhaseFilter = LinkInViewPhaseFilter.ElementAtOrDefault(n);
+            r.DetailLevel = LinkInViewDetailLevel.ElementAtOrDefault(n);
+            r.Discipline = LinkInViewDiscipline.ElementAtOrDefault(n);
+            r.LinkedWorksets = LinkInViewLinkedWorksets.ElementAtOrDefault(n);
+            r.IsMeasured = LinkInViewIsMeasured.ElementAtOrDefault(n);
+            r.MeasuredVisibleCount = LinkInViewMeasuredVisibleCount.ElementAtOrDefault(n);
+            r.NotReadable = LinkInViewNotReadable.ElementAtOrDefault(n);
+            r._View = new Relation<Vim.Format.ObjectModel.View>(GetLinkInViewViewIndex(n), GetView);
+            r._LinkedDocument = new Relation<Vim.Format.ObjectModel.BimDocument>(GetLinkInViewLinkedDocumentIndex(n), GetBimDocument);
+            r._LinkedView = new Relation<Vim.Format.ObjectModel.View>(GetLinkInViewLinkedViewIndex(n), GetView);
+            r._Element = new Relation<Vim.Format.ObjectModel.Element>(GetLinkInViewElementIndex(n), GetElement);
             return r;
         }
         
@@ -5088,6 +5743,44 @@ namespace Vim.Format.ObjectModel {
         public Double GetMaterialCutBackgroundPatternColor_Y(int index, Double defaultValue = default) => MaterialCutBackgroundPatternColor_Y?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
         public IArray<Double> MaterialCutBackgroundPatternColor_Z { get; }
         public Double GetMaterialCutBackgroundPatternColor_Z(int index, Double defaultValue = default) => MaterialCutBackgroundPatternColor_Z?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<String> MaterialAppearanceKind { get; }
+        public String GetMaterialAppearanceKind(int index, String defaultValue = "") => MaterialAppearanceKind?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> MaterialAppearanceColor_X { get; }
+        public Double GetMaterialAppearanceColor_X(int index, Double defaultValue = default) => MaterialAppearanceColor_X?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> MaterialAppearanceColor_Y { get; }
+        public Double GetMaterialAppearanceColor_Y(int index, Double defaultValue = default) => MaterialAppearanceColor_Y?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> MaterialAppearanceColor_Z { get; }
+        public Double GetMaterialAppearanceColor_Z(int index, Double defaultValue = default) => MaterialAppearanceColor_Z?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> MaterialAppearanceTint_X { get; }
+        public Double GetMaterialAppearanceTint_X(int index, Double defaultValue = default) => MaterialAppearanceTint_X?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> MaterialAppearanceTint_Y { get; }
+        public Double GetMaterialAppearanceTint_Y(int index, Double defaultValue = default) => MaterialAppearanceTint_Y?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> MaterialAppearanceTint_Z { get; }
+        public Double GetMaterialAppearanceTint_Z(int index, Double defaultValue = default) => MaterialAppearanceTint_Z?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> MaterialAppearanceImageFade { get; }
+        public Double GetMaterialAppearanceImageFade(int index, Double defaultValue = default) => MaterialAppearanceImageFade?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> MaterialAppearanceTransparency { get; }
+        public Double GetMaterialAppearanceTransparency(int index, Double defaultValue = default) => MaterialAppearanceTransparency?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> MaterialRoughness { get; }
+        public Double GetMaterialRoughness(int index, Double defaultValue = default) => MaterialRoughness?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> MaterialMetalness { get; }
+        public Double GetMaterialMetalness(int index, Double defaultValue = default) => MaterialMetalness?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> MaterialReflectivity { get; }
+        public Double GetMaterialReflectivity(int index, Double defaultValue = default) => MaterialReflectivity?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> MaterialRefractionIndex { get; }
+        public Double GetMaterialRefractionIndex(int index, Double defaultValue = default) => MaterialRefractionIndex?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> MaterialEmissionColor_X { get; }
+        public Double GetMaterialEmissionColor_X(int index, Double defaultValue = default) => MaterialEmissionColor_X?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> MaterialEmissionColor_Y { get; }
+        public Double GetMaterialEmissionColor_Y(int index, Double defaultValue = default) => MaterialEmissionColor_Y?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> MaterialEmissionColor_Z { get; }
+        public Double GetMaterialEmissionColor_Z(int index, Double defaultValue = default) => MaterialEmissionColor_Z?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> MaterialEmissionLuminance { get; }
+        public Double GetMaterialEmissionLuminance(int index, Double defaultValue = default) => MaterialEmissionLuminance?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<String> MaterialColorTextureKind { get; }
+        public String GetMaterialColorTextureKind(int index, String defaultValue = "") => MaterialColorTextureKind?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<String> MaterialNormalTextureKind { get; }
+        public String GetMaterialNormalTextureKind(int index, String defaultValue = "") => MaterialNormalTextureKind?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
         public IArray<int> MaterialColorTextureFileIndex { get; }
         public int GetMaterialColorTextureFileIndex(int index) => MaterialColorTextureFileIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
         public IArray<int> MaterialNormalTextureFileIndex { get; }
@@ -5144,6 +5837,25 @@ namespace Vim.Format.ObjectModel {
             r.CutBackgroundPatternColor_X = MaterialCutBackgroundPatternColor_X.ElementAtOrDefault(n);
             r.CutBackgroundPatternColor_Y = MaterialCutBackgroundPatternColor_Y.ElementAtOrDefault(n);
             r.CutBackgroundPatternColor_Z = MaterialCutBackgroundPatternColor_Z.ElementAtOrDefault(n);
+            r.AppearanceKind = MaterialAppearanceKind.ElementAtOrDefault(n);
+            r.AppearanceColor_X = MaterialAppearanceColor_X.ElementAtOrDefault(n);
+            r.AppearanceColor_Y = MaterialAppearanceColor_Y.ElementAtOrDefault(n);
+            r.AppearanceColor_Z = MaterialAppearanceColor_Z.ElementAtOrDefault(n);
+            r.AppearanceTint_X = MaterialAppearanceTint_X.ElementAtOrDefault(n);
+            r.AppearanceTint_Y = MaterialAppearanceTint_Y.ElementAtOrDefault(n);
+            r.AppearanceTint_Z = MaterialAppearanceTint_Z.ElementAtOrDefault(n);
+            r.AppearanceImageFade = MaterialAppearanceImageFade.ElementAtOrDefault(n);
+            r.AppearanceTransparency = MaterialAppearanceTransparency.ElementAtOrDefault(n);
+            r.Roughness = MaterialRoughness.ElementAtOrDefault(n);
+            r.Metalness = MaterialMetalness.ElementAtOrDefault(n);
+            r.Reflectivity = MaterialReflectivity.ElementAtOrDefault(n);
+            r.RefractionIndex = MaterialRefractionIndex.ElementAtOrDefault(n);
+            r.EmissionColor_X = MaterialEmissionColor_X.ElementAtOrDefault(n);
+            r.EmissionColor_Y = MaterialEmissionColor_Y.ElementAtOrDefault(n);
+            r.EmissionColor_Z = MaterialEmissionColor_Z.ElementAtOrDefault(n);
+            r.EmissionLuminance = MaterialEmissionLuminance.ElementAtOrDefault(n);
+            r.ColorTextureKind = MaterialColorTextureKind.ElementAtOrDefault(n);
+            r.NormalTextureKind = MaterialNormalTextureKind.ElementAtOrDefault(n);
             r._ColorTextureFile = new Relation<Vim.Format.ObjectModel.Asset>(GetMaterialColorTextureFileIndex(n), GetAsset);
             r._NormalTextureFile = new Relation<Vim.Format.ObjectModel.Asset>(GetMaterialNormalTextureFileIndex(n), GetAsset);
             r._SurfaceForegroundPattern = new Relation<Vim.Format.ObjectModel.FillPattern>(GetMaterialSurfaceForegroundPatternIndex(n), GetFillPattern);
@@ -7050,6 +7762,165 @@ namespace Vim.Format.ObjectModel {
             return r;
         }
         
+        
+        // CadFile
+        
+        public EntityTable CadFileEntityTable { get; }
+        
+        public IArray<String> CadFileFileName { get; }
+        public String GetCadFileFileName(int index, String defaultValue = "") => CadFileFileName?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<String> CadFileExtension { get; }
+        public String GetCadFileExtension(int index, String defaultValue = "") => CadFileExtension?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Boolean> CadFileIsLinked { get; }
+        public Boolean GetCadFileIsLinked(int index, Boolean defaultValue = default) => CadFileIsLinked?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<String> CadFileSavedPath { get; }
+        public String GetCadFileSavedPath(int index, String defaultValue = "") => CadFileSavedPath?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<String> CadFileAbsolutePath { get; }
+        public String GetCadFileAbsolutePath(int index, String defaultValue = "") => CadFileAbsolutePath?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<String> CadFilePathType { get; }
+        public String GetCadFilePathType(int index, String defaultValue = "") => CadFilePathType?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<String> CadFileLinkStatus { get; }
+        public String GetCadFileLinkStatus(int index, String defaultValue = "") => CadFileLinkStatus?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Int32> CadFileInstanceCount { get; }
+        public Int32 GetCadFileInstanceCount(int index, Int32 defaultValue = default) => CadFileInstanceCount?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Int32> CadFileViewSpecificInstanceCount { get; }
+        public Int32 GetCadFileViewSpecificInstanceCount(int index, Int32 defaultValue = default) => CadFileViewSpecificInstanceCount?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Int32> CadFilePurgeState { get; }
+        public Int32 GetCadFilePurgeState(int index, Int32 defaultValue = default) => CadFilePurgeState?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Boolean> CadFileIsExploded { get; }
+        public Boolean GetCadFileIsExploded(int index, Boolean defaultValue = default) => CadFileIsExploded?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Int32> CadFileExplodedPieceCount { get; }
+        public Int32 GetCadFileExplodedPieceCount(int index, Int32 defaultValue = default) => CadFileExplodedPieceCount?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Int32> CadFileExplodedModelPieceCount { get; }
+        public Int32 GetCadFileExplodedModelPieceCount(int index, Int32 defaultValue = default) => CadFileExplodedModelPieceCount?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Int32> CadFileExplodedViewCount { get; }
+        public Int32 GetCadFileExplodedViewCount(int index, Int32 defaultValue = default) => CadFileExplodedViewCount?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Int32> CadFileExplodedModelViewCount { get; }
+        public Int32 GetCadFileExplodedModelViewCount(int index, Int32 defaultValue = default) => CadFileExplodedModelViewCount?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Int32> CadFileExplodedSeverity { get; }
+        public Int32 GetCadFileExplodedSeverity(int index, Int32 defaultValue = default) => CadFileExplodedSeverity?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<int> CadFileFamilyTypeIndex { get; }
+        public int GetCadFileFamilyTypeIndex(int index) => CadFileFamilyTypeIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
+        public IArray<int> CadFileCategoryIndex { get; }
+        public int GetCadFileCategoryIndex(int index) => CadFileCategoryIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
+        public IArray<int> CadFileElementIndex { get; }
+        public int GetCadFileElementIndex(int index) => CadFileElementIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
+        public int NumCadFile => CadFileEntityTable?.NumRows ?? 0;
+        public IArray<CadFile> CadFileList { get; }
+        public CadFile GetCadFile(int n)
+        {
+            if (n < 0) return null;
+            var r = new CadFile();
+            r.Document = Document;
+            r.Index = n;
+            r.FileName = CadFileFileName.ElementAtOrDefault(n);
+            r.Extension = CadFileExtension.ElementAtOrDefault(n);
+            r.IsLinked = CadFileIsLinked.ElementAtOrDefault(n);
+            r.SavedPath = CadFileSavedPath.ElementAtOrDefault(n);
+            r.AbsolutePath = CadFileAbsolutePath.ElementAtOrDefault(n);
+            r.PathType = CadFilePathType.ElementAtOrDefault(n);
+            r.LinkStatus = CadFileLinkStatus.ElementAtOrDefault(n);
+            r.InstanceCount = CadFileInstanceCount.ElementAtOrDefault(n);
+            r.ViewSpecificInstanceCount = CadFileViewSpecificInstanceCount.ElementAtOrDefault(n);
+            r.PurgeState = CadFilePurgeState.ElementAtOrDefault(n);
+            r.IsExploded = CadFileIsExploded.ElementAtOrDefault(n);
+            r.ExplodedPieceCount = CadFileExplodedPieceCount.ElementAtOrDefault(n);
+            r.ExplodedModelPieceCount = CadFileExplodedModelPieceCount.ElementAtOrDefault(n);
+            r.ExplodedViewCount = CadFileExplodedViewCount.ElementAtOrDefault(n);
+            r.ExplodedModelViewCount = CadFileExplodedModelViewCount.ElementAtOrDefault(n);
+            r.ExplodedSeverity = CadFileExplodedSeverity.ElementAtOrDefault(n);
+            r._FamilyType = new Relation<Vim.Format.ObjectModel.FamilyType>(GetCadFileFamilyTypeIndex(n), GetFamilyType);
+            r._Category = new Relation<Vim.Format.ObjectModel.Category>(GetCadFileCategoryIndex(n), GetCategory);
+            r._Element = new Relation<Vim.Format.ObjectModel.Element>(GetCadFileElementIndex(n), GetElement);
+            return r;
+        }
+        
+        
+        // CadInstance
+        
+        public EntityTable CadInstanceEntityTable { get; }
+        
+        public IArray<String> CadInstanceFileName { get; }
+        public String GetCadInstanceFileName(int index, String defaultValue = "") => CadInstanceFileName?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Boolean> CadInstanceIsLinked { get; }
+        public Boolean GetCadInstanceIsLinked(int index, Boolean defaultValue = default) => CadInstanceIsLinked?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Boolean> CadInstanceIsViewSpecific { get; }
+        public Boolean GetCadInstanceIsViewSpecific(int index, Boolean defaultValue = default) => CadInstanceIsViewSpecific?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Boolean> CadInstanceIsExplodedPiece { get; }
+        public Boolean GetCadInstanceIsExplodedPiece(int index, Boolean defaultValue = default) => CadInstanceIsExplodedPiece?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<int> CadInstanceCadFileIndex { get; }
+        public int GetCadInstanceCadFileIndex(int index) => CadInstanceCadFileIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
+        public IArray<int> CadInstanceOwnerViewIndex { get; }
+        public int GetCadInstanceOwnerViewIndex(int index) => CadInstanceOwnerViewIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
+        public IArray<int> CadInstanceElementIndex { get; }
+        public int GetCadInstanceElementIndex(int index) => CadInstanceElementIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
+        public int NumCadInstance => CadInstanceEntityTable?.NumRows ?? 0;
+        public IArray<CadInstance> CadInstanceList { get; }
+        public CadInstance GetCadInstance(int n)
+        {
+            if (n < 0) return null;
+            var r = new CadInstance();
+            r.Document = Document;
+            r.Index = n;
+            r.FileName = CadInstanceFileName.ElementAtOrDefault(n);
+            r.IsLinked = CadInstanceIsLinked.ElementAtOrDefault(n);
+            r.IsViewSpecific = CadInstanceIsViewSpecific.ElementAtOrDefault(n);
+            r.IsExplodedPiece = CadInstanceIsExplodedPiece.ElementAtOrDefault(n);
+            r._CadFile = new Relation<Vim.Format.ObjectModel.CadFile>(GetCadInstanceCadFileIndex(n), GetCadFile);
+            r._OwnerView = new Relation<Vim.Format.ObjectModel.View>(GetCadInstanceOwnerViewIndex(n), GetView);
+            r._Element = new Relation<Vim.Format.ObjectModel.Element>(GetCadInstanceElementIndex(n), GetElement);
+            return r;
+        }
+        
+        
+        // QuestElement
+        
+        public EntityTable QuestElementEntityTable { get; }
+        
+        public IArray<String> QuestElementCollisionClass { get; }
+        public String GetQuestElementCollisionClass(int index, String defaultValue = "") => QuestElementCollisionClass?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<String> QuestElementCollisionCategory { get; }
+        public String GetQuestElementCollisionCategory(int index, String defaultValue = "") => QuestElementCollisionCategory?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> QuestElementBoundsMin_X { get; }
+        public Double GetQuestElementBoundsMin_X(int index, Double defaultValue = default) => QuestElementBoundsMin_X?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> QuestElementBoundsMin_Y { get; }
+        public Double GetQuestElementBoundsMin_Y(int index, Double defaultValue = default) => QuestElementBoundsMin_Y?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> QuestElementBoundsMin_Z { get; }
+        public Double GetQuestElementBoundsMin_Z(int index, Double defaultValue = default) => QuestElementBoundsMin_Z?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> QuestElementBoundsMax_X { get; }
+        public Double GetQuestElementBoundsMax_X(int index, Double defaultValue = default) => QuestElementBoundsMax_X?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> QuestElementBoundsMax_Y { get; }
+        public Double GetQuestElementBoundsMax_Y(int index, Double defaultValue = default) => QuestElementBoundsMax_Y?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> QuestElementBoundsMax_Z { get; }
+        public Double GetQuestElementBoundsMax_Z(int index, Double defaultValue = default) => QuestElementBoundsMax_Z?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<int> QuestElementStreamLevelIndex { get; }
+        public int GetQuestElementStreamLevelIndex(int index) => QuestElementStreamLevelIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
+        public IArray<int> QuestElementStreamTopLevelIndex { get; }
+        public int GetQuestElementStreamTopLevelIndex(int index) => QuestElementStreamTopLevelIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
+        public IArray<int> QuestElementElementIndex { get; }
+        public int GetQuestElementElementIndex(int index) => QuestElementElementIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
+        public int NumQuestElement => QuestElementEntityTable?.NumRows ?? 0;
+        public IArray<QuestElement> QuestElementList { get; }
+        public QuestElement GetQuestElement(int n)
+        {
+            if (n < 0) return null;
+            var r = new QuestElement();
+            r.Document = Document;
+            r.Index = n;
+            r.CollisionClass = QuestElementCollisionClass.ElementAtOrDefault(n);
+            r.CollisionCategory = QuestElementCollisionCategory.ElementAtOrDefault(n);
+            r.BoundsMin_X = QuestElementBoundsMin_X.ElementAtOrDefault(n);
+            r.BoundsMin_Y = QuestElementBoundsMin_Y.ElementAtOrDefault(n);
+            r.BoundsMin_Z = QuestElementBoundsMin_Z.ElementAtOrDefault(n);
+            r.BoundsMax_X = QuestElementBoundsMax_X.ElementAtOrDefault(n);
+            r.BoundsMax_Y = QuestElementBoundsMax_Y.ElementAtOrDefault(n);
+            r.BoundsMax_Z = QuestElementBoundsMax_Z.ElementAtOrDefault(n);
+            r._StreamLevel = new Relation<Vim.Format.ObjectModel.Level>(GetQuestElementStreamLevelIndex(n), GetLevel);
+            r._StreamTopLevel = new Relation<Vim.Format.ObjectModel.Level>(GetQuestElementStreamTopLevelIndex(n), GetLevel);
+            r._Element = new Relation<Vim.Format.ObjectModel.Element>(GetQuestElementElementIndex(n), GetElement);
+            return r;
+        }
+        
         // All entity collections
         public Dictionary<string, IEnumerable<Entity>> AllEntities => new Dictionary<string, IEnumerable<Entity>>() {
             {"Vim.Asset", AssetList.ToEnumerable()},
@@ -7073,6 +7944,10 @@ namespace Vim.Format.ObjectModel {
             {"Vim.FamilyInstance", FamilyInstanceList.ToEnumerable()},
             {"Vim.View", ViewList.ToEnumerable()},
             {"Vim.FilterInView", FilterInViewList.ToEnumerable()},
+            {"Vim.HiddenCategoryInView", HiddenCategoryInViewList.ToEnumerable()},
+            {"Vim.HiddenWorksetInView", HiddenWorksetInViewList.ToEnumerable()},
+            {"Vim.HiddenElementInView", HiddenElementInViewList.ToEnumerable()},
+            {"Vim.LinkInView", LinkInViewList.ToEnumerable()},
             {"Vim.GridInView", GridInViewList.ToEnumerable()},
             {"Vim.LinePattern", LinePatternList.ToEnumerable()},
             {"Vim.FillPattern", FillPatternList.ToEnumerable()},
@@ -7137,6 +8012,9 @@ namespace Vim.Format.ObjectModel {
             {"Vim.SyncSession", SyncSessionList.ToEnumerable()},
             {"Vim.ElementChange", ElementChangeList.ToEnumerable()},
             {"Vim.ActivityMarker", ActivityMarkerList.ToEnumerable()},
+            {"Vim.CadFile", CadFileList.ToEnumerable()},
+            {"Vim.CadInstance", CadInstanceList.ToEnumerable()},
+            {"Vim.QuestElement", QuestElementList.ToEnumerable()},
         };
         
         // Entity types from table names
@@ -7162,6 +8040,10 @@ namespace Vim.Format.ObjectModel {
             {"Vim.FamilyInstance", typeof(FamilyInstance)},
             {"Vim.View", typeof(View)},
             {"Vim.FilterInView", typeof(FilterInView)},
+            {"Vim.HiddenCategoryInView", typeof(HiddenCategoryInView)},
+            {"Vim.HiddenWorksetInView", typeof(HiddenWorksetInView)},
+            {"Vim.HiddenElementInView", typeof(HiddenElementInView)},
+            {"Vim.LinkInView", typeof(LinkInView)},
             {"Vim.GridInView", typeof(GridInView)},
             {"Vim.LinePattern", typeof(LinePattern)},
             {"Vim.FillPattern", typeof(FillPattern)},
@@ -7226,6 +8108,9 @@ namespace Vim.Format.ObjectModel {
             {"Vim.SyncSession", typeof(SyncSession)},
             {"Vim.ElementChange", typeof(ElementChange)},
             {"Vim.ActivityMarker", typeof(ActivityMarker)},
+            {"Vim.CadFile", typeof(CadFile)},
+            {"Vim.CadInstance", typeof(CadInstance)},
+            {"Vim.QuestElement", typeof(QuestElement)},
         };
         public DocumentModel(Document d, bool inParallel = true)
         {
@@ -7253,6 +8138,10 @@ namespace Vim.Format.ObjectModel {
             FamilyInstanceEntityTable = Document.GetTable("Vim.FamilyInstance");
             ViewEntityTable = Document.GetTable("Vim.View");
             FilterInViewEntityTable = Document.GetTable("Vim.FilterInView");
+            HiddenCategoryInViewEntityTable = Document.GetTable("Vim.HiddenCategoryInView");
+            HiddenWorksetInViewEntityTable = Document.GetTable("Vim.HiddenWorksetInView");
+            HiddenElementInViewEntityTable = Document.GetTable("Vim.HiddenElementInView");
+            LinkInViewEntityTable = Document.GetTable("Vim.LinkInView");
             GridInViewEntityTable = Document.GetTable("Vim.GridInView");
             LinePatternEntityTable = Document.GetTable("Vim.LinePattern");
             FillPatternEntityTable = Document.GetTable("Vim.FillPattern");
@@ -7317,6 +8206,9 @@ namespace Vim.Format.ObjectModel {
             SyncSessionEntityTable = Document.GetTable("Vim.SyncSession");
             ElementChangeEntityTable = Document.GetTable("Vim.ElementChange");
             ActivityMarkerEntityTable = Document.GetTable("Vim.ActivityMarker");
+            CadFileEntityTable = Document.GetTable("Vim.CadFile");
+            CadInstanceEntityTable = Document.GetTable("Vim.CadInstance");
+            QuestElementEntityTable = Document.GetTable("Vim.QuestElement");
             
             // Initialize entity arrays
             AssetBufferName = AssetEntityTable?.GetStringColumnValues("string:BufferName") ?? Array.Empty<String>().ToIArray();
@@ -7346,6 +8238,7 @@ namespace Vim.Format.ObjectModel {
             ElementCreator = ElementEntityTable?.GetStringColumnValues("string:Creator") ?? Array.Empty<String>().ToIArray();
             ElementLastChangedBy = ElementEntityTable?.GetStringColumnValues("string:LastChangedBy") ?? Array.Empty<String>().ToIArray();
             ElementOwner = ElementEntityTable?.GetStringColumnValues("string:Owner") ?? Array.Empty<String>().ToIArray();
+            ElementChangeToken = ElementEntityTable?.GetStringColumnValues("string:ChangeToken") ?? Array.Empty<String>().ToIArray();
             WorksetId = WorksetEntityTable?.GetDataColumnValues<Int32>("int:Id") ?? Array.Empty<Int32>().ToIArray();
             WorksetName = WorksetEntityTable?.GetStringColumnValues("string:Name") ?? Array.Empty<String>().ToIArray();
             WorksetKind = WorksetEntityTable?.GetStringColumnValues("string:Kind") ?? Array.Empty<String>().ToIArray();
@@ -7375,6 +8268,7 @@ namespace Vim.Format.ObjectModel {
             BimDocumentIsMetric = BimDocumentEntityTable?.GetDataColumnValues<Boolean>("byte:IsMetric") ?? Array.Empty<Boolean>().ToIArray();
             BimDocumentGuid = BimDocumentEntityTable?.GetStringColumnValues("string:Guid") ?? Array.Empty<String>().ToIArray();
             BimDocumentNumSaves = BimDocumentEntityTable?.GetDataColumnValues<Int32>("int:NumSaves") ?? Array.Empty<Int32>().ToIArray();
+            BimDocumentIdentity = BimDocumentEntityTable?.GetStringColumnValues("string:Identity") ?? Array.Empty<String>().ToIArray();
             BimDocumentIsLinked = BimDocumentEntityTable?.GetDataColumnValues<Boolean>("byte:IsLinked") ?? Array.Empty<Boolean>().ToIArray();
             BimDocumentIsDetached = BimDocumentEntityTable?.GetDataColumnValues<Boolean>("byte:IsDetached") ?? Array.Empty<Boolean>().ToIArray();
             BimDocumentIsWorkshared = BimDocumentEntityTable?.GetDataColumnValues<Boolean>("byte:IsWorkshared") ?? Array.Empty<Boolean>().ToIArray();
@@ -7400,6 +8294,12 @@ namespace Vim.Format.ObjectModel {
             BimDocumentVersion = BimDocumentEntityTable?.GetStringColumnValues("string:Version") ?? Array.Empty<String>().ToIArray();
             BimDocumentUser = BimDocumentEntityTable?.GetStringColumnValues("string:User") ?? Array.Empty<String>().ToIArray();
             BimDocumentFileLength = BimDocumentEntityTable?.GetDataColumnValues<Int64>("long:FileLength") ?? Array.Empty<Int64>().ToIArray();
+            BimDocumentFileLengthSource = BimDocumentEntityTable?.GetDataColumnValues<Int32>("int:FileLengthSource") ?? Array.Empty<Int32>().ToIArray();
+            BimDocumentFileLengthPath = BimDocumentEntityTable?.GetStringColumnValues("string:FileLengthPath") ?? Array.Empty<String>().ToIArray();
+            BimDocumentIsCloudModel = BimDocumentEntityTable?.GetDataColumnValues<Boolean>("byte:IsCloudModel") ?? Array.Empty<Boolean>().ToIArray();
+            BimDocumentCloudProjectGuid = BimDocumentEntityTable?.GetStringColumnValues("string:CloudProjectGuid") ?? Array.Empty<String>().ToIArray();
+            BimDocumentCloudModelGuid = BimDocumentEntityTable?.GetStringColumnValues("string:CloudModelGuid") ?? Array.Empty<String>().ToIArray();
+            BimDocumentPurgeableElementCount = BimDocumentEntityTable?.GetDataColumnValues<Int32>("int:PurgeableElementCount") ?? Array.Empty<Int32>().ToIArray();
             PhaseOrderInBimDocumentOrderIndex = PhaseOrderInBimDocumentEntityTable?.GetDataColumnValues<Int32>("int:OrderIndex") ?? Array.Empty<Int32>().ToIArray();
             CategoryName = CategoryEntityTable?.GetStringColumnValues("string:Name") ?? Array.Empty<String>().ToIArray();
             CategoryId = (CategoryEntityTable?.GetDataColumnValues<Int64>("long:Id") ?? CategoryEntityTable?.GetDataColumnValues<Int32>("int:Id")?.Select(v => (Int64) v)) ?? Array.Empty<Int64>().ToIArray();
@@ -7415,7 +8315,11 @@ namespace Vim.Format.ObjectModel {
             FamilyStructuralSectionShape = FamilyEntityTable?.GetStringColumnValues("string:StructuralSectionShape") ?? Array.Empty<String>().ToIArray();
             FamilyIsSystemFamily = FamilyEntityTable?.GetDataColumnValues<Boolean>("byte:IsSystemFamily") ?? Array.Empty<Boolean>().ToIArray();
             FamilyIsInPlace = FamilyEntityTable?.GetDataColumnValues<Boolean>("byte:IsInPlace") ?? Array.Empty<Boolean>().ToIArray();
+            FamilyInstanceCount = FamilyEntityTable?.GetDataColumnValues<Int32>("int:InstanceCount") ?? Array.Empty<Int32>().ToIArray();
+            FamilyPurgeState = FamilyEntityTable?.GetDataColumnValues<Int32>("int:PurgeState") ?? Array.Empty<Int32>().ToIArray();
             FamilyTypeIsSystemFamilyType = FamilyTypeEntityTable?.GetDataColumnValues<Boolean>("byte:IsSystemFamilyType") ?? Array.Empty<Boolean>().ToIArray();
+            FamilyTypeInstanceCount = FamilyTypeEntityTable?.GetDataColumnValues<Int32>("int:InstanceCount") ?? Array.Empty<Int32>().ToIArray();
+            FamilyTypePurgeState = FamilyTypeEntityTable?.GetDataColumnValues<Int32>("int:PurgeState") ?? Array.Empty<Int32>().ToIArray();
             FamilyInstanceFacingFlipped = FamilyInstanceEntityTable?.GetDataColumnValues<Boolean>("byte:FacingFlipped") ?? Array.Empty<Boolean>().ToIArray();
             FamilyInstanceFacingOrientation_X = FamilyInstanceEntityTable?.GetDataColumnValues<Single>("float:FacingOrientation.X") ?? Array.Empty<Single>().ToIArray();
             FamilyInstanceFacingOrientation_Y = FamilyInstanceEntityTable?.GetDataColumnValues<Single>("float:FacingOrientation.Y") ?? Array.Empty<Single>().ToIArray();
@@ -7474,6 +8378,33 @@ namespace Vim.Format.ObjectModel {
             ViewHiddenElementCount = ViewEntityTable?.GetDataColumnValues<Int32>("int:HiddenElementCount") ?? Array.Empty<Int32>().ToIArray();
             ViewTemplateControlledSettings = ViewEntityTable?.GetStringColumnValues("string:TemplateControlledSettings") ?? Array.Empty<String>().ToIArray();
             ViewGraphicsRead = ViewEntityTable?.GetDataColumnValues<Boolean>("byte:GraphicsRead") ?? Array.Empty<Boolean>().ToIArray();
+            ViewIsLocked = ViewEntityTable?.GetDataColumnValues<Boolean>("byte:IsLocked") ?? Array.Empty<Boolean>().ToIArray();
+            ViewCropBox_Min_X = ViewEntityTable?.GetDataColumnValues<Double>("double:CropBox.Min.X") ?? Array.Empty<Double>().ToIArray();
+            ViewCropBox_Min_Y = ViewEntityTable?.GetDataColumnValues<Double>("double:CropBox.Min.Y") ?? Array.Empty<Double>().ToIArray();
+            ViewCropBox_Min_Z = ViewEntityTable?.GetDataColumnValues<Double>("double:CropBox.Min.Z") ?? Array.Empty<Double>().ToIArray();
+            ViewCropBox_Max_X = ViewEntityTable?.GetDataColumnValues<Double>("double:CropBox.Max.X") ?? Array.Empty<Double>().ToIArray();
+            ViewCropBox_Max_Y = ViewEntityTable?.GetDataColumnValues<Double>("double:CropBox.Max.Y") ?? Array.Empty<Double>().ToIArray();
+            ViewCropBox_Max_Z = ViewEntityTable?.GetDataColumnValues<Double>("double:CropBox.Max.Z") ?? Array.Empty<Double>().ToIArray();
+            ViewIsSectionBoxActive = ViewEntityTable?.GetDataColumnValues<Boolean>("byte:IsSectionBoxActive") ?? Array.Empty<Boolean>().ToIArray();
+            ViewSectionBox_Min_X = ViewEntityTable?.GetDataColumnValues<Double>("double:SectionBox.Min.X") ?? Array.Empty<Double>().ToIArray();
+            ViewSectionBox_Min_Y = ViewEntityTable?.GetDataColumnValues<Double>("double:SectionBox.Min.Y") ?? Array.Empty<Double>().ToIArray();
+            ViewSectionBox_Min_Z = ViewEntityTable?.GetDataColumnValues<Double>("double:SectionBox.Min.Z") ?? Array.Empty<Double>().ToIArray();
+            ViewSectionBox_Max_X = ViewEntityTable?.GetDataColumnValues<Double>("double:SectionBox.Max.X") ?? Array.Empty<Double>().ToIArray();
+            ViewSectionBox_Max_Y = ViewEntityTable?.GetDataColumnValues<Double>("double:SectionBox.Max.Y") ?? Array.Empty<Double>().ToIArray();
+            ViewSectionBox_Max_Z = ViewEntityTable?.GetDataColumnValues<Double>("double:SectionBox.Max.Z") ?? Array.Empty<Double>().ToIArray();
+            ViewSectionBoxOrigin_X = ViewEntityTable?.GetDataColumnValues<Double>("double:SectionBoxOrigin.X") ?? Array.Empty<Double>().ToIArray();
+            ViewSectionBoxOrigin_Y = ViewEntityTable?.GetDataColumnValues<Double>("double:SectionBoxOrigin.Y") ?? Array.Empty<Double>().ToIArray();
+            ViewSectionBoxOrigin_Z = ViewEntityTable?.GetDataColumnValues<Double>("double:SectionBoxOrigin.Z") ?? Array.Empty<Double>().ToIArray();
+            ViewSectionBoxBasisX_X = ViewEntityTable?.GetDataColumnValues<Double>("double:SectionBoxBasisX.X") ?? Array.Empty<Double>().ToIArray();
+            ViewSectionBoxBasisX_Y = ViewEntityTable?.GetDataColumnValues<Double>("double:SectionBoxBasisX.Y") ?? Array.Empty<Double>().ToIArray();
+            ViewSectionBoxBasisX_Z = ViewEntityTable?.GetDataColumnValues<Double>("double:SectionBoxBasisX.Z") ?? Array.Empty<Double>().ToIArray();
+            ViewSectionBoxBasisY_X = ViewEntityTable?.GetDataColumnValues<Double>("double:SectionBoxBasisY.X") ?? Array.Empty<Double>().ToIArray();
+            ViewSectionBoxBasisY_Y = ViewEntityTable?.GetDataColumnValues<Double>("double:SectionBoxBasisY.Y") ?? Array.Empty<Double>().ToIArray();
+            ViewSectionBoxBasisY_Z = ViewEntityTable?.GetDataColumnValues<Double>("double:SectionBoxBasisY.Z") ?? Array.Empty<Double>().ToIArray();
+            ViewSectionBoxBasisZ_X = ViewEntityTable?.GetDataColumnValues<Double>("double:SectionBoxBasisZ.X") ?? Array.Empty<Double>().ToIArray();
+            ViewSectionBoxBasisZ_Y = ViewEntityTable?.GetDataColumnValues<Double>("double:SectionBoxBasisZ.Y") ?? Array.Empty<Double>().ToIArray();
+            ViewSectionBoxBasisZ_Z = ViewEntityTable?.GetDataColumnValues<Double>("double:SectionBoxBasisZ.Z") ?? Array.Empty<Double>().ToIArray();
+            ViewDisplayStyle = ViewEntityTable?.GetStringColumnValues("string:DisplayStyle") ?? Array.Empty<String>().ToIArray();
             FilterInViewName = FilterInViewEntityTable?.GetStringColumnValues("string:Name") ?? Array.Empty<String>().ToIArray();
             FilterInViewKind = FilterInViewEntityTable?.GetStringColumnValues("string:Kind") ?? Array.Empty<String>().ToIArray();
             FilterInViewFilterUniqueId = FilterInViewEntityTable?.GetStringColumnValues("string:FilterUniqueId") ?? Array.Empty<String>().ToIArray();
@@ -7481,6 +8412,24 @@ namespace Vim.Format.ObjectModel {
             FilterInViewIsEnabled = FilterInViewEntityTable?.GetDataColumnValues<Boolean>("byte:IsEnabled") ?? Array.Empty<Boolean>().ToIArray();
             FilterInViewIsVisible = FilterInViewEntityTable?.GetDataColumnValues<Boolean>("byte:IsVisible") ?? Array.Empty<Boolean>().ToIArray();
             FilterInViewHasOverrides = FilterInViewEntityTable?.GetDataColumnValues<Boolean>("byte:HasOverrides") ?? Array.Empty<Boolean>().ToIArray();
+            HiddenElementInViewReason = HiddenElementInViewEntityTable?.GetStringColumnValues("string:Reason") ?? Array.Empty<String>().ToIArray();
+            LinkInViewDisplay = LinkInViewEntityTable?.GetStringColumnValues("string:Display") ?? Array.Empty<String>().ToIArray();
+            LinkInViewSettingsFrom = LinkInViewEntityTable?.GetStringColumnValues("string:SettingsFrom") ?? Array.Empty<String>().ToIArray();
+            LinkInViewIsHidden = LinkInViewEntityTable?.GetDataColumnValues<Boolean>("byte:IsHidden") ?? Array.Empty<Boolean>().ToIArray();
+            LinkInViewHiddenBy = LinkInViewEntityTable?.GetStringColumnValues("string:HiddenBy") ?? Array.Empty<String>().ToIArray();
+            LinkInViewIsHalftone = LinkInViewEntityTable?.GetDataColumnValues<Boolean>("byte:IsHalftone") ?? Array.Empty<Boolean>().ToIArray();
+            LinkInViewLinkedViewName = LinkInViewEntityTable?.GetStringColumnValues("string:LinkedViewName") ?? Array.Empty<String>().ToIArray();
+            LinkInViewViewFilters = LinkInViewEntityTable?.GetStringColumnValues("string:ViewFilters") ?? Array.Empty<String>().ToIArray();
+            LinkInViewObjectStyles = LinkInViewEntityTable?.GetStringColumnValues("string:ObjectStyles") ?? Array.Empty<String>().ToIArray();
+            LinkInViewNestedLinks = LinkInViewEntityTable?.GetStringColumnValues("string:NestedLinks") ?? Array.Empty<String>().ToIArray();
+            LinkInViewPhase = LinkInViewEntityTable?.GetStringColumnValues("string:Phase") ?? Array.Empty<String>().ToIArray();
+            LinkInViewPhaseFilter = LinkInViewEntityTable?.GetStringColumnValues("string:PhaseFilter") ?? Array.Empty<String>().ToIArray();
+            LinkInViewDetailLevel = LinkInViewEntityTable?.GetStringColumnValues("string:DetailLevel") ?? Array.Empty<String>().ToIArray();
+            LinkInViewDiscipline = LinkInViewEntityTable?.GetStringColumnValues("string:Discipline") ?? Array.Empty<String>().ToIArray();
+            LinkInViewLinkedWorksets = LinkInViewEntityTable?.GetStringColumnValues("string:LinkedWorksets") ?? Array.Empty<String>().ToIArray();
+            LinkInViewIsMeasured = LinkInViewEntityTable?.GetDataColumnValues<Boolean>("byte:IsMeasured") ?? Array.Empty<Boolean>().ToIArray();
+            LinkInViewMeasuredVisibleCount = LinkInViewEntityTable?.GetDataColumnValues<Int32>("int:MeasuredVisibleCount") ?? Array.Empty<Int32>().ToIArray();
+            LinkInViewNotReadable = LinkInViewEntityTable?.GetStringColumnValues("string:NotReadable") ?? Array.Empty<String>().ToIArray();
             GridInViewBubbleAtEnd0 = GridInViewEntityTable?.GetDataColumnValues<Boolean>("byte:BubbleAtEnd0") ?? Array.Empty<Boolean>().ToIArray();
             GridInViewBubbleAtEnd1 = GridInViewEntityTable?.GetDataColumnValues<Boolean>("byte:BubbleAtEnd1") ?? Array.Empty<Boolean>().ToIArray();
             LinePatternName = LinePatternEntityTable?.GetStringColumnValues("string:Name") ?? Array.Empty<String>().ToIArray();
@@ -7605,6 +8554,25 @@ namespace Vim.Format.ObjectModel {
             MaterialCutBackgroundPatternColor_X = MaterialEntityTable?.GetDataColumnValues<Double>("double:CutBackgroundPatternColor.X") ?? Array.Empty<Double>().ToIArray();
             MaterialCutBackgroundPatternColor_Y = MaterialEntityTable?.GetDataColumnValues<Double>("double:CutBackgroundPatternColor.Y") ?? Array.Empty<Double>().ToIArray();
             MaterialCutBackgroundPatternColor_Z = MaterialEntityTable?.GetDataColumnValues<Double>("double:CutBackgroundPatternColor.Z") ?? Array.Empty<Double>().ToIArray();
+            MaterialAppearanceKind = MaterialEntityTable?.GetStringColumnValues("string:AppearanceKind") ?? Array.Empty<String>().ToIArray();
+            MaterialAppearanceColor_X = MaterialEntityTable?.GetDataColumnValues<Double>("double:AppearanceColor.X") ?? Array.Empty<Double>().ToIArray();
+            MaterialAppearanceColor_Y = MaterialEntityTable?.GetDataColumnValues<Double>("double:AppearanceColor.Y") ?? Array.Empty<Double>().ToIArray();
+            MaterialAppearanceColor_Z = MaterialEntityTable?.GetDataColumnValues<Double>("double:AppearanceColor.Z") ?? Array.Empty<Double>().ToIArray();
+            MaterialAppearanceTint_X = MaterialEntityTable?.GetDataColumnValues<Double>("double:AppearanceTint.X") ?? Array.Empty<Double>().ToIArray();
+            MaterialAppearanceTint_Y = MaterialEntityTable?.GetDataColumnValues<Double>("double:AppearanceTint.Y") ?? Array.Empty<Double>().ToIArray();
+            MaterialAppearanceTint_Z = MaterialEntityTable?.GetDataColumnValues<Double>("double:AppearanceTint.Z") ?? Array.Empty<Double>().ToIArray();
+            MaterialAppearanceImageFade = MaterialEntityTable?.GetDataColumnValues<Double>("double:AppearanceImageFade") ?? Array.Empty<Double>().ToIArray();
+            MaterialAppearanceTransparency = MaterialEntityTable?.GetDataColumnValues<Double>("double:AppearanceTransparency") ?? Array.Empty<Double>().ToIArray();
+            MaterialRoughness = MaterialEntityTable?.GetDataColumnValues<Double>("double:Roughness") ?? Array.Empty<Double>().ToIArray();
+            MaterialMetalness = MaterialEntityTable?.GetDataColumnValues<Double>("double:Metalness") ?? Array.Empty<Double>().ToIArray();
+            MaterialReflectivity = MaterialEntityTable?.GetDataColumnValues<Double>("double:Reflectivity") ?? Array.Empty<Double>().ToIArray();
+            MaterialRefractionIndex = MaterialEntityTable?.GetDataColumnValues<Double>("double:RefractionIndex") ?? Array.Empty<Double>().ToIArray();
+            MaterialEmissionColor_X = MaterialEntityTable?.GetDataColumnValues<Double>("double:EmissionColor.X") ?? Array.Empty<Double>().ToIArray();
+            MaterialEmissionColor_Y = MaterialEntityTable?.GetDataColumnValues<Double>("double:EmissionColor.Y") ?? Array.Empty<Double>().ToIArray();
+            MaterialEmissionColor_Z = MaterialEntityTable?.GetDataColumnValues<Double>("double:EmissionColor.Z") ?? Array.Empty<Double>().ToIArray();
+            MaterialEmissionLuminance = MaterialEntityTable?.GetDataColumnValues<Double>("double:EmissionLuminance") ?? Array.Empty<Double>().ToIArray();
+            MaterialColorTextureKind = MaterialEntityTable?.GetStringColumnValues("string:ColorTextureKind") ?? Array.Empty<String>().ToIArray();
+            MaterialNormalTextureKind = MaterialEntityTable?.GetStringColumnValues("string:NormalTextureKind") ?? Array.Empty<String>().ToIArray();
             MaterialInElementArea = MaterialInElementEntityTable?.GetDataColumnValues<Double>("double:Area") ?? Array.Empty<Double>().ToIArray();
             MaterialInElementVolume = MaterialInElementEntityTable?.GetDataColumnValues<Double>("double:Volume") ?? Array.Empty<Double>().ToIArray();
             MaterialInElementIsPaint = MaterialInElementEntityTable?.GetDataColumnValues<Boolean>("byte:IsPaint") ?? Array.Empty<Boolean>().ToIArray();
@@ -7901,6 +8869,34 @@ namespace Vim.Format.ObjectModel {
             ActivityMarkerKind = ActivityMarkerEntityTable?.GetDataColumnValues<Int32>("int:Kind") ?? Array.Empty<Int32>().ToIArray();
             ActivityMarkerOccurredUtc = ActivityMarkerEntityTable?.GetStringColumnValues("string:OccurredUtc") ?? Array.Empty<String>().ToIArray();
             ActivityMarkerDescription = ActivityMarkerEntityTable?.GetStringColumnValues("string:Description") ?? Array.Empty<String>().ToIArray();
+            CadFileFileName = CadFileEntityTable?.GetStringColumnValues("string:FileName") ?? Array.Empty<String>().ToIArray();
+            CadFileExtension = CadFileEntityTable?.GetStringColumnValues("string:Extension") ?? Array.Empty<String>().ToIArray();
+            CadFileIsLinked = CadFileEntityTable?.GetDataColumnValues<Boolean>("byte:IsLinked") ?? Array.Empty<Boolean>().ToIArray();
+            CadFileSavedPath = CadFileEntityTable?.GetStringColumnValues("string:SavedPath") ?? Array.Empty<String>().ToIArray();
+            CadFileAbsolutePath = CadFileEntityTable?.GetStringColumnValues("string:AbsolutePath") ?? Array.Empty<String>().ToIArray();
+            CadFilePathType = CadFileEntityTable?.GetStringColumnValues("string:PathType") ?? Array.Empty<String>().ToIArray();
+            CadFileLinkStatus = CadFileEntityTable?.GetStringColumnValues("string:LinkStatus") ?? Array.Empty<String>().ToIArray();
+            CadFileInstanceCount = CadFileEntityTable?.GetDataColumnValues<Int32>("int:InstanceCount") ?? Array.Empty<Int32>().ToIArray();
+            CadFileViewSpecificInstanceCount = CadFileEntityTable?.GetDataColumnValues<Int32>("int:ViewSpecificInstanceCount") ?? Array.Empty<Int32>().ToIArray();
+            CadFilePurgeState = CadFileEntityTable?.GetDataColumnValues<Int32>("int:PurgeState") ?? Array.Empty<Int32>().ToIArray();
+            CadFileIsExploded = CadFileEntityTable?.GetDataColumnValues<Boolean>("byte:IsExploded") ?? Array.Empty<Boolean>().ToIArray();
+            CadFileExplodedPieceCount = CadFileEntityTable?.GetDataColumnValues<Int32>("int:ExplodedPieceCount") ?? Array.Empty<Int32>().ToIArray();
+            CadFileExplodedModelPieceCount = CadFileEntityTable?.GetDataColumnValues<Int32>("int:ExplodedModelPieceCount") ?? Array.Empty<Int32>().ToIArray();
+            CadFileExplodedViewCount = CadFileEntityTable?.GetDataColumnValues<Int32>("int:ExplodedViewCount") ?? Array.Empty<Int32>().ToIArray();
+            CadFileExplodedModelViewCount = CadFileEntityTable?.GetDataColumnValues<Int32>("int:ExplodedModelViewCount") ?? Array.Empty<Int32>().ToIArray();
+            CadFileExplodedSeverity = CadFileEntityTable?.GetDataColumnValues<Int32>("int:ExplodedSeverity") ?? Array.Empty<Int32>().ToIArray();
+            CadInstanceFileName = CadInstanceEntityTable?.GetStringColumnValues("string:FileName") ?? Array.Empty<String>().ToIArray();
+            CadInstanceIsLinked = CadInstanceEntityTable?.GetDataColumnValues<Boolean>("byte:IsLinked") ?? Array.Empty<Boolean>().ToIArray();
+            CadInstanceIsViewSpecific = CadInstanceEntityTable?.GetDataColumnValues<Boolean>("byte:IsViewSpecific") ?? Array.Empty<Boolean>().ToIArray();
+            CadInstanceIsExplodedPiece = CadInstanceEntityTable?.GetDataColumnValues<Boolean>("byte:IsExplodedPiece") ?? Array.Empty<Boolean>().ToIArray();
+            QuestElementCollisionClass = QuestElementEntityTable?.GetStringColumnValues("string:CollisionClass") ?? Array.Empty<String>().ToIArray();
+            QuestElementCollisionCategory = QuestElementEntityTable?.GetStringColumnValues("string:CollisionCategory") ?? Array.Empty<String>().ToIArray();
+            QuestElementBoundsMin_X = QuestElementEntityTable?.GetDataColumnValues<Double>("double:BoundsMin.X") ?? Array.Empty<Double>().ToIArray();
+            QuestElementBoundsMin_Y = QuestElementEntityTable?.GetDataColumnValues<Double>("double:BoundsMin.Y") ?? Array.Empty<Double>().ToIArray();
+            QuestElementBoundsMin_Z = QuestElementEntityTable?.GetDataColumnValues<Double>("double:BoundsMin.Z") ?? Array.Empty<Double>().ToIArray();
+            QuestElementBoundsMax_X = QuestElementEntityTable?.GetDataColumnValues<Double>("double:BoundsMax.X") ?? Array.Empty<Double>().ToIArray();
+            QuestElementBoundsMax_Y = QuestElementEntityTable?.GetDataColumnValues<Double>("double:BoundsMax.Y") ?? Array.Empty<Double>().ToIArray();
+            QuestElementBoundsMax_Z = QuestElementEntityTable?.GetDataColumnValues<Double>("double:BoundsMax.Z") ?? Array.Empty<Double>().ToIArray();
             
             // Initialize entity relational columns
             ParameterDescriptorDisplayUnitIndex = ParameterDescriptorEntityTable?.GetIndexColumnValues("index:Vim.DisplayUnit:DisplayUnit") ?? Array.Empty<int>().ToIArray();
@@ -7960,6 +8956,21 @@ namespace Vim.Format.ObjectModel {
             ViewElementIndex = ViewEntityTable?.GetIndexColumnValues("index:Vim.Element:Element") ?? Array.Empty<int>().ToIArray();
             FilterInViewViewIndex = FilterInViewEntityTable?.GetIndexColumnValues("index:Vim.View:View") ?? Array.Empty<int>().ToIArray();
             FilterInViewGraphicOverrideIndex = FilterInViewEntityTable?.GetIndexColumnValues("index:Vim.GraphicOverride:GraphicOverride") ?? Array.Empty<int>().ToIArray();
+            FilterInViewLinkInViewIndex = FilterInViewEntityTable?.GetIndexColumnValues("index:Vim.LinkInView:LinkInView") ?? Array.Empty<int>().ToIArray();
+            HiddenCategoryInViewViewIndex = HiddenCategoryInViewEntityTable?.GetIndexColumnValues("index:Vim.View:View") ?? Array.Empty<int>().ToIArray();
+            HiddenCategoryInViewCategoryIndex = HiddenCategoryInViewEntityTable?.GetIndexColumnValues("index:Vim.Category:Category") ?? Array.Empty<int>().ToIArray();
+            HiddenCategoryInViewLinkInViewIndex = HiddenCategoryInViewEntityTable?.GetIndexColumnValues("index:Vim.LinkInView:LinkInView") ?? Array.Empty<int>().ToIArray();
+            HiddenWorksetInViewViewIndex = HiddenWorksetInViewEntityTable?.GetIndexColumnValues("index:Vim.View:View") ?? Array.Empty<int>().ToIArray();
+            HiddenWorksetInViewWorksetIndex = HiddenWorksetInViewEntityTable?.GetIndexColumnValues("index:Vim.Workset:Workset") ?? Array.Empty<int>().ToIArray();
+            HiddenWorksetInViewLinkInViewIndex = HiddenWorksetInViewEntityTable?.GetIndexColumnValues("index:Vim.LinkInView:LinkInView") ?? Array.Empty<int>().ToIArray();
+            HiddenElementInViewViewIndex = HiddenElementInViewEntityTable?.GetIndexColumnValues("index:Vim.View:View") ?? Array.Empty<int>().ToIArray();
+            HiddenElementInViewFilterInViewIndex = HiddenElementInViewEntityTable?.GetIndexColumnValues("index:Vim.FilterInView:FilterInView") ?? Array.Empty<int>().ToIArray();
+            HiddenElementInViewLinkInViewIndex = HiddenElementInViewEntityTable?.GetIndexColumnValues("index:Vim.LinkInView:LinkInView") ?? Array.Empty<int>().ToIArray();
+            HiddenElementInViewElementIndex = HiddenElementInViewEntityTable?.GetIndexColumnValues("index:Vim.Element:Element") ?? Array.Empty<int>().ToIArray();
+            LinkInViewViewIndex = LinkInViewEntityTable?.GetIndexColumnValues("index:Vim.View:View") ?? Array.Empty<int>().ToIArray();
+            LinkInViewLinkedDocumentIndex = LinkInViewEntityTable?.GetIndexColumnValues("index:Vim.BimDocument:LinkedDocument") ?? Array.Empty<int>().ToIArray();
+            LinkInViewLinkedViewIndex = LinkInViewEntityTable?.GetIndexColumnValues("index:Vim.View:LinkedView") ?? Array.Empty<int>().ToIArray();
+            LinkInViewElementIndex = LinkInViewEntityTable?.GetIndexColumnValues("index:Vim.Element:Element") ?? Array.Empty<int>().ToIArray();
             GridInViewGridIndex = GridInViewEntityTable?.GetIndexColumnValues("index:Vim.Grid:Grid") ?? Array.Empty<int>().ToIArray();
             GridInViewViewIndex = GridInViewEntityTable?.GetIndexColumnValues("index:Vim.View:View") ?? Array.Empty<int>().ToIArray();
             LinePatternBimDocumentIndex = LinePatternEntityTable?.GetIndexColumnValues("index:Vim.BimDocument:BimDocument") ?? Array.Empty<int>().ToIArray();
@@ -8078,6 +9089,15 @@ namespace Vim.Format.ObjectModel {
             ActivityMarkerExportRevisionIndex = ActivityMarkerEntityTable?.GetIndexColumnValues("index:Vim.ExportRevision:ExportRevision") ?? Array.Empty<int>().ToIArray();
             ActivityMarkerSyncSessionIndex = ActivityMarkerEntityTable?.GetIndexColumnValues("index:Vim.SyncSession:SyncSession") ?? Array.Empty<int>().ToIArray();
             ActivityMarkerContributorIndex = ActivityMarkerEntityTable?.GetIndexColumnValues("index:Vim.Contributor:Contributor") ?? Array.Empty<int>().ToIArray();
+            CadFileFamilyTypeIndex = CadFileEntityTable?.GetIndexColumnValues("index:Vim.FamilyType:FamilyType") ?? Array.Empty<int>().ToIArray();
+            CadFileCategoryIndex = CadFileEntityTable?.GetIndexColumnValues("index:Vim.Category:Category") ?? Array.Empty<int>().ToIArray();
+            CadFileElementIndex = CadFileEntityTable?.GetIndexColumnValues("index:Vim.Element:Element") ?? Array.Empty<int>().ToIArray();
+            CadInstanceCadFileIndex = CadInstanceEntityTable?.GetIndexColumnValues("index:Vim.CadFile:CadFile") ?? Array.Empty<int>().ToIArray();
+            CadInstanceOwnerViewIndex = CadInstanceEntityTable?.GetIndexColumnValues("index:Vim.View:OwnerView") ?? Array.Empty<int>().ToIArray();
+            CadInstanceElementIndex = CadInstanceEntityTable?.GetIndexColumnValues("index:Vim.Element:Element") ?? Array.Empty<int>().ToIArray();
+            QuestElementStreamLevelIndex = QuestElementEntityTable?.GetIndexColumnValues("index:Vim.Level:StreamLevel") ?? Array.Empty<int>().ToIArray();
+            QuestElementStreamTopLevelIndex = QuestElementEntityTable?.GetIndexColumnValues("index:Vim.Level:StreamTopLevel") ?? Array.Empty<int>().ToIArray();
+            QuestElementElementIndex = QuestElementEntityTable?.GetIndexColumnValues("index:Vim.Element:Element") ?? Array.Empty<int>().ToIArray();
             
             // Initialize entity collections
             AssetList = NumAsset.Select(i => GetAsset(i));
@@ -8101,6 +9121,10 @@ namespace Vim.Format.ObjectModel {
             FamilyInstanceList = NumFamilyInstance.Select(i => GetFamilyInstance(i));
             ViewList = NumView.Select(i => GetView(i));
             FilterInViewList = NumFilterInView.Select(i => GetFilterInView(i));
+            HiddenCategoryInViewList = NumHiddenCategoryInView.Select(i => GetHiddenCategoryInView(i));
+            HiddenWorksetInViewList = NumHiddenWorksetInView.Select(i => GetHiddenWorksetInView(i));
+            HiddenElementInViewList = NumHiddenElementInView.Select(i => GetHiddenElementInView(i));
+            LinkInViewList = NumLinkInView.Select(i => GetLinkInView(i));
             GridInViewList = NumGridInView.Select(i => GetGridInView(i));
             LinePatternList = NumLinePattern.Select(i => GetLinePattern(i));
             FillPatternList = NumFillPattern.Select(i => GetFillPattern(i));
@@ -8165,6 +9189,9 @@ namespace Vim.Format.ObjectModel {
             SyncSessionList = NumSyncSession.Select(i => GetSyncSession(i));
             ElementChangeList = NumElementChange.Select(i => GetElementChange(i));
             ActivityMarkerList = NumActivityMarker.Select(i => GetActivityMarker(i));
+            CadFileList = NumCadFile.Select(i => GetCadFile(i));
+            CadInstanceList = NumCadInstance.Select(i => GetCadInstance(i));
+            QuestElementList = NumQuestElement.Select(i => GetQuestElement(i));
             
             // Initialize element index maps
             ElementIndexMaps = new ElementIndexMaps(this, inParallel);
@@ -8213,6 +9240,10 @@ namespace Vim.Format.ObjectModel {
             Tables[TableNames.FamilyInstance] = FamilyInstanceTable = new FamilyInstanceTable(GetSerializableTableOrEmpty(TableNames.FamilyInstance), stringTable, this);
             Tables[TableNames.View] = ViewTable = new ViewTable(GetSerializableTableOrEmpty(TableNames.View), stringTable, this);
             Tables[TableNames.FilterInView] = FilterInViewTable = new FilterInViewTable(GetSerializableTableOrEmpty(TableNames.FilterInView), stringTable, this);
+            Tables[TableNames.HiddenCategoryInView] = HiddenCategoryInViewTable = new HiddenCategoryInViewTable(GetSerializableTableOrEmpty(TableNames.HiddenCategoryInView), stringTable, this);
+            Tables[TableNames.HiddenWorksetInView] = HiddenWorksetInViewTable = new HiddenWorksetInViewTable(GetSerializableTableOrEmpty(TableNames.HiddenWorksetInView), stringTable, this);
+            Tables[TableNames.HiddenElementInView] = HiddenElementInViewTable = new HiddenElementInViewTable(GetSerializableTableOrEmpty(TableNames.HiddenElementInView), stringTable, this);
+            Tables[TableNames.LinkInView] = LinkInViewTable = new LinkInViewTable(GetSerializableTableOrEmpty(TableNames.LinkInView), stringTable, this);
             Tables[TableNames.GridInView] = GridInViewTable = new GridInViewTable(GetSerializableTableOrEmpty(TableNames.GridInView), stringTable, this);
             Tables[TableNames.LinePattern] = LinePatternTable = new LinePatternTable(GetSerializableTableOrEmpty(TableNames.LinePattern), stringTable, this);
             Tables[TableNames.FillPattern] = FillPatternTable = new FillPatternTable(GetSerializableTableOrEmpty(TableNames.FillPattern), stringTable, this);
@@ -8277,6 +9308,9 @@ namespace Vim.Format.ObjectModel {
             Tables[TableNames.SyncSession] = SyncSessionTable = new SyncSessionTable(GetSerializableTableOrEmpty(TableNames.SyncSession), stringTable, this);
             Tables[TableNames.ElementChange] = ElementChangeTable = new ElementChangeTable(GetSerializableTableOrEmpty(TableNames.ElementChange), stringTable, this);
             Tables[TableNames.ActivityMarker] = ActivityMarkerTable = new ActivityMarkerTable(GetSerializableTableOrEmpty(TableNames.ActivityMarker), stringTable, this);
+            Tables[TableNames.CadFile] = CadFileTable = new CadFileTable(GetSerializableTableOrEmpty(TableNames.CadFile), stringTable, this);
+            Tables[TableNames.CadInstance] = CadInstanceTable = new CadInstanceTable(GetSerializableTableOrEmpty(TableNames.CadInstance), stringTable, this);
+            Tables[TableNames.QuestElement] = QuestElementTable = new QuestElementTable(GetSerializableTableOrEmpty(TableNames.QuestElement), stringTable, this);
             
             // Initialize element index maps
             ElementIndexMaps = new ElementIndexMaps(this, inParallel);
@@ -8325,6 +9359,14 @@ namespace Vim.Format.ObjectModel {
         public View GetView(int index) => ViewTable?.Get(index);
         public FilterInViewTable FilterInViewTable { get; } // can be null
         public FilterInView GetFilterInView(int index) => FilterInViewTable?.Get(index);
+        public HiddenCategoryInViewTable HiddenCategoryInViewTable { get; } // can be null
+        public HiddenCategoryInView GetHiddenCategoryInView(int index) => HiddenCategoryInViewTable?.Get(index);
+        public HiddenWorksetInViewTable HiddenWorksetInViewTable { get; } // can be null
+        public HiddenWorksetInView GetHiddenWorksetInView(int index) => HiddenWorksetInViewTable?.Get(index);
+        public HiddenElementInViewTable HiddenElementInViewTable { get; } // can be null
+        public HiddenElementInView GetHiddenElementInView(int index) => HiddenElementInViewTable?.Get(index);
+        public LinkInViewTable LinkInViewTable { get; } // can be null
+        public LinkInView GetLinkInView(int index) => LinkInViewTable?.Get(index);
         public GridInViewTable GridInViewTable { get; } // can be null
         public GridInView GetGridInView(int index) => GridInViewTable?.Get(index);
         public LinePatternTable LinePatternTable { get; } // can be null
@@ -8453,6 +9495,12 @@ namespace Vim.Format.ObjectModel {
         public ElementChange GetElementChange(int index) => ElementChangeTable?.Get(index);
         public ActivityMarkerTable ActivityMarkerTable { get; } // can be null
         public ActivityMarker GetActivityMarker(int index) => ActivityMarkerTable?.Get(index);
+        public CadFileTable CadFileTable { get; } // can be null
+        public CadFile GetCadFile(int index) => CadFileTable?.Get(index);
+        public CadInstanceTable CadInstanceTable { get; } // can be null
+        public CadInstance GetCadInstance(int index) => CadInstanceTable?.Get(index);
+        public QuestElementTable QuestElementTable { get; } // can be null
+        public QuestElement GetQuestElement(int index) => QuestElementTable?.Get(index);
         
         public static HashSet<string> GetElementKindTableNames()
             => new HashSet<string>()
@@ -9032,6 +10080,7 @@ namespace Vim.Format.ObjectModel {
             Column_Creator = GetStringColumnValues("string:Creator") ?? Array.Empty<String>();
             Column_LastChangedBy = GetStringColumnValues("string:LastChangedBy") ?? Array.Empty<String>();
             Column_Owner = GetStringColumnValues("string:Owner") ?? Array.Empty<String>();
+            Column_ChangeToken = GetStringColumnValues("string:ChangeToken") ?? Array.Empty<String>();
             Column_LevelIndex = GetIndexColumnValues("index:Vim.Level:Level") ?? Array.Empty<int>();
             Column_PhaseCreatedIndex = GetIndexColumnValues("index:Vim.Phase:PhaseCreated") ?? Array.Empty<int>();
             Column_PhaseDemolishedIndex = GetIndexColumnValues("index:Vim.Phase:PhaseDemolished") ?? Array.Empty<int>();
@@ -9071,6 +10120,8 @@ namespace Vim.Format.ObjectModel {
         public String GetLastChangedBy(int index, String @default = "") => Column_LastChangedBy.ElementAtOrDefault(index, @default);
         public String[] Column_Owner { get; }
         public String GetOwner(int index, String @default = "") => Column_Owner.ElementAtOrDefault(index, @default);
+        public String[] Column_ChangeToken { get; }
+        public String GetChangeToken(int index, String @default = "") => Column_ChangeToken.ElementAtOrDefault(index, @default);
         public int[] Column_LevelIndex { get; }
         public int GetLevelIndex(int index) => Column_LevelIndex.ElementAtOrDefault(index, EntityRelation.None);
         public Level GetLevel(int index) => _GetReferencedLevel(GetLevelIndex(index));
@@ -9134,6 +10185,7 @@ namespace Vim.Format.ObjectModel {
             r.Creator = GetCreator(index);
             r.LastChangedBy = GetLastChangedBy(index);
             r.Owner = GetOwner(index);
+            r.ChangeToken = GetChangeToken(index);
             r._Level = new Relation<Vim.Format.ObjectModel.Level>(GetLevelIndex(index), _GetReferencedLevel);
             r._PhaseCreated = new Relation<Vim.Format.ObjectModel.Phase>(GetPhaseCreatedIndex(index), _GetReferencedPhaseCreated);
             r._PhaseDemolished = new Relation<Vim.Format.ObjectModel.Phase>(GetPhaseDemolishedIndex(index), _GetReferencedPhaseDemolished);
@@ -9533,6 +10585,7 @@ namespace Vim.Format.ObjectModel {
             Column_IsMetric = GetDataColumnValues<Boolean>("byte:IsMetric") ?? Array.Empty<Boolean>();
             Column_Guid = GetStringColumnValues("string:Guid") ?? Array.Empty<String>();
             Column_NumSaves = GetDataColumnValues<Int32>("int:NumSaves") ?? Array.Empty<Int32>();
+            Column_Identity = GetStringColumnValues("string:Identity") ?? Array.Empty<String>();
             Column_IsLinked = GetDataColumnValues<Boolean>("byte:IsLinked") ?? Array.Empty<Boolean>();
             Column_IsDetached = GetDataColumnValues<Boolean>("byte:IsDetached") ?? Array.Empty<Boolean>();
             Column_IsWorkshared = GetDataColumnValues<Boolean>("byte:IsWorkshared") ?? Array.Empty<Boolean>();
@@ -9558,6 +10611,12 @@ namespace Vim.Format.ObjectModel {
             Column_Version = GetStringColumnValues("string:Version") ?? Array.Empty<String>();
             Column_User = GetStringColumnValues("string:User") ?? Array.Empty<String>();
             Column_FileLength = GetDataColumnValues<Int64>("long:FileLength") ?? Array.Empty<Int64>();
+            Column_FileLengthSource = GetDataColumnValues<Int32>("int:FileLengthSource") ?? Array.Empty<Int32>();
+            Column_FileLengthPath = GetStringColumnValues("string:FileLengthPath") ?? Array.Empty<String>();
+            Column_IsCloudModel = GetDataColumnValues<Boolean>("byte:IsCloudModel") ?? Array.Empty<Boolean>();
+            Column_CloudProjectGuid = GetStringColumnValues("string:CloudProjectGuid") ?? Array.Empty<String>();
+            Column_CloudModelGuid = GetStringColumnValues("string:CloudModelGuid") ?? Array.Empty<String>();
+            Column_PurgeableElementCount = GetDataColumnValues<Int32>("int:PurgeableElementCount") ?? Array.Empty<Int32>();
             Column_ActiveViewIndex = GetIndexColumnValues("index:Vim.View:ActiveView") ?? Array.Empty<int>();
             Column_OwnerFamilyIndex = GetIndexColumnValues("index:Vim.Family:OwnerFamily") ?? Array.Empty<int>();
             Column_ParentIndex = GetIndexColumnValues("index:Vim.BimDocument:Parent") ?? Array.Empty<int>();
@@ -9572,6 +10631,8 @@ namespace Vim.Format.ObjectModel {
         public String GetGuid(int index, String @default = "") => Column_Guid.ElementAtOrDefault(index, @default);
         public Int32[] Column_NumSaves { get; }
         public Int32 GetNumSaves(int index, Int32 @default = default) => Column_NumSaves.ElementAtOrDefault(index, @default);
+        public String[] Column_Identity { get; }
+        public String GetIdentity(int index, String @default = "") => Column_Identity.ElementAtOrDefault(index, @default);
         public Boolean[] Column_IsLinked { get; }
         public Boolean GetIsLinked(int index, Boolean @default = default) => Column_IsLinked.ElementAtOrDefault(index, @default);
         public Boolean[] Column_IsDetached { get; }
@@ -9622,6 +10683,18 @@ namespace Vim.Format.ObjectModel {
         public String GetUser(int index, String @default = "") => Column_User.ElementAtOrDefault(index, @default);
         public Int64[] Column_FileLength { get; }
         public Int64 GetFileLength(int index, Int64 @default = default) => Column_FileLength.ElementAtOrDefault(index, @default);
+        public Int32[] Column_FileLengthSource { get; }
+        public Int32 GetFileLengthSource(int index, Int32 @default = default) => Column_FileLengthSource.ElementAtOrDefault(index, @default);
+        public String[] Column_FileLengthPath { get; }
+        public String GetFileLengthPath(int index, String @default = "") => Column_FileLengthPath.ElementAtOrDefault(index, @default);
+        public Boolean[] Column_IsCloudModel { get; }
+        public Boolean GetIsCloudModel(int index, Boolean @default = default) => Column_IsCloudModel.ElementAtOrDefault(index, @default);
+        public String[] Column_CloudProjectGuid { get; }
+        public String GetCloudProjectGuid(int index, String @default = "") => Column_CloudProjectGuid.ElementAtOrDefault(index, @default);
+        public String[] Column_CloudModelGuid { get; }
+        public String GetCloudModelGuid(int index, String @default = "") => Column_CloudModelGuid.ElementAtOrDefault(index, @default);
+        public Int32[] Column_PurgeableElementCount { get; }
+        public Int32 GetPurgeableElementCount(int index, Int32 @default = default) => Column_PurgeableElementCount.ElementAtOrDefault(index, @default);
         public int[] Column_ActiveViewIndex { get; }
         public int GetActiveViewIndex(int index) => Column_ActiveViewIndex.ElementAtOrDefault(index, EntityRelation.None);
         public View GetActiveView(int index) => _GetReferencedActiveView(GetActiveViewIndex(index));
@@ -9648,6 +10721,7 @@ namespace Vim.Format.ObjectModel {
             r.IsMetric = GetIsMetric(index);
             r.Guid = GetGuid(index);
             r.NumSaves = GetNumSaves(index);
+            r.Identity = GetIdentity(index);
             r.IsLinked = GetIsLinked(index);
             r.IsDetached = GetIsDetached(index);
             r.IsWorkshared = GetIsWorkshared(index);
@@ -9673,6 +10747,12 @@ namespace Vim.Format.ObjectModel {
             r.Version = GetVersion(index);
             r.User = GetUser(index);
             r.FileLength = GetFileLength(index);
+            r.FileLengthSource = GetFileLengthSource(index);
+            r.FileLengthPath = GetFileLengthPath(index);
+            r.IsCloudModel = GetIsCloudModel(index);
+            r.CloudProjectGuid = GetCloudProjectGuid(index);
+            r.CloudModelGuid = GetCloudModelGuid(index);
+            r.PurgeableElementCount = GetPurgeableElementCount(index);
             r._ActiveView = new Relation<Vim.Format.ObjectModel.View>(GetActiveViewIndex(index), _GetReferencedActiveView);
             r._OwnerFamily = new Relation<Vim.Format.ObjectModel.Family>(GetOwnerFamilyIndex(index), _GetReferencedOwnerFamily);
             r._Parent = new Relation<Vim.Format.ObjectModel.BimDocument>(GetParentIndex(index), _GetReferencedParent);
@@ -9881,6 +10961,8 @@ namespace Vim.Format.ObjectModel {
             Column_StructuralSectionShape = GetStringColumnValues("string:StructuralSectionShape") ?? Array.Empty<String>();
             Column_IsSystemFamily = GetDataColumnValues<Boolean>("byte:IsSystemFamily") ?? Array.Empty<Boolean>();
             Column_IsInPlace = GetDataColumnValues<Boolean>("byte:IsInPlace") ?? Array.Empty<Boolean>();
+            Column_InstanceCount = GetDataColumnValues<Int32>("int:InstanceCount") ?? Array.Empty<Int32>();
+            Column_PurgeState = GetDataColumnValues<Int32>("int:PurgeState") ?? Array.Empty<Int32>();
             Column_FamilyCategoryIndex = GetIndexColumnValues("index:Vim.Category:FamilyCategory") ?? Array.Empty<int>();
             Column_ElementIndex = GetIndexColumnValues("index:Vim.Element:Element") ?? Array.Empty<int>();
         }
@@ -9893,6 +10975,10 @@ namespace Vim.Format.ObjectModel {
         public Boolean GetIsSystemFamily(int index, Boolean @default = default) => Column_IsSystemFamily.ElementAtOrDefault(index, @default);
         public Boolean[] Column_IsInPlace { get; }
         public Boolean GetIsInPlace(int index, Boolean @default = default) => Column_IsInPlace.ElementAtOrDefault(index, @default);
+        public Int32[] Column_InstanceCount { get; }
+        public Int32 GetInstanceCount(int index, Int32 @default = default) => Column_InstanceCount.ElementAtOrDefault(index, @default);
+        public Int32[] Column_PurgeState { get; }
+        public Int32 GetPurgeState(int index, Int32 @default = default) => Column_PurgeState.ElementAtOrDefault(index, @default);
         public int[] Column_FamilyCategoryIndex { get; }
         public int GetFamilyCategoryIndex(int index) => Column_FamilyCategoryIndex.ElementAtOrDefault(index, EntityRelation.None);
         public Category GetFamilyCategory(int index) => _GetReferencedFamilyCategory(GetFamilyCategoryIndex(index));
@@ -9911,6 +10997,8 @@ namespace Vim.Format.ObjectModel {
             r.StructuralSectionShape = GetStructuralSectionShape(index);
             r.IsSystemFamily = GetIsSystemFamily(index);
             r.IsInPlace = GetIsInPlace(index);
+            r.InstanceCount = GetInstanceCount(index);
+            r.PurgeState = GetPurgeState(index);
             r._FamilyCategory = new Relation<Vim.Format.ObjectModel.Category>(GetFamilyCategoryIndex(index), _GetReferencedFamilyCategory);
             r._Element = new Relation<Vim.Format.ObjectModel.Element>(GetElementIndex(index), _GetReferencedElement);
             return r;
@@ -9935,6 +11023,8 @@ namespace Vim.Format.ObjectModel {
         {
             ParentTableSet = parentTableSet;
             Column_IsSystemFamilyType = GetDataColumnValues<Boolean>("byte:IsSystemFamilyType") ?? Array.Empty<Boolean>();
+            Column_InstanceCount = GetDataColumnValues<Int32>("int:InstanceCount") ?? Array.Empty<Int32>();
+            Column_PurgeState = GetDataColumnValues<Int32>("int:PurgeState") ?? Array.Empty<Int32>();
             Column_FamilyIndex = GetIndexColumnValues("index:Vim.Family:Family") ?? Array.Empty<int>();
             Column_CompoundStructureIndex = GetIndexColumnValues("index:Vim.CompoundStructure:CompoundStructure") ?? Array.Empty<int>();
             Column_ElementIndex = GetIndexColumnValues("index:Vim.Element:Element") ?? Array.Empty<int>();
@@ -9942,6 +11032,10 @@ namespace Vim.Format.ObjectModel {
         
         public Boolean[] Column_IsSystemFamilyType { get; }
         public Boolean GetIsSystemFamilyType(int index, Boolean @default = default) => Column_IsSystemFamilyType.ElementAtOrDefault(index, @default);
+        public Int32[] Column_InstanceCount { get; }
+        public Int32 GetInstanceCount(int index, Int32 @default = default) => Column_InstanceCount.ElementAtOrDefault(index, @default);
+        public Int32[] Column_PurgeState { get; }
+        public Int32 GetPurgeState(int index, Int32 @default = default) => Column_PurgeState.ElementAtOrDefault(index, @default);
         public int[] Column_FamilyIndex { get; }
         public int GetFamilyIndex(int index) => Column_FamilyIndex.ElementAtOrDefault(index, EntityRelation.None);
         public Family GetFamily(int index) => _GetReferencedFamily(GetFamilyIndex(index));
@@ -9961,6 +11055,8 @@ namespace Vim.Format.ObjectModel {
             var r = new FamilyType();
             r.Index = index;
             r.IsSystemFamilyType = GetIsSystemFamilyType(index);
+            r.InstanceCount = GetInstanceCount(index);
+            r.PurgeState = GetPurgeState(index);
             r._Family = new Relation<Vim.Format.ObjectModel.Family>(GetFamilyIndex(index), _GetReferencedFamily);
             r._CompoundStructure = new Relation<Vim.Format.ObjectModel.CompoundStructure>(GetCompoundStructureIndex(index), _GetReferencedCompoundStructure);
             r._Element = new Relation<Vim.Format.ObjectModel.Element>(GetElementIndex(index), _GetReferencedElement);
@@ -10177,6 +11273,33 @@ namespace Vim.Format.ObjectModel {
             Column_HiddenElementCount = GetDataColumnValues<Int32>("int:HiddenElementCount") ?? Array.Empty<Int32>();
             Column_TemplateControlledSettings = GetStringColumnValues("string:TemplateControlledSettings") ?? Array.Empty<String>();
             Column_GraphicsRead = GetDataColumnValues<Boolean>("byte:GraphicsRead") ?? Array.Empty<Boolean>();
+            Column_IsLocked = GetDataColumnValues<Boolean>("byte:IsLocked") ?? Array.Empty<Boolean>();
+            Column_CropBox_Min_X = GetDataColumnValues<Double>("double:CropBox.Min.X") ?? Array.Empty<Double>();
+            Column_CropBox_Min_Y = GetDataColumnValues<Double>("double:CropBox.Min.Y") ?? Array.Empty<Double>();
+            Column_CropBox_Min_Z = GetDataColumnValues<Double>("double:CropBox.Min.Z") ?? Array.Empty<Double>();
+            Column_CropBox_Max_X = GetDataColumnValues<Double>("double:CropBox.Max.X") ?? Array.Empty<Double>();
+            Column_CropBox_Max_Y = GetDataColumnValues<Double>("double:CropBox.Max.Y") ?? Array.Empty<Double>();
+            Column_CropBox_Max_Z = GetDataColumnValues<Double>("double:CropBox.Max.Z") ?? Array.Empty<Double>();
+            Column_IsSectionBoxActive = GetDataColumnValues<Boolean>("byte:IsSectionBoxActive") ?? Array.Empty<Boolean>();
+            Column_SectionBox_Min_X = GetDataColumnValues<Double>("double:SectionBox.Min.X") ?? Array.Empty<Double>();
+            Column_SectionBox_Min_Y = GetDataColumnValues<Double>("double:SectionBox.Min.Y") ?? Array.Empty<Double>();
+            Column_SectionBox_Min_Z = GetDataColumnValues<Double>("double:SectionBox.Min.Z") ?? Array.Empty<Double>();
+            Column_SectionBox_Max_X = GetDataColumnValues<Double>("double:SectionBox.Max.X") ?? Array.Empty<Double>();
+            Column_SectionBox_Max_Y = GetDataColumnValues<Double>("double:SectionBox.Max.Y") ?? Array.Empty<Double>();
+            Column_SectionBox_Max_Z = GetDataColumnValues<Double>("double:SectionBox.Max.Z") ?? Array.Empty<Double>();
+            Column_SectionBoxOrigin_X = GetDataColumnValues<Double>("double:SectionBoxOrigin.X") ?? Array.Empty<Double>();
+            Column_SectionBoxOrigin_Y = GetDataColumnValues<Double>("double:SectionBoxOrigin.Y") ?? Array.Empty<Double>();
+            Column_SectionBoxOrigin_Z = GetDataColumnValues<Double>("double:SectionBoxOrigin.Z") ?? Array.Empty<Double>();
+            Column_SectionBoxBasisX_X = GetDataColumnValues<Double>("double:SectionBoxBasisX.X") ?? Array.Empty<Double>();
+            Column_SectionBoxBasisX_Y = GetDataColumnValues<Double>("double:SectionBoxBasisX.Y") ?? Array.Empty<Double>();
+            Column_SectionBoxBasisX_Z = GetDataColumnValues<Double>("double:SectionBoxBasisX.Z") ?? Array.Empty<Double>();
+            Column_SectionBoxBasisY_X = GetDataColumnValues<Double>("double:SectionBoxBasisY.X") ?? Array.Empty<Double>();
+            Column_SectionBoxBasisY_Y = GetDataColumnValues<Double>("double:SectionBoxBasisY.Y") ?? Array.Empty<Double>();
+            Column_SectionBoxBasisY_Z = GetDataColumnValues<Double>("double:SectionBoxBasisY.Z") ?? Array.Empty<Double>();
+            Column_SectionBoxBasisZ_X = GetDataColumnValues<Double>("double:SectionBoxBasisZ.X") ?? Array.Empty<Double>();
+            Column_SectionBoxBasisZ_Y = GetDataColumnValues<Double>("double:SectionBoxBasisZ.Y") ?? Array.Empty<Double>();
+            Column_SectionBoxBasisZ_Z = GetDataColumnValues<Double>("double:SectionBoxBasisZ.Z") ?? Array.Empty<Double>();
+            Column_DisplayStyle = GetStringColumnValues("string:DisplayStyle") ?? Array.Empty<String>();
             Column_CameraIndex = GetIndexColumnValues("index:Vim.Camera:Camera") ?? Array.Empty<int>();
             Column_FamilyTypeIndex = GetIndexColumnValues("index:Vim.FamilyType:FamilyType") ?? Array.Empty<int>();
             Column_ViewTemplateIndex = GetIndexColumnValues("index:Vim.Element:ViewTemplate") ?? Array.Empty<int>();
@@ -10257,6 +11380,60 @@ namespace Vim.Format.ObjectModel {
         public String GetTemplateControlledSettings(int index, String @default = "") => Column_TemplateControlledSettings.ElementAtOrDefault(index, @default);
         public Boolean[] Column_GraphicsRead { get; }
         public Boolean GetGraphicsRead(int index, Boolean @default = default) => Column_GraphicsRead.ElementAtOrDefault(index, @default);
+        public Boolean[] Column_IsLocked { get; }
+        public Boolean GetIsLocked(int index, Boolean @default = default) => Column_IsLocked.ElementAtOrDefault(index, @default);
+        public Double[] Column_CropBox_Min_X { get; }
+        public Double GetCropBox_Min_X(int index, Double @default = default) => Column_CropBox_Min_X.ElementAtOrDefault(index, @default);
+        public Double[] Column_CropBox_Min_Y { get; }
+        public Double GetCropBox_Min_Y(int index, Double @default = default) => Column_CropBox_Min_Y.ElementAtOrDefault(index, @default);
+        public Double[] Column_CropBox_Min_Z { get; }
+        public Double GetCropBox_Min_Z(int index, Double @default = default) => Column_CropBox_Min_Z.ElementAtOrDefault(index, @default);
+        public Double[] Column_CropBox_Max_X { get; }
+        public Double GetCropBox_Max_X(int index, Double @default = default) => Column_CropBox_Max_X.ElementAtOrDefault(index, @default);
+        public Double[] Column_CropBox_Max_Y { get; }
+        public Double GetCropBox_Max_Y(int index, Double @default = default) => Column_CropBox_Max_Y.ElementAtOrDefault(index, @default);
+        public Double[] Column_CropBox_Max_Z { get; }
+        public Double GetCropBox_Max_Z(int index, Double @default = default) => Column_CropBox_Max_Z.ElementAtOrDefault(index, @default);
+        public Boolean[] Column_IsSectionBoxActive { get; }
+        public Boolean GetIsSectionBoxActive(int index, Boolean @default = default) => Column_IsSectionBoxActive.ElementAtOrDefault(index, @default);
+        public Double[] Column_SectionBox_Min_X { get; }
+        public Double GetSectionBox_Min_X(int index, Double @default = default) => Column_SectionBox_Min_X.ElementAtOrDefault(index, @default);
+        public Double[] Column_SectionBox_Min_Y { get; }
+        public Double GetSectionBox_Min_Y(int index, Double @default = default) => Column_SectionBox_Min_Y.ElementAtOrDefault(index, @default);
+        public Double[] Column_SectionBox_Min_Z { get; }
+        public Double GetSectionBox_Min_Z(int index, Double @default = default) => Column_SectionBox_Min_Z.ElementAtOrDefault(index, @default);
+        public Double[] Column_SectionBox_Max_X { get; }
+        public Double GetSectionBox_Max_X(int index, Double @default = default) => Column_SectionBox_Max_X.ElementAtOrDefault(index, @default);
+        public Double[] Column_SectionBox_Max_Y { get; }
+        public Double GetSectionBox_Max_Y(int index, Double @default = default) => Column_SectionBox_Max_Y.ElementAtOrDefault(index, @default);
+        public Double[] Column_SectionBox_Max_Z { get; }
+        public Double GetSectionBox_Max_Z(int index, Double @default = default) => Column_SectionBox_Max_Z.ElementAtOrDefault(index, @default);
+        public Double[] Column_SectionBoxOrigin_X { get; }
+        public Double GetSectionBoxOrigin_X(int index, Double @default = default) => Column_SectionBoxOrigin_X.ElementAtOrDefault(index, @default);
+        public Double[] Column_SectionBoxOrigin_Y { get; }
+        public Double GetSectionBoxOrigin_Y(int index, Double @default = default) => Column_SectionBoxOrigin_Y.ElementAtOrDefault(index, @default);
+        public Double[] Column_SectionBoxOrigin_Z { get; }
+        public Double GetSectionBoxOrigin_Z(int index, Double @default = default) => Column_SectionBoxOrigin_Z.ElementAtOrDefault(index, @default);
+        public Double[] Column_SectionBoxBasisX_X { get; }
+        public Double GetSectionBoxBasisX_X(int index, Double @default = default) => Column_SectionBoxBasisX_X.ElementAtOrDefault(index, @default);
+        public Double[] Column_SectionBoxBasisX_Y { get; }
+        public Double GetSectionBoxBasisX_Y(int index, Double @default = default) => Column_SectionBoxBasisX_Y.ElementAtOrDefault(index, @default);
+        public Double[] Column_SectionBoxBasisX_Z { get; }
+        public Double GetSectionBoxBasisX_Z(int index, Double @default = default) => Column_SectionBoxBasisX_Z.ElementAtOrDefault(index, @default);
+        public Double[] Column_SectionBoxBasisY_X { get; }
+        public Double GetSectionBoxBasisY_X(int index, Double @default = default) => Column_SectionBoxBasisY_X.ElementAtOrDefault(index, @default);
+        public Double[] Column_SectionBoxBasisY_Y { get; }
+        public Double GetSectionBoxBasisY_Y(int index, Double @default = default) => Column_SectionBoxBasisY_Y.ElementAtOrDefault(index, @default);
+        public Double[] Column_SectionBoxBasisY_Z { get; }
+        public Double GetSectionBoxBasisY_Z(int index, Double @default = default) => Column_SectionBoxBasisY_Z.ElementAtOrDefault(index, @default);
+        public Double[] Column_SectionBoxBasisZ_X { get; }
+        public Double GetSectionBoxBasisZ_X(int index, Double @default = default) => Column_SectionBoxBasisZ_X.ElementAtOrDefault(index, @default);
+        public Double[] Column_SectionBoxBasisZ_Y { get; }
+        public Double GetSectionBoxBasisZ_Y(int index, Double @default = default) => Column_SectionBoxBasisZ_Y.ElementAtOrDefault(index, @default);
+        public Double[] Column_SectionBoxBasisZ_Z { get; }
+        public Double GetSectionBoxBasisZ_Z(int index, Double @default = default) => Column_SectionBoxBasisZ_Z.ElementAtOrDefault(index, @default);
+        public String[] Column_DisplayStyle { get; }
+        public String GetDisplayStyle(int index, String @default = "") => Column_DisplayStyle.ElementAtOrDefault(index, @default);
         public int[] Column_CameraIndex { get; }
         public int GetCameraIndex(int index) => Column_CameraIndex.ElementAtOrDefault(index, EntityRelation.None);
         public Camera GetCamera(int index) => _GetReferencedCamera(GetCameraIndex(index));
@@ -10330,6 +11507,33 @@ namespace Vim.Format.ObjectModel {
             r.HiddenElementCount = GetHiddenElementCount(index);
             r.TemplateControlledSettings = GetTemplateControlledSettings(index);
             r.GraphicsRead = GetGraphicsRead(index);
+            r.IsLocked = GetIsLocked(index);
+            r.CropBox_Min_X = GetCropBox_Min_X(index);
+            r.CropBox_Min_Y = GetCropBox_Min_Y(index);
+            r.CropBox_Min_Z = GetCropBox_Min_Z(index);
+            r.CropBox_Max_X = GetCropBox_Max_X(index);
+            r.CropBox_Max_Y = GetCropBox_Max_Y(index);
+            r.CropBox_Max_Z = GetCropBox_Max_Z(index);
+            r.IsSectionBoxActive = GetIsSectionBoxActive(index);
+            r.SectionBox_Min_X = GetSectionBox_Min_X(index);
+            r.SectionBox_Min_Y = GetSectionBox_Min_Y(index);
+            r.SectionBox_Min_Z = GetSectionBox_Min_Z(index);
+            r.SectionBox_Max_X = GetSectionBox_Max_X(index);
+            r.SectionBox_Max_Y = GetSectionBox_Max_Y(index);
+            r.SectionBox_Max_Z = GetSectionBox_Max_Z(index);
+            r.SectionBoxOrigin_X = GetSectionBoxOrigin_X(index);
+            r.SectionBoxOrigin_Y = GetSectionBoxOrigin_Y(index);
+            r.SectionBoxOrigin_Z = GetSectionBoxOrigin_Z(index);
+            r.SectionBoxBasisX_X = GetSectionBoxBasisX_X(index);
+            r.SectionBoxBasisX_Y = GetSectionBoxBasisX_Y(index);
+            r.SectionBoxBasisX_Z = GetSectionBoxBasisX_Z(index);
+            r.SectionBoxBasisY_X = GetSectionBoxBasisY_X(index);
+            r.SectionBoxBasisY_Y = GetSectionBoxBasisY_Y(index);
+            r.SectionBoxBasisY_Z = GetSectionBoxBasisY_Z(index);
+            r.SectionBoxBasisZ_X = GetSectionBoxBasisZ_X(index);
+            r.SectionBoxBasisZ_Y = GetSectionBoxBasisZ_Y(index);
+            r.SectionBoxBasisZ_Z = GetSectionBoxBasisZ_Z(index);
+            r.DisplayStyle = GetDisplayStyle(index);
             r._Camera = new Relation<Vim.Format.ObjectModel.Camera>(GetCameraIndex(index), _GetReferencedCamera);
             r._FamilyType = new Relation<Vim.Format.ObjectModel.FamilyType>(GetFamilyTypeIndex(index), _GetReferencedFamilyType);
             r._ViewTemplate = new Relation<Vim.Format.ObjectModel.Element>(GetViewTemplateIndex(index), _GetReferencedViewTemplate);
@@ -10368,6 +11572,7 @@ namespace Vim.Format.ObjectModel {
             Column_HasOverrides = GetDataColumnValues<Boolean>("byte:HasOverrides") ?? Array.Empty<Boolean>();
             Column_ViewIndex = GetIndexColumnValues("index:Vim.View:View") ?? Array.Empty<int>();
             Column_GraphicOverrideIndex = GetIndexColumnValues("index:Vim.GraphicOverride:GraphicOverride") ?? Array.Empty<int>();
+            Column_LinkInViewIndex = GetIndexColumnValues("index:Vim.LinkInView:LinkInView") ?? Array.Empty<int>();
         }
         
         public String[] Column_Name { get; }
@@ -10392,6 +11597,10 @@ namespace Vim.Format.ObjectModel {
         public int GetGraphicOverrideIndex(int index) => Column_GraphicOverrideIndex.ElementAtOrDefault(index, EntityRelation.None);
         public GraphicOverride GetGraphicOverride(int index) => _GetReferencedGraphicOverride(GetGraphicOverrideIndex(index));
         private GraphicOverride _GetReferencedGraphicOverride(int referencedIndex) => ParentTableSet.GetGraphicOverride(referencedIndex);
+        public int[] Column_LinkInViewIndex { get; }
+        public int GetLinkInViewIndex(int index) => Column_LinkInViewIndex.ElementAtOrDefault(index, EntityRelation.None);
+        public LinkInView GetLinkInView(int index) => _GetReferencedLinkInView(GetLinkInViewIndex(index));
+        private LinkInView _GetReferencedLinkInView(int referencedIndex) => ParentTableSet.GetLinkInView(referencedIndex);
         // Object Getter
         public FilterInView Get(int index)
         {
@@ -10407,6 +11616,7 @@ namespace Vim.Format.ObjectModel {
             r.HasOverrides = GetHasOverrides(index);
             r._View = new Relation<Vim.Format.ObjectModel.View>(GetViewIndex(index), _GetReferencedView);
             r._GraphicOverride = new Relation<Vim.Format.ObjectModel.GraphicOverride>(GetGraphicOverrideIndex(index), _GetReferencedGraphicOverride);
+            r._LinkInView = new Relation<Vim.Format.ObjectModel.LinkInView>(GetLinkInViewIndex(index), _GetReferencedLinkInView);
             return r;
         }
         // Enumerator
@@ -10417,6 +11627,278 @@ namespace Vim.Format.ObjectModel {
                 yield return Get(i);
         }
     } // class FilterInViewTable 
+    
+    public partial class HiddenCategoryInViewTable : EntityTable_v2, IEnumerable<HiddenCategoryInView>
+    {
+        
+        public const string TableName = TableNames.HiddenCategoryInView;
+        
+        public EntityTableSet ParentTableSet { get; } // can be null
+        
+        public HiddenCategoryInViewTable(SerializableEntityTable rawTable, string[] stringTable, EntityTableSet parentTableSet = null) : base(rawTable, stringTable)
+        {
+            ParentTableSet = parentTableSet;
+            Column_ViewIndex = GetIndexColumnValues("index:Vim.View:View") ?? Array.Empty<int>();
+            Column_CategoryIndex = GetIndexColumnValues("index:Vim.Category:Category") ?? Array.Empty<int>();
+            Column_LinkInViewIndex = GetIndexColumnValues("index:Vim.LinkInView:LinkInView") ?? Array.Empty<int>();
+        }
+        
+        public int[] Column_ViewIndex { get; }
+        public int GetViewIndex(int index) => Column_ViewIndex.ElementAtOrDefault(index, EntityRelation.None);
+        public View GetView(int index) => _GetReferencedView(GetViewIndex(index));
+        private View _GetReferencedView(int referencedIndex) => ParentTableSet.GetView(referencedIndex);
+        public int[] Column_CategoryIndex { get; }
+        public int GetCategoryIndex(int index) => Column_CategoryIndex.ElementAtOrDefault(index, EntityRelation.None);
+        public Category GetCategory(int index) => _GetReferencedCategory(GetCategoryIndex(index));
+        private Category _GetReferencedCategory(int referencedIndex) => ParentTableSet.GetCategory(referencedIndex);
+        public int[] Column_LinkInViewIndex { get; }
+        public int GetLinkInViewIndex(int index) => Column_LinkInViewIndex.ElementAtOrDefault(index, EntityRelation.None);
+        public LinkInView GetLinkInView(int index) => _GetReferencedLinkInView(GetLinkInViewIndex(index));
+        private LinkInView _GetReferencedLinkInView(int referencedIndex) => ParentTableSet.GetLinkInView(referencedIndex);
+        // Object Getter
+        public HiddenCategoryInView Get(int index)
+        {
+            if (index < 0) return null;
+            var r = new HiddenCategoryInView();
+            r.Index = index;
+            r._View = new Relation<Vim.Format.ObjectModel.View>(GetViewIndex(index), _GetReferencedView);
+            r._Category = new Relation<Vim.Format.ObjectModel.Category>(GetCategoryIndex(index), _GetReferencedCategory);
+            r._LinkInView = new Relation<Vim.Format.ObjectModel.LinkInView>(GetLinkInViewIndex(index), _GetReferencedLinkInView);
+            return r;
+        }
+        // Enumerator
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+        public IEnumerator<HiddenCategoryInView> GetEnumerator()
+        {
+            for (var i = 0; i < RowCount; ++i)
+                yield return Get(i);
+        }
+    } // class HiddenCategoryInViewTable 
+    
+    public partial class HiddenWorksetInViewTable : EntityTable_v2, IEnumerable<HiddenWorksetInView>
+    {
+        
+        public const string TableName = TableNames.HiddenWorksetInView;
+        
+        public EntityTableSet ParentTableSet { get; } // can be null
+        
+        public HiddenWorksetInViewTable(SerializableEntityTable rawTable, string[] stringTable, EntityTableSet parentTableSet = null) : base(rawTable, stringTable)
+        {
+            ParentTableSet = parentTableSet;
+            Column_ViewIndex = GetIndexColumnValues("index:Vim.View:View") ?? Array.Empty<int>();
+            Column_WorksetIndex = GetIndexColumnValues("index:Vim.Workset:Workset") ?? Array.Empty<int>();
+            Column_LinkInViewIndex = GetIndexColumnValues("index:Vim.LinkInView:LinkInView") ?? Array.Empty<int>();
+        }
+        
+        public int[] Column_ViewIndex { get; }
+        public int GetViewIndex(int index) => Column_ViewIndex.ElementAtOrDefault(index, EntityRelation.None);
+        public View GetView(int index) => _GetReferencedView(GetViewIndex(index));
+        private View _GetReferencedView(int referencedIndex) => ParentTableSet.GetView(referencedIndex);
+        public int[] Column_WorksetIndex { get; }
+        public int GetWorksetIndex(int index) => Column_WorksetIndex.ElementAtOrDefault(index, EntityRelation.None);
+        public Workset GetWorkset(int index) => _GetReferencedWorkset(GetWorksetIndex(index));
+        private Workset _GetReferencedWorkset(int referencedIndex) => ParentTableSet.GetWorkset(referencedIndex);
+        public int[] Column_LinkInViewIndex { get; }
+        public int GetLinkInViewIndex(int index) => Column_LinkInViewIndex.ElementAtOrDefault(index, EntityRelation.None);
+        public LinkInView GetLinkInView(int index) => _GetReferencedLinkInView(GetLinkInViewIndex(index));
+        private LinkInView _GetReferencedLinkInView(int referencedIndex) => ParentTableSet.GetLinkInView(referencedIndex);
+        // Object Getter
+        public HiddenWorksetInView Get(int index)
+        {
+            if (index < 0) return null;
+            var r = new HiddenWorksetInView();
+            r.Index = index;
+            r._View = new Relation<Vim.Format.ObjectModel.View>(GetViewIndex(index), _GetReferencedView);
+            r._Workset = new Relation<Vim.Format.ObjectModel.Workset>(GetWorksetIndex(index), _GetReferencedWorkset);
+            r._LinkInView = new Relation<Vim.Format.ObjectModel.LinkInView>(GetLinkInViewIndex(index), _GetReferencedLinkInView);
+            return r;
+        }
+        // Enumerator
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+        public IEnumerator<HiddenWorksetInView> GetEnumerator()
+        {
+            for (var i = 0; i < RowCount; ++i)
+                yield return Get(i);
+        }
+    } // class HiddenWorksetInViewTable 
+    
+    public partial class HiddenElementInViewTable : EntityTable_v2, IEnumerable<HiddenElementInView>
+    {
+        
+        public const string TableName = TableNames.HiddenElementInView;
+        
+        public EntityTableSet ParentTableSet { get; } // can be null
+        
+        public HiddenElementInViewTable(SerializableEntityTable rawTable, string[] stringTable, EntityTableSet parentTableSet = null) : base(rawTable, stringTable)
+        {
+            ParentTableSet = parentTableSet;
+            Column_Reason = GetStringColumnValues("string:Reason") ?? Array.Empty<String>();
+            Column_ViewIndex = GetIndexColumnValues("index:Vim.View:View") ?? Array.Empty<int>();
+            Column_FilterInViewIndex = GetIndexColumnValues("index:Vim.FilterInView:FilterInView") ?? Array.Empty<int>();
+            Column_LinkInViewIndex = GetIndexColumnValues("index:Vim.LinkInView:LinkInView") ?? Array.Empty<int>();
+            Column_ElementIndex = GetIndexColumnValues("index:Vim.Element:Element") ?? Array.Empty<int>();
+        }
+        
+        public String[] Column_Reason { get; }
+        public String GetReason(int index, String @default = "") => Column_Reason.ElementAtOrDefault(index, @default);
+        public int[] Column_ViewIndex { get; }
+        public int GetViewIndex(int index) => Column_ViewIndex.ElementAtOrDefault(index, EntityRelation.None);
+        public View GetView(int index) => _GetReferencedView(GetViewIndex(index));
+        private View _GetReferencedView(int referencedIndex) => ParentTableSet.GetView(referencedIndex);
+        public int[] Column_FilterInViewIndex { get; }
+        public int GetFilterInViewIndex(int index) => Column_FilterInViewIndex.ElementAtOrDefault(index, EntityRelation.None);
+        public FilterInView GetFilterInView(int index) => _GetReferencedFilterInView(GetFilterInViewIndex(index));
+        private FilterInView _GetReferencedFilterInView(int referencedIndex) => ParentTableSet.GetFilterInView(referencedIndex);
+        public int[] Column_LinkInViewIndex { get; }
+        public int GetLinkInViewIndex(int index) => Column_LinkInViewIndex.ElementAtOrDefault(index, EntityRelation.None);
+        public LinkInView GetLinkInView(int index) => _GetReferencedLinkInView(GetLinkInViewIndex(index));
+        private LinkInView _GetReferencedLinkInView(int referencedIndex) => ParentTableSet.GetLinkInView(referencedIndex);
+        public int[] Column_ElementIndex { get; }
+        public int GetElementIndex(int index) => Column_ElementIndex.ElementAtOrDefault(index, EntityRelation.None);
+        public Element GetElement(int index) => _GetReferencedElement(GetElementIndex(index));
+        private Element _GetReferencedElement(int referencedIndex) => ParentTableSet.GetElement(referencedIndex);
+        // Object Getter
+        public HiddenElementInView Get(int index)
+        {
+            if (index < 0) return null;
+            var r = new HiddenElementInView();
+            r.Index = index;
+            r.Reason = GetReason(index);
+            r._View = new Relation<Vim.Format.ObjectModel.View>(GetViewIndex(index), _GetReferencedView);
+            r._FilterInView = new Relation<Vim.Format.ObjectModel.FilterInView>(GetFilterInViewIndex(index), _GetReferencedFilterInView);
+            r._LinkInView = new Relation<Vim.Format.ObjectModel.LinkInView>(GetLinkInViewIndex(index), _GetReferencedLinkInView);
+            r._Element = new Relation<Vim.Format.ObjectModel.Element>(GetElementIndex(index), _GetReferencedElement);
+            return r;
+        }
+        // Enumerator
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+        public IEnumerator<HiddenElementInView> GetEnumerator()
+        {
+            for (var i = 0; i < RowCount; ++i)
+                yield return Get(i);
+        }
+    } // class HiddenElementInViewTable 
+    
+    public partial class LinkInViewTable : EntityTable_v2, IEnumerable<LinkInView>
+    {
+        
+        public const string TableName = TableNames.LinkInView;
+        
+        public EntityTableSet ParentTableSet { get; } // can be null
+        
+        public LinkInViewTable(SerializableEntityTable rawTable, string[] stringTable, EntityTableSet parentTableSet = null) : base(rawTable, stringTable)
+        {
+            ParentTableSet = parentTableSet;
+            Column_Display = GetStringColumnValues("string:Display") ?? Array.Empty<String>();
+            Column_SettingsFrom = GetStringColumnValues("string:SettingsFrom") ?? Array.Empty<String>();
+            Column_IsHidden = GetDataColumnValues<Boolean>("byte:IsHidden") ?? Array.Empty<Boolean>();
+            Column_HiddenBy = GetStringColumnValues("string:HiddenBy") ?? Array.Empty<String>();
+            Column_IsHalftone = GetDataColumnValues<Boolean>("byte:IsHalftone") ?? Array.Empty<Boolean>();
+            Column_LinkedViewName = GetStringColumnValues("string:LinkedViewName") ?? Array.Empty<String>();
+            Column_ViewFilters = GetStringColumnValues("string:ViewFilters") ?? Array.Empty<String>();
+            Column_ObjectStyles = GetStringColumnValues("string:ObjectStyles") ?? Array.Empty<String>();
+            Column_NestedLinks = GetStringColumnValues("string:NestedLinks") ?? Array.Empty<String>();
+            Column_Phase = GetStringColumnValues("string:Phase") ?? Array.Empty<String>();
+            Column_PhaseFilter = GetStringColumnValues("string:PhaseFilter") ?? Array.Empty<String>();
+            Column_DetailLevel = GetStringColumnValues("string:DetailLevel") ?? Array.Empty<String>();
+            Column_Discipline = GetStringColumnValues("string:Discipline") ?? Array.Empty<String>();
+            Column_LinkedWorksets = GetStringColumnValues("string:LinkedWorksets") ?? Array.Empty<String>();
+            Column_IsMeasured = GetDataColumnValues<Boolean>("byte:IsMeasured") ?? Array.Empty<Boolean>();
+            Column_MeasuredVisibleCount = GetDataColumnValues<Int32>("int:MeasuredVisibleCount") ?? Array.Empty<Int32>();
+            Column_NotReadable = GetStringColumnValues("string:NotReadable") ?? Array.Empty<String>();
+            Column_ViewIndex = GetIndexColumnValues("index:Vim.View:View") ?? Array.Empty<int>();
+            Column_LinkedDocumentIndex = GetIndexColumnValues("index:Vim.BimDocument:LinkedDocument") ?? Array.Empty<int>();
+            Column_LinkedViewIndex = GetIndexColumnValues("index:Vim.View:LinkedView") ?? Array.Empty<int>();
+            Column_ElementIndex = GetIndexColumnValues("index:Vim.Element:Element") ?? Array.Empty<int>();
+        }
+        
+        public String[] Column_Display { get; }
+        public String GetDisplay(int index, String @default = "") => Column_Display.ElementAtOrDefault(index, @default);
+        public String[] Column_SettingsFrom { get; }
+        public String GetSettingsFrom(int index, String @default = "") => Column_SettingsFrom.ElementAtOrDefault(index, @default);
+        public Boolean[] Column_IsHidden { get; }
+        public Boolean GetIsHidden(int index, Boolean @default = default) => Column_IsHidden.ElementAtOrDefault(index, @default);
+        public String[] Column_HiddenBy { get; }
+        public String GetHiddenBy(int index, String @default = "") => Column_HiddenBy.ElementAtOrDefault(index, @default);
+        public Boolean[] Column_IsHalftone { get; }
+        public Boolean GetIsHalftone(int index, Boolean @default = default) => Column_IsHalftone.ElementAtOrDefault(index, @default);
+        public String[] Column_LinkedViewName { get; }
+        public String GetLinkedViewName(int index, String @default = "") => Column_LinkedViewName.ElementAtOrDefault(index, @default);
+        public String[] Column_ViewFilters { get; }
+        public String GetViewFilters(int index, String @default = "") => Column_ViewFilters.ElementAtOrDefault(index, @default);
+        public String[] Column_ObjectStyles { get; }
+        public String GetObjectStyles(int index, String @default = "") => Column_ObjectStyles.ElementAtOrDefault(index, @default);
+        public String[] Column_NestedLinks { get; }
+        public String GetNestedLinks(int index, String @default = "") => Column_NestedLinks.ElementAtOrDefault(index, @default);
+        public String[] Column_Phase { get; }
+        public String GetPhase(int index, String @default = "") => Column_Phase.ElementAtOrDefault(index, @default);
+        public String[] Column_PhaseFilter { get; }
+        public String GetPhaseFilter(int index, String @default = "") => Column_PhaseFilter.ElementAtOrDefault(index, @default);
+        public String[] Column_DetailLevel { get; }
+        public String GetDetailLevel(int index, String @default = "") => Column_DetailLevel.ElementAtOrDefault(index, @default);
+        public String[] Column_Discipline { get; }
+        public String GetDiscipline(int index, String @default = "") => Column_Discipline.ElementAtOrDefault(index, @default);
+        public String[] Column_LinkedWorksets { get; }
+        public String GetLinkedWorksets(int index, String @default = "") => Column_LinkedWorksets.ElementAtOrDefault(index, @default);
+        public Boolean[] Column_IsMeasured { get; }
+        public Boolean GetIsMeasured(int index, Boolean @default = default) => Column_IsMeasured.ElementAtOrDefault(index, @default);
+        public Int32[] Column_MeasuredVisibleCount { get; }
+        public Int32 GetMeasuredVisibleCount(int index, Int32 @default = default) => Column_MeasuredVisibleCount.ElementAtOrDefault(index, @default);
+        public String[] Column_NotReadable { get; }
+        public String GetNotReadable(int index, String @default = "") => Column_NotReadable.ElementAtOrDefault(index, @default);
+        public int[] Column_ViewIndex { get; }
+        public int GetViewIndex(int index) => Column_ViewIndex.ElementAtOrDefault(index, EntityRelation.None);
+        public View GetView(int index) => _GetReferencedView(GetViewIndex(index));
+        private View _GetReferencedView(int referencedIndex) => ParentTableSet.GetView(referencedIndex);
+        public int[] Column_LinkedDocumentIndex { get; }
+        public int GetLinkedDocumentIndex(int index) => Column_LinkedDocumentIndex.ElementAtOrDefault(index, EntityRelation.None);
+        public BimDocument GetLinkedDocument(int index) => _GetReferencedLinkedDocument(GetLinkedDocumentIndex(index));
+        private BimDocument _GetReferencedLinkedDocument(int referencedIndex) => ParentTableSet.GetBimDocument(referencedIndex);
+        public int[] Column_LinkedViewIndex { get; }
+        public int GetLinkedViewIndex(int index) => Column_LinkedViewIndex.ElementAtOrDefault(index, EntityRelation.None);
+        public View GetLinkedView(int index) => _GetReferencedLinkedView(GetLinkedViewIndex(index));
+        private View _GetReferencedLinkedView(int referencedIndex) => ParentTableSet.GetView(referencedIndex);
+        public int[] Column_ElementIndex { get; }
+        public int GetElementIndex(int index) => Column_ElementIndex.ElementAtOrDefault(index, EntityRelation.None);
+        public Element GetElement(int index) => _GetReferencedElement(GetElementIndex(index));
+        private Element _GetReferencedElement(int referencedIndex) => ParentTableSet.GetElement(referencedIndex);
+        // Object Getter
+        public LinkInView Get(int index)
+        {
+            if (index < 0) return null;
+            var r = new LinkInView();
+            r.Index = index;
+            r.Display = GetDisplay(index);
+            r.SettingsFrom = GetSettingsFrom(index);
+            r.IsHidden = GetIsHidden(index);
+            r.HiddenBy = GetHiddenBy(index);
+            r.IsHalftone = GetIsHalftone(index);
+            r.LinkedViewName = GetLinkedViewName(index);
+            r.ViewFilters = GetViewFilters(index);
+            r.ObjectStyles = GetObjectStyles(index);
+            r.NestedLinks = GetNestedLinks(index);
+            r.Phase = GetPhase(index);
+            r.PhaseFilter = GetPhaseFilter(index);
+            r.DetailLevel = GetDetailLevel(index);
+            r.Discipline = GetDiscipline(index);
+            r.LinkedWorksets = GetLinkedWorksets(index);
+            r.IsMeasured = GetIsMeasured(index);
+            r.MeasuredVisibleCount = GetMeasuredVisibleCount(index);
+            r.NotReadable = GetNotReadable(index);
+            r._View = new Relation<Vim.Format.ObjectModel.View>(GetViewIndex(index), _GetReferencedView);
+            r._LinkedDocument = new Relation<Vim.Format.ObjectModel.BimDocument>(GetLinkedDocumentIndex(index), _GetReferencedLinkedDocument);
+            r._LinkedView = new Relation<Vim.Format.ObjectModel.View>(GetLinkedViewIndex(index), _GetReferencedLinkedView);
+            r._Element = new Relation<Vim.Format.ObjectModel.Element>(GetElementIndex(index), _GetReferencedElement);
+            return r;
+        }
+        // Enumerator
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+        public IEnumerator<LinkInView> GetEnumerator()
+        {
+            for (var i = 0; i < RowCount; ++i)
+                yield return Get(i);
+        }
+    } // class LinkInViewTable 
     
     public partial class GridInViewTable : EntityTable_v2, IEnumerable<GridInView>
     {
@@ -11443,6 +12925,25 @@ namespace Vim.Format.ObjectModel {
             Column_CutBackgroundPatternColor_X = GetDataColumnValues<Double>("double:CutBackgroundPatternColor.X") ?? Array.Empty<Double>();
             Column_CutBackgroundPatternColor_Y = GetDataColumnValues<Double>("double:CutBackgroundPatternColor.Y") ?? Array.Empty<Double>();
             Column_CutBackgroundPatternColor_Z = GetDataColumnValues<Double>("double:CutBackgroundPatternColor.Z") ?? Array.Empty<Double>();
+            Column_AppearanceKind = GetStringColumnValues("string:AppearanceKind") ?? Array.Empty<String>();
+            Column_AppearanceColor_X = GetDataColumnValues<Double>("double:AppearanceColor.X") ?? Array.Empty<Double>();
+            Column_AppearanceColor_Y = GetDataColumnValues<Double>("double:AppearanceColor.Y") ?? Array.Empty<Double>();
+            Column_AppearanceColor_Z = GetDataColumnValues<Double>("double:AppearanceColor.Z") ?? Array.Empty<Double>();
+            Column_AppearanceTint_X = GetDataColumnValues<Double>("double:AppearanceTint.X") ?? Array.Empty<Double>();
+            Column_AppearanceTint_Y = GetDataColumnValues<Double>("double:AppearanceTint.Y") ?? Array.Empty<Double>();
+            Column_AppearanceTint_Z = GetDataColumnValues<Double>("double:AppearanceTint.Z") ?? Array.Empty<Double>();
+            Column_AppearanceImageFade = GetDataColumnValues<Double>("double:AppearanceImageFade") ?? Array.Empty<Double>();
+            Column_AppearanceTransparency = GetDataColumnValues<Double>("double:AppearanceTransparency") ?? Array.Empty<Double>();
+            Column_Roughness = GetDataColumnValues<Double>("double:Roughness") ?? Array.Empty<Double>();
+            Column_Metalness = GetDataColumnValues<Double>("double:Metalness") ?? Array.Empty<Double>();
+            Column_Reflectivity = GetDataColumnValues<Double>("double:Reflectivity") ?? Array.Empty<Double>();
+            Column_RefractionIndex = GetDataColumnValues<Double>("double:RefractionIndex") ?? Array.Empty<Double>();
+            Column_EmissionColor_X = GetDataColumnValues<Double>("double:EmissionColor.X") ?? Array.Empty<Double>();
+            Column_EmissionColor_Y = GetDataColumnValues<Double>("double:EmissionColor.Y") ?? Array.Empty<Double>();
+            Column_EmissionColor_Z = GetDataColumnValues<Double>("double:EmissionColor.Z") ?? Array.Empty<Double>();
+            Column_EmissionLuminance = GetDataColumnValues<Double>("double:EmissionLuminance") ?? Array.Empty<Double>();
+            Column_ColorTextureKind = GetStringColumnValues("string:ColorTextureKind") ?? Array.Empty<String>();
+            Column_NormalTextureKind = GetStringColumnValues("string:NormalTextureKind") ?? Array.Empty<String>();
             Column_ColorTextureFileIndex = GetIndexColumnValues("index:Vim.Asset:ColorTextureFile") ?? Array.Empty<int>();
             Column_NormalTextureFileIndex = GetIndexColumnValues("index:Vim.Asset:NormalTextureFile") ?? Array.Empty<int>();
             Column_SurfaceForegroundPatternIndex = GetIndexColumnValues("index:Vim.FillPattern:SurfaceForegroundPattern") ?? Array.Empty<int>();
@@ -11520,6 +13021,44 @@ namespace Vim.Format.ObjectModel {
         public Double GetCutBackgroundPatternColor_Y(int index, Double @default = default) => Column_CutBackgroundPatternColor_Y.ElementAtOrDefault(index, @default);
         public Double[] Column_CutBackgroundPatternColor_Z { get; }
         public Double GetCutBackgroundPatternColor_Z(int index, Double @default = default) => Column_CutBackgroundPatternColor_Z.ElementAtOrDefault(index, @default);
+        public String[] Column_AppearanceKind { get; }
+        public String GetAppearanceKind(int index, String @default = "") => Column_AppearanceKind.ElementAtOrDefault(index, @default);
+        public Double[] Column_AppearanceColor_X { get; }
+        public Double GetAppearanceColor_X(int index, Double @default = default) => Column_AppearanceColor_X.ElementAtOrDefault(index, @default);
+        public Double[] Column_AppearanceColor_Y { get; }
+        public Double GetAppearanceColor_Y(int index, Double @default = default) => Column_AppearanceColor_Y.ElementAtOrDefault(index, @default);
+        public Double[] Column_AppearanceColor_Z { get; }
+        public Double GetAppearanceColor_Z(int index, Double @default = default) => Column_AppearanceColor_Z.ElementAtOrDefault(index, @default);
+        public Double[] Column_AppearanceTint_X { get; }
+        public Double GetAppearanceTint_X(int index, Double @default = default) => Column_AppearanceTint_X.ElementAtOrDefault(index, @default);
+        public Double[] Column_AppearanceTint_Y { get; }
+        public Double GetAppearanceTint_Y(int index, Double @default = default) => Column_AppearanceTint_Y.ElementAtOrDefault(index, @default);
+        public Double[] Column_AppearanceTint_Z { get; }
+        public Double GetAppearanceTint_Z(int index, Double @default = default) => Column_AppearanceTint_Z.ElementAtOrDefault(index, @default);
+        public Double[] Column_AppearanceImageFade { get; }
+        public Double GetAppearanceImageFade(int index, Double @default = default) => Column_AppearanceImageFade.ElementAtOrDefault(index, @default);
+        public Double[] Column_AppearanceTransparency { get; }
+        public Double GetAppearanceTransparency(int index, Double @default = default) => Column_AppearanceTransparency.ElementAtOrDefault(index, @default);
+        public Double[] Column_Roughness { get; }
+        public Double GetRoughness(int index, Double @default = default) => Column_Roughness.ElementAtOrDefault(index, @default);
+        public Double[] Column_Metalness { get; }
+        public Double GetMetalness(int index, Double @default = default) => Column_Metalness.ElementAtOrDefault(index, @default);
+        public Double[] Column_Reflectivity { get; }
+        public Double GetReflectivity(int index, Double @default = default) => Column_Reflectivity.ElementAtOrDefault(index, @default);
+        public Double[] Column_RefractionIndex { get; }
+        public Double GetRefractionIndex(int index, Double @default = default) => Column_RefractionIndex.ElementAtOrDefault(index, @default);
+        public Double[] Column_EmissionColor_X { get; }
+        public Double GetEmissionColor_X(int index, Double @default = default) => Column_EmissionColor_X.ElementAtOrDefault(index, @default);
+        public Double[] Column_EmissionColor_Y { get; }
+        public Double GetEmissionColor_Y(int index, Double @default = default) => Column_EmissionColor_Y.ElementAtOrDefault(index, @default);
+        public Double[] Column_EmissionColor_Z { get; }
+        public Double GetEmissionColor_Z(int index, Double @default = default) => Column_EmissionColor_Z.ElementAtOrDefault(index, @default);
+        public Double[] Column_EmissionLuminance { get; }
+        public Double GetEmissionLuminance(int index, Double @default = default) => Column_EmissionLuminance.ElementAtOrDefault(index, @default);
+        public String[] Column_ColorTextureKind { get; }
+        public String GetColorTextureKind(int index, String @default = "") => Column_ColorTextureKind.ElementAtOrDefault(index, @default);
+        public String[] Column_NormalTextureKind { get; }
+        public String GetNormalTextureKind(int index, String @default = "") => Column_NormalTextureKind.ElementAtOrDefault(index, @default);
         public int[] Column_ColorTextureFileIndex { get; }
         public int GetColorTextureFileIndex(int index) => Column_ColorTextureFileIndex.ElementAtOrDefault(index, EntityRelation.None);
         public Asset GetColorTextureFile(int index) => _GetReferencedColorTextureFile(GetColorTextureFileIndex(index));
@@ -11588,6 +13127,25 @@ namespace Vim.Format.ObjectModel {
             r.CutBackgroundPatternColor_X = GetCutBackgroundPatternColor_X(index);
             r.CutBackgroundPatternColor_Y = GetCutBackgroundPatternColor_Y(index);
             r.CutBackgroundPatternColor_Z = GetCutBackgroundPatternColor_Z(index);
+            r.AppearanceKind = GetAppearanceKind(index);
+            r.AppearanceColor_X = GetAppearanceColor_X(index);
+            r.AppearanceColor_Y = GetAppearanceColor_Y(index);
+            r.AppearanceColor_Z = GetAppearanceColor_Z(index);
+            r.AppearanceTint_X = GetAppearanceTint_X(index);
+            r.AppearanceTint_Y = GetAppearanceTint_Y(index);
+            r.AppearanceTint_Z = GetAppearanceTint_Z(index);
+            r.AppearanceImageFade = GetAppearanceImageFade(index);
+            r.AppearanceTransparency = GetAppearanceTransparency(index);
+            r.Roughness = GetRoughness(index);
+            r.Metalness = GetMetalness(index);
+            r.Reflectivity = GetReflectivity(index);
+            r.RefractionIndex = GetRefractionIndex(index);
+            r.EmissionColor_X = GetEmissionColor_X(index);
+            r.EmissionColor_Y = GetEmissionColor_Y(index);
+            r.EmissionColor_Z = GetEmissionColor_Z(index);
+            r.EmissionLuminance = GetEmissionLuminance(index);
+            r.ColorTextureKind = GetColorTextureKind(index);
+            r.NormalTextureKind = GetNormalTextureKind(index);
             r._ColorTextureFile = new Relation<Vim.Format.ObjectModel.Asset>(GetColorTextureFileIndex(index), _GetReferencedColorTextureFile);
             r._NormalTextureFile = new Relation<Vim.Format.ObjectModel.Asset>(GetNormalTextureFileIndex(index), _GetReferencedNormalTextureFile);
             r._SurfaceForegroundPattern = new Relation<Vim.Format.ObjectModel.FillPattern>(GetSurfaceForegroundPatternIndex(index), _GetReferencedSurfaceForegroundPattern);
@@ -14662,6 +16220,259 @@ namespace Vim.Format.ObjectModel {
         }
     } // class ActivityMarkerTable 
     
+    public partial class CadFileTable : EntityTable_v2, IEnumerable<CadFile>
+    {
+        
+        public const string TableName = TableNames.CadFile;
+        
+        public EntityTableSet ParentTableSet { get; } // can be null
+        
+        public CadFileTable(SerializableEntityTable rawTable, string[] stringTable, EntityTableSet parentTableSet = null) : base(rawTable, stringTable)
+        {
+            ParentTableSet = parentTableSet;
+            Column_FileName = GetStringColumnValues("string:FileName") ?? Array.Empty<String>();
+            Column_Extension = GetStringColumnValues("string:Extension") ?? Array.Empty<String>();
+            Column_IsLinked = GetDataColumnValues<Boolean>("byte:IsLinked") ?? Array.Empty<Boolean>();
+            Column_SavedPath = GetStringColumnValues("string:SavedPath") ?? Array.Empty<String>();
+            Column_AbsolutePath = GetStringColumnValues("string:AbsolutePath") ?? Array.Empty<String>();
+            Column_PathType = GetStringColumnValues("string:PathType") ?? Array.Empty<String>();
+            Column_LinkStatus = GetStringColumnValues("string:LinkStatus") ?? Array.Empty<String>();
+            Column_InstanceCount = GetDataColumnValues<Int32>("int:InstanceCount") ?? Array.Empty<Int32>();
+            Column_ViewSpecificInstanceCount = GetDataColumnValues<Int32>("int:ViewSpecificInstanceCount") ?? Array.Empty<Int32>();
+            Column_PurgeState = GetDataColumnValues<Int32>("int:PurgeState") ?? Array.Empty<Int32>();
+            Column_IsExploded = GetDataColumnValues<Boolean>("byte:IsExploded") ?? Array.Empty<Boolean>();
+            Column_ExplodedPieceCount = GetDataColumnValues<Int32>("int:ExplodedPieceCount") ?? Array.Empty<Int32>();
+            Column_ExplodedModelPieceCount = GetDataColumnValues<Int32>("int:ExplodedModelPieceCount") ?? Array.Empty<Int32>();
+            Column_ExplodedViewCount = GetDataColumnValues<Int32>("int:ExplodedViewCount") ?? Array.Empty<Int32>();
+            Column_ExplodedModelViewCount = GetDataColumnValues<Int32>("int:ExplodedModelViewCount") ?? Array.Empty<Int32>();
+            Column_ExplodedSeverity = GetDataColumnValues<Int32>("int:ExplodedSeverity") ?? Array.Empty<Int32>();
+            Column_FamilyTypeIndex = GetIndexColumnValues("index:Vim.FamilyType:FamilyType") ?? Array.Empty<int>();
+            Column_CategoryIndex = GetIndexColumnValues("index:Vim.Category:Category") ?? Array.Empty<int>();
+            Column_ElementIndex = GetIndexColumnValues("index:Vim.Element:Element") ?? Array.Empty<int>();
+        }
+        
+        public String[] Column_FileName { get; }
+        public String GetFileName(int index, String @default = "") => Column_FileName.ElementAtOrDefault(index, @default);
+        public String[] Column_Extension { get; }
+        public String GetExtension(int index, String @default = "") => Column_Extension.ElementAtOrDefault(index, @default);
+        public Boolean[] Column_IsLinked { get; }
+        public Boolean GetIsLinked(int index, Boolean @default = default) => Column_IsLinked.ElementAtOrDefault(index, @default);
+        public String[] Column_SavedPath { get; }
+        public String GetSavedPath(int index, String @default = "") => Column_SavedPath.ElementAtOrDefault(index, @default);
+        public String[] Column_AbsolutePath { get; }
+        public String GetAbsolutePath(int index, String @default = "") => Column_AbsolutePath.ElementAtOrDefault(index, @default);
+        public String[] Column_PathType { get; }
+        public String GetPathType(int index, String @default = "") => Column_PathType.ElementAtOrDefault(index, @default);
+        public String[] Column_LinkStatus { get; }
+        public String GetLinkStatus(int index, String @default = "") => Column_LinkStatus.ElementAtOrDefault(index, @default);
+        public Int32[] Column_InstanceCount { get; }
+        public Int32 GetInstanceCount(int index, Int32 @default = default) => Column_InstanceCount.ElementAtOrDefault(index, @default);
+        public Int32[] Column_ViewSpecificInstanceCount { get; }
+        public Int32 GetViewSpecificInstanceCount(int index, Int32 @default = default) => Column_ViewSpecificInstanceCount.ElementAtOrDefault(index, @default);
+        public Int32[] Column_PurgeState { get; }
+        public Int32 GetPurgeState(int index, Int32 @default = default) => Column_PurgeState.ElementAtOrDefault(index, @default);
+        public Boolean[] Column_IsExploded { get; }
+        public Boolean GetIsExploded(int index, Boolean @default = default) => Column_IsExploded.ElementAtOrDefault(index, @default);
+        public Int32[] Column_ExplodedPieceCount { get; }
+        public Int32 GetExplodedPieceCount(int index, Int32 @default = default) => Column_ExplodedPieceCount.ElementAtOrDefault(index, @default);
+        public Int32[] Column_ExplodedModelPieceCount { get; }
+        public Int32 GetExplodedModelPieceCount(int index, Int32 @default = default) => Column_ExplodedModelPieceCount.ElementAtOrDefault(index, @default);
+        public Int32[] Column_ExplodedViewCount { get; }
+        public Int32 GetExplodedViewCount(int index, Int32 @default = default) => Column_ExplodedViewCount.ElementAtOrDefault(index, @default);
+        public Int32[] Column_ExplodedModelViewCount { get; }
+        public Int32 GetExplodedModelViewCount(int index, Int32 @default = default) => Column_ExplodedModelViewCount.ElementAtOrDefault(index, @default);
+        public Int32[] Column_ExplodedSeverity { get; }
+        public Int32 GetExplodedSeverity(int index, Int32 @default = default) => Column_ExplodedSeverity.ElementAtOrDefault(index, @default);
+        public int[] Column_FamilyTypeIndex { get; }
+        public int GetFamilyTypeIndex(int index) => Column_FamilyTypeIndex.ElementAtOrDefault(index, EntityRelation.None);
+        public FamilyType GetFamilyType(int index) => _GetReferencedFamilyType(GetFamilyTypeIndex(index));
+        private FamilyType _GetReferencedFamilyType(int referencedIndex) => ParentTableSet.GetFamilyType(referencedIndex);
+        public int[] Column_CategoryIndex { get; }
+        public int GetCategoryIndex(int index) => Column_CategoryIndex.ElementAtOrDefault(index, EntityRelation.None);
+        public Category GetCategory(int index) => _GetReferencedCategory(GetCategoryIndex(index));
+        private Category _GetReferencedCategory(int referencedIndex) => ParentTableSet.GetCategory(referencedIndex);
+        public int[] Column_ElementIndex { get; }
+        public int GetElementIndex(int index) => Column_ElementIndex.ElementAtOrDefault(index, EntityRelation.None);
+        public Element GetElement(int index) => _GetReferencedElement(GetElementIndex(index));
+        private Element _GetReferencedElement(int referencedIndex) => ParentTableSet.GetElement(referencedIndex);
+        // Object Getter
+        public CadFile Get(int index)
+        {
+            if (index < 0) return null;
+            var r = new CadFile();
+            r.Index = index;
+            r.FileName = GetFileName(index);
+            r.Extension = GetExtension(index);
+            r.IsLinked = GetIsLinked(index);
+            r.SavedPath = GetSavedPath(index);
+            r.AbsolutePath = GetAbsolutePath(index);
+            r.PathType = GetPathType(index);
+            r.LinkStatus = GetLinkStatus(index);
+            r.InstanceCount = GetInstanceCount(index);
+            r.ViewSpecificInstanceCount = GetViewSpecificInstanceCount(index);
+            r.PurgeState = GetPurgeState(index);
+            r.IsExploded = GetIsExploded(index);
+            r.ExplodedPieceCount = GetExplodedPieceCount(index);
+            r.ExplodedModelPieceCount = GetExplodedModelPieceCount(index);
+            r.ExplodedViewCount = GetExplodedViewCount(index);
+            r.ExplodedModelViewCount = GetExplodedModelViewCount(index);
+            r.ExplodedSeverity = GetExplodedSeverity(index);
+            r._FamilyType = new Relation<Vim.Format.ObjectModel.FamilyType>(GetFamilyTypeIndex(index), _GetReferencedFamilyType);
+            r._Category = new Relation<Vim.Format.ObjectModel.Category>(GetCategoryIndex(index), _GetReferencedCategory);
+            r._Element = new Relation<Vim.Format.ObjectModel.Element>(GetElementIndex(index), _GetReferencedElement);
+            return r;
+        }
+        // Enumerator
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+        public IEnumerator<CadFile> GetEnumerator()
+        {
+            for (var i = 0; i < RowCount; ++i)
+                yield return Get(i);
+        }
+    } // class CadFileTable 
+    
+    public partial class CadInstanceTable : EntityTable_v2, IEnumerable<CadInstance>
+    {
+        
+        public const string TableName = TableNames.CadInstance;
+        
+        public EntityTableSet ParentTableSet { get; } // can be null
+        
+        public CadInstanceTable(SerializableEntityTable rawTable, string[] stringTable, EntityTableSet parentTableSet = null) : base(rawTable, stringTable)
+        {
+            ParentTableSet = parentTableSet;
+            Column_FileName = GetStringColumnValues("string:FileName") ?? Array.Empty<String>();
+            Column_IsLinked = GetDataColumnValues<Boolean>("byte:IsLinked") ?? Array.Empty<Boolean>();
+            Column_IsViewSpecific = GetDataColumnValues<Boolean>("byte:IsViewSpecific") ?? Array.Empty<Boolean>();
+            Column_IsExplodedPiece = GetDataColumnValues<Boolean>("byte:IsExplodedPiece") ?? Array.Empty<Boolean>();
+            Column_CadFileIndex = GetIndexColumnValues("index:Vim.CadFile:CadFile") ?? Array.Empty<int>();
+            Column_OwnerViewIndex = GetIndexColumnValues("index:Vim.View:OwnerView") ?? Array.Empty<int>();
+            Column_ElementIndex = GetIndexColumnValues("index:Vim.Element:Element") ?? Array.Empty<int>();
+        }
+        
+        public String[] Column_FileName { get; }
+        public String GetFileName(int index, String @default = "") => Column_FileName.ElementAtOrDefault(index, @default);
+        public Boolean[] Column_IsLinked { get; }
+        public Boolean GetIsLinked(int index, Boolean @default = default) => Column_IsLinked.ElementAtOrDefault(index, @default);
+        public Boolean[] Column_IsViewSpecific { get; }
+        public Boolean GetIsViewSpecific(int index, Boolean @default = default) => Column_IsViewSpecific.ElementAtOrDefault(index, @default);
+        public Boolean[] Column_IsExplodedPiece { get; }
+        public Boolean GetIsExplodedPiece(int index, Boolean @default = default) => Column_IsExplodedPiece.ElementAtOrDefault(index, @default);
+        public int[] Column_CadFileIndex { get; }
+        public int GetCadFileIndex(int index) => Column_CadFileIndex.ElementAtOrDefault(index, EntityRelation.None);
+        public CadFile GetCadFile(int index) => _GetReferencedCadFile(GetCadFileIndex(index));
+        private CadFile _GetReferencedCadFile(int referencedIndex) => ParentTableSet.GetCadFile(referencedIndex);
+        public int[] Column_OwnerViewIndex { get; }
+        public int GetOwnerViewIndex(int index) => Column_OwnerViewIndex.ElementAtOrDefault(index, EntityRelation.None);
+        public View GetOwnerView(int index) => _GetReferencedOwnerView(GetOwnerViewIndex(index));
+        private View _GetReferencedOwnerView(int referencedIndex) => ParentTableSet.GetView(referencedIndex);
+        public int[] Column_ElementIndex { get; }
+        public int GetElementIndex(int index) => Column_ElementIndex.ElementAtOrDefault(index, EntityRelation.None);
+        public Element GetElement(int index) => _GetReferencedElement(GetElementIndex(index));
+        private Element _GetReferencedElement(int referencedIndex) => ParentTableSet.GetElement(referencedIndex);
+        // Object Getter
+        public CadInstance Get(int index)
+        {
+            if (index < 0) return null;
+            var r = new CadInstance();
+            r.Index = index;
+            r.FileName = GetFileName(index);
+            r.IsLinked = GetIsLinked(index);
+            r.IsViewSpecific = GetIsViewSpecific(index);
+            r.IsExplodedPiece = GetIsExplodedPiece(index);
+            r._CadFile = new Relation<Vim.Format.ObjectModel.CadFile>(GetCadFileIndex(index), _GetReferencedCadFile);
+            r._OwnerView = new Relation<Vim.Format.ObjectModel.View>(GetOwnerViewIndex(index), _GetReferencedOwnerView);
+            r._Element = new Relation<Vim.Format.ObjectModel.Element>(GetElementIndex(index), _GetReferencedElement);
+            return r;
+        }
+        // Enumerator
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+        public IEnumerator<CadInstance> GetEnumerator()
+        {
+            for (var i = 0; i < RowCount; ++i)
+                yield return Get(i);
+        }
+    } // class CadInstanceTable 
+    
+    public partial class QuestElementTable : EntityTable_v2, IEnumerable<QuestElement>
+    {
+        
+        public const string TableName = TableNames.QuestElement;
+        
+        public EntityTableSet ParentTableSet { get; } // can be null
+        
+        public QuestElementTable(SerializableEntityTable rawTable, string[] stringTable, EntityTableSet parentTableSet = null) : base(rawTable, stringTable)
+        {
+            ParentTableSet = parentTableSet;
+            Column_CollisionClass = GetStringColumnValues("string:CollisionClass") ?? Array.Empty<String>();
+            Column_CollisionCategory = GetStringColumnValues("string:CollisionCategory") ?? Array.Empty<String>();
+            Column_BoundsMin_X = GetDataColumnValues<Double>("double:BoundsMin.X") ?? Array.Empty<Double>();
+            Column_BoundsMin_Y = GetDataColumnValues<Double>("double:BoundsMin.Y") ?? Array.Empty<Double>();
+            Column_BoundsMin_Z = GetDataColumnValues<Double>("double:BoundsMin.Z") ?? Array.Empty<Double>();
+            Column_BoundsMax_X = GetDataColumnValues<Double>("double:BoundsMax.X") ?? Array.Empty<Double>();
+            Column_BoundsMax_Y = GetDataColumnValues<Double>("double:BoundsMax.Y") ?? Array.Empty<Double>();
+            Column_BoundsMax_Z = GetDataColumnValues<Double>("double:BoundsMax.Z") ?? Array.Empty<Double>();
+            Column_StreamLevelIndex = GetIndexColumnValues("index:Vim.Level:StreamLevel") ?? Array.Empty<int>();
+            Column_StreamTopLevelIndex = GetIndexColumnValues("index:Vim.Level:StreamTopLevel") ?? Array.Empty<int>();
+            Column_ElementIndex = GetIndexColumnValues("index:Vim.Element:Element") ?? Array.Empty<int>();
+        }
+        
+        public String[] Column_CollisionClass { get; }
+        public String GetCollisionClass(int index, String @default = "") => Column_CollisionClass.ElementAtOrDefault(index, @default);
+        public String[] Column_CollisionCategory { get; }
+        public String GetCollisionCategory(int index, String @default = "") => Column_CollisionCategory.ElementAtOrDefault(index, @default);
+        public Double[] Column_BoundsMin_X { get; }
+        public Double GetBoundsMin_X(int index, Double @default = default) => Column_BoundsMin_X.ElementAtOrDefault(index, @default);
+        public Double[] Column_BoundsMin_Y { get; }
+        public Double GetBoundsMin_Y(int index, Double @default = default) => Column_BoundsMin_Y.ElementAtOrDefault(index, @default);
+        public Double[] Column_BoundsMin_Z { get; }
+        public Double GetBoundsMin_Z(int index, Double @default = default) => Column_BoundsMin_Z.ElementAtOrDefault(index, @default);
+        public Double[] Column_BoundsMax_X { get; }
+        public Double GetBoundsMax_X(int index, Double @default = default) => Column_BoundsMax_X.ElementAtOrDefault(index, @default);
+        public Double[] Column_BoundsMax_Y { get; }
+        public Double GetBoundsMax_Y(int index, Double @default = default) => Column_BoundsMax_Y.ElementAtOrDefault(index, @default);
+        public Double[] Column_BoundsMax_Z { get; }
+        public Double GetBoundsMax_Z(int index, Double @default = default) => Column_BoundsMax_Z.ElementAtOrDefault(index, @default);
+        public int[] Column_StreamLevelIndex { get; }
+        public int GetStreamLevelIndex(int index) => Column_StreamLevelIndex.ElementAtOrDefault(index, EntityRelation.None);
+        public Level GetStreamLevel(int index) => _GetReferencedStreamLevel(GetStreamLevelIndex(index));
+        private Level _GetReferencedStreamLevel(int referencedIndex) => ParentTableSet.GetLevel(referencedIndex);
+        public int[] Column_StreamTopLevelIndex { get; }
+        public int GetStreamTopLevelIndex(int index) => Column_StreamTopLevelIndex.ElementAtOrDefault(index, EntityRelation.None);
+        public Level GetStreamTopLevel(int index) => _GetReferencedStreamTopLevel(GetStreamTopLevelIndex(index));
+        private Level _GetReferencedStreamTopLevel(int referencedIndex) => ParentTableSet.GetLevel(referencedIndex);
+        public int[] Column_ElementIndex { get; }
+        public int GetElementIndex(int index) => Column_ElementIndex.ElementAtOrDefault(index, EntityRelation.None);
+        public Element GetElement(int index) => _GetReferencedElement(GetElementIndex(index));
+        private Element _GetReferencedElement(int referencedIndex) => ParentTableSet.GetElement(referencedIndex);
+        // Object Getter
+        public QuestElement Get(int index)
+        {
+            if (index < 0) return null;
+            var r = new QuestElement();
+            r.Index = index;
+            r.CollisionClass = GetCollisionClass(index);
+            r.CollisionCategory = GetCollisionCategory(index);
+            r.BoundsMin_X = GetBoundsMin_X(index);
+            r.BoundsMin_Y = GetBoundsMin_Y(index);
+            r.BoundsMin_Z = GetBoundsMin_Z(index);
+            r.BoundsMax_X = GetBoundsMax_X(index);
+            r.BoundsMax_Y = GetBoundsMax_Y(index);
+            r.BoundsMax_Z = GetBoundsMax_Z(index);
+            r._StreamLevel = new Relation<Vim.Format.ObjectModel.Level>(GetStreamLevelIndex(index), _GetReferencedStreamLevel);
+            r._StreamTopLevel = new Relation<Vim.Format.ObjectModel.Level>(GetStreamTopLevelIndex(index), _GetReferencedStreamTopLevel);
+            r._Element = new Relation<Vim.Format.ObjectModel.Element>(GetElementIndex(index), _GetReferencedElement);
+            return r;
+        }
+        // Enumerator
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+        public IEnumerator<QuestElement> GetEnumerator()
+        {
+            for (var i = 0; i < RowCount; ++i)
+                yield return Get(i);
+        }
+    } // class QuestElementTable 
+    
     public static class DocumentBuilderExtensions
     {
         public static EntityTableBuilder ToAssetTableBuilder(this EntitySetBuilder<Asset> entitySet)
@@ -14846,6 +16657,11 @@ namespace Vim.Format.ObjectModel {
                 var columnData = new String[entityCount];
                 for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Owner; }
                 tb.AddStringColumn("string:Owner", columnData);
+            }
+            {
+                var columnData = new String[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].ChangeToken; }
+                tb.AddStringColumn("string:ChangeToken", columnData);
             }
             {
                 var columnData = new int[entityCount];
@@ -15154,6 +16970,11 @@ namespace Vim.Format.ObjectModel {
                 tb.AddDataColumn("int:NumSaves", columnData);
             }
             {
+                var columnData = new String[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Identity; }
+                tb.AddStringColumn("string:Identity", columnData);
+            }
+            {
                 var columnData = new Boolean[entityCount];
                 for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].IsLinked; }
                 tb.AddDataColumn("byte:IsLinked", columnData);
@@ -15277,6 +17098,36 @@ namespace Vim.Format.ObjectModel {
                 var columnData = new Int64[entityCount];
                 for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].FileLength; }
                 tb.AddDataColumn("long:FileLength", columnData);
+            }
+            {
+                var columnData = new Int32[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].FileLengthSource; }
+                tb.AddDataColumn("int:FileLengthSource", columnData);
+            }
+            {
+                var columnData = new String[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].FileLengthPath; }
+                tb.AddStringColumn("string:FileLengthPath", columnData);
+            }
+            {
+                var columnData = new Boolean[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].IsCloudModel; }
+                tb.AddDataColumn("byte:IsCloudModel", columnData);
+            }
+            {
+                var columnData = new String[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].CloudProjectGuid; }
+                tb.AddStringColumn("string:CloudProjectGuid", columnData);
+            }
+            {
+                var columnData = new String[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].CloudModelGuid; }
+                tb.AddStringColumn("string:CloudModelGuid", columnData);
+            }
+            {
+                var columnData = new Int32[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].PurgeableElementCount; }
+                tb.AddDataColumn("int:PurgeableElementCount", columnData);
             }
             {
                 var columnData = new int[entityCount];
@@ -15442,6 +17293,16 @@ namespace Vim.Format.ObjectModel {
                 tb.AddDataColumn("byte:IsInPlace", columnData);
             }
             {
+                var columnData = new Int32[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].InstanceCount; }
+                tb.AddDataColumn("int:InstanceCount", columnData);
+            }
+            {
+                var columnData = new Int32[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].PurgeState; }
+                tb.AddDataColumn("int:PurgeState", columnData);
+            }
+            {
                 var columnData = new int[entityCount];
                 for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._FamilyCategory?.Index ?? EntityRelation.None; }
                 tb.AddIndexColumn("index:Vim.Category:FamilyCategory", columnData);
@@ -15462,6 +17323,16 @@ namespace Vim.Format.ObjectModel {
                 var columnData = new Boolean[entityCount];
                 for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].IsSystemFamilyType; }
                 tb.AddDataColumn("byte:IsSystemFamilyType", columnData);
+            }
+            {
+                var columnData = new Int32[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].InstanceCount; }
+                tb.AddDataColumn("int:InstanceCount", columnData);
+            }
+            {
+                var columnData = new Int32[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].PurgeState; }
+                tb.AddDataColumn("int:PurgeState", columnData);
             }
             {
                 var columnData = new int[entityCount];
@@ -15813,6 +17684,141 @@ namespace Vim.Format.ObjectModel {
                 tb.AddDataColumn("byte:GraphicsRead", columnData);
             }
             {
+                var columnData = new Boolean[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].IsLocked; }
+                tb.AddDataColumn("byte:IsLocked", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].CropBox_Min_X; }
+                tb.AddDataColumn("double:CropBox.Min.X", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].CropBox_Min_Y; }
+                tb.AddDataColumn("double:CropBox.Min.Y", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].CropBox_Min_Z; }
+                tb.AddDataColumn("double:CropBox.Min.Z", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].CropBox_Max_X; }
+                tb.AddDataColumn("double:CropBox.Max.X", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].CropBox_Max_Y; }
+                tb.AddDataColumn("double:CropBox.Max.Y", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].CropBox_Max_Z; }
+                tb.AddDataColumn("double:CropBox.Max.Z", columnData);
+            }
+            {
+                var columnData = new Boolean[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].IsSectionBoxActive; }
+                tb.AddDataColumn("byte:IsSectionBoxActive", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].SectionBox_Min_X; }
+                tb.AddDataColumn("double:SectionBox.Min.X", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].SectionBox_Min_Y; }
+                tb.AddDataColumn("double:SectionBox.Min.Y", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].SectionBox_Min_Z; }
+                tb.AddDataColumn("double:SectionBox.Min.Z", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].SectionBox_Max_X; }
+                tb.AddDataColumn("double:SectionBox.Max.X", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].SectionBox_Max_Y; }
+                tb.AddDataColumn("double:SectionBox.Max.Y", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].SectionBox_Max_Z; }
+                tb.AddDataColumn("double:SectionBox.Max.Z", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].SectionBoxOrigin_X; }
+                tb.AddDataColumn("double:SectionBoxOrigin.X", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].SectionBoxOrigin_Y; }
+                tb.AddDataColumn("double:SectionBoxOrigin.Y", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].SectionBoxOrigin_Z; }
+                tb.AddDataColumn("double:SectionBoxOrigin.Z", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].SectionBoxBasisX_X; }
+                tb.AddDataColumn("double:SectionBoxBasisX.X", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].SectionBoxBasisX_Y; }
+                tb.AddDataColumn("double:SectionBoxBasisX.Y", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].SectionBoxBasisX_Z; }
+                tb.AddDataColumn("double:SectionBoxBasisX.Z", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].SectionBoxBasisY_X; }
+                tb.AddDataColumn("double:SectionBoxBasisY.X", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].SectionBoxBasisY_Y; }
+                tb.AddDataColumn("double:SectionBoxBasisY.Y", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].SectionBoxBasisY_Z; }
+                tb.AddDataColumn("double:SectionBoxBasisY.Z", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].SectionBoxBasisZ_X; }
+                tb.AddDataColumn("double:SectionBoxBasisZ.X", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].SectionBoxBasisZ_Y; }
+                tb.AddDataColumn("double:SectionBoxBasisZ.Y", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].SectionBoxBasisZ_Z; }
+                tb.AddDataColumn("double:SectionBoxBasisZ.Z", columnData);
+            }
+            {
+                var columnData = new String[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].DisplayStyle; }
+                tb.AddStringColumn("string:DisplayStyle", columnData);
+            }
+            {
                 var columnData = new int[entityCount];
                 for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._Camera?.Index ?? EntityRelation.None; }
                 tb.AddIndexColumn("index:Vim.Camera:Camera", columnData);
@@ -15903,6 +17909,199 @@ namespace Vim.Format.ObjectModel {
                 var columnData = new int[entityCount];
                 for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._GraphicOverride?.Index ?? EntityRelation.None; }
                 tb.AddIndexColumn("index:Vim.GraphicOverride:GraphicOverride", columnData);
+            }
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._LinkInView?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.LinkInView:LinkInView", columnData);
+            }
+            return tb;
+        }
+        public static EntityTableBuilder ToHiddenCategoryInViewTableBuilder(this EntitySetBuilder<HiddenCategoryInView> entitySet)
+        {
+            var tb = new EntityTableBuilder(TableNames.HiddenCategoryInView);
+            var entities = entitySet.Entities;
+            var entityCount = entities.Count;
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._View?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.View:View", columnData);
+            }
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._Category?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.Category:Category", columnData);
+            }
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._LinkInView?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.LinkInView:LinkInView", columnData);
+            }
+            return tb;
+        }
+        public static EntityTableBuilder ToHiddenWorksetInViewTableBuilder(this EntitySetBuilder<HiddenWorksetInView> entitySet)
+        {
+            var tb = new EntityTableBuilder(TableNames.HiddenWorksetInView);
+            var entities = entitySet.Entities;
+            var entityCount = entities.Count;
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._View?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.View:View", columnData);
+            }
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._Workset?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.Workset:Workset", columnData);
+            }
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._LinkInView?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.LinkInView:LinkInView", columnData);
+            }
+            return tb;
+        }
+        public static EntityTableBuilder ToHiddenElementInViewTableBuilder(this EntitySetBuilder<HiddenElementInView> entitySet)
+        {
+            var tb = new EntityTableBuilder(TableNames.HiddenElementInView);
+            var entities = entitySet.Entities;
+            var entityCount = entities.Count;
+            {
+                var columnData = new String[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Reason; }
+                tb.AddStringColumn("string:Reason", columnData);
+            }
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._View?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.View:View", columnData);
+            }
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._FilterInView?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.FilterInView:FilterInView", columnData);
+            }
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._LinkInView?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.LinkInView:LinkInView", columnData);
+            }
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._Element?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.Element:Element", columnData);
+            }
+            return tb;
+        }
+        public static EntityTableBuilder ToLinkInViewTableBuilder(this EntitySetBuilder<LinkInView> entitySet)
+        {
+            var tb = new EntityTableBuilder(TableNames.LinkInView);
+            var entities = entitySet.Entities;
+            var entityCount = entities.Count;
+            {
+                var columnData = new String[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Display; }
+                tb.AddStringColumn("string:Display", columnData);
+            }
+            {
+                var columnData = new String[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].SettingsFrom; }
+                tb.AddStringColumn("string:SettingsFrom", columnData);
+            }
+            {
+                var columnData = new Boolean[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].IsHidden; }
+                tb.AddDataColumn("byte:IsHidden", columnData);
+            }
+            {
+                var columnData = new String[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].HiddenBy; }
+                tb.AddStringColumn("string:HiddenBy", columnData);
+            }
+            {
+                var columnData = new Boolean[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].IsHalftone; }
+                tb.AddDataColumn("byte:IsHalftone", columnData);
+            }
+            {
+                var columnData = new String[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].LinkedViewName; }
+                tb.AddStringColumn("string:LinkedViewName", columnData);
+            }
+            {
+                var columnData = new String[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].ViewFilters; }
+                tb.AddStringColumn("string:ViewFilters", columnData);
+            }
+            {
+                var columnData = new String[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].ObjectStyles; }
+                tb.AddStringColumn("string:ObjectStyles", columnData);
+            }
+            {
+                var columnData = new String[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].NestedLinks; }
+                tb.AddStringColumn("string:NestedLinks", columnData);
+            }
+            {
+                var columnData = new String[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Phase; }
+                tb.AddStringColumn("string:Phase", columnData);
+            }
+            {
+                var columnData = new String[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].PhaseFilter; }
+                tb.AddStringColumn("string:PhaseFilter", columnData);
+            }
+            {
+                var columnData = new String[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].DetailLevel; }
+                tb.AddStringColumn("string:DetailLevel", columnData);
+            }
+            {
+                var columnData = new String[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Discipline; }
+                tb.AddStringColumn("string:Discipline", columnData);
+            }
+            {
+                var columnData = new String[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].LinkedWorksets; }
+                tb.AddStringColumn("string:LinkedWorksets", columnData);
+            }
+            {
+                var columnData = new Boolean[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].IsMeasured; }
+                tb.AddDataColumn("byte:IsMeasured", columnData);
+            }
+            {
+                var columnData = new Int32[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].MeasuredVisibleCount; }
+                tb.AddDataColumn("int:MeasuredVisibleCount", columnData);
+            }
+            {
+                var columnData = new String[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].NotReadable; }
+                tb.AddStringColumn("string:NotReadable", columnData);
+            }
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._View?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.View:View", columnData);
+            }
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._LinkedDocument?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.BimDocument:LinkedDocument", columnData);
+            }
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._LinkedView?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.View:LinkedView", columnData);
+            }
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._Element?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.Element:Element", columnData);
             }
             return tb;
         }
@@ -16790,6 +18989,101 @@ namespace Vim.Format.ObjectModel {
                 var columnData = new Double[entityCount];
                 for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].CutBackgroundPatternColor_Z; }
                 tb.AddDataColumn("double:CutBackgroundPatternColor.Z", columnData);
+            }
+            {
+                var columnData = new String[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].AppearanceKind; }
+                tb.AddStringColumn("string:AppearanceKind", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].AppearanceColor_X; }
+                tb.AddDataColumn("double:AppearanceColor.X", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].AppearanceColor_Y; }
+                tb.AddDataColumn("double:AppearanceColor.Y", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].AppearanceColor_Z; }
+                tb.AddDataColumn("double:AppearanceColor.Z", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].AppearanceTint_X; }
+                tb.AddDataColumn("double:AppearanceTint.X", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].AppearanceTint_Y; }
+                tb.AddDataColumn("double:AppearanceTint.Y", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].AppearanceTint_Z; }
+                tb.AddDataColumn("double:AppearanceTint.Z", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].AppearanceImageFade; }
+                tb.AddDataColumn("double:AppearanceImageFade", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].AppearanceTransparency; }
+                tb.AddDataColumn("double:AppearanceTransparency", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Roughness; }
+                tb.AddDataColumn("double:Roughness", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Metalness; }
+                tb.AddDataColumn("double:Metalness", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Reflectivity; }
+                tb.AddDataColumn("double:Reflectivity", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].RefractionIndex; }
+                tb.AddDataColumn("double:RefractionIndex", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].EmissionColor_X; }
+                tb.AddDataColumn("double:EmissionColor.X", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].EmissionColor_Y; }
+                tb.AddDataColumn("double:EmissionColor.Y", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].EmissionColor_Z; }
+                tb.AddDataColumn("double:EmissionColor.Z", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].EmissionLuminance; }
+                tb.AddDataColumn("double:EmissionLuminance", columnData);
+            }
+            {
+                var columnData = new String[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].ColorTextureKind; }
+                tb.AddStringColumn("string:ColorTextureKind", columnData);
+            }
+            {
+                var columnData = new String[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].NormalTextureKind; }
+                tb.AddStringColumn("string:NormalTextureKind", columnData);
             }
             {
                 var columnData = new int[entityCount];
@@ -19044,6 +21338,212 @@ namespace Vim.Format.ObjectModel {
             }
             return tb;
         }
+        public static EntityTableBuilder ToCadFileTableBuilder(this EntitySetBuilder<CadFile> entitySet)
+        {
+            var tb = new EntityTableBuilder(TableNames.CadFile);
+            var entities = entitySet.Entities;
+            var entityCount = entities.Count;
+            {
+                var columnData = new String[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].FileName; }
+                tb.AddStringColumn("string:FileName", columnData);
+            }
+            {
+                var columnData = new String[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Extension; }
+                tb.AddStringColumn("string:Extension", columnData);
+            }
+            {
+                var columnData = new Boolean[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].IsLinked; }
+                tb.AddDataColumn("byte:IsLinked", columnData);
+            }
+            {
+                var columnData = new String[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].SavedPath; }
+                tb.AddStringColumn("string:SavedPath", columnData);
+            }
+            {
+                var columnData = new String[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].AbsolutePath; }
+                tb.AddStringColumn("string:AbsolutePath", columnData);
+            }
+            {
+                var columnData = new String[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].PathType; }
+                tb.AddStringColumn("string:PathType", columnData);
+            }
+            {
+                var columnData = new String[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].LinkStatus; }
+                tb.AddStringColumn("string:LinkStatus", columnData);
+            }
+            {
+                var columnData = new Int32[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].InstanceCount; }
+                tb.AddDataColumn("int:InstanceCount", columnData);
+            }
+            {
+                var columnData = new Int32[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].ViewSpecificInstanceCount; }
+                tb.AddDataColumn("int:ViewSpecificInstanceCount", columnData);
+            }
+            {
+                var columnData = new Int32[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].PurgeState; }
+                tb.AddDataColumn("int:PurgeState", columnData);
+            }
+            {
+                var columnData = new Boolean[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].IsExploded; }
+                tb.AddDataColumn("byte:IsExploded", columnData);
+            }
+            {
+                var columnData = new Int32[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].ExplodedPieceCount; }
+                tb.AddDataColumn("int:ExplodedPieceCount", columnData);
+            }
+            {
+                var columnData = new Int32[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].ExplodedModelPieceCount; }
+                tb.AddDataColumn("int:ExplodedModelPieceCount", columnData);
+            }
+            {
+                var columnData = new Int32[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].ExplodedViewCount; }
+                tb.AddDataColumn("int:ExplodedViewCount", columnData);
+            }
+            {
+                var columnData = new Int32[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].ExplodedModelViewCount; }
+                tb.AddDataColumn("int:ExplodedModelViewCount", columnData);
+            }
+            {
+                var columnData = new Int32[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].ExplodedSeverity; }
+                tb.AddDataColumn("int:ExplodedSeverity", columnData);
+            }
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._FamilyType?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.FamilyType:FamilyType", columnData);
+            }
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._Category?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.Category:Category", columnData);
+            }
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._Element?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.Element:Element", columnData);
+            }
+            return tb;
+        }
+        public static EntityTableBuilder ToCadInstanceTableBuilder(this EntitySetBuilder<CadInstance> entitySet)
+        {
+            var tb = new EntityTableBuilder(TableNames.CadInstance);
+            var entities = entitySet.Entities;
+            var entityCount = entities.Count;
+            {
+                var columnData = new String[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].FileName; }
+                tb.AddStringColumn("string:FileName", columnData);
+            }
+            {
+                var columnData = new Boolean[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].IsLinked; }
+                tb.AddDataColumn("byte:IsLinked", columnData);
+            }
+            {
+                var columnData = new Boolean[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].IsViewSpecific; }
+                tb.AddDataColumn("byte:IsViewSpecific", columnData);
+            }
+            {
+                var columnData = new Boolean[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].IsExplodedPiece; }
+                tb.AddDataColumn("byte:IsExplodedPiece", columnData);
+            }
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._CadFile?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.CadFile:CadFile", columnData);
+            }
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._OwnerView?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.View:OwnerView", columnData);
+            }
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._Element?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.Element:Element", columnData);
+            }
+            return tb;
+        }
+        public static EntityTableBuilder ToQuestElementTableBuilder(this EntitySetBuilder<QuestElement> entitySet)
+        {
+            var tb = new EntityTableBuilder(TableNames.QuestElement);
+            var entities = entitySet.Entities;
+            var entityCount = entities.Count;
+            {
+                var columnData = new String[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].CollisionClass; }
+                tb.AddStringColumn("string:CollisionClass", columnData);
+            }
+            {
+                var columnData = new String[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].CollisionCategory; }
+                tb.AddStringColumn("string:CollisionCategory", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].BoundsMin_X; }
+                tb.AddDataColumn("double:BoundsMin.X", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].BoundsMin_Y; }
+                tb.AddDataColumn("double:BoundsMin.Y", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].BoundsMin_Z; }
+                tb.AddDataColumn("double:BoundsMin.Z", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].BoundsMax_X; }
+                tb.AddDataColumn("double:BoundsMax.X", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].BoundsMax_Y; }
+                tb.AddDataColumn("double:BoundsMax.Y", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].BoundsMax_Z; }
+                tb.AddDataColumn("double:BoundsMax.Z", columnData);
+            }
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._StreamLevel?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.Level:StreamLevel", columnData);
+            }
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._StreamTopLevel?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.Level:StreamTopLevel", columnData);
+            }
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._Element?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.Element:Element", columnData);
+            }
+            return tb;
+        }
     } // DocumentBuilderExtensions
     
     public partial class ObjectModelBuilder
@@ -19069,6 +21569,10 @@ namespace Vim.Format.ObjectModel {
         public readonly EntitySetBuilder<FamilyInstance> FamilyInstanceBuilder = new EntitySetBuilder<FamilyInstance>(TableNames.FamilyInstance);
         public readonly EntitySetBuilder<View> ViewBuilder = new EntitySetBuilder<View>(TableNames.View);
         public readonly EntitySetBuilder<FilterInView> FilterInViewBuilder = new EntitySetBuilder<FilterInView>(TableNames.FilterInView);
+        public readonly EntitySetBuilder<HiddenCategoryInView> HiddenCategoryInViewBuilder = new EntitySetBuilder<HiddenCategoryInView>(TableNames.HiddenCategoryInView);
+        public readonly EntitySetBuilder<HiddenWorksetInView> HiddenWorksetInViewBuilder = new EntitySetBuilder<HiddenWorksetInView>(TableNames.HiddenWorksetInView);
+        public readonly EntitySetBuilder<HiddenElementInView> HiddenElementInViewBuilder = new EntitySetBuilder<HiddenElementInView>(TableNames.HiddenElementInView);
+        public readonly EntitySetBuilder<LinkInView> LinkInViewBuilder = new EntitySetBuilder<LinkInView>(TableNames.LinkInView);
         public readonly EntitySetBuilder<GridInView> GridInViewBuilder = new EntitySetBuilder<GridInView>(TableNames.GridInView);
         public readonly EntitySetBuilder<LinePattern> LinePatternBuilder = new EntitySetBuilder<LinePattern>(TableNames.LinePattern);
         public readonly EntitySetBuilder<FillPattern> FillPatternBuilder = new EntitySetBuilder<FillPattern>(TableNames.FillPattern);
@@ -19133,6 +21637,9 @@ namespace Vim.Format.ObjectModel {
         public readonly EntitySetBuilder<SyncSession> SyncSessionBuilder = new EntitySetBuilder<SyncSession>(TableNames.SyncSession);
         public readonly EntitySetBuilder<ElementChange> ElementChangeBuilder = new EntitySetBuilder<ElementChange>(TableNames.ElementChange);
         public readonly EntitySetBuilder<ActivityMarker> ActivityMarkerBuilder = new EntitySetBuilder<ActivityMarker>(TableNames.ActivityMarker);
+        public readonly EntitySetBuilder<CadFile> CadFileBuilder = new EntitySetBuilder<CadFile>(TableNames.CadFile);
+        public readonly EntitySetBuilder<CadInstance> CadInstanceBuilder = new EntitySetBuilder<CadInstance>(TableNames.CadInstance);
+        public readonly EntitySetBuilder<QuestElement> QuestElementBuilder = new EntitySetBuilder<QuestElement>(TableNames.QuestElement);
         
         public DocumentBuilder AddEntityTableSets(DocumentBuilder db)
         {
@@ -19157,6 +21664,10 @@ namespace Vim.Format.ObjectModel {
             db.Tables.Add(FamilyInstanceBuilder.EntityTableName, FamilyInstanceBuilder.ToFamilyInstanceTableBuilder());
             db.Tables.Add(ViewBuilder.EntityTableName, ViewBuilder.ToViewTableBuilder());
             db.Tables.Add(FilterInViewBuilder.EntityTableName, FilterInViewBuilder.ToFilterInViewTableBuilder());
+            db.Tables.Add(HiddenCategoryInViewBuilder.EntityTableName, HiddenCategoryInViewBuilder.ToHiddenCategoryInViewTableBuilder());
+            db.Tables.Add(HiddenWorksetInViewBuilder.EntityTableName, HiddenWorksetInViewBuilder.ToHiddenWorksetInViewTableBuilder());
+            db.Tables.Add(HiddenElementInViewBuilder.EntityTableName, HiddenElementInViewBuilder.ToHiddenElementInViewTableBuilder());
+            db.Tables.Add(LinkInViewBuilder.EntityTableName, LinkInViewBuilder.ToLinkInViewTableBuilder());
             db.Tables.Add(GridInViewBuilder.EntityTableName, GridInViewBuilder.ToGridInViewTableBuilder());
             db.Tables.Add(LinePatternBuilder.EntityTableName, LinePatternBuilder.ToLinePatternTableBuilder());
             db.Tables.Add(FillPatternBuilder.EntityTableName, FillPatternBuilder.ToFillPatternTableBuilder());
@@ -19221,6 +21732,9 @@ namespace Vim.Format.ObjectModel {
             db.Tables.Add(SyncSessionBuilder.EntityTableName, SyncSessionBuilder.ToSyncSessionTableBuilder());
             db.Tables.Add(ElementChangeBuilder.EntityTableName, ElementChangeBuilder.ToElementChangeTableBuilder());
             db.Tables.Add(ActivityMarkerBuilder.EntityTableName, ActivityMarkerBuilder.ToActivityMarkerTableBuilder());
+            db.Tables.Add(CadFileBuilder.EntityTableName, CadFileBuilder.ToCadFileTableBuilder());
+            db.Tables.Add(CadInstanceBuilder.EntityTableName, CadInstanceBuilder.ToCadInstanceTableBuilder());
+            db.Tables.Add(QuestElementBuilder.EntityTableName, QuestElementBuilder.ToQuestElementTableBuilder());
             
             return db;
         } // AddEntityTableSets
@@ -19248,6 +21762,10 @@ namespace Vim.Format.ObjectModel {
             FamilyInstanceBuilder.Clear();
             ViewBuilder.Clear();
             FilterInViewBuilder.Clear();
+            HiddenCategoryInViewBuilder.Clear();
+            HiddenWorksetInViewBuilder.Clear();
+            HiddenElementInViewBuilder.Clear();
+            LinkInViewBuilder.Clear();
             GridInViewBuilder.Clear();
             LinePatternBuilder.Clear();
             FillPatternBuilder.Clear();
@@ -19312,6 +21830,9 @@ namespace Vim.Format.ObjectModel {
             SyncSessionBuilder.Clear();
             ElementChangeBuilder.Clear();
             ActivityMarkerBuilder.Clear();
+            CadFileBuilder.Clear();
+            CadInstanceBuilder.Clear();
+            QuestElementBuilder.Clear();
         } // Clear
     } // ObjectModelBuilder
 } // namespace

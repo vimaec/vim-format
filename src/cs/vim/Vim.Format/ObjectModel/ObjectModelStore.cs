@@ -32,9 +32,11 @@ namespace Vim.Format.ObjectModel
             return _subdivided;
         }
 
-        public DocumentBuilder ToDocumentBuilder(string generator, string versionString)
+        /// <param name="optionalHeaderValues">Extra header values (for example the export fingerprint a later differential
+        /// update checks); null for none.</param>
+        public DocumentBuilder ToDocumentBuilder(string generator, string versionString, IReadOnlyDictionary<string, string> optionalHeaderValues = null)
         {
-            return ObjectModelBuilder.ToDocumentBuilder(generator, versionString)
+            return ObjectModelBuilder.ToDocumentBuilder(generator, versionString, optionalHeaderValues)
                 .AddMeshes(_subdivided != null && _subdivided.Count == Meshes.Count ? (IEnumerable<DocumentBuilder.SubdividedMesh>)_subdivided : Meshes.Select(g => g.Subdivide()))
                 .AddInstances(Instances)
                 .AddShapes(Shapes)
