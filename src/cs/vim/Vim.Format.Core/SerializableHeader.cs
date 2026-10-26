@@ -18,6 +18,17 @@ namespace Vim.Format
         public const string SchemaField = "schema";
         public const string BuildField = "build"; // optional
 
+        /// <summary>
+        /// Optional: how the materials were exported. Absent = the default (Revit's Graphics / shaded colours).
+        /// "realistic" = the Material table also carries each material's render appearance (AppearanceColor, Metalness,
+        /// Reflectivity, Glossiness and Transparency from the appearance).
+        /// "realistic+textures" = as "realistic", plus the texture images in the assets and one texture coordinate per
+        /// vertex (g3d:vertex:uv) with the texture's size, offset and rotation already applied (image coordinates).
+        /// </summary>
+        public const string MaterialsField = "materials";
+        public const string MaterialsRealistic = "realistic";
+        public const string MaterialsRealisticWithTextures = "realistic+textures";
+
         public const char Separator = '=';
         public const char EndOfLineChar = '\n';
         public const string EndOfLineString = "\n";

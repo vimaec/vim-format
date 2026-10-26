@@ -6102,6 +6102,11 @@ export interface IMaterial {
     glossiness?: number
     smoothness?: number
     transparency?: number
+    appearanceColor_X?: number
+    appearanceColor_Y?: number
+    appearanceColor_Z?: number
+    metalness?: number
+    reflectivity?: number
     
     colorTextureFileIndex?: number
     colorTextureFile?: IAsset
@@ -6150,6 +6155,16 @@ export interface IMaterialTable {
     getAllSmoothness(): Promise<number[] | undefined>
     getTransparency(materialIndex: number): Promise<number | undefined>
     getAllTransparency(): Promise<number[] | undefined>
+    getAppearanceColor_X(materialIndex: number): Promise<number | undefined>
+    getAllAppearanceColor_X(): Promise<number[] | undefined>
+    getAppearanceColor_Y(materialIndex: number): Promise<number | undefined>
+    getAllAppearanceColor_Y(): Promise<number[] | undefined>
+    getAppearanceColor_Z(materialIndex: number): Promise<number | undefined>
+    getAllAppearanceColor_Z(): Promise<number[] | undefined>
+    getMetalness(materialIndex: number): Promise<number | undefined>
+    getAllMetalness(): Promise<number[] | undefined>
+    getReflectivity(materialIndex: number): Promise<number | undefined>
+    getAllReflectivity(): Promise<number[] | undefined>
     
     getColorTextureFileIndex(materialIndex: number): Promise<number | undefined>
     getAllColorTextureFileIndex(): Promise<number[] | undefined>
@@ -6181,6 +6196,11 @@ export class Material implements IMaterial {
     glossiness?: number
     smoothness?: number
     transparency?: number
+    appearanceColor_X?: number
+    appearanceColor_Y?: number
+    appearanceColor_Z?: number
+    metalness?: number
+    reflectivity?: number
     
     colorTextureFileIndex?: number
     colorTextureFile?: IAsset
@@ -6211,6 +6231,11 @@ export class Material implements IMaterial {
             table.getGlossiness(index).then(v => result.glossiness = v),
             table.getSmoothness(index).then(v => result.smoothness = v),
             table.getTransparency(index).then(v => result.transparency = v),
+            table.getAppearanceColor_X(index).then(v => result.appearanceColor_X = v),
+            table.getAppearanceColor_Y(index).then(v => result.appearanceColor_Y = v),
+            table.getAppearanceColor_Z(index).then(v => result.appearanceColor_Z = v),
+            table.getMetalness(index).then(v => result.metalness = v),
+            table.getReflectivity(index).then(v => result.reflectivity = v),
             table.getColorTextureFileIndex(index).then(v => result.colorTextureFileIndex = v),
             table.getNormalTextureFileIndex(index).then(v => result.normalTextureFileIndex = v),
             table.getElementIndex(index).then(v => result.elementIndex = v),
@@ -6266,6 +6291,11 @@ export class MaterialTable implements IMaterialTable {
         let glossiness: number[] | undefined
         let smoothness: number[] | undefined
         let transparency: number[] | undefined
+        let appearanceColor_X: number[] | undefined
+        let appearanceColor_Y: number[] | undefined
+        let appearanceColor_Z: number[] | undefined
+        let metalness: number[] | undefined
+        let reflectivity: number[] | undefined
         let colorTextureFileIndex: number[] | undefined
         let normalTextureFileIndex: number[] | undefined
         let elementIndex: number[] | undefined
@@ -6288,6 +6318,11 @@ export class MaterialTable implements IMaterialTable {
             (async () => { glossiness = (await localTable.getNumberArray("double:Glossiness")) })(),
             (async () => { smoothness = (await localTable.getNumberArray("double:Smoothness")) })(),
             (async () => { transparency = (await localTable.getNumberArray("double:Transparency")) })(),
+            (async () => { appearanceColor_X = (await localTable.getNumberArray("double:AppearanceColor.X")) })(),
+            (async () => { appearanceColor_Y = (await localTable.getNumberArray("double:AppearanceColor.Y")) })(),
+            (async () => { appearanceColor_Z = (await localTable.getNumberArray("double:AppearanceColor.Z")) })(),
+            (async () => { metalness = (await localTable.getNumberArray("double:Metalness")) })(),
+            (async () => { reflectivity = (await localTable.getNumberArray("double:Reflectivity")) })(),
             (async () => { colorTextureFileIndex = (await localTable.getNumberArray("index:Vim.Asset:ColorTextureFile")) })(),
             (async () => { normalTextureFileIndex = (await localTable.getNumberArray("index:Vim.Asset:NormalTextureFile")) })(),
             (async () => { elementIndex = (await localTable.getNumberArray("index:Vim.Element:Element")) })(),
@@ -6316,6 +6351,11 @@ export class MaterialTable implements IMaterialTable {
                 glossiness: glossiness ? glossiness[i] : undefined,
                 smoothness: smoothness ? smoothness[i] : undefined,
                 transparency: transparency ? transparency[i] : undefined,
+                appearanceColor_X: appearanceColor_X ? appearanceColor_X[i] : undefined,
+                appearanceColor_Y: appearanceColor_Y ? appearanceColor_Y[i] : undefined,
+                appearanceColor_Z: appearanceColor_Z ? appearanceColor_Z[i] : undefined,
+                metalness: metalness ? metalness[i] : undefined,
+                reflectivity: reflectivity ? reflectivity[i] : undefined,
                 colorTextureFileIndex: colorTextureFileIndex ? colorTextureFileIndex[i] : undefined,
                 normalTextureFileIndex: normalTextureFileIndex ? normalTextureFileIndex[i] : undefined,
                 elementIndex: elementIndex ? elementIndex[i] : undefined
@@ -6459,6 +6499,46 @@ export class MaterialTable implements IMaterialTable {
     
     async getAllTransparency(): Promise<number[] | undefined> {
         return (await this.entityTable.getNumberArray("double:Transparency"))
+    }
+    
+    async getAppearanceColor_X(materialIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(materialIndex, "double:AppearanceColor.X"))
+    }
+    
+    async getAllAppearanceColor_X(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:AppearanceColor.X"))
+    }
+    
+    async getAppearanceColor_Y(materialIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(materialIndex, "double:AppearanceColor.Y"))
+    }
+    
+    async getAllAppearanceColor_Y(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:AppearanceColor.Y"))
+    }
+    
+    async getAppearanceColor_Z(materialIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(materialIndex, "double:AppearanceColor.Z"))
+    }
+    
+    async getAllAppearanceColor_Z(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:AppearanceColor.Z"))
+    }
+    
+    async getMetalness(materialIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(materialIndex, "double:Metalness"))
+    }
+    
+    async getAllMetalness(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:Metalness"))
+    }
+    
+    async getReflectivity(materialIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(materialIndex, "double:Reflectivity"))
+    }
+    
+    async getAllReflectivity(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:Reflectivity"))
     }
     
     async getColorTextureFileIndex(materialIndex: number): Promise<number | undefined> {

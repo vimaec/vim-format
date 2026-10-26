@@ -28,6 +28,7 @@ namespace Vim.Format
         public int[] MeshSubmeshOffset { get; }
         public int[] SubmeshIndexOffsets { get; }
         public int[] ShapeVertexOffsets { get; }
+        public bool HasVertexUvs { get; }
 
         public BigG3dWriter(List<SubdividedMesh> meshes, List<Instance> instances, List<Shape> shapes, List<Material> materials, G3dHeader? header = null, bool useColors = false)
         {
@@ -113,6 +114,14 @@ namespace Vim.Format
                 writers.Add(AttributeSizeAndName(CommonAttributes.VertexColor, totalVertices));
             }
 
+            // Texture coordinates: written only when at least one mesh carries them (the exporter's experimental
+            // "Textures" option). The buffer always spans every vertex; meshes without UVs get (0, 0).
+            HasVertexUvs = meshes.Any(m => m.UVs != null);
+            if (HasVertexUvs)
+            {
+                writers.Add(AttributeSizeAndName(CommonAttributes.VertexUv, totalVertices));
+            }
+
             Names = writers.Select(w => w.attribute).ToArray();
             Sizes = writers.Select(w => w.size).ToArray();
             Header = BFast.BFast.CreateBFastHeader(Sizes, Names);
@@ -137,6 +146,13 @@ namespace Vim.Format
                     // Vertices
                     case CommonAttributes.Position:
                         Meshes.ForEach(g => stream.Write(g.Vertices.ToArray()));
+                        break;
+
+                    // Texture coordinates (one per vertex, zeros for meshes without UVs)
+                    case CommonAttributes.VertexUv:
+                        Meshes.ForEach(g => stream.Write(g.UVs != null
+                            ? g.UVs.ToArray()
+                            : new Math3d.Vector2[g.Vertices.Count]));
                         break;
 
                     // Indices
