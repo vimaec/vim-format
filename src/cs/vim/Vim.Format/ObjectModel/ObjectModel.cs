@@ -14,6 +14,13 @@ namespace Vim.Format.ObjectModel
         // ReSharper disable MemberHidesStaticFromOuterClass
         public static class History
         {
+            // Schema 5.11.0 = 5.10.0 + the "Prepare for Quest" floors step (experimental exporter option; filled only when
+            // Prepare for Quest is on): which levels of the main model a VR walk offers as floors to jump to.
+            // Schema additions
+            //   Vim.QuestLevel__byte:IsNavigable
+            //   Vim.QuestLevel__index:Vim.Level:Level
+            public const string v5_11_0 = "5.11.0";
+
             // Schema 5.10.0 = 5.9.0 + "Prepare for Quest" (experimental exporter option; tables filled only when it is on,
             // the light tables also with StoreLights). The three light tables are the integration branch's 5.8.0 shapes,
             // unchanged (renumber at merge).
@@ -303,7 +310,8 @@ namespace Vim.Format.ObjectModel
         // ReSharper enable MemberHidesStaticFromOuterClass
 
         // [MAINTAIN] Add more object model SerializableVersions below and update the current one.
-        public static SerializableVersion Current => v5_10_0;
+        public static SerializableVersion Current => v5_11_0;
+        public static SerializableVersion v5_11_0 => SerializableVersion.Parse(History.v5_11_0);
         public static SerializableVersion v5_10_0 => SerializableVersion.Parse(History.v5_10_0);
         public static SerializableVersion v5_9_0 => SerializableVersion.Parse(History.v5_9_0);
         public static SerializableVersion v5_7_0 => SerializableVersion.Parse(History.v5_7_0);
@@ -2993,6 +3001,24 @@ namespace Vim.Format.ObjectModel
 
         public object GetStorageKey()
             => _Element?.Index ?? EntityRelation.None;
+    }
+
+    /// <summary>
+    /// One row per level of the main (host) model of an export with the "Prepare for Quest" option: whether a VR walk offers
+    /// the level as a floor to jump to. It changes nothing else: the elements on a level that is not offered are exported,
+    /// shown and streamed as usual. Levels of linked models have no row (the main model's levels win).
+    /// </summary>
+    [TableName(TableNames.QuestLevel)]
+    public partial class QuestLevel : Entity, IStorageKey
+    {
+        /// <summary>True when the level is a Revit building story and was left ticked in the exporter's Quest floors step.</summary>
+        public bool IsNavigable;
+
+        /// <summary>The level.</summary>
+        public Relation<Level> _Level;
+
+        public object GetStorageKey()
+            => _Level?.Index ?? EntityRelation.None;
     }
 
     /// <summary>

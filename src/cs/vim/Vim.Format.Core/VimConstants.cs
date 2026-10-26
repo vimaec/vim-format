@@ -77,6 +77,7 @@ namespace Vim.Format
         public const string LightSource = "Vim.LightSource";
         public const string SunAndShadowSettings = "Vim.SunAndShadowSettings";
         public const string QuestElement = "Vim.QuestElement";
+        public const string QuestLevel = "Vim.QuestLevel";
     }
 
     public static class VimConstants

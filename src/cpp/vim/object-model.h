@@ -138,6 +138,8 @@ namespace Vim
     class SunAndShadowSettingsTable;
     class QuestElement;
     class QuestElementTable;
+    class QuestLevel;
+    class QuestLevelTable;
     
     class DocumentModel
     {
@@ -205,6 +207,7 @@ namespace Vim
         LightSourceTable* mLightSource;
         SunAndShadowSettingsTable* mSunAndShadowSettings;
         QuestElementTable* mQuestElement;
+        QuestLevelTable* mQuestLevel;
         
         DocumentModel(Scene& scene);
         ~DocumentModel();
@@ -20162,6 +20165,122 @@ namespace Vim
         return new QuestElementTable(scene.mEntityTables["Vim.QuestElement"], scene.mStrings);
     }
     
+    class QuestLevel
+    {
+    public:
+        int mIndex;
+        bool mIsNavigable;
+        
+        int mLevelIndex;
+        Level* mLevel;
+        
+        QuestLevel() {}
+    };
+    
+    class QuestLevelTable
+    {
+        EntityTable& mEntityTable;
+        std::vector<const bfast::byte*>& mStrings;
+    public:
+        QuestLevelTable(EntityTable& entityTable, std::vector<const bfast::byte*>& strings):
+            mEntityTable(entityTable), mStrings(strings) {}
+        
+        size_t GetCount()
+        {
+            return mEntityTable.get_count();
+        }
+        
+        QuestLevel* Get(int questLevelIndex)
+        {
+            QuestLevel* questLevel = new QuestLevel();
+            questLevel->mIndex = questLevelIndex;
+            questLevel->mIsNavigable = GetIsNavigable(questLevelIndex);
+            questLevel->mLevelIndex = GetLevelIndex(questLevelIndex);
+            return questLevel;
+        }
+        
+        std::vector<QuestLevel>* GetAll()
+        {
+            bool existsIsNavigable = mEntityTable.column_exists("byte:IsNavigable");
+            bool existsLevel = mEntityTable.column_exists("index:Vim.Level:Level");
+            
+            const auto count = GetCount();
+            
+            std::vector<QuestLevel>* questLevel = new std::vector<QuestLevel>();
+            questLevel->reserve(count);
+            
+            bfast::byte* isNavigableData = new bfast::byte[count];
+            if (mEntityTable.column_exists("byte:IsNavigable")) {
+                memcpy(isNavigableData, mEntityTable.mDataColumns["byte:IsNavigable"].begin(), count * sizeof(bfast::byte));
+            }
+            
+            const std::vector<int>& levelData = mEntityTable.column_exists("index:Vim.Level:Level") ? mEntityTable.mIndexColumns["index:Vim.Level:Level"] : std::vector<int>();
+            
+            for (int i = 0; i < count; ++i)
+            {
+                QuestLevel entity;
+                entity.mIndex = i;
+                if (existsIsNavigable)
+                    entity.mIsNavigable = isNavigableData[i];
+                entity.mLevelIndex = existsLevel ? levelData[i] : -1;
+                questLevel->push_back(entity);
+            }
+            
+            delete[] isNavigableData;
+            
+            return questLevel;
+        }
+        
+        bool GetIsNavigable(int questLevelIndex)
+        {
+            if (questLevelIndex < 0 || questLevelIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("byte:IsNavigable")) {
+                return static_cast<bool>(*reinterpret_cast<bfast::byte*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["byte:IsNavigable"].begin() + questLevelIndex * sizeof(bfast::byte))));
+            }
+            
+            return {};
+        }
+        
+        std::vector<bool>* GetAllIsNavigable()
+        {
+            const auto count = GetCount();
+            
+            bfast::byte* isNavigableData = new bfast::byte[count];
+            if (mEntityTable.column_exists("byte:IsNavigable")) {
+                memcpy(isNavigableData, mEntityTable.mDataColumns["byte:IsNavigable"].begin(), count * sizeof(bfast::byte));
+            }
+            
+            std::vector<bool>* result = new std::vector<bool>(isNavigableData, isNavigableData + count);
+            
+            delete[] isNavigableData;
+            
+            return result;
+        }
+        
+        int GetLevelIndex(int questLevelIndex)
+        {
+            if (!mEntityTable.column_exists("index:Vim.Level:Level")) {
+                return -1;
+            }
+            
+            if (questLevelIndex < 0 || questLevelIndex >= GetCount())
+                return -1;
+            
+            return mEntityTable.mIndexColumns["index:Vim.Level:Level"][questLevelIndex];
+        }
+        
+    };
+    
+    static QuestLevelTable* GetQuestLevelTable(Scene& scene)
+    {
+        if (scene.mEntityTables.find("Vim.QuestLevel") == scene.mEntityTables.end())
+            return {};
+        
+        return new QuestLevelTable(scene.mEntityTables["Vim.QuestLevel"], scene.mStrings);
+    }
+    
     DocumentModel::DocumentModel(Scene& scene)
     {
         mAsset = GetAssetTable(scene);
@@ -20227,6 +20346,7 @@ namespace Vim
         mLightSource = GetLightSourceTable(scene);
         mSunAndShadowSettings = GetSunAndShadowSettingsTable(scene);
         mQuestElement = GetQuestElementTable(scene);
+        mQuestLevel = GetQuestLevelTable(scene);
     }
     
     DocumentModel::~DocumentModel()
@@ -20294,6 +20414,7 @@ namespace Vim
         delete mLightSource;
         delete mSunAndShadowSettings;
         delete mQuestElement;
+        delete mQuestLevel;
     }
 }
 

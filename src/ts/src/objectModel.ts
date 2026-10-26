@@ -14146,6 +14146,126 @@ export class QuestElementTable implements IQuestElementTable {
     
 }
 
+export interface IQuestLevel {
+    index: number
+    isNavigable?: boolean
+    
+    levelIndex?: number
+    level?: ILevel
+}
+
+export interface IQuestLevelTable {
+    getCount(): Promise<number>
+    get(questLevelIndex: number): Promise<IQuestLevel>
+    getAll(): Promise<IQuestLevel[]>
+    
+    getIsNavigable(questLevelIndex: number): Promise<boolean | undefined>
+    getAllIsNavigable(): Promise<boolean[] | undefined>
+    
+    getLevelIndex(questLevelIndex: number): Promise<number | undefined>
+    getAllLevelIndex(): Promise<number[] | undefined>
+    getLevel(questLevelIndex: number): Promise<ILevel | undefined>
+}
+
+export class QuestLevel implements IQuestLevel {
+    index: number
+    isNavigable?: boolean
+    
+    levelIndex?: number
+    level?: ILevel
+    
+    static async createFromTable(table: IQuestLevelTable, index: number): Promise<IQuestLevel> {
+        let result = new QuestLevel()
+        result.index = index
+        
+        await Promise.all([
+            table.getIsNavigable(index).then(v => result.isNavigable = v),
+            table.getLevelIndex(index).then(v => result.levelIndex = v),
+        ])
+        
+        return result
+    }
+}
+
+export class QuestLevelTable implements IQuestLevelTable {
+    private document: VimDocument
+    private entityTable: EntityTable
+    
+    static async createFromDocument(document: VimDocument): Promise<IQuestLevelTable | undefined> {
+        const entity = await document.entities.getBfast("Vim.QuestLevel")
+        
+        if (!entity) {
+            return undefined
+        }
+        
+        let table = new QuestLevelTable()
+        table.document = document
+        table.entityTable = new EntityTable(entity, document.strings)
+        
+        return table
+    }
+    
+    getCount(): Promise<number> {
+        return this.entityTable.getCount()
+    }
+    
+    async get(questLevelIndex: number): Promise<IQuestLevel> {
+        return await QuestLevel.createFromTable(this, questLevelIndex)
+    }
+    
+    async getAll(): Promise<IQuestLevel[]> {
+        const localTable = await this.entityTable.getLocal()
+        
+        let isNavigable: boolean[] | undefined
+        let levelIndex: number[] | undefined
+        
+        await Promise.all([
+            (async () => { isNavigable = (await localTable.getBooleanArray("byte:IsNavigable")) })(),
+            (async () => { levelIndex = (await localTable.getNumberArray("index:Vim.Level:Level")) })(),
+        ])
+        
+        let questLevel: IQuestLevel[] = []
+        
+        const rowCount = await this.getCount()
+        for (let i = 0; i < rowCount; i++) {
+            questLevel.push({
+                index: i,
+                isNavigable: isNavigable ? isNavigable[i] : undefined,
+                levelIndex: levelIndex ? levelIndex[i] : undefined
+            })
+        }
+        
+        return questLevel
+    }
+    
+    async getIsNavigable(questLevelIndex: number): Promise<boolean | undefined> {
+        return (await this.entityTable.getBoolean(questLevelIndex, "byte:IsNavigable"))
+    }
+    
+    async getAllIsNavigable(): Promise<boolean[] | undefined> {
+        return (await this.entityTable.getBooleanArray("byte:IsNavigable"))
+    }
+    
+    async getLevelIndex(questLevelIndex: number): Promise<number | undefined> {
+        return await this.entityTable.getNumber(questLevelIndex, "index:Vim.Level:Level")
+    }
+    
+    async getAllLevelIndex(): Promise<number[] | undefined> {
+        return await this.entityTable.getNumberArray("index:Vim.Level:Level")
+    }
+    
+    async getLevel(questLevelIndex: number): Promise<ILevel | undefined> {
+        const index = await this.getLevelIndex(questLevelIndex)
+        
+        if (index === undefined) {
+            return undefined
+        }
+        
+        return await this.document.level?.get(index)
+    }
+    
+}
+
 export class VimDocument {
     asset: IAssetTable | undefined
     displayUnit: IDisplayUnitTable | undefined
@@ -14210,6 +14330,7 @@ export class VimDocument {
     lightSource: ILightSourceTable | undefined
     sunAndShadowSettings: ISunAndShadowSettingsTable | undefined
     questElement: IQuestElementTable | undefined
+    questLevel: IQuestLevelTable | undefined
     
     entities: BFast
     strings: string[] | undefined
@@ -14290,6 +14411,7 @@ export class VimDocument {
         doc.lightSource = await LightSourceTable.createFromDocument(doc)
         doc.sunAndShadowSettings = await SunAndShadowSettingsTable.createFromDocument(doc)
         doc.questElement = await QuestElementTable.createFromDocument(doc)
+        doc.questLevel = await QuestLevelTable.createFromDocument(doc)
         
         return doc
     }

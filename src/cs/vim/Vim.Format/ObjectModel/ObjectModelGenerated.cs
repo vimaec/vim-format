@@ -2446,6 +2446,36 @@ namespace Vim.Format.ObjectModel {
         
     } // end of class
     
+    // AUTO-GENERATED
+    public partial class QuestLevel
+    {
+        public Vim.Format.ObjectModel.Level Level => _Level?.Value;
+        public int LevelIndex => _Level?.Index ?? EntityRelation.None;
+        public QuestLevel()
+        {
+            _Level = new Relation<Vim.Format.ObjectModel.Level>();
+        }
+        
+        public override bool FieldsAreEqual(object obj)
+        {
+            if ((obj is QuestLevel other))
+            {
+                var fieldsAreEqual =
+                    (Index == other.Index) &&
+                    (IsNavigable == other.IsNavigable) &&
+                    (_Level?.Index == other._Level?.Index);
+                if (!fieldsAreEqual)
+                {
+                    return false;
+                }
+                
+                return true;
+            }
+            return false;
+        }
+        
+    } // end of class
+    
     public partial class DocumentModel
     {
         public ElementIndexMaps ElementIndexMaps { get; }
@@ -4927,6 +4957,28 @@ namespace Vim.Format.ObjectModel {
             return r;
         }
         
+        
+        // QuestLevel
+        
+        public EntityTable QuestLevelEntityTable { get; }
+        
+        public IArray<Boolean> QuestLevelIsNavigable { get; }
+        public Boolean GetQuestLevelIsNavigable(int index, Boolean defaultValue = default) => QuestLevelIsNavigable?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<int> QuestLevelLevelIndex { get; }
+        public int GetQuestLevelLevelIndex(int index) => QuestLevelLevelIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
+        public int NumQuestLevel => QuestLevelEntityTable?.NumRows ?? 0;
+        public IArray<QuestLevel> QuestLevelList { get; }
+        public QuestLevel GetQuestLevel(int n)
+        {
+            if (n < 0) return null;
+            var r = new QuestLevel();
+            r.Document = Document;
+            r.Index = n;
+            r.IsNavigable = QuestLevelIsNavigable.ElementAtOrDefault(n);
+            r._Level = new Relation<Vim.Format.ObjectModel.Level>(GetQuestLevelLevelIndex(n), GetLevel);
+            return r;
+        }
+        
         // All entity collections
         public Dictionary<string, IEnumerable<Entity>> AllEntities => new Dictionary<string, IEnumerable<Entity>>() {
             {"Vim.Asset", AssetList.ToEnumerable()},
@@ -4992,6 +5044,7 @@ namespace Vim.Format.ObjectModel {
             {"Vim.LightSource", LightSourceList.ToEnumerable()},
             {"Vim.SunAndShadowSettings", SunAndShadowSettingsList.ToEnumerable()},
             {"Vim.QuestElement", QuestElementList.ToEnumerable()},
+            {"Vim.QuestLevel", QuestLevelList.ToEnumerable()},
         };
         
         // Entity types from table names
@@ -5059,6 +5112,7 @@ namespace Vim.Format.ObjectModel {
             {"Vim.LightSource", typeof(LightSource)},
             {"Vim.SunAndShadowSettings", typeof(SunAndShadowSettings)},
             {"Vim.QuestElement", typeof(QuestElement)},
+            {"Vim.QuestLevel", typeof(QuestLevel)},
         };
         public DocumentModel(Document d, bool inParallel = true)
         {
@@ -5128,6 +5182,7 @@ namespace Vim.Format.ObjectModel {
             LightSourceEntityTable = Document.GetTable("Vim.LightSource");
             SunAndShadowSettingsEntityTable = Document.GetTable("Vim.SunAndShadowSettings");
             QuestElementEntityTable = Document.GetTable("Vim.QuestElement");
+            QuestLevelEntityTable = Document.GetTable("Vim.QuestLevel");
             
             // Initialize entity arrays
             AssetBufferName = AssetEntityTable?.GetStringColumnValues("string:BufferName") ?? Array.Empty<String>().ToIArray();
@@ -5496,6 +5551,7 @@ namespace Vim.Format.ObjectModel {
             QuestElementBoundsMax_X = QuestElementEntityTable?.GetDataColumnValues<Double>("double:BoundsMax.X") ?? Array.Empty<Double>().ToIArray();
             QuestElementBoundsMax_Y = QuestElementEntityTable?.GetDataColumnValues<Double>("double:BoundsMax.Y") ?? Array.Empty<Double>().ToIArray();
             QuestElementBoundsMax_Z = QuestElementEntityTable?.GetDataColumnValues<Double>("double:BoundsMax.Z") ?? Array.Empty<Double>().ToIArray();
+            QuestLevelIsNavigable = QuestLevelEntityTable?.GetDataColumnValues<Boolean>("byte:IsNavigable") ?? Array.Empty<Boolean>().ToIArray();
             
             // Initialize entity relational columns
             ParameterDescriptorDisplayUnitIndex = ParameterDescriptorEntityTable?.GetIndexColumnValues("index:Vim.DisplayUnit:DisplayUnit") ?? Array.Empty<int>().ToIArray();
@@ -5622,6 +5678,7 @@ namespace Vim.Format.ObjectModel {
             QuestElementStreamLevelIndex = QuestElementEntityTable?.GetIndexColumnValues("index:Vim.Level:StreamLevel") ?? Array.Empty<int>().ToIArray();
             QuestElementStreamTopLevelIndex = QuestElementEntityTable?.GetIndexColumnValues("index:Vim.Level:StreamTopLevel") ?? Array.Empty<int>().ToIArray();
             QuestElementElementIndex = QuestElementEntityTable?.GetIndexColumnValues("index:Vim.Element:Element") ?? Array.Empty<int>().ToIArray();
+            QuestLevelLevelIndex = QuestLevelEntityTable?.GetIndexColumnValues("index:Vim.Level:Level") ?? Array.Empty<int>().ToIArray();
             
             // Initialize entity collections
             AssetList = NumAsset.Select(i => GetAsset(i));
@@ -5687,6 +5744,7 @@ namespace Vim.Format.ObjectModel {
             LightSourceList = NumLightSource.Select(i => GetLightSource(i));
             SunAndShadowSettingsList = NumSunAndShadowSettings.Select(i => GetSunAndShadowSettings(i));
             QuestElementList = NumQuestElement.Select(i => GetQuestElement(i));
+            QuestLevelList = NumQuestLevel.Select(i => GetQuestLevel(i));
             
             // Initialize element index maps
             ElementIndexMaps = new ElementIndexMaps(this, inParallel);
@@ -5777,6 +5835,7 @@ namespace Vim.Format.ObjectModel {
             Tables[TableNames.LightSource] = LightSourceTable = new LightSourceTable(GetSerializableTableOrEmpty(TableNames.LightSource), stringTable, this);
             Tables[TableNames.SunAndShadowSettings] = SunAndShadowSettingsTable = new SunAndShadowSettingsTable(GetSerializableTableOrEmpty(TableNames.SunAndShadowSettings), stringTable, this);
             Tables[TableNames.QuestElement] = QuestElementTable = new QuestElementTable(GetSerializableTableOrEmpty(TableNames.QuestElement), stringTable, this);
+            Tables[TableNames.QuestLevel] = QuestLevelTable = new QuestLevelTable(GetSerializableTableOrEmpty(TableNames.QuestLevel), stringTable, this);
             
             // Initialize element index maps
             ElementIndexMaps = new ElementIndexMaps(this, inParallel);
@@ -5909,6 +5968,8 @@ namespace Vim.Format.ObjectModel {
         public SunAndShadowSettings GetSunAndShadowSettings(int index) => SunAndShadowSettingsTable?.Get(index);
         public QuestElementTable QuestElementTable { get; } // can be null
         public QuestElement GetQuestElement(int index) => QuestElementTable?.Get(index);
+        public QuestLevelTable QuestLevelTable { get; } // can be null
+        public QuestLevel GetQuestLevel(int index) => QuestLevelTable?.Get(index);
         
         public static HashSet<string> GetElementKindTableNames()
             => new HashSet<string>()
@@ -10310,6 +10371,45 @@ namespace Vim.Format.ObjectModel {
         }
     } // class QuestElementTable 
     
+    public partial class QuestLevelTable : EntityTable_v2, IEnumerable<QuestLevel>
+    {
+        
+        public const string TableName = TableNames.QuestLevel;
+        
+        public EntityTableSet ParentTableSet { get; } // can be null
+        
+        public QuestLevelTable(SerializableEntityTable rawTable, string[] stringTable, EntityTableSet parentTableSet = null) : base(rawTable, stringTable)
+        {
+            ParentTableSet = parentTableSet;
+            Column_IsNavigable = GetDataColumnValues<Boolean>("byte:IsNavigable") ?? Array.Empty<Boolean>();
+            Column_LevelIndex = GetIndexColumnValues("index:Vim.Level:Level") ?? Array.Empty<int>();
+        }
+        
+        public Boolean[] Column_IsNavigable { get; }
+        public Boolean GetIsNavigable(int index, Boolean @default = default) => Column_IsNavigable.ElementAtOrDefault(index, @default);
+        public int[] Column_LevelIndex { get; }
+        public int GetLevelIndex(int index) => Column_LevelIndex.ElementAtOrDefault(index, EntityRelation.None);
+        public Level GetLevel(int index) => _GetReferencedLevel(GetLevelIndex(index));
+        private Level _GetReferencedLevel(int referencedIndex) => ParentTableSet.GetLevel(referencedIndex);
+        // Object Getter
+        public QuestLevel Get(int index)
+        {
+            if (index < 0) return null;
+            var r = new QuestLevel();
+            r.Index = index;
+            r.IsNavigable = GetIsNavigable(index);
+            r._Level = new Relation<Vim.Format.ObjectModel.Level>(GetLevelIndex(index), _GetReferencedLevel);
+            return r;
+        }
+        // Enumerator
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+        public IEnumerator<QuestLevel> GetEnumerator()
+        {
+            for (var i = 0; i < RowCount; ++i)
+                yield return Get(i);
+        }
+    } // class QuestLevelTable 
+    
     public static class DocumentBuilderExtensions
     {
         public static EntityTableBuilder ToAssetTableBuilder(this EntitySetBuilder<Asset> entitySet)
@@ -13203,6 +13303,23 @@ namespace Vim.Format.ObjectModel {
             }
             return tb;
         }
+        public static EntityTableBuilder ToQuestLevelTableBuilder(this EntitySetBuilder<QuestLevel> entitySet)
+        {
+            var tb = new EntityTableBuilder(TableNames.QuestLevel);
+            var entities = entitySet.Entities;
+            var entityCount = entities.Count;
+            {
+                var columnData = new Boolean[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].IsNavigable; }
+                tb.AddDataColumn("byte:IsNavigable", columnData);
+            }
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._Level?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.Level:Level", columnData);
+            }
+            return tb;
+        }
     } // DocumentBuilderExtensions
     
     public partial class ObjectModelBuilder
@@ -13270,6 +13387,7 @@ namespace Vim.Format.ObjectModel {
         public readonly EntitySetBuilder<LightSource> LightSourceBuilder = new EntitySetBuilder<LightSource>(TableNames.LightSource);
         public readonly EntitySetBuilder<SunAndShadowSettings> SunAndShadowSettingsBuilder = new EntitySetBuilder<SunAndShadowSettings>(TableNames.SunAndShadowSettings);
         public readonly EntitySetBuilder<QuestElement> QuestElementBuilder = new EntitySetBuilder<QuestElement>(TableNames.QuestElement);
+        public readonly EntitySetBuilder<QuestLevel> QuestLevelBuilder = new EntitySetBuilder<QuestLevel>(TableNames.QuestLevel);
         
         public DocumentBuilder AddEntityTableSets(DocumentBuilder db)
         {
@@ -13336,6 +13454,7 @@ namespace Vim.Format.ObjectModel {
             db.Tables.Add(LightSourceBuilder.EntityTableName, LightSourceBuilder.ToLightSourceTableBuilder());
             db.Tables.Add(SunAndShadowSettingsBuilder.EntityTableName, SunAndShadowSettingsBuilder.ToSunAndShadowSettingsTableBuilder());
             db.Tables.Add(QuestElementBuilder.EntityTableName, QuestElementBuilder.ToQuestElementTableBuilder());
+            db.Tables.Add(QuestLevelBuilder.EntityTableName, QuestLevelBuilder.ToQuestLevelTableBuilder());
             
             return db;
         } // AddEntityTableSets
@@ -13405,6 +13524,7 @@ namespace Vim.Format.ObjectModel {
             LightSourceBuilder.Clear();
             SunAndShadowSettingsBuilder.Clear();
             QuestElementBuilder.Clear();
+            QuestLevelBuilder.Clear();
         } // Clear
     } // ObjectModelBuilder
 } // namespace
