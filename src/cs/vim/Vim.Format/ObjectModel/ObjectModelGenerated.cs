@@ -1996,6 +1996,57 @@ namespace Vim.Format.ObjectModel {
         
     } // end of class
     
+    // AUTO-GENERATED
+    public partial class SunAndShadowSettings
+    {
+        public Vim.Format.ObjectModel.Level GroundPlaneLevel => _GroundPlaneLevel?.Value;
+        public int GroundPlaneLevelIndex => _GroundPlaneLevel?.Index ?? EntityRelation.None;
+        public Vim.Format.ObjectModel.View View => _View?.Value;
+        public int ViewIndex => _View?.Index ?? EntityRelation.None;
+        public SunAndShadowSettings()
+        {
+            _GroundPlaneLevel = new Relation<Vim.Format.ObjectModel.Level>();
+            _View = new Relation<Vim.Format.ObjectModel.View>();
+        }
+        
+        public override bool FieldsAreEqual(object obj)
+        {
+            if ((obj is SunAndShadowSettings other))
+            {
+                var fieldsAreEqual =
+                    (Index == other.Index) &&
+                    (SunAndShadowType == other.SunAndShadowType) &&
+                    (ActiveFrameTime == other.ActiveFrameTime) &&
+                    (StartDateAndTime == other.StartDateAndTime) &&
+                    (EndDateAndTime == other.EndDateAndTime) &&
+                    (ActiveFrame == other.ActiveFrame) &&
+                    (NumberOfFrames == other.NumberOfFrames) &&
+                    (UsesDST == other.UsesDST) &&
+                    (Altitude == other.Altitude) &&
+                    (Azimuth == other.Azimuth) &&
+                    (RelativeToView == other.RelativeToView) &&
+                    (Latitude == other.Latitude) &&
+                    (Longitude == other.Longitude) &&
+                    (TimeZone == other.TimeZone) &&
+                    (ProjectLocationName == other.ProjectLocationName) &&
+                    (UsesGroundPlane == other.UsesGroundPlane) &&
+                    (CastShadows == other.CastShadows) &&
+                    (SunlightIntensity == other.SunlightIntensity) &&
+                    (ShadowIntensity == other.ShadowIntensity) &&
+                    (_GroundPlaneLevel?.Index == other._GroundPlaneLevel?.Index) &&
+                    (_View?.Index == other._View?.Index);
+                if (!fieldsAreEqual)
+                {
+                    return false;
+                }
+                
+                return true;
+            }
+            return false;
+        }
+        
+    } // end of class
+    
     public partial class DocumentModel
     {
         public ElementIndexMaps ElementIndexMaps { get; }
@@ -3874,6 +3925,82 @@ namespace Vim.Format.ObjectModel {
             return r;
         }
         
+        
+        // SunAndShadowSettings
+        
+        public EntityTable SunAndShadowSettingsEntityTable { get; }
+        
+        public IArray<String> SunAndShadowSettingsSunAndShadowType { get; }
+        public String GetSunAndShadowSettingsSunAndShadowType(int index, String defaultValue = "") => SunAndShadowSettingsSunAndShadowType?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<String> SunAndShadowSettingsActiveFrameTime { get; }
+        public String GetSunAndShadowSettingsActiveFrameTime(int index, String defaultValue = "") => SunAndShadowSettingsActiveFrameTime?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<String> SunAndShadowSettingsStartDateAndTime { get; }
+        public String GetSunAndShadowSettingsStartDateAndTime(int index, String defaultValue = "") => SunAndShadowSettingsStartDateAndTime?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<String> SunAndShadowSettingsEndDateAndTime { get; }
+        public String GetSunAndShadowSettingsEndDateAndTime(int index, String defaultValue = "") => SunAndShadowSettingsEndDateAndTime?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Int32> SunAndShadowSettingsActiveFrame { get; }
+        public Int32 GetSunAndShadowSettingsActiveFrame(int index, Int32 defaultValue = default) => SunAndShadowSettingsActiveFrame?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Int32> SunAndShadowSettingsNumberOfFrames { get; }
+        public Int32 GetSunAndShadowSettingsNumberOfFrames(int index, Int32 defaultValue = default) => SunAndShadowSettingsNumberOfFrames?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Boolean> SunAndShadowSettingsUsesDST { get; }
+        public Boolean GetSunAndShadowSettingsUsesDST(int index, Boolean defaultValue = default) => SunAndShadowSettingsUsesDST?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> SunAndShadowSettingsAltitude { get; }
+        public Double GetSunAndShadowSettingsAltitude(int index, Double defaultValue = default) => SunAndShadowSettingsAltitude?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> SunAndShadowSettingsAzimuth { get; }
+        public Double GetSunAndShadowSettingsAzimuth(int index, Double defaultValue = default) => SunAndShadowSettingsAzimuth?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Boolean> SunAndShadowSettingsRelativeToView { get; }
+        public Boolean GetSunAndShadowSettingsRelativeToView(int index, Boolean defaultValue = default) => SunAndShadowSettingsRelativeToView?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> SunAndShadowSettingsLatitude { get; }
+        public Double GetSunAndShadowSettingsLatitude(int index, Double defaultValue = default) => SunAndShadowSettingsLatitude?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> SunAndShadowSettingsLongitude { get; }
+        public Double GetSunAndShadowSettingsLongitude(int index, Double defaultValue = default) => SunAndShadowSettingsLongitude?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> SunAndShadowSettingsTimeZone { get; }
+        public Double GetSunAndShadowSettingsTimeZone(int index, Double defaultValue = default) => SunAndShadowSettingsTimeZone?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<String> SunAndShadowSettingsProjectLocationName { get; }
+        public String GetSunAndShadowSettingsProjectLocationName(int index, String defaultValue = "") => SunAndShadowSettingsProjectLocationName?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Boolean> SunAndShadowSettingsUsesGroundPlane { get; }
+        public Boolean GetSunAndShadowSettingsUsesGroundPlane(int index, Boolean defaultValue = default) => SunAndShadowSettingsUsesGroundPlane?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Boolean> SunAndShadowSettingsCastShadows { get; }
+        public Boolean GetSunAndShadowSettingsCastShadows(int index, Boolean defaultValue = default) => SunAndShadowSettingsCastShadows?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Int32> SunAndShadowSettingsSunlightIntensity { get; }
+        public Int32 GetSunAndShadowSettingsSunlightIntensity(int index, Int32 defaultValue = default) => SunAndShadowSettingsSunlightIntensity?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Int32> SunAndShadowSettingsShadowIntensity { get; }
+        public Int32 GetSunAndShadowSettingsShadowIntensity(int index, Int32 defaultValue = default) => SunAndShadowSettingsShadowIntensity?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<int> SunAndShadowSettingsGroundPlaneLevelIndex { get; }
+        public int GetSunAndShadowSettingsGroundPlaneLevelIndex(int index) => SunAndShadowSettingsGroundPlaneLevelIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
+        public IArray<int> SunAndShadowSettingsViewIndex { get; }
+        public int GetSunAndShadowSettingsViewIndex(int index) => SunAndShadowSettingsViewIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
+        public int NumSunAndShadowSettings => SunAndShadowSettingsEntityTable?.NumRows ?? 0;
+        public IArray<SunAndShadowSettings> SunAndShadowSettingsList { get; }
+        public SunAndShadowSettings GetSunAndShadowSettings(int n)
+        {
+            if (n < 0) return null;
+            var r = new SunAndShadowSettings();
+            r.Document = Document;
+            r.Index = n;
+            r.SunAndShadowType = SunAndShadowSettingsSunAndShadowType.ElementAtOrDefault(n);
+            r.ActiveFrameTime = SunAndShadowSettingsActiveFrameTime.ElementAtOrDefault(n);
+            r.StartDateAndTime = SunAndShadowSettingsStartDateAndTime.ElementAtOrDefault(n);
+            r.EndDateAndTime = SunAndShadowSettingsEndDateAndTime.ElementAtOrDefault(n);
+            r.ActiveFrame = SunAndShadowSettingsActiveFrame.ElementAtOrDefault(n);
+            r.NumberOfFrames = SunAndShadowSettingsNumberOfFrames.ElementAtOrDefault(n);
+            r.UsesDST = SunAndShadowSettingsUsesDST.ElementAtOrDefault(n);
+            r.Altitude = SunAndShadowSettingsAltitude.ElementAtOrDefault(n);
+            r.Azimuth = SunAndShadowSettingsAzimuth.ElementAtOrDefault(n);
+            r.RelativeToView = SunAndShadowSettingsRelativeToView.ElementAtOrDefault(n);
+            r.Latitude = SunAndShadowSettingsLatitude.ElementAtOrDefault(n);
+            r.Longitude = SunAndShadowSettingsLongitude.ElementAtOrDefault(n);
+            r.TimeZone = SunAndShadowSettingsTimeZone.ElementAtOrDefault(n);
+            r.ProjectLocationName = SunAndShadowSettingsProjectLocationName.ElementAtOrDefault(n);
+            r.UsesGroundPlane = SunAndShadowSettingsUsesGroundPlane.ElementAtOrDefault(n);
+            r.CastShadows = SunAndShadowSettingsCastShadows.ElementAtOrDefault(n);
+            r.SunlightIntensity = SunAndShadowSettingsSunlightIntensity.ElementAtOrDefault(n);
+            r.ShadowIntensity = SunAndShadowSettingsShadowIntensity.ElementAtOrDefault(n);
+            r._GroundPlaneLevel = new Relation<Vim.Format.ObjectModel.Level>(GetSunAndShadowSettingsGroundPlaneLevelIndex(n), GetLevel);
+            r._View = new Relation<Vim.Format.ObjectModel.View>(GetSunAndShadowSettingsViewIndex(n), GetView);
+            return r;
+        }
+        
         // All entity collections
         public Dictionary<string, IEnumerable<Entity>> AllEntities => new Dictionary<string, IEnumerable<Entity>>() {
             {"Vim.Asset", AssetList.ToEnumerable()},
@@ -3930,6 +4057,7 @@ namespace Vim.Format.ObjectModel {
             {"Vim.ViewInViewSheet", ViewInViewSheetList.ToEnumerable()},
             {"Vim.Site", SiteList.ToEnumerable()},
             {"Vim.Building", BuildingList.ToEnumerable()},
+            {"Vim.SunAndShadowSettings", SunAndShadowSettingsList.ToEnumerable()},
         };
         
         // Entity types from table names
@@ -3988,6 +4116,7 @@ namespace Vim.Format.ObjectModel {
             {"Vim.ViewInViewSheet", typeof(ViewInViewSheet)},
             {"Vim.Site", typeof(Site)},
             {"Vim.Building", typeof(Building)},
+            {"Vim.SunAndShadowSettings", typeof(SunAndShadowSettings)},
         };
         public DocumentModel(Document d, bool inParallel = true)
         {
@@ -4048,6 +4177,7 @@ namespace Vim.Format.ObjectModel {
             ViewInViewSheetEntityTable = Document.GetTable("Vim.ViewInViewSheet");
             SiteEntityTable = Document.GetTable("Vim.Site");
             BuildingEntityTable = Document.GetTable("Vim.Building");
+            SunAndShadowSettingsEntityTable = Document.GetTable("Vim.SunAndShadowSettings");
             
             // Initialize entity arrays
             AssetBufferName = AssetEntityTable?.GetStringColumnValues("string:BufferName") ?? Array.Empty<String>().ToIArray();
@@ -4287,6 +4417,24 @@ namespace Vim.Format.ObjectModel {
             BuildingElevation = BuildingEntityTable?.GetDataColumnValues<Double>("double:Elevation") ?? Array.Empty<Double>().ToIArray();
             BuildingTerrainElevation = BuildingEntityTable?.GetDataColumnValues<Double>("double:TerrainElevation") ?? Array.Empty<Double>().ToIArray();
             BuildingAddress = BuildingEntityTable?.GetStringColumnValues("string:Address") ?? Array.Empty<String>().ToIArray();
+            SunAndShadowSettingsSunAndShadowType = SunAndShadowSettingsEntityTable?.GetStringColumnValues("string:SunAndShadowType") ?? Array.Empty<String>().ToIArray();
+            SunAndShadowSettingsActiveFrameTime = SunAndShadowSettingsEntityTable?.GetStringColumnValues("string:ActiveFrameTime") ?? Array.Empty<String>().ToIArray();
+            SunAndShadowSettingsStartDateAndTime = SunAndShadowSettingsEntityTable?.GetStringColumnValues("string:StartDateAndTime") ?? Array.Empty<String>().ToIArray();
+            SunAndShadowSettingsEndDateAndTime = SunAndShadowSettingsEntityTable?.GetStringColumnValues("string:EndDateAndTime") ?? Array.Empty<String>().ToIArray();
+            SunAndShadowSettingsActiveFrame = SunAndShadowSettingsEntityTable?.GetDataColumnValues<Int32>("int:ActiveFrame") ?? Array.Empty<Int32>().ToIArray();
+            SunAndShadowSettingsNumberOfFrames = SunAndShadowSettingsEntityTable?.GetDataColumnValues<Int32>("int:NumberOfFrames") ?? Array.Empty<Int32>().ToIArray();
+            SunAndShadowSettingsUsesDST = SunAndShadowSettingsEntityTable?.GetDataColumnValues<Boolean>("byte:UsesDST") ?? Array.Empty<Boolean>().ToIArray();
+            SunAndShadowSettingsAltitude = SunAndShadowSettingsEntityTable?.GetDataColumnValues<Double>("double:Altitude") ?? Array.Empty<Double>().ToIArray();
+            SunAndShadowSettingsAzimuth = SunAndShadowSettingsEntityTable?.GetDataColumnValues<Double>("double:Azimuth") ?? Array.Empty<Double>().ToIArray();
+            SunAndShadowSettingsRelativeToView = SunAndShadowSettingsEntityTable?.GetDataColumnValues<Boolean>("byte:RelativeToView") ?? Array.Empty<Boolean>().ToIArray();
+            SunAndShadowSettingsLatitude = SunAndShadowSettingsEntityTable?.GetDataColumnValues<Double>("double:Latitude") ?? Array.Empty<Double>().ToIArray();
+            SunAndShadowSettingsLongitude = SunAndShadowSettingsEntityTable?.GetDataColumnValues<Double>("double:Longitude") ?? Array.Empty<Double>().ToIArray();
+            SunAndShadowSettingsTimeZone = SunAndShadowSettingsEntityTable?.GetDataColumnValues<Double>("double:TimeZone") ?? Array.Empty<Double>().ToIArray();
+            SunAndShadowSettingsProjectLocationName = SunAndShadowSettingsEntityTable?.GetStringColumnValues("string:ProjectLocationName") ?? Array.Empty<String>().ToIArray();
+            SunAndShadowSettingsUsesGroundPlane = SunAndShadowSettingsEntityTable?.GetDataColumnValues<Boolean>("byte:UsesGroundPlane") ?? Array.Empty<Boolean>().ToIArray();
+            SunAndShadowSettingsCastShadows = SunAndShadowSettingsEntityTable?.GetDataColumnValues<Boolean>("byte:CastShadows") ?? Array.Empty<Boolean>().ToIArray();
+            SunAndShadowSettingsSunlightIntensity = SunAndShadowSettingsEntityTable?.GetDataColumnValues<Int32>("int:SunlightIntensity") ?? Array.Empty<Int32>().ToIArray();
+            SunAndShadowSettingsShadowIntensity = SunAndShadowSettingsEntityTable?.GetDataColumnValues<Int32>("int:ShadowIntensity") ?? Array.Empty<Int32>().ToIArray();
             
             // Initialize entity relational columns
             ParameterDescriptorDisplayUnitIndex = ParameterDescriptorEntityTable?.GetIndexColumnValues("index:Vim.DisplayUnit:DisplayUnit") ?? Array.Empty<int>().ToIArray();
@@ -4389,6 +4537,8 @@ namespace Vim.Format.ObjectModel {
             SiteElementIndex = SiteEntityTable?.GetIndexColumnValues("index:Vim.Element:Element") ?? Array.Empty<int>().ToIArray();
             BuildingSiteIndex = BuildingEntityTable?.GetIndexColumnValues("index:Vim.Site:Site") ?? Array.Empty<int>().ToIArray();
             BuildingElementIndex = BuildingEntityTable?.GetIndexColumnValues("index:Vim.Element:Element") ?? Array.Empty<int>().ToIArray();
+            SunAndShadowSettingsGroundPlaneLevelIndex = SunAndShadowSettingsEntityTable?.GetIndexColumnValues("index:Vim.Level:GroundPlaneLevel") ?? Array.Empty<int>().ToIArray();
+            SunAndShadowSettingsViewIndex = SunAndShadowSettingsEntityTable?.GetIndexColumnValues("index:Vim.View:View") ?? Array.Empty<int>().ToIArray();
             
             // Initialize entity collections
             AssetList = NumAsset.Select(i => GetAsset(i));
@@ -4445,6 +4595,7 @@ namespace Vim.Format.ObjectModel {
             ViewInViewSheetList = NumViewInViewSheet.Select(i => GetViewInViewSheet(i));
             SiteList = NumSite.Select(i => GetSite(i));
             BuildingList = NumBuilding.Select(i => GetBuilding(i));
+            SunAndShadowSettingsList = NumSunAndShadowSettings.Select(i => GetSunAndShadowSettings(i));
             
             // Initialize element index maps
             ElementIndexMaps = new ElementIndexMaps(this, inParallel);
@@ -4526,6 +4677,7 @@ namespace Vim.Format.ObjectModel {
             Tables[TableNames.ViewInViewSheet] = ViewInViewSheetTable = new ViewInViewSheetTable(GetSerializableTableOrEmpty(TableNames.ViewInViewSheet), stringTable, this);
             Tables[TableNames.Site] = SiteTable = new SiteTable(GetSerializableTableOrEmpty(TableNames.Site), stringTable, this);
             Tables[TableNames.Building] = BuildingTable = new BuildingTable(GetSerializableTableOrEmpty(TableNames.Building), stringTable, this);
+            Tables[TableNames.SunAndShadowSettings] = SunAndShadowSettingsTable = new SunAndShadowSettingsTable(GetSerializableTableOrEmpty(TableNames.SunAndShadowSettings), stringTable, this);
             
             // Initialize element index maps
             ElementIndexMaps = new ElementIndexMaps(this, inParallel);
@@ -4640,6 +4792,8 @@ namespace Vim.Format.ObjectModel {
         public Site GetSite(int index) => SiteTable?.Get(index);
         public BuildingTable BuildingTable { get; } // can be null
         public Building GetBuilding(int index) => BuildingTable?.Get(index);
+        public SunAndShadowSettingsTable SunAndShadowSettingsTable { get; } // can be null
+        public SunAndShadowSettings GetSunAndShadowSettings(int index) => SunAndShadowSettingsTable?.Get(index);
         
         public static HashSet<string> GetElementKindTableNames()
             => new HashSet<string>()
@@ -8120,6 +8274,119 @@ namespace Vim.Format.ObjectModel {
         }
     } // class BuildingTable 
     
+    public partial class SunAndShadowSettingsTable : EntityTable_v2, IEnumerable<SunAndShadowSettings>
+    {
+        
+        public const string TableName = TableNames.SunAndShadowSettings;
+        
+        public EntityTableSet ParentTableSet { get; } // can be null
+        
+        public SunAndShadowSettingsTable(SerializableEntityTable rawTable, string[] stringTable, EntityTableSet parentTableSet = null) : base(rawTable, stringTable)
+        {
+            ParentTableSet = parentTableSet;
+            Column_SunAndShadowType = GetStringColumnValues("string:SunAndShadowType") ?? Array.Empty<String>();
+            Column_ActiveFrameTime = GetStringColumnValues("string:ActiveFrameTime") ?? Array.Empty<String>();
+            Column_StartDateAndTime = GetStringColumnValues("string:StartDateAndTime") ?? Array.Empty<String>();
+            Column_EndDateAndTime = GetStringColumnValues("string:EndDateAndTime") ?? Array.Empty<String>();
+            Column_ActiveFrame = GetDataColumnValues<Int32>("int:ActiveFrame") ?? Array.Empty<Int32>();
+            Column_NumberOfFrames = GetDataColumnValues<Int32>("int:NumberOfFrames") ?? Array.Empty<Int32>();
+            Column_UsesDST = GetDataColumnValues<Boolean>("byte:UsesDST") ?? Array.Empty<Boolean>();
+            Column_Altitude = GetDataColumnValues<Double>("double:Altitude") ?? Array.Empty<Double>();
+            Column_Azimuth = GetDataColumnValues<Double>("double:Azimuth") ?? Array.Empty<Double>();
+            Column_RelativeToView = GetDataColumnValues<Boolean>("byte:RelativeToView") ?? Array.Empty<Boolean>();
+            Column_Latitude = GetDataColumnValues<Double>("double:Latitude") ?? Array.Empty<Double>();
+            Column_Longitude = GetDataColumnValues<Double>("double:Longitude") ?? Array.Empty<Double>();
+            Column_TimeZone = GetDataColumnValues<Double>("double:TimeZone") ?? Array.Empty<Double>();
+            Column_ProjectLocationName = GetStringColumnValues("string:ProjectLocationName") ?? Array.Empty<String>();
+            Column_UsesGroundPlane = GetDataColumnValues<Boolean>("byte:UsesGroundPlane") ?? Array.Empty<Boolean>();
+            Column_CastShadows = GetDataColumnValues<Boolean>("byte:CastShadows") ?? Array.Empty<Boolean>();
+            Column_SunlightIntensity = GetDataColumnValues<Int32>("int:SunlightIntensity") ?? Array.Empty<Int32>();
+            Column_ShadowIntensity = GetDataColumnValues<Int32>("int:ShadowIntensity") ?? Array.Empty<Int32>();
+            Column_GroundPlaneLevelIndex = GetIndexColumnValues("index:Vim.Level:GroundPlaneLevel") ?? Array.Empty<int>();
+            Column_ViewIndex = GetIndexColumnValues("index:Vim.View:View") ?? Array.Empty<int>();
+        }
+        
+        public String[] Column_SunAndShadowType { get; }
+        public String GetSunAndShadowType(int index, String @default = "") => Column_SunAndShadowType.ElementAtOrDefault(index, @default);
+        public String[] Column_ActiveFrameTime { get; }
+        public String GetActiveFrameTime(int index, String @default = "") => Column_ActiveFrameTime.ElementAtOrDefault(index, @default);
+        public String[] Column_StartDateAndTime { get; }
+        public String GetStartDateAndTime(int index, String @default = "") => Column_StartDateAndTime.ElementAtOrDefault(index, @default);
+        public String[] Column_EndDateAndTime { get; }
+        public String GetEndDateAndTime(int index, String @default = "") => Column_EndDateAndTime.ElementAtOrDefault(index, @default);
+        public Int32[] Column_ActiveFrame { get; }
+        public Int32 GetActiveFrame(int index, Int32 @default = default) => Column_ActiveFrame.ElementAtOrDefault(index, @default);
+        public Int32[] Column_NumberOfFrames { get; }
+        public Int32 GetNumberOfFrames(int index, Int32 @default = default) => Column_NumberOfFrames.ElementAtOrDefault(index, @default);
+        public Boolean[] Column_UsesDST { get; }
+        public Boolean GetUsesDST(int index, Boolean @default = default) => Column_UsesDST.ElementAtOrDefault(index, @default);
+        public Double[] Column_Altitude { get; }
+        public Double GetAltitude(int index, Double @default = default) => Column_Altitude.ElementAtOrDefault(index, @default);
+        public Double[] Column_Azimuth { get; }
+        public Double GetAzimuth(int index, Double @default = default) => Column_Azimuth.ElementAtOrDefault(index, @default);
+        public Boolean[] Column_RelativeToView { get; }
+        public Boolean GetRelativeToView(int index, Boolean @default = default) => Column_RelativeToView.ElementAtOrDefault(index, @default);
+        public Double[] Column_Latitude { get; }
+        public Double GetLatitude(int index, Double @default = default) => Column_Latitude.ElementAtOrDefault(index, @default);
+        public Double[] Column_Longitude { get; }
+        public Double GetLongitude(int index, Double @default = default) => Column_Longitude.ElementAtOrDefault(index, @default);
+        public Double[] Column_TimeZone { get; }
+        public Double GetTimeZone(int index, Double @default = default) => Column_TimeZone.ElementAtOrDefault(index, @default);
+        public String[] Column_ProjectLocationName { get; }
+        public String GetProjectLocationName(int index, String @default = "") => Column_ProjectLocationName.ElementAtOrDefault(index, @default);
+        public Boolean[] Column_UsesGroundPlane { get; }
+        public Boolean GetUsesGroundPlane(int index, Boolean @default = default) => Column_UsesGroundPlane.ElementAtOrDefault(index, @default);
+        public Boolean[] Column_CastShadows { get; }
+        public Boolean GetCastShadows(int index, Boolean @default = default) => Column_CastShadows.ElementAtOrDefault(index, @default);
+        public Int32[] Column_SunlightIntensity { get; }
+        public Int32 GetSunlightIntensity(int index, Int32 @default = default) => Column_SunlightIntensity.ElementAtOrDefault(index, @default);
+        public Int32[] Column_ShadowIntensity { get; }
+        public Int32 GetShadowIntensity(int index, Int32 @default = default) => Column_ShadowIntensity.ElementAtOrDefault(index, @default);
+        public int[] Column_GroundPlaneLevelIndex { get; }
+        public int GetGroundPlaneLevelIndex(int index) => Column_GroundPlaneLevelIndex.ElementAtOrDefault(index, EntityRelation.None);
+        public Level GetGroundPlaneLevel(int index) => _GetReferencedGroundPlaneLevel(GetGroundPlaneLevelIndex(index));
+        private Level _GetReferencedGroundPlaneLevel(int referencedIndex) => ParentTableSet.GetLevel(referencedIndex);
+        public int[] Column_ViewIndex { get; }
+        public int GetViewIndex(int index) => Column_ViewIndex.ElementAtOrDefault(index, EntityRelation.None);
+        public View GetView(int index) => _GetReferencedView(GetViewIndex(index));
+        private View _GetReferencedView(int referencedIndex) => ParentTableSet.GetView(referencedIndex);
+        // Object Getter
+        public SunAndShadowSettings Get(int index)
+        {
+            if (index < 0) return null;
+            var r = new SunAndShadowSettings();
+            r.Index = index;
+            r.SunAndShadowType = GetSunAndShadowType(index);
+            r.ActiveFrameTime = GetActiveFrameTime(index);
+            r.StartDateAndTime = GetStartDateAndTime(index);
+            r.EndDateAndTime = GetEndDateAndTime(index);
+            r.ActiveFrame = GetActiveFrame(index);
+            r.NumberOfFrames = GetNumberOfFrames(index);
+            r.UsesDST = GetUsesDST(index);
+            r.Altitude = GetAltitude(index);
+            r.Azimuth = GetAzimuth(index);
+            r.RelativeToView = GetRelativeToView(index);
+            r.Latitude = GetLatitude(index);
+            r.Longitude = GetLongitude(index);
+            r.TimeZone = GetTimeZone(index);
+            r.ProjectLocationName = GetProjectLocationName(index);
+            r.UsesGroundPlane = GetUsesGroundPlane(index);
+            r.CastShadows = GetCastShadows(index);
+            r.SunlightIntensity = GetSunlightIntensity(index);
+            r.ShadowIntensity = GetShadowIntensity(index);
+            r._GroundPlaneLevel = new Relation<Vim.Format.ObjectModel.Level>(GetGroundPlaneLevelIndex(index), _GetReferencedGroundPlaneLevel);
+            r._View = new Relation<Vim.Format.ObjectModel.View>(GetViewIndex(index), _GetReferencedView);
+            return r;
+        }
+        // Enumerator
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+        public IEnumerator<SunAndShadowSettings> GetEnumerator()
+        {
+            for (var i = 0; i < RowCount; ++i)
+                yield return Get(i);
+        }
+    } // class SunAndShadowSettingsTable 
+    
     public static class DocumentBuilderExtensions
     {
         public static EntityTableBuilder ToAssetTableBuilder(this EntitySetBuilder<Asset> entitySet)
@@ -10185,6 +10452,113 @@ namespace Vim.Format.ObjectModel {
             }
             return tb;
         }
+        public static EntityTableBuilder ToSunAndShadowSettingsTableBuilder(this EntitySetBuilder<SunAndShadowSettings> entitySet)
+        {
+            var tb = new EntityTableBuilder(TableNames.SunAndShadowSettings);
+            var entities = entitySet.Entities;
+            var entityCount = entities.Count;
+            {
+                var columnData = new String[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].SunAndShadowType; }
+                tb.AddStringColumn("string:SunAndShadowType", columnData);
+            }
+            {
+                var columnData = new String[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].ActiveFrameTime; }
+                tb.AddStringColumn("string:ActiveFrameTime", columnData);
+            }
+            {
+                var columnData = new String[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].StartDateAndTime; }
+                tb.AddStringColumn("string:StartDateAndTime", columnData);
+            }
+            {
+                var columnData = new String[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].EndDateAndTime; }
+                tb.AddStringColumn("string:EndDateAndTime", columnData);
+            }
+            {
+                var columnData = new Int32[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].ActiveFrame; }
+                tb.AddDataColumn("int:ActiveFrame", columnData);
+            }
+            {
+                var columnData = new Int32[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].NumberOfFrames; }
+                tb.AddDataColumn("int:NumberOfFrames", columnData);
+            }
+            {
+                var columnData = new Boolean[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].UsesDST; }
+                tb.AddDataColumn("byte:UsesDST", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Altitude; }
+                tb.AddDataColumn("double:Altitude", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Azimuth; }
+                tb.AddDataColumn("double:Azimuth", columnData);
+            }
+            {
+                var columnData = new Boolean[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].RelativeToView; }
+                tb.AddDataColumn("byte:RelativeToView", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Latitude; }
+                tb.AddDataColumn("double:Latitude", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Longitude; }
+                tb.AddDataColumn("double:Longitude", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].TimeZone; }
+                tb.AddDataColumn("double:TimeZone", columnData);
+            }
+            {
+                var columnData = new String[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].ProjectLocationName; }
+                tb.AddStringColumn("string:ProjectLocationName", columnData);
+            }
+            {
+                var columnData = new Boolean[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].UsesGroundPlane; }
+                tb.AddDataColumn("byte:UsesGroundPlane", columnData);
+            }
+            {
+                var columnData = new Boolean[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].CastShadows; }
+                tb.AddDataColumn("byte:CastShadows", columnData);
+            }
+            {
+                var columnData = new Int32[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].SunlightIntensity; }
+                tb.AddDataColumn("int:SunlightIntensity", columnData);
+            }
+            {
+                var columnData = new Int32[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].ShadowIntensity; }
+                tb.AddDataColumn("int:ShadowIntensity", columnData);
+            }
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._GroundPlaneLevel?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.Level:GroundPlaneLevel", columnData);
+            }
+            {
+                var columnData = new int[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i]._View?.Index ?? EntityRelation.None; }
+                tb.AddIndexColumn("index:Vim.View:View", columnData);
+            }
+            return tb;
+        }
     } // DocumentBuilderExtensions
     
     public partial class ObjectModelBuilder
@@ -10243,6 +10617,7 @@ namespace Vim.Format.ObjectModel {
         public readonly EntitySetBuilder<ViewInViewSheet> ViewInViewSheetBuilder = new EntitySetBuilder<ViewInViewSheet>(TableNames.ViewInViewSheet);
         public readonly EntitySetBuilder<Site> SiteBuilder = new EntitySetBuilder<Site>(TableNames.Site);
         public readonly EntitySetBuilder<Building> BuildingBuilder = new EntitySetBuilder<Building>(TableNames.Building);
+        public readonly EntitySetBuilder<SunAndShadowSettings> SunAndShadowSettingsBuilder = new EntitySetBuilder<SunAndShadowSettings>(TableNames.SunAndShadowSettings);
         
         public DocumentBuilder AddEntityTableSets(DocumentBuilder db)
         {
@@ -10300,6 +10675,7 @@ namespace Vim.Format.ObjectModel {
             db.Tables.Add(ViewInViewSheetBuilder.EntityTableName, ViewInViewSheetBuilder.ToViewInViewSheetTableBuilder());
             db.Tables.Add(SiteBuilder.EntityTableName, SiteBuilder.ToSiteTableBuilder());
             db.Tables.Add(BuildingBuilder.EntityTableName, BuildingBuilder.ToBuildingTableBuilder());
+            db.Tables.Add(SunAndShadowSettingsBuilder.EntityTableName, SunAndShadowSettingsBuilder.ToSunAndShadowSettingsTableBuilder());
             
             return db;
         } // AddEntityTableSets
@@ -10360,6 +10736,7 @@ namespace Vim.Format.ObjectModel {
             ViewInViewSheetBuilder.Clear();
             SiteBuilder.Clear();
             BuildingBuilder.Clear();
+            SunAndShadowSettingsBuilder.Clear();
         } // Clear
     } // ObjectModelBuilder
 } // namespace
