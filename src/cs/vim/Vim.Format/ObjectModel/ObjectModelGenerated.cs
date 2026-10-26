@@ -1084,6 +1084,11 @@ namespace Vim.Format.ObjectModel {
                     (Glossiness == other.Glossiness) &&
                     (Smoothness == other.Smoothness) &&
                     (Transparency == other.Transparency) &&
+                    (AppearanceColor_X == other.AppearanceColor_X) &&
+                    (AppearanceColor_Y == other.AppearanceColor_Y) &&
+                    (AppearanceColor_Z == other.AppearanceColor_Z) &&
+                    (Metalness == other.Metalness) &&
+                    (Reflectivity == other.Reflectivity) &&
                     (_ColorTextureFile?.Index == other._ColorTextureFile?.Index) &&
                     (_NormalTextureFile?.Index == other._NormalTextureFile?.Index) &&
                     (_Element?.Index == other._Element?.Index);
@@ -3090,6 +3095,16 @@ namespace Vim.Format.ObjectModel {
         public Double GetMaterialSmoothness(int index, Double defaultValue = default) => MaterialSmoothness?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
         public IArray<Double> MaterialTransparency { get; }
         public Double GetMaterialTransparency(int index, Double defaultValue = default) => MaterialTransparency?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> MaterialAppearanceColor_X { get; }
+        public Double GetMaterialAppearanceColor_X(int index, Double defaultValue = default) => MaterialAppearanceColor_X?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> MaterialAppearanceColor_Y { get; }
+        public Double GetMaterialAppearanceColor_Y(int index, Double defaultValue = default) => MaterialAppearanceColor_Y?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> MaterialAppearanceColor_Z { get; }
+        public Double GetMaterialAppearanceColor_Z(int index, Double defaultValue = default) => MaterialAppearanceColor_Z?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> MaterialMetalness { get; }
+        public Double GetMaterialMetalness(int index, Double defaultValue = default) => MaterialMetalness?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
+        public IArray<Double> MaterialReflectivity { get; }
+        public Double GetMaterialReflectivity(int index, Double defaultValue = default) => MaterialReflectivity?.ElementAtOrDefault(index, defaultValue) ?? defaultValue;
         public IArray<int> MaterialColorTextureFileIndex { get; }
         public int GetMaterialColorTextureFileIndex(int index) => MaterialColorTextureFileIndex?.ElementAtOrDefault(index, EntityRelation.None) ?? EntityRelation.None;
         public IArray<int> MaterialNormalTextureFileIndex { get; }
@@ -3121,6 +3136,11 @@ namespace Vim.Format.ObjectModel {
             r.Glossiness = MaterialGlossiness.ElementAtOrDefault(n);
             r.Smoothness = MaterialSmoothness.ElementAtOrDefault(n);
             r.Transparency = MaterialTransparency.ElementAtOrDefault(n);
+            r.AppearanceColor_X = MaterialAppearanceColor_X.ElementAtOrDefault(n);
+            r.AppearanceColor_Y = MaterialAppearanceColor_Y.ElementAtOrDefault(n);
+            r.AppearanceColor_Z = MaterialAppearanceColor_Z.ElementAtOrDefault(n);
+            r.Metalness = MaterialMetalness.ElementAtOrDefault(n);
+            r.Reflectivity = MaterialReflectivity.ElementAtOrDefault(n);
             r._ColorTextureFile = new Relation<Vim.Format.ObjectModel.Asset>(GetMaterialColorTextureFileIndex(n), GetAsset);
             r._NormalTextureFile = new Relation<Vim.Format.ObjectModel.Asset>(GetMaterialNormalTextureFileIndex(n), GetAsset);
             r._Element = new Relation<Vim.Format.ObjectModel.Element>(GetMaterialElementIndex(n), GetElement);
@@ -4221,6 +4241,11 @@ namespace Vim.Format.ObjectModel {
             MaterialGlossiness = MaterialEntityTable?.GetDataColumnValues<Double>("double:Glossiness") ?? Array.Empty<Double>().ToIArray();
             MaterialSmoothness = MaterialEntityTable?.GetDataColumnValues<Double>("double:Smoothness") ?? Array.Empty<Double>().ToIArray();
             MaterialTransparency = MaterialEntityTable?.GetDataColumnValues<Double>("double:Transparency") ?? Array.Empty<Double>().ToIArray();
+            MaterialAppearanceColor_X = MaterialEntityTable?.GetDataColumnValues<Double>("double:AppearanceColor.X") ?? Array.Empty<Double>().ToIArray();
+            MaterialAppearanceColor_Y = MaterialEntityTable?.GetDataColumnValues<Double>("double:AppearanceColor.Y") ?? Array.Empty<Double>().ToIArray();
+            MaterialAppearanceColor_Z = MaterialEntityTable?.GetDataColumnValues<Double>("double:AppearanceColor.Z") ?? Array.Empty<Double>().ToIArray();
+            MaterialMetalness = MaterialEntityTable?.GetDataColumnValues<Double>("double:Metalness") ?? Array.Empty<Double>().ToIArray();
+            MaterialReflectivity = MaterialEntityTable?.GetDataColumnValues<Double>("double:Reflectivity") ?? Array.Empty<Double>().ToIArray();
             MaterialInElementArea = MaterialInElementEntityTable?.GetDataColumnValues<Double>("double:Area") ?? Array.Empty<Double>().ToIArray();
             MaterialInElementVolume = MaterialInElementEntityTable?.GetDataColumnValues<Double>("double:Volume") ?? Array.Empty<Double>().ToIArray();
             MaterialInElementIsPaint = MaterialInElementEntityTable?.GetDataColumnValues<Boolean>("byte:IsPaint") ?? Array.Empty<Boolean>().ToIArray();
@@ -6751,6 +6776,11 @@ namespace Vim.Format.ObjectModel {
             Column_Glossiness = GetDataColumnValues<Double>("double:Glossiness") ?? Array.Empty<Double>();
             Column_Smoothness = GetDataColumnValues<Double>("double:Smoothness") ?? Array.Empty<Double>();
             Column_Transparency = GetDataColumnValues<Double>("double:Transparency") ?? Array.Empty<Double>();
+            Column_AppearanceColor_X = GetDataColumnValues<Double>("double:AppearanceColor.X") ?? Array.Empty<Double>();
+            Column_AppearanceColor_Y = GetDataColumnValues<Double>("double:AppearanceColor.Y") ?? Array.Empty<Double>();
+            Column_AppearanceColor_Z = GetDataColumnValues<Double>("double:AppearanceColor.Z") ?? Array.Empty<Double>();
+            Column_Metalness = GetDataColumnValues<Double>("double:Metalness") ?? Array.Empty<Double>();
+            Column_Reflectivity = GetDataColumnValues<Double>("double:Reflectivity") ?? Array.Empty<Double>();
             Column_ColorTextureFileIndex = GetIndexColumnValues("index:Vim.Asset:ColorTextureFile") ?? Array.Empty<int>();
             Column_NormalTextureFileIndex = GetIndexColumnValues("index:Vim.Asset:NormalTextureFile") ?? Array.Empty<int>();
             Column_ElementIndex = GetIndexColumnValues("index:Vim.Element:Element") ?? Array.Empty<int>();
@@ -6790,6 +6820,16 @@ namespace Vim.Format.ObjectModel {
         public Double GetSmoothness(int index, Double @default = default) => Column_Smoothness.ElementAtOrDefault(index, @default);
         public Double[] Column_Transparency { get; }
         public Double GetTransparency(int index, Double @default = default) => Column_Transparency.ElementAtOrDefault(index, @default);
+        public Double[] Column_AppearanceColor_X { get; }
+        public Double GetAppearanceColor_X(int index, Double @default = default) => Column_AppearanceColor_X.ElementAtOrDefault(index, @default);
+        public Double[] Column_AppearanceColor_Y { get; }
+        public Double GetAppearanceColor_Y(int index, Double @default = default) => Column_AppearanceColor_Y.ElementAtOrDefault(index, @default);
+        public Double[] Column_AppearanceColor_Z { get; }
+        public Double GetAppearanceColor_Z(int index, Double @default = default) => Column_AppearanceColor_Z.ElementAtOrDefault(index, @default);
+        public Double[] Column_Metalness { get; }
+        public Double GetMetalness(int index, Double @default = default) => Column_Metalness.ElementAtOrDefault(index, @default);
+        public Double[] Column_Reflectivity { get; }
+        public Double GetReflectivity(int index, Double @default = default) => Column_Reflectivity.ElementAtOrDefault(index, @default);
         public int[] Column_ColorTextureFileIndex { get; }
         public int GetColorTextureFileIndex(int index) => Column_ColorTextureFileIndex.ElementAtOrDefault(index, EntityRelation.None);
         public Asset GetColorTextureFile(int index) => _GetReferencedColorTextureFile(GetColorTextureFileIndex(index));
@@ -6825,6 +6865,11 @@ namespace Vim.Format.ObjectModel {
             r.Glossiness = GetGlossiness(index);
             r.Smoothness = GetSmoothness(index);
             r.Transparency = GetTransparency(index);
+            r.AppearanceColor_X = GetAppearanceColor_X(index);
+            r.AppearanceColor_Y = GetAppearanceColor_Y(index);
+            r.AppearanceColor_Z = GetAppearanceColor_Z(index);
+            r.Metalness = GetMetalness(index);
+            r.Reflectivity = GetReflectivity(index);
             r._ColorTextureFile = new Relation<Vim.Format.ObjectModel.Asset>(GetColorTextureFileIndex(index), _GetReferencedColorTextureFile);
             r._NormalTextureFile = new Relation<Vim.Format.ObjectModel.Asset>(GetNormalTextureFileIndex(index), _GetReferencedNormalTextureFile);
             r._Element = new Relation<Vim.Format.ObjectModel.Element>(GetElementIndex(index), _GetReferencedElement);
@@ -9453,6 +9498,31 @@ namespace Vim.Format.ObjectModel {
                 var columnData = new Double[entityCount];
                 for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Transparency; }
                 tb.AddDataColumn("double:Transparency", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].AppearanceColor_X; }
+                tb.AddDataColumn("double:AppearanceColor.X", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].AppearanceColor_Y; }
+                tb.AddDataColumn("double:AppearanceColor.Y", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].AppearanceColor_Z; }
+                tb.AddDataColumn("double:AppearanceColor.Z", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Metalness; }
+                tb.AddDataColumn("double:Metalness", columnData);
+            }
+            {
+                var columnData = new Double[entityCount];
+                for (var i = 0; i < columnData.Length; ++i) { columnData[i] = entities[i].Reflectivity; }
+                tb.AddDataColumn("double:Reflectivity", columnData);
             }
             {
                 var columnData = new int[entityCount];

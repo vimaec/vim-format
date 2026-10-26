@@ -8654,6 +8654,11 @@ namespace Vim
         double mGlossiness;
         double mSmoothness;
         double mTransparency;
+        double mAppearanceColor_X;
+        double mAppearanceColor_Y;
+        double mAppearanceColor_Z;
+        double mMetalness;
+        double mReflectivity;
         
         int mColorTextureFileIndex;
         Asset* mColorTextureFile;
@@ -8699,6 +8704,11 @@ namespace Vim
             material->mGlossiness = GetGlossiness(materialIndex);
             material->mSmoothness = GetSmoothness(materialIndex);
             material->mTransparency = GetTransparency(materialIndex);
+            material->mAppearanceColor_X = GetAppearanceColor_X(materialIndex);
+            material->mAppearanceColor_Y = GetAppearanceColor_Y(materialIndex);
+            material->mAppearanceColor_Z = GetAppearanceColor_Z(materialIndex);
+            material->mMetalness = GetMetalness(materialIndex);
+            material->mReflectivity = GetReflectivity(materialIndex);
             material->mColorTextureFileIndex = GetColorTextureFileIndex(materialIndex);
             material->mNormalTextureFileIndex = GetNormalTextureFileIndex(materialIndex);
             material->mElementIndex = GetElementIndex(materialIndex);
@@ -8724,6 +8734,11 @@ namespace Vim
             bool existsGlossiness = mEntityTable.column_exists("double:Glossiness");
             bool existsSmoothness = mEntityTable.column_exists("double:Smoothness");
             bool existsTransparency = mEntityTable.column_exists("double:Transparency");
+            bool existsAppearanceColor_X = mEntityTable.column_exists("double:AppearanceColor.X");
+            bool existsAppearanceColor_Y = mEntityTable.column_exists("double:AppearanceColor.Y");
+            bool existsAppearanceColor_Z = mEntityTable.column_exists("double:AppearanceColor.Z");
+            bool existsMetalness = mEntityTable.column_exists("double:Metalness");
+            bool existsReflectivity = mEntityTable.column_exists("double:Reflectivity");
             bool existsColorTextureFile = mEntityTable.column_exists("index:Vim.Asset:ColorTextureFile");
             bool existsNormalTextureFile = mEntityTable.column_exists("index:Vim.Asset:NormalTextureFile");
             bool existsElement = mEntityTable.column_exists("index:Vim.Element:Element");
@@ -8812,6 +8827,31 @@ namespace Vim
                 memcpy(transparencyData, mEntityTable.mDataColumns["double:Transparency"].begin(), count * sizeof(double));
             }
             
+            double* appearanceColor_XData = new double[count];
+            if (mEntityTable.column_exists("double:AppearanceColor.X")) {
+                memcpy(appearanceColor_XData, mEntityTable.mDataColumns["double:AppearanceColor.X"].begin(), count * sizeof(double));
+            }
+            
+            double* appearanceColor_YData = new double[count];
+            if (mEntityTable.column_exists("double:AppearanceColor.Y")) {
+                memcpy(appearanceColor_YData, mEntityTable.mDataColumns["double:AppearanceColor.Y"].begin(), count * sizeof(double));
+            }
+            
+            double* appearanceColor_ZData = new double[count];
+            if (mEntityTable.column_exists("double:AppearanceColor.Z")) {
+                memcpy(appearanceColor_ZData, mEntityTable.mDataColumns["double:AppearanceColor.Z"].begin(), count * sizeof(double));
+            }
+            
+            double* metalnessData = new double[count];
+            if (mEntityTable.column_exists("double:Metalness")) {
+                memcpy(metalnessData, mEntityTable.mDataColumns["double:Metalness"].begin(), count * sizeof(double));
+            }
+            
+            double* reflectivityData = new double[count];
+            if (mEntityTable.column_exists("double:Reflectivity")) {
+                memcpy(reflectivityData, mEntityTable.mDataColumns["double:Reflectivity"].begin(), count * sizeof(double));
+            }
+            
             const std::vector<int>& colorTextureFileData = mEntityTable.column_exists("index:Vim.Asset:ColorTextureFile") ? mEntityTable.mIndexColumns["index:Vim.Asset:ColorTextureFile"] : std::vector<int>();
             const std::vector<int>& normalTextureFileData = mEntityTable.column_exists("index:Vim.Asset:NormalTextureFile") ? mEntityTable.mIndexColumns["index:Vim.Asset:NormalTextureFile"] : std::vector<int>();
             const std::vector<int>& elementData = mEntityTable.column_exists("index:Vim.Element:Element") ? mEntityTable.mIndexColumns["index:Vim.Element:Element"] : std::vector<int>();
@@ -8854,6 +8894,16 @@ namespace Vim
                     entity.mSmoothness = smoothnessData[i];
                 if (existsTransparency)
                     entity.mTransparency = transparencyData[i];
+                if (existsAppearanceColor_X)
+                    entity.mAppearanceColor_X = appearanceColor_XData[i];
+                if (existsAppearanceColor_Y)
+                    entity.mAppearanceColor_Y = appearanceColor_YData[i];
+                if (existsAppearanceColor_Z)
+                    entity.mAppearanceColor_Z = appearanceColor_ZData[i];
+                if (existsMetalness)
+                    entity.mMetalness = metalnessData[i];
+                if (existsReflectivity)
+                    entity.mReflectivity = reflectivityData[i];
                 entity.mColorTextureFileIndex = existsColorTextureFile ? colorTextureFileData[i] : -1;
                 entity.mNormalTextureFileIndex = existsNormalTextureFile ? normalTextureFileData[i] : -1;
                 entity.mElementIndex = existsElement ? elementData[i] : -1;
@@ -8875,6 +8925,11 @@ namespace Vim
             delete[] glossinessData;
             delete[] smoothnessData;
             delete[] transparencyData;
+            delete[] appearanceColor_XData;
+            delete[] appearanceColor_YData;
+            delete[] appearanceColor_ZData;
+            delete[] metalnessData;
+            delete[] reflectivityData;
             
             return material;
         }
@@ -9353,6 +9408,146 @@ namespace Vim
             std::vector<double>* result = new std::vector<double>(transparencyData, transparencyData + count);
             
             delete[] transparencyData;
+            
+            return result;
+        }
+        
+        double GetAppearanceColor_X(int materialIndex)
+        {
+            if (materialIndex < 0 || materialIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("double:AppearanceColor.X")) {
+                return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:AppearanceColor.X"].begin() + materialIndex * sizeof(double)));
+            }
+            
+            return {};
+        }
+        
+        std::vector<double>* GetAllAppearanceColor_X()
+        {
+            const auto count = GetCount();
+            
+            double* appearanceColor_XData = new double[count];
+            if (mEntityTable.column_exists("double:AppearanceColor.X")) {
+                memcpy(appearanceColor_XData, mEntityTable.mDataColumns["double:AppearanceColor.X"].begin(), count * sizeof(double));
+            }
+            
+            std::vector<double>* result = new std::vector<double>(appearanceColor_XData, appearanceColor_XData + count);
+            
+            delete[] appearanceColor_XData;
+            
+            return result;
+        }
+        
+        double GetAppearanceColor_Y(int materialIndex)
+        {
+            if (materialIndex < 0 || materialIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("double:AppearanceColor.Y")) {
+                return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:AppearanceColor.Y"].begin() + materialIndex * sizeof(double)));
+            }
+            
+            return {};
+        }
+        
+        std::vector<double>* GetAllAppearanceColor_Y()
+        {
+            const auto count = GetCount();
+            
+            double* appearanceColor_YData = new double[count];
+            if (mEntityTable.column_exists("double:AppearanceColor.Y")) {
+                memcpy(appearanceColor_YData, mEntityTable.mDataColumns["double:AppearanceColor.Y"].begin(), count * sizeof(double));
+            }
+            
+            std::vector<double>* result = new std::vector<double>(appearanceColor_YData, appearanceColor_YData + count);
+            
+            delete[] appearanceColor_YData;
+            
+            return result;
+        }
+        
+        double GetAppearanceColor_Z(int materialIndex)
+        {
+            if (materialIndex < 0 || materialIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("double:AppearanceColor.Z")) {
+                return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:AppearanceColor.Z"].begin() + materialIndex * sizeof(double)));
+            }
+            
+            return {};
+        }
+        
+        std::vector<double>* GetAllAppearanceColor_Z()
+        {
+            const auto count = GetCount();
+            
+            double* appearanceColor_ZData = new double[count];
+            if (mEntityTable.column_exists("double:AppearanceColor.Z")) {
+                memcpy(appearanceColor_ZData, mEntityTable.mDataColumns["double:AppearanceColor.Z"].begin(), count * sizeof(double));
+            }
+            
+            std::vector<double>* result = new std::vector<double>(appearanceColor_ZData, appearanceColor_ZData + count);
+            
+            delete[] appearanceColor_ZData;
+            
+            return result;
+        }
+        
+        double GetMetalness(int materialIndex)
+        {
+            if (materialIndex < 0 || materialIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("double:Metalness")) {
+                return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:Metalness"].begin() + materialIndex * sizeof(double)));
+            }
+            
+            return {};
+        }
+        
+        std::vector<double>* GetAllMetalness()
+        {
+            const auto count = GetCount();
+            
+            double* metalnessData = new double[count];
+            if (mEntityTable.column_exists("double:Metalness")) {
+                memcpy(metalnessData, mEntityTable.mDataColumns["double:Metalness"].begin(), count * sizeof(double));
+            }
+            
+            std::vector<double>* result = new std::vector<double>(metalnessData, metalnessData + count);
+            
+            delete[] metalnessData;
+            
+            return result;
+        }
+        
+        double GetReflectivity(int materialIndex)
+        {
+            if (materialIndex < 0 || materialIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("double:Reflectivity")) {
+                return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:Reflectivity"].begin() + materialIndex * sizeof(double)));
+            }
+            
+            return {};
+        }
+        
+        std::vector<double>* GetAllReflectivity()
+        {
+            const auto count = GetCount();
+            
+            double* reflectivityData = new double[count];
+            if (mEntityTable.column_exists("double:Reflectivity")) {
+                memcpy(reflectivityData, mEntityTable.mDataColumns["double:Reflectivity"].begin(), count * sizeof(double));
+            }
+            
+            std::vector<double>* result = new std::vector<double>(reflectivityData, reflectivityData + count);
+            
+            delete[] reflectivityData;
             
             return result;
         }

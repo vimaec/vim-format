@@ -14,6 +14,14 @@ namespace Vim.Format.ObjectModel
         // ReSharper disable MemberHidesStaticFromOuterClass
         public static class History
         {
+            // Schema additions (realistic materials; filled only by exports with the header value materials=realistic*)
+            //   Vim.Material__double:AppearanceColor.X
+            //   Vim.Material__double:AppearanceColor.Y
+            //   Vim.Material__double:AppearanceColor.Z
+            //   Vim.Material__double:Metalness
+            //   Vim.Material__double:Reflectivity
+            public const string v5_8_0 = "5.8.0";
+
             // Schema additions
             //   Vim.Element__string:Creator
             //   Vim.Element__string:LastChangedBy
@@ -186,7 +194,8 @@ namespace Vim.Format.ObjectModel
         // ReSharper enable MemberHidesStaticFromOuterClass
 
         // [MAINTAIN] Add more object model SerializableVersions below and update the current one.
-        public static SerializableVersion Current => v5_7_0;
+        public static SerializableVersion Current => v5_8_0;
+        public static SerializableVersion v5_8_0 => SerializableVersion.Parse(History.v5_8_0);
         public static SerializableVersion v5_7_0 => SerializableVersion.Parse(History.v5_7_0);
         public static SerializableVersion v5_6_0 => SerializableVersion.Parse(History.v5_6_0);
         public static SerializableVersion v5_5_0 => SerializableVersion.Parse(History.v5_5_0);
@@ -1451,6 +1460,28 @@ namespace Vim.Format.ObjectModel
 
         /// <summary>The transparency, defined in the domain [0..1]</summary>
         public double Transparency;
+
+        // Realistic materials (schema 5.8.0). Filled only when the file header says materials=realistic or
+        // materials=realistic+textures; then Glossiness and Transparency also come from the render appearance.
+
+        /// <summary>
+        /// The render appearance's base colour (Revit: Appearance > Color, tint applied), in [0..1].
+        /// Color keeps the Graphics / shaded colour.
+        /// </summary>
+        public double AppearanceColor_X;
+        public double AppearanceColor_Y;
+        public double AppearanceColor_Z;
+        public DVector3 AppearanceColor
+        {
+            get => new DVector3(AppearanceColor_X, AppearanceColor_Y, AppearanceColor_Z);
+            set => (AppearanceColor_X, AppearanceColor_Y, AppearanceColor_Z) = value;
+        }
+
+        /// <summary>The metalness, in [0..1] (Revit: Highlights = Metallic, or a metal appearance).</summary>
+        public double Metalness;
+
+        /// <summary>The reflectivity facing the viewer (F0), in [0..1] (Revit: Reflectivity > Direct, or the F0 value). 0 when the appearance gives none.</summary>
+        public double Reflectivity;
     }
 
     /// <summary>
