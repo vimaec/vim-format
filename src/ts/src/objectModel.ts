@@ -10713,6 +10713,427 @@ export class BuildingTable implements IBuildingTable {
     
 }
 
+export interface ISunAndShadowSettings {
+    index: number
+    sunAndShadowType?: string
+    activeFrameTime?: string
+    startDateAndTime?: string
+    endDateAndTime?: string
+    activeFrame?: number
+    numberOfFrames?: number
+    usesDST?: boolean
+    altitude?: number
+    azimuth?: number
+    relativeToView?: boolean
+    latitude?: number
+    longitude?: number
+    timeZone?: number
+    projectLocationName?: string
+    usesGroundPlane?: boolean
+    castShadows?: boolean
+    sunlightIntensity?: number
+    shadowIntensity?: number
+    
+    groundPlaneLevelIndex?: number
+    groundPlaneLevel?: ILevel
+    viewIndex?: number
+    view?: IView
+}
+
+export interface ISunAndShadowSettingsTable {
+    getCount(): Promise<number>
+    get(sunAndShadowSettingsIndex: number): Promise<ISunAndShadowSettings>
+    getAll(): Promise<ISunAndShadowSettings[]>
+    
+    getSunAndShadowType(sunAndShadowSettingsIndex: number): Promise<string | undefined>
+    getAllSunAndShadowType(): Promise<string[] | undefined>
+    getActiveFrameTime(sunAndShadowSettingsIndex: number): Promise<string | undefined>
+    getAllActiveFrameTime(): Promise<string[] | undefined>
+    getStartDateAndTime(sunAndShadowSettingsIndex: number): Promise<string | undefined>
+    getAllStartDateAndTime(): Promise<string[] | undefined>
+    getEndDateAndTime(sunAndShadowSettingsIndex: number): Promise<string | undefined>
+    getAllEndDateAndTime(): Promise<string[] | undefined>
+    getActiveFrame(sunAndShadowSettingsIndex: number): Promise<number | undefined>
+    getAllActiveFrame(): Promise<number[] | undefined>
+    getNumberOfFrames(sunAndShadowSettingsIndex: number): Promise<number | undefined>
+    getAllNumberOfFrames(): Promise<number[] | undefined>
+    getUsesDST(sunAndShadowSettingsIndex: number): Promise<boolean | undefined>
+    getAllUsesDST(): Promise<boolean[] | undefined>
+    getAltitude(sunAndShadowSettingsIndex: number): Promise<number | undefined>
+    getAllAltitude(): Promise<number[] | undefined>
+    getAzimuth(sunAndShadowSettingsIndex: number): Promise<number | undefined>
+    getAllAzimuth(): Promise<number[] | undefined>
+    getRelativeToView(sunAndShadowSettingsIndex: number): Promise<boolean | undefined>
+    getAllRelativeToView(): Promise<boolean[] | undefined>
+    getLatitude(sunAndShadowSettingsIndex: number): Promise<number | undefined>
+    getAllLatitude(): Promise<number[] | undefined>
+    getLongitude(sunAndShadowSettingsIndex: number): Promise<number | undefined>
+    getAllLongitude(): Promise<number[] | undefined>
+    getTimeZone(sunAndShadowSettingsIndex: number): Promise<number | undefined>
+    getAllTimeZone(): Promise<number[] | undefined>
+    getProjectLocationName(sunAndShadowSettingsIndex: number): Promise<string | undefined>
+    getAllProjectLocationName(): Promise<string[] | undefined>
+    getUsesGroundPlane(sunAndShadowSettingsIndex: number): Promise<boolean | undefined>
+    getAllUsesGroundPlane(): Promise<boolean[] | undefined>
+    getCastShadows(sunAndShadowSettingsIndex: number): Promise<boolean | undefined>
+    getAllCastShadows(): Promise<boolean[] | undefined>
+    getSunlightIntensity(sunAndShadowSettingsIndex: number): Promise<number | undefined>
+    getAllSunlightIntensity(): Promise<number[] | undefined>
+    getShadowIntensity(sunAndShadowSettingsIndex: number): Promise<number | undefined>
+    getAllShadowIntensity(): Promise<number[] | undefined>
+    
+    getGroundPlaneLevelIndex(sunAndShadowSettingsIndex: number): Promise<number | undefined>
+    getAllGroundPlaneLevelIndex(): Promise<number[] | undefined>
+    getGroundPlaneLevel(sunAndShadowSettingsIndex: number): Promise<ILevel | undefined>
+    getViewIndex(sunAndShadowSettingsIndex: number): Promise<number | undefined>
+    getAllViewIndex(): Promise<number[] | undefined>
+    getView(sunAndShadowSettingsIndex: number): Promise<IView | undefined>
+}
+
+export class SunAndShadowSettings implements ISunAndShadowSettings {
+    index: number
+    sunAndShadowType?: string
+    activeFrameTime?: string
+    startDateAndTime?: string
+    endDateAndTime?: string
+    activeFrame?: number
+    numberOfFrames?: number
+    usesDST?: boolean
+    altitude?: number
+    azimuth?: number
+    relativeToView?: boolean
+    latitude?: number
+    longitude?: number
+    timeZone?: number
+    projectLocationName?: string
+    usesGroundPlane?: boolean
+    castShadows?: boolean
+    sunlightIntensity?: number
+    shadowIntensity?: number
+    
+    groundPlaneLevelIndex?: number
+    groundPlaneLevel?: ILevel
+    viewIndex?: number
+    view?: IView
+    
+    static async createFromTable(table: ISunAndShadowSettingsTable, index: number): Promise<ISunAndShadowSettings> {
+        let result = new SunAndShadowSettings()
+        result.index = index
+        
+        await Promise.all([
+            table.getSunAndShadowType(index).then(v => result.sunAndShadowType = v),
+            table.getActiveFrameTime(index).then(v => result.activeFrameTime = v),
+            table.getStartDateAndTime(index).then(v => result.startDateAndTime = v),
+            table.getEndDateAndTime(index).then(v => result.endDateAndTime = v),
+            table.getActiveFrame(index).then(v => result.activeFrame = v),
+            table.getNumberOfFrames(index).then(v => result.numberOfFrames = v),
+            table.getUsesDST(index).then(v => result.usesDST = v),
+            table.getAltitude(index).then(v => result.altitude = v),
+            table.getAzimuth(index).then(v => result.azimuth = v),
+            table.getRelativeToView(index).then(v => result.relativeToView = v),
+            table.getLatitude(index).then(v => result.latitude = v),
+            table.getLongitude(index).then(v => result.longitude = v),
+            table.getTimeZone(index).then(v => result.timeZone = v),
+            table.getProjectLocationName(index).then(v => result.projectLocationName = v),
+            table.getUsesGroundPlane(index).then(v => result.usesGroundPlane = v),
+            table.getCastShadows(index).then(v => result.castShadows = v),
+            table.getSunlightIntensity(index).then(v => result.sunlightIntensity = v),
+            table.getShadowIntensity(index).then(v => result.shadowIntensity = v),
+            table.getGroundPlaneLevelIndex(index).then(v => result.groundPlaneLevelIndex = v),
+            table.getViewIndex(index).then(v => result.viewIndex = v),
+        ])
+        
+        return result
+    }
+}
+
+export class SunAndShadowSettingsTable implements ISunAndShadowSettingsTable {
+    private document: VimDocument
+    private entityTable: EntityTable
+    
+    static async createFromDocument(document: VimDocument): Promise<ISunAndShadowSettingsTable | undefined> {
+        const entity = await document.entities.getBfast("Vim.SunAndShadowSettings")
+        
+        if (!entity) {
+            return undefined
+        }
+        
+        let table = new SunAndShadowSettingsTable()
+        table.document = document
+        table.entityTable = new EntityTable(entity, document.strings)
+        
+        return table
+    }
+    
+    getCount(): Promise<number> {
+        return this.entityTable.getCount()
+    }
+    
+    async get(sunAndShadowSettingsIndex: number): Promise<ISunAndShadowSettings> {
+        return await SunAndShadowSettings.createFromTable(this, sunAndShadowSettingsIndex)
+    }
+    
+    async getAll(): Promise<ISunAndShadowSettings[]> {
+        const localTable = await this.entityTable.getLocal()
+        
+        let sunAndShadowType: string[] | undefined
+        let activeFrameTime: string[] | undefined
+        let startDateAndTime: string[] | undefined
+        let endDateAndTime: string[] | undefined
+        let activeFrame: number[] | undefined
+        let numberOfFrames: number[] | undefined
+        let usesDST: boolean[] | undefined
+        let altitude: number[] | undefined
+        let azimuth: number[] | undefined
+        let relativeToView: boolean[] | undefined
+        let latitude: number[] | undefined
+        let longitude: number[] | undefined
+        let timeZone: number[] | undefined
+        let projectLocationName: string[] | undefined
+        let usesGroundPlane: boolean[] | undefined
+        let castShadows: boolean[] | undefined
+        let sunlightIntensity: number[] | undefined
+        let shadowIntensity: number[] | undefined
+        let groundPlaneLevelIndex: number[] | undefined
+        let viewIndex: number[] | undefined
+        
+        await Promise.all([
+            (async () => { sunAndShadowType = (await localTable.getStringArray("string:SunAndShadowType")) })(),
+            (async () => { activeFrameTime = (await localTable.getStringArray("string:ActiveFrameTime")) })(),
+            (async () => { startDateAndTime = (await localTable.getStringArray("string:StartDateAndTime")) })(),
+            (async () => { endDateAndTime = (await localTable.getStringArray("string:EndDateAndTime")) })(),
+            (async () => { activeFrame = (await localTable.getNumberArray("int:ActiveFrame")) })(),
+            (async () => { numberOfFrames = (await localTable.getNumberArray("int:NumberOfFrames")) })(),
+            (async () => { usesDST = (await localTable.getBooleanArray("byte:UsesDST")) })(),
+            (async () => { altitude = (await localTable.getNumberArray("double:Altitude")) })(),
+            (async () => { azimuth = (await localTable.getNumberArray("double:Azimuth")) })(),
+            (async () => { relativeToView = (await localTable.getBooleanArray("byte:RelativeToView")) })(),
+            (async () => { latitude = (await localTable.getNumberArray("double:Latitude")) })(),
+            (async () => { longitude = (await localTable.getNumberArray("double:Longitude")) })(),
+            (async () => { timeZone = (await localTable.getNumberArray("double:TimeZone")) })(),
+            (async () => { projectLocationName = (await localTable.getStringArray("string:ProjectLocationName")) })(),
+            (async () => { usesGroundPlane = (await localTable.getBooleanArray("byte:UsesGroundPlane")) })(),
+            (async () => { castShadows = (await localTable.getBooleanArray("byte:CastShadows")) })(),
+            (async () => { sunlightIntensity = (await localTable.getNumberArray("int:SunlightIntensity")) })(),
+            (async () => { shadowIntensity = (await localTable.getNumberArray("int:ShadowIntensity")) })(),
+            (async () => { groundPlaneLevelIndex = (await localTable.getNumberArray("index:Vim.Level:GroundPlaneLevel")) })(),
+            (async () => { viewIndex = (await localTable.getNumberArray("index:Vim.View:View")) })(),
+        ])
+        
+        let sunAndShadowSettings: ISunAndShadowSettings[] = []
+        
+        const rowCount = await this.getCount()
+        for (let i = 0; i < rowCount; i++) {
+            sunAndShadowSettings.push({
+                index: i,
+                sunAndShadowType: sunAndShadowType ? sunAndShadowType[i] : undefined,
+                activeFrameTime: activeFrameTime ? activeFrameTime[i] : undefined,
+                startDateAndTime: startDateAndTime ? startDateAndTime[i] : undefined,
+                endDateAndTime: endDateAndTime ? endDateAndTime[i] : undefined,
+                activeFrame: activeFrame ? activeFrame[i] : undefined,
+                numberOfFrames: numberOfFrames ? numberOfFrames[i] : undefined,
+                usesDST: usesDST ? usesDST[i] : undefined,
+                altitude: altitude ? altitude[i] : undefined,
+                azimuth: azimuth ? azimuth[i] : undefined,
+                relativeToView: relativeToView ? relativeToView[i] : undefined,
+                latitude: latitude ? latitude[i] : undefined,
+                longitude: longitude ? longitude[i] : undefined,
+                timeZone: timeZone ? timeZone[i] : undefined,
+                projectLocationName: projectLocationName ? projectLocationName[i] : undefined,
+                usesGroundPlane: usesGroundPlane ? usesGroundPlane[i] : undefined,
+                castShadows: castShadows ? castShadows[i] : undefined,
+                sunlightIntensity: sunlightIntensity ? sunlightIntensity[i] : undefined,
+                shadowIntensity: shadowIntensity ? shadowIntensity[i] : undefined,
+                groundPlaneLevelIndex: groundPlaneLevelIndex ? groundPlaneLevelIndex[i] : undefined,
+                viewIndex: viewIndex ? viewIndex[i] : undefined
+            })
+        }
+        
+        return sunAndShadowSettings
+    }
+    
+    async getSunAndShadowType(sunAndShadowSettingsIndex: number): Promise<string | undefined> {
+        return (await this.entityTable.getString(sunAndShadowSettingsIndex, "string:SunAndShadowType"))
+    }
+    
+    async getAllSunAndShadowType(): Promise<string[] | undefined> {
+        return (await this.entityTable.getStringArray("string:SunAndShadowType"))
+    }
+    
+    async getActiveFrameTime(sunAndShadowSettingsIndex: number): Promise<string | undefined> {
+        return (await this.entityTable.getString(sunAndShadowSettingsIndex, "string:ActiveFrameTime"))
+    }
+    
+    async getAllActiveFrameTime(): Promise<string[] | undefined> {
+        return (await this.entityTable.getStringArray("string:ActiveFrameTime"))
+    }
+    
+    async getStartDateAndTime(sunAndShadowSettingsIndex: number): Promise<string | undefined> {
+        return (await this.entityTable.getString(sunAndShadowSettingsIndex, "string:StartDateAndTime"))
+    }
+    
+    async getAllStartDateAndTime(): Promise<string[] | undefined> {
+        return (await this.entityTable.getStringArray("string:StartDateAndTime"))
+    }
+    
+    async getEndDateAndTime(sunAndShadowSettingsIndex: number): Promise<string | undefined> {
+        return (await this.entityTable.getString(sunAndShadowSettingsIndex, "string:EndDateAndTime"))
+    }
+    
+    async getAllEndDateAndTime(): Promise<string[] | undefined> {
+        return (await this.entityTable.getStringArray("string:EndDateAndTime"))
+    }
+    
+    async getActiveFrame(sunAndShadowSettingsIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(sunAndShadowSettingsIndex, "int:ActiveFrame"))
+    }
+    
+    async getAllActiveFrame(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("int:ActiveFrame"))
+    }
+    
+    async getNumberOfFrames(sunAndShadowSettingsIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(sunAndShadowSettingsIndex, "int:NumberOfFrames"))
+    }
+    
+    async getAllNumberOfFrames(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("int:NumberOfFrames"))
+    }
+    
+    async getUsesDST(sunAndShadowSettingsIndex: number): Promise<boolean | undefined> {
+        return (await this.entityTable.getBoolean(sunAndShadowSettingsIndex, "byte:UsesDST"))
+    }
+    
+    async getAllUsesDST(): Promise<boolean[] | undefined> {
+        return (await this.entityTable.getBooleanArray("byte:UsesDST"))
+    }
+    
+    async getAltitude(sunAndShadowSettingsIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(sunAndShadowSettingsIndex, "double:Altitude"))
+    }
+    
+    async getAllAltitude(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:Altitude"))
+    }
+    
+    async getAzimuth(sunAndShadowSettingsIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(sunAndShadowSettingsIndex, "double:Azimuth"))
+    }
+    
+    async getAllAzimuth(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:Azimuth"))
+    }
+    
+    async getRelativeToView(sunAndShadowSettingsIndex: number): Promise<boolean | undefined> {
+        return (await this.entityTable.getBoolean(sunAndShadowSettingsIndex, "byte:RelativeToView"))
+    }
+    
+    async getAllRelativeToView(): Promise<boolean[] | undefined> {
+        return (await this.entityTable.getBooleanArray("byte:RelativeToView"))
+    }
+    
+    async getLatitude(sunAndShadowSettingsIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(sunAndShadowSettingsIndex, "double:Latitude"))
+    }
+    
+    async getAllLatitude(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:Latitude"))
+    }
+    
+    async getLongitude(sunAndShadowSettingsIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(sunAndShadowSettingsIndex, "double:Longitude"))
+    }
+    
+    async getAllLongitude(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:Longitude"))
+    }
+    
+    async getTimeZone(sunAndShadowSettingsIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(sunAndShadowSettingsIndex, "double:TimeZone"))
+    }
+    
+    async getAllTimeZone(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("double:TimeZone"))
+    }
+    
+    async getProjectLocationName(sunAndShadowSettingsIndex: number): Promise<string | undefined> {
+        return (await this.entityTable.getString(sunAndShadowSettingsIndex, "string:ProjectLocationName"))
+    }
+    
+    async getAllProjectLocationName(): Promise<string[] | undefined> {
+        return (await this.entityTable.getStringArray("string:ProjectLocationName"))
+    }
+    
+    async getUsesGroundPlane(sunAndShadowSettingsIndex: number): Promise<boolean | undefined> {
+        return (await this.entityTable.getBoolean(sunAndShadowSettingsIndex, "byte:UsesGroundPlane"))
+    }
+    
+    async getAllUsesGroundPlane(): Promise<boolean[] | undefined> {
+        return (await this.entityTable.getBooleanArray("byte:UsesGroundPlane"))
+    }
+    
+    async getCastShadows(sunAndShadowSettingsIndex: number): Promise<boolean | undefined> {
+        return (await this.entityTable.getBoolean(sunAndShadowSettingsIndex, "byte:CastShadows"))
+    }
+    
+    async getAllCastShadows(): Promise<boolean[] | undefined> {
+        return (await this.entityTable.getBooleanArray("byte:CastShadows"))
+    }
+    
+    async getSunlightIntensity(sunAndShadowSettingsIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(sunAndShadowSettingsIndex, "int:SunlightIntensity"))
+    }
+    
+    async getAllSunlightIntensity(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("int:SunlightIntensity"))
+    }
+    
+    async getShadowIntensity(sunAndShadowSettingsIndex: number): Promise<number | undefined> {
+        return (await this.entityTable.getNumber(sunAndShadowSettingsIndex, "int:ShadowIntensity"))
+    }
+    
+    async getAllShadowIntensity(): Promise<number[] | undefined> {
+        return (await this.entityTable.getNumberArray("int:ShadowIntensity"))
+    }
+    
+    async getGroundPlaneLevelIndex(sunAndShadowSettingsIndex: number): Promise<number | undefined> {
+        return await this.entityTable.getNumber(sunAndShadowSettingsIndex, "index:Vim.Level:GroundPlaneLevel")
+    }
+    
+    async getAllGroundPlaneLevelIndex(): Promise<number[] | undefined> {
+        return await this.entityTable.getNumberArray("index:Vim.Level:GroundPlaneLevel")
+    }
+    
+    async getGroundPlaneLevel(sunAndShadowSettingsIndex: number): Promise<ILevel | undefined> {
+        const index = await this.getGroundPlaneLevelIndex(sunAndShadowSettingsIndex)
+        
+        if (index === undefined) {
+            return undefined
+        }
+        
+        return await this.document.level?.get(index)
+    }
+    
+    async getViewIndex(sunAndShadowSettingsIndex: number): Promise<number | undefined> {
+        return await this.entityTable.getNumber(sunAndShadowSettingsIndex, "index:Vim.View:View")
+    }
+    
+    async getAllViewIndex(): Promise<number[] | undefined> {
+        return await this.entityTable.getNumberArray("index:Vim.View:View")
+    }
+    
+    async getView(sunAndShadowSettingsIndex: number): Promise<IView | undefined> {
+        const index = await this.getViewIndex(sunAndShadowSettingsIndex)
+        
+        if (index === undefined) {
+            return undefined
+        }
+        
+        return await this.document.view?.get(index)
+    }
+    
+}
+
 export class VimDocument {
     asset: IAssetTable | undefined
     displayUnit: IDisplayUnitTable | undefined
@@ -10768,6 +11189,7 @@ export class VimDocument {
     viewInViewSheet: IViewInViewSheetTable | undefined
     site: ISiteTable | undefined
     building: IBuildingTable | undefined
+    sunAndShadowSettings: ISunAndShadowSettingsTable | undefined
     
     entities: BFast
     strings: string[] | undefined
@@ -10839,6 +11261,7 @@ export class VimDocument {
         doc.viewInViewSheet = await ViewInViewSheetTable.createFromDocument(doc)
         doc.site = await SiteTable.createFromDocument(doc)
         doc.building = await BuildingTable.createFromDocument(doc)
+        doc.sunAndShadowSettings = await SunAndShadowSettingsTable.createFromDocument(doc)
         
         return doc
     }
