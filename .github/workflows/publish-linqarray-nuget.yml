@@ -5,10 +5,13 @@ on:
 
 jobs:
   publish:
+    permissions:
+      id-token: write # lets the called workflow get a GitHub OIDC token for NuGet trusted publishing
+      contents: write # lets the called workflow push the release tag
     uses: ./.github/workflows/publish-nuget.yaml
     with:
       project_path: src/cs/linqarray/Vim.LinqArray/Vim.LinqArray.csproj
       test_project_path: src/cs/linqarray/Vim.LinqArray.Tests/Vim.LinqArray.Tests.csproj
       package_name: Vim.LinqArray
     secrets:
-      VIM_NUGET_PUSH: ${{ secrets.VIM_NUGET_PUSH }}
+      NUGET_USER: ${{ secrets.NUGET_USER }}

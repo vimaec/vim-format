@@ -13,12 +13,16 @@ on:
         type: string
         required: true
     secrets:
-      VIM_NUGET_PUSH:
-        description: 'The API key needed to push the package'
+      NUGET_USER:
+        description: 'The nuget.org profile name (not an email address) for NuGet trusted publishing'
+        required: true
 
 jobs:
   publish:
     runs-on: windows-latest
+    permissions:
+      id-token: write # lets NuGet/login get a GitHub OIDC token for NuGet trusted publishing
+      contents: write # lets the "Tag commit" step push the release tag
     steps:
 
     ############################
@@ -76,10 +80,18 @@ jobs:
     ########## PUBLISH ###########
     ##############################
 
+    # Trusted publishing: exchanges the GitHub OIDC token for a NuGet API key that is valid for 1 hour.
+    # Requires a trusted publishing policy on nuget.org for this repository and workflow file.
+    - name: NuGet login
+      id: nuget_login
+      uses: NuGet/login@v1
+      with:
+        user: ${{ secrets.NUGET_USER }}
+
     - name: Push NuGet package
       env:
         NUGET_ENABLE_LEGACY_CSPROJ_PACK: true
-      run: nuget push ${{ inputs.package_name }}*.nupkg -ApiKey ${{ secrets.VIM_NUGET_PUSH }} -Source https://api.nuget.org/v3/index.json
+      run: nuget push ${{ inputs.package_name }}*.nupkg -ApiKey ${{ steps.nuget_login.outputs.NUGET_API_KEY }} -Source https://api.nuget.org/v3/index.json
       shell: bash
 
     - name: Tag commit
