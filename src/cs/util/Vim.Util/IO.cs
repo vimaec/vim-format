@@ -295,10 +295,17 @@ namespace Vim.Util
             });
 
 
-        public static Process ShellExecute(string filePath)
-            => Process.Start(new ProcessStartInfo { FileName = filePath, UseShellExecute = true });
+        public static Process ShellExecute(string filePath, string workingDirectory = null)
+            => Process.Start(new ProcessStartInfo { FileName = filePath, UseShellExecute = true, WorkingDirectory = workingDirectory });
 
-        public static Process OpenFile(string filePath)
+        /// <summary>
+        /// Opens the file with the application registered for its extension. If no application
+        /// opens it, selects the file in Explorer.
+        /// </summary>
+        /// <param name="filePath">The file to open.</param>
+        /// <param name="workingDirectory">The working directory of the started application. When
+        /// null, the application inherits the working directory of the calling process.</param>
+        public static Process OpenFile(string filePath, string workingDirectory = null)
         {
             if (!File.Exists(filePath))
                 throw new FileNotFoundException("", filePath);
@@ -309,7 +316,7 @@ namespace Vim.Util
             // Open the file with the default file extension handler.
             try
             {
-                return Process.Start(filePath);
+                return Process.Start(new ProcessStartInfo(filePath) { WorkingDirectory = workingDirectory });
             }
             catch (Exception e)
             {
@@ -319,7 +326,7 @@ namespace Vim.Util
             // If there is no default file extension handler, use shell execute
             try
             {
-                return ShellExecute(filePath);
+                return ShellExecute(filePath, workingDirectory);
             }
             catch (Exception e)
             {
