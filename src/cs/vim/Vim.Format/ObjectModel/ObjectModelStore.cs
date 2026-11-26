@@ -19,9 +19,9 @@ namespace Vim.Format.ObjectModel
         public List<DocumentBuilder.Instance> Instances { get; } = new List<DocumentBuilder.Instance>();
         public List<DocumentBuilder.Shape> Shapes { get; } = new List<DocumentBuilder.Shape>();
 
-        public DocumentBuilder ToDocumentBuilder(string generator, string versionString)
+        public DocumentBuilder ToDocumentBuilder(string generator, string versionString, IReadOnlyDictionary<string, string> optionalHeaderValues = null)
         {
-            return ObjectModelBuilder.ToDocumentBuilder(generator, versionString)
+            return ObjectModelBuilder.ToDocumentBuilder(generator, versionString, optionalHeaderValues)
                 .AddMeshes(Meshes.Select(g => g.Subdivide()))
                 .AddInstances(Instances)
                 .AddShapes(Shapes)

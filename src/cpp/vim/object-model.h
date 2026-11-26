@@ -1001,6 +1001,7 @@ namespace Vim
         std::string mCreator;
         std::string mLastChangedBy;
         std::string mOwner;
+        std::string mChangeToken;
         
         int mLevelIndex;
         Level* mLevel;
@@ -1057,6 +1058,7 @@ namespace Vim
             element->mCreator = GetCreator(elementIndex);
             element->mLastChangedBy = GetLastChangedBy(elementIndex);
             element->mOwner = GetOwner(elementIndex);
+            element->mChangeToken = GetChangeToken(elementIndex);
             element->mLevelIndex = GetLevelIndex(elementIndex);
             element->mPhaseCreatedIndex = GetPhaseCreatedIndex(elementIndex);
             element->mPhaseDemolishedIndex = GetPhaseDemolishedIndex(elementIndex);
@@ -1085,6 +1087,7 @@ namespace Vim
             bool existsCreator = mEntityTable.column_exists("string:Creator");
             bool existsLastChangedBy = mEntityTable.column_exists("string:LastChangedBy");
             bool existsOwner = mEntityTable.column_exists("string:Owner");
+            bool existsChangeToken = mEntityTable.column_exists("string:ChangeToken");
             bool existsLevel = mEntityTable.column_exists("index:Vim.Level:Level");
             bool existsPhaseCreated = mEntityTable.column_exists("index:Vim.Phase:PhaseCreated");
             bool existsPhaseDemolished = mEntityTable.column_exists("index:Vim.Phase:PhaseDemolished");
@@ -1146,6 +1149,8 @@ namespace Vim
             
             const std::vector<int>& ownerData = mEntityTable.column_exists("string:Owner") ? mEntityTable.mStringColumns["string:Owner"] : std::vector<int>();
             
+            const std::vector<int>& changeTokenData = mEntityTable.column_exists("string:ChangeToken") ? mEntityTable.mStringColumns["string:ChangeToken"] : std::vector<int>();
+            
             const std::vector<int>& levelData = mEntityTable.column_exists("index:Vim.Level:Level") ? mEntityTable.mIndexColumns["index:Vim.Level:Level"] : std::vector<int>();
             const std::vector<int>& phaseCreatedData = mEntityTable.column_exists("index:Vim.Phase:PhaseCreated") ? mEntityTable.mIndexColumns["index:Vim.Phase:PhaseCreated"] : std::vector<int>();
             const std::vector<int>& phaseDemolishedData = mEntityTable.column_exists("index:Vim.Phase:PhaseDemolished") ? mEntityTable.mIndexColumns["index:Vim.Phase:PhaseDemolished"] : std::vector<int>();
@@ -1186,6 +1191,8 @@ namespace Vim
                     entity.mLastChangedBy = std::string(reinterpret_cast<const char*>(mStrings[lastChangedByData[i]]));
                 if (existsOwner)
                     entity.mOwner = std::string(reinterpret_cast<const char*>(mStrings[ownerData[i]]));
+                if (existsChangeToken)
+                    entity.mChangeToken = std::string(reinterpret_cast<const char*>(mStrings[changeTokenData[i]]));
                 entity.mLevelIndex = existsLevel ? levelData[i] : -1;
                 entity.mPhaseCreatedIndex = existsPhaseCreated ? phaseCreatedData[i] : -1;
                 entity.mPhaseDemolishedIndex = existsPhaseDemolished ? phaseDemolishedData[i] : -1;
@@ -1556,6 +1563,35 @@ namespace Vim
             for (int i = 0; i < count; ++i)
             {
                 result->push_back(std::string(reinterpret_cast<const char*>(mStrings[ownerData[i]])));
+            }
+            
+            return result;
+        }
+        
+        std::string GetChangeToken(int elementIndex)
+        {
+            if (elementIndex < 0 || elementIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("string:ChangeToken")) {
+                return std::string(reinterpret_cast<const char*>(mStrings[mEntityTable.mStringColumns["string:ChangeToken"][elementIndex]]));
+            }
+            
+            return {};
+        }
+        
+        std::vector<std::string>* GetAllChangeToken()
+        {
+            const auto count = GetCount();
+            
+            const std::vector<int>& changeTokenData = mEntityTable.column_exists("string:ChangeToken") ? mEntityTable.mStringColumns["string:ChangeToken"] : std::vector<int>();
+            
+            std::vector<std::string>* result = new std::vector<std::string>();
+            result->reserve(count);
+            
+            for (int i = 0; i < count; ++i)
+            {
+                result->push_back(std::string(reinterpret_cast<const char*>(mStrings[changeTokenData[i]])));
             }
             
             return result;
@@ -3257,6 +3293,7 @@ namespace Vim
         bool mIsMetric;
         std::string mGuid;
         int mNumSaves;
+        std::string mIdentity;
         bool mIsLinked;
         bool mIsDetached;
         bool mIsWorkshared;
@@ -3316,6 +3353,7 @@ namespace Vim
             bimDocument->mIsMetric = GetIsMetric(bimDocumentIndex);
             bimDocument->mGuid = GetGuid(bimDocumentIndex);
             bimDocument->mNumSaves = GetNumSaves(bimDocumentIndex);
+            bimDocument->mIdentity = GetIdentity(bimDocumentIndex);
             bimDocument->mIsLinked = GetIsLinked(bimDocumentIndex);
             bimDocument->mIsDetached = GetIsDetached(bimDocumentIndex);
             bimDocument->mIsWorkshared = GetIsWorkshared(bimDocumentIndex);
@@ -3354,6 +3392,7 @@ namespace Vim
             bool existsIsMetric = mEntityTable.column_exists("byte:IsMetric");
             bool existsGuid = mEntityTable.column_exists("string:Guid");
             bool existsNumSaves = mEntityTable.column_exists("int:NumSaves");
+            bool existsIdentity = mEntityTable.column_exists("string:Identity");
             bool existsIsLinked = mEntityTable.column_exists("byte:IsLinked");
             bool existsIsDetached = mEntityTable.column_exists("byte:IsDetached");
             bool existsIsWorkshared = mEntityTable.column_exists("byte:IsWorkshared");
@@ -3402,6 +3441,8 @@ namespace Vim
             if (mEntityTable.column_exists("int:NumSaves")) {
                 memcpy(numSavesData, mEntityTable.mDataColumns["int:NumSaves"].begin(), count * sizeof(int));
             }
+            
+            const std::vector<int>& identityData = mEntityTable.column_exists("string:Identity") ? mEntityTable.mStringColumns["string:Identity"] : std::vector<int>();
             
             bfast::byte* isLinkedData = new bfast::byte[count];
             if (mEntityTable.column_exists("byte:IsLinked")) {
@@ -3494,6 +3535,8 @@ namespace Vim
                     entity.mGuid = std::string(reinterpret_cast<const char*>(mStrings[guidData[i]]));
                 if (existsNumSaves)
                     entity.mNumSaves = numSavesData[i];
+                if (existsIdentity)
+                    entity.mIdentity = std::string(reinterpret_cast<const char*>(mStrings[identityData[i]]));
                 if (existsIsLinked)
                     entity.mIsLinked = isLinkedData[i];
                 if (existsIsDetached)
@@ -3675,6 +3718,35 @@ namespace Vim
             std::vector<int>* result = new std::vector<int>(numSavesData, numSavesData + count);
             
             delete[] numSavesData;
+            
+            return result;
+        }
+        
+        std::string GetIdentity(int bimDocumentIndex)
+        {
+            if (bimDocumentIndex < 0 || bimDocumentIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("string:Identity")) {
+                return std::string(reinterpret_cast<const char*>(mStrings[mEntityTable.mStringColumns["string:Identity"][bimDocumentIndex]]));
+            }
+            
+            return {};
+        }
+        
+        std::vector<std::string>* GetAllIdentity()
+        {
+            const auto count = GetCount();
+            
+            const std::vector<int>& identityData = mEntityTable.column_exists("string:Identity") ? mEntityTable.mStringColumns["string:Identity"] : std::vector<int>();
+            
+            std::vector<std::string>* result = new std::vector<std::string>();
+            result->reserve(count);
+            
+            for (int i = 0; i < count; ++i)
+            {
+                result->push_back(std::string(reinterpret_cast<const char*>(mStrings[identityData[i]])));
+            }
             
             return result;
         }

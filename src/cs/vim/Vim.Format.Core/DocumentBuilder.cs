@@ -31,6 +31,14 @@ namespace Vim.Format
             Header = new SerializableHeader(generator, schema, versionString, optionalHeaderValues);
         }
 
+        /// <summary>
+        /// A builder which writes the given header (for example <see cref="SerializableHeader.CreateRevisionOf"/>).
+        /// </summary>
+        public DocumentBuilder(SerializableHeader header)
+        {
+            Header = header ?? throw new ArgumentNullException(nameof(header));
+        }
+
         public EntityTableBuilder GetTableBuilderOrCreate(string name)
         {
             if (!Tables.ContainsKey(name))
