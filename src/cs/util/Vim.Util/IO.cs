@@ -223,6 +223,57 @@ namespace Vim.Util
             return newFileName;
         }
 
+        private static readonly Regex VersionSuffixRegex = new Regex(@"\.v(\d+)$", RegexOptions.IgnoreCase | RegexOptions.Compiled);
+
+        /// <summary>
+        /// Returns the given file path if nothing exists there. Otherwise, returns the first free versioned
+        /// file path, with the following scheme: 'name.ext', 'name.v2.ext', 'name.v3.ext', ...<br/>
+        /// A trailing '.v{N}' version suffix in the given file name is replaced, not repeated
+        /// ('name.v2.ext' gives 'name.v3.ext', not 'name.v2.v2.ext').<br/>
+        /// A file or a directory at a candidate path makes that path unavailable.
+        /// </summary>
+        public static string GetVersionedFilePath(string filePath)
+        {
+            if (!File.Exists(filePath) && !Directory.Exists(filePath))
+                return filePath;
+
+            var directory = Path.GetDirectoryName(filePath) ?? "";
+            var extension = Path.GetExtension(filePath);
+            var baseName = VersionSuffixRegex.Replace(Path.GetFileNameWithoutExtension(filePath), "");
+
+            for (var version = 2; ; ++version)
+            {
+                var candidate = Path.Combine(directory, $"{baseName}.v{version}{extension}");
+                if (!File.Exists(candidate) && !Directory.Exists(candidate))
+                    return candidate;
+            }
+        }
+
+        /// <summary>
+        /// Returns true if the candidate file path is the base file path, or one of the versioned file paths
+        /// which <see cref="GetVersionedFilePath"/> gives for it ('name.v2.ext', 'name.v3.ext', ...).<br/>
+        /// The candidate must be in the same directory and have the same extension. A trailing '.v{N}' version
+        /// suffix in the base file name is ignored. The comparison ignores case.<br/>
+        /// Returns false if one of the paths is null or empty. Does not access the file system.
+        /// </summary>
+        public static bool IsVersionOfBaseFilePath(string baseFilePath, string candidateVersionedFilePath)
+        {
+            if (string.IsNullOrWhiteSpace(baseFilePath) || string.IsNullOrWhiteSpace(candidateVersionedFilePath))
+                return false;
+
+            var baseDirectory = Path.GetDirectoryName(Path.GetFullPath(baseFilePath));
+            var candidateDirectory = Path.GetDirectoryName(Path.GetFullPath(candidateVersionedFilePath));
+            if (!string.Equals(baseDirectory, candidateDirectory, StringComparison.OrdinalIgnoreCase))
+                return false;
+
+            if (!string.Equals(Path.GetExtension(baseFilePath), Path.GetExtension(candidateVersionedFilePath), StringComparison.OrdinalIgnoreCase))
+                return false;
+
+            var baseName = VersionSuffixRegex.Replace(Path.GetFileNameWithoutExtension(baseFilePath), "");
+            var candidateBaseName = VersionSuffixRegex.Replace(Path.GetFileNameWithoutExtension(candidateVersionedFilePath), "");
+            return string.Equals(baseName, candidateBaseName, StringComparison.OrdinalIgnoreCase);
+        }
+
         /// <summary>
         /// Generates a Regular Expression character set from an array of characters
         /// </summary>
