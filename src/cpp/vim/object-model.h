@@ -120,6 +120,12 @@ namespace Vim
     class SiteTable;
     class Building;
     class BuildingTable;
+    class LightType;
+    class LightTypeTable;
+    class LightSource;
+    class LightSourceTable;
+    class SunAndShadowSettings;
+    class SunAndShadowSettingsTable;
     
     class DocumentModel
     {
@@ -178,6 +184,9 @@ namespace Vim
         ViewInViewSheetTable* mViewInViewSheet;
         SiteTable* mSite;
         BuildingTable* mBuilding;
+        LightTypeTable* mLightType;
+        LightSourceTable* mLightSource;
+        SunAndShadowSettingsTable* mSunAndShadowSettings;
         
         DocumentModel(Scene& scene);
         ~DocumentModel();
@@ -14228,6 +14237,2052 @@ namespace Vim
         return new BuildingTable(scene.mEntityTables["Vim.Building"], scene.mStrings);
     }
     
+    class LightType
+    {
+    public:
+        int mIndex;
+        int mLightShapeStyle;
+        double mEmitLength;
+        double mEmitWidth;
+        double mEmitDiameter;
+        int mLightDistributionStyle;
+        double mSpotBeamAngle;
+        double mSpotFieldAngle;
+        double mTiltAngle;
+        std::string mPhotometricWebFileName;
+        int mInitialIntensityType;
+        double mLuminosity;
+        double mFlux;
+        double mWattage;
+        double mEfficacy;
+        double mIlluminance;
+        double mIlluminanceDistance;
+        double mInitialColorTemperature;
+        double mColorFilter_X;
+        double mColorFilter_Y;
+        double mColorFilter_Z;
+        double mLossFactor;
+        int mDimmingColor;
+        
+        int mPhotometricWebFileIndex;
+        Asset* mPhotometricWebFile;
+        int mFamilyTypeIndex;
+        FamilyType* mFamilyType;
+        
+        LightType() {}
+    };
+    
+    class LightTypeTable
+    {
+        EntityTable& mEntityTable;
+        std::vector<const bfast::byte*>& mStrings;
+    public:
+        LightTypeTable(EntityTable& entityTable, std::vector<const bfast::byte*>& strings):
+            mEntityTable(entityTable), mStrings(strings) {}
+        
+        size_t GetCount()
+        {
+            return mEntityTable.get_count();
+        }
+        
+        LightType* Get(int lightTypeIndex)
+        {
+            LightType* lightType = new LightType();
+            lightType->mIndex = lightTypeIndex;
+            lightType->mLightShapeStyle = GetLightShapeStyle(lightTypeIndex);
+            lightType->mEmitLength = GetEmitLength(lightTypeIndex);
+            lightType->mEmitWidth = GetEmitWidth(lightTypeIndex);
+            lightType->mEmitDiameter = GetEmitDiameter(lightTypeIndex);
+            lightType->mLightDistributionStyle = GetLightDistributionStyle(lightTypeIndex);
+            lightType->mSpotBeamAngle = GetSpotBeamAngle(lightTypeIndex);
+            lightType->mSpotFieldAngle = GetSpotFieldAngle(lightTypeIndex);
+            lightType->mTiltAngle = GetTiltAngle(lightTypeIndex);
+            lightType->mPhotometricWebFileName = GetPhotometricWebFileName(lightTypeIndex);
+            lightType->mInitialIntensityType = GetInitialIntensityType(lightTypeIndex);
+            lightType->mLuminosity = GetLuminosity(lightTypeIndex);
+            lightType->mFlux = GetFlux(lightTypeIndex);
+            lightType->mWattage = GetWattage(lightTypeIndex);
+            lightType->mEfficacy = GetEfficacy(lightTypeIndex);
+            lightType->mIlluminance = GetIlluminance(lightTypeIndex);
+            lightType->mIlluminanceDistance = GetIlluminanceDistance(lightTypeIndex);
+            lightType->mInitialColorTemperature = GetInitialColorTemperature(lightTypeIndex);
+            lightType->mColorFilter_X = GetColorFilter_X(lightTypeIndex);
+            lightType->mColorFilter_Y = GetColorFilter_Y(lightTypeIndex);
+            lightType->mColorFilter_Z = GetColorFilter_Z(lightTypeIndex);
+            lightType->mLossFactor = GetLossFactor(lightTypeIndex);
+            lightType->mDimmingColor = GetDimmingColor(lightTypeIndex);
+            lightType->mPhotometricWebFileIndex = GetPhotometricWebFileIndex(lightTypeIndex);
+            lightType->mFamilyTypeIndex = GetFamilyTypeIndex(lightTypeIndex);
+            return lightType;
+        }
+        
+        std::vector<LightType>* GetAll()
+        {
+            bool existsLightShapeStyle = mEntityTable.column_exists("int:LightShapeStyle");
+            bool existsEmitLength = mEntityTable.column_exists("double:EmitLength");
+            bool existsEmitWidth = mEntityTable.column_exists("double:EmitWidth");
+            bool existsEmitDiameter = mEntityTable.column_exists("double:EmitDiameter");
+            bool existsLightDistributionStyle = mEntityTable.column_exists("int:LightDistributionStyle");
+            bool existsSpotBeamAngle = mEntityTable.column_exists("double:SpotBeamAngle");
+            bool existsSpotFieldAngle = mEntityTable.column_exists("double:SpotFieldAngle");
+            bool existsTiltAngle = mEntityTable.column_exists("double:TiltAngle");
+            bool existsPhotometricWebFileName = mEntityTable.column_exists("string:PhotometricWebFileName");
+            bool existsInitialIntensityType = mEntityTable.column_exists("int:InitialIntensityType");
+            bool existsLuminosity = mEntityTable.column_exists("double:Luminosity");
+            bool existsFlux = mEntityTable.column_exists("double:Flux");
+            bool existsWattage = mEntityTable.column_exists("double:Wattage");
+            bool existsEfficacy = mEntityTable.column_exists("double:Efficacy");
+            bool existsIlluminance = mEntityTable.column_exists("double:Illuminance");
+            bool existsIlluminanceDistance = mEntityTable.column_exists("double:IlluminanceDistance");
+            bool existsInitialColorTemperature = mEntityTable.column_exists("double:InitialColorTemperature");
+            bool existsColorFilter_X = mEntityTable.column_exists("double:ColorFilter.X");
+            bool existsColorFilter_Y = mEntityTable.column_exists("double:ColorFilter.Y");
+            bool existsColorFilter_Z = mEntityTable.column_exists("double:ColorFilter.Z");
+            bool existsLossFactor = mEntityTable.column_exists("double:LossFactor");
+            bool existsDimmingColor = mEntityTable.column_exists("int:DimmingColor");
+            bool existsPhotometricWebFile = mEntityTable.column_exists("index:Vim.Asset:PhotometricWebFile");
+            bool existsFamilyType = mEntityTable.column_exists("index:Vim.FamilyType:FamilyType");
+            
+            const auto count = GetCount();
+            
+            std::vector<LightType>* lightType = new std::vector<LightType>();
+            lightType->reserve(count);
+            
+            int* lightShapeStyleData = new int[count];
+            if (mEntityTable.column_exists("int:LightShapeStyle")) {
+                memcpy(lightShapeStyleData, mEntityTable.mDataColumns["int:LightShapeStyle"].begin(), count * sizeof(int));
+            }
+            
+            double* emitLengthData = new double[count];
+            if (mEntityTable.column_exists("double:EmitLength")) {
+                memcpy(emitLengthData, mEntityTable.mDataColumns["double:EmitLength"].begin(), count * sizeof(double));
+            }
+            
+            double* emitWidthData = new double[count];
+            if (mEntityTable.column_exists("double:EmitWidth")) {
+                memcpy(emitWidthData, mEntityTable.mDataColumns["double:EmitWidth"].begin(), count * sizeof(double));
+            }
+            
+            double* emitDiameterData = new double[count];
+            if (mEntityTable.column_exists("double:EmitDiameter")) {
+                memcpy(emitDiameterData, mEntityTable.mDataColumns["double:EmitDiameter"].begin(), count * sizeof(double));
+            }
+            
+            int* lightDistributionStyleData = new int[count];
+            if (mEntityTable.column_exists("int:LightDistributionStyle")) {
+                memcpy(lightDistributionStyleData, mEntityTable.mDataColumns["int:LightDistributionStyle"].begin(), count * sizeof(int));
+            }
+            
+            double* spotBeamAngleData = new double[count];
+            if (mEntityTable.column_exists("double:SpotBeamAngle")) {
+                memcpy(spotBeamAngleData, mEntityTable.mDataColumns["double:SpotBeamAngle"].begin(), count * sizeof(double));
+            }
+            
+            double* spotFieldAngleData = new double[count];
+            if (mEntityTable.column_exists("double:SpotFieldAngle")) {
+                memcpy(spotFieldAngleData, mEntityTable.mDataColumns["double:SpotFieldAngle"].begin(), count * sizeof(double));
+            }
+            
+            double* tiltAngleData = new double[count];
+            if (mEntityTable.column_exists("double:TiltAngle")) {
+                memcpy(tiltAngleData, mEntityTable.mDataColumns["double:TiltAngle"].begin(), count * sizeof(double));
+            }
+            
+            const std::vector<int>& photometricWebFileNameData = mEntityTable.column_exists("string:PhotometricWebFileName") ? mEntityTable.mStringColumns["string:PhotometricWebFileName"] : std::vector<int>();
+            
+            int* initialIntensityTypeData = new int[count];
+            if (mEntityTable.column_exists("int:InitialIntensityType")) {
+                memcpy(initialIntensityTypeData, mEntityTable.mDataColumns["int:InitialIntensityType"].begin(), count * sizeof(int));
+            }
+            
+            double* luminosityData = new double[count];
+            if (mEntityTable.column_exists("double:Luminosity")) {
+                memcpy(luminosityData, mEntityTable.mDataColumns["double:Luminosity"].begin(), count * sizeof(double));
+            }
+            
+            double* fluxData = new double[count];
+            if (mEntityTable.column_exists("double:Flux")) {
+                memcpy(fluxData, mEntityTable.mDataColumns["double:Flux"].begin(), count * sizeof(double));
+            }
+            
+            double* wattageData = new double[count];
+            if (mEntityTable.column_exists("double:Wattage")) {
+                memcpy(wattageData, mEntityTable.mDataColumns["double:Wattage"].begin(), count * sizeof(double));
+            }
+            
+            double* efficacyData = new double[count];
+            if (mEntityTable.column_exists("double:Efficacy")) {
+                memcpy(efficacyData, mEntityTable.mDataColumns["double:Efficacy"].begin(), count * sizeof(double));
+            }
+            
+            double* illuminanceData = new double[count];
+            if (mEntityTable.column_exists("double:Illuminance")) {
+                memcpy(illuminanceData, mEntityTable.mDataColumns["double:Illuminance"].begin(), count * sizeof(double));
+            }
+            
+            double* illuminanceDistanceData = new double[count];
+            if (mEntityTable.column_exists("double:IlluminanceDistance")) {
+                memcpy(illuminanceDistanceData, mEntityTable.mDataColumns["double:IlluminanceDistance"].begin(), count * sizeof(double));
+            }
+            
+            double* initialColorTemperatureData = new double[count];
+            if (mEntityTable.column_exists("double:InitialColorTemperature")) {
+                memcpy(initialColorTemperatureData, mEntityTable.mDataColumns["double:InitialColorTemperature"].begin(), count * sizeof(double));
+            }
+            
+            double* colorFilter_XData = new double[count];
+            if (mEntityTable.column_exists("double:ColorFilter.X")) {
+                memcpy(colorFilter_XData, mEntityTable.mDataColumns["double:ColorFilter.X"].begin(), count * sizeof(double));
+            }
+            
+            double* colorFilter_YData = new double[count];
+            if (mEntityTable.column_exists("double:ColorFilter.Y")) {
+                memcpy(colorFilter_YData, mEntityTable.mDataColumns["double:ColorFilter.Y"].begin(), count * sizeof(double));
+            }
+            
+            double* colorFilter_ZData = new double[count];
+            if (mEntityTable.column_exists("double:ColorFilter.Z")) {
+                memcpy(colorFilter_ZData, mEntityTable.mDataColumns["double:ColorFilter.Z"].begin(), count * sizeof(double));
+            }
+            
+            double* lossFactorData = new double[count];
+            if (mEntityTable.column_exists("double:LossFactor")) {
+                memcpy(lossFactorData, mEntityTable.mDataColumns["double:LossFactor"].begin(), count * sizeof(double));
+            }
+            
+            int* dimmingColorData = new int[count];
+            if (mEntityTable.column_exists("int:DimmingColor")) {
+                memcpy(dimmingColorData, mEntityTable.mDataColumns["int:DimmingColor"].begin(), count * sizeof(int));
+            }
+            
+            const std::vector<int>& photometricWebFileData = mEntityTable.column_exists("index:Vim.Asset:PhotometricWebFile") ? mEntityTable.mIndexColumns["index:Vim.Asset:PhotometricWebFile"] : std::vector<int>();
+            const std::vector<int>& familyTypeData = mEntityTable.column_exists("index:Vim.FamilyType:FamilyType") ? mEntityTable.mIndexColumns["index:Vim.FamilyType:FamilyType"] : std::vector<int>();
+            
+            for (int i = 0; i < count; ++i)
+            {
+                LightType entity;
+                entity.mIndex = i;
+                if (existsLightShapeStyle)
+                    entity.mLightShapeStyle = lightShapeStyleData[i];
+                if (existsEmitLength)
+                    entity.mEmitLength = emitLengthData[i];
+                if (existsEmitWidth)
+                    entity.mEmitWidth = emitWidthData[i];
+                if (existsEmitDiameter)
+                    entity.mEmitDiameter = emitDiameterData[i];
+                if (existsLightDistributionStyle)
+                    entity.mLightDistributionStyle = lightDistributionStyleData[i];
+                if (existsSpotBeamAngle)
+                    entity.mSpotBeamAngle = spotBeamAngleData[i];
+                if (existsSpotFieldAngle)
+                    entity.mSpotFieldAngle = spotFieldAngleData[i];
+                if (existsTiltAngle)
+                    entity.mTiltAngle = tiltAngleData[i];
+                if (existsPhotometricWebFileName)
+                    entity.mPhotometricWebFileName = std::string(reinterpret_cast<const char*>(mStrings[photometricWebFileNameData[i]]));
+                if (existsInitialIntensityType)
+                    entity.mInitialIntensityType = initialIntensityTypeData[i];
+                if (existsLuminosity)
+                    entity.mLuminosity = luminosityData[i];
+                if (existsFlux)
+                    entity.mFlux = fluxData[i];
+                if (existsWattage)
+                    entity.mWattage = wattageData[i];
+                if (existsEfficacy)
+                    entity.mEfficacy = efficacyData[i];
+                if (existsIlluminance)
+                    entity.mIlluminance = illuminanceData[i];
+                if (existsIlluminanceDistance)
+                    entity.mIlluminanceDistance = illuminanceDistanceData[i];
+                if (existsInitialColorTemperature)
+                    entity.mInitialColorTemperature = initialColorTemperatureData[i];
+                if (existsColorFilter_X)
+                    entity.mColorFilter_X = colorFilter_XData[i];
+                if (existsColorFilter_Y)
+                    entity.mColorFilter_Y = colorFilter_YData[i];
+                if (existsColorFilter_Z)
+                    entity.mColorFilter_Z = colorFilter_ZData[i];
+                if (existsLossFactor)
+                    entity.mLossFactor = lossFactorData[i];
+                if (existsDimmingColor)
+                    entity.mDimmingColor = dimmingColorData[i];
+                entity.mPhotometricWebFileIndex = existsPhotometricWebFile ? photometricWebFileData[i] : -1;
+                entity.mFamilyTypeIndex = existsFamilyType ? familyTypeData[i] : -1;
+                lightType->push_back(entity);
+            }
+            
+            delete[] lightShapeStyleData;
+            delete[] emitLengthData;
+            delete[] emitWidthData;
+            delete[] emitDiameterData;
+            delete[] lightDistributionStyleData;
+            delete[] spotBeamAngleData;
+            delete[] spotFieldAngleData;
+            delete[] tiltAngleData;
+            delete[] initialIntensityTypeData;
+            delete[] luminosityData;
+            delete[] fluxData;
+            delete[] wattageData;
+            delete[] efficacyData;
+            delete[] illuminanceData;
+            delete[] illuminanceDistanceData;
+            delete[] initialColorTemperatureData;
+            delete[] colorFilter_XData;
+            delete[] colorFilter_YData;
+            delete[] colorFilter_ZData;
+            delete[] lossFactorData;
+            delete[] dimmingColorData;
+            
+            return lightType;
+        }
+        
+        int GetLightShapeStyle(int lightTypeIndex)
+        {
+            if (lightTypeIndex < 0 || lightTypeIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("int:LightShapeStyle")) {
+                return *reinterpret_cast<int*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["int:LightShapeStyle"].begin() + lightTypeIndex * sizeof(int)));
+            }
+            
+            return {};
+        }
+        
+        std::vector<int>* GetAllLightShapeStyle()
+        {
+            const auto count = GetCount();
+            
+            int* lightShapeStyleData = new int[count];
+            if (mEntityTable.column_exists("int:LightShapeStyle")) {
+                memcpy(lightShapeStyleData, mEntityTable.mDataColumns["int:LightShapeStyle"].begin(), count * sizeof(int));
+            }
+            
+            std::vector<int>* result = new std::vector<int>(lightShapeStyleData, lightShapeStyleData + count);
+            
+            delete[] lightShapeStyleData;
+            
+            return result;
+        }
+        
+        double GetEmitLength(int lightTypeIndex)
+        {
+            if (lightTypeIndex < 0 || lightTypeIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("double:EmitLength")) {
+                return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:EmitLength"].begin() + lightTypeIndex * sizeof(double)));
+            }
+            
+            return {};
+        }
+        
+        std::vector<double>* GetAllEmitLength()
+        {
+            const auto count = GetCount();
+            
+            double* emitLengthData = new double[count];
+            if (mEntityTable.column_exists("double:EmitLength")) {
+                memcpy(emitLengthData, mEntityTable.mDataColumns["double:EmitLength"].begin(), count * sizeof(double));
+            }
+            
+            std::vector<double>* result = new std::vector<double>(emitLengthData, emitLengthData + count);
+            
+            delete[] emitLengthData;
+            
+            return result;
+        }
+        
+        double GetEmitWidth(int lightTypeIndex)
+        {
+            if (lightTypeIndex < 0 || lightTypeIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("double:EmitWidth")) {
+                return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:EmitWidth"].begin() + lightTypeIndex * sizeof(double)));
+            }
+            
+            return {};
+        }
+        
+        std::vector<double>* GetAllEmitWidth()
+        {
+            const auto count = GetCount();
+            
+            double* emitWidthData = new double[count];
+            if (mEntityTable.column_exists("double:EmitWidth")) {
+                memcpy(emitWidthData, mEntityTable.mDataColumns["double:EmitWidth"].begin(), count * sizeof(double));
+            }
+            
+            std::vector<double>* result = new std::vector<double>(emitWidthData, emitWidthData + count);
+            
+            delete[] emitWidthData;
+            
+            return result;
+        }
+        
+        double GetEmitDiameter(int lightTypeIndex)
+        {
+            if (lightTypeIndex < 0 || lightTypeIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("double:EmitDiameter")) {
+                return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:EmitDiameter"].begin() + lightTypeIndex * sizeof(double)));
+            }
+            
+            return {};
+        }
+        
+        std::vector<double>* GetAllEmitDiameter()
+        {
+            const auto count = GetCount();
+            
+            double* emitDiameterData = new double[count];
+            if (mEntityTable.column_exists("double:EmitDiameter")) {
+                memcpy(emitDiameterData, mEntityTable.mDataColumns["double:EmitDiameter"].begin(), count * sizeof(double));
+            }
+            
+            std::vector<double>* result = new std::vector<double>(emitDiameterData, emitDiameterData + count);
+            
+            delete[] emitDiameterData;
+            
+            return result;
+        }
+        
+        int GetLightDistributionStyle(int lightTypeIndex)
+        {
+            if (lightTypeIndex < 0 || lightTypeIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("int:LightDistributionStyle")) {
+                return *reinterpret_cast<int*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["int:LightDistributionStyle"].begin() + lightTypeIndex * sizeof(int)));
+            }
+            
+            return {};
+        }
+        
+        std::vector<int>* GetAllLightDistributionStyle()
+        {
+            const auto count = GetCount();
+            
+            int* lightDistributionStyleData = new int[count];
+            if (mEntityTable.column_exists("int:LightDistributionStyle")) {
+                memcpy(lightDistributionStyleData, mEntityTable.mDataColumns["int:LightDistributionStyle"].begin(), count * sizeof(int));
+            }
+            
+            std::vector<int>* result = new std::vector<int>(lightDistributionStyleData, lightDistributionStyleData + count);
+            
+            delete[] lightDistributionStyleData;
+            
+            return result;
+        }
+        
+        double GetSpotBeamAngle(int lightTypeIndex)
+        {
+            if (lightTypeIndex < 0 || lightTypeIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("double:SpotBeamAngle")) {
+                return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:SpotBeamAngle"].begin() + lightTypeIndex * sizeof(double)));
+            }
+            
+            return {};
+        }
+        
+        std::vector<double>* GetAllSpotBeamAngle()
+        {
+            const auto count = GetCount();
+            
+            double* spotBeamAngleData = new double[count];
+            if (mEntityTable.column_exists("double:SpotBeamAngle")) {
+                memcpy(spotBeamAngleData, mEntityTable.mDataColumns["double:SpotBeamAngle"].begin(), count * sizeof(double));
+            }
+            
+            std::vector<double>* result = new std::vector<double>(spotBeamAngleData, spotBeamAngleData + count);
+            
+            delete[] spotBeamAngleData;
+            
+            return result;
+        }
+        
+        double GetSpotFieldAngle(int lightTypeIndex)
+        {
+            if (lightTypeIndex < 0 || lightTypeIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("double:SpotFieldAngle")) {
+                return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:SpotFieldAngle"].begin() + lightTypeIndex * sizeof(double)));
+            }
+            
+            return {};
+        }
+        
+        std::vector<double>* GetAllSpotFieldAngle()
+        {
+            const auto count = GetCount();
+            
+            double* spotFieldAngleData = new double[count];
+            if (mEntityTable.column_exists("double:SpotFieldAngle")) {
+                memcpy(spotFieldAngleData, mEntityTable.mDataColumns["double:SpotFieldAngle"].begin(), count * sizeof(double));
+            }
+            
+            std::vector<double>* result = new std::vector<double>(spotFieldAngleData, spotFieldAngleData + count);
+            
+            delete[] spotFieldAngleData;
+            
+            return result;
+        }
+        
+        double GetTiltAngle(int lightTypeIndex)
+        {
+            if (lightTypeIndex < 0 || lightTypeIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("double:TiltAngle")) {
+                return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:TiltAngle"].begin() + lightTypeIndex * sizeof(double)));
+            }
+            
+            return {};
+        }
+        
+        std::vector<double>* GetAllTiltAngle()
+        {
+            const auto count = GetCount();
+            
+            double* tiltAngleData = new double[count];
+            if (mEntityTable.column_exists("double:TiltAngle")) {
+                memcpy(tiltAngleData, mEntityTable.mDataColumns["double:TiltAngle"].begin(), count * sizeof(double));
+            }
+            
+            std::vector<double>* result = new std::vector<double>(tiltAngleData, tiltAngleData + count);
+            
+            delete[] tiltAngleData;
+            
+            return result;
+        }
+        
+        std::string GetPhotometricWebFileName(int lightTypeIndex)
+        {
+            if (lightTypeIndex < 0 || lightTypeIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("string:PhotometricWebFileName")) {
+                return std::string(reinterpret_cast<const char*>(mStrings[mEntityTable.mStringColumns["string:PhotometricWebFileName"][lightTypeIndex]]));
+            }
+            
+            return {};
+        }
+        
+        std::vector<std::string>* GetAllPhotometricWebFileName()
+        {
+            const auto count = GetCount();
+            
+            const std::vector<int>& photometricWebFileNameData = mEntityTable.column_exists("string:PhotometricWebFileName") ? mEntityTable.mStringColumns["string:PhotometricWebFileName"] : std::vector<int>();
+            
+            std::vector<std::string>* result = new std::vector<std::string>();
+            result->reserve(count);
+            
+            for (int i = 0; i < count; ++i)
+            {
+                result->push_back(std::string(reinterpret_cast<const char*>(mStrings[photometricWebFileNameData[i]])));
+            }
+            
+            return result;
+        }
+        
+        int GetInitialIntensityType(int lightTypeIndex)
+        {
+            if (lightTypeIndex < 0 || lightTypeIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("int:InitialIntensityType")) {
+                return *reinterpret_cast<int*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["int:InitialIntensityType"].begin() + lightTypeIndex * sizeof(int)));
+            }
+            
+            return {};
+        }
+        
+        std::vector<int>* GetAllInitialIntensityType()
+        {
+            const auto count = GetCount();
+            
+            int* initialIntensityTypeData = new int[count];
+            if (mEntityTable.column_exists("int:InitialIntensityType")) {
+                memcpy(initialIntensityTypeData, mEntityTable.mDataColumns["int:InitialIntensityType"].begin(), count * sizeof(int));
+            }
+            
+            std::vector<int>* result = new std::vector<int>(initialIntensityTypeData, initialIntensityTypeData + count);
+            
+            delete[] initialIntensityTypeData;
+            
+            return result;
+        }
+        
+        double GetLuminosity(int lightTypeIndex)
+        {
+            if (lightTypeIndex < 0 || lightTypeIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("double:Luminosity")) {
+                return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:Luminosity"].begin() + lightTypeIndex * sizeof(double)));
+            }
+            
+            return {};
+        }
+        
+        std::vector<double>* GetAllLuminosity()
+        {
+            const auto count = GetCount();
+            
+            double* luminosityData = new double[count];
+            if (mEntityTable.column_exists("double:Luminosity")) {
+                memcpy(luminosityData, mEntityTable.mDataColumns["double:Luminosity"].begin(), count * sizeof(double));
+            }
+            
+            std::vector<double>* result = new std::vector<double>(luminosityData, luminosityData + count);
+            
+            delete[] luminosityData;
+            
+            return result;
+        }
+        
+        double GetFlux(int lightTypeIndex)
+        {
+            if (lightTypeIndex < 0 || lightTypeIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("double:Flux")) {
+                return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:Flux"].begin() + lightTypeIndex * sizeof(double)));
+            }
+            
+            return {};
+        }
+        
+        std::vector<double>* GetAllFlux()
+        {
+            const auto count = GetCount();
+            
+            double* fluxData = new double[count];
+            if (mEntityTable.column_exists("double:Flux")) {
+                memcpy(fluxData, mEntityTable.mDataColumns["double:Flux"].begin(), count * sizeof(double));
+            }
+            
+            std::vector<double>* result = new std::vector<double>(fluxData, fluxData + count);
+            
+            delete[] fluxData;
+            
+            return result;
+        }
+        
+        double GetWattage(int lightTypeIndex)
+        {
+            if (lightTypeIndex < 0 || lightTypeIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("double:Wattage")) {
+                return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:Wattage"].begin() + lightTypeIndex * sizeof(double)));
+            }
+            
+            return {};
+        }
+        
+        std::vector<double>* GetAllWattage()
+        {
+            const auto count = GetCount();
+            
+            double* wattageData = new double[count];
+            if (mEntityTable.column_exists("double:Wattage")) {
+                memcpy(wattageData, mEntityTable.mDataColumns["double:Wattage"].begin(), count * sizeof(double));
+            }
+            
+            std::vector<double>* result = new std::vector<double>(wattageData, wattageData + count);
+            
+            delete[] wattageData;
+            
+            return result;
+        }
+        
+        double GetEfficacy(int lightTypeIndex)
+        {
+            if (lightTypeIndex < 0 || lightTypeIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("double:Efficacy")) {
+                return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:Efficacy"].begin() + lightTypeIndex * sizeof(double)));
+            }
+            
+            return {};
+        }
+        
+        std::vector<double>* GetAllEfficacy()
+        {
+            const auto count = GetCount();
+            
+            double* efficacyData = new double[count];
+            if (mEntityTable.column_exists("double:Efficacy")) {
+                memcpy(efficacyData, mEntityTable.mDataColumns["double:Efficacy"].begin(), count * sizeof(double));
+            }
+            
+            std::vector<double>* result = new std::vector<double>(efficacyData, efficacyData + count);
+            
+            delete[] efficacyData;
+            
+            return result;
+        }
+        
+        double GetIlluminance(int lightTypeIndex)
+        {
+            if (lightTypeIndex < 0 || lightTypeIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("double:Illuminance")) {
+                return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:Illuminance"].begin() + lightTypeIndex * sizeof(double)));
+            }
+            
+            return {};
+        }
+        
+        std::vector<double>* GetAllIlluminance()
+        {
+            const auto count = GetCount();
+            
+            double* illuminanceData = new double[count];
+            if (mEntityTable.column_exists("double:Illuminance")) {
+                memcpy(illuminanceData, mEntityTable.mDataColumns["double:Illuminance"].begin(), count * sizeof(double));
+            }
+            
+            std::vector<double>* result = new std::vector<double>(illuminanceData, illuminanceData + count);
+            
+            delete[] illuminanceData;
+            
+            return result;
+        }
+        
+        double GetIlluminanceDistance(int lightTypeIndex)
+        {
+            if (lightTypeIndex < 0 || lightTypeIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("double:IlluminanceDistance")) {
+                return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:IlluminanceDistance"].begin() + lightTypeIndex * sizeof(double)));
+            }
+            
+            return {};
+        }
+        
+        std::vector<double>* GetAllIlluminanceDistance()
+        {
+            const auto count = GetCount();
+            
+            double* illuminanceDistanceData = new double[count];
+            if (mEntityTable.column_exists("double:IlluminanceDistance")) {
+                memcpy(illuminanceDistanceData, mEntityTable.mDataColumns["double:IlluminanceDistance"].begin(), count * sizeof(double));
+            }
+            
+            std::vector<double>* result = new std::vector<double>(illuminanceDistanceData, illuminanceDistanceData + count);
+            
+            delete[] illuminanceDistanceData;
+            
+            return result;
+        }
+        
+        double GetInitialColorTemperature(int lightTypeIndex)
+        {
+            if (lightTypeIndex < 0 || lightTypeIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("double:InitialColorTemperature")) {
+                return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:InitialColorTemperature"].begin() + lightTypeIndex * sizeof(double)));
+            }
+            
+            return {};
+        }
+        
+        std::vector<double>* GetAllInitialColorTemperature()
+        {
+            const auto count = GetCount();
+            
+            double* initialColorTemperatureData = new double[count];
+            if (mEntityTable.column_exists("double:InitialColorTemperature")) {
+                memcpy(initialColorTemperatureData, mEntityTable.mDataColumns["double:InitialColorTemperature"].begin(), count * sizeof(double));
+            }
+            
+            std::vector<double>* result = new std::vector<double>(initialColorTemperatureData, initialColorTemperatureData + count);
+            
+            delete[] initialColorTemperatureData;
+            
+            return result;
+        }
+        
+        double GetColorFilter_X(int lightTypeIndex)
+        {
+            if (lightTypeIndex < 0 || lightTypeIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("double:ColorFilter.X")) {
+                return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:ColorFilter.X"].begin() + lightTypeIndex * sizeof(double)));
+            }
+            
+            return {};
+        }
+        
+        std::vector<double>* GetAllColorFilter_X()
+        {
+            const auto count = GetCount();
+            
+            double* colorFilter_XData = new double[count];
+            if (mEntityTable.column_exists("double:ColorFilter.X")) {
+                memcpy(colorFilter_XData, mEntityTable.mDataColumns["double:ColorFilter.X"].begin(), count * sizeof(double));
+            }
+            
+            std::vector<double>* result = new std::vector<double>(colorFilter_XData, colorFilter_XData + count);
+            
+            delete[] colorFilter_XData;
+            
+            return result;
+        }
+        
+        double GetColorFilter_Y(int lightTypeIndex)
+        {
+            if (lightTypeIndex < 0 || lightTypeIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("double:ColorFilter.Y")) {
+                return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:ColorFilter.Y"].begin() + lightTypeIndex * sizeof(double)));
+            }
+            
+            return {};
+        }
+        
+        std::vector<double>* GetAllColorFilter_Y()
+        {
+            const auto count = GetCount();
+            
+            double* colorFilter_YData = new double[count];
+            if (mEntityTable.column_exists("double:ColorFilter.Y")) {
+                memcpy(colorFilter_YData, mEntityTable.mDataColumns["double:ColorFilter.Y"].begin(), count * sizeof(double));
+            }
+            
+            std::vector<double>* result = new std::vector<double>(colorFilter_YData, colorFilter_YData + count);
+            
+            delete[] colorFilter_YData;
+            
+            return result;
+        }
+        
+        double GetColorFilter_Z(int lightTypeIndex)
+        {
+            if (lightTypeIndex < 0 || lightTypeIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("double:ColorFilter.Z")) {
+                return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:ColorFilter.Z"].begin() + lightTypeIndex * sizeof(double)));
+            }
+            
+            return {};
+        }
+        
+        std::vector<double>* GetAllColorFilter_Z()
+        {
+            const auto count = GetCount();
+            
+            double* colorFilter_ZData = new double[count];
+            if (mEntityTable.column_exists("double:ColorFilter.Z")) {
+                memcpy(colorFilter_ZData, mEntityTable.mDataColumns["double:ColorFilter.Z"].begin(), count * sizeof(double));
+            }
+            
+            std::vector<double>* result = new std::vector<double>(colorFilter_ZData, colorFilter_ZData + count);
+            
+            delete[] colorFilter_ZData;
+            
+            return result;
+        }
+        
+        double GetLossFactor(int lightTypeIndex)
+        {
+            if (lightTypeIndex < 0 || lightTypeIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("double:LossFactor")) {
+                return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:LossFactor"].begin() + lightTypeIndex * sizeof(double)));
+            }
+            
+            return {};
+        }
+        
+        std::vector<double>* GetAllLossFactor()
+        {
+            const auto count = GetCount();
+            
+            double* lossFactorData = new double[count];
+            if (mEntityTable.column_exists("double:LossFactor")) {
+                memcpy(lossFactorData, mEntityTable.mDataColumns["double:LossFactor"].begin(), count * sizeof(double));
+            }
+            
+            std::vector<double>* result = new std::vector<double>(lossFactorData, lossFactorData + count);
+            
+            delete[] lossFactorData;
+            
+            return result;
+        }
+        
+        int GetDimmingColor(int lightTypeIndex)
+        {
+            if (lightTypeIndex < 0 || lightTypeIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("int:DimmingColor")) {
+                return *reinterpret_cast<int*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["int:DimmingColor"].begin() + lightTypeIndex * sizeof(int)));
+            }
+            
+            return {};
+        }
+        
+        std::vector<int>* GetAllDimmingColor()
+        {
+            const auto count = GetCount();
+            
+            int* dimmingColorData = new int[count];
+            if (mEntityTable.column_exists("int:DimmingColor")) {
+                memcpy(dimmingColorData, mEntityTable.mDataColumns["int:DimmingColor"].begin(), count * sizeof(int));
+            }
+            
+            std::vector<int>* result = new std::vector<int>(dimmingColorData, dimmingColorData + count);
+            
+            delete[] dimmingColorData;
+            
+            return result;
+        }
+        
+        int GetPhotometricWebFileIndex(int lightTypeIndex)
+        {
+            if (!mEntityTable.column_exists("index:Vim.Asset:PhotometricWebFile")) {
+                return -1;
+            }
+            
+            if (lightTypeIndex < 0 || lightTypeIndex >= GetCount())
+                return -1;
+            
+            return mEntityTable.mIndexColumns["index:Vim.Asset:PhotometricWebFile"][lightTypeIndex];
+        }
+        
+        int GetFamilyTypeIndex(int lightTypeIndex)
+        {
+            if (!mEntityTable.column_exists("index:Vim.FamilyType:FamilyType")) {
+                return -1;
+            }
+            
+            if (lightTypeIndex < 0 || lightTypeIndex >= GetCount())
+                return -1;
+            
+            return mEntityTable.mIndexColumns["index:Vim.FamilyType:FamilyType"][lightTypeIndex];
+        }
+        
+    };
+    
+    static LightTypeTable* GetLightTypeTable(Scene& scene)
+    {
+        if (scene.mEntityTables.find("Vim.LightType") == scene.mEntityTables.end())
+            return {};
+        
+        return new LightTypeTable(scene.mEntityTables["Vim.LightType"], scene.mStrings);
+    }
+    
+    class LightSource
+    {
+    public:
+        int mIndex;
+        double mOrigin_X;
+        double mOrigin_Y;
+        double mOrigin_Z;
+        double mBasisX_X;
+        double mBasisX_Y;
+        double mBasisX_Z;
+        double mBasisY_X;
+        double mBasisY_Y;
+        double mBasisY_Z;
+        double mBasisZ_X;
+        double mBasisZ_Y;
+        double mBasisZ_Z;
+        bool mHasLightSourceTransform;
+        bool mIsOn;
+        
+        int mLightTypeIndex;
+        LightType* mLightType;
+        int mElementIndex;
+        Element* mElement;
+        
+        LightSource() {}
+    };
+    
+    class LightSourceTable
+    {
+        EntityTable& mEntityTable;
+        std::vector<const bfast::byte*>& mStrings;
+    public:
+        LightSourceTable(EntityTable& entityTable, std::vector<const bfast::byte*>& strings):
+            mEntityTable(entityTable), mStrings(strings) {}
+        
+        size_t GetCount()
+        {
+            return mEntityTable.get_count();
+        }
+        
+        LightSource* Get(int lightSourceIndex)
+        {
+            LightSource* lightSource = new LightSource();
+            lightSource->mIndex = lightSourceIndex;
+            lightSource->mOrigin_X = GetOrigin_X(lightSourceIndex);
+            lightSource->mOrigin_Y = GetOrigin_Y(lightSourceIndex);
+            lightSource->mOrigin_Z = GetOrigin_Z(lightSourceIndex);
+            lightSource->mBasisX_X = GetBasisX_X(lightSourceIndex);
+            lightSource->mBasisX_Y = GetBasisX_Y(lightSourceIndex);
+            lightSource->mBasisX_Z = GetBasisX_Z(lightSourceIndex);
+            lightSource->mBasisY_X = GetBasisY_X(lightSourceIndex);
+            lightSource->mBasisY_Y = GetBasisY_Y(lightSourceIndex);
+            lightSource->mBasisY_Z = GetBasisY_Z(lightSourceIndex);
+            lightSource->mBasisZ_X = GetBasisZ_X(lightSourceIndex);
+            lightSource->mBasisZ_Y = GetBasisZ_Y(lightSourceIndex);
+            lightSource->mBasisZ_Z = GetBasisZ_Z(lightSourceIndex);
+            lightSource->mHasLightSourceTransform = GetHasLightSourceTransform(lightSourceIndex);
+            lightSource->mIsOn = GetIsOn(lightSourceIndex);
+            lightSource->mLightTypeIndex = GetLightTypeIndex(lightSourceIndex);
+            lightSource->mElementIndex = GetElementIndex(lightSourceIndex);
+            return lightSource;
+        }
+        
+        std::vector<LightSource>* GetAll()
+        {
+            bool existsOrigin_X = mEntityTable.column_exists("double:Origin.X");
+            bool existsOrigin_Y = mEntityTable.column_exists("double:Origin.Y");
+            bool existsOrigin_Z = mEntityTable.column_exists("double:Origin.Z");
+            bool existsBasisX_X = mEntityTable.column_exists("double:BasisX.X");
+            bool existsBasisX_Y = mEntityTable.column_exists("double:BasisX.Y");
+            bool existsBasisX_Z = mEntityTable.column_exists("double:BasisX.Z");
+            bool existsBasisY_X = mEntityTable.column_exists("double:BasisY.X");
+            bool existsBasisY_Y = mEntityTable.column_exists("double:BasisY.Y");
+            bool existsBasisY_Z = mEntityTable.column_exists("double:BasisY.Z");
+            bool existsBasisZ_X = mEntityTable.column_exists("double:BasisZ.X");
+            bool existsBasisZ_Y = mEntityTable.column_exists("double:BasisZ.Y");
+            bool existsBasisZ_Z = mEntityTable.column_exists("double:BasisZ.Z");
+            bool existsHasLightSourceTransform = mEntityTable.column_exists("byte:HasLightSourceTransform");
+            bool existsIsOn = mEntityTable.column_exists("byte:IsOn");
+            bool existsLightType = mEntityTable.column_exists("index:Vim.LightType:LightType");
+            bool existsElement = mEntityTable.column_exists("index:Vim.Element:Element");
+            
+            const auto count = GetCount();
+            
+            std::vector<LightSource>* lightSource = new std::vector<LightSource>();
+            lightSource->reserve(count);
+            
+            double* origin_XData = new double[count];
+            if (mEntityTable.column_exists("double:Origin.X")) {
+                memcpy(origin_XData, mEntityTable.mDataColumns["double:Origin.X"].begin(), count * sizeof(double));
+            }
+            
+            double* origin_YData = new double[count];
+            if (mEntityTable.column_exists("double:Origin.Y")) {
+                memcpy(origin_YData, mEntityTable.mDataColumns["double:Origin.Y"].begin(), count * sizeof(double));
+            }
+            
+            double* origin_ZData = new double[count];
+            if (mEntityTable.column_exists("double:Origin.Z")) {
+                memcpy(origin_ZData, mEntityTable.mDataColumns["double:Origin.Z"].begin(), count * sizeof(double));
+            }
+            
+            double* basisX_XData = new double[count];
+            if (mEntityTable.column_exists("double:BasisX.X")) {
+                memcpy(basisX_XData, mEntityTable.mDataColumns["double:BasisX.X"].begin(), count * sizeof(double));
+            }
+            
+            double* basisX_YData = new double[count];
+            if (mEntityTable.column_exists("double:BasisX.Y")) {
+                memcpy(basisX_YData, mEntityTable.mDataColumns["double:BasisX.Y"].begin(), count * sizeof(double));
+            }
+            
+            double* basisX_ZData = new double[count];
+            if (mEntityTable.column_exists("double:BasisX.Z")) {
+                memcpy(basisX_ZData, mEntityTable.mDataColumns["double:BasisX.Z"].begin(), count * sizeof(double));
+            }
+            
+            double* basisY_XData = new double[count];
+            if (mEntityTable.column_exists("double:BasisY.X")) {
+                memcpy(basisY_XData, mEntityTable.mDataColumns["double:BasisY.X"].begin(), count * sizeof(double));
+            }
+            
+            double* basisY_YData = new double[count];
+            if (mEntityTable.column_exists("double:BasisY.Y")) {
+                memcpy(basisY_YData, mEntityTable.mDataColumns["double:BasisY.Y"].begin(), count * sizeof(double));
+            }
+            
+            double* basisY_ZData = new double[count];
+            if (mEntityTable.column_exists("double:BasisY.Z")) {
+                memcpy(basisY_ZData, mEntityTable.mDataColumns["double:BasisY.Z"].begin(), count * sizeof(double));
+            }
+            
+            double* basisZ_XData = new double[count];
+            if (mEntityTable.column_exists("double:BasisZ.X")) {
+                memcpy(basisZ_XData, mEntityTable.mDataColumns["double:BasisZ.X"].begin(), count * sizeof(double));
+            }
+            
+            double* basisZ_YData = new double[count];
+            if (mEntityTable.column_exists("double:BasisZ.Y")) {
+                memcpy(basisZ_YData, mEntityTable.mDataColumns["double:BasisZ.Y"].begin(), count * sizeof(double));
+            }
+            
+            double* basisZ_ZData = new double[count];
+            if (mEntityTable.column_exists("double:BasisZ.Z")) {
+                memcpy(basisZ_ZData, mEntityTable.mDataColumns["double:BasisZ.Z"].begin(), count * sizeof(double));
+            }
+            
+            bfast::byte* hasLightSourceTransformData = new bfast::byte[count];
+            if (mEntityTable.column_exists("byte:HasLightSourceTransform")) {
+                memcpy(hasLightSourceTransformData, mEntityTable.mDataColumns["byte:HasLightSourceTransform"].begin(), count * sizeof(bfast::byte));
+            }
+            
+            bfast::byte* isOnData = new bfast::byte[count];
+            if (mEntityTable.column_exists("byte:IsOn")) {
+                memcpy(isOnData, mEntityTable.mDataColumns["byte:IsOn"].begin(), count * sizeof(bfast::byte));
+            }
+            
+            const std::vector<int>& lightTypeData = mEntityTable.column_exists("index:Vim.LightType:LightType") ? mEntityTable.mIndexColumns["index:Vim.LightType:LightType"] : std::vector<int>();
+            const std::vector<int>& elementData = mEntityTable.column_exists("index:Vim.Element:Element") ? mEntityTable.mIndexColumns["index:Vim.Element:Element"] : std::vector<int>();
+            
+            for (int i = 0; i < count; ++i)
+            {
+                LightSource entity;
+                entity.mIndex = i;
+                if (existsOrigin_X)
+                    entity.mOrigin_X = origin_XData[i];
+                if (existsOrigin_Y)
+                    entity.mOrigin_Y = origin_YData[i];
+                if (existsOrigin_Z)
+                    entity.mOrigin_Z = origin_ZData[i];
+                if (existsBasisX_X)
+                    entity.mBasisX_X = basisX_XData[i];
+                if (existsBasisX_Y)
+                    entity.mBasisX_Y = basisX_YData[i];
+                if (existsBasisX_Z)
+                    entity.mBasisX_Z = basisX_ZData[i];
+                if (existsBasisY_X)
+                    entity.mBasisY_X = basisY_XData[i];
+                if (existsBasisY_Y)
+                    entity.mBasisY_Y = basisY_YData[i];
+                if (existsBasisY_Z)
+                    entity.mBasisY_Z = basisY_ZData[i];
+                if (existsBasisZ_X)
+                    entity.mBasisZ_X = basisZ_XData[i];
+                if (existsBasisZ_Y)
+                    entity.mBasisZ_Y = basisZ_YData[i];
+                if (existsBasisZ_Z)
+                    entity.mBasisZ_Z = basisZ_ZData[i];
+                if (existsHasLightSourceTransform)
+                    entity.mHasLightSourceTransform = hasLightSourceTransformData[i];
+                if (existsIsOn)
+                    entity.mIsOn = isOnData[i];
+                entity.mLightTypeIndex = existsLightType ? lightTypeData[i] : -1;
+                entity.mElementIndex = existsElement ? elementData[i] : -1;
+                lightSource->push_back(entity);
+            }
+            
+            delete[] origin_XData;
+            delete[] origin_YData;
+            delete[] origin_ZData;
+            delete[] basisX_XData;
+            delete[] basisX_YData;
+            delete[] basisX_ZData;
+            delete[] basisY_XData;
+            delete[] basisY_YData;
+            delete[] basisY_ZData;
+            delete[] basisZ_XData;
+            delete[] basisZ_YData;
+            delete[] basisZ_ZData;
+            delete[] hasLightSourceTransformData;
+            delete[] isOnData;
+            
+            return lightSource;
+        }
+        
+        double GetOrigin_X(int lightSourceIndex)
+        {
+            if (lightSourceIndex < 0 || lightSourceIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("double:Origin.X")) {
+                return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:Origin.X"].begin() + lightSourceIndex * sizeof(double)));
+            }
+            
+            return {};
+        }
+        
+        std::vector<double>* GetAllOrigin_X()
+        {
+            const auto count = GetCount();
+            
+            double* origin_XData = new double[count];
+            if (mEntityTable.column_exists("double:Origin.X")) {
+                memcpy(origin_XData, mEntityTable.mDataColumns["double:Origin.X"].begin(), count * sizeof(double));
+            }
+            
+            std::vector<double>* result = new std::vector<double>(origin_XData, origin_XData + count);
+            
+            delete[] origin_XData;
+            
+            return result;
+        }
+        
+        double GetOrigin_Y(int lightSourceIndex)
+        {
+            if (lightSourceIndex < 0 || lightSourceIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("double:Origin.Y")) {
+                return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:Origin.Y"].begin() + lightSourceIndex * sizeof(double)));
+            }
+            
+            return {};
+        }
+        
+        std::vector<double>* GetAllOrigin_Y()
+        {
+            const auto count = GetCount();
+            
+            double* origin_YData = new double[count];
+            if (mEntityTable.column_exists("double:Origin.Y")) {
+                memcpy(origin_YData, mEntityTable.mDataColumns["double:Origin.Y"].begin(), count * sizeof(double));
+            }
+            
+            std::vector<double>* result = new std::vector<double>(origin_YData, origin_YData + count);
+            
+            delete[] origin_YData;
+            
+            return result;
+        }
+        
+        double GetOrigin_Z(int lightSourceIndex)
+        {
+            if (lightSourceIndex < 0 || lightSourceIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("double:Origin.Z")) {
+                return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:Origin.Z"].begin() + lightSourceIndex * sizeof(double)));
+            }
+            
+            return {};
+        }
+        
+        std::vector<double>* GetAllOrigin_Z()
+        {
+            const auto count = GetCount();
+            
+            double* origin_ZData = new double[count];
+            if (mEntityTable.column_exists("double:Origin.Z")) {
+                memcpy(origin_ZData, mEntityTable.mDataColumns["double:Origin.Z"].begin(), count * sizeof(double));
+            }
+            
+            std::vector<double>* result = new std::vector<double>(origin_ZData, origin_ZData + count);
+            
+            delete[] origin_ZData;
+            
+            return result;
+        }
+        
+        double GetBasisX_X(int lightSourceIndex)
+        {
+            if (lightSourceIndex < 0 || lightSourceIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("double:BasisX.X")) {
+                return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:BasisX.X"].begin() + lightSourceIndex * sizeof(double)));
+            }
+            
+            return {};
+        }
+        
+        std::vector<double>* GetAllBasisX_X()
+        {
+            const auto count = GetCount();
+            
+            double* basisX_XData = new double[count];
+            if (mEntityTable.column_exists("double:BasisX.X")) {
+                memcpy(basisX_XData, mEntityTable.mDataColumns["double:BasisX.X"].begin(), count * sizeof(double));
+            }
+            
+            std::vector<double>* result = new std::vector<double>(basisX_XData, basisX_XData + count);
+            
+            delete[] basisX_XData;
+            
+            return result;
+        }
+        
+        double GetBasisX_Y(int lightSourceIndex)
+        {
+            if (lightSourceIndex < 0 || lightSourceIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("double:BasisX.Y")) {
+                return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:BasisX.Y"].begin() + lightSourceIndex * sizeof(double)));
+            }
+            
+            return {};
+        }
+        
+        std::vector<double>* GetAllBasisX_Y()
+        {
+            const auto count = GetCount();
+            
+            double* basisX_YData = new double[count];
+            if (mEntityTable.column_exists("double:BasisX.Y")) {
+                memcpy(basisX_YData, mEntityTable.mDataColumns["double:BasisX.Y"].begin(), count * sizeof(double));
+            }
+            
+            std::vector<double>* result = new std::vector<double>(basisX_YData, basisX_YData + count);
+            
+            delete[] basisX_YData;
+            
+            return result;
+        }
+        
+        double GetBasisX_Z(int lightSourceIndex)
+        {
+            if (lightSourceIndex < 0 || lightSourceIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("double:BasisX.Z")) {
+                return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:BasisX.Z"].begin() + lightSourceIndex * sizeof(double)));
+            }
+            
+            return {};
+        }
+        
+        std::vector<double>* GetAllBasisX_Z()
+        {
+            const auto count = GetCount();
+            
+            double* basisX_ZData = new double[count];
+            if (mEntityTable.column_exists("double:BasisX.Z")) {
+                memcpy(basisX_ZData, mEntityTable.mDataColumns["double:BasisX.Z"].begin(), count * sizeof(double));
+            }
+            
+            std::vector<double>* result = new std::vector<double>(basisX_ZData, basisX_ZData + count);
+            
+            delete[] basisX_ZData;
+            
+            return result;
+        }
+        
+        double GetBasisY_X(int lightSourceIndex)
+        {
+            if (lightSourceIndex < 0 || lightSourceIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("double:BasisY.X")) {
+                return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:BasisY.X"].begin() + lightSourceIndex * sizeof(double)));
+            }
+            
+            return {};
+        }
+        
+        std::vector<double>* GetAllBasisY_X()
+        {
+            const auto count = GetCount();
+            
+            double* basisY_XData = new double[count];
+            if (mEntityTable.column_exists("double:BasisY.X")) {
+                memcpy(basisY_XData, mEntityTable.mDataColumns["double:BasisY.X"].begin(), count * sizeof(double));
+            }
+            
+            std::vector<double>* result = new std::vector<double>(basisY_XData, basisY_XData + count);
+            
+            delete[] basisY_XData;
+            
+            return result;
+        }
+        
+        double GetBasisY_Y(int lightSourceIndex)
+        {
+            if (lightSourceIndex < 0 || lightSourceIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("double:BasisY.Y")) {
+                return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:BasisY.Y"].begin() + lightSourceIndex * sizeof(double)));
+            }
+            
+            return {};
+        }
+        
+        std::vector<double>* GetAllBasisY_Y()
+        {
+            const auto count = GetCount();
+            
+            double* basisY_YData = new double[count];
+            if (mEntityTable.column_exists("double:BasisY.Y")) {
+                memcpy(basisY_YData, mEntityTable.mDataColumns["double:BasisY.Y"].begin(), count * sizeof(double));
+            }
+            
+            std::vector<double>* result = new std::vector<double>(basisY_YData, basisY_YData + count);
+            
+            delete[] basisY_YData;
+            
+            return result;
+        }
+        
+        double GetBasisY_Z(int lightSourceIndex)
+        {
+            if (lightSourceIndex < 0 || lightSourceIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("double:BasisY.Z")) {
+                return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:BasisY.Z"].begin() + lightSourceIndex * sizeof(double)));
+            }
+            
+            return {};
+        }
+        
+        std::vector<double>* GetAllBasisY_Z()
+        {
+            const auto count = GetCount();
+            
+            double* basisY_ZData = new double[count];
+            if (mEntityTable.column_exists("double:BasisY.Z")) {
+                memcpy(basisY_ZData, mEntityTable.mDataColumns["double:BasisY.Z"].begin(), count * sizeof(double));
+            }
+            
+            std::vector<double>* result = new std::vector<double>(basisY_ZData, basisY_ZData + count);
+            
+            delete[] basisY_ZData;
+            
+            return result;
+        }
+        
+        double GetBasisZ_X(int lightSourceIndex)
+        {
+            if (lightSourceIndex < 0 || lightSourceIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("double:BasisZ.X")) {
+                return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:BasisZ.X"].begin() + lightSourceIndex * sizeof(double)));
+            }
+            
+            return {};
+        }
+        
+        std::vector<double>* GetAllBasisZ_X()
+        {
+            const auto count = GetCount();
+            
+            double* basisZ_XData = new double[count];
+            if (mEntityTable.column_exists("double:BasisZ.X")) {
+                memcpy(basisZ_XData, mEntityTable.mDataColumns["double:BasisZ.X"].begin(), count * sizeof(double));
+            }
+            
+            std::vector<double>* result = new std::vector<double>(basisZ_XData, basisZ_XData + count);
+            
+            delete[] basisZ_XData;
+            
+            return result;
+        }
+        
+        double GetBasisZ_Y(int lightSourceIndex)
+        {
+            if (lightSourceIndex < 0 || lightSourceIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("double:BasisZ.Y")) {
+                return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:BasisZ.Y"].begin() + lightSourceIndex * sizeof(double)));
+            }
+            
+            return {};
+        }
+        
+        std::vector<double>* GetAllBasisZ_Y()
+        {
+            const auto count = GetCount();
+            
+            double* basisZ_YData = new double[count];
+            if (mEntityTable.column_exists("double:BasisZ.Y")) {
+                memcpy(basisZ_YData, mEntityTable.mDataColumns["double:BasisZ.Y"].begin(), count * sizeof(double));
+            }
+            
+            std::vector<double>* result = new std::vector<double>(basisZ_YData, basisZ_YData + count);
+            
+            delete[] basisZ_YData;
+            
+            return result;
+        }
+        
+        double GetBasisZ_Z(int lightSourceIndex)
+        {
+            if (lightSourceIndex < 0 || lightSourceIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("double:BasisZ.Z")) {
+                return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:BasisZ.Z"].begin() + lightSourceIndex * sizeof(double)));
+            }
+            
+            return {};
+        }
+        
+        std::vector<double>* GetAllBasisZ_Z()
+        {
+            const auto count = GetCount();
+            
+            double* basisZ_ZData = new double[count];
+            if (mEntityTable.column_exists("double:BasisZ.Z")) {
+                memcpy(basisZ_ZData, mEntityTable.mDataColumns["double:BasisZ.Z"].begin(), count * sizeof(double));
+            }
+            
+            std::vector<double>* result = new std::vector<double>(basisZ_ZData, basisZ_ZData + count);
+            
+            delete[] basisZ_ZData;
+            
+            return result;
+        }
+        
+        bool GetHasLightSourceTransform(int lightSourceIndex)
+        {
+            if (lightSourceIndex < 0 || lightSourceIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("byte:HasLightSourceTransform")) {
+                return static_cast<bool>(*reinterpret_cast<bfast::byte*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["byte:HasLightSourceTransform"].begin() + lightSourceIndex * sizeof(bfast::byte))));
+            }
+            
+            return {};
+        }
+        
+        std::vector<bool>* GetAllHasLightSourceTransform()
+        {
+            const auto count = GetCount();
+            
+            bfast::byte* hasLightSourceTransformData = new bfast::byte[count];
+            if (mEntityTable.column_exists("byte:HasLightSourceTransform")) {
+                memcpy(hasLightSourceTransformData, mEntityTable.mDataColumns["byte:HasLightSourceTransform"].begin(), count * sizeof(bfast::byte));
+            }
+            
+            std::vector<bool>* result = new std::vector<bool>(hasLightSourceTransformData, hasLightSourceTransformData + count);
+            
+            delete[] hasLightSourceTransformData;
+            
+            return result;
+        }
+        
+        bool GetIsOn(int lightSourceIndex)
+        {
+            if (lightSourceIndex < 0 || lightSourceIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("byte:IsOn")) {
+                return static_cast<bool>(*reinterpret_cast<bfast::byte*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["byte:IsOn"].begin() + lightSourceIndex * sizeof(bfast::byte))));
+            }
+            
+            return {};
+        }
+        
+        std::vector<bool>* GetAllIsOn()
+        {
+            const auto count = GetCount();
+            
+            bfast::byte* isOnData = new bfast::byte[count];
+            if (mEntityTable.column_exists("byte:IsOn")) {
+                memcpy(isOnData, mEntityTable.mDataColumns["byte:IsOn"].begin(), count * sizeof(bfast::byte));
+            }
+            
+            std::vector<bool>* result = new std::vector<bool>(isOnData, isOnData + count);
+            
+            delete[] isOnData;
+            
+            return result;
+        }
+        
+        int GetLightTypeIndex(int lightSourceIndex)
+        {
+            if (!mEntityTable.column_exists("index:Vim.LightType:LightType")) {
+                return -1;
+            }
+            
+            if (lightSourceIndex < 0 || lightSourceIndex >= GetCount())
+                return -1;
+            
+            return mEntityTable.mIndexColumns["index:Vim.LightType:LightType"][lightSourceIndex];
+        }
+        
+        int GetElementIndex(int lightSourceIndex)
+        {
+            if (!mEntityTable.column_exists("index:Vim.Element:Element")) {
+                return -1;
+            }
+            
+            if (lightSourceIndex < 0 || lightSourceIndex >= GetCount())
+                return -1;
+            
+            return mEntityTable.mIndexColumns["index:Vim.Element:Element"][lightSourceIndex];
+        }
+        
+    };
+    
+    static LightSourceTable* GetLightSourceTable(Scene& scene)
+    {
+        if (scene.mEntityTables.find("Vim.LightSource") == scene.mEntityTables.end())
+            return {};
+        
+        return new LightSourceTable(scene.mEntityTables["Vim.LightSource"], scene.mStrings);
+    }
+    
+    class SunAndShadowSettings
+    {
+    public:
+        int mIndex;
+        std::string mSunAndShadowType;
+        bool mUsesDST;
+        std::string mActiveFrameTime;
+        std::string mStartDateAndTime;
+        std::string mEndDateAndTime;
+        int mActiveFrame;
+        int mNumberOfFrames;
+        double mAltitude;
+        double mAzimuth;
+        bool mRelativeToView;
+        
+        int mViewIndex;
+        View* mView;
+        
+        SunAndShadowSettings() {}
+    };
+    
+    class SunAndShadowSettingsTable
+    {
+        EntityTable& mEntityTable;
+        std::vector<const bfast::byte*>& mStrings;
+    public:
+        SunAndShadowSettingsTable(EntityTable& entityTable, std::vector<const bfast::byte*>& strings):
+            mEntityTable(entityTable), mStrings(strings) {}
+        
+        size_t GetCount()
+        {
+            return mEntityTable.get_count();
+        }
+        
+        SunAndShadowSettings* Get(int sunAndShadowSettingsIndex)
+        {
+            SunAndShadowSettings* sunAndShadowSettings = new SunAndShadowSettings();
+            sunAndShadowSettings->mIndex = sunAndShadowSettingsIndex;
+            sunAndShadowSettings->mSunAndShadowType = GetSunAndShadowType(sunAndShadowSettingsIndex);
+            sunAndShadowSettings->mUsesDST = GetUsesDST(sunAndShadowSettingsIndex);
+            sunAndShadowSettings->mActiveFrameTime = GetActiveFrameTime(sunAndShadowSettingsIndex);
+            sunAndShadowSettings->mStartDateAndTime = GetStartDateAndTime(sunAndShadowSettingsIndex);
+            sunAndShadowSettings->mEndDateAndTime = GetEndDateAndTime(sunAndShadowSettingsIndex);
+            sunAndShadowSettings->mActiveFrame = GetActiveFrame(sunAndShadowSettingsIndex);
+            sunAndShadowSettings->mNumberOfFrames = GetNumberOfFrames(sunAndShadowSettingsIndex);
+            sunAndShadowSettings->mAltitude = GetAltitude(sunAndShadowSettingsIndex);
+            sunAndShadowSettings->mAzimuth = GetAzimuth(sunAndShadowSettingsIndex);
+            sunAndShadowSettings->mRelativeToView = GetRelativeToView(sunAndShadowSettingsIndex);
+            sunAndShadowSettings->mViewIndex = GetViewIndex(sunAndShadowSettingsIndex);
+            return sunAndShadowSettings;
+        }
+        
+        std::vector<SunAndShadowSettings>* GetAll()
+        {
+            bool existsSunAndShadowType = mEntityTable.column_exists("string:SunAndShadowType");
+            bool existsUsesDST = mEntityTable.column_exists("byte:UsesDST");
+            bool existsActiveFrameTime = mEntityTable.column_exists("string:ActiveFrameTime");
+            bool existsStartDateAndTime = mEntityTable.column_exists("string:StartDateAndTime");
+            bool existsEndDateAndTime = mEntityTable.column_exists("string:EndDateAndTime");
+            bool existsActiveFrame = mEntityTable.column_exists("int:ActiveFrame");
+            bool existsNumberOfFrames = mEntityTable.column_exists("int:NumberOfFrames");
+            bool existsAltitude = mEntityTable.column_exists("double:Altitude");
+            bool existsAzimuth = mEntityTable.column_exists("double:Azimuth");
+            bool existsRelativeToView = mEntityTable.column_exists("byte:RelativeToView");
+            bool existsView = mEntityTable.column_exists("index:Vim.View:View");
+            
+            const auto count = GetCount();
+            
+            std::vector<SunAndShadowSettings>* sunAndShadowSettings = new std::vector<SunAndShadowSettings>();
+            sunAndShadowSettings->reserve(count);
+            
+            const std::vector<int>& sunAndShadowTypeData = mEntityTable.column_exists("string:SunAndShadowType") ? mEntityTable.mStringColumns["string:SunAndShadowType"] : std::vector<int>();
+            
+            bfast::byte* usesDSTData = new bfast::byte[count];
+            if (mEntityTable.column_exists("byte:UsesDST")) {
+                memcpy(usesDSTData, mEntityTable.mDataColumns["byte:UsesDST"].begin(), count * sizeof(bfast::byte));
+            }
+            
+            const std::vector<int>& activeFrameTimeData = mEntityTable.column_exists("string:ActiveFrameTime") ? mEntityTable.mStringColumns["string:ActiveFrameTime"] : std::vector<int>();
+            
+            const std::vector<int>& startDateAndTimeData = mEntityTable.column_exists("string:StartDateAndTime") ? mEntityTable.mStringColumns["string:StartDateAndTime"] : std::vector<int>();
+            
+            const std::vector<int>& endDateAndTimeData = mEntityTable.column_exists("string:EndDateAndTime") ? mEntityTable.mStringColumns["string:EndDateAndTime"] : std::vector<int>();
+            
+            int* activeFrameData = new int[count];
+            if (mEntityTable.column_exists("int:ActiveFrame")) {
+                memcpy(activeFrameData, mEntityTable.mDataColumns["int:ActiveFrame"].begin(), count * sizeof(int));
+            }
+            
+            int* numberOfFramesData = new int[count];
+            if (mEntityTable.column_exists("int:NumberOfFrames")) {
+                memcpy(numberOfFramesData, mEntityTable.mDataColumns["int:NumberOfFrames"].begin(), count * sizeof(int));
+            }
+            
+            double* altitudeData = new double[count];
+            if (mEntityTable.column_exists("double:Altitude")) {
+                memcpy(altitudeData, mEntityTable.mDataColumns["double:Altitude"].begin(), count * sizeof(double));
+            }
+            
+            double* azimuthData = new double[count];
+            if (mEntityTable.column_exists("double:Azimuth")) {
+                memcpy(azimuthData, mEntityTable.mDataColumns["double:Azimuth"].begin(), count * sizeof(double));
+            }
+            
+            bfast::byte* relativeToViewData = new bfast::byte[count];
+            if (mEntityTable.column_exists("byte:RelativeToView")) {
+                memcpy(relativeToViewData, mEntityTable.mDataColumns["byte:RelativeToView"].begin(), count * sizeof(bfast::byte));
+            }
+            
+            const std::vector<int>& viewData = mEntityTable.column_exists("index:Vim.View:View") ? mEntityTable.mIndexColumns["index:Vim.View:View"] : std::vector<int>();
+            
+            for (int i = 0; i < count; ++i)
+            {
+                SunAndShadowSettings entity;
+                entity.mIndex = i;
+                if (existsSunAndShadowType)
+                    entity.mSunAndShadowType = std::string(reinterpret_cast<const char*>(mStrings[sunAndShadowTypeData[i]]));
+                if (existsUsesDST)
+                    entity.mUsesDST = usesDSTData[i];
+                if (existsActiveFrameTime)
+                    entity.mActiveFrameTime = std::string(reinterpret_cast<const char*>(mStrings[activeFrameTimeData[i]]));
+                if (existsStartDateAndTime)
+                    entity.mStartDateAndTime = std::string(reinterpret_cast<const char*>(mStrings[startDateAndTimeData[i]]));
+                if (existsEndDateAndTime)
+                    entity.mEndDateAndTime = std::string(reinterpret_cast<const char*>(mStrings[endDateAndTimeData[i]]));
+                if (existsActiveFrame)
+                    entity.mActiveFrame = activeFrameData[i];
+                if (existsNumberOfFrames)
+                    entity.mNumberOfFrames = numberOfFramesData[i];
+                if (existsAltitude)
+                    entity.mAltitude = altitudeData[i];
+                if (existsAzimuth)
+                    entity.mAzimuth = azimuthData[i];
+                if (existsRelativeToView)
+                    entity.mRelativeToView = relativeToViewData[i];
+                entity.mViewIndex = existsView ? viewData[i] : -1;
+                sunAndShadowSettings->push_back(entity);
+            }
+            
+            delete[] usesDSTData;
+            delete[] activeFrameData;
+            delete[] numberOfFramesData;
+            delete[] altitudeData;
+            delete[] azimuthData;
+            delete[] relativeToViewData;
+            
+            return sunAndShadowSettings;
+        }
+        
+        std::string GetSunAndShadowType(int sunAndShadowSettingsIndex)
+        {
+            if (sunAndShadowSettingsIndex < 0 || sunAndShadowSettingsIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("string:SunAndShadowType")) {
+                return std::string(reinterpret_cast<const char*>(mStrings[mEntityTable.mStringColumns["string:SunAndShadowType"][sunAndShadowSettingsIndex]]));
+            }
+            
+            return {};
+        }
+        
+        std::vector<std::string>* GetAllSunAndShadowType()
+        {
+            const auto count = GetCount();
+            
+            const std::vector<int>& sunAndShadowTypeData = mEntityTable.column_exists("string:SunAndShadowType") ? mEntityTable.mStringColumns["string:SunAndShadowType"] : std::vector<int>();
+            
+            std::vector<std::string>* result = new std::vector<std::string>();
+            result->reserve(count);
+            
+            for (int i = 0; i < count; ++i)
+            {
+                result->push_back(std::string(reinterpret_cast<const char*>(mStrings[sunAndShadowTypeData[i]])));
+            }
+            
+            return result;
+        }
+        
+        bool GetUsesDST(int sunAndShadowSettingsIndex)
+        {
+            if (sunAndShadowSettingsIndex < 0 || sunAndShadowSettingsIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("byte:UsesDST")) {
+                return static_cast<bool>(*reinterpret_cast<bfast::byte*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["byte:UsesDST"].begin() + sunAndShadowSettingsIndex * sizeof(bfast::byte))));
+            }
+            
+            return {};
+        }
+        
+        std::vector<bool>* GetAllUsesDST()
+        {
+            const auto count = GetCount();
+            
+            bfast::byte* usesDSTData = new bfast::byte[count];
+            if (mEntityTable.column_exists("byte:UsesDST")) {
+                memcpy(usesDSTData, mEntityTable.mDataColumns["byte:UsesDST"].begin(), count * sizeof(bfast::byte));
+            }
+            
+            std::vector<bool>* result = new std::vector<bool>(usesDSTData, usesDSTData + count);
+            
+            delete[] usesDSTData;
+            
+            return result;
+        }
+        
+        std::string GetActiveFrameTime(int sunAndShadowSettingsIndex)
+        {
+            if (sunAndShadowSettingsIndex < 0 || sunAndShadowSettingsIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("string:ActiveFrameTime")) {
+                return std::string(reinterpret_cast<const char*>(mStrings[mEntityTable.mStringColumns["string:ActiveFrameTime"][sunAndShadowSettingsIndex]]));
+            }
+            
+            return {};
+        }
+        
+        std::vector<std::string>* GetAllActiveFrameTime()
+        {
+            const auto count = GetCount();
+            
+            const std::vector<int>& activeFrameTimeData = mEntityTable.column_exists("string:ActiveFrameTime") ? mEntityTable.mStringColumns["string:ActiveFrameTime"] : std::vector<int>();
+            
+            std::vector<std::string>* result = new std::vector<std::string>();
+            result->reserve(count);
+            
+            for (int i = 0; i < count; ++i)
+            {
+                result->push_back(std::string(reinterpret_cast<const char*>(mStrings[activeFrameTimeData[i]])));
+            }
+            
+            return result;
+        }
+        
+        std::string GetStartDateAndTime(int sunAndShadowSettingsIndex)
+        {
+            if (sunAndShadowSettingsIndex < 0 || sunAndShadowSettingsIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("string:StartDateAndTime")) {
+                return std::string(reinterpret_cast<const char*>(mStrings[mEntityTable.mStringColumns["string:StartDateAndTime"][sunAndShadowSettingsIndex]]));
+            }
+            
+            return {};
+        }
+        
+        std::vector<std::string>* GetAllStartDateAndTime()
+        {
+            const auto count = GetCount();
+            
+            const std::vector<int>& startDateAndTimeData = mEntityTable.column_exists("string:StartDateAndTime") ? mEntityTable.mStringColumns["string:StartDateAndTime"] : std::vector<int>();
+            
+            std::vector<std::string>* result = new std::vector<std::string>();
+            result->reserve(count);
+            
+            for (int i = 0; i < count; ++i)
+            {
+                result->push_back(std::string(reinterpret_cast<const char*>(mStrings[startDateAndTimeData[i]])));
+            }
+            
+            return result;
+        }
+        
+        std::string GetEndDateAndTime(int sunAndShadowSettingsIndex)
+        {
+            if (sunAndShadowSettingsIndex < 0 || sunAndShadowSettingsIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("string:EndDateAndTime")) {
+                return std::string(reinterpret_cast<const char*>(mStrings[mEntityTable.mStringColumns["string:EndDateAndTime"][sunAndShadowSettingsIndex]]));
+            }
+            
+            return {};
+        }
+        
+        std::vector<std::string>* GetAllEndDateAndTime()
+        {
+            const auto count = GetCount();
+            
+            const std::vector<int>& endDateAndTimeData = mEntityTable.column_exists("string:EndDateAndTime") ? mEntityTable.mStringColumns["string:EndDateAndTime"] : std::vector<int>();
+            
+            std::vector<std::string>* result = new std::vector<std::string>();
+            result->reserve(count);
+            
+            for (int i = 0; i < count; ++i)
+            {
+                result->push_back(std::string(reinterpret_cast<const char*>(mStrings[endDateAndTimeData[i]])));
+            }
+            
+            return result;
+        }
+        
+        int GetActiveFrame(int sunAndShadowSettingsIndex)
+        {
+            if (sunAndShadowSettingsIndex < 0 || sunAndShadowSettingsIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("int:ActiveFrame")) {
+                return *reinterpret_cast<int*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["int:ActiveFrame"].begin() + sunAndShadowSettingsIndex * sizeof(int)));
+            }
+            
+            return {};
+        }
+        
+        std::vector<int>* GetAllActiveFrame()
+        {
+            const auto count = GetCount();
+            
+            int* activeFrameData = new int[count];
+            if (mEntityTable.column_exists("int:ActiveFrame")) {
+                memcpy(activeFrameData, mEntityTable.mDataColumns["int:ActiveFrame"].begin(), count * sizeof(int));
+            }
+            
+            std::vector<int>* result = new std::vector<int>(activeFrameData, activeFrameData + count);
+            
+            delete[] activeFrameData;
+            
+            return result;
+        }
+        
+        int GetNumberOfFrames(int sunAndShadowSettingsIndex)
+        {
+            if (sunAndShadowSettingsIndex < 0 || sunAndShadowSettingsIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("int:NumberOfFrames")) {
+                return *reinterpret_cast<int*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["int:NumberOfFrames"].begin() + sunAndShadowSettingsIndex * sizeof(int)));
+            }
+            
+            return {};
+        }
+        
+        std::vector<int>* GetAllNumberOfFrames()
+        {
+            const auto count = GetCount();
+            
+            int* numberOfFramesData = new int[count];
+            if (mEntityTable.column_exists("int:NumberOfFrames")) {
+                memcpy(numberOfFramesData, mEntityTable.mDataColumns["int:NumberOfFrames"].begin(), count * sizeof(int));
+            }
+            
+            std::vector<int>* result = new std::vector<int>(numberOfFramesData, numberOfFramesData + count);
+            
+            delete[] numberOfFramesData;
+            
+            return result;
+        }
+        
+        double GetAltitude(int sunAndShadowSettingsIndex)
+        {
+            if (sunAndShadowSettingsIndex < 0 || sunAndShadowSettingsIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("double:Altitude")) {
+                return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:Altitude"].begin() + sunAndShadowSettingsIndex * sizeof(double)));
+            }
+            
+            return {};
+        }
+        
+        std::vector<double>* GetAllAltitude()
+        {
+            const auto count = GetCount();
+            
+            double* altitudeData = new double[count];
+            if (mEntityTable.column_exists("double:Altitude")) {
+                memcpy(altitudeData, mEntityTable.mDataColumns["double:Altitude"].begin(), count * sizeof(double));
+            }
+            
+            std::vector<double>* result = new std::vector<double>(altitudeData, altitudeData + count);
+            
+            delete[] altitudeData;
+            
+            return result;
+        }
+        
+        double GetAzimuth(int sunAndShadowSettingsIndex)
+        {
+            if (sunAndShadowSettingsIndex < 0 || sunAndShadowSettingsIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("double:Azimuth")) {
+                return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:Azimuth"].begin() + sunAndShadowSettingsIndex * sizeof(double)));
+            }
+            
+            return {};
+        }
+        
+        std::vector<double>* GetAllAzimuth()
+        {
+            const auto count = GetCount();
+            
+            double* azimuthData = new double[count];
+            if (mEntityTable.column_exists("double:Azimuth")) {
+                memcpy(azimuthData, mEntityTable.mDataColumns["double:Azimuth"].begin(), count * sizeof(double));
+            }
+            
+            std::vector<double>* result = new std::vector<double>(azimuthData, azimuthData + count);
+            
+            delete[] azimuthData;
+            
+            return result;
+        }
+        
+        bool GetRelativeToView(int sunAndShadowSettingsIndex)
+        {
+            if (sunAndShadowSettingsIndex < 0 || sunAndShadowSettingsIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("byte:RelativeToView")) {
+                return static_cast<bool>(*reinterpret_cast<bfast::byte*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["byte:RelativeToView"].begin() + sunAndShadowSettingsIndex * sizeof(bfast::byte))));
+            }
+            
+            return {};
+        }
+        
+        std::vector<bool>* GetAllRelativeToView()
+        {
+            const auto count = GetCount();
+            
+            bfast::byte* relativeToViewData = new bfast::byte[count];
+            if (mEntityTable.column_exists("byte:RelativeToView")) {
+                memcpy(relativeToViewData, mEntityTable.mDataColumns["byte:RelativeToView"].begin(), count * sizeof(bfast::byte));
+            }
+            
+            std::vector<bool>* result = new std::vector<bool>(relativeToViewData, relativeToViewData + count);
+            
+            delete[] relativeToViewData;
+            
+            return result;
+        }
+        
+        int GetViewIndex(int sunAndShadowSettingsIndex)
+        {
+            if (!mEntityTable.column_exists("index:Vim.View:View")) {
+                return -1;
+            }
+            
+            if (sunAndShadowSettingsIndex < 0 || sunAndShadowSettingsIndex >= GetCount())
+                return -1;
+            
+            return mEntityTable.mIndexColumns["index:Vim.View:View"][sunAndShadowSettingsIndex];
+        }
+        
+    };
+    
+    static SunAndShadowSettingsTable* GetSunAndShadowSettingsTable(Scene& scene)
+    {
+        if (scene.mEntityTables.find("Vim.SunAndShadowSettings") == scene.mEntityTables.end())
+            return {};
+        
+        return new SunAndShadowSettingsTable(scene.mEntityTables["Vim.SunAndShadowSettings"], scene.mStrings);
+    }
+    
     DocumentModel::DocumentModel(Scene& scene)
     {
         mAsset = GetAssetTable(scene);
@@ -14284,6 +16339,9 @@ namespace Vim
         mViewInViewSheet = GetViewInViewSheetTable(scene);
         mSite = GetSiteTable(scene);
         mBuilding = GetBuildingTable(scene);
+        mLightType = GetLightTypeTable(scene);
+        mLightSource = GetLightSourceTable(scene);
+        mSunAndShadowSettings = GetSunAndShadowSettingsTable(scene);
     }
     
     DocumentModel::~DocumentModel()
@@ -14342,6 +16400,9 @@ namespace Vim
         delete mViewInViewSheet;
         delete mSite;
         delete mBuilding;
+        delete mLightType;
+        delete mLightSource;
+        delete mSunAndShadowSettings;
     }
 }
 

@@ -11,6 +11,18 @@ namespace Vim.Format
     {
         Texture,
         Render,
+        /// <summary>
+        /// Photometric web files, "light/&lt;file&gt;.ies" (IESNA LM-63 text, as Revit's lighting families carry them),
+        /// referenced by LightType.PhotometricWebFile. Since object model 5.8.0 the light sources themselves are entities
+        /// (LightType, LightSource, SunAndShadowSettings). Files exported before 5.8.0 may carry "light/lights.json" and
+        /// "light/sun.json" instead.
+        /// </summary>
+        Light,
+        /// <summary>
+        /// Grids and levels (experimental): "grid/grids.json" (one record per grid - its element, curve, vertical
+        /// range, multi-segment chain and bubble ends - and one per level - name, elevations, building story).
+        /// </summary>
+        Grid,
     }
 
     /// <summary>
