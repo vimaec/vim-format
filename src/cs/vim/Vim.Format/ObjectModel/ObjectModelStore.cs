@@ -20,8 +20,14 @@ namespace Vim.Format.ObjectModel
         public List<DocumentBuilder.Shape> Shapes { get; } = new List<DocumentBuilder.Shape>();
 
         public DocumentBuilder ToDocumentBuilder(string generator, string versionString)
+            => ToDocumentBuilder(generator, versionString, null);
+
+        /// <summary>
+        /// The optional header values (for example SerializableHeader.MaterialsField) are written into the VIM header.
+        /// </summary>
+        public DocumentBuilder ToDocumentBuilder(string generator, string versionString, IReadOnlyDictionary<string, string> optionalHeaderValues)
         {
-            return ObjectModelBuilder.ToDocumentBuilder(generator, versionString)
+            return ObjectModelBuilder.ToDocumentBuilder(generator, versionString, optionalHeaderValues)
                 .AddMeshes(Meshes.Select(g => g.Subdivide()))
                 .AddInstances(Instances)
                 .AddShapes(Shapes)

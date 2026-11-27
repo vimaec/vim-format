@@ -110,6 +110,12 @@ namespace Vim.Format
             public IReadOnlyList<int> SubmeshesIndexOffset { get; }
             public IReadOnlyList<int> SubmeshMaterials { get; }
 
+            /// <summary>
+            /// The per-vertex texture coordinates, or null when the mesh has none.
+            /// When present, UVs.Count == Vertices.Count (a mesh whose UV count does not match its vertex count gets none).
+            /// </summary>
+            public IReadOnlyList<Vector2> UVs { get; }
+
             public SubdividedMesh(Mesh mesh)
             {
                 if (mesh.Indices.Any(i => i < 0 && i >= mesh.Vertices.Count))
@@ -140,26 +146,32 @@ namespace Vim.Format
                 SubmeshesIndexOffset = submeshIndexOffset;
 
                 Vertices = mesh.Vertices;
+                UVs = mesh.UVs != null && mesh.UVs.Count > 0 && mesh.UVs.Count == mesh.Vertices.Count
+                    ? mesh.UVs
+                    : null;
             }
 
             public SubdividedMesh(
                 IReadOnlyList<int> indices,
                 IReadOnlyList<Vector3> vertices,
                 IReadOnlyList<int> submeshesIndexOffset,
-                IReadOnlyList<int> submeshMaterials
+                IReadOnlyList<int> submeshMaterials,
+                IReadOnlyList<Vector2> uvs = null
             )
             {
                 Indices = indices;
                 Vertices = vertices;
                 SubmeshesIndexOffset = submeshesIndexOffset;
                 SubmeshMaterials = submeshMaterials;
+                UVs = uvs != null && uvs.Count > 0 && uvs.Count == vertices.Count ? uvs : null;
             }
 
             public bool IsEquivalentTo(SubdividedMesh other)
                 => Vertices.SequenceEqual(other.Vertices)
                    && Indices.SequenceEqual(other.Indices)
                     && SubmeshesIndexOffset.SequenceEqual(other.SubmeshesIndexOffset)
-                    && SubmeshMaterials.SequenceEqual(other.SubmeshMaterials);
+                    && SubmeshMaterials.SequenceEqual(other.SubmeshMaterials)
+                    && (UVs == null ? other.UVs == null : other.UVs != null && UVs.SequenceEqual(other.UVs));
 
             public static SubdividedMesh CreateFromWorldSpaceBox(IReadOnlyList<Vector3> points, int materialIndex)
             {
