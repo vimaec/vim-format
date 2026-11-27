@@ -177,5 +177,29 @@
       "Vim.Element__string:LastChangedBy",
       "Vim.Element__string:Owner"
     ]
+  },
+  "5.7.0 to 5.8.0": {
+    "Added": [
+      "Vim.SunAndShadowSettings__byte:CastShadows",
+      "Vim.SunAndShadowSettings__byte:RelativeToView",
+      "Vim.SunAndShadowSettings__byte:UsesDST",
+      "Vim.SunAndShadowSettings__byte:UsesGroundPlane",
+      "Vim.SunAndShadowSettings__double:Altitude",
+      "Vim.SunAndShadowSettings__double:Azimuth",
+      "Vim.SunAndShadowSettings__double:Latitude",
+      "Vim.SunAndShadowSettings__double:Longitude",
+      "Vim.SunAndShadowSettings__double:TimeZone",
+      "Vim.SunAndShadowSettings__index:Vim.Level:GroundPlaneLevel",
+      "Vim.SunAndShadowSettings__index:Vim.View:View",
+      "Vim.SunAndShadowSettings__int:ActiveFrame",
+      "Vim.SunAndShadowSettings__int:NumberOfFrames",
+      "Vim.SunAndShadowSettings__int:ShadowIntensity",
+      "Vim.SunAndShadowSettings__int:SunlightIntensity",
+      "Vim.SunAndShadowSettings__string:ActiveFrameTime",
+      "Vim.SunAndShadowSettings__string:EndDateAndTime",
+      "Vim.SunAndShadowSettings__string:ProjectLocationName",
+      "Vim.SunAndShadowSettings__string:StartDateAndTime",
+      "Vim.SunAndShadowSettings__string:SunAndShadowType"
+    ]
   }
 }

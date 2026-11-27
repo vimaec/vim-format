@@ -14,6 +14,29 @@ namespace Vim.Format.ObjectModel
         // ReSharper disable MemberHidesStaticFromOuterClass
         public static class History
         {
+            // Schema additions (the sun of the exported 3D view)
+            //   Vim.SunAndShadowSettings__byte:CastShadows
+            //   Vim.SunAndShadowSettings__byte:RelativeToView
+            //   Vim.SunAndShadowSettings__byte:UsesDST
+            //   Vim.SunAndShadowSettings__byte:UsesGroundPlane
+            //   Vim.SunAndShadowSettings__double:Altitude
+            //   Vim.SunAndShadowSettings__double:Azimuth
+            //   Vim.SunAndShadowSettings__double:Latitude
+            //   Vim.SunAndShadowSettings__double:Longitude
+            //   Vim.SunAndShadowSettings__double:TimeZone
+            //   Vim.SunAndShadowSettings__index:Vim.Level:GroundPlaneLevel
+            //   Vim.SunAndShadowSettings__index:Vim.View:View
+            //   Vim.SunAndShadowSettings__int:ActiveFrame
+            //   Vim.SunAndShadowSettings__int:NumberOfFrames
+            //   Vim.SunAndShadowSettings__int:ShadowIntensity
+            //   Vim.SunAndShadowSettings__int:SunlightIntensity
+            //   Vim.SunAndShadowSettings__string:ActiveFrameTime
+            //   Vim.SunAndShadowSettings__string:EndDateAndTime
+            //   Vim.SunAndShadowSettings__string:ProjectLocationName
+            //   Vim.SunAndShadowSettings__string:StartDateAndTime
+            //   Vim.SunAndShadowSettings__string:SunAndShadowType
+            public const string v5_8_0 = "5.8.0";
+
             // Schema additions
             //   Vim.Element__string:Creator
             //   Vim.Element__string:LastChangedBy
@@ -186,7 +209,8 @@ namespace Vim.Format.ObjectModel
         // ReSharper enable MemberHidesStaticFromOuterClass
 
         // [MAINTAIN] Add more object model SerializableVersions below and update the current one.
-        public static SerializableVersion Current => v5_7_0;
+        public static SerializableVersion Current => v5_8_0;
+        public static SerializableVersion v5_8_0 => SerializableVersion.Parse(History.v5_8_0);
         public static SerializableVersion v5_7_0 => SerializableVersion.Parse(History.v5_7_0);
         public static SerializableVersion v5_6_0 => SerializableVersion.Parse(History.v5_6_0);
         public static SerializableVersion v5_5_0 => SerializableVersion.Parse(History.v5_5_0);
@@ -2147,6 +2171,120 @@ namespace Vim.Format.ObjectModel
         public string Address;
 
         public Relation<Site> _Site;
+    }
+
+    /// <summary>
+    /// Represents the sun of a 3D view.
+    /// - Revit: maps to View.SunAndShadowSettings (the Sun Settings dialog of the view)
+    /// The project's place on Earth is also in the BimDocument (Latitude, Longitude, TimeZone), and its angle to true north in the BasePoint.
+    /// </summary>
+    [TableName(TableNames.SunAndShadowSettings)]
+    public partial class SunAndShadowSettings : Entity
+    {
+        /// <summary>
+        /// The name of Revit's SunAndShadowType: "StillImage", "OneDayStudy", "MultiDayStudy" or "Lighting".
+        /// "Lighting" is a fixed angle which is not tied to a place or a time.
+        /// </summary>
+        public string SunAndShadowType;
+
+        /// <summary>
+        /// The time of the active frame on the project's clock, as "yyyy-MM-ddTHH:mm:ss" (SunAndShadowSettings.GetFrameTime(ActiveFrame)).
+        /// Empty for the Lighting type.
+        /// </summary>
+        public string ActiveFrameTime;
+
+        /// <summary>
+        /// The start of the study on the project's clock, as "yyyy-MM-ddTHH:mm:ss" (SunAndShadowSettings.StartDateAndTime). Empty for the Lighting type.
+        /// </summary>
+        public string StartDateAndTime;
+
+        /// <summary>
+        /// The end of the study on the project's clock, as "yyyy-MM-ddTHH:mm:ss" (SunAndShadowSettings.EndDateAndTime). Empty for the Lighting type.
+        /// </summary>
+        public string EndDateAndTime;
+
+        /// <summary>
+        /// The active frame of the study (SunAndShadowSettings.ActiveFrame). 0 for the Lighting type.
+        /// </summary>
+        public int ActiveFrame;
+
+        /// <summary>
+        /// The number of frames of the study (SunAndShadowSettings.NumberOfFrames). 0 for the Lighting type.
+        /// </summary>
+        public int NumberOfFrames;
+
+        /// <summary>
+        /// Whether daylight saving time applies (SunAndShadowSettings.UsesDST).
+        /// </summary>
+        public bool UsesDST;
+
+        /// <summary>
+        /// The altitude of the sun above the horizon, in radians: the sun Revit computed for the active frame (SunAndShadowSettings.GetFrameAltitude),
+        /// or the fixed altitude for the Lighting type (SunAndShadowSettings.Altitude).
+        /// </summary>
+        public double Altitude;
+
+        /// <summary>
+        /// The azimuth of the sun, in radians, clockwise from true north: the sun Revit computed for the active frame (SunAndShadowSettings.GetFrameAzimuth),
+        /// or the fixed azimuth for the Lighting type (SunAndShadowSettings.Azimuth).
+        /// To get a direction in model coordinates, subtract the angle to true north of the project location (BasePoint.AngleToTrueNorth).
+        /// </summary>
+        public double Azimuth;
+
+        /// <summary>
+        /// For the Lighting type, whether the fixed angles are relative to the view rather than to the model (SunAndShadowSettings.RelativeToView).
+        /// </summary>
+        public bool RelativeToView;
+
+        /// <summary>
+        /// The latitude the sun is computed for, in radians (SunAndShadowSettings.Latitude).
+        /// </summary>
+        public double Latitude;
+
+        /// <summary>
+        /// The longitude the sun is computed for, in radians (SunAndShadowSettings.Longitude).
+        /// </summary>
+        public double Longitude;
+
+        /// <summary>
+        /// The time zone the sun is computed for, in hours from GMT (SunAndShadowSettings.TimeZone).
+        /// </summary>
+        public double TimeZone;
+
+        /// <summary>
+        /// The name of the project location (the shared coordinates) the sun is computed for (SunAndShadowSettings.ProjectLocationName).
+        /// </summary>
+        public string ProjectLocationName;
+
+        /// <summary>
+        /// Whether shadows fall on a ground plane at a level (SunAndShadowSettings.UsesGroundPlane).
+        /// </summary>
+        public bool UsesGroundPlane;
+
+        /// <summary>
+        /// The level of the ground plane (SunAndShadowSettings.GroundPlaneLevelId), when UsesGroundPlane is true.
+        /// </summary>
+        public Relation<Level> _GroundPlaneLevel;
+
+        /// <summary>
+        /// Whether the view casts shadows (the view's Graphic Display Options > Shadows > Cast Shadows).
+        /// </summary>
+        public bool CastShadows;
+
+        /// <summary>
+        /// The intensity of the sunlight in the view, 0 to 100 (View.SunlightIntensity).
+        /// </summary>
+        public int SunlightIntensity;
+
+        /// <summary>
+        /// The intensity of the shadows in the view, 0 (no shadows) to 100 (black) (View.ShadowIntensity).
+        /// </summary>
+        public int ShadowIntensity;
+
+        /// <summary>
+        /// The 3D view whose sun this is.
+        /// </summary>
+        public Relation<View> _View;
     }
 
     /// <summary>

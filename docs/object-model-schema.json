@@ -1,6 +1,6 @@
 {
   "VimFormatVersion": "1.0.0",
-  "SchemaVersion": "5.7.0",
+  "SchemaVersion": "5.8.0",
   "Tables": {
     "Vim.Area": [
       "byte:IsGrossInterior",
@@ -378,6 +378,28 @@
       "index:Vim.Element:Element",
       "string:Address",
       "string:Number"
+    ],
+    "Vim.SunAndShadowSettings": [
+      "byte:CastShadows",
+      "byte:RelativeToView",
+      "byte:UsesDST",
+      "byte:UsesGroundPlane",
+      "double:Altitude",
+      "double:Azimuth",
+      "double:Latitude",
+      "double:Longitude",
+      "double:TimeZone",
+      "index:Vim.Level:GroundPlaneLevel",
+      "index:Vim.View:View",
+      "int:ActiveFrame",
+      "int:NumberOfFrames",
+      "int:ShadowIntensity",
+      "int:SunlightIntensity",
+      "string:ActiveFrameTime",
+      "string:EndDateAndTime",
+      "string:ProjectLocationName",
+      "string:StartDateAndTime",
+      "string:SunAndShadowType"
     ],
     "Vim.System": [
       "index:Vim.Element:Element",

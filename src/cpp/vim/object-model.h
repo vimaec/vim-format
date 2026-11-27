@@ -120,6 +120,8 @@ namespace Vim
     class SiteTable;
     class Building;
     class BuildingTable;
+    class SunAndShadowSettings;
+    class SunAndShadowSettingsTable;
     
     class DocumentModel
     {
@@ -178,6 +180,7 @@ namespace Vim
         ViewInViewSheetTable* mViewInViewSheet;
         SiteTable* mSite;
         BuildingTable* mBuilding;
+        SunAndShadowSettingsTable* mSunAndShadowSettings;
         
         DocumentModel(Scene& scene);
         ~DocumentModel();
@@ -14228,6 +14231,788 @@ namespace Vim
         return new BuildingTable(scene.mEntityTables["Vim.Building"], scene.mStrings);
     }
     
+    class SunAndShadowSettings
+    {
+    public:
+        int mIndex;
+        std::string mSunAndShadowType;
+        std::string mActiveFrameTime;
+        std::string mStartDateAndTime;
+        std::string mEndDateAndTime;
+        int mActiveFrame;
+        int mNumberOfFrames;
+        bool mUsesDST;
+        double mAltitude;
+        double mAzimuth;
+        bool mRelativeToView;
+        double mLatitude;
+        double mLongitude;
+        double mTimeZone;
+        std::string mProjectLocationName;
+        bool mUsesGroundPlane;
+        bool mCastShadows;
+        int mSunlightIntensity;
+        int mShadowIntensity;
+        
+        int mGroundPlaneLevelIndex;
+        Level* mGroundPlaneLevel;
+        int mViewIndex;
+        View* mView;
+        
+        SunAndShadowSettings() {}
+    };
+    
+    class SunAndShadowSettingsTable
+    {
+        EntityTable& mEntityTable;
+        std::vector<const bfast::byte*>& mStrings;
+    public:
+        SunAndShadowSettingsTable(EntityTable& entityTable, std::vector<const bfast::byte*>& strings):
+            mEntityTable(entityTable), mStrings(strings) {}
+        
+        size_t GetCount()
+        {
+            return mEntityTable.get_count();
+        }
+        
+        SunAndShadowSettings* Get(int sunAndShadowSettingsIndex)
+        {
+            SunAndShadowSettings* sunAndShadowSettings = new SunAndShadowSettings();
+            sunAndShadowSettings->mIndex = sunAndShadowSettingsIndex;
+            sunAndShadowSettings->mSunAndShadowType = GetSunAndShadowType(sunAndShadowSettingsIndex);
+            sunAndShadowSettings->mActiveFrameTime = GetActiveFrameTime(sunAndShadowSettingsIndex);
+            sunAndShadowSettings->mStartDateAndTime = GetStartDateAndTime(sunAndShadowSettingsIndex);
+            sunAndShadowSettings->mEndDateAndTime = GetEndDateAndTime(sunAndShadowSettingsIndex);
+            sunAndShadowSettings->mActiveFrame = GetActiveFrame(sunAndShadowSettingsIndex);
+            sunAndShadowSettings->mNumberOfFrames = GetNumberOfFrames(sunAndShadowSettingsIndex);
+            sunAndShadowSettings->mUsesDST = GetUsesDST(sunAndShadowSettingsIndex);
+            sunAndShadowSettings->mAltitude = GetAltitude(sunAndShadowSettingsIndex);
+            sunAndShadowSettings->mAzimuth = GetAzimuth(sunAndShadowSettingsIndex);
+            sunAndShadowSettings->mRelativeToView = GetRelativeToView(sunAndShadowSettingsIndex);
+            sunAndShadowSettings->mLatitude = GetLatitude(sunAndShadowSettingsIndex);
+            sunAndShadowSettings->mLongitude = GetLongitude(sunAndShadowSettingsIndex);
+            sunAndShadowSettings->mTimeZone = GetTimeZone(sunAndShadowSettingsIndex);
+            sunAndShadowSettings->mProjectLocationName = GetProjectLocationName(sunAndShadowSettingsIndex);
+            sunAndShadowSettings->mUsesGroundPlane = GetUsesGroundPlane(sunAndShadowSettingsIndex);
+            sunAndShadowSettings->mCastShadows = GetCastShadows(sunAndShadowSettingsIndex);
+            sunAndShadowSettings->mSunlightIntensity = GetSunlightIntensity(sunAndShadowSettingsIndex);
+            sunAndShadowSettings->mShadowIntensity = GetShadowIntensity(sunAndShadowSettingsIndex);
+            sunAndShadowSettings->mGroundPlaneLevelIndex = GetGroundPlaneLevelIndex(sunAndShadowSettingsIndex);
+            sunAndShadowSettings->mViewIndex = GetViewIndex(sunAndShadowSettingsIndex);
+            return sunAndShadowSettings;
+        }
+        
+        std::vector<SunAndShadowSettings>* GetAll()
+        {
+            bool existsSunAndShadowType = mEntityTable.column_exists("string:SunAndShadowType");
+            bool existsActiveFrameTime = mEntityTable.column_exists("string:ActiveFrameTime");
+            bool existsStartDateAndTime = mEntityTable.column_exists("string:StartDateAndTime");
+            bool existsEndDateAndTime = mEntityTable.column_exists("string:EndDateAndTime");
+            bool existsActiveFrame = mEntityTable.column_exists("int:ActiveFrame");
+            bool existsNumberOfFrames = mEntityTable.column_exists("int:NumberOfFrames");
+            bool existsUsesDST = mEntityTable.column_exists("byte:UsesDST");
+            bool existsAltitude = mEntityTable.column_exists("double:Altitude");
+            bool existsAzimuth = mEntityTable.column_exists("double:Azimuth");
+            bool existsRelativeToView = mEntityTable.column_exists("byte:RelativeToView");
+            bool existsLatitude = mEntityTable.column_exists("double:Latitude");
+            bool existsLongitude = mEntityTable.column_exists("double:Longitude");
+            bool existsTimeZone = mEntityTable.column_exists("double:TimeZone");
+            bool existsProjectLocationName = mEntityTable.column_exists("string:ProjectLocationName");
+            bool existsUsesGroundPlane = mEntityTable.column_exists("byte:UsesGroundPlane");
+            bool existsCastShadows = mEntityTable.column_exists("byte:CastShadows");
+            bool existsSunlightIntensity = mEntityTable.column_exists("int:SunlightIntensity");
+            bool existsShadowIntensity = mEntityTable.column_exists("int:ShadowIntensity");
+            bool existsGroundPlaneLevel = mEntityTable.column_exists("index:Vim.Level:GroundPlaneLevel");
+            bool existsView = mEntityTable.column_exists("index:Vim.View:View");
+            
+            const auto count = GetCount();
+            
+            std::vector<SunAndShadowSettings>* sunAndShadowSettings = new std::vector<SunAndShadowSettings>();
+            sunAndShadowSettings->reserve(count);
+            
+            const std::vector<int>& sunAndShadowTypeData = mEntityTable.column_exists("string:SunAndShadowType") ? mEntityTable.mStringColumns["string:SunAndShadowType"] : std::vector<int>();
+            
+            const std::vector<int>& activeFrameTimeData = mEntityTable.column_exists("string:ActiveFrameTime") ? mEntityTable.mStringColumns["string:ActiveFrameTime"] : std::vector<int>();
+            
+            const std::vector<int>& startDateAndTimeData = mEntityTable.column_exists("string:StartDateAndTime") ? mEntityTable.mStringColumns["string:StartDateAndTime"] : std::vector<int>();
+            
+            const std::vector<int>& endDateAndTimeData = mEntityTable.column_exists("string:EndDateAndTime") ? mEntityTable.mStringColumns["string:EndDateAndTime"] : std::vector<int>();
+            
+            int* activeFrameData = new int[count];
+            if (mEntityTable.column_exists("int:ActiveFrame")) {
+                memcpy(activeFrameData, mEntityTable.mDataColumns["int:ActiveFrame"].begin(), count * sizeof(int));
+            }
+            
+            int* numberOfFramesData = new int[count];
+            if (mEntityTable.column_exists("int:NumberOfFrames")) {
+                memcpy(numberOfFramesData, mEntityTable.mDataColumns["int:NumberOfFrames"].begin(), count * sizeof(int));
+            }
+            
+            bfast::byte* usesDSTData = new bfast::byte[count];
+            if (mEntityTable.column_exists("byte:UsesDST")) {
+                memcpy(usesDSTData, mEntityTable.mDataColumns["byte:UsesDST"].begin(), count * sizeof(bfast::byte));
+            }
+            
+            double* altitudeData = new double[count];
+            if (mEntityTable.column_exists("double:Altitude")) {
+                memcpy(altitudeData, mEntityTable.mDataColumns["double:Altitude"].begin(), count * sizeof(double));
+            }
+            
+            double* azimuthData = new double[count];
+            if (mEntityTable.column_exists("double:Azimuth")) {
+                memcpy(azimuthData, mEntityTable.mDataColumns["double:Azimuth"].begin(), count * sizeof(double));
+            }
+            
+            bfast::byte* relativeToViewData = new bfast::byte[count];
+            if (mEntityTable.column_exists("byte:RelativeToView")) {
+                memcpy(relativeToViewData, mEntityTable.mDataColumns["byte:RelativeToView"].begin(), count * sizeof(bfast::byte));
+            }
+            
+            double* latitudeData = new double[count];
+            if (mEntityTable.column_exists("double:Latitude")) {
+                memcpy(latitudeData, mEntityTable.mDataColumns["double:Latitude"].begin(), count * sizeof(double));
+            }
+            
+            double* longitudeData = new double[count];
+            if (mEntityTable.column_exists("double:Longitude")) {
+                memcpy(longitudeData, mEntityTable.mDataColumns["double:Longitude"].begin(), count * sizeof(double));
+            }
+            
+            double* timeZoneData = new double[count];
+            if (mEntityTable.column_exists("double:TimeZone")) {
+                memcpy(timeZoneData, mEntityTable.mDataColumns["double:TimeZone"].begin(), count * sizeof(double));
+            }
+            
+            const std::vector<int>& projectLocationNameData = mEntityTable.column_exists("string:ProjectLocationName") ? mEntityTable.mStringColumns["string:ProjectLocationName"] : std::vector<int>();
+            
+            bfast::byte* usesGroundPlaneData = new bfast::byte[count];
+            if (mEntityTable.column_exists("byte:UsesGroundPlane")) {
+                memcpy(usesGroundPlaneData, mEntityTable.mDataColumns["byte:UsesGroundPlane"].begin(), count * sizeof(bfast::byte));
+            }
+            
+            bfast::byte* castShadowsData = new bfast::byte[count];
+            if (mEntityTable.column_exists("byte:CastShadows")) {
+                memcpy(castShadowsData, mEntityTable.mDataColumns["byte:CastShadows"].begin(), count * sizeof(bfast::byte));
+            }
+            
+            int* sunlightIntensityData = new int[count];
+            if (mEntityTable.column_exists("int:SunlightIntensity")) {
+                memcpy(sunlightIntensityData, mEntityTable.mDataColumns["int:SunlightIntensity"].begin(), count * sizeof(int));
+            }
+            
+            int* shadowIntensityData = new int[count];
+            if (mEntityTable.column_exists("int:ShadowIntensity")) {
+                memcpy(shadowIntensityData, mEntityTable.mDataColumns["int:ShadowIntensity"].begin(), count * sizeof(int));
+            }
+            
+            const std::vector<int>& groundPlaneLevelData = mEntityTable.column_exists("index:Vim.Level:GroundPlaneLevel") ? mEntityTable.mIndexColumns["index:Vim.Level:GroundPlaneLevel"] : std::vector<int>();
+            const std::vector<int>& viewData = mEntityTable.column_exists("index:Vim.View:View") ? mEntityTable.mIndexColumns["index:Vim.View:View"] : std::vector<int>();
+            
+            for (int i = 0; i < count; ++i)
+            {
+                SunAndShadowSettings entity;
+                entity.mIndex = i;
+                if (existsSunAndShadowType)
+                    entity.mSunAndShadowType = std::string(reinterpret_cast<const char*>(mStrings[sunAndShadowTypeData[i]]));
+                if (existsActiveFrameTime)
+                    entity.mActiveFrameTime = std::string(reinterpret_cast<const char*>(mStrings[activeFrameTimeData[i]]));
+                if (existsStartDateAndTime)
+                    entity.mStartDateAndTime = std::string(reinterpret_cast<const char*>(mStrings[startDateAndTimeData[i]]));
+                if (existsEndDateAndTime)
+                    entity.mEndDateAndTime = std::string(reinterpret_cast<const char*>(mStrings[endDateAndTimeData[i]]));
+                if (existsActiveFrame)
+                    entity.mActiveFrame = activeFrameData[i];
+                if (existsNumberOfFrames)
+                    entity.mNumberOfFrames = numberOfFramesData[i];
+                if (existsUsesDST)
+                    entity.mUsesDST = usesDSTData[i];
+                if (existsAltitude)
+                    entity.mAltitude = altitudeData[i];
+                if (existsAzimuth)
+                    entity.mAzimuth = azimuthData[i];
+                if (existsRelativeToView)
+                    entity.mRelativeToView = relativeToViewData[i];
+                if (existsLatitude)
+                    entity.mLatitude = latitudeData[i];
+                if (existsLongitude)
+                    entity.mLongitude = longitudeData[i];
+                if (existsTimeZone)
+                    entity.mTimeZone = timeZoneData[i];
+                if (existsProjectLocationName)
+                    entity.mProjectLocationName = std::string(reinterpret_cast<const char*>(mStrings[projectLocationNameData[i]]));
+                if (existsUsesGroundPlane)
+                    entity.mUsesGroundPlane = usesGroundPlaneData[i];
+                if (existsCastShadows)
+                    entity.mCastShadows = castShadowsData[i];
+                if (existsSunlightIntensity)
+                    entity.mSunlightIntensity = sunlightIntensityData[i];
+                if (existsShadowIntensity)
+                    entity.mShadowIntensity = shadowIntensityData[i];
+                entity.mGroundPlaneLevelIndex = existsGroundPlaneLevel ? groundPlaneLevelData[i] : -1;
+                entity.mViewIndex = existsView ? viewData[i] : -1;
+                sunAndShadowSettings->push_back(entity);
+            }
+            
+            delete[] activeFrameData;
+            delete[] numberOfFramesData;
+            delete[] usesDSTData;
+            delete[] altitudeData;
+            delete[] azimuthData;
+            delete[] relativeToViewData;
+            delete[] latitudeData;
+            delete[] longitudeData;
+            delete[] timeZoneData;
+            delete[] usesGroundPlaneData;
+            delete[] castShadowsData;
+            delete[] sunlightIntensityData;
+            delete[] shadowIntensityData;
+            
+            return sunAndShadowSettings;
+        }
+        
+        std::string GetSunAndShadowType(int sunAndShadowSettingsIndex)
+        {
+            if (sunAndShadowSettingsIndex < 0 || sunAndShadowSettingsIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("string:SunAndShadowType")) {
+                return std::string(reinterpret_cast<const char*>(mStrings[mEntityTable.mStringColumns["string:SunAndShadowType"][sunAndShadowSettingsIndex]]));
+            }
+            
+            return {};
+        }
+        
+        std::vector<std::string>* GetAllSunAndShadowType()
+        {
+            const auto count = GetCount();
+            
+            const std::vector<int>& sunAndShadowTypeData = mEntityTable.column_exists("string:SunAndShadowType") ? mEntityTable.mStringColumns["string:SunAndShadowType"] : std::vector<int>();
+            
+            std::vector<std::string>* result = new std::vector<std::string>();
+            result->reserve(count);
+            
+            for (int i = 0; i < count; ++i)
+            {
+                result->push_back(std::string(reinterpret_cast<const char*>(mStrings[sunAndShadowTypeData[i]])));
+            }
+            
+            return result;
+        }
+        
+        std::string GetActiveFrameTime(int sunAndShadowSettingsIndex)
+        {
+            if (sunAndShadowSettingsIndex < 0 || sunAndShadowSettingsIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("string:ActiveFrameTime")) {
+                return std::string(reinterpret_cast<const char*>(mStrings[mEntityTable.mStringColumns["string:ActiveFrameTime"][sunAndShadowSettingsIndex]]));
+            }
+            
+            return {};
+        }
+        
+        std::vector<std::string>* GetAllActiveFrameTime()
+        {
+            const auto count = GetCount();
+            
+            const std::vector<int>& activeFrameTimeData = mEntityTable.column_exists("string:ActiveFrameTime") ? mEntityTable.mStringColumns["string:ActiveFrameTime"] : std::vector<int>();
+            
+            std::vector<std::string>* result = new std::vector<std::string>();
+            result->reserve(count);
+            
+            for (int i = 0; i < count; ++i)
+            {
+                result->push_back(std::string(reinterpret_cast<const char*>(mStrings[activeFrameTimeData[i]])));
+            }
+            
+            return result;
+        }
+        
+        std::string GetStartDateAndTime(int sunAndShadowSettingsIndex)
+        {
+            if (sunAndShadowSettingsIndex < 0 || sunAndShadowSettingsIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("string:StartDateAndTime")) {
+                return std::string(reinterpret_cast<const char*>(mStrings[mEntityTable.mStringColumns["string:StartDateAndTime"][sunAndShadowSettingsIndex]]));
+            }
+            
+            return {};
+        }
+        
+        std::vector<std::string>* GetAllStartDateAndTime()
+        {
+            const auto count = GetCount();
+            
+            const std::vector<int>& startDateAndTimeData = mEntityTable.column_exists("string:StartDateAndTime") ? mEntityTable.mStringColumns["string:StartDateAndTime"] : std::vector<int>();
+            
+            std::vector<std::string>* result = new std::vector<std::string>();
+            result->reserve(count);
+            
+            for (int i = 0; i < count; ++i)
+            {
+                result->push_back(std::string(reinterpret_cast<const char*>(mStrings[startDateAndTimeData[i]])));
+            }
+            
+            return result;
+        }
+        
+        std::string GetEndDateAndTime(int sunAndShadowSettingsIndex)
+        {
+            if (sunAndShadowSettingsIndex < 0 || sunAndShadowSettingsIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("string:EndDateAndTime")) {
+                return std::string(reinterpret_cast<const char*>(mStrings[mEntityTable.mStringColumns["string:EndDateAndTime"][sunAndShadowSettingsIndex]]));
+            }
+            
+            return {};
+        }
+        
+        std::vector<std::string>* GetAllEndDateAndTime()
+        {
+            const auto count = GetCount();
+            
+            const std::vector<int>& endDateAndTimeData = mEntityTable.column_exists("string:EndDateAndTime") ? mEntityTable.mStringColumns["string:EndDateAndTime"] : std::vector<int>();
+            
+            std::vector<std::string>* result = new std::vector<std::string>();
+            result->reserve(count);
+            
+            for (int i = 0; i < count; ++i)
+            {
+                result->push_back(std::string(reinterpret_cast<const char*>(mStrings[endDateAndTimeData[i]])));
+            }
+            
+            return result;
+        }
+        
+        int GetActiveFrame(int sunAndShadowSettingsIndex)
+        {
+            if (sunAndShadowSettingsIndex < 0 || sunAndShadowSettingsIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("int:ActiveFrame")) {
+                return *reinterpret_cast<int*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["int:ActiveFrame"].begin() + sunAndShadowSettingsIndex * sizeof(int)));
+            }
+            
+            return {};
+        }
+        
+        std::vector<int>* GetAllActiveFrame()
+        {
+            const auto count = GetCount();
+            
+            int* activeFrameData = new int[count];
+            if (mEntityTable.column_exists("int:ActiveFrame")) {
+                memcpy(activeFrameData, mEntityTable.mDataColumns["int:ActiveFrame"].begin(), count * sizeof(int));
+            }
+            
+            std::vector<int>* result = new std::vector<int>(activeFrameData, activeFrameData + count);
+            
+            delete[] activeFrameData;
+            
+            return result;
+        }
+        
+        int GetNumberOfFrames(int sunAndShadowSettingsIndex)
+        {
+            if (sunAndShadowSettingsIndex < 0 || sunAndShadowSettingsIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("int:NumberOfFrames")) {
+                return *reinterpret_cast<int*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["int:NumberOfFrames"].begin() + sunAndShadowSettingsIndex * sizeof(int)));
+            }
+            
+            return {};
+        }
+        
+        std::vector<int>* GetAllNumberOfFrames()
+        {
+            const auto count = GetCount();
+            
+            int* numberOfFramesData = new int[count];
+            if (mEntityTable.column_exists("int:NumberOfFrames")) {
+                memcpy(numberOfFramesData, mEntityTable.mDataColumns["int:NumberOfFrames"].begin(), count * sizeof(int));
+            }
+            
+            std::vector<int>* result = new std::vector<int>(numberOfFramesData, numberOfFramesData + count);
+            
+            delete[] numberOfFramesData;
+            
+            return result;
+        }
+        
+        bool GetUsesDST(int sunAndShadowSettingsIndex)
+        {
+            if (sunAndShadowSettingsIndex < 0 || sunAndShadowSettingsIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("byte:UsesDST")) {
+                return static_cast<bool>(*reinterpret_cast<bfast::byte*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["byte:UsesDST"].begin() + sunAndShadowSettingsIndex * sizeof(bfast::byte))));
+            }
+            
+            return {};
+        }
+        
+        std::vector<bool>* GetAllUsesDST()
+        {
+            const auto count = GetCount();
+            
+            bfast::byte* usesDSTData = new bfast::byte[count];
+            if (mEntityTable.column_exists("byte:UsesDST")) {
+                memcpy(usesDSTData, mEntityTable.mDataColumns["byte:UsesDST"].begin(), count * sizeof(bfast::byte));
+            }
+            
+            std::vector<bool>* result = new std::vector<bool>(usesDSTData, usesDSTData + count);
+            
+            delete[] usesDSTData;
+            
+            return result;
+        }
+        
+        double GetAltitude(int sunAndShadowSettingsIndex)
+        {
+            if (sunAndShadowSettingsIndex < 0 || sunAndShadowSettingsIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("double:Altitude")) {
+                return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:Altitude"].begin() + sunAndShadowSettingsIndex * sizeof(double)));
+            }
+            
+            return {};
+        }
+        
+        std::vector<double>* GetAllAltitude()
+        {
+            const auto count = GetCount();
+            
+            double* altitudeData = new double[count];
+            if (mEntityTable.column_exists("double:Altitude")) {
+                memcpy(altitudeData, mEntityTable.mDataColumns["double:Altitude"].begin(), count * sizeof(double));
+            }
+            
+            std::vector<double>* result = new std::vector<double>(altitudeData, altitudeData + count);
+            
+            delete[] altitudeData;
+            
+            return result;
+        }
+        
+        double GetAzimuth(int sunAndShadowSettingsIndex)
+        {
+            if (sunAndShadowSettingsIndex < 0 || sunAndShadowSettingsIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("double:Azimuth")) {
+                return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:Azimuth"].begin() + sunAndShadowSettingsIndex * sizeof(double)));
+            }
+            
+            return {};
+        }
+        
+        std::vector<double>* GetAllAzimuth()
+        {
+            const auto count = GetCount();
+            
+            double* azimuthData = new double[count];
+            if (mEntityTable.column_exists("double:Azimuth")) {
+                memcpy(azimuthData, mEntityTable.mDataColumns["double:Azimuth"].begin(), count * sizeof(double));
+            }
+            
+            std::vector<double>* result = new std::vector<double>(azimuthData, azimuthData + count);
+            
+            delete[] azimuthData;
+            
+            return result;
+        }
+        
+        bool GetRelativeToView(int sunAndShadowSettingsIndex)
+        {
+            if (sunAndShadowSettingsIndex < 0 || sunAndShadowSettingsIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("byte:RelativeToView")) {
+                return static_cast<bool>(*reinterpret_cast<bfast::byte*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["byte:RelativeToView"].begin() + sunAndShadowSettingsIndex * sizeof(bfast::byte))));
+            }
+            
+            return {};
+        }
+        
+        std::vector<bool>* GetAllRelativeToView()
+        {
+            const auto count = GetCount();
+            
+            bfast::byte* relativeToViewData = new bfast::byte[count];
+            if (mEntityTable.column_exists("byte:RelativeToView")) {
+                memcpy(relativeToViewData, mEntityTable.mDataColumns["byte:RelativeToView"].begin(), count * sizeof(bfast::byte));
+            }
+            
+            std::vector<bool>* result = new std::vector<bool>(relativeToViewData, relativeToViewData + count);
+            
+            delete[] relativeToViewData;
+            
+            return result;
+        }
+        
+        double GetLatitude(int sunAndShadowSettingsIndex)
+        {
+            if (sunAndShadowSettingsIndex < 0 || sunAndShadowSettingsIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("double:Latitude")) {
+                return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:Latitude"].begin() + sunAndShadowSettingsIndex * sizeof(double)));
+            }
+            
+            return {};
+        }
+        
+        std::vector<double>* GetAllLatitude()
+        {
+            const auto count = GetCount();
+            
+            double* latitudeData = new double[count];
+            if (mEntityTable.column_exists("double:Latitude")) {
+                memcpy(latitudeData, mEntityTable.mDataColumns["double:Latitude"].begin(), count * sizeof(double));
+            }
+            
+            std::vector<double>* result = new std::vector<double>(latitudeData, latitudeData + count);
+            
+            delete[] latitudeData;
+            
+            return result;
+        }
+        
+        double GetLongitude(int sunAndShadowSettingsIndex)
+        {
+            if (sunAndShadowSettingsIndex < 0 || sunAndShadowSettingsIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("double:Longitude")) {
+                return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:Longitude"].begin() + sunAndShadowSettingsIndex * sizeof(double)));
+            }
+            
+            return {};
+        }
+        
+        std::vector<double>* GetAllLongitude()
+        {
+            const auto count = GetCount();
+            
+            double* longitudeData = new double[count];
+            if (mEntityTable.column_exists("double:Longitude")) {
+                memcpy(longitudeData, mEntityTable.mDataColumns["double:Longitude"].begin(), count * sizeof(double));
+            }
+            
+            std::vector<double>* result = new std::vector<double>(longitudeData, longitudeData + count);
+            
+            delete[] longitudeData;
+            
+            return result;
+        }
+        
+        double GetTimeZone(int sunAndShadowSettingsIndex)
+        {
+            if (sunAndShadowSettingsIndex < 0 || sunAndShadowSettingsIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("double:TimeZone")) {
+                return *reinterpret_cast<double*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["double:TimeZone"].begin() + sunAndShadowSettingsIndex * sizeof(double)));
+            }
+            
+            return {};
+        }
+        
+        std::vector<double>* GetAllTimeZone()
+        {
+            const auto count = GetCount();
+            
+            double* timeZoneData = new double[count];
+            if (mEntityTable.column_exists("double:TimeZone")) {
+                memcpy(timeZoneData, mEntityTable.mDataColumns["double:TimeZone"].begin(), count * sizeof(double));
+            }
+            
+            std::vector<double>* result = new std::vector<double>(timeZoneData, timeZoneData + count);
+            
+            delete[] timeZoneData;
+            
+            return result;
+        }
+        
+        std::string GetProjectLocationName(int sunAndShadowSettingsIndex)
+        {
+            if (sunAndShadowSettingsIndex < 0 || sunAndShadowSettingsIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("string:ProjectLocationName")) {
+                return std::string(reinterpret_cast<const char*>(mStrings[mEntityTable.mStringColumns["string:ProjectLocationName"][sunAndShadowSettingsIndex]]));
+            }
+            
+            return {};
+        }
+        
+        std::vector<std::string>* GetAllProjectLocationName()
+        {
+            const auto count = GetCount();
+            
+            const std::vector<int>& projectLocationNameData = mEntityTable.column_exists("string:ProjectLocationName") ? mEntityTable.mStringColumns["string:ProjectLocationName"] : std::vector<int>();
+            
+            std::vector<std::string>* result = new std::vector<std::string>();
+            result->reserve(count);
+            
+            for (int i = 0; i < count; ++i)
+            {
+                result->push_back(std::string(reinterpret_cast<const char*>(mStrings[projectLocationNameData[i]])));
+            }
+            
+            return result;
+        }
+        
+        bool GetUsesGroundPlane(int sunAndShadowSettingsIndex)
+        {
+            if (sunAndShadowSettingsIndex < 0 || sunAndShadowSettingsIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("byte:UsesGroundPlane")) {
+                return static_cast<bool>(*reinterpret_cast<bfast::byte*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["byte:UsesGroundPlane"].begin() + sunAndShadowSettingsIndex * sizeof(bfast::byte))));
+            }
+            
+            return {};
+        }
+        
+        std::vector<bool>* GetAllUsesGroundPlane()
+        {
+            const auto count = GetCount();
+            
+            bfast::byte* usesGroundPlaneData = new bfast::byte[count];
+            if (mEntityTable.column_exists("byte:UsesGroundPlane")) {
+                memcpy(usesGroundPlaneData, mEntityTable.mDataColumns["byte:UsesGroundPlane"].begin(), count * sizeof(bfast::byte));
+            }
+            
+            std::vector<bool>* result = new std::vector<bool>(usesGroundPlaneData, usesGroundPlaneData + count);
+            
+            delete[] usesGroundPlaneData;
+            
+            return result;
+        }
+        
+        bool GetCastShadows(int sunAndShadowSettingsIndex)
+        {
+            if (sunAndShadowSettingsIndex < 0 || sunAndShadowSettingsIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("byte:CastShadows")) {
+                return static_cast<bool>(*reinterpret_cast<bfast::byte*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["byte:CastShadows"].begin() + sunAndShadowSettingsIndex * sizeof(bfast::byte))));
+            }
+            
+            return {};
+        }
+        
+        std::vector<bool>* GetAllCastShadows()
+        {
+            const auto count = GetCount();
+            
+            bfast::byte* castShadowsData = new bfast::byte[count];
+            if (mEntityTable.column_exists("byte:CastShadows")) {
+                memcpy(castShadowsData, mEntityTable.mDataColumns["byte:CastShadows"].begin(), count * sizeof(bfast::byte));
+            }
+            
+            std::vector<bool>* result = new std::vector<bool>(castShadowsData, castShadowsData + count);
+            
+            delete[] castShadowsData;
+            
+            return result;
+        }
+        
+        int GetSunlightIntensity(int sunAndShadowSettingsIndex)
+        {
+            if (sunAndShadowSettingsIndex < 0 || sunAndShadowSettingsIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("int:SunlightIntensity")) {
+                return *reinterpret_cast<int*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["int:SunlightIntensity"].begin() + sunAndShadowSettingsIndex * sizeof(int)));
+            }
+            
+            return {};
+        }
+        
+        std::vector<int>* GetAllSunlightIntensity()
+        {
+            const auto count = GetCount();
+            
+            int* sunlightIntensityData = new int[count];
+            if (mEntityTable.column_exists("int:SunlightIntensity")) {
+                memcpy(sunlightIntensityData, mEntityTable.mDataColumns["int:SunlightIntensity"].begin(), count * sizeof(int));
+            }
+            
+            std::vector<int>* result = new std::vector<int>(sunlightIntensityData, sunlightIntensityData + count);
+            
+            delete[] sunlightIntensityData;
+            
+            return result;
+        }
+        
+        int GetShadowIntensity(int sunAndShadowSettingsIndex)
+        {
+            if (sunAndShadowSettingsIndex < 0 || sunAndShadowSettingsIndex >= GetCount())
+                return {};
+            
+            if (mEntityTable.column_exists("int:ShadowIntensity")) {
+                return *reinterpret_cast<int*>(const_cast<bfast::byte*>(mEntityTable.mDataColumns["int:ShadowIntensity"].begin() + sunAndShadowSettingsIndex * sizeof(int)));
+            }
+            
+            return {};
+        }
+        
+        std::vector<int>* GetAllShadowIntensity()
+        {
+            const auto count = GetCount();
+            
+            int* shadowIntensityData = new int[count];
+            if (mEntityTable.column_exists("int:ShadowIntensity")) {
+                memcpy(shadowIntensityData, mEntityTable.mDataColumns["int:ShadowIntensity"].begin(), count * sizeof(int));
+            }
+            
+            std::vector<int>* result = new std::vector<int>(shadowIntensityData, shadowIntensityData + count);
+            
+            delete[] shadowIntensityData;
+            
+            return result;
+        }
+        
+        int GetGroundPlaneLevelIndex(int sunAndShadowSettingsIndex)
+        {
+            if (!mEntityTable.column_exists("index:Vim.Level:GroundPlaneLevel")) {
+                return -1;
+            }
+            
+            if (sunAndShadowSettingsIndex < 0 || sunAndShadowSettingsIndex >= GetCount())
+                return -1;
+            
+            return mEntityTable.mIndexColumns["index:Vim.Level:GroundPlaneLevel"][sunAndShadowSettingsIndex];
+        }
+        
+        int GetViewIndex(int sunAndShadowSettingsIndex)
+        {
+            if (!mEntityTable.column_exists("index:Vim.View:View")) {
+                return -1;
+            }
+            
+            if (sunAndShadowSettingsIndex < 0 || sunAndShadowSettingsIndex >= GetCount())
+                return -1;
+            
+            return mEntityTable.mIndexColumns["index:Vim.View:View"][sunAndShadowSettingsIndex];
+        }
+        
+    };
+    
+    static SunAndShadowSettingsTable* GetSunAndShadowSettingsTable(Scene& scene)
+    {
+        if (scene.mEntityTables.find("Vim.SunAndShadowSettings") == scene.mEntityTables.end())
+            return {};
+        
+        return new SunAndShadowSettingsTable(scene.mEntityTables["Vim.SunAndShadowSettings"], scene.mStrings);
+    }
+    
     DocumentModel::DocumentModel(Scene& scene)
     {
         mAsset = GetAssetTable(scene);
@@ -14284,6 +15069,7 @@ namespace Vim
         mViewInViewSheet = GetViewInViewSheetTable(scene);
         mSite = GetSiteTable(scene);
         mBuilding = GetBuildingTable(scene);
+        mSunAndShadowSettings = GetSunAndShadowSettingsTable(scene);
     }
     
     DocumentModel::~DocumentModel()
@@ -14342,6 +15128,7 @@ namespace Vim
         delete mViewInViewSheet;
         delete mSite;
         delete mBuilding;
+        delete mSunAndShadowSettings;
     }
 }
 
