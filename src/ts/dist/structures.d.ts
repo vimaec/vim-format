@@ -1,34 +1,34 @@
 /**
  * @module vim-ts
  */
-export declare type Vector2 = {
+export type Vector2 = {
     x: number;
     y: number;
 };
-export declare type Vector3 = {
+export type Vector3 = {
     x: number;
     y: number;
     z: number;
 };
-export declare type Vector4 = {
+export type Vector4 = {
     x: number;
     y: number;
     z: number;
     w: number;
 };
-export declare type AABox = {
+export type AABox = {
     min: Vector3;
     max: Vector3;
 };
-export declare type AABox2D = {
+export type AABox2D = {
     min: Vector2;
     max: Vector2;
 };
-export declare type AABox4D = {
+export type AABox4D = {
     min: Vector4;
     max: Vector4;
 };
-export declare type Matrix4x4 = {
+export type Matrix4x4 = {
     m11: number;
     m12: number;
     m13: number;

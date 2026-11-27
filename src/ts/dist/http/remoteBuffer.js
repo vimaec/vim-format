@@ -3,7 +3,8 @@
  * @module vim-ts
  */
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.RemoteBuffer = exports.setRemoteBufferMaxConcurency = void 0;
+exports.RemoteBuffer = void 0;
+exports.setRemoteBufferMaxConcurency = setRemoteBufferMaxConcurency;
 const requestTracker_1 = require("./requestTracker");
 const logging_1 = require("./logging");
 const retriableRequest_1 = require("./retriableRequest");
@@ -11,7 +12,6 @@ let RemoteBufferMaxConcurency = 10;
 function setRemoteBufferMaxConcurency(value) {
     RemoteBufferMaxConcurency = value;
 }
-exports.setRemoteBufferMaxConcurency = setRemoteBufferMaxConcurency;
 /**
  * Wrapper to provide tracking for all webrequests via request logger.
  */

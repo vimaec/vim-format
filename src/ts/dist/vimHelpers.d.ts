@@ -3,7 +3,7 @@ import { VimDocument } from "./objectModel";
  * Representation of ElementParameter entity from the entity model
  * See https://github.com/vimaec/vim/blob/master/ObjectModel/object-model-schema.json
  */
-export declare type ElementParameter = {
+export type ElementParameter = {
     name: string | undefined;
     value: string | undefined;
     group: string | undefined;

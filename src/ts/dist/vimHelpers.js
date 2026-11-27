@@ -1,6 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getElementsParameters = exports.getFamilyElements = exports.getElementParameters = void 0;
+exports.getElementParameters = getElementParameters;
+exports.getFamilyElements = getFamilyElements;
+exports.getElementsParameters = getElementsParameters;
 /**
  * Returns all parameters of an element and of its family type and family
  * @param element element index
@@ -13,7 +15,6 @@ async function getElementParameters(document, element) {
     familyElements.forEach(element => elements.set(element, false));
     return getElementsParameters(document, elements);
 }
-exports.getElementParameters = getElementParameters;
 async function getFamilyElements(document, element) {
     const familyInstance = await getElementFamilyInstance(document, element);
     const familyType = Number.isInteger(familyInstance)
@@ -32,7 +33,6 @@ async function getFamilyElements(document, element) {
         ])
         : [undefined, undefined];
 }
-exports.getFamilyElements = getFamilyElements;
 async function getElementsParameters(document, elements) {
     const [parameterElements, parameterValues, getParameterDescriptorIndices, parameterDescriptorNames, parameterDescriptorGroups] = await Promise.all([
         document.parameter.getAllElementIndex(),
@@ -74,7 +74,6 @@ async function getElementsParameters(document, elements) {
         return { name, value, group, isInstance };
     });
 }
-exports.getElementsParameters = getElementsParameters;
 async function getElementFamilyInstance(document, element) {
     const familyInstanceElement = await document.familyInstance.getAllElementIndex();
     const result = familyInstanceElement.findIndex(e => e === element);

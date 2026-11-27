@@ -74,6 +74,7 @@ export interface IParameterDescriptor {
     isReadOnly?: boolean;
     flags?: number;
     guid?: string;
+    storageType?: number;
     displayUnitIndex?: number;
     displayUnit?: IDisplayUnit;
 }
@@ -97,6 +98,8 @@ export interface IParameterDescriptorTable {
     getAllFlags(): Promise<number[] | undefined>;
     getGuid(parameterDescriptorIndex: number): Promise<string | undefined>;
     getAllGuid(): Promise<string[] | undefined>;
+    getStorageType(parameterDescriptorIndex: number): Promise<number | undefined>;
+    getAllStorageType(): Promise<number[] | undefined>;
     getDisplayUnitIndex(parameterDescriptorIndex: number): Promise<number | undefined>;
     getAllDisplayUnitIndex(): Promise<number[] | undefined>;
     getDisplayUnit(parameterDescriptorIndex: number): Promise<IDisplayUnit | undefined>;
@@ -111,6 +114,7 @@ export declare class ParameterDescriptor implements IParameterDescriptor {
     isReadOnly?: boolean;
     flags?: number;
     guid?: string;
+    storageType?: number;
     displayUnitIndex?: number;
     displayUnit?: IDisplayUnit;
     static createFromTable(table: IParameterDescriptorTable, index: number): Promise<IParameterDescriptor>;
@@ -138,6 +142,8 @@ export declare class ParameterDescriptorTable implements IParameterDescriptorTab
     getAllFlags(): Promise<number[] | undefined>;
     getGuid(parameterDescriptorIndex: number): Promise<string | undefined>;
     getAllGuid(): Promise<string[] | undefined>;
+    getStorageType(parameterDescriptorIndex: number): Promise<number | undefined>;
+    getAllStorageType(): Promise<number[] | undefined>;
     getDisplayUnitIndex(parameterDescriptorIndex: number): Promise<number | undefined>;
     getAllDisplayUnitIndex(): Promise<number[] | undefined>;
     getDisplayUnit(parameterDescriptorIndex: number): Promise<IDisplayUnit | undefined>;
@@ -199,6 +205,9 @@ export interface IElement {
     location_Z?: number;
     familyName?: string;
     isPinned?: boolean;
+    creator?: string;
+    lastChangedBy?: string;
+    owner?: string;
     levelIndex?: number;
     level?: ILevel;
     phaseCreatedIndex?: number;
@@ -244,6 +253,12 @@ export interface IElementTable {
     getAllFamilyName(): Promise<string[] | undefined>;
     getIsPinned(elementIndex: number): Promise<boolean | undefined>;
     getAllIsPinned(): Promise<boolean[] | undefined>;
+    getCreator(elementIndex: number): Promise<string | undefined>;
+    getAllCreator(): Promise<string[] | undefined>;
+    getLastChangedBy(elementIndex: number): Promise<string | undefined>;
+    getAllLastChangedBy(): Promise<string[] | undefined>;
+    getOwner(elementIndex: number): Promise<string | undefined>;
+    getAllOwner(): Promise<string[] | undefined>;
     getLevelIndex(elementIndex: number): Promise<number | undefined>;
     getAllLevelIndex(): Promise<number[] | undefined>;
     getLevel(elementIndex: number): Promise<ILevel | undefined>;
@@ -289,6 +304,9 @@ export declare class Element implements IElement {
     location_Z?: number;
     familyName?: string;
     isPinned?: boolean;
+    creator?: string;
+    lastChangedBy?: string;
+    owner?: string;
     levelIndex?: number;
     level?: ILevel;
     phaseCreatedIndex?: number;
@@ -338,6 +356,12 @@ export declare class ElementTable implements IElementTable {
     getAllFamilyName(): Promise<string[] | undefined>;
     getIsPinned(elementIndex: number): Promise<boolean | undefined>;
     getAllIsPinned(): Promise<boolean[] | undefined>;
+    getCreator(elementIndex: number): Promise<string | undefined>;
+    getAllCreator(): Promise<string[] | undefined>;
+    getLastChangedBy(elementIndex: number): Promise<string | undefined>;
+    getAllLastChangedBy(): Promise<string[] | undefined>;
+    getOwner(elementIndex: number): Promise<string | undefined>;
+    getAllOwner(): Promise<string[] | undefined>;
     getLevelIndex(elementIndex: number): Promise<number | undefined>;
     getAllLevelIndex(): Promise<number[] | undefined>;
     getLevel(elementIndex: number): Promise<ILevel | undefined>;
@@ -591,6 +615,7 @@ export declare class DesignOptionTable implements IDesignOptionTable {
 export interface ILevel {
     index: number;
     elevation?: number;
+    projectElevation?: number;
     familyTypeIndex?: number;
     familyType?: IFamilyType;
     buildingIndex?: number;
@@ -604,6 +629,8 @@ export interface ILevelTable {
     getAll(): Promise<ILevel[]>;
     getElevation(levelIndex: number): Promise<number | undefined>;
     getAllElevation(): Promise<number[] | undefined>;
+    getProjectElevation(levelIndex: number): Promise<number | undefined>;
+    getAllProjectElevation(): Promise<number[] | undefined>;
     getFamilyTypeIndex(levelIndex: number): Promise<number | undefined>;
     getAllFamilyTypeIndex(): Promise<number[] | undefined>;
     getFamilyType(levelIndex: number): Promise<IFamilyType | undefined>;
@@ -617,6 +644,7 @@ export interface ILevelTable {
 export declare class Level implements ILevel {
     index: number;
     elevation?: number;
+    projectElevation?: number;
     familyTypeIndex?: number;
     familyType?: IFamilyType;
     buildingIndex?: number;
@@ -634,6 +662,8 @@ export declare class LevelTable implements ILevelTable {
     getAll(): Promise<ILevel[]>;
     getElevation(levelIndex: number): Promise<number | undefined>;
     getAllElevation(): Promise<number[] | undefined>;
+    getProjectElevation(levelIndex: number): Promise<number | undefined>;
+    getAllProjectElevation(): Promise<number[] | undefined>;
     getFamilyTypeIndex(levelIndex: number): Promise<number | undefined>;
     getAllFamilyTypeIndex(): Promise<number[] | undefined>;
     getFamilyType(levelIndex: number): Promise<IFamilyType | undefined>;
@@ -786,6 +816,7 @@ export interface IBimDocument {
     product?: string;
     version?: string;
     user?: string;
+    fileLength?: bigint;
     activeViewIndex?: number;
     activeView?: IView;
     ownerFamilyIndex?: number;
@@ -855,6 +886,8 @@ export interface IBimDocumentTable {
     getAllVersion(): Promise<string[] | undefined>;
     getUser(bimDocumentIndex: number): Promise<string | undefined>;
     getAllUser(): Promise<string[] | undefined>;
+    getFileLength(bimDocumentIndex: number): Promise<bigint | undefined>;
+    getAllFileLength(): Promise<BigInt64Array | undefined>;
     getActiveViewIndex(bimDocumentIndex: number): Promise<number | undefined>;
     getAllActiveViewIndex(): Promise<number[] | undefined>;
     getActiveView(bimDocumentIndex: number): Promise<IView | undefined>;
@@ -898,6 +931,7 @@ export declare class BimDocument implements IBimDocument {
     product?: string;
     version?: string;
     user?: string;
+    fileLength?: bigint;
     activeViewIndex?: number;
     activeView?: IView;
     ownerFamilyIndex?: number;
@@ -971,6 +1005,8 @@ export declare class BimDocumentTable implements IBimDocumentTable {
     getAllVersion(): Promise<string[] | undefined>;
     getUser(bimDocumentIndex: number): Promise<string | undefined>;
     getAllUser(): Promise<string[] | undefined>;
+    getFileLength(bimDocumentIndex: number): Promise<bigint | undefined>;
+    getAllFileLength(): Promise<BigInt64Array | undefined>;
     getActiveViewIndex(bimDocumentIndex: number): Promise<number | undefined>;
     getAllActiveViewIndex(): Promise<number[] | undefined>;
     getActiveView(bimDocumentIndex: number): Promise<IView | undefined>;
@@ -1305,6 +1341,8 @@ export interface IFamilyInstance {
     fromRoom?: IRoom;
     toRoomIndex?: number;
     toRoom?: IRoom;
+    superComponentIndex?: number;
+    superComponent?: IElement;
     elementIndex?: number;
     element?: IElement;
 }
@@ -1370,6 +1408,9 @@ export interface IFamilyInstanceTable {
     getToRoomIndex(familyInstanceIndex: number): Promise<number | undefined>;
     getAllToRoomIndex(): Promise<number[] | undefined>;
     getToRoom(familyInstanceIndex: number): Promise<IRoom | undefined>;
+    getSuperComponentIndex(familyInstanceIndex: number): Promise<number | undefined>;
+    getAllSuperComponentIndex(): Promise<number[] | undefined>;
+    getSuperComponent(familyInstanceIndex: number): Promise<IElement | undefined>;
     getElementIndex(familyInstanceIndex: number): Promise<number | undefined>;
     getAllElementIndex(): Promise<number[] | undefined>;
     getElement(familyInstanceIndex: number): Promise<IElement | undefined>;
@@ -1407,6 +1448,8 @@ export declare class FamilyInstance implements IFamilyInstance {
     fromRoom?: IRoom;
     toRoomIndex?: number;
     toRoom?: IRoom;
+    superComponentIndex?: number;
+    superComponent?: IElement;
     elementIndex?: number;
     element?: IElement;
     static createFromTable(table: IFamilyInstanceTable, index: number): Promise<IFamilyInstance>;
@@ -1476,6 +1519,9 @@ export declare class FamilyInstanceTable implements IFamilyInstanceTable {
     getToRoomIndex(familyInstanceIndex: number): Promise<number | undefined>;
     getAllToRoomIndex(): Promise<number[] | undefined>;
     getToRoom(familyInstanceIndex: number): Promise<IRoom | undefined>;
+    getSuperComponentIndex(familyInstanceIndex: number): Promise<number | undefined>;
+    getAllSuperComponentIndex(): Promise<number[] | undefined>;
+    getSuperComponent(familyInstanceIndex: number): Promise<IElement | undefined>;
     getElementIndex(familyInstanceIndex: number): Promise<number | undefined>;
     getAllElementIndex(): Promise<number[] | undefined>;
     getElement(familyInstanceIndex: number): Promise<IElement | undefined>;
@@ -2661,6 +2707,11 @@ export declare class ElementInWarningTable implements IElementInWarningTable {
 export interface IBasePoint {
     index: number;
     isSurveyPoint?: boolean;
+    isClipped?: boolean;
+    northSouth?: number;
+    eastWest?: number;
+    elevation?: number;
+    angleToTrueNorth?: number;
     position_X?: number;
     position_Y?: number;
     position_Z?: number;
@@ -2676,6 +2727,16 @@ export interface IBasePointTable {
     getAll(): Promise<IBasePoint[]>;
     getIsSurveyPoint(basePointIndex: number): Promise<boolean | undefined>;
     getAllIsSurveyPoint(): Promise<boolean[] | undefined>;
+    getIsClipped(basePointIndex: number): Promise<boolean | undefined>;
+    getAllIsClipped(): Promise<boolean[] | undefined>;
+    getNorthSouth(basePointIndex: number): Promise<number | undefined>;
+    getAllNorthSouth(): Promise<number[] | undefined>;
+    getEastWest(basePointIndex: number): Promise<number | undefined>;
+    getAllEastWest(): Promise<number[] | undefined>;
+    getElevation(basePointIndex: number): Promise<number | undefined>;
+    getAllElevation(): Promise<number[] | undefined>;
+    getAngleToTrueNorth(basePointIndex: number): Promise<number | undefined>;
+    getAllAngleToTrueNorth(): Promise<number[] | undefined>;
     getPosition_X(basePointIndex: number): Promise<number | undefined>;
     getAllPosition_X(): Promise<number[] | undefined>;
     getPosition_Y(basePointIndex: number): Promise<number | undefined>;
@@ -2695,6 +2756,11 @@ export interface IBasePointTable {
 export declare class BasePoint implements IBasePoint {
     index: number;
     isSurveyPoint?: boolean;
+    isClipped?: boolean;
+    northSouth?: number;
+    eastWest?: number;
+    elevation?: number;
+    angleToTrueNorth?: number;
     position_X?: number;
     position_Y?: number;
     position_Z?: number;
@@ -2714,6 +2780,16 @@ export declare class BasePointTable implements IBasePointTable {
     getAll(): Promise<IBasePoint[]>;
     getIsSurveyPoint(basePointIndex: number): Promise<boolean | undefined>;
     getAllIsSurveyPoint(): Promise<boolean[] | undefined>;
+    getIsClipped(basePointIndex: number): Promise<boolean | undefined>;
+    getAllIsClipped(): Promise<boolean[] | undefined>;
+    getNorthSouth(basePointIndex: number): Promise<number | undefined>;
+    getAllNorthSouth(): Promise<number[] | undefined>;
+    getEastWest(basePointIndex: number): Promise<number | undefined>;
+    getAllEastWest(): Promise<number[] | undefined>;
+    getElevation(basePointIndex: number): Promise<number | undefined>;
+    getAllElevation(): Promise<number[] | undefined>;
+    getAngleToTrueNorth(basePointIndex: number): Promise<number | undefined>;
+    getAllAngleToTrueNorth(): Promise<number[] | undefined>;
     getPosition_X(basePointIndex: number): Promise<number | undefined>;
     getAllPosition_X(): Promise<number[] | undefined>;
     getPosition_Y(basePointIndex: number): Promise<number | undefined>;
@@ -3482,5 +3558,5 @@ export declare class VimDocument {
     entities: BFast;
     strings: string[] | undefined;
     private constructor();
-    static createFromBfast(bfast: BFast, download: boolean, ignoreStrings?: boolean): Promise<VimDocument | undefined>;
+    static createFromBfast(bfast: BFast, ignoreStrings?: boolean): Promise<VimDocument | undefined>;
 }
